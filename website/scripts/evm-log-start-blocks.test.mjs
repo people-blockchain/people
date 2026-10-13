@@ -34,8 +34,8 @@ const contract = (key) => {
 };
 
 /** A live-ish tip: the chain re-deployed its factories around block 76. */
-const LATEST = 230_000;
-const TRADE_BLOCK = 229_000;
+const LATEST = 330_000;
+const TRADE_BLOCK = 329_000;
 const TRADE_TS_SECONDS = 1_700_000_000;
 const DECIMALS = 18;
 const TOKEN = "0x89e2d0d8a921027b4bf22aab600f100e9139ec3e";
@@ -101,16 +101,16 @@ const emptyNode = (call) => (call.method === "eth_blockNumber" ? hex(LATEST) : [
 const fromBlockOf = (filter) => Number.parseInt(filter.fromBlock, 16);
 
 test("logStartBlock uses the per-contract start block, not the chain's first deploy block", () => {
-  assert.equal(logStartBlock(contract("tokenFactory")), 76);
-  assert.equal(logStartBlock(contract("bondingCurve")), 73);
+  assert.equal(logStartBlock(contract("tokenFactory")), dep.startBlocks.tokenFactory);
+  assert.equal(logStartBlock(contract("bondingCurve")), dep.startBlocks.bondingCurve);
   assert.equal(logStartBlock(contract("ammFactory")), 58);
   assert.equal(logStartBlock(contract("wppl")), 57);
   assert.equal(logStartBlock(contract("router")), 59);
 });
 
 test("logStartBlock matches contract addresses case-insensitively", () => {
-  assert.equal(logStartBlock(contract("tokenFactory").toUpperCase()), 76);
-  assert.equal(logStartBlock(`0x${contract("bondingCurve").slice(2).toLowerCase()}`), 73);
+  assert.equal(logStartBlock(contract("tokenFactory").toUpperCase()), dep.startBlocks.tokenFactory);
+  assert.equal(logStartBlock(`0x${contract("bondingCurve").slice(2).toLowerCase()}`), dep.startBlocks.bondingCurve);
 });
 
 test("logStartBlock falls back to the deployment block for contracts with no start entry", () => {
@@ -126,7 +126,7 @@ test("logWindows collapses a scan to a handful of windows when a contract's star
   // Representative of a contract deployed long after genesis (the shape the old, mismatched
   // tokenFactory/bondingCurve startBlocks used to have before S2-04) — not tied to the current
   // deployment JSON, which now points at near-genesis contracts.
-  const farStart = 220_459;
+  const farStart = 320_459;
   const fromStart = logWindows(farStart, LATEST);
   const fromDeploy = logWindows(dep.deployBlock ?? 1, LATEST);
   assert.ok(fromStart.length < fromDeploy.length / 10);
@@ -141,8 +141,8 @@ test("fetchLogsWindowed starts the bonding-curve scan at its own deploy block, n
   await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]);
   const filters = logFilters(node.calls);
   assert.ok(filters.length > 0);
-  assert.equal(filters[0].fromBlock, hex(73));
-  for (const filter of filters) assert.ok(fromBlockOf(filter) >= 73);
+  assert.equal(filters[0].fromBlock, hex(dep.startBlocks.bondingCurve));
+  for (const filter of filters) assert.ok(fromBlockOf(filter) >= dep.startBlocks.bondingCurve);
 });
 
 test("fetchLogsWindowed starts an AMM pair scan at the factory's start block", async (t) => {
@@ -295,11 +295,11 @@ test("fetchTokenMarketSnapshot starts every bonding-curve window at the curve's 
   const bondingCurve = contract("bondingCurve").toLowerCase();
   for (const filter of filters) {
     assert.equal(filter.address.toLowerCase(), bondingCurve);
-    assert.ok(fromBlockOf(filter) >= 73);
+    assert.ok(fromBlockOf(filter) >= dep.startBlocks.bondingCurve);
   }
   // The whole point of the fix: the earliest window is the curve's own deploy block (73),
   // not the chain's deploy block of 56.
-  assert.equal(Math.min(...filters.map(fromBlockOf)), 73);
+  assert.equal(Math.min(...filters.map(fromBlockOf)), dep.startBlocks.bondingCurve);
 });
 
 test("fetchTokenMarketSnapshot resolves trade timestamps in one batched block request", async (t) => {
