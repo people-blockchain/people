@@ -222,4 +222,5 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - **Derzeit gibt es keinen öffentlichen PPL-Sale**, und es werden keine KYC- oder Teilnahmeberechtigungsprüfungen durchgeführt.
 - Sicherheit: jetzt eine **interne, KI-gestützte Prüfung** und ein **unabhängiges Audit vor dem Mainnet**.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
-- Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Vertragsänderung geschrieben und getestet, im Testnet noch nicht ausgerollt.)
+- Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
+- Der PPL-Sale läuft nach seiner Öffnung fest **180 Tage**. Danach kann jeder ihn abschließen, und die unverkauften PPL gehen in den Community-Pool — dieselbe Regel wie bei Token-Curves.

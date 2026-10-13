@@ -222,4 +222,5 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - **Hiện tại không có đợt bán PPL công khai** và không thực hiện kiểm tra KYC hay điều kiện tham gia.
 - Bảo mật: hiện là **đánh giá nội bộ có hỗ trợ của AI** và **kiểm toán độc lập trước mainnet**.
 - Multisig của kho bạc là **2 trên 3** và được tạo trước mainnet.
-- Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Thay đổi hợp đồng đã được viết và kiểm thử, chưa triển khai trên testnet.)
+- Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
+- Đợt bán PPL, khi mở, kéo dài cố định **180 ngày**. Sau đó bất kỳ ai cũng có thể kết thúc nó, và PPL chưa bán sẽ vào pool cộng đồng — cùng quy tắc như đường cong token.
