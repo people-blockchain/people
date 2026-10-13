@@ -6,8 +6,8 @@ import {
   fetchRecentBlocks,
   fetchRecentTransactions,
   fetchTransaction,
-  fetchAddressTransactions,
 } from "@/lib/evm/explorer-blocks";
+import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
@@ -237,7 +237,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const addr = getAddress(segments[1]);
     if (segments[2] === "transactions") {
       try {
-        const items = await fetchAddressTransactions(addr, Number(search.get("limit") ?? 30) || 30);
+        const { items } = await fetchAddressHistory(addr, Number(search.get("limit") ?? 30) || 30);
         return { status: 200, body: { items } };
       } catch {
         return { status: 502, body: { error: "rpc_unavailable" } };
@@ -256,7 +256,11 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     }
     const balance = weiToPpl(BigInt(balanceHex));
     const nonce = Number.parseInt(nonceHex, 16);
-    return { status: 200, body: { balance, nonce, balances: { ppl: balance } } };
+    const history = await fetchAddressHistory(addr, 30).catch(() => null);
+    return {
+      status: 200,
+      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: history?.incoming ?? 0 },
+    };
   }
 
   if (root === "accounts") {
