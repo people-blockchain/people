@@ -133,7 +133,8 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     let active = true;
     (async () => {
       try {
-        const provider = readInjectedProvider("any");
+        // Prefer MetaMask: Trust Wallet's extension hijacks window.ethereum when both are installed.
+        const provider = readInjectedProvider("metamask") ?? readInjectedProvider("any");
         if (!provider) return;
         const accounts = (await provider.request({ method: "eth_accounts" })) as Address[];
         const address = accounts[0];

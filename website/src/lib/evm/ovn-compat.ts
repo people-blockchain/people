@@ -6,6 +6,7 @@ import {
   fetchRecentBlocks,
   fetchRecentTransactions,
   fetchTransaction,
+  fetchAddressTransactions,
 } from "@/lib/evm/explorer-blocks";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
@@ -234,6 +235,14 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
 
   if (root === "address" && segments[1] && isAddress(segments[1])) {
     const addr = getAddress(segments[1]);
+    if (segments[2] === "transactions") {
+      try {
+        const items = await fetchAddressTransactions(addr, Number(search.get("limit") ?? 30) || 30);
+        return { status: 200, body: { items } };
+      } catch {
+        return { status: 502, body: { error: "rpc_unavailable" } };
+      }
+    }
     // An upstream RPC failure here must become a handled 502, not an unhandled 500.
     let balanceHex: string;
     let nonceHex: string;

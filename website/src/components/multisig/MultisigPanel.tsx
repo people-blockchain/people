@@ -74,7 +74,49 @@ const abi = [
     inputs: [{ type: "uint256" }],
     outputs: [],
   },
+  { type: "error", name: "NotOwner", inputs: [] },
+  { type: "error", name: "NotSelf", inputs: [] },
+  { type: "error", name: "DuplicateOwner", inputs: [] },
+  { type: "error", name: "UnknownTransaction", inputs: [] },
+  { type: "error", name: "AlreadyConfirmed", inputs: [] },
+  { type: "error", name: "NotConfirmed", inputs: [] },
+  { type: "error", name: "AlreadyExecuted", inputs: [] },
+  { type: "error", name: "NotEnoughConfirmations", inputs: [] },
+  { type: "error", name: "CallFailed", inputs: [] },
+  { type: "error", name: "InvalidOwner", inputs: [] },
+  { type: "error", name: "InvalidThreshold", inputs: [] },
+  { type: "error", name: "StaleConfirmations", inputs: [] },
+  {
+    type: "function",
+    name: "confirmedBy",
+    stateMutability: "view",
+    inputs: [{ type: "uint256" }, { type: "address" }],
+    outputs: [{ type: "bool" }],
+  },
 ] as const;
+
+const REVERT_HINTS: Record<string, string> = {
+  AlreadyConfirmed: "you already confirmed this transaction. Next step: Execute.",
+  NotEnoughConfirmations: "not enough confirmations yet. Another owner must Confirm first.",
+  AlreadyExecuted: "this transaction was already executed.",
+  NotOwner: "the connected wallet is not a multisig owner.",
+  StaleConfirmations: "the owner set changed after submission; submit a new transaction.",
+  CallFailed: "the target call reverted (e.g. the gateway's pendingOwner is not this multisig).",
+  UnknownTransaction: "unknown transaction id.",
+};
+
+function decodeRevert(e: unknown): string {
+  const err = e as { walk?: (fn: (x: unknown) => boolean) => unknown; shortMessage?: string; message?: string };
+  const reverted = err?.walk?.((x) => (x as { name?: string })?.name === "ContractFunctionRevertedError") as
+    | { data?: { errorName?: string } }
+    | undefined;
+  const name = reverted?.data?.errorName;
+  if (name) return `Reverted: ${name}${REVERT_HINTS[name] ? ` — ${REVERT_HINTS[name]}` : ""}`;
+  return err?.shortMessage ?? err?.message ?? String(e);
+}
+
+const BTN_PRIMARY =
+  "cursor-pointer rounded-xl bg-brand px-3 py-1.5 text-sm font-medium text-brand-ink shadow-sm transition hover:bg-brand/85 hover:shadow-md active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:bg-brand";
 
 const COPY = {
   en: {
@@ -141,6 +183,7 @@ type Tx = {
   data: Hex;
   executed: boolean;
   confirmations: bigint;
+  mine?: boolean;
 };
 
 export function MultisigPanel() {
@@ -151,6 +194,9 @@ export function MultisigPanel() {
   const [txs, setTxs] = useState<Tx[]>([]);
   const [account, setAccount] = useState<Address | null>(null);
   const [status, setStatus] = useState<string>("");
+  const [sending, setSending] = useState(false);
+  const accountRef = useRef<Address | null>(null);
+  accountRef.current = account;
 
   const load = useCallback(async () => {
     const client = createBrowserPublicClient();
@@ -187,14 +233,22 @@ export function MultisigPanel() {
         functionName: "getTransaction",
         args: [BigInt(i)],
       })) as readonly [Address, bigint, Hex, boolean, bigint];
-      list.push({ id: i, to, data, executed, confirmations });
+      const mine = accountRef.current
+        ? ((await client.readContract({
+            address: MULTISIG,
+            abi,
+            functionName: "confirmedBy",
+            args: [BigInt(i), accountRef.current],
+          })) as boolean)
+        : undefined;
+      list.push({ id: i, to, data, executed, confirmations, mine });
     }
     setTxs(list);
   }, []);
 
   useEffect(() => {
     load().catch((e) => setStatus(String((e as Error).message ?? e)));
-  }, [load]);
+  }, [load, account]);
 
   const providerRef = useRef<DiscoveredWallet["provider"] | null>(null);
   const [wallets, setWallets] = useState<DiscoveredWallet[] | null>(null);
@@ -268,6 +322,7 @@ export function MultisigPanel() {
   ) {
     const provider = providerRef.current;
     if (!provider || !account) return;
+    setSending(true);
     try {
       await ensurePeopleChain(provider);
       const wallet = createInjectedWalletClient(provider);
@@ -280,11 +335,46 @@ export function MultisigPanel() {
         chain: wallet.chain,
       });
       setStatus(`${t.sent}: ${hash}`);
-      await createBrowserPublicClient().waitForTransactionReceipt({ hash });
+      const receipt = await createBrowserPublicClient().waitForTransactionReceipt({ hash });
+      if (receipt.status !== "success") {
+        try {
+          await createBrowserPublicClient().simulateContract({ address: MULTISIG, abi, functionName, args: args as never, account });
+          setStatus(`Transaction ${hash} failed on-chain.`);
+        } catch (se) {
+          setStatus(decodeRevert(se));
+        }
+      } else {
+        setStatus(`${t.sent}: ${hash}`);
+      }
       await load();
     } catch (e) {
-      setStatus(String((e as Error).message ?? e));
+      setStatus(decodeRevert(e));
+    } finally {
+      setSending(false);
     }
+  }
+
+  function actions(tx: Tx) {
+    const enough = threshold !== null && tx.confirmations >= threshold;
+    const confirmWhy = sending ? "Waiting for wallet…" : tx.mine ? "You already confirmed" : "";
+    const execWhy = sending ? "Waiting for wallet…" : !enough ? `Needs ${threshold?.toString() ?? "…"} confirmations` : "";
+    return (
+      <div className="mt-2 flex flex-wrap items-start gap-2" data-testid="multisig-actions">
+        <span className="w-full text-xs text-ink-3">1. Confirm → 2. Execute</span>
+        <div className="flex flex-col">
+          <button type="button" disabled={!!confirmWhy} title={confirmWhy} onClick={() => send("confirm", [BigInt(tx.id)])} className={BTN_PRIMARY}>
+            1. {t.confirm}
+          </button>
+          {confirmWhy ? <span className="mt-1 text-xs text-ink-3">{confirmWhy}</span> : null}
+        </div>
+        <div className="flex flex-col">
+          <button type="button" disabled={!!execWhy} title={execWhy} onClick={() => send("execute", [BigInt(tx.id)])} className={BTN_PRIMARY}>
+            2. {t.execute}
+          </button>
+          {execWhy ? <span className="mt-1 text-xs text-ink-3">{execWhy}</span> : null}
+        </div>
+      </div>
+    );
   }
 
   const isOwner =
@@ -307,7 +397,7 @@ export function MultisigPanel() {
                 onClick={switchWallet}
                 disabled={busy}
                 data-testid="multisig-switch"
-                className="rounded-xl bg-surface px-3 py-1.5 text-sm ring-1 ring-line transition hover:bg-surface-2 hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
+                className="cursor-pointer rounded-xl bg-surface px-3 py-1.5 text-sm ring-1 ring-line transition hover:bg-surface-2 hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {t.switchWallet}
               </button>
@@ -316,7 +406,7 @@ export function MultisigPanel() {
             <a
               href={METAMASK_DEEPLINK}
               data-testid="multisig-open-metamask"
-              className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:brightness-110 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:brightness-100 inline-block"
+              className="cursor-pointer rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:bg-brand/85 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:bg-brand inline-block"
             >
               {t.openInApp}
             </a>
@@ -326,7 +416,7 @@ export function MultisigPanel() {
               onClick={connect}
               disabled={busy}
               data-testid="multisig-connect"
-              className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:brightness-110 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:brightness-100"
+              className="cursor-pointer rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:bg-brand/85 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:bg-brand"
             >
               {t.connect}
             </button>
@@ -346,7 +436,7 @@ export function MultisigPanel() {
                       disabled={busy}
                       data-testid="multisig-wallet-option"
                       data-rdns={w.rdns}
-                      className="flex w-full items-center gap-3 rounded-xl bg-surface px-3 py-2 text-left text-sm ring-1 ring-line transition hover:bg-canvas hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex w-full cursor-pointer items-center gap-3 rounded-xl bg-surface px-3 py-2 text-left text-sm ring-1 ring-line transition hover:bg-canvas hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {w.icon ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -381,7 +471,8 @@ export function MultisigPanel() {
             onClick={() =>
               send("submit", [GATEWAY, BigInt(0), ACCEPT_OWNERSHIP])
             }
-            className="mt-3 rounded-xl bg-brand px-4 py-2 text-sm text-brand-ink"
+            disabled={sending}
+            className={`mt-3 ${BTN_PRIMARY}`}
           >
             {t.submitAccept}
           </button>
@@ -400,20 +491,7 @@ export function MultisigPanel() {
                     {tx.confirmations.toString()} /{" "}
                     {threshold?.toString() ?? "…"}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => send("confirm", [BigInt(tx.id)])}
-                    className="rounded-xl bg-brand px-3 py-1.5 text-brand-ink"
-                  >
-                    {t.confirm}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => send("execute", [BigInt(tx.id)])}
-                    className="rounded-xl bg-surface px-3 py-1.5 ring-1 ring-line"
-                  >
-                    {t.execute}
-                  </button>
+                  {actions(tx)}
                 </div>
               ))
           : null}
@@ -466,22 +544,7 @@ export function MultisigPanel() {
                 {threshold?.toString() ?? "…"}
               </p>
               {isOwner && !tx.executed ? (
-                <div className="mt-2 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => send("confirm", [BigInt(tx.id)])}
-                    className="rounded-xl bg-surface px-3 py-1.5 text-sm ring-1 ring-line"
-                  >
-                    {t.confirm}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => send("execute", [BigInt(tx.id)])}
-                    className="rounded-xl bg-surface px-3 py-1.5 text-sm ring-1 ring-line"
-                  >
-                    {t.execute}
-                  </button>
-                </div>
+                actions(tx)
               ) : null}
             </li>
           ))}
