@@ -13,8 +13,9 @@ import {PeopleRouter} from "../src/amm/PeopleRouter.sol";
 import {CurveMath} from "../src/libs/CurveMath.sol";
 import {PeopleConstants} from "../src/PeopleConstants.sol";
 
-/// Owner rule 2026-10-13: a curve not sold out within 180 days can be finalized by anyone and
-/// its unsold tokens go to that token's community pool. A sold-out curve still migrates.
+/// Owner rule 2026-10-13: a curve not sold out within 180 days can be finalized by anyone.
+/// Unsold / migration leftovers follow the creator's leftoverMode (Burn default, or CommunityPool).
+/// A sold-out curve still migrates. See CurveLeftoverMode.t.sol for mode coverage.
 contract CurveFinalizeTest is Test {
     TokenFactory internal tokenFactory;
     BondingCurveMarket internal curve;
@@ -51,8 +52,15 @@ contract CurveFinalizeTest is Test {
         curve.finalize(token);
     }
 
+    function _launchMode(uint8 mode) internal returns (address token) {
+        vm.prank(creator);
+        token = tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}(
+            "Test", "TST", 18, 1_000_000, "", mode
+        );
+    }
+
     function test_anyoneFinalizesAfter180Days_unsoldToCommunityPool() public {
-        address token = _launch();
+        address token = _launchMode(1); // CommunityPool
         vm.prank(buyer);
         curve.buy{value: 1 ether}(token, 0);
         uint256 poolBefore = vault.balances(token);
@@ -100,7 +108,7 @@ contract CurveFinalizeTest is Test {
     }
 
     function test_soldOutCurveMigratesAndCannotBeFinalized() public {
-        address token = _launch();
+        address token = _launchMode(1); // CommunityPool so leftovers still land in the vault
         uint256 alloc = vault.balances(token);
         vm.prank(buyer);
         curve.buy{value: 50_000 ether}(token, 0);
@@ -112,6 +120,18 @@ contract CurveFinalizeTest is Test {
         assertFalse(curve.canFinalize(token));
         vm.expectRevert(BondingCurveMarket.NotFinalizable.selector);
         curve.finalize(token);
+    }
+
+    function test_soldOutCurveMigrates_defaultBurnsLeftovers() public {
+        address token = _launch(); // Burn default
+        uint256 alloc = vault.balances(token);
+        uint256 burnBefore = IERC20(token).balanceOf(address(0xdead));
+        vm.prank(buyer);
+        curve.buy{value: 50_000 ether}(token, 0);
+        assertTrue(curve.isMigrated(token), "migrated");
+        assertEq(IERC20(token).balanceOf(address(0x7EA5)), 0, "treasury gets no leftovers");
+        assertEq(vault.balances(token), alloc, "burn mode: pool not credited leftovers");
+        assertGt(IERC20(token).balanceOf(address(0xdead)), burnBefore, "leftovers burned");
     }
 
     function test_vaultDepositOnlyCreditsReceived() public {

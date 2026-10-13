@@ -14,7 +14,16 @@ import {IPeopleAmmFactory} from "../interfaces/ICreatorVesting.sol";
 contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     using SafeERC20 for IERC20;
 
-    event TokenRegistered(address indexed token, uint256 curveInventory, uint256 liquidityReserve, uint256 ecosystemReserve);
+    /// @dev Canonical burn sink. Never the creator, never the treasury.
+    address public constant BURN_ADDRESS = address(0xdead);
+
+    event TokenRegistered(
+        address indexed token,
+        uint256 curveInventory,
+        uint256 liquidityReserve,
+        uint256 ecosystemReserve,
+        uint8 leftoverMode
+    );
     event CurveBuy(address indexed token, address indexed buyer, uint256 nativeIn, uint256 tokensOut, uint256 fee);
     event CurveSell(address indexed token, address indexed seller, uint256 tokensIn, uint256 nativeOut, uint256 fee);
     event CurveMigrated(address indexed token, address indexed pair, uint256 poolNative, uint256 poolToken);
@@ -24,19 +33,20 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     event MigrationLeftoversSwept(address indexed token, address indexed to, uint256 amount);
     event CurveFinalized(address indexed token, address indexed vault, uint256 unsold);
     event UnsoldSentToCommunity(address indexed token, address indexed vault, uint256 amount);
+    /// @notice Emitted when leftovers are burned (owner rule 2026-10-13, mode Burn).
+    event LeftoversBurned(address indexed token, address indexed to, uint256 amount);
 
     /// @notice Owner rule 2026-10-13: a curve that has not sold out (migrated) within this
     /// window after launch can be finalized by anyone; its unsold tokens go to the token's own
-    /// community pool (`CommunityTokenVault`).
+    /// community pool (`CommunityTokenVault`) or are burned, per the creator's launch choice.
     uint256 public constant FINALIZE_AFTER = 180 days;
 
     address public immutable core;
     /// @dev AUD-H4: storage, not `immutable` — see `setFeeRecipient`.
     address public feeRecipient;
-    /// @notice AUD-M1: destination for the tokens a curve still holds when it migrates — the
-    /// unsold curve inventory plus the unused part of the liquidity reserve. They used to be
-    /// stranded in this contract forever (`withdrawEcosystemReserve` only reaches
-    /// `ecosystemReserve`). Owner decision 2026-10-13: they go to the token's community pool; kept for ABI compatibility.
+    /// @notice AUD-M1: legacy destination for migrated-curve leftovers. Kept for ABI
+    /// compatibility only; owner rule 2026-10-13 routes leftovers to burn or the token's own
+    /// community pool — never to this address.
     address public treasury;
     IPeopleRouter public immutable router;
     IPeopleAmmFactory public immutable ammFactory;
@@ -53,6 +63,9 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     mapping(address => uint256) public launchedAt;
     /// @notice True once `finalize` closed a curve that did not sell out in time.
     mapping(address => bool) public finalized;
+    /// @notice Owner rule 2026-10-13: per-token disposition of curve leftovers and unsold
+    /// remainder. 0 = Burn (default), 1 = CommunityPool. Set at launch, immutable afterwards.
+    mapping(address => uint8) public leftoverMode;
 
     error Unauthorized();
     error UnknownToken();
@@ -60,6 +73,7 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     error ZeroFeeRecipient();
     error ZeroTreasury();
     error NotFinalizable();
+    error InvalidLeftoverMode();
 
     modifier onlyFactory() {
         (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
@@ -93,9 +107,8 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         emit FeeRecipientUpdated(feeRecipient_);
     }
 
-    /// @notice AUD-M1: rotate the destination of a migrated curve's leftover tokens. Storage,
-    /// not a constructor-only value, for the same reason as `setFeeRecipient` — a wrong or
-    /// compromised recipient must be correctable without redeploying the market.
+    /// @notice AUD-M1: legacy setter kept for ABI compatibility. Owner rule 2026-10-13 means
+    /// curve leftovers no longer route here — they burn or go to the token's own community pool.
     function setTreasury(address treasury_) external onlyOwner {
         _setTreasury(treasury_);
     }
@@ -121,15 +134,18 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         address token,
         uint256 curveInventory,
         uint256 liquidityReserve,
-        uint256 ecosystemReserve
+        uint256 ecosystemReserve,
+        uint8 leftoverMode_
     ) external onlyFactory {
+        if (leftoverMode_ > uint8(LeftoverMode.CommunityPool)) revert InvalidLeftoverMode();
         TokenCurve storage tc = curves[token];
         tc.curveInventory = curveInventory;
         tc.liquidityReserve = liquidityReserve;
         tc.ecosystemReserve = ecosystemReserve;
         tc.state = CurveMath.initialState(curveInventory);
         launchedAt[token] = block.timestamp;
-        emit TokenRegistered(token, curveInventory, liquidityReserve, ecosystemReserve);
+        leftoverMode[token] = leftoverMode_;
+        emit TokenRegistered(token, curveInventory, liquidityReserve, ecosystemReserve, leftoverMode_);
     }
 
     function buy(address token, uint256 minTokensOut) external payable nonReentrant {
@@ -151,6 +167,8 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     function sell(address token, uint256 tokenAmount, uint256 minNativeOut) external nonReentrant {
         // After `finalize`, holders can still sell back to the curve (their PPL stays claimable);
         // buying is closed and the tokens sold back are forwarded to the community pool.
+        // NOTE: this is a user sell, not a leftover — it always goes to the community pool and
+        // is deliberately NOT routed through `_disposeLeftovers` / `leftoverMode`.
         bool isFinal = finalized[token];
         TokenCurve storage tc = isFinal ? curves[token] : _requireActive(token);
         IERC20(token).safeTransferFrom(msg.sender, address(this), tokenAmount);
@@ -181,7 +199,9 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
 
     /// @notice Permissionless: close a curve that did not sell out within `FINALIZE_AFTER` of
     /// launch. Buying stops; every unsold token the curve holds (except the ecosystem reserve,
-    /// which keeps its own `onlyOwner` path) goes to the token's community pool.
+    /// which keeps its own `onlyOwner` path) is disposed of per the creator's launch choice:
+    /// burned (default) or sent to the token's own community pool. Never the creator, never
+    /// the treasury.
     function finalize(address token) external nonReentrant {
         if (!canFinalize(token)) revert NotFinalizable();
         TokenCurve storage tc = curves[token];
@@ -191,8 +211,23 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         uint256 unsold = held > tc.ecosystemReserve ? held - tc.ecosystemReserve : 0;
         tc.curveInventory = 0;
         tc.liquidityReserve = 0;
-        address vault = _sendToCommunity(token, unsold);
-        emit CurveFinalized(token, vault, unsold);
+        address dest = _disposeLeftovers(token, unsold);
+        emit CurveFinalized(token, dest, unsold);
+    }
+
+    /// @notice Owner rule 2026-10-13: route curve leftovers (post-migration sweep and 180-day
+    /// finalize) according to the creator's launch choice. Burn (0) sends to 0xdead;
+    /// CommunityPool (1) sends to the token's own `CommunityTokenVault`. Never the creator,
+    /// never the treasury.
+    function _disposeLeftovers(address token, uint256 amount) internal returns (address dest) {
+        if (leftoverMode[token] == uint8(LeftoverMode.CommunityPool)) {
+            return _sendToCommunity(token, amount);
+        }
+        // Burn (default).
+        if (amount == 0) return BURN_ADDRESS;
+        IERC20(token).safeTransfer(BURN_ADDRESS, amount);
+        emit LeftoversBurned(token, BURN_ADDRESS, amount);
+        return BURN_ADDRESS;
     }
 
     function _sendToCommunity(address token, uint256 amount) internal returns (address vault) {
@@ -245,11 +280,10 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         router.addLiquidityETH{value: poolNative}(token, poolToken, poolToken, poolNative, address(0xdead), block.timestamp + 600);
         emit CurveMigrated(token, pair, poolNative, poolToken);
 
-        // AUD-M1: whatever the curve still holds after seeding the pool — the unsold curve
-        // inventory plus the unused liquidity reserve — is swept to the treasury instead of
-        // being stranded in this contract (nothing could withdraw it: `withdrawEcosystemReserve`
-        // is bounded by `ecosystemReserve`, which is deliberately kept back here and keeps its
-        // own `onlyOwner` path).
+        // Owner rule 2026-10-13: whatever the curve still holds after seeding the pool — the
+        // unsold curve inventory plus the unused liquidity reserve — is disposed of per the
+        // creator's launch choice: burned (default) or sent to the token's own community pool.
+        // Never the creator, never the treasury.
         //
         // Measured against the real token balance, not `curveInventory + liquidityReserve`:
         // `curveInventory` is only decremented here, never by the buys that drew the curve down,
@@ -262,9 +296,8 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         if (leftover > 0) {
             tc.curveInventory = 0;
             tc.liquidityReserve = 0;
-            // Owner decision 2026-10-13: leftovers go to the token's own community pool.
-            address vault = _sendToCommunity(token, leftover);
-            emit MigrationLeftoversSwept(token, vault, leftover);
+            address dest = _disposeLeftovers(token, leftover);
+            emit MigrationLeftoversSwept(token, dest, leftover);
         }
     }
 
