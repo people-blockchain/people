@@ -216,3 +216,36 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
     blockHeight: hexToNumber(tx.blockNumber),
   };
 }
+
+const ADDRESS_SCAN_BLOCKS = 2000;
+const ADDRESS_SCAN_CHUNK = 200;
+
+/** Txs sent from or to `address` in the newest blocks (case-insensitive match, no indexer). */
+export async function fetchAddressTransactions(address: string, limit: number): Promise<EvmExplorerTx[]> {
+  const head = await fetchLatestBlockNumber();
+  const take = Math.max(1, Math.min(limit, 100));
+  const needle = address.toLowerCase();
+  const heights = recentHeights(head, ADDRESS_SCAN_BLOCKS);
+  return cachedRecent(`address:${needle}`, head, take, async () => {
+    const out: EvmExplorerTx[] = [];
+    for (let i = 0; i < heights.length && out.length < take; i += ADDRESS_SCAN_CHUNK) {
+      const chunk = heights.slice(i, i + ADDRESS_SCAN_CHUNK);
+      const batched = await batchBlocks(chunk, true).catch(() => null);
+      if (!batched) break;
+      for (const block of batched) {
+        const txs = block?.transactions;
+        if (!Array.isArray(txs)) continue;
+        for (const raw of txs) {
+          if (typeof raw === "string") continue;
+          const tx = raw as RpcTx;
+          if (!tx.hash) continue;
+          if (tx.from?.toLowerCase() !== needle && tx.to?.toLowerCase() !== needle) continue;
+          out.push(toExplorerTx(tx));
+          if (out.length >= take) break;
+        }
+        if (out.length >= take) break;
+      }
+    }
+    return out;
+  });
+}
