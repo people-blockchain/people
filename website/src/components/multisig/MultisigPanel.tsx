@@ -1,16 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Address, Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import {
   createBrowserPublicClient,
   createInjectedWalletClient,
   ensurePeopleChain,
-  readInjectedProvider,
-  waitForInjectedProvider,
+  discoverWallets,
+  type DiscoveredWallet,
 } from "@/lib/evm/client";
-import { isMobileBrowser, walletAppDeepLink } from "@/lib/mobile-env";
+import { isMobileBrowser } from "@/lib/mobile-env";
 
 const MULTISIG: Address = "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB";
 const GATEWAY: Address = "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9";
@@ -78,13 +78,17 @@ const abi = [
 
 const COPY = {
   en: {
+    pick: "Choose a wallet",
+    switchWallet: "Switch wallet",
+    expected: "Expected owner addresses:",
+    searching: "Looking for wallets…",
     title: "Testnet multisig",
     lead: "People's own 2-of-3 multisig contract on the People testnet. Owners can submit, confirm and execute transactions here.",
-    connect: "Connect MetaMask",
+    connect: "Connect wallet",
     openInApp: "Open in the MetaMask app",
     connected: "Connected",
     noWallet:
-      "MetaMask was not found in this browser. Install it, or open this page in the MetaMask app.",
+      "No browser wallet was found. Install MetaMask (or another wallet extension) and reload.",
     owners: "Owners",
     threshold: "Confirmations needed",
     txs: "Transactions",
@@ -97,17 +101,22 @@ const COPY = {
     submitAccept: "Submit: accept fee gateway ownership",
     confirm: "Confirm",
     execute: "Execute",
-    notOwner: "This wallet is not a multisig owner, so actions are hidden.",
+    notOwner: "This address is not a multisig owner, so actions are hidden.",
     sent: "Transaction sent",
     loading: "Loading…",
   },
   ru: {
+    pick: "Выберите кошелёк",
+    switchWallet: "Сменить кошелёк",
+    expected: "Ожидаемые адреса владельцев:",
+    searching: "Ищем кошельки…",
     title: "Мультисиг тестнета",
     lead: "Собственный мультисиг-контракт People 2-из-3 в тестнете People. Владельцы могут здесь создавать, подтверждать и исполнять транзакции.",
-    connect: "Подключить MetaMask",
+    connect: "Подключить кошелёк",
     openInApp: "Открыть в приложении MetaMask",
     connected: "Подключено",
-    noWallet: "MetaMask не найден в этом браузере.",
+    noWallet:
+      "Кошелёк в браузере не найден. Установите MetaMask (или другое расширение) и перезагрузите страницу.",
     owners: "Владельцы",
     threshold: "Нужно подтверждений",
     txs: "Транзакции",
@@ -120,7 +129,7 @@ const COPY = {
     submitAccept: "Создать: принять владение fee gateway",
     confirm: "Подтвердить",
     execute: "Исполнить",
-    notOwner: "Этот кошелёк не владелец мультисига, поэтому действия скрыты.",
+    notOwner: "Этот адрес не владелец мультисига, поэтому действия скрыты.",
     sent: "Транзакция отправлена",
     loading: "Загрузка…",
   },
@@ -146,16 +155,14 @@ export function MultisigPanel() {
   const load = useCallback(async () => {
     const client = createBrowserPublicClient();
     const o = await Promise.all(
-      [0, 1, 2]
-        .map(BigInt)
-        .map((i) =>
-          client.readContract({
-            address: MULTISIG,
-            abi,
-            functionName: "owners",
-            args: [i],
-          }),
-        ),
+      [0, 1, 2].map(BigInt).map((i) =>
+        client.readContract({
+          address: MULTISIG,
+          abi,
+          functionName: "owners",
+          args: [i],
+        }),
+      ),
     );
     setOwners(o as Address[]);
     setThreshold(
@@ -189,36 +196,77 @@ export function MultisigPanel() {
     load().catch((e) => setStatus(String((e as Error).message ?? e)));
   }, [load]);
 
-  async function connect() {
-    const provider =
-      readInjectedProvider("any") ?? (await waitForInjectedProvider("any"));
-    if (!provider) {
-      // Mobile Chrome/Safari have no injected wallet: open this page inside the MetaMask app.
-      if (isMobileBrowser()) {
-        window.location.assign(
-          walletAppDeepLink("metamask", window.location.href),
-        );
-        return;
-      }
-      return setStatus(t.noWallet);
-    }
+  const providerRef = useRef<DiscoveredWallet["provider"] | null>(null);
+  const [wallets, setWallets] = useState<DiscoveredWallet[] | null>(null);
+  const [mobileNoWallet, setMobileNoWallet] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    discoverWallets(600).then((list) => {
+      if (alive) setMobileNoWallet(list.length === 0 && isMobileBrowser());
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  async function pickWallet(w: DiscoveredWallet) {
+    setBusy(true);
     try {
-      const accs = (await provider.request({
+      try {
+        // Let the wallet show its account picker again (e.g. on "Switch wallet").
+        await w.provider.request({
+          method: "wallet_requestPermissions",
+          params: [{ eth_accounts: {} }],
+        });
+      } catch {
+        /* optional; not every wallet supports it */
+      }
+      const accs = (await w.provider.request({
         method: "eth_requestAccounts",
       })) as Address[];
-      await ensurePeopleChain(provider);
+      await ensurePeopleChain(w.provider);
+      providerRef.current = w.provider;
       setAccount(accs[0] ?? null);
+      setWallets(null);
       setStatus("");
     } catch (e) {
       setStatus(String((e as Error).message ?? e));
+    } finally {
+      setBusy(false);
     }
+  }
+
+  async function connect() {
+    setBusy(true);
+    setStatus(t.searching);
+    const list = await discoverWallets(400);
+    setBusy(false);
+    setStatus("");
+    if (list.length === 0) {
+      if (isMobileBrowser()) {
+        window.location.assign(METAMASK_DEEPLINK);
+        return;
+      }
+      setStatus(t.noWallet);
+      return;
+    }
+    if (list.length === 1) return pickWallet(list[0]);
+    setWallets(list);
+  }
+
+  function switchWallet() {
+    providerRef.current = null;
+    setAccount(null);
+    void connect();
   }
 
   async function send(
     functionName: "submit" | "confirm" | "execute",
     args: readonly unknown[],
   ) {
-    const provider = readInjectedProvider("any");
+    const provider = providerRef.current;
     if (!provider || !account) return;
     try {
       await ensurePeopleChain(provider);
@@ -249,30 +297,81 @@ export function MultisigPanel() {
       <div className="mt-4" data-testid="multisig-actions">
         <div>
           {account ? (
-            <p className="text-sm">
-              {t.connected}: <span className="font-mono">{account}</span>
-            </p>
-          ) : (
             <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm" data-testid="multisig-account">
+                {t.connected}:{" "}
+                <span className="break-all font-mono">{account}</span>
+              </p>
               <button
                 type="button"
-                onClick={connect}
-                data-testid="multisig-connect"
-                className="rounded-xl bg-brand px-4 py-2 text-sm text-brand-ink"
+                onClick={switchWallet}
+                disabled={busy}
+                data-testid="multisig-switch"
+                className="rounded-xl bg-surface px-3 py-1.5 text-sm ring-1 ring-line transition hover:bg-surface-2 hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {t.connect}
+                {t.switchWallet}
               </button>
-              <a
-                href={METAMASK_DEEPLINK}
-                data-testid="multisig-open-metamask"
-                className="text-sm text-ink-2 underline"
-              >
-                {t.openInApp}
-              </a>
             </div>
+          ) : mobileNoWallet ? (
+            <a
+              href={METAMASK_DEEPLINK}
+              data-testid="multisig-open-metamask"
+              className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:brightness-110 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:brightness-100 inline-block"
+            >
+              {t.openInApp}
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={connect}
+              disabled={busy}
+              data-testid="multisig-connect"
+              className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-brand-ink shadow-sm transition hover:brightness-110 hover:shadow-md active:brightness-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:brightness-100"
+            >
+              {t.connect}
+            </button>
           )}
-          {account && !isOwner ? (
-            <p className="mt-2 text-sm text-ink-3">{t.notOwner}</p>
+          {wallets && !account ? (
+            <div
+              className="mt-3 rounded-2xl border border-line bg-surface-2 p-3"
+              data-testid="multisig-wallets"
+            >
+              <p className="text-sm font-semibold">{t.pick}</p>
+              <ul className="mt-2 space-y-2">
+                {wallets.map((w) => (
+                  <li key={w.id}>
+                    <button
+                      type="button"
+                      onClick={() => pickWallet(w)}
+                      disabled={busy}
+                      data-testid="multisig-wallet-option"
+                      data-rdns={w.rdns}
+                      className="flex w-full items-center gap-3 rounded-xl bg-surface px-3 py-2 text-left text-sm ring-1 ring-line transition hover:bg-canvas hover:ring-brand disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {w.icon ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={w.icon} alt="" className="h-6 w-6" />
+                      ) : null}
+                      <span>{w.name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {account && !isOwner && owners.length ? (
+            <div
+              className="mt-2 text-sm text-ink-3"
+              data-testid="multisig-not-owner"
+            >
+              <p>{t.notOwner}</p>
+              <p className="mt-1">{t.expected}</p>
+              <ul className="mt-1 space-y-0.5 break-all font-mono text-xs">
+                {owners.map((o) => (
+                  <li key={o}>{o}</li>
+                ))}
+              </ul>
+            </div>
           ) : null}
         </div>
 
