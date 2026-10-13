@@ -1,0 +1,12 @@
+{
+  "chainId": 97401,
+  "note": "Sample contract template instances on testnet people_97401-1, shown at /explorer/contracts.",
+  "contracts": {
+    "escrow": "0x9D4e4579a2E4F5D92836CF67C9CaF61b0aFfc2a9",
+    "vesting": "0xa71Fb5F489c7B3b332687Ab1f93e51890e71162b",
+    "crowdfund": "0x64d4F5f2D4Db2fc15434F831955eAd3eC03FDda5",
+    "erc20": "0x07a551154D3D2c318fb17388eaC6800Ee596deE9"
+  },
+  "deployedAt": "2026-10-11T16:05:00Z",
+  "deployer": "0xb3B803d3AC8d08Fbc2214D0D9eE615109eC614Bf"
+}

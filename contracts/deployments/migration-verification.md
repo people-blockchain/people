@@ -1,0 +1,19 @@
+# Testnet migration verification
+
+| Address (canonical) | Legacy | Expected PPL (OVN) | On-chain PPL (EVM) | OK |
+| --- | --- | ---: | ---: | --- |
+| `0xeb21598ae901305ad16c87357016b764d269f854` | `0xeb21598ae901305ad16c87357016b764d269f854` | 998300 | 0 | no |
+| `0xa4ac298fe800cd900e1c83106a09142e51514ce4` | `0xa4ac298fe800cd900e1c83106a09142e51514ce4` | 70 | 0 | no |
+| `0x458331af0e04b092269cd36eaaf7af7ce256a226` | `0x458331af0e04b092269cd36eaaf7af7ce256a226` | 45.25323100000012 | 0 | no |
+| `0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f` | `0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f` | 26.029995 | 0 | no |
+| `0x1b6fc32160cd561a567465ad2b34a86657522728` | `0x1b6fc32160cd561a567465ad2b34a86657522728` | 0 | 0 | yes |
+| `0x2e85a85e292cdc4a0eda5bca8081b6af811a99aa` | `0x2e85a85e292cdc4a0eda5bca8081b6af811a99aa` | 0 | 0 | yes |
+| `0x081c6f0e0f67db72c97f52f82ad687792ee3d0aa` | `0x3b7343b0d98f478efd0d40fef0f68c6b41e0cbea` | 0 | 0 | yes |
+| `0x6f3f31dcfb9f8cf259acd1643036651880f76604` | `0x70dcfeb09e1d7dbc6f4d50db4b74f615177f9cf0` | 0 | 0 | yes |
+| `0x08d41f0d1333369d89413985455430d1903caea1` | `0x8b473392f08e89c201d4f35bd76b4c8f3abd4b0f` | 0 | 0 | yes |
+| `0x9b16d4f10ef3f40069c356f4728a4bf8cca49e70` | `0xaae546144fe8435ffb7f8b1fc057b198a536e6a6` | 0 | 0 | yes |
+| `0xb460464d79e897a01fe751caf33df0f09e226936` | `0xcac852aead9c4f29569c0c4a39727f61776ac27b` | 0 | 0 | yes |
+| `0xa6a2e85ce43727b6c63c149ae82384902c4f9528` | `0xcd64c4932dca01cc6316aed43e1aaf533a0c3780` | 0 | 0 | yes |
+
+Assets mapped: 0
+Pools recorded: 0

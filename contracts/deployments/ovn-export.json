@@ -1,0 +1,516 @@
+{
+  "exportedAt": "2026-10-02T16:10:35.344Z",
+  "nodeUrl": "https://node.peopleblockchain.network",
+  "chainId": "people-public-testnet-v2-2026-09-30",
+  "height": null,
+  "assets": [
+    {
+      "assetId": "ppl",
+      "type": "native",
+      "name": "People",
+      "symbol": "PPL",
+      "decimals": 6,
+      "totalSupply": 1000000,
+      "creator": "genesis",
+      "status": "active"
+    },
+    {
+      "assetId": "usdt",
+      "type": "user",
+      "name": "USDT",
+      "symbol": "USDT",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f",
+      "creationMetadata": {
+        "description": "Баксы 1 к 1",
+        "image": "sha256:11287e678387884b6943e3557dc7ce39b350840438a262402d1cacf0d127c29f"
+      },
+      "status": "active",
+      "createdAt": 23127,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "trosc",
+      "type": "user",
+      "name": "ROSCASH (Testnet demo)",
+      "symbol": "TROSC",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. ROSCASH helps communities run rotating savings circles where members save together and take turns receiving the pot.",
+        "image": "https://www.peopleblockchain.network/seed/tROSC.png",
+        "website": "https://roscash.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27685,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "tkrda",
+      "type": "user",
+      "name": "KredaFi (Testnet demo)",
+      "symbol": "TKRDA",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. KredaFi is a lending and credit platform.",
+        "image": "https://www.peopleblockchain.network/seed/tKRDA.png",
+        "website": "https://kredafi.com",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27686,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "tmem",
+      "type": "user",
+      "name": "MEM Cash (Testnet demo)",
+      "symbol": "TMEM",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Not the official MEM token. MEM Cash is a digital cash project.",
+        "image": "https://www.peopleblockchain.network/seed/tMEM.png",
+        "website": "https://memcash.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27688,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "tpitp",
+      "type": "user",
+      "name": "PitPat (Testnet demo)",
+      "symbol": "TPITP",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Neighbourhood mutual aid for young parents: baby things are shared, not sold, and help comes from neighbours. Demo of a community thank-you token.",
+        "image": "https://www.peopleblockchain.network/seed/tPITP.png",
+        "website": "https://pit-pat.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27689,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "tgood",
+      "type": "user",
+      "name": "Goodwill Planet (Testnet demo)",
+      "symbol": "TGOOD",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Goodwill Planet is an ecosystem for charity and acts of goodwill.",
+        "image": "https://www.peopleblockchain.network/seed/tGOOD.png",
+        "website": "https://goodwillplanet.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27690,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "tmark",
+      "type": "user",
+      "name": "AI MARK (Testnet demo)",
+      "symbol": "TMARK",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. AI MARK offers an AI marketing employee that handles marketing work for businesses.",
+        "image": "https://www.peopleblockchain.network/seed/tMARK.png",
+        "website": "https://ai-mark.agency",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 27691,
+      "allocation": {
+        "bondingCurve": 600000000,
+        "communityPool": 100000000,
+        "creator": 150000000,
+        "liquidityReserve": 100000000,
+        "ecosystemReserve": 50000000
+      }
+    },
+    {
+      "assetId": "trosc2",
+      "type": "user",
+      "name": "ROSCASH v2 (Testnet demo)",
+      "symbol": "TROSC2",
+      "decimals": 6,
+      "totalSupply": 1000000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. ROSCASH helps communities run rotating savings circles where members save together and take turns receiving the pot.",
+        "image": "https://www.peopleblockchain.network/seed/tROSC.png",
+        "website": "https://roscash.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 28552,
+      "allocation": {
+        "bondingCurve": 600000000000,
+        "communityPool": 100000000000,
+        "creator": 150000000000,
+        "liquidityReserve": 100000000000,
+        "ecosystemReserve": 50000000000
+      }
+    },
+    {
+      "assetId": "tpitp2",
+      "type": "user",
+      "name": "PitPat v2 (Testnet demo)",
+      "symbol": "TPITP2",
+      "decimals": 6,
+      "totalSupply": 1000000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Neighbourhood mutual aid for young parents: baby things are shared, not sold, and help comes from neighbours. Demo of a community thank-you token.",
+        "image": "https://www.peopleblockchain.network/seed/tPITP.png",
+        "website": "https://pit-pat.org",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 28555,
+      "allocation": {
+        "bondingCurve": 600000000000,
+        "communityPool": 100000000000,
+        "creator": 150000000000,
+        "liquidityReserve": 100000000000,
+        "ecosystemReserve": 50000000000
+      }
+    },
+    {
+      "assetId": "tmark2",
+      "type": "user",
+      "name": "AI MARK v2 (Testnet demo)",
+      "symbol": "TMARK2",
+      "decimals": 6,
+      "totalSupply": 1000000000000,
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. AI MARK offers an AI marketing employee that handles marketing work for businesses.",
+        "image": "https://www.peopleblockchain.network/seed/tMARK.png",
+        "website": "https://ai-mark.agency",
+        "testnet": true
+      },
+      "status": "active",
+      "createdAt": 28559,
+      "allocation": {
+        "bondingCurve": 600000000000,
+        "communityPool": 100000000000,
+        "creator": 150000000000,
+        "liquidityReserve": 100000000000,
+        "ecosystemReserve": 50000000000
+      }
+    }
+  ],
+  "pools": [
+    {
+      "poolId": "pool-ppl-tmark",
+      "tokenAssetId": "tmark",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 78038183,
+      "nativeReserve": 10,
+      "feeBps": 30,
+      "status": "active",
+      "locked": false,
+      "createdAt": 27749,
+      "totalLpSupply": 27935,
+      "lockedLpSupply": 1000,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 26935
+      }
+    },
+    {
+      "poolId": "pool-ppl-tmark2",
+      "tokenAssetId": "tmark2",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 548361102406,
+      "nativeScale": 1000000,
+      "nativeReserve": 493.730649,
+      "feeBps": 30,
+      "status": "active",
+      "locked": true,
+      "createdAt": 28560,
+      "totalLpSupply": 16454260325,
+      "lockedLpSupply": 4000416579,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 12453843746
+      }
+    },
+    {
+      "poolId": "pool-ppl-tpitp",
+      "tokenAssetId": "tpitp",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 78038183,
+      "nativeReserve": 10,
+      "feeBps": 30,
+      "status": "active",
+      "locked": false,
+      "createdAt": 27747,
+      "totalLpSupply": 27935,
+      "lockedLpSupply": 1000,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 26935
+      }
+    },
+    {
+      "poolId": "pool-ppl-tpitp2",
+      "tokenAssetId": "tpitp2",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 548361102406,
+      "nativeScale": 1000000,
+      "nativeReserve": 493.730649,
+      "feeBps": 30,
+      "status": "active",
+      "locked": true,
+      "createdAt": 28556,
+      "totalLpSupply": 16454260325,
+      "lockedLpSupply": 4000416579,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 12453843746
+      }
+    },
+    {
+      "poolId": "pool-ppl-trosc",
+      "tokenAssetId": "trosc",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 78038183,
+      "nativeReserve": 10,
+      "feeBps": 30,
+      "status": "active",
+      "locked": false,
+      "createdAt": 27744,
+      "totalLpSupply": 27935,
+      "lockedLpSupply": 1000,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 26935
+      }
+    },
+    {
+      "poolId": "pool-ppl-trosc2",
+      "tokenAssetId": "trosc2",
+      "nativeAssetId": "ppl",
+      "tokenReserve": 548361102406,
+      "nativeScale": 1000000,
+      "nativeReserve": 493.730649,
+      "feeBps": 30,
+      "status": "active",
+      "locked": true,
+      "createdAt": 28553,
+      "totalLpSupply": 16454260325,
+      "lockedLpSupply": 4000416579,
+      "lpBalances": {
+        "0x458331af0e04b092269cd36eaaf7af7ce256a226": 12453843746
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "legacyAddress": "0xeb21598ae901305ad16c87357016b764d269f854",
+      "address": "0xeb21598ae901305ad16c87357016b764d269f854",
+      "balance": 998300,
+      "balances": {
+        "ppl": 998300
+      },
+      "nonce": 90
+    },
+    {
+      "legacyAddress": "0xa4ac298fe800cd900e1c83106a09142e51514ce4",
+      "address": "0xa4ac298fe800cd900e1c83106a09142e51514ce4",
+      "balance": 70,
+      "balances": {
+        "ppl": 70,
+        "tpitp": 100000
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "address": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "balance": 45.25323100000012,
+      "balances": {
+        "ppl": 45.25323100000012,
+        "trosc": 6926481,
+        "tkrda": 15000000,
+        "tmem": 15000000,
+        "tpitp": 6726481,
+        "tgood": 15000000,
+        "tmark": 6926481,
+        "trosc2": 26,
+        "tpitp2": 26,
+        "tmark2": 26
+      },
+      "nonce": 25
+    },
+    {
+      "legacyAddress": "0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f",
+      "address": "0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f",
+      "balance": 26.029995,
+      "balances": {
+        "ppl": 26.029995,
+        "usdt": 15000000,
+        "tpitp": 100000
+      },
+      "nonce": 3
+    },
+    {
+      "legacyAddress": "0x1b6fc32160cd561a567465ad2b34a86657522728",
+      "address": "0x1b6fc32160cd561a567465ad2b34a86657522728",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 0
+    },
+    {
+      "legacyAddress": "0x2e85a85e292cdc4a0eda5bca8081b6af811a99aa",
+      "address": "0x2e85a85e292cdc4a0eda5bca8081b6af811a99aa",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0x3b7343b0d98f478efd0d40fef0f68c6b41e0cbea",
+      "address": "0x081c6f0e0f67db72c97f52f82ad687792ee3d0aa",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0x70dcfeb09e1d7dbc6f4d50db4b74f615177f9cf0",
+      "address": "0x6f3f31dcfb9f8cf259acd1643036651880f76604",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0x8b473392f08e89c201d4f35bd76b4c8f3abd4b0f",
+      "address": "0x08d41f0d1333369d89413985455430d1903caea1",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0xaae546144fe8435ffb7f8b1fc057b198a536e6a6",
+      "address": "0x9b16d4f10ef3f40069c356f4728a4bf8cca49e70",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0xcac852aead9c4f29569c0c4a39727f61776ac27b",
+      "address": "0xb460464d79e897a01fe751caf33df0f09e226936",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    },
+    {
+      "legacyAddress": "0xcd64c4932dca01cc6316aed43e1aaf533a0c3780",
+      "address": "0xa6a2e85ce43727b6c63c149ae82384902c4f9528",
+      "balance": 0,
+      "balances": {
+        "ppl": 0
+      },
+      "nonce": 1
+    }
+  ],
+  "nfts": [
+    {
+      "nftId": "nft-6bac9765657e743d430c96d5",
+      "owner": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "name": "Goodwill Planet Early Supporter",
+      "description": "Testnet demo by the People team. No real value. A badge for early supporters of the Goodwill Planet demo. https://goodwillplanet.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-goodwill-early-supporter.png",
+      "createdAt": 27752
+    },
+    {
+      "nftId": "nft-87703857aea9f15b37182e08",
+      "owner": "0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f",
+      "creator": "0xb71677e6dd7f5f046339fd5eef1b2c17c5a4495f",
+      "name": "Ваучер WT",
+      "description": "Ваучер на 100$",
+      "imageUri": "sha256:18b4267d4e3cb1d1b72a0dbdea1705da63d7f9e24800032bd5f158abdffbe5a9",
+      "createdAt": 23186
+    },
+    {
+      "nftId": "nft-d2a848fe0870916ec80907e6",
+      "owner": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "creator": "0x458331af0e04b092269cd36eaaf7af7ce256a226",
+      "name": "PitPat Founding Parent",
+      "description": "Testnet demo by the People team. No real value. A thank-you badge for the first parents who joined PitPat's neighbourhood mutual aid demo. https://pit-pat.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-pitpat-founding-parent.png",
+      "createdAt": 27750
+    }
+  ],
+  "addressMap": {
+    "0xaae546144fe8435ffb7f8b1fc057b198a536e6a6": "0x9b16d4f10ef3f40069c356f4728a4bf8cca49e70",
+    "0x70dcfeb09e1d7dbc6f4d50db4b74f615177f9cf0": "0x6f3f31dcfb9f8cf259acd1643036651880f76604",
+    "0xcd64c4932dca01cc6316aed43e1aaf533a0c3780": "0xa6a2e85ce43727b6c63c149ae82384902c4f9528",
+    "0x3b7343b0d98f478efd0d40fef0f68c6b41e0cbea": "0x081c6f0e0f67db72c97f52f82ad687792ee3d0aa",
+    "0xcac852aead9c4f29569c0c4a39727f61776ac27b": "0xb460464d79e897a01fe751caf33df0f09e226936",
+    "0x8b473392f08e89c201d4f35bd76b4c8f3abd4b0f": "0x08d41f0d1333369d89413985455430d1903caea1"
+  }
+}
