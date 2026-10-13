@@ -77,6 +77,7 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
     using SafeERC20 for IERC20;
 
     event CommunityRegistered(address indexed token, uint256 amount);
+    event CommunityDeposited(address indexed token, address indexed from, uint256 amount);
     event CommunityWithdrawn(address indexed token, address indexed to, uint256 amount);
     event RecipientAllowed(address indexed recipient, bool allowed);
 
@@ -102,6 +103,17 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
         if (!ok || msg.sender != abi.decode(data, (address))) revert Unauthorized();
         balances[token] = amount;
         emit CommunityRegistered(token, amount);
+    }
+
+    /// @notice Add tokens to a token's community pool (e.g. unsold curve tokens after
+    /// `BondingCurveMarket.finalize`). Pulls exactly `amount` from the caller, so the balance only
+    /// grows by tokens the vault really received. Permissionless: it can only add, never take.
+    function deposit(address token, uint256 amount) external {
+        uint256 before = IERC20(token).balanceOf(address(this));
+        IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
+        uint256 received = IERC20(token).balanceOf(address(this)) - before;
+        balances[token] += received;
+        emit CommunityDeposited(token, msg.sender, received);
     }
 
     /// @notice H-01: only `owner()` may grow the set of addresses `withdraw` may send to.

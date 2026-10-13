@@ -7,6 +7,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {CurveMath} from "../libs/CurveMath.sol";
 import {IBondingCurveMarket} from "../interfaces/IBondingCurveMarket.sol";
+import {ICommunityTokenVault} from "../interfaces/ICommunityTokenVault.sol";
 import {IPeopleRouter} from "../interfaces/ICreatorVesting.sol";
 import {IPeopleAmmFactory} from "../interfaces/ICreatorVesting.sol";
 
@@ -21,6 +22,13 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     event FeeRecipientUpdated(address indexed feeRecipient);
     event TreasuryUpdated(address indexed treasury);
     event MigrationLeftoversSwept(address indexed token, address indexed to, uint256 amount);
+    event CurveFinalized(address indexed token, address indexed vault, uint256 unsold);
+    event UnsoldSentToCommunity(address indexed token, address indexed vault, uint256 amount);
+
+    /// @notice Owner rule 2026-10-13: a curve that has not sold out (migrated) within this
+    /// window after launch can be finalized by anyone; its unsold tokens go to the token's own
+    /// community pool (`CommunityTokenVault`).
+    uint256 public constant FINALIZE_AFTER = 180 days;
 
     address public immutable core;
     /// @dev AUD-H4: storage, not `immutable` — see `setFeeRecipient`.
@@ -41,12 +49,17 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     }
 
     mapping(address => TokenCurve) public curves;
+    /// @notice Launch time of each curve (set in `registerToken`).
+    mapping(address => uint256) public launchedAt;
+    /// @notice True once `finalize` closed a curve that did not sell out in time.
+    mapping(address => bool) public finalized;
 
     error Unauthorized();
     error UnknownToken();
     error InsufficientReserve();
     error ZeroFeeRecipient();
     error ZeroTreasury();
+    error NotFinalizable();
 
     modifier onlyFactory() {
         (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
@@ -115,6 +128,7 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         tc.liquidityReserve = liquidityReserve;
         tc.ecosystemReserve = ecosystemReserve;
         tc.state = CurveMath.initialState(curveInventory);
+        launchedAt[token] = block.timestamp;
         emit TokenRegistered(token, curveInventory, liquidityReserve, ecosystemReserve);
     }
 
@@ -135,10 +149,16 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     }
 
     function sell(address token, uint256 tokenAmount, uint256 minNativeOut) external nonReentrant {
-        TokenCurve storage tc = _requireActive(token);
+        // After `finalize`, holders can still sell back to the curve (their PPL stays claimable);
+        // buying is closed and the tokens sold back are forwarded to the community pool.
+        bool isFinal = finalized[token];
+        TokenCurve storage tc = isFinal ? curves[token] : _requireActive(token);
         IERC20(token).safeTransferFrom(msg.sender, address(this), tokenAmount);
+        CurveMath.State memory cur = tc.state;
+        if (isFinal) cur.active = true; // pricing only; the stored curve stays closed to buys
         (uint256 netOut, uint256 fee,, CurveMath.State memory next) =
-            CurveMath.calculateSell(tc.state, tokenAmount, minNativeOut);
+            CurveMath.calculateSell(cur, tokenAmount, minNativeOut);
+        if (isFinal) next.active = false;
         tc.state = next;
         if (fee > 0) {
             (bool sent,) = feeRecipient.call{value: fee}("");
@@ -147,6 +167,45 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         (bool pay,) = msg.sender.call{value: netOut}("");
         require(pay, "payout");
         emit CurveSell(token, msg.sender, tokenAmount, netOut, fee);
+        if (isFinal) {
+            _sendToCommunity(token, tokenAmount);
+        }
+    }
+
+    /// @notice True when `finalize(token)` would succeed.
+    function canFinalize(address token) public view returns (bool) {
+        TokenCurve storage tc = curves[token];
+        return tc.state.active && !tc.state.migrated && launchedAt[token] != 0
+            && block.timestamp >= launchedAt[token] + FINALIZE_AFTER;
+    }
+
+    /// @notice Permissionless: close a curve that did not sell out within `FINALIZE_AFTER` of
+    /// launch. Buying stops; every unsold token the curve holds (except the ecosystem reserve,
+    /// which keeps its own `onlyOwner` path) goes to the token's community pool.
+    function finalize(address token) external nonReentrant {
+        if (!canFinalize(token)) revert NotFinalizable();
+        TokenCurve storage tc = curves[token];
+        tc.state.active = false;
+        finalized[token] = true;
+        uint256 held = IERC20(token).balanceOf(address(this));
+        uint256 unsold = held > tc.ecosystemReserve ? held - tc.ecosystemReserve : 0;
+        tc.curveInventory = 0;
+        tc.liquidityReserve = 0;
+        address vault = _sendToCommunity(token, unsold);
+        emit CurveFinalized(token, vault, unsold);
+    }
+
+    function _sendToCommunity(address token, uint256 amount) internal returns (address vault) {
+        (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
+        require(ok, "factory");
+        address factory = abi.decode(data, (address));
+        (ok, data) = factory.staticcall(abi.encodeWithSignature("communityVault()"));
+        require(ok, "vault");
+        vault = abi.decode(data, (address));
+        if (amount == 0) return vault;
+        IERC20(token).forceApprove(vault, amount);
+        ICommunityTokenVault(vault).deposit(token, amount);
+        emit UnsoldSentToCommunity(token, vault, amount);
     }
 
     function quoteBuy(address token, uint256 nativeIn)
