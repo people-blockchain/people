@@ -36,7 +36,7 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     /// @notice AUD-M1: destination for the tokens a curve still holds when it migrates — the
     /// unsold curve inventory plus the unused part of the liquidity reserve. They used to be
     /// stranded in this contract forever (`withdrawEcosystemReserve` only reaches
-    /// `ecosystemReserve`). Owner decision 2026-10-09: they go to the treasury multisig.
+    /// `ecosystemReserve`). Owner decision 2026-10-13: they go to the token's community pool; kept for ABI compatibility.
     address public treasury;
     IPeopleRouter public immutable router;
     IPeopleAmmFactory public immutable ammFactory;
@@ -262,8 +262,9 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         if (leftover > 0) {
             tc.curveInventory = 0;
             tc.liquidityReserve = 0;
-            IERC20(token).safeTransfer(treasury, leftover);
-            emit MigrationLeftoversSwept(token, treasury, leftover);
+            // Owner decision 2026-10-13: leftovers go to the token's own community pool.
+            address vault = _sendToCommunity(token, leftover);
+            emit MigrationLeftoversSwept(token, vault, leftover);
         }
     }
 

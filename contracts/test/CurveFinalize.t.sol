@@ -101,9 +101,13 @@ contract CurveFinalizeTest is Test {
 
     function test_soldOutCurveMigratesAndCannotBeFinalized() public {
         address token = _launch();
+        uint256 alloc = vault.balances(token);
         vm.prank(buyer);
         curve.buy{value: 50_000 ether}(token, 0);
         assertTrue(curve.isMigrated(token), "migrated");
+        assertEq(IERC20(token).balanceOf(address(0x7EA5)), 0, "treasury gets no leftovers");
+        assertGt(vault.balances(token), alloc, "leftovers added to the community pool");
+        assertEq(IERC20(token).balanceOf(address(vault)), vault.balances(token));
         vm.warp(block.timestamp + 200 days);
         assertFalse(curve.canFinalize(token));
         vm.expectRevert(BondingCurveMarket.NotFinalizable.selector);
