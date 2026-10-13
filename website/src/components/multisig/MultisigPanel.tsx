@@ -195,8 +195,8 @@ export function MultisigPanel() {
   const [account, setAccount] = useState<Address | null>(null);
   const [status, setStatus] = useState<string>("");
   const [sending, setSending] = useState(false);
+  const [showNew, setShowNew] = useState(false);
   const accountRef = useRef<Address | null>(null);
-  accountRef.current = account;
 
   const load = useCallback(async () => {
     const client = createBrowserPublicClient();
@@ -247,6 +247,7 @@ export function MultisigPanel() {
   }, []);
 
   useEffect(() => {
+    accountRef.current = account;
     load().catch((e) => setStatus(String((e as Error).message ?? e)));
   }, [load, account]);
 
@@ -326,7 +327,9 @@ export function MultisigPanel() {
     try {
       await ensurePeopleChain(provider);
       const wallet = createInjectedWalletClient(provider);
+      await createBrowserPublicClient().simulateContract({ address: MULTISIG, abi, functionName, args: args as never, account });
       const hash = await wallet.writeContract({
+        gas: functionName === "submit" ? undefined : BigInt(300000),
         address: MULTISIG,
         abi,
         functionName,
@@ -356,26 +359,31 @@ export function MultisigPanel() {
 
   function actions(tx: Tx) {
     const enough = threshold !== null && tx.confirmations >= threshold;
-    const confirmWhy = sending ? "Waiting for wallet…" : tx.mine ? "You already confirmed" : "";
-    const execWhy = sending ? "Waiting for wallet…" : !enough ? `Needs ${threshold?.toString() ?? "…"} confirmations` : "";
+    if (enough)
+      return (
+        <div className="mt-2" data-testid="multisig-actions">
+          <span className="mr-2 text-xs text-ink-3">Step 2 of 2</span>
+          <button type="button" disabled={sending} onClick={() => send("execute", [BigInt(tx.id)])} className={BTN_PRIMARY}>
+            {sending ? "Waiting for wallet…" : t.execute}
+          </button>
+        </div>
+      );
+    if (!tx.mine)
+      return (
+        <div className="mt-2" data-testid="multisig-actions">
+          <span className="mr-2 text-xs text-ink-3">Step 1 of 2</span>
+          <button type="button" disabled={sending} onClick={() => send("confirm", [BigInt(tx.id)])} className={BTN_PRIMARY}>
+            {sending ? "Waiting for wallet…" : t.confirm}
+          </button>
+        </div>
+      );
     return (
-      <div className="mt-2 flex flex-wrap items-start gap-2" data-testid="multisig-actions">
-        <span className="w-full text-xs text-ink-3">1. Confirm → 2. Execute</span>
-        <div className="flex flex-col">
-          <button type="button" disabled={!!confirmWhy} title={confirmWhy} onClick={() => send("confirm", [BigInt(tx.id)])} className={BTN_PRIMARY}>
-            1. {t.confirm}
-          </button>
-          {confirmWhy ? <span className="mt-1 text-xs text-ink-3">{confirmWhy}</span> : null}
-        </div>
-        <div className="flex flex-col">
-          <button type="button" disabled={!!execWhy} title={execWhy} onClick={() => send("execute", [BigInt(tx.id)])} className={BTN_PRIMARY}>
-            2. {t.execute}
-          </button>
-          {execWhy ? <span className="mt-1 text-xs text-ink-3">{execWhy}</span> : null}
-        </div>
-      </div>
+      <p className="mt-2 text-xs text-ink-3" data-testid="multisig-actions">
+        You confirmed. Waiting for another owner to confirm ({tx.confirmations.toString()}/{threshold?.toString() ?? "…"}).
+      </p>
     );
   }
+
 
   const isOwner =
     account !== null &&
@@ -466,6 +474,11 @@ export function MultisigPanel() {
         </div>
 
         {isOwner ? (
+          <div className="mt-3">
+            <button type="button" onClick={() => setShowNew((v) => !v)} className="text-xs text-ink-3 underline hover:text-ink">
+              {showNew ? "− New transaction" : "+ New transaction"}
+            </button>
+            {showNew ? (
           <button
             type="button"
             onClick={() =>
@@ -476,25 +489,9 @@ export function MultisigPanel() {
           >
             {t.submitAccept}
           </button>
+            ) : null}
+          </div>
         ) : null}
-        {isOwner
-          ? txs
-              .filter((tx) => !tx.executed)
-              .map((tx) => (
-                <div
-                  key={tx.id}
-                  className="mt-3 flex flex-wrap items-center gap-2 text-sm"
-                  data-testid="multisig-quick-actions"
-                >
-                  <span className="font-semibold">#{tx.id}</span>
-                  <span className="text-ink-3">
-                    {tx.confirmations.toString()} /{" "}
-                    {threshold?.toString() ?? "…"}
-                  </span>
-                  {actions(tx)}
-                </div>
-              ))
-          : null}
         {status ? (
           <p className="mt-3 break-all text-xs text-ink-3">{status}</p>
         ) : null}
