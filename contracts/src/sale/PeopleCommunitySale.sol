@@ -23,6 +23,24 @@ contract PeopleCommunitySale is ReentrancyGuard, Ownable2Step, Pausable {
     uint256 public immutable stableScale;
     uint256 public soldPpl;
 
+    /// @notice Owner rule 2026-10-13: the sale runs for a fixed 180 days from `open`. After that
+    /// anyone can call `finalize`, and the unsold PPL is assigned to the community pool (the same
+    /// rule as user token curves). PPL is delivered on the People chain off this contract, so
+    /// `finalize` records the unsold amount and its recipient on-chain for that delivery.
+    uint256 public constant SALE_DURATION = 180 days;
+    uint256 public openedAt;
+    bool public finalized;
+    address public communityPool;
+    uint256 public unsoldToCommunity;
+
+    event SaleOpened(uint256 openedAt, uint256 closesAt, address indexed communityPool);
+    event SaleFinalized(address indexed caller, address indexed communityPool, uint256 unsoldPpl);
+
+    error AlreadyOpened();
+    error NotOpen();
+    error SaleEnded();
+    error NotFinalizable();
+
     event Purchased(address indexed buyer, address indexed beneficiary, uint256 usdtPaid, uint256 pplOut, uint256 soldAfter);
 
     constructor(address stablecoin_, address treasury_, address owner_) Ownable(owner_) {
@@ -40,6 +58,32 @@ contract PeopleCommunitySale is ReentrancyGuard, Ownable2Step, Pausable {
 
     function unpause() external onlyOwner {
         _unpause();
+    }
+
+    /// @notice Opens the 180-day window once; the community pool recipient is fixed here.
+    function open(address communityPool_) external onlyOwner {
+        if (openedAt != 0) revert AlreadyOpened();
+        require(communityPool_ != address(0), "zero");
+        openedAt = block.timestamp;
+        communityPool = communityPool_;
+        emit SaleOpened(block.timestamp, block.timestamp + SALE_DURATION, communityPool_);
+    }
+
+    function closesAt() public view returns (uint256) {
+        return openedAt == 0 ? 0 : openedAt + SALE_DURATION;
+    }
+
+    function canFinalize() public view returns (bool) {
+        return openedAt != 0 && !finalized && block.timestamp >= openedAt + SALE_DURATION;
+    }
+
+    /// @notice Permissionless once the 180 days are over: closes the sale for good and assigns
+    /// every unsold PPL to the community pool.
+    function finalize() external {
+        if (!canFinalize()) revert NotFinalizable();
+        finalized = true;
+        unsoldToCommunity = SUPPLY_PPL - soldPpl;
+        emit SaleFinalized(msg.sender, communityPool, unsoldToCommunity);
     }
 
     function remainingPpl() public view returns (uint256) {
@@ -68,6 +112,8 @@ contract PeopleCommunitySale is ReentrancyGuard, Ownable2Step, Pausable {
     }
 
     function buy(address beneficiary, uint256 usdtAmount, uint256 minPplOut) external nonReentrant whenNotPaused {
+        if (openedAt == 0) revert NotOpen();
+        if (finalized || block.timestamp >= openedAt + SALE_DURATION) revert SaleEnded();
         require(beneficiary != address(0), "beneficiary");
         require(usdtAmount > 0, "amount");
         (uint256 pplOut, uint256 usdtUsed) = quotePplForUsdt(usdtAmount);

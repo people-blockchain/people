@@ -58,6 +58,7 @@ contract PeopleCommunitySaleTest is Test {
     function setUp() public {
         usdt = new MockUsdt6();
         sale = new SaleHarness(address(usdt), treasury, address(this));
+        sale.open(address(0xC0DE));
     }
 
     /// Website formula in exact rational arithmetic (micro-USDT, rounded up).
@@ -145,6 +146,7 @@ contract PeopleCommunitySale18DecimalsTest is Test {
     function setUp() public {
         usdt = new MockUsdt18();
         sale = new SaleHarness(address(usdt), treasury, address(this));
+        sale.open(address(0xC0DE));
     }
 
     function test_tenUsdtBuysAboutOneThousandPplAt18Decimals() public view {
