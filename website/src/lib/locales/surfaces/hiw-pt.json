@@ -1,0 +1,116 @@
+{
+  "title": "Como funciona o People's Blockchain",
+  "loopLine": "As pessoas usam a rede. O uso gera taxas. Parte de cada taxa volta para a comunidade.",
+  "docsLinkLabel": "Detalhes na documentação",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Já no testnet",
+      "items": [
+        {
+          "title": "Carteira",
+          "text": "Carteira não custodial no telemóvel ou navegador. As chaves não saem do seu dispositivo."
+        },
+        {
+          "title": "Criar token",
+          "text": "Nome, ticker, imagem e oferta, pague em PPL. Preço na curva desde a primeira negociação."
+        },
+        {
+          "title": "Negociar",
+          "text": "Compre e venda na curva de lançamento, depois no pool token/PPL."
+        },
+        {
+          "title": "10% para a comunidade",
+          "text": "Cada token padrão envia 10% da oferta ao pool comunitário desse token."
+        },
+        {
+          "title": "Vesting do criador",
+          "text": "A parte do criador libera em 180 dias, sem dump no primeiro dia."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Participe como pessoa",
+      "items": [
+        {
+          "title": "Sessões de participação num toque no telemóvel.",
+          "text": ""
+        },
+        {
+          "title": "Prova de humanidade sem biometria.",
+          "text": ""
+        },
+        {
+          "title": "Os pontos de participação definem a sua parte das recompensas comunitárias. Não se compram nem transferem.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Oferta fixa de PPL",
+      "intro": "Um bilhão de PPL sem mint surpresa nos primeiros anos. Validadores e recompensas vêm de genesis e taxas.",
+      "bullets": [
+        "Anos 1–4: 0% inflação — 1B PPL.",
+        "Validadores: 200M PPL, 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M) + 30% taxas.",
+        "Fundadores, recompensas, embaixadores e airdrops: só fundo 35%.",
+        "Do ano 5: máx. 2% emissão nova/ano, só voto comunitário.",
+        "Airdrop fundadores primeiro; venda após 1.000 verificados e multisig.",
+        "Cada taxa: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queima."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "De onde vêm as recompensas",
+      "intro": "Cada taxa de rede é paga em PPL e dividida da mesma forma sempre:",
+      "feeSplit": [
+        {
+          "label": "Validadores (rede)",
+          "pct": 30
+        },
+        {
+          "label": "Pool comunitário",
+          "pct": 25
+        },
+        {
+          "label": "Tesouraria",
+          "pct": 20
+        },
+        {
+          "label": "Liquidez e ecossistema",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referências)",
+          "pct": 15
+        },
+        {
+          "label": "Queima",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "O pool comunitário é partilhado entre participantes ativos proporcionalmente aos pontos. Exemplo: 600 tokens no pool, três pessoas com 1, 2 e 3 pontos recebem 100, 200 e 300.",
+      "tokenPoolNote": "Separadamente, os 10% comunitários de cada token ficam no pool desse token. Nunca se misturam com taxas em PPL.",
+      "buybackNote": "As parcelas de tesouraria e liquidez (30% no total) financiam recompras públicas de PPL no mercado aberto, executadas pelo multisig publicado e visíveis no explorer.",
+      "launchFeeNote": "Lançar um token ou NFT custa uma taxa de protocolo, pagável em PPL ou numa stablecoin suportada (USDC/USDT), à sua escolha. O gas é sempre pago em PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Por que bots não conseguem farmar",
+      "body": "Contas novas começam devagar, inativas enfraquecem e cada pessoa tem um teto. Cem contas falsas não rendem cem vezes mais."
+    },
+    {
+      "id": "honest",
+      "title": "A parte honesta",
+      "bullets": [
+        "Recompensas não são fixas. Sem atividade não há recompensas.",
+        "Preços podem subir, cair ou ir a zero.",
+        "Isto é participação numa rede, não investimento."
+      ]
+    }
+  ],
+  "ctaWallet": "Criar carteira",
+  "ctaCreate": "Lançar um token",
+  "feeChartLabel": "Divisão da taxa de rede"
+}

@@ -1,0 +1,145 @@
+{
+  "hero": {
+    "brandLine": "PEOPLE — blockchain untuk komunitas",
+    "headlineMain": "Luncurkan token untuk komunitas Anda.",
+    "headlineMainLines": [
+      "Luncurkan token untuk komunitas Anda."
+    ],
+    "headlineAccent": "10% untuk orang Anda, bukan untuk paus.",
+    "headlineAccentLines": [
+      "10% untuk orang Anda,",
+      "bukan untuk paus."
+    ],
+    "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik dan coba di testnet.",
+    "pitchLine": "Blockchain untuk orang biasa: token sendiri, kartu NFT klub, dan mengumpulkan dana untuk sebuah ide — tanpa kode.",
+    "testnetBadge": "Testnet publik sudah live. Belum mainnet.",
+    "ctaTestnet": "Coba testnet",
+    "ctaFounder": "Klaim nomor pendiri Anda",
+    "card": {
+      "badge": "Contoh",
+      "tokenName": "Token komunitas Anda",
+      "ticker": "TICKER",
+      "price": "$0.0138"
+    },
+    "stages": [
+      {
+        "id": "wallet",
+        "label": "Dompet dalam 30 detik",
+        "sub": "Kunci Anda tetap di ponsel atau browser Anda."
+      },
+      {
+        "id": "token",
+        "label": "Token Anda, dihargai sejak transaksi pertama",
+        "sub": "Pilih nama dan ticker. Bonding curve yang menentukan harganya."
+      },
+      {
+        "id": "share",
+        "label": "10% untuk orang Anda",
+        "sub": "Setiap token baru mengirim 10% pasokannya ke pool komunitasnya sendiri."
+      }
+    ],
+    "shareBadge": "10% bagian komunitas",
+    "peopleLine": "Orang Anda, bukan paus"
+  },
+  "community": {
+    "eyebrow": "10% untuk komunitas",
+    "title": "10% dari setiap token baru untuk orang Anda",
+    "lead": "Ini tertanam di protokol, bukan dijanjikan di sebuah post: setiap peluncuran standar mengirim 10% pasokannya ke pool komunitas milik token itu sendiri. Ini tidak pernah tercampur dengan biaya jaringan.",
+    "statLabel": "dari pasokan setiap token baru masuk ke pool komunitasnya",
+    "statNote": "Pool ini milik orang-orang yang berpartisipasi di token itu — bukan milik jaringan dan bukan milik pencipta.",
+    "footnote": "Biaya jaringan dibagi secara terpisah: {{community}}% ke pool komunitas, {{validators}}% ke validator.",
+    "cta": "Ke mana biaya pergi",
+    "href": "/how-it-works#hiw-fees"
+  },
+  "build": {
+    "eyebrow": "Tanpa kode, tanpa keahlian kripto",
+    "title": "Yang bisa Anda lakukan tanpa kode",
+    "lead": "Semua di bawah ini sudah berjalan hari ini di testnet publik. Tidak ada yang perlu diinstal, tidak ada yang perlu dikompilasi.",
+    "cta": "Coba di testnet",
+    "cards": [
+      {
+        "id": "token",
+        "title": "Luncurkan token klub atau komunitas dalam satu menit",
+        "body": "Pilih nama, ticker, gambar, dan pasokan. Bayar biaya peluncuran dengan PPL dan token langsung live di bonding curve-nya sendiri.",
+        "href": "/create/token"
+      },
+      {
+        "id": "nft",
+        "title": "Cetak kartu NFT klub",
+        "body": "Kartu keanggotaan sebagai NFT: satu per anggota, dengan gambar yang Anda unggah atau buat di browser.",
+        "href": "/create/nft"
+      },
+      {
+        "id": "funding",
+        "title": "Kumpulkan dana untuk ide Anda",
+        "body": "Komunitas Anda membeli di curve sejak transaksi pertama, sehingga harga ditentukan oleh permintaan nyata, bukan oleh ronde privat.",
+        "href": "/create"
+      },
+      {
+        "id": "contract",
+        "title": "Jelaskan smart contract dengan kata-kata biasa",
+        "body": "Tulis apa yang Anda inginkan dalam bahasa biasa dan dapatkan kontrak yang dibangun dari template OpenZeppelin yang sudah diaudit. Anda melihat hasilnya sebelum men-deploy.",
+        "href": "/create/contract"
+      }
+    ]
+  },
+  "fair": {
+    "eyebrow": "Mengapa ini adil",
+    "title": "Aturan yang sama untuk setiap komunitas",
+    "lead": "Tiga aturan tertanam di protokol, bukan dijanjikan di sebuah post.",
+    "tiles": [
+      {
+        "id": "community-share",
+        "stat": "10%",
+        "title": "dari setiap token baru masuk ke pool komunitas token itu",
+        "body": "Bukan ke jaringan, bukan ke pencipta. Pool milik token itu sendiri, dibagi dengan orang-orang yang berpartisipasi."
+      },
+      {
+        "id": "vesting",
+        "stat": "180 hari",
+        "title": "sebelum bagian pencipta terbuka sepenuhnya",
+        "body": "Alokasi pencipta terbuka secara linear selama 180 hari, jadi tidak ada dump di hari pertama."
+      },
+      {
+        "id": "fees",
+        "stat": "0%",
+        "title": "biaya jaringan dibakar — orang-orang menerimanya sebagai gantinya",
+        "body": "Setiap biaya dibagi antara validator, pool komunitas, treasury, likuiditas, dan Growth. Tidak ada yang dihancurkan untuk berpura-pura langka."
+      }
+    ]
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million Founders",
+    "title": "Nomor pendiri masih dibagikan",
+    "titleWithNumber": "Pendiri #{{n}} berikutnya",
+    "lead": "Klaim nomor, dapatkan kartu yang bisa dibagikan, dan dapatkan bagian pool komunitas karena hadir lebih awal dan aktif.",
+    "cta": "Jadi pendiri",
+    "href": "/founders",
+    "cardHint": "Dua level, hanya untuk orang aktif, 10% di awal dan sisanya selama 52 minggu.",
+    "liveCountLabel": "Pendiri sejauh ini"
+  },
+  "agents": {
+    "eyebrow": "Agen AI komunitas",
+    "title": "Agen yang bekerja untuk kelompok",
+    "lead": "Agen adalah pengguna kelas satu di jaringan: mereka membayar untuk yang mereka pakai dan bertanggung jawab kepada orang-orang yang mereka layani.",
+    "cta": "Kenali para agen",
+    "href": "/agents"
+  },
+  "network": {
+    "eyebrow": "Jaringan live",
+    "title": "Testnet publik, saat ini",
+    "blockHeight": "Tinggi blok",
+    "chainLabel": "Chain testnet",
+    "explorer": "Buka explorer",
+    "unavailable": "Tinggi blok sedang tidak tersedia.",
+    "collecting": "Membaca jaringan…",
+    "note": "Ini adalah testnet. Angka di atas nyata, tokennya tidak."
+  },
+  "final": {
+    "title": "Testnet sudah dibuka. Jadilah yang lebih awal, coba rusak sesuatu, beri tahu kami yang menyebalkan.",
+    "body": "Setiap laporan bug dan setiap pertanyaan yang membingungkan langsung masuk ke apa yang kami bangun selanjutnya.",
+    "ctaWallet": "Buat dompet",
+    "ctaExplore": "Lihat explorer",
+    "socialLabel": "Ikuti kami"
+  }
+}

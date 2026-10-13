@@ -1,0 +1,13 @@
+# Railway service: set Root Directory to people-node
+# Volume: mount at /data  (node reads DATA_DIR, default /data in Dockerfile.node)
+# Image is portable (same Dockerfile.node on a VPS). This file is not a Mainnet authorization.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.node"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

@@ -1,0 +1,304 @@
+import type { Language } from "@/lib/preferences";
+import factoryAr from "./locales/surfaces/factory-ar.json" with { type: "json" };
+import factoryDe from "./locales/surfaces/factory-de.json" with { type: "json" };
+import factoryEs from "./locales/surfaces/factory-es.json" with { type: "json" };
+import factoryFr from "./locales/surfaces/factory-fr.json" with { type: "json" };
+import factoryId from "./locales/surfaces/factory-id.json" with { type: "json" };
+import factoryIt from "./locales/surfaces/factory-it.json" with { type: "json" };
+import factoryPt from "./locales/surfaces/factory-pt.json" with { type: "json" };
+import factoryTr from "./locales/surfaces/factory-tr.json" with { type: "json" };
+import factoryVi from "./locales/surfaces/factory-vi.json" with { type: "json" };
+import factoryZh from "./locales/surfaces/factory-zh.json" with { type: "json" };
+
+export type FactoryCopyContent = {
+  navLabel: string;
+  tokenNav: string;
+  nftNav: string;
+  contractNav: string;
+  contractLead: string;
+  feesLink: string;
+  hub: {
+    tag: string;
+    title: string;
+    subtitle: string;
+    tokenCta: string;
+    nftCta: string;
+    contractCta: string;
+    statusUnavailable: string;
+    statusTestnet: string;
+  };
+  token: {
+    title: string;
+    lead: string;
+    steps: string[];
+  };
+  nft: {
+    title: string;
+    lead: string;
+    steps: string[];
+    modeSingle: string;
+    modeCollection: string;
+    collectionLabel: string;
+  };
+  form: {
+    image: string;
+    imageHint: string;
+    imageUrl: string;
+    name: string;
+    description: string;
+    ticker: string;
+    supply: string;
+    decimals: string;
+    review: string;
+    pay: string;
+    result: string;
+    next: string;
+    back: string;
+    submit: string;
+    another: string;
+    wallet: string;
+    createWallet: string;
+    importWallet: string;
+    address: string;
+    balance: string;
+    nonce: string;
+    privateKey: string;
+    feeLabel: string;
+    feeUnset: string;
+    noRpc: string;
+    allocation: string;
+    success: string;
+    assetId: string;
+    nftId: string;
+    txId: string;
+    error: string;
+    payWithLabel: string;
+    payWithPpl: string;
+    stableFeeLabel: string;
+    stableFeeBuybackNote: string;
+    stableFeeNetworkNote: string;
+    approvingStable: string;
+    payingStableFee: string;
+    creatingAfterStableFee: string;
+  };
+  iconGen: {
+    button: string;
+    lead: string;
+    presetFlat: string;
+    presetBadge: string;
+    presetMascot: string;
+    subjectLabel: string;
+    subjectPlaceholder: string;
+    remainingFree: string;
+    /** M20-4: shown instead of the free counter when the wallet isn't a verified founder. */
+    verifiedOnly: string;
+    paidNote: string;
+    generate: string;
+    pickHint: string;
+    busy: string;
+    connectWallet: string;
+    errorGeneric: string;
+  };
+};
+
+const baseFactoryCopy: Record<string, FactoryCopyContent> = {
+  en: {
+    navLabel: "Create",
+    tokenNav: "Create token",
+    nftNav: "Create NFT",
+    contractNav: "Create a contract",
+    contractLead:
+      "Describe what you need in ordinary words. We parameterize a reviewed Solidity template (OpenZeppelin patterns). Gas is paid in PPL. Token/NFT factory remains the built-in path.",
+    feesLink: "Fees & pricing",
+    hub: {
+      tag: "CREATE",
+      title: "Create a token, NFT, or contract",
+      subtitle:
+        "No code for tokens and NFTs. For general-purpose contracts, write a sentence and review the Solidity before you sign.",
+      tokenCta: "Create a token",
+      nftCta: "Create an NFT",
+      contractCta: "Create a contract",
+      statusUnavailable: "Network temporarily unavailable",
+      statusTestnet: "Testnet",
+    },
+    token: {
+      title: "Create a token",
+      lead: "Standard Token Factory launch: name, ticker, supply, image, then pay the PPL fee.",
+      steps: ["Image", "Details", "Review", "Pay", "Done"],
+    },
+    nft: {
+      title: "Create an NFT",
+      lead: "Mint a unique item with a picture, name, and description. Optional collection name groups pieces.",
+      steps: ["Image", "Details", "Review", "Pay", "Done"],
+      modeSingle: "Single item",
+      modeCollection: "Part of a collection",
+      collectionLabel: "Collection name",
+    },
+    form: {
+      image: "Picture",
+      imageHint: "PNG, JPEG or WebP. Upload a file or paste a link to an image. You will see a preview first.",
+      imageUrl: "Or paste an image URL",
+      name: "Name",
+      description: "Description",
+      ticker: "Ticker",
+      supply: "Total supply",
+      decimals: "Decimals",
+      review: "Check before you pay",
+      pay: "Pay in PPL",
+      result: "Created",
+      next: "Continue",
+      back: "Back",
+      submit: "Sign and submit",
+      another: "Create another",
+      wallet: "Wallet",
+      createWallet: "Create a new key",
+      importWallet: "Import key",
+      address: "Address",
+      balance: "PPL balance",
+      nonce: "Nonce",
+      privateKey: "Private key (64 hex)",
+      feeLabel: "PPL fee",
+      feeUnset: "Fee amount is unavailable because the configured value is invalid.",
+      noRpc: "Network temporarily unavailable",
+      allocation: "Standard launch split (fixed by the protocol): 60% curve, 10% community, 15% creator, 10% liquidity, 5% ecosystem.",
+      success: "The network accepted the signed transaction.",
+      assetId: "Token id",
+      nftId: "NFT id",
+      txId: "Transaction id",
+      error: "Could not submit",
+      payWithLabel: "Pay fee with",
+      payWithPpl: "PPL",
+      stableFeeLabel: "Stable fee",
+      stableFeeBuybackNote: "Paid 100% into the public PPL buyback.",
+      stableFeeNetworkNote: "Works on the People network only for now. Paying from another chain (Ethereum, Polygon, Tron, TON, Solana) is coming later.",
+      approvingStable: "Approving…",
+      payingStableFee: "Paying stable fee…",
+      creatingAfterStableFee: "Creating…",
+    },
+    iconGen: {
+      button: "Generate icon",
+      lead: "Pick a style, describe your idea in a few words, and choose one of four pictures.",
+      presetFlat: "Flat icon",
+      presetBadge: "Badge",
+      presetMascot: "Mascot",
+      subjectLabel: "Subject and colors",
+      subjectPlaceholder: "e.g. blue sun, gold accents",
+      remainingFree: "{count} free today",
+      verifiedOnly: "Free tries are only for founders verified via Telegram or Human Passport.",
+      paidNote: "After free uses: {fee} PPL per try",
+      generate: "Create pictures",
+      pickHint: "Tap one to use as your picture",
+      busy: "Creating pictures…",
+      connectWallet: "Connect your wallet on the Pay step first, or open Wallet and return here.",
+      errorGeneric: "Could not create pictures. Try again.",
+    },
+  },
+  ru: {
+    navLabel: "Создать",
+    tokenNav: "Создать токен",
+    nftNav: "Создать NFT",
+    contractNav: "Создать контракт",
+    contractLead:
+      "Опишите задачу обычными словами. Мы параметризуем проверенный шаблон Solidity (паттерны OpenZeppelin). Газ оплачивается в PPL. Token/NFT factory остаётся встроенным путём.",
+    feesLink: "Комиссии и тарифы",
+    hub: {
+      tag: "СОЗДАТЬ",
+      title: "Создать токен, NFT или контракт",
+      subtitle:
+        "Токены и NFT — без кода. Для произвольных контрактов напишите фразу и проверьте Solidity перед подписью.",
+      tokenCta: "Создать токен",
+      nftCta: "Создать NFT",
+      contractCta: "Создать контракт",
+      statusUnavailable: "Сеть временно недоступна",
+      statusTestnet: "Testnet",
+    },
+    token: {
+      title: "Создать токен",
+      lead: "Стандартный запуск Token Factory: имя, тикер, эмиссия, картинка, затем комиссия в PPL.",
+      steps: ["Картинка", "Данные", "Проверка", "Оплата", "Готово"],
+    },
+    nft: {
+      title: "Создать NFT",
+      lead: "Выпуск уникального объекта с картинкой, названием и описанием. Имя коллекции необязательно.",
+      steps: ["Картинка", "Данные", "Проверка", "Оплата", "Готово"],
+      modeSingle: "Один объект",
+      modeCollection: "Часть коллекции",
+      collectionLabel: "Название коллекции",
+    },
+    form: {
+      image: "Картинка",
+      imageHint: "PNG, JPEG или WebP. Загрузите файл или вставьте ссылку на картинку. Сначала вы увидите превью.",
+      imageUrl: "Или вставьте URL картинки",
+      name: "Название",
+      description: "Описание",
+      ticker: "Тикер",
+      supply: "Общая эмиссия",
+      decimals: "Знаков после запятой",
+      review: "Проверьте перед оплатой",
+      pay: "Оплатить в PPL",
+      result: "Создано",
+      next: "Далее",
+      back: "Назад",
+      submit: "Подписать и отправить",
+      another: "Создать ещё",
+      wallet: "Кошелёк",
+      createWallet: "Создать ключ",
+      importWallet: "Импортировать ключ",
+      address: "Адрес",
+      balance: "Баланс PPL",
+      nonce: "Nonce",
+      privateKey: "Приватный ключ (64 hex)",
+      feeLabel: "Комиссия PPL",
+      feeUnset: "Сумма комиссии недоступна: значение в конфигурации некорректно.",
+      noRpc: "Сеть временно недоступна",
+      allocation: "Стандартный сплит запуска (фиксирует протокол): 60% кривая, 10% сообщество, 15% автор, 10% ликвидность, 5% экосистема.",
+      success: "Сеть приняла подписанную транзакцию.",
+      assetId: "Id токена",
+      nftId: "Id NFT",
+      txId: "Id транзакции",
+      error: "Не удалось отправить",
+      payWithLabel: "Оплатить комиссию в",
+      payWithPpl: "PPL",
+      stableFeeLabel: "Комиссия в стейблкоине",
+      stableFeeBuybackNote: "100% идёт в публичный байбэк PPL.",
+      stableFeeNetworkNote: "Пока работает только в сети People. Оплата из другой сети (Ethereum, Polygon, Tron, TON, Solana) появится позже.",
+      approvingStable: "Подтверждение...",
+      payingStableFee: "Оплата комиссии...",
+      creatingAfterStableFee: "Создание...",
+    },
+    iconGen: {
+      button: "Создать значок",
+      lead: "Выберите стиль, коротко опишите идею и выберите одну из четырёх картинок.",
+      presetFlat: "Плоский значок",
+      presetBadge: "Медальон",
+      presetMascot: "Персонаж",
+      subjectLabel: "Тема и цвета",
+      subjectPlaceholder: "например, синее солнце, золотые акценты",
+      remainingFree: "Бесплатно сегодня: {count}",
+      verifiedOnly: "Бесплатные попытки — только для основателей с подтверждением через Telegram или Human Passport.",
+      paidNote: "После лимита: {fee} PPL за попытку",
+      generate: "Создать картинки",
+      pickHint: "Нажмите на картинку, чтобы использовать её",
+      busy: "Создаём картинки…",
+      connectWallet: "Сначала подключите кошелёк (шаг «Оплата») или откройте раздел «Кошелёк».",
+      errorGeneric: "Не удалось создать картинки. Попробуйте ещё раз.",
+    },
+  },
+  es: factoryEs as FactoryCopyContent,
+  pt: factoryPt as FactoryCopyContent,
+  fr: factoryFr as FactoryCopyContent,
+  de: factoryDe as FactoryCopyContent,
+  it: factoryIt as FactoryCopyContent,
+  tr: factoryTr as FactoryCopyContent,
+  vi: factoryVi as FactoryCopyContent,
+  id: factoryId as FactoryCopyContent,
+  zh: factoryZh as FactoryCopyContent,
+  ar: factoryAr as FactoryCopyContent,
+};
+
+export const factoryCopy: Record<Language, FactoryCopyContent> = new Proxy(
+  baseFactoryCopy as unknown as Record<Language, FactoryCopyContent>,
+  {
+    get: (target, prop: string) => target[prop as keyof typeof target] ?? target.en,
+  }
+);

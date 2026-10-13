@@ -1,0 +1,145 @@
+{
+  "hero": {
+    "brandLine": "PEOPLE — topluluklar için bir blockchain",
+    "headlineMain": "Topluluğunuz için bir token başlatın.",
+    "headlineMainLines": [
+      "Topluluğunuz için bir token başlatın."
+    ],
+    "headlineAccent": "%10 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccentLines": [
+      "%10 sizin insanlarınıza gider,",
+      "balinalara değil."
+    ],
+    "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
+    "pitchLine": "Sıradan insanlar için bir blockchain: kendi tokeniniz, kulüp NFT kartları ve bir fikir için para toplamak — kod yazmadan.",
+    "testnetBadge": "Halka açık testnet yayında. Henüz mainnet değil.",
+    "ctaTestnet": "Testneti deneyin",
+    "ctaFounder": "Kurucu numaranızı alın",
+    "card": {
+      "badge": "Örnek",
+      "tokenName": "Topluluğunuzun tokeni",
+      "ticker": "TICKER",
+      "price": "$0.0138"
+    },
+    "stages": [
+      {
+        "id": "wallet",
+        "label": "30 saniyede cüzdan",
+        "sub": "Anahtarlarınız telefonunuzda veya tarayıcınızda kalır."
+      },
+      {
+        "id": "token",
+        "label": "Tokeniniz, ilk işlemden itibaren fiyatlanır",
+        "sub": "Bir ad ve ticker seçin. Fiyatlandırmayı bonding curve yapar."
+      },
+      {
+        "id": "share",
+        "label": "%10 insanlarınıza",
+        "sub": "Her yeni token, arzının %10'unu kendi topluluk havuzuna gönderir."
+      }
+    ],
+    "shareBadge": "%10 topluluk payı",
+    "peopleLine": "Sizin insanlarınız, balinalar değil"
+  },
+  "community": {
+    "eyebrow": "%10 topluluğa",
+    "title": "Her yeni tokenin %10'u sizin insanlarınıza gider",
+    "lead": "Bu protokole gömülüdür, bir gönderide vadedilmiş değildir: her standart lansman, arzının %10'unu o tokenin kendi topluluk havuzuna gönderir. Bu asla ağ ücretleriyle karıştırılmaz.",
+    "statLabel": "her yeni tokenin arzının topluluk havuzuna gider",
+    "statNote": "Havuz, o tokene katılan insanlara aittir — ağa veya oluşturana değil.",
+    "footnote": "Ağ ücretleri ayrı paylaştırılır: %{{community}} topluluk havuzuna, %{{validators}} doğrulayıcılara.",
+    "cta": "Ücretler nereye gidiyor",
+    "href": "/how-it-works#hiw-fees"
+  },
+  "build": {
+    "eyebrow": "Kod yok, kripto bilgisi gerekmez",
+    "title": "Kod yazmadan yapabilecekleriniz",
+    "lead": "Aşağıdakilerin hepsi bugün halka açık testnette çalışıyor. Kurulacak veya derlenecek hiçbir şey yok.",
+    "cta": "Testnette deneyin",
+    "cards": [
+      {
+        "id": "token",
+        "title": "Bir dakikada kulüp veya topluluk tokeni başlatın",
+        "body": "Bir ad, ticker, görsel ve arz seçin. Lansman ücretini PPL ile ödeyin, token kendi bonding curve'ünde yayında olsun.",
+        "href": "/create/token"
+      },
+      {
+        "id": "nft",
+        "title": "NFT kulüp kartları basın",
+        "body": "Üyelik kartları NFT olarak: kişi başına bir tane, yüklediğiniz veya tarayıcıda oluşturduğunuz bir görselle.",
+        "href": "/create/nft"
+      },
+      {
+        "id": "funding",
+        "title": "Fikriniz için fon toplayın",
+        "body": "Topluluğunuz ilk işlemden itibaren eğriden alım yapar, böylece fiyatı özel bir tur değil gerçek talep belirler.",
+        "href": "/create"
+      },
+      {
+        "id": "contract",
+        "title": "Bir akıllı sözleşmeyi düz sözlerle tanımlayın",
+        "body": "İstediğinizi sade bir dille yazın, denetlenmiş OpenZeppelin şablonlarından oluşturulmuş bir sözleşme alın. Dağıtmadan önce sonucu görürsünüz.",
+        "href": "/create/contract"
+      }
+    ]
+  },
+  "fair": {
+    "eyebrow": "Neden adil",
+    "title": "Her topluluk için aynı kurallar",
+    "lead": "Üç kural protokole gömülüdür, bir gönderide vadedilmiş değildir.",
+    "tiles": [
+      {
+        "id": "community-share",
+        "stat": "%10",
+        "title": "her yeni token o tokenin topluluk havuzuna gider",
+        "body": "Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
+      },
+      {
+        "id": "vesting",
+        "stat": "180 gün",
+        "title": "oluşturanın payı tamamen açılana kadar",
+        "body": "Oluşturanın payı 180 gün boyunca doğrusal olarak açılır, böylece ilk günde satış baskısı olmaz."
+      },
+      {
+        "id": "fees",
+        "stat": "%0",
+        "title": "ağ ücretleri yakılır — insanlar bunun yerine alır",
+        "body": "Her ücret doğrulayıcılar, topluluk havuzu, hazine, likidite ve Growth arasında paylaştırılır. Kıtlık yaratmak için hiçbir şey yok edilmez."
+      }
+    ]
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million Founders",
+    "title": "Kurucu numaraları hâlâ dağıtılıyor",
+    "titleWithNumber": "Sıradaki kurucu #{{n}}",
+    "lead": "Bir numara alın, paylaşabileceğiniz bir kart kazanın ve erken ve aktif olarak topluluk havuzundan pay kazanın.",
+    "cta": "Kurucu olun",
+    "href": "/founders",
+    "cardHint": "İki seviye, sadece aktif kişiler, öne %10 ve kalanı 52 haftada.",
+    "liveCountLabel": "Şimdiye kadarki kurucular"
+  },
+  "agents": {
+    "eyebrow": "Topluluk yapay zekâ ajanları",
+    "title": "Grup için çalışan ajanlar",
+    "lead": "Ajanlar ağın birinci sınıf kullanıcılarıdır: kullandıkları için öderler ve hizmet ettikleri insanlara hesap verirler.",
+    "cta": "Ajanlarla tanışın",
+    "href": "/agents"
+  },
+  "network": {
+    "eyebrow": "Canlı ağ",
+    "title": "Halka açık testnet, şu an",
+    "blockHeight": "Blok yüksekliği",
+    "chainLabel": "Testnet zinciri",
+    "explorer": "Explorer'ı aç",
+    "unavailable": "Blok yüksekliği şu anda kullanılamıyor.",
+    "collecting": "Ağ okunuyor…",
+    "note": "Bu bir testnet. Yukarıdaki sayılar gerçek, tokenler değil."
+  },
+  "final": {
+    "title": "Testnet açık. Erken olun, bir şeyleri kırın, neyin kötü olduğunu bize söyleyin.",
+    "body": "Her hata bildirimi ve her kafa karıştıran soru doğrudan sıradaki yapacağımız şeye gidiyor.",
+    "ctaWallet": "Cüzdan oluşturun",
+    "ctaExplore": "Explorer'a bakın",
+    "socialLabel": "Bizi takip edin"
+  }
+}

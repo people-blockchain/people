@@ -1,0 +1,116 @@
+{
+  "title": "How People's Blockchain works",
+  "loopLine": "People use the network. Usage creates fees. Part of every fee flows back to the community.",
+  "docsLinkLabel": "Details in docs",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Live now on testnet",
+      "items": [
+        {
+          "title": "Wallet",
+          "text": "Create a non-custodial wallet (12-word phrase) on your phone or in a browser, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave your device."
+        },
+        {
+          "title": "Create a token",
+          "text": "Pick a name, ticker, image and supply, and pay in PPL. It's priced on a bonding curve from the first trade."
+        },
+        {
+          "title": "Trade",
+          "text": "Buy and sell on the launch curve, then in the token/PPL pool."
+        },
+        {
+          "title": "10% to the community",
+          "text": "Every standard token sends 10% of its supply to its own community pool."
+        },
+        {
+          "title": "Creator vesting",
+          "text": "The creator's share unlocks over 180 days, so there's no dump on day one."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Take part as a person",
+      "items": [
+        {
+          "title": "One-tap participation sessions from your phone.",
+          "text": ""
+        },
+        {
+          "title": "Proof of humanity without biometrics.",
+          "text": ""
+        },
+        {
+          "title": "Participation points decide your share of community rewards. They can't be bought or transferred.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Fixed PPL supply",
+      "intro": "One billion PPL, no surprise minting in the early years. Validators and launch rewards come from genesis buckets and fees.",
+      "bullets": [
+        "Years 1–4: 0% inflation — supply stays at 1B PPL.",
+        "Validators: 200M PPL pool paid 6% / 5% / 5% / 4% of total supply per year (60M, 50M, 50M, 40M) plus 30% of network fees.",
+        "Founders, bounties, ambassadors and airdrops: only from the 35% community pool.",
+        "From year 5: at most 2% new emission per year, community vote only.",
+        "Founders airdrop first; public sale after 1,000 verified people and a multisig.",
+        "Every protocol fee: 30% validators, 25% community pool, 20% treasury, 10% liquidity, 15% Growth Pool, 0% burn."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Where rewards come from",
+      "intro": "Every network fee is paid in PPL and split the same way every time:",
+      "feeSplit": [
+        {
+          "label": "Validators (run the network)",
+          "pct": 30
+        },
+        {
+          "label": "Community Pool",
+          "pct": 25
+        },
+        {
+          "label": "Treasury",
+          "pct": 20
+        },
+        {
+          "label": "Liquidity & Ecosystem",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referrals)",
+          "pct": 15
+        },
+        {
+          "label": "Burn",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "The Community Pool is shared among active participants in proportion to their participation points. Here's an example: the pool has 600 tokens and three people hold 1, 2 and 3 points, so they get 100, 200 and 300.",
+      "tokenPoolNote": "Separately, each token's 10% community share stays in that token's own pool. It is never mixed with PPL fees.",
+      "buybackNote": "The treasury and liquidity shares (30% combined) fund public PPL buybacks from the open market, run by the published multisig and visible in the explorer.",
+      "launchFeeNote": "Launching a token or NFT costs a protocol fee, payable in PPL or in a supported stablecoin (USDC/USDT) — your choice. Gas is always paid in PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Why bots can't farm it",
+      "body": "New accounts start slow, inactive accounts fade, and every person has a cap. A hundred fake accounts don't earn a hundred times more."
+    },
+    {
+      "id": "honest",
+      "title": "The honest part",
+      "bullets": [
+        "Rewards aren't fixed. No activity means no rewards.",
+        "Token prices can go up, down, or to zero.",
+        "This is participation in a network, not an investment."
+      ]
+    }
+  ],
+  "ctaWallet": "Create a wallet",
+  "ctaCreate": "Launch a token",
+  "feeChartLabel": "Network fee split"
+}

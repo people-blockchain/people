@@ -1,0 +1,168 @@
+{
+  "tag": "KURUCULAR",
+  "title": "Bir milyon kurucu",
+  "lead": "Mainnet öncesi People's Blockchain'i inşa eden bir milyon doğrulanmış insana katılın. Kurucu numaranız ve aktivite puanlarınız bugün testnette kaydedilir.",
+  "preliminaryBanner": "Ön çalışma — puan ağırlıkları, çarpanlar ve günlük limitler mainnet öncesi değişebilir.",
+  "counterLabel": "Doğrulanmış kurucular",
+  "goalLabel": "Mainnet öncesi hedef",
+  "yourNumber": "Kurucu #{{n}}",
+  "multiplierLabel": "Erken katılım çarpanı",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Kurucu numaranızı alın",
+  "registerLead": "Herkese açık harita için ülkenizi seçin. Kayıt için bağlı bir cüzdan (insan kanıtı) gerekir.",
+  "countryLabel": "Ülke",
+  "countryPlaceholder": "Ülke seçin",
+  "registerButton": "Kurucu ol",
+  "registering": "Kaydediliyor…",
+  "signInCta": "Giriş yap",
+  "walletCta": "Cüzdan bağla",
+  "pohRequired": "Kayıt ve puan için giriş yapın ve cüzdan bağlayın. İnsan kanıtı olmadan puan yok.",
+  "registered": "Programdasınız.",
+  "pointsTitle": "Aktivite puanları",
+  "pointsTotal": "Toplam puan",
+  "pointsTodayHint": "Eylem bazında ve toplam günlük limitler (UTC).",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "Puan kazandıran eylemler",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "Proje akışında tepki",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Proje akışında projeyi takip",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "People's Blockchain testnet (97401), min {{swapMin}} PPL takası",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "People's Blockchain test ağında PPL stake et (yeni delegasyon), min. {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Token başlat (10+ doğrulanmış holder sonrası)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "NFT mint",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Likidite havuzu oluştur",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Yönetim oyu",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Doğrulanmış arkadaş daveti (doğrulama + eylem sonrası)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "Ülkelere göre kurucular",
+  "mapHint": "Kayıtta beyan edilen ülke.",
+  "leaderboardTitle": "Ülke sıralaması",
+  "leaderboardCount": "{{count}} kurucu",
+  "errorRegister": "Kayıt başarısız. Cüzdanı kontrol edip tekrar deneyin.",
+  "errorLoad": "İstatistikler yüklenemedi.",
+  "autoClaimLoading": "Kurucu numaran veriliyor…",
+  "autoClaimError": "Kurucu numaran verilemedi. Tekrar dene.",
+  "autoClaimRetry": "Tekrar dene",
+  "countryDetectedHint": "Ülke tarayıcından algılandı — değiştirebilirsin.",
+  "chooseCountryTitle": "Ülkeniz",
+  "countrySaved": "Ülke güncellendi.",
+  "countryUpdateError": "Ülke güncellenemedi. Tekrar deneyin.",
+  "countryRateLimited": "Çok fazla değişiklik — daha sonra tekrar deneyin.",
+  "visibilityLabel": "Herkese açık profil",
+  "visibilityHint": "Herkese açık listelerin hesap adımı ve avatarımı göstermesine izin ver; örneğin şeffaflık sayfasındaki liste. Varsayılan olarak kapalı.",
+  "visibilitySaved": "Kaydedildi.",
+  "visibilityError": "Kaydedilemedi.",
+  "loading": "Yükleniyor…",
+  "discoverCta": "Proje akışı",
+  "swapCta": "Testnette takas",
+  "createTokenCta": "Token başlat",
+  "refresh": "Yenile",
+  "live": "Canlı",
+  "mainnetRulesTitle": "Mainnet ödül kuralları (ön çalışma)",
+  "mainnetRulesPoh": "İnsan kanıtı olmadan hiçbir şey birikmez: hesap doğrulanıp cüzdan bağlanana kadar testnette kurucu puanı ve mainnette kişisel PPL ödülü yok.",
+  "mainnetRulesVestingTitle": "Kişisel ödülün açılması",
+  "mainnetRulesVestingBullets": [
+    "Mainnet'in ilk gününde dönüştürülen kişisel ödülün %10'u açılır (yalnızca doğrulanmış kurucular).",
+    "Kalan %90 tam 12 ay boyunca eşit haftalık dilimlerle açılır.",
+    "Her takvim ayında en az bir nitelikli zincir üstü veya Proje akışı eylemi gerekir. Aktivite olmayan ayda haftalık açılım durur; kaçırılan haftalar ileri atlanmaz.",
+    "Testnet puanları ayrıdır; bu kurallar mainnette PPL için geçerlidir."
+  ],
+  "mainnetRulesSaleFeeTitle": "Erken satış ücreti (mainnet'in ilk 30 günü)",
+  "mainnetRulesSaleFeeBody": "Ağın açılışından sonraki ilk 30 günde açılmış PPL satışında PPL cinsinden ücret kesilir: birinci gün %10, 30. güne kadar doğrusal olarak %0. Topluluk havuzuna gider.",
+  "mainnetRulesStakingTitle": "Kurucu staking bonusu",
+  "mainnetRulesStakingBullets": [
+    "İsteğe bağlı stake, doğrulayıcı ödül oranına +%25 ekler — orana bonus, miktarın %25'i değil ve belirli bir getiri vaadi değildir.",
+    "Staking ödülleri topluluk havuzundan ödenir ve kişisel ödülle aynı haftalık takvimde açılır.",
+    "Stake'ten çıkış: PPL cüzdana dönmeden önce 21 gün bekleme."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Mainnet öncesi {{n}}. kurucu olun",
+  "heroTitleFallback": "Ana ağ başlamadan ilk kuruculardan biri olun",
+  "heroSub": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve People's Blockchain testnet aktivite puanları alır.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "Alındı: 100 × 6 token",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

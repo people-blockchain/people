@@ -1,0 +1,168 @@
+{
+  "tag": "PENDIRI",
+  "title": "Sejuta pendiri",
+  "lead": "Bergabung dengan sejuta orang terverifikasi yang membangun People's Blockchain sebelum mainnet. Nomor pendiri dan poin aktivitas Anda dicatat di testnet hari ini.",
+  "preliminaryBanner": "Sementara — bobot poin, pengali, dan batas harian dapat berubah sebelum mainnet.",
+  "counterLabel": "Pendiri terverifikasi",
+  "goalLabel": "Target sebelum mainnet",
+  "yourNumber": "Pendiri #{{n}}",
+  "multiplierLabel": "Pengali masuk awal",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Klaim nomor pendiri Anda",
+  "registerLead": "Pilih negara untuk peta publik. Dompet tertaut (bukti kemanusiaan) diperlukan sebelum mendaftar.",
+  "countryLabel": "Negara",
+  "countryPlaceholder": "Pilih negara",
+  "registerButton": "Jadi pendiri",
+  "registering": "Mendaftar…",
+  "signInCta": "Masuk",
+  "walletCta": "Tautkan dompet",
+  "pohRequired": "Masuk dan tautkan dompet untuk mendaftar dan mendapat poin. Tanpa bukti kemanusiaan tidak ada poin.",
+  "registered": "Anda sudah dalam program.",
+  "pointsTitle": "Poin aktivitas",
+  "pointsTotal": "Total poin",
+  "pointsTodayHint": "Batas harian per aksi dan total (UTC).",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "Aksi yang memberi poin",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "Reaksi di feed proyek",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Ikuti proyek di feed",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "Swap di testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL di testnet People's Blockchain (delegasi baru), min. {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Luncurkan token (setelah 10+ holder terverifikasi)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Mint NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Buat pool likuiditas",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Vote governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Undang teman terverifikasi (setelah verifikasi & aksi)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "Pendiri per negara",
+  "mapHint": "Negara yang dinyatakan saat pendaftaran.",
+  "leaderboardTitle": "Peringkat negara",
+  "leaderboardCount": "{{count}} pendiri",
+  "errorRegister": "Pendaftaran gagal. Periksa dompet dan coba lagi.",
+  "errorLoad": "Statistik tidak dapat dimuat.",
+  "autoClaimLoading": "Menerbitkan nomor founder Anda…",
+  "autoClaimError": "Gagal menerbitkan nomor founder Anda. Coba lagi.",
+  "autoClaimRetry": "Coba lagi",
+  "countryDetectedHint": "Negara terdeteksi dari browser Anda — bisa diubah.",
+  "chooseCountryTitle": "Negara Anda",
+  "countrySaved": "Negara diperbarui.",
+  "countryUpdateError": "Negara tidak dapat diperbarui. Coba lagi.",
+  "countryRateLimited": "Terlalu banyak perubahan — coba lagi nanti.",
+  "visibilityLabel": "Profil publik",
+  "visibilityHint": "Izinkan daftar publik menampilkan nama dan avatar akun, misalnya papan peringkat di halaman transparansi. Nonaktif secara default.",
+  "visibilitySaved": "Tersimpan.",
+  "visibilityError": "Gagal menyimpan.",
+  "loading": "Memuat…",
+  "discoverCta": "Feed proyek",
+  "swapCta": "Tukar di testnet",
+  "createTokenCta": "Luncurkan token",
+  "refresh": "Segarkan",
+  "live": "Langsung",
+  "mainnetRulesTitle": "Aturan hadiah mainnet (sementara)",
+  "mainnetRulesPoh": "Tanpa bukti kemanusiaan tidak ada akumulasi: tidak ada poin pendiri di testnet dan tidak ada hadiah PPL pribadi di mainnet sampai akun terverifikasi dan dompet tertaut.",
+  "mainnetRulesVestingTitle": "Pembukaan hadiah pribadi",
+  "mainnetRulesVestingBullets": [
+    "Hari pertama mainnet, 10% hadiah pribadi yang dikonversi terbuka (hanya pendiri terverifikasi).",
+    "90% sisanya terbuka dalam irisan mingguan sama selama tepat 12 bulan.",
+    "Setiap bulan kalender perlu minimal satu aksi memenuhi syarat on-chain atau di Feed proyek. Bulan tanpa aktivitas menjeda pembukaan mingguan sampai kembali; minggu terlewat tidak dilompati.",
+    "Poin testnet terpisah; aturan ini untuk PPL di mainnet."
+  ],
+  "mainnetRulesSaleFeeTitle": "Biaya jual awal (30 hari pertama mainnet)",
+  "mainnetRulesSaleFeeBody": "Saat menjual PPL terbuka dalam 30 hari pertama setelah peluncuran, biaya dipotong dalam PPL: 10% hari pertama, turun linear ke 0% hari ke-30. Masuk ke pool komunitas.",
+  "mainnetRulesStakingTitle": "Bonus staking pendiri",
+  "mainnetRulesStakingBullets": [
+    "Stake opsional menambah +25% pada tingkat hadiah validator — bonus pada tingkat, bukan 25% jumlah stake, dan bukan janji imbal hasil tertentu.",
+    "Hadiah staking dibayar dari pool komunitas dan terbuka dengan jadwal mingguan yang sama dengan hadiah pribadi.",
+    "Unstake: tunggu 21 hari sebelum PPL kembali ke dompet."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Jadilah pendiri #{{n}} sebelum mainnet",
+  "heroTitleFallback": "Jadilah salah satu pendiri pertama sebelum mainnet diluncurkan",
+  "heroSub": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet People's Blockchain.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "Diterima: 100 × 6 token",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

@@ -1,0 +1,68 @@
+{
+  "title": "Beispiel-Vertragsvorlagen",
+  "lead": "Beispielverträge, bereit zum Lesen und Bereitstellen. Prüfen Sie den Quellcode und stellen Sie ihn direkt aus Ihrer verbundenen Wallet bereit.",
+  "notDeployed": "Noch nicht bereitgestellt",
+  "testnetAddress": "Adresse im Testnet",
+  "viewSource": "Quellcode anzeigen",
+  "hideSource": "Quellcode ausblenden",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "deployCta": "Mit meiner Wallet bereitstellen",
+  "connectFirst": "Verbinden Sie zuerst Ihre Wallet.",
+  "constructorArgs": "Konstruktor-Parameter",
+  "deployButton": "Bereitstellen",
+  "deploying": "Wird bereitgestellt…",
+  "cancel": "Abbrechen",
+  "success": "Bereitgestellt. Das Netzwerk hat Ihren Vertrag akzeptiert.",
+  "contractAddress": "Vertragsadresse",
+  "transaction": "Transaktion",
+  "error": "Etwas ist schiefgelaufen.",
+  "invalidAddress": "Geben Sie eine Wallet-Adresse ein, die mit 0x beginnt.",
+  "invalidNumber": "Geben Sie eine Zahl größer als null ein.",
+  "invalidText": "Dieses Feld darf nicht leer sein.",
+  "templates": {
+    "escrow": {
+      "title": "Treuhand (Escrow)",
+      "description": "Ein Käufer hinterlegt PPL für einen Verkäufer. Ein neutraler Schiedsrichter kann die Mittel an den Verkäufer freigeben oder dem Käufer erstatten; der Käufer kann die Freigabe auch vorzeitig auslösen. Unterstützt sowohl natives PPL als auch einen Test-Stablecoin (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Vesting-Timelock",
+      "description": "Sperrt PPL für einen einzigen Begünstigten und gibt sie linear zwischen einem Start- und einem Endzeitpunkt frei."
+    },
+    "crowdfund": {
+      "title": "Crowdfunding",
+      "description": "Sammelt PPL auf ein Ziel hin vor einer Frist. Der Eigentümer erhält die Mittel, wenn das Ziel erreicht wird; andernfalls erhalten die Unterstützer eine Rückerstattung. Unterstützt sowohl natives PPL als auch einen Test-Stablecoin (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token mit festem Angebot",
+      "description": "Ein einfacher ERC-20-Token mit festem Angebot, der bei der Erstellung vollständig an den Bereitsteller geprägt wird."
+    }
+  },
+  "fields": {
+    "seller": "Adresse des Verkäufers",
+    "arbiter": "Adresse des Schiedsrichters",
+    "value": "Zu sendender Betrag (PPL)",
+    "beneficiary": "Adresse des Begünstigten",
+    "start": "Startzeit (standardmäßig jetzt; Unix-Zeitstempel in Sekunden)",
+    "duration": "Dauer (Tage)",
+    "goal": "Ziel ({symbol})",
+    "durationSeconds": "Dauer (Sekunden)",
+    "name": "Token-Name",
+    "symbol": "Token-Symbol",
+    "supply": "Gesamtangebot (in Token)",
+    "token": "Adresse des Zahlungstokens",
+    "amount": "Einzuzahlender Betrag ({symbol})",
+    "payIn": "Zahlen in"
+  },
+  "faucetCta": "Test-{symbol} erhalten",
+  "faucetMinting": "Wird geprägt…",
+  "faucetDone": "Geprägt",
+  "faucetBalance": "Guthaben: {amount} {symbol}",
+  "faucetLimitHint": "Limit: bis zu 1000 Token pro 24 Stunden.",
+  "faucetCooldown": "Du hast das 24-Stunden-Limit des Faucets erreicht. Versuch es später erneut.",
+  "approveDepositLead": "Zwei Wallet-Transaktionen: zuerst den Token freigeben (approve), dann einzahlen.",
+  "approveAndDeposit": "Freigeben & einzahlen",
+  "approving": "Wird freigegeben…",
+  "depositing": "Wird eingezahlt…",
+  "depositComplete": "Eingezahlt. Das Treuhandkonto hält die Mittel nun."
+}

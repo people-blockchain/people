@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "PARA A COMUNIDADE",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "PARA A COMUNIDADE",
+    "headlineSecondary": "",
+    "slogan": "Criado por pessoas. Para a comunidade.",
+    "valueLine": "A comunidade participa no valor criado pela rede.",
+    "lead": "Construído pela comunidade. Partilhado pela comunidade. Pessoas comuns participam na emissão, no encaminhamento de taxas de rede e no Growth-referral — enquanto validadores dedicados asseguram o consenso. Os participantes não são validadores.",
+    "unlike": "Numa blockchain típica, os utilizadores sobretudo pagam taxas. Aqui, a participação da comunidade está desenhada na economia.",
+    "ctaJoin": "Participar",
+    "ctaHow": "Como funciona",
+    "ctaCreate": "Criar um token",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% para o pool da comunidade",
+        "note": "Da oferta de cada novo token vai para o pool da comunidade."
+      },
+      {
+        "id": "fees",
+        "value": "Taxas",
+        "title": "Taxas de rede",
+        "note": "Encaminhadas através da economia da rede."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "Duas linhas pagas: L1 70% · L2 30% do orçamento de recompensa Growth."
+      }
+    ],
+    "flowAria": "Como o valor da comunidade se move pela rede",
+    "flowPause": "Pausar animação",
+    "flowPlay": "Reproduzir animação",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token criado",
+        "sub": "Um projeto lança-se na rede"
+      },
+      {
+        "id": "community",
+        "label": "10% comunidade + taxa de rede",
+        "sub": "Parte do novo token e a taxa de protocolo ficam separadas"
+      },
+      {
+        "id": "economy",
+        "label": "Economia de rede + Growth Pool",
+        "sub": "O valor é encaminhado, não desaparece"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Duas linhas pagas de Growth-referral"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "PORQUE PARTICIPAR",
+    "title": "Três formas distintas de a comunidade participar",
+    "subtitle": "A emissão de tokens, as taxas de rede e o Growth-referral são três mecanismos separados. Nunca se fundem num pagamento pessoal.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10% de cada novo token vai para o pool da comunidade",
+        "body": "Cada token padrão lançado através da rede envia 10% da oferta inicial para o Community Pool desse token — depois para a comunidade. Não é um pagamento pessoal, nem 10% de cada taxa.",
+        "href": "/create/token",
+        "cta": "Criar um token"
+      },
+      {
+        "id": "fees",
+        "kicker": "ECONOMIA DE REDE",
+        "title": "As taxas não desaparecem — são encaminhadas",
+        "body": "As taxas de rede elegíveis seguem o the fee split aprovado. Isto é encaminhamento da economia de rede, não uma promessa de que cada participante é pago de cada taxa.",
+        "href": "#economics",
+        "cta": "Encaminhamento de taxas"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH-REFERRAL",
+        "title": "L1 70% · L2 30% do orçamento de recompensa Growth",
+        "body": "O Growth Pool (15% das taxas elegíveis) financia duas linhas de referral pagas: L1 a 70% e L2 a 30% do orçamento de recompensa Growth. Distinto da oferta Token Factory e da divisão de taxas the fee split.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH-REFERRAL",
+    "title": "Tu → L1 → L2",
+    "subtitle": "Pagamento Growth Beta ativo: L1 70% · L2 30% do orçamento de recompensa Growth. O Growth Pool é 15% das taxas elegíveis. Distinto dos destinos the fee split de taxas de rede e dos 10% de cada novo token que vão para o pool da comunidade.",
+    "you": "Tu",
+    "budgetNote": "As percentagens são quotas do orçamento de recompensa Growth depois de o the fee split encaminhar 15% das taxas elegíveis para o Growth Pool — não quotas de cada taxa de rede.",
+    "detailsTitle": "Como funciona o Growth-referral",
+    "details": [
+      {
+        "title": "Duas linhas pagas",
+        "body": "L1 (referral direto) recebe 70% e L2 (segundo nível) recebe 30% do orçamento ativo de recompensa Growth."
+      },
+      {
+        "title": "Separado de taxas e tokens",
+        "body": "Os pesos Growth L1/L2 não são a divisão the fee split de taxas de rede nem os 10% de cada novo token para o pool da comunidade. O Growth Pool é um destino de taxa the fee split com regras próprias de liquidação."
+      },
+      {
+        "title": "Este sítio",
+        "body": "Não há login nem painel de referral neste sítio público. O Growth-referral vive com a participação na rede."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JUNTA-TE",
+    "title": "Como participar",
+    "subtitle": "Junta-te à People’s Blockchain como participante da comunidade — a partir de um telemóvel, tablet ou navegador.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Começa aqui",
+        "body": "Usa um telemóvel, tablet ou navegador. Entras como participante — não como validador de consenso.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Cria uma carteira não custodial",
+        "body": "Gera uma frase de 12 palavras no navegador, anota-a e cifra-a com uma palavra-passe. As chaves nunca saem deste dispositivo.",
+        "href": "/wallet",
+        "cta": "Abrir carteira"
+      },
+      {
+        "num": "03",
+        "title": "Ver ativos no explorador",
+        "body": "Consulta blocos, transações, endereços, tokens e NFTs no scanner público.",
+        "href": "/explorer",
+        "cta": "Abrir explorador"
+      },
+      {
+        "num": "04",
+        "title": "Participa na economia",
+        "body": "Paga taxas de Token Factory e de cunhagem NFT a partir da mesma carteira. A quota de 10% para o pool da comunidade em novos tokens, as taxas de rede e o Growth-referral continuam três mecanismos separados.",
+        "href": "/create",
+        "cta": "Criar"
+      }
+    ],
+    "ctaJoin": "Junta-te à People’s Blockchain",
+    "ctaHow": "Como funciona"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "O QUÊ",
+    "title": "O que é Blockchain para a comunidade?",
+    "summary": "Blockchain para a comunidade é infraestrutura comunitária: dispositivos comuns para participar, criação de tokens e projetos ao nível do protocolo, e validadores Proof-of-Stake para produção de blocos. Os participantes não são validadores.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Consenso",
+        "summary": "Validadores PoS propõem e atestam blocos. A participação móvel nunca vota no quórum."
+      },
+      {
+        "id": "economics",
+        "title": "Economia",
+        "summary": "As taxas de rede elegíveis seguem o the fee split aprovado. Os mercados de tokens de utilizador são um canal separado."
+      },
+      {
+        "id": "participation",
+        "title": "Participação",
+        "summary": "Telemóveis, tablets e navegadores. Os participantes não são validadores."
+      },
+      {
+        "id": "technology",
+        "title": "Tecnologia",
+        "summary": "Livro multiativo seguro com inteiros, uma rede de pares e ferramentas para explorar a cadeia."
+      }
+    ],
+    "whyTitle": "Porque existe",
+    "learnMore": "Saber mais"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "PAPÉIS",
+    "title": "O que posso fazer?",
+    "subtitle": "Escolhe um papel. Os detalhes ficam a um clique.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Lança tokens, projetos e economias comunitárias com regras de protocolo.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Opera infraestrutura que propõe, atesta e finaliza blocos.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Entra a partir de dispositivos do dia a dia. Não é um papel de validador de consenso.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "O Growth Pool é um destino de taxa the fee split — não é rendimento garantido nem passivo.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Consulta blocos, transações, tokens e NFTs.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "COMO",
+    "title": "Como funciona",
+    "subtitle": "Um caminho pela rede. Abre um passo para o mecanismo exato.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Uma pessoa com uma carteira num telemóvel, tablet ou navegador.",
+        "detail": "Começa com uma conta não custodial num telemóvel, tablet ou navegador. Entras como pessoa da comunidade — não como validador."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transferências, lançamentos, negócios na curva e outras operações assinadas.",
+        "detail": "Operações elegíveis pagam uma taxa de protocolo em PPL. Cada ação é assinada e verificada antes de ser aceite."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Nós com stake que propõem e atestam.",
+        "detail": "Os validadores são infraestrutura dedicada. Telemóveis e navegadores não produzem blocos."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Transição de estado ordenada e segura com inteiros.",
+        "detail": "Os validadores reúnem operações assinadas em blocos. Dispositivos do dia a dia não entram nesse processo."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Cadeia partilhada entre nós validadores.",
+        "detail": "Os nós validadores partilham blocos entre si para a rede ficar num só estado."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "As taxas de rede e a quota comunitária de cada token ficam em canais separados.",
+        "detail": "As taxas de rede em PPL seguem the fee split. Tokens padrão criados por utilizadores enviam 10% da oferta desse token para o próprio pool da comunidade — isso não é uma taxa de rede."
+      }
+    ],
+    "storyCta": "História visual completa"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "ATIVO NATIVO",
+    "title": "People (PPL)",
+    "summary": "People é o ativo nativo de Blockchain para a comunidade. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILIDADE",
+        "body": "Ativo de liquidação para operações de rede: taxas, criação de tokens e serviços de protocolo descritos nas especificações."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Denomina taxas de protocolo elegíveis que o divisor em vivo encaminha segundo the fee split."
+      },
+      {
+        "title": "FEES",
+        "body": "Pagas em PPL em operações elegíveis. Os horários exatos de taxas permanecem protocolo/config — esta página não inventa tarifas."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Usado na contabilidade da economia de rede. Participation Power não é um token transferível nem poder de voto de validador."
+      }
+    ],
+    "notMarket": "Este sítio não publica preço, capitalização, listagens, ROI, APY, profundidade de liquidez nem preço futuro."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Rede e validadores",
+    "summary": "O consenso é Proof-of-Stake com um líder e um quórum de atestação. Os telemóveis são participantes, não validadores.",
+    "facts": [
+      {
+        "label": "Papel",
+        "value": "Os validadores asseguram a cadeia; os participantes nunca se sentam no quórum."
+      },
+      {
+        "label": "Quem corre o quê",
+        "value": "Nós dedicados propõem e atestam blocos. Telemóveis, tablets e navegadores entram como participantes."
+      },
+      {
+        "label": "Rede pública",
+        "value": "A testnet pública v2 está a correr. Isto não é Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Economia das taxas de rede",
+    "summary": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias.",
+    "splits": [
+      {
+        "label": "Validadores",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Tesouraria",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Liquidez e ecossistema",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Queima",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "O Growth Pool recebe 15% das taxas elegíveis. Não é rendimento garantido, nem um retorno passivo, nem um produto de investimento.",
+    "detailsTitle": "Como funciona o encaminhamento de taxas",
+    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Como as recompensas são explicadas"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "MERCADO DE TOKENS",
+    "title": "Criar → Lançar → Descobrir → Negociar",
+    "subtitle": "Cria um token, lança-o com preço integrado, deixa outros encontrá-lo e negocia na curva de lançamento.",
+    "steps": [
+      {
+        "title": "Criar",
+        "body": "Usa o formulário Token Factory: imagem, nome, ticker, oferta, depois paga em PPL."
+      },
+      {
+        "title": "Lançar",
+        "body": "Uma curva de ligação virtual dá preço contínuo desde o primeiro bloco."
+      },
+      {
+        "title": "Feed de projetos",
+        "body": "Os ativos aparecem no registo da rede para as comunidades os encontrarem."
+      },
+      {
+        "title": "Negociar",
+        "body": "Compra e vende na curva de lançamento e depois troca no pool AMM token/PPL ativo."
+      }
+    ],
+    "expandTitle": "Curva de lançamento, liquidez, vesting",
+    "expandItems": [
+      "O preço de lançamento usa uma curva de produto constante com matemática inteira exata.",
+      "Uma taxa de protocolo na curva é encaminhada pela economia de taxas de rede.",
+      "A divisão padrão de lançamento inclui 10% obrigatórios da oferta desse token para o próprio pool da comunidade (não é uma taxa de rede em PPL).",
+      "O vesting do criador mantém a maior parte da sua quota a desbloquear ao longo do tempo, para a comunidade não ser despejada no primeiro dia."
+    ],
+    "createCta": "Abrir Token Factory",
+    "nftCta": "Criar um NFT",
+    "swapCta": "Abrir troca"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECNOLOGIA",
+    "title": "Tecnologia",
+    "subtitle": "O que é a stack. Abre um cartão para a ideia voltada ao utilizador.",
+    "cards": [
+      {
+        "title": "Consenso",
+        "summary": "Validadores Proof-of-Stake propõem e atestam blocos. Os telemóveis não votam."
+      },
+      {
+        "title": "Estado",
+        "summary": "Saldos inteiros exatos em PPL nativo e tokens criados por utilizadores."
+      },
+      {
+        "title": "Rede",
+        "summary": "Os nós validadores partilham blocos para a cadeia ficar num só estado."
+      },
+      {
+        "title": "Persistência",
+        "summary": "Cada validador guarda o estado vivo da rede de que precisa para continuar."
+      },
+      {
+        "title": "Segurança",
+        "summary": "Ações assinadas, separação de papéis e nenhum atalho à volta das verificações."
+      },
+      {
+        "title": "Ferramentas",
+        "summary": "API HTTP e explorador para as pessoas lerem a rede."
+      }
+    ],
+    "archTitle": "Arquitetura interativa",
+    "invTitle": "Invariantes matemáticos"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROTEIRO",
+    "title": "Onde está a rede",
+    "subtitle": "Etapas de produto. Nenhuma data de lançamento é anunciada aqui.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Livro, contabilidade comunitária e encaminhamento de taxas de rede.",
+          "Criação de tokens e mercados de curva de lançamento.",
+          "Participação da comunidade na emissão, taxas e Growth-referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Uma testnet pública está a correr.",
+          "Isto não é Mainnet nem uma promessa de negociação pública em vivo de valor."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Acesso público mais amplo é a próxima etapa da comunidade."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Rede humana: participação móvel, prova de humanidade e anti-farming.",
+          "A data de lançamento público não é anunciada neste sítio."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Documentação",
+    "summary": "Carteiras, participação e o teu próprio nó — começa pela guia prática.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Ler a guia",
+        "hint": "Primeiros passos, recompensas e arranque do nó"
+      },
+      {
+        "href": "#economics",
+        "label": "Taxas de rede",
+        "hint": "Encaminhamento the fee split de taxas PPL elegíveis"
+      }
+    ]
+  }
+}

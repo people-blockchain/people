@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Open Validator Network API
+  version: 1.0.0
+servers:
+  - url: http://localhost:4001
+paths:
+  /health:
+    get:
+      summary: Basic liveness
+      responses:
+        "200":
+          description: OK
+  /health/details:
+    get:
+      summary: Detailed health and lag metrics
+      responses:
+        "200":
+          description: OK
+  /metrics:
+    get:
+      summary: Runtime node metrics (includes apiLatencyP95Ms, stateRevision)
+      responses:
+        "200":
+          description: OK
+  /snapshot:
+    get:
+      summary: Chain snapshot
+      responses:
+        "200":
+          description: OK
+  /blocks:
+    get:
+      summary: Recent blocks (offset or cursor pagination)
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer }
+        - in: query
+          name: offset
+          schema: { type: integer }
+        - in: query
+          name: cursor
+          schema: { type: integer }
+          description: Block height cursor (exclusive)
+      responses:
+        "200":
+          description: OK
+  /transactions:
+    get:
+      summary: Recent transactions (offset or cursor pagination)
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer }
+        - in: query
+          name: offset
+          schema: { type: integer }
+        - in: query
+          name: cursor
+          schema: { type: string }
+          description: Transaction id cursor (exclusive)
+      responses:
+        "200":
+          description: OK
+  /search:
+    get:
+      summary: Search blocks, tx, addresses
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+  /chain/config:
+    get:
+      summary: Chain configuration (Cache-Control + ETag)
+      responses:
+        "200":
+          description: OK
+        "304":
+          description: Not modified
+  /validators:
+    get:
+      summary: Validator set (Cache-Control + ETag)
+      responses:
+        "200":
+          description: OK
+        "304":
+          description: Not modified
+  /tx:
+    post:
+      summary: Submit signed transaction
+      description: |
+        Transfer memo rules:
+        - Single payment: optional payload.memo (max 256 chars) for that payment.
+        - Batch transfer: payload.recipients[] with per-item memo; top-level payload.memo is rejected.
+        - Batch size: up to 50 recipients, one fee for the whole batch.
+      responses:
+        "200":
+          description: Accepted
+        "400":
+          description: Rejected
+        "429":
+          description: Rate limited
+  /faucet/fund:
+    post:
+      summary: Fund address in dev mode
+      responses:
+        "200":
+          description: OK
+        "403":
+          description: Forbidden
+        "429":
+          description: Rate limited

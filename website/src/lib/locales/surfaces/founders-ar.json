@@ -1,0 +1,168 @@
+{
+  "tag": "المؤسسون",
+  "title": "مليون مؤسس",
+  "lead": "انضم إلى مليون شخص موثَّق يبني People's Blockchain قبل mainnet. يُسجَّل رقم المؤسس ونقاط النشاط على testnet اليوم.",
+  "preliminaryBanner": "أرقام مبدئية — أوزان النقاط والمضاعفات والحدود اليومية قد تتغير قبل mainnet.",
+  "counterLabel": "المؤسسون الموثَّقون",
+  "goalLabel": "الهدف قبل mainnet",
+  "yourNumber": "مؤسس رقم {{n}}",
+  "multiplierLabel": "مضاعف الدخول المبكر",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "احصل على رقم المؤسس",
+  "registerLead": "اختر بلدك للخريطة العامة. يلزم ربط محفظة (إثبات الإنسان) قبل التسجيل.",
+  "countryLabel": "البلد",
+  "countryPlaceholder": "اختر البلد",
+  "registerButton": "كن مؤسسًا",
+  "registering": "جارٍ التسجيل…",
+  "signInCta": "تسجيل الدخول",
+  "walletCta": "ربط المحفظة",
+  "pohRequired": "سجّل الدخول واربط محفظة للتسجيل وكسب النقاط. بدون إثبات الإنسان لا نقاط.",
+  "registered": "أنت ضمن البرنامج.",
+  "pointsTitle": "نقاط النشاط",
+  "pointsTotal": "إجمالي النقاط",
+  "pointsTodayHint": "حدود يومية لكل إجراء وإجمالي (UTC).",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "إجراءات تمنح نقاطًا",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "تفاعل في خلاصة المشاريع",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "متابعة مشروع في الخلاصة",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "تبادل على testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "تخزين PPL على شبكة اختبار People's Blockchain (تفويض جديد)، بحد أدنى {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "إطلاق رمز (بعد 10+ حاملين موثّقين)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "سك NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "إنشاء مجمع سيولة",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "تصويت الحوكمة",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "دعوة صديق موثّق (بعد التحقق والإجراء)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "المؤسسون حسب البلد",
+  "mapHint": "البلد المُصرَّح به عند التسجيل.",
+  "leaderboardTitle": "لوحة الصدارة حسب البلد",
+  "leaderboardCount": "{{count}} مؤسس",
+  "errorRegister": "فشل التسجيل. تحقق من المحفظة وحاول مجددًا.",
+  "errorLoad": "تعذّر تحميل الإحصاءات.",
+  "autoClaimLoading": "جارٍ إصدار رقم المؤسِّس…",
+  "autoClaimError": "تعذّر إصدار رقم المؤسِّس. حاول مرة أخرى.",
+  "autoClaimRetry": "إعادة المحاولة",
+  "countryDetectedHint": "تم اكتشاف البلد من متصفحك — يمكنك تغييره.",
+  "chooseCountryTitle": "بلدك",
+  "countrySaved": "تم تحديث البلد.",
+  "countryUpdateError": "تعذّر تحديث البلد. حاول مرة أخرى.",
+  "countryRateLimited": "تغييرات كثيرة جدًا — حاول مرة أخرى لاحقًا.",
+  "visibilityLabel": "الملف العام",
+  "visibilityHint": "السماح للقوائم العامة بإظهار اسم الحساب والصورة الرمزية، مثل لوحة صفحة الشفافية. معطّل افتراضيًا.",
+  "visibilitySaved": "تم الحفظ.",
+  "visibilityError": "تعذّر الحفظ.",
+  "loading": "جارٍ التحميل…",
+  "discoverCta": "خلاصة المشاريع",
+  "swapCta": "تبادل على testnet",
+  "createTokenCta": "إطلاق رمز",
+  "refresh": "تحديث",
+  "live": "مباشر",
+  "mainnetRulesTitle": "قواعد مكافآت mainnet (مبدئية)",
+  "mainnetRulesPoh": "بدون إثبات الإنسان لا يُتراكم شيء: لا نقاط مؤسس على testnet ولا مكافآت PPL شخصية على mainnet حتى يُوثَّق الحساب ويُربط المحفظة.",
+  "mainnetRulesVestingTitle": "فتح المكافأة الشخصية",
+  "mainnetRulesVestingBullets": [
+    "في اليوم الأول من mainnet يُفتح 10% من مكافأتك الشخصية المحوّلة (للمؤسسين الموثَّقين فقط).",
+    "الـ 90% المتبقية تُفتح بشرائح أسبوعية متساوية على مدى 12 شهرًا بالضبط.",
+    "كل شهر ميلادي يتطلب إجراءً مؤهَّلًا واحدًا على الأقل على السلسلة أو في خلاصة المشاريع. إن مر شهر بلا نشاط يتوقف الفتح الأسبوعي حتى العودة؛ الأسابيع الفائتة لا تُتخطى.",
+    "نقاط testnet منفصلة؛ هذه القواعد تنطبق على PPL على mainnet."
+  ],
+  "mainnetRulesSaleFeeTitle": "رسوم البيع المبكر (أول 30 يومًا من mainnet)",
+  "mainnetRulesSaleFeeBody": "عند بيع PPL المفتوح خلال أول 30 يومًا بعد الإطلاق، تُخصم رسوم بالـ PPL: 10% في اليوم الأول، تنخفض خطيًا إلى 0% في اليوم 30. تذهب إلى مجمع المجتمع.",
+  "mainnetRulesStakingTitle": "مكافأة تخزين المؤسسين",
+  "mainnetRulesStakingBullets": [
+    "التخزين الاختياري يضيف +25% إلى معدل مكافأة المُصادِق — زيادة على المعدل وليس 25% من المبلغ، وليس وعدًا بعائد محدد.",
+    "مكافآت التخزين من مجمع المجتمع وتُفتح بنفس الجدول الأسبوعي للمكافأة الشخصية.",
+    "إلغاء التخزين: انتظار 21 يومًا قبل عودة PPL إلى المحفظة."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "كن مؤسسًا رقم {{n}} قبل mainnet",
+  "heroTitleFallback": "كن من أوائل المؤسسين قبل إطلاق الشبكة الرئيسية",
+  "heroSub": "يحصل المشاركون الموثَّقون على رقمهم ومكافأة الدخول المبكر ونقاط النشاط على testnet People's Blockchain.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "تم الاستلام: 100 × 6 رموز",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

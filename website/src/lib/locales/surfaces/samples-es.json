@@ -1,0 +1,68 @@
+{
+  "title": "Plantillas de contratos de ejemplo",
+  "lead": "Contratos de ejemplo listos para leer y desplegar. Revisa el código y despliégalo directamente desde tu wallet conectada.",
+  "notDeployed": "Aún no desplegado",
+  "testnetAddress": "Dirección en testnet",
+  "viewSource": "Ver código",
+  "hideSource": "Ocultar código",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "deployCta": "Desplegar con mi wallet",
+  "connectFirst": "Primero conecta tu wallet.",
+  "constructorArgs": "Parámetros del constructor",
+  "deployButton": "Desplegar",
+  "deploying": "Desplegando…",
+  "cancel": "Cancelar",
+  "success": "Desplegado. La red aceptó tu contrato.",
+  "contractAddress": "Dirección del contrato",
+  "transaction": "Transacción",
+  "error": "Algo salió mal.",
+  "invalidAddress": "Introduce una dirección de wallet que empiece por 0x.",
+  "invalidNumber": "Introduce un número mayor que cero.",
+  "invalidText": "Este campo no puede estar vacío.",
+  "templates": {
+    "escrow": {
+      "title": "Depósito en garantía",
+      "description": "Un comprador deposita PPL para un vendedor. Un árbitro neutral puede liberar los fondos al vendedor o reembolsar al comprador; el comprador también puede liberarlos antes. Admite PPL nativo o un stablecoin de prueba (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Bloqueo temporal con vesting",
+      "description": "Bloquea PPL para un único beneficiario y los libera de forma lineal entre un momento de inicio y uno de fin."
+    },
+    "crowdfund": {
+      "title": "Financiación colectiva",
+      "description": "Recauda PPL hacia un objetivo antes de una fecha límite. El propietario reclama los fondos si se alcanza el objetivo; si no, los participantes reciben un reembolso. Admite PPL nativo o un stablecoin de prueba (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token de suministro fijo",
+      "description": "Un token ERC-20 simple con suministro fijo, acuñado por completo para quien despliega el contrato."
+    }
+  },
+  "fields": {
+    "seller": "Dirección del vendedor",
+    "arbiter": "Dirección del árbitro",
+    "value": "Importe a enviar (PPL)",
+    "beneficiary": "Dirección del beneficiario",
+    "start": "Hora de inicio (por defecto, ahora; timestamp unix en segundos)",
+    "duration": "Duración (días)",
+    "goal": "Objetivo ({symbol})",
+    "durationSeconds": "Duración (segundos)",
+    "name": "Nombre del token",
+    "symbol": "Símbolo del token",
+    "supply": "Suministro total (en tokens)",
+    "token": "Dirección del token de pago",
+    "amount": "Importe a depositar ({symbol})",
+    "payIn": "Pagar en"
+  },
+  "faucetCta": "Obtener {symbol} de prueba",
+  "faucetMinting": "Acuñando…",
+  "faucetDone": "Acuñado",
+  "faucetBalance": "Saldo: {amount} {symbol}",
+  "faucetLimitHint": "Límite: hasta 1000 tokens cada 24 horas.",
+  "faucetCooldown": "Has alcanzado el límite del grifo de 24 horas. Vuelve a intentarlo más tarde.",
+  "approveDepositLead": "Dos transacciones de wallet: primero aprueba el token, luego deposita.",
+  "approveAndDeposit": "Aprobar y depositar",
+  "approving": "Aprobando…",
+  "depositing": "Depositando…",
+  "depositComplete": "Depositado. El depósito en garantía ya retiene los fondos."
+}

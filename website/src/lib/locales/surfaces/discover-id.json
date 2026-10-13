@@ -1,0 +1,151 @@
+{
+  "navLabel": "Feed proyek",
+  "tagline": "Temukan proyek baru. Bantu ide bagus menjangkau orang. Ikut dari awal.",
+  "title": "Feed proyek",
+  "lead": "Setiap kartu terbuat dari teks Anda, ikon token, dan tangkapan layar. Video pendek opsional dan menaikkan kartu di feed.",
+  "createCta": "Bagikan proyek Anda",
+  "empty": "Belum ada apa pun. Jadilah yang pertama berbagi ide.",
+  "signInHint": "Masuk dan hubungkan dompet untuk bereaksi atau bertanya.",
+  "walletHint": "Hubungkan dompet di panel mitra untuk ikut serta.",
+  "walletLink": "Buka akun",
+  "loginLink": "Masuk",
+  "stageLabel": "Lingkaran",
+  "stageAll": "Semua",
+  "needsWork": "Kartu perlu pitch yang lebih jelas. Baca reaksi, edit, dan kirim lagi.",
+  "resubmit": "Edit dan kirim lagi",
+  "promoted": "Mencapai lingkaran lebih luas",
+  "votes": {
+    "interesting": "Menarik",
+    "unclear": "Kurang jelas",
+    "not_interesting": "Bukan untuk saya"
+  },
+  "askQuestion": "Ajukan pertanyaan",
+  "follow": "Ikuti",
+  "following": "Mengikuti",
+  "tryProduct": "Coba produk",
+  "readMore": "Baca selengkapnya",
+  "tokenLink": "Lihat token",
+  "questionPlaceholder": "Apa yang ingin Anda ketahui?",
+  "sendQuestion": "Kirim",
+  "form": {
+    "title": "Bagikan proyek Anda",
+    "lead": "Jelaskan proyek dengan bahasa sederhana dan pilih token. Kartu dibuat otomatis. Tambahkan tangkapan layar dan video pendek jika mau.",
+    "name": "Nama proyek",
+    "screenshots": "Tangkapan layar",
+    "screenshotsHint": "PNG, JPEG, atau WebP — produk, aplikasi, atau mockup (hingga 8).",
+    "addVideoOptional": "Tambah video pendek (opsional)",
+    "videoTemplateTitle": "Di video, jawab tiga pertanyaan ini:",
+    "videoQ1": "Apa yang Anda lakukan?",
+    "videoQ2": "Untuk siapa?",
+    "videoQ3": "Mengapa token?",
+    "video": "Berkas video",
+    "videoHint": "MP4 atau WebM, 30–60 detik. Atau tempel tautan.",
+    "videoUrl": "Tautan video",
+    "idea": "Apa yang Anda lakukan",
+    "audience": "Untuk siapa",
+    "whyToken": "Mengapa token",
+    "token": "Token di jaringan",
+    "productUrl": "Tautan produk (opsional)",
+    "submit": "Terbitkan di lingkaran pertama",
+    "durationError": "Video harus 30–60 detik.",
+    "durationTooShort": "Video minimal 30 detik.",
+    "uploadError": "Gagal mengunggah. Coba tautan.",
+    "screenshotError": "Gambar ini gagal diunggah.",
+    "success": "Proyek Anda aktif di lingkaran pertama."
+  },
+  "detail": {
+    "back": "Kembali ke feed",
+    "idea": "Apa yang Anda lakukan",
+    "audience": "Untuk siapa",
+    "whyToken": "Mengapa token",
+    "feedback": "Reaksi pada versi ini",
+    "questions": "Pertanyaan"
+  },
+  "stats": {
+    "title": "Metrik feed",
+    "uniqueVisitors": "Pengunjung masuk",
+    "returning": "Kembali dalam 14 hari",
+    "totalEvents": "Peristiwa kunjungan",
+    "window": "Jendela kembali (hari)"
+  },
+  "errors": {
+    "generic": "Terjadi kesalahan. Coba lagi.",
+    "rateLimited": "Terlalu banyak aksi berturut-turut. Tunggu sebentar.",
+    "notFound": "Proyek ini tidak ada lagi di feed."
+  },
+  "loading": "Memuat…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "Lingkaran tabungan bergilir dan uang saku komunitas on-chain.",
+      "idea": "Uang komunitas on-chain: tip, pembayaran kecil, dan hadiah lokal tanpa bank di tengah.",
+      "audience": "Grup lingkungan, kreator, dan siapa pun yang memindahkan jumlah kecil antar teman.",
+      "whyToken": "Aset khusus memisahkan saldo komunitas dari biaya jaringan dan membuat aturan berbagi terlihat oleh semua.",
+      "tags": [
+        "Tabungan bergilir",
+        "Pembayaran lokal",
+        "Komunitas"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "Kirim tip terima kasih kecil ke kreator dan tim di jaringan People.",
+      "idea": "Ucapkan terima kasih dengan token untuk dukungan mikro — konser, streaming, dan maintainer open source.",
+      "audience": "Penggemar, patron, dan tim yang mengumpulkan banyak ucapan terima kasih kecil.",
+      "whyToken": "Tip tetap di buku besar komunitas, bukan saldo aplikasi tertutup.",
+      "tags": [
+        "Tip",
+        "Kreator",
+        "Mikro pembayaran"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "Lencana on-chain untuk tonggak yang dicapai bersama sebagai grup.",
+      "idea": "Tandai tonggak bersama — acara, peluncuran, dan tujuan bersama dengan token lencana on-chain.",
+      "audience": "Klub, kohort, dan tim produk yang merayakan kemajuan secara publik.",
+      "whyToken": "Pemegang dapat membuktikan partisipasi sejak hari pertama tanpa membuka data pribadi.",
+      "tags": [
+        "Tonggak",
+        "Acara",
+        "Keanggotaan"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "Tukar token komunitas uji ke PPL langsung di browser.",
+      "idea": "Tukar token demo komunitas ke PPL di browser — tanpa akun exchange terpisah.",
+      "audience": "Orang yang mencoba aset testnet sebelum berkomitmen pada proyek.",
+      "whyToken": "Pasangan likuiditas menunjukkan penemuan harga nyata untuk peluncuran baru di jaringan.",
+      "tags": [
+        "Tukar",
+        "Likuiditas",
+        "Token demo"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "Luncurkan token komunitas adil dengan nama, gambar, dan aturan bawaan.",
+      "idea": "Luncurkan token proyek dengan gambar, nama, dan aturan peluncuran adil — langsung dari situs.",
+      "audience": "Pendiri yang ingin aset komunitas tanpa menulis smart contract manual.",
+      "whyToken": "Pabrik menerapkan vesting dan pembagian pool komunitas agar pendukung melihat aturan yang sama.",
+      "tags": [
+        "Peluncuran token",
+        "Kreator",
+        "Aturan adil"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "Koleksi untuk kreator",
+      "summary": "Cetak koleksi visual untuk drop, acara, atau keanggotaan Anda.",
+      "idea": "Cetak koleksi visual yang mewakili drop, acara, atau kartu keanggotaan Anda.",
+      "audience": "Seniman dan komunitas yang ingin sesuatu langka namun mudah dibagikan.",
+      "whyToken": "NFT membawa metadata dan asal usul di rantai yang sama dengan token proyek.",
+      "tags": [
+        "Pencetakan",
+        "Visual",
+        "Koleksi"
+      ]
+    }
+  }
+}

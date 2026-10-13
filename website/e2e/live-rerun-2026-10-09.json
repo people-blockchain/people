@@ -1,0 +1,30 @@
+[
+  {
+    "flow": "4. token launch",
+    "viewport": "1280",
+    "result": "PASS",
+    "tx": "0xedb9a8d43c00a07a521ce1180fcb2a2cf6d398a1581f88b02b383192e7c1408c",
+    "notes": "connect=button listed=false symbol=E2E391816 pageHint=EXPLORER Tokens Connecting…"
+  },
+  {
+    "flow": "5. NFT mint",
+    "viewport": "1280",
+    "result": "PASS",
+    "tx": "0xfb8c2ff47787e5d8499177146c7c5267648dc5625e784cd1c32e0f0e688822ae",
+    "notes": "name=E2E NFT 12695 status=success NftMinted=true"
+  },
+  {
+    "flow": "6. swap PPL→token",
+    "viewport": "1280",
+    "result": "BLOCKED",
+    "tx": "",
+    "notes": "deployed quote empty (rate=\"1 PPL = 0.108957 TROSC\" submit=\"Too small to receive anything\") — fix not deployed"
+  },
+  {
+    "flow": "diagnostics (1280)",
+    "viewport": "1280",
+    "result": "info",
+    "tx": "",
+    "notes": "{\"consoleErrors\":[\"Failed to load resource: the server responded with a status of 401 () @ https://www.peopleblockchain.network/api/founders/actions\"],\"pageErrors\":[],\"thirdParty\":[],\"failedRequests\":[\"GET https://www.peopleblockchain.network/explorer/tx/0x4ea8bdab8f957d9d7888ccff97c7ec279501683f5bf59e461976ebe6203c8c0a?_rsc=lN_XtQD_hNg5IEOB — net::ERR_ABORTED\",\"GET https://www.peopleblockchain.network/explorer/address/0xAec3E64717E7dCA9eAa8750a9f60af29FDD93b30?_rsc=lN_XtQD_hNg5IEOB — net::ERR_ABORTED\"]}"
+  }
+]

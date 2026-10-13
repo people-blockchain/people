@@ -1,0 +1,151 @@
+{
+  "navLabel": "Proje akışı",
+  "tagline": "Yeni projeler bulun. İyi fikirlerin insanlara ulaşmasına yardım edin. En başından katılın.",
+  "title": "Proje akışı",
+  "lead": "Her kart metniniz, token simgesi ve ekran görüntülerinden oluşur. Kısa video isteğe bağlıdır ve kartı akışta yükseltir.",
+  "createCta": "Projeni paylaş",
+  "empty": "Henüz bir şey yok. İlk fikri paylaşan sen ol.",
+  "signInHint": "Tepki vermek veya soru sormak için giriş yap ve cüzdanı bağla.",
+  "walletHint": "Katılmak için partner panelinde cüzdanını bağla.",
+  "walletLink": "Hesabı aç",
+  "loginLink": "Giriş yap",
+  "stageLabel": "Çember",
+  "stageAll": "Herkes",
+  "needsWork": "Kartın daha net bir sunuma ihtiyaç duyuyor. Tepkileri oku, düzenle ve yeniden gönder.",
+  "resubmit": "Düzenle ve yeniden gönder",
+  "promoted": "Daha geniş bir çembere ulaşıyor",
+  "votes": {
+    "interesting": "İlginç",
+    "unclear": "Belirsiz",
+    "not_interesting": "Bana göre değil"
+  },
+  "askQuestion": "Soru sor",
+  "follow": "Takip et",
+  "following": "Takip ediliyor",
+  "tryProduct": "Ürünü dene",
+  "readMore": "Devamını oku",
+  "tokenLink": "Tokeni gör",
+  "questionPlaceholder": "Ne öğrenmek istiyorsun?",
+  "sendQuestion": "Gönder",
+  "form": {
+    "title": "Projeni paylaş",
+    "lead": "Projeyi sade bir dille anlat ve tokenini seç. Kart otomatik oluşur. Ekran görüntüleri ve isteğe bağlı kısa video ekleyebilirsin.",
+    "name": "Proje adı",
+    "screenshots": "Ekran görüntüleri",
+    "screenshotsHint": "PNG, JPEG veya WebP — ürün, uygulama veya mockup (en fazla 8).",
+    "addVideoOptional": "Kısa video ekle (isteğe bağlı)",
+    "videoTemplateTitle": "Videoda bu üç soruyu yanıtla:",
+    "videoQ1": "Ne yapıyorsun?",
+    "videoQ2": "Kimin için?",
+    "videoQ3": "Neden token?",
+    "video": "Video dosyası",
+    "videoHint": "MP4 veya WebM, 30–60 saniye. Ya da bağlantı yapıştır.",
+    "videoUrl": "Video bağlantısı",
+    "idea": "Ne yapıyorsun",
+    "audience": "Kimin için",
+    "whyToken": "Neden token",
+    "token": "Ağdaki token",
+    "productUrl": "Ürün bağlantısı (isteğe bağlı)",
+    "submit": "İlk çembere yayınla",
+    "durationError": "Video 30–60 saniye arasında olmalı.",
+    "durationTooShort": "Video en az 30 saniye olmalı.",
+    "uploadError": "Yüklenemedi. Bağlantı dene.",
+    "screenshotError": "Bu görsel yüklenemedi.",
+    "success": "Projen ilk çemberde yayında."
+  },
+  "detail": {
+    "back": "Akışa dön",
+    "idea": "Ne yapıyorsun",
+    "audience": "Kimin için",
+    "whyToken": "Neden token",
+    "feedback": "Bu sürümdeki tepkiler",
+    "questions": "Sorular"
+  },
+  "stats": {
+    "title": "Akış metrikleri",
+    "uniqueVisitors": "Giriş yapan ziyaretçiler",
+    "returning": "14 gün içinde geri dönenler",
+    "totalEvents": "Ziyaret kayıtları",
+    "window": "Geri dönüş penceresi (gün)"
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Tekrar dene.",
+    "rateLimited": "Kısa sürede çok fazla işlem. Biraz bekle.",
+    "notFound": "Bu proje artık akışta değil."
+  },
+  "loading": "Yükleniyor…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "Zincir üstü döner tasarruf çevreleri ve topluluk harçlığı.",
+      "idea": "Zincir üstü topluluk parası: bahşişler, küçük ödemeler ve aracı banka olmadan yerel ödüller.",
+      "audience": "Mahalle grupları, içerik üreticileri ve arkadaşları arasında küçük tutarlar taşıyanlar.",
+      "whyToken": "Ayrı bir varlık, topluluk bakiyelerini ağ ücretlerinden ayırır ve paylaşım kurallarını herkese görünür kılar.",
+      "tags": [
+        "Döner tasarruf",
+        "Yerel ödemeler",
+        "Topluluk"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "People ağında içerik üreticilerine ve ekiplere küçük teşekkür bahşişleri gönderin.",
+      "idea": "Mikro destek için yapılmış bir token ile teşekkür edin — konserler, yayınlar ve açık kaynak maintainer’ları.",
+      "audience": "Küçük teşekkürleri toplayan hayranlar, destekçiler ve ekipler.",
+      "whyToken": "Bahşişler kapalı bir uygulama bakiyesi yerine topluluğun kendi defterinde kalır.",
+      "tags": [
+        "Bahşiş",
+        "Üreticiler",
+        "Mikro ödemeler"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "Grup olarak birlikte ulaştığınız kilometre taşları için zincir üstü rozet.",
+      "idea": "Kilometre taşlarını birlikte işaretleyin — etkinlikler, lansmanlar ve paylaşılan hedefler için zincir üstü rozet token.",
+      "audience": "İlerlemeyi kamuya açık kutlayan kulüpler, kohortlar ve ürün ekipleri.",
+      "whyToken": "Sahipler özel veri açmadan ilk günden katılımı kanıtlayabilir.",
+      "tags": [
+        "Kilometre taşları",
+        "Etkinlikler",
+        "Üyelik"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "Test topluluk tokenlerini tarayıcıda PPL ile takas edin.",
+      "idea": "Demo topluluk tokenlerini tarayıcıda PPL ile değiştirin — ayrı bir borsa hesabı gerekmez.",
+      "audience": "Bir projeye bağlanmadan önce testnet varlıklarını deneyenler.",
+      "whyToken": "Likidite çiftleri, ağdaki yeni lansmanlar için gerçek fiyat keşfini gösterir.",
+      "tags": [
+        "Takas",
+        "Likidite",
+        "Demo tokenler"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "Ad, görsel ve yerleşik kurallarla adil bir topluluk tokeni başlatın.",
+      "idea": "Görsel, ad ve adil lansman kurallarıyla proje tokeni başlatın — doğrudan siteden.",
+      "audience": "Elle akıllı sözleşme yazmadan topluluk varlığı isteyen kurucular.",
+      "whyToken": "Fabrika, vesting ve topluluk havuzu paylarını uygular; destekçiler sizinle aynı kuralları görür.",
+      "tags": [
+        "Token lansmanı",
+        "Üreticiler",
+        "Adil kurallar"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "Üretici koleksiyonları",
+      "summary": "Drop, etkinlik veya üyelik için görsel bir koleksiyon parçası basın.",
+      "idea": "Drop, etkinlik veya üyelik kartınızı temsil eden görsel bir koleksiyon parçası basın.",
+      "audience": "Nadir ama paylaşımı kolay bir şey isteyen sanatçılar ve topluluklar.",
+      "whyToken": "NFT’ler, proje tokeniyle aynı zincirde metadata ve köken taşır.",
+      "tags": [
+        "Basım",
+        "Görsel",
+        "Koleksiyonlar"
+      ]
+    }
+  }
+}

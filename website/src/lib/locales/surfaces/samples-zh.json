@@ -1,0 +1,68 @@
+{
+  "title": "示例合约模板",
+  "lead": "可直接阅读和部署的示例合约。先查看源代码,再直接用已连接的钱包部署。",
+  "notDeployed": "尚未部署",
+  "testnetAddress": "测试网地址",
+  "viewSource": "查看源代码",
+  "hideSource": "隐藏源代码",
+  "copy": "复制",
+  "copied": "已复制",
+  "deployCta": "用我的钱包部署",
+  "connectFirst": "请先连接您的钱包。",
+  "constructorArgs": "构造函数参数",
+  "deployButton": "部署",
+  "deploying": "正在部署…",
+  "cancel": "取消",
+  "success": "部署成功,网络已接受您的合约。",
+  "contractAddress": "合约地址",
+  "transaction": "交易",
+  "error": "出了点问题。",
+  "invalidAddress": "请输入以 0x 开头的钱包地址。",
+  "invalidNumber": "请输入大于零的数字。",
+  "invalidText": "该字段不能为空。",
+  "templates": {
+    "escrow": {
+      "title": "托管合约",
+      "description": "买方为卖方存入 PPL。中立的仲裁人可以将资金释放给卖方,或退还给买方;买方也可以提前发起释放。 支持原生 PPL 或测试稳定币(tUSDC/tUSDT)。"
+    },
+    "vesting": {
+      "title": "线性释放时间锁",
+      "description": "为单一受益人锁定 PPL,并在开始时间与结束时间之间按线性方式释放。"
+    },
+    "crowdfund": {
+      "title": "众筹合约",
+      "description": "在截止日期前为目标金额募集 PPL。若达到目标,所有者可领取资金;若未达到,参与者可获得退款。 支持原生 PPL 或测试稳定币(tUSDC/tUSDT)。"
+    },
+    "erc20": {
+      "title": "固定供应代币",
+      "description": "一个简单的固定供应 ERC-20 代币,在创建时全部铸造给部署者。"
+    }
+  },
+  "fields": {
+    "seller": "卖方地址",
+    "arbiter": "仲裁人地址",
+    "value": "发送金额(PPL)",
+    "beneficiary": "受益人地址",
+    "start": "开始时间(默认为当前时间,以 unix 秒为单位)",
+    "duration": "持续时间(天)",
+    "goal": "目标金额({symbol})",
+    "durationSeconds": "持续时间(秒)",
+    "name": "代币名称",
+    "symbol": "代币符号",
+    "supply": "总供应量(代币数量)",
+    "token": "付款代币地址",
+    "amount": "存入金额({symbol})",
+    "payIn": "支付方式"
+  },
+  "faucetCta": "领取测试 {symbol}",
+  "faucetMinting": "正在铸造…",
+  "faucetDone": "已铸造",
+  "faucetBalance": "余额：{amount} {symbol}",
+  "faucetLimitHint": "限额：每24小时最多1000个代币。",
+  "faucetCooldown": "您已达到该水龙头的24小时限额，请稍后再试。",
+  "approveDepositLead": "需要两笔钱包交易:先授权(approve)代币,再存入。",
+  "approveAndDeposit": "授权并存入",
+  "approving": "正在授权…",
+  "depositing": "正在存入…",
+  "depositComplete": "已存入。托管合约现已持有资金。"
+}

@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "updated": "2026-10-12",
+  "statusVocabulary": {
+    "done": "готово",
+    "live_on_testnet": "в тестовой сети",
+    "in_progress": "в работе",
+    "proposed_pending_vote": "предложено / ожидает голосования",
+    "planned_unapproved": "запланировано (не утверждено)"
+  },
+  "items": [
+    {
+      "id": "cosmos-evm-migration",
+      "status": "in_progress",
+      "evidence": "Stage 1 Cosmos EVM `chain/` in active development; not present on `main` in this repo yet. Current node remains OVN-derived with read-only JSON-RPC (PR #85, chain id 97401)."
+    },
+    {
+      "id": "genesis-snapshot-0x",
+      "status": "in_progress",
+      "evidence": "EVM address migration helpers and snapshot tests in `people-node/packages/core/src/address-policy.ts`; full state export into Cosmos genesis with preserved 0x addresses — not implemented."
+    },
+    {
+      "id": "solidity-protocol-modules",
+      "status": "in_progress",
+      "evidence": "Token factory, bonding curve, AMM (constant-product + migration), and NFT exist as protocol tx types in `people-node/packages/core`. Target: Solidity modules on Cosmos EVM (Uniswap V2-style AMM fork) — planned with chain migration."
+    },
+    {
+      "id": "fee-split-model-a",
+      "status": "done",
+      "evidence": "Model A 30/25/20/10/15/0 in `people-node/packages/core/src/growth-pool.ts` (`APPROVED_MODEL_A_SHARES`); public copy in `website/src/lib/fee-split-public.ts`."
+    },
+    {
+      "id": "tokenomics-1b-ppl",
+      "status": "proposed_pending_vote",
+      "evidence": "Fixed 1B PPL public copy on `/tokenomics` and `/how-it-works`: years 1–4 at 0% inflation; 200M validator pool on 6/5/5/4% of supply per year plus 30% of fees; launch rewards from 35% community pool; year 5+ max 2%/year by vote; founders airdrop before sale at 1,000 verified people + multisig; Model A fee split 30/25/20/10/15/0 (preliminary, governance-gated)."
+    },
+    {
+      "id": "discover-feed",
+      "status": "done",
+      "evidence": "`website/src/app/discover/*`, API routes, DB-backed feed."
+    },
+    {
+      "id": "ai-token-icons",
+      "status": "done",
+      "evidence": "`website/src/app/api/factory/icon/*`, `FactoryIconGenerator.tsx`, Flux/Pollinations/Together providers (env-gated)."
+    },
+    {
+      "id": "evm-wallet-site-package",
+      "status": "in_progress",
+      "evidence": "Read-only JSON-RPC via node `POST /rpc` and `website` proxy (`PEOPLE_EIP155_CHAIN_ID` 97401). Dedicated browser package for MetaMask / Trust / WalletConnect — not in repo."
+    },
+    {
+      "id": "site-wide-wallet-connect-modal",
+      "status": "in_progress",
+      "evidence": "Product UX: connect or create a wallet in a modal without leaving the current page. Today create/swap/explorer link out to `/wallet` (`website/src/components/factory/FactoryWizard.tsx`, `SwapApp.tsx`). Shared modal shell and cross-route wiring — in progress, not shipped site-wide on main."
+    },
+    {
+      "id": "community-ai-agent-wallet",
+      "status": "live_on_testnet",
+      "evidence": "Testnet: 1 community agent live. CommunityAgentWallet v3 at `0xBEEe27d8d0c7dea625CD58C29FDe9E735b3abE32` (executor `0xF363639474cF4FE1c8a735CeFB444A42621C0Fb8`, guardian = PeopleMultisig `0x8e6AbDC7225621770CAD88345A72F20Ed77e9D03` for instant freeze; admin/limits = protocol timelock, 48h delay). Sliding-window caps: 1 PPL per op, 5 PPL per rolling 24h, 20 PPL per rolling 7 days; recipient whitelist on. Community agent #1 runner (`ops/community-agent/`) proposes small spends every 4h, each emitting `AgentSpend` — visible on `/agents` and in the explorer."
+    },
+    {
+      "id": "oz-contract-builder",
+      "status": "done",
+      "evidence": "`/create/contract`, `website/src/app/api/contracts/compose` and `compile`, OpenZeppelin templates; freeform gated by `CONTRACT_AI_FREEFORM`."
+    },
+    {
+      "id": "ai-anti-scam-guard",
+      "status": "planned_unapproved",
+      "evidence": "No product module in repo."
+    },
+    {
+      "id": "ai-governance-summaries",
+      "status": "planned_unapproved",
+      "evidence": "No governance vote summary service in repo."
+    },
+    {
+      "id": "rewards-proof-of-humanity",
+      "status": "in_progress",
+      "evidence": "`registerParticipant` tx type; Discover verified-human gates (`website/src/lib/discover/verified-human.ts`). Extended by founders program in `docs/FOUNDERS-AND-LAVKA-PLAN.md` — full PoH + points not shipped."
+    },
+    {
+      "id": "founders-stage1-founders-page",
+      "status": "live_on_testnet",
+      "evidence": "`website/src/app/founders`, `website/src/lib/founders/*`, API `/api/founders/*`, Postgres `founder` / `founder_country` / `founder_points_ledger`; PoH via `verified-human`; preliminary multipliers and daily points for swap/Discover/token launch on 97401."
+    },
+    {
+      "id": "founders-stage2-points-antibot",
+      "status": "in_progress",
+      "evidence": "Partial: `awardFounderPoints` + ledger with daily caps; hooks for swap, Discover react/follow, EVM token launch. TBD: NFT/pool/vote client hooks, EVM indexer cron, anti-Sybil score (plan A2–A3). Referral bounty (2 levels, `docs/FOUNDERS-REFERRAL.md`): `website/src/lib/founders/referral*.ts`, `/api/founders/referral/*`; 15M PPL pool (Season 1: 6M), 100/30, 50-invitee cap, 10%+52-week vesting; off-chain accounting, on-chain payout TBD."
+    },
+    {
+      "id": "founders-stage3-referral-growth-contracts",
+      "status": "planned_unapproved",
+      "evidence": "Plan A4–A5: `FoundersRegistry` + lifetime Growth share (Preliminary 10%/3% of growth budget) — new Solidity; distinct from Beta L1=70/L2=30 until founder approval."
+    },
+    {
+      "id": "founders-stage4-grants-mainnet-conversion",
+      "status": "planned_unapproved",
+      "evidence": "Plan A6–A7: community-pool grants for real-user projects; milestones 10k/100k/1M; mainnet points→PPL from 35% bucket (Preliminary 20% instant, 12mo active vest, +25% stake)."
+    },
+    {
+      "id": "founders-stage5-ambassadors-ai-bot",
+      "status": "planned_unapproved",
+      "evidence": "Plan A8–A9: top-50 referrers per country pages; Telegram AI onboarding bot (WhatsApp later). Not implemented."
+    },
+    {
+      "id": "lavka-stage1-loyalty-qr",
+      "status": "in_progress",
+      "evidence": "B1–B3 + checkout PPL pay + escrow MVP: `/lavka`, LavkaPass/MerchantEscrow/LavkaPayments Solidity, site flows; testnet contract addresses pending deploy workflow."
+    },
+    {
+      "id": "lavka-stage2-cross-tips-ambassador",
+      "status": "planned_unapproved",
+      "evidence": "Plan B4–B5: seller Growth ambassador share; cross-venue bonuses; tip QR with Model A fee split on redemption/tip txs."
+    },
+    {
+      "id": "lavka-stage3-escrow-disputes",
+      "status": "planned_unapproved",
+      "evidence": "Plan B6: merchant escrow commitments, public reliability rating, verified-people dispute votes; PII/messages off-chain."
+    },
+    {
+      "id": "lavka-stage4-pilot-seller-ai",
+      "status": "planned_unapproved",
+      "evidence": "Plan B7–B8: seller AI reminders (Telegram/WhatsApp); Batumi pilot (Preliminary 10 venues, one category). Not started."
+    },
+    {
+      "id": "ai-group-buy-negotiation",
+      "status": "planned_unapproved",
+      "evidence": "Track C in `docs/FOUNDERS-AND-LAVKA-PLAN.md` — roadmap only, Later; no spec or code."
+    },
+    {
+      "id": "erc8004-x402-agents",
+      "status": "planned_unapproved",
+      "evidence": "ERC-8004 agent registry and x402 payment compatibility — not implemented."
+    },
+    {
+      "id": "no-agent-memecoins",
+      "status": "planned_unapproved",
+      "evidence": "Product policy: community AI agents are not a launchpad for memecoins. Awaiting formal spec approval."
+    },
+    {
+      "id": "cosmos-evm-smart-accounts",
+      "status": "planned_unapproved",
+      "evidence": "Target on post-migration Cosmos EVM: ERC-4337 or equivalent smart accounts — sign-in with Google/email or passkey, auto-provisioned wallet (no seed phrase by default, optional key export), signup choice between hosted wallet and bring-your-own; gasless first N txs for newcomers via community/project paymaster. Not implemented in repo."
+    },
+    {
+      "id": "ai-monthly-community-report",
+      "status": "planned_unapproved",
+      "evidence": "Monthly AI-generated summary of community activity and on-chain metrics for projects and the network — not implemented."
+    },
+    {
+      "id": "discover-referral-growth-pool",
+      "status": "planned_unapproved",
+      "evidence": "Per-project referral link on each `/discover` card, tied to Growth Pool referral economics (Model A growth budget). Discover feed exists; referral deep links and payout wiring — not implemented."
+    },
+    {
+      "id": "token-project-pages-lightpaper",
+      "status": "planned_unapproved",
+      "evidence": "Launch form collects goal, distribution, vesting, team and links; site generates a project page with tokenomics chart and short lightpaper (extendable to white paper), PDF download and embed. Planning only — not implemented."
+    },
+    {
+      "id": "mainnet-migration-snapshot-tokenomics",
+      "status": "planned_unapproved",
+      "evidence": "Move projects to mainnet via a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only — not implemented."
+    },
+    {
+      "id": "ambassador-promo-kit",
+      "status": "planned_unapproved",
+      "evidence": "Promo kit for ambassadors and active founders after the «Миллион основателей» launch. Planning only — not implemented."
+    }
+  ]
+}

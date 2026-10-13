@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Community AI agents",
+    "description": "How community AI agents can spend on behalf of a group — with limits, votes, and public records."
+  },
+  "hero": {
+    "title": "Community AI agents",
+    "lead": "An agent is software that can send transactions from a shared wallet — only within rules your community sets and approves."
+  },
+  "liveAgent": {
+    "badge": "Live on testnet",
+    "title": "Community agent #1",
+    "lead": "A real CommunityAgentWallet v2 is already spending small amounts on-chain, under hard limits anyone can check.",
+    "walletLabel": "Wallet",
+    "executorLabel": "Executor",
+    "guardianLabel": "Guardian (instant freeze)",
+    "balanceLabel": "Current balance",
+    "limitsLabel": "Limits",
+    "limitsText": "1 PPL per transaction · 5 PPL per rolling 24h · 20 PPL per rolling 7 days · recipient whitelist on",
+    "eventsTitle": "Recent spends",
+    "eventsEmpty": "No spends recorded yet.",
+    "eventsLoading": "Loading recent spends…",
+    "eventsError": "Couldn't load recent spends. Try again later.",
+    "amountLabel": "Amount",
+    "recipientLabel": "Recipient",
+    "timeLabel": "Time",
+    "viewTx": "View in explorer"
+  },
+  "sections": {
+    "how": {
+      "title": "How it works",
+      "body": "The community funds a shared smart-wallet. An AI agent proposes payouts — for grants, tools, or services. Every spend must fit daily and weekly caps and an allow-list of recipients. Token holders can change the rules by vote. Nothing happens in secret: each action has a hash you can open in the explorer."
+    },
+    "limits": {
+      "title": "Limits and voting",
+      "items": [
+        {
+          "title": "Hard caps",
+          "text": "Per transaction, per day, and per week — so a bug or prompt cannot drain the treasury."
+        },
+        {
+          "title": "Allow-list",
+          "text": "Money only goes to addresses the community already approved."
+        },
+        {
+          "title": "Governor vote",
+          "text": "Changing caps, the allow-list, or the agent itself requires an on-chain token vote."
+        },
+        {
+          "title": "Emergency freeze",
+          "text": "Guardians chosen by the community can pause spending while people investigate."
+        }
+      ]
+    },
+    "security": {
+      "title": "Security and transparency",
+      "items": [
+        {
+          "title": "Public by default",
+          "text": "Balances, votes, and payouts are visible like any other wallet — no hidden admin keys on our servers."
+        },
+        {
+          "title": "Open metrics",
+          "text": "We plan to publish how we count an “active agent” (for example, a wallet with at least one outgoing transaction per day) so anyone can reproduce the numbers."
+        },
+        {
+          "title": "Not a memecoin launcher",
+          "text": "Agents are for real community work — not for spinning up joke tokens."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Coming next",
+      "lead": "More agent tools from the roadmap — not live yet.",
+      "items": [
+        {
+          "title": "AI anti-scam guard",
+          "body": "Warnings before risky transfers and contracts, tuned for everyday users."
+        },
+        {
+          "title": "AI summaries of governance votes",
+          "body": "Short, neutral explanations of on-chain votes on the site."
+        },
+        {
+          "title": "ERC-8004 agent registry / x402 payments",
+          "body": "On-chain agent registry and payment rails compatible with emerging agent standards."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "Community AI",
+    "title": "Community AI agents",
+    "lead": "Shared wallets with clear limits — so automation helps people without taking control away.",
+    "cta": "Learn more",
+    "cards": [
+      {
+        "title": "Pay for real work",
+        "body": "Grants, subscriptions, and services — within caps the community sets."
+      },
+      {
+        "title": "Rules you can vote on",
+        "body": "Caps, allow-lists, and freezes change only through token votes."
+      },
+      {
+        "title": "Visible in the explorer",
+        "body": "Every payout is on-chain — the same transparency as any other wallet."
+      },
+      {
+        "title": "Built for groups",
+        "body": "Clubs, creators, and local communities — not anonymous meme launches."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "How a community AI agent works: task, rules check, signed transaction, network confirmation, result to the user.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Task",
+        "body": "Someone asks the agent to do work."
+      },
+      {
+        "id": "rules",
+        "title": "Rules",
+        "body": "Caps and allow-list are checked."
+      },
+      {
+        "id": "sign",
+        "title": "Sign",
+        "body": "The agent signs a transaction."
+      },
+      {
+        "id": "confirm",
+        "title": "Confirm",
+        "body": "The network confirms on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Result",
+        "body": "The outcome goes back to the user."
+      }
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Cara kerja People's Blockchain",
+  "loopLine": "Orang memakai jaringan. Pemakaian menciptakan biaya. Sebagian setiap biaya kembali ke komunitas.",
+  "docsLinkLabel": "Detail di dokumentasi",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Sudah di testnet",
+      "items": [
+        {
+          "title": "Dompet",
+          "text": "Dompet non-kustodial di ponsel atau browser. Kunci tidak meninggalkan perangkat."
+        },
+        {
+          "title": "Buat token",
+          "text": "Nama, ticker, gambar, dan suplai, bayar dengan PPL. Harga di kurva dari perdagangan pertama."
+        },
+        {
+          "title": "Perdagangan",
+          "text": "Beli jual di kurva peluncuran, lalu di pool token/PPL."
+        },
+        {
+          "title": "10% ke komunitas",
+          "text": "Setiap token standar mengirim 10% suplai ke pool komunitas token itu."
+        },
+        {
+          "title": "Vesting kreator",
+          "text": "Bagian kreator terbuka selama 180 hari, tanpa dump hari pertama."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Berpartisipasi sebagai manusia",
+      "items": [
+        {
+          "title": "Sesi partisipasi sekali ketuk dari ponsel.",
+          "text": ""
+        },
+        {
+          "title": "Bukti kemanusiaan tanpa biometrik.",
+          "text": ""
+        },
+        {
+          "title": "Poin partisipasi menentukan bagian imbalan komunitas. Tidak bisa dibeli atau ditransfer.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Pasokan PPL tetap",
+      "intro": "Satu miliar PPL tanpa mint kejutan di awal. Validator dan hadiah peluncuran dari genesis dan biaya.",
+      "bullets": [
+        "Tahun 1–4: inflasi 0% — 1B PPL.",
+        "Validator: 200M PPL, 6% / 5% / 5% / 4% pasokan (60M, 50M, 50M, 40M) + 30% biaya.",
+        "Pendiri, hadiah, duta, airdrop: hanya kolam 35%.",
+        "Dari tahun 5: maks. 2% emisi/tahun, voting komunitas.",
+        "Airdrop pendiri dulu; jual setelah 1.000 terverifikasi dan multisig.",
+        "Setiap biaya: 30% validator, 25% komunitas, 20% treasury, 10% likuiditas, 15% Growth, 0% burn."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Dari mana imbalan berasal",
+      "intro": "Setiap biaya jaringan dibayar PPL dan dibagi sama setiap kali:",
+      "feeSplit": [
+        {
+          "label": "Validator (menjalankan jaringan)",
+          "pct": 30
+        },
+        {
+          "label": "Pool komunitas",
+          "pct": 25
+        },
+        {
+          "label": "Perbendaharaan",
+          "pct": 20
+        },
+        {
+          "label": "Likuiditas & ekosistem",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referral)",
+          "pct": 15
+        },
+        {
+          "label": "Burn",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Pool komunitas dibagi di antara peserta aktif sesuai poin partisipasi. Contoh: pool 600 token, tiga orang dengan poin 1, 2, dan 3 mendapat 100, 200, dan 300.",
+      "tokenPoolNote": "Terpisah, 10% komunitas setiap token tetap di pool token itu. Tidak dicampur dengan biaya PPL.",
+      "buybackNote": "Porsi treasury dan likuiditas (total 30%) mendanai buyback PPL publik di pasar terbuka, dijalankan oleh multisig yang dipublikasikan dan terlihat di explorer.",
+      "launchFeeNote": "Meluncurkan token atau NFT memerlukan biaya protokol, dapat dibayar dengan PPL atau stablecoin yang didukung (USDC/USDT) — sesuai pilihan Anda. Gas selalu dibayar dengan PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Mengapa bot tidak bisa farm",
+      "body": "Akun baru mulai pelan, akun tidak aktif melemah, setiap orang punya batas. Seratus akun palsu tidak menghasilkan seratus kali lipat."
+    },
+    {
+      "id": "honest",
+      "title": "Bagian jujur",
+      "bullets": [
+        "Imbalan tidak tetap. Tanpa aktivitas tidak ada imbalan.",
+        "Harga token bisa naik, turun, atau nol.",
+        "Ini partisipasi di jaringan, bukan investasi."
+      ]
+    }
+  ],
+  "ctaWallet": "Buat dompet",
+  "ctaCreate": "Luncurkan token",
+  "feeChartLabel": "Pembagian biaya jaringan"
+}

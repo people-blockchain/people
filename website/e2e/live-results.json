@@ -1,0 +1,146 @@
+[
+  {
+    "flow": "1. wallet import + balance",
+    "viewport": "1280",
+    "result": "PASS",
+    "tx": "",
+    "notes": "ui=300 chain=300 wallets=1 addr=0xa64A\u2026247D53",
+    "target": "local-build (post-fix)"
+  },
+  {
+    "flow": "2. faucet",
+    "viewport": "1280",
+    "result": "PASS",
+    "tx": "",
+    "notes": "100 test PPL sent to your address.",
+    "target": "local-build (post-fix)"
+  },
+  {
+    "flow": "3. transfer 1 PPL",
+    "viewport": "1280",
+    "result": "PARTIAL",
+    "tx": "0x86f16971307461c0bda7b47d4e257205fa9ba4b10745f1003043ae7689323ba1",
+    "notes": "onChain=true explorer=false to=0x0165\u202644007C",
+    "target": "local-build (post-fix)"
+  },
+  {
+    "flow": "layout /wallet",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /create/token",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /create/nft",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /swap",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /staking",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /discover",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /explorer",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /wallet",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /create/token",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /create/nft",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /swap",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /staking",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /discover",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout /explorer",
+    "viewport": "390",
+    "result": "PASS",
+    "tx": "",
+    "notes": "",
+    "target": "live"
+  },
+  {
+    "flow": "layout send-review sheet",
+    "viewport": "360",
+    "result": "PASS",
+    "tx": "",
+    "notes": "review shown, not confirmed",
+    "target": "live"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "title": "Modèles de contrats d'exemple",
+  "lead": "Des contrats d'exemple prêts à lire et à déployer. Consultez le code source, puis déployez directement depuis votre portefeuille connecté.",
+  "notDeployed": "Pas encore déployé",
+  "testnetAddress": "Adresse sur le testnet",
+  "viewSource": "Voir le code source",
+  "hideSource": "Masquer le code source",
+  "copy": "Copier",
+  "copied": "Copié",
+  "deployCta": "Déployer avec mon portefeuille",
+  "connectFirst": "Connectez d'abord votre portefeuille.",
+  "constructorArgs": "Paramètres du constructeur",
+  "deployButton": "Déployer",
+  "deploying": "Déploiement…",
+  "cancel": "Annuler",
+  "success": "Déployé. Le réseau a accepté votre contrat.",
+  "contractAddress": "Adresse du contrat",
+  "transaction": "Transaction",
+  "error": "Une erreur est survenue.",
+  "invalidAddress": "Saisissez une adresse de portefeuille commençant par 0x.",
+  "invalidNumber": "Saisissez un nombre supérieur à zéro.",
+  "invalidText": "Ce champ ne peut pas être vide.",
+  "templates": {
+    "escrow": {
+      "title": "Dépôt fiduciaire (escrow)",
+      "description": "Un acheteur dépose des PPL pour un vendeur. Un arbitre neutre peut libérer les fonds vers le vendeur ou rembourser l'acheteur ; l'acheteur peut aussi libérer les fonds par anticipation. Accepte le PPL natif ou un stablecoin de test (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Verrou temporel avec vesting",
+      "description": "Verrouille des PPL pour un seul bénéficiaire et les libère de façon linéaire entre une date de début et une date de fin."
+    },
+    "crowdfund": {
+      "title": "Financement participatif",
+      "description": "Collecte des PPL vers un objectif avant une échéance. Le propriétaire récupère les fonds si l'objectif est atteint ; sinon, les contributeurs sont remboursés. Accepte le PPL natif ou un stablecoin de test (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Jeton à offre fixe",
+      "description": "Un jeton ERC-20 simple à offre fixe, intégralement émis au profit de celui qui déploie le contrat."
+    }
+  },
+  "fields": {
+    "seller": "Adresse du vendeur",
+    "arbiter": "Adresse de l'arbitre",
+    "value": "Montant à envoyer (PPL)",
+    "beneficiary": "Adresse du bénéficiaire",
+    "start": "Heure de début (par défaut : maintenant ; timestamp unix en secondes)",
+    "duration": "Durée (jours)",
+    "goal": "Objectif ({symbol})",
+    "durationSeconds": "Durée (secondes)",
+    "name": "Nom du jeton",
+    "symbol": "Symbole du jeton",
+    "supply": "Offre totale (en jetons)",
+    "token": "Adresse du jeton de paiement",
+    "amount": "Montant à déposer ({symbol})",
+    "payIn": "Payer en"
+  },
+  "faucetCta": "Obtenir du {symbol} de test",
+  "faucetMinting": "Émission…",
+  "faucetDone": "Émis",
+  "faucetBalance": "Solde : {amount} {symbol}",
+  "faucetLimitHint": "Limite : jusqu'à 1000 jetons par 24 heures.",
+  "faucetCooldown": "Vous avez atteint la limite du robinet sur 24 heures. Réessayez plus tard.",
+  "approveDepositLead": "Deux transactions de portefeuille : approuvez le jeton, puis déposez.",
+  "approveAndDeposit": "Approuver et déposer",
+  "approving": "Approbation…",
+  "depositing": "Dépôt…",
+  "depositComplete": "Déposé. Le dépôt fiduciaire détient désormais les fonds."
+}

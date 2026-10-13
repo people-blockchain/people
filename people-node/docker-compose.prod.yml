@@ -1,0 +1,40 @@
+# Production-oriented compose profile (faucet gated by token, host bind mounts for chain data).
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+#
+# Chain data survives reboot/restart under ./data/node-1 and ./data/node-2 on the host.
+# Never use `docker compose down -v` in production — that deletes volumes.
+
+services:
+  node:
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      ALLOW_DEV_ENDPOINTS: "0"
+      ALLOW_FAUCET: "1"
+      # Fail closed: a well-known default token would authenticate every privileged call to
+      # this node (audit OPS-H2). Compose refuses to start if DEV_API_TOKEN is unset; set it
+      # with e.g. `openssl rand -hex 32` in the same .env the node loads.
+      DEV_API_TOKEN: ${DEV_API_TOKEN:?set DEV_API_TOKEN (openssl rand -hex 32)}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      PEER_ID: node-1
+      DATA_DIR: /data/node-1
+    volumes:
+      - ./data/node-1:/data/node-1
+
+  node-2:
+    restart: unless-stopped
+    environment:
+      ALLOW_DEV_ENDPOINTS: "0"
+      ALLOW_FAUCET: "0"
+      PEER_ID: node-2
+      DATA_DIR: /data/node-2
+    volumes:
+      - ./data/node-2:/data/node-2
+
+  web:
+    restart: unless-stopped
+    environment:
+      # Never inject DEV_API_TOKEN here: VITE_* values are compiled into the browser
+      # bundle, so it would ship the node's privileged token to every visitor.
+      NODE_API_URL: http://node:4001
+

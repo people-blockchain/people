@@ -1,0 +1,151 @@
+{
+  "navLabel": "Bảng tin dự án",
+  "tagline": "Tìm dự án mới. Giúp ý tưởng hay tiếp cận người dùng. Tham gia từ đầu.",
+  "title": "Bảng tin dự án",
+  "lead": "Mỗi thẻ gồm nội dung, biểu tượng token và ảnh chụp màn hình. Video ngắn là tùy chọn và giúp thẻ nổi hơn trong bảng tin.",
+  "createCta": "Chia sẻ dự án của bạn",
+  "empty": "Chưa có nội dung. Hãy là người đầu tiên chia sẻ ý tưởng.",
+  "signInHint": "Đăng nhập và liên kết ví để phản hồi hoặc đặt câu hỏi.",
+  "walletHint": "Liên kết ví trong khu vực đối tác để tham gia.",
+  "walletLink": "Mở tài khoản",
+  "loginLink": "Đăng nhập",
+  "stageLabel": "Vòng",
+  "stageAll": "Mọi người",
+  "needsWork": "Thẻ cần pitch rõ ràng hơn. Đọc phản hồi, chỉnh sửa và gửi lại.",
+  "resubmit": "Chỉnh sửa và gửi lại",
+  "promoted": "Tiếp cận vòng rộng hơn",
+  "votes": {
+    "interesting": "Thú vị",
+    "unclear": "Chưa rõ",
+    "not_interesting": "Không phù hợp"
+  },
+  "askQuestion": "Đặt câu hỏi",
+  "follow": "Theo dõi",
+  "following": "Đang theo dõi",
+  "tryProduct": "Dùng thử sản phẩm",
+  "readMore": "Đọc thêm",
+  "tokenLink": "Xem token",
+  "questionPlaceholder": "Bạn muốn biết gì?",
+  "sendQuestion": "Gửi",
+  "form": {
+    "title": "Chia sẻ dự án của bạn",
+    "lead": "Mô tả dự án bằng ngôn ngữ đơn giản và chọn token. Thẻ được tạo tự động. Thêm ảnh chụp và tùy chọn video ngắn.",
+    "name": "Tên dự án",
+    "screenshots": "Ảnh chụp màn hình",
+    "screenshotsHint": "PNG, JPEG hoặc WebP — sản phẩm, app hoặc mockup (tối đa 8).",
+    "addVideoOptional": "Thêm video ngắn (tùy chọn)",
+    "videoTemplateTitle": "Trong video, trả lời ba câu hỏi:",
+    "videoQ1": "Bạn làm gì?",
+    "videoQ2": "Dành cho ai?",
+    "videoQ3": "Tại sao cần token?",
+    "video": "Tệp video",
+    "videoHint": "MP4 hoặc WebM, 30–60 giây. Hoặc dán liên kết.",
+    "videoUrl": "Liên kết video",
+    "idea": "Bạn làm gì",
+    "audience": "Dành cho ai",
+    "whyToken": "Tại sao token",
+    "token": "Token trên mạng",
+    "productUrl": "Liên kết sản phẩm (tùy chọn)",
+    "submit": "Xuất bản ở vòng đầu",
+    "durationError": "Video phải từ 30 đến 60 giây.",
+    "durationTooShort": "Video phải ít nhất 30 giây.",
+    "uploadError": "Không tải lên được. Thử dùng liên kết.",
+    "screenshotError": "Không tải được ảnh này.",
+    "success": "Dự án của bạn đã ở vòng đầu."
+  },
+  "detail": {
+    "back": "Về bảng tin",
+    "idea": "Bạn làm gì",
+    "audience": "Dành cho ai",
+    "whyToken": "Tại sao token",
+    "feedback": "Phản hồi phiên bản này",
+    "questions": "Câu hỏi"
+  },
+  "stats": {
+    "title": "Số liệu bảng tin",
+    "uniqueVisitors": "Khách đã đăng nhập",
+    "returning": "Quay lại trong 14 ngày",
+    "totalEvents": "Sự kiện truy cập",
+    "window": "Cửa sổ quay lại (ngày)"
+  },
+  "errors": {
+    "generic": "Đã xảy ra lỗi. Thử lại.",
+    "rateLimited": "Quá nhiều thao tác liên tiếp. Đợi một chút.",
+    "notFound": "Dự án này không còn trong bảng tin."
+  },
+  "loading": "Đang tải…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "Vòng tiết kiệm luân phiên và tiền tiêu vặt cộng đồng on-chain.",
+      "idea": "Tiền cộng đồng on-chain: tip, thanh toán nhỏ và phần thưởng địa phương không qua ngân hàng trung gian.",
+      "audience": "Nhóm hàng xóm, người sáng tạo và ai chuyển số tiền nhỏ giữa bạn bè.",
+      "whyToken": "Tài sản riêng tách số dư cộng đồng khỏi phí mạng và làm quy tắc chia sẻ rõ cho mọi người.",
+      "tags": [
+        "Tiết kiệm luân phiên",
+        "Thanh toán địa phương",
+        "Cộng đồng"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "Gửi tip cảm ơn nhỏ cho người sáng tạo và đội ngũ trên mạng People.",
+      "idea": "Cảm ơn bằng token cho hỗ trợ vi mô — concert, stream và maintainer mã nguồn mở.",
+      "audience": "Fan, nhà tài trợ và đội nhận nhiều lời cảm ơn nhỏ.",
+      "whyToken": "Tip nằm trong sổ cái của cộng đồng thay vì số dư kín trong app.",
+      "tags": [
+        "Tip",
+        "Người sáng tạo",
+        "Thanh toán vi mô"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "Huy hiệu on-chain cho cột mốc nhóm cùng đạt.",
+      "idea": "Đánh dấu cột mốc cùng nhau — sự kiện, ra mắt và mục tiêu chung với token huy hiệu on-chain.",
+      "audience": "Câu lạc bộ, cohort và đội sản phẩm ăn mừng tiến bộ công khai.",
+      "whyToken": "Người giữ chứng minh tham gia từ ngày đầu mà không lộ dữ liệu riêng.",
+      "tags": [
+        "Cột mốc",
+        "Sự kiện",
+        "Thành viên"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "Đổi token cộng đồng thử sang PPL ngay trên trình duyệt.",
+      "idea": "Đổi token demo cộng đồng lấy PPL trên trình duyệt — không cần tài khoản sàn riêng.",
+      "audience": "Người thử tài sản testnet trước khi gắn với một dự án.",
+      "whyToken": "Cặp thanh khoản cho thấy khám phá giá thực cho các ra mắt mới trên mạng.",
+      "tags": [
+        "Hoán đổi",
+        "Thanh khoản",
+        "Token demo"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "Ra mắt token cộng đồng công bằng với tên, ảnh và quy tắc tích hợp.",
+      "idea": "Ra mắt token dự án với ảnh, tên và quy tắc khởi động công bằng — trực tiếp từ site.",
+      "audience": "Người sáng lập muốn tài sản cộng đồng mà không viết smart contract thủ công.",
+      "whyToken": "Nhà máy áp vesting và chia pool cộng đồng để mọi người thấy cùng quy tắc.",
+      "tags": [
+        "Ra mắt token",
+        "Người sáng tạo",
+        "Quy tắc công bằng"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "Bộ sưu tập cho người sáng tạo",
+      "summary": "Đúc vật sưu tập hình ảnh cho drop, sự kiện hoặc thành viên.",
+      "idea": "Đúc vật sưu tập hình ảnh đại diện drop, sự kiện hoặc thẻ thành viên.",
+      "audience": "Nghệ sĩ và cộng đồng muốn thứ hiếm nhưng dễ chia sẻ.",
+      "whyToken": "NFT mang metadata và nguồn gốc trên cùng chuỗi với token dự án.",
+      "tags": [
+        "Đúc",
+        "Hình ảnh",
+        "Bộ sưu tập"
+      ]
+    }
+  }
+}

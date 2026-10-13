@@ -1,0 +1,116 @@
+{
+  "title": "Come funziona People's Blockchain",
+  "loopLine": "Le persone usano la rete. L'uso crea commissioni. Parte di ogni commissione torna alla community.",
+  "docsLinkLabel": "Dettagli nella documentazione",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Già su testnet",
+      "items": [
+        {
+          "title": "Wallet",
+          "text": "Wallet non custodial su telefono o browser. Le chiavi non lasciano il dispositivo."
+        },
+        {
+          "title": "Crea un token",
+          "text": "Nome, ticker, immagine e supply, paga in PPL. Prezzo su curva dal primo scambio."
+        },
+        {
+          "title": "Scambia",
+          "text": "Compra e vendi sulla curva di lancio, poi nel pool token/PPL."
+        },
+        {
+          "title": "10% alla community",
+          "text": "Ogni token standard invia il 10% della supply al pool comunitario di quel token."
+        },
+        {
+          "title": "Vesting del creator",
+          "text": "La quota del creator si sblocca in 180 giorni, niente dump al giorno uno."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Partecipa come persona",
+      "items": [
+        {
+          "title": "Sessioni di partecipazione con un tap dal telefono.",
+          "text": ""
+        },
+        {
+          "title": "Proof of humanity senza biometria.",
+          "text": ""
+        },
+        {
+          "title": "I punti partecipazione decidono la tua quota di ricompense community. Non comprabili né trasferibili.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Offerta fissa di PPL",
+      "intro": "Un miliardo di PPL senza mint a sorpresa all’inizio. Validatori e ricompense da genesis e commissioni.",
+      "bullets": [
+        "Anni 1–4: 0% inflazione — 1B PPL.",
+        "Validatori: 200M PPL, 6% / 5% / 5% / 4% del supply (60M, 50M, 50M, 40M) + 30% commissioni.",
+        "Fondatori, bounty, ambasciatori, airdrop: solo fondo 35%.",
+        "Dal quinto anno: max 2% emissione/anno, solo voto community.",
+        "Airdrop fondatori prima; vendita dopo 1.000 verificati e multisig.",
+        "Ogni commissione: 30% validatori, 25% community, 20% tesoreria, 10% liquidità, 15% Growth, 0% burn."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Da dove vengono le ricompense",
+      "intro": "Ogni commissione di rete è pagata in PPL e divisa allo stesso modo ogni volta:",
+      "feeSplit": [
+        {
+          "label": "Validatori (rete)",
+          "pct": 30
+        },
+        {
+          "label": "Community Pool",
+          "pct": 25
+        },
+        {
+          "label": "Tesoreria",
+          "pct": 20
+        },
+        {
+          "label": "Liquidità ed ecosistema",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referral)",
+          "pct": 15
+        },
+        {
+          "label": "Burn",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Il Community Pool è condiviso tra partecipanti attivi in proporzione ai punti. Esempio: 600 token nel pool, tre persone con 1, 2 e 3 punti ricevono 100, 200 e 300.",
+      "tokenPoolNote": "Separatamente, il 10% community di ogni token resta nel pool di quel token. Non si mescola con le commissioni PPL.",
+      "buybackNote": "Le quote di tesoreria e liquidità (30% in totale) finanziano riacquisti pubblici di PPL sul mercato aperto, eseguiti dal multisig pubblicato e visibili nell'explorer.",
+      "launchFeeNote": "Lanciare un token o un NFT costa una commissione di protocollo, pagabile in PPL o in una stablecoin supportata (USDC/USDT), a tua scelta. Il gas si paga sempre in PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Perché i bot non possono farmare",
+      "body": "I nuovi account partono lenti, gli inattivi calano e ogni persona ha un tetto. Cento account falsi non guadagnano cento volte di più."
+    },
+    {
+      "id": "honest",
+      "title": "La parte onesta",
+      "bullets": [
+        "Le ricompense non sono fisse. Nessuna attività, nessuna ricompensa.",
+        "I prezzi possono salire, scendere o azzerarsi.",
+        "È partecipazione a una rete, non un investimento."
+      ]
+    }
+  ],
+  "ctaWallet": "Crea wallet",
+  "ctaCreate": "Lancia un token",
+  "feeChartLabel": "Ripartizione della commissione di rete"
+}

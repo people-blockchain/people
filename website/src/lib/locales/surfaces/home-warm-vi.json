@@ -1,0 +1,145 @@
+{
+  "hero": {
+    "brandLine": "PEOPLE — blockchain cho cộng đồng",
+    "headlineMain": "Ra mắt token cho cộng đồng của bạn.",
+    "headlineMainLines": [
+      "Ra mắt token cho cộng đồng của bạn."
+    ],
+    "headlineAccent": "10% về người của bạn, không về cá voi.",
+    "headlineAccentLines": [
+      "10% về người của bạn,",
+      "không về cá voi."
+    ],
+    "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây và thử trên testnet.",
+    "pitchLine": "Blockchain cho người bình thường: token riêng, thẻ NFT câu lạc bộ và gọi vốn cho một ý tưởng — không cần code.",
+    "testnetBadge": "Testnet công khai đang chạy. Chưa phải mainnet.",
+    "ctaTestnet": "Thử testnet",
+    "ctaFounder": "Nhận số nhà sáng lập của bạn",
+    "card": {
+      "badge": "Ví dụ",
+      "tokenName": "Token của cộng đồng bạn",
+      "ticker": "TICKER",
+      "price": "$0.0138"
+    },
+    "stages": [
+      {
+        "id": "wallet",
+        "label": "Có ví trong 30 giây",
+        "sub": "Khóa của bạn luôn ở trên điện thoại hoặc trình duyệt của bạn."
+      },
+      {
+        "id": "token",
+        "label": "Token của bạn, có giá ngay từ giao dịch đầu tiên",
+        "sub": "Chọn tên và ticker. Bonding curve sẽ tự định giá."
+      },
+      {
+        "id": "share",
+        "label": "10% về người của bạn",
+        "sub": "Mỗi token mới gửi 10% lượng cung của nó vào pool cộng đồng riêng."
+      }
+    ],
+    "shareBadge": "10% chia cho cộng đồng",
+    "peopleLine": "Người của bạn, không phải cá voi"
+  },
+  "community": {
+    "eyebrow": "10% cho cộng đồng",
+    "title": "10% mỗi token mới thuộc về người của bạn",
+    "lead": "Điều này được gắn sẵn trong protocol, không phải lời hứa trong một bài đăng: mỗi lần ra mắt chuẩn đều gửi 10% lượng cung vào pool cộng đồng riêng của token đó. Nó không bao giờ bị trộn với phí mạng.",
+    "statLabel": "lượng cung của mỗi token mới vào pool cộng đồng của nó",
+    "statNote": "Pool thuộc về những người tham gia vào token đó — không thuộc về mạng, không thuộc về người tạo.",
+    "footnote": "Phí mạng được chia riêng: {{community}}% vào pool cộng đồng, {{validators}}% cho validator.",
+    "cta": "Phí đi về đâu",
+    "href": "/how-it-works#hiw-fees"
+  },
+  "build": {
+    "eyebrow": "Không cần code, không cần biết crypto",
+    "title": "Những gì bạn có thể làm mà không cần code",
+    "lead": "Mọi thứ dưới đây đã chạy ngay hôm nay trên testnet công khai. Không cần cài gì, không cần build gì.",
+    "cta": "Thử trên testnet",
+    "cards": [
+      {
+        "id": "token",
+        "title": "Ra mắt token câu lạc bộ hoặc cộng đồng trong một phút",
+        "body": "Chọn tên, ticker, hình ảnh và lượng cung. Trả phí ra mắt bằng PPL và token sẽ chạy trên bonding curve riêng của nó.",
+        "href": "/create/token"
+      },
+      {
+        "id": "nft",
+        "title": "Phát hành thẻ NFT câu lạc bộ",
+        "body": "Thẻ thành viên dưới dạng NFT: một thẻ mỗi người, với hình ảnh bạn tải lên hoặc tạo ngay trên trình duyệt.",
+        "href": "/create/nft"
+      },
+      {
+        "id": "funding",
+        "title": "Gọi vốn cho ý tưởng của bạn",
+        "body": "Cộng đồng của bạn mua vào trên đường cong ngay từ giao dịch đầu tiên, nên giá được quyết định bởi nhu cầu thật, không phải một vòng gọi vốn riêng.",
+        "href": "/create"
+      },
+      {
+        "id": "contract",
+        "title": "Mô tả một smart contract bằng lời thường",
+        "body": "Viết điều bạn muốn bằng ngôn ngữ thông thường và nhận một hợp đồng được xây từ các mẫu OpenZeppelin đã kiểm toán. Bạn thấy kết quả trước khi triển khai.",
+        "href": "/create/contract"
+      }
+    ]
+  },
+  "fair": {
+    "eyebrow": "Vì sao công bằng",
+    "title": "Cùng một quy tắc cho mọi cộng đồng",
+    "lead": "Ba quy tắc được gắn sẵn trong protocol, không phải lời hứa trong một bài đăng.",
+    "tiles": [
+      {
+        "id": "community-share",
+        "stat": "10%",
+        "title": "mỗi token mới vào pool cộng đồng của token đó",
+        "body": "Không về mạng, không về người tạo. Pool riêng của token, chia cho những người tham gia."
+      },
+      {
+        "id": "vesting",
+        "stat": "180 ngày",
+        "title": "trước khi phần của người tạo mở khóa hoàn toàn",
+        "body": "Phần của người tạo mở khóa tuyến tính trong 180 ngày, nên không có bán tháo ngay ngày đầu."
+      },
+      {
+        "id": "fees",
+        "stat": "0%",
+        "title": "phí mạng bị đốt — người dùng nhận thay vào đó",
+        "body": "Mỗi khoản phí được chia cho validator, pool cộng đồng, treasury, thanh khoản và Growth. Không có gì bị phá hủy để giả vờ khan hiếm."
+      }
+    ]
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million Founders",
+    "title": "Số nhà sáng lập vẫn đang được phát",
+    "titleWithNumber": "Nhà sáng lập #{{n}} là người tiếp theo",
+    "lead": "Nhận một số, có một thẻ để chia sẻ, và nhận một phần pool cộng đồng vì đến sớm và hoạt động tích cực.",
+    "cta": "Trở thành nhà sáng lập",
+    "href": "/founders",
+    "cardHint": "Hai cấp độ, chỉ cho người hoạt động tích cực, 10% trả trước và phần còn lại trong 52 tuần.",
+    "liveCountLabel": "Nhà sáng lập đến nay"
+  },
+  "agents": {
+    "eyebrow": "Tác nhân AI cộng đồng",
+    "title": "Tác nhân làm việc cho cả nhóm",
+    "lead": "Tác nhân là người dùng hạng nhất của mạng: chúng trả tiền cho những gì dùng và chịu trách nhiệm với những người chúng phục vụ.",
+    "cta": "Gặp các tác nhân",
+    "href": "/agents"
+  },
+  "network": {
+    "eyebrow": "Mạng trực tiếp",
+    "title": "Testnet công khai, ngay bây giờ",
+    "blockHeight": "Chiều cao khối",
+    "chainLabel": "Chain testnet",
+    "explorer": "Mở explorer",
+    "unavailable": "Chiều cao khối hiện không khả dụng.",
+    "collecting": "Đang đọc mạng…",
+    "note": "Đây là testnet. Các số trên là thật, token thì không."
+  },
+  "final": {
+    "title": "Testnet đã mở. Hãy đến sớm, phá thử mọi thứ, nói cho chúng tôi biết điều gì tệ.",
+    "body": "Mỗi báo cáo lỗi và mỗi câu hỏi khó hiểu đều đi thẳng vào thứ chúng tôi xây tiếp theo.",
+    "ctaWallet": "Tạo ví",
+    "ctaExplore": "Xem explorer",
+    "socialLabel": "Theo dõi chúng tôi"
+  }
+}

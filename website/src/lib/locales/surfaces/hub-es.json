@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "PARA LA COMUNIDAD",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "PARA LA COMUNIDAD",
+    "headlineSecondary": "",
+    "slogan": "Creado por personas. Para la comunidad.",
+    "valueLine": "La comunidad participa en el valor que crea la red.",
+    "lead": "Construido por la comunidad. Compartido por la comunidad. Las personas corrientes participan en la emisión, el enrutado de comisiones de red y el Growth-referral — mientras validadores dedicados aseguran el consenso. Los participantes no son validadores.",
+    "unlike": "En una cadena típica, los usuarios sobre todo pagan comisiones. Aquí, la participación de la comunidad está diseñada en la economía.",
+    "ctaJoin": "Unirse",
+    "ctaHow": "Cómo funciona",
+    "ctaCreate": "Crear un token",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% al pool de la comunidad",
+        "note": "De la oferta de cada token nuevo va al pool de la comunidad."
+      },
+      {
+        "id": "fees",
+        "value": "Comisiones",
+        "title": "Comisiones de red",
+        "note": "Enrutadas a través de la economía de la red."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "Dos líneas pagadas: L1 70% · L2 30% del presupuesto de recompensa Growth."
+      }
+    ],
+    "flowAria": "Cómo se mueve el valor de la comunidad por la red",
+    "flowPause": "Pausar animación",
+    "flowPlay": "Reproducir animación",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token creado",
+        "sub": "Un proyecto se lanza en la red"
+      },
+      {
+        "id": "community",
+        "label": "10% comunidad + comisión de red",
+        "sub": "Parte del token nuevo y la comisión de protocolo se quedan separadas"
+      },
+      {
+        "id": "economy",
+        "label": "Economía de red + Growth Pool",
+        "sub": "El valor se enruta, no desaparece"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Dos líneas pagadas de Growth-referral"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "POR QUÉ PARTICIPAR",
+    "title": "Tres vías distintas en las que la comunidad toma parte",
+    "subtitle": "La emisión de tokens, las comisiones de red y el Growth-referral son tres mecanismos separados. Nunca se fusionan en un pago personal.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "El 10% de cada token nuevo va al pool de la comunidad",
+        "body": "Cada token estándar lanzado a través de la red envía el 10% de su oferta inicial al Community Pool de ese token — luego a la comunidad. No es un pago personal, ni el 10% de cada comisión.",
+        "href": "/create/token",
+        "cta": "Crear un token"
+      },
+      {
+        "id": "fees",
+        "kicker": "ECONOMÍA DE RED",
+        "title": "Las comisiones no desaparecen: se enrutan",
+        "body": "Las comisiones de red elegibles siguen the fee split aprobado. Esto es enrutado de la economía de red, no una promesa de que cada participante cobre de cada comisión.",
+        "href": "#economics",
+        "cta": "Enrutado de comisiones"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH-REFERRAL",
+        "title": "L1 70% · L2 30% del presupuesto de recompensa Growth",
+        "body": "Growth Pool (15% de las comisiones elegibles) financia dos líneas de referral pagadas: L1 al 70% y L2 al 30% del presupuesto de recompensa Growth. Distinto de la oferta de Token Factory y del reparto de comisiones the fee split.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH-REFERRAL",
+    "title": "Tú → L1 → L2",
+    "subtitle": "Pago Growth Beta activo: L1 70% · L2 30% del presupuesto de recompensa Growth. Growth Pool es el 15% de las comisiones elegibles. Distinto de los destinos the fee split de comisiones de red y del 10% de cada token nuevo que va al pool de la comunidad.",
+    "you": "Tú",
+    "budgetNote": "Los porcentajes son cuotas del presupuesto de recompensa Growth después de que the fee split enrute el 15% de las comisiones elegibles al Growth Pool — no cuotas de cada comisión de red.",
+    "detailsTitle": "Cómo funciona el Growth-referral",
+    "details": [
+      {
+        "title": "Dos líneas pagadas",
+        "body": "L1 (referral directo) recibe el 70% y L2 (segundo nivel) recibe el 30% del presupuesto activo de recompensa Growth."
+      },
+      {
+        "title": "Separado de comisiones y tokens",
+        "body": "Los pesos Growth L1/L2 no son el reparto the fee split de comisiones de red ni el 10% de cada token nuevo para el pool de la comunidad. Growth Pool es un destino de comisión the fee split con sus propias reglas de liquidación."
+      },
+      {
+        "title": "Este sitio",
+        "body": "No hay inicio de sesión ni panel de referral en este sitio público. El Growth-referral vive con la participación en la red."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "UNIRSE",
+    "title": "Cómo participar",
+    "subtitle": "Únete a People’s Blockchain como participante de la comunidad — desde un teléfono, una tableta o un navegador.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Empieza aquí",
+        "body": "Usa un teléfono, una tableta o un navegador. Te unes como participante — no como validador de consenso.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Crea una cartera no custodial",
+        "body": "Genera una frase de 12 palabras en el navegador, anótala y cífrala con una contraseña. Las claves no salen de este dispositivo.",
+        "href": "/wallet",
+        "cta": "Abrir cartera"
+      },
+      {
+        "num": "03",
+        "title": "Ver activos en el explorador",
+        "body": "Consulta bloques, transacciones, direcciones, tokens y NFT en el escáner público.",
+        "href": "/explorer",
+        "cta": "Abrir explorador"
+      },
+      {
+        "num": "04",
+        "title": "Participa en la economía",
+        "body": "Paga las comisiones de Token Factory y de minteo NFT desde la misma cartera. La parte del 10% al pool de la comunidad en tokens nuevos, las comisiones de red y el Growth-referral siguen siendo tres mecanismos separados.",
+        "href": "/create",
+        "cta": "Crear"
+      }
+    ],
+    "ctaJoin": "Únete a People’s Blockchain",
+    "ctaHow": "Cómo funciona"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "QUÉ",
+    "title": "¿Qué es Blockchain para la comunidad?",
+    "summary": "Blockchain para la comunidad es infraestructura comunitaria: dispositivos cotidianos para participar, creación de tokens y proyectos a nivel de protocolo, y validadores Proof-of-Stake para producir bloques. Los participantes no son validadores.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Consenso",
+        "summary": "Los validadores PoS proponen y atestiguan bloques. La participación móvil nunca vota en el quórum."
+      },
+      {
+        "id": "economics",
+        "title": "Economía",
+        "summary": "Las comisiones de red elegibles siguen the fee split aprobado. Los mercados de tokens de usuario son un canal aparte."
+      },
+      {
+        "id": "participation",
+        "title": "Participación",
+        "summary": "Teléfonos, tabletas y navegadores. Los participantes no son validadores."
+      },
+      {
+        "id": "technology",
+        "title": "Tecnología",
+        "summary": "Libro multi-activo con enteros exactos, una red de pares y herramientas para explorar la cadena."
+      }
+    ],
+    "whyTitle": "Por qué existe",
+    "learnMore": "Saber más"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "¿Qué puedo hacer?",
+    "subtitle": "Elige un rol. Los detalles están a un clic.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Lanza tokens, proyectos y economías comunitarias con las reglas del protocolo.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Opera infraestructura que propone, atestigua y finaliza bloques.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Únete desde dispositivos cotidianos. No es un rol de validador de consenso.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool es un destino de comisión the fee split — no es ingreso garantizado ni pasivo.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Consulta bloques, transacciones, tokens y NFT.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "CÓMO",
+    "title": "Cómo funciona",
+    "subtitle": "Un camino por la red. Abre un paso para el mecanismo exacto.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Una persona con una cartera en un teléfono, tableta o navegador.",
+        "detail": "Empieza con una cuenta no custodial en un teléfono, tableta o navegador. Te unes como persona de la comunidad — no como validador."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transferencias, lanzamientos, operaciones en curva y otras operaciones firmadas.",
+        "detail": "Las operaciones elegibles pagan una comisión de protocolo en PPL. Cada acción se firma y se comprueba antes de aceptarse."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Nodos respaldados por stake que proponen y atestiguan.",
+        "detail": "Los validadores son infraestructura dedicada. Los teléfonos y navegadores no producen bloques."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Transición de estado ordenada y segura con enteros.",
+        "detail": "Los validadores agrupan operaciones firmadas en bloques. Los dispositivos cotidianos no forman parte de ese proceso."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Cadena compartida entre nodos validadores.",
+        "detail": "Los nodos validadores se comparten bloques para que la red se quede en un solo estado."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Las comisiones de red y la parte comunitaria de cada token se quedan en canales separados.",
+        "detail": "Las comisiones de red en PPL siguen the fee split. Los tokens estándar creados por usuarios envían el 10% de la oferta de ese token a su propio pool de la comunidad — eso no es una comisión de red."
+      }
+    ],
+    "storyCta": "Historia visual completa"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "ACTIVO NATIVO",
+    "title": "People (PPL)",
+    "summary": "People es el activo nativo de Blockchain para la comunidad. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILIDAD",
+        "body": "Activo de liquidación para operaciones de red: comisiones, creación de tokens y servicios de protocolo descritos en las especificaciones."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Denomina las comisiones de protocolo elegibles que el divisor en vivo enruta según the fee split."
+      },
+      {
+        "title": "FEES",
+        "body": "Se pagan en PPL en operaciones elegibles. Los horarios exactos de comisiones siguen siendo protocolo/config — esta página no inventa tarifas."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Se usa en la contabilidad de la economía de red. Participation Power no es un token transferible ni poder de voto de validador."
+      }
+    ],
+    "notMarket": "Este sitio no publica precio, capitalización, listados, ROI, APY, profundidad de liquidez ni precio futuro."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Red y validadores",
+    "summary": "El consenso es Proof-of-Stake con un líder y un quórum de atestación. Los teléfonos son participantes, no validadores.",
+    "facts": [
+      {
+        "label": "Rol",
+        "value": "Los validadores aseguran la cadena; los participantes nunca se sientan en el quórum."
+      },
+      {
+        "label": "Quién ejecuta qué",
+        "value": "Nodos dedicados proponen y atestiguan bloques. Teléfonos, tabletas y navegadores se unen como participantes."
+      },
+      {
+        "label": "Red pública",
+        "value": "La testnet pública v2 está en marcha. Esto no es Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Economía de comisiones de red",
+    "summary": "Cada comisión del protocolo se reparte: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quemado — también las fraccionarias.",
+    "splits": [
+      {
+        "label": "Validadores",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Tesorería",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Liquidez y ecosistema",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Quema",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool recibe el 15% de las comisiones elegibles. No es ingreso garantizado, ni un retorno pasivo, ni un producto de inversión.",
+    "detailsTitle": "Cómo funciona el enrutado de comisiones",
+    "detailsBody": "Cada comisión del protocolo se reparte: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quemado — también las fraccionarias. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Cómo se explican las recompensas"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "MERCADO DE TOKENS",
+    "title": "Crear → Lanzar → Descubrir → Operar",
+    "subtitle": "Crea un token, lánzalo con precio integrado, deja que otros lo encuentren y opera en la curva de lanzamiento.",
+    "steps": [
+      {
+        "title": "Crear",
+        "body": "Usa el formulario de Token Factory: imagen, nombre, ticker, oferta, luego paga en PPL."
+      },
+      {
+        "title": "Lanzar",
+        "body": "Una curva de enlace virtual ofrece precio continuo desde el primer bloque."
+      },
+      {
+        "title": "Feed de proyectos",
+        "body": "Los activos aparecen en el registro de la red para que las comunidades los encuentren."
+      },
+      {
+        "title": "Operar",
+        "body": "Compra y vende en la curva de lanzamiento y luego intercambia en el pool AMM token/PPL en vivo."
+      }
+    ],
+    "expandTitle": "Curva de lanzamiento, liquidez, vesting",
+    "expandItems": [
+      "El precio de lanzamiento usa una curva de producto constante con matemática entera exacta.",
+      "Una comisión de protocolo en la curva se enruta por la economía de comisiones de red.",
+      "El reparto estándar de lanzamiento incluye un 10% obligatorio de la oferta de ese token a su propio pool de la comunidad (no es una comisión de red en PPL).",
+      "El vesting del creador mantiene la mayor parte de su cuota desbloqueándose con el tiempo, para que la comunidad no reciba una descarga el primer día."
+    ],
+    "createCta": "Abrir Token Factory",
+    "nftCta": "Crear un NFT",
+    "swapCta": "Abrir intercambio"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECNOLOGÍA",
+    "title": "Tecnología",
+    "subtitle": "Qué es la pila. Abre una tarjeta para la idea de cara al usuario.",
+    "cards": [
+      {
+        "title": "Consenso",
+        "summary": "Los validadores Proof-of-Stake proponen y atestiguan bloques. Los teléfonos no votan."
+      },
+      {
+        "title": "Estado",
+        "summary": "Saldos enteros exactos en PPL nativo y tokens creados por usuarios."
+      },
+      {
+        "title": "Red",
+        "summary": "Los nodos validadores se comparten bloques para que la cadena se quede en un solo estado."
+      },
+      {
+        "title": "Persistencia",
+        "summary": "Cada validador guarda el estado vivo de red que necesita para seguir."
+      },
+      {
+        "title": "Seguridad",
+        "summary": "Acciones firmadas, separación de roles y ningún atajo alrededor de las comprobaciones."
+      },
+      {
+        "title": "Herramientas",
+        "summary": "API HTTP y explorador para que la gente pueda leer la red."
+      }
+    ],
+    "archTitle": "Arquitectura interactiva",
+    "invTitle": "Invariantes matemáticos"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "HOJA DE RUTA",
+    "title": "Dónde está la red",
+    "subtitle": "Etapas de producto. Aquí no se anuncia una fecha de lanzamiento.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Libro, contabilidad comunitaria y enrutado de comisiones de red.",
+          "Creación de tokens y mercados de curva de lanzamiento.",
+          "Participación de la comunidad en emisión, comisiones y Growth-referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Una testnet pública está en marcha.",
+          "Esto no es Mainnet ni una promesa de trading público en vivo de valor."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Un acceso público más amplio es la siguiente etapa de la comunidad."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Red humana: participación móvil, prueba de humanidad y anti-farming.",
+          "La fecha de lanzamiento público no se anuncia en este sitio."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Documentación",
+    "summary": "Carteras, participación y tu propio nodo — empieza por la guía práctica.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Leer la guía",
+        "hint": "Primeros pasos, recompensas y puesta en marcha del nodo"
+      },
+      {
+        "href": "#economics",
+        "label": "Comisiones de red",
+        "hint": "Enrutado the fee split de comisiones PPL elegibles"
+      }
+    ]
+  }
+}

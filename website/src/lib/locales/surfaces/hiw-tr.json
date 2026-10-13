@@ -1,0 +1,116 @@
+{
+  "title": "People's Blockchain nasıl çalışır",
+  "loopLine": "İnsanlar ağı kullanır. Kullanım ücret oluşturur. Her ücretin bir kısmı topluluğa döner.",
+  "docsLinkLabel": "Belgelerde ayrıntılar",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Testnette şimdi",
+      "items": [
+        {
+          "title": "Cüzdan",
+          "text": "Telefonda veya tarayıcıda saklamayan cüzdan. Anahtarlar cihazınızdan çıkmaz."
+        },
+        {
+          "title": "Token oluştur",
+          "text": "Ad, ticker, görsel ve arz, PPL ile ödeyin. İlk işlemden eğriyle fiyatlanır."
+        },
+        {
+          "title": "Al-sat",
+          "text": "Lansman eğrisinde, sonra token/PPL havuzunda alıp satın."
+        },
+        {
+          "title": "Topluluğa %10",
+          "text": "Her standart token arzının %10'unu kendi topluluk havuzuna gönderir."
+        },
+        {
+          "title": "Creator vesting",
+          "text": "Creator payı 180 günde açılır, birinci gün dump yok."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Bir insan olarak katılın",
+      "items": [
+        {
+          "title": "Telefondan tek dokunuşla katılım oturumları.",
+          "text": ""
+        },
+        {
+          "title": "Biyometri olmadan insan kanıtı.",
+          "text": ""
+        },
+        {
+          "title": "Katılım puanları topluluk ödüllerindeki payınızı belirler. Satın alınamaz veya transfer edilemez.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Sabit PPL arzı",
+      "intro": "İlk yıllarda sürpriz basım yok — bir milyar PPL. Doğrulayıcılar ve lansman ödülleri genesis ve ücretlerden.",
+      "bullets": [
+        "Yıl 1–4: %0 enflasyon — 1B PPL.",
+        "Doğrulayıcılar: 200M PPL, %6 / %5 / %5 / %4 arz (60M, 50M, 50M, 40M) + %30 ücret.",
+        "Kurucular, ödüller, elçiler, airdrop: yalnızca %35 topluluk havuzu.",
+        "5. yıldan: yılda en fazla %2 yeni emisyon, topluluk oyu.",
+        "Önce kurucu airdrop; satış 1.000 doğrulanmış + multisig sonrası.",
+        "Her ücret: %30 doğrulayıcı, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakım."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Ödüller nereden gelir",
+      "intro": "Her ağ ücreti PPL ile ödenir ve her seferinde aynı bölünür:",
+      "feeSplit": [
+        {
+          "label": "Doğrulayıcılar (ağ)",
+          "pct": 30
+        },
+        {
+          "label": "Topluluk havuzu",
+          "pct": 25
+        },
+        {
+          "label": "Hazine",
+          "pct": 20
+        },
+        {
+          "label": "Likidite ve ekosistem",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referans)",
+          "pct": 15
+        },
+        {
+          "label": "Yakma",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Topluluk havuzu, katılım puanlarına göre aktif katılımcılar arasında paylaşılır. Örnek: havuzda 600 token, 1, 2 ve 3 puanlı üç kişi 100, 200 ve 300 alır.",
+      "tokenPoolNote": "Ayrıca her token'ın %10 topluluk payı kendi havuzunda kalır. PPL ücretleriyle karışmaz.",
+      "buybackNote": "Hazine ve likidite payları (toplam %30) açık piyasadan yapılan halka açık PPL geri alımlarını finanse eder; yayınlanan çoklu imza tarafından yürütülür ve explorer'da görünür.",
+      "launchFeeNote": "Bir token veya NFT başlatmak protokol ücreti gerektirir; PPL veya desteklenen bir stabilcoin (USDC/USDT) ile ödenebilir — seçim sizin. Gas her zaman PPL ile ödenir."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Botlar neden farm edemez",
+      "body": "Yeni hesaplar yavaş başlar, hareketsizler zayıflar, herkesin tavanı vardır. Yüz sahte hesap yüz kat kazandırmaz."
+    },
+    {
+      "id": "honest",
+      "title": "Dürüst kısım",
+      "bullets": [
+        "Ödüller sabit değil. Aktivite yoksa ödül yok.",
+        "Token fiyatları yükselir, düşer veya sıfırlanır.",
+        "Bu bir ağa katılım, yatırım değil."
+      ]
+    }
+  ],
+  "ctaWallet": "Cüzdan oluştur",
+  "ctaCreate": "Token başlat",
+  "feeChartLabel": "Ağ ücreti dağılımı"
+}

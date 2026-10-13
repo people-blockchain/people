@@ -1,0 +1,48 @@
+# Single extra node on one server. Same image as Railway (Dockerfile.node).
+# Not mainnet. Not the two-node internal stack (docker-compose.yml).
+#
+#   cp .env.node.example .env.node   # fill public settings, never commit
+#   docker compose -f docker-compose.node.yml --env-file .env.node up --build -d
+#
+# Coordinated forks: SECURITY_UPGRADE_HEIGHT, VALIDATOR_ALLOWLIST and CONSENSUS_UPGRADE_1_HEIGHT
+# must be identical to every other node on the network (a mismatch forks the chain at that height).
+# Join an existing network: same CHAIN_ID + same GENESIS_FAUCET_ADDRESS and BOOTSTRAP_ADDRESS as the seed,
+# BOOTSTRAP_PEERS = reachable gossip of a seed (host:4002 or ws://host:4002).
+# Follower only: no signing keys are passed to the container.
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_HTTP_PORT:-4001}:4001"
+      - "${HOST_GOSSIP_PORT:-4002}:4002"
+    environment:
+      PEER_ID: ${PEER_ID:-vps-node-1}
+      PORT: 4001
+      GOSSIP_PORT: 4002
+      DATA_DIR: /data
+      BIND_HOST: 0.0.0.0
+      NODE_ENV: production
+      CHAIN_ID: ${CHAIN_ID:?set CHAIN_ID in .env.node}
+      BOOTSTRAP_PEERS: ${BOOTSTRAP_PEERS:-}
+      PUBLIC_GOSSIP_URL: ${PUBLIC_GOSSIP_URL:-}
+      GENESIS_FAUCET_ADDRESS: ${GENESIS_FAUCET_ADDRESS:?set public GENESIS_FAUCET_ADDRESS}
+      BOOTSTRAP_ADDRESS: ${BOOTSTRAP_ADDRESS:?set public BOOTSTRAP_ADDRESS}
+      ALLOW_FAUCET: ${ALLOW_FAUCET:-0}
+      VALIDATOR_ADDRESS: ${VALIDATOR_ADDRESS:-}
+      VALIDATOR_PRIVATE_KEY: ${VALIDATOR_PRIVATE_KEY:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+      # CHAIN-H1/H2: .env.node documents these, so they must reach the container — a node that
+      # never sees them runs legacy consensus and forks away at the activation height. Empty is
+      # "not scheduled" (readSecurityUpgrade/readConsensusUpgrade1 treat "" as unset).
+      SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
+      VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
+      CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+    volumes:
+      - node-data:/data
+
+volumes:
+  node-data:

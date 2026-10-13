@@ -1,0 +1,122 @@
+{
+  "tag": "LITEPAPER",
+  "tocLabel": "Bu sayfada",
+  "downloadTitle": "İndir",
+  "downloadLead": "Tam Litepaper PDF'ini veya paylaşım için tanıtım kitini indirin.",
+  "downloadPdfLabel": "Litepaper (PDF) indir",
+  "downloadZipLabel": "Tanıtım kitini indir",
+  "preliminaryNote": "Ön bilgi · gelir vaadi değildir",
+  "downloadWhitepaperLabel": "Whitepaper (PDF) indir",
+  "downloadWhitepaperLead": "Whitepaper — tam teknik belge (EN, PDF, 31 sayfa)",
+  "versionLabel": "Sürüm",
+  "changelogTitle": "Changelog",
+  "changelogInitial": "İlk sürüm",
+  "changelogAgentLive": "Topluluk ajanı #1 testnette canlı (günlük/haftalık kayan limitlere ve guardian tarafından anında dondurmaya sahip CommunityAgentWallet v2).",
+  "heroStat": {
+    "supplyLabel": "PPL, sabit arz",
+    "communityLabel": "her başlatılan token'in topluluğuna giden payı",
+    "burnLabel": "yakılan ücretlerin payı — hepsi paylaşılan",
+    "vcValue": "0",
+    "vcLabel": "VC veya yatırımcı tahsisatları"
+  },
+  "charts": {
+    "allocationTitle": "Genesis tahsisatı",
+    "feeFlowTitle": "Her ücretin nereye gittiği",
+    "feeFlowSourceLabel": "Bir ağ ücreti",
+    "feeFlowSourceNote": "PPL'de ödenen",
+    "feeFlowBurnNote": "hiçbir şey yok edilmedi",
+    "feeFlowBuybackTag": "→ geri satın almalar",
+    "buybackTitle": "Geri satın alma döngüsü",
+    "buybackLead": "Her ağ ücretinin hazine ve likidite payları halka açık PPL geri satın almalarını finanse eder.",
+    "buybackTreasuryLabel": "Hazine",
+    "buybackLiquidityLabel": "Likidite",
+    "buybackTargetLabel": "Halka açık PPL geri satın almaları",
+    "vestingTitle": "Takım ve kurucuların kilitlenmesi",
+    "vestingCliffLabel": "cliff",
+    "vestingMonthSuffix": "a",
+    "vestingCaption": "Arzın %{{pct}}'i. Lansmanında %0, {{cliff}} aylık kilitlenme, ardından {{vest}} ay doğrusal — {{total}} ayında tamamen kilitlenmesi açılmış.",
+    "payoutTitle": "Kurucuların ödeme",
+    "payoutAtOnceLabel": "Bir seferde",
+    "payoutWeeklyLabel": "{{pct}}% eşit haftalık dilimler →",
+    "payoutWeek1": "hafta 1",
+    "payoutWeekLast": "hafta {{n}}",
+    "roadmapTitle": "Kapılar, tarihler değil",
+    "roadmapLead": "Her aşama kapısı karşılandığında başlar. Tarih için taahhüt verilmez.",
+    "roadmapNowBadge": "Şimdi",
+    "roadmapStages": [
+      {
+        "title": "Sezon 0 · Halka açık testnet",
+        "body": "Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslar, Million Founders puanları.",
+        "gate": "Şimdi"
+      },
+      {
+        "title": "Mainnet + PPL satışı",
+        "body": "Mainnet başlar ve topluluk PPL satışı açılır.",
+        "gate": "Kapı: 1.000 doğrulanmış kişi + canlı 2-of-3 hazine çok imzalı cüzdan"
+      },
+      {
+        "title": "Staking ve doğrulanıcılar",
+        "body": "Staking ve doğrulanıcı katılımı projenin ötesinde açılır.",
+        "gate": "Mainnet sonrası"
+      }
+    ],
+    "verificationTitle": "Siz bir kişi olduğunuzun bir kontrolü",
+    "verificationLead": "Doğrulama ücretsizdir. Biyometri gerekmez.",
+    "verificationLevels": [
+      {
+        "level": "Seviye 0",
+        "title": "Oturum açmış",
+        "body": "Google veya e-posta + cüzdan."
+      },
+      {
+        "level": "Seviye 1 · Telegram",
+        "title": "Telefon, bir kez",
+        "body": "Telegram botumuzda telefonunuzu bir kez paylaşın. Kurucu başına bir numara."
+      },
+      {
+        "level": "Seviye 2 · Human Passport",
+        "title": "Human Passport",
+        "body": "Human Passport ile doğrulayın."
+      }
+    ],
+    "differTitle": "Nasıl farklıyız",
+    "differLead": "Diğer ağlar hakkında yalnızca doğrulanabilir halka açık gerçekler, kaynaklar ile. Bu tasarım seçimlerini karşılaştırır, kaliteyi değil.",
+    "differHeaders": [
+      "Ethereum",
+      "Solana",
+      "People"
+    ],
+    "differRows": [
+      {
+        "label": "Yakılan ücretler",
+        "ethereum": "Base fee is burned¹",
+        "solana": "50% of the base fee is burned²",
+        "people": "{{burnPct}}% yakılan"
+      },
+      {
+        "label": "Ücretleri kim alır",
+        "ethereum": "Validators get the priority fee (tip)¹",
+        "solana": "Validators get 50% of the base fee and 100% of the priority fee²",
+        "people": "{{feeSplit}}"
+      },
+      {
+        "label": "Erken finansman",
+        "ethereum": "Public ether sale, 2014 — 42 days, bought with BTC³",
+        "solana": "$20M Series A led by Multicoin Capital (2019); investors received SOL tokens⁴",
+        "people": "Kendi fonlu. VC yok, yatırımcı tahsisatı yok"
+      },
+      {
+        "label": "Hesaplar",
+        "ethereum": "Creating an account costs nothing; no identity check⁵",
+        "solana": "Human check is not a protocol requirement",
+        "people": "Ödüller yalnızca doğrulanmış insanlar için"
+      },
+      {
+        "label": "Yeni token topluluk payı",
+        "ethereum": "Not a protocol rule",
+        "solana": "Not a protocol rule",
+        "people": "her başlatılan token'in {{communityPct}}'i"
+      }
+    ]
+  }
+}

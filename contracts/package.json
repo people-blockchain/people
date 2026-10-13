@@ -1,0 +1,13 @@
+{
+  "name": "@people/contracts-scripts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed:97401": "node scripts/seed-97401.mjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.2.0",
+    "@noble/secp256k1": "^3.1.0",
+    "viem": "^2.37.9"
+  }
+}

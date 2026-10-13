@@ -1,0 +1,168 @@
+{
+  "tag": "创始人",
+  "title": "百万创始人",
+  "lead": "在 mainnet 之前，与一百万已验证的人一起建设 People's Blockchain。您的创始人编号和活动积分今天起在 testnet 上记录。",
+  "preliminaryBanner": "初步数值 — 积分权重、倍数和每日上限可能在 mainnet 前调整。",
+  "counterLabel": "已验证创始人",
+  "goalLabel": "mainnet 前目标",
+  "yourNumber": "创始人 #{{n}}",
+  "multiplierLabel": "早期加入倍数",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "领取创始人编号",
+  "registerLead": "选择国家以显示在公开地图上。注册前需绑定钱包（人性证明）。",
+  "countryLabel": "国家/地区",
+  "countryPlaceholder": "选择国家/地区",
+  "registerButton": "成为创始人",
+  "registering": "注册中…",
+  "signInCta": "登录",
+  "walletCta": "绑定钱包",
+  "pohRequired": "登录并绑定钱包以注册并获得积分。没有人性证明则没有积分。",
+  "registered": "您已加入计划。",
+  "pointsTitle": "活动积分",
+  "pointsTotal": "总积分",
+  "pointsTodayHint": "每项操作及总计均有每日上限（UTC）。",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "可获得积分的操作",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "在项目动态中表态",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "在项目动态中关注项目",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "在 People's Blockchain 测试网 (97401) 兑换，最少 {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "在 People's Blockchain 测试网质押 PPL（新增委托），最低 {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Launch a token (counts after 10+ verified holders)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "铸造 NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "创建流动性池",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Vote in governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "邀请已验证好友（对方验证并行动后）",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "各国创始人",
+  "mapHint": "注册时自行申报的国家/地区。",
+  "leaderboardTitle": "国家排行榜",
+  "leaderboardCount": "{{count}} 位创始人",
+  "errorRegister": "注册失败。请检查钱包后重试。",
+  "errorLoad": "无法加载统计数据。",
+  "autoClaimLoading": "正在发放你的创始人编号…",
+  "autoClaimError": "无法发放你的创始人编号，请重试。",
+  "autoClaimRetry": "重试",
+  "countryDetectedHint": "已根据浏览器识别国家/地区 — 可以修改。",
+  "chooseCountryTitle": "你的国家/地区",
+  "countrySaved": "国家/地区已更新。",
+  "countryUpdateError": "无法更新国家/地区，请重试。",
+  "countryRateLimited": "更改次数过多，请稍后重试。",
+  "visibilityLabel": "公开资料",
+  "visibilityHint": "允许公开列表显示账户名称和头像，例如透明度页面的排行榜。默认关闭。",
+  "visibilitySaved": "已保存。",
+  "visibilityError": "保存失败。",
+  "loading": "加载中…",
+  "discoverCta": "项目动态",
+  "swapCta": "在 testnet 兑换",
+  "createTokenCta": "发行代币",
+  "refresh": "刷新",
+  "live": "实时",
+  "mainnetRulesTitle": "主网奖励规则（初步）",
+  "mainnetRulesPoh": "没有人性证明则不累积任何内容：账户验证并绑定钱包之前，测试网无创始人积分，主网无个人 PPL 奖励。",
+  "mainnetRulesVestingTitle": "个人奖励解锁",
+  "mainnetRulesVestingBullets": [
+    "主网第一天解锁已转换个人奖励的 10%（仅限已验证创始人）。",
+    "剩余 90% 在整整 12 个月内按相等周份额解锁。",
+    "每个自然月至少一次合格的链上或 项目动态 操作。若整月无活动，每周解锁暂停直至回归；错过的周次不会自动跳过。",
+    "测试网积分单独计算；这些规则适用于主网 PPL。"
+  ],
+  "mainnetRulesSaleFeeTitle": "早期出售费（主网前 30 天）",
+  "mainnetRulesSaleFeeBody": "在网络启动后前 30 天出售已解锁 PPL 时，从成交额中扣缴 PPL 费用：首日 10%，线性降至第 30 天的 0%。费用进入社区池。",
+  "mainnetRulesStakingTitle": "创始人质押加成",
+  "mainnetRulesStakingBullets": [
+    "可选质押使验证者奖励利率提高 25%——加成作用于利率，而非本金的 25%，也不是对具体收益率的承诺。",
+    "质押奖励来自社区池，并按与个人奖励相同的每周节奏解锁。",
+    "解除质押：PPL 回到钱包前需等待 21 天。"
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "在 mainnet 前成为第 {{n}} 号创始人",
+  "heroTitleFallback": "在主网启动前成为最早的一批创始人",
+  "heroSub": "已验证参与者获得编号、早期入场奖励，以及在 People's Blockchain 测试网上的活动积分。",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "已领取：100 × 6 种代币",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

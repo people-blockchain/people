@@ -1,0 +1,218 @@
+{
+  "eyebrow": "Million Founders · Season 1",
+  "heroTitle": "Be one of the first million people building a blockchain for everyone.",
+  "heroSub": "No code, no crypto skills. Get your founder number, invite friends, and earn points when they launch tokens, NFTs and club cards on the People testnet.",
+  "ctaClaim": "Claim my founder number",
+  "ctaHow": "How it works",
+  "disclaimer": "Preliminary. Points, rates and season budget may change before mainnet. Not a promise of income.",
+  "stripVerified": "verified founders",
+  "stripGoal": "goal",
+  "cardFounder": "Founder",
+  "cardNumberPlaceholder": "Your number here",
+  "cardNetwork": "People testnet",
+  "cardFlipHint": "Tap to flip",
+  "cardBackTitle": "Your founder card",
+  "cardBackLines": [
+    "One verified person, one number.",
+    "Numbers are given in order of registration.",
+    "Shareable — your friends get their own."
+  ],
+  "cardCountry": "Country",
+  "cardRank": "Early-entry rank",
+  "cardPoints": "Points",
+  "hello": [
+    "Hello",
+    "Привет",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "Season 1 referral pool",
+  "poolNoNewCoins": "Paid from the Million Founders pool. No new coins.",
+  "poolSpent": "Spent",
+  "poolRemaining": "Remaining",
+  "poolLiveHint": "The live spent/remaining balance is shown to registered founders.",
+  "poolEmpty": "The Season 1 referral pool is empty. New referral points are not credited.",
+  "howEyebrow": "How it works",
+  "howTitle": "Three steps to become an active founder",
+  "steps": [
+    {
+      "title": "Verify",
+      "body": "Share your phone once in our Telegram bot, or verify with Human Passport. Free."
+    },
+    {
+      "title": "Create a wallet",
+      "body": "Sign in with Google or email and link your People wallet in a few taps."
+    },
+    {
+      "title": "Do one testnet action",
+      "body": "A swap, an NFT mint or a token launch on the People testnet."
+    }
+  ],
+  "inviteLine": "Invite friends: you earn when THEY do step 3.",
+  "levelsEyebrow": "Two levels",
+  "levelsTitle": "How invite points flow",
+  "levelYou": "You",
+  "levelFriend": "Your friend",
+  "levelFriendsFriends": "Your friend's friends",
+  "levelL1": "{{pts}} points per active friend",
+  "levelL2": "+{{pct}}% of your friend's L1 — not taken from them",
+  "levelsTagline": "Only 2 levels. Only real, active people.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — governance votes",
+  "gppl": [
+    {
+      "title": "People's governance token",
+      "body": "gPPL is the People governance token. Holders vote on DAO proposals."
+    },
+    {
+      "title": "1,000,000 gPPL, held by the DAO",
+      "body": "The whole supply sits in the DAO timelock — an on-chain contract, not a person."
+    },
+    {
+      "title": "Equal share per verified founder",
+      "body": "Every verified founder gets an equal gPPL share. Distribution runs in batches from the treasury 2-of-3 multisig."
+    },
+    {
+      "title": "Multisig now, DAO voting later",
+      "body": "Until there are enough verified founders, the 2-of-3 multisig decides batches and timing. After that, decisions move to DAO voting by gPPL holders."
+    }
+  ],
+  "gpplNote": "Testnet: gPPL has no price and is not income. The amount per founder is announced per batch.",
+  "activeEyebrow": "Who counts as active",
+  "activeTitle": "All three, or it doesn't count",
+  "activeChecklist": [
+    "Verified (Telegram phone or Human Passport)",
+    "Wallet created",
+    "At least 1 real testnet action"
+  ],
+  "activeActionsHint": "Real actions: swap, stake, liquidity pool, NFT mint, token launch, governance vote. Likes and follows don't count.",
+  "signupZero": "Sign-up alone = 0",
+  "bonusTitle": "Bonus points from your active friends",
+  "bonusStay": "+{{pts}} · still active after {{days}} days",
+  "bonusSale": "+{{pts}} · buys PPL in the official sale",
+  "bonusAirdrop": "+{{pts}} · joins another project's airdrop",
+  "buildEyebrow": "No code needed",
+  "buildTitle": "What your friends can build",
+  "build": [
+    {
+      "title": "Launch a token",
+      "body": "Name, ticker, supply — a short form, no code. It goes live on the testnet.",
+      "href": "/create/token",
+      "cta": "Launch a token"
+    },
+    {
+      "title": "Mint club cards and NFTs",
+      "body": "Membership cards for a club, a café or a community — as NFTs or loyalty passes.",
+      "href": "/create/nft",
+      "cta": "Mint an NFT"
+    },
+    {
+      "title": "Raise funding",
+      "body": "Collect support for a project with reviewed contract templates — escrow, vesting, token-weighted vote.",
+      "href": "/create/contract",
+      "cta": "Open templates"
+    }
+  ],
+  "buildTestnet": "Open the People testnet",
+  "ranksEyebrow": "Early entry",
+  "ranksTitle": "Earlier founders get a bigger multiplier",
+  "ranksHint": "Applies to activity points of the founder number holder. Preliminary.",
+  "ranksRange": "Founders {{from}}–{{to}}",
+  "fairEyebrow": "Fair by design",
+  "fairTitle": "Built so nobody can farm it",
+  "fair": [
+    {
+      "title": "{{instant}}% now + {{rest}}% weekly",
+      "body": "The rest unlocks in equal weekly slices over {{weeks}} weeks."
+    },
+    {
+      "title": "Max {{max}} active invitees",
+      "body": "Per person per season. More only with ambassador approval."
+    },
+    {
+      "title": "0% burn, fees shared",
+      "body": "Network fees are shared under the published fee split. Burn is 0%."
+    },
+    {
+      "title": "No new coins",
+      "body": "Paid from an existing pool. When the season pool is empty, the program stops."
+    }
+  ],
+  "countriesEyebrow": "Around the world",
+  "countriesTitle": "Founders by country",
+  "countriesHint": "Self-declared country at registration.",
+  "countriesEmpty": "Be the first founder from your country",
+  "countriesEmptyHint": "Claim your number and put your country on the map.",
+  "countriesCount": "{{count}} founders",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Questions people ask",
+  "faq": [
+    {
+      "q": "Is this a promise of income?",
+      "a": "No. Everything here is preliminary: points, the PPL-per-point rate and the season budget may change before mainnet. Points are a record of real activity on the testnet, not a payout guarantee."
+    },
+    {
+      "q": "Why only 2 levels?",
+      "a": "So the reward goes to people who bring real, active friends — not to deep chains. You get points for your friends, and +30% of what your friends earn for theirs. It is not taken from your friend."
+    },
+    {
+      "q": "Who counts as active?",
+      "a": "Someone who verified (Telegram phone or Human Passport), has a wallet and did at least one real testnet action: swap, stake, pool, NFT, token launch or governance vote. Sign-up alone earns nothing."
+    },
+    {
+      "q": "When can I sell?",
+      "a": "Not on the testnet. After mainnet distribution is live, 10% of your credited PPL is liquid at once and 90% unlocks weekly over 52 weeks. During the first 30 mainnet days an early sale fee applies, falling from 10% to 0%."
+    },
+    {
+      "q": "What if the pool runs out?",
+      "a": "The program stops. The last credit is cut to what is left, and nothing new is minted to keep it going."
+    },
+    {
+      "q": "Do I need crypto skills?",
+      "a": "No. You sign in, link a wallet and verify once. Launching a token or minting an NFT takes a form, not code."
+    }
+  ],
+  "rulesDetails": "Full program rules (preliminary)",
+  "finalTitle": "Your number is waiting.",
+  "finalSub": "Claim it, then share it with the people you'd build with.",
+  "shareTitle": "Share the program",
+  "shareText": "I'm joining the Million Founders on People's Blockchain — a blockchain for everyone, no code needed.",
+  "shareMine": "I'm Founder #{{n}} on People's Blockchain. Get your founder number:",
+  "shareCopy": "Copy",
+  "shareCopied": "Copied",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "Claim",
+  "claimTitle": "Get your founder number",
+  "claimSignInLead": "Sign in with Google or email, link a wallet, pick your country — and the next number is yours.",
+  "personalEyebrow": "Your founder space",
+  "personalTitle": "Welcome, Founder #{{n}}",
+  "downloadCard": "Download card (PNG)",
+  "shareCard": "Share card",
+  "activeOfMax": "{{active}}/{{max}} active",
+  "activeOfMaxHint": "Active invitees this season",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "Total",
+  "tickVerified": "Verified",
+  "tickWallet": "Wallet",
+  "tickAction": "Action",
+  "vestingTimeline": "Unlock timeline",
+  "vestingWeek": "week {{w}}",
+  "vestingNow": "now",
+  "verifyTitle": "Your verification",
+  "verifyHumanPassport": "Verify with Human Passport",
+  "verifyHumanPassportBusy": "Checking Human Passport…",
+  "verifyHumanPassportOk": "Human Passport verified.",
+  "verifyHumanPassportLow": "Your Human Passport score is below the required threshold.",
+  "verifyHumanPassportError": "Human Passport verification failed. Try again later.",
+  "verifyHumanPassportOff": "Human Passport is not configured on this environment yet."
+}

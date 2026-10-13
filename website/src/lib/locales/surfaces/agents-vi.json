@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Tác nhân AI cộng đồng",
+    "description": "Cách các agent AI của cộng đồng có thể chi tiêu thay cho một nhóm — với hạn mức, bỏ phiếu và lịch sử công khai."
+  },
+  "hero": {
+    "title": "Tác nhân AI cộng đồng",
+    "lead": "Agent là phần mềm có thể gửi giao dịch từ một ví chung — chỉ trong phạm vi quy tắc mà cộng đồng của bạn đặt ra và phê duyệt."
+  },
+  "liveAgent": {
+    "badge": "Hoạt động trên testnet",
+    "title": "Agent cộng đồng số 1",
+    "lead": "Một CommunityAgentWallet v2 thực sự đã chi những khoản nhỏ on-chain, trong giới hạn chặt mà ai cũng có thể kiểm tra.",
+    "walletLabel": "Ví",
+    "executorLabel": "Người thực thi",
+    "guardianLabel": "Guardian (đóng băng ngay lập tức)",
+    "balanceLabel": "Số dư hiện tại",
+    "limitsLabel": "Giới hạn",
+    "limitsText": "1 PPL mỗi giao dịch · 5 PPL mỗi 24 giờ trượt · 20 PPL mỗi 7 ngày trượt · danh sách trắng người nhận đang mở",
+    "eventsTitle": "Chi tiêu gần đây",
+    "eventsEmpty": "Chưa có chi tiêu nào được ghi nhận.",
+    "eventsLoading": "Đang tải chi tiêu gần đây…",
+    "eventsError": "Không tải được chi tiêu gần đây. Vui lòng thử lại sau.",
+    "amountLabel": "Số tiền",
+    "recipientLabel": "Người nhận",
+    "timeLabel": "Thời gian",
+    "viewTx": "Xem trong trình khám phá"
+  },
+  "sections": {
+    "how": {
+      "title": "Cách hoạt động",
+      "body": "Cộng đồng cấp vốn cho một ví thông minh chung. Một agent AI đề xuất các khoản chi — cho grant, công cụ hoặc dịch vụ. Mọi khoản chi phải nằm trong hạn mức ngày và tuần cùng danh sách địa chỉ được phép. Người giữ token có thể thay đổi quy tắc bằng bỏ phiếu. Không có gì diễn ra bí mật: mỗi hành động có một hash bạn có thể mở trên explorer."
+    },
+    "limits": {
+      "title": "Hạn mức và bỏ phiếu",
+      "items": [
+        {
+          "title": "Hạn mức cứng",
+          "text": "Theo từng giao dịch, theo ngày và theo tuần — để lỗi hoặc prompt không thể rút cạn quỹ."
+        },
+        {
+          "title": "Danh sách cho phép",
+          "text": "Tiền chỉ chuyển đến các địa chỉ cộng đồng đã phê duyệt."
+        },
+        {
+          "title": "Bỏ phiếu Governor",
+          "text": "Thay đổi hạn mức, danh sách cho phép, hoặc chính agent đều cần một cuộc bỏ phiếu token on-chain."
+        },
+        {
+          "title": "Đóng băng khẩn cấp",
+          "text": "Người giám hộ do cộng đồng chọn có thể tạm ngừng chi tiêu trong khi điều tra."
+        }
+      ]
+    },
+    "security": {
+      "title": "An toàn và minh bạch",
+      "items": [
+        {
+          "title": "Công khai theo mặc định",
+          "text": "Số dư, phiếu bầu và các khoản chi hiển thị như mọi ví khác — không có khóa quản trị ẩn trên máy chủ của chúng tôi."
+        },
+        {
+          "title": "Số liệu công khai",
+          "text": "Chúng tôi dự định công bố cách tính một \"agent hoạt động\" (ví dụ: một ví có ít nhất một giao dịch ra mỗi ngày) để ai cũng có thể tính lại các số liệu."
+        },
+        {
+          "title": "Không phải nền tảng ra mắt memecoin",
+          "text": "Agent dành cho công việc cộng đồng thực sự — không phải để tạo token đùa vui."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Sắp có",
+      "lead": "Thêm công cụ agent từ roadmap — chưa ra mắt.",
+      "items": [
+        {
+          "title": "Bảo vệ lừa đảo bằng AI",
+          "body": "Cảnh báo trước giao dịch và hợp đồng rủi ro — cho người dùng thường ngày."
+        },
+        {
+          "title": "Tóm tắt AI về phiếu governance",
+          "body": "Giải thích ngắn, trung lập các cuộc bỏ phiếu on-chain trên site."
+        },
+        {
+          "title": "Đăng ký agent ERC-8004 / thanh toán x402",
+          "body": "Sổ đăng ký on-chain và thanh toán tương thích chuẩn agent mới."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "AI cộng đồng",
+    "title": "Tác nhân AI cộng đồng",
+    "lead": "Ví chung với hạn mức rõ ràng — để tự động hóa giúp con người mà không lấy đi quyền kiểm soát.",
+    "cta": "Tìm hiểu thêm",
+    "cards": [
+      {
+        "title": "Trả tiền cho công việc thực sự",
+        "body": "Grant, đăng ký dịch vụ và dịch vụ — trong hạn mức cộng đồng đặt ra."
+      },
+      {
+        "title": "Quy tắc bạn có thể bỏ phiếu",
+        "body": "Hạn mức, danh sách cho phép và đóng băng chỉ thay đổi qua bỏ phiếu token."
+      },
+      {
+        "title": "Hiển thị trên explorer",
+        "body": "Mọi khoản chi đều on-chain — minh bạch như mọi ví khác."
+      },
+      {
+        "title": "Được xây cho các nhóm",
+        "body": "Câu lạc bộ, nhà sáng tạo và cộng đồng địa phương — không phải các đợt ra mắt meme ẩn danh."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Luồng tác nhân AI: nhiệm vụ, quy tắc, ký, xác nhận mạng, kết quả.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Nhiệm vụ",
+        "body": "Ai đó giao việc cho tác nhân."
+      },
+      {
+        "id": "rules",
+        "title": "Quy tắc",
+        "body": "Kiểm tra hạn mức và danh sách cho phép."
+      },
+      {
+        "id": "sign",
+        "title": "Ký",
+        "body": "Tác nhân ký giao dịch."
+      },
+      {
+        "id": "confirm",
+        "title": "Mạng",
+        "body": "Mạng xác nhận on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Kết quả",
+        "body": "Kết quả trả về người dùng."
+      }
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "title": "Örnek sözleşme şablonları",
+  "lead": "Okumaya ve dağıtmaya hazır örnek sözleşmeler. Kaynak kodu inceleyin, ardından bağlı cüzdanınızdan doğrudan dağıtın.",
+  "notDeployed": "Henüz dağıtılmadı",
+  "testnetAddress": "Testnet adresi",
+  "viewSource": "Kaynak kodu görüntüle",
+  "hideSource": "Kaynak kodu gizle",
+  "copy": "Kopyala",
+  "copied": "Kopyalandı",
+  "deployCta": "Cüzdanımla dağıt",
+  "connectFirst": "Önce cüzdanınızı bağlayın.",
+  "constructorArgs": "Kurucu parametreleri",
+  "deployButton": "Dağıt",
+  "deploying": "Dağıtılıyor…",
+  "cancel": "Vazgeç",
+  "success": "Dağıtıldı. Ağ sözleşmenizi kabul etti.",
+  "contractAddress": "Sözleşme adresi",
+  "transaction": "İşlem",
+  "error": "Bir şeyler ters gitti.",
+  "invalidAddress": "0x ile başlayan bir cüzdan adresi girin.",
+  "invalidNumber": "Sıfırdan büyük bir sayı girin.",
+  "invalidText": "Bu alan boş bırakılamaz.",
+  "templates": {
+    "escrow": {
+      "title": "Emanet (escrow)",
+      "description": "Bir alıcı, bir satıcı için PPL yatırır. Tarafsız bir hakem, fonları satıcıya serbest bırakabilir veya alıcıya iade edebilir; alıcı da serbest bırakmayı erken başlatabilir. Hem yerel PPL'yi hem de test stablecoin'ini (tUSDC/tUSDT) destekler."
+    },
+    "vesting": {
+      "title": "Kademeli serbest bırakma kilidi",
+      "description": "Tek bir yararlanıcı için PPL'yi kilitler ve bir başlangıç zamanı ile bitiş zamanı arasında doğrusal olarak serbest bırakır."
+    },
+    "crowdfund": {
+      "title": "Kitle fonlaması",
+      "description": "Bir son tarihten önce bir hedefe yönelik PPL toplar. Hedefe ulaşılırsa sahibi fonları alır; ulaşılamazsa katkıda bulunanlara geri ödeme yapılır. Hem yerel PPL'yi hem de test stablecoin'ini (tUSDC/tUSDT) destekler."
+    },
+    "erc20": {
+      "title": "Sabit arzlı token",
+      "description": "Sözleşmeyi dağıtana tamamen basılan, sabit arzlı basit bir ERC-20 token."
+    }
+  },
+  "fields": {
+    "seller": "Satıcı adresi",
+    "arbiter": "Hakem adresi",
+    "value": "Gönderilecek tutar (PPL)",
+    "beneficiary": "Yararlanıcı adresi",
+    "start": "Başlangıç zamanı (varsayılan: şimdi; unix zaman damgası, saniye)",
+    "duration": "Süre (gün)",
+    "goal": "Hedef ({symbol})",
+    "durationSeconds": "Süre (saniye)",
+    "name": "Token adı",
+    "symbol": "Token sembolü",
+    "supply": "Toplam arz (token olarak)",
+    "token": "Ödeme token adresi",
+    "amount": "Yatırılacak tutar ({symbol})",
+    "payIn": "Ödeme birimi"
+  },
+  "faucetCta": "Test {symbol} al",
+  "faucetMinting": "Basılıyor…",
+  "faucetDone": "Basıldı",
+  "faucetBalance": "Bakiye: {amount} {symbol}",
+  "faucetLimitHint": "Limit: 24 saatte en fazla 1000 token.",
+  "faucetCooldown": "Bu musluk için 24 saatlik limite ulaştınız. Daha sonra tekrar deneyin.",
+  "approveDepositLead": "İki cüzdan işlemi: önce token için approve, ardından yatırma.",
+  "approveAndDeposit": "Onayla ve yatır",
+  "approving": "Onaylanıyor…",
+  "depositing": "Yatırılıyor…",
+  "depositComplete": "Yatırıldı. Emanet artık fonları tutuyor."
+}

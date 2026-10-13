@@ -1,0 +1,151 @@
+{
+  "navLabel": "Feed de projetos",
+  "tagline": "Encontre projetos novos. Ajude boas ideias a alcançar pessoas. Participe desde o início.",
+  "title": "Feed de projetos",
+  "lead": "Cada cartão usa seu texto, ícone do token e capturas. Vídeo curto é opcional e sobe o cartão no feed.",
+  "createCta": "Compartilhar seu projeto",
+  "empty": "Nada por aqui ainda. Seja o primeiro a compartilhar uma ideia.",
+  "signInHint": "Entre e vincule sua carteira para reagir ou perguntar.",
+  "walletHint": "Vincule sua carteira no painel do parceiro para participar.",
+  "walletLink": "Abrir conta",
+  "loginLink": "Entrar",
+  "stageLabel": "Círculo",
+  "stageAll": "Todos",
+  "needsWork": "Seu cartão precisa de um pitch mais claro. Leia as reações, edite e envie de novo.",
+  "resubmit": "Editar e enviar de novo",
+  "promoted": "Alcançando um círculo maior",
+  "votes": {
+    "interesting": "Interessante",
+    "unclear": "Confuso",
+    "not_interesting": "Não é para mim"
+  },
+  "askQuestion": "Fazer uma pergunta",
+  "follow": "Seguir",
+  "following": "Seguindo",
+  "tryProduct": "Testar o produto",
+  "readMore": "Ler mais",
+  "tokenLink": "Ver token",
+  "questionPlaceholder": "O que você quer saber?",
+  "sendQuestion": "Enviar",
+  "form": {
+    "title": "Compartilhar seu projeto",
+    "lead": "Descreva o projeto em linguagem simples e escolha seu token. O cartão é montado automaticamente. Adicione capturas e, se quiser, um vídeo curto.",
+    "name": "Nome do projeto",
+    "screenshots": "Capturas de tela",
+    "screenshotsHint": "PNG, JPEG ou WebP — produto, app ou mockups (até 8).",
+    "addVideoOptional": "Adicionar vídeo curto (opcional)",
+    "videoTemplateTitle": "Responda no vídeo a estas três perguntas:",
+    "videoQ1": "O que você faz?",
+    "videoQ2": "Para quem é?",
+    "videoQ3": "Por que um token?",
+    "video": "Arquivo de vídeo",
+    "videoHint": "MP4 ou WebM, entre 30 e 60 segundos. Ou cole um link.",
+    "videoUrl": "Link do vídeo",
+    "idea": "O que você faz",
+    "audience": "Para quem",
+    "whyToken": "Por que um token",
+    "token": "Token na rede",
+    "productUrl": "Link do produto (opcional)",
+    "submit": "Publicar no primeiro círculo",
+    "durationError": "O vídeo deve ter entre 30 e 60 segundos.",
+    "durationTooShort": "O vídeo deve ter pelo menos 30 segundos.",
+    "uploadError": "Não foi possível enviar. Tente um link.",
+    "screenshotError": "Não foi possível enviar esta imagem.",
+    "success": "Seu projeto está no primeiro círculo."
+  },
+  "detail": {
+    "back": "Voltar ao feed",
+    "idea": "O que você faz",
+    "audience": "Para quem",
+    "whyToken": "Por que um token",
+    "feedback": "Reações nesta versão",
+    "questions": "Perguntas"
+  },
+  "stats": {
+    "title": "Métricas do feed",
+    "uniqueVisitors": "Visitantes com login",
+    "returning": "Voltaram em 14 dias",
+    "totalEvents": "Eventos de visita",
+    "window": "Janela de retorno (dias)"
+  },
+  "errors": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "rateLimited": "Muitas ações em pouco tempo. Aguarde um instante.",
+    "notFound": "Este projeto já não está no feed."
+  },
+  "loading": "A carregar…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "Círculos de poupança rotativos e dinheiro de bolso comunitário on-chain.",
+      "idea": "Dinheiro comunitário on-chain: gorjetas, pagamentos pequenos e recompensas locais sem banco no meio.",
+      "audience": "Grupos de vizinhança, criadores e quem move pequenas quantias entre amigos.",
+      "whyToken": "Um ativo dedicado separa saldos comunitários das taxas de rede e torna as regras de partilha visíveis.",
+      "tags": [
+        "Poupança rotativa",
+        "Pagamentos locais",
+        "Comunidade"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "Envie pequenas gorjetas de agradecimento a criadores e equipas na rede People.",
+      "idea": "Agradeça com um token feito para microapoio — concertos, streams e mantenedores open source.",
+      "audience": "Fãs, patronos e equipas que recolhem muitos «obrigados» pequenos.",
+      "whyToken": "As gorjetas ficam no livro-razão da comunidade, não num saldo fechado de app.",
+      "tags": [
+        "Gorjetas",
+        "Criadores",
+        "Micropagamentos"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "Distintivo on-chain para marcos que alcançam juntos em grupo.",
+      "idea": "Marquem marcos juntos — eventos, lançamentos e metas partilhadas com um token-distintivo on-chain.",
+      "audience": "Clubes, turmas e equipas de produto que celebram progresso em público.",
+      "whyToken": "Os detentores provam que participaram desde o primeiro dia sem expor dados privados.",
+      "tags": [
+        "Marcos",
+        "Eventos",
+        "Membresia"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "Troque tokens de teste da comunidade por PPL no navegador.",
+      "idea": "Troque tokens demo da comunidade por PPL no navegador — sem conta de exchange separada.",
+      "audience": "Quem experimenta ativos de testnet antes de se comprometer com um projeto.",
+      "whyToken": "Os pares de liquidez mostram descoberta de preço real para novos lançamentos na rede.",
+      "tags": [
+        "Troca",
+        "Liquidez",
+        "Tokens demo"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "Lance um token comunitário justo com nome, imagem e regras integradas.",
+      "idea": "Lance um token de projeto com imagem, nome e regras de lançamento justo — direto no site.",
+      "audience": "Fundadores que querem um ativo comunitário sem escrever contratos inteligentes à mão.",
+      "whyToken": "A fábrica aplica vesting e divisões do pool comunitário para que todos vejam as mesmas regras.",
+      "tags": [
+        "Lançamento de token",
+        "Criadores",
+        "Regras justas"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "Colecionáveis para criadores",
+      "summary": "Cunhe um colecionável visual para o seu drop, evento ou adesão.",
+      "idea": "Cunhe um colecionável visual que represente o seu drop, evento ou cartão de membro.",
+      "audience": "Artistas e comunidades que querem algo escasso e fácil de partilhar.",
+      "whyToken": "Os NFT trazem metadados e proveniência na mesma cadeia que o token do projeto.",
+      "tags": [
+        "Cunhagem",
+        "Visual",
+        "Colecionáveis"
+      ]
+    }
+  }
+}

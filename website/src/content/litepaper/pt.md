@@ -1,0 +1,213 @@
+---
+title: "People Blockchain — Whitepaper"
+description: "A blockchain onde cada usuário é um humano verificado. Propriedade das pessoas, não de VCs."
+slug: /litepaper
+version: "0.1"
+date: 2026-10
+status: preliminary
+---
+
+# People Blockchain — Whitepaper
+
+> **A blockchain onde cada usuário é um humano verificado.**
+> **Propriedade das pessoas, não de VCs.**
+
+*v0.1 · outubro de 2026 · Os números são preliminares e sujeitos à governança da comunidade. Nada neste documento é uma promessa de renda.*
+
+---
+
+## À primeira vista
+
+| | |
+|---|---|
+| Fornecimento | **1,000,000,000 PPL**, fixo |
+| Cada token lançado | **10%** do fornecimento vai para o pool da comunidade daquele token |
+| Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
+| Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
+| Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
+| Rede hoje | **Testnet** público — Cosmos EVM, chain id `people_97401-1` / EVM `97401` |
+
+---
+
+## 1. O problema
+
+**Crypto foi construída para insiders.** A maioria das chains assume que você pode ler código, gerenciar seed phrases e identificar uma scam por conta própria.
+
+**Bots ganham as recompensas.** Airdrops e programas de recompensas são explorados por scripts e contas falsas. Pessoas reais ganham pouco.
+
+**Lançamentos favorecem whales.** Rodadas privadas e alocações internas significam que a comunidade geralmente chega por último e paga o preço mais alto.
+
+## 2. Nossa resposta
+
+**Uma blockchain para pessoas comuns.** Um telefone ou um navegador é o suficiente. Lance um token, cunhe cartões de clube ou arrecade dinheiro para uma ideia — com um formulário, não com código.
+
+**Humanos verificados, não bots.** Recompensas vão para contas que passaram uma verificação gratuita de humanidade. Uma pessoa, uma conta. Apenas se inscrever não ganha nada.
+
+**10% de cada token lançado vai para sua comunidade.** Construído no protocolo, não prometido em um post: cada lançamento padrão envia 10% de seu fornecimento para o pool de comunidade daquele token. Nunca se mistura com taxas de rede.
+
+---
+
+## 3. Produto
+
+O que você pode fazer sem código:
+
+| Ferramenta | O que faz | Status |
+|---|---|---|
+| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. 10% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
+| **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
+| **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
+| **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
+| **Agentes de IA comunitários** | Agentes que trabalham para um grupo: uma carteira comunitária baseada em Safe com limites de gastos, listas brancas e um congelamento de emergência. Os parâmetros mudam apenas por voto do token; cada ação é visível no explorer. | Testnet: 1 agente comunitário ativo |
+
+---
+
+## 4. Tecnologia
+
+**Cosmos EVM.** People é executado em uma stack Cosmos EVM: contratos inteligentes compatíveis com Ethereum e endereços 0x em uma chain Cosmos.
+
+| Parâmetro | Valor |
+|---|---|
+| Cosmos chain id | `people_97401-1` |
+| EVM chain id | `97401` |
+| Moeda nativa | PPL (denom base `appl`, 18 decimais) |
+| Prefixo de endereço | `people1…` (e a mesma conta como `0x…` em EVM) |
+| Status da rede | Testnet público — não é mainnet |
+
+**Validadores.** Os validadores executam a rede e são pagos do pool pré-alocado de validadores mais 30% de cada taxa de rede. Os validadores de testnet são executados apenas para testes; abrir validação e staking ao público é um estágio posterior do roadmap.
+
+**Verificação — uma verificação de que você é uma pessoa.** Gratuita, feita uma vez:
+
+- **Nível 1 — Telegram:** compartilhe seu número de telefone uma vez em nosso bot Telegram. Um número por fundador. Ganha 50% dos pontos base.
+- **Nível 2 — Human Passport:** verifique com Human Passport. Ganha 100% dos pontos base.
+- **Sem verificação, sem pontos.** Sem pontos de fundador em testnet e sem recompensas pessoais de PPL em mainnet sem ela.
+
+---
+
+## 5. Tokenomia
+
+**Fornecimento fixo: 1,000,000,000 PPL.** Anos 1–4: inflação de 0%. A partir do ano 5, qualquer nova emissão é limitada a 2% ao ano e apenas por voto da comunidade.
+
+### Alocação de genesis
+
+| Bucket | Participação | PPL |
+|---|---:|---:|
+| Comunidade e recompensas | 35% | 350,000,000 |
+| Validadores e staking | 20% | 200,000,000 |
+| Equipe e fundadores | 15% | 150,000,000 |
+| Tesouro de ecossistema (DAO) | 15% | 150,000,000 |
+| Venda comunitária | 10% | 100,000,000 |
+| Liquidez | 5% | 50,000,000 |
+
+- **Vesting de equipe e fundadores (15% do fornecimento):** 0% no lançamento, cliff de 6 meses, depois 18 meses linear (24 meses no total).
+- **Sem bucket de investidor.** Não há alocação de VC ou rodada privada.
+- **Recompensas vêm de pools existentes.** Fundadores, bounties, embaixadores e airdrops são pagos apenas do bucket de Comunidade e recompensas. Nenhuma moeda nova é cunhada para eles.
+
+### Divisão de taxa de rede
+
+Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma forma:
+
+| Destinatário | Participação |
+|---|---:|
+| Validadores | 30% |
+| Pool comunitário | 25% |
+| Tesouro | 20% |
+| Liquidez | 10% |
+| Growth Pool | 15% |
+| Burn | 0% |
+
+**Buybacks.** As ações do tesouro (20%) e liquidez (10%) são usadas para buybacks públicos de PPL. Nada é queimado para falsificar escassez — as taxas voltam para a rede e suas pessoas.
+
+**Taxa de lançamento de token.** Ativa na testnet: a taxa para lançar um token ou criar um NFT pode ser paga em PPL, ou em uma stablecoin de testnet (tUSDC/tUSDT) através do contrato StableFeeGateway. O valor em stablecoin é um preço fixo em USD aprovado pelo proprietário: 5.00 USD para lançar um token, 10.00 USD para criar um NFT. O pagamento em stablecoin funciona apenas na rede People por agora; pagar a partir de outra rede (Ethereum, Polygon, Tron, TON, Solana) chegará mais tarde. 100% da taxa em stablecoin vai para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
+
+---
+
+## 6. Million Founders
+
+**Seja uma das primeiras milhões de pessoas verificadas.** Obtenha um número de fundador, convide amigos e ganhe pontos quando *eles* fizerem coisas reais na rede.
+
+**Os pontos vêm de ações reais, não de inscrições.** Você ganha pontos de convite apenas após seu convidado ter verificado, criado uma carteira e feito pelo menos uma ação real de testnet (swap, pool de liquidez, cunhagem de NFT, lançamento de token ou voto de governança). Apenas inscrição = 0.
+
+**Como os pontos se tornam PPL:**
+
+> **PPL por ponto = pool da temporada ÷ todos os pontos ganhos na temporada**
+
+- **Pool da Temporada 1:** 6,000,000 PPL, pagos do pool existente do Million Founders. Sem moedas novas. Quando o pool estiver vazio, o programa para.
+- **Pagamento:** 10% imediatamente, os 90% restantes em fatias iguais semanais ao longo de 52 semanas.
+- **Anti-farming:** apenas dois níveis de referência, um limite por temporada em convidados ativos e recuperação de pontos de contas sinalizadas como bots.
+
+*Preliminar. Pontos, a taxa PPL-por-ponto e o orçamento da temporada podem mudar antes da mainnet. Não é uma promessa de renda.*
+
+---
+
+## 7. Roadmap
+
+| Estágio | O que acontece | Gate |
+|---|---|---|
+| **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
+| **Mainnet + Venda de PPL** | Mainnet é lançada; a venda de PPL comunitária abre. | Pelo menos 1.000 pessoas verificadas **e** um multisig do tesouro ativo |
+| **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
+
+Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
+
+---
+
+## 8. Equipe e financiamento
+
+- **Anônimo por escolha.** Uma pequena equipe. Publicamos trabalho, código e regras, não rostos.
+- **Auto-financiado.** Sem dinheiro de VC. Sem alocações de investidor. Sem rodada privada.
+- **As mesmas regras para todos.** O vesting da equipe: 0% no lançamento, cliff de 6 meses, depois 18 meses linear (24 meses no total). Não há linha de equipe na divisão de taxa de rede.
+
+---
+
+## 9. Segurança
+
+- **Auditoria de segurança antes da mainnet.** Os contratos do protocolo passarão por uma auditoria de segurança antes do lançamento da mainnet.
+- **Multisig do tesouro.** O tesouro será mantido em um multisig antes da mainnet; endereços do signatário serão publicados.
+- **Endereços publicados.** Os endereços do contrato de venda, vesting e liquidez serão publicados no lançamento da mainnet — sem placeholders.
+- **Defesa contra bots.** Verificação humana, limites por dispositivo e IP, limites diários de pontos e clawback de bots.
+- **Blocos de construção comprovados.** Contratos sem código são montados a partir de templates OpenZeppelin.
+
+---
+
+## 10. Riscos e aviso legal
+
+- **Sem promessa de renda.** PPL, pontos e recompensas não são um produto de investimento. Nada aqui promete lucro, rendimento ou retornos.
+- **Os preços podem ir para zero.** Os preços dos tokens podem subir, descer ou ir para zero.
+- **Testnet não é mainnet.** Tokens de testnet e saldos não têm valor. Os pontos são um registro de atividade, não uma garantia de pagamento.
+- **Tudo é preliminar.** Números, cronogramas e regras podem mudar antes da mainnet e estão sujeitos à governança da comunidade.
+- **Risco tecnológico.** O software pode ter bugs. Uma auditoria reduz o risco; não o remove.
+- **Regulação.** As regras diferem por país e podem mudar. A venda de PPL não está disponível para residentes dos EUA e requer uma verificação de prova de humanidade / KYC.
+- **Faça sua própria pesquisa.** Este whitepaper é informação, não é conselho financeiro, legal ou fiscal.
+
+---
+
+## Como somos diferentes
+
+Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
+
+| | Ethereum | Solana | People |
+|---|---|---|---|
+| Taxas queimadas | Taxa base é queimada ¹ | 50% da taxa base é queimada ² | **0% queimado** |
+| Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
+| Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
+| Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% de cada token lançado** |
+
+1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+2. solana.com — Fees: https://solana.com/docs/core/fees
+3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
+4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana-blockchain
+5. ethereum.org — Accounts: https://ethereum.org/en/developers/docs/accounts/
+
+*Fontes verificadas em outubro de 2026. "Não é uma regra/requisito de protocolo" significa que a documentação citada não descreve tal regra. Isso compara escolhas de design, não qualidade.*
+
+---
+
+## Links
+
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
+- Telegram: https://t.me/people_blockchain
+- X: https://x.com/Peoplebchain
+- YouTube: https://www.youtube.com/@PeoplesBlockchain

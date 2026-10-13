@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "TOPLULUK İÇİN BLOKZİNCİR",
+    "headlineMain": "TOPLULUK İÇİN",
+    "headlineAccent": "BLOKZİNCİR",
+    "headlineSecondary": "",
+    "slogan": "İnsanlar tarafından oluşturuldu. Topluluk için.",
+    "valueLine": "Topluluk, ağın yarattığı değere katılır.",
+    "lead": "Topluluk tarafından inşa edildi. Toplulukla paylaşılır. Sıradan insanlar ihraca, ağ ücreti yönlendirmesine ve Growth-referralsına katılır — özel doğrulayıcılar mutabakatı korur. Katılımcılar doğrulayıcı değildir.",
+    "unlike": "Tipik bir zincirde kullanıcılar çoğunlukla ücret öder. Burada topluluk katılımı ekonominin içine tasarlanmıştır.",
+    "ctaJoin": "Katıl",
+    "ctaHow": "Nasıl çalışır",
+    "ctaCreate": "Token oluştur",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "Topluluk havuzuna %10",
+        "note": "Her yeni token arzının topluluk havuzuna gider."
+      },
+      {
+        "id": "fees",
+        "value": "Ücretler",
+        "title": "Ağ ücretleri",
+        "note": "Ağ ekonomisi üzerinden yönlendirilir."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "İki ücretli hat: Growth ödül bütçesinin L1 %70 · L2 %30’u."
+      }
+    ],
+    "flowAria": "Topluluk değerinin ağda nasıl hareket ettiği",
+    "flowPause": "Animasyonu duraklat",
+    "flowPlay": "Animasyonu oynat",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token oluşturuldu",
+        "sub": "Bir proje ağda başlar"
+      },
+      {
+        "id": "community",
+        "label": "%10 topluluk + ağ ücreti",
+        "sub": "Yeni tokenin bir kısmı ile protokol ücreti ayrı kalır"
+      },
+      {
+        "id": "economy",
+        "label": "Ağ ekonomisi + Growth Pool",
+        "sub": "Değer yönlendirilir, yok olmaz"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "İki ücretli Growth-referral hattı"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "NEDEN KATILMALI",
+    "title": "Topluluğun katıldığı üç ayrı yol",
+    "subtitle": "Token ihracı, ağ ücretleri ve Growth-referral üç ayrı mekanizmadır. Asla tek kişisel ödemede birleştirilmez.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "Her yeni tokenin %10’u topluluk havuzuna gider",
+        "body": "Ağ üzerinden başlatılan her standart token, ilk arzının %10’unu o tokenin Community Pool’una — sonra topluluğa gönderir. Kişisel ödeme değildir ve her ücretin %10’u değildir.",
+        "href": "/create/token",
+        "cta": "Token oluştur"
+      },
+      {
+        "id": "fees",
+        "kicker": "AĞ EKONOMİSİ",
+        "title": "Ücretler yok olmaz — yönlendirilir",
+        "body": "Uygun ağ ücretleri onaylı the fee split’yı izler. Bu ağ ekonomisi yönlendirmesidir; her katılımcının her ücretten ödeneceği sözü değildir.",
+        "href": "#economics",
+        "cta": "Ücret yönlendirme"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "Growth ödül bütçesinin L1 %70 · L2 %30’u",
+        "body": "Growth Pool (uygun ücretlerin %15’i) iki ücretli referral hattını finanse eder: Growth ödül bütçesinin L1 %70 ve L2 %30’u. Token Factory arzından ve the fee split ücret bölüşümünden ayrıdır.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Aktif Beta Growth ödemesi: Growth ödül bütçesinin L1 %70 · L2 %30’u. Growth Pool, uygun ücretlerin %15’idir. Ağ ücreti the fee split hedeflerinden ve her yeni tokenin topluluk havuzuna giden %10’undan ayrıdır.",
+    "you": "Sen",
+    "budgetNote": "Yüzdeler, the fee split uygun ücretlerin %15’ini Growth Pool’a yönlendirdikten sonra Growth ödül bütçesinin paylarıdır — her ağ ücretinin payı değildir.",
+    "detailsTitle": "Growth-referral nasıl çalışır",
+    "details": [
+      {
+        "title": "İki ücretli hat",
+        "body": "L1 (doğrudan referral) %70, L2 (ikinci düzey) aktif Growth ödül bütçesinin %30’unu alır."
+      },
+      {
+        "title": "Ücretlerden ve tokenlardan ayrı",
+        "body": "L1/L2 Growth ağırlıkları the fee split ağ ücreti bölüşümü değildir ve her yeni tokenin topluluk havuzu için %10’u da değildir. Growth Pool, kendi mutabakat kuralları olan bir the fee split ücret hedefidir."
+      },
+      {
+        "title": "Bu site",
+        "body": "Bu kamuya açık sitede referral girişi veya panosu yoktur. Growth-referral ağ katılımıyla yaşar."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "Nasıl katılırım",
+    "subtitle": "People’s Blockchain’e topluluk katılımcısı olarak katılın — telefondan, tabletle veya tarayıcıdan.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Buradan başla",
+        "body": "Telefon, tablet veya tarayıcı kullanın. Katılımcı olarak katılırsınız — mutabakat doğrulayıcısı olarak değil.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Emanetsiz cüzdan oluştur",
+        "body": "Tarayıcıda 12 kelimelik bir ifade üretin, yazın ve bir parolayla şifreleyin. Anahtarlar bu cihazı asla terk etmez.",
+        "href": "/wallet",
+        "cta": "Cüzdanı aç"
+      },
+      {
+        "num": "03",
+        "title": "Varlıkları kaşifte gör",
+        "body": "Blokları, işlemleri, adresleri, tokenleri ve NFT’leri kamuya açık tarayıcıda arayın.",
+        "href": "/explorer",
+        "cta": "Kaşifi aç"
+      },
+      {
+        "num": "04",
+        "title": "Ekonomiye katıl",
+        "body": "Token Factory ve NFT mint ücretlerini aynı cüzdandan ödeyin. Yeni tokenlerdeki %10 topluluk havuzu payı, ağ ücretleri ve Growth-referral üç ayrı mekanizma olarak kalır.",
+        "href": "/create",
+        "cta": "Oluştur"
+      }
+    ],
+    "ctaJoin": "People’s Blockchain’e katıl",
+    "ctaHow": "Nasıl çalışır"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "Topluluk için blokzincir nedir?",
+    "summary": "Topluluk için blokzincir topluluk altyapısıdır: katılım için sıradan cihazlar, protokol düzeyinde token ve proje oluşturma ve blok üretimi için Proof-of-Stake doğrulayıcıları. Katılımcılar doğrulayıcı değildir.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Mutabakat",
+        "summary": "PoS doğrulayıcıları blok önerir ve onaylar. Mobil katılım quorumda asla oy kullanmaz."
+      },
+      {
+        "id": "economics",
+        "title": "Ekonomi",
+        "summary": "Uygun ağ ücretleri onaylı the fee split’yı izler. Kullanıcı token piyasaları ayrı bir kanaldır."
+      },
+      {
+        "id": "participation",
+        "title": "Katılım",
+        "summary": "Telefonlar, tabletler ve tarayıcılar. Katılımcılar doğrulayıcı değildir."
+      },
+      {
+        "id": "technology",
+        "title": "Teknoloji",
+        "summary": "Tam sayı güvenli çok varlıklı defter, bir eş ağı ve zinciri keşfetme araçları."
+      }
+    ],
+    "whyTitle": "Neden var",
+    "learnMore": "Daha fazla"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "Ne yapabilirim?",
+    "subtitle": "Bir rol seçin. Ayrıntılar bir tık ötede.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Protokol kurallarıyla token, proje ve topluluk ekonomileri başlatın.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Blok öneren, onaylayan ve kesinleştiren altyapıyı çalıştırın.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Gündelik cihazlardan katılın. Mutabakat doğrulayıcı rolü değil.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool bir the fee split ücret hedefidir — garantili veya pasif gelir değildir.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Blok, işlem, token ve NFT’lere bakın.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "Nasıl çalışır",
+    "subtitle": "Ağ boyunca bir yol. Tam mekanik için bir adımı açın.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Telefon, tablet veya tarayıcıda cüzdanı olan bir kişi.",
+        "detail": "Telefonda, tablette veya tarayıcıda saklamasız bir hesapla başlayın. Toplulukta bir kişi olarak katılırsınız — doğrulayıcı olarak değil."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transferler, lansmanlar, eğri işlemleri ve diğer imzalı işlemler.",
+        "detail": "Uygun işlemler PPL cinsinden protokol ücreti öder. Her eylem kabul edilmeden önce imzalanır ve kontrol edilir."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Öneren ve tasdik eden stake destekli düğümler.",
+        "detail": "Doğrulayıcılar özel altyapıdır. Telefonlar ve tarayıcılar blok üretmez."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Sıralı, tam sayı güvenli durum geçişi.",
+        "detail": "Doğrulayıcılar imzalı işlemleri bloklara toplar. Günlük cihazlar bu süreçte yer almaz."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Doğrulayıcı düğümler arasında paylaşılan zincir.",
+        "detail": "Doğrulayıcı düğümleri blokları paylaşır ki ağ tek durumda kalsın."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Ağ ücretleri ve her tokenin topluluk payı ayrı kanallarda kalır.",
+        "detail": "PPL cinsinden ağ ücretleri the fee split’yı izler. Standart kullanıcı tokenleri o tokenin arzının %10’unu kendi topluluk havuzuna gönderir — bu bir ağ ücreti değildir."
+      }
+    ],
+    "storyCta": "Tam görsel hikâye"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People, Topluluk için blokzincir’in yerel varlığıdır. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Ağ işlemleri için mutabakat varlığı: ücretler, token oluşturma ve spesifikasyonlarda anlatılan protokol hizmetleri."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Canlı ücret ayırıcının the fee split’ya göre yönlendirdiği uygun protokol ücretlerini ifade eder."
+      },
+      {
+        "title": "FEES",
+        "body": "Uygun işlemlerde PPL ile ödenir. Kesin ücret tarifeleri protokol/yapılandırmada kalır — bu sayfa oran uydurmaz."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Ağ ekonomisi muhasebesinde kullanılır. Participation Power devredilebilir bir token değildir ve doğrulayıcı oy gücü değildir."
+      }
+    ],
+    "notMarket": "Bu site fiyat, piyasa değeri, listeler, ROI, APY, likidite derinliği veya gelecek fiyat yayımlamaz."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Ağ ve doğrulayıcılar",
+    "summary": "Mutabakat, bir lider ve onay quorumlu Proof-of-Stake’dir. Telefonlar katılımcıdır, doğrulayıcı değil.",
+    "facts": [
+      {
+        "label": "Rol",
+        "value": "Doğrulayıcılar zinciri korur; katılımcılar quorumda asla yer almaz."
+      },
+      {
+        "label": "Kim ne çalıştırır",
+        "value": "Özel düğümler blok önerir ve onaylar. Telefonlar, tabletler ve tarayıcılar katılımcı olarak katılır."
+      },
+      {
+        "label": "Genel ağ",
+        "value": "Genel testnet v2 çalışıyor. Bu Mainnet değil."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Ağ ücreti ekonomisi",
+    "summary": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil.",
+    "splits": [
+      {
+        "label": "Doğrulayıcılar",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Hazine",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Likidite ve ekosistem",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Yakım",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool uygun ücretlerin %15’ini alır. Garantili gelir, pasif getiri veya yatırım ürünü değildir.",
+    "detailsTitle": "Ücret yönlendirme nasıl çalışır",
+    "detailsBody": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Ödüller nasıl açıklanır"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Oluştur → Lansman → Keşfet → İşlem",
+    "subtitle": "Bir token oluşturun, yerleşik fiyatlamayla başlatın, başkalarının bulmasına izin verin ve lansman eğrisinde işlem yapın.",
+    "steps": [
+      {
+        "title": "Oluştur",
+        "body": "Token Factory formunu kullanın: görsel, ad, ticker, arz, sonra PPL ile ödeyin."
+      },
+      {
+        "title": "Lansman",
+        "body": "Sanal bir bonding curve ilk bloktan itibaren sürekli fiyat sağlar."
+      },
+      {
+        "title": "Proje akışı",
+        "body": "Varlıklar ağ kaydında görünür ki topluluklar onları bulabilsin."
+      },
+      {
+        "title": "İşlem",
+        "body": "Lansman eğrisinde alıp satın, ardından canlı token/PPL AMM havuzunda takas edin."
+      }
+    ],
+    "expandTitle": "Lansman eğrisi, likidite, vesting",
+    "expandItems": [
+      "Lansman fiyatı tam tam sayı matematiğiyle constant-product eğrisi kullanır.",
+      "Eğrideki protokol işlem ücreti ağ ücreti ekonomisi üzerinden yönlendirilir.",
+      "Standart lansman bölüşümü, o tokenin arzının zorunlu %10’unu kendi topluluk havuzuna içerir (PPL ağ ücreti değildir).",
+      "Oluşturucu vesting’i, oluşturucu payının çoğunu zamanla açar ki topluluk birinci günde dump edilmesin."
+    ],
+    "createCta": "Token Factory’yi aç",
+    "nftCta": "NFT oluştur",
+    "swapCta": "Takası aç"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Teknoloji",
+    "subtitle": "Yığının ne olduğu. Kullanıcıya dönük fikir için bir kart açın.",
+    "cards": [
+      {
+        "title": "Mutabakat",
+        "summary": "Proof-of-Stake doğrulayıcıları blok önerir ve onaylar. Telefonlar oy kullanmaz."
+      },
+      {
+        "title": "Durum",
+        "summary": "Yerel PPL ve kullanıcı tokenleri boyunca tam tam sayı bakiyeleri."
+      },
+      {
+        "title": "Ağ",
+        "summary": "Doğrulayıcı düğümleri blokları paylaşır ki zincir tek durumda kalsın."
+      },
+      {
+        "title": "Kalıcılık",
+        "summary": "Her doğrulayıcı devam etmek için gereken canlı ağ durumunu tutar."
+      },
+      {
+        "title": "Güvenlik",
+        "summary": "İmzalı eylemler, rol ayrımı ve kontrollerin etrafından kısayol yok."
+      },
+      {
+        "title": "Araçlar",
+        "summary": "İnsanların ağı okuyabilmesi için HTTP API ve kaşif."
+      }
+    ],
+    "archTitle": "Etkileşimli mimari",
+    "invTitle": "Matematiksel değişmezler"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Ağ nerede",
+    "subtitle": "Ürün aşamaları. Burada lansman tarihi duyurulmaz.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Defter, topluluk muhasebesi ve ağ ücreti yönlendirme.",
+          "Token oluşturma ve lansman eğrisi piyasaları.",
+          "Emisyon, ücretler ve Growth-referral’da topluluk katılımı."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Bir genel testnet çalışıyor.",
+          "Bu Mainnet değildir ve canlı kamuya açık değer ticaretinin sözü değildir."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Daha geniş genel erişim sonraki topluluk aşamasıdır."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "İnsan ağı: mobil katılım, proof of humanity ve anti-farming.",
+          "Genel lansman tarihi bu sitede duyurulmaz."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Belgeler",
+    "summary": "Cüzdanlar, katılım ve kendi düğümünüz — pratik kılavuzla başlayın.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Rehberi oku",
+        "hint": "İlk adımlar, ödüller ve düğüm kurulumu"
+      },
+      {
+        "href": "#economics",
+        "label": "Ağ ücretleri",
+        "hint": "Uygun PPL ücretlerinin the fee split yönlendirmesi"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "*": false,
+      "**": false
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/telegram/daily-summary",
+      "schedule": "0 7 * * *"
+    }
+  ],
+  "regions": [
+    "fra1"
+  ]
+}

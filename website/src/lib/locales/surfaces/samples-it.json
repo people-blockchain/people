@@ -1,0 +1,68 @@
+{
+  "title": "Modelli di contratti di esempio",
+  "lead": "Contratti di esempio pronti da leggere e distribuire. Esamina il codice sorgente, poi distribuiscilo direttamente dal tuo wallet collegato.",
+  "notDeployed": "Non ancora distribuito",
+  "testnetAddress": "Indirizzo sulla testnet",
+  "viewSource": "Mostra codice sorgente",
+  "hideSource": "Nascondi codice sorgente",
+  "copy": "Copia",
+  "copied": "Copiato",
+  "deployCta": "Distribuisci con il mio wallet",
+  "connectFirst": "Collega prima il tuo wallet.",
+  "constructorArgs": "Parametri del costruttore",
+  "deployButton": "Distribuisci",
+  "deploying": "Distribuzione in corso…",
+  "cancel": "Annulla",
+  "success": "Distribuito. La rete ha accettato il tuo contratto.",
+  "contractAddress": "Indirizzo del contratto",
+  "transaction": "Transazione",
+  "error": "Qualcosa è andato storto.",
+  "invalidAddress": "Inserisci un indirizzo wallet che inizi con 0x.",
+  "invalidNumber": "Inserisci un numero maggiore di zero.",
+  "invalidText": "Questo campo non può essere vuoto.",
+  "templates": {
+    "escrow": {
+      "title": "Deposito a garanzia (escrow)",
+      "description": "Un acquirente deposita PPL per un venditore. Un arbitro neutrale può liberare i fondi al venditore o rimborsare l'acquirente; l'acquirente può anche liberarli in anticipo. Supporta sia PPL nativo sia una stablecoin di test (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Timelock con vesting",
+      "description": "Blocca PPL per un unico beneficiario e li rilascia in modo lineare tra un momento di inizio e un momento di fine."
+    },
+    "crowdfund": {
+      "title": "Raccolta fondi collettiva",
+      "description": "Raccoglie PPL verso un obiettivo prima di una scadenza. Il proprietario riscuote i fondi se l'obiettivo viene raggiunto; altrimenti i partecipanti ricevono un rimborso. Supporta sia PPL nativo sia una stablecoin di test (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token a offerta fissa",
+      "description": "Un semplice token ERC-20 a offerta fissa, coniato interamente per chi distribuisce il contratto."
+    }
+  },
+  "fields": {
+    "seller": "Indirizzo del venditore",
+    "arbiter": "Indirizzo dell'arbitro",
+    "value": "Importo da inviare (PPL)",
+    "beneficiary": "Indirizzo del beneficiario",
+    "start": "Ora di inizio (predefinita: ora; timestamp unix in secondi)",
+    "duration": "Durata (giorni)",
+    "goal": "Obiettivo ({symbol})",
+    "durationSeconds": "Durata (secondi)",
+    "name": "Nome del token",
+    "symbol": "Simbolo del token",
+    "supply": "Offerta totale (in token)",
+    "token": "Indirizzo del token di pagamento",
+    "amount": "Importo da depositare ({symbol})",
+    "payIn": "Paga in"
+  },
+  "faucetCta": "Ottieni {symbol} di prova",
+  "faucetMinting": "Conio in corso…",
+  "faucetDone": "Coniato",
+  "faucetBalance": "Saldo: {amount} {symbol}",
+  "faucetLimitHint": "Limite: fino a 1000 token ogni 24 ore.",
+  "faucetCooldown": "Hai raggiunto il limite del faucet di 24 ore. Riprova più tardi.",
+  "approveDepositLead": "Due transazioni wallet: prima approva il token, poi deposita.",
+  "approveAndDeposit": "Approva e deposita",
+  "approving": "Approvazione…",
+  "depositing": "Deposito in corso…",
+  "depositComplete": "Depositato. Il deposito a garanzia ora detiene i fondi."
+}

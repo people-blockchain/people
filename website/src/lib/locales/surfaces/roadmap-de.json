@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "Roadmap",
+    "description": "Was live ist, in Arbeit ist und geplant ohne finale Freigabe."
+  },
+  "intro": "Status wie in docs/ROADMAP.md.",
+  "statusLabels": {
+    "done": "Live",
+    "in_progress": "In Arbeit",
+    "planned_unapproved": "Geplant",
+    "live_on_testnet": "In der Testnet",
+    "proposed_pending_vote": "Vorgeschlagen / Abstimmung ausstehend"
+  },
+  "sectionTitles": {
+    "done": "Live",
+    "in_progress": "In Arbeit",
+    "planned_unapproved": "Geplant",
+    "live_on_testnet": "In der Testnet",
+    "proposed_pending_vote": "Vorgeschlagen / Abstimmung ausstehend"
+  },
+  "items": {
+    "cosmos-evm-migration": {
+      "title": "People's Blockchain-Testnet (EVM)",
+      "summary": "Ausbau des People's Blockchain-Testnets auf EVM. Stufe 1 (chain/) läuft; das öffentliche Testnet nutzt noch den OVN-Knoten mit Read-only-RPC."
+    },
+    "genesis-snapshot-0x": {
+      "title": "Estado en genesis",
+      "summary": "Exportar saldos al genesis de la nueva red conservando las mismas direcciones 0x."
+    },
+    "solidity-protocol-modules": {
+      "title": "Solidity: fábrica, curva, AMM, NFT",
+      "summary": "Protokollmodule laufen bereits auf dem Testnet-Knoten; Ziel ist auditiertes Solidity im People's Blockchain-Testnet, inkl. Uniswap-V2-AMM."
+    },
+    "fee-split-model-a": {
+      "title": "Reparto de comisiones (Model A)",
+      "summary": "Validadores 30%, pool comunitario 25%, tesoro 20%, liquidez 10%, Growth Pool 15%, quema 0%."
+    },
+    "tokenomics-1b-ppl": {
+      "title": "1 mil millones de PPL",
+      "summary": "Festes 1B PPL: Jahre 1–4 0 % Inflation; Validator-Pool 200M mit 6/5/5/4 % + 30 % Gebühren; Start aus 35 %-Community-Topf; ab Jahr 5 max. 2 %/Jahr per Vote; Gründer-Airdrop vor Verkauf bei 1.000 Verifizierten + Multisig. Gebühren 30/25/20/10/15/0 auf /tokenomics und /how-it-works."
+    },
+    "discover-feed": {
+      "title": "Projekt-Feed",
+      "summary": "Projektkarten, Reaktionen, Fragen und Statistik."
+    },
+    "ai-token-icons": {
+      "title": "Iconos IA para tokens",
+      "summary": "Beim Start ein Token-Bild generieren."
+    },
+    "evm-wallet-site-package": {
+      "title": "Carteras EVM en el sitio",
+      "summary": "JSON-RPC solo lectura (97401) activo; paquete MetaMask/Trust/WalletConnect próximo."
+    },
+    "community-ai-agent-wallet": {
+      "title": "Community-KI-Agenten",
+      "summary": "Safe-Tresor mit Limits, Whitelist und Änderungen nur per Token-Vote — im Explorer sichtbar."
+    },
+    "oz-contract-builder": {
+      "title": "Constructor de contratos",
+      "summary": "Descríbelo en palabras sencillas; plantillas OpenZeppelin auditadas."
+    },
+    "ai-anti-scam-guard": {
+      "title": "Escudo antifraude IA",
+      "summary": "Avisos antes de transferencias y contratos arriesgados."
+    },
+    "ai-governance-summaries": {
+      "title": "Resúmenes IA de votos",
+      "summary": "Explicaciones breves y neutrales de votaciones on-chain."
+    },
+    "rewards-proof-of-humanity": {
+      "title": "Recompensas con prueba de humanidad",
+      "summary": "Pagar aportes reales, no bots — registro de participante y humano verificado."
+    },
+    "erc8004-x402-agents": {
+      "title": "ERC-8004 y x402",
+      "summary": "Registro de agentes y pagos compatibles con estándares emergentes."
+    },
+    "no-agent-memecoins": {
+      "title": "Sin memecoins para agentes",
+      "summary": "Los agentes sirven al trabajo comunitario, no a lanzar memes — política pendiente."
+    },
+    "site-wide-wallet-connect-modal": {
+      "title": "Wallet-Verbindung als Modal auf jeder Seite",
+      "summary": "Wallet verbinden oder erstellen im Modal auf jeder Seite — ohne Umweg über einen separaten Bildschirm. Ausrollung siteweit."
+    },
+    "cosmos-evm-smart-accounts": {
+      "title": "Smart Accounts im Testnet",
+      "summary": "ERC-4337 oder gleichwertig: Anmeldung mit Google, E-Mail oder Passkey; Wallet automatisch, ohne Seed-Phrase (optionaler Schlüssel-Export). Bei Registrierung: „Wallet mit Google/E-Mail erstellen“ oder „Eigenes verbinden“. Gasless: die ersten N Transaktionen für Neue zahlt ein Paymaster aus Community- oder Projektfonds."
+    },
+    "ai-monthly-community-report": {
+      "title": "Monatlicher KI-Community-Bericht",
+      "summary": "Automatische Monatszusammenfassung von Projekt- und Netzwerkaktivität — Kennzahlen und Highlights für Communities."
+    },
+    "discover-referral-growth-pool": {
+      "title": "Empfehlungslinks im Feed (Growth Pool)",
+      "summary": "Jede Projektkarte im Feed erhält einen eigenen Empfehlungslink, gekoppelt an Growth-Pool-Prämien (Model A)."
+    },
+    "founders-stage1-founders-page": {
+      "title": "Eine Million Gründer — Stufe 1: /founders",
+      "summary": "Live-Zähler, Weltkarte und Länder-Ranking, Gründernummer, frühe Multiplikatoren (Preliminary: 10k×5, 100k×3, 1M×1,5). Google-Login + Proof of Humanity; ohne Verifizierung keine Punkte."
+    },
+    "founders-stage2-points-antibot": {
+      "title": "Eine Million Gründer — Stufe 2: Punkte & Anti-Bot",
+      "summary": "Tägliche Punkte für echte Aktionen im Testnet (Swap, Feed, Token, NFT, Pool, Vote) und Anti-Sybil-Scoring; Referral-Punkte nur nach Verifizierung und Aktion des Eingeladenen."
+    },
+    "founders-stage3-referral-growth-contracts": {
+      "title": "Eine Million Gründer — Stufe 3: Registry & Growth-Anteil",
+      "summary": "On-Chain-Registry auf 97401; lebenslanger Growth-Pool-Anteil (Preliminary 10% / 3%) — neue Contracts, Freigabe vs. Beta 70/30."
+    },
+    "founders-stage4-grants-mainnet-conversion": {
+      "title": "Eine Million Gründer — Stufe 4: Grants & Mainnet",
+      "summary": "Community-Pool-Grants für Projekte mit echten Menschen; Meilensteine 10k/100k/1M; Punkte→PPL (Preliminary: 35%-Bucket, 20% sofort, 12 Monate aktiv, Stake +25%)."
+    },
+    "founders-stage5-ambassadors-ai-bot": {
+      "title": "Eine Million Gründer — Stufe 5: Botschafter & KI-Bot",
+      "summary": "Top-50-Empfehler pro Land mit Botschafter-Seiten; Telegram-KI für Login und Aufgaben (weitere Kanäle später)."
+    },
+    "lavka-stage1-loyalty-qr": {
+      "title": "Lavka — Stufe 1: Loyalty & QR",
+      "summary": "Kleine Betriebe erstellen in Minuten Pässe und Boni per Google (ohne Crypto-Jargon); Kassen-QR macht Kunden automatisch zu Gründern."
+    },
+    "lavka-stage2-cross-tips-ambassador": {
+      "title": "Lavka — Stufe 2: Cross-Boni & Trinkgeld",
+      "summary": "Händler-Botschafter-Anteil aus dem Growth Pool; Boni zwischen Nachbarläden; Trinkgeld-QR mit Model-A-Fee-Split."
+    },
+    "lavka-stage3-escrow-disputes": {
+      "title": "Lavka — Stufe 3: Escrow & Streitfälle",
+      "summary": "Garantien im Escrow bis Ereignis oder Frist; öffentliche Zuverlässigkeit; Streitentscheid durch verifizierte Nutzer; personenbezogene Daten off-chain."
+    },
+    "lavka-stage4-pilot-seller-ai": {
+      "title": "Lavka — Stufe 4: Pilot & Händler-KI",
+      "summary": "KI-Erinnerungen bei ablaufenden Pässen und leeren Zeiten; Batumi-Pilot (Preliminary: 10 Standorte, eine Kategorie)."
+    },
+    "ai-group-buy-negotiation": {
+      "title": "KI-Gruppenkauf-Verhandlung",
+      "summary": "Später: KI verhandelt für eine Käufergruppe — nur Roadmap, keine Umsetzung."
+    },
+    "token-project-pages-lightpaper": {
+      "title": "Token project pages & lightpaper",
+      "summary": "Launch form captures goal, distribution, vesting, team and links; the site builds a project page with a tokenomics chart and short lightpaper (extendable to a white paper), PDF download and embed. Planning only."
+    },
+    "mainnet-migration-snapshot-tokenomics": {
+      "title": "Mainnet migration via testnet snapshot",
+      "summary": "Move projects to mainnet using a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only."
+    },
+    "ambassador-promo-kit": {
+      "title": "Ambassador promo kit",
+      "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — la blockchain des communautés",
+    "headlineMain": "Lancez un token pour votre communauté.",
+    "headlineMainLines": [
+      "Lancez un token",
+      "pour votre",
+      "communauté."
+    ],
+    "headlineAccent": "10 % vont à vos gens, pas aux baleines.",
+    "headlineAccentLines": [
+      "10 % vont à vos gens,",
+      "pas aux baleines."
+    ],
+    "sub": "People's Blockchain, c'est là où les créateurs lancent des tokens à prix équitable dès le premier bloc, et la communauté reçoit une part de tout ce qu'elle aide à faire grandir.",
+    "testnetBadge": "Le testnet public est en ligne. Ce n'est pas encore le mainnet.",
+    "ctaCreate": "Créer un token",
+    "ctaWallet": "Ouvrir le portefeuille",
+    "flowAria": "Quatre étapes : du portefeuille au trading du token",
+    "flowPause": "Pause",
+    "flowPlay": "Lecture",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Créez un portefeuille",
+        "sub": "Dans le navigateur en moins d'une minute"
+      },
+      {
+        "id": "launch",
+        "label": "Lancez votre token",
+        "sub": "Payez le lancement en PPL"
+      },
+      {
+        "id": "community",
+        "label": "10 % au pool communautaire",
+        "sub": "Intégré à chaque nouveau token"
+      },
+      {
+        "id": "trade",
+        "label": "Échangez dans le pool token/PPL",
+        "sub": "Prix équitable dès le premier swap"
+      }
+    ],
+    "ctaWalletAuth": "Créer un portefeuille / Se connecter avec Google"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "Pour les créateurs",
+      "body": "Lancement en une minute : nom, ticker, image, c'est fait. Une courbe intégrée fixe le prix dès le premier échange, sans market makers ni prévente. Votre part se débloque sur 180 jours, pour rassurer la communauté."
+    },
+    {
+      "id": "community",
+      "title": "Pour la communauté",
+      "body": "10 % de chaque nouveau token va dans le pool communautaire de ce token. Une part de chaque frais réseau y va aussi. Ceux qui participent ont une part de ce qu'ils construisent."
+    },
+    {
+      "id": "everyone",
+      "title": "Pour tous",
+      "body": "Il suffit d'un téléphone ou d'un navigateur. Pas de rigs ni de gros stake. Créez un portefeuille en 30 secondes et essayez sur le testnet."
+    },
+    {
+      "id": "contracts",
+      "title": "Pour les builders",
+      "body": "Décrivez un contrat intelligent en langage simple — nous le construisons à partir de modèles OpenZeppelin audités.",
+      "ctaLabel": "Créer un contrat",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Le testnet est ouvert.",
+    "body": "Soyez en avance, cassez des choses, dites-nous ce qui cloche.",
+    "cta": "Commencer sur le testnet"
+  },
+  "notInvestmentDisclaimer": "C'est une participation à un réseau, pas un investissement.",
+  "visuals": {
+    "supply": "Offre du jeton",
+    "share": "10 %",
+    "toPool": "vont au fonds de la communauté",
+    "pool": "Fonds de la communauté",
+    "poolNote": "partagé entre ceux qui participent",
+    "aria": "10 % de l'offre de chaque nouveau jeton vont à son fonds de la communauté, partagé entre ceux qui participent.",
+    "prompt": "Un jeton dont les détenteurs votent l'usage de la trésorerie",
+    "step1": "Vous écrivez",
+    "step2": "Nous construisons",
+    "step3": "Vous lancez",
+    "contractTitle": "Jeton de vote",
+    "contractLines": [
+      "Les détenteurs votent les propositions",
+      "La trésorerie ne dépense que sur vote",
+      "Modèle OpenZeppelin audité"
+    ],
+    "deploy": "Déployer",
+    "deployed": "En ligne sur le réseau"
+  },
+  "agentsTeaser": {
+    "eyebrow": "IA communautaire",
+    "title": "Agents IA communautaires",
+    "lead": "Des portefeuilles partagés avec des limites claires — pour que l'automatisation aide les gens sans leur retirer le contrôle.",
+    "cta": "En savoir plus",
+    "cards": [
+      {
+        "title": "Payer pour du vrai travail",
+        "body": "Subventions, abonnements et services — dans les plafonds fixés par la communauté."
+      },
+      {
+        "title": "Des règles sur lesquelles voter",
+        "body": "Plafonds, listes autorisées et gels ne changent que par vote du token."
+      },
+      {
+        "title": "Visible dans l'explorer",
+        "body": "Chaque paiement est on-chain — la même transparence que tout autre portefeuille."
+      },
+      {
+        "title": "Conçu pour les groupes",
+        "body": "Clubs, créateurs et communautés locales — pas des lancements meme anonymes."
+      }
+    ],
+    "ctaHref": "/agents"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Un million de fondateurs",
+    "lead": "Les participants vérifiés reçoivent leur numéro, un bonus d'entrée anticipée et des points d'activité sur le testnet People's Blockchain.",
+    "cta": "Rejoindre les fondateurs",
+    "href": "/founders",
+    "titleWithNumber": "Devenez fondateur n° {{n}} avant le mainnet",
+    "titleFallback": "Soyez parmi les premiers fondateurs avant le lancement du réseau principal"
+  }
+}

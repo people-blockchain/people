@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Topluluk yapay zekâ ajanları",
+    "description": "Topluluk YZ ajanlarının bir grup adına nasıl harcama yapabildiği — limitler, oylamalar ve herkese açık kayıtlarla."
+  },
+  "hero": {
+    "title": "Topluluk yapay zekâ ajanları",
+    "lead": "Ajan, paylaşılan bir cüzdandan işlem gönderebilen bir yazılımdır — yalnızca topluluğunuzun belirlediği ve onayladığı kurallar içinde."
+  },
+  "liveAgent": {
+    "badge": "Testnet'te canlı",
+    "title": "Topluluk ajanı #1",
+    "lead": "Gerçek bir CommunityAgentWallet v2, herkesin denetleyebileceği sıkı limitler dahilinde zaten zincir üzerinde küçük tutarlar harcıyor.",
+    "walletLabel": "Cüzdan",
+    "executorLabel": "Yürütücü",
+    "guardianLabel": "Guardian (anında dondurma)",
+    "balanceLabel": "Güncel bakiye",
+    "limitsLabel": "Limitler",
+    "limitsText": "İşlem başına 1 PPL · kayan 24 saatte 5 PPL · kayan 7 günde 20 PPL · alıcı beyaz listesi açık",
+    "eventsTitle": "Son harcamalar",
+    "eventsEmpty": "Henüz kayıtlı harcama yok.",
+    "eventsLoading": "Son harcamalar yükleniyor…",
+    "eventsError": "Son harcamalar yüklenemedi. Daha sonra tekrar deneyin.",
+    "amountLabel": "Tutar",
+    "recipientLabel": "Alıcı",
+    "timeLabel": "Zaman",
+    "viewTx": "Explorer'da görüntüle"
+  },
+  "sections": {
+    "how": {
+      "title": "Nasıl çalışır",
+      "body": "Topluluk paylaşılan bir akıllı cüzdanı fonlar. Bir YZ ajanı ödemeler önerir — hibeler, araçlar veya hizmetler için. Her harcama günlük ve haftalık limitlere ve izinli alıcı listesine uymalıdır. Token sahipleri kuralları oyla değiştirebilir. Hiçbir şey gizli olmaz: her işlemin explorer'da açabileceğiniz bir hash'i vardır."
+    },
+    "limits": {
+      "title": "Limitler ve oylama",
+      "items": [
+        {
+          "title": "Sabit limitler",
+          "text": "İşlem, gün ve hafta başına — bir hata veya prompt hazineyi boşaltamasın diye."
+        },
+        {
+          "title": "İzin listesi",
+          "text": "Para yalnızca topluluğun zaten onayladığı adreslere gider."
+        },
+        {
+          "title": "Governor oyu",
+          "text": "Limitleri, izin listesini veya ajanın kendisini değiştirmek zincir üstü token oyu gerektirir."
+        },
+        {
+          "title": "Acil durdurma",
+          "text": "Topluluğun seçtiği koruyucular, inceleme sürerken harcamaları durdurabilir."
+        }
+      ]
+    },
+    "security": {
+      "title": "Güvenlik ve şeffaflık",
+      "items": [
+        {
+          "title": "Varsayılan olarak herkese açık",
+          "text": "Bakiyeler, oylar ve ödemeler diğer her cüzdan gibi görünür — sunucularımızda gizli yönetici anahtarı yok."
+        },
+        {
+          "title": "Açık metrikler",
+          "text": "Bir \"aktif ajanı\" nasıl saydığımızı (örneğin günde en az bir giden işlemi olan bir cüzdan) yayınlamayı planlıyoruz, böylece herkes rakamları yeniden hesaplayabilir."
+        },
+        {
+          "title": "Memecoin başlatıcısı değil",
+          "text": "Ajanlar gerçek topluluk işleri içindir — şaka token'ları çıkarmak için değil."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Sırada",
+      "lead": "Yol haritasındaki diğer ajan araçları — henüz yayında değil.",
+      "items": [
+        {
+          "title": "YZ dolandırıcılık koruması",
+          "body": "Riskli transferler ve sözleşmeler öncesinde uyarılar — günlük kullanım için."
+        },
+        {
+          "title": "Yönetişim oyları için YZ özetleri",
+          "body": "Sitede on-chain oyların kısa, tarafsız açıklamaları."
+        },
+        {
+          "title": "ERC-8004 ajan kaydı / x402 ödemeleri",
+          "body": "On-chain ajan kaydı ve gelişen standartlarla uyumlu ödeme altyapısı."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "Topluluk YZ",
+    "title": "Topluluk yapay zekâ ajanları",
+    "lead": "Açık limitli paylaşılan cüzdanlar — otomasyon, kontrolü ellerinden almadan insanlara yardımcı olsun diye.",
+    "cta": "Daha fazla",
+    "cards": [
+      {
+        "title": "Gerçek iş için ödeme",
+        "body": "Hibeler, abonelikler ve hizmetler — topluluğun belirlediği limitler içinde."
+      },
+      {
+        "title": "Oylayabileceğiniz kurallar",
+        "body": "Limitler, izin listeleri ve dondurmalar yalnızca token oyuyla değişir."
+      },
+      {
+        "title": "Explorer'da görünür",
+        "body": "Her ödeme zincir üstündedir — diğer her cüzdan kadar şeffaf."
+      },
+      {
+        "title": "Gruplar için tasarlandı",
+        "body": "Kulüpler, içerik üreticileri ve yerel topluluklar — anonim meme lansmanları değil."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Yapay zeka ajanı akışı: görev, kurallar, imza, ağ onayı, sonuç.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Görev",
+        "body": "Birisi ajana iş verir."
+      },
+      {
+        "id": "rules",
+        "title": "Kurallar",
+        "body": "Limitler ve izin listesi kontrol edilir."
+      },
+      {
+        "id": "sign",
+        "title": "İmza",
+        "body": "Ajan işlemi imzalar."
+      },
+      {
+        "id": "confirm",
+        "title": "Ağ",
+        "body": "Ağ on-chain onaylar."
+      },
+      {
+        "id": "result",
+        "title": "Sonuç",
+        "body": "Sonuç kullanıcıya döner."
+      }
+    ]
+  }
+}

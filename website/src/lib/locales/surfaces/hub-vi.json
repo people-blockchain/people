@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "DÀNH CHO CỘNG ĐỒNG",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "DÀNH CHO CỘNG ĐỒNG",
+    "headlineSecondary": "",
+    "slogan": "Được tạo bởi con người. Vì cộng đồng.",
+    "valueLine": "Cộng đồng tham gia vào giá trị do mạng tạo ra.",
+    "lead": "Do cộng đồng xây. Do cộng đồng chia sẻ. Người bình thường tham gia phát hành, định tuyến phí mạng và Growth-referral — trong khi trình xác thực chuyên trách bảo vệ đồng thuận. Người tham gia không phải trình xác thực.",
+    "unlike": "Trên blockchain điển hình, người dùng chủ yếu trả phí. Ở đây, sự tham gia của cộng đồng được thiết kế trong kinh tế.",
+    "ctaJoin": "Tham gia",
+    "ctaHow": "Cách hoạt động",
+    "ctaCreate": "Tạo token",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% vào quỹ cộng đồng",
+        "note": "Của nguồn cung mỗi token mới đi vào quỹ cộng đồng."
+      },
+      {
+        "id": "fees",
+        "value": "Phí",
+        "title": "Phí mạng",
+        "note": "Được định tuyến qua kinh tế mạng."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "Hai dòng được trả: L1 70% · L2 30% ngân sách thưởng Growth."
+      }
+    ],
+    "flowAria": "Giá trị cộng đồng đi qua mạng như thế nào",
+    "flowPause": "Tạm dừng hoạt ảnh",
+    "flowPlay": "Phát hoạt ảnh",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token đã tạo",
+        "sub": "Một dự án ra mắt trên mạng"
+      },
+      {
+        "id": "community",
+        "label": "10% cộng đồng + phí mạng",
+        "sub": "Một phần token mới và phí giao thức được giữ tách"
+      },
+      {
+        "id": "economy",
+        "label": "Kinh tế mạng + Growth Pool",
+        "sub": "Giá trị được định tuyến, không biến mất"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Hai dòng Growth-referral được trả"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "VÌ SAO THAM GIA",
+    "title": "Ba cách riêng để cộng đồng tham gia",
+    "subtitle": "Phát hành token, phí mạng và Growth-referral là ba cơ chế riêng. Không bao giờ gộp thành một khoản trả cá nhân.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10% mỗi token mới đi vào quỹ cộng đồng",
+        "body": "Mỗi token chuẩn phát hành qua mạng gửi 10% nguồn cung ban đầu vào Community Pool của token đó — rồi tới cộng đồng. Không phải khoản trả cá nhân, cũng không phải 10% mọi khoản phí.",
+        "href": "/create/token",
+        "cta": "Tạo token"
+      },
+      {
+        "id": "fees",
+        "kicker": "KINH TẾ MẠNG",
+        "title": "Phí không biến mất — chúng được định tuyến",
+        "body": "Phí mạng đủ điều kiện theo the fee split đã duyệt. Đây là định tuyến kinh tế mạng, không phải lời hứa mọi người tham gia đều được trả từ mọi khoản phí.",
+        "href": "#economics",
+        "cta": "Định tuyến phí"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "L1 70% · L2 30% ngân sách thưởng Growth",
+        "body": "Growth Pool (15% phí đủ điều kiện) tài trợ hai tuyến referral trả phí: L1 70% và L2 30% ngân sách thưởng Growth. Tách biệt với nguồn cung Token Factory và phần chia phí the fee split.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Chi trả Growth Beta đang hoạt động: L1 70% · L2 30% ngân sách thưởng Growth. Growth Pool là 15% phí đủ điều kiện. Tách biệt với đích the fee split của phí mạng và với 10% mỗi token mới đi vào pool cộng đồng.",
+    "you": "Bạn",
+    "budgetNote": "Phần trăm là phần ngân sách thưởng Growth sau khi the fee split đưa 15% phí đủ điều kiện vào Growth Pool — không phải phần của mọi phí mạng.",
+    "detailsTitle": "Growth-referral hoạt động thế nào",
+    "details": [
+      {
+        "title": "Hai dòng được trả",
+        "body": "L1 (referral trực tiếp) nhận 70% và L2 (cấp hai) nhận 30% ngân sách thưởng Growth đang hoạt động."
+      },
+      {
+        "title": "Tách khỏi phí và token",
+        "body": "Trọng số Growth L1/L2 không phải phần chia phí mạng the fee split và không phải 10% mỗi token mới cho pool cộng đồng. Growth Pool là đích phí the fee split với quy tắc quyết toán riêng."
+      },
+      {
+        "title": "Site này",
+        "body": "Không có đăng nhập hay bảng điều khiển referral trên trang công khai này. Growth-referral gắn với tham gia mạng."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "Cách tham gia",
+    "subtitle": "Tham gia People’s Blockchain với tư cách người tham gia cộng đồng — từ điện thoại, máy tính bảng hoặc trình duyệt.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Bắt đầu tại đây",
+        "body": "Dùng điện thoại, máy tính bảng hoặc trình duyệt. Bạn tham gia với tư cách người tham gia — không phải validator đồng thuận.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Tạo ví không lưu ký",
+        "body": "Tạo cụm 12 từ trong trình duyệt, ghi lại và mã hóa bằng mật khẩu. Khóa không rời thiết bị này.",
+        "href": "/wallet",
+        "cta": "Mở ví"
+      },
+      {
+        "num": "03",
+        "title": "Xem tài sản trên trình khám phá",
+        "body": "Tra khối, giao dịch, địa chỉ, token và NFT trên trình quét công khai.",
+        "href": "/explorer",
+        "cta": "Mở trình khám phá"
+      },
+      {
+        "num": "04",
+        "title": "Tham gia kinh tế",
+        "body": "Trả phí Token Factory và mint NFT từ cùng ví. Phần 10% pool cộng đồng trên token mới, phí mạng và Growth-referral vẫn là ba cơ chế riêng.",
+        "href": "/create",
+        "cta": "Tạo"
+      }
+    ],
+    "ctaJoin": "Tham gia People’s Blockchain",
+    "ctaHow": "Cách hoạt động"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "Blockchain dành cho cộng đồng là gì?",
+    "summary": "Blockchain dành cho cộng đồng là hạ tầng cộng đồng: thiết bị thường để tham gia, tạo token và dự án ở tầng giao thức, và validator Proof-of-Stake để sản xuất khối. Người tham gia không phải validator.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Đồng thuận",
+        "summary": "Validator PoS đề xuất và chứng thực khối. Tham gia trên di động không bao giờ bỏ phiếu trong quorum."
+      },
+      {
+        "id": "economics",
+        "title": "Kinh tế",
+        "summary": "Phí mạng đủ điều kiện theo the fee split đã duyệt. Thị trường token người dùng là một kênh riêng."
+      },
+      {
+        "id": "participation",
+        "title": "Tham gia",
+        "summary": "Điện thoại, máy tính bảng và trình duyệt. Người tham gia không phải validator."
+      },
+      {
+        "id": "technology",
+        "title": "Công nghệ",
+        "summary": "Sổ cái đa tài sản an toàn số nguyên, mạng ngang hàng và công cụ khám phá chuỗi."
+      }
+    ],
+    "whyTitle": "Vì sao tồn tại",
+    "learnMore": "Tìm hiểu thêm"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "Tôi có thể làm gì?",
+    "subtitle": "Chọn một vai. Chi tiết cách một cú nhấp.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Phát hành token, dự án và kinh tế cộng đồng theo quy tắc giao thức.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Chạy hạ tầng đề xuất, chứng thực và hoàn tất khối.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Tham gia từ thiết bị hàng ngày. Không phải vai trình xác thực đồng thuận.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool là đích phí the fee split — không phải thu nhập bảo đảm hay thụ động.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Tra khối, giao dịch, token và NFT.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "Cách hoạt động",
+    "subtitle": "Một đường xuyên mạng. Mở một bước để thấy cơ chế chính xác.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Người có ví trên điện thoại, máy tính bảng hoặc trình duyệt.",
+        "detail": "Bắt đầu với tài khoản không lưu ký trên điện thoại, máy tính bảng hoặc trình duyệt. Bạn tham gia với tư cách một người trong cộng đồng — không phải validator."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Chuyển khoản, phát hành, giao dịch đường cong và các thao tác đã ký khác.",
+        "detail": "Thao tác đủ điều kiện trả phí giao thức bằng PPL. Mọi hành động được ký và kiểm tra trước khi chấp nhận."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Nút gắn stake đề xuất và xác nhận.",
+        "detail": "Validator là hạ tầng chuyên dụng. Điện thoại và trình duyệt không sản xuất khối."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Chuyển trạng thái có thứ tự, an toàn số nguyên.",
+        "detail": "Validator ghép thao tác đã ký thành khối. Thiết bị hàng ngày không nằm trong quá trình đó."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Chuỗi dùng chung giữa các nút trình xác thực.",
+        "detail": "Nút validator chia sẻ khối với nhau để mạng ở một trạng thái."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Phí mạng và phần cộng đồng của mỗi token ở các kênh riêng.",
+        "detail": "Phí mạng bằng PPL theo the fee split. Token chuẩn do người dùng tạo gửi 10% nguồn cung token đó vào pool cộng đồng riêng — đó không phải phí mạng."
+      }
+    ],
+    "storyCta": "Câu chuyện hình đầy đủ"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People là tài sản gốc của Blockchain dành cho cộng đồng. Mã: PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Tài sản quyết toán cho thao tác mạng: phí, tạo token và dịch vụ giao thức trong đặc tả."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Định danh phí giao thức đủ điều kiện mà bộ chia phí đang chạy định tuyến theo the fee split."
+      },
+      {
+        "title": "FEES",
+        "body": "Trả bằng PPL trên thao tác đủ điều kiện. Biểu phí chính xác thuộc giao thức/cấu hình — trang này không bịa tỷ lệ."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Dùng trong kế toán kinh tế mạng. Participation Power không phải token chuyển nhượng và không phải quyền biểu quyết của validator."
+      }
+    ],
+    "notMarket": "Trang này không công bố giá, vốn hóa, niêm yết, ROI, APY, độ sâu thanh khoản hay giá tương lai."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Mạng và trình xác thực",
+    "summary": "Đồng thuận là Proof-of-Stake với leader và quorum chứng thực. Điện thoại là người tham gia, không phải validator.",
+    "facts": [
+      {
+        "label": "Vai",
+        "value": "Validator bảo vệ chuỗi; người tham gia không bao giờ ngồi trong quorum."
+      },
+      {
+        "label": "Ai chạy gì",
+        "value": "Nút chuyên dụng đề xuất và chứng thực khối. Điện thoại, máy tính bảng và trình duyệt tham gia với tư cách người tham gia."
+      },
+      {
+        "label": "Mạng công khai",
+        "value": "Testnet công khai v2 đang chạy. Đây không phải Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Kinh tế phí mạng",
+    "summary": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số.",
+    "splits": [
+      {
+        "label": "Trình xác thực",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Kho bạc",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Thanh khoản và hệ sinh thái",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Đốt",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool nhận 15% phí đủ điều kiện. Không phải thu nhập bảo đảm, lợi nhuận thụ động hay sản phẩm đầu tư.",
+    "detailsTitle": "Định tuyến phí hoạt động thế nào",
+    "detailsBody": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Phần thưởng được giải thích thế nào"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Tạo → Ra mắt → Khám phá → Giao dịch",
+    "subtitle": "Tạo token, phát hành với giá sẵn, để người khác tìm và giao dịch trên đường cong phát hành.",
+    "steps": [
+      {
+        "title": "Tạo",
+        "body": "Dùng form Token Factory: ảnh, tên, mã, nguồn cung, rồi trả bằng PPL."
+      },
+      {
+        "title": "Ra mắt",
+        "body": "Bonding curve ảo cung cấp giá liên tục từ khối đầu."
+      },
+      {
+        "title": "Bảng tin dự án",
+        "body": "Tài sản xuất hiện trong sổ đăng ký mạng để cộng đồng tìm được."
+      },
+      {
+        "title": "Giao dịch",
+        "body": "Mua bán trên đường cong phát hành, rồi đổi trong nhóm AMM token/PPL đang hoạt động."
+      }
+    ],
+    "expandTitle": "Đường cong ra mắt, thanh khoản, vesting",
+    "expandItems": [
+      "Giá phát hành dùng đường cong constant-product với toán số nguyên chính xác.",
+      "Phí giao dịch giao thức trên đường cong được định tuyến qua kinh tế phí mạng.",
+      "Phần chia phát hành chuẩn gồm bắt buộc 10% nguồn cung token đó vào pool cộng đồng riêng (không phải phí mạng PPL).",
+      "Vesting của người tạo giữ phần lớn phần của họ mở dần theo thời gian, để cộng đồng không bị dump ngày đầu."
+    ],
+    "createCta": "Mở Token Factory",
+    "nftCta": "Tạo NFT",
+    "swapCta": "Mở trang đổi"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Công nghệ",
+    "subtitle": "Stack là gì. Mở thẻ để xem ý tưởng phía người dùng.",
+    "cards": [
+      {
+        "title": "Đồng thuận",
+        "summary": "Validator Proof-of-Stake đề xuất và chứng thực khối. Điện thoại không bỏ phiếu."
+      },
+      {
+        "title": "Trạng thái",
+        "summary": "Số dư số nguyên chính xác trên PPL gốc và token người dùng tạo."
+      },
+      {
+        "title": "Mạng",
+        "summary": "Nút validator chia sẻ khối để chuỗi ở một trạng thái."
+      },
+      {
+        "title": "Lưu trữ",
+        "summary": "Mỗi validator giữ trạng thái mạng đang chạy cần để tiếp tục."
+      },
+      {
+        "title": "Bảo mật",
+        "summary": "Hành động đã ký, tách vai trò, không đi tắt quanh kiểm tra."
+      },
+      {
+        "title": "Công cụ",
+        "summary": "HTTP API và trình khám phá để mọi người đọc mạng."
+      }
+    ],
+    "archTitle": "Kiến trúc tương tác",
+    "invTitle": "Bất biến toán học"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Mạng đang ở đâu",
+    "subtitle": "Giai đoạn sản phẩm. Không công bố ngày ra mắt tại đây.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Sổ cái, kế toán cộng đồng và định tuyến phí mạng.",
+          "Tạo token và thị trường đường cong ra mắt.",
+          "Tham gia cộng đồng vào phát hành, phí và Growth-referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Một testnet công khai đang chạy.",
+          "Đây không phải Mainnet và không phải lời hứa giao dịch công khai giá trị đang chạy."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Truy cập công khai rộng hơn là giai đoạn cộng đồng tiếp theo."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Mạng con người: tham gia di động, proof of humanity và chống farming.",
+          "Ngày ra mắt công khai không được công bố trên site này."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Tài liệu",
+    "summary": "Ví, tham gia và nút của bạn — bắt đầu với hướng dẫn thực tế.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Đọc hướng dẫn",
+        "hint": "Bước đầu, phần thưởng và cài nút"
+      },
+      {
+        "href": "#economics",
+        "label": "Phí mạng",
+        "hint": "Định tuyến the fee split cho phí PPL đủ điều kiện"
+      }
+    ]
+  }
+}

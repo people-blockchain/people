@@ -1,0 +1,116 @@
+{
+  "title": "So funktioniert People's Blockchain",
+  "loopLine": "Menschen nutzen das Netzwerk. Nutzung erzeugt Gebühren. Ein Teil jeder Gebühr fließt zurück an die Community.",
+  "docsLinkLabel": "Details in der Dokumentation",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Jetzt im Testnet",
+      "items": [
+        {
+          "title": "Wallet",
+          "text": "Non-custodial Wallet am Handy oder im Browser. Schlüssel verlassen Ihr Gerät nicht."
+        },
+        {
+          "title": "Token erstellen",
+          "text": "Name, Ticker, Bild und Menge, zahlen in PPL. Preis ab erstem Trade über die Kurve."
+        },
+        {
+          "title": "Handeln",
+          "text": "Kaufen und verkaufen auf der Launch-Kurve, dann im Token/PPL-Pool."
+        },
+        {
+          "title": "10% an die Community",
+          "text": "Jeder Standard-Token sendet 10% seines Angebots in den Community-Pool dieses Tokens."
+        },
+        {
+          "title": "Creator-Vesting",
+          "text": "Der Creator-Anteil unlockt über 180 Tage – kein Dump am Tag eins."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Als Person mitmachen",
+      "items": [
+        {
+          "title": "Teilnahme-Sessions per Tap vom Handy.",
+          "text": ""
+        },
+        {
+          "title": "Proof of Humanity ohne Biometrie.",
+          "text": ""
+        },
+        {
+          "title": "Teilnahmepunkte bestimmen Ihren Anteil an Community-Belohnungen. Nicht kaufbar oder übertragbar.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Festes PPL-Angebot",
+      "intro": "Eine Milliarde PPL ohne Überraschungs-Minting am Anfang. Validatoren und Startprämien aus Genesis und Gebühren.",
+      "bullets": [
+        "Jahre 1–4: 0 % Inflation — 1B PPL.",
+        "Validatoren: 200M PPL, 6 % / 5 % / 5 % / 4 % des Angebots (60M, 50M, 50M, 40M) + 30 % Gebühren.",
+        "Gründer, Prämien, Botschafter, Airdrops: nur 35 %-Community-Topf.",
+        "Ab Jahr 5: max. 2 % neue Emission/Jahr, nur Community-Vote.",
+        "Gründer-Airdrop zuerst; Verkauf nach 1.000 Verifizierten und Multisig.",
+        "Jede Gebühr: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % Burn."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Woher Belohnungen kommen",
+      "intro": "Jede Netzwerkgebühr wird in PPL bezahlt und jedes Mal gleich geteilt:",
+      "feeSplit": [
+        {
+          "label": "Validatoren (Netzwerk)",
+          "pct": 30
+        },
+        {
+          "label": "Community Pool",
+          "pct": 25
+        },
+        {
+          "label": "Treasury",
+          "pct": 20
+        },
+        {
+          "label": "Liquidität & Ökosystem",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (Referrals)",
+          "pct": 15
+        },
+        {
+          "label": "Burn",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Der Community Pool wird unter aktiven Teilnehmern proportional zu Teilnahmepunkten geteilt. Beispiel: 600 Tokens im Pool, drei Personen mit 1, 2 und 3 Punkten erhalten 100, 200 und 300.",
+      "tokenPoolNote": "Getrennt davon bleiben die 10% Community-Anteile jedes Tokens im eigenen Pool. Sie werden nicht mit PPL-Gebühren vermischt.",
+      "buybackNote": "Die Treasury- und Liquiditätsanteile (zusammen 30 %) finanzieren öffentliche PPL-Rückkäufe am offenen Markt, ausgeführt vom veröffentlichten Multisig und im Explorer sichtbar.",
+      "launchFeeNote": "Das Starten eines Tokens oder NFTs kostet eine Protokollgebühr, zahlbar in PPL oder einem unterstützten Stablecoin (USDC/USDT) — Ihre Wahl. Gas wird immer in PPL bezahlt."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Warum Bots nicht farmen können",
+      "body": "Neue Konten starten langsam, inaktive schwächen ab, jede Person hat ein Cap. Hundert Fake-Konten verdienen nicht hundertmal mehr."
+    },
+    {
+      "id": "honest",
+      "title": "Der ehrliche Teil",
+      "bullets": [
+        "Belohnungen sind nicht fest. Keine Aktivität, keine Belohnungen.",
+        "Tokenpreise können steigen, fallen oder null werden.",
+        "Das ist Teilnahme an einem Netzwerk, keine Anlage."
+      ]
+    }
+  ],
+  "ctaWallet": "Wallet erstellen",
+  "ctaCreate": "Token starten",
+  "feeChartLabel": "Aufteilung der Netzwerkgebühr"
+}

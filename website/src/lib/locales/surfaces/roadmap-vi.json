@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "Lộ trình",
+    "description": "Đang chạy, đang làm và dự kiến chưa được phê duyệt trên People's Blockchain."
+  },
+  "intro": "Trạng thái khớp docs/ROADMAP.md.",
+  "statusLabels": {
+    "done": "Đang chạy",
+    "in_progress": "Đang làm",
+    "planned_unapproved": "Dự kiến",
+    "live_on_testnet": "Trên testnet",
+    "proposed_pending_vote": "Đề xuất / chờ bỏ phiếu"
+  },
+  "sectionTitles": {
+    "done": "Đang chạy",
+    "in_progress": "Đang làm",
+    "planned_unapproved": "Dự kiến",
+    "live_on_testnet": "Trên testnet",
+    "proposed_pending_vote": "Đề xuất / chờ bỏ phiếu"
+  },
+  "items": {
+    "cosmos-evm-migration": {
+      "title": "Testnet People's Blockchain (EVM)",
+      "summary": "Mở rộng testnet People's Blockchain trên EVM. Giai đoạn 1 (chain/) đang làm; testnet công khai hiện vẫn trên nút OVN với RPC chỉ đọc."
+    },
+    "genesis-snapshot-0x": {
+      "title": "Estado en genesis",
+      "summary": "Exportar saldos al genesis de la nueva red conservando las mismas direcciones 0x."
+    },
+    "solidity-protocol-modules": {
+      "title": "Solidity: fábrica, curva, AMM, NFT",
+      "summary": "Các module giao thức đã chạy trên nút testnet; mục tiêu là Solidity đã kiểm toán trên testnet People's Blockchain, gồm AMM kiểu Uniswap V2."
+    },
+    "fee-split-model-a": {
+      "title": "Reparto de comisiones (Model A)",
+      "summary": "Validadores 30%, pool comunitario 25%, tesoro 20%, liquidez 10%, Growth Pool 15%, quema 0%."
+    },
+    "tokenomics-1b-ppl": {
+      "title": "1 mil millones de PPL",
+      "summary": "1B PPL cố định: năm 1–4 0% lạm phát; quỹ validator 200M theo 6/5/5/4% + 30% phí; thưởng khởi động từ quỹ 35%; từ năm 5 tối đa 2%/năm bỏ phiếu; airdrop nhà sáng lập trước bán khi 1.000 xác minh + multisig. Phí 30/25/20/10/15/0 trên /tokenomics và /how-it-works."
+    },
+    "discover-feed": {
+      "title": "Bảng tin dự án",
+      "summary": "Thẻ dự án, phản ứng, câu hỏi và thống kê."
+    },
+    "ai-token-icons": {
+      "title": "Iconos IA para tokens",
+      "summary": "Tạo ảnh token khi bạn ra mắt."
+    },
+    "evm-wallet-site-package": {
+      "title": "Carteras EVM en el sitio",
+      "summary": "JSON-RPC solo lectura (97401) activo; paquete MetaMask/Trust/WalletConnect próximo."
+    },
+    "community-ai-agent-wallet": {
+      "title": "Tác nhân AI cộng đồng",
+      "summary": "Ví Safe có hạn mức, danh sách cho phép và thay đổi chỉ qua bỏ phiếu — công khai trên explorer."
+    },
+    "oz-contract-builder": {
+      "title": "Constructor de contratos",
+      "summary": "Descríbelo en palabras sencillas; plantillas OpenZeppelin auditadas."
+    },
+    "ai-anti-scam-guard": {
+      "title": "Escudo antifraude IA",
+      "summary": "Avisos antes de transferencias y contratos arriesgados."
+    },
+    "ai-governance-summaries": {
+      "title": "Resúmenes IA de votos",
+      "summary": "Explicaciones breves y neutrales de votaciones on-chain."
+    },
+    "rewards-proof-of-humanity": {
+      "title": "Recompensas con prueba de humanidad",
+      "summary": "Pagar aportes reales, no bots — registro de participante y humano verificado."
+    },
+    "erc8004-x402-agents": {
+      "title": "ERC-8004 y x402",
+      "summary": "Registro de agentes y pagos compatibles con estándares emergentes."
+    },
+    "no-agent-memecoins": {
+      "title": "Sin memecoins para agentes",
+      "summary": "Los agentes sirven al trabajo comunitario, no a lanzar memes — política pendiente."
+    },
+    "site-wide-wallet-connect-modal": {
+      "title": "Modal kết nối ví ngay trên trang",
+      "summary": "Kết nối hoặc tạo ví trong modal trên bất kỳ trang nào — không chuyển sang màn hình riêng. Triển khai toàn site."
+    },
+    "cosmos-evm-smart-accounts": {
+      "title": "Tài khoản thông minh trên testnet",
+      "summary": "ERC-4337 hoặc tương đương: đăng nhập Google, email hoặc passkey; ví tự tạo, không cụm từ seed (tùy chọn xuất khóa). Khi đăng ký: «Tạo ví với Google/email» hoặc «Kết nối ví của bạn». Không gas: N giao dịch đầu của người mới do paymaster từ quỹ cộng đồng/dự án trả."
+    },
+    "ai-monthly-community-report": {
+      "title": "Báo cáo cộng đồng hàng tháng bằng AI",
+      "summary": "Tóm tắt tự động hàng tháng về hoạt động dự án và mạng — số liệu và điểm nổi bật cho cộng đồng."
+    },
+    "discover-referral-growth-pool": {
+      "title": "Liên kết giới thiệu trên bảng tin (Growth Pool)",
+      "summary": "Mỗi thẻ dự án trên bảng tin có liên kết giới thiệu riêng, gắn với phần thưởng Growth Pool (Model A)."
+    },
+    "founders-stage1-founders-page": {
+      "title": "Một triệu nhà sáng lập — giai đoạn 1: /founders",
+      "summary": "Bộ đếm trực tiếp, bản đồ thế giới và bảng xếp hạng theo quốc gia, số nhà sáng lập, hệ số sớm (Preliminary: 10k×5, 100k×3, 1M×1,5). Đăng nhập Google + proof of humanity; không xác minh thì không có điểm."
+    },
+    "founders-stage2-points-antibot": {
+      "title": "Một triệu nhà sáng lập — giai đoạn 2: điểm & chống bot",
+      "summary": "Điểm hàng ngày cho hành động thật trên testnet (swap, feed, token, NFT, pool, vote) và chấm anti-Sybil; điểm giới thiệu chỉ sau khi người được mời xác minh và hành động."
+    },
+    "founders-stage3-referral-growth-contracts": {
+      "title": "Một triệu nhà sáng lập — giai đoạn 3: sổ đăng ký & phần Growth",
+      "summary": "Sổ đăng ký on-chain trên 97401; phần Growth Pool trọn đời (Preliminary 10% / 3%) — hợp đồng mới, cần phê duyệt so với Beta 70/30."
+    },
+    "founders-stage4-grants-mainnet-conversion": {
+      "title": "Một triệu nhà sáng lập — giai đoạn 4: grant & mainnet",
+      "summary": "Grant community pool cho dự án mang người thật; mốc 10k/100k/1M; quy đổi điểm→PPL (Preliminary: bucket 35%, 20% ngay, 12 tháng hoạt động, stake +25%)."
+    },
+    "founders-stage5-ambassadors-ai-bot": {
+      "title": "Một triệu nhà sáng lập — giai đoạn 5: đại sứ & bot AI",
+      "summary": "Top 50 người giới thiệu mỗi quốc gia có trang đại sứ; bot Telegram hỗ trợ đăng nhập và nhiệm vụ (kênh khác sau)."
+    },
+    "lavka-stage1-loyalty-qr": {
+      "title": "Lavka — giai đoạn 1: loyalty & QR",
+      "summary": "Doanh nghiệp nhỏ tạo pass và bonus qua Google trong vài phút (không thuật ngữ crypto); QR tại quầy và khách tự động thành nhà sáng lập."
+    },
+    "lavka-stage2-cross-tips-ambassador": {
+      "title": "Lavka — giai đoạn 2: bonus chéo & tip",
+      "summary": "Phần đại sứ người bán từ Growth Pool; bonus giữa cửa hàng lân cận; tip QR với chia phí Model A."
+    },
+    "lavka-stage3-escrow-disputes": {
+      "title": "Lavka — giai đoạn 3: escrow & tranh chấp",
+      "summary": "Ký quỹ đến sự kiện hoặc hạn; xếp hạng uy tín công khai; tranh chấp do người đã xác minh bỏ phiếu; dữ liệu cá nhân off-chain."
+    },
+    "lavka-stage4-pilot-seller-ai": {
+      "title": "Lavka — giai đoạn 4: pilot & AI người bán",
+      "summary": "Nhắc AI khi pass sắp hết hạn và giờ vắng; pilot Batumi (Preliminary: 10 địa điểm, một danh mục)."
+    },
+    "ai-group-buy-negotiation": {
+      "title": "AI đàm phán mua theo nhóm",
+      "summary": "Sau này: AI đàm phán cho nhóm người mua — chỉ roadmap, chưa triển khai."
+    },
+    "token-project-pages-lightpaper": {
+      "title": "Token project pages & lightpaper",
+      "summary": "Launch form captures goal, distribution, vesting, team and links; the site builds a project page with a tokenomics chart and short lightpaper (extendable to a white paper), PDF download and embed. Planning only."
+    },
+    "mainnet-migration-snapshot-tokenomics": {
+      "title": "Mainnet migration via testnet snapshot",
+      "summary": "Move projects to mainnet using a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only."
+    },
+    "ambassador-promo-kit": {
+      "title": "Ambassador promo kit",
+      "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    }
+  }
+}

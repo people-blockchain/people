@@ -1,0 +1,5 @@
+.cache/
+.testnets/
+build/peopled
+build/peopled.new
+scripts/node_modules/

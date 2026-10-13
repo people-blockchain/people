@@ -1,0 +1,66 @@
+# 3-validator People's local testnet (Cosmos EVM). Run `scripts/init-testnet.sh` first.
+services:
+  peopled-0:
+    build: .
+    image: people-chain/peopled:local
+    container_name: people-peopled-0
+    environment:
+      NODE_ID: "0"
+      CHAIN_ID: people_97401-1
+    ports:
+      - "26656-26657:26656-26657"
+      - "1317:1317"
+      - "9090:9090"
+      - "8545-8546:8545-8546"
+    # M11-3: each validator sees only its own data directory (and keyring) — a compromised
+    # container can no longer read the other validators' keys from a shared /data mount.
+    volumes:
+      - ./.testnets/node0:/data/node0
+    networks:
+      people-local:
+        ipv4_address: 192.168.20.2
+
+  peopled-1:
+    image: people-chain/peopled:local
+    container_name: people-peopled-1
+    environment:
+      NODE_ID: "1"
+      CHAIN_ID: people_97401-1
+    ports:
+      - "26666-26667:26656-26657"
+      - "1318:1317"
+      - "9091:9090"
+      - "8555-8556:8545-8546"
+    # M11-3: each validator sees only its own data directory (and keyring) — a compromised
+    # container can no longer read the other validators' keys from a shared /data mount.
+    volumes:
+      - ./.testnets/node1:/data/node1
+    networks:
+      people-local:
+        ipv4_address: 192.168.20.3
+
+  peopled-2:
+    image: people-chain/peopled:local
+    container_name: people-peopled-2
+    environment:
+      NODE_ID: "2"
+      CHAIN_ID: people_97401-1
+    ports:
+      - "26676-26677:26656-26657"
+      - "1319:1317"
+      - "9092:9090"
+      - "8565-8566:8545-8546"
+    # M11-3: each validator sees only its own data directory (and keyring) — a compromised
+    # container can no longer read the other validators' keys from a shared /data mount.
+    volumes:
+      - ./.testnets/node2:/data/node2
+    networks:
+      people-local:
+        ipv4_address: 192.168.20.4
+
+networks:
+  people-local:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24
