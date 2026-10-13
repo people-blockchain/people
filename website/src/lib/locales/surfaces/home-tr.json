@@ -7,9 +7,9 @@
       "bir token",
       "başlatın."
     ],
-    "headlineAccent": "%10 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "%27 sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%10 sizin insanlarınıza gider,",
+      "%27 sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "People's Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "%10 topluluk havuzuna",
+        "label": "%27 topluluk havuzuna",
         "sub": "Her yeni tokene gömülü"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Topluluğunuz için",
-      "body": "Her yeni token'ın %10'u o token'ın topluluk havuzuna gider. Her ağ ücretinin bir kısmı da oraya gider. Katılanlar, birlikte kurdukları şeyde pay sahibi olur."
+      "body": "Her yeni token'ın %27'si o token'ın topluluk havuzuna gider. Her ağ ücretinin bir kısmı da oraya gider. Katılanlar, birlikte kurdukları şeyde pay sahibi olur."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Bu bir ağa katılım, yatırım değil.",
   "visuals": {
     "supply": "Token arzı",
-    "share": "%10",
+    "share": "%27",
     "toPool": "topluluk havuzuna gider",
     "pool": "Topluluk havuzu",
     "poolNote": "katılanlar arasında paylaşılır",
-    "aria": "Her yeni tokenin arzının %10'u kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
+    "aria": "Her yeni tokenin arzının %27'si kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
     "prompt": "Sahiplerinin hazinenin nasıl harcanacağına oy verdiği bir token",
     "step1": "Siz yazarsınız",
     "step2": "Biz kurarız",

@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "10%",
-        "title": "10 % in den Gemeinschaftspool",
+        "value": "27%",
+        "title": "27 % in den Gemeinschaftspool",
         "note": "Vom Angebot jedes neuen Tokens geht in den Gemeinschaftspool."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "10 % Gemeinschaft + Netzgebühr",
+        "label": "27 % Gemeinschaft + Netzgebühr",
         "sub": "Teil des neuen Tokens und die Protokollgebühr bleiben getrennt"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "10 % jedes neuen Tokens gehen in den Gemeinschaftspool",
-        "body": "Jeder Standard-Token, der über das Netz gestartet wird, sendet 10 % seines Anfangsangebots in den Community Pool dieses Tokens — dann an die Gemeinschaft. Keine persönliche Auszahlung und nicht 10 % jeder Gebühr.",
+        "title": "27 % jedes neuen Tokens gehen in den Gemeinschaftspool",
+        "body": "Jeder Standard-Token, der über das Netz gestartet wird, sendet 27 % seines Anfangsangebots in den Community Pool dieses Tokens — dann an die Gemeinschaft. Keine persönliche Auszahlung und nicht 10 % jeder Gebühr.",
         "href": "/create/token",
         "cta": "Token erstellen"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Aktive Beta-Growth-Auszahlung: L1 70 % · L2 30 % des Growth-Belohnungsbudgets. Growth Pool sind 15 % der zulässigen Gebühren. Getrennt von den Model-A-Zielen der Netzgebühren und von den 10 % jedes neuen Tokens, die in den Community-Pool gehen.",
+    "subtitle": "Aktive Beta-Growth-Auszahlung: L1 70 % · L2 30 % des Growth-Belohnungsbudgets. Growth Pool sind 15 % der zulässigen Gebühren. Getrennt von den Model-A-Zielen der Netzgebühren und von den 27 % jedes neuen Tokens, die in den Community-Pool gehen.",
     "you": "Du",
     "budgetNote": "Prozentsätze sind Anteile am Growth-Belohnungsbudget, nachdem the fee split 15 % der zulässigen Gebühren in den Growth Pool leitet — nicht Anteile an jeder Netzgebühr.",
     "detailsTitle": "So funktioniert Growth-Referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Getrennt von Gebühren und Token",
-        "body": "Die Growth-Gewichte L1/L2 sind nicht der Model-A-Split der Netzgebühren und nicht die 10 % jedes neuen Tokens für den Community-Pool. Growth Pool ist ein Model-A-Gebührenziel mit eigenen Abrechnungsregeln."
+        "body": "Die Growth-Gewichte L1/L2 sind nicht der Model-A-Split der Netzgebühren und nicht die 27 % jedes neuen Tokens für den Community-Pool. Growth Pool ist ein Model-A-Gebührenziel mit eigenen Abrechnungsregeln."
       },
       {
         "title": "Diese Site",
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Netzgebühren und der Gemeinschaftsanteil jedes Tokens bleiben in getrennten Kanälen.",
-        "detail": "Netzgebühren in PPL folgen the fee split. Standardmäßig von Nutzern erstellte Token senden 10 % des Angebots dieses Tokens in den eigenen Community-Pool — das ist keine Netzgebühr."
+        "detail": "Netzgebühren in PPL folgen the fee split. Standardmäßig von Nutzern erstellte Token senden 27 % des Angebots dieses Tokens in den eigenen Community-Pool — das ist keine Netzgebühr."
       }
     ],
     "storyCta": "Vollständige visuelle Geschichte"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool erhält 15 % der zulässigen Gebühren. Das ist kein garantiertes Einkommen, keine passive Rendite und kein Anlageprodukt.",
     "detailsTitle": "So funktioniert die Gebührenweiterleitung",
-    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. After whole-number division, any remainder stays with validators. The 27 % of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Wie Belohnungen erklärt werden"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Die Startpreisbildung nutzt eine Constant-Product-Kurve mit exakter Ganzzahlmathematik.",
       "Eine Protokoll-Handelsgebühr auf der Kurve wird über die Netzgebührenwirtschaft weitergeleitet.",
-      "Der Standard-Start-Split enthält verpflichtend 10 % des Angebots dieses Tokens in den eigenen Community-Pool (keine PPL-Netzgebühr).",
+      "Der Standard-Start-Split enthält verpflichtend 27 % des Angebots dieses Tokens in den eigenen Community-Pool (keine PPL-Netzgebühr).",
       "Creator-Vesting hält den Großteil des Creator-Anteils über die Zeit frei, damit die Gemeinschaft nicht am ersten Tag gedumpt wird."
     ],
     "createCta": "Token Factory öffnen",

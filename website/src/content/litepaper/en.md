@@ -2,9 +2,9 @@
 title: "People Blockchain — Litepaper"
 description: "The blockchain where every user is a verified human. Owned by people, not VCs."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Litepaper
@@ -14,7 +14,7 @@ status: preliminary
 
 Our mission: put a blockchain in the hands of ordinary people — no code, no crypto skills, no bots, no insiders.
 
-*v0.1 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
+*v1.0 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
 
 ---
 
@@ -23,7 +23,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 | | |
 |---|---|
 | Supply | **1,000,000,000 PPL**, fixed |
-| Every launched token | **10%** of supply goes to that token's own community pool |
+| Every launched token | **27%** of supply goes to that token's own community pool |
 | Network fees burned | **0%** — every fee is shared |
 | Who earns rewards | **Verified humans** (Telegram phone or Human Passport) |
 | Funding | **Self-funded.** No VC. No investor allocation. |
@@ -45,7 +45,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 
 **Verified humans, not bots.** Rewards go to accounts that passed a free human check. One person, one account. Sign-up alone earns nothing.
 
-**10% of every launched token goes to its community.** Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.
+**27% of every launched token goes to its community.** Built into the protocol, not promised in a post: every standard launch sends 27% of its supply to that token's own community pool. It is never mixed with network fees.
 
 ---
 
@@ -55,7 +55,7 @@ What you can do without code:
 
 | Tool | What it does | Status |
 |---|---|---|
-| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 10% of supply goes to the token's community pool; the creator's share vests over 180 days. | Live on testnet |
+| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 27% of supply goes to the token's community pool; the creator's share vests over 180 days. | Live on testnet |
 | **NFT club cards** | Membership cards for a club, a café or a community — one per member, with an image you upload or generate. | Live on testnet |
 | **Fundraising** | Collect support for a project with reviewed contract templates: escrow, vesting, token-weighted vote. Your community buys in on the curve, so demand sets the price — not a private round. | Live on testnet |
 | **AI contracts** | Describe a smart contract in plain words. It is assembled from OpenZeppelin templates and you see the result before you deploy. | Live on testnet |
@@ -119,7 +119,7 @@ Every protocol fee, including fractional fees, is split the same way:
 
 **Buybacks.** The treasury (20%) and liquidity (10%) shares are used for public PPL buybacks. Nothing is burned to fake scarcity — fees go back to the network and its people.
 
-**Token-launch fee.** Live on testnet: the fee for launching a token or minting an NFT can be paid in PPL, or in a testnet stablecoin (tUSDC/tUSDT) through the StableFeeGateway contract. The stablecoin amount is a fixed, owner-approved USD price: 5.00 USD for a token launch, 10.00 USD for an NFT mint. Stablecoin payment works on the People network only for now; paying from another chain (Ethereum, Polygon, Tron, TON, Solana) is coming later. 100% of the stablecoin fee goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
+**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of launch fees goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
 
 ---
 
@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches; the community PPL sale opens. | At least 1,000 verified people **and** a live treasury multisig |
+| **Mainnet + PPL sale** | Mainnet launches. The PPL sale is not open yet; it will only open once an operating legal entity exists. | At least 1,000 verified people **and** a live treasury multisig |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.
@@ -178,7 +178,7 @@ No dates are promised. Each stage starts when its gate is met.
 - **Testnet is not mainnet.** Testnet tokens and balances carry no value. Points are a record of activity, not a payout guarantee.
 - **Everything is preliminary.** Numbers, schedules and rules may change before mainnet and are subject to community governance.
 - **Technology risk.** Software can have bugs. An audit reduces risk; it does not remove it.
-- **Regulation.** Rules differ by country and may change. The PPL sale is not available to US residents and requires a proof-of-humanity / KYC check.
+- **Regulation.** Rules differ by country and may change. There is no public PPL sale at this time; no KYC or sale-eligibility checks are run.
 - **Do your own research.** This litepaper is information, not financial, legal or tax advice.
 
 ---
@@ -193,7 +193,7 @@ Only verifiable public facts about other networks. Sources below.
 | Who receives fees | Validators get the priority fee (tip) ¹ | Validators get 50% of the base fee and 100% of the priority fee ² | **Validators 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Early funding | Public ether sale, 2014 (42 days, paid in BTC) ³ | $20M Series A led by Multicoin Capital (2019); investors received SOL tokens ⁴ | **Self-funded. No VC, no investor allocation** |
 | Account creation | Creating an account costs nothing; no identity check ⁵ | Not a protocol requirement | **Rewards only for verified humans** |
-| New-token community share | Not a protocol rule | Not a protocol rule | **10% of every launched token** |
+| New-token community share | Not a protocol rule | Not a protocol rule | **27% of every launched token** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -213,3 +213,14 @@ Only verifiable public facts about other networks. Sources below.
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### What changed in v1.0
+
+- A new token's community share is **27%** of supply: **10%** allocated at launch plus **~16.7%** swept from the bonding curve at migration.
+- Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
+- Launch fees: the approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
+- There is **no public PPL sale at this time**, and no KYC or sale-eligibility checks are run.
+- Security: an **internal, AI-assisted review** now, and an **independent audit before mainnet**.
+- The treasury multisig is **2-of-3** and is created before mainnet.

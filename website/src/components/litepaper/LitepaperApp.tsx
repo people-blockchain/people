@@ -17,7 +17,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { WarmCard, WARM_PRIMARY_BTN, WARM_SECONDARY_BTN } from "@/components/warm/warm-ui";
 import { DOCS_RELEASE, docsVersionLine } from "@/lib/docs-release";
 import { TOTAL_SUPPLY_PPL, NETWORK_FEE_SPLIT } from "@/lib/tokenomics";
-import { TOKEN_COMMUNITY_ALLOCATION_PCT } from "@/lib/selling-economics";
+import { TOKEN_COMMUNITY_SHARE_PCT } from "@/lib/selling-economics";
 import {
   LitepaperAllocationDonut,
   FeeFlowDiagram,
@@ -89,7 +89,7 @@ export function LitepaperApp({
 
         <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <HeroStat value={`${TOTAL_SUPPLY_PPL / 1_000_000_000}B`} label={t.heroStat.supplyLabel} />
-          <HeroStat value={`${TOKEN_COMMUNITY_ALLOCATION_PCT}%`} label={t.heroStat.communityLabel} />
+          <HeroStat value={`${TOKEN_COMMUNITY_SHARE_PCT}%`} label={t.heroStat.communityLabel} />
           <HeroStat value={`${burnPct}%`} label={t.heroStat.burnLabel} />
           <HeroStat value={t.heroStat.vcValue} label={t.heroStat.vcLabel} />
         </dl>

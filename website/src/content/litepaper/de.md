@@ -2,9 +2,9 @@
 title: "People Blockchain — Litepaper"
 description: "Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist. Von Menschen kontrolliert, nicht von VCs."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Litepaper
@@ -12,7 +12,7 @@ status: preliminary
 > **Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist.**
 > **Von Menschen kontrolliert, nicht von VCs.**
 
-*v0.1 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
+*v1.0 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
 
 ---
 
@@ -21,7 +21,7 @@ status: preliminary
 | | |
 |---|---|
 | Angebot | **1.000.000.000 PPL**, fest |
-| Jeder gestartete Token | **10%** des Angebots gehen an den Community-Pool dieses Tokens |
+| Jeder gestartete Token | **27%** des Angebots gehen an den Community-Pool dieses Tokens |
 | Netzwerk­gebühren verbrannt | **0%** — jede Gebühr wird geteilt |
 | Wer Belohnungen erhält | **Verifizierte Menschen** (Telegram-Telefon oder Human Passport) |
 | Finanzierung | **Self-finanziert.** Keine VCs. Keine Investor-Zuteilungen. |
@@ -43,7 +43,7 @@ status: preliminary
 
 **Verifizierte Menschen, keine Bots.** Belohnungen gehen an Konten, die eine kostenlose Personen­prüfung bestanden haben. Eine Person, ein Konto. Eine Anmeldung allein bringt nichts.
 
-**10% jedes gestarteten Tokens gehen an seine Community.** Ins Protokoll eingebaut, nicht nur versprochen: Jeder Standard-Launch sendet 10% seines Angebots an den Community-Pool dieses Tokens. Es wird nie mit Netzwerk­gebühren vermischt.
+**27% jedes gestarteten Tokens gehen an seine Community.** Ins Protokoll eingebaut, nicht nur versprochen: Jeder Standard-Launch sendet 27% seines Angebots an den Community-Pool dieses Tokens. Es wird nie mit Netzwerk­gebühren vermischt.
 
 ---
 
@@ -53,7 +53,7 @@ Was du ohne Code tun kannst:
 
 | Tool | Was es tut | Status |
 |---|---|---|
-| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. 10% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
+| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. 27% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
 | **NFT-Club-Karten** | Mitglieds­karten für einen Club, ein Café oder eine Community — eine pro Mitglied, mit einem Bild, das du hochlädst oder generierst. | Live auf Testnet |
 | **Fundraising** | Sammeln von Unterstützung für ein Projekt mit überprüften Vertrags­vorlagen: Escrow, Vesting, Token-gestütztes Abstimmen. Deine Community kauft auf der Curve ein, also setzt Nachfrage den Preis — nicht eine private Runde. | Live auf Testnet |
 | **KI-Verträge** | Beschreibe einen Smart Contract in einfachen Worten. Er wird aus OpenZeppelin-Vorlagen zusammengesetzt und du siehst das Ergebnis, bevor du es einsetzt. | Live auf Testnet |
@@ -117,7 +117,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 
 **Rückkäufe.** Die Treasury- (20%) und Liquiditäts- (10%) Anteile werden für öffentliche PPL-Rückkäufe verwendet. Nichts wird verbrannt, um Knappheit vorzutäuschen — Gebühren gehen zurück an das Netzwerk und seine Menschen.
 
-**Token-Launch-Gebühr.** Live im Testnet: Die Gebühr für den Start eines Tokens oder das Minten eines NFTs kann in PPL oder in einem Testnet-Stablecoin (tUSDC/tUSDT) über den StableFeeGateway-Vertrag bezahlt werden. Der Stablecoin-Betrag ist ein fester, vom Eigentümer genehmigter USD-Preis: 5.00 USD für einen Token-Launch, 10.00 USD für ein NFT-Minting. Die Zahlung in Stablecoin funktioniert vorerst nur im People-Netzwerk; die Zahlung von einer anderen Chain (Ethereum, Polygon, Tron, TON, Solana) kommt später. 100% der Stablecoin-Gebühr fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
+**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100 % der Launch-Gebühren fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
 
 ---
 
@@ -144,7 +144,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **Mainnet + PPL-Sale** | Mainnet startet; der Community PPL-Sale öffnet. | Mindestens 1.000 verifizierte Menschen **und** ein aktives Treasury Multisig |
+| **Mainnet + PPL-Sale** | Mainnet startet. Der PPL-Sale ist noch nicht offen; er öffnet erst, wenn eine operativ tätige juristische Person existiert. | Mindestens 1.000 verifizierte Menschen **und** ein aktives Treasury Multisig |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
 Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
@@ -176,7 +176,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 - **Testnet ist nicht Mainnet.** Testnet-Token und -Guthaben haben keinen Wert. Punkte sind eine Aufzeichnung von Aktivität, keine Auszahlungsgarantie.
 - **Alles ist vorläufig.** Zahlen, Zeitpläne und Regeln können sich vor dem Mainnet ändern und unterliegen Community-Abstimmungen.
 - **Technologie­risiko.** Software kann Fehler haben. Eine Prüfung reduziert das Risiko; es beseitigt es nicht.
-- **Regulierung.** Die Regeln unterscheiden sich je nach Land und können sich ändern. Der PPL-Sale ist nicht für US-Bewohner verfügbar und erfordert eine Proof-of-Humanity/KYC-Überprüfung.
+- **Regulierung.** Die Regeln unterscheiden sich je nach Land und können sich ändern. Derzeit gibt es keinen öffentlichen PPL-Sale; es werden keine KYC-Prüfungen durchgeführt.
 - **Führe deine eigene Recherche durch.** Dieses Litepaper ist Information, keine Finanz-, Rechts- oder Steuerberatung.
 
 ---
@@ -191,7 +191,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 | Wer erhält Gebühren | Validatoren erhalten die Prioritäts­gebühr (Trinkgeld) ¹ | Validatoren erhalten 50% der Basis­gebühr und 100% der Prioritäts­gebühr ² | **Validatoren 30 · Community 25 · Treasury 20 · Liquidität 10 · Growth 15** |
 | Frühe Finanzierung | Öffentliche Ether-Sale, 2014 (42 Tage, zahlbar in BTC) ³ | $20M Series A unter Führung von Multicoin Capital (2019); Investoren erhielten SOL-Token ⁴ | **Self-finanziert. Keine VCs, keine Investor-Zuteilung** |
 | Konto­erstellung | Einen Account zu erstellen kostet nichts; keine Identitäts­überprüfung ⁵ | Keine Protokoll-Anforderung | **Belohnungen nur für verifizierte Menschen** |
-| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **10% jedes gestarteten Tokens** |
+| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **27% jedes gestarteten Tokens** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -211,3 +211,14 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### Was sich in v1.0 geändert hat
+
+- Der Community-Anteil eines neuen Tokens beträgt **27 %** des Angebots: **10 %** bei der Einführung zugeteilt plus **~16,7 %**, die bei der Migration aus der Kurve entnommen werden.
+- Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
+- Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
+- **Derzeit gibt es keinen öffentlichen PPL-Sale**, und es werden keine KYC- oder Teilnahmeberechtigungsprüfungen durchgeführt.
+- Sicherheit: jetzt eine **interne, KI-gestützte Prüfung** und ein **unabhängiges Audit vor dem Mainnet**.
+- Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.

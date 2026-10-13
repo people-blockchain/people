@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Luncurkan token untuk komunitas Anda."
     ],
-    "headlineAccent": "10% untuk orang Anda, bukan untuk paus.",
+    "headlineAccent": "27% untuk orang Anda, bukan untuk paus.",
     "headlineAccentLines": [
-      "10% untuk orang Anda,",
+      "27% untuk orang Anda,",
       "bukan untuk paus."
     ],
     "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik dan coba di testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "10% untuk orang Anda",
-        "sub": "Setiap token baru mengirim 10% pasokannya ke pool komunitasnya sendiri."
+        "label": "27% untuk orang Anda",
+        "sub": "Setiap token baru mengirim 27% pasokannya ke pool komunitasnya sendiri."
       }
     ],
-    "shareBadge": "10% bagian komunitas",
+    "shareBadge": "27% bagian komunitas",
     "peopleLine": "Orang Anda, bukan paus"
   },
   "community": {
-    "eyebrow": "10% untuk komunitas",
-    "title": "10% dari setiap token baru untuk orang Anda",
-    "lead": "Ini tertanam di protokol, bukan dijanjikan di sebuah post: setiap peluncuran standar mengirim 10% pasokannya ke pool komunitas milik token itu sendiri. Ini tidak pernah tercampur dengan biaya jaringan.",
+    "eyebrow": "27% untuk komunitas",
+    "title": "27% dari setiap token baru untuk orang Anda",
+    "lead": "Ini tertanam di protokol, bukan dijanjikan di sebuah post: setiap peluncuran standar mengirim 27% pasokannya ke pool komunitas milik token itu sendiri. Ini tidak pernah tercampur dengan biaya jaringan.",
     "statLabel": "dari pasokan setiap token baru masuk ke pool komunitasnya",
     "statNote": "Pool ini milik orang-orang yang berpartisipasi di token itu — bukan milik jaringan dan bukan milik pencipta.",
     "footnote": "Biaya jaringan dibagi secara terpisah: {{community}}% ke pool komunitas, {{validators}}% ke validator.",
@@ -90,7 +90,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10%",
+        "stat": "27%",
         "title": "dari setiap token baru masuk ke pool komunitas token itu",
         "body": "Bukan ke jaringan, bukan ke pencipta. Pool milik token itu sendiri, dibagi dengan orang-orang yang berpartisipasi."
       },

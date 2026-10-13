@@ -78,7 +78,7 @@ Two multisig-shaped things already exist on People and must not be confused:
 | --- | --- | --- | --- |
 | `TreasuryMultisigAddress` (`people1e9y…`, 2-of-3) | Native Cosmos multisig | Treasury (20%) + liquidity (10%) PPL fee shares, credited every block by `peoplefees` | M11-2 custody (implemented) |
 | `PeopleMultisig.sol` (`0x8e6a…`, 2-of-3) | EVM contract | `Ownable.owner()` of `CommunityTokenVault` / `BondingCurveMarket` | Submit/confirm/execute vault calls |
-| Sale "3-of-5 Safe" (per `/tokenomics`) | Gnosis Safe, external chains (BNB/Base/Ethereum/Polygon) | Public-sale stablecoin proceeds | Sale proceeds, LP open, vesting controllers |
+| Sale multisigs (2-of-3 per `/tokenomics`): Safe (EVM), Squads (Solana), TON multisig wallet, Tron multi-sig permissions | External-chain multisigs | Public-sale stablecoin proceeds | Sale proceeds, LP open, vesting controllers |
 
 Because this is a cosmos-evm chain, `TreasuryMultisigAddress` has a 1:1-mapped `0x…` EVM address
 controlled by the same signer set, so it can submit ordinary EVM transactions (an ERC-20

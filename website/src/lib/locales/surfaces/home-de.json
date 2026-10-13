@@ -7,9 +7,9 @@
       "für Ihre",
       "Community."
     ],
-    "headlineAccent": "10 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccent": "27 % gehen an Ihre Leute, nicht an Wale.",
     "headlineAccentLines": [
-      "10 % gehen an Ihre Leute,",
+      "27 % gehen an Ihre Leute,",
       "nicht an Wale."
     ],
     "sub": "People's Blockchain ist der Ort, an dem Creator Tokens mit fairer Preisfindung ab Block eins starten – und die Community einen festen Anteil an allem erhält, was sie mitwachsen lässt.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10 % in den Community-Pool",
+        "label": "27 % in den Community-Pool",
         "sub": "In jedem neuen Token eingebaut"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Für die Community",
-      "body": "10 % jedes neuen Tokens gehen in den Community-Pool dieses Tokens. Ein Teil jeder Netzwerkgebühr fließt ebenfalls dorthin. Wer mitmacht, bekommt Anteil an dem, was entsteht."
+      "body": "27 % jedes neuen Tokens gehen in den Community-Pool dieses Tokens. Ein Teil jeder Netzwerkgebühr fließt ebenfalls dorthin. Wer mitmacht, bekommt Anteil an dem, was entsteht."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Das ist Teilnahme an einem Netzwerk, keine Anlage.",
   "visuals": {
     "supply": "Token-Menge",
-    "share": "10 %",
+    "share": "27 %",
     "toPool": "gehen in den Community-Pool",
     "pool": "Community-Pool",
     "poolNote": "geteilt unter allen, die mitmachen",
-    "aria": "10 % jedes neuen Tokens fließen in seinen Community-Pool und werden unter allen geteilt, die mitmachen.",
+    "aria": "27 % jedes neuen Tokens fließen in seinen Community-Pool und werden unter allen geteilt, die mitmachen.",
     "prompt": "Ein Token, dessen Halter über die Ausgaben der Kasse abstimmen",
     "step1": "Sie schreiben",
     "step2": "Wir bauen",

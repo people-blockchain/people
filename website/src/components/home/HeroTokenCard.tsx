@@ -1,12 +1,13 @@
 import type { HomeWarmCopy } from "@/lib/home-warm-content";
 import { PeopleWordmark, PersonAvatar } from "@/components/warm/warm-ui";
+import { TOKEN_COMMUNITY_SHARE_PCT } from "@/lib/selling-economics";
 
 type HeroCopy = HomeWarmCopy["hero"];
 
 /**
  * Hero visual: a single premium token card in the /founders gradient-card
  * language (name, ticker, an example price on the bonding curve, the real
- * 10%-to-community split and a few member avatars) instead of a looping
+ * community-share split and a few member avatars) instead of a looping
  * phone mock. Static markup only — the one animated loop is the existing
  * `founders-card-sheen` sweep, which already no-ops under reduced motion.
  */
@@ -57,11 +58,11 @@ export function HeroTokenCard({ t }: { t: HeroCopy }) {
           <div className="flex items-center gap-4">
             <span
               className="grid h-16 w-16 shrink-0 place-items-center rounded-full"
-              style={{ background: "conic-gradient(#fde68a 0% 10%, rgba(255,255,255,0.22) 10% 100%)" }}
+              style={{ background: `conic-gradient(#fde68a 0% ${TOKEN_COMMUNITY_SHARE_PCT}%, rgba(255,255,255,0.22) ${TOKEN_COMMUNITY_SHARE_PCT}% 100%)` }}
               aria-hidden="true"
             >
               <span className="grid h-12 w-12 place-items-center rounded-full bg-[#0b1220]/55 text-sm font-bold">
-                10%
+                {TOKEN_COMMUNITY_SHARE_PCT}%
               </span>
             </span>
             <div className="min-w-0">

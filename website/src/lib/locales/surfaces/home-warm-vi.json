@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Ra mắt token cho cộng đồng của bạn."
     ],
-    "headlineAccent": "10% về người của bạn, không về cá voi.",
+    "headlineAccent": "27% về người của bạn, không về cá voi.",
     "headlineAccentLines": [
-      "10% về người của bạn,",
+      "27% về người của bạn,",
       "không về cá voi."
     ],
     "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây và thử trên testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "10% về người của bạn",
-        "sub": "Mỗi token mới gửi 10% lượng cung của nó vào pool cộng đồng riêng."
+        "label": "27% về người của bạn",
+        "sub": "Mỗi token mới gửi 27% lượng cung của nó vào pool cộng đồng riêng."
       }
     ],
-    "shareBadge": "10% chia cho cộng đồng",
+    "shareBadge": "27% chia cho cộng đồng",
     "peopleLine": "Người của bạn, không phải cá voi"
   },
   "community": {
-    "eyebrow": "10% cho cộng đồng",
-    "title": "10% mỗi token mới thuộc về người của bạn",
-    "lead": "Điều này được gắn sẵn trong protocol, không phải lời hứa trong một bài đăng: mỗi lần ra mắt chuẩn đều gửi 10% lượng cung vào pool cộng đồng riêng của token đó. Nó không bao giờ bị trộn với phí mạng.",
+    "eyebrow": "27% cho cộng đồng",
+    "title": "27% mỗi token mới thuộc về người của bạn",
+    "lead": "Điều này được gắn sẵn trong protocol, không phải lời hứa trong một bài đăng: mỗi lần ra mắt chuẩn đều gửi 27% lượng cung vào pool cộng đồng riêng của token đó. Nó không bao giờ bị trộn với phí mạng.",
     "statLabel": "lượng cung của mỗi token mới vào pool cộng đồng của nó",
     "statNote": "Pool thuộc về những người tham gia vào token đó — không thuộc về mạng, không thuộc về người tạo.",
     "footnote": "Phí mạng được chia riêng: {{community}}% vào pool cộng đồng, {{validators}}% cho validator.",
@@ -90,7 +90,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10%",
+        "stat": "27%",
         "title": "mỗi token mới vào pool cộng đồng của token đó",
         "body": "Không về mạng, không về người tạo. Pool riêng của token, chia cho những người tham gia."
       },

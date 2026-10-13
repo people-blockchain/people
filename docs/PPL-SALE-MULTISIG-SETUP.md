@@ -4,13 +4,14 @@
 
 ## Multisig wallets to create
 
-Use the same **3-of-5 Safe policy** as other sale treasuries (published signer set). Create **receive-only** multisig addresses on:
+Use the same **2-of-3 threshold** as the treasury multisig (three separately held keys, addressed published when created). Create **receive-only** multisig addresses on:
 
-| Network | Asset | Recommended wallet |
-| --- | --- | --- |
-| **Tron** | USDT (TRC-20) | Gnosis Safe equivalent or audited Tron multisig (3-of-5) |
-| **TON** | USDT jetton | TON multisig / Tonkeeper multisig (3-of-5 signers) |
-| **Solana** | USDT + USDC (SPL) | Squads or equivalent Solana multisig (3-of-5) |
+| Network | Asset | Tool | Threshold |
+| --- | --- | --- | --- |
+| **Tron** | USDT (TRC-20) | Tron account **multi-sig permissions** (owner/active permission with 3 keys) | 2-of-3 |
+| **TON** | USDT jetton | **TON multisig wallet** (e.g. Tonkeeper / TON multisig) | 2-of-3 |
+| **Solana** | USDT + USDC (SPL) | **Squads** | 2-of-3 |
+| **EVM** (BNB Chain, Base, Ethereum, Polygon) | USDT/USDC | **Safe** | 2-of-3 |
 
 EVM chains (**BNB Chain, Base, Ethereum, Polygon**) use the `PeopleCommunitySale` contract; stablecoins flow to the **EVM Safe treasury** configured at deploy time (`SALE_TREASURY`), not the transfer receivers below.
 

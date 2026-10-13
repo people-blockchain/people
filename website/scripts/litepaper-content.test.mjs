@@ -15,7 +15,7 @@ test("/litepaper is a registered site route", () => {
 
 test("en.md parses frontmatter, hero, headings and tables", () => {
   const { frontmatter, blocks } = parseMarkdown(en);
-  assert.equal(frontmatter.status, "preliminary");
+  assert.equal(frontmatter.status, "public-draft");
   assert.ok(frontmatter.title.length > 0);
 
   const h1 = blocks.find((b) => b.type === "heading" && b.level === 1);

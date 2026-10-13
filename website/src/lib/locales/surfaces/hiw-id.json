@@ -20,8 +20,8 @@
           "text": "Beli jual di kurva peluncuran, lalu di pool token/PPL."
         },
         {
-          "title": "10% ke komunitas",
-          "text": "Setiap token standar mengirim 10% suplai ke pool komunitas token itu."
+          "title": "27% ke komunitas",
+          "text": "Setiap token standar mengirim 27% suplai ke pool komunitas token itu."
         },
         {
           "title": "Vesting kreator",
@@ -91,7 +91,7 @@
         }
       ],
       "communityPoolExample": "Pool komunitas dibagi di antara peserta aktif sesuai poin partisipasi. Contoh: pool 600 token, tiga orang dengan poin 1, 2, dan 3 mendapat 100, 200, dan 300.",
-      "tokenPoolNote": "Terpisah, 10% komunitas setiap token tetap di pool token itu. Tidak dicampur dengan biaya PPL.",
+      "tokenPoolNote": "Terpisah, 27% komunitas setiap token tetap di pool token itu. Tidak dicampur dengan biaya PPL.",
       "buybackNote": "Porsi treasury dan likuiditas (total 30%) mendanai buyback PPL publik di pasar terbuka, dijalankan oleh multisig yang dipublikasikan dan terlihat di explorer.",
       "launchFeeNote": "Meluncurkan token atau NFT memerlukan biaya protokol, dapat dibayar dengan PPL atau stablecoin yang didukung (USDC/USDT) — sesuai pilihan Anda. Gas selalu dibayar dengan PPL."
     },

@@ -7,9 +7,9 @@
       "pour votre",
       "communauté."
     ],
-    "headlineAccent": "10 % vont à vos gens, pas aux baleines.",
+    "headlineAccent": "27 % vont à vos gens, pas aux baleines.",
     "headlineAccentLines": [
-      "10 % vont à vos gens,",
+      "27 % vont à vos gens,",
       "pas aux baleines."
     ],
     "sub": "People's Blockchain, c'est là où les créateurs lancent des tokens à prix équitable dès le premier bloc, et la communauté reçoit une part de tout ce qu'elle aide à faire grandir.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10 % au pool communautaire",
+        "label": "27 % au pool communautaire",
         "sub": "Intégré à chaque nouveau token"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Pour la communauté",
-      "body": "10 % de chaque nouveau token va dans le pool communautaire de ce token. Une part de chaque frais réseau y va aussi. Ceux qui participent ont une part de ce qu'ils construisent."
+      "body": "27 % de chaque nouveau token va dans le pool communautaire de ce token. Une part de chaque frais réseau y va aussi. Ceux qui participent ont une part de ce qu'ils construisent."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "C'est une participation à un réseau, pas un investissement.",
   "visuals": {
     "supply": "Offre du jeton",
-    "share": "10 %",
+    "share": "27 %",
     "toPool": "vont au fonds de la communauté",
     "pool": "Fonds de la communauté",
     "poolNote": "partagé entre ceux qui participent",
-    "aria": "10 % de l'offre de chaque nouveau jeton vont à son fonds de la communauté, partagé entre ceux qui participent.",
+    "aria": "27 % de l'offre de chaque nouveau jeton vont à son fonds de la communauté, partagé entre ceux qui participent.",
     "prompt": "Un jeton dont les détenteurs votent l'usage de la trésorerie",
     "step1": "Vous écrivez",
     "step2": "Nous construisons",

@@ -7,9 +7,9 @@
       "para a sua",
       "comunidade."
     ],
-    "headlineAccent": "10% vão para a sua gente, não para baleias.",
+    "headlineAccent": "27% vão para a sua gente, não para baleias.",
     "headlineAccentLines": [
-      "10% vão para a sua gente,",
+      "27% vão para a sua gente,",
       "não para baleias."
     ],
     "sub": "People's Blockchain é onde criadores lançam tokens com preço justo desde o primeiro bloco, e a comunidade recebe uma fatia de tudo o que ajuda a crescer.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10% para o pool da comunidade",
+        "label": "27% para o pool da comunidade",
         "sub": "Integrado em cada token novo"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Para a comunidade",
-      "body": "10% de cada token novo vai para o pool comunitário desse token. Uma parte de cada taxa de rede também vai para lá. Quem participa ganha uma fatia do que constrói."
+      "body": "27% de cada token novo vai para o pool comunitário desse token. Uma parte de cada taxa de rede também vai para lá. Quem participa ganha uma fatia do que constrói."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Isto é participação numa rede, não um investimento.",
   "visuals": {
     "supply": "Oferta do token",
-    "share": "10%",
+    "share": "27%",
     "toPool": "vão para o fundo da comunidade",
     "pool": "Fundo da comunidade",
     "poolNote": "dividido entre quem participa",
-    "aria": "10% da oferta de cada novo token vão para o fundo da comunidade dele, dividido entre quem participa.",
+    "aria": "27% da oferta de cada novo token vão para o fundo da comunidade dele, dividido entre quem participa.",
     "prompt": "Um token em que os detentores votam como gastar a tesouraria",
     "step1": "Você escreve",
     "step2": "Nós montamos",

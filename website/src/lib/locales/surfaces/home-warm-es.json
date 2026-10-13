@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Lanza un token para tu comunidad."
     ],
-    "headlineAccent": "El 10% va a tu gente, no a las ballenas.",
+    "headlineAccent": "El 27% va a tu gente, no a las ballenas.",
     "headlineAccentLines": [
-      "El 10% va a tu gente,",
+      "El 27% va a tu gente,",
       "no a las ballenas."
     ],
     "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos y pruébalo en el testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "10% para tu gente",
-        "sub": "Cada token nuevo envía el 10% de su suministro a su propio pool de la comunidad."
+        "label": "27% para tu gente",
+        "sub": "Cada token nuevo envía el 27% de su suministro a su propio pool de la comunidad."
       }
     ],
-    "shareBadge": "10% para la comunidad",
+    "shareBadge": "27% para la comunidad",
     "peopleLine": "Tu gente, no las ballenas"
   },
   "community": {
-    "eyebrow": "10% para la comunidad",
-    "title": "El 10% de cada token nuevo va a tu gente",
-    "lead": "Está integrado en el protocolo, no prometido en una publicación: cada lanzamiento estándar envía el 10% de su suministro al pool de la comunidad de ese token. Nunca se mezcla con las comisiones de la red.",
+    "eyebrow": "27% para la comunidad",
+    "title": "El 27% de cada token nuevo va a tu gente",
+    "lead": "Está integrado en el protocolo, no prometido en una publicación: cada lanzamiento estándar envía el 27% de su suministro al pool de la comunidad de ese token. Nunca se mezcla con las comisiones de la red.",
     "statLabel": "del suministro de cada token nuevo va a su pool de la comunidad",
     "statNote": "El pool pertenece a las personas que participan en ese token — no a la red ni al creador.",
     "footnote": "Las comisiones de la red se reparten por separado: {{community}}% al pool de la comunidad, {{validators}}% a los validadores.",
@@ -90,7 +90,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10%",
+        "stat": "27%",
         "title": "de cada token nuevo va al pool de la comunidad de ese token",
         "body": "No a la red, no al creador. El pool propio del token, compartido con las personas que participan."
       },

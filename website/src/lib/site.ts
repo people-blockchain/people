@@ -54,22 +54,22 @@ export const SITE_TITLE = homeTitle(NETWORK_NAME_EN);
 
 /** Meta description used by the root layout. */
 export const SITE_DESCRIPTION =
-  "People — the blockchain for communities. Launch a token for your community: 10% of its supply goes to your people, not to whales. Public testnet, fees in PPL.";
+  "People — the blockchain for communities. Launch a token for your community: 27% of its supply goes to your people, not to whales. Public testnet, fees in PPL.";
 
 /** Open Graph / Twitter title shared by routes that do not override it. */
 export const SITE_OG_TITLE = SITE_TITLE;
 
 /** Open Graph / Twitter description shared by routes that do not override it. */
 export const SITE_OG_DESCRIPTION =
-  "Launch a token for your community on People. 10% of every new token goes to the community pool, not to whales.";
+  "Launch a token for your community on People. 27% of every new token goes to the community pool, not to whales.";
 
 /** Russian locale metadata equivalents — localized title leads. */
 export const SITE_TITLE_RU = homeTitle(NETWORK_NAME_BY_LANG.ru);
 export const SITE_DESCRIPTION_RU =
-  "People — блокчейн для сообществ. Запустите токен для своего сообщества: 10% выпуска получают ваши люди, а не киты. Публичная тестовая сеть, комиссии в PPL.";
+  "People — блокчейн для сообществ. Запустите токен для своего сообщества: 27% выпуска получают ваши люди, а не киты. Публичная тестовая сеть, комиссии в PPL.";
 export const SITE_OG_TITLE_RU = SITE_TITLE_RU;
 export const SITE_OG_DESCRIPTION_RU =
-  "Запустите токен для своего сообщества в People. 10% каждого нового токена идёт в пул сообщества, а не китам.";
+  "Запустите токен для своего сообщества в People. 27% каждого нового токена идёт в пул сообщества, а не китам.";
 
 export type DocumentTitlesLocale = {
   home: string;

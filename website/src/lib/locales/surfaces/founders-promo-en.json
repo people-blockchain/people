@@ -95,8 +95,6 @@
   "signupZero": "Sign-up alone = 0",
   "bonusTitle": "Bonus points from your active friends",
   "bonusStay": "+{{pts}} · still active after {{days}} days",
-  "bonusSale": "+{{pts}} · buys PPL in the official sale",
-  "bonusAirdrop": "+{{pts}} · joins another project's airdrop",
   "buildEyebrow": "No code needed",
   "buildTitle": "What your friends can build",
   "build": [

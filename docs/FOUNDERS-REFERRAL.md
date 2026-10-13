@@ -32,13 +32,13 @@ Registration alone = 0. The legacy flat `invite` (300 pts) action is retired and
 
 Only two levels. L2 beneficiary = the inviter's inviter, if verified and not a bot.
 
-Extra L1 points (L2 gets 30% of each), once per invitee per kind. **Defaults are proposals** — `TBD` founder approval:
+Extra L1 points (L2 gets 30% of each), once per invitee per kind. Points are earned only for the **real actions of verified invitees** — buying PPL in a sale and joining another project's airdrop are **not** rewarded. **Defaults are proposals** — `TBD` founder approval:
 
 | Kind | Points | Trigger |
 | --- | --- | --- |
 | `stay_7d` | 10 | Invitee has a real action ≥ 7 days after activation (settled lazily on action and on the inviter's page load) |
-| `sale_buy` | 20 | Invitee's official-sale order is delivered (`finalizeDeliveredOrder`) or trusted event |
-| `airdrop_join` | 10 | Trusted event (`POST /api/founders/referral/events`); no project-airdrop indexer exists yet |
+
+The retired `sale_buy` (20) and `airdrop_join` (10) kinds are gone from `REFERRAL_EXTRA_POINTS`; `POST /api/founders/referral/events` now accepts only `issuer_purchase` and answers `invalid_kind` for anything else.
 
 ## Limits
 

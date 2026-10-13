@@ -20,8 +20,8 @@
           "text": "Achetez et vendez sur la courbe de lancement, puis dans le pool token/PPL."
         },
         {
-          "title": "10% à la communauté",
-          "text": "Chaque token standard envoie 10% de son offre à son pool communautaire."
+          "title": "27 % à la communauté",
+          "text": "Chaque token standard envoie 27 % de son offre à son pool communautaire."
         },
         {
           "title": "Vesting créateur",
@@ -91,7 +91,7 @@
         }
       ],
       "communityPoolExample": "Le pool communautaire est partagé entre participants actifs selon leurs points. Exemple : 600 tokens dans le pool, trois personnes avec 1, 2 et 3 points reçoivent 100, 200 et 300.",
-      "tokenPoolNote": "Séparément, les 10% communautaires de chaque token restent dans le pool de ce token. Jamais mélangés aux frais PPL.",
+      "tokenPoolNote": "Séparément, les 27% communautaires de chaque token restent dans le pool de ce token. Jamais mélangés aux frais PPL.",
       "buybackNote": "Les parts trésorerie et liquidité (30 % au total) financent des rachats publics de PPL sur le marché ouvert, exécutés par le multisig publié et visibles dans l'explorer.",
       "launchFeeNote": "Lancer un jeton ou un NFT coûte des frais de protocole, payables en PPL ou dans un stablecoin pris en charge (USDC/USDT), à votre choix. Le gaz est toujours payé en PPL."
     },

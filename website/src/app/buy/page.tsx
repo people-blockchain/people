@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { SiteChrome } from "@/components/SiteChrome";
-import { PplSaleCheckout } from "@/components/sale/PplSaleCheckout";
-import { Eyebrow, Chip } from "@/components/ui/primitives";
+import { SaleNotOpenNotice } from "@/components/sale/SaleNotOpenNotice";
+import { Eyebrow } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
-  title: "Buy PPL",
+  title: "PPL sale",
   description:
-    "Community sale checkout — BNB Chain, Base, Ethereum, Polygon, Tron, TON and Solana.",
+    "The public PPL sale is not open. No prices are published, there is no payment widget and no KYC flow runs on this site.",
 };
 
 export default function BuyPplPage() {
@@ -14,10 +14,9 @@ export default function BuyPplPage() {
     <SiteChrome>
       <article className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <Eyebrow tone="value">Buy</Eyebrow>
-          <Chip tone="value">Testnet</Chip>
+          <Eyebrow tone="value">PPL</Eyebrow>
         </div>
-        <PplSaleCheckout />
+        <SaleNotOpenNotice />
       </article>
     </SiteChrome>
   );

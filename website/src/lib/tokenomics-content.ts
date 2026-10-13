@@ -41,14 +41,8 @@ export type TokenomicsCopy = {
   curveLead: string;
   unsoldTitle: string;
   unsoldBody: string;
-  raiseTitle: string;
-  raiseLead: string;
-  raiseRows: { label: string; pct: string; detail: string }[];
-  safeNote: string;
-  purchaseTitle: string;
-  purchaseCols: { sold: string; price: string; tranche: string; cumulative: string };
-  restrictionsTitle: string;
-  restrictionsBody: string;
+  saleClosedTitle: string;
+  saleClosedBody: string;
   feeTitle: string;
   feeLead: string;
   feeNote: string;
@@ -111,44 +105,22 @@ const en: TokenomicsCopy = {
   monthAxis: "Months after genesis",
   saleTitle: "Community sale",
   saleLead:
-    "Up to 100M PPL from the sale bucket are offered on a public bonding curve after the founders airdrop, once at least 1,000 verified people are on the network and a multisig is live. Unsold tokens return to the community fund.",
-  salePayTitle: "How you pay",
+    "Up to 100M PPL from the sale bucket are reserved for a public bonding curve after the founders airdrop. The sale stays closed until an operating entity for the sale exists.",
+  salePayTitle: "How you would pay",
   salePayBody:
-    "Stablecoins on BNB Chain, Base, Ethereum and Polygon go through the on-chain sale contract. Tron (USDT TRC-20), TON (USDT jetton) and Solana (USDT/USDC SPL) use a transfer to the project multisig with a unique amount and your People address for matching.",
+    "Stablecoins on BNB Chain, Base, Ethereum and Polygon would go through the on-chain sale contract. Tron (USDT TRC-20), TON (USDT jetton) and Solana (USDT/USDC SPL) receive transfers at a per-chain multisig — Safe on the EVM chains, Squads on Solana, the TON multisig wallet on TON and Tron account multi-sig permissions on Tron. Each of them is a 2-of-3 multisig with published signer addresses.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
     "Native PPL is credited to the same 0x address on the People network at genesis, following the vesting schedule above.",
   curveTitle: "Bonding curve",
   curveLead:
-    "Linear price from 0.01 to 0.05 USDT across 100M PPL over 30 days — about 3M USDT if fully sold.",
+    "The launch price comes from the curve's virtual reserve, not from a private round: the contract computes every trade and the whole curve runs on-chain and in public.",
   unsoldTitle: "Unsold tokens",
-  unsoldBody: "Any PPL not purchased on the curve is added to the community and rewards fund.",
-  raiseTitle: "Raised funds (USDT/USDC)",
-  raiseLead: "Stablecoins from the sale are routed through a 2-of-3 treasury multisig with published signer addresses.",
-  raiseRows: [
-    {
-      label: "Liquidity pool",
-      pct: "25%",
-      detail: "Opens at the final curve price when the sale ends.",
-    },
-    {
-      label: "Team operating budget",
-      pct: "25%",
-      detail: "Ads, servers, legal, audit — public monthly report.",
-    },
-    { label: "DAO treasury", pct: "50%", detail: "Community-controlled via governance votes." },
-  ],
-  safeNote: "All sale proceeds and vesting controllers use the same public 2-of-3 treasury multisig policy.",
-  purchaseTitle: "Public purchase reference",
-  purchaseCols: {
-    sold: "% of curve sold",
-    price: "Spot price (USDT)",
-    tranche: "Tranche size (PPL)",
-    cumulative: "Cumulative raise (USDT)",
-  },
-  restrictionsTitle: "Eligibility",
-  restrictionsBody:
-    "The sale is not available to US residents. Buyers complete a proof-of-humanity / KYC check before participating. The public sale opens only after the founders airdrop, 1,000 verified people, and multisig controls are in place.",
+  unsoldBody:
+    "Any PPL not purchased on the curve goes to PPL's own community pool — the 35% community & rewards bucket — not to the treasury and not burned. The same rule applies to every token launched on People: unsold curve inventory goes to that token's own community pool, so about 27% of a standard launch ends up with its community (the 10% community pool plus ~16.7% of supply swept from the curve at migration).",
+  saleClosedTitle: "Sale is not open yet",
+  saleClosedBody:
+    "There is no public PPL sale right now. No prices are published, the payment widget is switched off and no KYC flow runs on this site.",
   emissionTitle: "Emission and validator rewards",
   emissionLead:
     "Security rewards come from the pre-allocated validator pool and network fees — not from minting new supply in years 1–4.",
@@ -166,7 +138,7 @@ const en: TokenomicsCopy = {
   feeNote: FEE_SPLIT_PLAIN.en,
   buybackTitle: "Buybacks",
   buybackBody:
-    "Preliminary: the treasury and liquidity shares of every protocol fee (20% + 10% = 30%) are earmarked to buy PPL back from the open market. Buybacks run on a published cadence through the 2-of-3 treasury multisig, and every purchase is visible in the explorer — no off-chain discretion.",
+    "The treasury and liquidity shares of every protocol fee (20% + 10% = 30%) are earmarked to buy PPL back from the open market. The StableFeeGateway contract is implemented and deployed on the testnet: 100% of a stablecoin launch fee goes to the public buyback recipient. The bought-back PPL is then split 30/25/20/10/15 by the 2-of-3 treasury multisig — that split is a published multisig policy, not a rule enforced on-chain.",
   contractsTitle: "Contract addresses",
   contractsLead: "On-chain addresses are published when mainnet launches — not placeholders on this page.",
   contractRows: [
@@ -234,44 +206,22 @@ const ru: TokenomicsCopy = {
   monthAxis: "Месяцы после genesis",
   saleTitle: "Продажа сообществу",
   saleLead:
-    "До 100M PPL из корзины продажи предлагаются по публичной bonding curve после airdrop основателям, когда в сети не менее 1 000 verified people и работает мультисиг. Непроданные токены возвращаются в фонд сообщества.",
-  salePayTitle: "Как платить",
+    "До 100M PPL из корзины продажи зарезервированы под публичную bonding curve после airdrop основателям. Продажа остаётся закрытой, пока не появится юрлицо-оператор продажи.",
+  salePayTitle: "Как вы будете платить",
   salePayBody:
-    "Стейблкоины в BNB Chain, Base, Ethereum и Polygon — через on-chain контракт продажи. Tron (USDT TRC-20), TON (jetton USDT) и Solana (USDT/USDC SPL) — перевод на мультисиг проекта с уникальной суммой и адресом People для сопоставления.",
+    "Стейблкоины в BNB Chain, Base, Ethereum и Polygon пойдут через on-chain контракт продажи. Tron (USDT TRC-20), TON (jetton USDT) и Solana (USDT/USDC SPL) — переводы на мультисиг соответствующей сети: Safe в EVM-сетях, Squads в Solana, мультисиг-кошелёк TON в TON и multi-sig permissions аккаунта Tron в Tron. Каждый из них — мультисиг 2-из-3 с публичными адресами подписантов.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
     "Нативные PPL зачисляются на тот же адрес 0x в сети People при genesis по графику vesting выше.",
   curveTitle: "Bonding curve",
   curveLead:
-    "Линейная цена от 0,01 до 0,05 USDT на 100M PPL за 30 дней — около 3M USDT при полной распродаже.",
+    "Стартовая цена задаётся виртуальным резервом кривой, а не частным раундом: каждый обмен считает контракт, вся кривая работает on-chain и публично.",
   unsoldTitle: "Непроданные токены",
-  unsoldBody: "Любые PPL, не купленные на кривой, добавляются в фонд сообщества и наград.",
-  raiseTitle: "Собранные средства (USDT/USDC)",
-  raiseLead: "Стейблкоины с продажи проходят через мультисиг казны 2-из-3 с публичными адресами подписантов.",
-  raiseRows: [
-    {
-      label: "Пул ликвидности",
-      pct: "25%",
-      detail: "Открывается по финальной цене кривой при закрытии продажи.",
-    },
-    {
-      label: "Операционный бюджет команды",
-      pct: "25%",
-      detail: "Реклама, серверы, юристы, аудит — публичный ежемесячный отчёт.",
-    },
-    { label: "Казна DAO", pct: "50%", detail: "Под контролем сообщества через голосования." },
-  ],
-  safeNote: "Все поступления с продажи и контроллеры vesting используют одну публичную политику мультисига казны (2-из-3).",
-  purchaseTitle: "Справочная таблица покупки",
-  purchaseCols: {
-    sold: "% продано на кривой",
-    price: "Спот-цена (USDT)",
-    tranche: "Транш (PPL)",
-    cumulative: "Суммарный сбор (USDT)",
-  },
-  restrictionsTitle: "Кто может участвовать",
-  restrictionsBody:
-    "Продажа недоступна резидентам США. Перед участием проходят проверку proof-of-humanity / KYC. Публичная продажа открывается только после airdrop основателям, 1 000 verified people и запуска мультисига.",
+  unsoldBody:
+    "Любые PPL, не купленные на кривой, идут в собственный пул сообщества PPL — корзину сообщества и наград 35% — не в казну и не сжигаются. То же правило действует для каждого токена, запущенного в People: нераспроданный остаток кривой уходит в собственный пул сообщества этого токена, поэтому около 27% стандартного запуска достаётся его сообществу (10% пула сообщества плюс ~16,7% остатка кривой при миграции).",
+  saleClosedTitle: "Продажа пока не открыта",
+  saleClosedBody:
+    "Публичной продажи PPL сейчас нет. Цены не публикуются, платёжный виджет отключён, KYC на этом сайте не проводится.",
   emissionTitle: "Эмиссия и награды валидаторам",
   emissionLead:
     "Награды за безопасность сеть получает из пула валидаторов и комиссий — без дополнительного выпуска в годы 1–4.",
@@ -289,7 +239,7 @@ const ru: TokenomicsCopy = {
   feeNote: FEE_SPLIT_PLAIN.ru,
   buybackTitle: "Байбэк",
   buybackBody:
-    "Предварительно: доли казны и ликвидности из каждой протокольной комиссии (20% + 10% = 30%) закладываются на выкуп PPL с открытого рынка. Байбэк проходит по опубликованному графику через мультисиг казны (2-из-3), каждая покупка видна в проводнике (explorer) — без закрытых решений.",
+    "Доли казны и ликвидности из каждой протокольной комиссии (20% + 10% = 30%) закладываются на выкуп PPL с открытого рынка. Контракт StableFeeGateway реализован и развёрнут в тестнете: 100% комиссии в стейблкоине идёт получателю публичного байбэка. Выкупленный PPL затем делится 30/25/20/10/15 мультисигом казны 2-из-3 — это опубликованная политика мультисига, а не правило, зашитое в контракт.",
   contractsTitle: "Адреса контрактов",
   contractsLead: "On-chain адреса публикуются при запуске mainnet — на этой странице нет подставных значений.",
   contractRows: [
