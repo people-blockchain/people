@@ -1,6 +1,13 @@
 "use client";
 
-import { createPublicClient, createWalletClient, custom, http, type Chain, type Hex } from "viem";
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  http,
+  type Chain,
+  type Hex,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
 import { readEvmRpcUrl } from "@/lib/evm/config";
@@ -42,32 +49,45 @@ export function normalizePrivateKey(privateKey: string): Hex {
 export function createEmbeddedWalletClient(privateKey: string) {
   const chain = peopleViemChain(browserEvmRpcUrl());
   const account = privateKeyToAccount(normalizePrivateKey(privateKey));
-  return createWalletClient({ chain, transport: http(browserEvmRpcUrl()), account });
+  return createWalletClient({
+    chain,
+    transport: http(browserEvmRpcUrl()),
+    account,
+  });
 }
 
 export function createInjectedWalletClient(provider: EIP1193Provider) {
   const chain = peopleViemChain(browserEvmRpcUrl());
-  return createWalletClient({ chain, transport: custom(provider), account: undefined as never });
+  return createWalletClient({
+    chain,
+    transport: custom(provider),
+    account: undefined as never,
+  });
 }
 
 export type EIP1193Provider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
   on?: (event: string, handler: (...args: unknown[]) => void) => void;
-  removeListener?: (event: string, handler: (...args: unknown[]) => void) => void;
+  removeListener?: (
+    event: string,
+    handler: (...args: unknown[]) => void,
+  ) => void;
 };
 
 type InjectedWindow = Window & {
   ethereum?: EIP1193Provider & {
     isMetaMask?: boolean;
     isTrust?: boolean;
-    providers?: Array<EIP1193Provider & { isMetaMask?: boolean; isTrust?: boolean }>;
+    providers?: Array<
+      EIP1193Provider & { isMetaMask?: boolean; isTrust?: boolean }
+    >;
   };
 };
 
 export type InjectedWalletVendor = "metamask" | "trust" | "any";
 
 type Eip6963ProviderDetail = {
-  info: { uuid: string; rdns?: string };
+  info: { uuid: string; rdns?: string; name?: string; icon?: string };
   provider: EIP1193Provider;
 };
 
@@ -80,7 +100,8 @@ function listenEip6963(): void {
   eip6963Requested = true;
   window.addEventListener("eip6963:announceProvider", (event) => {
     const detail = (event as CustomEvent<Eip6963ProviderDetail>).detail;
-    if (detail?.provider && detail.info?.uuid) announcedProviders.set(detail.info.uuid, detail);
+    if (detail?.provider && detail.info?.uuid)
+      announcedProviders.set(detail.info.uuid, detail);
   });
   window.dispatchEvent(new Event("eip6963:requestProvider"));
 }
@@ -96,7 +117,9 @@ function eip6963Provider(vendor: InjectedWalletVendor): EIP1193Provider | null {
   return null;
 }
 
-export function readInjectedProvider(vendor: InjectedWalletVendor = "any"): EIP1193Provider | null {
+export function readInjectedProvider(
+  vendor: InjectedWalletVendor = "any",
+): EIP1193Provider | null {
   if (typeof window === "undefined") return null;
   listenEip6963();
   // With several extensions installed, window.ethereum may belong to another wallet (or a
@@ -118,7 +141,10 @@ export function readInjectedProvider(vendor: InjectedWalletVendor = "any"): EIP1
         return providers.find((p) => p.isTrust) ?? (eth.isTrust ? eth : null);
       }
       if (vendor === "metamask") {
-        return providers.find((p) => p.isMetaMask && !p.isTrust) ?? (!eth.isTrust ? eth : null);
+        return (
+          providers.find((p) => p.isMetaMask && !p.isTrust) ??
+          (!eth.isTrust ? eth : null)
+        );
       }
       return eth;
     }
@@ -164,7 +190,10 @@ export function waitForInjectedProvider(
     window.addEventListener("eip6963:announceProvider", onSignal);
     listenEip6963();
     const poll = setInterval(onSignal, 100);
-    const timer = setTimeout(() => finish(readInjectedProvider(vendor)), timeoutMs);
+    const timer = setTimeout(
+      () => finish(readInjectedProvider(vendor)),
+      timeoutMs,
+    );
   });
 }
 
@@ -174,7 +203,9 @@ export function waitForInjectedProvider(
  * treat any switch failure other than a user rejection (4001) as "needs adding" rather than
  * matching 4902 specifically.
  */
-export async function ensurePeopleChain(provider: EIP1193Provider): Promise<void> {
+export async function ensurePeopleChain(
+  provider: EIP1193Provider,
+): Promise<void> {
   const hexId = `0x${PEOPLE_EIP155_CHAIN_ID.toString(16)}`;
   try {
     await provider.request({
@@ -192,7 +223,11 @@ export async function ensurePeopleChain(provider: EIP1193Provider): Promise<void
       {
         chainId: hexId,
         chainName: chain.displayName,
-        nativeCurrency: { name: chain.tickerName, symbol: chain.ticker, decimals: 18 },
+        nativeCurrency: {
+          name: chain.tickerName,
+          symbol: chain.ticker,
+          decimals: 18,
+        },
         rpcUrls: [chain.rpcTarget],
         blockExplorerUrls: [chain.blockExplorerUrl],
       },
@@ -230,7 +265,13 @@ export const routerAbi = [
     ],
     outputs: [{ name: "amounts", type: "uint256[]" }],
   },
-  { type: "function", name: "WETH", stateMutability: "view", inputs: [], outputs: [{ type: "address" }] },
+  {
+    type: "function",
+    name: "WETH",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }],
+  },
 ] as const;
 
 export const factoryAbi = [
@@ -247,18 +288,45 @@ export const factoryAbi = [
     ],
     outputs: [{ type: "address" }],
   },
-  { type: "function", name: "tokenCreateFee", stateMutability: "view", inputs: [], outputs: [{ type: "uint256" }] },
+  {
+    type: "function",
+    name: "tokenCreateFee",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
 ] as const;
 
 export const erc20Abi = [
-  { type: "function", name: "approve", stateMutability: "nonpayable", inputs: [{ type: "address" }, { type: "uint256" }], outputs: [{ type: "bool" }] },
-  { type: "function", name: "balanceOf", stateMutability: "view", inputs: [{ type: "address" }], outputs: [{ type: "uint256" }] },
-  { type: "function", name: "decimals", stateMutability: "view", inputs: [], outputs: [{ type: "uint8" }] },
+  {
+    type: "function",
+    name: "approve",
+    stateMutability: "nonpayable",
+    inputs: [{ type: "address" }, { type: "uint256" }],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "balanceOf",
+    stateMutability: "view",
+    inputs: [{ type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "decimals",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint8" }],
+  },
   {
     type: "function",
     name: "allowance",
     stateMutability: "view",
-    inputs: [{ name: "owner", type: "address" }, { name: "spender", type: "address" }],
+    inputs: [
+      { name: "owner", type: "address" },
+      { name: "spender", type: "address" },
+    ],
     outputs: [{ type: "uint256" }],
   },
 ] as const;
@@ -275,5 +343,75 @@ export const pairAbi = [
       { name: "blockTimestampLast", type: "uint32" },
     ],
   },
-  { type: "function", name: "token0", stateMutability: "view", inputs: [], outputs: [{ type: "address" }] },
+  {
+    type: "function",
+    name: "token0",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }],
+  },
 ] as const;
+
+export type DiscoveredWallet = {
+  id: string;
+  name: string;
+  icon?: string;
+  rdns: string;
+  provider: EIP1193Provider;
+};
+
+function walletRank(rdns: string): number {
+  if (rdns.includes("metamask")) return 0;
+  if (rdns.includes("trust")) return 2;
+  return 1;
+}
+
+/**
+ * EIP-6963 discovery of every installed browser wallet, MetaMask first. Falls back to a
+ * legacy `window.ethereum` entry only when no wallet announced itself.
+ */
+export function discoverWallets(timeoutMs = 400): Promise<DiscoveredWallet[]> {
+  if (typeof window === "undefined") return Promise.resolve([]);
+  listenEip6963();
+  window.dispatchEvent(new Event("eip6963:requestProvider"));
+  return new Promise((resolve) => {
+    window.setTimeout(() => {
+      const list: DiscoveredWallet[] = [...announcedProviders.values()].map(
+        ({ info, provider }) => ({
+          id: info.uuid,
+          name: info.name || info.rdns || "Wallet",
+          icon: info.icon,
+          rdns: (info.rdns ?? "").toLowerCase(),
+          provider,
+        }),
+      );
+      if (list.length === 0) {
+        let eth: InjectedWindow["ethereum"];
+        try {
+          eth = (window as InjectedWindow).ethereum;
+        } catch {
+          eth = undefined;
+        }
+        if (eth) {
+          const rdns = eth.isTrust
+            ? "com.trustwallet.app"
+            : eth.isMetaMask
+              ? "io.metamask"
+              : "injected";
+          list.push({
+            id: "injected",
+            name: eth.isTrust
+              ? "Trust Wallet"
+              : eth.isMetaMask
+                ? "MetaMask"
+                : "Browser wallet",
+            rdns,
+            provider: eth,
+          });
+        }
+      }
+      list.sort((a, b) => walletRank(a.rdns) - walletRank(b.rdns));
+      resolve(list);
+    }, timeoutMs);
+  });
+}
