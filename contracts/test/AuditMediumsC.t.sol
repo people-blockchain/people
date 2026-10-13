@@ -31,6 +31,8 @@ contract AuditMediumsCTest is Test {
     address internal feeRecipient = address(0xFEE);
     /// @dev Stands in for the treasury multisig the owner chose as the AUD-M1 destination.
     address internal treasury = address(0xC949);
+    CommunityTokenVault internal vault;
+    uint256 internal _communityAlloc;
 
     function setUp() public {
         registry = new PeopleProtocolRegistry();
@@ -39,7 +41,7 @@ contract AuditMediumsCTest is Test {
         router = new PeopleRouter(address(ammFactory), wppl);
         bondingCurve = new BondingCurveMarket(address(registry), feeRecipient, router, ammFactory, address(this), treasury);
         CreatorVesting vesting = new CreatorVesting(address(registry));
-        CommunityTokenVault vault = new CommunityTokenVault(address(registry), address(this));
+        vault = new CommunityTokenVault(address(registry), address(this));
         tokenFactory = new TokenFactory(feeRecipient, bondingCurve, vesting, vault, address(this));
         registry.setTokenFactory(address(tokenFactory));
         vm.deal(creator, 1_000_000 ether);
@@ -57,9 +59,10 @@ contract AuditMediumsCTest is Test {
     /// stayed in the market forever (nothing could withdraw them). After migration they must
     /// land on the treasury, the two reserve fields must be cleared, the ecosystem reserve must
     /// be untouched, and no token may be created or destroyed along the way.
-    function test_AUD_M1_migrationSweepsLeftoverTokensToTreasury() public {
+    function test_AUD_M1_migrationSweepsLeftoverTokensToCommunityPool() public {
         address token = _createToken();
         PeopleProjectToken t = PeopleProjectToken(token);
+        _communityAlloc = vault.balances(token);
 
         (, uint256 liquidityReserve0, uint256 ecosystemReserve0, uint256 curveInventory0) = bondingCurve.curves(token);
         uint256 marketBalance0 = t.balanceOf(address(bondingCurve));
@@ -76,13 +79,14 @@ contract AuditMediumsCTest is Test {
 
         uint256 tokensToTrader = t.balanceOf(trader);
         uint256 tokensToPair = t.balanceOf(address(ammFactory.getPair(token, address(wppl))));
-        uint256 swept = t.balanceOf(treasury);
-
-        assertGt(swept, 0, "treasury must actually receive the leftovers");
+        uint256 swept = t.balanceOf(address(vault)) - _communityAlloc;
+        assertEq(t.balanceOf(treasury), 0, "treasury gets nothing");
+        assertGt(swept, 0, "community pool must actually receive the leftovers");
+        assertEq(vault.balances(token), _communityAlloc + swept, "pool balance credited");
         assertEq(
             swept,
             liquidityReserve0 + curveInventory0 - tokensToTrader - tokensToPair,
-            "treasury gets exactly the unsold inventory + unused liquidity reserve"
+            "pool gets exactly the unsold inventory + unused liquidity reserve"
         );
 
         (, uint256 liquidityReserve1, uint256 ecosystemReserve1, uint256 curveInventory1) = bondingCurve.curves(token);
