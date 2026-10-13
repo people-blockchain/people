@@ -222,4 +222,5 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - **Saat ini tidak ada penjualan PPL publik** dan tidak ada pemeriksaan KYC atau kelayakan.
 - Keamanan: **tinjauan internal berbantuan AI** saat ini dan **audit independen sebelum mainnet**.
 - Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
-- Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Perubahan kontrak sudah ditulis dan diuji, belum diterapkan di testnet.)
+- Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
+- Penjualan PPL, setelah dibuka, berlangsung tetap **180 hari**. Setelah itu siapa pun dapat memfinalisasinya, dan PPL yang tidak terjual masuk ke pool komunitas — aturan yang sama seperti kurva token.

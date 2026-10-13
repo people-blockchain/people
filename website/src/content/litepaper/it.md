@@ -222,4 +222,5 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 - **Al momento non c'è alcuna vendita pubblica di PPL** e non vengono eseguiti controlli KYC o di eleggibilità.
 - Sicurezza: ora una **revisione interna assistita dall'IA** e un'**audit indipendente prima della mainnet**.
 - Il multisig del tesoro è **2 su 3** e viene creato prima della mainnet.
-- Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Modifica al contratto scritta e testata, non ancora distribuita sulla testnet.)
+- Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Attiva sulla testnet.)
+- La vendita PPL, una volta aperta, dura **180 giorni** fissi. Dopo, chiunque può finalizzarla e i PPL invenduti vanno al pool della community — la stessa regola delle curve dei token.

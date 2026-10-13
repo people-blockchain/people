@@ -224,4 +224,5 @@ Only verifiable public facts about other networks. Sources below.
 - There is **no public PPL sale at this time**, and no KYC or sale-eligibility checks are run.
 - Security: an **internal, AI-assisted review** now, and an **independent audit before mainnet**.
 - The treasury multisig is **2-of-3** and is created before mainnet.
-- If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Contract change written and tested; not yet deployed on testnet.)
+- If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
+- The PPL sale, once it opens, runs for a fixed **180 days**. After that anyone can finalize it, and the unsold PPL goes to the community pool — the same rule as for token curves.
