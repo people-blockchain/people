@@ -7,9 +7,9 @@
       "cho cộng đồng",
       "của bạn."
     ],
-    "headlineAccent": "27% về người của bạn, không về cá voi.",
+    "headlineAccent": "10% về người của bạn, không về cá voi.",
     "headlineAccentLines": [
-      "27% về người của bạn,",
+      "10% về người của bạn,",
       "không về cá voi."
     ],
     "sub": "People's Blockchain là nơi creator ra token với giá công bằng ngay từ block đầu, và cộng đồng có phần trong mọi thứ họ giúp phát triển.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "27% vào pool cộng đồng",
+        "label": "10% vào pool cộng đồng",
         "sub": "Gắn sẵn trong mỗi token mới"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Cho cộng đồng",
-      "body": "27% mỗi token mới vào pool cộng đồng của token đó. Một phần mỗi phí mạng cũng vào đó. Người tham gia có phần trong những gì họ xây dựng."
+      "body": "10% mỗi token mới vào pool cộng đồng của token đó. Một phần mỗi phí mạng cũng vào đó. Người tham gia có phần trong những gì họ xây dựng."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Đây là tham gia mạng, không phải đầu tư.",
   "visuals": {
     "supply": "Nguồn cung token",
-    "share": "27%",
+    "share": "10%",
     "toPool": "vào quỹ cộng đồng",
     "pool": "Quỹ cộng đồng",
     "poolNote": "chia cho những người tham gia",
-    "aria": "27% nguồn cung của mỗi token mới vào quỹ cộng đồng của nó, chia cho những người tham gia.",
+    "aria": "10% nguồn cung của mỗi token mới vào quỹ cộng đồng của nó, chia cho những người tham gia.",
     "prompt": "Một token mà người nắm giữ bỏ phiếu cách chi tiêu ngân quỹ",
     "step1": "Bạn viết",
     "step2": "Chúng tôi dựng",

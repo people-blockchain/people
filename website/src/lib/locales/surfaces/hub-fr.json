@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "27%",
-        "title": "27 % vers le pool communautaire",
+        "value": "10%",
+        "title": "10 % vers le pool communautaire",
         "note": "De l’offre de chaque nouveau jeton va au pool communautaire."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "27 % communauté + frais de réseau",
+        "label": "10 % communauté + frais de réseau",
         "sub": "Une part du nouveau jeton et le frais de protocole restent séparés"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "27 % de chaque nouveau jeton va au pool communautaire",
-        "body": "Chaque jeton standard lancé via le réseau envoie 27 % de son offre initiale au Community Pool de ce jeton — puis à la communauté. Ce n’est pas un paiement personnel, ni 10 % de chaque frais.",
+        "title": "10 % de chaque nouveau jeton va au pool communautaire",
+        "body": "Chaque jeton standard lancé via le réseau envoie 10 % de son offre initiale au Community Pool de ce jeton — puis à la communauté. Ce n’est pas un paiement personnel, ni 10 % de chaque frais.",
         "href": "/create/token",
         "cta": "Créer un jeton"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Paiement Growth Beta actif : L1 70 % · L2 30 % du budget de récompense Growth. Growth Pool est 15 % des frais éligibles. Distinct des destinations the fee split des frais de réseau et des 27 % de chaque nouveau jeton qui vont au pool communautaire.",
+    "subtitle": "Paiement Growth Beta actif : L1 70 % · L2 30 % du budget de récompense Growth. Growth Pool est 15 % des frais éligibles. Distinct des destinations the fee split des frais de réseau et des 10 % de chaque nouveau jeton qui vont au pool communautaire.",
     "you": "Vous",
     "budgetNote": "Les pourcentages sont des parts du budget de récompense Growth après que the fee split achemine 15 % des frais éligibles vers le Growth Pool — pas des parts de chaque frais de réseau.",
     "detailsTitle": "Comment fonctionne le Growth-referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Séparé des frais et des jetons",
-        "body": "Les poids Growth L1/L2 ne sont pas le partage the fee split des frais de réseau ni les 27 % de chaque nouveau jeton pour le pool communautaire. Growth Pool est une destination de frais the fee split avec ses propres règles de règlement."
+        "body": "Les poids Growth L1/L2 ne sont pas le partage the fee split des frais de réseau ni les 10 % de chaque nouveau jeton pour le pool communautaire. Growth Pool est une destination de frais the fee split avec ses propres règles de règlement."
       },
       {
         "title": "Ce site",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Prendre part à l’économie",
-        "body": "Payez les frais Token Factory et de mint NFT depuis le même portefeuille. La part de 27 % au pool communautaire sur les nouveaux jetons, les frais de réseau et le Growth-referral restent trois mécanismes séparés.",
+        "body": "Payez les frais Token Factory et de mint NFT depuis le même portefeuille. La part de 10 % au pool communautaire sur les nouveaux jetons, les frais de réseau et le Growth-referral restent trois mécanismes séparés.",
         "href": "/create",
         "cta": "Créer"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Les frais de réseau et la part communautaire de chaque jeton restent dans des canaux séparés.",
-        "detail": "Les frais de réseau en PPL suivent the fee split. Les jetons standard créés par les utilisateurs envoient 27 % de l’offre de ce jeton à son propre pool communautaire — ce n’est pas un frais de réseau."
+        "detail": "Les frais de réseau en PPL suivent the fee split. Les jetons standard créés par les utilisateurs envoient 10 % de l’offre de ce jeton à son propre pool communautaire — ce n’est pas un frais de réseau."
       }
     ],
     "storyCta": "Histoire visuelle complète"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool reçoit 15 % des frais éligibles. Ce n’est pas un revenu garanti, ni un rendement passif, ni un produit d’investissement.",
     "detailsTitle": "Comment l’acheminement des frais fonctionne",
-    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. After whole-number division, any remainder stays with validators. The 27 % of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. After whole-number division, any remainder stays with validators. The 10 % of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Comment les récompenses sont expliquées"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Le prix de lancement utilise une courbe à produit constant avec une mathématique entière exacte.",
       "Un frais de protocole sur la courbe est acheminé par l’économie des frais de réseau.",
-      "Le partage standard de lancement inclut 27 % obligatoires de l’offre de ce jeton vers son propre pool communautaire (pas un frais de réseau en PPL).",
+      "Le partage standard de lancement inclut 10 % obligatoires de l’offre de ce jeton vers son propre pool communautaire (pas un frais de réseau en PPL).",
       "Le vesting du créateur garde la plus grande part de sa quote-part qui se débloque dans le temps, pour que la communauté ne soit pas déversée dès le premier jour."
     ],
     "createCta": "Ouvrir Token Factory",

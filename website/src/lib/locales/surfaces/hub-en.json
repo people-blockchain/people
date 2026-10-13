@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "27%",
-        "title": "27% to the community pool",
+        "value": "10%",
+        "title": "10% to the community pool",
         "note": "Of every new token's supply goes to the community pool."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "27% community + network fee",
+        "label": "10% community + network fee",
         "sub": "Part of the new token and the protocol fee stay separate"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "27% of every new token goes to the community pool",
-        "body": "Every standard token launched through the network sends 27% of its initial supply to that token’s Community Pool — then to the community. Not a personal payout, and not 10% of every fee.",
+        "title": "10% of every new token goes to the community pool",
+        "body": "Every standard token launched through the network sends 10% of its initial supply to that token’s Community Pool — then to the community. Not a personal payout, and not 10% of every fee.",
         "href": "/create/token",
         "cta": "Create a token"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Active Beta Growth payout: L1 70% · L2 30% of the Growth reward budget. Growth Pool is 15% of eligible fees. Distinct from network fee destinations and from the 27% of each new token that goes to the community pool.",
+    "subtitle": "Active Beta Growth payout: L1 70% · L2 30% of the Growth reward budget. Growth Pool is 15% of eligible fees. Distinct from network fee destinations and from the 10% of each new token that goes to the community pool.",
     "you": "You",
     "budgetNote": "Percentages are shares of the Growth reward budget after 15% of each protocol fee goes to the Growth Pool — not shares of every network fee.",
     "detailsTitle": "How Growth referral works",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Separate from fees and tokens",
-        "body": "L1/L2 Growth weights are not the network fee split and not the 27% of each new token for the community pool. Growth Pool receives 15% of each protocol fee with its own settlement rules."
+        "body": "L1/L2 Growth weights are not the network fee split and not the 10% of each new token for the community pool. Growth Pool receives 15% of each protocol fee with its own settlement rules."
       },
       {
         "title": "This site",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Take part in the economy",
-        "body": "Pay Token Factory and NFT mint fees from the same wallet. The 27% community-pool share on new tokens, network fees, and Growth referral stay three separate mechanisms.",
+        "body": "Pay Token Factory and NFT mint fees from the same wallet. The 10% community-pool share on new tokens, network fees, and Growth referral stay three separate mechanisms.",
         "href": "/create",
         "cta": "Create"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Network fees and each token's community share stay in separate pipelines.",
-        "detail": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. Standard user-created tokens send 27% of that token's supply to its own community pool — that is not a network fee."
+        "detail": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. Standard user-created tokens send 10% of that token's supply to its own community pool — that is not a network fee."
       }
     ],
     "storyCta": "Full visual story"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool receives 15% of eligible fees. It is not guaranteed income, not a passive return, and not an investment product.",
     "detailsTitle": "How fee routing works",
-    "detailsBody": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. After whole-number division, any remainder stays with validators. The 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "How rewards are explained"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Launch pricing uses a constant-product curve with exact integer math.",
       "A protocol trading fee on the curve is routed through network fee economics.",
-      "Standard launch split includes a mandatory 27% of that token's supply to its own community pool (not a PPL network fee).",
+      "Standard launch split includes a mandatory 10% of that token's supply to its own community pool (not a PPL network fee).",
       "Creator vesting keeps most of the creator's share unlocking over time, so the community is not dumped on day one."
     ],
     "createCta": "Open Token Factory",

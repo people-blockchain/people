@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Fornecimento | **1,000,000,000 PPL**, fixo |
-| Cada token lançado | **27%** do fornecimento vai para o pool da comunidade daquele token |
+| Cada token lançado | **10%** do fornecimento vai para o pool da comunidade daquele token |
 | Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
 | Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
 | Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Humanos verificados, não bots.** Recompensas vão para contas que passaram uma verificação gratuita de humanidade. Uma pessoa, uma conta. Apenas se inscrever não ganha nada.
 
-**27% de cada token lançado vai para sua comunidade.** Construído no protocolo, não prometido em um post: cada lançamento padrão envia 27% de seu fornecimento para o pool de comunidade daquele token. Nunca se mistura com taxas de rede.
+**10% de cada token lançado vai para sua comunidade.** Construído no protocolo, não prometido em um post: cada lançamento padrão envia 10% de seu fornecimento para o pool de comunidade daquele token. Nunca se mistura com taxas de rede.
 
 ---
 
@@ -53,7 +53,7 @@ O que você pode fazer sem código:
 
 | Ferramenta | O que faz | Status |
 |---|---|---|
-| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. 27% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
+| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. 10% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
 | **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
 | **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
 | **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
@@ -191,7 +191,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
 | Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
 | Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
-| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **27% de cada token lançado** |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% de cada token lançado** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 
 ### O que mudou na v1.1
 
-- A parte da comunidade em um novo token é **27%** da oferta: **10%** alocados no lançamento mais **~16,7%** retirados da curva na migração.
+- A parte da comunidade em um novo token é **10%** da oferta, alocados no lançamento.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
 - Taxas de lançamento: o plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
 - **Não há venda pública de PPL no momento** e não são feitas verificações de KYC ou de elegibilidade.

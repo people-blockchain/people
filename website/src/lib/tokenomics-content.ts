@@ -117,7 +117,7 @@ const en: TokenomicsCopy = {
     "The launch price comes from the curve's virtual reserve, not from a private round: the contract computes every trade and the whole curve runs on-chain and in public.",
   unsoldTitle: "Unsold tokens",
   unsoldBody:
-    "Any PPL not purchased on the curve goes to PPL's own community pool — the 35% community & rewards bucket — not to the treasury and not burned. The same rule applies to every token launched on People: unsold curve inventory goes to that token's own community pool, so about 27% of a standard launch ends up with its community (the 10% community pool plus ~16.7% of supply swept from the curve at migration).",
+    "Any PPL not purchased on the curve goes to PPL's own community pool — the 35% community & rewards bucket — not to the treasury and not burned. The same rule applies to every token launched on People: a standard launch allocates exactly 10% of supply to its community at launch.",
   saleClosedTitle: "Sale is not open yet",
   saleClosedBody:
     "There is no public PPL sale right now. No prices are published, the payment widget is switched off and no KYC flow runs on this site.",
@@ -218,7 +218,7 @@ const ru: TokenomicsCopy = {
     "Стартовая цена задаётся виртуальным резервом кривой, а не частным раундом: каждый обмен считает контракт, вся кривая работает on-chain и публично.",
   unsoldTitle: "Непроданные токены",
   unsoldBody:
-    "Любые PPL, не купленные на кривой, идут в собственный пул сообщества PPL — корзину сообщества и наград 35% — не в казну и не сжигаются. То же правило действует для каждого токена, запущенного в People: нераспроданный остаток кривой уходит в собственный пул сообщества этого токена, поэтому около 27% стандартного запуска достаётся его сообществу (10% пула сообщества плюс ~16,7% остатка кривой при миграции).",
+    "Любые PPL, не купленные на кривой, идут в собственный пул сообщества PPL — корзину сообщества и наград 35% — не в казну и не сжигаются. То же правило действует для каждого токена, запущенного в People: стандартный запуск выделяет ровно 10% предложения его сообществу при запуске.",
   saleClosedTitle: "Продажа пока не открыта",
   saleClosedBody:
     "Публичной продажи PPL сейчас нет. Цены не публикуются, платёжный виджет отключён, KYC на этом сайте не проводится.",

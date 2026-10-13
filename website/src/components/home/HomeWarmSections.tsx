@@ -40,10 +40,10 @@ const CARD_ICONS: ReactNode[] = [
   <path key="code" d="M8.7 15.9 4.8 12l3.9-3.9-1.4-1.4L2 12l5.3 5.3 1.4-1.4Zm6.6 0 3.9-3.9-3.9-3.9 1.4-1.4L22 12l-5.3 5.3-1.4-1.4Z" />,
 ];
 
-/* ── 2. The 27% community share ──────────────────────────────────────────── */
+/* ── 2. The 10% community share ──────────────────────────────────────────── */
 
 /**
- * The 27% community block — the promise the whole design hangs on. The warm
+ * The 10% community block — the promise the whole design hangs on. The warm
  * redesign dropped it from the homepage, so it is restored here, high on the
  * page and stacked on mobile.
  *

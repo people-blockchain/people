@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "27%",
-        "title": "27% para o pool da comunidade",
+        "value": "10%",
+        "title": "10% para o pool da comunidade",
         "note": "Da oferta de cada novo token vai para o pool da comunidade."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "27% comunidade + taxa de rede",
+        "label": "10% comunidade + taxa de rede",
         "sub": "Parte do novo token e a taxa de protocolo ficam separadas"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "27% de cada novo token vai para o pool da comunidade",
-        "body": "Cada token padrão lançado através da rede envia 27% da oferta inicial para o Community Pool desse token — depois para a comunidade. Não é um pagamento pessoal, nem 10% de cada taxa.",
+        "title": "10% de cada novo token vai para o pool da comunidade",
+        "body": "Cada token padrão lançado através da rede envia 10% da oferta inicial para o Community Pool desse token — depois para a comunidade. Não é um pagamento pessoal, nem 10% de cada taxa.",
         "href": "/create/token",
         "cta": "Criar um token"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH-REFERRAL",
     "title": "Tu → L1 → L2",
-    "subtitle": "Pagamento Growth Beta ativo: L1 70% · L2 30% do orçamento de recompensa Growth. O Growth Pool é 15% das taxas elegíveis. Distinto dos destinos the fee split de taxas de rede e dos 27% de cada novo token que vão para o pool da comunidade.",
+    "subtitle": "Pagamento Growth Beta ativo: L1 70% · L2 30% do orçamento de recompensa Growth. O Growth Pool é 15% das taxas elegíveis. Distinto dos destinos the fee split de taxas de rede e dos 10% de cada novo token que vão para o pool da comunidade.",
     "you": "Tu",
     "budgetNote": "As percentagens são quotas do orçamento de recompensa Growth depois de o the fee split encaminhar 15% das taxas elegíveis para o Growth Pool — não quotas de cada taxa de rede.",
     "detailsTitle": "Como funciona o Growth-referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Separado de taxas e tokens",
-        "body": "Os pesos Growth L1/L2 não são a divisão the fee split de taxas de rede nem os 27% de cada novo token para o pool da comunidade. O Growth Pool é um destino de taxa the fee split com regras próprias de liquidação."
+        "body": "Os pesos Growth L1/L2 não são a divisão the fee split de taxas de rede nem os 10% de cada novo token para o pool da comunidade. O Growth Pool é um destino de taxa the fee split com regras próprias de liquidação."
       },
       {
         "title": "Este sítio",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Participa na economia",
-        "body": "Paga taxas de Token Factory e de cunhagem NFT a partir da mesma carteira. A quota de 27% para o pool da comunidade em novos tokens, as taxas de rede e o Growth-referral continuam três mecanismos separados.",
+        "body": "Paga taxas de Token Factory e de cunhagem NFT a partir da mesma carteira. A quota de 10% para o pool da comunidade em novos tokens, as taxas de rede e o Growth-referral continuam três mecanismos separados.",
         "href": "/create",
         "cta": "Criar"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "As taxas de rede e a quota comunitária de cada token ficam em canais separados.",
-        "detail": "As taxas de rede em PPL seguem the fee split. Tokens padrão criados por utilizadores enviam 27% da oferta desse token para o próprio pool da comunidade — isso não é uma taxa de rede."
+        "detail": "As taxas de rede em PPL seguem the fee split. Tokens padrão criados por utilizadores enviam 10% da oferta desse token para o próprio pool da comunidade — isso não é uma taxa de rede."
       }
     ],
     "storyCta": "História visual completa"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "O Growth Pool recebe 15% das taxas elegíveis. Não é rendimento garantido, nem um retorno passivo, nem um produto de investimento.",
     "detailsTitle": "Como funciona o encaminhamento de taxas",
-    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Como as recompensas são explicadas"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "O preço de lançamento usa uma curva de produto constante com matemática inteira exata.",
       "Uma taxa de protocolo na curva é encaminhada pela economia de taxas de rede.",
-      "A divisão padrão de lançamento inclui 27% obrigatórios da oferta desse token para o próprio pool da comunidade (não é uma taxa de rede em PPL).",
+      "A divisão padrão de lançamento inclui 10% obrigatórios da oferta desse token para o próprio pool da comunidade (não é uma taxa de rede em PPL).",
       "O vesting do criador mantém a maior parte da sua quota a desbloquear ao longo do tempo, para a comunidade não ser despejada no primeiro dia."
     ],
     "createCta": "Abrir Token Factory",

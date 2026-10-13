@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Launch a token for your community."
     ],
-    "headlineAccent": "27% goes to your people, not to whales.",
+    "headlineAccent": "10% goes to your people, not to whales.",
     "headlineAccentLines": [
-      "27% goes to your people,",
+      "10% goes to your people,",
       "not to whales."
     ],
     "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds and try it on the testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "27% to your people",
-        "sub": "Every new token sends 27% of its supply to its own community pool."
+        "label": "10% to your people",
+        "sub": "Every new token sends 10% of its supply to its own community pool."
       }
     ],
-    "shareBadge": "27% community share",
+    "shareBadge": "10% community share",
     "peopleLine": "Your people, not whales"
   },
   "community": {
-    "eyebrow": "27% to the community",
-    "title": "27% of every new token goes to your people",
-    "lead": "Built into the protocol, not promised in a post: every standard launch sends 27% of its supply to that token's own community pool. It is never mixed with network fees.",
+    "eyebrow": "10% to the community",
+    "title": "10% of every new token goes to your people",
+    "lead": "Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.",
     "statLabel": "of every new token's supply goes to its community pool",
     "statNote": "The pool belongs to the people who take part in that token — not to the network and not to the creator.",
     "footnote": "Network fees are split separately: {{community}}% to the community pool, {{validators}}% to validators.",
@@ -90,7 +90,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "27%",
+        "stat": "10%",
         "title": "of every new token goes to that token's community pool",
         "body": "Not to the network, not to the creator. The token's own pool, shared with the people who take part."
       },

@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Fornitura | **1.000.000.000 PPL**, fissa |
-| Ogni token lanciato | **27%** della fornitura va al pool comunitario di quel token |
+| Ogni token lanciato | **10%** della fornitura va al pool comunitario di quel token |
 | Commissioni di rete bruciate | **0%** — ogni commissione è condivisa |
 | Chi guadagna ricompense | **Persone verificate** (Telegram con numero di telefono o Human Passport) |
 | Finanziamento | **Autofinanziato.** Nessun VC. Nessuna allocazione agli investitori. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Persone verificate, non bot.** Le ricompense vanno ad account che hanno superato un controllo umano gratuito. Una persona, un account. Solo l'iscrizione non guadagna nulla.
 
-**Il 27% di ogni token lanciato va alla sua comunità.** Incorporato nel protocollo, non promesso in un post: ogni lancio standard invia il 27% della sua fornitura al pool comunitario di quel token. Non è mai mescolato con le commissioni di rete.
+**Il 10% di ogni token lanciato va alla sua comunità.** Incorporato nel protocollo, non promesso in un post: ogni lancio standard invia il 10% della sua fornitura al pool comunitario di quel token. Non è mai mescolato con le commissioni di rete.
 
 ---
 
@@ -53,7 +53,7 @@ Quello che puoi fare senza codice:
 
 | Strumento | Cosa fa | Stato |
 |---|---|---|
-| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il 27% della fornitura va al pool comunitario del token; la quota del creatore scade in 180 giorni. | Live on testnet |
+| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il 10% della fornitura va al pool comunitario del token; la quota del creatore scade in 180 giorni. | Live on testnet |
 | **Carte club NFT** | Carte di iscrizione per un club, un caffè o una comunità — una per membro, con un'immagine che carichi o generi. | Live on testnet |
 | **Raccolta fondi** | Raccogli supporto per un progetto con modelli di contratti revisionati: escrow, vesting, voto ponderato per token. La tua comunità acquista sulla curva, quindi la domanda fissa il prezzo — non un round privato. | Live on testnet |
 | **Contratti AI** | Descrivi un contratto intelligente a parole. Viene assemblato da modelli OpenZeppelin e vedi il risultato prima di distribuirlo. | Live on testnet |
@@ -191,7 +191,7 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 | Chi riceve le commissioni | I validatori ottengono la commissione prioritaria (mancia) ¹ | I validatori ottengono il 50% della commissione base e il 100% della commissione prioritaria ² | **Validatori 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Finanziamento iniziale | Vendita pubblica di ether, 2014 (42 giorni, pagati in BTC) ³ | $20M Series A guidato da Multicoin Capital (2019); gli investitori hanno ricevuto token SOL ⁴ | **Autofinanziato. Nessun VC, nessuna allocazione agli investitori** |
 | Creazione account | La creazione di un account non costa nulla; nessun controllo di identità ⁵ | Non è un requisito di protocollo | **Ricompense solo per persone verificate** |
-| Quota comunitaria per nuovo token | Non è una regola di protocollo | Non è una regola di protocollo | **27% di ogni token lanciato** |
+| Quota comunitaria per nuovo token | Non è una regola di protocollo | Non è una regola di protocollo | **10% di ogni token lanciato** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 
 ### Cosa è cambiato nella v1.1
 
-- La quota comunitaria di un nuovo token è il **27%** della fornitura: **10%** assegnato al lancio più **~16,7%** prelevato dalla curva alla migrazione.
+- La quota comunitaria di un nuovo token è il **10%** della fornitura, assegnato al lancio.
 - Il vesting del team è **0% al lancio, un cliff di 6 mesi e poi 18 mesi lineari** (24 mesi in totale).
 - Commissioni di lancio: il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
 - **Al momento non c'è alcuna vendita pubblica di PPL** e non vengono eseguiti controlli KYC o di eleggibilità.

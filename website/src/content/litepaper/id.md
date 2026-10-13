@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Pasokan | **1.000.000.000 PPL**, tetap |
-| Setiap token yang diluncurkan | **27%** dari pasokan masuk ke pool komunitas token itu sendiri |
+| Setiap token yang diluncurkan | **10%** dari pasokan masuk ke pool komunitas token itu sendiri |
 | Biaya jaringan terbakar | **0%** — setiap biaya dibagikan |
 | Siapa yang mendapat hadiah | **Manusia terverifikasi** (Telegram dengan nomor ponsel atau Human Passport) |
 | Pendanaan | **Pendanaan mandiri.** Tanpa VC. Tanpa alokasi investor. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Manusia terverifikasi, bukan bot.** Hadiah pergi ke akun yang lulus pemeriksaan manusia gratis. Satu orang, satu akun. Pendaftaran saja tidak menghasilkan apa pun.
 
-**27% dari setiap token yang diluncurkan masuk ke komunitasnya.** Dibangun ke dalam protokol, bukan dijanjikan di posting: setiap peluncuran standar mengirim 27% dari pasokannya ke pool komunitas token itu sendiri. Ini tidak pernah dicampur dengan biaya jaringan.
+**10% dari setiap token yang diluncurkan masuk ke komunitasnya.** Dibangun ke dalam protokol, bukan dijanjikan di posting: setiap peluncuran standar mengirim 10% dari pasokannya ke pool komunitas token itu sendiri. Ini tidak pernah dicampur dengan biaya jaringan.
 
 ---
 
@@ -53,7 +53,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 | Alat | Apa yang dilakukannya | Status |
 |---|---|---|
-| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. 27% dari pasokan masuk ke pool komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
+| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. 10% dari pasokan masuk ke pool komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
 | **Kartu klub NFT** | Kartu keanggotaan untuk klub, kafe, atau komunitas — satu per anggota, dengan gambar yang Anda unggah atau hasilkan. | Aktif di testnet |
 | **Penggalangan dana** | Kumpulkan dukungan untuk proyek dengan template kontrak yang ditinjau: escrow, vesting, token-weighted vote. Komunitas Anda membeli di kurva, jadi permintaan menetapkan harga — bukan putaran pribadi. | Aktif di testnet |
 | **Kontrak AI** | Jelaskan kontrak pintar dalam kata-kata polos. Ini dirakit dari template OpenZeppelin dan Anda melihat hasilnya sebelum Anda deploy. | Aktif di testnet |
@@ -191,7 +191,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 | Siapa yang menerima biaya | Validator mendapat biaya prioritas (tip) ¹ | Validator mendapat 50% dari biaya dasar dan 100% dari biaya prioritas ² | **Validator 30 · Komunitas 25 · Treasury 20 · Likuiditas 10 · Pertumbuhan 15** |
 | Pendanaan awal | Penjualan ether publik, 2014 (42 hari, dibayar dalam BTC) ³ | Putaran Seri A $20M yang dipimpin oleh Multicoin Capital (2019); investor menerima token SOL ⁴ | **Pendanaan mandiri. Tanpa VC, tanpa alokasi investor** |
 | Pembuatan akun | Membuat akun tidak memerlukan biaya; tidak ada pemeriksaan identitas ⁵ | Bukan persyaratan protokol | **Hadiah hanya untuk manusia terverifikasi** |
-| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **27% dari setiap token yang diluncurkan** |
+| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **10% dari setiap token yang diluncurkan** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 
 ### Apa yang berubah di v1.1
 
-- Bagian komunitas dari token baru adalah **27%** dari pasokan: **10%** dialokasikan saat peluncuran plus **~16,7%** disapu dari kurva saat migrasi.
+- Bagian komunitas dari token baru adalah **10%** dari pasokan: **10%** dialokasikan saat peluncuran.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
 - **Saat ini tidak ada penjualan PPL publik** dan tidak ada pemeriksaan KYC atau kelayakan.

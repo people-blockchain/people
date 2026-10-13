@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "27%",
-        "title": "27% 进入社区池",
+        "value": "10%",
+        "title": "10% 进入社区池",
         "note": "每一枚新代币的供应量都会进入社区池。"
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "27% 社区 + 网络手续费",
+        "label": "10% 社区 + 网络手续费",
         "sub": "新代币的一部分与协议手续费保持分开"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "每个新代币的 27% 进入社区池",
-        "body": "通过网络发行的每个标准代币会把初始供应量的 27% 送入该代币的 Community Pool，再到社区。这不是个人打款，也不是每笔手续费的 10%。",
+        "title": "每个新代币的 10% 进入社区池",
+        "body": "通过网络发行的每个标准代币会把初始供应量的 10% 送入该代币的 Community Pool，再到社区。这不是个人打款，也不是每笔手续费的 10%。",
         "href": "/create/token",
         "cta": "创建代币"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "现行 Beta Growth 兑付：Growth 奖励预算的 L1 70% · L2 30%。Growth Pool 为符合条件手续费的 15%。有别于网络手续费的 the fee split 去向，也有别于每个新代币进入社区池的 27%。",
+    "subtitle": "现行 Beta Growth 兑付：Growth 奖励预算的 L1 70% · L2 30%。Growth Pool 为符合条件手续费的 15%。有别于网络手续费的 the fee split 去向，也有别于每个新代币进入社区池的 10%。",
     "you": "你",
     "budgetNote": "百分比是 the fee split 把符合条件手续费的 15% 路由进 Growth Pool 之后，Growth 奖励预算的份额——不是每笔网络手续费的份额。",
     "detailsTitle": "Growth 推荐如何运作",
@@ -104,7 +104,7 @@
       },
       {
         "title": "与手续费和代币分开",
-        "body": "L1/L2 的 Growth 权重不是 the fee split 网络手续费拆分，也不是每个新代币进入社区池的 27%。Growth Pool 是带有自身结算规则的 the fee split 手续费去向。"
+        "body": "L1/L2 的 Growth 权重不是 the fee split 网络手续费拆分，也不是每个新代币进入社区池的 10%。Growth Pool 是带有自身结算规则的 the fee split 手续费去向。"
       },
       {
         "title": "本站",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "参与经济",
-        "body": "用同一钱包支付 Token Factory 与 NFT 铸造手续费。新代币进入社区池的 27%、网络手续费和 Growth 推荐仍是三种独立机制。",
+        "body": "用同一钱包支付 Token Factory 与 NFT 铸造手续费。新代币进入社区池的 10%、网络手续费和 Growth 推荐仍是三种独立机制。",
         "href": "/create",
         "cta": "创建"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "网络手续费与每个代币的社区份额留在独立通道中。",
-        "detail": "以 PPL 计价的网络手续费遵循 the fee split。标准用户创建代币将该代币供给的 27% 送入其自身社区池 — 那不是网络手续费。"
+        "detail": "以 PPL 计价的网络手续费遵循 the fee split。标准用户创建代币将该代币供给的 10% 送入其自身社区池 — 那不是网络手续费。"
       }
     ],
     "storyCta": "完整可视化故事"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool 获得符合条件手续费的 15%。不是保证收入、被动回报或投资产品。",
     "detailsTitle": "手续费路由如何运作",
-    "detailsBody": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。 After whole-number division, any remainder stays with validators. The 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。 After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "如何解释奖励"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "发行定价使用精确整数运算的恒定乘积曲线。",
       "曲线上的协议交易费经网络手续费经济路由。",
-      "标准发行拆分强制将该代币供给的 27% 放入其自身社区池（不是 PPL 网络手续费）。",
+      "标准发行拆分强制将该代币供给的 10% 放入其自身社区池（不是 PPL 网络手续费）。",
       "创建者归属使创建者份额大部分随时间解锁，以免社区在第一天被抛售。"
     ],
     "createCta": "打开 Token Factory",

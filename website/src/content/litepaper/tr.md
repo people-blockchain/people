@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Arz | **1.000.000.000 PPL**, sabit |
-| Başlatılan her token | **%27'si**, o token'ın kendi topluluk havuzuna gider |
+| Başlatılan her token | **%10'si**, o token'ın kendi topluluk havuzuna gider |
 | Yakılan ağ ücretleri | **%0** — her ücret paylaşılır |
 | Ödül kazanan | **Doğrulanmış insanlar** (Telegram telefon veya Human Passport) |
 | Finansman | **Kendi finansmanı.** VC yok. Yatırımcı tahsisi yok. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Botlar değil, doğrulanmış insanlar.** Ödüller, ücretsiz bir insan kontrolünü geçen hesaplara gider. Bir kişi, bir hesap. Kayıt tek başına hiçbir şey kazanmaz.
 
-**Başlatılan her token'ın %27'si topluluğa gider.** Bir yazıda vaat edilmez, protokole yerleştirilir: her standart başlatma, arzının %27'sini o token'ın kendi topluluk havuzuna gönderir. Hiçbir zaman ağ ücretleriyle karıştırılmaz.
+**Başlatılan her token'ın %10'si topluluğa gider.** Bir yazıda vaat edilmez, protokole yerleştirilir: her standart başlatma, arzının %10'sini o token'ın kendi topluluk havuzuna gönderir. Hiçbir zaman ağ ücretleriyle karıştırılmaz.
 
 ---
 
@@ -53,7 +53,7 @@ Kod olmadan yapabileceğiniz şeyler:
 
 | Araç | Ne yaptığı | Durum |
 |---|---|---|
-| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %27'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
+| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %10'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
 | **NFT kulüp kartları** | Bir kulüp, kafe veya topluluk için üyelik kartları — üye başına bir tane, yüklediğiniz veya oluşturduğunuz bir görüntüyle. | Testnet'te canlı |
 | **Fon toplama** | İncelenen sözleşme şablonlarıyla bir proje için destek toplayın: emanet, hak ediş, token ağırlıklı oylama. Topluluğunuz eğride satın alır, bu nedenle talep fiyatı belirler — özel bir tur değil. | Testnet'te canlı |
 | **Yapay zeka sözleşmeleri** | Bir akıllı sözleşmeyi düz sözcüklerle açıklayın. OpenZeppelin şablonlarından birleştirilir ve dağıtmadan önce sonucu görürsünüz. | Testnet'te canlı |
@@ -191,7 +191,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 | Ücreti alan | Doğrulayıcılar öncelik ücretini (bahşiş) alır ¹ | Doğrulayıcılar temel ücretin %50'sini ve öncelik ücretinin %100'ünü alırlar ² | **Doğrulayıcılar 30 · Topluluk 25 · Hazine 20 · Likidite 10 · Büyüme 15** |
 | Erken finansman | Halka açık eter satışı, 2014 (42 gün, BTC cinsinden ödendi) ³ | Multicoin Capital tarafından yönetilen 20 milyon dolar Series A (2019); yatırımcılar SOL jetonlarını aldılar ⁴ | **Kendi finansmanı. VC yok, yatırımcı tahsisi yok** |
 | Hesap oluşturma | Hesap oluşturmak hiçbir şeye mal olmaz; kimlik denetimi yok ⁵ | Protokol gereksi değil | **Ödüller yalnızca doğrulanmış insanlar için** |
-| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %27'si** |
+| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %10'si** |
 
 1. ethereum.org — Gaz ve ücretler: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Ücretler: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 ### v1.1'da neler değişti
 
-- Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
+- Yeni bir token'ın topluluk payı arzın **%10'sidir**: lansmanda ayrılan **%10**.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **Şu anda halka açık bir PPL satışı yoktur** ve KYC veya uygunluk kontrolü yapılmaz.

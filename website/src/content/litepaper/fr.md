@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Approvisionnement | **1 000 000 000 PPL**, fixe |
-| Chaque token lancé | **27 %** de l'approvisionnement va au pool communautaire de ce token |
+| Chaque token lancé | **10 %** de l'approvisionnement va au pool communautaire de ce token |
 | Frais réseau brûlés | **0 %** — chaque frais est partagé |
 | Qui gagne des récompenses | **Personnes vérifiées** (téléphone Telegram ou Human Passport) |
 | Financement | **Autofinancé.** Pas de VC. Pas d'allocation investisseur. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Personnes vérifiées, pas de bots.** Les récompenses vont aux comptes qui ont passé un contrôle humain gratuit. Une personne, un compte. L'inscription seule ne gagne rien.
 
-**27 % de chaque token lancé va à sa communauté.** Intégré au protocole, non pas promis dans un post : chaque lancement standard envoie 27 % de son approvisionnement au pool communautaire de ce token. Il n'est jamais mélangé aux frais réseau.
+**10 % de chaque token lancé va à sa communauté.** Intégré au protocole, non pas promis dans un post : chaque lancement standard envoie 10 % de son approvisionnement au pool communautaire de ce token. Il n'est jamais mélangé aux frais réseau.
 
 ---
 
@@ -53,7 +53,7 @@ Ce que vous pouvez faire sans code :
 
 | Outil | Ce qu'il fait | Statut |
 |---|---|---|
-| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 27 % de l'approvisionnement va au pool communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
+| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 10 % de l'approvisionnement va au pool communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
 | **Cartes de club NFT** | Cartes d'adhésion pour un club, un café ou une communauté — une par membre, avec une image que vous téléchargez ou générez. | Live sur testnet |
 | **Levée de fonds** | Collectez le soutien pour un projet avec des modèles de contrats examinés : dépôt de garantie, accumulation, vote pondéré par token. Votre communauté achète sur la courbe, donc la demande définit le prix — pas un tour privé. | Live sur testnet |
 | **Contrats IA** | Décrivez un contrat intelligent en langage clair. Il est assemblé à partir de modèles OpenZeppelin et vous voyez le résultat avant de déployer. | Live sur testnet |
@@ -191,7 +191,7 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 | Qui reçoit les frais | Les validateurs reçoivent les frais de priorité (pourboire) ¹ | Les validateurs reçoivent 50 % des frais de base et 100 % des frais de priorité ² | **Validateurs 30 · Communauté 25 · Trésor 20 · Liquidité 10 · Croissance 15** |
 | Financement précoce | Vente d'ether publique, 2014 (42 jours, payée en BTC) ³ | Série A de 20 millions de dollars menée par Multicoin Capital (2019) ; les investisseurs ont reçu des tokens SOL ⁴ | **Autofinancé. Pas de VC, pas d'allocation d'investisseur** |
 | Création de compte | La création d'un compte ne coûte rien ; pas de contrôle d'identité ⁵ | Pas une exigence du protocole | **Récompenses seulement pour les personnes vérifiées** |
-| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **27 % de chaque token lancé** |
+| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **10 % de chaque token lancé** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 
 ### Ce qui a changé en v1.1
 
-- La part communautaire d'un nouveau token est de **27 %** de l'offre : **10 %** alloués au lancement plus **~16,7 %** prélevés sur la courbe lors de la migration.
+- La part communautaire d'un nouveau token est de **10 %** de l'offre, alloués au lancement.
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
 - Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - **Il n'y a pas de vente publique de PPL pour le moment** et aucun contrôle KYC ou d'éligibilité n'est effectué.
