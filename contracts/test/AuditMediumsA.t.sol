@@ -300,6 +300,8 @@ contract AuditMediumsA_PeopleCommunitySaleTest is Test {
     function setUp() public {
         usdt = new AuditMediumsA_MockUsdt();
         sale = new PeopleCommunitySale(address(usdt), treasury, owner);
+        vm.prank(owner);
+        sale.open(address(0xC0DE));
         usdt.mint(buyer, 1_000 * 1e6);
     }
 
