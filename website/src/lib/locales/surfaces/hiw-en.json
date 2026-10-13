@@ -24,6 +24,14 @@
           "text": "Every standard token sends 10% of its supply to its own community pool."
         },
         {
+          "title": "Curve leftovers",
+          "text": "After the curve migrates to the AMM — or if it is finalized after 180 days without selling out — leftover and unsold tokens follow the creator's launch choice: burned by default (recommended), or sent to that token's community pool. Never to the creator or the protocol treasury. Every standard token also sends 10% of supply to its community pool at launch."
+        },
+        {
+          "title": "Optional referral share",
+          "text": "At launch, a creator may opt into an issuer referral program: by default 5% of supply (maximum 10%) can be reserved for invite rewards, with a default invite bounty of 5% of the invitee's purchase. Off until the creator opts in."
+        },
+        {
           "title": "Creator vesting",
           "text": "The creator's share unlocks over 180 days, so there's no dump on day one."
         }

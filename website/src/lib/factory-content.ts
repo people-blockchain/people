@@ -80,6 +80,13 @@ export type FactoryCopyContent = {
     approvingStable: string;
     payingStableFee: string;
     creatingAfterStableFee: string;
+    leftoverTitle: string;
+    leftoverHint: string;
+    leftoverBurnLabel: string;
+    leftoverBurnHint: string;
+    leftoverPoolLabel: string;
+    leftoverPoolHint: string;
+    launchSummary: string;
   };
   iconGen: {
     button: string;
@@ -174,6 +181,13 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       approvingStable: "Approving…",
       payingStableFee: "Paying stable fee…",
       creatingAfterStableFee: "Creating…",
+      leftoverTitle: "Curve leftover & 180-day unsold",
+      leftoverHint: "Choose what happens to tokens still on the bonding curve when it migrates to the AMM, or if the curve does not sell out within 180 days. Never to you (the creator) and never to the protocol treasury.",
+      leftoverBurnLabel: "Burn (recommended)",
+      leftoverBurnHint: "Default. Leftover and unsold tokens are permanently burned.",
+      leftoverPoolLabel: "To community pool",
+      leftoverPoolHint: "Send leftover and unsold tokens to this token's own community pool.",
+      launchSummary: "When you launch: 10% of supply goes to your token's community pool. You choose whether curve leftovers after AMM migration and unsold tokens at 180-day finalize are burned (default, recommended) or sent to that community pool — never to you or the treasury. Optional referral share: default 5% of supply (max 10%), invite bounty 5%.",
     },
     iconGen: {
       button: "Generate icon",
@@ -265,6 +279,13 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       approvingStable: "Подтверждение...",
       payingStableFee: "Оплата комиссии...",
       creatingAfterStableFee: "Создание...",
+      leftoverTitle: "Остаток на кривой и нераспроданные за 180 дней",
+      leftoverHint: "Выберите, что произойдет с токенами, оставшимися на кривой связывания при миграции в AMM, или если кривая не будет распродана в течение 180 дней. Никогда не вам (создателю) и никогда не в казну протокола.",
+      leftoverBurnLabel: "Сжечь (рекомендуется)",
+      leftoverBurnHint: "По умолчанию. Оставшиеся и нераспроданные токены сжигаются навсегда.",
+      leftoverPoolLabel: "В общественный пул",
+      leftoverPoolHint: "Отправить оставшиеся и нераспроданные токены в общественный пул этого токена.",
+      launchSummary: "При запуске: 10% предложения поступает в общественный пул вашего токена. Вы выбираете, будут ли остатки кривой после миграции в AMM и нераспроданные токены при завершении через 180 дней сожжены (по умолчанию, рекомендуется) или отправлены в этот общественный пул — никогда вам или в казну. Опциональная реферальная доля: по умолчанию 5% предложения (макс. 10%), вознаграждение за приглашение 5%.",
     },
     iconGen: {
       button: "Создать значок",

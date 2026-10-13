@@ -228,11 +228,12 @@ export function EvmTokenLaunch() {
           ) : null}
 
 
+          <p className="text-sm text-ink-2" data-testid="launch-summary">
+            {form.launchSummary}
+          </p>
           <div className="rounded-xl border border-line p-3" data-testid="leftover-mode">
-            <p className="text-sm font-semibold">Curve leftover after migration / 180-day unsold</p>
-            <p className="mt-1 text-xs text-ink-3">
-              What happens to tokens still on the curve when it migrates to the AMM, or if it does not sell out in 180 days. Never to you or the treasury.
-            </p>
+            <p className="text-sm font-semibold">{form.leftoverTitle}</p>
+            <p className="mt-1 text-xs text-ink-3">{form.leftoverHint}</p>
             <div className="mt-3 space-y-2 text-sm text-ink-2">
               <label className="flex items-start gap-2">
                 <input
@@ -243,8 +244,8 @@ export function EvmTokenLaunch() {
                   onChange={() => setLeftoverMode(0)}
                 />
                 <span>
-                  <span className="font-semibold">Burn (recommended)</span>
-                  <span className="block text-xs text-ink-3">Default. Leftover and unsold tokens are permanently burned.</span>
+                  <span className="font-semibold">{form.leftoverBurnLabel}</span>
+                  <span className="block text-xs text-ink-3">{form.leftoverBurnHint}</span>
                 </span>
               </label>
               <label className="flex items-start gap-2">
@@ -256,8 +257,8 @@ export function EvmTokenLaunch() {
                   onChange={() => setLeftoverMode(1)}
                 />
                 <span>
-                  <span className="font-semibold">To community pool</span>
-                  <span className="block text-xs text-ink-3">Send leftover and unsold tokens to this token&apos;s own community pool.</span>
+                  <span className="font-semibold">{form.leftoverPoolLabel}</span>
+                  <span className="block text-xs text-ink-3">{form.leftoverPoolHint}</span>
                 </span>
               </label>
             </div>

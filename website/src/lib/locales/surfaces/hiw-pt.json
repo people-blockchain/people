@@ -24,6 +24,14 @@
           "text": "Cada token padrão envia 10% da oferta ao pool comunitário desse token."
         },
         {
+          "title": "Sobras da curva",
+          "text": "Depois que a curva migra para o AMM — ou se for finalizada após 180 dias sem esgotar — os tokens restantes e não vendidos seguem a escolha do criador no lançamento: queimados por padrão (recomendado), ou enviados para o pool comunitário desse token. Nunca para o criador ou para o tesouro do protocolo. Todo token padrão também envia 10% do suprimento para seu pool comunitário no lançamento."
+        },
+        {
+          "title": "Participação por indicação opcional",
+          "text": "No lançamento, um criador pode optar por um programa de indicação do emissor: por padrão, 5% do suprimento (máximo 10%) pode ser reservado para recompensas de convite, com uma recompensa de convite padrão de 5% da compra do convidado. Desativado até que o criador opte por participar."
+        },
+        {
           "title": "Vesting do criador",
           "text": "A parte do criador libera em 180 dias, sem dump no primeiro dia."
         }

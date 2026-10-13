@@ -123,13 +123,12 @@ test("logStartBlock scans AMM pairs from the factory's start block, since the fa
 });
 
 test("logWindows collapses a scan to a handful of windows when a contract's start block is far into the range", () => {
-  // Representative of a contract deployed long after genesis (the shape the old, mismatched
-  // tokenFactory/bondingCurve startBlocks used to have before S2-04) — not tied to the current
-  // deployment JSON, which now points at near-genesis contracts.
+  // Synthetic early genesis vs a late start — not tied to the live deployment JSON (which may
+  // itself sit far into the chain after a launch-set redeploy).
   const farStart = 320_459;
   const fromStart = logWindows(farStart, LATEST);
-  const fromDeploy = logWindows(dep.deployBlock ?? 1, LATEST);
-  assert.ok(fromStart.length < fromDeploy.length / 10);
+  const fromGenesis = logWindows(1, LATEST);
+  assert.ok(fromStart.length < fromGenesis.length / 10);
   assert.equal(fromStart[0][0], farStart);
   assert.equal(fromStart.at(-1)[1], LATEST);
 });

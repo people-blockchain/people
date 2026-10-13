@@ -26,6 +26,14 @@
         {
           "title": "Creator vesting",
           "text": "Creator payı 180 günde açılır, birinci gün dump yok."
+        },
+        {
+          "title": "Eğri kalanları",
+          "text": "Eğri AMM'ye geçtikten sonra — veya 180 gün sonra satılmadan finalize edilirse — kalan ve satılmayan tokenlar oluşturucunun başlatma seçimini takip eder: varsayılan olarak yakılır (önerilen) veya o tokenın topluluk havuzuna gönderilir. Asla oluşturucuya veya protokol hazinesine değil. Her standart token ayrıca başlatmada arzın %10'unu topluluk havuzuna gönderir."
+        },
+        {
+          "title": "İsteğe bağlı referans payı",
+          "text": "Başlatmada, bir oluşturucu ihraççı referans programına katılabilir: varsayılan olarak arzın %5'i (maksimum %10) davet ödülleri için ayrılabilir, varsayılan davet ödülü davet edilenin satın alımının %5'i. Oluşturucu katılana kadar kapalı."
         }
       ]
     },

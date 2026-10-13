@@ -24,6 +24,14 @@
           "text": "Cada token estándar envía el 10% de su suministro a su pool comunitario."
         },
         {
+          "title": "Restos de la curva",
+          "text": "Después de que la curva migra al AMM — o si se finaliza tras 180 días sin agotarse — los tokens sobrantes y no vendidos siguen la elección del creador al lanzar: quemados por defecto (recomendado), o enviados al fondo comunitario de ese token. Nunca al creador ni a la tesorería del protocolo. Cada token estándar también envía el 10% del suministro a su fondo comunitario al lanzar."
+        },
+        {
+          "title": "Participación por referidos opcional",
+          "text": "Al lanzar, un creador puede optar por un programa de referidos del emisor: por defecto, el 5% del suministro (máximo 10%) puede reservarse para recompensas por invitación, con una recompensa por invitación predeterminada del 5% de la compra del invitado. Desactivado hasta que el creador opte por participar."
+        },
+        {
           "title": "Vesting del creador",
           "text": "La parte del creador se desbloquea en 180 días, sin dump el día uno."
         }
