@@ -47,6 +47,7 @@
   "totalSupply": "Toplam arz",
   "pool": "Havuz",
   "noTx": "Henüz işlem yok — ilkini cüzdanınızdan yapın",
+  "loadMore": "Daha fazla yükle",
   "several": "Birden çok alıcı",
   "yourBalance": "Bakiyeniz: {amount} PPL",
   "notEnoughFee": "Ücret için yeterli PPL yok. Önce cüzdanınızdan test PPL alın.",

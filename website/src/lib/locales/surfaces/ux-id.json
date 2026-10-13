@@ -47,6 +47,7 @@
   "totalSupply": "Total pasokan",
   "pool": "Pool",
   "noTx": "Belum ada transaksi — buat yang pertama di dompet Anda",
+  "loadMore": "Muat lagi",
   "several": "Beberapa penerima",
   "yourBalance": "Saldo Anda: {amount} PPL",
   "notEnoughFee": "PPL tidak cukup untuk biaya. Dapatkan PPL uji di dompet Anda terlebih dahulu.",

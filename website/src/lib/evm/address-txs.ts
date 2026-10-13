@@ -24,15 +24,53 @@ type RpcLog = {
 };
 
 const BATCH_SIZE = 50;
+/** Cosmos EVM caps eth_getLogs around 10k blocks; keep two windows max per request. */
 const LOG_WINDOW = 9000;
-const LOG_RANGE = 60000;
-const RECENT_BLOCKS = 1000;
+const LOG_WINDOWS = 2;
+/** Native (from/to) scan of recent full blocks — keep small so a request stays under ~3s. */
+const RECENT_BLOCKS = 200;
+const MAX_OUTGOING_NONCES = 15;
+const DEFAULT_BUDGET_MS = 3000;
+const CACHE_TTL_MS = 60_000;
 
-async function runBatch<T>(calls: RpcCall[]): Promise<Array<T | null>> {
-  const chunks: RpcCall[][] = [];
-  for (let i = 0; i < calls.length; i += BATCH_SIZE) chunks.push(calls.slice(i, i + BATCH_SIZE));
-  const parts = await Promise.all(chunks.map((c) => evmJsonRpcBatch<T>(c).catch(() => c.map(() => null))));
-  return parts.flat();
+export type AddressHistoryResult = {
+  items: EvmExplorerTx[];
+  outgoing: number;
+  incoming: number;
+  hasMore: boolean;
+  nextBeforeBlock?: number;
+  truncated?: boolean;
+};
+
+type Deadline = { at: number; expired: () => boolean };
+
+function makeDeadline(budgetMs: number): Deadline {
+  const at = Date.now() + Math.max(250, budgetMs);
+  return { at, expired: () => Date.now() >= at };
+}
+
+async function runBatch<T>(calls: RpcCall[], deadline: Deadline): Promise<Array<T | null>> {
+  const out: Array<T | null> = [];
+  for (let i = 0; i < calls.length; i += BATCH_SIZE) {
+    if (deadline.expired()) {
+      for (let j = i; j < calls.length; j++) out.push(null);
+      break;
+    }
+    const chunk = calls.slice(i, i + BATCH_SIZE);
+    const remaining = Math.max(200, deadline.at - Date.now());
+    try {
+      const part = await Promise.race([
+        evmJsonRpcBatch<T>(chunk),
+        new Promise<Array<T | null>>((resolve) =>
+          setTimeout(() => resolve(chunk.map(() => null)), remaining),
+        ),
+      ]);
+      out.push(...part);
+    } catch {
+      out.push(...chunk.map(() => null));
+    }
+  }
+  return out;
 }
 
 function toHex(n: number): string {
@@ -53,8 +91,7 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
   const value = tx.value || "0x0";
   const amount = Number(formatUnits(BigInt(value), 18));
   const blockHeight = parseHexInt(tx.blockNumber);
-  const type: string =
-    tx.input && tx.input !== "0x" ? "contract_call" : "transfer";
+  const type: string = tx.input && tx.input !== "0x" ? "contract_call" : "transfer";
   return {
     id: tx.hash,
     type,
@@ -65,70 +102,46 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
   };
 }
 
-async function findNonceBlock(
-  address: string,
-  nonce: number,
-  head: number,
-): Promise<number | null> {
-  let lo = 0;
-  let hi = head;
-  let result: number | null = null;
-  while (lo <= hi) {
-    const mid = Math.floor((lo + hi) / 2);
-    const count = await evmJsonRpc<string>("eth_getTransactionCount", [
-      address,
-      toHex(mid),
-    ]);
-    if (parseHexInt(count) > nonce) {
-      result = mid;
-      hi = mid - 1;
-    } else {
-      lo = mid + 1;
-    }
-  }
-  return result;
-}
-
 async function fetchOutgoing(
   address: string,
   nonce: number,
   head: number,
+  beforeBlock: number | undefined,
   limit: number,
-): Promise<RpcTx[]> {
+  deadline: Deadline,
+): Promise<{ txs: RpcTx[]; scannedTo: number }> {
   const targetNonces: number[] = [];
-  const count = Math.min(nonce, limit);
-  for (let i = 0; i < count; i++) {
-    targetNonces.push(nonce - 1 - i);
+  const count = Math.min(nonce, limit, MAX_OUTGOING_NONCES);
+  for (let i = 0; i < count; i++) targetNonces.push(nonce - 1 - i);
+  if (targetNonces.length === 0 || deadline.expired()) {
+    return { txs: [], scannedTo: beforeBlock ?? head };
   }
-  if (targetNonces.length === 0) return [];
+
+  const scanHead = beforeBlock !== undefined ? Math.min(beforeBlock - 1, head) : head;
+  if (scanHead < 0) return { txs: [], scannedTo: 0 };
 
   const lowerAddr = address.toLowerCase();
-  const foundBlocks = new Map<number, number>(); // nonce -> block
-
-  // Parallel binary search rounds
+  const foundBlocks = new Map<number, number>();
   const state = targetNonces.map((k) => ({
     k,
     lo: 0,
-    hi: head,
+    hi: scanHead,
     result: null as number | null,
     done: false,
   }));
 
   while (state.some((s) => !s.done)) {
+    if (deadline.expired()) break;
     const active = state.filter((s) => !s.done);
     const calls: RpcCall[] = active.map((s) => {
       const mid = Math.floor((s.lo + s.hi) / 2);
-      return {
-        method: "eth_getTransactionCount",
-        params: [address, toHex(mid)],
-      };
+      return { method: "eth_getTransactionCount", params: [address, toHex(mid)] };
     });
-    const results = await runBatch<string>(calls);
+    const results = await runBatch<string>(calls, deadline);
     for (let i = 0; i < active.length; i++) {
       const s = active[i];
-      const res = results[i];
       const mid = Math.floor((s.lo + s.hi) / 2);
-      const cnt = parseHexInt(res);
+      const cnt = parseHexInt(results[i]);
       if (cnt > s.k) {
         s.result = mid;
         s.hi = mid - 1;
@@ -142,15 +155,16 @@ async function fetchOutgoing(
     }
   }
 
-  if (foundBlocks.size === 0) return [];
+  if (foundBlocks.size === 0) return { txs: [], scannedTo: Math.max(0, scanHead - RECENT_BLOCKS) };
 
-  const uniqueBlocks = Array.from(new Set(foundBlocks.values()));
+  const uniqueBlocks = Array.from(new Set(foundBlocks.values())).filter(
+    (b) => beforeBlock === undefined || b < beforeBlock,
+  );
   const blockCalls: RpcCall[] = uniqueBlocks.map((b) => ({
     method: "eth_getBlockByNumber",
     params: [toHex(b), true],
   }));
-  const blockResults = await runBatch<RpcBlock>(blockCalls);
-
+  const blockResults = await runBatch<RpcBlock>(blockCalls, deadline);
   const blockMap = new Map<number, RpcBlock>();
   for (let i = 0; i < uniqueBlocks.length; i++) {
     const blk = blockResults[i];
@@ -162,52 +176,54 @@ async function fetchOutgoing(
     const blk = blockMap.get(b);
     if (!blk) continue;
     for (const tx of blk.transactions) {
-      if (
-        tx.from.toLowerCase() === lowerAddr &&
-        parseHexInt(tx.nonce) === k
-      ) {
+      if (tx.from.toLowerCase() === lowerAddr && parseHexInt(tx.nonce) === k) {
         out.push(tx);
         break;
       }
     }
   }
-  return out;
+  const scannedTo =
+    uniqueBlocks.length > 0 ? Math.min(...uniqueBlocks) : Math.max(0, scanHead - RECENT_BLOCKS);
+  return { txs: out, scannedTo };
 }
 
 async function fetchIncoming(
   address: string,
   head: number,
-): Promise<RpcTx[]> {
+  beforeBlock: number | undefined,
+  deadline: Deadline,
+): Promise<{ txs: RpcTx[]; scannedTo: number; truncated: boolean }> {
   const lowerAddr = address.toLowerCase();
   const topic = addrTopic(address);
   const hashes = new Set<string>();
+  let truncated = false;
 
-  // Logs windows
-  const startBlock = Math.max(0, head - LOG_RANGE + 1);
-  let windowEnd = head;
-  while (windowEnd >= startBlock) {
+  const scanHead = beforeBlock !== undefined ? Math.min(beforeBlock - 1, head) : head;
+  if (scanHead < 0) return { txs: [], scannedTo: 0, truncated: false };
+
+  const range = LOG_WINDOW * LOG_WINDOWS;
+  const startBlock = Math.max(0, scanHead - range + 1);
+  let windowEnd = scanHead;
+  let windows = 0;
+  let scannedTo = scanHead;
+
+  while (windowEnd >= startBlock && windows < LOG_WINDOWS) {
+    if (deadline.expired()) {
+      truncated = true;
+      break;
+    }
     const windowStart = Math.max(startBlock, windowEnd - LOG_WINDOW + 1);
+    scannedTo = windowStart;
     const fromHex = toHex(windowStart);
     const toHexStr = toHex(windowEnd);
     const calls: RpcCall[] = [
+      { method: "eth_getLogs", params: [{ address, fromBlock: fromHex, toBlock: toHexStr }] },
       {
         method: "eth_getLogs",
-        params: [
-          { address, fromBlock: fromHex, toBlock: toHexStr },
-        ],
-      },
-      {
-        method: "eth_getLogs",
-        params: [
-          {
-            fromBlock: fromHex,
-            toBlock: toHexStr,
-            topics: [null, null, topic],
-          },
-        ],
+        params: [{ fromBlock: fromHex, toBlock: toHexStr, topics: [null, null, topic] }],
       },
     ];
-    const results = await runBatch<RpcLog[]>(calls);
+    const results = await runBatch<RpcLog[]>(calls, deadline);
     for (const r of results) {
       if (r) {
         for (const log of r) {
@@ -215,52 +231,68 @@ async function fetchIncoming(
         }
       }
     }
+    windows += 1;
     if (windowStart === startBlock) break;
     windowEnd = windowStart - 1;
   }
 
-  // Recent native txs
-  const recentStart = Math.max(0, head - RECENT_BLOCKS + 1);
-  const recentCalls: RpcCall[] = [];
-  for (let b = recentStart; b <= head; b++) {
-    recentCalls.push({
-      method: "eth_getBlockByNumber",
-      params: [toHex(b), true],
-    });
-  }
-  const recentBlocks = await runBatch<RpcBlock>(recentCalls);
-  for (const blk of recentBlocks) {
-    if (!blk) continue;
-    for (const tx of blk.transactions) {
-      if (tx.to && tx.to.toLowerCase() === lowerAddr) {
-        hashes.add(tx.hash);
+  // Recent native txs in a bounded window (from/to match).
+  if (!deadline.expired()) {
+    const recentEnd = scanHead;
+    const recentStart = Math.max(0, recentEnd - RECENT_BLOCKS + 1);
+    scannedTo = Math.min(scannedTo, recentStart);
+    const recentCalls: RpcCall[] = [];
+    for (let b = recentStart; b <= recentEnd; b++) {
+      recentCalls.push({ method: "eth_getBlockByNumber", params: [toHex(b), true] });
+    }
+    const recentBlocks = await runBatch<RpcBlock>(recentCalls, deadline);
+    if (deadline.expired()) truncated = true;
+    for (const blk of recentBlocks) {
+      if (!blk) continue;
+      for (const tx of blk.transactions) {
+        if (tx.to && tx.to.toLowerCase() === lowerAddr) hashes.add(tx.hash);
+        if (tx.from && tx.from.toLowerCase() === lowerAddr) hashes.add(tx.hash);
       }
     }
+  } else {
+    truncated = true;
   }
 
-  if (hashes.size === 0) return [];
+  if (hashes.size === 0) return { txs: [], scannedTo, truncated };
 
   const hashArr = Array.from(hashes);
   const txCalls: RpcCall[] = hashArr.map((h) => ({
     method: "eth_getTransactionByHash",
     params: [h],
   }));
-  const txResults = await runBatch<RpcTx>(txCalls);
+  const txResults = await runBatch<RpcTx>(txCalls, deadline);
   const out: RpcTx[] = [];
   for (const tx of txResults) {
-    if (tx) out.push(tx);
+    if (!tx) continue;
+    if (beforeBlock !== undefined && parseHexInt(tx.blockNumber) >= beforeBlock) continue;
+    out.push(tx);
   }
-  return out;
+  return { txs: out, scannedTo, truncated };
 }
 
-const historyCache = new Map<string, { at: number; value: Promise<{ items: EvmExplorerTx[]; outgoing: number; incoming: number }> }>();
+const historyCache = new Map<
+  string,
+  { at: number; value: Promise<AddressHistoryResult> }
+>();
 
-export function fetchAddressHistory(address: string, limit: number) {
-  const key = `${address.toLowerCase()}|${limit}`;
+export function fetchAddressHistory(
+  address: string,
+  limit: number,
+  opts?: { beforeBlock?: number; budgetMs?: number },
+): Promise<AddressHistoryResult> {
+  const safeLimit = Math.max(1, Math.min(limit || 30, 100));
+  const beforeBlock = opts?.beforeBlock;
+  const budgetMs = opts?.budgetMs ?? DEFAULT_BUDGET_MS;
+  const key = `${address.toLowerCase()}|${safeLimit}|${beforeBlock ?? ""}`;
   const hit = historyCache.get(key);
-  if (hit && Date.now() - hit.at < 30_000) return hit.value;
+  if (hit && Date.now() - hit.at < CACHE_TTL_MS) return hit.value;
   if (historyCache.size > 200) historyCache.clear();
-  const value = loadAddressHistory(address, limit);
+  const value = loadAddressHistory(address, safeLimit, beforeBlock, budgetMs);
   historyCache.set(key, { at: Date.now(), value });
   value.catch(() => historyCache.delete(key));
   return value;
@@ -269,33 +301,51 @@ export function fetchAddressHistory(address: string, limit: number) {
 async function loadAddressHistory(
   address: string,
   limit: number,
-): Promise<{ items: EvmExplorerTx[]; outgoing: number; incoming: number }> {
+  beforeBlock: number | undefined,
+  budgetMs: number,
+): Promise<AddressHistoryResult> {
   const lowerAddr = address.toLowerCase();
+  const deadline = makeDeadline(budgetMs);
 
   let head = 0;
   let nonce = 0;
   try {
     const headHex = await evmJsonRpc<string>("eth_blockNumber", []);
     head = parseHexInt(headHex);
-    const nonceHex = await evmJsonRpc<string>("eth_getTransactionCount", [
-      address,
-      headHex,
-    ]);
+    const nonceHex = await evmJsonRpc<string>("eth_getTransactionCount", [address, headHex]);
     nonce = parseHexInt(nonceHex);
   } catch {
-    return { items: [], outgoing: 0, incoming: 0 };
+    return { items: [], outgoing: nonce, incoming: 0, hasMore: false };
   }
 
-  const [outgoingTxs, incomingTxs] = await Promise.all([
-    fetchOutgoing(address, nonce, head, limit).catch((): RpcTx[] => []),
-    fetchIncoming(address, head).catch((): RpcTx[] => []),
+  if (deadline.expired()) {
+    return {
+      items: [],
+      outgoing: nonce,
+      incoming: 0,
+      hasMore: head > 0,
+      nextBeforeBlock: beforeBlock ?? head,
+      truncated: true,
+    };
+  }
+
+  const [outgoingRes, incomingRes] = await Promise.all([
+    fetchOutgoing(address, nonce, head, beforeBlock, limit, deadline).catch(() => ({
+      txs: [] as RpcTx[],
+      scannedTo: 0,
+    })),
+    fetchIncoming(address, head, beforeBlock, deadline).catch(() => ({
+      txs: [] as RpcTx[],
+      scannedTo: 0,
+      truncated: true,
+    })),
   ]);
 
   const merged = new Map<string, RpcTx>();
-  for (const tx of outgoingTxs) {
+  for (const tx of outgoingRes.txs) {
     if (!merged.has(tx.hash)) merged.set(tx.hash, tx);
   }
-  for (const tx of incomingTxs) {
+  for (const tx of incomingRes.txs) {
     if (!merged.has(tx.hash)) merged.set(tx.hash, tx);
   }
 
@@ -310,9 +360,26 @@ async function loadAddressHistory(
     if (tx.from.toLowerCase() !== lowerAddr) incomingCount++;
   }
 
+  const scannedFloor = Math.min(
+    outgoingRes.scannedTo || head,
+    incomingRes.scannedTo || head,
+  );
+  const truncated = deadline.expired() || incomingRes.truncated;
+  const oldest =
+    sliced.length > 0
+      ? Math.min(...sliced.map((t) => parseHexInt(t.blockNumber)))
+      : scannedFloor;
+  // Offer "load more" when we stopped early or there is older chain left to scan.
+  const hasMore =
+    oldest > 1 && (truncated || all.length > limit || scannedFloor > 1);
+  const nextBeforeBlock = hasMore ? oldest : undefined;
+
   return {
     items,
     outgoing: nonce,
     incoming: incomingCount,
+    hasMore,
+    nextBeforeBlock,
+    truncated,
   };
 }

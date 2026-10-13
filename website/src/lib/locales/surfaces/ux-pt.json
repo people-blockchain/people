@@ -47,6 +47,7 @@
   "totalSupply": "Emissão total",
   "pool": "Pool",
   "noTx": "Ainda não há transações — faça a primeira na sua carteira",
+  "loadMore": "Carregar mais",
   "several": "Vários destinatários",
   "yourBalance": "Seu saldo: {amount} PPL",
   "notEnoughFee": "PPL insuficiente para a taxa. Obtenha PPL de teste na sua carteira.",

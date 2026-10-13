@@ -47,6 +47,7 @@
   "totalSupply": "Gesamtmenge",
   "pool": "Pool",
   "noTx": "Noch keine Transaktionen — machen Sie die erste in Ihrer Wallet",
+  "loadMore": "Mehr laden",
   "several": "Mehrere Empfänger",
   "yourBalance": "Ihr Guthaben: {amount} PPL",
   "notEnoughFee": "Nicht genug PPL für die Gebühr. Holen Sie sich zuerst Test-PPL in der Wallet.",

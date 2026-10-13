@@ -47,6 +47,7 @@
   "totalSupply": "Total supply",
   "pool": "Pool",
   "noTx": "No transactions yet — make one in your wallet",
+  "loadMore": "Load more",
   "several": "Several recipients",
   "yourBalance": "Your balance: {amount} PPL",
   "notEnoughFee": "Not enough PPL for the fee. Get test PPL in your wallet first.",
