@@ -117,7 +117,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 
 **Rachats.** Les parts du trésor (20 %) et de la liquidité (10 %) sont utilisées pour les rachats publics de PPL. Rien n'est brûlé pour prétendre à la rareté — les frais reviennent au réseau et à ses gens.
 
-**Frais de lancement de token.** En direct sur le testnet : les usines déployées facturent encore des frais fixes en PPL — 1,045005 PPL pour lancer un token et 2,925 PPL pour créer un NFT. Le plan approuvé est un montant fixe de **5 USD par lancement de token et 10 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP. L'option stablecoin et la remise TWAP ne sont pas encore dans le code déployé. 100 % des frais de lancement vont au rachat public de PPL, et le PPL racheté est partagé 30/25/20/10/15 par le multisig du trésor, comme tout autre rachat.
+**Frais de lancement de token.** En direct sur le testnet : les usines déployées facturent encore des frais fixes en PPL — 1,045005 PPL pour lancer un token et 2,925 PPL pour créer un NFT. Le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP. L'option stablecoin et la remise TWAP ne sont pas encore dans le code déployé. 100 % des frais de lancement vont au rachat public de PPL, et le PPL racheté est partagé 30/25/20/10/15 par le multisig du trésor, comme tout autre rachat.
 
 ---
 
@@ -218,7 +218,8 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 
 - La part communautaire d'un nouveau token est de **27 %** de l'offre : **10 %** alloués au lancement plus **~16,7 %** prélevés sur la courbe lors de la migration.
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
-- Frais de lancement : le plan approuvé est un montant fixe de **5 USD par lancement de token et 10 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
+- Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - **Il n'y a pas de vente publique de PPL pour le moment** et aucun contrôle KYC ou d'éligibilité n'est effectué.
 - Sécurité : une **revue interne assistée par IA** aujourd'hui, et un **audit indépendant avant le mainnet**.
 - Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
+- Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Modification du contrat écrite et testée, pas encore déployée sur le testnet.)

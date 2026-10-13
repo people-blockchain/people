@@ -119,7 +119,7 @@ Every protocol fee, including fractional fees, is split the same way:
 
 **Buybacks.** The treasury (20%) and liquidity (10%) shares are used for public PPL buybacks. Nothing is burned to fake scarcity — fees go back to the network and its people.
 
-**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of launch fees goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
+**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of launch fees goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
 
 ---
 
@@ -220,7 +220,8 @@ Only verifiable public facts about other networks. Sources below.
 
 - A new token's community share is **27%** of supply: **10%** allocated at launch plus **~16.7%** swept from the bonding curve at migration.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
-- Launch fees: the approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
+- Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - There is **no public PPL sale at this time**, and no KYC or sale-eligibility checks are run.
 - Security: an **internal, AI-assisted review** now, and an **independent audit before mainnet**.
 - The treasury multisig is **2-of-3** and is created before mainnet.
+- If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Contract change written and tested; not yet deployed on testnet.)
