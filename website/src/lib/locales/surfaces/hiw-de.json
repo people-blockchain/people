@@ -26,6 +26,14 @@
         {
           "title": "Creator-Vesting",
           "text": "Der Creator-Anteil unlockt über 180 Tage – kein Dump am Tag eins."
+        },
+        {
+          "title": "Kurvenreste",
+          "text": "Nachdem die Kurve zum AMM migriert ist — oder wenn sie nach 180 Tagen ohne Ausverkauf finalisiert wird — folgen übrig gebliebene und unverkaufte Tokens der Wahl des Erstellers beim Start: standardmäßig verbrannt (empfohlen) oder an den Community-Pool dieses Tokens gesendet. Niemals an den Ersteller oder die Protokoll-Schatzkammer. Jeder Standard-Token sendet beim Start auch 10% des Angebots an seinen Community-Pool."
+        },
+        {
+          "title": "Optionale Empfehlungsbeteiligung",
+          "text": "Beim Start kann ein Ersteller an einem Emittenten-Empfehlungsprogramm teilnehmen: Standardmäßig können 5% des Angebots (maximal 10%) für Einladungsprämien reserviert werden, mit einer Standard-Einladungsprämie von 5% des Kaufs des Eingeladenen. Aus, bis der Ersteller zustimmt."
         }
       ]
     },

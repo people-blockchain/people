@@ -24,6 +24,14 @@
           "text": "Setiap token standar mengirim 10% suplai ke pool komunitas token itu."
         },
         {
+          "title": "Sisa kurva",
+          "text": "Setelah kurva bermigrasi ke AMM — atau jika difinalisasi setelah 180 hari tanpa terjual habis — token sisa dan tidak terjual mengikuti pilihan peluncuran kreator: dibakar secara default (disarankan), atau dikirim ke kolam komunitas token tersebut. Tidak pernah untuk kreator atau treasury protokol. Setiap token standar juga mengirim 10% pasokan ke kolam komunitasnya saat peluncuran."
+        },
+        {
+          "title": "Bagian referral opsional",
+          "text": "Saat peluncuran, kreator dapat memilih program referral penerbit: secara default 5% pasokan (maksimum 10%) dapat disisihkan untuk hadiah undangan, dengan bounty undangan default 5% dari pembelian yang diundang. Nonaktif sampai kreator memilih ikut."
+        },
+        {
           "title": "Vesting kreator",
           "text": "Bagian kreator terbuka selama 180 hari, tanpa dump hari pertama."
         }

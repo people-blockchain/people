@@ -20,7 +20,7 @@ import {
   nftMintedEvent,
 } from "../src/lib/evm/nft-factory.ts";
 
-const FACTORY = "0x607790894b3f55672a2cc26b75b43a03ff048ead";
+const FACTORY = "0x0fb9f7e6205ce2de5ff40d5c6dcc07050b9172d7";
 const OTHER = "0x89aaef7b13dfba2570c3c47390f03471596a2628";
 const COLLECTION = "0x8f659a462c89314faa6a4065fb3d2deb51faef62";
 

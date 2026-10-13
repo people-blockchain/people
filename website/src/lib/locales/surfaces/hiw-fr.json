@@ -26,6 +26,14 @@
         {
           "title": "Vesting créateur",
           "text": "La part du créateur se débloque sur 180 jours, pas de dump le jour un."
+        },
+        {
+          "title": "Restes de courbe",
+          "text": "Après la migration de la courbe vers l'AMM — ou si elle est finalisée après 180 jours sans être épuisée — les tokens restants et invendus suivent le choix du créateur au lancement : brûlés par défaut (recommandé), ou envoyés au pool communautaire de ce token. Jamais au créateur ni à la trésorerie du protocole. Chaque token standard envoie également 10% de l'offre à son pool communautaire au lancement."
+        },
+        {
+          "title": "Part de parrainage optionnelle",
+          "text": "Au lancement, un créateur peut opter pour un programme de parrainage d'émetteur : par défaut, 5% de l'offre (maximum 10%) peut être réservé aux récompenses d'invitation, avec une prime d'invitation par défaut de 5% de l'achat de l'invité. Désactivé jusqu'à ce que le créateur opte."
         }
       ]
     },

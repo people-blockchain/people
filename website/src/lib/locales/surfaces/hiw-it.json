@@ -24,6 +24,14 @@
           "text": "Ogni token standard invia il 10% della supply al pool comunitario di quel token."
         },
         {
+          "title": "Rimanenze della curva",
+          "text": "Dopo che la curva migra all'AMM — o se viene finalizzata dopo 180 giorni senza esaurirsi — i token rimanenti e invenduti seguono la scelta del creatore al lancio: bruciati per impostazione predefinita (consigliato), o inviati al pool della community di quel token. Mai al creatore o alla tesoreria del protocollo. Ogni token standard invia anche il 10% dell'offerta al suo pool della community al lancio."
+        },
+        {
+          "title": "Quota referral opzionale",
+          "text": "Al lancio, un creatore può aderire a un programma referral dell'emittente: per impostazione predefinita, il 5% dell'offerta (massimo 10%) può essere riservato a ricompense per inviti, con un bounty invito predefinito del 5% dell'acquisto dell'invitato. Disattivato finché il creatore non aderisce."
+        },
+        {
           "title": "Vesting del creator",
           "text": "La quota del creator si sblocca in 180 giorni, niente dump al giorno uno."
         }

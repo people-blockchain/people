@@ -24,6 +24,14 @@
           "text": "Mỗi token chuẩn gửi 10% nguồn cung vào pool cộng đồng của token đó."
         },
         {
+          "title": "Phần còn lại trên đường cong",
+          "text": "Sau khi đường cong di chuyển sang AMM — hoặc nếu nó được hoàn tất sau 180 ngày mà không bán hết — token còn lại và chưa bán tuân theo lựa chọn khởi chạy của người tạo: mặc định bị đốt (khuyến nghị), hoặc gửi đến quỹ cộng đồng của token đó. Không bao giờ cho người tạo hoặc kho bạc giao thức. Mọi token tiêu chuẩn cũng gửi 10% nguồn cung đến quỹ cộng đồng của nó khi khởi chạy."
+        },
+        {
+          "title": "Chia sẻ giới thiệu tùy chọn",
+          "text": "Khi khởi chạy, người tạo có thể chọn tham gia chương trình giới thiệu của tổ chức phát hành: mặc định 5% nguồn cung (tối đa 10%) có thể được dành cho phần thưởng mời, với thưởng mời mặc định là 5% giao dịch mua của người được mời. Tắt cho đến khi người tạo chọn tham gia."
+        },
+        {
           "title": "Vesting creator",
           "text": "Phần creator mở khóa trong 180 ngày, không dump ngày đầu."
         }

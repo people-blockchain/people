@@ -83,6 +83,14 @@
       {
         "title": "The creator's share vests over 180 days",
         "body": "10% of the creator allocation is liquid at creation, the remaining 90% unlocks linearly over 180 days. No dump on day one."
+      },
+      {
+        "title": "Curve leftovers",
+        "body": "After the curve migrates to the AMM — or if it is finalized after 180 days without selling out — leftover and unsold tokens follow the creator's launch choice: burned by default (recommended), or sent to that token's community pool. Never to the creator or the protocol treasury. Every standard token also sends 10% of supply to its community pool at launch."
+      },
+      {
+        "title": "Optional referral share",
+        "body": "At launch, a creator may opt into an issuer referral program: by default 5% of supply (maximum 10%) can be reserved for invite rewards, with a default invite bounty of 5% of the invitee's purchase. Off until the creator opts in."
       }
     ],
     "curveCaption": "Price along the bonding curve",

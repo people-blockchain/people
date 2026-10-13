@@ -2,20 +2,20 @@
   "chainId": 97401,
   "cosmosChainId": "people_97401-1",
   "rpcUrl": "https://node.peopleblockchain.network/rpc",
-  "deployedAt": "2026-10-09T04:24:05Z",
+  "deployedAt": "2026-10-13T22:20:52Z",
   "deployer": "0x040b538DCB60EEa5BdB78779d3097D25f38D44C4",
   "contracts": {
-    "registry": "0x3877fdF58a4D4Bb65cF7d780166Bec941755dd16",
-    "tokenFactory": "0xE281db7A508Bb50361246fb1a2A37C4d39aBfEfB",
-    "bondingCurve": "0x3238E9634D46e942090817942F5b1e521F371C2C",
+    "registry": "0x855e80417207A913B64e98EfF99F88Fc80759972",
+    "tokenFactory": "0xB0476cB21eD23386e0AC55762F5d7C3Deb940432",
+    "bondingCurve": "0x3bFd5c0c1a43abf2C8d07666A24aFF59a78398d9",
     "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18",
     "wppl": "0x89aaef7b13dfba2570c3c47390f03471596a2628",
     "ammFactory": "0x32b96f14f2d2447fff50c0e650f3795a3ca521f0",
-    "nftFactory": "0x607790894b3f55672A2Cc26b75B43A03fF048EAd",
-    "creatorVesting": "0x1e9Dcc18158733DC2a6ff2A850285124c9CBF377",
-    "communityVault": "0x66d16DF444972a7Ab57e64636C6114D7A523fFF7",
-    "peopleMultisig": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
-    "gateway": "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9",
+    "nftFactory": "0x0fb9f7E6205ce2DE5fF40d5C6Dcc07050b9172d7",
+    "creatorVesting": "0xa8A3e25A01C48743382498E8270392b02fff7f68",
+    "communityVault": "0xa6481690ca5cc8521e2546C2e11a8F35576dbfB7",
+    "peopleMultisig": "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB",
+    "gateway": "0x4620FAF6ac06C046f6A3920e750BEb51f5F2Cb84",
     "agentWallet": "0xbeee27d8d0c7dea625cd58c29fde9e735b3abe32",
     "agentWalletV2Deprecated": "0xc1554093398f48cc6c9c559bb26887acaec8897c",
     "governanceToken": "0x5375d46f0a5450e44bbbb33233d424038ad7988f",
@@ -85,7 +85,7 @@
       "status": "active"
     }
   ],
-  "deployBlock": 56,
+  "deployBlock": 309090,
   "seed": {
     "creatorCollectiblesCollection": "0x21c963c23934cb7b37adad77075482d15b9758eb",
     "discovery": {
@@ -149,7 +149,19 @@
     "gateway": "0xb68441f160c63988105285944534c607dfd94e80"
   },
   "startBlocks": {
-    "tokenFactory": 285448,
-    "bondingCurve": 285444
-  }
+    "tokenFactory": 309090,
+    "bondingCurve": 309090
+  },
+  "legacyContracts2026_10_13_afternoon": {
+    "registry": "0x3877fdF58a4D4Bb65cF7d780166Bec941755dd16",
+    "bondingCurve": "0x3238E9634D46e942090817942F5b1e521F371C2C",
+    "creatorVesting": "0x1e9Dcc18158733DC2a6ff2A850285124c9CBF377",
+    "communityVault": "0x66d16DF444972a7Ab57e64636C6114D7A523fFF7",
+    "tokenFactory": "0xE281db7A508Bb50361246fb1a2A37C4d39aBfEfB",
+    "nftFactory": "0x607790894b3f55672A2Cc26b75B43A03fF048EAd",
+    "gateway": "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9",
+    "peopleMultisig": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
+    "note": "Pre-leftoverMode launch set (2026-10-13). Gateway 0x78e9\u2026 kept fees 1/2 USD but is immutable to these factories."
+  },
+  "redeployNote": "2026-10-14 leftoverMode Burn/CommunityPool launch set; gateway Ownable2Step pending acceptOwnership by multisig."
 }
