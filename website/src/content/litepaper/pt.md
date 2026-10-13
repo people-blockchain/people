@@ -2,7 +2,7 @@
 title: "People Blockchain — Whitepaper"
 description: "A blockchain onde cada usuário é um humano verificado. Propriedade das pessoas, não de VCs."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -12,7 +12,7 @@ status: public-draft
 > **A blockchain onde cada usuário é um humano verificado.**
 > **Propriedade das pessoas, não de VCs.**
 
-*v1.0 · outubro de 2026 · Os números são preliminares e sujeitos à governança da comunidade. Nada neste documento é uma promessa de renda.*
+*v1.1 · outubro de 2026 · Os números são preliminares e sujeitos à governança da comunidade. Nada neste documento é uma promessa de renda.*
 
 ---
 
@@ -57,7 +57,7 @@ O que você pode fazer sem código:
 | **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
 | **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
 | **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
-| **Agentes de IA comunitários** | Agentes que trabalham para um grupo: uma carteira comunitária baseada em Safe com limites de gastos, listas brancas e um congelamento de emergência. Os parâmetros mudam apenas por voto do token; cada ação é visível no explorer. | Testnet: 1 agente comunitário ativo |
+| **Agentes de IA comunitários** | Agentes que trabalham para um grupo: uma carteira comunitária multisig com limites de gastos, listas brancas e um congelamento de emergência. Os parâmetros mudam apenas por voto do token; cada ação é visível no explorer. | Testnet: 1 agente comunitário ativo |
 
 ---
 
@@ -162,7 +162,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 ## 9. Segurança
 
 - **Auditoria de segurança antes da mainnet.** Os contratos do protocolo passarão por uma auditoria de segurança antes do lançamento da mainnet.
-- **Multisig do tesouro.** O tesouro será mantido em um multisig antes da mainnet; endereços do signatário serão publicados.
+- **Multisig do tesouro.** O tesouro é controlado pelo contrato multisig 2-de-3 próprio da People na rede People, criado antes da mainnet; os endereços dos signatários serão publicados.
 - **Endereços publicados.** Os endereços do contrato de venda, vesting e liquidez serão publicados no lançamento da mainnet — sem placeholders.
 - **Defesa contra bots.** Verificação humana, limites por dispositivo e IP, limites diários de pontos e clawback de bots.
 - **Blocos de construção comprovados.** Contratos sem código são montados a partir de templates OpenZeppelin.
@@ -214,7 +214,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 
 ---
 
-### O que mudou na v1.0
+### O que mudou na v1.1
 
 - A parte da comunidade em um novo token é **27%** da oferta: **10%** alocados no lançamento mais **~16,7%** retirados da curva na migração.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).

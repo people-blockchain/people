@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Topluluk yapay zekâ ajanları",
-      "summary": "Limitli Safe hazinesi, beyaz liste ve değişiklikler yalnızca oyla — explorer’da görünür."
+      "summary": "Limitli multisig hazinesi, beyaz liste ve değişiklikler yalnızca oyla — explorer’da görünür."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Community-KI-Agenten",
-      "summary": "Safe-Tresor mit Limits, Whitelist und Änderungen nur per Token-Vote — im Explorer sichtbar."
+      "summary": "Multisig-Tresor mit Limits, Whitelist und Änderungen nur per Token-Vote — im Explorer sichtbar."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "وكلاء ذكاء اصطناعي للمجتمع",
-      "summary": "خزينة Safe بحدود وقائمة مسموح والتغيير بالتصويت فقط — ظاهرة في المستكشف."
+      "summary": "خزينة متعددة التوقيع بحدود وقائمة مسموح والتغيير بالتصويت فقط — ظاهرة في المستكشف."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

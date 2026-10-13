@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Agents IA communautaires",
-      "summary": "Trésor Safe avec plafonds, liste blanche et changements par vote — visible dans l’explorer."
+      "summary": "Trésor multisig avec plafonds, liste blanche et changements par vote — visible dans l’explorer."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",
