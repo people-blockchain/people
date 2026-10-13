@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — topluluklar için blokzincir",
+    "headlineMain": "Topluluğunuz için bir token başlatın.",
+    "headlineMainLines": [
+      "Topluluğunuz için",
+      "bir token",
+      "başlatın."
+    ],
+    "headlineAccent": "%10 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccentLines": [
+      "%10 sizin insanlarınıza gider,",
+      "balinalara değil."
+    ],
+    "sub": "People's Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
+    "testnetBadge": "Halka açık testnet yayında. Henüz mainnet değil.",
+    "ctaCreate": "Token oluştur",
+    "ctaWallet": "Cüzdanı aç",
+    "flowAria": "Dört adım: cüzdandan token alım satımına",
+    "flowPause": "Duraklat",
+    "flowPlay": "Oynat",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Cüzdan oluşturun",
+        "sub": "Tarayıcıda bir dakikadan kısa sürede"
+      },
+      {
+        "id": "launch",
+        "label": "Token'ınızı başlatın",
+        "sub": "Başlatma ücretini PPL ile ödeyin"
+      },
+      {
+        "id": "community",
+        "label": "%10 topluluk havuzuna",
+        "sub": "Her yeni tokene gömülü"
+      },
+      {
+        "id": "trade",
+        "label": "Token/PPL havuzunda işlem yapın",
+        "sub": "İlk takastan adil fiyat"
+      }
+    ],
+    "ctaWalletAuth": "Cüzdan oluştur / Google ile giriş"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "Yaratıcılar için",
+      "body": "Bir dakikada: ad, ticker, görsel, tamam. Yerleşik eğri ilk işlemden fiyatlar; market maker veya ön satış gerekmez. Payınız 180 günde açılır; topluluk aniden satmayacağınızı bilir."
+    },
+    {
+      "id": "community",
+      "title": "Topluluğunuz için",
+      "body": "Her yeni token'ın %10'u o token'ın topluluk havuzuna gider. Her ağ ücretinin bir kısmı da oraya gider. Katılanlar, birlikte kurdukları şeyde pay sahibi olur."
+    },
+    {
+      "id": "everyone",
+      "title": "Herkes için",
+      "body": "Telefon veya tarayıcı yeter. Madencilik rig'i veya büyük stake yok. 30 saniyede cüzdan açın, testnette deneyin."
+    },
+    {
+      "id": "contracts",
+      "title": "Geliştiriciler için",
+      "body": "Akıllı sözleşmeyi sade bir dille anlatın — denetlenmiş OpenZeppelin şablonlarından oluştururuz.",
+      "ctaLabel": "Sözleşme oluştur",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Testnet açık.",
+    "body": "Erken gelin, bir şeyleri kırın, neyin kötü olduğunu söyleyin.",
+    "cta": "Testnette başla"
+  },
+  "notInvestmentDisclaimer": "Bu bir ağa katılım, yatırım değil.",
+  "visuals": {
+    "supply": "Token arzı",
+    "share": "%10",
+    "toPool": "topluluk havuzuna gider",
+    "pool": "Topluluk havuzu",
+    "poolNote": "katılanlar arasında paylaşılır",
+    "aria": "Her yeni tokenin arzının %10'u kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
+    "prompt": "Sahiplerinin hazinenin nasıl harcanacağına oy verdiği bir token",
+    "step1": "Siz yazarsınız",
+    "step2": "Biz kurarız",
+    "step3": "Siz başlatırsınız",
+    "contractTitle": "Oylama tokeni",
+    "contractLines": [
+      "Sahipler önerilere oy verir",
+      "Hazine yalnızca oyla harcar",
+      "Denetlenmiş OpenZeppelin şablonu"
+    ],
+    "deploy": "Dağıt",
+    "deployed": "Ağda çalışıyor"
+  },
+  "agentsTeaser": {
+    "eyebrow": "Topluluk YZ",
+    "title": "Topluluk yapay zekâ ajanları",
+    "lead": "Açık limitli paylaşılan cüzdanlar — otomasyon, kontrolü ellerinden almadan insanlara yardımcı olsun diye.",
+    "cta": "Daha fazla",
+    "cards": [
+      {
+        "title": "Gerçek iş için ödeme",
+        "body": "Hibeler, abonelikler ve hizmetler — topluluğun belirlediği limitler içinde."
+      },
+      {
+        "title": "Oylayabileceğiniz kurallar",
+        "body": "Limitler, izin listeleri ve dondurmalar yalnızca token oyuyla değişir."
+      },
+      {
+        "title": "Explorer'da görünür",
+        "body": "Her ödeme zincir üstündedir — diğer her cüzdan kadar şeffaf."
+      },
+      {
+        "title": "Gruplar için tasarlandı",
+        "body": "Kulüpler, içerik üreticileri ve yerel topluluklar — anonim meme lansmanları değil."
+      }
+    ],
+    "ctaHref": "/agents"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Bir milyon kurucu",
+    "lead": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve People's Blockchain testnet aktivite puanları alır.",
+    "cta": "Kuruculara katıl",
+    "href": "/founders",
+    "titleWithNumber": "Mainnet öncesi {{n}}. kurucu olun",
+    "titleFallback": "Ana ağ başlamadan ilk kuruculardan biri olun"
+  }
+}

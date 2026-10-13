@@ -1,0 +1,116 @@
+{
+  "title": "Comment fonctionne People's Blockchain",
+  "loopLine": "Les gens utilisent le réseau. L'usage crée des frais. Une part de chaque frais revient à la communauté.",
+  "docsLinkLabel": "Détails dans la documentation",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Déjà sur le testnet",
+      "items": [
+        {
+          "title": "Portefeuille",
+          "text": "Portefeuille non custodial sur mobile ou navigateur. Vos clés ne quittent pas l'appareil."
+        },
+        {
+          "title": "Créer un token",
+          "text": "Nom, ticker, image et offre, payez en PPL. Prix sur courbe dès le premier échange."
+        },
+        {
+          "title": "Échanger",
+          "text": "Achetez et vendez sur la courbe de lancement, puis dans le pool token/PPL."
+        },
+        {
+          "title": "10% à la communauté",
+          "text": "Chaque token standard envoie 10% de son offre à son pool communautaire."
+        },
+        {
+          "title": "Vesting créateur",
+          "text": "La part du créateur se débloque sur 180 jours, pas de dump le jour un."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Participez en tant que personne",
+      "items": [
+        {
+          "title": "Sessions de participation en un tap depuis le téléphone.",
+          "text": ""
+        },
+        {
+          "title": "Preuve d'humanité sans biométrie.",
+          "text": ""
+        },
+        {
+          "title": "Les points de participation fixent votre part des récompenses communautaires. Non achetables ni transférables.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Offre fixe de PPL",
+      "intro": "Un milliard de PPL sans frappe surprise au début. Validateurs et récompenses de lancement depuis genesis et frais.",
+      "bullets": [
+        "Années 1–4 : 0 % inflation — 1B PPL.",
+        "Validateurs : 200M PPL, 6 % / 5 % / 5 % / 4 % du supply (60M, 50M, 50M, 40M) + 30 % frais.",
+        "Fondateurs, primes, ambassadeurs, airdrops : fonds 35 % seulement.",
+        "À partir de l’an 5 : max 2 % émission/an, vote communautaire.",
+        "Airdrop fondateurs d’abord ; vente après 1 000 vérifiés et multisig.",
+        "Chaque frais : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % burn."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "D'où viennent les récompenses",
+      "intro": "Chaque frais réseau est payé en PPL et réparti de la même façon à chaque fois :",
+      "feeSplit": [
+        {
+          "label": "Validateurs (réseau)",
+          "pct": 30
+        },
+        {
+          "label": "Pool communautaire",
+          "pct": 25
+        },
+        {
+          "label": "Trésorerie",
+          "pct": 20
+        },
+        {
+          "label": "Liquidité et écosystème",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (parrainage)",
+          "pct": 15
+        },
+        {
+          "label": "Brûlage",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Le pool communautaire est partagé entre participants actifs selon leurs points. Exemple : 600 tokens dans le pool, trois personnes avec 1, 2 et 3 points reçoivent 100, 200 et 300.",
+      "tokenPoolNote": "Séparément, les 10% communautaires de chaque token restent dans le pool de ce token. Jamais mélangés aux frais PPL.",
+      "buybackNote": "Les parts trésorerie et liquidité (30 % au total) financent des rachats publics de PPL sur le marché ouvert, exécutés par le multisig publié et visibles dans l'explorer.",
+      "launchFeeNote": "Lancer un jeton ou un NFT coûte des frais de protocole, payables en PPL ou dans un stablecoin pris en charge (USDC/USDT), à votre choix. Le gaz est toujours payé en PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Pourquoi les bots ne peuvent pas farmer",
+      "body": "Les nouveaux comptes démarrent lentement, les inactifs s'affaiblissent et chaque personne a un plafond. Cent faux comptes ne rapportent pas cent fois plus."
+    },
+    {
+      "id": "honest",
+      "title": "La part honnête",
+      "bullets": [
+        "Les récompenses ne sont pas fixes. Pas d'activité, pas de récompenses.",
+        "Les prix peuvent monter, baisser ou tomber à zéro.",
+        "C'est une participation à un réseau, pas un investissement."
+      ]
+    }
+  ],
+  "ctaWallet": "Créer un portefeuille",
+  "ctaCreate": "Lancer un token",
+  "feeChartLabel": "Répartition des frais de réseau"
+}

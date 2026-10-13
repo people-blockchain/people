@@ -1,0 +1,122 @@
+{
+  "tag": "LITEPAPER",
+  "tocLabel": "Trong trang này",
+  "downloadTitle": "Tải xuống",
+  "downloadLead": "Tải Litepaper đầy đủ dạng PDF, hoặc bộ quảng bá để chia sẻ.",
+  "downloadPdfLabel": "Tải Litepaper (PDF)",
+  "downloadZipLabel": "Tải bộ quảng bá",
+  "preliminaryNote": "Tạm thời · không phải lời hứa về thu nhập",
+  "downloadWhitepaperLabel": "Tải Whitepaper (PDF)",
+  "downloadWhitepaperLead": "Whitepaper — tài liệu kỹ thuật đầy đủ (EN, PDF, 31 trang)",
+  "versionLabel": "Phiên bản",
+  "changelogTitle": "Changelog",
+  "changelogInitial": "Phát hành đầu tiên",
+  "changelogAgentLive": "Agent cộng đồng số 1 đã hoạt động trên testnet (CommunityAgentWallet v2 với giới hạn ngày/tuần trượt và đóng băng ngay lập tức bởi guardian).",
+  "heroStat": {
+    "supplyLabel": "PPL, cung cấp cố định",
+    "communityLabel": "của mỗi token được phát hành tới cộng đồng của nó",
+    "burnLabel": "phí bị đốt cháy — tất cả được chia sẻ",
+    "vcValue": "0",
+    "vcLabel": "Phân bổ VC hoặc nhà đầu tư"
+  },
+  "charts": {
+    "allocationTitle": "Phân bổ Genesis",
+    "feeFlowTitle": "Mỗi phí đi đâu",
+    "feeFlowSourceLabel": "Một phí mạng",
+    "feeFlowSourceNote": "thanh toán bằng PPL",
+    "feeFlowBurnNote": "không có gì bị phá hủy",
+    "feeFlowBuybackTag": "→ mua lại",
+    "buybackTitle": "Vòng mua lại",
+    "buybackLead": "Kho bạc và cổ phần thanh khoản từ mỗi phí mạng tài trợ cho những giao dịch mua lại PPL công cộng.",
+    "buybackTreasuryLabel": "Kho bạc",
+    "buybackLiquidityLabel": "Thanh khoản",
+    "buybackTargetLabel": "Mua lại PPL công cộng",
+    "vestingTitle": "Vesting cho nhóm & người sáng lập",
+    "vestingCliffLabel": "cliff",
+    "vestingMonthSuffix": "m",
+    "vestingCaption": "{{pct}}% cấp cung cấp. 0% tại launch, cliff {{cliff}} tháng, sau đó {{vest}} tháng tuyến tính — hoàn toàn vested tại tháng {{total}}.",
+    "payoutTitle": "Thanh toán cho người sáng lập",
+    "payoutAtOnceLabel": "Một lúc",
+    "payoutWeeklyLabel": "{{pct}}% trong các phần bằng nhau hàng tuần →",
+    "payoutWeek1": "tuần 1",
+    "payoutWeekLast": "tuần {{n}}",
+    "roadmapTitle": "Cổng, không phải ngày",
+    "roadmapLead": "Mỗi giai đoạn bắt đầu khi cổng của nó được đáp ứng. Không có ngày được hứa.",
+    "roadmapNowBadge": "Hiện tại",
+    "roadmapStages": [
+      {
+        "title": "Season 0 · Testnet công cộng",
+        "body": "Ví, xác minh, phát hành token, thẻ NFT, trao đổi, điểm Million Founders.",
+        "gate": "Hiện tại"
+      },
+      {
+        "title": "Mainnet + bán PPL",
+        "body": "Mainnet ra mắt và bán PPL cho cộng đồng mở.",
+        "gate": "Cổng: 1.000 người được xác minh + ví multisig 2-of-3 đang hoạt động"
+      },
+      {
+        "title": "Staking & xác thực viên",
+        "body": "Staking và tham gia xác thực viên mở rộng vượt ra ngoài dự án.",
+        "gate": "Sau mainnet"
+      }
+    ],
+    "verificationTitle": "Một kiểm tra rằng bạn là một người",
+    "verificationLead": "Xác minh miễn phí. Không yêu cầu sinh trắc học.",
+    "verificationLevels": [
+      {
+        "level": "Level 0",
+        "title": "Đã đăng nhập",
+        "body": "Google hoặc email + ví."
+      },
+      {
+        "level": "Level 1 · Telegram",
+        "title": "Điện thoại, một lần",
+        "body": "Chia sẻ điện thoại của bạn một lần trong bot Telegram của chúng tôi. Một số cho mỗi người sáng lập."
+      },
+      {
+        "level": "Level 2 · Human Passport",
+        "title": "Human Passport",
+        "body": "Xác minh bằng Human Passport."
+      }
+    ],
+    "differTitle": "Chúng tôi khác biệt như thế nào",
+    "differLead": "Chỉ những sự kiện công khai có thể xác minh được về các mạng khác, với các nguồn. Điều này so sánh các lựa chọn thiết kế, không phải chất lượng.",
+    "differHeaders": [
+      "Ethereum",
+      "Solana",
+      "People"
+    ],
+    "differRows": [
+      {
+        "label": "Phí bị đốt cháy",
+        "ethereum": "Base fee bị đốt¹",
+        "solana": "50% base fee bị đốt²",
+        "people": "{{burnPct}}% đốt"
+      },
+      {
+        "label": "Ai nhận phí",
+        "ethereum": "Xác thực viên nhận priority fee (tip)¹",
+        "solana": "Xác thực viên nhận 50% base fee và 100% priority fee²",
+        "people": "{{feeSplit}}"
+      },
+      {
+        "label": "Tài trợ sớm",
+        "ethereum": "Đợt bán ether công cộng, 2014 — 42 ngày, mua bằng BTC³",
+        "solana": "Series A $20M dẫn bởi Multicoin Capital (2019); nhà đầu tư nhận token SOL⁴",
+        "people": "Tự tài trợ. Không VC, không phân bổ nhà đầu tư"
+      },
+      {
+        "label": "Tài khoản",
+        "ethereum": "Tạo tài khoản không tốn chi phí; không kiểm tra danh tính⁵",
+        "solana": "Kiểm tra con người không phải yêu cầu giao thức",
+        "people": "Phần thưởng chỉ cho con người được xác minh"
+      },
+      {
+        "label": "Cộng đồng chia sẻ token mới",
+        "ethereum": "Không phải quy tắc giao thức",
+        "solana": "Không phải quy tắc giao thức",
+        "people": "{{communityPct}}% của mỗi token được phát hành"
+      }
+    ]
+  }
+}

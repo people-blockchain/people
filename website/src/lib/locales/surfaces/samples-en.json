@@ -1,0 +1,68 @@
+{
+  "title": "Sample contract templates",
+  "lead": "Ready-to-read, ready-to-deploy example contracts. Review the source, then deploy straight from your connected wallet.",
+  "notDeployed": "Not deployed yet",
+  "testnetAddress": "Testnet address",
+  "viewSource": "View source",
+  "hideSource": "Hide source",
+  "copy": "Copy",
+  "copied": "Copied",
+  "deployCta": "Deploy with my wallet",
+  "connectFirst": "Connect your wallet first.",
+  "constructorArgs": "Constructor arguments",
+  "deployButton": "Deploy",
+  "deploying": "Deploying…",
+  "cancel": "Cancel",
+  "success": "Deployed. The network accepted your contract.",
+  "contractAddress": "Contract address",
+  "transaction": "Transaction",
+  "error": "Something went wrong.",
+  "invalidAddress": "Enter a wallet address that starts with 0x.",
+  "invalidNumber": "Enter a number greater than zero.",
+  "invalidText": "This field can't be empty.",
+  "templates": {
+    "escrow": {
+      "title": "Escrow",
+      "description": "A buyer deposits PPL for a seller. A neutral arbiter can release the funds to the seller or refund the buyer; the buyer can also release early. Supports either native PPL or a test stablecoin (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Vesting timelock",
+      "description": "Locks PPL for one beneficiary and releases it in a straight line between a start time and an end time."
+    },
+    "crowdfund": {
+      "title": "Crowdfund",
+      "description": "Collects PPL toward a goal before a deadline. The owner claims the funds if the goal is met; contributors get a refund if it isn't. Supports either native PPL or a test stablecoin (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Fixed-supply token",
+      "description": "A simple ERC-20 token with a fixed supply, minted entirely to the deployer at creation."
+    }
+  },
+  "fields": {
+    "seller": "Seller address",
+    "arbiter": "Arbiter address",
+    "value": "Amount to send (PPL)",
+    "beneficiary": "Beneficiary address",
+    "start": "Start time (defaults to now, unix seconds)",
+    "duration": "Duration (days)",
+    "goal": "Goal ({symbol})",
+    "durationSeconds": "Duration (seconds)",
+    "name": "Token name",
+    "symbol": "Token symbol",
+    "supply": "Total supply (tokens)",
+    "token": "Payment token address",
+    "amount": "Amount to deposit ({symbol})",
+    "payIn": "Pay in"
+  },
+  "faucetCta": "Get test {symbol}",
+  "faucetMinting": "Minting…",
+  "faucetDone": "Minted",
+  "faucetBalance": "Balance: {amount} {symbol}",
+  "faucetLimitHint": "Limit: up to 1,000 tokens per 24 hours.",
+  "faucetCooldown": "You've reached the 24-hour faucet limit. Try again later.",
+  "approveDepositLead": "Two wallet transactions: approve the token, then deposit.",
+  "approveAndDeposit": "Approve & deposit",
+  "approving": "Approving…",
+  "depositing": "Depositing…",
+  "depositComplete": "Deposited. The escrow now holds the funds."
+}

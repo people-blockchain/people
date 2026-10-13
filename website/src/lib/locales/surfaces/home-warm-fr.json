@@ -1,0 +1,145 @@
+{
+  "hero": {
+    "brandLine": "PEOPLE — une blockchain pour les communautés",
+    "headlineMain": "Lancez un token pour votre communauté.",
+    "headlineMainLines": [
+      "Lancez un token pour votre communauté."
+    ],
+    "headlineAccent": "10 % vont à vos gens, pas aux baleines.",
+    "headlineAccentLines": [
+      "10 % vont à vos gens,",
+      "pas aux baleines."
+    ],
+    "sub": "Sans code, sans compétences crypto. Un téléphone ou un navigateur suffit : créez un portefeuille en 30 secondes et essayez-le sur le testnet.",
+    "pitchLine": "Une blockchain pour les gens ordinaires : votre propre token, des cartes NFT de club et lever des fonds pour une idée — sans code.",
+    "testnetBadge": "Le testnet public est en ligne. Ce n'est pas encore le mainnet.",
+    "ctaTestnet": "Essayer le testnet",
+    "ctaFounder": "Réclamez votre numéro de fondateur",
+    "card": {
+      "badge": "Exemple",
+      "tokenName": "Le token de votre communauté",
+      "ticker": "TICKER",
+      "price": "$0.0138"
+    },
+    "stages": [
+      {
+        "id": "wallet",
+        "label": "Un portefeuille en 30 secondes",
+        "sub": "Vos clés restent sur votre téléphone ou dans votre navigateur."
+      },
+      {
+        "id": "token",
+        "label": "Votre token, au prix fixé dès le premier échange",
+        "sub": "Choisissez un nom et un ticker. La courbe de liaison fixe le prix."
+      },
+      {
+        "id": "share",
+        "label": "10 % pour vos gens",
+        "sub": "Chaque nouveau token envoie 10 % de son offre à son propre pool communautaire."
+      }
+    ],
+    "shareBadge": "10 % pour la communauté",
+    "peopleLine": "Vos gens, pas les baleines"
+  },
+  "community": {
+    "eyebrow": "10 % pour la communauté",
+    "title": "10 % de chaque nouveau token vont à vos gens",
+    "lead": "C'est intégré au protocole, pas promis dans un post : chaque lancement standard envoie 10 % de son offre vers le pool communautaire propre à ce token. Il n'est jamais mélangé aux frais du réseau.",
+    "statLabel": "de l'offre de chaque nouveau token va à son pool communautaire",
+    "statNote": "Le pool appartient aux personnes qui participent à ce token — pas au réseau, pas au créateur.",
+    "footnote": "Les frais du réseau sont répartis séparément : {{community}} % au pool communautaire, {{validators}} % aux validateurs.",
+    "cta": "Où vont les frais",
+    "href": "/how-it-works#hiw-fees"
+  },
+  "build": {
+    "eyebrow": "Sans code, sans compétences crypto",
+    "title": "Ce que vous pouvez faire sans code",
+    "lead": "Tout ce qui suit fonctionne déjà aujourd'hui sur le testnet public. Rien à installer, rien à compiler.",
+    "cta": "Essayer sur le testnet",
+    "cards": [
+      {
+        "id": "token",
+        "title": "Lancez le token de votre club ou communauté en une minute",
+        "body": "Choisissez un nom, un ticker, une image et une offre. Payez les frais de lancement en PPL et le token est en ligne sur sa propre courbe de liaison.",
+        "href": "/create/token"
+      },
+      {
+        "id": "nft",
+        "title": "Créez des cartes de club en NFT",
+        "body": "Des cartes de membre en NFT : une par membre, avec une image que vous importez ou générez dans le navigateur.",
+        "href": "/create/nft"
+      },
+      {
+        "id": "funding",
+        "title": "Levez des fonds pour votre idée",
+        "body": "Votre communauté achète sur la courbe dès le premier échange, donc le prix est fixé par la demande réelle plutôt que par un tour privé.",
+        "href": "/create"
+      },
+      {
+        "id": "contract",
+        "title": "Décrivez un smart contract en langage courant",
+        "body": "Écrivez ce que vous voulez en langage ordinaire et obtenez un contrat construit à partir de modèles OpenZeppelin audités. Vous voyez le résultat avant de le déployer.",
+        "href": "/create/contract"
+      }
+    ]
+  },
+  "fair": {
+    "eyebrow": "Pourquoi c'est équitable",
+    "title": "Les mêmes règles pour chaque communauté",
+    "lead": "Trois règles sont intégrées au protocole, pas promises dans un post.",
+    "tiles": [
+      {
+        "id": "community-share",
+        "stat": "10 %",
+        "title": "de chaque nouveau token vont au pool communautaire de ce token",
+        "body": "Pas au réseau, pas au créateur. Le pool propre au token, partagé avec les personnes qui y participent."
+      },
+      {
+        "id": "vesting",
+        "stat": "180 jours",
+        "title": "avant que la part du créateur soit entièrement débloquée",
+        "body": "L'allocation du créateur se débloque de façon linéaire sur 180 jours, donc pas de largage massif le premier jour."
+      },
+      {
+        "id": "fees",
+        "stat": "0 %",
+        "title": "des frais du réseau sont brûlés — les gens les reçoivent à la place",
+        "body": "Chaque frais est réparti entre les validateurs, le pool communautaire, la trésorerie, la liquidité et Growth. Rien n'est détruit pour simuler une rareté."
+      }
+    ]
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million Founders",
+    "title": "Les numéros de fondateur sont encore distribués",
+    "titleWithNumber": "Le fondateur #{{n}} est le suivant",
+    "lead": "Réclamez un numéro, obtenez une carte à partager, et gagnez une part du pool communautaire en étant parmi les premiers et actif.",
+    "cta": "Devenez fondateur",
+    "href": "/founders",
+    "cardHint": "Deux niveaux, réservés aux personnes actives, 10 % d'avance et le reste sur 52 semaines.",
+    "liveCountLabel": "Fondateurs à ce jour"
+  },
+  "agents": {
+    "eyebrow": "Agents IA communautaires",
+    "title": "Des agents qui travaillent pour le groupe",
+    "lead": "Les agents sont des utilisateurs à part entière du réseau : ils paient ce qu'ils utilisent et rendent des comptes aux personnes qu'ils servent.",
+    "cta": "Découvrez les agents",
+    "href": "/agents"
+  },
+  "network": {
+    "eyebrow": "Réseau en direct",
+    "title": "Testnet public, en ce moment",
+    "blockHeight": "Hauteur de bloc",
+    "chainLabel": "Chaîne du testnet",
+    "explorer": "Ouvrir l'explorateur",
+    "unavailable": "La hauteur de bloc n'est pas disponible pour le moment.",
+    "collecting": "Lecture du réseau…",
+    "note": "Ceci est un testnet. Les chiffres ci-dessus sont réels, les tokens ne le sont pas."
+  },
+  "final": {
+    "title": "Le testnet est ouvert. Soyez parmi les premiers, cassez des choses, dites-nous ce qui ne va pas.",
+    "body": "Chaque rapport de bug et chaque question confuse va directement dans ce que nous construisons ensuite.",
+    "ctaWallet": "Créez un portefeuille",
+    "ctaExplore": "Regardez l'explorateur",
+    "socialLabel": "Suivez-nous"
+  }
+}

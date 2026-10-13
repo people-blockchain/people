@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "FÜR DIE GEMEINSCHAFT",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "FÜR DIE GEMEINSCHAFT",
+    "headlineSecondary": "",
+    "slogan": "Von Menschen geschaffen. Für die Gemeinschaft.",
+    "valueLine": "Die Gemeinschaft nimmt an dem Wert teil, den das Netz schafft.",
+    "lead": "Von der Gemeinschaft gebaut. Von der Gemeinschaft geteilt. Gewöhnliche Menschen nehmen an der Emission, der Netzgebühren-Weiterleitung und am Growth-Referral teil — während eigene Validatoren den Konsens sichern. Teilnehmer sind keine Validatoren.",
+    "unlike": "Auf einer typischen Blockchain zahlen Nutzer vor allem Gebühren. Hier ist Gemeinschaftsteilnahme in die Wirtschaft eingebaut.",
+    "ctaJoin": "Mitmachen",
+    "ctaHow": "So funktioniert es",
+    "ctaCreate": "Token erstellen",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10 % in den Gemeinschaftspool",
+        "note": "Vom Angebot jedes neuen Tokens geht in den Gemeinschaftspool."
+      },
+      {
+        "id": "fees",
+        "value": "Gebühren",
+        "title": "Netzgebühren",
+        "note": "Durch die Netzwirtschaft weitergeleitet."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-Referral",
+        "note": "Zwei bezahlte Linien: L1 70 % · L2 30 % des Growth-Belohnungsbudgets."
+      }
+    ],
+    "flowAria": "Wie Gemeinschaftswert durch das Netz fließt",
+    "flowPause": "Animation anhalten",
+    "flowPlay": "Animation abspielen",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token erstellt",
+        "sub": "Ein Projekt startet im Netz"
+      },
+      {
+        "id": "community",
+        "label": "10 % Gemeinschaft + Netzgebühr",
+        "sub": "Teil des neuen Tokens und die Protokollgebühr bleiben getrennt"
+      },
+      {
+        "id": "economy",
+        "label": "Netzwirtschaft + Growth Pool",
+        "sub": "Wert wird weitergeleitet, nicht ausgelöscht"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Zwei bezahlte Growth-Referral-Linien"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "WARUM TEILNEHMEN",
+    "title": "Drei getrennte Wege, wie die Gemeinschaft teilnimmt",
+    "subtitle": "Tokenemission, Netzgebühren und Growth-Referral sind drei getrennte Mechanismen. Sie werden nie zu einer persönlichen Auszahlung zusammengelegt.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10 % jedes neuen Tokens gehen in den Gemeinschaftspool",
+        "body": "Jeder Standard-Token, der über das Netz gestartet wird, sendet 10 % seines Anfangsangebots in den Community Pool dieses Tokens — dann an die Gemeinschaft. Keine persönliche Auszahlung und nicht 10 % jeder Gebühr.",
+        "href": "/create/token",
+        "cta": "Token erstellen"
+      },
+      {
+        "id": "fees",
+        "kicker": "NETZWIRTSCHAFT",
+        "title": "Gebühren verschwinden nicht — sie werden weitergeleitet",
+        "body": "Zulässige Netzgebühren folgen der genehmigten the fee split. Das ist Weiterleitung in der Netzwirtschaft, kein Versprechen, dass jeder Teilnehmer aus jeder Gebühr bezahlt wird.",
+        "href": "#economics",
+        "cta": "Gebührenweiterleitung"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "L1 70 % · L2 30 % des Growth-Belohnungsbudgets",
+        "body": "Growth Pool (15 % der zulässigen Gebühren) finanziert zwei bezahlte Referral-Linien: L1 mit 70 % und L2 mit 30 % des Growth-Belohnungsbudgets. Getrennt vom Angebot der Token Factory und vom Gebührensplit der the fee split.",
+        "href": "#partner",
+        "cta": "Growth-Referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Aktive Beta-Growth-Auszahlung: L1 70 % · L2 30 % des Growth-Belohnungsbudgets. Growth Pool sind 15 % der zulässigen Gebühren. Getrennt von den Model-A-Zielen der Netzgebühren und von den 10 % jedes neuen Tokens, die in den Community-Pool gehen.",
+    "you": "Du",
+    "budgetNote": "Prozentsätze sind Anteile am Growth-Belohnungsbudget, nachdem the fee split 15 % der zulässigen Gebühren in den Growth Pool leitet — nicht Anteile an jeder Netzgebühr.",
+    "detailsTitle": "So funktioniert Growth-Referral",
+    "details": [
+      {
+        "title": "Zwei bezahlte Linien",
+        "body": "L1 (direktes Referral) erhält 70 % und L2 (zweite Stufe) erhält 30 % des aktiven Growth-Belohnungsbudgets."
+      },
+      {
+        "title": "Getrennt von Gebühren und Token",
+        "body": "Die Growth-Gewichte L1/L2 sind nicht der Model-A-Split der Netzgebühren und nicht die 10 % jedes neuen Tokens für den Community-Pool. Growth Pool ist ein Model-A-Gebührenziel mit eigenen Abrechnungsregeln."
+      },
+      {
+        "title": "Diese Site",
+        "body": "Auf dieser öffentlichen Website gibt es kein Referral-Login und kein Dashboard. Growth-Referral gehört zur Netzteilnahme."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "Wie man teilnimmt",
+    "subtitle": "Treten Sie People’s Blockchain als Gemeinschaftsteilnehmer bei — vom Telefon, Tablet oder Browser.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Hier starten",
+        "body": "Nutzen Sie Telefon, Tablet oder Browser. Sie treten als Teilnehmer bei — nicht als Konsens-Validator.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Nicht-kustodiales Wallet erstellen",
+        "body": "Erzeugen Sie eine 12-Wörter-Phrase im Browser, schreiben Sie sie auf und verschlüsseln Sie sie mit einem Passwort. Schlüssel verlassen dieses Gerät nie.",
+        "href": "/wallet",
+        "cta": "Wallet öffnen"
+      },
+      {
+        "num": "03",
+        "title": "Assets im Explorer ansehen",
+        "body": "Schlagen Sie Blöcke, Transaktionen, Adressen, Token und NFTs im öffentlichen Scanner nach.",
+        "href": "/explorer",
+        "cta": "Explorer öffnen"
+      },
+      {
+        "num": "04",
+        "title": "An der Wirtschaft teilnehmen",
+        "body": "Zahlen Sie Token-Factory- und NFT-Mint-Gebühren aus derselben Wallet. Der 10-%-Anteil am Community-Pool neuer Token, Netzgebühren und Growth-Referral bleiben drei getrennte Mechanismen.",
+        "href": "/create",
+        "cta": "Erstellen"
+      }
+    ],
+    "ctaJoin": "People’s Blockchain beitreten",
+    "ctaHow": "So funktioniert es"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "Was ist Blockchain für die Gemeinschaft?",
+    "summary": "Blockchain für die Gemeinschaft ist Gemeinschaftsinfrastruktur: alltägliche Geräte zur Teilnahme, Erstellung von Token und Projekten auf Protokollebene und Proof-of-Stake-Validatoren zur Blockproduktion. Teilnehmer sind keine Validatoren.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Konsens",
+        "summary": "PoS-Validatoren schlagen Blöcke vor und beglaubigen sie. Mobile Teilnahme stimmt nie im Quorum ab."
+      },
+      {
+        "id": "economics",
+        "title": "Wirtschaft",
+        "summary": "Zulässige Netzgebühren folgen der genehmigten the fee split. Märkte für Nutzertoken sind ein getrennter Kanal."
+      },
+      {
+        "id": "participation",
+        "title": "Teilnahme",
+        "summary": "Telefone, Tablets und Browser. Teilnehmer sind keine Validatoren."
+      },
+      {
+        "id": "technology",
+        "title": "Technologie",
+        "summary": "Ganzzahlsicheres Multi-Asset-Ledger, ein Peer-Netz und Werkzeuge zum Erkunden der Kette."
+      }
+    ],
+    "whyTitle": "Warum es existiert",
+    "learnMore": "Mehr erfahren"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "Was kann ich tun?",
+    "subtitle": "Wählen Sie eine Rolle. Details sind einen Klick entfernt.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Starten Sie Token, Projekte und Gemeinschaftsökonomien nach Protokollregeln.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Betreiben Sie Infrastruktur, die Blöcke vorschlägt, beglaubigt und finalisiert.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Von Alltagsgeräten beitreten. Keine Konsens-Validator-Rolle.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool ist ein Model-A-Gebührenziel — kein garantiertes oder passives Einkommen.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Blöcke, Transaktionen, Token und NFTs nachschlagen.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "So funktioniert es",
+    "subtitle": "Ein Weg durch das Netz. Öffnen Sie einen Schritt für den genauen Mechanismus.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Eine Person mit Wallet auf Telefon, Tablet oder Browser.",
+        "detail": "Beginnen Sie mit einem nicht-kustodialen Konto auf Telefon, Tablet oder Browser. Sie treten als Person in der Gemeinschaft bei — nicht als Validator."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Überweisungen, Starts, Kurvenhandel und andere signierte Vorgänge.",
+        "detail": "Zulässige Vorgänge zahlen eine Protokollgebühr in PPL. Jede Aktion wird signiert und geprüft, bevor sie angenommen wird."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Stake-gestützte Nodes, die vorschlagen und bezeugen.",
+        "detail": "Validatoren sind dedizierte Infrastruktur. Telefone und Browser erzeugen keine Blöcke."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Geordnete, ganzzahlsichere Zustandsänderung.",
+        "detail": "Validatoren fügen signierte Vorgänge zu Blöcken zusammen. Alltagsgeräte sitzen nicht in diesem Prozess."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Geteilte Kette unter Validator-Nodes.",
+        "detail": "Validator-Knoten teilen Blöcke untereinander, damit das Netz in einem Zustand bleibt."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Netzgebühren und der Gemeinschaftsanteil jedes Tokens bleiben in getrennten Kanälen.",
+        "detail": "Netzgebühren in PPL folgen the fee split. Standardmäßig von Nutzern erstellte Token senden 10 % des Angebots dieses Tokens in den eigenen Community-Pool — das ist keine Netzgebühr."
+      }
+    ],
+    "storyCta": "Vollständige visuelle Geschichte"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People ist das native Asset von Blockchain für die Gemeinschaft. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Abwicklungsasset für Netzvorgänge: Gebühren, Tokenerstellung und in den Spezifikationen beschriebene Protokolldienste."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Benennt zulässige Protokollgebühren, die der live fee splitter gemäß the fee split weiterleitet."
+      },
+      {
+        "title": "FEES",
+        "body": "In PPL auf zulässigen Vorgängen gezahlt. Genaue Gebührenpläne bleiben Protokoll/Konfiguration — diese Seite erfindet keine Sätze."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Wird in der Buchhaltung der Netzwirtschaft verwendet. Participation Power ist kein übertragbares Token und keine Validator-Stimmkraft."
+      }
+    ],
+    "notMarket": "Diese Site veröffentlicht keinen Preis, keine Marktkapitalisierung, Listings, ROI, APY, Liquiditätstiefe oder künftigen Preis."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Netz und Validatoren",
+    "summary": "Konsens ist Proof-of-Stake mit einem Leader und einem Beglaubigungsquorum. Telefone sind Teilnehmer, keine Validatoren.",
+    "facts": [
+      {
+        "label": "Rolle",
+        "value": "Validatoren sichern die Kette; Teilnehmer sitzen nie im Quorum."
+      },
+      {
+        "label": "Wer betreibt was",
+        "value": "Dedizierte Knoten schlagen Blöcke vor und beglaubigen sie. Telefone, Tablets und Browser treten als Teilnehmer bei."
+      },
+      {
+        "label": "Öffentliches Netz",
+        "value": "Das öffentliche Testnet v2 läuft. Das ist nicht Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Wirtschaft der Netzgebühren",
+    "summary": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren.",
+    "splits": [
+      {
+        "label": "Validatoren",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Schatzamt",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Liquidität und Ökosystem",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Burn",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool erhält 15 % der zulässigen Gebühren. Das ist kein garantiertes Einkommen, keine passive Rendite und kein Anlageprodukt.",
+    "detailsTitle": "So funktioniert die Gebührenweiterleitung",
+    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Wie Belohnungen erklärt werden"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Erstellen → Starten → Entdecken → Handeln",
+    "subtitle": "Erstellen Sie einen Token, starten Sie ihn mit eingebauter Preisbildung, lassen Sie andere ihn finden und handeln Sie auf der Startkurve.",
+    "steps": [
+      {
+        "title": "Erstellen",
+        "body": "Nutzen Sie das Token-Factory-Formular: Bild, Name, Ticker, Angebot, dann in PPL zahlen."
+      },
+      {
+        "title": "Starten",
+        "body": "Eine virtuelle Bonding Curve liefert durchgehende Preise ab dem ersten Block."
+      },
+      {
+        "title": "Projekt-Feed",
+        "body": "Assets erscheinen im Netzregister, damit Gemeinschaften sie finden können."
+      },
+      {
+        "title": "Handeln",
+        "body": "Kaufen und verkaufen Sie auf der Startkurve und tauschen Sie danach im live Token/PPL-AMM-Pool."
+      }
+    ],
+    "expandTitle": "Startkurve, Liquidität, Vesting",
+    "expandItems": [
+      "Die Startpreisbildung nutzt eine Constant-Product-Kurve mit exakter Ganzzahlmathematik.",
+      "Eine Protokoll-Handelsgebühr auf der Kurve wird über die Netzgebührenwirtschaft weitergeleitet.",
+      "Der Standard-Start-Split enthält verpflichtend 10 % des Angebots dieses Tokens in den eigenen Community-Pool (keine PPL-Netzgebühr).",
+      "Creator-Vesting hält den Großteil des Creator-Anteils über die Zeit frei, damit die Gemeinschaft nicht am ersten Tag gedumpt wird."
+    ],
+    "createCta": "Token Factory öffnen",
+    "nftCta": "NFT erstellen",
+    "swapCta": "Tausch öffnen"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Technologie",
+    "subtitle": "Was der Stack ist. Öffnen Sie eine Karte für die nutzerseitige Idee.",
+    "cards": [
+      {
+        "title": "Konsens",
+        "summary": "Proof-of-Stake-Validatoren schlagen Blöcke vor und beglaubigen sie. Telefone stimmen nicht ab."
+      },
+      {
+        "title": "Zustand",
+        "summary": "Exakte ganzzahlige Salden über natives PPL und nutzererstellte Token."
+      },
+      {
+        "title": "Netz",
+        "summary": "Validator-Knoten teilen Blöcke, damit die Kette in einem Zustand bleibt."
+      },
+      {
+        "title": "Persistenz",
+        "summary": "Jeder Validator behält den lebenden Netzzustand, den er zum Weiterarbeiten braucht."
+      },
+      {
+        "title": "Sicherheit",
+        "summary": "Signierte Aktionen, Rollentrennung und keine Abkürzungen um Prüfungen herum."
+      },
+      {
+        "title": "Werkzeuge",
+        "summary": "HTTP-API und Explorer, damit Menschen das Netz lesen können."
+      }
+    ],
+    "archTitle": "Interaktive Architektur",
+    "invTitle": "Mathematische Invarianten"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Wo das Netz steht",
+    "subtitle": "Produktphasen. Hier wird kein Startdatum genannt.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Ledger, Gemeinschaftsbuchhaltung und Netzgebühren-Weiterleitung.",
+          "Tokenerstellung und Startkurven-Märkte.",
+          "Gemeinschaftsteilnahme an Emission, Gebühren und Growth-Referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Ein öffentliches Testnet läuft.",
+          "Das ist nicht Mainnet und kein Versprechen lebenden öffentlichen Wert-Handels."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Breiterer öffentlicher Zugang ist die nächste Gemeinschaftsstufe."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Human network: mobile Teilnahme, proof of humanity und Anti-Farming.",
+          "Das öffentliche Startdatum wird auf dieser Site nicht genannt."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Dokumentation",
+    "summary": "Wallets, Teilnahme und Ihr eigener Knoten — beginnen Sie mit der praktischen Anleitung.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Leitfaden lesen",
+        "hint": "Erste Schritte, Belohnungen und Node-Einrichtung"
+      },
+      {
+        "href": "#economics",
+        "label": "Netzgebühren",
+        "hint": "Model-A-Weiterleitung zulässiger PPL-Gebühren"
+      }
+    ]
+  }
+}

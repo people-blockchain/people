@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — blockchain untuk komunitas",
+    "headlineMain": "Luncurkan token untuk komunitas Anda.",
+    "headlineMainLines": [
+      "Luncurkan token",
+      "untuk komunitas",
+      "Anda."
+    ],
+    "headlineAccent": "10% untuk orang Anda, bukan untuk paus.",
+    "headlineAccentLines": [
+      "10% untuk orang Anda,",
+      "bukan untuk paus."
+    ],
+    "sub": "People's Blockchain tempat kreator meluncurkan token dengan harga adil sejak blok pertama, dan komunitas mendapat bagian dari semua yang mereka bantu tumbuh.",
+    "testnetBadge": "Testnet publik sudah live. Belum mainnet.",
+    "ctaCreate": "Buat token",
+    "ctaWallet": "Buka dompet",
+    "flowAria": "Empat langkah: dari dompet ke perdagangan token",
+    "flowPause": "Jeda",
+    "flowPlay": "Putar",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Buat dompet",
+        "sub": "Di browser kurang dari satu menit"
+      },
+      {
+        "id": "launch",
+        "label": "Luncurkan token Anda",
+        "sub": "Bayar biaya peluncuran dengan PPL"
+      },
+      {
+        "id": "community",
+        "label": "10% ke pool komunitas",
+        "sub": "Tertanam di setiap token baru"
+      },
+      {
+        "id": "trade",
+        "label": "Perdagangkan di pool token/PPL",
+        "sub": "Harga adil sejak swap pertama"
+      }
+    ],
+    "ctaWalletAuth": "Buat dompet / Masuk dengan Google"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "Untuk kreator",
+      "body": "Luncur dalam satu menit: nama, ticker, gambar, selesai. Kurva bawaan menetapkan harga dari perdagangan pertama, tanpa market maker atau presale. Bagian Anda terbuka selama 180 hari agar komunitas tahu Anda tidak dump sekaligus."
+    },
+    {
+      "id": "community",
+      "title": "Untuk komunitas",
+      "body": "10% setiap token baru masuk ke pool komunitas token itu. Sebagian setiap biaya jaringan juga ke sana. Yang ikut mendapat bagian dari apa yang mereka bangun."
+    },
+    {
+      "id": "everyone",
+      "title": "Untuk semua orang",
+      "body": "Cukup ponsel atau browser. Tanpa rig mining dan stake besar. Buat dompet dalam 30 detik dan coba di testnet."
+    },
+    {
+      "id": "contracts",
+      "title": "Untuk pembangun",
+      "body": "Jelaskan kontrak pintar dengan kata sederhana — kami susun dari templat OpenZeppelin yang diaudit.",
+      "ctaLabel": "Buat kontrak",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Testnet terbuka.",
+    "body": "Datang lebih awal, rusakkan hal-hal, beri tahu apa yang jelek.",
+    "cta": "Mulai di testnet"
+  },
+  "notInvestmentDisclaimer": "Ini partisipasi di jaringan, bukan investasi.",
+  "visuals": {
+    "supply": "Pasokan token",
+    "share": "10%",
+    "toPool": "masuk ke dana komunitas",
+    "pool": "Dana komunitas",
+    "poolNote": "dibagi di antara yang ikut serta",
+    "aria": "10% pasokan setiap token baru masuk ke dana komunitasnya, dibagi di antara yang ikut serta.",
+    "prompt": "Token yang pemegangnya memilih cara memakai kas",
+    "step1": "Anda menulis",
+    "step2": "Kami menyusun",
+    "step3": "Anda meluncurkan",
+    "contractTitle": "Token voting",
+    "contractLines": [
+      "Pemegang memilih usulan",
+      "Kas hanya dipakai lewat voting",
+      "Templat OpenZeppelin yang diaudit"
+    ],
+    "deploy": "Terapkan",
+    "deployed": "Aktif di jaringan"
+  },
+  "agentsTeaser": {
+    "eyebrow": "AI komunitas",
+    "title": "Agen AI komunitas",
+    "lead": "Dompet bersama dengan batas yang jelas — agar otomatisasi membantu orang tanpa mengambil alih kendali.",
+    "cta": "Pelajari lebih lanjut",
+    "cards": [
+      {
+        "title": "Bayar untuk kerja nyata",
+        "body": "Hibah, subscription, dan layanan — dalam batas yang ditetapkan komunitas."
+      },
+      {
+        "title": "Aturan yang bisa Anda voting",
+        "body": "Batas, daftar izin, dan pembekuan hanya berubah lewat voting token."
+      },
+      {
+        "title": "Terlihat di explorer",
+        "body": "Setiap pembayaran on-chain — transparansi yang sama seperti dompet lainnya."
+      },
+      {
+        "title": "Dibuat untuk kelompok",
+        "body": "Klub, kreator, dan komunitas lokal — bukan peluncuran meme anonim."
+      }
+    ],
+    "ctaHref": "/agents"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Sejuta pendiri",
+    "lead": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet People's Blockchain.",
+    "cta": "Gabung pendiri",
+    "href": "/founders",
+    "titleWithNumber": "Jadilah pendiri #{{n}} sebelum mainnet",
+    "titleFallback": "Jadilah salah satu pendiri pertama sebelum mainnet diluncurkan"
+  }
+}

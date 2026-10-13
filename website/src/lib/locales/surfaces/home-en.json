@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — the blockchain for communities",
+    "headlineMain": "Launch a token for your community.",
+    "headlineMainLines": [
+      "Launch a token",
+      "for your",
+      "community."
+    ],
+    "headlineAccent": "10% goes to your people, not to whales.",
+    "headlineAccentLines": [
+      "10% goes to your people,",
+      "not to whales."
+    ],
+    "sub": "People's Blockchain is where creators launch tokens with fair pricing from block one, and the community gets a built-in share of everything it helps grow.",
+    "testnetBadge": "Public testnet is live. Not mainnet yet.",
+    "ctaCreate": "Create a token",
+    "ctaWallet": "Open wallet",
+    "flowAria": "Four steps from wallet to trading your token",
+    "flowPause": "Pause",
+    "flowPlay": "Play",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Create a wallet",
+        "sub": "In your browser in under a minute"
+      },
+      {
+        "id": "launch",
+        "label": "Launch your token",
+        "sub": "Pay the launch fee in PPL"
+      },
+      {
+        "id": "community",
+        "label": "10% to the community pool",
+        "sub": "Built into every new token"
+      },
+      {
+        "id": "trade",
+        "label": "Trade in the token/PPL pool",
+        "sub": "Fair pricing from the first swap"
+      }
+    ],
+    "ctaWalletAuth": "Create wallet / Sign in with Google"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "For creators",
+      "body": "Launch in one minute: name, ticker, image, done. A built-in bonding curve prices it from the first trade, so you don't need market makers or a presale. Your share vests over 180 days, so your community knows you won't dump on them."
+    },
+    {
+      "id": "community",
+      "title": "For your community",
+      "body": "10% of every new token goes to that token's community pool. A share of every network fee goes there too. People who show up get a stake in what they build."
+    },
+    {
+      "id": "everyone",
+      "title": "For everyone",
+      "body": "All you need is a phone or a browser. No mining rigs and no big stake. Create a wallet in 30 seconds and try it on the testnet."
+    },
+    {
+      "id": "contracts",
+      "title": "For builders",
+      "body": "Describe a smart contract in plain words — we build it from audited OpenZeppelin templates.",
+      "ctaLabel": "Create a contract",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Testnet is open.",
+    "body": "Be early, break things, tell us what sucks.",
+    "cta": "Start on testnet"
+  },
+  "notInvestmentDisclaimer": "This is participation in a network, not an investment.",
+  "visuals": {
+    "supply": "Token supply",
+    "share": "10%",
+    "toPool": "goes to the community pool",
+    "pool": "Community pool",
+    "poolNote": "shared by the people who take part",
+    "aria": "10% of every new token's supply flows into its community pool, shared by the people who take part.",
+    "prompt": "A token where holders vote on how the treasury is spent",
+    "step1": "You write",
+    "step2": "We build",
+    "step3": "You launch",
+    "contractTitle": "Voting token",
+    "contractLines": [
+      "Holders vote on proposals",
+      "Treasury spends only by vote",
+      "Audited OpenZeppelin template"
+    ],
+    "deploy": "Deploy",
+    "deployed": "Live on the network"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million founders",
+    "lead": "Verified participants get their number, an early-entry bonus, and activity points on the People's Blockchain testnet.",
+    "cta": "Join founders",
+    "href": "/founders",
+    "titleWithNumber": "Become founder № {{n}} before mainnet",
+    "titleFallback": "Be among the first founders before mainnet launches"
+  },
+  "agentsTeaser": {
+    "eyebrow": "Community AI",
+    "title": "Community AI agents",
+    "lead": "Shared wallets with clear limits — so automation helps people without taking control away.",
+    "cta": "Learn more",
+    "cards": [
+      {
+        "title": "Pay for real work",
+        "body": "Grants, subscriptions, and services — within caps the community sets."
+      },
+      {
+        "title": "Rules you can vote on",
+        "body": "Caps, allow-lists, and freezes change only through token votes."
+      },
+      {
+        "title": "Visible in the explorer",
+        "body": "Every payout is on-chain — the same transparency as any other wallet."
+      },
+      {
+        "title": "Built for groups",
+        "body": "Clubs, creators, and local communities — not anonymous meme launches."
+      }
+    ],
+    "ctaHref": "/agents"
+  }
+}

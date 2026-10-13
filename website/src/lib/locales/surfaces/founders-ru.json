@@ -1,0 +1,168 @@
+{
+  "tag": "ОСНОВАТЕЛИ",
+  "title": "Миллион основателей",
+  "lead": "Присоединяйтесь к миллиону верифицированных людей, которые строят People's Blockchain до mainnet. Номер основателя и очки активности сегодня учитываются в testnet.",
+  "preliminaryBanner": "Предварительно — веса очков, множители и дневные лимиты могут измениться до mainnet.",
+  "counterLabel": "Верифицированные основатели",
+  "goalLabel": "Цель до mainnet",
+  "yourNumber": "Основатель №{{n}}",
+  "multiplierLabel": "Множитель раннего входа",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Заберите номер основателя",
+  "registerLead": "Выберите страну для публичной карты. Для регистрации нужен привязанный кошелёк (proof of humanity).",
+  "countryLabel": "Страна",
+  "countryPlaceholder": "Выберите страну",
+  "registerButton": "Стать основателем",
+  "registering": "Регистрация…",
+  "signInCta": "Войти",
+  "walletCta": "Привязать кошелёк",
+  "pohRequired": "Войдите и привяжите кошелёк, чтобы зарегистрироваться и получать очки. Без proof of humanity очков нет.",
+  "registered": "Вы в программе.",
+  "pointsTitle": "Очки активности",
+  "pointsTotal": "Всего очков",
+  "pointsTodayHint": "Дневной лимит {{dailyCap}} базовых очков (до множителя входа). Сначала применяется уровень верификации.",
+  "dailyCapValue": "1000",
+  "poolTitle": "Пул сезона",
+  "poolProgramLine": "Пул программы: {{program}} PPL (5% эмиссии из «Community and rewards»).",
+  "poolSeasonLine": "Сезон 1: {{season}} PPL.",
+  "poolFormula": "В конце сезона: ваша доля PPL = (ваши очки ÷ сумма очков всех) × пул сезона.",
+  "poolEstimateLabel": "Оценка сейчас",
+  "poolEstimateValue": "Сейчас 1 очко ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Оценка появится, когда появятся очки.",
+  "verificationTitle": "Уровни верификации (бесплатно)",
+  "verificationLead": "Уровень 1: вход через Google или email, затем один раз поделитесь номером в Telegram-боте (50% базовых очков; один номер — один основатель). Уровень 2: Human Passport (100% базовых очков). Верификация бесплатна.",
+  "verificationLevelLabel": "Ваш уровень",
+  "verificationLevel0": "Уровень 0 — завершите уровень 1, чтобы копить очки",
+  "verificationLevel1": "Уровень 1 — 50% базовых очков",
+  "verificationLevel2": "Уровень 2 — Human Passport, 100% базовых очков",
+  "verificationTelegramCta": "Верифицировать через Telegram",
+  "verificationTelegramLoading": "Готовим ссылку…",
+  "verificationTelegramStatusVerified": "Telegram: номер подтверждён (уровень 1 — 50% базовых очков)",
+  "verificationHumanPassportCta": "Human Passport",
+  "verificationConfiguredOff": "На этом окружении ещё не настроено.",
+  "actionsTitle": "Действия, за которые начисляются очки",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "Реакция в ленте проектов",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Подписка на проект в ленте",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "Своп в тестовой сети People's Blockchain (97401), мин. {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "Застейкать PPL в тестовой сети People's Blockchain (новая делегация), мин. {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Выпуск токена (после 10+ верифицированных держателей)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Минт NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Создание пула ликвидности",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Голосование в governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Пригласить друга (после верификации и действия)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Множители раннего входа (предварительно)",
+  "multipliers": [
+    {
+      "range": "1–10 000",
+      "value": "×5"
+    },
+    {
+      "range": "10 001–100 000",
+      "value": "×3"
+    },
+    {
+      "range": "100 001–1 000 000",
+      "value": "×1,5"
+    }
+  ],
+  "mapTitle": "Основатели по странам",
+  "mapHint": "Страна указывается при регистрации.",
+  "leaderboardTitle": "Лидерборд по странам",
+  "leaderboardCount": "{{count}} основателей",
+  "errorRegister": "Не удалось зарегистрироваться. Проверьте кошелёк и попробуйте снова.",
+  "errorLoad": "Не удалось загрузить статистику.",
+  "autoClaimLoading": "Выдаём номер основателя…",
+  "autoClaimError": "Не удалось выдать номер основателя. Попробуйте ещё раз.",
+  "autoClaimRetry": "Повторить",
+  "countryDetectedHint": "Страна определена по браузеру — можно изменить.",
+  "chooseCountryTitle": "Ваша страна",
+  "countrySaved": "Страна обновлена.",
+  "countryUpdateError": "Не удалось обновить страну. Попробуйте ещё раз.",
+  "countryRateLimited": "Слишком много изменений — попробуйте позже.",
+  "visibilityLabel": "Публичный профиль",
+  "visibilityHint": "Разрешить показывать имя и аватар аккаунта в публичных списках, например в таблице на странице прозрачности. По умолчанию выключено.",
+  "visibilitySaved": "Сохранено.",
+  "visibilityError": "Не удалось сохранить.",
+  "loading": "Загрузка…",
+  "discoverCta": "Лента проектов",
+  "swapCta": "Своп в testnet",
+  "createTokenCta": "Выпустить токен",
+  "refresh": "Обновить",
+  "live": "В эфире",
+  "mainnetRulesTitle": "Правила наград на mainnet (предварительно)",
+  "mainnetRulesPoh": "Без proof of humanity ничего не начисляется: ни очки основателя в testnet, ни личные награды PPL на mainnet, пока аккаунт не верифицирован и кошелёк не привязан.",
+  "mainnetRulesVestingTitle": "Разблокировка личной награды",
+  "mainnetRulesVestingBullets": [
+    "В первый день mainnet разблокируется 10% вашей конвертированной личной награды (только для верифицированных основателей).",
+    "Оставшиеся 90% разблокируются равными недельными долями ровно за 12 месяцев.",
+    "Каждый календарный месяц нужно хотя бы одно квалифицирующее действие в сети или в Лента проектов. Если месяц прошёл без активности, недельная разблокировка приостанавливается до возвращения — пропущенные недели не «перепрыгиваются».",
+    "Очки активности testnet учитываются отдельно; к PPL на mainnet применяются эти правила разблокировки."
+  ],
+  "mainnetRulesSaleFeeTitle": "Комиссия при ранней продаже (первые 30 дней mainnet)",
+  "mainnetRulesSaleFeeBody": "При продаже разблокированных PPL в первые 30 дней после запуска сети удерживается комиссия в PPL: 10% в первый день, линейно до 0% на 30-й день. Комиссия идёт в пул сообщества.",
+  "mainnetRulesStakingTitle": "Бонус стейкинга для основателей",
+  "mainnetRulesStakingBullets": [
+    "Добровольный стейк даёт +25% к ставке валидаторской награды — бонус к ставке, а не 25% от суммы стейка, и не обещание конкретной доходности.",
+    "Награды за стейкинг выплачиваются из пула сообщества и разблокируются по той же недельной схеме, что и личная награда.",
+    "Вывод из стейкинга: ожидание 21 дня до возврата PPL в кошелёк."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Станьте основателем № {{n}} до mainnet",
+  "heroTitleFallback": "Станьте одним из первых основателей до запуска основной сети",
+  "heroSub": "Проверенные участники получают свой номер, бонус за ранний вход и очки за активность в тестовой сети People's Blockchain",
+  "demoAirdropTitle": "Демо-токены testnet",
+  "demoAirdropReceived": "Получено: 100 × 6 токенов",
+  "demoAirdropPending": "Демо-токены автоматически отправляются на кошелёк основателя после верификации уровня 1.",
+  "demoAirdropClaiming": "Отправляем демо-токены…",
+  "demoAirdropUnavailable": "Раздача демо-токенов на этом сервере пока не настроена.",
+  "demoAirdropCapReached": "Лимит 10 000 раздач демо-токенов уже исчерпан."
+}

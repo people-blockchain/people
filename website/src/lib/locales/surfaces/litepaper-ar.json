@@ -1,0 +1,122 @@
+{
+  "tag": "LITEPAPER",
+  "tocLabel": "في هذه الصفحة",
+  "downloadTitle": "تنزيل",
+  "downloadLead": "نزّل Litepaper الكامل بصيغة PDF، أو حزمة الترويج للمشاركة.",
+  "downloadPdfLabel": "تنزيل Litepaper (PDF)",
+  "downloadZipLabel": "تنزيل حزمة الترويج",
+  "preliminaryNote": "مبدئي · ليس وعدًا بدخل",
+  "downloadWhitepaperLabel": "تنزيل Whitepaper (PDF)",
+  "downloadWhitepaperLead": "Whitepaper — وثيقة تقنية كاملة (EN، PDF، 31 صفحة)",
+  "versionLabel": "الإصدار",
+  "changelogTitle": "Changelog",
+  "changelogInitial": "الإصدار الأول",
+  "changelogAgentLive": "الوكيل المجتمعي رقم 1 نشط على الشبكة الاختبارية (CommunityAgentWallet v2 بحدود يومية/أسبوعية متحركة وتجميد فوري من قِبل الحارس).",
+  "heroStat": {
+    "supplyLabel": "PPL، إمداد ثابت",
+    "communityLabel": "من كل رمز مميز تم إطلاقه لمجتمعه",
+    "burnLabel": "من الرسوم المحروقة - جميعها مشتركة",
+    "vcValue": "0",
+    "vcLabel": "تخصيصات أصحاب رأس المال أو المستثمرين"
+  },
+  "charts": {
+    "allocationTitle": "تخصيص Genesis",
+    "feeFlowTitle": "إلى أين تذهب كل رسوم",
+    "feeFlowSourceLabel": "رسم شبكة واحد",
+    "feeFlowSourceNote": "مدفوع بـ PPL",
+    "feeFlowBurnNote": "لا شيء محروق",
+    "feeFlowBuybackTag": "→ إعادة الشراء",
+    "buybackTitle": "حلقة إعادة الشراء",
+    "buybackLead": "حصص الخزانة والسيولة من كل رسم شبكة تمول عمليات استعادة PPL العام.",
+    "buybackTreasuryLabel": "الخزانة",
+    "buybackLiquidityLabel": "السيولة",
+    "buybackTargetLabel": "عمليات استعادة PPL العام",
+    "vestingTitle": "استحقاق الفريق والمؤسسين",
+    "vestingCliffLabel": "الفترة الأولية",
+    "vestingMonthSuffix": "ش",
+    "vestingCaption": "{{pct}}% من الإمداد. 0% عند الإطلاق، فترة أولية لمدة {{cliff}} شهر، ثم {{vest}} شهر خطي - مستحق بالكامل في الشهر {{total}}.",
+    "payoutTitle": "دفع المؤسسين",
+    "payoutAtOnceLabel": "دفعة واحدة",
+    "payoutWeeklyLabel": "{{pct}}% في حصص أسبوعية متساوية →",
+    "payoutWeek1": "الأسبوع 1",
+    "payoutWeekLast": "الأسبوع {{n}}",
+    "roadmapTitle": "البوابات، وليس التواريخ",
+    "roadmapLead": "تبدأ كل مرحلة عند استيفاء بوابتها. لا توجد تواريخ محددة.",
+    "roadmapNowBadge": "الآن",
+    "roadmapStages": [
+      {
+        "title": "الموسم 0 · الشبكة الاختبارية العامة",
+        "body": "المحافظ، التحقق، إطلاق الرموز، بطاقات NFT، المقايضات، نقاط Million Founders.",
+        "gate": "الآن"
+      },
+      {
+        "title": "Mainnet + بيع PPL",
+        "body": "يتم إطلاق Mainnet وفتح بيع PPL المجتمعي.",
+        "gate": "البوابة: 1,000 شخص تم التحقق منه + توقيع خزانة 2-of-3 نشط"
+      },
+      {
+        "title": "Staking والمدققون",
+        "body": "يتم فتح المشاركة في Staking والمدققات خارج المشروع.",
+        "gate": "بعد Mainnet"
+      }
+    ],
+    "verificationTitle": "فحص واحد لأنك شخص",
+    "verificationLead": "التحقق مجاني. لا يتطلب القياسات الحيوية.",
+    "verificationLevels": [
+      {
+        "level": "المستوى 0",
+        "title": "تم تسجيل الدخول",
+        "body": "Google أو البريد الإلكتروني + المحفظة."
+      },
+      {
+        "level": "المستوى 1 · Telegram",
+        "title": "الهاتف، مرة واحدة",
+        "body": "شارك رقم هاتفك مرة واحدة في روبوت Telegram الخاص بنا. رقم واحد لكل مؤسس."
+      },
+      {
+        "level": "المستوى 2 · Human Passport",
+        "title": "Human Passport",
+        "body": "تحقق باستخدام Human Passport."
+      }
+    ],
+    "differTitle": "كيف نختلف",
+    "differLead": "حقائق عامة قابلة للتحقق فقط حول الشبكات الأخرى، مع المصادر. هذا يقارن خيارات التصميم، وليس الجودة.",
+    "differHeaders": [
+      "Ethereum",
+      "Solana",
+      "People"
+    ],
+    "differRows": [
+      {
+        "label": "الرسوم المحروقة",
+        "ethereum": "الرسم الأساسي محروق¹",
+        "solana": "50% من الرسم الأساسي محروق²",
+        "people": "{{burnPct}}% محروق"
+      },
+      {
+        "label": "من يتلقى الرسوم",
+        "ethereum": "المدققون يحصلون على رسم الأولوية (الطلب)¹",
+        "solana": "المدققون يحصلون على 50% من الرسم الأساسي و100% من رسم الأولوية²",
+        "people": "{{feeSplit}}"
+      },
+      {
+        "label": "التمويل المبكر",
+        "ethereum": "بيع ether عام، 2014 - 42 يوم، تم شراؤه بـ BTC³",
+        "solana": "$20M Series A بقيادة Multicoin Capital (2019)؛ تلقى المستثمرون رموز SOL⁴",
+        "people": "ممول ذاتياً. بدون VC، بدون تخصيص استثمار"
+      },
+      {
+        "label": "الحسابات",
+        "ethereum": "إنشاء حساب لا يكلف شيء؛ لا توجد فحص هوية⁵",
+        "solana": "فحص الإنسان ليس متطلب بروتوكول",
+        "people": "مكافآت للإنسان المحقق فقط"
+      },
+      {
+        "label": "حصة المجتمع من الرمز الجديد",
+        "ethereum": "ليس قاعدة بروتوكول",
+        "solana": "ليس قاعدة بروتوكول",
+        "people": "{{communityPct}}% من كل رمز مميز تم إطلاقه"
+      }
+    ]
+  }
+}

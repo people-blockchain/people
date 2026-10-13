@@ -1,0 +1,16 @@
+[
+  {
+    "flow": "6. swap PPL→token",
+    "viewport": "1280",
+    "result": "PASS",
+    "tx": "0xc6a479b65c20c4a679c58fd5e1c59169fc3694cce377912fccdcd3fd5d225ac3",
+    "notes": "connect=absent token=TROSC delivered=106010125643 to=0x77…eef1 rate=\"1 PPL = 107,192.59857 TROSC\" submit=\"Swap\" pageHint=SWAP Swap tokens Trade a user token for PPL, or PPL for a t"
+  },
+  {
+    "flow": "diagnostics (1280)",
+    "viewport": "1280",
+    "result": "info",
+    "tx": "",
+    "notes": "{\"consoleErrors\":[\"Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://localhost:3111/api/evm/compat/tx\",\"Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://localhost:3111/api/founders/actions\"],\"pageErrors\":[],\"thirdParty\":[],\"failedRequests\":[\"GET http://localhost:3111/login?callbackUrl=%2Fpartner&_rsc=2zTGpSM7niPTiJMm — net::ERR_ABORTED\",\"GET http://localhost:3111/?_rsc=lhQY4JewAUr38-O7 — net::ERR_ABORTED\",\"GET http://localhost:3111/login?callbackUrl=%2Fpartner&_rsc=4_oURMU11Z63wQZm — net::ERR_ABORTED\",\"GET http://localhost:3111/explorer?_rsc=nNrAH8GvMUKklcBQ — net::ERR_ABORTED\",\"GET http://localhost:3111/?_rsc=2zTGpSM7niPTiJMm — net::ERR_ABORTED\",\"GET http://localhost:3111/api/evm/compat/address/0x77a850af84e3acf7d4c00679b5f1afa6eb07eef1 — net::ERR_ABORTED\",\"GET http://localhost:3111/explorer/tx/0xc6a479b65c20c4a679c58fd5e1c59169fc3694cce377912fccdcd3fd5d225ac3?_rsc=rwh7M3J1YPObheRK — net::ERR_ABORTED\",\"GET http://localhost:3111/explorer/tx/0xc6a479b65c20c4a679c58fd5e1c59169fc3694cce377912fccdcd3fd5d225ac3?_rsc=iytX_d0NMs2KOHYA — net::ERR_ABORTED\"]}"
+  }
+]

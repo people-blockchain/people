@@ -1,0 +1,168 @@
+{
+  "tag": "FUNDADORES",
+  "title": "Un millón de fundadores",
+  "lead": "Únete a un millón de personas verificadas que construyen People's Blockchain antes del mainnet. Tu número de fundador y los puntos de actividad se registran hoy en testnet.",
+  "preliminaryBanner": "Preliminar: los pesos de puntos, multiplicadores y límites diarios pueden cambiar antes del mainnet.",
+  "counterLabel": "Fundadores verificados",
+  "goalLabel": "Meta antes del mainnet",
+  "yourNumber": "Fundador n.º {{n}}",
+  "multiplierLabel": "Multiplicador de entrada temprana",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Reclama tu número de fundador",
+  "registerLead": "Elige tu país para el mapa público. Necesitas una cartera vinculada (prueba de humanidad) antes de registrarte.",
+  "countryLabel": "País",
+  "countryPlaceholder": "Selecciona país",
+  "registerButton": "Ser fundador",
+  "registering": "Registrando…",
+  "signInCta": "Iniciar sesión",
+  "walletCta": "Vincular cartera",
+  "pohRequired": "Inicia sesión y vincula una cartera para registrarte y ganar puntos. Sin prueba de humanidad no hay puntos.",
+  "registered": "Estás en el programa.",
+  "pointsTitle": "Puntos de actividad",
+  "pointsTotal": "Puntos totales",
+  "pointsTodayHint": "Se aplican límites diarios por acción y en total (UTC).",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "Acciones que otorgan puntos",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "Reacción en el feed de proyectos",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Seguir un proyecto en el feed",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "Swap en testnet People's Blockchain (97401), mín. {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "Hacer stake de PPL en la testnet de People's Blockchain (nueva delegación), mín. {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Lanzar un token (cuenta con 10+ holders verificados)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Acuñar un NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Crear un pool de liquidez",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Votar en governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Invitar amigo verificado (tras verificar y actuar)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "Fundadores por país",
+  "mapHint": "País declarado al registrarse.",
+  "leaderboardTitle": "Clasificación por país",
+  "leaderboardCount": "{{count}} fundadores",
+  "errorRegister": "Error al registrarse. Revisa tu cartera e inténtalo de nuevo.",
+  "errorLoad": "No se pudieron cargar las estadísticas.",
+  "autoClaimLoading": "Emitiendo tu número de fundador…",
+  "autoClaimError": "No se pudo emitir tu número de fundador. Inténtalo de nuevo.",
+  "autoClaimRetry": "Reintentar",
+  "countryDetectedHint": "País detectado por tu navegador — puedes cambiarlo.",
+  "chooseCountryTitle": "Tu país",
+  "countrySaved": "País actualizado.",
+  "countryUpdateError": "No se pudo actualizar tu país. Inténtalo de nuevo.",
+  "countryRateLimited": "Demasiados cambios — inténtalo más tarde.",
+  "visibilityLabel": "Perfil público",
+  "visibilityHint": "Permitir que las listas públicas muestren el nombre y el avatar de mi cuenta, por ejemplo la tabla de la página de transparencia. Desactivado por defecto.",
+  "visibilitySaved": "Guardado.",
+  "visibilityError": "No se pudo guardar.",
+  "loading": "Cargando…",
+  "discoverCta": "Feed de proyectos",
+  "swapCta": "Intercambiar en testnet",
+  "createTokenCta": "Lanzar un token",
+  "refresh": "Actualizar",
+  "live": "En vivo",
+  "mainnetRulesTitle": "Reglas de recompensa en mainnet (preliminar)",
+  "mainnetRulesPoh": "Sin prueba de humanidad no se acumula nada: ni puntos de fundador en testnet ni recompensas personales en PPL en mainnet hasta que la cuenta esté verificada y la cartera vinculada.",
+  "mainnetRulesVestingTitle": "Desbloqueo de la recompensa personal",
+  "mainnetRulesVestingBullets": [
+    "El primer día de mainnet se desbloquea el 10% de tu recompensa personal convertida (solo fundadores verificados).",
+    "El 90% restante se desbloquea en tramos semanales iguales durante exactamente 12 meses.",
+    "Cada mes natural necesitas al menos una acción válida on-chain o en Feed de proyectos. Si un mes pasa sin actividad, el desbloqueo semanal se pausa hasta que vuelvas; las semanas perdidas no se adelantan.",
+    "Los puntos de testnet son aparte; estas reglas aplican al PPL en mainnet."
+  ],
+  "mainnetRulesSaleFeeTitle": "Comisión por venta temprana (primeros 30 días de mainnet)",
+  "mainnetRulesSaleFeeBody": "Al vender PPL desbloqueado en los primeros 30 días tras el lanzamiento, se retiene una comisión en PPL: 10% el día uno, bajando linealmente a 0% el día 30. Va al pool de la comunidad.",
+  "mainnetRulesStakingTitle": "Bono de staking para fundadores",
+  "mainnetRulesStakingBullets": [
+    "El stake opcional suma +25% a la tasa de recompensa del validador — bonus sobre la tasa, no 25% del principal, y no es promesa de un rendimiento concreto.",
+    "Las recompensas de staking salen del pool comunitario y se desbloquean con el mismo calendario semanal que la recompensa personal.",
+    "Al retirar el stake hay una espera de 21 días antes de recibir el PPL en la cartera."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Sé fundador n.º {{n}} antes del mainnet",
+  "heroTitleFallback": "Sé de los primeros fundadores antes del lanzamiento de la red principal",
+  "heroSub": "Las personas verificadas obtienen su número, bonificación por entrada temprana y puntos de actividad en el testnet de People's Blockchain.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "Recibido: 100 × 6 tokens",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

@@ -1,0 +1,1244 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   PEOPLE'S BLOCKCHAIN — DESIGN TOKENS
+   Semantic tokens only. Components must never hard-code surface hex values so
+   that dark / light parity stays automatic and contrast stays controlled.
+   ========================================================================== */
+
+@theme inline {
+  --color-canvas: var(--c-canvas);
+  --color-canvas-2: var(--c-canvas-2);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-brand: var(--c-brand);
+  --color-brand-2: var(--c-brand-2);
+  --color-brand-ink: var(--c-brand-ink);
+  --color-value: var(--c-value);
+  --color-warm: var(--c-warm);
+  --color-violet: var(--c-violet);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --text-display: clamp(2.5rem, 7.5vw, 5.25rem);
+  --text-display--line-height: 0.98;
+  --text-h2: clamp(1.75rem, 3.4vw, 2.75rem);
+  --text-h2--line-height: 1.1;
+  --text-h3: clamp(1.25rem, 1.8vw, 1.5rem);
+  --text-h3--line-height: 1.25;
+  --text-lead: clamp(1.0625rem, 1.35vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+}
+
+/* ---- Dark (default) ---- */
+:root,
+.dark {
+  --c-canvas: #07090e;
+  --c-canvas-2: #0a0d15;
+  --c-surface: #0d1119;
+  --c-surface-2: #121826;
+  --c-line: rgba(148, 163, 184, 0.16);
+  --c-line-strong: rgba(148, 163, 184, 0.3);
+  --c-ink: #f2f6fb;
+  --c-ink-2: #bcc7d6;
+  --c-ink-3: #8b99ad;
+  --c-brand: #38bdf8;
+  --c-brand-2: #6366f1;
+  --c-brand-ink: #04121c;
+  --c-value: #34d399;
+  --c-warm: #fbbf24;
+  --c-violet: #a78bfa;
+
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --elev-2: 0 24px 60px -24px rgba(0, 0, 0, 0.75);
+
+  color-scheme: dark;
+}
+
+/* ---- Light ---- */
+html.light,
+html[data-theme="light"] {
+  --c-canvas: #f5f7fb;
+  --c-canvas-2: #ffffff;
+  --c-surface: #ffffff;
+  --c-surface-2: #eef2f7;
+  --c-line: rgba(15, 23, 42, 0.1);
+  --c-line-strong: rgba(15, 23, 42, 0.2);
+  --c-ink: #0b1220;
+  --c-ink-2: #35435a;
+  --c-ink-3: #5a6779;
+  --c-brand: #0369a1;
+  --c-brand-2: #4f46e5;
+  --c-brand-ink: #ffffff;
+  --c-value: #047857;
+  --c-warm: #b45309;
+  --c-violet: #6d28d9;
+
+  --elev-1: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 30px -18px rgba(15, 23, 42, 0.28);
+  --elev-2: 0 24px 60px -30px rgba(15, 23, 42, 0.3);
+
+  color-scheme: light;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+* {
+  min-width: 0;
+}
+
+/*
+  Global min-width:0 lets flex children shrink below their text, so labels
+  like "How It Works", "Log in" and "Join the community" wrap inside the
+  sticky bar. Header chrome must keep one line regardless of available room.
+*/
+.header-label {
+  min-width: max-content;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--c-brand) 28%, transparent);
+  color: var(--c-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c-canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--c-ink-3) 40%, transparent);
+  border-radius: 6px;
+  border: 2px solid var(--c-canvas);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--c-ink-3) 65%, transparent);
+}
+
+/* ==========================================================================
+   SURFACES & TEXTURES
+   Readability rule: anything carrying paragraph text sits on an opaque-enough
+   surface. Glass is decorative and always >= 88% opaque.
+   ========================================================================== */
+
+.surface-panel {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-line);
+}
+
+.surface-elevated {
+  background-color: var(--c-surface);
+  border: 1px solid var(--c-line);
+  box-shadow: var(--elev-1);
+}
+
+/* Decorative glass — never used directly behind long paragraphs. */
+.glass-bar {
+  background-color: color-mix(in oklab, var(--c-canvas) 92%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.hairline {
+  border-color: var(--c-line);
+}
+
+.grid-texture {
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--c-ink) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, color-mix(in oklab, var(--c-ink) 6%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.dot-texture {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--c-ink) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.glow-brand {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--c-brand) 22%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+.glow-value {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--c-value) 18%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+.glow-violet {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--c-violet) 20%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+/* ==========================================================================
+   TYPE HELPERS
+   ========================================================================== */
+
+.mono-label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.prose-measure {
+  max-width: 62ch;
+}
+
+.text-gradient-brand {
+  background-image: linear-gradient(100deg, var(--c-ink) 0%, var(--c-brand) 58%, var(--c-brand-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ==========================================================================
+   MOTION
+   Principle: motion explains relationships. Everything is opacity/transform
+   based (GPU friendly) and fully disabled under prefers-reduced-motion.
+   ========================================================================== */
+
+@keyframes ovn-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes ovn-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ovn-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ovn-dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@keyframes ovn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ovn-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes ovn-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes ovn-flow-x {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes ovn-flow-y {
+  from {
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/* Progressive reveal — hidden state only exists when JS is confirmed alive. */
+html.js-motion .reveal {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  will-change: opacity, transform;
+}
+
+html.js-motion .reveal.is-visible {
+  animation: ovn-rise 0.72s cubic-bezier(0.22, 0.68, 0.24, 1) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* Line / path drawing */
+.draw-path {
+  stroke-dasharray: var(--path-len, 1000);
+  stroke-dashoffset: var(--path-len, 1000);
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: var(--draw-delay, 0ms);
+}
+.draw-path.is-drawn {
+  stroke-dashoffset: 0;
+}
+
+/* Travelling flow pulses along connectors */
+.flow-dash {
+  stroke-dasharray: 5 13;
+  animation: ovn-dash 7s linear infinite;
+}
+
+/* A particle travelling along a straight connector. The track is hairline-thin
+   and clips the pulse, so it reads as light moving through the wire. */
+.flow-particle {
+  animation: ovn-flow-x 2.2s linear infinite;
+}
+.flow-particle-y {
+  animation: ovn-flow-y 2.2s linear infinite;
+}
+
+.spin-slow {
+  animation: ovn-spin 92s linear infinite;
+  transform-origin: center;
+}
+.spin-slow-reverse {
+  animation: ovn-spin 130s linear infinite reverse;
+  transform-origin: center;
+}
+
+.node-pulse {
+  animation: ovn-pulse 3.4s ease-in-out infinite;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in oklab, var(--c-ink) 10%, transparent) 45%,
+    transparent 90%
+  );
+  animation: ovn-shimmer 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Animated proportional bar */
+.bar-fill {
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1.15s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: var(--bar-delay, 0ms);
+}
+.bar-fill.is-filled {
+  transform: scaleX(1);
+}
+
+/* Step activation used by flow diagrams */
+.step-node {
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 0.68, 0.24, 1),
+    border-color 0.4s ease, background-color 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  html.js-motion .reveal,
+  html.js-motion .reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .draw-path {
+    stroke-dashoffset: 0 !important;
+    stroke-dasharray: none !important;
+  }
+
+  .flow-dash {
+    stroke-dasharray: none;
+    animation: none;
+    opacity: 0.45;
+  }
+
+  .flow-particle,
+  .flow-particle-y {
+    animation: none !important;
+    opacity: 0;
+  }
+
+  .spin-slow,
+  .spin-slow-reverse,
+  .node-pulse,
+  .shimmer::after {
+    animation: none !important;
+  }
+
+  .bar-fill {
+    transform: scaleX(1) !important;
+  }
+
+  .step-node {
+    opacity: 1 !important;
+  }
+}
+
+/* Utility: hide horizontal scrollbars on mobile rails while keeping scroll */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Anchor offset so sticky nav + chapter rail never covers a heading */
+.anchor-offset {
+  scroll-margin-top: 7.5rem;
+}
+
+/* ==========================================================================
+   HEADER — brand lockup + tagline + localized slogan
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .header-brand-mobile .header-brand-lockup {
+    --header-lockup-h: 1.75rem;
+    height: var(--header-lockup-h);
+  }
+
+  /* `.header-brand-bundle` sets `display: grid` below — must win over that on small screens. */
+  .header-brand-bundle {
+    display: none !important;
+  }
+
+  .header-brand-tagline,
+  .header-brand-slogan {
+    display: none !important;
+  }
+}
+
+.header-brand-bundle {
+  --header-lockup-h: 1.75rem;
+  --header-slogan-size: calc(var(--header-lockup-h) * 0.35);
+  container-type: inline-size;
+  container-name: header-brand;
+  display: grid;
+  grid-template-columns: minmax(0, max-content);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .header-brand-bundle {
+    --header-lockup-h: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-brand-bundle {
+    --header-lockup-h: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Do not shrink the nav slot below its labels — overflow was painting over
+     partner login and stealing clicks (long RU copy @ ~1440px). */
+  .header-primary-nav {
+    flex-shrink: 0;
+    min-width: max-content;
+  }
+
+  /* Utilities follow nav in DOM; keep them above any residual overlap for hit-testing. */
+  .header-bar-row > .ml-auto {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* Wrapper only — theme visibility is explicit (display:none), not opacity/position. */
+.header-brand-lockup {
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  height: var(--header-lockup-h);
+  line-height: 0;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.header-brand-lockup img.header-lockup-theme {
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+/* One lockup raster at a time — display:none (not opacity/position). Applies everywhere Logo renders. */
+img.header-lockup-theme-light {
+  display: block;
+}
+
+img.header-lockup-theme-dark {
+  display: none;
+}
+
+html.dark img.header-lockup-theme-light {
+  display: none;
+}
+
+html.dark img.header-lockup-theme-dark {
+  display: block;
+}
+
+/* Column width follows the lockup raster only; slogan may extend past it. */
+.header-brand-lockup-column {
+  display: inline-grid;
+  grid-template-columns: max-content;
+  max-width: 100%;
+}
+
+/* Text column under the PEOPLE wordmark (not under the symbol). Inset matches
+   the approved compact lockup geometry: (symbol + gap) / total width ≈ 37.05%. */
+.header-brand-lines {
+  box-sizing: border-box;
+  width: 0;
+  min-width: 100%;
+  padding-inline-start: 37.05%;
+  margin-top: calc(var(--header-lockup-h) * -0.175);
+}
+
+/* CSS stand-in for the approved raster tagline at header scale (9px cap @ 40px symbol). */
+.header-brand-tagline {
+  display: block;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: 0.1em;
+  color: var(--c-ink-2);
+  font-size: calc(var(--header-lockup-h) * 0.225);
+  transition: color 0.3s;
+}
+
+.group:hover .header-brand-tagline {
+  color: var(--c-ink);
+}
+
+/* Footer uses text-sm under h-12 lockup; scale the same ratio to header height. */
+.header-brand-slogan {
+  --slogan-fit-mult: 2.05;
+  box-sizing: border-box;
+  grid-column: 1;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin-top: calc(var(--header-lockup-h) * 0.1);
+  padding-inline: 0;
+  overflow: visible;
+  white-space: nowrap;
+  font-weight: 500;
+  line-height: 1.375;
+  color: var(--c-ink-3);
+  text-align: start;
+  font-size: min(
+    var(--header-slogan-size),
+    max(
+      0.4rem,
+      calc(100cqi / var(--slogan-chars, 40) * var(--slogan-fit-mult))
+    )
+  );
+  transition: color 0.3s;
+}
+
+.group:hover .header-brand-slogan {
+  color: var(--c-ink-2);
+}
+
+/* Wider glyphs / longer copy — stronger shrink on narrow viewports */
+.header-brand-slogan[data-lang="de"],
+.header-brand-slogan[data-lang="fr"],
+.header-brand-slogan[data-lang="it"],
+.header-brand-slogan[data-lang="pt"],
+.header-brand-slogan[data-lang="es"] {
+  --slogan-fit-mult: 2.05;
+}
+
+.header-brand-slogan[data-lang="tr"],
+.header-brand-slogan[data-lang="ru"],
+.header-brand-slogan[data-lang="id"],
+.header-brand-slogan[data-lang="vi"] {
+  --slogan-fit-mult: 2.1;
+}
+
+.header-brand-slogan[data-lang="ar"] {
+  --slogan-fit-mult: 2.25;
+}
+
+.header-brand-slogan[data-lang="zh"] {
+  --slogan-fit-mult: 1.45;
+}
+
+@media (max-width: 1023px) {
+  .header-brand-slogan {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-brand-slogan {
+    width: max-content;
+    max-width: none;
+    margin-top: calc(var(--header-lockup-h) * 0.12);
+    font-size: var(--header-slogan-size);
+  }
+}
+
+/* ==========================================================================
+   HERO — fluid headline in the left column (desktop two-column grid)
+   ========================================================================== */
+
+.hero-copy {
+  container-type: inline-size;
+  container-name: hero-copy;
+}
+
+.hero-headline {
+  max-width: 100%;
+  overflow: visible;
+  hyphens: manual;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.hero-headline-line {
+  display: block;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.hero-headline-line--accent {
+  /* gradient accent line */
+}
+
+/* SSR default until client measurement; conservative cqi multiplier */
+.hero-headline.text-display {
+  font-size: clamp(
+    2rem,
+    calc(100cqi / var(--hero-max-chars, 10) * var(--hero-cqi-mult, 1.45)),
+    min(5.25rem, var(--hero-display-max, 5.25rem))
+  );
+}
+
+/* ==========================================================================
+   Lightweight explainer visuals (fee donut, community share flow, build loop).
+   Animate only while `.is-on` (set when in view); reduced motion is handled by
+   the global rule above, which leaves every visual in its final state.
+   ========================================================================== */
+.fee-donut-seg {
+  stroke-dasharray: 0 var(--gap);
+  transition: stroke-dasharray 0.9s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.fee-donut.is-on .fee-donut-seg {
+  stroke-dasharray: var(--seg) var(--gap);
+}
+.fee-donut-row {
+  opacity: 0.35;
+  transition: opacity 0.5s ease;
+}
+.fee-donut.is-on .fee-donut-row {
+  opacity: 1;
+}
+
+@keyframes community-flow-dot {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateX(78px); opacity: 0; }
+}
+@keyframes community-flow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes community-flow-avatar {
+  0%, 70%, 100% { transform: translateY(0); }
+  80% { transform: translateY(-3px); }
+}
+.community-flow-dot {
+  opacity: 0;
+  animation: community-flow-dot 1.8s linear infinite;
+  animation-play-state: paused;
+}
+.community-flow-share {
+  animation: community-flow-pulse 1.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.community-flow-avatar {
+  animation: community-flow-avatar 1.8s ease-in-out infinite;
+  animation-play-state: paused;
+}
+.community-flow.is-on .community-flow-dot,
+.community-flow.is-on .community-flow-share,
+.community-flow.is-on .community-flow-avatar {
+  animation-play-state: running;
+}
+
+@keyframes build-loop-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes build-loop-press {
+  0%, 60%, 100% { transform: scale(1); }
+  75% { transform: scale(0.95); }
+}
+.build-loop-caret {
+  display: none;
+}
+.build-loop-caret.is-on {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--c-brand);
+  animation: build-loop-caret 0.9s steps(1) infinite;
+}
+.build-loop-press {
+  animation: build-loop-press 1.8s ease-in-out;
+}
+
+.agents-workflow-step .agents-workflow-node {
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease, transform 0.35s ease;
+}
+
+.agents-workflow-connector {
+  position: absolute;
+  top: 1.65rem;
+  left: calc(50% + 1.35rem);
+  right: calc(-50% + 1.35rem);
+  height: 3px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--c-brand), color-mix(in oklab, var(--c-brand) 35%, transparent));
+  opacity: 0.2;
+  transform: scaleX(0.08);
+  transition: transform 0.55s ease, opacity 0.45s ease;
+}
+
+.agents-workflow-v2.is-on .agents-workflow-step.is-lit .agents-workflow-node {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--c-brand) 28%, transparent);
+  transform: scale(1.06);
+}
+
+.agents-workflow-v2.is-on .agents-workflow-step.is-lit .agents-workflow-connector {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.agents-workflow-v2.is-on .agents-workflow-step.is-pulse {
+  animation: agents-workflow-step-pop 0.55s ease;
+}
+
+.agents-workflow-agent-card {
+  animation: agents-workflow-card-in 0.6s ease both;
+}
+
+.agents-workflow-v2.is-on .agents-workflow-packet {
+  animation: agents-workflow-packet 0.9s ease-in-out infinite;
+  color: var(--c-brand);
+}
+
+.agents-workflow-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--c-brand);
+  animation: build-loop-caret 0.9s steps(1) infinite;
+}
+
+@keyframes agents-workflow-step-pop {
+  0% {
+    transform: translateY(4px);
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes agents-workflow-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes agents-workflow-packet {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+}
+
+.agents-workflow-v2.is-reduced.is-on .agents-workflow-step.is-lit .agents-workflow-node {
+  transform: none;
+}
+
+.agents-workflow-v2.is-reduced .agents-workflow-agent-card,
+.agents-workflow-v2.is-reduced .agents-workflow-packet {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-flow-dot {
+    animation: none;
+    opacity: 0;
+  }
+  .community-flow-share,
+  .community-flow-avatar {
+    animation: none;
+  }
+  .agents-workflow-v2.is-on .agents-workflow-step.is-pulse {
+    animation: none;
+  }
+  .agents-workflow-agent-card {
+    animation: none;
+  }
+}
+
+.hiw-stagger-item {
+  opacity: 0.35;
+  transform: translateY(10px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+  transition-delay: calc(var(--hiw-i, 0) * 120ms);
+}
+.hiw-in-view .hiw-stagger-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes people-loader-orbit { to { transform: rotate(360deg); } }
+@keyframes people-loader-breathe { 0%, 100% { transform: scale(.92); opacity: .65; } 50% { transform: scale(1); opacity: 1; } }
+.people-loader-ring { animation: people-loader-orbit 1.4s linear infinite; }
+.people-loader-logo { animation: people-loader-breathe 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .people-loader-ring, .people-loader-logo { animation: none; }
+}
+
+/* ==========================================================================
+   Warm public pages — /founders, the homepage and /how-it-works. The palette is
+   scoped to the page body (header/footer keep the site theme) and follows the
+   site theme toggle: warm cream in light, deep blue in dark. Motion is
+   decorative only and is switched off under prefers-reduced-motion.
+   ========================================================================== */
+.founders-warm,
+.warm-page {
+  --c-canvas: #fbf6ee;
+  --c-canvas-2: #fffdf9;
+  --c-surface: #ffffff;
+  --c-surface-2: #f3ebdf;
+  --c-line: rgba(87, 56, 24, 0.12);
+  --c-line-strong: rgba(87, 56, 24, 0.24);
+  --c-ink: #1f1a15;
+  --c-ink-2: #463d34;
+  --c-ink-3: #6b5f53;
+  --c-brand: #0369a1;
+  --c-brand-2: #4f46e5;
+  --c-brand-ink: #ffffff;
+  --c-value: #047857;
+  --c-warm: #b45309;
+  --c-violet: #6d28d9;
+  /* Stacked decorative avatars sit on the card surface, not on a fixed white. */
+  --c-avatar-ring: #ffffff;
+  --elev-1: 0 1px 2px rgba(87, 56, 24, 0.06), 0 12px 32px -18px rgba(87, 56, 24, 0.3);
+  --elev-2: 0 28px 60px -30px rgba(87, 56, 24, 0.38);
+  color-scheme: light;
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
+}
+
+/*
+  Landing top wash. The homepage hero paints this glow inside its own section;
+  every other warm page gets the same band straight from the page background so
+  the whole site opens in one visual language without each page rebuilding the
+  hero. Painted as a background image (not an overlay) so it never fights the
+  stacking or the content z-order, and it is inert under prefers-reduced-motion
+  because it does not animate.
+*/
+.warm-page {
+  background-image:
+    radial-gradient(92% 420px at 82% -140px, rgba(245, 158, 11, 0.18), transparent 70%),
+    radial-gradient(70% 380px at 6% -120px, rgba(3, 105, 161, 0.1), transparent 72%);
+  background-repeat: no-repeat;
+}
+
+/*
+  Dark variant of the same pages. Blue-navy rather than cream, so the toggle in
+  the header keeps working and the content is never left light-on-light. Every
+  ink/surface pair below was checked for >= 4.5:1 on body text and >= 3:1 on
+  large text and UI borders; brand, value, warm and violet stay light enough to
+  read as chart/figure colours on --c-surface.
+*/
+html.dark .founders-warm,
+html.dark .warm-page {
+  --c-canvas: #070b16;
+  --c-canvas-2: #0b1120;
+  --c-surface: #0e1628;
+  --c-surface-2: #16203a;
+  --c-line: rgba(148, 163, 184, 0.18);
+  --c-line-strong: rgba(148, 163, 184, 0.34);
+  --c-ink: #eef4ff;
+  --c-ink-2: #bdcae0;
+  --c-ink-3: #93a3bd;
+  --c-brand: #4cc4f8;
+  --c-brand-2: #8b93f8;
+  --c-brand-ink: #04121c;
+  --c-value: #3ddba1;
+  --c-warm: #fbbf24;
+  --c-violet: #b39bfb;
+  --c-avatar-ring: var(--c-canvas-2);
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+  --elev-2: 0 28px 60px -30px rgba(0, 0, 0, 0.9);
+  color-scheme: dark;
+  background-color: var(--c-canvas);
+  color: var(--c-ink);
+}
+
+/* Dark leg of the landing top wash (see the light rule above). */
+html.dark .warm-page {
+  background-image:
+    radial-gradient(92% 420px at 82% -140px, rgba(251, 191, 36, 0.14), transparent 70%),
+    radial-gradient(70% 380px at 6% -120px, rgba(76, 196, 248, 0.12), transparent 72%);
+  background-repeat: no-repeat;
+}
+
+/* Stacked avatar rings: `ring-2 ring-white` cannot follow the palette. */
+.warm-avatar-ring {
+  box-shadow: 0 0 0 2px var(--c-avatar-ring);
+}
+.warm-avatar-ring-lg {
+  box-shadow: 0 0 0 4px var(--c-avatar-ring);
+}
+
+.founders-card-scene {
+  perspective: 1200px;
+}
+.founders-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.founders-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.founders-card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.founders-card-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+.founders-card-sheen {
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.28) 45%, transparent 60%);
+  background-size: 250% 100%;
+  animation: founders-sheen 4.5s ease-in-out infinite;
+}
+@keyframes founders-sheen {
+  0%, 30% { background-position: 120% 0; }
+  70%, 100% { background-position: -40% 0; }
+}
+.founders-float {
+  animation: founders-float 6s ease-in-out infinite;
+}
+@keyframes founders-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.founders-bubble {
+  animation: founders-bubble 5s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes founders-bubble {
+  0%, 100% { transform: translateY(0); opacity: 0.92; }
+  50% { transform: translateY(-6px); opacity: 1; }
+}
+.founders-flow-line {
+  position: relative;
+  overflow: hidden;
+}
+.founders-flow-dot {
+  position: absolute;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 9999px;
+  background: var(--c-brand);
+  animation: founders-flow-up 2.4s linear infinite;
+  animation-delay: var(--d, 0s);
+}
+.founders-flow-dot.is-warm {
+  background: var(--c-warm);
+}
+@keyframes founders-flow-up {
+  from { top: 100%; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  to { top: -8px; opacity: 0; }
+}
+.founders-confetti {
+  position: fixed;
+  z-index: 60;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* --- Homepage hero phone mock ---------------------------------------------
+   Three beats: wallet → token card → the 10% share reaching people. Only the
+   active beat is opaque; the sequence is driven by useLoopStage, which never
+   advances under reduced motion (the caller then renders every beat statically).
+   -------------------------------------------------------------------------- */
+.warm-phone-stage {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.warm-phone-stage.is-on {
+  opacity: 1;
+  transform: translateY(0);
+}
+.warm-coin {
+  animation: warm-coin-pop 3.6s cubic-bezier(0.22, 0.68, 0.24, 1) infinite;
+}
+@keyframes warm-coin-pop {
+  0%, 55%, 100% { transform: translateY(0) scale(1); }
+  68% { transform: translateY(-5px) scale(1.06); }
+  80% { transform: translateY(0) scale(1); }
+}
+.warm-share-arrow {
+  stroke-dasharray: 4 6;
+  animation: warm-share-march 1.6s linear infinite;
+}
+@keyframes warm-share-march {
+  to { stroke-dashoffset: -20; }
+}
+.warm-pulse-ring {
+  animation: warm-pulse-ring 2.4s ease-out infinite;
+  transform-origin: center;
+}
+@keyframes warm-pulse-ring {
+  0% { transform: scale(0.6); opacity: 0.55; }
+  70% { transform: scale(1.55); opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* --- /how-it-works: stepper, timeline, fee split, curve ------------------- */
+
+/* Vertical progress rail of the three onboarding steps. */
+.warm-step-node {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease,
+    transform 0.4s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.warm-step-node.is-on {
+  transform: scale(1.06);
+}
+.warm-step-card {
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+  opacity: 0.62;
+}
+.warm-step-card.is-on {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--c-brand) 45%, transparent);
+  box-shadow: var(--elev-1);
+}
+
+/* Validator emission timeline: bars grow in when the section scrolls into view. */
+.warm-timeline-bar {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: var(--d, 0ms);
+}
+.warm-timeline.is-on .warm-timeline-bar {
+  transform: scaleX(1);
+}
+
+/* Fee split: a coin that splits into six labelled streams. */
+.warm-fee-root {
+  stroke-dasharray: var(--coin, 0) 400;
+  transition: stroke-dasharray 1.1s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.warm-fee-branch {
+  stroke-dasharray: var(--len, 0) 400;
+  transition: stroke-dasharray 0.9s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: var(--d, 0ms);
+}
+.warm-fee-flow.is-on .warm-fee-root,
+.warm-fee-flow.is-on .warm-fee-branch {
+  stroke-dasharray: var(--dash, 0) 400;
+}
+.warm-fee-row {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: var(--d, 0ms);
+}
+.warm-fee-flow.is-on .warm-fee-row {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Bonding curve: the price line draws itself, the dot rides the curve late. */
+.warm-curve-line {
+  stroke-dasharray: var(--len, 0) 400;
+  transition: stroke-dasharray 1.4s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.warm-curve.is-on .warm-curve-line {
+  stroke-dasharray: var(--dash, 0) 400;
+}
+.warm-curve-dot {
+  opacity: 0;
+  transition: opacity 0.5s ease 1s;
+}
+.warm-curve.is-on .warm-curve-dot {
+  opacity: 1;
+}
+
+/* Supply donut reuses the fee-donut draw-in from the /how-it-works page. */
+.warm-supply-ring circle {
+  transition: stroke-dasharray 1.2s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .founders-card-sheen,
+  .founders-float,
+  .founders-bubble,
+  .founders-flow-dot,
+  .warm-coin,
+  .warm-share-arrow,
+  .warm-pulse-ring {
+    animation: none !important;
+  }
+  .founders-flow-dot {
+    display: none;
+  }
+  .founders-card-inner {
+    transition: none;
+  }
+  .warm-phone-stage,
+  .warm-step-node,
+  .warm-step-card,
+  .warm-timeline-bar,
+  .warm-fee-root,
+  .warm-fee-branch,
+  .warm-fee-row,
+  .warm-curve-line,
+  .warm-curve-dot,
+  .warm-supply-ring circle {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    stroke-dasharray: none !important;
+  }
+}

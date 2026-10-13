@@ -1,0 +1,168 @@
+{
+  "tag": "FOUNDERS",
+  "title": "Million founders",
+  "lead": "Join one million verified people building People's Blockchain before mainnet. Your founder number and activity points are recorded on testnet today.",
+  "preliminaryBanner": "Preliminary — point weights, multipliers, and daily limits may change before mainnet.",
+  "counterLabel": "Verified founders",
+  "goalLabel": "Goal before mainnet",
+  "yourNumber": "Founder #{{n}}",
+  "multiplierLabel": "Early-entry multiplier",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Claim your founder number",
+  "registerLead": "Choose your country for the public map. You need a linked wallet (proof of humanity) before registration.",
+  "countryLabel": "Country",
+  "countryPlaceholder": "Select country",
+  "registerButton": "Become a founder",
+  "registering": "Registering…",
+  "signInCta": "Sign in",
+  "walletCta": "Link wallet",
+  "pohRequired": "Sign in and link a wallet to register and earn points. Without proof of humanity there are no points.",
+  "registered": "You are in the program.",
+  "pointsTitle": "Activity points",
+  "pointsTotal": "Total points",
+  "pointsTodayHint": "Daily cap {{dailyCap}} base points (before entry multiplier). Verification level applies first.",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "Actions that earn points",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "React on the project feed",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Follow a project in the feed",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "Swap on People's Blockchain testnet (97401), min {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL on People's Blockchain testnet (new delegation), min {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Launch a token (counts after 10+ verified holders)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Mint an NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Create a liquidity pool",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Vote in governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Invite verified friend (after they verify and act)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "Founders by country",
+  "mapHint": "Self-declared country at registration.",
+  "leaderboardTitle": "Country leaderboard",
+  "leaderboardCount": "{{count}} founders",
+  "errorRegister": "Registration failed. Check your wallet and try again.",
+  "errorLoad": "Could not load founder stats.",
+  "autoClaimLoading": "Issuing your founder number…",
+  "autoClaimError": "Could not issue your founder number. Try again.",
+  "autoClaimRetry": "Try again",
+  "countryDetectedHint": "Country detected from your browser — you can change it.",
+  "chooseCountryTitle": "Your country",
+  "countrySaved": "Country updated.",
+  "countryUpdateError": "Could not update your country. Try again.",
+  "countryRateLimited": "Too many changes — try again later.",
+  "visibilityLabel": "Public profile",
+  "visibilityHint": "Let public lists show my account name and avatar, for example the leaderboard on the transparency page. Off by default.",
+  "visibilitySaved": "Saved.",
+  "visibilityError": "Could not save.",
+  "loading": "Loading…",
+  "discoverCta": "Project feed",
+  "swapCta": "Swap on testnet",
+  "createTokenCta": "Launch a token",
+  "refresh": "Refresh",
+  "live": "Live",
+  "mainnetRulesTitle": "Mainnet reward rules (preliminary)",
+  "mainnetRulesPoh": "Nothing accrues without proof of humanity: no founder points on testnet and no personal PPL rewards on mainnet until your account is verified and your wallet is linked.",
+  "mainnetRulesVestingTitle": "Personal reward unlock",
+  "mainnetRulesVestingBullets": [
+    "On mainnet day one, 10% of your converted personal reward unlocks immediately (verified founders only).",
+    "The remaining 90% unlocks in equal weekly slices over exactly 12 months.",
+    "Each calendar month you need at least one qualifying on-chain or Project feed action. If a month passes with no activity, weekly unlocking pauses until you return — missed weeks are not skipped forward.",
+    "Testnet activity points are separate; they inform conversion but these unlock rules apply to PPL on mainnet."
+  ],
+  "mainnetRulesSaleFeeTitle": "Early sale fee (first 30 mainnet days)",
+  "mainnetRulesSaleFeeBody": "When you sell unlocked PPL during the first 30 days after the network launches, a fee is withheld in PPL from the sale: 10% on day one, falling linearly to 0% on day 30. The fee goes to the community pool.",
+  "mainnetRulesStakingTitle": "Founder staking bonus",
+  "mainnetRulesStakingBullets": [
+    "Optional stake adds +25% to the validator reward rate — a bonus on the rate, not 25% of your stake amount, and not a promise of any specific yield.",
+    "Staking rewards are paid from the community pool and unlock on the same weekly schedule as your personal reward.",
+    "Unstaking has a 21-day waiting period before PPL returns to your wallet."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Become founder № {{n}} before mainnet",
+  "heroTitleFallback": "Be among the first founders before mainnet launches",
+  "heroSub": "Verified participants get their number, an early-entry bonus, and activity points on the People's Blockchain testnet.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "Received: 100 × 6 tokens",
+  "demoAirdropPending": "Demo tokens are sent to your founder wallet automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

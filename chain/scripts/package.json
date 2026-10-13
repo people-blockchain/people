@@ -1,0 +1,12 @@
+{
+  "name": "@people/chain-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "ethers": "^6.15.0"
+  },
+  "scripts": {
+    "test:faucet": "node --test faucet.test.mjs",
+    "faucet": "node faucet-server.mjs"
+  }
+}

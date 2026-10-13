@@ -1,0 +1,86 @@
+[
+  {
+    "id": "participation-depth",
+    "title": "Participation Power and rewards math",
+    "lead": "Technical details moved from the public how-it-works page. Values marked provisional may change before mainnet.",
+    "items": [
+      {
+        "title": "Participation Power",
+        "text": "A non-transferable weight that sets your share of future Community Pool distributions from PPL network fees. It is not a tradable token."
+      },
+      {
+        "title": "PowerCap and epochs",
+        "text": "Participation is measured over epochs with diminishing returns and a hard cap per person so one account cannot absorb the whole pool."
+      },
+      {
+        "title": "Dynamic Participant Pool",
+        "text": "The share of fees routed to the Community Pool (25% of eligible protocol fees) funds epoch rewards for eligible active participants."
+      },
+      {
+        "title": "Anti-Sybil safeguards",
+        "text": "New accounts ramp slowly, inactive accounts decay, and caps limit how much a cluster of fake identities can earn."
+      },
+      {
+        "title": "Zero-Pool invariant",
+        "text": "If no one qualifies in an epoch, undistributed Community Pool amounts are not invented as passive income — accounting stays consistent with protocol rules."
+      }
+    ],
+    "links": [{ "label": "How it works (overview)", "href": "/how-it-works" }]
+  },
+  {
+    "id": "network-architecture",
+    "title": "Technology and invariants",
+    "lead": "How the network is structured — without status labels on the marketing pages.",
+    "items": [
+      {
+        "title": "Consensus and validators",
+        "text": "Dedicated validators produce and attest blocks. Phones and browser tabs are participants, not validators by default."
+      },
+      {
+        "title": "State and storage",
+        "text": "Nodes persist chain state locally. Historical blocks may be pruned on ordinary nodes; restarting validators rely on their own data directory."
+      },
+      {
+        "title": "Protocol invariants",
+        "text": "Fee splits, supply rules, and accounting paths are enforced in protocol code — not by marketing copy."
+      }
+    ],
+    "links": [{ "label": "Run a node", "href": "#node" }]
+  },
+  {
+    "id": "product-phases",
+    "title": "Roadmap phases",
+    "lead": "High-level phases for the product — not a mainnet launch date.",
+    "items": [
+      {
+        "title": "Current · public testnet",
+        "text": "Wallet, token factory, trading on test PPL, and fee routing you can try today."
+      },
+      {
+        "title": "Next · human network",
+        "text": "Phone participation sessions, humanity checks, and participation points — design in progress."
+      },
+      {
+        "title": "Later · consumer apps",
+        "text": "Hub experiences and creator tools built on the same protocol — after core participation is proven."
+      }
+    ],
+    "links": []
+  },
+  {
+    "id": "ppl-native",
+    "title": "PPL — the native asset",
+    "lead": "People (PPL) pays network fees and protocol operations on this chain.",
+    "items": [
+      {
+        "title": "Test coins",
+        "text": "Testnet PPL is for trying the network. Holding test PPL is not proof of profit."
+      },
+      {
+        "title": "Fees only in PPL",
+        "text": "Transfers, token create, NFT mint, and contract gas are quoted in PPL on public surfaces."
+      }
+    ],
+    "links": [{ "label": "Public tariffs", "href": "/fees" }]
+  }
+]

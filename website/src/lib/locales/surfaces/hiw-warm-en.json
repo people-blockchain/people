@@ -1,0 +1,138 @@
+{
+  "hero": {
+    "eyebrow": "People's Blockchain",
+    "title": "How People works, in 1 minute.",
+    "lead": "A wallet, one check that you are a person, and then you can launch, mint, swap or vote. No code and no crypto background.",
+    "testnetBadge": "Public testnet. Not mainnet yet."
+  },
+  "steps": {
+    "eyebrow": "Three steps",
+    "title": "What a regular person actually does",
+    "lead": "This is the whole onboarding. Everything else on this page is detail for the curious.",
+    "items": [
+      {
+        "title": "Get a wallet in 30 seconds",
+        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker Google sign-in with an encrypted, cloud-synced key.",
+        "note": "No app store, no seed-phrase homework."
+      },
+      {
+        "title": "Prove you are a human",
+        "body": "Verify once with a Telegram phone number or a Human Passport. One person, one account — that is what keeps bots from farming the community pool.",
+        "note": "No biometrics required."
+      },
+      {
+        "title": "Launch, mint, swap or vote",
+        "body": "Start a token for your community, mint club cards, trade in the token/PPL pool, or vote on where the community pool goes.",
+        "note": "Each action is a normal button, not a command line."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Supply",
+    "title": "One billion PPL, and no surprises",
+    "lead": "The supply is fixed at genesis. Nothing is minted on a schedule behind your back.",
+    "totalLabel": "Total supply, fixed",
+    "unit": "PPL",
+    "noNewCoins": "Years 1–4: 0% new coins. Inflation parameters are pinned to zero in the chain genesis.",
+    "year5": "From year 5: at most 2% a year, and only if the community votes for it.",
+    "donutLabel": "Genesis allocation",
+    "bucketLabels": {
+      "community": "Community & rewards",
+      "validators": "Validators",
+      "team": "Team",
+      "treasury": "Treasury",
+      "sale": "Community sale",
+      "liquidity": "Liquidity"
+    },
+    "donutNote": "Sums to 100% of the one billion PPL. The community bucket unlocks linearly over six years; the treasury and locked liquidity are not circulating."
+  },
+  "validators": {
+    "eyebrow": "Validators",
+    "title": "Who runs the network, and who pays for it",
+    "lead": "Validators keep the chain running. They are paid from their own pool, plus a share of every fee.",
+    "poolLabel": "Validator pool",
+    "unit": "PPL",
+    "shareLabel": "plus 30% of every network fee",
+    "yearsLabel": "PPL released per year",
+    "yearLabel": "Year {{n}}",
+    "pctLabel": "{{pct}}% of total supply",
+    "scheduleNote": "Years 1–4 release 60M, 50M, 50M and 40M PPL from the 200M pool. Nothing is minted to pay for it.",
+    "feeNote": "On top of the schedule, validators receive 30% of every network fee, split every block."
+  },
+  "fees": {
+    "eyebrow": "Fees",
+    "title": "Where every fee goes",
+    "lead": "Every network fee is paid in PPL and split the same way, every time.",
+    "totalLabel": "One fee",
+    "totalValue": "100%",
+    "note": "Nothing is burned: the burn line is 0%. Fractional fees follow the same split."
+  },
+  "launch": {
+    "eyebrow": "Launching a token",
+    "title": "What happens when you launch",
+    "lead": "Three rules are enforced by the contracts, not by us being nice.",
+    "points": [
+      {
+        "title": "The curve prices it from the first trade",
+        "body": "There is no private round and no preset price. The token starts on a bonding curve, so the very first buy sets the price everyone else sees."
+      },
+      {
+        "title": "10% goes to that token's community pool",
+        "body": "Every standard launch sends 10% of its supply to the token's own community pool. It is never mixed with network fees."
+      },
+      {
+        "title": "The creator's share vests over 180 days",
+        "body": "10% of the creator allocation is liquid at creation, the remaining 90% unlocks linearly over 180 days. No dump on day one."
+      }
+    ],
+    "curveCaption": "Price along the bonding curve",
+    "curveStartLabel": "First trade",
+    "curveEndLabel": "Sold out",
+    "curveNote": "Illustrative shape of the curve — this is how the mechanism works, not a price forecast."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Be early, and bring your people",
+    "lead": "Founder numbers are still open. Two referral levels, and only active people count.",
+    "bullets": [
+      "Two levels: you earn from your invitees, and a smaller share from theirs.",
+      "Inactive accounts earn nothing — a hundred fake accounts earn a hundred times zero.",
+      "Rewards vest: 10% liquid at once, the rest in weekly slices over 52 weeks."
+    ],
+    "cta": "Become a founder",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Straight answers",
+    "items": [
+      {
+        "q": "Is this mainnet?",
+        "a": "No. This is a public testnet. The tokens and balances here are for testing and carry no value."
+      },
+      {
+        "q": "Do I need to know how to code?",
+        "a": "No. Creating a wallet, launching a token, minting club cards and voting are buttons in the interface. Contracts come from audited OpenZeppelin templates."
+      },
+      {
+        "q": "Where do fees go?",
+        "a": "30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to the Growth Pool and 0% burned."
+      },
+      {
+        "q": "Will new coins be printed?",
+        "a": "Not in years 1–4 — the chain genesis pins inflation to zero. From year 5, at most 2% a year and only by community vote."
+      },
+      {
+        "q": "Is this a promise of income?",
+        "a": "No. Rewards are not fixed: no activity, no rewards. Token prices can go up, down, or to zero. This is participation in a network, not an investment."
+      }
+    ]
+  },
+  "cta": {
+    "title": "That is the whole idea",
+    "body": "Try it on the testnet, or read the details in the docs first.",
+    "ctaWallet": "Try the testnet",
+    "ctaCreate": "Launch a token",
+    "ctaDocs": "Read the docs"
+  }
+}

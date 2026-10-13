@@ -1,0 +1,24 @@
+# Extends the default gitleaks rules. Allowlist only known non-secrets.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Public contract addresses, event topics and documented public dev/test keys"
+paths = [
+  '''contracts/deployments/.*\.json''',
+  '''website/src/data/evm-deployments-.*\.json''',
+  # documented public dev/test keys (cosmos/evm dev0, unit-test fixtures) - zero balance, never used on funded networks
+  '''chain/scripts/contracts-smoke\.sh''',
+  '''contracts/scripts/smoke-local\.sh''',
+  '''website/scripts/evm-embedded-key\.test\.mjs''',
+  '''website/scripts/wallet-keep-current\.spec\.mjs''',
+  '''website/scripts/evm-log-start-blocks\.test\.mjs''',
+  # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
+  '''website/src/lib/web3auth-config\.ts''',
+]
+regexTarget = "line"
+regexes = [
+  # keccak event topics (TOKEN_CREATED etc.)
+  '''TOKEN_CREATED(_TOPIC)?\s*=''',
+  '''TOKEN_CREATED(_TOPIC)?=''',
+]

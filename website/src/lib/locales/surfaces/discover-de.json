@@ -1,0 +1,151 @@
+{
+  "navLabel": "Projekt-Feed",
+  "tagline": "Neue Projekte finden. Guten Ideen helfen, Menschen zu erreichen. Von Anfang an dabei sein.",
+  "title": "Projekt-Feed",
+  "lead": "Jede Karte nutzt Ihren Text, das Token-Symbol und Screenshots. Ein kurzes Video ist optional und hebt die Karte im Feed.",
+  "createCta": "Projekt teilen",
+  "empty": "Noch nichts zu sehen. Seien Sie der Erste mit einer Idee.",
+  "signInHint": "Melden Sie sich an und verknüpfen Sie Ihre Wallet, um zu reagieren oder zu fragen.",
+  "walletHint": "Verknüpfen Sie Ihre Wallet im Partnerbereich, um teilzunehmen.",
+  "walletLink": "Konto öffnen",
+  "loginLink": "Anmelden",
+  "stageLabel": "Kreis",
+  "stageAll": "Alle",
+  "needsWork": "Ihre Karte braucht einen klareren Pitch. Lesen Sie die Reaktionen, bearbeiten und erneut senden.",
+  "resubmit": "Bearbeiten und erneut senden",
+  "promoted": "Erreicht einen größeren Kreis",
+  "votes": {
+    "interesting": "Interessant",
+    "unclear": "Unklar",
+    "not_interesting": "Nichts für mich"
+  },
+  "askQuestion": "Frage stellen",
+  "follow": "Folgen",
+  "following": "Gefolgt",
+  "tryProduct": "Produkt testen",
+  "readMore": "Mehr lesen",
+  "tokenLink": "Token ansehen",
+  "questionPlaceholder": "Was möchten Sie wissen?",
+  "sendQuestion": "Senden",
+  "form": {
+    "title": "Projekt teilen",
+    "lead": "Beschreiben Sie das Projekt in einfacher Sprache und wählen Sie Ihr Token. Die Karte wird automatisch erstellt. Screenshots und optional ein kurzes Video hinzufügen.",
+    "name": "Projektname",
+    "screenshots": "Bildschirmfotos",
+    "screenshotsHint": "PNG, JPEG oder WebP — Produkt, App oder Mockups (bis zu 8).",
+    "addVideoOptional": "Kurzes Video hinzufügen (optional)",
+    "videoTemplateTitle": "Beantworten Sie im Video diese drei Fragen:",
+    "videoQ1": "Was machen Sie?",
+    "videoQ2": "Für wen ist es?",
+    "videoQ3": "Warum ein Token?",
+    "video": "Videodatei",
+    "videoHint": "MP4 oder WebM, 30 bis 60 Sekunden. Oder Link einfügen.",
+    "videoUrl": "Video-Link",
+    "idea": "Was Sie tun",
+    "audience": "Für wen",
+    "whyToken": "Warum ein Token",
+    "token": "Token im Netzwerk",
+    "productUrl": "Produktlink (optional)",
+    "submit": "Im ersten Kreis veröffentlichen",
+    "durationError": "Das Video muss zwischen 30 und 60 Sekunden lang sein.",
+    "durationTooShort": "Das Video muss mindestens 30 Sekunden lang sein.",
+    "uploadError": "Upload fehlgeschlagen. Versuchen Sie einen Link.",
+    "screenshotError": "Dieses Bild konnte nicht hochgeladen werden.",
+    "success": "Ihr Projekt ist im ersten Kreis live."
+  },
+  "detail": {
+    "back": "Zurück zum Feed",
+    "idea": "Was Sie tun",
+    "audience": "Für wen",
+    "whyToken": "Warum ein Token",
+    "feedback": "Reaktionen zu dieser Version",
+    "questions": "Fragen"
+  },
+  "stats": {
+    "title": "Feed-Metriken",
+    "uniqueVisitors": "Angemeldete Besucher",
+    "returning": "Kehrten innerhalb von 14 Tagen zurück",
+    "totalEvents": "Besuchsereignisse",
+    "window": "Rückkehrfenster (Tage)"
+  },
+  "errors": {
+    "generic": "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+    "rateLimited": "Zu viele Aktionen in kurzer Zeit. Kurz warten.",
+    "notFound": "Dieses Projekt ist nicht mehr im Feed."
+  },
+  "loading": "Wird geladen…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "Rotierende Sparkreise und Community-Taschengeld on-chain.",
+      "idea": "Community-Geld on-chain: Trinkgelder, kleine Zahlungen und lokale Belohnungen ohne Bank dazwischen.",
+      "audience": "Nachbarschaftsgruppen, Creator und alle, die kleine Beträge unter Freunden bewegen.",
+      "whyToken": "Ein eigener Vermögenswert trennt Community-Salden von Netzwerkgebühren und macht Teilungsregeln sichtbar.",
+      "tags": [
+        "Sparkreise",
+        "Lokale Zahlungen",
+        "Community"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "Senden Sie kleine Dankeschön-Trinkgelder an Creator und Teams im People-Netzwerk.",
+      "idea": "Sagen Sie Danke mit einem Token für Mikro-Unterstützung — Konzerte, Streams und Open-Source-Maintainer.",
+      "audience": "Fans, Paten und Teams, die viele kleine Danksagungen sammeln.",
+      "whyToken": "Trinkgelder bleiben im eigenen Ledger der Community statt in einem geschlossenen App-Guthaben.",
+      "tags": [
+        "Trinkgelder",
+        "Creator",
+        "Mikrozahlungen"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "On-Chain-Abzeichen für Meilensteine, die Sie als Gruppe gemeinsam erreichen.",
+      "idea": "Markieren Sie Meilensteine gemeinsam — Events, Launches und gemeinsame Ziele mit einem On-Chain-Abzeichen-Token.",
+      "audience": "Clubs, Kohorten und Produktteams, die Fortschritt öffentlich feiern.",
+      "whyToken": "Inhaber können Teilnahme ab Tag eins nachweisen, ohne private Daten offenzulegen.",
+      "tags": [
+        "Meilensteine",
+        "Events",
+        "Mitgliedschaft"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "Tauschen Sie Test-Community-Tokens gegen PPL direkt im Browser.",
+      "idea": "Tauschen Sie Demo-Community-Tokens gegen PPL im Browser — ohne separates Exchange-Konto.",
+      "audience": "Alle, die Testnet-Assets ausprobieren, bevor sie sich für ein Projekt entscheiden.",
+      "whyToken": "Liquiditätspaare zeigen echte Preisfindung für neue Launches im Netzwerk.",
+      "tags": [
+        "Tausch",
+        "Liquidität",
+        "Demo-Tokens"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "Starten Sie einen fairen Community-Token mit Name, Bild und festen Regeln.",
+      "idea": "Starten Sie einen Projekt-Token mit Bild, Name und fairen Launch-Regeln — direkt von der Website.",
+      "audience": "Gründer, die ein Community-Asset wollen, ohne Smart Contracts manuell zu schreiben.",
+      "whyToken": "Die Factory setzt Vesting und Community-Pool-Anteile durch, damit alle dieselben Regeln sehen.",
+      "tags": [
+        "Token-Start",
+        "Creator",
+        "Faire Regeln"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "Creator-Sammlerstücke",
+      "summary": "Prägen Sie ein visuelles Sammlerstück für Drop, Event oder Mitgliedschaft.",
+      "idea": "Prägen Sie ein visuelles Sammlerstück für Ihren Drop, Event oder Mitgliedskarte.",
+      "audience": "Künstler und Communities, die etwas Seltenes und leicht Teilbares wollen.",
+      "whyToken": "NFTs tragen Metadaten und Provenienz auf derselben Chain wie der Projekt-Token.",
+      "tags": [
+        "Prägung",
+        "Visuell",
+        "Sammlerstücke"
+      ]
+    }
+  }
+}

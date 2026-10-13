@@ -1,0 +1,104 @@
+# Internal TESTNET compose. Not mainnet. Do not use docker-compose.prod.yml for this.
+# Faucet key: set DEV_FAUCET_PRIVATE_KEY in a local .env (never commit). See .env.example.
+#
+# WARNING (M10-1, step 0). On any network reachable by outsiders, set the SAME
+# SECURITY_UPGRADE_HEIGHT and VALIDATOR_ALLOWLIST on every node, otherwise
+# `joinValidator` is open to anyone holding 100 PPL. The activation procedure is
+# in docs/AUDIT-CRITICAL-FIXES.md ("Coordinated testnet activation procedure")
+# and the variables are described in docs/DEVELOPMENT.md. Set them via .env:
+#
+#   SECURITY_UPGRADE_HEIGHT=<height above every current head>
+#   VALIDATOR_ALLOWLIST=0xaaa…,0xbbb…   # canonical lower-case, comma-separated
+#   CONSENSUS_UPGRADE_1_HEIGHT=<height above every current head>   # docs/protocol-decisions/consensus-upgrade-1.md
+#
+# VALIDATOR_ALLOWLIST without SECURITY_UPGRADE_HEIGHT is refused at startup, and
+# the height must be identical on every node — a mismatch forks the chain at H.
+# This limits WHO may become a validator. It does not remove the related risk
+# that an approved validator going offline stalls the chain: the height of a
+# silent proposer has no fallback proposer yet (M10-1, steps 1-2, owner decision
+# pending — do not change the proposer rules without it).
+services:
+  node:
+    build:
+      context: .
+      target: node
+    restart: unless-stopped
+    ports:
+      - "4001:4001"
+      - "4002:4002"
+    environment:
+      BOOTSTRAP_PRIVATE_KEY: ${BOOTSTRAP_PRIVATE_KEY:?Set a separate testnet bootstrap key}
+      PEER_ID: node-1
+      PORT: 4001
+      GOSSIP_PORT: 4002
+      DATA_DIR: /data/node-1
+      CHAIN_ID: ${CHAIN_ID:-people-internal-testnet}
+      NODE_ENV: production
+      ALLOW_DEV_ENDPOINTS: "1"
+      ALLOW_FAUCET: "1"
+      # OPS-M1: allow-list style even on this internal dev profile, so docker-compose.prod.yml
+      # (which only overrides CORS_ORIGIN with a default, not `:?`) can never silently inherit
+      # a `*` left over from dev. Override with a comma-separated origin list if needed.
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      PUBLIC_API_URL: http://localhost:4001
+      BOOTSTRAP_ADDRESS: ${BOOTSTRAP_ADDRESS:?Set the public bootstrap address}
+      DEV_FAUCET_PRIVATE_KEY: ${DEV_FAUCET_PRIVATE_KEY}
+      # M10-1 step 0: identical on every node, see the warning at the top.
+      SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
+      VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
+      CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ovn-data:/data
+
+  node-2:
+    build:
+      context: .
+      target: node
+    restart: unless-stopped
+    ports:
+      - "4011:4011"
+      - "4012:4012"
+    environment:
+      PEER_ID: node-2
+      PORT: 4011
+      GOSSIP_PORT: 4012
+      DATA_DIR: /data/node-2
+      # host-gateway: container-to-container bridge may be dropped on this VM;
+      # published host ports still work.
+      BOOTSTRAP_PEERS: host.docker.internal:4002
+      CHAIN_ID: ${CHAIN_ID:-people-internal-testnet}
+      NODE_ENV: production
+      ALLOW_DEV_ENDPOINTS: "1"
+      ALLOW_FAUCET: "0"
+      BOOTSTRAP_ADDRESS: ${BOOTSTRAP_ADDRESS:?Set the public bootstrap address}
+      DEV_FAUCET_PRIVATE_KEY: ${DEV_FAUCET_PRIVATE_KEY}
+      # M10-1 step 0: must match node-1 exactly.
+      SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
+      VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
+      CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ovn-data-2:/data
+    depends_on:
+      - node
+
+  web:
+    build:
+      context: .
+      target: web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_API_URL: http://host.docker.internal:4001
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - node
+
+volumes:
+  ovn-data:
+  ovn-data-2:

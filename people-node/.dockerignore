@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/.turbo
+data
+.git
+coverage
+*.log
+apps/web/dist
+
+**/.env
+**/.env.*
+**/data
+**/*.pem
+**/*.key

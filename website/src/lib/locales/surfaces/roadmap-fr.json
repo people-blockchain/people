@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "Feuille de route",
+    "description": "Ce qui est en ligne, en cours et prévu sans approbation finale."
+  },
+  "intro": "Les statuts suivent docs/ROADMAP.md.",
+  "statusLabels": {
+    "done": "En ligne",
+    "in_progress": "En cours",
+    "planned_unapproved": "Prévu",
+    "live_on_testnet": "En testnet",
+    "proposed_pending_vote": "Proposé / vote en attente"
+  },
+  "sectionTitles": {
+    "done": "En ligne",
+    "in_progress": "En cours",
+    "planned_unapproved": "Prévu",
+    "live_on_testnet": "En testnet",
+    "proposed_pending_vote": "Proposé / vote en attente"
+  },
+  "items": {
+    "cosmos-evm-migration": {
+      "title": "Testnet People's Blockchain (EVM)",
+      "summary": "Faire évoluer le testnet People's Blockchain sur EVM. Étape 1 (chain/) en cours ; le testnet public actuel reste sur le nœud OVN en RPC lecture seule."
+    },
+    "genesis-snapshot-0x": {
+      "title": "Estado en genesis",
+      "summary": "Exportar saldos al genesis de la nueva red conservando las mismas direcciones 0x."
+    },
+    "solidity-protocol-modules": {
+      "title": "Solidity: fábrica, curva, AMM, NFT",
+      "summary": "Les modules protocole fonctionnent déjà sur le nœud testnet ; la cible est du Solidity audité sur le testnet People's Blockchain, avec un AMM type Uniswap V2."
+    },
+    "fee-split-model-a": {
+      "title": "Reparto de comisiones (Model A)",
+      "summary": "Validadores 30%, pool comunitario 25%, tesoro 20%, liquidez 10%, Growth Pool 15%, quema 0%."
+    },
+    "tokenomics-1b-ppl": {
+      "title": "1 mil millones de PPL",
+      "summary": "1B PPL fixe : années 1–4 à 0 % d’inflation ; pool 200M selon 6/5/5/4 % + 30 % frais ; lancement depuis le fonds 35 % ; à partir de l’an 5 max 2 %/an par vote ; airdrop fondateurs avant vente à 1 000 vérifiés + multisig. Frais 30/25/20/10/15/0 sur /tokenomics et /how-it-works."
+    },
+    "discover-feed": {
+      "title": "Fil de projets",
+      "summary": "Fiches projets, réactions, questions et statistiques."
+    },
+    "ai-token-icons": {
+      "title": "Iconos IA para tokens",
+      "summary": "Générez une image lors du lancement du token."
+    },
+    "evm-wallet-site-package": {
+      "title": "Carteras EVM en el sitio",
+      "summary": "JSON-RPC solo lectura (97401) activo; paquete MetaMask/Trust/WalletConnect próximo."
+    },
+    "community-ai-agent-wallet": {
+      "title": "Agents IA communautaires",
+      "summary": "Trésor Safe avec plafonds, liste blanche et changements par vote — visible dans l’explorer."
+    },
+    "oz-contract-builder": {
+      "title": "Constructor de contratos",
+      "summary": "Descríbelo en palabras sencillas; plantillas OpenZeppelin auditadas."
+    },
+    "ai-anti-scam-guard": {
+      "title": "Escudo antifraude IA",
+      "summary": "Avisos antes de transferencias y contratos arriesgados."
+    },
+    "ai-governance-summaries": {
+      "title": "Resúmenes IA de votos",
+      "summary": "Explicaciones breves y neutrales de votaciones on-chain."
+    },
+    "rewards-proof-of-humanity": {
+      "title": "Recompensas con prueba de humanidad",
+      "summary": "Pagar aportes reales, no bots — registro de participante y humano verificado."
+    },
+    "erc8004-x402-agents": {
+      "title": "ERC-8004 y x402",
+      "summary": "Registro de agentes y pagos compatibles con estándares emergentes."
+    },
+    "no-agent-memecoins": {
+      "title": "Sin memecoins para agentes",
+      "summary": "Los agentes sirven al trabajo comunitario, no a lanzar memes — política pendiente."
+    },
+    "site-wide-wallet-connect-modal": {
+      "title": "Modal de connexion portefeuille sur place",
+      "summary": "Connectez ou créez un portefeuille dans une fenêtre modale sur toute page, sans quitter l’écran. Déploiement sur tout le site."
+    },
+    "cosmos-evm-smart-accounts": {
+      "title": "Comptes intelligents sur le testnet",
+      "summary": "ERC-4337 ou équivalent : connexion Google, e-mail ou passkey ; portefeuille créé automatiquement, sans phrase secrète (export de clé optionnel). À l’inscription : « Créer un portefeuille avec Google/e-mail » ou « Connecter le vôtre ». Sans gas : les N premières transactions des nouveaux couvertes par un paymaster alimenté par le fonds communautaire ou projet."
+    },
+    "ai-monthly-community-report": {
+      "title": "Rapport mensuel IA pour la communauté",
+      "summary": "Synthèse mensuelle automatique de l’activité du projet et du réseau — métriques et points saillants."
+    },
+    "discover-referral-growth-pool": {
+      "title": "Liens de parrainage sur le fil (Growth Pool)",
+      "summary": "Chaque carte projet du fil aura son lien de parrainage, relié aux récompenses Growth Pool (Model A)."
+    },
+    "founders-stage1-founders-page": {
+      "title": "Un million de fondateurs — étape 1 : /founders",
+      "summary": "Compteur en direct, carte mondiale et classement par pays, numéro de fondateur, multiplicateurs précoces (Preliminary : 10k×5, 100k×3, 1M×1,5). Connexion Google + preuve d’humanité ; pas de points sans vérification."
+    },
+    "founders-stage2-points-antibot": {
+      "title": "Un million de fondateurs — étape 2 : points et anti-bot",
+      "summary": "Points quotidiens pour actions réelles sur testnet (swap, fil, token, NFT, pool, vote) et score anti-Sybil ; points parrainage seulement si l’invité est vérifié et agit."
+    },
+    "founders-stage3-referral-growth-contracts": {
+      "title": "Un million de fondateurs — étape 3 : registre et part Growth",
+      "summary": "Registre on-chain sur 97401 ; part à vie du Growth Pool (Preliminary 10 % / 3 %) — nouveaux contrats, validation vs Beta 70/30."
+    },
+    "founders-stage4-grants-mainnet-conversion": {
+      "title": "Un million de fondateurs — étape 4 : subventions et mainnet",
+      "summary": "Subventions community pool aux projets avec de vraies personnes ; jalons 10k/100k/1M ; conversion points→PPL (Preliminary : bucket 35 %, 20 % immédiat, 12 mois actifs, stake +25 %)."
+    },
+    "founders-stage5-ambassadors-ai-bot": {
+      "title": "Un million de fondateurs — étape 5 : ambassadeurs et bot IA",
+      "summary": "Top 50 parrains par pays avec pages ambassadeur ; bot Telegram pour connexion et tâches (autres canaux plus tard)."
+    },
+    "lavka-stage1-loyalty-qr": {
+      "title": "Lavka — étape 1 : fidélité et QR",
+      "summary": "Petits commerces créent passes et bonus via Google en minutes (sans jargon crypto) ; QR en caisse et le client devient fondateur automatiquement."
+    },
+    "lavka-stage2-cross-tips-ambassador": {
+      "title": "Lavka — étape 2 : bonus croisés et pourboires",
+      "summary": "Part ambassadeur commerçant dans le Growth Pool ; bonus entre commerces voisins ; pourboire QR avec split Model A."
+    },
+    "lavka-stage3-escrow-disputes": {
+      "title": "Lavka — étape 3 : escrow et litiges",
+      "summary": "Garanties en escrow jusqu’à l’événement ou l’échéance ; réputation publique ; litiges votés par personnes vérifiées ; données personnelles hors chaîne."
+    },
+    "lavka-stage4-pilot-seller-ai": {
+      "title": "Lavka — étape 4 : pilote et IA commerçant",
+      "summary": "Rappels IA pour passes expirants et heures creuses ; pilote Batumi (Preliminary : 10 établissements, une catégorie)."
+    },
+    "ai-group-buy-negotiation": {
+      "title": "Négociation IA achat groupé",
+      "summary": "Plus tard : l’IA négocie pour un groupe d’acheteurs — roadmap seulement, pas d’implémentation."
+    },
+    "token-project-pages-lightpaper": {
+      "title": "Token project pages & lightpaper",
+      "summary": "Launch form captures goal, distribution, vesting, team and links; the site builds a project page with a tokenomics chart and short lightpaper (extendable to a white paper), PDF download and embed. Planning only."
+    },
+    "mainnet-migration-snapshot-tokenomics": {
+      "title": "Mainnet migration via testnet snapshot",
+      "summary": "Move projects to mainnet using a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only."
+    },
+    "ambassador-promo-kit": {
+      "title": "Ambassador promo kit",
+      "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    }
+  }
+}

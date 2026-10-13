@@ -1,0 +1,110 @@
+{
+  "tag": "LITEPAPER",
+  "tocLabel": "On this page",
+  "downloadTitle": "Download",
+  "downloadLead": "Get the full Litepaper as a PDF, or the promo kit for sharing.",
+  "downloadPdfLabel": "Download Litepaper (PDF)",
+  "downloadZipLabel": "Download promo kit",
+  "preliminaryNote": "Preliminary · not a promise of income",
+  "downloadWhitepaperLabel": "Download Whitepaper (PDF)",
+  "downloadWhitepaperLead": "Whitepaper — full technical document (EN, PDF, 31 pages)",
+  "versionLabel": "Version",
+  "changelogTitle": "Changelog",
+  "changelogInitial": "Initial release",
+  "changelogAgentLive": "Community agent #1 live on testnet (CommunityAgentWallet v2 with sliding daily/weekly limits and guardian instant freeze).",
+  "heroStat": {
+    "supplyLabel": "PPL, fixed supply",
+    "communityLabel": "of every launched token to its community",
+    "burnLabel": "of fees burned — all shared",
+    "vcValue": "0",
+    "vcLabel": "VC or investor allocations"
+  },
+  "charts": {
+    "allocationTitle": "Genesis allocation",
+    "feeFlowTitle": "Where every fee goes",
+    "feeFlowSourceLabel": "One network fee",
+    "feeFlowSourceNote": "paid in PPL",
+    "feeFlowBurnNote": "nothing destroyed",
+    "feeFlowBuybackTag": "→ buybacks",
+    "buybackTitle": "Buyback loop",
+    "buybackLead": "Treasury and liquidity shares of every network fee fund public PPL buybacks.",
+    "buybackTreasuryLabel": "Treasury",
+    "buybackLiquidityLabel": "Liquidity",
+    "buybackTargetLabel": "Public PPL buybacks",
+    "vestingTitle": "Team & founders vesting",
+    "vestingCliffLabel": "cliff",
+    "vestingMonthSuffix": "m",
+    "vestingCaption": "{{pct}}% of supply. 0% at launch, a {{cliff}}-month cliff, then {{vest}} months linear — fully vested at month {{total}}.",
+    "payoutTitle": "Founders payout",
+    "payoutAtOnceLabel": "At once",
+    "payoutWeeklyLabel": "{{pct}}% in equal weekly slices →",
+    "payoutWeek1": "week 1",
+    "payoutWeekLast": "week {{n}}",
+    "roadmapTitle": "Gates, not dates",
+    "roadmapLead": "Each stage starts when its gate is met. No dates are promised.",
+    "roadmapNowBadge": "Now",
+    "roadmapStages": [
+      {
+        "title": "Season 0 · Public testnet",
+        "body": "Wallets, verification, token launches, NFT cards, swaps, Million Founders points.",
+        "gate": "Now"
+      },
+      {
+        "title": "Mainnet + PPL sale",
+        "body": "Mainnet launches and the community PPL sale opens.",
+        "gate": "Gate: 1,000 verified people + a live 2-of-3 treasury multisig"
+      },
+      {
+        "title": "Staking & validators",
+        "body": "Staking and validator participation open beyond the project.",
+        "gate": "After mainnet"
+      }
+    ],
+    "verificationTitle": "One check that you are a person",
+    "verificationLead": "Verification is free. No biometrics required.",
+    "verificationLevels": [
+      { "level": "Level 0", "title": "Signed in", "body": "Google or email + wallet." },
+      {
+        "level": "Level 1 · Telegram",
+        "title": "Phone, once",
+        "body": "Share your phone once in our Telegram bot. One number per founder."
+      },
+      { "level": "Level 2 · Human Passport", "title": "Human Passport", "body": "Verify with Human Passport." }
+    ],
+    "differTitle": "How we differ",
+    "differLead": "Only verifiable public facts about other networks, with sources. This compares design choices, not quality.",
+    "differHeaders": ["Ethereum", "Solana", "People"],
+    "differRows": [
+      {
+        "label": "Fees burned",
+        "ethereum": "Base fee is burned¹",
+        "solana": "50% of the base fee is burned²",
+        "people": "{{burnPct}}% burned"
+      },
+      {
+        "label": "Who receives fees",
+        "ethereum": "Validators get the priority fee (tip)¹",
+        "solana": "Validators get 50% of the base fee and 100% of the priority fee²",
+        "people": "{{feeSplit}}"
+      },
+      {
+        "label": "Early funding",
+        "ethereum": "Public ether sale, 2014 — 42 days, bought with BTC³",
+        "solana": "$20M Series A led by Multicoin Capital (2019); investors received SOL tokens⁴",
+        "people": "Self-funded. No VC, no investor allocation"
+      },
+      {
+        "label": "Accounts",
+        "ethereum": "Creating an account costs nothing; no identity check⁵",
+        "solana": "Human check is not a protocol requirement",
+        "people": "Rewards only for verified humans"
+      },
+      {
+        "label": "New-token community share",
+        "ethereum": "Not a protocol rule",
+        "solana": "Not a protocol rule",
+        "people": "{{communityPct}}% of every launched token"
+      }
+    ]
+  }
+}

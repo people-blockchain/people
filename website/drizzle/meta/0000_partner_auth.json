@@ -1,0 +1,11 @@
+{
+  "id": "0000_partner_auth",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {},
+  "enums": {},
+  "schemas": {},
+  "views": {},
+  "_meta": { "schemas": {}, "tables": {}, "columns": {} }
+}

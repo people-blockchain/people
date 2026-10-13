@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "UNTUK KOMUNITAS",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "UNTUK KOMUNITAS",
+    "headlineSecondary": "",
+    "slogan": "Dibuat oleh orang. Untuk komunitas.",
+    "valueLine": "Komunitas ikut serta dalam nilai yang diciptakan jaringan.",
+    "lead": "Dibangun komunitas. Dibagi komunitas. Orang biasa ikut penerbitan, perutean biaya jaringan, dan Growth-referral — sementara validator khusus mengamankan konsensus. Peserta bukan validator.",
+    "unlike": "Pada blockchain tipikal, pengguna terutama membayar biaya. Di sini partisipasi komunitas dirancang ke dalam ekonomi.",
+    "ctaJoin": "Bergabung",
+    "ctaHow": "Cara kerjanya",
+    "ctaCreate": "Buat token",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% ke kolam komunitas",
+        "note": "Dari pasokan setiap token baru masuk ke kolam komunitas."
+      },
+      {
+        "id": "fees",
+        "value": "Biaya",
+        "title": "Biaya jaringan",
+        "note": "Dirutekan melalui ekonomi jaringan."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "Dua jalur berbayar: L1 70% · L2 30% anggaran imbalan Growth."
+      }
+    ],
+    "flowAria": "Bagaimana nilai komunitas bergerak di jaringan",
+    "flowPause": "Jeda animasi",
+    "flowPlay": "Putar animasi",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token dibuat",
+        "sub": "Sebuah proyek diluncurkan di jaringan"
+      },
+      {
+        "id": "community",
+        "label": "10% komunitas + biaya jaringan",
+        "sub": "Bagian token baru dan biaya protokol tetap terpisah"
+      },
+      {
+        "id": "economy",
+        "label": "Ekonomi jaringan + Growth Pool",
+        "sub": "Nilai dirutekan, tidak hilang"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Dua jalur Growth-referral berbayar"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "MENGAPA BERPARTISIPASI",
+    "title": "Tiga cara berbeda komunitas ikut serta",
+    "subtitle": "Penerbitan token, biaya jaringan, dan Growth-referral adalah tiga mekanisme terpisah. Tidak pernah digabung jadi pembayaran pribadi.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10% setiap token baru masuk ke kolam komunitas",
+        "body": "Setiap token standar yang diluncurkan lewat jaringan mengirim 10% pasokan awal ke Community Pool token itu — lalu ke komunitas. Bukan pembayaran pribadi, dan bukan 10% dari setiap biaya.",
+        "href": "/create/token",
+        "cta": "Buat token"
+      },
+      {
+        "id": "fees",
+        "kicker": "EKONOMI JARINGAN",
+        "title": "Biaya tidak hilang — dirutekan",
+        "body": "Biaya jaringan yang memenuhi syarat mengikuti the fee split yang disetujui. Ini adalah perutean ekonomi jaringan, bukan janji bahwa setiap peserta dibayar dari setiap biaya.",
+        "href": "#economics",
+        "cta": "Perutean biaya"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "L1 70% · L2 30% anggaran imbalan Growth",
+        "body": "Growth Pool (15% biaya yang memenuhi syarat) mendanai dua jalur referral berbayar: L1 70% dan L2 30% dari anggaran imbalan Growth. Terpisah dari pasokan Token Factory dan dari pembagian biaya the fee split.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Pembayaran Growth Beta aktif: L1 70% · L2 30% dari anggaran imbalan Growth. Growth Pool adalah 15% biaya yang memenuhi syarat. Terpisah dari tujuan the fee split biaya jaringan dan dari 10% setiap token baru yang masuk ke kumpulan komunitas.",
+    "you": "Anda",
+    "budgetNote": "Persentase adalah bagian anggaran imbalan Growth setelah the fee split mengarahkan 15% biaya yang memenuhi syarat ke Growth Pool — bukan bagian dari setiap biaya jaringan.",
+    "detailsTitle": "Cara kerja Growth-referral",
+    "details": [
+      {
+        "title": "Dua jalur berbayar",
+        "body": "L1 (referral langsung) menerima 70% dan L2 (tingkat kedua) menerima 30% dari anggaran imbalan Growth aktif."
+      },
+      {
+        "title": "Terpisah dari biaya dan token",
+        "body": "Bobot Growth L1/L2 bukan pembagian biaya jaringan the fee split dan bukan 10% setiap token baru untuk kumpulan komunitas. Growth Pool adalah tujuan biaya the fee split dengan aturan penyelesaian sendiri."
+      },
+      {
+        "title": "Situs ini",
+        "body": "Tidak ada login atau dasbor referral di situs publik ini. Growth-referral hidup bersama partisipasi jaringan."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "Cara berpartisipasi",
+    "subtitle": "Bergabung dengan People’s Blockchain sebagai peserta komunitas — dari telepon, tablet, atau peramban.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Mulai di sini",
+        "body": "Gunakan telepon, tablet, atau peramban. Anda bergabung sebagai peserta — bukan validator konsensus.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Buat dompet non-kustodial",
+        "body": "Buat frasa 12 kata di peramban, tulis, dan enkripsi dengan kata sandi. Kunci tidak pernah meninggalkan perangkat ini.",
+        "href": "/wallet",
+        "cta": "Buka dompet"
+      },
+      {
+        "num": "03",
+        "title": "Lihat aset di penjelajah",
+        "body": "Cari blok, transaksi, alamat, token, dan NFT di pemindai publik.",
+        "href": "/explorer",
+        "cta": "Buka penjelajah"
+      },
+      {
+        "num": "04",
+        "title": "Ikut serta dalam ekonomi",
+        "body": "Bayar biaya Token Factory dan mint NFT dari dompet yang sama. Bagian 10% kumpulan komunitas pada token baru, biaya jaringan, dan Growth-referral tetap tiga mekanisme terpisah.",
+        "href": "/create",
+        "cta": "Buat"
+      }
+    ],
+    "ctaJoin": "Gabung People’s Blockchain",
+    "ctaHow": "Cara kerjanya"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "Apa itu Blockchain untuk komunitas?",
+    "summary": "Blockchain untuk komunitas adalah infrastruktur komunitas: perangkat biasa untuk berpartisipasi, pembuatan token dan proyek di tingkat protokol, dan validator Proof-of-Stake untuk produksi blok. Peserta bukan validator.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Konsensus",
+        "summary": "Validator PoS mengusulkan dan mengesahkan blok. Partisipasi seluler tidak pernah memilih dalam kuorum."
+      },
+      {
+        "id": "economics",
+        "title": "Ekonomi",
+        "summary": "Biaya jaringan yang memenuhi syarat mengikuti the fee split yang disetujui. Pasar token pengguna adalah saluran terpisah."
+      },
+      {
+        "id": "participation",
+        "title": "Partisipasi",
+        "summary": "Telepon, tablet, dan peramban. Peserta bukan validator."
+      },
+      {
+        "id": "technology",
+        "title": "Teknologi",
+        "summary": "Buku besar multi-aset aman bilangan bulat, jaringan rekan, dan alat untuk menelusuri rantai."
+      }
+    ],
+    "whyTitle": "Mengapa ada",
+    "learnMore": "Pelajari lebih"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "Apa yang bisa saya lakukan?",
+    "subtitle": "Pilih peran. Rincian satu klik lagi.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Luncurkan token, proyek, dan ekonomi komunitas dengan aturan protokol.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Jalankan infrastruktur yang mengusulkan, mengesahkan, dan menyelesaikan blok.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Gabung dari perangkat sehari-hari. Bukan peran validator konsensus.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool adalah tujuan biaya the fee split — bukan pendapatan terjamin atau pasif.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Cari blok, transaksi, token, dan NFT.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "Cara kerjanya",
+    "subtitle": "Satu jalur melalui jaringan. Buka langkah untuk mekanik yang tepat.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Seseorang dengan dompet di ponsel, tablet, atau peramban.",
+        "detail": "Mulai dengan akun non-kustodial di telepon, tablet, atau peramban. Anda bergabung sebagai orang di komunitas — bukan sebagai validator."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transfer, peluncuran, perdagangan kurva, dan operasi bertanda tangan lain.",
+        "detail": "Operasi yang memenuhi syarat membayar biaya protokol dalam PPL. Setiap tindakan ditandatangani dan diperiksa sebelum diterima."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Node ber-stake yang mengusulkan dan mengesahkan.",
+        "detail": "Validator adalah infrastruktur khusus. Telepon dan peramban tidak memproduksi blok."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Transisi keadaan terurut dan aman integer.",
+        "detail": "Validator merakit operasi bertanda tangan menjadi blok. Perangkat sehari-hari tidak duduk dalam proses itu."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Rantai bersama antar node validator.",
+        "detail": "Node validator berbagi blok satu sama lain agar jaringan tetap dalam satu keadaan."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Biaya jaringan dan bagian komunitas setiap token tetap di saluran terpisah.",
+        "detail": "Biaya jaringan dalam PPL mengikuti the fee split. Token standar buatan pengguna mengirim 10% pasokan token itu ke kumpulan komunitas miliknya — itu bukan biaya jaringan."
+      }
+    ],
+    "storyCta": "Cerita visual lengkap"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People adalah aset asli Blockchain untuk komunitas. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Aset penyelesaian untuk operasi jaringan: biaya, pembuatan token, dan layanan protokol yang dijelaskan dalam spesifikasi."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Menyatakan biaya protokol yang memenuhi syarat yang dipisah live fee splitter menurut the fee split."
+      },
+      {
+        "title": "FEES",
+        "body": "Dibayar dalam PPL pada operasi yang memenuhi syarat. Jadwal biaya yang tepat tetap protokol/konfigurasi — halaman ini tidak mengarang tarif."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Dipakai dalam akuntansi ekonomi jaringan. Participation Power bukan token yang dapat dipindahtangankan dan bukan daya suara validator."
+      }
+    ],
+    "notMarket": "Situs ini tidak menerbitkan harga, kapitalisasi pasar, listing, ROI, APY, kedalaman likuiditas, atau harga masa depan."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Jaringan dan validator",
+    "summary": "Konsensus adalah Proof-of-Stake dengan pemimpin dan kuorum pengesahan. Telepon adalah peserta, bukan validator.",
+    "facts": [
+      {
+        "label": "Peran",
+        "value": "Validator mengamankan rantai; peserta tidak pernah duduk dalam kuorum."
+      },
+      {
+        "label": "Siapa menjalankan apa",
+        "value": "Node khusus mengusulkan dan mengesahkan blok. Telepon, tablet, dan peramban bergabung sebagai peserta."
+      },
+      {
+        "label": "Jaringan publik",
+        "value": "Testnet publik v2 sedang berjalan. Ini bukan Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Ekonomi biaya jaringan",
+    "summary": "Setiap biaya protokol dibagi: 30% validator, 25% komunitas, 20% treasury, 10% likuiditas, 15% Growth, 0% dibakar — termasuk pecahan.",
+    "splits": [
+      {
+        "label": "Validator",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Perbendaharaan",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Likuiditas dan ekosistem",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Burn",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool menerima 15% biaya yang memenuhi syarat. Bukan pendapatan terjamin, imbal hasil pasif, atau produk investasi.",
+    "detailsTitle": "Cara kerja perutean biaya",
+    "detailsBody": "Setiap biaya protokol dibagi: 30% validator, 25% komunitas, 20% treasury, 10% likuiditas, 15% Growth, 0% dibakar — termasuk pecahan. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Bagaimana imbalan dijelaskan"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Buat → Luncurkan → Temukan → Perdagangkan",
+    "subtitle": "Buat token, luncurkan dengan harga bawaan, biarkan orang lain menemukannya, dan dagangkan di kurva peluncuran.",
+    "steps": [
+      {
+        "title": "Buat",
+        "body": "Gunakan formulir Token Factory: gambar, nama, ticker, pasokan, lalu bayar dalam PPL."
+      },
+      {
+        "title": "Luncurkan",
+        "body": "Bonding curve virtual memberi harga berkelanjutan dari blok pertama."
+      },
+      {
+        "title": "Feed proyek",
+        "body": "Aset muncul di registri jaringan agar komunitas dapat menemukannya."
+      },
+      {
+        "title": "Perdagangkan",
+        "body": "Beli dan jual di kurva peluncuran, lalu tukar di kolam AMM token/PPL yang sudah aktif."
+      }
+    ],
+    "expandTitle": "Kurva peluncuran, likuiditas, vesting",
+    "expandItems": [
+      "Harga peluncuran memakai kurva constant-product dengan matematika bilangan bulat tepat.",
+      "Biaya perdagangan protokol pada kurva diarahkan melalui ekonomi biaya jaringan.",
+      "Pembagian peluncuran standar mencakup wajib 10% pasokan token itu ke kumpulan komunitas miliknya (bukan biaya jaringan PPL).",
+      "Vesting pencipta menahan sebagian besar bagian pencipta terbuka seiring waktu, agar komunitas tidak di-dump pada hari pertama."
+    ],
+    "createCta": "Buka Token Factory",
+    "nftCta": "Buat NFT",
+    "swapCta": "Buka tukar"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Teknologi",
+    "subtitle": "Apa itu tumpukan. Buka kartu untuk gagasan menghadap pengguna.",
+    "cards": [
+      {
+        "title": "Konsensus",
+        "summary": "Validator Proof-of-Stake mengusulkan dan mengesahkan blok. Telepon tidak memilih."
+      },
+      {
+        "title": "Keadaan",
+        "summary": "Saldo bilangan bulat tepat pada PPL asli dan token buatan pengguna."
+      },
+      {
+        "title": "Jaringan",
+        "summary": "Node validator berbagi blok agar rantai tetap dalam satu keadaan."
+      },
+      {
+        "title": "Persistensi",
+        "summary": "Setiap validator menyimpan keadaan jaringan hidup yang dibutuhkannya untuk terus berjalan."
+      },
+      {
+        "title": "Keamanan",
+        "summary": "Tindakan bertanda tangan, pemisahan peran, dan tidak ada jalan pintas di sekitar pemeriksaan."
+      },
+      {
+        "title": "Alat",
+        "summary": "HTTP API dan penjelajah agar orang dapat membaca jaringan."
+      }
+    ],
+    "archTitle": "Arsitektur interaktif",
+    "invTitle": "Invarian matematis"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Di mana jaringan",
+    "subtitle": "Tahap produk. Tidak ada tanggal peluncuran di sini.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Buku besar, akuntansi komunitas, dan perutean biaya jaringan.",
+          "Pembuatan token dan pasar kurva peluncuran.",
+          "Partisipasi komunitas dalam emisi, biaya, dan Growth-referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Sebuah testnet publik sedang berjalan.",
+          "Ini bukan Mainnet dan bukan janji perdagangan publik nilai yang sedang berjalan."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Akses publik lebih luas adalah tahap komunitas berikutnya."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Jaringan manusia: partisipasi seluler, proof of humanity, dan anti-farming.",
+          "Tanggal peluncuran publik tidak diumumkan di situs ini."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Dokumentasi",
+    "summary": "Dompet, partisipasi, dan node Anda sendiri — mulai dengan panduan praktis.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Baca panduan",
+        "hint": "Langkah pertama, imbalan, dan penyiapan node"
+      },
+      {
+        "href": "#economics",
+        "label": "Biaya jaringan",
+        "hint": "Perutean the fee split biaya PPL yang memenuhi syarat"
+      }
+    ]
+  }
+}

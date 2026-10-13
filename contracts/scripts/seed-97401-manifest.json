@@ -1,0 +1,116 @@
+{
+  "version": 2,
+  "siteBase": "https://www.peopleblockchain.network",
+  "assets": [
+    {
+      "assetId": "trosc3",
+      "name": "ROSCASH (Testnet demo)",
+      "symbol": "TROSC",
+      "decimals": 6,
+      "totalSupply": 100000000,
+      "seedPool": true,
+      "poolPpl": 2000,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. ROSCASH helps communities run rotating savings circles where members save together and take turns receiving the pot.",
+        "image": "/seed/tROSC.svg",
+        "website": "https://roscash.org",
+        "testnet": true
+      }
+    },
+    {
+      "assetId": "tpitp3",
+      "name": "PitPat (Testnet demo)",
+      "symbol": "TPITP",
+      "decimals": 6,
+      "totalSupply": 50000000,
+      "seedPool": true,
+      "poolPpl": 1500,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Neighbourhood mutual aid for young parents: baby things are shared, not sold, and help comes from neighbours.",
+        "image": "/seed/tPITP.svg",
+        "website": "https://pit-pat.org",
+        "testnet": true
+      }
+    },
+    {
+      "assetId": "tmark3",
+      "name": "AI MARK (Testnet demo)",
+      "symbol": "TMARK",
+      "decimals": 6,
+      "totalSupply": 21000000,
+      "seedPool": true,
+      "poolPpl": 1200,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. AI MARK offers an AI marketing employee that handles marketing work for businesses.",
+        "image": "/seed/tMARK.svg",
+        "website": "https://ai-mark.agency",
+        "testnet": true
+      }
+    },
+    {
+      "assetId": "tkrda2",
+      "name": "KredaFi (Testnet demo)",
+      "symbol": "TKRDA",
+      "decimals": 6,
+      "totalSupply": 100000000,
+      "seedPool": true,
+      "poolPpl": 1800,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. KredaFi is a lending and credit platform.",
+        "image": "/seed/tKRDA.svg",
+        "website": "https://kredafi.com",
+        "testnet": true
+      }
+    },
+    {
+      "assetId": "tmem2",
+      "name": "MEM Cash (Testnet demo)",
+      "symbol": "TMEM",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "seedPool": true,
+      "poolPpl": 2500,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Not the official MEM token. MEM Cash is a digital cash project.",
+        "image": "/seed/tMEM.svg",
+        "website": "https://memcash.org",
+        "testnet": true
+      }
+    },
+    {
+      "assetId": "tgood2",
+      "name": "Goodwill Planet (Testnet demo)",
+      "symbol": "TGOOD",
+      "decimals": 6,
+      "totalSupply": 1000000000,
+      "seedPool": true,
+      "poolPpl": 1000,
+      "creationMetadata": {
+        "description": "Testnet demo by the People team. No real value. Goodwill Planet is an ecosystem for charity and acts of goodwill.",
+        "image": "/seed/tGOOD.svg",
+        "website": "https://goodwillplanet.org",
+        "testnet": true
+      }
+    }
+  ],
+  "nftCollection": {
+    "name": "Creator Collectibles",
+    "symbol": "PCC"
+  },
+  "nfts": [
+    {
+      "nftId": "nft-d2a848fe0870916ec80907e6",
+      "name": "PitPat Founding Parent",
+      "description": "Testnet demo by the People team. No real value. A thank-you badge for the first parents who joined PitPat's neighbourhood mutual aid demo. https://pit-pat.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-pitpat-founding-parent.png",
+      "tokenURI": "https://www.peopleblockchain.network/seed/nft-pitpat-founding-parent.png"
+    },
+    {
+      "nftId": "nft-6bac9765657e743d430c96d5",
+      "name": "Goodwill Planet Early Supporter",
+      "description": "Testnet demo by the People team. No real value. A badge for early supporters of the Goodwill Planet demo. https://goodwillplanet.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-goodwill-early-supporter.png",
+      "tokenURI": "https://www.peopleblockchain.network/seed/nft-goodwill-early-supporter.png"
+    }
+  ]
+}

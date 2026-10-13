@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "PEOPLE'S BLOCKCHAIN",
+    "headlineMain": "PEOPLE'S",
+    "headlineAccent": "BLOCKCHAIN",
+    "headlineSecondary": "",
+    "slogan": "Created by people. For the community.",
+    "valueLine": "Community participates in the value created by the network.",
+    "lead": "Built by the community. Shared by the community. Ordinary people take part in issuance, network-fee routing, and Growth referral — while dedicated validators secure consensus. Participants are not validators.",
+    "unlike": "On a typical blockchain, users mostly pay fees. Here, community participation is designed into the economy.",
+    "ctaJoin": "Join",
+    "ctaHow": "How it works",
+    "ctaCreate": "Create a token",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% to the community pool",
+        "note": "Of every new token's supply goes to the community pool."
+      },
+      {
+        "id": "fees",
+        "value": "Fees",
+        "title": "Network fees",
+        "note": "Routed through the network economy."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth referral",
+        "note": "Two paid lines: L1 70% · L2 30% of the Growth reward budget."
+      }
+    ],
+    "flowAria": "How community value moves through the network",
+    "flowPause": "Pause animation",
+    "flowPlay": "Play animation",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Token created",
+        "sub": "A project launches on the network"
+      },
+      {
+        "id": "community",
+        "label": "10% community + network fee",
+        "sub": "Part of the new token and the protocol fee stay separate"
+      },
+      {
+        "id": "economy",
+        "label": "Network economy + Growth Pool",
+        "sub": "Value is routed, not vanished"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Two paid Growth referral lines"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "WHY PARTICIPATE",
+    "title": "Three distinct ways the community takes part",
+    "subtitle": "Token issuance, network fees, and Growth referral are three separate mechanisms. They are never merged into one personal payout.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10% of every new token goes to the community pool",
+        "body": "Every standard token launched through the network sends 10% of its initial supply to that token’s Community Pool — then to the community. Not a personal payout, and not 10% of every fee.",
+        "href": "/create/token",
+        "cta": "Create a token"
+      },
+      {
+        "id": "fees",
+        "kicker": "NETWORK ECONOMY",
+        "title": "Fees don’t disappear — they are routed",
+        "body": "Eligible network fees follow the protocol fee split. This is network-economy routing, not a promise that every participant is paid from every fee.",
+        "href": "#economics",
+        "cta": "Fee routing"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "L1 70% · L2 30% of the Growth reward budget",
+        "body": "Growth Pool (15% of eligible fees) funds two paid referral lines: L1 at 70% and L2 at 30% of the Growth reward budget. Distinct from Token Factory supply and from the network fee split.",
+        "href": "#partner",
+        "cta": "Growth referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Active Beta Growth payout: L1 70% · L2 30% of the Growth reward budget. Growth Pool is 15% of eligible fees. Distinct from network fee destinations and from the 10% of each new token that goes to the community pool.",
+    "you": "You",
+    "budgetNote": "Percentages are shares of the Growth reward budget after 15% of each protocol fee goes to the Growth Pool — not shares of every network fee.",
+    "detailsTitle": "How Growth referral works",
+    "details": [
+      {
+        "title": "Two paid lines",
+        "body": "L1 (direct referral) receives 70% and L2 (second level) receives 30% of the active Growth reward budget."
+      },
+      {
+        "title": "Separate from fees and tokens",
+        "body": "L1/L2 Growth weights are not the network fee split and not the 10% of each new token for the community pool. Growth Pool receives 15% of each protocol fee with its own settlement rules."
+      },
+      {
+        "title": "This site",
+        "body": "There is no referral login or dashboard on this public website. Growth referral lives with network participation."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "How to participate",
+    "subtitle": "Join People’s Blockchain as a community participant — from a phone, tablet, or browser.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Start here",
+        "body": "Use a phone, tablet, or browser. You join as a participant — not as a consensus validator.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Create a non-custodial wallet",
+        "body": "Generate a 12-word phrase in the browser and encrypt it with a password, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave this device.",
+        "href": "/wallet",
+        "cta": "Open wallet"
+      },
+      {
+        "num": "03",
+        "title": "See assets on the explorer",
+        "body": "Look up blocks, transactions, addresses, tokens, and NFTs on the public scanner.",
+        "href": "/explorer",
+        "cta": "Open explorer"
+      },
+      {
+        "num": "04",
+        "title": "Take part in the economy",
+        "body": "Pay Token Factory and NFT mint fees from the same wallet. The 10% community-pool share on new tokens, network fees, and Growth referral stay three separate mechanisms.",
+        "href": "/create",
+        "cta": "Create"
+      }
+    ],
+    "ctaJoin": "Join People’s Blockchain",
+    "ctaHow": "How it works"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "What is People's Blockchain?",
+    "summary": "People's Blockchain is community infrastructure: ordinary devices for participation, protocol-level creation of tokens and projects, and Proof-of-Stake validators for block production. Participants are not validators.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Consensus",
+        "summary": "PoS validators propose and attest blocks. Mobile participation never votes in quorum."
+      },
+      {
+        "id": "economics",
+        "title": "Economics",
+        "summary": "Eligible network fees follow the protocol fee split. User-token markets are a separate pipeline."
+      },
+      {
+        "id": "participation",
+        "title": "Participation",
+        "summary": "Phones, tablets, and browsers. Participants are not validators."
+      },
+      {
+        "id": "technology",
+        "title": "Technology",
+        "summary": "Integer-safe multi-asset ledger, a peer network, and tools to explore the chain."
+      }
+    ],
+    "whyTitle": "Why it exists",
+    "learnMore": "Learn more"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "What can I do?",
+    "subtitle": "Pick a role. Details stay one click away.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Launch tokens, projects, and community economies with protocol rules.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Run infrastructure that proposes, attests, and finalizes blocks.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Join from everyday devices. Not a consensus validator role.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool receives 15% of each protocol fee — not guaranteed or passive income.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Look up blocks, transactions, tokens, and NFTs.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "How it works",
+    "subtitle": "One path through the network. Open a step for the exact mechanic.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "A person with a wallet on a phone, tablet, or browser.",
+        "detail": "Start with a non-custodial account on a phone, tablet, or browser. You join as a person in the community — not as a validator."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transfers, launches, curve trades, and other signed operations.",
+        "detail": "Eligible operations pay a protocol fee in PPL. Every action is signed and checked before it is accepted."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Stake-backed nodes that propose and attest.",
+        "detail": "Validators are dedicated infrastructure. Phones and browsers do not produce blocks."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Ordered, integer-safe state transition.",
+        "detail": "Validators assemble signed operations into blocks. Everyday devices do not sit in that process."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Shared chain among validator nodes.",
+        "detail": "Validator nodes share blocks with each other so the network stays in one state."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Network fees and each token's community share stay in separate pipelines.",
+        "detail": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. Standard user-created tokens send 10% of that token's supply to its own community pool — that is not a network fee."
+      }
+    ],
+    "storyCta": "Full visual story"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People is the native asset of People's Blockchain. Ticker: PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Settlement asset for network operations: fees, token creation, and protocol services described in the specs."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Denominates eligible protocol fees that the live fee splitter routes with the 30/25/20/10/15/0 split."
+      },
+      {
+        "title": "FEES",
+        "body": "Paid in PPL on eligible operations. Exact fee schedules remain protocol/config — this page does not invent rates."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Used in network-economy accounting. Participation Power is not a transferable token and is not validator voting power."
+      }
+    ],
+    "notMarket": "This site does not publish price, market cap, listings, ROI, APY, liquidity depth, or future price."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Network & validators",
+    "summary": "Consensus is Proof-of-Stake with a leader and an attestation quorum. Phones are participants, not validators.",
+    "facts": [
+      {
+        "label": "Role",
+        "value": "Validators secure the chain; participants never sit in quorum."
+      },
+      {
+        "label": "Who runs what",
+        "value": "Dedicated nodes propose and attest blocks. Phones, tablets, and browsers join as participants."
+      },
+      {
+        "label": "Public network",
+        "value": "Public testnet v2 is running. This is not Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Network fee economics",
+    "summary": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees.",
+    "splits": [
+      {
+        "label": "Validators",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Treasury",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Liquidity & Ecosystem",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Burn",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool receives 15% of eligible fees. It is not guaranteed income, not a passive return, and not an investment product.",
+    "detailsTitle": "How fee routing works",
+    "detailsBody": "Every protocol fee is split: 30% to validators, 25% to the community pool, 20% to the treasury, 10% to liquidity, 15% to Growth, 0% burned — including fractional fees. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "How rewards are explained"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Create → Launch → Project feed → Trade",
+    "subtitle": "Create a token, launch it with built-in pricing, let others find it, and trade on the launch curve.",
+    "steps": [
+      {
+        "title": "Create",
+        "body": "Use the Token Factory form: image, name, ticker, supply, then pay in PPL."
+      },
+      {
+        "title": "Launch",
+        "body": "A virtual bonding curve provides continuous pricing from the first block."
+      },
+      {
+        "title": "Project feed",
+        "body": "Projects appear in the public feed so communities can find them."
+      },
+      {
+        "title": "Trade",
+        "body": "Buy and sell on the launch curve, then swap in the live token/PPL AMM pool."
+      }
+    ],
+    "expandTitle": "Launch curve, liquidity, vesting",
+    "expandItems": [
+      "Launch pricing uses a constant-product curve with exact integer math.",
+      "A protocol trading fee on the curve is routed through network fee economics.",
+      "Standard launch split includes a mandatory 10% of that token's supply to its own community pool (not a PPL network fee).",
+      "Creator vesting keeps most of the creator's share unlocking over time, so the community is not dumped on day one."
+    ],
+    "createCta": "Open Token Factory",
+    "nftCta": "Create an NFT",
+    "swapCta": "Open swap"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Technology",
+    "subtitle": "What the stack is. Open a card for the user-facing idea.",
+    "cards": [
+      {
+        "title": "Consensus",
+        "summary": "Proof-of-Stake validators propose and attest blocks. Phones do not vote."
+      },
+      {
+        "title": "State",
+        "summary": "Exact integer balances across native PPL and user-created tokens."
+      },
+      {
+        "title": "Network",
+        "summary": "Validator nodes share blocks so the chain stays in one state."
+      },
+      {
+        "title": "Persistence",
+        "summary": "Each validator keeps the live network state it needs to keep going."
+      },
+      {
+        "title": "Security",
+        "summary": "Signed actions, role separation, and no shortcuts around checks."
+      },
+      {
+        "title": "Tools",
+        "summary": "HTTP API and explorer so people can read the network."
+      }
+    ],
+    "archTitle": "Interactive architecture",
+    "invTitle": "Mathematical invariants"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Where the network is",
+    "subtitle": "Product stages. No launch date is announced here.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Ledger, community accounting, and network-fee routing.",
+          "Token creation and launch-curve markets.",
+          "Community participation in issuance, fees, and Growth referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "A public testnet is running.",
+          "This is not Mainnet and not a promise of live public trading of value."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Wider public access is the next community stage."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Human network: mobile participation, proof of humanity, and anti-farming.",
+          "Public launch date is not announced on this site."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Documentation",
+    "summary": "Wallets, participation and your own node — start with the practical guide.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Read the guide",
+        "hint": "First steps, rewards and node setup"
+      },
+      {
+        "href": "#economics",
+        "label": "Network fees",
+        "hint": "30/25/20/10/15/0 routing of PPL fees"
+      }
+    ]
+  }
+}

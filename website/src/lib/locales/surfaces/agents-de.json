@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Community-KI-Agenten",
+    "description": "Wie Community-KI-Agenten im Auftrag einer Gruppe ausgeben können — mit Limits, Abstimmungen und öffentlicher Historie."
+  },
+  "hero": {
+    "title": "Community-KI-Agenten",
+    "lead": "Ein Agent ist Software, die Transaktionen aus einer gemeinsamen Wallet senden kann — nur innerhalb der Regeln, die deine Community festlegt und genehmigt."
+  },
+  "liveAgent": {
+    "badge": "Live auf Testnet",
+    "title": "Community-Agent Nr. 1",
+    "lead": "Ein echtes CommunityAgentWallet v2 gibt bereits kleine Beträge on-chain aus — innerhalb strikter Limits, die jeder prüfen kann.",
+    "walletLabel": "Wallet",
+    "executorLabel": "Executor",
+    "guardianLabel": "Guardian (sofortiges Einfrieren)",
+    "balanceLabel": "Aktueller Kontostand",
+    "limitsLabel": "Limits",
+    "limitsText": "1 PPL pro Transaktion · 5 PPL pro gleitende 24 Stunden · 20 PPL pro gleitende 7 Tage · Empfänger-Whitelist aktiv",
+    "eventsTitle": "Letzte Ausgaben",
+    "eventsEmpty": "Noch keine Ausgaben erfasst.",
+    "eventsLoading": "Lade letzte Ausgaben…",
+    "eventsError": "Letzte Ausgaben konnten nicht geladen werden. Bitte später erneut versuchen.",
+    "amountLabel": "Betrag",
+    "recipientLabel": "Empfänger",
+    "timeLabel": "Zeit",
+    "viewTx": "Im Explorer ansehen"
+  },
+  "sections": {
+    "how": {
+      "title": "Wie es funktioniert",
+      "body": "Die Community finanziert eine gemeinsame Smart-Wallet. Ein KI-Agent schlägt Auszahlungen vor — für Grants, Tools oder Dienstleistungen. Jede Ausgabe muss in tägliche und wöchentliche Limits sowie eine Allow-List der Empfänger passen. Token-Halter können die Regeln per Abstimmung ändern. Nichts passiert heimlich: Jede Aktion hat einen Hash, den du im Explorer öffnen kannst."
+    },
+    "limits": {
+      "title": "Limits und Abstimmung",
+      "items": [
+        {
+          "title": "Feste Obergrenzen",
+          "text": "Pro Transaktion, pro Tag und pro Woche — damit ein Bug oder Prompt die Kasse nicht leeren kann."
+        },
+        {
+          "title": "Allow-List",
+          "text": "Geld geht nur an Adressen, die die Community bereits genehmigt hat."
+        },
+        {
+          "title": "Governor-Abstimmung",
+          "text": "Limits, Allow-List oder der Agent selbst lassen sich nur per On-Chain-Token-Abstimmung ändern."
+        },
+        {
+          "title": "Notfall-Einfrierung",
+          "text": "Von der Community gewählte Guardians können Ausgaben pausieren, während geprüft wird."
+        }
+      ]
+    },
+    "security": {
+      "title": "Sicherheit und Transparenz",
+      "items": [
+        {
+          "title": "Standardmäßig öffentlich",
+          "text": "Guthaben, Abstimmungen und Auszahlungen sind sichtbar wie bei jeder anderen Wallet — keine versteckten Admin-Keys auf unseren Servern."
+        },
+        {
+          "title": "Offene Metriken",
+          "text": "Wir planen zu veröffentlichen, wie wir einen „aktiven Agenten“ zählen (z. B. eine Wallet mit mindestens einer ausgehenden Transaktion pro Tag), damit jeder die Zahlen nachrechnen kann."
+        },
+        {
+          "title": "Kein Memecoin-Launcher",
+          "text": "Agenten sind für echte Community-Arbeit — nicht zum Starten von Spaß-Token."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Demnächst",
+      "lead": "Weitere Agent-Tools aus der Roadmap — noch nicht live.",
+      "items": [
+        {
+          "title": "KI-Betrugsschutz",
+          "body": "Warnungen vor riskanten Transfers und Verträgen — für den Alltag."
+        },
+        {
+          "title": "KI-Zusammenfassungen von Governance-Votes",
+          "body": "Kurze, neutrale Erklärungen on-chain-Votes auf der Website."
+        },
+        {
+          "title": "ERC-8004-Agentenregister / x402-Zahlungen",
+          "body": "On-chain-Register und Zahlungswege kompatibel mit neuen Agent-Standards."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "Community-KI",
+    "title": "Community-KI-Agenten",
+    "lead": "Gemeinsame Wallets mit klaren Limits — damit Automatisierung Menschen hilft, ohne ihnen die Kontrolle zu nehmen.",
+    "cta": "Mehr erfahren",
+    "cards": [
+      {
+        "title": "Für echte Arbeit bezahlen",
+        "body": "Grants, Abonnements und Dienstleistungen — innerhalb der von der Community festgelegten Limits."
+      },
+      {
+        "title": "Regeln, über die du abstimmen kannst",
+        "body": "Limits, Allow-Lists und Einfrierungen ändern sich nur per Token-Abstimmung."
+      },
+      {
+        "title": "Sichtbar im Explorer",
+        "body": "Jede Auszahlung ist on-chain — dieselbe Transparenz wie bei jeder anderen Wallet."
+      },
+      {
+        "title": "Gebaut für Gruppen",
+        "body": "Clubs, Creator und lokale Communities — keine anonymen Meme-Starts."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Ablauf eines KI-Agenten: Aufgabe, Regeln, Signatur, Netzbestätigung, Ergebnis.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Aufgabe",
+        "body": "Jemand gibt dem Agenten eine Aufgabe."
+      },
+      {
+        "id": "rules",
+        "title": "Regeln",
+        "body": "Limits und Allow-List werden geprüft."
+      },
+      {
+        "id": "sign",
+        "title": "Signieren",
+        "body": "Der Agent signiert die Transaktion."
+      },
+      {
+        "id": "confirm",
+        "title": "Netz",
+        "body": "Das Netz bestätigt on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Ergebnis",
+        "body": "Das Ergebnis geht zurück zum Nutzer."
+      }
+    ]
+  }
+}

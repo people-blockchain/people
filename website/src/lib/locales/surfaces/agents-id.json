@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Agen AI komunitas",
+    "description": "Bagaimana agen AI komunitas dapat membelanjakan atas nama kelompok — dengan batas, voting, dan catatan publik."
+  },
+  "hero": {
+    "title": "Agen AI komunitas",
+    "lead": "Agen adalah perangkat lunak yang dapat mengirim transaksi dari dompet bersama — hanya dalam aturan yang ditetapkan dan disetujui komunitas Anda."
+  },
+  "liveAgent": {
+    "badge": "Aktif di testnet",
+    "title": "Agen komunitas #1",
+    "lead": "CommunityAgentWallet v2 asli sudah membelanjakan jumlah kecil on-chain, dalam batas ketat yang bisa diperiksa siapa saja.",
+    "walletLabel": "Dompet",
+    "executorLabel": "Eksekutor",
+    "guardianLabel": "Guardian (pembekuan instan)",
+    "balanceLabel": "Saldo saat ini",
+    "limitsLabel": "Batas",
+    "limitsText": "1 PPL per transaksi · 5 PPL per 24 jam bergulir · 20 PPL per 7 hari bergulir · whitelist penerima aktif",
+    "eventsTitle": "Pengeluaran terbaru",
+    "eventsEmpty": "Belum ada pengeluaran yang tercatat.",
+    "eventsLoading": "Memuat pengeluaran terbaru…",
+    "eventsError": "Gagal memuat pengeluaran terbaru. Coba lagi nanti.",
+    "amountLabel": "Jumlah",
+    "recipientLabel": "Penerima",
+    "timeLabel": "Waktu",
+    "viewTx": "Lihat di explorer"
+  },
+  "sections": {
+    "how": {
+      "title": "Cara kerjanya",
+      "body": "Komunitas mendanai smart-wallet bersama. Agen AI mengusulkan pembayaran — untuk hibah, alat, atau layanan. Setiap pengeluaran harus sesuai batas harian dan mingguan serta daftar alamat yang diizinkan. Pemegang token dapat mengubah aturan melalui voting. Tidak ada yang terjadi secara rahasia: setiap tindakan punya hash yang bisa dibuka di explorer."
+    },
+    "limits": {
+      "title": "Batas dan voting",
+      "items": [
+        {
+          "title": "Batas ketat",
+          "text": "Per transaksi, per hari, dan per minggu — agar bug atau prompt tidak bisa mengosongkan treasury."
+        },
+        {
+          "title": "Daftar izin",
+          "text": "Uang hanya mengalir ke alamat yang sudah disetujui komunitas."
+        },
+        {
+          "title": "Voting Governor",
+          "text": "Mengubah batas, daftar izin, atau agen itu sendiri memerlukan voting token on-chain."
+        },
+        {
+          "title": "Pembekuan darurat",
+          "text": "Guardian yang dipilih komunitas dapat menghentikan sementara pengeluaran saat diselidiki."
+        }
+      ]
+    },
+    "security": {
+      "title": "Keamanan dan transparansi",
+      "items": [
+        {
+          "title": "Publik secara default",
+          "text": "Saldo, voting, dan pembayaran terlihat seperti dompet lainnya — tanpa kunci admin tersembunyi di server kami."
+        },
+        {
+          "title": "Metrik terbuka",
+          "text": "Kami berencana mempublikasikan cara menghitung \"agen aktif\" (misalnya, dompet dengan setidaknya satu transaksi keluar per hari) agar siapa pun bisa menghitung ulang angkanya."
+        },
+        {
+          "title": "Bukan peluncur memecoin",
+          "text": "Agen untuk kerja komunitas yang nyata — bukan untuk meluncurkan token lelucon."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Selanjutnya",
+      "lead": "Alat agen lain dari roadmap — belum live.",
+      "items": [
+        {
+          "title": "Penjaga anti-penipuan AI",
+          "body": "Peringatan sebelum transfer dan kontrak berisiko — untuk penggunaan harian."
+        },
+        {
+          "title": "Ringkasan AI suara governance",
+          "body": "Penjelasan singkat dan netral tentang voting on-chain di situs."
+        },
+        {
+          "title": "Registri agen ERC-8004 / pembayaran x402",
+          "body": "Registri on-chain dan jalur pembayaran sesuai standar agen yang berkembang."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "AI komunitas",
+    "title": "Agen AI komunitas",
+    "lead": "Dompet bersama dengan batas yang jelas — agar otomatisasi membantu orang tanpa mengambil alih kendali.",
+    "cta": "Pelajari lebih lanjut",
+    "cards": [
+      {
+        "title": "Bayar untuk kerja nyata",
+        "body": "Hibah, subscription, dan layanan — dalam batas yang ditetapkan komunitas."
+      },
+      {
+        "title": "Aturan yang bisa Anda voting",
+        "body": "Batas, daftar izin, dan pembekuan hanya berubah lewat voting token."
+      },
+      {
+        "title": "Terlihat di explorer",
+        "body": "Setiap pembayaran on-chain — transparansi yang sama seperti dompet lainnya."
+      },
+      {
+        "title": "Dibuat untuk kelompok",
+        "body": "Klub, kreator, dan komunitas lokal — bukan peluncuran meme anonim."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Alur agen AI: tugas, aturan, tanda tangan, konfirmasi jaringan, hasil.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Tugas",
+        "body": "Seseorang meminta pekerjaan pada agen."
+      },
+      {
+        "id": "rules",
+        "title": "Aturan",
+        "body": "Batas dan daftar izin dicek."
+      },
+      {
+        "id": "sign",
+        "title": "Tanda tangan",
+        "body": "Agen menandatangani transaksi."
+      },
+      {
+        "id": "confirm",
+        "title": "Jaringan",
+        "body": "Jaringan mengonfirmasi on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Hasil",
+        "body": "Hasil kembali ke pengguna."
+      }
+    ]
+  }
+}

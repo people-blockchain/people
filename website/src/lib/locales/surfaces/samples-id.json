@@ -1,0 +1,68 @@
+{
+  "title": "Templat kontrak contoh",
+  "lead": "Contoh kontrak yang siap dibaca dan di-deploy. Tinjau kode sumbernya, lalu deploy langsung dari dompet Anda yang terhubung.",
+  "notDeployed": "Belum di-deploy",
+  "testnetAddress": "Alamat di testnet",
+  "viewSource": "Lihat kode sumber",
+  "hideSource": "Sembunyikan kode sumber",
+  "copy": "Salin",
+  "copied": "Disalin",
+  "deployCta": "Deploy dengan dompet saya",
+  "connectFirst": "Hubungkan dompet Anda terlebih dahulu.",
+  "constructorArgs": "Parameter konstruktor",
+  "deployButton": "Deploy",
+  "deploying": "Sedang men-deploy…",
+  "cancel": "Batal",
+  "success": "Berhasil di-deploy. Jaringan menerima kontrak Anda.",
+  "contractAddress": "Alamat kontrak",
+  "transaction": "Transaksi",
+  "error": "Terjadi kesalahan.",
+  "invalidAddress": "Masukkan alamat dompet yang dimulai dengan 0x.",
+  "invalidNumber": "Masukkan angka yang lebih besar dari nol.",
+  "invalidText": "Bidang ini tidak boleh kosong.",
+  "templates": {
+    "escrow": {
+      "title": "Escrow",
+      "description": "Pembeli menyetor PPL untuk penjual. Arbiter netral dapat melepaskan dana ke penjual atau mengembalikannya ke pembeli; pembeli juga dapat melepaskannya lebih awal. Mendukung PPL asli maupun stablecoin uji (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Timelock vesting",
+      "description": "Mengunci PPL untuk satu penerima manfaat dan melepaskannya secara linear antara waktu mulai dan waktu akhir."
+    },
+    "crowdfund": {
+      "title": "Penggalangan dana",
+      "description": "Mengumpulkan PPL menuju suatu target sebelum tenggat waktu. Pemilik dapat mengambil dana jika target tercapai; jika tidak, kontributor mendapat pengembalian dana. Mendukung PPL asli maupun stablecoin uji (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token suplai tetap",
+      "description": "Token ERC-20 sederhana dengan suplai tetap, seluruhnya dicetak untuk yang men-deploy kontrak."
+    }
+  },
+  "fields": {
+    "seller": "Alamat penjual",
+    "arbiter": "Alamat arbiter",
+    "value": "Jumlah yang dikirim (PPL)",
+    "beneficiary": "Alamat penerima manfaat",
+    "start": "Waktu mulai (default: sekarang; unix timestamp dalam detik)",
+    "duration": "Durasi (hari)",
+    "goal": "Target ({symbol})",
+    "durationSeconds": "Durasi (detik)",
+    "name": "Nama token",
+    "symbol": "Simbol token",
+    "supply": "Total suplai (dalam token)",
+    "token": "Alamat token pembayaran",
+    "amount": "Jumlah yang disetor ({symbol})",
+    "payIn": "Bayar dengan"
+  },
+  "faucetCta": "Dapatkan {symbol} uji",
+  "faucetMinting": "Sedang mencetak…",
+  "faucetDone": "Tercetak",
+  "faucetBalance": "Saldo: {amount} {symbol}",
+  "faucetLimitHint": "Batas: hingga 1000 token per 24 jam.",
+  "faucetCooldown": "Anda telah mencapai batas faucet 24 jam. Coba lagi nanti.",
+  "approveDepositLead": "Dua transaksi dompet: setujui (approve) token lebih dulu, lalu deposit.",
+  "approveAndDeposit": "Setujui & deposit",
+  "approving": "Menyetujui…",
+  "depositing": "Menyetor…",
+  "depositComplete": "Disetor. Escrow kini menahan dana tersebut."
+}

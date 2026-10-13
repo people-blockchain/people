@@ -1,0 +1,68 @@
+{
+  "title": "Modelos de contratos de exemplo",
+  "lead": "Contratos de exemplo prontos para ler e implantar. Revise o código-fonte e depois implante direto da sua carteira conectada.",
+  "notDeployed": "Ainda não implantado",
+  "testnetAddress": "Endereço na testnet",
+  "viewSource": "Ver código-fonte",
+  "hideSource": "Ocultar código-fonte",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "deployCta": "Implantar com minha carteira",
+  "connectFirst": "Conecte sua carteira primeiro.",
+  "constructorArgs": "Parâmetros do construtor",
+  "deployButton": "Implantar",
+  "deploying": "Implantando…",
+  "cancel": "Cancelar",
+  "success": "Implantado. A rede aceitou o seu contrato.",
+  "contractAddress": "Endereço do contrato",
+  "transaction": "Transação",
+  "error": "Algo deu errado.",
+  "invalidAddress": "Digite um endereço de carteira que comece com 0x.",
+  "invalidNumber": "Digite um número maior que zero.",
+  "invalidText": "Este campo não pode ficar vazio.",
+  "templates": {
+    "escrow": {
+      "title": "Custódia (escrow)",
+      "description": "Um comprador deposita PPL para um vendedor. Um árbitro neutro pode liberar os fundos ao vendedor ou reembolsar o comprador; o comprador também pode liberar antecipadamente. Aceita PPL nativo ou uma stablecoin de teste (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Timelock com vesting",
+      "description": "Trava PPL para um único beneficiário e libera de forma linear entre um horário de início e um de término."
+    },
+    "crowdfund": {
+      "title": "Financiamento coletivo",
+      "description": "Arrecada PPL em direção a uma meta antes de um prazo final. O proprietário resgata os fundos se a meta for atingida; caso contrário, os contribuintes recebem reembolso. Aceita PPL nativo ou uma stablecoin de teste (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token de oferta fixa",
+      "description": "Um token ERC-20 simples com oferta fixa, cunhado inteiramente para quem implantou o contrato."
+    }
+  },
+  "fields": {
+    "seller": "Endereço do vendedor",
+    "arbiter": "Endereço do árbitro",
+    "value": "Valor a enviar (PPL)",
+    "beneficiary": "Endereço do beneficiário",
+    "start": "Horário de início (padrão: agora; timestamp unix em segundos)",
+    "duration": "Duração (dias)",
+    "goal": "Meta ({symbol})",
+    "durationSeconds": "Duração (segundos)",
+    "name": "Nome do token",
+    "symbol": "Símbolo do token",
+    "supply": "Oferta total (em tokens)",
+    "token": "Endereço do token de pagamento",
+    "amount": "Valor a depositar ({symbol})",
+    "payIn": "Pagar em"
+  },
+  "faucetCta": "Obter {symbol} de teste",
+  "faucetMinting": "Cunhando…",
+  "faucetDone": "Cunhado",
+  "faucetBalance": "Saldo: {amount} {symbol}",
+  "faucetLimitHint": "Limite: até 1000 tokens por 24 horas.",
+  "faucetCooldown": "Você atingiu o limite do faucet de 24 horas. Tente novamente mais tarde.",
+  "approveDepositLead": "Duas transações de carteira: primeiro aprove o token, depois deposite.",
+  "approveAndDeposit": "Aprovar e depositar",
+  "approving": "Aprovando…",
+  "depositing": "Depositando…",
+  "depositComplete": "Depositado. A custódia agora retém os fundos."
+}

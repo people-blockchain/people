@@ -1,0 +1,116 @@
+{
+  "title": "Cómo funciona People's Blockchain",
+  "loopLine": "La gente usa la red. El uso genera comisiones. Parte de cada comisión vuelve a la comunidad.",
+  "docsLinkLabel": "Detalles en la documentación",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Ya en testnet",
+      "items": [
+        {
+          "title": "Cartera",
+          "text": "Cartera no custodial en el móvil o navegador. Tus claves no salen de tu dispositivo."
+        },
+        {
+          "title": "Crear un token",
+          "text": "Elige nombre, ticker, imagen y suministro, paga en PPL. Precio en curva desde la primera operación."
+        },
+        {
+          "title": "Operar",
+          "text": "Compra y vende en la curva de lanzamiento, luego en el pool token/PPL."
+        },
+        {
+          "title": "10% a la comunidad",
+          "text": "Cada token estándar envía el 10% de su suministro a su pool comunitario."
+        },
+        {
+          "title": "Vesting del creador",
+          "text": "La parte del creador se desbloquea en 180 días, sin dump el día uno."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Participa como persona",
+      "items": [
+        {
+          "title": "Sesiones de participación en un toque desde el móvil.",
+          "text": ""
+        },
+        {
+          "title": "Prueba de humanidad sin biometría.",
+          "text": ""
+        },
+        {
+          "title": "Los puntos de participación deciden tu parte de las recompensas comunitarias. No se compran ni transfieren.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Oferta fija de PPL",
+      "intro": "Mil millones de PPL sin acuñación sorpresa al inicio. Validadores y recompensas de lanzamiento salen de genesis y comisiones.",
+      "bullets": [
+        "Años 1–4: 0% inflación — 1B PPL.",
+        "Validadores: 200M PPL, 6% / 5% / 5% / 4% del supply anual (60M, 50M, 50M, 40M) + 30% comisiones.",
+        "Fundadores, recompensas, embajadores y airdrops: solo fondo comunitario 35%.",
+        "Desde año 5: máx. 2% emisión nueva/año, solo voto comunitario.",
+        "Airdrop fundadores primero; venta tras 1.000 verificados y multisig.",
+        "Cada comisión: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quema."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "De dónde vienen las recompensas",
+      "intro": "Cada comisión de red se paga en PPL y se reparte igual cada vez:",
+      "feeSplit": [
+        {
+          "label": "Validadores (red)",
+          "pct": 30
+        },
+        {
+          "label": "Pool comunitario",
+          "pct": 25
+        },
+        {
+          "label": "Tesorería",
+          "pct": 20
+        },
+        {
+          "label": "Liquidez y ecosistema",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (referidos)",
+          "pct": 15
+        },
+        {
+          "label": "Quema",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "El pool comunitario se reparte entre participantes activos según sus puntos. Ejemplo: 600 tokens en el pool, tres personas con 1, 2 y 3 puntos reciben 100, 200 y 300.",
+      "tokenPoolNote": "Por separado, el 10% comunitario de cada token permanece en su propio pool. No se mezcla con comisiones en PPL.",
+      "buybackNote": "Las partes de tesorería y liquidez (30% en conjunto) financian recompras públicas de PPL en el mercado abierto, ejecutadas por el multisig publicado y visibles en el explorer.",
+      "launchFeeNote": "Lanzar un token o NFT cuesta una comisión de protocolo, pagable en PPL o en una stablecoin admitida (USDC/USDT), a tu elección. El gas siempre se paga en PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Por qué los bots no pueden farmear",
+      "body": "Las cuentas nuevas empiezan despacio, las inactivas se debilitan y cada persona tiene un tope. Cien cuentas falsas no ganan cien veces más."
+    },
+    {
+      "id": "honest",
+      "title": "La parte honesta",
+      "bullets": [
+        "Las recompensas no son fijas. Sin actividad no hay recompensas.",
+        "Los precios pueden subir, bajar o ir a cero.",
+        "Es participación en una red, no una inversión."
+      ]
+    }
+  ],
+  "ctaWallet": "Crear cartera",
+  "ctaCreate": "Lanzar un token",
+  "feeChartLabel": "Reparto de la comisión de red"
+}

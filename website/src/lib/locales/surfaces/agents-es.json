@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Agentes de IA comunitarios",
+    "description": "Cómo los agentes de IA comunitarios pueden gastar en nombre de un grupo — con límites, votos y registro público."
+  },
+  "hero": {
+    "title": "Agentes de IA comunitarios",
+    "lead": "Un agente es software que puede enviar transacciones desde una billetera compartida — solo dentro de las reglas que tu comunidad define y aprueba."
+  },
+  "liveAgent": {
+    "badge": "Activo en testnet",
+    "title": "Agente comunitario n.º 1",
+    "lead": "Un CommunityAgentWallet v2 real ya está gastando pequeñas cantidades on-chain, dentro de límites estrictos que cualquiera puede comprobar.",
+    "walletLabel": "Cartera",
+    "executorLabel": "Ejecutor",
+    "guardianLabel": "Guardián (congelación instantánea)",
+    "balanceLabel": "Saldo actual",
+    "limitsLabel": "Límites",
+    "limitsText": "1 PPL por transacción · 5 PPL por 24h móviles · 20 PPL por 7 días móviles · lista blanca de destinatarios activa",
+    "eventsTitle": "Gastos recientes",
+    "eventsEmpty": "Aún no hay gastos registrados.",
+    "eventsLoading": "Cargando gastos recientes…",
+    "eventsError": "No se pudieron cargar los gastos recientes. Inténtalo más tarde.",
+    "amountLabel": "Importe",
+    "recipientLabel": "Destinatario",
+    "timeLabel": "Hora",
+    "viewTx": "Ver en el explorador"
+  },
+  "sections": {
+    "how": {
+      "title": "Cómo funciona",
+      "body": "La comunidad financia una billetera inteligente compartida. Un agente de IA propone pagos — para subvenciones, herramientas o servicios. Cada gasto debe respetar límites diarios y semanales y una lista de direcciones permitidas. Los titulares del token pueden cambiar las reglas por votación. Nada ocurre en secreto: cada acción tiene un hash que puedes abrir en el explorer."
+    },
+    "limits": {
+      "title": "Límites y votación",
+      "items": [
+        {
+          "title": "Topes estrictos",
+          "text": "Por transacción, por día y por semana — para que un error o un prompt no vacíe la tesorería."
+        },
+        {
+          "title": "Lista permitida",
+          "text": "El dinero solo va a direcciones que la comunidad ya aprobó."
+        },
+        {
+          "title": "Voto del Governor",
+          "text": "Cambiar los topes, la lista permitida o el propio agente requiere una votación on-chain del token."
+        },
+        {
+          "title": "Congelación de emergencia",
+          "text": "Guardianes elegidos por la comunidad pueden pausar los gastos mientras se investiga."
+        }
+      ]
+    },
+    "security": {
+      "title": "Seguridad y transparencia",
+      "items": [
+        {
+          "title": "Público por defecto",
+          "text": "Saldos, votos y pagos son visibles como en cualquier otra billetera — sin claves de administrador ocultas en nuestros servidores."
+        },
+        {
+          "title": "Métricas abiertas",
+          "text": "Planeamos publicar cómo contamos un «agente activo» (por ejemplo, una billetera con al menos una transacción saliente al día) para que cualquiera pueda reproducir las cifras."
+        },
+        {
+          "title": "No es un lanzador de memecoins",
+          "text": "Los agentes son para trabajo real de la comunidad, no para lanzar tokens de broma."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "Próximamente",
+      "lead": "Más herramientas de agentes en la hoja de ruta — aún no disponibles.",
+      "items": [
+        {
+          "title": "Guardia antifraude con IA",
+          "body": "Avisos antes de transferencias y contratos de riesgo, pensados para el día a día."
+        },
+        {
+          "title": "Resúmenes IA de votos de governance",
+          "body": "Explicaciones breves y neutrales de votos on-chain en el sitio."
+        },
+        {
+          "title": "Registro de agentes ERC-8004 / pagos x402",
+          "body": "Registro on-chain de agentes y pagos compatibles con estándares emergentes."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "IA comunitaria",
+    "title": "Agentes de IA comunitarios",
+    "lead": "Billeteras compartidas con límites claros — para que la automatización ayude a las personas sin quitarles el control.",
+    "cta": "Más información",
+    "cards": [
+      {
+        "title": "Pago por trabajo real",
+        "body": "Subvenciones, suscripciones y servicios — dentro de los topes que fija la comunidad."
+      },
+      {
+        "title": "Reglas que puedes votar",
+        "body": "Los topes, las listas permitidas y las congelaciones solo cambian por votación del token."
+      },
+      {
+        "title": "Visible en el explorer",
+        "body": "Cada pago es on-chain — la misma transparencia que cualquier otra billetera."
+      },
+      {
+        "title": "Pensado para grupos",
+        "body": "Clubes, creadores y comunidades locales — no lanzamientos meme anónimos."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Cómo funciona un agente de IA: tarea, reglas, firma, confirmación de red y resultado.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Tarea",
+        "body": "Alguien pide trabajo al agente."
+      },
+      {
+        "id": "rules",
+        "title": "Reglas",
+        "body": "Se revisan límites y lista permitida."
+      },
+      {
+        "id": "sign",
+        "title": "Firma",
+        "body": "El agente firma la transacción."
+      },
+      {
+        "id": "confirm",
+        "title": "Red",
+        "body": "La red confirma on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Resultado",
+        "body": "La respuesta vuelve al usuario."
+      }
+    ]
+  }
+}

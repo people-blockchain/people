@@ -1,0 +1,168 @@
+{
+  "tag": "NHÀ SÁNG LẬP",
+  "title": "Một triệu nhà sáng lập",
+  "lead": "Tham gia cùng một triệu người đã xác minh đang xây People's Blockchain trước mainnet. Số nhà sáng lập và điểm hoạt động của bạn được ghi trên testnet ngay hôm nay.",
+  "preliminaryBanner": "Sơ bộ — trọng số điểm, hệ số nhân và giới hạn ngày có thể thay đổi trước mainnet.",
+  "counterLabel": "Nhà sáng lập đã xác minh",
+  "goalLabel": "Mục tiêu trước mainnet",
+  "yourNumber": "Nhà sáng lập #{{n}}",
+  "multiplierLabel": "Hệ số tham gia sớm",
+  "multiplierValue": "×{{x}}",
+  "registerTitle": "Nhận số nhà sáng lập",
+  "registerLead": "Chọn quốc gia cho bản đồ công khai. Cần ví đã liên kết (chứng minh con người) trước khi đăng ký.",
+  "countryLabel": "Quốc gia",
+  "countryPlaceholder": "Chọn quốc gia",
+  "registerButton": "Trở thành nhà sáng lập",
+  "registering": "Đang đăng ký…",
+  "signInCta": "Đăng nhập",
+  "walletCta": "Liên kết ví",
+  "pohRequired": "Đăng nhập và liên kết ví để đăng ký và nhận điểm. Không có chứng minh con người thì không có điểm.",
+  "registered": "Bạn đã trong chương trình.",
+  "pointsTitle": "Điểm hoạt động",
+  "pointsTotal": "Tổng điểm",
+  "pointsTodayHint": "Giới hạn ngày theo hành động và tổng (UTC).",
+  "dailyCapValue": "1000",
+  "poolTitle": "Season reward pool",
+  "poolProgramLine": "Program pool: {{program}} PPL (5% of emission from Community & rewards).",
+  "poolSeasonLine": "Season 1 pool: {{season}} PPL.",
+  "poolFormula": "At season end: your PPL share = (your points ÷ all founders’ points) × season pool.",
+  "poolEstimateLabel": "Live estimate",
+  "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
+  "poolEstimatePending": "Estimate appears once founders earn points.",
+  "verificationTitle": "Verification levels (free)",
+  "verificationLead": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLevelLabel": "Your level",
+  "verificationLevel0": "Level 0 — complete level 1 to earn points",
+  "verificationLevel1": "Level 1 — 50% of base points",
+  "verificationLevel2": "Level 2 — Human Passport, 100% of base points",
+  "verificationTelegramCta": "Verify with Telegram",
+  "verificationTelegramLoading": "Preparing link…",
+  "verificationTelegramStatusVerified": "Telegram: phone verified (level 1 — 50% of base points)",
+  "verificationHumanPassportCta": "Verify with Human Passport",
+  "verificationConfiguredOff": "Not configured on this environment yet.",
+  "actionsTitle": "Hành động được cộng điểm",
+  "actions": [
+    {
+      "id": "discover_reaction",
+      "label": "Phản hồi trên bảng tin dự án",
+      "base": "2",
+      "limit": "30/day"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Theo dõi dự án trên bảng tin",
+      "base": "5",
+      "limit": "20/day"
+    },
+    {
+      "id": "swap",
+      "label": "Hoán đổi trên testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL trên testnet People's Blockchain (ủy quyền mới), tối thiểu {{stakeMin}} PPL",
+      "base": "50",
+      "limit": "3/day"
+    },
+    {
+      "id": "token_launch",
+      "label": "Phát hành token (sau 10+ holder đã xác minh)",
+      "base": "200",
+      "limit": "2/day"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Mint NFT",
+      "base": "100",
+      "limit": "5/day"
+    },
+    {
+      "id": "pool_create",
+      "label": "Tạo pool thanh khoản",
+      "base": "150",
+      "limit": "3/day"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Bỏ phiếu governance",
+      "base": "25",
+      "limit": "10/day"
+    },
+    {
+      "id": "invite",
+      "label": "Mời bạn đã xác minh (sau xác minh và hành động)",
+      "base": "300",
+      "limit": "50/day"
+    }
+  ],
+  "swapMinPpl": "10",
+  "stakeMinPpl": "10",
+  "multipliersTitle": "Early-entry multipliers (preliminary)",
+  "multipliers": [
+    {
+      "range": "1–10,000",
+      "value": "×5"
+    },
+    {
+      "range": "10,001–100,000",
+      "value": "×3"
+    },
+    {
+      "range": "100,001–1,000,000",
+      "value": "×1.5"
+    }
+  ],
+  "mapTitle": "Nhà sáng lập theo quốc gia",
+  "mapHint": "Quốc gia khai báo khi đăng ký.",
+  "leaderboardTitle": "Bảng xếp hạng quốc gia",
+  "leaderboardCount": "{{count}} nhà sáng lập",
+  "errorRegister": "Đăng ký thất bại. Kiểm tra ví và thử lại.",
+  "errorLoad": "Không tải được thống kê.",
+  "autoClaimLoading": "Đang cấp số người sáng lập của bạn…",
+  "autoClaimError": "Không thể cấp số người sáng lập. Hãy thử lại.",
+  "autoClaimRetry": "Thử lại",
+  "countryDetectedHint": "Quốc gia được nhận diện từ trình duyệt — bạn có thể đổi.",
+  "chooseCountryTitle": "Quốc gia của bạn",
+  "countrySaved": "Đã cập nhật quốc gia.",
+  "countryUpdateError": "Không thể cập nhật quốc gia. Vui lòng thử lại.",
+  "countryRateLimited": "Thay đổi quá nhiều lần — vui lòng thử lại sau.",
+  "visibilityLabel": "Hồ sơ công khai",
+  "visibilityHint": "Cho phép danh sách công khai hiển thị tên và ảnh đại diện của tài khoản, ví dụ bảng trên trang minh bạch. Mặc định tắt.",
+  "visibilitySaved": "Đã lưu.",
+  "visibilityError": "Không lưu được.",
+  "loading": "Đang tải…",
+  "discoverCta": "Bảng tin dự án",
+  "swapCta": "Hoán đổi trên testnet",
+  "createTokenCta": "Phát hành token",
+  "refresh": "Làm mới",
+  "live": "Trực tiếp",
+  "mainnetRulesTitle": "Quy tắc thưởng mainnet (sơ bộ)",
+  "mainnetRulesPoh": "Không có chứng minh con người thì không tích lũy gì: không điểm nhà sáng lập trên testnet và không thưởng PPL cá nhân trên mainnet cho đến khi tài khoản được xác minh và ví được liên kết.",
+  "mainnetRulesVestingTitle": "Mở khóa phần thưởng cá nhân",
+  "mainnetRulesVestingBullets": [
+    "Ngày đầu mainnet, 10% phần thưởng cá nhân đã quy đổi được mở khóa (chỉ nhà sáng lập đã xác minh).",
+    "90% còn lại mở khóa theo từng tuần bình đều trong đúng 12 tháng.",
+    "Mỗi tháng dương lịch cần ít nhất một hành động đủ điều kiện on-chain hoặc trên Bảng tin dự án. Tháng không hoạt động thì mở khóa hàng tuần tạm dừng đến khi quay lại; các tuần bỏ lỡ không được nhảy cóc.",
+    "Điểm testnet tách biệt; các quy tắc này áp dụng cho PPL trên mainnet."
+  ],
+  "mainnetRulesSaleFeeTitle": "Phí bán sớm (30 ngày đầu mainnet)",
+  "mainnetRulesSaleFeeBody": "Khi bán PPL đã mở khóa trong 30 ngày đầu sau khi mạng ra mắt, phí khấu trừ bằng PPL: 10% ngày đầu, giảm tuyến tính về 0% vào ngày 30. Phí vào quỹ cộng đồng.",
+  "mainnetRulesStakingTitle": "Bonus staking nhà sáng lập",
+  "mainnetRulesStakingBullets": [
+    "Stake tùy chọn cộng +25% vào lãi suất thưởng validator — bonus trên lãi suất, không phải 25% số tiền stake, và không phải lời hứa về một mức lợi suất cụ thể.",
+    "Thưởng staking trả từ quỹ cộng đồng và mở khóa theo lịch tuần giống phần thưởng cá nhân.",
+    "Rút stake: chờ 21 ngày trước khi PPL về ví."
+  ],
+  "heroEyebrow": "STAND",
+  "heroTitleWithNumber": "Trở thành nhà sáng lập số {{n}} trước mainnet",
+  "heroTitleFallback": "Trở thành một trong những nhà sáng lập đầu tiên trước khi mạng chính ra mắt",
+  "heroSub": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet People's Blockchain.",
+  "demoAirdropTitle": "Testnet demo tokens",
+  "demoAirdropReceived": "Đã nhận: 100 × 6 token",
+  "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",
+  "demoAirdropClaiming": "Sending demo tokens…",
+  "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
+  "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed."
+}

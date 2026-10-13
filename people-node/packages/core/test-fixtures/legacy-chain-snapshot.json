@@ -1,0 +1,56 @@
+{
+  "chainState": {
+    "accounts": {
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+        "balance": 12.5,
+        "balances": { "ppl": 12.5 },
+        "nonce": 1
+      }
+    },
+    "validators": {},
+    "participants": {},
+    "contributionEpochs": {},
+    "networkActivityEpochs": {},
+    "growthPool": { "available": 0, "escrow": 0, "totalReturned": 0, "claimedSettled": {} },
+    "growthEpochInflow": {},
+    "growthEpochBudget": {},
+    "growthAssigned": {},
+    "growthClaims": {},
+    "growthSettledEpochs": {},
+    "feeLiquidityEcosystem": 0,
+    "mempool": [],
+    "chain": [
+      {
+        "header": {
+          "height": 0,
+          "previousHash": "GENESIS",
+          "stateRoot": "stub",
+          "chainId": "people-internal-testnet",
+          "protocolVersion": 2,
+          "proposer": "genesis",
+          "timestamp": 0
+        },
+        "transactions": [],
+        "hash": "genesis-stub"
+      }
+    ],
+    "epoch": 0,
+    "proposals": {},
+    "attestationVotes": {},
+    "attestationBallots": {},
+    "finalizedHeight": 0,
+    "seenBlockHashes": {},
+    "assets": { "ppl": { "assetId": "ppl", "name": "People", "symbol": "PPL", "decimals": 6, "type": "native", "status": "active" } },
+    "communityPool": { "pools": {} },
+    "curves": {},
+    "vesting": {},
+    "liquidityReserves": {},
+    "ecosystemReserves": {},
+    "launchReserves": {},
+    "liquidityPools": {},
+    "nfts": {},
+    "contracts": {}
+  },
+  "feePool": 0,
+  "rewards": []
+}

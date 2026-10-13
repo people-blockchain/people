@@ -1,0 +1,116 @@
+{
+  "title": "People's Blockchain hoạt động thế nào",
+  "loopLine": "Người dùng dùng mạng. Hoạt động tạo phí. Một phần mỗi phí quay lại cộng đồng.",
+  "docsLinkLabel": "Chi tiết trong tài liệu",
+  "blocks": [
+    {
+      "id": "live",
+      "title": "Đã có trên testnet",
+      "items": [
+        {
+          "title": "Ví",
+          "text": "Ví không giữ hộ trên điện thoại hoặc trình duyệt. Khóa không rời thiết bị."
+        },
+        {
+          "title": "Tạo token",
+          "text": "Tên, ticker, ảnh và nguồn cung, trả bằng PPL. Giá theo đường cong từ giao dịch đầu."
+        },
+        {
+          "title": "Giao dịch",
+          "text": "Mua bán trên đường cong ra mắt, sau đó trong pool token/PPL."
+        },
+        {
+          "title": "10% cho cộng đồng",
+          "text": "Mỗi token chuẩn gửi 10% nguồn cung vào pool cộng đồng của token đó."
+        },
+        {
+          "title": "Vesting creator",
+          "text": "Phần creator mở khóa trong 180 ngày, không dump ngày đầu."
+        }
+      ]
+    },
+    {
+      "id": "participation",
+      "title": "Tham gia với tư cách một người",
+      "items": [
+        {
+          "title": "Phiên tham gia một chạm từ điện thoại.",
+          "text": ""
+        },
+        {
+          "title": "Chứng minh con người không sinh trắc.",
+          "text": ""
+        },
+        {
+          "title": "Điểm tham gia quyết định phần thưởng cộng đồng. Không mua hay chuyển được.",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "id": "ppl-supply",
+      "title": "Cung PPL cố định",
+      "intro": "Một tỷ PPL, không đúc bất ngờ những năm đầu. Validator và thưởng khởi động từ genesis và phí.",
+      "bullets": [
+        "Năm 1–4: 0% lạm phát — 1B PPL.",
+        "Validator: 200M PPL, 6% / 5% / 5% / 4% cung (60M, 50M, 50M, 40M) + 30% phí.",
+        "Nhà sáng lập, thưởng, đại sứ, airdrop: chỉ quỹ 35%.",
+        "Từ năm 5: tối đa 2% phát hành/năm, bỏ phiếu cộng đồng.",
+        "Airdrop nhà sáng lập trước; bán sau 1.000 xác minh và multisig.",
+        "Mỗi phí: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt."
+      ]
+    },
+    {
+      "id": "rewards",
+      "title": "Phần thưởng đến từ đâu",
+      "intro": "Mỗi phí mạng trả bằng PPL và chia giống nhau mỗi lần:",
+      "feeSplit": [
+        {
+          "label": "Validator (vận hành mạng)",
+          "pct": 30
+        },
+        {
+          "label": "Pool cộng đồng",
+          "pct": 25
+        },
+        {
+          "label": "Kho bạc",
+          "pct": 20
+        },
+        {
+          "label": "Thanh khoản & hệ sinh thái",
+          "pct": 10
+        },
+        {
+          "label": "Growth Pool (giới thiệu)",
+          "pct": 15
+        },
+        {
+          "label": "Đốt",
+          "pct": 0
+        }
+      ],
+      "communityPoolExample": "Pool cộng đồng chia cho người tham gia tích cực theo điểm tham gia. Ví dụ: pool 600 token, ba người có 1, 2 và 3 điểm nhận 100, 200 và 300.",
+      "tokenPoolNote": "Riêng 10% cộng đồng của mỗi token ở pool riêng. Không trộn với phí PPL.",
+      "buybackNote": "Phần kho bạc và thanh khoản (tổng 30%) tài trợ cho việc mua lại PPL công khai trên thị trường mở, do multisig đã công bố thực hiện và hiển thị trên explorer.",
+      "launchFeeNote": "Khởi chạy một token hoặc NFT tốn một khoản phí giao thức, có thể trả bằng PPL hoặc stablecoin được hỗ trợ (USDC/USDT) — do bạn chọn. Gas luôn được trả bằng PPL."
+    },
+    {
+      "id": "anti-bot",
+      "title": "Vì sao bot không farm được",
+      "body": "Tài khoản mới bắt đầu chậm, tài khoản không hoạt động suy giảm, mỗi người có trần. Trăm tài khoản giả không kiếm gấp trăm lần."
+    },
+    {
+      "id": "honest",
+      "title": "Phần thẳng thắn",
+      "bullets": [
+        "Phần thưởng không cố định. Không hoạt động thì không có thưởng.",
+        "Giá token có thể tăng, giảm hoặc về không.",
+        "Đây là tham gia mạng, không phải đầu tư."
+      ]
+    }
+  ],
+  "ctaWallet": "Tạo ví",
+  "ctaCreate": "Ra mắt token",
+  "feeChartLabel": "Phân chia phí mạng"
+}

@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — blockchain cho cộng đồng",
+    "headlineMain": "Ra mắt token cho cộng đồng của bạn.",
+    "headlineMainLines": [
+      "Ra mắt token",
+      "cho cộng đồng",
+      "của bạn."
+    ],
+    "headlineAccent": "10% về người của bạn, không về cá voi.",
+    "headlineAccentLines": [
+      "10% về người của bạn,",
+      "không về cá voi."
+    ],
+    "sub": "People's Blockchain là nơi creator ra token với giá công bằng ngay từ block đầu, và cộng đồng có phần trong mọi thứ họ giúp phát triển.",
+    "testnetBadge": "Testnet công khai đang chạy. Chưa phải mainnet.",
+    "ctaCreate": "Tạo token",
+    "ctaWallet": "Mở ví",
+    "flowAria": "Bốn bước: từ ví đến giao dịch token",
+    "flowPause": "Tạm dừng",
+    "flowPlay": "Phát",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Tạo ví",
+        "sub": "Trên trình duyệt trong chưa đầy một phút"
+      },
+      {
+        "id": "launch",
+        "label": "Ra mắt token",
+        "sub": "Trả phí ra mắt bằng PPL"
+      },
+      {
+        "id": "community",
+        "label": "10% vào pool cộng đồng",
+        "sub": "Gắn sẵn trong mỗi token mới"
+      },
+      {
+        "id": "trade",
+        "label": "Giao dịch trong pool token/PPL",
+        "sub": "Giá công bằng từ lần swap đầu"
+      }
+    ],
+    "ctaWalletAuth": "Tạo ví / Đăng nhập bằng Google"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "Cho creator",
+      "body": "Ra mắt trong một phút: tên, ticker, ảnh, xong. Đường cong tích hợp định giá từ giao dịch đầu, không cần market maker hay presale. Phần của bạn mở khóa trong 180 ngày để cộng đồng yên tâm bạn không bán tháo."
+    },
+    {
+      "id": "community",
+      "title": "Cho cộng đồng",
+      "body": "10% mỗi token mới vào pool cộng đồng của token đó. Một phần mỗi phí mạng cũng vào đó. Người tham gia có phần trong những gì họ xây dựng."
+    },
+    {
+      "id": "everyone",
+      "title": "Cho mọi người",
+      "body": "Chỉ cần điện thoại hoặc trình duyệt. Không rig đào, không stake lớn. Tạo ví trong 30 giây và thử trên testnet."
+    },
+    {
+      "id": "contracts",
+      "title": "Dành cho người xây dựng",
+      "body": "Mô tả hợp đồng thông minh bằng lời thường — chúng tôi dựng từ mẫu OpenZeppelin đã kiểm tra.",
+      "ctaLabel": "Tạo hợp đồng",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Testnet đang mở.",
+    "body": "Đến sớm, phá thử, nói chúng tôi chỗ nào tệ.",
+    "cta": "Bắt đầu trên testnet"
+  },
+  "notInvestmentDisclaimer": "Đây là tham gia mạng, không phải đầu tư.",
+  "visuals": {
+    "supply": "Nguồn cung token",
+    "share": "10%",
+    "toPool": "vào quỹ cộng đồng",
+    "pool": "Quỹ cộng đồng",
+    "poolNote": "chia cho những người tham gia",
+    "aria": "10% nguồn cung của mỗi token mới vào quỹ cộng đồng của nó, chia cho những người tham gia.",
+    "prompt": "Một token mà người nắm giữ bỏ phiếu cách chi tiêu ngân quỹ",
+    "step1": "Bạn viết",
+    "step2": "Chúng tôi dựng",
+    "step3": "Bạn khởi chạy",
+    "contractTitle": "Token bỏ phiếu",
+    "contractLines": [
+      "Người nắm giữ bỏ phiếu cho đề xuất",
+      "Ngân quỹ chỉ chi khi có phiếu bầu",
+      "Mẫu OpenZeppelin đã kiểm toán"
+    ],
+    "deploy": "Triển khai",
+    "deployed": "Đang chạy trên mạng"
+  },
+  "agentsTeaser": {
+    "eyebrow": "AI cộng đồng",
+    "title": "Tác nhân AI cộng đồng",
+    "lead": "Ví chung với hạn mức rõ ràng — để tự động hóa giúp con người mà không lấy đi quyền kiểm soát.",
+    "cta": "Tìm hiểu thêm",
+    "cards": [
+      {
+        "title": "Trả tiền cho công việc thực sự",
+        "body": "Grant, đăng ký dịch vụ và dịch vụ — trong hạn mức cộng đồng đặt ra."
+      },
+      {
+        "title": "Quy tắc bạn có thể bỏ phiếu",
+        "body": "Hạn mức, danh sách cho phép và đóng băng chỉ thay đổi qua bỏ phiếu token."
+      },
+      {
+        "title": "Hiển thị trên explorer",
+        "body": "Mọi khoản chi đều on-chain — minh bạch như mọi ví khác."
+      },
+      {
+        "title": "Được xây cho các nhóm",
+        "body": "Câu lạc bộ, nhà sáng tạo và cộng đồng địa phương — không phải các đợt ra mắt meme ẩn danh."
+      }
+    ],
+    "ctaHref": "/agents"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Một triệu nhà sáng lập",
+    "lead": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet People's Blockchain.",
+    "cta": "Tham gia chương trình",
+    "href": "/founders",
+    "titleWithNumber": "Trở thành nhà sáng lập số {{n}} trước mainnet",
+    "titleFallback": "Trở thành một trong những nhà sáng lập đầu tiên trước khi mạng chính ra mắt"
+  }
+}

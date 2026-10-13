@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "社区区块链",
+    "headlineMain": "社区",
+    "headlineAccent": "区块链",
+    "headlineSecondary": "",
+    "slogan": "由人创建。为了社区。",
+    "valueLine": "社区参与网络创造的价值。",
+    "lead": "由社区建设。由社区共享。普通人参与发行、网络手续费路由和 Growth 推荐——同时由专职验证者保障共识。参与者不是验证者。",
+    "unlike": "在典型链上，用户主要是付手续费。这里把社区参与写进了经济设计。",
+    "ctaJoin": "成为参与者",
+    "ctaHow": "如何运作",
+    "ctaCreate": "创建代币",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10% 进入社区池",
+        "note": "每一枚新代币的供应量都会进入社区池。"
+      },
+      {
+        "id": "fees",
+        "value": "手续费",
+        "title": "网络手续费",
+        "note": "经由网络经济路由。"
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth 推荐",
+        "note": "两条付费线：Growth 奖励预算的 L1 70% · L2 30%。"
+      }
+    ],
+    "flowAria": "社区价值如何在网络中流动",
+    "flowPause": "暂停动画",
+    "flowPlay": "播放动画",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "代币已创建",
+        "sub": "一个项目在网络上发行"
+      },
+      {
+        "id": "community",
+        "label": "10% 社区 + 网络手续费",
+        "sub": "新代币的一部分与协议手续费保持分开"
+      },
+      {
+        "id": "economy",
+        "label": "网络经济 + Growth Pool",
+        "sub": "价值被路由，而不是消失"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "两条付费 Growth 推荐线"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "为何参与",
+    "title": "社区参与的三种不同方式",
+    "subtitle": "代币发行、网络手续费和 Growth 推荐是三套独立机制。绝不会合并成一笔个人付款。",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "每个新代币的 10% 进入社区池",
+        "body": "通过网络发行的每个标准代币会把初始供应量的 10% 送入该代币的 Community Pool，再到社区。这不是个人打款，也不是每笔手续费的 10%。",
+        "href": "/create/token",
+        "cta": "创建代币"
+      },
+      {
+        "id": "fees",
+        "kicker": "网络经济",
+        "title": "手续费不会消失——会被路由",
+        "body": "符合条件的网络手续费遵循已批准的 the fee split。这是网络经济路由，不是承诺每位参与者都能从每笔手续费中获得支付。",
+        "href": "#economics",
+        "cta": "手续费路由"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "Growth 奖励预算的 L1 70% · L2 30%",
+        "body": "Growth Pool（符合条件手续费的 15%）资助两条付费推荐线：Growth 奖励预算的 L1 70% 与 L2 30%。有别于 Token Factory 供给和 the fee split 手续费拆分。",
+        "href": "#partner",
+        "cta": "Growth 推荐"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "现行 Beta Growth 兑付：Growth 奖励预算的 L1 70% · L2 30%。Growth Pool 为符合条件手续费的 15%。有别于网络手续费的 the fee split 去向，也有别于每个新代币进入社区池的 10%。",
+    "you": "你",
+    "budgetNote": "百分比是 the fee split 把符合条件手续费的 15% 路由进 Growth Pool 之后，Growth 奖励预算的份额——不是每笔网络手续费的份额。",
+    "detailsTitle": "Growth 推荐如何运作",
+    "details": [
+      {
+        "title": "两条付费线",
+        "body": "L1（直接推荐）获得 70%，L2（第二级）获得现行 Growth 奖励预算的 30%。"
+      },
+      {
+        "title": "与手续费和代币分开",
+        "body": "L1/L2 的 Growth 权重不是 the fee split 网络手续费拆分，也不是每个新代币进入社区池的 10%。Growth Pool 是带有自身结算规则的 the fee split 手续费去向。"
+      },
+      {
+        "title": "本站",
+        "body": "本公开网站没有推荐登录或仪表盘。Growth 推荐随网络参与而存在。"
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "如何参与",
+    "subtitle": "以社区参与者身份加入 People’s Blockchain — 用手机、平板或浏览器。",
+    "steps": [
+      {
+        "num": "01",
+        "title": "从这里开始",
+        "body": "使用手机、平板或浏览器。你以参与者身份加入 — 不是共识验证者。",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "创建非托管钱包",
+        "body": "在浏览器中生成 12 词短语，写下来并用密码加密。密钥永不离开本设备。",
+        "href": "/wallet",
+        "cta": "打开钱包"
+      },
+      {
+        "num": "03",
+        "title": "在浏览器中查看资产",
+        "body": "在公开扫描器上查询区块、交易、地址、代币和 NFT。",
+        "href": "/explorer",
+        "cta": "打开浏览器"
+      },
+      {
+        "num": "04",
+        "title": "参与经济",
+        "body": "用同一钱包支付 Token Factory 与 NFT 铸造手续费。新代币进入社区池的 10%、网络手续费和 Growth 推荐仍是三种独立机制。",
+        "href": "/create",
+        "cta": "创建"
+      }
+    ],
+    "ctaJoin": "加入 People’s Blockchain",
+    "ctaHow": "如何运作"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "什么是社区区块链？",
+    "summary": "社区区块链 是社区基础设施：日常设备用于参与，协议层创建代币与项目，Proof-of-Stake 验证者生产区块。参与者不是验证者。",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "共识",
+        "summary": "PoS 验证者提议并证明区块。移动参与从不在法定人数中投票。"
+      },
+      {
+        "id": "economics",
+        "title": "经济",
+        "summary": "符合条件的网络手续费遵循已批准的 the fee split。用户代币市场是另一条通道。"
+      },
+      {
+        "id": "participation",
+        "title": "参与",
+        "summary": "手机、平板和浏览器。参与者不是验证者。"
+      },
+      {
+        "id": "technology",
+        "title": "技术",
+        "summary": "整数安全的多资产账本、对等网络，以及浏览链的工具。"
+      }
+    ],
+    "whyTitle": "为何存在",
+    "learnMore": "了解更多"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "我能做什么？",
+    "subtitle": "选一个角色。详情只需一键。",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "按协议规则发行代币、项目和社区经济。",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "运行提议、证明并最终确定区块的基础设施。",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "用日常设备加入。不是共识验证者角色。",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool 是 the fee split 手续费去向 — 不是保证或被动收入。",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "查阅区块、交易、代币和 NFT。",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "如何运作",
+    "subtitle": "贯穿网络的一条路径。打开一步查看确切机制。",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "在手机、平板或浏览器上持有钱包的人。",
+        "detail": "在手机、平板或浏览器上从非托管账户开始。你以社区中的人加入 — 不是验证者。"
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "转账、发行、曲线交易及其他已签名操作。",
+        "detail": "符合条件的操作以 PPL 支付协议手续费。每项操作在被接受前都经签名与检查。"
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "以质押为后盾、负责提议和见证的节点。",
+        "detail": "验证者是专用基础设施。手机和浏览器不生产区块。"
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "有序、对整数安全的状态转换。",
+        "detail": "验证者把已签名操作组装进区块。日常设备不参与该过程。"
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "验证者节点之间共享的链。",
+        "detail": "验证者节点彼此共享区块，使网络保持同一状态。"
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "网络手续费与每个代币的社区份额留在独立通道中。",
+        "detail": "以 PPL 计价的网络手续费遵循 the fee split。标准用户创建代币将该代币供给的 10% 送入其自身社区池 — 那不是网络手续费。"
+      }
+    ],
+    "storyCta": "完整可视化故事"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People 是 社区区块链 的原生资产。代码：PPL。",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "网络操作的结算资产：手续费、代币创建以及规范中描述的协议服务。"
+      },
+      {
+        "title": "NETWORK",
+        "body": "计量实时手续费拆分器按 the fee split 路由的符合条件协议手续费。"
+      },
+      {
+        "title": "FEES",
+        "body": "在符合条件的操作上以 PPL 支付。确切费率仍属协议/配置 — 本页不编造费率。"
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "用于网络经济记账。Participation Power 不是可转让代币，也不是验证者投票权。"
+      }
+    ],
+    "notMarket": "本站不公布价格、市值、上架、ROI、APY、流动性深度或未来价格。"
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "网络与验证者",
+    "summary": "共识是带有领导者和证明法定人数的 Proof-of-Stake。手机是参与者，不是验证者。",
+    "facts": [
+      {
+        "label": "角色",
+        "value": "验证者保障链；参与者从不进入法定人数。"
+      },
+      {
+        "label": "谁运行什么",
+        "value": "专用节点提议并证明区块。手机、平板和浏览器以参与者身份加入。"
+      },
+      {
+        "label": "公开网络",
+        "value": "公开测试网 v2 正在运行。这不是 Mainnet。"
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "网络手续费经济",
+    "summary": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。",
+    "splits": [
+      {
+        "label": "验证者",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "金库",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "流动性与生态",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "销毁",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool 获得符合条件手续费的 15%。不是保证收入、被动回报或投资产品。",
+    "detailsTitle": "手续费路由如何运作",
+    "detailsBody": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。 After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "如何解释奖励"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "创建 → 发行 → 发现 → 交易",
+    "subtitle": "创建代币，用内置定价发行，让他人发现，并在发行曲线上交易。",
+    "steps": [
+      {
+        "title": "创建",
+        "body": "使用 Token Factory 表单：图片、名称、代码、供给，然后用 PPL 支付。"
+      },
+      {
+        "title": "发行",
+        "body": "虚拟 bonding curve 从第一个区块起提供连续定价。"
+      },
+      {
+        "title": "项目动态",
+        "body": "资产出现在网络登记中，便于社区发现。"
+      },
+      {
+        "title": "交易",
+        "body": "在发行曲线上买卖，然后在已上线的代币/PPL AMM 资金池中兑换。"
+      }
+    ],
+    "expandTitle": "发行曲线、流动性、归属",
+    "expandItems": [
+      "发行定价使用精确整数运算的恒定乘积曲线。",
+      "曲线上的协议交易费经网络手续费经济路由。",
+      "标准发行拆分强制将该代币供给的 10% 放入其自身社区池（不是 PPL 网络手续费）。",
+      "创建者归属使创建者份额大部分随时间解锁，以免社区在第一天被抛售。"
+    ],
+    "createCta": "打开 Token Factory",
+    "nftCta": "创建 NFT",
+    "swapCta": "打开兑换"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "技术",
+    "subtitle": "技术栈是什么。打开卡片看面向用户的说明。",
+    "cards": [
+      {
+        "title": "共识",
+        "summary": "Proof-of-Stake 验证者提议并证明区块。手机不投票。"
+      },
+      {
+        "title": "状态",
+        "summary": "原生 PPL 与用户创建代币上的精确整数余额。"
+      },
+      {
+        "title": "网络",
+        "summary": "验证者节点共享区块，使链保持同一状态。"
+      },
+      {
+        "title": "持久化",
+        "summary": "每个验证者保存继续运行所需的实时网络状态。"
+      },
+      {
+        "title": "安全",
+        "summary": "已签名操作、角色分离，检查不可绕过。"
+      },
+      {
+        "title": "工具",
+        "summary": "HTTP API 和浏览器，让人们可以读取网络。"
+      }
+    ],
+    "archTitle": "交互式架构",
+    "invTitle": "数学不变量"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "网络现在到哪一步",
+    "subtitle": "产品阶段。此处不公布上线日期。",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "账本、社区记账与网络手续费路由。",
+          "代币创建与发行曲线市场。",
+          "社区参与发行、手续费与 Growth 推荐。"
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "公开测试网正在运行。",
+          "这不是 Mainnet，也不是对公开实盘价值交易的承诺。"
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "更广的公开访问是社区下一阶段。"
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "人际网络：移动参与、人性证明与反刷量。",
+          "本站不公布公开上线日期。"
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "文档",
+    "summary": "钱包、参与和你自己的节点 — 从实用指南开始。",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "阅读指南",
+        "hint": "入门、奖励与节点设置"
+      },
+      {
+        "href": "#economics",
+        "label": "网络手续费",
+        "hint": "符合条件的 PPL 手续费的 the fee split 路由"
+      }
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "title": "Agenti IA della community",
+    "description": "Come gli agenti IA della community possono spendere per conto di un gruppo — con limiti, voti e cronologia pubblica."
+  },
+  "hero": {
+    "title": "Agenti IA della community",
+    "lead": "Un agente è un software che può inviare transazioni da un wallet condiviso — solo nei limiti delle regole che la tua community stabilisce e approva."
+  },
+  "liveAgent": {
+    "badge": "Live on testnet",
+    "title": "Agente comunitario n. 1",
+    "lead": "Un vero CommunityAgentWallet v2 sta già spendendo piccole somme on-chain, entro limiti rigidi che chiunque può verificare.",
+    "walletLabel": "Portafoglio",
+    "executorLabel": "Esecutore",
+    "guardianLabel": "Guardian (blocco istantaneo)",
+    "balanceLabel": "Saldo attuale",
+    "limitsLabel": "Limiti",
+    "limitsText": "1 PPL per transazione · 5 PPL ogni 24h scorrevoli · 20 PPL ogni 7 giorni scorrevoli · whitelist dei destinatari attiva",
+    "eventsTitle": "Spese recenti",
+    "eventsEmpty": "Nessuna spesa registrata finora.",
+    "eventsLoading": "Caricamento delle spese recenti…",
+    "eventsError": "Impossibile caricare le spese recenti. Riprova più tardi.",
+    "amountLabel": "Importo",
+    "recipientLabel": "Destinatario",
+    "timeLabel": "Ora",
+    "viewTx": "Vedi nell'explorer"
+  },
+  "sections": {
+    "how": {
+      "title": "Come funziona",
+      "body": "La community finanzia uno smart-wallet condiviso. Un agente IA propone pagamenti — per grant, strumenti o servizi. Ogni spesa deve rientrare in limiti giornalieri e settimanali e in una allow-list di destinatari. I possessori del token possono cambiare le regole tramite voto. Nulla avviene in segreto: ogni azione ha un hash che puoi aprire nell'explorer."
+    },
+    "limits": {
+      "title": "Limiti e voto",
+      "items": [
+        {
+          "title": "Tetti rigidi",
+          "text": "Per transazione, per giorno e per settimana — così un bug o un prompt non può svuotare il tesoro."
+        },
+        {
+          "title": "Allow-list",
+          "text": "I fondi vanno solo verso indirizzi già approvati dalla community."
+        },
+        {
+          "title": "Voto del Governor",
+          "text": "Cambiare i limiti, la allow-list o l'agente stesso richiede un voto on-chain del token."
+        },
+        {
+          "title": "Blocco di emergenza",
+          "text": "I guardiani scelti dalla community possono sospendere la spesa durante un'indagine."
+        }
+      ]
+    },
+    "security": {
+      "title": "Sicurezza e trasparenza",
+      "items": [
+        {
+          "title": "Pubblico per impostazione predefinita",
+          "text": "Saldi, voti e pagamenti sono visibili come in qualsiasi altro wallet — nessuna chiave admin nascosta sui nostri server."
+        },
+        {
+          "title": "Metriche aperte",
+          "text": "Prevediamo di pubblicare come contiamo un «agente attivo» (ad esempio, un wallet con almeno una transazione in uscita al giorno), così chiunque può ricalcolare i numeri."
+        },
+        {
+          "title": "Non è un launcher di memecoin",
+          "text": "Gli agenti servono per il lavoro reale della community, non per lanciare token scherzosi."
+        }
+      ]
+    },
+    "comingNext": {
+      "title": "In arrivo",
+      "lead": "Altri strumenti per agenti dalla roadmap — non ancora live.",
+      "items": [
+        {
+          "title": "Scudo anti-truffa IA",
+          "body": "Avvisi prima di trasferimenti e contratti rischiosi, per l’uso quotidiano."
+        },
+        {
+          "title": "Sintesi IA dei voti di governance",
+          "body": "Spiegazioni brevi e neutrali dei voti on-chain sul sito."
+        },
+        {
+          "title": "Registro agenti ERC-8004 / pagamenti x402",
+          "body": "Registro on-chain e pagamenti compatibili con standard emergenti."
+        }
+      ]
+    }
+  },
+  "homeTeaser": {
+    "eyebrow": "IA della community",
+    "title": "Agenti IA della community",
+    "lead": "Wallet condivisi con limiti chiari — così l'automazione aiuta le persone senza togliere loro il controllo.",
+    "cta": "Scopri di più",
+    "cards": [
+      {
+        "title": "Pagare per lavoro reale",
+        "body": "Grant, abbonamenti e servizi — entro i limiti fissati dalla community."
+      },
+      {
+        "title": "Regole su cui puoi votare",
+        "body": "Limiti, allow-list e blocchi cambiano solo tramite voto del token."
+      },
+      {
+        "title": "Visibile nell'explorer",
+        "body": "Ogni pagamento è on-chain — la stessa trasparenza di qualsiasi altro wallet."
+      },
+      {
+        "title": "Pensato per i gruppi",
+        "body": "Club, creator e community locali — non lanci meme anonimi."
+      }
+    ]
+  },
+  "workflow": {
+    "aria": "Come funziona un agente IA: compito, regole, firma, conferma di rete, risultato.",
+    "steps": [
+      {
+        "id": "task",
+        "title": "Compito",
+        "body": "Qualcuno chiede lavoro all'agente."
+      },
+      {
+        "id": "rules",
+        "title": "Regole",
+        "body": "Si controllano limiti e allow-list."
+      },
+      {
+        "id": "sign",
+        "title": "Firma",
+        "body": "L'agente firma la transazione."
+      },
+      {
+        "id": "confirm",
+        "title": "Rete",
+        "body": "La rete conferma on-chain."
+      },
+      {
+        "id": "result",
+        "title": "Risultato",
+        "body": "Il risultato torna all'utente."
+      }
+    ]
+  }
+}

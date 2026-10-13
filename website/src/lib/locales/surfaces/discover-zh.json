@@ -1,0 +1,151 @@
+{
+  "navLabel": "项目动态",
+  "tagline": "发现新项目。帮助好想法触达用户。从一开始就参与。",
+  "title": "项目动态",
+  "lead": "每张卡片由你的文字、代币图标和截图组成。可选短视频会让卡片在动态中更靠前。",
+  "createCta": "分享你的项目",
+  "empty": "暂无内容。成为第一个分享想法的人。",
+  "signInHint": "登录并绑定钱包即可互动或提问。",
+  "walletHint": "在合作伙伴后台绑定钱包以参与。",
+  "walletLink": "打开账户",
+  "loginLink": "登录",
+  "stageLabel": "圈层",
+  "stageAll": "全部",
+  "needsWork": "卡片需要更清晰的介绍。阅读下方反馈，编辑后再次提交。",
+  "resubmit": "编辑并再次提交",
+  "promoted": "触达更广圈层",
+  "votes": {
+    "interesting": "有趣",
+    "unclear": "不清楚",
+    "not_interesting": "不适合我"
+  },
+  "askQuestion": "提问",
+  "follow": "关注",
+  "following": "已关注",
+  "tryProduct": "试用产品",
+  "readMore": "了解更多",
+  "tokenLink": "查看代币",
+  "questionPlaceholder": "你想了解什么？",
+  "sendQuestion": "发送",
+  "form": {
+    "title": "分享你的项目",
+    "lead": "用通俗语言描述项目并选择代币。卡片会自动生成。可添加截图和可选短视频。",
+    "name": "项目名称",
+    "screenshots": "截图",
+    "screenshotsHint": "PNG、JPEG 或 WebP — 产品、应用或原型（最多 8 张）。",
+    "addVideoOptional": "添加短视频（可选）",
+    "videoTemplateTitle": "在视频中回答这三个问题：",
+    "videoQ1": "你做什么？",
+    "videoQ2": "面向谁？",
+    "videoQ3": "为什么需要代币？",
+    "video": "视频文件",
+    "videoHint": "MP4 或 WebM，30–60 秒。或粘贴链接。",
+    "videoUrl": "视频链接",
+    "idea": "你做什么",
+    "audience": "面向谁",
+    "whyToken": "为什么需要代币",
+    "token": "网络上的代币",
+    "productUrl": "产品链接（可选）",
+    "submit": "发布到第一圈层",
+    "durationError": "视频长度须在 30–60 秒之间。",
+    "durationTooShort": "视频至少 30 秒。",
+    "uploadError": "上传失败。请尝试链接。",
+    "screenshotError": "无法上传此图片。",
+    "success": "你的项目已在第一圈层上线。"
+  },
+  "detail": {
+    "back": "返回动态",
+    "idea": "你做什么",
+    "audience": "面向谁",
+    "whyToken": "为什么需要代币",
+    "feedback": "本版本反馈",
+    "questions": "问题"
+  },
+  "stats": {
+    "title": "动态指标",
+    "uniqueVisitors": "已登录访客",
+    "returning": "14 天内回访",
+    "totalEvents": "访问事件",
+    "window": "回访窗口（天）"
+  },
+  "errors": {
+    "generic": "出了点问题。请重试。",
+    "rateLimited": "操作过于频繁。请稍候。",
+    "notFound": "该项目已不在动态中。"
+  },
+  "loading": "加载中…",
+  "seedCards": {
+    "discover-seed-v1-roscash": {
+      "title": "ROSCASH",
+      "summary": "链上轮流储蓄圈与社区零用钱。",
+      "idea": "链上社区零钱：小费、小额支付和本地奖励，无需银行居中。",
+      "audience": "邻里小组、创作者以及在朋友间流转小额资金的人。",
+      "whyToken": "专用资产将社区余额与日常网络手续费分开，让分配规则对所有人可见。",
+      "tags": [
+        "轮流储蓄",
+        "本地支付",
+        "社区"
+      ]
+    },
+    "discover-seed-v1-tpitp": {
+      "title": "People Tips",
+      "summary": "在 People 网络上向创作者和团队发送小额感谢小费。",
+      "idea": "用为微支持设计的代币表达感谢——演唱会、直播和开源维护者。",
+      "audience": "粉丝、赞助人和收集许多小小「谢谢」的团队。",
+      "whyToken": "小费留在社区自己的账本中，而不是封闭应用余额。",
+      "tags": [
+        "小费",
+        "创作者",
+        "微支付"
+      ]
+    },
+    "discover-seed-v1-tmark": {
+      "title": "TMARK",
+      "summary": "团队共同达成里程碑的链上徽章。",
+      "idea": "一起标记里程碑——活动、发布和共同目标，使用链上徽章代币。",
+      "audience": "公开庆祝进步的俱乐部、批次和产品团队。",
+      "whyToken": "持有者可在不暴露隐私的情况下证明从第一天就参与。",
+      "tags": [
+        "里程碑",
+        "活动",
+        "成员"
+      ]
+    },
+    "discover-seed-v1-swap": {
+      "title": "People Swap",
+      "summary": "在浏览器中将社区测试代币兑换为 PPL。",
+      "idea": "在浏览器中将社区演示代币兑换为 PPL——无需单独的交易所账户。",
+      "audience": "在投入项目前试用测试网资产的人。",
+      "whyToken": "流动性交易对展示网络上新发行的真实价格发现。",
+      "tags": [
+        "兑换",
+        "流动性",
+        "演示代币"
+      ]
+    },
+    "discover-seed-v1-factory": {
+      "title": "Token Factory",
+      "summary": "以名称、图片和内置规则启动公平的社区代币。",
+      "idea": "从网站直接启动带图片、名称和公平发行规则的项目代币。",
+      "audience": "希望拥有社区资产而无需手写智能合约的创始人。",
+      "whyToken": "工厂执行归属和社区池分配，让支持者看到与你相同的规则。",
+      "tags": [
+        "代币发行",
+        "创作者",
+        "公平规则"
+      ]
+    },
+    "discover-seed-v1-nft": {
+      "title": "创作者收藏品",
+      "summary": "为你的发售、活动或会员铸造视觉收藏品。",
+      "idea": "铸造代表发售、活动或会员卡片的视觉收藏品。",
+      "audience": "希望稀缺且易于分享的艺术家和社区。",
+      "whyToken": "NFT 与项目代币在同一条链上携带元数据和来源。",
+      "tags": [
+        "铸造",
+        "视觉",
+        "收藏品"
+      ]
+    }
+  }
+}

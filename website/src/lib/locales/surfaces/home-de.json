@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "brandLine": "People — die Blockchain für Gemeinschaften",
+    "headlineMain": "Starten Sie einen Token für Ihre Community.",
+    "headlineMainLines": [
+      "Starten Sie einen Token",
+      "für Ihre",
+      "Community."
+    ],
+    "headlineAccent": "10 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccentLines": [
+      "10 % gehen an Ihre Leute,",
+      "nicht an Wale."
+    ],
+    "sub": "People's Blockchain ist der Ort, an dem Creator Tokens mit fairer Preisfindung ab Block eins starten – und die Community einen festen Anteil an allem erhält, was sie mitwachsen lässt.",
+    "testnetBadge": "Öffentliches Testnet ist live. Noch kein Mainnet.",
+    "ctaCreate": "Token erstellen",
+    "ctaWallet": "Wallet öffnen",
+    "flowAria": "Vier Schritte: vom Wallet zum Token-Handel",
+    "flowPause": "Pause",
+    "flowPlay": "Abspielen",
+    "flowSteps": [
+      {
+        "id": "wallet",
+        "label": "Wallet erstellen",
+        "sub": "Im Browser in unter einer Minute"
+      },
+      {
+        "id": "launch",
+        "label": "Token starten",
+        "sub": "Startgebühr in PPL bezahlen"
+      },
+      {
+        "id": "community",
+        "label": "10 % in den Community-Pool",
+        "sub": "In jedem neuen Token eingebaut"
+      },
+      {
+        "id": "trade",
+        "label": "Im Token/PPL-Pool handeln",
+        "sub": "Fairer Preis ab dem ersten Swap"
+      }
+    ],
+    "ctaWalletAuth": "Wallet erstellen / Mit Google anmelden"
+  },
+  "blocks": [
+    {
+      "id": "creators",
+      "title": "Für Creator",
+      "body": "Start in einer Minute: Name, Ticker, Bild, fertig. Eine eingebaute Bonding Curve bepreist ab dem ersten Trade – ohne Market Maker oder Presale. Ihr Anteil vestet über 180 Tage, damit die Community weiß, dass Sie nicht alles sofort verkaufen."
+    },
+    {
+      "id": "community",
+      "title": "Für die Community",
+      "body": "10 % jedes neuen Tokens gehen in den Community-Pool dieses Tokens. Ein Teil jeder Netzwerkgebühr fließt ebenfalls dorthin. Wer mitmacht, bekommt Anteil an dem, was entsteht."
+    },
+    {
+      "id": "everyone",
+      "title": "Für alle",
+      "body": "Sie brauchen nur Handy oder Browser. Keine Mining-Rigs, kein großer Stake. Wallet in 30 Sekunden anlegen und im Testnet ausprobieren."
+    },
+    {
+      "id": "contracts",
+      "title": "Für Entwickler",
+      "body": "Beschreiben Sie einen Smart Contract in einfachen Worten — wir bauen aus geprüften OpenZeppelin-Vorlagen.",
+      "ctaLabel": "Vertrag erstellen",
+      "ctaHref": "/create/contract"
+    }
+  ],
+  "footerCta": {
+    "title": "Testnet ist offen.",
+    "body": "Seien Sie früh dabei, brechen Sie Dinge, sagen Sie uns, was nervt.",
+    "cta": "Im Testnet starten"
+  },
+  "notInvestmentDisclaimer": "Das ist Teilnahme an einem Netzwerk, keine Anlage.",
+  "visuals": {
+    "supply": "Token-Menge",
+    "share": "10 %",
+    "toPool": "gehen in den Community-Pool",
+    "pool": "Community-Pool",
+    "poolNote": "geteilt unter allen, die mitmachen",
+    "aria": "10 % jedes neuen Tokens fließen in seinen Community-Pool und werden unter allen geteilt, die mitmachen.",
+    "prompt": "Ein Token, dessen Halter über die Ausgaben der Kasse abstimmen",
+    "step1": "Sie schreiben",
+    "step2": "Wir bauen",
+    "step3": "Sie starten",
+    "contractTitle": "Abstimmungs-Token",
+    "contractLines": [
+      "Halter stimmen über Vorschläge ab",
+      "Die Kasse zahlt nur nach Abstimmung",
+      "Geprüfte OpenZeppelin-Vorlage"
+    ],
+    "deploy": "Bereitstellen",
+    "deployed": "Live im Netzwerk"
+  },
+  "agentsTeaser": {
+    "eyebrow": "Community-KI",
+    "title": "Community-KI-Agenten",
+    "lead": "Gemeinsame Wallets mit klaren Limits — damit Automatisierung Menschen hilft, ohne ihnen die Kontrolle zu nehmen.",
+    "cta": "Mehr erfahren",
+    "cards": [
+      {
+        "title": "Für echte Arbeit bezahlen",
+        "body": "Grants, Abonnements und Dienstleistungen — innerhalb der von der Community festgelegten Limits."
+      },
+      {
+        "title": "Regeln, über die du abstimmen kannst",
+        "body": "Limits, Allow-Lists und Einfrierungen ändern sich nur per Token-Abstimmung."
+      },
+      {
+        "title": "Sichtbar im Explorer",
+        "body": "Jede Auszahlung ist on-chain — dieselbe Transparenz wie bei jeder anderen Wallet."
+      },
+      {
+        "title": "Gebaut für Gruppen",
+        "body": "Clubs, Creator und lokale Communities — keine anonymen Meme-Starts."
+      }
+    ],
+    "ctaHref": "/agents"
+  },
+  "foundersTeaser": {
+    "eyebrow": "Eine Million Gründer",
+    "lead": "Verifizierte Teilnehmer erhalten ihre Nummer, einen Früheinstiegsbonus und Aktivitätspunkte im People's Blockchain-Testnet.",
+    "cta": "Gründer werden",
+    "href": "/founders",
+    "titleWithNumber": "Werde Gründer Nr. {{n}} vor dem Mainnet",
+    "titleFallback": "Gehöre zu den ersten Gründern vor dem Start des Mainnets"
+  }
+}

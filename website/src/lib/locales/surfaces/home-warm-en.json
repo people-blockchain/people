@@ -1,0 +1,143 @@
+{
+  "hero": {
+    "brandLine": "PEOPLE — a blockchain for communities",
+    "headlineMain": "Launch a token for your community.",
+    "headlineMainLines": ["Launch a token for your community."],
+    "headlineAccent": "10% goes to your people, not to whales.",
+    "headlineAccentLines": [
+      "10% goes to your people,",
+      "not to whales."
+    ],
+    "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds and try it on the testnet.",
+    "pitchLine": "A blockchain for ordinary people: your own token, club NFT cards and raising money for an idea — no code.",
+    "testnetBadge": "Public testnet is live. Not mainnet yet.",
+    "ctaTestnet": "Try the testnet",
+    "ctaFounder": "Claim your founder number",
+    "card": {
+      "badge": "Example",
+      "tokenName": "Your community token",
+      "ticker": "TICKER",
+      "price": "$0.0138"
+    },
+    "stages": [
+      {
+        "id": "wallet",
+        "label": "A wallet in 30 seconds",
+        "sub": "Your keys stay on your phone or in your browser."
+      },
+      {
+        "id": "token",
+        "label": "Your token, priced from the first trade",
+        "sub": "Pick a name and a ticker. The bonding curve does the pricing."
+      },
+      {
+        "id": "share",
+        "label": "10% to your people",
+        "sub": "Every new token sends 10% of its supply to its own community pool."
+      }
+    ],
+    "shareBadge": "10% community share",
+    "peopleLine": "Your people, not whales"
+  },
+  "community": {
+    "eyebrow": "10% to the community",
+    "title": "10% of every new token goes to your people",
+    "lead": "Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.",
+    "statLabel": "of every new token's supply goes to its community pool",
+    "statNote": "The pool belongs to the people who take part in that token — not to the network and not to the creator.",
+    "footnote": "Network fees are split separately: {{community}}% to the community pool, {{validators}}% to validators.",
+    "cta": "Where the fees go",
+    "href": "/how-it-works#hiw-fees"
+  },
+  "build": {
+    "eyebrow": "No code, no crypto skills",
+    "title": "What you can do without code",
+    "lead": "Everything below runs on the public testnet today. Nothing to install, nothing to compile.",
+    "cta": "Try on testnet",
+    "cards": [
+      {
+        "id": "token",
+        "title": "Launch a club or community token in a minute",
+        "body": "Pick a name, a ticker, an image and a supply. Pay the launch fee in PPL and the token is live on its own bonding curve.",
+        "href": "/create/token"
+      },
+      {
+        "id": "nft",
+        "title": "Mint NFT club cards",
+        "body": "Membership cards as NFTs: one per member, with an image you upload or generate in the browser.",
+        "href": "/create/nft"
+      },
+      {
+        "id": "funding",
+        "title": "Raise funding for your idea",
+        "body": "Your community buys in on the curve from the first trade, so the price is set by real demand instead of a private round.",
+        "href": "/create"
+      },
+      {
+        "id": "contract",
+        "title": "Describe a smart contract in plain words",
+        "body": "Write what you want in ordinary language and get a contract built from audited OpenZeppelin templates. You see the result before you deploy.",
+        "href": "/create/contract"
+      }
+    ]
+  },
+  "fair": {
+    "eyebrow": "Why it's fair",
+    "title": "The same rules for every community",
+    "lead": "Three rules are built into the protocol, not promised in a post.",
+    "tiles": [
+      {
+        "id": "community-share",
+        "stat": "10%",
+        "title": "of every new token goes to that token's community pool",
+        "body": "Not to the network, not to the creator. The token's own pool, shared with the people who take part."
+      },
+      {
+        "id": "vesting",
+        "stat": "180 days",
+        "title": "before a creator's share is fully unlocked",
+        "body": "The creator's allocation vests linearly over 180 days, so there is no dump on day one."
+      },
+      {
+        "id": "fees",
+        "stat": "0%",
+        "title": "of network fees are burned — people get them instead",
+        "body": "Every fee is split between validators, the community pool, the treasury, liquidity and Growth. Nothing is destroyed to fake scarcity."
+      }
+    ]
+  },
+  "foundersTeaser": {
+    "eyebrow": "Million Founders",
+    "title": "Founder numbers are still being handed out",
+    "titleWithNumber": "Founder #{{n}} is next",
+    "lead": "Claim a number, get a card you can share, and earn a share of the community pool by being early and active.",
+    "cta": "Become a founder",
+    "href": "/founders",
+    "cardHint": "Two levels, active people only, 10% up front and the rest over 52 weeks.",
+    "liveCountLabel": "Founders so far"
+  },
+  "agents": {
+    "eyebrow": "Community AI agents",
+    "title": "Agents that work for the group",
+    "lead": "Agents are first-class users of the network: they pay for what they use and answer to the people they serve.",
+    "cta": "Meet the agents",
+    "href": "/agents"
+  },
+  "network": {
+    "eyebrow": "Live network",
+    "title": "Public testnet, right now",
+    "blockHeight": "Block height",
+    "chainLabel": "Testnet chain",
+    "explorer": "Open the explorer",
+    "unavailable": "Block height is unavailable right now.",
+    "collecting": "Reading the network…",
+    "note": "This is a testnet. The numbers above are real, the tokens are not."
+  },
+  "final": {
+    "title": "Testnet is open. Be early, break things, tell us what sucks.",
+    "body": "Every bug report and every confused question goes straight into what we build next.",
+    "ctaWallet": "Create a wallet",
+    "ctaExplore": "Look at the explorer",
+    "socialLabel": "Follow along"
+  }
+}

@@ -1,0 +1,480 @@
+{
+  "hero": {
+    "tag": "POUR LA COMMUNAUTÉ",
+    "headlineMain": "BLOCKCHAIN",
+    "headlineAccent": "POUR LA COMMUNAUTÉ",
+    "headlineSecondary": "",
+    "slogan": "Créé par des personnes. Pour la communauté.",
+    "valueLine": "La communauté participe à la valeur créée par le réseau.",
+    "lead": "Bâti par la communauté. Partagé par la communauté. Les personnes ordinaires prennent part à l’émission, à l’acheminement des frais de réseau et au Growth-referral — tandis que des validateurs dédiés sécurisent le consensus. Les participants ne sont pas des validateurs.",
+    "unlike": "Sur une blockchain typique, les utilisateurs paient surtout des frais. Ici, la participation de la communauté est conçue dans l’économie.",
+    "ctaJoin": "Rejoindre",
+    "ctaHow": "Comment ça marche",
+    "ctaCreate": "Créer un jeton",
+    "pillars": [
+      {
+        "id": "allocation",
+        "value": "10%",
+        "title": "10 % vers le pool communautaire",
+        "note": "De l’offre de chaque nouveau jeton va au pool communautaire."
+      },
+      {
+        "id": "fees",
+        "value": "Frais",
+        "title": "Frais de réseau",
+        "note": "Acheminés à travers l’économie du réseau."
+      },
+      {
+        "id": "partner",
+        "value": "70/30",
+        "title": "Growth-referral",
+        "note": "Deux lignes payées : L1 70 % · L2 30 % du budget de récompense Growth."
+      }
+    ],
+    "flowAria": "Comment la valeur communautaire circule dans le réseau",
+    "flowPause": "Mettre l’animation en pause",
+    "flowPlay": "Lire l’animation",
+    "flowSteps": [
+      {
+        "id": "created",
+        "label": "Jeton créé",
+        "sub": "Un projet se lance sur le réseau"
+      },
+      {
+        "id": "community",
+        "label": "10 % communauté + frais de réseau",
+        "sub": "Une part du nouveau jeton et le frais de protocole restent séparés"
+      },
+      {
+        "id": "economy",
+        "label": "Économie de réseau + Growth Pool",
+        "sub": "La valeur est acheminée, elle ne disparaît pas"
+      },
+      {
+        "id": "lines",
+        "label": "L1 70% → L2 30%",
+        "sub": "Deux lignes Growth-referral payées"
+      }
+    ]
+  },
+  "value": {
+    "id": "community-value",
+    "tag": "POURQUOI PARTICIPER",
+    "title": "Trois façons distinctes dont la communauté prend part",
+    "subtitle": "L’émission de jetons, les frais de réseau et le Growth-referral sont trois mécanismes séparés. Ils ne sont jamais fusionnés en un paiement personnel.",
+    "cards": [
+      {
+        "id": "allocation",
+        "kicker": "TOKEN FACTORY",
+        "title": "10 % de chaque nouveau jeton va au pool communautaire",
+        "body": "Chaque jeton standard lancé via le réseau envoie 10 % de son offre initiale au Community Pool de ce jeton — puis à la communauté. Ce n’est pas un paiement personnel, ni 10 % de chaque frais.",
+        "href": "/create/token",
+        "cta": "Créer un jeton"
+      },
+      {
+        "id": "fees",
+        "kicker": "ÉCONOMIE DE RÉSEAU",
+        "title": "Les frais ne disparaissent pas — ils sont acheminés",
+        "body": "Les frais de réseau éligibles suivent the fee split approuvé. C’est un acheminement d’économie de réseau, pas une promesse que chaque participant est payé de chaque frais.",
+        "href": "#economics",
+        "cta": "Acheminement des frais"
+      },
+      {
+        "id": "partner",
+        "kicker": "GROWTH REFERRAL",
+        "title": "L1 70 % · L2 30 % du budget de récompense Growth",
+        "body": "Growth Pool (15 % des frais éligibles) finance deux lignes de referral payées : L1 à 70 % et L2 à 30 % du budget de récompense Growth. Distinct de l’offre Token Factory et du partage des frais the fee split.",
+        "href": "#partner",
+        "cta": "Growth-referral"
+      }
+    ]
+  },
+  "partner": {
+    "id": "partner",
+    "tag": "GROWTH REFERRAL",
+    "title": "You → L1 → L2",
+    "subtitle": "Paiement Growth Beta actif : L1 70 % · L2 30 % du budget de récompense Growth. Growth Pool est 15 % des frais éligibles. Distinct des destinations the fee split des frais de réseau et des 10 % de chaque nouveau jeton qui vont au pool communautaire.",
+    "you": "Vous",
+    "budgetNote": "Les pourcentages sont des parts du budget de récompense Growth après que the fee split achemine 15 % des frais éligibles vers le Growth Pool — pas des parts de chaque frais de réseau.",
+    "detailsTitle": "Comment fonctionne le Growth-referral",
+    "details": [
+      {
+        "title": "Deux lignes payées",
+        "body": "L1 (referral direct) reçoit 70 % et L2 (deuxième niveau) reçoit 30 % du budget actif de récompense Growth."
+      },
+      {
+        "title": "Séparé des frais et des jetons",
+        "body": "Les poids Growth L1/L2 ne sont pas le partage the fee split des frais de réseau ni les 10 % de chaque nouveau jeton pour le pool communautaire. Growth Pool est une destination de frais the fee split avec ses propres règles de règlement."
+      },
+      {
+        "title": "Ce site",
+        "body": "Il n’y a pas de connexion ni de tableau de bord de referral sur ce site public. Le Growth-referral vit avec la participation au réseau."
+      }
+    ]
+  },
+  "join": {
+    "id": "join",
+    "tag": "JOIN",
+    "title": "Comment participer",
+    "subtitle": "Rejoignez People’s Blockchain comme participant de la communauté — depuis un téléphone, une tablette ou un navigateur.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Commencez ici",
+        "body": "Utilisez un téléphone, une tablette ou un navigateur. Vous rejoignez comme participant — pas comme validateur de consensus.",
+        "href": "/wallet",
+        "cta": ""
+      },
+      {
+        "num": "02",
+        "title": "Créer un portefeuille non custodial",
+        "body": "Générez une phrase de 12 mots dans le navigateur, notez-la et chiffrez-la avec un mot de passe. Les clés ne quittent jamais cet appareil.",
+        "href": "/wallet",
+        "cta": "Ouvrir le portefeuille"
+      },
+      {
+        "num": "03",
+        "title": "Voir les actifs dans l’explorateur",
+        "body": "Consultez blocs, transactions, adresses, jetons et NFT sur le scanner public.",
+        "href": "/explorer",
+        "cta": "Ouvrir l’explorateur"
+      },
+      {
+        "num": "04",
+        "title": "Prendre part à l’économie",
+        "body": "Payez les frais Token Factory et de mint NFT depuis le même portefeuille. La part de 10 % au pool communautaire sur les nouveaux jetons, les frais de réseau et le Growth-referral restent trois mécanismes séparés.",
+        "href": "/create",
+        "cta": "Créer"
+      }
+    ],
+    "ctaJoin": "Rejoindre People’s Blockchain",
+    "ctaHow": "Comment ça marche"
+  },
+  "whatIs": {
+    "id": "what-is",
+    "tag": "WHAT",
+    "title": "Qu’est-ce que Blockchain pour la communauté ?",
+    "summary": "Blockchain pour la communauté est une infrastructure communautaire : appareils ordinaires pour participer, création de jetons et de projets au niveau du protocole, et validateurs Proof-of-Stake pour produire des blocs. Les participants ne sont pas des validateurs.",
+    "items": [
+      {
+        "id": "consensus",
+        "title": "Consensus",
+        "summary": "Les validateurs PoS proposent et attestent des blocs. La participation mobile ne vote jamais au quorum."
+      },
+      {
+        "id": "economics",
+        "title": "Économie",
+        "summary": "Les frais de réseau éligibles suivent the fee split approuvé. Les marchés de jetons utilisateur sont un canal séparé."
+      },
+      {
+        "id": "participation",
+        "title": "Participation",
+        "summary": "Téléphones, tablettes et navigateurs. Les participants ne sont pas des validateurs."
+      },
+      {
+        "id": "technology",
+        "title": "Technologie",
+        "summary": "Registre multi-actifs sûr pour les entiers, un réseau de pairs et des outils pour explorer la chaîne."
+      }
+    ],
+    "whyTitle": "Pourquoi cela existe",
+    "learnMore": "En savoir plus"
+  },
+  "whatCanIDo": {
+    "id": "what-can-i-do",
+    "tag": "ROLES",
+    "title": "Que puis-je faire ?",
+    "subtitle": "Choisissez un rôle. Les détails sont à un clic.",
+    "cards": [
+      {
+        "id": "build",
+        "title": "BUILD",
+        "summary": "Lancez jetons, projets et économies communautaires avec les règles du protocole.",
+        "href": "/create"
+      },
+      {
+        "id": "validate",
+        "title": "VALIDATE",
+        "summary": "Exécutez l’infrastructure qui propose, atteste et finalise les blocs.",
+        "href": "#network"
+      },
+      {
+        "id": "participate",
+        "title": "PARTICIPATE",
+        "summary": "Rejoignez depuis des appareils du quotidien. Ce n’est pas un rôle de validateur de consensus.",
+        "href": "/wallet"
+      },
+      {
+        "id": "grow",
+        "title": "GROW",
+        "summary": "Growth Pool est une destination de frais the fee split — pas un revenu garanti ni passif.",
+        "href": "#economics"
+      },
+      {
+        "id": "explore",
+        "title": "EXPLORE",
+        "summary": "Consultez blocs, transactions, jetons et NFT.",
+        "href": "/explorer"
+      }
+    ]
+  },
+  "flow": {
+    "id": "how-the-network-works",
+    "tag": "HOW",
+    "title": "Comment ça marche",
+    "subtitle": "Un chemin à travers le réseau. Ouvrez une étape pour le mécanisme exact.",
+    "steps": [
+      {
+        "id": "user",
+        "title": "USER",
+        "summary": "Une personne avec un portefeuille sur téléphone, tablette ou navigateur.",
+        "detail": "Commencez avec un compte non custodial sur téléphone, tablette ou navigateur. Vous rejoignez comme personne de la communauté — pas comme validateur."
+      },
+      {
+        "id": "transaction",
+        "title": "TRANSACTION",
+        "summary": "Transferts, lancements, échanges sur courbe et autres opérations signées.",
+        "detail": "Les opérations éligibles paient un frais de protocole en PPL. Chaque action est signée et vérifiée avant d’être acceptée."
+      },
+      {
+        "id": "validator",
+        "title": "VALIDATOR",
+        "summary": "Nœuds adossés au stake qui proposent et attestent.",
+        "detail": "Les validateurs sont une infrastructure dédiée. Téléphones et navigateurs ne produisent pas de blocs."
+      },
+      {
+        "id": "block",
+        "title": "BLOCK",
+        "summary": "Transition d’état ordonnée et sûre pour les entiers.",
+        "detail": "Les validateurs assemblent des opérations signées en blocs. Les appareils du quotidien ne siègent pas dans ce processus."
+      },
+      {
+        "id": "network",
+        "title": "NETWORK",
+        "summary": "Chaîne partagée entre nœuds validateurs.",
+        "detail": "Les nœuds validateurs partagent les blocs entre eux pour que le réseau reste dans un seul état."
+      },
+      {
+        "id": "community",
+        "title": "COMMUNITY",
+        "summary": "Les frais de réseau et la part communautaire de chaque jeton restent dans des canaux séparés.",
+        "detail": "Les frais de réseau en PPL suivent the fee split. Les jetons standard créés par les utilisateurs envoient 10 % de l’offre de ce jeton à son propre pool communautaire — ce n’est pas un frais de réseau."
+      }
+    ],
+    "storyCta": "Histoire visuelle complète"
+  },
+  "ppl": {
+    "id": "ppl",
+    "tag": "NATIVE ASSET",
+    "title": "People (PPL)",
+    "summary": "People est l’actif natif de Blockchain pour la communauté. Ticker : PPL.",
+    "cards": [
+      {
+        "title": "UTILITY",
+        "body": "Actif de règlement pour les opérations de réseau : frais, création de jetons et services de protocole décrits dans les spécifications."
+      },
+      {
+        "title": "NETWORK",
+        "body": "Dénomine les frais de protocole éligibles que le répartiteur en direct achemine selon the fee split."
+      },
+      {
+        "title": "FEES",
+        "body": "Payés en PPL sur les opérations éligibles. Les barèmes exacts restent protocole/config — cette page n’invente pas de tarifs."
+      },
+      {
+        "title": "PARTICIPATION",
+        "body": "Utilisé dans la comptabilité d’économie de réseau. Participation Power n’est pas un jeton transférable ni un pouvoir de vote de validateur."
+      }
+    ],
+    "notMarket": "Ce site ne publie pas de prix, capitalisation, cotations, ROI, APY, profondeur de liquidité ni prix futur."
+  },
+  "network": {
+    "id": "network",
+    "tag": "NETWORK",
+    "title": "Réseau et validateurs",
+    "summary": "Le consensus est Proof-of-Stake avec un leader et un quorum d’attestation. Les téléphones sont des participants, pas des validateurs.",
+    "facts": [
+      {
+        "label": "Rôle",
+        "value": "Les validateurs sécurisent la chaîne ; les participants ne siègent jamais au quorum."
+      },
+      {
+        "label": "Qui exécute quoi",
+        "value": "Des nœuds dédiés proposent et attestent des blocs. Téléphones, tablettes et navigateurs rejoignent comme participants."
+      },
+      {
+        "label": "Réseau public",
+        "value": "Le testnet public v2 tourne. Ce n’est pas le Mainnet."
+      }
+    ],
+    "caveat": ""
+  },
+  "economics": {
+    "id": "economics",
+    "tag": "NETWORK FEES",
+    "title": "Économie des frais de réseau",
+    "summary": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires.",
+    "splits": [
+      {
+        "label": "Validateurs",
+        "pct": 30,
+        "tone": "brand"
+      },
+      {
+        "label": "Community Pool",
+        "pct": 25,
+        "tone": "value"
+      },
+      {
+        "label": "Trésorerie",
+        "pct": 20,
+        "tone": "violet"
+      },
+      {
+        "label": "Liquidité et écosystème",
+        "pct": 10,
+        "tone": "warm"
+      },
+      {
+        "label": "Growth Pool",
+        "pct": 15,
+        "tone": "brand"
+      },
+      {
+        "label": "Brûlage",
+        "pct": 0,
+        "tone": "neutral"
+      }
+    ],
+    "growthNote": "Growth Pool reçoit 15 % des frais éligibles. Ce n’est pas un revenu garanti, ni un rendement passif, ni un produit d’investissement.",
+    "detailsTitle": "Comment l’acheminement des frais fonctionne",
+    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "storyLink": "Comment les récompenses sont expliquées"
+  },
+  "tokenMarket": {
+    "id": "token-market",
+    "tag": "TOKEN MARKET",
+    "title": "Créer → Lancer → Découvrir → Échanger",
+    "subtitle": "Créez un jeton, lancez-le avec un prix intégré, laissez les autres le trouver et échangez sur la courbe de lancement.",
+    "steps": [
+      {
+        "title": "Créer",
+        "body": "Utilisez le formulaire Token Factory : image, nom, ticker, offre, puis payez en PPL."
+      },
+      {
+        "title": "Lancer",
+        "body": "Une courbe de liaison virtuelle fournit un prix continu dès le premier bloc."
+      },
+      {
+        "title": "Fil de projets",
+        "body": "Les actifs apparaissent dans le registre du réseau pour que les communautés les trouvent."
+      },
+      {
+        "title": "Échanger",
+        "body": "Achetez et vendez sur la courbe de lancement, puis échangez dans le pool AMM jeton/PPL en service."
+      }
+    ],
+    "expandTitle": "Courbe de lancement, liquidité, vesting",
+    "expandItems": [
+      "Le prix de lancement utilise une courbe à produit constant avec une mathématique entière exacte.",
+      "Un frais de protocole sur la courbe est acheminé par l’économie des frais de réseau.",
+      "Le partage standard de lancement inclut 10 % obligatoires de l’offre de ce jeton vers son propre pool communautaire (pas un frais de réseau en PPL).",
+      "Le vesting du créateur garde la plus grande part de sa quote-part qui se débloque dans le temps, pour que la communauté ne soit pas déversée dès le premier jour."
+    ],
+    "createCta": "Ouvrir Token Factory",
+    "nftCta": "Créer un NFT",
+    "swapCta": "Ouvrir l’échange"
+  },
+  "technology": {
+    "id": "technology",
+    "tag": "TECHNOLOGY",
+    "title": "Technologie",
+    "subtitle": "Ce qu’est la pile. Ouvrez une carte pour l’idée côté utilisateur.",
+    "cards": [
+      {
+        "title": "Consensus",
+        "summary": "Les validateurs Proof-of-Stake proposent et attestent des blocs. Les téléphones ne votent pas."
+      },
+      {
+        "title": "État",
+        "summary": "Soldes entiers exacts sur PPL natif et jetons créés par les utilisateurs."
+      },
+      {
+        "title": "Réseau",
+        "summary": "Les nœuds validateurs partagent les blocs pour que la chaîne reste dans un seul état."
+      },
+      {
+        "title": "Persistance",
+        "summary": "Chaque validateur conserve l’état de réseau vivant dont il a besoin pour continuer."
+      },
+      {
+        "title": "Sécurité",
+        "summary": "Actions signées, séparation des rôles et aucun raccourci autour des contrôles."
+      },
+      {
+        "title": "Outils",
+        "summary": "API HTTP et explorateur pour que les gens puissent lire le réseau."
+      }
+    ],
+    "archTitle": "Architecture interactive",
+    "invTitle": "Invariants mathématiques"
+  },
+  "roadmap": {
+    "id": "roadmap",
+    "tag": "ROADMAP",
+    "title": "Où en est le réseau",
+    "subtitle": "Étapes produit. Aucune date de lancement n’est annoncée ici.",
+    "columns": [
+      {
+        "id": "current",
+        "title": "CURRENT",
+        "items": [
+          "Registre, comptabilité communautaire et acheminement des frais de réseau.",
+          "Création de jetons et marchés de courbe de lancement.",
+          "Participation de la communauté à l’émission, aux frais et au Growth-referral."
+        ]
+      },
+      {
+        "id": "testnet",
+        "title": "TESTNET",
+        "items": [
+          "Un testnet public tourne.",
+          "Ce n’est pas le Mainnet et ce n’est pas une promesse de trading public en direct de valeur."
+        ]
+      },
+      {
+        "id": "beta",
+        "title": "BETA",
+        "items": [
+          "Un accès public plus large est la prochaine étape communautaire."
+        ]
+      },
+      {
+        "id": "future",
+        "title": "FUTURE",
+        "items": [
+          "Réseau humain : participation mobile, preuve d’humanité et anti-farming.",
+          "La date de lancement public n’est pas annoncée sur ce site."
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "id": "documentation",
+    "tag": "DOCS",
+    "title": "Documentation",
+    "summary": "Portefeuilles, participation et votre propre nœud — commencez par le guide pratique.",
+    "links": [
+      {
+        "href": "/docs",
+        "label": "Lire le guide",
+        "hint": "Premiers pas, récompenses et mise en route du nœud"
+      },
+      {
+        "href": "#economics",
+        "label": "Frais de réseau",
+        "hint": "Acheminement the fee split des frais PPL éligibles"
+      }
+    ]
+  }
+}

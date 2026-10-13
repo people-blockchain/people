@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "路线图",
+    "description": "People's Blockchain 已上线、进行中及待批准的计划。"
+  },
+  "intro": "状态与 docs/ROADMAP.md 一致。",
+  "statusLabels": {
+    "done": "已上线",
+    "in_progress": "进行中",
+    "planned_unapproved": "计划中",
+    "live_on_testnet": "测试网上线",
+    "proposed_pending_vote": "提案 / 待治理投票"
+  },
+  "sectionTitles": {
+    "done": "已上线",
+    "in_progress": "进行中",
+    "planned_unapproved": "计划中",
+    "live_on_testnet": "测试网上线",
+    "proposed_pending_vote": "提案 / 待治理投票"
+  },
+  "items": {
+    "cosmos-evm-migration": {
+      "title": "People's Blockchain 测试网（EVM）",
+      "summary": "在 EVM 上扩展 People's Blockchain 测试网。阶段 1（chain/）进行中；当前公开测试网仍在 OVN 节点上，RPC 只读。"
+    },
+    "genesis-snapshot-0x": {
+      "title": "Estado en genesis",
+      "summary": "Exportar saldos al genesis de la nueva red conservando las mismas direcciones 0x."
+    },
+    "solidity-protocol-modules": {
+      "title": "Solidity: fábrica, curva, AMM, NFT",
+      "summary": "协议模块已在测试网节点运行；目标是在 People's Blockchain 测试网上部署经审计的 Solidity，包括 Uniswap V2 风格 AMM。"
+    },
+    "fee-split-model-a": {
+      "title": "Reparto de comisiones (Model A)",
+      "summary": "Validadores 30%, pool comunitario 25%, tesoro 20%, liquidez 10%, Growth Pool 15%, quema 0%."
+    },
+    "tokenomics-1b-ppl": {
+      "title": "1 mil millones de PPL",
+      "summary": "固定 10 亿 PPL：第 1–4 年 0% 通胀；200M 验证者池按 6/5/5/4% + 手续费 30%；启动奖励仅 35% 社区池；第 5 年起每年最多 2% 须投票；创始人空投先于销售（1,000 已验证 + 多签）。手续费 30/25/20/10/15/0，见 /tokenomics 与 /how-it-works。"
+    },
+    "discover-feed": {
+      "title": "项目动态",
+      "summary": "项目卡片、反应、提问与统计。"
+    },
+    "ai-token-icons": {
+      "title": "Iconos IA para tokens",
+      "summary": "上线时生成代币图标。"
+    },
+    "evm-wallet-site-package": {
+      "title": "Carteras EVM en el sitio",
+      "summary": "JSON-RPC solo lectura (97401) activo; paquete MetaMask/Trust/WalletConnect próximo."
+    },
+    "community-ai-agent-wallet": {
+      "title": "社区 AI 代理",
+      "summary": "带限额与白名单的 Safe 金库，变更仅能通过代币投票 — 在浏览器公开可见。"
+    },
+    "oz-contract-builder": {
+      "title": "Constructor de contratos",
+      "summary": "Descríbelo en palabras sencillas; plantillas OpenZeppelin auditadas."
+    },
+    "ai-anti-scam-guard": {
+      "title": "Escudo antifraude IA",
+      "summary": "Avisos antes de transferencias y contratos arriesgados."
+    },
+    "ai-governance-summaries": {
+      "title": "Resúmenes IA de votos",
+      "summary": "Explicaciones breves y neutrales de votaciones on-chain."
+    },
+    "rewards-proof-of-humanity": {
+      "title": "Recompensas con prueba de humanidad",
+      "summary": "Pagar aportes reales, no bots — registro de participante y humano verificado."
+    },
+    "erc8004-x402-agents": {
+      "title": "ERC-8004 y x402",
+      "summary": "Registro de agentes y pagos compatibles con estándares emergentes."
+    },
+    "no-agent-memecoins": {
+      "title": "Sin memecoins para agentes",
+      "summary": "Los agentes sirven al trabajo comunitario, no a lanzar memes — política pendiente."
+    },
+    "site-wide-wallet-connect-modal": {
+      "title": "全站页内钱包连接弹窗",
+      "summary": "在任意页面通过弹窗连接或创建钱包，无需跳转到单独页面。正在全站推广。"
+    },
+    "cosmos-evm-smart-accounts": {
+      "title": "测试网智能账户",
+      "summary": "ERC-4337 或同等方案：Google、邮箱或 passkey 登录；自动创建钱包，默认无助记词（可选导出密钥）。注册时可选「用 Google/邮箱创建钱包」或「连接自有钱包」。免 gas：新用户前 N 笔交易由社区/项目资金的 paymaster 代付。"
+    },
+    "ai-monthly-community-report": {
+      "title": "每月 AI 社区报告",
+      "summary": "自动生成的月度项目与网络活动摘要——为社区提供指标与要点。"
+    },
+    "discover-referral-growth-pool": {
+      "title": "项目动态推荐链接（Growth Pool）",
+      "summary": "项目动态中每张卡片将有独立推荐链接，关联 Model A 下的 Growth Pool 推荐奖励。"
+    },
+    "founders-stage1-founders-page": {
+      "title": "百万创始人 — 阶段 1：/founders",
+      "summary": "实时计数、世界地图与国家排行榜、创始人编号、早期倍数（Preliminary：10k×5、100k×3、1M×1.5）。Google 登录 + 人性证明；未验证不计分。"
+    },
+    "founders-stage2-points-antibot": {
+      "title": "百万创始人 — 阶段 2：积分与反机器人",
+      "summary": "测试网上真实行为每日积分（swap、动态、代币、NFT、池、投票）与反 Sybil 评分；推荐积分仅在受邀者验证并行动后发放。"
+    },
+    "founders-stage3-referral-growth-contracts": {
+      "title": "百万创始人 — 阶段 3：链上注册与 Growth 分成",
+      "summary": "97401 链上创始人注册；Growth Pool 终身分成（Preliminary 10% / 3%）— 新合约，需与 Beta 70/30 单独批准。"
+    },
+    "founders-stage4-grants-mainnet-conversion": {
+      "title": "百万创始人 — 阶段 4：资助与主网",
+      "summary": "社区池资助带来真实用户的项目；10k/100k/1M 里程碑；积分兑换 PPL（Preliminary：35% 池、20% 即时、12 个月活跃释放、质押 +25%）。"
+    },
+    "founders-stage5-ambassadors-ai-bot": {
+      "title": "百万创始人 — 阶段 5：大使与 AI 机器人",
+      "summary": "各国推荐前 50 名大使页面；Telegram AI 协助登录与任务（更多渠道稍后）。"
+    },
+    "lavka-stage1-loyalty-qr": {
+      "title": "Lavka — 阶段 1：忠诚度与二维码",
+      "summary": "小商户通过 Google 几分钟创建次卡与奖励（无加密术语）；收银二维码使顾客自动成为创始人。"
+    },
+    "lavka-stage2-cross-tips-ambassador": {
+      "title": "Lavka — 阶段 2：跨店奖励与小费",
+      "summary": "商户大使 Growth Pool 分成；邻近店铺交叉奖励；小费二维码按 Model A 分费。"
+    },
+    "lavka-stage3-escrow-disputes": {
+      "title": "Lavka — 阶段 3：托管与争议",
+      "summary": "预付/担保托管至事件或截止日；公开信誉；已验证用户投票裁决；个人数据不上链。"
+    },
+    "lavka-stage4-pilot-seller-ai": {
+      "title": "Lavka — 阶段 4：试点与商户 AI",
+      "summary": "即将过期次卡与空闲时段 AI 提醒；巴统试点（Preliminary：10 家店、单一品类）。"
+    },
+    "ai-group-buy-negotiation": {
+      "title": "AI 团购议价",
+      "summary": "稍后：AI 代表买家群体议价 — 仅路线图，尚未实现。"
+    },
+    "token-project-pages-lightpaper": {
+      "title": "Token project pages & lightpaper",
+      "summary": "Launch form captures goal, distribution, vesting, team and links; the site builds a project page with a tokenomics chart and short lightpaper (extendable to a white paper), PDF download and embed. Planning only."
+    },
+    "mainnet-migration-snapshot-tokenomics": {
+      "title": "Mainnet migration via testnet snapshot",
+      "summary": "Move projects to mainnet using a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only."
+    },
+    "ambassador-promo-kit": {
+      "title": "Ambassador promo kit",
+      "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    }
+  }
+}

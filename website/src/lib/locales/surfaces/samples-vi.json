@@ -1,0 +1,68 @@
+{
+  "title": "Mẫu hợp đồng ví dụ",
+  "lead": "Các hợp đồng mẫu đã sẵn sàng để đọc và triển khai. Xem mã nguồn, sau đó triển khai trực tiếp từ ví đã kết nối của bạn.",
+  "notDeployed": "Chưa được triển khai",
+  "testnetAddress": "Địa chỉ trên testnet",
+  "viewSource": "Xem mã nguồn",
+  "hideSource": "Ẩn mã nguồn",
+  "copy": "Sao chép",
+  "copied": "Đã sao chép",
+  "deployCta": "Triển khai bằng ví của tôi",
+  "connectFirst": "Hãy kết nối ví của bạn trước.",
+  "constructorArgs": "Tham số hàm khởi tạo",
+  "deployButton": "Triển khai",
+  "deploying": "Đang triển khai…",
+  "cancel": "Hủy",
+  "success": "Đã triển khai. Mạng đã chấp nhận hợp đồng của bạn.",
+  "contractAddress": "Địa chỉ hợp đồng",
+  "transaction": "Giao dịch",
+  "error": "Đã có lỗi xảy ra.",
+  "invalidAddress": "Nhập địa chỉ ví bắt đầu bằng 0x.",
+  "invalidNumber": "Nhập một số lớn hơn 0.",
+  "invalidText": "Trường này không được để trống.",
+  "templates": {
+    "escrow": {
+      "title": "Ký quỹ (escrow)",
+      "description": "Người mua ký quỹ PPL cho người bán. Một bên trọng tài trung lập có thể giải ngân cho người bán hoặc hoàn tiền cho người mua; người mua cũng có thể cho giải ngân sớm. Hỗ trợ cả PPL gốc hoặc một stablecoin thử nghiệm (tUSDC/tUSDT)."
+    },
+    "vesting": {
+      "title": "Khóa thời gian theo lịch vesting",
+      "description": "Khóa PPL cho một người thụ hưởng và giải ngân theo đường thẳng giữa thời điểm bắt đầu và thời điểm kết thúc."
+    },
+    "crowdfund": {
+      "title": "Gọi vốn cộng đồng",
+      "description": "Thu thập PPL hướng tới một mục tiêu trước hạn chót. Chủ sở hữu nhận tiền nếu đạt mục tiêu; nếu không, người góp vốn sẽ được hoàn tiền. Hỗ trợ cả PPL gốc hoặc một stablecoin thử nghiệm (tUSDC/tUSDT)."
+    },
+    "erc20": {
+      "title": "Token cung cố định",
+      "description": "Một token ERC-20 đơn giản với cung cố định, được đúc toàn bộ cho người triển khai hợp đồng."
+    }
+  },
+  "fields": {
+    "seller": "Địa chỉ người bán",
+    "arbiter": "Địa chỉ trọng tài",
+    "value": "Số tiền gửi (PPL)",
+    "beneficiary": "Địa chỉ người thụ hưởng",
+    "start": "Thời gian bắt đầu (mặc định là hiện tại, tính bằng giây unix)",
+    "duration": "Thời hạn (ngày)",
+    "goal": "Mục tiêu ({symbol})",
+    "durationSeconds": "Thời hạn (giây)",
+    "name": "Tên token",
+    "symbol": "Ký hiệu token",
+    "supply": "Tổng cung (theo token)",
+    "token": "Địa chỉ token thanh toán",
+    "amount": "Số tiền cần ký quỹ ({symbol})",
+    "payIn": "Thanh toán bằng"
+  },
+  "faucetCta": "Nhận {symbol} thử nghiệm",
+  "faucetMinting": "Đang tạo token…",
+  "faucetDone": "Đã tạo",
+  "faucetBalance": "Số dư: {amount} {symbol}",
+  "faucetLimitHint": "Giới hạn: tối đa 1.000 token mỗi 24 giờ.",
+  "faucetCooldown": "Bạn đã đạt giới hạn vòi nhận trong 24 giờ. Vui lòng thử lại sau.",
+  "approveDepositLead": "Hai giao dịch ví: approve token trước, sau đó ký quỹ.",
+  "approveAndDeposit": "Approve & ký quỹ",
+  "approving": "Đang approve…",
+  "depositing": "Đang ký quỹ…",
+  "depositComplete": "Đã ký quỹ. Hợp đồng escrow hiện đang giữ tiền."
+}

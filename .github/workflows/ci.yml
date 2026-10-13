@@ -1,0 +1,44 @@
+name: People service checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            people-node/package-lock.json
+            website/package-lock.json
+      - run: npm ci
+        working-directory: people-node
+      - run: npm run build && npm run typecheck && npm test
+        working-directory: people-node
+      - run: npm run test:public-node
+        working-directory: people-node
+      - run: npm run ci:smoke
+        working-directory: people-node
+      - run: npm ci
+        working-directory: website
+      - run: npx playwright install --with-deps chromium
+        working-directory: website
+      # `npm test` already runs `npm run build` before the Playwright suite.
+      - run: npm run lint && npm run typecheck && npm test
+        working-directory: website
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            website/playwright-report
+            website/test-results
+          retention-days: 7
+          if-no-files-found: ignore

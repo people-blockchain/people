@@ -1,0 +1,488 @@
+[
+  {
+    "page": "/",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/wallet",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/how-it-works",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/token",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/nft",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/contract",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/discover",
+    "viewport": "360",
+    "result": "FAIL",
+    "notes": "1 console error(s): Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts/params"
+  },
+  {
+    "page": "/founders",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/roadmap",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/agents",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/tokenomics",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/tokens",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/nfts",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/contracts",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/swap",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/staking",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/fees",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/transparency",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/docs",
+    "viewport": "360",
+    "result": "FAIL",
+    "notes": "overflow +29px \u00b7 soft: unavailable"
+  },
+  {
+    "page": "/login",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/partner",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/privacy",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/terms",
+    "viewport": "360",
+    "result": "WARN",
+    "notes": "soft: unavailable"
+  },
+  {
+    "page": "/",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/wallet",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/how-it-works",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/token",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/nft",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/contract",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/discover",
+    "viewport": "390",
+    "result": "FAIL",
+    "notes": "1 console error(s): Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts/params"
+  },
+  {
+    "page": "/founders",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/roadmap",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/agents",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/tokenomics",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/tokens",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/nfts",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/contracts",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/swap",
+    "viewport": "390",
+    "result": "FAIL",
+    "notes": "1 console error(s): Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts"
+  },
+  {
+    "page": "/staking",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/fees",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/transparency",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/docs",
+    "viewport": "390",
+    "result": "WARN",
+    "notes": "soft: unavailable"
+  },
+  {
+    "page": "/login",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/partner",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/privacy",
+    "viewport": "390",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/terms",
+    "viewport": "390",
+    "result": "WARN",
+    "notes": "soft: unavailable"
+  },
+  {
+    "page": "/",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/wallet",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/how-it-works",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/token",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/nft",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/create/contract",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/discover",
+    "viewport": "1280",
+    "result": "FAIL",
+    "notes": "1 console error(s): Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts/params"
+  },
+  {
+    "page": "/founders",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/roadmap",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/agents",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/tokenomics",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/tokens",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/nfts",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/explorer/contracts",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/swap",
+    "viewport": "1280",
+    "result": "FAIL",
+    "notes": "1 console error(s): Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts"
+  },
+  {
+    "page": "/staking",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/fees",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/transparency",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/docs",
+    "viewport": "1280",
+    "result": "WARN",
+    "notes": "soft: unavailable"
+  },
+  {
+    "page": "/login",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/partner",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/privacy",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "/terms",
+    "viewport": "1280",
+    "result": "WARN",
+    "notes": "soft: unavailable"
+  },
+  {
+    "page": "EN\u2192RU switch",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": "nav=true stored=ru"
+  },
+  {
+    "page": "RU\u2192EN switch",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "theme toggle",
+    "viewport": "1280",
+    "result": "PASS",
+    "notes": "dark \u2192 light stored=light"
+  },
+  {
+    "page": "mobile menu",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": "links=25 overflow=0px"
+  },
+  {
+    "page": "mobile menu closes",
+    "viewport": "360",
+    "result": "PASS",
+    "notes": ""
+  },
+  {
+    "page": "diagnostics",
+    "viewport": "all",
+    "result": "info",
+    "notes": "{\"consoleErrors\":[\"Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts/params\",\"Failed to load resource: the server responded with a status of 404 () @ https://www.peopleblockchain.network/api/evm/compat/contracts\"],\"pageErrors\":[],\"thirdParty\":[],\"failedRequests\":[\"GET https://www.peopleblockchain.network/explorer?_rsc=PiXs48YabM0hLFCm \u2014 net::ERR_ABORTED\",\"GET https://www.peopleblockchain.network/?_rsc=sW2A7HEmFQnSVIMx \u2014 net::ERR_ABORTED\",\"GET https://www.peopleblockchain.network/discover/discover-seed-v1-roscash?_rsc=6UjlU0gA68F_vU0N \u2014 net::ERR_ABORTED\",\"GET https://www.peopleblockchain.network/?_rsc=fg13JktVYeDWuOrH \u2014 net::ERR_ABORTED\"]}"
+  }
+]

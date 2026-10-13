@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "خارطة الطريق",
+    "description": "ما هو مُفعَّل وقيد التنفيذ ومخطط دون موافقة نهائية على People's Blockchain."
+  },
+  "intro": "الحالات من docs/ROADMAP.md.",
+  "statusLabels": {
+    "done": "مُفعَّل",
+    "in_progress": "قيد التنفيذ",
+    "planned_unapproved": "مخطط",
+    "live_on_testnet": "على الشبكة التجريبية",
+    "proposed_pending_vote": "مقترح / بانتظار التصويت"
+  },
+  "sectionTitles": {
+    "done": "مُفعَّل",
+    "in_progress": "قيد التنفيذ",
+    "planned_unapproved": "مخطط",
+    "live_on_testnet": "على الشبكة التجريبية",
+    "proposed_pending_vote": "مقترح / بانتظار التصويت"
+  },
+  "items": {
+    "cosmos-evm-migration": {
+      "title": "شبكة People's Blockchain التجريبية (EVM)",
+      "summary": "توسيع شبكة People's Blockchain التجريبية على EVM. المرحلة 1 (chain/) جارية؛ الشبكة التجريبية العامة ما زالت على عقدة OVN مع RPC للقراءة فقط."
+    },
+    "genesis-snapshot-0x": {
+      "title": "Estado en genesis",
+      "summary": "Exportar saldos al genesis de la nueva red conservando las mismas direcciones 0x."
+    },
+    "solidity-protocol-modules": {
+      "title": "Solidity: fábrica, curva, AMM, NFT",
+      "summary": "وحدات البروتوكول تعمل على عقدة الاختبار؛ الهدف Solidity مُدقَّق على شبكة People's Blockchain التجريبية، بما فيها AMM بأسلوب Uniswap V2."
+    },
+    "fee-split-model-a": {
+      "title": "Reparto de comisiones (Model A)",
+      "summary": "Validadores 30%, pool comunitario 25%, tesoro 20%, liquidez 10%, Growth Pool 15%, quema 0%."
+    },
+    "tokenomics-1b-ppl": {
+      "title": "1 mil millones de PPL",
+      "summary": "1B PPL ثابت: السنوات 1–4 تضخم 0%; صندوق مدققين 200M بجدول 6/5/5/4% + 30% رسوم; مكافآت الإطلاق من صندوق 35%; من السنة 5 حد 2%/سنة بالتصويت; إيردروب المؤسسين قبل البيع عند 1,000 موثّق وmultisig. رسوم 30/25/20/10/15/0 على /tokenomics و/how-it-works."
+    },
+    "discover-feed": {
+      "title": "خلاصة المشاريع",
+      "summary": "بطاقات مشاريع وتفاعلات وأسئلة وإحصاءات."
+    },
+    "ai-token-icons": {
+      "title": "Iconos IA para tokens",
+      "summary": "أنشئ صورة للرمز عند الإطلاق."
+    },
+    "evm-wallet-site-package": {
+      "title": "Carteras EVM en el sitio",
+      "summary": "JSON-RPC solo lectura (97401) activo; paquete MetaMask/Trust/WalletConnect próximo."
+    },
+    "community-ai-agent-wallet": {
+      "title": "وكلاء ذكاء اصطناعي للمجتمع",
+      "summary": "خزينة Safe بحدود وقائمة مسموح والتغيير بالتصويت فقط — ظاهرة في المستكشف."
+    },
+    "oz-contract-builder": {
+      "title": "Constructor de contratos",
+      "summary": "Descríbelo en palabras sencillas; plantillas OpenZeppelin auditadas."
+    },
+    "ai-anti-scam-guard": {
+      "title": "Escudo antifraude IA",
+      "summary": "Avisos antes de transferencias y contratos arriesgados."
+    },
+    "ai-governance-summaries": {
+      "title": "Resúmenes IA de votos",
+      "summary": "Explicaciones breves y neutrales de votaciones on-chain."
+    },
+    "rewards-proof-of-humanity": {
+      "title": "Recompensas con prueba de humanidad",
+      "summary": "Pagar aportes reales, no bots — registro de participante y humano verificado."
+    },
+    "erc8004-x402-agents": {
+      "title": "ERC-8004 y x402",
+      "summary": "Registro de agentes y pagos compatibles con estándares emergentes."
+    },
+    "no-agent-memecoins": {
+      "title": "Sin memecoins para agentes",
+      "summary": "Los agentes sirven al trabajo comunitario, no a lanzar memes — política pendiente."
+    },
+    "site-wide-wallet-connect-modal": {
+      "title": "نافذة ربط المحفظة في الصفحة",
+      "summary": "اربط أو أنشئ محفظة في نافذة منبثقة على أي صفحة دون الانتقال لشاشة منفصلة. طرح على كامل الموقع."
+    },
+    "cosmos-evm-smart-accounts": {
+      "title": "حسابات ذكية على الشبكة التجريبية",
+      "summary": "ERC-4337 أو ما يعادله: تسجيل عبر Google أو البريد أو passkey؛ محفظة تُنشأ تلقائيًا بلا عبارة استرداد (تصدير المفتاح اختياري). عند التسجيل: «إنشاء محفظة بـ Google/البريد» أو «ربط محفظتك». بدون غاز: أول N معاملة للوافدين يدفعها paymaster من صندوق المجتمع أو المشروع."
+    },
+    "ai-monthly-community-report": {
+      "title": "تقرير مجتمعي شهري بالذكاء الاصطناعي",
+      "summary": "ملخص شهري تلقائي لنشاط المشروع والشبكة — مقاييس ونقاط بارزة للمجتمعات."
+    },
+    "discover-referral-growth-pool": {
+      "title": "روابط إحالة الخلاصة (Growth Pool)",
+      "summary": "لكل بطاقة مشروع في الخلاصة رابط إحالة خاص، مرتبط بمكافآت Growth Pool (Model A)."
+    },
+    "founders-stage1-founders-page": {
+      "title": "مليون مؤسس — المرحلة 1: /founders",
+      "summary": "عداد مباشر، خريطة العالم وترتيب حسب البلد، رقم المؤسس، مضاعفات مبكرة (Preliminary: 10k×5، 100k×3، 1M×1.5). تسجيل Google + إثبات الإنسان؛ لا نقاط بدون تحقق."
+    },
+    "founders-stage2-points-antibot": {
+      "title": "مليون مؤسس — المرحلة 2: نقاط ومكافحة البوت",
+      "summary": "نقاط يومية لأفعال حقيقية على testnet (swap، الخلاصة، token، NFT، pool، تصويت) وتقييم anti-Sybil؛ نقاط الإحالة فقط بعد تحقق المدعو وفعله."
+    },
+    "founders-stage3-referral-growth-contracts": {
+      "title": "مليون مؤسس — المرحلة 3: سجل و حصة Growth",
+      "summary": "سجل on-chain على 97401؛ حصة مدى الحياة من Growth Pool (Preliminary 10% / 3%) — عقود جديدة، تحتاج موافقة مقابل Beta 70/30."
+    },
+    "founders-stage4-grants-mainnet-conversion": {
+      "title": "مليون مؤسس — المرحلة 4: منح و mainnet",
+      "summary": "منح community pool لمشاريع تجلب أشخاصاً حقيقيين؛ معالم 10k/100k/1M؛ تحويل نقاط→PPL (Preliminary: bucket 35%، 20% فوراً، 12 شهر نشاط، stake +25%)."
+    },
+    "founders-stage5-ambassadors-ai-bot": {
+      "title": "مليون مؤسس — المرحلة 5: سفراء وروبوت ذكاء اصطناعي",
+      "summary": "أفضل 50 مُحيل لكل بلد مع صفحات سفراء؛ بوت Telegram للدخول والمهام (قنوات أخرى لاحقاً)."
+    },
+    "lavka-stage1-loyalty-qr": {
+      "title": "Lavka — المرحلة 1: ولاء و QR",
+      "summary": "أعمال صغيرة تنشئ تصاريح ومكافآت عبر Google خلال دقائق (بدون مصطلحات crypto)؛ QR عند الدفع يجعل العميل مؤسساً تلقائياً."
+    },
+    "lavka-stage2-cross-tips-ambassador": {
+      "title": "Lavka — المرحلة 2: مكافآت متقاطعة وإكراميات",
+      "summary": "حصة سفير التاجر من Growth Pool؛ مكافآت بين محلات مجاورة؛ إكرامية QR بتقسيم Model A."
+    },
+    "lavka-stage3-escrow-disputes": {
+      "title": "Lavka — المرحلة 3: escrow ونزاعات",
+      "summary": "ضمانات في escrow حتى حدث أو موعد؛ سمعة عامة؛ نزاعات تصويت أشخاص مُتحققين؛ بيانات شخصية off-chain."
+    },
+    "lavka-stage4-pilot-seller-ai": {
+      "title": "Lavka — المرحلة 4: تجريبي وذكاء اصطناعي للتاجر",
+      "summary": "تذكيرات ذكاء اصطناعي لتصاريح منتهية وساعات فارغة؛ تجريب باتومي (Preliminary: 10 أماكن، فئة واحدة)."
+    },
+    "ai-group-buy-negotiation": {
+      "title": "تفاوض ذكاء اصطناعي للشراء الجماعي",
+      "summary": "لاحقاً: ذكاء اصطناعي يتفاوض لمجموعة مشترين — خارطة طريق فقط، بدون تنفيذ."
+    },
+    "token-project-pages-lightpaper": {
+      "title": "Token project pages & lightpaper",
+      "summary": "Launch form captures goal, distribution, vesting, team and links; the site builds a project page with a tokenomics chart and short lightpaper (extendable to a white paper), PDF download and embed. Planning only."
+    },
+    "mainnet-migration-snapshot-tokenomics": {
+      "title": "Mainnet migration via testnet snapshot",
+      "summary": "Move projects to mainnet using a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only."
+    },
+    "ambassador-promo-kit": {
+      "title": "Ambassador promo kit",
+      "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    }
+  }
+}
