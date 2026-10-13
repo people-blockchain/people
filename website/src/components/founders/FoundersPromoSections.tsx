@@ -224,8 +224,6 @@ export function GovSection({ t }: { t: FoundersPromoCopy }) {
 export function ActiveSection({ t }: { t: FoundersPromoCopy }) {
   const chips = [
     fill(t.bonusStay, { pts: REFERRAL_EXTRA_POINTS.stay_7d, days: REFERRAL_STAY_ACTIVE_DAYS }),
-    fill(t.bonusSale, { pts: REFERRAL_EXTRA_POINTS.sale_buy }),
-    fill(t.bonusAirdrop, { pts: REFERRAL_EXTRA_POINTS.airdrop_join }),
   ];
   return (
     <section className={SECTION} aria-labelledby="founders-active-title" data-testid="founders-active">

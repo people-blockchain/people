@@ -8,7 +8,7 @@ import { hub } from "@/lib/hub-content";
 import {
   GROWTH_PAID_LINES,
   MODEL_A_FEE_SPLIT,
-  TOKEN_COMMUNITY_ALLOCATION_PCT,
+  TOKEN_COMMUNITY_SHARE_PCT,
 } from "@/lib/selling-economics";
 import { Chip } from "@/components/ui/primitives";
 import { HubSection } from "@/components/hub/HubSection";
@@ -54,7 +54,7 @@ export function CommunityValue() {
             </Chip>
             {card.id === "allocation" && (
               <p className="mt-3 font-mono text-3xl font-black text-violet">
-                {TOKEN_COMMUNITY_ALLOCATION_PCT}%
+                {TOKEN_COMMUNITY_SHARE_PCT}%
               </p>
             )}
             <h3 className="mt-3 text-base font-bold leading-snug text-ink">{card.title}</h3>

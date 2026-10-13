@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "10%",
-        "title": "10% al pool della comunità",
+        "value": "27%",
+        "title": "27% al pool della comunità",
         "note": "Dell’offerta di ogni nuovo token va al pool della comunità."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "10% comunità + commissione di rete",
+        "label": "27% comunità + commissione di rete",
         "sub": "Parte del nuovo token e la commissione di protocollo restano separate"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Il 10% di ogni nuovo token va al pool della comunità",
-        "body": "Ogni token standard lanciato tramite la rete invia il 10% dell’offerta iniziale al Community Pool di quel token — poi alla comunità. Non è un pagamento personale, né il 10% di ogni commissione.",
+        "title": "Il 27% di ogni nuovo token va al pool della comunità",
+        "body": "Ogni token standard lanciato tramite la rete invia il 27% dell’offerta iniziale al Community Pool di quel token — poi alla comunità. Non è un pagamento personale, né il 10% di ogni commissione.",
         "href": "/create/token",
         "cta": "Crea un token"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Payout Growth Beta attivo: L1 70% · L2 30% del budget di ricompensa Growth. Growth Pool è il 15% delle commissioni idonee. Distinto dalle destinazioni the fee split delle commissioni di rete e dal 10% di ogni nuovo token che va al pool della comunità.",
+    "subtitle": "Payout Growth Beta attivo: L1 70% · L2 30% del budget di ricompensa Growth. Growth Pool è il 15% delle commissioni idonee. Distinto dalle destinazioni the fee split delle commissioni di rete e dal 27% di ogni nuovo token che va al pool della comunità.",
     "you": "Tu",
     "budgetNote": "Le percentuali sono quote del budget di ricompensa Growth dopo che the fee split indirizza il 15% delle commissioni idonee nel Growth Pool — non quote di ogni commissione di rete.",
     "detailsTitle": "Come funziona il Growth-referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Separato da commissioni e token",
-        "body": "I pesi Growth L1/L2 non sono lo split the fee split delle commissioni di rete né il 10% di ogni nuovo token per il pool della comunità. Growth Pool è una destinazione di commissioni the fee split con regole di regolamento proprie."
+        "body": "I pesi Growth L1/L2 non sono lo split the fee split delle commissioni di rete né il 27% di ogni nuovo token per il pool della comunità. Growth Pool è una destinazione di commissioni the fee split con regole di regolamento proprie."
       },
       {
         "title": "Questo sito",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Prendi parte all’economia",
-        "body": "Paga le commissioni Token Factory e di mint NFT dallo stesso portafoglio. La quota del 10% al pool della comunità sui nuovi token, le commissioni di rete e il Growth-referral restano tre meccanismi separati.",
+        "body": "Paga le commissioni Token Factory e di mint NFT dallo stesso portafoglio. La quota del 27% al pool della comunità sui nuovi token, le commissioni di rete e il Growth-referral restano tre meccanismi separati.",
         "href": "/create",
         "cta": "Crea"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Le commissioni di rete e la quota di comunità di ogni token restano in canali separati.",
-        "detail": "Le commissioni di rete in PPL seguono the fee split. I token standard creati dagli utenti inviano il 10% dell’offerta di quel token al proprio pool della comunità — quella non è una commissione di rete."
+        "detail": "Le commissioni di rete in PPL seguono the fee split. I token standard creati dagli utenti inviano il 27% dell’offerta di quel token al proprio pool della comunità — quella non è una commissione di rete."
       }
     ],
     "storyCta": "Storia visiva completa"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool riceve il 15% delle commissioni idonee. Non è reddito garantito, non un rendimento passivo e non un prodotto di investimento.",
     "detailsTitle": "Come funziona l’instradamento delle commissioni",
-    "detailsBody": "Ogni commissione di protocollo si divide: 30% validatori, 25% comunità, 20% tesoreria, 10% liquidità, 15% Growth, 0% bruciato — incluse le frazionarie. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Ogni commissione di protocollo si divide: 30% validatori, 25% comunità, 20% tesoreria, 10% liquidità, 15% Growth, 0% bruciato — incluse le frazionarie. After whole-number division, any remainder stays with validators. The 27% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Come si spiegano le ricompense"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Il prezzo di lancio usa una curva constant-product con matematica intera esatta.",
       "Una commissione di trading di protocollo sulla curva è instradata nell’economia delle commissioni di rete.",
-      "Lo split di lancio standard include obbligatoriamente il 10% dell’offerta di quel token al proprio pool della comunità (non una commissione di rete PPL).",
+      "Lo split di lancio standard include obbligatoriamente il 27% dell’offerta di quel token al proprio pool della comunità (non una commissione di rete PPL).",
       "Il vesting del creatore tiene la maggior parte della sua quota in sblocco nel tempo, così la comunità non viene dumpata il primo giorno."
     ],
     "createCta": "Apri Token Factory",

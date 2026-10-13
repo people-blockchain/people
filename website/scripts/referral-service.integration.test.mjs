@@ -171,7 +171,7 @@ test("season 1 pool exhaustion stops payouts (no minting beyond 6M PPL)", async 
   assert.equal((await svc.getReferralStatus(mid)).pool.remainingPpl, 0);
 });
 
-test("extra points: 7-day stay, sale buy, airdrop join; L2 follows", async () => {
+test("extra points: 7-day stay only; L2 follows", async () => {
   await db.update(schema.founderReferralPool).set({ spentPoints: 0 });
   const top = await mkUser();
   const mid = await mkUser({ invitedBy: top });
@@ -184,18 +184,15 @@ test("extra points: 7-day stay, sale buy, airdrop join; L2 follows", async () =>
     .set({ activatedAt: t0 })
     .where(eq(schema.founderReferralActivations.inviteeUserId, leaf));
   await db.update(schema.founderReferralCredits).set({ dayKey: "2020-02-01" });
-  assert.equal((await svc.awardReferralExtra(leaf, "sale_buy", leaf)).ok, true);
-  assert.equal((await svc.awardReferralExtra(leaf, "sale_buy", leaf)).reason, "duplicate");
-  assert.equal((await svc.awardReferralExtra(leaf, "airdrop_join", leaf)).ok, true);
   await act(leaf, "swap"); // a real action now, ≥7 days after activation
   await svc.maybeAwardStaySevenDays(leaf);
-  await svc.maybeAwardStaySevenDays(leaf);
+  await svc.maybeAwardStaySevenDays(leaf); // idempotent: no second credit for the same kind
   const kinds = (await credits(mid)).map((c) => `${c.kind}:${c.points}`).sort();
-  assert.deepEqual(kinds, ["active:100", "airdrop_join:10", "sale_buy:20", "stay_7d:10"]);
+  assert.deepEqual(kinds, ["active:100", "stay_7d:10"]);
   const l2 = (await credits(top)).map((c) => `${c.kind}:${c.points}`).sort();
-  assert.deepEqual(l2, ["active:30", "airdrop_join:3", "sale_buy:6", "stay_7d:3"]);
+  assert.deepEqual(l2, ["active:30", "stay_7d:3"]);
   const orphan = await mkUser({ invitedBy: mid });
-  assert.equal((await svc.awardReferralExtra(orphan, "sale_buy", orphan)).reason, "not_active");
+  assert.equal((await svc.awardReferralExtra(orphan, "stay_7d", orphan)).reason, "not_active");
 });
 
 test("vesting claims: 10% claimable immediately, rest per week, no double claim", async () => {

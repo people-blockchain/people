@@ -2,9 +2,9 @@
 title: "People Blockchain — Litepaper"
 description: "Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir. İnsanların sahip olduğu, VC'lerin değil."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Litepaper
@@ -12,7 +12,7 @@ status: preliminary
 > **Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir.**
 > **İnsanların sahip olduğu, VC'lerin değil.**
 
-*v0.1 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
+*v1.0 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
 
 ---
 
@@ -21,7 +21,7 @@ status: preliminary
 | | |
 |---|---|
 | Arz | **1.000.000.000 PPL**, sabit |
-| Başlatılan her token | **%10'u**, o token'ın kendi topluluk havuzuna gider |
+| Başlatılan her token | **%27'si**, o token'ın kendi topluluk havuzuna gider |
 | Yakılan ağ ücretleri | **%0** — her ücret paylaşılır |
 | Ödül kazanan | **Doğrulanmış insanlar** (Telegram telefon veya Human Passport) |
 | Finansman | **Kendi finansmanı.** VC yok. Yatırımcı tahsisi yok. |
@@ -43,7 +43,7 @@ status: preliminary
 
 **Botlar değil, doğrulanmış insanlar.** Ödüller, ücretsiz bir insan kontrolünü geçen hesaplara gider. Bir kişi, bir hesap. Kayıt tek başına hiçbir şey kazanmaz.
 
-**Başlatılan her token'ın %10'u topluluğa gider.** Bir yazıda vaat edilmez, protokole yerleştirilir: her standart başlatma, arzının %10'unu o token'ın kendi topluluk havuzuna gönderir. Hiçbir zaman ağ ücretleriyle karıştırılmaz.
+**Başlatılan her token'ın %27'si topluluğa gider.** Bir yazıda vaat edilmez, protokole yerleştirilir: her standart başlatma, arzının %27'sini o token'ın kendi topluluk havuzuna gönderir. Hiçbir zaman ağ ücretleriyle karıştırılmaz.
 
 ---
 
@@ -53,7 +53,7 @@ Kod olmadan yapabileceğiniz şeyler:
 
 | Araç | Ne yaptığı | Durum |
 |---|---|---|
-| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %10'u token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
+| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %27'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
 | **NFT kulüp kartları** | Bir kulüp, kafe veya topluluk için üyelik kartları — üye başına bir tane, yüklediğiniz veya oluşturduğunuz bir görüntüyle. | Testnet'te canlı |
 | **Fon toplama** | İncelenen sözleşme şablonlarıyla bir proje için destek toplayın: emanet, hak ediş, token ağırlıklı oylama. Topluluğunuz eğride satın alır, bu nedenle talep fiyatı belirler — özel bir tur değil. | Testnet'te canlı |
 | **Yapay zeka sözleşmeleri** | Bir akıllı sözleşmeyi düz sözcüklerle açıklayın. OpenZeppelin şablonlarından birleştirilir ve dağıtmadan önce sonucu görürsünüz. | Testnet'te canlı |
@@ -117,7 +117,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 
 **Geri alımlar.** Hazine (%20) ve likidite (%10) payları halka açık PPL geri alımları için kullanılır. Hiçbir şey kıtlık çakmak için yakılmaz — ücretler ağa ve insanlarına geri döner.
 
-**Token başlatma ücreti.** Test ağında canlı: bir token başlatma veya NFT basma ücreti PPL ile veya StableFeeGateway sözleşmesi üzerinden bir test ağı stabil coini (tUSDC/tUSDT) ile ödenebilir. Stabil coin tutarı, sahibin onayladığı sabit bir USD fiyatıdır: token lansmanı için 5.00 USD, NFT mint için 10.00 USD. Stabil coin ile ödeme şimdilik yalnızca People ağında çalışır; başka bir zincirden (Ethereum, Polygon, Tron, TON, Solana) ödeme daha sonra gelecek. Stabil coin ücretinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır.
+**Token başlatma ücreti.** Test ağında canlı: kurulu fabrikalar hâlâ sabit bir PPL ücreti almaktadır — bir token başlatmak için 1,045005 PPL ve NFT basmak için 2,925 PPL. Onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır. Stabil coin seçeneği ve TWAP indirimi henüz kurulu kodda yoktur. Başlatma ücretlerinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır.
 
 ---
 
@@ -144,7 +144,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Mainnet + PPL satışı** | Mainnet başlatılır; topluluk PPL satışı açılır. | En az 1.000 doğrulanmış kişi **ve** canlı hazine multisig |
+| **Mainnet + PPL satışı** | Mainnet başlatılır. PPL satışı henüz açık değil; yalnızca faaliyet gösteren bir tüzel kişilik oluştuğunda açılacaktır. | En az 1.000 doğrulanmış kişi **ve** canlı hazine multisig |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
 Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
@@ -176,7 +176,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 - **Testnet mainnet değil.** Testnet jetonları ve bakiyeleri hiçbir değere sahip değildir. Puanlar, ödeme garantisi değil, aktivitenin bir kaydıdır.
 - **Her şey ön niteliklidir.** Rakamlar, zaman çizelgeleri ve kurallar mainnet'ten önce değişebilir ve topluluk yönetişimine tabidir.
 - **Teknoloji riski.** Yazılımda hata olabilir. Bir denetim riski azaltır; bunu kaldırmaz.
-- **Düzenleme.** Kurallar ülkeden ülkeye farklı ve değişebilir. PPL satışı ABD'li sakinler tarafından kullanılamaz ve bir insanlık kanıtı / KYC kontrolü gerektirir.
+- **Düzenleme.** Kurallar ülkeden ülkeye farklı ve değişebilir. Şu anda halka açık bir PPL satışı yok; KYC kontrolü yapılmaz.
 - **Kendi araştırmanızı yapın.** Bu litepaper bilgidir, finansal, yasal veya vergi danışması değildir.
 
 ---
@@ -191,7 +191,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 | Ücreti alan | Doğrulayıcılar öncelik ücretini (bahşiş) alır ¹ | Doğrulayıcılar temel ücretin %50'sini ve öncelik ücretinin %100'ünü alırlar ² | **Doğrulayıcılar 30 · Topluluk 25 · Hazine 20 · Likidite 10 · Büyüme 15** |
 | Erken finansman | Halka açık eter satışı, 2014 (42 gün, BTC cinsinden ödendi) ³ | Multicoin Capital tarafından yönetilen 20 milyon dolar Series A (2019); yatırımcılar SOL jetonlarını aldılar ⁴ | **Kendi finansmanı. VC yok, yatırımcı tahsisi yok** |
 | Hesap oluşturma | Hesap oluşturmak hiçbir şeye mal olmaz; kimlik denetimi yok ⁵ | Protokol gereksi değil | **Ödüller yalnızca doğrulanmış insanlar için** |
-| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %10'u** |
+| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %27'si** |
 
 1. ethereum.org — Gaz ve ücretler: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Ücretler: https://solana.com/docs/core/fees
@@ -211,3 +211,14 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### v1.0'da neler değişti
+
+- Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
+- Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
+- Başlatma ücretleri: onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
+- **Şu anda halka açık bir PPL satışı yoktur** ve KYC veya uygunluk kontrolü yapılmaz.
+- Güvenlik: şimdi **iç, yapay zekâ destekli bir inceleme** ve mainnet'ten önce **bağımsız bir denetim**.
+- Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.

@@ -2,11 +2,12 @@
  * Guards on the /transparency page copy and its entry points.
  *
  * The page is a public statement about money, so the wording is constrained by
- * decisions that must not drift: the treasury is described in the future tense
- * with no address and no multisig threshold, the audit is not called
- * independent, and no team member is named or pictured. EN/RU key parity itself
- * is enforced by TypeScript (`TransparencyCopy`), so these tests only check what
- * the type system cannot see.
+ * decisions that must not drift: the treasury is a 2-of-3 multisig created
+ * before mainnet (with no address published yet), the audit is promised — an
+ * internal AI-assisted review today, an independent audit before mainnet, never
+ * a completed result — and no team member is named or pictured. EN/RU key parity
+ * itself is enforced by TypeScript (`TransparencyCopy`), so these tests only
+ * check what the type system cannot see.
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -44,19 +45,25 @@ test("every locale has a document title for /transparency", () => {
   assert.match(read("src", "components", "DocumentTitle.tsx"), /"\/transparency"/);
 });
 
-test("the treasury is future tense, with no address and no threshold", () => {
+test("the treasury is a 2-of-3 multisig created before mainnet, with no address yet", () => {
   const copy = sectionBodies();
-  assert.doesNotMatch(copy, /\d\s*(?:of|из)\s*\d/i, "a multisig threshold must not be published");
+  assert.match(copy, /2-of-3/, "the approved 2-of-3 threshold must be stated");
+  assert.match(copy, /2-из-3/, "the approved 2-of-3 threshold must be stated (RU)");
   assert.doesNotMatch(copy, /0x[0-9a-fA-F]{6,}/, "no address may appear on this page yet");
-  assert.match(copy, /will move to a multisig/);
-  assert.match(copy, /казна перейдёт в мультисиг/);
+  assert.match(copy, /created before mainnet/);
+  assert.match(copy, /создаваемый до mainnet/);
 });
 
-test("the audit is promised, not claimed, and never called independent", () => {
+test("the audit is promised as independent, never claimed as passed", () => {
   const copy = sectionBodies();
-  assert.match(copy, /goes through a security audit before mainnet/);
-  assert.match(copy, /проходит аудит безопасности до mainnet/);
-  assert.doesNotMatch(copy, /independent|third[- ]party|независим/i);
+  assert.match(copy, /goes through an internal AI-assisted review/);
+  assert.match(copy, /внутреннюю проверку с помощью ИИ/);
+  // The independent audit is promised for before mainnet…
+  assert.match(copy, /[Ii]ndependent (?:security )?audit is completed before mainnet/);
+  assert.match(copy, /Независимый аудит безопасности/);
+  // …but no completed result may be claimed anywhere on the page.
+  assert.doesNotMatch(copy, /\baudit (?:has )?passed\b/i, "no passed audit may be claimed");
+  assert.doesNotMatch(copy, /аудит пройден/i);
   // The report slot exists but states nothing until a report does.
   assert.match(copy, /will be published in this slot/);
 });
@@ -71,12 +78,16 @@ test("no team member, partner or investor is named or pictured", () => {
   assert.doesNotMatch(page, /PersonAvatar|FounderCard|<img/, "no faces or photos on /transparency");
 });
 
-test("team vesting is stated as 10% at genesis and 24 months linear", () => {
+test("team vesting is stated as 0% at launch, a 6-month cliff then 18 months linear", () => {
   const copy = sectionBodies();
-  assert.match(copy, /10% at mainnet genesis/);
-  assert.match(copy, /24 months/);
-  assert.match(copy, /10% при genesis mainnet/);
-  assert.match(copy, /24 месяца/);
+  assert.match(copy, /0% at launch/);
+  assert.match(copy, /6-month cliff/);
+  assert.match(copy, /24 months in total/);
+  assert.match(copy, /0% при запуске/);
+  assert.match(copy, /клифф 6 месяцев/);
+  assert.match(copy, /всего 24 месяца/);
+  assert.doesNotMatch(copy, /10% at mainnet genesis/);
+  assert.doesNotMatch(copy, /10% при genesis mainnet/);
 });
 
 test("the genesis split labels come from the tokenomics copy, not from new numbers", () => {

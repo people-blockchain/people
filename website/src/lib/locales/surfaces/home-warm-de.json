@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Starten Sie einen Token für Ihre Community."
     ],
-    "headlineAccent": "10 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccent": "27 % gehen an Ihre Leute, nicht an Wale.",
     "headlineAccentLines": [
-      "10 % gehen an Ihre Leute,",
+      "27 % gehen an Ihre Leute,",
       "nicht an Wale."
     ],
     "sub": "Kein Code, keine Krypto-Kenntnisse nötig. Ein Smartphone oder ein Browser reicht: Wallet in 30 Sekunden erstellen und im Testnet ausprobieren.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "10 % an Ihre Leute",
-        "sub": "Jeder neue Token schickt 10 % seines Angebots in seinen eigenen Community-Pool."
+        "label": "27 % an Ihre Leute",
+        "sub": "Jeder neue Token schickt 27 % seines Angebots in seinen eigenen Community-Pool."
       }
     ],
-    "shareBadge": "10 % Community-Anteil",
+    "shareBadge": "27 % Community-Anteil",
     "peopleLine": "Ihre Leute, nicht Wale"
   },
   "community": {
-    "eyebrow": "10 % für die Community",
-    "title": "10 % jedes neuen Tokens gehen an Ihre Leute",
-    "lead": "Das ist im Protokoll verankert, nicht in einem Post versprochen: Jeder Standard-Start schickt 10 % seines Angebots in den eigenen Community-Pool dieses Tokens. Er wird nie mit Netzwerkgebühren vermischt.",
+    "eyebrow": "27 % für die Community",
+    "title": "27 % jedes neuen Tokens gehen an Ihre Leute",
+    "lead": "Das ist im Protokoll verankert, nicht in einem Post versprochen: Jeder Standard-Start schickt 27 % seines Angebots in den eigenen Community-Pool dieses Tokens. Er wird nie mit Netzwerkgebühren vermischt.",
     "statLabel": "des Angebots jedes neuen Tokens fließen in seinen Community-Pool",
     "statNote": "Der Pool gehört den Menschen, die an diesem Token teilnehmen — nicht dem Netzwerk und nicht dem Ersteller.",
     "footnote": "Netzwerkgebühren werden separat aufgeteilt: {{community}} % an den Community-Pool, {{validators}} % an die Validatoren.",
@@ -90,7 +90,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10 %",
+        "stat": "27 %",
         "title": "jedes neuen Tokens gehen in dessen Community-Pool",
         "body": "Nicht ans Netzwerk, nicht an den Ersteller. Der eigene Pool des Tokens, geteilt mit den Menschen, die teilnehmen."
       },

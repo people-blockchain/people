@@ -9,7 +9,7 @@ import { SLICE_COLOR } from "@/components/visuals/FeeSplitDonut";
 import { fill } from "@/components/warm/warm-ui";
 import { useIsMobile } from "@/components/motion/useIsMobile";
 import { GENESIS_ALLOCATIONS, NETWORK_FEE_SPLIT, cumulativeUnlockPpl, type AllocationId } from "@/lib/tokenomics";
-import { TOKEN_COMMUNITY_ALLOCATION_PCT } from "@/lib/selling-economics";
+import { TOKEN_COMMUNITY_SHARE_PCT } from "@/lib/selling-economics";
 import { REFERRAL_INSTANT_UNLOCK_BPS, REFERRAL_VEST_WEEKS } from "@/lib/founders/referral";
 import { VERIFICATION_POINTS_FACTOR_FULL, VERIFICATION_POINTS_FACTOR_TELEGRAM } from "@/lib/founders/verification";
 
@@ -451,7 +451,7 @@ export function DifferTable({ copy, lang }: { copy: LitepaperCopy; lang: Languag
     .join(" · ");
   const rows = c.differRows.map((row) => ({
     ...row,
-    people: fill(row.people, { burnPct, feeSplit, communityPct: TOKEN_COMMUNITY_ALLOCATION_PCT }),
+    people: fill(row.people, { burnPct, feeSplit, communityPct: TOKEN_COMMUNITY_SHARE_PCT }),
   }));
 
   return (

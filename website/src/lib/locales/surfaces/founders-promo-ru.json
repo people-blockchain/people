@@ -80,8 +80,6 @@
   "signupZero": "Одна регистрация = 0",
   "bonusTitle": "Бонусные очки за активных друзей",
   "bonusStay": "+{{pts}} · активен через {{days}} дней",
-  "bonusSale": "+{{pts}} · покупает PPL в официальной продаже",
-  "bonusAirdrop": "+{{pts}} · участвует в airdrop другого проекта",
   "buildEyebrow": "Без кода",
   "buildTitle": "Что друзья могут создать",
   "build": [

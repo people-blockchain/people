@@ -2,9 +2,9 @@
 title: "People Blockchain — Litepaper"
 description: "La blockchain dove ogni utente è una persona verificata. Posseduta da persone, non da VC."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Litepaper
@@ -12,7 +12,7 @@ status: preliminary
 > **La blockchain dove ogni utente è una persona verificata.**
 > **Posseduta da persone, non da VC.**
 
-*v0.1 · Ottobre 2026 · I numeri sono preliminari e soggetti a governance comunitaria. Niente in questo documento è una promessa di reddito.*
+*v1.0 · Ottobre 2026 · I numeri sono preliminari e soggetti a governance comunitaria. Niente in questo documento è una promessa di reddito.*
 
 ---
 
@@ -21,7 +21,7 @@ status: preliminary
 | | |
 |---|---|
 | Fornitura | **1.000.000.000 PPL**, fissa |
-| Ogni token lanciato | **10%** della fornitura va al pool comunitario di quel token |
+| Ogni token lanciato | **27%** della fornitura va al pool comunitario di quel token |
 | Commissioni di rete bruciate | **0%** — ogni commissione è condivisa |
 | Chi guadagna ricompense | **Persone verificate** (Telegram con numero di telefono o Human Passport) |
 | Finanziamento | **Autofinanziato.** Nessun VC. Nessuna allocazione agli investitori. |
@@ -43,7 +43,7 @@ status: preliminary
 
 **Persone verificate, non bot.** Le ricompense vanno ad account che hanno superato un controllo umano gratuito. Una persona, un account. Solo l'iscrizione non guadagna nulla.
 
-**Il 10% di ogni token lanciato va alla sua comunità.** Incorporato nel protocollo, non promesso in un post: ogni lancio standard invia il 10% della sua fornitura al pool comunitario di quel token. Non è mai mescolato con le commissioni di rete.
+**Il 27% di ogni token lanciato va alla sua comunità.** Incorporato nel protocollo, non promesso in un post: ogni lancio standard invia il 27% della sua fornitura al pool comunitario di quel token. Non è mai mescolato con le commissioni di rete.
 
 ---
 
@@ -53,7 +53,7 @@ Quello che puoi fare senza codice:
 
 | Strumento | Cosa fa | Stato |
 |---|---|---|
-| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il 10% della fornitura va al pool comunitario del token; la quota del creatore scade in 180 giorni. | Live on testnet |
+| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il 27% della fornitura va al pool comunitario del token; la quota del creatore scade in 180 giorni. | Live on testnet |
 | **Carte club NFT** | Carte di iscrizione per un club, un caffè o una comunità — una per membro, con un'immagine che carichi o generi. | Live on testnet |
 | **Raccolta fondi** | Raccogli supporto per un progetto con modelli di contratti revisionati: escrow, vesting, voto ponderato per token. La tua comunità acquista sulla curva, quindi la domanda fissa il prezzo — non un round privato. | Live on testnet |
 | **Contratti AI** | Descrivi un contratto intelligente a parole. Viene assemblato da modelli OpenZeppelin e vedi il risultato prima di distribuirlo. | Live on testnet |
@@ -117,7 +117,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 
 **Buyback.** Le quote del tesoro (20%) e della liquidità (10%) vengono utilizzate per i buyback pubblici di PPL. Niente viene bruciato per fingere scarsità — le commissioni tornano alla rete e alle sue persone.
 
-**Commissione di lancio token.** Attiva sulla testnet: la commissione per lanciare un token o coniare un NFT può essere pagata in PPL, oppure in una stablecoin di testnet (tUSDC/tUSDT) tramite il contratto StableFeeGateway. L'importo in stablecoin è un prezzo fisso in USD approvato dal proprietario: 5.00 USD per il lancio di un token, 10.00 USD per il mint di un NFT. Il pagamento in stablecoin funziona solo sulla rete People per ora; il pagamento da un'altra chain (Ethereum, Polygon, Tron, TON, Solana) arriverà più avanti. Il 100% della commissione in stablecoin va al riacquisto pubblico di PPL, e il PPL riacquistato viene diviso 30/25/20/10/15 dal multisig del tesoro, come ogni altro riacquisto.
+**Commissione di lancio token.** Attiva sulla testnet: le factory distribuite applicano ancora una commissione fissa in PPL — 1,045005 PPL per lanciare un token e 2,925 PPL per coniare un NFT. Il piano approvato è un importo fisso di **5 USD per il lancio di un token e 10 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP. L'opzione stablecoin e lo sconto TWAP non sono ancora nel codice distribuito. Il 100% delle commissioni di lancio va al riacquisto pubblico di PPL, e il PPL riacquistato viene diviso 30/25/20/10/15 dal multisig del tesoro, come ogni altro riacquisto.
 
 ---
 
@@ -144,7 +144,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 | Fase | Cosa succede | Gate |
 |---|---|---|
 | **Stagione 0 — Testnet pubblico** | Portafogli, verifica, lanci di token, carte NFT, swap, punti Million Founders. | Ora |
-| **Mainnet + vendita PPL** | Mainnet si avvia; la vendita comunitaria di PPL si apre. | Almeno 1.000 persone verificate **e** un multisig del tesoro live |
+| **Mainnet + vendita PPL** | Mainnet si avvia. La vendita PPL non è ancora aperta; aprirà solo quando esisterà un'entità giuridica operativa. | Almeno 1.000 persone verificate **e** un multisig del tesoro live |
 | **Staking & validatori** | Staking e partecipazione dei validatori si aprono oltre il progetto. | Dopo mainnet |
 
 Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
@@ -176,7 +176,7 @@ Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
 - **Testnet non è mainnet.** I token e i saldi testnet non hanno valore. I punti sono un record di attività, non una garanzia di pagamento.
 - **Tutto è preliminare.** I numeri, gli orari e le regole possono cambiare prima del mainnet e sono soggetti a governance comunitaria.
 - **Rischio tecnologico.** Il software può avere bug. Un audit riduce il rischio; non lo elimina.
-- **Regolazione.** Le regole variano a seconda del paese e possono cambiare. La vendita di PPL non è disponibile per i residenti negli Stati Uniti e richiede un controllo proof-of-humanity / KYC.
+- **Regolazione.** Le regole variano a seconda del paese e possono cambiare. Al momento non c'è alcuna vendita pubblica di PPL; non vengono eseguiti controlli KYC.
 - **Fai la tua ricerca.** Questo litepaper è informazione, non consiglio finanziario, legale o fiscale.
 
 ---
@@ -191,7 +191,7 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 | Chi riceve le commissioni | I validatori ottengono la commissione prioritaria (mancia) ¹ | I validatori ottengono il 50% della commissione base e il 100% della commissione prioritaria ² | **Validatori 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Finanziamento iniziale | Vendita pubblica di ether, 2014 (42 giorni, pagati in BTC) ³ | $20M Series A guidato da Multicoin Capital (2019); gli investitori hanno ricevuto token SOL ⁴ | **Autofinanziato. Nessun VC, nessuna allocazione agli investitori** |
 | Creazione account | La creazione di un account non costa nulla; nessun controllo di identità ⁵ | Non è un requisito di protocollo | **Ricompense solo per persone verificate** |
-| Quota comunitaria per nuovo token | Non è una regola di protocollo | Non è una regola di protocollo | **10% di ogni token lanciato** |
+| Quota comunitaria per nuovo token | Non è una regola di protocollo | Non è una regola di protocollo | **27% di ogni token lanciato** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -211,3 +211,14 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### Cosa è cambiato nella v1.0
+
+- La quota comunitaria di un nuovo token è il **27%** della fornitura: **10%** assegnato al lancio più **~16,7%** prelevato dalla curva alla migrazione.
+- Il vesting del team è **0% al lancio, un cliff di 6 mesi e poi 18 mesi lineari** (24 mesi in totale).
+- Commissioni di lancio: il piano approvato è un importo fisso di **5 USD per il lancio di un token e 10 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
+- **Al momento non c'è alcuna vendita pubblica di PPL** e non vengono eseguiti controlli KYC o di eleggibilità.
+- Sicurezza: ora una **revisione interna assistita dall'IA** e un'**audit indipendente prima della mainnet**.
+- Il multisig del tesoro è **2 su 3** e viene creato prima della mainnet.

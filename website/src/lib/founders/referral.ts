@@ -31,11 +31,14 @@ export const REFERRAL_L1_POINTS = 100;
 /** L2: 30% of what the direct invitee earned for THEIR active invitees (basis points). */
 export const REFERRAL_L2_BPS = 3_000;
 
-/** Extra L1 points for invitee activity (defaults sized against FOUNDER_ACTION_CONFIG). */
+/**
+ * Extra L1 points for invitee activity (defaults sized against FOUNDER_ACTION_CONFIG).
+ *
+ * Points are earned only for the real actions of verified invitees. Buying PPL in a sale and
+ * joining another project's airdrop are NOT rewarded (founder decision), so no kind exists for them.
+ */
 export const REFERRAL_EXTRA_POINTS = {
   stay_7d: 10,
-  sale_buy: 20,
-  airdrop_join: 10,
 } as const;
 export type ReferralExtraKind = keyof typeof REFERRAL_EXTRA_POINTS;
 

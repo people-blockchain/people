@@ -2,9 +2,9 @@
 title: "People Blockchain — Litepaper"
 description: "Blockchain di mana setiap pengguna adalah manusia yang terverifikasi. Dimiliki oleh orang-orang, bukan VC."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Litepaper
@@ -12,7 +12,7 @@ status: preliminary
 > **Blockchain di mana setiap pengguna adalah manusia yang terverifikasi.**
 > **Dimiliki oleh orang-orang, bukan VC.**
 
-*v0.1 · Oktober 2026 · Angka-angka bersifat awal dan dapat berubah sesuai tata kelola komunitas. Tidak ada janji penghasilan dalam dokumen ini.*
+*v1.0 · Oktober 2026 · Angka-angka bersifat awal dan dapat berubah sesuai tata kelola komunitas. Tidak ada janji penghasilan dalam dokumen ini.*
 
 ---
 
@@ -21,7 +21,7 @@ status: preliminary
 | | |
 |---|---|
 | Pasokan | **1.000.000.000 PPL**, tetap |
-| Setiap token yang diluncurkan | **10%** dari pasokan masuk ke pool komunitas token itu sendiri |
+| Setiap token yang diluncurkan | **27%** dari pasokan masuk ke pool komunitas token itu sendiri |
 | Biaya jaringan terbakar | **0%** — setiap biaya dibagikan |
 | Siapa yang mendapat hadiah | **Manusia terverifikasi** (Telegram dengan nomor ponsel atau Human Passport) |
 | Pendanaan | **Pendanaan mandiri.** Tanpa VC. Tanpa alokasi investor. |
@@ -43,7 +43,7 @@ status: preliminary
 
 **Manusia terverifikasi, bukan bot.** Hadiah pergi ke akun yang lulus pemeriksaan manusia gratis. Satu orang, satu akun. Pendaftaran saja tidak menghasilkan apa pun.
 
-**10% dari setiap token yang diluncurkan masuk ke komunitasnya.** Dibangun ke dalam protokol, bukan dijanjikan di posting: setiap peluncuran standar mengirim 10% dari pasokannya ke pool komunitas token itu sendiri. Ini tidak pernah dicampur dengan biaya jaringan.
+**27% dari setiap token yang diluncurkan masuk ke komunitasnya.** Dibangun ke dalam protokol, bukan dijanjikan di posting: setiap peluncuran standar mengirim 27% dari pasokannya ke pool komunitas token itu sendiri. Ini tidak pernah dicampur dengan biaya jaringan.
 
 ---
 
@@ -53,7 +53,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 | Alat | Apa yang dilakukannya | Status |
 |---|---|---|
-| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. 10% dari pasokan masuk ke pool komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
+| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. 27% dari pasokan masuk ke pool komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
 | **Kartu klub NFT** | Kartu keanggotaan untuk klub, kafe, atau komunitas — satu per anggota, dengan gambar yang Anda unggah atau hasilkan. | Aktif di testnet |
 | **Penggalangan dana** | Kumpulkan dukungan untuk proyek dengan template kontrak yang ditinjau: escrow, vesting, token-weighted vote. Komunitas Anda membeli di kurva, jadi permintaan menetapkan harga — bukan putaran pribadi. | Aktif di testnet |
 | **Kontrak AI** | Jelaskan kontrak pintar dalam kata-kata polos. Ini dirakit dari template OpenZeppelin dan Anda melihat hasilnya sebelum Anda deploy. | Aktif di testnet |
@@ -117,7 +117,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 
 **Pembelian kembali.** Bagian treasury (20%) dan likuiditas (10%) digunakan untuk pembelian kembali PPL publik. Tidak ada yang terbakar untuk membuat kelangkaan palsu — biaya kembali ke jaringan dan orangnya.
 
-**Biaya peluncuran token.** Aktif di testnet: biaya untuk meluncurkan token atau mencetak NFT dapat dibayar dengan PPL, atau dengan stablecoin testnet (tUSDC/tUSDT) melalui kontrak StableFeeGateway. Jumlah stablecoin adalah harga USD tetap yang disetujui pemilik: 5.00 USD untuk peluncuran token, 10.00 USD untuk mint NFT. Pembayaran stablecoin untuk saat ini hanya berfungsi di jaringan People; membayar dari rantai lain (Ethereum, Polygon, Tron, TON, Solana) akan hadir nanti. 100% dari biaya stablecoin masuk ke buyback PPL publik, dan PPL yang dibeli kembali kemudian dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti buyback lainnya.
+**Biaya peluncuran token.** Aktif di testnet: pabrik yang telah diterapkan masih mengenakan biaya tetap dalam PPL — 1,045005 PPL untuk meluncurkan token dan 2,925 PPL untuk mencetak NFT. Rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP. Opsi stablecoin dan diskon TWAP belum ada dalam kode yang diterapkan. 100% biaya peluncuran masuk ke buyback PPL publik, dan PPL yang dibeli kembali dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti buyback lainnya.
 
 ---
 
@@ -144,7 +144,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Tahap | Apa yang terjadi | Gerbang |
 |---|---|---|
 | **Musim 0 — Testnet publik** | Dompet, verifikasi, peluncuran token, kartu NFT, swap, poin Satu Juta Founder. | Sekarang |
-| **Mainnet + Penjualan PPL** | Mainnet diluncurkan; penjualan PPL komunitas dibuka. | Minimal 1.000 orang terverifikasi **dan** multisig treasury yang aktif |
+| **Mainnet + Penjualan PPL** | Mainnet diluncurkan. Penjualan PPL belum dibuka; hanya akan dibuka setelah ada badan hukum yang beroperasi. | Minimal 1.000 orang terverifikasi **dan** multisig treasury yang aktif |
 | **Staking & validator** | Staking dan partisipasi validator terbuka di luar proyek. | Setelah mainnet |
 
 Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpenuhi.
@@ -176,7 +176,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 - **Testnet bukan mainnet.** Token testnet dan saldo tidak memiliki nilai. Poin adalah catatan aktivitas, bukan jaminan pembayaran.
 - **Semuanya awal.** Angka, jadwal, dan aturan dapat berubah sebelum mainnet dan tunduk pada tata kelola komunitas.
 - **Risiko teknologi.** Perangkat lunak dapat memiliki bug. Audit mengurangi risiko; itu tidak menghilangkannya.
-- **Regulasi.** Aturan berbeda menurut negara dan dapat berubah. Penjualan PPL tidak tersedia untuk penduduk AS dan memerlukan pemeriksaan bukti-kemanusiaan / KYC.
+- **Regulasi.** Aturan berbeda menurut negara dan dapat berubah. Saat ini tidak ada penjualan PPL publik; tidak ada pemeriksaan KYC.
 - **Lakukan riset sendiri.** Litepaper ini adalah informasi, bukan saran keuangan, hukum, atau pajak.
 
 ---
@@ -191,7 +191,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 | Siapa yang menerima biaya | Validator mendapat biaya prioritas (tip) ¹ | Validator mendapat 50% dari biaya dasar dan 100% dari biaya prioritas ² | **Validator 30 · Komunitas 25 · Treasury 20 · Likuiditas 10 · Pertumbuhan 15** |
 | Pendanaan awal | Penjualan ether publik, 2014 (42 hari, dibayar dalam BTC) ³ | Putaran Seri A $20M yang dipimpin oleh Multicoin Capital (2019); investor menerima token SOL ⁴ | **Pendanaan mandiri. Tanpa VC, tanpa alokasi investor** |
 | Pembuatan akun | Membuat akun tidak memerlukan biaya; tidak ada pemeriksaan identitas ⁵ | Bukan persyaratan protokol | **Hadiah hanya untuk manusia terverifikasi** |
-| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **10% dari setiap token yang diluncurkan** |
+| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **27% dari setiap token yang diluncurkan** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -211,3 +211,14 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### Apa yang berubah di v1.0
+
+- Bagian komunitas dari token baru adalah **27%** dari pasokan: **10%** dialokasikan saat peluncuran plus **~16,7%** disapu dari kurva saat migrasi.
+- Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
+- Biaya peluncuran: rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
+- **Saat ini tidak ada penjualan PPL publik** dan tidak ada pemeriksaan KYC atau kelayakan.
+- Keamanan: **tinjauan internal berbantuan AI** saat ini dan **audit independen sebelum mainnet**.
+- Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.

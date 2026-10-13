@@ -19,9 +19,7 @@ const tokenomics = {
         "200M PPL (20%): años 1–4 pagan 6%, 5%, 5%, 4% del supply total al año (60M / 50M / 50M / 40M PPL) más 30% de las comisiones de red.",
     },
     saleLead:
-      "Hasta 100M PPL de la venta en una curva pública tras el airdrop de fundadores, con al menos 1.000 personas verificadas y un multisig activo. Lo no vendido vuelve al fondo comunitario.",
-    restrictionsBody:
-      "No disponible para residentes de EE. UU. Se requiere prueba de humanidad / KYC. La venta pública solo tras el airdrop de fundadores, 1.000 personas verificadas y multisig.",
+      "Hasta 100M PPL del tramo de venta están reservados para una curva de precios pública tras el airdrop de fundadores. La venta permanece cerrada hasta que exista una entidad operadora de la venta.",
     emissionTitle: "Emisión y recompensas a validadores",
     emissionLead:
       "La seguridad se paga desde el pool de validadores y las comisiones — sin acuñar supply nuevo en los años 1–4.",
@@ -47,9 +45,7 @@ const tokenomics = {
         "200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.",
     },
     saleLead:
-      "Até 100M PPL da venda numa curva pública após o airdrop de fundadores, com pelo menos 1.000 pessoas verificadas e multisig ativo. O não vendido volta ao fundo comunitário.",
-    restrictionsBody:
-      "Indisponível para residentes dos EUA. Exige prova de humanidade / KYC. Venda pública só após airdrop de fundadores, 1.000 verificados e multisig.",
+      "Até 100M PPL do lote de venda estão reservados para uma curva de preços pública após o airdrop dos fundadores. A venda permanece fechada até existir uma entidade operadora da venda.",
     emissionTitle: "Emissão e recompensas de validadores",
     emissionLead:
       "Segurança paga pelo pool de validadores e taxas — sem cunhar supply novo nos anos 1–4.",
@@ -75,9 +71,7 @@ const tokenomics = {
         "200M PPL (20 %) : années 1–4 versent 6 %, 5 %, 5 %, 4 % du supply total par an (60M / 50M / 50M / 40M PPL) plus 30 % des frais réseau.",
     },
     saleLead:
-      "Jusqu’à 100M PPL en vente publique après l’airdrop fondateurs, avec au moins 1 000 personnes vérifiées et un multisig actif. L’invendu retourne au fonds communautaire.",
-    restrictionsBody:
-      "Indisponible aux résidents américains. Preuve d’humanité / KYC requis. Vente publique seulement après airdrop fondateurs, 1 000 vérifiés et multisig.",
+      "Jusqu'à 100M PPL du lot de vente sont réservés à une courbe de prix publique après l'airdrop des fondateurs. La vente reste fermée tant qu'une entité opératrice de la vente n'existe pas.",
     emissionTitle: "Émission et récompenses validateurs",
     emissionLead:
       "La sécurité est financée par le pool validateurs et les frais — pas de frappe nouvelle les années 1–4.",
@@ -103,9 +97,7 @@ const tokenomics = {
         "200M PPL (20 %): Jahre 1–4 zahlen 6 %, 5 %, 5 %, 4 % des Gesamtangebots pro Jahr (60M / 50M / 50M / 40M PPL) plus 30 % der Netzwerkgebühren.",
     },
     saleLead:
-      "Bis zu 100M PPL aus dem Verkaufstopf per öffentlicher Kurve nach dem Gründer-Airdrop, mit mindestens 1.000 verifizierten Personen und aktivem Multisig. Unverkauftes geht an den Community-Fonds.",
-    restrictionsBody:
-      "Nicht für US-Bewohner. Proof-of-Humanity / KYC erforderlich. Öffentlicher Verkauf erst nach Gründer-Airdrop, 1.000 Verifizierten und Multisig.",
+      "Bis zu 100M PPL aus dem Verkaufsbudget sind für eine öffentliche Bonding-Kurve nach dem Gründer-Airdrop reserviert. Der Verkauf bleibt geschlossen, bis eine Betreibergesellschaft für den Verkauf existiert.",
     emissionTitle: "Emission und Validator-Belohnungen",
     emissionLead:
       "Sicherheit wird aus dem Validator-Pool und Gebühren bezahlt — in Jahren 1–4 kein neues Minting.",
@@ -131,9 +123,7 @@ const tokenomics = {
         "200M PPL (20%): anni 1–4 pagano 6%, 5%, 5%, 4% del supply totale all’anno (60M / 50M / 50M / 40M PPL) più 30% delle commissioni di rete.",
     },
     saleLead:
-      "Fino a 100M PPL in vendita pubblica dopo l’airdrop fondatori, con almeno 1.000 persone verificate e multisig attivo. L’invenduto torna al fondo community.",
-    restrictionsBody:
-      "Non disponibile ai residenti USA. Richiede proof of humanity / KYC. Vendita pubblica solo dopo airdrop fondatori, 1.000 verificati e multisig.",
+      "Fino a 100M PPL del lotto di vendita sono riservati a una curva di prezzo pubblica dopo l'airdrop dei fondatori. La vendita resta chiusa finché non esiste un soggetto giuridico che la gestisca.",
     emissionTitle: "Emissione e ricompense validatori",
     emissionLead:
       "La sicurezza è pagata dal pool validatori e dalle commissioni — niente nuovo mint negli anni 1–4.",
@@ -159,9 +149,7 @@ const tokenomics = {
         "200M PPL (%20): yıl 1–4 toplam arzın yıllık %6, %5, %5, %4 (60M / 50M / 50M / 40M PPL) artı ağ ücretlerinin %30’u.",
     },
     saleLead:
-      "Kurucu airdrop’undan sonra, en az 1.000 doğrulanmış kişi ve multisig ile satış havuzundan 100M PPL’ye kadar halka açık eğri. Satılmayanlar topluluk fonuna döner.",
-    restrictionsBody:
-      "ABD sakinleri için değil. İnsanlık kanıtı / KYC gerekir. Halka satış yalnızca kurucu airdrop, 1.000 doğrulanmış kişi ve multisig sonrası.",
+      "Satış havuzundaki 100M PPL'ye kadar kısım, kurucu airdrop'undan sonra halka açık bir fiyat eğrisi (bonding curve) için ayrılmıştır. Satış, onu işletecek bir tüzel kişilik oluşana kadar kapalı kalır.",
     emissionTitle: "Emisyon ve doğrulayıcı ödülleri",
     emissionLead:
       "Güvenlik doğrulayıcı havuzu ve ücretlerle ödenir — yıl 1–4’te yeni basım yok.",
@@ -187,9 +175,7 @@ const tokenomics = {
         "200M PPL (20%): năm 1–4 trả 6%, 5%, 5%, 4% tổng cung mỗi năm (60M / 50M / 50M / 40M PPL) cộng 30% phí mạng.",
     },
     saleLead:
-      "Tối đa 100M PPL bán trên đường cong công khai sau airdrop nhà sáng lập, khi có ít nhất 1.000 người đã xác minh và multisig hoạt động. Phần không bán trả về quỹ cộng đồng.",
-    restrictionsBody:
-      "Không dành cho cư dân Mỹ. Cần proof of humanity / KYC. Bán công khai chỉ sau airdrop nhà sáng lập, 1.000 người xác minh và multisig.",
+      "Tối đa 100M PPL từ phần bán được dành cho đường cong giá công khai (bonding curve) sau airdrop cho nhà sáng lập. Đợt bán vẫn đóng cho đến khi có pháp nhân vận hành đợt bán.",
     emissionTitle: "Phát hành và thưởng validator",
     emissionLead:
       "An ninh trả từ quỹ validator và phí — không đúc mới trong năm 1–4.",
@@ -215,9 +201,7 @@ const tokenomics = {
         "200M PPL (20%): tahun 1–4 membayar 6%, 5%, 5%, 4% dari total pasokan per tahun (60M / 50M / 50M / 40M PPL) plus 30% biaya jaringan.",
     },
     saleLead:
-      "Hingga 100M PPL dijual di kurva publik setelah airdrop pendiri, dengan minimal 1.000 orang terverifikasi dan multisig aktif. Yang tidak terjual kembali ke dana komunitas.",
-    restrictionsBody:
-      "Tidak untuk penduduk AS. Butuh proof of humanity / KYC. Penjualan publik hanya setelah airdrop pendiri, 1.000 terverifikasi, dan multisig.",
+      "Hingga 100M PPL dari bagian penjualan disisihkan untuk kurva harga publik (bonding curve) setelah airdrop pendiri. Penjualan tetap tertutup sampai ada badan hukum yang mengoperasikannya.",
     emissionTitle: "Emisi dan hadiah validator",
     emissionLead:
       "Keamanan dibayar dari kolam validator dan biaya — tanpa mint baru di tahun 1–4.",
@@ -242,9 +226,7 @@ const tokenomics = {
         "200M PPL（20%）：第 1–4 年每年支付总供应的 6%、5%、5%、4%（60M / 50M / 50M / 40M PPL），另加网络手续费的 30%。",
     },
     saleLead:
-      "创始人空投后，在至少 1,000 名已验证用户且多签就绪时，最多 100M PPL 通过公开联合曲线出售。未售出部分回到社区基金。",
-    restrictionsBody:
-      "美国居民不可参与。需通过真人验证 / KYC。公开销售仅在创始人空投、1,000 已验证用户与多签就绪后开放。",
+      "销售池中最多 100M PPL 预留给创始空投后的公开联合曲线（bonding curve）。在销售运营主体成立之前，销售保持关闭。",
     emissionTitle: "发行与验证者奖励",
     emissionLead: "安全支出来自验证者池与手续费——第 1–4 年不增发新币。",
     emissionBullets: [
@@ -268,9 +250,7 @@ const tokenomics = {
         "200M PPL (20%): السنوات 1–4 تدفع 6% و5% و5% و4% من العرض الكلي سنويًا (60M / 50M / 50M / 40M PPL) زائد 30% من رسوم الشبكة.",
     },
     saleLead:
-      "حتى 100M PPL في بيع عام بعد إيردروب المؤسسين، مع 1,000 شخص موثّق على الأقل وmultisig فعّال. غير المباع يعود لصندوق المجتمع.",
-    restrictionsBody:
-      "غير متاح لسكان الولايات المتحدة. يتطلب إثبات الإنسانية / KYC. البيع العام فقط بعد إيردروب المؤسسين و1,000 موثّق وmultisig.",
+      "حتى 100M PPL من حصة البيع مخصصة لمنحنى تسعير عام (bonding curve) بعد إيردروب المؤسسين. يبقى البيع مغلقاً حتى يوجد كيان قانوني مشغّل للبيع.",
     emissionTitle: "الإصدار ومكافآت المدققين",
     emissionLead: "الأمان يُموَّل من صندوق المدققين والرسوم — بدون سك جديد في السنوات 1–4.",
     emissionBullets: [
@@ -295,9 +275,7 @@ const tokenomics = {
         "200M PPL (20%): years 1–4 pay 6%, 5%, 5%, 4% of total supply per year (60M / 50M / 50M / 40M), plus 30% of network fees.",
     },
     saleLead:
-      "Up to 100M PPL from the sale bucket are offered on a public bonding curve after the founders airdrop, once at least 1,000 verified people are on the network and a multisig is live. Unsold tokens return to the community fund.",
-    restrictionsBody:
-      "The sale is not available to US residents. Buyers complete a proof-of-humanity / KYC check before participating. The public sale opens only after the founders airdrop, 1,000 verified people, and multisig controls are in place.",
+      "Up to 100M PPL from the sale bucket are reserved for a public bonding curve after the founders airdrop. The sale stays closed until an operating entity for the sale exists.",
     emissionTitle: "Emission and validator rewards",
     emissionLead:
       "Security rewards come from the pre-allocated validator pool and network fees — not from minting new supply in years 1–4.",

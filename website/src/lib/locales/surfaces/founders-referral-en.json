@@ -23,9 +23,7 @@
   ],
   "extraTitle": "Extra points from invitee activity",
   "extraRules": [
-    "{{pts}} points when your active invitee is still acting 7 days after activation.",
-    "{{pts2}} points when your active invitee buys PPL in the official sale.",
-    "{{pts3}} points when your active invitee joins another project's airdrop on People."
+    "{{pts}} points when your active invitee is still acting 7 days after activation."
   ],
   "statsActive": "Active invitees",
   "statsInactive": "Not active yet",
@@ -65,7 +63,7 @@
   "loadError": "Could not load referral data.",
   "launchTitle": "Issuer referral program (optional)",
   "launchLabel": "Add +{{pct}}% of supply for my own referral program",
-  "launchHint": "Off by default. On top of the mandatory 10% community share. Paid to inviters on their invitees' purchases of this token, same two levels (L2 = 30% of L1), same vesting. Accounting is off-chain on this testnet; the reserved share comes from your own allocation.",
+  "launchHint": "Off by default. On top of the token's mandatory community share. Paid to inviters on their invitees' purchases of this token, same two levels (L2 = 30% of L1), same vesting. Accounting is off-chain on this testnet; the reserved share comes from your own allocation.",
   "launchRegistered": "Referral program registered for this token.",
   "launchFailed": "Token was created, but the referral program could not be registered."
 }

@@ -20,8 +20,8 @@
           "text": "Mua bán trên đường cong ra mắt, sau đó trong pool token/PPL."
         },
         {
-          "title": "10% cho cộng đồng",
-          "text": "Mỗi token chuẩn gửi 10% nguồn cung vào pool cộng đồng của token đó."
+          "title": "27% cho cộng đồng",
+          "text": "Mỗi token chuẩn gửi 27% nguồn cung vào pool cộng đồng của token đó."
         },
         {
           "title": "Vesting creator",
@@ -91,7 +91,7 @@
         }
       ],
       "communityPoolExample": "Pool cộng đồng chia cho người tham gia tích cực theo điểm tham gia. Ví dụ: pool 600 token, ba người có 1, 2 và 3 điểm nhận 100, 200 và 300.",
-      "tokenPoolNote": "Riêng 10% cộng đồng của mỗi token ở pool riêng. Không trộn với phí PPL.",
+      "tokenPoolNote": "Riêng 27% cộng đồng của mỗi token ở pool riêng. Không trộn với phí PPL.",
       "buybackNote": "Phần kho bạc và thanh khoản (tổng 30%) tài trợ cho việc mua lại PPL công khai trên thị trường mở, do multisig đã công bố thực hiện và hiển thị trên explorer.",
       "launchFeeNote": "Khởi chạy một token hoặc NFT tốn một khoản phí giao thức, có thể trả bằng PPL hoặc stablecoin được hỗ trợ (USDC/USDT) — do bạn chọn. Gas luôn được trả bằng PPL."
     },

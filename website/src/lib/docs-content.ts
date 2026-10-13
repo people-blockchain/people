@@ -178,7 +178,7 @@ export const docsContent: Record<Language, Guide> = {
         "items": [
           {
             "title": "Токен",
-            "text": "Задайте параметры выпуска и изучите правила распределения. Во встроенном механизме выпуска 10% нового токена направляется в его пул сообщества. Это не означает автоматическую выплату каждому держателю PPL и не является универсальным правилом любого Solidity-контракта."
+            "text": "Задайте параметры выпуска и изучите правила распределения. Во встроенном механизме выпуска 27% нового токена направляется в его пул сообщества. Это не означает автоматическую выплату каждому держателю PPL и не является универсальным правилом любого Solidity-контракта."
           },
           {
             "title": "NFT",
@@ -649,7 +649,7 @@ export const docsContent: Record<Language, Guide> = {
         "items": [
           {
             "title": "Token",
-            "text": "Choose issuance parameters and understand the allocation rules. The built-in token issuance mechanism allocates 10% of a new token to its community pool. This is not an automatic payment to every PPL holder or a universal rule for arbitrary Solidity contracts."
+            "text": "Choose issuance parameters and understand the allocation rules. The built-in token issuance mechanism allocates 27% of a new token to its community pool. This is not an automatic payment to every PPL holder or a universal rule for arbitrary Solidity contracts."
           },
           {
             "title": "NFT",

@@ -2,7 +2,6 @@ import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "@/db";
 import {
-  awardReferralExtra,
   recordIssuerPurchase,
   resolveBuyerByWallet,
 } from "@/lib/founders/referral-service";
@@ -18,9 +17,11 @@ function authorized(request: Request): boolean | null {
 }
 
 /**
- * Trusted-backend endpoint (indexer / sale watcher): invitee activity events that pay the
- * inviter extra points, and invitee purchases of issuer tokens. Never callable from a browser
- * session — events must not be self-reported by the invitee.
+ * Trusted-backend endpoint (indexer / sale watcher): invitee purchases of issuer tokens.
+ * Never callable from a browser session — events must not be self-reported by the invitee.
+ *
+ * The retired `sale_buy` / `airdrop_join` bonus kinds are rejected as `invalid_kind`: referral
+ * points are earned only for real actions of verified invitees.
  */
 export async function POST(request: Request) {
   if (!isDatabaseConfigured()) return NextResponse.json({ error: "unavailable" }, { status: 503 });
@@ -42,11 +43,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_event" }, { status: 400 });
   }
 
-  if (body.kind === "sale_buy" || body.kind === "airdrop_join") {
-    // One bonus per invitee per kind: the event key only labels the source event.
-    const result = await awardReferralExtra(userId, body.kind, userId);
-    return NextResponse.json({ ok: result.ok, ...(result.ok ? { points: result.points } : { reason: result.reason }) });
-  }
   if (body.kind === "issuer_purchase") {
     let amount: bigint;
     try {

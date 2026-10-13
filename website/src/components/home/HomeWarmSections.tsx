@@ -7,7 +7,7 @@ import { homeWarmCopy } from "@/lib/home-warm-content";
 import { homePublic } from "@/lib/home-public-content";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
 import { fetchHealth, type NetworkHealth } from "@/lib/network-client";
-import { MODEL_A_FEE_SPLIT, TOKEN_COMMUNITY_ALLOCATION_PCT } from "@/lib/selling-economics";
+import { MODEL_A_FEE_SPLIT, TOKEN_COMMUNITY_SHARE_PCT } from "@/lib/selling-economics";
 import { CommunityShareFlow } from "@/components/visuals/CommunityShareFlow";
 import {
   CountUpNumber,
@@ -40,14 +40,14 @@ const CARD_ICONS: ReactNode[] = [
   <path key="code" d="M8.7 15.9 4.8 12l3.9-3.9-1.4-1.4L2 12l5.3 5.3 1.4-1.4Zm6.6 0 3.9-3.9-3.9-3.9 1.4-1.4L22 12l-5.3 5.3-1.4-1.4Z" />,
 ];
 
-/* ── 2. The 10% community share ──────────────────────────────────────────── */
+/* ── 2. The 27% community share ──────────────────────────────────────────── */
 
 /**
- * The 10% community block — the promise the whole design hangs on. The warm
+ * The 27% community block — the promise the whole design hangs on. The warm
  * redesign dropped it from the homepage, so it is restored here, high on the
  * page and stacked on mobile.
  *
- * The percentage comes from `TOKEN_COMMUNITY_ALLOCATION_PCT` and the fee-split
+ * The percentage comes from `TOKEN_COMMUNITY_SHARE_PCT` and the fee-split
  * figures in the footnote from `MODEL_A_FEE_SPLIT`; the diagram copy is the
  * already-translated text every locale has for the community pool.
  */
@@ -69,7 +69,7 @@ export function HomeWarmCommunity() {
       <div className="mt-8 grid gap-4 lg:grid-cols-[0.62fr_1.38fr] lg:items-stretch">
         <div className="flex flex-col justify-center rounded-[28px] border border-value/30 bg-surface p-6 text-center shadow-[var(--elev-1)]">
           <p className="font-mono text-6xl font-bold leading-none tabular-nums text-value sm:text-7xl">
-            {TOKEN_COMMUNITY_ALLOCATION_PCT}%
+            {TOKEN_COMMUNITY_SHARE_PCT}%
           </p>
           <p className="mt-4 text-sm font-semibold text-ink">{t.statLabel}</p>
           <p className="mt-2 text-xs text-ink-3">{t.statNote}</p>

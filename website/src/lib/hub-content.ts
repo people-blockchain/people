@@ -34,8 +34,8 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "10%",
-          title: "10% to the community pool",
+          value: "27%",
+          title: "27% to the community pool",
           note: "Of every new token's supply goes to the community pool.",
         },
         {
@@ -58,7 +58,7 @@ const rawHub = {
         { id: "created", label: "Token created", sub: "A project launches on the network" },
         {
           id: "community",
-          label: "10% community + network fee",
+          label: "27% community + network fee",
           sub: "Part of the new token and the protocol fee stay separate",
         },
         {
@@ -79,8 +79,8 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "10% of every new token goes to the community pool",
-          body: "Every standard token launched through the network sends 10% of its initial supply to that token’s Community Pool — then to the community. Not a personal payout, and not 10% of every fee.",
+          title: "27% of every new token goes to the community pool",
+          body: "Every standard token launched through the network ends up sending 27% of its initial supply to that token’s Community Pool — then to the community. That is the 10% community pool plus ~16.7% of supply swept from the curve at migration. Not a personal payout, and not 10% of every fee.",
           href: "/create/token",
           cta: "Create a token",
         },
@@ -107,7 +107,7 @@ const rawHub = {
       tag: "GROWTH REFERRAL",
       title: "You → L1 → L2",
       subtitle:
-        "Active Beta Growth payout: L1 70% · L2 30% of the Growth reward budget. Growth Pool is 15% of eligible fees. Distinct from network fee destinations and from the 10% of each new token that goes to the community pool.",
+        "Active Beta Growth payout: L1 70% · L2 30% of the Growth reward budget. Growth Pool is 15% of eligible fees. Distinct from network fee destinations and from the 27% of each new token that goes to the community pool.",
       you: "You",
       budgetNote:
         "Percentages are shares of the Growth reward budget after 15% of each protocol fee goes to the Growth Pool — not shares of every network fee.",
@@ -119,7 +119,7 @@ const rawHub = {
         },
         {
           title: "Separate from fees and tokens",
-          body: "L1/L2 Growth weights are not the network fee split and not the 10% of each new token for the community pool. Growth Pool receives 15% of each protocol fee with its own settlement rules.",
+          body: "L1/L2 Growth weights are not the network fee split and not the 27% of each new token for the community pool. Growth Pool receives 15% of each protocol fee with its own settlement rules.",
         },
         {
           title: "This site",
@@ -158,7 +158,7 @@ const rawHub = {
         {
           num: "04",
           title: "Take part in the economy",
-          body: "Pay Token Factory and NFT mint fees from the same wallet. The 10% community-pool share on new tokens, network fees, and Growth referral stay three separate mechanisms.",
+          body: "Pay Token Factory and NFT mint fees from the same wallet. The 27% community-pool share on new tokens, network fees, and Growth referral stay three separate mechanisms.",
           href: "/create",
           cta: "Create",
         },
@@ -281,7 +281,7 @@ const rawHub = {
           title: "COMMUNITY",
           summary: "Network fees and each token's community share stay in separate pipelines.",
           detail:
-            `${FEE_SPLIT_PLAIN.en} Standard user-created tokens send 10% of that token's supply to its own community pool — that is not a network fee.`,
+            `${FEE_SPLIT_PLAIN.en} Standard user-created tokens end up sending 27% of that token's supply to its own community pool — that is not a network fee.`,
         },
       ],
       storyCta: "Full visual story",
@@ -352,7 +352,7 @@ const rawHub = {
         "Growth Pool receives 15% of eligible fees. It is not guaranteed income, not a passive return, and not an investment product.",
       detailsTitle: "How fee routing works",
       detailsBody:
-        `${FEE_SPLIT_PLAIN.en} After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.`,
+        `${FEE_SPLIT_PLAIN.en} After whole-number division, any remainder stays with validators. The 27% of each new token that goes to the community pool is a different path — not a network fee.`,
       storyLink: "How rewards are explained",
     },
     tokenMarket: {
@@ -374,7 +374,7 @@ const rawHub = {
       expandItems: [
         "Launch pricing uses a constant-product curve with exact integer math.",
         "A protocol trading fee on the curve is routed through network fee economics.",
-        "Standard launch split includes a mandatory 10% of that token's supply to its own community pool (not a PPL network fee).",
+        "Standard launch split includes a mandatory 27% of that token's supply to its own community pool (not a PPL network fee).",
         "Creator vesting keeps most of the creator's share unlocking over time, so the community is not dumped on day one.",
       ],
       createCta: "Open Token Factory",
@@ -486,8 +486,8 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "10%",
-          title: "10% — в пул сообщества",
+          value: "27%",
+          title: "27% — в пул сообщества",
           note: "От каждого нового токена идёт в пул сообщества.",
         },
         {
@@ -510,7 +510,7 @@ const rawHub = {
         { id: "created", label: "Токен создан", sub: "Проект запускается в сети" },
         {
           id: "community",
-          label: "10% сообществу + сетевая комиссия",
+          label: "27% сообществу + сетевая комиссия",
           sub: "Доля нового токена и комиссия протокола разделены",
         },
         {
@@ -531,8 +531,8 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "10% каждого нового токена — в пул сообщества",
-          body: "Каждый стандартный токен, выпущенный через сеть, направляет 10% начального предложения в Community Pool этого токена — затем сообществу. Не личная выплата и не 10% с каждой комиссии.",
+          title: "27% каждого нового токена — в пул сообщества",
+          body: "Каждый стандартный токен, выпущенный через сеть, в итоге направляет 27% начального предложения в Community Pool этого токена — затем сообществу. Это 10% пула сообщества плюс ~16,7% предложения, сметённого с кривой при миграции. Не личная выплата и не 10% с каждой комиссии.",
           href: "/create/token",
           cta: "Создать токен",
         },
@@ -559,7 +559,7 @@ const rawHub = {
       tag: "GROWTH-РЕФЕРАЛ",
       title: "Вы → L1 → L2",
       subtitle:
-        "Активная Beta-выплата Growth: L1 70% · L2 30% бюджета награды Growth. Growth Pool — 15% допустимых комиссий. Это отдельно от направлений сетевых комиссий и от 10% каждого нового токена в пул сообщества.",
+        "Активная Beta-выплата Growth: L1 70% · L2 30% бюджета награды Growth. Growth Pool — 15% допустимых комиссий. Это отдельно от направлений сетевых комиссий и от 27% каждого нового токена в пул сообщества.",
       you: "Вы",
       budgetNote:
         "Проценты — доли бюджета награды Growth после того, как 15% каждой комиссии протокола идёт в Growth Pool, а не доли каждой сетевой комиссии.",
@@ -571,7 +571,7 @@ const rawHub = {
         },
         {
           title: "Отдельно от комиссий и токенов",
-          body: "Веса L1/L2 Growth — не сплит сетевых комиссий и не 10% каждого нового токена в пул сообщества. Growth Pool — 15% от комиссии протокола со своими правилами settlement.",
+          body: "Веса L1/L2 Growth — не сплит сетевых комиссий и не 27% каждого нового токена в пул сообщества. Growth Pool — 15% от комиссии протокола со своими правилами settlement.",
         },
         {
           title: "Этот сайт",
@@ -610,7 +610,7 @@ const rawHub = {
         {
           num: "04",
           title: "Участвуйте в экономике",
-          body: "Комиссии Token Factory и минта NFT оплачиваются из того же кошелька. 10% новых токенов в пул сообщества, сетевые комиссии и Growth-реферал — три отдельных механизма.",
+          body: "Комиссии Token Factory и минта NFT оплачиваются из того же кошелька. 27% новых токенов в пул сообщества, сетевые комиссии и Growth-реферал — три отдельных механизма.",
           href: "/create",
           cta: "Создать",
         },
@@ -733,7 +733,7 @@ const rawHub = {
           title: "COMMUNITY",
           summary: "Сетевые комиссии и доля каждого токена для сообщества учитываются раздельно.",
           detail:
-            `${FEE_SPLIT_PLAIN.ru} Стандартный пользовательский токен направляет 10% своего предложения в собственный пул сообщества — это не сетевая комиссия.`,
+            `${FEE_SPLIT_PLAIN.ru} Стандартный пользовательский токен в итоге направляет 27% своего предложения в собственный пул сообщества — это не сетевая комиссия.`,
         },
       ],
       storyCta: "Полная визуальная история",
@@ -804,7 +804,7 @@ const rawHub = {
         "Growth Pool получает 15% допустимых комиссий. Это не гарантированный доход, не пассивная доходность и не инвестиционный продукт.",
       detailsTitle: "Как устроена маршрутизация комиссий",
       detailsBody:
-        `${FEE_SPLIT_PLAIN.ru} После целочисленного деления остаток остаётся у валидаторов. 10% каждого нового токена в пул сообщества — другой контур, не сетевая комиссия.`,
+        `${FEE_SPLIT_PLAIN.ru} После целочисленного деления остаток остаётся у валидаторов. 27% каждого нового токена в пул сообщества — другой контур, не сетевая комиссия.`,
       storyLink: "Как объясняются награды",
     },
     tokenMarket: {
@@ -826,7 +826,7 @@ const rawHub = {
       expandItems: [
         "Цена запуска считается по кривой постоянного произведения с точной целочисленной математикой.",
         "Протокольная комиссия кривой идёт через экономику сетевых комиссий.",
-        "Стандартный запуск включает обязательные 10% предложения этого токена в его собственный пул (это не сетевая комиссия PPL).",
+        "Стандартный запуск включает обязательные 27% предложения этого токена в его собственный пул (это не сетевая комиссия PPL).",
         "Вестинг автора разблокирует большую часть его доли со временем, чтобы сообщество не получило сброс в первый день.",
       ],
       createCta: "Открыть фабрику токенов",

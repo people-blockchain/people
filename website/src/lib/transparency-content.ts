@@ -95,7 +95,7 @@ const en: TransparencyCopy = {
   meta: {
     title: "Team & transparency | People's Blockchain",
     description:
-      "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a treasury multisig and a security audit before mainnet.",
+      "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, an internal AI-assisted review today and an independent security audit before mainnet.",
   },
   hero: {
     eyebrow: "TRANSPARENCY",
@@ -134,32 +134,32 @@ const en: TransparencyCopy = {
     bucketNote: "Bucket names are taken from the tokenomics page — no separate numbers are introduced here.",
     vestTitle: "Team vesting",
     vestBody:
-      "The team share vests 10% at mainnet genesis; the remaining 90% unlocks linearly over 24 months.",
+      "The team share vests 0% at launch: a 6-month cliff, then 18 months of linear unlocks (24 months in total).",
     vestSplit: {
-      genesis: "At mainnet genesis",
-      genesisPct: "10%",
-      remainder: "Linear over 24 months",
-      remainderPct: "90%",
+      genesis: "At launch",
+      genesisPct: "0%",
+      remainder: "6-month cliff, then linear over 18 months",
+      remainderPct: "100%",
     },
     linkCta: "Full tokenomics",
   },
   treasury: {
     eyebrow: "TREASURY",
     title: "Treasury and spending",
-    body: "Before mainnet the treasury will move to a multisig; every spend will be visible in the explorer.",
+    body: "The treasury is a 2-of-3 multisig, created before mainnet; every spend is visible in the explorer.",
     points: [
-      "The multisig is not live yet, so no addresses are published here in advance.",
-      "Once it is live, every outgoing treasury transaction is a public explorer entry.",
-      "Nothing will be moved quietly: treasury spending will be readable by anyone.",
+      "The 2-of-3 multisig is created before mainnet; signer addresses are published then.",
+      "Every outgoing treasury transaction is a public explorer entry.",
+      "Nothing is moved quietly: treasury spending is readable by anyone.",
     ],
   },
   audit: {
     eyebrow: "AUDIT",
-    title: "Security audit before mainnet",
-    body: "The code goes through a security audit before mainnet.",
+    title: "Security review before mainnet",
+    body: "Today the code goes through an internal AI-assisted review. An independent security audit is completed before mainnet.",
     placeholderTitle: "Audit report",
     placeholderBody:
-      "The report will be published in this slot as soon as it is available. Until then, no audit result is claimed anywhere on this site.",
+      "The independent audit report will be published in this slot as soon as it is available. Until then, no audit result is claimed anywhere on this site.",
   },
   launch: {
     eyebrow: "LAUNCH PLAN",
@@ -176,7 +176,7 @@ const en: TransparencyCopy = {
       },
       {
         title: "Treasury multisig",
-        body: "Before mainnet the treasury moves to a multisig, so spending is visible in the explorer.",
+        body: "Before mainnet the treasury is a 2-of-3 multisig, so spending is visible in the explorer.",
       },
       {
         title: "Mainnet and the PPL sale",
@@ -238,7 +238,7 @@ const ru: TransparencyCopy = {
   meta: {
     title: "Команда и прозрачность | People's Blockchain",
     description:
-      "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны и аудит безопасности до mainnet.",
+      "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, внутренняя проверка с помощью ИИ сейчас и независимый аудит безопасности до mainnet.",
   },
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
@@ -277,32 +277,32 @@ const ru: TransparencyCopy = {
     bucketNote: "Названия корзин взяты со страницы токеномики — здесь не вводятся отдельные числа.",
     vestTitle: "Vesting команды",
     vestBody:
-      "Доля команды разблокируется на 10% при genesis mainnet; остальные 90% — линейно за 24 месяца.",
+      "Доля команды разблокируется на 0% при запуске: клифф 6 месяцев, затем линейно 18 месяцев (всего 24 месяца).",
     vestSplit: {
-      genesis: "При genesis mainnet",
-      genesisPct: "10%",
-      remainder: "Линейно за 24 месяца",
-      remainderPct: "90%",
+      genesis: "При запуске",
+      genesisPct: "0%",
+      remainder: "Клифф 6 месяцев, затем линейно 18 месяцев",
+      remainderPct: "100%",
     },
     linkCta: "Вся токеномика",
   },
   treasury: {
     eyebrow: "КАЗНА",
     title: "Казна и расходы",
-    body: "До mainnet казна перейдёт в мультисиг; каждый расход будет виден в explorer.",
+    body: "Казна — мультисиг 2-из-3, создаваемый до mainnet; каждый расход виден в explorer.",
     points: [
-      "Мультисиг ещё не запущен, поэтому адреса заранее здесь не публикуются.",
-      "После запуска каждая исходящая транзакция казны — публичная запись в explorer.",
-      "Тихо ничего не будет: расходы казны сможет прочитать любой.",
+      "Мультисиг 2-из-3 создаётся до mainnet; адреса подписантов публикуются тогда же.",
+      "Каждая исходящая транзакция казны — публичная запись в explorer.",
+      "Тихо ничего не происходит: расходы казны сможет прочитать любой.",
     ],
   },
   audit: {
     eyebrow: "АУДИТ",
-    title: "Аудит безопасности до mainnet",
-    body: "Код проходит аудит безопасности до mainnet.",
+    title: "Проверка безопасности до mainnet",
+    body: "Сегодня код проходит внутреннюю проверку с помощью ИИ. Независимый аудит безопасности завершается до mainnet.",
     placeholderTitle: "Отчёт об аудите",
     placeholderBody:
-      "Отчёт будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат аудита.",
+      "Отчёт независимого аудита будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат аудита.",
   },
   launch: {
     eyebrow: "ПЛАН ЗАПУСКА",
@@ -319,7 +319,7 @@ const ru: TransparencyCopy = {
       },
       {
         title: "Мультисиг казны",
-        body: "До mainnet казна переходит в мультисиг, чтобы расходы были видны в explorer.",
+        body: "До mainnet казна — мультисиг 2-из-3, чтобы расходы были видны в explorer.",
       },
       {
         title: "Mainnet и продажа PPL",

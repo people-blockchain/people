@@ -209,20 +209,6 @@ export async function finalizeDeliveredOrder(orderId: string, deliveryTxId: stri
     .update(pplSaleOrders)
     .set({ status: "delivered", deliveryTxId, deliveredAt: now, updatedAt: now })
     .where(and(eq(pplSaleOrders.id, orderId), eq(pplSaleOrders.status, "delivering")));
-  await creditReferralForSaleBuy(orderId);
-}
-
-/** Million Founders referral: a delivered official-sale purchase pays the buyer's inviter extra points. */
-async function creditReferralForSaleBuy(orderId: string): Promise<void> {
-  try {
-    const order = await getSaleOrder(orderId);
-    if (!order || order.status !== "delivered") return;
-    const { awardReferralExtra, resolveBuyerByWallet } = await import("@/lib/founders/referral-service");
-    const buyer = await resolveBuyerByWallet(order.peopleAddress);
-    if (buyer) await awardReferralExtra(buyer, "sale_buy", buyer);
-  } catch (error) {
-    console.error("[sale] referral credit failed", error instanceof Error ? error.message : typeof error);
-  }
 }
 
 /**

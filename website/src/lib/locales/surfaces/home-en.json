@@ -7,9 +7,9 @@
       "for your",
       "community."
     ],
-    "headlineAccent": "10% goes to your people, not to whales.",
+    "headlineAccent": "27% goes to your people, not to whales.",
     "headlineAccentLines": [
-      "10% goes to your people,",
+      "27% goes to your people,",
       "not to whales."
     ],
     "sub": "People's Blockchain is where creators launch tokens with fair pricing from block one, and the community gets a built-in share of everything it helps grow.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10% to the community pool",
+        "label": "27% to the community pool",
         "sub": "Built into every new token"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "For your community",
-      "body": "10% of every new token goes to that token's community pool. A share of every network fee goes there too. People who show up get a stake in what they build."
+      "body": "27% of every new token goes to that token's community pool. A share of every network fee goes there too. People who show up get a stake in what they build."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "This is participation in a network, not an investment.",
   "visuals": {
     "supply": "Token supply",
-    "share": "10%",
+    "share": "27%",
     "toPool": "goes to the community pool",
     "pool": "Community pool",
     "poolNote": "shared by the people who take part",
-    "aria": "10% of every new token's supply flows into its community pool, shared by the people who take part.",
+    "aria": "27% of every new token's supply flows into its community pool, shared by the people who take part.",
     "prompt": "A token where holders vote on how the treasury is spent",
     "step1": "You write",
     "step2": "We build",

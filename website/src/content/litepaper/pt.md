@@ -2,9 +2,9 @@
 title: "People Blockchain — Whitepaper"
 description: "A blockchain onde cada usuário é um humano verificado. Propriedade das pessoas, não de VCs."
 slug: /litepaper
-version: "0.1"
+version: "1.0"
 date: 2026-10
-status: preliminary
+status: public-draft
 ---
 
 # People Blockchain — Whitepaper
@@ -12,7 +12,7 @@ status: preliminary
 > **A blockchain onde cada usuário é um humano verificado.**
 > **Propriedade das pessoas, não de VCs.**
 
-*v0.1 · outubro de 2026 · Os números são preliminares e sujeitos à governança da comunidade. Nada neste documento é uma promessa de renda.*
+*v1.0 · outubro de 2026 · Os números são preliminares e sujeitos à governança da comunidade. Nada neste documento é uma promessa de renda.*
 
 ---
 
@@ -21,7 +21,7 @@ status: preliminary
 | | |
 |---|---|
 | Fornecimento | **1,000,000,000 PPL**, fixo |
-| Cada token lançado | **10%** do fornecimento vai para o pool da comunidade daquele token |
+| Cada token lançado | **27%** do fornecimento vai para o pool da comunidade daquele token |
 | Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
 | Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
 | Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
@@ -43,7 +43,7 @@ status: preliminary
 
 **Humanos verificados, não bots.** Recompensas vão para contas que passaram uma verificação gratuita de humanidade. Uma pessoa, uma conta. Apenas se inscrever não ganha nada.
 
-**10% de cada token lançado vai para sua comunidade.** Construído no protocolo, não prometido em um post: cada lançamento padrão envia 10% de seu fornecimento para o pool de comunidade daquele token. Nunca se mistura com taxas de rede.
+**27% de cada token lançado vai para sua comunidade.** Construído no protocolo, não prometido em um post: cada lançamento padrão envia 27% de seu fornecimento para o pool de comunidade daquele token. Nunca se mistura com taxas de rede.
 
 ---
 
@@ -53,7 +53,7 @@ O que você pode fazer sem código:
 
 | Ferramenta | O que faz | Status |
 |---|---|---|
-| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. 10% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
+| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. 27% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
 | **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
 | **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
 | **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
@@ -117,7 +117,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 
 **Buybacks.** As ações do tesouro (20%) e liquidez (10%) são usadas para buybacks públicos de PPL. Nada é queimado para falsificar escassez — as taxas voltam para a rede e suas pessoas.
 
-**Taxa de lançamento de token.** Ativa na testnet: a taxa para lançar um token ou criar um NFT pode ser paga em PPL, ou em uma stablecoin de testnet (tUSDC/tUSDT) através do contrato StableFeeGateway. O valor em stablecoin é um preço fixo em USD aprovado pelo proprietário: 5.00 USD para lançar um token, 10.00 USD para criar um NFT. O pagamento em stablecoin funciona apenas na rede People por agora; pagar a partir de outra rede (Ethereum, Polygon, Tron, TON, Solana) chegará mais tarde. 100% da taxa em stablecoin vai para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
+**Taxa de lançamento de token.** Ativa na testnet: as fábricas implantadas ainda cobram uma taxa fixa em PPL — 1,045005 PPL para lançar um token e 2,925 PPL para criar um NFT. O plano aprovado é um valor fixo de **5 USD por lançamento de token e 10 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP. A opção de stablecoin e o desconto TWAP ainda não estão no código implantado. 100% das taxas de lançamento vão para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
 
 ---
 
@@ -144,7 +144,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Mainnet + Venda de PPL** | Mainnet é lançada; a venda de PPL comunitária abre. | Pelo menos 1.000 pessoas verificadas **e** um multisig do tesouro ativo |
+| **Mainnet + Venda de PPL** | Mainnet é lançada. A venda de PPL ainda não está aberta; só abrirá quando existir uma entidade jurídica operadora. | Pelo menos 1.000 pessoas verificadas **e** um multisig do tesouro ativo |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
 Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
@@ -176,7 +176,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 - **Testnet não é mainnet.** Tokens de testnet e saldos não têm valor. Os pontos são um registro de atividade, não uma garantia de pagamento.
 - **Tudo é preliminar.** Números, cronogramas e regras podem mudar antes da mainnet e estão sujeitos à governança da comunidade.
 - **Risco tecnológico.** O software pode ter bugs. Uma auditoria reduz o risco; não o remove.
-- **Regulação.** As regras diferem por país e podem mudar. A venda de PPL não está disponível para residentes dos EUA e requer uma verificação de prova de humanidade / KYC.
+- **Regulação.** As regras diferem por país e podem mudar. Não há venda pública de PPL neste momento; não são feitas verificações de KYC.
 - **Faça sua própria pesquisa.** Este whitepaper é informação, não é conselho financeiro, legal ou fiscal.
 
 ---
@@ -191,7 +191,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
 | Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
 | Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
-| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% de cada token lançado** |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **27% de cada token lançado** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -211,3 +211,14 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
+
+---
+
+### O que mudou na v1.0
+
+- A parte da comunidade em um novo token é **27%** da oferta: **10%** alocados no lançamento mais **~16,7%** retirados da curva na migração.
+- O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
+- Taxas de lançamento: o plano aprovado é um valor fixo de **5 USD por lançamento de token e 10 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
+- **Não há venda pública de PPL no momento** e não são feitas verificações de KYC ou de elegibilidade.
+- Segurança: uma **revisão interna assistida por IA** agora e uma **auditoria independente antes da mainnet**.
+- O multisig do tesouro é **2 de 3** e é criado antes da mainnet.

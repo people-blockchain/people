@@ -1,6 +1,6 @@
 "use client";
 
-import { MODEL_A_FEE_SPLIT, TOKEN_COMMUNITY_ALLOCATION_PCT } from "@/lib/selling-economics";
+import { MODEL_A_FEE_SPLIT, TOKEN_COMMUNITY_SHARE_PCT } from "@/lib/selling-economics";
 import type { Language } from "@/context/LanguageContext";
 import { hub } from "@/lib/hub-content";
 
@@ -46,7 +46,7 @@ export function HeroPillars({ pillars, lang, className = "", compact }: HeroPill
                 pillarTone[pillar.id] ?? "text-brand"
               }`}
             >
-              {pillar.id === "allocation" ? `${TOKEN_COMMUNITY_ALLOCATION_PCT}%` : pillar.value}
+              {pillar.id === "allocation" ? `${TOKEN_COMMUNITY_SHARE_PCT}%` : pillar.value}
             </p>
             <p className="mt-1 text-[10px] font-semibold uppercase leading-snug tracking-wide text-ink sm:text-[11px]">
               {pillar.title}
