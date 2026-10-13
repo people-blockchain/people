@@ -5,24 +5,24 @@
   "deployedAt": "2026-10-09T04:24:05Z",
   "deployer": "0x040b538DCB60EEa5BdB78779d3097D25f38D44C4",
   "startBlocks": {
-    "tokenFactory": 76,
-    "bondingCurve": 73,
+    "tokenFactory": 285448,
+    "bondingCurve": 285444,
     "ammFactory": 58,
     "wppl": 57,
     "router": 59
   },
   "contracts": {
-    "registry": "0xc0f7b64786ab9d6e6d0ccde1a4b50f6e3c27d133",
-    "tokenFactory": "0x84D0973A901Dc5794C797B5321781e9Ade4174BF",
-    "bondingCurve": "0x0cD6E78eD7A33A1816eEA9Fb4986e44Ab9cf2f77",
+    "registry": "0x3877fdF58a4D4Bb65cF7d780166Bec941755dd16",
+    "tokenFactory": "0xE281db7A508Bb50361246fb1a2A37C4d39aBfEfB",
+    "bondingCurve": "0x3238E9634D46e942090817942F5b1e521F371C2C",
     "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18",
     "wppl": "0x89aaef7b13dfba2570c3c47390f03471596a2628",
     "ammFactory": "0x32b96f14f2d2447fff50c0e650f3795a3ca521f0",
-    "nftFactory": "0xbe8a453f62fc7b4f2b168ff9eb7b750a114bb406",
-    "creatorVesting": "0x6f6ceafdcc8dff75245f544d5eedf39e40628f96",
-    "communityVault": "0x0E259a8Df9FAcdC8c0d2EfEDC10cf15f273d42d1",
+    "nftFactory": "0x607790894b3f55672A2Cc26b75B43A03fF048EAd",
+    "creatorVesting": "0x1e9Dcc18158733DC2a6ff2A850285124c9CBF377",
+    "communityVault": "0x66d16DF444972a7Ab57e64636C6114D7A523fFF7",
     "peopleMultisig": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
-    "gateway": "0xb68441f160c63988105285944534c607dfd94e80",
+    "gateway": "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9",
     "agentWallet": "0xbeee27d8d0c7dea625cd58c29fde9e735b3abe32",
     "agentWalletExecutor": "0xf363639474cf4fe1c8a735cefb444a42621c0fb8",
     "agentWalletV2Deprecated": "0xc1554093398f48cc6c9c559bb26887acaec8897c",
@@ -145,5 +145,14 @@
       "description": "Testnet demo by the People team. No real value. A badge for early supporters of the Goodwill Planet demo. https://goodwillplanet.org",
       "imageUri": "https://www.peopleblockchain.network/seed/nft-goodwill-early-supporter.png"
     }
-  ]
+  ],
+  "legacyContracts2026_10_13": {
+    "registry": "0xc0f7b64786ab9d6e6d0ccde1a4b50f6e3c27d133",
+    "bondingCurve": "0x0cD6E78eD7A33A1816eEA9Fb4986e44Ab9cf2f77",
+    "creatorVesting": "0x6f6ceafdcc8dff75245f544d5eedf39e40628f96",
+    "communityVault": "0x0E259a8Df9FAcdC8c0d2EfEDC10cf15f273d42d1",
+    "tokenFactory": "0x84D0973A901Dc5794C797B5321781e9Ade4174BF",
+    "nftFactory": "0xbe8a453f62fc7b4f2b168ff9eb7b750a114bb406",
+    "gateway": "0xb68441f160c63988105285944534c607dfd94e80"
+  }
 }
