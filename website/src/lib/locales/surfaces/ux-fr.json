@@ -47,6 +47,7 @@
   "totalSupply": "Offre totale",
   "pool": "Pool",
   "noTx": "Aucune transaction pour l’instant — faites-en une dans votre portefeuille",
+  "loadMore": "Charger davantage",
   "several": "Plusieurs destinataires",
   "yourBalance": "Votre solde : {amount} PPL",
   "notEnoughFee": "Pas assez de PPL pour les frais. Obtenez d’abord des PPL de test dans votre portefeuille.",

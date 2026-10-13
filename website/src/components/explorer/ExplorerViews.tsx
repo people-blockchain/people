@@ -250,26 +250,106 @@ export function AddressView({ address }: { address: string }) {
     incomingTxs?: number;
     outgoingTxs?: number;
   } | null>(null);
-  const [txs, setTxs] = useState<Array<{ id: string; type?: string; amount?: number; fee?: number; assetId?: string; payload?: Record<string, unknown> | null }>>([]);
+  const [txs, setTxs] = useState<Array<{ id: string; type?: string; amount?: number; fee?: number; assetId?: string; from?: string; to?: string; blockHeight?: number; payload?: Record<string, unknown> | null }>>([]);
   const [nfts, setNfts] = useState<Array<{ nftId: string; name: string }>>([]);
-
-  const [loading, setLoading] = useState(true);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [txsLoading, setTxsLoading] = useState(true);
   const [failed, setFailed] = useState(false);
+  const [incoming, setIncoming] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [nextBeforeBlock, setNextBeforeBlock] = useState<number | undefined>(undefined);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   useEffect(() => {
     const controller = new AbortController();
-    void Promise.allSettled([
-      networkJson<NonNullable<typeof account>>(`address/${encodeURIComponent(address)}`, { signal: controller.signal }),
-      networkJson<typeof txs | { items?: typeof txs }>(`address/${encodeURIComponent(address)}/transactions?limit=30`, { signal: controller.signal }),
-      networkJson<typeof nfts>(`nfts?owner=${encodeURIComponent(address)}`, { signal: controller.signal }),
-    ]).then(([a, x, n]) => {
-      if (controller.signal.aborted) return;
-      if (a.status === "fulfilled") setAccount(a.value); else setFailed(true);
-      if (x.status === "fulfilled") setTxs(Array.isArray(x.value) ? x.value : x.value.items ?? []);
-      if (n.status === "fulfilled") setNfts(Array.isArray(n.value) ? visibleNfts(n.value) : []);
-      setLoading(false);
-    });
+    setSummaryLoading(true);
+    setFailed(false);
+    void networkJson<NonNullable<typeof account>>(`address/${encodeURIComponent(address)}`, {
+      signal: controller.signal,
+    })
+      .then((a) => {
+        if (controller.signal.aborted) return;
+        setAccount(a);
+        setSummaryLoading(false);
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setFailed(true);
+        setSummaryLoading(false);
+      });
+
+    void networkJson<typeof nfts>(`nfts?owner=${encodeURIComponent(address)}`, {
+      signal: controller.signal,
+    })
+      .then((n) => {
+        if (controller.signal.aborted) return;
+        setNfts(Array.isArray(n) ? visibleNfts(n) : []);
+      })
+      .catch(() => {
+        /* optional */
+      });
+
     return () => controller.abort();
   }, [address]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setTxsLoading(true);
+    setTxs([]);
+    setHasMore(false);
+    setNextBeforeBlock(undefined);
+    setIncoming(0);
+    void networkJson<{
+      items?: typeof txs;
+      hasMore?: boolean;
+      nextBeforeBlock?: number;
+      incoming?: number;
+    }>(`address/${encodeURIComponent(address)}/transactions?limit=30`, { signal: controller.signal })
+      .then((body) => {
+        if (controller.signal.aborted) return;
+        const items = Array.isArray(body) ? body : body.items ?? [];
+        setTxs(items);
+        setHasMore(Boolean(!Array.isArray(body) && body.hasMore));
+        setNextBeforeBlock(!Array.isArray(body) ? body.nextBeforeBlock : undefined);
+        if (!Array.isArray(body) && typeof body.incoming === "number") setIncoming(body.incoming);
+        setTxsLoading(false);
+      })
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        setTxs([]);
+        setTxsLoading(false);
+      });
+    return () => controller.abort();
+  }, [address]);
+
+  const loadMore = () => {
+    if (!hasMore || loadingMore || nextBeforeBlock === undefined) return;
+    setLoadingMore(true);
+    void networkJson<{
+      items?: typeof txs;
+      hasMore?: boolean;
+      nextBeforeBlock?: number;
+      incoming?: number;
+    }>(
+      `address/${encodeURIComponent(address)}/transactions?limit=30&beforeBlock=${nextBeforeBlock}`,
+    )
+      .then((body) => {
+        const items = Array.isArray(body) ? body : body.items ?? [];
+        setTxs((prev) => {
+          const seen = new Set(prev.map((t) => t.id));
+          return [...prev, ...items.filter((t) => !seen.has(t.id))];
+        });
+        setHasMore(Boolean(!Array.isArray(body) && body.hasMore));
+        setNextBeforeBlock(!Array.isArray(body) ? body.nextBeforeBlock : undefined);
+        if (!Array.isArray(body) && typeof body.incoming === "number") {
+          setIncoming((prev) => Math.max(prev, body.incoming ?? 0));
+        }
+      })
+      .catch(() => {
+        setHasMore(false);
+      })
+      .finally(() => setLoadingMore(false));
+  };
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -281,14 +361,15 @@ export function AddressView({ address }: { address: string }) {
       <div className="mt-4">
         <NetworkStatus />
       </div>
-      {loading ? <PeopleLoader /> : failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
+      {summaryLoading ? <PeopleLoader /> : failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-3">{t.pplBalance}</p>
       <p className="mt-1 flex items-center gap-3 text-2xl font-black" data-testid="address-ppl">
         <AssetImage assetId="ppl" name="PPL" className="h-9 w-9" />
         {account ? formatPpl(account.balance) : "—"} PPL
       </p>
       <p className="text-sm text-ink-3">
-        {u.operations}: {u.sent} {account?.outgoingTxs ?? 0} · {u.received} {account?.incomingTxs ?? 0}
+        {u.operations}: {u.sent} {account?.outgoingTxs ?? account?.nonce ?? 0} · {u.received}{" "}
+        {incoming || account?.incomingTxs || 0}
       </p>
       <h2 className="mt-8 font-bold">{t.tokens}</h2>
       <ul className="mt-2 space-y-2 text-sm" data-testid="address-tokens">
@@ -317,8 +398,9 @@ export function AddressView({ address }: { address: string }) {
         ))}
       </ul>
       <h2 className="mt-8 font-bold">{t.transactions}</h2>
+      {txsLoading ? <PeopleLoader /> : null}
       <ul className="mt-2 space-y-2 text-sm">
-        {!loading && txs.length === 0 ? <li className="text-ink-3">{u.noTx}</li> : null}
+        {!txsLoading && txs.length === 0 ? <li className="text-ink-3">{u.noTx}</li> : null}
         {txs.map((tx) => (
           <li key={tx.id}>
             <Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="font-mono text-brand hover:underline">
@@ -328,6 +410,16 @@ export function AddressView({ address }: { address: string }) {
           </li>
         ))}
       </ul>
+      {!txsLoading && hasMore ? (
+        <button
+          type="button"
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="mt-4 rounded-xl border border-line px-4 py-2 text-sm font-semibold text-brand disabled:opacity-40"
+        >
+          {loadingMore ? "…" : u.loadMore}
+        </button>
+      ) : null}
       <p className="mt-6">
         <WalletGateLink className="text-sm font-semibold text-brand" connectLabel={u.openWallet}>
           {u.myWallet}

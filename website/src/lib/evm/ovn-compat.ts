@@ -237,13 +237,27 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const addr = getAddress(segments[1]);
     if (segments[2] === "transactions") {
       try {
-        const { items } = await fetchAddressHistory(addr, Number(search.get("limit") ?? 30) || 30);
-        return { status: 200, body: { items } };
+        const limit = Number(search.get("limit") ?? 30) || 30;
+        const beforeRaw = search.get("beforeBlock");
+        const beforeBlock =
+          beforeRaw && /^\d+$/.test(beforeRaw) ? Number(beforeRaw) : undefined;
+        const history = await fetchAddressHistory(addr, limit, { beforeBlock });
+        return {
+          status: 200,
+          body: {
+            items: history.items,
+            hasMore: history.hasMore,
+            nextBeforeBlock: history.nextBeforeBlock,
+            outgoing: history.outgoing,
+            incoming: history.incoming,
+            truncated: history.truncated ?? false,
+          },
+        };
       } catch {
         return { status: 502, body: { error: "rpc_unavailable" } };
       }
     }
-    // An upstream RPC failure here must become a handled 502, not an unhandled 500.
+    // Balance + nonce only — never wait on the history scan (that blocked the page for 18–40s).
     let balanceHex: string;
     let nonceHex: string;
     try {
@@ -256,10 +270,9 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     }
     const balance = weiToPpl(BigInt(balanceHex));
     const nonce = Number.parseInt(nonceHex, 16);
-    const history = await fetchAddressHistory(addr, 30).catch(() => null);
     return {
       status: 200,
-      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: history?.incoming ?? 0 },
+      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: 0 },
     };
   }
 

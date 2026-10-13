@@ -14,10 +14,15 @@ const RATE_WINDOW_MS = 60_000;
  */
 const CACHE_HEADER = "public, s-maxage=30, stale-while-revalidate=300";
 
+const TX_CACHE_HEADER = "public, s-maxage=60, stale-while-revalidate=300";
+
 function cacheHeaderFor(path: string): string | null {
-  // Live balances (address/accounts/blocks/transactions) stay uncached.
-  const [root] = path.split("/");
-  return root === "assets" || root === "liquidity-pools" ? CACHE_HEADER : null;
+  // Live balances stay uncached; address history may be partial and is edge-cached briefly.
+  const parts = path.split("/").filter(Boolean);
+  const [root] = parts;
+  if (root === "assets" || root === "liquidity-pools") return CACHE_HEADER;
+  if (root === "address" && parts[2] === "transactions") return TX_CACHE_HEADER;
+  return null;
 }
 
 export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
