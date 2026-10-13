@@ -110,13 +110,17 @@ html[data-theme="light"] {
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* `clip` (not `hidden`) so neither html nor body becomes its own scroll
+     container: in wallet in-app WebViews (MetaMask mobile) a body with
+     overflow-x:hidden computes overflow-y:auto and stops scrolling. */
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--c-canvas);
   color: var(--c-ink);
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  overflow-x: hidden;
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
 }
 

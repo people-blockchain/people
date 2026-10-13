@@ -1,5 +1,6 @@
 "use client";
 
+import { installScrollLockGuard } from "@/lib/scroll-lock";
 import { supportUrlWithLocale } from "@/lib/support-url";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { useHeaderSloganFit } from "@/hooks/useHeaderSloganFit";
@@ -167,17 +168,24 @@ export function Navbar() {
     setPortalReady(true);
   }, []);
 
+  // Site-wide: while the sheet is closed, clear any stale scroll lock (wallet
+  // in-app browsers can background the page mid-lock for a native warning).
+  useEffect(() => {
+    if (open) return;
+    return installScrollLockGuard();
+  }, [open]);
+
   // Lock body scroll + allow Escape to dismiss the mobile sheet.
   useEffect(() => {
     if (!open) return;
-    const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = previous;
+      // Always clear (never restore a possibly stale "hidden").
+      document.body.style.removeProperty("overflow");
       window.removeEventListener("keydown", onKey);
     };
   }, [open]);
