@@ -9,6 +9,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { GithubNavLink } from "./OpenSource";
 import { Menu, X, ArrowRight, Sun, Moon, ChevronDown } from "lucide-react";
 import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
@@ -321,6 +322,7 @@ export function Navbar() {
               the homepage hero, and Become a partner in the footer, Growth
               block, and the <1024 sheet. */}
           <div className="hidden items-center gap-1.5 lg:flex xl:gap-2">
+            <GithubNavLink />
             <LanguageSwitcher value={lang} onChange={setLang} label={t.languageLabel} />
             <ThemeToggleButton label={t.themeToggle} onToggle={toggleTheme} />
           </div>
