@@ -1,0 +1,20 @@
+{
+  "chainId": 97401,
+  "note": "TESTNET-ONLY mock stablecoins with no real value, deployed from contracts/src/samples/TestStablecoin.sol for the Escrow/Crowdfund sample contract templates and the /explorer/contracts faucet button.",
+  "tokens": {
+    "tUSDC": {
+      "address": "0x3578D3bEdC71DA9B1472eb2719Aa47D98223E1BA",
+      "name": "Test USD Coin",
+      "symbol": "tUSDC",
+      "decimals": 6
+    },
+    "tUSDT": {
+      "address": "0x5F0BD878762F7DF035a4C71E3D75740348a3FADC",
+      "name": "Test Tether",
+      "symbol": "tUSDT",
+      "decimals": 6
+    }
+  },
+  "deployedAt": "2026-10-11T18:05:00Z",
+  "deployer": "0xb3B803d3AC8d08Fbc2214D0D9eE615109eC614Bf"
+}

@@ -1,0 +1,25 @@
+{
+  "chainId": 97401,
+  "note": "Sample contract template instances on testnet people_97401-1, shown at /explorer/contracts.",
+  "contracts": {
+    "escrow": "0x9D4e4579a2E4F5D92836CF67C9CaF61b0aFfc2a9",
+    "vesting": "0xa71Fb5F489c7B3b332687Ab1f93e51890e71162b",
+    "crowdfund": "0x64d4F5f2D4Db2fc15434F831955eAd3eC03FDda5",
+    "erc20": "0x07a551154D3D2c318fb17388eaC6800Ee596deE9"
+  },
+  "stables": {
+    "tUSDC": "0x3578D3bEdC71DA9B1472eb2719Aa47D98223E1BA",
+    "tUSDT": "0x5F0BD878762F7DF035a4C71E3D75740348a3FADC"
+  },
+  "stableFeeGateway": {
+    "address": "0xF85Cc098Ccbd41580D74d0877e68EA541DbaeE44",
+    "note": "StableFeeGateway (contracts/src/fees/StableFeeGateway.sol) — accepts tUSDC/tUSDT, pays 100% to the public PPL buyback recipient. Stable fee amounts are PLACEHOLDER pending owner pricing (docs/design/buyback.md §8).",
+    "tokenStableFeeUsd6": "1000000",
+    "nftStableFeeUsd6": "3000000",
+    "acceptedStables": ["tUSDC", "tUSDT"],
+    "buybackRecipient": "0xC949B419AB6A202923D69F1E8B1784535293C375",
+    "deployedAt": "2026-10-12T00:45:00Z"
+  },
+  "deployedAt": "2026-10-11T16:05:00Z",
+  "deployer": "0xb3B803d3AC8d08Fbc2214D0D9eE615109eC614Bf"
+}

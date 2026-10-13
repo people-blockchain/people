@@ -1,0 +1,9 @@
+{
+  "chainId": 97401,
+  "note": "StableFeeGateway (contracts/src/fees/StableFeeGateway.sol): accepts tUSDC/tUSDT for the token/NFT launch fee and routes 100% of it to the public PPL buyback recipient; the bought-back PPL is then split 30/25/20/10/15 by the treasury multisig off-chain (docs/design/buyback.md §4, §8). Owner-approved pricing (Alex, 2026-10-12): 5.00 USD for a token launch, 10.00 USD for an NFT mint — the UI reads the live fee from the gateway, not from this file. Stablecoin payment works on the People network only for now; cross-chain (Ethereum, Polygon, Tron, TON, Solana) comes later. Empty address means the stable-fee option is hidden on /create/token and /create/nft.",
+  "address": "0xB68441f160C63988105285944534c607Dfd94E80",
+  "acceptedStables": ["tUSDC", "tUSDT"],
+  "buybackRecipient": "0xC949B419AB6A202923D69F1E8B1784535293C375",
+  "deployedAt": "2026-10-12T13:45:03Z",
+  "supersedes": "0xF85Cc098Ccbd41580D74d0877e68EA541DbaeE44"
+}

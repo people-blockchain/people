@@ -1,0 +1,142 @@
+{
+  "chainId": 97401,
+  "cosmosChainId": "people_97401-1",
+  "rpcUrl": "https://node.peopleblockchain.network/rpc",
+  "deployedAt": "2026-10-09T04:24:05Z",
+  "deployer": "0x040b538DCB60EEa5BdB78779d3097D25f38D44C4",
+  "contracts": {
+    "registry": "0xc0f7b64786ab9d6e6d0ccde1a4b50f6e3c27d133",
+    "tokenFactory": "0x84D0973A901Dc5794C797B5321781e9Ade4174BF",
+    "bondingCurve": "0x0cD6E78eD7A33A1816eEA9Fb4986e44Ab9cf2f77",
+    "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18",
+    "wppl": "0x89aaef7b13dfba2570c3c47390f03471596a2628",
+    "ammFactory": "0x32b96f14f2d2447fff50c0e650f3795a3ca521f0",
+    "nftFactory": "0xbe8a453f62fc7b4f2b168ff9eb7b750a114bb406",
+    "creatorVesting": "0x6f6ceafdcc8dff75245f544d5eedf39e40628f96",
+    "communityVault": "0x0E259a8Df9FAcdC8c0d2EfEDC10cf15f273d42d1",
+    "peopleMultisig": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
+    "gateway": "0xb68441f160c63988105285944534c607dfd94e80",
+    "agentWallet": "0xbeee27d8d0c7dea625cd58c29fde9e735b3abe32",
+    "agentWalletV2Deprecated": "0xc1554093398f48cc6c9c559bb26887acaec8897c",
+    "governanceToken": "0x5375d46f0a5450e44bbbb33233d424038ad7988f",
+    "timelock": "0xcdba640215e4d8a7cb52c967bb516a71b30d1dce",
+    "governor": "0x5d145a4ebf689466acafd2e536669659e46524f8",
+    "lavkaPass": "0x47723bc7d7bab2dd177698e2255d0ae5646e37d4",
+    "merchantEscrow": "0xD15C889122ad4892186F1DA446A80c33fF269488",
+    "lavkaPayments": "0xE72A7Db932Aa9E6bcA954F6C57a0759C60852216",
+    "agentWalletV1Deprecated": "0xfbf9b56e243f01ba58df814e9883be232ea04b8d",
+    "agentWalletExecutor": "0xf363639474cf4fe1c8a735cefb444a42621c0fb8"
+  },
+  "assetMap": {
+    "trosc3": "0x89e2d0d8a921027b4bf22aab600f100e9139ec3e",
+    "tpitp3": "0x023d84deef92f48a09d9c8066dd81ba5c2efe6c7",
+    "tmark3": "0x3e04d2458d10f29c1693a037db3a8408a2befedf",
+    "tkrda2": "0x9bf8db1d5198e73d8a262320ea13d8eb73810e59",
+    "tmem2": "0xfb36c479bbe90ddddc2e1f5f4141060841f7eed6",
+    "tgood2": "0xa3de9569ef1990d330273384684ec911adde3b9f"
+  },
+  "pools": [
+    {
+      "poolId": "0x3d8d35357ac24e0ad5ac32e2c014b970b6a97556",
+      "tokenAssetId": "trosc3",
+      "tokenAddress": "0x89e2d0d8a921027b4bf22aab600f100e9139ec3e",
+      "nativeReserve": 121.77,
+      "tokenReserve": 13267783.993786,
+      "status": "active"
+    },
+    {
+      "poolId": "0x1f7e033b59940851c4ee25b30494be21cdff134c",
+      "tokenAssetId": "tpitp3",
+      "tokenAddress": "0x023d84deef92f48a09d9c8066dd81ba5c2efe6c7",
+      "nativeReserve": 121.77,
+      "tokenReserve": 6633891.996893,
+      "status": "active"
+    },
+    {
+      "poolId": "0x1db9bfe61ff4ee4bfa0170170741b732ca9cd106",
+      "tokenAssetId": "tmark3",
+      "tokenAddress": "0x3e04d2458d10f29c1693a037db3a8408a2befedf",
+      "nativeReserve": 121.77,
+      "tokenReserve": 2786234.638695,
+      "status": "active"
+    },
+    {
+      "poolId": "0xe17eb4f6f0eb93a1fdec4fe6ccd9f3864a9efc49",
+      "tokenAssetId": "tkrda2",
+      "tokenAddress": "0x9bf8db1d5198e73d8a262320ea13d8eb73810e59",
+      "nativeReserve": 121.77,
+      "tokenReserve": 13267783.993786,
+      "status": "active"
+    },
+    {
+      "poolId": "0x533966926aba7fb0d5777a8c8a386a7edb7870de",
+      "tokenAssetId": "tmem2",
+      "tokenAddress": "0xfb36c479bbe90ddddc2e1f5f4141060841f7eed6",
+      "nativeReserve": 121.77,
+      "tokenReserve": 132677839.937865,
+      "status": "active"
+    },
+    {
+      "poolId": "0x48f0fb27bb77aabdb660a7a6b71ec12fef83f3df",
+      "tokenAssetId": "tgood2",
+      "tokenAddress": "0xa3de9569ef1990d330273384684ec911adde3b9f",
+      "nativeReserve": 121.77,
+      "tokenReserve": 132677839.937865,
+      "status": "active"
+    }
+  ],
+  "deployBlock": 56,
+  "seed": {
+    "creatorCollectiblesCollection": "0x21c963c23934cb7b37adad77075482d15b9758eb",
+    "discovery": {
+      "method": "block_scan",
+      "scanCompleted": true,
+      "fromBlock": "0x0",
+      "toBlock": "0x72",
+      "blocksScanned": 115,
+      "deployerTxCount": 26,
+      "duplicates": [],
+      "tokensFound": [],
+      "collectionsFound": [],
+      "pairsFound": [],
+      "hintsUsed": [],
+      "error": null,
+      "supplyMismatchAssetIds": [],
+      "missingAssetIds": [
+        "trosc3",
+        "tpitp3",
+        "tmark3",
+        "tkrda2",
+        "tmem2",
+        "tgood2"
+      ],
+      "factoryTokenCreates": 0
+    },
+    "demoTokenDistributor": "0x25d2de6abc3eb704c534dc86fe7efc1438329ec4",
+    "manifestVersion": 2,
+    "seededAt": "2026-10-09T04:36:38.853Z",
+    "lastError": null
+  },
+  "nfts": [
+    {
+      "nftId": "nft-d2a848fe0870916ec80907e6",
+      "collection": "0x21c963c23934cb7b37adad77075482d15b9758eb",
+      "onChainTokenId": "0",
+      "owner": "0x040b538dcb60eea5bdb78779d3097d25f38d44c4",
+      "creator": "0x040b538dcb60eea5bdb78779d3097d25f38d44c4",
+      "name": "PitPat Founding Parent",
+      "description": "Testnet demo by the People team. No real value. A thank-you badge for the first parents who joined PitPat's neighbourhood mutual aid demo. https://pit-pat.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-pitpat-founding-parent.png"
+    },
+    {
+      "nftId": "nft-6bac9765657e743d430c96d5",
+      "collection": "0x21c963c23934cb7b37adad77075482d15b9758eb",
+      "onChainTokenId": "1",
+      "owner": "0x040b538dcb60eea5bdb78779d3097d25f38d44c4",
+      "creator": "0x040b538dcb60eea5bdb78779d3097d25f38d44c4",
+      "name": "Goodwill Planet Early Supporter",
+      "description": "Testnet demo by the People team. No real value. A badge for early supporters of the Goodwill Planet demo. https://goodwillplanet.org",
+      "imageUri": "https://www.peopleblockchain.network/seed/nft-goodwill-early-supporter.png"
+    }
+  ]
+}
