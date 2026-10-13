@@ -2,7 +2,7 @@
 title: "People Blockchain — Litepaper"
 description: "The blockchain where every user is a verified human. Owned by people, not VCs."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -14,7 +14,7 @@ status: public-draft
 
 Our mission: put a blockchain in the hands of ordinary people — no code, no crypto skills, no bots, no insiders.
 
-*v1.0 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
+*v1.1 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
 
 ---
 
@@ -59,7 +59,7 @@ What you can do without code:
 | **NFT club cards** | Membership cards for a club, a café or a community — one per member, with an image you upload or generate. | Live on testnet |
 | **Fundraising** | Collect support for a project with reviewed contract templates: escrow, vesting, token-weighted vote. Your community buys in on the curve, so demand sets the price — not a private round. | Live on testnet |
 | **AI contracts** | Describe a smart contract in plain words. It is assembled from OpenZeppelin templates and you see the result before you deploy. | Live on testnet |
-| **Community AI agents** | Agents that work for a group: a Safe-based community wallet with spending limits, whitelists and an emergency freeze. Parameters change only by token vote; every action is visible in the explorer. | Testnet: 1 community agent live |
+| **Community AI agents** | Agents that work for a group: a multisig community wallet with spending limits, whitelists and an emergency freeze. Parameters change only by token vote; every action is visible in the explorer. | Testnet: 1 community agent live |
 
 ---
 
@@ -164,7 +164,7 @@ No dates are promised. Each stage starts when its gate is met.
 ## 9. Security
 
 - **Security audit before mainnet.** Protocol contracts will go through a security audit before mainnet launch.
-- **Treasury multisig.** The treasury will be held in a multisig before mainnet; signer addresses will be published.
+- **Treasury multisig.** The treasury is controlled by People's own 2-of-3 multisig contract on the People network, created before mainnet; signer addresses will be published.
 - **Published addresses.** Sale, vesting and liquidity contract addresses will be published at mainnet launch — no placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
 - **Proven building blocks.** No-code contracts are assembled from OpenZeppelin templates.
@@ -216,7 +216,7 @@ Only verifiable public facts about other networks. Sources below.
 
 ---
 
-### What changed in v1.0
+### What changed in v1.1
 
 - A new token's community share is **27%** of supply: **10%** allocated at launch plus **~16.7%** swept from the bonding curve at migration.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).

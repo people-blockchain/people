@@ -2,7 +2,7 @@
 title: "People Blockchain — Litepaper"
 description: "Blockchain di mana setiap pengguna adalah manusia yang terverifikasi. Dimiliki oleh orang-orang, bukan VC."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -12,7 +12,7 @@ status: public-draft
 > **Blockchain di mana setiap pengguna adalah manusia yang terverifikasi.**
 > **Dimiliki oleh orang-orang, bukan VC.**
 
-*v1.0 · Oktober 2026 · Angka-angka bersifat awal dan dapat berubah sesuai tata kelola komunitas. Tidak ada janji penghasilan dalam dokumen ini.*
+*v1.1 · Oktober 2026 · Angka-angka bersifat awal dan dapat berubah sesuai tata kelola komunitas. Tidak ada janji penghasilan dalam dokumen ini.*
 
 ---
 
@@ -57,7 +57,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 | **Kartu klub NFT** | Kartu keanggotaan untuk klub, kafe, atau komunitas — satu per anggota, dengan gambar yang Anda unggah atau hasilkan. | Aktif di testnet |
 | **Penggalangan dana** | Kumpulkan dukungan untuk proyek dengan template kontrak yang ditinjau: escrow, vesting, token-weighted vote. Komunitas Anda membeli di kurva, jadi permintaan menetapkan harga — bukan putaran pribadi. | Aktif di testnet |
 | **Kontrak AI** | Jelaskan kontrak pintar dalam kata-kata polos. Ini dirakit dari template OpenZeppelin dan Anda melihat hasilnya sebelum Anda deploy. | Aktif di testnet |
-| **Agen AI komunitas** | Agen yang bekerja untuk grup: dompet komunitas berbasis Safe dengan batasan pengeluaran, whitelist, dan pembekuan darurat. Parameter berubah hanya melalui suara token; setiap tindakan terlihat di explorer. | Testnet: 1 agen komunitas aktif |
+| **Agen AI komunitas** | Agen yang bekerja untuk grup: dompet komunitas multisig dengan batasan pengeluaran, whitelist, dan pembekuan darurat. Parameter berubah hanya melalui suara token; setiap tindakan terlihat di explorer. | Testnet: 1 agen komunitas aktif |
 
 ---
 
@@ -162,7 +162,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 ## 9. Keamanan
 
 - **Audit keamanan sebelum mainnet.** Kontrak protokol akan melalui audit keamanan sebelum peluncuran mainnet.
-- **Multisig treasury.** Treasury akan dipegang dalam multisig sebelum mainnet; alamat penanda akan dipublikasikan.
+- **Multisig treasury.** Treasury dikendalikan oleh kontrak multisig 2-dari-3 milik People sendiri di jaringan People, dibuat sebelum mainnet; alamat penanda tangan akan dipublikasikan.
 - **Alamat yang dipublikasikan.** Alamat penjualan, vesting, dan kontrak likuiditas akan dipublikasikan saat peluncuran mainnet — tidak ada placeholder.
 - **Pertahanan bot.** Verifikasi manusia, batas per-perangkat dan per-IP, batas poin harian, dan clawback bot.
 - **Blok bangunan yang terbukti.** Kontrak tanpa kode dirakit dari template OpenZeppelin.
@@ -214,7 +214,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 
 ---
 
-### Apa yang berubah di v1.0
+### Apa yang berubah di v1.1
 
 - Bagian komunitas dari token baru adalah **27%** dari pasokan: **10%** dialokasikan saat peluncuran plus **~16,7%** disapu dari kurva saat migrasi.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).

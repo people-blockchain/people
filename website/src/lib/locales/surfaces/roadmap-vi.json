@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Tác nhân AI cộng đồng",
-      "summary": "Ví Safe có hạn mức, danh sách cho phép và thay đổi chỉ qua bỏ phiếu — công khai trên explorer."
+      "summary": "Ví multisig có hạn mức, danh sách cho phép và thay đổi chỉ qua bỏ phiếu — công khai trên explorer."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

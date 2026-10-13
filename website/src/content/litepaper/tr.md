@@ -2,7 +2,7 @@
 title: "People Blockchain — Litepaper"
 description: "Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir. İnsanların sahip olduğu, VC'lerin değil."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -12,7 +12,7 @@ status: public-draft
 > **Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir.**
 > **İnsanların sahip olduğu, VC'lerin değil.**
 
-*v1.0 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
+*v1.1 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
 
 ---
 
@@ -57,7 +57,7 @@ Kod olmadan yapabileceğiniz şeyler:
 | **NFT kulüp kartları** | Bir kulüp, kafe veya topluluk için üyelik kartları — üye başına bir tane, yüklediğiniz veya oluşturduğunuz bir görüntüyle. | Testnet'te canlı |
 | **Fon toplama** | İncelenen sözleşme şablonlarıyla bir proje için destek toplayın: emanet, hak ediş, token ağırlıklı oylama. Topluluğunuz eğride satın alır, bu nedenle talep fiyatı belirler — özel bir tur değil. | Testnet'te canlı |
 | **Yapay zeka sözleşmeleri** | Bir akıllı sözleşmeyi düz sözcüklerle açıklayın. OpenZeppelin şablonlarından birleştirilir ve dağıtmadan önce sonucu görürsünüz. | Testnet'te canlı |
-| **Topluluk yapay zeka ajanları** | Bir grup için çalışan ajanlar: harcama sınırları, beyaz listeler ve acil durum dondurması olan Safe tabanlı bir topluluk cüzdanı. Parametreler yalnızca token oyu tarafından değişir; her işlem explorer'da görünür. | Testnet: 1 topluluk ajanı aktif |
+| **Topluluk yapay zeka ajanları** | Bir grup için çalışan ajanlar: harcama sınırları, beyaz listeler ve acil durum dondurması olan multisig bir topluluk cüzdanı. Parametreler yalnızca token oyu tarafından değişir; her işlem explorer'da görünür. | Testnet: 1 topluluk ajanı aktif |
 
 ---
 
@@ -162,7 +162,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 ## 9. Güvenlik
 
 - **Mainnet'ten önce güvenlik denetimi.** Protokol sözleşmeleri mainnet başlatmasından önce bir güvenlik denetiminden geçecektir.
-- **Hazine multisig.** Hazine mainnet'ten önce bir multisig'de tutulacak; imzalayan adresler yayınlanacaktır.
+- **Hazine multisig.** Hazine, People ağındaki People'ın kendi 2/3 multisig sözleşmesiyle yönetilir ve mainnet'ten önce oluşturulur; imzalayan adresler yayınlanacaktır.
 - **Yayınlanan adresler.** Satış, hak ediş ve likidite sözleşme adresleri mainnet başlatmasında yayınlanacak — yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
 - **Kanıtlanmış yapı taşları.** Kod gerektirmeyen sözleşmeler OpenZeppelin şablonlarından birleştirilir.
@@ -214,7 +214,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 ---
 
-### v1.0'da neler değişti
+### v1.1'da neler değişti
 
 - Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).

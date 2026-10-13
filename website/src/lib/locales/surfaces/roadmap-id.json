@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Agen AI komunitas",
-      "summary": "Treasury Safe dengan batas, daftar putih, dan perubahan hanya lewat voting — terlihat di explorer."
+      "summary": "Treasury multisig dengan batas, daftar putih, dan perubahan hanya lewat voting — terlihat di explorer."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

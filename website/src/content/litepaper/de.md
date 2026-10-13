@@ -2,7 +2,7 @@
 title: "People Blockchain — Litepaper"
 description: "Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist. Von Menschen kontrolliert, nicht von VCs."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -12,7 +12,7 @@ status: public-draft
 > **Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist.**
 > **Von Menschen kontrolliert, nicht von VCs.**
 
-*v1.0 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
+*v1.1 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
 
 ---
 
@@ -57,7 +57,7 @@ Was du ohne Code tun kannst:
 | **NFT-Club-Karten** | Mitglieds­karten für einen Club, ein Café oder eine Community — eine pro Mitglied, mit einem Bild, das du hochlädst oder generierst. | Live auf Testnet |
 | **Fundraising** | Sammeln von Unterstützung für ein Projekt mit überprüften Vertrags­vorlagen: Escrow, Vesting, Token-gestütztes Abstimmen. Deine Community kauft auf der Curve ein, also setzt Nachfrage den Preis — nicht eine private Runde. | Live auf Testnet |
 | **KI-Verträge** | Beschreibe einen Smart Contract in einfachen Worten. Er wird aus OpenZeppelin-Vorlagen zusammengesetzt und du siehst das Ergebnis, bevor du es einsetzt. | Live auf Testnet |
-| **Community-KI-Agenten** | Agenten, die für eine Gruppe arbeiten: eine auf Safe basierende Community-Wallet mit Ausgabelimits, Whitelists und einem Notfall-Freeze. Parameter ändern sich nur durch Token-Abstimmung; jede Aktion ist im Explorer sichtbar. | Testnet: 1 Community-Agent aktiv |
+| **Community-KI-Agenten** | Agenten, die für eine Gruppe arbeiten: eine Multisig-Community-Wallet mit Ausgabelimits, Whitelists und einem Notfall-Freeze. Parameter ändern sich nur durch Token-Abstimmung; jede Aktion ist im Explorer sichtbar. | Testnet: 1 Community-Agent aktiv |
 
 ---
 
@@ -162,7 +162,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 ## 9. Sicherheit
 
 - **Sicherheitsprüfung vor Mainnet.** Protokoll-Verträge werden vor dem Mainnet-Start einer Sicherheitsprüfung unterzogen.
-- **Treasury Multisig.** Die Treasury wird vor dem Mainnet in einem Multisig gehalten; Signer-Adressen werden veröffentlicht.
+- **Treasury Multisig.** Die Treasury wird von People's eigenem 2-von-3-Multisig-Vertrag im People-Netzwerk verwaltet, der vor dem Mainnet erstellt wird; Signer-Adressen werden veröffentlicht.
 - **Veröffentlichte Adressen.** Sale-, Vesting- und Liquiditäts-Vertrags­adressen werden beim Mainnet-Start veröffentlicht — keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
 - **Bewährte Bausteine.** No-Code-Verträge werden aus OpenZeppelin-Vorlagen zusammengesetzt.
@@ -214,7 +214,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
 ---
 
-### Was sich in v1.0 geändert hat
+### Was sich in v1.1 geändert hat
 
 - Der Community-Anteil eines neuen Tokens beträgt **27 %** des Angebots: **10 %** bei der Einführung zugeteilt plus **~16,7 %**, die bei der Migration aus der Kurve entnommen werden.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).

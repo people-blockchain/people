@@ -108,7 +108,7 @@ const en: TokenomicsCopy = {
     "Up to 100M PPL from the sale bucket are reserved for a public bonding curve after the founders airdrop. The sale stays closed until an operating entity for the sale exists.",
   salePayTitle: "How you would pay",
   salePayBody:
-    "Stablecoins on BNB Chain, Base, Ethereum and Polygon would go through the on-chain sale contract. Tron (USDT TRC-20), TON (USDT jetton) and Solana (USDT/USDC SPL) receive transfers at a per-chain multisig — Safe on the EVM chains, Squads on Solana, the TON multisig wallet on TON and Tron account multi-sig permissions on Tron. Each of them is a 2-of-3 multisig with published signer addresses.",
+    "The treasury is controlled by People's own 2-of-3 multisig contract on the People network, with published signer addresses.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
     "Native PPL is credited to the same 0x address on the People network at genesis, following the vesting schedule above.",
@@ -209,7 +209,7 @@ const ru: TokenomicsCopy = {
     "До 100M PPL из корзины продажи зарезервированы под публичную bonding curve после airdrop основателям. Продажа остаётся закрытой, пока не появится юрлицо-оператор продажи.",
   salePayTitle: "Как вы будете платить",
   salePayBody:
-    "Стейблкоины в BNB Chain, Base, Ethereum и Polygon пойдут через on-chain контракт продажи. Tron (USDT TRC-20), TON (jetton USDT) и Solana (USDT/USDC SPL) — переводы на мультисиг соответствующей сети: Safe в EVM-сетях, Squads в Solana, мультисиг-кошелёк TON в TON и multi-sig permissions аккаунта Tron в Tron. Каждый из них — мультисиг 2-из-3 с публичными адресами подписантов.",
+    "Казначейство управляется собственным мультисиг-контрактом People 2-из-3 в сети People, адреса подписантов публикуются.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
     "Нативные PPL зачисляются на тот же адрес 0x в сети People при genesis по графику vesting выше.",

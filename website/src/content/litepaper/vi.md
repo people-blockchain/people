@@ -2,7 +2,7 @@
 title: "People Blockchain — Litepaper"
 description: "Blockchain nơi mỗi người dùng là một con người đã được xác minh. Sở hữu bởi con người, không phải các quỹ VC."
 slug: /litepaper
-version: "1.0"
+version: "1.1"
 date: 2026-10
 status: public-draft
 ---
@@ -12,7 +12,7 @@ status: public-draft
 > **Blockchain nơi mỗi người dùng là một con người đã được xác minh.**
 > **Sở hữu bởi con người, không phải các quỹ VC.**
 
-*v1.0 · Tháng 10 năm 2026 · Các số liệu là sơ bộ và có thể thay đổi theo quản trị cộng đồng. Không có gì trong tài liệu này là một cam kết về lợi tức.*
+*v1.1 · Tháng 10 năm 2026 · Các số liệu là sơ bộ và có thể thay đổi theo quản trị cộng đồng. Không có gì trong tài liệu này là một cam kết về lợi tức.*
 
 ---
 
@@ -57,7 +57,7 @@ Những gì bạn có thể làm mà không cần mã:
 | **Thẻ câu lạc bộ NFT** | Thẻ thành viên cho một câu lạc bộ, một quán cà phê hoặc một cộng đồng — một cho mỗi thành viên, với hình ảnh bạn tải lên hoặc tạo. | Hoạt động trên testnet |
 | **Gây quỹ** | Thu thập sự hỗ trợ cho một dự án với các mẫu hợp đồng được xem xét: ký quỹ, phân bổ, quyết định có trọng số token. Cộng đồng của bạn mua vào trên đường cong, do đó nhu cầu đặt giá — không phải một vòng riêng tư. | Hoạt động trên testnet |
 | **Hợp đồng AI** | Mô tả một hợp đồng thông minh bằng từ thường. Nó được lắp ráp từ các mẫu OpenZeppelin và bạn thấy kết quả trước khi triển khai. | Hoạt động trên testnet |
-| **Agent AI Cộng đồng** | Agent làm việc cho một nhóm: ví tiền cộng đồng dựa trên Safe với giới hạn chi tiêu, danh sách trắng và đóng băng khẩn cấp. Các tham số chỉ thay đổi theo quyết định token; mỗi hành động đều hiển thị trong trình khám phá. | Testnet: 1 agent cộng đồng đang hoạt động |
+| **Agent AI Cộng đồng** | Agent làm việc cho một nhóm: ví cộng đồng multisig với giới hạn chi tiêu, danh sách trắng và đóng băng khẩn cấp. Các tham số chỉ thay đổi theo quyết định token; mỗi hành động đều hiển thị trong trình khám phá. | Testnet: 1 agent cộng đồng đang hoạt động |
 
 ---
 
@@ -162,7 +162,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 ## 9. Bảo mật
 
 - **Kiểm toán bảo mật trước mainnet.** Hợp đồng giao thức sẽ trải qua kiểm toán bảo mật trước khi khởi chạy mainnet.
-- **Multisig kho tài sản.** Kho tài sản sẽ được giữ trong một multisig trước mainnet; các địa chỉ ký được xuất bản.
+- **Multisig kho tài sản.** Kho tài sản được kiểm soát bởi hợp đồng multisig 2-trong-3 riêng của People trên mạng People, được tạo trước mainnet; các địa chỉ ký sẽ được công bố.
 - **Địa chỉ được xuất bản.** Địa chỉ hợp đồng bán hàng, phân bổ và thanh khoản sẽ được xuất bản khi khởi chạy mainnet — không có trình giữ chỗ.
 - **Phòng chống bot.** Xác minh con người, giới hạn mỗi thiết bị và mỗi IP, giới hạn điểm hàng ngày và lấy lại bot.
 - **Các khối xây dựng đã được chứng minh.** Hợp đồng không cần mã được lắp ráp từ các mẫu OpenZeppelin.
@@ -214,7 +214,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 ---
 
-### Những gì đã thay đổi trong v1.0
+### Những gì đã thay đổi trong v1.1
 
 - Phần cộng đồng của một token mới là **27%** nguồn cung: **10%** được phân bổ khi ra mắt cộng thêm **~16,7%** quét từ đường cong khi chuyển đổi.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).

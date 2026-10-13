@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "社区 AI 代理",
-      "summary": "带限额与白名单的 Safe 金库，变更仅能通过代币投票 — 在浏览器公开可见。"
+      "summary": "带限额与白名单的 多签金库，变更仅能通过代币投票 — 在浏览器公开可见。"
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",

@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Community AI agent wallets",
-      "summary": "Safe-based treasury with spending limits, whitelists, freeze, and changes only by token vote — all actions visible in the explorer."
+      "summary": "Multisig treasury with spending limits, whitelists, freeze, and changes only by token vote — all actions visible in the explorer."
     },
     "oz-contract-builder": {
       "title": "Plain-language contract builder",

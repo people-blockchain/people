@@ -53,7 +53,7 @@
     },
     "community-ai-agent-wallet": {
       "title": "Agenti IA della community",
-      "summary": "Tesoro Safe con limiti, whitelist e modifiche solo per voto — visibile nell’explorer."
+      "summary": "Tesoro multisig con limiti, whitelist e modifiche solo per voto — visibile nell’explorer."
     },
     "oz-contract-builder": {
       "title": "Constructor de contratos",
