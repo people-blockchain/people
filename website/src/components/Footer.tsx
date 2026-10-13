@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
+import { OpenSourceLine, GithubNavLink } from "@/components/OpenSource";
 import { useLanguage } from "@/context/LanguageContext";
 import { PARTNER_LOGIN_HREF, PARTNER_PATH_PREFIX } from "@/lib/partner/guards";
 import { content } from "@/lib/content";
@@ -69,7 +70,11 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
               ) : null}
             </div>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-ink-2">{t.desc}</p>
-            <SocialLinks className="mt-5" />
+            <div className="mt-5 flex items-center gap-2">
+              <SocialLinks />
+              <GithubNavLink />
+            </div>
+            <OpenSourceLine className="mt-4" />
             <Link
               href={ctaHref}
               className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
