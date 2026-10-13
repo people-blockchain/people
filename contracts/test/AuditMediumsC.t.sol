@@ -49,9 +49,10 @@ contract AuditMediumsCTest is Test {
     }
 
     function _createToken() internal returns (address token) {
+        // CommunityPool mode: AUD-M1 asserts leftovers land in the vault (not burn).
         vm.prank(creator);
         token = tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}(
-            "Mediums C", "AMC", 6, 1_000_000_000, "ipfs://meta"
+            "Mediums C", "AMC", 6, 1_000_000_000, "ipfs://meta", 1
         );
     }
 
