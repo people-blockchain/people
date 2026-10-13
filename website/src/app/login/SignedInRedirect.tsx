@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { isAuthConfigured, partnerHomeAfterLogin, withWalletConnectFlag } from "@/lib/partner/guards";
 import { partnerUserExists } from "@/lib/partner/service";
 import { hasWeb3AuthRedirectResultInParams } from "@/lib/web3auth-redirect-resume";
+import { shouldSkipLoginForSession } from "@/lib/wallet-reauth-window";
 
 /** Runs in Suspense so the login shell can stream without blocking on auth/DB. */
 export async function SignedInRedirect({
@@ -27,7 +28,14 @@ export async function SignedInRedirect({
   let signedIn = false;
   try {
     const session = await auth();
-    signedIn = Boolean(session?.user?.id && (await partnerUserExists(session.user.id)));
+    // A stale session (older than the wallet reauth window) must see the sign-in form: the
+    // vault refuses it, so /wallet cannot open, and only a fresh Google/email sign-in fixes it.
+    const userId = session?.user?.id;
+    signedIn = Boolean(
+      userId &&
+        shouldSkipLoginForSession({ userId, authTime: session?.authTime }) &&
+        (await partnerUserExists(userId)),
+    );
   } catch (err) {
     console.error(
       "[login] session check failed",

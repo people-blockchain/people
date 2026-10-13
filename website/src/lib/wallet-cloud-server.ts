@@ -11,10 +11,7 @@ import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
 
 const MIN_VAULT_SECRET_BYTES = 32;
-// recon.md R1: a sufficiently-fresh session alone used to be enough to derive the wrap key for
-// 15 minutes after any sign-in. Shortened to narrow the window a stolen/replayed session cookie
-// can be used to pull the wrap key.
-export const WALLET_VAULT_REAUTH_WINDOW_MS = 5 * 60 * 1000;
+export { WALLET_VAULT_REAUTH_WINDOW_MS, isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 
 let vaultSecretWarningLogged = false;
 
@@ -22,12 +19,6 @@ function warnVaultSecret(message: string): void {
   if (vaultSecretWarningLogged) return;
   vaultSecretWarningLogged = true;
   console.warn(`[wallet-vault] ${message}`);
-}
-
-/** The wrap key unlocks the vault ciphertext: require a sign-in within the reauth window. */
-export function isAuthTimeFresh(authTime: number | null | undefined, nowMs: number = Date.now()): boolean {
-  if (typeof authTime !== "number") return false;
-  return nowMs - authTime <= WALLET_VAULT_REAUTH_WINDOW_MS;
 }
 
 const BUILD_OR_TEST =

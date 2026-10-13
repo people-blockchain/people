@@ -261,17 +261,14 @@ export function WalletWeb3AuthSignIn({
       const vault = await fetchVaultRecordClient();
       const generated = await keyPairFromWeb3AuthProvider(provider);
 
-      if (vault && vault.address.toLowerCase() !== generated.address.toLowerCase()) {
-        setMigration({
-          vaultAddress: vault.address,
-          newAddress: generated.address,
-          userId: user.id,
-          email: user.email,
-        });
-        return "migration";
-      }
-
+      // A returning account always opens the wallet already saved for it. The Web3Auth key can
+      // derive a different address (SDK/network change), but that address is never used and the
+      // old "found an existing wallet / keep current" card only ever offered one button — keeping
+      // the saved wallet — so it is done silently and the user lands straight in /wallet.
       if (vault) {
+        if (vault.address.toLowerCase() !== generated.address.toLowerCase()) {
+          console.info("[wallet] web3auth key differs from the saved wallet; opening the saved wallet");
+        }
         return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
       }
 
