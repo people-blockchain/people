@@ -21,7 +21,7 @@
         },
         {
           "title": "Topluluğa %27",
-          "text": "Her standart token arzının %27'sini kendi topluluk havuzuna gönderir."
+          "text": "Her standart token arzının %10'sini kendi topluluk havuzuna gönderir."
         },
         {
           "title": "Creator vesting",
@@ -91,7 +91,7 @@
         }
       ],
       "communityPoolExample": "Topluluk havuzu, katılım puanlarına göre aktif katılımcılar arasında paylaşılır. Örnek: havuzda 600 token, 1, 2 ve 3 puanlı üç kişi 100, 200 ve 300 alır.",
-      "tokenPoolNote": "Ayrıca her token'ın %27 topluluk payı kendi havuzunda kalır. PPL ücretleriyle karışmaz.",
+      "tokenPoolNote": "Ayrıca her token'ın %10 topluluk payı kendi havuzunda kalır. PPL ücretleriyle karışmaz.",
       "buybackNote": "Hazine ve likidite payları (toplam %30) açık piyasadan yapılan halka açık PPL geri alımlarını finanse eder; yayınlanan çoklu imza tarafından yürütülür ve explorer'da görünür.",
       "launchFeeNote": "Bir token veya NFT başlatmak protokol ücreti gerektirir; PPL veya desteklenen bir stabilcoin (USDC/USDT) ile ödenebilir — seçim sizin. Gas her zaman PPL ile ödenir."
     },

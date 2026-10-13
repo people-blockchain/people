@@ -20,8 +20,8 @@
           "text": "Kaufen und verkaufen auf der Launch-Kurve, dann im Token/PPL-Pool."
         },
         {
-          "title": "27 % an die Community",
-          "text": "Jeder Standard-Token sendet 27 % seines Angebots in den Community-Pool dieses Tokens."
+          "title": "10 % an die Community",
+          "text": "Jeder Standard-Token sendet 10 % seines Angebots in den Community-Pool dieses Tokens."
         },
         {
           "title": "Creator-Vesting",
@@ -91,7 +91,7 @@
         }
       ],
       "communityPoolExample": "Der Community Pool wird unter aktiven Teilnehmern proportional zu Teilnahmepunkten geteilt. Beispiel: 600 Tokens im Pool, drei Personen mit 1, 2 und 3 Punkten erhalten 100, 200 und 300.",
-      "tokenPoolNote": "Getrennt davon bleiben die 27 % Community-Anteile jedes Tokens im eigenen Pool. Sie werden nicht mit PPL-Gebühren vermischt.",
+      "tokenPoolNote": "Getrennt davon bleiben die 10 % Community-Anteile jedes Tokens im eigenen Pool. Sie werden nicht mit PPL-Gebühren vermischt.",
       "buybackNote": "Die Treasury- und Liquiditätsanteile (zusammen 30 %) finanzieren öffentliche PPL-Rückkäufe am offenen Markt, ausgeführt vom veröffentlichten Multisig und im Explorer sichtbar.",
       "launchFeeNote": "Das Starten eines Tokens oder NFTs kostet eine Protokollgebühr, zahlbar in PPL oder einem unterstützten Stablecoin (USDC/USDT) — Ihre Wahl. Gas wird immer in PPL bezahlt."
     },

@@ -19,13 +19,13 @@ export const TOKEN_COMMUNITY_ALLOCATION_PCT = 10;
  * `TOKEN_COMMUNITY_ALLOCATION_PCT`; this constant is the headline figure the
  * site, litepaper and tokenomics copy use for the community share.
  */
-export const TOKEN_COMMUNITY_SHARE_PCT = 27;
+export const TOKEN_COMMUNITY_SHARE_PCT = 10;
 
 /**
  * Docs (`TOKEN-ECONOMY.md` §4, `ECONOMICS.md` §9) confirm a mandatory 10%
  * Community Pool allocation at launch; the P0-4 decision adds the unsold
  * curve remainder (~16.7%) to the same pool at migration, so the public figure
- * is the fixed 27% share, not an open-ended "10%+" or "27%+" range.
+ * is the fixed 10% share, not an open-ended "10%+" or "10%+" range.
  */
 export const TOKEN_COMMUNITY_ALLOCATION_PLUS = false;
 

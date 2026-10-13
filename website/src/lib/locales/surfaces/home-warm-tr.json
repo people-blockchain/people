@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Topluluğunuz için bir token başlatın."
     ],
-    "headlineAccent": "%27 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "%10 sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%27 sizin insanlarınıza gider,",
+      "%10 sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "%27 insanlarınıza",
-        "sub": "Her yeni token, arzının %27'sini kendi topluluk havuzuna gönderir."
+        "label": "%10 insanlarınıza",
+        "sub": "Her yeni token, arzının %10'sini kendi topluluk havuzuna gönderir."
       }
     ],
-    "shareBadge": "%27 topluluk payı",
+    "shareBadge": "%10 topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil"
   },
   "community": {
-    "eyebrow": "%27 topluluğa",
-    "title": "Her yeni tokenin %27'si sizin insanlarınıza gider",
-    "lead": "Bu protokole gömülüdür, bir gönderide vadedilmiş değildir: her standart lansman, arzının %27'sini o tokenin kendi topluluk havuzuna gönderir. Bu asla ağ ücretleriyle karıştırılmaz.",
+    "eyebrow": "%10 topluluğa",
+    "title": "Her yeni tokenin %10'si sizin insanlarınıza gider",
+    "lead": "Bu protokole gömülüdür, bir gönderide vadedilmiş değildir: her standart lansman, arzının %10'sini o tokenin kendi topluluk havuzuna gönderir. Bu asla ağ ücretleriyle karıştırılmaz.",
     "statLabel": "her yeni tokenin arzının topluluk havuzuna gider",
     "statNote": "Havuz, o tokene katılan insanlara aittir — ağa veya oluşturana değil.",
     "footnote": "Ağ ücretleri ayrı paylaştırılır: %{{community}} topluluk havuzuna, %{{validators}} doğrulayıcılara.",

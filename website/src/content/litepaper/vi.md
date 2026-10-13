@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Cung cấp | **1.000.000.000 PPL**, cố định |
-| Mỗi token được phát hành | **27%** cung cấp đi vào nhóm cộng đồng của token đó |
+| Mỗi token được phát hành | **10%** cung cấp đi vào nhóm cộng đồng của token đó |
 | Phí mạng bị đốt cháy | **0%** — mỗi phí được chia sẻ |
 | Ai kiếm được phần thưởng | **Những con người được xác minh** (số điện thoại Telegram hoặc Human Passport) |
 | Tài trợ | **Tự trợ cấp.** Không VC. Không phân bổ nhà đầu tư. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Những con người được xác minh, không phải bot.** Phần thưởng đi đến những tài khoản đã vượt qua một bài kiểm tra con người miễn phí. Một người, một tài khoản. Chỉ đăng ký không kiếm được gì.
 
-**27% của mỗi token được phát hành đi vào cộng đồng của nó.** Được tích hợp vào giao thức, không hứa hẹn trong một bài đăng: mỗi bản phát hành tiêu chuẩn gửi 27% cung cấp của nó đến nhóm cộng đồng của token đó. Nó không bao giờ được trộn với phí mạng.
+**10% của mỗi token được phát hành đi vào cộng đồng của nó.** Được tích hợp vào giao thức, không hứa hẹn trong một bài đăng: mỗi bản phát hành tiêu chuẩn gửi 10% cung cấp của nó đến nhóm cộng đồng của token đó. Nó không bao giờ được trộn với phí mạng.
 
 ---
 
@@ -53,7 +53,7 @@ Những gì bạn có thể làm mà không cần mã:
 
 | Công cụ | Nó làm gì | Trạng thái |
 |---|---|---|
-| **Token không cần mã** | Tên, ticker, hình ảnh, cung cấp. Token có được trực tiếp trên đường cong liên kết của nó; giao dịch đầu tiên đặt giá. 27% cung cấp đi vào nhóm cộng đồng của token; cổ phần của người tạo được phân bổ trong 180 ngày. | Hoạt động trên testnet |
+| **Token không cần mã** | Tên, ticker, hình ảnh, cung cấp. Token có được trực tiếp trên đường cong liên kết của nó; giao dịch đầu tiên đặt giá. 10% cung cấp đi vào nhóm cộng đồng của token; cổ phần của người tạo được phân bổ trong 180 ngày. | Hoạt động trên testnet |
 | **Thẻ câu lạc bộ NFT** | Thẻ thành viên cho một câu lạc bộ, một quán cà phê hoặc một cộng đồng — một cho mỗi thành viên, với hình ảnh bạn tải lên hoặc tạo. | Hoạt động trên testnet |
 | **Gây quỹ** | Thu thập sự hỗ trợ cho một dự án với các mẫu hợp đồng được xem xét: ký quỹ, phân bổ, quyết định có trọng số token. Cộng đồng của bạn mua vào trên đường cong, do đó nhu cầu đặt giá — không phải một vòng riêng tư. | Hoạt động trên testnet |
 | **Hợp đồng AI** | Mô tả một hợp đồng thông minh bằng từ thường. Nó được lắp ráp từ các mẫu OpenZeppelin và bạn thấy kết quả trước khi triển khai. | Hoạt động trên testnet |
@@ -191,7 +191,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 | Ai nhận phí | Trình xác thực nhận phí ưu tiên (mẹo) ¹ | Trình xác thực nhận 50% phí cơ sở và 100% phí ưu tiên ² | **Trình xác thực 30 · Cộng đồng 25 · Kho tài sản 20 · Tính thanh khoản 10 · Tăng trưởng 15** |
 | Tài trợ sớm | Bán ether công cộng, 2014 (42 ngày, trả bằng BTC) ³ | $20M Series A do Multicoin Capital dẫn đầu (2019); nhà đầu tư nhận được token SOL ⁴ | **Tự trợ cấp. Không VC, không phân bổ nhà đầu tư** |
 | Tạo tài khoản | Tạo một tài khoản không tốn chi phí; không kiểm tra danh tính ⁵ | Không phải yêu cầu giao thức | **Phần thưởng chỉ cho những con người được xác minh** |
-| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **27% của mỗi token được phát hành** |
+| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **10% của mỗi token được phát hành** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 ### Những gì đã thay đổi trong v1.1
 
-- Phần cộng đồng của một token mới là **27%** nguồn cung: **10%** được phân bổ khi ra mắt cộng thêm **~16,7%** quét từ đường cong khi chuyển đổi.
+- Phần cộng đồng của một token mới là **10%** nguồn cung: **10%** được phân bổ khi ra mắt.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Hiện tại không có đợt bán PPL công khai** và không thực hiện kiểm tra KYC hay điều kiện tham gia.

@@ -23,7 +23,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 | | |
 |---|---|
 | Supply | **1,000,000,000 PPL**, fixed |
-| Every launched token | **27%** of supply goes to that token's own community pool |
+| Every launched token | **10%** of supply goes to that token's own community pool |
 | Network fees burned | **0%** — every fee is shared |
 | Who earns rewards | **Verified humans** (Telegram phone or Human Passport) |
 | Funding | **Self-funded.** No VC. No investor allocation. |
@@ -45,7 +45,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 
 **Verified humans, not bots.** Rewards go to accounts that passed a free human check. One person, one account. Sign-up alone earns nothing.
 
-**27% of every launched token goes to its community.** Built into the protocol, not promised in a post: every standard launch sends 27% of its supply to that token's own community pool. It is never mixed with network fees.
+**10% of every launched token goes to its community.** Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.
 
 ---
 
@@ -55,7 +55,7 @@ What you can do without code:
 
 | Tool | What it does | Status |
 |---|---|---|
-| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 27% of supply goes to the token's community pool; the creator's share vests over 180 days. | Live on testnet |
+| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 10% of supply goes to the token's community pool; the creator's share vests over 180 days. | Live on testnet |
 | **NFT club cards** | Membership cards for a club, a café or a community — one per member, with an image you upload or generate. | Live on testnet |
 | **Fundraising** | Collect support for a project with reviewed contract templates: escrow, vesting, token-weighted vote. Your community buys in on the curve, so demand sets the price — not a private round. | Live on testnet |
 | **AI contracts** | Describe a smart contract in plain words. It is assembled from OpenZeppelin templates and you see the result before you deploy. | Live on testnet |
@@ -193,7 +193,7 @@ Only verifiable public facts about other networks. Sources below.
 | Who receives fees | Validators get the priority fee (tip) ¹ | Validators get 50% of the base fee and 100% of the priority fee ² | **Validators 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Early funding | Public ether sale, 2014 (42 days, paid in BTC) ³ | $20M Series A led by Multicoin Capital (2019); investors received SOL tokens ⁴ | **Self-funded. No VC, no investor allocation** |
 | Account creation | Creating an account costs nothing; no identity check ⁵ | Not a protocol requirement | **Rewards only for verified humans** |
-| New-token community share | Not a protocol rule | Not a protocol rule | **27% of every launched token** |
+| New-token community share | Not a protocol rule | Not a protocol rule | **10% of every launched token** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -218,7 +218,7 @@ Only verifiable public facts about other networks. Sources below.
 
 ### What changed in v1.1
 
-- A new token's community share is **27%** of supply: **10%** allocated at launch plus **~16.7%** swept from the bonding curve at migration.
+- A new token's community share is **10%** of supply: **10%** allocated at launch.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - There is **no public PPL sale at this time**, and no KYC or sale-eligibility checks are run.
