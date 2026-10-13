@@ -362,7 +362,7 @@ export function MultisigPanel() {
     if (enough)
       return (
         <div className="mt-2" data-testid="multisig-actions">
-          <span className="mr-2 text-xs text-ink-3">Step 2 of 2</span>
+          
           <button type="button" disabled={sending} onClick={() => send("execute", [BigInt(tx.id)])} className={BTN_PRIMARY}>
             {sending ? "Waiting for wallet…" : t.execute}
           </button>
@@ -371,15 +371,15 @@ export function MultisigPanel() {
     if (!tx.mine)
       return (
         <div className="mt-2" data-testid="multisig-actions">
-          <span className="mr-2 text-xs text-ink-3">Step 1 of 2</span>
+          
           <button type="button" disabled={sending} onClick={() => send("confirm", [BigInt(tx.id)])} className={BTN_PRIMARY}>
-            {sending ? "Waiting for wallet…" : t.confirm}
+            {sending ? "Waiting for wallet…" : "Confirm (sign)"}
           </button>
         </div>
       );
     return (
-      <p className="mt-2 text-xs text-ink-3" data-testid="multisig-actions">
-        You confirmed. Waiting for another owner to confirm ({tx.confirmations.toString()}/{threshold?.toString() ?? "…"}).
+      <p className="mt-2 rounded-xl bg-surface px-3 py-2 text-sm font-medium text-ink-2 ring-1 ring-line" data-testid="multisig-actions">
+        Waiting for 2nd signature ({tx.confirmations.toString()}/{threshold?.toString() ?? "…"})
       </p>
     );
   }
@@ -389,9 +389,28 @@ export function MultisigPanel() {
     account !== null &&
     owners.some((o) => o.toLowerCase() === account.toLowerCase());
 
+  const card = (tx: Tx) => (
+    <li key={tx.id} className="rounded-2xl border border-line bg-surface-2 p-4 text-sm">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="font-semibold">#{tx.id} · {tx.executed ? t.executed : t.pending}</p>
+        {tx.mine ? (
+          <span className="rounded-full bg-green-600/15 px-3 py-1 text-sm font-semibold text-green-700" data-testid="signed-badge">
+            Signed by you ✓
+          </span>
+        ) : null}
+      </div>
+      <p className="break-all font-mono text-xs">{t.to}: {tx.to}</p>
+      <p className="break-all font-mono text-xs">{t.data}: {tx.data}</p>
+      <p>{t.confirmations}: {tx.confirmations.toString()} / {threshold?.toString() ?? "…"}</p>
+      {isOwner && !tx.executed ? actions(tx) : null}
+    </li>
+  );
+  const pending = txs.filter((tx) => !tx.executed);
+  const history = txs.filter((tx) => tx.executed);
   return (
     <section className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-12">
       <h1 className="text-2xl font-semibold">{t.title}</h1>
+      <h2 className="mt-6 font-semibold">Step 1 · Connect wallet</h2>
       <div className="mt-4" data-testid="multisig-actions">
         <div>
           {account ? (
@@ -500,53 +519,25 @@ export function MultisigPanel() {
       <p className="mt-2 text-sm text-ink-2">{t.lead}</p>
       <p className="mt-2 break-all font-mono text-xs text-ink-3">{MULTISIG}</p>
 
-      <h2 className="mt-8 font-semibold">{t.owners}</h2>
-      {owners.length === 0 ? (
-        <p className="text-sm text-ink-3">{t.loading}</p>
-      ) : (
-        <ul
-          className="mt-2 space-y-1 font-mono text-xs"
-          data-testid="multisig-owners"
-        >
-          {owners.map((o) => (
-            <li key={o}>{o}</li>
-          ))}
-        </ul>
-      )}
-      <p className="mt-3 text-sm">
-        {t.threshold}: <b>{threshold === null ? "…" : threshold.toString()}</b>
-      </p>
-
-      <h2 className="mt-8 font-semibold">{t.txs}</h2>
-      {txs.length === 0 ? (
+      <h2 className="mt-8 font-semibold">Step 2 · Pending transactions</h2>
+      {!account ? <p className="mt-2 text-sm text-ink-3">Connect a wallet (Step 1) to sign.</p> : null}
+      {pending.length === 0 ? (
         <p className="mt-3 text-sm text-ink-3">{t.none}</p>
       ) : (
-        <ul className="mt-3 space-y-3">
-          {txs.map((tx) => (
-            <li
-              key={tx.id}
-              className="rounded-2xl border border-line bg-surface-2 p-4 text-sm"
-            >
-              <p className="font-semibold">
-                #{tx.id} · {tx.executed ? t.executed : t.pending}
-              </p>
-              <p className="break-all font-mono text-xs">
-                {t.to}: {tx.to}
-              </p>
-              <p className="break-all font-mono text-xs">
-                {t.data}: {tx.data}
-              </p>
-              <p>
-                {t.confirmations}: {tx.confirmations.toString()} /{" "}
-                {threshold?.toString() ?? "…"}
-              </p>
-              {isOwner && !tx.executed ? (
-                actions(tx)
-              ) : null}
-            </li>
-          ))}
-        </ul>
+        <ul className="mt-3 space-y-3" data-testid="multisig-pending">{pending.map(card)}</ul>
       )}
+
+      <details className="mt-6">
+        <summary className="cursor-pointer font-semibold">History ({history.length})</summary>
+        <ul className="mt-3 space-y-3">{history.map(card)}</ul>
+      </details>
+
+      <details className="mt-4">
+        <summary className="cursor-pointer font-semibold">{t.owners} · {t.threshold}: {threshold === null ? "…" : threshold.toString()}</summary>
+        <ul className="mt-2 space-y-1 font-mono text-xs" data-testid="multisig-owners">
+          {owners.map((o) => (<li key={o}>{o}</li>))}
+        </ul>
+      </details>
     </section>
   );
 }
