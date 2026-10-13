@@ -290,6 +290,20 @@ export const factoryAbi = [
   },
   {
     type: "function",
+    name: "createToken",
+    stateMutability: "payable",
+    inputs: [
+      { name: "name", type: "string" },
+      { name: "symbol", type: "string" },
+      { name: "decimals", type: "uint8" },
+      { name: "totalSupply", type: "uint256" },
+      { name: "metadataURI", type: "string" },
+      { name: "leftoverMode", type: "uint8" },
+    ],
+    outputs: [{ type: "address" }],
+  },
+  {
+    type: "function",
     name: "tokenCreateFee",
     stateMutability: "view",
     inputs: [],

@@ -42,6 +42,8 @@ export function EvmTokenLaunch() {
   const [stableFeeUsd6, setStableFeeUsd6] = useState<bigint | null>(null);
   const [stage, setStage] = useState<"idle" | "approving" | "payingFee" | "creating">("idle");
   // Issuer referral program is OFF unless the issuer ticks the box.
+  /** 0 = Burn (default), 1 = CommunityPool — owner rule 2026-10-13. */
+  const [leftoverMode, setLeftoverMode] = useState<0 | 1>(0);
   const [issuerReferral, setIssuerReferral] = useState(false);
   const [issuerReferralMsg, setIssuerReferralMsg] = useState("");
   const r = foundersReferralCopy(lang);
@@ -149,7 +151,7 @@ export function EvmTokenLaunch() {
         address: dep.contracts.tokenFactory as `0x${string}`,
         abi: factoryAbi,
         functionName: "createToken",
-        args: [name.trim(), symbol.trim().toUpperCase(), 6, total, `ipfs://people/${symbol.trim()}`],
+        args: [name.trim(), symbol.trim().toUpperCase(), 6, total, `ipfs://people/${symbol.trim()}`, leftoverMode],
         value: fee,
       });
       setTx(hash);
@@ -224,6 +226,42 @@ export function EvmTokenLaunch() {
               ) : null}
             </div>
           ) : null}
+
+
+          <div className="rounded-xl border border-line p-3" data-testid="leftover-mode">
+            <p className="text-sm font-semibold">Curve leftover after migration / 180-day unsold</p>
+            <p className="mt-1 text-xs text-ink-3">
+              What happens to tokens still on the curve when it migrates to the AMM, or if it does not sell out in 180 days. Never to you or the treasury.
+            </p>
+            <div className="mt-3 space-y-2 text-sm text-ink-2">
+              <label className="flex items-start gap-2">
+                <input
+                  type="radio"
+                  className="mt-1"
+                  name="leftoverMode"
+                  checked={leftoverMode === 0}
+                  onChange={() => setLeftoverMode(0)}
+                />
+                <span>
+                  <span className="font-semibold">Burn (recommended)</span>
+                  <span className="block text-xs text-ink-3">Default. Leftover and unsold tokens are permanently burned.</span>
+                </span>
+              </label>
+              <label className="flex items-start gap-2">
+                <input
+                  type="radio"
+                  className="mt-1"
+                  name="leftoverMode"
+                  checked={leftoverMode === 1}
+                  onChange={() => setLeftoverMode(1)}
+                />
+                <span>
+                  <span className="font-semibold">To community pool</span>
+                  <span className="block text-xs text-ink-3">Send leftover and unsold tokens to this token&apos;s own community pool.</span>
+                </span>
+              </label>
+            </div>
+          </div>
 
           <div className="rounded-xl border border-line p-3" data-testid="issuer-referral-option">
             <p className="text-sm font-semibold">{r.launchTitle}</p>

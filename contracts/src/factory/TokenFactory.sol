@@ -18,7 +18,8 @@ contract TokenFactory is Ownable {
         string symbol,
         uint8 decimals,
         uint256 totalSupply,
-        CurveMath.Allocation allocation
+        CurveMath.Allocation allocation,
+        uint8 leftoverMode
     );
 
     /// @dev AUD-H4: storage, not `immutable` — see `setFeeRecipient`.
@@ -48,6 +49,7 @@ contract TokenFactory is Ownable {
     error ZeroFeeRecipient();
     error ZeroGateway();
     error Unauthorized();
+    error InvalidLeftoverMode();
 
     constructor(
         address feeRecipient_,
@@ -94,6 +96,8 @@ contract TokenFactory is Ownable {
         emit PrepaidCreditAdded(payer, msg.value);
     }
 
+    /// @notice Backwards-compatible 5-arg overload. Defaults to `LeftoverMode.Burn` (0) per the
+    /// owner rule 2026-10-13, so existing callers and tests keep compiling and behaving.
     function createToken(
         string calldata name,
         string calldata symbol,
@@ -101,6 +105,32 @@ contract TokenFactory is Ownable {
         uint256 totalSupply,
         string calldata metadataURI
     ) external payable returns (address token) {
+        return _createToken(name, symbol, decimals, totalSupply, metadataURI, 0);
+    }
+
+    /// @notice 6-arg overload: creator picks what happens to curve leftovers and the unsold
+    /// remainder at 180-day finalize. 0 = Burn (default), 1 = CommunityPool. Never the creator,
+    /// never the treasury.
+    function createToken(
+        string calldata name,
+        string calldata symbol,
+        uint8 decimals,
+        uint256 totalSupply,
+        string calldata metadataURI,
+        uint8 leftoverMode
+    ) external payable returns (address token) {
+        return _createToken(name, symbol, decimals, totalSupply, metadataURI, leftoverMode);
+    }
+
+    function _createToken(
+        string calldata name,
+        string calldata symbol,
+        uint8 decimals,
+        uint256 totalSupply,
+        string calldata metadataURI,
+        uint8 leftoverMode
+    ) internal returns (address token) {
+        if (leftoverMode > 1) revert InvalidLeftoverMode();
         if (bytes(name).length < 2 || bytes(name).length > 64) revert InvalidParams();
         bytes memory sym = bytes(symbol);
         if (sym.length < 2 || sym.length > 16) revert InvalidParams();
@@ -146,10 +176,11 @@ contract TokenFactory is Ownable {
             token,
             allocation.bondingCurve,
             allocation.liquidityReserve,
-            allocation.ecosystemReserve
+            allocation.ecosystemReserve,
+            leftoverMode
         );
 
-        emit TokenCreated(token, msg.sender, name, upperSymbol, decimals, totalSupply, allocation);
+        emit TokenCreated(token, msg.sender, name, upperSymbol, decimals, totalSupply, allocation, leftoverMode);
     }
 
     function _upperSymbol(string calldata symbol) private pure returns (string memory) {
