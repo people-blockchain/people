@@ -8,11 +8,14 @@ import {
   createInjectedWalletClient,
   ensurePeopleChain,
   readInjectedProvider,
+  waitForInjectedProvider,
 } from "@/lib/evm/client";
+import { isMobileBrowser, walletAppDeepLink } from "@/lib/mobile-env";
 
 const MULTISIG: Address = "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB";
 const GATEWAY: Address = "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9";
 const ACCEPT_OWNERSHIP: Hex = "0x79ba5097";
+const METAMASK_DEEPLINK = "https://metamask.app.link/dapp/www.peopleblockchain.network/multisig";
 
 const abi = [
   { type: "function", name: "owners", stateMutability: "view", inputs: [{ type: "uint256" }], outputs: [{ type: "address" }] },
@@ -41,8 +44,9 @@ const COPY = {
     title: "Testnet multisig",
     lead: "People's own 2-of-3 multisig contract on the People testnet. Owners can submit, confirm and execute transactions here.",
     connect: "Connect MetaMask",
+    openInApp: "Open in the MetaMask app",
     connected: "Connected",
-    noWallet: "MetaMask was not found in this browser.",
+    noWallet: "MetaMask was not found in this browser. Install it, or open this page in the MetaMask app.",
     owners: "Owners",
     threshold: "Confirmations needed",
     txs: "Transactions",
@@ -63,6 +67,7 @@ const COPY = {
     title: "Мультисиг тестнета",
     lead: "Собственный мультисиг-контракт People 2-из-3 в тестнете People. Владельцы могут здесь создавать, подтверждать и исполнять транзакции.",
     connect: "Подключить MetaMask",
+    openInApp: "Открыть в приложении MetaMask",
     connected: "Подключено",
     noWallet: "MetaMask не найден в этом браузере.",
     owners: "Владельцы",
@@ -118,8 +123,15 @@ export function MultisigPanel() {
   }, [load]);
 
   async function connect() {
-    const provider = readInjectedProvider("any");
-    if (!provider) return setStatus(t.noWallet);
+    const provider = readInjectedProvider("any") ?? (await waitForInjectedProvider("any"));
+    if (!provider) {
+      // Mobile Chrome/Safari have no injected wallet: open this page inside the MetaMask app.
+      if (isMobileBrowser()) {
+        window.location.assign(walletAppDeepLink("metamask", window.location.href));
+        return;
+      }
+      return setStatus(t.noWallet);
+    }
     try {
       const accs = (await provider.request({ method: "eth_requestAccounts" })) as Address[];
       await ensurePeopleChain(provider);
@@ -166,9 +178,14 @@ export function MultisigPanel() {
             {t.connected}: <span className="font-mono">{account}</span>
           </p>
         ) : (
-          <button type="button" onClick={connect} className="rounded-xl bg-brand px-4 py-2 text-sm text-brand-ink">
-            {t.connect}
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button type="button" onClick={connect} data-testid="multisig-connect" className="rounded-xl bg-brand px-4 py-2 text-sm text-brand-ink">
+              {t.connect}
+            </button>
+            <a href={METAMASK_DEEPLINK} data-testid="multisig-open-metamask" className="text-sm text-ink-2 underline">
+              {t.openInApp}
+            </a>
+          </div>
         )}
         {account && !isOwner ? <p className="mt-2 text-sm text-ink-3">{t.notOwner}</p> : null}
       </div>
