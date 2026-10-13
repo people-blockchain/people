@@ -117,7 +117,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 
 **Mua lại.** Cổ phần của kho tài sản (20%) và tính thanh khoản (10%) được sử dụng cho các mua lại PPL công cộng. Không có gì bị đốt cháy để giả lập hiếm — phí quay trở lại mạng và con người của nó.
 
-**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **5 USD cho mỗi lần ra mắt token và 10 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy được chuyển vào quỹ mua lại PPL công khai, và PPL mua lại được chia 30/25/20/10/15 bởi multisig của ngân khố, giống như mọi lần mua lại khác.
+**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy được chuyển vào quỹ mua lại PPL công khai, và PPL mua lại được chia 30/25/20/10/15 bởi multisig của ngân khố, giống như mọi lần mua lại khác.
 
 ---
 
@@ -218,7 +218,8 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 - Phần cộng đồng của một token mới là **27%** nguồn cung: **10%** được phân bổ khi ra mắt cộng thêm **~16,7%** quét từ đường cong khi chuyển đổi.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
-- Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **5 USD cho mỗi lần ra mắt token và 10 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
+- Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Hiện tại không có đợt bán PPL công khai** và không thực hiện kiểm tra KYC hay điều kiện tham gia.
 - Bảo mật: hiện là **đánh giá nội bộ có hỗ trợ của AI** và **kiểm toán độc lập trước mainnet**.
 - Multisig của kho bạc là **2 trên 3** và được tạo trước mainnet.
+- Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Thay đổi hợp đồng đã được viết và kiểm thử, chưa triển khai trên testnet.)

@@ -117,7 +117,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 
 **Pembelian kembali.** Bagian treasury (20%) dan likuiditas (10%) digunakan untuk pembelian kembali PPL publik. Tidak ada yang terbakar untuk membuat kelangkaan palsu — biaya kembali ke jaringan dan orangnya.
 
-**Biaya peluncuran token.** Aktif di testnet: pabrik yang telah diterapkan masih mengenakan biaya tetap dalam PPL — 1,045005 PPL untuk meluncurkan token dan 2,925 PPL untuk mencetak NFT. Rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP. Opsi stablecoin dan diskon TWAP belum ada dalam kode yang diterapkan. 100% biaya peluncuran masuk ke buyback PPL publik, dan PPL yang dibeli kembali dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti buyback lainnya.
+**Biaya peluncuran token.** Aktif di testnet: pabrik yang telah diterapkan masih mengenakan biaya tetap dalam PPL — 1,045005 PPL untuk meluncurkan token dan 2,925 PPL untuk mencetak NFT. Rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP. Opsi stablecoin dan diskon TWAP belum ada dalam kode yang diterapkan. 100% biaya peluncuran masuk ke buyback PPL publik, dan PPL yang dibeli kembali dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti buyback lainnya.
 
 ---
 
@@ -218,7 +218,8 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 
 - Bagian komunitas dari token baru adalah **27%** dari pasokan: **10%** dialokasikan saat peluncuran plus **~16,7%** disapu dari kurva saat migrasi.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
-- Biaya peluncuran: rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
+- Biaya peluncuran: rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
 - **Saat ini tidak ada penjualan PPL publik** dan tidak ada pemeriksaan KYC atau kelayakan.
 - Keamanan: **tinjauan internal berbantuan AI** saat ini dan **audit independen sebelum mainnet**.
 - Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
+- Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Perubahan kontrak sudah ditulis dan diuji, belum diterapkan di testnet.)

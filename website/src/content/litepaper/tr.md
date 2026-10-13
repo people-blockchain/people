@@ -117,7 +117,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 
 **Geri alımlar.** Hazine (%20) ve likidite (%10) payları halka açık PPL geri alımları için kullanılır. Hiçbir şey kıtlık çakmak için yakılmaz — ücretler ağa ve insanlarına geri döner.
 
-**Token başlatma ücreti.** Test ağında canlı: kurulu fabrikalar hâlâ sabit bir PPL ücreti almaktadır — bir token başlatmak için 1,045005 PPL ve NFT basmak için 2,925 PPL. Onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır. Stabil coin seçeneği ve TWAP indirimi henüz kurulu kodda yoktur. Başlatma ücretlerinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır.
+**Token başlatma ücreti.** Test ağında canlı: kurulu fabrikalar hâlâ sabit bir PPL ücreti almaktadır — bir token başlatmak için 1,045005 PPL ve NFT basmak için 2,925 PPL. Onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır. Stabil coin seçeneği ve TWAP indirimi henüz kurulu kodda yoktur. Başlatma ücretlerinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır.
 
 ---
 
@@ -218,7 +218,8 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 - Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
-- Başlatma ücretleri: onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
+- Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **Şu anda halka açık bir PPL satışı yoktur** ve KYC veya uygunluk kontrolü yapılmaz.
 - Güvenlik: şimdi **iç, yapay zekâ destekli bir inceleme** ve mainnet'ten önce **bağımsız bir denetim**.
 - Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
+- Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Sözleşme değişikliği yazıldı ve test edildi; test ağında henüz dağıtılmadı.)

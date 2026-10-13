@@ -117,7 +117,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 
 **Rückkäufe.** Die Treasury- (20%) und Liquiditäts- (10%) Anteile werden für öffentliche PPL-Rückkäufe verwendet. Nichts wird verbrannt, um Knappheit vorzutäuschen — Gebühren gehen zurück an das Netzwerk und seine Menschen.
 
-**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100 % der Launch-Gebühren fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
+**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100 % der Launch-Gebühren fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
 
 ---
 
@@ -218,7 +218,8 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
 - Der Community-Anteil eines neuen Tokens beträgt **27 %** des Angebots: **10 %** bei der Einführung zugeteilt plus **~16,7 %**, die bei der Migration aus der Kurve entnommen werden.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
-- Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
+- Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - **Derzeit gibt es keinen öffentlichen PPL-Sale**, und es werden keine KYC- oder Teilnahmeberechtigungsprüfungen durchgeführt.
 - Sicherheit: jetzt eine **interne, KI-gestützte Prüfung** und ein **unabhängiges Audit vor dem Mainnet**.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
+- Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Vertragsänderung geschrieben und getestet, im Testnet noch nicht ausgerollt.)

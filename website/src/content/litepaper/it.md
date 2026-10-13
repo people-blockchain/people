@@ -117,7 +117,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 
 **Buyback.** Le quote del tesoro (20%) e della liquidità (10%) vengono utilizzate per i buyback pubblici di PPL. Niente viene bruciato per fingere scarsità — le commissioni tornano alla rete e alle sue persone.
 
-**Commissione di lancio token.** Attiva sulla testnet: le factory distribuite applicano ancora una commissione fissa in PPL — 1,045005 PPL per lanciare un token e 2,925 PPL per coniare un NFT. Il piano approvato è un importo fisso di **5 USD per il lancio di un token e 10 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP. L'opzione stablecoin e lo sconto TWAP non sono ancora nel codice distribuito. Il 100% delle commissioni di lancio va al riacquisto pubblico di PPL, e il PPL riacquistato viene diviso 30/25/20/10/15 dal multisig del tesoro, come ogni altro riacquisto.
+**Commissione di lancio token.** Attiva sulla testnet: le factory distribuite applicano ancora una commissione fissa in PPL — 1,045005 PPL per lanciare un token e 2,925 PPL per coniare un NFT. Il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP. L'opzione stablecoin e lo sconto TWAP non sono ancora nel codice distribuito. Il 100% delle commissioni di lancio va al riacquisto pubblico di PPL, e il PPL riacquistato viene diviso 30/25/20/10/15 dal multisig del tesoro, come ogni altro riacquisto.
 
 ---
 
@@ -218,7 +218,8 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 
 - La quota comunitaria di un nuovo token è il **27%** della fornitura: **10%** assegnato al lancio più **~16,7%** prelevato dalla curva alla migrazione.
 - Il vesting del team è **0% al lancio, un cliff di 6 mesi e poi 18 mesi lineari** (24 mesi in totale).
-- Commissioni di lancio: il piano approvato è un importo fisso di **5 USD per il lancio di un token e 10 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
+- Commissioni di lancio: il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
 - **Al momento non c'è alcuna vendita pubblica di PPL** e non vengono eseguiti controlli KYC o di eleggibilità.
 - Sicurezza: ora una **revisione interna assistita dall'IA** e un'**audit indipendente prima della mainnet**.
 - Il multisig del tesoro è **2 su 3** e viene creato prima della mainnet.
+- Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Modifica al contratto scritta e testata, non ancora distribuita sulla testnet.)

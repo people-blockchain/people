@@ -117,7 +117,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 
 **Buybacks.** As ações do tesouro (20%) e liquidez (10%) são usadas para buybacks públicos de PPL. Nada é queimado para falsificar escassez — as taxas voltam para a rede e suas pessoas.
 
-**Taxa de lançamento de token.** Ativa na testnet: as fábricas implantadas ainda cobram uma taxa fixa em PPL — 1,045005 PPL para lançar um token e 2,925 PPL para criar um NFT. O plano aprovado é um valor fixo de **5 USD por lançamento de token e 10 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP. A opção de stablecoin e o desconto TWAP ainda não estão no código implantado. 100% das taxas de lançamento vão para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
+**Taxa de lançamento de token.** Ativa na testnet: as fábricas implantadas ainda cobram uma taxa fixa em PPL — 1,045005 PPL para lançar um token e 2,925 PPL para criar um NFT. O plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP. A opção de stablecoin e o desconto TWAP ainda não estão no código implantado. 100% das taxas de lançamento vão para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
 
 ---
 
@@ -218,7 +218,8 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 
 - A parte da comunidade em um novo token é **27%** da oferta: **10%** alocados no lançamento mais **~16,7%** retirados da curva na migração.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
-- Taxas de lançamento: o plano aprovado é um valor fixo de **5 USD por lançamento de token e 10 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
+- Taxas de lançamento: o plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
 - **Não há venda pública de PPL no momento** e não são feitas verificações de KYC ou de elegibilidade.
 - Segurança: uma **revisão interna assistida por IA** agora e uma **auditoria independente antes da mainnet**.
 - O multisig do tesouro é **2 de 3** e é criado antes da mainnet.
+- Se a curva de um token não esgotar em **180 dias** após o lançamento, qualquer pessoa pode finalizá-la e os tokens não vendidos vão para o pool comunitário desse token. Uma curva esgotada passa para a liquidez como antes. (Alteração do contrato escrita e testada, ainda não implantada na testnet.)
