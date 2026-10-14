@@ -2,7 +2,7 @@
 # People Predict — testnet MVP
 
 Status: **APPROVED MVP rules** (founder answers in this chat, 2026-10-14).
-Implementation: local source and tests; **deployment in progress on chainId 97401**, **NOT PRODUCTION-READY**.
+Implementation: local source and tests; **live on chainId 97401** at `0x77408f49f36520b722CbcCDBeD68aCc8c5Ca4eBf`, **NOT PRODUCTION-READY**.
 Alex approved testnet deployment and public-repo merge on 2026-10-14; roles and rules below are binding for that release.
 
 ## Approved scope
@@ -103,11 +103,10 @@ configuration `wss://node.peopleblockchain.network/ws`, native PPL/appl **18 dec
 The app uses bounded HTTP polling, not WS subscriptions. Historical OVN 6-decimal RPC
 notes do not apply to this Cosmos EVM application.
 
-`website/src/lib/predict/deployment.json` deliberately has no address. Roles are approved
+`website/src/lib/predict/deployment.json` pins the live address, runtime code hash, genesis hash, start block and release SHA. Roles are approved
 (administrator PeopleMultisig `0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB`, default
 resolver Alex `0x510B2e28e936d36eF1EDDA7C9ea592e359aB5D48`, default arbiter Kirill
-`0x685Ef7cE99a7C8bBC7BdE0B12594376163DDd4B2`) and deployment is in progress on chainId
-97401. Therefore live RPC health/balances can be read, but no markets, odds, activity or
+`0x685Ef7cE99a7C8bBC7BdE0B12594376163DDd4B2`) and the contract is live on chainId 97401 at `0x77408f49f36520b722CbcCDBeD68aCc8c5Ca4eBf`. Therefore live RPC health/balances can be read, but no markets, odds, activity or
 positions are fabricated, and writes remain disabled until the manifest records the
 reviewed address and code pins. Existing factories/DEX addresses are not reused.
 

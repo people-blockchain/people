@@ -149,7 +149,7 @@
     },
     "people-predict-testnet-mvp": {
       "title": "People Predict — testnet MVP",
-      "summary": "Testnet prediction market MVP: fully backed binary positions and on-chain limit orders. Rules approved; contracts and interface implemented locally. Deployment and role addresses pending."
+      "summary": "Live on People testnet (97401): fully backed Yes/No markets, on-chain limit orders, 0 app fee, 48h dispute, void 0.5 PPL. Admin=multisig; named resolver/arbiter per market."
     }
   }
 }
