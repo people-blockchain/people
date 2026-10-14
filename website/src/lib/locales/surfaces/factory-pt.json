@@ -75,7 +75,7 @@
     "payWithLabel": "Pagar a taxa com",
     "payWithPpl": "PPL",
     "stableFeeLabel": "Taxa em stablecoin",
-    "stableFeeBuybackNote": "100% vai para a recompra pública de PPL.",
+    "stableFeeBuybackNote": "100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL.",
     "stableFeeNetworkNote": "Por agora, funciona apenas na rede People. Pagar a partir de outra rede (Ethereum, Polygon, Tron, TON, Solana) chegará mais tarde.",
     "approvingStable": "Aprovando…",
     "payingStableFee": "Pagando a taxa…",

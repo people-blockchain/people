@@ -100,7 +100,7 @@
       ],
       "communityPoolExample": "Der Community Pool wird unter aktiven Teilnehmern proportional zu Teilnahmepunkten geteilt. Beispiel: 600 Tokens im Pool, drei Personen mit 1, 2 und 3 Punkten erhalten 100, 200 und 300.",
       "tokenPoolNote": "Getrennt davon bleiben die 10 % Community-Anteile jedes Tokens im eigenen Pool. Sie werden nicht mit PPL-Gebühren vermischt.",
-      "buybackNote": "Die Treasury- und Liquiditätsanteile (zusammen 30 %) finanzieren öffentliche PPL-Rückkäufe am offenen Markt, ausgeführt vom veröffentlichten Multisig und im Explorer sichtbar.",
+      "buybackNote": "100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%). Alles fließt letztendlich an die Teilnehmer zurück — Rückkäufe laufen über den veröffentlichten Multisig und sind im Explorer sichtbar.",
       "launchFeeNote": "Das Starten eines Tokens oder NFTs kostet eine Protokollgebühr, zahlbar in PPL oder einem unterstützten Stablecoin (USDC/USDT) — Ihre Wahl. Gas wird immer in PPL bezahlt."
     },
     {

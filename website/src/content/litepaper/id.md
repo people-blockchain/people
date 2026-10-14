@@ -115,9 +115,9 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Pool pertumbuhan | 15% |
 | Terbakar | 0% |
 
-**Pembelian kembali.** Bagian treasury (20%) dan likuiditas (10%) digunakan untuk pembelian kembali PPL publik. Tidak ada yang terbakar untuk membuat kelangkaan palsu — biaya kembali ke jaringan dan orangnya.
+**Aliran biaya.** 100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik. 30% dari biaya jaringan masuk ke pembelian kembali PPL publik (treasury 20% + likuiditas 10%). Sisa 70% dari biaya jaringan masuk ke validator (30%), community pool (25%) dan Growth Pool (15%). Semuanya pada akhirnya kembali ke peserta. Tidak ada yang dibakar untuk memalsukan kelangkaan.
 
-**Biaya peluncuran token.** Aktif di testnet: pabrik yang telah diterapkan masih mengenakan biaya tetap dalam PPL — 1,045005 PPL untuk meluncurkan token dan 2,925 PPL untuk mencetak NFT. Rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP. Opsi stablecoin dan diskon TWAP belum ada dalam kode yang diterapkan. 100% biaya peluncuran masuk ke buyback PPL publik, dan PPL yang dibeli kembali dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti buyback lainnya.
+**Biaya peluncuran token.** Aktif di testnet: pabrik yang telah diterapkan masih mengenakan biaya tetap dalam PPL — 1,045005 PPL untuk meluncurkan token dan 2,925 PPL untuk mencetak NFT. Rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP. Opsi stablecoin dan diskon TWAP belum ada dalam kode yang diterapkan. 100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik, dan PPL yang dibeli kembali dibagi 30/25/20/10/15 oleh multisig treasury, sama seperti setiap pembelian kembali lainnya.
 
 ---
 

@@ -100,7 +100,7 @@
       ],
       "communityPoolExample": "The Community Pool is shared among active participants in proportion to their participation points. Here's an example: the pool has 600 tokens and three people hold 1, 2 and 3 points, so they get 100, 200 and 300.",
       "tokenPoolNote": "Separately, each token's 10% community share stays in that token's own pool. It is never mixed with PPL fees.",
-      "buybackNote": "The treasury and liquidity shares (30% combined) fund public PPL buybacks from the open market, run by the published multisig and visible in the explorer.",
+      "buybackNote": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants — buybacks run through the published multisig and are visible in the explorer.",
       "launchFeeNote": "Launching a token or NFT costs a protocol fee, payable in PPL or in a supported stablecoin (USDC/USDT) — your choice. Gas is always paid in PPL."
     },
     {

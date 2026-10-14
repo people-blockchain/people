@@ -75,7 +75,7 @@
     "payWithLabel": "使用以下方式支付费用",
     "payWithPpl": "PPL",
     "stableFeeLabel": "稳定币费用",
-    "stableFeeBuybackNote": "100% 用于公开的 PPL 回购。",
+    "stableFeeBuybackNote": "100% 的代币和 NFT 发行费用（USDC/USDT）用于公开的 PPL 回购。",
     "stableFeeNetworkNote": "目前仅支持 People 网络。从其他链（Ethereum、Polygon、Tron、TON、Solana）支付将在以后推出。",
     "approvingStable": "正在授权…",
     "payingStableFee": "正在支付费用…",

@@ -100,7 +100,7 @@
       ],
       "communityPoolExample": "Pool komunitas dibagi di antara peserta aktif sesuai poin partisipasi. Contoh: pool 600 token, tiga orang dengan poin 1, 2, dan 3 mendapat 100, 200, dan 300.",
       "tokenPoolNote": "Terpisah, 10% komunitas setiap token tetap di pool token itu. Tidak dicampur dengan biaya PPL.",
-      "buybackNote": "Porsi treasury dan likuiditas (total 30%) mendanai buyback PPL publik di pasar terbuka, dijalankan oleh multisig yang dipublikasikan dan terlihat di explorer.",
+      "buybackNote": "100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik. 30% dari biaya jaringan masuk ke pembelian kembali PPL publik (treasury 20% + likuiditas 10%). Sisa 70% masuk ke validator (30%), community pool (25%) dan Growth Pool (15%). Semuanya pada akhirnya kembali ke peserta — pembelian kembali dijalankan melalui multisig yang dipublikasikan dan terlihat di explorer.",
       "launchFeeNote": "Meluncurkan token atau NFT memerlukan biaya protokol, dapat dibayar dengan PPL atau stablecoin yang didukung (USDC/USDT) — sesuai pilihan Anda. Gas selalu dibayar dengan PPL."
     },
     {

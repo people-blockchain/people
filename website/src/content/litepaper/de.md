@@ -115,9 +115,9 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Growth Pool | 15% |
 | Verbrannt | 0% |
 
-**Rückkäufe.** Die Treasury- (20%) und Liquiditäts- (10%) Anteile werden für öffentliche PPL-Rückkäufe verwendet. Nichts wird verbrannt, um Knappheit vorzutäuschen — Gebühren gehen zurück an das Netzwerk und seine Menschen.
+**Gebührenfluss.** 100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% der Netzwerkgebühren gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%). Alles fließt letztendlich an die Teilnehmer zurück. Nichts wird verbrannt, um Knappheit vorzutäuschen.
 
-**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100 % der Launch-Gebühren fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
+**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe, und die zurückgekauften PPL werden vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, genau wie bei jedem anderen Rückkauf.
 
 ---
 

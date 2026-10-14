@@ -100,7 +100,7 @@
       ],
       "communityPoolExample": "Il Community Pool è condiviso tra partecipanti attivi in proporzione ai punti. Esempio: 600 token nel pool, tre persone con 1, 2 e 3 punti ricevono 100, 200 e 300.",
       "tokenPoolNote": "Separatamente, il 10% community di ogni token resta nel pool di quel token. Non si mescola con le commissioni PPL.",
-      "buybackNote": "Le quote di tesoreria e liquidità (30% in totale) finanziano riacquisti pubblici di PPL sul mercato aperto, eseguiti dal multisig pubblicato e visibili nell'explorer.",
+      "buybackNote": "100% delle commissioni di lancio di token e NFT (USDC/USDT) va ai riacquisti pubblici di PPL. Il 30% delle commissioni di rete va ai riacquisti pubblici di PPL (tesoreria 20% + liquidità 10%). Il restante 70% va ai validatori (30%), al pool della community (25%) e al Growth Pool (15%). Tutto alla fine torna ai partecipanti — i riacquisti avvengono tramite il multisig pubblicato e sono visibili nell'explorer.",
       "launchFeeNote": "Lanciare un token o un NFT costa una commissione di protocollo, pagabile in PPL o in una stablecoin supportata (USDC/USDT), a tua scelta. Il gas si paga sempre in PPL."
     },
     {

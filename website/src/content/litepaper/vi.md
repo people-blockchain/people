@@ -115,9 +115,9 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Nhóm tăng trưởng | 15% |
 | Đốt cháy | 0% |
 
-**Mua lại.** Cổ phần của kho tài sản (20%) và tính thanh khoản (10%) được sử dụng cho các mua lại PPL công cộng. Không có gì bị đốt cháy để giả lập hiếm — phí quay trở lại mạng và con người của nó.
+**Dòng phí.** 100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai. 30% phí mạng được dùng cho các đợt mua lại PPL công khai (kho bạc 20% + thanh khoản 10%). 70% phí mạng còn lại được chia cho các validator (30%), quỹ cộng đồng (25%) và Growth Pool (15%). Cuối cùng tất cả đều quay trở lại với người tham gia. Không có gì bị đốt để tạo khan hiếm giả tạo.
 
-**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy được chuyển vào quỹ mua lại PPL công khai, và PPL mua lại được chia 30/25/20/10/15 bởi multisig của ngân khố, giống như mọi lần mua lại khác.
+**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai, và PPL đã mua lại được chia theo tỷ lệ 30/25/20/10/15 bởi multisig kho bạc, giống như mọi đợt mua lại khác.
 
 ---
 

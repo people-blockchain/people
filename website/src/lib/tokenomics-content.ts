@@ -138,7 +138,7 @@ const en: TokenomicsCopy = {
   feeNote: FEE_SPLIT_PLAIN.en,
   buybackTitle: "Buybacks",
   buybackBody:
-    "The treasury and liquidity shares of every protocol fee (20% + 10% = 30%) are earmarked to buy PPL back from the open market. The StableFeeGateway contract is implemented and deployed on the testnet: 100% of a stablecoin launch fee goes to the public buyback recipient. The bought-back PPL is then split 30/25/20/10/15 by the 2-of-3 treasury multisig — that split is a published multisig policy, not a rule enforced on-chain.",
+    "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. The StableFeeGateway contract is implemented and deployed on the testnet: every stablecoin launch fee goes to the public buyback recipient. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%) — and it all ultimately goes back to participants. Bought-back PPL is then split 30/25/20/10/15 by the 2-of-3 treasury multisig — that split is a published multisig policy, not a rule enforced on-chain.",
   contractsTitle: "Contract addresses",
   contractsLead: "On-chain addresses are published when mainnet launches — not placeholders on this page.",
   contractRows: [
@@ -239,7 +239,7 @@ const ru: TokenomicsCopy = {
   feeNote: FEE_SPLIT_PLAIN.ru,
   buybackTitle: "Байбэк",
   buybackBody:
-    "Доли казны и ликвидности из каждой протокольной комиссии (20% + 10% = 30%) закладываются на выкуп PPL с открытого рынка. Контракт StableFeeGateway реализован и развёрнут в тестнете: 100% комиссии в стейблкоине идёт получателю публичного байбэка. Выкупленный PPL затем делится 30/25/20/10/15 мультисигом казны 2-из-3 — это опубликованная политика мультисига, а не правило, зашитое в контракт.",
+    "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичные байбэки PPL. Контракт StableFeeGateway реализован и развёрнут в тестнете: каждая комиссия в стейблкоине идёт получателю публичного байбэка. 30% сетевых комиссий идут на публичные байбэки PPL (казна 20% + ликвидность 10%). Оставшиеся 70% сетевых комиссий идут валидаторам (30%), в пул сообщества (25%) и в Growth Pool (15%) — и в итоге всё возвращается участникам. Выкупленный PPL затем делится 30/25/20/10/15 мультисигом казны 2-из-3 — это опубликованная политика мультисига, а не правило, зашитое в контракт.",
   contractsTitle: "Адреса контрактов",
   contractsLead: "On-chain адреса публикуются при запуске mainnet — на этой странице нет подставных значений.",
   contractRows: [

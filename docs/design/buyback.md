@@ -18,6 +18,8 @@ every other buyback-sourced PPL. This supersedes the "splits it 30/25/20/10/15/0
 the original §5.2 draft — that text is left in place below, struck through in spirit, so the
 revision is traceable; §5.4 explains the shape that was actually built.
 
+**Public copy order (site / litepaper / whitepaper):** (1) 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks; (2) 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%); (3) the remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%) — and it all ultimately goes back to participants. Never say "100% of all fees".
+
 ## 1. What doesn't change
 
 Model A fee split stays exactly as approved: validators 30% / community 25% / treasury 20% /

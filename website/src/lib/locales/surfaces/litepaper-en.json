@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "nothing destroyed",
     "feeFlowBuybackTag": "→ buybacks",
     "buybackTitle": "Buyback loop",
-    "buybackLead": "Treasury and liquidity shares of every network fee fund public PPL buybacks.",
+    "buybackLead": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% go to validators (30%), the community pool (25%) and the Growth Pool (15%) — and it all ultimately goes back to participants.",
     "buybackTreasuryLabel": "Treasury",
     "buybackLiquidityLabel": "Liquidity",
     "buybackTargetLabel": "Public PPL buybacks",
@@ -63,17 +63,29 @@
     "verificationTitle": "One check that you are a person",
     "verificationLead": "Verification is free. No biometrics required.",
     "verificationLevels": [
-      { "level": "Level 0", "title": "Signed in", "body": "Google or email + wallet." },
+      {
+        "level": "Level 0",
+        "title": "Signed in",
+        "body": "Google or email + wallet."
+      },
       {
         "level": "Level 1 · Telegram",
         "title": "Phone, once",
         "body": "Share your phone once in our Telegram bot. One number per founder."
       },
-      { "level": "Level 2 · Human Passport", "title": "Human Passport", "body": "Verify with Human Passport." }
+      {
+        "level": "Level 2 · Human Passport",
+        "title": "Human Passport",
+        "body": "Verify with Human Passport."
+      }
     ],
     "differTitle": "How we differ",
     "differLead": "Only verifiable public facts about other networks, with sources. This compares design choices, not quality.",
-    "differHeaders": ["Ethereum", "Solana", "People"],
+    "differHeaders": [
+      "Ethereum",
+      "Solana",
+      "People"
+    ],
     "differRows": [
       {
         "label": "Fees burned",

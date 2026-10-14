@@ -115,7 +115,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Growth Pool | 15% |
 | Burn | 0% |
 
-**Buybacks.** As ações do tesouro (20%) e liquidez (10%) são usadas para buybacks públicos de PPL. Nada é queimado para falsificar escassez — as taxas voltam para a rede e suas pessoas.
+**Fluxo de taxas.** 100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pela multisig de tesouraria, tal como qualquer outra recompra.
 
 **Taxa de lançamento de token.** Ativa na testnet: as fábricas implantadas ainda cobram uma taxa fixa em PPL — 1,045005 PPL para lançar um token e 2,925 PPL para criar um NFT. O plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP. A opção de stablecoin e o desconto TWAP ainda não estão no código implantado. 100% das taxas de lançamento vão para a recompra pública de PPL, e o PPL recomprado é dividido 30/25/20/10/15 pelo multisig do tesouro, como qualquer outra recompra.
 

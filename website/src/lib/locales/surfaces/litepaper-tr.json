@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "hiçbir şey yok edilmedi",
     "feeFlowBuybackTag": "→ geri satın almalar",
     "buybackTitle": "Geri satın alma döngüsü",
-    "buybackLead": "Her ağ ücretinin hazine ve likidite payları halka açık PPL geri satın almalarını finanse eder.",
+    "buybackLead": "Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10). Kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider — ve hepsi nihayetinde katılımcılara geri döner.",
     "buybackTreasuryLabel": "Hazine",
     "buybackLiquidityLabel": "Likidite",
     "buybackTargetLabel": "Halka açık PPL geri satın almaları",

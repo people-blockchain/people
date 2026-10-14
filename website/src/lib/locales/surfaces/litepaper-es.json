@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "nada destruido",
     "feeFlowBuybackTag": "→ recompras",
     "buybackTitle": "Ciclo de recompras",
-    "buybackLead": "Las acciones de tesorería y liquidez de cada comisión de red financian recompras públicas de PPL.",
+    "buybackLead": "100% de las tarifas de lanzamiento de tokens y NFT (USDC/USDT) se destinan a recompras públicas de PPL. 30% de las tarifas de red se destinan a recompras públicas de PPL (tesorería 20% + liquidez 10%). El 70% restante se destina a validadores (30%), el fondo comunitario (25%) y el Growth Pool (15%) — y todo vuelve finalmente a los participantes.",
     "buybackTreasuryLabel": "Tesorería",
     "buybackLiquidityLabel": "Liquidez",
     "buybackTargetLabel": "Recompras públicas de PPL",

@@ -62,7 +62,7 @@
   "fees": {
     "eyebrow": "Fees",
     "title": "Where every fee goes",
-    "lead": "Every network fee is paid in PPL and split the same way, every time.",
+    "lead": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants.",
     "totalLabel": "One fee",
     "totalValue": "100%",
     "note": "Nothing is burned: the burn line is 0%. Fractional fees follow the same split."
