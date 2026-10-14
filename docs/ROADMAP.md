@@ -19,25 +19,9 @@
 
 ## В работе
 
-### Миграция на Cosmos EVM
-
-Переход с текущей OVN-ноды на Cosmos EVM. Сейчас идёт **этап 1**: каталог `chain/` (сборка цепи) — в разработке, в `main` этого репозитория ещё нет. Текущий testnet: read-only JSON-RPC на `POST /rpc`, chain id **97401** (см. PR #85, `docs/EVM-RPC-TESTNET-OPERATOR.md`).
-
-### Снимок состояния в genesis с теми же 0x-адресами
-
-В ядре есть миграция legacy → EVM-адресов и тесты на снимках; **полный** экспорт состояния в genesis Cosmos с сохранением всех `0x` балансов — ещё не сделан.
-
-### Протокольные модули → Solidity на EVM
-
-На текущей ноде **реализованы** типы транзакций: фабрика токенов, bonding curve, AMM (constant-product, миграция с кривой), NFT. Цель — **Solidity** на Cosmos EVM, в т.ч. AMM на форке Uniswap V2.
-
-### EVM-кошелёк для сайта
-
-Read-only RPC уже доступен (прокси сайта + нода). Отдельный пакет подключения **MetaMask / Trust / WalletConnect** — в планах.
-
 ### Модальное подключение кошелька на всех страницах
 
-Подключить или создать кошелёк **на месте** (модальное окно), не уходя с текущей страницы. Сейчас часть сценариев ведёт на `/wallet`; общий модальный слой и сквозная интеграция — **в работе**.
+Подключить или создать кошелёк **на месте** (модальное окно), не уходя с текущей страницы. Общий модальный слой уже есть; сквозная интеграция на оставшихся страницах — **в работе**.
 
 ### Архитектура ИИ-агентов сообществ
 
@@ -58,6 +42,18 @@ Read-only RPC уже доступен (прокси сайта + нода). От
 ---
 
 ## Готово
+
+### Публичный Cosmos EVM testnet (chain id 97401)
+
+Live: `https://node.peopleblockchain.network/rpc`, cosmos id `people_97401-1`. Исходники цепи в `chain/` (evmd overrides). Публичный сайт (`www.peopleblockchain.network`) обслуживает создание токенов/NFT, bonding curve, AMM/swap, explorer и `/predict` против задеплоенных Solidity-контрактов (`website/src/data/evm-deployments-97401.json`, `contracts/`). Legacy OVN people-node **не** является текущим публичным testnet; архивный снимок OVN не реплеится (см. `docs/COSMOS-EVM-TESTNET-CUTOVER.md`).
+
+### EVM-контракты запуска: Token / NFT factory, curve, AMM, gateway
+
+Solidity в `contracts/`: TokenFactory, NftFactory, BondingCurveMarket, router/AMM, StableFeeGateway и др. — **live_on_testnet**. Админ/multisig = PeopleMultisig. UI: `/create/*`, `/swap`, `/explorer`.
+
+### EVM-кошелёк на сайте
+
+MetaMask / Trust / WalletConnect и cloud vault (Web3Auth) подключены к chain **97401** через прокси `/api/evm/rpc`.
 
 ### Распределение сетевых комиссий (Model A)
 

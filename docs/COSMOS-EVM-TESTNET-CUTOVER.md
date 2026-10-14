@@ -1,3 +1,5 @@
+> **Status 2026-10-14:** Cutover complete. Public RPC + Solidity launch set (token/NFT/AMM/gateway) and People Predict are live; use this checklist for redeploys/ops.
+
 # Cosmos EVM testnet cutover (operator checklist)
 
 ## Network
