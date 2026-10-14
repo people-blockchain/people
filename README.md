@@ -163,25 +163,11 @@ The detailed parameters are not yet final.
 
 ## Blockchain Foundation
 
-People's Blockchain was developed from the Open Validator Network (OVN) reference codebase and currently uses that implementation as a technical starting point.
+People's Blockchain was developed from the Open Validator Network (OVN) reference codebase (historical origin only).
 
-The existing codebase contains components related to:
+**Current public testnet (2026-10):** Cosmos EVM chain id **97401** (`people_97401-1`), RPC `https://node.peopleblockchain.network/rpc`, chain sources in `chain/`. The public site at `www.peopleblockchain.network` already offers asset creation (token/NFT factories), bonding curve launch, AMM/swap, explorer, multisig, and People Predict against live Solidity contracts under `contracts/` (addresses in `website/src/data/evm-deployments-97401.json`).
 
-- blockchain core;
-- blocks and transactions;
-- consensus;
-- validators;
-- staking;
-- slashing;
-- rewards;
-- P2P networking;
-- wallets;
-- explorer;
-- SDK;
-- web;
-- mobile/PWA.
-
-These components are being audited before major architectural changes are introduced.
+The OVN `people-node` stack remains in-repo as an archive/baseline; it is **not** the network users connect to today.
 
 ---
 
@@ -219,7 +205,7 @@ Defines user-created tokens, Community Pool, Token Factory, bonding curves and D
 
 `docs/TECHNICAL-ARCHITECTURE.md`
 
-Defines the technical architecture and the planned evolution from the OVN foundation.
+Defines the technical architecture; see §0 for the current Cosmos EVM testnet runtime (97401).
 
 ### Terminology
 

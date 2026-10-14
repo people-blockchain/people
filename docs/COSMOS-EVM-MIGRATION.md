@@ -1,10 +1,12 @@
+> **Status 2026-10-14:** Public cutover is **complete**. Users and the site use Cosmos EVM testnet **97401** with live Solidity factories/AMM/NFT/Predict. This file remains as the migration design/history; do not treat remaining checklist items as blocking the public testnet.
+
 # Cosmos EVM migration — People's Blockchain
 
-**Status:** Stage 1 **IMPLEMENTED** (chain scaffold + local testnet). Stages 2–6 **TBD** / founder-gated.
+**Status (2026-10-14):** Public Cosmos EVM testnet **97401** is live; Stage 1–2 and website JSON-RPC cutover are **done**. Stages 3–4 (fee-split module / full OVN genesis replay) remain TBD / founder-gated. Stage 6 mainnet still TBD.
 
 **Decision:** Kirill (owner / validator operator), 2026-10-02 — migrate testnet and mainnet from the custom TypeScript node (`people-node`, Fastify + embedded EVM) to **Cosmos EVM** (`cosmos/evm`), with Solidity contracts for token factory, bonding curve, Uniswap V2–style AMM, and NFTs.
 
-The legacy `people-node` stack remains running until cutover; Stage 1 does **not** modify `people-node/`, `website/`, or production deployments.
+Legacy `people-node` is archive-only for the public network. Production site and RPC already target Cosmos EVM 97401.
 
 ---
 
@@ -16,8 +18,8 @@ The legacy `people-node` stack remains running until cutover; Stage 1 does **not
 | **2** | Solidity: token factory, bonding curve, AMM (Uniswap V2 fork), NFT, agent wallet, governance | **IMPLEMENTED** (`contracts/`, `docs/CONTRACTS-STAGE2.md`) |
 | **3** | On-chain fee split: validators 30% / community 25% / treasury 20% / liquidity 10% / growth 15% / burn 0% | **TBD** (economics founder-gated) |
 | **4** | Genesis snapshot: PPL balances, tokens, pools, NFTs at same `0x` addresses | **TBD** |
-| **5** | Website → standard EVM JSON-RPC (replace custom REST paths) | **TBD** |
-| **6** | Public testnet, external audit, mainnet after owner OK | **TBD** |
+| **5** | Website → standard EVM JSON-RPC (replace custom REST paths) | **IMPLEMENTED** (site uses `/api/evm/rpc` → node JSON-RPC) |
+| **6** | Public testnet, external audit, mainnet after owner OK | **Public testnet LIVE**; external audit + mainnet still TBD |
 
 ---
 
@@ -34,7 +36,7 @@ The legacy `people-node` stack remains running until cutover; Stage 1 does **not
 
 ---
 
-## What changes vs `people-node` (future stages)
+## What changed vs `people-node` (migration target; public testnet already on Cosmos EVM)
 
 | Area | Current (`people-node`) | Target (Cosmos EVM) |
 | --- | --- | --- |
