@@ -146,6 +146,10 @@
     "ambassador-promo-kit": {
       "title": "Ambassador promo kit",
       "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
+    },
+    "people-predict-testnet-mvp": {
+      "title": "People Predict — testnet MVP",
+      "summary": "Testnet-MVP für Prognosemärkte: vollständig besicherte binäre Positionen und Onchain-Limitorders. Regeln genehmigt, lokal implementiert; Bereitstellung und Rollenadressen stehen aus."
     }
   }
 }
