@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-12",
+  "updated": "2026-10-14",
   "statusVocabulary": {
     "done": "готово",
     "live_on_testnet": "в тестовой сети",
@@ -168,6 +168,11 @@
       "id": "ambassador-promo-kit",
       "status": "planned_unapproved",
       "evidence": "Promo kit for ambassadors and active founders after the «Миллион основателей» launch. Planning only — not implemented."
+    },
+    {
+      "id": "people-predict-testnet-mvp",
+      "status": "in_progress",
+      "evidence": "Founder approved 2026-10-14: fully backed Yes/No, participant limit orders, no app fee, 48h dispute, void 0.5 PPL. Admin=PeopleMultisig 0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB; default resolver=Alex 0x510B2e28e936d36eF1EDDA7C9ea592e359aB5D48; arbiter=Kirill 0x685Ef7cE99a7C8bBC7BdE0B12594376163DDd4B2. contracts/src/PeoplePredict.sol + website/src/app/predict. docs/PEOPLE-PREDICT.md."
     }
   ]
 }

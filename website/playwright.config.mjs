@@ -2,6 +2,7 @@
 const config = {
   testDir: "./scripts",
   testMatch: [
+    "predict.spec.mjs",
     "hero-headline-layout.spec.mjs",
     "no-horizontal-overflow.spec.mjs",
     "header-mobile-slogan.spec.mjs",
