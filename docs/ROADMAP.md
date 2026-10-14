@@ -164,6 +164,6 @@ Read-only RPC уже доступен (прокси сайта + нода). От
 
 ## People Predict — MVP testnet
 
-`in_progress`: founder-approved binary positions, on-chain limit orders, 0 app fee,
+`live_on_testnet`: founder-approved binary positions, on-chain limit orders, 0 app fee,
 48h disputes and 0.5 PPL void payouts. Administrator = PeopleMultisig; named resolver
-and arbiter are set per market. See `PEOPLE-PREDICT.md`.
+and arbiter are set per market. Contract `0x77408f49f36520b722CbcCDBeD68aCc8c5Ca4eBf`. See `PEOPLE-PREDICT.md`.
