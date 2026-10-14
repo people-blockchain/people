@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "nulla distrutto",
     "feeFlowBuybackTag": "→ riacquisti",
     "buybackTitle": "Ciclo di riacquisto",
-    "buybackLead": "Le quote del Tesoro e della Liquidità di ogni commissione di rete finanziano i riacquisti pubblici di PPL.",
+    "buybackLead": "100% delle commissioni di lancio di token e NFT (USDC/USDT) va ai riacquisti pubblici di PPL. Il 30% delle commissioni di rete va ai riacquisti pubblici di PPL (tesoreria 20% + liquidità 10%). Il restante 70% va ai validatori (30%), al pool della community (25%) e al Growth Pool (15%) — e tutto alla fine torna ai partecipanti.",
     "buybackTreasuryLabel": "Tesoro",
     "buybackLiquidityLabel": "Liquidità",
     "buybackTargetLabel": "Riacquisti pubblici di PPL",

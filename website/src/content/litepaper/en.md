@@ -117,9 +117,9 @@ Every protocol fee, including fractional fees, is split the same way:
 | Growth Pool | 15% |
 | Burn | 0% |
 
-**Buybacks.** The treasury (20%) and liquidity (10%) shares are used for public PPL buybacks. Nothing is burned to fake scarcity — fees go back to the network and its people.
+**Fee flow.** 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants. Nothing is burned to fake scarcity.
 
-**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of launch fees goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
+**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
 
 ---
 

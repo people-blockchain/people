@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "没有销毁任何东西",
     "feeFlowBuybackTag": "→ 回购",
     "buybackTitle": "回购循环",
-    "buybackLead": "国库和流动性分享网络费用以资助PPL公开回购。",
+    "buybackLead": "100% 的代币和 NFT 发行费用（USDC/USDT）用于公开的 PPL 回购。30% 的网络费用用于公开的 PPL 回购（金库 20% + 流动性 10%）。剩余 70% 分配给验证者（30%）、社区池（25%）和 Growth Pool（15%）——最终全部回馈给参与者。",
     "buybackTreasuryLabel": "国库",
     "buybackLiquidityLabel": "流动性",
     "buybackTargetLabel": "PPL公开回购",

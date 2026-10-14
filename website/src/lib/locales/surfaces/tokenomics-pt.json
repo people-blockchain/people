@@ -1,1 +1,93 @@
-{"tag":"TOKENOMIA","title":"Oferta de PPL e plano de lançamento","lead":"Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois do mainnet. Números preliminares, sujeitos à governança da comunidade.","banner":"Preliminar — sujeito a voto da governança comunitária.","supplyTitle":"Oferta fixa","supplyBody":"Oferta fixa de 1.000.000.000 PPL (um bilhão). Anos 1–4: 0% de inflação — sem moedas novas além dos desbloqueios. A partir do ano 5, emissão extra de no máximo 2% ao ano só por voto da comunidade.","testnetNote":"A testnet interna usou premine de 1M PPL para testes. Não é transferido — o mainnet começa do zero.","allocationTitle":"Alocação genesis","allocationLead":"Seis buckets no lançamento. Toque ou passe o mouse para ver participação, volume e desbloqueio.","bucketLabels":{"community":"Comunidade e recompensas","validators":"Validadores e staking","team":"Equipe e fundadores","treasury":"Tesouro do ecossistema (DAO)","sale":"Venda comunitária","liquidity":"Liquidez"},"bucketNotes":{"community":"35% genesis — fundadores, recompensas, embaixadores e airdrops apenas deste fundo (6 anos).","validators":"200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.","team":"15% da oferta: 0% no lançamento, cliff de 6 meses e depois 18 meses de desbloqueio mensal linear (24 meses no total).","treasury":"Só após votos DAO; em multisig.","sale":"25% no genesis em People, resto mensal 9 meses.","liquidity":"Pool PPL/USDT ao fechar a venda; LP bloqueado 2+ anos."},"donutTitle":"Alocação","shareLabel":"Participação","amountLabel":"Quantidade","unlockChartLabel":"Desbloqueado no tempo","circulatingTitle":"Oferta circulante","circulatingLead":"PPL líquidos estimados por mês (0–120). Tesouro DAO fora até voto; liquidez após lock de 2 anos.","monthAxis":"Meses após genesis","saleTitle":"Venda comunitária","saleLead":"Até 100M PPL do lote de venda estão reservados para uma curva de preços pública após o airdrop dos fundadores. A venda permanece fechada até existir uma entidade operadora da venda.","salePayTitle":"Como você pagaria","salePayBody":"A tesouraria é controlada pelo contrato multisig 2-de-3 próprio da People na rede People, com endereços de signatários publicados.","saleDeliveryTitle":"Como receber PPL","saleDeliveryBody":"PPL nativos creditados no mesmo endereço 0x na People no genesis conforme o vesting acima.","curveTitle":"Curva de bonding","curveLead":"O preço de lançamento vem da reserva virtual da curva, não de uma rodada privada: o contrato calcula cada negociação e a curva inteira roda on-chain e em público.","unsoldTitle":"Tokens não vendidos","unsoldBody":"Os PPL não comprados na curva vão para o pool comunitário do próprio PPL — o lote de 35% de comunidade e recompensas — não para a tesouraria e não são queimados. A mesma regra vale para cada token lançado na People: cerca de 10% de um lançamento padrão acaba com a sua comunidade (os 10% do pool comunitário).","saleClosedTitle":"A venda ainda não está aberta","saleClosedBody":"No momento não há venda pública de PPL. Nenhum preço é publicado, o widget de pagamento está desligado e nenhum fluxo de KYC roda neste site.","feeTitle":"Divisão das taxas de rede","feeLead":"Cada taxa de protocolo em People segue a Model A aprovada:","feeNote":"Cada taxa de protocolo: 30% validadores, 25% pool comunitário, 20% tesouro, 10% liquidez, 15% Growth, 0% queimado.","buybackTitle":"Recompras","buybackBody":"As parcelas de tesouraria e liquidez de cada taxa de protocolo (20% + 10% = 30%) são destinadas a recomprar PPL no mercado aberto. O contrato StableFeeGateway está implementado e implantado na testnet: 100% de uma taxa de lançamento em stablecoin vai para o destinatário público das recompras. O PPL recomprado é então dividido 30/25/20/10/15 pelo multisig de tesouraria 2-de-3 — essa divisão é uma política publicada do multisig, não uma regra imposta on-chain.","contractsTitle":"Endereços de contratos","contractsLead":"Endereços on-chain publicados no lançamento do mainnet — sem placeholders aqui.","contractRows":[{"name":"Contratos de venda (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)","status":"Publicado no lançamento do mainnet"},{"name":"Multisig do tesouro (2-de-3)","status":"Publicado no lançamento do mainnet"},{"name":"Controladores de vesting","status":"Publicado no lançamento do mainnet"},{"name":"Contrato de lock LP","status":"Publicado no lançamento do mainnet"}],"legendHint":"Clique na legenda para focar uma fatia.","feeSliceLabels":{"validators":"Validadores","community":"Pool comunitário","treasury":"Tesouro","liquidity":"Liquidez e ecossistema","growth":"Growth Pool","burn":"Queima"},"emissionTitle":"Emissão e recompensas de validadores","emissionLead":"Segurança paga pelo pool de validadores e taxas — sem cunhar supply novo nos anos 1–4.","emissionBullets":["Anos 1–4: 0% de inflação — o teto de um bilhão não aumenta.","Pool de validadores: 200M PPL em calendário 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M PPL nos anos 1–4) mais 30% de cada taxa de protocolo.","Fundadores, recompensas, embaixadores e airdrops só do fundo comunitário de 35%.","A partir do ano 5, emissão nova de no máximo 2% ao ano e só por voto comunitário."],"launchOrderTitle":"Sequência de lançamento","launchOrderBody":"Primeiro o airdrop de fundadores. A venda comunitária de PPL só após 1.000 pessoas verificadas e multisig publicado.","pplFeeTariffsLink":"Tarifas de taxas PPL","explorerLink":"Explorador","backToDocsLink":"Voltar à documentação"}
+{
+  "tag": "TOKENOMIA",
+  "title": "Oferta de PPL e plano de lançamento",
+  "lead": "Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois do mainnet. Números preliminares, sujeitos à governança da comunidade.",
+  "banner": "Preliminar — sujeito a voto da governança comunitária.",
+  "supplyTitle": "Oferta fixa",
+  "supplyBody": "Oferta fixa de 1.000.000.000 PPL (um bilhão). Anos 1–4: 0% de inflação — sem moedas novas além dos desbloqueios. A partir do ano 5, emissão extra de no máximo 2% ao ano só por voto da comunidade.",
+  "testnetNote": "A testnet interna usou premine de 1M PPL para testes. Não é transferido — o mainnet começa do zero.",
+  "allocationTitle": "Alocação genesis",
+  "allocationLead": "Seis buckets no lançamento. Toque ou passe o mouse para ver participação, volume e desbloqueio.",
+  "bucketLabels": {
+    "community": "Comunidade e recompensas",
+    "validators": "Validadores e staking",
+    "team": "Equipe e fundadores",
+    "treasury": "Tesouro do ecossistema (DAO)",
+    "sale": "Venda comunitária",
+    "liquidity": "Liquidez"
+  },
+  "bucketNotes": {
+    "community": "35% genesis — fundadores, recompensas, embaixadores e airdrops apenas deste fundo (6 anos).",
+    "validators": "200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.",
+    "team": "15% da oferta: 0% no lançamento, cliff de 6 meses e depois 18 meses de desbloqueio mensal linear (24 meses no total).",
+    "treasury": "Só após votos DAO; em multisig.",
+    "sale": "25% no genesis em People, resto mensal 9 meses.",
+    "liquidity": "Pool PPL/USDT ao fechar a venda; LP bloqueado 2+ anos."
+  },
+  "donutTitle": "Alocação",
+  "shareLabel": "Participação",
+  "amountLabel": "Quantidade",
+  "unlockChartLabel": "Desbloqueado no tempo",
+  "circulatingTitle": "Oferta circulante",
+  "circulatingLead": "PPL líquidos estimados por mês (0–120). Tesouro DAO fora até voto; liquidez após lock de 2 anos.",
+  "monthAxis": "Meses após genesis",
+  "saleTitle": "Venda comunitária",
+  "saleLead": "Até 100M PPL do lote de venda estão reservados para uma curva de preços pública após o airdrop dos fundadores. A venda permanece fechada até existir uma entidade operadora da venda.",
+  "salePayTitle": "Como você pagaria",
+  "salePayBody": "A tesouraria é controlada pelo contrato multisig 2-de-3 próprio da People na rede People, com endereços de signatários publicados.",
+  "saleDeliveryTitle": "Como receber PPL",
+  "saleDeliveryBody": "PPL nativos creditados no mesmo endereço 0x na People no genesis conforme o vesting acima.",
+  "curveTitle": "Curva de bonding",
+  "curveLead": "O preço de lançamento vem da reserva virtual da curva, não de uma rodada privada: o contrato calcula cada negociação e a curva inteira roda on-chain e em público.",
+  "unsoldTitle": "Tokens não vendidos",
+  "unsoldBody": "Os PPL não comprados na curva vão para o pool comunitário do próprio PPL — o lote de 35% de comunidade e recompensas — não para a tesouraria e não são queimados. A mesma regra vale para cada token lançado na People: cerca de 10% de um lançamento padrão acaba com a sua comunidade (os 10% do pool comunitário).",
+  "saleClosedTitle": "A venda ainda não está aberta",
+  "saleClosedBody": "No momento não há venda pública de PPL. Nenhum preço é publicado, o widget de pagamento está desligado e nenhum fluxo de KYC roda neste site.",
+  "feeTitle": "Divisão das taxas de rede",
+  "feeLead": "Cada taxa de protocolo em People segue a Model A aprovada:",
+  "feeNote": "Cada taxa de protocolo: 30% validadores, 25% pool comunitário, 20% tesouro, 10% liquidez, 15% Growth, 0% queimado.",
+  "buybackTitle": "Recompras",
+  "buybackBody": "100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL. O contrato StableFeeGateway está implementado e implantado na testnet: cada taxa de lançamento de stablecoin vai para o destinatário público de recompra. 30% das taxas de rede vão para recompras públicas de PPL (tesouraria 20% + liquidez 10%). Os 70% restantes das taxas de rede vão para validadores (30%), o pool da comunidade (25%) e o Growth Pool (15%) — e tudo acaba voltando para os participantes. O PPL recomprado é então dividido 30/25/20/10/15 pela multisig de tesouraria 2-de-3 — essa divisão é uma política de multisig publicada, não uma regra aplicada on-chain.",
+  "contractsTitle": "Endereços de contratos",
+  "contractsLead": "Endereços on-chain publicados no lançamento do mainnet — sem placeholders aqui.",
+  "contractRows": [
+    {
+      "name": "Contratos de venda (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)",
+      "status": "Publicado no lançamento do mainnet"
+    },
+    {
+      "name": "Multisig do tesouro (2-de-3)",
+      "status": "Publicado no lançamento do mainnet"
+    },
+    {
+      "name": "Controladores de vesting",
+      "status": "Publicado no lançamento do mainnet"
+    },
+    {
+      "name": "Contrato de lock LP",
+      "status": "Publicado no lançamento do mainnet"
+    }
+  ],
+  "legendHint": "Clique na legenda para focar uma fatia.",
+  "feeSliceLabels": {
+    "validators": "Validadores",
+    "community": "Pool comunitário",
+    "treasury": "Tesouro",
+    "liquidity": "Liquidez e ecossistema",
+    "growth": "Growth Pool",
+    "burn": "Queima"
+  },
+  "emissionTitle": "Emissão e recompensas de validadores",
+  "emissionLead": "Segurança paga pelo pool de validadores e taxas — sem cunhar supply novo nos anos 1–4.",
+  "emissionBullets": [
+    "Anos 1–4: 0% de inflação — o teto de um bilhão não aumenta.",
+    "Pool de validadores: 200M PPL em calendário 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M PPL nos anos 1–4) mais 30% de cada taxa de protocolo.",
+    "Fundadores, recompensas, embaixadores e airdrops só do fundo comunitário de 35%.",
+    "A partir do ano 5, emissão nova de no máximo 2% ao ano e só por voto comunitário."
+  ],
+  "launchOrderTitle": "Sequência de lançamento",
+  "launchOrderBody": "Primeiro o airdrop de fundadores. A venda comunitária de PPL só após 1.000 pessoas verificadas e multisig publicado.",
+  "pplFeeTariffsLink": "Tarifas de taxas PPL",
+  "explorerLink": "Explorador",
+  "backToDocsLink": "Voltar à documentação"
+}

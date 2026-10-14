@@ -141,6 +141,14 @@ Examples:
 
 The historical provisional table (40 / 25 / 20 / 10 / 5) is retained only as a reference in `docs/ECONOMIC-MODEL-v0.1.md` §2 and is **not** the live public split.
 
+**Public fee flow (copy order for site and docs):**
+
+1. 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks.
+2. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%).
+3. The remaining 70% of network fees go to validators (30%), the People's / Community Pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants.
+
+Do not describe this as "100% of all fees". Model A shares above are unchanged; buybacks describe what happens to the treasury and liquidity shares and to USDC/USDT launch fees (see `docs/design/buyback.md`).
+
 The network must never depend on burn to create the primary value proposition of PPL.
 
 ---

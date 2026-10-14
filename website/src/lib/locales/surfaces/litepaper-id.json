@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "tidak ada yang dimusnahkan",
     "feeFlowBuybackTag": "→ pembelian kembali",
     "buybackTitle": "Loop pembelian kembali",
-    "buybackLead": "Saham Treasury dan liquidity dari setiap biaya jaringan mendanai pembelian kembali PPL publik.",
+    "buybackLead": "100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik. 30% dari biaya jaringan masuk ke pembelian kembali PPL publik (treasury 20% + likuiditas 10%). Sisa 70% masuk ke validator (30%), community pool (25%) dan Growth Pool (15%) — dan semuanya pada akhirnya kembali ke peserta.",
     "buybackTreasuryLabel": "Treasury",
     "buybackLiquidityLabel": "Liquidity",
     "buybackTargetLabel": "Pembelian kembali PPL publik",

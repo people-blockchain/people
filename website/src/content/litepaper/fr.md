@@ -115,7 +115,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Pool de croissance | 15 % |
 | Brûlure | 0 % |
 
-**Rachats.** Les parts du trésor (20 %) et de la liquidité (10 %) sont utilisées pour les rachats publics de PPL. Rien n'est brûlé pour prétendre à la rareté — les frais reviennent au réseau et à ses gens.
+**Flux de frais.** 100% des frais de lancement de tokens et NFT (USDC/USDT) vont aux rachats publics de PPL, et les PPL rachetés sont répartis 30/25/20/10/15 par le multisig de trésorerie, comme pour tout autre rachat.
 
 **Frais de lancement de token.** En direct sur le testnet : les usines déployées facturent encore des frais fixes en PPL — 1,045005 PPL pour lancer un token et 2,925 PPL pour créer un NFT. Le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP. L'option stablecoin et la remise TWAP ne sont pas encore dans le code déployé. 100 % des frais de lancement vont au rachat public de PPL, et le PPL racheté est partagé 30/25/20/10/15 par le multisig du trésor, comme tout autre rachat.
 

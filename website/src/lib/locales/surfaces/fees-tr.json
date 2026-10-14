@@ -1,1 +1,43 @@
-{"tag": "ÜCRETLER VE TARİFELER", "title": "Kamuya açık PPL tarifeleri", "lead": "People's Blockchain üzerinde sık yapılan işlemlerin maliyeti. Tüm ücretler ağın kendi coini PPL ile ödenir.", "approvedNote": "Bunlar sitenin bugün kullandığı fiyatlardır. Cüzdan, imzalamadan önce her zaman kesin ücreti gösterir.", "table": [{"operation": "Olağan transfer", "amount": "0.004875 PPL", "note": "Birine PPL veya token göndermek"}, {"operation": "Token oluşturma (asgari)", "amount": "1.045005 PPL", "note": "Kendi tokenınızı başlatmak"}, {"operation": "NFT mint (asgari)", "amount": "2.925 PPL", "note": "Bir NFT oluşturmak"}, {"operation": "Sözleşme gaz fiyatı", "amount": "0.00000087 gas birimi başına PPL", "note": "Bir sözleşmeyi yayınlarken veya kullanırken önceden ödenir"}, {"operation": "Tipik sözleşme dağıtımı (tahmini)", "amount": "~1.044 PPL", "note": "Basit bir token sözleşmesi (yaklaşık 1.200.000 gas birimi)"}], "contractNote": "Kesin maliyet sözleşmenin boyutuna bağlıdır. İmzalamadan önce bir gas limiti seçersiniz; kullanılmayan gas iade edilmez.", "modelANote": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil.", "payOptionsNote": "Token ve NFT oluşturma ücretleri PPL ile veya StableFeeGateway sözleşmesi üzerinden desteklenen bir test ağı stabil coini (tUSDC/tUSDT) ile ödenebilir — seçim sizin. Stabil coin ücreti, sahibin onayladığı sabit bir USD tutarıdır: token lansmanı için 1.00 USD, NFT mint için 2.00 USD. Onaylanan politika, token lansmanı için 1.00 USD ve NFT mint için 2.00 USD olup USDC/USDT veya TWAP üzerinden %20 indirimli PPL ile ödenebilir. Bugün dağıtılan kısım bu politikadan daha dardır: fabrika sabit bir PPL tutarı (yukarıdaki tabloya bakın), StableFeeGateway ise sahibin onayladığı sabit bir USD tutarı (1.00 USD / 2.00 USD) alır. PPL ile TWAP indirimli ödeme yolu onaylanmıştır, ancak dağıtılmamıştır. Her stabil coin ücretinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır. Gaz her zaman PPL ile ödenir.", "stableFeeNetworkNote": "Stabil coin ile ödeme şimdilik yalnızca People ağında çalışır. Başka bir zincirden (Ethereum, Polygon, Tron, TON, Solana) ödeme daha sonra gelecek.", "growthReferralTitle": "Growth referans (L1 / L2)", "growthReferralBody": "Uygun protokol ücretlerinin %15'i Growth Pool'u besler. Ödeme sırasında iki ücretli referans hattı bütçeyi paylaşır: L1 %70, L2 %30. Token'ın kendi community payından ve olağan yönlendirmeden ayrıdır.", "tableColOperation": "İşlem", "tableColTariff": "Tarife", "tableColNote": "Not", "createContractLink": "Sözleşme oluştur"}
+{
+  "tag": "ÜCRETLER VE TARİFELER",
+  "title": "Kamuya açık PPL tarifeleri",
+  "lead": "People's Blockchain üzerinde sık yapılan işlemlerin maliyeti. Tüm ücretler ağın kendi coini PPL ile ödenir.",
+  "approvedNote": "Bunlar sitenin bugün kullandığı fiyatlardır. Cüzdan, imzalamadan önce her zaman kesin ücreti gösterir.",
+  "table": [
+    {
+      "operation": "Olağan transfer",
+      "amount": "0.004875 PPL",
+      "note": "Birine PPL veya token göndermek"
+    },
+    {
+      "operation": "Token oluşturma (asgari)",
+      "amount": "1.045005 PPL",
+      "note": "Kendi tokenınızı başlatmak"
+    },
+    {
+      "operation": "NFT mint (asgari)",
+      "amount": "2.925 PPL",
+      "note": "Bir NFT oluşturmak"
+    },
+    {
+      "operation": "Sözleşme gaz fiyatı",
+      "amount": "0.00000087 gas birimi başına PPL",
+      "note": "Bir sözleşmeyi yayınlarken veya kullanırken önceden ödenir"
+    },
+    {
+      "operation": "Tipik sözleşme dağıtımı (tahmini)",
+      "amount": "~1.044 PPL",
+      "note": "Basit bir token sözleşmesi (yaklaşık 1.200.000 gas birimi)"
+    }
+  ],
+  "contractNote": "Kesin maliyet sözleşmenin boyutuna bağlıdır. İmzalamadan önce bir gas limiti seçersiniz; kullanılmayan gas iade edilmez.",
+  "modelANote": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil.",
+  "payOptionsNote": "Token ve NFT oluşturma ücretleri PPL olarak veya StableFeeGateway sözleşmesi aracılığıyla desteklenen bir testnet stablecoin'i (tUSDC/tUSDT) ile ödenebilir — seçim sizin. Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider; geri alınan PPL daha sonra diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak bölünür. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10); kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider — ve hepsi nihayetinde katılımcılara geri döner. Stablecoin ücreti sabit, sahip onaylı bir USD tutarıdır: token lansmanı için 1.00 USD, NFT mint için 2.00 USD. Gas her zaman PPL olarak ödenir.",
+  "stableFeeNetworkNote": "Stabil coin ile ödeme şimdilik yalnızca People ağında çalışır. Başka bir zincirden (Ethereum, Polygon, Tron, TON, Solana) ödeme daha sonra gelecek.",
+  "growthReferralTitle": "Growth referans (L1 / L2)",
+  "growthReferralBody": "Uygun protokol ücretlerinin %15'i Growth Pool'u besler. Ödeme sırasında iki ücretli referans hattı bütçeyi paylaşır: L1 %70, L2 %30. Token'ın kendi community payından ve olağan yönlendirmeden ayrıdır.",
+  "tableColOperation": "İşlem",
+  "tableColTariff": "Tarife",
+  "tableColNote": "Not",
+  "createContractLink": "Sözleşme oluştur"
+}

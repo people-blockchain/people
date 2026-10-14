@@ -115,7 +115,7 @@ Cada comisión de protocolo, incluidas las comisiones fraccionarias, se divide d
 | Fondo de crecimiento | 15% |
 | Quema | 0% |
 
-**Recompras.** Las acciones de tesorería (20%) y liquidez (10%) se utilizan para recompras públicas de PPL. Nada se quema para fingir escasez — las comisiones se devuelven a la red y a sus personas.
+**Flujo de tarifas.** 100% de las tarifas de lanzamiento de tokens y NFT (USDC/USDT) se destinan a recompras públicas de PPL, y el PPL recomprado se divide 30/25/20/10/15 por el multisig de tesorería, igual que cualquier otra recompra.
 
 **Comisión de lanzamiento de token.** Activa en testnet: las fábricas desplegadas aún cobran una comisión fija en PPL — 1,045005 PPL por lanzar un token y 2,925 PPL por acuñar un NFT. El plan aprobado es un importe fijo de **1 USD por lanzamiento de token y 2 USD por mint de NFT**, pagadero en PPL, USDT o USDC, con un 20% de descuento al pagar en PPL a un precio TWAP. La opción de moneda estable y el descuento TWAP aún no están en el código desplegado. El 100% de las comisiones de lanzamiento va a la recompra pública de PPL, y el PPL recomprado se reparte 30/25/20/10/15 por el multisig del tesoro, igual que cualquier otra recompra.
 

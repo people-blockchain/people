@@ -100,7 +100,7 @@
       ],
       "communityPoolExample": "O pool comunitário é partilhado entre participantes ativos proporcionalmente aos pontos. Exemplo: 600 tokens no pool, três pessoas com 1, 2 e 3 pontos recebem 100, 200 e 300.",
       "tokenPoolNote": "Separadamente, os 10% comunitários de cada token ficam no pool desse token. Nunca se misturam com taxas em PPL.",
-      "buybackNote": "As parcelas de tesouraria e liquidez (30% no total) financiam recompras públicas de PPL no mercado aberto, executadas pelo multisig publicado e visíveis no explorer.",
+      "buybackNote": "100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL. 30% das taxas de rede vão para recompras públicas de PPL (tesouraria 20% + liquidez 10%). Os 70% restantes vão para validadores (30%), o pool da comunidade (25%) e o Growth Pool (15%). Tudo acaba voltando para os participantes — as recompras são executadas através da multisig publicada e são visíveis no explorer.",
       "launchFeeNote": "Lançar um token ou NFT custa uma taxa de protocolo, pagável em PPL ou numa stablecoin suportada (USDC/USDT), à sua escolha. O gas é sempre pago em PPL."
     },
     {

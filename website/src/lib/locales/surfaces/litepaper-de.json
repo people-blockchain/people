@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "nichts zerstört",
     "feeFlowBuybackTag": "→ Rückkäufe",
     "buybackTitle": "Rückkauf-Kreislauf",
-    "buybackLead": "Treasury- und Liquiditätsanteile jeder Netzwerkgebühr finanzieren öffentliche PPL-Rückkäufe.",
+    "buybackLead": "100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%) — und alles fließt letztendlich an die Teilnehmer zurück.",
     "buybackTreasuryLabel": "Treasury",
     "buybackLiquidityLabel": "Liquidität",
     "buybackTargetLabel": "Öffentliche PPL-Rückkäufe",

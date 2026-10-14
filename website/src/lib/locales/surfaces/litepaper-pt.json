@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "nada destruído",
     "feeFlowBuybackTag": "→ recompras",
     "buybackTitle": "Ciclo de recompra",
-    "buybackLead": "Cotas de tesouro e liquidez de cada taxa de rede financiam recompras públicas de PPL.",
+    "buybackLead": "100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL. 30% das taxas de rede vão para recompras públicas de PPL (tesouraria 20% + liquidez 10%). Os 70% restantes vão para validadores (30%), o pool da comunidade (25%) e o Growth Pool (15%) — e tudo acaba voltando para os participantes.",
     "buybackTreasuryLabel": "Tesouro",
     "buybackLiquidityLabel": "Liquidez",
     "buybackTargetLabel": "Recompras públicas de PPL",

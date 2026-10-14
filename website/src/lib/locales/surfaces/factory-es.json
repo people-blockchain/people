@@ -75,7 +75,7 @@
     "payWithLabel": "Pagar la comisión con",
     "payWithPpl": "PPL",
     "stableFeeLabel": "Comisión en moneda estable",
-    "stableFeeBuybackNote": "El 100% va a la recompra pública de PPL.",
+    "stableFeeBuybackNote": "100% de las tarifas de lanzamiento de tokens y NFT (USDC/USDT) se destinan a recompras públicas de PPL.",
     "stableFeeNetworkNote": "Por ahora solo funciona en la red People. Pagar desde otra red (Ethereum, Polygon, Tron, TON, Solana) llegará más adelante.",
     "approvingStable": "Aprobando…",
     "payingStableFee": "Pagando la comisión…",

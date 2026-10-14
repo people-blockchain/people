@@ -115,7 +115,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 | Growth Pool | 15% |
 | Burn | 0% |
 
-**Buyback.** Le quote del tesoro (20%) e della liquidità (10%) vengono utilizzate per i buyback pubblici di PPL. Niente viene bruciato per fingere scarsità — le commissioni tornano alla rete e alle sue persone.
+**Flusso delle commissioni.** 100% delle commissioni di lancio di token e NFT (USDC/USDT) va ai riacquisti pubblici di PPL, e i PPL riacquistati vengono suddivisi 30/25/20/10/15 dal multisig di tesoreria, come ogni altro riacquisto.
 
 **Commissione di lancio token.** Attiva sulla testnet: le factory distribuite applicano ancora una commissione fissa in PPL — 1,045005 PPL per lanciare un token e 2,925 PPL per coniare un NFT. Il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP. L'opzione stablecoin e lo sconto TWAP non sono ancora nel codice distribuito. Il 100% delle commissioni di lancio va al riacquisto pubblico di PPL, e il PPL riacquistato viene diviso 30/25/20/10/15 dal multisig del tesoro, come ogni altro riacquisto.
 

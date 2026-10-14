@@ -75,7 +75,7 @@ export const docsContent: Record<Language, Guide> = {
           },
           {
             "title": "Байбэк",
-            "text": "Доли казны и ликвидности из каждой протокольной комиссии (20% + 10% = 30%) закладываются на выкуп PPL с открытого рынка. Байбэк идёт по опубликованному графику через мультисиг казны 2-из-3, и каждая покупка видна в сканере. Комиссии за токен и NFT, оплаченные тестовым стейблкоином (tUSDC/tUSDT) через StableFeeGateway, на 100% идут в тот же публичный байбэк, а выкупленный PPL затем делится 30/25/20/10/15. Цифры предварительные и подлежат голосованию сообщества."
+            "text": "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичные байбэки PPL — включая тестовые стейблкоины (tUSDC/tUSDT) через StableFeeGateway. 30% сетевых комиссий идут на публичные байбэки PPL (казна 20% + ликвидность 10%). Оставшиеся 70% сетевых комиссий идут валидаторам (30%), в пул сообщества (25%) и в Growth Pool (15%). В итоге всё возвращается участникам. Байбэки выполняются по опубликованному расписанию через казначейский мультисиг 2-из-3, каждая покупка видна в проводнике. Выкупленный PPL затем делится 30/25/20/10/15. Цифры предварительные и зависят от голосования сообщества."
           },
           {
             "title": "Запуск ноды",
@@ -546,7 +546,7 @@ export const docsContent: Record<Language, Guide> = {
           },
           {
             "title": "Buybacks",
-            "text": "The treasury and liquidity shares of every protocol fee (20% + 10% = 30%) are earmarked to buy PPL back from the open market. Buybacks run on a published cadence through the 2-of-3 treasury multisig, and every purchase is visible in the explorer. Token and NFT launch fees paid in a test stablecoin (tUSDC/tUSDT) through the StableFeeGateway go 100% to the same public buyback, and the bought-back PPL is then split 30/25/20/10/15. Figures are preliminary and subject to community governance."
+            "text": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks — including test stablecoin (tUSDC/tUSDT) fees through the StableFeeGateway. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants. Buybacks run on a published cadence through the 2-of-3 treasury multisig, and every purchase is visible in the explorer. Bought-back PPL is then split 30/25/20/10/15. Figures are preliminary and subject to community governance."
           },
           {
             "title": "Running a node",

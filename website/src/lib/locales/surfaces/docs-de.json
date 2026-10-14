@@ -1,1 +1,471 @@
-{"eyebrow":"WISSENSBASIS / PEOPLE","title":"Verstehen.\nAusprobieren.\nTeilnehmen.","description":"Von Ihrer ersten Wallet bis zu Ihrem eigenen Knoten — eine praktische Anleitung zu People’s Blockchain.","notice":"Testnetz","noticeText":"Mainnet ist nicht gestartet. Verfügbare Vorgänge hängen von der Site-Verbindung und der Netzversion ab. Testmünzen sind kein Einkommensversprechen.","contents":"In diesem Leitfaden","search":"Dokumentation durchsuchen","empty":"Keine Treffer. Versuchen Sie „Wallet“, „Belohnungen“ oder „Node“.","clear":"Suche leeren","results":"Gefundene Abschnitte","read":"Leitfaden lesen","cards":[{"title":"Ich fange an","text":"Ein Wallet, PPL und Ihre erste Überweisung","href":"#start"},{"title":"Ich möchte teilnehmen","text":"Belohnungen, Produkte und Grenzen","href":"#earn"},{"title":"Ich betreibe einen Node","text":"Verbinden, prüfen und warten","href":"#node"}],"sections":[{"id":"basics","title":"Wie People funktioniert","lead":"Eine Blockchain ist ein gemeinsames Protokoll von Vorgängen. Ihre Wallet signiert eine Aktion, Knoten prüfen sie, und Validatoren nehmen sie in Blöcke auf.","items":[{"title":"PPL ist die Netz-Münze","text":"People (PPL) zahlt Netzgebühren und Protokollvorgänge. Test-PPL dient zum Testen des Netzes; Halten bedeutet nicht, dass Sie Geld verdient haben."},{"title":"Teilnehmer, Node, Validator","text":"Ein Teilnehmer nutzt Wallets und Anwendungen. Ein Full Node speichert und prüft den Netzzustand. Ein Validator erzeugt und beglaubigt außerdem Blöcke. Ein Telefon oder ein offener Browser-Tab wird nicht automatisch zum Validator."},{"title":"Wie das Netzwerk aufgebaut ist","text":"Jeder Node speichert den Kettenzustand auf seiner eigenen Festplatte. Validatoren erzeugen und bestätigen Blöcke; gewöhnliche Folge-Nodes prüfen alles und erzeugen nichts. Wallet, Explorer, Swap und Fabriken auf dieser Seite lesen dieselbe Kette — den Live-Zustand zeigt /explorer. Fee-Anteile, Ausgaberegeln und Buchhaltung stehen im Protokollcode, daher kann eine Seite dieser Website sie nicht ändern."},{"title":"Wohin jede Gebühr fließt","text":"Jede Protokollgebühr wird nach festen Anteilen aufgeteilt: 30 % an Validatoren, 25 % an den Community-Pool, 20 % an die Treasury, 10 % an Liquidität und 15 % an Growth, 0 % verbrannt — auch bei Bruchteilgebühren. Protokoll v2 wendet dieselben Anteile auf Bruchteilgebühren an, berechnet in den kleinsten PPL-Einheiten, der Rest geht an Validatoren. Vertragsgas wird im Voraus bezahlt; nicht genutztes Gas wird nicht erstattet."},{"title":"Rückkäufe","text":"Die Treasury- und Liquiditätsanteile jeder Protokollgebühr (20 % + 10 % = 30 %) dienen dem Rückkauf von PPL am offenen Markt. Rückkäufe erfolgen nach einem veröffentlichten Rhythmus über das 2-von-3-Treasury-Multisig, und jeder Kauf ist im Explorer sichtbar. In einer Test-Stablecoin (tUSDC/tUSDT) über das StableFeeGateway bezahlte Token- und NFT-Gebühren fließen zu 100 % in denselben öffentlichen Rückkauf; das zurückgekaufte PPL wird dann 30/25/20/10/15 aufgeteilt. Die Zahlen sind vorläufig und unterliegen der Community-Governance."},{"title":"Einen Node betreiben","text":"Jeder kann mit einem einzigen Docker-Befehl einen Folge-Node betreiben: Er prüft Blöcke und braucht weder Wallet noch Bond oder private Schlüssel. Ein Validator ist eine eigene Rolle: Er braucht einen eigenen Schlüssel, einen Bond und Abstimmung mit dem Betreiber, erzeugt Blöcke und muss online bleiben. Ein Telefon oder ein offener Browser-Tab nimmt am Netzwerk teil, ist aber kein Validator."},{"title":"Von der Signatur zur Bestätigung","text":"Ein Vorgang besteht Prüfungen und kommt in eine Warteschlange. Annahme in die Warteschlange ist keine Blockaufnahme und keine Finalität. Prüfen Sie das Ergebnis im Explorer."}],"links":[{"label":"Das Netz erkunden","href":"/explorer"},{"label":"Die visuelle Erklärung","href":"/how-it-works"},{"label":"PPL-Tokenomik","href":"/tokenomics"}]},{"id":"start","title":"Beginnen Sie mit einem Wallet","lead":"Sie brauchen keinen eigenen Server für den Start.","items":[{"title":"01 · Wallet erstellen oder wiederherstellen","text":"Öffnen Sie die Wallet und erstellen Sie eine neue oder stellen Sie Ihre eigene wieder her. Bewahren Sie die Wiederherstellungsphrase sicher außerhalb der Website auf. Ein Passwort schützt den lokalen Speicher; es ersetzt kein Backup der Phrase."},{"title":"02 · Verbindung prüfen","text":"Die Wallet sollte Testnet anzeigen. Wenn das Netz nicht erreichbar ist, warten Sie kurz und laden Sie die Seite neu."},{"title":"03 · Test-PPL holen","text":"Wenn der Faucet in diesem Netz aktiviert ist, fordern Sie Testmünzen über die verfügbare Oberfläche an. Es gelten Limits. Kaufen Sie keine Testmünzen auf das Versprechen künftigen Einkommens."},{"title":"04 · Kleine Überweisung versuchen","text":"Prüfen Sie Empfänger, Betrag und Gebühr. Lassen Sie etwas PPL für spätere Vorgänge. Nach dem Senden finden Sie die Transaktions-ID im Explorer und prüfen die Blockaufnahme."}],"links":[{"label":"Wallet öffnen","href":"/wallet"},{"label":"Gebühren prüfen","href":"/fees"}]},{"id":"earn","title":"Wege zur Teilnahme","lead":"Das Netz ist in der Testphase. Das sind Teilnahmemechanismen, kein Gewinnversprechen.","items":[{"title":"Validierung · Testprotokoll","text":"Belohnungen hängen von Validator-Teilnahme und Netzparametern ab. Registrierung, eine Kaution und laufende Infrastruktur sind erforderlich. Rechnen Sie mit Serverkosten und Protokollrisiken; es gibt keine versprochene feste Rendite. Der Betrieb eines gewöhnlichen Nicht-Validator-Knotens verdient allein keine Belohnung."},{"title":"Produkte bauen · hängt von der Nachfrage ab","text":"Sie können Token, NFTs und Verträge testen. Ein Asset zu erstellen, erzeugt keine Käufer, Liquidität oder Gewinn. Das Protokoll kann Produktwert oder Nachfrage nicht garantieren."},{"title":"Growth-Empfehlungen","text":"Zwei Ebenen, L1 und L2. Die Gewichte 70/30 gelten für ein berechtigtes Abrechnungsbudget, nicht für den Betrag jeder Überweisung. Aktivität, Teilnahmealter, Reifung und Obergrenzen gelten. Eine Einladung allein bringt keine Zahlung. Growth-Belohnungen im Partnerportal einsehen und abholen, wenn Sie berechtigt sind."},{"title":"Mobile Teilnahme","text":"Teilnahmesitzungen per Tap vom Handy. Belohnungen hängen von verifizierter Aktivität ab, nicht vom offenen Tab oder „Mining“ von PPL."},{"title":"Proof of Humanity","text":"Multisignal-Prüfungen ohne Biometrie und ohne Roh-Personendaten on-chain."},{"title":"Teilnahmepunkte","text":"Punkte bestimmen Ihren Anteil an Community-Pool-Belohnungen aus Netzwerkgebühren. Sie können nicht gekauft oder übertragen werden."}],"links":[{"label":"Mehr über Validatoren","href":"#validators"}]},{"id":"create","title":"Auf dem Testnetz bauen","lead":"Wählen Sie ein Werkzeug und prüfen Sie das Ergebnis im Explorer.","items":[{"title":"Token","text":"Wählen Sie Emissionsparameter und verstehen Sie die Regeln. Der eingebaute Token-Emissionsmechanismus sendet 10 % eines neuen Tokens in seinen Community-Pool. Das ist keine automatische Zahlung an jeden PPL-Inhaber und keine Universalregel für beliebige Solidity-Verträge."},{"title":"NFT","text":"Bereiten Sie Metadaten und ein Bild vor, prüfen Sie Ihre Rechte an den Materialien und die Gebühr. Ein verfügbares Formular bedeutet nicht, dass das Minten fertig ist: ein signierter Vorgang muss in einen Block aufgenommen werden."},{"title":"Vertrag","text":"Deploy erfordert PPL für Gas und Quellprüfung. Erfolgreiche Kompilierung ist kein Sicherheitsaudit. Testen Sie Vorgänge zuerst ohne realen Wert."}],"links":[{"label":"Token erstellen","href":"/create/token"},{"label":"NFT erstellen","href":"/create/nft"},{"label":"Vertrag erstellen","href":"/create/contract"}]},{"id":"fees","title":"Wohin Gebühren gehen","lead":"Eine Gebühr zahlt einen Netzvorgang; Überweisungsbetrag und Gebühr sind unterschiedliche Beträge.","items":[{"title":"Aufteilung der Protokollgebühren","text":"Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren."},{"title":"Gebrochene Gebühren","text":"Protokoll v2 wendet dieselben Anteile auf gebrochene Gebühren an, berechnet in den kleinsten PPL-Einheiten, Rest geht an Validatoren. Ohne Validatoren geht deren Anteil an Treasury."},{"title":"Vor dem Signieren prüfen","text":"Unterschiedliche Vorgänge haben unterschiedliche Preise. Vertragsgas ist vorausbezahlt; der aktuelle Mechanismus erstattet ungenutztes Gas bei Erfolg oder Revert nicht. Die Gebührenseite listet die von der Website verwendeten Werte."}],"links":[{"label":"Gebühren und Preise","href":"/fees"}]},{"id":"node","title":"Eigenen Node verbinden","lead":"Der neue Beitrittspfad nutzt ein fertiges Docker-Image und einen Befehl. Kein privater Repository-Zugang, keine Wallet und keine privaten Schlüssel sind erforderlich.","items":[{"title":"01 · Docker vorbereiten","text":"Installieren Sie Docker und stellen Sie sicher, dass es läuft. Das erste verifizierte Image zielt auf Linux amd64 (x86-64). Andere Plattformen sind noch nicht als verifiziert ausgewiesen."},{"title":"02 · Panel oben prüfen","text":"Nutzen Sie den Befehl im Kasten oben. Er ist an die aktuelle öffentliche Testnet-Version gebunden. Keine anderen Images oder Netzwerk-URLs einsetzen."},{"title":"03 · Befehl kopieren und ausführen","text":"Der Befehl lädt eine festgelegte Image-Version, erzeugt den Container people-node und das persistente Volume people-node-data. Netzeinstellungen werden automatisch über HTTPS geholt und im Volume gespeichert. Gewöhnliche Follower müssen keine Schlüssel wählen und keine .env-Datei bearbeiten."},{"title":"04 · Auf Synchronisation warten","text":"Ihr Knoten verbindet sich mit dem Archive-Seed, empfängt Blöcke ab Genesis und prüft Signaturen und Zustandsänderungen selbst. Die Dauer hängt von der Historie und Ihrer Verbindung ab. Die API ist nur auf Ihrem Rechner verfügbar; gewöhnlicher Beitritt erfordert keine eingehenden Ports."},{"title":"05 · Ergebnis prüfen","text":"Öffnen Sie http://localhost:4001/health und http://localhost:4001/chain/head. API-Verfügbarkeit allein beweist keine Synchronisation: vergleichen Sie Höhe und Blockdaten mit dem Netz. Der nächste Abschnitt behandelt Prüf- und Wartungsbefehle."}],"links":[{"label":"Prüfung und Wartung","href":"#verify"},{"label":"Manueller Build für Entwickler","href":"#node-manual"}]},{"id":"verify","title":"Node prüfen und warten","lead":"Prüfen Sie die Synchronisation und verwalten Sie dann den bestehenden Container. Wiederholen Sie docker run nicht jedes Mal, wenn Sie den Knoten starten wollen.","items":[{"title":"Zustand prüfen","text":"Nach dem Start die Befehle lokal ausführen. /health sollte JSON mit ok:true liefern. /chain/head zeigt die lokale Höhe — mit dem Explorer vergleichen. /health allein beweist keine volle Synchronisation. Lokale API ohne Login; fremde 401-Fehler ignorieren."},{"title":"Logs, Stopp und Neustart","text":"docker logs --tail 100 people-node zeigt aktuelle Meldungen. docker stop people-node fährt ihn geordnet herunter; docker start people-node startet denselben Container mit seiner gespeicherten Kette. Neustart nutzt festgelegte Einstellungen, auch wenn der Konfigurationsserver vorübergehend nicht erreichbar ist."},{"title":"Daten behalten","text":"Behalten Sie das Volume people-node-data: es enthält die Kette und die festgelegte Netzkonfiguration. Für manuellen Start DATA_DIR bewahren. Führen Sie docker compose down -v nicht für Daten aus, die Sie brauchen. Die /snapshot-Antwort ist eine Zustandsübersicht, kein Backup. Nutzen Sie ein getrenntes Volume für ein anderes Netz."},{"title":"Einer älteren Kette beitreten","text":"Knoten behalten ein begrenztes Historielfenster. Ein leerer Knoten holt vielleicht nicht auf, wenn frühe Blöcke schon entfernt wurden. Das neue v2-Netz hat einen Archivmodus: ein dedizierter Knoten behält Blöcke ab Genesis zur vollen Prüfung. Archivmodus kann zuvor gelöschte Blöcke nicht wiederherstellen."}],"links":[],"code":"curl http://127.0.0.1:4001/health\n# {\"ok\":true,\"chainId\":\"people-public-testnet-v2-2026-09-30\",...}\ncurl http://127.0.0.1:4001/chain/head"},{"id":"node-manual","title":"Für Entwickler: manueller Build","lead":"Ein optionaler Weg für Entwickler mit Quellzugang. Gewöhnliche Docker-Nutzer brauchen diesen Abschnitt nicht.","items":[{"title":"01 · Quellcode holen","text":"Manueller Build braucht Repository-Zugang und freigegebene Revision. CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS und Gebühren aus der v2-Konfiguration unter https://node.peopleblockchain.network/network übernehmen. Für ein anderes Netz separates DATA_DIR."},{"title":"02 · Umgebung vorbereiten","text":"Verwenden Sie Node.js 22 und npm. Führen Sie im erhaltenen Repository die Befehle unten aus. Bauen ist Pflicht: Pakete laden dist."},{"title":"03 · .env.node vorbereiten","text":"Setzen Sie PEER_ID, CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS, DATA_DIR, PORT=4001, GOSSIP_PORT=4002 und BIND_HOST=127.0.0.1 in .env.node. EXPECTED_GENESIS_HASH muss genesisHash in der öffentlichen Konfiguration entsprechen; TOKEN_CREATE_MIN_FEE und NFT_MINT_MIN_FEE müssen ihren Gebühren entsprechen. PUBLIC_GOSSIP_URL wird nur für einen Knoten mit eingehenden Gossip-Verbindungen benötigt."},{"title":"04 · Nur öffentliche Einstellungen nutzen","text":"GENESIS_FAUCET_ADDRESS und BOOTSTRAP_ADDRESS sind öffentliche Adressen. DEV_FAUCET_PRIVATE_KEY bleibt beim Faucet und BOOTSTRAP_PRIVATE_KEY beim Erzeuger des ersten Blocks. Fordern oder kopieren Sie diese Geheimnisse nicht auf Ihren Knoten."},{"title":"05 · Prozess starten","text":"Speichern Sie .env.node in people-node innerhalb Ihres Peoples-Blockchain-Checkouts und schützen Sie die Datei. ALLOW_FAUCET und ALLOW_DEV_ENDPOINTS auf einem normalen Node nicht aktivieren. HTTP-API nicht ungeschützt ins Internet stellen."}],"links":[],"code":"git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"},{"id":"validators","title":"Validator werden","lead":"Betreiben und synchronisieren Sie zuerst einen gewöhnlichen Knoten, dann stimmen Sie die Teilnahme mit dem Betreiber ab.","items":[{"title":"Schlüssel und Bond getrennt","text":"Erstellen Sie einen eigenen Validator-Schlüssel und bewahren Sie ihn sicher auf. Besorgen Sie Test-PPL für Kaution und Gebühr und bestätigen Sie aktuelle Registrierungsparameter und die Wartezeit. Die Registrierung nutzt einen signierten Join-Vorgang; einen Server zu starten registriert allein keinen Validator."},{"title":"Rolle aktivieren","text":"Setzen Sie nach der Registrierung passende VALIDATOR_ADDRESS und VALIDATOR_PRIVATE_KEY in der Node-Umgebung und starten Sie neu. Folgen Sie den Anweisungen des Betreibers für die aktuelle Netzwerkversion und prüfen Sie die tatsächliche Teilnahme an Blöcken."},{"title":"Verfügbarkeit zählt","text":"Fällt ein ausgewählter Validator aus, pausiert die Blockproduktion, bis er wieder da ist. Planen Sie Wartung mit dem Betreiber; setzen Sie die Kette nicht selbst zurück."}],"links":[]},{"id":"participation-depth","title":"Teilnahmegewicht und Belohnungen","lead":"So wird Ihr Anteil am Community Pool berechnet.","items":[{"title":"Teilnahmegewicht","text":"Ein persönliches Gewicht, das Ihren Anteil an den Auszahlungen des Community Pool aus Netzwerkgebühren in PPL bestimmt. Es lässt sich weder verkaufen noch übertragen."},{"title":"Grenze pro Person und Epochen","text":"Teilnahme wird in Zeiträumen, sogenannten Epochen, gezählt. Jede weitere Aktivität bringt weniger, und jede Person hat eine feste Obergrenze, sodass ein Konto nicht den ganzen Pool bekommt."},{"title":"Woher das Geld im Pool kommt","text":"25 % der berechtigten Netzwerkgebühren fließen in den Community Pool und werden jede Epoche an aktive Teilnehmer ausgezahlt, die die Bedingungen erfüllen."},{"title":"Schutz vor Fake-Konten","text":"Neue Konten gewinnen langsam an Gewicht, inaktive verlieren es, und Grenzen verhindern, dass eine Gruppe von Fake-Konten viel verdient."},{"title":"Wenn niemand die Bedingungen erfüllt","text":"Erfüllt in einer Epoche niemand die Bedingungen, wird nichts als Gratis-Einkommen ausgezahlt. Das Geld bleibt nach den Protokollregeln im Pool."}],"links":[{"label":"So funktioniert es","href":"/how-it-works"}]},{"id":"network-architecture","title":"So funktioniert das Netzwerk","lead":"Die Teile des Netzwerks und die Regeln, die niemand von Hand ändern kann.","items":[{"title":"Konsens und Validatoren","text":"Eigene Validatoren erstellen und bestätigen Blöcke. Telefone und Browser-Tabs nehmen am Netzwerk teil, sind aber keine Validatoren."},{"title":"Zustand und Speicher","text":"Jeder Knoten speichert den Kettenzustand auf seiner eigenen Festplatte. Normale Knoten dürfen alte Blöcke löschen; Validatoren starten aus ihrem eigenen Datenordner neu."},{"title":"Feste Regeln","text":"Gebührenanteile, Ausgaberegeln und Buchhaltung stehen im Protokollcode, daher kann ein Text auf der Website sie nicht ändern."}],"links":[{"label":"Knoten starten","href":"#node"}]},{"id":"product-phases","title":"Was Sie nutzen können","lead":"Was im Testnetz schon funktioniert und was danach kommt. Ein Mainnet-Datum gibt es noch nicht.","items":[{"title":"Jetzt verfügbar · Testnetz","text":"Wallet, Token- und NFT-Fabrik, Tausch gegen Test-PPL, Verträge und Gebührenverteilung."},{"title":"Jetzt verfügbar · Netzwerk der Menschen","text":"Teilnahme per Tipp vom Handy, Prüfung ohne Biometrie, dass Sie ein echter Mensch sind, und Teilnahmepunkte für Ihren Anteil am Community Pool."},{"title":"Danach · Apps für alle","text":"Der Hub und Werkzeuge für Kreative auf demselben Protokoll."}],"links":[]},{"id":"ppl-native","title":"PPL — die Münze des Netzwerks","lead":"People (PPL) bezahlt Netzwerkgebühren und Protokollaktionen auf dieser Kette.","items":[{"title":"Testmünzen","text":"Test-PPL sind zum Ausprobieren des Netzwerks da. Wer Test-PPL besitzt, hat damit keinen Gewinn."},{"title":"Gebühren nur in PPL","text":"Überweisungen, das Erstellen eines Tokens oder NFT und Vertrags-Gas werden in PPL bezahlt."}],"links":[{"label":"Gebühren","href":"/fees"}]},{"id":"safety","title":"Wallet sicher halten","lead":"Wer das Geheimnis hat, kann Vorgänge signieren.","items":[{"title":"Ihre Wiederherstellungsphrase gehört nur Ihnen","text":"Senden Sie nie Phrase, privaten Schlüssel oder Passwort an Support, einen Chat, ein Website-Formular oder ein Repository. Eine öffentliche Adresse und eine Transaktions-ID reichen, um einen Vorgang zu untersuchen."},{"title":"Vor dem Signieren","text":"Prüfen Sie Domain, Netz, Empfänger, Betrag und Zweck. Versuchen Sie zuerst einen kleinen Betrag. Eine Blockchain bietet die übliche Stornierung einer versehentlichen Überweisung nicht."},{"title":"Wenn Sie den Zugang verlieren","text":"Suchen Sie Ihr eigenes Backup der Phrase oder des Schlüssels. Ein Website-Passwort und Kettendaten können einen verlorenen privaten Schlüssel nicht wiederherstellen. Vertrauen Sie keinen Angeboten, ihn gegen Gebühr zu „recover“."}],"links":[]},{"id":"help","title":"Häufige Fragen","lead":"Was prüfen, wenn etwas nicht funktioniert.","items":[{"title":"Netz nicht erreichbar","text":"Die Site erreicht das Netz nicht. Warten Sie und laden Sie neu. Geben Sie keine Geheimnisse erneut an Drittanbieter ein."},{"title":"Ich habe überwiesen, aber der Saldo hat sich nicht geändert","text":"Prüfen Sie Transaktions-ID, Blockaufnahme und Netzzustand im Explorer. Prüfen Sie Adresse und gewähltes Netz. Senden Sie keine doppelte Überweisung, bevor Sie wissen, was mit der ersten geschehen ist."},{"title":"Neue Blöcke erscheinen nicht mehr","text":"Konnektivität oder ein nicht erreichbarer ausgewählter Validator können verantwortlich sein. Melden Sie beobachtete Höhe und Zeit dem Betreiber. Löschen Sie keine Knotendaten, um einen Halt zu beheben."},{"title":"Was in einen Support-Bericht gehört","text":"Seitenadresse, Fehlertext, Zeit, öffentliche Adresse und Transaktions-ID. Knotenbetreiber können die Code-SHA, CHAIN_ID und Höhe ergänzen. Entfernen Sie Geheimnisse aus Logs; senden Sie Ihre .env-Datei nicht."}],"links":[]}],"nodeQuickStart":{"title":"Ihr Node — ein Befehl","intro":"Installieren und starten Sie Docker. Der Befehl unten startet einen verifizierenden Follower-Node mit persistentem Speicher im öffentlichen Testnetz. Kein Wallet, keine Kaution, keine privaten Schlüssel nötig.","copy":"Kopieren","copied":"Kopiert","copyManual":"Befehl markieren und manuell kopieren.","hint":"Prüfen: curl http://127.0.0.1:4001/health sollte ok:true und chainId people-public-testnet-v2-2026-09-30 liefern. Logs: docker logs people-node. Stopp: docker stop people-node. Neu starten: docker start people-node. Image aktualisieren: docker stop people-node && docker rm people-node, dann Befehl erneut (Volume people-node-data behalten)."}}
+{
+  "eyebrow": "WISSENSBASIS / PEOPLE",
+  "title": "Verstehen.\nAusprobieren.\nTeilnehmen.",
+  "description": "Von Ihrer ersten Wallet bis zu Ihrem eigenen Knoten — eine praktische Anleitung zu People’s Blockchain.",
+  "notice": "Testnetz",
+  "noticeText": "Mainnet ist nicht gestartet. Verfügbare Vorgänge hängen von der Site-Verbindung und der Netzversion ab. Testmünzen sind kein Einkommensversprechen.",
+  "contents": "In diesem Leitfaden",
+  "search": "Dokumentation durchsuchen",
+  "empty": "Keine Treffer. Versuchen Sie „Wallet“, „Belohnungen“ oder „Node“.",
+  "clear": "Suche leeren",
+  "results": "Gefundene Abschnitte",
+  "read": "Leitfaden lesen",
+  "cards": [
+    {
+      "title": "Ich fange an",
+      "text": "Ein Wallet, PPL und Ihre erste Überweisung",
+      "href": "#start"
+    },
+    {
+      "title": "Ich möchte teilnehmen",
+      "text": "Belohnungen, Produkte und Grenzen",
+      "href": "#earn"
+    },
+    {
+      "title": "Ich betreibe einen Node",
+      "text": "Verbinden, prüfen und warten",
+      "href": "#node"
+    }
+  ],
+  "sections": [
+    {
+      "id": "basics",
+      "title": "Wie People funktioniert",
+      "lead": "Eine Blockchain ist ein gemeinsames Protokoll von Vorgängen. Ihre Wallet signiert eine Aktion, Knoten prüfen sie, und Validatoren nehmen sie in Blöcke auf.",
+      "items": [
+        {
+          "title": "PPL ist die Netz-Münze",
+          "text": "People (PPL) zahlt Netzgebühren und Protokollvorgänge. Test-PPL dient zum Testen des Netzes; Halten bedeutet nicht, dass Sie Geld verdient haben."
+        },
+        {
+          "title": "Teilnehmer, Node, Validator",
+          "text": "Ein Teilnehmer nutzt Wallets und Anwendungen. Ein Full Node speichert und prüft den Netzzustand. Ein Validator erzeugt und beglaubigt außerdem Blöcke. Ein Telefon oder ein offener Browser-Tab wird nicht automatisch zum Validator."
+        },
+        {
+          "title": "Wie das Netzwerk aufgebaut ist",
+          "text": "Jeder Node speichert den Kettenzustand auf seiner eigenen Festplatte. Validatoren erzeugen und bestätigen Blöcke; gewöhnliche Folge-Nodes prüfen alles und erzeugen nichts. Wallet, Explorer, Swap und Fabriken auf dieser Seite lesen dieselbe Kette — den Live-Zustand zeigt /explorer. Fee-Anteile, Ausgaberegeln und Buchhaltung stehen im Protokollcode, daher kann eine Seite dieser Website sie nicht ändern."
+        },
+        {
+          "title": "Wohin jede Gebühr fließt",
+          "text": "Jede Protokollgebühr wird nach festen Anteilen aufgeteilt: 30 % an Validatoren, 25 % an den Community-Pool, 20 % an die Treasury, 10 % an Liquidität und 15 % an Growth, 0 % verbrannt — auch bei Bruchteilgebühren. Protokoll v2 wendet dieselben Anteile auf Bruchteilgebühren an, berechnet in den kleinsten PPL-Einheiten, der Rest geht an Validatoren. Vertragsgas wird im Voraus bezahlt; nicht genutztes Gas wird nicht erstattet."
+        },
+        {
+          "title": "Rückkäufe",
+          "text": "100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe — einschließlich Test-Stablecoin-Gebühren (tUSDC/tUSDT) über das StableFeeGateway. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% der Netzwerkgebühren gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%). Alles fließt letztendlich an die Teilnehmer zurück. Rückkäufe laufen nach einem veröffentlichten Rhythmus über den 2-von-3-Treasury-Multisig, und jeder Kauf ist im Explorer sichtbar. Zurückgekaufte PPL werden dann im Verhältnis 30/25/20/10/15 aufgeteilt. Die Zahlen sind vorläufig und unterliegen der Community-Governance."
+        },
+        {
+          "title": "Einen Node betreiben",
+          "text": "Jeder kann mit einem einzigen Docker-Befehl einen Folge-Node betreiben: Er prüft Blöcke und braucht weder Wallet noch Bond oder private Schlüssel. Ein Validator ist eine eigene Rolle: Er braucht einen eigenen Schlüssel, einen Bond und Abstimmung mit dem Betreiber, erzeugt Blöcke und muss online bleiben. Ein Telefon oder ein offener Browser-Tab nimmt am Netzwerk teil, ist aber kein Validator."
+        },
+        {
+          "title": "Von der Signatur zur Bestätigung",
+          "text": "Ein Vorgang besteht Prüfungen und kommt in eine Warteschlange. Annahme in die Warteschlange ist keine Blockaufnahme und keine Finalität. Prüfen Sie das Ergebnis im Explorer."
+        }
+      ],
+      "links": [
+        {
+          "label": "Das Netz erkunden",
+          "href": "/explorer"
+        },
+        {
+          "label": "Die visuelle Erklärung",
+          "href": "/how-it-works"
+        },
+        {
+          "label": "PPL-Tokenomik",
+          "href": "/tokenomics"
+        }
+      ]
+    },
+    {
+      "id": "start",
+      "title": "Beginnen Sie mit einem Wallet",
+      "lead": "Sie brauchen keinen eigenen Server für den Start.",
+      "items": [
+        {
+          "title": "01 · Wallet erstellen oder wiederherstellen",
+          "text": "Öffnen Sie die Wallet und erstellen Sie eine neue oder stellen Sie Ihre eigene wieder her. Bewahren Sie die Wiederherstellungsphrase sicher außerhalb der Website auf. Ein Passwort schützt den lokalen Speicher; es ersetzt kein Backup der Phrase."
+        },
+        {
+          "title": "02 · Verbindung prüfen",
+          "text": "Die Wallet sollte Testnet anzeigen. Wenn das Netz nicht erreichbar ist, warten Sie kurz und laden Sie die Seite neu."
+        },
+        {
+          "title": "03 · Test-PPL holen",
+          "text": "Wenn der Faucet in diesem Netz aktiviert ist, fordern Sie Testmünzen über die verfügbare Oberfläche an. Es gelten Limits. Kaufen Sie keine Testmünzen auf das Versprechen künftigen Einkommens."
+        },
+        {
+          "title": "04 · Kleine Überweisung versuchen",
+          "text": "Prüfen Sie Empfänger, Betrag und Gebühr. Lassen Sie etwas PPL für spätere Vorgänge. Nach dem Senden finden Sie die Transaktions-ID im Explorer und prüfen die Blockaufnahme."
+        }
+      ],
+      "links": [
+        {
+          "label": "Wallet öffnen",
+          "href": "/wallet"
+        },
+        {
+          "label": "Gebühren prüfen",
+          "href": "/fees"
+        }
+      ]
+    },
+    {
+      "id": "earn",
+      "title": "Wege zur Teilnahme",
+      "lead": "Das Netz ist in der Testphase. Das sind Teilnahmemechanismen, kein Gewinnversprechen.",
+      "items": [
+        {
+          "title": "Validierung · Testprotokoll",
+          "text": "Belohnungen hängen von Validator-Teilnahme und Netzparametern ab. Registrierung, eine Kaution und laufende Infrastruktur sind erforderlich. Rechnen Sie mit Serverkosten und Protokollrisiken; es gibt keine versprochene feste Rendite. Der Betrieb eines gewöhnlichen Nicht-Validator-Knotens verdient allein keine Belohnung."
+        },
+        {
+          "title": "Produkte bauen · hängt von der Nachfrage ab",
+          "text": "Sie können Token, NFTs und Verträge testen. Ein Asset zu erstellen, erzeugt keine Käufer, Liquidität oder Gewinn. Das Protokoll kann Produktwert oder Nachfrage nicht garantieren."
+        },
+        {
+          "title": "Growth-Empfehlungen",
+          "text": "Zwei Ebenen, L1 und L2. Die Gewichte 70/30 gelten für ein berechtigtes Abrechnungsbudget, nicht für den Betrag jeder Überweisung. Aktivität, Teilnahmealter, Reifung und Obergrenzen gelten. Eine Einladung allein bringt keine Zahlung. Growth-Belohnungen im Partnerportal einsehen und abholen, wenn Sie berechtigt sind."
+        },
+        {
+          "title": "Mobile Teilnahme",
+          "text": "Teilnahmesitzungen per Tap vom Handy. Belohnungen hängen von verifizierter Aktivität ab, nicht vom offenen Tab oder „Mining“ von PPL."
+        },
+        {
+          "title": "Proof of Humanity",
+          "text": "Multisignal-Prüfungen ohne Biometrie und ohne Roh-Personendaten on-chain."
+        },
+        {
+          "title": "Teilnahmepunkte",
+          "text": "Punkte bestimmen Ihren Anteil an Community-Pool-Belohnungen aus Netzwerkgebühren. Sie können nicht gekauft oder übertragen werden."
+        }
+      ],
+      "links": [
+        {
+          "label": "Mehr über Validatoren",
+          "href": "#validators"
+        }
+      ]
+    },
+    {
+      "id": "create",
+      "title": "Auf dem Testnetz bauen",
+      "lead": "Wählen Sie ein Werkzeug und prüfen Sie das Ergebnis im Explorer.",
+      "items": [
+        {
+          "title": "Token",
+          "text": "Wählen Sie Emissionsparameter und verstehen Sie die Regeln. Der eingebaute Token-Emissionsmechanismus sendet 10 % eines neuen Tokens in seinen Community-Pool. Das ist keine automatische Zahlung an jeden PPL-Inhaber und keine Universalregel für beliebige Solidity-Verträge."
+        },
+        {
+          "title": "NFT",
+          "text": "Bereiten Sie Metadaten und ein Bild vor, prüfen Sie Ihre Rechte an den Materialien und die Gebühr. Ein verfügbares Formular bedeutet nicht, dass das Minten fertig ist: ein signierter Vorgang muss in einen Block aufgenommen werden."
+        },
+        {
+          "title": "Vertrag",
+          "text": "Deploy erfordert PPL für Gas und Quellprüfung. Erfolgreiche Kompilierung ist kein Sicherheitsaudit. Testen Sie Vorgänge zuerst ohne realen Wert."
+        }
+      ],
+      "links": [
+        {
+          "label": "Token erstellen",
+          "href": "/create/token"
+        },
+        {
+          "label": "NFT erstellen",
+          "href": "/create/nft"
+        },
+        {
+          "label": "Vertrag erstellen",
+          "href": "/create/contract"
+        }
+      ]
+    },
+    {
+      "id": "fees",
+      "title": "Wohin Gebühren gehen",
+      "lead": "Eine Gebühr zahlt einen Netzvorgang; Überweisungsbetrag und Gebühr sind unterschiedliche Beträge.",
+      "items": [
+        {
+          "title": "Aufteilung der Protokollgebühren",
+          "text": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren."
+        },
+        {
+          "title": "Gebrochene Gebühren",
+          "text": "Protokoll v2 wendet dieselben Anteile auf gebrochene Gebühren an, berechnet in den kleinsten PPL-Einheiten, Rest geht an Validatoren. Ohne Validatoren geht deren Anteil an Treasury."
+        },
+        {
+          "title": "Vor dem Signieren prüfen",
+          "text": "Unterschiedliche Vorgänge haben unterschiedliche Preise. Vertragsgas ist vorausbezahlt; der aktuelle Mechanismus erstattet ungenutztes Gas bei Erfolg oder Revert nicht. Die Gebührenseite listet die von der Website verwendeten Werte."
+        }
+      ],
+      "links": [
+        {
+          "label": "Gebühren und Preise",
+          "href": "/fees"
+        }
+      ]
+    },
+    {
+      "id": "node",
+      "title": "Eigenen Node verbinden",
+      "lead": "Der neue Beitrittspfad nutzt ein fertiges Docker-Image und einen Befehl. Kein privater Repository-Zugang, keine Wallet und keine privaten Schlüssel sind erforderlich.",
+      "items": [
+        {
+          "title": "01 · Docker vorbereiten",
+          "text": "Installieren Sie Docker und stellen Sie sicher, dass es läuft. Das erste verifizierte Image zielt auf Linux amd64 (x86-64). Andere Plattformen sind noch nicht als verifiziert ausgewiesen."
+        },
+        {
+          "title": "02 · Panel oben prüfen",
+          "text": "Nutzen Sie den Befehl im Kasten oben. Er ist an die aktuelle öffentliche Testnet-Version gebunden. Keine anderen Images oder Netzwerk-URLs einsetzen."
+        },
+        {
+          "title": "03 · Befehl kopieren und ausführen",
+          "text": "Der Befehl lädt eine festgelegte Image-Version, erzeugt den Container people-node und das persistente Volume people-node-data. Netzeinstellungen werden automatisch über HTTPS geholt und im Volume gespeichert. Gewöhnliche Follower müssen keine Schlüssel wählen und keine .env-Datei bearbeiten."
+        },
+        {
+          "title": "04 · Auf Synchronisation warten",
+          "text": "Ihr Knoten verbindet sich mit dem Archive-Seed, empfängt Blöcke ab Genesis und prüft Signaturen und Zustandsänderungen selbst. Die Dauer hängt von der Historie und Ihrer Verbindung ab. Die API ist nur auf Ihrem Rechner verfügbar; gewöhnlicher Beitritt erfordert keine eingehenden Ports."
+        },
+        {
+          "title": "05 · Ergebnis prüfen",
+          "text": "Öffnen Sie http://localhost:4001/health und http://localhost:4001/chain/head. API-Verfügbarkeit allein beweist keine Synchronisation: vergleichen Sie Höhe und Blockdaten mit dem Netz. Der nächste Abschnitt behandelt Prüf- und Wartungsbefehle."
+        }
+      ],
+      "links": [
+        {
+          "label": "Prüfung und Wartung",
+          "href": "#verify"
+        },
+        {
+          "label": "Manueller Build für Entwickler",
+          "href": "#node-manual"
+        }
+      ]
+    },
+    {
+      "id": "verify",
+      "title": "Node prüfen und warten",
+      "lead": "Prüfen Sie die Synchronisation und verwalten Sie dann den bestehenden Container. Wiederholen Sie docker run nicht jedes Mal, wenn Sie den Knoten starten wollen.",
+      "items": [
+        {
+          "title": "Zustand prüfen",
+          "text": "Nach dem Start die Befehle lokal ausführen. /health sollte JSON mit ok:true liefern. /chain/head zeigt die lokale Höhe — mit dem Explorer vergleichen. /health allein beweist keine volle Synchronisation. Lokale API ohne Login; fremde 401-Fehler ignorieren."
+        },
+        {
+          "title": "Logs, Stopp und Neustart",
+          "text": "docker logs --tail 100 people-node zeigt aktuelle Meldungen. docker stop people-node fährt ihn geordnet herunter; docker start people-node startet denselben Container mit seiner gespeicherten Kette. Neustart nutzt festgelegte Einstellungen, auch wenn der Konfigurationsserver vorübergehend nicht erreichbar ist."
+        },
+        {
+          "title": "Daten behalten",
+          "text": "Behalten Sie das Volume people-node-data: es enthält die Kette und die festgelegte Netzkonfiguration. Für manuellen Start DATA_DIR bewahren. Führen Sie docker compose down -v nicht für Daten aus, die Sie brauchen. Die /snapshot-Antwort ist eine Zustandsübersicht, kein Backup. Nutzen Sie ein getrenntes Volume für ein anderes Netz."
+        },
+        {
+          "title": "Einer älteren Kette beitreten",
+          "text": "Knoten behalten ein begrenztes Historielfenster. Ein leerer Knoten holt vielleicht nicht auf, wenn frühe Blöcke schon entfernt wurden. Das neue v2-Netz hat einen Archivmodus: ein dedizierter Knoten behält Blöcke ab Genesis zur vollen Prüfung. Archivmodus kann zuvor gelöschte Blöcke nicht wiederherstellen."
+        }
+      ],
+      "links": [],
+      "code": "curl http://127.0.0.1:4001/health\n# {\"ok\":true,\"chainId\":\"people-public-testnet-v2-2026-09-30\",...}\ncurl http://127.0.0.1:4001/chain/head"
+    },
+    {
+      "id": "node-manual",
+      "title": "Für Entwickler: manueller Build",
+      "lead": "Ein optionaler Weg für Entwickler mit Quellzugang. Gewöhnliche Docker-Nutzer brauchen diesen Abschnitt nicht.",
+      "items": [
+        {
+          "title": "01 · Quellcode holen",
+          "text": "Manueller Build braucht Repository-Zugang und freigegebene Revision. CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS und Gebühren aus der v2-Konfiguration unter https://node.peopleblockchain.network/network übernehmen. Für ein anderes Netz separates DATA_DIR."
+        },
+        {
+          "title": "02 · Umgebung vorbereiten",
+          "text": "Verwenden Sie Node.js 22 und npm. Führen Sie im erhaltenen Repository die Befehle unten aus. Bauen ist Pflicht: Pakete laden dist."
+        },
+        {
+          "title": "03 · .env.node vorbereiten",
+          "text": "Setzen Sie PEER_ID, CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS, DATA_DIR, PORT=4001, GOSSIP_PORT=4002 und BIND_HOST=127.0.0.1 in .env.node. EXPECTED_GENESIS_HASH muss genesisHash in der öffentlichen Konfiguration entsprechen; TOKEN_CREATE_MIN_FEE und NFT_MINT_MIN_FEE müssen ihren Gebühren entsprechen. PUBLIC_GOSSIP_URL wird nur für einen Knoten mit eingehenden Gossip-Verbindungen benötigt."
+        },
+        {
+          "title": "04 · Nur öffentliche Einstellungen nutzen",
+          "text": "GENESIS_FAUCET_ADDRESS und BOOTSTRAP_ADDRESS sind öffentliche Adressen. DEV_FAUCET_PRIVATE_KEY bleibt beim Faucet und BOOTSTRAP_PRIVATE_KEY beim Erzeuger des ersten Blocks. Fordern oder kopieren Sie diese Geheimnisse nicht auf Ihren Knoten."
+        },
+        {
+          "title": "05 · Prozess starten",
+          "text": "Speichern Sie .env.node in people-node innerhalb Ihres Peoples-Blockchain-Checkouts und schützen Sie die Datei. ALLOW_FAUCET und ALLOW_DEV_ENDPOINTS auf einem normalen Node nicht aktivieren. HTTP-API nicht ungeschützt ins Internet stellen."
+        }
+      ],
+      "links": [],
+      "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+    },
+    {
+      "id": "validators",
+      "title": "Validator werden",
+      "lead": "Betreiben und synchronisieren Sie zuerst einen gewöhnlichen Knoten, dann stimmen Sie die Teilnahme mit dem Betreiber ab.",
+      "items": [
+        {
+          "title": "Schlüssel und Bond getrennt",
+          "text": "Erstellen Sie einen eigenen Validator-Schlüssel und bewahren Sie ihn sicher auf. Besorgen Sie Test-PPL für Kaution und Gebühr und bestätigen Sie aktuelle Registrierungsparameter und die Wartezeit. Die Registrierung nutzt einen signierten Join-Vorgang; einen Server zu starten registriert allein keinen Validator."
+        },
+        {
+          "title": "Rolle aktivieren",
+          "text": "Setzen Sie nach der Registrierung passende VALIDATOR_ADDRESS und VALIDATOR_PRIVATE_KEY in der Node-Umgebung und starten Sie neu. Folgen Sie den Anweisungen des Betreibers für die aktuelle Netzwerkversion und prüfen Sie die tatsächliche Teilnahme an Blöcken."
+        },
+        {
+          "title": "Verfügbarkeit zählt",
+          "text": "Fällt ein ausgewählter Validator aus, pausiert die Blockproduktion, bis er wieder da ist. Planen Sie Wartung mit dem Betreiber; setzen Sie die Kette nicht selbst zurück."
+        }
+      ],
+      "links": []
+    },
+    {
+      "id": "participation-depth",
+      "title": "Teilnahmegewicht und Belohnungen",
+      "lead": "So wird Ihr Anteil am Community Pool berechnet.",
+      "items": [
+        {
+          "title": "Teilnahmegewicht",
+          "text": "Ein persönliches Gewicht, das Ihren Anteil an den Auszahlungen des Community Pool aus Netzwerkgebühren in PPL bestimmt. Es lässt sich weder verkaufen noch übertragen."
+        },
+        {
+          "title": "Grenze pro Person und Epochen",
+          "text": "Teilnahme wird in Zeiträumen, sogenannten Epochen, gezählt. Jede weitere Aktivität bringt weniger, und jede Person hat eine feste Obergrenze, sodass ein Konto nicht den ganzen Pool bekommt."
+        },
+        {
+          "title": "Woher das Geld im Pool kommt",
+          "text": "25 % der berechtigten Netzwerkgebühren fließen in den Community Pool und werden jede Epoche an aktive Teilnehmer ausgezahlt, die die Bedingungen erfüllen."
+        },
+        {
+          "title": "Schutz vor Fake-Konten",
+          "text": "Neue Konten gewinnen langsam an Gewicht, inaktive verlieren es, und Grenzen verhindern, dass eine Gruppe von Fake-Konten viel verdient."
+        },
+        {
+          "title": "Wenn niemand die Bedingungen erfüllt",
+          "text": "Erfüllt in einer Epoche niemand die Bedingungen, wird nichts als Gratis-Einkommen ausgezahlt. Das Geld bleibt nach den Protokollregeln im Pool."
+        }
+      ],
+      "links": [
+        {
+          "label": "So funktioniert es",
+          "href": "/how-it-works"
+        }
+      ]
+    },
+    {
+      "id": "network-architecture",
+      "title": "So funktioniert das Netzwerk",
+      "lead": "Die Teile des Netzwerks und die Regeln, die niemand von Hand ändern kann.",
+      "items": [
+        {
+          "title": "Konsens und Validatoren",
+          "text": "Eigene Validatoren erstellen und bestätigen Blöcke. Telefone und Browser-Tabs nehmen am Netzwerk teil, sind aber keine Validatoren."
+        },
+        {
+          "title": "Zustand und Speicher",
+          "text": "Jeder Knoten speichert den Kettenzustand auf seiner eigenen Festplatte. Normale Knoten dürfen alte Blöcke löschen; Validatoren starten aus ihrem eigenen Datenordner neu."
+        },
+        {
+          "title": "Feste Regeln",
+          "text": "Gebührenanteile, Ausgaberegeln und Buchhaltung stehen im Protokollcode, daher kann ein Text auf der Website sie nicht ändern."
+        }
+      ],
+      "links": [
+        {
+          "label": "Knoten starten",
+          "href": "#node"
+        }
+      ]
+    },
+    {
+      "id": "product-phases",
+      "title": "Was Sie nutzen können",
+      "lead": "Was im Testnetz schon funktioniert und was danach kommt. Ein Mainnet-Datum gibt es noch nicht.",
+      "items": [
+        {
+          "title": "Jetzt verfügbar · Testnetz",
+          "text": "Wallet, Token- und NFT-Fabrik, Tausch gegen Test-PPL, Verträge und Gebührenverteilung."
+        },
+        {
+          "title": "Jetzt verfügbar · Netzwerk der Menschen",
+          "text": "Teilnahme per Tipp vom Handy, Prüfung ohne Biometrie, dass Sie ein echter Mensch sind, und Teilnahmepunkte für Ihren Anteil am Community Pool."
+        },
+        {
+          "title": "Danach · Apps für alle",
+          "text": "Der Hub und Werkzeuge für Kreative auf demselben Protokoll."
+        }
+      ],
+      "links": []
+    },
+    {
+      "id": "ppl-native",
+      "title": "PPL — die Münze des Netzwerks",
+      "lead": "People (PPL) bezahlt Netzwerkgebühren und Protokollaktionen auf dieser Kette.",
+      "items": [
+        {
+          "title": "Testmünzen",
+          "text": "Test-PPL sind zum Ausprobieren des Netzwerks da. Wer Test-PPL besitzt, hat damit keinen Gewinn."
+        },
+        {
+          "title": "Gebühren nur in PPL",
+          "text": "Überweisungen, das Erstellen eines Tokens oder NFT und Vertrags-Gas werden in PPL bezahlt."
+        }
+      ],
+      "links": [
+        {
+          "label": "Gebühren",
+          "href": "/fees"
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "title": "Wallet sicher halten",
+      "lead": "Wer das Geheimnis hat, kann Vorgänge signieren.",
+      "items": [
+        {
+          "title": "Ihre Wiederherstellungsphrase gehört nur Ihnen",
+          "text": "Senden Sie nie Phrase, privaten Schlüssel oder Passwort an Support, einen Chat, ein Website-Formular oder ein Repository. Eine öffentliche Adresse und eine Transaktions-ID reichen, um einen Vorgang zu untersuchen."
+        },
+        {
+          "title": "Vor dem Signieren",
+          "text": "Prüfen Sie Domain, Netz, Empfänger, Betrag und Zweck. Versuchen Sie zuerst einen kleinen Betrag. Eine Blockchain bietet die übliche Stornierung einer versehentlichen Überweisung nicht."
+        },
+        {
+          "title": "Wenn Sie den Zugang verlieren",
+          "text": "Suchen Sie Ihr eigenes Backup der Phrase oder des Schlüssels. Ein Website-Passwort und Kettendaten können einen verlorenen privaten Schlüssel nicht wiederherstellen. Vertrauen Sie keinen Angeboten, ihn gegen Gebühr zu „recover“."
+        }
+      ],
+      "links": []
+    },
+    {
+      "id": "help",
+      "title": "Häufige Fragen",
+      "lead": "Was prüfen, wenn etwas nicht funktioniert.",
+      "items": [
+        {
+          "title": "Netz nicht erreichbar",
+          "text": "Die Site erreicht das Netz nicht. Warten Sie und laden Sie neu. Geben Sie keine Geheimnisse erneut an Drittanbieter ein."
+        },
+        {
+          "title": "Ich habe überwiesen, aber der Saldo hat sich nicht geändert",
+          "text": "Prüfen Sie Transaktions-ID, Blockaufnahme und Netzzustand im Explorer. Prüfen Sie Adresse und gewähltes Netz. Senden Sie keine doppelte Überweisung, bevor Sie wissen, was mit der ersten geschehen ist."
+        },
+        {
+          "title": "Neue Blöcke erscheinen nicht mehr",
+          "text": "Konnektivität oder ein nicht erreichbarer ausgewählter Validator können verantwortlich sein. Melden Sie beobachtete Höhe und Zeit dem Betreiber. Löschen Sie keine Knotendaten, um einen Halt zu beheben."
+        },
+        {
+          "title": "Was in einen Support-Bericht gehört",
+          "text": "Seitenadresse, Fehlertext, Zeit, öffentliche Adresse und Transaktions-ID. Knotenbetreiber können die Code-SHA, CHAIN_ID und Höhe ergänzen. Entfernen Sie Geheimnisse aus Logs; senden Sie Ihre .env-Datei nicht."
+        }
+      ],
+      "links": []
+    }
+  ],
+  "nodeQuickStart": {
+    "title": "Ihr Node — ein Befehl",
+    "intro": "Installieren und starten Sie Docker. Der Befehl unten startet einen verifizierenden Follower-Node mit persistentem Speicher im öffentlichen Testnetz. Kein Wallet, keine Kaution, keine privaten Schlüssel nötig.",
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "copyManual": "Befehl markieren und manuell kopieren.",
+    "hint": "Prüfen: curl http://127.0.0.1:4001/health sollte ok:true und chainId people-public-testnet-v2-2026-09-30 liefern. Logs: docker logs people-node. Stopp: docker stop people-node. Neu starten: docker start people-node. Image aktualisieren: docker stop people-node && docker rm people-node, dann Befehl erneut (Volume people-node-data behalten)."
+  }
+}

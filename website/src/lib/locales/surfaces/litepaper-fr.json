@@ -27,7 +27,7 @@
     "feeFlowBurnNote": "rien détruit",
     "feeFlowBuybackTag": "→ rachats",
     "buybackTitle": "Boucle de rachat",
-    "buybackLead": "Les parts du Trésor et de liquidité de chaque frais réseau financent les rachats publics de PPL.",
+    "buybackLead": "100% des frais de lancement de tokens et NFT (USDC/USDT) vont aux rachats publics de PPL. 30% des frais de réseau vont aux rachats publics de PPL (trésorerie 20% + liquidité 10%). Les 70% restants vont aux validateurs (30%), au pool communautaire (25%) et au Growth Pool (15%) — et tout cela revient finalement aux participants.",
     "buybackTreasuryLabel": "Trésor",
     "buybackLiquidityLabel": "Liquidité",
     "buybackTargetLabel": "Rachats publics de PPL",
