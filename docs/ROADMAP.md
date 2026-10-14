@@ -160,4 +160,10 @@ Read-only RPC уже доступен (прокси сайта + нода). От
 
 ---
 
-*Последнее обновление структуры: 2026-10-03. Доказательства по коду — поле `evidence` в `roadmap.json`. План A/B — `docs/FOUNDERS-AND-LAVKA-PLAN.md`.*
+*Последнее обновление структуры: 2026-10-14. Доказательства по коду — поле `evidence` в `roadmap.json`. План A/B — `docs/FOUNDERS-AND-LAVKA-PLAN.md`.*
+
+## People Predict — MVP testnet
+
+`in_progress`: founder-approved binary positions, on-chain limit orders, 0 app fee,
+48h disputes and 0.5 PPL void payouts. Administrator = PeopleMultisig; named resolver
+and arbiter are set per market. See `PEOPLE-PREDICT.md`.

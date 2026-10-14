@@ -1,0 +1,23 @@
+import { parseAbi } from "viem";
+export const predictAbi = parseAbi([
+  "function VERSION() view returns (uint256)",
+  "function admin() view returns (address)",
+  "function marketCount() view returns (uint256)",
+  "function orderCount() view returns (uint256)",
+  "function getMarket(uint256 id) view returns ((string title, string terms, string source, string category, uint64 closeAt, address resolver, address arbiter, uint64 proposedAt, uint8 proposedOutcome, bool disputed, uint8 outcome, uint256 collateral))",
+  "function positions(uint256 id, address account) view returns (uint256 yes, uint256 no)",
+  "function credits(address account) view returns (uint256)",
+  "function orders(uint256 id) view returns (address maker, uint256 marketId, bool yes, bool buy, uint256 price, uint256 remaining, uint64 expiresAt)",
+  "function createMarket(string title, string terms, string source, string category, uint64 closeAt, address resolver, address arbiter) returns (uint256)",
+  "function split(uint256 id) payable",
+  "function merge(uint256 id, uint256 amount)",
+  "function placeOrder(uint256 id, bool yes, bool buy, uint256 amount, uint256 price, uint64 expiresAt) payable returns (uint256)",
+  "function fillOrder(uint256 orderId, uint256 amount) payable",
+  "function cancelOrder(uint256 orderId)",
+  "function propose(uint256 id, uint8 outcome, bytes32 evidenceHash)",
+  "function dispute(uint256 id, bytes32 evidenceHash)",
+  "function finalize(uint256 id, uint8 outcome, bytes32 evidenceHash)",
+  "function redeem(uint256 id)",
+  "function withdraw()",
+  "event Trade(uint256 indexed orderId, uint256 indexed marketId, address indexed taker, address maker, bool yes, bool buy, uint256 amount, uint256 price, uint256 cost)",
+]);
