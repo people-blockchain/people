@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Tanpa kode, tanpa keahlian kripto",
-    "title": "Yang bisa Anda lakukan tanpa kode",
-    "lead": "Semua di bawah ini sudah berjalan hari ini di testnet publik. Tidak ada yang perlu diinstal, tidak ada yang perlu dikompilasi.",
-    "cta": "Coba di testnet",
+    "eyebrow": "Pembuat tanpa kode",
+    "title": "Pembuat tanpa kode",
+    "lead": "Wizard asli sudah tersedia di testnet publik. Luncurkan token atau NFT, terapkan escrow atau crowdfunding, jelaskan kontrak dengan kata-kata sederhana, atau buka Lavka — tidak perlu instalasi atau kompilasi.",
+    "cta": "Buka",
     "cards": [
       {
         "id": "token",
-        "title": "Luncurkan token klub atau komunitas dalam satu menit",
-        "body": "Pilih nama, ticker, gambar, dan pasokan. Bayar biaya peluncuran dengan PPL dan token langsung live di bonding curve-nya sendiri.",
+        "title": "Luncurkan token",
+        "body": "Nama, ticker, gambar, dan pasokan. Bayar biaya peluncuran dan token langsung aktif di kurva ikatannya.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Cetak kartu NFT klub",
-        "body": "Kartu keanggotaan sebagai NFT: satu per anggota, dengan gambar yang Anda unggah atau buat di browser.",
+        "title": "Cetak koleksi NFT",
+        "body": "Kartu klub atau keanggotaan sebagai NFT — unggah atau buat gambar di browser.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Kumpulkan dana untuk ide Anda",
-        "body": "Komunitas Anda membeli di curve sejak transaksi pertama, sehingga harga ditentukan oleh permintaan nyata, bukan oleh ronde privat.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Terapkan escrow",
+        "body": "Contoh templat escrow di halaman kontrak: kunci dana hingga kondisi atau tenggat waktu terpenuhi.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Mulai crowdfunding",
+        "body": "Contoh templat crowdfund: tetapkan target dan kumpulkan dalam PPL atau stablecoin uji coba.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
-        "title": "Jelaskan smart contract dengan kata-kata biasa",
-        "body": "Tulis apa yang Anda inginkan dalam bahasa biasa dan dapatkan kontrak yang dibangun dari template OpenZeppelin yang sudah diaudit. Anda melihat hasilnya sebelum men-deploy.",
+        "title": "Jelaskan kontrak pintar dengan kata-kata sederhana",
+        "body": "Kami memparameterkan templat OpenZeppelin yang telah ditinjau. Anda melihat Solidity sebelum menandatangani.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Alat merchant Lavka",
+        "body": "Pass loyalitas dan escrow merchant untuk toko lokal — tanpa kode khusus.",
+        "href": "/lavka"
       }
     ]
   },

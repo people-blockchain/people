@@ -24,6 +24,12 @@ export type FactoryCopyContent = {
     tokenCta: string;
     nftCta: string;
     contractCta: string;
+    escrowCta: string;
+    crowdfundCta: string;
+    lavkaCta: string;
+    escrowLead: string;
+    crowdfundLead: string;
+    lavkaLead: string;
     statusUnavailable: string;
     statusTestnet: string;
   };
@@ -118,13 +124,19 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       "Describe what you need in ordinary words. We parameterize a reviewed Solidity template (OpenZeppelin patterns). Gas is paid in PPL. Token/NFT factory remains the built-in path.",
     feesLink: "Fees & pricing",
     hub: {
-      tag: "CREATE",
-      title: "Create a token, NFT, or contract",
+      tag: "NO-CODE BUILDER",
+      title: "No-code builder",
       subtitle:
-        "No code for tokens and NFTs. For general-purpose contracts, write a sentence and review the Solidity before you sign.",
-      tokenCta: "Create a token",
-      nftCta: "Create an NFT",
-      contractCta: "Create a contract",
+        "Token, NFT, escrow, crowdfunding, plain-language contracts and Lavka — wizards that already exist on the public testnet.",
+      tokenCta: "Launch a token",
+      nftCta: "Mint an NFT",
+      contractCta: "Build a contract",
+      escrowCta: "Deploy escrow",
+      crowdfundCta: "Start crowdfunding",
+      lavkaCta: "Open Lavka",
+      escrowLead: "Sample escrow template: lock funds until a condition or deadline.",
+      crowdfundLead: "Sample crowdfund template: set a goal and raise in PPL or a test stablecoin.",
+      lavkaLead: "Loyalty passes and merchant escrow for local shops.",
       statusUnavailable: "Network temporarily unavailable",
       statusTestnet: "Testnet",
     },
@@ -216,13 +228,19 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       "Опишите задачу обычными словами. Мы параметризуем проверенный шаблон Solidity (паттерны OpenZeppelin). Газ оплачивается в PPL. Token/NFT factory остаётся встроенным путём.",
     feesLink: "Комиссии и тарифы",
     hub: {
-      tag: "СОЗДАТЬ",
-      title: "Создать токен, NFT или контракт",
+      tag: "КОНСТРУКТОР БЕЗ КОДА",
+      title: "Конструктор без кода",
       subtitle:
-        "Токены и NFT — без кода. Для произвольных контрактов напишите фразу и проверьте Solidity перед подписью.",
-      tokenCta: "Создать токен",
-      nftCta: "Создать NFT",
-      contractCta: "Создать контракт",
+        "Токен, NFT, эскроу, краудфандинг, контракты простыми словами и Lavka — мастеры, которые уже есть в публичном тестнете.",
+      tokenCta: "Запустить токен",
+      nftCta: "Выпустить NFT",
+      contractCta: "Собрать контракт",
+      escrowCta: "Развернуть эскроу",
+      crowdfundCta: "Запустить краудфандинг",
+      lavkaCta: "Открыть Lavka",
+      escrowLead: "Образец эскроу: заморозка средств до условия или срока.",
+      crowdfundLead: "Образец краудфандинга: цель и сбор в PPL или тестовом стейблкоине.",
+      lavkaLead: "Карты лояльности и эскроу для локальных точек.",
       statusUnavailable: "Сеть временно недоступна",
       statusTestnet: "Testnet",
     },
@@ -274,7 +292,7 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       payWithLabel: "Оплатить комиссию в",
       payWithPpl: "PPL",
       stableFeeLabel: "Комиссия в стейблкоине",
-      stableFeeBuybackNote: "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичные байбэки PPL.",
+      stableFeeBuybackNote: "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичный выкуп PPL.",
       stableFeeNetworkNote: "Пока работает только в сети People. Оплата из другой сети (Ethereum, Polygon, Tron, TON, Solana) появится позже.",
       approvingStable: "Подтверждение...",
       payingStableFee: "Оплата комиссии...",

@@ -6,14 +6,20 @@
   "contractLead": "İhtiyacınızı sıradan sözcüklerle anlatın. İncelenmiş bir Solidity şablonunu (OpenZeppelin kalıpları) parametreleştiririz. Gaz PPL ile ödenir. Token/NFT fabrikası yerleşik yol olmayı sürdürür.",
   "feesLink": "Ücretler ve tarifeler",
   "hub": {
-    "tag": "OLUŞTUR",
-    "title": "Token, NFT veya sözleşme oluştur",
-    "subtitle": "Token ve NFT için kod yok. Genel amaçlı sözleşmeler için bir cümle yazın ve imzalamadan önce Solidity’yi gözden geçirin.",
-    "tokenCta": "Token oluştur",
-    "nftCta": "NFT oluştur",
+    "tag": "KODSUZ OLUŞTURUCU",
+    "title": "Kodsuz oluşturucu",
+    "subtitle": "Token, NFT, emanet, kitle fonlaması, sade dilli sözleşmeler ve Lavka — genel test ağında zaten mevcut olan sihirbazlar.",
+    "tokenCta": "Token başlat",
+    "nftCta": "NFT bas",
     "contractCta": "Sözleşme oluştur",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "Ağ geçici olarak kullanılamıyor"
+    "escrowCta": "Emaneti dağıt",
+    "crowdfundCta": "Kitle fonlamasını başlat",
+    "lavkaCta": "Lavka'yı aç",
+    "escrowLead": "Örnek emanet şablonu: bir koşul veya son tarihe kadar fonları kilitle.",
+    "crowdfundLead": "Örnek kitle fonlama şablonu: bir hedef belirle ve PPL veya bir test stablecoin ile topla.",
+    "lavkaLead": "Yerel mağazalar için sadakat kartları ve satıcı emaneti.",
+    "statusUnavailable": "Ağ geçici olarak kullanılamıyor",
+    "statusTestnet": "Testnet"
   },
   "token": {
     "title": "Token oluştur",

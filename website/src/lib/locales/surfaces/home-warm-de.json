@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Kein Code, keine Krypto-Kenntnisse",
-    "title": "Was Sie ohne Code tun können",
-    "lead": "Alles unten läuft schon heute im öffentlichen Testnet. Nichts zu installieren, nichts zu kompilieren.",
-    "cta": "Im Testnet ausprobieren",
+    "eyebrow": "No-Code-Builder",
+    "title": "No-Code-Builder",
+    "lead": "Echte Wizards laufen bereits im öffentlichen Testnetz. Starte einen Token oder NFT, stelle Escrow oder Crowdfunding bereit, beschreibe einen Vertrag in einfachen Worten oder öffne Lavka – nichts zu installieren oder zu kompilieren.",
+    "cta": "Öffnen",
     "cards": [
       {
         "id": "token",
-        "title": "Starten Sie einen Club- oder Community-Token in einer Minute",
-        "body": "Wählen Sie Name, Ticker, Bild und Angebot. Zahlen Sie die Startgebühr in PPL und der Token läuft auf seiner eigenen Bonding Curve.",
+        "title": "Starte einen Token",
+        "body": "Name, Ticker, Bild und Supply. Zahle die Startgebühr und der Token geht live auf seiner Bonding Curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "NFT-Clubkarten erstellen",
-        "body": "Mitgliedskarten als NFTs: eine pro Mitglied, mit einem Bild, das Sie hochladen oder im Browser generieren.",
+        "title": "Mint eine NFT-Kollektion",
+        "body": "Club- oder Mitgliedskarten als NFTs – lade ein Bild hoch oder generiere eines im Browser.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Sammeln Sie Geld für Ihre Idee",
-        "body": "Ihre Community kauft von Anfang an auf der Kurve, sodass der Preis von echter Nachfrage statt von einer privaten Runde bestimmt wird.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Stelle ein Escrow bereit",
+        "body": "Beispiel-Escrow-Vorlage auf der Vertragsseite: Sperre Gelder bis zu einer Bedingung oder Frist.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Starte Crowdfunding",
+        "body": "Beispiel-Crowdfunding-Vorlage: Setze ein Ziel und sammle in PPL oder einem Test-Stablecoin.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
-        "title": "Beschreiben Sie einen Smart Contract in normaler Sprache",
-        "body": "Schreiben Sie, was Sie wollen, in gewöhnlicher Sprache und erhalten Sie einen Vertrag aus geprüften OpenZeppelin-Vorlagen. Sie sehen das Ergebnis, bevor Sie es deployen.",
+        "title": "Beschreibe einen Smart Contract in einfachen Worten",
+        "body": "Wir parametrisieren eine geprüfte OpenZeppelin-Vorlage. Du siehst das Solidity, bevor du unterschreibst.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Lavka-Händler-Tools",
+        "body": "Loyalty-Pässe und Händler-Escrow für lokale Geschäfte – kein eigener Code.",
+        "href": "/lavka"
       }
     ]
   },

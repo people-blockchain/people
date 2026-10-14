@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Không cần code, không cần biết crypto",
-    "title": "Những gì bạn có thể làm mà không cần code",
-    "lead": "Mọi thứ dưới đây đã chạy ngay hôm nay trên testnet công khai. Không cần cài gì, không cần build gì.",
-    "cta": "Thử trên testnet",
+    "eyebrow": "Trình tạo không mã",
+    "title": "Trình tạo không mã",
+    "lead": "Các wizard thực thụ đã có mặt trên public testnet. Khởi chạy token hoặc NFT, triển khai escrow hoặc crowdfunding, mô tả hợp đồng bằng ngôn ngữ đơn giản, hoặc mở Lavka — không cần cài đặt hay biên dịch.",
+    "cta": "Mở",
     "cards": [
       {
         "id": "token",
-        "title": "Ra mắt token câu lạc bộ hoặc cộng đồng trong một phút",
-        "body": "Chọn tên, ticker, hình ảnh và lượng cung. Trả phí ra mắt bằng PPL và token sẽ chạy trên bonding curve riêng của nó.",
+        "title": "Khởi chạy token",
+        "body": "Tên, mã, hình ảnh và nguồn cung. Trả phí khởi chạy và token sẽ hoạt động trên đường cong liên kết của nó.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Phát hành thẻ NFT câu lạc bộ",
-        "body": "Thẻ thành viên dưới dạng NFT: một thẻ mỗi người, với hình ảnh bạn tải lên hoặc tạo ngay trên trình duyệt.",
+        "title": "Đúc bộ sưu tập NFT",
+        "body": "Thẻ câu lạc bộ hoặc thẻ thành viên dưới dạng NFT — tải lên hoặc tạo hình ảnh trong trình duyệt.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Gọi vốn cho ý tưởng của bạn",
-        "body": "Cộng đồng của bạn mua vào trên đường cong ngay từ giao dịch đầu tiên, nên giá được quyết định bởi nhu cầu thật, không phải một vòng gọi vốn riêng.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Triển khai escrow",
+        "body": "Mẫu escrow trên trang hợp đồng: khóa tiền cho đến khi có điều kiện hoặc thời hạn.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Bắt đầu crowdfunding",
+        "body": "Mẫu crowdfund: đặt mục tiêu và gây quỹ bằng PPL hoặc stablecoin thử nghiệm.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
-        "title": "Mô tả một smart contract bằng lời thường",
-        "body": "Viết điều bạn muốn bằng ngôn ngữ thông thường và nhận một hợp đồng được xây từ các mẫu OpenZeppelin đã kiểm toán. Bạn thấy kết quả trước khi triển khai.",
+        "title": "Mô tả hợp đồng thông minh bằng ngôn ngữ đơn giản",
+        "body": "Chúng tôi tham số hóa một mẫu OpenZeppelin đã được kiểm duyệt. Bạn xem Solidity trước khi ký.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Công cụ thương nhân Lavka",
+        "body": "Thẻ khách hàng thân thiết và escrow thương nhân cho cửa hàng địa phương — không cần mã tùy chỉnh.",
+        "href": "/lavka"
       }
     ]
   },

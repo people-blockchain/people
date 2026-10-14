@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "No code, no crypto skills",
-    "title": "What you can do without code",
-    "lead": "Everything below runs on the public testnet today. Nothing to install, nothing to compile.",
-    "cta": "Try on testnet",
+    "eyebrow": "No-code builder",
+    "title": "No-code builder",
+    "lead": "Real wizards already live on the public testnet. Launch a token or NFT, deploy escrow or crowdfunding, describe a contract in plain words, or open Lavka — nothing to install or compile.",
+    "cta": "Open",
     "cards": [
       {
         "id": "token",
-        "title": "Launch a club or community token in a minute",
-        "body": "Pick a name, a ticker, an image and a supply. Pay the launch fee in PPL and the token is live on its own bonding curve.",
+        "title": "Launch a token",
+        "body": "Name, ticker, image and supply. Pay the launch fee and the token goes live on its bonding curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Mint NFT club cards",
-        "body": "Membership cards as NFTs: one per member, with an image you upload or generate in the browser.",
+        "title": "Mint an NFT collection",
+        "body": "Club or membership cards as NFTs — upload or generate an image in the browser.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Raise funding for your idea",
-        "body": "Your community buys in on the curve from the first trade, so the price is set by real demand instead of a private round.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Deploy an escrow",
+        "body": "Sample escrow template on the contracts page: lock funds until a condition or deadline.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Start crowdfunding",
+        "body": "Sample crowdfund template: set a goal and raise in PPL or a test stablecoin.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
         "title": "Describe a smart contract in plain words",
-        "body": "Write what you want in ordinary language and get a contract built from audited OpenZeppelin templates. You see the result before you deploy.",
+        "body": "We parameterize a reviewed OpenZeppelin template. You see the Solidity before you sign.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Lavka merchant tools",
+        "body": "Loyalty passes and merchant escrow for local shops — no custom code.",
+        "href": "/lavka"
       }
     ]
   },

@@ -150,6 +150,10 @@
     "people-predict-testnet-mvp": {
       "title": "People Predict — testnet MVP",
       "summary": "MVP de marchés prédictifs sur testnet : positions binaires garanties et ordres à cours limité on-chain. Règles approuvées, implémentation locale ; déploiement et adresses des rôles en attente."
+    },
+    "app-builder-audited-templates": {
+      "title": "App Builder : modèles audités pour applications (club à accès NFT, vote DAO, abonnement, boutique USDC, giveaway), sans code",
+      "summary": "Après le mainnet : un App Builder avec des modèles no-code audités pour les applications courantes — club à accès NFT, vote DAO, abonnement, boutique USDC et giveaway. Planification uniquement ; non implémenté."
     }
   }
 }

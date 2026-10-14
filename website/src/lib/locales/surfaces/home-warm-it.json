@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Senza codice, senza competenze crypto",
-    "title": "Cosa puoi fare senza codice",
-    "lead": "Tutto quello che segue funziona già oggi sul testnet pubblico. Niente da installare, niente da compilare.",
-    "cta": "Prova sul testnet",
+    "eyebrow": "Builder no-code",
+    "title": "Builder no-code",
+    "lead": "I wizard reali sono già attivi sulla testnet pubblica. Lancia un token o un NFT, distribuisci escrow o crowdfunding, descrivi un contratto in parole semplici o apri Lavka — niente da installare o compilare.",
+    "cta": "Apri",
     "cards": [
       {
         "id": "token",
-        "title": "Lancia il token del tuo club o community in un minuto",
-        "body": "Scegli un nome, un ticker, un'immagine e un'offerta. Paga il lancio in PPL e il token è live sulla sua bonding curve.",
+        "title": "Lancia un token",
+        "body": "Nome, ticker, immagine e supply. Paga la commissione di lancio e il token va live sulla sua bonding curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Crea tessere NFT del club",
-        "body": "Tessere associative come NFT: una per membro, con un'immagine che carichi o generi nel browser.",
+        "title": "Conia una collezione NFT",
+        "body": "Tessere club o membership come NFT — carica o genera un'immagine nel browser.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Raccogli fondi per la tua idea",
-        "body": "La tua community compra sulla curva dalla prima operazione, quindi il prezzo è deciso dalla domanda reale e non da un round privato.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Distribuisci un escrow",
+        "body": "Template escrow di esempio nella pagina dei contratti: blocca i fondi fino a una condizione o scadenza.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Avvia il crowdfunding",
+        "body": "Template crowdfund di esempio: imposta un obiettivo e raccogli in PPL o una stablecoin di test.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
-        "title": "Descrivi uno smart contract con parole semplici",
-        "body": "Scrivi cosa vuoi in linguaggio comune e ottieni un contratto costruito da template OpenZeppelin verificati. Vedi il risultato prima di fare il deploy.",
+        "title": "Descrivi uno smart contract in parole semplici",
+        "body": "Parametrizziamo un template OpenZeppelin revisionato. Vedi il Solidity prima di firmare.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Strumenti per commercianti Lavka",
+        "body": "Pass fedeltà ed escrow per commercianti per negozi locali — senza codice personalizzato.",
+        "href": "/lavka"
       }
     ]
   },

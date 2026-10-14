@@ -6,14 +6,20 @@
   "contractLead": "Descreva o que precisa com palavras comuns. Parametrizamos um modelo Solidity revisto (padrões OpenZeppelin). O gás é pago em PPL. A fábrica de token/NFT continua o caminho integrado.",
   "feesLink": "Taxas e preços",
   "hub": {
-    "tag": "CRIAR",
-    "title": "Criar um token, NFT ou contrato",
-    "subtitle": "Sem código para tokens e NFTs. Para contratos de uso geral, escreva uma frase e reveja o Solidity antes de assinar.",
-    "tokenCta": "Criar um token",
-    "nftCta": "Criar um NFT",
+    "tag": "CONSTRUTOR NO-CODE",
+    "title": "Construtor no-code",
+    "subtitle": "Token, NFT, escrow, crowdfunding, contratos em linguagem simples e Lavka — assistentes que já existem na testnet pública.",
+    "tokenCta": "Lançar um token",
+    "nftCta": "Cunhar um NFT",
     "contractCta": "Criar um contrato",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "A rede está temporariamente indisponível"
+    "escrowCta": "Implantar escrow",
+    "crowdfundCta": "Iniciar crowdfunding",
+    "lavkaCta": "Abrir Lavka",
+    "escrowLead": "Modelo de escrow de exemplo: bloquear fundos até uma condição ou prazo.",
+    "crowdfundLead": "Modelo de crowdfund de exemplo: definir uma meta e arrecadar em PPL ou uma stablecoin de teste.",
+    "lavkaLead": "Passes de fidelidade e escrow para comerciantes locais.",
+    "statusUnavailable": "Rede temporariamente indisponível",
+    "statusTestnet": "Testnet"
   },
   "token": {
     "title": "Criar um token",

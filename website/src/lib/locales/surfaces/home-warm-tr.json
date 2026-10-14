@@ -52,34 +52,46 @@
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Kod yok, kripto bilgisi gerekmez",
-    "title": "Kod yazmadan yapabilecekleriniz",
-    "lead": "Aşağıdakilerin hepsi bugün halka açık testnette çalışıyor. Kurulacak veya derlenecek hiçbir şey yok.",
-    "cta": "Testnette deneyin",
+    "eyebrow": "Kod yazmadan oluşturucu",
+    "title": "Kod yazmadan oluşturucu",
+    "lead": "Gerçek sihirbazlar zaten halka açık testnet'te çalışıyor. Bir token veya NFT başlatın, emanet veya kitle fonlaması dağıtın, bir sözleşmeyi sade kelimelerle tanımlayın veya Lavka'yı açın — yükleme veya derleme yok.",
+    "cta": "Aç",
     "cards": [
       {
         "id": "token",
-        "title": "Bir dakikada kulüp veya topluluk tokeni başlatın",
-        "body": "Bir ad, ticker, görsel ve arz seçin. Lansman ücretini PPL ile ödeyin, token kendi bonding curve'ünde yayında olsun.",
+        "title": "Bir token başlat",
+        "body": "İsim, sembol, görsel ve arz. Başlatma ücretini ödeyin ve token bağlanma eğrisinde yayına geçsin.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "NFT kulüp kartları basın",
-        "body": "Üyelik kartları NFT olarak: kişi başına bir tane, yüklediğiniz veya tarayıcıda oluşturduğunuz bir görselle.",
+        "title": "Bir NFT koleksiyonu bas",
+        "body": "NFT olarak kulüp veya üyelik kartları — tarayıcıda bir görsel yükleyin veya oluşturun.",
         "href": "/create/nft"
       },
       {
-        "id": "funding",
-        "title": "Fikriniz için fon toplayın",
-        "body": "Topluluğunuz ilk işlemden itibaren eğriden alım yapar, böylece fiyatı özel bir tur değil gerçek talep belirler.",
-        "href": "/create"
+        "id": "escrow",
+        "title": "Bir emanet dağıt",
+        "body": "Sözleşmeler sayfasındaki örnek emanet şablonu: bir koşul veya son tarihe kadar fonları kilitleyin.",
+        "href": "/explorer/contracts"
+      },
+      {
+        "id": "crowdfund",
+        "title": "Kitle fonlaması başlat",
+        "body": "Örnek kitle fonlaması şablonu: bir hedef belirleyin ve PPL veya bir test stablecoin ile toplayın.",
+        "href": "/explorer/contracts"
       },
       {
         "id": "contract",
-        "title": "Bir akıllı sözleşmeyi düz sözlerle tanımlayın",
-        "body": "İstediğinizi sade bir dille yazın, denetlenmiş OpenZeppelin şablonlarından oluşturulmuş bir sözleşme alın. Dağıtmadan önce sonucu görürsünüz.",
+        "title": "Bir akıllı sözleşmeyi sade kelimelerle tanımla",
+        "body": "İncelenmiş bir OpenZeppelin şablonunu parametreleştiriyoruz. İmzalamadan önce Solidity'yi görürsünüz.",
         "href": "/create/contract"
+      },
+      {
+        "id": "lavka",
+        "title": "Lavka satıcı araçları",
+        "body": "Yerel dükkanlar için sadakat kartları ve satıcı emaneti — özel kod yok.",
+        "href": "/lavka"
       }
     ]
   },
