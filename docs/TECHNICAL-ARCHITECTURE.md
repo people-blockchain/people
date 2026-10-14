@@ -1,8 +1,9 @@
 # PEOPLE'S BLOCKCHAIN — TECHNICAL ARCHITECTURE v0.1
 
 **Status:** Working architecture specification
-**Date:** 2026-09-22
-**Base:** Open Validator Network (OVN) reference codebase
+**Date:** 2026-10-14 (runtime status); body still includes OVN-era design history
+**Base (historical):** Open Validator Network (OVN) reference codebase
+**Current runtime:** Cosmos EVM testnet chain id **97401** (`chain/`, public RPC + Solidity contracts)
 **Network:** People's Blockchain
 **Brand:** People
 **Native asset:** People (ticker **PPL**)
@@ -11,6 +12,18 @@
 > `VLS` / `Vallis` appear only in historical notes. See `docs/TERMINOLOGY.md`.
 
 > This document maps the People's Blockchain concept onto the existing OVN codebase. It deliberately separates **what already exists**, **what should be preserved**, and **what must be added or redesigned**. It is an architectural source of truth for AI coding agents. Agents must not invent protocol economics that are not explicitly approved in the project documents.
+
+---
+
+## 0. Current runtime (2026-10-14)
+
+- The public testnet is a Cosmos EVM chain: chain id `97401`, chain name `people_97401-1`, RPC `https://node.peopleblockchain.network/rpc`.
+- Chain source is `chain/` in this repo; the public site is www.peopleblockchain.network.
+- Live Solidity on 97401: token and NFT factories, bonding curve, AMM/swap, fee gateway, and People Predict.
+- Deployment addresses: `website/src/data/evm-deployments-97401.json` and `website/src/lib/predict/deployment.json`.
+- `people-node` (OVN) is a historical baseline/archive only; it is not the public network.
+- The public testnet cutover is already done — no future migration is pending for it.
+- Where marked historical, the rest of this document still describes the OVN-era design baseline.
 
 ---
 
