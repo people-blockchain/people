@@ -150,6 +150,10 @@
     "people-predict-testnet-mvp": {
       "title": "People Predict — testnet MVP",
       "summary": "MVP pasar prediksi testnet: posisi biner dengan jaminan penuh dan pesanan limit on-chain. Aturan disetujui, implementasi lokal; penerapan dan alamat peran masih menunggu."
+    },
+    "app-builder-audited-templates": {
+      "title": "App Builder: templat teraudit untuk aplikasi (klub dengan akses NFT, voting DAO, langganan, toko USDC, giveaway), tanpa kode",
+      "summary": "Setelah mainnet: App Builder dengan templat tanpa kode teraudit untuk aplikasi umum — klub dengan akses NFT, voting DAO, langganan, toko USDC, dan giveaway. Hanya perencanaan; belum diimplementasikan."
     }
   }
 }

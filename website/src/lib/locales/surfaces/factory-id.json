@@ -6,14 +6,20 @@
   "contractLead": "Jelaskan kebutuhan Anda dengan kata biasa. Kami parameterkan templat Solidity yang telah ditinjau (pola OpenZeppelin). Gas dibayar dalam PPL. Pabrik token/NFT tetap jalur bawaan.",
   "feesLink": "Biaya dan tarif",
   "hub": {
-    "tag": "BUAT",
-    "title": "Buat token, NFT, atau kontrak",
-    "subtitle": "Tanpa kode untuk token dan NFT. Untuk kontrak umum, tulis kalimat dan tinjau Solidity sebelum menandatangani.",
-    "tokenCta": "Buat token",
-    "nftCta": "Buat NFT",
-    "contractCta": "Buat kontrak",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "Jaringan sementara tidak tersedia"
+    "tag": "PEMBUAT TANPA KODE",
+    "title": "Pembuat tanpa kode",
+    "subtitle": "Token, NFT, escrow, crowdfunding, kontrak bahasa sederhana dan Lavka — wizard yang sudah ada di testnet publik.",
+    "tokenCta": "Luncurkan token",
+    "nftCta": "Cetak NFT",
+    "contractCta": "Bangun kontrak",
+    "escrowCta": "Terapkan escrow",
+    "crowdfundCta": "Mulai crowdfunding",
+    "lavkaCta": "Buka Lavka",
+    "escrowLead": "Contoh template escrow: kunci dana hingga kondisi atau tenggat waktu.",
+    "crowdfundLead": "Contoh template crowdfund: tetapkan tujuan dan kumpulkan dalam PPL atau stablecoin uji coba.",
+    "lavkaLead": "Pass loyalitas dan escrow pedagang untuk toko lokal.",
+    "statusUnavailable": "Jaringan sementara tidak tersedia",
+    "statusTestnet": "Testnet"
   },
   "token": {
     "title": "Buat token",

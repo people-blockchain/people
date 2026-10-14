@@ -6,14 +6,20 @@
   "contractLead": "Mô tả nhu cầu bằng lời thường. Chúng tôi tham số hóa mẫu Solidity đã rà (mẫu OpenZeppelin). Gas trả bằng PPL. Nhà máy token/NFT vẫn là đường tích hợp.",
   "feesLink": "Phí và biểu giá",
   "hub": {
-    "tag": "TẠO",
-    "title": "Tạo token, NFT hoặc hợp đồng",
-    "subtitle": "Không cần mã cho token và NFT. Với hợp đồng đa năng, viết một câu và rà Solidity trước khi ký.",
-    "tokenCta": "Tạo token",
-    "nftCta": "Tạo NFT",
+    "tag": "TRÌNH TẠO KHÔNG CẦN CODE",
+    "title": "Trình tạo không cần code",
+    "subtitle": "Token, NFT, escrow, crowdfunding, hợp đồng ngôn ngữ tự nhiên và Lavka — các trình hướng dẫn đã có trên public testnet.",
+    "tokenCta": "Khởi chạy token",
+    "nftCta": "Mint NFT",
     "contractCta": "Tạo hợp đồng",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "Mạng tạm thời không khả dụng"
+    "escrowCta": "Triển khai escrow",
+    "crowdfundCta": "Bắt đầu crowdfunding",
+    "lavkaCta": "Mở Lavka",
+    "escrowLead": "Mẫu escrow: khóa tiền cho đến khi điều kiện hoặc thời hạn được đáp ứng.",
+    "crowdfundLead": "Mẫu crowdfund: đặt mục tiêu và gây quỹ bằng PPL hoặc stablecoin thử nghiệm.",
+    "lavkaLead": "Thẻ khách hàng thân thiết và escrow thương nhân cho cửa hàng địa phương.",
+    "statusUnavailable": "Mạng tạm thời không khả dụng",
+    "statusTestnet": "Testnet"
   },
   "token": {
     "title": "Tạo token",

@@ -6,14 +6,20 @@
   "contractLead": "用平常的话描述你需要什么。我们会参数化一份已审阅的 Solidity 模板（OpenZeppelin 模式）。Gas 用 PPL 支付。代币/NFT 工厂仍是内置路径。",
   "feesLink": "手续费与定价",
   "hub": {
-    "tag": "创建",
-    "title": "创建代币、NFT 或合约",
-    "subtitle": "代币和 NFT 无需写代码。通用合约请先写一句话，签名前核对 Solidity。",
-    "tokenCta": "创建代币",
-    "nftCta": "创建 NFT",
-    "contractCta": "创建合约",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "网络暂时不可用"
+    "tag": "无代码构建器",
+    "title": "无代码构建器",
+    "subtitle": "Token、NFT、托管、众筹、自然语言合约和 Lavka —— 已在公共测试网上运行的向导。",
+    "tokenCta": "启动 Token",
+    "nftCta": "铸造 NFT",
+    "contractCta": "构建合约",
+    "escrowCta": "部署托管",
+    "crowdfundCta": "开始众筹",
+    "lavkaCta": "打开 Lavka",
+    "escrowLead": "托管模板示例：锁定资金直到满足条件或截止日期。",
+    "crowdfundLead": "众筹模板示例：设定目标并以 PPL 或测试稳定币筹集。",
+    "lavkaLead": "面向本地商店的忠诚度通行证和商家托管。",
+    "statusUnavailable": "网络暂时不可用",
+    "statusTestnet": "测试网"
   },
   "token": {
     "title": "创建代币",

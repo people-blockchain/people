@@ -165,6 +165,11 @@
       "evidence": "Move projects to mainnet via a testnet balance snapshot; each project confirms its tokenomics before migration. Planning only — not implemented."
     },
     {
+      "id": "app-builder-audited-templates",
+      "status": "planned_unapproved",
+      "evidence": "Planning only after mainnet: App Builder with audited no-code templates (NFT-gated club, DAO voting, subscription, USDC shop, giveaway). Not implemented in the repo."
+    },
+    {
       "id": "ambassador-promo-kit",
       "status": "planned_unapproved",
       "evidence": "Promo kit for ambassadors and active founders after the «Миллион основателей» launch. Planning only — not implemented."

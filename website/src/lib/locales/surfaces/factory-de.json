@@ -6,14 +6,20 @@
   "contractLead": "Beschreiben Sie, was Sie brauchen, in gewöhnlichen Worten. Wir parametrisieren eine geprüfte Solidity-Vorlage (OpenZeppelin-Muster). Gas wird in PPL bezahlt. Die Token/NFT-Fabrik bleibt der eingebaute Weg.",
   "feesLink": "Gebühren und Preise",
   "hub": {
-    "tag": "ERSTELLEN",
-    "title": "Token, NFT oder Vertrag erstellen",
-    "subtitle": "Kein Code für Token und NFTs. Für allgemeine Verträge schreiben Sie einen Satz und prüfen Sie das Solidity vor der Signatur.",
-    "tokenCta": "Token erstellen",
-    "nftCta": "NFT erstellen",
+    "tag": "NO-CODE BUILDER",
+    "title": "No-Code-Builder",
+    "subtitle": "Token, NFT, Escrow, Crowdfunding, Klartext-Verträge und Lavka — Assistenten, die bereits im öffentlichen Testnetz existieren.",
+    "tokenCta": "Token starten",
+    "nftCta": "NFT prägen",
     "contractCta": "Vertrag erstellen",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "Das Netz ist vorübergehend nicht erreichbar"
+    "escrowCta": "Escrow bereitstellen",
+    "crowdfundCta": "Crowdfunding starten",
+    "lavkaCta": "Lavka öffnen",
+    "escrowLead": "Beispiel-Escrow-Vorlage: Mittel sperren, bis eine Bedingung oder Frist erfüllt ist.",
+    "crowdfundLead": "Beispiel-Crowdfunding-Vorlage: Ziel festlegen und in PPL oder einem Test-Stablecoin sammeln.",
+    "lavkaLead": "Treuepässe und Händler-Escrow für lokale Geschäfte.",
+    "statusUnavailable": "Netzwerk vorübergehend nicht verfügbar",
+    "statusTestnet": "Testnetz"
   },
   "token": {
     "title": "Token erstellen",

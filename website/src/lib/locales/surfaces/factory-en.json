@@ -6,14 +6,20 @@
   "contractLead": "Describe what you need in ordinary words. We parameterize a reviewed Solidity template (OpenZeppelin patterns). Gas is paid in PPL. Token/NFT factory remains the built-in path.",
   "feesLink": "Fees & pricing",
   "hub": {
-    "tag": "CREATE",
-    "title": "Create a token, NFT, or contract",
-    "subtitle": "No code for tokens and NFTs. For general-purpose contracts, write a sentence and review the Solidity before you sign.",
-    "tokenCta": "Create a token",
-    "nftCta": "Create an NFT",
-    "contractCta": "Create a contract",
-    "statusTestnet": "Testnet",
-    "statusUnavailable": "Network temporarily unavailable"
+    "tag": "NO-CODE BUILDER",
+    "title": "No-code builder",
+    "subtitle": "Token, NFT, escrow, crowdfunding, plain-language contracts and Lavka — wizards that already exist on the public testnet.",
+    "tokenCta": "Launch a token",
+    "nftCta": "Mint an NFT",
+    "contractCta": "Build a contract",
+    "escrowCta": "Deploy escrow",
+    "crowdfundCta": "Start crowdfunding",
+    "lavkaCta": "Open Lavka",
+    "escrowLead": "Sample escrow template: lock funds until a condition or deadline.",
+    "crowdfundLead": "Sample crowdfund template: set a goal and raise in PPL or a test stablecoin.",
+    "lavkaLead": "Loyalty passes and merchant escrow for local shops.",
+    "statusUnavailable": "Network temporarily unavailable",
+    "statusTestnet": "Testnet"
   },
   "token": {
     "title": "Create a token",
