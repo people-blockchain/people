@@ -24,9 +24,26 @@ test("legal policy is English-only single bundle with required sections", () => 
   assert.match(blob, /do not run third-party advertising or analytics scripts/i);
 });
 
-test("only legal-en.json exists for policy surfaces", () => {
-  const legalFiles = readdirSync(surfaces).filter((name) => name.startsWith("legal-"));
-  assert.deepEqual(legalFiles.sort(), ["legal-en.json"]);
+test("legal surfaces exist for all 12 locales", () => {
+  const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+  const legalFiles = readdirSync(surfaces)
+    .filter((name) => name.startsWith("legal-") && name.endsWith(".json"))
+    .sort();
+  assert.deepEqual(
+    legalFiles,
+    langs.map((l) => `legal-${l}.json`).sort(),
+  );
+});
+
+test("legal surfaces do not hide public sale (P0-10)", () => {
+  const banned = [/no public PPL sale/i, /payment widget is switched off/i, /no token prices/i];
+  for (const file of readdirSync(surfaces).filter((n) => n.startsWith("legal-"))) {
+    const raw = readFileSync(join(surfaces, file), "utf8");
+    for (const re of banned) {
+      assert.doesNotMatch(raw, re, file);
+    }
+    assert.match(raw, /\/buy/, `${file} should reference /buy`);
+  }
 });
 
 test("privacy and terms routes are public and contact email is set", () => {

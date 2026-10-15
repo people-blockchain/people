@@ -144,7 +144,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Mainnet + bán PPL** | Mainnet khởi chạy. Đợt bán PPL chưa mở; chỉ mở khi có một thực thể pháp lý điều hành. | Ít nhất 1.000 người được xác minh **và** một multisig kho tài sản trực tiếp |
+| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
 Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.
@@ -161,7 +161,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 
 ## 9. Bảo mật
 
-- **Kiểm toán bảo mật trước mainnet.** Hợp đồng giao thức sẽ trải qua kiểm toán bảo mật trước khi khởi chạy mainnet.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Multisig kho tài sản.** Kho tài sản được kiểm soát bởi hợp đồng multisig 2-trong-3 riêng của People trên mạng People, được tạo trước mainnet; các địa chỉ ký sẽ được công bố.
 - **Địa chỉ được xuất bản.** Địa chỉ hợp đồng bán hàng, phân bổ và thanh khoản sẽ được xuất bản khi khởi chạy mainnet — không có trình giữ chỗ.
 - **Phòng chống bot.** Xác minh con người, giới hạn mỗi thiết bị và mỗi IP, giới hạn điểm hàng ngày và lấy lại bot.
@@ -176,7 +176,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 - **Testnet không phải mainnet.** Các token testnet và số dư không có giá trị. Điểm là một bản ghi của hoạt động, không phải một bảo đảm thanh toán.
 - **Mọi thứ đều sơ bộ.** Các số liệu, lịch trình và quy tắc có thể thay đổi trước mainnet và được tùy thuộc vào quản trị cộng đồng.
 - **Rủi ro công nghệ.** Phần mềm có thể có lỗi. Kiểm toán làm giảm rủi ro; nó không loại bỏ nó.
-- **Quy định.** Quy tắc khác nhau tùy theo quốc gia và có thể thay đổi. Hiện tại không có đợt bán PPL công khai nào; không thực hiện kiểm tra KYC.
+- **Quy định.** Quy tắc khác nhau theo quốc gia và có thể thay đổi. Tham số bán PPL được công bố trên `/buy` (đường cong từ **$0.005**/PPL); mua hàng vẫn tắt cho đến khi hub được triển khai. Không có KYC hay kiểm tra điều kiện trên trang này.
 - **Tự thực hiện nghiên cứu của bạn.** Bản giới thiệu công nghệ này là thông tin, không phải tư vấn tài chính, pháp lý hoặc thuế.
 
 ---
@@ -219,8 +219,8 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - Phần cộng đồng của một token mới là **10%** nguồn cung: **10%** được phân bổ khi ra mắt.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
-- **Hiện tại không có đợt bán PPL công khai** và không thực hiện kiểm tra KYC hay điều kiện tham gia.
-- Bảo mật: hiện là **đánh giá nội bộ có hỗ trợ của AI** và **kiểm toán độc lập trước mainnet**.
+- **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Không có KYC hay kiểm tra điều kiện trên trang này.
+- Bảo mật: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Multisig của kho bạc là **2 trên 3** và được tạo trước mainnet.
 - Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
 - Đợt bán PPL, khi mở, kéo dài cố định **180 ngày**. Sau đó bất kỳ ai cũng có thể kết thúc nó, và PPL chưa bán sẽ vào pool cộng đồng — cùng quy tắc như đường cong token.

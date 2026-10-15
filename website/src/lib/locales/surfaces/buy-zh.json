@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "购买 PPL",
+    "description": "PPL 在公开价格曲线上销售：起价 $0.005，随每次购买上升，上限 $0.25。曲线在募集 $400 万时关闭。随时买卖。"
+  },
+  "hero": {
+    "eyebrow": "PPL 销售",
+    "headline": "以早期参与者价格购买 PPL",
+    "sub": "价格随每次购买上升——越早买，付得越少。",
+    "statsTitle": "曲线实时数据",
+    "statsNote": "从销售合约读取。未有真实链上数据前不显示任何内容。",
+    "ctaScroll": "曲线如何运作"
+  },
+  "stats": {
+    "price": "当前价格",
+    "priceStartHint": "起价 {start}",
+    "raised": "已募集",
+    "raisedTarget": "距毕业目标 {target}",
+    "sold": "已售 PPL",
+    "soldTarget": "曲线上共 {supply}",
+    "buyers": "买家",
+    "daysLeft": "剩余天数",
+    "daysLeftTarget": "共 {days} 天",
+    "none": "—",
+    "notOpenYet": "尚未开放",
+    "progressLabel": "距 {target} 毕业的进度"
+  },
+  "form": {
+    "title": "购买 PPL",
+    "amountLabel": "您支付",
+    "amountHint": "USDC 或 USDT",
+    "stableLabel": "稳定币",
+    "networkLabel": "付款网络",
+    "networkHint": "一条曲线，一个价格——从哪个网络付款都一样。",
+    "youGet": "您获得",
+    "avgPrice": "平均价格",
+    "priceAfter": "购买后的价格",
+    "estimate": "按已公布公式估算。金额在签名前确认。",
+    "limitPerBuy": "单次最多 {amount}",
+    "limitPerDay": "每人每天最多 {amount}",
+    "cooldown": "交易间隔 {seconds} 秒",
+    "overLimit": "单次购买最多 {amount}。",
+    "belowMin": "输入金额以查看报价。",
+    "cta": "连接钱包并购买",
+    "ctaDisabled": "销售尚未开放",
+    "ctaConnected": "购买 PPL",
+    "disabledNote": "销售合约尚未部署，无法购买。连接钱包是安全的，不构成任何承诺。",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "您可随时将 PPL 卖回曲线，扣除 {fee} 费用。"
+  },
+  "curve": {
+    "eyebrow": "公式",
+    "title": "一条曲线，人人可见",
+    "lead": "价格非人工设定。价格 = {start} × e^(k·x)，x 为已售 PPL 的百万数，k = ln(50)/100。下方每个数字均由此公式计算。",
+    "axisRaised": "已募集，$",
+    "axisPrice": "每 PPL 价格，$",
+    "youAreHere": "您在这里",
+    "notOpen": "曲线随销售开放。形状与下方标记由公式固定。",
+    "marker": "已募集 {raised}",
+    "markerPrice": "每 PPL {price}",
+    "markerSold": "已售 {sold} PPL",
+    "graduationTag": "毕业",
+    "ceilingNote": "仅当全部 {supply} PPL 售完才会达到 {ceiling} 上限。曲线会先关闭，在募集 {graduation} 时。",
+    "feedTitle": "近期买卖",
+    "feedEmpty": "尚无交易——销售未开放。",
+    "feedBuy": "买",
+    "feedSell": "卖",
+    "feedLink": "查看",
+    "capScope": "{ceiling} 上限仅适用于曲线销售期间。毕业后进入池子，价格由自由市场决定——无上限也无下限。"
+  },
+  "whatYouGet": {
+    "eyebrow": "您获得什么",
+    "title": "购买实际给您什么",
+    "items": [
+      {
+        "title": "PPL 立即到您的地址",
+        "body": "购买瞬间 PPL 即记入您在 PEOPLE 网络上的地址。曲线上无锁仓，无等待名单。"
+      },
+      {
+        "title": "可随时卖回曲线",
+        "body": "改变主意？可随时按现价将 PPL 卖回曲线，扣除 {fee} 费用——该费用用于 PPL 回购，而非团队。卖回支付为 {payoutNetwork} 上的 {payoutStable}（Coinbase 的网络；Circle 发行的 USDC，与 Ethereum 或 Polygon 上的美元相同，只是更快更便宜）。也可选择其他网络；跨链桥需几分钟。"
+      },
+      {
+        "title": "转账随网络全面上线开放",
+        "body": "向他人发送 PPL 及池内交易在全面主网上线时开始：{verified} 名已验证参与者，且不晚于 {months} 个月。"
+      },
+      {
+        "title": "募集 {graduation} 时曲线关闭",
+        "body": "募集额的 {liquidityShare} 加上按曲线最后价格的 PPL 注入公开池，LP 代币锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。"
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "事件顺序",
+    "title": "从曲线到自由市场",
+    "steps": [
+      {
+        "title": "曲线",
+        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。最多 {days} 天内随时买卖。"
+      },
+      {
+        "title": "{graduation} 时毕业",
+        "body": "曲线停止。募集 {liquidityShare} 与最后曲线价格的 PPL 以该价格进入公开 DEX 池，无跳价。LP 锁定 {lock} 个月。{multisigShare} 进入多签并公开报告。"
+      },
+      {
+        "title": "全面主网",
+        "body": "钱包间 PPL 转账与池交易在 {verified} 名已验证参与者时开放，不晚于 {months} 个月。"
+      },
+      {
+        "title": "{days} 天后",
+        "body": "若未达 {graduation}，已募集部分仍按 {liquidityShare}/{multisigShare} 分配，未售 PPL 全部进入社区池。"
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "透明度",
+    "title": "合约、资金与代码",
+    "lead": "销售合约、销售资金流向、代码安全审查及团队代币解锁方式。",
+    "saleContract": "销售合约",
+    "saleContractPending": "尚未部署",
+    "saleContractNote": "部署并验证后地址将立即在此公布。",
+    "verifiedSource": "已验证源码",
+    "auditTitle": "安全审查",
+    "auditLine": "审计方：Claude Opus 5.5、GPT Astra、Fable 5.1",
+    "explorerLink": "在 People 浏览器中打开",
+    "allocationTitle": "10 亿 PPL 去向",
+    "allocationNote": "固定供应 {supply} PPL。销售份额为曲线上的 {salePct}。",
+    "vestingTitle": "团队归属",
+    "vestingBody": "前 {cliff} 个月团队不获得任何代币。之后每月逐步解锁，再持续 {linear} 个月——共 {total} 个月。",
+    "fundsTitle": "销售资金去向",
+    "fundsBody": "募集 {liquidityShare} 进入流动性池，LP 锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。",
+    "auditBounty": "漏洞赏金：通过任意页面的 bug 按钮报告漏洞。"
+  },
+  "faq": {
+    "eyebrow": "常见问题",
+    "title": "问题与解答",
+    "items": [
+      {
+        "q": "改变主意？",
+        "a": "可随时按当前曲线价格将 PPL 卖回曲线，扣除 {fee} 费用，用于 PPL 回购。"
+      },
+      {
+        "q": "{ceiling} 上限是永久的吗？",
+        "a": "不是。仅在曲线运行期间适用。曲线在募集 {graduation} 时关闭，约每 PPL {graduationPrice}，低于上限。毕业后池价由自由市场决定，无上下限。"
+      },
+      {
+        "q": "如何将 People 网络添加到钱包？",
+        "a": "使用下方按钮：钱包将被要求添加官方参数的 PEOPLE 网络并切换。您也可根据已公布的 People 网络文档手动输入相同参数。"
+      },
+      {
+        "q": "何时可以向他人发送 PPL？",
+        "a": "全面网络上线时：{verified} 名已验证参与者，且不晚于 {months} 个月。曲线买卖从第一天即可进行。"
+      }
+    ],
+    "addNetworkCta": "将 People 网络添加到钱包",
+    "addNetworkDone": "请求已发送至您的钱包",
+    "addNetworkError": "钱包拒绝或未找到钱包。",
+    "pumpTitle": "无上限曲线的问题",
+    "pumpLead": "联合曲线因 pump.fun 等 launchpad 而流行。以下是已知问题及我们的做法。",
+    "pumpCols": ["问题", "会发生什么", "我们的保障"],
+    "pumpRows": [
+      {
+        "problem": "晚期买家支付过高",
+        "what": "价格无限上涨，毕业前最后买家支付数倍于最早买家。",
+        "ours": "硬性 {ceiling} 上限，曲线在 {graduation} 关闭——约 {graduationPrice}。"
+      },
+      {
+        "problem": "狙击与机器人",
+        "what": "脚本在最初几秒从多钱包买入，再卖给真实用户。",
+        "ours": "单次最多 {perBuy}，每人每天 {perDay}，交易间隔 {cooldown} 秒。若出现机器人，多签可开启仅验证用户模式。"
+      },
+      {
+        "problem": "砸盘",
+        "what": "大持有人一次性卖出，价格暴跌。",
+        "ours": "每人限额防止大仓位。{fee} 卖出费用用于 PPL 回购，池流动性锁定 {lock} 个月。"
+      },
+      {
+        "problem": "抢跑与差成交",
+        "what": "成交价格远差于展示价格。",
+        "ours": "每笔交易滑点保护：最低收到量，否则交易取消。"
+      },
+      {
+        "problem": "炒作上币",
+        "what": "销售中途被推上交易所。",
+        "ours": "销售期间不上币。DEX 交易仅在毕业后。"
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "准备就绪",
+    "title": "以今日曲线价格购买 PPL",
+    "lead": "同一表单，人人同一价格。"
+  },
+  "sticky": {
+    "label": "购买 PPL",
+    "price": "从 {price} 起"
+  },
+  "footnote": {
+    "title": "免责声明",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL 是 PEOPLE 网络的实用代币。曲线上价格遵循已公布公式；毕业后由市场决定：可跌可涨。PPL 不是证券、公司股权、存款或投资产品，不承诺或保证任何利润、收益或回报。购买前显示的数字为按已公布公式的估算，签名前在链上确认。本页内容不构成投资、法律或税务建议。"
+      },
+      {
+        "marker": "**",
+        "text": "您所在地区参与可能受限或不可用；了解适用规则是您的责任。请仅使用可承受损失的资金。"
+      },
+      {
+        "marker": "***",
+        "text": "上述 AI 辅助审查由项目团队完成。并非外部审计公司审计；主网前将完成第三方安全审计。漏洞赏金降低风险但不能消除：任何审查都无法证明软件无缺陷。"
+      }
+    ]
+  }
+}

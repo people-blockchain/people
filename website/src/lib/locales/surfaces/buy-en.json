@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "title": "Buy PPL",
+    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase, up to a $0.25 ceiling. The curve closes at $4M raised. Buy and sell at any time."
+  },
+  "hero": {
+    "eyebrow": "PPL sale",
+    "headline": "Buy PPL at the early-participant price",
+    "sub": "The price rises with every purchase — the earlier you buy, the less you pay.",
+    "statsTitle": "Live on the curve",
+    "statsNote": "Read from the sale contract. Nothing is shown until there is real on-chain data.",
+    "ctaScroll": "How the curve works"
+  },
+  "stats": {
+    "price": "Current price",
+    "priceStartHint": "Starts at {start}",
+    "raised": "Raised",
+    "raisedTarget": "of {target} to graduation",
+    "sold": "PPL sold",
+    "soldTarget": "of {supply} on the curve",
+    "buyers": "Buyers",
+    "daysLeft": "Days left",
+    "daysLeftTarget": "of {days}",
+    "none": "—",
+    "notOpenYet": "Not open yet",
+    "progressLabel": "Progress to the {target} graduation"
+  },
+  "form": {
+    "title": "Buy PPL",
+    "amountLabel": "You pay",
+    "amountHint": "USDC or USDT",
+    "stableLabel": "Stablecoin",
+    "networkLabel": "Network you pay from",
+    "networkHint": "One curve, one price — whatever network you pay from.",
+    "youGet": "You get",
+    "avgPrice": "Average price",
+    "priceAfter": "Price after your purchase",
+    "estimate": "Estimate from the published formula. The figure is confirmed before you sign.",
+    "limitPerBuy": "Up to {amount} per purchase",
+    "limitPerDay": "Up to {amount} per person per day",
+    "cooldown": "{seconds}s between trades",
+    "overLimit": "Maximum {amount} in one purchase.",
+    "belowMin": "Enter an amount to see your quote.",
+    "cta": "Connect wallet & buy",
+    "ctaDisabled": "Sale is not open yet",
+    "ctaConnected": "Buy PPL",
+    "disabledNote": "The sale contract is not deployed yet, so no purchase can be made. Connecting a wallet is safe and commits you to nothing.",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "You can sell PPL back to the curve at any time, minus the {fee} fee."
+  },
+  "curve": {
+    "eyebrow": "The formula",
+    "title": "One curve, visible to everyone",
+    "lead": "The price is not set by hand. price = {start} × e^(k·x), where x is millions of PPL sold and k = ln(50)/100. Every figure below is computed from that formula.",
+    "axisRaised": "Raised, $",
+    "axisPrice": "Price per PPL, $",
+    "youAreHere": "You are here",
+    "notOpen": "The curve opens with the sale. The shape and the markers below are fixed by the formula.",
+    "marker": "{raised} raised",
+    "markerPrice": "{price} per PPL",
+    "markerSold": "{sold} PPL sold",
+    "graduationTag": "Graduation",
+    "ceilingNote": "The {ceiling} ceiling is only reached if all {supply} PPL sell. The curve closes first, at {graduation} raised.",
+    "feedTitle": "Recent buys and sells",
+    "feedEmpty": "No trades yet — the sale has not opened.",
+    "feedBuy": "Buy",
+    "feedSell": "Sell",
+    "feedLink": "View",
+    "capScope": "The {ceiling} cap applies during the curve sale only. After graduation to the pool the price is set by the free market — no upper limit and no lower limit."
+  },
+  "whatYouGet": {
+    "eyebrow": "What you get",
+    "title": "What a purchase actually gives you",
+    "items": [
+      {
+        "title": "PPL on your address, immediately",
+        "body": "PPL is recorded to you on the People network the moment you buy. No lock-up on the curve, no waiting list."
+      },
+      {
+        "title": "You can sell back to the curve at any time",
+        "body": "Changed your mind? Sell PPL back to the curve at any time at the current price, minus the {fee} fee — and that fee goes to PPL buyback, not to the team. Sell-back payout comes in {payoutStable} on {payoutNetwork} (Coinbase's network; USDC issued by Circle, the same dollar as on Ethereum or Polygon, only faster and cheaper). Or choose your own network; the bridge takes a few minutes."
+      },
+      {
+        "title": "Transfers open with the full network launch",
+        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants, and no later than {months} months."
+      },
+      {
+        "title": "At {graduation} the curve closes",
+        "body": "{liquidityShare} of the raise plus PPL at the last curve price seed a public pool whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Order of events",
+    "title": "From the curve to a free market",
+    "steps": [
+      {
+        "title": "The curve",
+        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time, for up to {days} days."
+      },
+      {
+        "title": "Graduation at {graduation}",
+        "body": "The curve stops. {liquidityShare} of the raise plus PPL at the last curve price go into a public DEX pool at exactly that price, with no jump. LP locked for {lock} months. {multisigShare} to the multisig with public reporting."
+      },
+      {
+        "title": "Full mainnet",
+        "body": "PPL transfers between wallets and pool trading open at {verified} verified participants, and no later than {months} months."
+      },
+      {
+        "title": "After {days} days",
+        "body": "If {graduation} is not reached, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, and every unsold PPL goes to the community pool."
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "Transparency",
+    "title": "The contract, the money and the code",
+    "lead": "The sale contract, where the money from the sale goes, the security reviews the code has been through, and how the team's own tokens unlock.",
+    "saleContract": "Sale contract",
+    "saleContractPending": "Not deployed yet",
+    "saleContractNote": "The address is published here the moment it is deployed and verified.",
+    "verifiedSource": "Verified source",
+    "auditTitle": "Security reviews",
+    "auditLine": "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "explorerLink": "Open in the People explorer",
+    "allocationTitle": "Where the 1B PPL goes",
+    "allocationNote": "Fixed supply of {supply} PPL. The sale bucket is the {salePct} on the curve.",
+    "vestingTitle": "Team vesting",
+    "vestingBody": "For the first {cliff} months the team receives no tokens at all. After that the tokens unlock gradually, every month, over {linear} more months — {total} months in total.",
+    "fundsTitle": "Where the money from the sale goes",
+    "fundsBody": "{liquidityShare} of the raise goes into the liquidity pool, whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend.",
+    "auditBounty": "Bug bounty: report a vulnerability from the bug button on any page."
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Questions, answered",
+    "items": [
+      {
+        "q": "Changed your mind?",
+        "a": "Sell PPL back to the curve at any time at the current curve price, minus the {fee} fee, which goes to PPL buyback."
+      },
+      {
+        "q": "Is the {ceiling} ceiling permanent?",
+        "a": "No. It applies while the curve is running. The curve closes at {graduation} raised, around {graduationPrice} per PPL, below the cap. After graduation the pool price is set by the free market, with no upper limit and no lower limit."
+      },
+      {
+        "q": "How do I add the People network to my wallet?",
+        "a": "Use the button below: your wallet is asked to add the PEOPLE network with the official parameters and then switch to it. You can also enter the same values manually from the published network documentation."
+      },
+      {
+        "q": "When can I send PPL to someone else?",
+        "a": "At the full network launch: {verified} verified participants, and no later than {months} months. Buying and selling on the curve works from day one."
+      }
+    ],
+    "addNetworkCta": "Add People network to wallet",
+    "addNetworkDone": "Request sent to your wallet",
+    "addNetworkError": "Your wallet refused or no wallet was found.",
+    "pumpTitle": "What goes wrong on curves without a ceiling",
+    "pumpLead": "Bonding curves became popular through launchpads like pump.fun. These are their known problems, and what we do instead.",
+    "pumpCols": [
+      "Problem",
+      "What happens",
+      "Our safeguard"
+    ],
+    "pumpRows": [
+      {
+        "problem": "Late buyers overpay",
+        "what": "The price runs up without limit, so the last buyers before graduation pay many times what the first did.",
+        "ours": "A hard {ceiling} ceiling, and the curve closes at {graduation} — around {graduationPrice}."
+      },
+      {
+        "problem": "Snipers and bots",
+        "what": "Scripts buy in the first seconds from many wallets, then sell to real people.",
+        "ours": "Up to {perBuy} per purchase, {perDay} per person per day, and a {cooldown}-second pause between trades. If bots show up, the multisig can switch on a verified-only mode."
+      },
+      {
+        "problem": "Dumps",
+        "what": "Large holders sell everything at once and crash the price.",
+        "ours": "Per-person limits stop anyone building a large position. The {fee} sell fee goes to PPL buyback, and pool liquidity is locked for {lock} months."
+      },
+      {
+        "problem": "Front-running and bad fills",
+        "what": "A trade fills at a price much worse than the one you were shown.",
+        "ours": "Slippage protection on every trade: a minimum received, or the transaction is cancelled."
+      },
+      {
+        "problem": "Hype listings",
+        "what": "The token is pushed onto exchanges in the middle of the sale.",
+        "ours": "No listings during the sale. DEX trading only after graduation."
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "Ready",
+    "title": "Buy PPL at today's curve price",
+    "lead": "Same form, same single price for everyone."
+  },
+  "sticky": {
+    "label": "Buy PPL",
+    "price": "from {price}"
+  },
+  "footnote": {
+    "title": "Small print",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL is the utility token of the People network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
+      },
+      {
+        "marker": "**",
+        "text": "Participation may be restricted or unavailable where you live, and checking the rules that apply to you is your own responsibility. Use only money you can afford to lose."
+      },
+      {
+        "marker": "***",
+        "text": "The AI-assisted reviews named above were carried out by the project team. They are not an audit by an external audit firm; a third-party security audit is completed before mainnet. A bug bounty reduces risk but does not remove it: no review can prove software free of defects."
+      }
+    ]
+  }
+}

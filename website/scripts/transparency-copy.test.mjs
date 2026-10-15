@@ -4,8 +4,9 @@
  * The page is a public statement about money, so the wording is constrained by
  * decisions that must not drift: the treasury is a 2-of-3 multisig created
  * before mainnet (with no address published yet), the audit is promised — an
- * internal AI-assisted review today, an independent audit before mainnet, never
- * a completed result — and no team member is named or pictured. EN/RU key parity
+ * the three named AI models plus bug bounty, a third-party audit before mainnet,
+ * never a completed external result — and no team member is named or pictured.
+ * EN/RU key parity
  * itself is enforced by TypeScript (`TransparencyCopy`), so these tests only
  * check what the type system cannot see.
  */
@@ -54,18 +55,17 @@ test("the treasury is a 2-of-3 multisig created before mainnet, with no address 
   assert.match(copy, /создаваемый до mainnet/);
 });
 
-test("the audit is promised as independent, never claimed as passed", () => {
+test("the audit names three AI models and never claims an external audit passed", () => {
   const copy = sectionBodies();
-  assert.match(copy, /goes through an internal AI-assisted review/);
-  assert.match(copy, /внутреннюю проверку с помощью ИИ/);
-  // The independent audit is promised for before mainnet…
-  assert.match(copy, /[Ii]ndependent (?:security )?audit is completed before mainnet/);
-  assert.match(copy, /Независимый аудит безопасности/);
-  // …but no completed result may be claimed anywhere on the page.
+  assert.match(copy, /Audited by: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
+  assert.match(copy, /Аудит: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
+  assert.match(copy, /Bug bounty:/);
+  assert.match(copy, /Баг-баунти:/);
+  assert.doesNotMatch(copy, /Sonnet|Opus 5[^.]/);
   assert.doesNotMatch(copy, /\baudit (?:has )?passed\b/i, "no passed audit may be claimed");
   assert.doesNotMatch(copy, /аудит пройден/i);
-  // The report slot exists but states nothing until a report does.
-  assert.match(copy, /will be published in this slot/);
+  assert.match(copy, /third-party security audit report will be published/);
+  assert.match(copy, /Отчёт аудита сторонней фирмы будет опубликован/);
 });
 
 test("no team member, partner or investor is named or pictured", () => {
