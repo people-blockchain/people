@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "Beli PPL",
+    "description": "PPL dijual pada kurva harga publik: mulai $0,005, naik setiap pembelian, plafon $0,25. Kurva tutup saat terkumpul $4M. Beli dan jual kapan saja."
+  },
+  "hero": {
+    "eyebrow": "Penjualan PPL",
+    "headline": "Beli PPL dengan harga peserta awal",
+    "sub": "Harga naik setiap pembelian — semakin awal Anda beli, semakin sedikit yang dibayar.",
+    "statsTitle": "Langsung di kurva",
+    "statsNote": "Dibaca dari kontrak penjualan. Tidak ada yang ditampilkan sampai ada data on-chain nyata.",
+    "ctaScroll": "Cara kerja kurva"
+  },
+  "stats": {
+    "price": "Harga saat ini",
+    "priceStartHint": "Mulai dari {start}",
+    "raised": "Terkumpul",
+    "raisedTarget": "dari {target} menuju graduation",
+    "sold": "PPL terjual",
+    "soldTarget": "dari {supply} di kurva",
+    "buyers": "Pembeli",
+    "daysLeft": "Hari tersisa",
+    "daysLeftTarget": "dari {days}",
+    "none": "—",
+    "notOpenYet": "Belum dibuka",
+    "progressLabel": "Progres menuju graduation {target}"
+  },
+  "form": {
+    "title": "Beli PPL",
+    "amountLabel": "Anda bayar",
+    "amountHint": "USDC atau USDT",
+    "stableLabel": "Stablecoin",
+    "networkLabel": "Jaringan pembayaran",
+    "networkHint": "Satu kurva, satu harga — dari jaringan mana pun.",
+    "youGet": "Anda dapat",
+    "avgPrice": "Harga rata-rata",
+    "priceAfter": "Harga setelah pembelian Anda",
+    "estimate": "Perkiraan dari formula yang dipublikasikan. Angka dikonfirmasi sebelum Anda menandatangani.",
+    "limitPerBuy": "Hingga {amount} per pembelian",
+    "limitPerDay": "Hingga {amount} per orang per hari",
+    "cooldown": "{seconds} dtk antar transaksi",
+    "overLimit": "Maksimum {amount} dalam satu pembelian.",
+    "belowMin": "Masukkan jumlah untuk melihat penawaran.",
+    "cta": "Hubungkan dompet & beli",
+    "ctaDisabled": "Penjualan belum dibuka",
+    "ctaConnected": "Beli PPL",
+    "disabledNote": "Kontrak penjualan belum di-deploy, jadi tidak bisa membeli. Menghubungkan dompet aman dan tidak mengikat Anda.",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "Anda bisa menjual PPL kembali ke kurva kapan saja, dikurangi biaya {fee}."
+  },
+  "curve": {
+    "eyebrow": "Formulanya",
+    "title": "Satu kurva, terlihat semua orang",
+    "lead": "Harga tidak ditetapkan manual. harga = {start} × e^(k·x), x juta PPL terjual, k = ln(50)/100. Setiap angka di bawah dihitung dari formula itu.",
+    "axisRaised": "Terkumpul, $",
+    "axisPrice": "Harga per PPL, $",
+    "youAreHere": "Anda di sini",
+    "notOpen": "Kurva dibuka bersama penjualan. Bentuk dan penanda di bawah ditetapkan formula.",
+    "marker": "{raised} terkumpul",
+    "markerPrice": "{price} per PPL",
+    "markerSold": "{sold} PPL terjual",
+    "graduationTag": "Graduation",
+    "ceilingNote": "Plafon {ceiling} hanya tercapai jika semua {supply} PPL terjual. Kurva tutup lebih dulu, saat {graduation} terkumpul.",
+    "feedTitle": "Beli jual terbaru",
+    "feedEmpty": "Belum ada transaksi — penjualan belum dibuka.",
+    "feedBuy": "Beli",
+    "feedSell": "Jual",
+    "feedLink": "Lihat",
+    "capScope": "Plafon {ceiling} hanya berlaku selama penjualan kurva. Setelah graduation ke pool, harga ditetapkan pasar bebas — tanpa batas atas maupun bawah."
+  },
+  "whatYouGet": {
+    "eyebrow": "Yang Anda dapat",
+    "title": "Apa yang sebenarnya diberikan pembelian",
+    "items": [
+      {
+        "title": "PPL langsung di alamat Anda",
+        "body": "PPL dicatat untuk Anda di jaringan PEOPLE saat membeli. Tanpa lock-up di kurva, tanpa antrean."
+      },
+      {
+        "title": "Jual kembali ke kurva kapan saja",
+        "body": "Berubah pikiran? Jual PPL kembali ke kurva kapan saja dengan harga saat ini, dikurangi biaya {fee} — biaya itu untuk buyback PPL, bukan tim. Pembayaran jual kembali dalam {payoutStable} di {payoutNetwork} (jaringan Coinbase; USDC dari Circle, dolar yang sama seperti di Ethereum atau Polygon, hanya lebih cepat dan murah). Atau pilih jaringan lain; jembatan butuh beberapa menit."
+      },
+      {
+        "title": "Transfer dibuka saat peluncuran penuh jaringan",
+        "body": "Mengirim PPL ke orang lain dan trading di pool dimulai saat mainnet penuh: {verified} peserta terverifikasi, paling lambat {months} bulan."
+      },
+      {
+        "title": "Saat {graduation} kurva tutup",
+        "body": "{liquidityShare} dari terkumpul plus PPL di harga kurva terakhir mengisi pool publik dengan token LP terkunci {lock} bulan. Sisanya {multisigShare} ke multisig proyek, dengan laporan publik setiap pengeluaran."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Urutan peristiwa",
+    "title": "Dari kurva ke pasar bebas",
+    "steps": [
+      {
+        "title": "Kurva",
+        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual kapan saja, hingga {days} hari."
+      },
+      {
+        "title": "Graduation di {graduation}",
+        "body": "Kurva berhenti. {liquidityShare} terkumpul plus PPL harga terakhir masuk pool DEX publik tepat di harga itu, tanpa loncatan. LP terkunci {lock} bulan. {multisigShare} ke multisig dengan laporan publik."
+      },
+      {
+        "title": "Mainnet penuh",
+        "body": "Transfer PPL antar dompet dan trading pool dibuka pada {verified} peserta terverifikasi, paling lambat {months} bulan."
+      },
+      {
+        "title": "Setelah {days} hari",
+        "body": "Jika {graduation} tidak tercapai, pembagian {liquidityShare}/{multisigShare} yang sama untuk yang terkumpul, dan semua PPL tidak terjual ke kolam komunitas."
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "Transparansi",
+    "title": "Kontrak, dana, dan kode",
+    "lead": "Kontrak penjualan, kemana uang penjualan, tinjauan keamanan kode, dan cara token tim dibuka.",
+    "saleContract": "Kontrak penjualan",
+    "saleContractPending": "Belum di-deploy",
+    "saleContractNote": "Alamat dipublikasikan di sini segera setelah di-deploy dan diverifikasi.",
+    "verifiedSource": "Sumber terverifikasi",
+    "auditTitle": "Tinjauan keamanan",
+    "auditLine": "Diaudit oleh: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "explorerLink": "Buka di explorer People",
+    "allocationTitle": "Kemana 1B PPL pergi",
+    "allocationNote": "Pasokan tetap {supply} PPL. Bagian penjualan adalah {salePct} di kurva.",
+    "vestingTitle": "Vesting tim",
+    "vestingBody": "Selama {cliff} bulan pertama tim tidak menerima token. Setelah itu dibuka bertahap setiap bulan selama {linear} bulan lagi — total {total} bulan.",
+    "fundsTitle": "Kemana uang penjualan",
+    "fundsBody": "{liquidityShare} terkumpul masuk pool likuiditas dengan LP terkunci {lock} bulan. Sisanya {multisigShare} ke multisig proyek, laporan publik setiap pengeluaran.",
+    "auditBounty": "Bug bounty: laporkan kerentanan lewat tombol bug di halaman mana pun."
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Pertanyaan, dijawab",
+    "items": [
+      {
+        "q": "Berubah pikiran?",
+        "a": "Jual PPL kembali ke kurva kapan saja dengan harga kurva saat ini, dikurangi biaya {fee}, yang masuk buyback PPL."
+      },
+      {
+        "q": "Apakah plafon {ceiling} permanen?",
+        "a": "Tidak. Berlaku saat kurva berjalan. Kurva tutup saat {graduation} terkumpul, sekitar {graduationPrice} per PPL, di bawah plafon. Setelah graduation, harga pool ditetapkan pasar bebas, tanpa batas atas maupun bawah."
+      },
+      {
+        "q": "Bagaimana menambahkan jaringan People ke dompet?",
+        "a": "Gunakan tombol di bawah: dompet diminta menambahkan jaringan PEOPLE dengan parameter resmi lalu beralih. Anda juga bisa memasukkan nilai yang sama manual dari dokumentasi jaringan People yang dipublikasikan."
+      },
+      {
+        "q": "Kapan bisa mengirim PPL ke orang lain?",
+        "a": "Saat peluncuran penuh jaringan: {verified} peserta terverifikasi, paling lambat {months} bulan. Beli jual di kurva berjalan dari hari pertama."
+      }
+    ],
+    "addNetworkCta": "Tambahkan jaringan People ke dompet",
+    "addNetworkDone": "Permintaan dikirim ke dompet Anda",
+    "addNetworkError": "Dompet menolak atau tidak ditemukan.",
+    "pumpTitle": "Apa yang salah pada kurva tanpa plafon",
+    "pumpLead": "Kurva bonding populer lewat launchpad seperti pump.fun. Ini masalah yang dikenal dan apa yang kami lakukan.",
+    "pumpCols": ["Masalah", "Apa yang terjadi", "Perlindungan kami"],
+    "pumpRows": [
+      {
+        "problem": "Pembeli terlambat overpay",
+        "what": "Harga naik tanpa batas; pembeli terakhir sebelum graduation membayar jauh lebih dari yang pertama.",
+        "ours": "Plafon keras {ceiling}, kurva tutup di {graduation} — sekitar {graduationPrice}."
+      },
+      {
+        "problem": "Sniper dan bot",
+        "what": "Skrip membeli di detik pertama dari banyak dompet lalu menjual ke orang sungguhan.",
+        "ours": "Hingga {perBuy} per beli, {perDay} per orang per hari, jeda {cooldown} detik antar transaksi. Jika bot muncul, multisig bisa aktifkan mode hanya terverifikasi."
+      },
+      {
+        "problem": "Dump",
+        "what": "Holder besar jual semua sekaligus, harga anjlok.",
+        "ours": "Limit per orang mencegah posisi besar. Biaya jual {fee} ke buyback PPL; likuiditas pool terkunci {lock} bulan."
+      },
+      {
+        "problem": "Front-running dan eksekusi buruk",
+        "what": "Transaksi terisi di harga jauh lebih buruk dari yang ditampilkan.",
+        "ours": "Proteksi slippage setiap transaksi: minimum diterima, atau transaksi dibatalkan."
+      },
+      {
+        "problem": "Listing hype",
+        "what": "Token didorong ke exchange di tengah penjualan.",
+        "ours": "Tidak ada listing selama penjualan. Trading DEX hanya setelah graduation."
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "Siap",
+    "title": "Beli PPL dengan harga kurva hari ini",
+    "lead": "Formulir sama, harga tunggal sama untuk semua."
+  },
+  "sticky": {
+    "label": "Beli PPL",
+    "price": "dari {price}"
+  },
+  "footnote": {
+    "title": "Catatan kecil",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti formula yang dipublikasikan; setelah graduation ditetapkan pasar: bisa turun maupun naik. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; tidak ada laba, imbal hasil, atau pengembalian yang dijanjikan atau dijamin. Angka sebelum pembelian adalah perkiraan dari formula yang dipublikasikan dan dikonfirmasi on-chain sebelum menandatangani. Tidak ada di halaman ini yang merupakan saran investasi, hukum, atau pajak."
+      },
+      {
+        "marker": "**",
+        "text": "Partisipasi mungkin dibatasi atau tidak tersedia di tempat Anda tinggal; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang sanggup Anda rugikan."
+      },
+      {
+        "marker": "***",
+        "text": "Tinjauan berbantuan AI di atas dilakukan tim proyek. Bukan audit firma eksternal; audit keamanan pihak ketiga diselesaikan sebelum mainnet. Bug bounty mengurangi risiko tetapi tidak menghilangkan: tidak ada tinjauan yang membuktikan perangkat lunak bebas cacat."
+      }
+    ]
+  }
+}

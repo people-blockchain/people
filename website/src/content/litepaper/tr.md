@@ -144,7 +144,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Mainnet + PPL satışı** | Mainnet başlatılır. PPL satışı henüz açık değil; yalnızca faaliyet gösteren bir tüzel kişilik oluştuğunda açılacaktır. | En az 1.000 doğrulanmış kişi **ve** canlı hazine multisig |
+| **Mainnet + PPL satışı** | Mainnet başlar. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; hub deploy edilene kadar alımlar kapalı. | En az 1.000 doğrulanmış kişi **ve** aktif hazine multisig |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
 Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
@@ -161,7 +161,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 ## 9. Güvenlik
 
-- **Mainnet'ten önce güvenlik denetimi.** Protokol sözleşmeleri mainnet başlatmasından önce bir güvenlik denetiminden geçecektir.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Hazine multisig.** Hazine, People ağındaki People'ın kendi 2/3 multisig sözleşmesiyle yönetilir ve mainnet'ten önce oluşturulur; imzalayan adresler yayınlanacaktır.
 - **Yayınlanan adresler.** Satış, hak ediş ve likidite sözleşme adresleri mainnet başlatmasında yayınlanacak — yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
@@ -176,7 +176,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 - **Testnet mainnet değil.** Testnet jetonları ve bakiyeleri hiçbir değere sahip değildir. Puanlar, ödeme garantisi değil, aktivitenin bir kaydıdır.
 - **Her şey ön niteliklidir.** Rakamlar, zaman çizelgeleri ve kurallar mainnet'ten önce değişebilir ve topluluk yönetişimine tabidir.
 - **Teknoloji riski.** Yazılımda hata olabilir. Bir denetim riski azaltır; bunu kaldırmaz.
-- **Düzenleme.** Kurallar ülkeden ülkeye farklı ve değişebilir. Şu anda halka açık bir PPL satışı yok; KYC kontrolü yapılmaz.
+- **Düzenleme.** Kurallar ülkeye göre değişir. PPL satış parametreleri `/buy` sayfasında (eğri **$0.005**/PPL'den); hub kontratı deploy edilene kadar alımlar kapalı. Bu sitede KYC veya uygunluk kontrolü yapılmaz.
 - **Kendi araştırmanızı yapın.** Bu litepaper bilgidir, finansal, yasal veya vergi danışması değildir.
 
 ---
@@ -219,8 +219,8 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Yeni bir token'ın topluluk payı arzın **%10'sidir**: lansmanda ayrılan **%10**.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
-- **Şu anda halka açık bir PPL satışı yoktur** ve KYC veya uygunluk kontrolü yapılmaz.
-- Güvenlik: şimdi **iç, yapay zekâ destekli bir inceleme** ve mainnet'ten önce **bağımsız bir denetim**.
+- **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.
+- Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
 - Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
 - PPL satışı açıldıktan sonra sabit **180 gün** sürer. Ardından herkes onu sonlandırabilir ve satılmayan PPL topluluk havuzuna gider — token eğrileriyle aynı kural.

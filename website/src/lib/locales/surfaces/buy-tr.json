@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "PPL satın al",
+    "description": "PPL halka açık bir fiyat eğrisinde satılır: $0,005'ten başlar, her alımla yükselir, tavan $0,25. Eğri $4M toplanınca kapanır. İstediğiniz zaman alın ve satın."
+  },
+  "hero": {
+    "eyebrow": "PPL satışı",
+    "headline": "PPL'yi erken katılımcı fiyatından alın",
+    "sub": "Fiyat her alımla yükselir — ne kadar erken alırsanız o kadar az ödersiniz.",
+    "statsTitle": "Eğrida canlı",
+    "statsNote": "Satış sözleşmesinden okunur. Gerçek zincir üstü veri olana kadar hiçbir şey gösterilmez.",
+    "ctaScroll": "Eğri nasıl çalışır"
+  },
+  "stats": {
+    "price": "Güncel fiyat",
+    "priceStartHint": "{start} ile başlar",
+    "raised": "Toplanan",
+    "raisedTarget": "mezuniyete {target} hedefinin",
+    "sold": "Satılan PPL",
+    "soldTarget": "eğrida {supply} hedefinin",
+    "buyers": "Alıcılar",
+    "daysLeft": "Kalan gün",
+    "daysLeftTarget": "{days} süresinin",
+    "none": "—",
+    "notOpenYet": "Henüz açılmadı",
+    "progressLabel": "{target} mezuniyetine ilerleme"
+  },
+  "form": {
+    "title": "PPL satın al",
+    "amountLabel": "Ödediğiniz",
+    "amountHint": "USDC veya USDT",
+    "stableLabel": "Stablecoin",
+    "networkLabel": "Ödeme ağı",
+    "networkHint": "Tek eğri, tek fiyat — hangi ağdan öderseniz ödeyin.",
+    "youGet": "Alacağınız",
+    "avgPrice": "Ortalama fiyat",
+    "priceAfter": "Alımınızdan sonraki fiyat",
+    "estimate": "Yayınlanan formüle göre tahmin. Tutar imzadan önce onaylanır.",
+    "limitPerBuy": "Alım başına en fazla {amount}",
+    "limitPerDay": "Kişi başına günde en fazla {amount}",
+    "cooldown": "İşlemler arası {seconds} sn",
+    "overLimit": "Tek alımda en fazla {amount}.",
+    "belowMin": "Teklif görmek için tutar girin.",
+    "cta": "Cüzdan bağla ve al",
+    "ctaDisabled": "Satış henüz açık değil",
+    "ctaConnected": "PPL satın al",
+    "disabledNote": "Satış sözleşmesi henüz deploy edilmedi, alım yapılamaz. Cüzdan bağlamak güvenlidir ve sizi hiçbir şeye bağlamaz.",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "PPL'yi istediğiniz zaman eğriye geri satabilirsiniz, {fee} ücret hariç."
+  },
+  "curve": {
+    "eyebrow": "Formül",
+    "title": "Herkesin gördüğü tek eğri",
+    "lead": "Fiyat elle belirlenmez. fiyat = {start} × e^(k·x); x satılan PPL milyonları, k = ln(50)/100. Aşağıdaki her rakam bu formülden gelir.",
+    "axisRaised": "Toplanan, $",
+    "axisPrice": "PPL başına fiyat, $",
+    "youAreHere": "Buradasınız",
+    "notOpen": "Eğri satışla açılır. Şekil ve aşağıdaki işaretler formülle sabittir.",
+    "marker": "{raised} toplandı",
+    "markerPrice": "PPL başına {price}",
+    "markerSold": "{sold} PPL satıldı",
+    "graduationTag": "Mezuniyet",
+    "ceilingNote": "{ceiling} tavanına yalnızca tüm {supply} PPL satılırsa ulaşılır. Eğri önce {graduation} toplanınca kapanır.",
+    "feedTitle": "Son alım ve satımlar",
+    "feedEmpty": "Henüz işlem yok — satış açılmadı.",
+    "feedBuy": "Alım",
+    "feedSell": "Satım",
+    "feedLink": "Görüntüle",
+    "capScope": "{ceiling} tavanı yalnızca eğri satışı sırasında geçerlidir. Havuza mezuniyetten sonra fiyatı serbest piyasa belirler — üst ve alt sınır yok."
+  },
+  "whatYouGet": {
+    "eyebrow": "Ne alırsınız",
+    "title": "Bir alım size gerçekte ne verir",
+    "items": [
+      {
+        "title": "PPL anında adresinizde",
+        "body": "PPL, alım anında PEOPLE ağında size kaydedilir. Eğrida kilitleme yok, bekleme listesi yok."
+      },
+      {
+        "title": "İstediğiniz zaman eğriye geri satış",
+        "body": "Fikriniz mi değişti? PPL'yi istediğiniz zaman güncel fiyattan eğriye satın, {fee} ücret düşülür — ücret PPL geri alıma gider, ekibe değil. Geri satış ödemesi {payoutStable} olarak {payoutNetwork} üzerinde (Coinbase ağı; Circle USDC, Ethereum veya Polygon'daki doların aynısı, daha hızlı ve ucuz). Veya başka ağ seçin; köprü birkaç dakika sürer."
+      },
+      {
+        "title": "Transferler tam ağ lansmanıyla açılır",
+        "body": "PPL göndermek ve havuzda işlem, tam mainnette başlar: {verified} doğrulanmış katılımcı, en geç {months} ay içinde."
+      },
+      {
+        "title": "{graduation} toplanınca eğri kapanır",
+        "body": "Toplananın {liquidityShare}'i ile son eğri fiyatındaki PPL, LP tokenları {lock} ay kilitli halka açık bir havuza gider. Diğer {multisigShare} proje multisig'ine gider; her harcama kamuya açık raporlanır."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Olay sırası",
+    "title": "Eğriden serbest piyasaya",
+    "steps": [
+      {
+        "title": "Eğri",
+        "body": "{supply} PPL, {start}'ten {ceiling} tavanına kadar halka açık eğride. {days} güne kadar istediğiniz zaman alın ve satın."
+      },
+      {
+        "title": "{graduation} mezuniyeti",
+        "body": "Eğri durur. Toplananın {liquidityShare}'i ve son eğri fiyatındaki PPL, tam o fiyattan sıçrama olmadan halka açık DEX havuzuna gider. LP {lock} ay kilitli. {multisigShare} multisig'e, kamu raporlamasıyla."
+      },
+      {
+        "title": "Tam mainnet",
+        "body": "Cüzdanlar arası PPL transferi ve havuz işlemi {verified} doğrulanmış katılımcıda, en geç {months} ay içinde açılır."
+      },
+      {
+        "title": "{days} gün sonra",
+        "body": "{graduation} ulaşılmazsa, toplanan için aynı {liquidityShare}/{multisigShare} bölünür; satılmayan tüm PPL topluluk havuzuna gider."
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "Şeffaflık",
+    "title": "Sözleşme, para ve kod",
+    "lead": "Satış sözleşmesi, satış gelirinin gittiği yer, kodun güvenlik incelemeleri ve ekip tokenlarının açılması.",
+    "saleContract": "Satış sözleşmesi",
+    "saleContractPending": "Henüz deploy edilmedi",
+    "saleContractNote": "Adres, deploy ve doğrulama anında burada yayınlanır.",
+    "verifiedSource": "Doğrulanmış kaynak kod",
+    "auditTitle": "Güvenlik incelemeleri",
+    "auditLine": "Denetleyen: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "explorerLink": "People explorer'da aç",
+    "allocationTitle": "1B PPL nereye gidiyor",
+    "allocationNote": "Sabit arz {supply} PPL. Satış kovası eğrida {salePct}.",
+    "vestingTitle": "Ekip vesting",
+    "vestingBody": "İlk {cliff} ay ekip hiç token almaz. Sonra {linear} ay daha her ay kademeli açılır — toplam {total} ay.",
+    "fundsTitle": "Satış parası nereye gidiyor",
+    "fundsBody": "Toplananın {liquidityShare}'i LP'si {lock} ay kilitli likidite havuzuna gider. Diğer {multisigShare} proje multisig'ine; her harcama kamuya açık raporlanır.",
+    "auditBounty": "Bug bounty: herhangi bir sayfadaki bug düğmesinden zafiyet bildirin."
+  },
+  "faq": {
+    "eyebrow": "SSS",
+    "title": "Sorular, yanıtlar",
+    "items": [
+      {
+        "q": "Fikriniz mi değişti?",
+        "a": "PPL'yi istediğiniz zaman güncel eğri fiyatından eğriye satın, {fee} ücret düşülür; ücret PPL geri alıma gider."
+      },
+      {
+        "q": "{ceiling} tavanı kalıcı mı?",
+        "a": "Hayır. Eğri çalışırken geçerlidir. Eğri {graduation} toplanınca, PPL başına yaklaşık {graduationPrice} ile tavanın altında kapanır. Mezuniyetten sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
+      },
+      {
+        "q": "People ağını cüzdanıma nasıl eklerim?",
+        "a": "Aşağıdaki düğmeyi kullanın: cüzdanınız resmi parametrelerle PEOPLE ağını eklemenizi ve geçmenizi ister. Aynı değerleri People ağının yayınlanmış belgelerinden elle de girebilirsiniz."
+      },
+      {
+        "q": "PPL'yi başkasına ne zaman gönderebilirim?",
+        "a": "Tam ağ lansmanında: {verified} doğrulanmış katılımcı, en geç {months} ay. Eğrida alım satım ilk günden çalışır."
+      }
+    ],
+    "addNetworkCta": "People ağını cüzdana ekle",
+    "addNetworkDone": "İstek cüzdanınıza gönderildi",
+    "addNetworkError": "Cüzdan reddetti veya cüzdan bulunamadı.",
+    "pumpTitle": "Tavansız eğrilerde neler ters gider",
+    "pumpLead": "Bonding eğrileri pump.fun gibi launchpad'lerle popüler oldu. Bilinen sorunlar ve bizim çözümümüz.",
+    "pumpCols": ["Sorun", "Ne olur", "Korumamız"],
+    "pumpRows": [
+      {
+        "problem": "Geç alanlar fazla öder",
+        "what": "Fiyat sınırsız yükselir; mezuniyet öncesi son alıcılar ilk alıcılardan kat kat fazla öder.",
+        "ours": "Sert {ceiling} tavanı; eğri {graduation} toplanınca kapanır — yaklaşık {graduationPrice}."
+      },
+      {
+        "problem": "Sniper'lar ve botlar",
+        "what": "Scriptler ilk saniyelerde çok cüzdandan alır, gerçek kullanıcılara satar.",
+        "ours": "Alım başına {perBuy}, kişi başına günde {perDay} ve işlemler arası {cooldown} sn. Bot gelirse multisig yalnızca doğrulanmış modunu açabilir."
+      },
+      {
+        "problem": "Dump'lar",
+        "what": "Büyük holder'lar hepsini birden satar, fiyat çöker.",
+        "ours": "Kişi limitleri büyük pozisyonu engeller. {fee} satış ücreti PPL geri alıma gider; havuz likiditesi {lock} ay kilitli."
+      },
+      {
+        "problem": "Front-running ve kötü fiyat",
+        "what": "İşlem gösterilenden çok daha kötü fiyattan gerçekleşir.",
+        "ours": "Her işlemde slippage koruması: minimum alınan, yoksa işlem iptal."
+      },
+      {
+        "problem": "Hype listelemeleri",
+        "what": "Token satış ortasında borsalara itilir.",
+        "ours": "Satış sırasında listeleme yok. DEX işlemi yalnızca mezuniyetten sonra."
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "Hazır",
+    "title": "PPL'yi bugünkü eğri fiyatından alın",
+    "lead": "Aynı form, herkes için aynı tek fiyat."
+  },
+  "sticky": {
+    "label": "PPL satın al",
+    "price": "{price}'den itibaren"
+  },
+  "footnote": {
+    "title": "Küçük puntolar",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL, PEOPLE ağının utility token'ıdır. Eğrida fiyat yayınlanan formülü izler; mezuniyetten sonra piyasa belirler: düşebilir de yükselebilir. PPL menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kar, getiri veya geri dönüş vaat veya garanti edilmez. Alım öncesi rakamlar yayınlanan formüle göre tahmindir ve imzadan önce zincir üstünde onaylanır. Bu sayfa yatırım, hukuk veya vergi tavsiyesi değildir."
+      },
+      {
+        "marker": "**",
+        "text": "Katılım bulunduğunuz yerde kısıtlı veya kullanılamayabilir; size uyan kuralları kontrol etmek sizin sorumluluğunuzdur. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın."
+      },
+      {
+        "marker": "***",
+        "text": "Yukarıda adı geçen yapay zekâ destekli incelemeler proje ekibi tarafından yapıldı. Harici denetim firması denetimi değildir; mainnet öncesi üçüncü taraf güvenlik denetimi tamamlanır. Bug bounty riski azaltır ama ortadan kaldırmaz: hiçbir inceleme yazılımın hatasız olduğunu kanıtlamaz."
+      }
+    ]
+  }
+}

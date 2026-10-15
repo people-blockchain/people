@@ -144,7 +144,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **Mainnet + PPL-Sale** | Mainnet startet. Der PPL-Sale ist noch nicht offen; er öffnet erst, wenn eine operativ tätige juristische Person existiert. | Mindestens 1.000 verifizierte Menschen **und** ein aktives Treasury Multisig |
+| **Mainnet + PPL-Verkauf** | Mainnet startet. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist. | Mindestens 1.000 verifizierte Personen **und** ein aktives Treasury-Multisig |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
 Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
@@ -161,7 +161,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 
 ## 9. Sicherheit
 
-- **Sicherheitsprüfung vor Mainnet.** Protokoll-Verträge werden vor dem Mainnet-Start einer Sicherheitsprüfung unterzogen.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Treasury Multisig.** Die Treasury wird von People's eigenem 2-von-3-Multisig-Vertrag im People-Netzwerk verwaltet, der vor dem Mainnet erstellt wird; Signer-Adressen werden veröffentlicht.
 - **Veröffentlichte Adressen.** Sale-, Vesting- und Liquiditäts-Vertrags­adressen werden beim Mainnet-Start veröffentlicht — keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
@@ -176,7 +176,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 - **Testnet ist nicht Mainnet.** Testnet-Token und -Guthaben haben keinen Wert. Punkte sind eine Aufzeichnung von Aktivität, keine Auszahlungsgarantie.
 - **Alles ist vorläufig.** Zahlen, Zeitpläne und Regeln können sich vor dem Mainnet ändern und unterliegen Community-Abstimmungen.
 - **Technologie­risiko.** Software kann Fehler haben. Eine Prüfung reduziert das Risiko; es beseitigt es nicht.
-- **Regulierung.** Die Regeln unterscheiden sich je nach Land und können sich ändern. Derzeit gibt es keinen öffentlichen PPL-Sale; es werden keine KYC-Prüfungen durchgeführt.
+- **Regulierung.** Die Regeln variieren je nach Land und können sich ändern. Die PPL-Verkaufsparameter stehen auf `/buy` (Kurve ab **0,005 $** pro PPL); Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist. Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
 - **Führe deine eigene Recherche durch.** Dieses Litepaper ist Information, keine Finanz-, Rechts- oder Steuerberatung.
 
 ---
@@ -219,8 +219,8 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Der Community-Anteil eines neuen Tokens beträgt **10 %** des Angebots, bei der Einführung zugeteilt.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
-- **Derzeit gibt es keinen öffentlichen PPL-Sale**, und es werden keine KYC- oder Teilnahmeberechtigungsprüfungen durchgeführt.
-- Sicherheit: jetzt eine **interne, KI-gestützte Prüfung** und ein **unabhängiges Audit vor dem Mainnet**.
+- Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
+- Sicherheit: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; Bug bounty on every page.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
 - Der PPL-Sale läuft nach seiner Öffnung fest **180 Tage**. Danach kann jeder ihn abschließen, und die unverkauften PPL gehen in den Community-Pool — dieselbe Regel wie bei Token-Curves.

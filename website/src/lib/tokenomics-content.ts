@@ -41,8 +41,13 @@ export type TokenomicsCopy = {
   curveLead: string;
   unsoldTitle: string;
   unsoldBody: string;
-  saleClosedTitle: string;
-  saleClosedBody: string;
+  salePublicTitle: string;
+  salePublicBody: string;
+  salePublicCta: string;
+  saleCurveBullets: string[];
+  curveTableSold: string;
+  curveTablePrice: string;
+  curveTableRaised: string;
   feeTitle: string;
   feeLead: string;
   feeNote: string;
@@ -105,22 +110,32 @@ const en: TokenomicsCopy = {
   monthAxis: "Months after genesis",
   saleTitle: "Community sale",
   saleLead:
-    "Up to 100M PPL from the sale bucket are reserved for a public bonding curve after the founders airdrop. The sale stays closed until an operating entity for the sale exists.",
-  salePayTitle: "How you would pay",
+    "Up to 100M PPL from the sale bucket (10% of the fixed supply) are sold on a public exponential curve. Published parameters match the live /buy page and the order API.",
+  salePayTitle: "How you pay",
   salePayBody:
-    "The treasury is controlled by People's own 2-of-3 multisig contract on the People network, with published signer addresses.",
+    "Pay with USDC or USDT from Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron or Solana. One curve, one price — whatever network you pay from. Sell payouts default to USDC on Base unless you choose another chain.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
     "Native PPL is credited to the same 0x address on the People network at genesis, following the vesting schedule above.",
   curveTitle: "Bonding curve",
   curveLead:
-    "The launch price comes from the curve's virtual reserve, not from a private round: the contract computes every trade and the whole curve runs on-chain and in public.",
+    "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. Graduation closes the curve at $4M raised.",
   unsoldTitle: "Unsold tokens",
   unsoldBody:
-    "Any PPL not purchased on the curve goes to PPL's own community pool — the 35% community & rewards bucket — not to the treasury and not burned. The same rule applies to every token launched on People: a standard launch allocates exactly 10% of supply to its community at launch.",
-  saleClosedTitle: "Sale is not open yet",
-  saleClosedBody:
-    "There is no public PPL sale right now. No prices are published, the payment widget is switched off and no KYC flow runs on this site.",
+    "After 180 days, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool. The same unsold rule applies to every token launched on PEOPLE.",
+  salePublicTitle: "Published sale parameters",
+  salePublicBody:
+    "Prices, limits and the curve formula are public on /buy. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet does not commit you to anything.",
+  salePublicCta: "Open the /buy page",
+  saleCurveBullets: [
+    "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
+    "Graduation at $4,000,000 raised; 180-day sale window, then unsold PPL to the community pool.",
+    "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
+    "Sell-back allowed with a 1.5% fee to PPL buyback. Limits: $500 per buy, $2,000 per person per day, 60s cooldown.",
+  ],
+  curveTableSold: "% sold",
+  curveTablePrice: "Spot price (USDT)",
+  curveTableRaised: "Raised (USDT)",
   emissionTitle: "Emission and validator rewards",
   emissionLead:
     "Security rewards come from the pre-allocated validator pool and network fees — not from minting new supply in years 1–4.",
@@ -206,22 +221,32 @@ const ru: TokenomicsCopy = {
   monthAxis: "Месяцы после genesis",
   saleTitle: "Продажа сообществу",
   saleLead:
-    "До 100M PPL из корзины продажи зарезервированы под публичную bonding curve после airdrop основателям. Продажа остаётся закрытой, пока не появится юрлицо-оператор продажи.",
-  salePayTitle: "Как вы будете платить",
+    "До 100M PPL из корзины продажи (10% фиксированной эмиссии) продаются на публичной экспоненциальной кривой. Параметры совпадают со страницей /buy и API заказов.",
+  salePayTitle: "Как платить",
   salePayBody:
-    "Казначейство управляется собственным мультисиг-контрактом People 2-из-3 в сети People, адреса подписантов публикуются.",
+    "USDC или USDT из Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron или Solana. Одна кривая, одна цена — с какой сети ни платите. Выплаты при продаже по умолчанию — USDC в Base, если не выбрана другая сеть.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
     "Нативные PPL зачисляются на тот же адрес 0x в сети People при genesis по графику vesting выше.",
   curveTitle: "Bonding curve",
   curveLead:
-    "Стартовая цена задаётся виртуальным резервом кривой, а не частным раундом: каждый обмен считает контракт, вся кривая работает on-chain и публично.",
+    "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Выпуск закрывается при сборе $4M.",
   unsoldTitle: "Непроданные токены",
   unsoldBody:
-    "Любые PPL, не купленные на кривой, идут в собственный пул сообщества PPL — корзину сообщества и наград 35% — не в казну и не сжигаются. То же правило действует для каждого токена, запущенного в People: стандартный запуск выделяет ровно 10% предложения его сообществу при запуске.",
-  saleClosedTitle: "Продажа пока не открыта",
-  saleClosedBody:
-    "Публичной продажи PPL сейчас нет. Цены не публикуются, платёжный виджет отключён, KYC на этом сайте не проводится.",
+    "Через 180 дней собранное делится 50/50 между заблокированной LP и мультисигом проекта, а непроданные PPL на кривой уходят в пул сообщества. То же правило — для любого токена, запущенного в PEOPLE.",
+  salePublicTitle: "Опубликованные параметры продажи",
+  salePublicBody:
+    "Цены, лимиты и формула кривой публичны на /buy. Покупка отключена, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает.",
+  salePublicCta: "Открыть страницу /buy",
+  saleCurveBullets: [
+    "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
+    "Выпуск при $4 000 000 собранных; окно продажи 180 дней, затем непроданные PPL — в пул сообщества.",
+    "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
+    "Обратная продажа разрешена; комиссия 1,5% на buyback PPL. Лимиты: $500 за покупку, $2000 на человека в сутки, пауза 60 с.",
+  ],
+  curveTableSold: "% продано",
+  curveTablePrice: "Спот-цена (USDT)",
+  curveTableRaised: "Собрано (USDT)",
   emissionTitle: "Эмиссия и награды валидаторам",
   emissionLead:
     "Награды за безопасность сеть получает из пула валидаторов и комиссий — без дополнительного выпуска в годы 1–4.",
