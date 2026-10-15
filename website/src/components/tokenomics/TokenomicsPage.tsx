@@ -8,6 +8,8 @@ import { Eyebrow } from "@/components/ui/primitives";
 import { FeeSplitDonut } from "@/components/visuals/FeeSplitDonut";
 import { AllocationDonut } from "./AllocationDonut";
 import { CirculatingSupplyChart } from "./CirculatingSupplyChart";
+import { BondingCurveChart } from "./BondingCurveChart";
+import { publicPurchaseTable } from "@/lib/tokenomics";
 
 export function TokenomicsPage() {
   const { lang } = useLanguage();
@@ -68,9 +70,14 @@ export function TokenomicsPage() {
       <section className="mt-14" id="sale">
         <h2 className="text-h3 font-bold text-ink">{t.saleTitle}</h2>
         <p className="mt-3 text-sm leading-relaxed text-ink-2">{t.saleLead}</p>
-        <div className="mt-6 rounded-2xl border border-warm/50 bg-warm/10 p-5" role="note">
-          <h3 className="font-semibold text-ink">{t.saleClosedTitle}</h3>
-          <p className="mt-2 text-sm text-ink-2">{t.saleClosedBody}</p>
+        <div className="mt-6 rounded-2xl border border-brand/30 bg-brand/5 p-5" role="note">
+          <h3 className="font-semibold text-ink">{t.salePublicTitle}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-ink-2">{t.salePublicBody}</p>
+          <p className="mt-3 text-sm">
+            <Link href="/buy" className="font-semibold text-brand hover:underline">
+              {t.salePublicCta}
+            </Link>
+          </p>
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div id="sale-pay" className="rounded-2xl border border-line bg-surface p-4 sm:col-span-2 space-y-3">
@@ -86,6 +93,32 @@ export function TokenomicsPage() {
         <div className="mt-8 rounded-2xl border border-line bg-surface p-5">
           <h3 className="font-semibold text-ink">{t.curveTitle}</h3>
           <p className="mt-2 text-sm text-ink-2">{t.curveLead}</p>
+          <BondingCurveChart />
+          <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-ink-2">
+            {t.saleCurveBullets.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[280px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-line text-ink-3">
+                  <th className="py-2 pr-3 font-semibold">{t.curveTableSold}</th>
+                  <th className="py-2 pr-3 font-semibold">{t.curveTablePrice}</th>
+                  <th className="py-2 font-semibold">{t.curveTableRaised}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {publicPurchaseTable().map((row) => (
+                  <tr key={row.soldPct} className="border-b border-line/60 text-ink-2">
+                    <td className="py-2 pr-3">{Math.round(row.soldPct * 100)}%</td>
+                    <td className="py-2 pr-3">${row.priceUsdt.toFixed(4)}</td>
+                    <td className="py-2">${Math.round(row.cumulativeUsdt).toLocaleString("en-US")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="mt-6 rounded-2xl border border-line bg-surface p-5">

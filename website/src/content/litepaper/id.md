@@ -144,7 +144,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Tahap | Apa yang terjadi | Gerbang |
 |---|---|---|
 | **Musim 0 — Testnet publik** | Dompet, verifikasi, peluncuran token, kartu NFT, swap, poin Satu Juta Founder. | Sekarang |
-| **Mainnet + Penjualan PPL** | Mainnet diluncurkan. Penjualan PPL belum dibuka; hanya akan dibuka setelah ada badan hukum yang beroperasi. | Minimal 1.000 orang terverifikasi **dan** multisig treasury yang aktif |
+| **Mainnet + penjualan PPL** | Mainnet diluncurkan. Parameter dipublikasikan (kurva eksponensial dari **$0.005**/PPL, hingga **100M PPL** di kurva, graduation **$4M**) di `/buy`; pembelian nonaktif hingga hub di-deploy. | Minimal 1.000 orang terverifikasi **dan** multisig treasury aktif |
 | **Staking & validator** | Staking dan partisipasi validator terbuka di luar proyek. | Setelah mainnet |
 
 Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpenuhi.
@@ -161,7 +161,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 
 ## 9. Keamanan
 
-- **Audit keamanan sebelum mainnet.** Kontrak protokol akan melalui audit keamanan sebelum peluncuran mainnet.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Multisig treasury.** Treasury dikendalikan oleh kontrak multisig 2-dari-3 milik People sendiri di jaringan People, dibuat sebelum mainnet; alamat penanda tangan akan dipublikasikan.
 - **Alamat yang dipublikasikan.** Alamat penjualan, vesting, dan kontrak likuiditas akan dipublikasikan saat peluncuran mainnet — tidak ada placeholder.
 - **Pertahanan bot.** Verifikasi manusia, batas per-perangkat dan per-IP, batas poin harian, dan clawback bot.
@@ -176,7 +176,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 - **Testnet bukan mainnet.** Token testnet dan saldo tidak memiliki nilai. Poin adalah catatan aktivitas, bukan jaminan pembayaran.
 - **Semuanya awal.** Angka, jadwal, dan aturan dapat berubah sebelum mainnet dan tunduk pada tata kelola komunitas.
 - **Risiko teknologi.** Perangkat lunak dapat memiliki bug. Audit mengurangi risiko; itu tidak menghilangkannya.
-- **Regulasi.** Aturan berbeda menurut negara dan dapat berubah. Saat ini tidak ada penjualan PPL publik; tidak ada pemeriksaan KYC.
+- **Regulasi.** Aturan berbeda per negara dan dapat berubah. Parameter penjualan PPL ada di `/buy` (kurva dari **$0.005**/PPL); pembelian tetap nonaktif hingga hub di-deploy. Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
 - **Lakukan riset sendiri.** Litepaper ini adalah informasi, bukan saran keuangan, hukum, atau pajak.
 
 ---
@@ -219,8 +219,8 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - Bagian komunitas dari token baru adalah **10%** dari pasokan: **10%** dialokasikan saat peluncuran.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
-- **Saat ini tidak ada penjualan PPL publik** dan tidak ada pemeriksaan KYC atau kelayakan.
-- Keamanan: **tinjauan internal berbantuan AI** saat ini dan **audit independen sebelum mainnet**.
+- **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
+- Keamanan: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
 - Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
 - Penjualan PPL, setelah dibuka, berlangsung tetap **180 hari**. Setelah itu siapa pun dapat memfinalisasinya, dan PPL yang tidak terjual masuk ke pool komunitas — aturan yang sama seperti kurva token.

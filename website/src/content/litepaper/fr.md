@@ -144,7 +144,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Mainnet + Vente PPL** | Mainnet est lancé. La vente PPL n'est pas encore ouverte ; elle n'ouvrira qu'une fois qu'une entité juridique opératrice existera. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor en direct |
+| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
 Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
@@ -161,7 +161,7 @@ Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
 
 ## 9. Sécurité
 
-- **Audit de sécurité avant mainnet.** Les contrats de protocole passeront par un audit de sécurité avant le lancement de mainnet.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Multisig de trésor.** Le trésor est contrôlé par le contrat multisig 2-sur-3 propre à People sur le réseau People, créé avant mainnet ; les adresses des signataires seront publiées.
 - **Adresses publiées.** Les adresses de contrat de vente, d'accumulation et de liquidité seront publiées au lancement de mainnet — pas de placeholders.
 - **Défense contre les bots.** Vérification humaine, limites par appareil et par IP, plafonds de points quotidiens et récupération de points des bots.
@@ -176,7 +176,7 @@ Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
 - **Testnet n'est pas mainnet.** Les tokens testnet et les soldes n'ont aucune valeur. Les points sont un enregistrement d'activité, pas une garantie de paiement.
 - **Tout est préliminaire.** Les chiffres, les calendriers et les règles peuvent changer avant mainnet et sont soumis à la gouvernance communautaire.
 - **Risque technologique.** Le logiciel peut avoir des bogues. Un audit réduit le risque ; il ne l'élimine pas.
-- **Réglementation.** Les règles diffèrent selon les pays et peuvent changer. Il n'y a pas de vente publique de PPL pour le moment ; aucun contrôle KYC n'est effectué.
+- **Réglementation.** Les règles varient selon le pays et peuvent changer. Les paramètres de vente PPL sont sur `/buy` (courbe dès **0,005 $** par PPL) ; les achats restent désactivés tant que le hub n'est pas déployé. Aucun KYC ni contrôle d'éligibilité sur ce site.
 - **Faites vos propres recherches.** Ce litepaper est une information, pas un conseil financier, juridique ou fiscal.
 
 ---
@@ -219,8 +219,8 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 - La part communautaire d'un nouveau token est de **10 %** de l'offre, alloués au lancement.
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
 - Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
-- **Il n'y a pas de vente publique de PPL pour le moment** et aucun contrôle KYC ou d'éligibilité n'est effectué.
-- Sécurité : une **revue interne assistée par IA** aujourd'hui, et un **audit indépendant avant le mainnet**.
+- La **vente communautaire de PPL** suit la courbe exponentielle publiée sur `/buy` (départ **0,005 $** par PPL ; prix et limites publics ; achat désactivé jusqu'au hub). Aucun KYC ni contrôle d'éligibilité sur ce site.
+- Sécurité : **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1** ; bug bounty on every page.
 - Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
 - Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
 - La vente PPL, une fois ouverte, dure **180 jours** fixes. Ensuite, n'importe qui peut la clôturer et les PPL invendus vont au pool communautaire — la même règle que pour les courbes de tokens.

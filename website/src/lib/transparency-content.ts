@@ -95,7 +95,7 @@ const en: TransparencyCopy = {
   meta: {
     title: "Team & transparency | People's Blockchain",
     description:
-      "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, an internal AI-assisted review today and an independent security audit before mainnet.",
+      "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) and a third-party security audit before mainnet.",
   },
   hero: {
     eyebrow: "TRANSPARENCY",
@@ -156,10 +156,11 @@ const en: TransparencyCopy = {
   audit: {
     eyebrow: "AUDIT",
     title: "Security review before mainnet",
-    body: "Today the code goes through an internal AI-assisted review. An independent security audit is completed before mainnet.",
+    body:
+      "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1. Bug bounty: report a vulnerability from the bug button on any page.",
     placeholderTitle: "Audit report",
     placeholderBody:
-      "The independent audit report will be published in this slot as soon as it is available. Until then, no audit result is claimed anywhere on this site.",
+      "A third-party security audit report will be published in this slot as soon as it is available. Until then, no external firm audit result is claimed anywhere on this site.",
   },
   launch: {
     eyebrow: "LAUNCH PLAN",
@@ -238,7 +239,7 @@ const ru: TransparencyCopy = {
   meta: {
     title: "Команда и прозрачность | People's Blockchain",
     description:
-      "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, внутренняя проверка с помощью ИИ сейчас и независимый аудит безопасности до mainnet.",
+      "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) и аудит сторонней фирмы до mainnet.",
   },
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
@@ -299,10 +300,11 @@ const ru: TransparencyCopy = {
   audit: {
     eyebrow: "АУДИТ",
     title: "Проверка безопасности до mainnet",
-    body: "Сегодня код проходит внутреннюю проверку с помощью ИИ. Независимый аудит безопасности завершается до mainnet.",
+    body:
+      "Аудит: Claude Opus 5.5, GPT Astra, Fable 5.1. Баг-баунти: сообщите об уязвимости кнопкой на любой странице.",
     placeholderTitle: "Отчёт об аудите",
     placeholderBody:
-      "Отчёт независимого аудита будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат аудита.",
+      "Отчёт аудита сторонней фирмы будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат внешнего аудита.",
   },
   launch: {
     eyebrow: "ПЛАН ЗАПУСКА",

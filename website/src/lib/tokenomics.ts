@@ -3,6 +3,8 @@
  * Display-only; does not change protocol economics.
  */
 
+import { CURVE, SALE } from "./sale/config";
+import { raisedUsd, spotPriceUsd } from "./sale/curve";
 import { MODEL_A_FEE_SPLIT } from "./selling-economics";
 
 export const TOTAL_SUPPLY_PPL = 1_000_000_000;
@@ -53,19 +55,29 @@ export const LIQUIDITY_LOCK_MONTHS = 24;
 
 export const CIRCULATING_HORIZON_MONTHS = 120;
 
-/** Bonding curve: linear price from start to end across full sale supply. */
+/**
+ * Public PPL sale curve parameters — same source as `/buy` and `/api/sale`.
+ * Math is exponential (`src/lib/sale/curve.ts`), not the old linear model.
+ */
 export const BONDING_CURVE = {
-  supplyPpl: 100_000_000,
-  durationDays: 30,
-  priceStartUsdt: 0.01,
-  priceEndUsdt: 0.05,
-  maxRaiseUsdt: 3_000_000,
+  supplyPpl: CURVE.supplyPpl,
+  durationDays: SALE.durationDays,
+  priceStartUsdt: CURVE.startPriceUsd,
+  /** Hard ceiling on the curve only; after graduation the market sets price. */
+  priceEndUsdt: CURVE.ceilingPriceUsd,
+  /** Graduation closes the curve; theoretical max raise if every PPL sold is higher. */
+  maxRaiseUsdt: CURVE.graduationRaiseUsd,
+  graduationRaiseUsdt: CURVE.graduationRaiseUsd,
+  sellFeePct: SALE.sellFeePct,
+  maxPerBuyUsdt: SALE.maxPerBuyUsd,
+  maxPerDayUsdt: SALE.maxPerDayUsd,
+  cooldownSeconds: SALE.cooldownSeconds,
 } as const;
 
+/** Where the raise goes at graduation (and after the 180-day window). */
 export const RAISE_SPLIT = [
-  { id: "liquidity", pct: 25 },
-  { id: "teamOps", pct: 25 },
-  { id: "daoTreasury", pct: 50 },
+  { id: "liquidity", pct: SALE.liquiditySharePct },
+  { id: "multisig", pct: SALE.multisigSharePct },
 ] as const;
 
 export const NETWORK_FEE_SPLIT = MODEL_A_FEE_SPLIT;
@@ -153,21 +165,16 @@ export function unlockSeriesForBucket(id: AllocationId, maxMonth = CIRCULATING_H
 
 /** Spot USDT price after `soldPpl` tokens have been purchased on the curve. */
 export function bondingCurvePriceUsdt(soldPpl: number): number {
-  const { supplyPpl, priceStartUsdt, priceEndUsdt } = BONDING_CURVE;
-  const t = Math.min(Math.max(soldPpl / supplyPpl, 0), 1);
-  return priceStartUsdt + (priceEndUsdt - priceStartUsdt) * t;
+  return spotPriceUsd(soldPpl);
 }
 
 /** USDT cost to buy `amountPpl` starting from `soldPpl` already sold. */
 export function bondingCurveCostUsdt(soldPpl: number, amountPpl: number): number {
-  const { supplyPpl, priceStartUsdt, priceEndUsdt } = BONDING_CURVE;
+  const { supplyPpl } = BONDING_CURVE;
   const s0 = Math.min(Math.max(soldPpl, 0), supplyPpl);
-  const s1 = Math.min(s0 + amountPpl, supplyPpl);
-  const delta = s1 - s0;
-  if (delta <= 0) return 0;
-  const p0 = priceStartUsdt + (priceEndUsdt - priceStartUsdt) * (s0 / supplyPpl);
-  const p1 = priceStartUsdt + (priceEndUsdt - priceStartUsdt) * (s1 / supplyPpl);
-  return (delta * (p0 + p1)) / 2;
+  const s1 = Math.min(s0 + Math.max(amountPpl, 0), supplyPpl);
+  if (s1 <= s0) return 0;
+  return raisedUsd(s1) - raisedUsd(s0);
 }
 
 export function bondingCurveSamples(points = 40): { soldPct: number; priceUsdt: number }[] {
