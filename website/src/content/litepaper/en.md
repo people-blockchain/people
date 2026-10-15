@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches. The PPL sale is not open yet; it will only open once an operating legal entity exists. | At least 1,000 verified people **and** a live treasury multisig |
+| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.
@@ -163,7 +163,7 @@ No dates are promised. Each stage starts when its gate is met.
 
 ## 9. Security
 
-- **Security audit before mainnet.** Protocol contracts will go through a security audit before mainnet launch.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty: report a vulnerability from the bug button on any page.
 - **Treasury multisig.** The treasury is controlled by People's own 2-of-3 multisig contract on the People network, created before mainnet; signer addresses will be published.
 - **Published addresses.** Sale, vesting and liquidity contract addresses will be published at mainnet launch — no placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
@@ -178,7 +178,7 @@ No dates are promised. Each stage starts when its gate is met.
 - **Testnet is not mainnet.** Testnet tokens and balances carry no value. Points are a record of activity, not a payout guarantee.
 - **Everything is preliminary.** Numbers, schedules and rules may change before mainnet and are subject to community governance.
 - **Technology risk.** Software can have bugs. An audit reduces risk; it does not remove it.
-- **Regulation.** Rules differ by country and may change. There is no public PPL sale at this time; no KYC or sale-eligibility checks are run.
+- **Regulation.** Rules differ by country and may change. Published PPL sale parameters are on `/buy` (curve from **$0.005** per PPL); purchases stay disabled until the sale hub contract is deployed. No KYC or sale-eligibility checks run on this site.
 - **Do your own research.** This litepaper is information, not financial, legal or tax advice.
 
 ---
@@ -221,8 +221,8 @@ Only verifiable public facts about other networks. Sources below.
 - A new token's community share is **10%** of supply: **10%** allocated at launch.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
-- There is **no public PPL sale at this time**, and no KYC or sale-eligibility checks are run.
-- Security: an **internal, AI-assisted review** now, and an **independent audit before mainnet**.
+- The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). No KYC or sale-eligibility checks are run on this site.
+- Security: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - The treasury multisig is **2-of-3** and is created before mainnet.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
 - The PPL sale, once it opens, runs for a fixed **180 days**. After that anyone can finalize it, and the unsold PPL goes to the community pool — the same rule as for token curves.

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { legalBundle, type LegalPageContent } from "@/lib/legal-content";
+import { useLanguage } from "@/context/LanguageContext";
+import { legalCopy, type LegalPageContent } from "@/lib/legal-content";
 import { LEGAL_CONTACT_EMAIL } from "@/lib/legal-contact";
 
 function renderParagraph(text: string, email: string) {
@@ -19,7 +20,8 @@ function renderParagraph(text: string, email: string) {
 }
 
 export function LegalDocument({ kind }: { kind: "privacy" | "terms" }) {
-  const doc: LegalPageContent = legalBundle[kind];
+  const { lang } = useLanguage();
+  const doc: LegalPageContent = legalCopy[lang][kind];
   const email = LEGAL_CONTACT_EMAIL;
 
   return (

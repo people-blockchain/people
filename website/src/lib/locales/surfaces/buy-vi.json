@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "Mua PPL",
+    "description": "PPL được bán trên đường cong giá công khai: bắt đầu $0,005, tăng theo mỗi lần mua, trần $0,25. Đường cong đóng khi gom $4M. Mua và bán bất cứ lúc nào."
+  },
+  "hero": {
+    "eyebrow": "Bán PPL",
+    "headline": "Mua PPL ở mức giá người tham gia sớm",
+    "sub": "Giá tăng theo mỗi lần mua — mua càng sớm, trả càng ít.",
+    "statsTitle": "Trực tiếp trên đường cong",
+    "statsNote": "Đọc từ hợp đồng bán. Không hiển thị gì cho đến khi có dữ liệu on-chain thật.",
+    "ctaScroll": "Đường cong hoạt động thế nào"
+  },
+  "stats": {
+    "price": "Giá hiện tại",
+    "priceStartHint": "Bắt đầu từ {start}",
+    "raised": "Đã gom",
+    "raisedTarget": "trong {target} tới graduation",
+    "sold": "PPL đã bán",
+    "soldTarget": "trong {supply} trên đường cong",
+    "buyers": "Người mua",
+    "daysLeft": "Ngày còn lại",
+    "daysLeftTarget": "trong {days}",
+    "none": "—",
+    "notOpenYet": "Chưa mở",
+    "progressLabel": "Tiến độ tới graduation {target}"
+  },
+  "form": {
+    "title": "Mua PPL",
+    "amountLabel": "Bạn trả",
+    "amountHint": "USDC hoặc USDT",
+    "stableLabel": "Stablecoin",
+    "networkLabel": "Mạng thanh toán",
+    "networkHint": "Một đường cong, một giá — từ mạng nào cũng được.",
+    "youGet": "Bạn nhận",
+    "avgPrice": "Giá trung bình",
+    "priceAfter": "Giá sau giao dịch của bạn",
+    "estimate": "Ước tính theo công thức công bố. Số tiền được xác nhận trước khi ký.",
+    "limitPerBuy": "Tối đa {amount} mỗi lần mua",
+    "limitPerDay": "Tối đa {amount} mỗi người mỗi ngày",
+    "cooldown": "{seconds}s giữa các giao dịch",
+    "overLimit": "Tối đa {amount} trong một lần mua.",
+    "belowMin": "Nhập số tiền để xem báo giá.",
+    "cta": "Kết nối ví và mua",
+    "ctaDisabled": "Đợt bán chưa mở",
+    "ctaConnected": "Mua PPL",
+    "disabledNote": "Hợp đồng bán chưa triển khai nên chưa mua được. Kết nối ví an toàn và không ràng buộc gì.",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "Bạn có thể bán PPL lại đường cong bất cứ lúc nào, trừ phí {fee}."
+  },
+  "curve": {
+    "eyebrow": "Công thức",
+    "title": "Một đường cong, ai cũng thấy",
+    "lead": "Giá không đặt tay. giá = {start} × e^(k·x), với x là triệu PPL đã bán và k = ln(50)/100. Mọi số bên dưới tính từ công thức đó.",
+    "axisRaised": "Đã gom, $",
+    "axisPrice": "Giá mỗi PPL, $",
+    "youAreHere": "Bạn ở đây",
+    "notOpen": "Đường cong mở cùng đợt bán. Hình dạng và mốc bên dưới do công thức cố định.",
+    "marker": "đã gom {raised}",
+    "markerPrice": "{price} mỗi PPL",
+    "markerSold": "đã bán {sold} PPL",
+    "graduationTag": "Graduation",
+    "ceilingNote": "Trần {ceiling} chỉ đạt nếu bán hết {supply} PPL. Đường cong đóng trước, khi gom {graduation}.",
+    "feedTitle": "Mua bán gần đây",
+    "feedEmpty": "Chưa có giao dịch — đợt bán chưa mở.",
+    "feedBuy": "Mua",
+    "feedSell": "Bán",
+    "feedLink": "Xem",
+    "capScope": "Trần {ceiling} chỉ áp dụng khi bán trên đường cong. Sau graduation sang pool, giá do thị trường tự do — không trần cũng không sàn."
+  },
+  "whatYouGet": {
+    "eyebrow": "Bạn nhận được gì",
+    "title": "Một lần mua thực sự cho bạn gì",
+    "items": [
+      {
+        "title": "PPL ngay trên địa chỉ của bạn",
+        "body": "PPL được ghi cho bạn trên mạng PEOPLE ngay khi mua. Không khóa trên đường cong, không chờ đợi."
+      },
+      {
+        "title": "Bán lại đường cong bất cứ lúc nào",
+        "body": "Đổi ý? Bán PPL lại đường cong bất cứ lúc nào theo giá hiện tại, trừ phí {fee} — phí đi vào mua lại PPL, không vào đội ngũ. Thanh toán bán lại bằng {payoutStable} trên {payoutNetwork} (mạng của Coinbase; USDC do Circle phát hành, cùng đô la như Ethereum hoặc Polygon, nhanh và rẻ hơn). Hoặc chọn mạng khác; cầu nối mất vài phút."
+      },
+      {
+        "title": "Chuyển token mở khi mạng ra mắt đầy đủ",
+        "body": "Gửi PPL cho người khác và giao dịch pool bắt đầu ở mainnet đầy đủ: {verified} người tham gia đã xác minh, chậm nhất {months} tháng."
+      },
+      {
+        "title": "Khi gom {graduation} đường cong đóng",
+        "body": "{liquidityShare} số tiền gom cộng PPL ở giá đường cong cuối tạo pool công khai với token LP khóa {lock} tháng. Phần còn lại {multisigShare} vào multisig dự án, báo cáo công khai từng khoản chi."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Trình tự sự kiện",
+    "title": "Từ đường cong tới thị trường tự do",
+    "steps": [
+      {
+        "title": "Đường cong",
+        "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán bất cứ lúc nào, tối đa {days} ngày."
+      },
+      {
+        "title": "Graduation tại {graduation}",
+        "body": "Đường cong dừng. {liquidityShare} số gom cộng PPL ở giá cuối vào pool DEX công khai đúng giá đó, không nhảy. LP khóa {lock} tháng. {multisigShare} vào multisig, báo cáo công khai."
+      },
+      {
+        "title": "Mainnet đầy đủ",
+        "body": "Chuyển PPL giữa ví và giao dịch pool mở khi có {verified} người xác minh, chậm nhất {months} tháng."
+      },
+      {
+        "title": "Sau {days} ngày",
+        "body": "Nếu chưa đạt {graduation}, cùng tỷ lệ {liquidityShare}/{multisigShare} cho số đã gom, và mọi PPL chưa bán vào quỹ cộng đồng."
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "Minh bạch",
+    "title": "Hợp đồng, tiền và mã nguồn",
+    "lead": "Hợp đồng bán, tiền bán đi đâu, các đợt rà soát bảo mật mã và cách token đội ngũ mở khóa.",
+    "saleContract": "Hợp đồng bán",
+    "saleContractPending": "Chưa triển khai",
+    "saleContractNote": "Địa chỉ được công bố tại đây ngay khi triển khai và xác minh.",
+    "verifiedSource": "Mã nguồn đã xác minh",
+    "auditTitle": "Rà soát bảo mật",
+    "auditLine": "Kiểm toán bởi: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "explorerLink": "Mở trong trình duyệt People",
+    "allocationTitle": "1B PPL phân bổ thế nào",
+    "allocationNote": "Cung cố định {supply} PPL. Phần bán là {salePct} trên đường cong.",
+    "vestingTitle": "Vesting đội ngũ",
+    "vestingBody": "{cliff} tháng đầu đội ngũ không nhận token. Sau đó mở dần hàng tháng trong {linear} tháng nữa — tổng {total} tháng.",
+    "fundsTitle": "Tiền bán đi đâu",
+    "fundsBody": "{liquidityShare} số gom vào pool thanh khoản, LP khóa {lock} tháng. Phần còn lại {multisigShare} vào multisig dự án, báo cáo công khai từng khoản chi.",
+    "auditBounty": "Bug bounty: báo lỗ hổng qua nút bug trên bất kỳ trang nào."
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Câu hỏi và trả lời",
+    "items": [
+      {
+        "q": "Đổi ý?",
+        "a": "Bán PPL lại đường cong bất cứ lúc nào theo giá hiện tại, trừ phí {fee}, phí đi vào mua lại PPL."
+      },
+      {
+        "q": "Trần {ceiling} có vĩnh viễn không?",
+        "a": "Không. Chỉ khi đường cong đang chạy. Đóng khi gom {graduation}, khoảng {graduationPrice} mỗi PPL, dưới trần. Sau graduation, giá pool do thị trường tự do — không trần không sàn."
+      },
+      {
+        "q": "Làm sao thêm mạng People vào ví?",
+        "a": "Dùng nút bên dưới: ví sẽ được yêu cầu thêm mạng PEOPLE với tham số chính thức và chuyển sang. Bạn cũng có thể nhập cùng các giá trị thủ công từ tài liệu mạng People đã công bố."
+      },
+      {
+        "q": "Khi nào gửi PPL cho người khác?",
+        "a": "Khi mạng ra mắt đầy đủ: {verified} người xác minh, chậm nhất {months} tháng. Mua bán trên đường cong hoạt động từ ngày đầu."
+      }
+    ],
+    "addNetworkCta": "Thêm mạng People vào ví",
+    "addNetworkDone": "Đã gửi yêu cầu tới ví",
+    "addNetworkError": "Ví từ chối hoặc không tìm thấy ví.",
+    "pumpTitle": "Điều gì sai trên đường cong không trần",
+    "pumpLead": "Bonding curve phổ biến nhờ launchpad như pump.fun. Đây là vấn đề đã biết và cách chúng tôi xử lý.",
+    "pumpCols": ["Vấn đề", "Điều gì xảy ra", "Biện pháp của chúng tôi"],
+    "pumpRows": [
+      {
+        "problem": "Người mua muộn trả quá nhiều",
+        "what": "Giá tăng không giới hạn; người mua cuối trước graduation trả gấp nhiều lần người đầu.",
+        "ours": "Trần cứng {ceiling}, đường cong đóng ở {graduation} — khoảng {graduationPrice}."
+      },
+      {
+        "problem": "Sniper và bot",
+        "what": "Script mua trong giây đầu từ nhiều ví rồi bán cho người thật.",
+        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi người mỗi ngày, nghỉ {cooldown} giây giữa giao dịch. Nếu có bot, multisig có thể bật chế độ chỉ người đã xác minh."
+      },
+      {
+        "problem": "Dump",
+        "what": "Holder lớn bán hết một lúc, giá sụp.",
+        "ours": "Giới hạn mỗi người ngăn vị thế lớn. Phí bán {fee} vào mua lại PPL; thanh khoản pool khóa {lock} tháng."
+      },
+      {
+        "problem": "Front-running và khớp lệnh tệ",
+        "what": "Giao dịch khớp ở giá tệ hơn nhiều so với hiển thị.",
+        "ours": "Bảo vệ slippage mỗi giao dịch: tối thiểu nhận được, nếu không thì hủy giao dịch."
+      },
+      {
+        "problem": "Listing theo hype",
+        "what": "Token bị đẩy lên sàn giữa đợt bán.",
+        "ours": "Không listing trong đợt bán. Giao dịch DEX chỉ sau graduation."
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "Sẵn sàng",
+    "title": "Mua PPL ở giá đường cong hôm nay",
+    "lead": "Cùng form, cùng một giá cho mọi người."
+  },
+  "sticky": {
+    "label": "Mua PPL",
+    "price": "từ {price}"
+  },
+  "footnote": {
+    "title": "Ghi chú pháp lý",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau graduation do thị trường quyết: có thể giảm cũng như tăng. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hay bảo đảm lợi nhuận, lợi suất hay hoàn vốn. Số liệu trước khi mua là ước tính theo công thức công bố và được xác nhận on-chain trước khi ký. Không có gì trên trang này là tư vấn đầu tư, pháp lý hay thuế."
+      },
+      {
+        "marker": "**",
+        "text": "Tham gia có thể bị hạn chế hoặc không khả dụng nơi bạn sống; kiểm tra quy định áp dụng là trách nhiệm của bạn. Chỉ dùng số tiền bạn chấp nhận mất."
+      },
+      {
+        "marker": "***",
+        "text": "Các đợt rà soát hỗ trợ AI nêu trên do đội dự án thực hiện. Không phải kiểm toán của công ty bên ngoài; kiểm toán bảo mật bên thứ ba hoàn tất trước mainnet. Bug bounty giảm rủi ro nhưng không loại bỏ: không đợt rà soát nào chứng minh phần mềm không lỗi."
+      }
+    ]
+  }
+}

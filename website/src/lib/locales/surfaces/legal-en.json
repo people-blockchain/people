@@ -119,8 +119,8 @@
       {
         "title": "Public PPL sale",
         "body": [
-          "There is no public PPL sale at this time. No token prices, price tiers, or raise amount are published, the payment widget is switched off, and no KYC or eligibility checks run on this site.",
-          "The sale stays closed until an operating legal entity for the sale exists. Nothing on this page is an offer or a promise to sell PPL, and no sale terms are guaranteed here."
+          "Published PPL sale parameters (curve formula, price path, limits, and graduation target) are on the /buy page and match the order API. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet commits you to nothing. No KYC or eligibility checks run on this site.",
+          "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction. Sale terms may change only through published updates and governance where applicable."
         ]
       },
       {

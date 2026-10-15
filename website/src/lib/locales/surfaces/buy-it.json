@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "title": "Compra PPL",
+    "description": "PPL è venduto su una curva di prezzo pubblica: parte da $0,005 e sale a ogni acquisto, fino a un tetto di $0,25. La curva si chiude a $4M raccolti. Compra e vendi in qualsiasi momento."
+  },
+  "hero": {
+    "eyebrow": "Vendita PPL",
+    "headline": "Compra PPL al prezzo partecipante anticipato",
+    "sub": "Il prezzo sale a ogni acquisto — prima compri, meno paghi.",
+    "statsTitle": "Live sulla curva",
+    "statsNote": "Lettura dal contratto di vendita. Nulla viene mostrato finché non ci sono dati on-chain reali.",
+    "ctaScroll": "Come funziona la curva"
+  },
+  "stats": {
+    "price": "Prezzo attuale",
+    "priceStartHint": "Parte da {start}",
+    "raised": "Raccolto",
+    "raisedTarget": "su {target} fino alla graduation",
+    "sold": "PPL venduti",
+    "soldTarget": "su {supply} sulla curva",
+    "buyers": "Acquirenti",
+    "daysLeft": "Giorni rimasti",
+    "daysLeftTarget": "su {days}",
+    "none": "—",
+    "notOpenYet": "Non ancora aperta",
+    "progressLabel": "Progresso verso la graduation a {target}"
+  },
+  "form": {
+    "title": "Compra PPL",
+    "amountLabel": "Paghi",
+    "amountHint": "USDC o USDT",
+    "stableLabel": "Stablecoin",
+    "networkLabel": "Rete di pagamento",
+    "networkHint": "Una curva, un prezzo — da qualsiasi rete paghi.",
+    "youGet": "Ricevi",
+    "avgPrice": "Prezzo medio",
+    "priceAfter": "Prezzo dopo il tuo acquisto",
+    "estimate": "Stima dalla formula pubblicata. L'importo è confermato prima della firma.",
+    "limitPerBuy": "Fino a {amount} per acquisto",
+    "limitPerDay": "Fino a {amount} a persona al giorno",
+    "cooldown": "{seconds}s tra le operazioni",
+    "overLimit": "Massimo {amount} in un acquisto.",
+    "belowMin": "Inserisci un importo per vedere il preventivo.",
+    "cta": "Connetti wallet e compra",
+    "ctaDisabled": "La vendita non è ancora aperta",
+    "ctaConnected": "Compra PPL",
+    "disabledNote": "Il contratto di vendita non è ancora deployato, quindi non si può acquistare. Connettere il wallet è sicuro e non ti impegna a nulla.",
+    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
+    "sellBack": "Puoi rivendere PPL alla curva in qualsiasi momento, meno la commissione del {fee}."
+  },
+  "curve": {
+    "eyebrow": "La formula",
+    "title": "Una curva, visibile a tutti",
+    "lead": "Il prezzo non è impostato a mano. prezzo = {start} × e^(k·x), dove x sono milioni di PPL venduti e k = ln(50)/100. Ogni cifra sotto deriva da quella formula.",
+    "axisRaised": "Raccolto, $",
+    "axisPrice": "Prezzo per PPL, $",
+    "youAreHere": "Sei qui",
+    "notOpen": "La curva si apre con la vendita. Forma e indicatori sotto sono fissati dalla formula.",
+    "marker": "{raised} raccolti",
+    "markerPrice": "{price} per PPL",
+    "markerSold": "{sold} PPL venduti",
+    "graduationTag": "Graduation",
+    "ceilingNote": "Il tetto {ceiling} si raggiunge solo se si vendono tutti i {supply} PPL. La curva si chiude prima, a {graduation} raccolti.",
+    "feedTitle": "Acquisti e vendite recenti",
+    "feedEmpty": "Nessuna operazione — la vendita non è aperta.",
+    "feedBuy": "Acquisto",
+    "feedSell": "Vendita",
+    "feedLink": "Vedi",
+    "capScope": "Il tetto {ceiling} vale solo durante la vendita sulla curva. Dopo la graduation al pool, il prezzo lo fissa il mercato libero — senza limite superiore né inferiore."
+  },
+  "whatYouGet": {
+    "eyebrow": "Cosa ottieni",
+    "title": "Cosa ti dà davvero un acquisto",
+    "items": [
+      {
+        "title": "PPL sul tuo indirizzo, subito",
+        "body": "PPL ti sono accreditati sulla rete PEOPLE al momento dell'acquisto. Nessun lock-up sulla curva, nessuna lista d'attesa."
+      },
+      {
+        "title": "Rivendi alla curva in qualsiasi momento",
+        "body": "Hai cambiato idea? Rivendi PPL alla curva quando vuoi al prezzo attuale, meno la commissione {fee} — e quella commissione va al buyback PPL, non al team. Il pagamento della rivendita arriva in {payoutStable} su {payoutNetwork} (rete di Coinbase; USDC emesso da Circle, lo stesso dollaro di Ethereum o Polygon, solo più veloce ed economico). Oppure scegli un'altra rete; il bridge richiede pochi minuti."
+      },
+      {
+        "title": "I trasferimenti si aprono con il lancio completo della rete",
+        "body": "Inviare PPL ad altri e fare trading nel pool iniziano al mainnet completo: {verified} partecipanti verificati, e non oltre {months} mesi."
+      },
+      {
+        "title": "A {graduation} la curva si chiude",
+        "body": "Il {liquidityShare} della raccolta più PPL all'ultimo prezzo di curva alimentano un pool pubblico i cui token LP sono bloccati per {lock} mesi. L'altro {multisigShare} va al multisig del progetto, con report pubblici su ogni spesa."
+      }
+    ]
+  },
+  "timeline": {
+    "eyebrow": "Ordine degli eventi",
+    "title": "Dalla curva al mercato libero",
+    "steps": [
+      {
+        "title": "La curva",
+        "body": "{supply} PPL su una curva pubblica da {start} fino al tetto {ceiling}. Compra e vendi in qualsiasi momento, fino a {days} giorni."
+      },
+      {
+        "title": "Graduation a {graduation}",
+        "body": "La curva si ferma. Il {liquidityShare} della raccolta più PPL all'ultimo prezzo vanno in un pool DEX pubblico esattamente a quel prezzo, senza salto. LP bloccati {lock} mesi. {multisigShare} al multisig con report pubblici."
+      },
+      {
+        "title": "Mainnet completo",
+        "body": "Trasferimenti PPL tra wallet e trading nel pool si aprono a {verified} partecipanti verificati, non oltre {months} mesi."
+      },
+      {
+        "title": "Dopo {days} giorni",
+        "body": "Se {graduation} non è raggiunto, la stessa divisione {liquidityShare}/{multisigShare} si applica a quanto raccolto, e ogni PPL non venduto va al fondo community."
+      }
+    ]
+  },
+  "transparency": {
+    "eyebrow": "Trasparenza",
+    "title": "Contratto, fondi e codice",
+    "lead": "Il contratto di vendita, dove vanno i fondi, le revisioni di sicurezza del codice e lo sblocco dei token del team.",
+    "saleContract": "Contratto di vendita",
+    "saleContractPending": "Non ancora deployato",
+    "saleContractNote": "L'indirizzo sarà pubblicato qui appena deployato e verificato.",
+    "verifiedSource": "Codice sorgente verificato",
+    "auditTitle": "Revisioni di sicurezza",
+    "auditLine": "Auditato da: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "explorerLink": "Apri nell'explorer People",
+    "allocationTitle": "Dove vanno 1B PPL",
+    "allocationNote": "Offerta fissa di {supply} PPL. Il lotto vendita sono quei {salePct} sulla curva.",
+    "vestingTitle": "Vesting del team",
+    "vestingBody": "Per i primi {cliff} mesi il team non riceve token. Poi sblocco graduale, ogni mese, per altri {linear} mesi — {total} mesi in totale.",
+    "fundsTitle": "Dove vanno i fondi della vendita",
+    "fundsBody": "Il {liquidityShare} della raccolta va al pool di liquidità, i cui LP sono bloccati {lock} mesi. L'altro {multisigShare} va al multisig del progetto, con report pubblici su ogni spesa.",
+    "auditBounty": "Bug bounty: segnala una vulnerabilità dal pulsante bug su qualsiasi pagina."
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Domande, risposte",
+    "items": [
+      {
+        "q": "Hai cambiato idea?",
+        "a": "Rivendi PPL alla curva quando vuoi al prezzo attuale della curva, meno la commissione {fee}, che va al buyback PPL."
+      },
+      {
+        "q": "Il tetto {ceiling} è permanente?",
+        "a": "No. Vale mentre la curva è attiva. Si chiude a {graduation} raccolti, circa {graduationPrice} per PPL, sotto il tetto. Dopo la graduation, il prezzo del pool lo fissa il mercato libero, senza limite superiore né inferiore."
+      },
+      {
+        "q": "Come aggiungo la rete People al mio wallet?",
+        "a": "Usa il pulsante sotto: il wallet chiederà di aggiungere la rete PEOPLE con i parametri ufficiali e passare a essa. Puoi anche inserire manualmente gli stessi valori dalla documentazione pubblicata della rete People."
+      },
+      {
+        "q": "Quando posso inviare PPL a qualcun altro?",
+        "a": "Al lancio completo della rete: {verified} partecipanti verificati, non oltre {months} mesi. Comprare e vendere sulla curva funziona dal primo giorno."
+      }
+    ],
+    "addNetworkCta": "Aggiungi rete People al wallet",
+    "addNetworkDone": "Richiesta inviata al wallet",
+    "addNetworkError": "Il wallet ha rifiutato o nessun wallet trovato.",
+    "pumpTitle": "Cosa va storto sulle curve senza tetto",
+    "pumpLead": "Le bonding curve sono diventate popolari con launchpad come pump.fun. Ecco i problemi noti e cosa facciamo noi.",
+    "pumpCols": ["Problema", "Cosa succede", "La nostra protezione"],
+    "pumpRows": [
+      {
+        "problem": "Gli acquirenti tardivi pagano troppo",
+        "what": "Il prezzo sale senza limite e gli ultimi prima della graduation pagano molte volte i primi.",
+        "ours": "Un tetto rigido {ceiling}, e la curva si chiude a {graduation} — circa {graduationPrice}."
+      },
+      {
+        "problem": "Snipers e bot",
+        "what": "Script comprano nei primi secondi da molti wallet e rivendono a persone reali.",
+        "ours": "Fino a {perBuy} per acquisto, {perDay} a persona al giorno e pausa di {cooldown} secondi tra operazioni. Se compaiono bot, il multisig può attivare la modalità solo verificati."
+      },
+      {
+        "problem": "Dump",
+        "what": "Grandi holder vendono tutto insieme e crollano il prezzo.",
+        "ours": "Limiti per persona impediscono posizioni grandi. La commissione vendita {fee} va al buyback PPL, e la liquidità del pool è bloccata {lock} mesi."
+      },
+      {
+        "problem": "Front-running e esecuzioni pessime",
+        "what": "Un'operazione si esegue a un prezzo molto peggiore di quello mostrato.",
+        "ours": "Protezione slippage su ogni operazione: minimo ricevuto, altrimenti la transazione è annullata."
+      },
+      {
+        "problem": "Listing hype",
+        "what": "Il token viene spinto sugli exchange a metà vendita.",
+        "ours": "Nessun listing durante la vendita. Trading DEX solo dopo graduation."
+      }
+    ]
+  },
+  "bottomCta": {
+    "eyebrow": "Pronto",
+    "title": "Compra PPL al prezzo di curva di oggi",
+    "lead": "Lo stesso modulo, lo stesso prezzo unico per tutti."
+  },
+  "sticky": {
+    "label": "Compra PPL",
+    "price": "da {price}"
+  },
+  "footnote": {
+    "title": "Note legali",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL è il token utility della rete PEOPLE. Sulla curva il prezzo segue la formula pubblicata; dopo la graduation lo fissa il mercato: può scendere come salire. PPL non è un titolo, una quota societaria, un deposito né un prodotto d'investimento; nessun profitto, rendimento o ritorno è promesso o garantito. Le cifre prima dell'acquisto sono stime dalla formula pubblicata e confermate on-chain prima della firma. Nulla in questa pagina è consulenza d'investimento, legale o fiscale."
+      },
+      {
+        "marker": "**",
+        "text": "La partecipazione può essere limitata o non disponibile dove vivi; verificare le regole applicabili è tua responsabilità. Usa solo denaro che puoi permetterti di perdere."
+      },
+      {
+        "marker": "***",
+        "text": "Le revisioni assistite da IA citate sopra sono state svolte dal team del progetto. Non sono un audit di una società esterna; prima del mainnet si completa un audit di sicurezza di terze parti. Un bug bounty riduce il rischio ma non lo elimina: nessuna revisione prova software privo di difetti."
+      }
+    ]
+  }
+}

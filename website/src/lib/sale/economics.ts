@@ -1,11 +1,8 @@
-import {
-  BONDING_CURVE,
-  bondingCurveCostUsdt,
-  bondingCurvePriceUsdt,
-} from "@/lib/tokenomics";
+import { BONDING_CURVE, bondingCurveCostUsdt, bondingCurvePriceUsdt } from "@/lib/tokenomics";
+import { SALE } from "@/lib/sale/config";
 
 export const SALE_MIN_USDT = 10;
-export const SALE_MAX_USDT = 250_000;
+export const SALE_MAX_USDT = SALE.maxPerBuyUsd;
 
 export function soldPplFromOrders(totalSoldPpl: number): number {
   return Math.min(Math.max(totalSoldPpl, 0), BONDING_CURVE.supplyPpl);

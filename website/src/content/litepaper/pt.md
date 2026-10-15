@@ -144,7 +144,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Mainnet + Venda de PPL** | Mainnet é lançada. A venda de PPL ainda não está aberta; só abrirá quando existir uma entidade jurídica operadora. | Pelo menos 1.000 pessoas verificadas **e** um multisig do tesouro ativo |
+| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
 Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
@@ -161,7 +161,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 
 ## 9. Segurança
 
-- **Auditoria de segurança antes da mainnet.** Os contratos do protocolo passarão por uma auditoria de segurança antes do lançamento da mainnet.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
 - **Multisig do tesouro.** O tesouro é controlado pelo contrato multisig 2-de-3 próprio da People na rede People, criado antes da mainnet; os endereços dos signatários serão publicados.
 - **Endereços publicados.** Os endereços do contrato de venda, vesting e liquidez serão publicados no lançamento da mainnet — sem placeholders.
 - **Defesa contra bots.** Verificação humana, limites por dispositivo e IP, limites diários de pontos e clawback de bots.
@@ -176,7 +176,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 - **Testnet não é mainnet.** Tokens de testnet e saldos não têm valor. Os pontos são um registro de atividade, não uma garantia de pagamento.
 - **Tudo é preliminar.** Números, cronogramas e regras podem mudar antes da mainnet e estão sujeitos à governança da comunidade.
 - **Risco tecnológico.** O software pode ter bugs. Uma auditoria reduz o risco; não o remove.
-- **Regulação.** As regras diferem por país e podem mudar. Não há venda pública de PPL neste momento; não são feitas verificações de KYC.
+- **Regulação.** As regras variam por país e podem mudar. Os parâmetros da venda de PPL estão em `/buy` (curva a partir de **$0.005** por PPL); compras permanecem desativadas até o hub ser implantado. Não há KYC nem verificações de elegibilidade neste site.
 - **Faça sua própria pesquisa.** Este whitepaper é informação, não é conselho financeiro, legal ou fiscal.
 
 ---
@@ -219,8 +219,8 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 - A parte da comunidade em um novo token é **10%** da oferta, alocados no lançamento.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
 - Taxas de lançamento: o plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
-- **Não há venda pública de PPL no momento** e não são feitas verificações de KYC ou de elegibilidade.
-- Segurança: uma **revisão interna assistida por IA** agora e uma **auditoria independente antes da mainnet**.
+- A **venda comunitária de PPL** usa a curva exponencial publicada em `/buy` (início **$0.005** por PPL; preços e limites públicos; compra desativada até o hub). Não há KYC nem verificações de elegibilidade neste site.
+- Segurança: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - O multisig do tesouro é **2 de 3** e é criado antes da mainnet.
 - Se a curva de um token não esgotar em **180 dias** após o lançamento, qualquer pessoa pode finalizá-la e os tokens não vendidos vão para o pool comunitário desse token. Uma curva esgotada passa para a liquidez como antes. (Ativo na testnet.)
 - A venda de PPL, depois de aberta, dura **180 dias** fixos. Depois disso qualquer pessoa pode finalizá-la, e os PPL não vendidos vão para o pool comunitário — a mesma regra das curvas de tokens.

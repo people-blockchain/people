@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { GithubNavLink } from "./OpenSource";
+import { NetworkModeSwitch } from "./NetworkModeSwitch";
 import { Menu, X, ArrowRight, Sun, Moon, ChevronDown } from "lucide-react";
 import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
@@ -323,6 +324,7 @@ export function Navbar() {
               block, and the <1024 sheet. */}
           <div className="hidden items-center gap-1.5 lg:flex xl:gap-2">
             <GithubNavLink />
+            <NetworkModeSwitch />
             <LanguageSwitcher value={lang} onChange={setLang} label={t.languageLabel} />
             <ThemeToggleButton label={t.themeToggle} onToggle={toggleTheme} />
           </div>
@@ -421,7 +423,10 @@ export function Navbar() {
                     ))}
                   </ul>
 
-                  <div className="mt-8 flex flex-col gap-3 border-t border-line pt-6 pb-8">
+                  <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 pb-8">
+                    <div>
+                      <NetworkModeSwitch />
+                    </div>
                     <HeaderWalletMenu layout="mobile-sheet" onDismiss={() => setOpen(false)} />
                   </div>
                 </nav>

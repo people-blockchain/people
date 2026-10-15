@@ -1,23 +1,27 @@
 import type { Metadata } from "next";
+
 import { SiteChrome } from "@/components/SiteChrome";
-import { SaleNotOpenNotice } from "@/components/sale/SaleNotOpenNotice";
-import { Eyebrow } from "@/components/ui/primitives";
+import { BuyPage } from "@/components/buy/BuyPage";
+import buyEn from "@/lib/locales/surfaces/buy-en.json" with { type: "json" };
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "PPL sale",
-  description:
-    "The public PPL sale is not open. No prices are published, there is no payment widget and no KYC flow runs on this site.",
+  title: `${buyEn.meta.title} | People's Blockchain`,
+  description: buyEn.meta.description,
+  alternates: { canonical: "/buy" },
+  openGraph: {
+    title: buyEn.meta.title,
+    description: buyEn.meta.description,
+    type: "website",
+    siteName: SITE_NAME,
+    url: "/buy",
+  },
 };
 
-export default function BuyPplPage() {
+export default function Page() {
   return (
     <SiteChrome>
-      <article className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <Eyebrow tone="value">PPL</Eyebrow>
-        </div>
-        <SaleNotOpenNotice />
-      </article>
+      <BuyPage />
     </SiteChrome>
   );
 }
