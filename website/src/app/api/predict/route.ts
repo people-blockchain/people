@@ -3,7 +3,10 @@ import { isAddress, type Address } from "viem";
 import { readPredictSnapshot } from "@/lib/predict/read";
 import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
+import { PREDICT_ENABLED } from "@/lib/features";
 export async function GET(request: NextRequest) {
+  // hidden: PeoplePredict (feature flag)
+  if (!PREDICT_ENABLED) return NextResponse.json({ error: "not_found" }, { status: 404 });
   if (!checkSlidingWindowRateLimit("predict", clientIpFromRequest(request), 30, 60000)) return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   const q = request.nextUrl.searchParams;
   const account = q.get("account") ?? undefined;
