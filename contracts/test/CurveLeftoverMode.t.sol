@@ -45,7 +45,7 @@ contract CurveLeftoverModeTest is Test {
             token = tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}("Test", "TST", 18, 1_000_000, "");
         } else {
             token = tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}(
-                "Test", "TST", 18, 1_000_000, "", mode
+                "Test", "TST", 18, 1_000_000, "", uint16(0), mode
             );
         }
     }
@@ -58,7 +58,7 @@ contract CurveLeftoverModeTest is Test {
     function test_invalidLeftoverModeReverts() public {
         vm.prank(creator);
         vm.expectRevert(TokenFactory.InvalidLeftoverMode.selector);
-        tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}("Bad", "BAD", 18, 1_000_000, "", 2);
+        tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}("Bad", "BAD", 18, 1_000_000, "", uint16(0), uint8(2));
     }
 
     function test_migrate_defaultBurnsLeftovers() public {

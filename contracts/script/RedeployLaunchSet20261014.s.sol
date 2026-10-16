@@ -27,6 +27,7 @@ contract RedeployLaunchSet20261014 is Script {
     address internal constant T_USDT = 0x5F0BD878762F7DF035a4C71E3D75740348a3FADC;
 
     function run() external {
+        revert("superseded: use RedeployFullStack.s.sol (no PromoRewardsVault, reuses stale-registry AMM)");
         require(block.chainid == PeopleConstants.PEOPLE_EVM_CHAIN_ID, "wrong chain id");
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/deployments/97401.json"));
         address router = vm.parseJsonAddress(json, ".contracts.router");

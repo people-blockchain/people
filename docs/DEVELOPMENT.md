@@ -209,6 +209,8 @@ npm run ci:smoke
 | `DEV_FAUCET_PRIVATE_KEY` | `@ovn/node`, `@ovn/core` | unset | `DEV_FAUCET_PRIVATE_KEY` задаётся локально, never commit. |
 | `SECURITY_UPGRADE_HEIGHT` | `@ovn/core` | unset | Высота активации правил security protocol v2. **Обязательна на любой сети, доступной посторонним.** Должна быть одинаковой на всех нодах: расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
 | `VALIDATOR_ALLOWLIST` | `@ovn/core` | `""` | Список адресов (канонический нижний регистр, через запятую), которым разрешён `joinValidator` после `SECURITY_UPGRADE_HEIGHT`. Без `SECURITY_UPGRADE_HEIGHT` нода не стартует. Пустой список допустим для сети только из bootstrap. |
+| `CONSENSUS_UPGRADE_1_HEIGHT` | `@ovn/core` | unset | Высота активации Consensus Upgrade #1 (`docs/protocol-decisions/consensus-upgrade-1.md`). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
+| `PROMO_SHARE_UPGRADE_HEIGHT` | `@ovn/core` | unset | Высота активации опционального promo-share создателя (`docs/protocol-decisions/promo-share.md`, `docs/TOKEN-ECONOMY.md` §4a). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана: нода держит фиксированный сплит 60/15/10/10/5 и игнорирует `promoBps`. |
 
 ### Предупреждение (M10-1, шаг 0)
 

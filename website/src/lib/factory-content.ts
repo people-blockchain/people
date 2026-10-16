@@ -93,6 +93,20 @@ export type FactoryCopyContent = {
     leftoverPoolLabel: string;
     leftoverPoolHint: string;
     launchSummary: string;
+    /** Optional creator promo share (owner decision 2026-10-13); EVM token launch only. */
+    promoTitle: string;
+    promoLead: string;
+    promoOptionNone: string;
+    promoOptionLabel: string;
+    promoSource: string;
+    promoRules: string;
+    allocationTitle: string;
+    allocationCurve: string;
+    allocationCommunity: string;
+    allocationCreator: string;
+    allocationLiquidity: string;
+    allocationEcosystem: string;
+    allocationPromo: string;
   };
   iconGen: {
     button: string;
@@ -190,6 +204,19 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       stableFeeLabel: "Stable fee",
       stableFeeBuybackNote: "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks.",
       stableFeeNetworkNote: "Works on the People network only for now. Paying from another chain (Ethereum, Polygon, Tron, TON, Solana) is coming later.",
+      promoTitle: "Promotion budget (optional)",
+      promoLead: "Set aside part of the supply to reward the referrers and partners who bring people to your token. Leave it at 0% if you do not need it.",
+      promoOptionNone: "None",
+      promoOptionLabel: "{{pct}}% of supply",
+      promoSource: "The promotion budget comes out of your own bonding-curve supply — not out of the community, liquidity or ecosystem shares. A smaller curve means a thinner market and a steeper price, which is the cost you choose to pay for promotion.",
+      promoRules: "The budget is held by a protocol contract, not by you. You can award it to referrers and partners; a single recipient can get at most {{cap}}% of the budget, each award unlocks {{upfront}}% immediately and the rest vests over {{days}} days. Anything you have not awarded within {{days}} days goes to this token's community pool — it does not come back to you.",
+      allocationTitle: "Your launch split",
+      allocationCurve: "Bonding curve",
+      allocationCommunity: "Community pool",
+      allocationCreator: "Creator (vesting)",
+      allocationLiquidity: "Liquidity reserve",
+      allocationEcosystem: "Ecosystem reserve",
+      allocationPromo: "Promotion budget",
       approvingStable: "Approving…",
       payingStableFee: "Paying stable fee…",
       creatingAfterStableFee: "Creating…",
@@ -294,6 +321,19 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       stableFeeLabel: "Комиссия в стейблкоине",
       stableFeeBuybackNote: "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичный выкуп PPL.",
       stableFeeNetworkNote: "Пока работает только в сети People. Оплата из другой сети (Ethereum, Polygon, Tron, TON, Solana) появится позже.",
+      promoTitle: "Бюджет на продвижение (необязательно)",
+      promoLead: "Отложите часть выпуска на вознаграждение тем, кто приводит людей к вашему токену: реферерам и партнёрам. Если это не нужно, оставьте 0%.",
+      promoOptionNone: "Нет",
+      promoOptionLabel: "{{pct}}% выпуска",
+      promoSource: "Бюджет на продвижение берётся из вашей же доли на бондинг-кривой, а не из доли сообщества, ликвидности или экосистемы. Кривая становится меньше, рынок — тоньше, а цена растёт быстрее: это и есть цена продвижения, которую вы выбираете заплатить.",
+      promoRules: "Бюджет держит контракт протокола, а не вы. Его можно распределять реферерам и партнёрам: один получатель — не более {{cap}}% бюджета, у каждой выплаты {{upfront}}% разблокируется сразу, остальное вестится {{days}} дней. Всё, что вы не распределили за {{days}} дней, уходит в пул сообщества этого токена и к вам не возвращается.",
+      allocationTitle: "Сплит вашего запуска",
+      allocationCurve: "Бондинг-кривая",
+      allocationCommunity: "Пул сообщества",
+      allocationCreator: "Автор (вестинг)",
+      allocationLiquidity: "Резерв ликвидности",
+      allocationEcosystem: "Резерв экосистемы",
+      allocationPromo: "Бюджет на продвижение",
       approvingStable: "Подтверждение...",
       payingStableFee: "Оплата комиссии...",
       creatingAfterStableFee: "Создание...",

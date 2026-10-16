@@ -23,7 +23,10 @@ export type TxType =
   | "ammCreatePool"
   | "ammAddLiquidity"
   | "ammRemoveLiquidity"
-  | "ammSwap";
+  | "ammSwap"
+  | "promoAward"
+  | "promoClaim"
+  | "promoReturn";
 
 export type AssetType = "native" | "fungible" | "user" | "pool";
 export type AssetStatus = "active" | "paused" | "deprecated";
@@ -34,6 +37,12 @@ export interface TokenAllocation {
   creator: number;
   liquidityReserve: number;
   ecosystemReserve: number;
+  /**
+   * Optional creator promo share, carved out of `bondingCurve` (owner decision 2026-10-13).
+   * Absent — not `0` — on every launch without a promo share, so the hashed allocation of a
+   * 60/15/10/10/5 launch is byte-identical to the pre-promo-share binary.
+   */
+  promo?: number;
 }
 
 export interface CreatorVestingState {
@@ -144,6 +153,21 @@ export interface TokenCreatePayload {
   decimals: number;
   totalSupply: number;
   metadata?: Record<string, unknown>;
+  /**
+   * Optional creator promo share in basis points. Exactly `0`, `500` or `1000`; absent means
+   * `0`. Honoured only at and above the coordinated `promoShareUpgrade` height; below it the
+   * field is ignored, exactly as a pre-upgrade binary ignores it.
+   */
+  promoBps?: number;
+}
+
+/** Payload of a `promoAward` / `promoClaim` / `promoReturn` transaction. */
+export interface PromoPayload {
+  assetId: string;
+  /** `promoAward` only: the referrer or partner receiving the award. */
+  recipient?: string;
+  /** `promoAward` only: token base units to commit to `recipient`. */
+  amount?: number;
 }
 
 export interface CurveBuyPayload {
@@ -403,6 +427,8 @@ export interface NetworkConfig {
   securityUpgrade?: { height: number; validatorAllowlist: string[] };
   /** Coordinated consensus fork #1 (owner-approved small items); omitted on legacy networks. Not part of genesis identity. */
   consensusUpgrade1?: { height: number };
+  /** Coordinated activation of the optional creator promo share; omitted on legacy networks. Not part of genesis identity. */
+  promoShareUpgrade?: { height: number };
   /** Pinned bootstrap authority before the validator set becomes active. */
   bootstrapAddress?: string;
   chainId: string;

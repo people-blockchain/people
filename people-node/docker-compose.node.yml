@@ -4,7 +4,8 @@
 #   cp .env.node.example .env.node   # fill public settings, never commit
 #   docker compose -f docker-compose.node.yml --env-file .env.node up --build -d
 #
-# Coordinated forks: SECURITY_UPGRADE_HEIGHT, VALIDATOR_ALLOWLIST and CONSENSUS_UPGRADE_1_HEIGHT
+# Coordinated forks: SECURITY_UPGRADE_HEIGHT, VALIDATOR_ALLOWLIST, CONSENSUS_UPGRADE_1_HEIGHT and
+# PROMO_SHARE_UPGRADE_HEIGHT
 # must be identical to every other node on the network (a mismatch forks the chain at that height).
 # Join an existing network: same CHAIN_ID + same GENESIS_FAUCET_ADDRESS and BOOTSTRAP_ADDRESS as the seed,
 # BOOTSTRAP_PEERS = reachable gossip of a seed (host:4002 or ws://host:4002).
@@ -37,10 +38,11 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-}
       # CHAIN-H1/H2: .env.node documents these, so they must reach the container — a node that
       # never sees them runs legacy consensus and forks away at the activation height. Empty is
-      # "not scheduled" (readSecurityUpgrade/readConsensusUpgrade1 treat "" as unset).
+      # "not scheduled" (readSecurityUpgrade/readConsensusUpgrade1/readPromoShareUpgrade treat "" as unset).
       SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
       VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
       CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+      PROMO_SHARE_UPGRADE_HEIGHT: ${PROMO_SHARE_UPGRADE_HEIGHT:-}
     volumes:
       - node-data:/data
 

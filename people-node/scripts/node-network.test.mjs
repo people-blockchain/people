@@ -56,3 +56,18 @@ test('consensus upgrade 1 activation is pinned public configuration', () => {
   assert.equal(validateNetwork(network).consensusUpgrade1, undefined);
   assert.equal(networkEnvironment(validateNetwork(network), {}).CONSENSUS_UPGRADE_1_HEIGHT, undefined);
 });
+// The optional creator promo share is a coordinated fork for exactly the same reason: a joining
+// node that never learns its height keeps the fixed 60/15/10/10/5 split past activation.
+test('promo share activation is pinned public configuration', () => {
+  const clean = validateNetwork({...network, promoShareUpgrade: {height: 25492, injected: 'ignored'}});
+  assert.deepEqual(clean.promoShareUpgrade, {height: 25492});
+  const env = networkEnvironment(clean, {});
+  assert.equal(env.PROMO_SHARE_UPGRADE_HEIGHT, '25492');
+  assert.throws(() => networkEnvironment(clean, {PROMO_SHARE_UPGRADE_HEIGHT: '25493'}), /conflicts/);
+  for (const bad of [{height: -1}, {height: 1.5}, {}, null]) {
+    assert.throws(() => validateNetwork({...network, promoShareUpgrade: bad}), /promo share upgrade/i);
+  }
+  // Absent means "not scheduled": the joining node must not invent a height.
+  assert.equal(validateNetwork(network).promoShareUpgrade, undefined);
+  assert.equal(networkEnvironment(validateNetwork(network), {}).PROMO_SHARE_UPGRADE_HEIGHT, undefined);
+});

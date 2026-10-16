@@ -8,6 +8,7 @@ import {CurveMath} from "../libs/CurveMath.sol";
 import {IBondingCurveMarket} from "../interfaces/IBondingCurveMarket.sol";
 import {ICreatorVesting} from "../interfaces/ICreatorVesting.sol";
 import {ICommunityTokenVault} from "../interfaces/ICommunityTokenVault.sol";
+import {IPromoRewardsVault} from "../interfaces/IPromoRewardsVault.sol";
 
 /// @notice Creates ERC-20 project tokens with the same allocation as `applyTokenCreate`.
 contract TokenFactory is Ownable {
@@ -34,6 +35,13 @@ contract TokenFactory is Ownable {
     /// once `StableFeeGateway` is deployed; until then the credit path is simply unreachable.
     address public gateway;
 
+    /// @notice Custodian for the optional creator promo share (owner decision 2026-10-13). Set
+    /// by the owner once `PromoRewardsVault` is deployed — same shape and reason as `gateway`:
+    /// the vault needs this factory's `communityVault`, so it is deployed after the factory.
+    /// While unset, a launch with a non-zero promo share reverts with `PromoVaultNotSet`; the
+    /// default 0% launch path never touches it.
+    address public promoVault;
+
     /// @notice C-01/S1-02: PPL a payer has prepaid via `StableFeeGateway` and not yet consumed by
     /// a `createToken` call. Never withdrawable by anyone — only ever spent against this payer's
     /// own future launch fee — so no native PPL can leave this contract without a token being
@@ -43,11 +51,17 @@ contract TokenFactory is Ownable {
     event FeeRecipientUpdated(address indexed feeRecipient);
     event GatewaySet(address indexed gateway);
     event PrepaidCreditAdded(address indexed payer, uint256 amount);
+    event PromoVaultSet(address indexed promoVault);
+    /// @notice Emitted only when a launch actually sets aside a promo share, so a default 0%
+    /// launch emits exactly the same logs it did before the option existed.
+    event TokenPromoAllocated(address indexed token, address indexed creator, uint16 promoBps, uint256 amount);
 
     error InvalidParams();
     error InsufficientFee();
     error ZeroFeeRecipient();
     error ZeroGateway();
+    error ZeroPromoVault();
+    error PromoVaultNotSet();
     error Unauthorized();
     error InvalidLeftoverMode();
 
@@ -86,6 +100,22 @@ contract TokenFactory is Ownable {
         emit GatewaySet(gateway_);
     }
 
+    /// @notice Set or rotate the `PromoRewardsVault` that custodies optional promo shares.
+    /// Storage rather than `immutable` for the same reason as `gateway`: the vault is deployed
+    /// after this factory, and a retired vault must be replaceable without redeploying the
+    /// factory (which would mean rewiring the registry and every live curve).
+    /// @dev Rotating it does not move pools already registered in the old vault — those keep
+    /// paying out awards under their own rules. It does, however, revoke the old vault's right
+    /// to credit `CommunityTokenVault`, so before rotating, either wait out the 180-day promo
+    /// windows still open there or have the community vault's owner re-authorize the old vault
+    /// with `CommunityTokenVault.setLegacyPromoVault`, otherwise those remainders cannot be
+    /// returned.
+    function setPromoVault(address promoVault_) external onlyOwner {
+        if (promoVault_ == address(0)) revert ZeroPromoVault();
+        promoVault = promoVault_;
+        emit PromoVaultSet(promoVault_);
+    }
+
     /// @notice C-01/S1-02: called by `StableFeeGateway` with the live PPL launch fee as
     /// `msg.value`, crediting `payer` for a future `createToken` call instead of paying PPL out
     /// to the caller for free. The credit is only ever consumed by `createToken` against a real
@@ -96,8 +126,8 @@ contract TokenFactory is Ownable {
         emit PrepaidCreditAdded(payer, msg.value);
     }
 
-    /// @notice Backwards-compatible 5-arg overload. Defaults to `LeftoverMode.Burn` (0) per the
-    /// owner rule 2026-10-13, so existing callers and tests keep compiling and behaving.
+    /// @notice Launch with the standard split, no promo share and `LeftoverMode.Burn` (0).
+    /// @dev Kept so its selector and behaviour match the original five-argument entry point.
     function createToken(
         string calldata name,
         string calldata symbol,
@@ -105,21 +135,40 @@ contract TokenFactory is Ownable {
         uint256 totalSupply,
         string calldata metadataURI
     ) external payable returns (address token) {
-        return _createToken(name, symbol, decimals, totalSupply, metadataURI, 0);
+        return _createToken(name, symbol, decimals, totalSupply, metadataURI, PeopleConstants.PROMO_BPS_NONE, 0);
     }
 
-    /// @notice 6-arg overload: creator picks what happens to curve leftovers and the unsold
-    /// remainder at 180-day finalize. 0 = Burn (default), 1 = CommunityPool. Never the creator,
-    /// never the treasury.
+    /// @notice Launch with an optional promo share (0, 500 or 1000 bps; owner decision
+    /// 2026-10-13) and the default `LeftoverMode.Burn`. See the seven-argument overload.
     function createToken(
         string calldata name,
         string calldata symbol,
         uint8 decimals,
         uint256 totalSupply,
         string calldata metadataURI,
+        uint16 promoBps
+    ) external payable returns (address token) {
+        return _createToken(name, symbol, decimals, totalSupply, metadataURI, promoBps, 0);
+    }
+
+    /// @notice Full launch: optional promo share plus the creator's leftover choice.
+    /// @param promoBps Exactly 0, 500 (5%) or 1000 (10%), carved out of the bonding-curve
+    /// portion; promo tokens go to `promoVault` (see `CurveMath.calculateAllocationWithPromo`).
+    /// @dev There is deliberately no `(…, uint8 leftoverMode)` six-argument overload: a `uint8`
+    /// argument also converts to the promo overload's `uint16`, so Solidity callers could never
+    /// select it. Pass `promoBps = 0` here instead.
+    /// @param leftoverMode What happens to curve leftovers at migration and to the unsold
+    /// remainder at the 180-day finalize: 0 = Burn, 1 = the token's own CommunityPool.
+    function createToken(
+        string calldata name,
+        string calldata symbol,
+        uint8 decimals,
+        uint256 totalSupply,
+        string calldata metadataURI,
+        uint16 promoBps,
         uint8 leftoverMode
     ) external payable returns (address token) {
-        return _createToken(name, symbol, decimals, totalSupply, metadataURI, leftoverMode);
+        return _createToken(name, symbol, decimals, totalSupply, metadataURI, promoBps, leftoverMode);
     }
 
     function _createToken(
@@ -128,8 +177,10 @@ contract TokenFactory is Ownable {
         uint8 decimals,
         uint256 totalSupply,
         string calldata metadataURI,
+        uint16 promoBps,
         uint8 leftoverMode
-    ) internal returns (address token) {
+    ) private returns (address token) {
+        CurveMath.requireValidPromoBps(promoBps);
         if (leftoverMode > 1) revert InvalidLeftoverMode();
         if (bytes(name).length < 2 || bytes(name).length > 64) revert InvalidParams();
         bytes memory sym = bytes(symbol);
@@ -160,7 +211,8 @@ contract TokenFactory is Ownable {
         );
         isPeopleToken[token] = true;
 
-        CurveMath.Allocation memory allocation = CurveMath.calculateAllocation(totalSupply);
+        (CurveMath.Allocation memory allocation, uint256 promo) =
+            CurveMath.calculateAllocationWithPromo(totalSupply, promoBps);
         uint256 upfrontCreator = (allocation.creator * 10) / 100;
         PeopleProjectToken t = PeopleProjectToken(token);
 
@@ -170,6 +222,16 @@ contract TokenFactory is Ownable {
         t.transfer(msg.sender, upfrontCreator);
         t.transfer(address(creatorVesting), allocation.creator - upfrontCreator);
         creatorVesting.register(token, msg.sender, allocation.creator, upfrontCreator);
+
+        // The promo share is carved out of `allocation.bondingCurve`, so the curve transfer below
+        // already excludes it; `promo == 0` skips this block entirely.
+        if (promo > 0) {
+            address vault = promoVault;
+            if (vault == address(0)) revert PromoVaultNotSet();
+            t.transfer(vault, promo);
+            IPromoRewardsVault(vault).register(token, msg.sender, promoBps, promo);
+            emit TokenPromoAllocated(token, msg.sender, promoBps, promo);
+        }
 
         t.transfer(address(bondingCurve), allocation.bondingCurve + allocation.liquidityReserve + allocation.ecosystemReserve);
         bondingCurve.registerToken(
