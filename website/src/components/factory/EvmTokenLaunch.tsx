@@ -8,8 +8,17 @@ import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
-import { erc20Abi, factoryAbi } from "@/lib/evm/client";
+import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
+import {
+  PROMO_BPS_OPTIONS,
+  PROMO_RECIPIENT_CAP_BPS,
+  PROMO_UPFRONT_PERCENT,
+  PROMO_WINDOW_DAYS,
+  allocationPercent,
+  launchAllocation,
+  type PromoBps,
+} from "@/lib/token-promo";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
 import { ISSUER_REFERRAL_DEFAULT_ALLOCATION_BPS } from "@/lib/founders/referral";
 import {
@@ -22,11 +31,15 @@ import {
 
 const ERC20_TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const ZERO_TOPIC = "0x0000000000000000000000000000000000000000000000000000000000000000";
+const LAUNCH_DECIMALS = 6;
 
 export function EvmTokenLaunch() {
   const { lang } = useLanguage();
   const page = factoryCopy[lang].token;
-  const form = factoryCopy[lang].form;
+  // Locale files that predate a copy key fall back to English per key, the same way
+  // `litepaper-content.ts` merges with EN at read time — a locale we have not translated yet
+  // shows English text rather than nothing at all.
+  const form = { ...factoryCopy.en.form, ...factoryCopy[lang].form };
   const u = uxCopy[lang];
   const { signer } = useExternalWallet();
   const dep = readEvmDeployments();
@@ -46,6 +59,9 @@ export function EvmTokenLaunch() {
   const [leftoverMode, setLeftoverMode] = useState<0 | 1>(0);
   const [issuerReferral, setIssuerReferral] = useState(false);
   const [issuerReferralMsg, setIssuerReferralMsg] = useState("");
+  // Optional creator promo share, owner decision 2026-10-13. 0 is the default and keeps the
+  // launch on the unchanged five-argument `createToken` path.
+  const [promoBps, setPromoBps] = useState<PromoBps>(0);
   const r = foundersReferralCopy(lang);
 
   useEffect(() => {
@@ -98,11 +114,11 @@ export function EvmTokenLaunch() {
     setStage("idle");
     try {
       const client = readPublicClient();
-      if (!isTokenSupplyWholeAmountValid(supply, "6")) {
+      if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
         setError(u.supplyMinError);
         return;
       }
-      const units = wholeTokensToBaseUnits(supply, "6");
+      const units = wholeTokensToBaseUnits(supply, String(LAUNCH_DECIMALS));
       if (units === null) {
         setError(u.supplyMinError);
         return;
@@ -142,16 +158,20 @@ export function EvmTokenLaunch() {
       }
 
       setStage("creating");
+      const factory = dep.contracts.tokenFactory as `0x${string}`;
       const fee = await client.readContract({
-        address: dep.contracts.tokenFactory as `0x${string}`,
+        address: factory,
         abi: factoryAbi,
         functionName: "tokenCreateFee",
       });
+      const metadataURI = `ipfs://people/${symbol.trim()}`;
+      // One entry point carries both creator choices: the promo share (0/5/10%) and what happens
+      // to curve leftovers / the unsold remainder (0 = burn, 1 = the token's community pool).
       const hash = await writeViaActiveSigner(signer, {
-        address: dep.contracts.tokenFactory as `0x${string}`,
-        abi: factoryAbi,
+        address: factory,
+        abi: factoryLaunchAbi,
         functionName: "createToken",
-        args: [name.trim(), symbol.trim().toUpperCase(), 6, total, `ipfs://people/${symbol.trim()}`, leftoverMode],
+        args: [name.trim(), symbol.trim().toUpperCase(), LAUNCH_DECIMALS, total, metadataURI, promoBps, leftoverMode],
         value: fee,
       });
       setTx(hash);
@@ -170,6 +190,24 @@ export function EvmTokenLaunch() {
 
   const stageLabel =
     stage === "approving" ? form.approvingStable : stage === "payingFee" ? form.payingStableFee : stage === "creating" ? form.creatingAfterStableFee : null;
+
+  const previewSupply = isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))
+    ? wholeTokensToBaseUnits(supply, String(LAUNCH_DECIMALS))
+    : null;
+  const allocation = previewSupply === null ? null : launchAllocation(previewSupply, promoBps);
+  const wholeTokens = (baseUnits: bigint) =>
+    (baseUnits / BigInt(10) ** BigInt(LAUNCH_DECIMALS)).toLocaleString(lang);
+  const allocationRows: { label: string; amount: bigint }[] =
+    allocation === null
+      ? []
+      : [
+          { label: form.allocationCurve, amount: allocation.bondingCurve },
+          { label: form.allocationPromo, amount: allocation.promo },
+          { label: form.allocationCreator, amount: allocation.creator },
+          { label: form.allocationCommunity, amount: allocation.communityPool },
+          { label: form.allocationLiquidity, amount: allocation.liquidityReserve },
+          { label: form.allocationEcosystem, amount: allocation.ecosystemReserve },
+        ].filter((row) => row.amount > BigInt(0));
 
   if (!evmContractsReady()) {
     return <p className="px-4 py-16 text-center text-ink-2">Contracts not deployed on chain 97401 yet.</p>;
@@ -264,6 +302,51 @@ export function EvmTokenLaunch() {
             </div>
           </div>
 
+          <div className="rounded-xl border border-line p-3" data-testid="promo-share-option">
+            <p className="text-sm font-semibold text-ink">{form.promoTitle}</p>
+            <p className="mt-1 text-xs text-ink-3">{form.promoLead}</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {PROMO_BPS_OPTIONS.map((bps) => (
+                <button
+                  key={bps}
+                  type="button"
+                  aria-pressed={promoBps === bps}
+                  onClick={() => setPromoBps(bps)}
+                  className={`rounded-xl px-3 py-2 text-sm ${promoBps === bps ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
+                >
+                  {bps === 0 ? form.promoOptionNone : form.promoOptionLabel.replace("{{pct}}", String(bps / 100))}
+                </button>
+              ))}
+            </div>
+            {promoBps > 0 ? (
+              <div className="mt-2 space-y-1 text-xs text-ink-3">
+                <p>{form.promoSource}</p>
+                <p>
+                  {form.promoRules
+                    .replaceAll("{{cap}}", String(PROMO_RECIPIENT_CAP_BPS / 100))
+                    .replaceAll("{{upfront}}", String(PROMO_UPFRONT_PERCENT))
+                    .replaceAll("{{days}}", String(PROMO_WINDOW_DAYS))}
+                </p>
+              </div>
+            ) : null}
+          </div>
+
+          {allocation !== null && previewSupply !== null ? (
+            <div className="rounded-xl border border-line p-3" data-testid="launch-allocation">
+              <p className="text-sm font-semibold text-ink">{form.allocationTitle}</p>
+              <dl className="mt-2 space-y-1 text-sm">
+                {allocationRows.map((row) => (
+                  <div key={row.label} className="flex items-baseline justify-between gap-3">
+                    <dt className="text-ink-2">{row.label}</dt>
+                    <dd className="text-right tabular-nums text-ink">
+                      {allocationPercent(row.amount, previewSupply)}% · {wholeTokens(row.amount)}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ) : null}
+
           <div className="rounded-xl border border-line p-3" data-testid="issuer-referral-option">
             <p className="text-sm font-semibold">{r.launchTitle}</p>
             <label className="mt-2 flex items-start gap-2 text-sm text-ink-2">
@@ -287,7 +370,7 @@ export function EvmTokenLaunch() {
             disabled={
               busy ||
               name.trim().length < 2 ||
-              !isTokenSupplyWholeAmountValid(supply, "6") ||
+              !isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS)) ||
               (payWith !== "PPL" && stableFeeUsd6 === null)
             }
             onClick={() => void submit()}

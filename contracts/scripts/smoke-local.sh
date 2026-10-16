@@ -50,7 +50,7 @@ echo "registry=$REGISTRY factory=$FACTORY"
 FEE_RAW="$(cast call "$FACTORY" 'tokenCreateFee()(uint256)' --rpc-url "$RPC" | awk '{print $1}')"
 
 echo "==> create token"
-SIG="$(cast sig-event 'TokenCreated(address,address,string,string,uint8,uint256,(uint256,uint256,uint256,uint256,uint256))')"
+SIG="$(cast sig-event 'TokenCreated(address,address,string,string,uint8,uint256,(uint256,uint256,uint256,uint256,uint256),uint8)')"
 CREATE_OUT="$(cast send "$FACTORY" \
   'createToken(string,string,uint8,uint256,string)' \
   'Smoke Token' "SMK${RANDOM}" 6 1000000000 'ipfs://smoke' \

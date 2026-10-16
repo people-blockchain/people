@@ -28,11 +28,12 @@ test('the production compose profile does not enable dev endpoints', async () =>
 });
 
 // CHAIN-H1/H2 (audit docs/audit-final/chain.md): a coordinated fork only works if every node
-// actually receives the activation height. `.env.node.example` documents SECURITY_UPGRADE_HEIGHT
-// and CONSENSUS_UPGRADE_1_HEIGHT, but compose only passes what its `environment:` block lists —
-// a variable that is documented and not forwarded leaves that node on the legacy rules, which
-// forks it away from the network at the activation height.
-const ACTIVATION_VARS = ['SECURITY_UPGRADE_HEIGHT', 'VALIDATOR_ALLOWLIST', 'CONSENSUS_UPGRADE_1_HEIGHT'];
+// actually receives the activation height. `.env.node.example` documents the activation
+// variables, but compose only passes what its `environment:` block lists — a variable that is
+// documented and not forwarded leaves that node on the legacy rules, which forks it away from
+// the network at the activation height. PROMO_SHARE_UPGRADE_HEIGHT joins the list for the
+// optional creator promo share (docs/protocol-decisions/promo-share.md).
+const ACTIVATION_VARS = ['SECURITY_UPGRADE_HEIGHT', 'VALIDATOR_ALLOWLIST', 'CONSENSUS_UPGRADE_1_HEIGHT', 'PROMO_SHARE_UPGRADE_HEIGHT'];
 
 for (const file of ['../docker-compose.yml', '../docker-compose.node.yml']) {
   test(`${file} forwards every coordinated-activation variable to each node service`, async () => {
@@ -53,7 +54,7 @@ for (const file of ['../docker-compose.yml', '../docker-compose.node.yml']) {
   });
 }
 
-test('the public-node env example documents both coordinated activations', async () => {
+test('the public-node env example documents every coordinated activation', async () => {
   const example = await read('../.env.node.example');
   for (const key of ACTIVATION_VARS) {
     assert.ok(example.includes(key), `.env.node.example must document ${key}`);

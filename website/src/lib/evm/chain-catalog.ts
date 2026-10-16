@@ -4,7 +4,10 @@ import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 
+/** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
+/** Same event with the trailing `uint8 leftoverMode` (owner rule 2026-10-13 factories). */
+const TOKEN_CREATED_LEFTOVER_TOPIC = "0xdcb5d6c49a959a42d0c67fe9b9aa48b4da6065c9f47789f71789f629d84d30f1";
 const PAIR_CREATED_TOPIC = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9";
 
 // ERC-20 / Uniswap-V2 selectors, spelled out so the catalog scan stays dependency-free.
@@ -46,6 +49,15 @@ export type CatalogPool = {
   nativeReserve: number;
   tokenReserve: number;
 };
+
+/** Current + legacy (`<base>V1`, `<base>V2`, …) addresses of one contract role, current first. */
+function contractVersions(dep: { contracts: Record<string, string | null> }, base: string): string[] {
+  const re = new RegExp(`^${base}(V\\d+)?$`);
+  return Object.entries(dep.contracts ?? {})
+    .filter(([key, addr]) => re.test(key) && Boolean(addr))
+    .sort(([a], [b]) => (a === base ? -1 : b === base ? 1 : a.localeCompare(b)))
+    .map(([, addr]) => addr as string);
+}
 
 function topicAddress(topic: string | undefined): string {
   if (!topic || topic.length < 66) return "";
@@ -92,8 +104,13 @@ export function logStartBlock(address: string): number {
     const start = startBlocks[key];
     return typeof start === "number" && start > 0 ? start : deploymentStartBlock();
   }
-  const ammFactory = startBlocks.ammFactory;
-  return typeof ammFactory === "number" && ammFactory > 0 ? ammFactory : deploymentStartBlock();
+  // Legacy pairs/tokens of the previous stack predate the current AMM factory, so fall back to
+  // the earliest AMM factory start.
+  const ammStarts = Object.entries(startBlocks)
+    .filter(([key]) => /^ammFactory(V\d+)?$/.test(key))
+    .map(([, block]) => block)
+    .filter((b): b is number => typeof b === "number" && b > 0);
+  return ammStarts.length ? Math.min(...ammStarts) : deploymentStartBlock();
 }
 
 /**
@@ -251,7 +268,17 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
   if (!factory) return [];
 
   const staticMap = Object.entries(dep.assetMap ?? {});
-  const fromLogs = await fetchLogsWindowed(factory, [TOKEN_CREATED_TOPIC]);
+  // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
+  // keep showing up in the catalog.
+  const factories = contractVersions(dep, "tokenFactory");
+  const fromLogs = (
+    await Promise.all(
+      factories.flatMap((f) => [
+        fetchLogsWindowed(f, [TOKEN_CREATED_TOPIC]),
+        fetchLogsWindowed(f, [TOKEN_CREATED_LEFTOVER_TOPIC]),
+      ]),
+    )
+  ).flat();
 
   const tokenAddrs = new Set<string>();
   for (const [, addr] of staticMap) {
@@ -454,14 +481,17 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
   // 9 000-block window and measured ~16 s cold against the live node, which put the whole pool list
   // behind a multi-second skeleton, so it now runs only when the index is unavailable — an older
   // factory, or a node that rejects the calls.
-  const indexed = await factoryPairAddresses(ammFactory);
-  if (indexed && indexed.length) {
-    for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
-  } else {
-    const fromLogs = await fetchLogsWindowed(ammFactory, [PAIR_CREATED_TOPIC]);
-    for (const log of fromLogs) {
-      const pair = topicAddress(log.topics?.[2]);
-      if (pair) pairAddrs.add(pair.toLowerCase());
+  // Every AMM factory (current and legacy `ammFactoryVn`) is listed, so old pools stay visible.
+  for (const factory of contractVersions(dep, "ammFactory")) {
+    const indexed = await factoryPairAddresses(factory);
+    if (indexed && indexed.length) {
+      for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
+    } else {
+      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]);
+      for (const log of fromLogs) {
+        const pair = topicAddress(log.topics?.[2]);
+        if (pair) pairAddrs.add(pair.toLowerCase());
+      }
     }
   }
 

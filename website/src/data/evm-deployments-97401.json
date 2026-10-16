@@ -2,27 +2,41 @@
   "chainId": 97401,
   "cosmosChainId": "people_97401-1",
   "rpcUrl": "https://node.peopleblockchain.network/rpc",
-  "deployedAt": "2026-10-13T22:20:52Z",
+  "deployedAt": "2026-10-16T10:12:30Z",
   "deployer": "0x040b538DCB60EEa5BdB78779d3097D25f38D44C4",
   "startBlocks": {
-    "tokenFactory": 309090,
-    "bondingCurve": 309090,
-    "ammFactory": 58,
+    "tokenFactory": 471827,
+    "bondingCurve": 471827,
+    "ammFactory": 471827,
     "wppl": 57,
-    "router": 59
+    "router": 471827,
+    "nftFactory": 471827,
+    "promoRewardsVault": 471827,
+    "tokenFactoryV1": 109010,
+    "bondingCurveV1": 109010,
+    "ammFactoryV1": 58,
+    "routerV1": 59,
+    "tokenFactoryV2": 285448,
+    "bondingCurveV2": 285444,
+    "tokenFactoryV3": 309090,
+    "bondingCurveV3": 309090,
+    "tokenFactoryV4": 470209,
+    "bondingCurveV4": 470209,
+    "ammFactoryV4": 470209,
+    "routerV4": 470209
   },
   "contracts": {
-    "registry": "0x855e80417207A913B64e98EfF99F88Fc80759972",
-    "tokenFactory": "0xB0476cB21eD23386e0AC55762F5d7C3Deb940432",
-    "bondingCurve": "0x3bFd5c0c1a43abf2C8d07666A24aFF59a78398d9",
-    "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18",
+    "registry": "0x107B847f13DF4c28d2087D5f750629AD2B3350B3",
+    "tokenFactory": "0x58f434E5f24c7239CAAf103a23F783e89dEec36B",
+    "bondingCurve": "0xCAe2d69eE15BC4Ac791B23994C8C14fA847F9C56",
+    "router": "0xCf33a271d404FCAe18a887C144D7111c37A5c546",
     "wppl": "0x89aaef7b13dfba2570c3c47390f03471596a2628",
-    "ammFactory": "0x32b96f14f2d2447fff50c0e650f3795a3ca521f0",
-    "nftFactory": "0x0fb9f7E6205ce2DE5fF40d5C6Dcc07050b9172d7",
-    "creatorVesting": "0xa8A3e25A01C48743382498E8270392b02fff7f68",
-    "communityVault": "0xa6481690ca5cc8521e2546C2e11a8F35576dbfB7",
+    "ammFactory": "0xC262a068434572D5fce97CC304e85B7D2Af7b2fa",
+    "nftFactory": "0x755FEC41decD3147D693EE28B6442eF0dC9DD0Df",
+    "creatorVesting": "0x9f5F47f08109742b49EB470A91BE1DFfE710EAd1",
+    "communityVault": "0xacfd43cf2370041a940402364b217E5312C06683",
     "peopleMultisig": "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB",
-    "gateway": "0x4620FAF6ac06C046f6A3920e750BEb51f5F2Cb84",
+    "gateway": "0xFd9124c4a5b1eDe75c2d437eE4dac063ab13056B",
     "agentWallet": "0xbeee27d8d0c7dea625cd58c29fde9e735b3abe32",
     "agentWalletExecutor": "0xf363639474cf4fe1c8a735cefb444a42621c0fb8",
     "agentWalletV2Deprecated": "0xc1554093398f48cc6c9c559bb26887acaec8897c",
@@ -32,7 +46,43 @@
     "governor": "0x5d145a4ebf689466acafd2e536669659e46524f8",
     "lavkaPass": "0x47723bc7d7bab2dd177698e2255d0ae5646e37d4",
     "merchantEscrow": "0xD15C889122ad4892186F1DA446A80c33fF269488",
-    "lavkaPayments": "0xE72A7Db932Aa9E6bcA954F6C57a0759C60852216"
+    "lavkaPayments": "0xE72A7Db932Aa9E6bcA954F6C57a0759C60852216",
+    "promoRewardsVault": "0x2Cc35F206A18bd374B2617101Fdc6162358a35b9",
+    "registryV1": "0xc0f7b64786ab9d6e6d0ccde1a4b50f6e3c27d133",
+    "tokenFactoryV1": "0x84D0973A901Dc5794C797B5321781e9Ade4174BF",
+    "bondingCurveV1": "0x0cD6E78eD7A33A1816eEA9Fb4986e44Ab9cf2f77",
+    "creatorVestingV1": "0x6f6ceafdcc8dff75245f544d5eedf39e40628f96",
+    "communityVaultV1": "0x0E259a8Df9FAcdC8c0d2EfEDC10cf15f273d42d1",
+    "nftFactoryV1": "0xbe8a453f62fc7b4f2b168ff9eb7b750a114bb406",
+    "gatewayV1": "0xb68441f160c63988105285944534c607dfd94e80",
+    "routerV1": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18",
+    "ammFactoryV1": "0x32b96f14f2d2447fff50c0e650f3795a3ca521f0",
+    "peopleMultisigV1": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
+    "registryV2": "0x3877fdF58a4D4Bb65cF7d780166Bec941755dd16",
+    "tokenFactoryV2": "0xE281db7A508Bb50361246fb1a2A37C4d39aBfEfB",
+    "bondingCurveV2": "0x3238E9634D46e942090817942F5b1e521F371C2C",
+    "creatorVestingV2": "0x1e9Dcc18158733DC2a6ff2A850285124c9CBF377",
+    "communityVaultV2": "0x66d16DF444972a7Ab57e64636C6114D7A523fFF7",
+    "nftFactoryV2": "0x607790894b3f55672A2Cc26b75B43A03fF048EAd",
+    "gatewayV2": "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9",
+    "registryV3": "0x855e80417207A913B64e98EfF99F88Fc80759972",
+    "tokenFactoryV3": "0xB0476cB21eD23386e0AC55762F5d7C3Deb940432",
+    "bondingCurveV3": "0x3bFd5c0c1a43abf2C8d07666A24aFF59a78398d9",
+    "creatorVestingV3": "0xa8A3e25A01C48743382498E8270392b02fff7f68",
+    "communityVaultV3": "0xa6481690ca5cc8521e2546C2e11a8F35576dbfB7",
+    "nftFactoryV3": "0x0fb9f7E6205ce2DE5fF40d5C6Dcc07050b9172d7",
+    "gatewayV3": "0x4620FAF6ac06C046f6A3920e750BEb51f5F2Cb84",
+    "registryV4": "0xF9B660F76c6bEc31F3C1f21A1393E02F821dcfe6",
+    "ammFactoryV4": "0xcc91d0dE35639Ca65b7b43883734110Daf830d1C",
+    "routerV4": "0xE5c1e9CC3804AE5453D366cBA8C53D5A2b9a7281",
+    "creatorVestingV4": "0xD0730CB9b411EdD8e691d8683b25DFBbC4230e95",
+    "communityVaultV4": "0xd2A693f6E156e520d04356C851a3b7215Ae2f5F6",
+    "bondingCurveV4": "0x910E5Cc0FBD6Fc1B9B69d1485aC998546B49d2B4",
+    "tokenFactoryV4": "0xe5a2a22503BaB0a05849c93445a563c635930dad",
+    "promoRewardsVaultV4": "0xf604973235aF77214F35D795253e07F81DF7F002",
+    "nftFactoryV4": "0xaca5e339cD67B740D62D1042E332F8Be44d75447",
+    "gatewayV4": "0x095aeC6071a535AB81695403Bce46507D0fa6ebA",
+    "peopleMultisigV4": "0x8E6aBdc7225621770cAd88345a72f20eD77e9d03"
   },
   "assetMap": {
     "trosc3": "0x89e2d0d8a921027b4bf22aab600f100e9139ec3e",
@@ -49,7 +99,8 @@
       "tokenAddress": "0x89e2d0d8a921027b4bf22aab600f100e9139ec3e",
       "nativeReserve": 121.77,
       "tokenReserve": 13267783.993786,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     },
     {
       "poolId": "0x1f7e033b59940851c4ee25b30494be21cdff134c",
@@ -57,7 +108,8 @@
       "tokenAddress": "0x023d84deef92f48a09d9c8066dd81ba5c2efe6c7",
       "nativeReserve": 121.77,
       "tokenReserve": 6633891.996893,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     },
     {
       "poolId": "0x1db9bfe61ff4ee4bfa0170170741b732ca9cd106",
@@ -65,7 +117,8 @@
       "tokenAddress": "0x3e04d2458d10f29c1693a037db3a8408a2befedf",
       "nativeReserve": 121.77,
       "tokenReserve": 2786234.638695,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     },
     {
       "poolId": "0xe17eb4f6f0eb93a1fdec4fe6ccd9f3864a9efc49",
@@ -73,7 +126,8 @@
       "tokenAddress": "0x9bf8db1d5198e73d8a262320ea13d8eb73810e59",
       "nativeReserve": 121.77,
       "tokenReserve": 13267783.993786,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     },
     {
       "poolId": "0x533966926aba7fb0d5777a8c8a386a7edb7870de",
@@ -81,7 +135,8 @@
       "tokenAddress": "0xfb36c479bbe90ddddc2e1f5f4141060841f7eed6",
       "nativeReserve": 121.77,
       "tokenReserve": 132677839.937865,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     },
     {
       "poolId": "0x48f0fb27bb77aabdb660a7a6b71ec12fef83f3df",
@@ -89,7 +144,8 @@
       "tokenAddress": "0xa3de9569ef1990d330273384684ec911adde3b9f",
       "nativeReserve": 121.77,
       "tokenReserve": 132677839.937865,
-      "status": "active"
+      "status": "active",
+      "router": "0x56eeacd20cc4e51e0a7484bd6df71a5f8074cf18"
     }
   ],
   "deployBlock": 309090,
@@ -164,7 +220,14 @@
     "nftFactory": "0x607790894b3f55672A2Cc26b75B43A03fF048EAd",
     "gateway": "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9",
     "peopleMultisig": "0x8e6abdc7225621770cad88345a72f20ed77e9d03",
-    "note": "Pre-leftoverMode launch set (2026-10-13). Gateway 0x78e9\u2026 kept fees 1/2 USD but is immutable to these factories."
+    "note": "Pre-leftoverMode launch set (2026-10-13). Gateway 0x78e9… kept fees 1/2 USD but is immutable to these factories."
   },
-  "redeployNote": "2026-10-14 leftoverMode Burn/CommunityPool launch set; gateway Ownable2Step pending acceptOwnership by multisig."
+  "redeployNote": "2026-10-14 leftoverMode Burn/CommunityPool launch set; gateway Ownable2Step pending acceptOwnership by multisig.",
+  "fullStackRedeploy": {
+    "deployedAt": "2026-10-16T10:12:30Z",
+    "firstBlock": 471827,
+    "script": "contracts/script/RedeployFullStack.s.sol",
+    "owner": "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB",
+    "note": "Current launch stack: fresh registry + AMM factory/router, vesting, community vault, bonding curve with creator leftoverMode (burn / community pool) and 180-day finalize, TokenFactory with 0/5/10% promo, PromoRewardsVault, NftFactory, StableFeeGateway ($1/$2, tUSDC/tUSDT). *V1..*V4 keys are earlier stacks kept readable: V1 2026-10-09, V2 2026-10-13, V3 2026-10-14 (leftoverMode, no promo), V4 2026-10-16 first redeploy (promo, no leftoverMode). Old tokens stay on their own contracts."
+  }
 }

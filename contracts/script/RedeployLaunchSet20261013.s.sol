@@ -22,6 +22,7 @@ contract RedeployLaunchSet20261013 is Script {
     uint256 internal constant NFT_FEE_USD6 = 2_000000; // 2.00 USD
 
     function run() external {
+        revert("superseded: use RedeployFullStack.s.sol (no PromoRewardsVault, reuses stale-registry AMM)");
         require(block.chainid == PeopleConstants.PEOPLE_EVM_CHAIN_ID, "wrong chain id");
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/deployments/97401.json"));
         address router = vm.parseJsonAddress(json, ".contracts.router");

@@ -255,6 +255,17 @@ export class NodeService {
         await this.store.close();
         throw new Error("Consensus upgrade 1 must be scheduled above the existing head");
       }
+      // The creator promo share is a coordinated fork with the same two failure modes.
+      const configuredPromo = this.config.promoShareUpgrade;
+      const storedPromo = saved.networkConfig?.promoShareUpgrade;
+      if (storedPromo && JSON.stringify(storedPromo) !== JSON.stringify(configuredPromo)) {
+        await this.store.close();
+        throw new Error("Promo share upgrade configuration changed; existing data preserved");
+      }
+      if (configuredPromo && !storedPromo && savedHead.header.height >= configuredPromo.height) {
+        await this.store.close();
+        throw new Error("Promo share upgrade must be scheduled above the existing head");
+      }
       if (configuredUpgrade && Object.values(saved.validators).some(validator => validator.status === "active" && !configuredUpgrade.validatorAllowlist.includes(validator.address))) {
         await this.store.close();
         throw new Error("Existing active validator is missing from the approved allowlist");
@@ -262,6 +273,7 @@ export class NodeService {
       if (this.chainState.networkConfig) Object.assign(this.config, this.chainState.networkConfig);
       if (configuredUpgrade) this.config.securityUpgrade = configuredUpgrade;
       if (configuredUpgrade1) this.config.consensusUpgrade1 = configuredUpgrade1;
+      if (configuredPromo) this.config.promoShareUpgrade = configuredPromo;
       this.chainState.networkConfig = structuredClone(this.config);
       this.latestReward = persisted.latestReward;
       this.totalValidatorRewards = persisted.totalValidatorRewards ?? 0;
@@ -596,6 +608,7 @@ export class NodeService {
       // CHAIN-H2: joining nodes derive their env from this descriptor, so it must publish every
       // coordinated activation height, not just the security upgrade.
       ...(this.config.consensusUpgrade1 ? { consensusUpgrade1: this.config.consensusUpgrade1 } : {}),
+      ...(this.config.promoShareUpgrade ? { promoShareUpgrade: this.config.promoShareUpgrade } : {}),
       schemaVersion: 1, protocolVersion: 2,
       chainId: this.chainState.chain[0]!.header.chainId,
       genesisHash: this.chainState.chain[0]!.hash,

@@ -22,7 +22,7 @@ const chain = {
 };
 
 const abi = parseAbi([
-  "function createToken(string name, string symbol, uint8 decimals, uint256 totalSupply, string metadataURI, uint8 leftoverMode) payable returns (address)",
+  "function createToken(string name, string symbol, uint8 decimals, uint256 totalSupply, string metadataURI, uint16 promoBps, uint8 leftoverMode) payable returns (address)",
   "function tokenCreateFee() view returns (uint256)",
   "function leftoverMode(address) view returns (uint8)",
   "event TokenCreated(address indexed token, address indexed creator, string name, string symbol, uint8 decimals, uint256 totalSupply, (uint256 bondingCurve, uint256 communityPool, uint256 creator, uint256 liquidityReserve, uint256 ecosystemReserve) allocation, uint8 leftoverMode)",
@@ -44,7 +44,7 @@ const hash = await wallet.writeContract({
   address: factory,
   abi,
   functionName: "createToken",
-  args: ["BurnModeProbe", "BURNP", 6, 1_000_000n, "ipfs://people/burnp-probe", 0],
+  args: ["BurnModeProbe", "BURNP", 6, 1_000_000n, "ipfs://people/burnp-probe", 0, 0],
   value: fee,
 });
 console.log("tx", hash);

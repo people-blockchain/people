@@ -55,7 +55,7 @@ contract CurveFinalizeTest is Test {
     function _launchMode(uint8 mode) internal returns (address token) {
         vm.prank(creator);
         token = tokenFactory.createToken{value: PeopleConstants.TOKEN_CREATE_FEE}(
-            "Test", "TST", 18, 1_000_000, "", mode
+            "Test", "TST", 18, 1_000_000, "", uint16(0), mode
         );
     }
 

@@ -79,7 +79,16 @@ const PROTOCOL_TX_FEE_TYPES = new Set<TxType>([
   "ammCreatePool",
   "ammAddLiquidity",
   "ammRemoveLiquidity",
-  "ammSwap"
+  "ammSwap",
+  // Optional creator promo share (docs/PROTOCOL-DECISIONS.md, docs/protocol-decisions/promo-share.md):
+  // these three carry the ordinary `DEFAULT_TRANSFER_FEE` and route it through Model A
+  // 30/25/20/10/15/0 like every other eligible `tx.fee` — no new public tariff. Omitting them
+  // would send the whole fee to validators and starve the community/treasury/liquidity/growth
+  // buckets. Historical blocks cannot contain these types (`validateTransactionValues` rejected
+  // them before the promo-share upgrade), so adding them cannot change a replayed state root.
+  "promoAward",
+  "promoClaim",
+  "promoReturn"
 ]);
 
 export interface GrowthFeeSplitSwitch {

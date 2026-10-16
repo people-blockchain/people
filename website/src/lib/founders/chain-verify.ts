@@ -111,8 +111,10 @@ export async function verifyFounderActionOnChain(
   }
 
   const deployments = readEvmDeployments();
-  const router = deployments.contracts.router?.toLowerCase();
-  if (!router || receipt.to?.toLowerCase() !== router) {
+  const routers = Object.entries(deployments.contracts)
+    .filter(([key, addr]) => /^router(V\d+)?$/.test(key) && Boolean(addr))
+    .map(([, addr]) => (addr as string).toLowerCase());
+  if (!routers.length || !routers.includes(receipt.to?.toLowerCase() ?? "")) {
     return { ok: false, error: "wrong_contract" };
   }
   const pairAddresses = new Set(deployments.pools.map((p) => p.poolId.toLowerCase()));

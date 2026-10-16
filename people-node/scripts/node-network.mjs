@@ -29,8 +29,16 @@ export function validateNetwork(info) {
     if (!upgrade || !Number.isSafeInteger(upgrade.height) || upgrade.height < 0) throw new Error('Invalid consensus upgrade 1');
     consensusUpgrade1 = { height: upgrade.height };
   }
+  // The creator promo share is a coordinated fork too, for the same reason as CHAIN-H2: a
+  // joining node that does not learn its height runs the legacy split past the agreed height.
+  let promoShareUpgrade;
+  if (info.promoShareUpgrade !== undefined) {
+    const upgrade = info.promoShareUpgrade;
+    if (!upgrade || !Number.isSafeInteger(upgrade.height) || upgrade.height < 0) throw new Error('Invalid promo share upgrade');
+    promoShareUpgrade = { height: upgrade.height };
+  }
   // Construct an allowlist: never persist arbitrary fields supplied by a remote endpoint.
-  return { ...(securityUpgrade ? { securityUpgrade } : {}), ...(consensusUpgrade1 ? { consensusUpgrade1 } : {}), schemaVersion: 1, protocolVersion: 2, chainId: info.chainId, genesisHash: info.genesisHash,
+  return { ...(securityUpgrade ? { securityUpgrade } : {}), ...(consensusUpgrade1 ? { consensusUpgrade1 } : {}), ...(promoShareUpgrade ? { promoShareUpgrade } : {}), schemaVersion: 1, protocolVersion: 2, chainId: info.chainId, genesisHash: info.genesisHash,
     genesisFaucetAddress: info.genesisFaucetAddress, bootstrapAddress: info.bootstrapAddress,
     bootstrapPeers: info.bootstrapPeers, archive: true,
     tokenCreateMinFee: info.tokenCreateMinFee, nftMintMinFee: info.nftMintMinFee };
@@ -66,6 +74,7 @@ export function networkEnvironment(network, env) {
   const values = {
     ...(network.securityUpgrade ? { SECURITY_UPGRADE_HEIGHT: String(network.securityUpgrade.height), VALIDATOR_ALLOWLIST: network.securityUpgrade.validatorAllowlist.join(',') } : {}),
     ...(network.consensusUpgrade1 ? { CONSENSUS_UPGRADE_1_HEIGHT: String(network.consensusUpgrade1.height) } : {}),
+    ...(network.promoShareUpgrade ? { PROMO_SHARE_UPGRADE_HEIGHT: String(network.promoShareUpgrade.height) } : {}),
     CHAIN_ID: network.chainId, GENESIS_FAUCET_ADDRESS: network.genesisFaucetAddress,
     BOOTSTRAP_ADDRESS: network.bootstrapAddress, BOOTSTRAP_PEERS: network.bootstrapPeers.join(','),
     EXPECTED_GENESIS_HASH: network.genesisHash,

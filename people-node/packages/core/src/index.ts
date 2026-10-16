@@ -1,6 +1,19 @@
 import { PPL_SCALE, pplToAtoms } from "./ppl-units.js";
 import { readSecurityUpgrade, securityUpgradeActive, legacyNetworkConfig, MAX_FUTURE_BLOCK_MS } from "./security-upgrade.js";
 import { readConsensusUpgrade1, consensusUpgrade1Active, withoutConsensusUpgrade1 } from "./consensus-upgrade-1.js";
+import {
+  PROMO_BPS_NONE,
+  applyPromoToAllocation,
+  awardPromo,
+  claimPromo,
+  createPromoPool,
+  parsePromoBps,
+  promoShareActive,
+  readPromoShareUpgrade,
+  returnUnusedPromo,
+  withoutPromoShareUpgrade,
+  type PromoPoolState
+} from "./promo-share.js";
 import { createHash } from "node:crypto";
 import type {
   AssetMetadata,
@@ -202,6 +215,37 @@ export {
   toSafeInteger as ammToSafeInteger
 } from "./amm.js";
 export {
+  PROMO_ACCEPTED_BPS,
+  PROMO_BPS_HIGH,
+  PROMO_BPS_LOW,
+  PROMO_BPS_NONE,
+  PROMO_MAX_AWARDS_PER_RECIPIENT,
+  PROMO_RECIPIENT_CAP_BPS,
+  PROMO_UPFRONT_PERCENT,
+  PROMO_VESTING_BLOCKS,
+  PROMO_WINDOW_BLOCKS,
+  applyPromoToAllocation,
+  awardPromo,
+  claimPromo,
+  createPromoPool,
+  parsePromoBps,
+  promoAmount,
+  promoAwardedTo,
+  promoClaimableOf,
+  promoDeadline,
+  promoRecipientCap,
+  promoShareActive,
+  promoUndistributed,
+  promoVestedOf,
+  promoVestedOfAward,
+  readPromoShareUpgrade,
+  requireValidPromoBps,
+  returnUnusedPromo,
+  withoutPromoShareUpgrade,
+  type PromoAward,
+  type PromoPoolState
+} from "./promo-share.js";
+export {
   wrapRuntimeAsDeploy,
   bytesToHex,
   hexToBytes,
@@ -339,6 +383,13 @@ export interface ChainState {
   evmAddressMigrationApplied?: boolean;
   /** Address (any form) → secp256k1 public key hex. Not hashed in stateRoot. */
   knownAccountPublicKeys?: Record<string, string>;
+  /**
+   * Optional creator promo pools, keyed by asset id (`docs/TOKEN-ECONOMY.md` §4a). The node-side
+   * equivalent of `PromoRewardsVault`: promo tokens live here, never in the creator's account.
+   * Hashed in `computeStateRoot` **only while non-empty**, so a chain that has never launched a
+   * token with a promo share keeps byte-identical state roots.
+   */
+  promoPools?: Record<string, PromoPoolState>;
 }
 
 export const GENESIS_FAUCET_BALANCE = 1_000_000;
@@ -582,6 +633,7 @@ export function distributeFromCommunityPool(
 export const DEFAULT_CONFIG: NetworkConfig = {
   ...(readSecurityUpgrade(process.env) ? { securityUpgrade: readSecurityUpgrade(process.env) } : {}),
   ...(readConsensusUpgrade1(process.env) ? { consensusUpgrade1: readConsensusUpgrade1(process.env) } : {}),
+  ...(readPromoShareUpgrade(process.env) ? { promoShareUpgrade: readPromoShareUpgrade(process.env) } : {}),
   bootstrapAddress: process.env.BOOTSTRAP_ADDRESS ?? "",
   chainId: process.env.CHAIN_ID ?? "ovn-devnet",
   minStake: 100,
@@ -624,6 +676,7 @@ function normalizedNetworkConfigForRoot(config: NetworkConfig, height: number): 
   let normalized = config;
   if (!securityUpgradeActive(normalized, height)) normalized = legacyNetworkConfig(normalized);
   if (!consensusUpgrade1Active(normalized, height)) normalized = withoutConsensusUpgrade1(normalized);
+  if (!promoShareActive(normalized, height)) normalized = withoutPromoShareUpgrade(normalized);
   return normalized;
 }
 
@@ -658,7 +711,10 @@ export function computeStateRoot(state: ChainState): string {
     launchReserves: state.launchReserves,
     liquidityPools: state.liquidityPools,
     nfts: state.nfts ?? {},
-    contracts: canonicalizeContracts(state.contracts ?? {})
+    contracts: canonicalizeContracts(state.contracts ?? {}),
+    // Appended last and only when a promo pool exists: a chain with no promo launch hashes the
+    // exact same object as the pre-promo-share binary, so historical state roots are unchanged.
+    ...(state.promoPools && Object.keys(state.promoPools).length > 0 ? { promoPools: state.promoPools } : {})
   });
 }
 
@@ -666,7 +722,14 @@ export function createGenesisBlock(config: NetworkConfig = DEFAULT_CONFIG): Bloc
   const header: BlockHeader = {
     height: 0,
     previousHash: "GENESIS",
-    stateRoot: hashJson({ config: legacyNetworkConfig(config), faucet: FAUCET_ADDRESS, balance: GENESIS_FAUCET_BALANCE, tokenCreateMinFee: tokenCreateMinFee(), nftMintMinFee: nftMintMinFee() }),
+    // A coordinated activation height is a schedule, not genesis identity: scheduling the promo
+    // share on a live network must not move the genesis hash, or every node would fail the
+    // `EXPECTED_GENESIS_HASH` check and refuse to rejoin its own chain. Stripping an absent field
+    // is a no-op, so this is byte-identical on a network that never schedules one.
+    // NOTE: `consensusUpgrade1` is deliberately left in here. It is already part of the genesis
+    // hash on any network that scheduled it, and removing it now would move that network's
+    // genesis — a separate coordinated change, not this one's to make.
+    stateRoot: hashJson({ config: withoutPromoShareUpgrade(legacyNetworkConfig(config)), faucet: FAUCET_ADDRESS, balance: GENESIS_FAUCET_BALANCE, tokenCreateMinFee: tokenCreateMinFee(), nftMintMinFee: nftMintMinFee() }),
     chainId: config.chainId,
     protocolVersion: 2,
     proposer: "genesis",
@@ -724,7 +787,8 @@ export function createInitialState(config: NetworkConfig = DEFAULT_CONFIG): Chai
     nfts: {},
     contracts: {},
     contractReceipts: {},
-    contractMeta: {}
+    contractMeta: {},
+    promoPools: {}
   };
 }
 
@@ -889,6 +953,27 @@ export function enqueueTransaction(state: ChainState, tx: Transaction, verify = 
   if ((tx.type === "registerParticipant" || tx.type === "participantReferral") && (tx.amount !== 0 || tx.fee !== 0)) throw new Error("Participant transaction must not move value");
   if (state.mempool.some(pending => pending.from === tx.from)) throw new Error("Sender already has a pending transaction");
   validateMempoolSpending(state, tx);
+  // Node-local promo-share admission. `applyTokenCreate` deliberately *ignores* `promoBps` below
+  // the coordinated activation height (so a pre-upgrade binary and this one replay identically);
+  // refusing the transaction here instead gives the creator an explicit error rather than a
+  // silent 0% promo share. Above the height the value is validated eagerly, at submit time.
+  // The three pool transactions get the same treatment: `applyPromoTransaction` rejects them
+  // below the height anyway, so refusing admission only moves the error to submit time and keeps
+  // a hopeless transaction out of the sender's single mempool slot.
+  if (
+    (tx.type === "tokenCreate" && tx.payload?.promoBps !== undefined && tx.payload.promoBps !== null) ||
+    tx.type === "promoAward" ||
+    tx.type === "promoClaim" ||
+    tx.type === "promoReturn"
+  ) {
+    const promoLive = Boolean(
+      state.networkConfig && promoShareActive(state.networkConfig, inclusionBlockHeight(state))
+    );
+    if (!promoLive) {
+      throw new Error("Creator promo share is not active on this network yet");
+    }
+    if (tx.type === "tokenCreate") parsePromoBps(tx.payload, true);
+  }
   if (state.networkConfig && securityUpgradeActive(state.networkConfig, inclusionBlockHeight(state)) && tx.id !== contentTransactionId(tx)) throw new Error("Transaction ID must match signed content");
   if (tx.type === "registerParticipant" || tx.type === "participantReferral") {
     if (tx.amount !== 0 || tx.fee !== 0) {
@@ -1486,7 +1571,7 @@ export function validateTransactionValues(tx: Transaction): void {
   pplToAtoms(tx.fee);
   if (tx.type === "transfer" && tx.payload?.recipients === undefined && !isCanonicalAddress(tx.to)) throw new Error("Invalid recipient address");
   if (tx.type === "nftTransfer" && !isCanonicalAddress(tx.to)) throw new Error("Invalid NFT transfer recipient");
-  const types = ["transfer", "joinValidator", "leaveValidator", "unstake", "attestation", "slashEvidence", "proposal", "vote", "tokenCreate", "curveBuy", "curveSell", "creatorClaim", "nftMint", "nftTransfer", "contractDeploy", "contractCall", "registerParticipant", "participantReferral", "growthClaim", "ammCreatePool", "ammAddLiquidity", "ammRemoveLiquidity", "ammSwap"];
+  const types = ["transfer", "joinValidator", "leaveValidator", "unstake", "attestation", "slashEvidence", "proposal", "vote", "tokenCreate", "curveBuy", "curveSell", "creatorClaim", "nftMint", "nftTransfer", "contractDeploy", "contractCall", "registerParticipant", "participantReferral", "growthClaim", "ammCreatePool", "ammAddLiquidity", "ammRemoveLiquidity", "ammSwap", "promoAward", "promoClaim", "promoReturn"];
   if (!types.includes(tx.type)) throw new Error("Unsupported transaction type");
 }
 
@@ -1764,6 +1849,11 @@ function applyTransactionUnchecked(state: ChainState, tx: Transaction, config: N
 
   if (tx.type === "creatorClaim") {
     applyCreatorClaim(state, tx, config);
+    return;
+  }
+
+  if (tx.type === "promoAward" || tx.type === "promoClaim" || tx.type === "promoReturn") {
+    applyPromoTransaction(state, tx, config);
     return;
   }
 
@@ -2089,7 +2179,15 @@ export function applyTokenCreate(
     throw new Error(`Asset ID already exists: ${assetId}`);
   }
 
-  const allocation = BondingCurveEngine.calculateTokenAllocation(totalSupply);
+  // Optional creator promo share (owner decision 2026-10-13, docs/TOKEN-ECONOMY.md §4a).
+  // Below the coordinated activation height `parsePromoBps` returns 0 and ignores the payload
+  // field, so every line after this point is the pre-upgrade code path, byte for byte.
+  const promoBps = parsePromoBps(tx.payload, promoShareActive(config, inclusionBlockHeight(state)));
+  const { allocation, promo } = applyPromoToAllocation(
+    BondingCurveEngine.calculateTokenAllocation(totalSupply),
+    totalSupply,
+    promoBps
+  );
   const currentHeight = state.chain.length > 0 ? state.chain[state.chain.length - 1]!.header.height : 0;
 
   from.balance -= tx.fee;
@@ -2136,8 +2234,19 @@ export function applyTokenCreate(
   state.ecosystemReserves[assetId] = allocation.ecosystemReserve;
   state.launchReserves[assetId] = 0;
 
-  // 60% Bonding Curve
-  state.curves[assetId] = BondingCurveEngine.createInitialCurveState(assetId, totalSupply, securityUpgradeActive(config, inclusionBlockHeight(state)));
+  // 60% Bonding Curve (55% / 50% when the creator chose a promo share)
+  state.curves[assetId] = BondingCurveEngine.createCurveStateForAllocation(
+    assetId,
+    totalSupply,
+    allocation.bondingCurve,
+    securityUpgradeActive(config, inclusionBlockHeight(state))
+  );
+
+  // 0 / 5% / 10% Promo Share — held under the PromoRewardsVault rules, not credited to anyone.
+  if (promoBps !== PROMO_BPS_NONE && promo > 0) {
+    state.promoPools ??= {};
+    state.promoPools[assetId] = createPromoPool(assetId, tx.from, promoBps, promo, currentHeight);
+  }
   routeEligibleTxFee(state, tx, config);
   if ((securityUpgradeActive(config, inclusionBlockHeight(state)) ? Number.isFinite(tx.fee) : Number.isSafeInteger(tx.fee)) && tx.fee > 0) {
     noteGrowthEpoch(state, tx.from, "N");
@@ -2357,6 +2466,74 @@ export function applyCreatorClaim(
   const currentTokenBal = getAccountBalance(from, assetId);
   setAccountBalance(from, assetId, currentTokenBal + claimable);
   routeEligibleTxFee(state, tx, config);
+}
+
+/** Protocol-controlled destinations a promo award may never be routed to. */
+function forbiddenPromoRecipients(config: NetworkConfig): string[] {
+  const bootstrap = (config.bootstrapAddress ?? "").trim().toLowerCase();
+  return [FAUCET_ADDRESS.toLowerCase(), ...(bootstrap ? [bootstrap] : [])];
+}
+
+/**
+ * `promoAward` / `promoClaim` / `promoReturn` — the node-side `PromoRewardsVault` operations
+ * (`docs/TOKEN-ECONOMY.md` §4a). Gated on the coordinated `promoShareUpgrade` height; a pool can
+ * only exist above it, so these transactions are unreachable on historical blocks.
+ *
+ * The economic clock is the head height, the same one `applyCreatorClaim` and `applyTokenCreate`
+ * use for creator vesting, so a promo award and the creator allocation vest on one timeline.
+ */
+export function applyPromoTransaction(
+  state: ChainState,
+  tx: Transaction,
+  config: NetworkConfig
+): void {
+  if (!promoShareActive(config, inclusionBlockHeight(state))) {
+    throw new Error("Creator promo share is not active on this network");
+  }
+  const from = ensureAccount(state, tx.from);
+  if (from.nonce !== tx.nonce) {
+    throw new Error("Invalid nonce");
+  }
+  if (!Number.isFinite(tx.fee) || tx.fee < 0) {
+    throw new Error("Invalid transaction fee");
+  }
+  if (from.balance < tx.fee) {
+    throw new Error("Insufficient native balance for transaction fee");
+  }
+  const assetId = canonicalizeAssetId(String(tx.payload?.assetId ?? tx.assetId ?? "").trim());
+  const pool = ownGet(state.promoPools, assetId);
+  if (!pool) {
+    throw new Error(`No promo pool found for asset: ${assetId}`);
+  }
+  const currentHeight = state.chain.length > 0 ? state.chain[state.chain.length - 1]!.header.height : 0;
+
+  if (tx.type === "promoAward") {
+    const recipient = String(tx.payload?.recipient ?? tx.to ?? "").trim();
+    if (!isCanonicalAddress(recipient)) {
+      throw new Error("Invalid promo recipient address");
+    }
+    const amount = Number(tx.payload?.amount ?? tx.amount ?? 0);
+    awardPromo(pool, tx.from, recipient, amount, currentHeight, forbiddenPromoRecipients(config));
+    // The tokens stay in the pool; `promoClaim` moves them as they vest.
+  } else if (tx.type === "promoClaim") {
+    const claimable = claimPromo(pool, tx.from, currentHeight);
+    setAccountBalance(from, assetId, getAccountBalance(from, assetId) + claimable);
+  } else if (tx.type === "promoReturn") {
+    // Permissionless by rule: anyone may close the window, nothing returns to the creator.
+    const unused = returnUnusedPromo(pool, currentHeight);
+    if (unused > 0) {
+      allocateToCommunityPool(state.communityPool, assetId, unused);
+    }
+  } else {
+    throw new Error(`Unsupported promo transaction type: ${tx.type}`);
+  }
+
+  from.balance -= tx.fee;
+  from.balances[NATIVE_ASSET_ID] = from.balance;
+  from.nonce += 1;
+  if (Number.isFinite(tx.fee) && tx.fee > 0) {
+    routeEligibleTxFee(state, tx, config);
+  }
 }
 
 function applyProposalParams(config: NetworkConfig, params: GovernanceProposal["params"], noIssuance = false): void {
@@ -2715,7 +2892,7 @@ async function applyIncludedTransaction(
 ): Promise<void> {
   recordTransactionPublicKey(state, tx);
   await applyTransaction(state, tx, config);
-  const chargedTypes = ["transfer", "joinValidator", "proposal", "tokenCreate", "curveBuy", "curveSell", "creatorClaim", "nftMint", "nftTransfer", "contractDeploy", "contractCall", "ammCreatePool", "ammAddLiquidity", "ammRemoveLiquidity", "ammSwap"];
+  const chargedTypes = ["transfer", "joinValidator", "proposal", "tokenCreate", "curveBuy", "curveSell", "creatorClaim", "nftMint", "nftTransfer", "contractDeploy", "contractCall", "ammCreatePool", "ammAddLiquidity", "ammRemoveLiquidity", "ammSwap", "promoAward", "promoClaim", "promoReturn"];
   if (chargedTypes.includes(tx.type) && !txFeeUsesLiveModelA(tx, config)) {
     state.pendingValidatorFees = (state.pendingValidatorFees ?? 0) + tx.fee;
   }

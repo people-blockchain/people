@@ -298,6 +298,7 @@ export const factoryAbi = [
       { name: "decimals", type: "uint8" },
       { name: "totalSupply", type: "uint256" },
       { name: "metadataURI", type: "string" },
+      { name: "promoBps", type: "uint16" },
       { name: "leftoverMode", type: "uint8" },
     ],
     outputs: [{ type: "address" }],
@@ -310,6 +311,13 @@ export const factoryAbi = [
     outputs: [{ type: "uint256" }],
   },
 ] as const;
+
+/**
+ * Full launch entry point: `createToken(…, uint16 promoBps, uint8 leftoverMode)`. There is no
+ * six-argument `uint8 leftoverMode` overload on the factory (it would be ambiguous with the
+ * promo overload for Solidity callers).
+ */
+export const factoryLaunchAbi = factoryAbi;
 
 export const erc20Abi = [
   {

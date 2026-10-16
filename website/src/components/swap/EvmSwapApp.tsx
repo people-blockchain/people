@@ -25,6 +25,37 @@ import { SwapTokenPicker } from "@/components/swap/SwapTokenPicker";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import type { AssetInfo } from "@/lib/asset-amounts";
 
+/**
+ * Pairs created by a legacy AMM factory (`ammFactoryVn`, earlier stacks) must be traded through
+ * that stack's router (`routerVn`); everything else uses the live router.
+ */
+async function routerForPair(pair: string): Promise<Address> {
+  const dep = readEvmDeployments();
+  const live = dep.contracts.router as Address;
+  if (!isAddress(pair)) return live;
+  const staticPool = dep.pools.find((p) => p.poolId.toLowerCase() === pair.toLowerCase()) as
+    | { router?: string }
+    | undefined;
+  if (staticPool?.router && isAddress(staticPool.router)) return getAddress(staticPool.router);
+  try {
+    const factory = (await readPublicClient().readContract({
+      address: getAddress(pair),
+      abi: [{ type: "function", name: "factory", stateMutability: "view", inputs: [], outputs: [{ type: "address" }] }] as const,
+      functionName: "factory",
+    })) as Address;
+    for (const [key, addr] of Object.entries(dep.contracts)) {
+      const m = /^ammFactory(V\d+)$/.exec(key);
+      if (!m || !addr || addr.toLowerCase() !== factory.toLowerCase()) continue;
+      const legacyRouter = dep.contracts[`router${m[1]}`];
+      if (legacyRouter && isAddress(legacyRouter)) return getAddress(legacyRouter);
+    }
+    return live;
+  } catch {
+    return live;
+  }
+}
+
+
 export type PoolRow = {
   poolId: string;
   tokenAssetId: string;
@@ -380,7 +411,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
     setError("");
     setTxHash("");
     try {
-      const router = dep.contracts.router as Address;
+      const router = await routerForPair(selectedPool.poolId);
       const wppl = wpplAddress;
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 600);
       let hash: Hex;
