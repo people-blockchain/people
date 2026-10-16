@@ -166,6 +166,58 @@ describe("NodeService metrics", () => {
     await same.stop();
   });
 
+  // The optional creator promo share is a coordinated fork with the same two failure modes:
+  // an unpublished height forks a joining node, and a silently replaced height forks this one.
+  test("the public network descriptor publishes the promo-share activation height", async () => {
+    dataDir = await mkdtemp(join(tmpdir(), "ovn-promo-descriptor-"));
+    node = new NodeService({
+      dataDir,
+      peerId: "test-promo-descriptor",
+      gossipPort: 19992,
+      bootstrapPeers: [],
+      blockIntervalMs: 60_000
+    });
+    node.config.promoShareUpgrade = { height: 25_492 };
+    await node.start();
+    expect(node.getPublicNetworkInfo().promoShareUpgrade).toEqual({ height: 25_492 });
+  });
+
+  test("a changed or dropped promo-share height is refused at restart", async () => {
+    dataDir = await mkdtemp(join(tmpdir(), "ovn-promo-restart-"));
+    node = new NodeService({
+      dataDir,
+      peerId: "test-promo-restart",
+      gossipPort: 19991,
+      bootstrapPeers: [],
+      blockIntervalMs: 60_000
+    });
+    node.config.promoShareUpgrade = { height: 500_000 };
+    (Reflect.get(node, "chainState") as { networkConfig?: { promoShareUpgrade?: { height: number } } })
+      .networkConfig!.promoShareUpgrade = { height: 500_000 };
+    await node.start();
+    await (Reflect.get(node, "persist") as () => Promise<void>).call(node);
+    await node.stop();
+
+    const restart = (height?: number) => {
+      const next = new NodeService({
+        dataDir,
+        peerId: "test-promo-restart-2",
+        gossipPort: 19991,
+        bootstrapPeers: [],
+        blockIntervalMs: 60_000
+      });
+      next.config.promoShareUpgrade = height === undefined ? undefined : { height };
+      return next;
+    };
+
+    await expect(restart(600_000).start()).rejects.toThrow(/Promo share upgrade configuration changed/);
+    await expect(restart(undefined).start()).rejects.toThrow(/Promo share upgrade configuration changed/);
+    const same = restart(500_000);
+    await same.start();
+    expect(same.config.promoShareUpgrade).toEqual({ height: 500_000 });
+    await same.stop();
+  });
+
   test("M10-5: a conflicting BOOTSTRAP_ADDRESS is still rejected rather than silently overridden", async () => {
     dataDir = await mkdtemp(join(tmpdir(), "ovn-bootstrap-conflict-"));
     node = new NodeService({

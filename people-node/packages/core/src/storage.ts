@@ -130,6 +130,9 @@ export class ChainStore {
       snapshot.chainState.contracts ??= {};
       snapshot.chainState.contractReceipts ??= {};
       snapshot.chainState.contractMeta ??= {};
+      // Absent on every snapshot written before the promo share existed. An empty map is not
+      // hashed, so defaulting it here cannot change a persisted state root.
+      snapshot.chainState.promoPools ??= {};
       assertLoadableBalances(snapshot.chainState.accounts);
       for (const account of Object.values(snapshot.chainState.accounts)) {
         account.balances ??= { [NATIVE_ASSET_ID]: account.balance ?? 0 };
@@ -261,6 +264,9 @@ export class ChainStore {
       parsed.chainState.contracts ??= {};
       parsed.chainState.contractReceipts ??= {};
       parsed.chainState.contractMeta ??= {};
+      // Absent on every snapshot written before the promo share existed. An empty map is not
+      // hashed, so defaulting it here cannot change a persisted state root.
+      parsed.chainState.promoPools ??= {};
       assertLoadableBalances(parsed.chainState.accounts ?? {});
       for (const account of Object.values(parsed.chainState.accounts ?? {})) {
         account.balances ??= { [NATIVE_ASSET_ID]: account.balance ?? 0 };

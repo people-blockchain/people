@@ -68,6 +68,31 @@ export class BondingCurveEngine {
    */
   static createInitialCurveState(assetId: string, totalSupply: number, microPpl = false): CurveState {
     const allocation = BondingCurveEngine.calculateTokenAllocation(totalSupply);
+    return BondingCurveEngine.createCurveStateForAllocation(
+      assetId,
+      totalSupply,
+      allocation.bondingCurve,
+      microPpl
+    );
+  }
+
+  /**
+   * Same curve, but with the market inventory stated explicitly instead of derived from the
+   * fixed 60% split. Used by the optional creator promo share (`docs/TOKEN-ECONOMY.md` §4a),
+   * which carves its share out of the curve portion only, so the curve opens at 55% or 50% of
+   * supply. `initialPriceReference` still references total supply, not the curve slice, so a
+   * promo launch quotes against the same nominal supply as a launch without one.
+   */
+  static createCurveStateForAllocation(
+    assetId: string,
+    totalSupply: number,
+    bondingCurveAllocation: number,
+    microPpl = false
+  ): CurveState {
+    if (!Number.isSafeInteger(bondingCurveAllocation) || bondingCurveAllocation <= 0) {
+      throw new Error("Bonding curve allocation must be a positive safe integer");
+    }
+    const allocation = { bondingCurve: bondingCurveAllocation };
     const x0 = BigInt(allocation.bondingCurve);
     const y0 = BigInt(VIRTUAL_NATIVE_RESERVE_BASE * (microPpl ? PPL_SCALE : 1));
     const k = x0 * y0;

@@ -91,6 +91,76 @@ The allocation must be transparent before the creator signs the launch transacti
 
 ---
 
+## 4a. Optional Creator Promo Share — APPROVED (owner decision 2026-10-13)
+
+At launch a creator may **optionally** set aside an extra promo share to reward referrers and
+partners who promote the token. The choice is one of exactly three values and nothing in between:
+
+| Promo share | `promoBps` | Bonding curve becomes |
+|---|---:|---:|
+| None (default) | 0 | 60% |
+| 5% of total supply | 500 | 55% |
+| 10% of total supply | 1000 | 50% |
+
+Any other value is rejected on chain (`CurveMath.InvalidPromoBps`). **0% is the default and is
+behaviour-identical to §4**: the same five numbers, the same transfers, the same events.
+
+### Where the promo share comes from
+
+The promo share is taken **entirely out of the bonding-curve portion**. The Community Pool, the
+Creator Allocation, the Liquidity Reserve and the Ecosystem Reserve are byte-for-byte identical at
+every promo share. The reasons:
+
+1. the **10% Community Pool allocation is mandatory** (§4) — it must not shrink, and a creator
+   must not be able to convert participants' distribution budget into tokens they hand out;
+2. the Liquidity Reserve backs post-curve DEX liquidity and the Ecosystem Reserve backs grants and
+   integrations — both are protocol-reserved, not creator-spendable;
+3. taking it from the creator's own 15% would make the option economically meaningless;
+4. the curve portion is the creator's own market inventory, and its size is a pure creator/market
+   trade-off: a smaller curve means a thinner market and a steeper price. That is a real cost the
+   creator chooses to pay for promotion budget, and it is paid by the creator, not by participants.
+
+So `curve + community + creator + liquidity + ecosystem + promo == total supply`, always.
+
+### Rules the promo pool runs under
+
+Promo tokens are **not** sent to the creator. They go to `PromoRewardsVault`
+(`contracts/src/promo/PromoRewardsVault.sol`), which has no owner and enforces:
+
+- only the launching creator may award, and only to third parties — never to themselves, the
+  token contract, the vault or the zero address;
+- a single recipient may be awarded at most **10% of the promo pool**
+  (`PROMO_RECIPIENT_CAP_BPS`), across at most 16 separate awards, so the whole pool cannot be
+  routed to one address the creator controls;
+- every award vests on its own clock — **10% unlocked at award time, the remaining 90% linearly
+  over 180 days** — the same shape as the creator allocation (§11, §21), so promo rewards cannot
+  be handed out and dumped in the same block;
+- awards are only possible inside a **180-day promo window** from launch, the same horizon as
+  creator vesting, so a launch has a single economic clock;
+- after the window, **anyone** may call `returnUnused`, and every promo token the creator never
+  awarded is credited to **this token's Community Pool allocation**. Nothing returns to the
+  creator. Already-awarded tokens stay claimable by their recipients.
+
+The per-recipient cap (10% of the pool), the 16-award bound and the 10%-upfront + 180-day linear
+vesting are **APPROVED** by the owner (PR #298, 2026-10-16). The three accepted
+promo shares (0 / 500 / 1000 bps), the source bucket (curve only) and the 180-day return to the
+Community Pool are the owner's decision of 2026-10-13.
+
+**Scope.** This option exists in the Solidity Token Factory (`contracts/`), in the EVM launch form
+on the website, and — since PR #299 — in the node-side `applyTokenCreate` split in `people-node`,
+where it is implemented behind the coordinated activation height `PROMO_SHARE_UPGRADE_HEIGHT`
+(`docs/protocol-decisions/promo-share.md`). Below that height, or on a network that never
+schedules it, the node keeps the fixed 60/15/10/10/5 split and ignores `promoBps` byte-for-byte,
+so historical blocks replay unchanged. The node holds the promo share in `ChainState.promoPools`
+— the equivalent of `PromoRewardsVault` — and enforces the same rules through three transaction
+types, `promoAward` / `promoClaim` / `promoReturn`. Because the node has no trusted wall clock in
+a state transition, its 180-day window and vesting are counted in blocks (5,184,000 blocks at
+3 s/block, the same horizon creator vesting already uses). **Activating it requires a coordinated
+node upgrade on every peer** — see `docs/AUDIT-CRITICAL-FIXES.md`, "Coordinated testnet
+activation procedure".
+
+---
+
 ## 5. Why the Community Pool Exists
 
 The Community Pool creates a two-sided economic exchange.

@@ -80,6 +80,7 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
     event CommunityDeposited(address indexed token, address indexed from, uint256 amount);
     event CommunityWithdrawn(address indexed token, address indexed to, uint256 amount);
     event RecipientAllowed(address indexed recipient, bool allowed);
+    event LegacyPromoVaultAllowed(address indexed vault, bool allowed);
 
     address public immutable core;
     mapping(address => uint256) public balances;
@@ -90,19 +91,65 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
     /// within one block.
     mapping(address => bool) public allowedRecipient;
 
+    /// @notice Promo vaults the factory no longer points at but which may still credit returned
+    /// promo tokens here. Owner-only, see `setLegacyPromoVault`.
+    mapping(address => bool) public legacyPromoVault;
+
     error Unauthorized();
     error InsufficientBalance();
     error RecipientNotAllowed(address to);
+    error CreditExceedsHoldings();
+
+    event CommunityPromoReturned(address indexed token, uint256 amount);
 
     constructor(address core_, address initialOwner_) Ownable(initialOwner_) {
         core = core_;
     }
 
     function register(address token, uint256 amount) external {
-        (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
-        if (!ok || msg.sender != abi.decode(data, (address))) revert Unauthorized();
+        if (msg.sender != _tokenFactory()) revert Unauthorized();
         balances[token] = amount;
         emit CommunityRegistered(token, amount);
+    }
+
+    /// @notice Re-authorizes a `PromoRewardsVault` the factory has since rotated away from, so
+    /// promo pools registered in it can still return their unawarded remainder here instead of
+    /// being stranded. Owner-only — the `PeopleTimelock`, behind its 2-day delay, same gate as
+    /// `setRecipientAllowed`. Granting this is not a spending power: a credit still has to be
+    /// backed by tokens actually transferred in (see `creditPromoReturn`).
+    function setLegacyPromoVault(address vault, bool allowed) external onlyOwner {
+        legacyPromoVault[vault] = allowed;
+        emit LegacyPromoVaultAllowed(vault, allowed);
+    }
+
+    /// @notice Credits promo tokens the creator never handed out (owner decision 2026-10-13) to
+    /// this token's Community Pool allocation, after `PromoRewardsVault` transferred them in.
+    /// @dev Callable by the `PromoRewardsVault` the factory is currently wired to — resolved live
+    /// through the registry, so there is no second copy of that address to keep in sync — or by
+    /// one the owner re-authorized via `setLegacyPromoVault` after a rotation. The credit is
+    /// bounded by tokens actually held, so neither a buggy vault nor a stale one can inflate
+    /// `balances` beyond what `withdraw` can really pay out.
+    function creditPromoReturn(address token, uint256 amount) external {
+        address current = _promoVault();
+        if (msg.sender != current && !legacyPromoVault[msg.sender]) revert Unauthorized();
+        if (balances[token] + amount > IERC20(token).balanceOf(address(this))) revert CreditExceedsHoldings();
+        balances[token] += amount;
+        emit CommunityPromoReturned(token, amount);
+    }
+
+    function _tokenFactory() private view returns (address) {
+        (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
+        if (!ok || data.length != 32) revert Unauthorized();
+        return abi.decode(data, (address));
+    }
+
+    /// @dev `address(0)` when the registry's factory exposes no promo vault (or none is set yet),
+    /// rather than a revert, so the `setLegacyPromoVault` path stays usable either way. The
+    /// caller must never treat `address(0)` as authorized.
+    function _promoVault() private view returns (address) {
+        (bool ok, bytes memory data) = _tokenFactory().staticcall(abi.encodeWithSignature("promoVault()"));
+        if (!ok || data.length != 32) return address(0);
+        return abi.decode(data, (address));
     }
 
     /// @notice Add tokens to a token's community pool (e.g. unsold curve tokens after

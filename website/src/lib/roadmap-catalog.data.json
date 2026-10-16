@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-14",
+  "updated": "2026-10-16",
   "statusVocabulary": {
     "done": "готово",
     "live_on_testnet": "в тестовой сети",
@@ -22,7 +22,7 @@
     {
       "id": "solidity-protocol-modules",
       "status": "in_progress",
-      "evidence": "Token factory, bonding curve, AMM (constant-product + migration), and NFT exist as protocol tx types in `people-node/packages/core`. Target: Solidity modules on Cosmos EVM (Uniswap V2-style AMM fork) — planned with chain migration."
+      "evidence": "Token factory, bonding curve, AMM (constant-product + migration), and NFT exist as protocol tx types in `people-node/packages/core`. The optional 0/5/10% creator promo share and `PromoRewardsVault` exist on the Solidity side (`contracts/src/promo`, owner decision 2026-10-13) and in the node-side `applyTokenCreate`, behind the coordinated activation height `PROMO_SHARE_UPGRADE_HEIGHT` (`docs/protocol-decisions/promo-share.md`); unset, the node keeps the fixed 60/15/10/10/5 split. Target: Solidity modules on Cosmos EVM (Uniswap V2-style AMM fork) — planned with chain migration."
     },
     {
       "id": "fee-split-model-a",

@@ -10,6 +10,7 @@
 #   SECURITY_UPGRADE_HEIGHT=<height above every current head>
 #   VALIDATOR_ALLOWLIST=0xaaa…,0xbbb…   # canonical lower-case, comma-separated
 #   CONSENSUS_UPGRADE_1_HEIGHT=<height above every current head>   # docs/protocol-decisions/consensus-upgrade-1.md
+#   PROMO_SHARE_UPGRADE_HEIGHT=<height above every current head>   # docs/protocol-decisions/promo-share.md
 #
 # VALIDATOR_ALLOWLIST without SECURITY_UPGRADE_HEIGHT is refused at startup, and
 # the height must be identical on every node — a mismatch forks the chain at H.
@@ -47,6 +48,7 @@ services:
       SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
       VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
       CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+      PROMO_SHARE_UPGRADE_HEIGHT: ${PROMO_SHARE_UPGRADE_HEIGHT:-}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -78,6 +80,7 @@ services:
       SECURITY_UPGRADE_HEIGHT: ${SECURITY_UPGRADE_HEIGHT:-}
       VALIDATOR_ALLOWLIST: ${VALIDATOR_ALLOWLIST:-}
       CONSENSUS_UPGRADE_1_HEIGHT: ${CONSENSUS_UPGRADE_1_HEIGHT:-}
+      PROMO_SHARE_UPGRADE_HEIGHT: ${PROMO_SHARE_UPGRADE_HEIGHT:-}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
