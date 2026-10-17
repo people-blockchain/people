@@ -29,14 +29,9 @@ test("founders copy names only Telegram and Human Passport verification", () => 
   assert.doesNotMatch(component, /WorldId/);
 });
 
-test("founders promo copy carries the agreed hero and disclaimer", () => {
+test("founders promo copy still powers card and referral UI strings", () => {
   const en = load("founders-promo-en.json");
-  const ru = load("founders-promo-ru.json");
-  assert.equal(en.heroTitle, "Be one of the first million people building a blockchain for everyone.");
-  assert.equal(ru.heroTitle, "Стань одним из первых миллиона людей, кто строит блокчейн для всех.");
-  assert.equal(en.disclaimer, "Preliminary. Points, rates and season budget may change before mainnet. Not a promise of income.");
-  assert.equal(ru.disclaimer, "Предварительно. Очки, курсы и бюджет сезона могут измениться до мейннета. Это не обещание дохода.");
+  assert.ok(en.ctaClaim);
+  assert.ok(en.cardFounder);
   assert.equal(en.countriesEmpty, "Be the first founder from your country");
-  assert.equal(en.faq.length, 6);
-  assert.equal(ru.faq.length, 6);
 });

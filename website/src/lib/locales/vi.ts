@@ -15,16 +15,16 @@ export const vi: LocaleContent = {
       {
         "label": "Bảng tin dự án",
         "href": "/discover"
-      },
-      {
-        "label": "Nhà sáng lập",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "Các giai đoạn giao thức",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "Tokenomics PPL",
