@@ -67,14 +67,7 @@ export function SaleTransparency({ stats }: { stats: SaleStats }) {
             </div>
           </>
         ) : (
-          <>
-            <p className="mt-2 inline-flex items-center gap-2 rounded-full border border-warm/40 bg-warm/10 px-3 py-1 text-sm font-semibold text-warm">
-              {t.transparency.saleContractPending}
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-ink-2">
-              {t.transparency.saleContractNote}
-            </p>
-          </>
+          <p className="mt-2 text-sm leading-relaxed text-ink-2">{t.transparency.saleContractPending}</p>
         )}
       </div>
 

@@ -8,14 +8,14 @@
     "headline": "Mua PPL ở mức giá người tham gia sớm",
     "sub": "Giá tăng theo mỗi lần mua — mua càng sớm, trả càng ít.",
     "statsTitle": "Trực tiếp trên đường cong",
-    "statsNote": "Đọc từ hợp đồng bán. Không hiển thị gì cho đến khi có dữ liệu on-chain thật.",
+    "statsNote": "",
     "ctaScroll": "Đường cong hoạt động thế nào"
   },
   "stats": {
     "price": "Giá hiện tại",
     "priceStartHint": "Bắt đầu từ {start}",
     "raised": "Đã gom",
-    "raisedTarget": "trong {target} tới graduation",
+    "raisedTarget": "trong {target} tới kết thúc đợt bán",
     "sold": "PPL đã bán",
     "soldTarget": "trong {supply} trên đường cong",
     "buyers": "Người mua",
@@ -23,7 +23,7 @@
     "daysLeftTarget": "trong {days}",
     "none": "—",
     "notOpenYet": "Chưa mở",
-    "progressLabel": "Tiến độ tới graduation {target}"
+    "progressLabel": "Tiến độ tới kết thúc đợt bán {target}"
   },
   "form": {
     "title": "Mua PPL",
@@ -33,7 +33,7 @@
     "youGet": "Bạn nhận",
     "avgPrice": "Giá trung bình",
     "priceAfter": "Giá sau giao dịch của bạn",
-    "estimate": "Ước tính theo công thức công bố. Số tiền được xác nhận trước khi ký.",
+    "estimate": "",
     "limitPerBuy": "Tối đa {amount} mỗi lần mua",
     "limitPerDay": "Tối đa {amount} mỗi người mỗi ngày",
     "cooldown": "{seconds}s giữa các giao dịch",
@@ -42,9 +42,9 @@
     "cta": "Kết nối ví và mua",
     "ctaDisabled": "Đợt bán chưa mở",
     "ctaConnected": "Mua PPL",
-    "disabledNote": "Hợp đồng bán chưa triển khai nên chưa mua được. Kết nối ví an toàn và không ràng buộc gì.",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Bạn có thể bán PPL lại đường cong bất cứ lúc nào, trừ phí {fee}.",
+    "sellBack": "Mua lại từ quỹ dự trữ chỉ dành cho người dùng đã xác minh: mỗi lô cần 30 ngày nắm giữ, có giới hạn theo ngày và phí {fee}; đóng khi kết thúc đợt bán.",
     "payModeLabel": "Cách thanh toán",
     "payOnBase": "Thanh toán trên Base",
     "payFromOther": "Thanh toán từ mạng khác",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana và Tron",
     "scrollToForm": "Quay lại form mua"
   },
+  "whyPriceRises": {
+    "title": "Vì sao giá tăng",
+    "noManualLead": "Đội PEOPLE không đặt hay tăng giá. Công thức công khai trong hợp đồng bán tự động quyết định: mỗi lần mua đẩy giá theo đường cong giá (bonding curve). Không ai có thể đổi giá thủ công.",
+    "mechanism": "Cùng nguyên tắc định giá theo công thức như Uniswap, Bancor (tiên phong, 2017), pump.fun và Virtuals Protocol trên Base: ở đây giá chỉ phụ thuộc vào lượng PPL đã bán, minh bạch và có thể kiểm tra trên chuỗi.",
+    "example": "Theo tham số công bố: {startPrice} mỗi PPL khi bắt đầu, {midPrice} sau khi bán {midSold} PPL (~{midRaised} huy động) và {gradPrice} khi kết thúc đợt bán ({gradRaised} huy động).",
+    "explainerLink": "Đường cong hoạt động thế nào",
+    "reserve": "Tiền từ các lần mua ở lại quỹ dự trữ bán trên Base và dùng để mua lại PPL từ người nắm giữ — mua lại cho người dùng đã xác minh sau 30 ngày nắm giữ, có giới hạn theo ngày.",
+    "chartAria": "Đường cong giá bán PPL: giá và PPL đã bán",
+    "chartAxisSold": "PPL đã bán",
+    "chartAxisPrice": "Giá, $",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "Công thức",
     "title": "Một đường cong, ai cũng thấy",
@@ -64,18 +76,18 @@
     "axisRaised": "Đã gom, $",
     "axisPrice": "Giá mỗi PPL, $",
     "youAreHere": "Bạn ở đây",
-    "notOpen": "Đường cong mở cùng đợt bán. Hình dạng và mốc bên dưới do công thức cố định.",
+    "notOpen": "",
     "marker": "đã gom {raised}",
     "markerPrice": "{price} mỗi PPL",
     "markerSold": "đã bán {sold} PPL",
-    "graduationTag": "Graduation",
+    "graduationTag": "Kết thúc đợt bán",
     "ceilingNote": "Trần {ceiling} chỉ đạt nếu bán hết {supply} PPL. Đường cong đóng trước, khi gom {graduation}.",
     "feedTitle": "Mua bán gần đây",
-    "feedEmpty": "Chưa có giao dịch — đợt bán chưa mở.",
+    "feedEmpty": "Chưa có giao dịch.",
     "feedBuy": "Mua",
     "feedSell": "Bán",
     "feedLink": "Xem",
-    "capScope": "Trần {ceiling} chỉ áp dụng khi bán trên đường cong. Sau graduation sang pool, giá do thị trường tự do — không trần cũng không sàn."
+    "capScope": "Trần {ceiling} chỉ áp dụng khi bán trên đường cong. Sau kết thúc đợt bán sang pool, giá do thị trường tự do — không trần cũng không sàn."
   },
   "whatYouGet": {
     "eyebrow": "Bạn nhận được gì",
@@ -86,8 +98,8 @@
         "body": "PPL được ghi cho bạn trên mạng PEOPLE ngay khi mua. Không khóa trên đường cong, không chờ đợi."
       },
       {
-        "title": "Bán lại đường cong bất cứ lúc nào",
-        "body": "Đổi ý? Bán PPL lại đường cong bất cứ lúc nào theo giá hiện tại, trừ phí {fee} — phí đi vào mua lại PPL, không vào đội ngũ. Thanh toán bán lại bằng {payoutStable} trên {payoutNetwork} (mạng của Coinbase; USDC do Circle phát hành, cùng đô la như Ethereum hoặc Polygon, nhanh và rẻ hơn). Hoặc chọn mạng khác; cầu nối mất vài phút."
+        "title": "mua lại từ quỹ dự trữ",
+        "body": "Người dùng đã xác minh có thể bán PPL lại vào quỹ dự trữ sau 30 ngày nắm giữ mỗi lô, trong giới hạn ngày và phí {fee}. Đóng khi kết thúc đợt bán. Thanh toán bằng {payoutStable} trên {payoutNetwork}."
       },
       {
         "title": "Chuyển token mở khi mạng ra mắt đầy đủ",
@@ -108,7 +120,7 @@
         "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán bất cứ lúc nào, tối đa {days} ngày."
       },
       {
-        "title": "Graduation tại {graduation}",
+        "title": "Kết thúc đợt bán tại {graduation}",
         "body": "Đường cong dừng. {liquidityShare} số gom cộng PPL ở giá cuối vào pool DEX công khai đúng giá đó, không nhảy. LP khóa {lock} tháng. {multisigShare} vào multisig, báo cáo công khai."
       },
       {
@@ -126,8 +138,8 @@
     "title": "Hợp đồng, tiền và mã nguồn",
     "lead": "Hợp đồng bán, tiền bán đi đâu, các đợt rà soát bảo mật mã và cách token đội ngũ mở khóa.",
     "saleContract": "Hợp đồng bán",
-    "saleContractPending": "Chưa triển khai",
-    "saleContractNote": "Địa chỉ được công bố tại đây ngay khi triển khai và xác minh.",
+    "saleContractPending": "Địa chỉ hợp đồng sẽ được đăng ở đây trước khi mở bán.",
+    "saleContractNote": "",
     "verifiedSource": "Mã nguồn đã xác minh",
     "auditTitle": "Rà soát bảo mật",
     "auditLine": "Kiểm toán bởi: Claude Opus 5.5, GPT Astra, Fable 5.1",
@@ -145,12 +157,12 @@
     "title": "Câu hỏi và trả lời",
     "items": [
       {
-        "q": "Đổi ý?",
-        "a": "Bán PPL lại đường cong bất cứ lúc nào theo giá hiện tại, trừ phí {fee}, phí đi vào mua lại PPL."
+        "q": "Tôi có thể bán lại PPL không?",
+        "a": "Chỉ người dùng đã xác minh: giữ 30 ngày mỗi lô, giới hạn ngày và phí {fee}. Đóng khi kết thúc đợt bán."
       },
       {
         "q": "Trần {ceiling} có vĩnh viễn không?",
-        "a": "Không. Chỉ khi đường cong đang chạy. Đóng khi gom {graduation}, khoảng {graduationPrice} mỗi PPL, dưới trần. Sau graduation, giá pool do thị trường tự do — không trần không sàn."
+        "a": "Không. Chỉ khi đường cong đang chạy. Đóng khi gom {graduation}, khoảng {graduationPrice} mỗi PPL, dưới trần. Sau kết thúc đợt bán, giá pool do thị trường tự do — không trần không sàn."
       },
       {
         "q": "Làm sao thêm mạng People vào ví?",
@@ -165,7 +177,7 @@
     "addNetworkDone": "Đã gửi yêu cầu tới ví",
     "addNetworkError": "Ví từ chối hoặc không tìm thấy ví.",
     "pumpTitle": "Điều gì sai trên đường cong không trần",
-    "pumpLead": "Bonding curve phổ biến nhờ launchpad như pump.fun. Đây là vấn đề đã biết và cách chúng tôi xử lý.",
+    "pumpLead": "đường cong giá phổ biến nhờ launchpad như pump.fun. Đây là vấn đề đã biết và cách chúng tôi xử lý.",
     "pumpCols": [
       "Vấn đề",
       "Điều gì xảy ra",
@@ -174,7 +186,7 @@
     "pumpRows": [
       {
         "problem": "Người mua muộn trả quá nhiều",
-        "what": "Giá tăng không giới hạn; người mua cuối trước graduation trả gấp nhiều lần người đầu.",
+        "what": "Giá tăng không giới hạn; người mua cuối trước kết thúc đợt bán trả gấp nhiều lần người đầu.",
         "ours": "Trần cứng {ceiling}, đường cong đóng ở {graduation} — khoảng {graduationPrice}."
       },
       {
@@ -195,7 +207,7 @@
       {
         "problem": "Listing theo hype",
         "what": "Token bị đẩy lên sàn giữa đợt bán.",
-        "ours": "Không listing trong đợt bán. Giao dịch DEX chỉ sau graduation."
+        "ours": "Không listing trong đợt bán. Giao dịch DEX chỉ sau kết thúc đợt bán."
       }
     ]
   },
@@ -214,7 +226,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau graduation do thị trường quyết: có thể giảm cũng như tăng. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hay bảo đảm lợi nhuận, lợi suất hay hoàn vốn. Số liệu trước khi mua là ước tính theo công thức công bố và được xác nhận on-chain trước khi ký. Không có gì trên trang này là tư vấn đầu tư, pháp lý hay thuế."
+        "text": "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau kết thúc đợt bán do thị trường quyết: có thể giảm cũng như tăng. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hay bảo đảm lợi nhuận, lợi suất hay hoàn vốn. Số liệu trước khi mua là ước tính theo công thức công bố và được xác nhận on-chain trước khi ký. Không có gì trên trang này là tư vấn đầu tư, pháp lý hay thuế."
       },
       {
         "marker": "**",

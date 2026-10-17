@@ -215,7 +215,6 @@ export function CurveChart({ stats }: { stats: SaleStats }) {
             graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
           })}
         </p>
-        {here === null ? <p>{t.curve.notOpen}</p> : null}
       </figcaption>
 
       <ul className="mt-4 grid gap-2 sm:grid-cols-3">

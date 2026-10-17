@@ -8,7 +8,7 @@
     "headline": "Compre PPL ao preço de participante antecipado",
     "sub": "O preço sobe a cada compra — quanto antes você comprar, menos paga.",
     "statsTitle": "Ao vivo na curva",
-    "statsNote": "Lido do contrato de venda. Nada é exibido até haver dados reais on-chain.",
+    "statsNote": "",
     "ctaScroll": "Como a curva funciona"
   },
   "stats": {
@@ -33,7 +33,7 @@
     "youGet": "Você recebe",
     "avgPrice": "Preço médio",
     "priceAfter": "Preço após sua compra",
-    "estimate": "Estimativa pela fórmula publicada. O valor é confirmado antes de assinar.",
+    "estimate": "",
     "limitPerBuy": "Até {amount} por compra",
     "limitPerDay": "Até {amount} por pessoa por dia",
     "cooldown": "{seconds}s entre operações",
@@ -42,9 +42,9 @@
     "cta": "Conectar carteira e comprar",
     "ctaDisabled": "A venda ainda não está aberta",
     "ctaConnected": "Comprar PPL",
-    "disabledNote": "O contrato de venda ainda não foi implantado, então não há compra. Conectar a carteira é seguro e não te compromete com nada.",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Você pode vender PPL de volta à curva a qualquer momento, menos a taxa de {fee}.",
+    "sellBack": "A recompra a partir da reserva é só para usuários verificados: cada lote exige 30 dias de retenção, há limites diários e taxa de {fee}; fecha no encerramento da venda.",
     "payModeLabel": "Como você paga",
     "payOnBase": "Pagar na Base",
     "payFromOther": "Pagar de outra rede",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana e Tron",
     "scrollToForm": "Voltar ao formulário de compra"
   },
+  "whyPriceRises": {
+    "title": "Por que o preço sobe",
+    "noManualLead": "A equipe PEOPLE não define nem aumenta o preço. Uma fórmula pública no contrato de venda o define automaticamente: cada compra move o preço pela curva de preço (bonding curve). Ninguém pode alterar o preço manualmente.",
+    "mechanism": "O mesmo princípio de preço por fórmula de Uniswap, Bancor (pioneiro, 2017), pump.fun e Virtuals Protocol na Base: aqui o preço depende apenas da quantidade de PPL vendidos, de forma transparente e verificável na rede.",
+    "example": "Pelos parâmetros publicados: {startPrice} por PPL no início, {midPrice} após vender {midSold} PPL (~{midRaised} arrecadados) e {gradPrice} no encerramento da venda ({gradRaised} arrecadados).",
+    "explainerLink": "Como funciona a curva",
+    "reserve": "Os recursos das compras ficam na reserva da venda na Base e são usados para recomprar PPL dos detentores — recompra para usuários verificados após 30 dias de retenção, com limites diários.",
+    "chartAria": "Curva de preço da venda PPL: preço versus PPL vendidos",
+    "chartAxisSold": "PPL vendidos",
+    "chartAxisPrice": "Preço, $",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "A fórmula",
     "title": "Uma curva, visível para todos",
@@ -64,14 +76,14 @@
     "axisRaised": "Arrecadado, $",
     "axisPrice": "Preço por PPL, $",
     "youAreHere": "Você está aqui",
-    "notOpen": "A curva abre com a venda. A forma e as marcas abaixo são fixadas pela fórmula.",
+    "notOpen": "",
     "marker": "{raised} arrecadados",
     "markerPrice": "{price} por PPL",
     "markerSold": "{sold} PPL vendidos",
-    "graduationTag": "Graduação",
+    "graduationTag": "Encerramento da venda",
     "ceilingNote": "O teto de {ceiling} só é atingido se todos os {supply} PPL forem vendidos. A curva fecha antes, em {graduation} arrecadados.",
     "feedTitle": "Compras e vendas recentes",
-    "feedEmpty": "Ainda não há operações — a venda não abriu.",
+    "feedEmpty": "Ainda não há operações.",
     "feedBuy": "Compra",
     "feedSell": "Venda",
     "feedLink": "Ver",
@@ -86,8 +98,8 @@
         "body": "PPL são registrados para você na rede PEOPLE no momento da compra. Sem bloqueio na curva, sem lista de espera."
       },
       {
-        "title": "Venda de volta à curva a qualquer momento",
-        "body": "Mudou de ideia? Venda PPL de volta à curva quando quiser ao preço atual, menos a taxa de {fee} — e essa taxa vai para buyback de PPL, não para a equipe. O pagamento da venda vem em {payoutStable} na {payoutNetwork} (rede da Coinbase; USDC emitido pela Circle, o mesmo dólar que em Ethereum ou Polygon, só mais rápido e barato). Ou escolha outra rede; a ponte leva alguns minutos."
+        "title": "recompra da reserva",
+        "body": "Usuários verificados podem vender PPL de volta à reserva após retenção de 30 dias por lote, com limites diários e taxa de {fee}. Fecha quando a venda gradua. Pagamento em {payoutStable} na {payoutNetwork}."
       },
       {
         "title": "Transferências abrem com o lançamento completo da rede",
@@ -108,7 +120,7 @@
         "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda a qualquer momento, por até {days} dias."
       },
       {
-        "title": "Graduação em {graduation}",
+        "title": "Encerramento da venda em {graduation}",
         "body": "A curva para. {liquidityShare} do arrecadado mais PPL ao último preço da curva vão para um pool DEX público exatamente nesse preço, sem salto. LP bloqueados por {lock} meses. {multisigShare} ao multisig com relatórios públicos."
       },
       {
@@ -126,8 +138,8 @@
     "title": "Contrato, dinheiro e código",
     "lead": "O contrato de venda, para onde vai o dinheiro da venda, as revisões de segurança do código e como os tokens da equipe são desbloqueados.",
     "saleContract": "Contrato de venda",
-    "saleContractPending": "Ainda não implantado",
-    "saleContractNote": "O endereço será publicado aqui assim que for implantado e verificado.",
+    "saleContractPending": "O endereço do contrato será publicado aqui antes da abertura da venda.",
+    "saleContractNote": "",
     "verifiedSource": "Código-fonte verificado",
     "auditTitle": "Revisões de segurança",
     "auditLine": "Auditado por: Claude Opus 5.5, GPT Astra, Fable 5.1",
@@ -145,12 +157,12 @@
     "title": "Perguntas respondidas",
     "items": [
       {
-        "q": "Mudou de ideia?",
-        "a": "Venda PPL de volta à curva quando quiser ao preço atual da curva, menos a taxa de {fee}, que vai para buyback de PPL."
+        "q": "Posso vender PPL de volta?",
+        "a": "Só usuários verificados: retenção de 30 dias por lote, limites diários e taxa de {fee}. Fecha na encerramento da venda da venda."
       },
       {
         "q": "O teto de {ceiling} é permanente?",
-        "a": "Não. Vale enquanto a curva está ativa. A curva fecha em {graduation} arrecadados, cerca de {graduationPrice} por PPL, abaixo do teto. Após a graduação, o preço do pool é definido pelo mercado livre, sem limite superior nem inferior."
+        "a": "Não. Vale enquanto a curva está ativa. A curva fecha em {graduation} arrecadados, cerca de {graduationPrice} por PPL, abaixo do teto. Após o encerramento da venda, o preço do pool é definido pelo mercado livre, sem limite superior nem inferior."
       },
       {
         "q": "Como adiciono a rede People à minha carteira?",

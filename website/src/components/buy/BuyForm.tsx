@@ -14,8 +14,6 @@ import { SALE, type SaleStableSymbol, saleContractConfigured } from "@/lib/sale/
 import { quoteBuy } from "@/lib/sale/curve";
 import { fillCopy, pplCompact, pricePerPpl, usd } from "@/lib/sale/format";
 
-import { FootnoteRef } from "./SmallPrint";
-
 const BuyLifiBridge = dynamic(
   () => import("./BuyLifiBridge").then((mod) => mod.BuyLifiBridge),
   { ssr: false, loading: () => <div className="min-h-[420px] rounded-2xl border border-line bg-surface-2" /> },
@@ -215,7 +213,6 @@ export function BuyForm({
               : t.form.belowMin}
           </p>
         )}
-        <p className="mt-3 border-t border-line pt-3 text-xs text-ink-3">{t.form.estimate}</p>
       </div>
 
       <ul className="flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-ink-3">
@@ -244,10 +241,6 @@ export function BuyForm({
         <p className="text-center text-sm text-ink-2">{t.form.bridgeAwaiting}</p>
       )}
 
-      <p className="text-xs leading-relaxed text-ink-3">
-        {t.form.disabledNote}
-        <FootnoteRef marker="**" />
-      </p>
       <p className="text-xs text-ink-3">{t.form.wallets}</p>
       <p className="text-xs text-ink-3">
         {fillCopy(t.form.sellBack, { fee: `${SALE.sellFeePct}%` })}

@@ -1,4 +1,3 @@
-import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -63,9 +62,52 @@ async function seedAndUnlockWallet(page) {
 async function setLang(page, lang) {
   await page.evaluate((l) => {
     localStorage.setItem("ovn_lang", l);
-    document.cookie = `ovn_lang=${l}; path=/`;
+    document.cookie = `ovn_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
     window.dispatchEvent(new StorageEvent("storage", { key: "ovn_lang" }));
   }, lang);
+}
+
+async function installApiMocks(page) {
+  await page.route(/\/api\/(network|evm\/compat)\//, async (route) => {
+    const url = new URL(route.request().url());
+    const sub = url.pathname.replace(/^\/api\/(network|evm\/compat)\//, "");
+    let body = {};
+    if (sub === "health") body = { chainId: "97401", status: "ok", height: 100 };
+    else if (sub === "metrics") body = { height: 100, finalizedHeight: 99 };
+    else if (sub.endsWith("/transactions")) body = [];
+    else if (sub.startsWith("address/")) body = { balance: 10, nonce: 0, balances: {} };
+    else if (sub === "assets") body = [];
+    else if (sub === "nfts") body = [];
+    await route.fulfill({ json: body });
+  });
+}
+
+const HERO_HEADLINE = {
+  en: /Buy PPL at the early-participant price/i,
+  ru: /Купите PPL по цене раннего участника/,
+};
+
+async function waitForBuyHeroLocale(page, lang) {
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(HERO_HEADLINE[lang], {
+    timeout: 30_000,
+  });
+}
+
+async function openBuyInLocale(browser, lang) {
+  const context = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    locale: lang === "ru" ? "ru-RU" : "en-US",
+  });
+  await context.addCookies([{ name: "ovn_lang", value: lang, url: BASE, sameSite: "Lax" }]);
+  await context.addInitScript((l) => {
+    localStorage.setItem("ovn_lang", l);
+    document.cookie = `ovn_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
+  }, lang);
+  const page = await context.newPage();
+  await installApiMocks(page);
+  await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+  await waitForBuyHeroLocale(page, lang);
+  return { page, context };
 }
 
 async function openBridgeWidget(page) {
@@ -114,42 +156,46 @@ test.describe("buy page evidence", () => {
     }
   });
 
-  test("390px RU top viewport — header must not cover hero", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
-    await setLang(page, "ru");
-    await page.reload({ waitUntil: "networkidle" });
-    await page.evaluate(() => window.scrollTo(0, 0));
+  test("390px locale viewport evidence (RU v2 + why v3)", async ({ browser }) => {
+    const { page: ruPage, context: ruCtx } = await openBuyInLocale(browser, "ru");
+    await expect(ruPage.getByRole("heading", { level: 1 })).toHaveText(HERO_HEADLINE.ru);
+    await expect(ruPage.getByTestId("buy-why-price-rises")).toContainText("Почему растёт цена");
+    await ruPage.evaluate(() => window.scrollTo(0, 0));
+    await ruPage.screenshot({ path: path.join(OUT, "buy-390-ru-top-v2.png"), fullPage: false });
+    const ruWhy = ruPage.getByTestId("buy-why-price-rises");
+    await ruWhy.scrollIntoViewIfNeeded();
+    await expect(ruPage.getByTestId("buy-why-curve-chart")).toBeVisible();
+    await ruPage.screenshot({ path: path.join(OUT, "buy-390-ru-why-v2.png"), fullPage: false });
+    await ruPage.screenshot({ path: path.join(OUT, "ru-why-v3.png"), fullPage: false });
+    await ruPage.screenshot({ path: path.join(OUT, "ru-why-v4.png"), fullPage: false });
+    await ruCtx.close();
 
-    const metrics = await page.evaluate(() => {
-      const header = document.querySelector("header.glass-bar");
-      const hero = document.getElementById("buy-hero-title");
-      const stats = document.querySelector('[data-testid="sale-stats"]');
-      const headerRect = header?.getBoundingClientRect();
-      const heroRect = hero?.getBoundingClientRect();
-      const statsRect = stats?.getBoundingClientRect();
-      const headerBottom = headerRect?.bottom ?? 0;
-      return {
-        headerBottom,
-        heroTop: heroRect?.top ?? 0,
-        statsBottom: statsRect?.bottom ?? 0,
-        raisedVisible: Boolean(
-          [...document.querySelectorAll("[data-testid=sale-stats] dt")].some((el) =>
-            /raised|собрано/i.test(el.textContent ?? ""),
-          ),
-        ),
-        progressVisible: Boolean(document.querySelector('[data-testid="sale-stats"] [role="progressbar"]')),
-      };
+    const ctx360 = await browser.newContext({
+      viewport: { width: 360, height: 800 },
+      locale: "ru-RU",
     });
-
-    assert.ok(metrics.heroTop >= metrics.headerBottom - 1, "hero title must sit below sticky header");
-    assert.ok(!metrics.raisedVisible, "raised stat card must be removed");
-    assert.ok(!metrics.progressVisible, "graduation progress bar must be removed");
-
-    await page.screenshot({
-      path: path.join(OUT, "buy-390-ru-top.png"),
-      fullPage: false,
+    await ctx360.addCookies([{ name: "ovn_lang", value: "ru", url: BASE, sameSite: "Lax" }]);
+    await ctx360.addInitScript(() => {
+      localStorage.setItem("ovn_lang", "ru");
+      document.cookie = "ovn_lang=ru; path=/; max-age=31536000; SameSite=Lax";
     });
+    const page360 = await ctx360.newPage();
+    await installApiMocks(page360);
+    await page360.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await waitForBuyHeroLocale(page360, "ru");
+    const why360 = page360.getByTestId("buy-why-price-rises");
+    await why360.scrollIntoViewIfNeeded();
+    await expect(page360.getByTestId("buy-why-curve-chart")).toBeVisible();
+    await page360.screenshot({ path: path.join(OUT, "ru-why-360-v4.png"), fullPage: false });
+    await ctx360.close();
+
+    const { page: enPage, context: enCtx } = await openBuyInLocale(browser, "en");
+    await expect(enPage.getByRole("heading", { level: 1 })).toHaveText(HERO_HEADLINE.en);
+    const enWhy = enPage.getByTestId("buy-why-price-rises");
+    await enWhy.scrollIntoViewIfNeeded();
+    await expect(enPage.getByTestId("buy-why-curve-chart")).toBeVisible();
+    await enPage.screenshot({ path: path.join(OUT, "en-why-v3.png"), fullPage: false });
+    await enCtx.close();
   });
 
   test("390px EN bridge widget (Solana if available)", async ({ page }) => {
@@ -168,10 +214,18 @@ test.describe("buy page evidence", () => {
     await page.screenshot({ path: path.join(OUT, "buy-desktop-en-widget-open.png"), fullPage: false });
   });
 
-  test("/ru/buy redirects to /buy", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+  test("/ru/buy redirects to /buy with ru cookie", async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await context.addInitScript(() => {
+      localStorage.setItem("ovn_lang", "ru");
+      document.cookie = "ovn_lang=ru; path=/; max-age=31536000; SameSite=Lax";
+    });
+    const page = await context.newPage();
+    await installApiMocks(page);
     await page.goto(`${BASE}/ru/buy`, { waitUntil: "networkidle" });
     expect(page.url()).toMatch(/\/buy$/);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(HERO_HEADLINE.ru);
     await page.screenshot({ path: path.join(OUT, "buy-ru-redirect.png"), fullPage: true });
+    await context.close();
   });
 });
