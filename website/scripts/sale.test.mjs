@@ -58,12 +58,12 @@ test("tokenomics surfaces list all sale networks without Cosmos", () => {
   }
 });
 
-test("buy surfaces list LI.FI bridge source chains without TON (12 languages)", () => {
+test("buy surfaces list LI.FI bridge source chains without TON or Tron (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
     assert.match(doc.form.supportedBridgeChains, /Solana/);
-    assert.match(doc.form.supportedBridgeChains, /Tron/);
+    assert.doesNotMatch(doc.form.supportedBridgeChains, /Tron/);
     assert.doesNotMatch(doc.form.supportedBridgeChains, /\bTON\b/i);
     assert.match(doc.form.payOnBase, /Base/);
   }
@@ -81,6 +81,14 @@ test("ppl-sale-evm.json includes Polygon with stable addresses", () => {
   assert.equal(json.chains["137"].saleContract, "");
   assert.ok(json.chains["137"].usdt.address);
   assert.ok(json.chains["137"].usdc.address);
+});
+
+test("Base sale hub accepts USDC only; Base USDT address is LI.FI verified", () => {
+  const hubSrc = readFileSync(join(root, "src/lib/sale/sale-hub.ts"), "utf8");
+  assert.match(hubSrc, /stables:\s*\["usdc"\]/);
+  const json = JSON.parse(readFileSync(join(root, "src/data/ppl-sale-evm.json"), "utf8"));
+  assert.equal(json.chains["8453"].usdt.address, "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2");
+  assert.equal(json.chains["8453"].usdt.decimals, 6);
 });
 
 // M05-6: BSC stablecoins (BSC-USD, USDC) report 18 decimals, not 6 like Ethereum/Polygon.

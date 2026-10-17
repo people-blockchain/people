@@ -229,3 +229,86 @@ test.describe("buy page evidence", () => {
     await context.close();
   });
 });
+
+function buyHero(page) {
+  return page.getByTestId("buy-form-hero");
+}
+
+test.describe("buy USDT evidence", () => {
+  test.beforeAll(async () => {
+    await mkdir(OUT, { recursive: true });
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await installApiMocks(page);
+  });
+
+  test("usdt-390-selector", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await buyHero(page).getByTestId("pay-mode-base").click();
+    await buyHero(page).getByTestId("buy-stable-select").selectOption("USDT");
+    await expect(buyHero(page).getByTestId("buy-usdt-note")).toBeVisible();
+    await page.screenshot({ path: path.join(OUT, "usdt-390-selector.png"), fullPage: false });
+  });
+
+  test("usdt-390-base-swap", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await buyHero(page).getByTestId("pay-mode-base").click();
+    await buyHero(page).getByTestId("buy-stable-select").selectOption("USDT");
+    await expect(buyHero(page).getByTestId("buy-usdt-swap-panel")).toBeVisible({ timeout: 90_000 });
+    await expect(buyHero(page).getByTestId("buy-lifi-widget-usdt")).toBeVisible({ timeout: 90_000 });
+    await page.screenshot({ path: path.join(OUT, "usdt-390-base-swap.png"), fullPage: true });
+  });
+
+  test("usdt-390-bridge-widget", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await openBridgeWidget(page);
+    await page.screenshot({ path: path.join(OUT, "usdt-390-bridge-widget.png"), fullPage: true });
+  });
+
+  test("usdt-390-ru-base-swap", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await setLang(page, "ru");
+    await page.reload({ waitUntil: "networkidle" });
+    await buyHero(page).getByTestId("pay-mode-base").click();
+    await buyHero(page).getByTestId("buy-stable-select").selectOption("USDT");
+    await expect(buyHero(page).getByTestId("buy-usdt-swap-panel")).toBeVisible({ timeout: 90_000 });
+    await page.screenshot({ path: path.join(OUT, "usdt-390-ru-base-swap.png"), fullPage: true });
+  });
+
+  test("usdt-desktop-selector", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await buyHero(page).getByTestId("pay-mode-base").click();
+    await buyHero(page).getByTestId("buy-stable-select").selectOption("USDT");
+    await expect(buyHero(page).getByTestId("buy-usdt-note")).toBeVisible();
+    await page.screenshot({ path: path.join(OUT, "usdt-desktop-selector.png"), fullPage: false });
+  });
+
+  test("usdt-desktop-base-swap", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await buyHero(page).getByTestId("pay-mode-base").click();
+    await buyHero(page).getByTestId("buy-stable-select").selectOption("USDT");
+    await expect(buyHero(page).getByTestId("buy-lifi-widget-usdt")).toBeVisible({ timeout: 90_000 });
+    await page.screenshot({ path: path.join(OUT, "usdt-desktop-base-swap.png"), fullPage: false });
+  });
+
+  test("usdt-desktop-bridge-widget", async ({ page }) => {
+    await seedAndUnlockWallet(page);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${BASE}/buy`, { waitUntil: "networkidle" });
+    await openBridgeWidget(page);
+    await page.screenshot({ path: path.join(OUT, "usdt-desktop-bridge-widget.png"), fullPage: false });
+  });
+});
