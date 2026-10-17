@@ -13,16 +13,16 @@ export const en = {
       {
         "label": "Project feed",
         "href": "/discover"
-      },
-      {
-        "label": "Founders",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "Protocol phases",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "PPL tokenomics",
