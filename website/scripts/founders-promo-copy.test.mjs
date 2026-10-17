@@ -14,8 +14,19 @@ function shape(obj) {
   return typeof obj;
 }
 
+/** `hello` is a greeting carousel: each locale leads with its own language, so lengths may differ. */
+const FREE_LENGTH_LISTS = ["hello"];
+
 test("founders promo RU matches EN structure", () => {
-  assert.deepEqual(shape(load("founders-promo-ru.json")), shape(load("founders-promo-en.json")));
+  const ru = load("founders-promo-ru.json");
+  const en = load("founders-promo-en.json");
+  for (const key of FREE_LENGTH_LISTS) {
+    for (const copy of [ru, en]) {
+      assert.ok(Array.isArray(copy[key]) && copy[key].length > 0 && copy[key].every((item) => typeof item === "string" && item));
+    }
+  }
+  const strip = (copy) => Object.fromEntries(Object.entries(copy).filter(([key]) => !FREE_LENGTH_LISTS.includes(key)));
+  assert.deepEqual(shape(strip(ru)), shape(strip(en)));
 });
 
 test("founders copy names only Telegram and Human Passport verification", () => {

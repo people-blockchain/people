@@ -1,18 +1,87 @@
 import { readEvmRpcUrl } from "@/lib/evm/config";
 
+/**
+ * Exponential backoff for the shared PEOPLE node.
+ *
+ * When the node times out, drops the connection or answers 429/5xx, further calls to that URL fail
+ * fast (`rpc_backoff`) instead of piling more work onto a struggling validator. The pause starts at
+ * `RPC_BACKOFF_BASE_MS` and doubles per consecutive failure up to `RPC_BACKOFF_MAX_MS`; any
+ * successful response resets it. JSON-RPC `error` members are answers from a healthy node and do
+ * not count as failures. State is per URL and per server instance.
+ */
+export const RPC_BACKOFF_BASE_MS = 2_000;
+export const RPC_BACKOFF_MAX_MS = 120_000;
+const RPC_RETRYABLE_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
+
+type BackoffState = { failures: number; blockedUntil: number };
+const backoffByUrl = new Map<string, BackoffState>();
+
+export function rpcBackoffDelayMs(failures: number): number {
+  if (failures <= 0) return 0;
+  return Math.min(RPC_BACKOFF_MAX_MS, RPC_BACKOFF_BASE_MS * 2 ** (failures - 1));
+}
+
+/** Milliseconds until `url` may be called again (0 when it is not backing off). */
+export function rpcBackoffRemainingMs(url = readEvmRpcUrl() ?? ""): number {
+  const state = backoffByUrl.get(url);
+  return state ? Math.max(0, state.blockedUntil - Date.now()) : 0;
+}
+
+export function resetRpcBackoffForTests(): void {
+  backoffByUrl.clear();
+}
+
+function noteRpcFailure(url: string): void {
+  const state = backoffByUrl.get(url) ?? { failures: 0, blockedUntil: 0 };
+  state.failures += 1;
+  state.blockedUntil = Date.now() + rpcBackoffDelayMs(state.failures);
+  backoffByUrl.set(url, state);
+}
+
+function noteRpcSuccess(url: string): void {
+  backoffByUrl.delete(url);
+}
+
+/** POSTs a JSON-RPC body, honouring and updating the per-URL backoff. */
+async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{ res: Response; payload: unknown }> {
+  if (rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+  let res: Response;
+  let payload: unknown;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store",
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } catch (error) {
+    noteRpcFailure(url);
+    throw error;
+  }
+  if (RPC_RETRYABLE_STATUS.has(res.status)) {
+    noteRpcFailure(url);
+    const detail = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
+    throw new Error(detail?.error?.message ?? `rpc_http_${res.status}`);
+  }
+  try {
+    payload = await res.json();
+  } catch (error) {
+    // A truncated/HTML body (proxy error page, dropped connection) is a node-side failure.
+    noteRpcFailure(url);
+    throw error;
+  }
+  noteRpcSuccess(url);
+  return { res, payload };
+}
+
 export async function evmJsonRpc<T>(method: string, params: unknown[] = []): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
-    cache: "no-store",
-    signal: AbortSignal.timeout(20_000),
-  });
-  const payload = (await res.json()) as { result?: T; error?: { message?: string } };
-  if (!res.ok || payload.error) {
-    throw new Error(payload.error?.message ?? `rpc_http_${res.status}`);
+  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, 20_000);
+  const payload = raw as { result?: T; error?: { message?: string } };
+  if (!res.ok || payload?.error) {
+    throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);
   }
   return payload.result as T;
 }
@@ -47,15 +116,9 @@ export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T
       method: call.method,
       params: call.params ?? [],
     }));
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json" },
-      body: JSON.stringify(body),
-      cache: "no-store",
-      signal: AbortSignal.timeout(30_000),
-    });
+    const { res, payload: raw } = await postRpc(url, body, 30_000);
     if (!res.ok) throw new Error(`rpc_http_${res.status}`);
-    const payload = (await res.json()) as Array<RpcBatchEntry<T>> | RpcBatchEntry<T>;
+    const payload = raw as Array<RpcBatchEntry<T>> | RpcBatchEntry<T>;
     // A node that rejects batch arrays answers with a single error object rather than an array.
     if (!Array.isArray(payload)) {
       throw new Error(payload?.error?.message ?? "rpc_batch_rejected");

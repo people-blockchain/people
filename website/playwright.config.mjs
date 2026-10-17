@@ -1,8 +1,11 @@
+import { randomBytes } from "node:crypto";
+
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
   testDir: "./scripts",
   testMatch: [
-    "predict.spec.mjs",
+    // /predict is behind NEXT_PUBLIC_FEATURE_PREDICT (off by default, 404 otherwise).
+    ...(process.env.NEXT_PUBLIC_FEATURE_PREDICT === "1" ? ["predict.spec.mjs"] : []),
     "hero-headline-layout.spec.mjs",
     "no-horizontal-overflow.spec.mjs",
     "header-mobile-slogan.spec.mjs",
@@ -44,6 +47,11 @@ const config = {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000",
     viewport: { width: 1280, height: 720 },
     locale: "en-US",
+    // Tests must never reach the public PEOPLE node (it is the production validator's RPC):
+    // the browser cannot resolve it, so specs have to mock it with `page.route`.
+    launchOptions: {
+      args: ["--host-resolver-rules=MAP node.peopleblockchain.network ~NOTFOUND, MAP 147.45.227.204 ~NOTFOUND"],
+    },
   },
   webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER
     ? undefined
@@ -52,6 +60,16 @@ const config = {
         url: "http://127.0.0.1:3000",
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
+        // Server-side RPC goes to a closed local port, and scripts/no-live-rpc.mjs rejects any
+        // hard-coded call to the public PEOPLE node.
+        env: {
+          EVM_RPC_URL: "http://127.0.0.1:9",
+          // `next start` refuses to run without AUTH_SECRET; a throwaway per-run value for the local
+          // test server (never a real secret, never committed).
+          AUTH_SECRET: process.env.AUTH_SECRET || randomBytes(32).toString("hex"),
+          NO_LIVE_RPC_MODE: "block",
+          NODE_OPTIONS: [process.env.NODE_OPTIONS, "--import=./scripts/no-live-rpc.mjs"].filter(Boolean).join(" "),
+        },
       },
 };
 

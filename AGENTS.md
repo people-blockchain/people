@@ -197,6 +197,17 @@ Never hide or suppress failing tests just to obtain a green build.
 
 ---
 
+## 9a. Never Use the Public PEOPLE RPC from Tests or Agents
+
+The public node (`node.peopleblockchain.network`, `147.45.227.204`) is the production validators' RPC. Load from a test run slowed the whole chain on 2026-10-17.
+
+- Tests (unit, integration, Playwright) and cloud agents **must never call it**. Mock the node instead: start an ephemeral localhost JSON-RPC server and point `EVM_RPC_URL` at it (see `startRpcNode` in `website/scripts/evm-log-start-blocks.test.mjs`), or use `page.route` in Playwright.
+- `website/scripts/no-live-rpc.mjs` enforces this: any `fetch`/`WebSocket` to those hosts in `npm test` is rejected and fails the run, and the Playwright browser cannot resolve the host. Do not remove or bypass the guard.
+- `npm run test:live` is the only deliberate exception and is run by a human, never by CI or an agent.
+- Agents doing chain diagnostics must ask the owner first and use read-only calls on a local/archive node, never load-test the public endpoint.
+
+---
+
 ## 10. Small, Verifiable Changes
 
 Prefer small logical changes over massive rewrites.
