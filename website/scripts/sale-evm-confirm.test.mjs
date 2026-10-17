@@ -26,7 +26,7 @@ const purchasedEvent = parseAbiItem(
   "event Purchased(address indexed buyer, address indexed beneficiary, uint256 usdtPaid, uint256 pplOut, uint256 soldAfter)",
 );
 
-function logFor({ beneficiary = BENEFICIARY, usdtPaid = 50n * 10n ** 18n, pplOut = 1000n } = {}) {
+function logFor({ beneficiary = BENEFICIARY, usdtPaid = 50n * 10n ** 6n, pplOut = 1000n } = {}) {
   const topics = encodeEventTopics({
     abi: [purchasedEvent],
     eventName: "Purchased",
@@ -115,8 +115,8 @@ function stubRpc({ receipt, block, head = HEAD } = {}) {
 let verifyEvmSaleTx, checkEvmPurchaseAgainstOrder, confirmOrderAction;
 
 before(async () => {
-  process.env.SALE_CONTRACT_BSC = SALE_CONTRACT;
-  process.env.SALE_RPC_BSC = "https://rpc.test";
+  process.env.NEXT_PUBLIC_SALE_HUB_ADDRESS = SALE_CONTRACT;
+  process.env.SALE_RPC_BASE = "https://rpc.test";
   ({ verifyEvmSaleTx } = await import("../src/lib/sale/evm-verify.ts"));
   ({ checkEvmPurchaseAgainstOrder, confirmOrderAction } = await import("../src/lib/sale/evm-order-check.ts"));
 });
@@ -136,8 +136,8 @@ test("the confirm route requires a session, rate-limits, and never reads amounts
 const originalFetch = globalThis.fetch;
 after(() => {
   globalThis.fetch = originalFetch;
-  delete process.env.SALE_CONTRACT_BSC;
-  delete process.env.SALE_RPC_BSC;
+  delete process.env.NEXT_PUBLIC_SALE_HUB_ADDRESS;
+  delete process.env.SALE_RPC_BASE;
 });
 
 const createdAt = BLOCK_TIMESTAMP_MS - 60_000;
@@ -145,7 +145,7 @@ const expiresAt = BLOCK_TIMESTAMP_MS + 60_000;
 
 async function verify(overrides = {}) {
   stubRpc({ receipt: receiptFor(), block: blockFor(), ...overrides });
-  return verifyEvmSaleTx("bsc", "usdt", TX_HASH, BENEFICIARY, 1000, createdAt, expiresAt);
+  return verifyEvmSaleTx("usdc", TX_HASH, BENEFICIARY, 1000, createdAt, expiresAt);
 }
 
 /* ── on-chain verification ────────────────────────────────────────────────── */

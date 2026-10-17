@@ -30,8 +30,6 @@
     "amountLabel": "Paghi",
     "amountHint": "USDC o USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Rete di pagamento",
-    "networkHint": "Una curva, un prezzo — da qualsiasi rete paghi.",
     "youGet": "Ricevi",
     "avgPrice": "Prezzo medio",
     "priceAfter": "Prezzo dopo il tuo acquisto",
@@ -46,7 +44,18 @@
     "ctaConnected": "Compra PPL",
     "disabledNote": "Il contratto di vendita non è ancora deployato, quindi non si può acquistare. Connettere il wallet è sicuro e non ti impegna a nulla.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Puoi rivendere PPL alla curva in qualsiasi momento, meno la commissione del {fee}."
+    "sellBack": "Puoi rivendere PPL alla curva in qualsiasi momento, meno la commissione del {fee}.",
+    "payModeLabel": "Come paghi",
+    "payOnBase": "Paga su Base",
+    "payFromOther": "Paga da un'altra rete",
+    "basePayHint": "La vendita è solo su Base — paga con USDC o USDT dal tuo wallet su Base.",
+    "bridgeHint": "Fai bridge di USDC al tuo wallet su Base con LI.FI, poi completa l'acquisto sotto. Reti di origine supportate: {chains}.",
+    "bridgePanelTitle": "Bridge verso Base",
+    "bridgeNeedWallet": "Collega un wallet per ricevere USDC su Base prima del bridge.",
+    "bridgeReady": "Bridge completato — termina l'acquisto su Base sotto.",
+    "bridgeAwaiting": "Completa il bridge sopra per sbloccare il pulsante di acquisto.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana e Tron",
+    "scrollToForm": "Torna al modulo di acquisto"
   },
   "curve": {
     "eyebrow": "La formula",
@@ -157,7 +166,11 @@
     "addNetworkError": "Il wallet ha rifiutato o nessun wallet trovato.",
     "pumpTitle": "Cosa va storto sulle curve senza tetto",
     "pumpLead": "Le bonding curve sono diventate popolari con launchpad come pump.fun. Ecco i problemi noti e cosa facciamo noi.",
-    "pumpCols": ["Problema", "Cosa succede", "La nostra protezione"],
+    "pumpCols": [
+      "Problema",
+      "Cosa succede",
+      "La nostra protezione"
+    ],
     "pumpRows": [
       {
         "problem": "Gli acquirenti tardivi pagano troppo",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Pronto",
     "title": "Compra PPL al prezzo di curva di oggi",
-    "lead": "Lo stesso modulo, lo stesso prezzo unico per tutti."
+    "lead": "Lo stesso modulo, lo stesso prezzo unico per tutti.",
+    "scrollToForm": "Torna al modulo di acquisto"
   },
   "sticky": {
     "label": "Compra PPL",

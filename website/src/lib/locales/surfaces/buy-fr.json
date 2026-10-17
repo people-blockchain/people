@@ -30,8 +30,6 @@
     "amountLabel": "Vous payez",
     "amountHint": "USDC ou USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Réseau de paiement",
-    "networkHint": "Une courbe, un prix — quel que soit le réseau.",
     "youGet": "Vous recevez",
     "avgPrice": "Prix moyen",
     "priceAfter": "Prix après votre achat",
@@ -46,7 +44,18 @@
     "ctaConnected": "Acheter PPL",
     "disabledNote": "Le contrat de vente n’est pas encore déployé, aucun achat possible. Connecter un portefeuille est sûr et ne vous engage à rien.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Vous pouvez revendre PPL à la courbe à tout moment, moins les frais de {fee}."
+    "sellBack": "Vous pouvez revendre PPL à la courbe à tout moment, moins les frais de {fee}.",
+    "payModeLabel": "Mode de paiement",
+    "payOnBase": "Payer sur Base",
+    "payFromOther": "Payer depuis un autre réseau",
+    "basePayHint": "La vente se fait uniquement sur Base — payez en USDC ou USDT depuis votre portefeuille sur Base.",
+    "bridgeHint": "Faites un bridge USDC vers votre portefeuille sur Base via LI.FI, puis finalisez l'achat ci-dessous. Réseaux sources pris en charge : {chains}.",
+    "bridgePanelTitle": "Bridge vers Base",
+    "bridgeNeedWallet": "Connectez un portefeuille pour recevoir des USDC sur Base avant le bridge.",
+    "bridgeReady": "Bridge terminé — finalisez l'achat sur Base ci-dessous.",
+    "bridgeAwaiting": "Terminez le bridge ci-dessus pour activer le bouton d'achat.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana et Tron",
+    "scrollToForm": "Retour au formulaire d'achat"
   },
   "curve": {
     "eyebrow": "La formule",
@@ -157,7 +166,11 @@
     "addNetworkError": "Votre portefeuille a refusé ou aucun portefeuille trouvé.",
     "pumpTitle": "Ce qui va mal sur les courbes sans plafond",
     "pumpLead": "Les courbes de bonding se sont popularisées via des launchpads comme pump.fun. Voici leurs problèmes connus et notre approche.",
-    "pumpCols": ["Problème", "Ce qui se passe", "Notre protection"],
+    "pumpCols": [
+      "Problème",
+      "Ce qui se passe",
+      "Notre protection"
+    ],
     "pumpRows": [
       {
         "problem": "Les acheteurs tardifs surpayent",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Prêt",
     "title": "Achetez PPL au prix de la courbe d’aujourd’hui",
-    "lead": "Le même formulaire, le même prix unique pour tous."
+    "lead": "Le même formulaire, le même prix unique pour tous.",
+    "scrollToForm": "Retour au formulaire d'achat"
   },
   "sticky": {
     "label": "Acheter PPL",

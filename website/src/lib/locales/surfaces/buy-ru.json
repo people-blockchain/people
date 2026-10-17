@@ -30,8 +30,6 @@
     "amountLabel": "Вы платите",
     "amountHint": "USDC или USDT",
     "stableLabel": "Стейблкоин",
-    "networkLabel": "Сеть, из которой платите",
-    "networkHint": "Кривая одна и цена одна — из какой бы сети вы ни платили.",
     "youGet": "Вы получите",
     "avgPrice": "Средняя цена",
     "priceAfter": "Цена после вашей покупки",
@@ -46,7 +44,18 @@
     "ctaConnected": "Купить PPL",
     "disabledNote": "Контракт продажи ещё не развёрнут, поэтому покупка недоступна. Подключение кошелька безопасно и ни к чему не обязывает.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "PPL можно в любой момент продать обратно в кривую за вычетом комиссии {fee}."
+    "sellBack": "PPL можно в любой момент продать обратно в кривую за вычетом комиссии {fee}.",
+    "payModeLabel": "Способ оплаты",
+    "payOnBase": "Оплатить в Base",
+    "payFromOther": "Оплатить из другой сети",
+    "basePayHint": "Продажа только в Base — платите USDC или USDT с кошелька в Base.",
+    "bridgeHint": "Переведите USDC на свой кошелёк в Base через LI.FI, затем завершите покупку ниже. Поддерживаемые сети-источники: {chains}.",
+    "bridgePanelTitle": "Мост в Base",
+    "bridgeNeedWallet": "Подключите кошелёк, чтобы получить USDC в Base перед мостом.",
+    "bridgeReady": "Мост выполнен — завершите покупку в Base ниже.",
+    "bridgeAwaiting": "Сначала завершите мост выше, чтобы открыть кнопку покупки.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana и Tron",
+    "scrollToForm": "К форме покупки"
   },
   "curve": {
     "eyebrow": "Формула",
@@ -193,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Готовы",
     "title": "Купить PPL по сегодняшней цене кривой",
-    "lead": "Та же форма и та же единая цена для всех."
+    "lead": "Та же форма и та же единая цена для всех.",
+    "scrollToForm": "К форме покупки"
   },
   "sticky": {
     "label": "Купить PPL",
