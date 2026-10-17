@@ -23,7 +23,18 @@
     "tokenFactoryV4": 470209,
     "bondingCurveV4": 470209,
     "ammFactoryV4": 470209,
-    "routerV4": 470209
+    "routerV4": 470209,
+    "registry": 471827,
+    "creatorVesting": 471830,
+    "communityVault": 471831,
+    "gateway": 471838,
+    "registryV4": 470209,
+    "creatorVestingV4": 470212,
+    "communityVaultV4": 470213,
+    "promoRewardsVaultV4": 470217,
+    "nftFactoryV4": 470219,
+    "gatewayV4": 470220,
+    "agentWallet": 220464
   },
   "contracts": {
     "registry": "0x107B847f13DF4c28d2087D5f750629AD2B3350B3",

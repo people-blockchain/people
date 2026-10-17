@@ -1,11 +1,15 @@
 import { getAddress } from "viem";
 import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
 import { readEvmDeployments } from "@/lib/evm/config";
+import { fetchLogsWindowed } from "@/lib/evm/chain-catalog";
 
 const AGENT_SPEND_TOPIC = "0x01dea9e942d4b524a073c8dd6160dee9ee4ea0c986c2f56171be67d0fdc149da";
 
-/** CommunityAgentWallet v2 redeploy block (AUD-M3/M4); scanning from genesis is wasteful on a long-lived testnet. */
-const AGENT_WALLET_V2_DEPLOY_BLOCK = 174_800;
+/**
+ * CommunityAgentWallet v2 deploy block (first block with code: 220 464). Used only when the
+ * deployment JSON has no `startBlocks.agentWallet` entry.
+ */
+const AGENT_WALLET_V2_DEPLOY_BLOCK = 220_464;
 
 export type AgentSpendEvent = {
   recipient: string;
@@ -44,22 +48,15 @@ type RpcLog = {
   transactionHash?: string;
 };
 
-async function fetchAgentSpendLogs(wallet: string, fromBlock: number, latest: number): Promise<RpcLog[]> {
-  const logs: RpcLog[] = [];
-  // Cosmos EVM caps eth_getLogs at 10,000 blocks per query; scan in windows.
-  for (let start = Math.max(0, fromBlock); start <= latest; start += 9_000) {
-    const end = Math.min(latest, start + 8_999);
-    const chunk = await evmJsonRpc<RpcLog[]>("eth_getLogs", [
-      {
-        address: wallet,
-        topics: [AGENT_SPEND_TOPIC],
-        fromBlock: `0x${start.toString(16)}`,
-        toBlock: `0x${end.toString(16)}`,
-      },
-    ]);
-    if (Array.isArray(chunk)) logs.push(...chunk);
-  }
-  return logs;
+/**
+ * Spend logs go through the shared windowed scanner: immutable windows are cached across requests
+ * and server instances, node reads are capped at two windows in flight, and the RPC layer backs off
+ * when the node is unhealthy (previously ~38 uncached sequential `eth_getLogs` per request).
+ */
+async function fetchAgentSpendLogs(wallet: string): Promise<RpcLog[]> {
+  const configured = readEvmDeployments().startBlocks?.agentWallet;
+  const fromBlock = typeof configured === "number" && configured > 0 ? configured : AGENT_WALLET_V2_DEPLOY_BLOCK;
+  return fetchLogsWindowed(wallet, [AGENT_SPEND_TOPIC], fromBlock);
 }
 
 export async function fetchCommunityAgentSnapshot(limit = 10): Promise<CommunityAgentSnapshot> {
@@ -67,13 +64,8 @@ export async function fetchCommunityAgentSnapshot(limit = 10): Promise<Community
   if (!wallet || !executor || !guardian) throw new Error("community_agent_wallet_unconfigured");
   const walletAddr = getAddress(wallet);
 
-  const [balanceHex, latestHex] = await Promise.all([
-    evmJsonRpc<string>("eth_getBalance", [walletAddr, "latest"]),
-    evmJsonRpc<string>("eth_blockNumber", []),
-  ]);
-  const latest = hexToNumber(latestHex);
-
-  const logs = await fetchAgentSpendLogs(walletAddr, AGENT_WALLET_V2_DEPLOY_BLOCK, latest);
+  const balanceHex = await evmJsonRpc<string>("eth_getBalance", [walletAddr, "latest"]);
+  const logs = await fetchAgentSpendLogs(walletAddr);
   const parsed = logs
     .map((log) => {
       const topics = log.topics ?? [];

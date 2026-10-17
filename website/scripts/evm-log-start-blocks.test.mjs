@@ -5,11 +5,21 @@ import { encodeAbiParameters, encodeEventTopics } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import {
+  MAX_PARALLEL_LOG_WINDOWS,
   fetchLogsWindowed,
   logStartBlock,
+  logWindowConcurrencyPeakForTests,
   logWindows,
+  pairLogStartBlock,
   resetChainCatalogCacheForTests,
 } from "../src/lib/evm/chain-catalog.ts";
+import {
+  RPC_BACKOFF_BASE_MS,
+  RPC_BACKOFF_MAX_MS,
+  evmJsonRpc,
+  rpcBackoffDelayMs,
+  rpcBackoffRemainingMs,
+} from "../src/lib/evm/rpc-server.ts";
 import { fetchTokenMarketSnapshot, resetTokenMarketCacheForTests } from "../src/lib/evm/market-data.ts";
 
 /**
@@ -121,8 +131,22 @@ test("logStartBlock matches contract addresses case-insensitively", () => {
 });
 
 test("logStartBlock falls back to the deployment block for contracts with no start entry", () => {
-  // `registry` is in the deployment JSON but has no `startBlocks` entry.
-  assert.equal(logStartBlock(contract("registry")), dep.deployBlock);
+  // `timelock` is in the deployment JSON but has no `startBlocks` entry.
+  assert.equal(dep.startBlocks.timelock, undefined);
+  assert.equal(logStartBlock(contract("timelock")), dep.deployBlock);
+});
+
+test("every contract of the 2026-10-16 redeploys has its own start block", () => {
+  // Current stack (fullStackRedeploy) and the earlier V4 redeploy of the same day: deploy blocks
+  // were read from the chain (first block with code).
+  const current = ["registry", "creatorVesting", "communityVault", "gateway", "tokenFactory", "bondingCurve", "ammFactory", "router", "nftFactory", "promoRewardsVault"];
+  const v4 = ["registryV4", "creatorVestingV4", "communityVaultV4", "promoRewardsVaultV4", "nftFactoryV4", "gatewayV4", "tokenFactoryV4", "bondingCurveV4", "ammFactoryV4", "routerV4"];
+  for (const key of current) assert.ok(logStartBlock(contract(key)) >= 471_827, key);
+  for (const key of v4) {
+    const start = logStartBlock(contract(key));
+    assert.ok(start >= 470_209 && start < 471_827, `${key} ${start}`);
+  }
+  assert.equal(logStartBlock(contract("agentWallet")), 220_464);
 });
 
 test("logStartBlock scans AMM pairs from the factory's start block, since the factory deployed them", () => {
@@ -341,4 +365,140 @@ test("fetchTokenMarketSnapshot falls back to per-block requests when the node re
   assert.equal(timestampBatches.length, 1);
   assert.deepEqual(singleBlockCalls, [hex(TRADE_BLOCK)]);
   assert.equal(snapshot.trades[0].ts, TRADE_TS_SECONDS * 1000);
+});
+
+// --- load shedding: window concurrency cap, exponential backoff, pair start blocks ------------
+
+test("fetchLogsWindowed never has more than MAX_PARALLEL_LOG_WINDOWS eth_getLogs in flight", async (t) => {
+  assert.equal(MAX_PARALLEL_LOG_WINDOWS, 2);
+  let inFlight = 0;
+  let peak = 0;
+  const node = createServer((req, res) => {
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      const reply = (result) => {
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result }));
+      };
+      if (body.method !== "eth_getLogs") return reply(hex(LATEST + 200_000));
+      inFlight++;
+      peak = Math.max(peak, inFlight);
+      setTimeout(() => {
+        inFlight--;
+        reply([]);
+      }, 15);
+    });
+  });
+  await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
+  const previous = process.env.EVM_RPC_URL;
+  process.env.EVM_RPC_URL = `http://127.0.0.1:${node.address().port}`;
+  t.after(async () => {
+    if (previous === undefined) delete process.env.EVM_RPC_URL;
+    else process.env.EVM_RPC_URL = previous;
+    await new Promise((resolve) => node.close(resolve));
+  });
+  resetChainCatalogCacheForTests();
+
+  // Two concurrent scans (~23 windows each) share the same global cap.
+  await Promise.all([
+    fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]),
+    fetchLogsWindowed(contract("bondingCurve"), [SELL_TOPIC]),
+  ]);
+  assert.ok(peak >= 1);
+  assert.ok(peak <= MAX_PARALLEL_LOG_WINDOWS, `peak ${peak}`);
+  assert.ok(logWindowConcurrencyPeakForTests() <= MAX_PARALLEL_LOG_WINDOWS);
+});
+
+test("fetchLogsWindowed honours a later fromBlock hint but never scans before the contract's start", async (t) => {
+  const node = await startRpcNode(t, emptyNode);
+  resetChainCatalogCacheForTests();
+
+  await fetchLogsWindowed(PAIR_ADDRESS, [BUY_TOPIC], CURVE_START);
+  assert.equal(Math.min(...logFilters(node.calls).map(fromBlockOf)), CURVE_START);
+
+  resetChainCatalogCacheForTests();
+  const before = node.calls.length;
+  await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC], 1);
+  assert.equal(Math.min(...logFilters(node.calls.slice(before)).map(fromBlockOf)), CURVE_START);
+});
+
+test("pairLogStartBlock starts a pair at the start block of the factory that created it", async (t) => {
+  const factory = contract("ammFactory");
+  await startRpcNode(t, (call) =>
+    call.method === "eth_call" && call.params[0].data === "0xc45a0155"
+      ? `0x${factory.slice(2).toLowerCase().padStart(64, "0")}`
+      : null,
+  );
+  resetChainCatalogCacheForTests();
+  assert.equal(await pairLogStartBlock(PAIR_ADDRESS), dep.startBlocks.ammFactory);
+});
+
+test("pairLogStartBlock falls back to the earliest AMM factory when factory() is unknown", async (t) => {
+  await startRpcNode(t, () => `0x${"99".repeat(32)}`);
+  resetChainCatalogCacheForTests();
+  assert.equal(await pairLogStartBlock(PAIR_ADDRESS), AMM_START);
+});
+
+test("rpc backoff doubles from the base delay and is capped", () => {
+  assert.equal(rpcBackoffDelayMs(0), 0);
+  assert.equal(rpcBackoffDelayMs(1), RPC_BACKOFF_BASE_MS);
+  assert.equal(rpcBackoffDelayMs(2), RPC_BACKOFF_BASE_MS * 2);
+  assert.equal(rpcBackoffDelayMs(3), RPC_BACKOFF_BASE_MS * 4);
+  assert.equal(rpcBackoffDelayMs(50), RPC_BACKOFF_MAX_MS);
+});
+
+test("after a node failure, calls fail fast without touching the node until the backoff expires", async (t) => {
+  let hits = 0;
+  const node = createServer((req, res) => {
+    req.resume();
+    req.on("end", () => {
+      hits++;
+      res.writeHead(503, { "content-type": "text/plain" });
+      res.end("busy");
+    });
+  });
+  await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
+  const previous = process.env.EVM_RPC_URL;
+  process.env.EVM_RPC_URL = `http://127.0.0.1:${node.address().port}`;
+  t.after(async () => {
+    if (previous === undefined) delete process.env.EVM_RPC_URL;
+    else process.env.EVM_RPC_URL = previous;
+    resetChainCatalogCacheForTests();
+    await new Promise((resolve) => node.close(resolve));
+  });
+  resetChainCatalogCacheForTests();
+
+  await assert.rejects(evmJsonRpc("eth_blockNumber"), /rpc_http_503/); // plain-text body: status code
+  assert.equal(hits, 1);
+  assert.ok(rpcBackoffRemainingMs() > 0);
+  assert.ok(rpcBackoffRemainingMs() <= RPC_BACKOFF_BASE_MS);
+
+  // Backing off: neither single calls nor a whole log scan reach the node.
+  await assert.rejects(evmJsonRpc("eth_blockNumber"), /rpc_backoff/);
+  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
+  assert.equal(hits, 1);
+});
+
+test("a JSON-RPC error is an answer from a healthy node and does not trigger backoff", async (t) => {
+  const node = createServer((req, res) => {
+    req.resume();
+    req.on("end", () => {
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ jsonrpc: "2.0", id: 1, error: { code: -32000, message: "execution reverted" } }));
+    });
+  });
+  await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
+  const previous = process.env.EVM_RPC_URL;
+  process.env.EVM_RPC_URL = `http://127.0.0.1:${node.address().port}`;
+  t.after(async () => {
+    if (previous === undefined) delete process.env.EVM_RPC_URL;
+    else process.env.EVM_RPC_URL = previous;
+    await new Promise((resolve) => node.close(resolve));
+  });
+  resetChainCatalogCacheForTests();
+
+  await assert.rejects(evmJsonRpc("eth_call"), /execution reverted/);
+  assert.equal(rpcBackoffRemainingMs(), 0);
 });
