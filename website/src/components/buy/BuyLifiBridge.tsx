@@ -5,28 +5,33 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChainType, LiFiWidget, WidgetEvent, widgetEvents, type WidgetConfig } from "@lifi/widget";
 import { EthereumProvider } from "@lifi/widget-provider-ethereum";
 import { SolanaProvider } from "@lifi/widget-provider-solana";
-import { TronProvider } from "@lifi/widget-provider-tron";
 import type { Address } from "viem";
 
 import {
   BASE_CHAIN_ID,
   BASE_USDC_ADDRESS,
+  BASE_USDT_ADDRESS,
   LIFI_BRIDGE_SOURCE_CHAIN_IDS,
+  LIFI_FEATURED_SOURCE_TOKENS,
 } from "@/lib/sale/bridge";
 
 const queryClient = new QueryClient();
 
 type BuyLifiBridgeProps = {
   recipient: Address;
+  variant?: "cross-chain" | "base-usdt";
   onBridgeComplete?: () => void;
   testId?: string;
 };
 
-function useBridgeWidgetConfig(recipient: Address): WidgetConfig {
-  return useMemo(
-    () => ({
+function useBridgeWidgetConfig(
+  recipient: Address,
+  variant: "cross-chain" | "base-usdt",
+): WidgetConfig {
+  return useMemo(() => {
+    const shared: WidgetConfig = {
       integrator: "PEOPLE",
-      providers: [EthereumProvider(), SolanaProvider(), TronProvider()],
+      providers: [EthereumProvider(), SolanaProvider()],
       toChain: BASE_CHAIN_ID,
       toToken: BASE_USDC_ADDRESS,
       toAddress: {
@@ -36,11 +41,14 @@ function useBridgeWidgetConfig(recipient: Address): WidgetConfig {
       },
       chains: {
         to: { allow: [BASE_CHAIN_ID] },
-        from: { allow: [...LIFI_BRIDGE_SOURCE_CHAIN_IDS] },
+        types: { allow: [ChainType.EVM, ChainType.SVM] },
       },
       hiddenUI: {
         toAddress: true,
         toToken: true,
+      },
+      explorerUrls: {
+        [BASE_CHAIN_ID]: ["https://scan.li.fi"],
       },
       theme: {
         container: {
@@ -48,13 +56,50 @@ function useBridgeWidgetConfig(recipient: Address): WidgetConfig {
           borderRadius: "16px",
         },
       },
-    }),
-    [recipient],
-  );
+    };
+
+    if (variant === "base-usdt") {
+      return {
+        ...shared,
+        fromChain: BASE_CHAIN_ID,
+        fromToken: BASE_USDT_ADDRESS,
+        chains: {
+          ...shared.chains,
+          from: { allow: [BASE_CHAIN_ID] },
+        },
+        tokens: {
+          from: {
+            allow: [{ chainId: BASE_CHAIN_ID, address: BASE_USDT_ADDRESS }],
+          },
+        },
+        hiddenUI: {
+          ...shared.hiddenUI,
+          fromToken: true,
+          fromChain: true,
+        },
+      };
+    }
+
+    return {
+      ...shared,
+      chains: {
+        ...shared.chains,
+        from: { allow: [...LIFI_BRIDGE_SOURCE_CHAIN_IDS] },
+      },
+      tokens: {
+        featured: [...LIFI_FEATURED_SOURCE_TOKENS],
+      },
+    };
+  }, [recipient, variant]);
 }
 
-function BridgeWidgetInner({ recipient, onBridgeComplete, testId }: BuyLifiBridgeProps) {
-  const config = useBridgeWidgetConfig(recipient);
+function BridgeWidgetInner({
+  recipient,
+  variant = "cross-chain",
+  onBridgeComplete,
+  testId,
+}: BuyLifiBridgeProps) {
+  const config = useBridgeWidgetConfig(recipient, variant);
 
   useEffect(() => {
     if (!onBridgeComplete) return;

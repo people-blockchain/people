@@ -9,7 +9,7 @@ import { useWallet } from "@/context/WalletContext";
 import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
-import { LIFI_BRIDGE_SOURCE_CHAINS_EN } from "@/lib/sale/bridge";
+import { hubPaymentToken, LIFI_BRIDGE_SOURCE_CHAINS_EN } from "@/lib/sale/bridge";
 import { SALE, type SaleStableSymbol, saleContractConfigured } from "@/lib/sale/config";
 import { quoteBuy } from "@/lib/sale/curve";
 import { fillCopy, pplCompact, pricePerPpl, usd } from "@/lib/sale/format";
@@ -23,8 +23,6 @@ const FIELD =
   "mt-1.5 w-full rounded-xl border border-line bg-surface-2 px-3.5 py-2.5 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30";
 
 const LABEL = "block text-xs font-semibold uppercase tracking-[0.08em] text-ink-3";
-
-const BASE_STABLES: readonly SaleStableSymbol[] = ["USDC", "USDT"];
 
 type PayMode = "base" | "bridge";
 
@@ -52,7 +50,7 @@ export function BuyForm({
   const [amount, setAmount] = useState(String(SALE.maxPerBuyUsd / 5));
   const [stable, setStable] = useState<SaleStableSymbol>("USDC");
   const [payMode, setPayMode] = useState<PayMode>("base");
-  const [bridgeReady, setBridgeReady] = useState(false);
+  const [conversionReady, setConversionReady] = useState(false);
 
   const amountFieldId = useId();
   const stableFieldId = useId();
@@ -66,9 +64,14 @@ export function BuyForm({
     [amountValid, soldPpl, usdAmount],
   );
 
+  const showBuyCta =
+    payMode === "base" && stable === "USDC" ? true : conversionReady;
+
   const showConnect = !connected;
-  const buttonDisabled = !showConnect || !amountValid || overLimit || !saleContractConfigured();
-  const showBaseBuy = payMode === "base" || bridgeReady;
+  // hubPaymentToken(stable) is the on-chain stable for buyWith when the sale opens (USDC only).
+  const hubStable = hubPaymentToken(stable);
+  void hubStable;
+  const buttonDisabled = !showConnect || !amountValid || overLimit || !saleContractConfigured() || !showBuyCta;
 
   const rows: { label: string; value: string }[] = quote
     ? [
@@ -81,6 +84,8 @@ export function BuyForm({
   const bridgeChains =
     t.form.supportedBridgeChains?.trim() || LIFI_BRIDGE_SOURCE_CHAINS_EN;
 
+  const resetConversion = () => setConversionReady(false);
+
   const body = (
     <div className="space-y-4" data-testid={testId}>
       <div>
@@ -91,7 +96,7 @@ export function BuyForm({
             data-testid="pay-mode-base"
             onClick={() => {
               setPayMode("base");
-              setBridgeReady(false);
+              resetConversion();
             }}
             className={`rounded-xl border px-3.5 py-3 text-left text-sm font-semibold transition ${
               payMode === "base"
@@ -104,7 +109,10 @@ export function BuyForm({
           <button
             type="button"
             data-testid="pay-mode-bridge"
-            onClick={() => setPayMode("bridge")}
+            onClick={() => {
+              setPayMode("bridge");
+              resetConversion();
+            }}
             className={`rounded-xl border px-3.5 py-3 text-left text-sm font-semibold transition ${
               payMode === "bridge"
                 ? "border-brand bg-brand/10 text-ink"
@@ -121,6 +129,9 @@ export function BuyForm({
         ) : (
           <p className="mt-1.5 text-xs text-ink-3">{t.form.basePayHint}</p>
         )}
+        {payMode === "bridge" ? (
+          <p className="mt-1 text-xs text-ink-3">{t.form.bridgeUsdtHint}</p>
+        ) : null}
       </div>
 
       {payMode === "bridge" ? (
@@ -130,14 +141,36 @@ export function BuyForm({
             <p className="text-sm text-ink-2">{t.form.bridgeNeedWallet}</p>
           ) : (
             <BuyLifiBridge
+              variant="cross-chain"
               recipient={evmAddress as Address}
-              onBridgeComplete={() => setBridgeReady(true)}
+              onBridgeComplete={() => setConversionReady(true)}
               testId="buy-lifi-widget"
             />
           )}
-          {bridgeReady ? (
+          {conversionReady ? (
             <p className="rounded-xl border border-brand/40 bg-brand/5 px-3 py-2 text-sm font-medium text-ink">
               {t.form.bridgeReady}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {payMode === "base" && stable === "USDT" ? (
+        <div className="space-y-3" data-testid="buy-usdt-swap-panel">
+          <p className="text-sm font-semibold text-ink">{t.form.usdtSwapTitle}</p>
+          {!connected ? (
+            <p className="text-sm text-ink-2">{t.form.bridgeNeedWallet}</p>
+          ) : (
+            <BuyLifiBridge
+              variant="base-usdt"
+              recipient={evmAddress as Address}
+              onBridgeComplete={() => setConversionReady(true)}
+              testId="buy-lifi-widget-usdt"
+            />
+          )}
+          {conversionReady ? (
+            <p className="rounded-xl border border-brand/40 bg-brand/5 px-3 py-2 text-sm font-medium text-ink">
+              {t.form.usdtSwapReady}
             </p>
           ) : null}
         </div>
@@ -175,16 +208,22 @@ export function BuyForm({
           </label>
           <select
             id={stableFieldId}
+            data-testid="buy-stable-select"
             value={stable}
-            onChange={(event) => setStable(event.target.value as SaleStableSymbol)}
+            onChange={(event) => {
+              setStable(event.target.value as SaleStableSymbol);
+              resetConversion();
+            }}
             className={FIELD}
           >
-            {BASE_STABLES.map((symbol) => (
-              <option key={symbol} value={symbol}>
-                {symbol}
-              </option>
-            ))}
+            <option value="USDC">USDC</option>
+            <option value="USDT">{t.form.stableUsdtOption}</option>
           </select>
+          {stable === "USDT" ? (
+            <p data-testid="buy-usdt-note" className="mt-1.5 text-xs text-ink-3">
+              {t.form.usdtConvertHint}
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -227,18 +266,26 @@ export function BuyForm({
         </li>
       </ul>
 
-      {showBaseBuy ? (
+      {showBuyCta ? (
         <button
           type="button"
           data-testid="buy-cta"
           disabled={buttonDisabled}
-          onClick={showConnect ? openWalletModal : undefined}
+          onClick={
+            showConnect
+              ? openWalletModal
+              : () => {
+                  // TODO(sale-deploy): approve + buyWith(hubPaymentToken(stable), ...) when hub is live.
+                }
+          }
           className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-base font-semibold text-brand-ink shadow-[0_14px_36px_-16px_rgba(3,105,161,0.8)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none"
         >
           {showConnect ? t.form.cta : t.form.ctaDisabled}
         </button>
       ) : (
-        <p className="text-center text-sm text-ink-2">{t.form.bridgeAwaiting}</p>
+        <p className="text-center text-sm text-ink-2">
+          {payMode === "base" && stable === "USDT" ? t.form.usdtSwapAwaiting : t.form.bridgeAwaiting}
+        </p>
       )}
 
       <p className="text-xs text-ink-3">{t.form.wallets}</p>
