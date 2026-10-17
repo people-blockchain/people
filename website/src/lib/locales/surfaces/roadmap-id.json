@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "Testnet People's Blockchain (EVM)",
-      "summary": "Mengembangkan testnet People's Blockchain di EVM. Tahap 1 (chain/) berjalan; testnet publik saat ini masih di node OVN dengan RPC baca-saja."
+      "title": "Testnet PEOPLE Blockchain (EVM)",
+      "summary": "Mengembangkan testnet PEOPLE Blockchain di EVM. Tahap 1 (chain/) berjalan; testnet publik saat ini masih di node OVN dengan RPC baca-saja."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Modul protokol sudah berjalan di node testnet; targetnya Solidity diaudit di testnet People's Blockchain, termasuk AMM gaya Uniswap V2."
+      "summary": "Modul protokol sudah berjalan di node testnet; targetnya Solidity diaudit di testnet PEOPLE Blockchain, termasuk AMM gaya Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

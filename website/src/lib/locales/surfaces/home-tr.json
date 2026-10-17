@@ -1,6 +1,6 @@
 {
   "hero": {
-    "brandLine": "People — topluluklar için blokzincir",
+    "brandLine": "PEOPLE — topluluklar için blokzincir",
     "headlineMain": "Topluluğunuz için bir token başlatın.",
     "headlineMainLines": [
       "Topluluğunuz için",
@@ -12,7 +12,7 @@
       "%10 sizin insanlarınıza gider,",
       "balinalara değil."
     ],
-    "sub": "People's Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
+    "sub": "PEOPLE Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
     "testnetBadge": "Halka açık testnet yayında. Henüz mainnet değil.",
     "ctaCreate": "Token oluştur",
     "ctaWallet": "Cüzdanı aç",
@@ -120,7 +120,7 @@
   },
   "foundersTeaser": {
     "eyebrow": "Bir milyon kurucu",
-    "lead": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve People's Blockchain testnet aktivite puanları alır.",
+    "lead": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve PEOPLE Blockchain testnet aktivite puanları alır.",
     "cta": "Kuruculara katıl",
     "href": "/founders",
     "titleWithNumber": "Mainnet öncesi {{n}}. kurucu olun",

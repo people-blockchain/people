@@ -63,6 +63,6 @@ export function evmContractsReady(): boolean {
 
 export const peopleEvmChain = {
   id: PEOPLE_EIP155_CHAIN_ID,
-  name: "People's Blockchain testnet",
+  name: "PEOPLE Blockchain testnet",
   nativeCurrency: { name: "People", symbol: "PPL", decimals: 18 },
 } as const;

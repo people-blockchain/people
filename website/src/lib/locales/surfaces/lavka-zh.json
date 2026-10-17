@@ -1,7 +1,7 @@
 {
   "tag": "会员",
   "title": "本地小店",
-  "lead": "几分钟上线次卡计划。顾客在收银台扫码即可——无加密术语，底层为 People's Blockchain。",
+  "lead": "几分钟上线次卡计划。顾客在收银台扫码即可——无加密术语，底层为 PEOPLE Blockchain。",
   "contractsOff": "本测试网尚未部署会员合约。合并后请运行 Lavka 部署工作流。",
   "signInCta": "登录",
   "walletCta": "绑定钱包",
@@ -45,7 +45,7 @@
   "releaseEscrow": "放款给商家",
   "refundEscrow": "申请退款",
   "disputeEscrow": "发起争议",
-  "escrowLocked": "资金已锁定在 People's Blockchain 测试网。",
+  "escrowLocked": "资金已锁定在 PEOPLE Blockchain 测试网。",
   "visitsLeft": "剩余次数：{{n}}",
   "founderWelcome": "您已加入 Million Founders，编号 {{n}}。",
   "founderAlready": "创始人 #{{n}}",

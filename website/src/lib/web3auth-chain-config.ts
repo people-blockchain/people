@@ -16,7 +16,7 @@ export function buildWeb3AuthChainConfig(rpcTarget: string = readEvmRpcUrl()) {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
     chainId: `0x${PEOPLE_EIP155_CHAIN_ID.toString(16)}`,
     rpcTarget,
-    displayName: "People's Blockchain testnet",
+    displayName: "PEOPLE Blockchain testnet",
     blockExplorerUrl: "https://www.peopleblockchain.network/explorer",
     ticker: "PPL",
     tickerName: "People",

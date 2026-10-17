@@ -1,7 +1,7 @@
 {
   "tag": "手续费与定价",
   "title": "公开 PPL 费率",
-  "lead": "在 People's Blockchain 上常见操作的费用。所有手续费都用网络自己的币 PPL 支付。",
+  "lead": "在 PEOPLE Blockchain 上常见操作的费用。所有手续费都用网络自己的币 PPL 支付。",
   "approvedNote": "这是网站目前使用的价格。签名前钱包总会显示准确的手续费。",
   "table": [
     {

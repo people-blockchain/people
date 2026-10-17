@@ -5,13 +5,13 @@ import { GovernanceApp } from "@/components/governance/GovernanceApp";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Governance | People's Blockchain",
+  title: "Governance | PEOPLE Blockchain",
   description:
-    "Browse on-chain governance proposals on People's Blockchain testnet and vote with your People Wallet.",
+    "Browse on-chain governance proposals on PEOPLE Blockchain testnet and vote with your People Wallet.",
   alternates: { canonical: "/governance" },
   openGraph: {
     title: "Governance",
-    description: "See live proposals, tallies and cast your vote on People's Blockchain testnet.",
+    description: "See live proposals, tallies and cast your vote on PEOPLE Blockchain testnet.",
     type: "website",
     siteName: SITE_NAME,
     url: "/governance",

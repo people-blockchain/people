@@ -1258,7 +1258,7 @@ export const it: LocaleContent = {
     "specDesc": "Split delle commissioni di rete approvato (30/25/20/10/15/0). Il protocollo di produzione è invariato."
   },
   "footer": {
-    "desc": "People è una blockchain per le comunità. Le commissioni si pagano in PPL e una parte di ogni commissione torna a chi partecipa.",
+    "desc": "PEOPLE è una blockchain per le comunità. Le commissioni si pagano in PPL e una parte di ogni commissione torna a chi partecipa.",
     "architectureCol": "Architettura",
     "protocolCol": "Protocollo",
     "homeCta": "Torna alla home",

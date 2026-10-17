@@ -1,7 +1,7 @@
 {
   "privacy": {
     "title": "Informativa sulla privacy",
-    "subtitle": "Come il sito People's Blockchain gestisce le informazioni durante navigazione, accesso e strumenti partner.",
+    "subtitle": "Come il sito PEOPLE Blockchain gestisce le informazioni durante navigazione, accesso e strumenti partner.",
     "effectiveLabel": "Effective date",
     "effectiveDate": "30 September 2026",
     "backHome": "Torna alla home",
@@ -14,7 +14,7 @@
         "title": "Who this policy is for",
         "body": [
           "This policy describes the website at www.peopleblockchain.network (the \"site\"), operated by the People Blockchain project operators (\"we\", \"us\"). It applies when you visit public pages, use the in-browser wallet, explore the test network, or sign in to the partner portal.",
-          "This policy does not replace the public nature of blockchain data. On-chain activity on the People's Blockchain test network is visible to anyone and cannot be made private after it is confirmed."
+          "This policy does not replace the public nature of blockchain data. On-chain activity on the PEOPLE Blockchain test network is visible to anyone and cannot be made private after it is confirmed."
         ]
       },
       {
@@ -52,7 +52,7 @@
       {
         "title": "Blockchain and test network",
         "body": [
-          "People's Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income.",
+          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income.",
           "Deleting your website account does not remove or change on-chain history."
         ]
       },
@@ -93,7 +93,7 @@
   },
   "terms": {
     "title": "Termini di servizio",
-    "subtitle": "Regole per usare il sito People's Blockchain e gli strumenti partner mentre la rete è in test/beta.",
+    "subtitle": "Regole per usare il sito PEOPLE Blockchain e gli strumenti partner mentre la rete è in test/beta.",
     "effectiveLabel": "Effective date",
     "effectiveDate": "30 September 2026",
     "backHome": "Torna alla home",
@@ -112,7 +112,7 @@
       {
         "title": "Test network and beta status",
         "body": [
-          "People's Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
+          "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
           "Mainnet has not launched. Anything labeled testnet or beta is for experimentation, not production financial use."
         ]
       },

@@ -9,9 +9,9 @@
  * Two lockups exist, both cut from the same artwork:
  *
  *   compact — symbol + PEOPLE. The site header. The approved tagline raster is
- *             too fine at header scale; the header renders "People's Blockchain"
+ *             too fine at header scale; the header renders "PEOPLE Blockchain"
  *             as CSS text aligned with the PEOPLE column (see globals.css).
- *   full    — symbol + PEOPLE + "People's Blockchain". Footer and social
+ *   full    — symbol + PEOPLE + "PEOPLE Blockchain". Footer and social
  *             cards, where it is rendered large enough to stay legible.
  *
  * Theme handling: the site theme is a class on <html> applied before first
@@ -45,7 +45,7 @@ const srcSet = (file: string, variant: "light" | "dark") =>
 export function Logo({
   className = "h-10",
   variant = "compact",
-  alt = "People's Blockchain",
+  alt = "PEOPLE Blockchain",
 }: {
   /** Sizing utilities only — e.g. `h-10`, `h-9 sm:h-12`. */
   className?: string;

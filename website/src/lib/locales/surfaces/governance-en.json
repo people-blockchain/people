@@ -1,8 +1,8 @@
 {
   "tag": "Testnet governance",
   "title": "Governance",
-  "lead": "Browse on-chain proposals on People's Blockchain testnet (people_97401-1) and cast your vote with your People Wallet.",
-  "networkBadge": "People's Blockchain testnet · chain 97401",
+  "lead": "Browse on-chain proposals on PEOPLE Blockchain testnet (people_97401-1) and cast your vote with your People Wallet.",
+  "networkBadge": "PEOPLE Blockchain testnet · chain 97401",
   "unreachable": "Couldn't reach the governance module right now. Showing the last loaded data.",
   "loadError": "Couldn't load proposals. Try again shortly.",
   "connectPrompt": "Connect your People Wallet to vote on proposals.",

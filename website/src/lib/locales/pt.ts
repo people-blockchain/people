@@ -1258,7 +1258,7 @@ export const pt: LocaleContent = {
     "specDesc": "Repartição de taxas de rede aprovada (30/25/20/10/15/0). O protocolo de produção não muda."
   },
   "footer": {
-    "desc": "People é uma blockchain para comunidades. As taxas são pagas em PPL e parte de cada taxa volta para quem participa.",
+    "desc": "PEOPLE é uma blockchain para comunidades. As taxas são pagas em PPL e parte de cada taxa volta para quem participa.",
     "architectureCol": "Arquitetura",
     "protocolCol": "Protocolo",
     "homeCta": "Voltar ao início",

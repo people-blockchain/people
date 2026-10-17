@@ -1,7 +1,7 @@
 {
   "tag": "LOYALTY",
   "title": "Local shop",
-  "lead": "Launch a visit-based loyalty program in minutes. Customers scan a QR at checkout — no crypto jargon, just People's Blockchain under the hood.",
+  "lead": "Launch a visit-based loyalty program in minutes. Customers scan a QR at checkout — no crypto jargon, just PEOPLE Blockchain under the hood.",
   "contractsOff": "Loyalty contracts are not deployed on this testnet yet. Ask the operator to run the Lavka deploy workflow after merging.",
   "signInCta": "Sign in",
   "walletCta": "Link wallet",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Release to shop",
   "refundEscrow": "Request refund",
   "disputeEscrow": "Open dispute",
-  "escrowLocked": "Funds are locked on People's Blockchain testnet.",
+  "escrowLocked": "Funds are locked on PEOPLE Blockchain testnet.",
   "visitsLeft": "Visits left: {{n}}",
   "founderWelcome": "You joined Million Founders as #{{n}}.",
   "founderAlready": "Founder #{{n}}",

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "People",
-    "People's Blockchain",
+    "PEOPLE Blockchain",
     "Блокчейн для сообщества",
     "Blockchain für die Gemeinschaft",
     "社区区块链",

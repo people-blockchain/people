@@ -1,7 +1,7 @@
 {
   "tag": "KURUCULAR",
   "title": "Bir milyon kurucu",
-  "lead": "Mainnet öncesi People's Blockchain'i inşa eden bir milyon doğrulanmış insana katılın. Kurucu numaranız ve aktivite puanlarınız bugün testnette kaydedilir.",
+  "lead": "Mainnet öncesi PEOPLE Blockchain'i inşa eden bir milyon doğrulanmış insana katılın. Kurucu numaranız ve aktivite puanlarınız bugün testnette kaydedilir.",
   "preliminaryBanner": "Ön çalışma — puan ağırlıkları, çarpanlar ve günlük limitler mainnet öncesi değişebilir.",
   "counterLabel": "Doğrulanmış kurucular",
   "goalLabel": "Mainnet öncesi hedef",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "People's Blockchain testnet (97401), min {{swapMin}} PPL takası",
+      "label": "PEOPLE Blockchain testnet (97401), min {{swapMin}} PPL takası",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "People's Blockchain test ağında PPL stake et (yeni delegasyon), min. {{stakeMin}} PPL",
+      "label": "PEOPLE Blockchain test ağında PPL stake et (yeni delegasyon), min. {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Mainnet öncesi {{n}}. kurucu olun",
   "heroTitleFallback": "Ana ağ başlamadan ilk kuruculardan biri olun",
-  "heroSub": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve People's Blockchain testnet aktivite puanları alır.",
+  "heroSub": "Doğrulanmış katılımcılar numara, erken giriş bonusu ve PEOPLE Blockchain testnet aktivite puanları alır.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Alındı: 100 × 6 token",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

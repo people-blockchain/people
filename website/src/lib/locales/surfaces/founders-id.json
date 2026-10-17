@@ -1,7 +1,7 @@
 {
   "tag": "PENDIRI",
   "title": "Sejuta pendiri",
-  "lead": "Bergabung dengan sejuta orang terverifikasi yang membangun People's Blockchain sebelum mainnet. Nomor pendiri dan poin aktivitas Anda dicatat di testnet hari ini.",
+  "lead": "Bergabung dengan sejuta orang terverifikasi yang membangun PEOPLE Blockchain sebelum mainnet. Nomor pendiri dan poin aktivitas Anda dicatat di testnet hari ini.",
   "preliminaryBanner": "Sementara — bobot poin, pengali, dan batas harian dapat berubah sebelum mainnet.",
   "counterLabel": "Pendiri terverifikasi",
   "goalLabel": "Target sebelum mainnet",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "Swap di testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "label": "Swap di testnet PEOPLE Blockchain (97401), min {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "Stake PPL di testnet People's Blockchain (delegasi baru), min. {{stakeMin}} PPL",
+      "label": "Stake PPL di testnet PEOPLE Blockchain (delegasi baru), min. {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Jadilah pendiri #{{n}} sebelum mainnet",
   "heroTitleFallback": "Jadilah salah satu pendiri pertama sebelum mainnet diluncurkan",
-  "heroSub": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet People's Blockchain.",
+  "heroSub": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet PEOPLE Blockchain.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Diterima: 100 × 6 token",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

@@ -1,6 +1,6 @@
 {
   "hero": {
-    "brandLine": "People — blockchain cho cộng đồng",
+    "brandLine": "PEOPLE — blockchain cho cộng đồng",
     "headlineMain": "Ra mắt token cho cộng đồng của bạn.",
     "headlineMainLines": [
       "Ra mắt token",
@@ -12,7 +12,7 @@
       "10% về người của bạn,",
       "không về cá voi."
     ],
-    "sub": "People's Blockchain là nơi creator ra token với giá công bằng ngay từ block đầu, và cộng đồng có phần trong mọi thứ họ giúp phát triển.",
+    "sub": "PEOPLE Blockchain là nơi creator ra token với giá công bằng ngay từ block đầu, và cộng đồng có phần trong mọi thứ họ giúp phát triển.",
     "testnetBadge": "Testnet công khai đang chạy. Chưa phải mainnet.",
     "ctaCreate": "Tạo token",
     "ctaWallet": "Mở ví",
@@ -120,7 +120,7 @@
   },
   "foundersTeaser": {
     "eyebrow": "Một triệu nhà sáng lập",
-    "lead": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet People's Blockchain.",
+    "lead": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet PEOPLE Blockchain.",
     "cta": "Tham gia chương trình",
     "href": "/founders",
     "titleWithNumber": "Trở thành nhà sáng lập số {{n}} trước mainnet",
