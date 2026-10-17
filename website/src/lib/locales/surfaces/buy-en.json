@@ -30,8 +30,6 @@
     "amountLabel": "You pay",
     "amountHint": "USDC or USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Network you pay from",
-    "networkHint": "One curve, one price — whatever network you pay from.",
     "youGet": "You get",
     "avgPrice": "Average price",
     "priceAfter": "Price after your purchase",
@@ -46,7 +44,18 @@
     "ctaConnected": "Buy PPL",
     "disabledNote": "The sale contract is not deployed yet, so no purchase can be made. Connecting a wallet is safe and commits you to nothing.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "You can sell PPL back to the curve at any time, minus the {fee} fee."
+    "sellBack": "You can sell PPL back to the curve at any time, minus the {fee} fee.",
+    "payModeLabel": "How you pay",
+    "payOnBase": "Pay on Base",
+    "payFromOther": "Pay from another network",
+    "basePayHint": "The sale runs on Base only — pay with USDC or USDT from your wallet on Base.",
+    "bridgeHint": "Bridge USDC to your wallet on Base with LI.FI, then complete the purchase below. Supported source networks: {chains}.",
+    "bridgePanelTitle": "Bridge to Base",
+    "bridgeNeedWallet": "Connect a wallet to receive USDC on Base before bridging.",
+    "bridgeReady": "Bridge complete — finish your purchase on Base below.",
+    "bridgeAwaiting": "Complete the bridge above to unlock the buy button.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana, and Tron",
+    "scrollToForm": "Back to the buy form"
   },
   "curve": {
     "eyebrow": "The formula",
@@ -193,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Ready",
     "title": "Buy PPL at today's curve price",
-    "lead": "Same form, same single price for everyone."
+    "lead": "Same form, same single price for everyone.",
+    "scrollToForm": "Back to the buy form"
   },
   "sticky": {
     "label": "Buy PPL",

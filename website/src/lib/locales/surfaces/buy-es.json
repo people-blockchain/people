@@ -30,8 +30,6 @@
     "amountLabel": "Pagas",
     "amountHint": "USDC o USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Red desde la que pagas",
-    "networkHint": "Una curva, un precio — desde la red que elijas.",
     "youGet": "Recibes",
     "avgPrice": "Precio medio",
     "priceAfter": "Precio tras tu compra",
@@ -46,7 +44,18 @@
     "ctaConnected": "Comprar PPL",
     "disabledNote": "El contrato de venta aún no está desplegado, así que no se puede comprar. Conectar una cartera es seguro y no te compromete a nada.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Puedes vender PPL de vuelta a la curva en cualquier momento, menos la comisión del {fee}."
+    "sellBack": "Puedes vender PPL de vuelta a la curva en cualquier momento, menos la comisión del {fee}.",
+    "payModeLabel": "Cómo pagas",
+    "payOnBase": "Pagar en Base",
+    "payFromOther": "Pagar desde otra red",
+    "basePayHint": "La venta es solo en Base: paga con USDC o USDT desde tu wallet en Base.",
+    "bridgeHint": "Puentea USDC a tu wallet en Base con LI.FI y completa la compra abajo. Redes de origen admitidas: {chains}.",
+    "bridgePanelTitle": "Puente a Base",
+    "bridgeNeedWallet": "Conecta una wallet para recibir USDC en Base antes del puente.",
+    "bridgeReady": "Puente completado — termina la compra en Base abajo.",
+    "bridgeAwaiting": "Completa el puente de arriba para activar el botón de compra.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana y Tron",
+    "scrollToForm": "Volver al formulario de compra"
   },
   "curve": {
     "eyebrow": "La fórmula",
@@ -193,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Listo",
     "title": "Compra PPL al precio de la curva de hoy",
-    "lead": "El mismo formulario, el mismo precio único para todos."
+    "lead": "El mismo formulario, el mismo precio único para todos.",
+    "scrollToForm": "Volver al formulario de compra"
   },
   "sticky": {
     "label": "Comprar PPL",

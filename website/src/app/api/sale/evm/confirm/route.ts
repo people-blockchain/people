@@ -8,7 +8,7 @@ import {
   normalizeEvmTxHash,
 } from "@/lib/sale/evm-order-check";
 import { verifyEvmSaleTx } from "@/lib/sale/evm-verify";
-import type { SaleNetworkId, SaleStable } from "@/lib/sale/networks";
+import type { SaleStable } from "@/lib/sale/sale-hub";
 import { getSaleOrder, tryDeliverPaidOrder } from "@/lib/sale/service";
 import { getDbReady } from "@/db";
 import { pplSaleOrders } from "@/db/schema";
@@ -81,7 +81,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "payment_tx_used" }, { status: 409 });
   }
   const verified = await verifyEvmSaleTx(
-    order.networkId as SaleNetworkId,
     order.stable as SaleStable,
     txHash,
     order.peopleAddress,

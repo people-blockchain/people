@@ -19,7 +19,7 @@ import { TradeFeed } from "./TradeFeed";
 import { WhatYouGet } from "./WhatYouGet";
 import { useSaleData } from "./useSaleData";
 
-const BOTTOM_FORM_ID = "buy-now";
+const HERO_FORM_ID = "buy-form";
 
 /** `/buy` — the PPL sale page. */
 export function BuyPage() {
@@ -30,9 +30,16 @@ export function BuyPage() {
   const isRtl = lang === "ar";
 
   return (
-    <div data-testid="buy-page" dir={isRtl ? "rtl" : "ltr"} className={isRtl ? "buy-page-rtl" : undefined}>
+    <div
+      data-testid="buy-page"
+      dir={isRtl ? "rtl" : "ltr"}
+      className={isRtl ? "buy-page-rtl" : undefined}
+    >
       {/* 1 — Hero: the pitch and the stats on the left, the form on the right */}
-      <section className="border-b border-line bg-canvas-2" aria-labelledby="buy-hero-title">
+      <section
+        className="border-b border-line bg-canvas-2 pt-[max(0px,env(safe-area-inset-top))]"
+        aria-labelledby="buy-hero-title"
+      >
         <div className={`${WARM_SECTION} grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10`}>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
@@ -54,7 +61,10 @@ export function BuyPage() {
             </div>
           </div>
 
-          <div className="lg:sticky lg:top-24">
+          <div
+            id={HERO_FORM_ID}
+            className="scroll-mt-[calc(3.5rem+0.75rem)] lg:scroll-mt-24 lg:sticky lg:top-24"
+          >
             <BuyForm soldPpl={stats.soldPpl} testId="buy-form-hero" />
           </div>
         </div>
@@ -128,37 +138,39 @@ export function BuyPage() {
         </Reveal>
       </WarmSection>
 
-      {/* 7 — Bottom CTA: the same form, the same price */}
+      {/* 7 — Bottom CTA: scroll back to the single buy form in the hero */}
       <section
-        id={BOTTOM_FORM_ID}
+        id="buy-now"
         className="scroll-mt-20 border-t border-line bg-canvas-2"
         aria-labelledby="buy-bottom-title"
       >
-        <div className={`${WARM_SECTION} grid items-center gap-8 lg:grid-cols-2`}>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
-              {t.bottomCta.eyebrow}
-            </p>
-            <h2 id="buy-bottom-title" className="mt-2 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-              {t.bottomCta.title}
-            </h2>
-            <p className="mt-3 text-sm text-ink-2 sm:text-base">{t.bottomCta.lead}</p>
-            {/* Just the price here — the full stat grid already ran in the hero. */}
-            <div className="mt-6 inline-flex flex-col rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
-              <span className="text-xs font-medium text-ink-3">{t.stats.price}</span>
-              <span className="mt-0.5 font-mono text-2xl font-bold text-brand">
-                {stats.spotPriceUsd === null
-                  ? t.stats.notOpenYet
-                  : pricePerPpl(stats.spotPriceUsd, lang)}
-              </span>
-              <span className="mt-1 text-[11px] text-ink-3">
-                {fillCopy(t.stats.priceStartHint, {
-                  start: pricePerPpl(CURVE.startPriceUsd, lang),
-                })}
-              </span>
-            </div>
+        <div className={`${WARM_SECTION} max-w-2xl`}>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
+            {t.bottomCta.eyebrow}
+          </p>
+          <h2 id="buy-bottom-title" className="mt-2 text-2xl font-bold leading-tight text-ink sm:text-3xl">
+            {t.bottomCta.title}
+          </h2>
+          <p className="mt-3 text-sm text-ink-2 sm:text-base">{t.bottomCta.lead}</p>
+          <div className="mt-6 inline-flex flex-col rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
+            <span className="text-xs font-medium text-ink-3">{t.stats.price}</span>
+            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">
+              {stats.spotPriceUsd === null
+                ? t.stats.notOpenYet
+                : pricePerPpl(stats.spotPriceUsd, lang)}
+            </span>
+            <span className="mt-1 text-[11px] text-ink-3">
+              {fillCopy(t.stats.priceStartHint, {
+                start: pricePerPpl(CURVE.startPriceUsd, lang),
+              })}
+            </span>
           </div>
-          <BuyForm soldPpl={stats.soldPpl} testId="buy-form-bottom" />
+          <a
+            href={`#${HERO_FORM_ID}`}
+            className="mt-8 inline-flex min-h-13 items-center justify-center rounded-full bg-brand px-8 py-3.5 text-base font-semibold text-brand-ink shadow-[0_14px_36px_-16px_rgba(3,105,161,0.8)] transition hover:brightness-110"
+          >
+            {t.bottomCta.scrollToForm}
+          </a>
         </div>
       </section>
 
@@ -168,7 +180,7 @@ export function BuyPage() {
 
       {/* Mobile-only sticky CTA; adds room so it never covers the small print. */}
       <div className="h-20 sm:hidden" aria-hidden="true" />
-      <StickyBuyBar stats={stats} targetId={BOTTOM_FORM_ID} />
+      <StickyBuyBar stats={stats} targetId={HERO_FORM_ID} />
     </div>
   );
 }

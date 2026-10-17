@@ -30,8 +30,6 @@
     "amountLabel": "Sie zahlen",
     "amountHint": "USDC oder USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Zahlungsnetzwerk",
-    "networkHint": "Eine Kurve, ein Preis — egal von welchem Netzwerk.",
     "youGet": "Sie erhalten",
     "avgPrice": "Durchschnittspreis",
     "priceAfter": "Preis nach Ihrem Kauf",
@@ -46,7 +44,18 @@
     "ctaConnected": "PPL kaufen",
     "disabledNote": "Der Verkaufsvertrag ist noch nicht deployed, daher kein Kauf möglich. Wallet verbinden ist sicher und verpflichtet zu nichts.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Sie können PPL jederzeit zurück an die Kurve verkaufen, abzüglich {fee} Gebühr."
+    "sellBack": "Sie können PPL jederzeit zurück an die Kurve verkaufen, abzüglich {fee} Gebühr.",
+    "payModeLabel": "Zahlungsweg",
+    "payOnBase": "Auf Base zahlen",
+    "payFromOther": "Aus einem anderen Netz zahlen",
+    "basePayHint": "Der Verkauf läuft nur auf Base — zahlen Sie USDC oder USDT aus Ihrer Wallet auf Base.",
+    "bridgeHint": "Bridgen Sie USDC mit LI.FI auf Ihre Wallet auf Base und schließen Sie den Kauf unten ab. Unterstützte Quellnetze: {chains}.",
+    "bridgePanelTitle": "Bridge nach Base",
+    "bridgeNeedWallet": "Verbinden Sie eine Wallet, um USDC auf Base zu empfangen.",
+    "bridgeReady": "Bridge abgeschlossen — schließen Sie den Kauf auf Base unten ab.",
+    "bridgeAwaiting": "Schließen Sie zuerst den Bridge oben ab, um den Kauf-Button freizuschalten.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana und Tron",
+    "scrollToForm": "Zurück zum Kaufformular"
   },
   "curve": {
     "eyebrow": "Die Formel",
@@ -157,7 +166,11 @@
     "addNetworkError": "Ihre Wallet hat abgelehnt oder keine Wallet gefunden.",
     "pumpTitle": "Was schiefgeht bei Kurven ohne Obergrenze",
     "pumpLead": "Bonding-Kurven wurden durch Launchpads wie pump.fun populär. Das sind ihre bekannten Probleme — und unser Ansatz.",
-    "pumpCols": ["Problem", "Was passiert", "Unser Schutz"],
+    "pumpCols": [
+      "Problem",
+      "Was passiert",
+      "Unser Schutz"
+    ],
     "pumpRows": [
       {
         "problem": "Späte Käufer zahlen zu viel",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Bereit",
     "title": "PPL zum heutigen Kurvenpreis kaufen",
-    "lead": "Dasselbe Formular, derselbe Einheitspreis für alle."
+    "lead": "Dasselbe Formular, derselbe Einheitspreis für alle.",
+    "scrollToForm": "Zurück zum Kaufformular"
   },
   "sticky": {
     "label": "PPL kaufen",

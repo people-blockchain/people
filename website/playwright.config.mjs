@@ -31,6 +31,7 @@ const config = {
     "wallet-google-primary.spec.mjs",
     "roadmap-agents-screenshots.spec.mjs",
     "bug-button.spec.mjs",
+    "buy-page-screenshots.spec.mjs",
     "wallet-keep-current.spec.mjs",
   ],
   fullyParallel: false,

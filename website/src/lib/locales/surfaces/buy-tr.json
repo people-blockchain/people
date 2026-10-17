@@ -30,8 +30,6 @@
     "amountLabel": "Ödediğiniz",
     "amountHint": "USDC veya USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Ödeme ağı",
-    "networkHint": "Tek eğri, tek fiyat — hangi ağdan öderseniz ödeyin.",
     "youGet": "Alacağınız",
     "avgPrice": "Ortalama fiyat",
     "priceAfter": "Alımınızdan sonraki fiyat",
@@ -46,7 +44,18 @@
     "ctaConnected": "PPL satın al",
     "disabledNote": "Satış sözleşmesi henüz deploy edilmedi, alım yapılamaz. Cüzdan bağlamak güvenlidir ve sizi hiçbir şeye bağlamaz.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "PPL'yi istediğiniz zaman eğriye geri satabilirsiniz, {fee} ücret hariç."
+    "sellBack": "PPL'yi istediğiniz zaman eğriye geri satabilirsiniz, {fee} ücret hariç.",
+    "payModeLabel": "Ödeme yöntemi",
+    "payOnBase": "Base'de öde",
+    "payFromOther": "Başka bir ağdan öde",
+    "basePayHint": "Satış yalnızca Base'de — Base'deki cüzdanınızdan USDC veya USDT ile ödeyin.",
+    "bridgeHint": "LI.FI ile USDC'yi Base'deki cüzdanınıza köprüleyin, ardından alışı aşağıda tamamlayın. Desteklenen kaynak ağlar: {chains}.",
+    "bridgePanelTitle": "Base'e köprü",
+    "bridgeNeedWallet": "Köprülemeden önce Base'de USDC almak için bir cüzdan bağlayın.",
+    "bridgeReady": "Köprü tamam — alışı Base'de aşağıda tamamlayın.",
+    "bridgeAwaiting": "Satın alma düğmesi için önce yukarıdaki köprüyü tamamlayın.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana ve Tron",
+    "scrollToForm": "Satın alma formuna dön"
   },
   "curve": {
     "eyebrow": "Formül",
@@ -157,7 +166,11 @@
     "addNetworkError": "Cüzdan reddetti veya cüzdan bulunamadı.",
     "pumpTitle": "Tavansız eğrilerde neler ters gider",
     "pumpLead": "Bonding eğrileri pump.fun gibi launchpad'lerle popüler oldu. Bilinen sorunlar ve bizim çözümümüz.",
-    "pumpCols": ["Sorun", "Ne olur", "Korumamız"],
+    "pumpCols": [
+      "Sorun",
+      "Ne olur",
+      "Korumamız"
+    ],
     "pumpRows": [
       {
         "problem": "Geç alanlar fazla öder",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Hazır",
     "title": "PPL'yi bugünkü eğri fiyatından alın",
-    "lead": "Aynı form, herkes için aynı tek fiyat."
+    "lead": "Aynı form, herkes için aynı tek fiyat.",
+    "scrollToForm": "Satın alma formuna dön"
   },
   "sticky": {
     "label": "PPL satın al",
