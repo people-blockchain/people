@@ -51,7 +51,9 @@ test("saving a country change in the post-claim editor never writes the pre-clai
 }) => {
   let currentCountry = "GE";
 
-  await page.route("**/api/founders/stats", (r) => r.fulfill({ json: MOCK_STATS }));
+  await page.route("**/api/founders/million-counter", (r) =>
+    r.fulfill({ json: { current: MOCK_STATS.verifiedCount, goal: MOCK_STATS.goal, source: "verified" } }),
+  );
   await page.route("**/api/founders/referral", (r) => r.fulfill({ json: MOCK_REFERRAL }));
   await page.route("**/api/founders/me", (r) => r.fulfill({ json: meWithCountry(currentCountry) }));
   await page.route("**/api/founders/country", async (r) => {

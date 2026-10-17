@@ -9,12 +9,12 @@
   "stripGoal": "goal",
   "cardFounder": "Founder",
   "cardNumberPlaceholder": "Your number here",
-  "cardNetwork": "People testnet",
+  "cardNetwork": "PEOPLE testnet",
   "cardFlipHint": "Tap to flip",
   "cardBackTitle": "Your founder card",
   "cardBackLines": [
     "One verified person, one number.",
-    "Numbers are given in order of registration.",
+    "Your tier follows when you verify; your number is drawn within the tier.",
     "Shareable — your friends get their own."
   ],
   "cardCountry": "Country",

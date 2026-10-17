@@ -1,0 +1,107 @@
+{
+  "heroEyebrow": "PEOPLE · before mainnet",
+  "heroTitle": "Million Founders",
+  "heroSub": "Join up to one million verified people who help write the first chapter of PEOPLE. One person, one founder number, one free Founder NFT — recorded in the genesis block forever.",
+  "heroCta": "Verify and join",
+  "heroCtaHow": "How numbers work",
+  "counterLabel": "verified people",
+  "counterGoal": "goal",
+  "counterLive": "Live count from Human Passport verification on PEOPLE.",
+  "counterStub": "Counter shows verified people once the database is connected.",
+  "disclaimer": "Preliminary program details may change before mainnet. Not financial advice. No promise of income or token price growth.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Your free numbered Founder NFT",
+  "nftBody": "Every verified person who joins before mainnet receives a Founder NFT with their public number. Getting it is free. The record is written into the genesis block and stays there — there will never be a second genesis.",
+  "nftBullets": [
+    "Free for verified founders before mainnet",
+    "Your number is part of chain history from day one",
+    "Same base rights for every founder — special numbers add small one-time perks only"
+  ],
+  "tiersEyebrow": "Founder numbers",
+  "tiersTitle": "Tiers by when you join",
+  "tiersSub": "Your tier follows the order you verified. Inside each tier, your exact number is assigned by a fair public random draw when that tier closes — nobody chooses their number.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "The first hundred verified founders"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Early builders shaping the network"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "The core wave before wide adoption"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Growing the community at scale"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Everyone after the first hundred thousand"
+    }
+  ],
+  "specialEyebrow": "Special numbers",
+  "specialTitle": "Special numbers and tier closers",
+  "specialBody": "Some numbers stand out: round or visually distinctive numbers, and the last number in each tier. The last number in a tier is not given to whoever joined last — it is drawn fairly among everyone in that tier.",
+  "specialListTitle": "Which numbers are special",
+  "specialList": [
+    "#1 through #9",
+    "Repeating digits, like 77, 888 or 8888",
+    "Round numbers: 1,000, 10,000, 100,000 and 500,000",
+    "The sequence 12345",
+    "The last number of each tier"
+  ],
+  "specialFixedNote": "This list is published and fixed before registration opens. It will not change afterwards, so everyone can check the draw was fair.",
+  "specialPerksTitle": "What a special number gets — once",
+  "specialPerksBody": "Every special number gets the same one-time bonus. It is a thank-you, not money: no payouts, no price promises, no permanent discounts. Base founder rights stay the same for everyone.",
+  "sealEyebrow": "Genesis ceremony",
+  "sealTitle": "Sealing the genesis block",
+  "sealBody": "When the founder window closes, PEOPLE will hold a public sealing ceremony for the genesis block. Founder names that opted into the public mosaic will appear together as a permanent snapshot of who started the network.",
+  "mosaicTitle": "Founder mosaic",
+  "mosaicSub": "A visual mosaic of founder names will go live at sealing. Search by handle is coming then.",
+  "mosaicSearchLabel": "Search by handle",
+  "mosaicSearchPlaceholder": "Coming at genesis sealing",
+  "mosaicSoon": "At sealing",
+  "mosaicSearchHint": "Handle search opens when the genesis block is sealed.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Quick answers",
+  "faq": [
+    {
+      "q": "Is it free?",
+      "a": "Yes. Verification with Human Passport on PEOPLE is free, and your Founder NFT is free before mainnet."
+    },
+    {
+      "q": "Can I pick my founder number?",
+      "a": "No. Numbers are tied to your tier and assigned by a fair public random draw within that tier. Nobody can reserve a favourite number."
+    },
+    {
+      "q": "Are there payouts or guaranteed rewards?",
+      "a": "No. This page is about identity and history in the genesis block, not payouts or investment returns."
+    },
+    {
+      "q": "How do I join?",
+      "a": "Sign in on PEOPLE, complete Human Passport verification, and follow the steps on this page. Use the Verify section below when you are ready."
+    },
+    {
+      "q": "What is PEOPLE?",
+      "a": "PEOPLE is a community blockchain — created by people, for the community. Founders are verified humans who join before mainnet."
+    }
+  ],
+  "finalTitle": "Become a founder",
+  "finalSub": "Verify with Human Passport, claim your place among the Million Founders, and keep your number in the genesis block forever.",
+  "finalCta": "Start verification",
+  "specialPerks": [
+    "An animated frame and badge on your Founder NFT",
+    "Your name highlighted in the genesis mosaic",
+    "7 days of early access to new PEOPLE features and drops",
+    "Priority support"
+  ],
+  "specialNamedBadge": "#1 and the last number of each tier also get their own named badge."
+}
