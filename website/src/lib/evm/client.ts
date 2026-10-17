@@ -16,7 +16,7 @@ import { buildWeb3AuthChainConfig } from "@/lib/web3auth-chain-config";
 export function peopleViemChain(rpcUrl: string): Chain {
   return {
     id: PEOPLE_EIP155_CHAIN_ID,
-    name: "People's Blockchain testnet",
+    name: "PEOPLE Blockchain testnet",
     nativeCurrency: { name: "People", symbol: "PPL", decimals: 18 },
     rpcUrls: { default: { http: [rpcUrl] } },
   };

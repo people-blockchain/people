@@ -9,12 +9,12 @@ import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Blocks | People's Blockchain",
-  description: "The latest blocks produced by the People's Blockchain testnet, with height, hash and time.",
+  title: "Blocks | PEOPLE Blockchain",
+  description: "The latest blocks produced by the PEOPLE Blockchain testnet, with height, hash and time.",
   alternates: { canonical: "/explorer/blocks" },
   openGraph: {
     title: "Blocks",
-    description: "The latest blocks produced by the People's Blockchain testnet.",
+    description: "The latest blocks produced by the PEOPLE Blockchain testnet.",
     type: "website",
     siteName: SITE_NAME,
     url: "/explorer/blocks",

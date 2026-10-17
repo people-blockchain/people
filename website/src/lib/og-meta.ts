@@ -23,8 +23,8 @@ export function absoluteUrl(path: string): string {
 }
 
 const TRANSPARENCY_DESCRIPTION: Partial<Record<Language, string>> = {
-  en: "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a treasury multisig and a security audit before mainnet.",
-  ru: "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны и аудит безопасности до mainnet.",
+  en: "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a treasury multisig and a security audit before mainnet.",
+  ru: "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны и аудит безопасности до mainnet.",
 };
 
 const LITEPAPER_DESCRIPTION: Partial<Record<Language, string>> = {

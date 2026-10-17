@@ -1,8 +1,8 @@
 {
   "tag": "Управление в тестовой сети",
   "title": "Управление",
-  "lead": "Смотрите ончейн-предложения тестовой сети People's Blockchain (people_97401-1) и голосуйте через People Wallet.",
-  "networkBadge": "Тестовая сеть People's Blockchain · chain 97401",
+  "lead": "Смотрите ончейн-предложения тестовой сети PEOPLE Blockchain (people_97401-1) и голосуйте через People Wallet.",
+  "networkBadge": "Тестовая сеть PEOPLE Blockchain · chain 97401",
   "unreachable": "Не удалось связаться с модулем управления. Показаны последние загруженные данные.",
   "loadError": "Не удалось загрузить предложения. Попробуйте ещё раз позже.",
   "connectPrompt": "Подключите People Wallet, чтобы голосовать по предложениям.",

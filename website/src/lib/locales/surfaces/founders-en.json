@@ -1,7 +1,7 @@
 {
   "tag": "FOUNDERS",
   "title": "Million founders",
-  "lead": "Join one million verified people building People's Blockchain before mainnet. Your founder number and activity points are recorded on testnet today.",
+  "lead": "Join one million verified people building PEOPLE Blockchain before mainnet. Your founder number and activity points are recorded on testnet today.",
   "preliminaryBanner": "Preliminary — point weights, multipliers, and daily limits may change before mainnet.",
   "counterLabel": "Verified founders",
   "goalLabel": "Goal before mainnet",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "Swap on People's Blockchain testnet (97401), min {{swapMin}} PPL",
+      "label": "Swap on PEOPLE Blockchain testnet (97401), min {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "Stake PPL on People's Blockchain testnet (new delegation), min {{stakeMin}} PPL",
+      "label": "Stake PPL on PEOPLE Blockchain testnet (new delegation), min {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Become founder № {{n}} before mainnet",
   "heroTitleFallback": "Be among the first founders before mainnet launches",
-  "heroSub": "Verified participants get their number, an early-entry bonus, and activity points on the People's Blockchain testnet.",
+  "heroSub": "Verified participants get their number, an early-entry bonus, and activity points on the PEOPLE Blockchain testnet.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Received: 100 × 6 tokens",
   "demoAirdropPending": "Demo tokens are sent to your founder wallet automatically after level 1 verification.",

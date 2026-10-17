@@ -1,7 +1,7 @@
 {
   "tag": "THÀNH VIÊN",
   "title": "Cửa hàng địa phương",
-  "lead": "Ra mắt chương trình lượt ghé trong vài phút. Khách quét QR tại quầy — không thuật ngữ crypto, dùng People's Blockchain.",
+  "lead": "Ra mắt chương trình lượt ghé trong vài phút. Khách quét QR tại quầy — không thuật ngữ crypto, dùng PEOPLE Blockchain.",
   "contractsOff": "Hợp đồng loyalty chưa triển khai trên testnet này. Chạy workflow Lavka sau merge.",
   "signInCta": "Đăng nhập",
   "walletCta": "Liên kết ví",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Chuyển cho cửa hàng",
   "refundEscrow": "Yêu cầu hoàn",
   "disputeEscrow": "Mở tranh chấp",
-  "escrowLocked": "Tiền khóa trên testnet People's Blockchain.",
+  "escrowLocked": "Tiền khóa trên testnet PEOPLE Blockchain.",
   "visitsLeft": "Lượt còn: {{n}}",
   "founderWelcome": "Bạn tham gia Million Founders số {{n}}.",
   "founderAlready": "Nhà sáng lập #{{n}}",

@@ -1,7 +1,7 @@
 {
   "tag": "NHÀ SÁNG LẬP",
   "title": "Một triệu nhà sáng lập",
-  "lead": "Tham gia cùng một triệu người đã xác minh đang xây People's Blockchain trước mainnet. Số nhà sáng lập và điểm hoạt động của bạn được ghi trên testnet ngay hôm nay.",
+  "lead": "Tham gia cùng một triệu người đã xác minh đang xây PEOPLE Blockchain trước mainnet. Số nhà sáng lập và điểm hoạt động của bạn được ghi trên testnet ngay hôm nay.",
   "preliminaryBanner": "Sơ bộ — trọng số điểm, hệ số nhân và giới hạn ngày có thể thay đổi trước mainnet.",
   "counterLabel": "Nhà sáng lập đã xác minh",
   "goalLabel": "Mục tiêu trước mainnet",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "Hoán đổi trên testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "label": "Hoán đổi trên testnet PEOPLE Blockchain (97401), min {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "Stake PPL trên testnet People's Blockchain (ủy quyền mới), tối thiểu {{stakeMin}} PPL",
+      "label": "Stake PPL trên testnet PEOPLE Blockchain (ủy quyền mới), tối thiểu {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Trở thành nhà sáng lập số {{n}} trước mainnet",
   "heroTitleFallback": "Trở thành một trong những nhà sáng lập đầu tiên trước khi mạng chính ra mắt",
-  "heroSub": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet People's Blockchain.",
+  "heroSub": "Người tham gia đã xác minh nhận số, thưởng vào sớm và điểm hoạt động trên testnet PEOPLE Blockchain.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Đã nhận: 100 × 6 token",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

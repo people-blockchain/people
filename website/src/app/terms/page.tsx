@@ -5,9 +5,9 @@ import { LegalDocument } from "@/components/legal/LegalDocument";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | People's Blockchain",
+  title: "Terms of Service | PEOPLE Blockchain",
   description:
-    "Terms for using the People's Blockchain website and partner tools on the public test network.",
+    "Terms for using the PEOPLE Blockchain website and partner tools on the public test network.",
   alternates: { canonical: "/terms" },
   openGraph: {
     title: "Terms of Service",

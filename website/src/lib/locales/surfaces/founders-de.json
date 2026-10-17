@@ -1,7 +1,7 @@
 {
   "tag": "GRÜNDER",
   "title": "Eine Million Gründer",
-  "lead": "Schließen Sie sich einer Million verifizierter Menschen an, die People's Blockchain vor dem Mainnet aufbauen. Ihre Gründernummer und Aktivitätspunkte werden heute im Testnet erfasst.",
+  "lead": "Schließen Sie sich einer Million verifizierter Menschen an, die PEOPLE Blockchain vor dem Mainnet aufbauen. Ihre Gründernummer und Aktivitätspunkte werden heute im Testnet erfasst.",
   "preliminaryBanner": "Vorläufig — Punktgewichte, Multiplikatoren und Tageslimits können sich vor dem Mainnet ändern.",
   "counterLabel": "Verifizierte Gründer",
   "goalLabel": "Ziel vor Mainnet",
@@ -56,7 +56,7 @@
     },
     {
       "id": "swap",
-      "label": "Swap im People's Blockchain-Testnet (97401), min. {{swapMin}} PPL",
+      "label": "Swap im PEOPLE Blockchain-Testnet (97401), min. {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Werde Gründer Nr. {{n}} vor dem Mainnet",
   "heroTitleFallback": "Gehöre zu den ersten Gründern vor dem Start des Mainnets",
-  "heroSub": "Verifizierte Teilnehmer erhalten ihre Nummer, einen Früheinstiegsbonus und Aktivitätspunkte im People's Blockchain-Testnet.",
+  "heroSub": "Verifizierte Teilnehmer erhalten ihre Nummer, einen Früheinstiegsbonus und Aktivitätspunkte im PEOPLE Blockchain-Testnet.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Erhalten: 100 × 6 Token",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

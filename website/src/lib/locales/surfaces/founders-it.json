@@ -1,7 +1,7 @@
 {
   "tag": "FONDATORI",
   "title": "Un milione di fondatori",
-  "lead": "Unisciti a un milione di persone verificate che costruiscono People's Blockchain prima del mainnet. Il tuo numero di fondatore e i punti attività sono registrati oggi sul testnet.",
+  "lead": "Unisciti a un milione di persone verificate che costruiscono PEOPLE Blockchain prima del mainnet. Il tuo numero di fondatore e i punti attività sono registrati oggi sul testnet.",
   "preliminaryBanner": "Preliminare — pesi punti, moltiplicatori e limiti giornalieri possono cambiare prima del mainnet.",
   "counterLabel": "Fondatori verificati",
   "goalLabel": "Obiettivo prima del mainnet",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "Swap su testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "label": "Swap su testnet PEOPLE Blockchain (97401), min {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "Fare stake di PPL sulla testnet di People's Blockchain (nuova delega), min. {{stakeMin}} PPL",
+      "label": "Fare stake di PPL sulla testnet di PEOPLE Blockchain (nuova delega), min. {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "Diventa fondatore n. {{n}} prima del mainnet",
   "heroTitleFallback": "Entra tra i primi fondatori prima del lancio della rete principale",
-  "heroSub": "I partecipanti verificati ottengono il proprio numero, bonus di ingresso anticipato e punti attività sul testnet People's Blockchain.",
+  "heroSub": "I partecipanti verificati ottengono il proprio numero, bonus di ingresso anticipato e punti attività sul testnet PEOPLE Blockchain.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "Ricevuto: 100 × 6 token",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

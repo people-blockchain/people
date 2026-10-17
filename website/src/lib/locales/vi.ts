@@ -1258,7 +1258,7 @@ export const vi: LocaleContent = {
     "specDesc": "Chia phí mạng đã duyệt (30/25/20/10/15/0). Giao thức production không đổi."
   },
   "footer": {
-    "desc": "People là blockchain cho cộng đồng. Phí được trả bằng PPL, và một phần của mỗi khoản phí quay về với những người tham gia.",
+    "desc": "PEOPLE là blockchain cho cộng đồng. Phí được trả bằng PPL, và một phần của mỗi khoản phí quay về với những người tham gia.",
     "architectureCol": "Kiến trúc",
     "protocolCol": "Giao thức",
     "homeCta": "Về Trang chủ",

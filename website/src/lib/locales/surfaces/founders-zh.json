@@ -1,7 +1,7 @@
 {
   "tag": "创始人",
   "title": "百万创始人",
-  "lead": "在 mainnet 之前，与一百万已验证的人一起建设 People's Blockchain。您的创始人编号和活动积分今天起在 testnet 上记录。",
+  "lead": "在 mainnet 之前，与一百万已验证的人一起建设 PEOPLE Blockchain。您的创始人编号和活动积分今天起在 testnet 上记录。",
   "preliminaryBanner": "初步数值 — 积分权重、倍数和每日上限可能在 mainnet 前调整。",
   "counterLabel": "已验证创始人",
   "goalLabel": "mainnet 前目标",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "在 People's Blockchain 测试网 (97401) 兑换，最少 {{swapMin}} PPL",
+      "label": "在 PEOPLE Blockchain 测试网 (97401) 兑换，最少 {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "在 People's Blockchain 测试网质押 PPL（新增委托），最低 {{stakeMin}} PPL",
+      "label": "在 PEOPLE Blockchain 测试网质押 PPL（新增委托），最低 {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "在 mainnet 前成为第 {{n}} 号创始人",
   "heroTitleFallback": "在主网启动前成为最早的一批创始人",
-  "heroSub": "已验证参与者获得编号、早期入场奖励，以及在 People's Blockchain 测试网上的活动积分。",
+  "heroSub": "已验证参与者获得编号、早期入场奖励，以及在 PEOPLE Blockchain 测试网上的活动积分。",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "已领取：100 × 6 种代币",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

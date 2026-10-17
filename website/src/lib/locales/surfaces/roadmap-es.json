@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Hoja de ruta",
-    "description": "Qué está en vivo, en curso y planificado sin aprobación final en People's Blockchain."
+    "description": "Qué está en vivo, en curso y planificado sin aprobación final en PEOPLE Blockchain."
   },
   "intro": "Los estados coinciden con docs/ROADMAP.md.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "Testnet People's Blockchain (EVM)",
-      "summary": "Ampliación del testnet People's Blockchain en EVM. La etapa 1 (chain/) está en curso; el testnet público actual sigue en el nodo OVN con RPC solo lectura."
+      "title": "Testnet PEOPLE Blockchain (EVM)",
+      "summary": "Ampliación del testnet PEOPLE Blockchain en EVM. La etapa 1 (chain/) está en curso; el testnet público actual sigue en el nodo OVN con RPC solo lectura."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Los módulos de protocolo ya funcionan en el nodo testnet; el objetivo es Solidity auditado en el testnet People's Blockchain, con un AMM tipo Uniswap V2."
+      "summary": "Los módulos de protocolo ya funcionan en el nodo testnet; el objetivo es Solidity auditado en el testnet PEOPLE Blockchain, con un AMM tipo Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

@@ -1,7 +1,7 @@
 {
   "tag": "الولاء",
   "title": "متجر محلي",
-  "lead": "أطلق برنامج زيارات خلال دقائق. العميل يمسح QR عند الصندوق — بلا مصطلحات كريبتو، مع People's Blockchain في الخلفية.",
+  "lead": "أطلق برنامج زيارات خلال دقائق. العميل يمسح QR عند الصندوق — بلا مصطلحات كريبتو، مع PEOPLE Blockchain في الخلفية.",
   "contractsOff": "عقود الولاء غير منشورة على هذا الاختبار بعد. شغّل workflow Lavka بعد الدمج.",
   "signInCta": "تسجيل الدخول",
   "walletCta": "ربط المحفظة",
@@ -45,7 +45,7 @@
   "releaseEscrow": "تحويل للمتجر",
   "refundEscrow": "طلب استرداد",
   "disputeEscrow": "فتح نزاع",
-  "escrowLocked": "الأموال مقفلة على شبكة اختبار People's Blockchain.",
+  "escrowLocked": "الأموال مقفلة على شبكة اختبار PEOPLE Blockchain.",
   "visitsLeft": "الزيارات المتبقية: {{n}}",
   "founderWelcome": "انضممت إلى Million Founders برقم {{n}}.",
   "founderAlready": "مؤسس #{{n}}",

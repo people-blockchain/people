@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Дорожная карта",
-    "description": "Что уже работает в People's Blockchain, что в разработке и что запланировано без финального утверждения."
+    "description": "Что уже работает в PEOPLE Blockchain, что в разработке и что запланировано без финального утверждения."
   },
   "intro": "Статусы совпадают с docs/ROADMAP.md. Цифры и экономика могут измениться после голосования сообщества.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "Тестовая сеть People's Blockchain (EVM)",
-      "summary": "Развитие тестовой сети People's Blockchain на EVM. Идёт этап 1 (сборка chain/); текущий публичный testnet пока на ноде OVN с read-only RPC."
+      "title": "Тестовая сеть PEOPLE Blockchain (EVM)",
+      "summary": "Развитие тестовой сети PEOPLE Blockchain на EVM. Идёт этап 1 (сборка chain/); текущий публичный testnet пока на ноде OVN с read-only RPC."
     },
     "genesis-snapshot-0x": {
       "title": "Снимок состояния в genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: фабрика, кривая, AMM, NFT",
-      "summary": "Модули уже на testnet-ноде; цель — аудированный Solidity в тестовой сети People's Blockchain, AMM в стиле Uniswap V2."
+      "summary": "Модули уже на testnet-ноде; цель — аудированный Solidity в тестовой сети PEOPLE Blockchain, AMM в стиле Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Делёж сетевых комиссий (Model A)",

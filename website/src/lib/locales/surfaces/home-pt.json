@@ -1,6 +1,6 @@
 {
   "hero": {
-    "brandLine": "People — a blockchain para comunidades",
+    "brandLine": "PEOPLE — a blockchain para comunidades",
     "headlineMain": "Lance um token para a sua comunidade.",
     "headlineMainLines": [
       "Lance um token",
@@ -12,7 +12,7 @@
       "10% vão para a sua gente,",
       "não para baleias."
     ],
-    "sub": "People's Blockchain é onde criadores lançam tokens com preço justo desde o primeiro bloco, e a comunidade recebe uma fatia de tudo o que ajuda a crescer.",
+    "sub": "PEOPLE Blockchain é onde criadores lançam tokens com preço justo desde o primeiro bloco, e a comunidade recebe uma fatia de tudo o que ajuda a crescer.",
     "testnetBadge": "O testnet público está no ar. Ainda não é mainnet.",
     "ctaCreate": "Criar um token",
     "ctaWallet": "Abrir carteira",
@@ -120,7 +120,7 @@
   },
   "foundersTeaser": {
     "eyebrow": "Um milhão de fundadores",
-    "lead": "Participantes verificados recebem número, bónus de entrada antecipada e pontos de atividade no testnet People's Blockchain.",
+    "lead": "Participantes verificados recebem número, bónus de entrada antecipada e pontos de atividade no testnet PEOPLE Blockchain.",
     "cta": "Juntar-me aos fundadores",
     "href": "/founders",
     "titleWithNumber": "Seja o fundador n.º {{n}} antes do mainnet",

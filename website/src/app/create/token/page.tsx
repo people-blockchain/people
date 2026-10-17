@@ -5,7 +5,7 @@ import { FactoryWizard } from "@/components/factory/FactoryWizard";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Create a token | People's Blockchain",
+  title: "Create a token | PEOPLE Blockchain",
   description: "No-code Token Factory: image, name, ticker, supply, pay in PPL.",
   alternates: { canonical: "/create/token" },
   openGraph: {

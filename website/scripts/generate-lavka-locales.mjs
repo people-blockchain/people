@@ -10,7 +10,7 @@ const overlays = {
     tag: "ЛОЯЛЬНОСТЬ",
     title: "Лавка",
     lead:
-      "Запустите программу лояльности за пару минут. Клиент сканирует QR на кассе — без крипто-жаргона, на базе People's Blockchain.",
+      "Запустите программу лояльности за пару минут. Клиент сканирует QR на кассе — без крипто-жаргона, на базе PEOPLE Blockchain.",
     contractsOff:
       "Контракты лояльности ещё не развёрнуты в этом тестнете. Оператору нужно запустить workflow деплоя Lavka после слияния.",
     signInCta: "Войти",
@@ -55,7 +55,7 @@ const overlays = {
     releaseEscrow: "Передать лавке",
     refundEscrow: "Запросить возврат",
     disputeEscrow: "Открыть спор",
-    escrowLocked: "Средства заблокированы в тестнете People's Blockchain.",
+    escrowLocked: "Средства заблокированы в тестнете PEOPLE Blockchain.",
     visitsLeft: "Осталось визитов: {{n}}",
     founderWelcome: "Вы в программе «Миллион основателей», №{{n}}.",
     founderAlready: "Основатель №{{n}}",
@@ -73,7 +73,7 @@ const overlays = {
     tag: "LEALTAD",
     title: "Tienda local",
     lead:
-      "Lanza un programa de visitas en minutos. El cliente escanea un QR en caja — sin jerga cripto, con People's Blockchain debajo.",
+      "Lanza un programa de visitas en minutos. El cliente escanea un QR en caja — sin jerga cripto, con PEOPLE Blockchain debajo.",
     contractsOff:
       "Los contratos aún no están desplegados en este testnet. El operador debe ejecutar el workflow de Lavka tras fusionar.",
     signInCta: "Iniciar sesión",
@@ -118,7 +118,7 @@ const overlays = {
     releaseEscrow: "Liberar al local",
     refundEscrow: "Solicitar reembolso",
     disputeEscrow: "Abrir disputa",
-    escrowLocked: "Fondos bloqueados en el testnet de People's Blockchain.",
+    escrowLocked: "Fondos bloqueados en el testnet de PEOPLE Blockchain.",
     visitsLeft: "Visitas restantes: {{n}}",
     founderWelcome: "Te uniste a Million Founders como #{{n}}.",
     founderAlready: "Fundador #{{n}}",
@@ -136,7 +136,7 @@ const overlays = {
     tag: "FIDELIDADE",
     title: "Loja local",
     lead:
-      "Crie um programa de visitas em minutos. O cliente escaneia um QR no caixa — sem jargão cripto, com People's Blockchain por baixo.",
+      "Crie um programa de visitas em minutos. O cliente escaneia um QR no caixa — sem jargão cripto, com PEOPLE Blockchain por baixo.",
     signInCta: "Entrar",
     walletCta: "Vincular carteira",
     pohRequired: "Entre com Google ou e-mail e vincule a carteira para gerir a loja ou resgatar visitas.",
@@ -178,7 +178,7 @@ const overlays = {
     releaseEscrow: "Liberar para a loja",
     refundEscrow: "Pedir reembolso",
     disputeEscrow: "Abrir disputa",
-    escrowLocked: "Fundos bloqueados no testnet People's Blockchain.",
+    escrowLocked: "Fundos bloqueados no testnet PEOPLE Blockchain.",
     visitsLeft: "Visitas restantes: {{n}}",
     founderWelcome: "Você entrou no Million Founders como #{{n}}.",
     founderAlready: "Fundador #{{n}}",
@@ -198,7 +198,7 @@ const overlays = {
     tag: "FIDÉLITÉ",
     title: "Commerce local",
     lead:
-      "Lancez un programme de visites en quelques minutes. Le client scanne un QR en caisse — sans jargon crypto, avec People's Blockchain.",
+      "Lancez un programme de visites en quelques minutes. Le client scanne un QR en caisse — sans jargon crypto, avec PEOPLE Blockchain.",
     signInCta: "Se connecter",
     walletCta: "Lier le portefeuille",
     pohRequired:
@@ -241,7 +241,7 @@ const overlays = {
     releaseEscrow: "Libérer au commerce",
     refundEscrow: "Demander un remboursement",
     disputeEscrow: "Ouvrir un litige",
-    escrowLocked: "Fonds bloqués sur le testnet People's Blockchain.",
+    escrowLocked: "Fonds bloqués sur le testnet PEOPLE Blockchain.",
     visitsLeft: "Visites restantes : {{n}}",
     founderWelcome: "Vous avez rejoint Million Founders n°{{n}}.",
     founderAlready: "Fondateur n°{{n}}",
@@ -261,7 +261,7 @@ const overlays = {
     tag: "TREUE",
     title: "Lokaler Shop",
     lead:
-      "Starten Sie in Minuten ein Besuchsprogramm. Kunden scannen einen QR an der Kasse — ohne Krypto-Jargon, mit People's Blockchain.",
+      "Starten Sie in Minuten ein Besuchsprogramm. Kunden scannen einen QR an der Kasse — ohne Krypto-Jargon, mit PEOPLE Blockchain.",
     signInCta: "Anmelden",
     walletCta: "Wallet verknüpfen",
     pohRequired:
@@ -324,7 +324,7 @@ const overlays = {
     tag: "FEDELTÀ",
     title: "Negozio locale",
     lead:
-      "Avvia un programma visite in pochi minuti. Il cliente scansiona un QR in cassa — senza gergo crypto, con People's Blockchain.",
+      "Avvia un programma visite in pochi minuti. Il cliente scansiona un QR in cassa — senza gergo crypto, con PEOPLE Blockchain.",
     signInCta: "Accedi",
     walletCta: "Collega wallet",
     pohRequired: "Accedi con Google o email e collega il wallet per gestire il negozio o scalare visite.",
@@ -366,7 +366,7 @@ const overlays = {
     releaseEscrow: "Rilascia al negozio",
     refundEscrow: "Richiedi rimborso",
     disputeEscrow: "Apri disputa",
-    escrowLocked: "Fondi bloccati sul testnet People's Blockchain.",
+    escrowLocked: "Fondi bloccati sul testnet PEOPLE Blockchain.",
     visitsLeft: "Visite rimaste: {{n}}",
     founderWelcome: "Sei entrato in Million Founders come #{{n}}.",
     founderAlready: "Fondatore #{{n}}",
@@ -386,7 +386,7 @@ const overlays = {
     tag: "SADAKAT",
     title: "Yerel dükkan",
     lead:
-      "Dakikalar içinde ziyaret programı açın. Müşteri kasada QR okutur — kripto jargonu yok, altta People's Blockchain.",
+      "Dakikalar içinde ziyaret programı açın. Müşteri kasada QR okutur — kripto jargonu yok, altta PEOPLE Blockchain.",
     signInCta: "Giriş yap",
     walletCta: "Cüzdan bağla",
     pohRequired:
@@ -429,7 +429,7 @@ const overlays = {
     releaseEscrow: "Dükkana aktar",
     refundEscrow: "İade iste",
     disputeEscrow: "Anlaşmazlık aç",
-    escrowLocked: "Fonlar People's Blockchain testnetinde kilitli.",
+    escrowLocked: "Fonlar PEOPLE Blockchain testnetinde kilitli.",
     visitsLeft: "Kalan ziyaret: {{n}}",
     founderWelcome: "Million Founders'a #{{n}} olarak katıldınız.",
     founderAlready: "Kurucu #{{n}}",
@@ -449,7 +449,7 @@ const overlays = {
     tag: "THÀNH VIÊN",
     title: "Cửa hàng địa phương",
     lead:
-      "Ra mắt chương trình lượt ghé trong vài phút. Khách quét QR tại quầy — không thuật ngữ crypto, dùng People's Blockchain.",
+      "Ra mắt chương trình lượt ghé trong vài phút. Khách quét QR tại quầy — không thuật ngữ crypto, dùng PEOPLE Blockchain.",
     signInCta: "Đăng nhập",
     walletCta: "Liên kết ví",
     pohRequired:
@@ -492,7 +492,7 @@ const overlays = {
     releaseEscrow: "Chuyển cho cửa hàng",
     refundEscrow: "Yêu cầu hoàn",
     disputeEscrow: "Mở tranh chấp",
-    escrowLocked: "Tiền khóa trên testnet People's Blockchain.",
+    escrowLocked: "Tiền khóa trên testnet PEOPLE Blockchain.",
     visitsLeft: "Lượt còn: {{n}}",
     founderWelcome: "Bạn tham gia Million Founders số {{n}}.",
     founderAlready: "Nhà sáng lập #{{n}}",
@@ -512,7 +512,7 @@ const overlays = {
     tag: "LOYALITAS",
     title: "Toko lokal",
     lead:
-      "Luncurkan program kunjungan dalam hitungan menit. Pelanggan memindai QR di kasir — tanpa jargon kripto, dengan People's Blockchain.",
+      "Luncurkan program kunjungan dalam hitungan menit. Pelanggan memindai QR di kasir — tanpa jargon kripto, dengan PEOPLE Blockchain.",
     signInCta: "Masuk",
     walletCta: "Tautkan dompet",
     pohRequired:
@@ -555,7 +555,7 @@ const overlays = {
     releaseEscrow: "Lepas ke toko",
     refundEscrow: "Minta pengembalian",
     disputeEscrow: "Buka sengketa",
-    escrowLocked: "Dana terkunci di testnet People's Blockchain.",
+    escrowLocked: "Dana terkunci di testnet PEOPLE Blockchain.",
     visitsLeft: "Kunjungan tersisa: {{n}}",
     founderWelcome: "Anda bergabung Million Founders sebagai #{{n}}.",
     founderAlready: "Pendiri #{{n}}",
@@ -575,7 +575,7 @@ const overlays = {
     tag: "会员",
     title: "本地小店",
     lead:
-      "几分钟上线次卡计划。顾客在收银台扫码即可——无加密术语，底层为 People's Blockchain。",
+      "几分钟上线次卡计划。顾客在收银台扫码即可——无加密术语，底层为 PEOPLE Blockchain。",
     signInCta: "登录",
     walletCta: "绑定钱包",
     pohRequired: "使用 Google 或邮箱登录并绑定钱包，以经营小店或核销次数。",
@@ -617,7 +617,7 @@ const overlays = {
     releaseEscrow: "放款给商家",
     refundEscrow: "申请退款",
     disputeEscrow: "发起争议",
-    escrowLocked: "资金已锁定在 People's Blockchain 测试网。",
+    escrowLocked: "资金已锁定在 PEOPLE Blockchain 测试网。",
     visitsLeft: "剩余次数：{{n}}",
     founderWelcome: "您已加入 Million Founders，编号 {{n}}。",
     founderAlready: "创始人 #{{n}}",
@@ -636,7 +636,7 @@ const overlays = {
     tag: "الولاء",
     title: "متجر محلي",
     lead:
-      "أطلق برنامج زيارات خلال دقائق. العميل يمسح QR عند الصندوق — بلا مصطلحات كريبتو، مع People's Blockchain في الخلفية.",
+      "أطلق برنامج زيارات خلال دقائق. العميل يمسح QR عند الصندوق — بلا مصطلحات كريبتو، مع PEOPLE Blockchain في الخلفية.",
     signInCta: "تسجيل الدخول",
     walletCta: "ربط المحفظة",
     pohRequired:
@@ -679,7 +679,7 @@ const overlays = {
     releaseEscrow: "تحويل للمتجر",
     refundEscrow: "طلب استرداد",
     disputeEscrow: "فتح نزاع",
-    escrowLocked: "الأموال مقفلة على شبكة اختبار People's Blockchain.",
+    escrowLocked: "الأموال مقفلة على شبكة اختبار PEOPLE Blockchain.",
     visitsLeft: "الزيارات المتبقية: {{n}}",
     founderWelcome: "انضممت إلى Million Founders برقم {{n}}.",
     founderAlready: "مؤسس #{{n}}",

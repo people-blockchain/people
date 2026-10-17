@@ -41,7 +41,7 @@ const baseFeesCopy: Record<string, FeesCopyContent> = {
     tag: "FEES & PRICING",
     title: "Public PPL tariffs",
     lead:
-      "What common actions on People's Blockchain cost. Every fee is paid in PPL, the network's own coin.",
+      "What common actions on PEOPLE Blockchain cost. Every fee is paid in PPL, the network's own coin.",
     approvedNote:
       "These are the prices the site uses today. The wallet always shows the exact fee before you sign.",
     table: [
@@ -90,7 +90,7 @@ const baseFeesCopy: Record<string, FeesCopyContent> = {
     tag: "КОМИССИИ И ТАРИФЫ",
     title: "Публичные тарифы в PPL",
     lead:
-      "Сколько стоят обычные действия в People's Blockchain. Все комиссии платятся в PPL — собственной монете сети.",
+      "Сколько стоят обычные действия в PEOPLE Blockchain. Все комиссии платятся в PPL — собственной монете сети.",
     approvedNote:
       "Это цены, которые сайт использует сейчас. Кошелёк всегда показывает точную комиссию перед подписью.",
     table: [

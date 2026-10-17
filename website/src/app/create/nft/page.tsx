@@ -5,7 +5,7 @@ import { FactoryWizard } from "@/components/factory/FactoryWizard";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Create an NFT | People's Blockchain",
+  title: "Create an NFT | PEOPLE Blockchain",
   description: "No-code NFT mint: image, name, description, pay in PPL.",
   alternates: { canonical: "/create/nft" },
   openGraph: {

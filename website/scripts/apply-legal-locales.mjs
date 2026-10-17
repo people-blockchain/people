@@ -59,48 +59,48 @@ const saleBody = {
 
 const chrome = {
   ru: {
-    privacy: { title: "Политика конфиденциальности", subtitle: "Как сайт People's Blockchain обрабатывает данные при просмотре, входе и использовании партнёрских инструментов.", backHome: "На главную", relatedTerms: "Условия использования", relatedPrivacy: "Политика конфиденциальности", contactTitle: "Контакты" },
-    terms: { title: "Условия использования", subtitle: "Правила использования сайта People's Blockchain и партнёрских инструментов, пока сеть в тесте/beta.", backHome: "На главную", relatedTerms: "Условия использования", relatedPrivacy: "Политика конфиденциальности", contactTitle: "Контакты", saleTitle: "Публичная продажа PPL" },
+    privacy: { title: "Политика конфиденциальности", subtitle: "Как сайт PEOPLE Blockchain обрабатывает данные при просмотре, входе и использовании партнёрских инструментов.", backHome: "На главную", relatedTerms: "Условия использования", relatedPrivacy: "Политика конфиденциальности", contactTitle: "Контакты" },
+    terms: { title: "Условия использования", subtitle: "Правила использования сайта PEOPLE Blockchain и партнёрских инструментов, пока сеть в тесте/beta.", backHome: "На главную", relatedTerms: "Условия использования", relatedPrivacy: "Политика конфиденциальности", contactTitle: "Контакты", saleTitle: "Публичная продажа PPL" },
   },
   es: {
-    privacy: { title: "Política de privacidad", subtitle: "Cómo el sitio de People's Blockchain trata la información al navegar, iniciar sesión o usar herramientas de socio.", backHome: "Volver al inicio", relatedTerms: "Términos del servicio", relatedPrivacy: "Política de privacidad", contactTitle: "Contacto" },
-    terms: { title: "Términos del servicio", subtitle: "Reglas para usar el sitio de People's Blockchain y herramientas de socio mientras la red está en prueba/beta.", backHome: "Volver al inicio", relatedTerms: "Términos del servicio", relatedPrivacy: "Política de privacidad", contactTitle: "Contacto", saleTitle: "Venta pública de PPL" },
+    privacy: { title: "Política de privacidad", subtitle: "Cómo el sitio de PEOPLE Blockchain trata la información al navegar, iniciar sesión o usar herramientas de socio.", backHome: "Volver al inicio", relatedTerms: "Términos del servicio", relatedPrivacy: "Política de privacidad", contactTitle: "Contacto" },
+    terms: { title: "Términos del servicio", subtitle: "Reglas para usar el sitio de PEOPLE Blockchain y herramientas de socio mientras la red está en prueba/beta.", backHome: "Volver al inicio", relatedTerms: "Términos del servicio", relatedPrivacy: "Política de privacidad", contactTitle: "Contacto", saleTitle: "Venta pública de PPL" },
   },
   pt: {
-    privacy: { title: "Política de privacidade", subtitle: "Como o site People's Blockchain trata informações ao navegar, entrar ou usar ferramentas de parceiro.", backHome: "Voltar ao início", relatedTerms: "Termos de serviço", relatedPrivacy: "Política de privacidade", contactTitle: "Contato" },
-    terms: { title: "Termos de serviço", subtitle: "Regras para usar o site People's Blockchain e ferramentas de parceiro enquanto a rede está em teste/beta.", backHome: "Voltar ao início", relatedTerms: "Termos de serviço", relatedPrivacy: "Política de privacidade", contactTitle: "Contato", saleTitle: "Venda pública de PPL" },
+    privacy: { title: "Política de privacidade", subtitle: "Como o site PEOPLE Blockchain trata informações ao navegar, entrar ou usar ferramentas de parceiro.", backHome: "Voltar ao início", relatedTerms: "Termos de serviço", relatedPrivacy: "Política de privacidade", contactTitle: "Contato" },
+    terms: { title: "Termos de serviço", subtitle: "Regras para usar o site PEOPLE Blockchain e ferramentas de parceiro enquanto a rede está em teste/beta.", backHome: "Voltar ao início", relatedTerms: "Termos de serviço", relatedPrivacy: "Política de privacidade", contactTitle: "Contato", saleTitle: "Venda pública de PPL" },
   },
   fr: {
-    privacy: { title: "Politique de confidentialité", subtitle: "Comment le site People's Blockchain traite les informations lors de la navigation, de la connexion ou de l'utilisation des outils partenaires.", backHome: "Retour à l'accueil", relatedTerms: "Conditions d'utilisation", relatedPrivacy: "Politique de confidentialité", contactTitle: "Contact" },
-    terms: { title: "Conditions d'utilisation", subtitle: "Règles d'utilisation du site People's Blockchain et des outils partenaires pendant la phase test/bêta.", backHome: "Retour à l'accueil", relatedTerms: "Conditions d'utilisation", relatedPrivacy: "Politique de confidentialité", contactTitle: "Contact", saleTitle: "Vente publique de PPL" },
+    privacy: { title: "Politique de confidentialité", subtitle: "Comment le site PEOPLE Blockchain traite les informations lors de la navigation, de la connexion ou de l'utilisation des outils partenaires.", backHome: "Retour à l'accueil", relatedTerms: "Conditions d'utilisation", relatedPrivacy: "Politique de confidentialité", contactTitle: "Contact" },
+    terms: { title: "Conditions d'utilisation", subtitle: "Règles d'utilisation du site PEOPLE Blockchain et des outils partenaires pendant la phase test/bêta.", backHome: "Retour à l'accueil", relatedTerms: "Conditions d'utilisation", relatedPrivacy: "Politique de confidentialité", contactTitle: "Contact", saleTitle: "Vente publique de PPL" },
   },
   de: {
     privacy: { title: "Datenschutz", subtitle: "Wie die People's-Blockchain-Website Informationen beim Surfen, Anmelden oder Nutzen von Partner-Tools verarbeitet.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt" },
-    terms: { title: "Nutzungsbedingungen", subtitle: "Regeln für die Website People's Blockchain und Partner-Tools, solange das Netz im Test/Beta ist.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt", saleTitle: "Öffentlicher PPL-Verkauf" },
+    terms: { title: "Nutzungsbedingungen", subtitle: "Regeln für die Website PEOPLE Blockchain und Partner-Tools, solange das Netz im Test/Beta ist.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt", saleTitle: "Öffentlicher PPL-Verkauf" },
   },
   it: {
-    privacy: { title: "Informativa sulla privacy", subtitle: "Come il sito People's Blockchain gestisce le informazioni durante navigazione, accesso e strumenti partner.", backHome: "Torna alla home", relatedTerms: "Termini di servizio", relatedPrivacy: "Informativa sulla privacy", contactTitle: "Contatti" },
-    terms: { title: "Termini di servizio", subtitle: "Regole per usare il sito People's Blockchain e gli strumenti partner mentre la rete è in test/beta.", backHome: "Torna alla home", relatedTerms: "Termini di servizio", relatedPrivacy: "Informativa sulla privacy", contactTitle: "Contatti", saleTitle: "Vendita pubblica di PPL" },
+    privacy: { title: "Informativa sulla privacy", subtitle: "Come il sito PEOPLE Blockchain gestisce le informazioni durante navigazione, accesso e strumenti partner.", backHome: "Torna alla home", relatedTerms: "Termini di servizio", relatedPrivacy: "Informativa sulla privacy", contactTitle: "Contatti" },
+    terms: { title: "Termini di servizio", subtitle: "Regole per usare il sito PEOPLE Blockchain e gli strumenti partner mentre la rete è in test/beta.", backHome: "Torna alla home", relatedTerms: "Termini di servizio", relatedPrivacy: "Informativa sulla privacy", contactTitle: "Contatti", saleTitle: "Vendita pubblica di PPL" },
   },
   tr: {
-    privacy: { title: "Gizlilik politikası", subtitle: "People's Blockchain sitesinin gezinme, giriş ve ortak araçları kullanımında bilgileri nasıl işlediği.", backHome: "Ana sayfaya dön", relatedTerms: "Hizmet şartları", relatedPrivacy: "Gizlilik politikası", contactTitle: "İletişim" },
-    terms: { title: "Hizmet şartları", subtitle: "Ağ test/beta aşamasındayken People's Blockchain sitesi ve ortak araçları için kurallar.", backHome: "Ana sayfaya dön", relatedTerms: "Hizmet şartları", relatedPrivacy: "Gizlilik politikası", contactTitle: "İletişim", saleTitle: "Halka açık PPL satışı" },
+    privacy: { title: "Gizlilik politikası", subtitle: "PEOPLE Blockchain sitesinin gezinme, giriş ve ortak araçları kullanımında bilgileri nasıl işlediği.", backHome: "Ana sayfaya dön", relatedTerms: "Hizmet şartları", relatedPrivacy: "Gizlilik politikası", contactTitle: "İletişim" },
+    terms: { title: "Hizmet şartları", subtitle: "Ağ test/beta aşamasındayken PEOPLE Blockchain sitesi ve ortak araçları için kurallar.", backHome: "Ana sayfaya dön", relatedTerms: "Hizmet şartları", relatedPrivacy: "Gizlilik politikası", contactTitle: "İletişim", saleTitle: "Halka açık PPL satışı" },
   },
   vi: {
-    privacy: { title: "Chính sách quyền riêng tư", subtitle: "Cách trang People's Blockchain xử lý thông tin khi bạn duyệt, đăng nhập hoặc dùng công cụ đối tác.", backHome: "Về trang chủ", relatedTerms: "Điều khoản dịch vụ", relatedPrivacy: "Chính sách quyền riêng tư", contactTitle: "Liên hệ" },
-    terms: { title: "Điều khoản dịch vụ", subtitle: "Quy tắc sử dụng trang People's Blockchain và công cụ đối tác khi mạng đang test/beta.", backHome: "Về trang chủ", relatedTerms: "Điều khoản dịch vụ", relatedPrivacy: "Chính sách quyền riêng tư", contactTitle: "Liên hệ", saleTitle: "Bán PPL công khai" },
+    privacy: { title: "Chính sách quyền riêng tư", subtitle: "Cách trang PEOPLE Blockchain xử lý thông tin khi bạn duyệt, đăng nhập hoặc dùng công cụ đối tác.", backHome: "Về trang chủ", relatedTerms: "Điều khoản dịch vụ", relatedPrivacy: "Chính sách quyền riêng tư", contactTitle: "Liên hệ" },
+    terms: { title: "Điều khoản dịch vụ", subtitle: "Quy tắc sử dụng trang PEOPLE Blockchain và công cụ đối tác khi mạng đang test/beta.", backHome: "Về trang chủ", relatedTerms: "Điều khoản dịch vụ", relatedPrivacy: "Chính sách quyền riêng tư", contactTitle: "Liên hệ", saleTitle: "Bán PPL công khai" },
   },
   id: {
-    privacy: { title: "Kebijakan privasi", subtitle: "Bagaimana situs People's Blockchain menangani informasi saat menjelajah, masuk, atau menggunakan alat mitra.", backHome: "Kembali ke beranda", relatedTerms: "Ketentuan layanan", relatedPrivacy: "Kebijakan privasi", contactTitle: "Kontak" },
-    terms: { title: "Ketentuan layanan", subtitle: "Aturan menggunakan situs People's Blockchain dan alat mitra saat jaringan dalam uji/beta.", backHome: "Kembali ke beranda", relatedTerms: "Ketentuan layanan", relatedPrivacy: "Kebijakan privasi", contactTitle: "Kontak", saleTitle: "Penjualan PPL publik" },
+    privacy: { title: "Kebijakan privasi", subtitle: "Bagaimana situs PEOPLE Blockchain menangani informasi saat menjelajah, masuk, atau menggunakan alat mitra.", backHome: "Kembali ke beranda", relatedTerms: "Ketentuan layanan", relatedPrivacy: "Kebijakan privasi", contactTitle: "Kontak" },
+    terms: { title: "Ketentuan layanan", subtitle: "Aturan menggunakan situs PEOPLE Blockchain dan alat mitra saat jaringan dalam uji/beta.", backHome: "Kembali ke beranda", relatedTerms: "Ketentuan layanan", relatedPrivacy: "Kebijakan privasi", contactTitle: "Kontak", saleTitle: "Penjualan PPL publik" },
   },
   zh: {
-    privacy: { title: "隐私政策", subtitle: "People's Blockchain 网站在浏览、登录或使用合作伙伴工具时如何处理信息。", backHome: "返回首页", relatedTerms: "服务条款", relatedPrivacy: "隐私政策", contactTitle: "联系" },
-    terms: { title: "服务条款", subtitle: "在网络处于测试/测试版阶段时使用 People's Blockchain 网站与合作伙伴工具的规则。", backHome: "返回首页", relatedTerms: "服务条款", relatedPrivacy: "隐私政策", contactTitle: "联系", saleTitle: "PPL 公开销售" },
+    privacy: { title: "隐私政策", subtitle: "PEOPLE Blockchain 网站在浏览、登录或使用合作伙伴工具时如何处理信息。", backHome: "返回首页", relatedTerms: "服务条款", relatedPrivacy: "隐私政策", contactTitle: "联系" },
+    terms: { title: "服务条款", subtitle: "在网络处于测试/测试版阶段时使用 PEOPLE Blockchain 网站与合作伙伴工具的规则。", backHome: "返回首页", relatedTerms: "服务条款", relatedPrivacy: "隐私政策", contactTitle: "联系", saleTitle: "PPL 公开销售" },
   },
   ar: {
-    privacy: { title: "سياسة الخصوصية", subtitle: "كيف يتعامل موقع People's Blockchain مع المعلومات عند التصفح أو تسجيل الدخول أو استخدام أدوات الشريك.", backHome: "العودة للرئيسية", relatedTerms: "شروط الخدمة", relatedPrivacy: "سياسة الخصوصية", contactTitle: "اتصل بنا" },
-    terms: { title: "شروط الخدمة", subtitle: "قواعد استخدام موقع People's Blockchain وأدوات الشريك أثناء مرحلة الاختبار/التجريب.", backHome: "العودة للرئيسية", relatedTerms: "شروط الخدمة", relatedPrivacy: "سياسة الخصوصية", contactTitle: "اتصل بنا", saleTitle: "بيع PPL العام" },
+    privacy: { title: "سياسة الخصوصية", subtitle: "كيف يتعامل موقع PEOPLE Blockchain مع المعلومات عند التصفح أو تسجيل الدخول أو استخدام أدوات الشريك.", backHome: "العودة للرئيسية", relatedTerms: "شروط الخدمة", relatedPrivacy: "سياسة الخصوصية", contactTitle: "اتصل بنا" },
+    terms: { title: "شروط الخدمة", subtitle: "قواعد استخدام موقع PEOPLE Blockchain وأدوات الشريك أثناء مرحلة الاختبار/التجريب.", backHome: "العودة للرئيسية", relatedTerms: "شروط الخدمة", relatedPrivacy: "سياسة الخصوصية", contactTitle: "اتصل بنا", saleTitle: "بيع PPL العام" },
   },
 };
 

@@ -169,9 +169,9 @@ const rawHub = {
     whatIs: {
       id: "what-is",
       tag: "WHAT",
-      title: "What is People's Blockchain?",
+      title: "What is PEOPLE Blockchain?",
       summary:
-        "People's Blockchain is community infrastructure: ordinary devices for participation, protocol-level creation of tokens and projects, and Proof-of-Stake validators for block production. Participants are not validators.",
+        "PEOPLE Blockchain is community infrastructure: ordinary devices for participation, protocol-level creation of tokens and projects, and Proof-of-Stake validators for block production. Participants are not validators.",
       items: [
         {
           id: "consensus",
@@ -291,7 +291,7 @@ const rawHub = {
       tag: "NATIVE ASSET",
       title: "People (PPL)",
       summary:
-        "People is the native asset of People's Blockchain. Ticker: PPL.",
+        "People is the native asset of PEOPLE Blockchain. Ticker: PPL.",
       cards: [
         {
           title: "UTILITY",

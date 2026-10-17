@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "How It Works | People's Blockchain",
+  title: "How It Works | PEOPLE Blockchain",
   description:
-    "How People's Blockchain works: people use the network, usage creates fees, and part of every fee flows back to the community.",
+    "How PEOPLE Blockchain works: people use the network, usage creates fees, and part of every fee flows back to the community.",
   alternates: { canonical: "/how-it-works" },
   openGraph: {
-    title: "How People's Blockchain Works",
+    title: "How PEOPLE Blockchain Works",
     description:
       "People use the network. Usage creates fees. Part of every fee flows back to the community.",
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image.jpg",
         width: 1200,
         height: 630,
-        alt: "People's Blockchain — the PEOPLE mark and wordmark on a dark navy gradient card. Created by people. For the community.",
+        alt: "PEOPLE Blockchain — the PEOPLE mark and wordmark on a dark navy gradient card. Created by people. For the community.",
       },
     ],
   },

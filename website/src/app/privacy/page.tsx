@@ -5,9 +5,9 @@ import { LegalDocument } from "@/components/legal/LegalDocument";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | People's Blockchain",
+  title: "Privacy Policy | PEOPLE Blockchain",
   description:
-    "How the People's Blockchain website collects and uses information for partner sign-in, referrals, and non-custodial wallets.",
+    "How the PEOPLE Blockchain website collects and uses information for partner sign-in, referrals, and non-custodial wallets.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy",
