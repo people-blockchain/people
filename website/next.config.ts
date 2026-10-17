@@ -38,7 +38,6 @@ const nextConfig: NextConfig = {
     "@lifi/widget",
     "@lifi/widget-provider-ethereum",
     "@lifi/widget-provider-solana",
-    "@lifi/widget-provider-tron",
   ],
   async redirects() {
     const localeBuyRedirects = [
