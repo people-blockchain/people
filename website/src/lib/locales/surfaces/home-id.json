@@ -1,6 +1,6 @@
 {
   "hero": {
-    "brandLine": "People — blockchain untuk komunitas",
+    "brandLine": "PEOPLE — blockchain untuk komunitas",
     "headlineMain": "Luncurkan token untuk komunitas Anda.",
     "headlineMainLines": [
       "Luncurkan token",
@@ -12,7 +12,7 @@
       "10% untuk orang Anda,",
       "bukan untuk paus."
     ],
-    "sub": "People's Blockchain tempat kreator meluncurkan token dengan harga adil sejak blok pertama, dan komunitas mendapat bagian dari semua yang mereka bantu tumbuh.",
+    "sub": "PEOPLE Blockchain tempat kreator meluncurkan token dengan harga adil sejak blok pertama, dan komunitas mendapat bagian dari semua yang mereka bantu tumbuh.",
     "testnetBadge": "Testnet publik sudah live. Belum mainnet.",
     "ctaCreate": "Buat token",
     "ctaWallet": "Buka dompet",
@@ -120,7 +120,7 @@
   },
   "foundersTeaser": {
     "eyebrow": "Sejuta pendiri",
-    "lead": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet People's Blockchain.",
+    "lead": "Peserta terverifikasi mendapat nomor, bonus masuk awal, dan poin aktivitas di testnet PEOPLE Blockchain.",
     "cta": "Gabung pendiri",
     "href": "/founders",
     "titleWithNumber": "Jadilah pendiri #{{n}} sebelum mainnet",

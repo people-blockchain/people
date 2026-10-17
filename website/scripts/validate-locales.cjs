@@ -29,7 +29,7 @@ const ALLOWED_IDENTICAL = new Set([
   "10 // DEPLOYMENT",
   "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
   "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-  "PPL", "BFT", "PoS", "AMM", "PII", "People", "People's Blockchain",
+  "PPL", "BFT", "PoS", "AMM", "PII", "People", "PEOPLE Blockchain",
   "#concept", "#audiences", "#architecture", "#specifications", "#phase-1", "#phase-2", "#phase-3",
   "emerald", "amber", "sky", "brand", "value", "violet", "warm", "muted",
   "creators", "token-economy", "community-pool", "human-network", "peoples-blockchain",

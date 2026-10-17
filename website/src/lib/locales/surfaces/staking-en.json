@@ -1,8 +1,8 @@
 {
   "tag": "Testnet staking",
   "title": "Staking",
-  "lead": "Delegate test PPL to a validator, earn a share of rewards, and help secure People's Blockchain testnet (people_97401-1).",
-  "networkBadge": "People's Blockchain testnet · chain 97401",
+  "lead": "Delegate test PPL to a validator, earn a share of rewards, and help secure PEOPLE Blockchain testnet (people_97401-1).",
+  "networkBadge": "PEOPLE Blockchain testnet · chain 97401",
   "notReady": "Staking isn't live on this testnet yet — the chain's staking contract hasn't been switched on.",
   "connectPrompt": "Connect your wallet to delegate, claim rewards, and see your stake.",
   "validatorsTitle": "Validators",

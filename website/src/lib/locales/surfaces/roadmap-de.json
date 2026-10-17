@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "People's Blockchain-Testnet (EVM)",
-      "summary": "Ausbau des People's Blockchain-Testnets auf EVM. Stufe 1 (chain/) läuft; das öffentliche Testnet nutzt noch den OVN-Knoten mit Read-only-RPC."
+      "title": "PEOPLE Blockchain-Testnet (EVM)",
+      "summary": "Ausbau des PEOPLE Blockchain-Testnets auf EVM. Stufe 1 (chain/) läuft; das öffentliche Testnet nutzt noch den OVN-Knoten mit Read-only-RPC."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Protokollmodule laufen bereits auf dem Testnet-Knoten; Ziel ist auditiertes Solidity im People's Blockchain-Testnet, inkl. Uniswap-V2-AMM."
+      "summary": "Protokollmodule laufen bereits auf dem Testnet-Knoten; Ziel ist auditiertes Solidity im PEOPLE Blockchain-Testnet, inkl. Uniswap-V2-AMM."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

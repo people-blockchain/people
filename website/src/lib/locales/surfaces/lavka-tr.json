@@ -1,7 +1,7 @@
 {
   "tag": "SADAKAT",
   "title": "Yerel dükkan",
-  "lead": "Dakikalar içinde ziyaret programı açın. Müşteri kasada QR okutur — kripto jargonu yok, altta People's Blockchain.",
+  "lead": "Dakikalar içinde ziyaret programı açın. Müşteri kasada QR okutur — kripto jargonu yok, altta PEOPLE Blockchain.",
   "contractsOff": "Sadakat sözleşmeleri bu testnette henüz yok. Merge sonrası Lavka workflow çalıştırın.",
   "signInCta": "Giriş yap",
   "walletCta": "Cüzdan bağla",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Dükkana aktar",
   "refundEscrow": "İade iste",
   "disputeEscrow": "Anlaşmazlık aç",
-  "escrowLocked": "Fonlar People's Blockchain testnetinde kilitli.",
+  "escrowLocked": "Fonlar PEOPLE Blockchain testnetinde kilitli.",
   "visitsLeft": "Kalan ziyaret: {{n}}",
   "founderWelcome": "Million Founders'a #{{n}} olarak katıldınız.",
   "founderAlready": "Kurucu #{{n}}",

@@ -1,7 +1,7 @@
 {
-  "name": "People's Blockchain",
+  "name": "PEOPLE Blockchain",
   "short_name": "People",
-  "description": "People's Blockchain — public testnet infrastructure",
+  "description": "PEOPLE Blockchain — public testnet infrastructure",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#07090e",

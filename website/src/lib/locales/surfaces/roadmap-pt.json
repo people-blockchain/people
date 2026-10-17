@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "Testnet People's Blockchain (EVM)",
-      "summary": "Evolução do testnet People's Blockchain em EVM. Etapa 1 (chain/) em curso; o testnet público atual ainda no nó OVN com RPC só leitura."
+      "title": "Testnet PEOPLE Blockchain (EVM)",
+      "summary": "Evolução do testnet PEOPLE Blockchain em EVM. Etapa 1 (chain/) em curso; o testnet público atual ainda no nó OVN com RPC só leitura."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Os módulos de protocolo já funcionam no nó testnet; o alvo é Solidity auditado no testnet People's Blockchain, incluindo AMM estilo Uniswap V2."
+      "summary": "Os módulos de protocolo já funcionam no nó testnet; o alvo é Solidity auditado no testnet PEOPLE Blockchain, incluindo AMM estilo Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

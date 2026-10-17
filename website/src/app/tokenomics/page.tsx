@@ -5,13 +5,13 @@ import { TokenomicsPage } from "@/components/tokenomics/TokenomicsPage";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Tokenomics | People's Blockchain",
+  title: "Tokenomics | PEOPLE Blockchain",
   description:
     "Fixed 1B PPL supply, genesis allocation, community sale bonding curve, vesting schedules and network fee split.",
   alternates: { canonical: "/tokenomics" },
   openGraph: {
     title: "PPL tokenomics",
-    description: "Genesis allocation, sale curve and circulating supply plan for People's Blockchain.",
+    description: "Genesis allocation, sale curve and circulating supply plan for PEOPLE Blockchain.",
     type: "website",
     siteName: SITE_NAME,
     url: "/tokenomics",

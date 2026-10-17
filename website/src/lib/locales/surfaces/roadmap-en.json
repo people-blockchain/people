@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Roadmap",
-    "description": "What is live on People's Blockchain today, what we are building next, and what is planned but not yet approved."
+    "description": "What is live on PEOPLE Blockchain today, what we are building next, and what is planned but not yet approved."
   },
   "intro": "Statuses come from the same data as docs/ROADMAP.md. Numbers and economics stay subject to community governance.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "People's Blockchain testnet (EVM)",
-      "summary": "Growing the People's Blockchain testnet on EVM. Stage 1 (chain build) is underway; the current public testnet still runs on the OVN-derived node with read-only RPC."
+      "title": "PEOPLE Blockchain testnet (EVM)",
+      "summary": "Growing the PEOPLE Blockchain testnet on EVM. Stage 1 (chain build) is underway; the current public testnet still runs on the OVN-derived node with read-only RPC."
     },
     "genesis-snapshot-0x": {
       "title": "State snapshot into genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: factory, curve, AMM, NFT",
-      "summary": "Protocol modules already work on the testnet node; the target is audited Solidity on the People's Blockchain testnet, including a Uniswap V2-style AMM."
+      "summary": "Protocol modules already work on the testnet node; the target is audited Solidity on the PEOPLE Blockchain testnet, including a Uniswap V2-style AMM."
     },
     "fee-split-model-a": {
       "title": "Network fee split (Model A)",

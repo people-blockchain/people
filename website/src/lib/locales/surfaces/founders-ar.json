@@ -1,7 +1,7 @@
 {
   "tag": "المؤسسون",
   "title": "مليون مؤسس",
-  "lead": "انضم إلى مليون شخص موثَّق يبني People's Blockchain قبل mainnet. يُسجَّل رقم المؤسس ونقاط النشاط على testnet اليوم.",
+  "lead": "انضم إلى مليون شخص موثَّق يبني PEOPLE Blockchain قبل mainnet. يُسجَّل رقم المؤسس ونقاط النشاط على testnet اليوم.",
   "preliminaryBanner": "أرقام مبدئية — أوزان النقاط والمضاعفات والحدود اليومية قد تتغير قبل mainnet.",
   "counterLabel": "المؤسسون الموثَّقون",
   "goalLabel": "الهدف قبل mainnet",
@@ -56,13 +56,13 @@
     },
     {
       "id": "swap",
-      "label": "تبادل على testnet People's Blockchain (97401), min {{swapMin}} PPL",
+      "label": "تبادل على testnet PEOPLE Blockchain (97401), min {{swapMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
     {
       "id": "stake",
-      "label": "تخزين PPL على شبكة اختبار People's Blockchain (تفويض جديد)، بحد أدنى {{stakeMin}} PPL",
+      "label": "تخزين PPL على شبكة اختبار PEOPLE Blockchain (تفويض جديد)، بحد أدنى {{stakeMin}} PPL",
       "base": "50",
       "limit": "3/day"
     },
@@ -158,7 +158,7 @@
   "heroEyebrow": "STAND",
   "heroTitleWithNumber": "كن مؤسسًا رقم {{n}} قبل mainnet",
   "heroTitleFallback": "كن من أوائل المؤسسين قبل إطلاق الشبكة الرئيسية",
-  "heroSub": "يحصل المشاركون الموثَّقون على رقمهم ومكافأة الدخول المبكر ونقاط النشاط على testnet People's Blockchain.",
+  "heroSub": "يحصل المشاركون الموثَّقون على رقمهم ومكافأة الدخول المبكر ونقاط النشاط على testnet PEOPLE Blockchain.",
   "demoAirdropTitle": "Testnet demo tokens",
   "demoAirdropReceived": "تم الاستلام: 100 × 6 رموز",
   "demoAirdropPending": "Demo tokens are sent automatically after level 1 verification.",

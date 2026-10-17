@@ -77,7 +77,7 @@ const sid = (id: string) => id.slice(0, 8);
 export const T: Record<Lang, Msgs> = {
   en: {
     welcome:
-      "Hi! This is People's Blockchain support.\n\n• /support <your question> — ask a question\n• /bug <what went wrong> — report a bug (you can attach a screenshot: send a photo with the text as caption)\n\nOr just send /support or /bug and then your message.",
+      "Hi! This is PEOPLE Blockchain support.\n\n• /support <your question> — ask a question\n• /bug <what went wrong> — report a bug (you can attach a screenshot: send a photo with the text as caption)\n\nOr just send /support or /bug and then your message.",
     askSupport: "Please write your question in one message (you may attach a photo with a caption).",
     askBug: "Describe the bug in one message. Attach a screenshot as a photo with the description as its caption if you can.",
     received: (id) => `Thanks! Your request #${sid(id)} was received. We'll notify you here about its status.`,
@@ -91,7 +91,7 @@ export const T: Record<Lang, Msgs> = {
   },
   ru: {
     welcome:
-      "Здравствуйте! Это поддержка People's Blockchain.\n\n• /support <ваш вопрос> — задать вопрос\n• /bug <что сломалось> — сообщить об ошибке (можно приложить скриншот: отправьте фото с текстом в подписи)\n\nИли отправьте /support или /bug, а затем сообщение.",
+      "Здравствуйте! Это поддержка PEOPLE Blockchain.\n\n• /support <ваш вопрос> — задать вопрос\n• /bug <что сломалось> — сообщить об ошибке (можно приложить скриншот: отправьте фото с текстом в подписи)\n\nИли отправьте /support или /bug, а затем сообщение.",
     askSupport: "Напишите вопрос одним сообщением (можно фото с подписью).",
     askBug: "Опишите ошибку одним сообщением. Если можете — приложите скриншот как фото с описанием в подписи.",
     received: (id) => `Спасибо! Обращение #${sid(id)} получено. Мы сообщим здесь о его статусе.`,
@@ -105,7 +105,7 @@ export const T: Record<Lang, Msgs> = {
   },
   ka: {
     welcome:
-      "გამარჯობა! ეს არის People's Blockchain-ის მხარდაჭერა.\n\n• /support <თქვენი კითხვა> — დასვით კითხვა\n• /bug <რა არ მუშაობს> — შეგვატყობინეთ შეცდომის შესახებ (შეგიძლიათ დაურთოთ სკრინშოტი: გამოგზავნეთ ფოტო ტექსტით წარწერაში)\n\nან უბრალოდ გამოგზავნეთ /support ან /bug და შემდეგ თქვენი შეტყობინება.",
+      "გამარჯობა! ეს არის PEOPLE Blockchain-ის მხარდაჭერა.\n\n• /support <თქვენი კითხვა> — დასვით კითხვა\n• /bug <რა არ მუშაობს> — შეგვატყობინეთ შეცდომის შესახებ (შეგიძლიათ დაურთოთ სკრინშოტი: გამოგზავნეთ ფოტო ტექსტით წარწერაში)\n\nან უბრალოდ გამოგზავნეთ /support ან /bug და შემდეგ თქვენი შეტყობინება.",
     askSupport: "დაწერეთ თქვენი კითხვა ერთ შეტყობინებაში (შეგიძლიათ დაურთოთ ფოტო წარწერით).",
     askBug: "აღწერეთ შეცდომა ერთ შეტყობინებაში. თუ შეგიძლიათ, დაურთეთ სკრინშოტი ფოტოდ, აღწერით წარწერაში.",
     received: (id) => `გმადლობთ! თქვენი მიმართვა #${sid(id)} მიღებულია. სტატუსის შესახებ აქ შეგატყობინებთ.`,
@@ -119,7 +119,7 @@ export const T: Record<Lang, Msgs> = {
   },
   hy: {
     welcome:
-      "Բարև։ Սա People's Blockchain-ի աջակցությունն է։\n\n• /support <ձեր հարցը> — հարց տալ\n• /bug <ինչն է չաշխատում> — հաղորդել սխալի մասին (կարող եք կցել սքրինշոթ՝ ուղարկեք լուսանկար՝ տեքստը որպես մակագրություն)\n\nԿամ պարզապես ուղարկեք /support կամ /bug, ապա ձեր հաղորդագրությունը։",
+      "Բարև։ Սա PEOPLE Blockchain-ի աջակցությունն է։\n\n• /support <ձեր հարցը> — հարց տալ\n• /bug <ինչն է չաշխատում> — հաղորդել սխալի մասին (կարող եք կցել սքրինշոթ՝ ուղարկեք լուսանկար՝ տեքստը որպես մակագրություն)\n\nԿամ պարզապես ուղարկեք /support կամ /bug, ապա ձեր հաղորդագրությունը։",
     askSupport: "Գրեք ձեր հարցը մեկ հաղորդագրությամբ (կարող եք կցել լուսանկար՝ մակագրությամբ)։",
     askBug: "Նկարագրեք սխալը մեկ հաղորդագրությամբ։ Հնարավորության դեպքում կցեք սքրինշոթ՝ նկարագրությունը որպես մակագրություն։",
     received: (id) => `Շնորհակալություն։ Ձեր դիմումը #${sid(id)} ստացվել է։ Կտեղեկացնենք այստեղ դրա կարգավիճակի մասին։`,
@@ -133,7 +133,7 @@ export const T: Record<Lang, Msgs> = {
   },
   tr: {
     welcome:
-      "Merhaba! Burası People's Blockchain destek hattı.\n\n• /support <sorunuz> — soru sorun\n• /bug <ne bozuldu> — hata bildirin (ekran görüntüsü ekleyebilirsiniz: metni açıklama olarak yazıp fotoğraf gönderin)\n\nYa da sadece /support veya /bug gönderip ardından mesajınızı yazın.",
+      "Merhaba! Burası PEOPLE Blockchain destek hattı.\n\n• /support <sorunuz> — soru sorun\n• /bug <ne bozuldu> — hata bildirin (ekran görüntüsü ekleyebilirsiniz: metni açıklama olarak yazıp fotoğraf gönderin)\n\nYa da sadece /support veya /bug gönderip ardından mesajınızı yazın.",
     askSupport: "Lütfen sorunuzu tek bir mesajda yazın (açıklamalı fotoğraf ekleyebilirsiniz).",
     askBug: "Hatayı tek bir mesajda açıklayın. Mümkünse açıklamayı fotoğraf altı yazısı olarak ekleyip ekran görüntüsü gönderin.",
     received: (id) => `Teşekkürler! #${sid(id)} numaralı talebiniz alındı. Durumu hakkında sizi burada bilgilendireceğiz.`,
@@ -147,7 +147,7 @@ export const T: Record<Lang, Msgs> = {
   },
   uk: {
     welcome:
-      "Вітаємо! Це підтримка People's Blockchain.\n\n• /support <ваше питання> — поставити питання\n• /bug <що зламалося> — повідомити про помилку (можна додати скриншот: надішліть фото з текстом у підписі)\n\nАбо надішліть /support чи /bug, а потім повідомлення.",
+      "Вітаємо! Це підтримка PEOPLE Blockchain.\n\n• /support <ваше питання> — поставити питання\n• /bug <що зламалося> — повідомити про помилку (можна додати скриншот: надішліть фото з текстом у підписі)\n\nАбо надішліть /support чи /bug, а потім повідомлення.",
     askSupport: "Напишіть питання одним повідомленням (можна фото з підписом).",
     askBug: "Опишіть помилку одним повідомленням. Якщо можете — додайте скриншот як фото з описом у підписі.",
     received: (id) => `Дякуємо! Звернення #${sid(id)} отримано. Ми повідомимо тут про його статус.`,

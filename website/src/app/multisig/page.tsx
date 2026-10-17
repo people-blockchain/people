@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { MultisigPanel } from "@/components/multisig/MultisigPanel";
 
 export const metadata: Metadata = {
-  title: "Testnet multisig | People's Blockchain",
+  title: "Testnet multisig | PEOPLE Blockchain",
   description: "People's own 2-of-3 multisig on the People testnet: owners, threshold and transactions.",
   alternates: { canonical: "/multisig" },
   robots: { index: false },

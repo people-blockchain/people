@@ -8,7 +8,7 @@ import { resolveNodeWebSocketUrl, resolvePublicChainId } from "@/lib/node-rpc";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "People Wallet | People's Blockchain",
+  title: "People Wallet | PEOPLE Blockchain",
   description: "People Wallet — PPL in your browser: a non-custodial 12-word wallet (keys stay on your device) or Google sign-in for a synced wallet.",
   alternates: { canonical: "/wallet" },
   manifest: "/people-wallet.webmanifest",

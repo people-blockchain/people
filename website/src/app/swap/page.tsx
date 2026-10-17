@@ -10,7 +10,7 @@ import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";
 
 export const metadata: Metadata = {
-  title: "Swap | People's Blockchain",
+  title: "Swap | PEOPLE Blockchain",
   description:
     "Swap tokens for PPL, or PPL for tokens, and add liquidity to earn from trades. Each swap pays a 0.30% fee that stays with liquidity providers.",
   alternates: { canonical: "/swap" },

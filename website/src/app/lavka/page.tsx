@@ -9,7 +9,7 @@ import { linkPartnerWalletFromVaultIfAbsent } from "@/lib/partner/service";
 
 export const metadata: Metadata = {
   title: "Local shop | People",
-  description: "Merchant loyalty passes and checkout QR on People's Blockchain testnet.",
+  description: "Merchant loyalty passes and checkout QR on PEOPLE Blockchain testnet.",
   alternates: { canonical: "/lavka" },
   robots: { index: false, follow: false },
 };

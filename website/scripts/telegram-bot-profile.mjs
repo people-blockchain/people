@@ -36,75 +36,75 @@ export const BOT_NAME = "People Blockchain Helper";
 export const PROFILE = {
   en: {
     name: BOT_NAME,
-    shortDescription: "Official People's Blockchain helper: verify, support, bug reports.",
+    shortDescription: "Official PEOPLE Blockchain helper: verify, support, bug reports.",
     description:
-      "Official helper bot of People's Blockchain. /verify — confirm you are a real person, /support — ask a question, /bug — report a bug. The bot answers in the language of the site page you came from, otherwise in your Telegram language, with English as fallback.",
+      "Official helper bot of PEOPLE Blockchain. /verify — confirm you are a real person, /support — ask a question, /bug — report a bug. The bot answers in the language of the site page you came from, otherwise in your Telegram language, with English as fallback.",
   },
   ru: {
     name: BOT_NAME,
-    shortDescription: "Официальный помощник People's Blockchain: проверка, поддержка, баги.",
+    shortDescription: "Официальный помощник PEOPLE Blockchain: проверка, поддержка, баги.",
     description:
-      "Официальный бот-помощник People's Blockchain. /verify — подтвердить, что вы реальный человек, /support — задать вопрос, /bug — сообщить об ошибке. Бот отвечает на языке страницы сайта, с которой вы пришли, иначе на языке Telegram, с откатом на английский.",
+      "Официальный бот-помощник PEOPLE Blockchain. /verify — подтвердить, что вы реальный человек, /support — задать вопрос, /bug — сообщить об ошибке. Бот отвечает на языке страницы сайта, с которой вы пришли, иначе на языке Telegram, с откатом на английский.",
   },
   es: {
     name: BOT_NAME,
-    shortDescription: "Asistente oficial de People's Blockchain: verificar, soporte, errores.",
+    shortDescription: "Asistente oficial de PEOPLE Blockchain: verificar, soporte, errores.",
     description:
-      "Bot asistente oficial de People's Blockchain. /verify — confirma que eres una persona real, /support — haz una pregunta, /bug — reporta un error. El bot responde en el idioma de la página del sitio desde la que llegaste; si no, en tu idioma de Telegram, con el inglés como reserva.",
+      "Bot asistente oficial de PEOPLE Blockchain. /verify — confirma que eres una persona real, /support — haz una pregunta, /bug — reporta un error. El bot responde en el idioma de la página del sitio desde la que llegaste; si no, en tu idioma de Telegram, con el inglés como reserva.",
   },
   pt: {
     name: BOT_NAME,
-    shortDescription: "Assistente oficial da People's Blockchain: verificar, suporte, bugs.",
+    shortDescription: "Assistente oficial da PEOPLE Blockchain: verificar, suporte, bugs.",
     description:
-      "Bot assistente oficial da People's Blockchain. /verify — confirme que você é uma pessoa real, /support — faça uma pergunta, /bug — reporte um erro. O bot responde no idioma da página do site de onde você veio; caso contrário, no idioma do Telegram, com inglês como reserva.",
+      "Bot assistente oficial da PEOPLE Blockchain. /verify — confirme que você é uma pessoa real, /support — faça uma pergunta, /bug — reporte um erro. O bot responde no idioma da página do site de onde você veio; caso contrário, no idioma do Telegram, com inglês como reserva.",
   },
   fr: {
     name: BOT_NAME,
-    shortDescription: "Assistant officiel de People's Blockchain : vérifier, aide, bugs.",
+    shortDescription: "Assistant officiel de PEOPLE Blockchain : vérifier, aide, bugs.",
     description:
-      "Bot assistant officiel de People's Blockchain. /verify — confirmez que vous êtes une vraie personne, /support — posez une question, /bug — signalez un bug. Le bot répond dans la langue de la page du site d'où vous venez, sinon dans la langue de Telegram, avec l'anglais en secours.",
+      "Bot assistant officiel de PEOPLE Blockchain. /verify — confirmez que vous êtes une vraie personne, /support — posez une question, /bug — signalez un bug. Le bot répond dans la langue de la page du site d'où vous venez, sinon dans la langue de Telegram, avec l'anglais en secours.",
   },
   de: {
     name: BOT_NAME,
-    shortDescription: "Offizieller Helfer von People's Blockchain: Prüfen, Hilfe, Fehler.",
+    shortDescription: "Offizieller Helfer von PEOPLE Blockchain: Prüfen, Hilfe, Fehler.",
     description:
-      "Offizieller Helfer-Bot von People's Blockchain. /verify — bestätige, dass du ein echter Mensch bist, /support — stelle eine Frage, /bug — melde einen Fehler. Der Bot antwortet in der Sprache der aufgerufenen Website-Seite, sonst in deiner Telegram-Sprache, mit Englisch als Rückfall.",
+      "Offizieller Helfer-Bot von PEOPLE Blockchain. /verify — bestätige, dass du ein echter Mensch bist, /support — stelle eine Frage, /bug — melde einen Fehler. Der Bot antwortet in der Sprache der aufgerufenen Website-Seite, sonst in deiner Telegram-Sprache, mit Englisch als Rückfall.",
   },
   it: {
     name: BOT_NAME,
-    shortDescription: "Assistente ufficiale di People's Blockchain: verifica, supporto, bug.",
+    shortDescription: "Assistente ufficiale di PEOPLE Blockchain: verifica, supporto, bug.",
     description:
-      "Bot assistente ufficiale di People's Blockchain. /verify — conferma di essere una persona reale, /support — fai una domanda, /bug — segnala un bug. Il bot risponde nella lingua della pagina del sito da cui sei arrivato, altrimenti nella lingua di Telegram, con l'inglese come riserva.",
+      "Bot assistente ufficiale di PEOPLE Blockchain. /verify — conferma di essere una persona reale, /support — fai una domanda, /bug — segnala un bug. Il bot risponde nella lingua della pagina del sito da cui sei arrivato, altrimenti nella lingua di Telegram, con l'inglese come riserva.",
   },
   tr: {
     name: BOT_NAME,
-    shortDescription: "People's Blockchain resmî yardımcısı: doğrulama, destek, hata bildirimi.",
+    shortDescription: "PEOPLE Blockchain resmî yardımcısı: doğrulama, destek, hata bildirimi.",
     description:
-      "People's Blockchain'in resmî yardımcı botu. /verify — gerçek bir kişi olduğunuzu doğrulayın, /support — soru sorun, /bug — hata bildirin. Bot, geldiğiniz site sayfasının dilinde; yoksa Telegram dilinizde yanıtlar ve İngilizceye döner.",
+      "PEOPLE Blockchain'in resmî yardımcı botu. /verify — gerçek bir kişi olduğunuzu doğrulayın, /support — soru sorun, /bug — hata bildirin. Bot, geldiğiniz site sayfasının dilinde; yoksa Telegram dilinizde yanıtlar ve İngilizceye döner.",
   },
   vi: {
     name: BOT_NAME,
-    shortDescription: "Trợ lý chính thức của People's Blockchain: xác minh, hỗ trợ, báo lỗi.",
+    shortDescription: "Trợ lý chính thức của PEOPLE Blockchain: xác minh, hỗ trợ, báo lỗi.",
     description:
-      "Bot trợ lý chính thức của People's Blockchain. /verify — xác nhận bạn là người thật, /support — đặt câu hỏi, /bug — báo lỗi. Bot trả lời theo ngôn ngữ của trang web bạn đến từ đó, nếu không thì theo ngôn ngữ Telegram, dự phòng bằng tiếng Anh.",
+      "Bot trợ lý chính thức của PEOPLE Blockchain. /verify — xác nhận bạn là người thật, /support — đặt câu hỏi, /bug — báo lỗi. Bot trả lời theo ngôn ngữ của trang web bạn đến từ đó, nếu không thì theo ngôn ngữ Telegram, dự phòng bằng tiếng Anh.",
   },
   id: {
     name: BOT_NAME,
-    shortDescription: "Asisten resmi People's Blockchain: verifikasi, dukungan, laporkan bug.",
+    shortDescription: "Asisten resmi PEOPLE Blockchain: verifikasi, dukungan, laporkan bug.",
     description:
-      "Bot asisten resmi People's Blockchain. /verify — pastikan Anda orang sungguhan, /support — ajukan pertanyaan, /bug — laporkan bug. Bot menjawab dalam bahasa halaman situs asal Anda, jika tidak dalam bahasa Telegram, dengan bahasa Inggris sebagai cadangan.",
+      "Bot asisten resmi PEOPLE Blockchain. /verify — pastikan Anda orang sungguhan, /support — ajukan pertanyaan, /bug — laporkan bug. Bot menjawab dalam bahasa halaman situs asal Anda, jika tidak dalam bahasa Telegram, dengan bahasa Inggris sebagai cadangan.",
   },
   zh: {
     name: BOT_NAME,
-    shortDescription: "People's Blockchain 官方助手：验证、支持、报告错误。",
+    shortDescription: "PEOPLE Blockchain 官方助手：验证、支持、报告错误。",
     description:
-      "People's Blockchain 官方助手机器人。/verify —— 确认您是真人，/support —— 提问，/bug —— 报告错误。机器人会使用您来源网页的语言回复，否则使用您的 Telegram 语言，并回退到英语。",
+      "PEOPLE Blockchain 官方助手机器人。/verify —— 确认您是真人，/support —— 提问，/bug —— 报告错误。机器人会使用您来源网页的语言回复，否则使用您的 Telegram 语言，并回退到英语。",
   },
   ar: {
     name: BOT_NAME,
-    shortDescription: "مساعد People's Blockchain الرسمي: التحقق والدعم والإبلاغ عن الأخطاء.",
+    shortDescription: "مساعد PEOPLE Blockchain الرسمي: التحقق والدعم والإبلاغ عن الأخطاء.",
     description:
-      "بوت المساعدة الرسمي لـ People's Blockchain. /verify — أكّد أنك شخص حقيقي، /support — اطرح سؤالًا، /bug — أبلغ عن خطأ. يرد البوت بلغة صفحة الموقع التي أتيت منها، وإلا بلغة Telegram، مع الإنجليزية كخيار احتياطي.",
+      "بوت المساعدة الرسمي لـ PEOPLE Blockchain. /verify — أكّد أنك شخص حقيقي، /support — اطرح سؤالًا، /bug — أبلغ عن خطأ. يرد البوت بلغة صفحة الموقع التي أتيت منها، وإلا بلغة Telegram، مع الإنجليزية كخيار احتياطي.",
   },
 };
 

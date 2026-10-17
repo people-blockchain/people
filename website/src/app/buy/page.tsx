@@ -6,7 +6,7 @@ import buyEn from "@/lib/locales/surfaces/buy-en.json" with { type: "json" };
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `${buyEn.meta.title} | People's Blockchain`,
+  title: `${buyEn.meta.title} | PEOPLE Blockchain`,
   description: buyEn.meta.description,
   alternates: { canonical: "/buy" },
   openGraph: {

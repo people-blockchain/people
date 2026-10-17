@@ -1,6 +1,6 @@
 {
   "hero": {
-    "brandLine": "People — 为社区而生的区块链",
+    "brandLine": "PEOPLE — 为社区而生的区块链",
     "headlineMain": "为你的社区发行代币。",
     "headlineMainLines": [
       "为你的社区",
@@ -12,7 +12,7 @@
       "10% 给你的用户，",
       "而不是巨鲸。"
     ],
-    "sub": "People's Blockchain 让创作者从第一个区块起以公平定价发行代币，社区在共同增长的一切中获得内置份额。",
+    "sub": "PEOPLE Blockchain 让创作者从第一个区块起以公平定价发行代币，社区在共同增长的一切中获得内置份额。",
     "testnetBadge": "公开测试网已上线。尚未是主网。",
     "ctaCreate": "创建代币",
     "ctaWallet": "打开钱包",
@@ -120,7 +120,7 @@
   },
   "foundersTeaser": {
     "eyebrow": "百万创始人",
-    "lead": "已验证参与者获得编号、早期入场奖励，以及在 People's Blockchain 测试网上的活动积分。",
+    "lead": "已验证参与者获得编号、早期入场奖励，以及在 PEOPLE Blockchain 测试网上的活动积分。",
     "cta": "加入创始人计划",
     "href": "/founders",
     "titleWithNumber": "在 mainnet 前成为第 {{n}} 号创始人",

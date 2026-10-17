@@ -7,12 +7,12 @@ import { handleEvmCompatGet } from "@/lib/evm/ovn-compat";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 
 export const metadata: Metadata = {
-  title: "Tokens | People's Blockchain",
-  description: "All tokens on People's Blockchain: supply, pools and where to swap them.",
+  title: "Tokens | PEOPLE Blockchain",
+  description: "All tokens on PEOPLE Blockchain: supply, pools and where to swap them.",
   alternates: { canonical: "/explorer/tokens" },
   openGraph: {
     title: "Tokens",
-    description: "All tokens on People's Blockchain: supply, pools and where to swap them.",
+    description: "All tokens on PEOPLE Blockchain: supply, pools and where to swap them.",
     type: "website",
     siteName: SITE_NAME,
     url: "/explorer/tokens",

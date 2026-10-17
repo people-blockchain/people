@@ -117,7 +117,7 @@ for (const theme of THEMES) {
       // (DocumentTitle's swap does not stick — reproduced on /tokenomics and /how-it-works
       // too), so this only asserts the route got its own title and not the homepage's.
       expect(state.title).toMatch(/transparency|прозрачность/i);
-      expect(state.title).not.toBe("People's Blockchain");
+      expect(state.title).not.toBe("PEOPLE Blockchain");
 
       await page.screenshot({
         path: path.join(outDir, `transparency-ru-${width}-${theme}.jpg`),

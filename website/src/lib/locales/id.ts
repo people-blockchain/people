@@ -450,7 +450,7 @@ export const id: LocaleContent = {
     "specDesc": "Pembagian biaya jaringan disetujui (30/25/20/10/15/0). Protokol produksi tidak berubah."
   },
   "footer": {
-    "desc": "People adalah blockchain untuk komunitas. Biaya dibayar dalam PPL, dan sebagian dari setiap biaya kembali ke orang-orang yang ikut serta.",
+    "desc": "PEOPLE adalah blockchain untuk komunitas. Biaya dibayar dalam PPL, dan sebagian dari setiap biaya kembali ke orang-orang yang ikut serta.",
     "architectureCol": "Arsitektur",
     "protocolCol": "Protokol",
     "homeCta": "Kembali ke Beranda",

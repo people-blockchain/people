@@ -1258,7 +1258,7 @@ export const tr: LocaleContent = {
     "specDesc": "Onaylı ağ ücreti bölünmesi (30/25/20/10/15/0). Üretim protokolü değişmedi."
   },
   "footer": {
-    "desc": "People topluluklar için bir blokzincirdir. Ücretler PPL ile ödenir ve her ücretin bir kısmı katılanlara geri döner.",
+    "desc": "PEOPLE topluluklar için bir blokzincirdir. Ücretler PPL ile ödenir ve her ücretin bir kısmı katılanlara geri döner.",
     "architectureCol": "Mimari",
     "protocolCol": "Protokol",
     "homeCta": "Ana Sayfaya Dön",

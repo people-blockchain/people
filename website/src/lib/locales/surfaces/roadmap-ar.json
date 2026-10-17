@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "خارطة الطريق",
-    "description": "ما هو مُفعَّل وقيد التنفيذ ومخطط دون موافقة نهائية على People's Blockchain."
+    "description": "ما هو مُفعَّل وقيد التنفيذ ومخطط دون موافقة نهائية على PEOPLE Blockchain."
   },
   "intro": "الحالات من docs/ROADMAP.md.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "شبكة People's Blockchain التجريبية (EVM)",
-      "summary": "توسيع شبكة People's Blockchain التجريبية على EVM. المرحلة 1 (chain/) جارية؛ الشبكة التجريبية العامة ما زالت على عقدة OVN مع RPC للقراءة فقط."
+      "title": "شبكة PEOPLE Blockchain التجريبية (EVM)",
+      "summary": "توسيع شبكة PEOPLE Blockchain التجريبية على EVM. المرحلة 1 (chain/) جارية؛ الشبكة التجريبية العامة ما زالت على عقدة OVN مع RPC للقراءة فقط."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "وحدات البروتوكول تعمل على عقدة الاختبار؛ الهدف Solidity مُدقَّق على شبكة People's Blockchain التجريبية، بما فيها AMM بأسلوب Uniswap V2."
+      "summary": "وحدات البروتوكول تعمل على عقدة الاختبار؛ الهدف Solidity مُدقَّق على شبكة PEOPLE Blockchain التجريبية، بما فيها AMM بأسلوب Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

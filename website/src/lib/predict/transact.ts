@@ -13,7 +13,7 @@ export async function sendPredictTransaction(provider: PredictProvider, expected
   if (walletGenesis?.hash?.toLowerCase() !== d.genesisHash.toLowerCase()) throw new Error("genesis_mismatch");
   const walletCode = await provider.request({ method: "eth_getCode", params: [d.address, "latest"] });
   if (typeof walletCode !== "string" || !/^0x[0-9a-f]+$/i.test(walletCode) || keccak256(walletCode as Hex).toLowerCase() !== d.runtimeCodeHash.toLowerCase()) throw new Error("contract_mismatch");
-  const chain = { id: CHAIN_ID, name: "People's Blockchain testnet", nativeCurrency: { name: "People", symbol: "PPL", decimals: 18 }, rpcUrls: { default: { http: ["/api/evm/rpc"] } } } as const;
+  const chain = { id: CHAIN_ID, name: "PEOPLE Blockchain testnet", nativeCurrency: { name: "People", symbol: "PPL", decimals: 18 }, rpcUrls: { default: { http: ["/api/evm/rpc"] } } } as const;
   const client = createPublicClient({ chain, transport: http("/api/evm/rpc", { retryCount: 0 }) });
   if (await client.getChainId() !== CHAIN_ID) throw new Error("wrong_chain");
   const block = await client.getBlock();

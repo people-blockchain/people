@@ -1,7 +1,7 @@
 {
   "tag": "FIDELIDADE",
   "title": "Loja local",
-  "lead": "Crie um programa de visitas em minutos. O cliente escaneia um QR no caixa — sem jargão cripto, com People's Blockchain por baixo.",
+  "lead": "Crie um programa de visitas em minutos. O cliente escaneia um QR no caixa — sem jargão cripto, com PEOPLE Blockchain por baixo.",
   "contractsOff": "Contratos de fidelidade ainda não implantados neste testnet. Execute o workflow Lavka após o merge.",
   "signInCta": "Entrar",
   "walletCta": "Vincular carteira",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Liberar para a loja",
   "refundEscrow": "Pedir reembolso",
   "disputeEscrow": "Abrir disputa",
-  "escrowLocked": "Fundos bloqueados no testnet People's Blockchain.",
+  "escrowLocked": "Fundos bloqueados no testnet PEOPLE Blockchain.",
   "visitsLeft": "Visitas restantes: {{n}}",
   "founderWelcome": "Você entrou no Million Founders como #{{n}}.",
   "founderAlready": "Fundador #{{n}}",

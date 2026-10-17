@@ -10,12 +10,12 @@ import { resolveNodeWebSocketUrl, resolvePublicChainId } from "@/lib/node-rpc";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Explorer | People's Blockchain",
+  title: "Explorer | PEOPLE Blockchain",
   description: "Blocks, transactions, addresses, tokens, and NFTs.",
   alternates: { canonical: "/explorer" },
   openGraph: {
     title: "Explorer",
-    description: "Search the People's Blockchain node for blocks, transactions, and addresses.",
+    description: "Search the PEOPLE Blockchain node for blocks, transactions, and addresses.",
     type: "website",
     siteName: SITE_NAME,
     url: "/explorer",
