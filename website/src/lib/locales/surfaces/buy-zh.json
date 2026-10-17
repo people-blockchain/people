@@ -8,7 +8,7 @@
     "headline": "以早期参与者价格购买 PPL",
     "sub": "价格随每次购买上升——越早买，付得越少。",
     "statsTitle": "曲线实时数据",
-    "statsNote": "从销售合约读取。未有真实链上数据前不显示任何内容。",
+    "statsNote": "",
     "ctaScroll": "曲线如何运作"
   },
   "stats": {
@@ -33,7 +33,7 @@
     "youGet": "您获得",
     "avgPrice": "平均价格",
     "priceAfter": "购买后的价格",
-    "estimate": "按已公布公式估算。金额在签名前确认。",
+    "estimate": "",
     "limitPerBuy": "单次最多 {amount}",
     "limitPerDay": "每人每天最多 {amount}",
     "cooldown": "交易间隔 {seconds} 秒",
@@ -42,9 +42,9 @@
     "cta": "连接钱包并购买",
     "ctaDisabled": "销售尚未开放",
     "ctaConnected": "购买 PPL",
-    "disabledNote": "销售合约尚未部署，无法购买。连接钱包是安全的，不构成任何承诺。",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "您可随时将 PPL 卖回曲线，扣除 {fee} 费用。",
+    "sellBack": "仅已验证用户可从储备回购：每批需持有 30 天，有每日限额及 {fee} 费用；销售结束时关闭。",
     "payModeLabel": "支付方式",
     "payOnBase": "在 Base 支付",
     "payFromOther": "从其他网络支付",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche、Solana 和 Tron",
     "scrollToForm": "返回购买表单"
   },
+  "whyPriceRises": {
+    "title": "价格为何上涨",
+    "noManualLead": "PEOPLE 团队不会手动定价或提价。销售合约中的公开公式自动决定价格：每次购买都会沿价格曲线（bonding curve）推动价格。任何人都无法手动改价。",
+    "mechanism": "与 Uniswap、Bancor（2017 年先驱）、pump.fun 以及 Base 上的 Virtuals Protocol 相同的公式定价原则：这里价格仅取决于已售出的 PPL 数量，透明且可在链上验证。",
+    "example": "根据已公布参数：起始每 PPL {startPrice}，售出 {midSold} PPL 后 {midPrice}（约筹集 {midRaised}），销售结束时 {gradPrice}（{gradRaised} 已筹集）。",
+    "explainerLink": "曲线如何运作",
+    "reserve": "购买资金留在 Base 上的销售储备中，用于从持有者处回购 PPL——已验证用户在持有 30 天后可回购，并有每日限额。",
+    "chartAria": "PPL 销售价格曲线：价格与已售 PPL",
+    "chartAxisSold": "已售 PPL",
+    "chartAxisPrice": "价格，$",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "公式",
     "title": "一条曲线，人人可见",
@@ -64,14 +76,14 @@
     "axisRaised": "已募集，$",
     "axisPrice": "每 PPL 价格，$",
     "youAreHere": "您在这里",
-    "notOpen": "曲线随销售开放。形状与下方标记由公式固定。",
+    "notOpen": "",
     "marker": "已募集 {raised}",
     "markerPrice": "每 PPL {price}",
     "markerSold": "已售 {sold} PPL",
-    "graduationTag": "毕业",
+    "graduationTag": "销售结束",
     "ceilingNote": "仅当全部 {supply} PPL 售完才会达到 {ceiling} 上限。曲线会先关闭，在募集 {graduation} 时。",
     "feedTitle": "近期买卖",
-    "feedEmpty": "尚无交易——销售未开放。",
+    "feedEmpty": "尚无交易。",
     "feedBuy": "买",
     "feedSell": "卖",
     "feedLink": "查看",
@@ -86,8 +98,8 @@
         "body": "购买瞬间 PPL 即记入您在 PEOPLE 网络上的地址。曲线上无锁仓，无等待名单。"
       },
       {
-        "title": "可随时卖回曲线",
-        "body": "改变主意？可随时按现价将 PPL 卖回曲线，扣除 {fee} 费用——该费用用于 PPL 回购，而非团队。卖回支付为 {payoutNetwork} 上的 {payoutStable}（Coinbase 的网络；Circle 发行的 USDC，与 Ethereum 或 Polygon 上的美元相同，只是更快更便宜）。也可选择其他网络；跨链桥需几分钟。"
+        "title": "从储备卖回",
+        "body": "已验证用户可在每批持有 30 天后、在每日限额内并以 {fee} 费用将 PPL 卖回储备；销售结束 后关闭。以 {payoutNetwork} 上的 {payoutStable} 支付。"
       },
       {
         "title": "转账随网络全面上线开放",
@@ -108,7 +120,7 @@
         "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。最多 {days} 天内随时买卖。"
       },
       {
-        "title": "{graduation} 时毕业",
+        "title": "销售结束于 {graduation}",
         "body": "曲线停止。募集 {liquidityShare} 与最后曲线价格的 PPL 以该价格进入公开 DEX 池，无跳价。LP 锁定 {lock} 个月。{multisigShare} 进入多签并公开报告。"
       },
       {
@@ -126,8 +138,8 @@
     "title": "合约、资金与代码",
     "lead": "销售合约、销售资金流向、代码安全审查及团队代币解锁方式。",
     "saleContract": "销售合约",
-    "saleContractPending": "尚未部署",
-    "saleContractNote": "部署并验证后地址将立即在此公布。",
+    "saleContractPending": "销售开始前，合约地址将在此公布。",
+    "saleContractNote": "",
     "verifiedSource": "已验证源码",
     "auditTitle": "安全审查",
     "auditLine": "审计方：Claude Opus 5.5、GPT Astra、Fable 5.1",
@@ -145,12 +157,12 @@
     "title": "问题与解答",
     "items": [
       {
-        "q": "改变主意？",
-        "a": "可随时按当前曲线价格将 PPL 卖回曲线，扣除 {fee} 费用，用于 PPL 回购。"
+        "q": "可以将 PPL 卖回吗？",
+        "a": "仅限已验证用户：每批持有 30 天、每日限额及 {fee} 费用；销售结束 后关闭。"
       },
       {
         "q": "{ceiling} 上限是永久的吗？",
-        "a": "不是。仅在曲线运行期间适用。曲线在募集 {graduation} 时关闭，约每 PPL {graduationPrice}，低于上限。毕业后池价由自由市场决定，无上下限。"
+        "a": "不是。仅在曲线运行期间适用。曲线在募集 {graduation} 时关闭，约每 PPL {graduationPrice}，低于上限。销售结束后池价由自由市场决定，无上下限。"
       },
       {
         "q": "如何将 People 网络添加到钱包？",

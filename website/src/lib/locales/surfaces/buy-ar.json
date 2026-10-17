@@ -8,7 +8,7 @@
     "headline": "اشترِ PPL بسعر المشارك المبكر",
     "sub": "السعر يرتفع مع كل شراء — كلما اشتريت أبكر، دفعت أقل.",
     "statsTitle": "مباشر على المنحنى",
-    "statsNote": "يُقرأ من عقد البيع. لا يُعرض شيء حتى توجد بيانات on-chain حقيقية.",
+    "statsNote": "",
     "ctaScroll": "كيف يعمل المنحنى"
   },
   "stats": {
@@ -33,7 +33,7 @@
     "youGet": "تحصل على",
     "avgPrice": "السعر المتوسط",
     "priceAfter": "السعر بعد شرائك",
-    "estimate": "تقدير من الصيغة المنشورة. يُؤكد المبلغ قبل التوقيع.",
+    "estimate": "",
     "limitPerBuy": "حتى {amount} لكل شراء",
     "limitPerDay": "حتى {amount} للشخص يوميًا",
     "cooldown": "{seconds} ث بين الصفقات",
@@ -42,9 +42,9 @@
     "cta": "ربط المحفظة والشراء",
     "ctaDisabled": "البيع لم يُفتح بعد",
     "ctaConnected": "شراء PPL",
-    "disabledNote": "عقد البيع غير منشور بعد، فلا يمكن الشراء. ربط المحفظة آمن ولا يلزمك بشيء.",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "يمكنك بيع PPL للمنحنى في أي وقت، ناقص رسوم {fee}.",
+    "sellBack": "إعادة الشراء من الاحتياطي للمستخدمين الموثَّقين فقط: كل دفعة تحتاج 30 يوماً احتفاظ، مع حدود يومية ورسوم {fee}؛ يُغلق عند إنهاء البيع.",
     "payModeLabel": "طريقة الدفع",
     "payOnBase": "الدفع على Base",
     "payFromOther": "الدفع من شبكة أخرى",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum وBNB Chain وPolygon وArbitrum وOptimism وAvalanche وSolana وTron",
     "scrollToForm": "العودة إلى نموذج الشراء"
   },
+  "whyPriceRises": {
+    "title": "لماذا يرتفع السعر",
+    "noManualLead": "فريق PEOPLE لا يحدد السعر ولا يرفعه. صيغة عامة في عقد البيع الذكي تضبطه تلقائياً: كل عملية شراء تحرّك السعر على منحنى السعر (bonding curve). لا يمكن لأحد تغيير السعر يدوياً.",
+    "mechanism": "نفس مبدأ التسعير بالصيغة مثل Uniswap وBancor (رائد، 2017) وpump.fun وVirtuals Protocol على Base: هنا السعر يعتمد فقط على كمية PPL المباعة، بشفافية ويمكن التحقق منه على السلسلة.",
+    "example": "من المعاملات المنشورة: {startPrice} لكل PPL في البداية، {midPrice} بعد بيع {midSold} PPL (~{midRaised} مُجمَّع)، و{gradPrice} عند إنهاء البيع ({gradRaised} مُجمَّع).",
+    "explainerLink": "كيف يعمل المنحنى",
+    "reserve": "تبقى أموال المشتريات في احتياطي البيع على Base وتُستخدم لشراء PPL من الحاملين — إعادة شراء للمستخدمين الموثَّقين بعد 30 يوماً احتفاظ، مع حدود يومية.",
+    "chartAria": "منحنى سعر بيع PPL: السعر مقابل PPL المباع",
+    "chartAxisSold": "PPL مباع",
+    "chartAxisPrice": "السعر، $",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "الصيغة",
     "title": "منحنى واحد، مرئي للجميع",
@@ -64,14 +76,14 @@
     "axisRaised": "المجموع، $",
     "axisPrice": "السعر لكل PPL، $",
     "youAreHere": "أنت هنا",
-    "notOpen": "يُفتح المنحنى مع البيع. شكله والعلامات أدناه ثابتة بالصيغة.",
+    "notOpen": "",
     "marker": "جُمع {raised}",
     "markerPrice": "{price} لكل PPL",
     "markerSold": "بِيع {sold} PPL",
-    "graduationTag": "التخرج",
+    "graduationTag": "إنهاء البيع",
     "ceilingNote": "سقف {ceiling} يُبلغ فقط إذا بِيعت كل {supply} PPL. يُغلق المنحنى أولًا عند جمع {graduation}.",
     "feedTitle": "آخر عمليات الشراء والبيع",
-    "feedEmpty": "لا صفقات بعد — البيع لم يُفتح.",
+    "feedEmpty": "لا صفقات بعد.",
     "feedBuy": "شراء",
     "feedSell": "بيع",
     "feedLink": "عرض",
@@ -86,8 +98,8 @@
         "body": "يُسجَّل PPL لك على شبكة PEOPLE لحظة الشراء. بلا قفل على المنحنى، بلا قائمة انتظار."
       },
       {
-        "title": "بيع للمنحنى في أي وقت",
-        "body": "غيّرت رأيك؟ بِع PPL للمنحنى في أي وقت بالسعر الحالي، ناقص رسوم {fee} — وتذهب الرسوم لإعادة شراء PPL، لا للفريق. دفع إعادة البيع بـ {payoutStable} على {payoutNetwork} (شبكة Coinbase؛ USDC من Circle، نفس الدollar على Ethereum أو Polygon، أسرع وأرخص). أو اختر شبكة أخرى؛ الجسر دقائق."
+        "title": "البيع للاحتياطي",
+        "body": "المستخدمون الموثَّقون يمكنهم بيع PPL للاحتياطي بعد احتفاظ 30 يوماً لكل دفعة، مع حدود يومية ورسوم {fee}؛ يُغلق عند إنهاء البيع. الدفع بـ {payoutStable} على {payoutNetwork}."
       },
       {
         "title": "التحويلات تُفتح مع الإطلاق الكامل للشبكة",
@@ -108,7 +120,7 @@
         "body": "{supply} PPL على منحنى علني من {start} حتى سقف {ceiling}. اشترِ وبِع في أي وقت، حتى {days} يومًا."
       },
       {
-        "title": "التخرج عند {graduation}",
+        "title": "إنهاء البيع عند {graduation}",
         "body": "يتوقف المنحنى. {liquidityShare} من المجموع إضافة PPL بآخر سعر يدخلان تجمع DEX علنيًا بنفس السعر، بلا قفزة. LP مقفلة {lock} شهرًا. {multisigShare} للmultisig بتقارير علنية."
       },
       {
@@ -126,8 +138,8 @@
     "title": "العقد والمال والكود",
     "lead": "عقد البيع، أين يذهب مال البيع، مراجعات أمان الكود، وكيف تُفتح رموز الفريق.",
     "saleContract": "عقد البيع",
-    "saleContractPending": "لم يُنشر بعد",
-    "saleContractNote": "يُنشر العنوان هنا فور النشر والتحقق.",
+    "saleContractPending": "سيُعرض عنوان العقد هنا قبل فتح البيع.",
+    "saleContractNote": "",
     "verifiedSource": "مصدر مُتحقَّق",
     "auditTitle": "مراجعات الأمان",
     "auditLine": "تدقيق: Claude Opus 5.5، GPT Astra، Fable 5.1",
@@ -145,12 +157,12 @@
     "title": "أسئلة وأجوبة",
     "items": [
       {
-        "q": "غيّرت رأيك؟",
-        "a": "بِع PPL للمنحنى في أي وقت بالسعر الحالي للمنحنى، ناقص رسوم {fee}، وتذهب لإعادة شراء PPL."
+        "q": "هل يمكنني بيع PPL مرة أخرى؟",
+        "a": "للمستخدمين الموثَّقين فقط: احتفاظ 30 يوماً لكل دفعة، حدود يومية ورسوم {fee}؛ يُغلق عند إنهاء البيع."
       },
       {
         "q": "هل سقف {ceiling} دائم؟",
-        "a": "لا. ينطبق أثناء عمل المنحنى. يُغلق عند جمع {graduation}، حوالي {graduationPrice} لكل PPL، دون السقف. بعد التخرج، سعر ال pool يحدده السوق الحر، بلا سقف ولا أرضية."
+        "a": "لا. ينطبق أثناء عمل المنحنى. يُغلق عند جمع {graduation}، حوالي {graduationPrice} لكل PPL، دون السقف. بعد إنهاء البيع، سعر ال pool يحدده السوق الحر، بلا سقف ولا أرضية."
       },
       {
         "q": "كيف أضيف شبكة People للمحفظة؟",

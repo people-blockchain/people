@@ -73,6 +73,7 @@ export function LanguageSwitcher({
     return (
       <button
         type="button"
+        data-testid={`lang-option-${option.code}`}
         onClick={() => {
           onChange(option.code as Language);
           setOpen(false);
@@ -150,6 +151,7 @@ export function LanguageSwitcher({
       <button
         ref={triggerRef}
         type="button"
+        data-testid="lang-switcher-trigger"
         onClick={() => setOpen((state) => !state)}
         onKeyDown={onTriggerKeyDown}
         aria-haspopup="true"

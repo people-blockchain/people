@@ -8,7 +8,7 @@
     "headline": "PPL'yi erken katılımcı fiyatından alın",
     "sub": "Fiyat her alımla yükselir — ne kadar erken alırsanız o kadar az ödersiniz.",
     "statsTitle": "Eğrida canlı",
-    "statsNote": "Satış sözleşmesinden okunur. Gerçek zincir üstü veri olana kadar hiçbir şey gösterilmez.",
+    "statsNote": "",
     "ctaScroll": "Eğri nasıl çalışır"
   },
   "stats": {
@@ -33,7 +33,7 @@
     "youGet": "Alacağınız",
     "avgPrice": "Ortalama fiyat",
     "priceAfter": "Alımınızdan sonraki fiyat",
-    "estimate": "Yayınlanan formüle göre tahmin. Tutar imzadan önce onaylanır.",
+    "estimate": "",
     "limitPerBuy": "Alım başına en fazla {amount}",
     "limitPerDay": "Kişi başına günde en fazla {amount}",
     "cooldown": "İşlemler arası {seconds} sn",
@@ -42,9 +42,9 @@
     "cta": "Cüzdan bağla ve al",
     "ctaDisabled": "Satış henüz açık değil",
     "ctaConnected": "PPL satın al",
-    "disabledNote": "Satış sözleşmesi henüz deploy edilmedi, alım yapılamaz. Cüzdan bağlamak güvenlidir ve sizi hiçbir şeye bağlamaz.",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "PPL'yi istediğiniz zaman eğriye geri satabilirsiniz, {fee} ücret hariç.",
+    "sellBack": "Rezervden geri alım yalnızca doğrulanmış kullanıcılar için: her lot için 30 gün elde tutma, günlük limitler ve {fee} ücreti; satış tamamlanınca kapanır.",
     "payModeLabel": "Ödeme yöntemi",
     "payOnBase": "Base'de öde",
     "payFromOther": "Başka bir ağdan öde",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana ve Tron",
     "scrollToForm": "Satın alma formuna dön"
   },
+  "whyPriceRises": {
+    "title": "Fiyat neden yükselir",
+    "noManualLead": "PEOPLE ekibi fiyatı belirlemez veya yükseltmez. Satış sözleşmesindeki açık formül otomatik ayarlar: her alım fiyatı fiyat eğrisi (bonding curve) üzerinde kaydırır. Kimse fiyatı elle değiştiremez.",
+    "mechanism": "Uniswap, Bancor (öncü, 2017), pump.fun ve Base’deki Virtuals Protocol ile aynı formül tabanlı fiyatlama: burada fiyat yalnızca satılan PPL miktarına bağlıdır; şeffaf ve zincirde doğrulanabilir.",
+    "example": "Yayımlanan parametrelerle: başta PPL için {startPrice}, {midSold} PPL satıldıktan sonra {midPrice} (~{midRaised} toplanan) ve satışın tamamlanmasında {gradPrice} ({gradRaised} toplanan).",
+    "explainerLink": "Eğri nasıl çalışır",
+    "reserve": "Alımlardan gelen fonlar Base’deki satış rezervinde kalır ve elde edenlerden PPL geri almak için kullanılır — doğrulanmış kullanıcılar için 30 günlük elde tutma sonrası geri alım, günlük limitlerle.",
+    "chartAria": "PPL satış fiyat eğrisi: fiyat ve satılan PPL",
+    "chartAxisSold": "Satılan PPL",
+    "chartAxisPrice": "Fiyat, $",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "Formül",
     "title": "Herkesin gördüğü tek eğri",
@@ -64,14 +76,14 @@
     "axisRaised": "Toplanan, $",
     "axisPrice": "PPL başına fiyat, $",
     "youAreHere": "Buradasınız",
-    "notOpen": "Eğri satışla açılır. Şekil ve aşağıdaki işaretler formülle sabittir.",
+    "notOpen": "",
     "marker": "{raised} toplandı",
     "markerPrice": "PPL başına {price}",
     "markerSold": "{sold} PPL satıldı",
-    "graduationTag": "Mezuniyet",
+    "graduationTag": "Satışın tamamlanması",
     "ceilingNote": "{ceiling} tavanına yalnızca tüm {supply} PPL satılırsa ulaşılır. Eğri önce {graduation} toplanınca kapanır.",
     "feedTitle": "Son alım ve satımlar",
-    "feedEmpty": "Henüz işlem yok — satış açılmadı.",
+    "feedEmpty": "Henüz işlem yok.",
     "feedBuy": "Alım",
     "feedSell": "Satım",
     "feedLink": "Görüntüle",
@@ -86,8 +98,8 @@
         "body": "PPL, alım anında PEOPLE ağında size kaydedilir. Eğrida kilitleme yok, bekleme listesi yok."
       },
       {
-        "title": "İstediğiniz zaman eğriye geri satış",
-        "body": "Fikriniz mi değişti? PPL'yi istediğiniz zaman güncel fiyattan eğriye satın, {fee} ücret düşülür — ücret PPL geri alıma gider, ekibe değil. Geri satış ödemesi {payoutStable} olarak {payoutNetwork} üzerinde (Coinbase ağı; Circle USDC, Ethereum veya Polygon'daki doların aynısı, daha hızlı ve ucuz). Veya başka ağ seçin; köprü birkaç dakika sürer."
+        "title": "Rezervden geri alım",
+        "body": "Doğrulanmış kullanıcılar, lot başına 30 günlük hold, günlük limitler ve {fee} ücretle PPL’yi rezerve geri satabilir. Satış satışın tamamlanması olduğunda kapanır. Ödeme {payoutNetwork} üzerinde {payoutStable}."
       },
       {
         "title": "Transferler tam ağ lansmanıyla açılır",
@@ -108,7 +120,7 @@
         "body": "{supply} PPL, {start}'ten {ceiling} tavanına kadar halka açık eğride. {days} güne kadar istediğiniz zaman alın ve satın."
       },
       {
-        "title": "{graduation} mezuniyeti",
+        "title": "Satışın tamamlanması: {graduation}",
         "body": "Eğri durur. Toplananın {liquidityShare}'i ve son eğri fiyatındaki PPL, tam o fiyattan sıçrama olmadan halka açık DEX havuzuna gider. LP {lock} ay kilitli. {multisigShare} multisig'e, kamu raporlamasıyla."
       },
       {
@@ -126,8 +138,8 @@
     "title": "Sözleşme, para ve kod",
     "lead": "Satış sözleşmesi, satış gelirinin gittiği yer, kodun güvenlik incelemeleri ve ekip tokenlarının açılması.",
     "saleContract": "Satış sözleşmesi",
-    "saleContractPending": "Henüz deploy edilmedi",
-    "saleContractNote": "Adres, deploy ve doğrulama anında burada yayınlanır.",
+    "saleContractPending": "Satış açılmadan önce sözleşme adresi burada listelenecek.",
+    "saleContractNote": "",
     "verifiedSource": "Doğrulanmış kaynak kod",
     "auditTitle": "Güvenlik incelemeleri",
     "auditLine": "Denetleyen: Claude Opus 5.5, GPT Astra, Fable 5.1",
@@ -145,12 +157,12 @@
     "title": "Sorular, yanıtlar",
     "items": [
       {
-        "q": "Fikriniz mi değişti?",
-        "a": "PPL'yi istediğiniz zaman güncel eğri fiyatından eğriye satın, {fee} ücret düşülür; ücret PPL geri alıma gider."
+        "q": "PPL’yi geri satabilir miyim?",
+        "a": "Yalnızca doğrulanmış kullanıcılar: lot başına 30 günlük hold, günlük limitler ve {fee} ücret. Satış satışın tamamlanması olduğunda kapanır."
       },
       {
         "q": "{ceiling} tavanı kalıcı mı?",
-        "a": "Hayır. Eğri çalışırken geçerlidir. Eğri {graduation} toplanınca, PPL başına yaklaşık {graduationPrice} ile tavanın altında kapanır. Mezuniyetten sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
+        "a": "Hayır. Eğri çalışırken geçerlidir. Eğri {graduation} toplanınca, PPL başına yaklaşık {graduationPrice} ile tavanın altında kapanır. Satış tamamlandıktan sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
       },
       {
         "q": "People ağını cüzdanıma nasıl eklerim?",
