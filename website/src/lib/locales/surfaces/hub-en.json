@@ -153,8 +153,8 @@
   "whatIs": {
     "id": "what-is",
     "tag": "WHAT",
-    "title": "What is People's Blockchain?",
-    "summary": "People's Blockchain is community infrastructure: ordinary devices for participation, protocol-level creation of tokens and projects, and Proof-of-Stake validators for block production. Participants are not validators.",
+    "title": "What is PEOPLE Blockchain?",
+    "summary": "PEOPLE Blockchain is community infrastructure: ordinary devices for participation, protocol-level creation of tokens and projects, and Proof-of-Stake validators for block production. Participants are not validators.",
     "items": [
       {
         "id": "consensus",
@@ -267,7 +267,7 @@
     "id": "ppl",
     "tag": "NATIVE ASSET",
     "title": "People (PPL)",
-    "summary": "People is the native asset of People's Blockchain. Ticker: PPL.",
+    "summary": "People is the native asset of PEOPLE Blockchain. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",

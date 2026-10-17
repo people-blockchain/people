@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "路线图",
-    "description": "People's Blockchain 已上线、进行中及待批准的计划。"
+    "description": "PEOPLE Blockchain 已上线、进行中及待批准的计划。"
   },
   "intro": "状态与 docs/ROADMAP.md 一致。",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "People's Blockchain 测试网（EVM）",
-      "summary": "在 EVM 上扩展 People's Blockchain 测试网。阶段 1（chain/）进行中；当前公开测试网仍在 OVN 节点上，RPC 只读。"
+      "title": "PEOPLE Blockchain 测试网（EVM）",
+      "summary": "在 EVM 上扩展 PEOPLE Blockchain 测试网。阶段 1（chain/）进行中；当前公开测试网仍在 OVN 节点上，RPC 只读。"
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "协议模块已在测试网节点运行；目标是在 People's Blockchain 测试网上部署经审计的 Solidity，包括 Uniswap V2 风格 AMM。"
+      "summary": "协议模块已在测试网节点运行；目标是在 PEOPLE Blockchain 测试网上部署经审计的 Solidity，包括 Uniswap V2 风格 AMM。"
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

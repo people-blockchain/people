@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Lộ trình",
-    "description": "Đang chạy, đang làm và dự kiến chưa được phê duyệt trên People's Blockchain."
+    "description": "Đang chạy, đang làm và dự kiến chưa được phê duyệt trên PEOPLE Blockchain."
   },
   "intro": "Trạng thái khớp docs/ROADMAP.md.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "Testnet People's Blockchain (EVM)",
-      "summary": "Mở rộng testnet People's Blockchain trên EVM. Giai đoạn 1 (chain/) đang làm; testnet công khai hiện vẫn trên nút OVN với RPC chỉ đọc."
+      "title": "Testnet PEOPLE Blockchain (EVM)",
+      "summary": "Mở rộng testnet PEOPLE Blockchain trên EVM. Giai đoạn 1 (chain/) đang làm; testnet công khai hiện vẫn trên nút OVN với RPC chỉ đọc."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Các module giao thức đã chạy trên nút testnet; mục tiêu là Solidity đã kiểm toán trên testnet People's Blockchain, gồm AMM kiểu Uniswap V2."
+      "summary": "Các module giao thức đã chạy trên nút testnet; mục tiêu là Solidity đã kiểm toán trên testnet PEOPLE Blockchain, gồm AMM kiểu Uniswap V2."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

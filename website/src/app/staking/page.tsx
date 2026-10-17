@@ -5,9 +5,9 @@ import { StakingApp } from "@/components/staking/StakingApp";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Staking | People's Blockchain",
+  title: "Staking | PEOPLE Blockchain",
   description:
-    "Delegate test PPL to a validator on People's Blockchain testnet, earn a share of rewards, and help secure the network.",
+    "Delegate test PPL to a validator on PEOPLE Blockchain testnet, earn a share of rewards, and help secure the network.",
   alternates: { canonical: "/staking" },
   openGraph: {
     title: "Stake PPL",

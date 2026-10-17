@@ -1258,7 +1258,7 @@ export const es: LocaleContent = {
     "specDesc": "Reparto de comisiones de red aprobado (30/25/20/10/15/0). El protocolo de producción no cambia."
   },
   "footer": {
-    "desc": "People es una blockchain para comunidades. Las comisiones se pagan en PPL y parte de cada comisión vuelve a quienes participan.",
+    "desc": "PEOPLE es una blockchain para comunidades. Las comisiones se pagan en PPL y parte de cada comisión vuelve a quienes participan.",
     "architectureCol": "Arquitectura",
     "protocolCol": "Protocolo",
     "homeCta": "Volver al inicio",

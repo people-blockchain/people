@@ -5,12 +5,12 @@ import { RoadmapPublic } from "@/components/roadmap/RoadmapPublic";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Roadmap | People's Blockchain",
-  description: "What is live, in progress, and planned on People's Blockchain.",
+  title: "Roadmap | PEOPLE Blockchain",
+  description: "What is live, in progress, and planned on PEOPLE Blockchain.",
   alternates: { canonical: "/roadmap" },
   openGraph: {
     title: "Roadmap",
-    description: "Product roadmap statuses for People's Blockchain.",
+    description: "Product roadmap statuses for PEOPLE Blockchain.",
     type: "website",
     siteName: SITE_NAME,
     url: "/roadmap",

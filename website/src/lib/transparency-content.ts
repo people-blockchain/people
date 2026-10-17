@@ -93,9 +93,9 @@ export type TransparencyCopy = {
 
 const en: TransparencyCopy = {
   meta: {
-    title: "Team & transparency | People's Blockchain",
+    title: "Team & transparency | PEOPLE Blockchain",
     description:
-      "How People's Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) and a third-party security audit before mainnet.",
+      "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) and a third-party security audit before mainnet.",
   },
   hero: {
     eyebrow: "TRANSPARENCY",
@@ -106,7 +106,7 @@ const en: TransparencyCopy = {
   investors: {
     eyebrow: "FUNDING",
     title: "No investors",
-    body: "People's Blockchain has no venture capital and no private investors. Development is self-funded, and there are no early investor allocations: nobody holds tokens for money that was invested before launch.",
+    body: "PEOPLE Blockchain has no venture capital and no private investors. Development is self-funded, and there are no early investor allocations: nobody holds tokens for money that was invested before launch.",
     points: [
       "No VC round and no private sale to funds.",
       "Development paid for by the team itself.",
@@ -237,9 +237,9 @@ const en: TransparencyCopy = {
 
 const ru: TransparencyCopy = {
   meta: {
-    title: "Команда и прозрачность | People's Blockchain",
+    title: "Команда и прозрачность | PEOPLE Blockchain",
     description:
-      "Как финансируется People's Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) и аудит сторонней фирмы до mainnet.",
+      "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) и аудит сторонней фирмы до mainnet.",
   },
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
@@ -250,7 +250,7 @@ const ru: TransparencyCopy = {
   investors: {
     eyebrow: "ФИНАНСИРОВАНИЕ",
     title: "Инвесторов нет",
-    body: "У People's Blockchain нет венчурного капитала и частных инвесторов. Разработка финансируется самостоятельно, и никаких аллокаций ранним инвесторам нет: никто не держит токены за деньги, вложенные до запуска.",
+    body: "У PEOPLE Blockchain нет венчурного капитала и частных инвесторов. Разработка финансируется самостоятельно, и никаких аллокаций ранним инвесторам нет: никто не держит токены за деньги, вложенные до запуска.",
     points: [
       "Ни венчурного раунда, ни частной продажи фондам.",
       "Разработку оплачивает сама команда.",

@@ -1258,7 +1258,7 @@ export const zh: LocaleContent = {
     "specDesc": "已批准的网络手续费分配 (30/25/20/10/15/0)。生产协议未变。"
   },
   "footer": {
-    "desc": "People 是为社区打造的区块链。手续费用 PPL 支付，每笔手续费的一部分会回到参与者手中。",
+    "desc": "PEOPLE 是为社区打造的区块链。手续费用 PPL 支付，每笔手续费的一部分会回到参与者手中。",
     "architectureCol": "系统架构",
     "protocolCol": "协议规范",
     "homeCta": "返回首页",

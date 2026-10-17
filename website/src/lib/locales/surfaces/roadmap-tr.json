@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Yol haritası",
-    "description": "People's Blockchain'de yayında, devam eden ve onay bekleyen planlar."
+    "description": "PEOPLE Blockchain'de yayında, devam eden ve onay bekleyen planlar."
   },
   "intro": "Durumlar docs/ROADMAP.md ile uyumlu.",
   "statusLabels": {
@@ -20,8 +20,8 @@
   },
   "items": {
     "cosmos-evm-migration": {
-      "title": "People's Blockchain testnet (EVM)",
-      "summary": "People's Blockchain testnet EVM üzerinde büyütülüyor. Aşama 1 (chain/) sürüyor; mevcut genel testnet hâlâ salt okunur RPC ile OVN düğümünde."
+      "title": "PEOPLE Blockchain testnet (EVM)",
+      "summary": "PEOPLE Blockchain testnet EVM üzerinde büyütülüyor. Aşama 1 (chain/) sürüyor; mevcut genel testnet hâlâ salt okunur RPC ile OVN düğümünde."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Protokol modülleri testnet düğümünde çalışıyor; hedef, Uniswap V2 tarzı AMM dahil People's Blockchain testnet üzerinde denetlenmiş Solidity."
+      "summary": "Protokol modülleri testnet düğümünde çalışıyor; hedef, Uniswap V2 tarzı AMM dahil PEOPLE Blockchain testnet üzerinde denetlenmiş Solidity."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

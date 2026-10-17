@@ -1258,7 +1258,7 @@ export const fr: LocaleContent = {
     "specDesc": "Répartition des frais réseau approuvée (30/25/20/10/15/0). Le protocole de production est inchangé."
   },
   "footer": {
-    "desc": "People est une blockchain pour les communautés. Les frais se paient en PPL et une partie de chaque frais revient à ceux qui participent.",
+    "desc": "PEOPLE est une blockchain pour les communautés. Les frais se paient en PPL et une partie de chaque frais revient à ceux qui participent.",
     "architectureCol": "Architecture",
     "protocolCol": "Protocole",
     "homeCta": "Retour à l'accueil",

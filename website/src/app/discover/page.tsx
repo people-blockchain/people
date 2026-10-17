@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/discover" },
   openGraph: {
     title: "Project feed",
-    description: "Project cards from founders building on the People's Blockchain testnet.",
+    description: "Project cards from founders building on the PEOPLE Blockchain testnet.",
     type: "website",
     siteName: SITE_NAME,
     url: "/discover",

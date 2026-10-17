@@ -1,7 +1,7 @@
 {
   "tag": "LOYALITAS",
   "title": "Toko lokal",
-  "lead": "Luncurkan program kunjungan dalam hitungan menit. Pelanggan memindai QR di kasir — tanpa jargon kripto, dengan People's Blockchain.",
+  "lead": "Luncurkan program kunjungan dalam hitungan menit. Pelanggan memindai QR di kasir — tanpa jargon kripto, dengan PEOPLE Blockchain.",
   "contractsOff": "Kontrak loyalitas belum di-deploy di testnet ini. Jalankan workflow Lavka setelah merge.",
   "signInCta": "Masuk",
   "walletCta": "Tautkan dompet",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Lepas ke toko",
   "refundEscrow": "Minta pengembalian",
   "disputeEscrow": "Buka sengketa",
-  "escrowLocked": "Dana terkunci di testnet People's Blockchain.",
+  "escrowLocked": "Dana terkunci di testnet PEOPLE Blockchain.",
   "visitsLeft": "Kunjungan tersisa: {{n}}",
   "founderWelcome": "Anda bergabung Million Founders sebagai #{{n}}.",
   "founderAlready": "Pendiri #{{n}}",

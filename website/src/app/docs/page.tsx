@@ -4,8 +4,8 @@ import { Footer } from "@/components/Footer";
 import { Documentation } from "@/components/docs/Documentation";
 
 export const metadata: Metadata = {
-  title: "Documentation | People's Blockchain",
-  description: "A practical guide: wallets, test PPL, participation, fees and running a People's Blockchain node.",
+  title: "Documentation | PEOPLE Blockchain",
+  description: "A practical guide: wallets, test PPL, participation, fees and running a PEOPLE Blockchain node.",
   alternates: { canonical: "/docs" },
 };
 export default function DocsPage() {

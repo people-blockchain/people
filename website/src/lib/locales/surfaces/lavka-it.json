@@ -1,7 +1,7 @@
 {
   "tag": "FEDELTÀ",
   "title": "Negozio locale",
-  "lead": "Avvia un programma visite in pochi minuti. Il cliente scansiona un QR in cassa — senza gergo crypto, con People's Blockchain.",
+  "lead": "Avvia un programma visite in pochi minuti. Il cliente scansiona un QR in cassa — senza gergo crypto, con PEOPLE Blockchain.",
   "contractsOff": "Contratti fedeltà non ancora deployati su questo testnet. Esegui il workflow Lavka dopo il merge.",
   "signInCta": "Accedi",
   "walletCta": "Collega wallet",
@@ -45,7 +45,7 @@
   "releaseEscrow": "Rilascia al negozio",
   "refundEscrow": "Richiedi rimborso",
   "disputeEscrow": "Apri disputa",
-  "escrowLocked": "Fondi bloccati sul testnet People's Blockchain.",
+  "escrowLocked": "Fondi bloccati sul testnet PEOPLE Blockchain.",
   "visitsLeft": "Visite rimaste: {{n}}",
   "founderWelcome": "Sei entrato in Million Founders come #{{n}}.",
   "founderAlready": "Fondatore #{{n}}",

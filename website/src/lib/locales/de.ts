@@ -1258,7 +1258,7 @@ export const de: LocaleContent = {
     "specDesc": "Genehmigte Netzgebühren-Aufteilung (30/25/20/10/15/0). Produktionsprotokoll unverändert."
   },
   "footer": {
-    "desc": "People ist eine Blockchain für Gemeinschaften. Gebühren werden in PPL bezahlt, und ein Teil jeder Gebühr geht an die Menschen zurück, die mitmachen.",
+    "desc": "PEOPLE ist eine Blockchain für Gemeinschaften. Gebühren werden in PPL bezahlt, und ein Teil jeder Gebühr geht an die Menschen zurück, die mitmachen.",
     "architectureCol": "Architektur",
     "protocolCol": "Protokoll",
     "homeCta": "Zurück zur Startseite",

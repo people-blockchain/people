@@ -5,8 +5,8 @@ import { FactoryHub } from "@/components/factory/FactoryHub";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "No-code builder | People's Blockchain",
-  description: "No-code builder: token, NFT, escrow, crowdfunding, contracts and Lavka on People's Blockchain.",
+  title: "No-code builder | PEOPLE Blockchain",
+  description: "No-code builder: token, NFT, escrow, crowdfunding, contracts and Lavka on PEOPLE Blockchain.",
   alternates: { canonical: "/create" },
   openGraph: {
     title: "No-code builder",

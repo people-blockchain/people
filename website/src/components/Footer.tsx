@@ -47,7 +47,7 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
           {/* Brand */}
           <div className="md:col-span-5">
             <div>
-              {/* Full lockup including the "People's Blockchain" tagline — the
+              {/* Full lockup including the "PEOPLE Blockchain" tagline — the
                   footer is wide enough to render it above the ~9px cap where
                   the approved hairline letterforms stay legible. */}
               <Logo variant="full" alt={t.logoAlt} className="h-12" />
@@ -167,7 +167,7 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
         ) : null}
         <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 font-mono text-xs text-ink-3 sm:flex-row sm:items-center sm:justify-between">
           <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>© {new Date().getFullYear()} People. {t.allRights}</span>
+            <span>© {new Date().getFullYear()} PEOPLE. {t.allRights}</span>
             <span className="text-ink-3/80" aria-hidden="true">·</span>
             <Link href="/privacy" className="text-ink-2 transition-colors hover:text-brand">
               {t.privacyLink}

@@ -5,9 +5,9 @@ import { AgentsPublic } from "@/components/agents/AgentsPublic";
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Community AI agents | People's Blockchain",
+  title: "Community AI agents | PEOPLE Blockchain",
   description:
-    "How community AI agents spend from shared wallets with limits, votes, and public records on People's Blockchain.",
+    "How community AI agents spend from shared wallets with limits, votes, and public records on PEOPLE Blockchain.",
   alternates: { canonical: "/agents" },
   openGraph: {
     title: "Community AI agents",

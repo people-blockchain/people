@@ -32,13 +32,13 @@ test("founder share text exists for every locale, in that locale, with the numbe
   for (const lang of LANGS) {
     const mine = share.founderShareText(lang, 1234);
     assert.doesNotMatch(mine, /\{\{/, lang);
-    assert.match(mine, /People's Blockchain/, lang);
+    assert.match(mine, /PEOPLE Blockchain/, lang);
     assert.ok(mine.includes((1234).toLocaleString(lang)), lang);
     seen.add(mine.replace((1234).toLocaleString(lang), "N"));
     assert.ok(share.founderShareText(lang, null).length > 10, lang);
   }
   assert.equal(seen.size, LANGS.length, "every locale has its own wording");
-  assert.match(share.founderShareText("en", 7), /^I am Founder #7 of People's Blockchain\. Get your Founder Number:$/);
+  assert.match(share.founderShareText("en", 7), /^I am Founder #7 of PEOPLE Blockchain\. Get your Founder Number:$/);
   assert.match(share.founderShareText("ru", 7), /основатель №7/);
 });
 
