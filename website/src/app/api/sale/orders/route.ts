@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
 import { createSaleOrder } from "@/lib/sale/service";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
-import type { SaleNetworkId } from "@/lib/sale/networks";
+import type { SaleNetworkId } from "@/lib/sale/sale-hub";
 
 export async function POST(request: Request) {
   const ip = clientIpFromRequest(request);
@@ -14,14 +14,12 @@ export async function POST(request: Request) {
     stable?: string;
     peopleAddress?: string;
     usdtAmount?: number;
-    payerAddress?: string;
   };
   const result = await createSaleOrder({
-    networkId: (body.networkId ?? "") as SaleNetworkId,
-    stable: body.stable ?? "usdt",
+    networkId: (body.networkId ?? "base") as SaleNetworkId,
+    stable: body.stable ?? "usdc",
     peopleAddress: body.peopleAddress ?? "",
     usdtAmount: Number(body.usdtAmount ?? 0),
-    payerAddress: body.payerAddress,
   });
   if (!result.ok) {
     return NextResponse.json({ error: result.code }, { status: 400 });

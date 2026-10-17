@@ -58,14 +58,14 @@ test("tokenomics surfaces list all sale networks without Cosmos", () => {
   }
 });
 
-test("sale surfaces list all networks in 12 languages", () => {
+test("buy surfaces list LI.FI bridge source chains without TON (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
-    const doc = JSON.parse(readFileSync(join(surfaces, `sale-${lang}.json`), "utf8"));
-    assert.match(doc.networksList, /Polygon/);
-    assert.match(doc.networksList, /Solana/);
-    assert.doesNotMatch(doc.networksList, /Cosmos/i);
-    assert.match(doc.contractsRow, /Tron/);
+    const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
+    assert.match(doc.form.supportedBridgeChains, /Solana/);
+    assert.match(doc.form.supportedBridgeChains, /Tron/);
+    assert.doesNotMatch(doc.form.supportedBridgeChains, /\bTON\b/i);
+    assert.match(doc.form.payOnBase, /Base/);
   }
 });
 
@@ -122,6 +122,17 @@ test("/buy page sets dir=rtl for Arabic", () => {
   const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
   assert.match(page, /data-testid="buy-page"/);
   assert.match(page, /dir=\{isRtl \? "rtl" : "ltr"\}/);
+});
+
+test("/buy stats panel omits raised card and graduation progress bar", () => {
+  const panel = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
+  assert.doesNotMatch(panel, /key: "raised"/);
+  assert.doesNotMatch(panel, /role="progressbar"/);
+  assert.doesNotMatch(panel, /graduationProgress/);
+  assert.match(panel, /key: "price"/);
+  assert.match(panel, /key: "sold"/);
+  assert.match(panel, /key: "buyers"/);
+  assert.match(panel, /key: "days"/);
 });
 
 test("/buy audit copy names exactly the three models in AI_AUDITS", () => {

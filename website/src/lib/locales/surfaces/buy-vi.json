@@ -30,8 +30,6 @@
     "amountLabel": "Bạn trả",
     "amountHint": "USDC hoặc USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Mạng thanh toán",
-    "networkHint": "Một đường cong, một giá — từ mạng nào cũng được.",
     "youGet": "Bạn nhận",
     "avgPrice": "Giá trung bình",
     "priceAfter": "Giá sau giao dịch của bạn",
@@ -46,7 +44,18 @@
     "ctaConnected": "Mua PPL",
     "disabledNote": "Hợp đồng bán chưa triển khai nên chưa mua được. Kết nối ví an toàn và không ràng buộc gì.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Bạn có thể bán PPL lại đường cong bất cứ lúc nào, trừ phí {fee}."
+    "sellBack": "Bạn có thể bán PPL lại đường cong bất cứ lúc nào, trừ phí {fee}.",
+    "payModeLabel": "Cách thanh toán",
+    "payOnBase": "Thanh toán trên Base",
+    "payFromOther": "Thanh toán từ mạng khác",
+    "basePayHint": "Đợt bán chỉ trên Base — thanh toán USDC hoặc USDT từ ví Base của bạn.",
+    "bridgeHint": "Bridge USDC vào ví Base của bạn qua LI.FI, sau đó hoàn tất mua bên dưới. Mạng nguồn được hỗ trợ: {chains}.",
+    "bridgePanelTitle": "Bridge sang Base",
+    "bridgeNeedWallet": "Kết nối ví để nhận USDC trên Base trước khi bridge.",
+    "bridgeReady": "Bridge hoàn tất — hoàn tất mua trên Base bên dưới.",
+    "bridgeAwaiting": "Hoàn tất bridge ở trên để mở nút mua.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana và Tron",
+    "scrollToForm": "Quay lại form mua"
   },
   "curve": {
     "eyebrow": "Công thức",
@@ -157,7 +166,11 @@
     "addNetworkError": "Ví từ chối hoặc không tìm thấy ví.",
     "pumpTitle": "Điều gì sai trên đường cong không trần",
     "pumpLead": "Bonding curve phổ biến nhờ launchpad như pump.fun. Đây là vấn đề đã biết và cách chúng tôi xử lý.",
-    "pumpCols": ["Vấn đề", "Điều gì xảy ra", "Biện pháp của chúng tôi"],
+    "pumpCols": [
+      "Vấn đề",
+      "Điều gì xảy ra",
+      "Biện pháp của chúng tôi"
+    ],
     "pumpRows": [
       {
         "problem": "Người mua muộn trả quá nhiều",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Sẵn sàng",
     "title": "Mua PPL ở giá đường cong hôm nay",
-    "lead": "Cùng form, cùng một giá cho mọi người."
+    "lead": "Cùng form, cùng một giá cho mọi người.",
+    "scrollToForm": "Quay lại form mua"
   },
   "sticky": {
     "label": "Mua PPL",

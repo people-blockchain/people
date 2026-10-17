@@ -1013,6 +1013,16 @@ html.dark .warm-page {
   background-repeat: no-repeat;
 }
 
+/* `/buy` — anchor targets and sticky nav: keep hero copy below the glass header. */
+html:has([data-testid="buy-page"]) {
+  scroll-padding-top: 3.5rem;
+}
+@media (min-width: 1024px) {
+  html:has([data-testid="buy-page"]) {
+    scroll-padding-top: 4rem;
+  }
+}
+
 /* Stacked avatar rings: `ring-2 ring-white` cannot follow the palette. */
 .warm-avatar-ring {
   box-shadow: 0 0 0 2px var(--c-avatar-ring);

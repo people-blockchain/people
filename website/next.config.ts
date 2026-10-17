@@ -20,8 +20,8 @@ const CSP_REPORT_ONLY = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://node.peopleblockchain.network https://explorer.peopleblockchain.network https://*.peopleblockchain.network https://vercel.live https://challenges.cloudflare.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org",
-  "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com",
+  "connect-src 'self' https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://node.peopleblockchain.network https://explorer.peopleblockchain.network https://*.peopleblockchain.network https://vercel.live https://challenges.cloudflare.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://li.quest https://*.li.fi",
+  "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi",
 ].join("; ");
 
 const nextConfig: NextConfig = {
@@ -30,11 +30,39 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_APP_VERSION: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.NEXT_PUBLIC_APP_VERSION ?? "dev",
   },
-  transpilePackages: ["@web3auth/modal", "@web3auth/base", "@web3auth/ethereum-provider", "@web3auth/no-modal"],
+  transpilePackages: [
+    "@web3auth/modal",
+    "@web3auth/base",
+    "@web3auth/ethereum-provider",
+    "@web3auth/no-modal",
+    "@lifi/widget",
+    "@lifi/widget-provider-ethereum",
+    "@lifi/widget-provider-solana",
+    "@lifi/widget-provider-tron",
+  ],
   async redirects() {
+    const localeBuyRedirects = [
+      "en",
+      "ru",
+      "es",
+      "pt",
+      "fr",
+      "de",
+      "it",
+      "tr",
+      "vi",
+      "id",
+      "zh",
+      "ar",
+    ].map((locale) => ({
+      source: `/${locale}/buy`,
+      destination: "/buy",
+      permanent: false,
+    }));
     return [
       { source: "/sign-in", destination: "/login", permanent: true },
       { source: "/partner/login", destination: "/login?callbackUrl=%2Fpartner", permanent: true },
+      ...localeBuyRedirects,
     ];
   },
   async headers() {

@@ -4,8 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
 import { CURVE, SALE } from "@/lib/sale/config";
-import { graduationProgress } from "@/lib/sale/curve";
-import { fillCopy, pplCompact, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
+import { fillCopy, pplCompact, pricePerPpl } from "@/lib/sale/format";
 
 type Stat = { key: string; label: string; value: string; hint: string; accent?: boolean };
 
@@ -18,7 +17,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
   const t = buyCopy[lang];
   const s = t.stats;
 
-  const target = usdCompact(CURVE.graduationRaiseUsd, lang);
   const none = s.none;
 
   const rows: Stat[] = [
@@ -28,12 +26,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
       value: stats.spotPriceUsd === null ? s.notOpenYet : pricePerPpl(stats.spotPriceUsd, lang),
       hint: fillCopy(s.priceStartHint, { start: pricePerPpl(CURVE.startPriceUsd, lang) }),
       accent: true,
-    },
-    {
-      key: "raised",
-      label: s.raised,
-      value: stats.raisedUsd === null ? none : usd(stats.raisedUsd, lang),
-      hint: fillCopy(s.raisedTarget, { target }),
     },
     {
       key: "sold",
@@ -55,8 +47,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
     },
   ];
 
-  const progress = graduationProgress(stats.raisedUsd ?? 0);
-
   return (
     <div data-testid="sale-stats">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -65,7 +55,7 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
         </h2>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-2">
         {rows.map((row) => (
           <div
             key={row.key}
@@ -85,28 +75,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
           </div>
         ))}
       </dl>
-
-      <div className="mt-4">
-        <div className="flex items-baseline justify-between gap-3 text-xs text-ink-3">
-          <span>{fillCopy(s.progressLabel, { target })}</span>
-          <span className="font-mono">
-            {stats.raisedUsd === null ? none : `${Math.round(progress * 100)}%`}
-          </span>
-        </div>
-        <div
-          className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-surface-2"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={stats.raisedUsd === null ? 0 : Math.round(progress * 100)}
-          aria-label={fillCopy(s.progressLabel, { target })}
-        >
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-brand to-value transition-[width] duration-700"
-            style={{ width: `${Math.max(progress * 100, stats.raisedUsd === null ? 0 : 1.5)}%` }}
-          />
-        </div>
-      </div>
 
       <p className="mt-3 text-xs leading-relaxed text-ink-3">{t.hero.statsNote}</p>
     </div>

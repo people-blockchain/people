@@ -30,8 +30,6 @@
     "amountLabel": "您支付",
     "amountHint": "USDC 或 USDT",
     "stableLabel": "稳定币",
-    "networkLabel": "付款网络",
-    "networkHint": "一条曲线，一个价格——从哪个网络付款都一样。",
     "youGet": "您获得",
     "avgPrice": "平均价格",
     "priceAfter": "购买后的价格",
@@ -46,7 +44,18 @@
     "ctaConnected": "购买 PPL",
     "disabledNote": "销售合约尚未部署，无法购买。连接钱包是安全的，不构成任何承诺。",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "您可随时将 PPL 卖回曲线，扣除 {fee} 费用。"
+    "sellBack": "您可随时将 PPL 卖回曲线，扣除 {fee} 费用。",
+    "payModeLabel": "支付方式",
+    "payOnBase": "在 Base 支付",
+    "payFromOther": "从其他网络支付",
+    "basePayHint": "销售仅在 Base 进行 — 请用 Base 钱包中的 USDC 或 USDT 支付。",
+    "bridgeHint": "通过 LI.FI 将 USDC 跨链到您在 Base 的钱包，然后在下方完成购买。支持的来源网络：{chains}。",
+    "bridgePanelTitle": "跨链到 Base",
+    "bridgeNeedWallet": "请先连接钱包，以便在 Base 接收 USDC。",
+    "bridgeReady": "跨链完成 — 请在下方于 Base 完成购买。",
+    "bridgeAwaiting": "请先完成上方跨链，以解锁购买按钮。",
+    "supportedBridgeChains": "Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche、Solana 和 Tron",
+    "scrollToForm": "返回购买表单"
   },
   "curve": {
     "eyebrow": "公式",
@@ -157,7 +166,11 @@
     "addNetworkError": "钱包拒绝或未找到钱包。",
     "pumpTitle": "无上限曲线的问题",
     "pumpLead": "联合曲线因 pump.fun 等 launchpad 而流行。以下是已知问题及我们的做法。",
-    "pumpCols": ["问题", "会发生什么", "我们的保障"],
+    "pumpCols": [
+      "问题",
+      "会发生什么",
+      "我们的保障"
+    ],
     "pumpRows": [
       {
         "problem": "晚期买家支付过高",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "准备就绪",
     "title": "以今日曲线价格购买 PPL",
-    "lead": "同一表单，人人同一价格。"
+    "lead": "同一表单，人人同一价格。",
+    "scrollToForm": "返回购买表单"
   },
   "sticky": {
     "label": "购买 PPL",

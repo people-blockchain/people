@@ -30,8 +30,6 @@
     "amountLabel": "Você paga",
     "amountHint": "USDC ou USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Rede de pagamento",
-    "networkHint": "Uma curva, um preço — de qualquer rede você pagar.",
     "youGet": "Você recebe",
     "avgPrice": "Preço médio",
     "priceAfter": "Preço após sua compra",
@@ -46,7 +44,18 @@
     "ctaConnected": "Comprar PPL",
     "disabledNote": "O contrato de venda ainda não foi implantado, então não há compra. Conectar a carteira é seguro e não te compromete com nada.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Você pode vender PPL de volta à curva a qualquer momento, menos a taxa de {fee}."
+    "sellBack": "Você pode vender PPL de volta à curva a qualquer momento, menos a taxa de {fee}.",
+    "payModeLabel": "Como você paga",
+    "payOnBase": "Pagar na Base",
+    "payFromOther": "Pagar de outra rede",
+    "basePayHint": "A venda é só na Base — pague com USDC ou USDT da sua carteira na Base.",
+    "bridgeHint": "Faça bridge de USDC para sua carteira na Base com LI.FI e conclua a compra abaixo. Redes de origem: {chains}.",
+    "bridgePanelTitle": "Bridge para Base",
+    "bridgeNeedWallet": "Conecte uma carteira para receber USDC na Base antes do bridge.",
+    "bridgeReady": "Bridge concluído — finalize a compra na Base abaixo.",
+    "bridgeAwaiting": "Conclua o bridge acima para liberar o botão de compra.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana e Tron",
+    "scrollToForm": "Voltar ao formulário de compra"
   },
   "curve": {
     "eyebrow": "A fórmula",
@@ -157,7 +166,11 @@
     "addNetworkError": "Sua carteira recusou ou nenhuma carteira foi encontrada.",
     "pumpTitle": "O que dá errado em curvas sem teto",
     "pumpLead": "Curvas de bonding ficaram populares com launchpads como pump.fun. Estes são os problemas conhecidos e o que fazemos.",
-    "pumpCols": ["Problema", "O que acontece", "Nossa proteção"],
+    "pumpCols": [
+      "Problema",
+      "O que acontece",
+      "Nossa proteção"
+    ],
     "pumpRows": [
       {
         "problem": "Compradores tardios pagam demais",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Pronto",
     "title": "Compre PPL ao preço da curva de hoje",
-    "lead": "O mesmo formulário, o mesmo preço único para todos."
+    "lead": "O mesmo formulário, o mesmo preço único para todos.",
+    "scrollToForm": "Voltar ao formulário de compra"
   },
   "sticky": {
     "label": "Comprar PPL",

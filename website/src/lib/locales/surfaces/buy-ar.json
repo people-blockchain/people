@@ -30,8 +30,6 @@
     "amountLabel": "أنت تدفع",
     "amountHint": "USDC أو USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "شبكة الدفع",
-    "networkHint": "منحنى واحد، سعر واحد — من أي شبكة دفعت.",
     "youGet": "تحصل على",
     "avgPrice": "السعر المتوسط",
     "priceAfter": "السعر بعد شرائك",
@@ -46,7 +44,18 @@
     "ctaConnected": "شراء PPL",
     "disabledNote": "عقد البيع غير منشور بعد، فلا يمكن الشراء. ربط المحفظة آمن ولا يلزمك بشيء.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "يمكنك بيع PPL للمنحنى في أي وقت، ناقص رسوم {fee}."
+    "sellBack": "يمكنك بيع PPL للمنحنى في أي وقت، ناقص رسوم {fee}.",
+    "payModeLabel": "طريقة الدفع",
+    "payOnBase": "الدفع على Base",
+    "payFromOther": "الدفع من شبكة أخرى",
+    "basePayHint": "البيع على Base فقط — ادفع USDC أو USDT من محفظتك على Base.",
+    "bridgeHint": "انقل USDC إلى محفظتك على Base عبر LI.FI ثم أكمل الشراء أدناه. شبكات المصدر المدعومة: {chains}",
+    "bridgePanelTitle": "جسر إلى Base",
+    "bridgeNeedWallet": "اربط محفظة لاستلام USDC على Base قبل الجسر.",
+    "bridgeReady": "اكتمل الجسر — أكمل الشراء على Base أدناه.",
+    "bridgeAwaiting": "أكمل الجسر أعلاه لفتح زر الشراء.",
+    "supportedBridgeChains": "Ethereum وBNB Chain وPolygon وArbitrum وOptimism وAvalanche وSolana وTron",
+    "scrollToForm": "العودة إلى نموذج الشراء"
   },
   "curve": {
     "eyebrow": "الصيغة",
@@ -157,7 +166,11 @@
     "addNetworkError": "رفضت المحفظة أو لم تُعثر على محفظة.",
     "pumpTitle": "ما يخطئ في منحنيات بلا سقف",
     "pumpLead": "انتشرت منحنيات bonding عبر launchpads مثل pump.fun. هذه مشاكلها المعروفة وما نفعله نحن.",
-    "pumpCols": ["المشكلة", "ما يحدث", "حمايتنا"],
+    "pumpCols": [
+      "المشكلة",
+      "ما يحدث",
+      "حمايتنا"
+    ],
     "pumpRows": [
       {
         "problem": "المشترون المتأخرون يدفعون أكثر",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "جاهز",
     "title": "اشترِ PPL بسعر المنحنى اليوم",
-    "lead": "نفس النموذج، نفس السعر الواحد للجميع."
+    "lead": "نفس النموذج، نفس السعر الواحد للجميع.",
+    "scrollToForm": "العودة إلى نموذج الشراء"
   },
   "sticky": {
     "label": "شراء PPL",

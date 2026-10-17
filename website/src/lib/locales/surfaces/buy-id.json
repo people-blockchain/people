@@ -30,8 +30,6 @@
     "amountLabel": "Anda bayar",
     "amountHint": "USDC atau USDT",
     "stableLabel": "Stablecoin",
-    "networkLabel": "Jaringan pembayaran",
-    "networkHint": "Satu kurva, satu harga — dari jaringan mana pun.",
     "youGet": "Anda dapat",
     "avgPrice": "Harga rata-rata",
     "priceAfter": "Harga setelah pembelian Anda",
@@ -46,7 +44,18 @@
     "ctaConnected": "Beli PPL",
     "disabledNote": "Kontrak penjualan belum di-deploy, jadi tidak bisa membeli. Menghubungkan dompet aman dan tidak mengikat Anda.",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "Anda bisa menjual PPL kembali ke kurva kapan saja, dikurangi biaya {fee}."
+    "sellBack": "Anda bisa menjual PPL kembali ke kurva kapan saja, dikurangi biaya {fee}.",
+    "payModeLabel": "Cara bayar",
+    "payOnBase": "Bayar di Base",
+    "payFromOther": "Bayar dari jaringan lain",
+    "basePayHint": "Penjualan hanya di Base — bayar USDC atau USDT dari dompet Anda di Base.",
+    "bridgeHint": "Bridge USDC ke dompet Anda di Base dengan LI.FI, lalu selesaikan pembelian di bawah. Jaringan sumber yang didukung: {chains}.",
+    "bridgePanelTitle": "Bridge ke Base",
+    "bridgeNeedWallet": "Hubungkan dompet untuk menerima USDC di Base sebelum bridge.",
+    "bridgeReady": "Bridge selesai — selesaikan pembelian di Base di bawah.",
+    "bridgeAwaiting": "Selesaikan bridge di atas untuk membuka tombol beli.",
+    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana, dan Tron",
+    "scrollToForm": "Kembali ke formulir beli"
   },
   "curve": {
     "eyebrow": "Formulanya",
@@ -157,7 +166,11 @@
     "addNetworkError": "Dompet menolak atau tidak ditemukan.",
     "pumpTitle": "Apa yang salah pada kurva tanpa plafon",
     "pumpLead": "Kurva bonding populer lewat launchpad seperti pump.fun. Ini masalah yang dikenal dan apa yang kami lakukan.",
-    "pumpCols": ["Masalah", "Apa yang terjadi", "Perlindungan kami"],
+    "pumpCols": [
+      "Masalah",
+      "Apa yang terjadi",
+      "Perlindungan kami"
+    ],
     "pumpRows": [
       {
         "problem": "Pembeli terlambat overpay",
@@ -189,7 +202,8 @@
   "bottomCta": {
     "eyebrow": "Siap",
     "title": "Beli PPL dengan harga kurva hari ini",
-    "lead": "Formulir sama, harga tunggal sama untuk semua."
+    "lead": "Formulir sama, harga tunggal sama untuk semua.",
+    "scrollToForm": "Kembali ke formulir beli"
   },
   "sticky": {
     "label": "Beli PPL",

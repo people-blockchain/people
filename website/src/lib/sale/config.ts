@@ -65,34 +65,7 @@ export const SALE = {
 /** Team vesting, shown on the sale page's transparency block. */
 export const TEAM_VESTING = { cliffMonths: 6, linearMonths: 18 } as const;
 
-/* ── Networks you can pay from ─────────────────────────────────────────── */
-
 export type SaleStableSymbol = "USDC" | "USDT";
-
-export type BuyNetwork = {
-  id: string;
-  label: string;
-  /** EVM chain id, where the network is EVM. */
-  chainId?: number;
-  stables: readonly SaleStableSymbol[];
-};
-
-/**
- * One curve, one price, whatever you pay from. Base is the hub: the sale's
- * reserve and the default sell payout live there.
- */
-export const BUY_NETWORKS: readonly BuyNetwork[] = [
-  { id: "ethereum", label: "Ethereum", chainId: 1, stables: ["USDC", "USDT"] },
-  { id: "bnb", label: "BNB Chain", chainId: 56, stables: ["USDC", "USDT"] },
-  { id: "polygon", label: "Polygon", chainId: 137, stables: ["USDC", "USDT"] },
-  { id: "arbitrum", label: "Arbitrum", chainId: 42161, stables: ["USDC", "USDT"] },
-  { id: "base", label: "Base", chainId: 8453, stables: ["USDC"] },
-  { id: "ton", label: "TON", stables: ["USDT"] },
-  { id: "tron", label: "Tron", stables: ["USDT"] },
-  { id: "solana", label: "Solana", stables: ["USDC", "USDT"] },
-] as const;
-
-export const DEFAULT_BUY_NETWORK_ID = "base";
 
 /** Sells pay out here unless the buyer picks their own chain (bridge, minutes). */
 export const PAYOUT_DEFAULT = { networkLabel: "Base", stable: "USDC" as SaleStableSymbol } as const;
