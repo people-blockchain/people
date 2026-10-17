@@ -9,7 +9,7 @@ import {
 } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
-import { fetchLogsWindowed } from "@/lib/evm/chain-catalog";
+import { fetchLogsWindowed, pairLogStartBlock } from "@/lib/evm/chain-catalog";
 import type { MarketTrade } from "@/lib/market-chart";
 import { curveLiquidityNative, curveProgressPercent, marketCapNative, poolLiquidityNative } from "@/lib/market-chart";
 
@@ -281,7 +281,8 @@ async function ammTrades(pair: string, decimals: number): Promise<MarketTrade[]>
   }
 
   const [swapTopic] = encodeEventTopics({ abi: swapEventAbi, eventName: "Swap" });
-  const logs = await fetchLogsWindowed(pair, [swapTopic]);
+  // Start at the creating factory's deploy block, not the legacy V1 factory's block 58.
+  const logs = await fetchLogsWindowed(pair, [swapTopic], await pairLogStartBlock(pair));
   const timestamps = await blockTimestampsMs(logs.map((log) => log.blockNumber).filter((v): v is string => Boolean(v)));
 
   const trades: MarketTrade[] = [];

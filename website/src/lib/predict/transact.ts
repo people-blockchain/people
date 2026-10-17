@@ -4,8 +4,8 @@ import { predictAbi } from "./abi";
 import { CHAIN_ID, configuredDeployment, type Deployment } from "./model";
 import { verifiedAccount, type PredictProvider } from "./wallet";
 export type PredictAction = "split" | "merge" | "placeOrder" | "fillOrder" | "cancelOrder" | "propose" | "dispute" | "finalize" | "redeem" | "withdraw" | "createMarket";
-export async function sendPredictTransaction(provider: PredictProvider, expectedAccount: Address, action: PredictAction, args: readonly unknown[], value = BigInt(0)): Promise<Hex> {
-  const d: Deployment = manifest;
+export async function sendPredictTransaction(provider: PredictProvider, expectedAccount: Address, action: PredictAction, args: readonly unknown[], value = BigInt(0), deployment: Deployment = manifest): Promise<Hex> {
+  const d: Deployment = deployment;
   if (!configuredDeployment(d)) throw new Error("undeployed");
   const account = await verifiedAccount(provider);
   if (account.toLowerCase() !== expectedAccount.toLowerCase()) throw new Error("account_changed");

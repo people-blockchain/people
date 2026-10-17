@@ -89,7 +89,7 @@ test("read pagination and missing market are bounded",async()=>rpcFixture(async 
 
 test("undeployed write gate never asks wallet for keys, signature or transaction",async()=>{
  const requests=[];const p={request:async q=>{requests.push(q.method);throw new Error("must not reach wallet");}};
- await assert.rejects(()=>sendPredictTransaction(p,address,"split",[1n],1000000000000000000n),/undeployed/);
+ await assert.rejects(()=>sendPredictTransaction(p,address,"split",[1n],1000000000000000000n,undeployed),/undeployed/);
  assert.deepEqual(requests,[]);
 });
 

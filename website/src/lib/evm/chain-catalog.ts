@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
-import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
@@ -122,6 +122,38 @@ const WINDOW_LOG_TTL_MS = 15 * 60_000;
 const MAX_WINDOW_CACHE_ENTRIES = 400;
 const windowLogsCache = new Map<string, { at: number; value: RpcLog[] }>();
 
+/**
+ * At most this many `eth_getLogs` windows are in flight per server instance, across every caller.
+ * Each window is a full 9 000-block range scan on the node; firing dozens at once (one batch per
+ * pair/curve/agent scan, several scans per page) is what pushed the shared validator over its
+ * memory limit on 2026-10-17.
+ */
+export const MAX_PARALLEL_LOG_WINDOWS = 2;
+let logWindowsInFlight = 0;
+const logWindowQueue: Array<() => void> = [];
+
+async function withLogWindowSlot<T>(work: () => Promise<T>): Promise<T> {
+  if (logWindowsInFlight >= MAX_PARALLEL_LOG_WINDOWS) {
+    await new Promise<void>((resolve) => logWindowQueue.push(resolve));
+  } else {
+    logWindowsInFlight++;
+  }
+  try {
+    return await work();
+  } finally {
+    const next = logWindowQueue.shift();
+    // Hand the slot straight to the next waiter; only free it when nobody is queued.
+    if (next) next();
+    else logWindowsInFlight--;
+  }
+}
+
+/** Peak concurrent `eth_getLogs` windows, for tests. */
+let logWindowsPeak = 0;
+export function logWindowConcurrencyPeakForTests(): number {
+  return logWindowsPeak;
+}
+
 function windowCacheKey(address: string, topics: Array<string | null>, from: number, to: number): string {
   return `${address.toLowerCase()}|${topics.map((topic) => topic ?? "*").join(",")}|${from}|${to}`;
 }
@@ -143,60 +175,114 @@ function rpcLogFilter(address: string, topics: Array<string | null>, from: numbe
   };
 }
 
+/** Marks an error raised by the node (as opposed to the Next data cache being unavailable). */
+class LogWindowRpcError extends Error {}
+
+async function readLogWindowFromNode(address: string, topics: Array<string | null>, from: number, to: number): Promise<RpcLog[]> {
+  return withLogWindowSlot(async () => {
+    logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
+    let logs: unknown;
+    try {
+      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]);
+    } catch (error) {
+      throw new LogWindowRpcError(error instanceof Error ? error.message : "rpc_logs_failed");
+    }
+    // Throwing (rather than returning []) keeps a failed window out of every cache.
+    if (!Array.isArray(logs)) throw new LogWindowRpcError("rpc_logs_unavailable");
+    return logs as RpcLog[];
+  });
+}
+
 /**
- * Scans every window from `logStartBlock(address)` to the tip in one batched JSON-RPC request,
- * reusing cached windows. A 21-window sequential scan measured ~23.6 s against the live node; the
- * same windows batched into one HTTP request take ~9.2 s cold, and ~0.8 s for the tip window alone
- * on a refresh. Starting at the contract's own deploy block rather than the chain's removes the
- * ~24 leading windows that can never match.
+ * Immutable windows are shared across server instances/lambdas through the Next data cache, so a
+ * cold instance does not re-scan history that every other instance already read. The arguments
+ * (lower-cased address, topics, range) are part of the cache key.
+ */
+const IMMUTABLE_WINDOW_REVALIDATE_SECONDS = 24 * 60 * 60;
+const readImmutableLogWindowShared = unstable_cache(readLogWindowFromNode, ["evm-log-window-v1"], {
+  revalidate: IMMUTABLE_WINDOW_REVALIDATE_SECONDS,
+  tags: ["evm-log-windows"],
+});
+
+async function readLogWindow(
+  address: string,
+  topics: Array<string | null>,
+  from: number,
+  to: number,
+  immutable: boolean,
+): Promise<RpcLog[] | null> {
+  const lower = address.toLowerCase();
+  if (immutable) {
+    try {
+      return await readImmutableLogWindowShared(lower, topics, from, to);
+    } catch (error) {
+      if (error instanceof LogWindowRpcError) return null;
+      // Outside the Next runtime (node tests, scripts) there is no data cache: read directly.
+    }
+  }
+  try {
+    return await readLogWindowFromNode(lower, topics, from, to);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Scans every window from the contract's first block to the tip.
  *
+ * - Windows come from the per-process cache, then (for immutable windows) the shared Next data
+ *   cache, and only then from the node.
+ * - Node reads are capped at `MAX_PARALLEL_LOG_WINDOWS` in flight across the whole process, so a
+ *   cold page render cannot fire dozens of range scans at the validator at once.
+ * - `rpc-server.ts` backs off exponentially after node failures, so an unhealthy node is not
+ *   hammered with retries; failed windows are simply skipped (and not cached).
+ *
+ * `fromBlockHint` can only move the start later (e.g. a pair's own factory start block).
  * `topics` follows the JSON-RPC log filter: `null` is a wildcard position. The window cache key
  * includes every topic, so a buy scan and a sell scan of the same address do not collide.
  */
-export async function fetchLogsWindowed(address: string, topics: Array<string | null>): Promise<RpcLog[]> {
+export async function fetchLogsWindowed(
+  address: string,
+  topics: Array<string | null>,
+  fromBlockHint?: number,
+): Promise<RpcLog[]> {
   const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
   const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
   if (!Number.isFinite(latest)) return [];
-  const windows = logWindows(logStartBlock(address), latest);
+  const start = Math.max(logStartBlock(address), typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0);
+  const windows = logWindows(start, latest);
   if (!windows.length) return [];
 
   const now = Date.now();
-  const out: RpcLog[] = [];
-  const missing: Array<[number, number]> = [];
-  for (const [from, to] of windows) {
-    const entry = windowLogsCache.get(windowCacheKey(address, topics, from, to));
-    const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
-    if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) {
-      out.push(...entry.value);
-    } else {
-      missing.push([from, to]);
-    }
-  }
-  if (!missing.length) return out;
+  const results = await Promise.all(
+    windows.map(async ([from, to]) => {
+      const key = windowCacheKey(address, topics, from, to);
+      const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
+      const entry = windowLogsCache.get(key);
+      if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
+      const logs = await readLogWindow(address, topics, from, to, isImmutable);
+      if (logs) rememberWindowLogs(key, logs);
+      return logs ?? [];
+    }),
+  );
+  return results.flat();
+}
 
-  const batch = await evmJsonRpcBatch<RpcLog[]>(
-    missing.map(([from, to]) => ({ method: "eth_getLogs", params: [rpcLogFilter(address, topics, from, to)] })),
-  ).catch(() => null);
-  // A node without batch support is detected by every window coming back null; fall back to
-  // sequential windows so the catalog still fills in.
-  let fetched: Array<RpcLog[] | null>;
-  if (batch && batch.some((entry) => Array.isArray(entry))) {
-    fetched = batch;
-  } else {
-    fetched = [];
-    for (const [from, to] of missing) {
-      const logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]).catch(() => null);
-      fetched.push(Array.isArray(logs) ? logs : null);
-    }
-  }
+const SEL_FACTORY = "0xc45a0155";
 
-  missing.forEach(([from, to], index) => {
-    const logs = fetched[index];
-    if (!Array.isArray(logs)) return;
-    out.push(...logs);
-    rememberWindowLogs(windowCacheKey(address, topics, from, to), logs);
-  });
-  return out;
+/**
+ * First block worth scanning for an AMM pair: the start block of the factory that created it
+ * (read via `factory()`), so a pair of the 2026-10-16 stack is not scanned from the legacy V1
+ * factory's block 58. Falls back to `logStartBlock(pair)` when the factory is unknown.
+ */
+export async function pairLogStartBlock(pair: string): Promise<number> {
+  const fallback = logStartBlock(pair);
+  const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(pair), data: SEL_FACTORY }, "latest"]).catch(() => "");
+  if (!out || out.length < 66) return fallback;
+  const factory = `0x${out.slice(-40)}`.toLowerCase();
+  const dep = readEvmDeployments();
+  const known = Object.values(dep.contracts ?? {}).some((contract) => contract?.toLowerCase() === factory);
+  return known ? Math.max(fallback, logStartBlock(factory)) : fallback;
 }
 
 /**
@@ -246,6 +332,8 @@ export function resetChainCatalogCacheForTests(): void {
   tokensRefreshing = null;
   poolsRefreshing = null;
   windowLogsCache.clear();
+  logWindowsPeak = 0;
+  resetRpcBackoffForTests();
 }
 
 /**
