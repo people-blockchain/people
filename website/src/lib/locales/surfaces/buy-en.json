@@ -8,7 +8,7 @@
     "headline": "Buy PPL at the early-participant price",
     "sub": "The price rises with every purchase — the earlier you buy, the less you pay.",
     "statsTitle": "Live on the curve",
-    "statsNote": "Read from the sale contract. Nothing is shown until there is real on-chain data.",
+    "statsNote": "",
     "ctaScroll": "How the curve works"
   },
   "stats": {
@@ -33,7 +33,7 @@
     "youGet": "You get",
     "avgPrice": "Average price",
     "priceAfter": "Price after your purchase",
-    "estimate": "Estimate from the published formula. The figure is confirmed before you sign.",
+    "estimate": "",
     "limitPerBuy": "Up to {amount} per purchase",
     "limitPerDay": "Up to {amount} per person per day",
     "cooldown": "{seconds}s between trades",
@@ -42,9 +42,9 @@
     "cta": "Connect wallet & buy",
     "ctaDisabled": "Sale is not open yet",
     "ctaConnected": "Buy PPL",
-    "disabledNote": "The sale contract is not deployed yet, so no purchase can be made. Connecting a wallet is safe and commits you to nothing.",
+    "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Tonkeeper · Google",
-    "sellBack": "You can sell PPL back to the curve at any time, minus the {fee} fee.",
+    "sellBack": "Sell-back from the reserve is for verified users only: each lot needs a 30-day hold, daily limits apply, and a {fee} fee; it closes when the sale graduates.",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
@@ -57,6 +57,18 @@
     "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, Solana, and Tron",
     "scrollToForm": "Back to the buy form"
   },
+  "whyPriceRises": {
+    "title": "Why the price rises",
+    "noManualLead": "The PEOPLE team does not set or raise the price. A public formula in the sale smart contract sets it automatically: each purchase moves the price along the bonding curve. Nobody can change the price manually.",
+    "mechanism": "Same formula-based pricing as Uniswap, Bancor (pioneer, 2017), pump.fun, and Virtuals Protocol on Base: here price = f(tokens sold), transparent and verifiable on chain.",
+    "example": "From the published curve parameters: {startPrice} per PPL at the start, {midPrice} after {midSold} PPL sold (~{midRaised} raised), and {gradPrice} at graduation ({gradRaised} raised).",
+    "explainerLink": "How the bonding curve works",
+    "reserve": "Funds from purchases stay in the sale reserve on Base and are used to buy PPL back from holders — sell-back for verified users after a 30-day hold, subject to daily limits.",
+    "chartAria": "PPL sale bonding curve: price versus PPL sold",
+    "chartAxisSold": "PPL sold",
+    "chartAxisPrice": "Price, $",
+    "chartMarker": "{price} · {sold}"
+  },
   "curve": {
     "eyebrow": "The formula",
     "title": "One curve, visible to everyone",
@@ -64,14 +76,14 @@
     "axisRaised": "Raised, $",
     "axisPrice": "Price per PPL, $",
     "youAreHere": "You are here",
-    "notOpen": "The curve opens with the sale. The shape and the markers below are fixed by the formula.",
+    "notOpen": "",
     "marker": "{raised} raised",
     "markerPrice": "{price} per PPL",
     "markerSold": "{sold} PPL sold",
     "graduationTag": "Graduation",
     "ceilingNote": "The {ceiling} ceiling is only reached if all {supply} PPL sell. The curve closes first, at {graduation} raised.",
     "feedTitle": "Recent buys and sells",
-    "feedEmpty": "No trades yet — the sale has not opened.",
+    "feedEmpty": "No trades yet.",
     "feedBuy": "Buy",
     "feedSell": "Sell",
     "feedLink": "View",
@@ -86,8 +98,8 @@
         "body": "PPL is recorded to you on the People network the moment you buy. No lock-up on the curve, no waiting list."
       },
       {
-        "title": "You can sell back to the curve at any time",
-        "body": "Changed your mind? Sell PPL back to the curve at any time at the current price, minus the {fee} fee — and that fee goes to PPL buyback, not to the team. Sell-back payout comes in {payoutStable} on {payoutNetwork} (Coinbase's network; USDC issued by Circle, the same dollar as on Ethereum or Polygon, only faster and cheaper). Or choose your own network; the bridge takes a few minutes."
+        "title": "Sell-back from the reserve",
+        "body": "Verified users can sell PPL back to the reserve after a 30-day hold per lot, within daily limits and a {fee} fee. Sell-back closes when the sale graduates. Payouts are in {payoutStable} on {payoutNetwork}."
       },
       {
         "title": "Transfers open with the full network launch",
@@ -126,8 +138,8 @@
     "title": "The contract, the money and the code",
     "lead": "The sale contract, where the money from the sale goes, the security reviews the code has been through, and how the team's own tokens unlock.",
     "saleContract": "Sale contract",
-    "saleContractPending": "Not deployed yet",
-    "saleContractNote": "The address is published here the moment it is deployed and verified.",
+    "saleContractPending": "The contract address will be listed here before the sale opens.",
+    "saleContractNote": "",
     "verifiedSource": "Verified source",
     "auditTitle": "Security reviews",
     "auditLine": "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
@@ -145,8 +157,8 @@
     "title": "Questions, answered",
     "items": [
       {
-        "q": "Changed your mind?",
-        "a": "Sell PPL back to the curve at any time at the current curve price, minus the {fee} fee, which goes to PPL buyback."
+        "q": "Can I sell PPL back?",
+        "a": "Verified users only: 30-day hold per lot, daily limits, and a {fee} fee. Sell-back closes when the sale graduates."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",

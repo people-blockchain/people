@@ -8,6 +8,7 @@ import { CURVE } from "@/lib/sale/config";
 import { fillCopy, pricePerPpl } from "@/lib/sale/format";
 
 import { BuyForm } from "./BuyForm";
+import { BuyWhyPriceRises } from "./BuyWhyPriceRises";
 import { CurveChart } from "./CurveChart";
 import { SaleFaq } from "./SaleFaq";
 import { SaleStatsPanel } from "./SaleStatsPanel";
@@ -66,6 +67,7 @@ export function BuyPage() {
             className="scroll-mt-[calc(3.5rem+0.75rem)] lg:scroll-mt-24 lg:sticky lg:top-24"
           >
             <BuyForm soldPpl={stats.soldPpl} testId="buy-form-hero" />
+            <BuyWhyPriceRises />
           </div>
         </div>
       </section>

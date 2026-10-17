@@ -124,15 +124,63 @@ test("/buy page sets dir=rtl for Arabic", () => {
   assert.match(page, /dir=\{isRtl \? "rtl" : "ltr"\}/);
 });
 
-test("/buy stats panel omits raised card and graduation progress bar", () => {
+test("/buy stats panel shows only price and days left", () => {
   const panel = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
   assert.doesNotMatch(panel, /key: "raised"/);
   assert.doesNotMatch(panel, /role="progressbar"/);
   assert.doesNotMatch(panel, /graduationProgress/);
   assert.match(panel, /key: "price"/);
-  assert.match(panel, /key: "sold"/);
-  assert.match(panel, /key: "buyers"/);
   assert.match(panel, /key: "days"/);
+  assert.doesNotMatch(panel, /key: "sold"/);
+  assert.doesNotMatch(panel, /key: "buyers"/);
+});
+
+test("/buy why-price block leads with no manual pricing (12 languages)", () => {
+  const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+  for (const lang of langs) {
+    const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
+    assert.ok(doc.whyPriceRises?.noManualLead, lang);
+    assert.match(doc.whyPriceRises.noManualLead, /PEOPLE/, `${lang}: brand caps`);
+    assert.match(doc.whyPriceRises.mechanism, /Uniswap/i, `${lang}: Uniswap example`);
+    assert.match(doc.whyPriceRises.mechanism, /Bancor/i, `${lang}: Bancor example`);
+    assert.match(doc.whyPriceRises.mechanism, /pump\.fun/i, `${lang}: pump.fun example`);
+    assert.match(doc.whyPriceRises.mechanism, /Virtuals Protocol/i, `${lang}: Virtuals example`);
+    assert.ok(doc.whyPriceRises.reserve, lang);
+    assert.match(doc.whyPriceRises.reserve, /30/, `${lang}: hold mention`);
+    assert.ok(doc.whyPriceRises.chartAxisSold, lang);
+    assert.match(doc.form.sellBack, /30/, `${lang}: sell-back hold`);
+    assert.doesNotMatch(doc.form.sellBack, /any time|в любой момент|à tout moment|jederzeit|en cualquier momento/i, `${lang}: no anytime sell-back`);
+  }
+  const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
+  assert.match(page, /BuyWhyPriceRises/);
+});
+
+test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
+  const nonEn = ["ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+  for (const lang of nonEn) {
+    const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
+    const blob = JSON.stringify(doc);
+    assert.doesNotMatch(doc.whyPriceRises.mechanism, /price = f\(tokens/i, lang);
+    assert.doesNotMatch(blob, /sell-back/i, lang);
+    assert.doesNotMatch(blob, /\bSell-back\b/, lang);
+    assert.doesNotMatch(blob.replace(/\{graduation\}/g, ""), /\bgraduation\b/i, lang);
+    assert.match(doc.whyPriceRises.noManualLead, /bonding curve[）)]/i, `${lang}: bonding curve gloss`);
+  }
+  const ru = JSON.parse(readFileSync(join(surfaces, "buy-ru.json"), "utf8"));
+  assert.match(ru.form.sellBack, /обратный выкуп/i);
+  assert.match(ru.whyPriceRises.mechanism, /количества проданных PPL/);
+  assert.doesNotMatch(JSON.stringify(ru), /холд/i);
+});
+
+test("/buy UI omits dev-facing stats and form disclaimers", () => {
+  const stats = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
+  assert.doesNotMatch(stats, /statsNote/);
+  const form = readFileSync(join(root, "src/components/buy/BuyForm.tsx"), "utf8");
+  assert.doesNotMatch(form, /disabledNote/);
+  assert.doesNotMatch(form, /form\.estimate/);
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
+  assert.equal(en.hero.statsNote, "");
+  assert.equal(en.form.disabledNote, "");
 });
 
 test("/buy audit copy names exactly the three models in AI_AUDITS", () => {

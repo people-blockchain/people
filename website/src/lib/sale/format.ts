@@ -65,6 +65,16 @@ export function pplCompact(amount: number, lang = "en"): string {
   return ppl(amount, lang);
 }
 
+/** Tighter PPL compact for small chart callouts (one decimal on millions). */
+export function pplCompactChart(amount: number, lang = "en"): string {
+  if (amount >= 1_000_000) {
+    return `${(amount / 1_000_000).toLocaleString(intlLocale(lang), {
+      maximumFractionDigits: 1,
+    })}M`;
+  }
+  return pplCompact(amount, lang);
+}
+
 export function pct(value: number, lang = "en"): string {
   return `${value.toLocaleString(intlLocale(lang), { maximumFractionDigits: 1 })}%`;
 }

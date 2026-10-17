@@ -4,7 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
 import { CURVE, SALE } from "@/lib/sale/config";
-import { fillCopy, pplCompact, pricePerPpl } from "@/lib/sale/format";
+import { fillCopy, pricePerPpl } from "@/lib/sale/format";
 
 type Stat = { key: string; label: string; value: string; hint: string; accent?: boolean };
 
@@ -26,18 +26,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
       value: stats.spotPriceUsd === null ? s.notOpenYet : pricePerPpl(stats.spotPriceUsd, lang),
       hint: fillCopy(s.priceStartHint, { start: pricePerPpl(CURVE.startPriceUsd, lang) }),
       accent: true,
-    },
-    {
-      key: "sold",
-      label: s.sold,
-      value: stats.soldPpl === null ? none : `${pplCompact(stats.soldPpl, lang)} PPL`,
-      hint: fillCopy(s.soldTarget, { supply: pplCompact(CURVE.supplyPpl, lang) }),
-    },
-    {
-      key: "buyers",
-      label: s.buyers,
-      value: stats.buyers === null ? none : stats.buyers.toLocaleString(lang),
-      hint: "",
     },
     {
       key: "days",
@@ -75,8 +63,6 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
           </div>
         ))}
       </dl>
-
-      <p className="mt-3 text-xs leading-relaxed text-ink-3">{t.hero.statsNote}</p>
     </div>
   );
 }
