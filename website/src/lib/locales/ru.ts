@@ -15,16 +15,16 @@ export const ru: LocaleContent = {
       {
         "label": "Лента проектов",
         "href": "/discover"
-      },
-      {
-        "label": "Основатели",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "Фазы протокола",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Миллион основателей",
+        "href": "/founders"
       },
       {
         "label": "Токеномика PPL",

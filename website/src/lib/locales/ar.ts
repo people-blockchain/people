@@ -15,16 +15,16 @@ export const ar: LocaleContent = {
       {
         "label": "خلاصة المشاريع",
         "href": "/discover"
-      },
-      {
-        "label": "المؤسسون",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "مراحل البروتوكول",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "اقتصاد توكن PPL",

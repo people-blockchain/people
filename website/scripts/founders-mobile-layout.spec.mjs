@@ -72,7 +72,7 @@ test.describe("founders page layout", () => {
       await page.setViewportSize({ width, height: 800 });
       await page.goto(`${BASE}/founders`, { waitUntil: "networkidle" });
 
-      await expect(page.getByRole("heading", { level: 1 })).toContainText("first million people");
+      await expect(page.getByRole("heading", { level: 1 })).toContainText("Million Founders");
       await expect(page.getByTestId("founders-cta-claim")).toBeVisible();
       // The header carries the only PEOPLE lockup; the hero must not duplicate it.
       const heroWordmarksOutsideCard = await page
@@ -87,7 +87,9 @@ test.describe("founders page layout", () => {
 
     test(`/founders logged in (mocked) @ ${width}px`, async ({ page }) => {
       await setLocale(page);
-      await page.route("**/api/founders/stats", (r) => r.fulfill({ json: MOCK_STATS }));
+      await page.route("**/api/founders/million-counter", (r) =>
+        r.fulfill({ json: { current: MOCK_STATS.verifiedCount, goal: MOCK_STATS.goal, source: "verified" } }),
+      );
       await page.route("**/api/founders/me", (r) => r.fulfill({ json: MOCK_ME }));
       await page.route("**/api/founders/referral", (r) => r.fulfill({ json: MOCK_REFERRAL }));
       await page.setViewportSize({ width, height: 800 });
@@ -96,7 +98,8 @@ test.describe("founders page layout", () => {
       await expect(page.getByTestId("founders-personal")).toBeVisible();
       await expect(page.getByTestId("founders-active-count")).toContainText("0/50");
       await expect(page.getByTestId("founders-verification").getByRole("heading", { level: 2 })).toBeVisible();
-      await expect(page.getByTestId("founders-countries-empty")).toHaveText("Be the first founder from your country");
+      await expect(page.getByTestId("founders-tiers")).toBeVisible();
+      await expect(page.getByTestId("founders-mosaic")).toBeVisible();
       await assertNoOverflow(page, `/founders logged in@${width}px`, width);
     });
   }

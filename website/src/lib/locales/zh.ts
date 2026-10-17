@@ -15,16 +15,16 @@ export const zh: LocaleContent = {
       {
         "label": "项目动态",
         "href": "/discover"
-      },
-      {
-        "label": "创始人",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "协议阶段",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "PPL 代币经济",

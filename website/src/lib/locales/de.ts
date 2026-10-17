@@ -15,16 +15,16 @@ export const de: LocaleContent = {
       {
         "label": "Projekt-Feed",
         "href": "/discover"
-      },
-      {
-        "label": "Gründer",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "Protokollphasen",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "PPL-Tokenomik",

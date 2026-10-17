@@ -15,16 +15,16 @@ export const tr: LocaleContent = {
       {
         "label": "Proje akışı",
         "href": "/discover"
-      },
-      {
-        "label": "Kurucular",
-        "href": "/founders"
       }
     ],
     "protocolLinks": [
       {
         "label": "Protokol aşamaları",
         "href": "/docs#product-phases"
+      },
+      {
+        "label": "Million Founders",
+        "href": "/founders"
       },
       {
         "label": "PPL tokenomisi",
