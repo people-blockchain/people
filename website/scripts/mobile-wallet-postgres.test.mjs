@@ -1,0 +1,56 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const enabled=process.env.PEOPLE_CONNECT_PG_TEST==='1';
+test('isolated PostgreSQL: large JSONB, atomic pair claim, durable limit and no bootstrap', {skip:!enabled}, async t=>{
+  // Never accepts an existing application URL or the owner's default local database.
+  assert.equal(process.env.DATABASE_URL,'postgres:///people_connect_test');
+  assert.match(process.env.PGHOST??'',/^\/private\/tmp\/people-connect-pg-[A-Za-z0-9-]+$/);
+  assert.equal(process.env.PGPORT,'19483');
+  assert.equal(process.env.PGUSER,'people_connect_test');
+  const {default:postgres}=await import('postgres');
+  const sql=postgres({host:process.env.PGHOST,port:19483,user:'people_connect_test',database:'people_connect_test',password:'',ssl:false,max:1,prepare:false});
+  t.after(()=>sql.end({timeout:1}));
+  const {PostgresGatewayStore,checkGatewayRateLimit}=await import('../src/lib/mobile-wallet/store.ts');
+  const {getDb}=await import('../src/db/index.ts');
+  t.after(()=>getDb().$client.end({timeout:1}));
+  const {MobileWalletGateway,PEOPLE_CONNECT_ORIGIN}=await import('../src/lib/mobile-wallet/service.ts');
+  const {generatePrivateKey,privateKeyToAccount}=await import('viem/accounts');
+  const {recoverMessageAddress}=await import('viem');
+  const {randomBytes}=await import('node:crypto');
+  await sql.unsafe(await readFile(new URL('../drizzle/people-connect-review.sql',import.meta.url),'utf8'));
+  await sql`CREATE TABLE api_rate_limit ("bucketKey" text PRIMARY KEY, count integer NOT NULL DEFAULT 0, "expiresAt" timestamp NOT NULL)`;
+  const store=new PostgresGatewayStore();
+  const gateway=new MobileWalletGateway(store);
+  const execute=(action,fields={},origin=null)=>gateway.execute({version:1,action,...fields},origin);
+  const created=await execute('create',{},PEOPLE_CONNECT_ORIGIN);
+  const pairToken=new URLSearchParams(new URL(created.link).hash.slice(1)).get('token');
+  const attempts=await Promise.all([0,1].map(async()=>{
+    const account=privateKeyToAccount(generatePrivateKey()); // Ephemeral offline key, never funded or logged.
+    const phoneToken=randomBytes(32).toString('hex');
+    const fields={id:created.id,pairToken,address:account.address};
+    const challenge=await execute('challenge',fields);
+    return {account,phoneToken,fields:{...fields,message:challenge.message,signature:await account.signMessage({message:challenge.message}),phoneToken}};
+  }));
+  const claims=await Promise.allSettled(attempts.map(x=>execute('connect',x.fields)));
+  assert.equal(claims.filter(x=>x.status==='fulfilled').length,1,'CAS must allow exactly one pair claim');
+  const winner=attempts[claims.findIndex(x=>x.status==='fulfilled')];
+  const browser={id:created.id,browserToken:created.browserToken};
+  const phone={id:created.id,phoneToken:winner.phoneToken};
+  const message='a'.repeat(8192);
+  const {request}=await execute('request',{...browser,message},PEOPLE_CONNECT_ORIGIN);
+  const signature=await winner.account.signMessage({message});
+  await execute('respond',{...phone,requestId:request.id,decision:'approve',signature});
+  const state=await execute('status',browser,PEOPLE_CONNECT_ORIGIN);
+  assert.equal(state.request.message,message);
+  assert.equal(await recoverMessageAddress({message,signature:state.request.signature}),winner.account.address);
+  const record=await store.read(created.id);
+  assert(Buffer.byteLength(JSON.stringify(record))>8192,'large payload must live in unindexed JSONB, not a B-tree token key');
+  for(const token of [pairToken,created.browserToken,...attempts.map(x=>x.phoneToken)])assert(!JSON.stringify(record).includes(token));
+  assert.equal(await checkGatewayRateLimit('people-mobile-test','127.0.0.1',1,60000),true);
+  assert.equal(await checkGatewayRateLimit('people-mobile-test','127.0.0.1',1,60000),false);
+  await execute('disconnect',{id:created.id,role:'phone',token:winner.phoneToken});
+  assert.deepEqual(await execute('status',browser,PEOPLE_CONNECT_ORIGIN),{state:'disconnected'});
+  const tables=await sql`SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename`;
+  assert.deepEqual(tables.map(x=>x.tablename),['api_rate_limit','mobile_wallet_session'],'no unrelated schema bootstrap is allowed');
+});

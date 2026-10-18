@@ -1,0 +1,12 @@
+{
+  "note": "PUBLIC evidence: fresh unfunded iOS simulator test wallet. No wallet keys, pairing links or role capabilities.",
+  "phase": "passed",
+  "origin": "http://127.0.0.1:18080",
+  "chainId": 97401,
+  "address": "0x1ef640064Ed14365b6249ddAad3B7C3C90fFcf2c",
+  "message": "PEOPLE Connect acceptance\nChain: 97401\nPurpose: prove fresh test-wallet message signing only\nNonce: e189492376905b35ff904c65ba64b35d",
+  "recovered": "0x1ef640064Ed14365b6249ddAad3B7C3C90fFcf2c",
+  "signature": "0x0db90705e0390ed88e3c63ee07db6df8186c9c046fa6c61d0c523e35d79681941fe3f154970d27fa8c4132152cdf09e55b7cdaa21cf23522781bec2626c149961b",
+  "rejectionCode": 4001,
+  "httpCalls": 24
+}
