@@ -3,6 +3,7 @@ import { isDatabaseConfigured } from "@/db";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
 import { GatewayError, LOCAL_CONNECT_ORIGIN, MobileWalletGateway, PEOPLE_CONNECT_ORIGIN } from "@/lib/mobile-wallet/service";
+import { rateLimitSubject } from "@/lib/mobile-wallet/rate-limit-subject";
 import { checkGatewayRateLimit, DevelopmentGatewayStore, PostgresGatewayStore } from "@/lib/mobile-wallet/store";
 
 export const runtime = "nodejs";
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     try { body = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(Buffer.concat(chunks))); }
     catch { throw new GatewayError("invalid_json"); }
     const creating = !!body && typeof body === "object" && "action" in body && body.action === "create";
-    const ip = clientIpFromRequest(request);
+    const ip = rateLimitSubject(clientIpFromRequest(request));
     const budget = creating ? 5 : 120;
     if (!checkSlidingWindowRateLimit(`people-mobile:${creating ? "create" : "action"}`, ip, budget, 60_000) ||
         (!development && !await checkGatewayRateLimit(`people-mobile:${creating ? "create" : "action"}`, ip, budget, 60_000))) throw new GatewayError("rate_limited", 429);
