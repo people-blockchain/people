@@ -13,7 +13,7 @@
  * Settlement, claims, caps, and payouts are not here.
  */
 
-import type { TxType } from "@ovn/protocol";
+import type { TxType } from "@people/protocol";
 
 export const GROWTH_FEE_SPLIT_ACTIVE = true;
 

@@ -3,8 +3,8 @@ import { importPeopleWallet, connectEmbeddedWallet } from "./live-helpers.mjs";
 test("samples layout 390", async ({ browser }) => {
   for (const lang of ["en","de","zh","ar","ru"]) {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-    await ctx.addCookies([{ name: "ovn_lang", value: lang, url: process.env.LIVE_BASE_URL }]);
-    await ctx.addInitScript((l) => { for (const k of Object.keys(localStorage)) {} ; localStorage.setItem("ovn_lang", l); }, lang);
+    await ctx.addCookies([{ name: "people_lang", value: lang, url: process.env.LIVE_BASE_URL }]);
+    await ctx.addInitScript((l) => { for (const k of Object.keys(localStorage)) {} ; localStorage.setItem("people_lang", l); }, lang);
     const p = await ctx.newPage(); await p.goto("/explorer/contracts"); await p.waitForTimeout(3000);
     await p.getByRole("button").filter({ hasText: /./ }).first();
     const ow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);

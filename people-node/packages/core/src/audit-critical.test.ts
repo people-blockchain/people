@@ -7,7 +7,7 @@ import {
   tryApplyRemoteBlock, BondingCurveEngine, quoteAmmSwap, setAccountBalance,
   pplToAtoms, securityUpgradeActive, readSecurityUpgrade, calculateAddLiquidity, calculateRemoveLiquidity, type ChainState,
 } from "./index.js";
-import type { NetworkConfig, Transaction, CurveState, LiquidityPoolState } from "@ovn/protocol";
+import type { NetworkConfig, Transaction, CurveState, LiquidityPoolState } from "@people/protocol";
 
 const bootstrap = generateKeyPair();
 const config = (height = 1, addresses: string[] = []): NetworkConfig => ({

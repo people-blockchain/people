@@ -6,11 +6,11 @@ Status: **draft** — internal testnet wiring only. Not Mainnet. Growth Model A 
 
 | Item | Value | Constant / notes |
 | --- | ---: | --- |
-| Gas price | **8.7e-7** PPL / gas | `APPROVED_CONTRACT_GAS_PRICE_PPL` in `@ovn/protocol` / `@ovn/core` |
+| Gas price | **8.7e-7** PPL / gas | `APPROVED_CONTRACT_GAS_PRICE_PPL` in `@people/protocol` / `@people/core` |
 | Typical ERC-20-class deploy | **~1.044** PPL | ~`1_200_000` gas at the approved price (`TYPICAL_CONTRACT_DEPLOY_FEE_PPL`) |
 | Default tx gas limit (prepay cap) | 2_000_000 | `DEFAULT_TX_GAS_LIMIT`; max prepaid ≈ 1.74 PPL at approved price |
 
-Gas price and block gas limit are **consensus constants** from `@ovn/protocol` (`APPROVED_CONTRACT_GAS_PRICE_PPL`, `DEFAULT_BLOCK_GAS_LIMIT`). Per-node env overrides fork the network and are **not** used in block validation. Public site mirrors defaults in `website/src/lib/factory-fees.ts` and `/fees`. `/create/contract` shows gas price and typical deploy estimate from `GET /contracts/params`.
+Gas price and block gas limit are **consensus constants** from `@people/protocol` (`APPROVED_CONTRACT_GAS_PRICE_PPL`, `DEFAULT_BLOCK_GAS_LIMIT`). Per-node env overrides fork the network and are **not** used in block validation. Public site mirrors defaults in `website/src/lib/factory-fees.ts` and `/fees`. `/create/contract` shows gas price and typical deploy estimate from `GET /contracts/params`.
 
 Non-integer prepaid gas still bypasses Growth Pool / Model A integer path (unchanged). Growth L1=70 / L2=30, depth=2, pool 15%, Claim D, caps — **not modified** by this tariff.
 

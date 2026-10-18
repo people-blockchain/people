@@ -30,7 +30,7 @@
       {
         "title": "Information stored only in your browser",
         "body": [
-          "Non-custodial wallets: wallet keys are created and encrypted in your browser. Encrypted private keys and optional mnemonics are saved in localStorage under the key ppl-web-wallets. Language (ovn_lang) and colour theme (ovn_theme) preferences are also stored in localStorage.",
+          "Non-custodial wallets: wallet keys are created and encrypted in your browser. Encrypted private keys and optional mnemonics are saved in localStorage under the key ppl-web-wallets. Language (people_lang) and colour theme (people_theme) preferences are also stored in localStorage.",
           "We never receive your wallet private keys, seed phrases, or wallet encryption password. Only public addresses and public keys are sent to our servers when you choose to bind a wallet to your partner profile."
         ]
       },

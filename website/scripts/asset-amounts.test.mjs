@@ -19,7 +19,7 @@ test('EVM chain: value is already human units, must not be divided again', t => 
 test('legacy chain: value is raw base units and must be divided by 10**decimals', t => {
   const saved = process.env.NEXT_PUBLIC_CHAIN;
   t.after(() => { process.env.NEXT_PUBLIC_CHAIN = saved; });
-  process.env.NEXT_PUBLIC_CHAIN = 'ovn-node';
+  process.env.NEXT_PUBLIC_CHAIN = 'people-node';
   assert.equal(formatAssetUnits(1_000_000_000_000, 6), '1,000,000');
   assert.equal(formatAssetUnits(78038183, 6), '78.038183');
   assert.equal(formatAssetUnits(null, 6), '—');

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { userWalletVaults } from "@/db/schema";
-import { keyFromPrivate } from "@/lib/ovn-sign";
+import { keyFromPrivate } from "@/lib/people-sign";
 import {
   decryptPrivateKeyFromVault,
   deriveUserWrapKeyHex,

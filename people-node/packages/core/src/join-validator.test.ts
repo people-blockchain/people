@@ -9,7 +9,7 @@ import {
   signTransaction
 } from "./index.js";
 import type { ChainState } from "./index.js";
-import type { NetworkConfig, Transaction } from "@ovn/protocol";
+import type { NetworkConfig, Transaction } from "@people/protocol";
 
 /**
  * M04-3: `joinValidator` assigned `state.validators[tx.from]` unconditionally, so a validator

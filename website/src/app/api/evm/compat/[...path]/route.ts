@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
-import { handleEvmCompatGet } from "@/lib/evm/ovn-compat";
+import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
 const RATE_LIMIT = 120;

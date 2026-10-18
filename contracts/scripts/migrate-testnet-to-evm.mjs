@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Apply ovn-export.json to a deployed Cosmos EVM chain (97401).
+ * Apply legacy-testnet-export.json to a deployed Cosmos EVM chain (97401).
  * Requires: DEPLOYER_PRIVATE_KEY, funded deployer, contracts/deployments/97401.json
  */
 import { readFileSync, writeFileSync } from "node:fs";
@@ -17,7 +17,7 @@ import {
 import { privateKeyToAccount } from "viem/accounts";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const EXPORT = join(ROOT, "deployments", "ovn-export.json");
+const EXPORT = join(ROOT, "deployments", "legacy-testnet-export.json");
 const DEPLOYED = join(ROOT, "deployments", "97401.json");
 const REPORT = join(ROOT, "deployments", "migration-report.json");
 

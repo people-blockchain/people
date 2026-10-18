@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { SwapApp } from "@/components/swap/SwapApp";
 import { SITE_NAME } from "@/lib/site";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
-import { handleEvmCompatGet } from "@/lib/evm/ovn-compat";
+import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";

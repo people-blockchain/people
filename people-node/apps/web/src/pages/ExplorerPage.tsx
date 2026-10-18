@@ -6,8 +6,8 @@ import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useLive } from "../LiveContext.js";
 import { useWallet } from "../WalletContext.js";
-import { ovn } from "../ovnClient.js";
-import type { Block } from "@ovn/protocol";
+import { people } from "../peopleClient.js";
+import type { Block } from "@people/protocol";
 import type { LiveTransaction } from "../LiveContext.js";
 import { formatPaymentMemos } from "../txMemo.js";
 import { labelTxType } from "../i18n.js";
@@ -98,7 +98,7 @@ export function ExplorerPage() {
     setLoadingMore(true);
     try {
       const cursor = blockCursor ?? feed?.blocks.at(-1)?.header.height;
-      const page = await ovn.getBlocksCursor(10, cursor);
+      const page = await people.getBlocksCursor(10, cursor);
       setExtraBlocks(page.items);
       setBlockCursor(page.nextCursor === null ? -1 : Number(page.nextCursor));
     } catch (err) {
@@ -112,7 +112,7 @@ export function ExplorerPage() {
     setLoadingMore(true);
     try {
       const cursor = txCursor ?? feed?.transactions.at(-1)?.id;
-      const page = await ovn.getTransactionsCursor(20, cursor);
+      const page = await people.getTransactionsCursor(20, cursor);
       setExtraTxs(page.items as LiveTransaction[]);
       setTxCursor(page.nextCursor === null ? "" : String(page.nextCursor));
     } catch (err) {
@@ -123,7 +123,7 @@ export function ExplorerPage() {
   }
 
   function exportTxCsv() {
-    downloadCsv(`ovn-txs-${Date.now()}.csv`, [
+    downloadCsv(`people-txs-${Date.now()}.csv`, [
       ["id", "blockHeight", "type", "from", "to", "amount", "fee", "memo", "finalized"],
       ...visibleTransactions.map((tx) => [
         tx.id,

@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
-import { EIP155_CHAIN_ID } from "@ovn/protocol";
+import { EIP155_CHAIN_ID } from "@people/protocol";
 import {
   DEFAULT_JSON_RPC_MAX_BATCH,
   handleJsonRpcBatch,

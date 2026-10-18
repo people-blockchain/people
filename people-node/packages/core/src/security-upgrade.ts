@@ -1,4 +1,4 @@
-import type { NetworkConfig } from "@ovn/protocol";
+import type { NetworkConfig } from "@people/protocol";
 
 export const MAX_FUTURE_BLOCK_MS = 15_000;
 

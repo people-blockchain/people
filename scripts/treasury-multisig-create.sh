@@ -4,7 +4,7 @@
 # Testnet or mainnet, read-only against the chain: builds a local keyring
 # entry only, does not send any transaction.
 #
-# Each signer (Alex, Kirill, the cold-key holder) runs on their OWN machine,
+# Each signer (three independent key holders, one cold) runs on their OWN machine,
 # independently:
 #   peopled keys add <name>
 #   peopled keys show <name> -p
@@ -19,9 +19,9 @@
 #
 # Example (2-of-3 test multisig):
 #   scripts/treasury-multisig-create.sh treasury-test 2 \
-#     'alex:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}' \
-#     'kirill:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}' \
-#     'cold:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}'
+#     'signer1:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}' \
+#     'signer2:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}' \
+#     'signer3:{"@type":"/cosmos.evm.crypto.v1.ethsecp256k1.PubKey","key":"..."}'
 #
 # Env: PEOPLED (default: peopled on PATH), HOME_DIR (keyring dir, default
 # ./multisig-keyring), KEYRING_BACKEND (default: test — unencrypted, fine for

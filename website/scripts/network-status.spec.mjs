@@ -15,7 +15,7 @@ test("wallet network status starts neutral then reaches testnet without unavaila
 
   await page.addInitScript(() => {
     try {
-      localStorage.setItem("ovn_lang", "ru");
+      localStorage.setItem("people_lang", "ru");
     } catch {
       /* ignore */
     }

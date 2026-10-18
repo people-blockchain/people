@@ -5,7 +5,7 @@ export const DEFAULT_TRUSTED_PROXY_PEERS = ['127.0.0.1', '::1', '::ffff:127.0.0.
 
 /**
  * The service listens on loopback behind the site proxy, so the caller IP arrives in the
- * `x-ovn-client-ip` header. Honour it only when forwarded headers are explicitly trusted
+ * `x-people-client-ip` header. Honour it only when forwarded headers are explicitly trusted
  * (TRUST_PROXY_HEADERS=1) AND the immediate peer is the configured trusted proxy; otherwise
  * any local process (or an SSRF in a co-hosted app) could mint a fresh source key per request
  * and defeat the per-source queue cap (LAV-M4). A malformed/absent value falls back to the peer.
@@ -13,7 +13,8 @@ export const DEFAULT_TRUSTED_PROXY_PEERS = ['127.0.0.1', '::1', '::ffff:127.0.0.
 export function clientSource(peer, headers, { trustProxyHeaders = false, trustedPeers = [] } = {}) {
   const address = typeof peer === 'string' ? peer : '';
   if (trustProxyHeaders && trustedPeers.includes(address)) {
-    const forwarded = String(headers?.['x-ovn-client-ip'] ?? '').trim();
+    // Legacy header still sent by deployed nginx in front of the faucet.
+    const forwarded = String(headers?.['x-people-client-ip'] ?? headers?.['x-ovn-client-ip'] ?? '').trim();
     if (SOURCE_RE.test(forwarded)) return forwarded;
   }
   return address || 'unknown';

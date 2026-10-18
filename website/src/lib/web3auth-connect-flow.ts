@@ -305,7 +305,7 @@ export function beginWeb3AuthConnect(
 
 /** Root element @web3auth/ui mounts the SDK modal into (see `w3a-parent-container` in the SDK). */
 export const SDK_MODAL_CONTAINER_ID = "w3a-parent-container";
-export const SDK_MODAL_STYLE_ID = "ovn-web3auth-modal-hide";
+export const SDK_MODAL_STYLE_ID = "people-web3auth-modal-hide";
 
 type StyleDocument = {
   getElementById: (id: string) => unknown;

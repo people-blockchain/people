@@ -8,7 +8,7 @@ import { useDeviceVault } from "../DeviceVaultContext.js";
 import { ConfirmDialog } from "../ConfirmDialog.js";
 import { InstallPwaButton } from "../InstallPwaButton.js";
 import { useLive } from "../LiveContext.js";
-import { ovn, signTransaction } from "../ovnClient.js";
+import { people, signTransaction } from "../peopleClient.js";
 import { deviceHasStoredKey } from "../devices.js";
 import { MIN_WALLET_PASSWORD_LENGTH } from "../walletStorage.js";
 import { getSignedAttestation, recordSignedAttestation } from "../attestationLog.js";
@@ -96,12 +96,12 @@ export function LightPage() {
           continue;
         }
         try {
-          const block = await ovn.getBlock(height);
+          const block = await people.getBlock(height);
           // The only thing the wallet attests to is whatever hash the node reports, and it
           // has no way to recompute it. Read the same height twice and refuse to sign if the
           // node contradicts itself, or if it now offers a different hash than one we have
           // already signed at this height.
-          const confirmation = await ovn.getBlock(height);
+          const confirmation = await people.getBlock(height);
           if (confirmation.hash !== block.hash) {
             notify.error(t.lightAttestationHashConflict.replace("{height}", String(height)));
             stopped = true;
@@ -115,9 +115,9 @@ export function LightPage() {
             setRunning(false);
             return;
           }
-          const account = await ovn.getAddress(device.address);
+          const account = await people.getAddress(device.address);
           const tx = signTransaction(privateKey, {
-            chainId: (await ovn.getHealth()).chainId,
+            chainId: (await people.getHealth()).chainId,
             id: `${device.address}-att-${height}-${Date.now()}`,
             from: device.address,
             to: "attestation",
@@ -132,7 +132,7 @@ export function LightPage() {
               kind: "light"
             }
           });
-          const result = await ovn.submitTx(tx);
+          const result = await people.submitTx(tx);
           if (result.accepted) {
             recordSignedAttestation(height, block.hash);
           }

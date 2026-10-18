@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "Testnet PEOPLE Blockchain (EVM)",
-      "summary": "Mở rộng testnet PEOPLE Blockchain trên EVM. Giai đoạn 1 (chain/) đang làm; testnet công khai hiện vẫn trên nút OVN với RPC chỉ đọc."
+      "summary": "Mở rộng testnet PEOPLE Blockchain trên EVM. Giai đoạn 1 (chain/) đang làm; testnet công khai hiện vẫn trên nút legacy people-node với RPC chỉ đọc."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

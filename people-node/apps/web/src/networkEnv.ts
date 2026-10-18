@@ -7,7 +7,7 @@ export function classifyNetwork(chainId: string | undefined | null): NetworkKind
     return "unknown";
   }
   const id = chainId.toLowerCase();
-  if (id.includes("mainnet") || id === "ovn") {
+  if (id.includes("mainnet")) {
     return "mainnet";
   }
   if (id.includes("testnet")) {

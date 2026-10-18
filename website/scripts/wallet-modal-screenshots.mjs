@@ -7,8 +7,8 @@ const outDir = "/opt/cursor/artifacts/screenshots";
 async function prime(page, lang, path = "/") {
   await page.goto(`${base}${path}`, { waitUntil: "domcontentloaded" });
   await page.evaluate((l) => {
-    localStorage.setItem("ovn_lang", l);
-    localStorage.setItem("ovn_theme", "dark");
+    localStorage.setItem("people_lang", l);
+    localStorage.setItem("people_theme", "dark");
   }, lang);
   await page.reload({ waitUntil: "networkidle" });
 }

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import type { RewardDistribution } from "@ovn/protocol";
+import type { RewardDistribution } from "@people/protocol";
 import { addressPath, isWalletAddress } from "../address.js";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
@@ -10,11 +10,11 @@ import { ConfirmDialog } from "../ConfirmDialog.js";
 import { useLive, type LiveTransaction } from "../LiveContext.js";
 import {
   keyPairFromPrivateKey,
-  ovn,
+  people,
   recommendedFeeForSend,
   signTransaction,
   MAX_BATCH_RECIPIENTS
-} from "../ovnClient.js";
+} from "../peopleClient.js";
 import { TokenIcon } from "../TokenIcon.js";
 import {
   decryptPrivateKey,
@@ -280,8 +280,8 @@ export function WalletPage() {
     setLoading(true);
     try {
       const [transactions, account] = await Promise.all([
-        ovn.getAddressTransactions(address, 20),
-        ovn.getAddress(address)
+        people.getAddressTransactions(address, 20),
+        people.getAddress(address)
       ]);
       setExtraHistory(transactions as LiveTransaction[]);
       setAccountOverride({
@@ -313,7 +313,7 @@ export function WalletPage() {
       setRewardHistory([]);
       return;
     }
-    ovn
+    people
       .getRewardHistory(20)
       .then(setRewardHistory)
       .catch(() => setRewardHistory([]));
@@ -719,7 +719,7 @@ export function WalletPage() {
       // against the chain first and never re-sign on a nonce that is already consumed.
       if (retryItem) {
         const priorOnChain = retryItem.txId
-          ? await ovn.getTransaction(retryItem.txId).catch(() => null)
+          ? await people.getTransaction(retryItem.txId).catch(() => null)
           : null;
         if (priorOnChain) {
           setTxQueue(
@@ -734,7 +734,7 @@ export function WalletPage() {
           await refreshAccount(session.address);
           return;
         }
-        const current = await ovn.getAddress(session.address);
+        const current = await people.getAddress(session.address);
         if (current.nonce > retryItem.nonce) {
           // Some other tx already spent this nonce, so the node will reject a re-sign of
           // it and the original may have been the one that landed. Stop and let a human
@@ -751,11 +751,11 @@ export function WalletPage() {
           return;
         }
       }
-      const fresh = await ovn.getAddress(session.address);
+      const fresh = await people.getAddress(session.address);
       const useNonce = fresh.nonce;
       const tx = draft.recipients?.length
         ? signTransaction(session.privateKey, {
-            chainId: (await ovn.getHealth()).chainId,
+            chainId: (await people.getHealth()).chainId,
             id: `${session.address}-batch-${Date.now()}`,
             from: session.address,
             to: "batch",
@@ -767,7 +767,7 @@ export function WalletPage() {
             payload: { recipients: draft.recipients }
           })
         : signTransaction(session.privateKey, {
-            chainId: (await ovn.getHealth()).chainId,
+            chainId: (await people.getHealth()).chainId,
             id: `${session.address}-transfer-${Date.now()}`,
             from: session.address,
             to: draft.to,
@@ -793,7 +793,7 @@ export function WalletPage() {
         recipients: draft.recipients
       };
       setTxQueue(upsertTxQueueItem(queued));
-      const result = await ovn.submitTx(tx);
+      const result = await people.submitTx(tx);
       if (!result.accepted) {
         setTxQueue(
           updateTxQueueStatus(localId, {
@@ -926,7 +926,7 @@ export function WalletPage() {
     }
     setFunding(true);
     try {
-      await ovn.fundFromFaucet(session.address, 100);
+      await people.fundFromFaucet(session.address, 100);
       notify.success(t.walletFaucetRequested);
       await new Promise((resolve) => setTimeout(resolve, 3500));
       await refreshAccount(session.address);
@@ -1728,7 +1728,7 @@ export function WalletPage() {
                           type="button"
                           className="ghost send-action-btn"
                           onClick={() =>
-                            downloadTextFile(`ovn-batch-${Date.now()}.csv`, batchReportReady)
+                            downloadTextFile(`people-batch-${Date.now()}.csv`, batchReportReady)
                           }
                         >
                           {t.batchCsvDownloadReport}

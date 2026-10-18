@@ -7,8 +7,8 @@ import {
 import * as secp from "@noble/secp256k1";
 import { hmac } from "@noble/hashes/hmac.js";
 import { sha256 } from "@noble/hashes/sha2.js";
-import type { Transaction, Block } from "@ovn/protocol";
-import { transactionIdPayload } from "@ovn/protocol";
+import type { Transaction, Block } from "@people/protocol";
+import { transactionIdPayload } from "@people/protocol";
 
 export {
   addressFromPublicKey,
@@ -63,7 +63,7 @@ export function contentTransactionId(tx: object): string {
 export function signTransaction(privateKeyHex: string, tx: Transaction, contentId = false): Transaction {
   const secretKey = hexToBytes(privateKeyHex);
   const publicKey = bytesToHex(secp.getPublicKey(secretKey, true));
-  tx = { ...tx, from: addressFromPublicKey(publicKey), chainId: tx.chainId ?? process.env.CHAIN_ID ?? "ovn-devnet" };
+  tx = { ...tx, from: addressFromPublicKey(publicKey), chainId: tx.chainId ?? process.env.CHAIN_ID ?? "people-devnet" };
   if (contentId) tx = { ...tx, id: contentTransactionId(tx) };
   const message = new TextEncoder().encode(canonicalTxPayload(tx));
   const signature = bytesToHex(secp.sign(message, secretKey));

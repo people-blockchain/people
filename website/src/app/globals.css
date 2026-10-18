@@ -252,7 +252,7 @@ body {
    based (GPU friendly) and fully disabled under prefers-reduced-motion.
    ========================================================================== */
 
-@keyframes ovn-rise {
+@keyframes people-rise {
   from {
     opacity: 0;
     transform: translate3d(0, 20px, 0);
@@ -263,7 +263,7 @@ body {
   }
 }
 
-@keyframes ovn-fade {
+@keyframes people-fade {
   from {
     opacity: 0;
   }
@@ -272,7 +272,7 @@ body {
   }
 }
 
-@keyframes ovn-grow-x {
+@keyframes people-grow-x {
   from {
     transform: scaleX(0);
   }
@@ -281,19 +281,19 @@ body {
   }
 }
 
-@keyframes ovn-dash {
+@keyframes people-dash {
   to {
     stroke-dashoffset: -1000;
   }
 }
 
-@keyframes ovn-spin {
+@keyframes people-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@keyframes ovn-pulse {
+@keyframes people-pulse {
   0%,
   100% {
     opacity: 0.35;
@@ -305,7 +305,7 @@ body {
   }
 }
 
-@keyframes ovn-shimmer {
+@keyframes people-shimmer {
   0% {
     transform: translateX(-120%);
   }
@@ -314,7 +314,7 @@ body {
   }
 }
 
-@keyframes ovn-flow-x {
+@keyframes people-flow-x {
   from {
     transform: translate3d(-100%, 0, 0);
   }
@@ -323,7 +323,7 @@ body {
   }
 }
 
-@keyframes ovn-flow-y {
+@keyframes people-flow-y {
   from {
     transform: translate3d(0, -100%, 0);
   }
@@ -340,7 +340,7 @@ html.js-motion .reveal {
 }
 
 html.js-motion .reveal.is-visible {
-  animation: ovn-rise 0.72s cubic-bezier(0.22, 0.68, 0.24, 1) forwards;
+  animation: people-rise 0.72s cubic-bezier(0.22, 0.68, 0.24, 1) forwards;
   animation-delay: var(--reveal-delay, 0ms);
 }
 
@@ -358,29 +358,29 @@ html.js-motion .reveal.is-visible {
 /* Travelling flow pulses along connectors */
 .flow-dash {
   stroke-dasharray: 5 13;
-  animation: ovn-dash 7s linear infinite;
+  animation: people-dash 7s linear infinite;
 }
 
 /* A particle travelling along a straight connector. The track is hairline-thin
    and clips the pulse, so it reads as light moving through the wire. */
 .flow-particle {
-  animation: ovn-flow-x 2.2s linear infinite;
+  animation: people-flow-x 2.2s linear infinite;
 }
 .flow-particle-y {
-  animation: ovn-flow-y 2.2s linear infinite;
+  animation: people-flow-y 2.2s linear infinite;
 }
 
 .spin-slow {
-  animation: ovn-spin 92s linear infinite;
+  animation: people-spin 92s linear infinite;
   transform-origin: center;
 }
 .spin-slow-reverse {
-  animation: ovn-spin 130s linear infinite reverse;
+  animation: people-spin 130s linear infinite reverse;
   transform-origin: center;
 }
 
 .node-pulse {
-  animation: ovn-pulse 3.4s ease-in-out infinite;
+  animation: people-pulse 3.4s ease-in-out infinite;
 }
 
 .shimmer::after {
@@ -393,7 +393,7 @@ html.js-motion .reveal.is-visible {
     color-mix(in oklab, var(--c-ink) 10%, transparent) 45%,
     transparent 90%
   );
-  animation: ovn-shimmer 2.6s ease-in-out infinite;
+  animation: people-shimmer 2.6s ease-in-out infinite;
   pointer-events: none;
 }
 

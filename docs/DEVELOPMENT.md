@@ -1,6 +1,6 @@
 # DEVELOPER GUIDE — PEOPLE'S BLOCKCHAIN
 
-This guide explains how to set up, build, test, and run the **People's Blockchain** monorepo (based on the OVN baseline).
+This guide explains how to set up, build, test, and run the **People's Blockchain** monorepo (based on the legacy people-node (TypeScript) stack).
 
 > Naming follows `docs/TERMINOLOGY.md`: brand **People**, network **People's Blockchain**,
 > native token **People** (ticker **PPL**, runtime id `ppl`). Legacy `vls` keys in old
@@ -73,7 +73,7 @@ Before running type checks or starting applications, compile all workspaces:
 npm run build
 ```
 
-> **Note:** Turborepo handles package inter-dependencies automatically. `@ovn/protocol` is compiled first, followed by `@ovn/core`, `@ovn/p2p`, `@ovn/sdk`, and the frontend/node applications.
+> **Note:** Turborepo handles package inter-dependencies automatically. `@people/protocol` is compiled first, followed by `@people/core`, `@people/p2p`, `@people/sdk`, and the frontend/node applications.
 
 ### 3. Run Type Checking and Linting
 
@@ -96,9 +96,9 @@ npm run test
 To run tests for a specific workspace:
 
 ```bash
-npm run test --workspace=@ovn/core
-npm run test --workspace=@ovn/node
-npm run test --workspace=@ovn/sdk
+npm run test --workspace=@people/core
+npm run test --workspace=@people/node
+npm run test --workspace=@people/sdk
 ```
 
 ---
@@ -110,7 +110,7 @@ npm run test --workspace=@ovn/sdk
 Starts the node daemon on port `4001` with P2P gossip on port `4002`:
 
 ```bash
-npm --workspace=@ovn/node run dev
+npm --workspace=@people/node run dev
 ```
 
 Key endpoints:
@@ -128,7 +128,7 @@ Key endpoints:
 Starts the Vite development server for the web interface on `http://localhost:3000`:
 
 ```bash
-npm --workspace=@ovn/web run dev
+npm --workspace=@people/web run dev
 ```
 
 Open `http://localhost:3000` in your browser to access the wallet, explorer, and staking views.
@@ -191,26 +191,26 @@ npm run ci:smoke
 
 | Variable | Workspace | Default | Description |
 |---|---|---|---|
-| `PORT` | `@ovn/node` | `4001` | HTTP API port for the node |
-| `GOSSIP_PORT` | `@ovn/node` | `4002` | WebSocket P2P gossip port |
-| `DATA_DIR` | `@ovn/node` | `./data/<peerId>` | Directory for LevelDB blockchain data |
-| `PEER_ID` | `@ovn/node` | `peer-<rand>` | Unique identifier for the node peer |
-| `BOOTSTRAP_PEERS`| `@ovn/node` | `""` | Comma-separated gossip seeds (`host:4002`, `ws://host:4002`, `wss://…`) |
-| `PUBLIC_GOSSIP_URL` | `@ovn/node` | `""` | Advertised listen URL for peer-exchange (`ws://PUBLIC_IP:4002`). Alias: `GOSSIP_ADVERTISE`. Without this, hello advertises `ws://127.0.0.1:$GOSSIP_PORT`, which other hosts cannot dial. |
-| `CHAIN_ID` | `@ovn/node` | `ovn-devnet` | Blockchain network identifier |
-| `ALLOW_DEV_ENDPOINTS` | `@ovn/node` | `""` | Set to `1` to enable debug/dev-only routes. Public Railway testnet must leave this unset. Testnet faucet is `ALLOW_FAUCET=1` instead. |
-| `PPL_PRICE_USD` | `@ovn/node` | `0.12` | Fallback reference for node metrics only. Not a market rate. Do not show USD on the public website. |
-| `TOKEN_CREATE_MIN_FEE` | `@ovn/core` | `1.045005` | Owner-approved minimum `tokenCreate` fee in PPL. |
-| `NFT_MINT_MIN_FEE` | `@ovn/core` | `2.925` | Owner-approved minimum `nftMint` fee in PPL. |
-| `DEFAULT_TRANSFER_FEE` | `@ovn/core` / `@ovn/sdk` | `0.004875` | Owner-approved ordinary transfer client default (not hashed in `stateRoot`). Batch scales with this tariff. |
-| `NODE_API_URL` | `@ovn/mobile-lite`| `http://localhost:4001` | Target node API URL for light worker |
-| `VITE_NODE_URL` | `@ovn/web` | `http://localhost:4001` | Backend API URL for the web dashboard |
-| `VITE_WS_URL` | `@ovn/web` | `ws://localhost:4001/ws` | Live WebSocket endpoint for the web dashboard |
-| `DEV_FAUCET_PRIVATE_KEY` | `@ovn/node`, `@ovn/core` | unset | `DEV_FAUCET_PRIVATE_KEY` задаётся локально, never commit. |
-| `SECURITY_UPGRADE_HEIGHT` | `@ovn/core` | unset | Высота активации правил security protocol v2. **Обязательна на любой сети, доступной посторонним.** Должна быть одинаковой на всех нодах: расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
-| `VALIDATOR_ALLOWLIST` | `@ovn/core` | `""` | Список адресов (канонический нижний регистр, через запятую), которым разрешён `joinValidator` после `SECURITY_UPGRADE_HEIGHT`. Без `SECURITY_UPGRADE_HEIGHT` нода не стартует. Пустой список допустим для сети только из bootstrap. |
-| `CONSENSUS_UPGRADE_1_HEIGHT` | `@ovn/core` | unset | Высота активации Consensus Upgrade #1 (`docs/protocol-decisions/consensus-upgrade-1.md`). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
-| `PROMO_SHARE_UPGRADE_HEIGHT` | `@ovn/core` | unset | Высота активации опционального promo-share создателя (`docs/protocol-decisions/promo-share.md`, `docs/TOKEN-ECONOMY.md` §4a). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана: нода держит фиксированный сплит 60/15/10/10/5 и игнорирует `promoBps`. |
+| `PORT` | `@people/node` | `4001` | HTTP API port for the node |
+| `GOSSIP_PORT` | `@people/node` | `4002` | WebSocket P2P gossip port |
+| `DATA_DIR` | `@people/node` | `./data/<peerId>` | Directory for LevelDB blockchain data |
+| `PEER_ID` | `@people/node` | `peer-<rand>` | Unique identifier for the node peer |
+| `BOOTSTRAP_PEERS`| `@people/node` | `""` | Comma-separated gossip seeds (`host:4002`, `ws://host:4002`, `wss://…`) |
+| `PUBLIC_GOSSIP_URL` | `@people/node` | `""` | Advertised listen URL for peer-exchange (`ws://PUBLIC_IP:4002`). Alias: `GOSSIP_ADVERTISE`. Without this, hello advertises `ws://127.0.0.1:$GOSSIP_PORT`, which other hosts cannot dial. |
+| `CHAIN_ID` | `@people/node` | `people-devnet` | Blockchain network identifier |
+| `ALLOW_DEV_ENDPOINTS` | `@people/node` | `""` | Set to `1` to enable debug/dev-only routes. Public Railway testnet must leave this unset. Testnet faucet is `ALLOW_FAUCET=1` instead. |
+| `PPL_PRICE_USD` | `@people/node` | `0.12` | Fallback reference for node metrics only. Not a market rate. Do not show USD on the public website. |
+| `TOKEN_CREATE_MIN_FEE` | `@people/core` | `1.045005` | Owner-approved minimum `tokenCreate` fee in PPL. |
+| `NFT_MINT_MIN_FEE` | `@people/core` | `2.925` | Owner-approved minimum `nftMint` fee in PPL. |
+| `DEFAULT_TRANSFER_FEE` | `@people/core` / `@people/sdk` | `0.004875` | Owner-approved ordinary transfer client default (not hashed in `stateRoot`). Batch scales with this tariff. |
+| `NODE_API_URL` | `@people/mobile-lite`| `http://localhost:4001` | Target node API URL for light worker |
+| `VITE_NODE_URL` | `@people/web` | `http://localhost:4001` | Backend API URL for the web dashboard |
+| `VITE_WS_URL` | `@people/web` | `ws://localhost:4001/ws` | Live WebSocket endpoint for the web dashboard |
+| `DEV_FAUCET_PRIVATE_KEY` | `@people/node`, `@people/core` | unset | `DEV_FAUCET_PRIVATE_KEY` задаётся локально, never commit. |
+| `SECURITY_UPGRADE_HEIGHT` | `@people/core` | unset | Высота активации правил security protocol v2. **Обязательна на любой сети, доступной посторонним.** Должна быть одинаковой на всех нодах: расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
+| `VALIDATOR_ALLOWLIST` | `@people/core` | `""` | Список адресов (канонический нижний регистр, через запятую), которым разрешён `joinValidator` после `SECURITY_UPGRADE_HEIGHT`. Без `SECURITY_UPGRADE_HEIGHT` нода не стартует. Пустой список допустим для сети только из bootstrap. |
+| `CONSENSUS_UPGRADE_1_HEIGHT` | `@people/core` | unset | Высота активации Consensus Upgrade #1 (`docs/protocol-decisions/consensus-upgrade-1.md`). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана. |
+| `PROMO_SHARE_UPGRADE_HEIGHT` | `@people/core` | unset | Высота активации опционального promo-share создателя (`docs/protocol-decisions/promo-share.md`, `docs/TOKEN-ECONOMY.md` §4a). Одинаковая на всех нодах; расхождение раскалывает цепь на высоте H. Пустое значение = не задана: нода держит фиксированный сплит 60/15/10/10/5 и игнорирует `promoBps`. |
 
 ### Предупреждение (M10-1, шаг 0)
 
@@ -292,7 +292,7 @@ node.peopleblockchain.network {
 
 Caddy сам получит и обновит TLS-сертификат. API ноды снаружи: `https://node.peopleblockchain.network/health`, `https://node.peopleblockchain.network/tx`, и т.д.
 
-4. **Сайт (`website/`):** задайте публичный RPC, например `OVN_RPC_URL=https://node.peopleblockchain.network` (или имя переменной из `website/.env.example` для URL ноды). Без HTTPS браузер заблокирует запросы с прод-домена к `http://…`.
+4. **Сайт (`website/`):** задайте публичный RPC, например `PEOPLE_RPC_URL=https://node.peopleblockchain.network` (или имя переменной из `website/.env.example` для URL ноды). Без HTTPS браузер заблокирует запросы с прод-домена к `http://…`.
 
 **Установка Caddy рядом с Docker Compose (кратко):** на VPS установите Caddy (пакет ОС или официальный образ). Нода в compose слушает `127.0.0.1:4001` (не публикуйте 4001 в интернет, если достаточно proxy). Пример отдельного сервиса в `docker-compose.node.yml` на том же хосте:
 
@@ -348,7 +348,7 @@ This is **not Mainnet**. The archive seed is already producing protocol v2 block
 | HTTP / HTTPS API | `https://node.peopleblockchain.network` (process listens on `127.0.0.1:4001`) |
 | Gossip | Port **4002** open on the VPS; published seed also lists `wss://node.peopleblockchain.network/gossip` |
 | Manifest | `GET https://node.peopleblockchain.network/network` |
-| Website RPC env | `OVN_RPC_URL=https://node.peopleblockchain.network` (host/Vercel env only; never commit secrets) |
+| Website RPC env | `PEOPLE_RPC_URL=https://node.peopleblockchain.network` (host/Vercel env only; never commit secrets) |
 
 Public join fields (not secrets) come from `/network`: `genesisHash`, `genesisFaucetAddress`, `bootstrapAddress`, `bootstrapPeers`, token/NFT min fees. Followers set **no** `DEV_FAUCET_PRIVATE_KEY`, **no** `BOOTSTRAP_PRIVATE_KEY`, `ALLOW_FAUCET=0`, and leave `ALLOW_DEV_ENDPOINTS` unset.
 
@@ -381,7 +381,7 @@ Set `TRUST_PROXY_HEADERS=1` on the node **only** if this proxy overwrites `X-Rea
 The website `/explorer` connects directly from the browser to the node's `/ws`
 endpoint. Vercel serves the page; it does not proxy WebSocket connections.
 The endpoint defaults to the configured HTTP RPC origin converted to `ws`/`wss`
-with `/ws` appended. Override it with `OVN_WS_URL` (public URL, no credentials).
+with `/ws` appended. Override it with `PEOPLE_WS_URL` (public URL, no credentials).
 For the public v2 testnet use `wss://node.peopleblockchain.network/ws`.
 
 The client checks the node's `hello.chainId` against `NEXT_PUBLIC_CHAIN_ID`, loads
@@ -414,7 +414,7 @@ subscription (over 45 seconds) mark the connection unavailable. Previous rows
 remain visible while reconnecting with exponential backoff. Teardown cancels
 requests and timers. Reads run sequentially so burst notifications cannot pile up
 overlapping scans. The wallet uses the same EVM subscription client to refresh after blocks.
-Legacy `ovn-node` retains its existing hello/feed WebSocket.
+Legacy `people-node` backend alias (`people-node` env) retains its existing hello/feed WebSocket.
 
 Verification: `cd website && npm run test:explorer-live`; browser regression:
 `npx playwright test scripts/explorer-live.spec.mjs` against a Cosmos EVM build.

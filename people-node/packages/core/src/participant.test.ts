@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 import { Level } from "level";
-import type { Block, Transaction } from "@ovn/protocol";
+import type { Block, Transaction } from "@people/protocol";
 import {
   ChainStore,
   DEFAULT_CONFIG,

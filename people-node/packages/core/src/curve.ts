@@ -1,5 +1,5 @@
 import { PPL_SCALE, pplToAtoms } from "./ppl-units.js";
-import type { CurveState, CurveStatus, LiquidityPoolState, TokenAllocation } from "@ovn/protocol";
+import type { CurveState, CurveStatus, LiquidityPoolState, TokenAllocation } from "@people/protocol";
 
 export const VIRTUAL_NATIVE_RESERVE_BASE = 60; // 60 NATIVE
 export const CURVE_FEE_BPS = 100; // 1.00% = 100 bps

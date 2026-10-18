@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import type { Block, Transaction } from "@ovn/protocol";
+import type { Block, Transaction } from "@people/protocol";
 import { addressPath, isWalletAddress } from "../address.js";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { labelTxType } from "../i18n.js";
 
 interface AccountInfo {
@@ -57,15 +57,15 @@ export function SearchPage() {
     setLoading(true);
     setHadError(false);
 
-    ovn.search(query)
+    people.search(query)
       .then(async (data) => {
         setResults(data);
 
         const primaryAddress = data.addresses.length === 1 ? data.addresses[0]! : null;
         if (primaryAddress && data.blocks.length === 0 && data.transactions.length === 0) {
           const [accountData, txs] = await Promise.all([
-            ovn.getAddress(primaryAddress),
-            ovn.getAddressTransactions(primaryAddress, 50) as Promise<ExplorerTransaction[]>
+            people.getAddress(primaryAddress),
+            people.getAddressTransactions(primaryAddress, 50) as Promise<ExplorerTransaction[]>
           ]);
           setAccount(accountData);
           setAddressTxs(txs);
@@ -77,7 +77,7 @@ export function SearchPage() {
         if (data.addresses.length > 0) {
           const balances = await Promise.all(
             data.addresses.map(async (address) => {
-              const info = await ovn.getAddress(address);
+              const info = await people.getAddress(address);
               return [address, info.balance] as const;
             })
           );

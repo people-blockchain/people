@@ -8,7 +8,7 @@
 | Scope | CODE + RUNTIME measurement only. No consensus/economics/BondingCurveEngine changes. No Mainnet, VPS, archival, prune “improvements”, or repo benchmark scripts |
 | Evidence tags | **MEASURED** · **CODE-DERIVED** · **ESTIMATED** · **UNKNOWN** · **BLOCKED** |
 
-This document grounds claims in the current OVN-derived node code. It does **not** depend on AGENTS.md PR #16. Where `docs/BASELINE-AUDIT.md` disagrees with code, **code wins** (called out below).
+This document grounds claims in the current legacy people-node node code. It does **not** depend on AGENTS.md PR #16. Where `docs/BASELINE-AUDIT.md` disagrees with code, **code wins** (called out below).
 
 > **Historical / superseded for native asset naming.** Written against a checkout whose native id was still `vls`. Current runtime native asset is **People / PPL** (`ppl`). Env `VLS_PRICE_USD` below is the name as found; nodes now also accept `PPL_PRICE_USD`.
 
@@ -380,7 +380,7 @@ They were **forked**, not synced to one tip. CI `scripts/ci-smoke.sh` asserts **
 | `web` | 3000 | — | — | — | `NODE_API_URL=http://host.docker.internal:4001` |
 
 - `CHAIN_ID=${CHAIN_ID:-people-internal-testnet}`
-- Named volumes `ovn-data`, `ovn-data-2`
+- Named volumes `people-data`, `people-data-2`
 - Comment in compose: host-gateway used because container-to-container gossip may be dropped on some VMs
 - `.env.example`: `DEV_FAUCET_PRIVATE_KEY`, `CHAIN_ID=people-internal-testnet`
 - Overlay `docker-compose.prod.yml`: host bind `./data/node-1|2`, tighter faucet/API token; **not** for this internal testnet per file comment
@@ -396,7 +396,7 @@ Windows operator guide: `docs/WINDOWS-TESTNET.md` (compose from `people-node`, c
 | Path | Status |
 | --- | --- |
 | Documented Docker Compose two-node + web | **CODE-DERIVED** yes (needs Docker + local `.env`). **BLOCKED** on this audit VM (`docker` missing) |
-| Two `npm --workspace @ovn/node run dev` processes | **MEASURED** they **start, gossip, and produce blocks**, but **do not share one chain** unless proposer identity is constrained by env (empty `VALIDATOR_ADDRESS` → dual bootstrap proposers) |
+| Two `npm --workspace @people/node run dev` processes | **MEASURED** they **start, gossip, and produce blocks**, but **do not share one chain** unless proposer identity is constrained by env (empty `VALIDATOR_ADDRESS` → dual bootstrap proposers) |
 | CI smoke | **CODE-DERIVED**: three nodes `4101/4111/4121`, `scripts/ci-smoke.sh`; height checks only |
 
 Operator RAM hint in `WINDOWS-TESTNET.md` (4–8 GiB Docker Desktop) is **documentation**, not a measurement on this VM.

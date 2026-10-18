@@ -11,6 +11,7 @@
  */
 
 import { detectLanguage, languageFromCookie } from "./locale-detect";
+import { migrateWebsiteStorage } from "./storage-migration";
 
 export type Language =
   | "en"
@@ -28,11 +29,11 @@ export type Language =
 
 export type Theme = "dark" | "light";
 
-const LANG_KEY = "ovn_lang";
-const THEME_KEY = "ovn_theme";
+const LANG_KEY = "people_lang";
+const THEME_KEY = "people_theme";
 
 /** Mirrors `LANG_KEY` into a cookie so the server can pick the same locale for SSR markdown. */
-export const LANG_COOKIE = "ovn_lang";
+export const LANG_COOKIE = "people_lang";
 const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 /**
@@ -42,8 +43,12 @@ const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
  * paint that flipped once React hydrated — the "theme randomly switches on
  * page load" report.
  */
-export const THEME_COOKIE = "ovn_theme";
+export const THEME_COOKIE = "people_theme";
 const THEME_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+/** Legacy cookie names (server reads fall back; client expires on write). */
+const LEGACY_LANG_COOKIE = "ovn_lang";
+const LEGACY_THEME_COOKIE = "ovn_theme";
 
 /** Every value the resolver treats as an explicit user choice. */
 export function isTheme(value: unknown): value is Theme {
@@ -86,6 +91,36 @@ function readCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
   const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
+}
+
+function readCookieWithLegacy(primary: string, legacy: string): string | null {
+  return readCookie(primary) ?? readCookie(legacy);
+}
+
+function expireLegacyCookie(name: string): void {
+  try {
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+  } catch {
+    /* cookies unavailable */
+  }
+}
+
+function ensureClientStorageMigrated(): void {
+  if (typeof localStorage === "undefined") return;
+  migrateWebsiteStorage(localStorage);
+}
+
+/** SSR: prefer new cookie, fall back to legacy name once. */
+export function languageCookieFromStore(
+  cookieStore: { get(name: string): { value?: string } | undefined },
+): string | undefined {
+  return cookieStore.get(LANG_COOKIE)?.value ?? cookieStore.get(LEGACY_LANG_COOKIE)?.value;
+}
+
+export function themeCookieFromStore(
+  cookieStore: { get(name: string): { value?: string } | undefined },
+): string | undefined {
+  return cookieStore.get(THEME_COOKIE)?.value ?? cookieStore.get(LEGACY_THEME_COOKIE)?.value;
 }
 
 const VALID_LANGS = new Set<Language>([
@@ -158,14 +193,16 @@ let themeCache: Theme | null = null;
 export function getLanguageSnapshot(): Language {
   if (langCache === null) {
     try {
+      ensureClientStorageMigrated();
       const stored = localStorage.getItem(LANG_KEY) as Language;
-      // No saved choice: the `ovn_lang` cookie (set when only SSR has run, e.g.
+      // No saved choice: the language cookie (set when only SSR has run, e.g.
       // a shared link with no localStorage yet) wins next, then the browser language.
       langCache = stored && VALID_LANGS.has(stored)
         ? stored
-        : languageFromCookie(readCookie(LANG_COOKIE)) ?? browserLanguage();
+        : languageFromCookie(readCookieWithLegacy(LANG_COOKIE, LEGACY_LANG_COOKIE)) ?? browserLanguage();
     } catch {
-      langCache = languageFromCookie(readCookie(LANG_COOKIE)) ?? browserLanguage();
+      langCache =
+        languageFromCookie(readCookieWithLegacy(LANG_COOKIE, LEGACY_LANG_COOKIE)) ?? browserLanguage();
     }
   }
   return langCache;
@@ -178,9 +215,10 @@ export function getServerLanguageSnapshot(): Language {
 export function getThemeSnapshot(): Theme {
   if (themeCache === null) {
     try {
+      ensureClientStorageMigrated();
       themeCache = resolveThemePreference(
         localStorage.getItem(THEME_KEY),
-        readCookie(THEME_COOKIE),
+        readCookieWithLegacy(THEME_COOKIE, LEGACY_THEME_COOKIE),
         systemPrefersDark(),
       );
     } catch {
@@ -204,6 +242,7 @@ export function setLanguagePreference(value: Language) {
   }
   try {
     document.cookie = `${LANG_COOKIE}=${value}; path=/; max-age=${LANG_COOKIE_MAX_AGE}; SameSite=Lax`;
+    expireLegacyCookie(LEGACY_LANG_COOKIE);
   } catch {
     /* cookies unavailable — server will keep following Accept-Language */
   }
@@ -227,6 +266,7 @@ export function setThemePreference(value: Theme) {
   }
   try {
     document.cookie = `${THEME_COOKIE}=${value}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; SameSite=Lax`;
+    expireLegacyCookie(LEGACY_THEME_COOKIE);
   } catch {
     /* cookies unavailable — the server keeps rendering its default theme */
   }

@@ -1,7 +1,7 @@
 import {
   DEFAULT_NFT_MINT_MIN_FEE,
   DEFAULT_TOKEN_CREATE_MIN_FEE
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 function readNonNegativeFee(envName: string, fallback: number): number {
   const raw = process.env[envName]?.trim() ?? "";

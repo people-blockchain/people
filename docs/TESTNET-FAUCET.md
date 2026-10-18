@@ -42,7 +42,8 @@ HTTPS nginx. Use an ingress rate limit and a small request body limit.
 Do not expose RPC `personal` or permit HTTP keyring unlock.
 
 The per-source queue cap (M06-3) keys on the client IP the site proxy forwards
-in `x-ovn-client-ip`. The service ignores that header unless
+in `x-people-client-ip` (deployed nginx may still send the legacy
+`x-ovn-client-ip` name; the faucet accepts either when proxy trust is enabled). The service ignores that header unless
 `TRUST_PROXY_HEADERS=1` **and** the immediate peer is the trusted proxy, so a
 local process cannot rotate source keys. The trusted peer defaults to loopback;
 override with `FAUCET_TRUSTED_PROXY` (comma-separated addresses) if the proxy

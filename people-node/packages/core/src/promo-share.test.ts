@@ -53,7 +53,7 @@ import {
   withoutPromoShareUpgrade
 } from "./index.js";
 import type { ChainState, PromoPoolState } from "./index.js";
-import type { Block, NetworkConfig, Transaction } from "@ovn/protocol";
+import type { Block, NetworkConfig, Transaction } from "@people/protocol";
 
 /**
  * Node-side counterpart of `contracts/src/libs/CurveMath.sol` (`calculateAllocationWithPromo`)

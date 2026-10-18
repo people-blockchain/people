@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import type { Transaction } from "@ovn/protocol";
+import type { Transaction } from "@people/protocol";
 import {
   DEFAULT_CONFIG,
   DEV_FAUCET_PRIVATE_KEY,

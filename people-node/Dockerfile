@@ -19,11 +19,11 @@ ENV NODE_ENV=production
 # expose dev endpoints. docker-compose.yml's dev profile sets this back to "1".
 ENV ALLOW_DEV_ENDPOINTS=0
 EXPOSE 4001 4002
-CMD ["npm", "--workspace", "@ovn/node", "run", "start"]
+CMD ["npm", "--workspace", "@people/node", "run", "start"]
 
 FROM node:22-alpine AS web
 WORKDIR /app
 COPY --from=build /app /app
 ENV NODE_API_URL=http://node:4001
 EXPOSE 3000
-CMD ["npm", "--workspace", "@ovn/web", "run", "start"]
+CMD ["npm", "--workspace", "@people/web", "run", "start"]

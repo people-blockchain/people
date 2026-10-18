@@ -5,6 +5,7 @@
 
 import { DEFAULT_NFT_MINT_FEE_PPL, DEFAULT_TOKEN_CREATE_FEE_PPL } from "@/lib/factory-fees";
 import { isAiIconFeatureEnabled, isPinataConfigured } from "@/lib/factory-icon-config";
+import { readEnvWithLegacy } from "@/lib/legacy-env";
 import { readOptionalUrl, resolveNodeRpcUrl, resolvePublicChainId } from "@/lib/node-rpc";
 
 function readOptionalNumber(raw: string | undefined): number | null {
@@ -32,7 +33,9 @@ export interface FactoryPublicConfig {
 }
 
 export function getFactoryPublicConfig(): FactoryPublicConfig {
-  const publicRpc = readOptionalUrl(process.env.NEXT_PUBLIC_OVN_RPC_URL);
+  const publicRpc = readOptionalUrl(
+    readEnvWithLegacy(process.env.NEXT_PUBLIC_PEOPLE_RPC_URL, process.env.NEXT_PUBLIC_OVN_RPC_URL),
+  );
   const rpcUrl = publicRpc;
   const tokenFeePpl =
     readOptionalNumber(process.env.NEXT_PUBLIC_TOKEN_CREATE_FEE_PPL) ?? DEFAULT_TOKEN_CREATE_FEE_PPL;

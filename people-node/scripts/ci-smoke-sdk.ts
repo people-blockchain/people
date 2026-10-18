@@ -1,8 +1,8 @@
-import { OvnClient, generateKeyPair } from "@ovn/sdk";
+import { PeopleClient, generateKeyPair } from "@people/sdk";
 
 async function main() {
   const baseUrl = process.env.SMOKE_API_URL ?? "http://127.0.0.1:4101";
-  const client = new OvnClient({ baseUrl });
+  const client = new PeopleClient({ baseUrl });
   const health = await client.getHealth();
   if (!health.ok) {
     throw new Error("health_not_ok");

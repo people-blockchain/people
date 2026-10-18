@@ -135,11 +135,11 @@ export function DocsPage() {
           <li>{t.docsQuickstart3}</li>
           <li>{t.docsQuickstart4}</li>
         </ol>
-        <pre>{`npm install @ovn/sdk
+        <pre>{`npm install @people/sdk
 # or use workspace package packages/sdk`}</pre>
-        <pre>{`import { OvnClient, generateKeyPair } from "@ovn/sdk";
+        <pre>{`import { PeopleClient, generateKeyPair } from "@people/sdk";
 
-const client = new OvnClient({ baseUrl: "/api" }); // via Vite proxy in web
+const client = new PeopleClient({ baseUrl: "/api" }); // via Vite proxy in web
 const key = generateKeyPair();
 ${isDevnet ? "await client.fundFromFaucet(key.address, 200);\n" : ""}const account = await client.getAddress(key.address);
 await client.sendTransfer(key.privateKey, {
@@ -159,7 +159,7 @@ await client.sendTransfer(key.privateKey, {
               API: <code>/api</code> (proxied) · WS: <code>/ws</code>
             </li>
             <li>
-              Chain: <code>{metrics?.chainId ?? "ovn-devnet"}</code>
+              Chain: <code>{metrics?.chainId ?? "people-devnet"}</code>
             </li>
             <li>{t.docsTestnetFaucet}</li>
             <li>{t.docsTestnetToken}</li>
@@ -170,9 +170,9 @@ await client.sendTransfer(key.privateKey, {
       <section className="card">
         <h2>{t.docsSdkTitle}</h2>
         <p className="wallet-hint">{t.docsSdkHint}</p>
-        <pre>{`import { OvnClient, generateKeyPair } from "@ovn/sdk";
+        <pre>{`import { PeopleClient, generateKeyPair } from "@people/sdk";
 
-const client = new OvnClient({
+const client = new PeopleClient({
   baseUrl: "http://localhost:4001",
   apiToken: process.env.DEV_API_TOKEN // optional for faucet/admin
 });

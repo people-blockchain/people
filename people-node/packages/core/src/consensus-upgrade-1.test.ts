@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import type { NetworkConfig, Transaction } from "@ovn/protocol";
+import type { NetworkConfig, Transaction } from "@people/protocol";
 import {
   DEFAULT_CONFIG,
   DEFAULT_NFT_MINT_MIN_FEE,

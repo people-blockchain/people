@@ -44,7 +44,7 @@ import type {
   TokenCreatePayload,
   Transaction,
   Validator
-} from "@ovn/protocol";
+} from "@people/protocol";
 import {
   FAUCET_ADDRESS,
   DEV_FAUCET_PRIVATE_KEY,
@@ -92,7 +92,7 @@ import {
   BATCH_FEE_CAP_PPL,
   BATCH_FEE_PER_EXTRA_PPL,
   DEFAULT_TRANSFER_FEE_PPL
-} from "@ovn/protocol";
+} from "@people/protocol";
 import { nftMintMempoolMinFee, tokenCreateMempoolMinFee, tokenCreateMinFee } from "./factory-fees.js";
 import {
   applyContractTransaction
@@ -372,9 +372,9 @@ export interface ChainState {
   /** Unique NFTs. Empty on nodes that have never minted. Hashed in stateRoot. */
   nfts: Record<string, NftRecord>;
   /** EVM contracts. Hashed in stateRoot. Coordinated node upgrade required. */
-  contracts: Record<string, import("@ovn/protocol").ContractAccount>;
+  contracts: Record<string, import("@people/protocol").ContractAccount>;
   /** Execution receipts/logs. Not hashed in stateRoot. */
-  contractReceipts?: Record<string, import("@ovn/protocol").ContractReceipt>;
+  contractReceipts?: Record<string, import("@people/protocol").ContractReceipt>;
   /** Submitted source/ABI. Not hashed in stateRoot. */
   contractMeta?: Record<string, { deployTxId: string; source?: Record<string, unknown> }>;
   /** legacy sha256 address → Ethereum canonical (policy 0a). Not hashed in stateRoot. */
@@ -635,7 +635,7 @@ export const DEFAULT_CONFIG: NetworkConfig = {
   ...(readConsensusUpgrade1(process.env) ? { consensusUpgrade1: readConsensusUpgrade1(process.env) } : {}),
   ...(readPromoShareUpgrade(process.env) ? { promoShareUpgrade: readPromoShareUpgrade(process.env) } : {}),
   bootstrapAddress: process.env.BOOTSTRAP_ADDRESS ?? "",
-  chainId: process.env.CHAIN_ID ?? "ovn-devnet",
+  chainId: process.env.CHAIN_ID ?? "people-devnet",
   minStake: 100,
   warmupEpochs: 2,
   unbondingEpochs: 2,

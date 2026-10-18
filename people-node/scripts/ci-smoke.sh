@@ -25,13 +25,13 @@ trap cleanup EXIT
 
 
 
-BOOTSTRAP_PRIVATE_KEY="$BOOTSTRAP_PRIVATE_KEY" ALLOW_FAUCET=1 PEER_ID=ci-1 PORT=4101 GOSSIP_PORT=4102 DATA_DIR="$CI_DATA_DIR/ci-1" npm --workspace @ovn/node run dev &
+BOOTSTRAP_PRIVATE_KEY="$BOOTSTRAP_PRIVATE_KEY" ALLOW_FAUCET=1 PEER_ID=ci-1 PORT=4101 GOSSIP_PORT=4102 DATA_DIR="$CI_DATA_DIR/ci-1" npm --workspace @people/node run dev &
 NODE1=$!
 sleep 4
-BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-2 PORT=4111 GOSSIP_PORT=4112 DATA_DIR="$CI_DATA_DIR/ci-2" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @ovn/node run dev &
+BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-2 PORT=4111 GOSSIP_PORT=4112 DATA_DIR="$CI_DATA_DIR/ci-2" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @people/node run dev &
 NODE2=$!
 sleep 2
-BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-3 PORT=4121 GOSSIP_PORT=4122 DATA_DIR="$CI_DATA_DIR/ci-3" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @ovn/node run dev &
+BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-3 PORT=4121 GOSSIP_PORT=4122 DATA_DIR="$CI_DATA_DIR/ci-3" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @people/node run dev &
 NODE3=$!
 
 sleep 12
@@ -40,7 +40,7 @@ curl -sf http://127.0.0.1:4111/health >/dev/null
 curl -sf http://127.0.0.1:4121/health >/dev/null
 curl -sf http://127.0.0.1:4101/health/details >/dev/null
 curl -sf http://127.0.0.1:4101/openapi.yaml >/dev/null
-curl -sf http://127.0.0.1:4101/metrics/prometheus | grep -q ovn_height
+curl -sf http://127.0.0.1:4101/metrics/prometheus | grep -q people_height
 
 H1=$(curl -sf http://127.0.0.1:4101/chain/head | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).height))")
 H2=$(curl -sf http://127.0.0.1:4111/chain/head | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).height))")
@@ -69,7 +69,7 @@ H1B=$(curl -sf http://127.0.0.1:4101/chain/head | node -e "let d='';process.stdi
 echo "after-partition head $H1B"
 test "$H1B" -gt "$H1"
 
-BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-2 PORT=4111 GOSSIP_PORT=4112 DATA_DIR="$CI_DATA_DIR/ci-2" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @ovn/node run dev &
+BOOTSTRAP_PRIVATE_KEY= PEER_ID=ci-2 PORT=4111 GOSSIP_PORT=4112 DATA_DIR="$CI_DATA_DIR/ci-2" BOOTSTRAP_PEERS=127.0.0.1:4102 npm --workspace @people/node run dev &
 NODE2=$!
 sleep 14
 H2B=$(curl -sf http://127.0.0.1:4111/chain/head | node -e "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>console.log(JSON.parse(d).height))")

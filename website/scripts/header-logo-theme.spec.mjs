@@ -14,8 +14,8 @@ async function setPrefs(page, lang, theme) {
   await page.addInitScript(
     ({ language, theme: t }) => {
       try {
-        localStorage.setItem("ovn_lang", language);
-        localStorage.setItem("ovn_theme", t);
+        localStorage.setItem("people_lang", language);
+        localStorage.setItem("people_theme", t);
       } catch {
         /* ignore */
       }

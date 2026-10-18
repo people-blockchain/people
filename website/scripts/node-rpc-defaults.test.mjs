@@ -3,15 +3,15 @@ import assert from "node:assert/strict";
 
 test("built-in public testnet defaults apply when env is unset", async () => {
   const prev = {
-    OVN_RPC_URL: process.env.OVN_RPC_URL,
-    NEXT_PUBLIC_OVN_RPC_URL: process.env.NEXT_PUBLIC_OVN_RPC_URL,
+    PEOPLE_RPC_URL: process.env.PEOPLE_RPC_URL,
+    NEXT_PUBLIC_PEOPLE_RPC_URL: process.env.NEXT_PUBLIC_PEOPLE_RPC_URL,
     PEOPLE_NODE_URL: process.env.PEOPLE_NODE_URL,
     NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID,
     NEXT_PUBLIC_CHAIN: process.env.NEXT_PUBLIC_CHAIN,
     EVM_RPC_URL: process.env.EVM_RPC_URL,
   };
-  delete process.env.OVN_RPC_URL;
-  delete process.env.NEXT_PUBLIC_OVN_RPC_URL;
+  delete process.env.PEOPLE_RPC_URL;
+  delete process.env.NEXT_PUBLIC_PEOPLE_RPC_URL;
   delete process.env.PEOPLE_NODE_URL;
   delete process.env.NEXT_PUBLIC_CHAIN_ID;
   delete process.env.NEXT_PUBLIC_CHAIN;
@@ -28,10 +28,25 @@ test("built-in public testnet defaults apply when env is unset", async () => {
   assert.equal(resolvePublicChainId(), COSMOS_EVM_CHAIN_ID_LABEL);
   assert.equal(COSMOS_EVM_CHAIN_ID_LABEL, "97401");
 
-  process.env.NEXT_PUBLIC_CHAIN = "ovn-node";
+  process.env.NEXT_PUBLIC_CHAIN = "people-node";
   assert.equal(resolvePublicChainId(), DEFAULT_PUBLIC_CHAIN_ID);
   assert.equal(DEFAULT_PUBLIC_CHAIN_ID, "people-public-testnet-v2-2026-09-30");
 
+  for (const [key, value] of Object.entries(prev)) {
+    if (value === undefined) delete process.env[key];
+    else process.env[key] = value;
+  }
+});
+
+test("legacy OVN_RPC_URL is used when PEOPLE_RPC_URL is unset", async () => {
+  const prev = {
+    PEOPLE_RPC_URL: process.env.PEOPLE_RPC_URL,
+    OVN_RPC_URL: process.env.OVN_RPC_URL,
+  };
+  delete process.env.PEOPLE_RPC_URL;
+  process.env.OVN_RPC_URL = "https://legacy-node.example.test";
+  const { resolveNodeRpcUrl } = await import("../src/lib/node-rpc.ts");
+  assert.equal(resolveNodeRpcUrl(), "https://legacy-node.example.test");
   for (const [key, value] of Object.entries(prev)) {
     if (value === undefined) delete process.env[key];
     else process.env[key] = value;
