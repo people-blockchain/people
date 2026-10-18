@@ -1,14 +1,14 @@
 {
-  "name": "open-validator-network",
+  "name": "people-node",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "turbo run test",
     "build": "turbo run build",
-    "dev": "turbo run dev --filter=@ovn/node --filter=@ovn/web",
-    "start": "turbo run start --filter=@ovn/node --filter=@ovn/web",
-    "dev:all": "turbo run dev --filter=@ovn/node --filter=@ovn/web --filter=@ovn/mobile-lite",
+    "dev": "turbo run dev --filter=@people/node --filter=@people/web",
+    "start": "turbo run start --filter=@people/node --filter=@people/web",
+    "dev:all": "turbo run dev --filter=@people/node --filter=@people/web --filter=@people/mobile-lite",
     "stop": "bash scripts/stop-dev.sh",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

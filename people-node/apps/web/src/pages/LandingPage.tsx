@@ -103,7 +103,7 @@ export function LandingPage() {
         </div>
 
         <div className="hero-content">
-          <p className="hero-brand">Open Validator Network</p>
+          <p className="hero-brand">PEOPLE Network</p>
           <h1 className="hero-title">{t.heroLead}</h1>
           <p className="lead">{t.subtitle}</p>
           <div className="hero-actions">

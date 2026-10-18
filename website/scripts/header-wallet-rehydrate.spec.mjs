@@ -59,7 +59,7 @@ async function seedPersistedSession(page) {
         exp: now + 12 * 60 * 60 * 1000,
       }),
     );
-    localStorage.setItem("ovn_lang", "en");
+    localStorage.setItem("people_lang", "en");
   }, ADDRESS);
 }
 

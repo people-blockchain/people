@@ -1,7 +1,7 @@
 "use client";
 
 import type { IProvider } from "@web3auth/base";
-import { keyFromPrivate } from "@/lib/ovn-sign";
+import { keyFromPrivate } from "@/lib/people-sign";
 import { readWeb3AuthClientId, readWeb3AuthNetworkName } from "@/lib/web3auth-config";
 import { WEB3AUTH_INIT_TIMEOUT_MS, shouldUseRedirectSignIn, withTimeout } from "@/lib/mobile-env";
 import { buildWeb3AuthChainConfig } from "@/lib/web3auth-chain-config";

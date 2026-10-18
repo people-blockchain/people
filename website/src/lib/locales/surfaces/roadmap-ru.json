@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "Тестовая сеть PEOPLE Blockchain (EVM)",
-      "summary": "Развитие тестовой сети PEOPLE Blockchain на EVM. Идёт этап 1 (сборка chain/); текущий публичный testnet пока на ноде OVN с read-only RPC."
+      "summary": "Развитие тестовой сети PEOPLE Blockchain на EVM. Идёт этап 1 (сборка chain/); текущий публичный testnet пока на ноде legacy people-node с read-only RPC."
     },
     "genesis-snapshot-0x": {
       "title": "Снимок состояния в genesis",

@@ -41,8 +41,8 @@ for (const theme of THEMES) {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   await context.addInitScript((themeValue) => {
     try {
-      window.localStorage.setItem("ovn_theme", themeValue);
-      window.localStorage.setItem("ovn_lang", "en");
+      window.localStorage.setItem("people_theme", themeValue);
+      window.localStorage.setItem("people_lang", "en");
     } catch {}
   }, theme);
   const page = await context.newPage();

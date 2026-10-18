@@ -12,7 +12,7 @@
     {
       "id": "cosmos-evm-migration",
       "status": "in_progress",
-      "evidence": "Stage 1 Cosmos EVM `chain/` in active development; not present on `main` in this repo yet. Current node remains OVN-derived with read-only JSON-RPC (PR #85, chain id 97401)."
+      "evidence": "Stage 1 Cosmos EVM `chain/` in active development; not present on `main` in this repo yet. Current node remains legacy people-node with read-only JSON-RPC (PR #85, chain id 97401)."
     },
     {
       "id": "genesis-snapshot-0x",

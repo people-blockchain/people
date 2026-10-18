@@ -9,8 +9,8 @@ const iosUa =
 async function prime(page, path = "/wallet") {
   await page.goto(`${base}${path}`, { waitUntil: "domcontentloaded" });
   await page.evaluate(() => {
-    localStorage.setItem("ovn_lang", "ru");
-    localStorage.setItem("ovn_theme", "dark");
+    localStorage.setItem("people_lang", "ru");
+    localStorage.setItem("people_theme", "dark");
     localStorage.removeItem("people-wallets");
   });
   await page.reload({ waitUntil: "networkidle" });

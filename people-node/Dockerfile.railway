@@ -21,4 +21,4 @@ ENV GOSSIP_PORT=4002
 EXPOSE 4001 4002
 HEALTHCHECK --interval=15s --timeout=5s --start-period=40s --retries=5 \
   CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||4001)+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-CMD ["npm", "--workspace", "@ovn/node", "run", "start"]
+CMD ["npm", "--workspace", "@people/node", "run", "start"]

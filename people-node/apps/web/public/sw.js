@@ -1,5 +1,5 @@
-/* OVN shell service worker — caches static assets; API stays network-only. */
-const CACHE = "ovn-shell-v3";
+/* PEOPLE shell service worker — caches static assets; API stays network-only. */
+const CACHE = "people-shell-v1";
 const PRECACHE = ["/", "/index.html", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png", "/icons/apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {

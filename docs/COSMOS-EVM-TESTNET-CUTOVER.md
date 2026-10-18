@@ -29,11 +29,11 @@ Or run GitHub Actions workflow **Testnet EVM contract deploy** on branch `main` 
 
 ## Archive export (no state migration)
 
-The Kirill chain is intentionally **empty**. Do **not** replay OVN balances or pools on-chain.
+The operator testnet chain is intentionally **empty**. Do **not** replay PEOPLE Network balances or pools on-chain.
 
 ```bash
 cd contracts
-node scripts/export-ovn-testnet.mjs   # → deployments/ovn-export.json (archive only)
+node scripts/export-legacy-testnet.mjs   # → deployments/legacy-testnet-export.json (archive only)
 ```
 
 ## Website defaults
@@ -43,7 +43,7 @@ NEXT_PUBLIC_CHAIN=cosmos-evm
 EVM_RPC_URL=https://node.peopleblockchain.network/rpc
 ```
 
-Rollback for local dev only: `NEXT_PUBLIC_CHAIN=ovn-node` against a running people-node stack.
+Rollback for local dev only: `NEXT_PUBLIC_CHAIN=people-node` against a running people-node stack.
 
 ## Verification
 

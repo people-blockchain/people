@@ -52,7 +52,7 @@ if (signed.code !== 0 || !signed.stdout.includes("accepted")) {
   throw new Error(`devnet faucet tx was not accepted (code ${signed.code})`);
 }
 
-const dataDir = await mkdtemp(join(tmpdir(), "ovn-faucet-"));
+const dataDir = await mkdtemp(join(tmpdir(), "people-faucet-"));
 const port = "4191";
 const node = spawn("npx", ["tsx", "apps/node/src/index.ts"], {
   cwd: root,

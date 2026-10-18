@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { Block, Transaction } from "@ovn/protocol";
+import type { Block, Transaction } from "@people/protocol";
 import { addressPath } from "../address.js";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useLive } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { formatPaymentMemos, formatTxMemo, getBatchRecipients, getTxMemo } from "../txMemo.js";
 import { labelTxType } from "../i18n.js";
 import { resolveTxLifecycle, stageReached, type TxLifecycleStage } from "../txLifecycle.js";
@@ -31,7 +31,7 @@ export function BlockPage() {
       return;
     }
     setLoading(true);
-    ovn.getBlock(Number(height))
+    people.getBlock(Number(height))
       .then(setBlock)
       .catch((err) => notify.error(err instanceof Error ? err.message : t.notFound))
       .finally(() => setLoading(false));
@@ -145,7 +145,7 @@ export function TxPage() {
       return;
     }
     setLoading(true);
-    ovn.getTransaction(id)
+    people.getTransaction(id)
       .then(setTx)
       .catch((err) => notify.error(err instanceof Error ? err.message : t.notFound))
       .finally(() => setLoading(false));

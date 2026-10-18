@@ -12,7 +12,7 @@ for (const theme of ["light", "dark"]) {
     await page.evaluate((t) => {
       document.documentElement.classList.remove("dark", "light");
       document.documentElement.classList.add(t);
-      localStorage.setItem("ovn_theme", t);
+      localStorage.setItem("people_theme", t);
     }, theme);
     await page.reload({ waitUntil: "networkidle" });
     const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);

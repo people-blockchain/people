@@ -21,7 +21,7 @@ import {
   readStoredReferrer,
   resolveReferrerForWallet,
 } from "../src/lib/referral-ref.ts";
-import { signFactoryTx } from "../src/lib/ovn-sign.ts";
+import { signFactoryTx } from "../src/lib/people-sign.ts";
 
 const SELF = "0x1111111111111111111111111111111111111111";
 const REF = "0x2222222222222222222222222222222222222222";

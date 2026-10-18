@@ -61,9 +61,9 @@ async function seedAndUnlockWallet(page) {
 
 async function setLang(page, lang) {
   await page.evaluate((l) => {
-    localStorage.setItem("ovn_lang", l);
-    document.cookie = `ovn_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
-    window.dispatchEvent(new StorageEvent("storage", { key: "ovn_lang" }));
+    localStorage.setItem("people_lang", l);
+    document.cookie = `people_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
+    window.dispatchEvent(new StorageEvent("storage", { key: "people_lang" }));
   }, lang);
 }
 
@@ -98,10 +98,10 @@ async function openBuyInLocale(browser, lang) {
     viewport: { width: 390, height: 844 },
     locale: lang === "ru" ? "ru-RU" : "en-US",
   });
-  await context.addCookies([{ name: "ovn_lang", value: lang, url: BASE, sameSite: "Lax" }]);
+  await context.addCookies([{ name: "people_lang", value: lang, url: BASE, sameSite: "Lax" }]);
   await context.addInitScript((l) => {
-    localStorage.setItem("ovn_lang", l);
-    document.cookie = `ovn_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
+    localStorage.setItem("people_lang", l);
+    document.cookie = `people_lang=${encodeURIComponent(l)}; path=/; max-age=31536000; SameSite=Lax`;
   }, lang);
   const page = await context.newPage();
   await installApiMocks(page);
@@ -174,10 +174,10 @@ test.describe("buy page evidence", () => {
       viewport: { width: 360, height: 800 },
       locale: "ru-RU",
     });
-    await ctx360.addCookies([{ name: "ovn_lang", value: "ru", url: BASE, sameSite: "Lax" }]);
+    await ctx360.addCookies([{ name: "people_lang", value: "ru", url: BASE, sameSite: "Lax" }]);
     await ctx360.addInitScript(() => {
-      localStorage.setItem("ovn_lang", "ru");
-      document.cookie = "ovn_lang=ru; path=/; max-age=31536000; SameSite=Lax";
+      localStorage.setItem("people_lang", "ru");
+      document.cookie = "people_lang=ru; path=/; max-age=31536000; SameSite=Lax";
     });
     const page360 = await ctx360.newPage();
     await installApiMocks(page360);
@@ -217,8 +217,8 @@ test.describe("buy page evidence", () => {
   test("/ru/buy redirects to /buy with ru cookie", async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     await context.addInitScript(() => {
-      localStorage.setItem("ovn_lang", "ru");
-      document.cookie = "ovn_lang=ru; path=/; max-age=31536000; SameSite=Lax";
+      localStorage.setItem("people_lang", "ru");
+      document.cookie = "people_lang=ru; path=/; max-age=31536000; SameSite=Lax";
     });
     const page = await context.newPage();
     await installApiMocks(page);

@@ -160,7 +160,7 @@ test.describe("live smoke", () => {
     await page.getByRole("button", { name: /Русский/ }).first().click();
     await expect.poll(() => page.evaluate(() => document.documentElement.lang)).toBe("ru");
     const ruNav = await page.getByRole("link", { name: "Как это работает" }).first().isVisible().catch(() => false);
-    const ruStored = await page.evaluate(() => localStorage.getItem("ovn_lang"));
+    const ruStored = await page.evaluate(() => localStorage.getItem("people_lang"));
     record("EN→RU switch", "1280", ruNav && ruStored === "ru" ? "PASS" : "FAIL", `nav=${ruNav} stored=${ruStored}`);
 
     // RU → EN
@@ -176,7 +176,7 @@ test.describe("live smoke", () => {
     await page.getByRole("button", { name: "Toggle colour theme" }).first().click();
     await expect.poll(() => page.evaluate(() => document.documentElement.getAttribute("data-theme"))).not.toBe(before);
     const after = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
-    const persisted = await page.evaluate(() => localStorage.getItem("ovn_theme"));
+    const persisted = await page.evaluate(() => localStorage.getItem("people_theme"));
     record("theme toggle", "1280", after === persisted ? "PASS" : "FAIL", `${before} → ${after} stored=${persisted}`);
 
     // Mobile menu

@@ -12,7 +12,7 @@ import {
   setAccountBalance,
   signTransaction
 } from "./index.js";
-import type { NetworkConfig } from "@ovn/protocol";
+import type { NetworkConfig } from "@people/protocol";
 
 /**
  * M04-2 / M04-4: a batch transfer validated each leg with the per-transaction rules turned

@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "PEOPLE Blockchain 测试网（EVM）",
-      "summary": "在 EVM 上扩展 PEOPLE Blockchain 测试网。阶段 1（chain/）进行中；当前公开测试网仍在 OVN 节点上，RPC 只读。"
+      "summary": "在 EVM 上扩展 PEOPLE Blockchain 测试网。阶段 1（chain/）进行中；当前公开测试网仍在 legacy people-node 节点上，RPC 只读。"
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

@@ -14,8 +14,8 @@ const THEMES = ["light", "dark"];
 async function setLocaleAndTheme(page, theme) {
   await page.addInitScript((th) => {
     try {
-      localStorage.setItem("ovn_lang", "en");
-      localStorage.setItem("ovn_theme", th);
+      localStorage.setItem("people_lang", "en");
+      localStorage.setItem("people_theme", th);
     } catch {
       /* ignore */
     }

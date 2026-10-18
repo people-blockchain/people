@@ -67,8 +67,8 @@ for (const theme of THEMES) {
 
       await page.addInitScript((value) => {
         try {
-          localStorage.setItem("ovn_lang", "ru");
-          localStorage.setItem("ovn_theme", value);
+          localStorage.setItem("people_lang", "ru");
+          localStorage.setItem("people_theme", value);
         } catch {
           /* ignore */
         }
@@ -153,7 +153,7 @@ for (const theme of THEMES) {
 test("transparency page states the required facts and hides empty live blocks", async ({ page }) => {
   await page.addInitScript(() => {
     try {
-      localStorage.setItem("ovn_lang", "ru");
+      localStorage.setItem("people_lang", "ru");
     } catch {
       /* ignore */
     }

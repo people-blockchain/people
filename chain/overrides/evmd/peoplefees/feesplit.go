@@ -35,7 +35,7 @@ const (
 
 // TreasuryMultisigAddress is the owner-approved 2-of-3 multisig (owner, co-founder, owner's
 // cold address) that treasury/liquidity/growth route to directly (M11-2). TESTNET ONLY: the
-// 2-of-3 native multisig (test-alex, test-kirill, test-cold) exercised on testnet on 2026-10-08
+// 2-of-3 native multisig (test-signer1, test-signer2, test-signer3) exercised on testnet on 2026-10-08
 // (docs/TREASURY-MULTISIG-RU.md). Its keys are test keys on the testnet VPS, so it is NOT
 // mainnet custody. The owner must regenerate this with three independently-held keys and
 // update this constant (and chain/emission/allocation.json `treasury_multisig`) together

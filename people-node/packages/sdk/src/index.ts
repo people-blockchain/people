@@ -1,4 +1,4 @@
-import { transactionIdPayload } from "@ovn/protocol";
+import { transactionIdPayload } from "@people/protocol";
 import * as secp from "@noble/secp256k1";
 import { hmac } from "@noble/hashes/hmac.js";
 import { keccak_256 } from "@noble/hashes/sha3.js";
@@ -25,7 +25,7 @@ import type {
   TokenAllocation,
   Transaction,
   Validator
-} from "@ovn/protocol";
+} from "@people/protocol";
 import {
   BATCH_FEE_BASE_PPL,
   BATCH_FEE_CAP_PPL,
@@ -34,14 +34,14 @@ import {
   DEFAULT_TOKEN_CREATE_MIN_FEE,
   DEFAULT_TRANSFER_FEE_PPL,
   DEFAULT_TX_GAS_LIMIT
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 secp.hashes.sha256 = sha256;
 secp.hashes.hmacSha256 = (key, msg) => hmac(sha256, key, msg);
 
 const { bytesToHex, hexToBytes } = secp.etc;
 
-export interface OvnClientOptions {
+export interface PeopleClientOptions {
   baseUrl: string;
   apiToken?: string;
   /**
@@ -63,14 +63,14 @@ export interface KeyPair {
   address: string;
 }
 
-export class OvnApiError extends Error {
+export class PeopleApiError extends Error {
   constructor(
     message: string,
     readonly status: number,
     readonly body?: unknown
   ) {
     super(message);
-    this.name = "OvnApiError";
+    this.name = "PeopleApiError";
   }
 }
 
@@ -174,7 +174,7 @@ export {
   DEFAULT_NFT_MINT_MIN_FEE,
   DEFAULT_TOKEN_CREATE_MIN_FEE,
   DEFAULT_TRANSFER_FEE_PPL
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 export function suggestedBatchFee(recipientCount: number): number {
   const n = Math.max(1, recipientCount);
@@ -297,10 +297,10 @@ export function signTransaction(privateKeyHex: string, tx: Transaction): Transac
   };
 }
 
-export class OvnClient {
+export class PeopleClient {
   private healthPromise?: Promise<HealthResponse>;
 
-  constructor(private readonly options: OvnClientOptions) {}
+  constructor(private readonly options: PeopleClientOptions) {}
 
   private headers(json = false): HeadersInit {
     const headers: Record<string, string> = {};
@@ -317,7 +317,7 @@ export class OvnClient {
     const res = await fetch(`${this.options.baseUrl}${path}`, init);
     const body = await res.json().catch(() => undefined);
     if (!res.ok) {
-      throw new OvnApiError(
+      throw new PeopleApiError(
         typeof body === "object" && body && "error" in body
           ? String((body as { error: string }).error)
           : `${res.status} ${res.statusText}`,

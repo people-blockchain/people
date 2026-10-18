@@ -3,7 +3,7 @@ set -euo pipefail
 
 PORTS=(3000 3001 4001 4002 4011 4012)
 
-echo "Stopping OVN dev processes on ports: ${PORTS[*]}"
+echo "Stopping PEOPLE dev processes on ports: ${PORTS[*]}"
 for port in "${PORTS[@]}"; do
   pids=$(lsof -ti tcp:"$port" 2>/dev/null || true)
   if [[ -n "${pids}" ]]; then

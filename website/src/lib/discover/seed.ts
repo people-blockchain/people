@@ -1,6 +1,7 @@
 import { count } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { discoverProjects } from "@/db/schema";
+import { readEnvWithLegacy } from "@/lib/legacy-env";
 import { DISCOVER_SEED_CATALOG, resolveDiscoverSeedIcon } from "@/lib/discover/seed-catalog";
 import { DISCOVER_SEED_PROJECTS } from "@/lib/discover/seed-data";
 
@@ -43,8 +44,8 @@ export async function listDiscoverTokensFromNode(): Promise<
   { assetId: string; name: string; symbol: string; imageUri?: string | null }[]
 > {
   const base =
-    process.env.OVN_RPC_URL?.trim() ||
-    process.env.NEXT_PUBLIC_OVN_RPC_URL?.trim() ||
+    readEnvWithLegacy(process.env.PEOPLE_RPC_URL, process.env.OVN_RPC_URL) ||
+    readEnvWithLegacy(process.env.NEXT_PUBLIC_PEOPLE_RPC_URL, process.env.NEXT_PUBLIC_OVN_RPC_URL) ||
     "https://node.peopleblockchain.network";
   try {
     const res = await fetch(`${base.replace(/\/$/, "")}/assets`, { next: { revalidate: 60 } });

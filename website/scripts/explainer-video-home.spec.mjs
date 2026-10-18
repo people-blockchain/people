@@ -20,8 +20,8 @@ async function setPrefs(page, { lang, theme }) {
   await page.addInitScript(
     ({ lang: l, theme: t }) => {
       try {
-        localStorage.setItem("ovn_lang", l);
-        localStorage.setItem("ovn_theme", t);
+        localStorage.setItem("people_lang", l);
+        localStorage.setItem("people_theme", t);
         document.documentElement.classList.toggle("dark", t === "dark");
         document.documentElement.dataset.theme = t;
       } catch {

@@ -38,7 +38,7 @@
 `storage-security.test.ts`, `packages/p2p/src/security.test.ts`,
 `website/scripts/compiler-security.test.mjs` и обновлённые существующие тесты.
 GitHub workflow добавлен в корневой `.github/workflows/ci.yml`; вложенный файл
-OVN оставлен как историческая конфигурация.
+PEOPLE Network оставлен как историческая конфигурация.
 Полный прогон: монорепозиторий `npm run build`, `npm run typecheck`, `npm test`,
 `npm run ci:smoke`; сайт `npm test`, `npm run build`.
 Smoke использует три локальных процесса и временные данные, проверяет catch-up,

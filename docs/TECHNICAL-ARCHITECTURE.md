@@ -1,8 +1,8 @@
 # PEOPLE'S BLOCKCHAIN — TECHNICAL ARCHITECTURE v0.1
 
 **Status:** Working architecture specification
-**Date:** 2026-10-14 (runtime status); body still includes OVN-era design history
-**Base (historical):** Open Validator Network (OVN) reference codebase
+**Date:** 2026-10-14 (runtime status); body still includes legacy design history
+**Base (historical):** PEOPLE Network reference codebase
 **Current runtime:** Cosmos EVM testnet chain id **97401** (`chain/`, public RPC + Solidity contracts)
 **Network:** People's Blockchain
 **Brand:** People
@@ -11,7 +11,7 @@
 > **Terminology:** runtime native asset is **People** / **PPL** / id `ppl`. Legacy `vls` /
 > `VLS` / `Vallis` appear only in historical notes. See `docs/TERMINOLOGY.md`.
 
-> This document maps the People's Blockchain concept onto the existing OVN codebase. It deliberately separates **what already exists**, **what should be preserved**, and **what must be added or redesigned**. It is an architectural source of truth for AI coding agents. Agents must not invent protocol economics that are not explicitly approved in the project documents.
+> This document maps the People's Blockchain concept onto the existing PEOPLE Network codebase. It deliberately separates **what already exists**, **what should be preserved**, and **what must be added or redesigned**. It is an architectural source of truth for AI coding agents. Agents must not invent protocol economics that are not explicitly approved in the project documents.
 
 ---
 
@@ -21,22 +21,22 @@
 - Chain source is `chain/` in this repo; the public site is www.peopleblockchain.network.
 - Live Solidity on 97401: token and NFT factories, bonding curve, AMM/swap, and fee gateway.
 - Deployment addresses: `website/src/data/evm-deployments-97401.json`.
-- `people-node` (OVN) is a historical baseline/archive only; it is not the public network.
+- `people-node` (PEOPLE Network) is a historical baseline/archive only; it is not the public network.
 - The public testnet cutover is already done — no future migration is pending for it.
-- Where marked historical, the rest of this document still describes the OVN-era design baseline.
+- Where marked historical, the rest of this document still describes the legacy design baseline.
 
 ---
 
 ## 1. Architectural strategy
 
-We are **not** throwing away the existing OVN blockchain implementation.
+We are **not** throwing away the existing PEOPLE Network blockchain implementation.
 
-We are creating a new project repository from the OVN codebase and using it as the technical baseline.
+We are creating a new project repository from the PEOPLE Network codebase and using it as the technical baseline.
 
 Conceptually:
 
 ```text
-OVN Reference Codebase
+PEOPLE Network Reference Codebase
         ↓
 People's Blockchain
         ├── Preserve working blockchain primitives
@@ -47,15 +47,15 @@ People's Blockchain
         └── Rebuild consumer-facing product UX
 ```
 
-The original OVN repository/archive remains unchanged and is treated as a reference/backup.
+The original PEOPLE Network repository/archive remains unchanged and is treated as a reference/backup.
 
 The new repository is the only place where product development occurs.
 
 ---
 
-## 2. Existing OVN technical baseline
+## 2. Existing PEOPLE Network technical baseline
 
-The supplied OVN archive already contains a functioning monorepo with these major areas:
+The supplied PEOPLE Network archive already contains a functioning monorepo with these major areas:
 
 ```text
 apps/node
@@ -89,7 +89,7 @@ These foundations should be preserved unless a concrete reason for replacement i
 
 ## 3. Existing consensus and validator layer
 
-The OVN reference implementation currently uses a **leader-based Proof-of-Stake model with attestation-based finalization**.
+The PEOPLE Network reference implementation currently uses a **leader-based Proof-of-Stake model with attestation-based finalization**.
 
 Current reference behavior includes:
 
@@ -127,7 +127,7 @@ Do not redesign consensus until the product/economic layers are working on a con
 
 ## 4. Existing slashing layer
 
-OVN already contains evidence-based slashing.
+PEOPLE Network already contains evidence-based slashing.
 
 Reference implementation includes:
 
@@ -266,7 +266,7 @@ The SDK already handles:
 
 ### Decision
 
-Extend `@ovn/sdk` rather than creating a second SDK.
+Extend `@people/sdk` rather than creating a second SDK.
 
 New product operations should eventually be exposed through the same SDK/API contract.
 
@@ -370,7 +370,7 @@ The formal mathematical simulation model and invariants are documented in `ECONO
 
 ## 12. Identity and Anti-Sybil layer
 
-The reference OVN code does not provide the consumer-grade proof-of-human system required by People's Blockchain.
+The reference PEOPLE Network code does not provide the consumer-grade proof-of-human system required by People's Blockchain.
 
 We therefore need a new identity/anti-Sybil subsystem.
 
@@ -524,7 +524,7 @@ Media storage can use external/object storage/content-addressed infrastructure i
 
 ## 18. Native asset / economics integration
 
-The current OVN implementation uses a simple account-balance model with the native **PPL** asset and validator issuance.
+The current PEOPLE Network implementation uses a simple account-balance model with the native **PPL** asset and validator issuance.
 
 People's Blockchain requires this layer to evolve into the economic model described in `ECONOMICS.md`.
 
@@ -565,7 +565,7 @@ This prevents the misconception that everyone with a phone is securing consensus
 
 ## 20. Governance
 
-The current OVN governance is validator/stake-oriented.
+The current PEOPLE Network governance is validator/stake-oriented.
 
 It may be retained for early network administration, but long-term governance needs a dedicated design for People's Blockchain.
 
@@ -683,7 +683,7 @@ The project should be developed in the following order.
 
 ### Phase 0 — Baseline
 
-- create new repository from OVN reference;
+- create new repository from PEOPLE Network reference;
 - preserve original archive;
 - make baseline build/typecheck/tests pass;
 - rename product-facing references gradually, not in one risky bulk edit.
@@ -779,7 +779,7 @@ When documents conflict, use this order:
 4. `TOKEN-ECONOMY.md` for token/DEX rules;
 5. this document for architecture boundaries;
 6. `VISION.md` for high-level product intent;
-7. existing OVN code only as the current implementation baseline.
+7. existing PEOPLE Network code only as the current implementation baseline.
 
 Existing code is **not automatically the intended final behavior**.
 
@@ -787,7 +787,7 @@ Existing code is **not automatically the intended final behavior**.
 
 ## 28. Current conclusion
 
-The existing OVN codebase is a useful blockchain foundation, not the finished People's Blockchain.
+The existing PEOPLE Network codebase is a useful blockchain foundation, not the finished People's Blockchain.
 
 The most important architectural decision is to build the project as two clearly separated layers:
 

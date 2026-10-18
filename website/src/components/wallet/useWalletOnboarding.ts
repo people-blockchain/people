@@ -14,7 +14,7 @@ import {
   pickMnemonicConfirmIndices,
   verifyMnemonicConfirm,
 } from "@/lib/wallet-seed";
-import { keyFromPrivate } from "@/lib/ovn-sign";
+import { keyFromPrivate } from "@/lib/people-sign";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { requestTestnetFaucet } from "@/lib/evm/faucet-client";
 import type { StoredWallet } from "@/lib/wallet-vault";

@@ -7,10 +7,10 @@ changed from the original design-only text. Owner-approved policy (this batch): 
 unchanged, treasury + liquidity shares fund public buybacks, visible in the explorer. Website
 copy (`/tokenomics`, `/how-it-works`, `/fees`) describes the batched swap-and-split as
 **preliminary** policy; the stablecoin launch fee itself is live, with an owner-approved price
-(5.00 USD token launch, 10.00 USD NFT mint — Alex, 2026-10-12) and is People-network-only for
+(5.00 USD token launch, 10.00 USD NFT mint — owner decision, 2026-10-12) and is People-network-only for
 now; cross-chain stablecoin payment (Ethereum, Polygon, Tron, TON, Solana) is not built yet.
 
-**OWNER DECISION (Alex, 2026-10-12):** the token/NFT launch fee paid in USDC/USDT goes **100%**
+**OWNER DECISION (2026-10-12):** the token/NFT launch fee paid in USDC/USDT goes **100%**
 to the public PPL buyback (not the 30/25/20/10/15 split applied to a stablecoin balance as
 originally drafted below in §5.2 point 2). The PPL that the buyback purchases is what the
 treasury multisig then splits 30/25/20/10/15 per §4, off-chain, the same way it already splits
@@ -205,7 +205,7 @@ deploy script `contracts/script/DeployStableFeeGateway.s.sol`, self-review
   This is deliberate: a stablecoin fee priced directly off a PPL/USD oracle would reintroduce the
   exact price dependency a *fixed* USD launch fee is meant to avoid, and no oracle/pool-based PPL
   pricing decision has been approved yet.
-- **The deploy script's default values are the owner-approved price** (Alex, 2026-10-12): 5.00
+- **The deploy script's default values are the owner-approved price** (owner decision, 2026-10-12): 5.00
   USD for a token launch, 10.00 USD for an NFT mint (`DeployStableFeeGateway.s.sol`,
   `APPROVED_TOKEN_STABLE_FEE_USD6` / `APPROVED_NFT_STABLE_FEE_USD6`), overridable via
   `GATEWAY_TOKEN_STABLE_FEE_USD6` / `GATEWAY_NFT_STABLE_FEE_USD6` env vars. The owner can change

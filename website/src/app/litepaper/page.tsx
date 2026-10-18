@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { languageFromRequest } from "@/lib/locale-detect";
-import { LANG_COOKIE } from "@/lib/preferences";
+import { languageCookieFromStore } from "@/lib/preferences";
 import { buildPageMetadata } from "@/lib/og-meta";
 import { loadLitepaperMarkdown } from "@/lib/litepaper/content";
 import type { InlineNode, MdBlock } from "@/lib/litepaper/markdown";
@@ -13,7 +13,10 @@ import path from "node:path";
 
 async function resolveLang(): Promise<ReturnType<typeof languageFromRequest>> {
   const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
-  return languageFromRequest(cookieStore.get(LANG_COOKIE)?.value, headerStore.get("accept-language"));
+  return languageFromRequest(
+    languageCookieFromStore(cookieStore),
+    headerStore.get("accept-language"),
+  );
 }
 
 export async function generateMetadata(): Promise<Metadata> {

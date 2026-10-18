@@ -15,7 +15,7 @@ const ARTIFACT_ROOT = process.env.HEADER_SCREENSHOT_DIR ?? "";
 async function setLocale(page, lang) {
   await page.addInitScript((value) => {
     try {
-      localStorage.setItem("ovn_lang", value);
+      localStorage.setItem("people_lang", value);
     } catch {
       /* ignore */
     }

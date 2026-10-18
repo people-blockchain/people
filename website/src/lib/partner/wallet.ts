@@ -1,5 +1,5 @@
 /**
- * secp256k1 address + signature helpers aligned with @ovn/sdk / @ovn/core:
+ * secp256k1 address + signature helpers aligned with @people/sdk / @people/core:
  * compressed pubkey, canonical address = Ethereum keccak (policy 0a),
  * ECDSA over UTF-8 message bytes with SHA-256 prehash (noble default).
  * Private keys never leave the browser; the server only verifies.

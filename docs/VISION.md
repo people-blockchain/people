@@ -330,13 +330,13 @@ Specific mechanisms must be defined in the relevant technical and economic docum
 
 ---
 
-## 15. Relationship to the existing OVN codebase
+## 15. Relationship to the existing PEOPLE Network codebase
 
-The current project is being developed from the existing **Open Validator Network (OVN)** codebase supplied as a reference implementation.
+The current project is being developed from the existing **PEOPLE Network** codebase supplied as a reference implementation.
 
-The original OVN repository/ZIP is preserved unchanged as the reference baseline.
+The original PEOPLE Network repository/ZIP is preserved unchanged as the reference baseline.
 
-The new People's Blockchain repository is a separate development project that may reuse, redesign, refactor, or replace parts of the OVN implementation.
+The new People's Blockchain repository is a separate development project that may reuse, redesign, refactor, or replace parts of the PEOPLE Network implementation.
 
 The existing technical foundation includes blockchain/network concepts such as:
 
@@ -349,7 +349,7 @@ The existing technical foundation includes blockchain/network concepts such as:
 - explorer functionality;
 - SDK/application layers.
 
-The People's Blockchain project will not assume that existing OVN economic rules are final.
+The People's Blockchain project will not assume that existing PEOPLE Network economic rules are final.
 
 ---
 

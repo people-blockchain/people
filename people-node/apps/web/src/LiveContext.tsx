@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Block, ChainSnapshot, GovernanceProposal, RewardDistribution, Transaction } from "@ovn/protocol";
+import type { Block, ChainSnapshot, GovernanceProposal, RewardDistribution, Transaction } from "@people/protocol";
 
 export interface LiveMetrics {
   ok?: boolean;

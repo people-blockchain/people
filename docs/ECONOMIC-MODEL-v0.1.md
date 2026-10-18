@@ -288,10 +288,10 @@ Owner-approved **2026-09-29** (Solana-aligned operator defaults; not Growth perc
 
 | Operation | Default PPL | Config / constant |
 | --- | ---: | --- |
-| Ordinary transfer | 0.004875 | `DEFAULT_TRANSFER_FEE` in `@ovn/core` / `@ovn/sdk` |
+| Ordinary transfer | 0.004875 | `DEFAULT_TRANSFER_FEE` in `@people/core` / `@people/sdk` |
 | Token create (minimum) | 1.045005 | `TOKEN_CREATE_MIN_FEE` |
 | NFT mint (minimum) | 2.925 | `NFT_MINT_MIN_FEE` |
-| EVM contract gas | 8.7e-7 PPL / gas | `APPROVED_CONTRACT_GAS_PRICE_PPL` in `@ovn/protocol`; typical deploy ~1.2e6 gas ≈ 1.044 PPL |
+| EVM contract gas | 8.7e-7 PPL / gas | `APPROVED_CONTRACT_GAS_PRICE_PPL` in `@people/protocol`; typical deploy ~1.2e6 gas ≈ 1.044 PPL |
 
 Batch transfer fees scale with the transfer tariff (`BATCH_FEE_BASE` = transfer default). Non-integer fees remain ineligible for Growth Pool settlement per §8 and `docs/PROTOCOL-DECISIONS.md`. Factory wiring: `docs/TOKEN-NFT-FACTORY-REPORT.md`. Contract gas: `docs/SMART-CONTRACTS-REPORT.md`.
 

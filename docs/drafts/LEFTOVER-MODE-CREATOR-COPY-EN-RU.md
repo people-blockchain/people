@@ -1,7 +1,7 @@
 # DRAFT — creator-facing copy (EN / RU)
 
 **Status:** draft only. Not wired into `website/src/lib/locales` or the live site.
-**Owner rule:** Alex, 2026-10-13. User tokens: leftover mode Burn (default) or Community pool.
+**Owner rule:** 2026-10-13. User tokens: leftover mode Burn (default) or Community pool.
 **Do not ship** until product review. PPL sale copy is unchanged.
 
 ---

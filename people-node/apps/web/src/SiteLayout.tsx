@@ -144,11 +144,11 @@ export function SiteLayout() {
           <div className="top-nav__row">
             <div className="brand">
               <span className="brand-mark" aria-hidden="true">
-                OVN
+                PPL
               </span>
               <div className="brand-copy">
                 <Link to="/" className="brand-link">
-                  Open Validator Network
+                  PEOPLE Network
                 </Link>
                 <span className="brand-tagline">
                   {connected ? (
@@ -268,7 +268,7 @@ export function SiteLayout() {
         <footer className="footer card">
           <div className="footer__grid">
             <div>
-              <strong className="brand-link">Open Validator Network</strong>
+              <strong className="brand-link">PEOPLE Network</strong>
               <p>{t.defaultDescription}</p>
             </div>
             <div className="footer__links">
@@ -279,7 +279,7 @@ export function SiteLayout() {
             </div>
           </div>
           <p className="footer__copy">
-            Open Validator Network ·{" "}
+            PEOPLE Network ·{" "}
             <span className="footer-token">
               <TokenIcon size={14} /> People (PPL)
             </span>

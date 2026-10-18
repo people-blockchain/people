@@ -3,7 +3,7 @@ import { SiteChrome } from "@/components/SiteChrome";
 import { TokenList, type PoolRow, type TokenRow } from "@/components/explorer/ExplorerLists";
 import { SITE_NAME } from "@/lib/site";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
-import { handleEvmCompatGet } from "@/lib/evm/ovn-compat";
+import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 
 export const metadata: Metadata = {

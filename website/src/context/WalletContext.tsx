@@ -17,7 +17,7 @@ import {
   readWalletAddressSchemeConfig,
   setResolvedWalletAddressScheme,
 } from "@/lib/wallet-address-scheme";
-import { keyFromPrivate, type FactoryKeyPair } from "@/lib/ovn-sign";
+import { keyFromPrivate, type FactoryKeyPair } from "@/lib/people-sign";
 import {
   decryptSecret,
   decryptSecretWithUpgrade,

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Sparkles } from "lucide-react";
 import type { FactoryCopyContent } from "@/lib/factory-content";
 import type { IconPresetId } from "@/lib/factory-icon-config";
-import { signFactoryTx } from "@/lib/ovn-sign";
+import { signFactoryTx } from "@/lib/people-sign";
 import { signWalletMessage } from "@/lib/partner/wallet";
 import { buildIconQuotaProofMessage } from "@/lib/factory-icon-proof";
 import { networkJson } from "@/lib/network-client";

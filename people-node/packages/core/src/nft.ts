@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { NftRecord, Transaction } from "@ovn/protocol";
+import type { NftRecord, Transaction } from "@people/protocol";
 
 const NFT_ID_RE = /^nft-[a-z0-9]{8,48}$/;
 const MAX_NAME = 64;

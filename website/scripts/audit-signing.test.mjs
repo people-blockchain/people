@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash, randomBytes } from "node:crypto";
-import { signFactoryTx, keyFromPrivate } from "../src/lib/ovn-sign.ts";
+import { signFactoryTx, keyFromPrivate } from "../src/lib/people-sign.ts";
 import { transactionIdPayload } from "../../people-node/packages/protocol/src/transaction-id.ts";
 process.env.GENESIS_FAUCET_ADDRESS ??= "0x" + "1".repeat(40);
 const { signTransaction, verifyTransaction, contentTransactionId } = await import("../../people-node/packages/core/dist/crypto.js");

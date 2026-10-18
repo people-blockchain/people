@@ -16,8 +16,8 @@ import {
 import { contractBlockGasLimit } from "./contract-fees.js";
 import { getExecutionEnv } from "./execution-env.js";
 import { NATIVE_ASSET_ID } from "./native-asset.js";
-import { EIP155_CHAIN_ID } from "@ovn/protocol";
-import type { ContractAccount, ContractLog } from "@ovn/protocol";
+import { EIP155_CHAIN_ID } from "@people/protocol";
+import type { ContractAccount, ContractLog } from "@people/protocol";
 
 export const PEOPLE_EVM_HARDFORK = Hardfork.Shanghai;
 

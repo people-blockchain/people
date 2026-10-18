@@ -2,9 +2,9 @@
 
 # Cosmos EVM migration — People's Blockchain
 
-**Status (2026-10-14):** Public Cosmos EVM testnet **97401** is live; Stage 1–2 and website JSON-RPC cutover are **done**. Stages 3–4 (fee-split module / full OVN genesis replay) remain TBD / founder-gated. Stage 6 mainnet still TBD.
+**Status (2026-10-14):** Public Cosmos EVM testnet **97401** is live; Stage 1–2 and website JSON-RPC cutover are **done**. Stages 3–4 (fee-split module / full PEOPLE Network genesis replay) remain TBD / founder-gated. Stage 6 mainnet still TBD.
 
-**Decision:** Kirill (owner / validator operator), 2026-10-02 — migrate testnet and mainnet from the custom TypeScript node (`people-node`, Fastify + embedded EVM) to **Cosmos EVM** (`cosmos/evm`), with Solidity contracts for token factory, bonding curve, Uniswap V2–style AMM, and NFTs.
+**Decision:** validator operator / core team, 2026-10-02 — migrate testnet and mainnet from the custom TypeScript node (`people-node`, Fastify + embedded EVM) to **Cosmos EVM** (`cosmos/evm`), with Solidity contracts for token factory, bonding curve, Uniswap V2–style AMM, and NFTs.
 
 Legacy `people-node` is archive-only for the public network. Production site and RPC already target Cosmos EVM 97401.
 
@@ -75,5 +75,4 @@ docs/
 
 ## Operator references
 
-- Local / server validators: `docs/KIRILL-TESTNET-NODES-STAGE1.md` (Russian).
 - Chain README: `chain/README.md`.

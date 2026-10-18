@@ -47,7 +47,7 @@ function injectMockProvider({ vendor, address }) {
 async function openLoginWithProvider(browser, { viewport, theme, vendor }) {
   const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
   const page = await context.newPage();
-  await page.addInitScript((t) => localStorage.setItem("ovn_theme", t), theme);
+  await page.addInitScript((t) => localStorage.setItem("people_theme", t), theme);
   await page.addInitScript(injectMockProvider, { vendor, address: ADDRESS });
   await page.route("**/api/evm/compat/address/**", (route) =>
     route.fulfill({ json: { balance: 12.5, nonce: 0, balances: { ppl: 12.5 } } }),

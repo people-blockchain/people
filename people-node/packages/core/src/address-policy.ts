@@ -1,7 +1,7 @@
 import * as secp from "@noble/secp256k1";
 import { keccak_256 } from "@noble/hashes/sha3.js";
 import { sha256 } from "@noble/hashes/sha2.js";
-import { EVM_ADDRESS_ACTIVATION_HEIGHT } from "@ovn/protocol";
+import { EVM_ADDRESS_ACTIVATION_HEIGHT } from "@people/protocol";
 import { NATIVE_ASSET_ID } from "./native-asset.js";
 
 export interface EvmAddressMigrationState {

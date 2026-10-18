@@ -2,7 +2,7 @@ import { afterEach, expect, test, vi } from "vitest";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildBlock, createInitialState, generateKeyPair, ensureAccount, setAccountBalance, signTransaction, computeStateRoot } from "@ovn/core";
+import { buildBlock, createInitialState, generateKeyPair, ensureAccount, setAccountBalance, signTransaction, computeStateRoot } from "@people/core";
 import { NodeService } from "./node-service.js";
 
 const nodes: NodeService[] = [];

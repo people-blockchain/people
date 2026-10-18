@@ -1,4 +1,4 @@
-import type { NetworkConfig } from "@ovn/protocol";
+import type { NetworkConfig } from "@people/protocol";
 
 /**
  * Coordinated activation height for the owner-approved small consensus items

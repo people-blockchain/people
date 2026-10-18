@@ -3,7 +3,7 @@ import {
   DEFAULT_TX_GAS_LIMIT,
   EIP155_CHAIN_ID,
   MAX_TX_GAS_LIMIT
-} from "@ovn/protocol";
+} from "@people/protocol";
 import { resolveAccountStorageKey } from "./address-policy.js";
 import { staticContractCall } from "./contracts.js";
 import type { ChainState } from "./index.js";

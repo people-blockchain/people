@@ -77,7 +77,7 @@ for (const theme of THEMES) {
     test(`governance list + detail @ ${viewport.label} ${theme}`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.addInitScript((t) => {
-        window.localStorage.setItem("ovn_theme", t);
+        window.localStorage.setItem("people_theme", t);
       }, theme);
       await routeGov(page);
 

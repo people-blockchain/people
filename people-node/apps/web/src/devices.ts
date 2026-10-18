@@ -1,4 +1,5 @@
 import { decryptPrivateKey, encryptPrivateKey } from "./walletStorage.js";
+import { migratePeopleWebStorage } from "./storageMigration.js";
 
 export type NodeKind = "full" | "light";
 
@@ -17,10 +18,11 @@ export interface DeviceRecord {
   createdAt: number;
 }
 
-export const DEVICE_KEY = "ovn-devices";
+export const DEVICE_KEY = "people-devices";
 
 export function loadDevices(): DeviceRecord[] {
   try {
+    migratePeopleWebStorage(localStorage);
     return JSON.parse(localStorage.getItem(DEVICE_KEY) ?? "[]") as DeviceRecord[];
   } catch {
     return [];

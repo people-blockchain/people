@@ -7,7 +7,7 @@ register("./fixtures/bug-reports-db-loader.mjs", import.meta.url);
 
 process.env.TELEGRAM_VERIFY_BOT_TOKEN = "123:TEST";
 delete process.env.BUG_REPORTS_TELEGRAM_CHAT_ID;
-process.env.OWNER_TELEGRAM_USERNAME = "AlexOwner";
+process.env.OWNER_TELEGRAM_USERNAME = "ProjectOwner";
 
 let db, schema, bot, calls;
 const OWNER = 9001;
@@ -53,7 +53,7 @@ test("non-owner /start owner_<wrong> does not claim the owner chat", async () =>
 
 test("owner claims via OWNER_TELEGRAM_USERNAME /start; webhook gains callback_query; second claim refused", async () => {
   const u = msg(OWNER, "/start");
-  u.message.from.username = "alexowner";
+  u.message.from.username = "projectowner";
   assert.equal(await bot.handleSupportBotUpdate(u), true);
   assert.equal(await bot.getOwnerChatId(), String(OWNER));
   const setHook = calls.find((c) => c.method === "setWebhook");

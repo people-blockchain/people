@@ -64,8 +64,8 @@ import {
   listLiquidityPools,
   quoteAmmSwap,
   type ChainState
-} from "@ovn/core";
-import { GossipNetwork } from "@ovn/p2p";
+} from "@people/core";
+import { GossipNetwork } from "@people/p2p";
 import type {
   Block,
   HealthDetailsResponse,
@@ -73,7 +73,7 @@ import type {
   RewardDistribution,
   SlashEvidence,
   Transaction
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 /** Relay-only cap: how many fee-less (non-onboarding) relayed txs the mempool may hold. */
 const MAX_PENDING_FREE_TXS = Math.max(0, Number(process.env.PUBLIC_MEMPOOL_FREE_TX_CAP ?? 500));
@@ -466,48 +466,48 @@ export class NodeService {
   getPrometheusMetrics(): string {
     const m = this.getMetrics();
     const lines = [
-      `# HELP ovn_height Chain head height`,
-      `# TYPE ovn_height gauge`,
-      `ovn_height ${m.height}`,
-      `# HELP ovn_finalized_height Finalized height`,
-      `# TYPE ovn_finalized_height gauge`,
-      `ovn_finalized_height ${m.finalizedHeight}`,
-      `# HELP ovn_finalized_lag Head minus finalized`,
-      `# TYPE ovn_finalized_lag gauge`,
-      `ovn_finalized_lag ${m.finalizedLag}`,
-      `# HELP ovn_validators Validator count`,
-      `# TYPE ovn_validators gauge`,
-      `ovn_validators ${m.validators}`,
-      `# HELP ovn_active_validators Active validators`,
-      `# TYPE ovn_active_validators gauge`,
-      `ovn_active_validators ${m.activeValidators}`,
-      `# HELP ovn_peer_count Connected peers`,
-      `# TYPE ovn_peer_count gauge`,
-      `ovn_peer_count ${m.peerCount}`,
-      `# HELP ovn_missed_proposals Missed proposal events`,
-      `# TYPE ovn_missed_proposals counter`,
-      `ovn_missed_proposals ${m.missedProposalCount ?? 0}`,
-      `# HELP ovn_attestation_quorum_heights Heights with attestation quorum`,
-      `# TYPE ovn_attestation_quorum_heights gauge`,
-      `ovn_attestation_quorum_heights ${m.attestationQuorumHeights ?? 0}`,
-      `# HELP ovn_outbound_peers Outbound peer connections`,
-      `# TYPE ovn_outbound_peers gauge`,
-      `ovn_outbound_peers ${m.outboundPeerCount ?? 0}`,
-      `# HELP ovn_reconnect_count Gossip reconnect attempts`,
-      `# TYPE ovn_reconnect_count counter`,
-      `ovn_reconnect_count ${m.reconnectCount ?? 0}`,
-      `# HELP ovn_banned_peers Banned peer count`,
-      `# TYPE ovn_banned_peers gauge`,
-      `ovn_banned_peers ${m.bannedPeerCount ?? 0}`,
-      `# HELP ovn_suggested_transfer_fee Recommended transfer fee in PPL`,
-      `# TYPE ovn_suggested_transfer_fee gauge`,
-      `ovn_suggested_transfer_fee ${m.suggestedTransferFee ?? DEFAULT_TRANSFER_FEE}`,
-      `# HELP ovn_chain_window_blocks Blocks retained in memory`,
-      `# TYPE ovn_chain_window_blocks gauge`,
-      `ovn_chain_window_blocks ${m.chainWindowBlocks ?? 0}`,
-      `# HELP ovn_pruned_before_height Heights below this may be pruned`,
-      `# TYPE ovn_pruned_before_height gauge`,
-      `ovn_pruned_before_height ${m.prunedBeforeHeight ?? 0}`
+      `# HELP people_height Chain head height`,
+      `# TYPE people_height gauge`,
+      `people_height ${m.height}`,
+      `# HELP people_finalized_height Finalized height`,
+      `# TYPE people_finalized_height gauge`,
+      `people_finalized_height ${m.finalizedHeight}`,
+      `# HELP people_finalized_lag Head minus finalized`,
+      `# TYPE people_finalized_lag gauge`,
+      `people_finalized_lag ${m.finalizedLag}`,
+      `# HELP people_validators Validator count`,
+      `# TYPE people_validators gauge`,
+      `people_validators ${m.validators}`,
+      `# HELP people_active_validators Active validators`,
+      `# TYPE people_active_validators gauge`,
+      `people_active_validators ${m.activeValidators}`,
+      `# HELP people_peer_count Connected peers`,
+      `# TYPE people_peer_count gauge`,
+      `people_peer_count ${m.peerCount}`,
+      `# HELP people_missed_proposals Missed proposal events`,
+      `# TYPE people_missed_proposals counter`,
+      `people_missed_proposals ${m.missedProposalCount ?? 0}`,
+      `# HELP people_attestation_quorum_heights Heights with attestation quorum`,
+      `# TYPE people_attestation_quorum_heights gauge`,
+      `people_attestation_quorum_heights ${m.attestationQuorumHeights ?? 0}`,
+      `# HELP people_outbound_peers Outbound peer connections`,
+      `# TYPE people_outbound_peers gauge`,
+      `people_outbound_peers ${m.outboundPeerCount ?? 0}`,
+      `# HELP people_reconnect_count Gossip reconnect attempts`,
+      `# TYPE people_reconnect_count counter`,
+      `people_reconnect_count ${m.reconnectCount ?? 0}`,
+      `# HELP people_banned_peers Banned peer count`,
+      `# TYPE people_banned_peers gauge`,
+      `people_banned_peers ${m.bannedPeerCount ?? 0}`,
+      `# HELP people_suggested_transfer_fee Recommended transfer fee in PPL`,
+      `# TYPE people_suggested_transfer_fee gauge`,
+      `people_suggested_transfer_fee ${m.suggestedTransferFee ?? DEFAULT_TRANSFER_FEE}`,
+      `# HELP people_chain_window_blocks Blocks retained in memory`,
+      `# TYPE people_chain_window_blocks gauge`,
+      `people_chain_window_blocks ${m.chainWindowBlocks ?? 0}`,
+      `# HELP people_pruned_before_height Heights below this may be pruned`,
+      `# TYPE people_pruned_before_height gauge`,
+      `people_pruned_before_height ${m.prunedBeforeHeight ?? 0}`
     ];
     return `${lines.join("\n")}\n`;
   }

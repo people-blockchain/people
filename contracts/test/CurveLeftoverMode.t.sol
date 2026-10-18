@@ -13,7 +13,7 @@ import {PeopleRouter} from "../src/amm/PeopleRouter.sol";
 import {PeopleConstants} from "../src/PeopleConstants.sol";
 import {IBondingCurveMarket} from "../src/interfaces/IBondingCurveMarket.sol";
 
-/// Owner rule 2026-10-13 (Alex): creator chooses Burn (default) or CommunityPool for
+/// Owner rule 2026-10-13: creator chooses Burn (default) or CommunityPool for
 /// migration leftovers and 180-day finalize unsold. Never creator, never treasury.
 contract CurveLeftoverModeTest is Test {
     address internal constant BURN = address(0xdead);

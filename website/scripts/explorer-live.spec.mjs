@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 const hex = n => `0x${n.toString(16)}`;
 
 test('Cosmos EVM explorer streams blocks over WebSocket, preserves rows offline and resubscribes', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('ovn_lang', 'en'));
+  await page.addInitScript(() => localStorage.setItem('people_lang', 'en'));
   let socket;
   let recovering = false;
   const httpLists = [];

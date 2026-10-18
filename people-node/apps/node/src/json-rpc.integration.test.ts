@@ -4,9 +4,9 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createPublicClient, http } from "viem";
-import { EIP155_CHAIN_ID } from "@ovn/protocol";
+import { EIP155_CHAIN_ID } from "@people/protocol";
 import { NodeService } from "./node-service.js";
-import { jsonRpcMaxBatch } from "@ovn/core";
+import { jsonRpcMaxBatch } from "@people/core";
 import { registerJsonRpcRoutes } from "./json-rpc.js";
 
 describe("JSON-RPC integration (viem)", () => {
@@ -30,7 +30,7 @@ describe("JSON-RPC integration (viem)", () => {
   });
 
   test("viem reads chainId, balance, and eth_call", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-jsonrpc-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-jsonrpc-"));
     node = new NodeService({
       dataDir,
       peerId: "jsonrpc-viem",
@@ -50,7 +50,7 @@ describe("JSON-RPC integration (viem)", () => {
     const chainId = await client.getChainId();
     expect(chainId).toBe(EIP155_CHAIN_ID);
 
-    const { FAUCET_ADDRESS } = await import("@ovn/core");
+    const { FAUCET_ADDRESS } = await import("@people/core");
     const balance = await client.getBalance({ address: FAUCET_ADDRESS as `0x${string}` });
     expect(balance > 0n).toBe(true);
 
@@ -63,7 +63,7 @@ describe("JSON-RPC integration (viem)", () => {
 
   /** M16-1: one HTTP request must not be able to run an unbounded number of calls. */
   test("an over-long batch is refused with -32600 and nothing is executed", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-jsonrpc-batch-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-jsonrpc-batch-"));
     node = new NodeService({
       dataDir,
       peerId: "jsonrpc-batch",
@@ -102,7 +102,7 @@ describe("JSON-RPC integration (viem)", () => {
   });
 
   test("eth_call batches spend the per-IP contract-call budget", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-jsonrpc-rate-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-jsonrpc-rate-"));
     node = new NodeService({
       dataDir,
       peerId: "jsonrpc-rate",

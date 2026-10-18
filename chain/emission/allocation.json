@@ -87,7 +87,7 @@
       "02895b4bc696fc47b4133e1cf389cc625dc963ecd0258366799223f2307f38cbe9"
     ],
     "placeholder": true,
-    "note": "TESTNET ONLY. The 2-of-3 native multisig (test-alex, test-kirill, test-cold; threshold 2) that was created and exercised on testnet on 2026-10-08 (docs/TREASURY-MULTISIG-RU.md: funding + a 2-of-3 signed bank send). Its keys are eth_secp256k1 test keys held in the testnet VPS keyring, so it is still NOT mainnet custody: before mainnet genesis the owner must regenerate it from three independently-held keys (owner, co-founder, owner's cold address) and update this block plus TreasuryMultisigAddress in chain/overrides/evmd/peoplefees/feesplit.go together. Replaces the earlier published-seed placeholder people1prcc866w0qye2nw3sqvt3ufxaarfqzrgknqeju.",
+    "note": "TESTNET ONLY. The 2-of-3 native multisig (test-signer1, test-signer2, test-signer3; threshold 2) that was created and exercised on testnet on 2026-10-08 (docs/TREASURY-MULTISIG-RU.md: funding + a 2-of-3 signed bank send). Its keys are eth_secp256k1 test keys held in the testnet VPS keyring, so it is still NOT mainnet custody: before mainnet genesis the owner must regenerate it from three independently-held keys (owner, co-founder, owner's cold address) and update this block plus TreasuryMultisigAddress in chain/overrides/evmd/peoplefees/feesplit.go together. Replaces the earlier published-seed placeholder people1prcc866w0qye2nw3sqvt3ufxaarfqzrgknqeju.",
     "public_key_type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey"
   },
   "mainnet_prep": {

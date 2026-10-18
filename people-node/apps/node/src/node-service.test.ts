@@ -18,7 +18,7 @@ describe("NodeService metrics", () => {
   });
 
   test("backfills transaction counter on start", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-node-test-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-node-test-"));
     node = new NodeService({
       dataDir,
       peerId: "test-metrics",
@@ -38,7 +38,7 @@ describe("NodeService metrics", () => {
     const previousCap = process.env.FAUCET_DAILY_CAP_PPL;
     process.env.FAUCET_DAILY_CAP_PPL = "15";
     try {
-      dataDir = await mkdtemp(join(tmpdir(), "ovn-node-test-"));
+      dataDir = await mkdtemp(join(tmpdir(), "people-node-test-"));
       node = new NodeService({
         dataDir,
         peerId: "test-faucet-cap",
@@ -58,7 +58,7 @@ describe("NodeService metrics", () => {
   });
 
   test("contract eth_call rate limit and gas cap are node-local policy", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-contract-call-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-contract-call-"));
     node = new NodeService({
       dataDir,
       peerId: "test-contract-call",
@@ -77,7 +77,7 @@ describe("NodeService metrics", () => {
   });
 
   test("M10-5: a restarted node adopts bootstrapAddress from genesis/chain state, not its own env", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-bootstrap-adopt-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-bootstrap-adopt-"));
     node = new NodeService({
       dataDir,
       peerId: "test-bootstrap-adopt",
@@ -114,7 +114,7 @@ describe("NodeService metrics", () => {
   // must publish its height to joining nodes, and a height already pinned in this node's own
   // state must not be silently replaced by a different env value — both would fork the node.
   test("CHAIN-H2: the public network descriptor publishes the consensus-upgrade-1 height", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-cu1-descriptor-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-cu1-descriptor-"));
     node = new NodeService({
       dataDir,
       peerId: "test-cu1-descriptor",
@@ -128,7 +128,7 @@ describe("NodeService metrics", () => {
   });
 
   test("CHAIN-H2: a changed or dropped consensus-upgrade-1 height is refused at restart", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-cu1-restart-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-cu1-restart-"));
     node = new NodeService({
       dataDir,
       peerId: "test-cu1-restart",
@@ -169,7 +169,7 @@ describe("NodeService metrics", () => {
   // The optional creator promo share is a coordinated fork with the same two failure modes:
   // an unpublished height forks a joining node, and a silently replaced height forks this one.
   test("the public network descriptor publishes the promo-share activation height", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-promo-descriptor-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-promo-descriptor-"));
     node = new NodeService({
       dataDir,
       peerId: "test-promo-descriptor",
@@ -183,7 +183,7 @@ describe("NodeService metrics", () => {
   });
 
   test("a changed or dropped promo-share height is refused at restart", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-promo-restart-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-promo-restart-"));
     node = new NodeService({
       dataDir,
       peerId: "test-promo-restart",
@@ -219,7 +219,7 @@ describe("NodeService metrics", () => {
   });
 
   test("M10-5: a conflicting BOOTSTRAP_ADDRESS is still rejected rather than silently overridden", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-bootstrap-conflict-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-bootstrap-conflict-"));
     node = new NodeService({
       dataDir,
       peerId: "test-bootstrap-conflict",
@@ -258,7 +258,7 @@ describe("NodeService metrics", () => {
     delete process.env.ALLOW_DEV_ENDPOINTS;
     delete process.env.DEV_API_TOKEN;
     try {
-      dataDir = await mkdtemp(join(tmpdir(), "ovn-dev-endpoint-disabled-"));
+      dataDir = await mkdtemp(join(tmpdir(), "people-dev-endpoint-disabled-"));
       node = new NodeService({
         dataDir,
         peerId: "test-dev-endpoint-disabled",
@@ -290,7 +290,7 @@ describe("NodeService metrics", () => {
     process.env.ALLOW_DEV_ENDPOINTS = "1";
     delete process.env.DEV_API_TOKEN;
     try {
-      dataDir = await mkdtemp(join(tmpdir(), "ovn-dev-endpoint-enabled-"));
+      dataDir = await mkdtemp(join(tmpdir(), "people-dev-endpoint-enabled-"));
       node = new NodeService({
         dataDir,
         peerId: "test-dev-endpoint-enabled",

@@ -5,7 +5,7 @@ import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useWallet } from "../WalletContext.js";
 import { useLive } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { useDeviceVault } from "../DeviceVaultContext.js";
 import { labelProposalStatus } from "../i18n.js";
 
@@ -27,7 +27,7 @@ export function GovernancePage() {
     if (!address) {
       return 0;
     }
-    const account = await ovn.getAddress(address);
+    const account = await people.getAddress(address);
     return account.nonce;
   }
 
@@ -39,7 +39,7 @@ export function GovernancePage() {
     }
     try {
       const nonce = await resolveNonce();
-      const result = await ovn.submitProposal(privateKey, nonce, {
+      const result = await people.submitProposal(privateKey, nonce, {
         minStake,
         epochBaseIssuance: issuance
       });
@@ -58,7 +58,7 @@ export function GovernancePage() {
     }
     try {
       const nonce = await resolveNonce();
-      const result = await ovn.vote(privateKey, nonce, proposalId, support);
+      const result = await people.vote(privateKey, nonce, proposalId, support);
       if (!result.accepted) {
         throw new Error(result.error ?? "vote_failed");
       }

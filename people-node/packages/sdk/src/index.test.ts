@@ -7,11 +7,11 @@ import {
   getTxMemo,
   keyPairFromPrivateKey,
   MAX_TRANSFER_MEMO_LENGTH,
-  OvnClient,
+  PeopleClient,
   signTransaction
 } from "./index.js";
 
-describe("@ovn/sdk", () => {
+describe("@people/sdk", () => {
   test("getTxMemo trims and validates memo length constant", async () => {
     expect(getTxMemo({ type: "transfer", payload: { memo: "  hello  " } })).toBe("hello");
     expect(getTxMemo({ type: "transfer", payload: { memo: "" } })).toBeNull();
@@ -59,13 +59,13 @@ describe("@ovn/sdk", () => {
     expect(restored.address).toBe(key.address);
   });
 
-  test("OvnClient builds reward history path", async () => {
-    const client = new OvnClient({ baseUrl: "http://localhost:4001" });
+  test("PeopleClient builds reward history path", async () => {
+    const client = new PeopleClient({ baseUrl: "http://localhost:4001" });
     expect(client.getRewardHistory).toBeTypeOf("function");
   });
 
-  test("OvnClient exposes Phase 2 token factory and bonding curve methods", async () => {
-    const client = new OvnClient({ baseUrl: "http://localhost:4001" });
+  test("PeopleClient exposes Phase 2 token factory and bonding curve methods", async () => {
+    const client = new PeopleClient({ baseUrl: "http://localhost:4001" });
     expect(client.createToken).toBeTypeOf("function");
     expect(client.buyCurveTokens).toBeTypeOf("function");
     expect(client.sellCurveTokens).toBeTypeOf("function");
@@ -103,7 +103,7 @@ describe("@ovn/sdk", () => {
     }) as any;
 
     try {
-      const client = new OvnClient({ baseUrl: "http://localhost:4001" });
+      const client = new PeopleClient({ baseUrl: "http://localhost:4001" });
 
       // 1. Create Token
       await client.createToken(key.privateKey, {

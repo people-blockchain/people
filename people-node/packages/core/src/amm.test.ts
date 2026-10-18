@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import type { LiquidityPoolState } from "@ovn/protocol";
+import type { LiquidityPoolState } from "@people/protocol";
 import {
   AMM_FEE_BPS,
   AMM_MINIMUM_LIQUIDITY,

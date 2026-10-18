@@ -19,12 +19,9 @@ test('entrypoint does not expose personal/debug unless JSON_RPC_API asks for the
 
 test('the EVM JSON-RPC API set is not hard-coded with personal/debug in scripts or docs', async () => {
   // Every operator-facing file that shows a --json-rpc.api example must use the safe set.
-  // docs/KIRILL-TESTNET-NODES-STAGE1.md was missed by the first M11-3 pass and kept
-  // instructing operators to enable personal+debug on public validator nodes (audit OPS-H1).
   for (const rel of [
     'ci-smoke.sh',
     '../README.md',
-    '../../docs/KIRILL-TESTNET-NODES-STAGE1.md',
     '../../docs/EVM-RPC-TESTNET-OPERATOR.md',
     '../../docs/DEVELOPMENT.md',
     '../../docs/PUBLIC-NODE-ONBOARDING.md',

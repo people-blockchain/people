@@ -5,7 +5,6 @@
 **Not in scope:** consensus, fees, Growth Pool formulas, Token Factory, BondingCurveEngine, P2P, storage, prune/archival, deploy, Mainnet, auth.
 
 Public package: **`website/`** (Next.js). Canonical origin in code: `https://www.peopleblockchain.network`.  
-`https://ovn-foundation.vercel.app` is a Vercel host of the same package.  
 `people-node/apps/web` is the protocol explorer/wallet app — **not** this redesign.
 
 Public routes before and after: `/` and `/how-it-works` (plus `robots.txt` / `sitemap.xml`). RU/EN is client language preference, not separate URL locales.

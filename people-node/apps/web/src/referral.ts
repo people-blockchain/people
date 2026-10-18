@@ -1,7 +1,8 @@
 import { isWalletAddress } from "./address.js";
+import { migratePeopleWebStorage } from "./storageMigration.js";
 
-export const REFERRAL_STORAGE_KEY = "ovn-referrer";
-export const REFERRAL_BINDINGS_KEY = "ovn-referrer-bindings";
+export const REFERRAL_STORAGE_KEY = "people-referrer";
+export const REFERRAL_BINDINGS_KEY = "people-referrer-bindings";
 
 type ReferrerBindings = Record<string, string>;
 
@@ -11,6 +12,7 @@ function normalizeAddress(value: string): string {
 
 function readBindings(): ReferrerBindings {
   try {
+    migratePeopleWebStorage(localStorage);
     const raw = localStorage.getItem(REFERRAL_BINDINGS_KEY);
     if (!raw) {
       return {};
