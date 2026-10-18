@@ -4,9 +4,9 @@ The website owner / their agent performs the production release. The mobile agen
 
 ## Review and code
 
-- PR: https://github.com/rednaxelavoroge/Peoples-Blockchain/pull/321 (`codex/people-connect`). Use the latest reviewed head, not an earlier SHA from chat.
+- PR: https://github.com/people-blockchain/people/pull/13. Use the latest reviewed head, not an earlier SHA from chat.
 - Contract: [PEOPLE-CONNECT-V1.md](PEOPLE-CONNECT-V1.md). The gateway supports account proof, `personal_sign`, rejection and disconnect only. Existing external-wallet WalletConnect remains available. Gateway transactions are unsupported.
-- Resolve review findings and run `npm run build`, `npm run lint`, `npm run typecheck` from `website/` before each push. The mobile worktree uses `npm run build -- --webpack` because its caches/dependencies are external SSD symlinks; CI has conventional dependencies.
+- Resolve review findings and run `npm run build`, `npm run lint`, `npm run typecheck` from `website/` before each push. CI uses conventional dependencies in the repository.
 - New gateway/browser offline tests are part of standard `npm test`; the real PostgreSQL integration test is separately opted in against a disposable private cluster. Keep `scripts/no-live-rpc.mjs` enabled. Do not run `test:live` or use the public node/proxy from ordinary tests.
 - The initial PR CI job did not start: GitHub reported failed account payments or an insufficient spending limit. This is not a passing check. The repository owner must resolve the account issue and rerun CI; do not disable required checks or force a merge.
 
@@ -28,12 +28,12 @@ Use the existing site's approved secret manager / database interface. Do not pri
 
 ## Public acceptance
 
-- Verify `/connect/mobile` renders. An unsupported `GET /api/mobile-wallet` returns405; a browser `POST create` uses the exact production Origin. Never print the returned capabilities or pairing link.
+- Verify `/connect/mobile` renders. An unsupported `GET /api/mobile-wallet` returns 405; a browser `POST create` uses the exact production Origin. Never print the returned capabilities or pairing link.
 - Use only newly created dedicated, unfunded test wallets. Never unlock/import/sign with an owner's primary wallet for acceptance. Ordinary automated checks stay offline.
-- The browser-role coordinator is `People-Android/scripts/people-connect-acceptance.cjs`. It needs `PEOPLE_CONNECT_ACCEPTANCE=97401` **and** `PEOPLE_CONNECT_PUBLIC_ACCEPTANCE=97401` to select the exact production origin. Without the public flag it uses only `http://127.0.0.1:18080`; arbitrary origin environment variables are unsupported.
-- Provide an absolute installed `PEOPLE_CONNECT_NODE_MODULES` directory and a fresh absolute `PEOPLE_CONNECT_STATE_DIR`. Keep the state directory0700 and one-time URI0600; copy/stage atomically without putting the URI or keys in arguments/logs. Create the pair after the native client is ready; pair/request TTL remain120seconds.
-- Verify visible account/message consent and native authentication, independently recover the first signature against the exact message/account, reject the second request with4001, then disconnect on the phone. Require both native success and coordinator `phase: passed`. Preserve only public address/message/signature/recovered address/call counts as evidence.
-- Coordinate Android/iOS native runs on this8GB Mac; only one emulator/simulator at a time, with compilers stopped. Physical-device authentication, camera and signed App/Universal Link association remain separate checks; never invent Apple team or distribution certificate identities.
+- The browser-role coordinator is the native-app acceptance coordinator (kept in the mobile app repo). It needs `PEOPLE_CONNECT_ACCEPTANCE=97401` **and** `PEOPLE_CONNECT_PUBLIC_ACCEPTANCE=97401` to select the exact production origin. Without the public flag it uses only `http://127.0.0.1:18080`; arbitrary origin environment variables are unsupported.
+- Provide an absolute installed `PEOPLE_CONNECT_NODE_MODULES` directory and a fresh absolute `PEOPLE_CONNECT_STATE_DIR`. Keep the state directory 0700 and one-time URI 0600; copy/stage atomically without putting the URI or keys in arguments/logs. Create the pair after the native client is ready; pair/request TTL remain 120 seconds.
+- Verify visible account/message consent and native authentication, independently recover the first signature against the exact message/account, reject the second request with 4001, then disconnect on the phone. Require both native success and coordinator `phase: passed`. Preserve only public address/message/signature/recovered address/call counts as evidence.
+- Coordinate Android/iOS native runs on a constrained host; only one emulator/simulator at a time, with compilers stopped. Physical-device authentication, camera and signed App/Universal Link association remain separate checks; never invent Apple team or distribution certificate identities.
 
 ## Rollback
 
