@@ -1,8 +1,0 @@
-{
-  "chainId": 97401,
-  "address": "0x77408f49f36520b722CbcCDBeD68aCc8c5Ca4eBf",
-  "runtimeCodeHash": "0x326532a70b20efb87b31fd53ef3576185e4cd552961f032ec4169fe7a14a8f15",
-  "genesisHash": "0x6a8f9cf0319e44acc4ee8fe4473549f422266e5b0e5be6b3ac68167a4cbe525d",
-  "startBlock": 337805,
-  "release": "cb884311fdabc4fcd50c99d517688e6b7c95692d"
-}
