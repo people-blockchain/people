@@ -13,7 +13,7 @@
  *   `next build`/`next start` under test, whose pages degrade gracefully when the node is down).
  */
 
-const BLOCKED_HOSTS = new Set(["node.peopleblockchain.network", "147.45.227.204"]);
+const BLOCKED_HOSTS = new Set(["node.peopleblockchain.network", "203.0.113.10"]);
 const strict = process.env.NO_LIVE_RPC_MODE !== "block";
 const violations = [];
 

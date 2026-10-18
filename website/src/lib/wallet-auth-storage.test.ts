@@ -37,7 +37,7 @@ describe("wallet auth storage", () => {
   });
 
   it("remembers email", () => {
-    rememberAuthEmail("someone@gmail.com");
-    assert.equal(readLastAuthEmail(), "someone@gmail.com");
+    rememberAuthEmail("test@example.com");
+    assert.equal(readLastAuthEmail(), "test@example.com");
   });
 });

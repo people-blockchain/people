@@ -47,6 +47,6 @@ test("founders landing lists every special number and the fixed one-time bonus",
     assert.ok(c.specialFixedNote.length > 0 && c.specialNamedBadge.length > 0, name);
     const text = JSON.stringify(c);
     assert.doesNotMatch(text, /\bsoon\b|скоро|guaranteed return/i, name);
-    assert.doesNotMatch(text, /\bPeople\b(?! Predict)/, `${name} brand must be PEOPLE in caps`);
+    assert.doesNotMatch(text, /\bPeople\b/, `${name} brand must be PEOPLE in caps`);
   }
 });

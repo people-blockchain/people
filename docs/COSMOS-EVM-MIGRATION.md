@@ -1,4 +1,4 @@
-> **Status 2026-10-14:** Public cutover is **complete**. Users and the site use Cosmos EVM testnet **97401** with live Solidity factories/AMM/NFT/Predict. This file remains as the migration design/history; do not treat remaining checklist items as blocking the public testnet.
+> **Status 2026-10-14:** Public cutover is **complete**. Users and the site use Cosmos EVM testnet **97401** with live Solidity factories/AMM/NFT. This file remains as the migration design/history; do not treat remaining checklist items as blocking the public testnet.
 
 # Cosmos EVM migration — People's Blockchain
 
