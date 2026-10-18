@@ -91,6 +91,42 @@ test('persistent read failure expires at the pair deadline and stops polling',as
  t.mock.timers.tick(5000);await flush();assert.equal(expired,1);assert.equal(calls.length,2);
  t.mock.timers.tick(20000);await flush();assert.equal(calls.length,2);
 });
+test('personal_sign poll survives transient read errors then returns approved signature',async t=>{
+ const message='Retry after read glitch';const signature=await account.signMessage({message});
+ const request={id:'ab'.repeat(16),method:'personal_sign',message,expiresAt:new Date(now+120000).toISOString(),status:'pending'};
+ let statusReads=0;
+ const {provider}=setup(t,b=>{
+  if(b.action==='request')return {request};
+  if(++statusReads===1)throw new Error('transient status read');
+  return {state:'connected',session,request:{...request,status:'approved',signature}};
+ });
+ const pending=provider.request({method:'personal_sign',params:[stringToHex(message),account.address]});
+ await flush();t.mock.timers.tick(5000);await flush();assert.equal(statusReads,1);
+ t.mock.timers.tick(5000);await flush();assert.equal(await pending,signature);
+});
+test('five consecutive read failures during personal_sign poll throw mobile_wallet_unavailable',async t=>{
+ const message='Offline review';const request={id:'cd'.repeat(16),method:'personal_sign',message,expiresAt:new Date(now+600000).toISOString(),status:'pending'};
+ const {provider}=setup(t,b=>b.action==='request'?{request}:(()=>{throw new Error('offline')})());
+ const pending=provider.request({method:'personal_sign',params:[stringToHex(message),account.address]});
+ const rejected=assert.rejects(pending,/mobile_wallet_unavailable/);
+ for(let i=0;i<5;i++){await flush();t.mock.timers.tick(5000);await flush()}
+ await rejected;
+});
+test('stale in-flight status after request does not poison the read cache',async t=>{
+ const message='Cache epoch guard';const signature=await account.signMessage({message});
+ const request={id:'ef'.repeat(16),method:'personal_sign',message,expiresAt:new Date(now+120000).toISOString(),status:'pending'};
+ let releaseStale;let staleStarted=false;
+ const {provider}=setup(t,b=>{
+  if(b.action==='request')return {request};
+  if(!staleStarted){staleStarted=true;return new Promise(r=>{releaseStale=()=>r({state:'connected',session,request:{id:'ff'.repeat(16),method:'personal_sign',message:'stale',expiresAt:request.expiresAt,status:'approved',signature}})})}
+  return {state:'connected',session,request:{...request,status:'approved',signature}};
+ });
+ provider.startMonitoring();await flush();
+ const pending=provider.request({method:'personal_sign',params:[stringToHex(message),account.address]});
+ await flush();releaseStale();await flush();
+ t.mock.timers.tick(5000);await flush();
+ assert.equal(await pending,signature);provider.stopMonitoring();
+});
 test('a mismatched connected session is terminal and is never retried as a transport failure',async t=>{
  let invalid=0;
  const {calls}=setup(t,()=>({state:'connected',session:{...session,id:'ff'.repeat(16)}}));

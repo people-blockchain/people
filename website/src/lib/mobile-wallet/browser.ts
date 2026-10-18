@@ -19,7 +19,7 @@ export class PeopleMobileProvider {
   private session: MobileSession; private token: string; private closed = false; private busy = false;
   private listeners = new Set<(...args: unknown[]) => void>();
   private timer?: ReturnType<typeof setTimeout>; private monitoring = false; private monitorEpoch = 0;
-  private reading?: Promise<State>; private cached?: State; private readAt = 0;
+  private reading?: Promise<{ state: State; epoch: number }>; private cached?: State; private readAt = 0; private cacheEpoch = 0;
   constructor(session: MobileSession, browserToken: string) { this.session = session; this.token = browserToken; }
   on(event: string, listener: (...args: unknown[]) => void) { if (event === "disconnect") this.listeners.add(listener); }
   removeListener(event: string, listener: (...args: unknown[]) => void) { if (event === "disconnect") this.listeners.delete(listener); }
@@ -29,12 +29,25 @@ export class PeopleMobileProvider {
     for (const listener of this.listeners) listener({ code: 4900, message: "People mobile connection ended" });
   }
   private async readState(): Promise<State> {
-    if (this.reading) return this.reading;
-    if (this.cached && Date.now() - this.readAt < 5000) return this.cached;
-    this.reading = mobileWalletApi({ action: "status", id: this.session.id, browserToken: this.token }).then(value => {
-      this.cached = value as State; this.readAt = Date.now(); return this.cached;
-    });
-    try { return await this.reading; } finally { this.reading = undefined; }
+    for (;;) {
+      if (this.cached && Date.now() - this.readAt < 5000) return this.cached;
+      if (!this.reading) {
+        const epoch = this.cacheEpoch;
+        this.reading = mobileWalletApi({ action: "status", id: this.session.id, browserToken: this.token }).then(value => {
+          const state = value as State;
+          if (epoch === this.cacheEpoch) { this.cached = state; this.readAt = Date.now(); }
+          return { state, epoch };
+        });
+      }
+      try {
+        const { state, epoch } = await this.reading;
+        this.reading = undefined;
+        if (epoch === this.cacheEpoch) return state;
+      } catch (error) {
+        this.reading = undefined;
+        throw error;
+      }
+    }
   }
   startMonitoring() {
     if (this.monitoring || this.closed) return;
@@ -67,19 +80,24 @@ export class PeopleMobileProvider {
     this.busy = true;
     try {
       const { request } = await mobileWalletApi({ action: "request", id: this.session.id, browserToken: this.token, message }) as { request: MessageRequest };
-      this.cached = undefined;
-      while (!this.closed && Date.now() < Date.parse(request.expiresAt)) {
+      this.cacheEpoch++; this.cached = undefined; this.reading = undefined;
+      const deadline = Math.min(Date.parse(request.expiresAt), Date.parse(this.session.expiresAt));
+      let readFailures = 0;
+      while (!this.closed && Date.now() < deadline) {
         await new Promise(resolve => setTimeout(resolve, 5000));
         if (this.closed || document.visibilityState === "hidden") throw new Error("mobile_wallet_review_cancelled");
-        const state = await this.readState();
-        if (this.closed || Date.now() >= Math.min(Date.parse(request.expiresAt), Date.parse(this.session.expiresAt))) throw new Error("mobile_wallet_request_expired");
+        if (Date.now() >= deadline) throw new Error("mobile_wallet_request_expired");
+        let state: State;
+        try { state = await this.readState(); readFailures = 0; }
+        catch { if (++readFailures >= 5) throw new Error("mobile_wallet_unavailable"); continue; }
+        if (this.closed || Date.now() >= deadline) throw new Error("mobile_wallet_request_expired");
         if (state.state !== "connected" || state.session?.address !== this.session.address) { this.closeLocal(); throw new Error("mobile_wallet_disconnected"); }
         const result = state.request;
         if (result?.id !== request.id || result.message !== message) throw new Error("mobile_wallet_request_changed");
         if (result.status === "rejected") throw Object.assign(new Error("mobile_wallet_rejected"), { code: 4001 });
         if (result.status === "approved" && result.signature) {
           const recovered = await recoverMessageAddress({ message, signature: result.signature });
-          if (this.closed || Date.now() >= Math.min(Date.parse(request.expiresAt), Date.parse(this.session.expiresAt))) throw new Error("mobile_wallet_request_expired");
+          if (this.closed || Date.now() >= deadline) throw new Error("mobile_wallet_request_expired");
           if (recovered.toLowerCase() !== this.session.address.toLowerCase()) throw new Error("mobile_wallet_bad_signature");
           return result.signature;
         }
