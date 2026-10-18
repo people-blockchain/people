@@ -50,6 +50,8 @@ test("embedded trailing IPv4 uses two hex groups so different /64 prefixes do no
   assert.equal(rateLimitSubject(b), "2001:0db8:0002:0000");
   assert.notEqual(rateLimitSubject(a), rateLimitSubject(b));
 
+  assert.equal(rateLimitSubject("1::2:3:4:5:1.2.3.4"), "0001:0000:0002:0003");
+
   const c = "1:2::4:5:6:1.2.3.4";
   const d = "1:2:0:5:0:4:1.2.3.4";
   assert.equal(isIP(c), 6);
@@ -58,9 +60,9 @@ test("embedded trailing IPv4 uses two hex groups so different /64 prefixes do no
 });
 
 test("zone id is stripped before subject normalization", () => {
+  assert.equal(rateLimitSubject("::ffff:1.2.3.4%eth0"), "1.2.3.4");
   assert.equal(rateLimitSubject("::ffff:1.2.3.4%eth0"), rateLimitSubject("::ffff:1.2.3.4"));
-  assert.equal(
-    rateLimitSubject("2001:0db8:85a3::8a2e:370:7334%en0"),
-    rateLimitSubject("2001:0db8:85a3::8a2e:370:7334"),
-  );
+  assert.equal(rateLimitSubject("fe80::1%eth0"), rateLimitSubject("fe80::1"));
+  assert.equal(rateLimitSubject("2001:db8::1%eth0"), "2001:0db8:0000:0000");
+  assert.equal(rateLimitSubject("2001:db8::1%eth0"), rateLimitSubject("2001:db8::1"));
 });
