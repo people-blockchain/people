@@ -11,7 +11,7 @@ import {
   SOLANA_METAPLEX_CORE_NFT_SOL,
   SOLANA_SPL_MINT_RENT_SOL,
   solToPpl
-} from "@ovn/protocol";
+} from "@people/protocol";
 import {
   BATCH_FEE_BASE,
   BATCH_FEE_CAP,

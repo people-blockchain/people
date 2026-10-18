@@ -1,9 +1,9 @@
 import { HDKey } from "@scure/bip32";
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english.js";
-import { keyFromPrivate, type FactoryKeyPair } from "@/lib/ovn-sign";
+import { keyFromPrivate, type FactoryKeyPair } from "@/lib/people-sign";
 
-/** Same BIP44 path as `@ovn/web` (`apps/web/src/seedPhrase.ts`). */
+/** Same BIP44 path as `@people/web` (`apps/web/src/seedPhrase.ts`). */
 export const PPL_DERIVATION_PATH = "m/44'/60'/0'/0/0";
 
 function bytesToHex(bytes: Uint8Array): string {

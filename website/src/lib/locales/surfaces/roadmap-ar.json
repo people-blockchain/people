@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "شبكة PEOPLE Blockchain التجريبية (EVM)",
-      "summary": "توسيع شبكة PEOPLE Blockchain التجريبية على EVM. المرحلة 1 (chain/) جارية؛ الشبكة التجريبية العامة ما زالت على عقدة OVN مع RPC للقراءة فقط."
+      "summary": "توسيع شبكة PEOPLE Blockchain التجريبية على EVM. المرحلة 1 (chain/) جارية؛ الشبكة التجريبية العامة ما زالت على عقدة legacy people-node مع RPC للقراءة فقط."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

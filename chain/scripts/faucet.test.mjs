@@ -51,10 +51,13 @@ test('allows exactly the 100 PPL cap',async()=>{
 });
 const addr=n=>'0x'+BigInt(n).toString(16).padStart(40,'0');
 const trusted={trustProxyHeaders:true,trustedPeers:DEFAULT_TRUSTED_PROXY_PEERS};
-const fwd=ip=>({'x-ovn-client-ip':ip});
+const fwd=ip=>({'x-people-client-ip':ip});
 test('ignores a forwarded client-ip header unless forwarded headers are trusted (fail closed)',()=>{
   assert.equal(clientSource('127.0.0.1',fwd('9.9.9.9'),{trustedPeers:DEFAULT_TRUSTED_PROXY_PEERS}),'127.0.0.1');
   assert.equal(clientSource('127.0.0.1',fwd('9.9.9.9')),'127.0.0.1');
+});
+test('honours the legacy forwarded header name from a trusted proxy peer',()=>{
+  assert.equal(clientSource('127.0.0.1',{'x-ovn-client-ip':'9.9.9.9'},trusted),'9.9.9.9');
 });
 test('honours the forwarded header only from a trusted proxy peer',()=>{
   assert.equal(clientSource('127.0.0.1',fwd('9.9.9.9'),trusted),'9.9.9.9');

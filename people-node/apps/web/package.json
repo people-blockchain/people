@@ -1,5 +1,5 @@
 {
-  "name": "@ovn/web",
+  "name": "@people/web",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,7 @@
   "dependencies": {
     "@noble/hashes": "^2.2.0",
     "@noble/secp256k1": "^3.1.0",
-    "@ovn/sdk": "file:../../packages/sdk",
+    "@people/sdk": "file:../../packages/sdk",
     "@scure/bip32": "^2.4.0",
     "@scure/bip39": "^2.4.0",
     "qrcode": "^1.5.4",

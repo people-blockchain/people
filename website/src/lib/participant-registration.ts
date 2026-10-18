@@ -1,4 +1,4 @@
-import { signFactoryTx } from "@/lib/ovn-sign";
+import { signFactoryTx } from "@/lib/people-sign";
 import { networkJson } from "@/lib/network-client";
 import { planParticipantRegistration } from "@/lib/referral-ref";
 

@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import type { FactoryPublicConfig } from "@/lib/factory-config";
 import { DEFAULT_PUBLIC_CHAIN_ID } from "@/lib/node-rpc";
-import { signFactoryTx } from "@/lib/ovn-sign";
+import { signFactoryTx } from "@/lib/people-sign";
 import { networkJson } from "@/lib/network-client";
 import { useWallet } from "@/context/WalletContext";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
@@ -51,10 +51,10 @@ export function FactoryWizard({ kind }: Props) {
   if (isCosmosEvmChain()) {
     return kind === "token" ? <EvmTokenLaunch /> : <EvmNftMint />;
   }
-  return <OvnFactoryWizard kind={kind} />;
+  return <PeopleFactoryWizard kind={kind} />;
 }
 
-function OvnFactoryWizard({ kind }: Props) {
+function PeopleFactoryWizard({ kind }: Props) {
   const { lang } = useLanguage();
   const copy = factoryCopy[lang];
   const page = kind === "token" ? copy.token : copy.nft;

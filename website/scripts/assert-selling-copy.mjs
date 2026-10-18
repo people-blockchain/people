@@ -238,7 +238,7 @@ const PUBLIC_COPY_FILES = [
 
 test("public website copy has no legacy brand or internal diary language", () => {
   const forbidden = [
-    /Open Validator Network/,
+    /PEOPLE Network/,
     /Open Validate Network/,
     /OVN Foundation/,
     /legacy VLS/,
@@ -264,7 +264,7 @@ test("public website copy has no legacy brand or internal diary language", () =>
     }
   }
   const layout = src("src/app/layout.tsx");
-  assert.match(layout, /ovn_theme/, "code identifier ovn_theme must remain");
+  assert.match(layout, /people_theme/, "code identifier people_theme must remain");
 });
 
 test("homepage still leads with user-value props in both locales", () => {

@@ -1,4 +1,4 @@
-# EVM JSON-RPC — operator note (Kirill, internal testnet)
+# EVM JSON-RPC — operator note, internal testnet)
 
 **Status:** stage 0–1 (read-only RPC + address policy 0a). Not Mainnet.
 

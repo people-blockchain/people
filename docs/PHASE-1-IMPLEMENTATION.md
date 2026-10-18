@@ -3,8 +3,9 @@
 **Date:** 2026-09-22  
 **Status:** IMPLEMENTED & TESTED  
 **Author / Role:** Antigravity / Senior Blockchain Engineer & Technical Architect  
-**Repository Baseline:** Open Validator Network (OVN)  
-**Target Platform:** People's Blockchain  
+**Repository Baseline:** PEOPLE Network
+
+**Target Platform:** People's Blockchain
 
 > **Historical / superseded for native asset naming.** Current runtime native asset is
 > **People** (`PPL`, id `ppl`). `VLS` / `vls` / `Vallis` below record this document’s
@@ -16,7 +17,7 @@
 
 Phase 1 establishes the multi-asset ledger foundation and integer-safe fee distribution architecture for People's Blockchain.
 
-Prior to Phase 1, the OVN core was strictly a single-asset ledger (`balance: number` of native VLS), transaction fees were directly merged into epoch base issuance, and no secondary assets, community pool state, or separable fee destinations existed.
+Prior to Phase 1, the PEOPLE Network core was strictly a single-asset ledger (`balance: number` of native VLS), transaction fees were directly merged into epoch base issuance, and no secondary assets, community pool state, or separable fee destinations existed.
 
 In Phase 1, the core protocol was upgraded to:
 1. Support multi-asset balances (`balances: Record<string, number>`) per account while preserving 100% backward compatibility with `account.balance` for native VLS.
@@ -82,7 +83,7 @@ export interface CommunityPoolState {
 
 ### 3.2 Account State Compatibility
 
-To prevent breaking any legacy OVN code or tests:
+To prevent breaking any legacy PEOPLE Network code or tests:
 ```typescript
 export interface AccountState {
   balance: number;                   // Native VLS balance (backward compatibility mirror)
@@ -174,10 +175,10 @@ All automated test suites across all packages passed successfully:
 
 | Package / App | Test Count | Status | Description |
 |:---|:---|:---|:---|
-| `@ovn/core` | 41 / 41 passed | **GREEN** | Core blockchain, fork choice, multi-asset ledger, fee splitter, community pool, persistence, invariants |
-| `@ovn/sdk` | 10 / 10 passed | **GREEN** | Transaction signing, memo validation, multi-asset client queries |
-| `@ovn/p2p` | 6 / 6 passed | **GREEN** | Gossip, message serialization, peer discovery |
-| `@ovn/node` | 3 / 3 passed | **GREEN** | API integration, lag fields, rejected tx metrics |
+| `@people/core` | 41 / 41 passed | **GREEN** | Core blockchain, fork choice, multi-asset ledger, fee splitter, community pool, persistence, invariants |
+| `@people/sdk` | 10 / 10 passed | **GREEN** | Transaction signing, memo validation, multi-asset client queries |
+| `@people/p2p` | 6 / 6 passed | **GREEN** | Gossip, message serialization, peer discovery |
+| `@people/node` | 3 / 3 passed | **GREEN** | API integration, lag fields, rejected tx metrics |
 | **All Workspaces** | **60 / 60 passed** | **GREEN** | Turborepo full workspace build, typecheck, lint, and test pass |
 
 ### Specific Invariants Formally Tested in `packages/core/src/index.test.ts`:

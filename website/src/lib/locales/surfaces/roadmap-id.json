@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "Testnet PEOPLE Blockchain (EVM)",
-      "summary": "Mengembangkan testnet PEOPLE Blockchain di EVM. Tahap 1 (chain/) berjalan; testnet publik saat ini masih di node OVN dengan RPC baca-saja."
+      "summary": "Mengembangkan testnet PEOPLE Blockchain di EVM. Tahap 1 (chain/) berjalan; testnet publik saat ini masih di node legacy people-node dengan RPC baca-saja."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

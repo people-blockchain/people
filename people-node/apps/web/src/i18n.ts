@@ -1,15 +1,17 @@
+import { migratePeopleWebStorage } from "./storageMigration.js";
+
 export type Language = "en" | "ru";
 export type Theme = "dark" | "light";
 
-export const LANGUAGE_KEY = "ovn-language";
-export const THEME_KEY = "ovn-theme";
+export const LANGUAGE_KEY = "people-language";
+export const THEME_KEY = "people-theme";
 
 export const i18n = {
   en: {
-    title: "Open Validator Network",
+    title: "PEOPLE Network",
     subtitle: "Turn any device into a validator and earn PPL rewards.",
     heroLead:
-      "Open Validator Network is a production-ready validator platform. Launch validators on server, desktop, phone, or tablet in minutes.",
+      "PEOPLE Network is a production-ready validator platform. Launch validators on server, desktop, phone, or tablet in minutes.",
     heroValue1: "Permissionless PoS with fair PPL rewards",
     heroValue2: "Web onboarding with instant bootstrap QR",
     heroValue3: "Light validator mode for mobile devices",
@@ -84,7 +86,7 @@ export const i18n = {
     light: "phone / tablet (light)",
     themeDark: "Dark",
     themeLight: "Light",
-    why: "Why OVN",
+    why: "Why PEOPLE",
     openAccess: "Open Access",
     openAccessDesc: "Anyone can join with a minimum stake and run a validator on any device type.",
     builtInSecurity: "Built-In Security",
@@ -184,9 +186,9 @@ export const i18n = {
     viewTx: "View transaction",
     explorer: "Explorer",
     defaultDescription:
-      "Open Validator Network is a production-ready platform to launch full and light validators on server, desktop, phone, or tablet with PPL rewards.",
+      "PEOPLE Network is a production-ready platform to launch full and light validators on server, desktop, phone, or tablet with PPL rewards.",
     pricingTitle: "Pricing",
-    pricingDescription: "Choose how you want to participate in Open Validator Network.",
+    pricingDescription: "Choose how you want to participate in PEOPLE Network.",
     pricingForIndividuals: "For individuals",
     pricingForValidators: "For validators",
     pricingForTeams: "For teams",
@@ -204,11 +206,11 @@ export const i18n = {
     pricingNoteBody:
       "Start with Wallet and Explorer for basic usage, then move to Validator Console when you are ready to stake and earn PPL.",
     roadmapTitle: "Roadmap",
-    roadmapDescription: "Quarterly milestones for Open Validator Network from devnet to mainnet readiness.",
+    roadmapDescription: "Quarterly milestones for PEOPLE Network from devnet to mainnet readiness.",
     validatorsTitle: "Validator Console",
     validatorsDescription: "Connect validators, monitor network state, and track PPL rewards.",
     explorerTitle: "Block Explorer",
-    explorerDescription: "Browse the latest blocks and transactions on Open Validator Network.",
+    explorerDescription: "Browse the latest blocks and transactions on PEOPLE Network.",
     allWallets: "All wallets",
     noWallets: "No wallets on chain yet.",
     featuresTitle: "Platform Features",
@@ -227,7 +229,7 @@ export const i18n = {
     walletSeedOrKeyPlaceholder: "twelve words … or 0x private key",
     seedPhrase: "Recovery seed phrase",
     seedRevealWarning:
-      "Write down these 12 words offline. Anyone with this phrase can take your funds. OVN cannot recover a lost seed or key.",
+      "Write down these 12 words offline. Anyone with this phrase can take your funds. PEOPLE Network cannot recover a lost seed or key.",
     seedCopyButton: "Copy seed phrase",
     seedCopied: "Seed phrase copied.",
     seedSavedConfirm: "I wrote down my seed phrase in a safe place",
@@ -443,7 +445,7 @@ export const i18n = {
     voteAgainst: "Vote against",
     docs: "Docs",
     docsTitle: "API documentation",
-    docsDescription: "HTTP API reference for the Open Validator Network node.",
+    docsDescription: "HTTP API reference for the PEOPLE Network node.",
     lightClient: "Light",
     lightTitle: "Light validator",
     lightDescription: "Run attestation heartbeats from the browser using a saved validator key.",
@@ -540,9 +542,9 @@ export const i18n = {
     consensusNote: "Consensus model: leader-based PoS (not BFT).",
     peers: "Peers",
     mempool: "Mempool",
-    aboutNetworkTitle: "What is Open Validator Network",
+    aboutNetworkTitle: "What is PEOPLE Network",
     aboutNetworkBody:
-      "OVN is an open proof-of-stake network where anyone can secure the chain and earn People (PPL). Full nodes propose and gossip blocks; light validators on phones and tablets send attestations and share rewards with lower hardware cost.",
+      "PEOPLE Network is an open proof-of-stake network where anyone can secure the chain and earn People (PPL). Full nodes propose and gossip blocks; light validators on phones and tablets send attestations and share rewards with lower hardware cost.",
     howItWorksTitle: "How the network works",
     howItWorksLead:
       "Leader-based PoS: one proposer per slot (~3s), peers gossip blocks, validators attest with height + block hash, and ≥67% active stake finalizes the height.",
@@ -571,7 +573,7 @@ export const i18n = {
     guideStep3Body: "After ~2 epochs the validator becomes active and can receive rewards and attest.",
     guideStep4Title: "Stay online",
     guideStep4Body:
-      "Light: keep /light (or the PWA) open so attestations keep flowing. Full: run @ovn/node with VALIDATOR_ADDRESS and VALIDATOR_PRIVATE_KEY.",
+      "Light: keep /light (or the PWA) open so attestations keep flowing. Full: run @people/node with VALIDATOR_ADDRESS and VALIDATOR_PRIVATE_KEY.",
     guideNeedTitle: "What you need",
     guideNeedStake: "≥ 100 PPL stake (+ small join fee)",
     guideNeedKey: "A saved validator private key",
@@ -597,13 +599,13 @@ export const i18n = {
     pathLightCta: "Install & run light",
     pathFullTitle: "3. Full validator on server or PC",
     pathFullBody:
-      "Run the OVN node process (@ovn/node), stake as a full validator, and keep gossip peers online. Use Launch for key + bootstrap QR, then point your node at the network. This is software you run yourself, not a mobile store app.",
+      "Run the PEOPLE Network node process (@people/node), stake as a full validator, and keep gossip peers online. Use Launch for key + bootstrap QR, then point your node at the network. This is software you run yourself, not a mobile store app.",
     pathFullCta: "Launch full path",
     pathWatchTitle: "Just watching?",
     pathWatchBody:
       "Explorer and live WebSocket updates work in any browser — browse blocks, wallets, and validators without staking.",
     installPwa: "Install app",
-    installPwaHint: "Add OVN to your home screen, then open Light and press Start.",
+    installPwaHint: "Add PEOPLE Network to your home screen, then open Light and press Start.",
     installPwaDone: "Installed",
     installPwaUnavailable: "Use browser menu → Add to Home Screen",
     installPwaNotice:
@@ -669,7 +671,7 @@ export const i18n = {
     supplyTracked: "Tracked total",
     supplyIssuedRewards: "Issued validator rewards",
     supplyFeePool: "Pending fee pool",
-    supplyNoBurn: "OVN has no burn sink in the current protocol — fees go to the epoch fee pool.",
+    supplyNoBurn: "PEOPLE Network has no burn sink in the current protocol — fees go to the epoch fee pool.",
     explorerFilterMine: "Only my txs",
     explorerExportCsv: "Export CSV",
     explorerCsvExported: "CSV download started",
@@ -682,11 +684,11 @@ export const i18n = {
     txLifeFinalized: "Finalized",
     txLifecycleHint: "Current stage: {stage}. Chain confirmations after inclusion: {confirmations}.",
     docsPortalTitle: "Developer portal",
-    docsPortalDescription: "OpenAPI, SDK quickstart, and testnet credentials for building on OVN.",
+    docsPortalDescription: "OpenAPI, SDK quickstart, and testnet credentials for building on PEOPLE Network.",
     docsOpenapiLink: "OpenAPI YAML",
     docsQuickstartTitle: "Quickstart",
     docsQuickstart1: "Run a local node or point the client at a public RPC.",
-    docsQuickstart2: "Install @ovn/sdk and create a keypair.",
+    docsQuickstart2: "Install @people/sdk and create a keypair.",
     docsQuickstart3: "On devnet, fund from the faucet; on mainnet use a real transfer.",
     docsQuickstart4: "Submit transfers, join as validator, or read chain state via HTTP/WS.",
     docsTestnetCredsTitle: "Devnet / testnet credentials",
@@ -700,10 +702,10 @@ export const i18n = {
     docsSwaggerFallback: "Could not load Swagger UI. Use the OpenAPI YAML link above."
   },
   ru: {
-    title: "Open Validator Network",
+    title: "PEOPLE Network",
     subtitle: "Подключай любое устройство как валидатор и получай награды PPL.",
     heroLead:
-      "Open Validator Network — production-ready платформа валидаторов. Запускайте валидаторы на сервере, ПК, телефоне или планшете за минуты.",
+      "PEOPLE Network — production-ready платформа валидаторов. Запускайте валидаторы на сервере, ПК, телефоне или планшете за минуты.",
     heroValue1: "Permissionless PoS с честными наградами PPL",
     heroValue2: "Веб-онбординг и мгновенный bootstrap QR",
     heroValue3: "Light-validator режим для мобильных устройств",
@@ -778,7 +780,7 @@ export const i18n = {
     light: "телефон / планшет (light)",
     themeDark: "Тёмная",
     themeLight: "Светлая",
-    why: "Почему OVN",
+    why: "Почему PEOPLE Network",
     openAccess: "Открытый доступ",
     openAccessDesc: "Любой может зайти с минимальным стейком и запустить валидатор на любом типе устройства.",
     builtInSecurity: "Встроенная безопасность",
@@ -880,9 +882,9 @@ export const i18n = {
     viewTx: "Открыть транзакцию",
     explorer: "Обозреватель",
     defaultDescription:
-      "Open Validator Network — платформа для запуска full и light валидаторов на сервере, ПК, телефоне или планшете с наградами PPL.",
+      "PEOPLE Network — платформа для запуска full и light валидаторов на сервере, ПК, телефоне или планшете с наградами PPL.",
     pricingTitle: "Тарифы",
-    pricingDescription: "Выберите, как вы хотите участвовать в Open Validator Network.",
+    pricingDescription: "Выберите, как вы хотите участвовать в PEOPLE Network.",
     pricingForIndividuals: "Для пользователей",
     pricingForValidators: "Для валидаторов",
     pricingForTeams: "Для команд",
@@ -900,11 +902,11 @@ export const i18n = {
     pricingNoteBody:
       "Начните с кошелька и explorer для базового использования, затем переходите в консоль валидатора, когда будете готовы к стейку и наградам PPL.",
     roadmapTitle: "Дорожная карта",
-    roadmapDescription: "Квартальные этапы развития Open Validator Network: от devnet к готовности mainnet.",
+    roadmapDescription: "Квартальные этапы развития PEOPLE Network: от devnet к готовности mainnet.",
     validatorsTitle: "Консоль валидатора",
     validatorsDescription: "Подключайте валидаторы, следите за сетью и наградами PPL.",
     explorerTitle: "Обозреватель блоков",
-    explorerDescription: "Последние блоки и транзакции Open Validator Network.",
+    explorerDescription: "Последние блоки и транзакции PEOPLE Network.",
     allWallets: "Все кошельки",
     noWallets: "На цепи пока нет кошельков.",
     featuresTitle: "Возможности платформы",
@@ -923,7 +925,7 @@ export const i18n = {
     walletSeedOrKeyPlaceholder: "двенадцать слов … или 0x приватный ключ",
     seedPhrase: "Seed-фраза для восстановления",
     seedRevealWarning:
-      "Запишите эти 12 слов офлайн. Кто владеет фразой — владеет средствами. OVN не сможет восстановить потерянную фразу или ключ.",
+      "Запишите эти 12 слов офлайн. Кто владеет фразой — владеет средствами. PEOPLE Network не сможет восстановить потерянную фразу или ключ.",
     seedCopyButton: "Скопировать seed-фразу",
     seedCopied: "Seed-фраза скопирована.",
     seedSavedConfirm: "Я записал seed-фразу в надёжном месте",
@@ -1139,7 +1141,7 @@ export const i18n = {
     voteAgainst: "Против",
     docs: "Документация",
     docsTitle: "Документация API",
-    docsDescription: "Справочник HTTP API ноды Open Validator Network.",
+    docsDescription: "Справочник HTTP API ноды PEOPLE Network.",
     lightClient: "Лайт",
     lightTitle: "Light-валидатор",
     lightDescription: "Отправляйте attestation heartbeat из браузера с сохранённым ключом валидатора.",
@@ -1237,9 +1239,9 @@ export const i18n = {
     consensusNote: "Модель консенсуса: leader-based PoS (не BFT).",
     peers: "Пиры",
     mempool: "Пул транзакций",
-    aboutNetworkTitle: "Что такое Open Validator Network",
+    aboutNetworkTitle: "Что такое PEOPLE Network",
     aboutNetworkBody:
-      "OVN — открытая proof-of-stake сеть: любой может помогать защищать цепочку и получать People (PPL). Full-ноды предлагают и рассылают блоки; light-валидаторы на телефонах и планшетах шлют attestation и делят награды при меньших требованиях к железу.",
+      "PEOPLE Network — открытая proof-of-stake сеть: любой может помогать защищать цепочку и получать People (PPL). Full-ноды предлагают и рассылают блоки; light-валидаторы на телефонах и планшетах шлют attestation и делят награды при меньших требованиях к железу.",
     howItWorksTitle: "Как устроена сеть",
     howItWorksLead:
       "Leader-based PoS: один proposer на слот (~3 с), пиры gossip’ят блоки, валидаторы шлют attestation (height + blockHash), при ≥67% активного стейка высота финализируется.",
@@ -1269,7 +1271,7 @@ export const i18n = {
     guideStep3Body: "Через ~2 эпохи валидатор станет active и сможет получать награды и слать attestation.",
     guideStep4Title: "Оставайтесь онлайн",
     guideStep4Body:
-      "Light: держите открытым /light (или PWA), чтобы шли attestation. Full: запустите @ovn/node с VALIDATOR_ADDRESS и VALIDATOR_PRIVATE_KEY.",
+      "Light: держите открытым /light (или PWA), чтобы шли attestation. Full: запустите @people/node с VALIDATOR_ADDRESS и VALIDATOR_PRIVATE_KEY.",
     guideNeedTitle: "Что потребуется",
     guideNeedStake: "Стейк ≥ 100 PPL (+ небольшая комиссия join)",
     guideNeedKey: "Сохранённый private key валидатора",
@@ -1295,13 +1297,13 @@ export const i18n = {
     pathLightCta: "Установить и запустить light",
     pathFullTitle: "3. Full-валидатор на сервере или ПК",
     pathFullBody:
-      "Запустите процесс ноды OVN (@ovn/node), сделайте стейк как full-валидатор и держите P2P-пиры онлайн. В Запуске получите ключ и bootstrap QR, затем подключите ноду к сети. Это ПО, которое вы запускаете сами, а не мобильное приложение из магазина.",
+      "Запустите процесс ноды PEOPLE Network (@people/node), сделайте стейк как full-валидатор и держите P2P-пиры онлайн. В Запуске получите ключ и bootstrap QR, затем подключите ноду к сети. Это ПО, которое вы запускаете сами, а не мобильное приложение из магазина.",
     pathFullCta: "Путь full-валидатора",
     pathWatchTitle: "Только смотреть?",
     pathWatchBody:
       "Explorer и live WebSocket работают в любом браузере — блоки, кошельки и валидаторы без стейка.",
     installPwa: "Установить приложение",
-    installPwaHint: "Добавьте OVN на домашний экран, затем откройте Light и нажмите «Старт».",
+    installPwaHint: "Добавьте PEOPLE Network на домашний экран, затем откройте Light и нажмите «Старт».",
     installPwaDone: "Установлено",
     installPwaUnavailable: "Меню браузера → «На экран Домой»",
     installPwaNotice:
@@ -1367,7 +1369,7 @@ export const i18n = {
     supplyTracked: "Отслеживаемый итог",
     supplyIssuedRewards: "Выплаченные награды валидаторам",
     supplyFeePool: "Ожидающий fee pool",
-    supplyNoBurn: "В текущем протоколе OVN нет burn — комиссии идут в fee pool эпохи.",
+    supplyNoBurn: "В текущем протоколе PEOPLE Network нет burn — комиссии идут в fee pool эпохи.",
     explorerFilterMine: "Только мои tx",
     explorerExportCsv: "Экспорт CSV",
     explorerCsvExported: "Скачивание CSV начато",
@@ -1380,11 +1382,11 @@ export const i18n = {
     txLifeFinalized: "Финализировано",
     txLifecycleHint: "Текущая стадия: {stage}. Подтверждений цепи после включения: {confirmations}.",
     docsPortalTitle: "Портал разработчика",
-    docsPortalDescription: "OpenAPI, SDK quickstart и credentials тестнета для сборки на OVN.",
+    docsPortalDescription: "OpenAPI, SDK quickstart и credentials тестнета для сборки на PEOPLE Network.",
     docsOpenapiLink: "OpenAPI YAML",
     docsQuickstartTitle: "Quickstart",
     docsQuickstart1: "Запустите локальную ноду или укажите публичный RPC.",
-    docsQuickstart2: "Установите @ovn/sdk и создайте keypair.",
+    docsQuickstart2: "Установите @people/sdk и создайте keypair.",
     docsQuickstart3: "На devnet пополните faucet; на mainnet — реальный перевод.",
     docsQuickstart4: "Отправляйте transfer, входите в валидаторы или читайте состояние по HTTP/WS.",
     docsTestnetCredsTitle: "Credentials Devnet / Testnet",
@@ -1466,6 +1468,7 @@ export function labelProposalStatus(t: Translation, status: string): string {
 }
 
 export function detectInitialLanguage(): Language {
+  migratePeopleWebStorage(localStorage);
   const stored = localStorage.getItem(LANGUAGE_KEY);
   if (stored === "en" || stored === "ru") {
     return stored;
@@ -1475,6 +1478,7 @@ export function detectInitialLanguage(): Language {
 }
 
 export function detectInitialTheme(): Theme {
+  migratePeopleWebStorage(localStorage);
   const stored = localStorage.getItem(THEME_KEY);
   if (stored === "light" || stored === "dark") {
     return stored;

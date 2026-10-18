@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "PEOPLE Blockchain-Testnet (EVM)",
-      "summary": "Ausbau des PEOPLE Blockchain-Testnets auf EVM. Stufe 1 (chain/) läuft; das öffentliche Testnet nutzt noch den OVN-Knoten mit Read-only-RPC."
+      "summary": "Ausbau des PEOPLE Blockchain-Testnets auf EVM. Stufe 1 (chain/) läuft; das öffentliche Testnet nutzt noch den legacy people-node-Knoten mit Read-only-RPC."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

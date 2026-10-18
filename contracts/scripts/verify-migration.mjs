@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/** Compare ovn-export.json vs on-chain reads after migration. */
+/** Compare legacy-testnet-export.json vs on-chain reads after migration. */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createPublicClient, http, formatEther } from "viem";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const EXPORT = join(ROOT, "deployments", "ovn-export.json");
+const EXPORT = join(ROOT, "deployments", "legacy-testnet-export.json");
 const DEPLOYED = join(ROOT, "deployments", "97401.json");
 const OUT = join(ROOT, "deployments", "migration-verification.md");
 
@@ -39,7 +39,7 @@ async function main() {
   const md = [
     "# Testnet migration verification",
     "",
-    `| Address (canonical) | Legacy | Expected PPL (OVN) | On-chain PPL (EVM) | OK |`,
+    `| Address (canonical) | Legacy | Expected PPL (export) | On-chain PPL (EVM) | OK |`,
     `| --- | --- | ---: | ---: | --- |`,
     ...rows.map(
       (r) => `| \`${r.address}\` | \`${r.legacy}\` | ${r.expectedPpl} | ${r.onChainPpl} | ${r.ok ? "yes" : "no"} |`

@@ -13,13 +13,16 @@ export interface StatusIncident {
   detail: string;
 }
 
-const SAMPLES_KEY = "ovn-status-samples";
-const INCIDENTS_KEY = "ovn-status-incidents";
+import { migratePeopleWebStorage } from "./storageMigration.js";
+
+const SAMPLES_KEY = "people-status-samples";
+const INCIDENTS_KEY = "people-status-incidents";
 const MAX_SAMPLES = 288; // ~24h if sampled every 5m
 const MAX_INCIDENTS = 40;
 
 export function loadStatusSamples(): StatusSample[] {
   try {
+    migratePeopleWebStorage(localStorage);
     const parsed = JSON.parse(localStorage.getItem(SAMPLES_KEY) ?? "[]") as StatusSample[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -29,6 +32,7 @@ export function loadStatusSamples(): StatusSample[] {
 
 export function loadStatusIncidents(): StatusIncident[] {
   try {
+    migratePeopleWebStorage(localStorage);
     const parsed = JSON.parse(localStorage.getItem(INCIDENTS_KEY) ?? "[]") as StatusIncident[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {

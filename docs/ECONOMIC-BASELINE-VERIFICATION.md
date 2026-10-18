@@ -21,7 +21,7 @@ A focused code audit was performed to resolve the apparent discrepancy between:
 - **Actual Code Value:** The code at commit `90e4330d7468a406090cd0770b5bedeb5a72f067` has **50 VLS** per epoch (`DEFAULT_CONFIG.epochBaseIssuance = 50`).
 - **Originating Commit:** The value `50` was defined in the original baseline commit `89619f4c11f722e1a84e638c511439b464a864f3` and was **never modified**.
 - **Cause of Discrepancy:** The mention of "10 VLS per epoch" in `docs/PHASE-1-IMPLEMENTATION.md` and the Phase 1 report was an unintentional typographical error by the reporting agent, caused by conflating the **epoch block period** (`10` blocks per epoch, i.e., `block.header.height % 10 === 0`) with the **epoch issuance amount** (`50` VLS).
-- **Difference from Original OVN Baseline:** **Zero difference**. The running code has remained strictly at 50 VLS per epoch since inception.
+- **Difference from Original PEOPLE Network Baseline:** **Zero difference**. The running code has remained strictly at 50 VLS per epoch since inception.
 
 ---
 
@@ -34,7 +34,7 @@ At commit `90e4330d7468a406090cd0770b5bedeb5a72f067`:
 File: `packages/core/src/index.ts` (lines 267–276)
 ```typescript
 export const DEFAULT_CONFIG: NetworkConfig = {
-  chainId: process.env.CHAIN_ID ?? "ovn-devnet",
+  chainId: process.env.CHAIN_ID ?? "people-devnet",
   minStake: 100,
   warmupEpochs: 2,
   unbondingEpochs: 2,

@@ -1,6 +1,6 @@
 # Testnet migration verification
 
-| Address (canonical) | Legacy | Expected PPL (OVN) | On-chain PPL (EVM) | OK |
+| Address (canonical) | Legacy | Expected PPL (export) | On-chain PPL (EVM) | OK |
 | --- | --- | ---: | ---: | --- |
 | `0xeb21598ae901305ad16c87357016b764d269f854` | `0xeb21598ae901305ad16c87357016b764d269f854` | 998300 | 0 | no |
 | `0xa4ac298fe800cd900e1c83106a09142e51514ce4` | `0xa4ac298fe800cd900e1c83106a09142e51514ce4` | 70 | 0 | no |

@@ -1,6 +1,6 @@
-import { OvnClient } from "@ovn/sdk";
+import { PeopleClient } from "@people/sdk";
 
-export const ovn = new OvnClient({
+export const people = new PeopleClient({
   baseUrl: "/api",
   apiToken: import.meta.env.VITE_DEV_API_TOKEN
 });
@@ -15,5 +15,5 @@ export {
   recommendedFeeForSend,
   DEFAULT_TRANSFER_FEE,
   MAX_BATCH_RECIPIENTS,
-  OvnApiError
-} from "@ovn/sdk";
+  PeopleApiError
+} from "@people/sdk";

@@ -20,7 +20,7 @@ describe("NodeService integration scenarios", () => {
   });
 
   test("health details expose lag fields", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-api-int-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-api-int-"));
     node = new NodeService({
       dataDir,
       peerId: "integration-health",
@@ -36,7 +36,7 @@ describe("NodeService integration scenarios", () => {
   });
 
   test("metrics increment rejected tx counter", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-api-int-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-api-int-"));
     node = new NodeService({
       dataDir,
       peerId: "integration-reject",
@@ -61,7 +61,7 @@ describe("NodeService integration scenarios", () => {
   });
 
   test("NodeService exposes Phase 2 curve, vesting, and liquidity endpoints", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-api-phase2-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-api-phase2-"));
     node = new NodeService({
       dataDir,
       peerId: "integration-phase2",
@@ -89,7 +89,7 @@ describe("NodeService integration scenarios", () => {
     const prevEnv = process.env.NODE_ENV;
     process.env.ALLOW_FAUCET = "1";
     process.env.NODE_ENV = "production";
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-api-faucet-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-api-faucet-"));
     node = new NodeService({
       dataDir,
       peerId: "integration-faucet",
@@ -99,7 +99,7 @@ describe("NodeService integration scenarios", () => {
     });
     await node.start();
     expect(node.isPublicFaucetEnabled()).toBe(true);
-    const { generateKeyPair } = await import("@ovn/core");
+    const { generateKeyPair } = await import("@people/core");
     const user = generateKeyPair();
     try {
       const tx = node.fundFromFaucet(user.address, 1);

@@ -7,7 +7,7 @@
  *
  * Optional: STAKE (default 100), NODE_KIND=full|light
  */
-import { DEFAULT_TRANSFER_FEE, keyPairFromPrivateKey, signTransaction } from "@ovn/core";
+import { DEFAULT_TRANSFER_FEE, keyPairFromPrivateKey, signTransaction } from "@people/core";
 
 const base = (process.env.NODE_URL ?? "http://127.0.0.1:4001").replace(/\/$/, "");
 const privateKey = (process.env.VALIDATOR_PRIVATE_KEY ?? "").trim();

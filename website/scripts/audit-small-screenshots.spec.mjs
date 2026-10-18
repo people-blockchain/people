@@ -109,7 +109,7 @@ test.describe("free icon tier requires a verified founder (M20-4)", () => {
       await page.goto(`${BASE}/create/token`, { waitUntil: "networkidle" });
 
       const button = page.getByRole("button", { name: "Generate icon" });
-      // The AI-icon flow only renders on the ovn-node backend (cosmos-evm returns the EVM
+      // The AI-icon flow only renders on the people-node backend (cosmos-evm returns the EVM
       // launch form instead), so this evidence is skipped on a default-backend build.
       test.skip(!(await button.isVisible().catch(() => false)), "AI icon flow not enabled in this build");
       await button.click();

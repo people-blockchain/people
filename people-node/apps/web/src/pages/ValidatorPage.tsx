@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { RewardDistribution, Validator } from "@ovn/protocol";
+import type { RewardDistribution, Validator } from "@people/protocol";
 import { addressPath, isWalletAddress } from "../address.js";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useLive, type LiveTransaction } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { labelNodeKind, labelValidatorStatus } from "../i18n.js";
 import { referralSharePath } from "../referral.js";
 import {
@@ -45,9 +45,9 @@ export function ValidatorPage() {
     let cancelled = false;
     setLoading(true);
     Promise.all([
-      ovn.getValidators().catch(() => [] as Validator[]),
-      ovn.getRewardHistory(30).catch(() => [] as RewardDistribution[]),
-      ovn.getAddressTransactions(address, 40).catch(() => [])
+      people.getValidators().catch(() => [] as Validator[]),
+      people.getRewardHistory(30).catch(() => [] as RewardDistribution[]),
+      people.getAddressTransactions(address, 40).catch(() => [])
     ])
       .then(([validators, history, txs]) => {
         if (cancelled) {

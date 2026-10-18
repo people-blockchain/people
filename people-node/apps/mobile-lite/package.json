@@ -1,5 +1,5 @@
 {
-  "name": "@ovn/mobile-lite",
+  "name": "@people/mobile-lite",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
     "lint": "echo lint mobile-lite"
   },
   "dependencies": {
-    "@ovn/core": "file:../../packages/core",
-    "@ovn/protocol": "file:../../packages/protocol",
-    "@ovn/sdk": "file:../../packages/sdk"
+    "@people/core": "file:../../packages/core",
+    "@people/protocol": "file:../../packages/protocol",
+    "@people/sdk": "file:../../packages/sdk"
   }
 }

@@ -1,14 +1,14 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import QRCode from "qrcode";
-import type { RewardDistribution } from "@ovn/protocol";
+import type { RewardDistribution } from "@people/protocol";
 import { addressPath } from "../address.js";
 import { ConfirmDialog } from "../ConfirmDialog.js";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useLive } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import type { NodeKind } from "../devices.js";
 import {
   createMnemonicWallet,
@@ -108,17 +108,17 @@ export function ValidatorsPage() {
   }, [searchParams, pending?.address, session?.address]);
 
   useEffect(() => {
-    ovn.getRewardHistory(20)
+    people.getRewardHistory(20)
       .then(setRewardHistory)
       .catch(() => setRewardHistory([]));
   }, [rewards?.epoch]);
 
   useEffect(() => {
-    ovn
+    people
       .getChainConfig()
       .then((config) => setMinStake(config.minStake ?? 100))
       .catch(() => setMinStake(100));
-    ovn
+    people
       .getHealthDetails()
       .then((details) => setNodeVersion(details.peerId))
       .catch(() => setNodeVersion(undefined));
@@ -236,7 +236,7 @@ export function ValidatorsPage() {
   async function handleSlashReport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const result = await ovn.reportSecurity(slashAddress.trim(), {
+      const result = await people.reportSecurity(slashAddress.trim(), {
         type: "double_sign",
         validator: slashAddress.trim(),
         height: Number(slashHeight),
@@ -347,11 +347,11 @@ export function ValidatorsPage() {
     setJoinPhase("funding");
     setWizardStep(3);
     try {
-      let account = await ovn.getAddress(pending.address);
+      let account = await people.getAddress(pending.address);
       if (account.balance < pending.stake + 1) {
-        await ovn.fundFromFaucet(pending.address, pending.stake + 50);
+        await people.fundFromFaucet(pending.address, pending.stake + 50);
         await new Promise((resolve) => setTimeout(resolve, 3500));
-        account = await ovn.getAddress(pending.address);
+        account = await people.getAddress(pending.address);
       }
       setJoinPhase("joining");
       const joinReferrer =
@@ -359,7 +359,7 @@ export function ValidatorsPage() {
           joiningAddress: pending.address,
           sessionAddress: session?.address
         }) ?? undefined;
-      const join = await ovn.joinValidator(
+      const join = await people.joinValidator(
         pending.privateKey,
         pending.stake,
         pending.kind,
@@ -370,7 +370,7 @@ export function ValidatorsPage() {
         throw new Error(join.error ?? t.validatorJoinFailed);
       }
 
-      const bundle = await ovn.getJoinBundle(pending.address, pending.kind);
+      const bundle = await people.getJoinBundle(pending.address, pending.kind);
       setBootstrapPayload(bundle.qrPayload);
       setQrDataUrl(await QRCode.toDataURL(bundle.qrPayload, { margin: 1, width: 220 }));
 

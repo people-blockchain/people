@@ -5,13 +5,13 @@ import {readFile} from 'node:fs/promises';
 // Covers the sheet-based People Wallet (Send / Receive / Settings dialogs,
 // Tokens / NFT / Activity tabs). Chain reads are mocked on both public
 // backends: `/api/evm/compat/*` (default cosmos-evm) and `/api/network/*`
-// (legacy ovn-node). Nothing here broadcasts a transaction: the test stops at
+// (legacy people-node). Nothing here broadcasts a transaction: the test stops at
 // the review step and at the "balance changed" guard, which run before any
 // signing or RPC submission.
 const privateKey='1'.padStart(64,'0');const ecdh=createECDH('secp256k1');ecdh.setPrivateKey(Buffer.from(privateKey,'hex'));
 const key={privateKey,address:'0x'+createHash('sha256').update(ecdh.getPublicKey(null,'compressed')).digest('hex').slice(0,40)};
 const recipient='0x'+'a'.repeat(40);
-const legacyBackend=['ovn-node','legacy','people-node'].includes((process.env.NEXT_PUBLIC_CHAIN??'').trim().toLowerCase());
+const legacyBackend=['legacy','people-node'].includes((process.env.NEXT_PUBLIC_CHAIN??'').trim().toLowerCase());
 const chainId=legacyBackend?(process.env.NEXT_PUBLIC_CHAIN_ID?.trim()||'people-public-testnet-v2-2026-09-30'):'97401';
 const LOCALES=['en','ru','es','pt','fr','de','it','tr','vi','id','zh','ar'];
 
@@ -19,7 +19,7 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  const sent=[];let balance=10;
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  const seedWallet=async({key})=>{
-   localStorage.setItem('ovn_lang','en');
+   localStorage.setItem('people_lang','en');
    const salt=crypto.getRandomValues(new Uint8Array(16));const iv=crypto.getRandomValues(new Uint8Array(12));
    const material=await crypto.subtle.importKey('raw',new TextEncoder().encode('test-password'),'PBKDF2',false,['deriveKey']);
    const derived=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:120000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt']);
@@ -123,7 +123,7 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
  for (const lang of LOCALES) {
   const copy=JSON.parse(await readFile(new URL(`../src/lib/locales/surfaces/wallet-ux-${lang}.json`,import.meta.url),'utf8'));
-  await page.evaluate(lang=>{localStorage.setItem('ovn_lang',lang);window.dispatchEvent(new StorageEvent('storage',{key:'ovn_lang'}));},lang);
+  await page.evaluate(lang=>{localStorage.setItem('people_lang',lang);window.dispatchEvent(new StorageEvent('storage',{key:'people_lang'}));},lang);
   const localeTabs=page.getByRole('tablist',{name:copy.walletTabsAria});
   for(const name of [copy.tokensTab,copy.nftTab,copy.historyTab])await expect(localeTabs.getByRole('tab',{name,exact:true})).toBeVisible();
   await expect(page.getByTestId('wallet-action-send')).toHaveText(copy.sendTab);

@@ -48,7 +48,7 @@ contract RedeployFullStack is Script {
     }
 
     address internal constant FEE_RECIPIENT = 0xc949b419ab6a202923D69F1e8B1784535293C375;
-    /// @dev PeopleMultisig the live site already uses (2-of-3; Alex, Kirill, third key), checked
+    /// @dev PeopleMultisig the live site already uses (2-of-3; three independent signers), checked
     /// on chain before this deploy. Replaces 0x8E6a…9d03 (older multisig build).
     address internal constant MULTISIG = 0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB;
     /// @dev Owner-approved launch fees from the 2026-10-14 public redeploy: $1 token, $2 NFT.

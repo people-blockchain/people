@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "PEOPLE Blockchain testnet (EVM)",
-      "summary": "PEOPLE Blockchain testnet EVM üzerinde büyütülüyor. Aşama 1 (chain/) sürüyor; mevcut genel testnet hâlâ salt okunur RPC ile OVN düğümünde."
+      "summary": "PEOPLE Blockchain testnet EVM üzerinde büyütülüyor. Aşama 1 (chain/) sürüyor; mevcut genel testnet hâlâ salt okunur RPC ile legacy people-node legacy düğümünde."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",
@@ -29,7 +29,7 @@
     },
     "solidity-protocol-modules": {
       "title": "Solidity: fábrica, curva, AMM, NFT",
-      "summary": "Protokol modülleri testnet düğümünde çalışıyor; hedef, Uniswap V2 tarzı AMM dahil PEOPLE Blockchain testnet üzerinde denetlenmiş Solidity."
+      "summary": "Protokol modülleri testnet legacy düğümünde çalışıyor; hedef, Uniswap V2 tarzı AMM dahil PEOPLE Blockchain testnet üzerinde denetlenmiş Solidity."
     },
     "fee-split-model-a": {
       "title": "Reparto de comisiones (Model A)",

@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "PEOPLE Blockchain testnet (EVM)",
-      "summary": "Growing the PEOPLE Blockchain testnet on EVM. Stage 1 (chain build) is underway; the current public testnet still runs on the OVN-derived node with read-only RPC."
+      "summary": "Growing the PEOPLE Blockchain testnet on EVM. Stage 1 (chain build) is underway; the current public testnet still runs on the legacy people-node node with read-only RPC."
     },
     "genesis-snapshot-0x": {
       "title": "State snapshot into genesis",

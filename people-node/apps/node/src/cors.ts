@@ -17,9 +17,9 @@ function parseCorsList(raw: string | undefined): string[] {
  * deploy a preview host call the node from a browser. Preview deployments must be listed
  * explicitly in `CORS_ORIGIN`.
  *
- * The public website normally uses a server-side `OVN_RPC_URL` proxy, so CORS is
+ * The public website normally uses a server-side `PEOPLE_RPC_URL` proxy, so CORS is
  * not required for that path. This allowlist covers direct browser RPC
- * (`NEXT_PUBLIC_OVN_RPC_URL`) and local tools.
+ * (`NEXT_PUBLIC_PEOPLE_RPC_URL`) and local tools.
  */
 export function isAllowedCorsOrigin(origin: string | undefined, corsOriginEnv?: string): boolean {
   if (!origin) {

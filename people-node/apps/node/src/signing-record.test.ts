@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "vitest";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { ChainStore } from "@ovn/core";
+import { ChainStore } from "@people/core";
 import { NodeService } from "./node-service.js";
 
 /**
@@ -17,7 +17,7 @@ const nodes: NodeService[] = [];
 const previousArchiveMode = process.env.ARCHIVE_MODE;
 
 async function makeDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), "ovn-signing-"));
+  const dir = await mkdtemp(join(tmpdir(), "people-signing-"));
   dirs.push(dir);
   return dir;
 }

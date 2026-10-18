@@ -1,7 +1,7 @@
-import { OvnClient, generateKeyPair, keyPairFromPrivateKey, signTransaction } from "@ovn/sdk";
+import { PeopleClient, generateKeyPair, keyPairFromPrivateKey, signTransaction } from "@people/sdk";
 
 const baseUrl = process.env.NODE_API_URL ?? "http://localhost:4001";
-const client = new OvnClient({ baseUrl });
+const client = new PeopleClient({ baseUrl });
 
 const validatorKey = process.env.VALIDATOR_PRIVATE_KEY
   ? keyPairFromPrivateKey(process.env.VALIDATOR_PRIVATE_KEY)

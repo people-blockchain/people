@@ -12,7 +12,7 @@ import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";
 import { swapCopy } from "@/lib/swap-content";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
-import { signFactoryTx } from "@/lib/ovn-sign";
+import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
 import { minAmountOutWithSlippage, quoteExactIn } from "@/lib/amm-math";
 import { assetDecimals, formatPpl, formatUnits, parseUnits } from "@/lib/asset-amounts";
@@ -41,10 +41,10 @@ export function SwapApp({ initialPools, initialAssets }: { initialPools?: PoolRo
   if (isCosmosEvmChain()) {
     return <EvmSwapApp initialPools={initialPools} initialAssets={initialAssets} />;
   }
-  return <OvnSwapApp />;
+  return <PeopleSwapApp />;
 }
 
-function OvnSwapApp() {
+function PeopleSwapApp() {
   const { lang } = useLanguage();
   const t = swapCopy[lang];
   const u = uxCopy[lang];

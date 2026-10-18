@@ -8,8 +8,8 @@ const ARTIFACT_DIR = "/opt/cursor/artifacts";
 async function setLocale(page) {
   await page.addInitScript(() => {
     try {
-      localStorage.setItem("ovn_lang", "en");
-      localStorage.setItem("ovn_theme", "light");
+      localStorage.setItem("people_lang", "en");
+      localStorage.setItem("people_theme", "light");
     } catch {
       /* ignore */
     }

@@ -1,5 +1,5 @@
 import { useId, useMemo } from "react";
-import type { Block } from "@ovn/protocol";
+import type { Block } from "@people/protocol";
 
 interface ActivityChartProps {
   blocks: Block[];

@@ -45,7 +45,7 @@
 
 ### Публичный Cosmos EVM testnet (chain id 97401)
 
-Live: `https://node.peopleblockchain.network/rpc`, cosmos id `people_97401-1`. Исходники цепи в `chain/` (evmd overrides). Публичный сайт (`www.peopleblockchain.network`) обслуживает создание токенов/NFT, bonding curve, AMM/swap и explorer против задеплоенных Solidity-контрактов (`website/src/data/evm-deployments-97401.json`, `contracts/`). Legacy OVN people-node **не** является текущим публичным testnet; архивный снимок OVN не реплеится (см. `docs/COSMOS-EVM-TESTNET-CUTOVER.md`).
+Live: `https://node.peopleblockchain.network/rpc`, cosmos id `people_97401-1`. Исходники цепи в `chain/` (evmd overrides). Публичный сайт (`www.peopleblockchain.network`) обслуживает создание токенов/NFT, bonding curve, AMM/swap и explorer против задеплоенных Solidity-контрактов (`website/src/data/evm-deployments-97401.json`, `contracts/`). Legacy PEOPLE Network people-node **не** является текущим публичным testnet; архивный снимок PEOPLE Network не реплеится (см. `docs/COSMOS-EVM-TESTNET-CUTOVER.md`).
 
 ### EVM-контракты запуска: Token / NFT factory, curve, AMM, gateway
 

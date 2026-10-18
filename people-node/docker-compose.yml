@@ -52,7 +52,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ovn-data:/data
+      - people-data:/data
 
   node-2:
     build:
@@ -84,7 +84,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ovn-data-2:/data
+      - people-data-2:/data
     depends_on:
       - node
 
@@ -103,5 +103,5 @@ services:
       - node
 
 volumes:
-  ovn-data:
-  ovn-data-2:
+  people-data:
+  people-data-2:

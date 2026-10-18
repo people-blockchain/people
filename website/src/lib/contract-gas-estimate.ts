@@ -3,7 +3,7 @@ import {
   TYPICAL_CONTRACT_DEPLOY_GAS,
 } from "@/lib/factory-fees";
 
-/** Mirrors `@ovn/core` contract gas constants (website must not import core). */
+/** Mirrors `@people/core` contract gas constants (website must not import core). */
 const INTRINSIC_TX_GAS = 21_000;
 const CREATE_GAS = 32_000;
 const CODE_DEPOSIT_GAS_PER_BYTE = 200;

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Export public testnet state from the legacy people-node REST API.
- * Output: contracts/deployments/ovn-export.json (no secrets).
+ * Output: contracts/deployments/legacy-testnet-export.json (no secrets).
  */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -11,10 +11,14 @@ import { sha256 } from "@noble/hashes/sha2.js";
 import * as secp from "@noble/secp256k1";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = join(ROOT, "deployments", "ovn-export.json");
+const OUT = join(ROOT, "deployments", "legacy-testnet-export.json");
 
 const NODE =
-  (process.env.OVN_NODE_URL ?? process.env.PEOPLE_NODE_URL ?? "https://node.peopleblockchain.network").replace(
+  (
+    process.env.PEOPLE_NODE_URL ??
+    process.env.OVN_NODE_URL ??
+    "https://node.peopleblockchain.network"
+  ).replace(
     /\/$/,
     ""
   );

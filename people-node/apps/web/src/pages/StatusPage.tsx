@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useLive } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { classifyNetwork, showDevnetTools } from "../networkEnv.js";
 import { computeSupply } from "../supplyMath.js";
 import {
@@ -27,11 +27,11 @@ export function StatusPage() {
   const lastDegradedAtRef = useRef(0);
 
   useEffect(() => {
-    ovn
+    people
       .getChainConfig()
       .then((config) => setThreshold(config.attestationFinalityThreshold ?? null))
       .catch(() => setThreshold(null));
-    ovn
+    people
       .getHealth()
       .then((health) => setHealthOk(Boolean(health.ok)))
       .catch(() => setHealthOk(false));

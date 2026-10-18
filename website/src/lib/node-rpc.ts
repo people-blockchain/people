@@ -4,6 +4,7 @@
 
 import { readPublicChainBackend } from "@/lib/chain-mode";
 import { readEvmRpcUrl } from "@/lib/evm/config";
+import { readEnvWithLegacy } from "@/lib/legacy-env";
 
 export const DEFAULT_PUBLIC_NODE_URL = "https://node.peopleblockchain.network";
 export const DEFAULT_PUBLIC_CHAIN_ID = "people-public-testnet-v2-2026-09-30";
@@ -28,9 +29,11 @@ export function readOptionalUrl(raw: string | undefined): string | null {
 /** Server-side node HTTP origin (no trailing slash). */
 export function resolveNodeRpcUrl(): string {
   return (
-    readOptionalUrl(process.env.OVN_RPC_URL) ??
-    readOptionalUrl(process.env.NEXT_PUBLIC_OVN_RPC_URL) ??
-    readOptionalUrl(process.env.PEOPLE_NODE_URL) ??
+    readOptionalUrl(readEnvWithLegacy(process.env.PEOPLE_RPC_URL, process.env.OVN_RPC_URL)) ??
+    readOptionalUrl(
+      readEnvWithLegacy(process.env.NEXT_PUBLIC_PEOPLE_RPC_URL, process.env.NEXT_PUBLIC_OVN_RPC_URL),
+    ) ??
+    readOptionalUrl(readEnvWithLegacy(process.env.PEOPLE_NODE_URL, process.env.OVN_NODE_URL)) ??
     DEFAULT_PUBLIC_NODE_URL
   );
 }
@@ -53,7 +56,7 @@ export function resolveNodeWebSocketUrl(): string {
     url.protocol = ["https:", "wss:"].includes(url.protocol) ? "wss:" : "ws:";
     return url.toString();
   }
-  const explicit = process.env.OVN_WS_URL?.trim();
+  const explicit = readEnvWithLegacy(process.env.PEOPLE_WS_URL, process.env.OVN_WS_URL);
   const url = new URL(explicit || resolveNodeRpcUrl());
   if (url.username || url.password || url.search || url.hash) {
     throw new Error("Node WebSocket URL must not contain credentials, query or fragment");

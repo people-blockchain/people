@@ -1,6 +1,6 @@
-# Open Validator Network
+# PEOPLE Network
 
-> **Historical / OVN reference copy.** People's Blockchain current native asset is **People / PPL** (`ppl`). Vallis (`VLS`) below is the original OVN product name, not the live People asset.
+> **Legacy TypeScript node stack (reference implementation).** People's Blockchain current native asset is **People / PPL** (`ppl`). Vallis (`VLS`) below is the legacy product name, not the live People asset.
 
 Облегчённый блокчейн + веб-панель: любой может подключить сервер, ПК, телефон или планшет как валидатор и получать награды в **Vallis (`VLS`)**.
 
@@ -17,7 +17,7 @@
 - **On-chain referrals:** `joinValidator.payload.referrer` → `Validator.referredBy`; доля награды реферала (`referralShare`, по умолчанию 5%) уходит рефереру в `distributeEpochRewards`
 - Governance v0: proposal / vote
 - Web: кабинет (earn hub + referrals), explorer, staking, governance, light PWA, docs; уведомления модалками
-- SDK: `@ovn/sdk` с подписью и полным HTTP API
+- SDK: `@people/sdk` с подписью и полным HTTP API
 
 ## Быстрый старт
 
@@ -65,10 +65,10 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 ### Отдельный запуск нод
 
 ```bash
-PEER_ID=node-1 PORT=4001 GOSSIP_PORT=4002 DATA_DIR=./data/node-1 npm --workspace @ovn/node run dev
+PEER_ID=node-1 PORT=4001 GOSSIP_PORT=4002 DATA_DIR=./data/node-1 npm --workspace @people/node run dev
 
 PEER_ID=node-2 PORT=4011 GOSSIP_PORT=4012 DATA_DIR=./data/node-2 \
-BOOTSTRAP_PEERS=127.0.0.1:4002 npm --workspace @ovn/node run dev
+BOOTSTRAP_PEERS=127.0.0.1:4002 npm --workspace @people/node run dev
 ```
 
 ## Веб-маршруты
@@ -90,7 +90,7 @@ Primary nav: flat header links (Home → Roadmap); search + menu on a second row
 
 1. **Браузер** — кошелёк и explorer, ничего не ставить.
 2. **PWA на телефоне** — «Установить приложение» / Add to Home Screen, затем Launch → Light для attestation.
-3. **Full-нода** — запустить `@ovn/node` на сервере/ПК (не мобильный магазин).
+3. **Full-нода** — запустить `@people/node` на сервере/ПК (не мобильный магазин).
 
 ### Заработок и рефералы
 
@@ -110,7 +110,7 @@ PWA: service worker `apps/web/public/sw.js`, manifest `manifest.webmanifest`, и
 | `DATA_DIR` | `./data/<peer>` | LevelDB |
 | `BOOTSTRAP_PEERS` | — | `host:port` или `ws://` / `wss://` через запятую |
 | `PUBLIC_GOSSIP_URL` | — | Что advertise в hello (`ws://PUBLIC_IP:4002`) |
-| `CHAIN_ID` | `ovn-devnet` | ID сети |
+| `CHAIN_ID` | `people-devnet` | ID сети |
 | `NODE_ENV` | — | `production` закрывает faucet без токена |
 | `DEV_API_TOKEN` | — | Токен для faucet/admin (`x-api-token`) |
 | `ALLOW_DEV_ENDPOINTS` | — | `1` разрешает faucet в production |
@@ -156,9 +156,9 @@ Prometheus: `GET /metrics/prometheus`.
 ## SDK
 
 ```ts
-import { OvnClient, generateKeyPair } from "@ovn/sdk";
+import { PeopleClient, generateKeyPair } from "@people/sdk";
 
-const client = new OvnClient({ baseUrl: "http://localhost:4001" });
+const client = new PeopleClient({ baseUrl: "http://localhost:4001" });
 const key = generateKeyPair();
 await client.fundFromFaucet(key.address, 200);
 await client.joinValidator(key.privateKey, 120, "light", 0, "0xReferrer...");
