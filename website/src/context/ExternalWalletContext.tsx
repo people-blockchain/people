@@ -6,10 +6,11 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
-import type { Address, Hex } from "viem";
+import { isAddress, type Address, type Hex } from "viem";
 import {
   browserEvmRpcUrl,
   createBrowserPublicClient,
@@ -31,8 +32,10 @@ import {
   type WalletAppVendor,
 } from "@/lib/mobile-env";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
+import { PeopleMobileProvider } from "@/lib/mobile-wallet/browser";
+import type { MobileSession } from "@/lib/mobile-wallet/service";
 
-export type WalletConnectorKind = "embedded" | "injected" | "walletconnect";
+export type WalletConnectorKind = "embedded" | "injected" | "walletconnect" | "people-mobile";
 
 export type ActiveEvmSigner = {
   kind: WalletConnectorKind;
@@ -47,6 +50,7 @@ interface ExternalWalletContextValue {
   connectInjected: (vendor?: InjectedWalletVendor) => Promise<void>;
   connectWalletConnect: () => Promise<void>;
   connectEmbedded: () => void;
+  connectPeopleMobile: (session: MobileSession, browserToken: string) => void;
   disconnect: () => void;
 }
 
@@ -55,6 +59,12 @@ const ExternalWalletContext = createContext<ExternalWalletContextValue | null>(n
 export function ExternalWalletProvider({ children }: { children: ReactNode }) {
   const { session } = useWallet();
   const [signer, setSigner] = useState<ActiveEvmSigner | null>(null);
+  const activeMobileProvider = useRef<PeopleMobileProvider | null>(null);
+  const connectPeopleMobile = useCallback((session: MobileSession, browserToken: string) => {
+    const expiry = Date.parse(session.expiresAt);
+    if (session.chainId !== 97401 || session.origin !== window.location.origin || !/^[0-9a-f]{32}$/.test(session.id) || !/^[0-9a-f]{64}$/.test(browserToken) || !isAddress(session.address, { strict: true }) || !Array.isArray(session.methods) || session.methods.length !== 1 || session.methods[0] !== "personal_sign" || !Number.isFinite(expiry) || expiry <= Date.now() || expiry > Date.now() + 930_000) throw new Error("invalid_mobile_session");
+    setSigner({ kind: "people-mobile", address: session.address, provider: new PeopleMobileProvider(session, browserToken) });
+  }, []);
 
   const connectEmbedded = useCallback(() => {
     if (!session) return;
@@ -185,11 +195,26 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     };
   }, [signer]);
 
-  const disconnect = useCallback(() => setSigner(null), []);
+  const disconnect = useCallback(() => {
+    if (signer?.kind === "people-mobile" && signer.provider instanceof PeopleMobileProvider) void signer.provider.disconnect().catch(() => {});
+    setSigner(null);
+  }, [signer]);
+  useEffect(() => {
+    const provider = signer?.kind === "people-mobile" && signer.provider instanceof PeopleMobileProvider ? signer.provider : null;
+    const previous = activeMobileProvider.current;
+    if (previous && previous !== provider) void previous.disconnect().catch(() => {});
+    activeMobileProvider.current = provider;
+    if (!provider) return;
+    const ended = () => setSigner(previous => previous?.provider === provider ? null : previous);
+    provider.on("disconnect", ended); provider.startMonitoring();
+    // Strict Mode replays setup/cleanup. Only stop observation here; replacing the
+    // actual signer above or an explicit disconnect ends the remote session.
+    return () => { provider.removeListener("disconnect", ended); provider.stopMonitoring(); };
+  }, [signer]);
 
   const value = useMemo(
-    () => ({ signer, connectInjected, connectWalletConnect, connectEmbedded, disconnect }),
-    [signer, connectInjected, connectWalletConnect, connectEmbedded, disconnect]
+    () => ({ signer, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect }),
+    [signer, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect]
   );
 
   return <ExternalWalletContext.Provider value={value}>{children}</ExternalWalletContext.Provider>;
