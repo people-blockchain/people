@@ -18,11 +18,14 @@ export interface OutboundTx {
   confirmations?: number;
 }
 
-const TX_QUEUE_KEY = "ovn-tx-queue";
+import { migratePeopleWebStorage } from "./storageMigration.js";
+
+const TX_QUEUE_KEY = "people-tx-queue";
 const MAX_QUEUE = 80;
 
 export function loadTxQueue(address?: string): OutboundTx[] {
   try {
+    migratePeopleWebStorage(localStorage);
     const parsed = JSON.parse(localStorage.getItem(TX_QUEUE_KEY) ?? "[]") as OutboundTx[];
     const list = Array.isArray(parsed) ? parsed : [];
     if (!address) {

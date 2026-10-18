@@ -11,7 +11,7 @@ import { pplToAtoms, PPL_SCALE } from "./ppl-units.js";
  * accounting is bootstrapped only on the first add/remove after this binary.
  */
 
-import type { AmmQuote, LiquidityPoolState, NetworkConfig, Transaction } from "@ovn/protocol";
+import type { AmmQuote, LiquidityPoolState, NetworkConfig, Transaction } from "@people/protocol";
 import { AMM_FEE_BPS } from "./curve.js";
 import { securityUpgradeActive } from "./security-upgrade.js";
 import { canonicalizeAssetId, NATIVE_ASSET_ID, nativeLiquidityPoolId, ownGet } from "./native-asset.js";

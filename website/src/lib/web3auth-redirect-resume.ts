@@ -4,7 +4,9 @@
  * No React and no window access here — callers pass storage / location in.
  */
 
-export const PENDING_KEY = "ovn_web3auth_pending";
+import { migrateWebsiteStorage } from "@/lib/storage-migration";
+
+export const PENDING_KEY = "people_web3auth_pending";
 export const PENDING_MAX_AGE_MS = 10 * 60_000;
 /** Where a finished sign-in lands when it started on the login page itself. */
 export const RESUME_FALLBACK_PATH = "/wallet";
@@ -26,6 +28,7 @@ export function writePendingRedirect(storage: StorageLike, returnTo: string, now
 
 export function readPendingRedirect(storage: StorageLike, now = Date.now()): PendingRedirect | null {
   try {
+    migrateWebsiteStorage(storage);
     const raw = storage.getItem(PENDING_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as PendingRedirect;

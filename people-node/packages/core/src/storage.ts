@@ -1,7 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { Level } from "level";
-import type { Block, RewardDistribution, Transaction } from "@ovn/protocol";
+import type { Block, RewardDistribution, Transaction } from "@people/protocol";
 import {
   CHECKPOINT_INTERVAL,
   CHECKPOINT_KEEP,

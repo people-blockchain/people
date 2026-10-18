@@ -71,7 +71,7 @@ describe("address policy 0a", () => {
       nonce: 0,
       timestamp: 1,
       type: "registerParticipant" as const,
-      chainId: "ovn-devnet"
+      chainId: "people-devnet"
     };
     const publicKey = key.publicKey;
     const signature = secp.etc.bytesToHex(

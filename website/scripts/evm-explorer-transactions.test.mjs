@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { handleEvmCompatGet } from "../src/lib/evm/ovn-compat.ts";
+import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
 
 const hash = "0x9e9f00d663b28272c9532f6562d751570658d7c275a4b6f3624d612a1453c5a9";
 const from = "0x2697602e17815c110abc736374b5aff8b8e405b5";

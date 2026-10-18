@@ -157,7 +157,7 @@ server.addHook("onRequest", async (request) => {
 });
 
 server.get("/", async () => ({
-  service: "open-validator-network-node-api",
+  service: "people-node-node-api",
   ok: true,
   chainId: node.config.chainId,
   peerId,
@@ -209,7 +209,7 @@ server.get("/", async () => ({
 
 registerJsonRpcRoutes(server, node);
 
-server.get("/health", async (): Promise<import("@ovn/protocol").HealthResponse> => ({
+server.get("/health", async (): Promise<import("@people/protocol").HealthResponse> => ({
   ok: true,
   chainId: node.config.chainId,
   peerId
@@ -464,7 +464,7 @@ server.get("/rewards/history", async (request) => {
 server.get("/governance/proposals", async () => node.listProposals());
 
 server.post("/tx", async (request, reply) => {
-  const tx = request.body as import("@ovn/protocol").Transaction;
+  const tx = request.body as import("@people/protocol").Transaction;
   const result = node.submitTransaction(tx);
   if (!result.accepted) {
     return reply.code(result.error === "rate_limited" ? 429 : 400).send(result);
@@ -522,7 +522,7 @@ server.post("/security/report", async (request, reply) => {
   const body = request.body as {
     validator: string;
     evidenceType?: "double_sign" | "conflicting_attestation";
-    evidence?: import("@ovn/protocol").SlashEvidence;
+    evidence?: import("@people/protocol").SlashEvidence;
   };
   const evidence = body.evidence ?? {
     type: body.evidenceType ?? "double_sign",

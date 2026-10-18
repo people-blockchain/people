@@ -3,8 +3,9 @@
 **Date:** 2026-09-22  
 **Status:** IMPLEMENTED & TESTED  
 **Author / Role:** Antigravity / Senior Blockchain Engineer & Technical Architect  
-**Repository Baseline:** Open Validator Network (OVN)  
-**Target Platform:** People's Blockchain  
+**Repository Baseline:** PEOPLE Network
+
+**Target Platform:** People's Blockchain
 **Working reference:** `docs/TOKEN-ECONOMY.md` (not an Approved Public Specification)  
 
 > **Historical / superseded for native asset naming.** Current runtime native asset is
@@ -215,7 +216,7 @@ The reference scenario below is the **implemented testnet baseline**, defined by
 
 ## 8. Client SDK & Node REST API
 
-### 8.1 SDK Methods (`@ovn/sdk`)
+### 8.1 SDK Methods (`@people/sdk`)
 - `client.createToken(privateKey, options)`: Signs and submits `tokenCreate`.
 - `client.buyCurveTokens(privateKey, options)`: Signs and submits `curveBuy`.
 - `client.sellCurveTokens(privateKey, options)`: Signs and submits `curveSell`.
@@ -225,7 +226,7 @@ The reference scenario below is the **implemented testnet baseline**, defined by
 - `client.getLiquidityPool(poolId)`: Fetches AMM pool state.
 - `client.getTokenAllocation(assetId)`: Fetches allocation breakdown.
 
-### 8.2 Node REST Endpoints (`@ovn/node`)
+### 8.2 Node REST Endpoints (`@people/node`)
 - `GET /assets/:assetId/curve`
 - `GET /assets/:assetId/vesting`
 - `GET /assets/:assetId/liquidity`
@@ -237,10 +238,10 @@ The reference scenario below is the **implemented testnet baseline**, defined by
 
 | Package | Test Suites | Tests Run | Result |
 |---|---|---|---|
-| `@ovn/core` | `src/index.test.ts`, `src/curve.test.ts` | 63 passed | **100% PASS** |
-| `@ovn/sdk` | `src/index.test.ts`, `dist/index.test.js` | 14 passed | **100% PASS** |
-| `@ovn/node` | `src/api.integration.test.ts`, `src/node-service.test.ts` | 4 passed | **100% PASS** |
-| `@ovn/p2p` | `src/index.test.ts`, `dist/index.test.js` | 6 passed | **100% PASS** |
+| `@people/core` | `src/index.test.ts`, `src/curve.test.ts` | 63 passed | **100% PASS** |
+| `@people/sdk` | `src/index.test.ts`, `dist/index.test.js` | 14 passed | **100% PASS** |
+| `@people/node` | `src/api.integration.test.ts`, `src/node-service.test.ts` | 4 passed | **100% PASS** |
+| `@people/p2p` | `src/index.test.ts`, `dist/index.test.js` | 6 passed | **100% PASS** |
 | **Total** | **8 Test Files** | **87 Tests** | **ALL PASSED** |
 
 Typecheck and linter ran with 0 errors across all 7 workspace packages.

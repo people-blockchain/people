@@ -7,7 +7,7 @@ import {
   jsonRpcParseError,
   parseJsonRpcBody,
   type EvmJsonRpcHost
-} from "@ovn/core";
+} from "@people/core";
 import { allowKeyedRate } from "./rate-limit.js";
 import type { NodeService } from "./node-service.js";
 

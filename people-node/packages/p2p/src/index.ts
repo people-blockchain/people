@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { WebSocket, WebSocketServer } from "ws";
-import { transactionIdPayload, type Block, type Transaction, type WireMessage } from "@ovn/protocol";
+import { transactionIdPayload, type Block, type Transaction, type WireMessage } from "@people/protocol";
 
 export interface GossipNetworkOptions {
   peerId: string;
@@ -293,7 +293,7 @@ export class GossipNetwork {
     this.send(socket, {
       type: "hello",
       peerId: this.peerId,
-      payload: { ok: true, chainId: this.options.chainId ?? "ovn-devnet", identity: this.peerId, listen: this.listenAddress() }
+      payload: { ok: true, chainId: this.options.chainId ?? "people-devnet", identity: this.peerId, listen: this.listenAddress() }
     });
   }
 
@@ -404,7 +404,7 @@ export class GossipNetwork {
         this.send(socket, {
           type: "hello",
           peerId: this.peerId,
-          payload: { ok: true, chainId: this.options.chainId ?? "ovn-devnet", identity: this.peerId, listen: this.listenAddress() }
+          payload: { ok: true, chainId: this.options.chainId ?? "people-devnet", identity: this.peerId, listen: this.listenAddress() }
         });
         this.sendPeerExchange(socket);
       });
@@ -514,7 +514,7 @@ export class GossipNetwork {
     if (message.type !== "hello" && (!this.handshakes.has(socket) || this.socketIdentities.get(socket) !== message.peerId)) { socket.close(); return; }
     if (message.type === "hello") {
       const hello = message.payload as {chainId?:string};
-      if (hello?.chainId !== (this.options.chainId ?? "ovn-devnet")) { socket.close(); return; }
+      if (hello?.chainId !== (this.options.chainId ?? "people-devnet")) { socket.close(); return; }
       if (this.handshakes.has(socket)) { socket.close(); return; }
       this.handshakes.add(socket);
       this.socketIdentities.set(socket,message.peerId);

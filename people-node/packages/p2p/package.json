@@ -1,5 +1,5 @@
 {
-  "name": "@ovn/p2p",
+  "name": "@people/p2p",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "lint": "echo lint p2p"
   },
   "dependencies": {
-    "@ovn/protocol": "file:../protocol",
+    "@people/protocol": "file:../protocol",
     "ws": "^8.21.1"
   },
   "devDependencies": {

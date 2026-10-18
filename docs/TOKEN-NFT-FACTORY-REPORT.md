@@ -4,7 +4,7 @@ Status: **draft** — internal testnet wiring only. Not Mainnet. Growth Model A 
 
 ## 8. Owner-approved PPL tariffs (2026-09-29)
 
-Solana-aligned defaults in `@ovn/protocol` (`factory-fees.ts`), converted at `PPL_PRICE_USD=0.12` and SOL=$117 assumption:
+Solana-aligned defaults in `@people/protocol` (`factory-fees.ts`), converted at `PPL_PRICE_USD=0.12` and SOL=$117 assumption:
 
 | Tariff | PPL | Source |
 | --- | ---: | --- |

@@ -2,4 +2,4 @@ export {
   generateKeyPair,
   keyPairFromPrivateKey,
   signTransaction
-} from "./ovnClient.js";
+} from "./peopleClient.js";

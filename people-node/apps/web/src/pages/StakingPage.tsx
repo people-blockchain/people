@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import type { RewardDistribution } from "@ovn/protocol";
+import type { RewardDistribution } from "@people/protocol";
 import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
@@ -8,7 +8,7 @@ import { labelValidatorStatus } from "../i18n.js";
 import { useWallet } from "../WalletContext.js";
 import { useLive } from "../LiveContext.js";
 import { ConfirmDialog } from "../ConfirmDialog.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import { useDeviceVault } from "../DeviceVaultContext.js";
 import { TokenIcon } from "../TokenIcon.js";
 import {
@@ -36,7 +36,7 @@ export function StakingPage() {
   const isUnbonding = validator?.status === "unbonding";
 
   useEffect(() => {
-    ovn
+    people
       .getRewardHistory(30)
       .then(setRewardHistory)
       .catch(() => setRewardHistory([]));
@@ -46,7 +46,7 @@ export function StakingPage() {
     if (!address) {
       return 0;
     }
-    const account = await ovn.getAddress(address);
+    const account = await people.getAddress(address);
     return account.nonce;
   }
 
@@ -57,7 +57,7 @@ export function StakingPage() {
     }
     try {
       const nonce = await resolveNonce();
-      const result = await ovn.leaveValidator(privateKey, nonce);
+      const result = await people.leaveValidator(privateKey, nonce);
       if (!result.accepted) {
         throw new Error(result.error ?? t.leaveFailed);
       }
@@ -74,7 +74,7 @@ export function StakingPage() {
     }
     try {
       const nonce = await resolveNonce();
-      const result = await ovn.unstake(privateKey, nonce);
+      const result = await people.unstake(privateKey, nonce);
       if (!result.accepted) {
         throw new Error(result.error ?? t.unstakeFailed);
       }

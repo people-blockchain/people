@@ -1,4 +1,6 @@
-const WALLET_KEY = "ovn-wallets";
+import { migratePeopleWebStorage } from "./storageMigration.js";
+
+const WALLET_KEY = "people-wallets";
 
 export interface StoredWallet {
   id: string;
@@ -93,6 +95,7 @@ export async function decryptPrivateKey(payload: string, password: string): Prom
 
 export function loadWallets(): StoredWallet[] {
   try {
+    migratePeopleWebStorage(localStorage);
     return JSON.parse(localStorage.getItem(WALLET_KEY) ?? "[]") as StoredWallet[];
   } catch {
     return [];

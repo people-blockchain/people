@@ -1,4 +1,4 @@
-import type { ContractAccount, ContractReceipt, Transaction } from "@ovn/protocol";
+import type { ContractAccount, ContractReceipt, Transaction } from "@people/protocol";
 import { NATIVE_ASSET_ID } from "./native-asset.js";
 import {
   CREATE_GAS,

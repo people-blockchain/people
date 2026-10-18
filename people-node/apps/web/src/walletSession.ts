@@ -1,5 +1,5 @@
 import type { StoredWallet } from "./walletStorage.js";
-import { keyPairFromPrivateKey } from "./ovnClient.js";
+import { keyPairFromPrivateKey } from "./peopleClient.js";
 
 export interface SessionWallet {
   id: string;

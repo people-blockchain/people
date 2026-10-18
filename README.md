@@ -5,7 +5,7 @@ A blockchain project focused on mass participation, creator-owned tokens, commun
 ## Project Status
 
 - **Status:** Early Development
-- **Codebase Foundation:** Developed from the Open Validator Network (OVN) reference codebase
+- **Codebase Foundation:** Developed from the PEOPLE Network reference codebase
 - **Product Specifications:** Product specifications are located in `/docs`
 - **Protocol Parameters:** Current protocol parameters are provisional unless explicitly marked final.
 
@@ -163,11 +163,11 @@ The detailed parameters are not yet final.
 
 ## Blockchain Foundation
 
-People's Blockchain was developed from the Open Validator Network (OVN) reference codebase (historical origin only).
+People's Blockchain was developed from the PEOPLE Network reference codebase (historical origin only).
 
 **Current public testnet (2026-10):** Cosmos EVM chain id **97401** (`people_97401-1`), RPC `https://node.peopleblockchain.network/rpc`, chain sources in `chain/`. The public site at `www.peopleblockchain.network` already offers asset creation (token/NFT factories), bonding curve launch, AMM/swap, explorer, and multisig against live Solidity contracts under `contracts/` (addresses in `website/src/data/evm-deployments-97401.json`).
 
-The OVN `people-node` stack remains in-repo as an archive/baseline; it is **not** the network users connect to today.
+The PEOPLE Network `people-node` stack remains in-repo as an archive/baseline; it is **not** the network users connect to today.
 
 ---
 
@@ -243,7 +243,7 @@ and presented for approval before implementation.
 
 The project is being developed in stages:
 
-1. Understand the existing OVN foundation.
+1. Understand the existing PEOPLE Network foundation.
 2. Establish a stable baseline.
 3. Define protocol economics.
 4. Define participation mechanics.
@@ -291,7 +291,7 @@ The current priority is not mass deployment.
 
 The current priority is to:
 
-1. audit the existing OVN foundation;
+1. audit the existing PEOPLE Network foundation;
 2. establish a reproducible development baseline;
 3. define the People's Blockchain economics;
 4. define Participation Mining;
@@ -306,7 +306,7 @@ The current priority is to:
 
 ### Preserve the Foundation
 
-Existing OVN functionality must not be removed or rewritten without a documented reason.
+Existing PEOPLE Network functionality must not be removed or rewritten without a documented reason.
 
 ### Separate Product Decisions from Implementation
 

@@ -37,7 +37,7 @@ test("an unlocked People Wallet survives full page loads (E2E-H2)", async ({ pag
   // Seed an encrypted wallet record exactly like the import flow would persist it.
   await page.evaluate(
     async ({ privateKey, address, password }) => {
-      localStorage.setItem("ovn_lang", "en");
+      localStorage.setItem("people_lang", "en");
       const salt = crypto.getRandomValues(new Uint8Array(16));
       const iv = crypto.getRandomValues(new Uint8Array(12));
       const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]);

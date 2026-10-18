@@ -8,7 +8,9 @@
  * that contradicts itself between two reads of the same height.
  */
 
-const ATTESTATION_LOG_KEY = "ovn-light-attestations";
+import { migratePeopleWebStorage } from "./storageMigration.js";
+
+const ATTESTATION_LOG_KEY = "people-light-attestations";
 const MAX_ENTRIES = 128;
 
 export interface SignedAttestation {
@@ -20,6 +22,7 @@ type AttestationLog = Record<string, SignedAttestation>;
 
 function loadLog(): AttestationLog {
   try {
+    migratePeopleWebStorage(localStorage);
     const parsed = JSON.parse(localStorage.getItem(ATTESTATION_LOG_KEY) ?? "{}") as unknown;
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
       return {};

@@ -1,7 +1,7 @@
 {
-  "name": "Open Validator Network",
-  "short_name": "OVN",
-  "description": "Open Validator Network — launch full and light validators, earn People (PPL), explore the live chain.",
+  "name": "PEOPLE Network",
+  "short_name": "PEOPLE",
+  "description": "PEOPLE Network — launch full and light validators, earn People (PPL), explore the live chain.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

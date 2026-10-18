@@ -1,6 +1,6 @@
 /**
  * EVM gas billing in PPL. Gas price and block gas limit are **consensus constants**
- * from `@ovn/protocol` — not per-node env overrides (env forks the network).
+ * from `@people/protocol` — not per-node env overrides (env forks the network).
  */
 
 import {
@@ -9,7 +9,7 @@ import {
   DEFAULT_TX_GAS_LIMIT,
   MAX_TX_GAS_LIMIT,
   quoteContractGasFeePpl
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 export {
   APPROVED_CONTRACT_GAS_PRICE_PPL,
@@ -19,7 +19,7 @@ export {
   TYPICAL_CONTRACT_DEPLOY_GAS,
   TYPICAL_CONTRACT_DEPLOY_FEE_PPL,
   quoteContractGasFeePpl
-} from "@ovn/protocol";
+} from "@people/protocol";
 
 /** @deprecated Use `APPROVED_CONTRACT_GAS_PRICE_PPL`. */
 export const PROPOSED_CONTRACT_GAS_PRICE_PPL = APPROVED_CONTRACT_GAS_PRICE_PPL;

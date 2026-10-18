@@ -456,7 +456,7 @@ const CLOSED_STATUSES: readonly BugStatus[] = ["fixed", "rejected", "duplicate"]
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
- * Daily digest of open tickets posted to the owner DM (Alex). Driven by the `daily-ticket-summary`
+ * Daily digest of open tickets posted to the owner DM. Driven by the `daily-ticket-summary`
  * cron in vercel.json calling /api/telegram/daily-summary with CRON_SECRET. Returns the open count
  * even when the bot or the owner chat is not configured, so the cron route can report what happened.
  */

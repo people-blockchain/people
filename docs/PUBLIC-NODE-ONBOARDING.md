@@ -43,8 +43,8 @@ For a private local test only, launcher `NODE_ALLOW_HTTP=1` permits HTTP. Public
 
 Docker image build, anonymous pull and remote public-network checks must be reported separately from these local source checks.
 
-## VPS operator note (Kirill)
+## VPS operator note)
 
-The node monorepo directory in this repository is **`people-node/`** (formerly `Open-Validator-Network-main/`). After `git pull` on the server, use `cd people-node` for `npm ci`, `npm run build`, Docker builds (`Dockerfile.node`), and manual `.env.node` startup.
+The node monorepo directory in this repository is **`people-node/`**. After `git pull` on the server, use `cd people-node` for `npm ci`, `npm run build`, Docker builds (`Dockerfile.node`), and manual `.env.node` startup.
 
-**Unchanged on upgrade:** keep the same `DATA_DIR` volume/path and `CHAIN_ID=people-public-testnet-v2-2026-09-30`. Do not rename or wipe the data directory when only the source folder name changes.
+**Unchanged on upgrade:** keep the same `DATA_DIR` volume/path and `CHAIN_ID=people-public-testnet-v2-2026-09-30`.

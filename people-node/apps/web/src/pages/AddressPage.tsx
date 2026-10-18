@@ -4,7 +4,7 @@ import { PageMeta } from "../PageMeta.js";
 import { usePrefs } from "../PrefsContext.js";
 import { useNotify } from "../NotifyContext.js";
 import { useLive } from "../LiveContext.js";
-import { ovn } from "../ovnClient.js";
+import { people } from "../peopleClient.js";
 import type { LiveTransaction } from "../LiveContext.js";
 import { formatTxMemo, getPaymentMemoForAddress } from "../txMemo.js";
 import { labelTxType } from "../i18n.js";
@@ -51,7 +51,7 @@ export function AddressPage() {
     }
     setLoading(true);
     try {
-      setExtraHistory((await ovn.getAddressTransactions(address, 50)) as LiveTransaction[]);
+      setExtraHistory((await people.getAddressTransactions(address, 50)) as LiveTransaction[]);
     } catch (err) {
       notify.error(err instanceof Error ? err.message : t.notFound);
     } finally {

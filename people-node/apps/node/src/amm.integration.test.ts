@@ -12,7 +12,7 @@ import {
   registerAsset,
   setAccountBalance,
   signTransaction
-} from "@ovn/core";
+} from "@people/core";
 import { NodeService } from "./node-service.js";
 
 describe("NodeService AMM v0.1", () => {
@@ -31,7 +31,7 @@ describe("NodeService AMM v0.1", () => {
   });
 
   test("lists pools, quotes swaps, and accepts AMM txs on the existing submit path", async () => {
-    dataDir = await mkdtemp(join(tmpdir(), "ovn-amm-int-"));
+    dataDir = await mkdtemp(join(tmpdir(), "people-amm-int-"));
     node = new NodeService({
       dataDir,
       peerId: "integration-amm",

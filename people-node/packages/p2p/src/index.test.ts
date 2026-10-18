@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { GossipNetwork } from "./index.js";
 
-describe("@ovn/p2p", () => {
+describe("@people/p2p", () => {
   test("GossipNetwork initializes with peer id and bootstrap peers", () => {
     const gossip = new GossipNetwork({
       peerId: "test-peer",

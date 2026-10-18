@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Open Validator Network API
+  title: PEOPLE Network API
   version: 1.0.0
 servers:
   - url: http://localhost:4001

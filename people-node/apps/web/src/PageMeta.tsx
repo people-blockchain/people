@@ -17,7 +17,7 @@ export function PageMeta({ title, description }: PageMetaProps) {
       <title>{fullTitle}</title>
       <meta name="description" content={desc} />
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Open Validator Network" />
+      <meta property="og:site_name" content="PEOPLE Network" />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={desc} />
       <meta property="og:image" content="/og-cover.png" />

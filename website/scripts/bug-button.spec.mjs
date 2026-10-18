@@ -7,7 +7,7 @@ const WIDTHS = [360, 390, 1280];
 async function setLocale(page, lang = "en") {
   await page.addInitScript((value) => {
     try {
-      localStorage.setItem("ovn_lang", value);
+      localStorage.setItem("people_lang", value);
     } catch {
       /* ignore */
     }
@@ -17,7 +17,7 @@ async function setLocale(page, lang = "en") {
 async function setTheme(page, theme) {
   await page.addInitScript((value) => {
     try {
-      localStorage.setItem("ovn_theme", value);
+      localStorage.setItem("people_theme", value);
     } catch {
       /* ignore */
     }

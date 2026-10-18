@@ -30,7 +30,7 @@
  * blocks replay unchanged.
  */
 
-import type { NetworkConfig, TokenAllocation } from "@ovn/protocol";
+import type { NetworkConfig, TokenAllocation } from "@people/protocol";
 
 /** No promo share. The default, and the only value accepted before activation. */
 export const PROMO_BPS_NONE = 0;

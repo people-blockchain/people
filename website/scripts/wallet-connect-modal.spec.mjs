@@ -4,14 +4,14 @@ import { test, expect } from "@playwright/test";
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000";
 /** Default public backend is cosmos-evm: /swap and /create/token gate on an EVM
  *  wallet (MetaMask / Trust / WalletConnect), not on the People sign-in modal. */
-const LEGACY_BACKEND = ["ovn-node", "legacy", "people-node"].includes(
+const LEGACY_BACKEND = ["legacy", "people-node"].includes(
   (process.env.NEXT_PUBLIC_CHAIN ?? "").trim().toLowerCase(),
 );
 
 async function setLocale(page, lang) {
   await page.addInitScript((value) => {
     try {
-      localStorage.setItem("ovn_lang", value);
+      localStorage.setItem("people_lang", value);
     } catch {
       /* ignore */
     }

@@ -1,4 +1,5 @@
 import { isWalletAddress } from "./address.js";
+import { migratePeopleWebStorage } from "./storageMigration.js";
 
 export interface AddressBookEntry {
   address: string;
@@ -7,10 +8,11 @@ export interface AddressBookEntry {
   createdAt: number;
 }
 
-const ADDRESS_BOOK_KEY = "ovn-address-book";
+const ADDRESS_BOOK_KEY = "people-address-book";
 
 export function loadAddressBook(): AddressBookEntry[] {
   try {
+    migratePeopleWebStorage(localStorage);
     const parsed = JSON.parse(localStorage.getItem(ADDRESS_BOOK_KEY) ?? "[]") as AddressBookEntry[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {

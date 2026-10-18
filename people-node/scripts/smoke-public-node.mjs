@@ -10,7 +10,7 @@ import {
   DEFAULT_TRANSFER_FEE,
   generateKeyPair,
   signTransaction
-} from "@ovn/core";
+} from "@people/core";
 
 const base = (process.env.NODE_URL ?? "http://127.0.0.1:14001").replace(/\/$/, "");
 

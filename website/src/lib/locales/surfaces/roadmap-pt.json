@@ -21,7 +21,7 @@
   "items": {
     "cosmos-evm-migration": {
       "title": "Testnet PEOPLE Blockchain (EVM)",
-      "summary": "Evolução do testnet PEOPLE Blockchain em EVM. Etapa 1 (chain/) em curso; o testnet público atual ainda no nó OVN com RPC só leitura."
+      "summary": "Evolução do testnet PEOPLE Blockchain em EVM. Etapa 1 (chain/) em curso; o testnet público atual ainda no nó legacy people-node com RPC só leitura."
     },
     "genesis-snapshot-0x": {
       "title": "Estado en genesis",

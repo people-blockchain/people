@@ -1,5 +1,5 @@
 import { getNodeRpcUrl } from "@/lib/factory-config";
-import { fetchAccount, signFactoryTx, submitSignedTx } from "@/lib/ovn-sign";
+import { fetchAccount, signFactoryTx, submitSignedTx } from "@/lib/people-sign";
 
 const INCLUSION_POLL_MS = 1_500;
 export const DELIVERY_INCLUSION_TIMEOUT_MS = 6_000;
@@ -47,7 +47,7 @@ export async function deliverPplToPeopleAddress(
     return { ok: false, code: "invalid_amount" };
   }
   const rpc = getNodeRpcUrl();
-  const account = await fetchAccount(rpc, (await import("@/lib/ovn-sign")).keyFromPrivate(key).address);
+  const account = await fetchAccount(rpc, (await import("@/lib/people-sign")).keyFromPrivate(key).address);
   const chainId = process.env.NEXT_PUBLIC_CHAIN_ID ?? "people-public-testnet-v2-2026-09-30";
   const tx = signFactoryTx(key, {
     chainId,

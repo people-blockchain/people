@@ -41,7 +41,7 @@ const MOCK_REFERRAL = {
 async function setLocale(page) {
   await page.addInitScript(() => {
     try {
-      localStorage.setItem("ovn_lang", "en");
+      localStorage.setItem("people_lang", "en");
     } catch {
       /* ignore */
     }

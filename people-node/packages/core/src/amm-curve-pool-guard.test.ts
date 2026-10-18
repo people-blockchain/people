@@ -14,7 +14,7 @@ import {
   setAccountBalance,
   signTransaction
 } from "./index.js";
-import type { NetworkConfig } from "@ovn/protocol";
+import type { NetworkConfig } from "@people/protocol";
 
 /**
  * M13-1: a manual TOKEN/PPL pool created while the bonding curve is still live

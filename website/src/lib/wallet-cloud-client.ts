@@ -1,6 +1,6 @@
 import { addressMatchesPublicKey } from "@/lib/wallet-address-scheme";
 import { generateWalletKeyPair } from "@/lib/partner/wallet";
-import { keyFromPrivate, type FactoryKeyPair } from "@/lib/ovn-sign";
+import { keyFromPrivate, type FactoryKeyPair } from "@/lib/people-sign";
 import {
   decryptPrivateKeyFromVault,
   encryptPrivateKeyForVault,

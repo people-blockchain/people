@@ -1,10 +1,10 @@
 import { HDKey } from "@scure/bip32";
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english.js";
-import { keyPairFromPrivateKey } from "./ovnClient.js";
+import { keyPairFromPrivateKey } from "./peopleClient.js";
 
 /** BIP44 path compatible with common secp256k1 wallets (ETH-style). */
-export const OVN_DERIVATION_PATH = "m/44'/60'/0'/0/0";
+export const PEOPLE_DERIVATION_PATH = "m/44'/60'/0'/0/0";
 
 type DerivedKeyPair = ReturnType<typeof keyPairFromPrivateKey>;
 
@@ -36,7 +36,7 @@ export function keyPairFromMnemonic(mnemonic: string): DerivedKeyPair {
   }
   const seed = mnemonicToSeedSync(normalized);
   const root = HDKey.fromMasterSeed(seed);
-  const child = root.derive(OVN_DERIVATION_PATH);
+  const child = root.derive(PEOPLE_DERIVATION_PATH);
   if (!child.privateKey) {
     throw new Error("mnemonic_derive_failed");
   }

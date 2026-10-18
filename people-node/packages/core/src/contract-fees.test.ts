@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { APPROVED_CONTRACT_GAS_PRICE_PPL, DEFAULT_BLOCK_GAS_LIMIT } from "@ovn/protocol";
+import { APPROVED_CONTRACT_GAS_PRICE_PPL, DEFAULT_BLOCK_GAS_LIMIT } from "@people/protocol";
 import { contractBlockGasLimit, contractGasPricePpl } from "./contract-fees.js";
 import {
   DEFAULT_CONFIG,

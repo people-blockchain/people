@@ -4,8 +4,8 @@ import { connectExplorer } from '../src/lib/explorer-live.ts';
 import { resolveNodeWebSocketUrl } from '../src/lib/node-rpc.ts';
 
 function resolveNodeWebSocketUrlForTest() {
-  const explicit = process.env.OVN_WS_URL?.trim();
-  const rpc = process.env.OVN_RPC_URL?.trim() || 'https://node.example.test';
+  const explicit = process.env.PEOPLE_WS_URL?.trim();
+  const rpc = process.env.PEOPLE_RPC_URL?.trim() || 'https://node.example.test';
   const url = new URL(explicit || rpc);
   if (url.username || url.password || url.search || url.hash) {
     throw new Error('Node WebSocket URL must not contain credentials, query or fragment');
@@ -136,16 +136,16 @@ test('WebSocket URL follows RPC config and rejects credentials', t => {
   process.env.EVM_WS_URL = 'ftp://node.example.test/ws';
   assert.throws(resolveNodeWebSocketUrl, /protocol/);
   delete process.env.EVM_WS_URL;
-  process.env.NEXT_PUBLIC_CHAIN = 'ovn-node';
-  process.env.OVN_RPC_URL = 'https://node.example.test';
-  delete process.env.OVN_WS_URL;
+  process.env.NEXT_PUBLIC_CHAIN = 'people-node';
+  process.env.PEOPLE_RPC_URL = 'https://node.example.test';
+  delete process.env.PEOPLE_WS_URL;
   assert.equal(resolveNodeWebSocketUrlForTest(), 'wss://node.example.test/ws');
-  process.env.OVN_RPC_URL = 'http://127.0.0.1:4001';
+  process.env.PEOPLE_RPC_URL = 'http://127.0.0.1:4001';
   assert.equal(resolveNodeWebSocketUrlForTest(), 'ws://127.0.0.1:4001/ws');
-  process.env.OVN_WS_URL = 'wss://node.example.test';
+  process.env.PEOPLE_WS_URL = 'wss://node.example.test';
   assert.equal(resolveNodeWebSocketUrlForTest(), 'wss://node.example.test/');
-  process.env.OVN_WS_URL = 'wss://user:secret@node.example.test/ws';
+  process.env.PEOPLE_WS_URL = 'wss://user:secret@node.example.test/ws';
   assert.throws(resolveNodeWebSocketUrlForTest, /credentials/);
-  process.env.OVN_WS_URL = 'https://node.example.test';
+  process.env.PEOPLE_WS_URL = 'https://node.example.test';
   assert.throws(resolveNodeWebSocketUrlForTest, /protocol/);
 });

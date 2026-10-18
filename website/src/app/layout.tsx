@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { LANG_COOKIE, THEME_COOKIE, themeFromCookieValue } from "@/lib/preferences";
+import {
+  languageCookieFromStore,
+  themeCookieFromStore,
+  themeFromCookieValue,
+} from "@/lib/preferences";
 import { languageFromRequest } from "@/lib/locale-detect";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -92,9 +96,11 @@ export const metadata: Metadata = {
 /**
  * Boot script:
  *  - restores the stored colour theme before first paint (no flash). The
- *    resolution order mirrors `resolveThemePreference` in `@/lib/preferences`:
- *    saved choice (localStorage, then the `ovn_theme` cookie the server already
- *    read) → OS `prefers-color-scheme` → dark. Keep the two in sync;
+ *    resolution order mirrors `resolveThemePreference` in `@/lib/preferences`
+ *    for the signals this script can see: `people_theme` in localStorage, then
+ *    the `people_theme` cookie (legacy cookie names are handled only on the
+ *    server via `themeCookieFromStore` and on the client after hydration via
+ *    `migrateWebsiteStorage` / `getThemeSnapshot`) → OS `prefers-color-scheme`.
  *  - marks the document as motion-capable only when JS is alive AND the user
  *    has not requested reduced motion. Reveal animations are gated on this
  *    class, so a no-JS or reduced-motion visitor sees every element.
@@ -102,9 +108,9 @@ export const metadata: Metadata = {
 const bootScript = `(function() {
   try {
     var root = document.documentElement;
-    var t = localStorage.getItem('ovn_theme');
+    var t = localStorage.getItem('people_theme');
     if (t !== 'light' && t !== 'dark') {
-      var m = document.cookie.match(/(?:^|;\\s*)ovn_theme=([^;]*)/);
+      var m = document.cookie.match(/(?:^|;\\s*)people_theme=([^;]*)/);
       t = m ? decodeURIComponent(m[1]) : null;
     }
     if (t !== 'light' && t !== 'dark') {
@@ -127,10 +133,10 @@ export default async function RootLayout({
   // gives the first paint the right theme on repeat visits — before this the
   // document always shipped `class="dark"`.
   const cookieStore = await cookies();
-  const theme = themeFromCookieValue(cookieStore.get(THEME_COOKIE)?.value);
+  const theme = themeFromCookieValue(themeCookieFromStore(cookieStore));
   const headerStore = await headers();
   const lang = languageFromRequest(
-    cookieStore.get(LANG_COOKIE)?.value,
+    languageCookieFromStore(cookieStore),
     headerStore.get("accept-language"),
   );
 

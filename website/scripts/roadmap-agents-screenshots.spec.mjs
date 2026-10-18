@@ -8,7 +8,7 @@ const BASE = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
 async function setLocale(page, lang) {
   await page.addInitScript((value) => {
     try {
-      localStorage.setItem("ovn_lang", value);
+      localStorage.setItem("people_lang", value);
     } catch {
       /* ignore */
     }
@@ -23,7 +23,7 @@ async function gotoWithLocale(page, url) {
 async function ensureLocale(page, lang) {
   await page.goto(`${BASE}/`, { waitUntil: "domcontentloaded" });
   await page.evaluate((code) => {
-    localStorage.setItem("ovn_lang", code);
+    localStorage.setItem("people_lang", code);
   }, lang);
   await page.reload({ waitUntil: "networkidle" });
 }
