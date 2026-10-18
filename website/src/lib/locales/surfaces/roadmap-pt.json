@@ -147,10 +147,6 @@
       "title": "Ambassador promo kit",
       "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
     },
-    "people-predict-testnet-mvp": {
-      "title": "People Predict — testnet MVP",
-      "summary": "MVP de mercados de previsão na testnet: posições binárias garantidas e ordens limitadas on-chain. Regras aprovadas e implementação local; implantação e endereços dos responsáveis pendentes."
-    },
     "app-builder-audited-templates": {
       "title": "App Builder: templates auditados para apps (clube com acesso via NFT, votação DAO, assinatura, loja USDC, sorteio), sem código",
       "summary": "Após a mainnet: um App Builder com templates auditados sem código para apps comuns — clube com acesso via NFT, votação DAO, assinatura, loja USDC e sorteio. Apenas planejamento; não implementado."

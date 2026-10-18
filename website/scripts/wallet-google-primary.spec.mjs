@@ -22,7 +22,7 @@ test.describe("Google is the primary sign-in option on mobile", () => {
       await context.addInitScript(() => {
         try {
           localStorage.setItem("ovn_lang", "en");
-          localStorage.setItem("ppl_last_auth_email", "aegonet@gmail.com");
+          localStorage.setItem("ppl_last_auth_email", "test@example.com");
           localStorage.setItem("ppl_last_auth_method", "google");
         } catch {
           /* ignore */

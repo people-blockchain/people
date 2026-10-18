@@ -4,8 +4,6 @@ import { randomBytes } from "node:crypto";
 const config = {
   testDir: "./scripts",
   testMatch: [
-    // /predict is behind NEXT_PUBLIC_FEATURE_PREDICT (off by default, 404 otherwise).
-    ...(process.env.NEXT_PUBLIC_FEATURE_PREDICT === "1" ? ["predict.spec.mjs"] : []),
     "hero-headline-layout.spec.mjs",
     "no-horizontal-overflow.spec.mjs",
     "header-mobile-slogan.spec.mjs",
@@ -51,7 +49,7 @@ const config = {
     // Tests must never reach the public PEOPLE node (it is the production validator's RPC):
     // the browser cannot resolve it, so specs have to mock it with `page.route`.
     launchOptions: {
-      args: ["--host-resolver-rules=MAP node.peopleblockchain.network ~NOTFOUND, MAP 147.45.227.204 ~NOTFOUND"],
+      args: ["--host-resolver-rules=MAP node.peopleblockchain.network ~NOTFOUND, MAP 203.0.113.10 ~NOTFOUND"],
     },
   },
   webServer: process.env.PLAYWRIGHT_SKIP_WEBSERVER

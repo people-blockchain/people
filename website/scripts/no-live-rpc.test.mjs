@@ -29,7 +29,7 @@ test("a swallowed call to the public PEOPLE RPC still fails the process", () => 
 
 test("the validator IP is blocked too, including WebSocket", () => {
   const run = runWithGuard(
-    `try { new WebSocket("ws://147.45.227.204:8546"); } catch (e) { console.log(String(e.message).includes("no-live-rpc")); }`,
+    `try { new WebSocket("ws://203.0.113.10:8546"); } catch (e) { console.log(String(e.message).includes("no-live-rpc")); }`,
   );
   assert.match(run.stdout, /true/);
   assert.equal(run.status, 1);

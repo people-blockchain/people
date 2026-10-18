@@ -244,9 +244,9 @@ test("an email sign-in goes to connectTo with login_hint, never to a restored se
     walletAdapters: { auth: { status: "ready" } },
   };
 
-  const result = await beginWeb3AuthConnect(mock, "email_passwordless", "aegonet@gmail.com");
+  const result = await beginWeb3AuthConnect(mock, "email_passwordless", "test@example.com");
   assert.equal(capturedParams?.loginProvider, "email_passwordless");
-  assert.deepEqual(capturedParams?.extraLoginOptions, { login_hint: "aegonet@gmail.com" });
+  assert.deepEqual(capturedParams?.extraLoginOptions, { login_hint: "test@example.com" });
   assert.equal(result.idToken, "email.token.sig", "the fresh login's token, not the restored one");
 });
 
@@ -263,7 +263,7 @@ test("an email sign-in on a still-connected adapter fails fast instead of reusin
     walletAdapters: { auth: { status: "connected" } },
   };
   await assert.rejects(
-    beginWeb3AuthConnect(mock, "email_passwordless", "aegonet@gmail.com"),
+    beginWeb3AuthConnect(mock, "email_passwordless", "test@example.com"),
     /web3auth_auth_adapter_not_ready:connected/,
   );
 });

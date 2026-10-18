@@ -165,7 +165,7 @@ The detailed parameters are not yet final.
 
 People's Blockchain was developed from the Open Validator Network (OVN) reference codebase (historical origin only).
 
-**Current public testnet (2026-10):** Cosmos EVM chain id **97401** (`people_97401-1`), RPC `https://node.peopleblockchain.network/rpc`, chain sources in `chain/`. The public site at `www.peopleblockchain.network` already offers asset creation (token/NFT factories), bonding curve launch, AMM/swap, explorer, multisig, and People Predict against live Solidity contracts under `contracts/` (addresses in `website/src/data/evm-deployments-97401.json`).
+**Current public testnet (2026-10):** Cosmos EVM chain id **97401** (`people_97401-1`), RPC `https://node.peopleblockchain.network/rpc`, chain sources in `chain/`. The public site at `www.peopleblockchain.network` already offers asset creation (token/NFT factories), bonding curve launch, AMM/swap, explorer, and multisig against live Solidity contracts under `contracts/` (addresses in `website/src/data/evm-deployments-97401.json`).
 
 The OVN `people-node` stack remains in-repo as an archive/baseline; it is **not** the network users connect to today.
 

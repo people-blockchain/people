@@ -45,7 +45,7 @@
 
 ### Публичный Cosmos EVM testnet (chain id 97401)
 
-Live: `https://node.peopleblockchain.network/rpc`, cosmos id `people_97401-1`. Исходники цепи в `chain/` (evmd overrides). Публичный сайт (`www.peopleblockchain.network`) обслуживает создание токенов/NFT, bonding curve, AMM/swap, explorer и `/predict` против задеплоенных Solidity-контрактов (`website/src/data/evm-deployments-97401.json`, `contracts/`). Legacy OVN people-node **не** является текущим публичным testnet; архивный снимок OVN не реплеится (см. `docs/COSMOS-EVM-TESTNET-CUTOVER.md`).
+Live: `https://node.peopleblockchain.network/rpc`, cosmos id `people_97401-1`. Исходники цепи в `chain/` (evmd overrides). Публичный сайт (`www.peopleblockchain.network`) обслуживает создание токенов/NFT, bonding curve, AMM/swap и explorer против задеплоенных Solidity-контрактов (`website/src/data/evm-deployments-97401.json`, `contracts/`). Legacy OVN people-node **не** является текущим публичным testnet; архивный снимок OVN не реплеится (см. `docs/COSMOS-EVM-TESTNET-CUTOVER.md`).
 
 ### EVM-контракты запуска: Token / NFT factory, curve, AMM, gateway
 
@@ -157,12 +157,6 @@ MetaMask / Trust / WalletConnect и cloud vault (Web3Auth) подключены 
 ---
 
 *Последнее обновление структуры: 2026-10-14. Доказательства по коду — поле `evidence` в `roadmap.json`. План A/B — `docs/FOUNDERS-AND-LAVKA-PLAN.md`.*
-
-## People Predict — MVP testnet
-
-`live_on_testnet`: founder-approved binary positions, on-chain limit orders, 0 app fee,
-48h disputes and 0.5 PPL void payouts. Administrator = PeopleMultisig; named resolver
-and arbiter are set per market. Contract `0x77408f49f36520b722CbcCDBeD68aCc8c5Ca4eBf`. See `PEOPLE-PREDICT.md`.
 
 ### App Builder (после mainnet) — `planned_unapproved`
 
