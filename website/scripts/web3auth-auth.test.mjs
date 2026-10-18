@@ -174,19 +174,19 @@ test("an already-bound identity signs in even when the token reports an unverifi
 
 test("api-cron M1: a DISCOVER_ADMIN_EMAILS address is never bound through Web3Auth", async () => {
   const previous = process.env.DISCOVER_ADMIN_EMAILS;
-  process.env.DISCOVER_ADMIN_EMAILS = "someone@gmail.com";
+  process.env.DISCOVER_ADMIN_EMAILS = "test@example.com";
   try {
     const adminUserId = crypto.randomUUID();
     await db.insert(schema.users).values({
       id: adminUserId,
-      email: "someone@gmail.com",
+      email: "test@example.com",
       name: "Admin",
       emailVerified: new Date(),
     });
 
     // Even with a *verified* email claim, the admin account must not be reachable via Web3Auth
     // email fallback — admins are re-attached by userId or by signing in through Google.
-    const p = profile({ email: "someone@gmail.com" });
+    const p = profile({ email: "test@example.com" });
     const result = await bindWeb3AuthProfile(p);
     assert.equal(result, null);
 

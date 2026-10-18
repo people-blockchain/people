@@ -147,10 +147,6 @@
       "title": "Ambassador promo kit",
       "summary": "Promo materials for ambassadors and active founders after the Million Founders launch. Planning only."
     },
-    "people-predict-testnet-mvp": {
-      "title": "People Predict — testnet MVP",
-      "summary": "Live on People testnet (97401): fully backed Yes/No markets, on-chain limit orders, 0 app fee, 48h dispute, void 0.5 PPL. Admin=multisig; named resolver/arbiter per market."
-    },
     "app-builder-audited-templates": {
       "title": "App Builder: audited templates for apps (NFT-gated club, DAO voting, subscription, USDC shop, giveaway), no code",
       "summary": "After mainnet: an App Builder with audited no-code templates for common apps — NFT-gated club, DAO voting, subscription, USDC shop and giveaway. Planning only; not implemented."

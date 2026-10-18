@@ -14,7 +14,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 register("./fixtures/web3auth-auth-db-loader.mjs", import.meta.url);
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const ADMIN_EMAIL = "someone@gmail.com";
+const ADMIN_EMAIL = "test@example.com";
 
 /** Unique address per test: `user.email` is unique and each test seeds its own fixture. */
 function adminEmail() {
