@@ -137,15 +137,15 @@ test('personal_sign tolerates intermittent read failures when a successful pendi
  const {provider,calls}=setup(t,b=>{
   if(b.action==='request')return {request};
   const n=++statusReads;
-  if(n===1||n===2||n===4||n===5)throw new Error('offline');
-  if(n===3)return {state:'connected',session,request:{...request,status:'pending'}};
+  if(n>=1&&n<=4||n>=6&&n<=9)throw new Error('offline');
+  if(n===5)return {state:'connected',session,request:{...request,status:'pending'}};
   return {state:'connected',session,request:{...request,status:'approved',signature}};
  });
  const pending=provider.request({method:'personal_sign',params:[stringToHex(message),account.address]});
- for(let i=0;i<6;i++){await flush();t.mock.timers.tick(5000);await flush()}
+ for(let i=0;i<10;i++){await flush();t.mock.timers.tick(5000);await flush()}
  assert.equal(await pending,signature);
- assert.equal(statusReads,6);
- assert.equal(calls.filter(c=>c.action==='status').length,6);
+ assert.equal(statusReads,10);
+ assert.equal(calls.filter(c=>c.action==='status').length,10);
 });
 test('a mismatched connected session is terminal and is never retried as a transport failure',async t=>{
  let invalid=0;
