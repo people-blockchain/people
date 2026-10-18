@@ -65,6 +65,13 @@ export const verificationTokens = pgTable(
   ],
 );
 
+/** First-party mobile message connection; migration is reviewed/applied separately. */
+export const mobileWalletSessions = pgTable("mobile_wallet_session", {
+  id: text("id").primaryKey(),
+  data: jsonb("data").notNull(),
+  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+}, (table) => [index("mobile_wallet_session_expires_idx").on(table.expiresAt)]);
+
 /**
  * Partner profile. Referral graph here is off-chain CRM for the public site.
  * It mirrors Growth L1/L2 depth only and does not write consensus state.

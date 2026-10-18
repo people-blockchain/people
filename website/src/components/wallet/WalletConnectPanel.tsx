@@ -7,6 +7,7 @@ import { UnifiedWalletAuthPanel } from "./UnifiedWalletAuthPanel";
 import { WalletExternalConnectSection } from "./WalletExternalConnectSection";
 import { walletFeatures } from "@/lib/wallet-features";
 import { readLastAuthEmail } from "@/lib/wallet-auth-storage";
+import { PeopleMobileConnect } from "./PeopleMobileConnect";
 
 export function WalletConnectPanel({
   onConnected,
@@ -118,6 +119,7 @@ export function WalletConnectPanel({
             </div>
           ) : null}
           {context === "modal" ? <WalletConnectSoonSection /> : null}
+          <PeopleMobileConnect onConnected={onConnected} />
         </div>
       ) : null}
 
