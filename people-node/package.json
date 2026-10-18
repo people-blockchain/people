@@ -17,7 +17,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "packageManager": "npm@10.9.0",
   "private": true,
   "workspaces": [

@@ -19,8 +19,8 @@
 
 - The public testnet is a Cosmos EVM chain: chain id `97401`, chain name `people_97401-1`, RPC `https://node.peopleblockchain.network/rpc`.
 - Chain source is `chain/` in this repo; the public site is www.peopleblockchain.network.
-- Live Solidity on 97401: token and NFT factories, bonding curve, AMM/swap, fee gateway, and People Predict.
-- Deployment addresses: `website/src/data/evm-deployments-97401.json` and `website/src/lib/predict/deployment.json`.
+- Live Solidity on 97401: token and NFT factories, bonding curve, AMM/swap, and fee gateway.
+- Deployment addresses: `website/src/data/evm-deployments-97401.json`.
 - `people-node` (OVN) is a historical baseline/archive only; it is not the public network.
 - The public testnet cutover is already done — no future migration is pending for it.
 - Where marked historical, the rest of this document still describes the OVN-era design baseline.
