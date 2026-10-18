@@ -802,3 +802,13 @@ Participation / Community Pool / Token Factory / NFT / DEX / Rewards
 ```
 
 The first development objective is therefore **not** to rewrite the blockchain core. It is to make the economic and participation layer explicit, deterministic and testable, then integrate it with the existing core.
+
+---
+
+## 29. Native wallet ↔ first-party website connection (2026-10-18)
+
+The owner selected People Connect for the native People apps connecting to the PEOPLE website. Existing external-wallet WalletConnect/injected connectors remain separate. The native wallet reads the official checked-chain RPC directly; the connection gateway is an off-chain message transport, never a validator or transaction relay.
+
+The v1 contract is [PEOPLE-CONNECT-V1.md](PEOPLE-CONNECT-V1.md): short-lived QR/link pairing, SIWE account proof, explicit per-message authentication for `personal_sign`, rejection and disconnect. Wallet private keys stay on the device. The server independently recovers signatures, stores hashed role capabilities and uses atomic JSONB state replacement. Production uses a dedicated shared table and stays disabled until separately reviewed migration and release; the explicit localhost development store is bounded and never a production fallback.
+
+Status: implemented for review, native acceptance and production storage validation recorded separately. No production deployment, automatic migration, economics or consensus change is authorized by this section.

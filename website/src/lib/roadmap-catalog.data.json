@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-16",
+  "updated": "2026-10-18",
   "statusVocabulary": {
     "done": "готово",
     "live_on_testnet": "в тестовой сети",
@@ -47,7 +47,7 @@
     {
       "id": "evm-wallet-site-package",
       "status": "in_progress",
-      "evidence": "Read-only JSON-RPC via node `POST /rpc` and `website` proxy (`PEOPLE_EIP155_CHAIN_ID` 97401). Dedicated browser package for MetaMask / Trust / WalletConnect — not in repo."
+      "evidence": "Website external-wallet connectors remain in ExternalWalletContext.tsx. First-party People Connect for the native apps is in progress: /api/mobile-wallet, short-lived role capabilities, SIWE account proof and explicitly approved personal_sign; no gateway transactions. Production is disabled by default; reviewed SQL, deployment and native acceptance remain separate gates. See docs/PEOPLE-CONNECT-V1.md."
     },
     {
       "id": "site-wide-wallet-connect-modal",
