@@ -20,7 +20,7 @@
     "soldTarget": "su {supply} sulla curva",
     "buyers": "Acquirenti",
     "daysLeft": "Giorni rimasti",
-    "daysLeftTarget": "su {days}",
+    "daysLeftTarget": "max {days} (cap {months} mesi)",
     "none": "—",
     "notOpenYet": "Non ancora aperta",
     "progressLabel": "Progresso verso la chiusura della vendita a {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "La curva",
-        "body": "{supply} PPL su una curva pubblica da {start} fino al tetto {ceiling}. Compra e vendi in qualsiasi momento, fino a {days} giorni."
+        "body": "{supply} PPL su una curva pubblica da {start} fino al tetto {ceiling}. Compra e vendi in qualsiasi momento finché la vendita è aperta — fino a esaurimento PPL o per {saleMonths} mesi, a seconda di cosa avviene prima."
       },
       {
         "title": "Chiusura della vendita a {graduation}",
@@ -134,8 +134,8 @@
         "body": "Trasferimenti PPL tra wallet e trading nel pool si aprono a {verified} partecipanti verificati, non oltre {months} mesi."
       },
       {
-        "title": "Dopo {days} giorni",
-        "body": "Se {graduation} non è raggiunto, la stessa divisione {liquidityShare}/{multisigShare} si applica a quanto raccolto, e ogni PPL non venduto va al fondo community."
+        "title": "Quando finisce la vendita",
+        "body": "Il termine è fisso e non sarà prorogato. Se non si raggiunge {graduation}, quanto raccolto è diviso {liquidityShare}/{multisigShare}, ogni PPL non venduto va al fondo community e non ci sono rimborsi. Fino ad allora i PPL non venduti restano nel multisig del progetto e il team non li tocca."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Domande, risposte",
     "items": [
+      {
+        "q": "Quanto dura la vendita?",
+        "a": "Finché non si vendono tutti i PPL o per {saleMonths} mesi, a seconda di cosa avviene prima. Il termine è fisso e non sarà prorogato. Alla fine i PPL non venduti vanno al fondo community; nessun rimborso. Fino ad allora restano nel multisig del progetto e il team non li tocca."
+      },
       {
         "q": "Posso rivendere PPL?",
         "a": "Solo utenti verificati: 30 giorni di detenzione per lotto, limiti giornalieri e commissione {fee}. Si chiude alla chiusura della vendita."

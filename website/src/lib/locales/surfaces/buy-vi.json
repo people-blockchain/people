@@ -20,7 +20,7 @@
     "soldTarget": "trong {supply} trên đường cong",
     "buyers": "Người mua",
     "daysLeft": "Ngày còn lại",
-    "daysLeftTarget": "trong {days}",
+    "daysLeftTarget": "tối đa {days} (trần {months} tháng)",
     "none": "—",
     "notOpenYet": "Chưa mở",
     "progressLabel": "Tiến độ tới kết thúc đợt bán {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Đường cong",
-        "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán bất cứ lúc nào, tối đa {days} ngày."
+        "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán bất cứ lúc nào khi đợt bán đang mở — đến khi bán hết PPL hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước."
       },
       {
         "title": "Kết thúc đợt bán tại {graduation}",
@@ -134,8 +134,8 @@
         "body": "Chuyển PPL giữa ví và giao dịch pool mở khi có {verified} người xác minh, chậm nhất {months} tháng."
       },
       {
-        "title": "Sau {days} ngày",
-        "body": "Nếu chưa đạt {graduation}, cùng tỷ lệ {liquidityShare}/{multisigShare} cho số đã gom, và mọi PPL chưa bán vào quỹ cộng đồng."
+        "title": "Khi đợt bán kết thúc",
+        "body": "Thời hạn cố định và không gia hạn. Nếu chưa đạt {graduation}, số tiền gom được chia {liquidityShare}/{multisigShare}, toàn bộ PPL chưa bán vào quỹ cộng đồng, không hoàn tiền. Trước đó PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Câu hỏi và trả lời",
     "items": [
+      {
+        "q": "Đợt bán kéo dài bao lâu?",
+        "a": "Đến khi bán hết PPL hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước. Thời hạn cố định và không gia hạn. Khi kết thúc, PPL chưa bán vào quỹ cộng đồng; không hoàn tiền. Trước đó được giữ trong multisig dự án, đội ngũ không chạm vào."
+      },
       {
         "q": "Tôi có thể bán lại PPL không?",
         "a": "Chỉ người dùng đã xác minh: giữ 30 ngày mỗi lô, giới hạn ngày và phí {fee}. Đóng khi kết thúc đợt bán."

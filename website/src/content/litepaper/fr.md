@@ -223,4 +223,4 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 - Sécurité : **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1** ; bug bounty on every page.
 - Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
 - Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
-- La vente PPL, une fois ouverte, dure **180 jours** fixes. Ensuite, n'importe qui peut la clôturer et les PPL invendus vont au pool communautaire — la même règle que pour les courbes de tokens.
+- La vente PPL, une fois ouverte, dure jusqu'à ce que tous les PPL soient vendus ou pendant **24 mois**, selon la première échéance. Le délai est fixe et ne sera pas prolongé. Ensuite n'importe qui peut la clôturer ; les PPL invendus vont au fonds communautaire et il n'y a pas de remboursement. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas.

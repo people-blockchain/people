@@ -223,4 +223,4 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Sicherheit: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; Bug bounty on every page.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
-- Der PPL-Sale läuft nach seiner Öffnung fest **180 Tage**. Danach kann jeder ihn abschließen, und die unverkauften PPL gehen in den Community-Pool — dieselbe Regel wie bei Token-Curves.
+- Der PPL-Sale läuft nach der Öffnung, bis alle PPL verkauft sind oder **24 Monate** vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach kann jeder abschließen; unverkaufte PPL gehen in den Community-Pool, keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu.

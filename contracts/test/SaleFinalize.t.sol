@@ -10,8 +10,9 @@ contract SaleFinalizeUsdt is ERC20("USDT", "USDT") {
     function mint(address to, uint256 a) external { _mint(to, a); }
 }
 
-/// Owner rule 2026-10-13: the PPL sale runs a fixed 180 days from opening; afterwards anyone can
-/// finalize and the unsold PPL is assigned to the community pool.
+/// Owner decision 2026-10-19: the PPL sale runs until sold out or a fixed 24 months (730 days) from
+/// opening, whichever comes first; then anyone can finalize and the unsold PPL (zero when sold out)
+/// is assigned to the community pool. No extensions, no refunds.
 contract SaleFinalizeTest is Test {
     SaleFinalizeUsdt usdt;
     PeopleCommunitySale sale;
@@ -39,14 +40,14 @@ contract SaleFinalizeTest is Test {
         vm.expectRevert();
         sale.open(pool);
         sale.open(pool);
-        assertEq(sale.closesAt(), block.timestamp + 180 days);
+        assertEq(sale.closesAt(), block.timestamp + 730 days);
         vm.expectRevert(PeopleCommunitySale.AlreadyOpened.selector);
         sale.open(pool);
     }
 
-    function test_cannotFinalizeBefore180Days() public {
+    function test_cannotFinalizeBefore730Days() public {
         sale.open(pool);
-        vm.warp(block.timestamp + 180 days - 1);
+        vm.warp(block.timestamp + 730 days - 1);
         vm.prank(buyer);
         sale.buy(buyer, 10e6, 0);
         assertFalse(sale.canFinalize());
@@ -55,12 +56,12 @@ contract SaleFinalizeTest is Test {
         sale.finalize();
     }
 
-    function test_anyoneFinalizesAfter180Days_unsoldToCommunityPool() public {
+    function test_anyoneFinalizesAt730Days_unsoldToCommunityPool() public {
         sale.open(pool);
         vm.prank(buyer);
         sale.buy(buyer, 100e6, 0);
         uint256 sold = sale.soldPpl();
-        vm.warp(block.timestamp + 180 days);
+        vm.warp(block.timestamp + 730 days);
 
         vm.prank(buyer);
         vm.expectRevert(PeopleCommunitySale.SaleEnded.selector);
@@ -82,5 +83,67 @@ contract SaleFinalizeTest is Test {
         vm.warp(block.timestamp + 365 days);
         vm.expectRevert(PeopleCommunitySale.NotFinalizable.selector);
         sale.finalize();
+    }
+
+    function test_durationIsFixedAt730Days() public view {
+        // `SALE_DURATION` is a constant: no setter, no extension path.
+        assertEq(sale.SALE_DURATION(), 730 days);
+    }
+
+    function test_soldOutSaleFinalizesImmediately_noUnsold() public {
+        sale.open(pool);
+        uint256 openedAt = block.timestamp;
+        assertFalse(sale.isSoldOut());
+        _sellOut();
+
+        assertTrue(sale.isSoldOut());
+        assertEq(sale.remainingPpl(), 0);
+        assertLt(block.timestamp, openedAt + 730 days);
+        assertEq(sale.closesAt(), openedAt + 730 days);
+        assertTrue(sale.canFinalize());
+
+        vm.expectEmit(true, true, false, true);
+        emit PeopleCommunitySale.SaleFinalized(anyone, pool, 0);
+        vm.prank(anyone);
+        sale.finalize();
+        assertTrue(sale.finalized());
+        assertEq(sale.unsoldToCommunity(), 0);
+        assertFalse(sale.canFinalize());
+    }
+
+    function test_buyAfterSoldOutReverts() public {
+        sale.open(pool);
+        _sellOut();
+        vm.prank(buyer);
+        vm.expectRevert(PeopleCommunitySale.SaleEnded.selector);
+        sale.buy(buyer, 10e6, 0);
+    }
+
+    function test_buyAfter730DaysReverts() public {
+        sale.open(pool);
+        vm.warp(block.timestamp + 730 days - 1);
+        vm.prank(buyer);
+        sale.buy(buyer, 10e6, 0);
+        vm.warp(block.timestamp + 1);
+        vm.prank(buyer);
+        vm.expectRevert(PeopleCommunitySale.SaleEnded.selector);
+        sale.buy(buyer, 10e6, 0);
+    }
+
+    function test_notSoldOutSaleCannotFinalizeEarly() public {
+        sale.open(pool);
+        vm.prank(buyer);
+        sale.buy(buyer, 100e6, 0);
+        assertFalse(sale.isSoldOut());
+        assertFalse(sale.canFinalize());
+        vm.expectRevert(PeopleCommunitySale.NotFinalizable.selector);
+        sale.finalize();
+    }
+
+    /// Buys the entire supply (the full curve costs ~3M USDT).
+    function _sellOut() internal {
+        usdt.mint(buyer, 10_000_000e6);
+        vm.prank(buyer);
+        sale.buy(buyer, 10_000_000e6, 0);
     }
 }

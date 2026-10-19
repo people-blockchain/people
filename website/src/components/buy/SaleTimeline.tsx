@@ -5,7 +5,7 @@ import { buyCopy } from "@/lib/buy-content";
 import { CURVE, SALE } from "@/lib/sale/config";
 import { fillCopy, pplCompact, pricePerPpl, usdCompact } from "@/lib/sale/format";
 
-/** Curve → graduation → full mainnet → day 180. Four steps, no dates invented. */
+/** Curve → graduation → full mainnet → sale end. Four steps, no dates invented. */
 export function SaleTimeline() {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
@@ -14,7 +14,7 @@ export function SaleTimeline() {
     supply: `${pplCompact(CURVE.supplyPpl, lang)}`,
     start: pricePerPpl(CURVE.startPriceUsd, lang),
     ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
-    days: SALE.durationDays,
+    saleMonths: SALE.durationMonths,
     graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
     liquidityShare: `${SALE.liquiditySharePct}%`,
     multisigShare: `${SALE.multisigSharePct}%`,

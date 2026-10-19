@@ -56,7 +56,7 @@ function AddPeopleNetworkButton() {
 }
 
 /** The "how do I add the People network" question, which carries the button. */
-const ADD_NETWORK_FAQ_INDEX = 2;
+const ADD_NETWORK_FAQ_INDEX = 3;
 
 /**
  * FAQ and the pump.fun comparison table.
@@ -76,6 +76,7 @@ export function SaleFaq() {
     graduationPrice: pricePerPpl(grad.priceUsd, lang),
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
     months: SALE.fullMainnetMaxMonths,
+    saleMonths: SALE.durationMonths,
     perBuy: usd(SALE.maxPerBuyUsd, lang),
     perDay: usd(SALE.maxPerDayUsd, lang),
     cooldown: SALE.cooldownSeconds,
