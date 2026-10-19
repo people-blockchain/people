@@ -1,5 +1,7 @@
 /** In-process per-key sliding window rate limit (website API routes; not consensus). */
 
+import { checkDurableRateLimit } from "@/lib/durable-rate-limit";
+
 type Bucket = { count: number; windowStart: number };
 
 const stores = new Map<string, Map<string, Bucket>>();
@@ -37,4 +39,25 @@ export function checkSlidingWindowRateLimit(
 
 export function resetRateLimitStoresForTests(): void {
   stores.clear();
+}
+
+/**
+ * Postgres-backed limit shared across instances; falls back to the in-process sliding window if
+ * the database is unreachable (same pattern as factory icon generation).
+ */
+export async function checkRateLimitDurableFirst(
+  namespace: string,
+  subject: string,
+  maxPerWindow: number,
+  windowMs: number
+): Promise<boolean> {
+  try {
+    return await checkDurableRateLimit(namespace, subject, maxPerWindow, windowMs);
+  } catch (error) {
+    console.warn(
+      `[rate-limit] durable limit unavailable for ${namespace}, falling back to in-memory`,
+      error instanceof Error ? error.message : error
+    );
+    return checkSlidingWindowRateLimit(namespace, subject, maxPerWindow, windowMs);
+  }
 }

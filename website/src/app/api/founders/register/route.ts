@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { registerFounder, resolveFounderUserIdByWallet } from "@/lib/founders/service";
@@ -9,7 +9,11 @@ export async function POST(request: Request) {
   if (!guard.ok) return guard.response;
   // Registration is a one-time action; a tight per-user window stops scripted churn
   // (each attempt consumes verification work and registration-slot bookkeeping).
-  if (!checkSlidingWindowRateLimit("founders_register", guard.userId, 10, 10 * 60 * 1000)) {
+  // TODO(audit-2026-10-19): Turnstile on register — when TURNSTILE_SECRET_KEY is set, call
+  // verifyTurnstileToken(body.turnstileToken, clientIp(request)) before registerFounder and
+  // return 400 on failure; expose NEXT_PUBLIC_TURNSTILE_SITE_KEY in FoundersApp (widget like
+  // FactoryIconGenerator) and pass turnstileToken in the register JSON body.
+  if (!(await checkRateLimitDurableFirst("founders_register", guard.userId, 10, 10 * 60 * 1000))) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const body = (await request.json()) as {
