@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const surfacesDir = path.join(import.meta.dirname, '../src/lib/locales/surfaces');
-const manualCode = `git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git
-cd Peoples-Blockchain/people-node
+const manualCode = `git clone https://github.com/people-blockchain/people.git
+cd people/people-node
 npm ci
 npm run build
 node --env-file=.env.node apps/node/dist/index.js`;
@@ -28,7 +28,7 @@ const patches = {
     node02:
       'Use the command in the panel above. It is pinned to the current public testnet release. Do not substitute other images or network URLs.',
     manual05:
-      'Save .env.node inside people-node in your Peoples-Blockchain checkout and restrict file permissions. Do not enable ALLOW_FAUCET or ALLOW_DEV_ENDPOINTS on an ordinary node. Do not expose the HTTP API to the internet without agreed protection.',
+      'Save .env.node inside people-node in your people checkout and restrict file permissions. Do not enable ALLOW_FAUCET or ALLOW_DEV_ENDPOINTS on an ordinary node. Do not expose the HTTP API to the internet without agreed protection.',
     manual01:
       'Manual builds need repository access and an approved revision. Take CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS and fee parameters from the published v2 network configuration at https://node.peopleblockchain.network/network. Use a separate data directory for a different chain.',
     verifyState:
@@ -48,7 +48,7 @@ const patches = {
     node02:
       'Используйте команду в блоке выше. Она закреплена за текущим публичным выпуском тестовой сети. Не подставляйте другие образы или адреса сети.',
     manual05:
-      'Сохраните .env.node в каталоге people-node внутри клонированного репозитория Peoples-Blockchain и ограничьте доступ к файлу. Не включайте ALLOW_FAUCET и ALLOW_DEV_ENDPOINTS для обычной ноды. Не публикуйте HTTP API в интернет без согласованной защиты.',
+      'Сохраните .env.node в каталоге people-node внутри клонированного репозитория people и ограничьте доступ к файлу. Не включайте ALLOW_FAUCET и ALLOW_DEV_ENDPOINTS для обычной ноды. Не публикуйте HTTP API в интернет без согласованной защиты.',
     manual01:
       'Для ручной сборки нужен доступ к репозиторию и согласованная ревизия. Возьмите CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS и тарифы из опубликованной конфигурации v2 на https://node.peopleblockchain.network/network. Для другой сети используйте отдельный каталог данных.',
     verifyState:
@@ -68,7 +68,7 @@ const patches = {
     node02:
       'Usa el comando del panel superior. Está fijado al lanzamiento público actual de la testnet. No sustituyas otras imágenes ni URLs de red.',
     manual05:
-      'Guarda .env.node en people-node dentro de tu copia de Peoples-Blockchain y restringe permisos. No actives ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS en un nodo ordinario. No expongas la API HTTP a Internet sin protección acordada.',
+      'Guarda .env.node en people-node dentro de tu copia de people y restringe permisos. No actives ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS en un nodo ordinario. No expongas la API HTTP a Internet sin protección acordada.',
     manual01:
       'La compilación manual requiere acceso al repositorio y una revisión aprobada. Toma CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS y tarifas de la configuración v2 publicada en https://node.peopleblockchain.network/network. Usa otro directorio de datos para otra red.',
     verifyState:
@@ -88,7 +88,7 @@ const patches = {
     node02:
       'Usa o comando no painel acima. Está fixado ao lançamento público atual da testnet. Não substituas outras imagens nem URLs de rede.',
     manual05:
-      'Guarda .env.node em people-node dentro do teu checkout Peoples-Blockchain e restringe permissões. Não atives ALLOW_FAUCET nem ALLOW_DEV_ENDPOINTS num nó comum. Não exponhas a API HTTP à Internet sem proteção acordada.',
+      'Guarda .env.node em people-node dentro do teu checkout people e restringe permissões. Não atives ALLOW_FAUCET nem ALLOW_DEV_ENDPOINTS num nó comum. Não exponhas a API HTTP à Internet sem proteção acordada.',
     manual01:
       'Compilação manual requer acesso ao repositório e revisão aprovada. Usa CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS e taxas da configuração v2 em https://node.peopleblockchain.network/network. Usa outro diretório de dados para outra rede.',
     verifyState:
@@ -108,7 +108,7 @@ const patches = {
     node02:
       'Utilisez la commande du panneau ci-dessus. Elle est épinglée à la version publique actuelle du testnet. Ne substituez pas d’autres images ou URL réseau.',
     manual05:
-      'Enregistrez .env.node dans people-node de votre copie Peoples-Blockchain et restreignez les permissions. N’activez pas ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS sur un nœud ordinaire. N’exposez pas l’API HTTP sans protection convenue.',
+      'Enregistrez .env.node dans people-node de votre copie people et restreignez les permissions. N’activez pas ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS sur un nœud ordinaire. N’exposez pas l’API HTTP sans protection convenue.',
     manual01:
       'La compilation manuelle exige l’accès au dépôt et une révision approuvée. Reprenez CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS et les frais depuis la config v2 sur https://node.peopleblockchain.network/network. Utilisez un autre répertoire de données pour un autre réseau.',
     verifyState:
@@ -128,7 +128,7 @@ const patches = {
     node02:
       'Nutzen Sie den Befehl im Kasten oben. Er ist an die aktuelle öffentliche Testnet-Version gebunden. Keine anderen Images oder Netzwerk-URLs einsetzen.',
     manual05:
-      'Speichern Sie .env.node in people-node innerhalb Ihres Peoples-Blockchain-Checkouts und schützen Sie die Datei. ALLOW_FAUCET und ALLOW_DEV_ENDPOINTS auf einem normalen Node nicht aktivieren. HTTP-API nicht ungeschützt ins Internet stellen.',
+      'Speichern Sie .env.node in people-node innerhalb Ihres people-Checkouts und schützen Sie die Datei. ALLOW_FAUCET und ALLOW_DEV_ENDPOINTS auf einem normalen Node nicht aktivieren. HTTP-API nicht ungeschützt ins Internet stellen.',
     manual01:
       'Manueller Build braucht Repository-Zugang und freigegebene Revision. CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS und Gebühren aus der v2-Konfiguration unter https://node.peopleblockchain.network/network übernehmen. Für ein anderes Netz separates DATA_DIR.',
     verifyState:
@@ -148,7 +148,7 @@ const patches = {
     node02:
       'Usa il comando nel riquadro sopra. È fissato alla release pubblica attuale della testnet. Non sostituire altre immagini o URL di rete.',
     manual05:
-      'Salva .env.node in people-node nel checkout Peoples-Blockchain e limita i permessi. Non abilitare ALLOW_FAUCET né ALLOW_DEV_ENDPOINTS su un nodo ordinario. Non esporre l’API HTTP senza protezione concordata.',
+      'Salva .env.node in people-node nel checkout people e limita i permessi. Non abilitare ALLOW_FAUCET né ALLOW_DEV_ENDPOINTS su un nodo ordinario. Non esporre l’API HTTP senza protezione concordata.',
     manual01:
       'La build manuale richiede accesso al repository e revisione approvata. Prendi CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS e tariffe dalla configurazione v2 su https://node.peopleblockchain.network/network. Usa una directory dati separata per un’altra rete.',
     verifyState:
@@ -168,7 +168,7 @@ const patches = {
     node02:
       'Yukarıdaki kutudaki komutu kullanın. Güncel genel testnet sürümüne sabitlenmiştir. Başka görüntü veya ağ adresi kullanmayın.',
     manual05:
-      '.env.node dosyasını Peoples-Blockchain kopyanızdaki people-node içinde saklayın ve izinleri kısıtlayın. Normal düğümde ALLOW_FAUCET ve ALLOW_DEV_ENDPOINTS açmayın. HTTP API’yi korumasız internete açmayın.',
+      '.env.node dosyasını people kopyanızdaki people-node içinde saklayın ve izinleri kısıtlayın. Normal düğümde ALLOW_FAUCET ve ALLOW_DEV_ENDPOINTS açmayın. HTTP API’yi korumasız internete açmayın.',
     manual01:
       'Manuel derleme için depo erişimi ve onaylı revizyon gerekir. CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS ve ücretleri https://node.peopleblockchain.network/network v2 yapılandırmasından alın. Başka ağ için ayrı veri dizini kullanın.',
     verifyState:
@@ -188,7 +188,7 @@ const patches = {
     node02:
       'Dùng lệnh trong khung phía trên. Lệnh được ghim bản phát hành testnet công khai hiện tại. Không thay ảnh hoặc URL mạng khác.',
     manual05:
-      'Lưu .env.node trong people-node trong bản sao Peoples-Blockchain và giới hạn quyền. Không bật ALLOW_FAUCET hay ALLOW_DEV_ENDPOINTS trên nút thường. Không công khai API HTTP ra internet không bảo vệ.',
+      'Lưu .env.node trong people-node trong bản sao people và giới hạn quyền. Không bật ALLOW_FAUCET hay ALLOW_DEV_ENDPOINTS trên nút thường. Không công khai API HTTP ra internet không bảo vệ.',
     manual01:
       'Build thủ công cần quyền repo và revision đã duyệt. Lấy CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS và phí từ cấu hình v2 tại https://node.peopleblockchain.network/network. Dùng thư mục dữ liệu riêng cho mạng khác.',
     verifyState:
@@ -208,7 +208,7 @@ const patches = {
     node02:
       'Gunakan perintah di kotak atas. Terikat ke rilis testnet publik saat ini. Jangan ganti image atau URL jaringan lain.',
     manual05:
-      'Simpan .env.node di people-node dalam checkout Peoples-Blockchain Anda dan batasi izin. Jangan aktifkan ALLOW_FAUCET atau ALLOW_DEV_ENDPOINTS pada node biasa. Jangan ekspos API HTTP ke internet tanpa perlindungan.',
+      'Simpan .env.node di people-node dalam checkout people Anda dan batasi izin. Jangan aktifkan ALLOW_FAUCET atau ALLOW_DEV_ENDPOINTS pada node biasa. Jangan ekspos API HTTP ke internet tanpa perlindungan.',
     manual01:
       'Build manual memerlukan akses repo dan revisi yang disetujui. Ambil CHAIN_ID, GENESIS_FAUCET_ADDRESS, BOOTSTRAP_ADDRESS, BOOTSTRAP_PEERS dan biaya dari konfigurasi v2 di https://node.peopleblockchain.network/network. Gunakan direktori data terpisah untuk jaringan lain.',
     verifyState:
@@ -227,7 +227,7 @@ const patches = {
     },
     node02: '使用上方框中的命令。它固定为当前公共测试网发布版本。请勿替换其他镜像或网络地址。',
     manual05:
-      '将 .env.node 保存在 Peoples-Blockchain 检出目录中的 people-node 内并限制权限。普通节点不要启用 ALLOW_FAUCET 或 ALLOW_DEV_ENDPOINTS。未经约定保护不要将 HTTP API 暴露到公网。',
+      '将 .env.node 保存在 people 检出目录中的 people-node 内并限制权限。普通节点不要启用 ALLOW_FAUCET 或 ALLOW_DEV_ENDPOINTS。未经约定保护不要将 HTTP API 暴露到公网。',
     manual01:
       '手动构建需要仓库访问权和已批准的修订。从 https://node.peopleblockchain.network/network 的 v2 配置获取 CHAIN_ID、GENESIS_FAUCET_ADDRESS、BOOTSTRAP_ADDRESS、BOOTSTRAP_PEERS 和费用。其他网络请使用单独的数据目录。',
     verifyState:
@@ -246,7 +246,7 @@ const patches = {
     },
     node02: 'استخدم الأمر في المربع أعلاه. هو مثبّت لإصدار شبكة الاختبار العامة الحالي. لا تستبدل صورًا أو عناوين شبكة أخرى.',
     manual05:
-      'احفظ .env.node داخل people-node في نسخة Peoples-Blockchain وقيّد الصلاحيات. لا تفعّل ALLOW_FAUCET أو ALLOW_DEV_ENDPOINTS على عقدة عادية. لا تعرّض API HTTP للإنترنت دون حماية متفق عليها.',
+      'احفظ .env.node داخل people-node في نسخة people وقيّد الصلاحيات. لا تفعّل ALLOW_FAUCET أو ALLOW_DEV_ENDPOINTS على عقدة عادية. لا تعرّض API HTTP للإنترنت دون حماية متفق عليها.',
     manual01:
       'البناء اليدوي يحتاج وصولًا للمستودع ومراجعة مُعتمدة. خذ CHAIN_ID وGENESIS_FAUCET_ADDRESS وBOOTSTRAP_ADDRESS وBOOTSTRAP_PEERS والرسوم من إعداد v2 على https://node.peopleblockchain.network/network. استخدم مجلد بيانات منفصلًا لشبكة أخرى.',
     verifyState:
