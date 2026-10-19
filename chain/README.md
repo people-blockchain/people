@@ -50,6 +50,8 @@ docker compose up -d
 
 See `docker-compose.yml` for node1/node2 host port offsets.
 
+Production validator exposure, sentry layout, and public RPC hardening: [`docs/NODE-SECURITY.md`](../docs/NODE-SECURITY.md).
+
 ## Exposure and key handling (M11-3)
 
 - The JSON-RPC API set defaults to `eth,txpool,net,web3` (Docker entrypoint `JSON_RPC_API`).
