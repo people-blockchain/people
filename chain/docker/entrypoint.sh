@@ -15,6 +15,23 @@ fi
 # They are opt-in via JSON_RPC_API, never on by default.
 JSON_RPC_API="${JSON_RPC_API:-eth,txpool,net,web3}"
 
+if [[ -n "${PEOPLE_JSONRPC_BIND:-}" ]]; then
+  APP_TOML="$HOME_DIR/config/app.toml"
+  CFG_TOML="$HOME_DIR/config/config.toml"
+  if [[ -f "$APP_TOML" ]]; then
+    sed -i -E 's|address = "[^"]*:8545"|address = "'"${PEOPLE_JSONRPC_BIND}"':8545"|g' "$APP_TOML"
+    sed -i -E 's|address = "[^"]*:8546"|address = "'"${PEOPLE_JSONRPC_BIND}"':8546"|g' "$APP_TOML"
+  fi
+  if [[ -f "$CFG_TOML" ]]; then
+    if [[ "$PEOPLE_JSONRPC_BIND" == "127.0.0.1" || "$PEOPLE_JSONRPC_BIND" == "localhost" ]]; then
+      sed -i 's/prometheus = false/prometheus = true/g' "$CFG_TOML"
+      sed -i -E 's|prometheus_listen_addr = "[^"]*"|prometheus_listen_addr = "127.0.0.1:26660"|g' "$CFG_TOML"
+    else
+      sed -i 's/prometheus = true/prometheus = false/g' "$CFG_TOML"
+    fi
+  fi
+fi
+
 exec peopled "$@" \
   --home "$HOME_DIR" \
   --chain-id "$CHAIN_ID" \
