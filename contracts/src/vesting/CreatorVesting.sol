@@ -28,6 +28,8 @@ contract CreatorVesting is ICreatorVesting {
 
     error Unauthorized();
     error NothingToClaim();
+    /// @notice A schedule for this token already exists; `register` never overwrites one.
+    error AlreadyRegistered();
 
     constructor(address core_) {
         core = core_;
@@ -40,6 +42,9 @@ contract CreatorVesting is ICreatorVesting {
     }
 
     function register(address token, address creator, uint256 totalAllocation, uint256 upfrontUnlocked) external onlyFactory {
+        // `startTime` is always non-zero once registered (even when `creator` is zero), so a
+        // swapped-in factory cannot reset `claimed`/`startTime` or reassign `creator`.
+        if (schedules[token].startTime != 0) revert AlreadyRegistered();
         schedules[token] = Schedule({
             creator: creator,
             totalAllocation: totalAllocation,

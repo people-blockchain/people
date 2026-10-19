@@ -23,6 +23,8 @@ contract PeopleAmmFactory is IPeopleAmmFactory {
     address[] public allPairs;
 
     error CurveNotMigrated(address token);
+    /// @notice The registry lookup reverted or returned malformed data; pair creation fails closed.
+    error RegistryCheckFailed();
 
     constructor(address registry_) {
         require(registry_ != address(0), "registry");
@@ -54,7 +56,8 @@ contract PeopleAmmFactory is IPeopleAmmFactory {
     /// the migration liquidity is added at).
     function _requireCurveMayList(address token) private view {
         (bool ok, bytes memory data) = registry.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
-        if (!ok || data.length < 32) return;
+        // Fail closed: a registry that reverts or answers garbage must not open pair creation.
+        if (!ok || data.length < 32) revert RegistryCheckFailed();
         address tokenFactory = abi.decode(data, (address));
         if (tokenFactory == address(0)) return;
         ITokenFactoryCurveView tf = ITokenFactoryCurveView(tokenFactory);

@@ -78,6 +78,7 @@ contract StableFeeGateway is Ownable2Step, Pausable, ReentrancyGuard {
     event DailyCallCapSet(uint256 cap);
     event FloatWithdrawn(address indexed to, uint256 amount);
     event FloatReceived(address indexed from, uint256 amount);
+    event ERC20Rescued(address indexed token, address indexed to, uint256 amount);
     event StableFeePaid(
         address indexed payer, Kind indexed kind, address indexed stable, uint256 stableAmount, uint256 pplAmount
     );
@@ -163,6 +164,15 @@ contract StableFeeGateway is Ownable2Step, Pausable, ReentrancyGuard {
         (bool sent,) = to.call{value: amount}("");
         if (!sent) revert PplTransferFailed();
         emit FloatWithdrawn(to, amount);
+    }
+
+    /// @notice Recover ERC-20s sent to the gateway by mistake. The PPL float is the gateway's
+    /// native balance, which an ERC-20 transfer can never touch — `withdrawFloat` stays the only
+    /// path for it. The gateway's own address is refused so this can't be pointed at itself.
+    function rescueERC20(address token, address to, uint256 amount) external onlyOwner nonReentrant {
+        if (token == address(0) || to == address(0) || token == address(this)) revert ZeroAddress();
+        IERC20(token).safeTransfer(to, amount);
+        emit ERC20Rescued(token, to, amount);
     }
 
     // ---------------------------------------------------------------------

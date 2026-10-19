@@ -115,6 +115,13 @@ contract MerchantEscrowTest is Test {
         vm.warp(block.timestamp + escrow.DISPUTE_AUTO_CLOSE_WINDOW() + 1);
         // Anyone can trigger the auto-close, not just a party to the escrow.
         escrow.autoCloseDispute(id);
+        // Pull payment: the split is credited, not pushed.
+        assertEq(escrow.pendingWithdrawals(customer), 0.5 ether);
+        assertEq(escrow.pendingWithdrawals(merchant), 0.5 ether);
+        vm.prank(customer);
+        escrow.withdrawPending();
+        vm.prank(merchant);
+        escrow.withdrawPending();
         assertEq(customer.balance, 4.5 ether);
         assertEq(merchant.balance, 0.5 ether);
         (,,,, MerchantEscrow.Status status,,) = escrow.escrows(id);
