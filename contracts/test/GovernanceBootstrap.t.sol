@@ -18,8 +18,10 @@ import {PeopleMultisig} from "../src/governance/PeopleMultisig.sol";
 /// also the timelock's only proposer and the deployer renounced `DEFAULT_ADMIN_ROLE` to nobody,
 /// so the first proposal could never pass — the supply was locked and every timelock-gated
 /// control (including `CommunityAgentWallet`'s freeze) was dead. `Deploy.s.sol` now also gives
-/// the approved 2-of-3 `PeopleMultisig` the admin/proposer/canceller roles as bootstrap
-/// authority. This test mirrors that wiring and drives it end to end.
+/// the approved 2-of-3 `PeopleMultisig` the proposer/canceller roles as bootstrap authority.
+/// The multisig is deliberately NOT the timelock's `DEFAULT_ADMIN_ROLE` (pre-mainnet audit): an
+/// admin can `grantRole` instantly and so bypass the delay; the timelock is its own sole admin.
+/// This test mirrors that wiring and drives it end to end.
 contract GovernanceBootstrapTest is Test {
     address internal deployer = address(0xD3919);
     address internal ownerKey = address(0x0001);
@@ -43,7 +45,6 @@ contract GovernanceBootstrapTest is Test {
         timelock.grantRole(timelock.PROPOSER_ROLE(), address(governor));
         timelock.grantRole(timelock.EXECUTOR_ROLE(), address(0));
         timelock.grantRole(timelock.CANCELLER_ROLE(), address(governor));
-        timelock.grantRole(timelock.DEFAULT_ADMIN_ROLE(), address(multisig));
         timelock.grantRole(timelock.PROPOSER_ROLE(), address(multisig));
         timelock.grantRole(timelock.CANCELLER_ROLE(), address(multisig));
         timelock.renounceRole(timelock.DEFAULT_ADMIN_ROLE(), deployer);
@@ -56,6 +57,22 @@ contract GovernanceBootstrapTest is Test {
         assertFalse(timelock.hasRole(timelock.PROPOSER_ROLE(), deployer));
         assertFalse(timelock.hasRole(timelock.CANCELLER_ROLE(), deployer));
         assertFalse(multisig.isOwner(deployer), "deployer is not a multisig owner either");
+    }
+
+    /// The timelock is its own sole admin: neither the multisig nor the governor can grant roles
+    /// instantly, so every role change has to pass through schedule -> delay -> execute.
+    function test_timelockIsSelfAdminOnly() public {
+        bytes32 admin = timelock.DEFAULT_ADMIN_ROLE();
+        assertTrue(timelock.hasRole(admin, address(timelock)), "timelock is its own admin");
+        assertFalse(timelock.hasRole(admin, address(multisig)), "multisig is not admin");
+        assertFalse(timelock.hasRole(admin, address(governor)), "governor is not admin");
+        assertTrue(timelock.hasRole(timelock.PROPOSER_ROLE(), address(multisig)));
+        assertTrue(timelock.hasRole(timelock.CANCELLER_ROLE(), address(multisig)));
+
+        bytes32 proposer = timelock.PROPOSER_ROLE();
+        vm.prank(address(multisig));
+        vm.expectRevert();
+        timelock.grantRole(proposer, community);
     }
 
     /// A single multisig owner cannot act alone: the 2-of-3 threshold still applies.
@@ -141,28 +158,23 @@ contract GovernanceBootstrapTest is Test {
     /// The emergency path the deadlock had removed: the multisig can still reach a
     /// timelock-gated control (here, revoking its own bootstrap roles once the DAO is live).
     function test_multisigCanHandOffToTheDao() public {
+        // Revoking is itself a timelock self-call, so it carries the delay like everything else.
+        bytes memory revokeProposer =
+            abi.encodeWithSignature("revokeRole(bytes32,address)", timelock.PROPOSER_ROLE(), address(multisig));
         _multisigCall(
             abi.encodeWithSignature(
                 "schedule(address,uint256,bytes,bytes32,bytes32,uint256)",
                 address(timelock),
                 uint256(0),
-                abi.encodeWithSignature(
-                    "revokeRole(bytes32,address)", timelock.DEFAULT_ADMIN_ROLE(), address(multisig)
-                ),
+                revokeProposer,
                 bytes32(0),
                 bytes32(0),
                 uint256(2 days)
             )
         );
         vm.warp(block.timestamp + 2 days + 1);
-        timelock.execute(
-            address(timelock),
-            0,
-            abi.encodeWithSignature("revokeRole(bytes32,address)", timelock.DEFAULT_ADMIN_ROLE(), address(multisig)),
-            bytes32(0),
-            bytes32(0)
-        );
-        assertFalse(timelock.hasRole(timelock.DEFAULT_ADMIN_ROLE(), address(multisig)), "handoff is one proposal");
+        timelock.execute(address(timelock), 0, revokeProposer, bytes32(0), bytes32(0));
+        assertFalse(timelock.hasRole(timelock.PROPOSER_ROLE(), address(multisig)), "handoff is one proposal");
     }
 
     /// `Deploy.s.sol` used to default all three owners to the deployer, which `PeopleMultisig`
