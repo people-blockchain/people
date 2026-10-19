@@ -20,7 +20,7 @@
     "soldTarget": "曲线上共 {supply}",
     "buyers": "买家",
     "daysLeft": "剩余天数",
-    "daysLeftTarget": "共 {days} 天",
+    "daysLeftTarget": "最多 {days} 天（{months} 个月上限）",
     "none": "—",
     "notOpenYet": "尚未开放",
     "progressLabel": "距 {target} 毕业的进度"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "曲线",
-        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。最多 {days} 天内随时买卖。"
+        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。销售进行中可随时买卖——至全部 PPL 售完或满 {saleMonths} 个月，以先到者为准。"
       },
       {
         "title": "销售结束于 {graduation}",
@@ -134,8 +134,8 @@
         "body": "钱包间 PPL 转账与池交易在 {verified} 名已验证参与者时开放，不晚于 {months} 个月。"
       },
       {
-        "title": "{days} 天后",
-        "body": "若未达 {graduation}，已募集部分仍按 {liquidityShare}/{multisigShare} 分配，未售 PPL 全部进入社区池。"
+        "title": "销售结束时",
+        "body": "期限固定，不会延长。若未达 {graduation}，已募资金按 {liquidityShare}/{multisigShare} 分配，未售出 PPL 全部进入社区池，不退款。此前未售出 PPL 由项目多签保管，团队不动用。"
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "常见问题",
     "title": "问题与解答",
     "items": [
+      {
+        "q": "销售持续多久？",
+        "a": "至全部 PPL 售完或满 {saleMonths} 个月，以先到者为准。期限固定，不会延长。结束后未售出 PPL 进入社区池；不退款。此前由项目多签保管，团队不动用。"
+      },
       {
         "q": "可以将 PPL 卖回吗？",
         "a": "仅限已验证用户：每批持有 30 天、每日限额及 {fee} 费用；销售结束 后关闭。"

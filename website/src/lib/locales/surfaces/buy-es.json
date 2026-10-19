@@ -20,7 +20,7 @@
     "soldTarget": "de {supply} en la curva",
     "buyers": "Compradores",
     "daysLeft": "Días restantes",
-    "daysLeftTarget": "de {days}",
+    "daysLeftTarget": "máx. {days} (tope {months} meses)",
     "none": "—",
     "notOpenYet": "Aún no abierta",
     "progressLabel": "Progreso hacia el cierre de la venta en {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "La curva",
-        "body": "{supply} PPL en una curva pública desde {start} hasta un tope de {ceiling}. Compra y vende en cualquier momento, hasta {days} días."
+        "body": "{supply} PPL en una curva pública desde {start} hasta un tope de {ceiling}. Compra y vende en cualquier momento mientras dure la venta: hasta agotar PPL o durante {saleMonths} meses, lo que ocurra primero."
       },
       {
         "title": "Cierre de la venta en {graduation}",
@@ -134,8 +134,8 @@
         "body": "Las transferencias de PPL entre carteras y el trading en pool se abren con {verified} participantes verificados, y a más tardar en {months} meses."
       },
       {
-        "title": "Tras {days} días",
-        "body": "Si no se alcanza {graduation}, el mismo reparto {liquidityShare}/{multisigShare} aplica a lo recaudado, y todo PPL no vendido va al fondo comunitario."
+        "title": "Cuando termina la venta",
+        "body": "El plazo es fijo y no se prorrogará. Si no se alcanza {graduation}, lo recaudado se reparte {liquidityShare}/{multisigShare}, todo el PPL no vendido va al fondo comunitario y no hay reembolsos. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Preguntas, respondidas",
     "items": [
+      {
+        "q": "¿Cuánto dura la venta?",
+        "a": "Hasta que se vendan todos los PPL o durante {saleMonths} meses, lo que ocurra primero. El plazo es fijo y no se prorrogará. Al terminar, el PPL no vendido va al fondo comunitario; no hay reembolsos. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
+      },
       {
         "q": "¿Puedo vender PPL de vuelta?",
         "a": "Solo usuarios verificados: 30 días de retención por lote, límites diarios y comisión {fee}. Se cierra al graduarse la venta."

@@ -41,8 +41,14 @@ export const CAP_IS_CURVE_ONLY = true;
 /* ── Sale window, limits, fees ─────────────────────────────────────────── */
 
 export const SALE = {
-  /** Sale window. After this, whatever was raised is split the same 50/50 way. */
-  durationDays: 180,
+  /**
+   * Sale window: until all curve PPL is sold or this many months from open,
+   * whichever comes first (fixed term, no extensions). After it ends, unsold
+   * PPL goes to the community pool; whatever was raised is split 50/50.
+   */
+  durationMonths: 24,
+  /** Derived day cap for countdown UI and adapters (~24 calendar months). */
+  durationDays: 730,
   /** Max USD value of a single purchase. */
   maxPerBuyUsd: 500,
   /** Max USD value one person may buy in a rolling 24 hours. */

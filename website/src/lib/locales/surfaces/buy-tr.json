@@ -20,7 +20,7 @@
     "soldTarget": "eğrida {supply} hedefinin",
     "buyers": "Alıcılar",
     "daysLeft": "Kalan gün",
-    "daysLeftTarget": "{days} süresinin",
+    "daysLeftTarget": "en fazla {days} ({months} ay üst sınırı)",
     "none": "—",
     "notOpenYet": "Henüz açılmadı",
     "progressLabel": "{target} mezuniyetine ilerleme"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Eğri",
-        "body": "{supply} PPL, {start}'ten {ceiling} tavanına kadar halka açık eğride. {days} güne kadar istediğiniz zaman alın ve satın."
+        "body": "{supply} PPL, {start}'ten {ceiling} tavanına kadar halka açık eğride. Satış sürerken istediğiniz zaman alın ve satın — tüm PPL satılana veya {saleMonths} ay dolana kadar, hangisi önce gelirse."
       },
       {
         "title": "Satışın tamamlanması: {graduation}",
@@ -134,8 +134,8 @@
         "body": "Cüzdanlar arası PPL transferi ve havuz işlemi {verified} doğrulanmış katılımcıda, en geç {months} ay içinde açılır."
       },
       {
-        "title": "{days} gün sonra",
-        "body": "{graduation} ulaşılmazsa, toplanan için aynı {liquidityShare}/{multisigShare} bölünür; satılmayan tüm PPL topluluk havuzuna gider."
+        "title": "Satış bittiğinde",
+        "body": "Süre sabittir ve uzatılmaz. {graduation} toplanmazsa, toplanan {liquidityShare}/{multisigShare} bölünür, satılmayan tüm PPL topluluk havuzuna gider; iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "SSS",
     "title": "Sorular, yanıtlar",
     "items": [
+      {
+        "q": "Satış ne kadar sürer?",
+        "a": "Tüm PPL satılana veya {saleMonths} ay dolana kadar — hangisi önce gelirse. Süre sabittir ve uzatılmaz. Bittiğinde satılmayan PPL topluluk havuzuna gider; iade yoktur. O zamana kadar proje multisig'inde tutulur, ekip dokunmaz."
+      },
       {
         "q": "PPL’yi geri satabilir miyim?",
         "a": "Yalnızca doğrulanmış kullanıcılar: lot başına 30 günlük hold, günlük limitler ve {fee} ücret. Satış satışın tamamlanması olduğunda kapanır."

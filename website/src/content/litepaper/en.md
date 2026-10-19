@@ -225,4 +225,4 @@ Only verifiable public facts about other networks. Sources below.
 - Security: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - The treasury multisig is **2-of-3** and is created before mainnet.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
-- The PPL sale, once it opens, runs for a fixed **180 days**. After that anyone can finalize it, and the unsold PPL goes to the community pool — the same rule as for token curves.
+- The PPL sale, once it opens, runs until all PPL is sold or for **24 months**, whichever comes first. The term is fixed and will not be extended. After it ends, anyone can finalize it; unsold PPL goes to the community pool and there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it.

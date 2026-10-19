@@ -20,7 +20,7 @@
     "soldTarget": "of {supply} on the curve",
     "buyers": "Buyers",
     "daysLeft": "Days left",
-    "daysLeftTarget": "of {days}",
+    "daysLeftTarget": "of {days} max ({months}-month cap)",
     "none": "—",
     "notOpenYet": "Not open yet",
     "progressLabel": "Progress to the {target} graduation"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "The curve",
-        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time, for up to {days} days."
+        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time while the sale runs — until all PPL is sold or for {saleMonths} months, whichever comes first."
       },
       {
         "title": "Graduation at {graduation}",
@@ -134,8 +134,8 @@
         "body": "PPL transfers between wallets and pool trading open at {verified} verified participants, and no later than {months} months."
       },
       {
-        "title": "After {days} days",
-        "body": "If {graduation} is not reached, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, and every unsold PPL goes to the community pool."
+        "title": "When the sale ends",
+        "body": "The term is fixed and will not be extended. If {graduation} is not reached by then, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, every unsold PPL goes to the community pool, and there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Questions, answered",
     "items": [
+      {
+        "q": "How long does the sale run?",
+        "a": "Until all PPL is sold or for {saleMonths} months, whichever comes first. The term is fixed and will not be extended. After it ends, unsold PPL goes to the community pool; there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it."
+      },
       {
         "q": "Can I sell PPL back?",
         "a": "Verified users only: 30-day hold per lot, daily limits, and a {fee} fee. Sell-back closes when the sale graduates."

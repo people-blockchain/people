@@ -20,7 +20,7 @@
     "soldTarget": "von {supply} auf der Kurve",
     "buyers": "Käufer",
     "daysLeft": "Tage übrig",
-    "daysLeftTarget": "von {days}",
+    "daysLeftTarget": "max. {days} ({months}-Monats-Obergrenze)",
     "none": "—",
     "notOpenYet": "Noch nicht geöffnet",
     "progressLabel": "Fortschritt zur Abschluss des Verkaufs bei {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Die Kurve",
-        "body": "{supply} PPL auf einer öffentlichen Kurve von {start} bis Obergrenze {ceiling}. Jederzeit kaufen und verkaufen, bis zu {days} Tagen."
+        "body": "{supply} PPL auf einer öffentlichen Kurve von {start} bis Obergrenze {ceiling}. Jederzeit kaufen und verkaufen, solange der Verkauf läuft — bis alle PPL verkauft sind oder {saleMonths} Monate vergangen sind, je nachdem, was zuerst eintritt."
       },
       {
         "title": "Abschluss des Verkaufs bei {graduation}",
@@ -134,8 +134,8 @@
         "body": "PPL-Transfers zwischen Wallets und Pool-Trading öffnen bei {verified} verifizierten Teilnehmern, spätestens in {months} Monaten."
       },
       {
-        "title": "Nach {days} Tagen",
-        "body": "Wenn {graduation} nicht erreicht wird, gilt dieselbe Aufteilung {liquidityShare}/{multisigShare} auf das Eingenommene, und unverkaufte PPL gehen in den Community-Pool."
+        "title": "Wenn der Verkauf endet",
+        "body": "Die Laufzeit ist fest und wird nicht verlängert. Wenn {graduation} nicht erreicht wird, wird das Eingenommene {liquidityShare}/{multisigShare} geteilt, unverkaufte PPL gehen in den Community-Pool, keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Fragen und Antworten",
     "items": [
+      {
+        "q": "Wie lange läuft der Verkauf?",
+        "a": "Bis alle PPL verkauft sind oder {saleMonths} Monate vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach gehen unverkaufte PPL in den Community-Pool; keine Erstattungen. Bis dahin liegen sie im Projekt-Multisig, das Team greift nicht zu."
+      },
       {
         "q": "Kann ich PPL zurückverkaufen?",
         "a": "Nur verifizierte Nutzer: 30 Tage Haltedauer pro Los, Tageslimits und {fee} Gebühr. Schließt bei Abschluss des Verkaufs."

@@ -20,7 +20,7 @@
     "soldTarget": "de {supply} na curva",
     "buyers": "Compradores",
     "daysLeft": "Dias restantes",
-    "daysLeftTarget": "de {days}",
+    "daysLeftTarget": "máx. {days} (teto {months} meses)",
     "none": "—",
     "notOpenYet": "Ainda não aberta",
     "progressLabel": "Progresso até a graduação em {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "A curva",
-        "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda a qualquer momento, por até {days} dias."
+        "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda a qualquer momento enquanto a venda estiver aberta — até esgotar o PPL ou por {saleMonths} meses, o que vier primeiro."
       },
       {
         "title": "Encerramento da venda em {graduation}",
@@ -134,8 +134,8 @@
         "body": "Transferências de PPL entre carteiras e trading no pool abrem com {verified} participantes verificados, e no máximo em {months} meses."
       },
       {
-        "title": "Após {days} dias",
-        "body": "Se {graduation} não for atingido, a mesma divisão {liquidityShare}/{multisigShare} vale para o arrecadado, e todo PPL não vendido vai ao fundo comunitário."
+        "title": "Quando a venda termina",
+        "body": "O prazo é fixo e não será prorrogado. Se {graduation} não for atingido, o arrecadado é dividido {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Perguntas respondidas",
     "items": [
+      {
+        "q": "Quanto tempo dura a venda?",
+        "a": "Até vender todo o PPL ou por {saleMonths} meses, o que vier primeiro. O prazo é fixo e não será prorrogado. Ao terminar, PPL não vendido vai ao fundo comunitário; não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
+      },
       {
         "q": "Posso vender PPL de volta?",
         "a": "Só usuários verificados: retenção de 30 dias por lote, limites diários e taxa de {fee}. Fecha na encerramento da venda da venda."
