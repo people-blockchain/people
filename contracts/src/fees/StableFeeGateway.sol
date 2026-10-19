@@ -7,6 +7,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {Ownable2Step, Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
+import {PeopleConstants} from "../PeopleConstants.sol";
 
 /// @notice Read-only view onto `TokenFactory.tokenCreateFee()`. Declared `view` (not `pure`) on
 /// purpose: the deployed factory happens to return a constant today, but the gateway must not
@@ -90,6 +91,10 @@ contract StableFeeGateway is Ownable2Step, Pausable, ReentrancyGuard {
     error DailyCapExceeded(address payer);
     error InsufficientFloat(uint256 requested, uint256 available);
     error PplTransferFailed();
+    /// @notice `rescueERC20` was pointed at the native-PPL ERC-20 precompile.
+    error NativeTokenNotRescuable();
+    /// @notice A rescued token's transfer changed the gateway's native balance.
+    error NativeBalanceChanged();
 
     constructor(
         address owner_,
@@ -169,9 +174,16 @@ contract StableFeeGateway is Ownable2Step, Pausable, ReentrancyGuard {
     /// @notice Recover ERC-20s sent to the gateway by mistake. The PPL float is the gateway's
     /// native balance, which an ERC-20 transfer can never touch — `withdrawFloat` stays the only
     /// path for it. The gateway's own address is refused so this can't be pointed at itself.
+    /// On People chain the native PPL is also reachable as an ERC-20 precompile
+    /// (`PeopleConstants.NATIVE_PPL_ERC20`), where `transfer` moves native balance: that address
+    /// is refused outright, and the native balance must be identical before and after the token
+    /// call, so no other token contract can drain the float through this function either.
     function rescueERC20(address token, address to, uint256 amount) external onlyOwner nonReentrant {
         if (token == address(0) || to == address(0) || token == address(this)) revert ZeroAddress();
+        if (token == PeopleConstants.NATIVE_PPL_ERC20) revert NativeTokenNotRescuable();
+        uint256 nativeBefore = address(this).balance;
         IERC20(token).safeTransfer(to, amount);
+        if (address(this).balance != nativeBefore) revert NativeBalanceChanged();
         emit ERC20Rescued(token, to, amount);
     }
 
