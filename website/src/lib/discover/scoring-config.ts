@@ -27,6 +27,7 @@ export const DISCOVER_SCORING = {
   },
   rateLimits: {
     reactionsPerUserPerHour: 40,
+    followsPerUserPerHour: 60,
     questionsPerUserPerHour: 12,
     productClicksPerUserPerHour: 30,
     /** WEB-M2: project creation is the expensive one (external token lookup + a DB row per call). */
