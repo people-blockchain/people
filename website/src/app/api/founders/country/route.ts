@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { updateFounderCountry } from "@/lib/founders/service";
@@ -11,7 +11,7 @@ export async function PATCH(request: Request) {
   if (!guard.ok) return guard.response;
 
   const key = `${guard.userId}:${clientIp(request)}`;
-  if (!checkSlidingWindowRateLimit("founders-country-update", key, 5, 60 * 60 * 1000)) {
+  if (!(await checkRateLimitDurableFirst("founders-country-update", key, 5, 60 * 60 * 1000))) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 

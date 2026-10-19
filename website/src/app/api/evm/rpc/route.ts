@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { evmJsonRpcMethodsAllowed } from "@/lib/evm/json-rpc-allowlist";
@@ -15,12 +15,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "evm_rpc_unconfigured" }, { status: 503 });
   }
   if (
-    !checkSlidingWindowRateLimit(
+    !(await checkRateLimitDurableFirst(
       "evm-rpc-proxy",
       clientIpFromRequest(request),
       RATE_LIMIT,
       RATE_WINDOW_MS,
-    )
+    ))
   ) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }

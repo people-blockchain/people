@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { setPublicProfileOptIn } from "@/lib/founders/transparency";
@@ -16,12 +16,12 @@ export async function POST(request: Request) {
   if (!guard.ok) return guard.response;
 
   if (
-    !checkSlidingWindowRateLimit(
+    !(await checkRateLimitDurableFirst(
       "founders-profile-visibility",
       `${guard.userId}:${clientIp(request)}`,
       10,
       60 * 60 * 1000,
-    )
+    ))
   ) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }

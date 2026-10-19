@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import { clientIp, discoverApiGuard } from "@/lib/discover/api-guard";
 import { firstProjectFieldError } from "@/lib/discover/field-limits";
 import { DISCOVER_SCORING } from "@/lib/discover/scoring-config";
@@ -61,24 +61,24 @@ export async function POST(request: Request) {
   const { rateLimits } = DISCOVER_SCORING;
   const ip = clientIp(request);
   const limited =
-    !checkSlidingWindowRateLimit(
+    !(await checkRateLimitDurableFirst(
       "discover-project-create",
       guard.userId,
       rateLimits.projectsPerUserPerHour,
       HOUR_MS,
-    ) ||
-    !checkSlidingWindowRateLimit(
+    )) ||
+    !(await checkRateLimitDurableFirst(
       "discover-project-create-day",
       guard.userId,
       rateLimits.projectsPerUserPerDay,
       DAY_MS,
-    ) ||
-    !checkSlidingWindowRateLimit(
+    )) ||
+    !(await checkRateLimitDurableFirst(
       "discover-project-create-ip",
       ip,
       rateLimits.projectsPerIpPerHour,
       HOUR_MS,
-    );
+    ));
   if (limited) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
