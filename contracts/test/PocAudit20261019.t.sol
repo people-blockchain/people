@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
+import {Vm} from "forge-std/Vm.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {PeopleProtocolRegistry} from "../src/PeopleProtocolRegistry.sol";
@@ -153,6 +154,62 @@ contract PocAudit20261019_ReRegisterTest is PocCurveBase {
 
         assertEq(_curveHash(token), hashBefore, "state not reset");
         assertEq(_reserve(token), reserveBefore, "reserve accounting not reset");
+    }
+
+    function test_communityVault_swappedFactoryCannotReRegister() public {
+        address token = _launch();
+        assertTrue(vault.registered(token), "registered at launch");
+        uint256 balance0 = vault.balances(token);
+        assertGt(balance0, 0, "community allocation funded at launch");
+
+        // A swapped-in factory tries to zero (freeze) the allocation, then to inflate it.
+        registry.setTokenFactory(evilFactory);
+        vm.startPrank(evilFactory);
+        vm.expectRevert(CommunityTokenVault.AlreadyRegistered.selector);
+        vault.register(token, 0);
+        vm.expectRevert(CommunityTokenVault.AlreadyRegistered.selector);
+        vault.register(token, type(uint128).max);
+        vm.stopPrank();
+        assertEq(vault.balances(token), balance0, "balance untouched");
+    }
+
+    /// The guard must not be `balances[token] != 0`: after a full withdraw the balance is
+    /// legitimately zero and the allocation must still not be re-creatable.
+    function test_communityVault_guardHoldsAfterFullWithdraw() public {
+        address token = _launch();
+        uint256 balance0 = vault.balances(token);
+        vault.setRecipientAllowed(sweepTo, true);
+        vault.withdraw(token, sweepTo, balance0);
+        assertEq(vault.balances(token), 0, "fully withdrawn");
+
+        registry.setTokenFactory(evilFactory);
+        vm.prank(evilFactory);
+        vm.expectRevert(CommunityTokenVault.AlreadyRegistered.selector);
+        vault.register(token, balance0);
+        assertEq(vault.balances(token), 0, "no phantom balance created");
+    }
+
+    function test_communityVault_registerStillWorksOncePerToken() public {
+        address freshToken = address(0xABCD);
+        assertFalse(vault.registered(freshToken));
+        vm.prank(address(tokenFactory));
+        vault.register(freshToken, 5 ether);
+        assertTrue(vault.registered(freshToken));
+        assertEq(vault.balances(freshToken), 5 ether);
+    }
+
+    function test_curve_registerTokenRejectsNativePplPrecompileAndCodelessTokens() public {
+        registry.setTokenFactory(evilFactory);
+        vm.startPrank(evilFactory);
+        vm.expectRevert(BondingCurveMarket.InvalidToken.selector);
+        curve.registerToken(PeopleConstants.NATIVE_PPL_ERC20, 1_000 ether, 1_000 ether, 1_000 ether, 0);
+        vm.expectRevert(BondingCurveMarket.InvalidToken.selector);
+        curve.registerToken(address(0xBEEF), 1_000 ether, 1_000 ether, 1_000 ether, 0);
+        vm.expectRevert(BondingCurveMarket.InvalidToken.selector);
+        curve.registerToken(address(0), 1_000 ether, 1_000 ether, 1_000 ether, 0);
+        vm.stopPrank();
+        assertEq(curve.launchedAt(PeopleConstants.NATIVE_PPL_ERC20), 0, "precompile never registered");
+        assertEq(curve.launchedAt(address(0xBEEF)), 0, "EOA never registered");
     }
 }
 
@@ -334,6 +391,19 @@ contract PocAudit20261019_SweepTest is PocCurveBase {
         curve.sweepNativeDust(tokenA, sweepTo);
     }
 
+    function test_migration_zeroesCurveReserve_accountingMatchesRemainingCurves() public {
+        address tokenA = _launch();
+        address tokenB = _launch();
+        _buy(buyer2, tokenB, 10 ether);
+        uint256 reserveB = _reserve(tokenB);
+        assertGt(reserveB, 0);
+
+        _migrate(tokenA);
+        assertEq(_reserve(tokenA), 0, "migrated curve reports no reserve");
+        assertEq(curve.totalAccountedNative(), reserveB, "accounted == sum over non-migrated curves");
+        assertEq(address(curve).balance, reserveB);
+    }
+
     function test_sweep_secondSweepHasNothingLeft() public {
         (address token,) = _finalizeWithBuyer(1 ether);
         _forceSend(2 ether);
@@ -346,6 +416,17 @@ contract PocAudit20261019_SweepTest is PocCurveBase {
 // -------------------------------------------------------------------------------------
 // 4b. StableFeeGateway.rescueERC20
 // -------------------------------------------------------------------------------------
+/// Stand-in for the native-PPL ERC-20 precompile: its `transfer` moves the caller's native
+/// balance (simulated with the `deal` cheatcode, which works from any address under forge).
+contract NativeDrainingToken {
+    Vm private constant VM = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
+
+    function transfer(address, uint256) external returns (bool) {
+        VM.deal(msg.sender, msg.sender.balance - 1 ether);
+        return true;
+    }
+}
+
 contract PocAudit20261019_GatewayRescueTest is Test {
     StableFeeGateway internal gateway;
     TestStablecoin internal stray;
@@ -397,6 +478,35 @@ contract PocAudit20261019_GatewayRescueTest is Test {
         gateway.rescueERC20(address(gateway), rescueTo, 1);
         vm.stopPrank();
         assertEq(address(gateway).balance, FLOAT);
+    }
+
+    function test_rescueRejectsNativePplPrecompile() public {
+        vm.prank(owner);
+        vm.expectRevert(StableFeeGateway.NativeTokenNotRescuable.selector);
+        gateway.rescueERC20(PeopleConstants.NATIVE_PPL_ERC20, rescueTo, FLOAT);
+        assertEq(address(gateway).balance, FLOAT, "float unchanged");
+        assertEq(rescueTo.balance, 0);
+    }
+
+    /// Under forge the precompile does not exist; etch a native-draining "token" at its address
+    /// to prove the address is refused before any call is made.
+    function test_rescueRejectsNativePplPrecompile_evenWhenItWouldDrainTheFloat() public {
+        vm.etch(PeopleConstants.NATIVE_PPL_ERC20, address(new NativeDrainingToken()).code);
+        vm.prank(owner);
+        vm.expectRevert(StableFeeGateway.NativeTokenNotRescuable.selector);
+        gateway.rescueERC20(PeopleConstants.NATIVE_PPL_ERC20, rescueTo, FLOAT);
+        assertEq(address(gateway).balance, FLOAT, "float unchanged");
+    }
+
+    /// Any other token whose `transfer` moves the gateway's native balance is caught by the
+    /// before/after balance check, and the whole rescue reverts.
+    function test_rescueRejectsTokenThatChangesNativeBalance() public {
+        NativeDrainingToken drainer = new NativeDrainingToken();
+        vm.prank(owner);
+        vm.expectRevert(StableFeeGateway.NativeBalanceChanged.selector);
+        gateway.rescueERC20(address(drainer), rescueTo, 1);
+        // No balance assertion afterwards: the mock drains via the `deal` cheatcode, which a
+        // revert does not undo (a real precompile transfer is rolled back with the call).
     }
 
     function test_rescueCannotMoveNativeFloat_withdrawFloatIsTheOnlyWayOut() public {
