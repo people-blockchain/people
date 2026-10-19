@@ -99,7 +99,7 @@ contract Reaudit20261009Test is Test {
         uint256 kBefore = _snapshot(token).invariantK;
 
         vm.prank(trader);
-        bondingCurve.buy{value: 5 ether}(token, 0);
+        bondingCurve.buy{value: 5 ether}(token, 1, block.timestamp);
         uint256 tokensHeld = t.balanceOf(trader);
         assertGt(tokensHeld, 0);
         assertGe(_snapshot(token).invariantK, kBefore, "k must not decrease on buy");
@@ -114,7 +114,7 @@ contract Reaudit20261009Test is Test {
         vm.prank(trader);
         t.approve(address(bondingCurve), sellAmount);
         vm.prank(trader);
-        bondingCurve.sell(token, sellAmount, 0);
+        bondingCurve.sell(token, sellAmount, 1, block.timestamp);
 
         assertEq(t.balanceOf(trader), tokensHeld - sellAmount, "sold tokens left the seller");
         assertEq(
@@ -142,14 +142,14 @@ contract Reaudit20261009Test is Test {
         PeopleProjectToken t = PeopleProjectToken(token);
 
         vm.prank(trader);
-        bondingCurve.buy{value: 1 ether}(token, 0);
+        bondingCurve.buy{value: 1 ether}(token, 1, block.timestamp);
         uint256 tokensHeld = t.balanceOf(trader);
 
         vm.prank(trader);
         t.approve(address(bondingCurve), type(uint256).max);
         vm.prank(trader);
         vm.expectRevert();
-        bondingCurve.sell(token, tokensHeld * 1000, 0);
+        bondingCurve.sell(token, tokensHeld * 1000, 1, block.timestamp);
     }
 
     /// @notice Drive the curve to migration with a large buy, then check: the ecosystem reserve
@@ -170,7 +170,7 @@ contract Reaudit20261009Test is Test {
         // A large buy relative to the curve inventory triggers migration (threshold is
         // `curveInventory0 / 3`, see `CurveMath.initialState`).
         vm.prank(trader);
-        bondingCurve.buy{value: 500 ether}(token, 0);
+        bondingCurve.buy{value: 500 ether}(token, 1, block.timestamp);
         assertTrue(bondingCurve.isMigrated(token), "expected migration to have fired");
 
         CurveSnapshot memory after_ = _snapshot(token);
@@ -185,13 +185,13 @@ contract Reaudit20261009Test is Test {
 
         vm.prank(trader);
         vm.expectRevert(BondingCurveMarket.UnknownToken.selector);
-        bondingCurve.buy{value: 1 ether}(token, 0);
+        bondingCurve.buy{value: 1 ether}(token, 1, block.timestamp);
 
         vm.prank(trader);
         t.approve(address(bondingCurve), 1);
         vm.prank(trader);
         vm.expectRevert(BondingCurveMarket.UnknownToken.selector);
-        bondingCurve.sell(token, 1, 0);
+        bondingCurve.sell(token, 1, 1, block.timestamp);
     }
 
     /// @notice `withdrawEcosystemReserve` is `onlyOwner` — confirm a non-owner (e.g. the token

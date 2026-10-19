@@ -75,7 +75,7 @@ contract AuditMediumsCTest is Test {
 
         // A buy large enough to cross the migration threshold (curveInventory0 / 3).
         vm.prank(trader);
-        bondingCurve.buy{value: 500 ether}(token, 0);
+        bondingCurve.buy{value: 500 ether}(token, 1, block.timestamp);
         assertTrue(bondingCurve.isMigrated(token), "expected migration to have fired");
 
         uint256 tokensToTrader = t.balanceOf(trader);

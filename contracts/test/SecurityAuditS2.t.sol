@@ -78,6 +78,10 @@ contract SecurityAuditS2Test is Test {
 
         vm.warp(block.timestamp + escrow.DISPUTE_AUTO_CLOSE_WINDOW() + 1);
         escrow.autoCloseDispute(id);
+        vm.prank(customer);
+        escrow.withdrawPending();
+        vm.prank(merchant);
+        escrow.withdrawPending();
 
         // Pre-fix: customer.balance == 5 ether (full refund, the free win).
         // Post-fix: the 2 ether is split 50/50.

@@ -60,7 +60,7 @@ TOKEN="$(cast parse-bytes32-address "$TOKEN_TOPIC")"
 echo "token=$TOKEN"
 
 echo "==> curve buy 1 PPL"
-cast send "$CURVE" 'buy(address,uint256)' "$TOKEN" 0 --value 1ether --private-key "$PK" --rpc-url "$RPC" >/dev/null
+cast send "$CURVE" 'buy(address,uint256,uint256)' "$TOKEN" 1 "$(( $(date +%s) + 3600 ))" --value 1ether --private-key "$PK" --rpc-url "$RPC" >/dev/null
 
 echo "==> listing before curve migration (expect revert, M07-2)"
 TOKEN_AMT=1000000

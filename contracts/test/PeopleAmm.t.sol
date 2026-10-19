@@ -129,7 +129,7 @@ contract PeopleAmmTest is Test {
     function test_cannotPrecreatePairBeforeMigration() public {
         PeopleProjectToken t = _peopleToken();
         vm.startPrank(mallory);
-        curve.buy{value: 20 ether}(address(t), 0);
+        curve.buy{value: 20 ether}(address(t), 1, block.timestamp);
         vm.expectRevert(abi.encodeWithSelector(PeopleAmmFactory.CurveNotMigrated.selector, address(t)));
         ammFactory.createPair(address(t), address(wppl));
 
@@ -143,7 +143,7 @@ contract PeopleAmmTest is Test {
     function test_migrationLiquidityIsLockedAtDead() public {
         PeopleProjectToken t = _peopleToken();
         vm.prank(alice);
-        curve.buy{value: 200 ether}(address(t), 0);
+        curve.buy{value: 200 ether}(address(t), 1, block.timestamp);
         assertTrue(curve.isMigrated(address(t)));
         PeoplePair pair = PeoplePair(ammFactory.getPair(address(t), address(wppl)));
         assertTrue(address(pair) != address(0));
