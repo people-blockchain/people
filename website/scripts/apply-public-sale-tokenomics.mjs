@@ -18,14 +18,14 @@ const patchByLang = {
     curveLead:
       "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. Graduation closes the curve at $4M raised.",
     unsoldBody:
-      "After 180 days, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool. The same unsold rule applies to every token launched on PEOPLE.",
+      "The sale runs until all PPL is sold or for 24 months, whichever comes first. The term is fixed and will not be extended. After it ends, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool; there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it. Token curves on PEOPLE keep their own 180-day finalize rule for unsold tokens.",
     salePublicTitle: "Published sale parameters",
     salePublicBody:
       "Prices, limits and the curve formula are public on /buy. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet does not commit you to anything.",
     salePublicCta: "Open the /buy page",
     saleCurveBullets: [
       "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
-      "Graduation at $4,000,000 raised; 180-day sale window, then unsold PPL to the community pool.",
+      "Graduation at $4,000,000 raised. Sale runs until all PPL is sold or 24 months (fixed term); then unsold PPL to the community pool.",
       "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
       "Sell-back allowed with a 1.5% fee to PPL buyback. Limits: $500 per buy, $2,000 per person per day, 60s cooldown.",
     ],
@@ -41,14 +41,14 @@ const patchByLang = {
     curveLead:
       "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Выпуск закрывается при сборе $4M.",
     unsoldBody:
-      "Через 180 дней собранное делится 50/50 между заблокированной LP и мультисигом проекта, а непроданные PPL на кривой уходят в пул сообщества. То же правило — для любого токена, запущенного в PEOPLE.",
+      "Продажа идёт, пока не распроданы все PPL или не истекут 24 месяца — что наступит раньше. Срок фиксирован и не продлевается. После окончания собранное делится 50/50 между заблокированной LP и мультисигом проекта, непроданные PPL на кривой уходят в пул сообщества; возвратов нет. До этого непроданные PPL хранятся в мультисиге проекта, команда их не трогает. У кривых токенов на PEOPLE остаётся своё правило финализации через 180 дней для непроданного остатка.",
     salePublicTitle: "Опубликованные параметры продажи",
     salePublicBody:
       "Цены, лимиты и формула кривой публичны на /buy. Покупка отключена, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает.",
     salePublicCta: "Открыть страницу /buy",
     saleCurveBullets: [
       "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
-      "Выпуск при $4 000 000 собранных; окно продажи 180 дней, затем непроданные PPL — в пул сообщества.",
+      "Выпуск при $4 000 000 собранных. Продажа — пока не распроданы все PPL или 24 месяца (фиксированный срок); затем непроданные PPL — в пул сообщества.",
       "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
       "Обратная продажа разрешена; комиссия 1,5% на buyback PPL. Лимиты: $500 за покупку, $2000 на человека в сутки, пауза 60 с.",
     ],
@@ -64,14 +64,14 @@ const patchByLang = {
     curveLead:
       "Curva exponencial: el precio empieza en $0,005 por PPL y sube con cada compra, hasta un tope de $0,25 mientras la curva esté abierta. La graduación cierra la curva al reunir $4M.",
     unsoldBody:
-      "Tras 180 días, lo recaudado se reparte 50/50 entre LP bloqueada y el multisig del proyecto, y cualquier PPL no vendido en la curva va al fondo comunitario. La misma regla aplica a todo token lanzado en PEOPLE.",
+      "La venta dura hasta que se vendan todos los PPL o durante 24 meses, lo que ocurra primero. El plazo es fijo y no se prorrogará. Al terminar, lo recaudado se reparte 50/50 entre LP bloqueada y el multisig del proyecto, y cualquier PPL no vendido en la curva va al fondo comunitario; no hay reembolsos. Hasta entonces, los PPL no vendidos permanecen en el multisig del proyecto y el equipo no los toca. Las curvas de tokens en PEOPLE conservan su propia regla de cierre a los 180 días para lo no vendido.",
     salePublicTitle: "Parámetros publicados de la venta",
     salePublicBody:
       "Precios, límites y la fórmula de la curva son públicos en /buy. Las compras siguen desactivadas hasta desplegar el contrato hub de la venta; conectar la cartera no te compromete a nada.",
     salePublicCta: "Abrir la página /buy",
     saleCurveBullets: [
       "100.000.000 PPL en la curva (10% de la oferta); inicio $0,005, subida exponencial, tope $0,25 solo en la curva.",
-      "Graduación al reunir $4.000.000; ventana de venta de 180 días; luego PPL no vendido al fondo comunitario.",
+      "Graduación al reunir $4.000.000. La venta dura hasta agotar PPL o 24 meses (plazo fijo); luego PPL no vendido al fondo comunitario.",
       "Recaudación 50% liquidez bloqueada / 50% multisig del proyecto; tokens LP bloqueados 24 meses.",
       "Reventa a la curva permitida con comisión del 1,5% para buyback de PPL. Límites: $500 por compra, $2000 por persona al día, pausa de 60 s.",
     ],
@@ -87,14 +87,14 @@ const patchByLang = {
     curveLead:
       "Curva exponencial: o preço começa em $0,005 por PPL e sobe a cada compra, até um teto de $0,25 enquanto a curva estiver aberta. A graduação fecha a curva ao arrecadar $4M.",
     unsoldBody:
-      "Após 180 dias, o arrecadado é dividido 50/50 entre LP bloqueada e o multisig do projeto, e qualquer PPL não vendido na curva vai para o fundo comunitário. A mesma regra vale para todo token lançado na PEOPLE.",
+      "A venda segue até vender todo o PPL ou por 24 meses, o que vier primeiro. O prazo é fixo e não será prorrogado. Ao terminar, o arrecadado é dividido 50/50 entre LP bloqueada e o multisig do projeto, e qualquer PPL não vendido na curva vai para o fundo comunitário; não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca. Curvas de tokens na PEOPLE mantêm a própria regra de finalização em 180 dias para o não vendido.",
     salePublicTitle: "Parâmetros publicados da venda",
     salePublicBody:
       "Preços, limites e a fórmula da curva são públicos em /buy. Compras permanecem desativadas até o contrato hub da venda ser implantado; conectar a carteira não te compromete com nada.",
     salePublicCta: "Abrir a página /buy",
     saleCurveBullets: [
       "100.000.000 PPL na curva (10% da oferta); início $0,005, alta exponencial, teto $0,25 só na curva.",
-      "Graduação ao arrecadar $4.000.000; janela de venda de 180 dias; depois PPL não vendido vai ao fundo comunitário.",
+      "Graduação ao arrecadar $4.000.000. Venda até esgotar PPL ou 24 meses (prazo fixo); depois PPL não vendido vai ao fundo comunitário.",
       "Arrecadação 50% liquidez bloqueada / 50% multisig do projeto; tokens LP bloqueados por 24 meses.",
       "Revenda à curva permitida com taxa de 1,5% para buyback de PPL. Limites: $500 por compra, $2000 por pessoa por dia, pausa de 60 s.",
     ],
@@ -110,14 +110,14 @@ const patchByLang = {
     curveLead:
       "Courbe exponentielle : le prix démarre à 0,005 $ par PPL et monte à chaque achat, jusqu'à un plafond de 0,25 $ tant que la courbe est ouverte. La graduation ferme la courbe à 4 M$ levés.",
     unsoldBody:
-      "Après 180 jours, les fonds levés sont partagés 50/50 entre LP verrouillée et multisig du projet, et tout PPL invendu sur la courbe va au fonds communautaire. Même règle pour tout jeton lancé sur PEOPLE.",
+      "La vente dure jusqu'à ce que tous les PPL soient vendus ou pendant 24 mois, selon la première échéance. Le délai est fixe et ne sera pas prolongé. À la fin, les fonds levés sont partagés 50/50 entre LP verrouillée et multisig du projet, et tout PPL invendu sur la courbe va au fonds communautaire ; aucun remboursement. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas. Les courbes de jetons sur PEOPLE gardent leur propre règle de finalisation à 180 jours pour l'invendu.",
     salePublicTitle: "Paramètres de vente publiés",
     salePublicBody:
       "Prix, limites et formule de la courbe sont publics sur /buy. Les achats restent désactivés tant que le contrat hub de vente n'est pas déployé ; connecter un portefeuille ne vous engage à rien.",
     salePublicCta: "Ouvrir la page /buy",
     saleCurveBullets: [
       "100 000 000 PPL sur la courbe (10 % de l'offre) ; départ 0,005 $, hausse exponentielle, plafond 0,25 $ sur la courbe seulement.",
-      "Graduation à 4 000 000 $ levés ; fenêtre de vente de 180 jours ; PPL invendu vers le fonds communautaire.",
+      "Graduation à 4 000 000 $ levés. Vente jusqu'à épuisement des PPL ou 24 mois (délai fixe) ; PPL invendu vers le fonds communautaire.",
       "Levée 50 % liquidité verrouillée / 50 % multisig projet ; jetons LP verrouillés 24 mois.",
       "Revente à la courbe autorisée avec frais de 1,5 % pour le buyback PPL. Limites : 500 $ par achat, 2 000 $ par personne et par jour, pause de 60 s.",
     ],
@@ -133,14 +133,14 @@ const patchByLang = {
     curveLead:
       "Exponentialkurve: Der Preis startet bei 0,005 $ pro PPL und steigt mit jedem Kauf bis zu einer Obergrenze von 0,25 $, solange die Kurve offen ist. Graduation schließt die Kurve bei 4 M$ Einnahmen.",
     unsoldBody:
-      "Nach 180 Tagen wird das Eingenommene 50/50 zwischen gesperrter LP und Projekt-Multisig geteilt; nicht verkaufte PPL auf der Kurve gehen in den Community-Pool. Gleiche Regel für jeden auf PEOPLE gestarteten Token.",
+      "Der Verkauf läuft, bis alle PPL verkauft sind oder 24 Monate vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach wird das Eingenommene 50/50 zwischen gesperrter LP und Projekt-Multisig geteilt; nicht verkaufte PPL auf der Kurve gehen in den Community-Pool; keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu. Token-Kurven auf PEOPLE behalten ihre eigene 180-Tage-Finalisierungsregel für Unverkauftes.",
     salePublicTitle: "Veröffentlichte Verkaufsparameter",
     salePublicBody:
       "Preise, Limits und Kurvenformel sind öffentlich auf /buy. Käufe bleiben deaktiviert, bis der Sale-Hub-Vertrag deployed ist; Wallet verbinden verpflichtet zu nichts.",
     salePublicCta: "Seite /buy öffnen",
     saleCurveBullets: [
       "100.000.000 PPL auf der Kurve (10 % des Angebots); Start 0,005 $, exponentieller Anstieg, Deckel 0,25 $ nur auf der Kurve.",
-      "Graduation bei 4.000.000 $ Einnahmen; 180-Tage-Verkaufsfenster, danach unverkaufte PPL in den Community-Pool.",
+      "Graduation bei 4.000.000 $ Einnahmen. Verkauf bis Ausverkauf oder 24 Monate (feste Laufzeit); danach unverkaufte PPL in den Community-Pool.",
       "Einnahmen 50 % gesperrte Liquidität / 50 % Projekt-Multisig; LP-Tokens 24 Monate gesperrt.",
       "Rückverkauf an die Kurve mit 1,5 % Gebühr für PPL-Buyback. Limits: 500 $ pro Kauf, 2.000 $ pro Person und Tag, 60 s Pause.",
     ],
@@ -156,14 +156,14 @@ const patchByLang = {
     curveLead:
       "Curva esponenziale: il prezzo parte da $0,005 per PPL e sale a ogni acquisto, fino a un tetto di $0,25 mentre la curva è aperta. La graduation chiude la curva a $4M raccolti.",
     unsoldBody:
-      "Dopo 180 giorni, quanto raccolto è diviso 50/50 tra LP bloccata e multisig del progetto; ogni PPL non venduto sulla curva va al fondo community. Stessa regola per ogni token lanciato su PEOPLE.",
+      "La vendita dura finché non si vendono tutti i PPL o per 24 mesi, a seconda di cosa avviene prima. Il termine è fisso e non sarà prorogato. Alla fine, quanto raccolto è diviso 50/50 tra LP bloccata e multisig del progetto; ogni PPL non venduto sulla curva va al fondo community; nessun rimborso. Fino ad allora i PPL non venduti restano nel multisig del progetto e il team non li tocca. Le curve dei token su PEOPLE mantengono la propria regola di finalizzazione a 180 giorni per l'invenduto.",
     salePublicTitle: "Parametri di vendita pubblicati",
     salePublicBody:
       "Prezzi, limiti e formula della curva sono pubblici su /buy. Gli acquisti restano disabilitati finché non è deployato il contratto hub della vendita; connettere il wallet non impegna a nulla.",
     salePublicCta: "Apri la pagina /buy",
     saleCurveBullets: [
       "100.000.000 PPL sulla curva (10% dell'offerta); partenza $0,005, crescita esponenziale, tetto $0,25 solo sulla curva.",
-      "Graduation a $4.000.000 raccolti; finestra di vendita 180 giorni; poi PPL non venduto al fondo community.",
+      "Graduation a $4.000.000 raccolti. Vendita fino a esaurimento PPL o 24 mesi (termine fisso); poi PPL non venduto al fondo community.",
       "Raccolta 50% liquidità bloccata / 50% multisig progetto; token LP bloccati 24 mesi.",
       "Rivendita alla curva consentita con commissione 1,5% per buyback PPL. Limiti: $500 per acquisto, $2000 a persona al giorno, pausa 60 s.",
     ],
@@ -179,14 +179,14 @@ const patchByLang = {
     curveLead:
       "Üstel eğri: fiyat PPL başına $0,005'ten başlar ve eğri açıkken her alımla $0,25 tavanına kadar yükselir. Mezuniyet eğriyi $4M toplanınca kapatır.",
     unsoldBody:
-      "180 gün sonra toplanan tutar %50 kilitli LP / %50 proje multisig arasında bölünür; eğrida satılmayan PPL topluluk havuzuna gider. PEOPLE'da başlatılan her token için aynı kural.",
+      "Satış, tüm PPL satılana veya 24 ay dolana kadar — hangisi önce gelirse — sürer. Süre sabittir ve uzatılmaz. Bittiğinde toplanan tutar %50 kilitli LP / %50 proje multisig arasında bölünür; eğrida satılmayan PPL topluluk havuzuna gider; iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz. PEOPLE'daki token eğrileri satılmayan için kendi 180 günlük finalize kuralını korur.",
     salePublicTitle: "Yayınlanan satış parametreleri",
     salePublicBody:
       "Fiyatlar, limitler ve eğri formülü /buy'da herkese açıktır. Satış hub sözleşmesi deploy edilene kadar alımlar kapalıdır; cüzdan bağlamak sizi hiçbir şeye bağlamaz.",
     salePublicCta: "/buy sayfasını aç",
     saleCurveBullets: [
       "Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.",
-      "$4.000.000 toplanınca mezuniyet; 180 günlük satış penceresi; ardından satılmayan PPL topluluk havuzuna.",
+      "$4.000.000 toplanınca mezuniyet. Satış PPL tükenene veya 24 aya kadar (sabit süre); ardından satılmayan PPL topluluk havuzuna.",
       "Toplanan %50 kilitli likidite / %50 proje multisig; LP tokenları 24 ay kilitli.",
       "Eğriye geri satışa izin; PPL buyback için %1,5 ücret. Limitler: alım başına $500, kişi başına günde $2000, 60 sn bekleme.",
     ],
@@ -202,14 +202,14 @@ const patchByLang = {
     curveLead:
       "Đường cong mũ: giá bắt đầu $0,005 mỗi PPL và tăng theo mỗi lần mua, tới trần $0,25 khi đường cong mở. Tốt nghiệp đóng đường cong ở mức gom $4M.",
     unsoldBody:
-      "Sau 180 ngày, số tiền gom được chia 50/50 giữa LP khóa và multisig dự án; PPL chưa bán trên đường cong vào quỹ cộng đồng. Cùng quy tắc cho mọi token ra mắt trên PEOPLE.",
+      "Đợt bán chạy đến khi bán hết PPL hoặc trong 24 tháng, tùy điều kiện nào đến trước. Thời hạn cố định và không gia hạn. Khi kết thúc, số tiền gom được chia 50/50 giữa LP khóa và multisig dự án; PPL chưa bán trên đường cong vào quỹ cộng đồng; không hoàn tiền. Trước đó PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào. Đường cong token trên PEOPLE giữ quy tắc finalize 180 ngày riêng cho phần chưa bán.",
     salePublicTitle: "Tham số bán hàng đã công bố",
     salePublicBody:
       "Giá, giới hạn và công thức đường cong công khai trên /buy. Mua hàng vẫn tắt cho đến khi hub hợp đồng bán được triển khai; kết nối ví không ràng buộc gì.",
     salePublicCta: "Mở trang /buy",
     saleCurveBullets: [
       "100.000.000 PPL trên đường cong (10% cung); bắt đầu $0,005, tăng mũ, trần $0,25 chỉ trên đường cong.",
-      "Tốt nghiệp khi gom $4.000.000; cửa sổ bán 180 ngày; sau đó PPL chưa bán vào quỹ cộng đồng.",
+      "Tốt nghiệp khi gom $4.000.000. Bán đến hết PPL hoặc 24 tháng (thời hạn cố định); sau đó PPL chưa bán vào quỹ cộng đồng.",
       "Gom 50% thanh khoản khóa / 50% multisig dự án; token LP khóa 24 tháng.",
       "Cho phép bán lại đường cong với phí 1,5% cho buyback PPL. Giới hạn: $500 mỗi lần mua, $2000 mỗi người mỗi ngày, nghỉ 60 giây.",
     ],
@@ -225,14 +225,14 @@ const patchByLang = {
     curveLead:
       "Kurva eksponensial: harga mulai $0,005 per PPL dan naik setiap pembelian, hingga batas $0,25 selama kurva terbuka. Graduation menutup kurva saat terkumpul $4M.",
     unsoldBody:
-      "Setelah 180 hari, dana terkumpul dibagi 50/50 antara LP terkunci dan multisig proyek; PPL tidak terjual di kurva masuk ke kolam komunitas. Aturan sama untuk setiap token diluncurkan di PEOPLE.",
+      "Penjualan berjalan sampai semua PPL terjual atau selama 24 bulan, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah berakhir, dana terkumpul dibagi 50/50 antara LP terkunci dan multisig proyek; PPL tidak terjual di kurva masuk ke kolam komunitas; tidak ada pengembalian dana. Sampai saat itu PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya. Kurva token di PEOPLE mempertahankan aturan finalisasi 180 hari sendiri untuk yang tidak terjual.",
     salePublicTitle: "Parameter penjualan yang dipublikasikan",
     salePublicBody:
       "Harga, batas, dan rumus kurva publik di /buy. Pembelian tetap nonaktif sampai kontrak hub penjualan di-deploy; menghubungkan dompet tidak mengikat Anda.",
     salePublicCta: "Buka halaman /buy",
     saleCurveBullets: [
       "100.000.000 PPL di kurva (10% pasokan); awal $0,005, kenaikan eksponensial, batas $0,25 hanya di kurva.",
-      "Graduation saat terkumpul $4.000.000; jendela penjualan 180 hari; lalu PPL tidak terjual ke kolam komunitas.",
+      "Graduation saat terkumpul $4.000.000. Penjualan sampai PPL habis atau 24 bulan (jangka tetap); lalu PPL tidak terjual ke kolam komunitas.",
       "Dana 50% likuiditas terkunci / 50% multisig proyek; token LP terkunci 24 bulan.",
       "Jual kembali ke kurva diizinkan dengan biaya 1,5% untuk buyback PPL. Batas: $500 per beli, $2000 per orang per hari, jeda 60 dtk.",
     ],
@@ -248,14 +248,14 @@ const patchByLang = {
     curveLead:
       "指数曲线：价格从每 PPL $0.005 起，随每次购买上升，曲线开放期间最高 $0.25。达到 $400 万募集额时毕业并关闭曲线。",
     unsoldBody:
-      "180 天后，已募资金按 50/50 分配至锁定 LP 与项目多签；曲线上未售出的 PPL 进入社区池。在 PEOPLE 上启动的每个代币适用相同规则。",
+      "销售持续至全部 PPL 售完或满 24 个月，以先到者为准。期限固定，不会延长。结束后，已募资金按 50/50 分配至锁定 LP 与项目多签，曲线上未售出的 PPL 进入社区池；不退款。此前未售出的 PPL 由项目多签保管，团队不动用。PEOPLE 上的代币曲线对未售出部分仍适用各自的 180 天 finalize 规则。",
     salePublicTitle: "已公布的销售参数",
     salePublicBody:
       "价格、限额与曲线公式在 /buy 公开。销售 hub 合约部署前购买保持关闭；连接钱包不构成任何承诺。",
     salePublicCta: "打开 /buy 页面",
     saleCurveBullets: [
       "曲线上 100,000,000 PPL（供应 10%）；起始 $0.005，指数上升，仅曲线上限 $0.25。",
-      "募集 $4,000,000 时毕业；180 天销售窗口；未售出 PPL 进入社区池。",
+      "募集 $4,000,000 时毕业。销售至 PPL 售完或 24 个月（固定期限）；未售出 PPL 进入社区池。",
       "募集 50% 锁定流动性 / 50% 项目多签；LP 代币锁定 24 个月。",
       "允许卖回曲线，1.5% 费用用于 PPL 回购。限额：单次 $500，每人每日 $2000，间隔 60 秒。",
     ],
@@ -271,14 +271,14 @@ const patchByLang = {
     curveLead:
       "منحنى أسي: السعر يبدأ عند 0.005$ لكل PPL ويرتفع مع كل شراء، حتى سقف 0.25$ ما دام المنحنى مفتوحًا. التخرج يغلق المنحنى عند جمع 4M$.",
     unsoldBody:
-      "بعد 180 يومًا، يُقسَّم المجموع 50/50 بين LP مقفلة وmultisig المشروع، وأي PPL غير مباع على المنحنى يذهب إلى صندوق المجتمع. نفس القاعدة لكل token يُطلق على PEOPLE.",
+      "يستمر البيع حتى بيع كل PPL أو لمدة 24 شهرًا، أيهما أسبق. المدة ثابتة ولن تُمدَّد. بعد الانتهاء يُقسَّم المجموع 50/50 بين LP مقفلة وmultisig المشروع، وأي PPL غير مباع على المنحنى يذهب إلى صندوق المجتمع؛ لا استرداد. حتى ذلك الحين يُحتفظ بـ PPL غير المباع في multisig المشروع ولا يمسه الفريق. منحنيات الرموز على PEOPLE تحتفظ بقاعدة الإنهاء بعد 180 يومًا الخاصة بها لغير المباع.",
     salePublicTitle: "معلمات البيع المنشورة",
     salePublicBody:
       "الأسعار والحدود وصيغة المنحنى علنية على /buy. الشراء معطّل حتى نشر عقد hub البيع؛ ربط المحفظة لا يلزمك بشيء.",
     salePublicCta: "افتح صفحة /buy",
     saleCurveBullets: [
       "100,000,000 PPL على المنحنى (10% من العرض)؛ بداية 0.005$، ارتفاع أسي، سقف 0.25$ على المنحنى فقط.",
-      "التخرج عند جمع 4,000,000$؛ نافذة بيع 180 يومًا؛ ثم PPL غير المباع إلى صندوق المجتمع.",
+      "التخرج عند جمع 4,000,000$. البيع حتى نفاد PPL أو 24 شهرًا (مدة ثابتة)؛ ثم PPL غير المباع إلى صندوق المجتمع.",
       "المجموع 50% سيولة مقفلة / 50% multisig المشروع؛ رموز LP مقفلة 24 شهرًا.",
       "إعادة البيع للمنحنى مسموحة برسوم 1.5% لbuyback PPL. حدود: 500$ لكل شراء، 2000$ للشخص يوميًا، انتظار 60 ث.",
     ],

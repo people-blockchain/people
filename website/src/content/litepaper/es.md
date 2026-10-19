@@ -223,4 +223,4 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 - Seguridad: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - El multisig del tesoro es **2 de 3** y se crea antes de mainnet.
 - Si la curva de un token no se agota en **180 días** desde el lanzamiento, cualquiera puede finalizarla y los tokens no vendidos van al pool comunitario de ese token. Una curva agotada pasa a liquidez como antes. (Activo en testnet.)
-- La venta de PPL, una vez abierta, dura **180 días** fijos. Después, cualquiera puede finalizarla y los PPL no vendidos van al pool comunitario — la misma regla que para las curvas de tokens.
+- La venta de PPL, una vez abierta, dura hasta que se vendan todos los PPL o durante **24 meses**, lo que ocurra primero. El plazo es fijo y no se prorrogará. Después cualquiera puede finalizarla; los PPL no vendidos van al fondo comunitario y no hay reembolsos. Hasta entonces, los PPL no vendidos están en el multisig del proyecto y el equipo no los toca.

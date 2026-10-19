@@ -20,7 +20,7 @@
     "soldTarget": "sur {supply} sur la courbe",
     "buyers": "Acheteurs",
     "daysLeft": "Jours restants",
-    "daysLeftTarget": "sur {days}",
+    "daysLeftTarget": "max. {days} (plafond {months} mois)",
     "none": "—",
     "notOpenYet": "Pas encore ouverte",
     "progressLabel": "Progression vers la fin de la vente à {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "La courbe",
-        "body": "{supply} PPL sur une courbe publique de {start} jusqu’au plafond {ceiling}. Achetez et vendez à tout moment, jusqu’à {days} jours."
+        "body": "{supply} PPL sur une courbe publique de {start} jusqu’au plafond {ceiling}. Achetez et vendez à tout moment pendant la vente — jusqu’à épuisement des PPL ou pendant {saleMonths} mois, selon la première échéance."
       },
       {
         "title": "Fin de la vente à {graduation}",
@@ -134,8 +134,8 @@
         "body": "Transferts PPL entre portefeuilles et trading pool s’ouvrent à {verified} participants vérifiés, au plus tard dans {months} mois."
       },
       {
-        "title": "Après {days} jours",
-        "body": "Si {graduation} n’est pas atteint, le même partage {liquidityShare}/{multisigShare} s’applique aux fonds levés, et tout PPL invendu va au fonds communautaire."
+        "title": "Fin de la vente",
+        "body": "Le délai est fixe et ne sera pas prolongé. Si {graduation} n’est pas atteint, les fonds levés sont partagés {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n’y a pas de remboursement. D’ici là, les PPL invendus sont détenus par le multisig du projet et l’équipe n’y touche pas."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Questions, réponses",
     "items": [
+      {
+        "q": "Combien de temps dure la vente ?",
+        "a": "Jusqu’à ce que tous les PPL soient vendus ou pendant {saleMonths} mois, selon la première échéance. Le délai est fixe et ne sera pas prolongé. À la fin, les PPL invendus vont au fonds communautaire ; aucun remboursement. D’ici là, ils sont détenus par le multisig du projet et l’équipe n’y touche pas."
+      },
       {
         "q": "Puis-je revendre du PPL ?",
         "a": "Utilisateurs vérifiés uniquement : 30 jours de détention par lot, plafonds journaliers et frais de {fee}. Fermeture à la fin de la vente."

@@ -9,7 +9,7 @@ The price is not set by hand. It is set by a published formula. Every purchase m
 - Starting price: **$0.005**
 - Price ceiling: **$0.25**. It is reached only if all 100M PPL are sold. The price can never go above it on the curve.
 - Graduation: at **$4M raised**, which is roughly $0.16 per PPL. The curve closes before the price reaches the ceiling.
-- Sale window: **180 days**.
+- Sale window: until all PPL is sold or **24 months**, whichever comes first. The term is fixed and will not be extended. After it ends, unsold PPL goes to the community pool; there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it.
 
 **Important:** the $0.25 ceiling applies on the curve only, while the sale is running. After the move to the pool, the price is set by a free market, with no limit up or down.
 
@@ -50,7 +50,7 @@ When **$4,000,000** has been raised:
 
 PPL left unsold on the curve (around 11M at a $4M graduation) goes to the **community pool**.
 
-If $4M is not raised within **180 days**, graduation happens with whatever was raised: 50% into the liquidity pool, 50% to the multisig, and unsold PPL to the **community pool**.
+If $4M is not raised before the sale ends (sell-out or the 24-month cap), graduation happens with whatever was raised: 50% into the liquidity pool, 50% to the multisig, and unsold PPL to the **community pool**. There are no refunds.
 
 ## Where the money goes
 | Share | Destination |

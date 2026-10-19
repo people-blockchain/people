@@ -20,7 +20,7 @@
     "soldTarget": "dari {supply} di kurva",
     "buyers": "Pembeli",
     "daysLeft": "Hari tersisa",
-    "daysLeftTarget": "dari {days}",
+    "daysLeftTarget": "maks. {days} (batas {months} bulan)",
     "none": "—",
     "notOpenYet": "Belum dibuka",
     "progressLabel": "Progres menuju penutupan penjualan {target}"
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Kurva",
-        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual kapan saja, hingga {days} hari."
+        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual kapan saja selama penjualan berjalan — sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu."
       },
       {
         "title": "Penutupan penjualan pada {graduation}",
@@ -134,8 +134,8 @@
         "body": "Transfer PPL antar dompet dan trading pool dibuka pada {verified} peserta terverifikasi, paling lambat {months} bulan."
       },
       {
-        "title": "Setelah {days} hari",
-        "body": "Jika {graduation} tidak tercapai, pembagian {liquidityShare}/{multisigShare} yang sama untuk yang terkumpul, dan semua PPL tidak terjual ke kolam komunitas."
+        "title": "Saat penjualan berakhir",
+        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Jika {graduation} belum tercapai, dana terkumpul dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, tidak ada pengembalian dana. Sampai saat itu PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya."
       }
     ]
   },
@@ -162,6 +162,10 @@
     "eyebrow": "FAQ",
     "title": "Pertanyaan, dijawab",
     "items": [
+      {
+        "q": "Berapa lama penjualan berlangsung?",
+        "a": "Sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah berakhir, PPL tidak terjual masuk kolam komunitas; tidak ada pengembalian dana. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya."
+      },
       {
         "q": "Bisakah saya menjual kembali PPL?",
         "a": "Hanya pengguna terverifikasi: masa tunggu 30 hari per lot, batas harian, dan biaya {fee}. Tutup saat penjualan penutupan penjualan."

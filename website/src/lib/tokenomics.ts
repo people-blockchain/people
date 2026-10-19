@@ -74,7 +74,7 @@ export const BONDING_CURVE = {
   cooldownSeconds: SALE.cooldownSeconds,
 } as const;
 
-/** Where the raise goes at graduation (and after the 180-day window). */
+/** Where the raise goes at graduation (and after the sale window ends). */
 export const RAISE_SPLIT = [
   { id: "liquidity", pct: SALE.liquiditySharePct },
   { id: "multisig", pct: SALE.multisigSharePct },

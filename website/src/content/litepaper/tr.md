@@ -223,4 +223,4 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
 - Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
-- PPL satışı açıldıktan sonra sabit **180 gün** sürer. Ardından herkes onu sonlandırabilir ve satılmayan PPL topluluk havuzuna gider — token eğrileriyle aynı kural.
+- PPL satışı açıldıktan sonra tüm PPL satılana veya **24 ay** dolana kadar — hangisi önce gelirse — sürer. Süre sabittir ve uzatılmaz. Ardından herkes sonlandırabilir; satılmayan PPL topluluk havuzuna gider, iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz.

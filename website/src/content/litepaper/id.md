@@ -223,4 +223,4 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - Keamanan: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
 - Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
-- Penjualan PPL, setelah dibuka, berlangsung tetap **180 hari**. Setelah itu siapa pun dapat memfinalisasinya, dan PPL yang tidak terjual masuk ke pool komunitas — aturan yang sama seperti kurva token.
+- Penjualan PPL, setelah dibuka, berjalan sampai semua PPL terjual atau selama **24 bulan**, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah itu siapa pun dapat memfinalisasinya; PPL tidak terjual masuk ke kolam komunitas, tidak ada pengembalian dana. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya.

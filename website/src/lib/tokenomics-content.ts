@@ -122,14 +122,14 @@ const en: TokenomicsCopy = {
     "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. Graduation closes the curve at $4M raised.",
   unsoldTitle: "Unsold tokens",
   unsoldBody:
-    "After 180 days, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool. The same unsold rule applies to every token launched on PEOPLE.",
+    "The sale runs until all PPL is sold or for 24 months, whichever comes first. The term is fixed and will not be extended. After it ends, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool; there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it. Token curves on PEOPLE keep their own 180-day finalize rule for unsold tokens.",
   salePublicTitle: "Published sale parameters",
   salePublicBody:
     "Prices, limits and the curve formula are public on /buy. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet does not commit you to anything.",
   salePublicCta: "Open the /buy page",
   saleCurveBullets: [
     "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
-    "Graduation at $4,000,000 raised; 180-day sale window, then unsold PPL to the community pool.",
+    "Graduation at $4,000,000 raised. Sale runs until all PPL is sold or 24 months (fixed term); then unsold PPL to the community pool.",
     "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
     "Sell-back allowed with a 1.5% fee to PPL buyback. Limits: $500 per buy, $2,000 per person per day, 60s cooldown.",
   ],
@@ -233,14 +233,14 @@ const ru: TokenomicsCopy = {
     "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Выпуск закрывается при сборе $4M.",
   unsoldTitle: "Непроданные токены",
   unsoldBody:
-    "Через 180 дней собранное делится 50/50 между заблокированной LP и мультисигом проекта, а непроданные PPL на кривой уходят в пул сообщества. То же правило — для любого токена, запущенного в PEOPLE.",
+    "Продажа идёт, пока не распроданы все PPL или не истекут 24 месяца — что наступит раньше. Срок фиксирован и не продлевается. После окончания собранное делится 50/50 между заблокированной LP и мультисигом проекта, непроданные PPL на кривой уходят в пул сообщества; возвратов нет. До этого непроданные PPL хранятся в мультисиге проекта, команда их не трогает. У кривых токенов на PEOPLE остаётся своё правило финализации через 180 дней для непроданного остатка.",
   salePublicTitle: "Опубликованные параметры продажи",
   salePublicBody:
     "Цены, лимиты и формула кривой публичны на /buy. Покупка отключена, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает.",
   salePublicCta: "Открыть страницу /buy",
   saleCurveBullets: [
     "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
-    "Выпуск при $4 000 000 собранных; окно продажи 180 дней, затем непроданные PPL — в пул сообщества.",
+    "Выпуск при $4 000 000 собранных. Продажа — пока не распроданы все PPL или 24 месяца (фиксированный срок); затем непроданные PPL — в пул сообщества.",
     "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
     "Обратная продажа разрешена; комиссия 1,5% на buyback PPL. Лимиты: $500 за покупку, $2000 на человека в сутки, пауза 60 с.",
   ],
