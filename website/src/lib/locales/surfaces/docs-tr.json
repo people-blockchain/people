@@ -290,11 +290,11 @@
         },
         {
           "title": "05 · Süreci başlat",
-          "text": ".env.node dosyasını Peoples-Blockchain kopyanızdaki people-node içinde saklayın ve izinleri kısıtlayın. Normal düğümde ALLOW_FAUCET ve ALLOW_DEV_ENDPOINTS açmayın. HTTP API’yi korumasız internete açmayın."
+          "text": ".env.node dosyasını people kopyanızdaki people-node içinde saklayın ve izinleri kısıtlayın. Normal düğümde ALLOW_FAUCET ve ALLOW_DEV_ENDPOINTS açmayın. HTTP API’yi korumasız internete açmayın."
         }
       ],
       "links": [],
-      "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+      "code": "git clone https://github.com/people-blockchain/people.git\ncd people/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
     },
     {
       "id": "validators",
