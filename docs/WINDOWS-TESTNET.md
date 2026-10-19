@@ -1,10 +1,10 @@
 # Internal testnet на Windows (ноутбук)
 
-**Это не mainnet.** Этот гайд поднимает **локальный internal testnet** People’s Blockchain: две ноды + explorer через Docker Compose (как после PR #13). Репозиторий **приватный** — не публиковать, секреты не коммитить, mainnet не деплоить.
+**Это не mainnet.** Этот гайд поднимает **локальный internal testnet** People’s Blockchain: две ноды + explorer через Docker Compose (как после PR #13). Исходники в **публичном** репозитории `people-blockchain/people` — секреты не коммитить, mainnet не деплоить.
 
 Ноутбук — **оператор локальных нод**, а не «вся сеть» и не mainnet. Faucet работает **только на node-1**.
 
-Нужно: доступ в GitHub-репозиторий `rednaxelavoroge/Peoples-Blockchain` (без доступа `git clone` не сработает) и несколько гигабайт RAM (Docker Desktop + две ноды + web; 4–8 ГБ для Docker спокойнее, чем дефолтные 2 ГБ).
+Нужно: публичный GitHub-репозиторий `people-blockchain/people` (отдельный доступ не требуется — `git clone` работает без приглашения) и несколько гигабайт RAM (Docker Desktop + две ноды + web; 4–8 ГБ для Docker спокойнее, чем дефолтные 2 ГБ).
 
 ---
 
@@ -16,13 +16,13 @@
 
 Поставьте также [Git for Windows](https://git-scm.com/download/win), если ещё нет `git`.
 
-## 2. Клон приватного репозитория
+## 2. Клон репозитория
 
-В PowerShell (войдите в GitHub: браузерный логин, GitHub Desktop или Personal Access Token; репозиторий **private**):
+В PowerShell (для публичного репозитория отдельный вход в GitHub не обязателен):
 
 ```powershell
-git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git
-cd Peoples-Blockchain\people-node
+git clone https://github.com/people-blockchain/people.git
+cd people\people-node
 ```
 
 Дальше все команды — из каталога `people-node`. Compose-файл: `docker-compose.yml` (не `docker-compose.prod.yml`).

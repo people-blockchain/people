@@ -290,11 +290,11 @@
         },
         {
           "title": "05 · Démarrer le processus",
-          "text": "Enregistrez .env.node dans people-node de votre copie Peoples-Blockchain et restreignez les permissions. N’activez pas ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS sur un nœud ordinaire. N’exposez pas l’API HTTP sans protection convenue."
+          "text": "Enregistrez .env.node dans people-node de votre copie people et restreignez les permissions. N’activez pas ALLOW_FAUCET ni ALLOW_DEV_ENDPOINTS sur un nœud ordinaire. N’exposez pas l’API HTTP sans protection convenue."
         }
       ],
       "links": [],
-      "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+      "code": "git clone https://github.com/people-blockchain/people.git\ncd people/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
     },
     {
       "id": "validators",

@@ -314,11 +314,11 @@ export const docsContent: Record<Language, Guide> = {
           },
           {
             "title": "05 · Запустите процесс",
-            "text": "Сохраните .env.node в каталоге people-node внутри клонированного репозитория Peoples-Blockchain и ограничьте доступ к файлу. Не включайте ALLOW_FAUCET и ALLOW_DEV_ENDPOINTS для обычной ноды. Не публикуйте HTTP API в интернет без согласованной защиты."
+            "text": "Сохраните .env.node в каталоге people-node внутри клонированного репозитория people и ограничьте доступ к файлу. Не включайте ALLOW_FAUCET и ALLOW_DEV_ENDPOINTS для обычной ноды. Не публикуйте HTTP API в интернет без согласованной защиты."
           }
         ],
         "links": [],
-        "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+        "code": "git clone https://github.com/people-blockchain/people.git\ncd people/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
       },
       {
         "id": "validators",
@@ -785,11 +785,11 @@ export const docsContent: Record<Language, Guide> = {
           },
           {
             "title": "05 · Start the process",
-            "text": "Save .env.node inside people-node in your Peoples-Blockchain checkout and restrict file permissions. Do not enable ALLOW_FAUCET or ALLOW_DEV_ENDPOINTS on an ordinary node. Do not expose the HTTP API to the internet without agreed protection."
+            "text": "Save .env.node inside people-node in your people checkout and restrict file permissions. Do not enable ALLOW_FAUCET or ALLOW_DEV_ENDPOINTS on an ordinary node. Do not expose the HTTP API to the internet without agreed protection."
           }
         ],
         "links": [],
-        "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+        "code": "git clone https://github.com/people-blockchain/people.git\ncd people/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
       },
       {
         "id": "validators",

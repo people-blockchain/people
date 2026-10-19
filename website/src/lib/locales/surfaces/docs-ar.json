@@ -290,11 +290,11 @@
         },
         {
           "title": "05 · ابدأ العملية",
-          "text": "احفظ .env.node داخل people-node في نسخة Peoples-Blockchain وقيّد الصلاحيات. لا تفعّل ALLOW_FAUCET أو ALLOW_DEV_ENDPOINTS على عقدة عادية. لا تعرّض API HTTP للإنترنت دون حماية متفق عليها."
+          "text": "احفظ .env.node داخل people-node في نسخة people وقيّد الصلاحيات. لا تفعّل ALLOW_FAUCET أو ALLOW_DEV_ENDPOINTS على عقدة عادية. لا تعرّض API HTTP للإنترنت دون حماية متفق عليها."
         }
       ],
       "links": [],
-      "code": "git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git\ncd Peoples-Blockchain/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
+      "code": "git clone https://github.com/people-blockchain/people.git\ncd people/people-node\nnpm ci\nnpm run build\nnode --env-file=.env.node apps/node/dist/index.js"
     },
     {
       "id": "validators",
