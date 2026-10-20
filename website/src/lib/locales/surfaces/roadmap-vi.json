@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder: các mẫu ứng dụng đã được kiểm toán (câu lạc bộ NFT-gated, bỏ phiếu DAO, đăng ký, cửa hàng USDC, giveaway), không cần code",
       "summary": "Sau mainnet: một App Builder với các mẫu no-code đã được kiểm toán cho các ứng dụng phổ biến — câu lạc bộ NFT-gated, bỏ phiếu DAO, đăng ký, cửa hàng USDC và giveaway. Chỉ đang lên kế hoạch; chưa được triển khai."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — một node phần mềm chỉ với một cú nhấp, sau đó là thiết bị plug-and-play sẵn sàng cho bất kỳ ai muốn hỗ trợ mạng lưới."
     }
   }
 }

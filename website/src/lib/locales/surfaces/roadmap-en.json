@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder: audited templates for apps (NFT-gated club, DAO voting, subscription, USDC shop, giveaway), no code",
       "summary": "After mainnet: an App Builder with audited no-code templates for common apps — NFT-gated club, DAO voting, subscription, USDC shop and giveaway. Planning only; not implemented."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — a one-click software node, then a ready plug-and-play device for anyone who wants to support the network."
     }
   }
 }

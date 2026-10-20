@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder: قوالب مُدققة للتطبيقات (نادي NFT-gated، تصويت DAO، اشتراك، متجر USDC، هدية)، بدون كود",
       "summary": "بعد mainnet: App Builder مع قوالب مُدققة بدون كود للتطبيقات الشائعة — نادي NFT-gated، تصويت DAO، اشتراك، متجر USDC وهدية. تخطيط فقط؛ غير مُنفذ."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — عقدة برمجية بنقرة واحدة، ثم جهاز plug-and-play جاهز لأي شخص يريد دعم الشبكة."
     }
   }
 }
