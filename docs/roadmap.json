@@ -173,6 +173,11 @@
       "id": "ambassador-promo-kit",
       "status": "planned_unapproved",
       "evidence": "Promo kit for ambassadors and active founders after the «Миллион основателей» launch. Planning only — not implemented."
+    },
+    {
+      "id": "people-node-device",
+      "status": "planned_unapproved",
+      "evidence": "Approved for the roadmap; not started."
     }
   ]
 }
