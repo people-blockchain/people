@@ -19,7 +19,6 @@ export type SaleStatus =
   | "not_deployed"
   | "open"
   | "paused"
-  | "graduated"
   | "ended";
 
 export type SaleStats = {

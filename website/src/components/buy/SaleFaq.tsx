@@ -8,7 +8,7 @@ import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { buyCopy } from "@/lib/buy-content";
 import { ensurePeopleChain, readInjectedProvider } from "@/lib/evm/client";
 import { CURVE, SALE } from "@/lib/sale/config";
-import { graduation } from "@/lib/sale/curve";
+import { curveEnd } from "@/lib/sale/curve";
 import { fillCopy, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
 
 /**
@@ -67,13 +67,13 @@ const ADD_NETWORK_FAQ_INDEX = 3;
 export function SaleFaq() {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
-  const grad = graduation();
+  const end = curveEnd();
 
   const vars = {
     fee: `${SALE.sellFeePct}%`,
     ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
-    graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
-    graduationPrice: pricePerPpl(grad.priceUsd, lang),
+    endRaise: usdCompact(end.raisedUsd, lang),
+    endPrice: pricePerPpl(end.priceUsd, lang),
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
     months: SALE.fullMainnetMaxMonths,
     saleMonths: SALE.durationMonths,

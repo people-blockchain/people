@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Compra PPL",
-    "description": "PPL è venduto su una curva di prezzo pubblica: parte da $0,005 e sale a ogni acquisto, fino a un tetto di $0,25. La curva si chiude a $4M raccolti. Comprare e vendere sulla curva funziona dal giorno in cui si apre la vendita; i lotti di rivendita hanno un periodo di attesa di 30 giorni."
+    "description": "PPL è venduto su una curva di prezzo pubblica: parte da $0,005 e sale a ogni acquisto. Il tetto di $0,25 si raggiunge solo se tutti i 100M PPL in vendita vengono venduti, a circa $6.262.744 raccolti. La vendita dura fino a esaurimento o 24 mesi; i lotti di rivendita hanno un periodo di attesa di 30 giorni."
   },
   "hero": {
     "eyebrow": "Vendita PPL",
@@ -15,7 +15,7 @@
     "price": "Prezzo attuale",
     "priceStartHint": "Parte da {start}",
     "raised": "Raccolto",
-    "raisedTarget": "su {target} fino alla chiusura della vendita",
+    "raisedTarget": "su {target} massimo",
     "sold": "PPL venduti",
     "soldTarget": "su {supply} sulla curva",
     "buyers": "Acquirenti",
@@ -23,7 +23,7 @@
     "daysLeftTarget": "max {days} (cap {months} mesi)",
     "none": "—",
     "notOpenYet": "Non ancora aperta",
-    "progressLabel": "Progresso verso la chiusura della vendita a {target}"
+    "progressLabel": "Progresso verso il massimo di {target} sulla curva"
   },
   "form": {
     "title": "Compra PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "Compra PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude dopo la fine della vendita; pagamenti in USDC su Base.",
+    "sellBack": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base.",
     "payModeLabel": "Come paghi",
     "payOnBase": "Paga su Base",
     "payFromOther": "Paga da un'altra rete",
-    "basePayHint": "La vendita è su Base. Paga con USDC o USDT — l'USDT viene convertito in USDC prima.",
+    "basePayHint": "La vendita avviene solo su Base. Paga con USDC o USDT su Base, oppure con USDT/USDC da qualsiasi chain supportata tramite il widget di swap automatico integrato, che converte in USDC su Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e Solana. Tron e TON non sono supportati.",
     "bridgeHint": "Invia USDT o USDC da un'altra rete con LI.FI. Arriva come USDC sul wallet su Base; poi completa l'acquisto sotto. Reti supportate: {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "Pagamento in USDT: prima conversione in USDC, poi acquisto in USDC. Piccola commissione di swap.",
@@ -67,7 +67,7 @@
     "title": "Perché il prezzo sale",
     "noManualLead": "Il team PEOPLE non imposta né alza il prezzo. Una formula pubblica nel contratto di vendita lo definisce automaticamente: ogni acquisto sposta il prezzo lungo la curva dei prezzi (bonding curve). Nessuno può cambiare il prezzo manualmente.",
     "mechanism": "Lo stesso principio di prezzo da formula di Uniswap, Bancor (pioniere, 2017), pump.fun e Virtuals Protocol su Base: qui il prezzo dipende solo dalla quantità di PPL venduti, in modo trasparente e verificabile on-chain.",
-    "example": "Dai parametri pubblicati: {startPrice} per PPL all'inizio, {midPrice} dopo {midSold} PPL venduti (~{midRaised} raccolti) e {gradPrice} alla chiusura della vendita ({gradRaised} raccolti).",
+    "example": "Dai parametri pubblicati: {startPrice} per PPL all'inizio, {midPrice} dopo {midSold} PPL venduti (~{midRaised} raccolti) e {endPrice} alla fine della curva ({endRaised} raccolti).",
     "explainerLink": "Come funziona la curva",
     "reserve": "I fondi degli acquisti restano nella riserva di vendita su Base e servono a ricomprare PPL dai holder — riacquisto per utenti verificati dopo 30 giorni di detenzione, con limiti giornalieri.",
     "chartAria": "Curva dei prezzi della vendita PPL: prezzo e PPL venduti",
@@ -86,14 +86,14 @@
     "marker": "{raised} raccolti",
     "markerPrice": "{price} per PPL",
     "markerSold": "{sold} PPL venduti",
-    "graduationTag": "chiusura della vendita",
-    "ceilingNote": "Il tetto {ceiling} si raggiunge solo se si vendono tutti i {supply} PPL. La curva si chiude prima, a {graduation} raccolti.",
+    "ceilingNote": "Il tetto {ceiling} si raggiunge solo se si vendono tutti i {supply} PPL, a {endRaise} raccolti. Altrimenti la vendita termina dopo 24 mesi.",
     "feedTitle": "Acquisti e vendite recenti",
     "feedEmpty": "Nessuna operazione per ora.",
     "feedBuy": "Acquisto",
     "feedSell": "Vendita",
     "feedLink": "Vedi",
-    "capScope": "Il tetto {ceiling} vale solo durante la vendita sulla curva. Dopo la chiusura della vendita al pool, il prezzo lo fissa il mercato libero — senza limite superiore né inferiore."
+    "capScope": "Il tetto {ceiling} vale solo durante la vendita sulla curva. Quando la vendita termina, il prezzo nel pool lo fissa il mercato libero — senza limite superiore né inferiore.",
+    "endTag": "Fine della curva"
   },
   "whatYouGet": {
     "eyebrow": "Cosa ottieni",
@@ -105,14 +105,14 @@
       },
       {
         "title": "riacquisto dalla riserva",
-        "body": "La rivendita è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude dopo la fine della vendita; pagamenti in USDC su Base."
+        "body": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
       },
       {
         "title": "I trasferimenti si aprono con il lancio completo della rete",
         "body": "Inviare PPL ad altri e fare trading nel pool iniziano al mainnet completo: {verified} partecipanti verificati e il requisito multisig pubblicato si applicano ai trasferimenti PPL, non all'apertura della vendita."
       },
       {
-        "title": "A {graduation} la curva si chiude",
+        "title": "Quando termina la vendita",
         "body": "Il {liquidityShare} della raccolta più PPL all'ultimo prezzo di curva alimentano un pool pubblico i cui token LP sono bloccati per {lock} mesi. L'altro {multisigShare} va al multisig del progetto, con report pubblici su ogni spesa."
       }
     ]
@@ -126,16 +126,16 @@
         "body": "{supply} PPL su una curva pubblica da {start} fino al tetto {ceiling}. Compra e vendi sulla curva dal giorno in cui si apre la vendita; ogni lotto di rivendita ha un'attesa di 30 giorni. La vendita dura fino a esaurimento o per {saleMonths} mesi, a seconda di cosa avviene prima; nessuna proroga."
       },
       {
-        "title": "Chiusura della vendita a {graduation}",
-        "body": "La curva si ferma. Il {liquidityShare} della raccolta più PPL all'ultimo prezzo vanno in un pool DEX pubblico esattamente a quel prezzo, senza salto. LP bloccati {lock} mesi. {multisigShare} al multisig con report pubblici."
+        "title": "Quando termina la vendita",
+        "body": "La curva si ferma quando tutti i PPL sono venduti o dopo {saleMonths} mesi, a seconda di cosa avviene prima. Il {liquidityShare} della raccolta più PPL al prezzo finale della curva vanno in un pool DEX pubblico esattamente a quel prezzo, senza salto. LP bloccati {lock} mesi. {multisigShare} al multisig con report pubblici."
       },
       {
         "title": "Mainnet completo",
         "body": "Trasferimenti PPL tra wallet e trading nel pool si aprono al mainnet completo: {verified} partecipanti verificati, non oltre {months} mesi. Il requisito si applica ai trasferimenti PPL, non al giorno di apertura della vendita."
       },
       {
-        "title": "Quando finisce la vendita",
-        "body": "Il termine è fisso e non sarà prorogato. Se non si raggiunge {graduation}, quanto raccolto è diviso {liquidityShare}/{multisigShare}, ogni PPL non venduto va al fondo community e non ci sono rimborsi al di fuori della rivendita. Fino ad allora i PPL non venduti restano nel multisig del progetto e il team non li tocca."
+        "title": "Se la curva non si esaurisce",
+        "body": "Il termine è fisso e non sarà prorogato. Quanto raccolto mantiene lo stesso reparto {liquidityShare}/{multisigShare}, ogni PPL non venduto va al fondo community e non ci sono rimborsi al di fuori della rivendita. Fino alla fine della vendita i PPL non venduti restano nel multisig del progetto e il team non li tocca."
       }
     ]
   },
@@ -168,11 +168,11 @@
       },
       {
         "q": "Posso rivendere PPL?",
-        "a": "Solo persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude dopo la fine della vendita; pagamenti in USDC su Base."
+        "a": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
       },
       {
         "q": "Il tetto {ceiling} è permanente?",
-        "a": "No. Vale mentre la curva è attiva. Si chiude a {graduation} raccolti, circa {graduationPrice} per PPL, sotto il tetto. Dopo la chiusura della vendita, il prezzo del pool lo fissa il mercato libero, senza limite superiore né inferiore."
+        "a": "No. Vale mentre la curva è attiva. Il tetto {ceiling} si raggiunge solo alla fine della curva, con {endRaise} raccolti e {endPrice} per PPL. Quando la vendita termina, il prezzo del pool lo fissa il mercato libero, senza limite superiore né inferiore."
       },
       {
         "q": "Come aggiungo la rete People al mio wallet?",
@@ -196,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Gli acquirenti tardivi pagano troppo",
-        "what": "Il prezzo sale senza limite e gli ultimi prima della chiusura della vendita pagano molte volte i primi.",
-        "ours": "Un tetto rigido {ceiling}, e la curva si chiude a {graduation} — circa {graduationPrice}."
+        "what": "Il prezzo sale verso un tetto rigido e gli acquirenti tardivi pagano molto più dei primi.",
+        "ours": "Un tetto rigido {ceiling}. La curva lo raggiunge solo quando tutti i PPL sono venduti, a {endRaise} — circa {endPrice}."
       },
       {
         "problem": "Snipers e bot",
@@ -217,7 +217,7 @@
       {
         "problem": "Listing hype",
         "what": "Il token viene spinto sugli exchange a metà vendita.",
-        "ours": "Nessun listing durante la vendita. Trading DEX solo dopo chiusura della vendita."
+        "ours": "Nessun listing durante la vendita. Trading DEX solo quando la vendita termina."
       }
     ]
   },
@@ -236,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL è il token utility della rete PEOPLE. Sulla curva il prezzo segue la formula pubblicata; dopo la chiusura della vendita lo fissa il mercato: può scendere come salire. PPL non è un titolo, una quota societaria, un deposito né un prodotto d'investimento; nessun profitto, rendimento o ritorno è promesso o garantito. Le cifre prima dell'acquisto sono stime dalla formula pubblicata e confermate on-chain prima della firma. Nulla in questa pagina è consulenza d'investimento, legale o fiscale."
+        "text": "PPL è il token utility della rete PEOPLE. Sulla curva il prezzo segue la formula pubblicata; quando la vendita termina lo fissa il mercato: può scendere come salire. PPL non è un titolo, una quota societaria, un deposito né un prodotto d'investimento; nessun profitto, rendimento o ritorno è promesso o garantito. Le cifre prima dell'acquisto sono stime dalla formula pubblicata e confermate on-chain prima della firma. Nulla in questa pagina è consulenza d'investimento, legale o fiscale."
       },
       {
         "marker": "**",

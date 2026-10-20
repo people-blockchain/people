@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Comprar PPL",
-    "description": "PPL é vendido numa curva de preço pública: começa em $0,005 e sobe a cada compra, até um teto de $0,25. A curva fecha ao arrecadar $4M. Comprar e vender na curva funciona desde o dia em que a venda abre; os lotes de revenda têm retenção de 30 dias."
+    "description": "PPL é vendido numa curva de preço pública: começa em $0,005 e sobe a cada compra. O teto de $0,25 só é atingido se todos os 100M PPL da venda forem vendidos, ao arrecadar cerca de $6.262.744. A venda dura até esgotar ou 24 meses; os lotes de revenda têm retenção de 30 dias."
   },
   "hero": {
     "eyebrow": "Venda de PPL",
@@ -15,7 +15,7 @@
     "price": "Preço atual",
     "priceStartHint": "Começa em {start}",
     "raised": "Arrecadado",
-    "raisedTarget": "de {target} até a graduação",
+    "raisedTarget": "de {target} no máximo",
     "sold": "PPL vendidos",
     "soldTarget": "de {supply} na curva",
     "buyers": "Compradores",
@@ -23,7 +23,7 @@
     "daysLeftTarget": "máx. {days} (teto {months} meses)",
     "none": "—",
     "notOpenYet": "Ainda não aberta",
-    "progressLabel": "Progresso até a graduação em {target}"
+    "progressLabel": "Progresso até o máximo de {target} na curva"
   },
   "form": {
     "title": "Comprar PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "Comprar PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base.",
+    "sellBack": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base.",
     "payModeLabel": "Como você paga",
     "payOnBase": "Pagar na Base",
     "payFromOther": "Pagar de outra rede",
-    "basePayHint": "A venda é na Base. Pague com USDC ou USDT — o USDT é convertido em USDC primeiro.",
+    "basePayHint": "A venda ocorre apenas na Base. Pague com USDC ou USDT na Base, ou com USDT/USDC de qualquer rede compatível pelo widget de swap automático integrado, que converte para USDC na Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e Solana. Tron e TON não são suportados.",
     "bridgeHint": "Envie USDT ou USDC de outra rede com LI.FI. Chega como USDC na sua carteira na Base; depois conclua a compra abaixo. Redes suportadas: {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "Pague com USDT: primeiro converte para USDC e a compra segue em USDC. Taxa de swap pequena.",
@@ -67,7 +67,7 @@
     "title": "Por que o preço sobe",
     "noManualLead": "A equipe PEOPLE não define nem aumenta o preço. Uma fórmula pública no contrato de venda o define automaticamente: cada compra move o preço pela curva de preço (bonding curve). Ninguém pode alterar o preço manualmente.",
     "mechanism": "O mesmo princípio de preço por fórmula de Uniswap, Bancor (pioneiro, 2017), pump.fun e Virtuals Protocol na Base: aqui o preço depende apenas da quantidade de PPL vendidos, de forma transparente e verificável na rede.",
-    "example": "Pelos parâmetros publicados: {startPrice} por PPL no início, {midPrice} após vender {midSold} PPL (~{midRaised} arrecadados) e {gradPrice} no encerramento da venda ({gradRaised} arrecadados).",
+    "example": "Pelos parâmetros publicados: {startPrice} por PPL no início, {midPrice} após vender {midSold} PPL (~{midRaised} arrecadados) e {endPrice} no fim da curva ({endRaised} arrecadados).",
     "explainerLink": "Como funciona a curva",
     "reserve": "Os recursos das compras ficam na reserva da venda na Base e são usados para recomprar PPL dos detentores — recompra para usuários verificados após 30 dias de retenção, com limites diários.",
     "chartAria": "Curva de preço da venda PPL: preço versus PPL vendidos",
@@ -86,14 +86,14 @@
     "marker": "{raised} arrecadados",
     "markerPrice": "{price} por PPL",
     "markerSold": "{sold} PPL vendidos",
-    "graduationTag": "Encerramento da venda",
-    "ceilingNote": "O teto de {ceiling} só é atingido se todos os {supply} PPL forem vendidos. A curva fecha antes, em {graduation} arrecadados.",
+    "ceilingNote": "O teto de {ceiling} só é atingido se todos os {supply} PPL forem vendidos, em {endRaise} arrecadados. Caso contrário, a venda termina após 24 meses.",
     "feedTitle": "Compras e vendas recentes",
     "feedEmpty": "Ainda não há operações.",
     "feedBuy": "Compra",
     "feedSell": "Venda",
     "feedLink": "Ver",
-    "capScope": "O teto de {ceiling} vale só durante a venda na curva. Após a graduação no pool, o preço é definido pelo mercado livre — sem limite superior nem inferior."
+    "capScope": "O teto de {ceiling} vale só durante a venda na curva. Quando a venda termina, o preço no pool é definido pelo mercado livre — sem limite superior nem inferior.",
+    "endTag": "Fim da curva"
   },
   "whatYouGet": {
     "eyebrow": "O que você recebe",
@@ -105,14 +105,14 @@
       },
       {
         "title": "recompra da reserva",
-        "body": "A revenda é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base."
+        "body": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
       },
       {
         "title": "Transferências abrem com o lançamento completo da rede",
         "body": "Enviar PPL a outras pessoas e negociar no pool começam no mainnet completo: {verified} participantes verificados e o requisito multisig publicado se aplicam às transferências de PPL, não à abertura da venda."
       },
       {
-        "title": "Em {graduation} a curva fecha",
+        "title": "Quando a venda termina",
         "body": "{liquidityShare} do arrecadado mais PPL ao último preço da curva alimentam um pool público cujos tokens LP ficam bloqueados por {lock} meses. Os outros {multisigShare} vão ao multisig do projeto, com relatórios públicos de cada gasto."
       }
     ]
@@ -126,16 +126,16 @@
         "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda na curva desde o dia em que a venda abre; cada lote de revenda tem retenção de 30 dias. A venda segue até esgotar ou por {saleMonths} meses, o que vier primeiro; sem prorrogações."
       },
       {
-        "title": "Encerramento da venda em {graduation}",
-        "body": "A curva para. {liquidityShare} do arrecadado mais PPL ao último preço da curva vão para um pool DEX público exatamente nesse preço, sem salto. LP bloqueados por {lock} meses. {multisigShare} ao multisig com relatórios públicos."
+        "title": "Quando a venda termina",
+        "body": "A curva para quando todo o PPL é vendido ou após {saleMonths} meses, o que vier primeiro. {liquidityShare} do arrecadado mais PPL ao preço final da curva vão para um pool DEX público exatamente nesse preço, sem salto. LP bloqueados por {lock} meses. {multisigShare} ao multisig com relatórios públicos."
       },
       {
         "title": "Mainnet completo",
         "body": "Transferências de PPL entre carteiras e trading no pool abrem no mainnet completo: {verified} participantes verificados, e no máximo em {months} meses. O requisito se aplica às transferências de PPL, não ao dia em que a venda abre."
       },
       {
-        "title": "Quando a venda termina",
-        "body": "O prazo é fixo e não será prorrogado. Se {graduation} não for atingido, o arrecadado é dividido {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos fora da revenda. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
+        "title": "Se a curva não esgotar",
+        "body": "O prazo é fixo e não será prorrogado. O valor arrecadado mantém o mesmo reparto {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos fora da revenda. Até a venda terminar, PPL não vendido fica no multisig do projeto e a equipe não o toca."
       }
     ]
   },
@@ -168,11 +168,11 @@
       },
       {
         "q": "Posso vender PPL de volta?",
-        "a": "Só pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base."
+        "a": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
       },
       {
         "q": "O teto de {ceiling} é permanente?",
-        "a": "Não. Vale enquanto a curva está ativa. A curva fecha em {graduation} arrecadados, cerca de {graduationPrice} por PPL, abaixo do teto. Após o encerramento da venda, o preço do pool é definido pelo mercado livre, sem limite superior nem inferior."
+        "a": "Não. Vale enquanto a curva está ativa. O teto de {ceiling} só é atingido no fim da curva, com {endRaise} arrecadados e {endPrice} por PPL. Quando a venda termina, o preço do pool é definido pelo mercado livre, sem limite superior nem inferior."
       },
       {
         "q": "Como adiciono a rede People à minha carteira?",
@@ -196,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Compradores tardios pagam demais",
-        "what": "O preço sobe sem limite e os últimos compradores antes da graduação pagam muitas vezes mais que os primeiros.",
-        "ours": "Um teto rígido de {ceiling}, e a curva fecha em {graduation} — cerca de {graduationPrice}."
+        "what": "O preço sobe rumo a um teto rígido, e compradores tardios pagam muito mais que os primeiros.",
+        "ours": "Um teto rígido de {ceiling}. A curva só o atinge quando todo o PPL é vendido, em {endRaise} — cerca de {endPrice}."
       },
       {
         "problem": "Snipers e bots",
@@ -217,7 +217,7 @@
       {
         "problem": "Listagens de hype",
         "what": "O token é empurrado para exchanges no meio da venda.",
-        "ours": "Nenhuma listagem durante a venda. Trading em DEX só após a graduação."
+        "ours": "Nenhuma listagem durante a venda. Trading em DEX só quando a venda termina."
       }
     ]
   },
@@ -236,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL é o token utilitário da rede PEOPLE. Na curva seu preço segue a fórmula publicada; após a graduação é definido pelo mercado: pode cair tanto quanto subir. PPL não é título, participação em empresa, depósito nem produto de investimento, e nenhum lucro, rendimento ou retorno é prometido ou garantido. Valores mostrados antes da compra são estimativas pela fórmula publicada e confirmados on-chain antes de assinar. Nada nesta página é aconselhamento de investimento, jurídico ou fiscal."
+        "text": "PPL é o token utilitário da rede PEOPLE. Na curva seu preço segue a fórmula publicada; quando a venda termina, é definido pelo mercado: pode cair tanto quanto subir. PPL não é título, participação em empresa, depósito nem produto de investimento, e nenhum lucro, rendimento ou retorno é prometido ou garantido. Valores mostrados antes da compra são estimativas pela fórmula publicada e confirmados on-chain antes de assinar. Nada nesta página é aconselhamento de investimento, jurídico ou fiscal."
       },
       {
         "marker": "**",

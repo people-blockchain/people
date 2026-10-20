@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "PPL satın al",
-    "description": "PPL halka açık bir fiyat eğrisinde satılır: $0,005'ten başlar, her alımla yükselir, tavan $0,25. Eğri $4M toplanınca kapanır. Eğrida alım satım satış açıldığı günden itibaren çalışır; geri satış lotları 30 gün tutulmalıdır."
+    "description": "PPL halka açık bir fiyat eğrisinde satılır: $0,005'ten başlar ve her alımla yükselir. $0,25 tavanına yalnızca satıştaki 100M PPL'in tamamı satılırsa, yaklaşık $6.262.744 toplanınca ulaşılır. Satış tükenene veya 24 aya kadar sürer; geri satış lotları 30 gün tutulmalıdır."
   },
   "hero": {
     "eyebrow": "PPL satışı",
@@ -15,7 +15,7 @@
     "price": "Güncel fiyat",
     "priceStartHint": "{start} ile başlar",
     "raised": "Toplanan",
-    "raisedTarget": "mezuniyete {target} hedefinin",
+    "raisedTarget": "en fazla {target}",
     "sold": "Satılan PPL",
     "soldTarget": "eğrida {supply} hedefinin",
     "buyers": "Alıcılar",
@@ -23,7 +23,7 @@
     "daysLeftTarget": "en fazla {days} ({months} ay üst sınırı)",
     "none": "—",
     "notOpenYet": "Henüz açılmadı",
-    "progressLabel": "{target} mezuniyetine ilerleme"
+    "progressLabel": "{target} eğri maksimumuna ilerleme"
   },
   "form": {
     "title": "PPL satın al",
@@ -44,11 +44,11 @@
     "ctaConnected": "PPL satın al",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış mezuniyetten sonra kapanır; ödemeler Base'de USDC olarak yapılır.",
+    "sellBack": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır.",
     "payModeLabel": "Ödeme yöntemi",
     "payOnBase": "Base'de öde",
     "payFromOther": "Başka bir ağdan öde",
-    "basePayHint": "Satış Base'de. USDC veya USDT ile ödeyin — USDT önce USDC'ye dönüştürülür.",
+    "basePayHint": "Satış yalnızca Base üzerinde yürür. Base'de USDC veya USDT ile ya da desteklenen herhangi bir zincirden USDT/USDC ile yerleşik otomatik takas widget'ı üzerinden ödeyin; widget bunları Base'de USDC'ye çevirir: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve Solana. Tron ve TON desteklenmez.",
     "bridgeHint": "LI.FI ile başka bir ağdan USDT veya USDC gönderin. Base'deki cüzdanınıza USDC gelir; alımı altta tamamlayın. Desteklenen ağlar: {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "USDT ile ödeme: önce USDC'ye dönüşür, alım USDC ile yapılır. Küçük swap ücreti uygulanır.",
@@ -67,7 +67,7 @@
     "title": "Fiyat neden yükselir",
     "noManualLead": "PEOPLE ekibi fiyatı belirlemez veya yükseltmez. Satış sözleşmesindeki açık formül otomatik ayarlar: her alım fiyatı fiyat eğrisi (bonding curve) üzerinde kaydırır. Kimse fiyatı elle değiştiremez.",
     "mechanism": "Uniswap, Bancor (öncü, 2017), pump.fun ve Base’deki Virtuals Protocol ile aynı formül tabanlı fiyatlama: burada fiyat yalnızca satılan PPL miktarına bağlıdır; şeffaf ve zincirde doğrulanabilir.",
-    "example": "Yayımlanan parametrelerle: başta PPL için {startPrice}, {midSold} PPL satıldıktan sonra {midPrice} (~{midRaised} toplanan) ve satışın tamamlanmasında {gradPrice} ({gradRaised} toplanan).",
+    "example": "Yayımlanan parametrelerle: başta PPL için {startPrice}, {midSold} PPL satıldıktan sonra {midPrice} (~{midRaised} toplanan) ve eğrinin sonunda {endPrice} ({endRaised} toplanan).",
     "explainerLink": "Eğri nasıl çalışır",
     "reserve": "Alımlardan gelen fonlar Base’deki satış rezervinde kalır ve elde edenlerden PPL geri almak için kullanılır — doğrulanmış kullanıcılar için 30 günlük elde tutma sonrası geri alım, günlük limitlerle.",
     "chartAria": "PPL satış fiyat eğrisi: fiyat ve satılan PPL",
@@ -86,14 +86,14 @@
     "marker": "{raised} toplandı",
     "markerPrice": "PPL başına {price}",
     "markerSold": "{sold} PPL satıldı",
-    "graduationTag": "Satışın tamamlanması",
-    "ceilingNote": "{ceiling} tavanına yalnızca tüm {supply} PPL satılırsa ulaşılır. Eğri önce {graduation} toplanınca kapanır.",
+    "ceilingNote": "{ceiling} tavanına yalnızca tüm {supply} PPL satılırsa, {endRaise} toplanınca ulaşılır. Aksi halde satış 24 ay sonra biter.",
     "feedTitle": "Son alım ve satımlar",
     "feedEmpty": "Henüz işlem yok.",
     "feedBuy": "Alım",
     "feedSell": "Satım",
     "feedLink": "Görüntüle",
-    "capScope": "{ceiling} tavanı yalnızca eğri satışı sırasında geçerlidir. Havuza mezuniyetten sonra fiyatı serbest piyasa belirler — üst ve alt sınır yok."
+    "capScope": "{ceiling} tavanı yalnızca eğri satışı sırasında geçerlidir. Satış bittikten sonra havuzdaki fiyatı serbest piyasa belirler — üst ve alt sınır yok.",
+    "endTag": "Eğrinin sonu"
   },
   "whatYouGet": {
     "eyebrow": "Ne alırsınız",
@@ -105,14 +105,14 @@
       },
       {
         "title": "Rezervden geri alım",
-        "body": "Geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış mezuniyetten sonra kapanır; ödemeler Base'de USDC olarak yapılır."
+        "body": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
       },
       {
         "title": "Transferler tam ağ lansmanıyla açılır",
         "body": "PPL göndermek ve havuzda işlem, tam mainnette başlar: {verified} doğrulanmış katılımcı ve yayınlanmış multisig koşulu PPL transferlerine uygulanır, satışın açılışına değil."
       },
       {
-        "title": "{graduation} toplanınca eğri kapanır",
+        "title": "Satış bittiğinde",
         "body": "Toplananın {liquidityShare}'i ile son eğri fiyatındaki PPL, LP tokenları {lock} ay kilitli halka açık bir havuza gider. Diğer {multisigShare} proje multisig'ine gider; her harcama kamuya açık raporlanır."
       }
     ]
@@ -126,16 +126,16 @@
         "body": "{supply} PPL, {start}'ten {ceiling} tavanına kadar halka açık eğride. Eğrida alım satım satış açıldığı günden itibaren çalışır; her geri satış lotu 30 gün tutulur. Satış tükenene veya {saleMonths} aya kadar, hangisi önce gelirse sürer; uzatma yoktur."
       },
       {
-        "title": "Satışın tamamlanması: {graduation}",
-        "body": "Eğri durur. Toplananın {liquidityShare}'i ve son eğri fiyatındaki PPL, tam o fiyattan sıçrama olmadan halka açık DEX havuzuna gider. LP {lock} ay kilitli. {multisigShare} multisig'e, kamu raporlamasıyla."
+        "title": "Satış bittiğinde",
+        "body": "Eğri, tüm PPL satıldığında veya {saleMonths} ay sonra, hangisi önce gelirse durur. Toplananın {liquidityShare}'i ve son eğri fiyatındaki PPL, tam o fiyattan sıçrama olmadan halka açık DEX havuzuna gider. LP {lock} ay kilitli. {multisigShare} multisig'e, kamu raporlamasıyla."
       },
       {
         "title": "Tam mainnet",
         "body": "Cüzdanlar arası PPL transferi ve havuz işlemi tam mainnette açılır: {verified} doğrulanmış katılımcı, en geç {months} ay içinde. Koşul PPL transferlerine uygulanır, satışın açıldığı güne değil."
       },
       {
-        "title": "Satış bittiğinde",
-        "body": "Süre sabittir ve uzatılmaz. {graduation} toplanmazsa, toplanan {liquidityShare}/{multisigShare} bölünür, satılmayan tüm PPL topluluk havuzuna gider; geri satış dışında iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz."
+        "title": "Eğri tükenmezse",
+        "body": "Süre sabittir ve uzatılmaz. Toplanan yine aynı {liquidityShare}/{multisigShare} oranında bölünür, satılmayan tüm PPL topluluk havuzuna gider; geri satış dışında iade yoktur. Satış bitene kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz."
       }
     ]
   },
@@ -168,11 +168,11 @@
       },
       {
         "q": "PPL’yi geri satabilir miyim?",
-        "a": "Yalnızca doğrulanmış kişiler: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış mezuniyetten sonra kapanır; ödemeler Base'de USDC olarak yapılır."
+        "a": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
       },
       {
         "q": "{ceiling} tavanı kalıcı mı?",
-        "a": "Hayır. Eğri çalışırken geçerlidir. Eğri {graduation} toplanınca, PPL başına yaklaşık {graduationPrice} ile tavanın altında kapanır. Satış tamamlandıktan sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
+        "a": "Hayır. Eğri çalışırken geçerlidir. {ceiling} tavanına yalnızca eğrinin sonunda, {endRaise} toplanınca ve PPL başına {endPrice} ile ulaşılır. Satış bittikten sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
       },
       {
         "q": "People ağını cüzdanıma nasıl eklerim?",
@@ -196,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Geç alanlar fazla öder",
-        "what": "Fiyat sınırsız yükselir; mezuniyet öncesi son alıcılar ilk alıcılardan kat kat fazla öder.",
-        "ours": "Sert {ceiling} tavanı; eğri {graduation} toplanınca kapanır — yaklaşık {graduationPrice}."
+        "what": "Fiyat sert bir tavana doğru yükselir ve geç alanlar ilk alıcılardan çok daha fazla öder.",
+        "ours": "Sert bir {ceiling} tavanı. Eğri bu tavana yalnızca tüm PPL satılınca, {endRaise} toplanınca ulaşır — yaklaşık {endPrice}."
       },
       {
         "problem": "Sniper'lar ve botlar",
@@ -217,7 +217,7 @@
       {
         "problem": "Hype listelemeleri",
         "what": "Token satış ortasında borsalara itilir.",
-        "ours": "Satış sırasında listeleme yok. DEX işlemi yalnızca mezuniyetten sonra."
+        "ours": "Satış sırasında listeleme yok. DEX işlemi yalnızca satış bittikten sonra."
       }
     ]
   },
@@ -236,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL, PEOPLE ağının utility token'ıdır. Eğrida fiyat yayınlanan formülü izler; mezuniyetten sonra piyasa belirler: düşebilir de yükselebilir. PPL menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kar, getiri veya geri dönüş vaat veya garanti edilmez. Alım öncesi rakamlar yayınlanan formüle göre tahmindir ve imzadan önce zincir üstünde onaylanır. Bu sayfa yatırım, hukuk veya vergi tavsiyesi değildir."
+        "text": "PPL, PEOPLE ağının utility token'ıdır. Eğrida fiyat yayınlanan formülü izler; satış bittikten sonra piyasa belirler: düşebilir de yükselebilir. PPL menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kar, getiri veya geri dönüş vaat veya garanti edilmez. Alım öncesi rakamlar yayınlanan formüle göre tahmindir ve imzadan önce zincir üstünde onaylanır. Bu sayfa yatırım, hukuk veya vergi tavsiyesi değildir."
       },
       {
         "marker": "**",

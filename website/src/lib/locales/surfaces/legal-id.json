@@ -119,7 +119,7 @@
       {
         "title": "Penjualan PPL publik",
         "body": [
-          "Parameter penjualan PPL yang dipublikasikan (rumus kurva, jalur harga, batas, dan target graduation) ada di /buy dan sesuai API pesanan. Pembelian tetap nonaktif hingga hub di-deploy; menghubungkan dompet tidak mengikat Anda. Tidak ada KYC atau pemeriksaan kelayakan di situs ini.",
+          "Parameter penjualan PPL yang dipublikasikan (rumus kurva, jalur harga, batas, dan target akhir kurva) ada di /buy dan sesuai API pesanan. Pembelian tetap nonaktif hingga hub di-deploy; menghubungkan dompet tidak mengikat Anda. Tidak ada KYC atau pemeriksaan kelayakan di situs ini.",
           "Tidak ada di situs ini yang merupakan penawaran atau janji menjual PPL di tempat penjualan dibatasi; partisipasi mungkin tidak tersedia di yurisdiksi Anda. Ketentuan penjualan hanya berubah melalui pembaruan yang dipublikasikan dan tata kelola jika berlaku."
         ]
       },

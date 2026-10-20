@@ -41,7 +41,9 @@ test("tokenomics surfaces publish public sale copy (no P0-10 saleClosed gate)", 
     assert.ok(doc.salePublicTitle, file);
     assert.ok(Array.isArray(doc.saleCurveBullets) && doc.saleCurveBullets.length === 5, file);
     assert.match(doc.curveLead ?? "", /0[,.]005/, file);
-    assert.match(doc.curveLead ?? "", /4\s?M|4[,.]000[,.]000|\$?400\s*万/, file);
+    const curveLeadDigits = (doc.curveLead ?? "").replace(/\D/g, "");
+    assert.ok(curveLeadDigits.includes("6262744"), `${file}: curve lead must state the full-curve raise`);
+    assert.doesNotMatch(doc.curveLead ?? "", /(?:^|[^\d])4\s?M\b|4[,.]000[,.]000|\$?400\s*万/, file);
   }
 });
 

@@ -119,7 +119,7 @@
       {
         "title": "Öffentlicher PPL-Verkauf",
         "body": [
-          "Die veröffentlichten PPL-Verkaufsparameter (Kurvenformel, Preispfad, Limits und Graduation-Ziel) stehen auf /buy und entsprechen der Order-API. Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist; eine Wallet-Verbindung verpflichtet zu nichts. Kein KYC und keine Teilnahmeprüfungen auf dieser Website.",
+          "Die veröffentlichten PPL-Verkaufsparameter (Kurvenformel, Preispfad, Limits und Ziel am Kurvenende) stehen auf /buy und entsprechen der Order-API. Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist; eine Wallet-Verbindung verpflichtet zu nichts. Kein KYC und keine Teilnahmeprüfungen auf dieser Website.",
           "Nichts auf dieser Website ist ein Angebot oder Versprechen, PPL zu verkaufen, wo der Verkauf eingeschränkt ist; die Teilnahme kann in Ihrer Rechtsordnung nicht verfügbar sein. Verkaufsbedingungen ändern sich nur durch veröffentlichte Updates und Governance, wo zutreffend."
         ]
       },
