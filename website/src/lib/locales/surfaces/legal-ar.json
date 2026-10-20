@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "إفصاحات بيع PPL",
+        "body": [
+          "PPL هو رمز المنفعة لشبكة PEOPLE. على المنحنى يتبع السعر الصيغة المنشورة؛ وبعد انتهاء البيع يحدده السوق وقد يرتفع أو ينخفض. PPL ليس ورقة مالية أو حصة في شركة أو وديعة أو منتج استثماري؛ لا يُوعَد بأي ربح أو عائد أو استرداد.",
+          "قد يكون المشاركة مقيدة أو غير متاحة حيث تعيش؛ التحقق من القواعد المعمول بها مسؤوليتك. استخدم فقط مالًا يمكنك تحمل خسارته.",
+          "مراجعات الأمان المساعدة بالذكاء الاصطناعي المذكورة على الموقع أجراها فريق المشروع. ليست تدقيقًا خارجيًا؛ يُستكمل تدقيق أمني من طرف ثالث قبل الشبكة الرئيسية. مكافأة الثغرات تقلل المخاطر ولا تزيلها."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "Información sobre la venta de PPL",
+        "body": [
+          "PPL es el token de utilidad de la red PEOPLE. En la curva su precio sigue la fórmula publicada y, tras la venta, lo fija el mercado: puede subir o bajar. PPL no es un valor, una participación en una empresa, un depósito ni un producto de inversión; no se promete ni garantiza beneficio, rendimiento o retorno.",
+          "La participación puede estar restringida o no disponible donde vives; comprobar las normas aplicables es tu responsabilidad. Usa solo dinero que puedas permitirte perder.",
+          "Las revisiones de seguridad asistidas por IA mencionadas en el sitio las realizó el equipo del proyecto. No son una auditoría externa; se completa una auditoría de seguridad de terceros antes del mainnet. El programa de recompensas por bugs reduce el riesgo, pero no lo elimina."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

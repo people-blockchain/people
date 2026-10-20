@@ -28,40 +28,41 @@
   "form": {
     "title": "PPL satın al",
     "amountLabel": "Ödediğiniz",
-    "amountHint": "USDC veya USDC'ye dönüştürülen USDT",
-    "stableLabel": "Stablecoin",
+    "stableLabel": "Coin",
     "youGet": "Alacağınız",
     "avgPrice": "Ortalama fiyat",
     "priceAfter": "Alımınızdan sonraki fiyat",
-    "estimate": "",
-    "limitPerBuy": "Alım başına en fazla {amount}",
-    "limitPerDay": "Kişi başına günde en fazla {amount}",
-    "cooldown": "İşlemler arası {seconds} sn",
     "overLimit": "Tek alımda en fazla {amount}.",
     "belowMin": "Teklif görmek için tutar girin.",
-    "cta": "Cüzdan bağla ve al",
-    "ctaDisabled": "Satış henüz açık değil",
-    "ctaConnected": "PPL satın al",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır.",
-    "payModeLabel": "Ödeme yöntemi",
-    "payOnBase": "Base'de öde",
-    "payFromOther": "Başka bir ağdan öde",
-    "basePayHint": "Satış yalnızca Base üzerinde yürür. Base'de USDC veya USDT ile ya da desteklenen herhangi bir zincirden USDT/USDC ile yerleşik otomatik takas widget'ı üzerinden ödeyin; widget bunları Base'de USDC'ye çevirir: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve Solana. Tron ve TON desteklenmez.",
-    "bridgeHint": "LI.FI ile başka bir ağdan USDT veya USDC gönderin. Base'deki cüzdanınıza USDC gelir; alımı altta tamamlayın. Desteklenen ağlar: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "USDT ile ödeme: önce USDC'ye dönüşür, alım USDC ile yapılır. Küçük swap ücreti uygulanır.",
-    "usdtSwapTitle": "USDT'yi USDC'ye dönüştür",
-    "usdtSwapAwaiting": "Satın alma düğmesini açmak için yukarıdaki USDT'yi dönüştürün.",
-    "usdtSwapReady": "Dönüştürüldü. Alımı altta USDC ile tamamlayın.",
-    "bridgeUsdtHint": "Listelenen herhangi bir ağdan USDT veya USDC ile ödeyebilirsiniz. Base'de USDC alırsınız.",
-    "bridgePanelTitle": "Base'e köprü",
-    "bridgeNeedWallet": "Köprülemeden önce Base'de USDC almak için bir cüzdan bağlayın.",
-    "bridgeReady": "Köprü tamam — alışı Base'de aşağıda tamamlayın.",
-    "bridgeAwaiting": "Satın alma düğmesi için önce yukarıdaki köprüyü tamamlayın.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve Solana",
-    "scrollToForm": "Satın alma formuna dön"
+    "sellBack": "30 gün sonra geri satış yapabilirsiniz.",
+    "network": "Ağ",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "Limit: satın alma için $500, günlük $2.000",
+    "ctaConnect": "Cüzdanı bağla",
+    "ctaBuy": "PPL satın al",
+    "ctaClosed": "Satış henüz açık değil",
+    "closedTitle": "Satış henüz açık değil",
+    "closedSub": "PPL başlangıç fiyatı $0,005.",
+    "step2": "2. adım: satın almayı onaylayın",
+    "disclaimerBefore": "PPL bir yardımcı tokendir, yatırım değildir. Fiyat düşebilir. ",
+    "disclaimerLink": "Koşullar",
+    "disclaimerAfter": ".",
+    "sellBackLink": "Detaylar",
+    "beneficiaryHint": "PPL {address} adresine gönderilir",
+    "successMessage": "Satın alma onaylandı.",
+    "errorCooldown": "Satın almalar arasında 60 saniye bekleyin.",
+    "errorDailyLimit": "Günlük satın alma limitine ulaşıldı.",
+    "errorInsufficient": "Base'de yeterli USDC yok.",
+    "errorRejected": "İşlem cüzdanda iptal edildi.",
+    "errorGeneric": "Satın alma başarısız. Tekrar deneyin."
   },
   "whyPriceRises": {
     "title": "Fiyat neden yükselir",
@@ -156,7 +157,8 @@
     "vestingBody": "İlk {cliff} ay ekip hiç token almaz. Sonra {linear} ay daha her ay kademeli açılır — toplam {total} ay.",
     "fundsTitle": "Satış parası nereye gidiyor",
     "fundsBody": "Toplananın {liquidityShare}'i LP'si {lock} ay kilitli likidite havuzuna gider. Diğer {multisigShare} proje multisig'ine; her harcama kamuya açık raporlanır.",
-    "auditBounty": "Bug bounty: herhangi bir sayfadaki bug düğmesinden zafiyet bildirin."
+    "auditBounty": "Bug bounty: herhangi bir sayfadaki bug düğmesinden zafiyet bildirin.",
+    "auditDisclaimer": "Yapay zekâ destekli incelemeler proje ekibi tarafından yapıldı. Bu bir dış denetim değildir; mainnet öncesi üçüncü taraf güvenlik denetimi yapılacaktır."
   },
   "faq": {
     "eyebrow": "SSS",
@@ -175,17 +177,10 @@
         "a": "Hayır. Eğri çalışırken geçerlidir. {ceiling} tavanına yalnızca eğrinin sonunda, {endRaise} toplanınca ve PPL başına {endPrice} ile ulaşılır. Satış bittikten sonra havuz fiyatını serbest piyasa belirler — üst ve alt sınır yok."
       },
       {
-        "q": "People ağını cüzdanıma nasıl eklerim?",
-        "a": "Aşağıdaki düğmeyi kullanın: cüzdanınız resmi parametrelerle PEOPLE ağını eklemenizi ve geçmenizi ister. Aynı değerleri People ağının yayınlanmış belgelerinden elle de girebilirsiniz."
-      },
-      {
         "q": "PPL'yi başkasına ne zaman gönderebilirim?",
         "a": "Tam ağ lansmanında: {verified} doğrulanmış katılımcı, en geç {months} ay. Eğrida alım satım ilk günden çalışır."
       }
     ],
-    "addNetworkCta": "People ağını cüzdana ekle",
-    "addNetworkDone": "İstek cüzdanınıza gönderildi",
-    "addNetworkError": "Cüzdan reddetti veya cüzdan bulunamadı.",
     "pumpTitle": "Tavansız eğrilerde neler ters gider",
     "pumpLead": "Bonding eğrileri pump.fun gibi launchpad'lerle popüler oldu. Bilinen sorunlar ve bizim çözümümüz.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "PPL satın al",
-    "price": "{price}'den itibaren"
-  },
-  "footnote": {
-    "title": "Küçük puntolar",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL, PEOPLE ağının utility token'ıdır. Eğrida fiyat yayınlanan formülü izler; satış bittikten sonra piyasa belirler: düşebilir de yükselebilir. PPL menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kar, getiri veya geri dönüş vaat veya garanti edilmez. Alım öncesi rakamlar yayınlanan formüle göre tahmindir ve imzadan önce zincir üstünde onaylanır. Bu sayfa yatırım, hukuk veya vergi tavsiyesi değildir."
-      },
-      {
-        "marker": "**",
-        "text": "Katılım bulunduğunuz yerde kısıtlı veya kullanılamayabilir; size uyan kuralları kontrol etmek sizin sorumluluğunuzdur. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın."
-      },
-      {
-        "marker": "***",
-        "text": "Yukarıda adı geçen yapay zekâ destekli incelemeler proje ekibi tarafından yapıldı. Harici denetim firması denetimi değildir; mainnet öncesi üçüncü taraf güvenlik denetimi tamamlanır. Bug bounty riski azaltır ama ortadan kaldırmaz: hiçbir inceleme yazılımın hatasız olduğunu kanıtlamaz."
-      }
-    ]
+    "price": "{price}'den itibaren",
+    "closedLabel": "Henüz açık değil"
   }
 }

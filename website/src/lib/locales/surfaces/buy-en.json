@@ -28,40 +28,41 @@
   "form": {
     "title": "Buy PPL",
     "amountLabel": "You pay",
-    "amountHint": "USDC, or USDT converted to USDC",
-    "stableLabel": "Stablecoin",
+    "stableLabel": "Coin",
     "youGet": "You get",
     "avgPrice": "Average price",
     "priceAfter": "Price after your purchase",
-    "estimate": "",
-    "limitPerBuy": "Up to {amount} per purchase",
-    "limitPerDay": "Up to {amount} per person per day",
-    "cooldown": "{seconds}s between trades",
     "overLimit": "Maximum {amount} in one purchase.",
     "belowMin": "Enter an amount to see your quote.",
-    "cta": "Connect wallet & buy",
-    "ctaDisabled": "Sale is not open yet",
-    "ctaConnected": "Buy PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base.",
-    "payModeLabel": "How you pay",
-    "payOnBase": "Pay on Base",
-    "payFromOther": "Pay from another network",
-    "basePayHint": "The sale runs on Base only. Pay with USDC or USDT on Base, or with USDT/USDC from any supported chain via the built-in automatic swap widget, which converts to USDC on Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and Solana. Tron and TON are not supported.",
-    "bridgeHint": "Send USDT or USDC from another network with LI.FI. It arrives as USDC in your wallet on Base, then you complete the purchase below. Supported networks: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "Pay with USDT: it's converted to USDC first, then your purchase goes through in USDC. A small swap fee applies.",
-    "usdtSwapTitle": "Convert USDT to USDC",
-    "usdtSwapAwaiting": "Convert your USDT above to unlock the buy button.",
-    "usdtSwapReady": "Converted. Finish your purchase in USDC below.",
-    "bridgeUsdtHint": "You can pay with USDT or USDC from any listed network. It arrives as USDC in your wallet on Base.",
-    "bridgePanelTitle": "Bridge to Base",
-    "bridgeNeedWallet": "Connect a wallet to receive USDC on Base before bridging.",
-    "bridgeReady": "Bridge complete — finish your purchase on Base below.",
-    "bridgeAwaiting": "Complete the bridge above to unlock the buy button.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, and Solana",
-    "scrollToForm": "Back to the buy form"
+    "sellBack": "You can sell back after 30 days.",
+    "network": "Network",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "Limit: $500 per purchase, $2,000 per day",
+    "ctaConnect": "Connect wallet",
+    "ctaBuy": "Buy PPL",
+    "ctaClosed": "Sale not open yet",
+    "closedTitle": "Sale not open yet",
+    "closedSub": "Starting at $0.005 per PPL.",
+    "step2": "Step 2 of 2: confirm purchase",
+    "disclaimerBefore": "PPL is a utility token, not an investment. Its price can go down. ",
+    "disclaimerLink": "Terms",
+    "disclaimerAfter": ".",
+    "sellBackLink": "Details",
+    "beneficiaryHint": "PPL will be sent to {address}",
+    "successMessage": "Purchase confirmed.",
+    "errorCooldown": "Please wait 60 seconds between purchases.",
+    "errorDailyLimit": "Daily purchase limit reached.",
+    "errorInsufficient": "Insufficient USDC on Base.",
+    "errorRejected": "Transaction cancelled in your wallet.",
+    "errorGeneric": "Purchase failed. Try again."
   },
   "whyPriceRises": {
     "title": "Why the price rises",
@@ -156,7 +157,8 @@
     "vestingBody": "For the first {cliff} months the team receives no tokens at all. After that the tokens unlock gradually, every month, over {linear} more months — {total} months in total.",
     "fundsTitle": "Where the money from the sale goes",
     "fundsBody": "{liquidityShare} of the raise goes into the liquidity pool, whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend.",
-    "auditBounty": "Bug bounty: report a vulnerability from the bug button on any page."
+    "auditBounty": "Bug bounty: report a vulnerability from the bug button on any page.",
+    "auditDisclaimer": "AI-assisted reviews were done by the project team. They are not an external audit; a third-party security audit will run before mainnet."
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -175,17 +177,10 @@
         "a": "No. It applies while the curve is running. The {ceiling} cap is only reached at the end of the curve, with {endRaise} raised and {endPrice} per PPL. After the sale ends, the pool price is set by the free market, with no upper limit and no lower limit."
       },
       {
-        "q": "How do I add the People network to my wallet?",
-        "a": "Use the button below: your wallet is asked to add the PEOPLE network with the official parameters and then switch to it. You can also enter the same values manually from the published network documentation."
-      },
-      {
         "q": "When can I send PPL to someone else?",
         "a": "At the full network launch: {verified} verified participants, and no later than {months} months. Buying and selling on the curve works from day one."
       }
     ],
-    "addNetworkCta": "Add People network to wallet",
-    "addNetworkDone": "Request sent to your wallet",
-    "addNetworkError": "Your wallet refused or no wallet was found.",
     "pumpTitle": "What goes wrong on curves without a ceiling",
     "pumpLead": "Bonding curves became popular through launchpads like pump.fun. These are their known problems, and what we do instead.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "Buy PPL",
-    "price": "from {price}"
-  },
-  "footnote": {
-    "title": "Small print",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL is the utility token of the People network. On the curve its price follows the published formula, and after the sale ends it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
-      },
-      {
-        "marker": "**",
-        "text": "Participation may be restricted or unavailable where you live, and checking the rules that apply to you is your own responsibility. Use only money you can afford to lose."
-      },
-      {
-        "marker": "***",
-        "text": "The AI-assisted reviews named above were carried out by the project team. They are not an audit by an external audit firm; a third-party security audit is completed before mainnet. A bug bounty reduces risk but does not remove it: no review can prove software free of defects."
-      }
-    ]
+    "price": "from {price}",
+    "closedLabel": "Not open yet"
   }
 }

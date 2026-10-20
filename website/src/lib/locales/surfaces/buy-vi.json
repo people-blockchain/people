@@ -28,40 +28,41 @@
   "form": {
     "title": "Mua PPL",
     "amountLabel": "Bạn trả",
-    "amountHint": "USDC hoặc USDT quy đổi sang USDC",
-    "stableLabel": "Stablecoin",
+    "stableLabel": "Coin",
     "youGet": "Bạn nhận",
     "avgPrice": "Giá trung bình",
     "priceAfter": "Giá sau giao dịch của bạn",
-    "estimate": "",
-    "limitPerBuy": "Tối đa {amount} mỗi lần mua",
-    "limitPerDay": "Tối đa {amount} mỗi người mỗi ngày",
-    "cooldown": "{seconds}s giữa các giao dịch",
     "overLimit": "Tối đa {amount} trong một lần mua.",
     "belowMin": "Nhập số tiền để xem báo giá.",
-    "cta": "Kết nối ví và mua",
-    "ctaDisabled": "Đợt bán chưa mở",
-    "ctaConnected": "Mua PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng khi đợt bán kết thúc; thanh toán bằng USDC trên Base.",
-    "payModeLabel": "Cách thanh toán",
-    "payOnBase": "Thanh toán trên Base",
-    "payFromOther": "Thanh toán từ mạng khác",
-    "basePayHint": "Đợt bán chỉ diễn ra trên Base. Thanh toán bằng USDC hoặc USDT trên Base, hoặc bằng USDT/USDC từ bất kỳ chuỗi được hỗ trợ nào qua widget hoán đổi tự động tích hợp, công cụ này chuyển thành USDC trên Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và Solana. Tron và TON không được hỗ trợ.",
-    "bridgeHint": "Gửi USDT hoặc USDC từ mạng khác qua LI.FI. USDC vào ví Base, sau đó hoàn tất mua bên dưới. Mạng hỗ trợ: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "Thanh toán USDT: quy đổi sang USDC trước, giao dịch mua dùng USDC. Phí swap nhỏ.",
-    "usdtSwapTitle": "Quy đổi USDT sang USDC",
-    "usdtSwapAwaiting": "Quy đổi USDT ở trên để mở nút mua.",
-    "usdtSwapReady": "Đã quy đổi. Hoàn tất mua bằng USDC bên dưới.",
-    "bridgeUsdtHint": "Bạn có thể trả USDT hoặc USDC từ bất kỳ mạng trong danh sách. USDC vào ví trên Base.",
-    "bridgePanelTitle": "Bridge sang Base",
-    "bridgeNeedWallet": "Kết nối ví để nhận USDC trên Base trước khi bridge.",
-    "bridgeReady": "Bridge hoàn tất — hoàn tất mua trên Base bên dưới.",
-    "bridgeAwaiting": "Hoàn tất bridge ở trên để mở nút mua.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và Solana",
-    "scrollToForm": "Quay lại form mua"
+    "sellBack": "Có thể bán lại sau 30 ngày.",
+    "network": "Mạng",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "Giới hạn: $500 mỗi lần mua, $2.000 mỗi ngày",
+    "ctaConnect": "Kết nối ví",
+    "ctaBuy": "Mua PPL",
+    "ctaClosed": "Đợt bán chưa mở",
+    "closedTitle": "Đợt bán chưa mở",
+    "closedSub": "Bắt đầu từ $0,005 mỗi PPL.",
+    "step2": "Bước 2/2: xác nhận mua",
+    "disclaimerBefore": "PPL là token tiện ích, không phải khoản đầu tư. Giá có thể giảm. ",
+    "disclaimerLink": "Điều khoản",
+    "disclaimerAfter": ".",
+    "sellBackLink": "Chi tiết",
+    "beneficiaryHint": "PPL sẽ gửi đến {address}",
+    "successMessage": "Mua thành công.",
+    "errorCooldown": "Đợi 60 giây giữa các lần mua.",
+    "errorDailyLimit": "Đã đạt giới hạn mua trong ngày.",
+    "errorInsufficient": "Không đủ USDC trên Base.",
+    "errorRejected": "Giao dịch bị hủy trong ví.",
+    "errorGeneric": "Mua thất bại. Thử lại."
   },
   "whyPriceRises": {
     "title": "Vì sao giá tăng",
@@ -156,7 +157,8 @@
     "vestingBody": "{cliff} tháng đầu đội ngũ không nhận token. Sau đó mở dần hàng tháng trong {linear} tháng nữa — tổng {total} tháng.",
     "fundsTitle": "Tiền bán đi đâu",
     "fundsBody": "{liquidityShare} số gom vào pool thanh khoản, LP khóa {lock} tháng. Phần còn lại {multisigShare} vào multisig dự án, báo cáo công khai từng khoản chi.",
-    "auditBounty": "Bug bounty: báo lỗ hổng qua nút bug trên bất kỳ trang nào."
+    "auditBounty": "Bug bounty: báo lỗ hổng qua nút bug trên bất kỳ trang nào.",
+    "auditDisclaimer": "Các đánh giá hỗ trợ AI do đội ngũ dự án thực hiện. Đây không phải kiểm toán bên ngoài; kiểm toán bảo mật bên thứ ba sẽ diễn ra trước mainnet."
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -175,17 +177,10 @@
         "a": "Không. Chỉ áp dụng khi đường cong đang chạy. Trần {ceiling} chỉ đạt ở cuối đường cong, khi gom {endRaise} và {endPrice} mỗi PPL. Sau khi đợt bán kết thúc, giá pool do thị trường tự do — không trần không sàn."
       },
       {
-        "q": "Làm sao thêm mạng People vào ví?",
-        "a": "Dùng nút bên dưới: ví sẽ được yêu cầu thêm mạng PEOPLE với tham số chính thức và chuyển sang. Bạn cũng có thể nhập cùng các giá trị thủ công từ tài liệu mạng People đã công bố."
-      },
-      {
         "q": "Khi nào gửi PPL cho người khác?",
         "a": "Khi mạng ra mắt đầy đủ: {verified} người xác minh, chậm nhất {months} tháng. Mua bán trên đường cong hoạt động từ ngày đầu."
       }
     ],
-    "addNetworkCta": "Thêm mạng People vào ví",
-    "addNetworkDone": "Đã gửi yêu cầu tới ví",
-    "addNetworkError": "Ví từ chối hoặc không tìm thấy ví.",
     "pumpTitle": "Điều gì sai trên đường cong không trần",
     "pumpLead": "đường cong giá phổ biến nhờ launchpad như pump.fun. Đây là vấn đề đã biết và cách chúng tôi xử lý.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "Mua PPL",
-    "price": "từ {price}"
-  },
-  "footnote": {
-    "title": "Ghi chú pháp lý",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau khi đợt bán kết thúc do thị trường quyết: có thể giảm cũng như tăng. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hay bảo đảm lợi nhuận, lợi suất hay hoàn vốn. Số liệu trước khi mua là ước tính theo công thức công bố và được xác nhận on-chain trước khi ký. Không có gì trên trang này là tư vấn đầu tư, pháp lý hay thuế."
-      },
-      {
-        "marker": "**",
-        "text": "Tham gia có thể bị hạn chế hoặc không khả dụng nơi bạn sống; kiểm tra quy định áp dụng là trách nhiệm của bạn. Chỉ dùng số tiền bạn chấp nhận mất."
-      },
-      {
-        "marker": "***",
-        "text": "Các đợt rà soát hỗ trợ AI nêu trên do đội dự án thực hiện. Không phải kiểm toán của công ty bên ngoài; kiểm toán bảo mật bên thứ ba hoàn tất trước mainnet. Bug bounty giảm rủi ro nhưng không loại bỏ: không đợt rà soát nào chứng minh phần mềm không lỗi."
-      }
-    ]
+    "price": "từ {price}",
+    "closedLabel": "Chưa mở"
   }
 }

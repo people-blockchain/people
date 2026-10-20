@@ -77,10 +77,8 @@ export const PAYOUT_DEFAULT = { networkLabel: "Base", stable: "USDC" as SaleStab
 /** Wallets the sale accepts. The connect flow itself is the site-wide wallet modal. */
 export const SUPPORTED_WALLETS = [
   "MetaMask",
-  "Phantom",
   "Trust Wallet",
   "WalletConnect",
-  "Tonkeeper (TON Connect)",
   "Google",
 ] as const;
 

@@ -27,41 +27,42 @@
   },
   "form": {
     "title": "购买 PPL",
-    "amountLabel": "您支付",
-    "amountHint": "USDC，或兑换为 USDC 的 USDT",
-    "stableLabel": "稳定币",
+    "amountLabel": "支付金额",
+    "stableLabel": "币种",
     "youGet": "您获得",
     "avgPrice": "平均价格",
     "priceAfter": "购买后的价格",
-    "estimate": "",
-    "limitPerBuy": "单次最多 {amount}",
-    "limitPerDay": "每人每天最多 {amount}",
-    "cooldown": "交易间隔 {seconds} 秒",
     "overLimit": "单次购买最多 {amount}。",
     "belowMin": "输入金额以查看报价。",
-    "cta": "连接钱包并购买",
-    "ctaDisabled": "销售尚未开放",
-    "ctaConnected": "购买 PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "仅限已验证用户从储备卖回：每个购买批次必须持有 30 天才能卖回；卖回价格为退出时的曲线价格；每日全球上限为储备的 2%；每人每日个人上限为 $2,000；费用 1.5%（当日卖回总额超过储备的 1% 时为 3%）；销售结束时卖回关闭；在 Base 上以 USDC 支付。",
-    "payModeLabel": "支付方式",
-    "payOnBase": "在 Base 支付",
-    "payFromOther": "从其他网络支付",
-    "basePayHint": "销售仅在 Base 上进行。在 Base 上使用 USDC 或 USDT 支付，或通过内置自动兑换组件使用来自任一支持链的 USDT/USDC 支付，该组件会将其转换为 Base 上的 USDC：Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 和 Solana。不支持 Tron 和 TON。",
-    "bridgeHint": "通过 LI.FI 从其他网络发送 USDT 或 USDC。USDC 到达您在 Base 的钱包后，在下方完成购买。支持网络：{chains}。",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "使用 USDT 支付：先兑换为 USDC，再以 USDC 完成购买。需支付少量兑换费。",
-    "usdtSwapTitle": "将 USDT 兑换为 USDC",
-    "usdtSwapAwaiting": "请在上方完成 USDT 兑换以解锁购买按钮。",
-    "usdtSwapReady": "已兑换。请在下方以 USDC 完成购买。",
-    "bridgeUsdtHint": "可从所列任意网络使用 USDT 或 USDC 支付，到账为 Base 上的 USDC。",
-    "bridgePanelTitle": "跨链到 Base",
-    "bridgeNeedWallet": "请先连接钱包，以便在 Base 接收 USDC。",
-    "bridgeReady": "跨链完成 — 请在下方于 Base 完成购买。",
-    "bridgeAwaiting": "请先完成上方跨链，以解锁购买按钮。",
-    "supportedBridgeChains": "Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 和 Solana",
-    "scrollToForm": "返回购买表单"
+    "sellBack": "30 天后可回售。",
+    "network": "网络",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "限额：单次 $500，每日 $2,000",
+    "ctaConnect": "连接钱包",
+    "ctaBuy": "购买 PPL",
+    "ctaClosed": "销售尚未开放",
+    "closedTitle": "销售尚未开放",
+    "closedSub": "起始价每枚 PPL $0.005。",
+    "step2": "第 2/2 步：确认购买",
+    "disclaimerBefore": "PPL 为实用代币，非投资品，价格可能下跌。",
+    "disclaimerLink": "条款",
+    "disclaimerAfter": "。",
+    "sellBackLink": "详情",
+    "beneficiaryHint": "PPL 将发送至 {address}",
+    "successMessage": "购买已确认。",
+    "errorCooldown": "两次购买请间隔 60 秒。",
+    "errorDailyLimit": "已达每日购买限额。",
+    "errorInsufficient": "Base 上 USDC 不足。",
+    "errorRejected": "已在钱包中取消交易。",
+    "errorGeneric": "购买失败，请重试。"
   },
   "whyPriceRises": {
     "title": "价格为何上涨",
@@ -156,7 +157,8 @@
     "vestingBody": "前 {cliff} 个月团队不获得任何代币。之后每月逐步解锁，再持续 {linear} 个月——共 {total} 个月。",
     "fundsTitle": "销售资金去向",
     "fundsBody": "募集 {liquidityShare} 进入流动性池，LP 锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。",
-    "auditBounty": "漏洞赏金：通过任意页面的 bug 按钮报告漏洞。"
+    "auditBounty": "漏洞赏金：通过任意页面的 bug 按钮报告漏洞。",
+    "auditDisclaimer": "上述 AI 辅助审查由项目团队完成，并非外部审计；主网前将进行第三方安全审计。"
   },
   "faq": {
     "eyebrow": "常见问题",
@@ -183,9 +185,6 @@
         "a": "全面网络上线时：{verified} 名已验证参与者，且不晚于 {months} 个月。曲线买卖从第一天即可进行。"
       }
     ],
-    "addNetworkCta": "将 People 网络添加到钱包",
-    "addNetworkDone": "请求已发送至您的钱包",
-    "addNetworkError": "钱包拒绝或未找到钱包。",
     "pumpTitle": "无上限曲线的问题",
     "pumpLead": "联合曲线因 pump.fun 等 launchpad 而流行。以下是已知问题及我们的做法。",
     "pumpCols": [
@@ -229,23 +228,7 @@
   },
   "sticky": {
     "label": "购买 PPL",
-    "price": "从 {price} 起"
-  },
-  "footnote": {
-    "title": "免责声明",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL 是 PEOPLE 网络的实用代币。曲线上价格遵循已公布公式；销售结束后由市场决定：可跌可涨。PPL 不是证券、公司股权、存款或投资产品，不承诺或保证任何利润、收益或回报。购买前显示的数字为按已公布公式的估算，签名前在链上确认。本页内容不构成投资、法律或税务建议。"
-      },
-      {
-        "marker": "**",
-        "text": "您所在地区参与可能受限或不可用；了解适用规则是您的责任。请仅使用可承受损失的资金。"
-      },
-      {
-        "marker": "***",
-        "text": "上述 AI 辅助审查由项目团队完成。并非外部审计公司审计；主网前将完成第三方安全审计。漏洞赏金降低风险但不能消除：任何审查都无法证明软件无缺陷。"
-      }
-    ]
+    "price": "从 {price} 起",
+    "closedLabel": "尚未开放"
   }
 }

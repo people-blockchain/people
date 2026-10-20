@@ -27,41 +27,42 @@
   },
   "form": {
     "title": "PPL kaufen",
-    "amountLabel": "Sie zahlen",
-    "amountHint": "USDC oder USDT, umgewandelt in USDC",
-    "stableLabel": "Stablecoin",
+    "amountLabel": "Du zahlst",
+    "stableLabel": "Coin",
     "youGet": "Sie erhalten",
     "avgPrice": "Durchschnittspreis",
     "priceAfter": "Preis nach Ihrem Kauf",
-    "estimate": "",
-    "limitPerBuy": "Bis {amount} pro Kauf",
-    "limitPerDay": "Bis {amount} pro Person und Tag",
-    "cooldown": "{seconds} s zwischen Trades",
     "overLimit": "Maximal {amount} in einem Kauf.",
     "belowMin": "Betrag eingeben, um ein Angebot zu sehen.",
-    "cta": "Wallet verbinden & kaufen",
-    "ctaDisabled": "Verkauf ist noch nicht geöffnet",
-    "ctaConnected": "PPL kaufen",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet mit dem Verkaufsende; Auszahlungen in USDC auf Base.",
-    "payModeLabel": "Zahlungsweg",
-    "payOnBase": "Auf Base zahlen",
-    "payFromOther": "Aus einem anderen Netz zahlen",
-    "basePayHint": "Der Verkauf läuft nur auf Base. Bezahle mit USDC oder USDT auf Base oder mit USDT/USDC von jeder unterstützten Chain über das integrierte automatische Swap-Widget, das in USDC auf Base umwandelt: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und Solana. Tron und TON werden nicht unterstützt.",
-    "bridgeHint": "Senden Sie USDT oder USDC aus einem anderen Netz mit LI.FI. Es landet als USDC in Ihrer Wallet auf Base; schließen Sie den Kauf unten ab. Unterstützte Netze: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "Zahlung mit USDT: zuerst Umwandlung in USDC, dann Kauf in USDC. Kleine Swap-Gebühr.",
-    "usdtSwapTitle": "USDT in USDC umwandeln",
-    "usdtSwapAwaiting": "Wandeln Sie oben USDT um, um die Kauf-Schaltfläche freizuschalten.",
-    "usdtSwapReady": "Umgewandelt. Schließen Sie den Kauf in USDC unten ab.",
-    "bridgeUsdtHint": "Sie können mit USDT oder USDC aus jedem gelisteten Netz zahlen. Auf Base erhalten Sie USDC.",
-    "bridgePanelTitle": "Bridge nach Base",
-    "bridgeNeedWallet": "Verbinden Sie eine Wallet, um USDC auf Base zu empfangen.",
-    "bridgeReady": "Bridge abgeschlossen — schließen Sie den Kauf auf Base unten ab.",
-    "bridgeAwaiting": "Schließen Sie zuerst den Bridge oben ab, um den Kauf-Button freizuschalten.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und Solana",
-    "scrollToForm": "Zurück zum Kaufformular"
+    "sellBack": "Rückverkauf nach 30 Tagen möglich.",
+    "network": "Netzwerk",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "Limit: 500 $ pro Kauf, 2.000 $ pro Tag",
+    "ctaConnect": "Wallet verbinden",
+    "ctaBuy": "PPL kaufen",
+    "ctaClosed": "Verkauf noch nicht geöffnet",
+    "closedTitle": "Verkauf noch nicht geöffnet",
+    "closedSub": "Ab 0,005 $ pro PPL.",
+    "step2": "Schritt 2 von 2: Kauf bestätigen",
+    "disclaimerBefore": "PPL ist ein Utility-Token, keine Anlage. Der Preis kann fallen. ",
+    "disclaimerLink": "AGB",
+    "disclaimerAfter": ".",
+    "sellBackLink": "Details",
+    "beneficiaryHint": "PPL gehen an {address}",
+    "successMessage": "Kauf bestätigt.",
+    "errorCooldown": "Bitte 60 Sekunden zwischen Käufen warten.",
+    "errorDailyLimit": "Tageslimit für Käufe erreicht.",
+    "errorInsufficient": "Nicht genug USDC auf Base.",
+    "errorRejected": "Transaktion im Wallet abgebrochen.",
+    "errorGeneric": "Kauf fehlgeschlagen. Bitte erneut versuchen."
   },
   "whyPriceRises": {
     "title": "Warum der Preis steigt",
@@ -156,7 +157,8 @@
     "vestingBody": "In den ersten {cliff} Monaten erhält das Team keine Tokens. Danach schrittweise monatliche Freigabe über {linear} weitere Monate — {total} Monate insgesamt.",
     "fundsTitle": "Verwendung der Verkaufserlöse",
     "fundsBody": "{liquidityShare} der Einnahmen gehen in den Liquiditätspool, dessen LP-Tokens {lock} Monate gesperrt sind. Die anderen {multisigShare} gehen ans Projekt-Multisig mit öffentlicher Berichterstattung jeder Ausgabe.",
-    "auditBounty": "Bug Bounty: Melden Sie eine Schwachstelle über den Bug-Button auf jeder Seite."
+    "auditBounty": "Bug Bounty: Melden Sie eine Schwachstelle über den Bug-Button auf jeder Seite.",
+    "auditDisclaimer": "Die KI-gestützten Prüfungen wurden vom Projektteam durchgeführt. Das ist kein externer Audit; ein Sicherheitsaudit durch Dritte wird vor dem Mainnet durchgeführt."
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -175,17 +177,10 @@
         "a": "Nein. Sie gilt, solange die Kurve läuft. Die Obergrenze {ceiling} wird nur am Ende der Kurve erreicht, bei {endRaise} Einnahmen und {endPrice} pro PPL. Nach dem Verkaufsende setzt der freie Markt den Pool-Preis — ohne obere und ohne untere Grenze."
       },
       {
-        "q": "Wie füge ich das People-Netzwerk meiner Wallet hinzu?",
-        "a": "Nutzen Sie den Button unten: Ihre Wallet wird gebeten, das PEOPLE-Netzwerk mit den offiziellen Parametern hinzuzufügen und dorthin zu wechseln. Sie können dieselben Werte auch manuell aus der veröffentlichten Netzwerkdokumentation eingeben."
-      },
-      {
         "q": "Wann kann ich PPL an jemand anderen senden?",
         "a": "Beim vollständigen Netzwerkstart: {verified} verifizierte Teilnehmer, spätestens in {months} Monaten. Kauf und Verkauf auf der Kurve funktionieren ab Tag eins."
       }
     ],
-    "addNetworkCta": "People-Netzwerk zur Wallet hinzufügen",
-    "addNetworkDone": "Anfrage an Ihre Wallet gesendet",
-    "addNetworkError": "Ihre Wallet hat abgelehnt oder keine Wallet gefunden.",
     "pumpTitle": "Was schiefgeht bei Kurven ohne Obergrenze",
     "pumpLead": "Bonding-Kurven wurden durch Launchpads wie pump.fun populär. Das sind ihre bekannten Probleme — und unser Ansatz.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "PPL kaufen",
-    "price": "ab {price}"
-  },
-  "footnote": {
-    "title": "Kleingedrucktes",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL ist der Utility-Token des PEOPLE-Netzwerks. Auf der Kurve folgt der Preis der veröffentlichten Formel; nach dem Verkaufsende setzt ihn der Markt: er kann fallen wie steigen. PPL ist kein Wertpapier, kein Unternehmensanteil, keine Einlage und kein Anlageprodukt; kein Gewinn, Ertrag oder Rückfluss wird versprochen oder garantiert. Zahlen vor dem Kauf sind Schätzungen nach der veröffentlichten Formel und werden on-chain vor der Signatur bestätigt. Nichts auf dieser Seite ist Anlage-, Rechts- oder Steuerberatung."
-      },
-      {
-        "marker": "**",
-        "text": "Teilnahme kann wo Sie leben eingeschränkt oder unmöglich sein; die für Sie geltenden Regeln zu prüfen ist Ihre Verantwortung. Nutzen Sie nur Geld, dessen Verlust Sie verkraften können."
-      },
-      {
-        "marker": "***",
-        "text": "Die genannten KI-gestützten Reviews wurden vom Projektteam durchgeführt. Sie sind kein Audit einer externen Prüfgesellschaft; vor Mainnet erfolgt ein Security-Audit durch Dritte. Ein Bug Bounty reduziert Risiko, beseitigt es nicht: Kein Review beweist fehlerfreie Software."
-      }
-    ]
+    "price": "ab {price}",
+    "closedLabel": "Noch nicht geöffnet"
   }
 }

@@ -58,14 +58,15 @@ test("tokenomics surfaces point the sale contract row at Base only", () => {
   }
 });
 
-test("buy surfaces list LI.FI bridge source chains without TON or Tron (12 languages)", () => {
+test("buy surfaces list supported networks without TON or Tron (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
-    assert.match(doc.form.supportedBridgeChains, /Solana/);
-    assert.doesNotMatch(doc.form.supportedBridgeChains, /Tron/);
-    assert.doesNotMatch(doc.form.supportedBridgeChains, /\bTON\b/i);
-    assert.match(doc.form.payOnBase, /Base/);
+    const names = Object.values(doc.form.networkNames ?? {}).join(" ");
+    assert.match(names, /Solana/);
+    assert.doesNotMatch(names, /Tron/);
+    assert.doesNotMatch(names, /\bTON\b/i);
+    assert.match(doc.form.networkNames.base, /Base/);
   }
 });
 
@@ -175,7 +176,7 @@ test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
     assert.match(doc.whyPriceRises.noManualLead, /bonding curve[）)]/i, `${lang}: bonding curve gloss`);
   }
   const ru = JSON.parse(readFileSync(join(surfaces, "buy-ru.json"), "utf8"));
-  assert.match(ru.form.sellBack, /обратный выкуп/i);
+  assert.match(ru.form.sellBack, /обратно/i);
   assert.match(ru.whyPriceRises.mechanism, /количества проданных PPL/);
   assert.doesNotMatch(JSON.stringify(ru), /холд/i);
 });
@@ -188,7 +189,8 @@ test("/buy UI omits dev-facing stats and form disclaimers", () => {
   assert.doesNotMatch(form, /form\.estimate/);
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
   assert.equal(en.hero.statsNote, "");
-  assert.equal(en.form.disabledNote, "");
+  assert.ok(en.form.ctaConnect);
+  assert.ok(en.form.disclaimerLink);
 });
 
 test("/buy audit copy names exactly the three models in AI_AUDITS", () => {

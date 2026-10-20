@@ -27,41 +27,42 @@
   },
   "form": {
     "title": "شراء PPL",
-    "amountLabel": "أنت تدفع",
-    "amountHint": "USDC أو USDT يُحوَّل إلى USDC",
-    "stableLabel": "Stablecoin",
+    "amountLabel": "المبلغ",
+    "stableLabel": "العملة",
     "youGet": "تحصل على",
     "avgPrice": "السعر المتوسط",
     "priceAfter": "السعر بعد شرائك",
-    "estimate": "",
-    "limitPerBuy": "حتى {amount} لكل شراء",
-    "limitPerDay": "حتى {amount} للشخص يوميًا",
-    "cooldown": "{seconds} ث بين الصفقات",
     "overLimit": "الحد الأقصى {amount} في شراء واحد.",
     "belowMin": "أدخل مبلغًا لرؤية العرض.",
-    "cta": "ربط المحفظة والشراء",
-    "ctaDisabled": "البيع لم يُفتح بعد",
-    "ctaConnected": "شراء PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "إعادة البيع من الاحتياطي للأشخاص الموثّقين فقط: يجب الاحتفاظ بكل دفعة شراء 30 يوماً قبل إمكانية إعادة بيعها؛ سعر إعادة البيع هو سعر المنحنى لحظة الخروج؛ سقف عالمي 2% من الاحتياطي يومياً؛ سقف شخصي 2,000$ لكل شخص يومياً؛ رسوم 1.5% (3% عندما يتجاوز إجمالي عمليات إعادة البيع في اليوم 1% من الاحتياطي)؛ تُغلق إعادة البيع عند انتهاء البيع؛ الدفع بـ USDC على Base.",
-    "payModeLabel": "طريقة الدفع",
-    "payOnBase": "الدفع على Base",
-    "payFromOther": "الدفع من شبكة أخرى",
-    "basePayHint": "يتم البيع على Base فقط. ادفع بـ USDC أو USDT على Base، أو بـ USDT/USDC من أي شبكة مدعومة عبر أداة المبادلة التلقائية المدمجة، التي تحوّلها إلى USDC على Base: Ethereum وBNB Chain وPolygon وArbitrum وOptimism وAvalanche وSolana. Tron وTON غير مدعومين.",
-    "bridgeHint": "أرسل USDT أو USDC من شبكة أخرى عبر LI.FI. يصل USDC إلى محفظتك على Base ثم أكمل الشراء أدناه. الشبكات المدعومة: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "الدفع بـ USDT: يُحوَّل إلى USDC أولاً ثم تتم الشراء بـ USDC. رسوم تحويل بسيطة.",
-    "usdtSwapTitle": "تحويل USDT إلى USDC",
-    "usdtSwapAwaiting": "حوّل USDT أعلاه لفتح زر الشراء.",
-    "usdtSwapReady": "تم التحويل. أكمل الشراء بـ USDC أدناه.",
-    "bridgeUsdtHint": "يمكنك الدفع بـ USDT أو USDC من أي شبكة مدرجة. يصل USDC على Base.",
-    "bridgePanelTitle": "جسر إلى Base",
-    "bridgeNeedWallet": "اربط محفظة لاستلام USDC على Base قبل الجسر.",
-    "bridgeReady": "اكتمل الجسر — أكمل الشراء على Base أدناه.",
-    "bridgeAwaiting": "أكمل الجسر أعلاه لفتح زر الشراء.",
-    "supportedBridgeChains": "Ethereum و BNB Chain و Polygon و Arbitrum و Optimism و Avalanche و Solana",
-    "scrollToForm": "العودة إلى نموذج الشراء"
+    "sellBack": "يمكنك البيع مرة أخرى بعد 30 يومًا.",
+    "network": "الشبكة",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "الحد: 500 دولار لكل عملية، 2000 دولار يوميًا",
+    "ctaConnect": "ربط المحفظة",
+    "ctaBuy": "شراء PPL",
+    "ctaClosed": "البيع غير مفتوح بعد",
+    "closedTitle": "البيع غير مفتوح بعد",
+    "closedSub": "يبدأ من 0.005 دولار لكل PPL.",
+    "step2": "الخطوة 2 من 2: أكّد الشراء",
+    "disclaimerBefore": "PPL رمز منفعة وليس استثمارًا. قد ينخفض السعر. ",
+    "disclaimerLink": "الشروط",
+    "disclaimerAfter": ".",
+    "sellBackLink": "التفاصيل",
+    "beneficiaryHint": "سيُرسَل PPL إلى {address}",
+    "successMessage": "تم تأكيد الشراء.",
+    "errorCooldown": "انتظر 60 ثانية بين عمليات الشراء.",
+    "errorDailyLimit": "تم بلوغ الحد اليومي للشراء.",
+    "errorInsufficient": "رصيد USDC غير كافٍ على Base.",
+    "errorRejected": "تم إلغاء المعاملة في المحفظة.",
+    "errorGeneric": "فشل الشراء. حاول مرة أخرى."
   },
   "whyPriceRises": {
     "title": "لماذا يرتفع السعر",
@@ -156,7 +157,8 @@
     "vestingBody": "أول {cliff} شهرًا لا يحصل الفريق على رموز. ثم فتح تدريجي شهريًا لـ {linear} شهرًا إضافيًا — {total} شهرًا إجمالًا.",
     "fundsTitle": "أين يذهب مال البيع",
     "fundsBody": "{liquidityShare} من المجموع لpool السيولة، LP مقفلة {lock} شهرًا. الباقي {multisigShare} لmultisig المشروع، بتقارير علنية عن كل إنفاق.",
-    "auditBounty": "Bug bounty: أبلغ عن ثغرة من زر bug في أي صفحة."
+    "auditBounty": "Bug bounty: أبلغ عن ثغرة من زر bug في أي صفحة.",
+    "auditDisclaimer": "أجريت مراجعات المساعدة بالذكاء الاصطناعي من فريق المشروع. ليست تدقيقًا خارجيًا؛ سيُجرى تدقيق أمني من طرف ثالث قبل الشبكة الرئيسية."
   },
   "faq": {
     "eyebrow": "الأسئلة",
@@ -175,17 +177,10 @@
         "a": "لا. ينطبق أثناء عمل المنحنى. لا يُبلغ سقف {ceiling} إلا في نهاية المنحنى، عند جمع {endRaise} وبسعر {endPrice} لكل PPL. بعد انتهاء البيع، يحدد السوق الحر سعر التجمع، بلا سقف ولا أرضية."
       },
       {
-        "q": "كيف أضيف شبكة People للمحفظة؟",
-        "a": "استخدم الزر أدناه: تُطلب من محفظتك إضافة شبكة PEOPLE بالمعلمات الرسمية والتبديل إليها. يمكنك أيضًا إدخال نفس القيم يدويًا من الوثائق المنشورة لشبكة People."
-      },
-      {
         "q": "متى أستطيع إرسال PPL لشخص آخر؟",
         "a": "عند الإطلاق الكامل للشبكة: {verified} مشاركًا موثّقًا، ولا لاحقًا من {months} شهرًا. الشراء والبيع على المنحنى يعملان من اليوم الأول."
       }
     ],
-    "addNetworkCta": "إضافة شبكة People للمحفظة",
-    "addNetworkDone": "أُرسل الطلب لمحفظتك",
-    "addNetworkError": "رفضت المحفظة أو لم تُعثر على محفظة.",
     "pumpTitle": "ما يخطئ في منحنيات بلا سقف",
     "pumpLead": "انتشرت منحنيات bonding عبر launchpads مثل pump.fun. هذه مشاكلها المعروفة وما نفعله نحن.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "شراء PPL",
-    "price": "من {price}"
-  },
-  "footnote": {
-    "title": "ملاحظات قانونية",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL هو token منفعة شبكة PEOPLE. على المنحنى يتبع السعر الصيغة المنشورة؛ وبعد انتهاء البيع يحدده السوق: قد ينخفض كما يرتفع. PPL ليس ورقة مالية ولا حصة شركة ولا وديعة ولا منتج استثمار، ولا يُوعد أو يُضمن ربح أو عائد أو استرداد. الأرقام قبل الشراء تقديرات من الصيغة المنشورة وتُؤكَّد on-chain قبل التوقيع. لا شيء في هذه الصفحة نصيحة استثمار أو قانون أو ضريبة."
-      },
-      {
-        "marker": "**",
-        "text": "قد يُقيَّد المشاركة أو تكون غير متاحة حيث تعيش؛ التحقق من القواعد المطبقة عليك مسؤوليتك. استخدم فقط مالًا تتحمل خسارته."
-      },
-      {
-        "marker": "***",
-        "text": "المراجعات بمساعدة AI المذكورة أعلاه نفذها فريق المشروع. ليست تدقيق شركة خارجية؛ يُستكمل تدقيق أمان طرف ثالث قبل mainnet. Bug bounty يقلل المخاطر ولا يلغيها: لا مراجعة تثبت خلو البرنامج من العيوب."
-      }
-    ]
+    "price": "من {price}",
+    "closedLabel": "غير مفتوح بعد"
   }
 }

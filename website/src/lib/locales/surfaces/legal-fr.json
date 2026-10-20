@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "Informations sur la vente de PPL",
+        "body": [
+          "PPL est le jeton utilitaire du réseau PEOPLE. Sur la courbe, son prix suit la formule publiée ; après la vente, il est fixé par le marché et peut monter ou baisser. PPL n'est pas un titre, une part d'entreprise, un dépôt ni un produit d'investissement ; aucun profit, rendement ou retour n'est promis ni garanti.",
+          "La participation peut être restreinte ou indisponible où vous vivez ; vérifier les règles applicables vous incombe. N'utilisez que de l'argent que vous pouvez perdre.",
+          "Les revues de sécurité assistées par IA mentionnées sur le site ont été réalisées par l'équipe du projet. Ce ne sont pas des audits externes ; un audit de sécurité tiers est réalisé avant le mainnet. La prime aux bugs réduit le risque sans l'éliminer."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

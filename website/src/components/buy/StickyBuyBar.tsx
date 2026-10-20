@@ -5,24 +5,31 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
-import { CURVE } from "@/lib/sale/config";
+import { CURVE, saleContractConfigured } from "@/lib/sale/config";
 import { fillCopy, pricePerPpl } from "@/lib/sale/format";
 
 /**
  * Mobile-only CTA that appears once the hero form has scrolled away and jumps
- * back to the bottom form. Hidden from `sm` up, where the form is always in
- * reach.
+ * back to the buy form. Hidden while `#buy-form` is in view.
  */
 export function StickyBuyBar({ stats, targetId }: { stats: SaleStats; targetId: string }) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const [visible, setVisible] = useState(false);
+  const saleOpen = saleContractConfigured();
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 520);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const form = document.getElementById("buy-form");
+    if (!form) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(!entry.isIntersecting && entry.intersectionRatio < 0.05);
+      },
+      { threshold: [0, 0.05, 0.1] },
+    );
+    observer.observe(form);
+    return () => observer.disconnect();
   }, []);
 
   const price = stats.spotPriceUsd ?? CURVE.startPriceUsd;
@@ -40,10 +47,12 @@ export function StickyBuyBar({ stats, targetId }: { stats: SaleStats; targetId: 
         tabIndex={visible ? undefined : -1}
         className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-brand px-5 text-base font-semibold text-brand-ink shadow-[0_12px_30px_-14px_rgba(3,105,161,0.8)]"
       >
-        {t.sticky.label}
-        <span className="text-sm font-medium opacity-80">
-          {fillCopy(t.sticky.price, { price: pricePerPpl(price, lang) })}
-        </span>
+        {saleOpen ? t.sticky.label : t.sticky.closedLabel}
+        {saleOpen ? (
+          <span className="text-sm font-medium opacity-80">
+            {fillCopy(t.sticky.price, { price: pricePerPpl(price, lang) })}
+          </span>
+        ) : null}
       </a>
     </div>
   );
