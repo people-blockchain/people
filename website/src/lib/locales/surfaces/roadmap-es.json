@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder: plantillas auditadas para apps (club con acceso NFT, votación DAO, suscripción, tienda USDC, sorteo), sin código",
       "summary": "Después de mainnet: un App Builder con plantillas auditadas sin código para apps comunes — club con acceso NFT, votación DAO, suscripción, tienda USDC y sorteo. Solo planificación; no implementado."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — un nodo de software con un clic y, después, un dispositivo plug-and-play listo para cualquiera que quiera apoyar la red."
     }
   }
 }
