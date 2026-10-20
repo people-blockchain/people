@@ -13,6 +13,10 @@ export const zh: LocaleContent = {
         "href": "/create"
       },
       {
+        "label": "购买 PPL",
+        "href": "/buy"
+      },
+      {
         "label": "项目动态",
         "href": "/discover"
       }
