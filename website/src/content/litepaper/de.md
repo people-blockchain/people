@@ -144,7 +144,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **Mainnet + PPL-Verkauf** | Mainnet startet. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist. | Mindestens 1.000 verifizierte Personen **und** ein aktives Treasury-Multisig |
+| **Mainnet + PPL-Verkauf** | Mainnet startet. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve; der Verkauf endet beim Ausverkauf oder nach **24 Monaten**) auf `/buy`; Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist. | Mindestens 1.000 verifizierte Personen **und** ein aktives Treasury-Multisig |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
 Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
@@ -223,4 +223,4 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Sicherheit: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; Bug bounty on every page.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
-- Der PPL-Sale läuft nach seiner Öffnung fest **180 Tage**. Danach kann jeder ihn abschließen, und die unverkauften PPL gehen in den Community-Pool — dieselbe Regel wie bei Token-Curves.
+- Der PPL-Sale läuft nach der Öffnung, bis alle PPL verkauft sind oder **24 Monate** vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach kann jeder abschließen; unverkaufte PPL gehen in den Community-Pool, keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu.

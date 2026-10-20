@@ -19,7 +19,6 @@ export type SaleStatus =
   | "not_deployed"
   | "open"
   | "paused"
-  | "graduated"
   | "ended";
 
 export type SaleStats = {
@@ -36,7 +35,7 @@ export type SaleStats = {
   buyers: number | null;
   /** Sale start, ISO-8601, or `null` before the sale opens. */
   startedAt: string | null;
-  /** Whole days left in the 180-day window, or `null`. */
+  /** Whole days left in the sale window (sold-out or duration cap), or `null`. */
   daysLeft: number | null;
 };
 

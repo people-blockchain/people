@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "购买 PPL",
-    "description": "PPL 在公开价格曲线上销售：起价 $0.005，随每次购买上升，上限 $0.25。曲线在募集 $400 万时关闭。随时买卖。"
+    "description": "PPL 在公开价格曲线上销售：起价 $0.005，随每次购买上升。仅当 100M 销售 PPL 全部售出、募集约 $6,262,744 时才会达到 $0.25 上限。销售持续至售罄或满 24 个月；每个卖回批次需持有 30 天。"
   },
   "hero": {
     "eyebrow": "PPL 销售",
@@ -15,15 +15,15 @@
     "price": "当前价格",
     "priceStartHint": "起价 {start}",
     "raised": "已募集",
-    "raisedTarget": "距毕业目标 {target}",
+    "raisedTarget": "最高 {target}",
     "sold": "已售 PPL",
     "soldTarget": "曲线上共 {supply}",
     "buyers": "买家",
     "daysLeft": "剩余天数",
-    "daysLeftTarget": "共 {days} 天",
+    "daysLeftTarget": "最多 {days} 天（{months} 个月上限）",
     "none": "—",
     "notOpenYet": "尚未开放",
-    "progressLabel": "距 {target} 毕业的进度"
+    "progressLabel": "距曲线最高 {target} 的进度"
   },
   "form": {
     "title": "购买 PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "购买 PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "仅已验证用户可从储备回购：每批需持有 30 天，有每日限额及 {fee} 费用；销售结束时关闭。",
+    "sellBack": "仅限已验证用户从储备卖回：每个购买批次必须持有 30 天才能卖回；卖回价格为退出时的曲线价格；每日全球上限为储备的 2%；每人每日个人上限为 $2,000；费用 1.5%（当日卖回总额超过储备的 1% 时为 3%）；销售结束时卖回关闭；在 Base 上以 USDC 支付。",
     "payModeLabel": "支付方式",
     "payOnBase": "在 Base 支付",
     "payFromOther": "从其他网络支付",
-    "basePayHint": "销售在 Base 进行。可用 USDC 或 USDT 支付——USDT 会先兑换为 USDC。",
+    "basePayHint": "销售仅在 Base 上进行。在 Base 上使用 USDC 或 USDT 支付，或通过内置自动兑换组件使用来自任一支持链的 USDT/USDC 支付，该组件会将其转换为 Base 上的 USDC：Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 和 Solana。不支持 Tron 和 TON。",
     "bridgeHint": "通过 LI.FI 从其他网络发送 USDT 或 USDC。USDC 到达您在 Base 的钱包后，在下方完成购买。支持网络：{chains}。",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "使用 USDT 支付：先兑换为 USDC，再以 USDC 完成购买。需支付少量兑换费。",
@@ -67,7 +67,7 @@
     "title": "价格为何上涨",
     "noManualLead": "PEOPLE 团队不会手动定价或提价。销售合约中的公开公式自动决定价格：每次购买都会沿价格曲线（bonding curve）推动价格。任何人都无法手动改价。",
     "mechanism": "与 Uniswap、Bancor（2017 年先驱）、pump.fun 以及 Base 上的 Virtuals Protocol 相同的公式定价原则：这里价格仅取决于已售出的 PPL 数量，透明且可在链上验证。",
-    "example": "根据已公布参数：起始每 PPL {startPrice}，售出 {midSold} PPL 后 {midPrice}（约筹集 {midRaised}），销售结束时 {gradPrice}（{gradRaised} 已筹集）。",
+    "example": "根据已公布参数：起始每 PPL {startPrice}，售出 {midSold} PPL 后 {midPrice}（约筹集 {midRaised}），曲线结束时 {endPrice}（{endRaised} 已筹集）。",
     "explainerLink": "曲线如何运作",
     "reserve": "购买资金留在 Base 上的销售储备中，用于从持有者处回购 PPL——已验证用户在持有 30 天后可回购，并有每日限额。",
     "chartAria": "PPL 销售价格曲线：价格与已售 PPL",
@@ -86,14 +86,14 @@
     "marker": "已募集 {raised}",
     "markerPrice": "每 PPL {price}",
     "markerSold": "已售 {sold} PPL",
-    "graduationTag": "销售结束",
-    "ceilingNote": "仅当全部 {supply} PPL 售完才会达到 {ceiling} 上限。曲线会先关闭，在募集 {graduation} 时。",
+    "ceilingNote": "仅当全部 {supply} PPL 售完、募集 {endRaise} 时才会达到 {ceiling} 上限。否则销售在 24 个月后结束。",
     "feedTitle": "近期买卖",
     "feedEmpty": "尚无交易。",
     "feedBuy": "买",
     "feedSell": "卖",
     "feedLink": "查看",
-    "capScope": "{ceiling} 上限仅适用于曲线销售期间。毕业后进入池子，价格由自由市场决定——无上限也无下限。"
+    "capScope": "{ceiling} 上限仅适用于曲线销售期间。销售结束后，池中价格由自由市场决定——无上限也无下限。",
+    "endTag": "曲线终点"
   },
   "whatYouGet": {
     "eyebrow": "您获得什么",
@@ -101,18 +101,18 @@
     "items": [
       {
         "title": "PPL 立即到您的地址",
-        "body": "购买瞬间 PPL 即记入您在 PEOPLE 网络上的地址。曲线上无锁仓，无等待名单。"
+        "body": "购买时，你的 PPL 会记录到 Base 上销售合约中你的地址，并在创世时作为 PEOPLE 网络上的原生 PPL 入账。购买的 PPL 除 30 天卖回持有期外没有锁仓。"
       },
       {
         "title": "从储备卖回",
-        "body": "已验证用户可在每批持有 30 天后、在每日限额内并以 {fee} 费用将 PPL 卖回储备；销售结束 后关闭。以 {payoutNetwork} 上的 {payoutStable} 支付。"
+        "body": "仅限已验证用户从储备卖回：每个购买批次必须持有 30 天才能卖回；卖回价格为退出时的曲线价格；每日全球上限为储备的 2%；每人每日个人上限为 $2,000；费用 1.5%（当日卖回总额超过储备的 1% 时为 3%）；销售结束时卖回关闭；在 Base 上以 USDC 支付。"
       },
       {
         "title": "转账随网络全面上线开放",
-        "body": "向他人发送 PPL 及池内交易在全面主网上线时开始：{verified} 名已验证参与者，且不晚于 {months} 个月。"
+        "body": "向他人发送 PPL 及池内交易在全面主网上线时开始：{verified} 名已验证参与者及已公布的多签门槛适用于 PPL 转账，而非销售开放。"
       },
       {
-        "title": "募集 {graduation} 时曲线关闭",
+        "title": "销售结束时",
         "body": "募集额的 {liquidityShare} 加上按曲线最后价格的 PPL 注入公开池，LP 代币锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。"
       }
     ]
@@ -123,19 +123,19 @@
     "steps": [
       {
         "title": "曲线",
-        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。最多 {days} 天内随时买卖。"
+        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。曲线上的买卖从销售开放之日起即可进行；每个卖回批次持有 30 天。销售持续至售罄或满 {saleMonths} 个月，以先到者为准；不延长。"
       },
       {
-        "title": "销售结束于 {graduation}",
-        "body": "曲线停止。募集 {liquidityShare} 与最后曲线价格的 PPL 以该价格进入公开 DEX 池，无跳价。LP 锁定 {lock} 个月。{multisigShare} 进入多签并公开报告。"
+        "title": "销售结束时",
+        "body": "当全部 PPL 售完或满 {saleMonths} 个月（以先到者为准）时曲线停止。募集额的 {liquidityShare} 加上按曲线最终价格的 PPL 以该价格进入公开 DEX 池，无跳价。LP 锁定 {lock} 个月。{multisigShare} 进入多签并公开报告。"
       },
       {
         "title": "全面主网",
-        "body": "钱包间 PPL 转账与池交易在 {verified} 名已验证参与者时开放，不晚于 {months} 个月。"
+        "body": "钱包间 PPL 转账与池交易在全面主网上线时开放：{verified} 名已验证参与者，且不晚于 {months} 个月。该门槛适用于 PPL 转账，而非销售开放之日。"
       },
       {
-        "title": "{days} 天后",
-        "body": "若未达 {graduation}，已募集部分仍按 {liquidityShare}/{multisigShare} 分配，未售 PPL 全部进入社区池。"
+        "title": "若曲线未售罄",
+        "body": "期限固定，不会延长。已募资金仍按 {liquidityShare}/{multisigShare} 分配，未售出 PPL 全部进入社区池，卖回之外不退款。在销售结束前，未售出 PPL 由项目多签保管，团队不动用。"
       }
     ]
   },
@@ -163,12 +163,16 @@
     "title": "问题与解答",
     "items": [
       {
+        "q": "销售持续多久？",
+        "a": "至全部 PPL 售完或满 {saleMonths} 个月，以先到者为准。期限固定，不会延长。结束后未售出 PPL 进入社区池；卖回之外不退款。此前由项目多签保管，团队不动用。"
+      },
+      {
         "q": "可以将 PPL 卖回吗？",
-        "a": "仅限已验证用户：每批持有 30 天、每日限额及 {fee} 费用；销售结束 后关闭。"
+        "a": "仅限已验证用户从储备卖回：每个购买批次必须持有 30 天才能卖回；卖回价格为退出时的曲线价格；每日全球上限为储备的 2%；每人每日个人上限为 $2,000；费用 1.5%（当日卖回总额超过储备的 1% 时为 3%）；销售结束时卖回关闭；在 Base 上以 USDC 支付。"
       },
       {
         "q": "{ceiling} 上限是永久的吗？",
-        "a": "不是。仅在曲线运行期间适用。曲线在募集 {graduation} 时关闭，约每 PPL {graduationPrice}，低于上限。销售结束后池价由自由市场决定，无上下限。"
+        "a": "不是。仅在曲线运行期间适用。只有到曲线终点、募集 {endRaise} 且每 PPL {endPrice} 时才会达到 {ceiling} 上限。销售结束后，池价由自由市场决定，无上下限。"
       },
       {
         "q": "如何将 People 网络添加到钱包？",
@@ -192,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "晚期买家支付过高",
-        "what": "价格无限上涨，毕业前最后买家支付数倍于最早买家。",
-        "ours": "硬性 {ceiling} 上限，曲线在 {graduation} 关闭——约 {graduationPrice}。"
+        "what": "价格向硬性上限上升，销售后期买家支付的价格远高于早期买家。",
+        "ours": "硬性 {ceiling} 上限。只有全部 PPL 售出、募集 {endRaise} 时曲线才达到该上限——约 {endPrice}。"
       },
       {
         "problem": "狙击与机器人",
@@ -213,7 +217,7 @@
       {
         "problem": "炒作上币",
         "what": "销售中途被推上交易所。",
-        "ours": "销售期间不上币。DEX 交易仅在毕业后。"
+        "ours": "销售期间不上币。DEX 交易仅在销售结束后。"
       }
     ]
   },
@@ -232,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL 是 PEOPLE 网络的实用代币。曲线上价格遵循已公布公式；毕业后由市场决定：可跌可涨。PPL 不是证券、公司股权、存款或投资产品，不承诺或保证任何利润、收益或回报。购买前显示的数字为按已公布公式的估算，签名前在链上确认。本页内容不构成投资、法律或税务建议。"
+        "text": "PPL 是 PEOPLE 网络的实用代币。曲线上价格遵循已公布公式；销售结束后由市场决定：可跌可涨。PPL 不是证券、公司股权、存款或投资产品，不承诺或保证任何利润、收益或回报。购买前显示的数字为按已公布公式的估算，签名前在链上确认。本页内容不构成投资、法律或税务建议。"
       },
       {
         "marker": "**",

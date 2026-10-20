@@ -4,7 +4,7 @@
  */
 
 import { CURVE, SALE } from "./sale/config";
-import { raisedUsd, spotPriceUsd } from "./sale/curve";
+import { maxRaiseUsd, raisedUsd, spotPriceUsd } from "./sale/curve";
 import { MODEL_A_FEE_SPLIT } from "./selling-economics";
 
 export const TOTAL_SUPPLY_PPL = 1_000_000_000;
@@ -63,18 +63,17 @@ export const BONDING_CURVE = {
   supplyPpl: CURVE.supplyPpl,
   durationDays: SALE.durationDays,
   priceStartUsdt: CURVE.startPriceUsd,
-  /** Hard ceiling on the curve only; after graduation the market sets price. */
+  /** Hard ceiling on the curve only; after the sale ends the market sets price. */
   priceEndUsdt: CURVE.ceilingPriceUsd,
-  /** Graduation closes the curve; theoretical max raise if every PPL sold is higher. */
-  maxRaiseUsdt: CURVE.graduationRaiseUsd,
-  graduationRaiseUsdt: CURVE.graduationRaiseUsd,
+  /** The full curve raise if all 100M PPL sell; the sale can also end at 24 months. */
+  maxRaiseUsdt: maxRaiseUsd(),
   sellFeePct: SALE.sellFeePct,
   maxPerBuyUsdt: SALE.maxPerBuyUsd,
   maxPerDayUsdt: SALE.maxPerDayUsd,
   cooldownSeconds: SALE.cooldownSeconds,
 } as const;
 
-/** Where the raise goes at graduation (and after the 180-day window). */
+/** Where the raise goes when the sale ends. */
 export const RAISE_SPLIT = [
   { id: "liquidity", pct: SALE.liquiditySharePct },
   { id: "multisig", pct: SALE.multisigSharePct },

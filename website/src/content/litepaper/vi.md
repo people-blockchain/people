@@ -144,7 +144,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
+| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong; đợt bán kết thúc khi bán hết hoặc sau **24 tháng**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
 Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.
@@ -223,4 +223,4 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - Bảo mật: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Multisig của kho bạc là **2 trên 3** và được tạo trước mainnet.
 - Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
-- Đợt bán PPL, khi mở, kéo dài cố định **180 ngày**. Sau đó bất kỳ ai cũng có thể kết thúc nó, và PPL chưa bán sẽ vào pool cộng đồng — cùng quy tắc như đường cong token.
+- Đợt bán PPL, khi mở, chạy đến khi bán hết PPL hoặc trong **24 tháng**, tùy điều kiện nào đến trước. Thời hạn cố định và không gia hạn. Sau đó bất kỳ ai cũng có thể kết thúc; PPL chưa bán vào quỹ cộng đồng, không hoàn tiền. Trước đó PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào.

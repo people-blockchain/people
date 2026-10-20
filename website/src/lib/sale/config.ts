@@ -29,20 +29,24 @@ export const CURVE = {
   ceilingPriceUsd: 0.25,
   /** Growth rate per 1M PPL sold. */
   k: Math.log(50) / 100,
-  /** The curve closes once this much has been raised (net reserve). */
-  graduationRaiseUsd: 4_000_000,
   /** Raise markers drawn on the chart. */
-  milestoneRaisesUsd: [1_000_000, 2_000_000, 4_000_000] as const,
+  milestoneRaisesUsd: [1_000_000, 2_000_000, 5_000_000] as const,
 } as const;
 
-/** The $0.25 ceiling binds on the curve only; after graduation it is a free market. */
+/** The $0.25 ceiling binds on the curve only; after the sale ends it is a free market. */
 export const CAP_IS_CURVE_ONLY = true;
 
 /* ── Sale window, limits, fees ─────────────────────────────────────────── */
 
 export const SALE = {
-  /** Sale window. After this, whatever was raised is split the same 50/50 way. */
-  durationDays: 180,
+  /**
+   * Sale window: until all curve PPL is sold or this many months from open,
+   * whichever comes first (fixed term, no extensions). After it ends, unsold
+   * PPL goes to the community pool; whatever was raised is split 50/50.
+   */
+  durationMonths: 24,
+  /** Derived day cap for countdown UI and adapters (~24 calendar months). */
+  durationDays: 730,
   /** Max USD value of a single purchase. */
   maxPerBuyUsd: 500,
   /** Max USD value one person may buy in a rolling 24 hours. */
@@ -51,9 +55,9 @@ export const SALE = {
   cooldownSeconds: 60,
   /** Taken off a sell back to the curve; goes to PPL buyback, not to the team. */
   sellFeePct: 1.5,
-  /** Share of the raise seeded into the DEX pool at graduation. */
+  /** Share of the raise seeded into the DEX pool when the sale ends. */
   liquiditySharePct: 50,
-  /** Share of the raise sent to the project multisig at graduation. */
+  /** Share of the raise sent to the project multisig when the sale ends. */
   multisigSharePct: 50,
   /** How long the pool's LP tokens are locked. */
   lpLockMonths: 24,

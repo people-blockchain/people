@@ -31,7 +31,10 @@ export function SaleStatsPanel({ stats }: { stats: SaleStats }) {
       key: "days",
       label: s.daysLeft,
       value: stats.daysLeft === null ? none : String(stats.daysLeft),
-      hint: fillCopy(s.daysLeftTarget, { days: SALE.durationDays }),
+      hint: fillCopy(s.daysLeftTarget, {
+        days: SALE.durationDays,
+        months: SALE.durationMonths,
+      }),
     },
   ];
 

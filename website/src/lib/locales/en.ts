@@ -11,6 +11,10 @@ export const en = {
         "href": "/create"
       },
       {
+        "label": "Buy PPL",
+        "href": "/buy"
+      },
+      {
         "label": "Project feed",
         "href": "/discover"
       }

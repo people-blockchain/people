@@ -144,7 +144,7 @@ Cada comisión de protocolo, incluidas las comisiones fraccionarias, se divide d
 | Etapa | Qué sucede | Condición |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteras, verificación, lanzamientos de tokens, tarjetas NFT, intercambios, puntos de Un Millón de Fundadores. | Ahora |
-| **Mainnet + venta de PPL** | Se lanza mainnet. Los parámetros publicados (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva, graduación en **$4M**) están en `/buy`; las compras siguen desactivadas hasta desplegar el hub de venta. | Al menos 1.000 personas verificadas **y** una multifirma de tesorería activa |
+| **Mainnet + venta de PPL** | Se lanza mainnet. Los parámetros publicados (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva; la venta termina al agotarse o a los **24 meses**) están en `/buy`; las compras siguen desactivadas hasta desplegar el hub de venta. | Al menos 1.000 personas verificadas **y** una multifirma de tesorería activa |
 | **Apuestas y validadores** | Las apuestas y la participación de validadores se abren más allá del proyecto. | Después de mainnet |
 
 No se prometen fechas. Cada etapa comienza cuando se cumple su condición.
@@ -223,4 +223,4 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 - Seguridad: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - El multisig del tesoro es **2 de 3** y se crea antes de mainnet.
 - Si la curva de un token no se agota en **180 días** desde el lanzamiento, cualquiera puede finalizarla y los tokens no vendidos van al pool comunitario de ese token. Una curva agotada pasa a liquidez como antes. (Activo en testnet.)
-- La venta de PPL, una vez abierta, dura **180 días** fijos. Después, cualquiera puede finalizarla y los PPL no vendidos van al pool comunitario — la misma regla que para las curvas de tokens.
+- La venta de PPL, una vez abierta, dura hasta que se vendan todos los PPL o durante **24 meses**, lo que ocurra primero. El plazo es fijo y no se prorrogará. Después cualquiera puede finalizarla; los PPL no vendidos van al fondo comunitario y no hay reembolsos. Hasta entonces, los PPL no vendidos están en el multisig del proyecto y el equipo no los toca.

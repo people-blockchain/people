@@ -144,7 +144,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 | Fase | Cosa succede | Gate |
 |---|---|---|
 | **Stagione 0 — Testnet pubblico** | Portafogli, verifica, lanci di token, carte NFT, swap, punti Million Founders. | Ora |
-| **Mainnet + vendita PPL** | Il mainnet parte. Parametri pubblicati (curva esponenziale da **$0.005** per PPL, fino a **100M PPL** sulla curva, graduation a **$4M**) su `/buy`; acquisti disattivati finché l'hub non è deployato. | Almeno 1.000 persone verificate **e** multisig del tesoro attivo |
+| **Mainnet + vendita PPL** | Il mainnet parte. Parametri pubblicati (curva esponenziale da **$0.005** per PPL, fino a **100M PPL** sulla curva; la vendita termina a esaurimento o dopo **24 mesi**) su `/buy`; acquisti disattivati finché l'hub non è deployato. | Almeno 1.000 persone verificate **e** multisig del tesoro attivo |
 | **Staking & validatori** | Staking e partecipazione dei validatori si aprono oltre il progetto. | Dopo mainnet |
 
 Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
@@ -223,4 +223,4 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 - Sicurezza: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Il multisig del tesoro è **2 su 3** e viene creato prima della mainnet.
 - Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Attiva sulla testnet.)
-- La vendita PPL, una volta aperta, dura **180 giorni** fissi. Dopo, chiunque può finalizzarla e i PPL invenduti vanno al pool della community — la stessa regola delle curve dei token.
+- La vendita PPL, una volta aperta, dura finché non si vendono tutti i PPL o per **24 mesi**, a seconda di cosa avviene prima. Il termine è fisso e non sarà prorogato. Dopo chiunque può finalizzarla; i PPL non venduti vanno al fondo community e non ci sono rimborsi. Fino ad allora restano nel multisig del progetto e il team non li tocca.

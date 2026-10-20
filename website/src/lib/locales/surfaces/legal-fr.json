@@ -119,7 +119,7 @@
       {
         "title": "Vente publique de PPL",
         "body": [
-          "Les paramètres publiés de la vente PPL (formule de courbe, trajectoire de prix, limites et objectif de graduation) sont sur /buy et correspondent à l'API de commande. Les achats restent désactivés tant que le hub de vente n'est pas déployé ; connecter un portefeuille ne vous engage à rien. Aucun KYC ni contrôle d'éligibilité sur ce site.",
+          "Les paramètres publiés de la vente PPL (formule de courbe, trajectoire de prix, limites et objectif de fin de courbe) sont sur /buy et correspondent à l'API de commande. Les achats restent désactivés tant que le hub de vente n'est pas déployé ; connecter un portefeuille ne vous engage à rien. Aucun KYC ni contrôle d'éligibilité sur ce site.",
           "Rien sur ce site n'est une offre ni une promesse de vente de PPL où la vente est restreinte ; la participation peut être indisponible dans votre juridiction. Les conditions de vente changent uniquement via des mises à jour publiées et la gouvernance le cas échéant."
         ]
       },

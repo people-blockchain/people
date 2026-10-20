@@ -144,7 +144,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
+| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe ; la vente se termine à l'épuisement ou après **24 mois**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
 Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
@@ -223,4 +223,4 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 - Sécurité : **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1** ; bug bounty on every page.
 - Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
 - Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
-- La vente PPL, une fois ouverte, dure **180 jours** fixes. Ensuite, n'importe qui peut la clôturer et les PPL invendus vont au pool communautaire — la même règle que pour les courbes de tokens.
+- La vente PPL, une fois ouverte, dure jusqu'à ce que tous les PPL soient vendus ou pendant **24 mois**, selon la première échéance. Le délai est fixe et ne sera pas prolongé. Ensuite n'importe qui peut la clôturer ; les PPL invendus vont au fonds communautaire et il n'y a pas de remboursement. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas.

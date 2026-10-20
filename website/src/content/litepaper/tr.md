@@ -144,7 +144,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Mainnet + PPL satışı** | Mainnet başlar. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; hub deploy edilene kadar alımlar kapalı. | En az 1.000 doğrulanmış kişi **ve** aktif hazine multisig |
+| **Mainnet + PPL satışı** | Mainnet başlar. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**; satış tükenince veya **24 ay** sonra biter) `/buy` sayfasında; hub deploy edilene kadar alımlar kapalı. | En az 1.000 doğrulanmış kişi **ve** aktif hazine multisig |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
 Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
@@ -223,4 +223,4 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
 - Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
-- PPL satışı açıldıktan sonra sabit **180 gün** sürer. Ardından herkes onu sonlandırabilir ve satılmayan PPL topluluk havuzuna gider — token eğrileriyle aynı kural.
+- PPL satışı açıldıktan sonra tüm PPL satılana veya **24 ay** dolana kadar — hangisi önce gelirse — sürer. Süre sabittir ve uzatılmaz. Ardından herkes sonlandırabilir; satılmayan PPL topluluk havuzuna gider, iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz.

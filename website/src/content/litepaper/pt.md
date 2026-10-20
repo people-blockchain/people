@@ -144,7 +144,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
+| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva; a venda termina ao esgotar ou após **24 meses**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
 Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
@@ -223,4 +223,4 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 - Segurança: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - O multisig do tesouro é **2 de 3** e é criado antes da mainnet.
 - Se a curva de um token não esgotar em **180 dias** após o lançamento, qualquer pessoa pode finalizá-la e os tokens não vendidos vão para o pool comunitário desse token. Uma curva esgotada passa para a liquidez como antes. (Ativo na testnet.)
-- A venda de PPL, depois de aberta, dura **180 dias** fixos. Depois disso qualquer pessoa pode finalizá-la, e os PPL não vendidos vão para o pool comunitário — a mesma regra das curvas de tokens.
+- A venda de PPL, depois de aberta, segue até vender todo o PPL ou por **24 meses**, o que vier primeiro. O prazo é fixo e não será prorrogado. Depois qualquer pessoa pode finalizá-la; PPL não vendido vai ao fundo comunitário e não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca.

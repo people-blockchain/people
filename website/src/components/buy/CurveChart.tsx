@@ -6,7 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
 import { CURVE } from "@/lib/sale/config";
-import { milestones, spotPriceUsd } from "@/lib/sale/curve";
+import { curveEnd, milestones, spotPriceUsd } from "@/lib/sale/curve";
 import { fillCopy, pplCompact, pricePerPpl, usdCompact } from "@/lib/sale/format";
 
 const W = 640;
@@ -41,15 +41,16 @@ function curvePath(): string {
  * Plotted as price against PPL sold rather than against dollars raised:
  * price is a straight line in dollars raised (`p = p0 + k·R/1e6`), which would
  * hide the exponential shape that actually governs what a buyer gets. The
- * $1M / $2M / $4M raise markers are placed at the PPL sold each one implies,
+ * $1M / $2M / $5M raise markers are placed at the PPL sold each one implies,
+ * and the end of the curve is marked at all 100M PPL sold and the $0.25 cap,
  * so both readings are on the same picture.
  */
 export function CurveChart({ stats }: { stats: SaleStats }) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const gradientId = useId();
-  const marks = milestones();
-  const graduationMark = marks[marks.length - 1];
+  const end = curveEnd();
+  const marks = [...milestones(), end];
   const here = stats.soldPpl;
 
   const yTicks = [0.05, 0.1, 0.15, 0.2, 0.25];
@@ -145,7 +146,7 @@ export function CurveChart({ stats }: { stats: SaleStats }) {
 
           {/* Raise markers, staggered so the labels never collide at 360px */}
           {marks.map((mark, index) => {
-            const isGraduation = mark.raisedUsd === graduationMark.raisedUsd;
+            const isEnd = mark.soldPpl >= CURVE.supplyPpl;
             // Labels sit to the left of their own guide line, each on its own
             // row, so three markers inside one plot never collide or clip.
             const labelY = PAD.top + 15 + index * 18;
@@ -156,15 +157,15 @@ export function CurveChart({ stats }: { stats: SaleStats }) {
                   x2={x(mark.soldPpl)}
                   y1={PAD.top}
                   y2={H - PAD.bottom}
-                  stroke={isGraduation ? "var(--c-value)" : "var(--c-line-strong)"}
-                  strokeWidth={isGraduation ? 2 : 1}
-                  strokeDasharray={isGraduation ? undefined : "4 4"}
+                  stroke={isEnd ? "var(--c-value)" : "var(--c-line-strong)"}
+                  strokeWidth={isEnd ? 2 : 1}
+                  strokeDasharray={isEnd ? undefined : "4 4"}
                 />
                 <circle
                   cx={x(mark.soldPpl)}
                   cy={y(mark.priceUsd)}
-                  r={isGraduation ? 5.5 : 4}
-                  fill={isGraduation ? "var(--c-value)" : "var(--c-brand)"}
+                  r={isEnd ? 5.5 : 4}
+                  fill={isEnd ? "var(--c-value)" : "var(--c-brand)"}
                   stroke="var(--c-surface)"
                   strokeWidth="1.5"
                 />
@@ -175,7 +176,7 @@ export function CurveChart({ stats }: { stats: SaleStats }) {
                   /* Below sm the same figures are legible in the cards under
                      the chart, so the in-plot labels step aside. */
                   className={`font-mono text-[13px] font-semibold max-sm:hidden ${
-                    isGraduation ? "fill-[var(--c-value)]" : "fill-[var(--c-ink-2)]"
+                    isEnd ? "fill-[var(--c-value)]" : "fill-[var(--c-ink-2)]"
                   }`}
                 >
                   {`${usdCompact(mark.raisedUsd, lang)} · ${pricePerPpl(mark.priceUsd, lang)}`}
@@ -212,26 +213,26 @@ export function CurveChart({ stats }: { stats: SaleStats }) {
           {fillCopy(t.curve.ceilingNote, {
             ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
             supply: pplCompact(CURVE.supplyPpl, lang),
-            graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
+            endRaise: usdCompact(end.raisedUsd, lang),
           })}
         </p>
       </figcaption>
 
       <ul className="mt-4 grid gap-2 sm:grid-cols-3">
         {marks.map((mark) => {
-          const isGraduation = mark.raisedUsd === graduationMark.raisedUsd;
+          const isEnd = mark.soldPpl >= CURVE.supplyPpl;
           return (
             <li
               key={mark.raisedUsd}
               className={`rounded-2xl border p-3 ${
-                isGraduation ? "border-value/45 bg-value/5" : "border-line bg-surface"
+                isEnd ? "border-value/45 bg-value/5" : "border-line bg-surface"
               }`}
             >
               <p className="flex items-center gap-2 font-mono text-sm font-bold text-ink">
                 {fillCopy(t.curve.marker, { raised: usdCompact(mark.raisedUsd, lang) })}
-                {isGraduation ? (
+                {isEnd ? (
                   <span className="rounded-full bg-value/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-value">
-                    {t.curve.graduationTag}
+                    {t.curve.endTag}
                   </span>
                 ) : null}
               </p>

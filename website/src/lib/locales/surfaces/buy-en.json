@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Buy PPL",
-    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase, up to a $0.25 ceiling. The curve closes at $4M raised. Buy and sell at any time."
+    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase. The $0.25 ceiling is only reached if all 100M sale PPL sell, at about $6,262,744 raised. The sale runs until sold out or 24 months; sell-back lots have a 30-day hold."
   },
   "hero": {
     "eyebrow": "PPL sale",
@@ -15,15 +15,15 @@
     "price": "Current price",
     "priceStartHint": "Starts at {start}",
     "raised": "Raised",
-    "raisedTarget": "of {target} to graduation",
+    "raisedTarget": "of {target} maximum",
     "sold": "PPL sold",
     "soldTarget": "of {supply} on the curve",
     "buyers": "Buyers",
     "daysLeft": "Days left",
-    "daysLeftTarget": "of {days}",
+    "daysLeftTarget": "of {days} max ({months}-month cap)",
     "none": "—",
     "notOpenYet": "Not open yet",
-    "progressLabel": "Progress to the {target} graduation"
+    "progressLabel": "Progress to the {target} curve maximum"
   },
   "form": {
     "title": "Buy PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "Buy PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Sell-back from the reserve is for verified users only: each lot needs a 30-day hold, daily limits apply, and a {fee} fee; it closes when the sale graduates.",
+    "sellBack": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base.",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
-    "basePayHint": "The sale runs on Base. Pay with USDC, or with USDT — it's converted to USDC first.",
+    "basePayHint": "The sale runs on Base only. Pay with USDC or USDT on Base, or with USDT/USDC from any supported chain via the built-in automatic swap widget, which converts to USDC on Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and Solana. Tron and TON are not supported.",
     "bridgeHint": "Send USDT or USDC from another network with LI.FI. It arrives as USDC in your wallet on Base, then you complete the purchase below. Supported networks: {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "Pay with USDT: it's converted to USDC first, then your purchase goes through in USDC. A small swap fee applies.",
@@ -67,7 +67,7 @@
     "title": "Why the price rises",
     "noManualLead": "The PEOPLE team does not set or raise the price. A public formula in the sale smart contract sets it automatically: each purchase moves the price along the bonding curve. Nobody can change the price manually.",
     "mechanism": "Same formula-based pricing as Uniswap, Bancor (pioneer, 2017), pump.fun, and Virtuals Protocol on Base: here price = f(tokens sold), transparent and verifiable on chain.",
-    "example": "From the published curve parameters: {startPrice} per PPL at the start, {midPrice} after {midSold} PPL sold (~{midRaised} raised), and {gradPrice} at graduation ({gradRaised} raised).",
+    "example": "From the published curve parameters: {startPrice} per PPL at the start, {midPrice} after {midSold} PPL sold (~{midRaised} raised), and {endPrice} at the end of the curve ({endRaised} raised).",
     "explainerLink": "How the bonding curve works",
     "reserve": "Funds from purchases stay in the sale reserve on Base and are used to buy PPL back from holders — sell-back for verified users after a 30-day hold, subject to daily limits.",
     "chartAria": "PPL sale bonding curve: price versus PPL sold",
@@ -86,14 +86,14 @@
     "marker": "{raised} raised",
     "markerPrice": "{price} per PPL",
     "markerSold": "{sold} PPL sold",
-    "graduationTag": "Graduation",
-    "ceilingNote": "The {ceiling} ceiling is only reached if all {supply} PPL sell. The curve closes first, at {graduation} raised.",
+    "ceilingNote": "The {ceiling} ceiling is only reached if all {supply} PPL sell, at {endRaise} raised. Otherwise the sale ends after 24 months.",
     "feedTitle": "Recent buys and sells",
     "feedEmpty": "No trades yet.",
     "feedBuy": "Buy",
     "feedSell": "Sell",
     "feedLink": "View",
-    "capScope": "The {ceiling} cap applies during the curve sale only. After graduation to the pool the price is set by the free market — no upper limit and no lower limit."
+    "capScope": "The {ceiling} cap applies during the curve sale only. After the sale ends, the price in the pool is set by the free market — no upper limit and no lower limit.",
+    "endTag": "End of curve"
   },
   "whatYouGet": {
     "eyebrow": "What you get",
@@ -101,18 +101,18 @@
     "items": [
       {
         "title": "PPL on your address, immediately",
-        "body": "PPL is recorded to you on the People network the moment you buy. No lock-up on the curve, no waiting list."
+        "body": "Your PPL is recorded to your address in the sale contract on Base the moment you buy and is credited as native PPL on the PEOPLE network at genesis. There is no lock-up on purchased PPL beyond the 30-day sell-back hold."
       },
       {
         "title": "Sell-back from the reserve",
-        "body": "Verified users can sell PPL back to the reserve after a 30-day hold per lot, within daily limits and a {fee} fee. Sell-back closes when the sale graduates. Payouts are in {payoutStable} on {payoutNetwork}."
+        "body": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
       },
       {
         "title": "Transfers open with the full network launch",
-        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants, and no later than {months} months."
+        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants and the published multisig gate apply to PPL transfers, not to the sale opening."
       },
       {
-        "title": "At {graduation} the curve closes",
+        "title": "When the sale ends",
         "body": "{liquidityShare} of the raise plus PPL at the last curve price seed a public pool whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend."
       }
     ]
@@ -123,19 +123,19 @@
     "steps": [
       {
         "title": "The curve",
-        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time, for up to {days} days."
+        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell on the curve from the day the sale opens; each sell-back lot has a 30-day hold. The sale runs until sold out or for {saleMonths} months, whichever comes first; there are no extensions."
       },
       {
-        "title": "Graduation at {graduation}",
-        "body": "The curve stops. {liquidityShare} of the raise plus PPL at the last curve price go into a public DEX pool at exactly that price, with no jump. LP locked for {lock} months. {multisigShare} to the multisig with public reporting."
+        "title": "When the sale ends",
+        "body": "The curve stops when all PPL sell or after {saleMonths} months, whichever comes first. {liquidityShare} of the raise plus PPL at the final curve price go into a public DEX pool at exactly that price, with no jump. LP locked for {lock} months. {multisigShare} to the multisig with public reporting."
       },
       {
         "title": "Full mainnet",
-        "body": "PPL transfers between wallets and pool trading open at {verified} verified participants, and no later than {months} months."
+        "body": "PPL transfers between wallets and pool trading open at full mainnet: {verified} verified participants, and no later than {months} months. The gate applies to PPL transfers, not to the day the sale opens."
       },
       {
-        "title": "After {days} days",
-        "body": "If {graduation} is not reached, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, and every unsold PPL goes to the community pool."
+        "title": "If the curve does not sell out",
+        "body": "The term is fixed and will not be extended. Whatever was raised still gets the same {liquidityShare}/{multisigShare} split, every unsold PPL goes to the Community Pool, and there are no refunds outside sell-back. Until the sale ends, unsold PPL is held in the project multisig and the team does not touch it."
       }
     ]
   },
@@ -163,12 +163,16 @@
     "title": "Questions, answered",
     "items": [
       {
+        "q": "How long does the sale run?",
+        "a": "Until all PPL is sold or for {saleMonths} months, whichever comes first. The term is fixed and will not be extended. After it ends, unsold PPL goes to the Community Pool; there are no refunds outside sell-back. Until then, unsold PPL is held in the project multisig and the team does not touch it."
+      },
+      {
         "q": "Can I sell PPL back?",
-        "a": "Verified users only: 30-day hold per lot, daily limits, and a {fee} fee. Sell-back closes when the sale graduates."
+        "a": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",
-        "a": "No. It applies while the curve is running. The curve closes at {graduation} raised, around {graduationPrice} per PPL, below the cap. After graduation the pool price is set by the free market, with no upper limit and no lower limit."
+        "a": "No. It applies while the curve is running. The {ceiling} cap is only reached at the end of the curve, with {endRaise} raised and {endPrice} per PPL. After the sale ends, the pool price is set by the free market, with no upper limit and no lower limit."
       },
       {
         "q": "How do I add the People network to my wallet?",
@@ -192,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Late buyers overpay",
-        "what": "The price runs up without limit, so the last buyers before graduation pay many times what the first did.",
-        "ours": "A hard {ceiling} ceiling, and the curve closes at {graduation} — around {graduationPrice}."
+        "what": "The price runs up toward a hard ceiling, and buyers late in the sale pay far more than the first ones.",
+        "ours": "A hard {ceiling} ceiling. The curve reaches it only when all PPL sell, at {endRaise} raised — around {endPrice}."
       },
       {
         "problem": "Snipers and bots",
@@ -213,7 +217,7 @@
       {
         "problem": "Hype listings",
         "what": "The token is pushed onto exchanges in the middle of the sale.",
-        "ours": "No listings during the sale. DEX trading only after graduation."
+        "ours": "No listings during the sale. DEX trading only after the sale ends."
       }
     ]
   },
@@ -232,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL is the utility token of the People network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
+        "text": "PPL is the utility token of the People network. On the curve its price follows the published formula, and after the sale ends it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
       },
       {
         "marker": "**",

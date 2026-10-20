@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Beli PPL",
-    "description": "PPL dijual pada kurva harga publik: mulai $0,005, naik setiap pembelian, plafon $0,25. Kurva tutup saat terkumpul $4M. Beli dan jual kapan saja."
+    "description": "PPL dijual pada kurva harga publik: mulai $0,005 dan naik setiap pembelian. Plafon $0,25 hanya tercapai jika seluruh 100M PPL dalam penjualan terjual, saat terkumpul sekitar $6.262.744. Penjualan berjalan sampai habis atau 24 bulan; setiap lot jual kembali memiliki masa tunggu 30 hari."
   },
   "hero": {
     "eyebrow": "Penjualan PPL",
@@ -15,15 +15,15 @@
     "price": "Harga saat ini",
     "priceStartHint": "Mulai dari {start}",
     "raised": "Terkumpul",
-    "raisedTarget": "dari {target} menuju penutupan penjualan",
+    "raisedTarget": "maksimal {target}",
     "sold": "PPL terjual",
     "soldTarget": "dari {supply} di kurva",
     "buyers": "Pembeli",
     "daysLeft": "Hari tersisa",
-    "daysLeftTarget": "dari {days}",
+    "daysLeftTarget": "maks. {days} (batas {months} bulan)",
     "none": "—",
     "notOpenYet": "Belum dibuka",
-    "progressLabel": "Progres menuju penutupan penjualan {target}"
+    "progressLabel": "Progres menuju maksimum kurva {target}"
   },
   "form": {
     "title": "Beli PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "Beli PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Pembelian kembali dari cadangan hanya untuk pengguna terverifikasi: setiap lot butuh 30 hari masa tunggu, ada batas harian, dan biaya {fee}; tutup saat penutupan penjualan.",
+    "sellBack": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base.",
     "payModeLabel": "Cara bayar",
     "payOnBase": "Bayar di Base",
     "payFromOther": "Bayar dari jaringan lain",
-    "basePayHint": "Penjualan di Base. Bayar dengan USDC atau USDT — USDT dikonversi ke USDC dulu.",
+    "basePayHint": "Penjualan hanya berjalan di Base. Bayar dengan USDC atau USDT di Base, atau dengan USDT/USDC dari chain mana pun yang didukung melalui widget swap otomatis bawaan, yang mengonversinya ke USDC di Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche dan Solana. Tron dan TON tidak didukung.",
     "bridgeHint": "Kirim USDT atau USDC dari jaringan lain dengan LI.FI. USDC masuk ke dompet di Base, lalu selesaikan pembelian di bawah. Jaringan didukung: {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "Bayar dengan USDT: dikonversi ke USDC dulu, pembelian memakai USDC. Biaya swap kecil.",
@@ -67,7 +67,7 @@
     "title": "Mengapa harga naik",
     "noManualLead": "Tim PEOPLE tidak menetapkan atau menaikkan harga. Formula publik di kontrak penjualan menetapkannya otomatis: setiap pembelian menggeser harga di kurva harga (bonding curve). Tidak ada yang bisa mengubah harga secara manual.",
     "mechanism": "Prinsip harga berbasis formula yang sama dengan Uniswap, Bancor (pelopor, 2017), pump.fun, dan Virtuals Protocol di Base: di sini harga hanya bergantung pada jumlah PPL yang terjual, transparan dan dapat diverifikasi on-chain.",
-    "example": "Dari parameter yang dipublikasikan: {startPrice} per PPL di awal, {midPrice} setelah {midSold} PPL terjual (~{midRaised} terkumpul), dan {gradPrice} saat penutupan penjualan ({gradRaised} terkumpul).",
+    "example": "Dari parameter yang dipublikasikan: {startPrice} per PPL di awal, {midPrice} setelah {midSold} PPL terjual (~{midRaised} terkumpul), dan {endPrice} di akhir kurva ({endRaised} terkumpul).",
     "explainerLink": "Cara kerja kurva",
     "reserve": "Dana dari pembelian tetap di cadangan penjualan di Base dan dipakai untuk membeli kembali PPL dari pemegang — pembelian kembali untuk pengguna terverifikasi setelah 30 hari masa tunggu, dengan batas harian.",
     "chartAria": "Kurva harga penjualan PPL: harga dan PPL terjual",
@@ -86,14 +86,14 @@
     "marker": "{raised} terkumpul",
     "markerPrice": "{price} per PPL",
     "markerSold": "{sold} PPL terjual",
-    "graduationTag": "Penutupan penjualan",
-    "ceilingNote": "Plafon {ceiling} hanya tercapai jika semua {supply} PPL terjual. Kurva tutup lebih dulu, saat {graduation} terkumpul.",
+    "ceilingNote": "Plafon {ceiling} hanya tercapai jika semua {supply} PPL terjual, saat {endRaise} terkumpul. Jika tidak, penjualan berakhir setelah 24 bulan.",
     "feedTitle": "Beli jual terbaru",
     "feedEmpty": "Belum ada transaksi.",
     "feedBuy": "Beli",
     "feedSell": "Jual",
     "feedLink": "Lihat",
-    "capScope": "Plafon {ceiling} hanya berlaku selama penjualan kurva. Setelah penutupan penjualan ke pool, harga ditetapkan pasar bebas — tanpa batas atas maupun bawah."
+    "capScope": "Plafon {ceiling} hanya berlaku selama penjualan kurva. Setelah penjualan berakhir, harga di pool ditetapkan pasar bebas — tanpa batas atas maupun bawah.",
+    "endTag": "Akhir kurva"
   },
   "whatYouGet": {
     "eyebrow": "Yang Anda dapat",
@@ -101,18 +101,18 @@
     "items": [
       {
         "title": "PPL langsung di alamat Anda",
-        "body": "PPL dicatat untuk Anda di jaringan PEOPLE saat membeli. Tanpa lock-up di kurva, tanpa antrean."
+        "body": "PPL Anda dicatat ke alamat Anda di kontrak penjualan di Base saat Anda membeli dan dikreditkan sebagai PPL native di jaringan PEOPLE saat genesis. Tidak ada lock-up pada PPL yang dibeli selain masa tunggu 30 hari untuk jual kembali."
       },
       {
         "title": "pembelian kembali dari cadangan",
-        "body": "Pengguna terverifikasi dapat menjual PPL kembali ke cadangan setelah masa tunggu 30 hari per lot, dengan batas harian dan biaya {fee}. Tutup saat penjualan penutupan penjualan. Pembayaran dalam {payoutStable} di {payoutNetwork}."
+        "body": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
       },
       {
         "title": "Transfer dibuka saat peluncuran penuh jaringan",
-        "body": "Mengirim PPL ke orang lain dan trading di pool dimulai saat mainnet penuh: {verified} peserta terverifikasi, paling lambat {months} bulan."
+        "body": "Mengirim PPL ke orang lain dan trading di pool dimulai saat mainnet penuh: {verified} peserta terverifikasi dan gerbang multisig yang dipublikasikan berlaku untuk transfer PPL, bukan untuk pembukaan penjualan."
       },
       {
-        "title": "Saat {graduation} kurva tutup",
+        "title": "Saat penjualan berakhir",
         "body": "{liquidityShare} dari terkumpul plus PPL di harga kurva terakhir mengisi pool publik dengan token LP terkunci {lock} bulan. Sisanya {multisigShare} ke multisig proyek, dengan laporan publik setiap pengeluaran."
       }
     ]
@@ -123,19 +123,19 @@
     "steps": [
       {
         "title": "Kurva",
-        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual kapan saja, hingga {days} hari."
+        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual di kurva sejak hari penjualan dibuka; setiap lot jual kembali ditahan 30 hari. Penjualan berjalan sampai habis atau selama {saleMonths} bulan, mana yang lebih dulu; tidak ada perpanjangan."
       },
       {
-        "title": "Penutupan penjualan pada {graduation}",
-        "body": "Kurva berhenti. {liquidityShare} terkumpul plus PPL harga terakhir masuk pool DEX publik tepat di harga itu, tanpa loncatan. LP terkunci {lock} bulan. {multisigShare} ke multisig dengan laporan publik."
+        "title": "Saat penjualan berakhir",
+        "body": "Kurva berhenti saat semua PPL terjual atau setelah {saleMonths} bulan, mana yang lebih dulu. {liquidityShare} terkumpul plus PPL di harga akhir kurva masuk pool DEX publik tepat di harga itu, tanpa loncatan. LP terkunci {lock} bulan. {multisigShare} ke multisig dengan laporan publik."
       },
       {
         "title": "Mainnet penuh",
-        "body": "Transfer PPL antar dompet dan trading pool dibuka pada {verified} peserta terverifikasi, paling lambat {months} bulan."
+        "body": "Transfer PPL antar dompet dan trading pool dibuka saat mainnet penuh: {verified} peserta terverifikasi, paling lambat {months} bulan. Gerbang berlaku untuk transfer PPL, bukan untuk hari pembukaan penjualan."
       },
       {
-        "title": "Setelah {days} hari",
-        "body": "Jika {graduation} tidak tercapai, pembagian {liquidityShare}/{multisigShare} yang sama untuk yang terkumpul, dan semua PPL tidak terjual ke kolam komunitas."
+        "title": "Jika kurva tidak habis terjual",
+        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Dana terkumpul tetap dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, dan tidak ada pengembalian dana di luar jual kembali. Sampai penjualan berakhir, PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya."
       }
     ]
   },
@@ -163,12 +163,16 @@
     "title": "Pertanyaan, dijawab",
     "items": [
       {
+        "q": "Berapa lama penjualan berlangsung?",
+        "a": "Sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah berakhir, PPL tidak terjual masuk kolam komunitas; tidak ada pengembalian dana di luar jual kembali. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya."
+      },
+      {
         "q": "Bisakah saya menjual kembali PPL?",
-        "a": "Hanya pengguna terverifikasi: masa tunggu 30 hari per lot, batas harian, dan biaya {fee}. Tutup saat penjualan penutupan penjualan."
+        "a": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
       },
       {
         "q": "Apakah plafon {ceiling} permanen?",
-        "a": "Tidak. Berlaku saat kurva berjalan. Kurva tutup saat {graduation} terkumpul, sekitar {graduationPrice} per PPL, di bawah plafon. Setelah penutupan penjualan, harga pool ditetapkan pasar bebas, tanpa batas atas maupun bawah."
+        "a": "Tidak. Berlaku saat kurva berjalan. Plafon {ceiling} hanya tercapai di akhir kurva, saat {endRaise} terkumpul dan {endPrice} per PPL. Setelah penjualan berakhir, harga pool ditetapkan pasar bebas, tanpa batas atas maupun bawah."
       },
       {
         "q": "Bagaimana menambahkan jaringan People ke dompet?",
@@ -192,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Pembeli terlambat overpay",
-        "what": "Harga naik tanpa batas; pembeli terakhir sebelum penutupan penjualan membayar jauh lebih dari yang pertama.",
-        "ours": "Plafon keras {ceiling}, kurva tutup di {graduation} — sekitar {graduationPrice}."
+        "what": "Harga naik menuju plafon keras, dan pembeli terlambat membayar jauh lebih dari yang pertama.",
+        "ours": "Plafon keras {ceiling}. Kurva hanya mencapainya saat semua PPL terjual, di {endRaise} — sekitar {endPrice}."
       },
       {
         "problem": "Sniper dan bot",
@@ -213,7 +217,7 @@
       {
         "problem": "Listing hype",
         "what": "Token didorong ke exchange di tengah penjualan.",
-        "ours": "Tidak ada listing selama penjualan. Trading DEX hanya setelah penutupan penjualan."
+        "ours": "Tidak ada listing selama penjualan. Trading DEX hanya setelah penjualan berakhir."
       }
     ]
   },
@@ -232,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti formula yang dipublikasikan; setelah penutupan penjualan ditetapkan pasar: bisa turun maupun naik. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; tidak ada laba, imbal hasil, atau pengembalian yang dijanjikan atau dijamin. Angka sebelum pembelian adalah perkiraan dari formula yang dipublikasikan dan dikonfirmasi on-chain sebelum menandatangani. Tidak ada di halaman ini yang merupakan saran investasi, hukum, atau pajak."
+        "text": "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti formula yang dipublikasikan; setelah penjualan berakhir ditetapkan pasar: bisa turun maupun naik. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; tidak ada laba, imbal hasil, atau pengembalian yang dijanjikan atau dijamin. Angka sebelum pembelian adalah perkiraan dari formula yang dipublikasikan dan dikonfirmasi on-chain sebelum menandatangani. Tidak ada di halaman ini yang merupakan saran investasi, hukum, atau pajak."
       },
       {
         "marker": "**",

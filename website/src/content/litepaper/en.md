@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
+| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve; the sale ends when sold out or after **24 months**) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.
@@ -225,4 +225,4 @@ Only verifiable public facts about other networks. Sources below.
 - Security: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
 - The treasury multisig is **2-of-3** and is created before mainnet.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
-- The PPL sale, once it opens, runs for a fixed **180 days**. After that anyone can finalize it, and the unsold PPL goes to the community pool — the same rule as for token curves.
+- The PPL sale, once it opens, runs until all PPL is sold or for **24 months**, whichever comes first. The term is fixed and will not be extended. After it ends, anyone can finalize it; unsold PPL goes to the community pool and there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it.

@@ -119,7 +119,7 @@
       {
         "title": "Vendita pubblica di PPL",
         "body": [
-          "I parametri pubblicati della vendita PPL (formula della curva, percorso di prezzo, limiti e obiettivo di graduation) sono su /buy e corrispondono all'API ordini. Gli acquisti restano disattivati finché l'hub di vendita non è deployato; collegare il wallet non ti impegna a nulla. Nessun KYC né controlli di eleggibilità su questo sito.",
+          "I parametri pubblicati della vendita PPL (formula della curva, percorso di prezzo, limiti e obiettivo di fine curva) sono su /buy e corrispondono all'API ordini. Gli acquisti restano disattivati finché l'hub di vendita non è deployato; collegare il wallet non ti impegna a nulla. Nessun KYC né controlli di eleggibilità su questo sito.",
           "Nulla su questo sito è un'offerta o promessa di vendere PPL dove la vendita è limitata; la partecipazione può non essere disponibile nella tua giurisdizione. I termini di vendita cambiano solo tramite aggiornamenti pubblicati e governance ove applicabile."
         ]
       },
