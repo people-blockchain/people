@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "Công bố về bán PPL",
+        "body": [
+          "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau khi bán kết thúc thị trường quyết định và có thể tăng hoặc giảm. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hẹn hay bảo đảm lợi nhuận hay hoàn vốn.",
+          "Tham gia có thể bị hạn chế hoặc không khả dụng nơi bạn sống; kiểm tra quy định áp dụng là trách nhiệm của bạn. Chỉ dùng số tiền bạn có thể chấp nhận mất.",
+          "Các đánh giá bảo mật hỗ trợ AI trên trang web do đội dự án thực hiện. Không phải kiểm toán bên ngoài; kiểm toán bảo mật bên thứ ba hoàn tất trước mainnet. Bug bounty giảm rủi ro nhưng không loại bỏ hoàn toàn."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

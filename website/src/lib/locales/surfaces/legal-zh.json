@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "PPL 销售披露",
+        "body": [
+          "PPL 是 PEOPLE 网络的实用代币。在曲线上价格遵循已公布公式；销售结束后由市场决定，可能上涨也可能下跌。PPL 不是证券、公司股份、存款或投资产品；不承诺或保证任何利润、收益或回报。",
+          "您所在地区可能限制或无法参与，核实适用规则是您的责任。请仅使用可承受损失的资金。",
+          "网站上列出的 AI 辅助安全审查由项目团队完成，并非外部审计；主网前将完成第三方安全审计。漏洞赏金可降低风险，但不能完全消除。"
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

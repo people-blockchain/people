@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "Pengungkapan penjualan PPL",
+        "body": [
+          "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti rumus yang dipublikasikan; setelah penjualan berakhir pasar yang menentukan dan bisa naik atau turun. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; keuntungan atau pengembalian tidak dijanjikan.",
+          "Partisipasi mungkin dibatasi atau tidak tersedia di wilayah Anda; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang siap Anda rugikan.",
+          "Tinjauan keamanan berbantuan AI yang disebut di situs dilakukan oleh tim proyek. Bukan audit eksternal; audit keamanan pihak ketiga diselesaikan sebelum mainnet. Bug bounty mengurangi risiko tetapi tidak menghilangkannya."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

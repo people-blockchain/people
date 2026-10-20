@@ -14,7 +14,6 @@ import { SaleFaq } from "./SaleFaq";
 import { SaleStatsPanel } from "./SaleStatsPanel";
 import { SaleTimeline } from "./SaleTimeline";
 import { SaleTransparency } from "./SaleTransparency";
-import { SmallPrint, FootnoteRef } from "./SmallPrint";
 import { StickyBuyBar } from "./StickyBuyBar";
 import { TradeFeed } from "./TradeFeed";
 import { WhatYouGet } from "./WhatYouGet";
@@ -41,8 +40,8 @@ export function BuyPage() {
         className="border-b border-line bg-canvas-2 pt-[max(0px,env(safe-area-inset-top))]"
         aria-labelledby="buy-hero-title"
       >
-        <div className={`${WARM_SECTION} grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10`}>
-          <div>
+        <div className={`${WARM_SECTION} flex flex-col gap-8 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-10`}>
+          <div className="order-2 lg:order-1">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
               {t.hero.eyebrow}
             </p>
@@ -52,22 +51,23 @@ export function BuyPage() {
             >
               {t.hero.headline}
             </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              {t.hero.sub}
-              <FootnoteRef marker="*" />
-            </p>
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">{t.hero.sub}</p>
 
-            <div className="mt-7">
+            <div className="mt-7 hidden lg:block">
               <SaleStatsPanel stats={stats} />
             </div>
           </div>
 
           <div
             id={HERO_FORM_ID}
-            className="scroll-mt-[calc(3.5rem+0.75rem)] lg:scroll-mt-24 lg:sticky lg:top-24"
+            className="order-1 scroll-mt-[calc(3.5rem+0.75rem)] lg:order-2 lg:sticky lg:top-24"
           >
             <BuyForm soldPpl={stats.soldPpl} testId="buy-form-hero" />
             <BuyWhyPriceRises />
+          </div>
+
+          <div className="order-3 lg:hidden">
+            <SaleStatsPanel stats={stats} />
           </div>
         </div>
       </section>
@@ -96,7 +96,6 @@ export function BuyPage() {
             className="mt-5 rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4 text-sm font-medium leading-relaxed text-ink sm:text-base"
           >
             {fillCopy(t.curve.capScope, { ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang) })}
-            <FootnoteRef marker="*" />
           </p>
         </Reveal>
       </WarmSection>
@@ -133,7 +132,7 @@ export function BuyPage() {
         </Reveal>
       </WarmSection>
 
-      {/* 6 — FAQ (risks live in the small print at the foot of the page) */}
+      {/* 6 — FAQ */}
       <WarmSection id="faq" eyebrow={t.faq.eyebrow} title={t.faq.title}>
         <Reveal>
           <SaleFaq />
@@ -161,7 +160,7 @@ export function BuyPage() {
                 ? t.stats.notOpenYet
                 : pricePerPpl(stats.spotPriceUsd, lang)}
             </span>
-            <span className="mt-1 text-[11px] text-ink-3">
+            <span className="mt-1 text-xs text-ink-3">
               {fillCopy(t.stats.priceStartHint, {
                 start: pricePerPpl(CURVE.startPriceUsd, lang),
               })}
@@ -176,11 +175,7 @@ export function BuyPage() {
         </div>
       </section>
 
-      <div className={`${WARM_SECTION} !py-8`}>
-        <SmallPrint />
-      </div>
-
-      {/* Mobile-only sticky CTA; adds room so it never covers the small print. */}
+      {/* Mobile-only sticky CTA */}
       <div className="h-20 sm:hidden" aria-hidden="true" />
       <StickyBuyBar stats={stats} targetId={HERO_FORM_ID} />
     </div>

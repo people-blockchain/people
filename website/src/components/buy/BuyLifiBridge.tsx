@@ -7,6 +7,7 @@ import { EthereumProvider } from "@lifi/widget-provider-ethereum";
 import { SolanaProvider } from "@lifi/widget-provider-solana";
 import type { Address } from "viem";
 
+import { useTheme } from "@/context/ThemeContext";
 import {
   BASE_CHAIN_ID,
   BASE_USDC_ADDRESS,
@@ -18,7 +19,12 @@ import {
 const queryClient = new QueryClient();
 
 type BuyLifiBridgeProps = {
+  open: boolean;
+  onClose: () => void;
   recipient: Address;
+  fromChain: number;
+  fromToken: string;
+  fromAmount: string;
   variant?: "cross-chain" | "base-usdt";
   onBridgeComplete?: () => void;
   testId?: string;
@@ -27,15 +33,32 @@ type BuyLifiBridgeProps = {
 function useBridgeWidgetConfig(
   recipient: Address,
   variant: "cross-chain" | "base-usdt",
+  fromChain: number,
+  fromToken: string,
+  fromAmount: string,
+  appearance: "light" | "dark",
 ): WidgetConfig {
   return useMemo(() => {
+    const hiddenBase = {
+      toAddress: true,
+      toToken: true,
+      appearance: true,
+      language: true,
+      poweredBy: true,
+    } as const;
+
     const shared: WidgetConfig = {
       integrator: "PEOPLE",
+      variant: "compact",
+      appearance,
+      languages: { default: "en" },
       providers: [EthereumProvider(), SolanaProvider()],
+      fromChain,
+      fromToken,
+      fromAmount,
       toChain: BASE_CHAIN_ID,
       toToken: BASE_USDC_ADDRESS,
       toAddress: {
-        name: "Your wallet on Base",
         address: recipient,
         chainType: ChainType.EVM,
       },
@@ -43,13 +66,8 @@ function useBridgeWidgetConfig(
         to: { allow: [BASE_CHAIN_ID] },
         types: { allow: [ChainType.EVM, ChainType.SVM] },
       },
-      hiddenUI: {
-        toAddress: true,
-        toToken: true,
-      },
-      explorerUrls: {
-        [BASE_CHAIN_ID]: ["https://scan.li.fi"],
-      },
+      hiddenUI: hiddenBase,
+      disabledUI: { toAddress: true, toToken: true },
       theme: {
         container: {
           border: "1px solid var(--line)",
@@ -72,11 +90,7 @@ function useBridgeWidgetConfig(
             allow: [{ chainId: BASE_CHAIN_ID, address: BASE_USDT_ADDRESS }],
           },
         },
-        hiddenUI: {
-          ...shared.hiddenUI,
-          fromToken: true,
-          fromChain: true,
-        },
+        hiddenUI: { ...hiddenBase, fromToken: true, fromChain: true },
       };
     }
 
@@ -84,22 +98,36 @@ function useBridgeWidgetConfig(
       ...shared,
       chains: {
         ...shared.chains,
-        from: { allow: [...LIFI_BRIDGE_SOURCE_CHAIN_IDS] },
+        from: { allow: [...LIFI_BRIDGE_SOURCE_CHAIN_IDS, BASE_CHAIN_ID] },
       },
       tokens: {
         featured: [...LIFI_FEATURED_SOURCE_TOKENS],
       },
     };
-  }, [recipient, variant]);
+  }, [recipient, variant, fromChain, fromToken, fromAmount, appearance]);
 }
 
 function BridgeWidgetInner({
+  open,
+  onClose,
   recipient,
   variant = "cross-chain",
+  fromChain,
+  fromToken,
+  fromAmount,
   onBridgeComplete,
   testId,
 }: BuyLifiBridgeProps) {
-  const config = useBridgeWidgetConfig(recipient, variant);
+  const { theme } = useTheme();
+  const appearance = theme === "dark" ? "dark" : "light";
+  const config = useBridgeWidgetConfig(
+    recipient,
+    variant,
+    fromChain,
+    fromToken,
+    fromAmount,
+    appearance,
+  );
 
   useEffect(() => {
     if (!onBridgeComplete) return;
@@ -112,9 +140,32 @@ function BridgeWidgetInner({
     };
   }, [onBridgeComplete]);
 
+  if (!open) return null;
+
   return (
-    <div data-testid={testId} className="min-h-[420px] overflow-hidden rounded-2xl border border-line bg-surface-2">
-      <LiFiWidget integrator="PEOPLE" config={config} />
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-4 sm:items-center"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[90vh] w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-surface shadow-[var(--elev-3)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-center justify-end border-b border-line px-3 py-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="min-h-11 rounded-full px-4 text-sm font-semibold text-ink-2 hover:text-ink"
+          >
+            ×
+          </button>
+        </div>
+        <div data-testid={testId} className="max-h-[calc(90vh-3rem)] overflow-y-auto p-2">
+          <LiFiWidget integrator="PEOPLE" config={config} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -131,6 +131,14 @@
         ]
       },
       {
+        "title": "PPL sale disclosures",
+        "body": [
+          "PPL is the utility token of the PEOPLE network. On the curve its price follows the published formula, and after the sale ends it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed.",
+          "Participation may be restricted or unavailable where you live, and checking the rules that apply to you is your own responsibility. Use only money you can afford to lose.",
+          "AI-assisted security reviews named on the site were carried out by the project team. They are not an audit by an external audit firm; a third-party security audit is completed before mainnet. A bug bounty reduces risk but does not remove it."
+        ]
+      },
+      {
         "title": "Your wallet and keys",
         "body": [
           "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",

@@ -28,40 +28,41 @@
   "form": {
     "title": "Beli PPL",
     "amountLabel": "Anda bayar",
-    "amountHint": "USDC atau USDT dikonversi ke USDC",
-    "stableLabel": "Stablecoin",
+    "stableLabel": "Koin",
     "youGet": "Anda dapat",
     "avgPrice": "Harga rata-rata",
     "priceAfter": "Harga setelah pembelian Anda",
-    "estimate": "",
-    "limitPerBuy": "Hingga {amount} per pembelian",
-    "limitPerDay": "Hingga {amount} per orang per hari",
-    "cooldown": "{seconds} dtk antar transaksi",
     "overLimit": "Maksimum {amount} dalam satu pembelian.",
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
-    "cta": "Hubungkan dompet & beli",
-    "ctaDisabled": "Penjualan belum dibuka",
-    "ctaConnected": "Beli PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base.",
-    "payModeLabel": "Cara bayar",
-    "payOnBase": "Bayar di Base",
-    "payFromOther": "Bayar dari jaringan lain",
-    "basePayHint": "Penjualan hanya berjalan di Base. Bayar dengan USDC atau USDT di Base, atau dengan USDT/USDC dari chain mana pun yang didukung melalui widget swap otomatis bawaan, yang mengonversinya ke USDC di Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche dan Solana. Tron dan TON tidak didukung.",
-    "bridgeHint": "Kirim USDT atau USDC dari jaringan lain dengan LI.FI. USDC masuk ke dompet di Base, lalu selesaikan pembelian di bawah. Jaringan didukung: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
-    "usdtConvertHint": "Bayar dengan USDT: dikonversi ke USDC dulu, pembelian memakai USDC. Biaya swap kecil.",
-    "usdtSwapTitle": "Konversi USDT ke USDC",
-    "usdtSwapAwaiting": "Konversi USDT di atas untuk membuka tombol beli.",
-    "usdtSwapReady": "Terkonversi. Selesaikan pembelian dalam USDC di bawah.",
-    "bridgeUsdtHint": "Anda bisa bayar USDT atau USDC dari jaringan mana pun yang terdaftar. USDC tiba di Base.",
-    "bridgePanelTitle": "Bridge ke Base",
-    "bridgeNeedWallet": "Hubungkan dompet untuk menerima USDC di Base sebelum bridge.",
-    "bridgeReady": "Bridge selesai — selesaikan pembelian di Base di bawah.",
-    "bridgeAwaiting": "Selesaikan bridge di atas untuk membuka tombol beli.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan Solana",
-    "scrollToForm": "Kembali ke formulir beli"
+    "sellBack": "Bisa jual kembali setelah 30 hari.",
+    "network": "Jaringan",
+    "networkNames": {
+      "base": "Base",
+      "eth": "Ethereum",
+      "bsc": "BNB Chain",
+      "pol": "Polygon",
+      "arb": "Arbitrum",
+      "opt": "Optimism",
+      "sol": "Solana"
+    },
+    "limitsLine": "Batas: $500 per pembelian, $2.000 per hari",
+    "ctaConnect": "Hubungkan dompet",
+    "ctaBuy": "Beli PPL",
+    "ctaClosed": "Penjualan belum dibuka",
+    "closedTitle": "Penjualan belum dibuka",
+    "closedSub": "Mulai dari $0,005 per PPL.",
+    "step2": "Langkah 2 dari 2: konfirmasi pembelian",
+    "disclaimerBefore": "PPL adalah token utilitas, bukan investasi. Harganya bisa turun. ",
+    "disclaimerLink": "Ketentuan",
+    "disclaimerAfter": ".",
+    "sellBackLink": "Detail",
+    "beneficiaryHint": "PPL akan dikirim ke {address}",
+    "successMessage": "Pembelian dikonfirmasi.",
+    "errorCooldown": "Tunggu 60 detik antar pembelian.",
+    "errorDailyLimit": "Batas pembelian harian tercapai.",
+    "errorInsufficient": "USDC di Base tidak cukup.",
+    "errorRejected": "Transaksi dibatalkan di dompet.",
+    "errorGeneric": "Pembelian gagal. Coba lagi."
   },
   "whyPriceRises": {
     "title": "Mengapa harga naik",
@@ -156,7 +157,8 @@
     "vestingBody": "Selama {cliff} bulan pertama tim tidak menerima token. Setelah itu dibuka bertahap setiap bulan selama {linear} bulan lagi — total {total} bulan.",
     "fundsTitle": "Kemana uang penjualan",
     "fundsBody": "{liquidityShare} terkumpul masuk pool likuiditas dengan LP terkunci {lock} bulan. Sisanya {multisigShare} ke multisig proyek, laporan publik setiap pengeluaran.",
-    "auditBounty": "Bug bounty: laporkan kerentanan lewat tombol bug di halaman mana pun."
+    "auditBounty": "Bug bounty: laporkan kerentanan lewat tombol bug di halaman mana pun.",
+    "auditDisclaimer": "Tinjauan berbantuan AI dilakukan oleh tim proyek. Ini bukan audit eksternal; audit keamanan pihak ketiga akan dijalankan sebelum mainnet."
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -175,17 +177,10 @@
         "a": "Tidak. Berlaku saat kurva berjalan. Plafon {ceiling} hanya tercapai di akhir kurva, saat {endRaise} terkumpul dan {endPrice} per PPL. Setelah penjualan berakhir, harga pool ditetapkan pasar bebas, tanpa batas atas maupun bawah."
       },
       {
-        "q": "Bagaimana menambahkan jaringan People ke dompet?",
-        "a": "Gunakan tombol di bawah: dompet diminta menambahkan jaringan PEOPLE dengan parameter resmi lalu beralih. Anda juga bisa memasukkan nilai yang sama manual dari dokumentasi jaringan People yang dipublikasikan."
-      },
-      {
         "q": "Kapan bisa mengirim PPL ke orang lain?",
         "a": "Saat peluncuran penuh jaringan: {verified} peserta terverifikasi, paling lambat {months} bulan. Beli jual di kurva berjalan dari hari pertama."
       }
     ],
-    "addNetworkCta": "Tambahkan jaringan People ke dompet",
-    "addNetworkDone": "Permintaan dikirim ke dompet Anda",
-    "addNetworkError": "Dompet menolak atau tidak ditemukan.",
     "pumpTitle": "Apa yang salah pada kurva tanpa plafon",
     "pumpLead": "Kurva bonding populer lewat launchpad seperti pump.fun. Ini masalah yang dikenal dan apa yang kami lakukan.",
     "pumpCols": [
@@ -229,23 +224,7 @@
   },
   "sticky": {
     "label": "Beli PPL",
-    "price": "dari {price}"
-  },
-  "footnote": {
-    "title": "Catatan kecil",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti formula yang dipublikasikan; setelah penjualan berakhir ditetapkan pasar: bisa turun maupun naik. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; tidak ada laba, imbal hasil, atau pengembalian yang dijanjikan atau dijamin. Angka sebelum pembelian adalah perkiraan dari formula yang dipublikasikan dan dikonfirmasi on-chain sebelum menandatangani. Tidak ada di halaman ini yang merupakan saran investasi, hukum, atau pajak."
-      },
-      {
-        "marker": "**",
-        "text": "Partisipasi mungkin dibatasi atau tidak tersedia di tempat Anda tinggal; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang sanggup Anda rugikan."
-      },
-      {
-        "marker": "***",
-        "text": "Tinjauan berbantuan AI di atas dilakukan tim proyek. Bukan audit firma eksternal; audit keamanan pihak ketiga diselesaikan sebelum mainnet. Bug bounty mengurangi risiko tetapi tidak menghilangkan: tidak ada tinjauan yang membuktikan perangkat lunak bebas cacat."
-      }
-    ]
+    "price": "dari {price}",
+    "closedLabel": "Belum dibuka"
   }
 }

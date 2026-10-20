@@ -11,8 +11,6 @@ import { fillCopy, intlLocale } from "@/lib/sale/format";
 import { GENESIS_ALLOCATIONS, TOTAL_SUPPLY_PPL } from "@/lib/tokenomics";
 
 import { AllocationPie } from "./AllocationPie";
-import { FootnoteRef } from "./SmallPrint";
-
 const CARD = "rounded-3xl border border-line bg-surface p-5 shadow-[var(--elev-1)]";
 
 /**
@@ -97,10 +95,8 @@ export function SaleTransparency({ stats }: { stats: SaleStats }) {
           <ShieldCheck className="h-4 w-4" aria-hidden="true" />
           {t.transparency.auditLine}
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-ink-2">
-          {t.transparency.auditBounty}
-          <FootnoteRef marker="***" />
-        </p>
+        <p className="mt-3 text-sm leading-relaxed text-ink-2">{t.transparency.auditBounty}</p>
+        <p className="mt-2 text-xs leading-relaxed text-ink-3">{t.transparency.auditDisclaimer}</p>
 
         <h4 className="mt-5 text-sm font-semibold text-ink">{t.transparency.vestingTitle}</h4>
         <p className="mt-1 text-sm leading-relaxed text-ink-2">
