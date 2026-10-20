@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder : modèles audités pour applications (club à accès NFT, vote DAO, abonnement, boutique USDC, giveaway), sans code",
       "summary": "Après le mainnet : un App Builder avec des modèles no-code audités pour les applications courantes — club à accès NFT, vote DAO, abonnement, boutique USDC et giveaway. Planification uniquement ; non implémenté."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — un nœud logiciel en un clic, puis un appareil plug-and-play prêt à l’emploi pour toutes les personnes qui souhaitent soutenir le réseau."
     }
   }
 }

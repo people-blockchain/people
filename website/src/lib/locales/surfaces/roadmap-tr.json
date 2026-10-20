@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder: uygulamalar için denetlenmiş şablonlar (NFT-gated kulüp, DAO oylaması, abonelik, USDC mağazası, çekiliş), kod yok",
       "summary": "Mainnet sonrası: yaygın uygulamalar için denetlenmiş kod gerektirmeyen şablonlara sahip bir App Builder — NFT-gated kulüp, DAO oylaması, abonelik, USDC mağazası ve çekiliş. Yalnızca planlama; uygulanmadı."
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — tek tıkla kurulan bir yazılım düğümü, ardından ağı desteklemek isteyen herkes için hazır bir plug-and-play cihaz."
     }
   }
 }
