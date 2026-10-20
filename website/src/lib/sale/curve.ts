@@ -45,15 +45,15 @@ export function soldPplForRaisedUsd(usd: number): number {
   return Math.min(soldPplForRaisedUsdUnclamped(usd), supplyPpl);
 }
 
-/** The whole curve if every PPL were sold. Graduation happens well before this. */
+/** The whole curve if every PPL were sold: the end of the curve. */
 export function maxRaiseUsd(): number {
   return raisedUsd(supplyPpl);
 }
 
-/** PPL sold, spot price and raise at the graduation point. */
-export function graduation(): { raisedUsd: number; soldPpl: number; priceUsd: number } {
-  const soldPpl = soldPplForRaisedUsd(CURVE.graduationRaiseUsd);
-  return { raisedUsd: CURVE.graduationRaiseUsd, soldPpl, priceUsd: spotPriceUsd(soldPpl) };
+/** PPL sold, spot price and raise at the end of the curve (all 100M sold). */
+export function curveEnd(): { raisedUsd: number; soldPpl: number; priceUsd: number } {
+  const soldPpl = supplyPpl;
+  return { raisedUsd: maxRaiseUsd(), soldPpl, priceUsd: spotPriceUsd(soldPpl) };
 }
 
 export type BuyQuote = {
@@ -161,8 +161,8 @@ export function milestones(): CurvePoint[] {
   });
 }
 
-/** 0–1 progress towards graduation. */
-export function graduationProgress(raisedSoFarUsd: number): number {
+/** 0–1 progress towards the end of the curve (all 100M PPL sold). */
+export function curveProgress(raisedSoFarUsd: number): number {
   if (!Number.isFinite(raisedSoFarUsd) || raisedSoFarUsd <= 0) return 0;
-  return Math.min(raisedSoFarUsd / CURVE.graduationRaiseUsd, 1);
+  return Math.min(raisedSoFarUsd / maxRaiseUsd(), 1);
 }

@@ -23,7 +23,7 @@ export function intlLocale(lang: string): string {
   return LOCALE_BY_LANG[lang] ?? "en-US";
 }
 
-/** Whole dollars, e.g. `$4,000,000`. */
+/** Whole dollars, e.g. `$6,262,744`. */
 export function usd(amount: number, lang = "en"): string {
   return `$${Math.round(amount).toLocaleString(intlLocale(lang))}`;
 }

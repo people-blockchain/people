@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Acheter PPL",
-    "description": "PPL est vendu sur une courbe de prix publique : départ à 0,005 $, hausse à chaque achat, plafond 0,25 $. La courbe se ferme à 4 M$ levés. L'achat et la vente sur la courbe fonctionnent dès l'ouverture de la vente ; les lots de revente ont une retenue de 30 jours."
+    "description": "PPL est vendu sur une courbe de prix publique : départ à 0,005 $, hausse à chaque achat. Le plafond de 0,25 $ n’est atteint que si les 100M PPL de la vente sont tous vendus, pour environ 6 262 744 $ levés. La vente dure jusqu’à épuisement ou 24 mois ; les lots de revente ont une retenue de 30 jours."
   },
   "hero": {
     "eyebrow": "Vente PPL",
@@ -15,7 +15,7 @@
     "price": "Prix actuel",
     "priceStartHint": "Départ à {start}",
     "raised": "Levé",
-    "raisedTarget": "sur {target} jusqu’à la fin de la vente",
+    "raisedTarget": "sur {target} au maximum",
     "sold": "PPL vendus",
     "soldTarget": "sur {supply} sur la courbe",
     "buyers": "Acheteurs",
@@ -23,7 +23,7 @@
     "daysLeftTarget": "max. {days} (plafond {months} mois)",
     "none": "—",
     "notOpenYet": "Pas encore ouverte",
-    "progressLabel": "Progression vers la fin de la vente à {target}"
+    "progressLabel": "Progression vers le maximum de {target} sur la courbe"
   },
   "form": {
     "title": "Acheter PPL",
@@ -44,11 +44,11 @@
     "ctaConnected": "Acheter PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base.",
+    "sellBack": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base.",
     "payModeLabel": "Mode de paiement",
     "payOnBase": "Payer sur Base",
     "payFromOther": "Payer depuis un autre réseau",
-    "basePayHint": "La vente est sur Base. Payez en USDC ou USDT — l'USDT est converti en USDC d'abord.",
+    "basePayHint": "La vente a lieu uniquement sur Base. Payez en USDC ou USDT sur Base, ou en USDT/USDC depuis toute chaîne prise en charge via le widget d'échange automatique intégré, qui convertit en USDC sur Base : Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et Solana. Tron et TON ne sont pas pris en charge.",
     "bridgeHint": "Envoyez USDT ou USDC depuis un autre réseau avec LI.FI. Vous recevez l'USDC sur Base, puis finalisez l'achat ci-dessous. Réseaux pris en charge : {chains}.",
     "stableUsdtOption": "USDT → USDC",
     "usdtConvertHint": "Paiement en USDT : conversion en USDC d'abord, puis achat en USDC. Petits frais de swap.",
@@ -67,7 +67,7 @@
     "title": "Pourquoi le prix monte",
     "noManualLead": "L'équipe PEOPLE ne fixe ni ne relève le prix. Une formule publique dans le contrat de vente le définit automatiquement : chaque achat fait avancer le prix sur la courbe de prix (bonding curve). Personne ne peut modifier le prix manuellement.",
     "mechanism": "Le même principe de prix par formule qu'Uniswap, Bancor (pionnier, 2017), pump.fun et Virtuals Protocol sur Base : ici le prix dépend uniquement de la quantité de PPL vendus, de façon transparente et vérifiable sur la chaîne.",
-    "example": "D'après les paramètres publiés : {startPrice} par PPL au départ, {midPrice} après {midSold} PPL vendus (~{midRaised} levés) et {gradPrice} à la fin de la vente ({gradRaised} levés).",
+    "example": "D'après les paramètres publiés : {startPrice} par PPL au départ, {midPrice} après {midSold} PPL vendus (~{midRaised} levés) et {endPrice} à la fin de la courbe ({endRaised} levés).",
     "explainerLink": "Comment fonctionne la courbe",
     "reserve": "Les fonds des achats restent dans la réserve de vente sur Base et servent à racheter du PPL aux détenteurs — rachat pour utilisateurs vérifiés après 30 jours de détention, avec plafonds journaliers.",
     "chartAria": "Courbe de prix de la vente PPL : prix et PPL vendus",
@@ -86,14 +86,14 @@
     "marker": "{raised} levés",
     "markerPrice": "{price} par PPL",
     "markerSold": "{sold} PPL vendus",
-    "graduationTag": "Fin de la vente",
-    "ceilingNote": "Le plafond de {ceiling} n’est atteint que si tous les {supply} PPL sont vendus. La courbe se ferme avant, à {graduation} levés.",
+    "ceilingNote": "Le plafond de {ceiling} n’est atteint que si tous les {supply} PPL sont vendus, à {endRaise} levés. Sinon, la vente se termine après 24 mois.",
     "feedTitle": "Achats et ventes récents",
     "feedEmpty": "Pas encore d’opérations.",
     "feedBuy": "Achat",
     "feedSell": "Vente",
     "feedLink": "Voir",
-    "capScope": "Le plafond {ceiling} s’applique uniquement pendant la vente sur courbe. Après fin de la vente vers le pool, le prix est fixé par le marché libre — sans plafond ni plancher."
+    "capScope": "Le plafond {ceiling} s’applique uniquement pendant la vente sur courbe. À la fin de la vente, le prix du pool est fixé par le marché libre — sans plafond ni plancher.",
+    "endTag": "Fin de la courbe"
   },
   "whatYouGet": {
     "eyebrow": "Ce que vous obtenez",
@@ -105,14 +105,14 @@
       },
       {
         "title": "Revente depuis la réserve",
-        "body": "La revente est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base."
+        "body": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "title": "Les transferts s’ouvrent au lancement complet du réseau",
         "body": "Envoyer PPL à d'autres personnes et trader dans le pool commencent au mainnet complet : {verified} participants vérifiés et le seuil multisig publié s'appliquent aux transferts de PPL, pas à l'ouverture de la vente."
       },
       {
-        "title": "À {graduation} la courbe se ferme",
+        "title": "À la fin de la vente",
         "body": "{liquidityShare} des fonds levés plus PPL au dernier prix de courbe alimentent un pool public dont les jetons LP sont verrouillés {lock} mois. Les autres {multisigShare} vont au multisig du projet, avec reporting public de chaque dépense."
       }
     ]
@@ -126,16 +126,16 @@
         "body": "{supply} PPL sur une courbe publique de {start} jusqu'au plafond {ceiling}. Achetez et vendez sur la courbe dès l'ouverture de la vente ; chaque lot de revente a une retenue de 30 jours. La vente dure jusqu'à épuisement ou pendant {saleMonths} mois, selon la première échéance ; aucune prolongation."
       },
       {
-        "title": "Fin de la vente à {graduation}",
-        "body": "La courbe s’arrête. {liquidityShare} des fonds plus PPL au dernier prix vont dans un pool DEX public exactement à ce prix, sans saut. LP verrouillés {lock} mois. {multisigShare} au multisig avec reporting public."
+        "title": "À la fin de la vente",
+        "body": "La courbe s’arrête lorsque tous les PPL sont vendus ou après {saleMonths} mois, selon la première échéance. {liquidityShare} des fonds plus PPL au prix final de la courbe vont dans un pool DEX public exactement à ce prix, sans saut. LP verrouillés {lock} mois. {multisigShare} au multisig avec reporting public."
       },
       {
         "title": "Mainnet complet",
         "body": "Transferts PPL entre portefeuilles et trading pool s'ouvrent au mainnet complet : {verified} participants vérifiés, au plus tard dans {months} mois. Le seuil s'applique aux transferts de PPL, pas au jour de l'ouverture de la vente."
       },
       {
-        "title": "Fin de la vente",
-        "body": "Le délai est fixe et ne sera pas prolongé. Si {graduation} n'est pas atteint, les fonds levés sont partagés {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n'y a pas de remboursement en dehors de la revente. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas."
+        "title": "Si la courbe n’est pas épuisée",
+        "body": "Le délai est fixe et ne sera pas prolongé. Les fonds levés gardent la même répartition {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n'y a pas de remboursement en dehors de la revente. D'ici la fin de la vente, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas."
       }
     ]
   },
@@ -168,11 +168,11 @@
       },
       {
         "q": "Puis-je revendre du PPL ?",
-        "a": "Personnes vérifiées uniquement : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base."
+        "a": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "q": "Le plafond {ceiling} est-il permanent ?",
-        "a": "Non. Il s’applique tant que la courbe tourne. Elle se ferme à {graduation} levés, environ {graduationPrice} par PPL, sous le plafond. Après fin de la vente, le prix du pool est fixé par le marché libre, sans limite haute ni basse."
+        "a": "Non. Il s’applique tant que la courbe tourne. Le plafond de {ceiling} n’est atteint qu’à la fin de la courbe, avec {endRaise} levés et {endPrice} par PPL. À la fin de la vente, le prix du pool est fixé par le marché libre, sans limite haute ni basse."
       },
       {
         "q": "Comment ajouter le réseau People à mon portefeuille ?",
@@ -196,8 +196,8 @@
     "pumpRows": [
       {
         "problem": "Les acheteurs tardifs surpayent",
-        "what": "Le prix monte sans limite ; les derniers acheteurs avant fin de la vente paient bien plus que les premiers.",
-        "ours": "Un plafond dur à {ceiling}, et la courbe se ferme à {graduation} — environ {graduationPrice}."
+        "what": "Le prix monte vers un plafond dur, et les acheteurs tardifs paient bien plus que les premiers.",
+        "ours": "Un plafond dur à {ceiling}. La courbe ne l’atteint que si tous les PPL sont vendus, à {endRaise} — environ {endPrice}."
       },
       {
         "problem": "Snipers et bots",
@@ -217,7 +217,7 @@
       {
         "problem": "Listings hype",
         "what": "Le jeton est poussé sur des exchanges en pleine vente.",
-        "ours": "Aucun listing pendant la vente. Trading DEX seulement après fin de la vente."
+        "ours": "Aucun listing pendant la vente. Trading DEX seulement à la fin de la vente."
       }
     ]
   },
@@ -236,7 +236,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL est le jeton utilitaire du réseau PEOPLE. Sur la courbe son prix suit la formule publiée ; après fin de la vente il est fixé par le marché : il peut baisser autant que monter. PPL n’est pas un titre, une part d’entreprise, un dépôt ni un produit d’investissement ; aucun profit, rendement ou retour n’est promis ou garanti. Les chiffres avant achat sont des estimations selon la formule publiée et confirmés on-chain avant signature. Rien sur cette page n’est un conseil en investissement, juridique ou fiscal."
+        "text": "PPL est le jeton utilitaire du réseau PEOPLE. Sur la courbe son prix suit la formule publiée ; à la fin de la vente il est fixé par le marché : il peut baisser autant que monter. PPL n’est pas un titre, une part d’entreprise, un dépôt ni un produit d’investissement ; aucun profit, rendement ou retour n’est promis ou garanti. Les chiffres avant achat sont des estimations selon la formule publiée et confirmés on-chain avant signature. Rien sur cette page n’est un conseil en investissement, juridique ou fiscal."
       },
       {
         "marker": "**",

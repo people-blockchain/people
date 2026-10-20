@@ -4,7 +4,8 @@ import { Coins, Lock, RefreshCw, Send } from "lucide-react";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
-import { CURVE, PAYOUT_DEFAULT, SALE } from "@/lib/sale/config";
+import { PAYOUT_DEFAULT, SALE } from "@/lib/sale/config";
+import { curveEnd } from "@/lib/sale/curve";
 import { fillCopy, usdCompact } from "@/lib/sale/format";
 
 import { FootnoteRef } from "./SmallPrint";
@@ -18,6 +19,7 @@ const SELL_BACK_ITEM_INDEX = 1;
 export function WhatYouGet() {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
+  const end = curveEnd();
 
   const vars = {
     fee: `${SALE.sellFeePct}%`,
@@ -25,7 +27,7 @@ export function WhatYouGet() {
     payoutNetwork: PAYOUT_DEFAULT.networkLabel,
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
     months: SALE.fullMainnetMaxMonths,
-    graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
+    endRaise: usdCompact(end.raisedUsd, lang),
     liquidityShare: `${SALE.liquiditySharePct}%`,
     multisigShare: `${SALE.multisigSharePct}%`,
     lock: SALE.lpLockMonths,

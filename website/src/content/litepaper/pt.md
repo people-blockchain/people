@@ -144,7 +144,7 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
+| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva; a venda termina ao esgotar ou após **24 meses**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
 Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.

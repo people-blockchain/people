@@ -6,7 +6,7 @@ import { useId, useMemo } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import { CURVE } from "@/lib/sale/config";
-import { graduation, soldPplForRaisedUsd, spotPriceUsd } from "@/lib/sale/curve";
+import { curveEnd, soldPplForRaisedUsd, spotPriceUsd } from "@/lib/sale/curve";
 import { fillCopy, pplCompact, pplCompactChart, pricePerPpl, usdCompact } from "@/lib/sale/format";
 
 const EXAMPLE_RAISE_USD = CURVE.milestoneRaisesUsd[0];
@@ -30,7 +30,7 @@ function chartMarkerLabel(priceUsd: number, soldPpl: number, lang: string): stri
 }
 
 function markerLabelLayout(
-  key: "start" | "mid" | "grad",
+  key: "start" | "mid" | "end",
   cx: number,
   cy: number,
 ): { x: number; y: number; textAnchor: "start" | "middle" | "end" } {
@@ -47,7 +47,7 @@ function markerLabelLayout(
       textAnchor: "start",
     };
   }
-  if (key === "grad") {
+  if (key === "end") {
     return {
       x: Math.max(Math.min(cx, innerRight), innerLeft + 48),
       y: Math.min(cy + 14, innerBottom - 2),
@@ -68,22 +68,22 @@ export function BuyWhyPriceRises() {
   const gradientId = useId();
 
   const example = useMemo(() => {
-    const grad = graduation();
+    const end = curveEnd();
     const midSold = soldPplForRaisedUsd(EXAMPLE_RAISE_USD);
     return {
       startPrice: pricePerPpl(CURVE.startPriceUsd, lang),
       midSold: pplCompact(midSold, lang),
       midPrice: pricePerPpl(spotPriceUsd(midSold), lang),
       midRaised: usdCompact(EXAMPLE_RAISE_USD, lang),
-      gradPrice: pricePerPpl(grad.priceUsd, lang),
-      gradRaised: usdCompact(grad.raisedUsd, lang),
+      endPrice: pricePerPpl(end.priceUsd, lang),
+      endRaised: usdCompact(end.raisedUsd, lang),
     };
   }, [lang]);
 
   const chart = useMemo(() => {
-    const grad = graduation();
+    const end = curveEnd();
     const midSold = soldPplForRaisedUsd(EXAMPLE_RAISE_USD);
-    const maxSold = grad.soldPpl * 1.02;
+    const maxSold = end.soldPpl * 1.02;
     const maxPrice = CURVE.ceilingPriceUsd;
     const samples = 48;
     const path = Array.from({ length: samples + 1 }, (_, i) => {
@@ -94,7 +94,7 @@ export function BuyWhyPriceRises() {
     const markers = [
       { sold: 0, price: CURVE.startPriceUsd, key: "start" as const },
       { sold: midSold, price: spotPriceUsd(midSold), key: "mid" as const },
-      { sold: grad.soldPpl, price: grad.priceUsd, key: "grad" as const },
+      { sold: end.soldPpl, price: end.priceUsd, key: "end" as const },
     ];
 
     return { path, markers, maxSold, maxPrice };

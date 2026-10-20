@@ -3,9 +3,9 @@ import { test } from "node:test";
 
 import { CURVE, SALE } from "./config.ts";
 import {
+  curveEnd,
+  curveProgress,
   curveSamplesByRaise,
-  graduation,
-  graduationProgress,
   maxRaiseUsd,
   milestones,
   quoteBuy,
@@ -38,7 +38,7 @@ test("milestone table matches ppl-curve-final.md", () => {
     [500_000, 40.69e6, 0.02456],
     [1_000_000, 55.66e6, 0.04412],
     [2_000_000, 71.89e6, 0.08324],
-    [4_000_000, 88.83e6, 0.16148],
+    [5_000_000, 94.37e6, 0.20060],
   ];
   for (const [raise, sold, price] of rows) {
     closeTo(soldPplForRaisedUsd(raise), sold, 1e-3);
@@ -46,18 +46,12 @@ test("milestone table matches ppl-curve-final.md", () => {
   }
 });
 
-test("theoretical max raise is $6.263M, graduation comes first", () => {
-  closeTo(maxRaiseUsd(), 6_263_000, 1e-3);
-  assert.ok(CURVE.graduationRaiseUsd < maxRaiseUsd());
-});
-
-test("graduation is $4M at ~88.83M sold and ~$0.1615", () => {
-  const g = graduation();
-  assert.equal(g.raisedUsd, 4_000_000);
-  closeTo(g.soldPpl, 88.83e6, 1e-3);
-  closeTo(g.priceUsd, 0.16148, 1e-3);
-  // ~11.17M PPL left unsold on the curve at graduation.
-  closeTo(CURVE.supplyPpl - g.soldPpl, 11.17e6, 1e-2);
+test("the curve ends when all 100M PPL sell, raising about $6.263M", () => {
+  closeTo(maxRaiseUsd(), 6_262_744, 1e-4);
+  const end = curveEnd();
+  assert.equal(end.soldPpl, CURVE.supplyPpl);
+  closeTo(end.raisedUsd, maxRaiseUsd());
+  closeTo(end.priceUsd, CURVE.ceilingPriceUsd);
 });
 
 test("raisedUsd and soldPplForRaisedUsd are inverses", () => {
@@ -108,13 +102,13 @@ test("selling cannot take out more PPL than the curve has sold", () => {
 });
 
 test("chart samples are monotonic and milestones land on the markers", () => {
-  const samples = curveSamplesByRaise(CURVE.graduationRaiseUsd, 20);
+  const samples = curveSamplesByRaise(maxRaiseUsd(), 20);
   assert.equal(samples.length, 21);
   for (let i = 1; i < samples.length; i++) {
     assert.ok(samples[i].raisedUsd > samples[i - 1].raisedUsd);
     assert.ok(samples[i].priceUsd > samples[i - 1].priceUsd);
   }
-  closeTo(samples[samples.length - 1].raisedUsd, CURVE.graduationRaiseUsd);
+  closeTo(samples[samples.length - 1].raisedUsd, maxRaiseUsd());
 
   const marks = milestones();
   assert.deepEqual(
@@ -123,9 +117,9 @@ test("chart samples are monotonic and milestones land on the markers", () => {
   );
 });
 
-test("graduation progress is a clamped 0–1 fraction", () => {
-  assert.equal(graduationProgress(0), 0);
-  assert.equal(graduationProgress(-5), 0);
-  closeTo(graduationProgress(2_000_000), 0.5);
-  assert.equal(graduationProgress(9_000_000), 1);
+test("curve progress is a clamped 0–1 fraction of the full raise", () => {
+  assert.equal(curveProgress(0), 0);
+  assert.equal(curveProgress(-5), 0);
+  closeTo(curveProgress(maxRaiseUsd() / 2), 0.5);
+  assert.equal(curveProgress(9_000_000), 1);
 });

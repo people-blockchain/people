@@ -144,7 +144,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
+| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe ; la vente se termine à l'épuisement ou après **24 mois**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
 Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
