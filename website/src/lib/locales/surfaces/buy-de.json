@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "PPL kaufen",
-    "description": "PPL wird auf einer öffentlichen Preiskurve verkauft: Start bei 0,005 $, Anstieg mit jedem Kauf, Obergrenze 0,25 $. Die Kurve schließt bei 4 M$ Einnahmen. Jederzeit kaufen und verkaufen."
+    "description": "PPL wird auf einer öffentlichen Preiskurve verkauft: Start bei 0,005 $, Anstieg mit jedem Kauf, Obergrenze 0,25 $. Die Kurve schließt bei 4 M$ Einnahmen. Kaufen und Verkaufen auf der Kurve funktioniert ab dem Tag der Verkaufseröffnung; Rückverkauf-Lose haben eine 30-tägige Haltefrist."
   },
   "hero": {
     "eyebrow": "PPL-Verkauf",
@@ -44,7 +44,7 @@
     "ctaConnected": "PPL kaufen",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Rückkauf aus der Reserve nur für verifizierte Nutzer: pro Los 30 Tage Haltefrist, Tageslimits und Gebühr {fee}; schließt beim Abschluss des Verkaufs.",
+    "sellBack": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet nach dem Verkaufsende; Auszahlungen in USDC auf Base.",
     "payModeLabel": "Zahlungsweg",
     "payOnBase": "Auf Base zahlen",
     "payFromOther": "Aus einem anderen Netz zahlen",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL sofort auf Ihrer Adresse",
-        "body": "PPL werden Ihnen im PEOPLE-Netzwerk im Moment des Kaufs gutgeschrieben. Kein Lock-up auf der Kurve, keine Warteliste."
+        "body": "Deine PPL werden im Moment des Kaufs deiner Adresse im Verkaufsvertrag auf Base gutgeschrieben und bei Genesis als native PPL im PEOPLE-Netzwerk gutgeschrieben. Für gekaufte PPL gibt es keine Sperre über die 30-tägige Haltefrist für den Rückverkauf hinaus."
       },
       {
         "title": "Rückkauf aus der Reserve",
-        "body": "Verifizierte Nutzer können PPL nach 30 Tagen Haltedauer pro Los innerhalb der Tageslimits und mit {fee} Gebühr an die Reserve verkaufen. Schließt bei Abschluss des Verkaufs. Auszahlung in {payoutStable} auf {payoutNetwork}."
+        "body": "Rückverkauf nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet nach dem Verkaufsende; Auszahlungen in USDC auf Base."
       },
       {
         "title": "Transfers ab vollständigem Netzwerkstart",
-        "body": "PPL an andere senden und Pool-Trading starten beim vollen Mainnet: {verified} verifizierte Teilnehmer, spätestens in {months} Monaten."
+        "body": "PPL an andere senden und Pool-Trading starten beim vollständigen Mainnet: {verified} verifizierte Teilnehmer und das veröffentlichte Multisig-Gate gelten für PPL-Transfers, nicht für die Verkaufseröffnung."
       },
       {
         "title": "Bei {graduation} schließt die Kurve",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Die Kurve",
-        "body": "{supply} PPL auf einer öffentlichen Kurve von {start} bis Obergrenze {ceiling}. Jederzeit kaufen und verkaufen, solange der Verkauf läuft — bis alle PPL verkauft sind oder {saleMonths} Monate vergangen sind, je nachdem, was zuerst eintritt."
+        "body": "{supply} PPL auf einer öffentlichen Kurve von {start} bis Obergrenze {ceiling}. Kaufen und Verkaufen auf der Kurve ab dem Tag der Verkaufseröffnung; jedes Rückverkaufslos hat eine 30-tägige Haltefrist. Der Verkauf läuft bis zum Ausverkauf oder {saleMonths} Monate, je nachdem, was zuerst eintritt; keine Verlängerungen."
       },
       {
         "title": "Abschluss des Verkaufs bei {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Voller Mainnet",
-        "body": "PPL-Transfers zwischen Wallets und Pool-Trading öffnen bei {verified} verifizierten Teilnehmern, spätestens in {months} Monaten."
+        "body": "PPL-Transfers zwischen Wallets und Pool-Trading öffnen beim vollständigen Mainnet: {verified} verifizierte Teilnehmer, spätestens in {months} Monaten. Das Gate gilt für PPL-Transfers, nicht für den Tag der Verkaufseröffnung."
       },
       {
         "title": "Wenn der Verkauf endet",
-        "body": "Die Laufzeit ist fest und wird nicht verlängert. Wenn {graduation} nicht erreicht wird, wird das Eingenommene {liquidityShare}/{multisigShare} geteilt, unverkaufte PPL gehen in den Community-Pool, keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu."
+        "body": "Die Laufzeit ist fest und wird nicht verlängert. Wenn {graduation} nicht erreicht wird, wird das Eingenommene {liquidityShare}/{multisigShare} geteilt, unverkaufte PPL gehen in den Community-Pool, und es gibt keine Erstattungen außerhalb des Rückverkaufs. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "Wie lange läuft der Verkauf?",
-        "a": "Bis alle PPL verkauft sind oder {saleMonths} Monate vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach gehen unverkaufte PPL in den Community-Pool; keine Erstattungen. Bis dahin liegen sie im Projekt-Multisig, das Team greift nicht zu."
+        "a": "Bis alle PPL verkauft sind oder {saleMonths} Monate vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach gehen unverkaufte PPL in den Community-Pool; keine Erstattungen außerhalb des Rückverkaufs. Bis dahin liegen sie im Projekt-Multisig, das Team greift nicht zu."
       },
       {
         "q": "Kann ich PPL zurückverkaufen?",
-        "a": "Nur verifizierte Nutzer: 30 Tage Haltedauer pro Los, Tageslimits und {fee} Gebühr. Schließt bei Abschluss des Verkaufs."
+        "a": "Nur verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet nach dem Verkaufsende; Auszahlungen in USDC auf Base."
       },
       {
         "q": "Ist die Obergrenze {ceiling} dauerhaft?",
