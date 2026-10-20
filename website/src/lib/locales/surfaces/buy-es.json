@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Comprar PPL",
-    "description": "PPL se vende en una curva de precio pública: empieza en $0,005 y sube con cada compra, hasta un tope de $0,25. La curva se cierra al reunir $4M. Compra y vende en cualquier momento."
+    "description": "PPL se vende en una curva de precio pública: empieza en $0,005 y sube con cada compra, hasta un tope de $0,25. La curva se cierra al reunir $4M. Comprar y vender en la curva funciona desde el día en que se abre la venta; los lotes de venta de vuelta tienen una retención de 30 días."
   },
   "hero": {
     "eyebrow": "Venta de PPL",
@@ -44,7 +44,7 @@
     "ctaConnected": "Comprar PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "La recompra desde la reserva es solo para usuarios verificados: cada lote exige 30 días de retención, hay límites diarios y una comisión de {fee}; se cierra al finalizar la venta.",
+    "sellBack": "La venta de vuelta desde la reserva es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope personal de $2.000 por persona y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra tras la graduación; pagos en USDC en Base.",
     "payModeLabel": "Cómo pagas",
     "payOnBase": "Pagar en Base",
     "payFromOther": "Pagar desde otra red",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL en tu dirección, al instante",
-        "body": "PPL se registran a tu nombre en la red PEOPLE en el momento de la compra. Sin bloqueo en la curva ni lista de espera."
+        "body": "Tu PPL se registra en tu dirección en el contrato de venta en Base en el momento de la compra y se acredita como PPL nativo en la red PEOPLE en el genesis. No hay bloqueo del PPL comprado más allá de la retención de 30 días para la venta de vuelta."
       },
       {
         "title": "Venta de vuelta desde la reserva",
-        "body": "Usuarios verificados pueden vender PPL a la reserva tras 30 días de retención por lote, con límites diarios y comisión {fee}. Se cierra al graduarse la venta. El pago es en {payoutStable} en {payoutNetwork}."
+        "body": "La venta de vuelta es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope personal de $2.000 por persona y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra tras la graduación; pagos en USDC en Base."
       },
       {
         "title": "Las transferencias se abren con el lanzamiento completo de la red",
-        "body": "Enviar PPL a otras personas y operar en el pool empiezan con el mainnet completo: {verified} participantes verificados, y a más tardar en {months} meses."
+        "body": "Enviar PPL a otras personas y operar en el pool empiezan con el mainnet completo: {verified} participantes verificados y la puerta del multisig publicado se aplican a las transferencias de PPL, no a la apertura de la venta."
       },
       {
         "title": "En {graduation} la curva se cierra",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "La curva",
-        "body": "{supply} PPL en una curva pública desde {start} hasta un tope de {ceiling}. Compra y vende en cualquier momento mientras dure la venta: hasta agotar PPL o durante {saleMonths} meses, lo que ocurra primero."
+        "body": "{supply} PPL en una curva pública desde {start} hasta un tope de {ceiling}. Compra y vende en la curva desde el día en que se abre la venta; cada lote de venta de vuelta tiene una retención de 30 días. La venta dura hasta agotar existencias o {saleMonths} meses, lo que ocurra primero; no hay prórrogas."
       },
       {
         "title": "Cierre de la venta en {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Mainnet completo",
-        "body": "Las transferencias de PPL entre carteras y el trading en pool se abren con {verified} participantes verificados, y a más tardar en {months} meses."
+        "body": "Las transferencias de PPL entre carteras y el trading en pool se abren con el mainnet completo: {verified} participantes verificados, y a más tardar en {months} meses. La puerta se aplica a las transferencias de PPL, no al día en que se abre la venta."
       },
       {
         "title": "Cuando termina la venta",
-        "body": "El plazo es fijo y no se prorrogará. Si no se alcanza {graduation}, lo recaudado se reparte {liquidityShare}/{multisigShare}, todo el PPL no vendido va al fondo comunitario y no hay reembolsos. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
+        "body": "El plazo es fijo y no se prorrogará. Si no se alcanza {graduation}, lo recaudado se reparte {liquidityShare}/{multisigShare}, todo el PPL no vendido va al fondo comunitario y no hay reembolsos fuera de la venta de vuelta. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "¿Cuánto dura la venta?",
-        "a": "Hasta que se vendan todos los PPL o durante {saleMonths} meses, lo que ocurra primero. El plazo es fijo y no se prorrogará. Al terminar, el PPL no vendido va al fondo comunitario; no hay reembolsos. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
+        "a": "Hasta que se vendan todos los PPL o durante {saleMonths} meses, lo que ocurra primero. El plazo es fijo y no se prorrogará. Al terminar, el PPL no vendido va al fondo comunitario; no hay reembolsos fuera de la venta de vuelta. Hasta entonces, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
       },
       {
         "q": "¿Puedo vender PPL de vuelta?",
-        "a": "Solo usuarios verificados: 30 días de retención por lote, límites diarios y comisión {fee}. Se cierra al graduarse la venta."
+        "a": "Solo personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope personal de $2.000 por persona y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra tras la graduación; pagos en USDC en Base."
       },
       {
         "q": "¿El tope de {ceiling} es permanente?",

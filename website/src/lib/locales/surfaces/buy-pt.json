@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Comprar PPL",
-    "description": "PPL é vendido numa curva de preço pública: começa em $0,005 e sobe a cada compra, até um teto de $0,25. A curva fecha ao arrecadar $4M. Compre e venda a qualquer momento."
+    "description": "PPL é vendido numa curva de preço pública: começa em $0,005 e sobe a cada compra, até um teto de $0,25. A curva fecha ao arrecadar $4M. Comprar e vender na curva funciona desde o dia em que a venda abre; os lotes de revenda têm retenção de 30 dias."
   },
   "hero": {
     "eyebrow": "Venda de PPL",
@@ -44,7 +44,7 @@
     "ctaConnected": "Comprar PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "A recompra a partir da reserva é só para usuários verificados: cada lote exige 30 dias de retenção, há limites diários e taxa de {fee}; fecha no encerramento da venda.",
+    "sellBack": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base.",
     "payModeLabel": "Como você paga",
     "payOnBase": "Pagar na Base",
     "payFromOther": "Pagar de outra rede",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL no seu endereço, na hora",
-        "body": "PPL são registrados para você na rede PEOPLE no momento da compra. Sem bloqueio na curva, sem lista de espera."
+        "body": "Seu PPL é registrado no seu endereço no contrato de venda na Base no momento da compra e creditado como PPL nativo na rede PEOPLE no genesis. Não há bloqueio no PPL comprado além da retenção de 30 dias para revenda."
       },
       {
         "title": "recompra da reserva",
-        "body": "Usuários verificados podem vender PPL de volta à reserva após retenção de 30 dias por lote, com limites diários e taxa de {fee}. Fecha quando a venda gradua. Pagamento em {payoutStable} na {payoutNetwork}."
+        "body": "A revenda é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base."
       },
       {
         "title": "Transferências abrem com o lançamento completo da rede",
-        "body": "Enviar PPL a outras pessoas e negociar no pool começam no mainnet completo: {verified} participantes verificados, e no máximo em {months} meses."
+        "body": "Enviar PPL a outras pessoas e negociar no pool começam no mainnet completo: {verified} participantes verificados e o requisito multisig publicado se aplicam às transferências de PPL, não à abertura da venda."
       },
       {
         "title": "Em {graduation} a curva fecha",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "A curva",
-        "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda a qualquer momento enquanto a venda estiver aberta — até esgotar o PPL ou por {saleMonths} meses, o que vier primeiro."
+        "body": "{supply} PPL numa curva pública de {start} até um teto de {ceiling}. Compre e venda na curva desde o dia em que a venda abre; cada lote de revenda tem retenção de 30 dias. A venda segue até esgotar ou por {saleMonths} meses, o que vier primeiro; sem prorrogações."
       },
       {
         "title": "Encerramento da venda em {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Mainnet completo",
-        "body": "Transferências de PPL entre carteiras e trading no pool abrem com {verified} participantes verificados, e no máximo em {months} meses."
+        "body": "Transferências de PPL entre carteiras e trading no pool abrem no mainnet completo: {verified} participantes verificados, e no máximo em {months} meses. O requisito se aplica às transferências de PPL, não ao dia em que a venda abre."
       },
       {
         "title": "Quando a venda termina",
-        "body": "O prazo é fixo e não será prorrogado. Se {graduation} não for atingido, o arrecadado é dividido {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
+        "body": "O prazo é fixo e não será prorrogado. Se {graduation} não for atingido, o arrecadado é dividido {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos fora da revenda. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "Quanto tempo dura a venda?",
-        "a": "Até vender todo o PPL ou por {saleMonths} meses, o que vier primeiro. O prazo é fixo e não será prorrogado. Ao terminar, PPL não vendido vai ao fundo comunitário; não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
+        "a": "Até vender todo o PPL ou por {saleMonths} meses, o que vier primeiro. O prazo é fixo e não será prorrogado. Ao terminar, PPL não vendido vai ao fundo comunitário; não há reembolsos fora da revenda. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca."
       },
       {
         "q": "Posso vender PPL de volta?",
-        "a": "Só usuários verificados: retenção de 30 dias por lote, limites diários e taxa de {fee}. Fecha na encerramento da venda da venda."
+        "a": "Só pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra após a graduação; pagamentos em USDC na Base."
       },
       {
         "q": "O teto de {ceiling} é permanente?",

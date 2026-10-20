@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Acheter PPL",
-    "description": "PPL est vendu sur une courbe de prix publique : départ à 0,005 $, hausse à chaque achat, plafond 0,25 $. La courbe se ferme à 4 M$ levés. Achetez et vendez à tout moment."
+    "description": "PPL est vendu sur une courbe de prix publique : départ à 0,005 $, hausse à chaque achat, plafond 0,25 $. La courbe se ferme à 4 M$ levés. L'achat et la vente sur la courbe fonctionnent dès l'ouverture de la vente ; les lots de revente ont une retenue de 30 jours."
   },
   "hero": {
     "eyebrow": "Vente PPL",
@@ -44,7 +44,7 @@
     "ctaConnected": "Acheter PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Le rachat depuis la réserve est réservé aux utilisateurs vérifiés : chaque lot exige 30 jours de détention, des plafonds journaliers et des frais de {fee} ; il se ferme à la fin de la vente.",
+    "sellBack": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base.",
     "payModeLabel": "Mode de paiement",
     "payOnBase": "Payer sur Base",
     "payFromOther": "Payer depuis un autre réseau",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL sur votre adresse, immédiatement",
-        "body": "PPL vous sont crédités sur le réseau PEOPLE au moment de l’achat. Pas de blocage sur la courbe, pas de liste d’attente."
+        "body": "Vos PPL sont enregistrés à votre adresse dans le contrat de vente sur Base dès l'achat et crédités en PPL natifs sur le réseau PEOPLE au genesis. Aucun blocage des PPL achetés au-delà de la retenue de 30 jours pour la revente."
       },
       {
         "title": "Revente depuis la réserve",
-        "body": "Les utilisateurs vérifiés peuvent revendre du PPL à la réserve après 30 jours de détention par lot, avec plafonds journaliers et frais de {fee}. Fermeture à la fin de la vente. Paiement en {payoutStable} sur {payoutNetwork}."
+        "body": "La revente est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "title": "Les transferts s’ouvrent au lancement complet du réseau",
-        "body": "Envoyer PPL à d’autres personnes et trader dans le pool commencent au mainnet complet : {verified} participants vérifiés, et au plus tard dans {months} mois."
+        "body": "Envoyer PPL à d'autres personnes et trader dans le pool commencent au mainnet complet : {verified} participants vérifiés et le seuil multisig publié s'appliquent aux transferts de PPL, pas à l'ouverture de la vente."
       },
       {
         "title": "À {graduation} la courbe se ferme",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "La courbe",
-        "body": "{supply} PPL sur une courbe publique de {start} jusqu’au plafond {ceiling}. Achetez et vendez à tout moment pendant la vente — jusqu’à épuisement des PPL ou pendant {saleMonths} mois, selon la première échéance."
+        "body": "{supply} PPL sur une courbe publique de {start} jusqu'au plafond {ceiling}. Achetez et vendez sur la courbe dès l'ouverture de la vente ; chaque lot de revente a une retenue de 30 jours. La vente dure jusqu'à épuisement ou pendant {saleMonths} mois, selon la première échéance ; aucune prolongation."
       },
       {
         "title": "Fin de la vente à {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Mainnet complet",
-        "body": "Transferts PPL entre portefeuilles et trading pool s’ouvrent à {verified} participants vérifiés, au plus tard dans {months} mois."
+        "body": "Transferts PPL entre portefeuilles et trading pool s'ouvrent au mainnet complet : {verified} participants vérifiés, au plus tard dans {months} mois. Le seuil s'applique aux transferts de PPL, pas au jour de l'ouverture de la vente."
       },
       {
         "title": "Fin de la vente",
-        "body": "Le délai est fixe et ne sera pas prolongé. Si {graduation} n’est pas atteint, les fonds levés sont partagés {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n’y a pas de remboursement. D’ici là, les PPL invendus sont détenus par le multisig du projet et l’équipe n’y touche pas."
+        "body": "Le délai est fixe et ne sera pas prolongé. Si {graduation} n'est pas atteint, les fonds levés sont partagés {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n'y a pas de remboursement en dehors de la revente. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "Combien de temps dure la vente ?",
-        "a": "Jusqu’à ce que tous les PPL soient vendus ou pendant {saleMonths} mois, selon la première échéance. Le délai est fixe et ne sera pas prolongé. À la fin, les PPL invendus vont au fonds communautaire ; aucun remboursement. D’ici là, ils sont détenus par le multisig du projet et l’équipe n’y touche pas."
+        "a": "Jusqu'à ce que tous les PPL soient vendus ou pendant {saleMonths} mois, selon la première échéance. Le délai est fixe et ne sera pas prolongé. À la fin, les PPL invendus vont au fonds communautaire ; aucun remboursement en dehors de la revente. D'ici là, ils sont détenus par le multisig du projet et l'équipe n'y touche pas."
       },
       {
         "q": "Puis-je revendre du PPL ?",
-        "a": "Utilisateurs vérifiés uniquement : 30 jours de détention par lot, plafonds journaliers et frais de {fee}. Fermeture à la fin de la vente."
+        "a": "Personnes vérifiées uniquement : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme après la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "q": "Le plafond {ceiling} est-il permanent ?",

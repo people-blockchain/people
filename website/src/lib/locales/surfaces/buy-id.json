@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Beli PPL",
-    "description": "PPL dijual pada kurva harga publik: mulai $0,005, naik setiap pembelian, plafon $0,25. Kurva tutup saat terkumpul $4M. Beli dan jual kapan saja."
+    "description": "PPL dijual pada kurva harga publik: mulai $0,005, naik setiap pembelian, plafon $0,25. Kurva tutup saat terkumpul $4M. Membeli dan menjual di kurva berjalan sejak hari penjualan dibuka; setiap lot jual kembali memiliki masa tunggu 30 hari."
   },
   "hero": {
     "eyebrow": "Penjualan PPL",
@@ -44,7 +44,7 @@
     "ctaConnected": "Beli PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Pembelian kembali dari cadangan hanya untuk pengguna terverifikasi: setiap lot butuh 30 hari masa tunggu, ada batas harian, dan biaya {fee}; tutup saat penutupan penjualan.",
+    "sellBack": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup setelah graduasi; pembayaran dalam USDC di Base.",
     "payModeLabel": "Cara bayar",
     "payOnBase": "Bayar di Base",
     "payFromOther": "Bayar dari jaringan lain",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL langsung di alamat Anda",
-        "body": "PPL dicatat untuk Anda di jaringan PEOPLE saat membeli. Tanpa lock-up di kurva, tanpa antrean."
+        "body": "PPL Anda dicatat ke alamat Anda di kontrak penjualan di Base saat Anda membeli dan dikreditkan sebagai PPL native di jaringan PEOPLE saat genesis. Tidak ada lock-up pada PPL yang dibeli selain masa tunggu 30 hari untuk jual kembali."
       },
       {
         "title": "pembelian kembali dari cadangan",
-        "body": "Pengguna terverifikasi dapat menjual PPL kembali ke cadangan setelah masa tunggu 30 hari per lot, dengan batas harian dan biaya {fee}. Tutup saat penjualan penutupan penjualan. Pembayaran dalam {payoutStable} di {payoutNetwork}."
+        "body": "Jual kembali hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup setelah graduasi; pembayaran dalam USDC di Base."
       },
       {
         "title": "Transfer dibuka saat peluncuran penuh jaringan",
-        "body": "Mengirim PPL ke orang lain dan trading di pool dimulai saat mainnet penuh: {verified} peserta terverifikasi, paling lambat {months} bulan."
+        "body": "Mengirim PPL ke orang lain dan trading di pool dimulai saat mainnet penuh: {verified} peserta terverifikasi dan gerbang multisig yang dipublikasikan berlaku untuk transfer PPL, bukan untuk pembukaan penjualan."
       },
       {
         "title": "Saat {graduation} kurva tutup",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Kurva",
-        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual kapan saja selama penjualan berjalan — sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu."
+        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Beli jual di kurva sejak hari penjualan dibuka; setiap lot jual kembali ditahan 30 hari. Penjualan berjalan sampai habis atau selama {saleMonths} bulan, mana yang lebih dulu; tidak ada perpanjangan."
       },
       {
         "title": "Penutupan penjualan pada {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Mainnet penuh",
-        "body": "Transfer PPL antar dompet dan trading pool dibuka pada {verified} peserta terverifikasi, paling lambat {months} bulan."
+        "body": "Transfer PPL antar dompet dan trading pool dibuka saat mainnet penuh: {verified} peserta terverifikasi, paling lambat {months} bulan. Gerbang berlaku untuk transfer PPL, bukan untuk hari pembukaan penjualan."
       },
       {
         "title": "Saat penjualan berakhir",
-        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Jika {graduation} belum tercapai, dana terkumpul dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, tidak ada pengembalian dana. Sampai saat itu PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya."
+        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Jika {graduation} belum tercapai, dana terkumpul dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, dan tidak ada pengembalian dana di luar jual kembali. Sampai saat itu PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "Berapa lama penjualan berlangsung?",
-        "a": "Sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah berakhir, PPL tidak terjual masuk kolam komunitas; tidak ada pengembalian dana. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya."
+        "a": "Sampai semua PPL terjual atau selama {saleMonths} bulan, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah berakhir, PPL tidak terjual masuk kolam komunitas; tidak ada pengembalian dana di luar jual kembali. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya."
       },
       {
         "q": "Bisakah saya menjual kembali PPL?",
-        "a": "Hanya pengguna terverifikasi: masa tunggu 30 hari per lot, batas harian, dan biaya {fee}. Tutup saat penjualan penutupan penjualan."
+        "a": "Hanya orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup setelah graduasi; pembayaran dalam USDC di Base."
       },
       {
         "q": "Apakah plafon {ceiling} permanen?",

@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Buy PPL",
-    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase, up to a $0.25 ceiling. The curve closes at $4M raised. Buy and sell at any time."
+    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase, up to a $0.25 ceiling. The curve closes at $4M raised. Buying and selling on the curve works from the day the sale opens; sell-back lots have a 30-day hold."
   },
   "hero": {
     "eyebrow": "PPL sale",
@@ -44,7 +44,7 @@
     "ctaConnected": "Buy PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Sell-back from the reserve is for verified users only: each lot needs a 30-day hold, daily limits apply, and a {fee} fee; it closes when the sale graduates.",
+    "sellBack": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes after graduation; payouts in USDC on Base.",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL on your address, immediately",
-        "body": "PPL is recorded to you on the People network the moment you buy. No lock-up on the curve, no waiting list."
+        "body": "Your PPL is recorded to your address in the sale contract on Base the moment you buy and is credited as native PPL on the PEOPLE network at genesis. There is no lock-up on purchased PPL beyond the 30-day sell-back hold."
       },
       {
         "title": "Sell-back from the reserve",
-        "body": "Verified users can sell PPL back to the reserve after a 30-day hold per lot, within daily limits and a {fee} fee. Sell-back closes when the sale graduates. Payouts are in {payoutStable} on {payoutNetwork}."
+        "body": "Sell-back is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes after graduation; payouts in USDC on Base."
       },
       {
         "title": "Transfers open with the full network launch",
-        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants, and no later than {months} months."
+        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants and the published multisig gate apply to PPL transfers, not to the sale opening."
       },
       {
         "title": "At {graduation} the curve closes",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "The curve",
-        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time while the sale runs — until all PPL is sold or for {saleMonths} months, whichever comes first."
+        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell on the curve from the day the sale opens; each sell-back lot has a 30-day hold. The sale runs until sold out or for {saleMonths} months, whichever comes first; there are no extensions."
       },
       {
         "title": "Graduation at {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Full mainnet",
-        "body": "PPL transfers between wallets and pool trading open at {verified} verified participants, and no later than {months} months."
+        "body": "PPL transfers between wallets and pool trading open at full mainnet: {verified} verified participants, and no later than {months} months. The gate applies to PPL transfers, not to the day the sale opens."
       },
       {
         "title": "When the sale ends",
-        "body": "The term is fixed and will not be extended. If {graduation} is not reached by then, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, every unsold PPL goes to the community pool, and there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it."
+        "body": "The term is fixed and will not be extended. If {graduation} is not reached by then, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, every unsold PPL goes to the Community Pool, and there are no refunds outside sell-back. Until then, unsold PPL is held in the project multisig and the team does not touch it."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "How long does the sale run?",
-        "a": "Until all PPL is sold or for {saleMonths} months, whichever comes first. The term is fixed and will not be extended. After it ends, unsold PPL goes to the community pool; there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it."
+        "a": "Until all PPL is sold or for {saleMonths} months, whichever comes first. The term is fixed and will not be extended. After it ends, unsold PPL goes to the Community Pool; there are no refunds outside sell-back. Until then, unsold PPL is held in the project multisig and the team does not touch it."
       },
       {
         "q": "Can I sell PPL back?",
-        "a": "Verified users only: 30-day hold per lot, daily limits, and a {fee} fee. Sell-back closes when the sale graduates."
+        "a": "Verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes after graduation; payouts in USDC on Base."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",

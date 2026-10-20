@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Mua PPL",
-    "description": "PPL được bán trên đường cong giá công khai: bắt đầu $0,005, tăng theo mỗi lần mua, trần $0,25. Đường cong đóng khi gom $4M. Mua và bán bất cứ lúc nào."
+    "description": "PPL được bán trên đường cong giá công khai: bắt đầu $0,005, tăng theo mỗi lần mua, trần $0,25. Đường cong đóng khi gom $4M. Mua và bán trên đường cong hoạt động từ ngày đợt bán mở; mỗi lô bán lại có thời gian giữ 30 ngày."
   },
   "hero": {
     "eyebrow": "Bán PPL",
@@ -44,7 +44,7 @@
     "ctaConnected": "Mua PPL",
     "disabledNote": "",
     "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Mua lại từ quỹ dự trữ chỉ dành cho người dùng đã xác minh: mỗi lô cần 30 ngày nắm giữ, có giới hạn theo ngày và phí {fee}; đóng khi kết thúc đợt bán.",
+    "sellBack": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng sau khi tốt nghiệp; thanh toán bằng USDC trên Base.",
     "payModeLabel": "Cách thanh toán",
     "payOnBase": "Thanh toán trên Base",
     "payFromOther": "Thanh toán từ mạng khác",
@@ -101,15 +101,15 @@
     "items": [
       {
         "title": "PPL ngay trên địa chỉ của bạn",
-        "body": "PPL được ghi cho bạn trên mạng PEOPLE ngay khi mua. Không khóa trên đường cong, không chờ đợi."
+        "body": "PPL của bạn được ghi nhận vào địa chỉ của bạn trong hợp đồng bán trên Base ngay khi bạn mua và được ghi có là PPL native trên mạng PEOPLE tại genesis. Không khóa PPL đã mua ngoài thời gian giữ 30 ngày cho bán lại."
       },
       {
         "title": "mua lại từ quỹ dự trữ",
-        "body": "Người dùng đã xác minh có thể bán PPL lại vào quỹ dự trữ sau 30 ngày nắm giữ mỗi lô, trong giới hạn ngày và phí {fee}. Đóng khi kết thúc đợt bán. Thanh toán bằng {payoutStable} trên {payoutNetwork}."
+        "body": "Bán lại chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng sau khi tốt nghiệp; thanh toán bằng USDC trên Base."
       },
       {
         "title": "Chuyển token mở khi mạng ra mắt đầy đủ",
-        "body": "Gửi PPL cho người khác và giao dịch pool bắt đầu ở mainnet đầy đủ: {verified} người tham gia đã xác minh, chậm nhất {months} tháng."
+        "body": "Gửi PPL cho người khác và giao dịch pool bắt đầu ở mainnet đầy đủ: {verified} người tham gia đã xác minh và cổng multisig đã công bố áp dụng cho chuyển PPL, không áp dụng cho ngày mở bán."
       },
       {
         "title": "Khi gom {graduation} đường cong đóng",
@@ -123,7 +123,7 @@
     "steps": [
       {
         "title": "Đường cong",
-        "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán bất cứ lúc nào khi đợt bán đang mở — đến khi bán hết PPL hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước."
+        "body": "{supply} PPL trên đường cong công khai từ {start} tới trần {ceiling}. Mua bán trên đường cong từ ngày đợt bán mở; mỗi lô bán lại giữ 30 ngày. Đợt bán chạy đến khi bán hết hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước; không gia hạn."
       },
       {
         "title": "Kết thúc đợt bán tại {graduation}",
@@ -131,11 +131,11 @@
       },
       {
         "title": "Mainnet đầy đủ",
-        "body": "Chuyển PPL giữa ví và giao dịch pool mở khi có {verified} người xác minh, chậm nhất {months} tháng."
+        "body": "Chuyển PPL giữa ví và giao dịch pool mở ở mainnet đầy đủ: {verified} người xác minh, chậm nhất {months} tháng. Cổng áp dụng cho chuyển PPL, không áp dụng cho ngày mở bán."
       },
       {
         "title": "Khi đợt bán kết thúc",
-        "body": "Thời hạn cố định và không gia hạn. Nếu chưa đạt {graduation}, số tiền gom được chia {liquidityShare}/{multisigShare}, toàn bộ PPL chưa bán vào quỹ cộng đồng, không hoàn tiền. Trước đó PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào."
+        "body": "Thời hạn cố định và không gia hạn. Nếu chưa đạt {graduation}, số tiền gom được chia {liquidityShare}/{multisigShare}, toàn bộ PPL chưa bán vào quỹ cộng đồng, không hoàn tiền ngoài bán lại. Trước đó PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào."
       }
     ]
   },
@@ -164,11 +164,11 @@
     "items": [
       {
         "q": "Đợt bán kéo dài bao lâu?",
-        "a": "Đến khi bán hết PPL hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước. Thời hạn cố định và không gia hạn. Khi kết thúc, PPL chưa bán vào quỹ cộng đồng; không hoàn tiền. Trước đó được giữ trong multisig dự án, đội ngũ không chạm vào."
+        "a": "Đến khi bán hết PPL hoặc trong {saleMonths} tháng, tùy điều kiện nào đến trước. Thời hạn cố định và không gia hạn. Khi kết thúc, PPL chưa bán vào quỹ cộng đồng; không hoàn tiền ngoài bán lại. Trước đó được giữ trong multisig dự án, đội ngũ không chạm vào."
       },
       {
         "q": "Tôi có thể bán lại PPL không?",
-        "a": "Chỉ người dùng đã xác minh: giữ 30 ngày mỗi lô, giới hạn ngày và phí {fee}. Đóng khi kết thúc đợt bán."
+        "a": "Chỉ người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng sau khi tốt nghiệp; thanh toán bằng USDC trên Base."
       },
       {
         "q": "Trần {ceiling} có vĩnh viễn không?",
