@@ -13,6 +13,10 @@ export const vi: LocaleContent = {
         "href": "/create"
       },
       {
+        "label": "Mua PPL",
+        "href": "/buy"
+      },
+      {
         "label": "Bảng tin dự án",
         "href": "/discover"
       }

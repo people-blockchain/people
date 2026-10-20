@@ -13,6 +13,10 @@ export const pt: LocaleContent = {
         "href": "/create"
       },
       {
+        "label": "Comprar PPL",
+        "href": "/buy"
+      },
+      {
         "label": "Feed de projetos",
         "href": "/discover"
       }
