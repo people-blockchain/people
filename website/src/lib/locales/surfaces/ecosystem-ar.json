@@ -8,13 +8,12 @@
   "openLabel": "فتح",
   "categories": {
     "payments": "المدفوعات",
-    "markets": "الأسواق",
     "communities": "المجتمعات",
     "tools": "الأدوات"
   },
   "statusLabels": {
     "testnet": "الشبكة التجريبية",
-    "coming_soon": "قريبًا"
+    "in_development": "قيد التطوير"
   },
   "labelBadges": {
     "built_by_people": "صُنع بواسطة PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "بطاقات ولاء ورمز QR عند الدفع للمتاجر المحلية."
-    },
-    "people-predict": {
-      "summary": "أسواق توقعات لأسئلة المجتمعات."
     },
     "people-clubs": {
       "summary": "أدوات للأندية ومجتمعات الأعضاء."

@@ -8,13 +8,12 @@
   "openLabel": "Abrir",
   "categories": {
     "payments": "Pagos",
-    "markets": "Mercados",
     "communities": "Comunidades",
     "tools": "Herramientas"
   },
   "statusLabels": {
     "testnet": "Red de prueba",
-    "coming_soon": "Próximamente"
+    "in_development": "En desarrollo"
   },
   "labelBadges": {
     "built_by_people": "Creado por PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Pases de fidelidad y QR de cobro para comercios locales."
-    },
-    "people-predict": {
-      "summary": "Mercados de predicción para preguntas de la comunidad."
     },
     "people-clubs": {
       "summary": "Herramientas para clubes y comunidades de miembros."

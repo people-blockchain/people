@@ -8,13 +8,12 @@
   "openLabel": "Mở",
   "categories": {
     "payments": "Thanh toán",
-    "markets": "Thị trường",
     "communities": "Cộng đồng",
     "tools": "Công cụ"
   },
   "statusLabels": {
     "testnet": "Mạng thử nghiệm",
-    "coming_soon": "Sắp ra mắt"
+    "in_development": "Đang phát triển"
   },
   "labelBadges": {
     "built_by_people": "Được xây dựng bởi PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Thẻ khách hàng thân thiết và QR thanh toán cho cửa hàng địa phương."
-    },
-    "people-predict": {
-      "summary": "Thị trường dự đoán cho các câu hỏi của cộng đồng."
     },
     "people-clubs": {
       "summary": "Công cụ cho câu lạc bộ và cộng đồng thành viên."

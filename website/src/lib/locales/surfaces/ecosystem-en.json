@@ -8,13 +8,12 @@
   "openLabel": "Open",
   "categories": {
     "payments": "Payments",
-    "markets": "Markets",
     "communities": "Communities",
     "tools": "Tools"
   },
   "statusLabels": {
     "testnet": "Testnet",
-    "coming_soon": "Coming soon"
+    "in_development": "In development"
   },
   "labelBadges": {
     "built_by_people": "Built by PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Loyalty passes and checkout QR for local shops."
-    },
-    "people-predict": {
-      "summary": "Prediction markets for community questions."
     },
     "people-clubs": {
       "summary": "Tools for clubs and member communities."

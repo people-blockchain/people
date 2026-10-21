@@ -8,13 +8,12 @@
   "openLabel": "打开",
   "categories": {
     "payments": "支付",
-    "markets": "市场",
     "communities": "社区",
     "tools": "工具"
   },
   "statusLabels": {
     "testnet": "测试网",
-    "coming_soon": "即将推出"
+    "in_development": "开发中"
   },
   "labelBadges": {
     "built_by_people": "由 PEOPLE 构建",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "为本地商店提供会员卡和结账二维码。"
-    },
-    "people-predict": {
-      "summary": "面向社区问题的预测市场。"
     },
     "people-clubs": {
       "summary": "面向俱乐部和成员社区的工具。"
