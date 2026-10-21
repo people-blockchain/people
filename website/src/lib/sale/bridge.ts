@@ -1,8 +1,7 @@
 /**
  * Cross-chain funding for `/buy` via the embedded LI.FI Widget.
  *
- * Supported source ecosystems: Base, EVM L1/L2s listed below, and Solana.
- * Tron and TON are not supported.
+ * Supported source ecosystems: Base, EVM L1/L2s listed below, Solana and Tron.
  *
  * @see https://docs.li.fi/widget/wallet-management
  * @see https://docs.li.fi/widget/install-widget
@@ -33,7 +32,7 @@ export function hubPaymentToken(paidWith: SaleStableSymbol): typeof BASE_USDC_AD
 /** Hub chain for PplCurveHub (sale contract). */
 export const BASE_CHAIN_ID = ChainId.BAS;
 
-export type BuyNetworkId = "base" | "eth" | "bsc" | "pol" | "arb" | "opt" | "sol";
+export type BuyNetworkId = "base" | "eth" | "bsc" | "pol" | "arb" | "opt" | "sol" | "tron";
 
 export type BuyNetworkOption = {
   id: BuyNetworkId;
@@ -49,11 +48,12 @@ export const BUY_NETWORK_OPTIONS: readonly BuyNetworkOption[] = [
   { id: "arb", chainId: ChainId.ARB },
   { id: "opt", chainId: ChainId.OPT },
   { id: "sol", chainId: ChainId.SOL },
+  { id: "tron", chainId: ChainId.TRN },
 ];
 
 /**
  * Source chains exposed in the cross-chain LI.FI widget (`chains.from.allow`).
- * Base is included for same-chain USDT→USDC; excludes Tron and TON.
+ * Base is included for same-chain USDT→USDC.
  */
 export const LIFI_BRIDGE_SOURCE_CHAIN_IDS: readonly number[] = [
   ChainId.ETH,
@@ -62,6 +62,7 @@ export const LIFI_BRIDGE_SOURCE_CHAIN_IDS: readonly number[] = [
   ChainId.ARB,
   ChainId.OPT,
   ChainId.SOL,
+  ChainId.TRN,
 ];
 
 function featured(
@@ -87,7 +88,16 @@ export const LIFI_FEATURED_SOURCE_TOKENS: readonly StaticToken[] = [
   featured(ChainId.OPT, "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", "USDC", 6),
   featured(ChainId.SOL, "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", "USDT", 6),
   featured(ChainId.SOL, "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "USDC", 6),
+  featured(ChainId.TRN, "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", "USDT", 6),
 ];
+
+/** Networks where only USDT is offered as the paying coin (no featured USDC token). */
+const USDT_ONLY_CHAINS: readonly number[] = [ChainId.TRN];
+
+/** Whether `stable` can be picked as the paying coin on `chainId`. */
+export function networkSupportsStable(chainId: number, stable: SaleStableSymbol): boolean {
+  return !(stable === "USDC" && USDT_ONLY_CHAINS.includes(chainId));
+}
 
 /** Pick the default `fromToken` for a network + stable selection. */
 export function defaultFromToken(chainId: number, stable: SaleStableSymbol): string {
@@ -99,14 +109,14 @@ export function defaultFromToken(chainId: number, stable: SaleStableSymbol): str
   );
   if (match) return match.address;
   const fallback = LIFI_FEATURED_SOURCE_TOKENS.find(
-    (token) => token.chainId === chainId && token.symbol === "USDC",
+    (token) => token.chainId === chainId && (token.symbol === "USDC" || token.symbol === "USDT"),
   );
   return fallback?.address ?? BASE_USDC_ADDRESS;
 }
 
 /** Human-readable list for APIs (EN). */
 export const LIFI_BRIDGE_SOURCE_CHAINS_EN =
-  "Base, Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, and Solana";
+  "Base, Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Solana, and Tron";
 
-/** Documentation link for supported ecosystems (EVM + Solana). */
+/** Documentation link for supported ecosystems (EVM, Solana and Tron). */
 export const LIFI_BRIDGE_DOCS_URL = "https://docs.li.fi/widget/wallet-management";

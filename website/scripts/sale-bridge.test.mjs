@@ -15,6 +15,9 @@ import {
   LIFI_BRIDGE_DOCS_URL,
   LIFI_FEATURED_SOURCE_TOKENS,
   hubPaymentToken,
+  defaultFromToken,
+  networkSupportsStable,
+  BUY_NETWORK_OPTIONS,
 } from "../src/lib/sale/bridge.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -40,7 +43,7 @@ test("hubPaymentToken always returns Base USDC", () => {
 
 test("featured EVM token addresses are strict checksummed", () => {
   for (const token of LIFI_FEATURED_SOURCE_TOKENS) {
-    if (token.chainId === ChainId.SOL) continue;
+    if (token.chainId === ChainId.SOL || token.chainId === ChainId.TRN) continue;
     assert.ok(isAddress(token.address, { strict: true }), `${token.symbol} on ${token.chainId}`);
   }
   assert.ok(isAddress(BASE_USDC_ADDRESS, { strict: true }));
@@ -54,16 +57,33 @@ test("BuyLifiBridge locks toChain, toToken and toAddress from config", () => {
   assert.match(BUY_LIFI_BRIDGE_SRC, /address: recipient/);
 });
 
-test("bridge source chains include Solana, exclude Tron, Avalanche and Base-only list", () => {
+test("bridge source chains include Solana and Tron, exclude Avalanche and Base-only list", () => {
   assert.ok(LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.SOL));
-  assert.ok(!LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.TRN));
+  assert.ok(LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.TRN));
+  assert.equal(ChainId.TRN, 728126428);
   assert.ok(!LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.AVA));
   assert.ok(!LIFI_BRIDGE_SOURCE_CHAIN_IDS.some((id) => id === 8453));
 });
 
-test("BuyLifiBridge does not bundle Tron provider", () => {
-  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /widget-provider-tron/);
-  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /TronProvider/);
+test("BuyLifiBridge bundles Tron provider and allows TVM chains", () => {
+  assert.match(BUY_LIFI_BRIDGE_SRC, /widget-provider-tron/);
+  assert.match(BUY_LIFI_BRIDGE_SRC, /TronProvider\(\)/);
+  assert.match(BUY_LIFI_BRIDGE_SRC, /ChainType\.TVM/);
+});
+
+test("BuyLifiBridge keeps the gas refuel message visible", () => {
+  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /gasRefuelMessage:\s*true/);
+});
+
+test("Tron source offers USDT TRC20 only", () => {
+  const usdt = LIFI_FEATURED_SOURCE_TOKENS.find((t) => t.chainId === ChainId.TRN && t.symbol === "USDT");
+  assert.equal(usdt?.address, "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  assert.equal(usdt?.decimals, 6);
+  assert.equal(defaultFromToken(ChainId.TRN, "USDC"), "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t");
+  assert.equal(networkSupportsStable(ChainId.TRN, "USDC"), false);
+  assert.equal(networkSupportsStable(ChainId.TRN, "USDT"), true);
+  assert.equal(networkSupportsStable(ChainId.ETH, "USDC"), true);
+  assert.ok(BUY_NETWORK_OPTIONS.some((n) => n.id === "tron" && n.chainId === ChainId.TRN));
 });
 
 test("BuyForm uses network selector and single buy CTA", () => {

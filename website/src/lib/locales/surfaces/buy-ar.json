@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "الحد: 500 دولار لكل عملية، 2000 دولار يوميًا",
     "ctaConnect": "ربط المحفظة",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "تم بلوغ الحد اليومي للشراء.",
     "errorInsufficient": "رصيد USDC غير كافٍ على Base.",
     "errorRejected": "تم إلغاء المعاملة في المحفظة.",
-    "errorGeneric": "فشل الشراء. حاول مرة أخرى."
+    "errorGeneric": "فشل الشراء. حاول مرة أخرى.",
+    "errorCooldownWait": "انتظر {seconds} ثانية ثم حاول مرة أخرى.",
+    "errorSoldOut": "نفدت الكمية. بيعت كل PPL على المنحنى.",
+    "errorNotVerified": "هذه المحفظة لم يتم التحقق منها بعد، لذا لا يمكنها الشراء.",
+    "errorSlippage": "تغيّر السعر. حاول مرة أخرى.",
+    "errorPaused": "البيع متوقف مؤقتًا.",
+    "errorNoGas": "لا يوجد ETH كافٍ على Base لرسوم الشبكة. أضف قليلًا من ETH على Base وحاول مرة أخرى.",
+    "endedTitle": "انتهى البيع",
+    "endedSub": "بيعت كل PPL أو مرّت 24 شهرًا. تذهب PPL غير المباعة إلى Community Pool.",
+    "ctaWorking": "جارٍ المعالجة…",
+    "waitingFunds": "في انتظار وصول أموالك…",
+    "leftoverNote": "يبقى {amount} في محفظتك بسبب حد الشراء.",
+    "saleTermsLine": "يستمر البيع حتى بيع 100 مليون PPL أو مرور 24 شهرًا. تذهب PPL غير المباعة إلى Community Pool. لا استرداد."
   },
   "whyPriceRises": {
     "title": "لماذا يرتفع السعر",

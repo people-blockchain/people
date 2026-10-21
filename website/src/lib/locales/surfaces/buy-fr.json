@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Limite : 500 $ par achat, 2 000 $ par jour",
     "ctaConnect": "Connecter le portefeuille",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Limite d'achat quotidienne atteinte.",
     "errorInsufficient": "USDC insuffisant sur Base.",
     "errorRejected": "Transaction annulée dans le portefeuille.",
-    "errorGeneric": "Échec de l'achat. Réessayez."
+    "errorGeneric": "Échec de l'achat. Réessayez.",
+    "errorCooldownWait": "Patientez {seconds} secondes puis réessayez.",
+    "errorSoldOut": "Épuisé. Tous les PPL de la courbe ont été vendus.",
+    "errorNotVerified": "Ce portefeuille n'est pas encore vérifié et ne peut pas acheter.",
+    "errorSlippage": "Le prix a changé. Réessayez.",
+    "errorPaused": "La vente est temporairement suspendue.",
+    "errorNoGas": "Pas assez d'ETH sur Base pour les frais de réseau. Ajoutez un peu d'ETH sur Base et réessayez.",
+    "endedTitle": "La vente est terminée",
+    "endedSub": "Tous les PPL ont été vendus ou 24 mois se sont écoulés. Les PPL invendus vont au Community Pool.",
+    "ctaWorking": "Traitement…",
+    "waitingFunds": "En attente de l'arrivée de vos fonds…",
+    "leftoverNote": "{amount} restent dans votre portefeuille à cause de la limite d'achat.",
+    "saleTermsLine": "La vente dure jusqu'à la vente des 100 M de PPL ou 24 mois. Les PPL invendus vont au Community Pool. Aucun remboursement."
   },
   "whyPriceRises": {
     "title": "Pourquoi le prix monte",

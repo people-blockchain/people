@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import type { Address, Hex } from "viem";
 
 import { useLanguage } from "@/context/LanguageContext";
@@ -18,20 +18,22 @@ import {
   type BuyNetworkId,
   defaultFromToken,
   hubPaymentToken,
+  networkSupportsStable,
 } from "@/lib/sale/bridge";
+import type { SaleStatus } from "@/lib/sale/adapter";
 import { SALE, type SaleStableSymbol, saleContractConfigured } from "@/lib/sale/config";
 import { quoteBuy } from "@/lib/sale/curve";
 import {
   activeSignerToBaseWriter,
   executeHubBuyWithUsdc,
   mapBuyError,
-  pplToMinOut,
   readBaseUsdcBalance,
   sessionToBaseWriter,
   usdToUsdc6,
   waitForBaseReceipt,
-  type BuyOnBaseErrorCode,
+  waitForUsdcIncrease,
 } from "@/lib/sale/buy-on-base";
+import type { BuyErrorInfo } from "@/lib/sale/buy-math";
 import { fillCopy, pplCompact, pricePerPpl, usd } from "@/lib/sale/format";
 
 const BuyLifiBridge = dynamic(
@@ -68,15 +70,52 @@ function resolveSigner(
   return null;
 }
 
+type FormCopy = (typeof buyCopy)["en"]["form"];
+
+/** Human sentence for a purchase error; no raw contract names ever reach the page. */
+function buyErrorText(info: BuyErrorInfo, form: FormCopy, lang: Parameters<typeof usd>[1]): string {
+  switch (info.code) {
+    case "cooldown":
+      return fillCopy(form.errorCooldownWait, { seconds: info.waitSec ?? 60 });
+    case "dailyLimit":
+      return form.errorDailyLimit;
+    case "perBuyLimit":
+      return fillCopy(form.overLimit, { amount: usd(SALE.maxPerBuyUsd, lang) });
+    case "insufficient":
+      return form.errorInsufficient;
+    case "noGas":
+      return form.errorNoGas;
+    case "rejected":
+      return form.errorRejected;
+    case "soldOut":
+      return form.errorSoldOut;
+    case "closed":
+      return form.endedTitle;
+    case "notOpen":
+      return form.closedTitle;
+    case "notVerified":
+      return form.errorNotVerified;
+    case "slippage":
+      return form.errorSlippage;
+    case "paused":
+      return form.errorPaused;
+    default:
+      return form.errorGeneric;
+  }
+}
+
 /**
  * Single buy widget for `/buy`. State is local; curve parameters come from config.
  */
 export function BuyForm({
   soldPpl,
+  saleStatus,
   variant = "panel",
   testId,
 }: {
   soldPpl: number | null;
+  /** Live status from the chain adapter; `ended` / `not_open` swap the form for a closed card. */
+  saleStatus?: SaleStatus;
   variant?: "panel" | "bare";
   testId?: string;
 }) {
@@ -98,7 +137,13 @@ export function BuyForm({
   const [amount, setAmount] = useState(String(SALE.maxPerBuyUsd / 5));
   const [stable, setStable] = useState<SaleStableSymbol>("USDC");
   const [phase, setPhase] = useState<CtaPhase>("connect");
-  const [errorCode, setErrorCode] = useState<BuyOnBaseErrorCode | null>(null);
+  const [errorInfo, setErrorInfo] = useState<BuyErrorInfo | null>(null);
+  const [leftoverUsd, setLeftoverUsd] = useState<number | null>(null);
+  const [waitingFunds, setWaitingFunds] = useState(false);
+  /** Guards against a second purchase starting before the first one settled (double click, repeated bridge event). */
+  const busyRef = useRef(false);
+  /** Base USDC balance before the bridge opened, so we know when the payout has landed. */
+  const balanceBeforeBridge = useRef<bigint | null>(null);
   const [usdcReady, setUsdcReady] = useState(false);
   const [lifiOpen, setLifiOpen] = useState(false);
   const [showStep2, setShowStep2] = useState(false);
@@ -138,6 +183,11 @@ export function BuyForm({
     void refreshUsdcReady();
   }, [refreshUsdcReady, networkId, stable]);
 
+  // Re-read the balance once a purchase settles so the next click routes correctly.
+  useEffect(() => {
+    if (phase === "success" || phase === "error") void refreshUsdcReady();
+  }, [phase, refreshUsdcReady]);
+
   useEffect(() => {
     if (!saleOpen || !connected) return;
     try {
@@ -172,39 +222,50 @@ export function BuyForm({
     }
   }, []);
 
-  const runHubBuy = useCallback(async () => {
-    if (!signer || !beneficiary || !quote || quote.pplOut <= 0) return;
-    setPhase("pending");
-    setErrorCode(null);
-    try {
-      const writer =
-        signer.kind === "embedded" && signer.privateKey
-          ? sessionToBaseWriter({ address: signer.address, privateKey: signer.privateKey })
-          : activeSignerToBaseWriter(signer);
-      const hash = await executeHubBuyWithUsdc({
-        writer,
-        beneficiary: beneficiary as Address,
-        usdAmount: Math.min(usdAmount, SALE.maxPerBuyUsd),
-        minPplOut: pplToMinOut(quote.pplOut),
-      });
-      const receipt = await waitForBaseReceipt(hash);
-      if (receipt.status !== "success") throw new Error("tx_failed");
-      clearPending();
-      setShowStep2(false);
-      setPhase("success");
-    } catch (err) {
-      setPhase("error");
-      setErrorCode(mapBuyError(err));
-    }
-  }, [beneficiary, clearPending, quote, signer, usdAmount]);
+  const runHubBuy = useCallback(
+    async (afterBridge = false) => {
+      if (!signer || !beneficiary || busyRef.current) return;
+      busyRef.current = true;
+      setPhase("pending");
+      setErrorInfo(null);
+      setLeftoverUsd(null);
+      try {
+        const writer =
+          signer.kind === "embedded" && signer.privateKey
+            ? sessionToBaseWriter({ address: signer.address, privateKey: signer.privateKey })
+            : activeSignerToBaseWriter(signer);
+        if (afterBridge && balanceBeforeBridge.current !== null) {
+          setWaitingFunds(true);
+          await waitForUsdcIncrease(signer.address, balanceBeforeBridge.current);
+          setWaitingFunds(false);
+        }
+        const result = await executeHubBuyWithUsdc({
+          writer,
+          beneficiary: beneficiary as Address,
+          usdAmount: Math.min(usdAmount, SALE.maxPerBuyUsd),
+        });
+        const receipt = await waitForBaseReceipt(result.hash);
+        if (receipt.status !== "success") throw new Error("tx_failed");
+        clearPending();
+        setShowStep2(false);
+        if (result.leftover6 > BigInt(0)) setLeftoverUsd(Number(result.leftover6) / 1e6);
+        setPhase("success");
+      } catch (err) {
+        setPhase("error");
+        setErrorInfo(mapBuyError(err));
+      } finally {
+        setWaitingFunds(false);
+        busyRef.current = false;
+      }
+    },
+    [beneficiary, clearPending, signer, usdAmount],
+  );
 
   const onBridgeComplete = useCallback(() => {
     setLifiOpen(false);
     setShowStep2(true);
-    void refreshUsdcReady().then(() => {
-      void runHubBuy();
-    });
-  }, [refreshUsdcReady, runHubBuy]);
+    void runHubBuy(true);
+  }, [runHubBuy]);
 
   const onCtaClick = useCallback(() => {
     if (!saleOpen) return;
@@ -212,7 +273,7 @@ export function BuyForm({
       openWalletModal();
       return;
     }
-    if (!amountValid || overLimit || !quote) return;
+    if (!amountValid || overLimit || !quote || busyRef.current) return;
 
     const directUsdcOnBase = networkId === "base" && stable === "USDC";
     if (directUsdcOnBase || usdcReady) {
@@ -221,9 +282,18 @@ export function BuyForm({
     }
 
     persistPending();
+    balanceBeforeBridge.current = null;
+    void readBaseUsdcBalance(beneficiary as Address)
+      .then((balance) => {
+        balanceBeforeBridge.current = balance;
+      })
+      .catch(() => {
+        balanceBeforeBridge.current = null;
+      });
     setLifiOpen(true);
   }, [
     amountValid,
+    beneficiary,
     connected,
     networkId,
     openWalletModal,
@@ -242,18 +312,7 @@ export function BuyForm({
     phase === "success" ||
     (connected && (!amountValid || overLimit));
 
-  const errorMessage =
-    errorCode === "cooldown"
-      ? t.form.errorCooldown
-      : errorCode === "dailyLimit"
-        ? t.form.errorDailyLimit
-        : errorCode === "insufficient"
-          ? t.form.errorInsufficient
-          : errorCode === "rejected"
-            ? t.form.errorRejected
-            : errorCode
-              ? t.form.errorGeneric
-              : null;
+  const errorMessage = errorInfo ? buyErrorText(errorInfo, t.form, lang) : null;
 
   const rows: { label: string; value: string }[] = quote
     ? [
@@ -265,15 +324,18 @@ export function BuyForm({
 
   void hubPaymentToken(stable);
 
-  if (!saleOpen) {
+  const saleEnded = saleStatus === "ended";
+  const saleNotOpen = saleStatus === "not_open";
+
+  if (!saleOpen || saleEnded || saleNotOpen) {
     const closed = (
       <div
         className="rounded-2xl border border-line bg-surface-2 p-6 text-center"
         data-testid={testId}
         id="buy-form"
       >
-        <p className="text-lg font-bold text-ink">{t.form.closedTitle}</p>
-        <p className="mt-2 text-sm text-ink-2">{t.form.closedSub}</p>
+        <p className="text-lg font-bold text-ink">{saleEnded ? t.form.endedTitle : t.form.closedTitle}</p>
+        <p className="mt-2 text-sm text-ink-2">{saleEnded ? t.form.endedSub : t.form.closedSub}</p>
       </div>
     );
     if (variant === "bare") return closed;
@@ -294,7 +356,10 @@ export function BuyForm({
           data-testid="buy-network-select"
           value={networkId}
           onChange={(event) => {
-            setNetworkId(event.target.value as BuyNetworkId);
+            const next = event.target.value as BuyNetworkId;
+            const nextChain = BUY_NETWORK_OPTIONS.find((n) => n.id === next)?.chainId;
+            setNetworkId(next);
+            if (nextChain !== undefined && !networkSupportsStable(nextChain, stable)) setStable("USDT");
             setShowStep2(false);
             setPhase(connected ? "buy" : "connect");
           }}
@@ -315,6 +380,7 @@ export function BuyForm({
             <button
               key={symbol}
               type="button"
+              disabled={!networkSupportsStable(chainId, symbol) || phase === "pending"}
               data-testid={`buy-stable-${symbol.toLowerCase()}`}
               onClick={() => {
                 setStable(symbol);
@@ -324,7 +390,7 @@ export function BuyForm({
                 stable === symbol
                   ? "border-brand bg-brand/10 text-ink"
                   : "border-line bg-surface-2 text-ink-2 hover:border-brand/40"
-              }`}
+              } disabled:cursor-not-allowed disabled:opacity-40`}
             >
               {symbol}
             </button>
@@ -346,7 +412,8 @@ export function BuyForm({
             onChange={(event) => {
               setAmount(event.target.value);
               setPhase(connected ? "buy" : "connect");
-              setErrorCode(null);
+              setErrorInfo(null);
+              setLeftoverUsd(null);
             }}
             className={`${FIELD} pr-16 font-mono text-base`}
           />
@@ -384,6 +451,7 @@ export function BuyForm({
       </div>
 
       <p className="text-xs text-ink-3">{t.form.limitsLine}</p>
+      <p className="text-sm text-ink-2">{t.form.saleTermsLine}</p>
 
       {connected ? (
         <p className="text-xs text-ink-3">
@@ -397,8 +465,15 @@ export function BuyForm({
         </p>
       ) : null}
 
+      {waitingFunds ? <p className="text-sm font-medium text-ink">{t.form.waitingFunds}</p> : null}
+
       {phase === "success" ? (
-        <p className="text-sm font-medium text-value">{t.form.successMessage}</p>
+        <p className="text-sm font-medium text-value">
+          {t.form.successMessage}
+          {leftoverUsd !== null && leftoverUsd > 0
+            ? ` ${fillCopy(t.form.leftoverNote, { amount: usd(leftoverUsd, lang) })}`
+            : ""}
+        </p>
       ) : null}
 
       <button
@@ -408,7 +483,7 @@ export function BuyForm({
         onClick={onCtaClick}
         className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-base font-semibold text-brand-ink shadow-[0_14px_36px_-16px_rgba(3,105,161,0.8)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none"
       >
-        {!connected ? t.form.ctaConnect : phase === "pending" ? "…" : t.form.ctaBuy}
+        {!connected ? t.form.ctaConnect : phase === "pending" ? t.form.ctaWorking : t.form.ctaBuy}
       </button>
 
       {errorMessage ? <p className="text-center text-sm text-warm">{errorMessage}</p> : null}

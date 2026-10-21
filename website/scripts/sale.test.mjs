@@ -58,13 +58,13 @@ test("tokenomics surfaces point the sale contract row at Base only", () => {
   }
 });
 
-test("buy surfaces list supported networks without TON or Tron (12 languages)", () => {
+test("buy surfaces list supported networks including Tron, without TON (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
     const names = Object.values(doc.form.networkNames ?? {}).join(" ");
     assert.match(names, /Solana/);
-    assert.doesNotMatch(names, /Tron/);
+    assert.match(names, /Tron/);
     assert.doesNotMatch(names, /\bTON\b/i);
     assert.match(doc.form.networkNames.base, /Base/);
   }

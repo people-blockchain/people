@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "限额：单次 $500，每日 $2,000",
     "ctaConnect": "连接钱包",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "已达每日购买限额。",
     "errorInsufficient": "Base 上 USDC 不足。",
     "errorRejected": "已在钱包中取消交易。",
-    "errorGeneric": "购买失败，请重试。"
+    "errorGeneric": "购买失败，请重试。",
+    "errorCooldownWait": "请等待 {seconds} 秒后重试。",
+    "errorSoldOut": "已售罄。曲线上的 PPL 已全部售出。",
+    "errorNotVerified": "该钱包尚未验证，暂时无法购买。",
+    "errorSlippage": "价格已变动，请重试。",
+    "errorPaused": "销售已暂时暂停。",
+    "errorNoGas": "Base 上的 ETH 不足以支付网络费用。请在 Base 上充入少量 ETH 后重试。",
+    "endedTitle": "销售已结束",
+    "endedSub": "PPL 已全部售出或已满 24 个月。未售出的 PPL 进入 Community Pool。",
+    "ctaWorking": "处理中…",
+    "waitingFunds": "正在等待资金到账…",
+    "leftoverNote": "因购买限额，{amount} 仍留在您的钱包中。",
+    "saleTermsLine": "销售持续到 1 亿 PPL 全部售出或满 24 个月。未售出的 PPL 进入 Community Pool。不退款。"
   },
   "whyPriceRises": {
     "title": "价格为何上涨",
