@@ -8,13 +8,12 @@
   "openLabel": "Открыть",
   "categories": {
     "payments": "Платежи",
-    "markets": "Рынки",
     "communities": "Сообщества",
     "tools": "Инструменты"
   },
   "statusLabels": {
     "testnet": "Тестнет",
-    "coming_soon": "Скоро"
+    "in_development": "В разработке"
   },
   "labelBadges": {
     "built_by_people": "Сделано PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Абонементы лояльности и QR на кассе для местных магазинов."
-    },
-    "people-predict": {
-      "summary": "Рынки прогнозов по вопросам сообществ."
     },
     "people-clubs": {
       "summary": "Инструменты для клубов и сообществ участников."

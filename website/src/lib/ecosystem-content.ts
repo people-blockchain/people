@@ -12,8 +12,8 @@ import ecosystemTr from "./locales/surfaces/ecosystem-tr.json" with { type: "jso
 import ecosystemVi from "./locales/surfaces/ecosystem-vi.json" with { type: "json" };
 import ecosystemZh from "./locales/surfaces/ecosystem-zh.json" with { type: "json" };
 
-export type EcosystemCategory = "payments" | "markets" | "communities" | "tools";
-export type EcosystemStatus = "testnet" | "coming_soon";
+export type EcosystemCategory = "payments" | "communities" | "tools";
+export type EcosystemStatus = "testnet" | "in_development";
 export type EcosystemLabel = "built_by_people" | "community";
 
 export type EcosystemProduct = {
@@ -31,7 +31,6 @@ export type EcosystemPublicCopy = typeof ecosystemEn;
 
 export const ECOSYSTEM_CATEGORIES: EcosystemCategory[] = [
   "payments",
-  "markets",
   "communities",
   "tools",
 ];
@@ -48,23 +47,13 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     label: "built_by_people",
   },
   {
-    id: "people-predict",
-    category: "markets",
-    name: "PEOPLE Predict",
-    monogram: "P",
-    href: "https://peoplepredict.app",
-    external: true,
-    status: "coming_soon",
-    label: "built_by_people",
-  },
-  {
     id: "people-clubs",
     category: "communities",
     name: "PEOPLE Clubs",
     monogram: "C",
     href: "https://peopleclubs.com",
     external: true,
-    status: "coming_soon",
+    status: "in_development",
     label: "built_by_people",
   },
   {

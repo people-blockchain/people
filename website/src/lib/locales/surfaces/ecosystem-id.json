@@ -8,13 +8,12 @@
   "openLabel": "Buka",
   "categories": {
     "payments": "Pembayaran",
-    "markets": "Pasar",
     "communities": "Komunitas",
     "tools": "Alat"
   },
   "statusLabels": {
     "testnet": "Jaringan uji",
-    "coming_soon": "Segera hadir"
+    "in_development": "Dalam pengembangan"
   },
   "labelBadges": {
     "built_by_people": "Dibuat oleh PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Kartu loyalitas dan QR kasir untuk toko lokal."
-    },
-    "people-predict": {
-      "summary": "Pasar prediksi untuk pertanyaan komunitas."
     },
     "people-clubs": {
       "summary": "Alat untuk klub dan komunitas anggota."

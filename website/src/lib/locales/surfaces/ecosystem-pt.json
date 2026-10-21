@@ -8,13 +8,12 @@
   "openLabel": "Abrir",
   "categories": {
     "payments": "Pagamentos",
-    "markets": "Mercados",
     "communities": "Comunidades",
     "tools": "Ferramentas"
   },
   "statusLabels": {
     "testnet": "Rede de teste",
-    "coming_soon": "Em breve"
+    "in_development": "Em desenvolvimento"
   },
   "labelBadges": {
     "built_by_people": "Feito pela PEOPLE",
@@ -23,9 +22,6 @@
   "items": {
     "people-lavka": {
       "summary": "Cartões de fidelidade e QR de caixa para lojas locais."
-    },
-    "people-predict": {
-      "summary": "Mercados de previsão para perguntas das comunidades."
     },
     "people-clubs": {
       "summary": "Ferramentas para clubes e comunidades de membros."
