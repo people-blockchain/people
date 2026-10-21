@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChainType, LiFiWidget, WidgetEvent, widgetEvents, type WidgetConfig } from "@lifi/widget";
 import { EthereumProvider } from "@lifi/widget-provider-ethereum";
 import { SolanaProvider } from "@lifi/widget-provider-solana";
+import { TronProvider } from "@lifi/widget-provider-tron";
 import type { Address } from "viem";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -39,6 +40,8 @@ function useBridgeWidgetConfig(
   appearance: "light" | "dark",
 ): WidgetConfig {
   return useMemo(() => {
+    // `gasRefuelMessage` is deliberately NOT hidden: the widget's auto-refuel
+    // (on by default) tops up ETH on Base when the buyer has none for gas.
     const hiddenBase = {
       toAddress: true,
       toToken: true,
@@ -52,7 +55,7 @@ function useBridgeWidgetConfig(
       variant: "compact",
       appearance,
       languages: { default: "en" },
-      providers: [EthereumProvider(), SolanaProvider()],
+      providers: [EthereumProvider(), SolanaProvider(), TronProvider()],
       fromChain,
       fromToken,
       fromAmount,
@@ -64,7 +67,7 @@ function useBridgeWidgetConfig(
       },
       chains: {
         to: { allow: [BASE_CHAIN_ID] },
-        types: { allow: [ChainType.EVM, ChainType.SVM] },
+        types: { allow: [ChainType.EVM, ChainType.SVM, ChainType.TVM] },
       },
       hiddenUI: hiddenBase,
       disabledUI: { toAddress: true, toToken: true },

@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Batas: $500 per pembelian, $2.000 per hari",
     "ctaConnect": "Hubungkan dompet",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Batas pembelian harian tercapai.",
     "errorInsufficient": "USDC di Base tidak cukup.",
     "errorRejected": "Transaksi dibatalkan di dompet.",
-    "errorGeneric": "Pembelian gagal. Coba lagi."
+    "errorGeneric": "Pembelian gagal. Coba lagi.",
+    "errorCooldownWait": "Tunggu {seconds} detik lalu coba lagi.",
+    "errorSoldOut": "Habis terjual. Semua PPL di kurva sudah terjual.",
+    "errorNotVerified": "Dompet ini belum terverifikasi sehingga belum bisa membeli.",
+    "errorSlippage": "Harga berubah. Silakan coba lagi.",
+    "errorPaused": "Penjualan dijeda sementara.",
+    "errorNoGas": "ETH di Base tidak cukup untuk biaya jaringan. Tambahkan sedikit ETH di Base lalu coba lagi.",
+    "endedTitle": "Penjualan telah berakhir",
+    "endedSub": "Semua PPL terjual atau 24 bulan telah berlalu. PPL yang tidak terjual masuk ke Community Pool.",
+    "ctaWorking": "Memproses…",
+    "waitingFunds": "Menunggu dana Anda masuk…",
+    "leftoverNote": "{amount} tetap di dompet Anda karena batas pembelian.",
+    "saleTermsLine": "Penjualan berjalan sampai 100 juta PPL terjual atau 24 bulan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana."
   },
   "whyPriceRises": {
     "title": "Mengapa harga naik",

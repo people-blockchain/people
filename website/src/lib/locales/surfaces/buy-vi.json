@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Giới hạn: $500 mỗi lần mua, $2.000 mỗi ngày",
     "ctaConnect": "Kết nối ví",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Đã đạt giới hạn mua trong ngày.",
     "errorInsufficient": "Không đủ USDC trên Base.",
     "errorRejected": "Giao dịch bị hủy trong ví.",
-    "errorGeneric": "Mua thất bại. Thử lại."
+    "errorGeneric": "Mua thất bại. Thử lại.",
+    "errorCooldownWait": "Vui lòng chờ {seconds} giây rồi thử lại.",
+    "errorSoldOut": "Đã bán hết. Toàn bộ PPL trên đường cong đã được bán.",
+    "errorNotVerified": "Ví này chưa được xác minh nên chưa thể mua.",
+    "errorSlippage": "Giá đã thay đổi. Vui lòng thử lại.",
+    "errorPaused": "Đợt bán tạm thời bị tạm dừng.",
+    "errorNoGas": "Không đủ ETH trên Base để trả phí mạng. Hãy nạp thêm một ít ETH trên Base rồi thử lại.",
+    "endedTitle": "Đợt bán đã kết thúc",
+    "endedSub": "Toàn bộ PPL đã bán hết hoặc đã qua 24 tháng. PPL chưa bán sẽ chuyển vào Community Pool.",
+    "ctaWorking": "Đang xử lý…",
+    "waitingFunds": "Đang chờ tiền của bạn về…",
+    "leftoverNote": "{amount} vẫn ở trong ví của bạn do giới hạn mua.",
+    "saleTermsLine": "Đợt bán kéo dài đến khi bán hết 100 triệu PPL hoặc 24 tháng. PPL chưa bán chuyển vào Community Pool. Không hoàn tiền."
   },
   "whyPriceRises": {
     "title": "Vì sao giá tăng",

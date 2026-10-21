@@ -1,14 +1,28 @@
 "use client";
 
-import { parseUnits, type Address, type Hex } from "viem";
+import { parseEther, parseUnits, type Address, type Hex } from "viem";
 
 import type { ActiveEvmSigner } from "@/context/ExternalWalletContext";
 import { BASE_USDC_ADDRESS } from "@/lib/sale/bridge";
-import { createBasePublicClient, type BaseWriteSigner, writeOnBase } from "@/lib/sale/base-client";
+import {
+  createBasePublicClient,
+  type BaseWriteSigner,
+  writeOnBase,
+  writeOnBaseAndWait,
+} from "@/lib/sale/base-client";
+import { BuyFlowError, DEFAULT_SLIPPAGE_BPS, minOutFromQuote, planBuyAmount } from "@/lib/sale/buy-math";
 import { saleContractAddress } from "@/lib/sale/config";
 import { ERC20_ABI, PPL_CURVE_HUB_ABI } from "@/lib/sale/hub-abi";
+import { readHubBuyerLimits, readHubQuote, readHubSaleState } from "@/lib/sale/hub-quote";
 
-export type BuyOnBaseErrorCode = "cooldown" | "dailyLimit" | "insufficient" | "rejected" | "generic";
+export { mapBuyError, type BuyOnBaseErrorCode } from "@/lib/sale/buy-math";
+
+/** Floor for the ETH a buyer needs on Base to pay for approve + buy. */
+export const MIN_GAS_WEI = parseEther("0.00002");
+
+/** Rough gas budget for approve + buyWith, used only for the balance pre-check. */
+const GAS_UNITS_APPROVE = BigInt(70_000);
+const GAS_UNITS_BUY = BigInt(400_000);
 
 export function activeSignerToBaseWriter(signer: ActiveEvmSigner): BaseWriteSigner {
   if (signer.kind === "embedded" && signer.privateKey) {
@@ -34,8 +48,7 @@ export function sessionToBaseWriter(session: {
 }
 
 export async function readBaseUsdcBalance(owner: Address): Promise<bigint> {
-  const client = createBasePublicClient();
-  return client.readContract({
+  return createBasePublicClient().readContract({
     address: BASE_USDC_ADDRESS,
     abi: ERC20_ABI,
     functionName: "balanceOf",
@@ -47,62 +60,148 @@ export function usdToUsdc6(usd: number): bigint {
   return parseUnits(usd.toFixed(6), 6);
 }
 
-export function pplToMinOut(pplOut: number, slippageBps = 100): bigint {
-  const scaled = Math.floor(pplOut * (1 - slippageBps / 10_000) * 1e18);
-  return BigInt(Math.max(scaled, 0));
+/**
+ * Polls until the Base USDC balance is above `before` (the bridge paid out) or
+ * the timeout passes; returns the latest balance either way.
+ */
+export async function waitForUsdcIncrease(
+  owner: Address,
+  before: bigint,
+  timeoutMs = 45_000,
+  intervalMs = 3_000,
+): Promise<bigint> {
+  const deadline = Date.now() + timeoutMs;
+  let balance = await readBaseUsdcBalance(owner);
+  while (balance <= before && Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    balance = await readBaseUsdcBalance(owner);
+  }
+  return balance;
 }
 
-export function mapBuyError(err: unknown): BuyOnBaseErrorCode {
-  const msg = String((err as { shortMessage?: string; message?: string })?.shortMessage ?? (err as Error)?.message ?? err).toLowerCase();
-  if ((err as { code?: number })?.code === 4001 || msg.includes("user rejected") || msg.includes("denied")) {
-    return "rejected";
+export type HubBuyResult = {
+  hash: Hex;
+  /** USDC (6 decimals) spent on this purchase. */
+  amount6: bigint;
+  /** USDC (6 decimals) deliberately left in the wallet because of a limit. */
+  leftover6: bigint;
+  limitedBy: "requested" | "balance" | "perBuy" | "daily";
+};
+
+async function ensureGas(owner: Address, needsApprove: boolean): Promise<void> {
+  const client = createBasePublicClient();
+  const balance = await client.getBalance({ address: owner });
+  let required = MIN_GAS_WEI;
+  try {
+    const gasPrice = await client.getGasPrice();
+    const units = GAS_UNITS_BUY + (needsApprove ? GAS_UNITS_APPROVE : BigInt(0));
+    const estimate = units * gasPrice * BigInt(2);
+    if (estimate > required) required = estimate;
+  } catch {
+    /* keep the fixed floor */
   }
-  if (msg.includes("cooldown")) return "cooldown";
-  if (msg.includes("daily") || msg.includes("limit")) return "dailyLimit";
-  if (msg.includes("insufficient") || msg.includes("exceeds balance") || msg.includes("transfer amount")) {
-    return "insufficient";
-  }
-  return "generic";
+  if (balance < required) throw new BuyFlowError("noGas");
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Buys PPL with Base USDC. The amount is min(wallet balance, requested, per-buy
+ * cap, daily remainder); `minPplOut` comes from the hub's own `quoteBuyWith`
+ * minus slippage; `buyWith` is simulated first so a revert surfaces as a named
+ * contract error.
+ */
 export async function executeHubBuyWithUsdc(input: {
   writer: BaseWriteSigner;
   beneficiary: Address;
   usdAmount: number;
-  minPplOut: bigint;
-}): Promise<Hex> {
-  const hub = saleContractAddress();
-  if (!hub) throw new Error("sale_not_configured");
-
-  const usdAmount6 = usdToUsdc6(input.usdAmount);
+  slippageBps?: number;
+}): Promise<HubBuyResult> {
+  const hubRaw = saleContractAddress();
+  if (!hubRaw) throw new Error("sale_not_configured");
+  const hub = hubRaw as Address;
   const owner = input.writer.address;
-
   const client = createBasePublicClient();
+
+  const state = await readHubSaleState();
+  if (state.openedAt === BigInt(0)) throw new BuyFlowError("notOpen");
+  if (state.paused) throw new BuyFlowError("paused");
+  if (state.soldOut) throw new BuyFlowError("soldOut");
+  if (state.closed) throw new BuyFlowError("closed");
+
+  const [balance6, limits, head] = await Promise.all([
+    readBaseUsdcBalance(owner),
+    readHubBuyerLimits(owner, input.beneficiary),
+    client.getBlock(),
+  ]);
+
+  // Compare against chain time, not the device clock: a skewed phone clock must not
+  // block a buy the hub would accept (or let one through that it would reject).
+  const nowSec = Number(head.timestamp);
+  if (limits.tradeAvailableAt > BigInt(nowSec)) {
+    throw new BuyFlowError("cooldown", Number(limits.tradeAvailableAt) - nowSec);
+  }
+  if (limits.remainingDaily6 === BigInt(0)) throw new BuyFlowError("dailyLimit");
+
+  const plan = planBuyAmount({
+    requested6: usdToUsdc6(input.usdAmount),
+    balance6,
+    maxPerBuy6: limits.maxPerBuy6,
+    remainingDaily6: limits.remainingDaily6,
+  });
+  if (plan.amount6 === BigInt(0)) throw new BuyFlowError("insufficient");
+
+  const quote = await readHubQuote(plan.amount6);
+  if (quote.pplOut === BigInt(0) || quote.usdUsed === BigInt(0)) throw new BuyFlowError("soldOut");
+  const minPplOut = minOutFromQuote(quote.pplOut, input.slippageBps ?? DEFAULT_SLIPPAGE_BPS);
+
   const allowance = await client.readContract({
     address: BASE_USDC_ADDRESS,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: [owner, hub as Address],
+    args: [owner, hub],
   });
+  const needsApprove = allowance < quote.usdUsed;
 
-  if (allowance < usdAmount6) {
-    await writeOnBase(input.writer, {
+  await ensureGas(owner, needsApprove);
+
+  if (needsApprove) {
+    await writeOnBaseAndWait(input.writer, {
       address: BASE_USDC_ADDRESS,
       abi: ERC20_ABI,
       functionName: "approve",
-      args: [hub as Address, usdAmount6],
+      args: [hub, quote.usdUsed],
     });
   }
 
-  return writeOnBase(input.writer, {
-    address: hub as Address,
+  const buyArgs = [BASE_USDC_ADDRESS, input.beneficiary, plan.amount6, minPplOut] as const;
+  // A load-balanced RPC may not have seen the approval yet; retry the simulation briefly.
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      await client.simulateContract({
+        account: owner,
+        address: hub,
+        abi: PPL_CURVE_HUB_ABI,
+        functionName: "buyWith",
+        args: buyArgs,
+      });
+      break;
+    } catch (err) {
+      if (!needsApprove || attempt >= 2) throw err;
+      await sleep(1_500);
+    }
+  }
+
+  const hash = await writeOnBase(input.writer, {
+    address: hub,
     abi: PPL_CURVE_HUB_ABI,
     functionName: "buyWith",
-    args: [BASE_USDC_ADDRESS, input.beneficiary, usdAmount6, input.minPplOut],
+    args: buyArgs,
   });
+
+  return { hash, amount6: plan.amount6, leftover6: plan.leftover6, limitedBy: plan.limitedBy };
 }
 
 export async function waitForBaseReceipt(hash: Hex) {
-  const client = createBasePublicClient();
-  return client.waitForTransactionReceipt({ hash });
+  return createBasePublicClient().waitForTransactionReceipt({ hash });
 }

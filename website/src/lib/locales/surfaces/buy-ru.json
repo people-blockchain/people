@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Лимит: $500 за покупку, $2 000 в день",
     "ctaConnect": "Подключить кошелёк",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Достигнут дневной лимит покупки.",
     "errorInsufficient": "Недостаточно USDC на Base.",
     "errorRejected": "Транзакция отменена в кошельке.",
-    "errorGeneric": "Покупка не удалась. Попробуйте снова."
+    "errorGeneric": "Покупка не удалась. Попробуйте снова.",
+    "errorCooldownWait": "Подождите {seconds} с и попробуйте снова.",
+    "errorSoldOut": "Всё распродано. Все PPL на кривой проданы.",
+    "errorNotVerified": "Этот кошелёк ещё не верифицирован, поэтому покупка недоступна.",
+    "errorSlippage": "Цена изменилась. Попробуйте ещё раз.",
+    "errorPaused": "Продажа временно приостановлена.",
+    "errorNoGas": "На Base не хватает ETH на комиссию сети. Пополните немного ETH на Base и попробуйте снова.",
+    "endedTitle": "Продажа завершена",
+    "endedSub": "Все PPL распроданы или прошло 24 месяца. Нераспроданные PPL уходят в Community Pool.",
+    "ctaWorking": "Выполняется…",
+    "waitingFunds": "Ждём поступления средств…",
+    "leftoverNote": "{amount} остаётся в вашем кошельке из-за лимита покупки.",
+    "saleTermsLine": "Продажа идёт до распродажи всех 100 млн PPL или 24 месяцев. Нераспроданные PPL уходят в Community Pool. Возврата нет."
   },
   "whyPriceRises": {
     "title": "Почему растёт цена",

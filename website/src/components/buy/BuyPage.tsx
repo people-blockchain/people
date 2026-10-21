@@ -62,7 +62,7 @@ export function BuyPage() {
             id={HERO_FORM_ID}
             className="order-1 scroll-mt-[calc(3.5rem+0.75rem)] lg:order-2 lg:sticky lg:top-24"
           >
-            <BuyForm soldPpl={stats.soldPpl} testId="buy-form-hero" />
+            <BuyForm soldPpl={stats.soldPpl} saleStatus={stats.status} testId="buy-form-hero" />
             <BuyWhyPriceRises />
           </div>
 

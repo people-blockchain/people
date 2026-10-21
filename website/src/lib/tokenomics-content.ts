@@ -113,7 +113,7 @@ const en: TokenomicsCopy = {
     "Up to 100M PPL from the sale bucket (10% of the fixed supply) are sold on a public exponential curve. Published parameters match the live /buy page and the order API.",
   salePayTitle: "How you pay",
   salePayBody:
-    "The sale runs on Base only. Pay with USDC or USDT on Base, or with USDT/USDC from any supported chain via the built-in automatic swap widget, which converts to USDC on Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and Solana. Tron and TON are not supported.",
+    "The sale runs on Base only. Pay with USDC or USDT on Base, or with USDT/USDC from any supported chain via the built-in automatic swap widget, which converts to USDC on Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Solana and Tron.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
     "Your PPL is recorded to your address in the sale contract on Base the moment you buy and is credited as native PPL on the PEOPLE network at genesis (no lock-up on purchased PPL beyond the 30-day sell-back hold).",
@@ -122,7 +122,7 @@ const en: TokenomicsCopy = {
     "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. The $0.25 ceiling is only reached if all 100M PPL sell, at about $6,262,744 raised; the sale otherwise ends after 24 months.",
   unsoldTitle: "Unsold tokens",
   unsoldBody:
-    "The sale runs until all PPL is sold or for 24 months, whichever comes first. The term is fixed and will not be extended. After it ends, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the Community Pool; there are no refunds outside sell-back. Until then, unsold PPL is held in the project multisig and the team does not touch it. Token curves on PEOPLE keep their own 180-day finalize rule for unsold tokens.",
+    "The sale runs until all PPL is sold or for 24 months, whichever comes first. The term is fixed and will not be extended. After it ends, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the Community Pool; there are no refunds outside sell-back. Until then, unsold PPL is held in the project multisig and the team does not touch it.",
   salePublicTitle: "Published sale parameters",
   salePublicBody:
     "Prices, limits and the curve formula are public on /buy. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet does not commit you to anything.",
@@ -225,7 +225,7 @@ const ru: TokenomicsCopy = {
     "До 100M PPL из корзины продажи (10% фиксированной эмиссии) продаются на публичной экспоненциальной кривой. Параметры совпадают со страницей /buy и API заказов.",
   salePayTitle: "Как платить",
   salePayBody:
-    "Продажа идёт только на Base. Платите USDC или USDT на Base либо USDT/USDC из любой поддерживаемой сети через встроенный автоматический своп-виджет, который конвертирует их в USDC на Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche и Solana. Tron и TON не поддерживаются.",
+    "Продажа идёт только на Base. Платите USDC или USDT на Base либо USDT/USDC из любой поддерживаемой сети через встроенный автоматический своп-виджет, который конвертирует их в USDC на Base: Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Solana и Tron.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
     "Ваши PPL записываются на ваш адрес в контракте продажи на Base в момент покупки и зачисляются как нативные PPL в сети PEOPLE при genesis (на купленные PPL нет блокировки сверх 30-дневной задержки для обратного выкупа).",
@@ -234,7 +234,7 @@ const ru: TokenomicsCopy = {
     "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Потолок $0.25 достигается, только если продать все 100M PPL, при сборе около $6 262 744; иначе продажа заканчивается через 24 месяца.",
   unsoldTitle: "Непроданные токены",
   unsoldBody:
-    "Продажа идёт, пока не распроданы все PPL или не истекут 24 месяца — что наступит раньше. Срок фиксирован и не продлевается. После окончания собранное делится 50/50 между заблокированной LP и мультисигом проекта, непроданные PPL на кривой уходят в пул сообщества; возвратов вне обратного выкупа нет. До этого непроданные PPL хранятся в мультисиге проекта, команда их не трогает. У кривых токенов на PEOPLE остаётся своё правило финализации через 180 дней для непроданного остатка.",
+    "Продажа идёт, пока не распроданы все PPL или не истекут 24 месяца — что наступит раньше. Срок фиксирован и не продлевается. После окончания собранное делится 50/50 между заблокированной LP и мультисигом проекта, непроданные PPL на кривой уходят в пул сообщества; возвратов вне обратного выкупа нет. До этого непроданные PPL хранятся в мультисиге проекта, команда их не трогает.",
   salePublicTitle: "Опубликованные параметры продажи",
   salePublicBody:
     "Цены, лимиты и формула кривой публичны на /buy. Покупка отключена, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает.",

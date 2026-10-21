@@ -1,8 +1,63 @@
 import { parseAbi } from "viem";
 
-/** Minimal ABI for PplCurveHub purchases on Base (USDC `buyWith` path). */
+/**
+ * ABI subset of PplCurveHub used by `/buy`: the USDC `buyWith` path, the views
+ * that gate it, and every custom error the contract can revert with (so viem
+ * can decode a simulation failure into a named error).
+ */
 export const PPL_CURVE_HUB_ABI = parseAbi([
   "function buyWith(address stable, address beneficiary, uint256 usdAmount, uint256 minPplOut) external",
+  "function quoteBuyWith(address stable, uint256 usdAmount) view returns (uint256 pplOut, uint256 usdUsed)",
+  "function soldOut() view returns (bool)",
+  "function remainingPpl() view returns (uint256)",
+  "function finalized() view returns (bool)",
+  "function canFinalize() view returns (bool)",
+  "function paused() view returns (bool)",
+  "function openedAt() view returns (uint256)",
+  "function closesAt() view returns (uint256)",
+  "function sold() view returns (uint256)",
+  "function reserve() view returns (uint256)",
+  "function buyers() view returns (uint256)",
+  "function remainingDailyUsd6(address account) view returns (uint256)",
+  "function tradeAvailableAt(address account) view returns (uint256)",
+  "function maxPerBuyUsd6() view returns (uint256)",
+  "function maxPerDayUsd6() view returns (uint256)",
+  "function pplCredited(address account) view returns (uint256)",
+  "error ZeroAddress()",
+  "error AlreadyOpened()",
+  "error NotOpen()",
+  "error WindowOver()",
+  "error CurveClosed()",
+  "error NotFinalizable()",
+  "error SoldOut()",
+  "error OverPerBuyLimit(uint256 requestedUsd6, uint256 limitUsd6)",
+  "error OverDailyLimit(uint256 requestedUsd6, uint256 remainingUsd6)",
+  "error CooldownActive(uint256 availableAt)",
+  "error NotVerified(address account)",
+  "error InsufficientCredit(uint256 have, uint256 want)",
+  "error StillHeld()",
+  "error Slippage()",
+  "error DustTrade()",
+  "error InvalidLimits()",
+  "error StableDecimalsTooLow(uint8 decimals)",
+  "error StableNotAccepted(address stable)",
+  "error NotALocker()",
+  "error NotOracle()",
+  "error RescueRestricted()",
+  "error NothingQueued()",
+  "error QueueNotReady()",
+  "error AlreadyProcessed()",
+  "error NotQueueOperator()",
+  "error QueueExpired()",
+  "error QueueFull()",
+  "error OracleOverCallLimit(uint256 requested, uint256 limit)",
+  "error OracleOverDailyLimit(uint256 requested, uint256 remaining)",
+  "error EnforcedPause()",
+  "error ExpectedPause()",
+  "error ReentrancyGuardReentrantCall()",
+  "error SafeERC20FailedOperation(address token)",
+  "error OwnableUnauthorizedAccount(address account)",
+  "error OwnableInvalidOwner(address owner)",
 ]);
 
 export const ERC20_ABI = parseAbi([

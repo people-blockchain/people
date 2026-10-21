@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Límite: $500 por compra, $2.000 al día",
     "ctaConnect": "Conectar monedero",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Límite diario de compra alcanzado.",
     "errorInsufficient": "USDC insuficiente en Base.",
     "errorRejected": "Transacción cancelada en tu monedero.",
-    "errorGeneric": "La compra falló. Inténtalo de nuevo."
+    "errorGeneric": "La compra falló. Inténtalo de nuevo.",
+    "errorCooldownWait": "Espera {seconds} segundos e inténtalo de nuevo.",
+    "errorSoldOut": "Agotado. Se vendieron todos los PPL de la curva.",
+    "errorNotVerified": "Esta wallet aún no está verificada, por lo que no puede comprar.",
+    "errorSlippage": "El precio cambió. Inténtalo de nuevo.",
+    "errorPaused": "La venta está en pausa temporalmente.",
+    "errorNoGas": "No hay suficiente ETH en Base para la comisión de red. Añade un poco de ETH en Base e inténtalo de nuevo.",
+    "endedTitle": "La venta ha terminado",
+    "endedSub": "Se vendieron todos los PPL o pasaron 24 meses. Los PPL no vendidos van al Community Pool.",
+    "ctaWorking": "Procesando…",
+    "waitingFunds": "Esperando a que lleguen tus fondos…",
+    "leftoverNote": "{amount} se quedan en tu wallet por el límite de compra.",
+    "saleTermsLine": "La venta dura hasta vender los 100 M de PPL o 24 meses. Los PPL no vendidos van al Community Pool. Sin reembolsos."
   },
   "whyPriceRises": {
     "title": "Por qué sube el precio",

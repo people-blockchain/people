@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Limit: satın alma için $500, günlük $2.000",
     "ctaConnect": "Cüzdanı bağla",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Günlük satın alma limitine ulaşıldı.",
     "errorInsufficient": "Base'de yeterli USDC yok.",
     "errorRejected": "İşlem cüzdanda iptal edildi.",
-    "errorGeneric": "Satın alma başarısız. Tekrar deneyin."
+    "errorGeneric": "Satın alma başarısız. Tekrar deneyin.",
+    "errorCooldownWait": "Lütfen {seconds} saniye bekleyip tekrar deneyin.",
+    "errorSoldOut": "Tükendi. Eğrideki tüm PPL satıldı.",
+    "errorNotVerified": "Bu cüzdan henüz doğrulanmadı, bu yüzden satın alamaz.",
+    "errorSlippage": "Fiyat değişti. Lütfen tekrar deneyin.",
+    "errorPaused": "Satış geçici olarak durduruldu.",
+    "errorNoGas": "Base üzerinde ağ ücreti için yeterli ETH yok. Base'e biraz ETH ekleyip tekrar deneyin.",
+    "endedTitle": "Satış sona erdi",
+    "endedSub": "Tüm PPL satıldı veya 24 ay geçti. Satılmayan PPL Community Pool'a gider.",
+    "ctaWorking": "İşleniyor…",
+    "waitingFunds": "Fonlarınızın gelmesi bekleniyor…",
+    "leftoverNote": "Satın alma limiti nedeniyle {amount} cüzdanınızda kalır.",
+    "saleTermsLine": "Satış, 100 milyon PPL'nin tamamı satılana veya 24 ay dolana kadar sürer. Satılmayan PPL Community Pool'a gider. İade yoktur."
   },
   "whyPriceRises": {
     "title": "Fiyat neden yükselir",

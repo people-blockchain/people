@@ -43,7 +43,8 @@
       "pol": "Polygon",
       "arb": "Arbitrum",
       "opt": "Optimism",
-      "sol": "Solana"
+      "sol": "Solana",
+      "tron": "Tron"
     },
     "limitsLine": "Limit: $500 per purchase, $2,000 per day",
     "ctaConnect": "Connect wallet",
@@ -62,7 +63,19 @@
     "errorDailyLimit": "Daily purchase limit reached.",
     "errorInsufficient": "Insufficient USDC on Base.",
     "errorRejected": "Transaction cancelled in your wallet.",
-    "errorGeneric": "Purchase failed. Try again."
+    "errorGeneric": "Purchase failed. Try again.",
+    "errorCooldownWait": "Please wait {seconds} seconds and try again.",
+    "errorSoldOut": "Sold out. All PPL on the curve have been sold.",
+    "errorNotVerified": "This wallet is not verified yet, so it cannot buy.",
+    "errorSlippage": "The price changed. Please try again.",
+    "errorPaused": "The sale is temporarily paused.",
+    "errorNoGas": "Not enough ETH on Base to cover the network fee. Add a little ETH on Base and try again.",
+    "endedTitle": "The sale has ended",
+    "endedSub": "All PPL were sold or 24 months passed. Unsold PPL goes to the Community Pool.",
+    "ctaWorking": "Processing…",
+    "waitingFunds": "Waiting for your funds to arrive…",
+    "leftoverNote": "{amount} stays in your wallet because of the purchase limit.",
+    "saleTermsLine": "The sale runs until all 100M PPL are sold or 24 months pass. Unsold PPL goes to the Community Pool. No refunds."
   },
   "whyPriceRises": {
     "title": "Why the price rises",

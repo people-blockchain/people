@@ -19,11 +19,19 @@ function baseRpcUrl(): string {
   return SALE_HUB_CHAIN.rpcUrl;
 }
 
-export function createBasePublicClient() {
+let cachedPublicClient: ReturnType<typeof buildBasePublicClient> | null = null;
+
+function buildBasePublicClient() {
   return createPublicClient({
     chain: base,
     transport: http(baseRpcUrl()),
   });
+}
+
+/** Shared read client for Base (one instance per page load). */
+export function createBasePublicClient() {
+  cachedPublicClient ??= buildBasePublicClient();
+  return cachedPublicClient;
 }
 
 export function createBaseWalletClientFromKey(privateKey: string) {
@@ -105,4 +113,18 @@ export async function writeOnBase(
     args: request.args as never,
     account: signer.address,
   });
+}
+
+/**
+ * Sends a transaction and resolves only once it is mined. Throws if the
+ * receipt says it reverted, so a failed approve can never be followed by a buy.
+ */
+export async function writeOnBaseAndWait(
+  signer: BaseWriteSigner,
+  request: Parameters<typeof writeOnBase>[1],
+): Promise<Hex> {
+  const hash = await writeOnBase(signer, request);
+  const receipt = await createBasePublicClient().waitForTransactionReceipt({ hash });
+  if (receipt.status !== "success") throw new Error("tx_failed");
+  return hash;
 }
