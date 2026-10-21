@@ -150,6 +150,10 @@
     "app-builder-audited-templates": {
       "title": "App Builder：经过审计的应用模板（NFT 门控俱乐部、DAO 投票、订阅、USDC 商店、赠品），无需代码",
       "summary": "主网上线后：App Builder 提供经过审计的无代码模板，用于常见应用——NFT 门控俱乐部、DAO 投票、订阅、USDC 商店和赠品。仅规划；未实施。"
+    },
+    "people-node-device": {
+      "title": "PEOPLE Node",
+      "summary": "PEOPLE Node — 一键式软件节点，随后是为任何想要支持网络的人准备就绪的 plug-and-play 设备。"
     }
   }
 }
