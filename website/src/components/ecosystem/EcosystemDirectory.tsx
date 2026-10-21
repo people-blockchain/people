@@ -1,7 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Boxes,
+  KeyRound,
+  QrCode,
+  Search,
+  ShieldCheck,
+  Store,
+  UsersRound,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
 import {
@@ -10,6 +22,43 @@ import {
   ecosystemPublic,
   type EcosystemStatus,
 } from "@/lib/ecosystem-content";
+
+type ProductGlyph = {
+  icon: LucideIcon;
+  badge?: LucideIcon;
+  tileClass: string;
+};
+
+const DEFAULT_GLYPH: ProductGlyph = {
+  icon: Wallet,
+  tileClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+};
+
+const PRODUCT_GLYPHS: Record<string, ProductGlyph> = {
+  "people-wallet": {
+    icon: Wallet,
+    tileClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  },
+  "people-explorer": {
+    icon: Boxes,
+    badge: Search,
+    tileClass: "bg-sky-500/10 text-sky-600 dark:text-sky-400",
+  },
+  "people-multisig": {
+    icon: ShieldCheck,
+    badge: KeyRound,
+    tileClass: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  },
+  "people-clubs": {
+    icon: UsersRound,
+    tileClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  },
+  "people-lavka": {
+    icon: Store,
+    badge: QrCode,
+    tileClass: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+  },
+};
 
 function statusBadgeClass(status: EcosystemStatus): string {
   if (status === "testnet") {
@@ -45,6 +94,9 @@ export function EcosystemDirectory() {
             <ul className="mt-4 grid gap-4 sm:grid-cols-2">
               {products.map((product) => {
                 const copy = t.items[product.id as keyof typeof t.items];
+                const glyph = PRODUCT_GLYPHS[product.id] ?? DEFAULT_GLYPH;
+                const GlyphIcon = glyph.icon;
+                const BadgeIcon = glyph.badge;
                 const linkClass =
                   "inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline";
                 const arrowClass = "h-4 w-4 shrink-0 rtl:-scale-x-100";
@@ -57,9 +109,16 @@ export function EcosystemDirectory() {
                     <div className="flex items-start justify-between gap-3">
                       <span
                         aria-hidden="true"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-surface-2 font-mono text-lg font-bold text-brand"
+                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line ${glyph.tileClass}`}
                       >
-                        {product.monogram}
+                        <span className="relative flex h-5 w-5 items-center justify-center">
+                          <GlyphIcon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+                          {BadgeIcon ? (
+                            <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-surface">
+                              <BadgeIcon className="h-2 w-2" strokeWidth={1.75} aria-hidden="true" />
+                            </span>
+                          ) : null}
+                        </span>
                       </span>
                       <span
                         className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusBadgeClass(product.status)}`}
