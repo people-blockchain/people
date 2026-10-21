@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Ekosistem",
+    "description": "PEOPLE Blockchain üzerinde ve onun için geliştirilen ürünler ve araçlar."
+  },
+  "eyebrow": "PEOPLE Ekosistemi",
+  "intro": "PEOPLE Blockchain üzerindeki ürünler ve araçlar. Durumlar test ağında bugün nelerin kullanılabilir olduğunu gösterir.",
+  "openLabel": "Aç",
+  "categories": {
+    "payments": "Ödemeler",
+    "markets": "Piyasalar",
+    "communities": "Topluluklar",
+    "tools": "Araçlar"
+  },
+  "statusLabels": {
+    "testnet": "Test ağı",
+    "coming_soon": "Yakında"
+  },
+  "labelBadges": {
+    "built_by_people": "PEOPLE tarafından geliştirildi",
+    "community": "Topluluk"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Yerel mağazalar için sadakat kartları ve kasa QR'ı."
+    },
+    "people-predict": {
+      "summary": "Topluluk soruları için tahmin piyasaları."
+    },
+    "people-clubs": {
+      "summary": "Kulüpler ve üye toplulukları için araçlar."
+    },
+    "people-multisig": {
+      "summary": "Test ağında birden çok sahibin yönettiği ortak bir hazine."
+    },
+    "people-wallet": {
+      "summary": "Tarayıcıda isteğe bağlı Google girişi olan, saklamasız bir PPL cüzdanı."
+    },
+    "people-explorer": {
+      "summary": "Herkese açık test ağında bloklar, işlemler, adresler, tokenlar ve NFT'ler."
+    }
+  }
+}

@@ -46,6 +46,10 @@ export const tr: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "Ekosistem",
+        "href": "/ecosystem"
+      },
+      {
         "label": "Topluluk YZ ajanları",
         "href": "/agents"
       },

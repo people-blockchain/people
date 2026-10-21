@@ -46,6 +46,10 @@ export const zh: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "生态系统",
+        "href": "/ecosystem"
+      },
+      {
         "label": "社区 AI 代理",
         "href": "/agents"
       },

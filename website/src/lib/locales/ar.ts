@@ -46,6 +46,10 @@ export const ar: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "النظام البيئي",
+        "href": "/ecosystem"
+      },
+      {
         "label": "وكلاء الذكاء الاصطناعي للمجتمع",
         "href": "/agents"
       },
