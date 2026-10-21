@@ -46,6 +46,10 @@ export const it: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "Ecosistema",
+        "href": "/ecosystem"
+      },
+      {
         "label": "Agenti IA della community",
         "href": "/agents"
       },

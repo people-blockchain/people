@@ -46,6 +46,10 @@ export const vi: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "Hệ sinh thái",
+        "href": "/ecosystem"
+      },
+      {
         "label": "Agent AI cộng đồng",
         "href": "/agents"
       },

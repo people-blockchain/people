@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Ecosystem",
+    "description": "Products and tools built on and for PEOPLE Blockchain."
+  },
+  "eyebrow": "PEOPLE Ecosystem",
+  "intro": "Products and tools built on and for PEOPLE Blockchain. Statuses reflect what is available on the testnet today.",
+  "openLabel": "Open",
+  "categories": {
+    "payments": "Payments",
+    "markets": "Markets",
+    "communities": "Communities",
+    "tools": "Tools"
+  },
+  "statusLabels": {
+    "testnet": "Testnet",
+    "coming_soon": "Coming soon"
+  },
+  "labelBadges": {
+    "built_by_people": "Built by PEOPLE",
+    "community": "Community"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Loyalty passes and checkout QR for local shops."
+    },
+    "people-predict": {
+      "summary": "Prediction markets for community questions."
+    },
+    "people-clubs": {
+      "summary": "Tools for clubs and member communities."
+    },
+    "people-multisig": {
+      "summary": "A shared treasury controlled by several owners on the testnet."
+    },
+    "people-wallet": {
+      "summary": "A non-custodial PPL wallet in the browser, with optional Google sign-in."
+    },
+    "people-explorer": {
+      "summary": "Blocks, transactions, addresses, tokens, and NFTs on the public testnet."
+    }
+  }
+}

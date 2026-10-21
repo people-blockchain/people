@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "生态系统",
+    "description": "在 PEOPLE Blockchain 上并为它构建的产品和工具。"
+  },
+  "eyebrow": "PEOPLE 生态系统",
+  "intro": "PEOPLE Blockchain 上的产品和工具。状态反映测试网当前可用的内容。",
+  "openLabel": "打开",
+  "categories": {
+    "payments": "支付",
+    "markets": "市场",
+    "communities": "社区",
+    "tools": "工具"
+  },
+  "statusLabels": {
+    "testnet": "测试网",
+    "coming_soon": "即将推出"
+  },
+  "labelBadges": {
+    "built_by_people": "由 PEOPLE 构建",
+    "community": "社区"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "为本地商店提供会员卡和结账二维码。"
+    },
+    "people-predict": {
+      "summary": "面向社区问题的预测市场。"
+    },
+    "people-clubs": {
+      "summary": "面向俱乐部和成员社区的工具。"
+    },
+    "people-multisig": {
+      "summary": "测试网上由多位所有者共同管理的共享资金库。"
+    },
+    "people-wallet": {
+      "summary": "浏览器中的非托管 PPL 钱包，可选择使用 Google 登录。"
+    },
+    "people-explorer": {
+      "summary": "公共测试网上的区块、交易、地址、代币和 NFT。"
+    }
+  }
+}

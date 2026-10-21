@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "title": "Hệ sinh thái",
+    "description": "Sản phẩm và công cụ được xây dựng trên PEOPLE Blockchain và vì nó."
+  },
+  "eyebrow": "Hệ sinh thái PEOPLE",
+  "intro": "Sản phẩm và công cụ trên PEOPLE Blockchain. Trạng thái phản ánh những gì đang có trên mạng thử nghiệm hôm nay.",
+  "openLabel": "Mở",
+  "categories": {
+    "payments": "Thanh toán",
+    "markets": "Thị trường",
+    "communities": "Cộng đồng",
+    "tools": "Công cụ"
+  },
+  "statusLabels": {
+    "testnet": "Mạng thử nghiệm",
+    "coming_soon": "Sắp ra mắt"
+  },
+  "labelBadges": {
+    "built_by_people": "Được xây dựng bởi PEOPLE",
+    "community": "Cộng đồng"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Thẻ khách hàng thân thiết và QR thanh toán cho cửa hàng địa phương."
+    },
+    "people-predict": {
+      "summary": "Thị trường dự đoán cho các câu hỏi của cộng đồng."
+    },
+    "people-clubs": {
+      "summary": "Công cụ cho câu lạc bộ và cộng đồng thành viên."
+    },
+    "people-multisig": {
+      "summary": "Kho quỹ chung do nhiều chủ sở hữu kiểm soát trên mạng thử nghiệm."
+    },
+    "people-wallet": {
+      "summary": "Ví PPL không lưu ký trên trình duyệt, có thể đăng nhập bằng Google."
+    },
+    "people-explorer": {
+      "summary": "Khối, giao dịch, địa chỉ, token và NFT trên mạng thử nghiệm công khai."
+    }
+  }
+}
