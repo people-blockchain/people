@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "title": "Ekosistem",
+    "description": "Produk dan alat yang dibangun di atas dan untuk PEOPLE Blockchain."
+  },
+  "eyebrow": "Ekosistem PEOPLE",
+  "intro": "Produk dan alat di PEOPLE Blockchain. Status mencerminkan apa yang tersedia di jaringan uji hari ini.",
+  "openLabel": "Buka",
+  "categories": {
+    "payments": "Pembayaran",
+    "communities": "Komunitas",
+    "tools": "Alat"
+  },
+  "statusLabels": {
+    "testnet": "Jaringan uji",
+    "in_development": "Dalam pengembangan"
+  },
+  "labelBadges": {
+    "built_by_people": "Dibuat oleh PEOPLE",
+    "community": "Komunitas"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Kartu loyalitas dan QR kasir untuk toko lokal."
+    },
+    "people-clubs": {
+      "summary": "Alat untuk klub dan komunitas anggota."
+    },
+    "people-multisig": {
+      "summary": "Kas bersama yang dikendalikan beberapa pemilik di jaringan uji."
+    },
+    "people-wallet": {
+      "summary": "Dompet PPL non-kustodial di browser, dengan login Google opsional."
+    },
+    "people-explorer": {
+      "summary": "Blok, transaksi, alamat, token, dan NFT di jaringan uji publik."
+    }
+  }
+}

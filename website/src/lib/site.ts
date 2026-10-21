@@ -361,6 +361,7 @@ export const SITE_ROUTES = [
   { path: "/founders", changeFrequency: "weekly" as const, priority: 0.88 },
   { path: "/litepaper", changeFrequency: "monthly" as const, priority: 0.8 },
   { path: "/transparency", changeFrequency: "monthly" as const, priority: 0.7 },
+  { path: "/ecosystem", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/privacy", changeFrequency: "yearly" as const, priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly" as const, priority: 0.3 },
 ];
