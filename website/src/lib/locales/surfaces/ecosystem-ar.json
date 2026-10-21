@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "title": "النظام البيئي",
+    "description": "منتجات وأدوات مبنية على PEOPLE Blockchain ولأجلها."
+  },
+  "eyebrow": "نظام PEOPLE البيئي",
+  "intro": "منتجات وأدوات على PEOPLE Blockchain. تعكس الحالات ما هو متاح اليوم على الشبكة التجريبية.",
+  "openLabel": "فتح",
+  "categories": {
+    "payments": "المدفوعات",
+    "communities": "المجتمعات",
+    "tools": "الأدوات"
+  },
+  "statusLabels": {
+    "testnet": "الشبكة التجريبية",
+    "in_development": "قيد التطوير"
+  },
+  "labelBadges": {
+    "built_by_people": "صُنع بواسطة PEOPLE",
+    "community": "المجتمع"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "بطاقات ولاء ورمز QR عند الدفع للمتاجر المحلية."
+    },
+    "people-clubs": {
+      "summary": "أدوات للأندية ومجتمعات الأعضاء."
+    },
+    "people-multisig": {
+      "summary": "خزينة مشتركة يديرها عدة مالكين على الشبكة التجريبية."
+    },
+    "people-wallet": {
+      "summary": "محفظة PPL غير احتجازية في المتصفح، مع تسجيل دخول اختياري عبر Google."
+    },
+    "people-explorer": {
+      "summary": "الكتل والمعاملات والعناوين والرموز وNFT على الشبكة التجريبية العامة."
+    }
+  }
+}

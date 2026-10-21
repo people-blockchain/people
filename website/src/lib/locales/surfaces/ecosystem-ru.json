@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "title": "Экосистема",
+    "description": "Продукты и инструменты, созданные на PEOPLE Blockchain и для него."
+  },
+  "eyebrow": "Экосистема PEOPLE",
+  "intro": "Продукты и инструменты на PEOPLE Blockchain. Статусы показывают, что уже доступно в тестовой сети.",
+  "openLabel": "Открыть",
+  "categories": {
+    "payments": "Платежи",
+    "communities": "Сообщества",
+    "tools": "Инструменты"
+  },
+  "statusLabels": {
+    "testnet": "Тестнет",
+    "in_development": "В разработке"
+  },
+  "labelBadges": {
+    "built_by_people": "Сделано PEOPLE",
+    "community": "Сообщество"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Абонементы лояльности и QR на кассе для местных магазинов."
+    },
+    "people-clubs": {
+      "summary": "Инструменты для клубов и сообществ участников."
+    },
+    "people-multisig": {
+      "summary": "Общая казна, которой управляют несколько владельцев в тестовой сети."
+    },
+    "people-wallet": {
+      "summary": "Некастодиальный кошелёк PPL в браузере с необязательным входом через Google."
+    },
+    "people-explorer": {
+      "summary": "Блоки, транзакции, адреса, токены и NFT в публичной тестовой сети."
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "title": "Ecossistema",
+    "description": "Produtos e ferramentas criados na PEOPLE Blockchain e para ela."
+  },
+  "eyebrow": "Ecossistema PEOPLE",
+  "intro": "Produtos e ferramentas na PEOPLE Blockchain. Os status mostram o que está disponível hoje na rede de teste.",
+  "openLabel": "Abrir",
+  "categories": {
+    "payments": "Pagamentos",
+    "communities": "Comunidades",
+    "tools": "Ferramentas"
+  },
+  "statusLabels": {
+    "testnet": "Rede de teste",
+    "in_development": "Em desenvolvimento"
+  },
+  "labelBadges": {
+    "built_by_people": "Feito pela PEOPLE",
+    "community": "Comunidade"
+  },
+  "items": {
+    "people-lavka": {
+      "summary": "Cartões de fidelidade e QR de caixa para lojas locais."
+    },
+    "people-clubs": {
+      "summary": "Ferramentas para clubes e comunidades de membros."
+    },
+    "people-multisig": {
+      "summary": "Uma tesouraria compartilhada controlada por vários proprietários na rede de teste."
+    },
+    "people-wallet": {
+      "summary": "Uma carteira PPL não custodial no navegador, com login opcional pelo Google."
+    },
+    "people-explorer": {
+      "summary": "Blocos, transações, endereços, tokens e NFTs na rede de teste pública."
+    }
+  }
+}

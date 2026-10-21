@@ -44,6 +44,10 @@ export const en = {
         "href": "/roadmap"
       },
       {
+        "label": "Ecosystem",
+        "href": "/ecosystem"
+      },
+      {
         "label": "Community AI agents",
         "href": "/agents"
       },

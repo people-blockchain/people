@@ -46,6 +46,10 @@ export const ru: LocaleContent = {
         "href": "/roadmap"
       },
       {
+        "label": "Экосистема",
+        "href": "/ecosystem"
+      },
+      {
         "label": "ИИ-агенты сообщества",
         "href": "/agents"
       },

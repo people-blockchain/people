@@ -20,6 +20,7 @@ const surfaces = [
   "discover",
   "agents",
   "roadmap",
+  "ecosystem",
   "founders",
   "lavka",
   "sale",
