@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Una cartera en 30 segundos",
-        "sub": "Tus claves se quedan en tu teléfono o en tu navegador."
+        "sub": "Cartera del navegador: tus claves se quedan en tu dispositivo. Cartera en la nube: guardada cifrada en los servidores de PEOPLE."
       },
       {
         "id": "token",

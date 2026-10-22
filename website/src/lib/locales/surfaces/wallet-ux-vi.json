@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Đăng nhập Google / email",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Mua",
-  "modalExplainer": "People Wallet của bạn được tạo tự động. Khóa được mã hóa và lưu trên máy chủ — khôi phục bằng cùng Google hoặc email; không cần cụm từ hạt giống. Ví này là lối vào khu vực đối tác và toàn bộ trang. Đừng tạo ví mới — hãy đăng nhập bằng cùng Google hoặc email.",
+  "modalExplainer": "People Wallet của bạn được tạo tự động. Khóa của bạn được lưu mã hóa trên máy chủ PEOPLE để bạn khôi phục bằng cách đăng nhập. Hạ tầng của PEOPLE có khả năng giải mã khóa đó. Để tự nắm giữ khóa hoàn toàn, hãy dùng ví trình duyệt hoặc ví ngoài. Không cần cụm từ hạt giống. Ví này là lối vào khu vực đối tác và toàn bộ trang. Đừng tạo ví mới — hãy đăng nhập bằng cùng Google hoặc email.",
   "haveExistingWallet": "Tôi đã có ví",
   "continueAs": "Tiếp tục với {email}",
   "modalExplainerMpc": "People Wallet được tạo tự động. Khóa được chia thành nhiều phần — không cần cụm từ hạt giống. Cùng Google hoặc email khôi phục trên mọi thiết bị. Đây là lối vào khu vực đối tác và toàn site.",

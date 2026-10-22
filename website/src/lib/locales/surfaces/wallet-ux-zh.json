@@ -97,7 +97,7 @@
   "connectGoogleEmail": "使用 Google / 邮箱登录",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "购买",
-  "modalExplainer": "您的 People Wallet 会自动创建。密钥经加密后存储在我们的服务器上，可通过同一 Google 或邮箱登录恢复，无需保存助记词。此钱包是您进入合作伙伴后台和全站登录的入口。请勿重复创建钱包，请始终使用同一 Google 或邮箱登录。",
+  "modalExplainer": "您的 People Wallet 会自动创建。您的密钥以加密形式存储在 PEOPLE 服务器上，方便您登录后恢复。PEOPLE 的基础设施能够解密该密钥。如需完全自主保管，请使用浏览器钱包或外部钱包。 无需保存助记词。此钱包是您进入合作伙伴后台和全站登录的入口。请勿重复创建钱包，请始终使用同一 Google 或邮箱登录。",
   "haveExistingWallet": "我已有钱包",
   "continueAs": "以 {email} 继续",
   "modalExplainerMpc": "People Wallet 会自动创建。密钥分成多个部分保护，无需保存助记词。同一 Google 或邮箱可在任意设备恢复。这是合作伙伴后台和全站登录入口。",

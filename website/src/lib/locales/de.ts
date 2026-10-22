@@ -458,7 +458,7 @@ export const de: LocaleContent = {
         {
           "num": "01",
           "title": "Konto erstellen",
-          "desc": "Erstellen Sie eine schlanke, Non-Custodial Wallet direkt auf Ihrem Smartphone, Tablet oder im Browser.",
+          "desc": "Erstellen Sie direkt auf Smartphone, Tablet oder im Browser eine schlanke Wallet — eine Browser-Wallet in Eigenverwahrung oder eine Cloud-Wallet, die Sie per Anmeldung wiederherstellen.",
           "highlight": "Keine Hardware-Anforderungen"
         },
         {
