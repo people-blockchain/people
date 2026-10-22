@@ -17,8 +17,31 @@ const GATEWAY: Address = "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9";
 const ACCEPT_OWNERSHIP: Hex = "0x79ba5097";
 const METAMASK_DEEPLINK =
   "https://metamask.app.link/dapp/www.peopleblockchain.network/multisig";
+const MULTISIG_FROM_BLOCK = BigInt(291000);
+
+const submittedEvent = {
+  type: "event",
+  name: "Submitted",
+  inputs: [
+    { name: "txId", type: "uint256", indexed: true },
+    { name: "proposer", type: "address", indexed: true },
+    { name: "to", type: "address", indexed: false },
+    { name: "value", type: "uint256", indexed: false },
+  ],
+} as const;
+
+const executedEvent = {
+  type: "event",
+  name: "Executed",
+  inputs: [
+    { name: "txId", type: "uint256", indexed: true },
+    { name: "executor", type: "address", indexed: true },
+  ],
+} as const;
 
 const abi = [
+  submittedEvent,
+  executedEvent,
   {
     type: "function",
     name: "owners",
@@ -139,6 +162,8 @@ const COPY = {
     data: "Data",
     confirmations: "Confirmations",
     executed: "Executed",
+    executedAt: "Executed at",
+    created: "Created",
     pending: "Pending",
     submitAccept: "Submit: accept fee gateway ownership",
     confirm: "Confirm",
@@ -167,6 +192,8 @@ const COPY = {
     data: "Данные",
     confirmations: "Подтверждения",
     executed: "Исполнена",
+    executedAt: "Исполнена в",
+    created: "Создана",
     pending: "Ожидает",
     submitAccept: "Создать: принять владение fee gateway",
     confirm: "Подтвердить",
@@ -184,7 +211,94 @@ type Tx = {
   executed: boolean;
   confirmations: bigint;
   mine?: boolean;
+  createdAt?: number;
+  executedAt?: number;
 };
+
+type TxTimes = { created?: number; executed?: number };
+
+function formatTime(sec: number): string {
+  const date = new Date(sec * 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const offset = -date.getTimezoneOffset();
+  const abs = Math.abs(offset);
+  const hours = Math.floor(abs / 60);
+  const minutes = abs % 60;
+  const zone =
+    offset === 0
+      ? "UTC"
+      : `UTC${offset > 0 ? "+" : "-"}${hours}${minutes ? `:${pad(minutes)}` : ""}`;
+  const stamp = `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  return `${stamp} (${zone})`;
+}
+
+async function loadTimes(
+  client: ReturnType<typeof createBrowserPublicClient>,
+): Promise<Map<number, TxTimes>> {
+  const latest = await client.getBlockNumber();
+  const ranges: Array<{ fromBlock: bigint; toBlock: bigint }> = [];
+  for (let from = MULTISIG_FROM_BLOCK; from <= latest; from += BigInt(9999)) {
+    const to = from + BigInt(9998);
+    ranges.push({ fromBlock: from, toBlock: to > latest ? latest : to });
+  }
+
+  const logs: Array<{
+    eventName?: string;
+    args: { txId?: bigint };
+    blockNumber: bigint | null;
+  }> = [];
+  for (let i = 0; i < ranges.length; i += 6) {
+    const batch = ranges.slice(i, i + 6);
+    const got = await Promise.all(
+      batch.map((range) =>
+        client.getLogs({
+          address: MULTISIG,
+          events: [submittedEvent, executedEvent],
+          fromBlock: range.fromBlock,
+          toBlock: range.toBlock,
+        }),
+      ),
+    );
+    for (const group of got) {
+      for (const log of group) logs.push(log);
+    }
+  }
+
+  const createdBlocks = new Map<number, bigint>();
+  const executedBlocks = new Map<number, bigint>();
+  for (const log of logs) {
+    const id = log.args.txId;
+    if (id === undefined || id === null || log.blockNumber === null) continue;
+    const txId = Number(id);
+    if (log.eventName === "Submitted") createdBlocks.set(txId, log.blockNumber);
+    else if (log.eventName === "Executed") executedBlocks.set(txId, log.blockNumber);
+  }
+
+  const blockNumbers = [
+    ...new Set([...createdBlocks.values(), ...executedBlocks.values()]),
+  ];
+  const timestamps = new Map<bigint, number>();
+  for (let i = 0; i < blockNumbers.length; i += 6) {
+    const batch = blockNumbers.slice(i, i + 6);
+    const blocks = await Promise.all(
+      batch.map((blockNumber) => client.getBlock({ blockNumber })),
+    );
+    blocks.forEach((block, index) => {
+      timestamps.set(batch[index], Number(block.timestamp));
+    });
+  }
+
+  const times = new Map<number, TxTimes>();
+  for (const [txId, block] of createdBlocks) {
+    const created = timestamps.get(block);
+    if (created !== undefined) times.set(txId, { ...times.get(txId), created });
+  }
+  for (const [txId, block] of executedBlocks) {
+    const executed = timestamps.get(block);
+    if (executed !== undefined) times.set(txId, { ...times.get(txId), executed });
+  }
+  return times;
+}
 
 export function MultisigPanel() {
   const { lang } = useLanguage();
@@ -244,6 +358,19 @@ export function MultisigPanel() {
       list.push({ id: i, to, data, executed, confirmations, mine });
     }
     setTxs(list);
+    try {
+      const times = await loadTimes(client);
+      setTxs((prev) =>
+        prev.map((tx) => {
+          const time = times.get(tx.id);
+          return time
+            ? { ...tx, createdAt: time.created, executedAt: time.executed }
+            : tx;
+        }),
+      );
+    } catch {
+      /* timestamps are optional; keep the page working without them */
+    }
   }, []);
 
   useEffect(() => {
@@ -399,14 +526,22 @@ export function MultisigPanel() {
           </span>
         ) : null}
       </div>
+      <p className="text-xs text-muted" data-testid="tx-created">
+        {t.created}: {tx.createdAt !== undefined ? formatTime(tx.createdAt) : "…"}
+      </p>
+      {tx.executed && tx.executedAt !== undefined ? (
+        <p className="text-xs text-muted" data-testid="tx-executed-at">
+          {t.executedAt}: {formatTime(tx.executedAt)}
+        </p>
+      ) : null}
       <p className="break-all font-mono text-xs">{t.to}: {tx.to}</p>
       <p className="break-all font-mono text-xs">{t.data}: {tx.data}</p>
       <p>{t.confirmations}: {tx.confirmations.toString()} / {threshold?.toString() ?? "…"}</p>
       {isOwner && !tx.executed ? actions(tx) : null}
     </li>
   );
-  const pending = txs.filter((tx) => !tx.executed);
-  const history = txs.filter((tx) => tx.executed);
+  const pending = txs.filter((tx) => !tx.executed).sort((a, b) => b.id - a.id);
+  const history = txs.filter((tx) => tx.executed).sort((a, b) => b.id - a.id);
   return (
     <section className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-12">
       <h1 className="text-2xl font-semibold">{t.title}</h1>
