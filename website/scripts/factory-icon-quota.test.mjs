@@ -11,6 +11,8 @@ const { factoryIconDailyUsage } = await import("../src/db/schema.ts");
 const {
   freeIconGensRemaining,
   consumeIconGenSlot,
+  reserveIconGenSlot,
+  releaseIconGenSlot,
   previewIconGenQuota,
   getWalletIconGenCountForDay,
   getGlobalIconGenCountForDay,
@@ -92,6 +94,53 @@ test("wallets are counted separately and case-insensitively", async () => {
     1
   );
   assert.equal(await getWalletIconGenCountForDay("0x0000000000000000000000000000000000000001", day), 0);
+});
+
+// AUDIT M2: check+debit is one conditional upsert, so parallel requests cannot all pass a
+// read-only preview and overspend the free quota or the global cap.
+test("parallel free reservations never exceed the per-wallet free quota", async () => {
+  await resetUsage();
+  const wallet = "0x7777777777777777777777777777777777777777";
+  const day = "2099-01-07";
+  const results = await Promise.all(
+    Array.from({ length: 10 }, () => reserveIconGenSlot(wallet, "free", day))
+  );
+  const won = results.filter((r) => r.ok);
+  assert.equal(won.length, 3);
+  assert.ok(results.filter((r) => !r.ok).every((r) => r.reason === "payment_required"));
+  assert.equal(await getWalletIconGenCountForDay(wallet, day), 3);
+  // A lost free race must not leak a global slot.
+  assert.equal(await getGlobalIconGenCountForDay(day), 3);
+});
+
+test("reservations stop at the global daily cap, paid included", async () => {
+  await resetUsage();
+  const day = "2099-01-08";
+  const previous = process.env.ICON_GEN_GLOBAL_DAILY_CAP;
+  process.env.ICON_GEN_GLOBAL_DAILY_CAP = "2";
+  try {
+    const results = await Promise.all(
+      ["0x01", "0x02", "0x03", "0x04"].map((w) => reserveIconGenSlot(w.padEnd(42, "0"), "paid", day))
+    );
+    assert.equal(results.filter((r) => r.ok).length, 2);
+    assert.ok(results.filter((r) => !r.ok).every((r) => r.reason === "global_cap"));
+    assert.equal(await getGlobalIconGenCountForDay(day), 2);
+  } finally {
+    if (previous === undefined) delete process.env.ICON_GEN_GLOBAL_DAILY_CAP;
+    else process.env.ICON_GEN_GLOBAL_DAILY_CAP = previous;
+  }
+});
+
+test("releaseIconGenSlot gives a failed batch's slot back", async () => {
+  await resetUsage();
+  const wallet = "0x8888888888888888888888888888888888888888";
+  const day = "2099-01-09";
+  const r = await reserveIconGenSlot(wallet, "free", day);
+  assert.equal(r.ok, true);
+  assert.equal(r.freeRemainingAfter, 2);
+  await releaseIconGenSlot(wallet, day);
+  assert.equal(await getWalletIconGenCountForDay(wallet, day), 0);
+  assert.equal(await getGlobalIconGenCountForDay(day), 0);
 });
 
 test("utcDayKey uses ISO date", () => {
