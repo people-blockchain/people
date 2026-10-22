@@ -82,6 +82,30 @@ test("first Web3Auth login with an email matching a non-Web3Auth-bound user back
   assert.equal(rows[0].providerAccountId, p.verifierId);
 });
 
+test("AUDIT M1: a new Web3Auth identity never attaches by email to an account that owns a cloud wallet", async () => {
+  const walletUserId = crypto.randomUUID();
+  await db.insert(schema.users).values({
+    id: walletUserId,
+    email: "wallet-owner@example.com",
+    name: "Wallet Owner",
+    emailVerified: new Date(),
+  });
+  await db.insert(schema.userWalletVaults).values({
+    userId: walletUserId,
+    address: `0x${"cd".repeat(20)}`,
+    publicKey: `0x${"ab".repeat(33)}`,
+    encryptedPrivateKey: "ciphertext",
+    vaultVersion: 2,
+  });
+
+  const p = profile({ email: "wallet-owner@example.com" });
+  const result = await bindWeb3AuthProfile(p);
+  assert.equal(result, null, "must refuse the email backfill onto a wallet-owning account");
+
+  const rows = await accountsFor(walletUserId);
+  assert.equal(rows.length, 0, "no Web3Auth binding is created for the wallet-owning account");
+});
+
 test("a second, unrelated verifierId sharing an already-bound user's email is refused, not merged", async () => {
   const first = profile();
   const bound = await bindWeb3AuthProfile(first);
