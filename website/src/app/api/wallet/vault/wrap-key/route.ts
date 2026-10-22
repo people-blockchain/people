@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { ensurePartnerSchema } from "@/db";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { getUserWrapKeyHex, isAuthTimeFresh, isWalletVaultConfigured } from "@/lib/wallet-cloud-server";
 import { checkDurableWrapKeyRateLimit, recordWalletVaultAccess } from "@/lib/wallet-vault-access-log";
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
   // durable DB-backed check (recon.md R1: forensic trail + rate limit that isn't wiped by a
   // deploy/restart or bypassed by hitting a different server instance).
   const key = `${userId}:${ip}`;
-  if (!checkSlidingWindowRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
+  if (!await checkSharedRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
     await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "rate_limited", ip });
     return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { CONTRACT_COMPOSE_RATE_PER_MIN, MAX_CONTRACT_PROMPT_BYTES, utf8ByteLength } from "@/lib/contract-api-guards";
 import { CONTRACT_TEMPLATES, findTemplateById, matchTemplate } from "@/lib/contract-templates";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
@@ -77,7 +77,7 @@ async function askModel(prompt: string, lang: "en" | "ru"): Promise<{
 
 export async function POST(request: Request) {
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("contracts-compose", ip, CONTRACT_COMPOSE_RATE_PER_MIN, 60_000)) {
+  if (!await checkSharedRateLimit("contracts-compose", ip, CONTRACT_COMPOSE_RATE_PER_MIN, 60_000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 
