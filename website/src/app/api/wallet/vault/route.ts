@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { ensurePartnerSchema } from "@/db";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import {
   createUserWalletVault,
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: NO_STORE });
   }
   const key = `${session.user.id}:${clientIp(request)}`;
-  if (!checkSlidingWindowRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
+  if (!await checkSharedRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
   }
   const vault = await loadUserWalletVault(session.user.id);
@@ -50,7 +50,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: NO_STORE });
   }
   const key = `${session.user.id}:${clientIp(request)}`;
-  if (!checkSlidingWindowRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
+  if (!await checkSharedRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
   }
   let body: { address?: string; publicKey?: string; encryptedPrivateKey?: string };

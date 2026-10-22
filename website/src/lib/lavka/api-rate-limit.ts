@@ -1,4 +1,4 @@
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 
 /**
  * The Lavka verify routes (redeem/escrow/programs/merchant) each trigger at least one upstream
@@ -10,8 +10,8 @@ const LAVKA_RATE_NAMESPACE = "lavka-api";
 const LAVKA_RATE_MAX_PER_WINDOW = 30;
 const LAVKA_RATE_WINDOW_MS = 60_000;
 
-export function lavkaRateLimitAllowed(userId: string): boolean {
-  return checkSlidingWindowRateLimit(
+export function lavkaRateLimitAllowed(userId: string): Promise<boolean> {
+  return checkSharedRateLimit(
     LAVKA_RATE_NAMESPACE,
     userId,
     LAVKA_RATE_MAX_PER_WINDOW,
