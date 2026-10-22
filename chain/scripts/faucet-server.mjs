@@ -1,7 +1,7 @@
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { JsonRpcProvider, Wallet, NonceManager } from 'ethers';
-import { createFaucet, clientSource, DEFAULT_TRUSTED_PROXY_PEERS } from './faucet-core.mjs';
+import { createFaucet, clientSource, parsePplAmount, DEFAULT_TRUSTED_PROXY_PEERS } from './faucet-core.mjs';
 const provider = new JsonRpcProvider(process.env.FAUCET_RPC_URL ?? 'http://127.0.0.1:8545', undefined, { cacheTimeout: -1 });
 const signer = new Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
 const manager = new NonceManager(signer);
@@ -12,11 +12,17 @@ const wallet = { address: signer.address, sendTransaction: async (tx) => {
 // "off"/"none" disables it (the per-address cooldown and per-request cap still apply).
 const dailyCapEnv = process.env.FAUCET_DAILY_CAP_PPL;
 const dailyCapPpl = dailyCapEnv === undefined || dailyCapEnv.trim() === '' ? 10_000n : /^(off|none)$/i.test(dailyCapEnv.trim()) ? null : BigInt(dailyCapEnv.trim());
-const faucet = createFaucet({ provider, wallet, firstBlockHash: process.env.FAUCET_FIRST_BLOCK_HASH, dailyCapPpl });
+// MF-21: minimum drip (decimal PPL, default 1) and per-source daily value cap (whole PPL, default 200;
+// "off"/"none" disables it). Dust requests are refused before they can consume a 24h slot.
+const minAmountEnv = process.env.FAUCET_MIN_AMOUNT_PPL?.trim();
+const minAmount = minAmountEnv ? parsePplAmount(minAmountEnv) : undefined;
+const sourceCapEnv = process.env.FAUCET_SOURCE_DAILY_CAP_PPL?.trim();
+const sourceDailyCapPpl = !sourceCapEnv ? undefined : /^(off|none)$/i.test(sourceCapEnv) ? null : BigInt(sourceCapEnv);
+const faucet = createFaucet({ provider, wallet, firstBlockHash: process.env.FAUCET_FIRST_BLOCK_HASH, dailyCapPpl, ...(minAmount !== undefined ? { minAmount } : {}), ...(sourceDailyCapPpl !== undefined ? { sourceDailyCapPpl } : {}) });
 await faucet.verifyNetwork();
-const publicErrors = new Set(['invalid_address','invalid_amount','amount_too_large','rate_limited','faucet_busy','wrong_network','fee_unavailable','faucet_insufficient_funds','recipient_gas_too_high','daily_budget_exhausted']);
+const publicErrors = new Set(['invalid_address','invalid_amount','amount_too_large','rate_limited','faucet_busy','wrong_network','fee_unavailable','faucet_insufficient_funds','recipient_gas_too_high','daily_budget_exhausted','amount_too_small','source_daily_limit']);
 // Errors whose public meaning needs a human sentence for the website/faucet UI.
-const publicMessages = { daily_budget_exhausted: 'Faucet is empty for today, try again tomorrow' };
+const publicMessages = { daily_budget_exhausted: 'Faucet is empty for today, try again tomorrow', amount_too_small: 'Requested amount is below the faucet minimum', source_daily_limit: 'Daily limit for this connection reached, try again tomorrow' };
 const html = await readFile(new URL('./faucet.html', import.meta.url));
 
 /**
@@ -24,7 +30,8 @@ const html = await readFile(new URL('./faucet.html', import.meta.url));
  * the immediate peer is the configured trusted proxy (default: loopback). Fail-closed by
  * default so a local process cannot rotate source keys (LAV-M4).
  */
-const TRUST_PROXY_HEADERS = process.env.TRUST_PROXY_HEADERS === '1';
+// Opt-in: TRUST_PROXY_HEADERS=1 (alias TRUST_PROXY=1). Off by default; the socket address is used then.
+const TRUST_PROXY_HEADERS = process.env.TRUST_PROXY_HEADERS === '1' || process.env.TRUST_PROXY === '1';
 const TRUSTED_PROXY_PEERS = (process.env.FAUCET_TRUSTED_PROXY ?? DEFAULT_TRUSTED_PROXY_PEERS.join(','))
   .split(',').map((entry) => entry.trim()).filter(Boolean);
 const sourceOf = (req) => clientSource(req.socket.remoteAddress, req.headers, { trustProxyHeaders: TRUST_PROXY_HEADERS, trustedPeers: TRUSTED_PROXY_PEERS });
@@ -75,7 +82,7 @@ const server = http.createServer(async (req, res) => {
   } catch (error) {
     const code = publicErrors.has(error?.message) ? error.message : 'faucet_unavailable';
     if (source) logFund(source, to, code);
-    const status = ['invalid_address','invalid_amount','amount_too_large'].includes(code) ? 400 : code === 'rate_limited' ? 429 : 503;
+    const status = ['invalid_address','invalid_amount','amount_too_large','amount_too_small'].includes(code) ? 400 : ['rate_limited','source_daily_limit'].includes(code) ? 429 : 503;
     return reply(status, { error: code, ...(publicMessages[code] ? { message: publicMessages[code] } : {}) });
   }
 });

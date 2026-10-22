@@ -20,6 +20,14 @@ export function clientSource(peer, headers, { trustProxyHeaders = false, trusted
   return address || 'unknown';
 }
 
+/** Parse a non-negative decimal PPL string (up to 18 fractional digits) into wei; throws on bad input. */
+export function parsePplAmount(text) {
+  const amount = String(text ?? '').trim();
+  if (!/^(?:0|[1-9]\d{0,30})(?:\.\d{1,18})?$/.test(amount)) throw new Error('invalid_amount');
+  const [whole, fraction = ''] = amount.split('.');
+  return BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, '0'));
+}
+
 /** Testnet distributions spend existing coins; this module cannot mint. */
 export function parseRequest(body) {
   if (!body || typeof body !== 'object' || !/^0x[0-9a-fA-F]{40}$/.test(body.address ?? '') || /^0x0{40}$/i.test(body.address)) throw new Error('invalid_address');
@@ -36,6 +44,9 @@ export function parseRequest(body) {
  * LAV-H1: on top of the per-address cooldown there is a global budget of `dailyCapPpl` per UTC day,
  * so an attacker generating fresh addresses cannot drain the whole faucet in one day. `null`
  * disables the budget (tests and non-production use only).
+ * MF-21: `minAmount` (wei, default 1 PPL = 1% of the per-request cap) stops dust requests (even 1 wei)
+ * from consuming the 24h per-address slot or the queue; `sourceDailyCapPpl` (default 200) limits the
+ * value one source key may receive per UTC day across all of its addresses. `null` disables it.
  */
 export function createFaucet({
   provider,
@@ -49,11 +60,17 @@ export function createFaucet({
   maxGasLimit = 200_000n,
   maxAmountPpl = 100n,
   dailyCapPpl = 10_000n,
+  minAmount = 10n ** 18n,
+  sourceDailyCapPpl = 200n,
 }) {
   if (!/^0x[0-9a-fA-F]{64}$/.test(firstBlockHash ?? '')) throw new Error('first_block_hash_required');
   const maxAmountValue = maxAmountPpl * 10n ** 18n;
   const dailyCapValue = dailyCapPpl === null ? null : dailyCapPpl * 10n ** 18n;
+  const sourceDailyCapValue = sourceDailyCapPpl === null ? null : sourceDailyCapPpl * 10n ** 18n;
+  if (typeof minAmount !== 'bigint' || minAmount < 1n) throw new Error('invalid_min_amount');
   const claims = new Map();
+  // Per-source value received on the current UTC day; cleared when the day changes.
+  const sourceTotals = new Map();
   const inFlightBySource = new Map();
   // Paid-out value and the UTC day (ms since epoch / 86_400_000) it belongs to.
   let payoutDay = -1;
@@ -69,6 +86,7 @@ export function createFaucet({
     const request = parseRequest(body);
     const sourceKey = sourceKeyOf(source);
     if (request.address === wallet.address.toLowerCase()) throw new Error('invalid_address');
+    if (request.value < minAmount) throw new Error('amount_too_small');
     if (request.value > maxAmountValue) throw new Error('amount_too_large');
     // One caller must not be able to hold the whole queue: a single source may only occupy
     // `maxInFlightPerSource` of the `maxQueue` slots, so a burst of its own addresses cannot
@@ -87,8 +105,10 @@ export function createFaucet({
       if (day !== payoutDay) {
         payoutDay = day;
         payoutValue = 0n;
+        sourceTotals.clear();
       }
       if (dailyCapValue !== null && payoutValue + request.value > dailyCapValue) throw new Error('daily_budget_exhausted');
+      if (sourceDailyCapValue !== null && (sourceTotals.get(sourceKey) ?? 0n) + request.value > sourceDailyCapValue) throw new Error('source_daily_limit');
       await verifyNetwork();
       const gas = await provider.estimateGas({ from: wallet.address, to: request.address, value: request.value });
       // A hostile contract recipient can quote an arbitrarily expensive `receive()`; cap what
@@ -103,6 +123,7 @@ export function createFaucet({
       // Lock before broadcast. Ambiguous RPC failures must not permit a duplicate send.
       claims.set(request.address, time + cooldownMs);
       payoutValue += request.value;
+      sourceTotals.set(sourceKey, (sourceTotals.get(sourceKey) ?? 0n) + request.value);
       const feeFields = fees.maxFeePerGas != null ? { maxFeePerGas: fees.maxFeePerGas, maxPriorityFeePerGas: fees.maxPriorityFeePerGas ?? 0n } : { gasPrice };
       const tx = await wallet.sendTransaction({ to: request.address, value: request.value, gasLimit, ...feeFields });
       return { ok: true, chainId: 97401, amount: request.amount, txId: tx.hash, pending: true };
