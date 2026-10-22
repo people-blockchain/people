@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Create a non-custodial wallet",
-        "body": "Generate a 12-word phrase in the browser and encrypt it with a password, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave this device.",
+        "title": "Create a wallet",
+        "body": "Generate a 12-word phrase in the browser and encrypt it with a password: a non-custodial browser wallet whose keys never leave this device. Or sign in with Google for a cloud wallet: your key is stored encrypted on PEOPLE servers, and PEOPLE's infrastructure is able to decrypt it.",
         "href": "/wallet",
         "cta": "Open wallet"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "A person with a wallet on a phone, tablet, or browser.",
-        "detail": "Start with a non-custodial account on a phone, tablet, or browser. You join as a person in the community — not as a validator."
+        "detail": "Start with a wallet on a phone, tablet, or browser. You join as a person in the community — not as a validator."
       },
       {
         "id": "transaction",

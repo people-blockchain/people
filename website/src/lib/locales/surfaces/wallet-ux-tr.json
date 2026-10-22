@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Google / e-posta ile giriş",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Satın al",
-  "modalExplainer": "People Wallet'ınız otomatik oluşturulur. Anahtar şifrelenir ve sunucularımızda saklanır — aynı Google veya e-posta girişiyle geri yüklenir; tohum cümlesi gerekmez. Bu cüzdan partner paneli ve tüm site için girişinizdir. Yeni cüzdan oluşturmayın — aynı Google veya e-posta ile giriş yapın.",
+  "modalExplainer": "People Wallet'ınız otomatik oluşturulur. Anahtarınız, giriş yaparak geri yükleyebilmeniz için PEOPLE sunucularında şifrelenmiş olarak saklanır. PEOPLE altyapısı onu çözebilir. Tam öz-saklama için tarayıcı cüzdanı veya harici bir cüzdan kullanın. Tohum cümlesi gerekmez. Bu cüzdan partner paneli ve tüm site için girişinizdir. Yeni cüzdan oluşturmayın — aynı Google veya e-posta ile giriş yapın.",
   "haveExistingWallet": "Zaten bir cüzdanım var",
   "continueAs": "{email} olarak devam et",
   "modalExplainerMpc": "People Wallet'ınız otomatik oluşturulur. Anahtar parçalara bölünür — tohum cümlesi gerekmez. Aynı Google veya e-posta her cihazda geri yükler. Partner paneli ve tüm site için girişinizdir.",

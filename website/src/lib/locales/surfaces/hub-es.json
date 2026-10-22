@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Crea una cartera no custodial",
-        "body": "Genera una frase de 12 palabras en el navegador, anótala y cífrala con una contraseña. Las claves no salen de este dispositivo.",
+        "title": "Crea una cartera",
+        "body": "Genera una frase de 12 palabras en el navegador, anótala y cífrala con una contraseña. Las claves no salen de este dispositivo. O inicia sesión con Google para obtener una cartera en la nube: tu clave se guarda cifrada en los servidores de PEOPLE y la infraestructura de PEOPLE puede descifrarla.",
         "href": "/wallet",
         "cta": "Abrir cartera"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Una persona con una cartera en un teléfono, tableta o navegador.",
-        "detail": "Empieza con una cuenta no custodial en un teléfono, tableta o navegador. Te unes como persona de la comunidad — no como validador."
+        "detail": "Empieza con una cartera en un teléfono, tableta o navegador. Te unes como persona de la comunidad — no como validador."
       },
       {
         "id": "transaction",

@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Iniciar sesión con Google / email",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Comprar",
-  "modalExplainer": "Tu People Wallet se crea automáticamente. La clave se cifra y se guarda en nuestros servidores; recupérala con el mismo inicio de sesión de Google o email. No necesitas frase semilla. Esta cartera es tu acceso al panel de socios y a todo el sitio. No crees carteras nuevas: entra siempre con el mismo Google o email.",
+  "modalExplainer": "Tu People Wallet se crea automáticamente. Tu clave se guarda cifrada en los servidores de PEOPLE para que puedas restaurarla al iniciar sesión. La infraestructura de PEOPLE puede descifrarla. Para una autocustodia total, usa una cartera de navegador o una cartera externa. No necesitas frase semilla. Esta cartera es tu acceso al panel de socios y a todo el sitio. No crees carteras nuevas: entra siempre con el mismo Google o email.",
   "haveExistingWallet": "Ya tengo una cartera",
   "continueAs": "Continuar como {email}",
   "modalExplainerMpc": "Tu People Wallet se crea solo. La clave se divide en partes — no hace falta guardar frase semilla. El mismo Google o email la restaura en cualquier dispositivo. Es tu acceso al panel de socios y a todo el sitio. No crees carteras nuevas.",

@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Accedi con Google / email",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Acquista",
-  "modalExplainer": "Il tuo People Wallet viene creato automaticamente. La chiave è crittografata e conservata sui nostri server — recuperala con lo stesso accesso Google o email; nessuna seed phrase. Questo wallet è l'accesso al cabinet partner e a tutto il sito. Non creare altri wallet — accedi sempre con lo stesso Google o email.",
+  "modalExplainer": "Il tuo People Wallet viene creato automaticamente. La tua chiave è conservata cifrata sui server di PEOPLE così puoi ripristinarla accedendo. L'infrastruttura di PEOPLE è in grado di decifrarla. Per l'autocustodia completa, usa un wallet del browser o un wallet esterno. Nessuna seed phrase. Questo wallet è l'accesso al cabinet partner e a tutto il sito. Non creare altri wallet — accedi sempre con lo stesso Google o email.",
   "haveExistingWallet": "Ho già un wallet",
   "continueAs": "Continua come {email}",
   "modalExplainerMpc": "Il tuo People Wallet viene creato automaticamente. La chiave è divisa in parti — nessuna seed phrase da salvare. Lo stesso Google o email lo ripristina ovunque. È l'accesso al cabinet partner e a tutto il sito.",

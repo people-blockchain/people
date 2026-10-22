@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Uma carteira em 30 segundos",
-        "sub": "Suas chaves ficam no seu celular ou no seu navegador."
+        "sub": "Carteira do navegador: as suas chaves ficam no seu dispositivo. Carteira na nuvem: guardada cifrada nos servidores da PEOPLE."
       },
       {
         "id": "token",

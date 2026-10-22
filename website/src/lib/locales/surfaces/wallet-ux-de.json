@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Mit Google / E-Mail anmelden",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Kaufen",
-  "modalExplainer": "Ihre People Wallet wird automatisch erstellt. Der Schlüssel wird verschlüsselt auf unseren Servern gespeichert — Wiederherstellung mit demselben Google- oder E-Mail-Login; keine Seed-Phrase nötig. Diese Wallet ist Ihr Zugang zum Partnerbereich und zur gesamten Website. Erstellen Sie keine weiteren Wallets — melden Sie sich weiter mit demselben Google oder derselben E-Mail an.",
+  "modalExplainer": "Ihre People Wallet wird automatisch erstellt. Ihr Schlüssel wird verschlüsselt auf PEOPLE-Servern gespeichert, damit Sie ihn per Anmeldung wiederherstellen können. Die Infrastruktur von PEOPLE kann ihn entschlüsseln. Für volle Selbstverwahrung nutzen Sie eine Browser-Wallet oder eine externe Wallet. Keine Seed-Phrase nötig. Diese Wallet ist Ihr Zugang zum Partnerbereich und zur gesamten Website. Erstellen Sie keine weiteren Wallets — melden Sie sich weiter mit demselben Google oder derselben E-Mail an.",
   "haveExistingWallet": "Ich habe bereits eine Wallet",
   "continueAs": "Weiter als {email}",
   "modalExplainerMpc": "Ihre People Wallet wird automatisch erstellt. Der Schlüssel wird in Teile aufgeteilt — keine Seed-Phrase nötig. Dasselbe Google oder E-Mail stellt sie überall wieder her. Das ist Ihr Zugang zum Partnerbereich und zur ganzen Website.",

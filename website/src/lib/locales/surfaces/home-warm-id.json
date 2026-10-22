@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Dompet dalam 30 detik",
-        "sub": "Kunci Anda tetap di ponsel atau browser Anda."
+        "sub": "Dompet peramban: kunci Anda tetap di perangkat Anda. Dompet cloud: disimpan terenkripsi di server PEOPLE."
       },
       {
         "id": "token",
