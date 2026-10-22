@@ -13,7 +13,7 @@ import ecosystemVi from "./locales/surfaces/ecosystem-vi.json" with { type: "jso
 import ecosystemZh from "./locales/surfaces/ecosystem-zh.json" with { type: "json" };
 
 export type EcosystemCategory = "payments" | "communities" | "tools";
-export type EcosystemStatus = "testnet" | "in_development";
+export type EcosystemStatus = "testnet" | "in_development" | "live";
 export type EcosystemLabel = "built_by_people" | "community";
 
 export type EcosystemProduct = {
@@ -54,6 +54,16 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     href: "https://peopleclubs.com",
     external: true,
     status: "in_development",
+    label: "built_by_people",
+  },
+  {
+    id: "people-predict",
+    category: "communities",
+    name: "PEOPLE Predict",
+    monogram: "P",
+    href: "https://peoplepredict.app",
+    external: true,
+    status: "live",
     label: "built_by_people",
   },
   {

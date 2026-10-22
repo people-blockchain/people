@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Réseau de test",
-    "in_development": "En développement"
+    "in_development": "En développement",
+    "live": "Disponible"
   },
   "labelBadges": {
     "built_by_people": "Créé par PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Outils pour les clubs et les communautés de membres."
+    },
+    "people-predict": {
+      "summary": "Marchés de prédiction sur des événements du monde réel pour la communauté PEOPLE."
     },
     "people-multisig": {
       "summary": "Une trésorerie partagée contrôlée par plusieurs propriétaires sur le réseau de test."

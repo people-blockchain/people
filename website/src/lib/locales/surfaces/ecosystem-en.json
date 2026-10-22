@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Testnet",
-    "in_development": "In development"
+    "in_development": "In development",
+    "live": "Live"
   },
   "labelBadges": {
     "built_by_people": "Built by PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Tools for clubs and member communities."
+    },
+    "people-predict": {
+      "summary": "Prediction markets on real-world events for the PEOPLE community."
     },
     "people-multisig": {
       "summary": "A shared treasury controlled by several owners on the testnet."
