@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseRequest, createFaucet, clientSource, DEFAULT_TRUSTED_PROXY_PEERS } from './faucet-core.mjs';
+import { parseRequest, parsePplAmount, createFaucet, clientSource, DEFAULT_TRUSTED_PROXY_PEERS } from './faucet-core.mjs';
 const address='0x'+'12'.repeat(20), sender='0x'+'34'.repeat(20), hash='0x'+'ab'.repeat(32);
 function setup(overrides={}) {
   const sends=[];
@@ -72,8 +72,8 @@ test('falls back to the peer for a malformed or absent forwarded header',()=>{
 });
 test('global daily budget defaults to 10000 PPL and refuses the next distinct address',async()=>{
   const {faucet,sends}=setup({getBalance:async()=>1_000_000n*10n**18n});
-  for(let i=1;i<=100;i++) await faucet.fund({address:addr(i),amount:'100'});
-  await assert.rejects(faucet.fund({address:addr(101),amount:'100'}),/daily_budget_exhausted/);
+  for(let i=1;i<=100;i++) await faucet.fund({address:addr(i),amount:'100'},'src'+i);
+  await assert.rejects(faucet.fund({address:addr(101),amount:'100'},'src101'),/daily_budget_exhausted/);
   assert.equal(sends.length,100);
 });
 test('daily budget counts value, not requests, and resets at the next UTC day',async()=>{
@@ -94,7 +94,7 @@ test('dailyCapPpl null disables the global budget',async()=>{
   const sends=[];
   const provider={getNetwork:async()=>({chainId:97401n}),getBlock:async()=>({hash}),estimateGas:async()=>21000n,getFeeData:async()=>({gasPrice:2n}),getBalance:async()=>1000n*10n**18n};
   const wallet={address:sender,sendTransaction:async tx=>{sends.push(tx);return {hash};}};
-  const faucet=createFaucet({provider,wallet,firstBlockHash:hash,dailyCapPpl:null});
+  const faucet=createFaucet({provider,wallet,firstBlockHash:hash,dailyCapPpl:null,sourceDailyCapPpl:null});
   for(let i=1;i<=5;i++) await faucet.fund({address:addr(i),amount:'100'});
   assert.equal(sends.length,5);
 });
@@ -110,4 +110,53 @@ test('default rate limit is one request per address per day: blocked just under 
   clock = 24*60*60_000 + 1;
   await faucet.fund({address,amount:'1'});
   assert.equal(sends.length,2);
+});
+test('rejects dust amounts (1 wei) without burning the per-address slot',async()=>{
+  const {faucet,sends}=setup();
+  await assert.rejects(faucet.fund({address,amount:'0.000000000000000001'},'ip-a'),/amount_too_small/);
+  await assert.rejects(faucet.fund({address,amount:'0.99'},'ip-a'),/amount_too_small/);
+  assert.equal(sends.length,0);
+  await faucet.fund({address,amount:'1'},'ip-a'); // the slot is still available
+  assert.equal(sends.length,1);
+});
+test('minAmount is configurable and must be positive',async()=>{
+  const sends=[];
+  const provider={getNetwork:async()=>({chainId:97401n}),getBlock:async()=>({hash}),estimateGas:async()=>21000n,getFeeData:async()=>({gasPrice:2n}),getBalance:async()=>100n*10n**18n};
+  const wallet={address:sender,sendTransaction:async tx=>{sends.push(tx);return {hash};}};
+  assert.throws(()=>createFaucet({provider,wallet,firstBlockHash:hash,minAmount:0n}),/invalid_min_amount/);
+  const faucet=createFaucet({provider,wallet,firstBlockHash:hash,minAmount:parsePplAmount('0.5')});
+  await faucet.fund({address,amount:'0.5'},'ip-a');
+  assert.equal(sends.length,1);
+});
+test('parsePplAmount converts decimals and rejects junk',()=>{
+  assert.equal(parsePplAmount('1.5'),1500000000000000000n);
+  for(const bad of ['','-1','1e3','abc'])assert.throws(()=>parsePplAmount(bad),/invalid_amount/);
+});
+test('per-source daily cap spans addresses and resets next UTC day',async()=>{
+  let clock=2*86_400_000;
+  const sends=[];
+  const provider={getNetwork:async()=>({chainId:97401n}),getBlock:async()=>({hash}),estimateGas:async()=>21000n,getFeeData:async()=>({gasPrice:2n}),getBalance:async()=>1000n*10n**18n};
+  const wallet={address:sender,sendTransaction:async tx=>{sends.push(tx);return {hash};}};
+  const faucet=createFaucet({provider,wallet,firstBlockHash:hash,now:()=>clock,sourceDailyCapPpl:150n});
+  await faucet.fund({address:addr(1),amount:'100'},'ip-a');
+  await assert.rejects(faucet.fund({address:addr(2),amount:'100'},'ip-a'),/source_daily_limit/);
+  await faucet.fund({address:addr(3),amount:'100'},'ip-b'); // other sources unaffected
+  await faucet.fund({address:addr(2),amount:'50'},'ip-a');
+  assert.equal(sends.length,3);
+  clock=3*86_400_000;
+  await faucet.fund({address:addr(4),amount:'100'},'ip-a');
+  assert.equal(sends.length,4);
+});
+test('expired claims are evicted before the tracking table reports faucet_busy',async()=>{
+  let clock=0;
+  const sends=[];
+  const provider={getNetwork:async()=>({chainId:97401n}),getBlock:async()=>({hash}),estimateGas:async()=>21000n,getFeeData:async()=>({gasPrice:2n}),getBalance:async()=>1000n*10n**18n};
+  const wallet={address:sender,sendTransaction:async tx=>{sends.push(tx);return {hash};}};
+  const faucet=createFaucet({provider,wallet,firstBlockHash:hash,now:()=>clock,maxTracked:2,dailyCapPpl:null,sourceDailyCapPpl:null});
+  await faucet.fund({address:addr(1),amount:'1'},'a');
+  await faucet.fund({address:addr(2),amount:'1'},'b');
+  await assert.rejects(faucet.fund({address:addr(3),amount:'1'},'c'),/faucet_busy/);
+  clock=24*60*60_000+1;
+  await faucet.fund({address:addr(3),amount:'1'},'c');
+  assert.equal(sends.length,3);
 });
