@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { isIPv4, isIPv6 } from "node:net";
 import { dirname } from "node:path";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { WebSocket, WebSocketServer } from "ws";
@@ -17,6 +18,12 @@ export interface GossipNetworkOptions {
   reconnectMs?: number;
   peerBookPath?: string;
   maxPeers?: number;
+  /** Max simultaneous connections per remote IP (IPv4 exact, IPv6 per /64). Env P2P_MAX_PEERS_PER_IP, default 2. Loopback is exempt. */
+  maxPeersPerIp?: number;
+  /** Max inbound connections; the rest of `maxPeers` is reserved for outbound dials. Env P2P_MAX_INBOUND, default maxPeers - 8. */
+  maxInboundPeers?: number;
+  /** Interface the gossip WebSocketServer binds to. Env GOSSIP_BIND_HOST; unset keeps the ws default (all interfaces). */
+  bindHost?: string;
   dialTimeoutMs?: number;
   /** Close an inbound socket that has not completed the hello handshake in time. */
   handshakeTimeoutMs?: number;
@@ -37,6 +44,8 @@ interface PeerBookEntry {
   address: string;
   lastSuccess: number;
   fails: number;
+  /** When the entry was first recorded; used to evict the oldest unverified entries first. */
+  addedAt?: number;
 }
 
 const MAX_SEEN = 5_000;
@@ -47,6 +56,13 @@ const BAN_MS = 10 * 60_000;
 const DEFAULT_HANDSHAKE_TIMEOUT_MS = 15_000;
 /** Unfinished-handshake sockets allowed per remote IP. */
 const MAX_PENDING_HANDSHAKES_PER_IP = 8;
+const DEFAULT_MAX_PEERS = 32;
+const DEFAULT_MAX_PEERS_PER_IP = 2;
+/** Slots always kept free of inbound connections so the node can still dial out. */
+const DEFAULT_OUTBOUND_RESERVED = 8;
+/** An address that failed this many dials without ever succeeding is dropped from the book. */
+const PEER_BOOK_MAX_FAILS = 8;
+const PEER_BOOK_FACTOR = 4;
 const DEFAULT_MAX_MESSAGES_PER_SECOND = 200;
 const DEFAULT_MAX_BYTES_PER_SECOND = 4_000_000;
 
@@ -59,6 +75,55 @@ function normalizePeerAddress(raw: string): string {
     return trimmed;
   }
   return `ws://${trimmed}`;
+}
+
+function parsePositiveInt(raw: string | undefined): number | undefined {
+  if (raw === undefined || raw.trim() === "") return undefined;
+  const value = Number(raw);
+  return Number.isInteger(value) && value > 0 ? value : undefined;
+}
+
+function expandIPv6(address: string): number[] | null {
+  let text = address;
+  const tail = /(\d{1,3}(?:\.\d{1,3}){3})$/.exec(text);
+  if (tail) {
+    if (!isIPv4(tail[1])) return null;
+    const o = tail[1].split(".").map(Number);
+    text = `${text.slice(0, -tail[1].length)}${((o[0] << 8) | o[1]).toString(16)}:${((o[2] << 8) | o[3]).toString(16)}`;
+  }
+  const halves = text.split("::");
+  if (halves.length > 2) return null;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const rest = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  const missing = 8 - head.length - rest.length;
+  if (halves.length === 1 ? missing !== 0 : missing < 1) return null;
+  const groups = [...head, ...Array<string>(halves.length === 2 ? missing : 0).fill("0"), ...rest].map((g) => parseInt(g, 16));
+  return groups.length === 8 && groups.every((g) => Number.isInteger(g) && g >= 0 && g <= 0xffff) ? groups : null;
+}
+
+/**
+ * Key used for per-IP connection limits: IPv4 exact, IPv6 grouped by /64, IPv4-mapped IPv6
+ * collapsed to the embedded IPv4. Non-IP hostnames get a `host:` key.
+ */
+export function peerIpKey(raw: string): string {
+  let host = raw.trim().toLowerCase().replace(/^\[/, "").replace(/\]$/, "");
+  const zone = host.indexOf("%");
+  if (zone >= 0) host = host.slice(0, zone);
+  if (!host) return "unknown";
+  if (isIPv4(host)) return host;
+  if (isIPv6(host)) {
+    const g = expandIPv6(host);
+    if (!g) return `host:${host}`;
+    if (g.slice(0, 5).every((x) => x === 0) && g[5] === 0xffff) {
+      return `${g[6] >> 8}.${g[6] & 255}.${g[7] >> 8}.${g[7] & 255}`;
+    }
+    return `${g.slice(0, 4).map((x) => x.toString(16)).join(":")}/64`;
+  }
+  return `host:${host}`;
+}
+
+function isLoopbackKey(key: string): boolean {
+  return key.startsWith("127.") || key === "0:0:0:0/64" || key === "host:localhost";
 }
 
 /**
@@ -124,6 +189,10 @@ export class GossipNetwork {
   private cachedBytes = 0;
   private readonly blockPool = new Map<string, Block>();
   private readonly peerBook = new Map<string, PeerBookEntry>();
+  private readonly protectedPeers = new Set<string>();
+  private readonly inboundSockets = new Set<WebSocket>();
+  private readonly socketIpKeys = new Map<WebSocket, string>();
+  private readonly connectionsByIp = new Map<string, number>();
   private readonly bannedUntil = new Map<string, number>();
   private readonly backoffUntil = new Map<string, number>();
   private wss: WebSocketServer | null = null;
@@ -136,6 +205,9 @@ export class GossipNetwork {
   private readonly reconnectMs: number;
   private readonly peerBookPath?: string;
   private readonly maxPeers: number;
+  private readonly maxPeersPerIp: number;
+  private readonly maxInboundPeers: number;
+  private readonly bindHost?: string;
   private readonly dialTimeoutMs: number;
   private readonly handshakeTimeoutMs: number;
   private readonly maxMessagesPerSecond: number;
@@ -147,19 +219,31 @@ export class GossipNetwork {
     this.maxMessageBytes = options.maxMessageBytes ?? 1_000_000;
     this.reconnectMs = options.reconnectMs ?? 5_000;
     this.peerBookPath = options.peerBookPath;
-    this.maxPeers = options.maxPeers ?? 32;
+    this.maxPeers = options.maxPeers ?? DEFAULT_MAX_PEERS;
+    this.maxPeersPerIp = options.maxPeersPerIp ?? parsePositiveInt(process.env.P2P_MAX_PEERS_PER_IP) ?? DEFAULT_MAX_PEERS_PER_IP;
+    const defaultInbound = Math.max(1, this.maxPeers - Math.min(DEFAULT_OUTBOUND_RESERVED, Math.floor(this.maxPeers / 2)));
+    this.maxInboundPeers = Math.min(
+      this.maxPeers,
+      options.maxInboundPeers ?? parsePositiveInt(process.env.P2P_MAX_INBOUND) ?? defaultInbound
+    );
+    this.bindHost = options.bindHost?.trim() || process.env.GOSSIP_BIND_HOST?.trim() || undefined;
     this.dialTimeoutMs = options.dialTimeoutMs ?? 4_000;
     this.handshakeTimeoutMs = options.handshakeTimeoutMs ?? DEFAULT_HANDSHAKE_TIMEOUT_MS;
     this.maxMessagesPerSecond = options.maxMessagesPerSecond ?? DEFAULT_MAX_MESSAGES_PER_SECOND;
     this.maxBytesPerSecond = options.maxBytesPerSecond ?? DEFAULT_MAX_BYTES_PER_SECOND;
     for (const peer of this.bootstrapPeers) {
-      this.peerBook.set(peer, { address: peer, lastSuccess: 0, fails: 0 });
+      this.peerBook.set(peer, { address: peer, lastSuccess: 0, fails: 0, addedAt: Date.now() });
+      this.protectedPeers.add(peer);
     }
   }
 
   async start(): Promise<void> {
     await this.loadPeerBook();
-    this.wss = new WebSocketServer({ port: this.options.port, maxPayload: this.maxMessageBytes });
+    this.wss = new WebSocketServer({
+      port: this.options.port,
+      maxPayload: this.maxMessageBytes,
+      ...(this.bindHost ? { host: this.bindHost } : {})
+    });
     this.wss.on("connection", (socket, request) =>
       this.attachSocket(socket, request.socket.remoteAddress ?? "")
     );
@@ -244,19 +328,21 @@ export class GossipNetwork {
 
   private knownDialAddresses(): string[] {
     const now = Date.now();
-    return [...this.peerBook.values()]
+    return this.rankedPeerEntries([...this.peerBook.values()])
       .filter((entry) => (this.bannedUntil.get(entry.address) ?? 0) <= now)
-      .sort((a, b) => b.lastSuccess - a.lastSuccess)
       .map((entry) => entry.address)
       .slice(0, this.maxPeers);
   }
 
   private attachSocket(socket: WebSocket, remoteAddress = ""): void {
-    if (this.sockets.size >= this.maxPeers) { socket.close(); return; }
+    if (this.sockets.size >= this.maxPeers || this.inboundSockets.size >= this.maxInboundPeers) { socket.close(); return; }
     const ip = remoteAddress || "unknown";
+    const ipKey = peerIpKey(ip);
+    if (!this.reserveIpSlot(socket, ipKey)) { socket.close(); return; }
+    this.inboundSockets.add(socket);
     // Cap unfinished handshakes per IP so a peer cannot fill the peer table with sockets
     // that never say hello, and time out the ones it does open.
-    if (!this.beginHandshake(ip)) { socket.close(); return; }
+    if (!this.beginHandshake(ip)) { this.releaseIpSlot(socket); this.inboundSockets.delete(socket); socket.close(); return; }
     this.socketIps.set(socket, ip);
     this.sockets.add(socket);
     const handshakeTimer = setTimeout(() => {
@@ -288,6 +374,8 @@ export class GossipNetwork {
     socket.on("close", () => {
       this.finishHandshake(socket);
       this.sockets.delete(socket);
+      this.inboundSockets.delete(socket);
+      this.releaseIpSlot(socket);
       this.releaseSocketId(socket);
     });
     this.send(socket, {
@@ -295,6 +383,23 @@ export class GossipNetwork {
       peerId: this.peerId,
       payload: { ok: true, chainId: this.options.chainId ?? "people-devnet", identity: this.peerId, listen: this.listenAddress() }
     });
+  }
+
+  /** Count a connection against its remote IP; false if the per-IP limit is already reached. */
+  private reserveIpSlot(socket: WebSocket, key: string): boolean {
+    if (!isLoopbackKey(key) && (this.connectionsByIp.get(key) ?? 0) >= this.maxPeersPerIp) return false;
+    this.socketIpKeys.set(socket, key);
+    this.connectionsByIp.set(key, (this.connectionsByIp.get(key) ?? 0) + 1);
+    return true;
+  }
+
+  private releaseIpSlot(socket: WebSocket): void {
+    const key = this.socketIpKeys.get(socket);
+    if (key === undefined) return;
+    this.socketIpKeys.delete(socket);
+    const left = (this.connectionsByIp.get(key) ?? 1) - 1;
+    if (left <= 0) this.connectionsByIp.delete(key);
+    else this.connectionsByIp.set(key, left);
   }
 
   private beginHandshake(ip: string): boolean {
@@ -387,7 +492,10 @@ export class GossipNetwork {
     }
     try {
       if (this.sockets.size >= this.maxPeers || this.outbound.has(address)) return;
+      const dialKey = peerIpKey(new URL(address).hostname);
+      if (!isLoopbackKey(dialKey) && (this.connectionsByIp.get(dialKey) ?? 0) >= this.maxPeersPerIp) return;
       const socket = new WebSocket(address, { maxPayload: this.maxMessageBytes });
+      this.reserveIpSlot(socket, dialKey);
       this.outbound.set(address, socket);
       const failTimer = setTimeout(() => {
         if (socket.readyState !== WebSocket.OPEN) {
@@ -398,6 +506,16 @@ export class GossipNetwork {
 
       socket.on("open", () => {
         clearTimeout(failTimer);
+        // The hostname may have resolved to an address that is already at its limit.
+        const remote = (socket as unknown as { _socket?: { remoteAddress?: string } })._socket?.remoteAddress;
+        const actualKey = remote ? peerIpKey(remote) : dialKey;
+        if (actualKey !== dialKey) {
+          this.releaseIpSlot(socket);
+          if (!this.reserveIpSlot(socket, actualKey)) {
+            socket.close();
+            return;
+          }
+        }
         this.sockets.add(socket);
         this.recordDialSuccess(address);
         this.emitter.emit("peer_joined", address);
@@ -428,6 +546,7 @@ export class GossipNetwork {
       socket.on("close", () => {
         clearTimeout(failTimer);
         this.sockets.delete(socket);
+        this.releaseIpSlot(socket);
         this.releaseSocketId(socket);
         if (this.outbound.get(address) === socket) {
           this.outbound.delete(address);
@@ -441,19 +560,66 @@ export class GossipNetwork {
     }
   }
 
+  private peerBookCap(): number {
+    return this.maxPeers * PEER_BOOK_FACTOR;
+  }
+
+  /**
+   * Make room for one more entry. Unverified candidates (never connected) go first, worst
+   * failure count then oldest; verified ones only go when the incoming entry is itself
+   * verified, oldest lastSuccess first. Configured bootstrap peers are never evicted.
+   */
+  private evictForNewEntry(incomingVerified: boolean): boolean {
+    let victim: PeerBookEntry | undefined;
+    const worse = (a: PeerBookEntry, b: PeerBookEntry): boolean => {
+      const aVerified = a.lastSuccess > 0;
+      const bVerified = b.lastSuccess > 0;
+      if (aVerified !== bVerified) return !aVerified;
+      if (!aVerified) return a.fails !== b.fails ? a.fails > b.fails : (a.addedAt ?? 0) < (b.addedAt ?? 0);
+      return a.lastSuccess !== b.lastSuccess ? a.lastSuccess < b.lastSuccess : a.fails > b.fails;
+    };
+    for (const entry of this.peerBook.values()) {
+      if (this.protectedPeers.has(entry.address)) continue;
+      // An unverified newcomer may only displace an unverified entry that has already failed.
+      if (!incomingVerified && (entry.lastSuccess > 0 || entry.fails === 0)) continue;
+      if (!victim || worse(entry, victim)) victim = entry;
+    }
+    if (!victim) return false;
+    this.peerBook.delete(victim.address);
+    return true;
+  }
+
+  /** Insert or return the entry for `address`, enforcing the size cap. Null if rejected. */
+  private upsertPeerEntry(address: string, verified: boolean): PeerBookEntry | null {
+    const existing = this.peerBook.get(address);
+    if (existing) return existing;
+    if (this.peerBook.size >= this.peerBookCap() && !this.evictForNewEntry(verified)) return null;
+    const entry: PeerBookEntry = { address, lastSuccess: 0, fails: 0, addedAt: Date.now() };
+    this.peerBook.set(address, entry);
+    return entry;
+  }
+
   private recordDialSuccess(address: string): void {
-    const entry = this.peerBook.get(address) ?? { address, lastSuccess: 0, fails: 0 };
+    const entry = this.upsertPeerEntry(address, true);
+    if (!entry) return;
     entry.lastSuccess = Date.now();
     entry.fails = 0;
-    this.peerBook.set(address, entry);
     this.backoffUntil.delete(address);
     this.queuePersistPeerBook();
   }
 
   private recordDialFailure(address: string): void {
-    const entry = this.peerBook.get(address) ?? { address, lastSuccess: 0, fails: 0 };
+    const entry = this.peerBook.get(address);
+    if (!entry) return;
     entry.fails += 1;
-    this.peerBook.set(address, entry);
+    if (entry.lastSuccess === 0 && entry.fails >= PEER_BOOK_MAX_FAILS && !this.protectedPeers.has(address)) {
+      // Never reachable and repeatedly failing: forget it instead of keeping the slot.
+      this.peerBook.delete(address);
+      this.backoffUntil.delete(address);
+      this.bannedUntil.set(address, Date.now() + BAN_MS);
+      this.queuePersistPeerBook();
+      return;
+    }
     const delay = Math.min(60_000, this.reconnectMs * 2 ** Math.min(6, entry.fails));
     this.backoffUntil.set(address, Date.now() + delay);
     if (entry.fails >= 8) {
@@ -491,7 +657,7 @@ export class GossipNetwork {
 
   private rememberPeerAddress(raw: string): void {
     const address = normalizePeerAddress(raw);
-    if (!address || address === this.listenAddress() || this.peerBook.size >= this.maxPeers * 4) {
+    if (!address || address === this.listenAddress()) {
       return;
     }
     let hostname = "";
@@ -503,8 +669,7 @@ export class GossipNetwork {
     if (isPrivateOrLocalHost(hostname)) {
       return;
     }
-    if (!this.peerBook.has(address)) {
-      this.peerBook.set(address, { address, lastSuccess: 0, fails: 0 });
+    if (!this.peerBook.has(address) && this.upsertPeerEntry(address, false)) {
       this.queuePersistPeerBook();
     }
   }
@@ -718,6 +883,16 @@ export class GossipNetwork {
     }, 1_000);
   }
 
+  /** Verified entries first (most recent success), then unverified by fewest failures and age. */
+  private rankedPeerEntries(entries: PeerBookEntry[]): PeerBookEntry[] {
+    return [...entries].sort((a, b) =>
+      (this.protectedPeers.has(b.address) ? 1 : 0) - (this.protectedPeers.has(a.address) ? 1 : 0) ||
+      b.lastSuccess - a.lastSuccess ||
+      a.fails - b.fails ||
+      (b.addedAt ?? 0) - (a.addedAt ?? 0)
+    );
+  }
+
   private async loadPeerBook(): Promise<void> {
     if (!this.peerBookPath) {
       return;
@@ -725,16 +900,33 @@ export class GossipNetwork {
     try {
       const raw = await readFile(this.peerBookPath, "utf8");
       const parsed = JSON.parse(raw) as { peers?: PeerBookEntry[] };
-      for (const entry of parsed.peers ?? []) {
+      const loaded = Array.isArray(parsed.peers) ? parsed.peers : [];
+      // Best entries first, so a bloated or poisoned file cannot crowd out good ones.
+      const sanitized: PeerBookEntry[] = [];
+      for (const entry of loaded) {
+        if (!entry || typeof entry.address !== "string" || entry.address.length > 2048) continue;
         const address = normalizePeerAddress(entry.address);
-        if (!address) {
+        if (!address) continue;
+        const lastSuccess = Number(entry.lastSuccess ?? 0);
+        const fails = Number(entry.fails ?? 0);
+        const addedAt = Number(entry.addedAt ?? 0);
+        sanitized.push({
+          address,
+          lastSuccess: Number.isFinite(lastSuccess) && lastSuccess > 0 ? lastSuccess : 0,
+          fails: Number.isFinite(fails) && fails > 0 ? fails : 0,
+          addedAt: Number.isFinite(addedAt) && addedAt > 0 ? addedAt : 0
+        });
+      }
+      for (const entry of this.rankedPeerEntries(sanitized)) {
+        if (this.peerBook.has(entry.address)) {
+          const known = this.peerBook.get(entry.address)!;
+          known.lastSuccess = Math.max(known.lastSuccess, entry.lastSuccess);
+          known.fails = entry.fails;
           continue;
         }
-        this.peerBook.set(address, {
-          address,
-          lastSuccess: Number(entry.lastSuccess ?? 0),
-          fails: Number(entry.fails ?? 0)
-        });
+        if (this.peerBook.size >= this.peerBookCap()) break;
+        if (entry.lastSuccess === 0 && entry.fails >= PEER_BOOK_MAX_FAILS) continue;
+        this.peerBook.set(entry.address, entry);
       }
     } catch {
       // no peer book yet
@@ -747,7 +939,7 @@ export class GossipNetwork {
     }
     try {
       await mkdir(dirname(this.peerBookPath), { recursive: true });
-      const peers = [...this.peerBook.values()].slice(0, this.maxPeers);
+      const peers = this.rankedPeerEntries([...this.peerBook.values()]).slice(0, this.peerBookCap());
       await writeFile(this.peerBookPath, JSON.stringify({ peers }, null, 2), "utf8");
     } catch {
       // ignore persist errors
