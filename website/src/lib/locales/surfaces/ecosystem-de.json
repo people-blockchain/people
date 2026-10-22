@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Testnetz",
-    "in_development": "In Entwicklung"
+    "in_development": "In Entwicklung",
+    "live": "Verfügbar"
   },
   "labelBadges": {
     "built_by_people": "Von PEOPLE gebaut",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Werkzeuge für Clubs und Mitgliedergemeinschaften."
+    },
+    "people-predict": {
+      "summary": "Prognosemärkte für reale Ereignisse für die PEOPLE-Community."
     },
     "people-multisig": {
       "summary": "Eine gemeinsame Schatzkammer, die im Testnetz von mehreren Eigentümern verwaltet wird."

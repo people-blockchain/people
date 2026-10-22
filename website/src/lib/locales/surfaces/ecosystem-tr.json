@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Test ağı",
-    "in_development": "Geliştirme aşamasında"
+    "in_development": "Geliştirme aşamasında",
+    "live": "Kullanılabilir"
   },
   "labelBadges": {
     "built_by_people": "PEOPLE tarafından geliştirildi",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Kulüpler ve üye toplulukları için araçlar."
+    },
+    "people-predict": {
+      "summary": "PEOPLE topluluğu için gerçek dünya olaylarına yönelik tahmin piyasaları."
     },
     "people-multisig": {
       "summary": "Test ağında birden çok sahibin yönettiği ortak bir hazine."

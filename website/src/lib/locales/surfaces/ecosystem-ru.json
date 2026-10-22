@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Тестнет",
-    "in_development": "В разработке"
+    "in_development": "В разработке",
+    "live": "Доступно"
   },
   "labelBadges": {
     "built_by_people": "Сделано PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Инструменты для клубов и сообществ участников."
+    },
+    "people-predict": {
+      "summary": "Рынки прогнозов на реальные события для сообщества PEOPLE."
     },
     "people-multisig": {
       "summary": "Общая казна, которой управляют несколько владельцев в тестовой сети."

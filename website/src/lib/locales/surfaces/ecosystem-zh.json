@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "测试网",
-    "in_development": "开发中"
+    "in_development": "开发中",
+    "live": "可用"
   },
   "labelBadges": {
     "built_by_people": "由 PEOPLE 构建",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "面向俱乐部和成员社区的工具。"
+    },
+    "people-predict": {
+      "summary": "面向 PEOPLE 社区的现实事件预测市场。"
     },
     "people-multisig": {
       "summary": "测试网上由多位所有者共同管理的共享资金库。"

@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Jaringan uji",
-    "in_development": "Dalam pengembangan"
+    "in_development": "Dalam pengembangan",
+    "live": "Tersedia"
   },
   "labelBadges": {
     "built_by_people": "Dibuat oleh PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Alat untuk klub dan komunitas anggota."
+    },
+    "people-predict": {
+      "summary": "Pasar prediksi untuk peristiwa dunia nyata bagi komunitas PEOPLE."
     },
     "people-multisig": {
       "summary": "Kas bersama yang dikendalikan beberapa pemilik di jaringan uji."
