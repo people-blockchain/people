@@ -4,6 +4,7 @@ import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
 import { getNodeRpcUrl } from "@/lib/factory-config";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { evmJsonRpcMethodsAllowed } from "@/lib/evm/json-rpc-allowlist";
+import { readCappedText } from "@/lib/read-capped-text";
 
 const MAX_BODY_BYTES = 256 * 1024;
 const MAX_RESPONSE_BYTES = 4 * 1024 * 1024;
@@ -110,7 +111,7 @@ async function proxy(request: NextRequest, segments: string[]) {
   if (declaredLength > MAX_RESPONSE_BYTES) {
     return NextResponse.json({ error: "upstream_response_too_large" }, { status: 502 });
   }
-  const text = await readCappedText(upstream);
+  const text = await readCappedText(upstream, MAX_RESPONSE_BYTES);
   if (text === null) {
     return NextResponse.json({ error: "upstream_response_too_large" }, { status: 502 });
   }
@@ -118,29 +119,6 @@ async function proxy(request: NextRequest, segments: string[]) {
     status: upstream.status,
     headers: { "content-type": upstream.headers.get("content-type") ?? "application/json" },
   });
-}
-
-/** Read an upstream body, aborting as soon as it exceeds the response cap. */
-async function readCappedText(response: Response): Promise<string | null> {
-  const body = response.body;
-  if (!body) return "";
-  const reader = body.getReader();
-  const chunks: Uint8Array[] = [];
-  let total = 0;
-  try {
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      if (value) {
-        total += value.byteLength;
-        if (total > MAX_RESPONSE_BYTES) return null;
-        chunks.push(value);
-      }
-    }
-  } finally {
-    reader.releaseLock();
-  }
-  return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk))).toString("utf8");
 }
 
 export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
