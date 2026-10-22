@@ -199,8 +199,8 @@ test("/buy audit copy names exactly the three models in AI_AUDITS", () => {
   assert.deepEqual(models, ["Claude Opus 5.5", "GPT Astra", "Fable 5.1"]);
 
   const expected = {
-    en: "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
-    ru: "Аудит: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    en: "AI-assisted security reviews (not an external audit)",
+    ru: "AI-проверки безопасности (не внешний аудит)",
   };
   for (const lang of ["en", "ru"]) {
     const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).transparency;

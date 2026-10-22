@@ -259,3 +259,9 @@ Unchanged by this decision: Model A's 30/25/20/10/15/0 split itself, Growth Pool
 (that pool lives in `people-node`, not `chain/`), `sale` bucket custody (still owner-pending,
 out of scope here), and every EVM address / JSON-RPC / AMM / contract-gas decision recorded
 above.
+
+### PPL sale copy aligned with the hub contract (MF-26) — copy only
+
+| Decision | Rule | Status |
+| --- | --- | --- |
+| PPL sale copy aligned with the hub contract | Website texts (`/buy` and legal locales, litepaper, `website/docs/ppl-sale-page-{en,ru}.md`) describe the sale as: no graduation / no raise target; runs until sold out or 24 months (730 days), whichever comes first; unsold PPL goes to the Community Pool; no refunds outside sell-back; sell-back limits 2% of the reserve per day and $2,000 per address per day, fee 1.5% (3% surge). Security wording is "AI-assisted security reviews (not an external audit)". The transfer of unsold PPL to the Community Pool and the LP lock are stated as executed by the project multisig under the published policy (a project commitment, not enforced by contract code). | Copy-only change; no contract, consensus or economics change. `public/whitepaper/people-whitepaper.pdf` NOT regenerated (no build script in the repo); KYC wording decision still open |

@@ -161,7 +161,7 @@ No se prometen fechas. Cada etapa comienza cuando se cumple su condición.
 
 ## 9. Seguridad
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Revisiones de seguridad asistidas por IA (no es una auditoría externa).** Bug bounty on every page.
 - **Multifirma de tesorería.** La tesorería está controlada por el contrato multifirma 2 de 3 propio de People en la red People, creado antes de mainnet; las direcciones de los firmantes se publicarán.
 - **Direcciones publicadas.** Las direcciones de contrato de venta, devengo y liquidez se publicarán en el lanzamiento de mainnet — sin marcadores de posición.
 - **Defensa contra bots.** Verificación de humanos, límites por dispositivo e IP, límites de puntos diarios y recuperación de bots.
@@ -220,7 +220,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 - El vesting del equipo es **0% al lanzamiento, un cliff de 6 meses y luego 18 meses lineales** (24 meses en total).
 - Comisiones de lanzamiento: el plan aprobado es un importe fijo de **1 USD por lanzamiento de token y 2 USD por mint de NFT**, pagadero en PPL, USDT o USDC, con un 20% de descuento al pagar en PPL a un precio TWAP; las fábricas desplegadas aún cobran una comisión fija en PPL.
 - La **venta comunitaria de PPL** usa la curva exponencial publicada en `/buy` (inicio **$0.005** por PPL; precios y límites públicos; la compra sigue desactivada hasta el hub). No hay KYC ni comprobaciones de elegibilidad en este sitio.
-- Seguridad: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Seguridad: **Revisiones de seguridad asistidas por IA (no es una auditoría externa)**; bug bounty on every page.
 - El multisig del tesoro es **2 de 3** y se crea antes de mainnet.
 - Si la curva de un token no se agota en **180 días** desde el lanzamiento, cualquiera puede finalizarla y los tokens no vendidos van al pool comunitario de ese token. Una curva agotada pasa a liquidez como antes. (Activo en testnet.)
 - La venta de PPL, una vez abierta, dura hasta que se vendan todos los PPL o durante **24 meses**, lo que ocurra primero. El plazo es fijo y no se prorrogará. Después cualquiera puede finalizarla; los PPL no vendidos van al fondo comunitario y no hay reembolsos. Hasta entonces, los PPL no vendidos están en el multisig del proyecto y el equipo no los toca.

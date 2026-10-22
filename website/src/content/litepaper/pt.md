@@ -161,7 +161,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 
 ## 9. Segurança
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Revisões de segurança assistidas por IA (não é uma auditoria externa).** Bug bounty on every page.
 - **Multisig do tesouro.** O tesouro é controlado pelo contrato multisig 2-de-3 próprio da People na rede People, criado antes da mainnet; os endereços dos signatários serão publicados.
 - **Endereços publicados.** Os endereços do contrato de venda, vesting e liquidez serão publicados no lançamento da mainnet — sem placeholders.
 - **Defesa contra bots.** Verificação humana, limites por dispositivo e IP, limites diários de pontos e clawback de bots.
@@ -220,7 +220,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
 - Taxas de lançamento: o plano aprovado é um valor fixo de **1 USD por lançamento de token e 2 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
 - A **venda comunitária de PPL** usa a curva exponencial publicada em `/buy` (início **$0.005** por PPL; preços e limites públicos; compra desativada até o hub). Não há KYC nem verificações de elegibilidade neste site.
-- Segurança: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Segurança: **Revisões de segurança assistidas por IA (não é uma auditoria externa)**; bug bounty on every page.
 - O multisig do tesouro é **2 de 3** e é criado antes da mainnet.
 - Se a curva de um token não esgotar em **180 dias** após o lançamento, qualquer pessoa pode finalizá-la e os tokens não vendidos vão para o pool comunitário desse token. Uma curva esgotada passa para a liquidez como antes. (Ativo na testnet.)
 - A venda de PPL, depois de aberta, segue até vender todo o PPL ou por **24 meses**, o que vier primeiro. O prazo é fixo e não será prorrogado. Depois qualquer pessoa pode finalizá-la; PPL não vendido vai ao fundo comunitário e não há reembolsos. Até então, PPL não vendido fica no multisig do projeto e a equipe não o toca.

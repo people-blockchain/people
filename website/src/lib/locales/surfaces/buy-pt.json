@@ -119,7 +119,7 @@
       },
       {
         "title": "recompra da reserva",
-        "body": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
+        "body": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite de $2.000 por endereço por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
       },
       {
         "title": "Transferências abrem com o lançamento completo da rede",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Se a curva não esgotar",
-        "body": "O prazo é fixo e não será prorrogado. O valor arrecadado mantém o mesmo reparto {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos fora da revenda. Até a venda terminar, PPL não vendido fica no multisig do projeto e a equipe não o toca."
+        "body": "O prazo é fixo e não será prorrogado. O valor arrecadado mantém o mesmo reparto {liquidityShare}/{multisigShare}, todo PPL não vendido vai ao fundo comunitário e não há reembolsos fora da revenda. Até a venda terminar, PPL não vendido fica no multisig do projeto e a equipe não o toca. A transferência do PPL não vendido ao fundo comunitário e o bloqueio de LP são executados pelo multisig do projeto conforme a política publicada."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Código-fonte verificado",
     "auditTitle": "Revisões de segurança",
-    "auditLine": "Auditado por: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Revisões de segurança assistidas por IA (não é uma auditoria externa)",
     "explorerLink": "Abrir no explorador People",
     "allocationTitle": "Para onde vão 1B PPL",
     "allocationNote": "Oferta fixa de {supply} PPL. O lote de venda são esses {salePct} na curva.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Posso vender PPL de volta?",
-        "a": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite pessoal de $2.000 por pessoa por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
+        "a": "A revenda a partir da reserva é só para pessoas verificadas: cada lote de compra deve ser mantido por 30 dias antes de poder ser revendido; o preço de revenda é o preço da curva no momento da saída; limite global de 2% da reserva por dia; limite de $2.000 por endereço por dia; taxa de 1,5% (3% quando o total de revendas do dia excede 1% da reserva); a revenda encerra quando a venda termina; pagamentos em USDC na Base."
       },
       {
         "q": "O teto de {ceiling} é permanente?",
@@ -210,7 +210,7 @@
       {
         "problem": "Snipers e bots",
         "what": "Scripts compram nos primeiros segundos de muitas carteiras e vendem a pessoas reais.",
-        "ours": "Até {perBuy} por compra, {perDay} por pessoa por dia e pausa de {cooldown} segundos entre operações. Se bots aparecerem, o multisig pode ativar modo só verificados."
+        "ours": "Até {perBuy} por compra, {perDay} por endereço por dia e pausa de {cooldown} segundos entre operações. Se bots aparecerem, o multisig pode ativar modo só verificados."
       },
       {
         "problem": "Dumps",

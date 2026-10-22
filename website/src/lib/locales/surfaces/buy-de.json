@@ -119,7 +119,7 @@
       },
       {
         "title": "Rückkauf aus der Reserve",
-        "body": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet mit dem Verkaufsende; Auszahlungen in USDC auf Base."
+        "body": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; Limit 2.000 $ pro Adresse und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet mit dem Verkaufsende; Auszahlungen in USDC auf Base."
       },
       {
         "title": "Transfers ab vollständigem Netzwerkstart",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Wenn die Kurve nicht ausverkauft ist",
-        "body": "Die Laufzeit ist fest und wird nicht verlängert. Das Eingenommene wird weiterhin {liquidityShare}/{multisigShare} geteilt, unverkaufte PPL gehen in den Community-Pool, und es gibt keine Erstattungen außerhalb des Rückverkaufs. Bis der Verkauf endet, liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu."
+        "body": "Die Laufzeit ist fest und wird nicht verlängert. Das Eingenommene wird weiterhin {liquidityShare}/{multisigShare} geteilt, unverkaufte PPL gehen in den Community-Pool, und es gibt keine Erstattungen außerhalb des Rückverkaufs. Bis der Verkauf endet, liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu. Die Übertragung unverkaufter PPL in den Community-Pool und die LP-Sperre führt das Projekt-Multisig gemäß der veröffentlichten Richtlinie aus."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Verifizierter Quellcode",
     "auditTitle": "Sicherheitsreviews",
-    "auditLine": "Geprüft von: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "KI-gestützte Sicherheitsprüfungen (kein externes Audit)",
     "explorerLink": "Im People-Explorer öffnen",
     "allocationTitle": "Wohin 1B PPL gehen",
     "allocationNote": "Festes Angebot von {supply} PPL. Der Verkaufsanteil sind die {salePct} auf der Kurve.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Kann ich PPL zurückverkaufen?",
-        "a": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; persönliches Limit 2.000 $ pro Person und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet mit dem Verkaufsende; Auszahlungen in USDC auf Base."
+        "a": "Rückverkauf aus der Reserve nur für verifizierte Personen: jedes Kauflos muss 30 Tage gehalten werden, bevor es zurückverkauft werden kann; der Rückverkaufspreis ist der Kurvenpreis im Moment des Ausstiegs; globales Limit 2 % der Reserve pro Tag; Limit 2.000 $ pro Adresse und Tag; Gebühr 1,5 % (3 %, wenn die gesamten Rückverkäufe an diesem Tag 1 % der Reserve übersteigen); Rückverkauf endet mit dem Verkaufsende; Auszahlungen in USDC auf Base."
       },
       {
         "q": "Ist die Obergrenze {ceiling} dauerhaft?",
@@ -210,7 +210,7 @@
       {
         "problem": "Snipers und Bots",
         "what": "Skripte kaufen in den ersten Sekunden von vielen Wallets und verkaufen an echte Nutzer.",
-        "ours": "Bis {perBuy} pro Kauf, {perDay} pro Person und Tag und {cooldown} Sekunden Pause zwischen Trades. Bei Bots kann das Multisig einen Nur-Verifiziert-Modus aktivieren."
+        "ours": "Bis {perBuy} pro Kauf, {perDay} pro Adresse und Tag und {cooldown} Sekunden Pause zwischen Trades. Bei Bots kann das Multisig einen Nur-Verifiziert-Modus aktivieren."
       },
       {
         "problem": "Dumps",
