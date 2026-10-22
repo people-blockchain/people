@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { compileIsolated, type CompilationOutput } from "@/lib/solidity-compiler";
+import { auth } from "@/auth";
 import { lookupPrecompiledTemplate } from "@/lib/contract-precompiled";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkRateLimitDurableFirst } from "@/lib/api-rate-limit";
 import {
+  CONTRACT_COMPILE_IP_RATE_PER_MIN,
   CONTRACT_COMPILE_RATE_PER_MIN,
-  CONTRACT_COMPILE_TIMEOUT_MS,
+  MAX_CONTRACT_SOURCE_BYTES,
   sourceWithinLimit
 } from "@/lib/contract-api-guards";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
@@ -12,77 +13,71 @@ import { clientIpFromRequest } from "@/lib/request-client-ip";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-function jsonFromOutput(fileName: string, output: CompilationOutput) {
-  const errors = (output.errors ?? []).filter((item) => item.severity === "error");
-  if (errors.length > 0 || !output.contracts?.[fileName]) {
-    return NextResponse.json(
-      { error: "compile_failed", details: errors.map((e) => e.formattedMessage) },
-      { status: 400 }
-    );
-  }
-  const contracts = output.contracts[fileName]!;
-  const name = Object.keys(contracts)[0];
-  if (!name) {
-    return NextResponse.json({ error: "no_contract" }, { status: 400 });
-  }
-  const compiled = contracts[name]!;
-  const bytecode = compiled.evm.bytecode.object;
-  if (!bytecode) {
-    return NextResponse.json({ error: "empty_bytecode" }, { status: 400 });
-  }
-  return NextResponse.json({
-    name,
-    abi: compiled.abi,
-    bytecode: bytecode.startsWith("0x") ? bytecode : `0x${bytecode}`,
-    deployedBytecode: compiled.evm.deployedBytecode.object,
-    compiler: "solc-0.8"
-  });
-}
+/** JSON envelope overhead allowed on top of the source cap (fileName, templateId, escaping). */
+const MAX_BODY_BYTES = MAX_CONTRACT_SOURCE_BYTES * 2 + 1024;
 
+/**
+ * MF-16: this endpoint never invokes solc. It only serves artifacts that were precompiled at
+ * build time from the reviewed templates, matched by template id, file name and exact source
+ * hash. Arbitrary ("freeform") Solidity is rejected server-side: no role exists that is allowed
+ * to compile it, and the former `freeform` flag was only a client-side hint.
+ */
 export async function POST(request: Request) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return NextResponse.json({ error: "sign_in_required" }, { status: 401 });
+  }
+
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("contracts-compile", ip, CONTRACT_COMPILE_RATE_PER_MIN, 60_000)) {
+  if (
+    !(await checkRateLimitDurableFirst("contracts-compile-user", userId, CONTRACT_COMPILE_RATE_PER_MIN, 60_000)) ||
+    !(await checkRateLimitDurableFirst("contracts-compile-ip", ip, CONTRACT_COMPILE_IP_RATE_PER_MIN, 60_000))
+  ) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 
-  const body = (await request.json().catch(() => ({}))) as {
-    source?: string;
-    fileName?: string;
-    templateId?: string;
-    freeform?: boolean;
-  };
-  const source = typeof body?.source === "string" ? body.source.trim() : "";
-  if (source.length < 20) {
+  const declared = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(declared) && declared > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "source_too_large" }, { status: 413 });
+  }
+  const raw = await request.text().catch(() => "");
+  if (raw.length > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "source_too_large" }, { status: 413 });
+  }
+  let body: { source?: unknown; fileName?: unknown; templateId?: unknown; freeform?: unknown } = {};
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed && typeof parsed === "object") body = parsed as typeof body;
+  } catch {
+    body = {};
+  }
+
+  // Do not trim: template artifacts are matched by the hash of the exact, untrimmed source.
+  const source = typeof body.source === "string" ? body.source : "";
+  if (source.trim().length < 20) {
     return NextResponse.json({ error: "source_required" }, { status: 400 });
   }
   if (!sourceWithinLimit(source)) {
     return NextResponse.json({ error: "source_too_large" }, { status: 413 });
   }
-  if (body.freeform && process.env.CONTRACT_AI_FREEFORM !== "1" && process.env.CONTRACT_AI_FREEFORM !== "true") {
+  if (body.freeform) {
     return NextResponse.json({ error: "freeform_disabled" }, { status: 400 });
   }
-  const fileName = (typeof body.fileName === "string" ? body.fileName : "Contract.sol").replace(/[^A-Za-z0-9._-]/g, "") || "Contract.sol";
+  const fileName =
+    (typeof body.fileName === "string" ? body.fileName : "Contract.sol").replace(/[^A-Za-z0-9._-]/g, "") ||
+    "Contract.sol";
   const templateId = typeof body.templateId === "string" ? body.templateId : undefined;
 
   const precompiled = lookupPrecompiledTemplate(templateId, source, fileName);
-  if (precompiled) {
-    return NextResponse.json({
-      name: precompiled.name,
-      abi: precompiled.abi,
-      bytecode: precompiled.bytecode,
-      deployedBytecode: precompiled.deployedBytecode,
-      compiler: precompiled.compiler
-    });
+  if (!precompiled) {
+    return NextResponse.json({ error: "template_required" }, { status: 400 });
   }
-
-  let output: CompilationOutput;
-  try {
-    output = await compileIsolated(fileName, source, CONTRACT_COMPILE_TIMEOUT_MS);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "compile_failed";
-    const status = message === "compile_timeout" ? 504 : message === "compiler_busy" ? 429 : 500;
-    return NextResponse.json({ error: message }, { status });
-  }
-
-  return jsonFromOutput(fileName, output);
+  return NextResponse.json({
+    name: precompiled.name,
+    abi: precompiled.abi,
+    bytecode: precompiled.bytecode,
+    deployedBytecode: precompiled.deployedBytecode,
+    compiler: precompiled.compiler
+  });
 }
