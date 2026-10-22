@@ -800,29 +800,65 @@ export const BATCH_FEE_CAP = BATCH_FEE_CAP_PPL;
 export const DEFAULT_TRANSFER_FEE = DEFAULT_TRANSFER_FEE_PPL;
 const MAX_MEMPOOL_SIZE = Number(process.env.MEMPOOL_MAX_SIZE ?? 10_000);
 
-/** Onboarding transactions are fee-0 by rule and are never evicted to make room. */
+/** Onboarding transactions are fee-0 by rule; they live in a bounded quota of the mempool. */
 function isOnboardingTx(tx: Transaction): boolean {
   return tx.type === "registerParticipant" || tx.type === "participantReferral";
 }
 
 /**
+ * Node-local cap on pending fee-0 onboarding transactions: 10% of `MEMPOOL_MAX_SIZE` (at least 1)
+ * unless `MEMPOOL_ONBOARDING_MAX` holds a non-negative integer. Never above the pool size.
+ */
+function resolveOnboardingQuota(maxSize: number, raw: string | undefined): number {
+  const fallback = Math.max(1, Math.floor(maxSize * 0.1));
+  if (raw === undefined || raw.trim() === "") return Math.min(fallback, maxSize);
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed) || parsed < 0) return Math.min(fallback, maxSize);
+  return Math.min(parsed, maxSize);
+}
+
+const MAX_ONBOARDING_MEMPOOL = resolveOnboardingQuota(MAX_MEMPOOL_SIZE, process.env.MEMPOOL_ONBOARDING_MAX);
+
+/**
  * Node-local mempool admission (`state.mempool` is not part of `computeStateRoot`, and blocks
  * carry only the transactions they include, so this is not a consensus rule).
  *
- * A full mempool replaces its cheapest evictable transaction rather than rejecting the
- * newcomer outright, but only when the newcomer pays strictly more — otherwise a
- * minimum-fee flood could push out everything that pays, and an onboarding transaction
- * (fee 0 by rule) could never make room for real value transfer.
+ * - Fee-0 onboarding transactions share a separate quota. When the quota is full a new
+ *   onboarding transaction is rejected (not swapped in): evicting the oldest would let a flood of
+ *   fresh keys push out registrations that are closest to block inclusion and were already
+ *   accepted, starving honest users; rejecting keeps the queue FIFO and cannot be displaced.
+ * - A paid transaction is never refused because of onboarding transactions: when the pool is
+ *   full, the oldest onboarding transaction (first in the pool) is evicted for it.
+ * - With no onboarding transactions left to evict, a full mempool replaces its cheapest paid
+ *   transaction, but only when the newcomer pays strictly more, so a minimum-fee flood cannot
+ *   push out everything that pays.
  */
 function admitToMempool(state: ChainState, tx: Transaction): void {
+  if (isOnboardingTx(tx)) {
+    let pendingOnboarding = 0;
+    for (const pending of state.mempool) {
+      if (isOnboardingTx(pending)) pendingOnboarding += 1;
+    }
+    if (pendingOnboarding >= MAX_ONBOARDING_MEMPOOL) {
+      throw new Error("Onboarding mempool quota is full");
+    }
+    if (state.mempool.length >= MAX_MEMPOOL_SIZE) throw new Error("Mempool is full");
+    state.mempool.push(tx);
+    return;
+  }
   if (state.mempool.length < MAX_MEMPOOL_SIZE) {
+    state.mempool.push(tx);
+    return;
+  }
+  const oldestOnboarding = state.mempool.findIndex(isOnboardingTx);
+  if (oldestOnboarding >= 0) {
+    state.mempool.splice(oldestOnboarding, 1);
     state.mempool.push(tx);
     return;
   }
   let victimIndex = -1;
   for (let i = 0; i < state.mempool.length; i += 1) {
     const candidate = state.mempool[i]!;
-    if (isOnboardingTx(candidate)) continue;
     if (victimIndex < 0 || candidate.fee < state.mempool[victimIndex]!.fee) victimIndex = i;
   }
   if (victimIndex < 0 || !(tx.fee > state.mempool[victimIndex]!.fee)) {

@@ -76,13 +76,18 @@ test("M13-3: a newcomer that does not outbid the cheapest is refused, leaving st
   expect(state.mempool).toEqual(before);
 });
 
-test("M13-3: onboarding transactions are never evicted to make room", () => {
+test("MF-20: a paid transaction evicts the oldest onboarding transaction instead of being refused", () => {
   const state = createInitialState(DEFAULT_CONFIG);
-  for (let i = 0; i < 3; i += 1) {
-    enqueueTransaction(state, onboardingTx(state, i) as never, false);
-  }
+  // Quota is 1 at MEMPOOL_MAX_SIZE=3, so fill the rest with paid transactions.
+  enqueueTransaction(state, onboardingTx(state, 0) as never, false);
+  enqueueTransaction(state, fundedTx(state, 0.005));
+  enqueueTransaction(state, fundedTx(state, 0.006));
   expect(state.mempool).toHaveLength(3);
 
-  expect(() => enqueueTransaction(state, fundedTx(state, 1))).toThrow("Mempool is full");
-  expect(state.mempool.every((tx) => tx.type === "registerParticipant")).toBe(true);
+  const newcomer = fundedTx(state, 0.005);
+  enqueueTransaction(state, newcomer);
+
+  expect(state.mempool).toHaveLength(3);
+  expect(state.mempool.some((tx) => tx.type === "registerParticipant")).toBe(false);
+  expect(state.mempool.some((tx) => tx.id === newcomer.id)).toBe(true);
 });
