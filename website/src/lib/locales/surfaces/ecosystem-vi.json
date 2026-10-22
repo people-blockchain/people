@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "Mạng thử nghiệm",
-    "in_development": "Đang phát triển"
+    "in_development": "Đang phát triển",
+    "live": "Có sẵn"
   },
   "labelBadges": {
     "built_by_people": "Được xây dựng bởi PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "Công cụ cho câu lạc bộ và cộng đồng thành viên."
+    },
+    "people-predict": {
+      "summary": "Thị trường dự đoán về các sự kiện trong thế giới thực cho cộng đồng PEOPLE."
     },
     "people-multisig": {
       "summary": "Kho quỹ chung do nhiều chủ sở hữu kiểm soát trên mạng thử nghiệm."

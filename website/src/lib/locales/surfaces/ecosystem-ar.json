@@ -13,7 +13,8 @@
   },
   "statusLabels": {
     "testnet": "الشبكة التجريبية",
-    "in_development": "قيد التطوير"
+    "in_development": "قيد التطوير",
+    "live": "متاح"
   },
   "labelBadges": {
     "built_by_people": "صُنع بواسطة PEOPLE",
@@ -25,6 +26,9 @@
     },
     "people-clubs": {
       "summary": "أدوات للأندية ومجتمعات الأعضاء."
+    },
+    "people-predict": {
+      "summary": "أسواق توقعات للأحداث الواقعية لمجتمع PEOPLE."
     },
     "people-multisig": {
       "summary": "خزينة مشتركة يديرها عدة مالكين على الشبكة التجريبية."
