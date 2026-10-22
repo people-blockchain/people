@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
@@ -27,7 +27,7 @@ function cacheHeaderFor(path: string): string | null {
 
 export async function GET(request: NextRequest, context: { params: Promise<{ path: string[] }> }) {
   if (
-    !checkSlidingWindowRateLimit("evm-compat", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)
+    !await checkSharedRateLimit("evm-compat", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)
   ) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }

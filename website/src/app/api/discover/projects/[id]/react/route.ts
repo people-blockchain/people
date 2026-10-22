@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { discoverApiGuard, clientIp } from "@/lib/discover/api-guard";
 import { getProjectById, setReaction } from "@/lib/discover/service";
 import { tryAwardFounderPoints } from "@/lib/founders/service";
@@ -20,7 +20,7 @@ export async function POST(request: Request, { params }: Params) {
   }
   const key = `${guard.userId}:${clientIp(request)}`;
   if (
-    !checkSlidingWindowRateLimit(
+    !await checkSharedRateLimit(
       "discover-react",
       key,
       DISCOVER_SCORING.rateLimits.reactionsPerUserPerHour,

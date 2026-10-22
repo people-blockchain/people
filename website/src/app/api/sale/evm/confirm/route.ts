@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import {
   checkEvmPurchaseAgainstOrder,
@@ -23,7 +23,7 @@ import { and, eq, ne, sql } from "drizzle-orm";
  */
 export async function POST(request: Request) {
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("sale-evm-confirm", ip, 20, 60_000)) {
+  if (!await checkSharedRateLimit("sale-evm-confirm", ip, 20, 60_000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const session = await auth();

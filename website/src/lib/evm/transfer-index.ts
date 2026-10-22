@@ -36,16 +36,34 @@ function topicAddress(topic: string | undefined): string {
   return getAddress(`0x${topic.slice(26)}`);
 }
 
+const DEFAULT_MAX_SCAN_WINDOWS = 500;
+
+/**
+ * Upper bound on sequential `eth_getLogs` windows one scan may issue, so a single request cannot
+ * walk an ever-growing chain. Override with EVM_TRANSFER_SCAN_MAX_WINDOWS (positive integer).
+ */
+export function maxTransferScanWindows(): number {
+  const n = Number(process.env.EVM_TRANSFER_SCAN_MAX_WINDOWS);
+  return Number.isFinite(n) && n >= 1 ? Math.floor(n) : DEFAULT_MAX_SCAN_WINDOWS;
+}
+
 export async function fetchTransferLogs(
   tokenAddress: string,
   fromBlock = deploymentStartBlock(),
   toBlock?: number,
+  maxWindows = maxTransferScanWindows(),
 ): Promise<IndexedTransfer[]> {
   const token = getAddress(tokenAddress);
-  const latest = toBlock ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", []));
+  const head = toBlock ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", []));
+  const first = Math.max(0, fromBlock);
+  // Past the cap the scan stops at a fixed block: results stay consistent, just stale.
+  const latest = Math.min(head, first + maxWindows * 9_000 - 1);
+  if (latest < head) {
+    console.warn(`[transfer-index] scan capped at ${maxWindows} windows (blocks ${first}..${latest} of ${head})`);
+  }
   // Cosmos EVM caps eth_getLogs at 10,000 blocks per query; scan in windows.
   const logs: RpcLog[] = [];
-  for (let start = Math.max(0, fromBlock); start <= latest; start += 9_000) {
+  for (let start = first; start <= latest; start += 9_000) {
     const end = Math.min(latest, start + 8_999);
     const chunk = await evmJsonRpc<RpcLog[]>("eth_getLogs", [
       {
@@ -79,17 +97,36 @@ export type TokenHolderRow = { address: string; balance: bigint };
 
 /** Full-history log scans are expensive; cache briefly to blunt anonymous scraping. */
 const HOLDERS_TTL_MS = 30_000;
+/** LRU bound: Map iteration follows insertion order, so the first key is the least recent. */
+export const HOLDERS_CACHE_MAX_ENTRIES = 64;
 const holdersCache = new Map<string, { at: number; value: TokenHolderRow[] }>();
 
 export function resetTransferIndexCacheForTests(): void {
   holdersCache.clear();
 }
 
+export function holdersCacheSizeForTests(): number {
+  return holdersCache.size;
+}
+
+function rememberHolders(key: string, entry: { at: number; value: TokenHolderRow[] }): void {
+  holdersCache.delete(key);
+  while (holdersCache.size >= HOLDERS_CACHE_MAX_ENTRIES) {
+    const oldest = holdersCache.keys().next().value;
+    if (oldest === undefined) break;
+    holdersCache.delete(oldest);
+  }
+  holdersCache.set(key, entry);
+}
+
 /** Aggregate wallet balances from Transfer logs (excludes zero-balance addresses). */
 export async function aggregateHoldersFromTransfers(tokenAddress: string): Promise<TokenHolderRow[]> {
   const cacheKey = tokenAddress.trim().toLowerCase();
   const cached = holdersCache.get(cacheKey);
-  if (cached && Date.now() - cached.at < HOLDERS_TTL_MS) return cached.value;
+  if (cached && Date.now() - cached.at < HOLDERS_TTL_MS) {
+    rememberHolders(cacheKey, cached);
+    return cached.value;
+  }
   const transfers = await fetchTransferLogs(tokenAddress);
   const balances = new Map<string, bigint>();
   for (const t of transfers) {
@@ -102,7 +139,7 @@ export async function aggregateHoldersFromTransfers(tokenAddress: string): Promi
     .filter(([, bal]) => bal > BigInt(0))
     .map(([address, balance]) => ({ address, balance }))
     .sort((a, b) => (a.balance > b.balance ? -1 : a.balance < b.balance ? 1 : a.address.localeCompare(b.address)));
-  holdersCache.set(cacheKey, { at: Date.now(), value });
+  rememberHolders(cacheKey, { at: Date.now(), value });
   return value;
 }
 

@@ -128,7 +128,7 @@ test("the confirm route requires a session, rate-limits, and never reads amounts
   );
   assert.match(src, /await auth\(\)/);
   assert.match(src, /sign_in_required/);
-  assert.match(src, /checkSlidingWindowRateLimit\("sale-evm-confirm"/);
+  assert.match(src, /checkSharedRateLimit\("sale-evm-confirm"/);
   // The only request fields are the order id and tx hash; amounts are re-derived on chain.
   assert.doesNotMatch(src, /body\.(ppl|usdt|amount|min)/i);
 });

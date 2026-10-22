@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { isPinataConfigured } from "@/lib/factory-icon-config";
 import { pinBytesToIpfs, toIpfsUri, ipfsGatewayUrl } from "@/lib/ipfs";
 import { sniffImageType } from "@/lib/media-sniff";
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   if (!session?.user?.id) {
     return NextResponse.json({ error: "sign_in_required" }, { status: 401 });
   }
-  if (!checkSlidingWindowRateLimit("factory-media-upload", session.user.id, UPLOAD_LIMIT, UPLOAD_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("factory-media-upload", session.user.id, UPLOAD_LIMIT, UPLOAD_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const form = await request.formData();

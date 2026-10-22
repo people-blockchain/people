@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { setPublicProfileOptIn } from "@/lib/founders/transparency";
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   if (!guard.ok) return guard.response;
 
   if (
-    !checkSlidingWindowRateLimit(
+    !await checkSharedRateLimit(
       "founders-profile-visibility",
       `${guard.userId}:${clientIp(request)}`,
       10,
