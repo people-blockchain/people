@@ -197,8 +197,13 @@ npm run ci:smoke
 | `PEER_ID` | `@people/node` | `peer-<rand>` | Unique identifier for the node peer |
 | `BOOTSTRAP_PEERS`| `@people/node` | `""` | Comma-separated gossip seeds (`host:4002`, `ws://host:4002`, `wss://…`) |
 | `PUBLIC_GOSSIP_URL` | `@people/node` | `""` | Advertised listen URL for peer-exchange (`ws://PUBLIC_IP:4002`). Alias: `GOSSIP_ADVERTISE`. Without this, hello advertises `ws://127.0.0.1:$GOSSIP_PORT`, which other hosts cannot dial. |
+| `GOSSIP_BIND_HOST` | `@people/node` | unset (all interfaces) | Interface the gossip WebSocket server binds to (for example `127.0.0.1`). Unset keeps the previous behaviour of listening on every interface. Independent of `BIND_HOST`, which only affects the HTTP API. |
+| `P2P_MAX_PEERS_PER_IP` | `@people/node` | `2` | Max simultaneous gossip connections (inbound and outbound together) per remote IP. IPv4 is matched exactly, IPv6 per /64, IPv4-mapped IPv6 as its IPv4. Loopback is exempt. |
+| `P2P_MAX_INBOUND` | `@people/node` | `24` (`32 - 8`) | Max inbound gossip connections. The remaining slots of the 32-peer table stay reserved for outbound dials so inbound peers cannot occupy all of them. |
 | `CHAIN_ID` | `@people/node` | `people-devnet` | Blockchain network identifier |
 | `ALLOW_DEV_ENDPOINTS` | `@people/node` | `""` | Set to `1` to enable debug/dev-only routes. Public Railway testnet must leave this unset. Testnet faucet is `ALLOW_FAUCET=1` instead. |
+| `MEMPOOL_MAX_SIZE` | `@people/core` | `10000` | Node-local cap on pending transactions in the mempool. Not a consensus rule. |
+| `MEMPOOL_ONBOARDING_MAX` | `@people/core` | 10% of `MEMPOOL_MAX_SIZE` (min 1) | Separate node-local quota for fee-0 onboarding transactions (`registerParticipant`, `participantReferral`). When it is full, new onboarding transactions are rejected (`Onboarding mempool quota is full`). A paid transaction arriving at a full mempool evicts the oldest onboarding transaction instead of being rejected. Non-negative integer, capped at `MEMPOOL_MAX_SIZE`; invalid values fall back to the default. |
 | `PPL_PRICE_USD` | `@people/node` | `0.12` | Fallback reference for node metrics only. Not a market rate. Do not show USD on the public website. |
 | `TOKEN_CREATE_MIN_FEE` | `@people/core` | `1.045005` | Owner-approved minimum `tokenCreate` fee in PPL. |
 | `NFT_MINT_MIN_FEE` | `@people/core` | `2.925` | Owner-approved minimum `nftMint` fee in PPL. |
@@ -275,6 +280,8 @@ curl -sS http://127.0.0.1:4001/health
 | 443 | HTTPS к API | Опционально, terminate на proxy; gossip в этом образе без TLS (`ws://`) |
 
 Railway: HTTP = `$PORT`. Gossip 4002 нужно публиковать отдельно, если эта нода — seed.
+
+В `docker-compose.yml` и `docker-compose.node.yml` порты публикуются на `127.0.0.1` по умолчанию. Чтобы gossip был доступен с других хостов, задайте `GOSSIP_BIND=0.0.0.0` (и `PUBLIC_GOSSIP_URL`) в `.env` и закройте порт firewall'ом от лишних источников; `API_BIND` / `WEB_BIND` меняйте только за reverse proxy. `docker-compose.prod.yml` по умолчанию держит `ALLOW_FAUCET=0`.
 
 ### Публичный HTTPS для ноды на VPS
 

@@ -19,7 +19,8 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:${HOST_HTTP_PORT:-4001}:4001"
-      - "${HOST_GOSSIP_PORT:-4002}:4002"
+      # Loopback by default; set GOSSIP_BIND=0.0.0.0 on a seed that must be dialable.
+      - "${GOSSIP_BIND:-127.0.0.1}:${HOST_GOSSIP_PORT:-4002}:4002"
     environment:
       PEER_ID: ${PEER_ID:-vps-node-1}
       PORT: 4001
