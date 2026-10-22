@@ -31,7 +31,7 @@
       "summary": "Prediction markets on real-world events for the PEOPLE community."
     },
     "people-multisig": {
-      "summary": "A shared treasury controlled by several owners on the testnet."
+      "summary": "A shared treasury controlled by several owners."
     },
     "people-wallet": {
       "summary": "A non-custodial PPL wallet in the browser, with optional Google sign-in."

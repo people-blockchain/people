@@ -31,7 +31,7 @@
       "summary": "Prognosemärkte für reale Ereignisse für die PEOPLE-Community."
     },
     "people-multisig": {
-      "summary": "Eine gemeinsame Schatzkammer, die im Testnetz von mehreren Eigentümern verwaltet wird."
+      "summary": "Eine gemeinsame Schatzkammer, die von mehreren Eigentümern verwaltet wird."
     },
     "people-wallet": {
       "summary": "Eine nicht-verwahrende PPL-Wallet im Browser mit optionaler Anmeldung über Google."
