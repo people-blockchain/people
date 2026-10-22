@@ -119,7 +119,7 @@
       },
       {
         "title": "Venta de vuelta desde la reserva",
-        "body": "La venta de vuelta desde la reserva es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope personal de $2.000 por persona y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra cuando termina la venta; pagos en USDC en Base."
+        "body": "La venta de vuelta desde la reserva es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope de $2.000 por dirección y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra cuando termina la venta; pagos en USDC en Base."
       },
       {
         "title": "Las transferencias se abren con el lanzamiento completo de la red",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Si la curva no se agota",
-        "body": "El plazo es fijo y no se prorrogará. Lo recaudado mantiene el mismo reparto {liquidityShare}/{multisigShare}, todo el PPL no vendido va al fondo comunitario y no hay reembolsos fuera de la venta de vuelta. Hasta que termine la venta, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca."
+        "body": "El plazo es fijo y no se prorrogará. Lo recaudado mantiene el mismo reparto {liquidityShare}/{multisigShare}, todo el PPL no vendido va al fondo comunitario y no hay reembolsos fuera de la venta de vuelta. Hasta que termine la venta, el PPL no vendido está en el multisig del proyecto y el equipo no lo toca. La transferencia del PPL no vendido al fondo comunitario y el bloqueo de LP los ejecuta el multisig del proyecto según la política publicada."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Código fuente verificado",
     "auditTitle": "Revisiones de seguridad",
-    "auditLine": "Auditado por: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Revisiones de seguridad asistidas por IA (no es una auditoría externa)",
     "explorerLink": "Abrir en el explorador People",
     "allocationTitle": "Adónde van 1B PPL",
     "allocationNote": "Oferta fija de {supply} PPL. El tramo de venta son esos {salePct} en la curva.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "¿Puedo vender PPL de vuelta?",
-        "a": "La venta de vuelta desde la reserva es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope personal de $2.000 por persona y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra cuando termina la venta; pagos en USDC en Base."
+        "a": "La venta de vuelta desde la reserva es solo para personas verificadas: cada lote de compra debe mantenerse 30 días antes de poder venderse de vuelta; el precio de venta de vuelta es el precio de la curva en el momento de la salida; tope global del 2% de la reserva por día; tope de $2.000 por dirección y día; comisión del 1,5% (3% cuando el total de ventas de vuelta del día supera el 1% de la reserva); la venta de vuelta se cierra cuando termina la venta; pagos en USDC en Base."
       },
       {
         "q": "¿El tope de {ceiling} es permanente?",
@@ -214,7 +214,7 @@
       {
         "problem": "Snipers y bots",
         "what": "Scripts compran en los primeros segundos desde muchas carteras y venden a personas reales.",
-        "ours": "Hasta {perBuy} por compra, {perDay} por persona al día y una pausa de {cooldown} segundos entre operaciones. Si aparecen bots, el multisig puede activar un modo solo verificados."
+        "ours": "Hasta {perBuy} por compra, {perDay} por dirección al día y una pausa de {cooldown} segundos entre operaciones. Si aparecen bots, el multisig puede activar un modo solo verificados."
       },
       {
         "problem": "Dumps",

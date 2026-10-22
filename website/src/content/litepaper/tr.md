@@ -161,7 +161,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 ## 9. Güvenlik
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Yapay zekâ destekli güvenlik incelemeleri (harici denetim değildir).** Bug bounty on every page.
 - **Hazine multisig.** Hazine, People ağındaki People'ın kendi 2/3 multisig sözleşmesiyle yönetilir ve mainnet'ten önce oluşturulur; imzalayan adresler yayınlanacaktır.
 - **Yayınlanan adresler.** Satış, hak ediş ve likidite sözleşme adresleri mainnet başlatmasında yayınlanacak — yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
@@ -220,7 +220,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.
-- Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Güvenlik: **Yapay zekâ destekli güvenlik incelemeleri (harici denetim değildir)**; bug bounty on every page.
 - Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
 - Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
 - PPL satışı açıldıktan sonra tüm PPL satılana veya **24 ay** dolana kadar — hangisi önce gelirse — sürer. Süre sabittir ve uzatılmaz. Ardından herkes sonlandırabilir; satılmayan PPL topluluk havuzuna gider, iade yoktur. O zamana kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz.

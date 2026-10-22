@@ -119,7 +119,7 @@
       },
       {
         "title": "mua lại từ quỹ dự trữ",
-        "body": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng khi đợt bán kết thúc; thanh toán bằng USDC trên Base."
+        "body": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn $2.000 mỗi địa chỉ mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng khi đợt bán kết thúc; thanh toán bằng USDC trên Base."
       },
       {
         "title": "Chuyển token mở khi mạng ra mắt đầy đủ",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Nếu đường cong không bán hết",
-        "body": "Thời hạn cố định và không gia hạn. Số tiền gom được vẫn chia theo {liquidityShare}/{multisigShare}, toàn bộ PPL chưa bán vào quỹ cộng đồng, không hoàn tiền ngoài bán lại. Đến khi đợt bán kết thúc, PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào."
+        "body": "Thời hạn cố định và không gia hạn. Số tiền gom được vẫn chia theo {liquidityShare}/{multisigShare}, toàn bộ PPL chưa bán vào quỹ cộng đồng, không hoàn tiền ngoài bán lại. Đến khi đợt bán kết thúc, PPL chưa bán được giữ trong multisig dự án, đội ngũ không chạm vào. Việc chuyển PPL chưa bán vào quỹ cộng đồng và khóa LP do multisig dự án thực hiện theo chính sách đã công bố."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Mã nguồn đã xác minh",
     "auditTitle": "Rà soát bảo mật",
-    "auditLine": "Kiểm toán bởi: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Rà soát bảo mật có hỗ trợ AI (không phải kiểm toán bên ngoài)",
     "explorerLink": "Mở trong trình duyệt People",
     "allocationTitle": "1B PPL phân bổ thế nào",
     "allocationNote": "Cung cố định {supply} PPL. Phần bán là {salePct} trên đường cong.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Tôi có thể bán lại PPL không?",
-        "a": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn cá nhân $2.000 mỗi người mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng khi đợt bán kết thúc; thanh toán bằng USDC trên Base."
+        "a": "Bán lại từ quỹ dự trữ chỉ dành cho người đã xác minh: mỗi lô mua phải được giữ 30 ngày trước khi có thể bán lại; giá bán lại là giá đường cong tại thời điểm thoát; giới hạn toàn cầu 2% dự trữ mỗi ngày; giới hạn $2.000 mỗi địa chỉ mỗi ngày; phí 1,5% (3% khi tổng bán lại trong ngày vượt 1% dự trữ); bán lại đóng khi đợt bán kết thúc; thanh toán bằng USDC trên Base."
       },
       {
         "q": "Trần {ceiling} có vĩnh viễn không?",
@@ -210,7 +210,7 @@
       {
         "problem": "Sniper và bot",
         "what": "Script mua trong giây đầu từ nhiều ví rồi bán cho người thật.",
-        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi người mỗi ngày, nghỉ {cooldown} giây giữa giao dịch. Nếu có bot, multisig có thể bật chế độ chỉ người đã xác minh."
+        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi địa chỉ mỗi ngày, nghỉ {cooldown} giây giữa giao dịch. Nếu có bot, multisig có thể bật chế độ chỉ người đã xác minh."
       },
       {
         "problem": "Dump",

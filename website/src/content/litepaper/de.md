@@ -161,7 +161,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 
 ## 9. Sicherheit
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **KI-gestützte Sicherheitsprüfungen (kein externes Audit).** Bug bounty on every page.
 - **Treasury Multisig.** Die Treasury wird von People's eigenem 2-von-3-Multisig-Vertrag im People-Netzwerk verwaltet, der vor dem Mainnet erstellt wird; Signer-Adressen werden veröffentlicht.
 - **Veröffentlichte Adressen.** Sale-, Vesting- und Liquiditäts-Vertrags­adressen werden beim Mainnet-Start veröffentlicht — keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
@@ -220,7 +220,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
-- Sicherheit: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; Bug bounty on every page.
+- Sicherheit: **KI-gestützte Sicherheitsprüfungen (kein externes Audit)**; Bug bounty on every page.
 - Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
 - Der PPL-Sale läuft nach der Öffnung, bis alle PPL verkauft sind oder **24 Monate** vergangen sind — je nachdem, was zuerst eintritt. Die Laufzeit ist fest und wird nicht verlängert. Danach kann jeder abschließen; unverkaufte PPL gehen in den Community-Pool, keine Erstattungen. Bis dahin liegen unverkaufte PPL im Projekt-Multisig, das Team greift nicht zu.
