@@ -199,6 +199,8 @@ npm run ci:smoke
 | `PUBLIC_GOSSIP_URL` | `@people/node` | `""` | Advertised listen URL for peer-exchange (`ws://PUBLIC_IP:4002`). Alias: `GOSSIP_ADVERTISE`. Without this, hello advertises `ws://127.0.0.1:$GOSSIP_PORT`, which other hosts cannot dial. |
 | `CHAIN_ID` | `@people/node` | `people-devnet` | Blockchain network identifier |
 | `ALLOW_DEV_ENDPOINTS` | `@people/node` | `""` | Set to `1` to enable debug/dev-only routes. Public Railway testnet must leave this unset. Testnet faucet is `ALLOW_FAUCET=1` instead. |
+| `MEMPOOL_MAX_SIZE` | `@people/core` | `10000` | Node-local cap on pending transactions in the mempool. Not a consensus rule. |
+| `MEMPOOL_ONBOARDING_MAX` | `@people/core` | 10% of `MEMPOOL_MAX_SIZE` (min 1) | Separate node-local quota for fee-0 onboarding transactions (`registerParticipant`, `participantReferral`). When it is full, new onboarding transactions are rejected (`Onboarding mempool quota is full`). A paid transaction arriving at a full mempool evicts the oldest onboarding transaction instead of being rejected. Non-negative integer, capped at `MEMPOOL_MAX_SIZE`; invalid values fall back to the default. |
 | `PPL_PRICE_USD` | `@people/node` | `0.12` | Fallback reference for node metrics only. Not a market rate. Do not show USD on the public website. |
 | `TOKEN_CREATE_MIN_FEE` | `@people/core` | `1.045005` | Owner-approved minimum `tokenCreate` fee in PPL. |
 | `NFT_MINT_MIN_FEE` | `@people/core` | `2.925` | Owner-approved minimum `nftMint` fee in PPL. |
