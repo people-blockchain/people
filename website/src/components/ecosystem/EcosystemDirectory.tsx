@@ -5,10 +5,12 @@ import {
   ArrowRight,
   ArrowUpRight,
   Boxes,
+  ChartLine,
   KeyRound,
   QrCode,
   Search,
   ShieldCheck,
+  Sparkles,
   Store,
   UsersRound,
   Wallet,
@@ -58,11 +60,19 @@ const PRODUCT_GLYPHS: Record<string, ProductGlyph> = {
     badge: QrCode,
     tileClass: "bg-rose-500/10 text-rose-600 dark:text-rose-400",
   },
+  "people-predict": {
+    icon: ChartLine,
+    badge: Sparkles,
+    tileClass: "bg-fuchsia-500/10 text-fuchsia-600 dark:text-fuchsia-400",
+  },
 };
 
 function statusBadgeClass(status: EcosystemStatus): string {
   if (status === "testnet") {
     return "border-sky-500/40 bg-sky-500/10 text-sky-800 dark:text-sky-200";
+  }
+  if (status === "live") {
+    return "border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200";
   }
   return "border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-200";
 }
