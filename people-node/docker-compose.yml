@@ -24,9 +24,12 @@ services:
       context: .
       target: node
     restart: unless-stopped
+    # Ports are published on loopback only (audit MF-23). To make this node dialable
+    # from other hosts, set GOSSIP_BIND=0.0.0.0 in .env (gossip) and also PUBLIC_GOSSIP_URL;
+    # keep the HTTP API behind a reverse proxy rather than publishing it (API_BIND).
     ports:
-      - "4001:4001"
-      - "4002:4002"
+      - "${API_BIND:-127.0.0.1}:4001:4001"
+      - "${GOSSIP_BIND:-127.0.0.1}:4002:4002"
     environment:
       BOOTSTRAP_PRIVATE_KEY: ${BOOTSTRAP_PRIVATE_KEY:?Set a separate testnet bootstrap key}
       PEER_ID: node-1
@@ -60,15 +63,16 @@ services:
       target: node
     restart: unless-stopped
     ports:
-      - "4011:4011"
-      - "4012:4012"
+      - "${API_BIND:-127.0.0.1}:4011:4011"
+      - "${GOSSIP_BIND:-127.0.0.1}:4012:4012"
     environment:
       PEER_ID: node-2
       PORT: 4011
       GOSSIP_PORT: 4012
       DATA_DIR: /data/node-2
       # host-gateway: container-to-container bridge may be dropped on this VM;
-      # published host ports still work.
+      # published host ports still work (Docker Desktop reaches loopback-bound ports via
+      # host.docker.internal; on Linux Engine set GOSSIP_BIND=0.0.0.0 behind a firewall).
       BOOTSTRAP_PEERS: host.docker.internal:4002
       CHAIN_ID: ${CHAIN_ID:-people-internal-testnet}
       NODE_ENV: production
@@ -94,7 +98,7 @@ services:
       target: web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${WEB_BIND:-127.0.0.1}:3000:3000"
     environment:
       NODE_API_URL: http://host.docker.internal:4001
     extra_hosts:

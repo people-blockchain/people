@@ -276,6 +276,8 @@ curl -sS http://127.0.0.1:4001/health
 
 Railway: HTTP = `$PORT`. Gossip 4002 нужно публиковать отдельно, если эта нода — seed.
 
+В `docker-compose.yml` и `docker-compose.node.yml` порты публикуются на `127.0.0.1` по умолчанию. Чтобы gossip был доступен с других хостов, задайте `GOSSIP_BIND=0.0.0.0` (и `PUBLIC_GOSSIP_URL`) в `.env` и закройте порт firewall'ом от лишних источников; `API_BIND` / `WEB_BIND` меняйте только за reverse proxy. `docker-compose.prod.yml` по умолчанию держит `ALLOW_FAUCET=0`.
+
 ### Публичный HTTPS для ноды на VPS
 
 Для браузера и прод-сайта нужен **HTTPS** к HTTP API ноды (`PORT`, по умолчанию **4001**). Gossip (**4002**) остаётся **сырым TCP/WebSocket** без TLS-терминации на том же домене.
