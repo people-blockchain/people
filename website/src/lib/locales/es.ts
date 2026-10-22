@@ -458,7 +458,7 @@ export const es: LocaleContent = {
         {
           "num": "01",
           "title": "Crear cuenta",
-          "desc": "Genera una billetera liviana y sin custodia directamente en tu teléfono inteligente, tableta o navegador.",
+          "desc": "Genera una cartera liviana directamente en tu teléfono inteligente, tableta o navegador: una cartera de navegador con autocustodia o una cartera en la nube que restauras al iniciar sesión.",
           "highlight": "Cero requisitos de hardware"
         },
         {

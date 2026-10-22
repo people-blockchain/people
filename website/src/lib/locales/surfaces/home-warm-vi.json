@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Có ví trong 30 giây",
-        "sub": "Khóa của bạn luôn ở trên điện thoại hoặc trình duyệt của bạn."
+        "sub": "Ví trình duyệt: khóa của bạn ở lại trên thiết bị. Ví đám mây: lưu mã hóa trên máy chủ PEOPLE."
       },
       {
         "id": "token",

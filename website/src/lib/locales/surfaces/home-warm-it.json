@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Un wallet in 30 secondi",
-        "sub": "Le tue chiavi restano sul tuo telefono o nel tuo browser."
+        "sub": "Wallet del browser: le tue chiavi restano sul tuo dispositivo. Wallet cloud: conservato cifrato sui server di PEOPLE."
       },
       {
         "id": "token",

@@ -1,6 +1,6 @@
 {
   "title": "Wallet",
-  "lead": "Non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers.",
+  "lead": "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
   "create": "Create a new wallet",
   "import": "Import wallet",
   "unlock": "Unlock",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your People Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+  "cloudExportHint": "Your key is stored encrypted on PEOPLE servers so you can restore it by signing in. PEOPLE's infrastructure is able to decrypt it. For full self-custody, use a browser wallet or an external wallet. Export the private key only if you need a backup outside People.",
   "cloudDisconnect": "Disconnect"
 }

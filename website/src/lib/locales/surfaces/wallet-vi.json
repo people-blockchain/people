@@ -1,6 +1,6 @@
 {
   "title": "Ví",
-  "lead": "Không lưu ký. Khóa được tạo trong trình duyệt này, mã hóa bằng mật khẩu của bạn và không bao giờ gửi tới máy chủ của chúng tôi.",
+  "lead": "Ví trình duyệt: không lưu ký. Khóa được tạo trong trình duyệt này, mã hóa bằng mật khẩu của bạn và không bao giờ gửi tới máy chủ của chúng tôi. Đăng nhập bằng Google hoặc email sẽ tạo ví đám mây thay thế: PEOPLE lưu khóa của bạn đã mã hóa và hạ tầng của PEOPLE có thể giải mã.",
   "create": "Tạo ví mới",
   "import": "Nhập ví",
   "unlock": "Mở khóa",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your People Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+  "cloudExportHint": "Khóa của bạn được lưu mã hóa trên máy chủ PEOPLE để bạn khôi phục bằng cách đăng nhập. Hạ tầng của PEOPLE có khả năng giải mã khóa đó. Để tự nắm giữ khóa hoàn toàn, hãy dùng ví trình duyệt hoặc ví ngoài. Chỉ xuất khóa riêng nếu bạn cần bản sao lưu bên ngoài People.",
   "cloudDisconnect": "Disconnect"
 }

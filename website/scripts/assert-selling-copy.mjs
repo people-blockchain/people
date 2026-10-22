@@ -465,7 +465,7 @@ test("Create factory routes exist and copy stays honest", () => {
   assert.match(diagram, /statusImplemented|IN PROTOCOL/);
 });
 
-test("Wallet and explorer pages exist and stay non-custodial in copy", () => {
+test("Wallet and explorer pages exist and state custody honestly in copy", () => {
   const walletPage = src("src/app/wallet/page.tsx");
   const explorerPage = src("src/app/explorer/page.tsx");
   const vault = src("src/lib/wallet-vault.ts");

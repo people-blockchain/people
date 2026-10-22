@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Buat dompet non-kustodial",
-        "body": "Buat frasa 12 kata di peramban, tulis, dan enkripsi dengan kata sandi. Kunci tidak pernah meninggalkan perangkat ini.",
+        "title": "Buat dompet",
+        "body": "Buat frasa 12 kata di peramban, tulis, dan enkripsi dengan kata sandi. Kunci tidak pernah meninggalkan perangkat ini. Atau masuk dengan Google untuk dompet cloud: kunci Anda disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya.",
         "href": "/wallet",
         "cta": "Buka dompet"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Seseorang dengan dompet di ponsel, tablet, atau peramban.",
-        "detail": "Mulai dengan akun non-kustodial di telepon, tablet, atau peramban. Anda bergabung sebagai orang di komunitas — bukan sebagai validator."
+        "detail": "Mulai dengan dompet di telepon, tablet, atau peramban. Anda bergabung sebagai orang di komunitas — bukan sebagai validator."
       },
       {
         "id": "transaction",
