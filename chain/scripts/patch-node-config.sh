@@ -14,7 +14,10 @@ for app_toml in "$OUT"/node*/peopled/config/app.toml; do
 done
 
 for cfg in "$OUT"/node*/peopled/config/config.toml; do
-  sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/g' "$cfg"
+  # Measured on a live node (people_97401-1): block ~4.3 s, empty blocks off.
+  sed -i -E 's/^timeout_commit = ".*"/timeout_commit = "4s"/' "$cfg"
+  sed -i -E 's/^timeout_propose = ".*"/timeout_propose = "3s"/' "$cfg"
+  sed -i -E 's/^create_empty_blocks = .*/create_empty_blocks = false/' "$cfg"
   sed -i 's/prometheus = false/prometheus = true/g' "$cfg"
 done
 
