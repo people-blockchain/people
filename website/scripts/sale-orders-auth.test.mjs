@@ -20,7 +20,7 @@ test("order creation requires a session before touching the database", () => {
 });
 
 test("order creation keeps the per-IP limit and adds a durable per-account budget", () => {
-  assert.match(src, /checkSlidingWindowRateLimit\("sale-order", ip/);
+  assert.match(src, /checkSharedRateLimit\("sale-order", ip/);
   assert.match(src, /checkDurableRateLimit\("sale-order-user", userId/);
   const budgetAt = src.indexOf("await userOrderBudgetAllowed(");
   assert.ok(budgetAt > src.indexOf("await auth()") && budgetAt < src.indexOf("await createSaleOrder("));

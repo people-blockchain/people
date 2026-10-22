@@ -2,7 +2,7 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { bugReports, founderTelegramUsers, telegramBotState } from "@/db/schema";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import {
   readTelegramVerifyBotToken,
   telegramVerifyWebhookSecret,
@@ -357,8 +357,8 @@ async function intake(msg: TgMessage, type: BugReportType, description: string):
   const l = supportLang(await getChatSiteLocale(chatId), msg.from?.language_code);
   const key = String(msg.from?.id ?? chatId);
   if (
-    !checkSlidingWindowRateLimit("tg-support-hour", key, 5, 60 * 60 * 1000) ||
-    !checkSlidingWindowRateLimit("tg-support-day", key, 20, 24 * 60 * 60 * 1000)
+    !await checkSharedRateLimit("tg-support-hour", key, 5, 60 * 60 * 1000) ||
+    !await checkSharedRateLimit("tg-support-day", key, 20, 24 * 60 * 60 * 1000)
   ) {
     await tgApi("sendMessage", { chat_id: chatId, text: T[l].rateLimited });
     return;

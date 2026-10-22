@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { isDatabaseConfigured } from "@/db";
 import { lookupFounder } from "@/lib/founders/transparency";
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   if (!isDatabaseConfigured()) {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
-  if (!checkSlidingWindowRateLimit("founders-lookup", clientIp(request), 30, 60_000)) {
+  if (!await checkSharedRateLimit("founders-lookup", clientIp(request), 30, 60_000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const q = new URL(request.url).searchParams.get("q") ?? "";
