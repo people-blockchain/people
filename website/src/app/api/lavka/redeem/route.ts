@@ -8,7 +8,7 @@ import { recordRedemption } from "@/lib/lavka/service";
 export async function POST(request: Request) {
   const guard = await lavkaApiGuard();
   if (!guard.ok) return guard.response;
-  if (!lavkaRateLimitAllowed(guard.userId)) {
+  if (!await lavkaRateLimitAllowed(guard.userId)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const body = (await request.json().catch(() => ({}))) as {

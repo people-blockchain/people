@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { DEFAULT_EVM_FAUCET_URL } from "@/lib/evm/public-endpoints";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
@@ -11,7 +11,7 @@ const RATE_WINDOW_MS = 60_000;
 
 export async function POST(request: NextRequest) {
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("evm-faucet-fund", ip, RATE_LIMIT, RATE_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("evm-faucet-fund", ip, RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const declared = Number(request.headers.get("content-length") ?? "0");

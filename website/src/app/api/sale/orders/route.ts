@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit, checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
 import { checkDurableRateLimit } from "@/lib/durable-rate-limit";
 import { createSaleOrder } from "@/lib/sale/service";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
@@ -30,7 +30,7 @@ async function userOrderBudgetAllowed(userId: string): Promise<boolean> {
  */
 export async function POST(request: Request) {
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("sale-order", ip, 20, 60_000)) {
+  if (!await checkSharedRateLimit("sale-order", ip, 20, 60_000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const session = await auth();

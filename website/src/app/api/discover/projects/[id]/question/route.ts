@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { discoverApiGuard, clientIp } from "@/lib/discover/api-guard";
 import { addQuestion } from "@/lib/discover/service";
 import { DISCOVER_SCORING } from "@/lib/discover/scoring-config";
@@ -17,7 +17,7 @@ export async function POST(request: Request, { params }: Params) {
   }
   const key = `${guard.userId}:${clientIp(request)}`;
   if (
-    !checkSlidingWindowRateLimit(
+    !await checkSharedRateLimit(
       "discover-question",
       key,
       DISCOVER_SCORING.rateLimits.questionsPerUserPerHour,
