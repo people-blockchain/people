@@ -1,3 +1,4 @@
+import { memoFromInput } from "./memo";
 import type { ExplorerFeed, LiveBlock, LivePhase, LiveTransaction } from "../explorer-live";
 
 /** A bounded recent window, not a full transaction-history index. */
@@ -28,7 +29,7 @@ function decodeBlock(value: unknown, height: number): LiveBlock {
     const wei = BigInt(tx.value ?? "0x0");
     return {
       id: tx.hash, from: tx.from, to: tx.to ?? undefined,
-      type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+      type: tx.input && tx.input !== "0x" && !memoFromInput(tx.input) ? "contract" : "transfer",
       amount: Number(wei) / 1e18, blockHeight: height,
     };
   });

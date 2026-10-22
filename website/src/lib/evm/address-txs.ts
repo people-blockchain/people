@@ -1,6 +1,6 @@
 import { formatUnits } from "viem";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
-import type { EvmExplorerTx } from "@/lib/evm/explorer-blocks";
+import { classifyInput, type EvmExplorerTx } from "@/lib/evm/explorer-blocks";
 
 type RpcCall = { method: string; params: unknown[] };
 
@@ -91,10 +91,10 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
   const value = tx.value || "0x0";
   const amount = Number(formatUnits(BigInt(value), 18));
   const blockHeight = parseHexInt(tx.blockNumber);
-  const type: string = tx.input && tx.input !== "0x" ? "contract_call" : "transfer";
+  const classified = classifyInput(tx.input, "contract_call");
   return {
     id: tx.hash,
-    type,
+    ...classified,
     from: tx.from,
     to: tx.to ?? undefined,
     amount,

@@ -6,6 +6,7 @@ import { WalletGateLink } from "@/components/wallet/WalletGateLink";
 import { useLanguage } from "@/context/LanguageContext";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { networkJson } from "@/lib/network-client";
+import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { fetchCosmosTx, isCosmosTxHash, type CosmosTxSummary } from "@/lib/cosmos-tx";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
@@ -222,6 +223,14 @@ export function TxView({ id }: { id: string }) {
             <dt className="text-ink-3">{t.fee}</dt>
             <dd>{txFeeText(tx)}</dd>
           </div>
+          {typeof tx.payload?.memo === "string" && tx.payload.memo ? (
+            <div>
+              <dt className="text-ink-3">{walletUxCopy(lang).memo}</dt>
+              <dd className="whitespace-pre-wrap break-words" data-testid="tx-memo">
+                {tx.payload.memo}
+              </dd>
+            </div>
+          ) : null}
           {tx.blockHeight !== undefined ? (
             <div>
               <dt className="text-ink-3">{t.height}</dt>

@@ -5,6 +5,7 @@ import { connectExplorer } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { sendNativeTransfer } from "@/lib/evm/wallet-send";
+import { MEMO_MAX_CHARS, memoLength, validateMemo } from "@/lib/evm/memo";
 import type { Hex } from "viem";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { RecipientField } from "./RecipientField";
@@ -253,7 +254,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       ]);
       if (health.chainId !== chainId && String(health.chainId) !== String(chainId)) throw new Error(c.networkMismatch);
       if (readPending(chainId,session.address).some(tx=>tx.from===session.address && tx.nonce===fresh.nonce)) throw new Error(c.pendingOutgoing);
-      if (memo.length > 256) throw new Error(c.memoLong);
+      const checkedMemo = validateMemo(memo);
+      if (!checkedMemo.ok) throw new Error(checkedMemo.error === "long" ? c.memoLong : c.memoInvalid);
+      const memoText = nft ? "" : checkedMemo.memo;
       let transferAmount: number;
       try {
         if (nft && (!parseWalletAddress(nftTo) || parseWalletAddress(nftTo)?.toLowerCase()===session.address.toLowerCase())) throw new Error("address");
@@ -282,7 +285,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         nonce: fresh.nonce,
         timestamp,
         type: nft ? "nftTransfer" : "transfer",
-        payload: nft ? {nftId:nft.nftId} : memo ? {memo} : undefined,
+        payload: nft ? {nftId:nft.nftId} : memoText ? {memo:memoText} : undefined,
       };
       setDraft({tx,reviewedNative:fresh.balance,reviewedAsset:fresh.balances?.[tx.assetId??"ppl"]??0,display:nft ? nft.name : `${assetId==="ppl"?transferAmount:formatTokenBalance(transferAmount,selectedAsset?.decimals??-1)} ${selectedSymbol}`,remaining: nft || assetId==="ppl" ? formatPpl(Number(maxTransferAmount(fresh.balance,DEFAULT_TRANSFER_FEE+(nft?0:transferAmount))))+" PPL" : formatTokenBalance((fresh.balances?.[assetId]??0)-transferAmount,selectedAsset?.decimals??-1)+" "+selectedSymbol});
       setSheet(null);
@@ -312,6 +315,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           privateKey: session.privateKey as Hex,
           to: txDraft.to as `0x${string}`,
           amountPpl: txDraft.amount,
+          memo: typeof txDraft.payload?.memo === "string" ? txDraft.payload.memo : undefined,
         });
         trackPending(chainId, session.address, { ...txDraft, id: hash });
       } else {
@@ -330,7 +334,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       setAmount("");
       await loadChain(session.address);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.error);
+      setError(err instanceof Error ? (err.message === "memo_contract" ? c.memoContract : err.message) : t.error);
     } finally {
       setBusy(false);
     }
@@ -413,9 +417,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         ))}
       </div>
       <p className="text-xs text-ink-3">{fill(u.maxHint, { fee: formatPpl(DEFAULT_TRANSFER_FEE) })}</p>
-      <label className="block text-sm">{c.memo}<textarea value={memo} maxLength={256} onChange={event=>setMemo(event.target.value)} rows={2} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /><span className="text-xs text-ink-3">{memo.length}/256</span></label>
+      <label className="block text-sm">{c.memoLabel}<textarea value={memo} onChange={event=>setMemo(event.target.value)} rows={2} placeholder={c.memoPlaceholder} aria-describedby="send-memo-hint" className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /><span id="send-memo-hint" className="mt-1 flex justify-between gap-3 text-xs text-ink-3"><span>{c.memoHint}</span><span className={`shrink-0 ${memoLength(memo)>MEMO_MAX_CHARS?"text-warm":""}`} aria-live="polite">{memoLength(memo)}/{MEMO_MAX_CHARS}</span></span></label>
       <p className="text-xs text-ink-3">{t.fee}: {DEFAULT_TRANSFER_FEE} PPL</p>
-      <button type="button" disabled={busy || !account || !to.trim() || !amount.trim() || (assetId !== "ppl" && !selectedAsset)} onClick={() => void doSend(Date.now())} className="w-full rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-ink disabled:opacity-40">
+      <button type="button" disabled={busy || !account || !to.trim() || !amount.trim() || memoLength(memo)>MEMO_MAX_CHARS || (assetId !== "ppl" && !selectedAsset)} onClick={() => void doSend(Date.now())} className="w-full rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-ink disabled:opacity-40">
         {c.review}
       </button>
     </div>
