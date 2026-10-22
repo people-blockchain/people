@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { compileIsolated, type CompilationOutput } from "@/lib/solidity-compiler";
 import { lookupPrecompiledTemplate } from "@/lib/contract-precompiled";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import {
   CONTRACT_COMPILE_RATE_PER_MIN,
   CONTRACT_COMPILE_TIMEOUT_MS,
@@ -41,7 +41,7 @@ function jsonFromOutput(fileName: string, output: CompilationOutput) {
 
 export async function POST(request: Request) {
   const ip = clientIpFromRequest(request);
-  if (!checkSlidingWindowRateLimit("contracts-compile", ip, CONTRACT_COMPILE_RATE_PER_MIN, 60_000)) {
+  if (!await checkSharedRateLimit("contracts-compile", ip, CONTRACT_COMPILE_RATE_PER_MIN, 60_000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 

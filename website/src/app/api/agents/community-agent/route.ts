@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { fetchCommunityAgentSnapshot } from "@/lib/evm/community-agent";
 
@@ -10,7 +10,7 @@ const RATE_LIMIT = 30;
 const RATE_WINDOW_MS = 60_000;
 
 export async function GET(request: Request) {
-  if (!checkSlidingWindowRateLimit("community-agent-live", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("community-agent-live", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   try {

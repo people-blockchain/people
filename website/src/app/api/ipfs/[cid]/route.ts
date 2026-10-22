@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import {
   IPFS_MAX_BYTES,
   ipfsGatewayUrl,
@@ -16,7 +16,7 @@ const RATE_LIMIT = 120;
 const RATE_WINDOW_MS = 60_000;
 
 export async function GET(request: Request, { params }: Params) {
-  if (!checkSlidingWindowRateLimit("ipfs-gateway", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("ipfs-gateway", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const { cid } = await params;

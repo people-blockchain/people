@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { clientIp } from "@/lib/discover/api-guard";
 import { awardFounderPoints } from "@/lib/founders/service";
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   if (!guard.ok) return guard.response;
 
   const key = `${guard.userId}:${clientIp(request)}`;
-  if (!checkSlidingWindowRateLimit("founders-actions", key, 120, 60 * 60 * 1000)) {
+  if (!await checkSharedRateLimit("founders-actions", key, 120, 60 * 60 * 1000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 

@@ -1,6 +1,6 @@
 import { isIP } from "node:net";
 import { NextRequest, NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { getNodeRpcUrl } from "@/lib/factory-config";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { evmJsonRpcMethodsAllowed } from "@/lib/evm/json-rpc-allowlist";
@@ -48,7 +48,7 @@ async function proxy(request: NextRequest, segments: string[]) {
   if (!path) {
     return NextResponse.json({ error: "path_not_allowed" }, { status: 400 });
   }
-  if (!checkSlidingWindowRateLimit("network-proxy", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("network-proxy", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const isFaucet = segments[0] === "faucet" && segments[1] === "fund";

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { registerFounder, resolveFounderUserIdByWallet } from "@/lib/founders/service";
@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   if (!guard.ok) return guard.response;
   // Registration is a one-time action; a tight per-user window stops scripted churn
   // (each attempt consumes verification work and registration-slot bookkeeping).
-  if (!checkSlidingWindowRateLimit("founders_register", guard.userId, 10, 10 * 60 * 1000)) {
+  if (!await checkSharedRateLimit("founders_register", guard.userId, 10, 10 * 60 * 1000)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const body = (await request.json()) as {

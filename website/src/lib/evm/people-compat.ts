@@ -1,4 +1,4 @@
-import { formatUnits, getAddress, isAddress } from "viem";
+import { encodeFunctionData, formatUnits, getAddress, isAddress, parseAbi } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import {
   fetchBlockByHeight,
@@ -123,6 +123,34 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
+}
+
+const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
+
+/**
+ * Token address for an assetId/address the site knows about, else null. The deployment assetMap
+ * is checked first (no RPC); otherwise one `isPeopleToken` eth_call per factory version (current
+ * and legacy `tokenFactoryVn`) — never a log scan.
+ */
+async function resolveKnownToken(assetIdOrAddress: string): Promise<string | null> {
+  const dep = readEvmDeployments();
+  const needle = assetIdOrAddress.trim().toLowerCase();
+  if (!needle) return null;
+  const mapped = dep.assetMap[assetIdOrAddress];
+  if (mapped) return mapped;
+  const fromMap = Object.values(dep.assetMap).find((addr) => addr && addr.toLowerCase() === needle);
+  if (fromMap) return fromMap;
+  if (!isAddress(needle)) return null;
+  const token = getAddress(needle);
+  const data = encodeFunctionData({ abi: IS_PEOPLE_TOKEN_ABI, functionName: "isPeopleToken", args: [token] });
+  const factories = Object.entries(dep.contracts ?? {})
+    .filter(([key, addr]) => /^tokenFactory(V\d+)?$/.test(key) && addr && isAddress(addr))
+    .map(([, addr]) => addr as string);
+  for (const factory of factories) {
+    const out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]).catch(() => "0x");
+    if (/^0x0*1$/.test(out ?? "")) return token;
+  }
+  return null;
 }
 
 export async function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
@@ -280,11 +308,11 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const tokenParam = search.get("token");
     const assetId = search.get("assetId") ?? tokenParam;
     const dep = readEvmDeployments();
-    const token =
-      (assetId && dep.assetMap[assetId]) ||
-      (assetId && isAddress(assetId) ? assetId : null) ||
-      (Object.values(dep.assetMap)[0] ?? null);
+    // Holders come from a full Transfer-log scan, so only known tokens (deployment assetMap or
+    // the factory registry) may trigger one; an arbitrary address must not buy a chain scan.
+    const token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
     if (!token || !isAddress(token)) {
+      if (assetId) return { status: 404, body: { error: "unknown_token" } };
       return { status: 200, body: [] };
     }
     const holders = await aggregateHoldersFromTransfers(token).catch(() => []);

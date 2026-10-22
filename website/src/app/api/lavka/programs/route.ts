@@ -7,7 +7,7 @@ import { getMerchantByUserId, registerProgram } from "@/lib/lavka/service";
 export async function POST(request: Request) {
   const guard = await lavkaApiGuard();
   if (!guard.ok) return guard.response;
-  if (!lavkaRateLimitAllowed(guard.userId)) {
+  if (!await lavkaRateLimitAllowed(guard.userId)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const merchant = await getMerchantByUserId(guard.userId);

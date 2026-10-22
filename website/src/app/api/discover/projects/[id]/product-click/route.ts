@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { auth } from "@/auth";
 import { clientIp, discoverApiGuard } from "@/lib/discover/api-guard";
 import { trackProductClick } from "@/lib/discover/service";
@@ -19,7 +19,7 @@ export async function POST(request: Request, { params }: Params) {
     trackedUser = guard.userId;
     const key = `${guard.userId}:${clientIp(request)}`;
     if (
-      !checkSlidingWindowRateLimit(
+      !await checkSharedRateLimit(
         "discover-product",
         key,
         DISCOVER_SCORING.rateLimits.productClicksPerUserPerHour,

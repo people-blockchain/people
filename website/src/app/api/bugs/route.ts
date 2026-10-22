@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { createBugReport, validateBugReportInput } from "@/lib/bug-reports/service";
 import { notifyOwnerNewReport } from "@/lib/bug-reports/telegram-support-bot";
 
@@ -20,10 +20,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "sign_in_required" }, { status: 401 });
   }
 
-  if (!checkSlidingWindowRateLimit("bugs-submit-hour", userId, MAX_PER_HOUR, HOUR_MS)) {
+  if (!await checkSharedRateLimit("bugs-submit-hour", userId, MAX_PER_HOUR, HOUR_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
-  if (!checkSlidingWindowRateLimit("bugs-submit-day", userId, MAX_PER_DAY, DAY_MS)) {
+  if (!await checkSharedRateLimit("bugs-submit-day", userId, MAX_PER_DAY, DAY_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 

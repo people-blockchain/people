@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { isAddress } from "viem";
-import { checkSlidingWindowRateLimit } from "@/lib/api-rate-limit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 import { evmContractsReady } from "@/lib/evm/config";
 import { fetchTokenMarketSnapshotCached } from "@/lib/evm/market-data";
@@ -15,7 +15,7 @@ export async function GET(request: Request, context: { params: Promise<{ token: 
   if (!evmContractsReady()) {
     return NextResponse.json({ hasMarket: false }, { status: 503 });
   }
-  if (!checkSlidingWindowRateLimit("evm-token-market", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
+  if (!await checkSharedRateLimit("evm-token-market", clientIpFromRequest(request), RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const { token } = await context.params;
