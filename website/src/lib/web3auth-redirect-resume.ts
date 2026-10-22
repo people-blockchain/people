@@ -4,6 +4,7 @@
  * No React and no window access here — callers pass storage / location in.
  */
 
+import { isSafeInAppPath } from "@/lib/safe-return-path";
 import { migrateWebsiteStorage } from "@/lib/storage-migration";
 
 export const PENDING_KEY = "people_web3auth_pending";
@@ -15,7 +16,7 @@ export type PendingRedirect = { returnTo: string; at: number };
 type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 
 export function isSafeReturnPath(path: unknown): path is string {
-  return typeof path === "string" && path.startsWith("/") && !path.startsWith("//") && !path.includes("\\");
+  return isSafeInAppPath(path);
 }
 
 export function writePendingRedirect(storage: StorageLike, returnTo: string, now = Date.now()): void {
