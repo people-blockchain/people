@@ -19,6 +19,19 @@ library PeopleConstants {
     /// ordinary token.
     address internal constant NATIVE_PPL_ERC20 = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
+    /// @dev Technical (not economic) ceiling on a factory token's `totalSupply`, in base units.
+    /// The economic limit is `TBD` (founders); this bound only keeps the AMM arithmetic from
+    /// overflowing once the token has migrated, which would strand holders' tokens.
+    ///
+    /// Derivation. `PeoplePair` keeps `uint256` reserves and its swap K-check evaluates
+    /// `(balance0 * 10_000) * (balance1 * 10_000)` and `reserve0 * reserve1 * 10_000 ** 2`,
+    /// i.e. `T * N * 1e8` must stay below `2^256 ~= 1.158e77`, with `T` the token side and `N`
+    /// the native (WPPL) side. `AmmMath.swapExactIn` needs at most `T * N * 1e4`, which is weaker.
+    /// `T <= totalSupply`. `N` is bounded by the fixed native supply of 1,000,000,000 PPL
+    /// = 1e27 wei (`docs/ECONOMICS.md`). Hence `totalSupply < 2^256 / (1e8 * 1e27) ~= 1.158e42`.
+    /// 1e40 keeps a ~115x safety margin below that and is still 1e22 whole tokens at 18 decimals.
+    uint256 internal constant MAX_TOKEN_TOTAL_SUPPLY = 1e40;
+
     // --------------------------------------------------- optional creator promo share
     // Owner decision 2026-10-13: a creator may optionally set aside an extra promo share for
     // referral/partner promotion rewards. Only these three values are accepted — there is no
