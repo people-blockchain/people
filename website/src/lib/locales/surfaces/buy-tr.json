@@ -119,7 +119,7 @@
       },
       {
         "title": "Rezervden geri alım",
-        "body": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
+        "body": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; adres başına günde $2.000 üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
       },
       {
         "title": "Transferler tam ağ lansmanıyla açılır",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Eğri tükenmezse",
-        "body": "Süre sabittir ve uzatılmaz. Toplanan yine aynı {liquidityShare}/{multisigShare} oranında bölünür, satılmayan tüm PPL topluluk havuzuna gider; geri satış dışında iade yoktur. Satış bitene kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz."
+        "body": "Süre sabittir ve uzatılmaz. Toplanan yine aynı {liquidityShare}/{multisigShare} oranında bölünür, satılmayan tüm PPL topluluk havuzuna gider; geri satış dışında iade yoktur. Satış bitene kadar satılmayan PPL proje multisig'inde tutulur, ekip dokunmaz. Satılmayan PPL'nin topluluk havuzuna aktarılması ve LP kilidi, yayımlanan politikaya göre proje multisig'i tarafından yürütülür."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Doğrulanmış kaynak kod",
     "auditTitle": "Güvenlik incelemeleri",
-    "auditLine": "Denetleyen: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Yapay zekâ destekli güvenlik incelemeleri (harici denetim değildir)",
     "explorerLink": "People explorer'da aç",
     "allocationTitle": "1B PPL nereye gidiyor",
     "allocationNote": "Sabit arz {supply} PPL. Satış kovası eğrida {salePct}.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "PPL’yi geri satabilir miyim?",
-        "a": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; kişi başına günde $2.000 kişisel üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
+        "a": "Rezervden geri satış yalnızca doğrulanmış kişiler içindir: her alım lotu geri satılmadan önce 30 gün tutulmalıdır; geri satış fiyatı çıkış anındaki eğri fiyatıdır; günlük rezervin %2'si küresel üst sınırı; adres başına günde $2.000 üst sınırı; ücret %1,5 (gün içindeki toplam geri satışlar rezervin %1'ini aştığında %3); geri satış satış bittiğinde kapanır; ödemeler Base'de USDC olarak yapılır."
       },
       {
         "q": "{ceiling} tavanı kalıcı mı?",
@@ -210,7 +210,7 @@
       {
         "problem": "Sniper'lar ve botlar",
         "what": "Scriptler ilk saniyelerde çok cüzdandan alır, gerçek kullanıcılara satar.",
-        "ours": "Alım başına {perBuy}, kişi başına günde {perDay} ve işlemler arası {cooldown} sn. Bot gelirse multisig yalnızca doğrulanmış modunu açabilir."
+        "ours": "Alım başına {perBuy}, adres başına günde {perDay} ve işlemler arası {cooldown} sn. Bot gelirse multisig yalnızca doğrulanmış modunu açabilir."
       },
       {
         "problem": "Dump'lar",

@@ -119,7 +119,7 @@
       {
         "title": "Bán PPL công khai",
         "body": [
-          "Tham số bán PPL công bố (công thức đường cong, quỹ đạo giá, giới hạn và mục tiêu cuối đường cong) ở /buy và khớp API đặt hàng. Mua vẫn tắt cho đến khi hub triển khai; kết nối ví không ràng buộc bạn. Không có KYC hay kiểm tra điều kiện trên trang này.",
+          "Tham số bán PPL công bố (công thức đường cong, quỹ đạo giá, giới hạn và thời hạn bán: đến khi bán hết hoặc 24 tháng, tùy điều kiện nào đến trước) ở /buy và khớp API đặt hàng. Mua vẫn tắt cho đến khi hub triển khai; kết nối ví không ràng buộc bạn. Không có KYC hay kiểm tra điều kiện trên trang này.",
           "Không có nội dung trên trang là đề nghị hay cam kết bán PPL nơi bán bị hạn chế; tham gia có thể không khả dụng ở khu vực pháp lý của bạn. Điều khoản bán chỉ thay đổi qua cập nhật công bố và quản trị khi áp dụng."
         ]
       },

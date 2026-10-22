@@ -119,7 +119,7 @@
       },
       {
         "title": "Sell-back from the reserve",
-        "body": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
+        "body": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; cap of $2,000 per address per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
       },
       {
         "title": "Transfers open with the full network launch",
@@ -149,7 +149,7 @@
       },
       {
         "title": "If the curve does not sell out",
-        "body": "The term is fixed and will not be extended. Whatever was raised still gets the same {liquidityShare}/{multisigShare} split, every unsold PPL goes to the Community Pool, and there are no refunds outside sell-back. Until the sale ends, unsold PPL is held in the project multisig and the team does not touch it."
+        "body": "The term is fixed and will not be extended. Whatever was raised still gets the same {liquidityShare}/{multisigShare} split, every unsold PPL goes to the Community Pool, and there are no refunds outside sell-back. Until the sale ends, unsold PPL is held in the project multisig and the team does not touch it. The transfer of unsold PPL to the Community Pool and the LP lock are executed by the project multisig under the published policy."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Verified source",
     "auditTitle": "Security reviews",
-    "auditLine": "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "AI-assisted security reviews (not an external audit)",
     "explorerLink": "Open in the People explorer",
     "allocationTitle": "Where the 1B PPL goes",
     "allocationNote": "Fixed supply of {supply} PPL. The sale bucket is the {salePct} on the curve.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Can I sell PPL back?",
-        "a": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; personal cap $2,000 per person per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
+        "a": "Sell-back from the reserve is for verified people only: each purchase lot must be held 30 days before it can be sold back; the sell-back price is the curve price at the moment of exit; global cap 2% of the reserve per day; cap of $2,000 per address per day; fee 1.5% (3% when total sell-backs that day exceed 1% of the reserve); sell-back closes when the sale ends; payouts in USDC on Base."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",
@@ -210,7 +210,7 @@
       {
         "problem": "Snipers and bots",
         "what": "Scripts buy in the first seconds from many wallets, then sell to real people.",
-        "ours": "Up to {perBuy} per purchase, {perDay} per person per day, and a {cooldown}-second pause between trades. If bots show up, the multisig can switch on a verified-only mode."
+        "ours": "Up to {perBuy} per purchase, {perDay} per address per day, and a {cooldown}-second pause between trades. If bots show up, the multisig can switch on a verified-only mode."
       },
       {
         "problem": "Dumps",

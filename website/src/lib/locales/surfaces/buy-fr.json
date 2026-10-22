@@ -119,7 +119,7 @@
       },
       {
         "title": "Revente depuis la réserve",
-        "body": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
+        "body": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond de 2 000 $ par adresse et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "title": "Les transferts s’ouvrent au lancement complet du réseau",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Si la courbe n’est pas épuisée",
-        "body": "Le délai est fixe et ne sera pas prolongé. Les fonds levés gardent la même répartition {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n'y a pas de remboursement en dehors de la revente. D'ici la fin de la vente, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas."
+        "body": "Le délai est fixe et ne sera pas prolongé. Les fonds levés gardent la même répartition {liquidityShare}/{multisigShare}, tout PPL invendu va au fonds communautaire et il n'y a pas de remboursement en dehors de la revente. D'ici la fin de la vente, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas. Le transfert des PPL invendus au fonds communautaire et le verrouillage des LP sont exécutés par le multisig du projet selon la politique publiée."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Code source vérifié",
     "auditTitle": "Revues de sécurité",
-    "auditLine": "Audité par : Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Revues de sécurité assistées par IA (pas un audit externe)",
     "explorerLink": "Ouvrir dans l’explorateur People",
     "allocationTitle": "Où vont 1B PPL",
     "allocationNote": "Offre fixe de {supply} PPL. Le lot de vente, ce sont les {salePct} sur la courbe.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Puis-je revendre du PPL ?",
-        "a": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond personnel de 2 000 $ par personne et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
+        "a": "La revente depuis la réserve est réservée aux personnes vérifiées : chaque lot d'achat doit être conservé 30 jours avant de pouvoir être revendu ; le prix de revente est le prix de la courbe au moment de la sortie ; plafond global de 2 % de la réserve par jour ; plafond de 2 000 $ par adresse et par jour ; frais de 1,5 % (3 % lorsque le total des reventes du jour dépasse 1 % de la réserve) ; la revente ferme à la fin de la vente ; paiements en USDC sur Base."
       },
       {
         "q": "Le plafond {ceiling} est-il permanent ?",
@@ -210,7 +210,7 @@
       {
         "problem": "Snipers et bots",
         "what": "Des scripts achètent dans les premières secondes depuis de nombreux portefeuilles puis revendent aux vrais utilisateurs.",
-        "ours": "Jusqu’à {perBuy} par achat, {perDay} par personne et par jour, et pause de {cooldown} secondes entre opérations. Si des bots apparaissent, le multisig peut activer un mode réservé aux vérifiés."
+        "ours": "Jusqu’à {perBuy} par achat, {perDay} par adresse et par jour, et pause de {cooldown} secondes entre opérations. Si des bots apparaissent, le multisig peut activer un mode réservé aux vérifiés."
       },
       {
         "problem": "Dumps",

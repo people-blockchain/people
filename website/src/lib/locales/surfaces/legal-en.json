@@ -119,7 +119,7 @@
       {
         "title": "Public PPL sale",
         "body": [
-          "Published PPL sale parameters (curve formula, price path, limits, and end-of-curve target) are on the /buy page and match the order API. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet commits you to nothing. No KYC or eligibility checks run on this site.",
+          "Published PPL sale parameters (curve formula, price path, limits, and sale term: until sold out or 24 months, whichever comes first) are on the /buy page and match the order API. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet commits you to nothing. No KYC or eligibility checks run on this site.",
           "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction. Sale terms may change only through published updates and governance where applicable."
         ]
       },

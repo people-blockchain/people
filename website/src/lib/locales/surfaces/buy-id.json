@@ -119,7 +119,7 @@
       },
       {
         "title": "pembelian kembali dari cadangan",
-        "body": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
+        "body": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas $2.000 per alamat per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
       },
       {
         "title": "Transfer dibuka saat peluncuran penuh jaringan",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Jika kurva tidak habis terjual",
-        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Dana terkumpul tetap dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, dan tidak ada pengembalian dana di luar jual kembali. Sampai penjualan berakhir, PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya."
+        "body": "Jangka waktu tetap dan tidak akan diperpanjang. Dana terkumpul tetap dibagi {liquidityShare}/{multisigShare}, semua PPL tidak terjual masuk kolam komunitas, dan tidak ada pengembalian dana di luar jual kembali. Sampai penjualan berakhir, PPL tidak terjual disimpan di multisig proyek dan tim tidak menyentuhnya. Pemindahan PPL tidak terjual ke kolam komunitas dan penguncian LP dijalankan oleh multisig proyek sesuai kebijakan yang dipublikasikan."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Sumber terverifikasi",
     "auditTitle": "Tinjauan keamanan",
-    "auditLine": "Diaudit oleh: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Tinjauan keamanan berbantuan AI (bukan audit eksternal)",
     "explorerLink": "Buka di explorer People",
     "allocationTitle": "Kemana 1B PPL pergi",
     "allocationNote": "Pasokan tetap {supply} PPL. Bagian penjualan adalah {salePct} di kurva.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Bisakah saya menjual kembali PPL?",
-        "a": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas pribadi $2.000 per orang per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
+        "a": "Jual kembali dari cadangan hanya untuk orang terverifikasi: setiap lot pembelian harus ditahan 30 hari sebelum dapat dijual kembali; harga jual kembali adalah harga kurva saat keluar; batas global 2% dari cadangan per hari; batas $2.000 per alamat per hari; biaya 1,5% (3% ketika total jual kembali hari itu melebihi 1% dari cadangan); jual kembali ditutup saat penjualan berakhir; pembayaran dalam USDC di Base."
       },
       {
         "q": "Apakah plafon {ceiling} permanen?",
@@ -210,7 +210,7 @@
       {
         "problem": "Sniper dan bot",
         "what": "Skrip membeli di detik pertama dari banyak dompet lalu menjual ke orang sungguhan.",
-        "ours": "Hingga {perBuy} per beli, {perDay} per orang per hari, jeda {cooldown} detik antar transaksi. Jika bot muncul, multisig bisa aktifkan mode hanya terverifikasi."
+        "ours": "Hingga {perBuy} per beli, {perDay} per alamat per hari, jeda {cooldown} detik antar transaksi. Jika bot muncul, multisig bisa aktifkan mode hanya terverifikasi."
       },
       {
         "problem": "Dump",

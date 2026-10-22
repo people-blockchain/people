@@ -161,7 +161,7 @@ Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
 
 ## 9. Sécurité
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Revues de sécurité assistées par IA (pas un audit externe).** Bug bounty on every page.
 - **Multisig de trésor.** Le trésor est contrôlé par le contrat multisig 2-sur-3 propre à People sur le réseau People, créé avant mainnet ; les adresses des signataires seront publiées.
 - **Adresses publiées.** Les adresses de contrat de vente, d'accumulation et de liquidité seront publiées au lancement de mainnet — pas de placeholders.
 - **Défense contre les bots.** Vérification humaine, limites par appareil et par IP, plafonds de points quotidiens et récupération de points des bots.
@@ -220,7 +220,7 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
 - Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - La **vente communautaire de PPL** suit la courbe exponentielle publiée sur `/buy` (départ **0,005 $** par PPL ; prix et limites publics ; achat désactivé jusqu'au hub). Aucun KYC ni contrôle d'éligibilité sur ce site.
-- Sécurité : **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1** ; bug bounty on every page.
+- Sécurité : **Revues de sécurité assistées par IA (pas un audit externe)** ; bug bounty on every page.
 - Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
 - Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
 - La vente PPL, une fois ouverte, dure jusqu'à ce que tous les PPL soient vendus ou pendant **24 mois**, selon la première échéance. Le délai est fixe et ne sera pas prolongé. Ensuite n'importe qui peut la clôturer ; les PPL invendus vont au fonds communautaire et il n'y a pas de remboursement. D'ici là, les PPL invendus sont détenus par le multisig du projet et l'équipe n'y touche pas.

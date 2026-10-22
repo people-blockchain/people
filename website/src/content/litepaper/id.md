@@ -161,7 +161,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 
 ## 9. Keamanan
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Tinjauan keamanan berbantuan AI (bukan audit eksternal).** Bug bounty on every page.
 - **Multisig treasury.** Treasury dikendalikan oleh kontrak multisig 2-dari-3 milik People sendiri di jaringan People, dibuat sebelum mainnet; alamat penanda tangan akan dipublikasikan.
 - **Alamat yang dipublikasikan.** Alamat penjualan, vesting, dan kontrak likuiditas akan dipublikasikan saat peluncuran mainnet — tidak ada placeholder.
 - **Pertahanan bot.** Verifikasi manusia, batas per-perangkat dan per-IP, batas poin harian, dan clawback bot.
@@ -220,7 +220,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
 - **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
-- Keamanan: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Keamanan: **Tinjauan keamanan berbantuan AI (bukan audit eksternal)**; bug bounty on every page.
 - Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
 - Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
 - Penjualan PPL, setelah dibuka, berjalan sampai semua PPL terjual atau selama **24 bulan**, mana yang lebih dulu. Jangka waktu tetap dan tidak akan diperpanjang. Setelah itu siapa pun dapat memfinalisasinya; PPL tidak terjual masuk ke kolam komunitas, tidak ada pengembalian dana. Sampai saat itu disimpan di multisig proyek dan tim tidak menyentuhnya.

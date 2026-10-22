@@ -119,7 +119,7 @@
       },
       {
         "title": "riacquisto dalla riserva",
-        "body": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
+        "body": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto di 2.000 $ per indirizzo al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
       },
       {
         "title": "I trasferimenti si aprono con il lancio completo della rete",
@@ -149,7 +149,7 @@
       },
       {
         "title": "Se la curva non si esaurisce",
-        "body": "Il termine è fisso e non sarà prorogato. Quanto raccolto mantiene lo stesso reparto {liquidityShare}/{multisigShare}, ogni PPL non venduto va al fondo community e non ci sono rimborsi al di fuori della rivendita. Fino alla fine della vendita i PPL non venduti restano nel multisig del progetto e il team non li tocca."
+        "body": "Il termine è fisso e non sarà prorogato. Quanto raccolto mantiene lo stesso reparto {liquidityShare}/{multisigShare}, ogni PPL non venduto va al fondo community e non ci sono rimborsi al di fuori della rivendita. Fino alla fine della vendita i PPL non venduti restano nel multisig del progetto e il team non li tocca. Il trasferimento dei PPL non venduti al fondo community e il blocco degli LP sono eseguiti dal multisig del progetto secondo la policy pubblicata."
       }
     ]
   },
@@ -162,7 +162,7 @@
     "saleContractNote": "",
     "verifiedSource": "Codice sorgente verificato",
     "auditTitle": "Revisioni di sicurezza",
-    "auditLine": "Auditato da: Claude Opus 5.5, GPT Astra, Fable 5.1",
+    "auditLine": "Revisioni di sicurezza assistite dall'IA (non è un audit esterno)",
     "explorerLink": "Apri nell'explorer People",
     "allocationTitle": "Dove vanno 1B PPL",
     "allocationNote": "Offerta fissa di {supply} PPL. Il lotto vendita sono quei {salePct} sulla curva.",
@@ -183,7 +183,7 @@
       },
       {
         "q": "Posso rivendere PPL?",
-        "a": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto personale di 2.000 $ per persona al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
+        "a": "La rivendita dalla riserva è solo per persone verificate: ogni lotto di acquisto deve essere detenuto 30 giorni prima di poter essere rivenduto; il prezzo di rivendita è il prezzo della curva al momento dell'uscita; tetto globale del 2% della riserva al giorno; tetto di 2.000 $ per indirizzo al giorno; commissione 1,5% (3% quando il totale delle rivendite del giorno supera l'1% della riserva); la rivendita chiude quando termina la vendita; pagamenti in USDC su Base."
       },
       {
         "q": "Il tetto {ceiling} è permanente?",
@@ -210,7 +210,7 @@
       {
         "problem": "Snipers e bot",
         "what": "Script comprano nei primi secondi da molti wallet e rivendono a persone reali.",
-        "ours": "Fino a {perBuy} per acquisto, {perDay} a persona al giorno e pausa di {cooldown} secondi tra operazioni. Se compaiono bot, il multisig può attivare la modalità solo verificati."
+        "ours": "Fino a {perBuy} per acquisto, {perDay} a indirizzo al giorno e pausa di {cooldown} secondi tra operazioni. Se compaiono bot, il multisig può attivare la modalità solo verificati."
       },
       {
         "problem": "Dump",
