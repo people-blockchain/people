@@ -1,6 +1,7 @@
 import { formatUnits, type Hash } from "viem";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
+import { memoFromInput } from "@/lib/evm/memo";
 
 type RpcBlock = {
   number?: string;
@@ -33,6 +34,8 @@ export type EvmExplorerTx = {
   amount?: number;
   fee?: number;
   blockHeight?: number;
+  /** Public payment memo carried in the transaction data, when it is plain text. */
+  payload?: { memo: string };
 };
 
 function hexToNumber(hex: string | undefined): number {
@@ -145,11 +148,18 @@ export async function fetchRecentBlocks(limit: number): Promise<EvmExplorerBlock
   });
 }
 
+/** `type` + optional memo payload for a transaction, so plain-text memos are not shown as contract calls. */
+export function classifyInput(input: string | undefined | null, contractType = "contract"): Pick<EvmExplorerTx, "type" | "payload"> {
+  if (!input || input === "0x") return { type: "transfer" };
+  const memo = memoFromInput(input);
+  return memo ? { type: "transfer", payload: { memo } } : { type: contractType };
+}
+
 function toExplorerTx(tx: RpcTx): EvmExplorerTx {
   const valueWei = BigInt(tx.value ?? "0x0");
   return {
     id: tx.hash,
-    type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+    ...classifyInput(tx.input),
     from: tx.from,
     to: tx.to ?? undefined,
     amount: Number(formatUnits(valueWei, 18)),
@@ -208,7 +218,7 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
   const valueWei = BigInt(tx.value ?? "0x0");
   return {
     id: tx.hash,
-    type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+    ...classifyInput(tx.input),
     from: tx.from,
     to: tx.to ?? undefined,
     amount: Number(formatUnits(valueWei, 18)),
