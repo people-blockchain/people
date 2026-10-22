@@ -5,9 +5,10 @@ export const DEFAULT_PUBLIC_NODE_NETWORK_URL =
 /**
  * Immutable GHCR image for the public testnet node launcher.
  * Update only after a verified anonymous `docker pull` of the new digest.
+ * NOTE: the image must be published under the people-blockchain org on GHCR before use (it does not exist there yet).
  */
 export const DEFAULT_PUBLIC_NODE_IMAGE =
-  "ghcr.io/rednaxelavoroge/people-node@sha256:d48cc23312667655e673a3f32c0636b1f84d2adde9464256fee90c8af648ef02";
+  "ghcr.io/people-blockchain/people-node@sha256:d48cc23312667655e673a3f32c0636b1f84d2adde9464256fee90c8af648ef02";
 
 export const PUBLIC_NODE_REPO = "people-blockchain/people";
 export const PUBLIC_NODE_CLONE_DIR = "people";
