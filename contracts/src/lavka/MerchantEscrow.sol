@@ -130,6 +130,15 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         Escrow storage e = escrows[escrowId];
         if (e.status != Status.Locked) revert BadStatus();
         if (msg.sender != e.customer && msg.sender != e.merchant) revert NotParty();
+        // MF-12: the merchant may dispute only inside its own claim window
+        // `[deadline, deadline + MERCHANT_CLAIM_WINDOW)` (where it could claimRelease for 100%
+        // anyway, so a dispute is never better for it). Before the deadline it could force the
+        // 50/50 auto-close without delivery; after the window it could block the customer's
+        // `refundCustomer` path. Customer behaviour is unchanged.
+        if (msg.sender == e.merchant) {
+            if (block.timestamp < e.deadline) revert DeadlineNotReached();
+            if (block.timestamp >= uint256(e.deadline) + MERCHANT_CLAIM_WINDOW) revert ClaimWindowElapsed();
+        }
         e.status = Status.Disputed;
         uint64 disputeDeadline = uint64(block.timestamp + DISPUTE_AUTO_CLOSE_WINDOW);
         e.disputeDeadline = disputeDeadline;

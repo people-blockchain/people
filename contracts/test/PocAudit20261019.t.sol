@@ -646,6 +646,8 @@ contract PocAudit20261019_EscrowTest is Test {
         PocEscrowParty merchant = new PocEscrowParty(escrow);
         vm.prank(eoaCustomer);
         uint256 id = escrow.createEscrow{value: 2 ether}(address(merchant), _deadline(), bytes32(0));
+        // MF-12: the merchant may dispute only once the deadline has passed.
+        vm.warp(block.timestamp + minDuration);
         merchant.open(id);
 
         _autoClose(id);
@@ -701,6 +703,8 @@ contract PocAudit20261019_EscrowTest is Test {
         // A second, unrelated escrow keeps extra funds in the contract for the reentrant party to steal.
         vm.prank(eoaCustomer);
         escrow.createEscrow{value: 3 ether}(eoaMerchant, _deadline(), bytes32(0));
+        // MF-12: the merchant may dispute only once the deadline has passed.
+        vm.warp(block.timestamp + minDuration);
         merchant.open(id);
         _autoClose(id);
 
