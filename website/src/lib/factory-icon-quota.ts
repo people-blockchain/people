@@ -88,6 +88,85 @@ export async function previewIconGenQuota(
   return { allowed: false, reason: "payment_required" };
 }
 
+export type IconGenReservation =
+  | { ok: true; charge: "free" | "paid"; freeRemainingAfter: number }
+  | { ok: false; reason: "global_cap" | "payment_required" };
+
+/**
+ * AUDIT M2: reserve a batch *before* generating, atomically. `previewIconGenQuota` is only a
+ * read, so N parallel requests could all pass it and then all consume. Here each counter is a
+ * single conditional upsert (`… DO UPDATE SET usedCount = usedCount + 1 WHERE usedCount < cap
+ * RETURNING`), so at most `cap` concurrent callers win; both rows move inside one transaction so
+ * a lost free-slot race also rolls back the global slot. Undo with `releaseIconGenSlot` if the
+ * batch then fails.
+ */
+export async function reserveIconGenSlot(
+  wallet: string,
+  charge: "free" | "paid",
+  day = utcDayKey()
+): Promise<IconGenReservation> {
+  const db = await getDbReady();
+  const walletAddress = normalizeWallet(wallet);
+  const globalCap = readIconGenGlobalDailyCap();
+  if (globalCap < 1) return { ok: false, reason: "global_cap" };
+
+  // Thrown (and caught below) only to roll the transaction back with a reason.
+  const rolledBack: { reason: "global_cap" | "payment_required" | null } = { reason: null };
+  const rollback = (reason: "global_cap" | "payment_required") => {
+    rolledBack.reason = reason;
+    return new Error(`icon_quota_${reason}`);
+  };
+
+  type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
+  const bump = (tx: Tx, key: string, cap: number | null) =>
+    tx
+      .insert(factoryIconDailyUsage)
+      .values({ dayKey: day, walletAddress: key, usedCount: 1 })
+      .onConflictDoUpdate({
+        target: [factoryIconDailyUsage.dayKey, factoryIconDailyUsage.walletAddress],
+        set: {
+          usedCount: sql`${factoryIconDailyUsage.usedCount} + 1`,
+          updatedAt: new Date(),
+        },
+        ...(cap === null ? {} : { setWhere: sql`${factoryIconDailyUsage.usedCount} < ${cap}` }),
+      })
+      .returning({ usedCount: factoryIconDailyUsage.usedCount });
+
+  try {
+    return await db.transaction(async (tx) => {
+      const globalRows = await bump(tx, GLOBAL_USAGE_KEY, globalCap);
+      if (globalRows.length === 0) throw rollback("global_cap");
+      // Paid batches still count on the wallet row (same as before) but are not capped by it.
+      const walletRows = await bump(tx, walletAddress, charge === "free" ? ICON_GEN_FREE_PER_DAY : null);
+      if (walletRows.length === 0) throw rollback("payment_required");
+      const used = Number(walletRows[0].usedCount);
+      return {
+        ok: true as const,
+        charge,
+        freeRemainingAfter: charge === "free" ? Math.max(0, ICON_GEN_FREE_PER_DAY - used) : 0,
+      };
+    });
+  } catch (error) {
+    if (rolledBack.reason) return { ok: false, reason: rolledBack.reason };
+    throw error;
+  }
+}
+
+/** Give back a slot taken by `reserveIconGenSlot` when the batch it guarded did not happen. */
+export async function releaseIconGenSlot(wallet: string, day = utcDayKey()): Promise<void> {
+  const db = await getDbReady();
+  const walletAddress = normalizeWallet(wallet);
+  for (const key of [walletAddress, GLOBAL_USAGE_KEY]) {
+    await db
+      .update(factoryIconDailyUsage)
+      .set({
+        usedCount: sql`GREATEST(${factoryIconDailyUsage.usedCount} - 1, 0)`,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(factoryIconDailyUsage.dayKey, day), eq(factoryIconDailyUsage.walletAddress, key)));
+  }
+}
+
 /**
  * Record one consumed batch: one row per wallet plus the shared global row. Upsert keeps the
  * increment atomic across instances. `_charge` is retained for call-site symmetry and future

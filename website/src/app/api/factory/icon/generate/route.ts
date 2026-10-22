@@ -13,8 +13,9 @@ import {
 import { moderateIconSubject } from "@/lib/factory-icon-moderation";
 import { isWalletFreeIconEligible } from "@/lib/factory-icon-eligibility";
 import {
-  consumeIconGenSlot,
   previewIconGenQuota,
+  releaseIconGenSlot,
+  reserveIconGenSlot,
   getGlobalIconGenCountForDay,
   utcDayKey,
 } from "@/lib/factory-icon-quota";
@@ -143,6 +144,18 @@ export async function POST(request: Request) {
     }
   }
 
+  // AUDIT M2: the preview above is only a read; take the slot atomically before spending any
+  // provider calls so parallel requests cannot all slip through the free quota / global cap.
+  const day = utcDayKey();
+  const reservation = await reserveIconGenSlot(wallet, charge, day);
+  if (!reservation.ok) {
+    if (charge === "paid") await releaseIconGenPaymentTx((body.paymentTxId ?? "").trim());
+    if (reservation.reason === "global_cap") {
+      return NextResponse.json({ error: "global_cap" }, { status: 503 });
+    }
+    return NextResponse.json({ error: "payment_required" }, { status: 402 });
+  }
+
   const prompt = buildPresetPrompt(preset, subject);
   const seeds = [11, 22, 33, 44].map((n, i) => Date.now() % 10_000 + n + i);
   const variants: Array<{ index: number; previewBase64: string }> = [];
@@ -160,19 +173,18 @@ export async function POST(request: Request) {
       variants.push({ index: i, previewBase64 });
     }
   } catch (err) {
+    await releaseIconGenSlot(wallet, day);
     if (charge === "paid") await releaseIconGenPaymentTx((body.paymentTxId ?? "").trim());
     const message = err instanceof Error ? err.message : "generation_failed";
     return NextResponse.json({ error: message }, { status: 502 });
   }
-
-  await consumeIconGenSlot(wallet, charge);
 
   return NextResponse.json({
     variants: variants.map((v) => ({
       index: v.index,
       preview: `data:image/png;base64,${v.previewBase64}`,
     })),
-    freeRemaining: Math.max(0, quotaPreview.allowed ? quotaPreview.freeRemainingAfter : 0),
+    freeRemaining: reservation.freeRemainingAfter,
     charge,
   });
 }

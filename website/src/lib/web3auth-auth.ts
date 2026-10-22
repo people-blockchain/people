@@ -5,6 +5,7 @@ import { verifyWeb3AuthIdToken, type Web3AuthProfile } from "@/lib/web3auth-id-t
 import { ensurePartner } from "@/lib/partner/service";
 import { isVerifierAllowed } from "@/lib/web3auth-verifier-allowlist";
 import { isDiscoverAdminEmail } from "@/lib/discover/admin-config";
+import { blocksDangerousAccountLink } from "@/lib/wallet-link-guard";
 
 /**
  * M02-5: Web3Auth accounts are bound by `(provider = verifier, providerAccountId =
@@ -88,6 +89,18 @@ export async function bindWeb3AuthProfile(profile: Web3AuthProfile) {
         "[auth] web3auth sign-in refused: email already bound to a different identity under this verifier",
         { verifier, email },
       );
+      return null;
+    }
+    // AUDIT M1: Web3Auth goes through Credentials, so the Auth.js `signIn` callback never runs
+    // `blocksDangerousAccountLink` for it (that check is gated on `account.type === "oauth"`).
+    // Apply the same wallet-owning-account guard here before attaching a new identity by email.
+    const blocked = await blocksDangerousAccountLink({
+      provider: verifier,
+      providerAccountId: verifierId,
+      email,
+    });
+    if (blocked) {
+      console.warn("[auth] web3auth sign-in refused: email belongs to a wallet-owning account", { verifier, email });
       return null;
     }
     await db.insert(accounts).values({
