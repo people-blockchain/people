@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "公共测试网上的区块、交易、地址、代币和 NFT。"
+    },
+    "people-peoplescan": {
+      "summary": "面向 PEOPLE 的独立社区区块浏览器：在测试网上浏览区块、交易、代币、NFT 和合约。"
     }
   }
 }

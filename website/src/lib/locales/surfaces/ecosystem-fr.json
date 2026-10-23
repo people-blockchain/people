@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Blocs, transactions, adresses, jetons et NFT sur le réseau de test public."
+    },
+    "people-peoplescan": {
+      "summary": "Explorateur de blocs PEOPLE indépendant, créé par la communauté : parcourez les blocs, transactions, jetons, NFT et contrats sur le réseau de test."
     }
   }
 }

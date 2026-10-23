@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Herkese açık test ağında bloklar, işlemler, adresler, tokenlar ve NFT'ler."
+    },
+    "people-peoplescan": {
+      "summary": "PEOPLE için bağımsız, topluluk tarafından geliştirilen blok gezgini: test ağında blokları, işlemleri, tokenları, NFT'leri ve sözleşmeleri inceleyin."
     }
   }
 }

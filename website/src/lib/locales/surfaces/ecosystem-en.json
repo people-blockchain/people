@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Blocks, transactions, addresses, tokens, and NFTs on the public testnet."
+    },
+    "people-peoplescan": {
+      "summary": "Independent community block explorer for PEOPLE: browse blocks, transactions, tokens, NFTs and contracts on the testnet."
     }
   }
 }
