@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { CURVE, SALE } from "./config.ts";
+import { CURVE, SALE, SELL_BACK } from "./config.ts";
 import {
   curveSamplesByRaise,
   graduation,
@@ -94,7 +94,7 @@ test("a buy that would overrun the supply is trimmed, not overfilled", () => {
 test("buy then sell never profits: the 1.5% fee and the curve see to it", () => {
   const start = 50e6;
   const buy = quoteBuy(start, 500);
-  const sell = quoteSell(start + buy.pplOut, buy.pplOut, SALE.sellFeePct);
+  const sell = quoteSell(start + buy.pplOut, buy.pplOut, SELL_BACK.feePct);
   closeTo(sell.grossUsd, buy.usdIn, 1e-9);
   closeTo(sell.feeUsd, buy.usdIn * 0.015, 1e-9);
   assert.ok(sell.netUsd < buy.usdIn);
@@ -102,7 +102,7 @@ test("buy then sell never profits: the 1.5% fee and the curve see to it", () => 
 });
 
 test("selling cannot take out more PPL than the curve has sold", () => {
-  const sell = quoteSell(1e6, 5e6, SALE.sellFeePct);
+  const sell = quoteSell(1e6, 5e6, SELL_BACK.feePct);
   closeTo(sell.pplIn, 1e6);
   closeTo(sell.priceAfterUsd, CURVE.startPriceUsd);
 });
