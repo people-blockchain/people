@@ -44,7 +44,7 @@ export function BuyPage() {
         className="border-b border-line bg-canvas-2 pt-[max(0px,env(safe-area-inset-top))]"
         aria-labelledby="buy-hero-title"
       >
-        <div className={`${WARM_SECTION} grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10`}>
+        <div className={`${WARM_SECTION} grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_1fr_auto] lg:gap-10`}>
           <div className="order-1 lg:col-start-1 lg:row-start-1">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
               {t.hero.eyebrow}

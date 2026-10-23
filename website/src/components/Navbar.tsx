@@ -239,7 +239,7 @@ export function Navbar() {
     <header className="glass-bar sticky top-0 z-50 border-b border-line">
       <div
         dir="ltr"
-        className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-16 lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
+        className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-[4.5rem] lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
       >
         {/* Brand — lockup + tagline under PEOPLE; localized slogan below the
             whole block, left-aligned with the symbol (footer layout). */}

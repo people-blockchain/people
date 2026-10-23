@@ -65,13 +65,13 @@ export function SaleStatsPanel({ stats, phase = "closed" }: { stats: SaleStats; 
         {rows.map((row) => (
           <div
             key={row.key}
-            className={`rounded-2xl border p-3.5 ${
+            className={`min-w-0 rounded-2xl border p-3.5 ${
               row.accent ? "border-brand/40 bg-brand/5" : "border-line bg-surface"
             }`}
           >
             <dt className="text-xs font-medium text-ink-3">{row.label}</dt>
             <dd
-              className={`mt-1 font-mono font-bold leading-tight break-words ${
+              className={`mt-1 font-mono font-bold leading-tight break-words [overflow-wrap:anywhere] ${
                 row.accent ? "text-xl text-brand sm:text-2xl" : "text-base text-ink sm:text-lg"
               }`}
             >
