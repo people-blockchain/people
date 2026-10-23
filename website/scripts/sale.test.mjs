@@ -58,13 +58,13 @@ test("tokenomics surfaces list all sale networks without Cosmos", () => {
   }
 });
 
-test("buy surfaces list LI.FI bridge source chains without TON or Tron (12 languages)", () => {
+test("buy surfaces say EVM, Tron and Solana work and TON does not (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
-    assert.match(doc.form.supportedBridgeChains, /Solana/);
-    assert.doesNotMatch(doc.form.supportedBridgeChains, /Tron/);
-    assert.doesNotMatch(doc.form.supportedBridgeChains, /\bTON\b/i);
+    assert.match(doc.form.payFromNetworks, /Solana/, lang);
+    assert.match(doc.form.payFromNetworks, /Tron/, lang);
+    assert.match(doc.form.payFromNetworks, /\bTON\b/, `${lang}: TON stated as unsupported`);
     assert.match(doc.form.payOnBase, /Base/);
   }
 });
@@ -113,16 +113,17 @@ test("sale order tx index compares paymentTxId case-insensitively", () => {
   assert.match(sql, /CREATE UNIQUE INDEX IF NOT EXISTS "ppl_sale_payment_tx_lower_idx".*lower\("paymentTxId"\)/);
 });
 
-// Round 2b: every explorer URL on /buy must point at the People network
-// explorer this site ships, never at a third-party block explorer.
-test("/buy explorer links are built from PEOPLE_EXPLORER, with no third-party explorer", () => {
+// Contract and transaction links on /buy go to Basescan (external, new tab).
+test("/buy explorer links point at Basescan", () => {
   const config = readFileSync(join(root, "src/lib/sale/config.ts"), "utf8");
-  assert.match(config, /PEOPLE_EXPLORER = \{\s*(?:\/\*\*[\s\S]*?\*\/\s*)?base: "\/explorer"/);
-  for (const fn of ["explorerAddressUrl", "explorerContractUrl", "explorerTxUrl"]) {
-    assert.match(config, new RegExp(`export function ${fn}\\([\\s\\S]*?PEOPLE_EXPLORER\\.base`), fn);
-  }
-  for (const file of ["src/lib/sale/config.ts", "src/lib/sale/adapter.ts", "src/components/buy/SaleTransparency.tsx", "src/components/buy/TradeFeed.tsx"]) {
-    assert.doesNotMatch(readFileSync(join(root, file), "utf8"), /basescan|etherscan|bscscan|solscan|tronscan/i, file);
+  assert.match(config, /BASESCAN = "https:\/\/basescan\.org"/);
+  for (const fn of ["basescanAddressUrl", "basescanTxUrl"]) assert.match(config, new RegExp(fn));
+  const transparency = readFileSync(join(root, "src/components/buy/SaleTransparency.tsx"), "utf8");
+  assert.match(transparency, /target="_blank"/);
+  assert.match(transparency, /rel="noopener noreferrer"/);
+  assert.doesNotMatch(transparency, /next\/link/);
+  for (const file of ["src/lib/sale/config.ts", "src/lib/sale/adapter.ts", "src/components/buy/TradeFeed.tsx"]) {
+    assert.doesNotMatch(readFileSync(join(root, file), "utf8"), /etherscan|bscscan|solscan|tronscan/i, file);
   }
 });
 
@@ -132,13 +133,13 @@ test("/buy page sets dir=rtl for Arabic", () => {
   assert.match(page, /dir=\{isRtl \? "rtl" : "ltr"\}/);
 });
 
-test("/buy stats panel shows only price and days left", () => {
+test("/buy stats panel shows only status/price and the sale window", () => {
   const panel = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
   assert.doesNotMatch(panel, /key: "raised"/);
   assert.doesNotMatch(panel, /role="progressbar"/);
   assert.doesNotMatch(panel, /graduationProgress/);
   assert.match(panel, /key: "price"/);
-  assert.match(panel, /key: "days"/);
+  assert.match(panel, /key: "window"/);
   assert.doesNotMatch(panel, /key: "sold"/);
   assert.doesNotMatch(panel, /key: "buyers"/);
 });
@@ -149,15 +150,11 @@ test("/buy why-price block leads with no manual pricing (12 languages)", () => {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
     assert.ok(doc.whyPriceRises?.noManualLead, lang);
     assert.match(doc.whyPriceRises.noManualLead, /PEOPLE/, `${lang}: brand caps`);
-    assert.match(doc.whyPriceRises.mechanism, /Uniswap/i, `${lang}: Uniswap example`);
-    assert.match(doc.whyPriceRises.mechanism, /Bancor/i, `${lang}: Bancor example`);
-    assert.match(doc.whyPriceRises.mechanism, /pump\.fun/i, `${lang}: pump.fun example`);
-    assert.match(doc.whyPriceRises.mechanism, /Virtuals Protocol/i, `${lang}: Virtuals example`);
-    assert.ok(doc.whyPriceRises.reserve, lang);
-    assert.match(doc.whyPriceRises.reserve, /30/, `${lang}: hold mention`);
+    assert.doesNotMatch(doc.whyPriceRises.mechanism, /Uniswap|Bancor|pump\.fun|Virtuals/i, `${lang}: no third-party brands`);
+    assert.ok(doc.whyPriceRises.plain.length >= 7, `${lang}: plain-words list`);
     assert.ok(doc.whyPriceRises.chartAxisSold, lang);
-    assert.match(doc.form.sellBack, /30/, `${lang}: sell-back hold`);
-    assert.doesNotMatch(doc.form.sellBack, /any time|в любой момент|à tout moment|jederzeit|en cualquier momento/i, `${lang}: no anytime sell-back`);
+    assert.match(doc.form.sellBackTerms, /30/, `${lang}: sell-back hold`);
+    assert.doesNotMatch(doc.form.sellBackTerms, /any time|в любой момент|à tout moment|jederzeit|en cualquier momento/i, `${lang}: no anytime sell-back`);
   }
   const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
   assert.match(page, /BuyWhyPriceRises/);
@@ -170,13 +167,10 @@ test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
     const blob = JSON.stringify(doc);
     assert.doesNotMatch(doc.whyPriceRises.mechanism, /price = f\(tokens/i, lang);
     assert.doesNotMatch(blob, /sell-back/i, lang);
-    assert.doesNotMatch(blob, /\bSell-back\b/, lang);
-    assert.doesNotMatch(blob.replace(/\{graduation\}/g, ""), /\bgraduation\b/i, lang);
-    assert.match(doc.whyPriceRises.noManualLead, /bonding curve[）)]/i, `${lang}: bonding curve gloss`);
+    assert.match(doc.whyPriceRises.plain[0], /bonding curve/i, `${lang}: bonding curve gloss`);
   }
   const ru = JSON.parse(readFileSync(join(surfaces, "buy-ru.json"), "utf8"));
-  assert.match(ru.form.sellBack, /обратный выкуп/i);
-  assert.match(ru.whyPriceRises.mechanism, /количества проданных PPL/);
+  assert.match(ru.form.sellBackTerms, /Продажа обратно в резерв/);
   assert.doesNotMatch(JSON.stringify(ru), /холд/i);
 });
 
@@ -185,25 +179,19 @@ test("/buy UI omits dev-facing stats and form disclaimers", () => {
   assert.doesNotMatch(stats, /statsNote/);
   const form = readFileSync(join(root, "src/components/buy/BuyForm.tsx"), "utf8");
   assert.doesNotMatch(form, /disabledNote/);
-  assert.doesNotMatch(form, /form\.estimate/);
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
   assert.equal(en.hero.statsNote, "");
-  assert.equal(en.form.disabledNote, "");
+  assert.equal(en.form.disabledNote, undefined);
 });
 
-test("/buy audit copy names exactly the three models in AI_AUDITS", () => {
-  const config = readFileSync(join(root, "src/lib/sale/config.ts"), "utf8");
-  const models = [...config.matchAll(/\{ id: "\w+", model: "([^"]+)" \}/g)].map(([, model]) => model);
-  assert.deepEqual(models, ["Claude Opus 5.5", "GPT Astra", "Fable 5.1"]);
-
-  const expected = {
-    en: "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
-    ru: "Аудит: Claude Opus 5.5, GPT Astra, Fable 5.1",
-  };
+test("/buy AI review copy names exactly the three models and never says audit", () => {
+  const expected = ["Claude Opus 5.5", "GPT Astra", "Fable 5.1"];
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).transparency;
+  for (const model of expected) assert.match(en.auditLine, new RegExp(model.replace(".", "\\.")));
+  assert.match(en.auditLine, /not a security audit/);
   for (const lang of ["en", "ru"]) {
     const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).transparency;
-    assert.equal(copy.auditLine, expected[lang], `buy-${lang}`);
     assert.ok(copy.auditBounty, `buy-${lang}: bug bounty mention`);
-    assert.doesNotMatch(JSON.stringify(copy), /Sonnet|Opus 5[^.]|independent AI audit|независимых AI-аудита/i, `buy-${lang}`);
+    assert.doesNotMatch(JSON.stringify(copy), /Sonnet|independent AI audit|независимых AI-аудита/i, `buy-${lang}`);
   }
 });
