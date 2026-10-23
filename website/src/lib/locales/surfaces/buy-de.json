@@ -247,7 +247,7 @@
       },
       {
         "q": "Brauche ich das PEOPLE-Netzwerk in meiner Wallet?",
-        "a": "Zum Kaufen nicht: Sie zahlen auf Base. Fügen Sie das PEOPLE-Netzwerk nur hinzu, wenn Sie es in Ihrer Wallet sehen möchten — über die Schaltfläche unten oder manuell mit den veröffentlichten Netzwerkparametern."
+        "a": "Nein. Der Verkauf läuft nur auf Base: Sie zahlen in USDC oder USDT auf Base. Das PEOPLE-Netzwerk ist getrennt und für den Kauf nicht nötig."
       },
       {
         "q": "Wann kann ich PPL an andere senden?",
@@ -262,9 +262,6 @@
         "a": "Auf Base mit USDC oder USDT. Aus anderen Netzwerken über den integrierten automatischen Tausch (LI.FI): EVM-Netzwerke (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und weitere), Tron und Solana funktionieren. TON wird nicht unterstützt."
       }
     ],
-    "addNetworkCta": "PEOPLE-Netzwerk zur Wallet hinzufügen (optional)",
-    "addNetworkDone": "Anfrage an Ihre Wallet gesendet",
-    "addNetworkError": "Ihre Wallet hat abgelehnt oder keine Wallet gefunden.",
     "pumpTitle": "Was schiefgeht bei Kurven ohne Obergrenze",
     "pumpLead": "Preiskurven (Bonding Curves) wurden durch Launchpads wie pump.fun populär. Das sind ihre bekannten Probleme — und unser Ansatz.",
     "pumpCols": [

@@ -117,7 +117,7 @@
     "items": [
       {
         "q": "Is this mainnet?",
-        "a": "No. This is a public testnet. The tokens and balances here are for testing and carry no value."
+        "a": "No. The People network is a public testnet. The tokens and balances here are for testing and carry no value. The PPL sale is separate: it runs on Base, in USDC or USDT, and opens once the sale contract is published."
       },
       {
         "q": "Do I need to know how to code?",

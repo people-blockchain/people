@@ -144,7 +144,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Tahap | Apa yang terjadi | Gerbang |
 |---|---|---|
 | **Musim 0 — Testnet publik** | Dompet, verifikasi, peluncuran token, kartu NFT, swap, poin Satu Juta Founder. | Sekarang |
-| **Mainnet + penjualan PPL** | Mainnet diluncurkan. Parameter dipublikasikan (kurva eksponensial dari **$0.005**/PPL, hingga **100M PPL** di kurva, graduation **$4M**) di `/buy`; pembelian nonaktif hingga hub di-deploy. | Minimal 1.000 orang terverifikasi **dan** multisig treasury aktif |
+| **Penjualan PPL di Base** | Penjualan PPL hanya berjalan di Base (PplCurveHub, USDC atau USDT). Parameter dipublikasikan (kurva eksponensial dari **$0.005**/PPL, hingga **100M PPL** di kurva, graduation **$4M**) di `/buy`; pembelian nonaktif hingga kontrak penjualan dipublikasikan. Mainnet jaringan PEOPLE adalah langkah terpisah. | Kontrak penjualan (PplCurveHub di Base) dan multisig penerima dipublikasikan |
 | **Staking & validator** | Staking dan partisipasi validator terbuka di luar proyek. | Setelah mainnet |
 
 Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpenuhi.

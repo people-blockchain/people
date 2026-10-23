@@ -247,7 +247,7 @@
       },
       {
         "q": "钱包里需要添加 PEOPLE 网络吗？",
-        "a": "购买不需要：您在 Base 上付款。只有想在钱包中看到 PEOPLE 网络时才需添加——使用下方按钮，或手动输入已公布的网络参数。"
+        "a": "不需要。销售仅在 Base 上进行：您在 Base 上用 USDC 或 USDT 支付。PEOPLE 网络是独立的，购买时无需使用。"
       },
       {
         "q": "什么时候可以把 PPL 发送给他人？",
@@ -262,9 +262,6 @@
         "a": "在 Base 上可用 USDC 或 USDT。从其他网络可通过内置自动兑换（LI.FI）：支持 EVM 网络（Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 等）、Tron 和 Solana。不支持 TON。"
       }
     ],
-    "addNetworkCta": "将 PEOPLE 网络添加到钱包（可选）",
-    "addNetworkDone": "请求已发送至您的钱包",
-    "addNetworkError": "钱包拒绝或未找到钱包。",
     "pumpTitle": "无上限曲线的问题",
     "pumpLead": "价格曲线（bonding curve）因 pump.fun 等发射平台而流行。以下是它们的已知问题，以及我们的做法。",
     "pumpCols": [

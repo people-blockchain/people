@@ -247,7 +247,7 @@
       },
       {
         "q": "Cüzdanımda PEOPLE ağı gerekli mi?",
-        "a": "Satın almak için hayır: ödemeyi Base'de yaparsınız. PEOPLE ağını yalnızca cüzdanınızda görmek isterseniz ekleyin — aşağıdaki düğmeyle veya yayımlanan ağ parametrelerini elle girerek."
+        "a": "Hayır. Satış yalnızca Base üzerinde yapılır: Base'te USDC veya USDT ile ödersiniz. PEOPLE ağı ayrıdır ve satın almak için gerekmez."
       },
       {
         "q": "PPL'i başkasına ne zaman gönderebilirim?",
@@ -262,9 +262,6 @@
         "a": "Base'de USDC veya USDT ile. Diğer ağlardan yerleşik otomatik takas (LI.FI) ile: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana çalışır. TON desteklenmez."
       }
     ],
-    "addNetworkCta": "PEOPLE ağını cüzdanıma ekle (isteğe bağlı)",
-    "addNetworkDone": "İstek cüzdanınıza gönderildi",
-    "addNetworkError": "Cüzdan reddetti veya cüzdan bulunamadı.",
     "pumpTitle": "Tavansız eğrilerde neler ters gider",
     "pumpLead": "Fiyat eğrileri (bonding curves) pump.fun gibi launchpad'lerle popüler oldu. Bilinen sorunları ve bizim çözümümüz şunlar.",
     "pumpCols": [

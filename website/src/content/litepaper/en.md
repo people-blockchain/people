@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
+| **PPL sale on Base** | The PPL sale runs on Base only (PplCurveHub, USDC or USDT). Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale contract is published. Mainnet of the PEOPLE network is a separate step. | Sale contract (PplCurveHub on Base) and receiving multisig published |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.

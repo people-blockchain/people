@@ -55,6 +55,8 @@ for (const vp of VIEWPORTS) {
             return route.fulfill({ status: 200, contentType: "text/html", body: "<title>wallet</title>" });
           });
           await page.getByTestId(testId).click();
+          // An intermediate step explains what will happen; the deep link opens on confirm.
+          await page.getByTestId("wallet-ext-open").click();
           await expect.poll(() => target, { timeout: 5000 }).not.toBeNull();
           expect(target.startsWith(urlPart)).toBe(true);
           if (testId.includes("trust")) {
@@ -82,8 +84,8 @@ for (const vp of VIEWPORTS) {
       test("desktop without extension shows a readable message", async ({ browser }) => {
         const { context, page } = await open(browser, vp);
         await page.getByTestId("wallet-connect-metamask").click();
-        const alert = page.getByTestId("wallet-external-connect").getByRole("alert");
-        await expect(alert).toContainText("MetaMask was not found");
+        const step = page.getByTestId("wallet-ext-step");
+        await expect(step).toContainText("MetaMask was not found");
         await expect(page.locator("body")).not.toContainText("no_injected_provider");
         await context.close();
       });

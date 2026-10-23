@@ -247,7 +247,7 @@
       },
       {
         "q": "Apakah saya perlu jaringan PEOPLE di dompet?",
-        "a": "Untuk membeli, tidak: Anda membayar di Base. Tambahkan jaringan PEOPLE hanya jika ingin melihatnya di dompet — dengan tombol di bawah atau dengan memasukkan parameter jaringan yang dipublikasikan secara manual."
+        "a": "Tidak. Penjualan hanya berjalan di Base: Anda membayar dengan USDC atau USDT di Base. Jaringan PEOPLE terpisah dan tidak diperlukan untuk membeli."
       },
       {
         "q": "Kapan saya bisa mengirim PPL ke orang lain?",
@@ -262,9 +262,6 @@
         "a": "Di Base — dengan USDC atau USDT. Dari jaringan lain — melalui penukaran otomatis bawaan (LI.FI): jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana berfungsi. TON tidak didukung."
       }
     ],
-    "addNetworkCta": "Tambahkan jaringan PEOPLE ke dompet (opsional)",
-    "addNetworkDone": "Permintaan dikirim ke dompet Anda",
-    "addNetworkError": "Dompet menolak atau tidak ditemukan.",
     "pumpTitle": "Apa yang salah pada kurva tanpa plafon",
     "pumpLead": "Kurva harga (bonding curve) menjadi populer lewat launchpad seperti pump.fun. Inilah masalah yang sudah dikenal dan apa yang kami lakukan.",
     "pumpCols": [
