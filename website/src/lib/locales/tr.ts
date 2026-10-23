@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const tr: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Test ağı PEOPLE v0.1",
     "links": [
       {
         "label": "Nasıl Çalışır",
@@ -42,6 +42,10 @@ export const tr: LocaleContent = {
     "slogan": "İnsanlar tarafından oluşturuldu. Topluluk için.",
     "moreLinks": [
       {
+        "label": "PPL satışı",
+        "href": "/buy"
+      },
+      {
         "label": "Yol haritası",
         "href": "/roadmap"
       },
@@ -64,6 +68,10 @@ export const tr: LocaleContent = {
       {
         "label": "Staking",
         "href": "/staking"
+      },
+      {
+        "label": "Yönetişim",
+        "href": "/governance"
       },
       {
         "label": "Token oluştur",
@@ -100,7 +108,8 @@ export const tr: LocaleContent = {
     "signIn": "Giriş yap",
     "becomePartner": "Ortak olun",
     "logoAlt": "Topluluk için blokzincir",
-    "brandAria": "Topluluk için blokzincir Ana Sayfa"
+    "brandAria": "Topluluk için blokzincir Ana Sayfa",
+    "buy": "PPL satışı"
   },
   "explainerVideo": {
     "eyebrow": "İzle",
@@ -1274,5 +1283,21 @@ export const tr: LocaleContent = {
     "logoAlt": "Topluluk için blokzincir",
     "privacyLink": "Gizlilik Politikası",
     "termsLink": "Hizmet Şartları"
+  },
+  "networkMode": {
+    "label": "Ağ modu",
+    "mainnet": "Ana ağ",
+    "mainnetTitle": "Ana ağ: PPL satışının yapıldığı Base ağı",
+    "testnet": "Test ağı",
+    "testnetTitle": "Test ağı: token ve NFT oluşturmak için PEOPLE test ağı"
+  },
+  "a11y": {
+    "skipToContent": "İçeriğe geç",
+    "navPrimary": "Ana gezinme",
+    "navMobile": "Mobil menü",
+    "footer": "Alt bilgi"
+  },
+  "common": {
+    "englishOnlyBanner": "Bu sayfa şimdilik yalnızca İngilizce mevcut."
   }
 };
