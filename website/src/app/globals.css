@@ -1019,7 +1019,7 @@ html:has([data-testid="buy-page"]) {
 }
 @media (min-width: 1024px) {
   html:has([data-testid="buy-page"]) {
-    scroll-padding-top: 4rem;
+    scroll-padding-top: 4.5rem;
   }
 }
 
