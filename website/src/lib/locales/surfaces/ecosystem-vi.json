@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Khối, giao dịch, địa chỉ, token và NFT trên mạng thử nghiệm công khai."
+    },
+    "people-peoplescan": {
+      "summary": "Trình khám phá khối độc lập của cộng đồng cho PEOPLE: duyệt khối, giao dịch, token, NFT và hợp đồng trên mạng thử nghiệm."
     }
   }
 }

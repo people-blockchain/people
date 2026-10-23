@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Blok, transaksi, alamat, token, dan NFT di jaringan uji publik."
+    },
+    "people-peoplescan": {
+      "summary": "Penjelajah blok PEOPLE independen buatan komunitas: telusuri blok, transaksi, token, NFT, dan kontrak di jaringan uji."
     }
   }
 }
