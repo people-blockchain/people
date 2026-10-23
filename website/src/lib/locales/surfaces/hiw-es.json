@@ -64,7 +64,7 @@
         "Validadores: 200M PPL, 6% / 5% / 5% / 4% del supply anual (60M, 50M, 50M, 40M) + 30% comisiones.",
         "Fundadores, recompensas, embajadores y airdrops: solo fondo comunitario 35%.",
         "Desde año 5: máx. 2% emisión nueva/año, solo voto comunitario.",
-        "Airdrop fundadores primero; venta tras 1.000 verificados y multisig.",
+        "Airdrop a fundadores primero; la venta de PPL es en Base y abre al publicar el contrato de venta y la multifirma receptora.",
         "Cada comisión: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quema."
       ]
     },

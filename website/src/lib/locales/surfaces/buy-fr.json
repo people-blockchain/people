@@ -247,7 +247,7 @@
       },
       {
         "q": "Ai-je besoin du réseau PEOPLE dans mon portefeuille ?",
-        "a": "Pas pour acheter : vous payez sur Base. Ajoutez le réseau PEOPLE seulement si vous voulez le voir dans votre portefeuille — avec le bouton ci-dessous ou en saisissant à la main les paramètres publiés du réseau."
+        "a": "Non. La vente se déroule uniquement sur Base : vous payez en USDC ou USDT sur Base. Le réseau PEOPLE est distinct et inutile pour acheter."
       },
       {
         "q": "Quand puis-je envoyer des PPL à quelqu’un ?",
@@ -262,9 +262,6 @@
         "a": "Sur Base, en USDC ou en USDT. Depuis d’autres réseaux, via l’échange automatique intégré (LI.FI) : les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana fonctionnent. TON n’est pas pris en charge."
       }
     ],
-    "addNetworkCta": "Ajouter le réseau PEOPLE à mon portefeuille (facultatif)",
-    "addNetworkDone": "Demande envoyée à votre portefeuille",
-    "addNetworkError": "Votre portefeuille a refusé ou aucun portefeuille trouvé.",
     "pumpTitle": "Ce qui va mal sur les courbes sans plafond",
     "pumpLead": "Les courbes de prix (bonding curves) se sont popularisées via des launchpads comme pump.fun. Voici leurs problèmes connus et notre approche.",
     "pumpCols": [

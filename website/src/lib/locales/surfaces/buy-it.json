@@ -247,7 +247,7 @@
       },
       {
         "q": "Mi serve la rete PEOPLE nel wallet?",
-        "a": "Per acquistare no: paghi su Base. Aggiungi la rete PEOPLE solo se vuoi vederla nel wallet — con il pulsante qui sotto o inserendo a mano i parametri pubblicati della rete."
+        "a": "No. La vendita avviene solo su Base: paghi in USDC o USDT su Base. La rete PEOPLE è separata e non serve per acquistare."
       },
       {
         "q": "Quando posso inviare PPL a qualcun altro?",
@@ -262,9 +262,6 @@
         "a": "Su Base, in USDC o USDT. Da altre reti, tramite lo scambio automatico integrato (LI.FI): funzionano le reti EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e altre), Tron e Solana. TON non è supportata."
       }
     ],
-    "addNetworkCta": "Aggiungi la rete PEOPLE al wallet (facoltativo)",
-    "addNetworkDone": "Richiesta inviata al wallet",
-    "addNetworkError": "Il wallet ha rifiutato o nessun wallet trovato.",
     "pumpTitle": "Cosa va storto sulle curve senza tetto",
     "pumpLead": "Le curve dei prezzi (bonding curve) sono diventate popolari con launchpad come pump.fun. Ecco i problemi noti e cosa facciamo noi.",
     "pumpCols": [

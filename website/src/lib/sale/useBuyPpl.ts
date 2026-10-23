@@ -7,8 +7,10 @@ import {
   custom,
   erc20Abi,
   http,
+  parseEventLogs,
   parseUnits,
   type Address,
+  type TransactionReceipt,
 } from "viem";
 import { base } from "viem/chains";
 
@@ -50,6 +52,18 @@ export function classifyBuyError(err: unknown): { reason: BuyErrorReason; detail
 export function minOutWithSlippage(expected: bigint, slippageBps: number = SALE.slippageBps): bigint {
   const bps = BigInt(slippageBps);
   return (expected * (BigInt(10000) - bps)) / BigInt(10000);
+}
+
+/** viem does not throw on a reverted receipt, so check the status explicitly. Exported for tests. */
+export function assertReceiptSuccess(receipt: Pick<TransactionReceipt, "status">): void {
+  if (receipt.status !== "success") throw new Error("transaction reverted");
+}
+
+/** The PPL actually minted, read from the hub's `Bought` event; null when the log is absent. */
+export function pplOutFromReceipt(receipt: TransactionReceipt, hub: Address): bigint | null {
+  const logs = parseEventLogs({ abi: pplCurveHubAbi, eventName: "Bought", logs: receipt.logs });
+  const own = logs.find((log) => log.address.toLowerCase() === hub.toLowerCase());
+  return own ? own.args.pplOut : null;
 }
 
 /**
@@ -94,7 +108,7 @@ export async function runBuy(
         functionName: "approve",
         args: [hub, amountIn],
       });
-      await publicClient.waitForTransactionReceipt({ hash: approveHash });
+      assertReceiptSuccess(await publicClient.waitForTransactionReceipt({ hash: approveHash }));
     }
 
     const expected = await publicClient.readContract({
@@ -113,8 +127,9 @@ export async function runBuy(
       args: [params.token, amountIn, minPplOut],
     });
     onStatus({ step: "pending" });
-    await publicClient.waitForTransactionReceipt({ hash });
-    return finish({ step: "done", txHash: hash, pplOut: expected });
+    const receipt = await publicClient.waitForTransactionReceipt({ hash });
+    assertReceiptSuccess(receipt);
+    return finish({ step: "done", txHash: hash, pplOut: pplOutFromReceipt(receipt, hub) ?? expected });
   } catch (err) {
     const { reason, detail } = classifyBuyError(err);
     console.warn("[sale] purchase did not complete:", reason);

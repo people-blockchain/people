@@ -247,7 +247,7 @@
       },
       {
         "q": "Ví của tôi có cần mạng PEOPLE không?",
-        "a": "Để mua thì không: bạn thanh toán trên Base. Chỉ thêm mạng PEOPLE nếu bạn muốn thấy nó trong ví — bằng nút bên dưới hoặc nhập thủ công các tham số mạng đã công bố."
+        "a": "Không. Đợt bán chỉ chạy trên Base: bạn thanh toán bằng USDC hoặc USDT trên Base. Mạng PEOPLE là mạng riêng và không cần để mua."
       },
       {
         "q": "Khi nào tôi có thể gửi PPL cho người khác?",
@@ -262,9 +262,6 @@
         "a": "Trên Base — bằng USDC hoặc USDT. Từ các mạng khác — qua công cụ hoán đổi tự động tích hợp (LI.FI): các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana đều dùng được. TON không được hỗ trợ."
       }
     ],
-    "addNetworkCta": "Thêm mạng PEOPLE vào ví (không bắt buộc)",
-    "addNetworkDone": "Đã gửi yêu cầu tới ví",
-    "addNetworkError": "Ví từ chối hoặc không tìm thấy ví.",
     "pumpTitle": "Những gì sai trên các đường cong không có trần",
     "pumpLead": "Đường cong giá (bonding curve) trở nên phổ biến nhờ các launchpad như pump.fun. Đây là những vấn đề đã biết của chúng và cách chúng tôi xử lý.",
     "pumpCols": [

@@ -7,7 +7,6 @@ import { CURVE, SALE } from "@/lib/sale/config";
 import { fillCopy, formatMonths, intlLocale, pricePerPpl } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
 
-import { Num } from "./Num";
 
 type Stat = { key: string; label: string; value: string; hint: string; accent?: boolean };
 
@@ -72,10 +71,10 @@ export function SaleStatsPanel({ stats, phase = "closed" }: { stats: SaleStats; 
             <dt className="text-xs font-medium text-ink-3">{row.label}</dt>
             <dd
               className={`mt-1 font-mono font-bold leading-tight break-words [overflow-wrap:anywhere] ${
-                row.accent ? "text-xl text-brand sm:text-2xl" : "text-base text-ink sm:text-lg"
+                row.accent ? "text-lg text-brand sm:text-xl" : "text-sm text-ink sm:text-base"
               }`}
             >
-              <Num>{row.value}</Num>
+              <bdi dir="auto">{row.value}</bdi>
             </dd>
             {row.hint ? <p className="mt-1 text-[11px] leading-snug text-ink-3">{row.hint}</p> : null}
           </div>

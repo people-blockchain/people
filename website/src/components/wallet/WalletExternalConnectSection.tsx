@@ -157,6 +157,7 @@ export function WalletExternalConnectSection({
             {step.kind === "deepLink" ? (
               <button
                 type="button"
+                data-testid="wallet-ext-open"
                 className="min-h-11 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-ink"
                 onClick={() => {
                   const { vendor, wallet } = step;

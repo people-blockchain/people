@@ -64,7 +64,7 @@
         "Validatori: 200M PPL, 6% / 5% / 5% / 4% del supply (60M, 50M, 50M, 40M) + 30% commissioni.",
         "Fondatori, bounty, ambasciatori, airdrop: solo fondo 35%.",
         "Dal quinto anno: max 2% emissione/anno, solo voto community.",
-        "Airdrop fondatori prima; vendita dopo 1.000 verificati e multisig.",
+        "Airdrop ai fondatori prima; la vendita PPL è su Base e apre dopo la pubblicazione del contratto di vendita e del multisig ricevente.",
         "Ogni commissione: 30% validatori, 25% community, 20% tesoreria, 10% liquidità, 15% Growth, 0% burn."
       ]
     },

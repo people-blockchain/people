@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { classifyBuyError, minOutWithSlippage } from "./useBuyPpl.ts";
+import { assertReceiptSuccess, classifyBuyError, minOutWithSlippage } from "./useBuyPpl.ts";
 
 test("minPplOut is 99% of the quoted amount", () => {
   assert.equal(minOutWithSlippage(BigInt(1_000_000)), BigInt(990_000));
@@ -18,4 +18,9 @@ test("slippage and limit reverts get their own messages", () => {
   const other = classifyBuyError({ message: "x".repeat(300) });
   assert.equal(other.reason, "txFailed");
   assert.equal(other.detail?.length, 120);
+});
+
+test("a reverted receipt is an error, a successful one passes", () => {
+  assert.throws(() => assertReceiptSuccess({ status: "reverted" }));
+  assert.doesNotThrow(() => assertReceiptSuccess({ status: "success" }));
 });

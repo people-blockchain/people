@@ -247,7 +247,7 @@
       },
       {
         "q": "Do I need the People network in my wallet?",
-        "a": "Not to buy: you pay on Base. Add the People network only if you want to see it in your wallet — use the button below or enter the published network parameters manually."
+        "a": "No. The sale runs on Base only: you pay in USDC or USDT on Base. The People network is separate and is not needed to buy."
       },
       {
         "q": "When can I send PPL to someone else?",
@@ -262,9 +262,6 @@
         "a": "On Base — in USDC or USDT. From other networks — through the built-in automatic swap (LI.FI): EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana work. TON is not supported."
       }
     ],
-    "addNetworkCta": "Add the People network to my wallet (optional)",
-    "addNetworkDone": "Request sent to your wallet",
-    "addNetworkError": "Your wallet refused or no wallet was found.",
     "pumpTitle": "What goes wrong on curves without a ceiling",
     "pumpLead": "Bonding curves became popular through launchpads like pump.fun. These are their known problems, and what we do instead.",
     "pumpCols": [
