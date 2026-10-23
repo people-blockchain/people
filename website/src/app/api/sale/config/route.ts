@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { LIFI_BRIDGE_SOURCE_CHAINS_EN } from "@/lib/sale/bridge";
+import { PAY_FROM_OTHER_CHAINS, SALE, SELL_BACK } from "@/lib/sale/config";
 import { getBaseSaleNetwork } from "@/lib/sale/sale-hub";
 import { totalDeliveredSoldPpl } from "@/lib/sale/service";
 import { BONDING_CURVE, bondingCurvePriceUsdt } from "@/lib/tokenomics";
-import { SALE_MIN_USDT, SALE_MAX_USDT } from "@/lib/sale/economics";
+import { SALE_MAX_USDT } from "@/lib/sale/economics";
 
 export async function GET() {
   const sold = await totalDeliveredSoldPpl();
@@ -12,7 +12,10 @@ export async function GET() {
     soldPpl: sold,
     supplyPpl: BONDING_CURVE.supplyPpl,
     spotUsdt: bondingCurvePriceUsdt(sold),
-    minUsdt: SALE_MIN_USDT,
+    minUsdt: SALE.minPerBuyUsd,
+    saleTermMonths: SALE.saleTermMonths,
+    sellBack: SELL_BACK,
+    payFromOtherChains: PAY_FROM_OTHER_CHAINS,
     maxUsdt: SALE_MAX_USDT,
     hub: {
       id: base.id,
@@ -22,6 +25,5 @@ export async function GET() {
       stables: base.stables,
       saleContract: base.evm.saleContract,
     },
-    bridgeSourceChains: LIFI_BRIDGE_SOURCE_CHAINS_EN,
   });
 }

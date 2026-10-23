@@ -41,16 +41,24 @@ export const CAP_IS_CURVE_ONLY = true;
 /* ── Sale window, limits, fees ─────────────────────────────────────────── */
 
 export const SALE = {
-  /** Sale window. After this, whatever was raised is split the same 50/50 way. */
-  durationDays: 180,
+  /** Sale term in months: until sold out or this long after opening, whichever comes first. */
+  saleTermMonths: 24,
+  /** The term is never extended. */
+  extensions: false as const,
+  /** Where PPL left unsold at the end of the term goes. */
+  unsoldGoesTo: "Community Pool",
+  /** Purchases are final. */
+  refunds: false as const,
+  /** Min USD value of a single purchase (single source; economics.ts re-exports it). */
+  minPerBuyUsd: 10,
+  /** Slippage tolerance applied to the on-chain quote, in basis points. */
+  slippageBps: 100,
   /** Max USD value of a single purchase. */
   maxPerBuyUsd: 500,
   /** Max USD value one person may buy in a rolling 24 hours. */
   maxPerDayUsd: 2_000,
   /** Minimum gap between two trades from the same person, in seconds. */
   cooldownSeconds: 60,
-  /** Taken off a sell back to the curve; goes to PPL buyback, not to the team. */
-  sellFeePct: 1.5,
   /** Share of the raise seeded into the DEX pool at graduation. */
   liquiditySharePct: 50,
   /** Share of the raise sent to the project multisig at graduation. */
@@ -62,6 +70,31 @@ export const SALE = {
   fullMainnetMaxMonths: 6,
 } as const;
 
+/** Selling PPL back to the reserve. Closes at graduation. */
+export const SELL_BACK = {
+  verifiedOnly: true,
+  holdDays: 30, // per lot
+  priceRule: "curve-at-exit",
+  dailyCapReservePct: 2, // all sellers combined, per day
+  perPersonPerDayUsd: 2000,
+  /** Goes to the PPL buyback by the project, not to the team. */
+  feePct: 1.5,
+  feeHighPct: 3,
+  /** The fee is `feeHighPct` once that day's sell-backs exceed this share of the reserve. */
+  feeHighThresholdReservePct: 1,
+  closesAt: "graduation",
+  payout: { token: "USDC", chainId: 8453 },
+} as const;
+
+/** Source ecosystems the built-in swap widget accepts. TON is not supported. */
+export const PAY_FROM_OTHER_CHAINS = { evm: true, tron: true, solana: true, ton: false } as const;
+
+/** ISO date the sale opens (UTC). `null` until announced; the page then says so. */
+export const SALE_OPENING_DATE_UTC: string | null = null;
+
+/** Minimum native balance (ETH) needed on Base to pay the network fee. */
+export const MIN_GAS_ETH = 0.00002;
+
 /** Team vesting, shown on the sale page's transparency block. */
 export const TEAM_VESTING = { cliffMonths: 6, linearMonths: 18 } as const;
 
@@ -70,25 +103,11 @@ export type SaleStableSymbol = "USDC" | "USDT";
 /** Sells pay out here unless the buyer picks their own chain (bridge, minutes). */
 export const PAYOUT_DEFAULT = { networkLabel: "Base", stable: "USDC" as SaleStableSymbol } as const;
 
-/** Wallets the sale accepts. The connect flow itself is the site-wide wallet modal. */
-export const SUPPORTED_WALLETS = [
-  "MetaMask",
-  "Phantom",
-  "Trust Wallet",
-  "WalletConnect",
-  "Tonkeeper (TON Connect)",
-  "Google",
-] as const;
-
 /* ── Addresses ─────────────────────────────────────────────────────────── */
 
 /**
- * The chain the curve hub is deployed on — needed to read the hub.
- *
- * This is plumbing, not copy: the sale page never renders the network name or
- * the RPC endpoint (owner decision 2026-10-16 — the treasury is internal and
- * the only place the page names a network is the sell-back payout). The project
- * treasury address and its balance are deliberately not part of this module.
+ * The chain the curve hub is deployed on (Base). Sale contract lives on Base;
+ * contract links on /buy go to Basescan (see BASESCAN).
  */
 export const SALE_HUB_CHAIN = {
   chainId: 8453,
@@ -96,19 +115,24 @@ export const SALE_HUB_CHAIN = {
   rpcUrl: (process.env.NEXT_PUBLIC_BASE_RPC_URL ?? "https://mainnet.base.org").trim(),
 } as const;
 
+/** Public block explorer for the Base sale contract and tokens. */
+export { BASE_USDC_ADDRESS as BASE_USDC, BASE_USDT_ADDRESS as BASE_USDT } from "@/lib/sale/bridge";
+export const BASESCAN = "https://basescan.org";
+export const basescanAddressUrl = (address: string): string => `${BASESCAN}/address/${address}`;
+export const basescanTxUrl = (txHash: string): string => `${BASESCAN}/tx/${txHash}`;
+
 /**
- * Where the sale page sends anyone who wants to look something up on-chain:
- * the People network explorer this site already ships (`app/explorer/*`).
- *
- * Owner decision 2026-10-16: no third-party explorer brand on `/buy`. Every
- * explorer URL on the page is built from `base` below, so swapping the explorer
- * — a path today, an absolute URL if it ever moves to its own host — is a
- * one-line change here and nowhere else.
+ * Addresses published on /buy once the owner fills them in. `null` = not published yet,
+ * the page then says the address appears before the sale opens.
  */
-export const PEOPLE_EXPLORER = {
-  /** Route prefix (or origin + prefix) of the People network explorer. */
-  base: "/explorer",
-} as const;
+export const SALE_ADDRESSES: {
+  ppl: string | null;
+  multisig: string | null;
+  multisigThreshold: { m: number; n: number } | null;
+} = { ppl: null, multisig: null, multisigThreshold: null };
+
+/** Links to published AI review reports; empty until there are any. */
+export const AI_REVIEW_REPORTS: readonly { label: string; url: string }[] = [];
 
 /**
  * Sale (curve hub) contract. TODO(sale-deploy): set
@@ -125,38 +149,7 @@ export function saleContractConfigured(): boolean {
   return saleContractAddress() !== null;
 }
 
-/** Account page for an address on the People network explorer. */
-export function explorerAddressUrl(address: string): string {
-  return `${PEOPLE_EXPLORER.base}/address/${encodeURIComponent(address)}`;
-}
-
-/** Contract page — the one that renders the verified source. */
-export function explorerContractUrl(address: string): string {
-  return `${PEOPLE_EXPLORER.base}/contract/${encodeURIComponent(address)}`;
-}
-
-/** Transaction page, used by the recent-trades feed. */
-export function explorerTxUrl(txHash: string): string {
-  return `${PEOPLE_EXPLORER.base}/tx/${encodeURIComponent(txHash)}`;
-}
-
 /* ── Security reviews ──────────────────────────────────────────────────── */
-
-/**
- * AI models named on `/buy`, `/transparency` and the litepaper. Keep this list in
- * sync with the public copy — exactly these three, in this order.
- *
- * No external audit firm has reviewed the code. That qualification is stated in
- * the page's small print and must not be dropped.
- */
-export const AI_AUDITS = [
-  { id: "opus", model: "Claude Opus 5.5" },
-  { id: "astra", model: "GPT Astra" },
-  { id: "fable", model: "Fable 5.1" },
-] as const;
-
-/** Model names as the copy lists them, in the order the audits happened. */
-export const AI_AUDIT_MODELS: readonly string[] = AI_AUDITS.map((audit) => audit.model);
 
 /** No external firm has audited the contracts. Do not flip without a real report. */
 export const EXTERNAL_FIRM_AUDIT = false;

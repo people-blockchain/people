@@ -1,8 +1,7 @@
 /**
  * Cross-chain funding for `/buy` via the embedded LI.FI Widget.
  *
- * Source chains are limited to ecosystems LI.FI documents for the widget
- * (EVM and Solana). Tron and TON are not offered in the widget.
+ * Source chains: EVM networks, Solana and Tron via the LI.FI widget. TON is not supported.
  *
  * @see https://docs.li.fi/widget/wallet-management
  * @see https://docs.li.fi/widget/install-widget
@@ -16,19 +15,24 @@ import type { SaleStableSymbol } from "@/lib/sale/config";
 export const BASE_USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as const;
 
 /**
- * Circle USDT on Base mainnet — payment-side only; LI.FI converts to USDC before the sale contract is called.
- * Verified via LI.FI token API (2026-10-17). Do not use the wrong address from private deployment JSON.
+ * Bridged USDT on Base (OP Standard Bridge, L1 token = Ethereum USDT), not native Tether.
+ * Paid directly only if the hub accepts it; otherwise LI.FI converts to USDC first.
  */
 export const BASE_USDT_ADDRESS = "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2" as const;
 
-/** Token the PplCurveHub `buyWith` path accepts (USDC only on Base). */
-export const HUB_PAYMENT_TOKEN = BASE_USDC_ADDRESS;
-
-/** The sale contract accepts USDC only; USDT is swapped to USDC first. */
-export function hubPaymentToken(paidWith: SaleStableSymbol): typeof BASE_USDC_ADDRESS {
-  void paidWith;
-  return BASE_USDC_ADDRESS;
+/** Token the PplCurveHub `buyWith` path takes: USDT only if the hub accepts it directly, else USDC. */
+export function hubPaymentToken(
+  paidWith: SaleStableSymbol,
+  hubAcceptsUsdt = false,
+): typeof BASE_USDC_ADDRESS | typeof BASE_USDT_ADDRESS {
+  return paidWith === "USDT" && hubAcceptsUsdt ? BASE_USDT_ADDRESS : BASE_USDC_ADDRESS;
 }
+
+/** LI.FI widget UI language per site language (Arabic is not offered by the widget). */
+export const LIFI_LANG: Record<string, string> = {
+  en: "en", es: "es", pt: "pt", fr: "fr", de: "de", it: "it",
+  tr: "tr", vi: "vi", id: "id", zh: "zh", ar: "en", ru: "ru",
+};
 
 /** Hub chain for PplCurveHub (sale contract). */
 export const BASE_CHAIN_ID = ChainId.BAS;
@@ -45,6 +49,7 @@ export const LIFI_BRIDGE_SOURCE_CHAIN_IDS: readonly number[] = [
   ChainId.OPT,
   ChainId.AVA,
   ChainId.SOL,
+  ChainId.TRN,
 ];
 
 function featured(
@@ -72,11 +77,8 @@ export const LIFI_FEATURED_SOURCE_TOKENS: readonly StaticToken[] = [
   featured(ChainId.AVA, "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E", "USDC", 6),
   featured(ChainId.SOL, "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", "USDT", 6),
   featured(ChainId.SOL, "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "USDC", 6),
+  featured(ChainId.TRN, "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", "USDT", 6),
 ];
 
-/** Human-readable list for on-page copy (EN); other locales translate in `buy-*.json`. */
-export const LIFI_BRIDGE_SOURCE_CHAINS_EN =
-  "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, and Solana";
-
-/** Documentation link for supported ecosystems (EVM + Solana; Tron and TON absent). */
+/** Documentation link for supported ecosystems (EVM, Solana, Tron; TON is not supported). */
 export const LIFI_BRIDGE_DOCS_URL = "https://docs.li.fi/widget/wallet-management";

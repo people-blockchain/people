@@ -25,9 +25,11 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
+    "@lifi/types": "^18.14.0",
     "@lifi/widget": "^4.10.2",
     "@lifi/widget-provider-ethereum": "^4.1.9",
     "@lifi/widget-provider-solana": "^4.1.9",
+    "@lifi/widget-provider-tron": "^4.1.9",
     "@noble/hashes": "^2.2.0",
     "@noble/secp256k1": "^3.1.0",
     "@openzeppelin/contracts": "^5.4.0",
