@@ -21,9 +21,31 @@ import buyAr from "./locales/surfaces/buy-ar.json" with { type: "json" };
 
 export type BuyCopy = typeof buyEn;
 
-function withEnFallback(partial: Partial<BuyCopy>): BuyCopy {
-  return { ...buyEn, ...partial };
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
+
+/**
+ * Deep-merges a locale over EN: objects merge key by key, arrays are taken from the locale
+ * only when their length matches EN (otherwise EN wins), everything else is replaced.
+ */
+function deepMerge(base: unknown, override: unknown): unknown {
+  if (isPlainObject(base) && isPlainObject(override)) {
+    const out: Record<string, unknown> = { ...base };
+    for (const key of Object.keys(override)) out[key] = deepMerge(base[key], override[key]);
+    return out;
+  }
+  if (Array.isArray(base) && Array.isArray(override)) {
+    return override.length === base.length ? override : base;
+  }
+  return override === undefined ? base : override;
+}
+
+function withEnFallback(partial: Partial<BuyCopy>): BuyCopy {
+  return deepMerge(buyEn, partial) as BuyCopy;
+}
+
+export { withEnFallback as __withEnFallbackForTests };
 
 const rawByLanguage: Record<Language, Partial<BuyCopy>> = {
   en: buyEn,

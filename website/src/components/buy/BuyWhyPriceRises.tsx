@@ -5,9 +5,12 @@ import { useId, useMemo } from "react";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
+import { content } from "@/lib/content";
 import { CURVE } from "@/lib/sale/config";
 import { graduation, soldPplForRaisedUsd, spotPriceUsd } from "@/lib/sale/curve";
-import { fillCopy, pplCompact, pplCompactChart, pricePerPpl, usdCompact } from "@/lib/sale/format";
+import { SALE } from "@/lib/sale/config";
+import { fillCopy, formatMonths, pplCompact, pplCompactChart, pricePerPpl, usdCompact } from "@/lib/sale/format";
+import type { SalePhase } from "@/lib/sale/sale-state";
 
 const EXAMPLE_RAISE_USD = CURVE.milestoneRaisesUsd[0];
 
@@ -62,9 +65,10 @@ function markerLabelLayout(
 }
 
 /** Short explainer under the buy form: no manual pricing, curve math, reserve. */
-export function BuyWhyPriceRises() {
+export function BuyWhyPriceRises({ phase = "closed" }: { phase?: SalePhase }) {
   const { lang } = useLanguage();
-  const t = buyCopy[lang].whyPriceRises;
+  const copy = buyCopy[lang];
+  const t = copy.whyPriceRises;
   const gradientId = useId();
 
   const example = useMemo(() => {
@@ -111,6 +115,32 @@ export function BuyWhyPriceRises() {
       </h2>
       <p className="mt-3 text-sm font-medium leading-relaxed text-ink">{t.noManualLead}</p>
       <p className="mt-2 text-sm leading-relaxed text-ink-2">{t.mechanism}</p>
+      {phase !== "open" ? (
+        <p className="mt-2 text-sm leading-relaxed text-ink-3" data-testid="contract-pending-note">
+          {t.contractPendingNote}
+        </p>
+      ) : null}
+      <h3 className="mt-4 text-sm font-semibold text-ink">{t.plainTitle}</h3>
+      <ul className="mt-2 list-disc space-y-1.5 ps-5 text-sm leading-relaxed text-ink-2" data-testid="plain-words">
+        {t.plain.map((line) => (
+          <li key={line}>
+            {line.includes("{howItWorks}")
+              ? (() => {
+                  const [before, after = ""] = line.split("{howItWorks}");
+                  return (
+                    <>
+                      {before}
+                      <Link href="/how-it-works" className="underline">
+                        {content[lang].nav.links.find((link) => link.href === "/how-it-works")?.label ?? "How it works"}
+                      </Link>
+                      {after}
+                    </>
+                  );
+                })()
+              : line}
+          </li>
+        ))}
+      </ul>
       <p className="mt-3 text-sm leading-relaxed text-ink-2">
         {fillCopy(t.example, example)}
       </p>
@@ -196,7 +226,11 @@ export function BuyWhyPriceRises() {
         </svg>
       </figure>
 
-      <p className="mt-3 text-xs leading-relaxed text-ink-3">{t.reserve}</p>
+      <p className="mt-3 text-xs leading-relaxed text-ink-3">{fillCopy(copy.transparency.fundsBody, {
+          liquidityShare: `${SALE.liquiditySharePct}%`,
+          multisigShare: `${SALE.multisigSharePct}%`,
+          lockPeriod: formatMonths(SALE.lpLockMonths, lang),
+        })}</p>
 
       <Link
         href="#curve"

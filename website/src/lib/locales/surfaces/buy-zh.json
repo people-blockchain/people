@@ -1,15 +1,17 @@
 {
   "meta": {
     "title": "购买 PPL",
-    "description": "PPL 在公开价格曲线上销售：起价 $0.005，随每次购买上升，上限 $0.25。曲线在募集 $400 万时关闭。随时买卖。"
+    "description": "PPL 在 Base 上通过公开价格曲线出售。价格从 0.005 美元起，随每笔购买上涨。销售持续到售罄或 24 个月，以先到者为准。所有购买均为最终交易。"
   },
   "hero": {
     "eyebrow": "PPL 销售",
-    "headline": "以早期参与者价格购买 PPL",
-    "sub": "价格随每次购买上升——越早买，付得越少。",
-    "statsTitle": "曲线实时数据",
+    "headline": "在公开价格曲线上购买 PPL",
+    "sub": "价格遵循公开曲线，随 PPL 售出增多而上升。越早买意味着起始价格越低，并非保证盈利。",
+    "statsTitle": "曲线数据",
     "statsNote": "",
-    "ctaScroll": "曲线如何运作"
+    "ctaScroll": "曲线如何运作",
+    "headlineClosed": "PPL 销售即将开放",
+    "statsTitleClosed": "曲线数据 — 即将开放"
   },
   "stats": {
     "price": "当前价格",
@@ -19,61 +21,122 @@
     "sold": "已售 PPL",
     "soldTarget": "曲线上共 {supply}",
     "buyers": "买家",
-    "daysLeft": "剩余天数",
-    "daysLeftTarget": "共 {days} 天",
     "none": "—",
     "notOpenYet": "尚未开放",
-    "progressLabel": "距 {target} 毕业的进度"
+    "progressLabel": "距 {target} 毕业的进度",
+    "saleStatus": "销售状态",
+    "startPriceOnOpen": "开放时的起始价格：{start}",
+    "saleWindow": "销售期限",
+    "saleWindowValue": "售罄或 {term}",
+    "saleWindowHint": "以先到者为准。不会延期。",
+    "endsByHint": "最晚结束日期。如提前售罄则更早结束。"
   },
   "form": {
     "title": "购买 PPL",
     "amountLabel": "您支付",
-    "amountHint": "USDC，或兑换为 USDC 的 USDT",
-    "stableLabel": "稳定币",
-    "youGet": "您获得",
+    "amountHint": "每笔购买 {min} 至 {max}。",
+    "stableLabel": "支付币种",
     "avgPrice": "平均价格",
     "priceAfter": "购买后的价格",
-    "estimate": "",
-    "limitPerBuy": "单次最多 {amount}",
-    "limitPerDay": "每人每天最多 {amount}",
-    "cooldown": "交易间隔 {seconds} 秒",
+    "estimate": "此为估算。确切数量会在您签名前于链上确认。",
+    "limitPerBuy": "每笔 {min}–{max}",
+    "limitPerDay": "任意 24 小时内每人最多 {amount}",
+    "cooldown": "两次购买之间间隔 {seconds} 秒",
     "overLimit": "单次购买最多 {amount}。",
     "belowMin": "输入金额以查看报价。",
-    "cta": "连接钱包并购买",
-    "ctaDisabled": "销售尚未开放",
+    "cta": "连接钱包以购买",
     "ctaConnected": "购买 PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "仅已验证用户可从储备回购：每批需持有 30 天，有每日限额及 {fee} 费用；销售结束时关闭。",
+    "wallets": "People Wallet（通过 Google 或邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "支付方式",
     "payOnBase": "在 Base 支付",
     "payFromOther": "从其他网络支付",
     "basePayHint": "销售在 Base 进行。可用 USDC 或 USDT 支付——USDT 会先兑换为 USDC。",
-    "bridgeHint": "通过 LI.FI 从其他网络发送 USDT 或 USDC。USDC 到达您在 Base 的钱包后，在下方完成购买。支持网络：{chains}。",
-    "stableUsdtOption": "USDT → USDC",
+    "bridgeHint": "在下方组件中选择您的网络和代币。它们会通过 LI.FI 自动兑换为 Base 上的 USDC，然后确认购买。",
+    "stableUsdtOption": "USDT（兑换为 USDC）",
     "usdtConvertHint": "使用 USDT 支付：先兑换为 USDC，再以 USDC 完成购买。需支付少量兑换费。",
     "usdtSwapTitle": "将 USDT 兑换为 USDC",
     "usdtSwapAwaiting": "请在上方完成 USDT 兑换以解锁购买按钮。",
     "usdtSwapReady": "已兑换。请在下方以 USDC 完成购买。",
-    "bridgeUsdtHint": "可从所列任意网络使用 USDT 或 USDC 支付，到账为 Base 上的 USDC。",
-    "bridgePanelTitle": "跨链到 Base",
-    "bridgeNeedWallet": "请先连接钱包，以便在 Base 接收 USDC。",
+    "bridgePanelTitle": "兑换为 Base 上的 USDC",
+    "bridgeNeedWallet": "请先连接钱包：USDC 将到达该钱包在 Base 上的地址。",
     "bridgeReady": "跨链完成 — 请在下方于 Base 完成购买。",
     "bridgeAwaiting": "请先完成上方跨链，以解锁购买按钮。",
-    "supportedBridgeChains": "Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 和 Solana",
-    "scrollToForm": "返回购买表单"
+    "scrollToForm": "返回购买表单",
+    "quoteLine": "您支付 {pay} → 约获得 {ppl} PPL",
+    "previewTitle": "按起始价格的示例",
+    "belowMinAmount": "最低金额为 {amount}。",
+    "invalidAmount": "请输入美元金额，例如 25 或 25.50。",
+    "ctaClosed": "销售尚未开放",
+    "openingDate": "开放日期：{date} UTC。",
+    "openingDateTba": "开放日期：待公布。",
+    "closedNoteAddress": "合约地址将首先在此公布——请仅通过该地址购买。",
+    "notifyMe": "在 Telegram 获取开放通知",
+    "stepSwitch": "请将钱包切换到 Base 网络…",
+    "stepApprove": "第 1 步（共 2 步）：在钱包中授权 {amount} {token}。",
+    "stepBuy": "第 2 步（共 2 步）：在钱包中确认购买。",
+    "stepPending": "正在等待 Base 网络确认…",
+    "success": "完成。您已购买 {ppl} PPL。",
+    "viewTx": "在 Basescan 查看",
+    "txRejected": "您已取消签名，未扣除任何资金。",
+    "priceMoved": "确认前价格变动超过 1%，因此未完成购买。请查看新的报价后重试。",
+    "limitHit": "此次购买触发了销售限额（单笔、24 小时内或两次购买的间隔），未购买任何 PPL。",
+    "txFailed": "交易失败：{reason}。未购买任何 PPL。",
+    "tryAgain": "重试",
+    "balanceLine": "您在 Base 上的钱包：{balance} {token} · {eth} ETH",
+    "notEnoughToken": "Base 上的 {token} 不足：您有 {have}，需要 {need}。",
+    "needGas": "您需要在 Base 上持有少量 ETH 来支付网络手续费（通常约 0.01 美元）。",
+    "riskTitle": "风险提示",
+    "riskBody": "加密资产存在风险：价格可能下跌，您可能无法立即卖出，且购买不可退款。请仅使用您可以承受损失的资金。",
+    "riskMoreToggle": "全部风险",
+    "riskMore": "此外：在网络全面上线之前，PPL 不能发送给他人。卖回储备仅限已验证用户，须持有满 30 天并在每日限额内进行。销售合约仅经过 AI 模型审查，尚未进行外部审计。项目多签可将购买限制为仅限已验证用户。",
+    "saleTermsNote": "销售持续到售罄（曲线在募集 400 万美元时关闭）或自开放起 24 个月，以先到者为准。不会延期。未售出的 PPL 进入 Community Pool。不支持退款：每笔购买均为最终交易。",
+    "termsAgree": "购买即表示您同意{terms}。",
+    "termsLink": "《条款》",
+    "help": "需要帮助？{support}",
+    "supportLink": "支持",
+    "noWalletHint": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 People Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
+    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每批持有满 30 天后，可按卖出时的曲线价格卖回。总限额：全体用户每日合计不超过储备的 2%，每人每日不超过 2,000 美元。费用 1.5%（当日卖回超过储备的 1% 时为 3%）。毕业（graduation）后关闭。您将在 Base 网络上收到 USDC。",
+    "feesTitle": "费用与时间",
+    "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%（当日卖回超过储备的 1% 时为 3%）。",
+    "timingBody": "Base 上的购买几秒内即可确认。来自其他网络的付款通常在 1–20 分钟内到账。卖回款项以 Base 网络上的 USDC 支付。",
+    "getUsdc": "还没有 USDC？可在交易所购买并提现到 Base 网络，或在下方从其他网络付款。您还需要在 Base 上持有少量 ETH 支付手续费。",
+    "glossaryBase": "Base 是基于以太坊构建的低手续费网络。USDC 和 USDT 是与美元挂钩的稳定币。LI.FI 是负责兑换代币并在网络间转移的服务。",
+    "phishing": "唯一的官方销售地址显示在本页。团队绝不会索要您的助记词，也不会通过私信发送付款链接。",
+    "stableUsdtDirectOption": "Base 上的 USDT（跨链桥版本）",
+    "payFromNetworks": "支持 EVM 网络（Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 等）、Tron 和 Solana。不支持 TON。",
+    "bridgeSteps": "第 1 步：在组件中将代币兑换为 Base 上的 USDC（通常 1–20 分钟）。第 2 步：用下方按钮购买 PPL。",
+    "solanaHint": "从 Solana 或 Tron 付款？您还需要一个 Base 地址来接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或使用 Google 登录。",
+    "bridgeClosed": "从其他网络付款将与销售同时开放。",
+    "bridgeStatus": "兑换进行中。可在 {link} 查看进度。",
+    "bridgeFailed": "兑换未完成。请在 scan.li.fi 查看状态或重试。",
+    "bridgeFundsHint": "如果组件提示“not enough funds”，请先为源网络上的钱包充值，否则无法完成兑换。",
+    "bridgeToAddressName": "您在 Base 上的钱包",
+    "wrongNetwork": "购买在 Base 网络上进行。你的钱包当前在其他网络。",
+    "switchToBase": "切换到 Base",
+    "switchRejected": "网络未切换。购买需要 Base 网络，请重试。",
+    "embeddedNoBase": "People Wallet 暂不支持在 Base 网络付款。如需购买，请连接 MetaMask、Trust Wallet 或 WalletConnect。"
   },
   "whyPriceRises": {
     "title": "价格为何上涨",
-    "noManualLead": "PEOPLE 团队不会手动定价或提价。销售合约中的公开公式自动决定价格：每次购买都会沿价格曲线（bonding curve）推动价格。任何人都无法手动改价。",
-    "mechanism": "与 Uniswap、Bancor（2017 年先驱）、pump.fun 以及 Base 上的 Virtuals Protocol 相同的公式定价原则：这里价格仅取决于已售出的 PPL 数量，透明且可在链上验证。",
-    "example": "根据已公布参数：起始每 PPL {startPrice}，售出 {midSold} PPL 后 {midPrice}（约筹集 {midRaised}），销售结束时 {gradPrice}（{gradRaised} 已筹集）。",
+    "noManualLead": "PEOPLE 团队不会设定或抬高价格。价格由销售合约中的公开公式自动决定：每笔购买都会让价格沿曲线移动。",
+    "mechanism": "价格由公开公式决定：只取决于已售出的 PPL 数量，合约公布后任何人都可以在链上核对。",
+    "example": "根据已公布参数：起始每 PPL {startPrice}，售出 {midSold} PPL 后 {midPrice}（约募集 {midRaised}），毕业时 {gradPrice}（已募集 {gradRaised}）。",
     "explainerLink": "曲线如何运作",
-    "reserve": "购买资金留在 Base 上的销售储备中，用于从持有者处回购 PPL——已验证用户在持有 30 天后可回购，并有每日限额。",
     "chartAria": "PPL 销售价格曲线：价格与已售 PPL",
     "chartAxisSold": "已售 PPL",
     "chartAxisPrice": "价格，$",
-    "chartMarker": "{price} · {sold}"
+    "chartMarker": "{price} · {sold}",
+    "contractPendingNote": "合约尚未公布。公布后，任何人都可以在链上核对公式。",
+    "plainTitle": "简单来说",
+    "plain": [
+      "价格曲线（bonding curve）——公开的价格公式：售出的 PPL 越多，价格越高。",
+      "毕业（graduation，曲线关闭）——募集满 400 万美元的时刻：曲线关闭，公开的 PPL 池开放。",
+      "LP 代币锁定 24 个月：在此期间任何人都无法取走池中的资金。",
+      "多签——每笔付款都需要多人批准的钱包。",
+      "DEX 池——任何人都可以交易 PPL 的开放兑换池。",
+      "一批即一次购买；30 天从每次购买起算。已验证是指您已一次性证明自己是唯一的真人（Human Passport 或 Telegram）——{howItWorks}。储备是销售合约中持有的 USDC，卖回款项从中支付。",
+      "卖回：您把 PPL 卖给储备。回购：项目用手续费收入购买 PPL。这是两种不同的机制。"
+    ]
   },
   "curve": {
     "eyebrow": "公式",
@@ -86,34 +149,35 @@
     "marker": "已募集 {raised}",
     "markerPrice": "每 PPL {price}",
     "markerSold": "已售 {sold} PPL",
-    "graduationTag": "销售结束",
+    "graduationTag": "毕业",
     "ceilingNote": "仅当全部 {supply} PPL 售完才会达到 {ceiling} 上限。曲线会先关闭，在募集 {graduation} 时。",
     "feedTitle": "近期买卖",
     "feedEmpty": "尚无交易。",
     "feedBuy": "买",
     "feedSell": "卖",
     "feedLink": "查看",
-    "capScope": "{ceiling} 上限仅适用于曲线销售期间。毕业后进入池子，价格由自由市场决定——无上限也无下限。"
+    "capScope": "{ceiling} 上限仅在曲线销售期间有效。毕业后，池中价格由自由市场决定，没有上限也没有下限——价格可能大幅下跌，甚至接近零。",
+    "formulaToggle": "给好奇的你：公式"
   },
   "whatYouGet": {
     "eyebrow": "您获得什么",
     "title": "购买实际给您什么",
     "items": [
       {
-        "title": "PPL 立即到您的地址",
-        "body": "购买瞬间 PPL 即记入您在 PEOPLE 网络上的地址。曲线上无锁仓，无等待名单。"
+        "title": "PPL 立即到账",
+        "body": "PPL 会立即记入您的地址，但在网络全面上线之前不能发送给他人。只有已验证用户可以卖回，且须在每次购买 30 天后。"
       },
       {
-        "title": "从储备卖回",
-        "body": "已验证用户可在每批持有 30 天后、在每日限额内并以 {fee} 费用将 PPL 卖回储备；销售结束 后关闭。以 {payoutNetwork} 上的 {payoutStable} 支付。"
+        "title": "卖回储备",
+        "body": "仅已验证用户可将 PPL 卖回储备。每批持有满 30 天后，可按卖出时的曲线价格卖回。总限额：全体用户每日合计不超过储备的 2%，每人每日不超过 2,000 美元。费用 1.5%（当日卖回超过储备的 1% 时为 3%）。毕业（graduation）后关闭。您将在 Base 网络上收到 USDC。"
       },
       {
-        "title": "转账随网络全面上线开放",
-        "body": "向他人发送 PPL 及池内交易在全面主网上线时开始：{verified} 名已验证参与者，且不晚于 {months} 个月。"
+        "title": "网络全面上线后开放转账",
+        "body": "向他人发送 PPL 和在池中交易将在网络全面上线时开始，即已有 {verified} 名已验证参与者加入时。"
       },
       {
-        "title": "募集 {graduation} 时曲线关闭",
-        "body": "募集额的 {liquidityShare} 加上按曲线最后价格的 PPL 注入公开池，LP 代币锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。"
+        "title": "募集达到 {graduation} 时曲线关闭",
+        "body": "销售期间，购买款项留在 Base 上的销售储备中，用于支付卖回。毕业时，{liquidityShare} 连同按曲线最后价格计的 PPL 注入公开池（LP 代币锁定 {lockPeriod}），{multisigShare} 转入项目多签，每笔支出都会公开报告。"
       }
     ]
   },
@@ -123,19 +187,19 @@
     "steps": [
       {
         "title": "曲线",
-        "body": "{supply} PPL 在公开曲线上，从 {start} 至 {ceiling} 上限。最多 {days} 天内随时买卖。"
+        "body": "{supply} PPL 在公开曲线上从 {start} 起，直至 {ceiling} 上限。销售开放期间任何人都可以购买：直到曲线在募集 {graduation} 时关闭，或自开放起满 {term}，以先到者为准。不会延期。"
       },
       {
-        "title": "销售结束于 {graduation}",
-        "body": "曲线停止。募集 {liquidityShare} 与最后曲线价格的 PPL 以该价格进入公开 DEX 池，无跳价。LP 锁定 {lock} 个月。{multisigShare} 进入多签并公开报告。"
+        "title": "募集 {graduation} 时毕业",
+        "body": "曲线停止。募集资金的 {liquidityShare} 加上按曲线最后价格计的 PPL，以该价格无跳空地注入公开 DEX 池。LP 代币锁定 {lockPeriod}。{multisigShare} 转入项目多签，并公开报告。卖回储备关闭。"
       },
       {
-        "title": "全面主网",
-        "body": "钱包间 PPL 转账与池交易在 {verified} 名已验证参与者时开放，不晚于 {months} 个月。"
+        "title": "网络全面上线",
+        "body": "当已有 {verified} 名已验证参与者加入、网络全面上线时，开放钱包间 PPL 转账和池内交易。"
       },
       {
-        "title": "{days} 天后",
-        "body": "若未达 {graduation}，已募集部分仍按 {liquidityShare}/{multisigShare} 分配，未售 PPL 全部进入社区池。"
+        "title": "若未售罄：开放 {term} 后",
+        "body": "若届时曲线仍未关闭，销售结束且不会延期。未售出的 PPL 进入 Community Pool。已支付的款项不予退还。"
       }
     ]
   },
@@ -143,47 +207,66 @@
     "eyebrow": "透明度",
     "title": "合约、资金与代码",
     "lead": "销售合约、销售资金流向、代码安全审查及团队代币解锁方式。",
-    "saleContract": "销售合约",
-    "saleContractPending": "销售开始前，合约地址将在此公布。",
-    "saleContractNote": "",
+    "saleContract": "销售合约（Base 上的 PplCurveHub）",
+    "saleContractPending": "销售合约：Base 上的 PplCurveHub（chain ID 8453）。尚未公布——地址和区块浏览器链接将在销售开放前显示在此处。",
     "verifiedSource": "已验证源码",
     "auditTitle": "安全审查",
-    "auditLine": "审计方：Claude Opus 5.5、GPT Astra、Fable 5.1",
-    "explorerLink": "在 People 浏览器中打开",
+    "auditLine": "由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。",
+    "explorerLink": "在 Basescan 打开",
     "allocationTitle": "10 亿 PPL 去向",
     "allocationNote": "固定供应 {supply} PPL。销售份额为曲线上的 {salePct}。",
-    "vestingTitle": "团队归属",
-    "vestingBody": "前 {cliff} 个月团队不获得任何代币。之后每月逐步解锁，再持续 {linear} 个月——共 {total} 个月。",
+    "vestingTitle": "团队代币解锁（vesting）",
+    "vestingBody": "团队 vesting 从网络全面上线时开始：前 {cliffPeriod}团队不获得任何代币，之后在接下来的 {linearPeriod}内按月解锁，共计 {totalPeriod}。",
     "fundsTitle": "销售资金去向",
-    "fundsBody": "募集 {liquidityShare} 进入流动性池，LP 锁定 {lock} 个月。其余 {multisigShare} 进入项目多签，每笔支出公开报告。",
-    "auditBounty": "漏洞赏金：通过任意页面的 bug 按钮报告漏洞。"
+    "fundsBody": "销售期间，购买款项留在 Base 上的销售储备中，用于支付卖回。毕业时，{liquidityShare} 连同按曲线最后价格计的 PPL 注入公开池（LP 代币锁定 {lockPeriod}），{multisigShare} 转入项目多签，每笔支出都会公开报告。",
+    "auditBounty": "漏洞赏金：可在任意页面通过错误报告按钮提交漏洞。",
+    "reviewReports": "审查报告：{links}",
+    "addressesTitle": "Base 上的地址",
+    "addrHub": "销售合约（PplCurveHub）",
+    "addrPpl": "PPL 代币",
+    "addrMultisig": "项目多签",
+    "addrMultisigThreshold": "{n} 个签名中需 {m} 个",
+    "addrUsdc": "Base 上的 USDC",
+    "addrUsdt": "Base 上的 USDT（跨链桥版本）",
+    "addrPending": "将在销售开放前在此公布",
+    "copy": "复制",
+    "copied": "已复制",
+    "adminPowers": "项目多签可以将购买限制为仅限已验证用户（例如遭遇机器人攻击时）。在该模式关闭前，未验证用户无法购买。"
   },
   "faq": {
     "eyebrow": "常见问题",
     "title": "问题与解答",
     "items": [
       {
-        "q": "可以将 PPL 卖回吗？",
-        "a": "仅限已验证用户：每批持有 30 天、每日限额及 {fee} 费用；销售结束 后关闭。"
+        "q": "可以把 PPL 卖回吗？",
+        "a": "仅已验证用户可将 PPL 卖回储备。每批持有满 30 天后，可按卖出时的曲线价格卖回。总限额：全体用户每日合计不超过储备的 2%，每人每日不超过 2,000 美元。费用 1.5%（当日卖回超过储备的 1% 时为 3%）。毕业（graduation）后关闭。您将在 Base 网络上收到 USDC。"
       },
       {
         "q": "{ceiling} 上限是永久的吗？",
-        "a": "不是。仅在曲线运行期间适用。曲线在募集 {graduation} 时关闭，约每 PPL {graduationPrice}，低于上限。销售结束后池价由自由市场决定，无上下限。"
+        "a": "不是。它只在曲线运行期间有效。曲线在募集 {graduation} 时关闭，此时每 PPL 约 {graduationPrice}，低于上限。毕业后，池中价格由自由市场决定，没有上限也没有下限——可能大幅下跌，甚至接近零。"
       },
       {
-        "q": "如何将 People 网络添加到钱包？",
-        "a": "使用下方按钮：钱包将被要求添加官方参数的 PEOPLE 网络并切换。您也可根据已公布的 People 网络文档手动输入相同参数。"
+        "q": "钱包里需要添加 PEOPLE 网络吗？",
+        "a": "购买不需要：您在 Base 上付款。只有想在钱包中看到 PEOPLE 网络时才需添加——使用下方按钮，或手动输入已公布的网络参数。"
       },
       {
-        "q": "何时可以向他人发送 PPL？",
-        "a": "全面网络上线时：{verified} 名已验证参与者，且不晚于 {months} 个月。曲线买卖从第一天即可进行。"
+        "q": "什么时候可以把 PPL 发送给他人？",
+        "a": "在网络全面上线时，即已有 {verified} 名已验证参与者加入时。在此之前，销售开放期间可以购买；卖回有限制：仅限已验证用户，每次购买 30 天后，在每日限额内，且在毕业之前。"
+      },
+      {
+        "q": "可以退款吗？",
+        "a": "不可以。所有购买均为最终交易：不支持退款。销售不会延期；未售出的 PPL 进入 Community Pool。"
+      },
+      {
+        "q": "可以从哪些网络付款？",
+        "a": "在 Base 上可用 USDC 或 USDT。从其他网络可通过内置自动兑换（LI.FI）：支持 EVM 网络（Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 等）、Tron 和 Solana。不支持 TON。"
       }
     ],
-    "addNetworkCta": "将 People 网络添加到钱包",
+    "addNetworkCta": "将 PEOPLE 网络添加到钱包（可选）",
     "addNetworkDone": "请求已发送至您的钱包",
     "addNetworkError": "钱包拒绝或未找到钱包。",
     "pumpTitle": "无上限曲线的问题",
-    "pumpLead": "联合曲线因 pump.fun 等 launchpad 而流行。以下是已知问题及我们的做法。",
+    "pumpLead": "价格曲线（bonding curve）因 pump.fun 等发射平台而流行。以下是它们的已知问题，以及我们的做法。",
     "pumpCols": [
       "问题",
       "会发生什么",
@@ -191,44 +274,46 @@
     ],
     "pumpRows": [
       {
-        "problem": "晚期买家支付过高",
+        "problem": "后来者付出更高价格",
         "what": "价格无限上涨，毕业前最后买家支付数倍于最早买家。",
-        "ours": "硬性 {ceiling} 上限，曲线在 {graduation} 关闭——约 {graduationPrice}。"
+        "ours": "价格仍会上涨：毕业时约为起始价格的 32 倍，因此后买的人比早买的人付得更多。曲线在募集 {graduation} 时关闭，价格约 {graduationPrice}，低于 {ceiling} 上限。"
       },
       {
-        "problem": "狙击与机器人",
+        "problem": "机器人抢先买入",
         "what": "脚本在最初几秒从多钱包买入，再卖给真实用户。",
-        "ours": "单次最多 {perBuy}，每人每天 {perDay}，交易间隔 {cooldown} 秒。若出现机器人，多签可开启仅验证用户模式。"
+        "ours": "每笔最多 {perBuy}，任意 24 小时内每人最多 {perDay}，两次购买间隔 {cooldown} 秒。按账户的限额让快速建立大额仓位更难，但无法排除一个人使用多个钱包。"
       },
       {
-        "problem": "砸盘",
-        "what": "大持有人一次性卖出，价格暴跌。",
-        "ours": "每人限额防止大仓位。{fee} 卖出费用用于 PPL 回购，池流动性锁定 {lock} 个月。"
+        "problem": "集中抛售",
+        "what": "大户一次性全部卖出，导致价格暴跌。",
+        "ours": "卖回储备受限：全体用户每日合计不超过储备的 2%，每人每日不超过 2,000 美元。手续费用于项目回购 PPL（另一种机制），池子流动性锁定 {lockPeriod}。"
       },
       {
-        "problem": "抢跑与差成交",
+        "problem": "成交价比显示的更差",
         "what": "成交价格远差于展示价格。",
-        "ours": "每笔交易滑点保护：最低收到量，否则交易取消。"
+        "ours": "滑点保护：如果在购买确认前价格朝不利方向变动超过 1%，交易将被取消。"
       },
       {
-        "problem": "炒作上币",
+        "problem": "炒作驱动的上架",
         "what": "销售中途被推上交易所。",
-        "ours": "销售期间不上币。DEX 交易仅在毕业后。"
+        "ours": "销售期间不上架交易所。池内交易在网络全面上线后开始。"
       }
     ]
   },
   "bottomCta": {
-    "eyebrow": "准备就绪",
-    "title": "以今日曲线价格购买 PPL",
-    "lead": "同一表单，人人同一价格。",
-    "scrollToForm": "返回购买表单"
+    "eyebrow": "准备好了吗？",
+    "title": "按当前曲线价格购买 PPL",
+    "lead": "同一表单，同一条价格曲线，人人相同。",
+    "scrollToForm": "返回购买表单",
+    "titleClosed": "销售即将开放",
+    "leadClosed": "开放当天，这里将显示当前价格。"
   },
   "sticky": {
     "label": "购买 PPL",
     "price": "从 {price} 起"
   },
   "footnote": {
-    "title": "免责声明",
+    "title": "说明",
     "notes": [
       {
         "marker": "*",
@@ -240,7 +325,7 @@
       },
       {
         "marker": "***",
-        "text": "上述 AI 辅助审查由项目团队完成。并非外部审计公司审计；主网前将完成第三方安全审计。漏洞赏金降低风险但不能消除：任何审查都无法证明软件无缺陷。"
+        "text": "上述 AI 辅助审查由项目团队运行。它们不是安全审计，目前也尚未进行外部审计。漏洞赏金可以降低风险，但不能消除风险：任何审查都无法证明软件没有缺陷。"
       }
     ]
   }

@@ -9,7 +9,7 @@ import { buyCopy } from "@/lib/buy-content";
 import { ensurePeopleChain, readInjectedProvider } from "@/lib/evm/client";
 import { CURVE, SALE } from "@/lib/sale/config";
 import { graduation } from "@/lib/sale/curve";
-import { fillCopy, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
+import { fillCopy, formatMonths, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
 
 /**
  * Reuses `ensurePeopleChain` — the same call the wallet and factory pages make
@@ -70,16 +70,14 @@ export function SaleFaq() {
   const grad = graduation();
 
   const vars = {
-    fee: `${SALE.sellFeePct}%`,
     ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
     graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
     graduationPrice: pricePerPpl(grad.priceUsd, lang),
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
-    months: SALE.fullMainnetMaxMonths,
     perBuy: usd(SALE.maxPerBuyUsd, lang),
     perDay: usd(SALE.maxPerDayUsd, lang),
     cooldown: SALE.cooldownSeconds,
-    lock: SALE.lpLockMonths,
+    lockPeriod: formatMonths(SALE.lpLockMonths, lang),
   };
 
   return (
@@ -92,7 +90,7 @@ export function SaleFaq() {
             className="group rounded-2xl border border-line bg-surface p-4 open:shadow-[var(--elev-1)]"
             open={index === 0}
           >
-            <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:hidden">
+            <summary className="flex min-h-[44px] cursor-pointer list-none items-center text-sm font-semibold text-ink marker:hidden">
               <span className="flex items-start justify-between gap-3">
                 {fillCopy(item.q, vars)}
                 <span
