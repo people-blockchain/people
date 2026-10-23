@@ -53,6 +53,8 @@ export type TokenomicsCopy = {
   feeNote: string;
   buybackTitle: string;
   buybackBody: string;
+  buybackNote: string;
+  curveTableUnreachable: string;
   contractsTitle: string;
   contractsLead: string;
   contractRows: { name: string; status: string }[];
@@ -87,8 +89,8 @@ const en: TokenomicsCopy = {
     validators: "Validators & staking",
     team: "Team & founders",
     treasury: "Ecosystem treasury (DAO)",
-    sale: "Community sale",
-    liquidity: "Liquidity",
+    sale: "Sold on the public curve on Base (PplCurveHub). PPL is credited right after purchase; transfers open at the full network launch.",
+    liquidity: "PPL/USDC pool at graduation; LP tokens locked for 24 months.",
   },
   bucketNotes: {
     community:
@@ -97,8 +99,8 @@ const en: TokenomicsCopy = {
       "200M PPL (20%): years 1–4 pay 6%, 5%, 5%, 4% of total supply per year (60M / 50M / 50M / 40M), plus 30% of network fees.",
     team: "15% of supply: 0% at launch, 6-month cliff, then 18 months of linear monthly unlocks (24 months total).",
     treasury: "Spent only after DAO votes; held in multisig.",
-    sale: "25% at genesis on People, remainder monthly over 9 months.",
-    liquidity: "PPL/USDT pool at sale close; LP tokens locked 2+ years.",
+    sale: "Продаётся на публичной кривой в сети Base (PplCurveHub). PPL зачисляются сразу после покупки; переводы — с полного запуска сети.",
+    liquidity: "Пул PPL/USDC при выпуске в пул (graduation); LP-токены заблокированы на 24 месяца.",
   },
   donutTitle: "Allocation",
   shareLabel: "Share",
@@ -110,32 +112,33 @@ const en: TokenomicsCopy = {
   monthAxis: "Months after genesis",
   saleTitle: "Community sale",
   saleLead:
-    "Up to 100M PPL from the sale bucket (10% of the fixed supply) are sold on a public exponential curve. Published parameters match the live /buy page and the order API.",
+    "Up to 100M PPL are on the curve (10% of the fixed supply). The curve closes at $4M raised — about 88.83M PPL sold, at about $0.1615 per PPL. Table rows after $4M are not reachable.",
   salePayTitle: "How you pay",
   salePayBody:
-    "Pay with USDC or USDT from Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron or Solana. One curve, one price — whatever network you pay from. Sell payouts default to USDC on Base unless you choose another chain.",
+    "On Base — in USDC or USDT. From other networks — through the built-in automatic swap (LI.FI): EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana work. TON is not supported. Payouts in USDC on Base.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
-    "Native PPL is credited to the same 0x address on the People network at genesis, following the vesting schedule above.",
+    "PPL is credited to your address right away, but you cannot send it to others until the full network launch. Sell-back is possible only for verified users, 30 days after each purchase.",
   curveTitle: "Bonding curve",
   curveLead:
     "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. Graduation closes the curve at $4M raised.",
   unsoldTitle: "Unsold tokens",
   unsoldBody:
-    "After 180 days, whatever was raised is split 50/50 between locked LP and the project multisig, and any unsold PPL on the curve goes to the community pool. The same unsold rule applies to every token launched on PEOPLE.",
+    "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
   salePublicTitle: "Published sale parameters",
   salePublicBody:
     "Prices, limits and the curve formula are public on /buy. Purchases stay disabled until the sale hub contract is deployed; connecting a wallet does not commit you to anything.",
   salePublicCta: "Open the /buy page",
   saleCurveBullets: [
     "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
-    "Graduation at $4,000,000 raised; 180-day sale window, then unsold PPL to the community pool.",
+    "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
     "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
-    "Sell-back allowed with a 1.5% fee to PPL buyback. Limits: $500 per buy, $2,000 per person per day, 60s cooldown.",
+    "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+    "$10–$500 per purchase; Up to $2,000 per person in any 24 hours; 60 s pause between purchases",
   ],
   curveTableSold: "% sold",
-  curveTablePrice: "Spot price (USDT)",
-  curveTableRaised: "Raised (USDT)",
+  curveTablePrice: "Spot price (USDC)",
+  curveTableRaised: "Raised (USDC)",
   emissionTitle: "Emission and validator rewards",
   emissionLead:
     "Security rewards come from the pre-allocated validator pool and network fees — not from minting new supply in years 1–4.",
@@ -147,23 +150,23 @@ const en: TokenomicsCopy = {
   ],
   launchOrderTitle: "Launch sequence",
   launchOrderBody:
-    "Founders airdrop runs first. The community PPL sale opens only after 1,000 verified people are registered and sale proceeds are secured by a published multisig.",
+    "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
   feeTitle: "Network fee split",
   feeLead: "Every protocol fee on People follows the approved Model A routing:",
   feeNote: FEE_SPLIT_PLAIN.en,
   buybackTitle: "Buybacks",
   buybackBody:
     "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. The StableFeeGateway contract is implemented and deployed on the testnet: every stablecoin launch fee goes to the public buyback recipient. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%) — and it all ultimately goes back to participants. Bought-back PPL is then split 30/25/20/10/15 by the 2-of-3 treasury multisig — that split is a published multisig policy, not a rule enforced on-chain.",
+  buybackNote: "Not the same as sell-back: in a sell-back you sell PPL to the sale reserve.",
+  curveTableUnreachable: "Not reachable: the curve closes at $4M.",
   contractsTitle: "Contract addresses",
-  contractsLead: "On-chain addresses are published when mainnet launches — not placeholders on this page.",
+  contractsLead: "Each address is published here once the contract exists — no placeholders.",
   contractRows: [
-    {
-      name: "Sale contracts (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)",
-      status: "Published at mainnet launch",
-    },
-    { name: "Treasury multisig (2-of-3)", status: "Published at mainnet launch" },
-    { name: "Vesting controllers", status: "Published at mainnet launch" },
-    { name: "LP lock contract", status: "Published at mainnet launch" },
+    { name: "Sale contract (PplCurveHub, Base)", status: "Published before the sale opens" },
+    { name: "Receiving multisig (project multisig)", status: "Published before the sale opens" },
+    { name: "Treasury multisig (2-of-3)", status: "Published at the full network launch" },
+    { name: "Vesting controllers", status: "Published at the full network launch" },
+    { name: "LP lock", status: "Published at the full network launch" },
   ],
   legendHint: "Click a legend item to focus a slice.",
   feeSliceLabels: {
@@ -221,32 +224,33 @@ const ru: TokenomicsCopy = {
   monthAxis: "Месяцы после genesis",
   saleTitle: "Продажа сообществу",
   saleLead:
-    "До 100M PPL из корзины продажи (10% фиксированной эмиссии) продаются на публичной экспоненциальной кривой. Параметры совпадают со страницей /buy и API заказов.",
+    "На кривой до 100M PPL (10% фиксированной эмиссии). Кривая закрывается при сборе $4M — около 88,83M проданных PPL, по цене около $0,1615 за PPL. Строки таблицы после $4M недостижимы.",
   salePayTitle: "Как платить",
   salePayBody:
-    "USDC или USDT из Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron или Solana. Одна кривая, одна цена — с какой сети ни платите. Выплаты при продаже по умолчанию — USDC в Base, если не выбрана другая сеть.",
+    "В сети Base — USDC или USDT. Из других сетей — через встроенный автоматический обмен (LI.FI): работают EVM-сети (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche и другие), Tron и Solana. TON не поддерживается. Выплата — в USDC в сети Base.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
-    "Нативные PPL зачисляются на тот же адрес 0x в сети People при genesis по графику vesting выше.",
+    "PPL зачисляются на ваш адрес сразу, но отправить их другим людям можно только после полного запуска сети. Продать обратно могут только верифицированные пользователи, через 30 дней после каждой покупки.",
   curveTitle: "Bonding curve",
   curveLead:
     "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Выпуск закрывается при сборе $4M.",
   unsoldTitle: "Непроданные токены",
   unsoldBody:
-    "Через 180 дней собранное делится 50/50 между заблокированной LP и мультисигом проекта, а непроданные PPL на кривой уходят в пул сообщества. То же правило — для любого токена, запущенного в PEOPLE.",
+    "Продажа идёт до распродажи (кривая закрывается при сборе $4M) или 24 месяца с момента открытия — что наступит раньше. Продлений нет. Непроданные PPL уходят в Community Pool. Возвратов нет: каждая покупка окончательна.",
   salePublicTitle: "Опубликованные параметры продажи",
   salePublicBody:
     "Цены, лимиты и формула кривой публичны на /buy. Покупка отключена, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает.",
   salePublicCta: "Открыть страницу /buy",
   saleCurveBullets: [
     "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
-    "Выпуск при $4 000 000 собранных; окно продажи 180 дней, затем непроданные PPL — в пул сообщества.",
+    "Продажа идёт до распродажи (кривая закрывается при сборе $4M) или 24 месяца с момента открытия — что наступит раньше. Продлений нет. Непроданные PPL уходят в Community Pool. Возвратов нет: каждая покупка окончательна.",
     "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
-    "Обратная продажа разрешена; комиссия 1,5% на buyback PPL. Лимиты: $500 за покупку, $2000 на человека в сутки, пауза 60 с.",
+    "Продажа обратно в резерв — только для верифицированных пользователей. Каждую партию можно продать после 30 дней удержания по цене кривой на момент продажи. Общий лимит — 2% резерва в сутки на всех и $2 000 в сутки на человека. Комиссия 1,5% (3%, если за день уже продано обратно больше 1% резерва). Закрывается после выпуска в пул (graduation). Выплата — в USDC в сети Base.",
+    "$10–$500 за покупку; До $2 000 на человека за любые 24 часа; Пауза 60 с между покупками",
   ],
   curveTableSold: "% продано",
-  curveTablePrice: "Спот-цена (USDT)",
-  curveTableRaised: "Собрано (USDT)",
+  curveTablePrice: "Спот-цена (USDC)",
+  curveTableRaised: "Собрано (USDC)",
   emissionTitle: "Эмиссия и награды валидаторам",
   emissionLead:
     "Награды за безопасность сеть получает из пула валидаторов и комиссий — без дополнительного выпуска в годы 1–4.",
@@ -258,23 +262,23 @@ const ru: TokenomicsCopy = {
   ],
   launchOrderTitle: "Порядок запуска",
   launchOrderBody:
-    "Сначала airdrop основателям. Продажа PPL сообществу открывается только после 1 000 verified people и публикации мультисига для средств с продажи.",
+    "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
   feeTitle: "Деление сетевой комиссии",
   feeLead: "Каждая протокольная комиссия в People следует утверждённой Model A:",
   feeNote: FEE_SPLIT_PLAIN.ru,
   buybackTitle: "Выкуп",
   buybackBody:
     "100% комиссий за запуск токенов и NFT (USDC/USDT) идут на публичный выкуп PPL. Контракт StableFeeGateway реализован и развёрнут в тестнете: каждая комиссия в стейблкоине идёт получателю публичного выкупа. 30% сетевых комиссий идут на публичный выкуп PPL (казна 20% + ликвидность 10%). Оставшиеся 70% сетевых комиссий идут валидаторам (30%), в пул сообщества (25%) и в Growth Pool (15%) — и в итоге всё возвращается участникам. Выкупленный PPL затем делится 30/25/20/10/15 мультисигом казны 2-из-3 — это опубликованная политика мультисига, а не правило, зашитое в контракт.",
+  buybackNote: "Это не то же самое, что продажа обратно в резерв: там вы сами продаёте PPL в резерв продажи.",
+  curveTableUnreachable: "Недостижимо: кривая закрывается на $4M.",
   contractsTitle: "Адреса контрактов",
-  contractsLead: "On-chain адреса публикуются при запуске mainnet — на этой странице нет подставных значений.",
+  contractsLead: "Каждый адрес публикуется здесь, как только контракт существует, — без заглушек.",
   contractRows: [
-    {
-      name: "Контракты продажи (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)",
-      status: "Публикуется при запуске mainnet",
-    },
-    { name: "Мультисиг казны (2-из-3)", status: "Публикуется при запуске mainnet" },
-    { name: "Контроллеры vesting", status: "Публикуется при запуске mainnet" },
-    { name: "Контракт лока LP", status: "Публикуется при запуске mainnet" },
+    { name: "Контракт продажи (PplCurveHub, Base)", status: "Публикуется до открытия продажи" },
+    { name: "Мультисиг-получатель (мультисиг проекта)", status: "Публикуется до открытия продажи" },
+    { name: "Мультисиг казны (2-из-3)", status: "Публикуется при полном запуске сети" },
+    { name: "Контроллеры vesting", status: "Публикуется при полном запуске сети" },
+    { name: "Блокировка LP", status: "Публикуется при полном запуске сети" },
   ],
   legendHint: "Нажмите пункт легенды, чтобы выделить сектор.",
   feeSliceLabels: {

@@ -10,6 +10,8 @@ import { AllocationDonut } from "./AllocationDonut";
 import { CirculatingSupplyChart } from "./CirculatingSupplyChart";
 import { BondingCurveChart } from "./BondingCurveChart";
 import { publicPurchaseTable } from "@/lib/tokenomics";
+import { CURVE } from "@/lib/sale/config";
+import { pricePerPpl, usd } from "@/lib/sale/format";
 
 export function TokenomicsPage() {
   const { lang } = useLanguage();
@@ -109,15 +111,25 @@ export function TokenomicsPage() {
                 </tr>
               </thead>
               <tbody>
-                {publicPurchaseTable().map((row) => (
-                  <tr key={row.soldPct} className="border-b border-line/60 text-ink-2">
-                    <td className="py-2 pr-3">{Math.round(row.soldPct * 100)}%</td>
-                    <td className="py-2 pr-3">${row.priceUsdt.toFixed(4)}</td>
-                    <td className="py-2">${Math.round(row.cumulativeUsdt).toLocaleString("en-US")}</td>
-                  </tr>
-                ))}
+                {publicPurchaseTable().map((row) => {
+                  const unreachable = row.cumulativeUsdt > CURVE.graduationRaiseUsd;
+                  return (
+                    <tr
+                      key={row.soldPct}
+                      className={`border-b border-line/60 ${unreachable ? "text-ink-3 opacity-70" : "text-ink-2"}`}
+                    >
+                      <td className="py-2 pr-3">{Math.round(row.soldPct * 100)}%</td>
+                      <td className="py-2 pr-3"><bdi dir="ltr">{pricePerPpl(row.priceUsdt, lang)}</bdi></td>
+                      <td className="py-2">
+                        <bdi dir="ltr">{usd(row.cumulativeUsdt, lang)}</bdi>
+                        {unreachable ? <span className="ms-1 text-xs">*</span> : null}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
+            <p className="mt-2 text-xs text-ink-3">* {t.curveTableUnreachable}</p>
           </div>
         </div>
 
@@ -147,6 +159,7 @@ export function TokenomicsPage() {
         <div className="mt-6 rounded-2xl border border-line bg-surface p-5">
           <h3 className="font-semibold text-ink">{t.buybackTitle}</h3>
           <p className="mt-2 text-sm text-ink-2">{t.buybackBody}</p>
+          <p className="mt-2 text-sm text-ink-2">{t.buybackNote}</p>
           <p className="mt-3 text-sm">
             <Link href="/explorer" className="font-semibold text-brand hover:underline">
               {t.explorerLink}

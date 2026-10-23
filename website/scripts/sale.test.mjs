@@ -39,22 +39,22 @@ test("tokenomics surfaces publish public sale copy (no P0-10 saleClosed gate)", 
     assert.equal(doc.saleClosedTitle, undefined, file);
     assert.equal(doc.saleClosedBody, undefined, file);
     assert.ok(doc.salePublicTitle, file);
-    assert.ok(Array.isArray(doc.saleCurveBullets) && doc.saleCurveBullets.length === 4, file);
+    assert.ok(Array.isArray(doc.saleCurveBullets) && doc.saleCurveBullets.length === 5, file);
     assert.match(doc.curveLead ?? "", /0[,.]005/, file);
     assert.match(doc.curveLead ?? "", /4\s?M|4[,.]000[,.]000|\$?400\s*万/, file);
   }
 });
 
-test("tokenomics surfaces list all sale networks without Cosmos", () => {
-  const required = ["BNB Chain", "Base", "Ethereum", "Polygon", "Tron", "TON", "Solana"];
+test("tokenomics surfaces: sale is on Base only; pay-from list has Tron and Solana, TON only as unsupported", () => {
   for (const file of readdirSync(surfaces).filter((f) => f.startsWith("tokenomics-") && f.endsWith(".json"))) {
     const doc = JSON.parse(readFileSync(join(surfaces, file), "utf8"));
     const name = doc.contractRows?.[0]?.name ?? "";
-    for (const net of required) {
-      assert.match(name, new RegExp(net.replace(".", "\\.")), `${file} missing ${net}`);
-    }
-    assert.doesNotMatch(name, /Cosmos/i, file);
-    assert.doesNotMatch(doc.salePayBody ?? "", /Cosmos/i, file);
+    assert.match(name, /PplCurveHub/, file);
+    assert.match(name, /Base/, file);
+    assert.doesNotMatch(name, /BNB|Polygon|Tron|Cosmos/i, file);
+    for (const word of ["Tron", "Solana", "TON", "EVM"]) assert.match(doc.salePayBody ?? "", new RegExp(word), `${file} ${word}`);
+    assert.doesNotMatch(doc.unsoldBody ?? "", /180/, file);
+    assert.match(doc.unsoldBody ?? "", /Community Pool/, file);
   }
 });
 

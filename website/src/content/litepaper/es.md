@@ -161,9 +161,9 @@ No se prometen fechas. Cada etapa comienza cuando se cumple su condición.
 
 ## 9. Seguridad
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Multifirma de tesorería.** La tesorería está controlada por el contrato multifirma 2 de 3 propio de People en la red People, creado antes de mainnet; las direcciones de los firmantes se publicarán.
-- **Direcciones publicadas.** Las direcciones de contrato de venta, devengo y liquidez se publicarán en el lanzamiento de mainnet — sin marcadores de posición.
+- Revisado por modelos de IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (ejecutados por el equipo del proyecto). No es una auditoría de seguridad. Todavía no se ha hecho ninguna auditoría externa. Bug bounty on every page.
+- **Multifirmas.** Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base; su dirección y su umbral de firmas se publican antes de que abra la venta.
+- **Direcciones publicadas.** El contrato de venta y la multifirma receptora se publican antes de que abra la venta; los contratos de vesting y de bloqueo de LP, con el lanzamiento completo de la red. Sin marcadores provisionales.
 - **Defensa contra bots.** Verificación de humanos, límites por dispositivo e IP, límites de puntos diarios y recuperación de bots.
 - **Componentes de construcción probados.** Los contratos sin código se ensamblan a partir de plantillas de OpenZeppelin.
 
@@ -205,9 +205,9 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 
 ## Enlaces
 
-- Sitio web: https://peopleblockchain.network
-- Un Millón de Fundadores: https://peopleblockchain.network/founders
-- Documento de visión: https://peopleblockchain.network/litepaper
+- Sitio web: https://www.peopleblockchain.network
+- Un Millón de Fundadores: https://www.peopleblockchain.network/founders
+- Documento de visión: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -220,7 +220,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 - El vesting del equipo es **0% al lanzamiento, un cliff de 6 meses y luego 18 meses lineales** (24 meses en total).
 - Comisiones de lanzamiento: el plan aprobado es un importe fijo de **1 USD por lanzamiento de token y 2 USD por mint de NFT**, pagadero en PPL, USDT o USDC, con un 20% de descuento al pagar en PPL a un precio TWAP; las fábricas desplegadas aún cobran una comisión fija en PPL.
 - La **venta comunitaria de PPL** usa la curva exponencial publicada en `/buy` (inicio **$0.005** por PPL; precios y límites públicos; la compra sigue desactivada hasta el hub). No hay KYC ni comprobaciones de elegibilidad en este sitio.
-- Seguridad: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- El multisig del tesoro es **2 de 3** y se crea antes de mainnet.
+- Seguridad: Revisado por modelos de IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (ejecutados por el equipo del proyecto). No es una auditoría de seguridad. Todavía no se ha hecho ninguna auditoría externa.; bug bounty on every page.
+- Multifirmas. Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base; su dirección y su umbral de firmas se publican antes de que abra la venta.
 - Si la curva de un token no se agota en **180 días** desde el lanzamiento, cualquiera puede finalizarla y los tokens no vendidos van al pool comunitario de ese token. Una curva agotada pasa a liquidez como antes. (Activo en testnet.)
-- La venta de PPL, una vez abierta, dura **180 días** fijos. Después, cualquiera puede finalizarla y los PPL no vendidos van al pool comunitario — la misma regla que para las curvas de tokens.
+- La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.

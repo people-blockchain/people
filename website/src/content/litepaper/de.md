@@ -161,9 +161,9 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 
 ## 9. Sicherheit
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Treasury Multisig.** Die Treasury wird von People's eigenem 2-von-3-Multisig-Vertrag im People-Netzwerk verwaltet, der vor dem Mainnet erstellt wird; Signer-Adressen werden veröffentlicht.
-- **Veröffentlichte Adressen.** Sale-, Vesting- und Liquiditäts-Vertrags­adressen werden beim Mainnet-Start veröffentlicht — keine Platzhalter.
+- Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht. Bug bounty on every page.
+- **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
+- **Veröffentlichte Adressen.** Verkaufsvertrag und empfangende Multisig werden vor dem Verkaufsstart veröffentlicht, Vesting- und LP-Sperrverträge beim vollständigen Netzwerkstart. Keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
 - **Bewährte Bausteine.** No-Code-Verträge werden aus OpenZeppelin-Vorlagen zusammengesetzt.
 
@@ -205,9 +205,9 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
 ## Links
 
-- Website: https://peopleblockchain.network
-- Million Founders: https://peopleblockchain.network/founders
-- Litepaper: https://peopleblockchain.network/litepaper
+- Website: https://www.peopleblockchain.network
+- Million Founders: https://www.peopleblockchain.network/founders
+- Litepaper: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -220,7 +220,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
-- Sicherheit: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; Bug bounty on every page.
-- Das Treasury-Multisig ist **2-von-3** und wird vor dem Mainnet erstellt.
+- Sicherheit: Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.; Bug bounty on every page.
+- Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
-- Der PPL-Sale läuft nach seiner Öffnung fest **180 Tage**. Danach kann jeder ihn abschließen, und die unverkauften PPL gehen in den Community-Pool — dieselbe Regel wie bei Token-Curves.
+- Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.

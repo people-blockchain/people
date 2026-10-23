@@ -1,1 +1,110 @@
-{"tag":"TOKENOMIK","title":"PPL-Angebot und Startplan","lead":"Wie das feste Milliarden-PPL-Angebot zugewiesen, freigeschaltet und verkauft wird. Zahlen vorläufig, Community-Governance vorbehalten.","banner":"Vorläufig — Gegenstand einer Community-Governance-Abstimmung.","supplyTitle":"Festes Angebot","supplyBody":"Festes Angebot: 1.000.000.000 PPL (eine Milliarde). Jahre 1–4: 0 % Inflation — keine neuen Coins außerhalb der Freigabepläne. Ab Jahr 5 höchstens 2 % Emission pro Jahr nur per Community-Vote.","testnetNote":"Das interne Testnet nutzte ein 1M-PPL-Premine für Experimente. Es wird nicht übernommen — Mainnet startet bei null.","allocationTitle":"Genesis-Zuteilung","allocationLead":"Sechs Buckets beim Start. Tippen oder Hover zeigt Anteil, Menge und Freigabe.","bucketLabels":{"community":"Community & Belohnungen","validators":"Validatoren & Staking","team":"Team & Gründer","treasury":"Ökosystem-Treasury (DAO)","sale":"Community-Verkauf","liquidity":"Liquidität"},"bucketNotes":{"community":"35 % Genesis — Gründer, Prämien, Botschafter und Airdrops nur aus diesem Topf (6 Jahre).","validators":"200M PPL (20 %): Jahre 1–4 zahlen 6 %, 5 %, 5 %, 4 % des Gesamtangebots pro Jahr (60M / 50M / 50M / 40M PPL) plus 30 % der Netzwerkgebühren.","team":"15 % des Angebots: 0 % zum Start, 6 Monate Cliff, danach 18 Monate lineare monatliche Freigabe (insgesamt 24 Monate).","treasury":"Nur nach DAO-Votes; in Multisig.","sale":"25 % beim Genesis auf People, Rest monatlich 9 Monate.","liquidity":"PPL/USDT-Pool beim Verkaufsende; LP 2+ Jahre gesperrt."},"donutTitle":"Zuteilung","shareLabel":"Anteil","amountLabel":"Menge","unlockChartLabel":"Freigeschaltet über die Zeit","circulatingTitle":"Umlaufangebot","circulatingLead":"Geschätzte liquide PPL pro Monat (0–120). DAO-Treasury erst nach Vote; Liquidität nach 2-Jahres-Lock.","monthAxis":"Monate nach Genesis","saleTitle":"Community-Verkauf","saleLead":"Bis zu 100M PPL aus dem Verkaufsbudget (10 % des festen Angebots) werden auf einer öffentlichen Exponentialkurve verkauft. Veröffentlichte Parameter entsprechen der Live-Seite /buy und der Order-API.","salePayTitle":"Wie Sie zahlen würden","salePayBody":"Zahlen Sie mit USDC oder USDT von Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron oder Solana. Eine Kurve, ein Preis — unabhängig vom Netzwerk. Rückverkaufs-Auszahlungen standardmäßig USDC auf Base, sofern Sie keine andere Chain wählen.","saleDeliveryTitle":"So erhalten Sie PPL","saleDeliveryBody":"Native PPL werden zum Genesis auf dieselbe 0x-Adresse auf People gutgeschrieben — gemäß Vesting oben.","curveTitle":"Bonding-Kurve","curveLead":"Exponentialkurve: Der Preis startet bei 0,005 $ pro PPL und steigt mit jedem Kauf bis zu einer Obergrenze von 0,25 $, solange die Kurve offen ist. Graduation schließt die Kurve bei 4 M$ Einnahmen.","unsoldTitle":"Unverkaufte Token","unsoldBody":"Nach 180 Tagen wird das Eingenommene 50/50 zwischen gesperrter LP und Projekt-Multisig geteilt; nicht verkaufte PPL auf der Kurve gehen in den Community-Pool. Gleiche Regel für jeden auf PEOPLE gestarteten Token.","feeTitle":"Aufteilung der Netzwerkgebühren","feeLead":"Jede Protokollgebühr auf People folgt der genehmigten Model A:","feeNote":"Jede Protokollgebühr: 30 % Validatoren, 25 % Community-Pool, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt.","buybackTitle":"Rückkäufe","buybackBody":"100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. Der StableFeeGateway-Vertrag ist implementiert und im Testnetz bereitgestellt: Jede Stablecoin-Launch-Gebühr geht an den öffentlichen Rückkauf-Empfänger. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% der Netzwerkgebühren gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%) — und alles fließt letztendlich an die Teilnehmer zurück. Zurückgekaufte PPL werden dann vom 2-von-3-Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt — diese Aufteilung ist eine veröffentlichte Multisig-Richtlinie, keine on-chain erzwungene Regel.","contractsTitle":"Vertragsadressen","contractsLead":"On-Chain-Adressen werden beim Mainnet-Start veröffentlicht — keine Platzhalter hier.","contractRows":[{"name":"Verkaufsverträge (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)","status":"Veröffentlicht beim Mainnet-Start"},{"name":"Treasury-Multisig (2-von-3)","status":"Veröffentlicht beim Mainnet-Start"},{"name":"Vesting-Controller","status":"Veröffentlicht beim Mainnet-Start"},{"name":"LP-Lock-Vertrag","status":"Veröffentlicht beim Mainnet-Start"}],"legendHint":"Klicken Sie auf die Legende, um einen Sektor zu fokussieren.","feeSliceLabels":{"validators":"Validatoren","community":"Community-Pool","treasury":"Schatzkammer","liquidity":"Liquidität & Ökosystem","growth":"Wachstumspool","burn":"Verbrennung"},"emissionTitle":"Emission und Validator-Belohnungen","emissionLead":"Sicherheit wird aus dem Validator-Pool und Gebühren bezahlt — in Jahren 1–4 kein neues Minting.","emissionBullets":["Jahre 1–4: 0 % Inflation — die Milliarden-Obergrenze steigt nicht.","Validator-Pool: 200M PPL nach 6 % / 5 % / 5 % / 4 % des Gesamtangebots (60M, 50M, 50M, 40M PPL in Jahren 1–4) plus 30 % jeder Protokollgebühr.","Gründer, Prämien, Botschafter und Airdrops nur aus dem 35 %-Community-Topf.","Ab Jahr 5 höchstens 2 % neue Emission pro Jahr und nur per Governance-Vote."],"launchOrderTitle":"Startreihenfolge","launchOrderBody":"Zuerst Gründer-Airdrop. Der öffentliche PPL-Verkauf erst nach 1.000 verifizierten Personen und veröffentlichtem Multisig.","pplFeeTariffsLink":"PPL-Gebührentarife","explorerLink":"Explorer","backToDocsLink":"Zurück zur Dokumentation","salePublicTitle":"Veröffentlichte Verkaufsparameter","salePublicBody":"Preise, Limits und Kurvenformel sind öffentlich auf /buy. Käufe bleiben deaktiviert, bis der Sale-Hub-Vertrag deployed ist; Wallet verbinden verpflichtet zu nichts.","salePublicCta":"Seite /buy öffnen","saleCurveBullets":["100.000.000 PPL auf der Kurve (10 % des Angebots); Start 0,005 $, exponentieller Anstieg, Deckel 0,25 $ nur auf der Kurve.","Graduation bei 4.000.000 $ Einnahmen; 180-Tage-Verkaufsfenster, danach unverkaufte PPL in den Community-Pool.","Einnahmen 50 % gesperrte Liquidität / 50 % Projekt-Multisig; LP-Tokens 24 Monate gesperrt.","Rückverkauf an die Kurve mit 1,5 % Gebühr für PPL-Buyback. Limits: 500 $ pro Kauf, 2.000 $ pro Person und Tag, 60 s Pause."],"curveTableSold":"% verkauft","curveTablePrice":"Spotpreis (USDT)","curveTableRaised":"Eingenommen (USDT)"}
+{
+  "tag": "TOKENOMIK",
+  "title": "PPL-Angebot und Startplan",
+  "lead": "Wie das feste Milliarden-PPL-Angebot zugewiesen, freigeschaltet und verkauft wird. Zahlen vorläufig, Community-Governance vorbehalten.",
+  "banner": "Vorläufig — Gegenstand einer Community-Governance-Abstimmung.",
+  "supplyTitle": "Festes Angebot",
+  "supplyBody": "Festes Angebot: 1.000.000.000 PPL (eine Milliarde). Jahre 1–4: 0 % Inflation — keine neuen Coins außerhalb der Freigabepläne. Ab Jahr 5 höchstens 2 % Emission pro Jahr nur per Community-Vote.",
+  "testnetNote": "Das interne Testnet nutzte ein 1M-PPL-Premine für Experimente. Es wird nicht übernommen — Mainnet startet bei null.",
+  "allocationTitle": "Genesis-Zuteilung",
+  "allocationLead": "Sechs Buckets beim Start. Tippen oder Hover zeigt Anteil, Menge und Freigabe.",
+  "bucketLabels": {
+    "community": "Community & Belohnungen",
+    "validators": "Validatoren & Staking",
+    "team": "Team & Gründer",
+    "treasury": "Ökosystem-Treasury (DAO)",
+    "sale": "Community-Verkauf",
+    "liquidity": "Liquidität"
+  },
+  "bucketNotes": {
+    "community": "35 % Genesis — Gründer, Prämien, Botschafter und Airdrops nur aus diesem Topf (6 Jahre).",
+    "validators": "200M PPL (20 %): Jahre 1–4 zahlen 6 %, 5 %, 5 %, 4 % des Gesamtangebots pro Jahr (60M / 50M / 50M / 40M PPL) plus 30 % der Netzwerkgebühren.",
+    "team": "15 % des Angebots: 0 % zum Start, 6 Monate Cliff, danach 18 Monate lineare monatliche Freigabe (insgesamt 24 Monate).",
+    "treasury": "Nur nach DAO-Votes; in Multisig.",
+    "sale": "Verkauf auf der öffentlichen Kurve auf Base (PplCurveHub). PPL wird direkt nach dem Kauf gutgeschrieben; Überweisungen öffnen mit dem vollständigen Netzwerkstart.",
+    "liquidity": "PPL/USDC-Pool bei der Graduation; LP-Token 24 Monate gesperrt."
+  },
+  "donutTitle": "Zuteilung",
+  "shareLabel": "Anteil",
+  "amountLabel": "Menge",
+  "unlockChartLabel": "Freigeschaltet über die Zeit",
+  "circulatingTitle": "Umlaufangebot",
+  "circulatingLead": "Geschätzte liquide PPL pro Monat (0–120). DAO-Treasury erst nach Vote; Liquidität nach 2-Jahres-Lock.",
+  "monthAxis": "Monate nach Genesis",
+  "saleTitle": "Community-Verkauf",
+  "saleLead": "Bis zu 100 Mio. PPL liegen auf der Kurve (10 % des festen Angebots). Die Kurve schließt bei 4 Mio. $ Einnahmen — etwa 88,83 Mio. verkaufte PPL zu etwa 0,1615 $ pro PPL. Tabellenzeilen über 4 Mio. $ sind nicht erreichbar.",
+  "salePayTitle": "Wie Sie zahlen würden",
+  "salePayBody": "Auf Base mit USDC oder USDT. Aus anderen Netzwerken über den integrierten automatischen Tausch (LI.FI): EVM-Netzwerke (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und weitere), Tron und Solana funktionieren. TON wird nicht unterstützt. Auszahlung in USDC auf Base.",
+  "saleDeliveryTitle": "So erhalten Sie PPL",
+  "saleDeliveryBody": "PPL wird Ihrer Adresse sofort gutgeschrieben, aber an andere senden können Sie es erst nach dem vollständigen Netzwerkstart. Zurückverkaufen können nur verifizierte Nutzer, 30 Tage nach jedem Kauf.",
+  "curveTitle": "Bonding-Kurve",
+  "curveLead": "Exponentialkurve: Der Preis startet bei 0,005 $ pro PPL und steigt mit jedem Kauf bis zu einer Obergrenze von 0,25 $, solange die Kurve offen ist. Graduation schließt die Kurve bei 4 M$ Einnahmen.",
+  "unsoldTitle": "Unverkaufte Token",
+  "unsoldBody": "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.",
+  "feeTitle": "Aufteilung der Netzwerkgebühren",
+  "feeLead": "Jede Protokollgebühr auf People folgt der genehmigten Model A:",
+  "feeNote": "Jede Protokollgebühr: 30 % Validatoren, 25 % Community-Pool, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt.",
+  "buybackTitle": "Rückkäufe",
+  "buybackBody": "100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. Der StableFeeGateway-Vertrag ist implementiert und im Testnetz bereitgestellt: Jede Stablecoin-Launch-Gebühr geht an den öffentlichen Rückkauf-Empfänger. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% der Netzwerkgebühren gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%) — und alles fließt letztendlich an die Teilnehmer zurück. Zurückgekaufte PPL werden dann vom 2-von-3-Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt — diese Aufteilung ist eine veröffentlichte Multisig-Richtlinie, keine on-chain erzwungene Regel.",
+  "contractsTitle": "Vertragsadressen",
+  "contractsLead": "Jede Adresse wird hier veröffentlicht, sobald der Vertrag existiert — ohne Platzhalter.",
+  "contractRows": [
+    {
+      "name": "Verkaufsvertrag (PplCurveHub, Base)",
+      "status": "Wird vor dem Verkaufsstart veröffentlicht"
+    },
+    {
+      "name": "Empfangende Multisig (Multisig des Projekts)",
+      "status": "Wird vor dem Verkaufsstart veröffentlicht"
+    },
+    {
+      "name": "Treasury-Multisig (2-von-3)",
+      "status": "Wird beim vollständigen Netzwerkstart veröffentlicht"
+    },
+    {
+      "name": "Vesting-Controller",
+      "status": "Wird beim vollständigen Netzwerkstart veröffentlicht"
+    },
+    {
+      "name": "LP-Sperre",
+      "status": "Wird beim vollständigen Netzwerkstart veröffentlicht"
+    }
+  ],
+  "legendHint": "Klicken Sie auf die Legende, um einen Sektor zu fokussieren.",
+  "feeSliceLabels": {
+    "validators": "Validatoren",
+    "community": "Community-Pool",
+    "treasury": "Schatzkammer",
+    "liquidity": "Liquidität & Ökosystem",
+    "growth": "Wachstumspool",
+    "burn": "Verbrennung"
+  },
+  "emissionTitle": "Emission und Validator-Belohnungen",
+  "emissionLead": "Sicherheit wird aus dem Validator-Pool und Gebühren bezahlt — in Jahren 1–4 kein neues Minting.",
+  "emissionBullets": [
+    "Jahre 1–4: 0 % Inflation — die Milliarden-Obergrenze steigt nicht.",
+    "Validator-Pool: 200M PPL nach 6 % / 5 % / 5 % / 4 % des Gesamtangebots (60M, 50M, 50M, 40M PPL in Jahren 1–4) plus 30 % jeder Protokollgebühr.",
+    "Gründer, Prämien, Botschafter und Airdrops nur aus dem 35 %-Community-Topf.",
+    "Ab Jahr 5 höchstens 2 % neue Emission pro Jahr und nur per Governance-Vote."
+  ],
+  "launchOrderTitle": "Startreihenfolge",
+  "launchOrderBody": "Der PPL-Verkauf öffnet, sobald der Verkaufsvertrag (PplCurveHub auf Base) und die empfangende Multisig veröffentlicht sind. Überweisungen und Handel im Pool öffnen mit dem vollständigen Netzwerkstart, bei 1.000 verifizierten Personen.",
+  "pplFeeTariffsLink": "PPL-Gebührentarife",
+  "explorerLink": "Explorer",
+  "backToDocsLink": "Zurück zur Dokumentation",
+  "salePublicTitle": "Veröffentlichte Verkaufsparameter",
+  "salePublicBody": "Preise, Limits und Kurvenformel sind öffentlich auf /buy. Käufe bleiben deaktiviert, bis der Sale-Hub-Vertrag deployed ist; Wallet verbinden verpflichtet zu nichts.",
+  "salePublicCta": "Seite /buy öffnen",
+  "saleCurveBullets": [
+    "100.000.000 PPL auf der Kurve (10 % des Angebots); Start 0,005 $, exponentieller Anstieg, Deckel 0,25 $ nur auf der Kurve.",
+    "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.",
+    "Einnahmen 50 % gesperrte Liquidität / 50 % Projekt-Multisig; LP-Tokens 24 Monate gesperrt.",
+    "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base.",
+    "$10–$500 pro Kauf; Bis zu $2,000 pro Person in beliebigen 24 Stunden; 60 s Pause zwischen Käufen"
+  ],
+  "curveTableSold": "% verkauft",
+  "curveTablePrice": "Spotpreis (USDC)",
+  "curveTableRaised": "Eingenommen (USDC)",
+  "buybackNote": "Nicht zu verwechseln mit dem Rückverkauf: Dabei verkaufen Sie PPL an die Verkaufsreserve.",
+  "curveTableUnreachable": "Nicht erreichbar: Die Kurve schließt bei 4 Mio. $."
+}

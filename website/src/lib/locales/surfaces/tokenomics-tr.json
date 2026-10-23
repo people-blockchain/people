@@ -1,1 +1,110 @@
-{"tag":"TOKENOMİ","title":"PPL arzı ve lansman planı","lead":"Sabit bir milyar PPL’nin mainnet öncesi ve sonrası nasıl dağıtıldığı, açıldığı ve satıldığı. Rakamlar ön çalışma; topluluk yönetimine tabidir.","banner":"Ön çalışma — topluluk yönetimi oylamasına tabidir.","supplyTitle":"Sabit arz","supplyBody":"Sabit arz: 1.000.000.000 PPL (bir milyar). Yıl 1–4: %0 enflasyon — planlı açılımlar dışında yeni coin yok. 5. yıldan itibaren ek emisyon yılda en fazla %2 ve yalnızca topluluk oyuyla.","testnetNote":"İç testnet deneyler için 1M PPL premine kullandı. Devredilmez — mainnet sıfırdan başlar.","allocationTitle":"Genesis dağılımı","allocationLead":"Lansmanda altı havuz. Dokunun veya üzerine gelin: pay, miktar ve açılış yolu.","bucketLabels":{"community":"Topluluk ve ödüller","validators":"Doğrulayıcılar ve staking","team":"Ekip ve kurucular","treasury":"Ekosistem hazinesi (DAO)","sale":"Topluluk satışı","liquidity":"Likidite"},"bucketNotes":{"community":"Genesis %35 — kurucular, ödüller, elçiler ve airdrop yalnızca bu havuzdan (6 yıl).","validators":"200M PPL (%20): yıl 1–4 toplam arzın yıllık %6, %5, %5, %4 (60M / 50M / 50M / 40M PPL) artı ağ ücretlerinin %30’u.","team":"Arzın %15'i: lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal aylık kilit açılımı (toplam 24 ay).","treasury":"Yalnızca DAO oylarından sonra; multisig’de.","sale":"People’da genesis’te %25, kalan 9 ay aylık.","liquidity":"Satış bitiminde PPL/USDT havuzu; LP 2+ yıl kilitli."},"donutTitle":"Dağılım","shareLabel":"Pay","amountLabel":"Miktar","unlockChartLabel":"Zaman içinde açılan","circulatingTitle":"Dolaşımdaki arz","circulatingLead":"Aylık tahmini likit PPL (0–120). DAO hazinesi oyalanana kadar grafik dışı; likidite 2 yıl kilit sonrası.","monthAxis":"Genesis sonrası ay","saleTitle":"Topluluk satışı","saleLead":"Satış havuzundaki 100M PPL'ye kadar (%10 sabit arz) halka açık üstel eğri üzerinde satılır. Yayınlanan parametreler canlı /buy sayfası ve sipariş API'si ile uyumludur.","salePayTitle":"Nasıl ödeyeceksiniz","salePayBody":"Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron veya Solana'dan USDC veya USDT ile ödeyin. Tek eğri, tek fiyat — hangi ağdan öderseniz ödeyin. Geri satış ödemeleri varsayılan olarak Base'de USDC'dir; başka zincir seçmediyseniz.","saleDeliveryTitle":"PPL nasıl alınır","saleDeliveryBody":"Yerel PPL, yukarıdaki vesting’e göre genesis’te People’da aynı 0x adresine yazılır.","curveTitle":"Bonding eğrisi","curveLead":"Üstel eğri: fiyat PPL başına $0,005'ten başlar ve eğri açıkken her alımla $0,25 tavanına kadar yükselir. Mezuniyet eğriyi $4M toplanınca kapatır.","unsoldTitle":"Satılmayan tokenler","unsoldBody":"180 gün sonra toplanan tutar %50 kilitli LP / %50 proje multisig arasında bölünür; eğrida satılmayan PPL topluluk havuzuna gider. PEOPLE'da başlatılan her token için aynı kural.","feeTitle":"Ağ ücreti dağılımı","feeLead":"People’daki her protokol ücreti onaylı Model A’yı izler:","feeNote":"Her protokol ücreti: %30 doğrulayıcı, %25 topluluk havuzu, %20 hazine, %10 likidite, %15 Growth, %0 yakım.","buybackTitle":"Geri alımlar","buybackBody":"Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider. StableFeeGateway sözleşmesi testnet'te uygulanmış ve dağıtılmıştır: her stablecoin lansman ücreti halka açık geri alım alıcısına gider. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10). Ağ ücretlerinin kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider — ve hepsi nihayetinde katılımcılara geri döner. Geri alınan PPL daha sonra 2/3 hazine multisig'i tarafından 30/25/20/10/15 olarak bölünür — bu bölünme yayınlanmış bir multisig politikasıdır, zincir üzerinde uygulanan bir kural değildir.","contractsTitle":"Sözleşme adresleri","contractsLead":"On-chain adresler mainnet lansmanında yayınlanır — burada yer tutucu yok.","contractRows":[{"name":"Satış sözleşmeleri (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)","status":"Mainnet lansmanında yayınlanır"},{"name":"Hazine multisig (2/3)","status":"Mainnet lansmanında yayınlanır"},{"name":"Vesting kontrolleri","status":"Mainnet lansmanında yayınlanır"},{"name":"LP kilit sözleşmesi","status":"Mainnet lansmanında yayınlanır"}],"legendHint":"Bir dilimi vurgulamak için lejanta tıklayın.","feeSliceLabels":{"validators":"Doğrulayıcılar","community":"Topluluk havuzu","treasury":"Hazine","liquidity":"Likidite ve ekosistem","growth":"Growth Pool","burn":"Yakım"},"emissionTitle":"Emisyon ve doğrulayıcı ödülleri","emissionLead":"Güvenlik doğrulayıcı havuzu ve ücretlerle ödenir — yıl 1–4’te yeni basım yok.","emissionBullets":["Yıl 1–4: %0 enflasyon — bir milyar tavanı artmaz.","Doğrulayıcı havuzu: 200M PPL, toplam arzın %6 / %5 / %5 / %4 takvimi (yıl 1–4’te 60M, 50M, 50M, 40M PPL) artı her protokol ücretinin %30’u.","Kurucu, ödül, elçi ve airdrop yalnızca %35 topluluk havuzundan.","5. yıldan itibaren yeni emisyon yılda en fazla %2 ve yalnızca topluluk oyuyla."],"launchOrderTitle":"Lansman sırası","launchOrderBody":"Önce kurucu airdrop. Topluluk PPL satışı yalnızca 1.000 doğrulanmış kişi ve yayınlanmış multisig sonrası.","pplFeeTariffsLink":"PPL ücret tarifeleri","explorerLink":"Kaşif","backToDocsLink":"Belgelere geri dön","salePublicTitle":"Yayınlanan satış parametreleri","salePublicBody":"Fiyatlar, limitler ve eğri formülü /buy'da herkese açıktır. Satış hub sözleşmesi deploy edilene kadar alımlar kapalıdır; cüzdan bağlamak sizi hiçbir şeye bağlamaz.","salePublicCta":"/buy sayfasını aç","saleCurveBullets":["Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.","$4.000.000 toplanınca mezuniyet; 180 günlük satış penceresi; ardından satılmayan PPL topluluk havuzuna.","Toplanan %50 kilitli likidite / %50 proje multisig; LP tokenları 24 ay kilitli.","Eğriye geri satışa izin; PPL buyback için %1,5 ücret. Limitler: alım başına $500, kişi başına günde $2000, 60 sn bekleme."],"curveTableSold":"% satıldı","curveTablePrice":"Spot fiyat (USDT)","curveTableRaised":"Toplanan (USDT)"}
+{
+  "tag": "TOKENOMİ",
+  "title": "PPL arzı ve lansman planı",
+  "lead": "Sabit bir milyar PPL’nin mainnet öncesi ve sonrası nasıl dağıtıldığı, açıldığı ve satıldığı. Rakamlar ön çalışma; topluluk yönetimine tabidir.",
+  "banner": "Ön çalışma — topluluk yönetimi oylamasına tabidir.",
+  "supplyTitle": "Sabit arz",
+  "supplyBody": "Sabit arz: 1.000.000.000 PPL (bir milyar). Yıl 1–4: %0 enflasyon — planlı açılımlar dışında yeni coin yok. 5. yıldan itibaren ek emisyon yılda en fazla %2 ve yalnızca topluluk oyuyla.",
+  "testnetNote": "İç testnet deneyler için 1M PPL premine kullandı. Devredilmez — mainnet sıfırdan başlar.",
+  "allocationTitle": "Genesis dağılımı",
+  "allocationLead": "Lansmanda altı havuz. Dokunun veya üzerine gelin: pay, miktar ve açılış yolu.",
+  "bucketLabels": {
+    "community": "Topluluk ve ödüller",
+    "validators": "Doğrulayıcılar ve staking",
+    "team": "Ekip ve kurucular",
+    "treasury": "Ekosistem hazinesi (DAO)",
+    "sale": "Topluluk satışı",
+    "liquidity": "Likidite"
+  },
+  "bucketNotes": {
+    "community": "Genesis %35 — kurucular, ödüller, elçiler ve airdrop yalnızca bu havuzdan (6 yıl).",
+    "validators": "200M PPL (%20): yıl 1–4 toplam arzın yıllık %6, %5, %5, %4 (60M / 50M / 50M / 40M PPL) artı ağ ücretlerinin %30’u.",
+    "team": "Arzın %15'i: lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal aylık kilit açılımı (toplam 24 ay).",
+    "treasury": "Yalnızca DAO oylarından sonra; multisig’de.",
+    "sale": "Base üzerindeki herkese açık eğride satılır (PplCurveHub). PPL alımdan hemen sonra hesaba yazılır; transferler ağın tam lansmanıyla açılır.",
+    "liquidity": "Graduation'da PPL/USDC havuzu; LP token'ları 24 ay kilitli."
+  },
+  "donutTitle": "Dağılım",
+  "shareLabel": "Pay",
+  "amountLabel": "Miktar",
+  "unlockChartLabel": "Zaman içinde açılan",
+  "circulatingTitle": "Dolaşımdaki arz",
+  "circulatingLead": "Aylık tahmini likit PPL (0–120). DAO hazinesi oyalanana kadar grafik dışı; likidite 2 yıl kilit sonrası.",
+  "monthAxis": "Genesis sonrası ay",
+  "saleTitle": "Topluluk satışı",
+  "saleLead": "Eğride en fazla 100M PPL var (sabit arzın %10'u). Eğri $4M toplanınca kapanır — yaklaşık 88,83M PPL satılmış olur, PPL başına yaklaşık $0,1615. Tablodaki $4M sonrası satırlara ulaşılamaz.",
+  "salePayTitle": "Nasıl ödeyeceksiniz",
+  "salePayBody": "Base'de USDC veya USDT ile. Diğer ağlardan yerleşik otomatik takas (LI.FI) ile: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana çalışır. TON desteklenmez. Ödemeyi USDC olarak Base ağında alırsınız.",
+  "saleDeliveryTitle": "PPL nasıl alınır",
+  "saleDeliveryBody": "PPL hemen adresinize yazılır, ancak ağın tam lansmanına kadar başkalarına gönderemezsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür.",
+  "curveTitle": "Bonding eğrisi",
+  "curveLead": "Üstel eğri: fiyat PPL başına $0,005'ten başlar ve eğri açıkken her alımla $0,25 tavanına kadar yükselir. Mezuniyet eğriyi $4M toplanınca kapatır.",
+  "unsoldTitle": "Satılmayan tokenler",
+  "unsoldBody": "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
+  "feeTitle": "Ağ ücreti dağılımı",
+  "feeLead": "People’daki her protokol ücreti onaylı Model A’yı izler:",
+  "feeNote": "Her protokol ücreti: %30 doğrulayıcı, %25 topluluk havuzu, %20 hazine, %10 likidite, %15 Growth, %0 yakım.",
+  "buybackTitle": "Geri alımlar",
+  "buybackBody": "Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider. StableFeeGateway sözleşmesi testnet'te uygulanmış ve dağıtılmıştır: her stablecoin lansman ücreti halka açık geri alım alıcısına gider. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10). Ağ ücretlerinin kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider — ve hepsi nihayetinde katılımcılara geri döner. Geri alınan PPL daha sonra 2/3 hazine multisig'i tarafından 30/25/20/10/15 olarak bölünür — bu bölünme yayınlanmış bir multisig politikasıdır, zincir üzerinde uygulanan bir kural değildir.",
+  "contractsTitle": "Sözleşme adresleri",
+  "contractsLead": "Her adres, sözleşme oluşturulduğunda burada yayımlanır — yer tutucu yok.",
+  "contractRows": [
+    {
+      "name": "Satış sözleşmesi (PplCurveHub, Base)",
+      "status": "Satış açılmadan önce yayımlanır"
+    },
+    {
+      "name": "Alıcı çoklu imza (projenin çoklu imza cüzdanı)",
+      "status": "Satış açılmadan önce yayımlanır"
+    },
+    {
+      "name": "Hazine multisig (2/3)",
+      "status": "Ağın tam lansmanında yayımlanır"
+    },
+    {
+      "name": "Vesting kontrolleri",
+      "status": "Ağın tam lansmanında yayımlanır"
+    },
+    {
+      "name": "LP kilidi",
+      "status": "Ağın tam lansmanında yayımlanır"
+    }
+  ],
+  "legendHint": "Bir dilimi vurgulamak için lejanta tıklayın.",
+  "feeSliceLabels": {
+    "validators": "Doğrulayıcılar",
+    "community": "Topluluk havuzu",
+    "treasury": "Hazine",
+    "liquidity": "Likidite ve ekosistem",
+    "growth": "Growth Pool",
+    "burn": "Yakım"
+  },
+  "emissionTitle": "Emisyon ve doğrulayıcı ödülleri",
+  "emissionLead": "Güvenlik doğrulayıcı havuzu ve ücretlerle ödenir — yıl 1–4’te yeni basım yok.",
+  "emissionBullets": [
+    "Yıl 1–4: %0 enflasyon — bir milyar tavanı artmaz.",
+    "Doğrulayıcı havuzu: 200M PPL, toplam arzın %6 / %5 / %5 / %4 takvimi (yıl 1–4’te 60M, 50M, 50M, 40M PPL) artı her protokol ücretinin %30’u.",
+    "Kurucu, ödül, elçi ve airdrop yalnızca %35 topluluk havuzundan.",
+    "5. yıldan itibaren yeni emisyon yılda en fazla %2 ve yalnızca topluluk oyuyla."
+  ],
+  "launchOrderTitle": "Lansman sırası",
+  "launchOrderBody": "PPL satışı, satış sözleşmesi (Base üzerinde PplCurveHub) ve alıcı çoklu imza cüzdanı yayımlandığında açılır. Transferler ve havuzda işlem, 1.000 doğrulanmış kişiyle ağın tam lansmanında açılır.",
+  "pplFeeTariffsLink": "PPL ücret tarifeleri",
+  "explorerLink": "Kaşif",
+  "backToDocsLink": "Belgelere geri dön",
+  "salePublicTitle": "Yayınlanan satış parametreleri",
+  "salePublicBody": "Fiyatlar, limitler ve eğri formülü /buy'da herkese açıktır. Satış hub sözleşmesi deploy edilene kadar alımlar kapalıdır; cüzdan bağlamak sizi hiçbir şeye bağlamaz.",
+  "salePublicCta": "/buy sayfasını aç",
+  "saleCurveBullets": [
+    "Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.",
+    "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
+    "Toplanan %50 kilitli likidite / %50 proje multisig; LP tokenları 24 ay kilitli.",
+    "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "Alım başına $10–$500; Herhangi bir 24 saatte kişi başına en fazla $2,000; Alımlar arasında 60 sn bekleme"
+  ],
+  "curveTableSold": "% satıldı",
+  "curveTablePrice": "Spot fiyat (USDC)",
+  "curveTableRaised": "Toplanan (USDC)",
+  "buybackNote": "Geri satışla karıştırmayın: geri satışta PPL'i satış rezervine siz satarsınız.",
+  "curveTableUnreachable": "Ulaşılamaz: eğri $4M'de kapanır."
+}
