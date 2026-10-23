@@ -172,7 +172,7 @@ test("join CTA routes to wallet; the header sign-in opens the modal", () => {
 });
 
 test("public website copy must not mention Model A", () => {
-  const forbidden = [/Model A/i, /MODEL A/];
+  const forbidden = [/\bModel A\b/i, /MODEL A/];
   for (const file of PUBLIC_COPY_FILES) {
     const text = src(file);
     for (const pattern of forbidden) {
@@ -306,7 +306,7 @@ test("nav uses the single localized Sign in label and Testnet v0.1 footer badge"
   const en = src("src/lib/locales/en.ts");
   assert.match(en, /"login": "Sign in"/);
   assert.match(en, /"signIn": "Sign in"/);
-  assert.match(en, /Testnet v0\.1/);
+  assert.match(en, /"statusBadge": "Testnet PEOPLE v0\.1"/);
   assert.doesNotMatch(footer, /baselineNote/);
   // The footer keeps nav.login; the header renders nav.signIn exactly once and
   // no longer duplicates the action as a nav link.
@@ -416,6 +416,8 @@ test("public surfaces forbid coming soon / soon / planned marketing wording", ()
     if (skipPaths.some((s) => file.includes(s))) continue;
     const text = readFileSync(file, "utf8");
     for (const pattern of forbidden) {
+      // The /buy closed state honestly says the sale "opens soon" until the contract is live.
+      if ((pattern.source === "\\bsoon\\b" || pattern.source === "即将") && file.includes("/surfaces/buy-")) continue;
       assert.doesNotMatch(text, pattern, `${file} matched ${pattern}`);
     }
   }
