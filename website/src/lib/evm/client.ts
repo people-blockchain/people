@@ -12,6 +12,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { buildWeb3AuthChainConfig } from "@/lib/web3auth-chain-config";
+import { SALE_HUB_CHAIN } from "@/lib/sale/config";
 
 export function peopleViemChain(rpcUrl: string): Chain {
   return {
@@ -237,6 +238,40 @@ export async function ensurePeopleChain(
     method: "wallet_switchEthereumChain",
     params: [{ chainId: hexId }],
   });
+}
+
+/**
+ * Switch the wallet to Base mainnet (adding it if unknown). Used only on an explicit user
+ * action ("Buy" / "Switch to Base"). Returns false if the user declines or the wallet refuses.
+ */
+export async function ensureBaseChain(provider: EIP1193Provider): Promise<boolean> {
+  const hexId = `0x${SALE_HUB_CHAIN.chainId.toString(16)}`;
+  const switchTo = () =>
+    provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
+  try {
+    await switchTo();
+    return true;
+  } catch (err) {
+    if ((err as { code?: number })?.code === 4001) return false;
+  }
+  try {
+    await provider.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: hexId,
+          chainName: "Base",
+          nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+          rpcUrls: ["https://mainnet.base.org"],
+          blockExplorerUrls: ["https://basescan.org"],
+        },
+      ],
+    });
+    await switchTo();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export const routerAbi = [

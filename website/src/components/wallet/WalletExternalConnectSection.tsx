@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const EXT_COPY: Record<string, { noApp: string; install: string; timeout: string; useGoogle: string }> = {
   en: {
@@ -27,7 +27,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useExternalWallet } from "@/context/ExternalWalletContext";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
-import { WALLET_APP_REDIRECT } from "@/lib/mobile-env";
+import { WALLET_APP_REDIRECT, isMobileBrowser } from "@/lib/mobile-env";
 
 export function WalletExternalConnectSection({
   onConnected,
@@ -38,7 +38,33 @@ export function WalletExternalConnectSection({
 }) {
   const { lang } = useLanguage();
   const w = walletUxCopy(lang);
-  const { connectInjected, connectWalletConnect, signer, disconnect } = useExternalWallet();
+  const { connectInjected, connectWalletConnect, setWalletConnectHooks, signer, disconnect } = useExternalWallet();
+  const rootRef = useRef<HTMLDivElement>(null);
+  // "no extension" (desktop) or "app will open" (mobile) step shown before any redirect.
+  const [step, setStep] = useState<{ kind: "noExtension" | "deepLink"; wallet: string; vendor: "metamask" | "trust" } | null>(null);
+
+  // Hide the site dialog while the WalletConnect QR is on screen; bring it back if it fails.
+  useEffect(() => {
+    const dialog = () => rootRef.current?.closest("dialog") ?? null;
+    setWalletConnectHooks({
+      onOpen: () => dialog()?.close(),
+      onFailed: () => {
+        const d = dialog();
+        if (d && !d.open) d.showModal();
+      },
+    });
+    return () => setWalletConnectHooks({});
+  }, [setWalletConnectHooks]);
+
+  const startInjected = (vendor: "metamask" | "trust", wallet: string) => {
+    const hasProvider = typeof window !== "undefined" && Boolean((window as { ethereum?: unknown }).ethereum);
+    if (!hasProvider) {
+      setError("");
+      setStep({ kind: isMobileBrowser() ? "deepLink" : "noExtension", wallet, vendor });
+      return;
+    }
+    void run(() => connectInjected(vendor), wallet);
+  };
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -121,15 +147,71 @@ export function WalletExternalConnectSection({
   );
 
   return (
-    <div className="space-y-2" data-testid="wallet-external-connect">
-      <p className="text-xs font-medium text-ink-3">{w.connectExternalWallets}</p>
+    <div ref={rootRef} className="space-y-2" data-testid="wallet-external-connect">
+      {step ? (
+        <div className="space-y-3 rounded-xl border border-line bg-surface-2 p-4" data-testid="wallet-ext-step">
+          <p className="text-sm text-ink">
+            {step.kind === "noExtension" ? w.noExtension : w.deepLinkIntro.replaceAll("{wallet}", step.wallet)}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {step.kind === "deepLink" ? (
+              <button
+                type="button"
+                className="min-h-11 rounded-xl bg-brand px-4 text-sm font-semibold text-brand-ink"
+                onClick={() => {
+                  const { vendor, wallet } = step;
+                  setStep(null);
+                  void run(() => connectInjected(vendor), wallet);
+                }}
+              >
+                {w.openWallet.replaceAll("{wallet}", step.wallet)}
+              </button>
+            ) : null}
+            <a
+              href={INSTALL_URL[step.wallet]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center rounded-xl border border-line px-4 text-sm font-semibold"
+            >
+              {step.kind === "noExtension" ? w.installMetaMask.replace("MetaMask", step.wallet) : w.install}
+            </a>
+            {step.kind === "noExtension" && showWalletConnect ? (
+              <button
+                type="button"
+                className="min-h-11 rounded-xl border border-line px-4 text-sm font-semibold"
+                onClick={() => {
+                  setStep(null);
+                  void run(connectWalletConnect, "WalletConnect");
+                }}
+              >
+                {w.scanQr}
+              </button>
+            ) : null}
+            {step.kind === "deepLink" ? (
+              <button
+                type="button"
+                className="min-h-11 rounded-xl border border-line px-4 text-sm font-semibold"
+                onClick={() => {
+                  setStep(null);
+                  document.getElementById("wallet-embedded-block")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                {w.signInGoogle}
+              </button>
+            ) : null}
+            <button type="button" className="min-h-11 rounded-xl px-4 text-sm text-ink-3" onClick={() => setStep(null)}>
+              {w.back}
+            </button>
+          </div>
+        </div>
+      ) : null}
       <div className={compact ? "grid gap-2 sm:grid-cols-2" : "grid gap-2"}>
         <button
           type="button"
           disabled={busy}
           className={btnClass}
           data-testid="wallet-connect-metamask"
-          onClick={() => void run(() => connectInjected("metamask"), "MetaMask")}
+          onClick={() => startInjected("metamask", "MetaMask")}
         >
           {iconBadge}
           {w.connectMetaMask}
@@ -139,7 +221,7 @@ export function WalletExternalConnectSection({
           disabled={busy}
           className={btnClass}
           data-testid="wallet-connect-trust"
-          onClick={() => void run(() => connectInjected("trust"), "Trust Wallet")}
+          onClick={() => startInjected("trust", "Trust Wallet")}
         >
           {iconBadge}
           {w.connectTrust}

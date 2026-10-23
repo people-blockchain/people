@@ -21,7 +21,7 @@ const CSP_REPORT_ONLY = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' https://va.vercel-scripts.com https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://node.peopleblockchain.network https://explorer.peopleblockchain.network https://*.peopleblockchain.network https://vercel.live https://challenges.cloudflare.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://li.quest https://*.li.fi",
-  "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi",
+  "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi https://verify.walletconnect.org https://verify.walletconnect.com",
 ].join("; ");
 
 const nextConfig: NextConfig = {
