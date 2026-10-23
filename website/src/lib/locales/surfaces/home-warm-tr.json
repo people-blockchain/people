@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "%10 topluluk payı",
-    "peopleLine": "Sizin insanlarınız, balinalar değil"
+    "peopleLine": "Sizin insanlarınız, balinalar değil",
+    "saleNote": "PEOPLE ağı hâlâ bir test ağıdır ve test token'larının değeri yoktur. PPL satışı ayrıdır: gerçek USDC veya USDT ile Base üzerinde yapılır."
   },
   "community": {
     "eyebrow": "%10 topluluğa",

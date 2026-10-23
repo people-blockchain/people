@@ -12,8 +12,8 @@ const surfaces = join(root, "src/lib/locales/surfaces");
 const localesDir = join(root, "src/lib/locales");
 
 test("legal policy is English-only single bundle with required sections", () => {
-  assert.equal(legalBundle.privacy.effectiveDate, "30 September 2026");
-  assert.equal(legalBundle.terms.effectiveDate, "30 September 2026");
+  assert.equal(legalBundle.privacy.effectiveDate, "23 October 2026");
+  assert.equal(legalBundle.terms.effectiveDate, "23 October 2026");
   assert.ok(legalBundle.privacy.blocks.length >= 8);
   assert.ok(legalBundle.terms.blocks.length >= 6);
   assert.match(legalBundle.privacy.contactBody, /\{email\}/);
@@ -51,6 +51,13 @@ test("privacy and terms routes are public and contact email is set", () => {
   assert.ok(paths.has("/privacy"));
   assert.ok(paths.has("/terms"));
   assert.equal(LEGAL_CONTACT_EMAIL, "privacy@peopleblockchain.network");
+});
+
+test("non-English legal pages say the English text prevails", () => {
+  for (const lang of ["ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"]) {
+    const doc = JSON.parse(readFileSync(join(surfaces, `legal-${lang}.json`), "utf8"));
+    for (const page of ["terms", "privacy"]) assert.ok(doc[page].englishPrevails, `${lang}/${page}`);
+  }
 });
 
 test("footer and partner login UI strings exist in every locale", () => {

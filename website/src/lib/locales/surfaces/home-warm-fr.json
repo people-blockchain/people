@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "10 % pour la communauté",
-    "peopleLine": "Vos gens, pas les baleines"
+    "peopleLine": "Vos gens, pas les baleines",
+    "saleNote": "Le réseau PEOPLE est encore un réseau de test, et ses jetons de test n’ont aucune valeur. La vente de PPL est distincte : elle se déroule sur Base avec de vrais USDC ou USDT."
   },
   "community": {
     "eyebrow": "10 % pour la communauté",

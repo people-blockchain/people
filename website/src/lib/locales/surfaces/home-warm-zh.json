@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "10% 社区份额",
-    "peopleLine": "你的用户，而不是巨鲸"
+    "peopleLine": "你的用户，而不是巨鲸",
+    "saleNote": "PEOPLE 网络仍是测试网，其测试代币没有价值。PPL 销售是独立的：在 Base 上以真实的 USDC 或 USDT 进行。"
   },
   "community": {
     "eyebrow": "10% 给社区",
