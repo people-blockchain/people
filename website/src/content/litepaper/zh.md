@@ -161,9 +161,9 @@ status: public-draft
 
 ## 9. 安全
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **财库多签。** 财库由 People 网络上 People 自有的 2-of-3 多签合约控制，在主网前创建；签署者地址将被公布。
-- **已发布地址。** 销售、释放和流动性合约地址将在主网启动时发布 — 没有占位符。
+- 由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。 Bug bounty on every page.
+- **多签。** 网络手续费金库：PEOPLE 网络上的 2/3 多签。销售资金：Base 上的项目多签；其地址和签名门槛会在销售开放前公布。
+- **公布的地址。** 销售合约和收款多签在销售开放前公布；vesting 合约和 LP 锁定合约在网络全面上线时公布。不使用占位地址。
 - **机器人防御。** 人类验证、每设备和每IP限额、每日积分上限和机器人追回。
 - **经证明的构建块。** 无代码合约由OpenZeppelin模板组装。
 
@@ -205,9 +205,9 @@ status: public-draft
 
 ## 链接
 
-- 网站: https://peopleblockchain.network
-- 百万创始人: https://peopleblockchain.network/founders
-- Litepaper: https://peopleblockchain.network/litepaper
+- 网站: https://www.peopleblockchain.network
+- 百万创始人: https://www.peopleblockchain.network/founders
+- Litepaper: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -220,7 +220,7 @@ status: public-draft
 - 团队归属为**发行时 0%、6 个月悬崖期，随后 18 个月线性释放**（共 24 个月）。
 - 发币费用：已批准方案为**每次代币发行 1 美元、每次 NFT 铸造 2 美元**的固定费用，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣；已部署的工厂仍收取固定的 PPL 费用。
 - **PPL 社区销售**使用 `/buy` 上公布的指数曲线（起始每 PPL **$0.005**；价格与限额公开；hub 部署前购买关闭）。本网站不进行 KYC 或资格检查。
-- 安全：**Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**；全站 bug bounty。
-- 财库多签为 **3 之 2**，并在 mainnet 之前创建。
+- 安全：由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。；全站 bug bounty。
+- 多签。 网络手续费金库：PEOPLE 网络上的 2/3 多签。销售资金：Base 上的项目多签；其地址和签名门槛会在销售开放前公布。
 - 如果代币的联合曲线在发行后 **180 天**内未售罄，任何人都可以结束它，未售出的代币进入该代币的社区池。已售罄的曲线照常迁移到流动性。（已在测试网上线。）
-- PPL 销售开放后固定持续 **180 天**。之后任何人都可以结束它，未售出的 PPL 进入社区池——与代币曲线相同的规则。
+- 销售持续到售罄（曲线在募集 400 万美元时关闭）或自开放起 24 个月，以先到者为准。不会延期。未售出的 PPL 进入 Community Pool。不支持退款：每笔购买均为最终交易。

@@ -95,7 +95,7 @@ const en: TransparencyCopy = {
   meta: {
     title: "Team & transparency | PEOPLE Blockchain",
     description:
-      "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) and a third-party security audit before mainnet.",
+      "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) no external audit has been done yet.",
   },
   hero: {
     eyebrow: "TRANSPARENCY",
@@ -146,19 +146,19 @@ const en: TransparencyCopy = {
   treasury: {
     eyebrow: "TREASURY",
     title: "Treasury and spending",
-    body: "The treasury is a 2-of-3 multisig, created before mainnet; every spend is visible in the explorer.",
+    body: "The network-fee treasury is a 2-of-3 multisig on the People network; every spend is visible in the explorer. Sale proceeds go to the project multisig on Base, published before the sale opens.",
     points: [
-      "The 2-of-3 multisig is created before mainnet; signer addresses are published then.",
+      "Signer addresses of the multisigs are published before the sale opens.",
       "Every outgoing treasury transaction is a public explorer entry.",
       "Nothing is moved quietly: treasury spending is readable by anyone.",
     ],
   },
   audit: {
-    eyebrow: "AUDIT",
-    title: "Security review before mainnet",
+    eyebrow: "SECURITY REVIEWS",
+    title: "Security reviews",
     body:
-      "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1. Bug bounty: report a vulnerability from the bug button on any page.",
-    placeholderTitle: "Audit report",
+      "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.",
+    placeholderTitle: "Third-party audit report",
     placeholderBody:
       "A third-party security audit report will be published in this slot as soon as it is available. Until then, no external firm audit result is claimed anywhere on this site.",
   },
@@ -177,11 +177,11 @@ const en: TransparencyCopy = {
       },
       {
         title: "Treasury multisig",
-        body: "Before mainnet the treasury is a 2-of-3 multisig, so spending is visible in the explorer.",
+        body: "The network-fee treasury is a 2-of-3 multisig, so spending is visible in the explorer.",
       },
       {
         title: "Mainnet and the PPL sale",
-        body: "Mainnet and the PPL community sale open after 1,000 verified people and after the multisig is in place.",
+        body: "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
       },
     ],
   },
@@ -239,7 +239,7 @@ const ru: TransparencyCopy = {
   meta: {
     title: "Команда и прозрачность | PEOPLE Blockchain",
     description:
-      "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) и аудит сторонней фирмы до mainnet.",
+      "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) внешнего аудита пока не было.",
   },
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
@@ -290,19 +290,19 @@ const ru: TransparencyCopy = {
   treasury: {
     eyebrow: "КАЗНА",
     title: "Казна и расходы",
-    body: "Казна — мультисиг 2-из-3, создаваемый до mainnet; каждый расход виден в explorer.",
+    body: "Казна комиссий сети — мультисиг 2 из 3 в сети People; каждый расход виден в обозревателе. Средства продажи идут в мультисиг проекта в сети Base; его адрес публикуется до открытия продажи.",
     points: [
-      "Мультисиг 2-из-3 создаётся до mainnet; адреса подписантов публикуются тогда же.",
+      "Адреса подписантов мультисигов публикуются до открытия продажи.",
       "Каждая исходящая транзакция казны — публичная запись в explorer.",
       "Тихо ничего не происходит: расходы казны сможет прочитать любой.",
     ],
   },
   audit: {
-    eyebrow: "АУДИТ",
-    title: "Проверка безопасности до mainnet",
+    eyebrow: "ПРОВЕРКИ БЕЗОПАСНОСТИ",
+    title: "Проверки безопасности",
     body:
-      "Аудит: Claude Opus 5.5, GPT Astra, Fable 5.1. Баг-баунти: сообщите об уязвимости кнопкой на любой странице.",
-    placeholderTitle: "Отчёт об аудите",
+      "Проверено ИИ-моделями: Claude Opus 5.5, GPT Astra, Fable 5.1 (запускала команда проекта). Это не аудит безопасности. Внешнего аудита пока не было. Баг-баунти: сообщите об уязвимости кнопкой на любой странице.",
+    placeholderTitle: "Отчёт внешнего аудита",
     placeholderBody:
       "Отчёт аудита сторонней фирмы будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат внешнего аудита.",
   },
@@ -325,7 +325,7 @@ const ru: TransparencyCopy = {
       },
       {
         title: "Mainnet и продажа PPL",
-        body: "Mainnet и продажа PPL сообществу открываются после 1 000 verified people и после запуска мультисига.",
+        body: "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
       },
     ],
   },

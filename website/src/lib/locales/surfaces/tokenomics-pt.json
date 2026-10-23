@@ -1,1 +1,110 @@
-{"tag":"TOKENOMIA","title":"Oferta de PPL e plano de lançamento","lead":"Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois do mainnet. Números preliminares, sujeitos à governança da comunidade.","banner":"Preliminar — sujeito a voto da governança comunitária.","supplyTitle":"Oferta fixa","supplyBody":"Oferta fixa de 1.000.000.000 PPL (um bilhão). Anos 1–4: 0% de inflação — sem moedas novas além dos desbloqueios. A partir do ano 5, emissão extra de no máximo 2% ao ano só por voto da comunidade.","testnetNote":"A testnet interna usou premine de 1M PPL para testes. Não é transferido — o mainnet começa do zero.","allocationTitle":"Alocação genesis","allocationLead":"Seis buckets no lançamento. Toque ou passe o mouse para ver participação, volume e desbloqueio.","bucketLabels":{"community":"Comunidade e recompensas","validators":"Validadores e staking","team":"Equipe e fundadores","treasury":"Tesouro do ecossistema (DAO)","sale":"Venda comunitária","liquidity":"Liquidez"},"bucketNotes":{"community":"35% genesis — fundadores, recompensas, embaixadores e airdrops apenas deste fundo (6 anos).","validators":"200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.","team":"15% da oferta: 0% no lançamento, cliff de 6 meses e depois 18 meses de desbloqueio mensal linear (24 meses no total).","treasury":"Só após votos DAO; em multisig.","sale":"25% no genesis em People, resto mensal 9 meses.","liquidity":"Pool PPL/USDT ao fechar a venda; LP bloqueado 2+ anos."},"donutTitle":"Alocação","shareLabel":"Participação","amountLabel":"Quantidade","unlockChartLabel":"Desbloqueado no tempo","circulatingTitle":"Oferta circulante","circulatingLead":"PPL líquidos estimados por mês (0–120). Tesouro DAO fora até voto; liquidez após lock de 2 anos.","monthAxis":"Meses após genesis","saleTitle":"Venda comunitária","saleLead":"Até 100M PPL do lote de venda (10% da oferta fixa) são vendidos em uma curva exponencial pública. Os parâmetros publicados coincidem com a página /buy e a API de pedidos.","salePayTitle":"Como você pagaria","salePayBody":"Pague com USDC ou USDT em Ethereum, BNB Chain, Polygon, Arbitrum, Base, TON, Tron ou Solana. Uma curva, um preço — de qualquer rede. Pagamentos de venda de volta usam USDC na Base por padrão, salvo se escolher outra chain.","saleDeliveryTitle":"Como receber PPL","saleDeliveryBody":"PPL nativos creditados no mesmo endereço 0x na People no genesis conforme o vesting acima.","curveTitle":"Curva de bonding","curveLead":"Curva exponencial: o preço começa em $0,005 por PPL e sobe a cada compra, até um teto de $0,25 enquanto a curva estiver aberta. A graduação fecha a curva ao arrecadar $4M.","unsoldTitle":"Tokens não vendidos","unsoldBody":"Após 180 dias, o arrecadado é dividido 50/50 entre LP bloqueada e o multisig do projeto, e qualquer PPL não vendido na curva vai para o fundo comunitário. A mesma regra vale para todo token lançado na PEOPLE.","feeTitle":"Divisão das taxas de rede","feeLead":"Cada taxa de protocolo em People segue a Model A aprovada:","feeNote":"Cada taxa de protocolo: 30% validadores, 25% pool comunitário, 20% tesouro, 10% liquidez, 15% Growth, 0% queimado.","buybackTitle":"Recompras","buybackBody":"100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL. O contrato StableFeeGateway está implementado e implantado na testnet: cada taxa de lançamento de stablecoin vai para o destinatário público de recompra. 30% das taxas de rede vão para recompras públicas de PPL (tesouraria 20% + liquidez 10%). Os 70% restantes das taxas de rede vão para validadores (30%), o pool da comunidade (25%) e o Growth Pool (15%) — e tudo acaba voltando para os participantes. O PPL recomprado é então dividido 30/25/20/10/15 pela multisig de tesouraria 2-de-3 — essa divisão é uma política de multisig publicada, não uma regra aplicada on-chain.","contractsTitle":"Endereços de contratos","contractsLead":"Endereços on-chain publicados no lançamento do mainnet — sem placeholders aqui.","contractRows":[{"name":"Contratos de venda (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)","status":"Publicado no lançamento do mainnet"},{"name":"Multisig do tesouro (2-de-3)","status":"Publicado no lançamento do mainnet"},{"name":"Controladores de vesting","status":"Publicado no lançamento do mainnet"},{"name":"Contrato de lock LP","status":"Publicado no lançamento do mainnet"}],"legendHint":"Clique na legenda para focar uma fatia.","feeSliceLabels":{"validators":"Validadores","community":"Pool comunitário","treasury":"Tesouro","liquidity":"Liquidez e ecossistema","growth":"Growth Pool","burn":"Queima"},"emissionTitle":"Emissão e recompensas de validadores","emissionLead":"Segurança paga pelo pool de validadores e taxas — sem cunhar supply novo nos anos 1–4.","emissionBullets":["Anos 1–4: 0% de inflação — o teto de um bilhão não aumenta.","Pool de validadores: 200M PPL em calendário 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M PPL nos anos 1–4) mais 30% de cada taxa de protocolo.","Fundadores, recompensas, embaixadores e airdrops só do fundo comunitário de 35%.","A partir do ano 5, emissão nova de no máximo 2% ao ano e só por voto comunitário."],"launchOrderTitle":"Sequência de lançamento","launchOrderBody":"Primeiro o airdrop de fundadores. A venda comunitária de PPL só após 1.000 pessoas verificadas e multisig publicado.","pplFeeTariffsLink":"Tarifas de taxas PPL","explorerLink":"Explorador","backToDocsLink":"Voltar à documentação","salePublicTitle":"Parâmetros publicados da venda","salePublicBody":"Preços, limites e a fórmula da curva são públicos em /buy. Compras permanecem desativadas até o contrato hub da venda ser implantado; conectar a carteira não te compromete com nada.","salePublicCta":"Abrir a página /buy","saleCurveBullets":["100.000.000 PPL na curva (10% da oferta); início $0,005, alta exponencial, teto $0,25 só na curva.","Graduação ao arrecadar $4.000.000; janela de venda de 180 dias; depois PPL não vendido vai ao fundo comunitário.","Arrecadação 50% liquidez bloqueada / 50% multisig do projeto; tokens LP bloqueados por 24 meses.","Revenda à curva permitida com taxa de 1,5% para buyback de PPL. Limites: $500 por compra, $2000 por pessoa por dia, pausa de 60 s."],"curveTableSold":"% vendido","curveTablePrice":"Preço spot (USDT)","curveTableRaised":"Arrecadado (USDT)"}
+{
+  "tag": "TOKENOMIA",
+  "title": "Oferta de PPL e plano de lançamento",
+  "lead": "Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois do mainnet. Números preliminares, sujeitos à governança da comunidade.",
+  "banner": "Preliminar — sujeito a voto da governança comunitária.",
+  "supplyTitle": "Oferta fixa",
+  "supplyBody": "Oferta fixa de 1.000.000.000 PPL (um bilhão). Anos 1–4: 0% de inflação — sem moedas novas além dos desbloqueios. A partir do ano 5, emissão extra de no máximo 2% ao ano só por voto da comunidade.",
+  "testnetNote": "A testnet interna usou premine de 1M PPL para testes. Não é transferido — o mainnet começa do zero.",
+  "allocationTitle": "Alocação genesis",
+  "allocationLead": "Seis buckets no lançamento. Toque ou passe o mouse para ver participação, volume e desbloqueio.",
+  "bucketLabels": {
+    "community": "Comunidade e recompensas",
+    "validators": "Validadores e staking",
+    "team": "Equipe e fundadores",
+    "treasury": "Tesouro do ecossistema (DAO)",
+    "sale": "Venda comunitária",
+    "liquidity": "Liquidez"
+  },
+  "bucketNotes": {
+    "community": "35% genesis — fundadores, recompensas, embaixadores e airdrops apenas deste fundo (6 anos).",
+    "validators": "200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.",
+    "team": "15% da oferta: 0% no lançamento, cliff de 6 meses e depois 18 meses de desbloqueio mensal linear (24 meses no total).",
+    "treasury": "Só após votos DAO; em multisig.",
+    "sale": "Vendido na curva pública na Base (PplCurveHub). Os PPL são creditados logo após a compra; as transferências abrem no lançamento completo da rede.",
+    "liquidity": "Pool PPL/USDC na graduação; tokens LP bloqueados por 24 meses."
+  },
+  "donutTitle": "Alocação",
+  "shareLabel": "Participação",
+  "amountLabel": "Quantidade",
+  "unlockChartLabel": "Desbloqueado no tempo",
+  "circulatingTitle": "Oferta circulante",
+  "circulatingLead": "PPL líquidos estimados por mês (0–120). Tesouro DAO fora até voto; liquidez após lock de 2 anos.",
+  "monthAxis": "Meses após genesis",
+  "saleTitle": "Venda comunitária",
+  "saleLead": "Há até 100M PPL na curva (10% da oferta fixa). A curva fecha ao arrecadar US$ 4M — cerca de 88,83M PPL vendidos, a cerca de US$ 0,1615 por PPL. As linhas da tabela após US$ 4M são inalcançáveis.",
+  "salePayTitle": "Como você pagaria",
+  "salePayBody": "Na Base, com USDC ou USDT. De outras redes, pela troca automática integrada (LI.FI): funcionam redes EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e outras), Tron e Solana. TON não é suportada. Você recebe o valor em USDC na rede Base.",
+  "saleDeliveryTitle": "Como receber PPL",
+  "saleDeliveryBody": "Os PPL são creditados no seu endereço na hora, mas você só pode enviá-los a outras pessoas após o lançamento completo da rede. Só usuários verificados podem vendê-los de volta, 30 dias após cada compra.",
+  "curveTitle": "Curva de bonding",
+  "curveLead": "Curva exponencial: o preço começa em $0,005 por PPL e sobe a cada compra, até um teto de $0,25 enquanto a curva estiver aberta. A graduação fecha a curva ao arrecadar $4M.",
+  "unsoldTitle": "Tokens não vendidos",
+  "unsoldBody": "A venda dura até esgotar (a curva fecha ao arrecadar US$ 4M) ou 24 meses após a abertura, o que ocorrer primeiro. Não há prorrogação. Os PPL não vendidos vão para o Community Pool. Não há reembolsos: toda compra é definitiva.",
+  "feeTitle": "Divisão das taxas de rede",
+  "feeLead": "Cada taxa de protocolo em People segue a Model A aprovada:",
+  "feeNote": "Cada taxa de protocolo: 30% validadores, 25% pool comunitário, 20% tesouro, 10% liquidez, 15% Growth, 0% queimado.",
+  "buybackTitle": "Recompras",
+  "buybackBody": "100% das taxas de lançamento de tokens e NFTs (USDC/USDT) vão para recompras públicas de PPL. O contrato StableFeeGateway está implementado e implantado na testnet: cada taxa de lançamento de stablecoin vai para o destinatário público de recompra. 30% das taxas de rede vão para recompras públicas de PPL (tesouraria 20% + liquidez 10%). Os 70% restantes das taxas de rede vão para validadores (30%), o pool da comunidade (25%) e o Growth Pool (15%) — e tudo acaba voltando para os participantes. O PPL recomprado é então dividido 30/25/20/10/15 pela multisig de tesouraria 2-de-3 — essa divisão é uma política de multisig publicada, não uma regra aplicada on-chain.",
+  "contractsTitle": "Endereços de contratos",
+  "contractsLead": "Cada endereço é publicado aqui assim que o contrato existir — sem marcadores provisórios.",
+  "contractRows": [
+    {
+      "name": "Contrato de venda (PplCurveHub, Base)",
+      "status": "Publicado antes da abertura da venda"
+    },
+    {
+      "name": "Multisig recebedor (multisig do projeto)",
+      "status": "Publicado antes da abertura da venda"
+    },
+    {
+      "name": "Multisig do tesouro (2-de-3)",
+      "status": "Publicado no lançamento completo da rede"
+    },
+    {
+      "name": "Controladores de vesting",
+      "status": "Publicado no lançamento completo da rede"
+    },
+    {
+      "name": "Bloqueio de LP",
+      "status": "Publicado no lançamento completo da rede"
+    }
+  ],
+  "legendHint": "Clique na legenda para focar uma fatia.",
+  "feeSliceLabels": {
+    "validators": "Validadores",
+    "community": "Pool comunitário",
+    "treasury": "Tesouro",
+    "liquidity": "Liquidez e ecossistema",
+    "growth": "Growth Pool",
+    "burn": "Queima"
+  },
+  "emissionTitle": "Emissão e recompensas de validadores",
+  "emissionLead": "Segurança paga pelo pool de validadores e taxas — sem cunhar supply novo nos anos 1–4.",
+  "emissionBullets": [
+    "Anos 1–4: 0% de inflação — o teto de um bilhão não aumenta.",
+    "Pool de validadores: 200M PPL em calendário 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M PPL nos anos 1–4) mais 30% de cada taxa de protocolo.",
+    "Fundadores, recompensas, embaixadores e airdrops só do fundo comunitário de 35%.",
+    "A partir do ano 5, emissão nova de no máximo 2% ao ano e só por voto comunitário."
+  ],
+  "launchOrderTitle": "Sequência de lançamento",
+  "launchOrderBody": "A venda de PPL abre quando o contrato de venda (PplCurveHub na Base) e o multisig recebedor forem publicados. Transferências e negociação no pool abrem no lançamento completo da rede, com 1.000 pessoas verificadas.",
+  "pplFeeTariffsLink": "Tarifas de taxas PPL",
+  "explorerLink": "Explorador",
+  "backToDocsLink": "Voltar à documentação",
+  "salePublicTitle": "Parâmetros publicados da venda",
+  "salePublicBody": "Preços, limites e a fórmula da curva são públicos em /buy. Compras permanecem desativadas até o contrato hub da venda ser implantado; conectar a carteira não te compromete com nada.",
+  "salePublicCta": "Abrir a página /buy",
+  "saleCurveBullets": [
+    "100.000.000 PPL na curva (10% da oferta); início $0,005, alta exponencial, teto $0,25 só na curva.",
+    "A venda dura até esgotar (a curva fecha ao arrecadar US$ 4M) ou 24 meses após a abertura, o que ocorrer primeiro. Não há prorrogação. Os PPL não vendidos vão para o Community Pool. Não há reembolsos: toda compra é definitiva.",
+    "Arrecadação 50% liquidez bloqueada / 50% multisig do projeto; tokens LP bloqueados por 24 meses.",
+    "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por pessoa por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base.",
+    "$10–$500 por compra; Até $2,000 por pessoa em quaisquer 24 horas; Pausa de 60 s entre compras"
+  ],
+  "curveTableSold": "% vendido",
+  "curveTablePrice": "Preço spot (USDC)",
+  "curveTableRaised": "Arrecadado (USDC)",
+  "buybackNote": "Não é o mesmo que a venda de volta: nela é você quem vende PPL à reserva da venda.",
+  "curveTableUnreachable": "Inalcançável: a curva fecha em US$ 4M."
+}
