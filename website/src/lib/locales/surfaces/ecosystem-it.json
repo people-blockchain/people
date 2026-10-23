@@ -38,6 +38,9 @@
     },
     "people-explorer": {
       "summary": "Blocchi, transazioni, indirizzi, token e NFT sulla rete di test pubblica."
+    },
+    "people-peoplescan": {
+      "summary": "Esploratore di blocchi indipendente della community per PEOPLE: sfoglia blocchi, transazioni, token, NFT e contratti sulla rete di test."
     }
   }
 }

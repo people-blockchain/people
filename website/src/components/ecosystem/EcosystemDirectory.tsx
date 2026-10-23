@@ -4,10 +4,12 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
+  Blocks,
   Boxes,
   ChartLine,
   KeyRound,
   QrCode,
+  ScanSearch,
   Search,
   ShieldCheck,
   Sparkles,
@@ -45,6 +47,11 @@ const PRODUCT_GLYPHS: Record<string, ProductGlyph> = {
     icon: Boxes,
     badge: Search,
     tileClass: "bg-sky-500/10 text-sky-600 dark:text-sky-400",
+  },
+  "people-peoplescan": {
+    icon: ScanSearch,
+    badge: Blocks,
+    tileClass: "bg-orange-500/10 text-orange-600 dark:text-orange-400",
   },
   "people-multisig": {
     icon: ShieldCheck,

@@ -96,6 +96,16 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     status: "testnet",
     label: "built_by_people",
   },
+  {
+    id: "people-peoplescan",
+    category: "tools",
+    name: "PeopleScan",
+    monogram: "P",
+    href: "https://peoplescan.org",
+    external: true,
+    status: "testnet",
+    label: "community",
+  },
 ];
 
 export const ecosystemPublic: Record<Language, EcosystemPublicCopy> = {
