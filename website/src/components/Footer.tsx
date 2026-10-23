@@ -89,7 +89,7 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
               instead of letting them stretch across the full 7-column track,
               which left the right third of the footer empty. */}
           <nav
-            aria-label="Footer"
+            aria-label={content[lang].a11y.footer}
             className="grid gap-8 sm:grid-cols-3 md:col-span-7 md:max-w-2xl"
           >
             <div>

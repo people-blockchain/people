@@ -1,6 +1,6 @@
 export const en = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Testnet PEOPLE v0.1",
     "links": [
       {
         "label": "How It Works",
@@ -39,6 +39,10 @@ export const en = {
     "themeToggle": "Toggle colour theme",
     "slogan": "Created by people. For the community.",
     "moreLinks": [
+      {
+        "label": "PPL sale",
+        "href": "/buy"
+      },
       {
         "label": "Roadmap",
         "href": "/roadmap"
@@ -102,7 +106,8 @@ export const en = {
     "signIn": "Sign in",
     "becomePartner": "Become a partner",
     "logoAlt": "PEOPLE Blockchain",
-    "brandAria": "PEOPLE Blockchain home"
+    "brandAria": "PEOPLE Blockchain home",
+    "buy": "PPL sale"
   },
   "explainerVideo": {
     "eyebrow": "Watch",
@@ -1276,5 +1281,21 @@ export const en = {
     "logoAlt": "PEOPLE Blockchain",
     "privacyLink": "Privacy Policy",
     "termsLink": "Terms of Service"
+  },
+  "networkMode": {
+    "label": "Network mode",
+    "mainnet": "Mainnet",
+    "mainnetTitle": "Mainnet: the Base network, where the PPL sale runs",
+    "testnet": "Testnet",
+    "testnetTitle": "Testnet: the People test network for creating tokens and NFTs"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "navPrimary": "Primary",
+    "navMobile": "Mobile menu",
+    "footer": "Footer"
+  },
+  "common": {
+    "englishOnlyBanner": "This page is available in English only for now."
   }
 };

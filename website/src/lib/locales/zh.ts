@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const zh: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "测试网 PEOPLE v0.1",
     "links": [
       {
         "label": "运作方式",
@@ -42,6 +42,10 @@ export const zh: LocaleContent = {
     "slogan": "因人而生，服务社区。",
     "moreLinks": [
       {
+        "label": "PPL 销售",
+        "href": "/buy"
+      },
+      {
         "label": "路线图",
         "href": "/roadmap"
       },
@@ -64,6 +68,10 @@ export const zh: LocaleContent = {
       {
         "label": "质押",
         "href": "/staking"
+      },
+      {
+        "label": "治理",
+        "href": "/governance"
       },
       {
         "label": "创建代币",
@@ -100,7 +108,8 @@ export const zh: LocaleContent = {
     "signIn": "登录",
     "becomePartner": "成为合作伙伴",
     "logoAlt": "社区区块链",
-    "brandAria": "社区区块链 首页"
+    "brandAria": "社区区块链 首页",
+    "buy": "PPL 销售"
   },
   "explainerVideo": {
     "eyebrow": "观看",
@@ -1274,5 +1283,21 @@ export const zh: LocaleContent = {
     "logoAlt": "社区区块链",
     "privacyLink": "隐私政策",
     "termsLink": "服务条款"
+  },
+  "networkMode": {
+    "label": "网络模式",
+    "mainnet": "主网",
+    "mainnetTitle": "主网：Base 网络，PPL 销售在此进行",
+    "testnet": "测试网",
+    "testnetTitle": "测试网：用于创建代币和 NFT 的 PEOPLE 测试网"
+  },
+  "a11y": {
+    "skipToContent": "跳到内容",
+    "navPrimary": "主导航",
+    "navMobile": "移动端菜单",
+    "footer": "页脚"
+  },
+  "common": {
+    "englishOnlyBanner": "本页面目前仅提供英文版。"
   }
 };
