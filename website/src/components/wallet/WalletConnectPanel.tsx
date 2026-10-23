@@ -76,13 +76,23 @@ export function WalletConnectPanel({
       ) : null}
       {notice ? <p className="text-sm text-value">{notice}</p> : null}
 
+      {mode === "home" && context === "modal" && walletFeatures.externalWallets ? (
+        <div className="mb-6 space-y-3" data-testid="wallet-ext-block">
+          <h3 className="text-sm font-semibold text-ink">{c.extHeading}</h3>
+          <WalletExternalConnectSection onConnected={onConnected} />
+        </div>
+      ) : null}
+
       {mode === "home" && showCloudAuth ? (
-        <UnifiedWalletAuthPanel onConnected={onConnected} autoConnect />
+        <div id="wallet-embedded-block" className={walletFeatures.externalWallets ? "border-t border-line pt-5" : ""}>
+          <h3 className="mb-3 text-sm font-semibold text-ink">{c.embeddedHeading}</h3>
+          <UnifiedWalletAuthPanel onConnected={onConnected} autoConnect />
+        </div>
       ) : null}
 
       {mode === "home" && showLocalHome ? (
         <div className={`space-y-4 ${showCloudAuth ? "mt-6 border-t border-line pt-6" : ""}`}>
-          {!hasExistingWallet ? <p className="text-xs text-ink-3">{c.haveExistingWallet}</p> : null}
+          {context === "modal" ? <h3 className="text-sm font-semibold text-ink">{c.haveExistingWallet}</h3> : null}
           {!hasExistingWallet && wallets.length === 0 ? <p className="text-sm text-ink-2">{t.noWallets}</p> : null}
           {!hasExistingWallet ? (
           <div className="flex flex-wrap gap-3" data-testid="wallet-create-import">
@@ -112,11 +122,6 @@ export function WalletConnectPanel({
                 </li>
               ))}
             </ul>
-          ) : null}
-          {context === "modal" && walletFeatures.externalWallets ? (
-            <div className="border-t border-line pt-4">
-              <WalletExternalConnectSection onConnected={onConnected} />
-            </div>
           ) : null}
           {context === "modal" ? <WalletConnectSoonSection /> : null}
           <PeopleMobileConnect onConnected={onConnected} />

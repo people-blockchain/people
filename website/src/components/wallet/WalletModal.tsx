@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/context/LanguageContext";
 import { useWalletModal } from "@/context/WalletModalContext";
-import { walletCopy } from "@/lib/wallet-copy";
+import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { WalletDialog } from "./WalletDialog";
 import { WalletConnectPanel } from "./WalletConnectPanel";
 import { PeopleWalletMark } from "./PeopleWalletMark";
@@ -10,12 +10,12 @@ import { PeopleWalletMark } from "./PeopleWalletMark";
 export function WalletModalHost() {
   const { isOpen, closeWalletModal } = useWalletModal();
   const { lang } = useLanguage();
-  const t = walletCopy[lang];
+  const t = walletUxCopy(lang);
 
   if (!isOpen) return null;
 
   return (
-    <WalletDialog title={t.title} closeLabel={t.back} onClose={closeWalletModal} busy={false}>
+    <WalletDialog title={t.connectTitle} closeLabel={t.back} onClose={closeWalletModal} busy={false}>
       <PeopleWalletMark size="lg" className="mb-4" />
       <WalletConnectPanel onConnected={closeWalletModal} />
     </WalletDialog>
