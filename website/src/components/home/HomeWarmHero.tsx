@@ -160,6 +160,12 @@ export function HomeWarmHero() {
                 </span>
                 {t.testnetBadge}
               </p>
+              <p className="mt-3 max-w-xl text-sm text-ink-2" data-testid="home-hero-sale-note">
+                {t.saleNote}{" "}
+                <Link href="/buy" className="font-semibold text-brand underline">
+                  {content[lang].nav.buy}
+                </Link>
+              </p>
             </Reveal>
           </div>
 

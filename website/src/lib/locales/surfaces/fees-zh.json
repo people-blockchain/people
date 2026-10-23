@@ -33,7 +33,7 @@
   "contractNote": "具体费用取决于合约的大小。签名前你会设定 gas 上限；未用完的 gas 不退还。",
   "modelANote": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。",
   "payOptionsNote": "代币和 NFT 创建费用可以用 PPL 支付，也可以通过 StableFeeGateway 合约使用支持的测试网稳定币（tUSDC/tUSDT）支付——由你选择。100% 的代币和 NFT 发行费用（USDC/USDT）用于公开的 PPL 回购；回购的 PPL 随后由金库多签按 30/25/20/10/15 分配，与其他所有回购相同。30% 的网络费用用于公开的 PPL 回购（金库 20% + 流动性 10%）；剩余 70% 分配给验证者（30%）、社区池（25%）和 Growth Pool（15%）——最终全部回馈给参与者。稳定币费用是固定的、由所有者批准的美元金额：代币发行 1.00 USD，NFT 铸造 2.00 USD。Gas 始终以 PPL 支付。",
-  "stableFeeNetworkNote": "稳定币支付目前仅支持 People 网络。从其他链（Ethereum、Polygon、Tron、TON、Solana）支付将在以后推出。",
+  "stableFeeNetworkNote": "用稳定币支付网络手续费仅适用于 PEOPLE 网络。这与在销售中购买 PPL 无关（见 /buy）。",
   "growthReferralTitle": "Growth 推荐 (L1 / L2)",
   "growthReferralBody": "15% 符合条件的协议手续费进入 Growth Pool。结算时两条付费推荐线分配该预算：L1 70%，L2 30%。与代币自身的社区份额及常规费用路由分开。",
   "tableColOperation": "操作",
