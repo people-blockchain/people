@@ -7,8 +7,13 @@ import {MockUSDC} from "../src/mocks/MockUSDC.sol";
 import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 
 /// @notice Deploy of the PPL curve hub (not executed by CI).
-/// Env: OWNER (Safe), TREASURY, USDC_ADDRESS, USDT_ADDRESS (optional when DEPLOY_MOCKS=true),
-/// DEPLOY_MOCKS (default false, test networks only), OPEN_SALE (default false).
+/// Env: OWNER (Safe), TREASURY, USDC_ADDRESS, USDT_ADDRESS (real tokens; must NOT be set when
+/// DEPLOY_MOCKS=true), DEPLOY_MOCKS (default false), TEST_DEPLOY_MAINNET (default false),
+/// OPEN_SALE (default false).
+/// DEPLOY_MOCKS=true deploys the valueless TEST mocks (tUSDC/tUSDT, public mint) and allowlists ONLY them.
+/// Mocks are allowed on Base Sepolia (84532) and local (31337); on Base mainnet (8453) they are an
+/// explicit TEST deployment that additionally requires TEST_DEPLOY_MAINNET=true.
+/// Non-mock deploys on 8453 must use the canonical Base USDC/USDT.
 /// `setToken` and `open` are owner-only: they run here only when the broadcaster is the OWNER;
 /// otherwise the owner (a Safe) must send them after the deploy.
 contract DeployPplCurveHub is Script {
@@ -24,9 +29,13 @@ contract DeployPplCurveHub is Script {
         bool openSale = vm.envOr("OPEN_SALE", false);
 
         if (deployMocks) {
-            require(block.chainid == 84532 || block.chainid == 31337, "mocks: testnet only");
-        }
-        if (block.chainid == 8453) {
+            require(usdc == address(0) && usdt == address(0), "mocks: USDC_ADDRESS/USDT_ADDRESS must be unset");
+            if (block.chainid == 8453) {
+                require(vm.envOr("TEST_DEPLOY_MAINNET", false), "mocks: mainnet needs TEST_DEPLOY_MAINNET=true");
+            } else {
+                require(block.chainid == 84532 || block.chainid == 31337, "mocks: testnet only");
+            }
+        } else if (block.chainid == 8453) {
             require(usdc == address(0) || usdc == BASE_USDC, "usdc: not canonical Base USDC");
             require(usdt == address(0) || usdt == BASE_USDT, "usdt: not canonical Base USDT");
         }
