@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "PEOPLE Wallet | PEOPLE Blockchain",
-  description: "PEOPLE Wallet — PPL in your browser: a non-custodial 12-word wallet (keys stay on your device) or Google sign-in for a synced wallet.",
+  description: "PEOPLE Wallet — PPL in your browser: a non-custodial 12-word browser wallet (keys stay on your device) or Google sign-in for a cloud wallet (key stored encrypted on PEOPLE servers; PEOPLE can decrypt it).",
   alternates: { canonical: "/wallet" },
   manifest: "/people-wallet.webmanifest",
   openGraph: {

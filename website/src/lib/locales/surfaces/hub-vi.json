@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Tạo ví không lưu ký",
-        "body": "Tạo cụm 12 từ trong trình duyệt, ghi lại và mã hóa bằng mật khẩu. Khóa không rời thiết bị này.",
+        "title": "Tạo ví",
+        "body": "Tạo cụm 12 từ trong trình duyệt, ghi lại và mã hóa bằng mật khẩu. Khóa không rời thiết bị này. Hoặc đăng nhập bằng Google để dùng ví đám mây: khóa của bạn được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã.",
         "href": "/wallet",
         "cta": "Mở ví"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Người có ví trên điện thoại, máy tính bảng hoặc trình duyệt.",
-        "detail": "Bắt đầu với tài khoản không lưu ký trên điện thoại, máy tính bảng hoặc trình duyệt. Bạn tham gia với tư cách một người trong cộng đồng — không phải validator."
+        "detail": "Bắt đầu với một ví trên điện thoại, máy tính bảng hoặc trình duyệt. Bạn tham gia với tư cách một người trong cộng đồng — không phải validator."
       },
       {
         "id": "transaction",
