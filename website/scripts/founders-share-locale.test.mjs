@@ -55,7 +55,7 @@ test("share link carries no locale and keeps ?ref= intact", () => {
   assert.equal(share.founderShareUrl("", wallet), "");
 });
 
-test("the site has no locale redirects that could drop ?ref= (locale is detected client-side)", () => {
+test("the site has no locale redirects that drop ?ref= (config has none; the /xx/buy proxy redirect keeps the query)", () => {
   const cfg = readFileSync(join(root, "next.config.ts"), "utf8");
   const proxy = readFileSync(join(root, "src/proxy.ts"), "utf8");
   assert.doesNotMatch(cfg, /\/(ru|de|es|fr)\b/);

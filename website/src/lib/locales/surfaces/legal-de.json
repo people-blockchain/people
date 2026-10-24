@@ -121,11 +121,11 @@
       {
         "title": "Öffentlicher PPL-Verkauf",
         "body": [
-          "Die Verkaufsparameter (Kurvenformel, Preisverlauf, Limits und das Graduation-Ziel) sind auf der Seite /buy veröffentlicht. Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist; das Verbinden einer Wallet verpflichtet Sie zu nichts.",
+          "Die Verkaufsparameter (Kurvenformel, Preisverlauf, Limits und die Verkaufslaufzeit: bis ausverkauft oder 24 Monate, je nachdem, was zuerst eintritt) sind auf der Seite /buy veröffentlicht. Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist; das Verbinden einer Wallet verpflichtet Sie zu nichts.",
           "Für den Kauf ist kein KYC erforderlich. Der Rückverkauf setzt einen Nachweis der Menschlichkeit voraus (Human Passport oder Telegram), der kein KYC ist.",
           "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ eingeworbenem Betrag) oder 24 Monate ab Eröffnung – je nachdem, was zuerst eintritt. Keine Verlängerungen. Nicht verkaufte PPL gehen an den Community Pool. Keine Rückerstattungen: Jeder Kauf ist endgültig.",
           "Laufzeit des Verkaufs, Preisformel und Limits ändern sich nach der Eröffnung des Verkaufs nicht.",
-          "Der Rückverkauf ist keine Rückerstattung: Rückverkauf an die Reserve – nur für verifizierte Nutzer. Jedes Los kann nach einer Haltefrist von 30 Tagen zum Kurvenpreis im Moment des Verkaufs zurückverkauft werden. Die Rückverkäufe insgesamt sind auf 2 % der Reserve pro Tag für alle zusammen und auf 2.000 $ pro Person und Tag begrenzt. Gebühr: 1,5 %, bzw. 3 %, wenn die Rückverkäufe des Tages bereits 1 % der Reserve übersteigen. Endet nach der Graduation. Auszahlungen in USDC auf Base.",
+          "Der Rückverkauf ist keine Rückerstattung: Rückverkauf an die Reserve – nur für verifizierte Nutzer. Jedes Los kann nach einer Haltefrist von 30 Tagen zum Kurvenpreis im Moment des Verkaufs zurückverkauft werden. Die Rückverkäufe insgesamt sind auf 2 % der Reserve pro Tag für alle zusammen und auf 2.000 $ pro Adresse und Tag begrenzt. Gebühr: 1,5 %, bzw. 3 %, wenn die Rückverkäufe des Tages bereits 1 % der Reserve übersteigen. Endet nach der Graduation. Auszahlungen in USDC auf Base.",
           "Nichts auf dieser Website ist ein Angebot oder ein Versprechen, PPL dort zu verkaufen, wo der Verkauf beschränkt ist; die Teilnahme kann in Ihrer Rechtsordnung nicht verfügbar sein."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Nichts auf dieser Website stellt Anlage-, Steuer- oder Rechtsberatung dar. Wir versprechen weder Gewinne, Erträge, Tokenkurse, Börsennotierungen noch Einkommen irgendeiner Art.",
           "Test-PPL und andere Testnetz-Vermögenswerte haben keinen Geldwert. Das Halten oder Verdienen von Test-Token berechtigt Sie nicht zu Mainnet-Token, Geld oder künftigen Zuteilungen, es sei denn, wir veröffentlichen ein gesondertes, verbindliches Programm – und ein solches wird hier nicht zugesagt."
+        ]
+      },
+      {
+        "title": "Hinweise zum PPL-Verkauf",
+        "body": [
+          "PPL ist der Utility-Token des PEOPLE-Netzwerks. Auf der Kurve folgt der Preis der veröffentlichten Formel; nach dem Verkauf setzt ihn der Markt – er kann steigen oder fallen. PPL ist kein Wertpapier, kein Unternehmensanteil, keine Einlage und kein Anlageprodukt; Gewinn, Rendite oder Rückzahlung werden nicht zugesichert.",
+          "Die Teilnahme kann in Ihrer Region eingeschränkt oder nicht verfügbar sein; die für Sie geltenden Regeln zu prüfen liegt in Ihrer Verantwortung. Setzen Sie nur Geld ein, dessen Verlust Sie verkraften können.",
+          "Die auf der Website genannten KI-gestützten Sicherheitsprüfungen wurden vom Projektteam durchgeführt. Sie sind kein externes Audit; ein Sicherheitsaudit durch Dritte wird vor dem Mainnet abgeschlossen. Ein Bug Bounty mindert Risiken, beseitigt sie aber nicht."
         ]
       },
       {

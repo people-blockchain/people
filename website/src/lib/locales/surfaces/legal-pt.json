@@ -121,11 +121,11 @@
       {
         "title": "Venda pública de PPL",
         "body": [
-          "Os parâmetros da venda (fórmula da curva, trajetória de preço, limites e meta de graduação) são publicados na página /buy. As compras permanecem desativadas até que o contrato da venda seja publicado; conectar uma carteira não obriga você a nada.",
+          "Os parâmetros da venda (fórmula da curva, trajetória de preço, limites e o prazo da venda: até se esgotar ou 24 meses, o que ocorrer primeiro) são publicados na página /buy. As compras permanecem desativadas até que o contrato da venda seja publicado; conectar uma carteira não obriga você a nada.",
           "Não é exigido KYC para comprar. A recompra pela reserva exige prova de humanidade (Human Passport ou Telegram), que não é KYC.",
           "A venda dura até se esgotar (a curva fecha ao atingir $4M arrecadados) ou por 24 meses a partir da abertura, o que ocorrer primeiro. Sem prorrogações. O PPL não vendido vai para o Community Pool. Sem reembolsos: toda compra é definitiva.",
           "O prazo da venda, a fórmula de preço e os limites não mudam depois que a venda é aberta.",
-          "A recompra não é um reembolso: recompra pela reserva — somente para usuários verificados. Cada lote pode ser vendido de volta após 30 dias de retenção, ao preço da curva no momento em que você vender. O total de recompras é limitado a 2% da reserva por dia para todos e a $2,000 por pessoa por dia. Taxa: 1.5%, ou 3% quando as recompras do dia já excederem 1% da reserva. Encerra após a graduação. Pagamentos em USDC na Base.",
+          "A recompra não é um reembolso: recompra pela reserva — somente para usuários verificados. Cada lote pode ser vendido de volta após 30 dias de retenção, ao preço da curva no momento em que você vender. O total de recompras é limitado a 2% da reserva por dia para todos e a $2,000 por endereço por dia. Taxa: 1.5%, ou 3% quando as recompras do dia já excederem 1% da reserva. Encerra após a graduação. Pagamentos em USDC na Base.",
           "Nada neste site constitui oferta ou promessa de vender PPL onde a venda for restrita, e a participação pode não estar disponível na sua jurisdição."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Nada neste site constitui aconselhamento de investimento, tributário ou jurídico. Não prometemos lucros, retornos, preço de token, listagem ou renda de qualquer tipo.",
           "O PPL de teste e outros ativos da rede de teste não têm valor monetário. Possuir ou ganhar tokens de teste não dá direito a tokens da mainnet, dinheiro ou alocações futuras, a menos que publiquemos um programa separado e vinculante; nenhum é prometido aqui."
+        ]
+      },
+      {
+        "title": "Divulgações da venda de PPL",
+        "body": [
+          "PPL é o token utilitário da rede PEOPLE. Na curva o preço segue a fórmula publicada e, após a venda, é definido pelo mercado: pode subir ou cair. PPL não é título, participação em empresa, depósito nem produto de investimento; lucro, rendimento ou retorno não são prometidos nem garantidos.",
+          "A participação pode ser restrita ou indisponível onde você mora; verificar as regras aplicáveis é sua responsabilidade. Use apenas dinheiro que pode perder.",
+          "As revisões de segurança com IA citadas no site foram feitas pela equipe do projeto. Não são auditoria externa; uma auditoria de segurança de terceiros é concluída antes do mainnet. O bug bounty reduz o risco, mas não o elimina."
         ]
       },
       {
