@@ -40,7 +40,7 @@
     "priceAfter": "Prezzo dopo il tuo acquisto",
     "estimate": "Stima. La quantità esatta viene confermata on-chain prima della firma.",
     "limitPerBuy": "{min}–{max} per acquisto",
-    "limitPerDay": "Fino a {amount} a persona in qualsiasi arco di 24 ore",
+    "limitPerDay": "Fino a {amount} per indirizzo in qualsiasi arco di 24 ore",
     "cooldown": "Pausa di {seconds} s tra un acquisto e l’altro",
     "overLimit": "Massimo {amount} in un acquisto.",
     "belowMin": "Inserisci un importo per vedere il preventivo.",
@@ -95,7 +95,7 @@
     "help": "Serve aiuto? {support}",
     "supportLink": "Assistenza",
     "noWalletHint": "Non hai un wallet? Scegli Google o email: verrà creato per te un People Wallet. Per pagare servono USDC su Base in quel wallet o in un wallet che colleghi.",
-    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
+    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 per indirizzo al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
     "feesTitle": "Commissioni e tempi",
     "feesBody": "Commissioni: la commissione della rete Base (gas), pagata in ETH — di solito circa $0,01; la commissione di swap o bridge di LI.FI — mostrata nel widget prima della conferma; la commissione di rivendita alla riserva — 1,5% (3% se le rivendite del giorno superano l’1% della riserva).",
     "timingBody": "Un acquisto su Base viene confermato in pochi secondi. I pagamenti da altre reti arrivano di solito in 1–20 minuti. Le rivendite vengono pagate in USDC su Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Rivendita alla riserva",
-        "body": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base."
+        "body": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 per indirizzo al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base."
       },
       {
         "title": "I trasferimenti si aprono con il lancio completo della rete",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Posso rivendere i PPL?",
-        "a": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base."
+        "a": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 per indirizzo al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base."
       },
       {
         "q": "Il tetto di {ceiling} è permanente?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bot che comprano per primi",
         "what": "Script comprano nei primi secondi da molti wallet e rivendono a persone reali.",
-        "ours": "Fino a {perBuy} per acquisto, {perDay} a persona in qualsiasi arco di 24 ore e una pausa di {cooldown} s tra un acquisto e l’altro. I limiti per account rendono più difficile accumulare in fretta una posizione grande, ma non impediscono a una persona di usare più wallet."
+        "ours": "Fino a {perBuy} per acquisto, {perDay} per indirizzo in qualsiasi arco di 24 ore e una pausa di {cooldown} s tra un acquisto e l’altro. I limiti per account rendono più difficile accumulare in fretta una posizione grande, ma non impediscono a una persona di usare più wallet."
       },
       {
         "problem": "Vendite in massa",
         "what": "Grandi detentori vendono tutto insieme e fanno crollare il prezzo.",
-        "ours": "La rivendita è limitata al 2% della riserva al giorno per tutti e a $2.000 a persona al giorno. La commissione va al riacquisto di PPL da parte del progetto (un meccanismo separato) e la liquidità del pool è bloccata per {lockPeriod}."
+        "ours": "La rivendita è limitata al 2% della riserva al giorno per tutti e a $2.000 per indirizzo al giorno. La commissione va al riacquisto di PPL da parte del progetto (un meccanismo separato) e la liquidità del pool è bloccata per {lockPeriod}."
       },
       {
         "problem": "Prezzo peggiore di quello mostrato",

@@ -40,7 +40,7 @@
     "priceAfter": "Giá sau giao dịch của bạn",
     "estimate": "Đây là ước tính. Số lượng chính xác được xác nhận on-chain trước khi bạn ký.",
     "limitPerBuy": "{min}–{max} mỗi lần mua",
-    "limitPerDay": "Tối đa {amount} mỗi người trong bất kỳ 24 giờ nào",
+    "limitPerDay": "Tối đa {amount} mỗi địa chỉ trong bất kỳ 24 giờ nào",
     "cooldown": "Nghỉ {seconds} giây giữa các lần mua",
     "overLimit": "Tối đa {amount} trong một lần mua.",
     "belowMin": "Nhập số tiền để xem báo giá.",
@@ -95,7 +95,7 @@
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
     "noWalletHint": "Chưa có ví? Chọn Google hoặc email — People Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
-    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
+    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi địa chỉ mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
     "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí swap hoặc bridge của LI.FI — hiển thị trong widget trước khi bạn xác nhận; phí bán lại vào quỹ dự trữ — 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ).",
     "timingBody": "Giao dịch mua trên Base được xác nhận trong vài giây. Thanh toán từ mạng khác thường đến trong 1–20 phút. Tiền bán lại được trả bằng USDC trên mạng Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Bán lại vào quỹ dự trữ",
-        "body": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
+        "body": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi địa chỉ mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
       },
       {
         "title": "Chuyển khoản mở khi ra mắt mạng đầy đủ",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Tôi có thể bán lại PPL không?",
-        "a": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
+        "a": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi địa chỉ mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
       },
       {
         "q": "Mức trần {ceiling} có vĩnh viễn không?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bot mua trước",
         "what": "Script mua trong giây đầu từ nhiều ví rồi bán cho người thật.",
-        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi người trong bất kỳ 24 giờ nào và nghỉ {cooldown} giây giữa các lần mua. Giới hạn theo tài khoản khiến việc gom nhanh một vị thế lớn khó hơn, nhưng không ngăn được một người dùng nhiều ví."
+        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi địa chỉ trong bất kỳ 24 giờ nào và nghỉ {cooldown} giây giữa các lần mua. Giới hạn theo tài khoản khiến việc gom nhanh một vị thế lớn khó hơn, nhưng không ngăn được một người dùng nhiều ví."
       },
       {
         "problem": "Bán tháo ồ ạt",
         "what": "Người nắm giữ lớn bán hết một lúc khiến giá sụp đổ.",
-        "ours": "Bán lại vào quỹ dự trữ bị giới hạn ở 2% quỹ dự trữ mỗi ngày cho tất cả và $2.000 mỗi người mỗi ngày. Phí được dùng để dự án mua lại PPL (một cơ chế riêng), và thanh khoản của pool bị khóa {lockPeriod}."
+        "ours": "Bán lại vào quỹ dự trữ bị giới hạn ở 2% quỹ dự trữ mỗi ngày cho tất cả và $2.000 mỗi địa chỉ mỗi ngày. Phí được dùng để dự án mua lại PPL (một cơ chế riêng), và thanh khoản của pool bị khóa {lockPeriod}."
       },
       {
         "problem": "Giá tệ hơn giá hiển thị",
