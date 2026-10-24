@@ -6,11 +6,11 @@ import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Create an NFT | PEOPLE Blockchain",
-  description: "No-code NFT mint: image, name, description, pay in PPL.",
+  description: "No-code NFT mint: image, SVG or video, name, description, pay in PPL.",
   alternates: { canonical: "/create/nft" },
   openGraph: {
     title: "Create an NFT",
-    description: "Mint a unique NFT with a picture and metadata.",
+    description: "Mint a unique NFT with an image, SVG or video and metadata.",
     type: "website",
     siteName: SITE_NAME,
     url: "/create/nft",
