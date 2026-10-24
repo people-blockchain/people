@@ -797,7 +797,7 @@ export function EvmNftMint() {
           ) : null}
           {result.createTx ? (
             <p className="break-all text-xs text-ink-3">
-              {copy.nft.collectionLabel}:{" "}
+              {form.txId}:{" "}
               <Link href={`/explorer/tx/${encodeURIComponent(result.createTx)}`} className="font-mono text-brand hover:underline" dir="ltr">
                 {result.createTx}
               </Link>

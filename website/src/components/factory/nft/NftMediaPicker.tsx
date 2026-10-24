@@ -9,8 +9,37 @@ const VIDEO_ACCEPT = "video/mp4,video/webm,.mp4,.webm";
 const segment = (active: boolean) =>
   `flex-1 rounded-xl px-3 py-2 text-sm sm:flex-none ${active ? "bg-brand text-brand-ink" : "bg-surface-2"}`;
 
-const fileInput =
-  "mt-1 block w-full min-w-0 rounded-xl border border-line bg-surface px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-surface-2 file:px-3 file:py-1.5 file:text-sm";
+const fileBox =
+  "mt-1 flex w-full min-w-0 items-center gap-3 rounded-xl border border-line bg-surface px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-brand";
+
+/** Visually hidden native input (keeps keyboard and screen-reader behaviour) with a localized button and file name. */
+function FilePick({
+  testId,
+  accept,
+  disabled,
+  onChange,
+  buttonLabel,
+  fileName,
+  emptyLabel,
+}: {
+  testId: string;
+  accept: string;
+  disabled: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  buttonLabel: string;
+  fileName: string | null;
+  emptyLabel: string;
+}) {
+  return (
+    <span className={`${fileBox} ${disabled ? "opacity-60" : "cursor-pointer"}`}>
+      <input type="file" accept={accept} data-testid={testId} disabled={disabled} onChange={onChange} className="sr-only" />
+      <span className="shrink-0 rounded-lg bg-surface-2 px-3 py-1.5 font-medium text-ink">{buttonLabel}</span>
+      <span className="min-w-0 break-all text-xs font-normal text-ink-3" dir="auto">
+        {fileName ?? emptyLabel}
+      </span>
+    </span>
+  );
+}
 
 type Props = {
   copy: NftMediaCopy;
@@ -76,15 +105,7 @@ export function NftMediaPicker({
         <>
           <label className="block text-sm font-medium text-ink">
             {copy.imageFile}
-            <input
-              type="file"
-              accept={IMAGE_ACCEPT}
-              data-testid="nft-image-input"
-              disabled={disabled}
-              onChange={pick(onImage)}
-              className={fileInput}
-            />
-            <span className="mt-1 block text-xs font-normal text-ink-3">{imageName ?? copy.noFile}</span>
+            <FilePick testId="nft-image-input" accept={IMAGE_ACCEPT} disabled={disabled} onChange={pick(onImage)} buttonLabel={copy.chooseFile} fileName={imageName} emptyLabel={copy.noFile} />
             <span className="mt-1 block text-xs font-normal text-ink-3">{copy.imageFileHint}</span>
           </label>
           <label className="block text-sm font-medium text-ink">
@@ -105,28 +126,12 @@ export function NftMediaPicker({
         <>
           <label className="block text-sm font-medium text-ink">
             {copy.videoFile}
-            <input
-              type="file"
-              accept={VIDEO_ACCEPT}
-              data-testid="nft-video-input"
-              disabled={disabled}
-              onChange={pick(onVideo)}
-              className={fileInput}
-            />
-            <span className="mt-1 block text-xs font-normal text-ink-3">{videoName ?? copy.noFile}</span>
+            <FilePick testId="nft-video-input" accept={VIDEO_ACCEPT} disabled={disabled} onChange={pick(onVideo)} buttonLabel={copy.chooseFile} fileName={videoName} emptyLabel={copy.noFile} />
             <span className="mt-1 block text-xs font-normal text-ink-3">{copy.videoFileHint}</span>
           </label>
           <label className="block text-sm font-medium text-ink">
             {copy.coverFile}
-            <input
-              type="file"
-              accept={IMAGE_ACCEPT}
-              data-testid="nft-cover-input"
-              disabled={disabled}
-              onChange={pick(onCover)}
-              className={fileInput}
-            />
-            <span className="mt-1 block text-xs font-normal text-ink-3">{coverName ?? copy.noFile}</span>
+            <FilePick testId="nft-cover-input" accept={IMAGE_ACCEPT} disabled={disabled} onChange={pick(onCover)} buttonLabel={copy.chooseFile} fileName={coverName} emptyLabel={copy.noFile} />
             <span className="mt-1 block text-xs font-normal text-ink-3">{copy.coverHint}</span>
           </label>
         </>
