@@ -56,7 +56,7 @@ contract PromoLeftoverCombinedTest is Test {
         assertEq(vault.balances(token), a.communityPool);
 
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         vm.prank(creator);
         promo.award(token, address(0xA1), promoAmt / 100);
 
@@ -76,7 +76,7 @@ contract PromoLeftoverCombinedTest is Test {
         uint256 pool = vault.balances(token);
         uint256 burnBefore = IERC20(token).balanceOf(address(0xdead));
         vm.prank(buyer);
-        curve.buy{value: 50_000 ether}(token, 0);
+        curve.buy{value: 50_000 ether}(token, 1, block.timestamp);
         assertTrue(curve.isMigrated(token));
         assertEq(vault.balances(token), pool, "burn mode: no leftovers to pool");
         assertGt(IERC20(token).balanceOf(address(0xdead)), burnBefore);

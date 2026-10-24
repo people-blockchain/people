@@ -55,7 +55,7 @@ contract ProtocolIntegrationTest is Test {
         uint256 buyAmount = 5 ether;
         vm.deal(creator, buyAmount + 1 ether);
         vm.prank(creator);
-        bondingCurve.buy{value: buyAmount}(token, 0);
+        bondingCurve.buy{value: buyAmount}(token, 1, block.timestamp);
         assertGt(PeopleProjectToken(token).balanceOf(creator), 0);
     }
 
@@ -65,7 +65,7 @@ contract ProtocolIntegrationTest is Test {
             "Swap Test", "SWAP", 6, 1_000_000_000, ""
         );
         // The AMM pair of a Token Factory token is created by its curve at migration (M07-2).
-        bondingCurve.buy{value: 200 ether}(token, 0);
+        bondingCurve.buy{value: 200 ether}(token, 1, block.timestamp);
         address pair = ammFactory.getPair(token, address(wppl));
         assertTrue(pair != address(0));
         uint256 tokenAmt = PeopleProjectToken(token).balanceOf(creator) / 2;

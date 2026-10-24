@@ -67,7 +67,7 @@ contract CurveLeftoverModeTest is Test {
         uint256 burnBefore = IERC20(token).balanceOf(BURN);
 
         vm.prank(buyer);
-        curve.buy{value: 50_000 ether}(token, 0);
+        curve.buy{value: 50_000 ether}(token, 1, block.timestamp);
         assertTrue(curve.isMigrated(token));
 
         assertGt(IERC20(token).balanceOf(BURN), burnBefore, "leftovers burned to 0xdead");
@@ -84,7 +84,7 @@ contract CurveLeftoverModeTest is Test {
         uint256 burnBefore = IERC20(token).balanceOf(BURN);
 
         vm.prank(buyer);
-        curve.buy{value: 50_000 ether}(token, 0);
+        curve.buy{value: 50_000 ether}(token, 1, block.timestamp);
         assertTrue(curve.isMigrated(token));
 
         assertGt(vault.balances(token), poolBefore, "leftovers to community pool");
@@ -95,7 +95,7 @@ contract CurveLeftoverModeTest is Test {
     function test_finalize_defaultBurnsUnsold() public {
         address token = _launch(0);
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         (, , uint256 eco,) = curve.curves(token);
         uint256 expectedUnsold = IERC20(token).balanceOf(address(curve)) - eco;
         uint256 burnBefore = IERC20(token).balanceOf(BURN);
@@ -114,7 +114,7 @@ contract CurveLeftoverModeTest is Test {
     function test_finalize_communityPoolReceivesUnsold() public {
         address token = _launch(1);
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         (, , uint256 eco,) = curve.curves(token);
         uint256 expectedUnsold = IERC20(token).balanceOf(address(curve)) - eco;
         uint256 poolBefore = vault.balances(token);

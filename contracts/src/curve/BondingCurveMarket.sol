@@ -6,6 +6,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {CurveMath} from "../libs/CurveMath.sol";
+import {PeopleConstants} from "../PeopleConstants.sol";
 import {IBondingCurveMarket} from "../interfaces/IBondingCurveMarket.sol";
 import {ICommunityTokenVault} from "../interfaces/ICommunityTokenVault.sol";
 import {IPeopleRouter} from "../interfaces/ICreatorVesting.sol";
@@ -35,6 +36,7 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     event UnsoldSentToCommunity(address indexed token, address indexed vault, uint256 amount);
     /// @notice Emitted when leftovers are burned (owner rule 2026-10-13, mode Burn).
     event LeftoversBurned(address indexed token, address indexed to, uint256 amount);
+    event NativeDustSwept(address indexed token, address indexed to, uint256 amount);
 
     /// @notice Owner rule 2026-10-13: a curve that has not sold out (migrated) within this
     /// window after launch can be finalized by anyone; its unsold tokens go to the token's own
@@ -67,6 +69,14 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     /// remainder. 0 = Burn (default), 1 = CommunityPool. Set at launch, immutable afterwards.
     mapping(address => uint8) public leftoverMode;
 
+    /// @notice Native balance the market owes to curves: the sum of `actualNativeReserve` over
+    /// every curve that has not migrated (migration moves the reserve into the AMM and zeroes it
+    /// on the curve). A finalized curve is not migrated, so whatever reserve it still holds stays
+    /// accounted — and out of reach of `sweepNativeDust` — until its holders sell back, even if
+    /// they never do. Kept in lock-step with the per-curve state so `sweepNativeDust` can only
+    /// ever take `balance - totalAccountedNative`.
+    uint256 public totalAccountedNative;
+
     error Unauthorized();
     error UnknownToken();
     error InsufficientReserve();
@@ -74,6 +84,17 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
     error ZeroTreasury();
     error NotFinalizable();
     error InvalidLeftoverMode();
+    /// @notice A curve for this token already exists; `registerToken` never overwrites one.
+    error AlreadyRegistered();
+    error Expired();
+    /// @notice `minTokensOut` / `minNativeOut` of zero disables slippage protection entirely.
+    error ZeroMinOut();
+    error ZeroRecipient();
+    /// @notice The dust sweep only runs against a finalized or migrated curve.
+    error CurveNotSettled();
+    error NothingToSweep();
+    /// @notice The token is the native-PPL ERC-20 precompile or has no code, so it cannot be a curve token.
+    error InvalidToken();
 
     modifier onlyFactory() {
         (bool ok, bytes memory data) = core.staticcall(abi.encodeWithSignature("tokenFactoryAddress()"));
@@ -138,6 +159,13 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         uint8 leftoverMode_
     ) external onlyFactory {
         if (leftoverMode_ > uint8(LeftoverMode.CommunityPool)) revert InvalidLeftoverMode();
+        // The native-PPL ERC-20 precompile (`transfer` there moves native balance) and code-less
+        // addresses can never be curve tokens: `buy` would pay "tokens" out of other curves' native
+        // reserves, or silently succeed against an EOA.
+        if (token == PeopleConstants.NATIVE_PPL_ERC20 || token.code.length == 0) revert InvalidToken();
+        // A token registers exactly once: re-registering would reset `state` (incl. `migrated`)
+        // and `launchedAt`, e.g. through a swapped-in factory.
+        if (launchedAt[token] != 0) revert AlreadyRegistered();
         TokenCurve storage tc = curves[token];
         tc.curveInventory = curveInventory;
         tc.liquidityReserve = liquidityReserve;
@@ -148,10 +176,32 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         emit TokenRegistered(token, curveInventory, liquidityReserve, ecosystemReserve, leftoverMode_);
     }
 
-    function buy(address token, uint256 minTokensOut) external payable nonReentrant {
+    /// @notice Owner-gated sweep of native dust (forced sends, `receive()` surplus, rounding)
+    /// from the market. It only ever moves `balance - totalAccountedNative`, so no active
+    /// curve's reserve, and no reserve a finalized curve still owes to sellers, can be touched.
+    /// @dev Dust accounting is global, not per token: the surplus is not attributable to any one
+    /// curve. The `token` argument is only a gate: it must name a finalized or migrated curve,
+    /// so at least one such curve must exist. It does not scope the amount swept to that token,
+    /// and any settled token unlocks the same global surplus.
+    function sweepNativeDust(address token, address to) external onlyOwner nonReentrant {
+        if (to == address(0)) revert ZeroRecipient();
+        if (!finalized[token] && !curves[token].state.migrated) revert CurveNotSettled();
+        uint256 bal = address(this).balance;
+        uint256 accounted = totalAccountedNative;
+        if (bal <= accounted) revert NothingToSweep();
+        uint256 dust = bal - accounted;
+        (bool sent,) = to.call{value: dust}("");
+        require(sent, "sweep");
+        emit NativeDustSwept(token, to, dust);
+    }
+
+    function buy(address token, uint256 minTokensOut, uint256 deadline) external payable nonReentrant {
+        if (block.timestamp > deadline) revert Expired();
+        if (minTokensOut == 0) revert ZeroMinOut();
         TokenCurve storage tc = _requireActive(token);
         (uint256 tokensOut, uint256 fee, uint256 netIn, CurveMath.State memory next, bool migrate) =
             CurveMath.calculateBuy(tc.state, msg.value, minTokensOut);
+        totalAccountedNative += netIn;
         tc.state = next;
         if (fee > 0) {
             (bool sent,) = feeRecipient.call{value: fee}("");
@@ -164,7 +214,9 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         }
     }
 
-    function sell(address token, uint256 tokenAmount, uint256 minNativeOut) external nonReentrant {
+    function sell(address token, uint256 tokenAmount, uint256 minNativeOut, uint256 deadline) external nonReentrant {
+        if (block.timestamp > deadline) revert Expired();
+        if (minNativeOut == 0) revert ZeroMinOut();
         // After `finalize`, holders can still sell back to the curve (their PPL stays claimable);
         // buying is closed and the tokens sold back are forwarded to the community pool.
         // NOTE: this is a user sell, not a leftover — it always goes to the community pool and
@@ -174,8 +226,9 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         IERC20(token).safeTransferFrom(msg.sender, address(this), tokenAmount);
         CurveMath.State memory cur = tc.state;
         if (isFinal) cur.active = true; // pricing only; the stored curve stays closed to buys
-        (uint256 netOut, uint256 fee,, CurveMath.State memory next) =
+        (uint256 netOut, uint256 fee, uint256 grossOut, CurveMath.State memory next) =
             CurveMath.calculateSell(cur, tokenAmount, minNativeOut);
+        totalAccountedNative -= grossOut;
         if (isFinal) next.active = false;
         tc.state = next;
         if (fee > 0) {
@@ -267,6 +320,11 @@ contract BondingCurveMarket is IBondingCurveMarket, ReentrancyGuard, Ownable {
         tc.state.migrated = true;
         (uint256 poolNative, uint256 poolToken, uint256 fromLiq, uint256 fromCurve) =
             CurveMath.calculateMigration(tc.state, tc.liquidityReserve);
+        totalAccountedNative -= poolNative;
+        // The reserve now lives in the AMM pool; zero it so the `curves()` getter does not
+        // report native the market no longer holds. Nothing reads it afterwards: buy/sell revert
+        // on a migrated curve and `calculateMigration` above has already consumed it.
+        tc.state.actualNativeReserve = 0;
         tc.liquidityReserve -= fromLiq;
         tc.curveInventory -= fromCurve;
 
