@@ -26,6 +26,7 @@ import { quoteBuy } from "@/lib/sale/curve";
 import { fillCopy, intlLocale, ppl, pricePerPpl, usd } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
 import { useBuyPpl } from "@/lib/sale/useBuyPpl";
+import { FAUCET_AMOUNT_USDC, useTestFaucet } from "@/lib/sale/useTestFaucet";
 import { useUsdcDelivery } from "@/lib/sale/useUsdcDelivery";
 import { supportUrlWithLocale } from "@/lib/support-url";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
@@ -71,6 +72,7 @@ export function BuyForm({
   const externalWallet = useExternalWalletOptional();
   const { openWalletModal } = useWalletModal();
   const { status, buy, reset, busy } = useBuyPpl();
+  const faucet = useTestFaucet();
 
   const evmAddress = (session?.address ?? externalWallet?.signer?.address ?? "") as Address | "";
   const connected = Boolean(evmAddress);
@@ -104,8 +106,8 @@ export function BuyForm({
   );
 
   const directUsdt = hubAcceptsUsdt;
-  // The LI.FI widget only delivers to Base mainnet, so it is hidden on the test sale chain.
-  const bridgeAvailable = !SALE_CHAIN.testnet;
+  // The LI.FI widget only delivers real USDC to Base mainnet, so it is hidden when the sale runs on test tokens.
+  const bridgeAvailable = !SALE_CHAIN.testTokens;
   const swapsUsdt = bridgeAvailable && stable === "USDT" && !directUsdt;
   const showBuyCta = payMode === "base" && !swapsUsdt ? true : conversionReady;
   const payToken = hubPaymentToken(stable, directUsdt) as Address | null;
@@ -138,6 +140,10 @@ export function BuyForm({
     if (status.step === "done") setBalanceTick((n) => n + 1);
   }, [status.step]);
 
+  useEffect(() => {
+    if (faucet.status.step === "done") setBalanceTick((n) => n + 1);
+  }, [faucet.status.step]);
+
   const insufficientToken = open && balances !== null && quoteOk && balances.token < usdAmount;
   const needsGas = open && balances !== null && balances.eth < MIN_GAS_ETH;
 
@@ -145,6 +151,15 @@ export function BuyForm({
     !open ||
     !payToken ||
     (connected && (!quoteOk || !showBuyCta || busy || !canSign || insufficientToken || needsGas));
+
+  const onFaucetClick = useCallback(async () => {
+    if (!connected) {
+      openWalletModal();
+      return;
+    }
+    if (!provider) return;
+    await faucet.mint({ provider, account: evmAddress as Address });
+  }, [connected, openWalletModal, provider, faucet, evmAddress]);
 
   const onBuyClick = useCallback(async () => {
     if (!connected) {
@@ -370,6 +385,58 @@ export function BuyForm({
         >
           {t.form.testnetNote}
         </p>
+      ) : null}
+      {SALE_CHAIN.faucet ? (
+        <div
+          className="space-y-2 rounded-xl border border-amber-500/40 bg-amber-500/5 px-3 py-2 text-xs text-ink"
+          data-testid="buy-test-mode"
+        >
+          <p className="font-semibold" data-testid="buy-test-mode-note">
+            {t.form.testModeNote}
+          </p>
+          <button
+            type="button"
+            data-testid="buy-faucet"
+            disabled={faucet.busy || (connected && !canSign)}
+            onClick={() => void onFaucetClick()}
+            className="min-h-11 rounded-lg border border-line bg-surface px-4 text-sm font-semibold transition hover:border-brand/40 disabled:cursor-not-allowed disabled:opacity-55"
+          >
+            {t.form.faucetButton}
+          </button>
+          <div aria-live="polite" data-testid="buy-faucet-status">
+            {!connected ? <p>{t.form.faucetNeedWallet}</p> : null}
+            {faucet.status.step === "switching" ? <p>{t.form.faucetSwitching}</p> : null}
+            {faucet.status.step === "minting" ? <p>{t.form.faucetMinting}</p> : null}
+            {faucet.status.step === "pending" ? <p>{t.form.faucetPending}</p> : null}
+            {faucet.status.step === "done" ? (
+              <p>
+                {fillCopy(t.form.faucetDone, { amount: String(FAUCET_AMOUNT_USDC) })}{" "}
+                <a
+                  href={basescanTxUrl(faucet.status.txHash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-brand underline"
+                >
+                  {t.form.viewTx}
+                </a>
+              </p>
+            ) : null}
+            {faucet.status.step === "error" ? (
+              <p className="text-warm" role="alert">
+                {faucet.status.reason === "notConfigured"
+                  ? t.form.faucetNotConfigured
+                  : faucet.status.reason === "switchRejected"
+                    ? t.form.switchRejected
+                    : faucet.status.reason === "txRejected"
+                      ? t.form.txRejected
+                      : fillCopy(t.form.faucetFailed, { reason: faucet.status.detail ?? "" })}{" "}
+                <button type="button" onClick={faucet.reset} className="min-h-11 font-semibold text-brand underline">
+                  {t.form.tryAgain}
+                </button>
+              </p>
+            ) : null}
+          </div>
+        </div>
       ) : null}
       <div>
         <span className={LABEL}>{t.form.payModeLabel}</span>

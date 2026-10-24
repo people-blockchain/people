@@ -2,8 +2,10 @@
  * Single source of truth for which chain the PPL sale runs on.
  *
  * `NEXT_PUBLIC_SALE_CHAIN=base-sepolia` switches the whole sale contour (chain id, RPC, hub address,
- * payment tokens, explorer) to the Base Sepolia test network. Anything else, or no flag, is Base
- * mainnet with the production addresses.
+ * payment tokens, explorer) to the Base Sepolia test network. `base-test` runs on Base mainnet
+ * (chain id 8453, normal Base RPC) but with a test hub and mintable test USDC/USDT taken from
+ * `NEXT_PUBLIC_BASE_TEST_*`; it is the only mode that shows the test-token faucet. Anything else,
+ * or no flag, is Base mainnet with the production addresses.
  *
  * `resolveSaleChain` is pure: it takes the env object as an argument so it can be unit-tested.
  * Next.js inlines `process.env.NEXT_PUBLIC_*` only for literal property accesses, hence the explicit
@@ -13,7 +15,7 @@
 import { base, baseSepolia } from "viem/chains";
 import type { Chain } from "viem";
 
-export type SaleChainKey = "base" | "base-sepolia";
+export type SaleChainKey = "base" | "base-sepolia" | "base-test";
 
 export type SaleChainEnv = Readonly<Record<string, string | undefined>>;
 
@@ -38,6 +40,10 @@ export type SaleChain = {
   /** Block explorer origin, no trailing slash. */
   explorer: string;
   testnet: boolean;
+  /** Payment tokens are valueless test tokens (base-sepolia, base-test). */
+  testTokens: boolean;
+  /** Show the "get test USDC" faucet button: only base-test, where the test USDC is mintable. */
+  faucet: boolean;
   /** Hub (sale contract) address, or null while not configured. */
   hubAddress: string | null;
   /** Payment tokens; null = not configured for this chain. */
@@ -52,13 +58,15 @@ export function validAddress(raw: string | undefined): string | null {
   return ADDRESS_RE.test(value) ? value : null;
 }
 
-/** Only the exact value "base-sepolia" (case-insensitive, trimmed) selects the testnet. */
+/** Only the exact values "base-sepolia" / "base-test" (case-insensitive, trimmed) leave Base mainnet. */
 export function resolveSaleChainKey(env: SaleChainEnv): SaleChainKey {
-  return (env.NEXT_PUBLIC_SALE_CHAIN ?? "").trim().toLowerCase() === "base-sepolia" ? "base-sepolia" : "base";
+  const raw = (env.NEXT_PUBLIC_SALE_CHAIN ?? "").trim().toLowerCase();
+  return raw === "base-sepolia" || raw === "base-test" ? raw : "base";
 }
 
 export function resolveSaleChain(env: SaleChainEnv): SaleChain {
-  if (resolveSaleChainKey(env) === "base-sepolia") {
+  const key = resolveSaleChainKey(env);
+  if (key === "base-sepolia") {
     return {
       key: "base-sepolia",
       id: baseSepolia.id,
@@ -67,10 +75,32 @@ export function resolveSaleChain(env: SaleChainEnv): SaleChain {
       rpcUrl: (env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL ?? "").trim() || "https://sepolia.base.org",
       explorer: "https://sepolia.basescan.org",
       testnet: true,
+      testTokens: true,
+      faucet: false,
       hubAddress: validAddress(env.NEXT_PUBLIC_SEPOLIA_HUB_ADDRESS),
       tokens: {
         USDC: validAddress(env.NEXT_PUBLIC_SEPOLIA_USDC_ADDRESS),
         USDT: validAddress(env.NEXT_PUBLIC_SEPOLIA_USDT_ADDRESS),
+      },
+    };
+  }
+  /** Public, keyless endpoint. Overridable without a redeploy. */
+  const rpcUrl = (env.NEXT_PUBLIC_BASE_RPC_URL ?? "https://mainnet.base.org").trim();
+  if (key === "base-test") {
+    return {
+      key: "base-test",
+      id: base.id,
+      viemChain: base,
+      name: "Base",
+      rpcUrl,
+      explorer: "https://basescan.org",
+      testnet: false,
+      testTokens: true,
+      faucet: true,
+      hubAddress: validAddress(env.NEXT_PUBLIC_BASE_TEST_HUB_ADDRESS),
+      tokens: {
+        USDC: validAddress(env.NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS),
+        USDT: validAddress(env.NEXT_PUBLIC_BASE_TEST_USDT_ADDRESS),
       },
     };
   }
@@ -79,10 +109,11 @@ export function resolveSaleChain(env: SaleChainEnv): SaleChain {
     id: base.id,
     viemChain: base,
     name: "Base",
-    /** Public, keyless endpoint. Overridable without a redeploy. */
-    rpcUrl: (env.NEXT_PUBLIC_BASE_RPC_URL ?? "https://mainnet.base.org").trim(),
+    rpcUrl,
     explorer: "https://basescan.org",
     testnet: false,
+    testTokens: false,
+    faucet: false,
     hubAddress: validAddress(env.NEXT_PUBLIC_SALE_HUB_ADDRESS),
     tokens: { USDC: BASE_MAINNET_USDC, USDT: BASE_MAINNET_USDT },
   };
@@ -98,6 +129,9 @@ export function readSaleChainEnv(): SaleChainEnv {
     NEXT_PUBLIC_SEPOLIA_HUB_ADDRESS: process.env.NEXT_PUBLIC_SEPOLIA_HUB_ADDRESS,
     NEXT_PUBLIC_SEPOLIA_USDC_ADDRESS: process.env.NEXT_PUBLIC_SEPOLIA_USDC_ADDRESS,
     NEXT_PUBLIC_SEPOLIA_USDT_ADDRESS: process.env.NEXT_PUBLIC_SEPOLIA_USDT_ADDRESS,
+    NEXT_PUBLIC_BASE_TEST_HUB_ADDRESS: process.env.NEXT_PUBLIC_BASE_TEST_HUB_ADDRESS,
+    NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS: process.env.NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS,
+    NEXT_PUBLIC_BASE_TEST_USDT_ADDRESS: process.env.NEXT_PUBLIC_BASE_TEST_USDT_ADDRESS,
   };
 }
 

@@ -117,3 +117,86 @@ test("hubPaymentToken picks the configured token of the resolved chain", () => {
   const noTokens = resolveSaleChain({ NEXT_PUBLIC_SALE_CHAIN: "base-sepolia" });
   assert.equal(hubPaymentToken("USDC", false, noTokens), null);
 });
+
+const TEST_HUB = "0x5555555555555555555555555555555555555555";
+const TEST_USDC = "0x6666666666666666666666666666666666666666";
+const TEST_USDT = "0x7777777777777777777777777777777777777777";
+
+const BASE_TEST_ENV = {
+  NEXT_PUBLIC_SALE_CHAIN: "base-test",
+  NEXT_PUBLIC_SALE_HUB_ADDRESS: HUB,
+  NEXT_PUBLIC_SEPOLIA_HUB_ADDRESS: SEP_HUB,
+  NEXT_PUBLIC_SEPOLIA_USDC_ADDRESS: SEP_USDC,
+  NEXT_PUBLIC_BASE_TEST_HUB_ADDRESS: TEST_HUB,
+  NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS: TEST_USDC,
+  NEXT_PUBLIC_BASE_TEST_USDT_ADDRESS: TEST_USDT,
+};
+
+test("base-test resolves to Base mainnet chain 8453 with the normal Base RPC", () => {
+  const chain = resolveSaleChain(BASE_TEST_ENV);
+  assert.equal(resolveSaleChainKey(BASE_TEST_ENV), "base-test");
+  assert.equal(chain.key, "base-test");
+  assert.equal(chain.id, 8453);
+  assert.equal(chain.viemChain.id, 8453);
+  assert.equal(chain.rpcUrl, "https://mainnet.base.org");
+  assert.equal(chain.explorer, "https://basescan.org");
+  assert.equal(chain.testnet, false);
+  assert.equal(
+    resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_BASE_RPC_URL: " https://rpc.example/base " }).rpcUrl,
+    "https://rpc.example/base",
+  );
+});
+
+test("base-test takes hub and tokens from NEXT_PUBLIC_BASE_TEST_*, never from mainnet or Sepolia", () => {
+  const chain = resolveSaleChain(BASE_TEST_ENV);
+  assert.equal(chain.hubAddress, TEST_HUB);
+  assert.equal(saleTokenAddress("USDC", chain), TEST_USDC);
+  assert.equal(saleTokenAddress("USDT", chain), TEST_USDT);
+  assert.equal(saleContractAddress(BASE_TEST_ENV), TEST_HUB);
+  assert.equal(saleContractConfigured(BASE_TEST_ENV), true);
+
+  const bare = resolveSaleChain({ NEXT_PUBLIC_SALE_CHAIN: "base-test", NEXT_PUBLIC_SALE_HUB_ADDRESS: HUB });
+  assert.equal(bare.hubAddress, null);
+  assert.equal(bare.tokens.USDC, null);
+  assert.equal(bare.tokens.USDT, null);
+  assert.equal(saleContractConfigured({ NEXT_PUBLIC_SALE_CHAIN: "base-test", NEXT_PUBLIC_SALE_HUB_ADDRESS: HUB }), false);
+});
+
+test("base-test flag is case-insensitive and trimmed", () => {
+  assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: "  Base-Test " }).key, "base-test");
+  for (const value of ["basetest", "base_test", "test", "base-test-2"]) {
+    assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: value }).key, "base", value);
+  }
+});
+
+test("base-test addresses are validated as 0x + 40 hex", () => {
+  const chain = resolveSaleChain({
+    NEXT_PUBLIC_SALE_CHAIN: "base-test",
+    NEXT_PUBLIC_BASE_TEST_HUB_ADDRESS: "0x123",
+    NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS: "not-an-address",
+    NEXT_PUBLIC_BASE_TEST_USDT_ADDRESS: `0x${"g".repeat(40)}`,
+  });
+  assert.equal(chain.hubAddress, null);
+  assert.equal(chain.tokens.USDC, null);
+  assert.equal(chain.tokens.USDT, null);
+  const padded = resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_BASE_TEST_USDC_ADDRESS: ` ${TEST_USDC} ` });
+  assert.equal(padded.tokens.USDC, TEST_USDC);
+});
+
+test("hubPaymentToken uses the base-test tokens", () => {
+  const chain = resolveSaleChain(BASE_TEST_ENV);
+  assert.equal(hubPaymentToken("USDC", false, chain), TEST_USDC);
+  assert.equal(hubPaymentToken("USDT", false, chain), TEST_USDC);
+  assert.equal(hubPaymentToken("USDT", true, chain), TEST_USDT);
+});
+
+test("faucet is on only in base-test; test-token flag covers both test modes", () => {
+  const main = resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: undefined });
+  const sepolia = resolveSaleChain(SEPOLIA_ENV);
+  const test_ = resolveSaleChain(BASE_TEST_ENV);
+  assert.deepEqual([main.faucet, sepolia.faucet, test_.faucet], [false, false, true]);
+  assert.deepEqual([main.testTokens, sepolia.testTokens, test_.testTokens], [false, true, true]);
+  for (const value of [undefined, "", "base", "mainnet", "base-sepolia"]) {
+    assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: value }).faucet, false, String(value));
+  }
+});
