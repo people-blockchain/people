@@ -1,6 +1,6 @@
 {
   "title": "Portafoglio",
-  "lead": "Non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server.",
+  "lead": "Wallet del browser: non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server. Accedere con Google o email crea invece un wallet cloud: PEOPLE conserva la tua chiave cifrata e la sua infrastruttura può decifrarla.",
   "create": "Crea un nuovo portafoglio",
   "import": "Importa portafoglio",
   "unlock": "Sblocca",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "La tua chiave è conservata cifrata sui server di PEOPLE così puoi ripristinarla accedendo. L'infrastruttura di PEOPLE è in grado di decifrarla. Per l'autocustodia completa, usa un wallet del browser o un wallet esterno. Esporta la chiave privata solo se ti serve un backup fuori da PEOPLE.",
   "cloudDisconnect": "Disconnect"
 }

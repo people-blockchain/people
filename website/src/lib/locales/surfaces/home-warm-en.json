@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "A wallet in 30 seconds",
-        "sub": "Your keys stay on your phone or in your browser."
+        "sub": "Browser wallet: your keys stay on your device. Cloud wallet: stored encrypted on PEOPLE servers."
       },
       {
         "id": "token",

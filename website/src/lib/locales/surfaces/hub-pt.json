@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Cria uma carteira não custodial",
-        "body": "Gera uma frase de 12 palavras no navegador, anota-a e cifra-a com uma palavra-passe. As chaves nunca saem deste dispositivo.",
+        "title": "Cria uma carteira",
+        "body": "Gera uma frase de 12 palavras no navegador, anota-a e cifra-a com uma palavra-passe. As chaves nunca saem deste dispositivo. Ou inicia sessão com Google para uma carteira na nuvem: a tua chave é guardada cifrada nos servidores da PEOPLE e a infraestrutura da PEOPLE consegue decifrá-la.",
         "href": "/wallet",
         "cta": "Abrir carteira"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Uma pessoa com uma carteira num telemóvel, tablet ou navegador.",
-        "detail": "Começa com uma conta não custodial num telemóvel, tablet ou navegador. Entras como pessoa da comunidade — não como validador."
+        "detail": "Começa com uma carteira num telemóvel, tablet ou navegador. Entras como pessoa da comunidade — não como validador."
       },
       {
         "id": "transaction",

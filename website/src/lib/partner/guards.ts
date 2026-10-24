@@ -1,3 +1,5 @@
+import { hasControlOrBackslash, sanitizeInAppPath } from "@/lib/safe-return-path";
+
 export const PARTNER_PATH_PREFIX = "/partner";
 export const LOGIN_PATH = "/login";
 
@@ -14,18 +16,23 @@ export function isLoginPath(pathname: string): boolean {
 
 function normalizeCallbackPath(callbackUrl: string | null | undefined): string | null {
   if (!callbackUrl?.trim()) return null;
-  const raw = callbackUrl.trim();
-  try {
-    const path = raw.startsWith("http") ? new URL(raw).pathname + new URL(raw).search : raw;
-    // Backslashes are treated as slashes by browsers, so `/\evil.example` or `\\evil.example`
-    // would become a protocol-relative cross-origin redirect. Reject them outright.
-    if (path.includes("\\")) return null;
-    if (isLoginPath(path.split("?")[0] ?? path)) return null;
-    if (!path.startsWith("/") || path.startsWith("//")) return null;
-    return path;
-  } catch {
-    return null;
+  // Not trimmed: a trailing tab/newline is a control character and must be rejected, not stripped.
+  const raw = callbackUrl;
+  let candidate = raw;
+  if (raw.startsWith("http")) {
+    // Absolute URLs are only accepted as a path hand-off; control characters and backslashes
+    // are rejected by `sanitizeInAppPath` below, so nothing cross-origin can survive.
+    try {
+      const parsed = new URL(raw);
+      candidate = parsed.pathname + parsed.search;
+    } catch {
+      return null;
+    }
   }
+  const path = sanitizeInAppPath(candidate);
+  if (!path) return null;
+  if (isLoginPath(path.split("?")[0] ?? path)) return null;
+  return path;
 }
 
 export function loginRedirectUrl(origin: string, callbackPath: string): string {
@@ -65,6 +72,8 @@ export function resolvePostAuthRedirectUrl(url: string, baseUrl: string): string
   const base = baseUrl.replace(/\/$/, "");
   let target: URL;
   try {
+    if (hasControlOrBackslash(url)) return `${base}${PARTNER_PATH_PREFIX}`;
+    if (!url.startsWith("http") && !sanitizeInAppPath(url)) return `${base}${PARTNER_PATH_PREFIX}`;
     target = url.startsWith("http") ? new URL(url) : new URL(url, `${base}/`);
   } catch {
     return `${base}${PARTNER_PATH_PREFIX}`;

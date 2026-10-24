@@ -1,6 +1,6 @@
 {
   "title": "المحفظة",
-  "lead": "غير حضانية. تُنشأ المفاتيح في هذا المتصفح وتُشفَّر بكلمتك السرية ولا تُرسل أبدًا إلى خوادمنا.",
+  "lead": "محفظة المتصفح: غير حضانية. تُنشأ المفاتيح في هذا المتصفح وتُشفَّر بكلمتك السرية ولا تُرسل أبدًا إلى خوادمنا. تسجيل الدخول عبر Google أو البريد ينشئ بدلًا من ذلك محفظة سحابية: تخزّن PEOPLE مفتاحك مشفَّرًا وبنيتها التحتية قادرة على فك تشفيره.",
   "create": "إنشاء محفظة جديدة",
   "import": "استيراد محفظة",
   "unlock": "فتح القفل",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "يُخزَّن مفتاحك مشفَّرًا على خوادم PEOPLE لتتمكن من استعادته بتسجيل الدخول. بنية PEOPLE التحتية قادرة على فك تشفيره. للحصول على حفظ ذاتي كامل، استخدم محفظة المتصفح أو محفظة خارجية. صدِّر المفتاح الخاص فقط إذا احتجت إلى نسخة احتياطية خارج PEOPLE.",
   "cloudDisconnect": "Disconnect"
 }
