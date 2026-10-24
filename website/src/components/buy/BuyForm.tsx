@@ -2,22 +2,23 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPublicClient, erc20Abi, formatUnits, http, type Address } from "viem";
-import { base } from "viem/chains";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
+import { decideAutoBuy, deliveredFromRoute, type AutoBuyTrigger } from "@/lib/sale/autoBuy";
 import { BASE_USDC_ADDRESS, hubPaymentToken } from "@/lib/sale/bridge";
 import {
   MIN_GAS_ETH,
   SALE,
-  SALE_HUB_CHAIN,
+  SALE_CHAIN,
   SALE_OPENING_DATE_UTC,
   basescanTxUrl,
+  saleTokenAddress,
   type SaleStableSymbol,
 } from "@/lib/sale/config";
 import { parseUsdAmount } from "@/lib/sale/amount";
@@ -25,6 +26,8 @@ import { quoteBuy } from "@/lib/sale/curve";
 import { fillCopy, intlLocale, ppl, pricePerPpl, usd } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
 import { useBuyPpl } from "@/lib/sale/useBuyPpl";
+import { FAUCET_AMOUNT_USDC, useTestFaucet } from "@/lib/sale/useTestFaucet";
+import { useUsdcDelivery } from "@/lib/sale/useUsdcDelivery";
 import { supportUrlWithLocale } from "@/lib/support-url";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
 
@@ -69,6 +72,7 @@ export function BuyForm({
   const externalWallet = useExternalWalletOptional();
   const { openWalletModal } = useWalletModal();
   const { status, buy, reset, busy } = useBuyPpl();
+  const faucet = useTestFaucet();
 
   const evmAddress = (session?.address ?? externalWallet?.signer?.address ?? "") as Address | "";
   const connected = Boolean(evmAddress);
@@ -85,6 +89,7 @@ export function BuyForm({
   const [switchFailed, setSwitchFailed] = useState(false);
   const [balances, setBalances] = useState<{ token: number; eth: number } | null>(null);
   const [balanceTick, setBalanceTick] = useState(0);
+  const [autoBuy, setAutoBuy] = useState<{ kind: "received" | "belowMin"; amountUsd: number } | null>(null);
 
   const amountFieldId = useId();
   const stableFieldId = useId();
@@ -101,21 +106,23 @@ export function BuyForm({
   );
 
   const directUsdt = hubAcceptsUsdt;
-  const swapsUsdt = stable === "USDT" && !directUsdt;
+  // The LI.FI widget only delivers real USDC to Base mainnet, so it is hidden when the sale runs on test tokens.
+  const bridgeAvailable = !SALE_CHAIN.testTokens;
+  const swapsUsdt = bridgeAvailable && stable === "USDT" && !directUsdt;
   const showBuyCta = payMode === "base" && !swapsUsdt ? true : conversionReady;
-  const payToken = hubPaymentToken(stable, directUsdt);
-  const tokenSymbol = payToken === BASE_USDC_ADDRESS ? "USDC" : "USDT";
+  const payToken = hubPaymentToken(stable, directUsdt) as Address | null;
+  const tokenSymbol = payToken !== null && payToken === saleTokenAddress("USDC") ? "USDC" : "USDT";
   const canSign = Boolean(provider);
-  const wrongNetwork = open && connected && canSign && walletChainId !== null && walletChainId !== SALE_HUB_CHAIN.chainId;
+  const wrongNetwork = open && connected && canSign && walletChainId !== null && walletChainId !== SALE_CHAIN.id;
 
-  // Balances on Base — read only while the sale is open and a wallet is connected.
+  // Balances on the sale chain — read only while the sale is open and a wallet is connected.
   useEffect(() => {
-    if (!open || !evmAddress) {
+    if (!open || !evmAddress || !payToken) {
       setBalances(null);
       return;
     }
     let active = true;
-    const client = createPublicClient({ chain: base, transport: http(SALE_HUB_CHAIN.rpcUrl) });
+    const client = createPublicClient({ chain: SALE_CHAIN.viemChain, transport: http(SALE_CHAIN.rpcUrl) });
     void Promise.all([
       client.readContract({ address: payToken, abi: erc20Abi, functionName: "balanceOf", args: [evmAddress] }),
       client.getBalance({ address: evmAddress }),
@@ -133,22 +140,99 @@ export function BuyForm({
     if (status.step === "done") setBalanceTick((n) => n + 1);
   }, [status.step]);
 
+  useEffect(() => {
+    if (faucet.status.step === "done") setBalanceTick((n) => n + 1);
+  }, [faucet.status.step]);
+
   const insufficientToken = open && balances !== null && quoteOk && balances.token < usdAmount;
   const needsGas = open && balances !== null && balances.eth < MIN_GAS_ETH;
 
   const buttonDisabled =
     !open ||
+    !payToken ||
     (connected && (!quoteOk || !showBuyCta || busy || !canSign || insufficientToken || needsGas));
+
+  const onFaucetClick = useCallback(async () => {
+    if (!connected) {
+      openWalletModal();
+      return;
+    }
+    if (!provider) return;
+    await faucet.mint({ provider, account: evmAddress as Address });
+  }, [connected, openWalletModal, provider, faucet, evmAddress]);
 
   const onBuyClick = useCallback(async () => {
     if (!connected) {
       openWalletModal();
       return;
     }
-    if (!provider || !parsed.ok) return;
+    if (!provider || !parsed.ok || !payToken) return;
     setSwitchFailed(false);
     await buy({ provider, account: evmAddress as Address, token: payToken, amountUsd: parsed.value });
   }, [connected, openWalletModal, provider, parsed, buy, evmAddress, payToken]);
+
+  // Auto-start of the purchase step once the bridged/swapped USDC has arrived on Base. Only the
+  // step starts; approve and buy are still signed by the user in the wallet.
+  const triggeredRef = useRef<Set<string>>(new Set());
+  const startingRef = useRef(false);
+  const latestRef = useRef({ open, busy, provider, evmAddress });
+  useEffect(() => {
+    latestRef.current = { open, busy, provider, evmAddress };
+  });
+
+  const handleDelivery = useCallback(
+    (trigger: AutoBuyTrigger) => {
+      const cur = latestRef.current;
+      if (!cur.open || !cur.provider || !cur.evmAddress) return;
+      const decision = decideAutoBuy({
+        chainKey: SALE_CHAIN.key,
+        trigger,
+        minUsd: SALE.minPerBuyUsd,
+        maxUsd: SALE.maxPerBuyUsd,
+        alreadyTriggered: triggeredRef.current,
+        busy: cur.busy || startingRef.current,
+      });
+      if (decision.action === "none") {
+        if (decision.reason === "below-min" && decision.amountUsd !== undefined) {
+          setAutoBuy({ kind: "belowMin", amountUsd: decision.amountUsd });
+        }
+        return;
+      }
+      triggeredRef.current.add(decision.key);
+      startingRef.current = true;
+      setAmount(decision.amountUsd.toFixed(2));
+      setBridgeIssue(null);
+      setConversionReady(true);
+      setBalanceTick((n) => n + 1);
+      setAutoBuy({ kind: "received", amountUsd: decision.amountUsd });
+      void buy({
+        provider: cur.provider,
+        account: cur.evmAddress as Address,
+        token: BASE_USDC_ADDRESS,
+        amountUsd: decision.amountUsd,
+      }).finally(() => {
+        startingRef.current = false;
+      });
+    },
+    [buy],
+  );
+
+  const onBridgeComplete = useCallback(
+    (route?: unknown) => {
+      setBridgeIssue(null);
+      setConversionReady(true);
+      setBalanceTick((n) => n + 1);
+      handleDelivery({ source: "event", ...deliveredFromRoute(route) });
+    },
+    [handleDelivery],
+  );
+
+  useUsdcDelivery({
+    enabled: open && bridgeAvailable && connected && canSign && (payMode === "bridge" || swapsUsdt),
+    owner: evmAddress,
+    rpcUrl: SALE_CHAIN.rpcUrl,
+    onDelivery: (delivery) => handleDelivery({ source: "balance", ...delivery }),
+  });
 
   const onSwitchToBase = async () => {
     const ok = await externalWallet?.switchToBase();
@@ -158,6 +242,7 @@ export function BuyForm({
   const resetConversion = () => {
     setConversionReady(false);
     setBridgeIssue(null);
+    setAutoBuy(null);
   };
 
   const supportHref = supportUrlWithLocale(process.env.NEXT_PUBLIC_SUPPORT_TG_URL?.trim() || TELEGRAM, lang);
@@ -245,11 +330,7 @@ export function BuyForm({
             lang={lang}
             toAddressName={t.form.bridgeToAddressName}
             recipient={evmAddress as Address}
-            onBridgeComplete={() => {
-              setBridgeIssue(null);
-              setConversionReady(true);
-              setBalanceTick((n) => n + 1);
-            }}
+            onBridgeComplete={onBridgeComplete}
             onBridgeFailed={setBridgeIssue}
             onBridgeProgress={(info) => setBridgeTx(info.txLink ?? null)}
             testId={id}
@@ -285,14 +366,82 @@ export function BuyForm({
     }
   })();
 
+  const autoBuyLine = !autoBuy
+    ? ""
+    : autoBuy.kind === "belowMin"
+      ? fillCopy(t.form.autoBuyBelowMin, { amount: usd(autoBuy.amountUsd, lang), min: usd(SALE.minPerBuyUsd, lang) })
+      : ["idle", "switching", "approving", "buying", "pending"].includes(status.step)
+        ? fillCopy(t.form.autoBuyReceived, { amount: usd(autoBuy.amountUsd, lang) })
+        : "";
+
   const ctaLabel = !open ? t.form.ctaClosed : connected ? t.form.ctaConnected : t.form.cta;
 
   const body = (
     <div className="space-y-4" data-testid={testId}>
+      {SALE_CHAIN.testnet ? (
+        <p
+          className="rounded-xl border border-amber-500/40 bg-amber-500/5 px-3 py-2 text-xs font-semibold text-ink"
+          data-testid="buy-testnet-note"
+        >
+          {t.form.testnetNote}
+        </p>
+      ) : null}
+      {SALE_CHAIN.faucet ? (
+        <div
+          className="space-y-2 rounded-xl border border-amber-500/40 bg-amber-500/5 px-3 py-2 text-xs text-ink"
+          data-testid="buy-test-mode"
+        >
+          <p className="font-semibold" data-testid="buy-test-mode-note">
+            {t.form.testModeNote}
+          </p>
+          <button
+            type="button"
+            data-testid="buy-faucet"
+            disabled={faucet.busy || (connected && !canSign)}
+            onClick={() => void onFaucetClick()}
+            className="min-h-11 rounded-lg border border-line bg-surface px-4 text-sm font-semibold transition hover:border-brand/40 disabled:cursor-not-allowed disabled:opacity-55"
+          >
+            {t.form.faucetButton}
+          </button>
+          <div aria-live="polite" data-testid="buy-faucet-status">
+            {!connected ? <p>{t.form.faucetNeedWallet}</p> : null}
+            {faucet.status.step === "switching" ? <p>{t.form.faucetSwitching}</p> : null}
+            {faucet.status.step === "minting" ? <p>{t.form.faucetMinting}</p> : null}
+            {faucet.status.step === "pending" ? <p>{t.form.faucetPending}</p> : null}
+            {faucet.status.step === "done" ? (
+              <p>
+                {fillCopy(t.form.faucetDone, { amount: String(FAUCET_AMOUNT_USDC) })}{" "}
+                <a
+                  href={basescanTxUrl(faucet.status.txHash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-brand underline"
+                >
+                  {t.form.viewTx}
+                </a>
+              </p>
+            ) : null}
+            {faucet.status.step === "error" ? (
+              <p className="text-warm" role="alert">
+                {faucet.status.reason === "notConfigured"
+                  ? t.form.faucetNotConfigured
+                  : faucet.status.reason === "switchRejected"
+                    ? t.form.switchRejected
+                    : faucet.status.reason === "txRejected"
+                      ? t.form.txRejected
+                      : fillCopy(t.form.faucetFailed, { reason: faucet.status.detail ?? "" })}{" "}
+                <button type="button" onClick={faucet.reset} className="min-h-11 font-semibold text-brand underline">
+                  {t.form.tryAgain}
+                </button>
+              </p>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
       <div>
         <span className={LABEL}>{t.form.payModeLabel}</span>
         <div className="mt-1.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {(["base", "bridge"] as const).map((mode) => (
+          {((bridgeAvailable ? ["base", "bridge"] : ["base"]) as PayMode[]).map((mode) => (
             <button
               key={mode}
               type="button"
@@ -311,7 +460,7 @@ export function BuyForm({
             </button>
           ))}
         </div>
-        {payMode === "bridge" ? (
+        {payMode === "bridge" && bridgeAvailable ? (
           <>
             <p className="mt-1.5 text-xs text-ink-3">{t.form.bridgeHint}</p>
             <p className="mt-1 text-xs text-ink-3" data-testid="pay-from-networks">{t.form.payFromNetworks}</p>
@@ -321,7 +470,7 @@ export function BuyForm({
         )}
       </div>
 
-      {payMode === "bridge" ? (
+      {payMode === "bridge" && bridgeAvailable ? (
         <div className="space-y-3" data-testid="buy-bridge-panel">
           <p className="text-sm font-semibold text-ink">{t.form.bridgePanelTitle}</p>
           {bridgeWidget("cross-chain", "buy-lifi-widget")}
@@ -385,7 +534,7 @@ export function BuyForm({
             className={FIELD}
           >
             <option value="USDC">USDC</option>
-            <option value="USDT">{directUsdt ? t.form.stableUsdtDirectOption : t.form.stableUsdtOption}</option>
+            {bridgeAvailable || directUsdt ? <option value="USDT">{directUsdt ? t.form.stableUsdtDirectOption : t.form.stableUsdtOption}</option> : null}
           </select>
           {swapsUsdt ? (
             <p data-testid="buy-usdt-note" className="mt-1.5 text-xs text-ink-3">
@@ -499,6 +648,11 @@ export function BuyForm({
       )}
 
       <div aria-live="polite" className="text-sm text-ink" data-testid="buy-status">
+        {autoBuyLine ? (
+          <p className="mb-1 font-semibold" data-testid="buy-autobuy-status">
+            {autoBuyLine}
+          </p>
+        ) : null}
         {statusLine}
         {status.step === "done" ? (
           <>

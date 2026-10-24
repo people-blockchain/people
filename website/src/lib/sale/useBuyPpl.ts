@@ -12,10 +12,9 @@ import {
   type Address,
   type TransactionReceipt,
 } from "viem";
-import { base } from "viem/chains";
 
-import { ensureBaseChain, type EIP1193Provider } from "@/lib/evm/client";
-import { SALE, SALE_HUB_CHAIN, saleContractAddress } from "@/lib/sale/config";
+import { ensureSaleChain, type EIP1193Provider } from "@/lib/evm/client";
+import { SALE, SALE_CHAIN, saleContractAddress } from "@/lib/sale/config";
 import { pplCurveHubAbi } from "@/lib/sale/pplCurveHub.abi";
 
 export type BuyStatus =
@@ -44,7 +43,7 @@ export function classifyBuyError(err: unknown): { reason: BuyErrorReason; detail
     return { reason: "txRejected" };
   }
   if (/minout|min_out|slippage|too little received/i.test(message)) return { reason: "priceMoved" };
-  if (/limit|cooldown|too soon|exceed/i.test(message)) return { reason: "limit" };
+  if (/limit|cooldown|too soon|exceed|abovemax|belowmin/i.test(message)) return { reason: "limit" };
   return { reason: "txFailed", detail: (e?.shortMessage ?? e?.message ?? "").slice(0, 120) };
 }
 
@@ -67,7 +66,7 @@ export function pplOutFromReceipt(receipt: TransactionReceipt, hub: Address): bi
 }
 
 /**
- * Runs the Base purchase: switch to Base → approve exactly the amount (if needed) → buyWith.
+ * Runs the purchase on the sale chain (Base): switch chain → approve exactly the amount (if needed) → buyWith.
  * Only ever called from a user click, and only when the sale is open.
  */
 export async function runBuy(
@@ -82,12 +81,12 @@ export async function runBuy(
   if (!hub) return finish({ step: "error", reason: "txFailed", detail: "sale_not_configured" });
   try {
     onStatus({ step: "switching" });
-    const switched = await ensureBaseChain(params.provider);
+    const switched = await ensureSaleChain(params.provider);
     if (!switched) return finish({ step: "error", reason: "switchRejected" });
 
-    const publicClient = createPublicClient({ chain: base, transport: http(SALE_HUB_CHAIN.rpcUrl) });
+    const publicClient = createPublicClient({ chain: SALE_CHAIN.viemChain, transport: http(SALE_CHAIN.rpcUrl) });
     const walletClient = createWalletClient({
-      chain: base,
+      chain: SALE_CHAIN.viemChain,
       transport: custom(params.provider),
       account: params.account,
     });

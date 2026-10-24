@@ -26,7 +26,8 @@ type BuyLifiBridgeProps = {
   variant?: "cross-chain" | "base-usdt";
   lang?: string;
   toAddressName?: string;
-  onBridgeComplete?: () => void;
+  /** Called with the completed LI.FI route (payload of `RouteExecutionCompleted`). */
+  onBridgeComplete?: (route?: unknown) => void;
   onBridgeFailed?: (reason: "rejected" | "failed") => void;
   onBridgeProgress?: (info: { txLink?: string }) => void;
   testId?: string;
@@ -163,8 +164,8 @@ function BridgeWidgetInner({
 
   useEffect(() => {
     if (!onBridgeComplete) return;
-    const handler = () => {
-      onBridgeComplete();
+    const handler = (route?: unknown) => {
+      onBridgeComplete(route);
     };
     widgetEvents.on(WidgetEvent.RouteExecutionCompleted, handler);
     return () => {
