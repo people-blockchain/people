@@ -25,7 +25,7 @@ const config = {
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
         env: {
-          EVM_RPC_URL: "http://127.0.0.1:9",
+          EVM_RPC_URL: "http://localhost:9",
           AUTH_SECRET: process.env.AUTH_SECRET || randomBytes(32).toString("hex"),
           NO_LIVE_RPC_MODE: "block",
           NODE_OPTIONS: [process.env.NODE_OPTIONS, "--import=./scripts/no-live-rpc.mjs"].filter(Boolean).join(" "),
