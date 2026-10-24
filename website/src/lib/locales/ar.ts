@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const ar: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "شبكة الاختبار PEOPLE v0.1",
     "links": [
       {
         "label": "كيف يعمل",
@@ -42,6 +42,10 @@ export const ar: LocaleContent = {
     "slogan": "ابتكره الناس. من أجل المجتمع.",
     "moreLinks": [
       {
+        "label": "بيع PPL",
+        "href": "/buy"
+      },
+      {
         "label": "خارطة الطريق",
         "href": "/roadmap"
       },
@@ -64,6 +68,10 @@ export const ar: LocaleContent = {
       {
         "label": "الستاكينج",
         "href": "/staking"
+      },
+      {
+        "label": "الحوكمة",
+        "href": "/governance"
       },
       {
         "label": "إنشاء رمز مميز",
@@ -100,7 +108,8 @@ export const ar: LocaleContent = {
     "signIn": "تسجيل الدخول",
     "becomePartner": "كن شريكاً",
     "logoAlt": "بلوك تشين للمجتمع",
-    "brandAria": "الرئيسية بلوك تشين للمجتمع"
+    "brandAria": "الرئيسية بلوك تشين للمجتمع",
+    "buy": "بيع PPL"
   },
   "explainerVideo": {
     "eyebrow": "شاهد",
@@ -1274,5 +1283,21 @@ export const ar: LocaleContent = {
     },
     "storyActiveHumanity": "إنسانية نشطة",
     "storyFeePipeline": "مسار توجيه الرسوم"
+  },
+  "networkMode": {
+    "label": "وضع الشبكة",
+    "mainnet": "الشبكة الرئيسية",
+    "mainnetTitle": "الشبكة الرئيسية: شبكة Base حيث يجري بيع PPL",
+    "testnet": "شبكة الاختبار",
+    "testnetTitle": "شبكة الاختبار: شبكة PEOPLE التجريبية لإنشاء الرموز و NFT"
+  },
+  "a11y": {
+    "skipToContent": "تخطَّ إلى المحتوى",
+    "navPrimary": "التنقل الرئيسي",
+    "navMobile": "قائمة الجوال",
+    "footer": "تذييل الصفحة"
+  },
+  "common": {
+    "englishOnlyBanner": "هذه الصفحة متاحة بالإنجليزية فقط حاليًا."
   }
 };

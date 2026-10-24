@@ -3,7 +3,7 @@
  * Display-only; does not change protocol economics.
  */
 
-import { CURVE, SALE } from "./sale/config";
+import { CURVE, SALE, SELL_BACK } from "./sale/config";
 import { raisedUsd, spotPriceUsd } from "./sale/curve";
 import { MODEL_A_FEE_SPLIT } from "./selling-economics";
 
@@ -61,14 +61,14 @@ export const CIRCULATING_HORIZON_MONTHS = 120;
  */
 export const BONDING_CURVE = {
   supplyPpl: CURVE.supplyPpl,
-  durationDays: SALE.durationDays,
+  saleTermMonths: SALE.saleTermMonths,
   priceStartUsdt: CURVE.startPriceUsd,
   /** Hard ceiling on the curve only; after graduation the market sets price. */
   priceEndUsdt: CURVE.ceilingPriceUsd,
   /** Graduation closes the curve; theoretical max raise if every PPL sold is higher. */
   maxRaiseUsdt: CURVE.graduationRaiseUsd,
   graduationRaiseUsdt: CURVE.graduationRaiseUsd,
-  sellFeePct: SALE.sellFeePct,
+  sellFeePct: SELL_BACK.feePct,
   maxPerBuyUsdt: SALE.maxPerBuyUsd,
   maxPerDayUsdt: SALE.maxPerDayUsd,
   cooldownSeconds: SALE.cooldownSeconds,

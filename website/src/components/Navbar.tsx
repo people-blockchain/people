@@ -239,7 +239,7 @@ export function Navbar() {
     <header className="glass-bar sticky top-0 z-50 border-b border-line">
       <div
         dir="ltr"
-        className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-16 lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
+        className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-[4.5rem] lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
       >
         {/* Brand — lockup + tagline under PEOPLE; localized slogan below the
             whole block, left-aligned with the symbol (footer layout). */}
@@ -298,7 +298,7 @@ export function Navbar() {
             by ~27px when these two were inline there. 2xl (1536px) has real
             room to spare. */}
         <nav
-          aria-label="Primary"
+          aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
         >
           {t.links.map((link) => (
@@ -380,7 +380,7 @@ export function Navbar() {
                 id="mobile-menu"
                 className="fixed inset-x-0 top-14 z-[60] max-h-[calc(100dvh-3.5rem)] overflow-y-auto overscroll-contain border-t border-line bg-canvas pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:hidden"
               >
-                <nav aria-label="Mobile" className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+                <nav aria-label={content[lang].a11y.navMobile} className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
                   <ul className="flex flex-col">
                     {sheetLinks.map((link) => (
                       <li key={link.href}>

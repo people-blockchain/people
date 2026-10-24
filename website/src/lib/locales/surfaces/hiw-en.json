@@ -64,7 +64,7 @@
         "Validators: 200M PPL pool paid 6% / 5% / 5% / 4% of total supply per year (60M, 50M, 50M, 40M) plus 30% of network fees.",
         "Founders, bounties, ambassadors and airdrops: only from the 35% community pool.",
         "From year 5: at most 2% new emission per year, community vote only.",
-        "Founders airdrop first; public sale after 1,000 verified people and a multisig.",
+        "Founders airdrop first; the PPL sale runs on Base and opens once the sale contract and the receiving multisig are published.",
         "Every protocol fee: 30% validators, 25% community pool, 20% treasury, 10% liquidity, 15% Growth Pool, 0% burn."
       ]
     },

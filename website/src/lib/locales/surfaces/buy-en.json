@@ -1,15 +1,17 @@
 {
   "meta": {
     "title": "Buy PPL",
-    "description": "PPL is sold on a public price curve: it starts at $0.005 and rises with every purchase, up to a $0.25 ceiling. The curve closes at $4M raised. Buy and sell at any time."
+    "description": "PPL is sold on a public price curve on Base. The price starts at $0.005 and rises with every purchase. The sale runs until it sells out or for 24 months, whichever comes first. Purchases are final."
   },
   "hero": {
     "eyebrow": "PPL sale",
-    "headline": "Buy PPL at the early-participant price",
-    "sub": "The price rises with every purchase — the earlier you buy, the less you pay.",
-    "statsTitle": "Live on the curve",
+    "headline": "Buy PPL on the public price curve",
+    "sub": "The price follows a public curve and rises as more PPL is sold. Buying earlier means a lower starting price — not a guaranteed profit.",
+    "statsTitle": "On the curve",
     "statsNote": "",
-    "ctaScroll": "How the curve works"
+    "ctaScroll": "How the curve works",
+    "headlineClosed": "The PPL sale opens soon",
+    "statsTitleClosed": "On the curve — opening soon"
   },
   "stats": {
     "price": "Current price",
@@ -19,61 +21,122 @@
     "sold": "PPL sold",
     "soldTarget": "of {supply} on the curve",
     "buyers": "Buyers",
-    "daysLeft": "Days left",
-    "daysLeftTarget": "of {days}",
     "none": "—",
     "notOpenYet": "Not open yet",
-    "progressLabel": "Progress to the {target} graduation"
+    "progressLabel": "Progress to the {target} graduation",
+    "saleStatus": "Sale status",
+    "startPriceOnOpen": "Starting price once it opens: {start}",
+    "saleWindow": "Sale window",
+    "saleWindowValue": "Until sold out or {term}",
+    "saleWindowHint": "Whichever comes first. No extensions.",
+    "endsByHint": "Latest end date. Earlier if it sells out."
   },
   "form": {
     "title": "Buy PPL",
     "amountLabel": "You pay",
-    "amountHint": "USDC, or USDT converted to USDC",
-    "stableLabel": "Stablecoin",
-    "youGet": "You get",
+    "amountHint": "From {min} to {max} per purchase.",
+    "stableLabel": "You pay with",
     "avgPrice": "Average price",
     "priceAfter": "Price after your purchase",
-    "estimate": "",
-    "limitPerBuy": "Up to {amount} per purchase",
-    "limitPerDay": "Up to {amount} per person per day",
-    "cooldown": "{seconds}s between trades",
+    "estimate": "Estimate. The exact amount is confirmed on-chain before you sign.",
+    "limitPerBuy": "{min}–{max} per purchase",
+    "limitPerDay": "Up to {amount} per person in any 24 hours",
+    "cooldown": "{seconds} s pause between purchases",
     "overLimit": "Maximum {amount} in one purchase.",
     "belowMin": "Enter an amount to see your quote.",
-    "cta": "Connect wallet & buy",
-    "ctaDisabled": "Sale is not open yet",
+    "cta": "Connect a wallet to buy",
     "ctaConnected": "Buy PPL",
-    "disabledNote": "",
-    "wallets": "MetaMask · Phantom · Trust Wallet · WalletConnect · Google",
-    "sellBack": "Sell-back from the reserve is for verified users only: each lot needs a 30-day hold, daily limits apply, and a {fee} fee; it closes when the sale graduates.",
+    "wallets": "People Wallet (sign in with Google or email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
     "basePayHint": "The sale runs on Base. Pay with USDC, or with USDT — it's converted to USDC first.",
-    "bridgeHint": "Send USDT or USDC from another network with LI.FI. It arrives as USDC in your wallet on Base, then you complete the purchase below. Supported networks: {chains}.",
-    "stableUsdtOption": "USDT → USDC",
+    "bridgeHint": "Choose your network and token in the widget below. It is swapped to USDC on Base automatically (via LI.FI); then confirm the purchase.",
+    "stableUsdtOption": "USDT (converted to USDC)",
     "usdtConvertHint": "Pay with USDT: it's converted to USDC first, then your purchase goes through in USDC. A small swap fee applies.",
     "usdtSwapTitle": "Convert USDT to USDC",
     "usdtSwapAwaiting": "Convert your USDT above to unlock the buy button.",
     "usdtSwapReady": "Converted. Finish your purchase in USDC below.",
-    "bridgeUsdtHint": "You can pay with USDT or USDC from any listed network. It arrives as USDC in your wallet on Base.",
-    "bridgePanelTitle": "Bridge to Base",
-    "bridgeNeedWallet": "Connect a wallet to receive USDC on Base before bridging.",
+    "bridgePanelTitle": "Swap to USDC on Base",
+    "bridgeNeedWallet": "Connect a wallet first: USDC will arrive at its address on Base.",
     "bridgeReady": "Bridge complete — finish your purchase on Base below.",
     "bridgeAwaiting": "Complete the bridge above to unlock the buy button.",
-    "supportedBridgeChains": "Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, and Solana",
-    "scrollToForm": "Back to the buy form"
+    "scrollToForm": "Back to the buy form",
+    "quoteLine": "You pay {pay} → you get about {ppl} PPL",
+    "previewTitle": "Preview at the starting price",
+    "belowMinAmount": "The minimum is {amount}.",
+    "invalidAmount": "Enter an amount in dollars, for example 25 or 25.50.",
+    "ctaClosed": "Sale not open yet",
+    "openingDate": "Opening date: {date} UTC.",
+    "openingDateTba": "Opening date: to be announced.",
+    "closedNoteAddress": "The sale contract address will be published here first — buy only from that address.",
+    "notifyMe": "Get the opening announcement in Telegram",
+    "stepSwitch": "Switch your wallet to the Base network…",
+    "stepApprove": "Step 1 of 2: allow {amount} {token} in your wallet.",
+    "stepBuy": "Step 2 of 2: confirm the purchase in your wallet.",
+    "stepPending": "Waiting for the Base network to confirm…",
+    "success": "Done. You bought {ppl} PPL.",
+    "viewTx": "View on Basescan",
+    "txRejected": "You cancelled the signature. No money was taken.",
+    "priceMoved": "The price moved by more than 1% before confirmation, so nothing was bought. Check the new quote and try again.",
+    "limitHit": "A sale limit stopped this purchase (per purchase, per 24 hours or the pause between purchases). Nothing was bought.",
+    "txFailed": "The transaction failed: {reason}. No PPL was bought.",
+    "tryAgain": "Try again",
+    "balanceLine": "In your wallet on Base: {balance} {token} · {eth} ETH",
+    "notEnoughToken": "Not enough {token} on Base: you have {have}, you need {need}.",
+    "needGas": "You need a little ETH on Base to pay the network fee (usually about $0.01).",
+    "riskTitle": "Risk warning",
+    "riskBody": "Crypto is risky: the price can fall, you may not be able to sell right away, and purchases cannot be refunded. Only use money you can afford to lose.",
+    "riskMoreToggle": "All risks",
+    "riskMore": "Also: PPL cannot be sent to other people until the full network launch. Sell-back is for verified users only, after a 30-day hold and within daily limits. The sale contract has been reviewed only by AI models; no external audit has been done yet. The project multisig can limit purchases to verified users.",
+    "saleTermsNote": "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
+    "termsAgree": "By buying you agree to the {terms}.",
+    "termsLink": "Terms",
+    "help": "Need help? {support}",
+    "supportLink": "Support",
+    "noWalletHint": "No wallet? Choose Google or email — a People Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
+    "sellBackTerms": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+    "feesTitle": "Fees and timing",
+    "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, or 3% when that day's sell-backs exceed 1% of the reserve.",
+    "timingBody": "A purchase on Base is confirmed within seconds. Payments from other networks usually arrive within 1–20 minutes. Sell-back payouts are made in USDC on Base.",
+    "getUsdc": "No USDC yet? Buy it on an exchange and withdraw it to the Base network, or pay from another network below. You also need a little ETH on Base for fees.",
+    "glossaryBase": "Base is a low-fee network built on Ethereum. USDC and USDT are stablecoins pegged to the US dollar. LI.FI is the service that swaps tokens and moves them between networks.",
+    "phishing": "The only official sale address is shown on this page. The team never asks for your seed phrase and never sends payment links in direct messages.",
+    "stableUsdtDirectOption": "USDT on Base (bridged)",
+    "payFromNetworks": "Works from EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana. TON is not supported.",
+    "bridgeSteps": "Step 1. Swap your tokens to USDC on Base in the widget (usually 1–20 minutes). Step 2. Buy PPL with the button below.",
+    "solanaHint": "Paying from Solana or Tron? You also need an address on Base to receive USDC: connect MetaMask, Trust Wallet or WalletConnect, or sign in with Google.",
+    "bridgeClosed": "Paying from other networks opens together with the sale.",
+    "bridgeStatus": "Swap in progress. Track it on {link}.",
+    "bridgeFailed": "The swap did not complete. Check its status on scan.li.fi or try again.",
+    "bridgeFundsHint": "If the widget says “not enough funds”, top up your wallet on the source network first — otherwise the swap cannot go through.",
+    "bridgeToAddressName": "Your wallet on Base",
+    "wrongNetwork": "The purchase runs on the Base network. Your wallet is on another network.",
+    "switchToBase": "Switch to Base",
+    "switchRejected": "The network was not switched. The purchase needs Base — try again.",
+    "embeddedNoBase": "People Wallet cannot pay on Base yet. To buy, connect MetaMask, Trust Wallet or WalletConnect."
   },
   "whyPriceRises": {
     "title": "Why the price rises",
-    "noManualLead": "The PEOPLE team does not set or raise the price. A public formula in the sale smart contract sets it automatically: each purchase moves the price along the bonding curve. Nobody can change the price manually.",
-    "mechanism": "Same formula-based pricing as Uniswap, Bancor (pioneer, 2017), pump.fun, and Virtuals Protocol on Base: here price = f(tokens sold), transparent and verifiable on chain.",
+    "noManualLead": "The PEOPLE team does not set or raise the price. A public formula in the sale contract sets it automatically: each purchase moves the price along the curve.",
+    "mechanism": "Pricing by a public formula: price depends only on how many PPL have been sold, and anyone can check it on-chain once the contract is published.",
     "example": "From the published curve parameters: {startPrice} per PPL at the start, {midPrice} after {midSold} PPL sold (~{midRaised} raised), and {gradPrice} at graduation ({gradRaised} raised).",
     "explainerLink": "How the bonding curve works",
-    "reserve": "Funds from purchases stay in the sale reserve on Base and are used to buy PPL back from holders — sell-back for verified users after a 30-day hold, subject to daily limits.",
     "chartAria": "PPL sale bonding curve: price versus PPL sold",
     "chartAxisSold": "PPL sold",
     "chartAxisPrice": "Price, $",
-    "chartMarker": "{price} · {sold}"
+    "chartMarker": "{price} · {sold}",
+    "contractPendingNote": "The contract is not published yet. When it is, anyone will be able to check the formula on-chain.",
+    "plainTitle": "In plain words",
+    "plain": [
+      "Bonding curve — a public price formula: the more PPL is sold, the higher the price.",
+      "Graduation — the moment $4M is raised: the curve closes and a public PPL pool opens.",
+      "LP tokens are locked for 24 months: nobody can withdraw the pool's money during that time.",
+      "Multisig — a wallet where several people must approve every payment.",
+      "DEX pool — an open exchange pool where anyone can trade PPL.",
+      "A lot is one purchase; the 30 days count from each purchase. Verified means you have proved once that you are a unique person (Human Passport or Telegram) — {howItWorks}. The reserve is the USDC held in the sale contract; sell-backs are paid from it.",
+      "Sell-back means you sell PPL to the reserve. Buyback means the project buys PPL with fee income. These are two different things."
+    ]
   },
   "curve": {
     "eyebrow": "The formula",
@@ -93,27 +156,28 @@
     "feedBuy": "Buy",
     "feedSell": "Sell",
     "feedLink": "View",
-    "capScope": "The {ceiling} cap applies during the curve sale only. After graduation to the pool the price is set by the free market — no upper limit and no lower limit."
+    "capScope": "The {ceiling} cap applies during the curve sale only. After graduation the pool price is set by the free market, with no upper limit and no lower limit — the price can fall a long way, even close to zero.",
+    "formulaToggle": "For the curious: the formula"
   },
   "whatYouGet": {
     "eyebrow": "What you get",
     "title": "What a purchase actually gives you",
     "items": [
       {
-        "title": "PPL on your address, immediately",
-        "body": "PPL is recorded to you on the People network the moment you buy. No lock-up on the curve, no waiting list."
+        "title": "PPL on your address right away",
+        "body": "PPL is credited to your address right away, but you cannot send it to others until the full network launch. Sell-back is possible only for verified users, 30 days after each purchase."
       },
       {
-        "title": "Sell-back from the reserve",
-        "body": "Verified users can sell PPL back to the reserve after a 30-day hold per lot, within daily limits and a {fee} fee. Sell-back closes when the sale graduates. Payouts are in {payoutStable} on {payoutNetwork}."
+        "title": "Sell-back to the reserve",
+        "body": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
       },
       {
         "title": "Transfers open with the full network launch",
-        "body": "Sending PPL to other people and trading in the pool start at full mainnet: {verified} verified participants, and no later than {months} months."
+        "body": "Sending PPL to other people and trading in the pool start at the full network launch, once {verified} verified participants have joined."
       },
       {
         "title": "At {graduation} the curve closes",
-        "body": "{liquidityShare} of the raise plus PPL at the last curve price seed a public pool whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend."
+        "body": "While the sale runs, purchase money stays in the sale reserve on Base and pays for sell-backs. At graduation {liquidityShare} goes into the public pool together with PPL at the last curve price (LP tokens locked for {lockPeriod}), and {multisigShare} goes to the project multisig, with public reporting on every spend."
       }
     ]
   },
@@ -123,19 +187,19 @@
     "steps": [
       {
         "title": "The curve",
-        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Buy and sell at any time, for up to {days} days."
+        "body": "{supply} PPL on a public curve from {start} up to a {ceiling} ceiling. Anyone can buy while the sale is open: until the curve closes at {graduation} raised or {term} after opening, whichever comes first. No extensions."
       },
       {
         "title": "Graduation at {graduation}",
-        "body": "The curve stops. {liquidityShare} of the raise plus PPL at the last curve price go into a public DEX pool at exactly that price, with no jump. LP locked for {lock} months. {multisigShare} to the multisig with public reporting."
+        "body": "The curve stops. {liquidityShare} of the raise plus PPL at the last curve price go into a public DEX pool at exactly that price, with no jump. LP tokens are locked for {lockPeriod}. {multisigShare} goes to the project multisig with public reporting. Sell-back closes."
       },
       {
-        "title": "Full mainnet",
-        "body": "PPL transfers between wallets and pool trading open at {verified} verified participants, and no later than {months} months."
+        "title": "Full network launch",
+        "body": "PPL transfers between wallets and pool trading open at the full network launch, once {verified} verified participants have joined."
       },
       {
-        "title": "After {days} days",
-        "body": "If {graduation} is not reached, the same {liquidityShare}/{multisigShare} split applies to whatever was raised, and every unsold PPL goes to the community pool."
+        "title": "If not sold out: {term} after opening",
+        "body": "If the curve has not closed by then, the sale ends and is not extended. Unsold PPL goes to the Community Pool. Money already paid is not refunded."
       }
     ]
   },
@@ -143,20 +207,31 @@
     "eyebrow": "Transparency",
     "title": "The contract, the money and the code",
     "lead": "The sale contract, where the money from the sale goes, the security reviews the code has been through, and how the team's own tokens unlock.",
-    "saleContract": "Sale contract",
-    "saleContractPending": "The contract address will be listed here before the sale opens.",
-    "saleContractNote": "",
+    "saleContract": "Sale contract (PplCurveHub on Base)",
+    "saleContractPending": "Sale contract: PplCurveHub on Base (chain ID 8453). Not published yet — the address and a block-explorer link will appear here before the sale opens.",
     "verifiedSource": "Verified source",
     "auditTitle": "Security reviews",
-    "auditLine": "Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1",
-    "explorerLink": "Open in the People explorer",
+    "auditLine": "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet.",
+    "explorerLink": "Open on Basescan",
     "allocationTitle": "Where the 1B PPL goes",
     "allocationNote": "Fixed supply of {supply} PPL. The sale bucket is the {salePct} on the curve.",
     "vestingTitle": "Team vesting",
-    "vestingBody": "For the first {cliff} months the team receives no tokens at all. After that the tokens unlock gradually, every month, over {linear} more months — {total} months in total.",
+    "vestingBody": "Team vesting starts at the full network launch: for the first {cliffPeriod} the team receives no tokens, then they unlock monthly over {linearPeriod} — {totalPeriod} in total.",
     "fundsTitle": "Where the money from the sale goes",
-    "fundsBody": "{liquidityShare} of the raise goes into the liquidity pool, whose LP tokens are locked for {lock} months. The other {multisigShare} goes to the project multisig, with public reporting on every spend.",
-    "auditBounty": "Bug bounty: report a vulnerability from the bug button on any page."
+    "fundsBody": "While the sale runs, purchase money stays in the sale reserve on Base and pays for sell-backs. At graduation {liquidityShare} goes into the public pool together with PPL at the last curve price (LP tokens locked for {lockPeriod}), and {multisigShare} goes to the project multisig, with public reporting on every spend.",
+    "auditBounty": "Bug bounty: report a vulnerability with the bug button on any page.",
+    "reviewReports": "Review reports: {links}",
+    "addressesTitle": "Addresses on Base",
+    "addrHub": "Sale contract (PplCurveHub)",
+    "addrPpl": "PPL token",
+    "addrMultisig": "Project multisig",
+    "addrMultisigThreshold": "{m} of {n} signatures",
+    "addrUsdc": "USDC on Base",
+    "addrUsdt": "USDT on Base (bridged)",
+    "addrPending": "Published here before the sale opens",
+    "copy": "Copy",
+    "copied": "Copied",
+    "adminPowers": "The project multisig can switch purchases to verified-only mode (for example during a bot attack). Then unverified users cannot buy until it is switched off."
   },
   "faq": {
     "eyebrow": "FAQ",
@@ -164,24 +239,29 @@
     "items": [
       {
         "q": "Can I sell PPL back?",
-        "a": "Verified users only: 30-day hold per lot, daily limits, and a {fee} fee. Sell-back closes when the sale graduates."
+        "a": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",
-        "a": "No. It applies while the curve is running. The curve closes at {graduation} raised, around {graduationPrice} per PPL, below the cap. After graduation the pool price is set by the free market, with no upper limit and no lower limit."
+        "a": "No. It applies while the curve is running. The curve closes at {graduation} raised, around {graduationPrice} per PPL, below the cap. After graduation the pool price is set by the free market, with no upper and no lower limit — it can fall a long way, even close to zero."
       },
       {
-        "q": "How do I add the People network to my wallet?",
-        "a": "Use the button below: your wallet is asked to add the PEOPLE network with the official parameters and then switch to it. You can also enter the same values manually from the published network documentation."
+        "q": "Do I need the People network in my wallet?",
+        "a": "No. The sale runs on Base only: you pay in USDC or USDT on Base. The People network is separate and is not needed to buy."
       },
       {
         "q": "When can I send PPL to someone else?",
-        "a": "At the full network launch: {verified} verified participants, and no later than {months} months. Buying and selling on the curve works from day one."
+        "a": "At the full network launch, once {verified} verified participants have joined. Until then you can buy while the sale is open; selling back is limited: verified users only, 30 days after each purchase, within daily limits, until graduation."
+      },
+      {
+        "q": "Can I get a refund?",
+        "a": "No. All purchases are final: there are no refunds. The sale cannot be extended; unsold PPL goes to the Community Pool."
+      },
+      {
+        "q": "Which networks can I pay from?",
+        "a": "On Base — in USDC or USDT. From other networks — through the built-in automatic swap (LI.FI): EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana work. TON is not supported."
       }
     ],
-    "addNetworkCta": "Add People network to wallet",
-    "addNetworkDone": "Request sent to your wallet",
-    "addNetworkError": "Your wallet refused or no wallet was found.",
     "pumpTitle": "What goes wrong on curves without a ceiling",
     "pumpLead": "Bonding curves became popular through launchpads like pump.fun. These are their known problems, and what we do instead.",
     "pumpCols": [
@@ -193,42 +273,44 @@
       {
         "problem": "Late buyers overpay",
         "what": "The price runs up without limit, so the last buyers before graduation pay many times what the first did.",
-        "ours": "A hard {ceiling} ceiling, and the curve closes at {graduation} — around {graduationPrice}."
+        "ours": "The price still rises: at graduation it is about 32 times the starting price, so late buyers pay more than early ones. The curve closes at {graduation}, around {graduationPrice}, below the {ceiling} cap."
       },
       {
-        "problem": "Snipers and bots",
+        "problem": "Bots buying first",
         "what": "Scripts buy in the first seconds from many wallets, then sell to real people.",
-        "ours": "Up to {perBuy} per purchase, {perDay} per person per day, and a {cooldown}-second pause between trades. If bots show up, the multisig can switch on a verified-only mode."
+        "ours": "Up to {perBuy} per purchase, {perDay} per person in any 24 hours, and a {cooldown}-second pause between purchases. Per-account limits make it harder to build a large position quickly; they cannot rule out one person using several wallets."
       },
       {
-        "problem": "Dumps",
+        "problem": "Large sell-offs",
         "what": "Large holders sell everything at once and crash the price.",
-        "ours": "Per-person limits stop anyone building a large position. The {fee} sell fee goes to PPL buyback, and pool liquidity is locked for {lock} months."
+        "ours": "Sell-back is capped at 2% of the reserve per day for everyone and $2,000 per person per day. The sell-back fee goes to the PPL buyback by the project (a separate mechanism), and pool liquidity is locked for {lockPeriod}."
       },
       {
-        "problem": "Front-running and bad fills",
+        "problem": "Worse price than shown",
         "what": "A trade fills at a price much worse than the one you were shown.",
-        "ours": "Slippage protection on every trade: a minimum received, or the transaction is cancelled."
+        "ours": "Slippage protection: if the price moves against you by more than 1% before your purchase is confirmed, the transaction is cancelled."
       },
       {
-        "problem": "Hype listings",
+        "problem": "Listings pushed by hype",
         "what": "The token is pushed onto exchanges in the middle of the sale.",
-        "ours": "No listings during the sale. DEX trading only after graduation."
+        "ours": "No listings during the sale. Pool trading starts at the full network launch."
       }
     ]
   },
   "bottomCta": {
-    "eyebrow": "Ready",
-    "title": "Buy PPL at today's curve price",
-    "lead": "Same form, same single price for everyone.",
-    "scrollToForm": "Back to the buy form"
+    "eyebrow": "Ready?",
+    "title": "Buy PPL at the current curve price",
+    "lead": "Same form, same price curve for everyone.",
+    "scrollToForm": "Back to the buy form",
+    "titleClosed": "The sale opens soon",
+    "leadClosed": "On opening day the current price will appear here."
   },
   "sticky": {
     "label": "Buy PPL",
     "price": "from {price}"
   },
   "footnote": {
-    "title": "Small print",
+    "title": "Notes",
     "notes": [
       {
         "marker": "*",
@@ -240,7 +322,7 @@
       },
       {
         "marker": "***",
-        "text": "The AI-assisted reviews named above were carried out by the project team. They are not an audit by an external audit firm; a third-party security audit is completed before mainnet. A bug bounty reduces risk but does not remove it: no review can prove software free of defects."
+        "text": "The AI-assisted reviews named above were run by the project team. They are not a security audit, and no external audit has been done yet. A bug bounty reduces risk but does not remove it: no review can prove software free of defects."
       }
     ]
   }

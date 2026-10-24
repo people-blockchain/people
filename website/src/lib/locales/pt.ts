@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const pt: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Rede de testes PEOPLE v0.1",
     "links": [
       {
         "label": "Como funciona",
@@ -42,7 +42,11 @@ export const pt: LocaleContent = {
     "slogan": "Criado por pessoas. Para a comunidade.",
     "moreLinks": [
       {
-        "label": "Roadmap",
+        "label": "Venda de PPL",
+        "href": "/buy"
+      },
+      {
+        "label": "Roteiro",
         "href": "/roadmap"
       },
       {
@@ -64,6 +68,10 @@ export const pt: LocaleContent = {
       {
         "label": "Staking",
         "href": "/staking"
+      },
+      {
+        "label": "Governança",
+        "href": "/governance"
       },
       {
         "label": "Criar um token",
@@ -100,7 +108,8 @@ export const pt: LocaleContent = {
     "signIn": "Entrar",
     "becomePartner": "Tornar-se parceiro",
     "logoAlt": "Blockchain para a comunidade",
-    "brandAria": "Início do Blockchain para a comunidade"
+    "brandAria": "Início do Blockchain para a comunidade",
+    "buy": "Venda de PPL"
   },
   "explainerVideo": {
     "eyebrow": "Assistir",
@@ -1274,5 +1283,21 @@ export const pt: LocaleContent = {
     "logoAlt": "Blockchain para a comunidade",
     "privacyLink": "Política de Privacidade",
     "termsLink": "Termos de Serviço"
+  },
+  "networkMode": {
+    "label": "Modo de rede",
+    "mainnet": "Rede principal",
+    "mainnetTitle": "Rede principal: a rede Base, onde acontece a venda de PPL",
+    "testnet": "Rede de testes",
+    "testnetTitle": "Rede de testes: a rede de testes PEOPLE para criar tokens e NFTs"
+  },
+  "a11y": {
+    "skipToContent": "Pular para o conteúdo",
+    "navPrimary": "Navegação principal",
+    "navMobile": "Menu móvel",
+    "footer": "Rodapé"
+  },
+  "common": {
+    "englishOnlyBanner": "Por enquanto, esta página está disponível apenas em inglês."
   }
 };

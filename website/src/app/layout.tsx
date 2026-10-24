@@ -10,6 +10,7 @@ import {
   themeFromCookieValue,
 } from "@/lib/preferences";
 import { languageFromRequest } from "@/lib/locale-detect";
+import { content } from "@/lib/content";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { WalletProvider } from "@/context/WalletContext";
@@ -158,7 +159,7 @@ export default async function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-ink"
         >
-          Skip to content
+          {content[lang].a11y.skipToContent}
         </a>
         <ThemeProvider initialTheme={theme}>
         <LanguageProvider>
@@ -183,8 +184,12 @@ export default async function RootLayout({
           </WalletProvider>
         </LanguageProvider>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+        {process.env.NEXT_PUBLIC_VERCEL_ANALYTICS === "1" ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

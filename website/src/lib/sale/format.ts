@@ -23,19 +23,37 @@ export function intlLocale(lang: string): string {
   return LOCALE_BY_LANG[lang] ?? "en-US";
 }
 
-/** Whole dollars, e.g. `$4,000,000`. */
+/** Currency sign placement per language: `$` prefix, `US$` prefix, or `$` suffix. */
+const NBSP = "\u00a0";
+const CURRENCY_STYLE: Record<string, { prefix?: string; suffix?: string }> = {
+  pt: { prefix: `US$${NBSP}` },
+  es: { prefix: `US$${NBSP}` },
+  id: { prefix: "US$" },
+  tr: { prefix: "US$" },
+  fr: { suffix: `${NBSP}$` },
+  de: { suffix: `${NBSP}$` },
+};
+
+function withCurrency(numberText: string, lang: string): string {
+  const style = CURRENCY_STYLE[lang] ?? { prefix: "$" };
+  return `${style.prefix ?? ""}${numberText}${style.suffix ?? ""}`;
+}
+
+function compactNumber(amount: number, lang: string): string {
+  return new Intl.NumberFormat(intlLocale(lang), {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+/** Whole dollars, e.g. `$4,000,000` (thousands separators in every language). */
 export function usd(amount: number, lang = "en"): string {
-  return `$${Math.round(amount).toLocaleString(intlLocale(lang))}`;
+  return withCurrency(Math.round(amount).toLocaleString(intlLocale(lang), { useGrouping: true }), lang);
 }
 
 /** Compact dollars for axis labels and markers, e.g. `$1M`, `$500K`. */
 export function usdCompact(amount: number, lang = "en"): string {
-  if (amount >= 1_000_000) {
-    const m = amount / 1_000_000;
-    return `$${(Number.isInteger(m) ? m : Number(m.toFixed(2))).toLocaleString(intlLocale(lang))}M`;
-  }
-  if (amount >= 1_000) return `$${Math.round(amount / 1_000)}K`;
-  return usd(amount, lang);
+  return withCurrency(compactNumber(amount, lang), lang);
 }
 
 /**
@@ -43,46 +61,51 @@ export function usdCompact(amount: number, lang = "en"): string {
  * decimals keep every milestone distinguishable without noise.
  */
 export function pricePerPpl(price: number, lang = "en"): string {
-  return `$${price.toLocaleString(intlLocale(lang), {
-    minimumFractionDigits: price < 0.01 ? 4 : 2,
-    maximumFractionDigits: 4,
-  })}`;
+  return withCurrency(
+    price.toLocaleString(intlLocale(lang), {
+      minimumFractionDigits: price < 0.01 ? 4 : 2,
+      maximumFractionDigits: 4,
+      useGrouping: true,
+    }),
+    lang,
+  );
 }
 
 /** Whole PPL, e.g. `1,234,567 PPL` (caller adds the ticker). */
 export function ppl(amount: number, lang = "en"): string {
-  return Math.round(amount).toLocaleString(intlLocale(lang));
+  return Math.round(amount).toLocaleString(intlLocale(lang), { useGrouping: true });
 }
 
-/** Compact PPL for stats and markers, e.g. `88.83M`. */
+/** Compact PPL for stats and markers, e.g. `55.66M` / `55,66 млн`. */
 export function pplCompact(amount: number, lang = "en"): string {
-  if (amount >= 1_000_000) {
-    return `${(amount / 1_000_000).toLocaleString(intlLocale(lang), {
-      maximumFractionDigits: 2,
-    })}M`;
-  }
-  if (amount >= 1_000) return `${Math.round(amount / 1_000)}K`;
-  return ppl(amount, lang);
+  return compactNumber(amount, lang);
 }
 
-/** Tighter PPL compact for small chart callouts (one decimal on millions). */
+/** Compact PPL for chart callouts — same two-decimal format as everywhere else. */
 export function pplCompactChart(amount: number, lang = "en"): string {
-  if (amount >= 1_000_000) {
-    return `${(amount / 1_000_000).toLocaleString(intlLocale(lang), {
-      maximumFractionDigits: 1,
-    })}M`;
-  }
-  return pplCompact(amount, lang);
+  return compactNumber(amount, lang);
 }
 
+/** Percent in the language's own style (`1.5%`, `1,5 %`, `%1,5`). */
 export function pct(value: number, lang = "en"): string {
-  return `${value.toLocaleString(intlLocale(lang), { maximumFractionDigits: 1 })}%`;
+  return new Intl.NumberFormat(intlLocale(lang), {
+    style: "percent",
+    maximumFractionDigits: 1,
+  }).format(value / 100);
+}
+
+/** A number of months in the right plural form: `24 months`, `24 месяца`, `6 месяцев`. */
+export function formatMonths(months: number, lang = "en"): string {
+  return new Intl.NumberFormat(intlLocale(lang), {
+    style: "unit",
+    unit: "month",
+    unitDisplay: "long",
+  }).format(months);
 }
 
 /**
  * Joins names into one phrase the way the locale does it — `a, b and c` in EN,
- * `a, b и c` in RU. Used for the audit list, so the models the copy names are
- * always exactly the ones in `AI_AUDITS`.
+ * `a, b и c` in RU.
  */
 export function listCopy(items: readonly string[], lang = "en"): string {
   try {

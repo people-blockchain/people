@@ -11,7 +11,7 @@
  * and fill in the two TODOs below. The shape the page consumes does not change.
  */
 
-import { SALE, explorerTxUrl, saleContractAddress } from "./config";
+import { SALE, basescanTxUrl, saleContractAddress } from "./config";
 import { spotPriceUsd } from "./curve";
 
 export type SaleStatus =
@@ -37,7 +37,8 @@ export type SaleStats = {
   /** Sale start, ISO-8601, or `null` before the sale opens. */
   startedAt: string | null;
   /** Whole days left in the 180-day window, or `null`. */
-  daysLeft: number | null;
+  /** ISO end of the sale term (opening + 24 calendar months), or null before opening. */
+  endsAt: string | null;
 };
 
 export type SaleTrade = {
@@ -62,7 +63,7 @@ export const EMPTY_SALE_STATS: SaleStats = {
   spotPriceUsd: null,
   buyers: null,
   startedAt: null,
-  daysLeft: null,
+  endsAt: null,
 };
 
 /** Optional indexer endpoint; unset today. */
@@ -83,12 +84,13 @@ function numberOrNull(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
-function daysLeftFrom(startedAt: string | null): number | null {
+function endsAtFrom(startedAt: string | null): string | null {
   if (!startedAt) return null;
-  const start = Date.parse(startedAt);
-  if (Number.isNaN(start)) return null;
-  const endsAt = start + SALE.durationDays * 24 * 60 * 60 * 1000;
-  return Math.max(0, Math.ceil((endsAt - Date.now()) / (24 * 60 * 60 * 1000)));
+  const start = new Date(startedAt);
+  if (Number.isNaN(start.getTime())) return null;
+  const end = new Date(start.getTime());
+  end.setUTCMonth(end.getUTCMonth() + SALE.saleTermMonths);
+  return end.toISOString();
 }
 
 /** Normalises whatever the indexer returned into `SaleStats`. Exported for tests. */
@@ -103,7 +105,7 @@ export function toSaleStats(contractAddress: string, raw: RawStats): SaleStats {
     spotPriceUsd: soldPpl === null ? null : spotPriceUsd(soldPpl),
     buyers: numberOrNull(raw.buyers),
     startedAt,
-    daysLeft: daysLeftFrom(startedAt),
+    endsAt: endsAtFrom(startedAt),
   };
 }
 
@@ -148,9 +150,9 @@ function shortenAddress(address: string): string {
   return a.length > 12 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a;
 }
 
-/** Explorer link for a hub transaction — the People network explorer, in-app. */
+/** Explorer link for a hub transaction on Basescan. */
 export function tradeExplorerUrl(txHash: string): string {
-  return explorerTxUrl(txHash);
+  return basescanTxUrl(txHash);
 }
 
 /** Exported for tests: maps an indexer row to the row the feed renders. */

@@ -51,14 +51,18 @@ test("the treasury is a 2-of-3 multisig created before mainnet, with no address 
   assert.match(copy, /2-of-3/, "the approved 2-of-3 threshold must be stated");
   assert.match(copy, /2-из-3/, "the approved 2-of-3 threshold must be stated (RU)");
   assert.doesNotMatch(copy, /0x[0-9a-fA-F]{6,}/, "no address may appear on this page yet");
-  assert.match(copy, /created before mainnet/);
-  assert.match(copy, /создаваемый до mainnet/);
+  assert.match(copy, /2-of-3 multisig on the People network/);
+  assert.doesNotMatch(copy, /created before mainnet/);
+  assert.match(copy, /мультисиг 2 из 3 в сети People/);
 });
 
 test("the audit names three AI models and never claims an external audit passed", () => {
   const copy = sectionBodies();
-  assert.match(copy, /Audited by: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
-  assert.match(copy, /Аудит: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
+  assert.match(copy, /Reviewed by AI models: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
+  assert.match(copy, /This is not a security audit/);
+  assert.doesNotMatch(copy, /Audited by/);
+  assert.match(copy, /Проверено ИИ-моделями: Claude Opus 5\.5, GPT Astra, Fable 5\.1/);
+  assert.doesNotMatch(copy, /Аудит: /);
   assert.match(copy, /Bug bounty:/);
   assert.match(copy, /Баг-баунти:/);
   assert.doesNotMatch(copy, /Sonnet|Opus 5[^.]/);

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
 import { useLanguage } from "@/context/LanguageContext";
@@ -9,8 +8,7 @@ import type { SaleTrade } from "@/lib/sale/adapter";
 import { intlLocale, pplCompact, usd } from "@/lib/sale/format";
 
 /**
- * Recent buys and sells from the chain adapter, each linking into the People
- * network explorer (`PEOPLE_EXPLORER.base`) — an in-app route, same tab.
+ * Recent buys and sells from the chain adapter, each linking to the transaction on Basescan.
  * The adapter returns nothing until the sale contract exists, so the empty
  * state — not a sample row — is what ships today.
  */
@@ -49,13 +47,15 @@ export function TradeFeed({ trades }: { trades: SaleTrade[] }) {
                   {usd(trade.usd, lang)}
                   <span className="block text-ink-3">{pplCompact(trade.ppl, lang)} PPL</span>
                 </span>
-                <Link
+                <a
                   href={trade.explorerUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={`${t.curve.feedLink} — ${new Date(trade.at).toLocaleString(intlLocale(lang))}`}
                   className="text-ink-3 transition-colors hover:text-brand"
                 >
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
+                </a>
               </div>
             </li>
           ))}

@@ -15,7 +15,7 @@ import {
   browserEvmRpcUrl,
   createBrowserPublicClient,
   createEmbeddedWalletClient,
-  ensurePeopleChain,
+  ensureBaseChain,
   peopleViemChain,
   readInjectedProvider,
   waitForInjectedProvider,
@@ -32,6 +32,7 @@ import {
   type WalletAppVendor,
 } from "@/lib/mobile-env";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
+import { SALE_HUB_CHAIN } from "@/lib/sale/config";
 import { PeopleMobileProvider } from "@/lib/mobile-wallet/browser";
 import type { MobileSession } from "@/lib/mobile-wallet/service";
 
@@ -45,8 +46,23 @@ export type ActiveEvmSigner = {
   provider?: EIP1193Provider;
 };
 
+const BASE_CHAIN_ID = SALE_HUB_CHAIN.chainId;
+
+function parseChainId(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value !== "string") return null;
+  const n = value.startsWith("0x") ? parseInt(value, 16) : Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
 interface ExternalWalletContextValue {
   signer: ActiveEvmSigner | null;
+  /** Chain id the connected external wallet is on (null if unknown or embedded). */
+  chainId: number | null;
+  /** Asks the wallet to switch to Base (adds it if needed). Resolves false if declined. */
+  switchToBase: () => Promise<boolean>;
+  /** Lets the wallet dialog hide itself while the WalletConnect QR is shown, and reopen on failure. */
+  setWalletConnectHooks: (hooks: { onOpen?: () => void; onFailed?: () => void }) => void;
   connectInjected: (vendor?: InjectedWalletVendor) => Promise<void>;
   connectWalletConnect: () => Promise<void>;
   connectEmbedded: () => void;
@@ -59,6 +75,9 @@ const ExternalWalletContext = createContext<ExternalWalletContextValue | null>(n
 export function ExternalWalletProvider({ children }: { children: ReactNode }) {
   const { session } = useWallet();
   const [signer, setSigner] = useState<ActiveEvmSigner | null>(null);
+  const [chainId, setChainId] = useState<number | null>(null);
+  const onWalletConnectOpenRef = useRef<(() => void) | null>(null);
+  const onWalletConnectFailedRef = useRef<(() => void) | null>(null);
   const activeMobileProvider = useRef<PeopleMobileProvider | null>(null);
   const connectPeopleMobile = useCallback((session: MobileSession, browserToken: string) => {
     const expiry = Date.parse(session.expiresAt);
@@ -82,15 +101,21 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     const { EthereumProvider } = await import("@walletconnect/ethereum-provider");
     const provider = await EthereumProvider.init({
       projectId,
-      // Mobile wallets reject sessions whose required chain they do not know; Ethereum is the
-      // required chain and the People chain is optional (added afterwards by ensurePeopleChain).
-      chains: [1],
-      optionalChains: [97401],
+      // The sale runs on Base, so Base is the required chain. Ethereum and the People chain are
+      // optional (the People chain is only used by explicit actions such as the multisig panel).
+      chains: [8453],
+      optionalChains: [1, 97401],
       showQrModal: true,
       rpcMap: { 97401: DEFAULT_EVM_RPC_URL },
     });
-    await provider.enable();
-    await ensurePeopleChain(provider as unknown as EIP1193Provider);
+    // Let the caller hide the site dialog so the WalletConnect QR is not stacked underneath it.
+    onWalletConnectOpenRef.current?.();
+    try {
+      await provider.enable();
+    } catch (error) {
+      onWalletConnectFailedRef.current?.();
+      throw error;
+    }
     const accounts = provider.accounts as Address[];
     setSigner({
       kind: "walletconnect",
@@ -129,12 +154,9 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     // declined or unsupported (MetaMask Mobile often rejects add/switch until the chain is in
     // its list). Writes re-check the chain through viem and report a wrong network clearly;
     // failing the whole connect here is what made "Connect MetaMask" look broken.
+    // Connecting never switches the network: the sale needs Base, and Base is requested only when
+    // the user presses "Buy" or "Switch to Base".
     setSigner({ kind: "injected", address, provider });
-    try {
-      await ensurePeopleChain(provider);
-    } catch (err) {
-      console.warn("[wallet] People network switch not completed", err);
-    }
   }, [connectWalletConnect]);
 
   // Restore a previously authorized injected connection silently (no prompt) — covers both a
@@ -149,7 +171,6 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
         const accounts = (await provider.request({ method: "eth_accounts" })) as Address[];
         const address = accounts[0];
         if (!active || !address) return;
-        await ensurePeopleChain(provider).catch(() => {});
         if (!active) return;
         setSigner((prev) => prev ?? { kind: "injected", address, provider });
       } catch {
@@ -176,9 +197,13 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
       }
       setSigner((prev) => (prev && prev.kind === "injected" ? { ...prev, address: next } : prev));
     };
-    const onChainChanged = () => {
-      void ensurePeopleChain(provider).catch(() => {});
+    const onChainChanged = (...args: unknown[]) => {
+      setChainId(parseChainId(args[0]));
     };
+    void provider
+      .request({ method: "eth_chainId" })
+      .then((id) => setChainId(parseChainId(id)))
+      .catch(() => setChainId(null));
     try {
       provider.on("accountsChanged", onAccountsChanged);
       provider.on("chainChanged", onChainChanged);
@@ -212,9 +237,51 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     return () => { provider.removeListener("disconnect", ended); provider.stopMonitoring(); };
   }, [signer]);
 
+  // Chain of the connected external wallet (null for embedded / unknown).
+  useEffect(() => {
+    const provider = signer && signer.kind !== "embedded" ? signer.provider : undefined;
+    if (!provider) {
+      setChainId(null);
+      return;
+    }
+    if (signer?.kind === "injected") return; // handled by the listener effect above
+    let active = true;
+    void provider
+      .request({ method: "eth_chainId" })
+      .then((id) => active && setChainId(parseChainId(id)))
+      .catch(() => active && setChainId(null));
+    const onChain = (...args: unknown[]) => setChainId(parseChainId(args[0]));
+    try {
+      provider.on?.("chainChanged", onChain);
+    } catch {
+      /* provider without events */
+    }
+    return () => {
+      active = false;
+      try {
+        provider.removeListener?.("chainChanged", onChain);
+      } catch {
+        /* provider went away */
+      }
+    };
+  }, [signer]);
+
+  const switchToBase = useCallback(async (): Promise<boolean> => {
+    const provider = signer && signer.kind !== "embedded" ? signer.provider : undefined;
+    if (!provider) return false;
+    const ok = await ensureBaseChain(provider);
+    if (ok) setChainId(BASE_CHAIN_ID);
+    return ok;
+  }, [signer]);
+
+  const setWalletConnectHooks = useCallback((hooks: { onOpen?: () => void; onFailed?: () => void }) => {
+    onWalletConnectOpenRef.current = hooks.onOpen ?? null;
+    onWalletConnectFailedRef.current = hooks.onFailed ?? null;
+  }, []);
+
   const value = useMemo(
-    () => ({ signer, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect }),
-    [signer, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect]
+    () => ({ signer, chainId, switchToBase, setWalletConnectHooks, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect }),
+    [signer, chainId, switchToBase, setWalletConnectHooks, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect]
   );
 
   return <ExternalWalletContext.Provider value={value}>{children}</ExternalWalletContext.Provider>;

@@ -4,8 +4,8 @@ import { Coins, Lock, RefreshCw, Send } from "lucide-react";
 
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
-import { CURVE, PAYOUT_DEFAULT, SALE } from "@/lib/sale/config";
-import { fillCopy, usdCompact } from "@/lib/sale/format";
+import { CURVE, SALE } from "@/lib/sale/config";
+import { fillCopy, formatMonths, usdCompact } from "@/lib/sale/format";
 
 import { FootnoteRef } from "./SmallPrint";
 
@@ -20,15 +20,11 @@ export function WhatYouGet() {
   const t = buyCopy[lang];
 
   const vars = {
-    fee: `${SALE.sellFeePct}%`,
-    payoutStable: PAYOUT_DEFAULT.stable,
-    payoutNetwork: PAYOUT_DEFAULT.networkLabel,
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
-    months: SALE.fullMainnetMaxMonths,
     graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
     liquidityShare: `${SALE.liquiditySharePct}%`,
     multisigShare: `${SALE.multisigSharePct}%`,
-    lock: SALE.lpLockMonths,
+    lockPeriod: formatMonths(SALE.lpLockMonths, lang),
   };
 
   return (

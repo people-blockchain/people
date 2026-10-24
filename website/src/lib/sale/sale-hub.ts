@@ -2,7 +2,7 @@
  * Base-only sale hub configuration (PplCurveHub on Base).
  * Cross-chain funding uses the LI.FI widget on `/buy`, not per-chain sale contracts.
  *
- * USDT is accepted on the page only via a LI.FI swap to USDC.
+ * USDT is paid directly only if the hub lists it in `stables`; otherwise it is swapped to USDC via LI.FI.
  */
 
 import saleEvm from "@/data/ppl-sale-evm.json" with { type: "json" };
@@ -51,6 +51,11 @@ export function getBaseSaleNetwork(): BaseSaleNetwork {
       usdc: row?.usdc ?? DEFAULT_STABLE,
     },
   };
+}
+
+/** True when the hub accepts USDT directly (otherwise USDT is swapped to USDC first). */
+export function hubAcceptsUsdtDirectly(): boolean {
+  return getBaseSaleNetwork().stables.includes("usdt");
 }
 
 export function getSaleNetwork(id: string): BaseSaleNetwork | undefined {

@@ -109,6 +109,7 @@ test("Android without MetaMask: opens the page inside the MetaMask app", async (
   await openLogin(page);
   const nav = page.waitForRequest(/metamask\.app\.link|link\.metamask\.io/, { timeout: 15000 });
   await page.getByTestId("wallet-connect-metamask").first().click();
+  await page.getByTestId("wallet-ext-open").click();
   const req = await nav;
   // The app deep-links to its own origin, so the expected host follows BASE
   // (CI and the local suite both serve 3000). This used to hardcode a dead

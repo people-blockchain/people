@@ -64,7 +64,7 @@
         "Validadores: 200M PPL, 6% / 5% / 5% / 4% do supply (60M, 50M, 50M, 40M) + 30% taxas.",
         "Fundadores, recompensas, embaixadores e airdrops: só fundo 35%.",
         "Do ano 5: máx. 2% emissão nova/ano, só voto comunitário.",
-        "Airdrop fundadores primeiro; venda após 1.000 verificados e multisig.",
+        "Airdrop dos fundadores primeiro; a venda de PPL ocorre na Base e abre após a publicação do contrato de venda e do multisig receptor.",
         "Cada taxa: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queima."
       ]
     },

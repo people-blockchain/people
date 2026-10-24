@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { content } from "@/lib/content";
 
 /**
  * Mainnet / Testnet switch in the header.
@@ -14,31 +15,17 @@ import { useLanguage } from "@/context/LanguageContext";
  * rest of the site did not honour would be a lie about which chain you are on.
  */
 const MODES = [
-  { id: "mainnet", label: "Mainnet", href: "/buy" },
-  { id: "testnet", label: "Testnet", href: "/create" },
+  { id: "mainnet", href: "/buy" },
+  { id: "testnet", href: "/create" },
 ] as const;
 
 /** Testnet-first routes: visiting any of these means you are in testnet mode. */
 const TESTNET_PREFIXES = ["/create", "/wallet", "/swap", "/explorer", "/staking", "/discover"];
 
-/** Inline copy, EN with a RU override — the same pattern as the wallet panels. */
-const COPY: Record<string, { aria: string; mainnet: string; testnet: string }> = {
-  en: {
-    aria: "Network mode",
-    mainnet: "Mainnet — buy PPL in the sale",
-    testnet: "Testnet — try everything with test tokens",
-  },
-  ru: {
-    aria: "Режим сети",
-    mainnet: "Mainnet — купить PPL в продаже",
-    testnet: "Testnet — попробовать всё на тестовых токенах",
-  },
-};
-
 export function NetworkModeSwitch({ size = "default" }: { size?: "default" | "compact" }) {
   const pathname = usePathname();
   const { lang } = useLanguage();
-  const c = COPY[lang] ?? COPY.en;
+  const c = content[lang].networkMode;
 
   const active = pathname?.startsWith("/buy")
     ? "mainnet"
@@ -51,7 +38,7 @@ export function NetworkModeSwitch({ size = "default" }: { size?: "default" | "co
   return (
     <div
       role="group"
-      aria-label={c.aria}
+      aria-label={c.label}
       className={`${height} inline-flex shrink-0 items-center rounded-lg border border-line bg-surface-2 p-0.5`}
     >
       {MODES.map((mode) => {
@@ -60,7 +47,7 @@ export function NetworkModeSwitch({ size = "default" }: { size?: "default" | "co
           <Link
             key={mode.id}
             href={mode.href}
-            title={mode.id === "mainnet" ? c.mainnet : c.testnet}
+            title={mode.id === "mainnet" ? c.mainnetTitle : c.testnetTitle}
             aria-current={isActive ? "page" : undefined}
             className={`header-label inline-flex h-full items-center rounded-[0.4rem] px-2 text-[11px] font-semibold transition-colors xl:px-2.5 xl:text-xs ${
               isActive
@@ -68,7 +55,7 @@ export function NetworkModeSwitch({ size = "default" }: { size?: "default" | "co
                 : "text-ink-3 hover:text-ink"
             }`}
           >
-            {mode.label}
+            {mode.id === "mainnet" ? c.mainnet : c.testnet}
           </Link>
         );
       })}

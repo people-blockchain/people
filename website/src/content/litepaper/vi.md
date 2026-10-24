@@ -144,7 +144,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
+| **Bán PPL trên Base** | Đợt bán PPL chỉ chạy trên Base (PplCurveHub, USDC hoặc USDT). Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hợp đồng bán được công bố. Mainnet của mạng PEOPLE là bước riêng. | Đã công bố hợp đồng bán (PplCurveHub trên Base) và multisig nhận tiền |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
 Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.
@@ -161,9 +161,9 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 
 ## 9. Bảo mật
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Multisig kho tài sản.** Kho tài sản được kiểm soát bởi hợp đồng multisig 2-trong-3 riêng của People trên mạng People, được tạo trước mainnet; các địa chỉ ký sẽ được công bố.
-- **Địa chỉ được xuất bản.** Địa chỉ hợp đồng bán hàng, phân bổ và thanh khoản sẽ được xuất bản khi khởi chạy mainnet — không có trình giữ chỗ.
+- Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài. Bug bounty on every page.
+- **Multisig.** Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
+- **Địa chỉ được công bố.** Hợp đồng bán và multisig nhận tiền được công bố trước khi mở bán; hợp đồng vesting và khóa LP được công bố khi ra mắt mạng đầy đủ. Không dùng địa chỉ giả.
 - **Phòng chống bot.** Xác minh con người, giới hạn mỗi thiết bị và mỗi IP, giới hạn điểm hàng ngày và lấy lại bot.
 - **Các khối xây dựng đã được chứng minh.** Hợp đồng không cần mã được lắp ráp từ các mẫu OpenZeppelin.
 
@@ -205,9 +205,9 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 ## Liên kết
 
-- Website: https://peopleblockchain.network
-- Million Founders: https://peopleblockchain.network/founders
-- Litepaper: https://peopleblockchain.network/litepaper
+- Website: https://www.peopleblockchain.network
+- Million Founders: https://www.peopleblockchain.network/founders
+- Litepaper: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -220,7 +220,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Không có KYC hay kiểm tra điều kiện trên trang này.
-- Bảo mật: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- Multisig của kho bạc là **2 trên 3** và được tạo trước mainnet.
+- Bảo mật: Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.; bug bounty on every page.
+- Multisig. Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
 - Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
-- Đợt bán PPL, khi mở, kéo dài cố định **180 ngày**. Sau đó bất kỳ ai cũng có thể kết thúc nó, và PPL chưa bán sẽ vào pool cộng đồng — cùng quy tắc như đường cong token.
+- Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.

@@ -24,6 +24,8 @@ export type LegalPageContent = {
   relatedPrivacy: string;
   contactTitle: string;
   contactBody: string;
+  /** Shown on non-English pages: the English text is the binding one. */
+  englishPrevails?: string;
   blocks: LegalBlock[];
 };
 
