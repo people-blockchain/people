@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Portefeuille",
-          "text": "Portefeuille non custodial sur mobile ou navigateur. Vos clés ne quittent pas l'appareil."
+          "text": "Créez un portefeuille sur mobile ou dans un navigateur. Un portefeuille de navigateur à 12 mots est non custodial : vos clés ne quittent pas l'appareil. Un portefeuille cloud (connexion Google ou e-mail) est stocké chiffré sur les serveurs de PEOPLE, et l'infrastructure de PEOPLE peut le déchiffrer."
         },
         {
           "title": "Créer un token",

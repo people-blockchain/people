@@ -24,14 +24,15 @@
           "Partner sign-in with email: if you request a magic link, we collect the email address you type, send a one-time sign-in link through Resend, and store verification tokens needed to complete sign-in.",
           "Account and partner records in our database (hosted on Neon Postgres): your user id, linked OAuth account fields (provider, provider account id, and tokens returned by the provider where applicable), session records, email verification timestamps, partner referral code, who referred you (if recorded at registration), wallet public address and public key after you bind a wallet, and timestamps such as when the partner profile was created or the wallet was bound.",
           "Referral attribution: if you arrive with a referral link or code, we may store a referral cookie (people_partner_ref) for up to 30 days so we can attach you to the inviting partner when you first sign in, using a first-wins rule.",
+          "Cloud wallet: if you sign in with Google or email, the site creates a wallet whose private key is encrypted in your browser and stored, encrypted, in our database. The key that decrypts it is issued to your signed-in session by our servers and is derived from a server-side secret, so PEOPLE's infrastructure is able to decrypt it. This is not self-custody.",
           "Server logs and security data: like most websites, our host (Vercel) may process connection metadata needed to deliver pages and protect the service. We do not run third-party advertising or analytics scripts on this site in the application code."
         ]
       },
       {
         "title": "Information stored only in your browser",
         "body": [
-          "Non-custodial wallets: wallet keys are created and encrypted in your browser. Encrypted private keys and optional mnemonics are saved in localStorage under the key ppl-web-wallets. Language (people_lang) and colour theme (people_theme) preferences are also stored in localStorage.",
-          "We never receive your wallet private keys, seed phrases, or wallet encryption password. Only public addresses and public keys are sent to our servers when you choose to bind a wallet to your partner profile."
+          "Browser wallets (non-custodial): wallet keys are created and encrypted in your browser. Encrypted private keys and optional mnemonics are saved in localStorage under the key ppl-web-wallets. Language (people_lang) and colour theme (people_theme) preferences are also stored in localStorage.",
+          "For browser wallets, we never receive your private keys, seed phrases, or wallet encryption password. Only public addresses and public keys are sent to our servers when you choose to bind a wallet to your partner profile."
         ]
       },
       {
@@ -137,7 +138,7 @@
       {
         "title": "Your wallet and keys",
         "body": [
-          "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",
+          "Browser wallets on this site are non-custodial: you create and control the keys in your browser, and if you lose your seed phrase, private key, or password, we cannot recover funds or access for you. The cloud wallet (Google or email sign-in) is different: your key is stored encrypted on PEOPLE servers so you can restore it by signing in, and PEOPLE's infrastructure is able to decrypt it. For full self-custody, use a browser wallet or an external wallet. You are solely responsible for safeguarding any seed phrases, private keys, and passwords you hold.",
           "Never share secrets with anyone claiming to be support. We will never ask for your seed phrase or private key."
         ]
       },

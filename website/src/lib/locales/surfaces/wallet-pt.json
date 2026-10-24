@@ -1,6 +1,6 @@
 {
   "title": "Carteira",
-  "lead": "Não custodial. As chaves são criadas neste navegador, cifradas com a sua palavra-passe e nunca enviadas para os nossos servidores.",
+  "lead": "Carteira do navegador: não custodial. As chaves são criadas neste navegador, cifradas com a sua palavra-passe e nunca enviadas para os nossos servidores. Iniciar sessão com Google ou email cria, em vez disso, uma carteira na nuvem: a PEOPLE guarda a sua chave cifrada e a sua infraestrutura consegue decifrá-la.",
   "create": "Criar uma carteira nova",
   "import": "Importar carteira",
   "unlock": "Desbloquear",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your People Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+  "cloudExportHint": "A sua chave é guardada cifrada nos servidores da PEOPLE para que possa restaurá-la ao iniciar sessão. A infraestrutura da PEOPLE consegue decifrá-la. Para autocustódia total, use uma carteira de navegador ou uma carteira externa. Exporte a chave privada apenas se precisar de uma cópia de segurança fora da People.",
   "cloudDisconnect": "Disconnect"
 }

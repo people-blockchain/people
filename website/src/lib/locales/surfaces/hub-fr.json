@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Créer un portefeuille non custodial",
-        "body": "Générez une phrase de 12 mots dans le navigateur, notez-la et chiffrez-la avec un mot de passe. Les clés ne quittent jamais cet appareil.",
+        "title": "Créer un portefeuille",
+        "body": "Générez une phrase de 12 mots dans le navigateur, notez-la et chiffrez-la avec un mot de passe. Les clés ne quittent jamais cet appareil. Ou connectez-vous avec Google pour un portefeuille cloud : votre clé est stockée chiffrée sur les serveurs de PEOPLE, et l'infrastructure de PEOPLE peut la déchiffrer.",
         "href": "/wallet",
         "cta": "Ouvrir le portefeuille"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Une personne avec un portefeuille sur téléphone, tablette ou navigateur.",
-        "detail": "Commencez avec un compte non custodial sur téléphone, tablette ou navigateur. Vous rejoignez comme personne de la communauté — pas comme validateur."
+        "detail": "Commencez avec un portefeuille sur téléphone, tablette ou navigateur. Vous rejoignez comme personne de la communauté — pas comme validateur."
       },
       {
         "id": "transaction",

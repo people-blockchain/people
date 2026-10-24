@@ -71,7 +71,15 @@ if (resendKey) {
       apiKey: resendKey,
       from: emailFrom,
       maxAge: 60 * 15,
-      sendVerificationRequest: async ({ identifier, url, provider }) => {
+      sendVerificationRequest: async ({ identifier, url, provider, request }) => {
+        // MF-15: throttle before Resend is called. Dynamic import keeps the DB-backed limiter
+        // out of the Proxy (edge) bundle, which also imports this config. A denied send is
+        // silent so the response is identical for any address (no enumeration, no oracle).
+        const { allowMagicLinkEmail } = await import("@/lib/partner/magic-link-rate-limit");
+        if (!(await allowMagicLinkEmail(identifier, request))) {
+          console.warn("[auth] magic-link email suppressed by rate limit");
+          return;
+        }
         const host = new URL(SITE_URL).host;
         const acceptLanguage = (await headers()).get("accept-language");
         const locale = resolveMagicLinkLocale(acceptLanguage);

@@ -471,7 +471,7 @@ export const fr: LocaleContent = {
         {
           "num": "01",
           "title": "Créer un compte",
-          "desc": "Générez un portefeuille léger et non dépositaire directement sur votre smartphone, tablette ou navigateur.",
+          "desc": "Générez un portefeuille léger directement sur votre smartphone, tablette ou navigateur : un portefeuille de navigateur en auto-conservation, ou un portefeuille cloud que vous restaurez en vous connectant.",
           "highlight": "Zéro exigence matérielle"
         },
         {

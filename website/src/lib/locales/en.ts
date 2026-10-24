@@ -469,7 +469,7 @@ export const en = {
         {
           "num": "01",
           "title": "Create Account",
-          "desc": "Generate a lightweight, non-custodial wallet directly on your smartphone, tablet, or browser.",
+          "desc": "Generate a lightweight wallet directly on your smartphone, tablet, or browser — a self-custody browser wallet, or a cloud wallet you restore by signing in.",
           "highlight": "Zero hardware requirements"
         },
         {
