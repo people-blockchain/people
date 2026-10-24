@@ -34,6 +34,16 @@ export function ipfsGatewayUrl(cidOrUri: string): string {
   return `${ipfsGatewayBase()}/${cid}`;
 }
 
+/** HTTPS gateway URL for `ipfs://<cid>[/path]`, keeping the path (`.../metadata.json`). */
+export function ipfsGatewayUrlForUri(uri: string): string {
+  const cid = parseIpfsUri(uri);
+  if (!cid || !uri.trim().startsWith("ipfs://")) {
+    throw new Error("invalid_cid");
+  }
+  const path = uri.trim().slice("ipfs://".length + cid.length);
+  return `${ipfsGatewayUrl(cid)}${path}`;
+}
+
 /**
  * Only inert media types may be proxied back to the browser from the site's own origin.
  * `text/html`/`image/svg+xml` (or any unlisted/missing type) must be rejected — serving them
@@ -82,26 +92,119 @@ export function ipfsResponseHeaders(contentType: string): Record<string, string>
   return headers;
 }
 
+export type PinataErrorCode = "pinata_not_configured" | "pinata_scope_missing" | "pin_failed";
+
+export class PinataError extends Error {
+  readonly code: PinataErrorCode;
+  constructor(code: PinataErrorCode) {
+    super(code);
+    this.code = code;
+    this.name = "PinataError";
+  }
+}
+
+type FetchLike = typeof fetch;
+const PINATA_TIMEOUT_MS = 25_000;
+
+function pinataJwt(): string {
+  const jwt = process.env.PINATA_JWT?.trim();
+  if (!jwt) throw new PinataError("pinata_not_configured");
+  return jwt;
+}
+
+/** 401/403 mean the key lacks the scope for this endpoint; anything else non-2xx is a generic failure. */
+function pinataFailure(status: number): PinataError {
+  return new PinataError(status === 401 || status === 403 ? "pinata_scope_missing" : "pin_failed");
+}
+
+export type PinOptions = {
+  /** Pin the file inside a directory so it keeps its name (`ipfs://<dir>/<filename>`). */
+  wrapWithDirectory?: boolean;
+  /** Injected in tests. */
+  fetchImpl?: FetchLike;
+};
+
 export async function pinBytesToIpfs(
   bytes: Uint8Array,
   filename: string,
   contentType = "image/png",
-): Promise<{ cid: string }> {
-  const jwt = process.env.PINATA_JWT?.trim();
-  if (!jwt) {
-    throw new Error("pinata_not_configured");
-  }
+  options: PinOptions = {},
+): Promise<{ cid: string; uri: string }> {
+  const jwt = pinataJwt();
   const form = new FormData();
   const blob = new Blob([Buffer.from(bytes)], { type: contentType });
   form.append("file", blob, filename);
-  const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+  if (options.wrapWithDirectory) {
+    form.append("pinataOptions", JSON.stringify({ wrapWithDirectory: true }));
+  }
+  const res = await (options.fetchImpl ?? fetch)("https://api.pinata.cloud/pinning/pinFileToIPFS", {
     method: "POST",
     headers: { Authorization: `Bearer ${jwt}` },
     body: form,
+    signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
   });
   const body = (await res.json().catch(() => ({}))) as { IpfsHash?: string; error?: string };
   if (!res.ok || !body.IpfsHash || !isValidIpfsCid(body.IpfsHash)) {
-    throw new Error(body.error ?? "pin_failed");
+    throw res.ok ? new PinataError("pin_failed") : pinataFailure(res.status);
   }
-  return { cid: body.IpfsHash };
+  return { cid: body.IpfsHash, uri: options.wrapWithDirectory ? `ipfs://${body.IpfsHash}/${filename}` : `ipfs://${body.IpfsHash}` };
+}
+
+/**
+ * Short-lived signed upload URL for a video (Pinata v3). The browser uploads straight to it, so
+ * a 20 MB file never passes through a serverless function body limit. Pinata itself enforces the
+ * size and MIME type recorded in the signature.
+ */
+export async function createPinataSignedVideoUpload(
+  params: { filename: string; mimeType: "video/mp4" | "video/webm"; maxBytes: number; expiresSec?: number },
+  fetchImpl: FetchLike = fetch,
+): Promise<{ url: string }> {
+  const jwt = pinataJwt();
+  const res = await fetchImpl("https://uploads.pinata.cloud/v3/files/sign", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      date: Math.floor(Date.now() / 1000),
+      expires: params.expiresSec ?? 120,
+      filename: params.filename,
+      max_file_size: params.maxBytes,
+      allow_mime_types: [params.mimeType],
+      network: "public",
+    }),
+    signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
+  });
+  if (!res.ok) throw pinataFailure(res.status);
+  const body = (await res.json().catch(() => ({}))) as { data?: unknown };
+  if (typeof body.data !== "string" || !body.data.startsWith("https://")) throw new PinataError("pin_failed");
+  return { url: body.data };
+}
+
+export type PinataFileRecord = { id: string; cid: string; size: number; mimeType: string };
+
+/** File record from this account's Pinata storage; a CID that belongs to someone else never resolves. */
+export async function getPinataFile(id: string, fetchImpl: FetchLike = fetch): Promise<PinataFileRecord> {
+  const jwt = pinataJwt();
+  const res = await fetchImpl(`https://api.pinata.cloud/v3/files/public/${encodeURIComponent(id)}`, {
+    headers: { Authorization: `Bearer ${jwt}` },
+    signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
+  });
+  if (!res.ok) throw pinataFailure(res.status);
+  const body = (await res.json().catch(() => ({}))) as {
+    data?: { id?: string; cid?: string; size?: number; mime_type?: string };
+  };
+  const data = body.data;
+  if (!data || typeof data.cid !== "string" || !isValidIpfsCid(data.cid) || typeof data.size !== "number") {
+    throw new PinataError("pin_failed");
+  }
+  return { id: String(data.id ?? id), cid: data.cid, size: data.size, mimeType: String(data.mime_type ?? "") };
+}
+
+export async function deletePinataFile(id: string, fetchImpl: FetchLike = fetch): Promise<void> {
+  const jwt = pinataJwt();
+  const res = await fetchImpl(`https://api.pinata.cloud/v3/files/public/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${jwt}` },
+    signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
+  });
+  if (!res.ok) throw pinataFailure(res.status);
 }

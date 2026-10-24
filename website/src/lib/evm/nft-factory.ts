@@ -10,7 +10,7 @@
  * Kept free of React and of the wallet context so the tx-building and receipt parsing can be
  * unit-tested in plain Node.
  */
-import { decodeEventLog, formatEther, getAddress, isAddress, type Address, type Hex } from "viem";
+import { decodeEventLog, formatEther, getAddress, isAddress, type Address, type Hex, type PublicClient } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 
 export const nftFactoryAbi = [
@@ -48,6 +48,32 @@ export const nftFactoryAbi = [
     stateMutability: "view",
     inputs: [{ name: "", type: "address" }],
     outputs: [{ name: "", type: "address" }],
+  },
+  {
+    type: "function",
+    name: "prepaidCredit",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+] as const;
+
+/** The ERC-721 collection the factory deploys (`PeopleNFT`): only the reads the mint page needs. */
+export const peopleNftAbi = [
+  { type: "function", name: "nextTokenId", stateMutability: "view", inputs: [], outputs: [{ type: "uint256" }] },
+  {
+    type: "function",
+    name: "tokenURI",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "string" }],
+  },
+  {
+    type: "function",
+    name: "ownerOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ type: "address" }],
   },
 ] as const;
 
@@ -91,18 +117,33 @@ export function deriveCollectionSymbol(name: string): string {
   return symbol || "NFT";
 }
 
+/** Page of an NFT on the PeopleScan explorer. */
+export function peoplescanNftUrl(collection: string, tokenId: bigint | number | string): string {
+  return `https://peoplescan.org/nft/${collection}/${tokenId.toString()}`;
+}
+
+type NftReadClient = Pick<PublicClient, "readContract">;
+
 /**
- * Self-contained ERC-721 metadata for the token. A `data:` URI needs no pinning service and
- * survives as long as the chain does, which matters because the NFT wizard's picture may be a
- * plain URL rather than an IPFS object.
+ * Double-mint guard: when the collection's newest token already carries `tokenUri` and belongs
+ * to `owner`, a previous attempt got through (its hash may never have reached the page), so the
+ * caller shows that token instead of sending another mint. Returns the token id or null.
  */
-export function buildNftTokenUri(meta: { name: string; description?: string; image?: string }): string {
-  const json: Record<string, string> = { name: meta.name.trim() };
-  const description = meta.description?.trim();
-  if (description) json.description = description;
-  const image = meta.image?.trim();
-  if (image) json.image = image;
-  return `data:application/json;utf8,${encodeURIComponent(JSON.stringify(json))}`;
+export async function findExistingMint(
+  client: NftReadClient,
+  collection: Address,
+  tokenUri: string,
+  owner: Address,
+): Promise<bigint | null> {
+  const next = await client.readContract({ address: collection, abi: peopleNftAbi, functionName: "nextTokenId" });
+  if (next <= BigInt(0)) return null;
+  const last = next - BigInt(1);
+  const [uri, holder] = await Promise.all([
+    client.readContract({ address: collection, abi: peopleNftAbi, functionName: "tokenURI", args: [last] }),
+    client.readContract({ address: collection, abi: peopleNftAbi, functionName: "ownerOf", args: [last] }),
+  ]);
+  if (uri !== tokenUri || String(holder).toLowerCase() !== owner.toLowerCase()) return null;
+  return last;
 }
 
 export function buildCreateCollectionRequest(factory: Address, name: string, symbol: string) {
@@ -193,6 +234,8 @@ export type NftWriteErrorCode =
   | "insufficient_fee"
   | "not_collection_creator"
   | "receipt_failed"
+  | "chain_mismatch"
+  | "timeout"
   | "unknown";
 
 /** Turn a viem/driver error into a code the UI can explain, keeping the raw text as detail. */
@@ -208,6 +251,10 @@ export function classifyNftWriteError(err: unknown): { code: NftWriteErrorCode; 
     code = "insufficient_fee";
   } else if (lower.includes("unauthorized")) {
     code = "not_collection_creator";
+  } else if (lower.includes("chain mismatch") || lower.includes("does not match the target chain") || lower.includes("wrong network")) {
+    code = "chain_mismatch";
+  } else if (lower.includes("timed out") || lower.includes("timeout")) {
+    code = "timeout";
   } else if (lower.includes("receipt") || lower.includes("reverted")) {
     code = "receipt_failed";
   }

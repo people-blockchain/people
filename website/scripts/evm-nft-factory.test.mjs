@@ -10,7 +10,9 @@ import {
   nftFactoryAddress,
   buildCreateCollectionRequest,
   buildMintRequest,
-  buildNftTokenUri,
+  peopleNftAbi,
+  peoplescanNftUrl,
+  findExistingMint,
   deriveCollectionSymbol,
   collectionFromReceipt,
   tokenIdFromReceipt,
@@ -52,12 +54,45 @@ test("symbol derivation keeps [A-Z0-9] and is bounded", () => {
   assert.equal(deriveCollectionSymbol("!!!"), "NFT");
 });
 
-test("token URI is self-contained JSON metadata", () => {
-  const uri = buildNftTokenUri({ name: "Badge", description: "A demo", image: "https://x/y.png" });
-  assert.ok(uri.startsWith("data:application/json;utf8,"));
-  const json = JSON.parse(decodeURIComponent(uri.slice("data:application/json;utf8,".length)));
-  assert.deepEqual(json, { name: "Badge", description: "A demo", image: "https://x/y.png" });
-  assert.deepEqual(JSON.parse(decodeURIComponent(buildNftTokenUri({ name: "Solo" }).split(",")[1])), { name: "Solo" });
+test("the factory ABI and collection ABI expose what the double-mint guard reads", () => {
+  assert.ok(nftFactoryAbi.some((entry) => entry.name === "prepaidCredit"));
+  for (const name of ["nextTokenId", "tokenURI", "ownerOf"]) {
+    assert.ok(peopleNftAbi.some((entry) => entry.name === name), name);
+  }
+});
+
+test("the PeopleScan page of a token", () => {
+  assert.equal(peoplescanNftUrl(getAddress(COLLECTION), 7n), `https://peoplescan.org/nft/${getAddress(COLLECTION)}/7`);
+  assert.equal(peoplescanNftUrl(COLLECTION, "12"), `https://peoplescan.org/nft/${COLLECTION}/12`);
+});
+
+function stubClient({ next, uri, holder }) {
+  const calls = [];
+  return {
+    calls,
+    async readContract({ functionName, args }) {
+      calls.push({ functionName, args });
+      if (functionName === "nextTokenId") return next;
+      if (functionName === "tokenURI") return uri;
+      if (functionName === "ownerOf") return holder;
+      throw new Error(`unexpected ${functionName}`);
+    },
+  };
+}
+
+test("findExistingMint finds the last token only when URI and owner both match", async () => {
+  const URI = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/metadata.json";
+  const owner = getAddress(OTHER);
+  const match = stubClient({ next: 3n, uri: URI, holder: owner });
+  assert.equal(await findExistingMint(match, getAddress(COLLECTION), URI, owner), 2n);
+  assert.deepEqual(match.calls.find((call) => call.functionName === "tokenURI").args, [2n]);
+  assert.equal(await findExistingMint(stubClient({ next: 3n, uri: "ipfs://other", holder: owner }), getAddress(COLLECTION), URI, owner), null);
+  assert.equal(await findExistingMint(stubClient({ next: 3n, uri: URI, holder: getAddress(FACTORY) }), getAddress(COLLECTION), URI, owner), null);
+  const empty = stubClient({ next: 0n, uri: URI, holder: owner });
+  assert.equal(await findExistingMint(empty, getAddress(COLLECTION), URI, owner), null);
+  assert.deepEqual(empty.calls.map((call) => call.functionName), ["nextTokenId"]);
+  // Owner comparison ignores address case.
+  assert.equal(await findExistingMint(stubClient({ next: 1n, uri: URI, holder: owner.toLowerCase() }), getAddress(COLLECTION), URI, owner), 0n);
 });
 
 test("collection address is decoded from a createCollection receipt", () => {
@@ -112,6 +147,8 @@ test("write errors are classified into actionable codes", () => {
   assert.equal(classifyNftWriteError(new Error("insufficient funds for gas * price + value")).code, "insufficient_funds");
   assert.equal(classifyNftWriteError(new Error("reverted with custom error 'InsufficientFee()'")).code, "insufficient_fee");
   assert.equal(classifyNftWriteError(new Error("reverted with custom error 'Unauthorized()'")).code, "not_collection_creator");
+  assert.equal(classifyNftWriteError(new Error('The current chain of the wallet (id: 1) does not match the target chain')).code, "chain_mismatch");
+  assert.equal(classifyNftWriteError(new Error("Timed out while waiting for transaction with hash 0x1")).code, "timeout");
   const unknown = classifyNftWriteError(new Error("boom"));
   assert.equal(unknown.code, "unknown");
   assert.equal(unknown.detail, "boom");
