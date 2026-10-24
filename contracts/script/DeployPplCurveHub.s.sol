@@ -12,6 +12,9 @@ import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 /// `setToken` and `open` are owner-only: they run here only when the broadcaster is the OWNER;
 /// otherwise the owner (a Safe) must send them after the deploy.
 contract DeployPplCurveHub is Script {
+    address internal constant BASE_USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
+    address internal constant BASE_USDT = 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2;
+
     function run() external returns (PplCurveHub hub) {
         address owner = vm.envAddress("OWNER");
         address treasury = vm.envAddress("TREASURY");
@@ -19,6 +22,14 @@ contract DeployPplCurveHub is Script {
         address usdt = vm.envOr("USDT_ADDRESS", address(0));
         bool deployMocks = vm.envOr("DEPLOY_MOCKS", false);
         bool openSale = vm.envOr("OPEN_SALE", false);
+
+        if (deployMocks) {
+            require(block.chainid == 84532 || block.chainid == 31337, "mocks: testnet only");
+        }
+        if (block.chainid == 8453) {
+            require(usdc == address(0) || usdc == BASE_USDC, "usdc: not canonical Base USDC");
+            require(usdt == address(0) || usdt == BASE_USDT, "usdt: not canonical Base USDT");
+        }
 
         vm.startBroadcast();
         (, address broadcaster,) = vm.readCallers();
