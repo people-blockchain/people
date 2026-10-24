@@ -13,6 +13,8 @@
  * address is configured, which is what keeps the buy button disabled.
  */
 
+import { SALE_CHAIN, readSaleChainEnv, resolveSaleChain, type SaleChainEnv } from "@/lib/sale/saleChain";
+
 /* ── Curve ─────────────────────────────────────────────────────────────── */
 
 /**
@@ -106,20 +108,22 @@ export const PAYOUT_DEFAULT = { networkLabel: "Base", stable: "USDC" as SaleStab
 /* ── Addresses ─────────────────────────────────────────────────────────── */
 
 /**
- * The chain the curve hub is deployed on (Base). Sale contract lives on Base;
- * contract links on /buy go to Basescan (see BASESCAN).
+ * The chain the curve hub is deployed on: Base mainnet, or Base Sepolia when
+ * `NEXT_PUBLIC_SALE_CHAIN=base-sepolia` (see `saleChain.ts`, the single source of truth).
+ * Contract links on /buy go to the chain's explorer.
  */
+export { SALE_CHAIN, SALE_CHAIN_KEY, saleTokenAddress } from "@/lib/sale/saleChain";
 export const SALE_HUB_CHAIN = {
-  chainId: 8453,
-  /** Public, keyless endpoint. Overridable without a redeploy. */
-  rpcUrl: (process.env.NEXT_PUBLIC_BASE_RPC_URL ?? "https://mainnet.base.org").trim(),
+  chainId: SALE_CHAIN.id,
+  rpcUrl: SALE_CHAIN.rpcUrl,
 } as const;
 
-/** Public block explorer for the Base sale contract and tokens. */
+/** Public block explorer for the sale contract and tokens. */
 export { BASE_USDC_ADDRESS as BASE_USDC, BASE_USDT_ADDRESS as BASE_USDT } from "@/lib/sale/bridge";
+/** Base mainnet explorer. On a test sale chain the helpers below use `SALE_CHAIN.explorer`. */
 export const BASESCAN = "https://basescan.org";
-export const basescanAddressUrl = (address: string): string => `${BASESCAN}/address/${address}`;
-export const basescanTxUrl = (txHash: string): string => `${BASESCAN}/tx/${txHash}`;
+export const basescanAddressUrl = (address: string): string => `${SALE_CHAIN.explorer}/address/${address}`;
+export const basescanTxUrl = (txHash: string): string => `${SALE_CHAIN.explorer}/tx/${txHash}`;
 
 /**
  * Addresses published on /buy once the owner fills them in. `null` = not published yet,
@@ -139,14 +143,13 @@ export const AI_REVIEW_REPORTS: readonly { label: string; url: string }[] = [];
  * `NEXT_PUBLIC_SALE_HUB_ADDRESS` once `PplCurveHub` is deployed. Until then the
  * page shows "not deployed yet" and the buy action stays disabled.
  */
-export function saleContractAddress(): string | null {
-  const raw = (process.env.NEXT_PUBLIC_SALE_HUB_ADDRESS ?? "").trim();
-  return /^0x[0-9a-fA-F]{40}$/.test(raw) ? raw : null;
+export function saleContractAddress(env: SaleChainEnv = readSaleChainEnv()): string | null {
+  return resolveSaleChain(env).hubAddress;
 }
 
 /** True once a sale contract is configured — the only gate on real purchases. */
-export function saleContractConfigured(): boolean {
-  return saleContractAddress() !== null;
+export function saleContractConfigured(env: SaleChainEnv = readSaleChainEnv()): boolean {
+  return saleContractAddress(env) !== null;
 }
 
 /* ── Security reviews ──────────────────────────────────────────────────── */

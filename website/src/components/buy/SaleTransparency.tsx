@@ -6,13 +6,13 @@ import { ArrowUpRight, ShieldCheck, Wallet } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
-import { BASE_USDC_ADDRESS, BASE_USDT_ADDRESS } from "@/lib/sale/bridge";
 import {
   AI_REVIEW_REPORTS,
   SALE,
   SALE_ADDRESSES,
   TEAM_VESTING,
   basescanAddressUrl,
+  saleTokenAddress,
 } from "@/lib/sale/config";
 import { fillCopy, formatMonths, intlLocale } from "@/lib/sale/format";
 import { GENESIS_ALLOCATIONS, TOTAL_SUPPLY_PPL } from "@/lib/tokenomics";
@@ -113,8 +113,8 @@ export function SaleTransparency({ stats }: { stats: SaleStats }) {
                 : undefined
             }
           />
-          <AddressRow label={t.transparency.addrUsdc} address={BASE_USDC_ADDRESS} pending="" />
-          <AddressRow label={t.transparency.addrUsdt} address={BASE_USDT_ADDRESS} pending="" />
+          <AddressRow label={t.transparency.addrUsdc} address={saleTokenAddress("USDC")} pending="" />
+          <AddressRow label={t.transparency.addrUsdt} address={saleTokenAddress("USDT")} pending="" />
         </dl>
         <p className="mt-3 text-xs leading-relaxed text-ink-3">{t.form.phishing}</p>
       </div>

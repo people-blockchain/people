@@ -12,7 +12,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { buildWeb3AuthChainConfig } from "@/lib/web3auth-chain-config";
-import { SALE_HUB_CHAIN } from "@/lib/sale/config";
+import { SALE_CHAIN } from "@/lib/sale/config";
 
 export function peopleViemChain(rpcUrl: string): Chain {
   return {
@@ -241,11 +241,12 @@ export async function ensurePeopleChain(
 }
 
 /**
- * Switch the wallet to Base mainnet (adding it if unknown). Used only on an explicit user
- * action ("Buy" / "Switch to Base"). Returns false if the user declines or the wallet refuses.
+ * Switch the wallet to the sale chain (Base mainnet, or Base Sepolia when the sale runs on the
+ * testnet), adding it if unknown. Used only on an explicit user action ("Buy" / "Switch to Base").
+ * Returns false if the user declines or the wallet refuses.
  */
-export async function ensureBaseChain(provider: EIP1193Provider): Promise<boolean> {
-  const hexId = `0x${SALE_HUB_CHAIN.chainId.toString(16)}`;
+export async function ensureSaleChain(provider: EIP1193Provider): Promise<boolean> {
+  const hexId = `0x${SALE_CHAIN.id.toString(16)}`;
   const switchTo = () =>
     provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
   try {
@@ -260,10 +261,10 @@ export async function ensureBaseChain(provider: EIP1193Provider): Promise<boolea
       params: [
         {
           chainId: hexId,
-          chainName: "Base",
+          chainName: SALE_CHAIN.name,
           nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
-          rpcUrls: ["https://mainnet.base.org"],
-          blockExplorerUrls: ["https://basescan.org"],
+          rpcUrls: [SALE_CHAIN.viemChain.rpcUrls.default.http[0]],
+          blockExplorerUrls: [SALE_CHAIN.explorer],
         },
       ],
     });
@@ -273,6 +274,9 @@ export async function ensureBaseChain(provider: EIP1193Provider): Promise<boolea
     return false;
   }
 }
+
+/** Kept for existing callers; same as `ensureSaleChain`. */
+export const ensureBaseChain = ensureSaleChain;
 
 export const routerAbi = [
   {
