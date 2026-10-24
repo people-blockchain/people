@@ -67,8 +67,9 @@ library PplCurveMath {
 /// People chain off this contract. Stablecoins go straight to the immutable `treasury`; the hub
 /// never holds funds.
 ///
-/// Peg assumption: every allowlisted token is valued at exactly 1 USD. The owner must remove a token
-/// with `setToken(token, false)` if it depegs.
+/// Peg assumption: every allowlisted token is valued at exactly 1 USD. The allowlist is fixed before
+/// `open()` (`setToken` reverts afterwards); if a token depegs after opening, the owner can only
+/// `pause()` the sale.
 ///
 /// TODO v2: sell-back (SELL_BACK in website config) — not implemented, no sell-back in v1.
 contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
@@ -106,7 +107,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
         uint216 usd6;
     }
 
-    /// @dev One slot per buyer: head index into `_entries`, USD6 still inside the window, last purchase time.
+    /// @dev One slot per recipient: head index into `_entries`, USD6 still inside the window, last purchase time.
     struct UserState {
         uint40 lastBuyAt;
         uint32 head;
@@ -122,7 +123,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     uint256 public soldPpl;
 
     mapping(address => TokenInfo) public tokenInfo;
-    /// @notice PPL (18 decimals) bought by an address; delivered on the People chain.
+    /// @notice PPL (18 decimals) bought for an address (the `recipient` of `buyWith`); delivered on the People chain.
     mapping(address => uint256) public purchasedOf;
 
     mapping(address => UserState) internal _users;
@@ -132,7 +133,8 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
                               EVENTS / ERRORS
     //////////////////////////////////////////////////////////////*/
 
-    event Bought(address indexed buyer, address token, uint256 amountIn, uint256 pplOut);
+    /// @dev `buyer` is the payer (msg.sender), `recipient` the address credited with the allocation.
+    event Bought(address indexed buyer, address indexed recipient, address token, uint256 amountIn, uint256 pplOut);
     event TokenSet(address indexed token, bool allowed, uint8 decimals);
     event SaleOpened(uint256 openedAt, uint256 closesAt);
     event Graduated(uint256 raisedUsd6, uint256 soldPpl);
@@ -141,6 +143,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     error ZeroAddress();
     error ZeroAmount();
     error AlreadyOpened();
+    error SaleAlreadyOpened();
     error NotOpen();
     error SaleEnded();
     error SoldOut();
@@ -184,8 +187,11 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     }
 
     /// @notice Allows or disables a payment token. Enabling reads and stores its decimals (1..18).
-    /// Every allowed token is treated as exactly 1 USD (peg assumption).
+    /// Every allowed token is treated as exactly 1 USD (peg assumption). The allowlist is frozen
+    /// once `open()` has been called: reverts with `SaleAlreadyOpened` afterwards (enable and disable).
+    /// Pause the sale instead if a token must be stopped after opening.
     function setToken(address token, bool allowed) external onlyOwner {
+        if (openedAt != 0) revert SaleAlreadyOpened();
         if (token == address(0)) revert ZeroAddress();
         uint8 d;
         if (allowed) {
@@ -209,14 +215,21 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     /// @notice Buys PPL with `amountIn` of an allowlisted stablecoin (token units). If the request
     /// exceeds what is left to raise, only the remainder is charged and the curve graduates.
     /// Dust below 1 USD6 unit (tokens with more than 6 decimals) is not charged.
+    /// The payment is pulled from `msg.sender`; the allocation (`purchasedOf`) and all per-address
+    /// limits (min/max, rolling cap, cooldown) are keyed on `recipient`.
+    /// @param token Allowlisted payment token.
+    /// @param amountIn Amount of `token` to pay (token units).
+    /// @param minPplOut Minimum PPL (18 decimals) to receive, otherwise reverts with `Slippage`.
+    /// @param recipient Address credited with the allocation; must not be the zero address.
     /// @return pplOut PPL bought (18 decimals), rounded down.
-    function buyWith(address token, uint256 amountIn, uint256 minPplOut)
+    function buyWith(address token, uint256 amountIn, uint256 minPplOut, address recipient)
         external
         nonReentrant
         whenNotPaused
         returns (uint256 pplOut)
     {
         // ---- checks
+        if (recipient == address(0)) revert ZeroAddress();
         if (openedAt == 0) revert NotOpen();
         if (graduated) revert SoldOut();
         if (block.timestamp >= openedAt + TERM) revert SaleEnded();
@@ -228,7 +241,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
         if (requested < MIN_BUY_USD6) revert BelowMin();
         if (requested > MAX_BUY_USD6) revert AboveMax();
 
-        UserState memory u = _users[msg.sender];
+        UserState memory u = _users[recipient];
         if (u.lastBuyAt != 0 && block.timestamp < uint256(u.lastBuyAt) + COOLDOWN) revert Cooldown();
 
         (uint256 usd6, uint256 charged, uint256 newSold) = _fill(requested, amountIn, info.decimals);
@@ -236,7 +249,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
         if (pplOut == 0 || pplOut < minPplOut) revert Slippage();
 
         // rolling window: drop expired entries, then check the cap
-        Entry[] storage list = _entries[msg.sender];
+        Entry[] storage list = _entries[recipient];
         uint256 head = u.head;
         uint256 sum = u.windowSum;
         uint256 len = list.length;
@@ -250,13 +263,13 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
         if (sum + usd6 > DAILY_CAP_USD6) revert DailyCapExceeded();
 
         // ---- effects
-        _users[msg.sender] = UserState({
+        _users[recipient] = UserState({
             lastBuyAt: uint40(block.timestamp), head: uint32(head), windowSum: uint184(sum + usd6)
         });
         list.push(Entry({ts: uint40(block.timestamp), usd6: uint216(usd6)}));
         raisedUsd6 += usd6;
         soldPpl = newSold;
-        purchasedOf[msg.sender] += pplOut;
+        purchasedOf[recipient] += pplOut;
         bool grad = raisedUsd6 >= RAISE_CAP_USD6;
         if (grad) graduated = true;
 
@@ -266,7 +279,7 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
         t.safeTransferFrom(msg.sender, treasury, charged);
         if (t.balanceOf(treasury) - balBefore != charged) revert TransferMismatch();
 
-        emit Bought(msg.sender, token, charged, pplOut);
+        emit Bought(msg.sender, recipient, token, charged, pplOut);
         if (grad) emit Graduated(raisedUsd6, newSold);
     }
 

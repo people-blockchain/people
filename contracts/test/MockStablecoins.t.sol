@@ -87,6 +87,10 @@ contract DeployPplCurveHubMocksTest is Test {
         vm.recordLogs();
         PplCurveHub hub = script.run();
         assertGt(hub.openedAt(), 0);
+        // the allowlist is frozen once the sale is open (setToken before open stays in the script)
+        vm.prank(DEFAULT_SENDER);
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(BASE_USDC, true);
         (bool usdcAllowed,) = hub.tokenInfo(BASE_USDC);
         (bool usdtAllowed,) = hub.tokenInfo(BASE_USDT);
         assertFalse(usdcAllowed);

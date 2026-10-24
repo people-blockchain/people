@@ -53,6 +53,19 @@ export function minOutWithSlippage(expected: bigint, slippageBps: number = SALE.
   return (expected * (BigInt(10000) - bps)) / BigInt(10000);
 }
 
+/**
+ * Arguments of `PplCurveHub.buyWith(token, amountIn, minPplOut, recipient)`. The connected wallet is
+ * both payer and recipient: the allocation and the per-address limits are keyed on `recipient`.
+ * Exported for tests.
+ */
+export function buyWithArgs(
+  params: Pick<BuyParams, "account" | "token">,
+  amountIn: bigint,
+  minPplOut: bigint,
+): readonly [Address, bigint, bigint, Address] {
+  return [params.token, amountIn, minPplOut, params.account];
+}
+
 /** viem does not throw on a reverted receipt, so check the status explicitly. Exported for tests. */
 export function assertReceiptSuccess(receipt: Pick<TransactionReceipt, "status">): void {
   if (receipt.status !== "success") throw new Error("transaction reverted");
@@ -66,7 +79,7 @@ export function pplOutFromReceipt(receipt: TransactionReceipt, hub: Address): bi
 }
 
 /**
- * Runs the purchase on the sale chain (Base): switch chain → approve exactly the amount (if needed) → buyWith.
+ * Runs the purchase on the sale chain (Base): switch chain → approve exactly the amount (if needed) → buyWith (recipient = the connected wallet).
  * Only ever called from a user click, and only when the sale is open.
  */
 export async function runBuy(
@@ -123,7 +136,7 @@ export async function runBuy(
       address: hub,
       abi: pplCurveHubAbi,
       functionName: "buyWith",
-      args: [params.token, amountIn, minPplOut],
+      args: buyWithArgs(params, amountIn, minPplOut),
     });
     onStatus({ step: "pending" });
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
