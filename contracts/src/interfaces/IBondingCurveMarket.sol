@@ -20,9 +20,9 @@ interface IBondingCurveMarket {
         uint8 leftoverMode
     ) external;
 
-    function buy(address token, uint256 minTokensOut) external payable;
+    function buy(address token, uint256 minTokensOut, uint256 deadline) external payable;
 
-    function sell(address token, uint256 tokenAmount, uint256 minNativeOut) external;
+    function sell(address token, uint256 tokenAmount, uint256 minNativeOut, uint256 deadline) external;
 
     function quoteBuy(address token, uint256 nativeIn) external view returns (uint256 tokensOut, uint256 fee);
 
