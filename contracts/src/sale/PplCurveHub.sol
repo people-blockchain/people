@@ -152,10 +152,16 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     error Cooldown();
     error Slippage();
     error TransferMismatch();
+    error RenounceDisabled();
 
     constructor(address owner_, address treasury_) Ownable(owner_) {
         if (owner_ == address(0) || treasury_ == address(0)) revert ZeroAddress();
         treasury = treasury_;
+    }
+
+    /// @notice Disabled: renouncing would leave the hub without an owner (no pause, no depeg response).
+    function renounceOwnership() public view override onlyOwner {
+        revert RenounceDisabled();
     }
 
     /*//////////////////////////////////////////////////////////////

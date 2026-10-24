@@ -304,6 +304,17 @@ contract PplCurveHubTest is Test {
         assertGt(h.quoteBuy(address(usdc), 10e6), 0);
     }
 
+    function test_renounceOwnershipDisabled() public {
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHub.RenounceDisabled.selector);
+        hub.renounceOwnership();
+        assertEq(hub.owner(), owner);
+
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        hub.renounceOwnership();
+    }
+
     function test_openOnlyOwnerAndOnce() public {
         PplCurveHub h = new PplCurveHub(owner, treasury);
         vm.prank(alice);
