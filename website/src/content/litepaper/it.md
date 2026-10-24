@@ -144,7 +144,7 @@ Ogni commissione di protocollo, incluse le commissioni frazionarie, viene divisa
 | Fase | Cosa succede | Gate |
 |---|---|---|
 | **Stagione 0 — Testnet pubblico** | Portafogli, verifica, lanci di token, carte NFT, swap, punti Million Founders. | Ora |
-| **Mainnet + vendita PPL** | Il mainnet parte. Parametri pubblicati (curva esponenziale da **$0.005** per PPL, fino a **100M PPL** sulla curva, graduation a **$4M**) su `/buy`; acquisti disattivati finché l'hub non è deployato. | Almeno 1.000 persone verificate **e** multisig del tesoro attivo |
+| **Vendita PPL su Base** | La vendita PPL avviene solo su Base (PplCurveHub, USDC o USDT). Parametri pubblicati (curva esponenziale da **$0.005** per PPL, fino a **100M PPL** sulla curva, graduation a **$4M**) su `/buy`; acquisti disattivati finché il contratto di vendita non è pubblicato. Il mainnet della rete PEOPLE è un passo separato. | Contratto di vendita (PplCurveHub su Base) e multisig ricevente pubblicati |
 | **Staking & validatori** | Staking e partecipazione dei validatori si aprono oltre il progetto. | Dopo mainnet |
 
 Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
@@ -161,9 +161,9 @@ Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
 
 ## 9. Sicurezza
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Treasury multisig.** Il tesoro è controllato dal contratto multisig 2-di-3 di People sulla rete People, creato prima del mainnet; gli indirizzi dei firmatari saranno pubblicati.
-- **Indirizzi pubblicati.** Gli indirizzi dei contratti di vendita, vesting e liquidità saranno pubblicati al lancio del mainnet — nessun placeholder.
+- Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno. Bug bounty on every page.
+- **Multisig.** Tesoreria delle commissioni di rete: un multisig 2 su 3 sulla rete PEOPLE. Proventi della vendita: il multisig del progetto su Base; indirizzo e soglia di firme vengono pubblicati prima dell’apertura della vendita.
+- **Indirizzi pubblicati.** Il contratto di vendita e il multisig ricevente vengono pubblicati prima dell’apertura della vendita; i contratti di vesting e di blocco LP al lancio completo della rete. Nessun segnaposto.
 - **Difesa dai bot.** Verifica umana, limiti per dispositivo e per IP, limiti di punti giornalieri e clawback dei bot.
 - **Building block provati.** I contratti senza codice vengono assemblati da modelli OpenZeppelin.
 
@@ -205,9 +205,9 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 
 ## Link
 
-- Website: https://peopleblockchain.network
-- Million Founders: https://peopleblockchain.network/founders
-- Litepaper: https://peopleblockchain.network/litepaper
+- Website: https://www.peopleblockchain.network
+- Million Founders: https://www.peopleblockchain.network/founders
+- Litepaper: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -220,7 +220,7 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 - Il vesting del team è **0% al lancio, un cliff di 6 mesi e poi 18 mesi lineari** (24 mesi in totale).
 - Commissioni di lancio: il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
 - La **vendita comunitaria di PPL** usa la curva esponenziale pubblicata su `/buy` (partenza **$0.005** per PPL; prezzi e limiti pubblici; acquisto disattivato fino all'hub). Nessun KYC né controlli di eleggibilità su questo sito.
-- Sicurezza: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- Il multisig del tesoro è **2 su 3** e viene creato prima della mainnet.
+- Sicurezza: Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno.; bug bounty on every page.
+- Multisig. Tesoreria delle commissioni di rete: un multisig 2 su 3 sulla rete PEOPLE. Proventi della vendita: il multisig del progetto su Base; indirizzo e soglia di firme vengono pubblicati prima dell’apertura della vendita.
 - Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Attiva sulla testnet.)
-- La vendita PPL, una volta aperta, dura **180 giorni** fissi. Dopo, chiunque può finalizzarla e i PPL invenduti vanno al pool della community — la stessa regola delle curve dei token.
+- La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.

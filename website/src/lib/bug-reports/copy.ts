@@ -90,7 +90,19 @@ const ru: BugReportCopy = {
   supportLink: "Поддержка",
 };
 
-const baseBugReportCopy: Partial<Record<Language, BugReportCopy>> = { en, ru };
+/** Languages without a full bug-report translation still get a localized "Support" link. */
+const SUPPORT_LABEL: Partial<Record<Language, string>> = {
+  es: "Soporte", pt: "Suporte", fr: "Assistance", de: "Hilfe", it: "Assistenza",
+  tr: "Destek", vi: "Hỗ trợ", id: "Dukungan", zh: "支持", ar: "الدعم",
+};
+
+const baseBugReportCopy: Partial<Record<Language, BugReportCopy>> = {
+  en,
+  ru,
+  ...Object.fromEntries(
+    Object.entries(SUPPORT_LABEL).map(([lang, supportLink]) => [lang, { ...en, supportLink }]),
+  ),
+};
 
 /** Any locale without its own entry falls back to `en` (existing wallet-copy.ts pattern). */
 export const bugReportCopy: Record<Language, BugReportCopy> = new Proxy(

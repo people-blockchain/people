@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
+| **PPL sale on Base** | The PPL sale runs on Base only (PplCurveHub, USDC or USDT). Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale contract is published. Mainnet of the PEOPLE network is a separate step. | Sale contract (PplCurveHub on Base) and receiving multisig published |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.
@@ -163,9 +163,9 @@ No dates are promised. Each stage starts when its gate is met.
 
 ## 9. Security
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty: report a vulnerability from the bug button on any page.
-- **Treasury multisig.** The treasury is controlled by People's own 2-of-3 multisig contract on the People network, created before mainnet; signer addresses will be published.
-- **Published addresses.** Sale, vesting and liquidity contract addresses will be published at mainnet launch — no placeholders.
+- Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.
+- **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the People network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
+- **Published addresses.** The sale contract and the receiving multisig are published before the sale opens; vesting and LP-lock contracts at the full network launch. No placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
 - **Proven building blocks.** No-code contracts are assembled from OpenZeppelin templates.
 
@@ -207,9 +207,9 @@ Only verifiable public facts about other networks. Sources below.
 
 ## Links
 
-- Website: https://peopleblockchain.network
-- Million Founders: https://peopleblockchain.network/founders
-- Litepaper: https://peopleblockchain.network/litepaper
+- Website: https://www.peopleblockchain.network
+- Million Founders: https://www.peopleblockchain.network/founders
+- Litepaper: https://www.peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
@@ -222,7 +222,7 @@ Only verifiable public facts about other networks. Sources below.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). No KYC or sale-eligibility checks are run on this site.
-- Security: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- The treasury multisig is **2-of-3** and is created before mainnet.
+- Security: Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty on every page.
+- Multisigs. Network-fee treasury: a 2-of-3 multisig on the People network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
-- The PPL sale, once it opens, runs for a fixed **180 days**. After that anyone can finalize it, and the unsold PPL goes to the community pool — the same rule as for token curves.
+- The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.

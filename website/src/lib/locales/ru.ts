@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const ru: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Тестовая сеть PEOPLE v0.1",
     "links": [
       {
         "label": "Как это работает",
@@ -42,6 +42,10 @@ export const ru: LocaleContent = {
     "slogan": "Создано людьми. Для сообщества.",
     "moreLinks": [
       {
+        "label": "Продажа PPL",
+        "href": "/buy"
+      },
+      {
         "label": "Дорожная карта",
         "href": "/roadmap"
       },
@@ -54,7 +58,7 @@ export const ru: LocaleContent = {
         "href": "/agents"
       },
       {
-        "label": "Сканер",
+        "label": "Обозреватель",
         "href": "/explorer"
       },
       {
@@ -90,7 +94,7 @@ export const ru: LocaleContent = {
         "href": "/transparency"
       },
       {
-        "label": "Litepaper",
+        "label": "Краткий whitepaper (Litepaper)",
         "href": "/litepaper"
       },
       {
@@ -104,7 +108,8 @@ export const ru: LocaleContent = {
     "signIn": "Войти",
     "becomePartner": "Стать партнёром",
     "logoAlt": "Блокчейн для сообщества",
-    "brandAria": "Блокчейн для сообщества — главная"
+    "brandAria": "Блокчейн для сообщества — главная",
+    "buy": "Продажа PPL"
   },
   "explainerVideo": {
     "eyebrow": "Смотреть",
@@ -1278,5 +1283,21 @@ export const ru: LocaleContent = {
     "logoAlt": "Блокчейн для сообщества",
     "privacyLink": "Политика конфиденциальности",
     "termsLink": "Условия использования"
+  },
+  "networkMode": {
+    "label": "Режим сети",
+    "mainnet": "Основная сеть",
+    "mainnetTitle": "Основная сеть: сеть Base, где идёт продажа PPL",
+    "testnet": "Тестовая сеть",
+    "testnetTitle": "Тестовая сеть: тестовая сеть People для создания токенов и NFT"
+  },
+  "a11y": {
+    "skipToContent": "К содержимому",
+    "navPrimary": "Основная навигация",
+    "navMobile": "Мобильное меню",
+    "footer": "Подвал сайта"
+  },
+  "common": {
+    "englishOnlyBanner": "Эта страница пока доступна только на английском."
   }
 };

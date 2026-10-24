@@ -3,7 +3,7 @@
     "title": "隐私政策",
     "subtitle": "PEOPLE Blockchain 网站在浏览、登录或使用合作伙伴工具时如何处理信息。",
     "effectiveLabel": "Effective date",
-    "effectiveDate": "30 September 2026",
+    "effectiveDate": "2026年10月23日",
     "backHome": "返回首页",
     "relatedTerms": "服务条款",
     "relatedPrivacy": "隐私政策",
@@ -39,7 +39,7 @@
         "body": [
           "Sign-in session: when you use the partner portal, Auth.js / NextAuth sets cookies needed to keep you signed in and to protect sign-in (for example session and CSRF-related cookies). These are used for authentication and security, not for advertising.",
           "Referral cookie: people_partner_ref remembers an invite code for up to 30 days when you have not already been attributed.",
-          "We do not use phone numbers or SMS for authentication on this site."
+          "We do not use SMS for sign-in. Telegram verification: if you choose it, you share your phone number once with our Telegram bot; we store it to enforce one account per person."
         ]
       },
       {
@@ -52,14 +52,14 @@
       {
         "title": "Blockchain and test network",
         "body": [
-          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income.",
+          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income. Purchases in the PPL sale are public transactions on Base.",
           "Deleting your website account does not remove or change on-chain history."
         ]
       },
       {
         "title": "Service providers",
         "body": [
-          "We rely on service providers that process data on our behalf: Vercel (hosting), Neon (database), Google (optional OAuth sign-in), and Resend (transactional email for magic links). They handle data according to their own terms and our instructions for operating the site."
+          "We rely on service providers that process data on our behalf: Vercel (hosting), Neon (database), Google (optional OAuth sign-in), and Resend (transactional email for magic links). They handle data according to their own terms and our instructions for operating the site. Human Passport and Telegram (verification), LI.FI (swap and bridge widget on /buy) and WalletConnect (wallet connection)."
         ]
       },
       {
@@ -89,13 +89,14 @@
           "We may update this policy. We will post the new version on this page and change the effective date above."
         ]
       }
-    ]
+    ],
+    "englishPrevails": "如各语言版本有出入，以英文版本为准。"
   },
   "terms": {
     "title": "服务条款",
     "subtitle": "在网络处于测试/测试版阶段时使用 PEOPLE Blockchain 网站与合作伙伴工具的规则。",
     "effectiveLabel": "Effective date",
-    "effectiveDate": "30 September 2026",
+    "effectiveDate": "2026年10月23日",
     "backHome": "返回首页",
     "relatedTerms": "服务条款",
     "relatedPrivacy": "隐私政策",
@@ -113,14 +114,18 @@
         "title": "Test network and beta status",
         "body": [
           "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
-          "Mainnet has not launched. Anything labeled testnet or beta is for experimentation, not production financial use."
+          "The People network is still a test network. The PPL sale is separate: it runs on Base mainnet with real USDC or USDT."
         ]
       },
       {
         "title": "PPL 公开销售",
         "body": [
-          "已公布的 PPL 销售参数（曲线公式、价格路径、限额与毕业目标）见 /buy 页面，并与订单 API 一致。在销售 hub 合约部署前购买功能保持关闭；连接钱包不构成任何承诺。本网站不进行 KYC 或资格检查。",
-          "本网站任何内容均不构成在受限地区出售 PPL 的要约或承诺；您所在司法辖区可能无法参与。销售条款仅通过公布的更新及适用的治理程序变更。"
+          "Sale parameters (curve formula, price path, limits and the graduation target) are published on the /buy page. Purchases stay disabled until the sale contract is published; connecting a wallet commits you to nothing.",
+          "No KYC is required to buy. Selling back requires proof of humanity (Human Passport or Telegram), which is not KYC.",
+          "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
+          "The sale term, price formula and limits do not change after the sale opens.",
+          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+          "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction."
         ]
       },
       {
@@ -155,7 +160,7 @@
       {
         "title": "Third-party services",
         "body": [
-          "Sign-in may use Google or email delivery through Resend under their terms. Your use of those services is also subject to their policies."
+          "Sign-in may use Google or email delivery through Resend. Paying from other networks uses LI.FI (swap and bridge); wallet connections may use WalletConnect; verification uses Human Passport or Telegram. Your use of those services is also subject to their terms."
         ]
       },
       {
@@ -172,6 +177,7 @@
         ]
       }
     ],
-    "saleTitle": "PPL 公开销售"
+    "saleTitle": "PPL 公开销售",
+    "englishPrevails": "如各语言版本有出入，以英文版本为准。"
   }
 }

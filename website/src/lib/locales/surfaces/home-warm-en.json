@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "10% community share",
-    "peopleLine": "Your people, not whales"
+    "peopleLine": "Your people, not whales",
+    "saleNote": "The People network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
   },
   "community": {
     "eyebrow": "10% to the community",

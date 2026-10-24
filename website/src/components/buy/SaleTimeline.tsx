@@ -3,9 +3,9 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import { CURVE, SALE } from "@/lib/sale/config";
-import { fillCopy, pplCompact, pricePerPpl, usdCompact } from "@/lib/sale/format";
+import { fillCopy, formatMonths, pplCompact, pricePerPpl, usdCompact } from "@/lib/sale/format";
 
-/** Curve → graduation → full mainnet → day 180. Four steps, no dates invented. */
+/** Curve → graduation → full network launch → end of the sale term. Four steps, no dates invented. */
 export function SaleTimeline() {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
@@ -14,13 +14,13 @@ export function SaleTimeline() {
     supply: `${pplCompact(CURVE.supplyPpl, lang)}`,
     start: pricePerPpl(CURVE.startPriceUsd, lang),
     ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
-    days: SALE.durationDays,
+    term: formatMonths(SALE.saleTermMonths, lang),
+    months: SALE.saleTermMonths,
     graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
     liquidityShare: `${SALE.liquiditySharePct}%`,
     multisigShare: `${SALE.multisigSharePct}%`,
-    lock: SALE.lpLockMonths,
+    lockPeriod: formatMonths(SALE.lpLockMonths, lang),
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
-    months: SALE.fullMainnetMaxMonths,
   };
 
   return (

@@ -35,6 +35,11 @@ export function LegalDocument({ kind }: { kind: "privacy" | "terms" }) {
         <p className="mt-6 font-mono text-xs text-ink-3">
           {doc.effectiveLabel}: {doc.effectiveDate}
         </p>
+        {doc.englishPrevails ? (
+          <p className="mt-3 text-sm text-ink-2" data-testid="english-prevails">
+            {doc.englishPrevails}
+          </p>
+        ) : null}
       </header>
 
       <div className="prose-legal mt-10 space-y-10">

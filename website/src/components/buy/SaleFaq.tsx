@@ -1,62 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
-
 import { useLanguage } from "@/context/LanguageContext";
-import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { buyCopy } from "@/lib/buy-content";
-import { ensurePeopleChain, readInjectedProvider } from "@/lib/evm/client";
 import { CURVE, SALE } from "@/lib/sale/config";
 import { graduation } from "@/lib/sale/curve";
-import { fillCopy, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
-
-/**
- * Reuses `ensurePeopleChain` — the same call the wallet and factory pages make
- * — so the chain parameters offered here can never drift from the rest of the
- * site.
- */
-function AddPeopleNetworkButton() {
-  const { lang } = useLanguage();
-  const t = buyCopy[lang];
-  const externalWallet = useExternalWalletOptional();
-  const [state, setState] = useState<"idle" | "done" | "error">("idle");
-
-  const add = async () => {
-    const provider =
-      externalWallet?.signer?.kind === "injected"
-        ? externalWallet.signer.provider
-        : readInjectedProvider("any");
-    if (!provider) {
-      setState("error");
-      return;
-    }
-    try {
-      await ensurePeopleChain(provider);
-      setState("done");
-    } catch {
-      setState("error");
-    }
-  };
-
-  return (
-    <div className="mt-3">
-      <button
-        type="button"
-        onClick={() => void add()}
-        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong bg-surface px-5 text-sm font-semibold text-ink transition hover:border-brand hover:text-brand"
-      >
-        <Plus className="h-4 w-4" aria-hidden="true" />
-        {t.faq.addNetworkCta}
-      </button>
-      {state === "done" ? <p className="mt-2 text-xs text-value">{t.faq.addNetworkDone}</p> : null}
-      {state === "error" ? <p className="mt-2 text-xs text-warm">{t.faq.addNetworkError}</p> : null}
-    </div>
-  );
-}
-
-/** The "how do I add the People network" question, which carries the button. */
-const ADD_NETWORK_FAQ_INDEX = 2;
+import { fillCopy, formatMonths, pricePerPpl, usd, usdCompact } from "@/lib/sale/format";
 
 /**
  * FAQ and the pump.fun comparison table.
@@ -70,16 +18,14 @@ export function SaleFaq() {
   const grad = graduation();
 
   const vars = {
-    fee: `${SALE.sellFeePct}%`,
     ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang),
     graduation: usdCompact(CURVE.graduationRaiseUsd, lang),
     graduationPrice: pricePerPpl(grad.priceUsd, lang),
     verified: SALE.fullMainnetVerifiedPeople.toLocaleString(lang),
-    months: SALE.fullMainnetMaxMonths,
     perBuy: usd(SALE.maxPerBuyUsd, lang),
     perDay: usd(SALE.maxPerDayUsd, lang),
     cooldown: SALE.cooldownSeconds,
-    lock: SALE.lpLockMonths,
+    lockPeriod: formatMonths(SALE.lpLockMonths, lang),
   };
 
   return (
@@ -92,7 +38,7 @@ export function SaleFaq() {
             className="group rounded-2xl border border-line bg-surface p-4 open:shadow-[var(--elev-1)]"
             open={index === 0}
           >
-            <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:hidden">
+            <summary className="flex min-h-[44px] cursor-pointer list-none items-center text-sm font-semibold text-ink marker:hidden">
               <span className="flex items-start justify-between gap-3">
                 {fillCopy(item.q, vars)}
                 <span
@@ -104,7 +50,6 @@ export function SaleFaq() {
               </span>
             </summary>
             <p className="mt-2.5 text-sm leading-relaxed text-ink-2">{fillCopy(item.a, vars)}</p>
-            {index === ADD_NETWORK_FAQ_INDEX ? <AddPeopleNetworkButton /> : null}
           </details>
         ))}
       </div>

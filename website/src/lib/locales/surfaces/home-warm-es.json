@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "10% para la comunidad",
-    "peopleLine": "Tu gente, no las ballenas"
+    "peopleLine": "Tu gente, no las ballenas",
+    "saleNote": "La red PEOPLE sigue siendo una red de pruebas y sus tokens de prueba no tienen valor. La venta de PPL es aparte: se realiza en Base con USDC o USDT reales."
   },
   "community": {
     "eyebrow": "10% para la comunidad",

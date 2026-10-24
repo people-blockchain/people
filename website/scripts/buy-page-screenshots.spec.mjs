@@ -120,7 +120,9 @@ async function openBridgeWidget(page) {
   await page.waitForTimeout(1500);
 }
 
+// Evidence capture for the sale-open UI: opt in with BUY_SCREENSHOT_EVIDENCE=1 (needs an open sale config).
 test.describe("buy page evidence", () => {
+  test.skip(!process.env.BUY_SCREENSHOT_EVIDENCE, "evidence capture only");
   test.beforeAll(async () => {
     await mkdir(OUT, { recursive: true });
   });
@@ -235,6 +237,7 @@ function buyHero(page) {
 }
 
 test.describe("buy USDT evidence", () => {
+  test.skip(!process.env.BUY_SCREENSHOT_EVIDENCE, "evidence capture only");
   test.beforeAll(async () => {
     await mkdir(OUT, { recursive: true });
   });

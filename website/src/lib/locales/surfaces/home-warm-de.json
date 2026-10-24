@@ -39,7 +39,8 @@
       }
     ],
     "shareBadge": "10 % Community-Anteil",
-    "peopleLine": "Ihre Leute, nicht Wale"
+    "peopleLine": "Ihre Leute, nicht Wale",
+    "saleNote": "Das PEOPLE-Netzwerk ist noch ein Testnetz, seine Test-Token haben keinen Wert. Der PPL-Verkauf ist davon getrennt: Er läuft auf Base mit echten USDC oder USDT."
   },
   "community": {
     "eyebrow": "10 % für die Community",

@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const id: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Jaringan uji PEOPLE v0.1",
     "links": [
       {
         "label": "Cara Kerja",
@@ -42,7 +42,11 @@ export const id: LocaleContent = {
     "slogan": "Dibuat oleh masyarakat. Untuk komunitas.",
     "moreLinks": [
       {
-        "label": "Roadmap",
+        "label": "Penjualan PPL",
+        "href": "/buy"
+      },
+      {
+        "label": "Peta jalan",
         "href": "/roadmap"
       },
       {
@@ -64,6 +68,10 @@ export const id: LocaleContent = {
       {
         "label": "Staking",
         "href": "/staking"
+      },
+      {
+        "label": "Tata kelola",
+        "href": "/governance"
       },
       {
         "label": "Buat token",
@@ -100,7 +108,8 @@ export const id: LocaleContent = {
     "signIn": "Masuk",
     "becomePartner": "Menjadi mitra",
     "logoAlt": "Blockchain untuk komunitas",
-    "brandAria": "Beranda Blockchain untuk komunitas"
+    "brandAria": "Beranda Blockchain untuk komunitas",
+    "buy": "Penjualan PPL"
   },
   "explainerVideo": {
     "eyebrow": "Tonton",
@@ -1274,5 +1283,21 @@ export const id: LocaleContent = {
     },
     "storyActiveHumanity": "KEMANUSIAAN AKTIF",
     "storyFeePipeline": "JALUR PERUTEAN BIAYA"
+  },
+  "networkMode": {
+    "label": "Mode jaringan",
+    "mainnet": "Jaringan utama",
+    "mainnetTitle": "Jaringan utama: jaringan Base, tempat penjualan PPL berlangsung",
+    "testnet": "Jaringan uji",
+    "testnetTitle": "Jaringan uji: jaringan uji PEOPLE untuk membuat token dan NFT"
+  },
+  "a11y": {
+    "skipToContent": "Lewati ke konten",
+    "navPrimary": "Navigasi utama",
+    "navMobile": "Menu seluler",
+    "footer": "Kaki halaman"
+  },
+  "common": {
+    "englishOnlyBanner": "Untuk saat ini halaman ini hanya tersedia dalam bahasa Inggris."
   }
 };

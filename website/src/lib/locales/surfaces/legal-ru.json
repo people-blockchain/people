@@ -3,7 +3,7 @@
     "title": "Политика конфиденциальности",
     "subtitle": "Как сайт PEOPLE Blockchain обрабатывает данные при просмотре, входе и использовании партнёрских инструментов.",
     "effectiveLabel": "Effective date",
-    "effectiveDate": "30 September 2026",
+    "effectiveDate": "23 октября 2026",
     "backHome": "На главную",
     "relatedTerms": "Условия использования",
     "relatedPrivacy": "Политика конфиденциальности",
@@ -39,7 +39,7 @@
         "body": [
           "Sign-in session: when you use the partner portal, Auth.js / NextAuth sets cookies needed to keep you signed in and to protect sign-in (for example session and CSRF-related cookies). These are used for authentication and security, not for advertising.",
           "Referral cookie: people_partner_ref remembers an invite code for up to 30 days when you have not already been attributed.",
-          "We do not use phone numbers or SMS for authentication on this site."
+          "Мы не используем SMS для входа. Верификация через Telegram: если вы выбираете её, вы один раз передаёте номер телефона нашему боту в Telegram; мы храним его, чтобы обеспечить один аккаунт на человека."
         ]
       },
       {
@@ -52,14 +52,14 @@
       {
         "title": "Blockchain and test network",
         "body": [
-          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income.",
+          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income. Покупки в продаже PPL — публичные транзакции в сети Base.",
           "Deleting your website account does not remove or change on-chain history."
         ]
       },
       {
         "title": "Service providers",
         "body": [
-          "We rely on service providers that process data on our behalf: Vercel (hosting), Neon (database), Google (optional OAuth sign-in), and Resend (transactional email for magic links). They handle data according to their own terms and our instructions for operating the site."
+          "We rely on service providers that process data on our behalf: Vercel (hosting), Neon (database), Google (optional OAuth sign-in), and Resend (transactional email for magic links). They handle data according to their own terms and our instructions for operating the site. Human Passport и Telegram (верификация), LI.FI (виджет обмена и моста на /buy) и WalletConnect (подключение кошелька)."
         ]
       },
       {
@@ -89,13 +89,14 @@
           "We may update this policy. We will post the new version on this page and change the effective date above."
         ]
       }
-    ]
+    ],
+    "englishPrevails": "При расхождении переводов действует английская версия."
   },
   "terms": {
     "title": "Условия использования",
     "subtitle": "Правила использования сайта PEOPLE Blockchain и партнёрских инструментов, пока сеть в тесте/beta.",
     "effectiveLabel": "Effective date",
-    "effectiveDate": "30 September 2026",
+    "effectiveDate": "23 октября 2026",
     "backHome": "На главную",
     "relatedTerms": "Условия использования",
     "relatedPrivacy": "Политика конфиденциальности",
@@ -113,14 +114,18 @@
         "title": "Test network and beta status",
         "body": [
           "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
-          "Mainnet has not launched. Anything labeled testnet or beta is for experimentation, not production financial use."
+          "Сеть People пока тестовая. Продажа PPL — отдельная: она идёт в мейннете Base за реальные USDC или USDT."
         ]
       },
       {
         "title": "Публичная продажа PPL",
         "body": [
-          "Опубликованные параметры продажи PPL (формула кривой, траектория цены, лимиты и цель graduation) на странице /buy совпадают с API заказов. Покупки отключены, пока не развёрнут hub-контракт продажи; подключение кошелька ни к чему не обязывает. KYC и проверки допустимости на этом сайте не проводятся.",
-          "Ничто на сайте не является офертой или обещанием продать PPL там, где продажа ограничена; участие может быть недоступно в вашей юрисдикции. Условия продажи меняются только через опубликованные обновления и governance, где применимо."
+          "Параметры продажи (формула кривой, траектория цены, лимиты и цель graduation) опубликованы на странице /buy. Покупка недоступна, пока не опубликован контракт продажи; подключение кошелька ни к чему не обязывает.",
+          "KYC для покупки не требуется. Для продажи обратно в резерв нужна проверка, что вы человек (Human Passport или Telegram), — это не KYC.",
+          "Продажа идёт до распродажи (кривая закрывается при сборе $4M) или 24 месяца с момента открытия — что наступит раньше. Продлений нет. Непроданные PPL уходят в Community Pool. Возвратов нет: каждая покупка окончательна.",
+          "Срок продажи, формула цены и лимиты после открытия продажи не меняются.",
+          "Продажа обратно в резерв — не возврат денег: Продажа обратно в резерв — только для верифицированных пользователей. Каждую партию можно продать после 30 дней удержания по цене кривой на момент продажи. Общий лимит — 2% резерва в сутки на всех и $2 000 в сутки на человека. Комиссия 1,5% (3%, если за день уже продано обратно больше 1% резерва). Закрывается после выпуска в пул (graduation). Выплата — в USDC в сети Base.",
+          "Ничто на этом сайте не является офертой или обещанием продать PPL там, где продажа ограничена; участие может быть недоступно в вашей юрисдикции."
         ]
       },
       {
@@ -155,7 +160,7 @@
       {
         "title": "Third-party services",
         "body": [
-          "Sign-in may use Google or email delivery through Resend under their terms. Your use of those services is also subject to their policies."
+          "Вход может использовать Google или доставку писем через Resend. Оплата из других сетей идёт через LI.FI (обмен и мост); подключение кошелька — через WalletConnect; верификация — через Human Passport или Telegram. Использование этих сервисов регулируется и их условиями."
         ]
       },
       {
@@ -172,6 +177,7 @@
         ]
       }
     ],
-    "saleTitle": "Публичная продажа PPL"
+    "saleTitle": "Публичная продажа PPL",
+    "englishPrevails": "При расхождении переводов действует английская версия."
   }
 }

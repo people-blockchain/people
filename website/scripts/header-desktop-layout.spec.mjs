@@ -17,7 +17,7 @@ async function setLocale(page, lang) {
 async function assertDesktopHeader(page, lang, width) {
   const metrics = await page.evaluate(() => {
     const stack = document.querySelector(".header-brand-bundle");
-    const nav = document.querySelector("nav[aria-label='Primary']");
+    const nav = document.querySelector("header nav");
     const utilities = document.querySelector("header .ml-auto");
     const lockup = [...document.querySelectorAll('[data-testid="header-brand-lockup"] img')].find(
       (img) => img.getBoundingClientRect().width > 0

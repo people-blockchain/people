@@ -66,6 +66,9 @@ export function HiwWarm() {
               </span>
               {c.hero.testnetBadge}
             </p>
+            <p className="mt-3 max-w-xl text-sm text-ink-2" data-testid="hiw-sale-note">
+              {c.hero.saleNote}
+            </p>
           </Reveal>
         </div>
       </section>

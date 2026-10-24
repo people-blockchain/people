@@ -7,13 +7,14 @@ import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
 import { CURVE } from "@/lib/sale/config";
 import { fillCopy, pricePerPpl } from "@/lib/sale/format";
+import type { SalePhase } from "@/lib/sale/sale-state";
 
 /**
  * Mobile-only CTA that appears once the hero form has scrolled away and jumps
  * back to the bottom form. Hidden from `sm` up, where the form is always in
  * reach.
  */
-export function StickyBuyBar({ stats, targetId }: { stats: SaleStats; targetId: string }) {
+export function StickyBuyBar({ stats, targetId, phase = "closed" }: { stats: SaleStats; targetId: string; phase?: SalePhase }) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const [visible, setVisible] = useState(false);
@@ -26,6 +27,8 @@ export function StickyBuyBar({ stats, targetId }: { stats: SaleStats; targetId: 
   }, []);
 
   const price = stats.spotPriceUsd ?? CURVE.startPriceUsd;
+  if (phase !== "open") return null;
+  const priceText = fillCopy(t.sticky.price, { price: pricePerPpl(price, lang) });
 
   return (
     <div
@@ -37,13 +40,12 @@ export function StickyBuyBar({ stats, targetId }: { stats: SaleStats; targetId: 
     >
       <a
         href={`#${targetId}`}
+        aria-label={`${t.sticky.label} ${priceText}`}
         tabIndex={visible ? undefined : -1}
         className="flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-brand px-5 text-base font-semibold text-brand-ink shadow-[0_12px_30px_-14px_rgba(3,105,161,0.8)]"
       >
-        {t.sticky.label}
-        <span className="text-sm font-medium opacity-80">
-          {fillCopy(t.sticky.price, { price: pricePerPpl(price, lang) })}
-        </span>
+        {t.sticky.label}{" "}
+        <span className="text-sm font-medium opacity-80">{priceText}</span>
       </a>
     </div>
   );

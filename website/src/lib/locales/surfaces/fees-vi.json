@@ -33,7 +33,7 @@
   "contractNote": "Chi phí chính xác phụ thuộc vào kích thước hợp đồng. Bạn chọn giới hạn gas trước khi ký; gas không dùng sẽ không được hoàn lại.",
   "modelANote": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số.",
   "payOptionsNote": "Phí tạo token và NFT có thể được thanh toán bằng PPL, hoặc bằng stablecoin testnet được hỗ trợ (tUSDC/tUSDT) thông qua hợp đồng StableFeeGateway — tùy bạn chọn. 100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai; PPL đã mua lại sau đó được chia theo tỷ lệ 30/25/20/10/15 bởi multisig kho bạc, giống như mọi đợt mua lại khác. 30% phí mạng được dùng cho các đợt mua lại PPL công khai (kho bạc 20% + thanh khoản 10%); 70% còn lại được chia cho các validator (30%), quỹ cộng đồng (25%) và Growth Pool (15%) — và cuối cùng tất cả đều quay trở lại với người tham gia. Phí stablecoin là một khoản USD cố định, được chủ sở hữu phê duyệt: 1.00 USD cho một lần khởi chạy token, 2.00 USD cho một lần mint NFT. Phí gas luôn được thanh toán bằng PPL.",
-  "stableFeeNetworkNote": "Thanh toán bằng stablecoin hiện chỉ hoạt động trên mạng People. Thanh toán từ một chuỗi khác (Ethereum, Polygon, Tron, TON, Solana) sẽ có sau.",
+  "stableFeeNetworkNote": "Trả phí mạng bằng stablecoin chỉ hoạt động trên mạng PEOPLE. Việc này tách biệt với việc mua PPL trong đợt bán (xem /buy).",
   "growthReferralTitle": "Giới thiệu Growth (L1 / L2)",
   "growthReferralBody": "15% phí đủ điều kiện nuôi Growth Pool. Khi thanh toán, hai tuyến giới thiệu trả chia ngân sách: L1 70% và L2 30%. Tách khỏi phần community của chính token và định tuyến phí thông thường.",
   "tableColOperation": "Giao dịch",

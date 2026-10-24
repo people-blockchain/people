@@ -23,7 +23,6 @@ const surfaces = [
   "ecosystem",
   "founders",
   "lavka",
-  "sale",
   "litepaper",
   "samples",
 ];

@@ -45,21 +45,23 @@ test("BuyLifiBridge locks toChain, toToken and toAddress from config", () => {
   assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /toToken: BASE_USDT_ADDRESS/);
 });
 
-test("bridge source chains include Solana, exclude Tron and Base", () => {
+test("bridge source chains include Solana and Tron, exclude Base and TON", () => {
   assert.ok(LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.SOL));
-  assert.ok(!LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.TRN));
+  assert.ok(LIFI_BRIDGE_SOURCE_CHAIN_IDS.includes(ChainId.TRN));
   assert.ok(!LIFI_BRIDGE_SOURCE_CHAIN_IDS.some((id) => id === 8453));
 });
 
-test("BuyLifiBridge does not bundle Tron provider", () => {
-  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /widget-provider-tron/);
-  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /TronProvider/);
+test("BuyLifiBridge bundles the Tron provider and never TON", () => {
+  assert.match(BUY_LIFI_BRIDGE_SRC, /widget-provider-tron/);
+  assert.match(BUY_LIFI_BRIDGE_SRC, /TronProvider\(\)/);
+  assert.match(BUY_LIFI_BRIDGE_SRC, /ChainType\.TVM/);
+  assert.doesNotMatch(BUY_LIFI_BRIDGE_SRC, /ton connect|tonkeeper|ChainId\.TON/i);
 });
 
 test("BuyForm uses LI.FI widget and USDT swap panel", () => {
   assert.doesNotMatch(BUY_FORM_SRC, /BUY_NETWORKS/);
   assert.match(BUY_FORM_SRC, /BuyLifiBridge/);
-  assert.match(BUY_FORM_SRC, /pay-mode-bridge/);
+  assert.match(BUY_FORM_SRC, /pay-mode-\$\{mode\}/);
   assert.match(BUY_FORM_SRC, /buy-usdt-swap-panel/);
   assert.match(BUY_FORM_SRC, /hubPaymentToken/);
 });

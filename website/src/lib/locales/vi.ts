@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const vi: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnet v0.1",
+    "statusBadge": "Mạng thử nghiệm PEOPLE v0.1",
     "links": [
       {
         "label": "Cách hoạt động",
@@ -42,6 +42,10 @@ export const vi: LocaleContent = {
     "cta": "Cách hoạt động",
     "moreLinks": [
       {
+        "label": "Đợt bán PPL",
+        "href": "/buy"
+      },
+      {
         "label": "Lộ trình",
         "href": "/roadmap"
       },
@@ -64,6 +68,10 @@ export const vi: LocaleContent = {
       {
         "label": "Staking",
         "href": "/staking"
+      },
+      {
+        "label": "Quản trị",
+        "href": "/governance"
       },
       {
         "label": "Tạo token",
@@ -100,7 +108,8 @@ export const vi: LocaleContent = {
     "signIn": "Đăng nhập",
     "becomePartner": "Trở thành đối tác",
     "logoAlt": "Blockchain dành cho cộng đồng",
-    "brandAria": "Trang chủ Blockchain dành cho cộng đồng"
+    "brandAria": "Trang chủ Blockchain dành cho cộng đồng",
+    "buy": "Đợt bán PPL"
   },
   "explainerVideo": {
     "eyebrow": "Xem",
@@ -1274,5 +1283,21 @@ export const vi: LocaleContent = {
     "logoAlt": "Blockchain dành cho cộng đồng",
     "privacyLink": "Chính sách quyền riêng tư",
     "termsLink": "Điều khoản dịch vụ"
+  },
+  "networkMode": {
+    "label": "Chế độ mạng",
+    "mainnet": "Mạng chính",
+    "mainnetTitle": "Mạng chính: mạng Base, nơi diễn ra đợt bán PPL",
+    "testnet": "Mạng thử nghiệm",
+    "testnetTitle": "Mạng thử nghiệm: mạng thử nghiệm PEOPLE để tạo token và NFT"
+  },
+  "a11y": {
+    "skipToContent": "Chuyển đến nội dung",
+    "navPrimary": "Điều hướng chính",
+    "navMobile": "Menu di động",
+    "footer": "Chân trang"
+  },
+  "common": {
+    "englishOnlyBanner": "Hiện trang này chỉ có bằng tiếng Anh."
   }
 };

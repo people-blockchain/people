@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000";
 const ADDRESS = "0x1111111111111111111111111111111111111111";
-const PEOPLE_CHAIN_HEX = "0x17c79";
 
 const VIEWPORTS = [
   { name: "360", width: 360, height: 740 },
@@ -71,18 +70,14 @@ for (const viewport of VIEWPORTS) {
 
       const calls = await walletCallMethods(page);
       expect(calls).toContain("eth_requestAccounts");
-      expect(calls).toContain("wallet_switchEthereumChain");
-      expect(calls).toContain("wallet_addEthereumChain");
-      // Accounts must be requested before the chain is ever touched: MetaMask's in-app browser
-      // refuses wallet_switchEthereumChain/wallet_addEthereumChain for an origin with no granted
-      // accounts, which is exactly what made "Connect" silently fail inside the wallet app.
-      expect(calls.indexOf("eth_requestAccounts")).toBeLessThan(calls.indexOf("wallet_switchEthereumChain"));
-
-      const addChainCall = await page.evaluate(
-        () => window.__walletCalls.find((c) => c.method === "wallet_addEthereumChain"),
+      // Connecting never changes the network: the PPL sale runs on Base, and Base is requested only
+      // when the user presses Buy or "Switch to Base". The People chain is never added on connect.
+      expect(calls).not.toContain("wallet_switchEthereumChain");
+      expect(calls).not.toContain("wallet_addEthereumChain");
+      const chainCalls = await page.evaluate(() =>
+        window.__walletCalls.filter((c) => /EthereumChain$/.test(c.method)),
       );
-      expect(addChainCall.params[0].chainId).toBe(PEOPLE_CHAIN_HEX);
-      expect(addChainCall.params[0].nativeCurrency).toEqual({ name: "People", symbol: "PPL", decimals: 18 });
+      expect(chainCalls).toHaveLength(0);
 
       const trigger = page.locator('[data-testid="header-wallet-menu-trigger"]:visible').first();
       await expect(trigger).toBeVisible();
@@ -93,7 +88,7 @@ for (const viewport of VIEWPORTS) {
   }
 }
 
-test("Trust Wallet in-app browser connect: generic switch failure still adds the chain", async ({ browser }) => {
+test("Trust Wallet in-app browser connect: connecting makes no network requests to the wallet", async ({ browser }) => {
   const { context, page } = await openLoginWithProvider(browser, {
     viewport: VIEWPORTS[1],
     theme: "dark",
@@ -105,8 +100,8 @@ test("Trust Wallet in-app browser connect: generic switch failure still adds the
 
   const calls = await walletCallMethods(page);
   expect(calls).toContain("eth_requestAccounts");
-  expect(calls).toContain("wallet_addEthereumChain");
-  expect(calls.filter((m) => m === "wallet_switchEthereumChain").length).toBeGreaterThanOrEqual(2);
+  expect(calls).not.toContain("wallet_addEthereumChain");
+  expect(calls).not.toContain("wallet_switchEthereumChain");
 
   await context.close();
 });
