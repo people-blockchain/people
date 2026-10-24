@@ -71,9 +71,9 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
     category: "tools",
     name: "PEOPLE Multisig",
     monogram: "M",
-    href: "/multisig",
-    external: false,
-    status: "testnet",
+    href: "https://peoplemultisig.com",
+    external: true,
+    status: "live",
     label: "built_by_people",
   },
   {
