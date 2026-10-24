@@ -40,7 +40,7 @@
     "priceAfter": "Precio tras tu compra",
     "estimate": "Es una estimación. La cantidad exacta se confirma en la cadena antes de firmar.",
     "limitPerBuy": "{min}–{max} por compra",
-    "limitPerDay": "Hasta {amount} por persona en cualquier periodo de 24 horas",
+    "limitPerDay": "Hasta {amount} por dirección en cualquier periodo de 24 horas",
     "cooldown": "Pausa de {seconds} s entre compras",
     "overLimit": "Máximo {amount} en una compra.",
     "belowMin": "Introduce un importe para ver tu cotización.",
@@ -95,7 +95,7 @@
     "help": "¿Necesitas ayuda? {support}",
     "supportLink": "Soporte",
     "noWalletHint": "¿No tienes cartera? Elige Google o email y se creará una People Wallet para ti. Para pagar necesitas USDC en Base en esa cartera o en una que conectes.",
-    "sellBackTerms": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por persona. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
+    "sellBackTerms": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por dirección. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
     "feesTitle": "Comisiones y plazos",
     "feesBody": "Comisiones: la de la red Base (gas), que se paga en ETH, normalmente unos US$ 0,01; la de intercambio o puente de LI.FI, que el widget muestra antes de confirmar; y la de venta de vuelta a la reserva: 1,5 % (3 % si las ventas del día superan el 1 % de la reserva).",
     "timingBody": "Una compra en Base se confirma en segundos. Los pagos desde otras redes suelen llegar en 1–20 minutos. Los pagos por venta de vuelta se reciben en USDC en la red Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Venta de vuelta a la reserva",
-        "body": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por persona. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base."
+        "body": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por dirección. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base."
       },
       {
         "title": "Las transferencias se abren con el lanzamiento completo de la red",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "¿Puedo vender PPL de vuelta?",
-        "a": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por persona. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base."
+        "a": "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por dirección. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base."
       },
       {
         "q": "¿El tope de {ceiling} es permanente?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bots que compran primero",
         "what": "Scripts compran en los primeros segundos desde muchas carteras y venden a personas reales.",
-        "ours": "Hasta {perBuy} por compra, {perDay} por persona en cualquier periodo de 24 horas y una pausa de {cooldown} s entre compras. Los límites por cuenta dificultan acumular rápido una posición grande, pero no impiden que una persona use varias carteras."
+        "ours": "Hasta {perBuy} por compra, {perDay} por dirección en cualquier periodo de 24 horas y una pausa de {cooldown} s entre compras. Los límites por cuenta dificultan acumular rápido una posición grande, pero no impiden que una persona use varias carteras."
       },
       {
         "problem": "Ventas masivas",
         "what": "Grandes tenedores venden todo de golpe y hunden el precio.",
-        "ours": "La venta de vuelta está limitada al 2 % de la reserva al día para todos y a US$ 2.000 al día por persona. La comisión va a la recompra de PPL por el proyecto (un mecanismo aparte) y la liquidez del pool está bloqueada {lockPeriod}."
+        "ours": "La venta de vuelta está limitada al 2 % de la reserva al día para todos y a US$ 2.000 al día por dirección. La comisión va a la recompra de PPL por el proyecto (un mecanismo aparte) y la liquidez del pool está bloqueada {lockPeriod}."
       },
       {
         "problem": "Un precio peor que el mostrado",

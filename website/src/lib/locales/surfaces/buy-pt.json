@@ -40,7 +40,7 @@
     "priceAfter": "Preço após sua compra",
     "estimate": "É uma estimativa. A quantidade exata é confirmada na rede antes de você assinar.",
     "limitPerBuy": "{min}–{max} por compra",
-    "limitPerDay": "Até {amount} por pessoa em quaisquer 24 horas",
+    "limitPerDay": "Até {amount} por endereço em quaisquer 24 horas",
     "cooldown": "Pausa de {seconds} s entre compras",
     "overLimit": "Máximo {amount} em uma compra.",
     "belowMin": "Informe um valor para ver a cotação.",
@@ -95,7 +95,7 @@
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
     "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma People Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
-    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por pessoa por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base.",
+    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por endereço por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
     "feesBody": "Taxas: a taxa da rede Base (gas), paga em ETH — normalmente cerca de US$ 0,01; a taxa de swap ou bridge da LI.FI — exibida no widget antes de você confirmar; a taxa de venda de volta à reserva — 1,5% (3% se as vendas do dia passarem de 1% da reserva).",
     "timingBody": "Uma compra na Base é confirmada em segundos. Pagamentos de outras redes costumam chegar em 1–20 minutos. Os pagamentos da venda de volta são feitos em USDC na rede Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Venda de volta à reserva",
-        "body": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por pessoa por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base."
+        "body": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por endereço por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base."
       },
       {
         "title": "Transferências abrem com o lançamento completo da rede",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Posso vender PPL de volta?",
-        "a": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por pessoa por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base."
+        "a": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por endereço por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base."
       },
       {
         "q": "O teto de {ceiling} é permanente?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bots que compram primeiro",
         "what": "Scripts compram nos primeiros segundos de muitas carteiras e vendem a pessoas reais.",
-        "ours": "Até {perBuy} por compra, {perDay} por pessoa em quaisquer 24 horas e pausa de {cooldown} s entre compras. Limites por conta dificultam montar rápido uma posição grande, mas não impedem que uma pessoa use várias carteiras."
+        "ours": "Até {perBuy} por compra, {perDay} por endereço em quaisquer 24 horas e pausa de {cooldown} s entre compras. Limites por conta dificultam montar rápido uma posição grande, mas não impedem que uma pessoa use várias carteiras."
       },
       {
         "problem": "Vendas em massa",
         "what": "Grandes detentores vendem tudo de uma vez e derrubam o preço.",
-        "ours": "A venda de volta é limitada a 2% da reserva por dia para todos e a US$ 2.000 por pessoa por dia. A taxa vai para a recompra de PPL pelo projeto (um mecanismo separado), e a liquidez do pool fica bloqueada por {lockPeriod}."
+        "ours": "A venda de volta é limitada a 2% da reserva por dia para todos e a US$ 2.000 por endereço por dia. A taxa vai para a recompra de PPL pelo projeto (um mecanismo separado), e a liquidez do pool fica bloqueada por {lockPeriod}."
       },
       {
         "problem": "Preço pior que o mostrado",

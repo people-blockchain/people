@@ -40,7 +40,7 @@
     "priceAfter": "Alımınızdan sonraki fiyat",
     "estimate": "Bu bir tahmindir. Kesin miktar, imzalamadan önce zincir üzerinde onaylanır.",
     "limitPerBuy": "Alım başına {min}–{max}",
-    "limitPerDay": "Herhangi bir 24 saatte kişi başına en fazla {amount}",
+    "limitPerDay": "Herhangi bir 24 saatte adres başına en fazla {amount}",
     "cooldown": "Alımlar arasında {seconds} sn bekleme",
     "overLimit": "Tek alımda en fazla {amount}.",
     "belowMin": "Fiyat teklifini görmek için tutar girin.",
@@ -95,7 +95,7 @@
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
     "noWalletHint": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir People Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
-    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve adres başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
     "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık US$0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3).",
     "timingBody": "Base'de bir alım saniyeler içinde onaylanır. Diğer ağlardan ödemeler genellikle 1–20 dakikada ulaşır. Geri satış ödemeleri Base ağında USDC olarak yapılır.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Rezerve geri satış",
-        "body": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
+        "body": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve adres başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
       },
       {
         "title": "Transferler ağın tam lansmanıyla açılır",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "PPL'i geri satabilir miyim?",
-        "a": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
+        "a": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve adres başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
       },
       {
         "q": "{ceiling} tavanı kalıcı mı?",
@@ -278,12 +278,12 @@
       {
         "problem": "İlk alan botlar",
         "what": "Scriptler ilk saniyelerde çok cüzdandan alır, gerçek kullanıcılara satar.",
-        "ours": "Alım başına en fazla {perBuy}, herhangi bir 24 saatte kişi başına {perDay} ve alımlar arasında {cooldown} sn bekleme. Hesap başına sınırlar hızla büyük pozisyon toplamayı zorlaştırır, ancak bir kişinin birden fazla cüzdan kullanmasını engelleyemez."
+        "ours": "Alım başına en fazla {perBuy}, herhangi bir 24 saatte adres başına {perDay} ve alımlar arasında {cooldown} sn bekleme. Hesap başına sınırlar hızla büyük pozisyon toplamayı zorlaştırır, ancak bir kişinin birden fazla cüzdan kullanmasını engelleyemez."
       },
       {
         "problem": "Toplu satışlar",
         "what": "Büyük sahipler her şeyi birden satar ve fiyat çöker.",
-        "ours": "Rezerve geri satış, herkes için günde rezervin %2'si ve kişi başına günde $2.000 ile sınırlıdır. Ücret, projenin PPL geri alımına gider (ayrı bir mekanizma); havuz likiditesi {lockPeriod} boyunca kilitlidir."
+        "ours": "Rezerve geri satış, herkes için günde rezervin %2'si ve adres başına günde $2.000 ile sınırlıdır. Ücret, projenin PPL geri alımına gider (ayrı bir mekanizma); havuz likiditesi {lockPeriod} boyunca kilitlidir."
       },
       {
         "problem": "Gösterilenden kötü fiyat",

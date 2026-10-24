@@ -41,28 +41,11 @@ const nextConfig: NextConfig = {
     "@lifi/widget-provider-solana",
   ],
   async redirects() {
-    const localeBuyRedirects = [
-      "en",
-      "ru",
-      "es",
-      "pt",
-      "fr",
-      "de",
-      "it",
-      "tr",
-      "vi",
-      "id",
-      "zh",
-      "ar",
-    ].map((locale) => ({
-      source: `/${locale}/buy`,
-      destination: "/buy",
-      permanent: false,
-    }));
+    // `/{locale}/buy` is handled in `src/proxy.ts`: a config redirect cannot set
+    // the language cookie, so the locale in the URL would be lost.
     return [
       { source: "/sign-in", destination: "/login", permanent: true },
       { source: "/partner/login", destination: "/login?callbackUrl=%2Fpartner", permanent: true },
-      ...localeBuyRedirects,
     ];
   },
   async headers() {

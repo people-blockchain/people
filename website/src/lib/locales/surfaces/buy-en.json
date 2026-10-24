@@ -40,7 +40,7 @@
     "priceAfter": "Price after your purchase",
     "estimate": "Estimate. The exact amount is confirmed on-chain before you sign.",
     "limitPerBuy": "{min}–{max} per purchase",
-    "limitPerDay": "Up to {amount} per person in any 24 hours",
+    "limitPerDay": "Up to {amount} per address in any 24 hours",
     "cooldown": "{seconds} s pause between purchases",
     "overLimit": "Maximum {amount} in one purchase.",
     "belowMin": "Enter an amount to see your quote.",
@@ -95,7 +95,7 @@
     "help": "Need help? {support}",
     "supportLink": "Support",
     "noWalletHint": "No wallet? Choose Google or email — a People Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
-    "sellBackTerms": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+    "sellBackTerms": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per address per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
     "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, or 3% when that day's sell-backs exceed 1% of the reserve.",
     "timingBody": "A purchase on Base is confirmed within seconds. Payments from other networks usually arrive within 1–20 minutes. Sell-back payouts are made in USDC on Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Sell-back to the reserve",
-        "body": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
+        "body": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per address per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
       },
       {
         "title": "Transfers open with the full network launch",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Can I sell PPL back?",
-        "a": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
+        "a": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per address per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base."
       },
       {
         "q": "Is the {ceiling} ceiling permanent?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bots buying first",
         "what": "Scripts buy in the first seconds from many wallets, then sell to real people.",
-        "ours": "Up to {perBuy} per purchase, {perDay} per person in any 24 hours, and a {cooldown}-second pause between purchases. Per-account limits make it harder to build a large position quickly; they cannot rule out one person using several wallets."
+        "ours": "Up to {perBuy} per purchase, {perDay} per address in any 24 hours, and a {cooldown}-second pause between purchases. Per-account limits make it harder to build a large position quickly; they cannot rule out one person using several wallets."
       },
       {
         "problem": "Large sell-offs",
         "what": "Large holders sell everything at once and crash the price.",
-        "ours": "Sell-back is capped at 2% of the reserve per day for everyone and $2,000 per person per day. The sell-back fee goes to the PPL buyback by the project (a separate mechanism), and pool liquidity is locked for {lockPeriod}."
+        "ours": "Sell-back is capped at 2% of the reserve per day for everyone and $2,000 per address per day. The sell-back fee goes to the PPL buyback by the project (a separate mechanism), and pool liquidity is locked for {lockPeriod}."
       },
       {
         "problem": "Worse price than shown",

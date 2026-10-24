@@ -40,7 +40,7 @@
     "priceAfter": "Prix après votre achat",
     "estimate": "Estimation. Le montant exact est confirmé on-chain avant votre signature.",
     "limitPerBuy": "{min}–{max} par achat",
-    "limitPerDay": "Jusqu’à {amount} par personne sur toute période de 24 heures",
+    "limitPerDay": "Jusqu’à {amount} par adresse sur toute période de 24 heures",
     "cooldown": "Pause de {seconds} s entre deux achats",
     "overLimit": "Maximum {amount} en un achat.",
     "belowMin": "Saisissez un montant pour voir le devis.",
@@ -95,7 +95,7 @@
     "help": "Besoin d’aide ? {support}",
     "supportLink": "Assistance",
     "noWalletHint": "Pas de portefeuille ? Choisissez Google ou e-mail : un People Wallet est créé pour vous. Pour payer, il vous faut des USDC sur Base dans ce portefeuille ou dans un portefeuille que vous connectez.",
-    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
+    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par adresse et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
     "feesTitle": "Frais et délais",
     "feesBody": "Frais : les frais du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; les frais d’échange ou de bridge de LI.FI — affichés dans le widget avant confirmation ; les frais de revente à la réserve — 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve).",
     "timingBody": "Un achat sur Base est confirmé en quelques secondes. Les paiements depuis d’autres réseaux arrivent en général en 1 à 20 minutes. Les reventes sont réglées en USDC sur Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Revente à la réserve",
-        "body": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
+        "body": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par adresse et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
       },
       {
         "title": "Les transferts ouvrent au lancement complet du réseau",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Puis-je revendre mes PPL ?",
-        "a": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
+        "a": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par adresse et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
       },
       {
         "q": "Le plafond de {ceiling} est-il permanent ?",
@@ -278,12 +278,12 @@
       {
         "problem": "Des bots qui achètent en premier",
         "what": "Des scripts achètent dans les premières secondes depuis de nombreux portefeuilles puis revendent aux vrais utilisateurs.",
-        "ours": "Jusqu’à {perBuy} par achat, {perDay} par personne sur toute période de 24 heures et une pause de {cooldown} s entre deux achats. Les limites par compte rendent plus difficile la constitution rapide d’une grosse position, sans exclure qu’une personne utilise plusieurs portefeuilles."
+        "ours": "Jusqu’à {perBuy} par achat, {perDay} par adresse sur toute période de 24 heures et une pause de {cooldown} s entre deux achats. Les limites par compte rendent plus difficile la constitution rapide d’une grosse position, sans exclure qu’une personne utilise plusieurs portefeuilles."
       },
       {
         "problem": "Ventes massives",
         "what": "De gros détenteurs vendent tout d’un coup et font chuter le prix.",
-        "ours": "La revente à la réserve est plafonnée à 2 % de la réserve par jour pour tous et à 2 000 $ par personne et par jour. Les frais financent le rachat de PPL par le projet (un mécanisme distinct), et la liquidité du pool est bloquée pendant {lockPeriod}."
+        "ours": "La revente à la réserve est plafonnée à 2 % de la réserve par jour pour tous et à 2 000 $ par adresse et par jour. Les frais financent le rachat de PPL par le projet (un mécanisme distinct), et la liquidité du pool est bloquée pendant {lockPeriod}."
       },
       {
         "problem": "Un prix pire que celui affiché",

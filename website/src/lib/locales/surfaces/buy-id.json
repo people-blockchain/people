@@ -40,7 +40,7 @@
     "priceAfter": "Harga setelah pembelian Anda",
     "estimate": "Ini perkiraan. Jumlah pastinya dikonfirmasi on-chain sebelum Anda menandatangani.",
     "limitPerBuy": "{min}–{max} per pembelian",
-    "limitPerDay": "Hingga {amount} per orang dalam 24 jam mana pun",
+    "limitPerDay": "Hingga {amount} per alamat dalam 24 jam mana pun",
     "cooldown": "Jeda {seconds} detik antarpembelian",
     "overLimit": "Maksimum {amount} dalam satu pembelian.",
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
@@ -95,7 +95,7 @@
     "help": "Butuh bantuan? {support}",
     "supportLink": "Dukungan",
     "noWalletHint": "Belum punya dompet? Pilih Google atau email — People Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
-    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
+    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
     "feesTitle": "Biaya dan waktu",
     "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar US$0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum Anda konfirmasi; biaya penjualan kembali ke cadangan — 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan).",
     "timingBody": "Pembelian di Base dikonfirmasi dalam hitungan detik. Pembayaran dari jaringan lain biasanya tiba dalam 1–20 menit. Pembayaran penjualan kembali dikirim dalam USDC di jaringan Base.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Penjualan kembali ke cadangan",
-        "body": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
+        "body": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
       },
       {
         "title": "Transfer dibuka saat peluncuran jaringan penuh",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Bisakah saya menjual PPL kembali?",
-        "a": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
+        "a": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
       },
       {
         "q": "Apakah plafon {ceiling} permanen?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bot yang membeli lebih dulu",
         "what": "Skrip membeli di detik pertama dari banyak dompet lalu menjual ke orang sungguhan.",
-        "ours": "Hingga {perBuy} per pembelian, {perDay} per orang dalam 24 jam mana pun, dan jeda {cooldown} detik antarpembelian. Batas per akun mempersulit pengumpulan posisi besar dengan cepat, tetapi tidak mencegah satu orang memakai beberapa dompet."
+        "ours": "Hingga {perBuy} per pembelian, {perDay} per alamat dalam 24 jam mana pun, dan jeda {cooldown} detik antarpembelian. Batas per akun mempersulit pengumpulan posisi besar dengan cepat, tetapi tidak mencegah satu orang memakai beberapa dompet."
       },
       {
         "problem": "Aksi jual besar-besaran",
         "what": "Pemegang besar menjual semuanya sekaligus dan harga anjlok.",
-        "ours": "Penjualan kembali dibatasi 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biayanya dipakai untuk pembelian kembali PPL oleh proyek (mekanisme terpisah), dan likuiditas pool dikunci selama {lockPeriod}."
+        "ours": "Penjualan kembali dibatasi 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biayanya dipakai untuk pembelian kembali PPL oleh proyek (mekanisme terpisah), dan likuiditas pool dikunci selama {lockPeriod}."
       },
       {
         "problem": "Harga lebih buruk dari yang ditampilkan",

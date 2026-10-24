@@ -120,11 +120,11 @@
       {
         "title": "Penjualan PPL publik",
         "body": [
-          "Sale parameters (curve formula, price path, limits and the graduation target) are published on the /buy page. Purchases stay disabled until the sale contract is published; connecting a wallet commits you to nothing.",
+          "Sale parameters (curve formula, price path, limits, and the sale term: until sold out or 24 months, whichever comes first) are published on the /buy page. Purchases stay disabled until the sale contract is published; connecting a wallet commits you to nothing.",
           "No KYC is required to buy. Selling back requires proof of humanity (Human Passport or Telegram), which is not KYC.",
           "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
           "The sale term, price formula and limits do not change after the sale opens.",
-          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per address per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
           "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction."
         ]
       },
@@ -133,6 +133,14 @@
         "body": [
           "Nothing on this site is investment, tax, or legal advice. We do not promise profits, returns, token price, listing, or income of any kind.",
           "Test PPL and other test-network assets have no monetary value. Holding or earning test tokens does not entitle you to mainnet tokens, money, or future allocations unless we publish a separate, binding program—and none is promised here."
+        ]
+      },
+      {
+        "title": "Pengungkapan penjualan PPL",
+        "body": [
+          "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti rumus yang dipublikasikan; setelah penjualan berakhir pasar yang menentukan dan bisa naik atau turun. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; keuntungan atau pengembalian tidak dijanjikan.",
+          "Partisipasi mungkin dibatasi atau tidak tersedia di wilayah Anda; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang siap Anda rugikan.",
+          "Tinjauan keamanan berbantuan AI yang disebut di situs dilakukan oleh tim proyek. Bukan audit eksternal; audit keamanan pihak ketiga diselesaikan sebelum mainnet. Bug bounty mengurangi risiko tetapi tidak menghilangkannya."
         ]
       },
       {

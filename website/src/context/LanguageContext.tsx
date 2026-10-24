@@ -4,7 +4,6 @@ import React, { createContext, useCallback, useContext, useEffect, useSyncExtern
 import { useRouter } from "next/navigation";
 import {
   getLanguageSnapshot,
-  getServerLanguageSnapshot,
   setLanguagePreference,
   subscribePreferences,
   type Language,
@@ -22,12 +21,18 @@ const LanguageContext = createContext<LanguageContextType>({
   setLang: () => {},
 });
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const lang = useSyncExternalStore(
-    subscribePreferences,
-    getLanguageSnapshot,
-    getServerLanguageSnapshot
-  );
+export function LanguageProvider({
+  children,
+  initialLang = "en",
+}: {
+  children: React.ReactNode;
+  /** Language resolved from the request (cookie, then Accept-Language) by the root layout. */
+  initialLang?: Language;
+}) {
+  // The server snapshot also drives the hydration render, so SSR markup and the
+  // first client render agree; the stored preference is applied right after.
+  const serverSnapshot = useCallback(() => initialLang, [initialLang]);
+  const lang = useSyncExternalStore(subscribePreferences, getLanguageSnapshot, serverSnapshot);
   const router = useRouter();
 
   const setLang = useCallback(

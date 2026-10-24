@@ -40,7 +40,7 @@
     "priceAfter": "Preis nach Ihrem Kauf",
     "estimate": "Schätzung. Die genaue Menge wird vor Ihrer Signatur on-chain bestätigt.",
     "limitPerBuy": "{min}–{max} pro Kauf",
-    "limitPerDay": "Bis zu {amount} pro Person in beliebigen 24 Stunden",
+    "limitPerDay": "Bis zu {amount} pro Adresse in beliebigen 24 Stunden",
     "cooldown": "{seconds} s Pause zwischen Käufen",
     "overLimit": "Maximal {amount} in einem Kauf.",
     "belowMin": "Betrag eingeben, um ein Angebot zu sehen.",
@@ -95,7 +95,7 @@
     "help": "Brauchen Sie Hilfe? {support}",
     "supportLink": "Hilfe",
     "noWalletHint": "Keine Wallet? Wählen Sie Google oder E-Mail — dann wird eine People Wallet für Sie erstellt. Zum Bezahlen brauchen Sie USDC auf Base in dieser oder in einer verbundenen Wallet.",
-    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base.",
+    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Adresse und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base.",
     "feesTitle": "Gebühren und Dauer",
     "feesBody": "Gebühren: die Netzwerkgebühr von Base (Gas), bezahlt in ETH — meist etwa 0,01 $; die Swap- oder Bridge-Gebühr von LI.FI — wird im Widget vor der Bestätigung angezeigt; die Gebühr für den Rückverkauf an die Reserve — 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen).",
     "timingBody": "Ein Kauf auf Base wird in Sekunden bestätigt. Zahlungen aus anderen Netzwerken kommen meist innerhalb von 1–20 Minuten an. Rückverkäufe werden in USDC auf Base ausgezahlt.",
@@ -169,7 +169,7 @@
       },
       {
         "title": "Rückverkauf an die Reserve",
-        "body": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base."
+        "body": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Adresse und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base."
       },
       {
         "title": "Überweisungen ab dem vollständigen Netzwerkstart",
@@ -239,7 +239,7 @@
     "items": [
       {
         "q": "Kann ich PPL zurückverkaufen?",
-        "a": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base."
+        "a": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Adresse und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base."
       },
       {
         "q": "Ist die Obergrenze {ceiling} dauerhaft?",
@@ -278,12 +278,12 @@
       {
         "problem": "Bots, die zuerst kaufen",
         "what": "Skripte kaufen in den ersten Sekunden von vielen Wallets und verkaufen an echte Nutzer.",
-        "ours": "Bis zu {perBuy} pro Kauf, {perDay} pro Person in beliebigen 24 Stunden und {cooldown} s Pause zwischen Käufen. Limits pro Konto erschweren den schnellen Aufbau einer großen Position, schließen aber nicht aus, dass eine Person mehrere Wallets nutzt."
+        "ours": "Bis zu {perBuy} pro Kauf, {perDay} pro Adresse in beliebigen 24 Stunden und {cooldown} s Pause zwischen Käufen. Limits pro Konto erschweren den schnellen Aufbau einer großen Position, schließen aber nicht aus, dass eine Person mehrere Wallets nutzt."
       },
       {
         "problem": "Massenverkäufe",
         "what": "Großinhaber verkaufen alles auf einmal und bringen den Preis zum Absturz.",
-        "ours": "Der Rückverkauf ist auf 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag begrenzt. Die Gebühr fließt in den PPL-Rückkauf durch das Projekt (ein separater Mechanismus), und die Pool-Liquidität ist für {lockPeriod} gesperrt."
+        "ours": "Der Rückverkauf ist auf 2 % der Reserve pro Tag für alle und 2.000 $ pro Adresse und Tag begrenzt. Die Gebühr fließt in den PPL-Rückkauf durch das Projekt (ein separater Mechanismus), und die Pool-Liquidität ist für {lockPeriod} gesperrt."
       },
       {
         "problem": "Schlechterer Preis als angezeigt",
