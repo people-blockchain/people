@@ -28,6 +28,8 @@ contract CreatorVesting is ICreatorVesting {
 
     error Unauthorized();
     error NothingToClaim();
+    /// @notice A schedule for this token already exists; `register` never overwrites one.
+    error AlreadyRegistered();
 
     constructor(address core_) {
         core = core_;
@@ -40,6 +42,9 @@ contract CreatorVesting is ICreatorVesting {
     }
 
     function register(address token, address creator, uint256 totalAllocation, uint256 upfrontUnlocked) external onlyFactory {
+        // `startTime` is always non-zero once registered (even when `creator` is zero), so a
+        // swapped-in factory cannot reset `claimed`/`startTime` or reassign `creator`.
+        if (schedules[token].startTime != 0) revert AlreadyRegistered();
         schedules[token] = Schedule({
             creator: creator,
             totalAllocation: totalAllocation,
@@ -84,6 +89,8 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
 
     address public immutable core;
     mapping(address => uint256) public balances;
+    /// @notice True once `register` ran for a token; `register` never runs twice for one token.
+    mapping(address => bool) public registered;
 
     /// @notice H-01: `withdraw`'s `to` must be on this allow-list, set only by `owner()`
     /// (the `PeopleTimelock`, behind its 2-day delay — see `Deploy.s.sol`). Without this, an
@@ -99,6 +106,8 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
     error InsufficientBalance();
     error RecipientNotAllowed(address to);
     error CreditExceedsHoldings();
+    /// @notice A community allocation for this token already exists; `register` never overwrites one.
+    error AlreadyRegistered();
 
     event CommunityPromoReturned(address indexed token, uint256 amount);
 
@@ -108,6 +117,10 @@ contract CommunityTokenVault is ICommunityTokenVault, Ownable {
 
     function register(address token, uint256 amount) external {
         if (msg.sender != _tokenFactory()) revert Unauthorized();
+        // Explicit flag, not `balances[token] != 0`: after a full `withdraw` the balance is
+        // legitimately zero, and a swapped-in factory must not be able to reset or inflate it.
+        if (registered[token]) revert AlreadyRegistered();
+        registered[token] = true;
         balances[token] = amount;
         emit CommunityRegistered(token, amount);
     }
