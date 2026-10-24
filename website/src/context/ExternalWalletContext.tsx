@@ -15,7 +15,7 @@ import {
   browserEvmRpcUrl,
   createBrowserPublicClient,
   createEmbeddedWalletClient,
-  ensureBaseChain,
+  ensureSaleChain,
   peopleViemChain,
   readInjectedProvider,
   waitForInjectedProvider,
@@ -32,7 +32,7 @@ import {
   type WalletAppVendor,
 } from "@/lib/mobile-env";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
-import { SALE_HUB_CHAIN } from "@/lib/sale/config";
+import { SALE_CHAIN } from "@/lib/sale/config";
 import { PeopleMobileProvider } from "@/lib/mobile-wallet/browser";
 import type { MobileSession } from "@/lib/mobile-wallet/service";
 
@@ -46,7 +46,7 @@ export type ActiveEvmSigner = {
   provider?: EIP1193Provider;
 };
 
-const BASE_CHAIN_ID = SALE_HUB_CHAIN.chainId;
+const BASE_CHAIN_ID = SALE_CHAIN.id;
 
 function parseChainId(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -101,12 +101,13 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     const { EthereumProvider } = await import("@walletconnect/ethereum-provider");
     const provider = await EthereumProvider.init({
       projectId,
-      // The sale runs on Base, so Base is the required chain. Ethereum and the People chain are
-      // optional (the People chain is only used by explicit actions such as the multisig panel).
-      chains: [8453],
-      optionalChains: [1, 97401],
+      // The sale chain (Base, or Base Sepolia on the test sale) is the required chain. Ethereum and
+      // the People chain are optional (the People chain is only used by explicit actions such as the
+      // multisig panel); on the test sale Base mainnet stays reachable as optional.
+      chains: [SALE_CHAIN.id],
+      optionalChains: SALE_CHAIN.testnet ? [1, 97401, 8453] : [1, 97401],
       showQrModal: true,
-      rpcMap: { 97401: DEFAULT_EVM_RPC_URL },
+      rpcMap: { 97401: DEFAULT_EVM_RPC_URL, ...(SALE_CHAIN.testnet ? { [SALE_CHAIN.id]: SALE_CHAIN.rpcUrl } : {}) },
     });
     // Let the caller hide the site dialog so the WalletConnect QR is not stacked underneath it.
     onWalletConnectOpenRef.current?.();
@@ -269,7 +270,7 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
   const switchToBase = useCallback(async (): Promise<boolean> => {
     const provider = signer && signer.kind !== "embedded" ? signer.provider : undefined;
     if (!provider) return false;
-    const ok = await ensureBaseChain(provider);
+    const ok = await ensureSaleChain(provider);
     if (ok) setChainId(BASE_CHAIN_ID);
     return ok;
   }, [signer]);

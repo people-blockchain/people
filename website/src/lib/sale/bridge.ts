@@ -10,22 +10,35 @@
 import { ChainId, type StaticToken } from "@lifi/types";
 
 import type { SaleStableSymbol } from "@/lib/sale/config";
+import {
+  BASE_MAINNET_USDC,
+  BASE_MAINNET_USDT,
+  SALE_CHAIN,
+  saleTokenAddress,
+  type SaleChain,
+} from "@/lib/sale/saleChain";
 
-/** Circle USDC on Base mainnet — bridge destination and the only token passed to the sale hub. */
-export const BASE_USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" as const;
+/** Circle USDC on Base mainnet — bridge destination (the widget always targets Base mainnet). */
+export const BASE_USDC_ADDRESS = BASE_MAINNET_USDC;
 
 /**
  * Bridged USDT on Base (OP Standard Bridge, L1 token = Ethereum USDT), not native Tether.
  * Paid directly only if the hub accepts it; otherwise LI.FI converts to USDC first.
  */
-export const BASE_USDT_ADDRESS = "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2" as const;
+export const BASE_USDT_ADDRESS = BASE_MAINNET_USDT;
 
-/** Token the PplCurveHub `buyWith` path takes: USDT only if the hub accepts it directly, else USDC. */
+/**
+ * Token the PplCurveHub `buyWith` path takes on the sale chain: USDT only if the hub accepts it
+ * directly (and it is configured), else USDC. Null when the chain has no USDC configured.
+ */
 export function hubPaymentToken(
   paidWith: SaleStableSymbol,
   hubAcceptsUsdt = false,
-): typeof BASE_USDC_ADDRESS | typeof BASE_USDT_ADDRESS {
-  return paidWith === "USDT" && hubAcceptsUsdt ? BASE_USDT_ADDRESS : BASE_USDC_ADDRESS;
+  chain: SaleChain = SALE_CHAIN,
+): string | null {
+  const usdt = saleTokenAddress("USDT", chain);
+  if (paidWith === "USDT" && hubAcceptsUsdt && usdt) return usdt;
+  return saleTokenAddress("USDC", chain);
 }
 
 /** LI.FI widget UI language per site language (Arabic is not offered by the widget). */
@@ -34,7 +47,7 @@ export const LIFI_LANG: Record<string, string> = {
   tr: "tr", vi: "vi", id: "id", zh: "zh", ar: "en", ru: "ru",
 };
 
-/** Hub chain for PplCurveHub (sale contract). */
+/** Base mainnet chain id: the LI.FI widget always delivers here (it does not support the test sale chain). */
 export const BASE_CHAIN_ID = ChainId.BAS;
 
 /**
