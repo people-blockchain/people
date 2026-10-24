@@ -133,6 +133,11 @@ export const pplCurveHubAbi = [
         "name": "minPplOut",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [
@@ -493,6 +498,12 @@ export const pplCurveHubAbi = [
         "internalType": "address"
       },
       {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
         "name": "token",
         "type": "address",
         "indexed": false,
@@ -773,6 +784,11 @@ export const pplCurveHubAbi = [
         "internalType": "address"
       }
     ]
+  },
+  {
+    "type": "error",
+    "name": "SaleAlreadyOpened",
+    "inputs": []
   },
   {
     "type": "error",

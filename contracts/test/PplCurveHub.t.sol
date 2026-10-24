@@ -66,7 +66,7 @@ contract HubHarness is PplCurveHub {
 }
 
 contract PplCurveHubTest is Test {
-    event Bought(address indexed buyer, address token, uint256 amountIn, uint256 pplOut);
+    event Bought(address indexed buyer, address indexed recipient, address token, uint256 amountIn, uint256 pplOut);
     event TokenSet(address indexed token, bool allowed, uint8 decimals);
     event SaleOpened(uint256 openedAt, uint256 closesAt);
     event Graduated(uint256 raisedUsd6, uint256 soldPpl);
@@ -75,6 +75,9 @@ contract PplCurveHubTest is Test {
     HubHarness harness;
     MockUSDC usdc;
     MockUSDT usdt;
+    FeeToken ft;
+    MockToken t18;
+    MockToken t2;
     address owner = makeAddr("owner");
     address treasury = makeAddr("treasury");
     address alice = makeAddr("alice");
@@ -86,11 +89,19 @@ contract PplCurveHubTest is Test {
         usdt = new MockUSDT();
         hub = new PplCurveHub(owner, treasury);
         harness = new HubHarness(owner, treasury);
+        ft = new FeeToken();
+        t18 = new MockToken("T18", 18);
+        t2 = new MockToken("T2", 2);
         vm.startPrank(owner);
         hub.setToken(address(usdc), true);
         hub.setToken(address(usdt), true);
+        hub.setToken(address(ft), true);
+        hub.setToken(address(t18), true);
+        hub.setToken(address(t2), true);
         hub.open();
         harness.setToken(address(usdc), true);
+        harness.setToken(address(t18), true);
+        harness.setToken(address(t2), true);
         harness.open();
         vm.stopPrank();
         _fund(alice, usdc, 1_000_000e6, hub);
@@ -108,7 +119,7 @@ contract PplCurveHubTest is Test {
 
     function _buy(address who, uint256 usd6) internal returns (uint256) {
         vm.prank(who);
-        return hub.buyWith(address(usdc), usd6, 0);
+        return hub.buyWith(address(usdc), usd6, 0, who);
     }
 
     function _approxRel(uint256 a, uint256 b, uint256 relWad) internal pure returns (bool) {
@@ -142,8 +153,8 @@ contract PplCurveHubTest is Test {
 
     function test_buyHappyPath() public {
         uint256 q = hub.quoteBuy(address(usdc), 100e6);
-        vm.expectEmit(true, false, false, true, address(hub));
-        emit Bought(alice, address(usdc), 100e6, q);
+        vm.expectEmit(true, true, false, true, address(hub));
+        emit Bought(alice, alice, address(usdc), 100e6, q);
         uint256 out = _buy(alice, 100e6);
         assertEq(out, q);
         assertGt(out, 19_000e18); // ~100/0.005 = 20,000 less slope
@@ -160,7 +171,7 @@ contract PplCurveHubTest is Test {
 
     function test_buyWithUsdt() public {
         vm.prank(alice);
-        uint256 out = hub.buyWith(address(usdt), 50e6, 0);
+        uint256 out = hub.buyWith(address(usdt), 50e6, 0, alice);
         assertGt(out, 0);
         assertEq(usdt.balanceOf(treasury), 50e6);
     }
@@ -168,14 +179,14 @@ contract PplCurveHubTest is Test {
     function test_minMaxPerPurchase() public {
         vm.startPrank(alice);
         vm.expectRevert(PplCurveHub.BelowMin.selector);
-        hub.buyWith(address(usdc), 10e6 - 1, 0);
+        hub.buyWith(address(usdc), 10e6 - 1, 0, alice);
         vm.expectRevert(PplCurveHub.AboveMax.selector);
-        hub.buyWith(address(usdc), 500e6 + 1, 0);
+        hub.buyWith(address(usdc), 500e6 + 1, 0, alice);
         vm.expectRevert(PplCurveHub.ZeroAmount.selector);
-        hub.buyWith(address(usdc), 0, 0);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 0, 0, alice);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
         vm.warp(vm.getBlockTimestamp() + 60);
-        hub.buyWith(address(usdc), 500e6, 0);
+        hub.buyWith(address(usdc), 500e6, 0, alice);
         vm.stopPrank();
     }
 
@@ -183,9 +194,9 @@ contract PplCurveHubTest is Test {
         uint256 q = hub.quoteBuy(address(usdc), 100e6);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.Slippage.selector);
-        hub.buyWith(address(usdc), 100e6, q + 1);
+        hub.buyWith(address(usdc), 100e6, q + 1, alice);
         vm.prank(alice);
-        assertEq(hub.buyWith(address(usdc), 100e6, q), q);
+        assertEq(hub.buyWith(address(usdc), 100e6, q, alice), q);
     }
 
     function test_quoteEqualsRealAcrossCurve() public {
@@ -197,20 +208,104 @@ contract PplCurveHubTest is Test {
             usdc.approve(address(hub), type(uint256).max);
             uint256 q = hub.quoteBuy(address(usdc), 250e6);
             vm.prank(b);
-            assertEq(hub.buyWith(address(usdc), 250e6, 0), q);
+            assertEq(hub.buyWith(address(usdc), 250e6, 0, b), q);
         }
     }
 
     function test_feeOnTransferTokenRejected() public {
-        FeeToken ft = new FeeToken();
-        vm.prank(owner);
-        hub.setToken(address(ft), true);
         ft.mint(alice, 1_000e6);
         vm.startPrank(alice);
         ft.approve(address(hub), type(uint256).max);
         vm.expectRevert(PplCurveHub.TransferMismatch.selector);
-        hub.buyWith(address(ft), 100e6, 0);
+        hub.buyWith(address(ft), 100e6, 0, alice);
         vm.stopPrank();
+    }
+
+    // ------------------------------------------------------------------ recipient
+
+    function test_recipientReceivesAllocation() public {
+        uint256 q = hub.quoteBuy(address(usdc), 100e6);
+        vm.expectEmit(true, true, false, true, address(hub));
+        emit Bought(alice, bob, address(usdc), 100e6, q);
+        vm.prank(alice);
+        uint256 out = hub.buyWith(address(usdc), 100e6, q, bob);
+        assertEq(out, q);
+        assertEq(hub.purchasedOf(bob), out);
+        assertEq(hub.purchasedOf(alice), 0);
+        // payment pulled from the payer
+        assertEq(usdc.balanceOf(alice), 1_000_000e6 - 100e6);
+        assertEq(usdc.balanceOf(bob), 1_000_000e6);
+        assertEq(usdc.balanceOf(treasury), 100e6);
+        // limits are tracked for the recipient only
+        assertEq(hub.dailyUsed(bob), 100e6);
+        assertEq(hub.dailyUsed(alice), 0);
+        assertEq(hub.nextBuyAt(bob), vm.getBlockTimestamp() + 60);
+        assertEq(hub.nextBuyAt(alice), 0);
+    }
+
+    function test_zeroRecipientReverts() public {
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHub.ZeroAddress.selector);
+        hub.buyWith(address(usdc), 100e6, 0, address(0));
+        assertEq(hub.raisedUsd6(), 0);
+    }
+
+    function test_recipientCooldownAppliesToRecipientNotPayer() public {
+        address carol = makeAddr("carol");
+        _fund(carol, usdc, 1_000e6, hub);
+        vm.prank(alice);
+        hub.buyWith(address(usdc), 10e6, 0, carol);
+        // a second payer buying for the same recipient hits its cooldown
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHub.Cooldown.selector);
+        hub.buyWith(address(usdc), 10e6, 0, carol);
+        // the first payer is not on cooldown for another recipient
+        vm.prank(alice);
+        hub.buyWith(address(usdc), 10e6, 0, bob);
+        // nor for itself
+        vm.prank(alice);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
+    }
+
+    function test_twoPayersHitRecipientDailyCap() public {
+        address carol = makeAddr("carol");
+        // 4 x 500 from alice and bob alternately = 2,000 for carol, the cap
+        for (uint256 i; i < 4; ++i) {
+            vm.prank(i % 2 == 0 ? alice : bob);
+            hub.buyWith(address(usdc), 500e6, 0, carol);
+            vm.warp(vm.getBlockTimestamp() + 61);
+        }
+        assertEq(hub.dailyUsed(carol), 2_000e6);
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHub.DailyCapExceeded.selector);
+        hub.buyWith(address(usdc), 10e6, 0, carol);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHub.DailyCapExceeded.selector);
+        hub.buyWith(address(usdc), 10e6, 0, carol);
+        // payers themselves are untouched
+        assertEq(hub.dailyUsed(alice), 0);
+        assertEq(hub.dailyUsed(bob), 0);
+    }
+
+    function test_onePayerTwoRecipientsNotCapped() public {
+        address carol = makeAddr("carol");
+        // alice pays 3,000 in total, 1,500 for each recipient: neither recipient exceeds its own cap
+        for (uint256 i; i < 3; ++i) {
+            vm.prank(alice);
+            hub.buyWith(address(usdc), 500e6, 0, bob);
+            vm.prank(alice);
+            vm.expectRevert(PplCurveHub.Cooldown.selector);
+            hub.buyWith(address(usdc), 500e6, 0, bob);
+            vm.prank(alice);
+            hub.buyWith(address(usdc), 500e6, 0, carol);
+            vm.warp(vm.getBlockTimestamp() + 61);
+        }
+        assertEq(hub.dailyUsed(bob), 1_500e6);
+        assertEq(hub.dailyUsed(carol), 1_500e6);
+        assertEq(usdc.balanceOf(alice), 1_000_000e6 - 3_000e6);
+        assertEq(hub.purchasedOf(alice), 0);
+        assertGt(hub.purchasedOf(bob), 0);
+        assertGt(hub.purchasedOf(carol), 0);
     }
 
     // ------------------------------------------------------------------ limits
@@ -219,11 +314,11 @@ contract PplCurveHubTest is Test {
         _buy(alice, 10e6);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.Cooldown.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
         vm.warp(vm.getBlockTimestamp() + 59);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.Cooldown.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
         vm.warp(vm.getBlockTimestamp() + 1);
         _buy(alice, 10e6);
         // other addresses are unaffected
@@ -244,14 +339,14 @@ contract PplCurveHubTest is Test {
         vm.warp(t0 + 400);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.DailyCapExceeded.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
 
         // one second before the first entry expires
         vm.warp(t0 + 1 days - 1);
         assertEq(hub.dailyUsed(alice), 2_000e6);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.DailyCapExceeded.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
 
         // first entry (t0) is exactly 24h old: only it is released
         vm.warp(t0 + 1 days);
@@ -276,7 +371,7 @@ contract PplCurveHubTest is Test {
         vm.warp(t0 + 1 days + 60);
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.DailyCapExceeded.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
 
         // at t0+100+1d the second entry expires
         vm.warp(t0 + 1 days + 100);
@@ -299,7 +394,7 @@ contract PplCurveHubTest is Test {
         assertFalse(h.isActive());
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.NotOpen.selector);
-        h.buyWith(address(usdc), 10e6, 0);
+        h.buyWith(address(usdc), 10e6, 0, alice);
         // quoting works before open
         assertGt(h.quoteBuy(address(usdc), 10e6), 0);
     }
@@ -341,7 +436,7 @@ contract PplCurveHubTest is Test {
         assertFalse(hub.isActive());
         vm.prank(alice);
         vm.expectRevert(PplCurveHub.SaleEnded.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
     }
 
     function test_pauseUnpause() public {
@@ -352,7 +447,7 @@ contract PplCurveHubTest is Test {
         hub.pause();
         vm.prank(alice);
         vm.expectRevert(Pausable.EnforcedPause.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
         vm.prank(owner);
         hub.unpause();
         _buy(alice, 10e6);
@@ -366,47 +461,70 @@ contract PplCurveHubTest is Test {
         vm.startPrank(alice);
         other.approve(address(hub), type(uint256).max);
         vm.expectRevert(PplCurveHub.TokenNotAllowed.selector);
-        hub.buyWith(address(other), 10e6, 0);
+        hub.buyWith(address(other), 10e6, 0, alice);
         vm.expectRevert(PplCurveHub.TokenNotAllowed.selector);
         hub.quoteBuy(address(other), 10e6);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
         hub.setToken(address(other), true);
         vm.stopPrank();
 
+        // the allowlist can change freely until open()
+        PplCurveHub h = new PplCurveHub(owner, treasury);
         vm.startPrank(owner);
-        vm.expectEmit(true, false, false, true, address(hub));
+        vm.expectEmit(true, false, false, true, address(h));
         emit TokenSet(address(other), true, 6);
-        hub.setToken(address(other), true);
+        h.setToken(address(other), true);
+        h.setToken(address(other), false);
+        h.setToken(address(other), true);
+        h.open();
         vm.stopPrank();
-        vm.prank(alice);
-        assertGt(hub.buyWith(address(other), 10e6, 0), 0);
+        vm.startPrank(alice);
+        other.approve(address(h), type(uint256).max);
+        assertGt(h.buyWith(address(other), 10e6, 0, alice), 0);
+        vm.stopPrank();
+    }
 
-        // disable again
+    function test_setTokenRevertsAfterOpen() public {
+        MockToken other = new MockToken("OTH", 6);
+        // enable after open
         vm.prank(owner);
-        hub.setToken(address(other), false);
-        vm.warp(vm.getBlockTimestamp() + 60);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHub.TokenNotAllowed.selector);
-        hub.buyWith(address(other), 10e6, 0);
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(address(other), true);
+        // disable after open (an already allowed token stays allowed)
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(address(usdc), false);
+        (bool allowed,) = hub.tokenInfo(address(usdc));
+        assertTrue(allowed);
+        (bool otherAllowed,) = hub.tokenInfo(address(other));
+        assertFalse(otherAllowed);
+        // the check precedes argument validation
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(address(0), true);
+        // still reverts while paused
+        vm.startPrank(owner);
+        hub.pause();
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(address(usdt), false);
+        vm.stopPrank();
     }
 
     function test_setTokenValidation() public {
         address d0 = address(new MockToken("D0", 0));
         address d19 = address(new MockToken("D19", 19));
+        PplCurveHub h = new PplCurveHub(owner, treasury); // validation runs before open()
         vm.startPrank(owner);
         vm.expectRevert(PplCurveHub.ZeroAddress.selector);
-        hub.setToken(address(0), true);
+        h.setToken(address(0), true);
         vm.expectRevert(PplCurveHub.BadDecimals.selector);
-        hub.setToken(d0, true);
+        h.setToken(d0, true);
         vm.expectRevert(PplCurveHub.BadDecimals.selector);
-        hub.setToken(d19, true);
+        h.setToken(d19, true);
         vm.stopPrank();
     }
 
     function test_decimals18() public {
-        MockToken t18 = new MockToken("T18", 18);
-        vm.prank(owner);
-        hub.setToken(address(t18), true);
         t18.mint(alice, 1_000e18);
         vm.startPrank(alice);
         t18.approve(address(hub), type(uint256).max);
@@ -414,9 +532,9 @@ contract PplCurveHubTest is Test {
         // 100.0000009 tokens -> 100 USD6, dust (9e11 wei) not charged
         uint256 amountIn = 100e18 + 9e11;
         uint256 q = hub.quoteBuy(address(t18), amountIn);
-        vm.expectEmit(true, false, false, true, address(hub));
-        emit Bought(alice, address(t18), 100e18, q);
-        assertEq(hub.buyWith(address(t18), amountIn, 0), q);
+        vm.expectEmit(true, true, false, true, address(hub));
+        emit Bought(alice, alice, address(t18), 100e18, q);
+        assertEq(hub.buyWith(address(t18), amountIn, 0, alice), q);
         vm.stopPrank();
         assertEq(t18.balanceOf(treasury), 100e18);
         assertEq(t18.balanceOf(alice), 900e18);
@@ -428,15 +546,12 @@ contract PplCurveHubTest is Test {
     }
 
     function test_decimals2() public {
-        MockToken t2 = new MockToken("T2", 2);
-        vm.prank(owner);
-        hub.setToken(address(t2), true);
         t2.mint(alice, 100_000);
         vm.startPrank(alice);
         t2.approve(address(hub), type(uint256).max);
         vm.expectRevert(PplCurveHub.BelowMin.selector);
-        hub.buyWith(address(t2), 999, 0); // $9.99
-        assertEq(hub.buyWith(address(t2), 1_000, 0), harness.soldFor(10e6)); // $10.00
+        hub.buyWith(address(t2), 999, 0, alice); // $9.99
+        assertEq(hub.buyWith(address(t2), 1_000, 0, alice), harness.soldFor(10e6)); // $10.00
         vm.stopPrank();
         assertEq(t2.balanceOf(treasury), 1_000);
         assertEq(hub.raisedUsd6(), 10e6);
@@ -475,12 +590,6 @@ contract PplCurveHubTest is Test {
     // ------------------------------------------------------------------ graduation
 
     function test_partialFillAndSoldOutMixedDecimals() public {
-        MockToken t18 = new MockToken("T18", 18);
-        MockToken t2 = new MockToken("T2", 2);
-        vm.startPrank(owner);
-        harness.setToken(address(t18), true);
-        harness.setToken(address(t2), true);
-        vm.stopPrank();
         t18.mint(alice, 1_000e18);
         t2.mint(bob, 100_000);
         vm.prank(alice);
@@ -493,7 +602,7 @@ contract PplCurveHubTest is Test {
         uint256 soldBefore = harness.soldPpl();
         uint256 expectedOut = harness.soldFor(4_000_000e6) - soldBefore;
         vm.prank(alice);
-        uint256 out = harness.buyWith(address(t18), 20e18, 0);
+        uint256 out = harness.buyWith(address(t18), 20e18, 0, alice);
         assertEq(out, expectedOut);
         assertEq(t18.balanceOf(treasury), 3_500_000 * 1e12);
         assertEq(t18.balanceOf(alice), 1_000e18 - 3_500_000 * 1e12);
@@ -504,20 +613,17 @@ contract PplCurveHubTest is Test {
 
         vm.prank(bob);
         vm.expectRevert(PplCurveHub.SoldOut.selector);
-        harness.buyWith(address(t2), 1_000, 0);
+        harness.buyWith(address(t2), 1_000, 0, bob);
     }
 
     function test_partialFillRoundsUpForLowDecimals() public {
-        MockToken t2 = new MockToken("T2", 2);
-        vm.prank(owner);
-        harness.setToken(address(t2), true);
         t2.mint(bob, 100_000);
         vm.prank(bob);
         t2.approve(address(harness), type(uint256).max);
         // remaining 15,000 USD6 = $0.015 -> 2 cents (rounded up, <= amountIn)
         harness.forceRaised(4_000_000e6 - 15_000);
         vm.prank(bob);
-        harness.buyWith(address(t2), 1_000, 0);
+        harness.buyWith(address(t2), 1_000, 0, bob);
         assertEq(t2.balanceOf(treasury), 2);
         assertEq(harness.raisedUsd6(), 4_000_000e6);
         assertTrue(harness.graduated());
@@ -532,7 +638,7 @@ contract PplCurveHubTest is Test {
         vm.expectEmit(false, false, false, true, address(harness));
         emit Graduated(4_000_000e6, target);
         vm.prank(alice);
-        harness.buyWith(address(usdc), 100e6, 0);
+        harness.buyWith(address(usdc), 100e6, 0, alice);
         assertEq(harness.quoteBuy(address(usdc), 100e6), 0);
     }
 
@@ -549,7 +655,7 @@ contract PplCurveHubTest is Test {
         }
         // an odd first purchase so that the last one is a partial fill
         vm.prank(buyers[0]);
-        hub.buyWith(address(usdc), 499e6, 0);
+        hub.buyWith(address(usdc), 499e6, 0, buyers[0]);
         vm.warp(vm.getBlockTimestamp() + 61);
 
         uint256 sumOut = hub.purchasedOf(buyers[0]);
@@ -562,7 +668,7 @@ contract PplCurveHubTest is Test {
                     uint256 rem = hub.remainingRaiseUsd6();
                     uint256 balBefore = usdc.balanceOf(buyers[i]);
                     vm.prank(buyers[i]);
-                    uint256 out = hub.buyWith(address(usdc), 500e6, 0);
+                    uint256 out = hub.buyWith(address(usdc), 500e6, 0, buyers[i]);
                     sumOut += out;
                     if (rem < 500e6) {
                         sawPartial = true;
@@ -593,7 +699,7 @@ contract PplCurveHubTest is Test {
 
         vm.prank(buyers[1]);
         vm.expectRevert(PplCurveHub.SoldOut.selector);
-        hub.buyWith(address(usdc), 10e6, 0);
+        hub.buyWith(address(usdc), 10e6, 0, buyers[1]);
         assertEq(hub.quoteBuy(address(usdc), 10e6), 0);
     }
 
@@ -627,7 +733,7 @@ contract PplCurveHubTest is Test {
             usdc.mint(b, amt);
             vm.startPrank(b);
             usdc.approve(address(harness), type(uint256).max);
-            harness.buyWith(address(usdc), amt, 0);
+            harness.buyWith(address(usdc), amt, 0, b);
             vm.stopPrank();
             assertLe(harness.raisedUsd6(), 4_000_000e6);
         }
@@ -670,7 +776,7 @@ contract PplCurveHubTest is Test {
         uint256 q = h.quoteBuy(BASE_USDC, 250e6);
         vm.startPrank(buyer);
         ERC20(BASE_USDC).approve(address(h), type(uint256).max);
-        uint256 out = h.buyWith(BASE_USDC, 250e6, q);
+        uint256 out = h.buyWith(BASE_USDC, 250e6, q, buyer);
         vm.stopPrank();
 
         assertEq(out, q);
