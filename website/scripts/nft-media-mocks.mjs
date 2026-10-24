@@ -180,7 +180,7 @@ export async function installNftMocks(page, { lang = "en", theme = "light" } = {
   // Anything not mocked below and not local stays offline.
   await page.route("**/*", (route) => {
     const url = new URL(route.request().url());
-    if (url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.protocol === "data:" || url.protocol === "blob:") return route.fallback();
+    if (url.hostname === "localhost" || url.protocol === "data:" || url.protocol === "blob:") return route.fallback();
     return route.abort();
   });
 
