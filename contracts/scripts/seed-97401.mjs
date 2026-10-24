@@ -74,6 +74,7 @@ const bondingCurveAbi = [
     inputs: [
       { name: "token", type: "address" },
       { name: "minTokensOut", type: "uint256" },
+      { name: "deadline", type: "uint256" },
     ],
     outputs: [],
   },
@@ -298,11 +299,14 @@ async function ensurePool({
   let spent = 0n;
   const chunk = parseEther("3");
   while (spent < maxCurveSpendWei) {
+    // `buy` rejects minTokensOut == 0 and expired deadlines; this is a seeding script, so the
+    // floor is the minimum non-zero value rather than a price-derived bound.
+    const buyDeadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
     const hash = await writeContractWithGas(publicClient, walletClient, {
       address: bondingCurve,
       abi: bondingCurveAbi,
       functionName: "buy",
-      args: [token, 0n],
+      args: [token, 1n, buyDeadline],
       value: chunk,
     }, HEAVY_GAS);
     const buyReceipt = await publicClient.waitForTransactionReceipt({ hash });

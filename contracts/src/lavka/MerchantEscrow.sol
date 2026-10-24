@@ -31,6 +31,8 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
     event DisputeResolved(uint256 indexed escrowId, bool refundCustomer);
     /// @notice S2-02: emitted when an unresolved dispute auto-closes with a 50/50 split.
     event DisputeAutoSplit(uint256 indexed escrowId, uint256 toCustomer, uint256 toMerchant);
+    event PendingCredited(address indexed account, uint256 amount);
+    event PendingWithdrawn(address indexed account, uint256 amount);
 
     /// @notice Minimum time a customer must wait before unilaterally refunding themselves.
     uint256 public constant MIN_ESCROW_DURATION = 3 days;
@@ -44,6 +46,8 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
 
     uint256 public nextEscrowId = 1;
     mapping(uint256 => Escrow) public escrows;
+    /// @notice Pull-payment credits from `autoCloseDispute`, claimed with `withdrawPending`.
+    mapping(address => uint256) public pendingWithdrawals;
 
     error BadStatus();
     error NotParty();
@@ -53,6 +57,7 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
     error BadDeadline();
     error DisputeWindowNotElapsed();
     error ClaimWindowElapsed();
+    error NothingPending();
 
     constructor(address owner_) Ownable(owner_) {}
 
@@ -125,6 +130,15 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         Escrow storage e = escrows[escrowId];
         if (e.status != Status.Locked) revert BadStatus();
         if (msg.sender != e.customer && msg.sender != e.merchant) revert NotParty();
+        // MF-12: the merchant may dispute only inside its own claim window
+        // `[deadline, deadline + MERCHANT_CLAIM_WINDOW)` (where it could claimRelease for 100%
+        // anyway, so a dispute is never better for it). Before the deadline it could force the
+        // 50/50 auto-close without delivery; after the window it could block the customer's
+        // `refundCustomer` path. Customer behaviour is unchanged.
+        if (msg.sender == e.merchant) {
+            if (block.timestamp < e.deadline) revert DeadlineNotReached();
+            if (block.timestamp >= uint256(e.deadline) + MERCHANT_CLAIM_WINDOW) revert ClaimWindowElapsed();
+        }
         e.status = Status.Disputed;
         uint64 disputeDeadline = uint64(block.timestamp + DISPUTE_AUTO_CLOSE_WINDOW);
         e.disputeDeadline = disputeDeadline;
@@ -169,15 +183,31 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
 
     /// @dev S2-02: splits `e.amount` 50/50 between customer and merchant. Any dust from integer
     /// division (at most 1 wei) stays with the merchant, matching `toMerchant = amount -
-    /// toCustomer` below.
+    /// toCustomer` below. Anyone can trigger this, so it is pull-payment: both shares are
+    /// credited to `pendingWithdrawals` and a recipient that rejects native PPL can neither
+    /// block the close nor the counterparty's share.
     function _settleDisputeSplit(uint256 escrowId, Escrow storage e) internal {
         uint256 toCustomer = e.amount / 2;
         uint256 toMerchant = e.amount - toCustomer;
         e.status = Status.Split;
-        (bool sentCustomer,) = e.customer.call{value: toCustomer}("");
-        require(sentCustomer, "refund");
-        (bool sentMerchant,) = e.merchant.call{value: toMerchant}("");
-        require(sentMerchant, "release");
+        _credit(e.customer, toCustomer);
+        _credit(e.merchant, toMerchant);
         emit DisputeAutoSplit(escrowId, toCustomer, toMerchant);
+    }
+
+    function _credit(address account, uint256 amount) internal {
+        if (amount == 0) return;
+        pendingWithdrawals[account] += amount;
+        emit PendingCredited(account, amount);
+    }
+
+    /// @notice Claim funds credited by `autoCloseDispute`.
+    function withdrawPending() external nonReentrant {
+        uint256 amount = pendingWithdrawals[msg.sender];
+        if (amount == 0) revert NothingPending();
+        pendingWithdrawals[msg.sender] = 0;
+        (bool sent,) = msg.sender.call{value: amount}("");
+        require(sent, "withdraw");
+        emit PendingWithdrawn(msg.sender, amount);
     }
 }

@@ -57,6 +57,8 @@ contract TokenFactory is Ownable {
     event TokenPromoAllocated(address indexed token, address indexed creator, uint16 promoBps, uint256 amount);
 
     error InvalidParams();
+    /// @dev `totalSupply` above `PeopleConstants.MAX_TOKEN_TOTAL_SUPPLY` (post-migration AMM overflow bound).
+    error SupplyTooLarge();
     error InsufficientFee();
     error ZeroFeeRecipient();
     error ZeroGateway();
@@ -186,6 +188,7 @@ contract TokenFactory is Ownable {
         bytes memory sym = bytes(symbol);
         if (sym.length < 2 || sym.length > 16) revert InvalidParams();
         if (decimals > 18 || totalSupply == 0) revert InvalidParams();
+        if (totalSupply > PeopleConstants.MAX_TOKEN_TOTAL_SUPPLY) revert SupplyTooLarge();
 
         uint256 fee = PeopleConstants.TOKEN_CREATE_FEE;
         uint256 credit = prepaidCredit[msg.sender];
