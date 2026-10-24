@@ -121,11 +121,11 @@
       {
         "title": "Venta pública de PPL",
         "body": [
-          "Los parámetros de la venta (fórmula de la curva, trayectoria de precios, límites y objetivo de graduación) se publican en la página /buy. Las compras permanecen deshabilitadas hasta que se publique el contrato de la venta; conectar una billetera no te compromete a nada.",
+          "Los parámetros de la venta (fórmula de la curva, trayectoria de precios, límites y el plazo de la venta: hasta que se agote o 24 meses, lo que ocurra primero) se publican en la página /buy. Las compras permanecen deshabilitadas hasta que se publique el contrato de la venta; conectar una billetera no te compromete a nada.",
           "No se exige KYC para comprar. La recompra por la reserva requiere prueba de humanidad (Human Passport o Telegram), que no es KYC.",
           "La venta dura hasta que se agote (la curva se cierra al alcanzar $4M recaudados) o durante 24 meses desde su apertura, lo que ocurra primero. Sin prórrogas. El PPL no vendido pasa al Community Pool. Sin reembolsos: toda compra es definitiva.",
           "El plazo de la venta, la fórmula de precio y los límites no cambian una vez abierta la venta.",
-          "La recompra no es un reembolso: recompra por la reserva — solo para usuarios verificados. Cada lote puede venderse de vuelta tras un periodo de tenencia de 30 días, al precio de la curva en el momento en que vendes. El total de recompras está limitado al 2% de la reserva por día para todos los usuarios y a $2,000 por persona y día. Comisión: 1.5%, o 3% cuando las recompras de ese día ya superen el 1% de la reserva. Se cierra tras la graduación. Pagos en USDC en Base.",
+          "La recompra no es un reembolso: recompra por la reserva — solo para usuarios verificados. Cada lote puede venderse de vuelta tras un periodo de tenencia de 30 días, al precio de la curva en el momento en que vendes. El total de recompras está limitado al 2% de la reserva por día para todos los usuarios y a $2,000 por dirección y día. Comisión: 1.5%, o 3% cuando las recompras de ese día ya superen el 1% de la reserva. Se cierra tras la graduación. Pagos en USDC en Base.",
           "Nada de este sitio constituye una oferta ni una promesa de vender PPL donde la venta esté restringida, y es posible que la participación no esté disponible en tu jurisdicción."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Nada de este sitio constituye asesoramiento de inversión, fiscal ni jurídico. No prometemos beneficios, rendimientos, precio del token, cotización ni ingresos de ningún tipo.",
           "El PPL de prueba y otros activos de la red de prueba no tienen valor monetario. Poseer u obtener tokens de prueba no te da derecho a tokens de mainnet, dinero ni asignaciones futuras, salvo que publiquemos un programa distinto y vinculante; aquí no se promete ninguno."
+        ]
+      },
+      {
+        "title": "Información sobre la venta de PPL",
+        "body": [
+          "PPL es el token de utilidad de la red PEOPLE. En la curva su precio sigue la fórmula publicada y, tras la venta, lo fija el mercado: puede subir o bajar. PPL no es un valor, una participación en una empresa, un depósito ni un producto de inversión; no se promete ni garantiza beneficio, rendimiento o retorno.",
+          "La participación puede estar restringida o no disponible donde vives; comprobar las normas aplicables es tu responsabilidad. Usa solo dinero que puedas permitirte perder.",
+          "Las revisiones de seguridad asistidas por IA mencionadas en el sitio las realizó el equipo del proyecto. No son una auditoría externa; se completa una auditoría de seguridad de terceros antes del mainnet. El programa de recompensas por bugs reduce el riesgo, pero no lo elimina."
         ]
       },
       {

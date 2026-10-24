@@ -121,11 +121,11 @@
       {
         "title": "Herkese açık PPL satışı",
         "body": [
-          "Satış parametreleri (eğri formülü, fiyat yolu, limitler ve graduation hedefi) /buy sayfasında yayımlanır. Satış sözleşmesi yayımlanana kadar alımlar devre dışı kalır; bir cüzdanı bağlamak sizi hiçbir şeye bağlamaz.",
+          "Satış parametreleri (eğri formülü, fiyat yolu, limitler ve satış süresi: tükenene kadar veya 24 ay, hangisi önce gerçekleşirse) /buy sayfasında yayımlanır. Satış sözleşmesi yayımlanana kadar alımlar devre dışı kalır; bir cüzdanı bağlamak sizi hiçbir şeye bağlamaz.",
           "Satın almak için KYC gerekmez. Geri satış, KYC olmayan bir insan olduğunu kanıtlama (Human Passport veya Telegram) gerektirir.",
           "Satış, tükenene kadar (eğri 4 milyon $ toplandığında kapanır) veya açılıştan itibaren 24 ay boyunca, hangisi önce gerçekleşirse o zamana kadar sürer. Uzatma yoktur. Satılmayan PPL, Community Pool'a gider. İade yoktur: her satın alma kesindir.",
           "Satış süresi, fiyat formülü ve limitler satış açıldıktan sonra değişmez.",
-          "Geri satış bir iade değildir: rezerve geri satış — yalnızca doğrulanmış kullanıcılar için. Her lot, 30 günlük bekletme süresinin ardından, sattığınız andaki eğri fiyatından geri satılabilir. Toplam geri satışlar, herkes için günlük rezervin %2'si ve kişi başına günlük 2.000 $ ile sınırlıdır. Ücret: %1,5; o günkü geri satışlar rezervin %1'ini zaten aşmışsa %3. Graduation sonrasında kapanır. Ödemeler Base üzerinde USDC ile yapılır.",
+          "Geri satış bir iade değildir: rezerve geri satış — yalnızca doğrulanmış kullanıcılar için. Her lot, 30 günlük bekletme süresinin ardından, sattığınız andaki eğri fiyatından geri satılabilir. Toplam geri satışlar, herkes için günlük rezervin %2'si ve adres başına günlük 2.000 $ ile sınırlıdır. Ücret: %1,5; o günkü geri satışlar rezervin %1'ini zaten aşmışsa %3. Graduation sonrasında kapanır. Ödemeler Base üzerinde USDC ile yapılır.",
           "Bu sitedeki hiçbir şey, satışın kısıtlandığı yerlerde PPL satışı yönünde bir teklif veya vaat değildir ve katılım bulunduğunuz yargı bölgesinde mümkün olmayabilir."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Bu sitedeki hiçbir şey yatırım, vergi veya hukuki tavsiye değildir. Kâr, getiri, token fiyatı, borsa listelemesi veya herhangi bir türde gelir vaat etmeyiz.",
           "Test PPL ve diğer test ağı varlıklarının parasal bir değeri yoktur. Test tokenlarına sahip olmak veya kazanmak, ayrı ve bağlayıcı bir program yayımlamadıkça sizi ana ağ tokenlarına, paraya veya gelecekteki tahsislere hak sahibi kılmaz; burada böyle bir program vaat edilmemektedir."
+        ]
+      },
+      {
+        "title": "PPL satışı açıklamaları",
+        "body": [
+          "PPL, PEOPLE ağının yardımcı tokenidir. Eğri üzerinde fiyat yayınlanan formülü izler; satış bitince piyasa belirler ve düşebilir de yükselir de. PPL bir menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kâr, getiri veya geri ödeme vaat edilmez.",
+          "Katılım bulunduğunuz yerde kısıtlanmış veya kullanılamaz olabilir; geçerli kuralları kontrol etmek sizin sorumluluğunuzdadır. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın.",
+          "Sitede adı geçen yapay zekâ destekli güvenlik incelemeleri proje ekibi tarafından yapıldı. Dış denetim değildir; mainnet öncesi üçüncü taraf güvenlik denetimi tamamlanır. Bug bounty riski azaltır ama ortadan kaldırmaz."
         ]
       },
       {
