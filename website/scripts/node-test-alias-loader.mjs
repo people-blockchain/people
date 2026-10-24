@@ -21,6 +21,11 @@ export async function resolve(specifier, context, nextResolve) {
   if (specifier === "next/cache" || specifier === "next/cache.js") {
     return nextResolve(pathToFileURL(pathResolve(root, "scripts/stubs/next-cache.mjs")).href, context);
   }
+  // `next/server` has no `exports` entry either; the `.js` file is the real module, so route
+  // handlers (NextResponse) can be imported and called directly in tests.
+  if (specifier === "next/server") {
+    return nextResolve("next/server.js", context);
+  }
   // Next/TS allow extensionless relative imports (`./bootstrap`); Node's ESM resolver does
   // not, so map them to the real file before handing off.
   if (specifier.startsWith(".") && !/\.[a-zA-Z0-9]+$/.test(specifier) && context.parentURL) {

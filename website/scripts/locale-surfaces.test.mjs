@@ -25,6 +25,7 @@ const surfaces = [
   "lavka",
   "litepaper",
   "samples",
+  "nft-media",
 ];
 
 function load(name) {
@@ -133,5 +134,32 @@ test("no non-ru surface file leaks Cyrillic text (home/agents regression: #263 w
       const raw = readFileSync(join(dir, `${surface}-${lang}.json`), "utf8");
       assert.doesNotMatch(raw, CYRILLIC, `${surface}-${lang}.json contains Cyrillic text`);
     }
+  }
+});
+
+test("nft-media surface: no empty values, PEOPLE stays in caps, PeopleScan keeps its spelling", () => {
+  const walk = (value, path, out) => {
+    if (typeof value === "string") out.push([path, value]);
+    else if (value && typeof value === "object") for (const [k, v] of Object.entries(value)) walk(v, `${path}.${k}`, out);
+    return out;
+  };
+  for (const lang of ["en", "ru", ...extra]) {
+    for (const [path, text] of walk(load(`nft-media-${lang}.json`), lang, [])) {
+      assert.ok(text.trim().length > 0, `${path} is empty`);
+      assert.doesNotMatch(text, /\bPeople\b(?!Scan)/, `${path} writes PEOPLE without caps`);
+      assert.doesNotMatch(text, /Peoplescan|peoplescan\b|PEOPLEscan|People Scan/, `${path} misspells PeopleScan`);
+    }
+  }
+});
+
+test("nft-media surface: image and video limits are stated the same way in every locale", () => {
+  for (const lang of ["en", "ru", ...extra]) {
+    const copy = load(`nft-media-${lang}.json`);
+    assert.match(copy.videoFileHint, /MP4/, lang);
+    assert.match(copy.videoFileHint, /WebM/, lang);
+    assert.match(copy.videoFileHint, /20/, lang);
+    assert.match(copy.imageFileHint, /SVG/, lang);
+    assert.match(copy.imageFileHint, /1[.,]5/, lang);
+    assert.match(copy.imageFileHint, /256/, lang);
   }
 });
