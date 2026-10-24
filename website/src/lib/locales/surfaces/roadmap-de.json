@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "Festes 1B PPL: Jahre 1–4 0 % Inflation; Validator-Pool 200M mit 6/5/5/4 % + 30 % Gebühren; Start aus 35 %-Community-Topf; ab Jahr 5 max. 2 %/Jahr per Vote; Gründer-Airdrop vor Verkauf bei 1.000 Verifizierten + Multisig. Gebühren 30/25/20/10/15/0 auf /tokenomics und /how-it-works."
+      "summary": "Festes 1B PPL: Jahre 1–4 0 % Inflation; Validator-Pool 200M mit 6/5/5/4 % + 30 % Gebühren; Start aus 35 %-Community-Topf; ab Jahr 5 max. 2 %/Jahr per Vote; PPL-Verkauf läuft auf Base über PplCurveHub für USDC/USDT; Zahlung von anderen Chains über das Cross-Chain-Widget (TON nicht unterstützt); läuft bis ausverkauft oder 24 Monate, je nachdem was zuerst kommt, keine Verlängerungen; nicht verkaufte PPL gehen an den Community Pool; Rückverkauf nur für verifizierte Personen, mit 30-Tage-Haltefrist und Limits. Gebühren 30/25/20/10/15/0 auf /tokenomics und /how-it-works."
     },
     "discover-feed": {
       "title": "Projekt-Feed",

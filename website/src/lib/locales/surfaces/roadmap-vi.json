@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "1B PPL cố định: năm 1–4 0% lạm phát; quỹ validator 200M theo 6/5/5/4% + 30% phí; thưởng khởi động từ quỹ 35%; từ năm 5 tối đa 2%/năm bỏ phiếu; airdrop nhà sáng lập trước bán khi 1.000 xác minh + multisig. Phí 30/25/20/10/15/0 trên /tokenomics và /how-it-works."
+      "summary": "1B PPL cố định: năm 1–4 0% lạm phát; quỹ validator 200M theo 6/5/5/4% + 30% phí; thưởng khởi động từ quỹ 35%; từ năm 5 tối đa 2%/năm bỏ phiếu; bán PPL đang diễn ra trên Base qua PplCurveHub cho USDC/USDT; thanh toán từ chain khác qua widget cross-chain (không hỗ trợ TON); kéo dài đến khi bán hết hoặc 24 tháng, tùy điều nào đến trước, không gia hạn; PPL không bán được chuyển vào Community Pool; bán lại chỉ cho người đã xác minh, với thời gian giữ 30 ngày và giới hạn. Phí 30/25/20/10/15/0 trên /tokenomics và /how-it-works."
     },
     "discover-feed": {
       "title": "Bảng tin dự án",
