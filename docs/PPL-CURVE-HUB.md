@@ -30,7 +30,7 @@ Merging first therefore cannot expose a buy flow or break the build. Then, in th
 2. **Safe `setToken`** for canonical Base USDC and USDT. This must happen before `open()`; tokens cannot be added later.
 3. **Set the env** `NEXT_PUBLIC_SALE_HUB_ADDRESS` in the Vercel **Preview** environment, with `NEXT_PUBLIC_SALE_CHAIN` unset (or `base`). Production builds fail if the sale mode is anything but `base`.
 4. **Preview:** check the preview deployment end to end (quote, limits, treasury guard message, the "Buy on Base" button after a bridge delivery).
-5. **Production:** set the same `NEXT_PUBLIC_SALE_HUB_ADDRESS` for Production and redeploy (the variable is inlined at build time). The page stays on "soon" until the owner opens the sale on-chain.
+5. **Production:** set the same `NEXT_PUBLIC_SALE_HUB_ADDRESS` for Production and redeploy (the variable is inlined at build time). Once the address is set the page leaves the "soon" state (it does not read `open()`); until Safe `open()` a purchase attempt stops in the pre-flight check (`sale_not_open`) before any approval, so for a quiet launch set the Production env right before `open()`.
 6. **Safe `open()`** at the planned opening time.
 
 ## Test hub on Base mainnet (8453)
