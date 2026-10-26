@@ -221,6 +221,36 @@ test("production build with base mode (or no flag) resolves normally", () => {
   }
 });
 
+test("production build, base mode, no hub address: does not throw, hubAddress is null", () => {
+  // The state of production before the hub is deployed: no NEXT_PUBLIC_SALE_CHAIN, no hub address,
+  // no SEPOLIA_* / BASE_TEST_* variables. The guard rejects only a non-base mode, never a missing address.
+  for (const value of [undefined, "", "base", "mainnet"]) {
+    const env = { VERCEL_ENV: "production", NEXT_PUBLIC_SALE_CHAIN: value };
+    assert.doesNotThrow(() => resolveSaleChain(env), String(value));
+    const chain = resolveSaleChain(env);
+    assert.equal(chain.key, "base", String(value));
+    assert.equal(chain.hubAddress, null, String(value));
+    assert.equal(chain.faucet, false);
+    assert.equal(chain.testTokens, false);
+    assert.equal(saleContractAddress(env), null);
+    assert.equal(saleContractConfigured(env), false);
+  }
+  assert.doesNotThrow(() => resolveSaleChain({ VERCEL_ENV: "production" }));
+  assert.doesNotThrow(() => resolveSaleChain({ VERCEL_ENV: "production", NEXT_PUBLIC_SALE_HUB_ADDRESS: "" }));
+  assert.doesNotThrow(() => assertProductionSaleMode({ VERCEL_ENV: "production" }, "base"));
+});
+
+test("production build: an empty or malformed hub address is not an error, only a non-base mode is", () => {
+  for (const hub of ["", "   ", "0xabc", "not-an-address"]) {
+    const chain = resolveSaleChain({ VERCEL_ENV: "production", NEXT_PUBLIC_SALE_HUB_ADDRESS: hub });
+    assert.equal(chain.key, "base", hub);
+    assert.equal(chain.hubAddress, null, hub);
+  }
+  // The same missing hub address with a test mode still fails: the guard looks at the mode alone.
+  assert.throws(() => resolveSaleChain({ VERCEL_ENV: "production", NEXT_PUBLIC_SALE_CHAIN: "base-test" }), /base-test/);
+  assert.throws(() => resolveSaleChain({ VERCEL_ENV: "production", NEXT_PUBLIC_SALE_CHAIN: "base-sepolia" }), /base-sepolia/);
+});
+
 test("preview, development and unset VERCEL_ENV keep the test modes available", () => {
   for (const vercelEnv of ["preview", "development", "", undefined]) {
     assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, VERCEL_ENV: vercelEnv }).key, "base-test", String(vercelEnv));
