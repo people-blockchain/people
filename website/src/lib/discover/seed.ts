@@ -66,7 +66,7 @@ export async function listDiscoverTokensFromNode(): Promise<
   } catch {
     return [
       { assetId: "trosc2", name: "ROSCASH (Testnet demo)", symbol: "TROSC" },
-      { assetId: "tpitp2", name: "People Tips (Testnet demo)", symbol: "TPITP" },
+      { assetId: "tpitp2", name: "PEOPLE Tips (Testnet demo)", symbol: "TPITP" },
       { assetId: "tmark2", name: "TMARK (Testnet demo)", symbol: "TMARK" },
     ];
   }

@@ -10,7 +10,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Native and user-issued asset accounting engine supporting multiple assets per account while maintaining backward compatibility with the legacy single-asset state.",
       "technicalDetails": [
-        "Account views stay consistent for the native asset People (PPL) across balances",
+        "Account views stay consistent for the native asset PEOPLE (PPL) across balances",
         "Canonical Asset Registry tracking symbol, name, decimals, issuer, maxSupply, and active/frozen status",
         "Fixed integer base units so rounding cannot create or destroy tokens"
       ],
@@ -205,7 +205,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Движок учета нативных и пользовательских активов, поддерживающий несколько балансов на аккаунт при сохранении обратной совместимости с исходным состоянием сети.",
       "technicalDetails": [
-        "Синхронизация видов счёта для нативного актива People (PPL)",
+        "Синхронизация видов счёта для нативного актива PEOPLE (PPL)",
         "Канонический Asset Registry для символов, имен, точности (decimals), эмитентов, maxSupply и статуса активности",
         "Фиксированные целочисленные базовые единицы исключают ошибки округления"
       ],
@@ -400,7 +400,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Motor de contabilidad de activos nativos y emitidos por usuarios que admite múltiples activos por cuenta, manteniendo compatibilidad hacia atrás con el estado heredado de un solo activo.",
       "technicalDetails": [
-        "Las vistas de cuenta se mantienen consistentes para el activo nativo People (PPL) en todos los saldos",
+        "Las vistas de cuenta se mantienen consistentes para el activo nativo PEOPLE (PPL) en todos los saldos",
         "Registro Canónico de Activos que rastrea símbolo, nombre, decimales, emisor, maxSupply y estado activo/congelado",
         "Unidades base de enteros fijos (6 decimales por defecto) para eliminar el no determinismo de punto flotante IEEE-754"
       ],
@@ -595,7 +595,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Mecanismo de contabilidade de ativos nativos e emitidos por usuários que suporta múltiplos ativos por conta, mantendo compatibilidade retroativa com o estado legado de ativo único.",
       "technicalDetails": [
-        "As visualizações de conta permanecem consistentes para o ativo nativo People (PPL) em todos os saldos",
+        "As visualizações de conta permanecem consistentes para o ativo nativo PEOPLE (PPL) em todos os saldos",
         "Registro Canônico de Ativos rastreando símbolo, nome, decimais, emissor, maxSupply e status ativo/congelado",
         "Unidades base de inteiros fixos (padrão de 6 decimais) para eliminar o não-determinismo de ponto flutuante IEEE-754"
       ],
@@ -790,7 +790,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Moteur de comptabilité d'actifs natifs et émis par les utilisateurs, prenant en charge plusieurs actifs par compte tout en maintenant la rétrocompatibilité avec l'état mono-actif hérité.",
       "technicalDetails": [
-        "Les vues de compte restent cohérentes pour l'actif natif People (PPL) entre les soldes",
+        "Les vues de compte restent cohérentes pour l'actif natif PEOPLE (PPL) entre les soldes",
         "Registre canonique des actifs (Canonical Asset Registry) suivant le symbole, le nom, les décimales, l'émetteur, le maxSupply et le statut actif/gelé",
         "Unités de base entières fixes (6 décimales par défaut) pour éliminer le non-déterminisme des calculs à virgule flottante IEEE-754"
       ],
@@ -985,7 +985,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Buchungs-Engine für native und nutzergenerierte Vermögenswerte, die mehrere Assets pro Konto unterstützt und gleichzeitig die Abwärtskompatibilität mit dem bestehenden Single-Asset-Zustand wahrt.",
       "technicalDetails": [
-        "Kontoansichten bleiben für das native Asset People (PPL) über alle Guthaben hinweg konsistent",
+        "Kontoansichten bleiben für das native Asset PEOPLE (PPL) über alle Guthaben hinweg konsistent",
         "Kanonisches Asset-Register zur Nachverfolgung von Symbol, Name, Dezimalstellen, Emittent, maxSupply sowie Aktiv-/Eingefroren-Status",
         "Feste ganzzahlige Basiseinheiten (standardmäßig 6 Dezimalstellen) zur Eliminierung von Nichtdeterminismus durch IEEE-754-Gleitkommazahlen"
       ],
@@ -1180,7 +1180,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Motore di contabilità per asset nativi ed emessi dagli utenti, che supporta molteplici asset per account preservando la retrocompatibilità con lo stato legacy a singolo asset.",
       "technicalDetails": [
-        "Le visualizzazioni del conto rimangono coerenti per l'asset nativo People (PPL) tra i saldi",
+        "Le visualizzazioni del conto rimangono coerenti per l'asset nativo PEOPLE (PPL) tra i saldi",
         "Registro canonico degli asset (Canonical Asset Registry) che traccia simbolo, nome, decimali, emittente, maxSupply e stato attivo/congelato",
         "Unità di base intere fisse (predefinito 6 decimali) per eliminare il non determinismo della virgola mobile IEEE-754"
       ],
@@ -1375,7 +1375,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Eski tek varlıklı durumla geriye dönük uyumluluğu korurken hesap başına birden fazla varlığı destekleyen yerel ve kullanıcı tarafından basılan varlık muhasebe motoru.",
       "technicalDetails": [
-        "Hesap görünümleri, bakiyeler arasında yerel varlık People (PPL) için tutarlı kalır",
+        "Hesap görünümleri, bakiyeler arasında yerel varlık PEOPLE (PPL) için tutarlı kalır",
         "Sembol, ad, ondalık basamak (decimals), ihraççı, maxSupply ve aktif/donmuş durumunu takip eden Kanonik Varlık Kaydı",
         "IEEE-754 kayan nokta belirsizliğini ortadan kaldırmak için sabit tam sayı temel birimleri (varsayılan 6 ondalık basamak)"
       ],
@@ -1570,7 +1570,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Cơ chế kế toán tài sản gốc và do người dùng phát hành, hỗ trợ nhiều tài sản trên mỗi tài khoản trong khi vẫn duy trì khả năng tương thích ngược với trạng thái tài sản đơn lẻ trước đây.",
       "technicalDetails": [
-        "Chế độ xem tài khoản luôn nhất quán cho tài sản gốc People (PPL) trên các số dư",
+        "Chế độ xem tài khoản luôn nhất quán cho tài sản gốc PEOPLE (PPL) trên các số dư",
         "Sổ đăng ký Tài sản Chuẩn hóa (Canonical Asset Registry) theo dõi biểu tượng (symbol), tên gọi, số chữ số thập phân (decimals), đơn vị phát hành, maxSupply và trạng thái hoạt động/đóng băng",
         "Đơn vị cơ sở số nguyên cố định (mặc định 6 chữ số thập phân) để loại bỏ tính bất định của số thực dấu phẩy động IEEE-754"
       ],
@@ -1765,7 +1765,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "Mesin akuntansi aset bawaan (native) dan aset terbitan pengguna yang mendukung banyak aset per akun dengan tetap mempertahankan kompatibilitas penuh terhadap kondisi aset tunggal sebelumnya.",
       "technicalDetails": [
-        "Tampilan akun tetap konsisten untuk aset asli People (PPL) di seluruh saldo",
+        "Tampilan akun tetap konsisten untuk aset asli PEOPLE (PPL) di seluruh saldo",
         "Canonical Asset Registry yang melacak simbol, nama, desimal, penerbit, maxSupply, dan status aktif/beku",
         "Satuan dasar bilangan bulat tetap (standar 6 desimal) untuk menghilangkan nondeterminisme floating-point IEEE-754"
       ],
@@ -1960,7 +1960,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "原生及用户发行的资产记账引擎，支持每个账户持有多种资产，同时保持与早期单资产状态的向后兼容性。",
       "technicalDetails": [
-        "在各个余额中，原生资产 People (PPL) 的账户视图均保持一致",
+        "在各个余额中，原生资产 PEOPLE (PPL) 的账户视图均保持一致",
         "标准资产注册表（Canonical Asset Registry），追踪符号、名称、精度（decimals）、发行人、最大供应量（maxSupply）及激活/冻结状态",
         "定点整数基础单位（默认 6 位小数），彻底消除 IEEE-754 浮点运算的不确定性"
       ],
@@ -2155,7 +2155,7 @@ export const ARCHITECTURE_NODES_DATA: Record<Language, Record<string, Architectu
       "status": "IMPLEMENTED",
       "summary": "محرك محاسبي للأصول الأصلية والأصول الصادرة من المستخدمين، يدعم أصولاً متعددة لكل حساب مع الحفاظ على التوافق الرجعي الكامل مع حالة الأصل الفردي السابقة.",
       "technicalDetails": [
-        "تظل طرق عرض الحساب متسقة مع الأصل الأصلي People (PPL) عبر جميع الأرصدة",
+        "تظل طرق عرض الحساب متسقة مع الأصل الأصلي PEOPLE (PPL) عبر جميع الأرصدة",
         "سجل الأصول القياسي (Canonical Asset Registry) الذي يتتبع الرمز، والاسم، والكسور العشرية (decimals)، والجهة المصدرة، والحد الأقصى للإمداد (maxSupply)، وحالة التفعيل أو التجميد",
         "وحدات أساسية صحيحة ثابتة (افتراضياً 6 خانات عشرية) للقضاء نهائياً على عدم الحتمية الناتجة عن الفاصلة العائمة في معيار IEEE-754"
       ],

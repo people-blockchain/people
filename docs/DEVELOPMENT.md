@@ -1,9 +1,9 @@
-# DEVELOPER GUIDE — PEOPLE'S BLOCKCHAIN
+# DEVELOPER GUIDE — PEOPLE BLOCKCHAIN
 
-This guide explains how to set up, build, test, and run the **People's Blockchain** monorepo (based on the legacy people-node (TypeScript) stack).
+This guide explains how to set up, build, test, and run the **PEOPLE Blockchain** monorepo (based on the legacy people-node (TypeScript) stack).
 
-> Naming follows `docs/TERMINOLOGY.md`: brand **People**, network **People's Blockchain**,
-> native token **People** (ticker **PPL**, runtime id `ppl`). Legacy `vls` keys in old
+> Naming follows `docs/TERMINOLOGY.md`: brand **PEOPLE**, network **PEOPLE Blockchain**,
+> native token **PEOPLE** (ticker **PPL**, runtime id `ppl`). Legacy `vls` keys in old
 > snapshots are migrated on load.
 
 ---

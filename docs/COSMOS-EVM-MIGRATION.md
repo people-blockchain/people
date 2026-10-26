@@ -1,6 +1,6 @@
 > **Status 2026-10-14:** Public cutover is **complete**. Users and the site use Cosmos EVM testnet **97401** with live Solidity factories/AMM/NFT. This file remains as the migration design/history; do not treat remaining checklist items as blocking the public testnet.
 
-# Cosmos EVM migration — People's Blockchain
+# Cosmos EVM migration — PEOPLE Blockchain
 
 **Status (2026-10-14):** Public Cosmos EVM testnet **97401** is live; Stage 1–2 and website JSON-RPC cutover are **done**. Stages 3–4 (fee-split module / full PEOPLE Network genesis replay) remain TBD / founder-gated. Stage 6 mainnet still TBD.
 

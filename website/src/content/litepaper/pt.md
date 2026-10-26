@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Whitepaper"
+title: "PEOPLE Blockchain — Whitepaper"
 description: "A blockchain onde cada usuário é um humano verificado. Propriedade das pessoas, não de VCs."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Whitepaper
+# PEOPLE Blockchain — Whitepaper
 
 > **A blockchain onde cada usuário é um humano verificado.**
 > **Propriedade das pessoas, não de VCs.**
@@ -63,7 +63,7 @@ O que você pode fazer sem código:
 
 ## 4. Tecnologia
 
-**Cosmos EVM.** People é executado em uma stack Cosmos EVM: contratos inteligentes compatíveis com Ethereum e endereços 0x em uma chain Cosmos.
+**Cosmos EVM.** PEOPLE é executado em uma stack Cosmos EVM: contratos inteligentes compatíveis com Ethereum e endereços 0x em uma chain Cosmos.
 
 | Parâmetro | Valor |
 |---|---|
@@ -185,7 +185,7 @@ Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
 
 Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Taxas queimadas | Taxa base é queimada ¹ | 50% da taxa base é queimada ² | **0% queimado** |
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |

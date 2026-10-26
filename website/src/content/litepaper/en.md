@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "The blockchain where every user is a verified human. Owned by people, not VCs."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **The blockchain where every user is a verified human.**
 > **Owned by people, not VCs.**
@@ -65,7 +65,7 @@ What you can do without code:
 
 ## 4. Technology
 
-**Cosmos EVM.** People runs on a Cosmos EVM stack: Ethereum-compatible smart contracts and 0x addresses on a Cosmos chain.
+**Cosmos EVM.** PEOPLE runs on a Cosmos EVM stack: Ethereum-compatible smart contracts and 0x addresses on a Cosmos chain.
 
 | Parameter | Value |
 |---|---|
@@ -164,7 +164,7 @@ No dates are promised. Each stage starts when its gate is met.
 ## 9. Security
 
 - Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.
-- **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the People network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
+- **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
 - **Published addresses.** The sale contract and the receiving multisig are published before the sale opens; vesting and LP-lock contracts at the full network launch. No placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
 - **Proven building blocks.** No-code contracts are assembled from OpenZeppelin templates.
@@ -187,7 +187,7 @@ No dates are promised. Each stage starts when its gate is met.
 
 Only verifiable public facts about other networks. Sources below.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Fees burned | Base fee is burned ¹ | 50% of the base fee is burned ² | **0% burned** |
 | Who receives fees | Validators get the priority fee (tip) ¹ | Validators get 50% of the base fee and 100% of the priority fee ² | **Validators 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
@@ -223,6 +223,6 @@ Only verifiable public facts about other networks. Sources below.
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). No KYC or sale-eligibility checks are run on this site.
 - Security: Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty on every page.
-- Multisigs. Network-fee treasury: a 2-of-3 multisig on the People network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
+- Multisigs. Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
 - The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.

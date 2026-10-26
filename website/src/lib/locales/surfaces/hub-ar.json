@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "كيف تشارك",
-    "subtitle": "انضم إلى People’s Blockchain كمشارك في المجتمع — من هاتف أو جهاز لوحي أو متصفح.",
+    "subtitle": "انضم إلى PEOPLE Blockchain كمشارك في المجتمع — من هاتف أو جهاز لوحي أو متصفح.",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "إنشاء"
       }
     ],
-    "ctaJoin": "انضم إلى People’s Blockchain",
+    "ctaJoin": "انضم إلى PEOPLE Blockchain",
     "ctaHow": "كيف يعمل"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People هو الأصل الأصلي لـ بلوك تشين للمجتمع. الرمز: PPL.",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE هو الأصل الأصلي لـ بلوك تشين للمجتمع. الرمز: PPL.",
     "cards": [
       {
         "title": "UTILITY",

@@ -37,7 +37,7 @@
   "helpLock": "少量最低 LP 份额保持锁定，使资金池无法被抽空。来自联合曲线迁移的流动性同样保持锁定。",
   "tokensEmpty": "网络上尚无代币。请在 Token Factory 发行——添加流动性后会出现兑换池。",
   "searchTokens": "按名称或符号搜索",
-  "networkBadge": "People 网络 · 链 97401",
+  "networkBadge": "PEOPLE 网络 · 链 97401",
   "selectToken": "选择代币",
   "closePicker": "关闭",
   "gasFeeNote": "签名时以 PPL 支付 gas"

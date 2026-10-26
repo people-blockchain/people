@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { createECDH, createHash, randomBytes } from "node:crypto";
 
-// E2E-H2: an unlocked People Wallet lived only in React state, so a full page load
+// E2E-H2: an unlocked PEOPLE Wallet lived only in React state, so a full page load
 // (footer <a> links, reload) dropped it and the EVM pages fell back to a "Connect a
 // wallet" link pointing at /wallet. This drives the real browser: import a throwaway
 // wallet on /wallet, unlock it, then full-load /create/token and /swap and expect the
@@ -16,9 +16,9 @@ const ecdh = createECDH("secp256k1");
 ecdh.setPrivateKey(Buffer.from(privateKey, "hex"));
 const address = "0x" + createHash("sha256").update(ecdh.getPublicKey(null, "compressed")).digest("hex").slice(0, 40);
 
-const peopleWalletButton = "People Wallet (this browser)";
+const peopleWalletButton = "PEOPLE Wallet (this browser)";
 
-test("an unlocked People Wallet survives full page loads (E2E-H2)", async ({ page }) => {
+test("an unlocked PEOPLE Wallet survives full page loads (E2E-H2)", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
 
@@ -91,7 +91,7 @@ test("an unlocked People Wallet survives full page loads (E2E-H2)", async ({ pag
 
   // A second full load on another EVM page keeps it connected too. /swap
   // auto-connects the restored session (unlike /create/token, which waits for a
-  // tap), so the proof here is the live swap form. The «People Wallet» connect
+  // tap), so the proof here is the live swap form. The «PEOPLE Wallet» connect
   // control must be absent — that is what a dropped session would render, as a
   // link back to /wallet.
   await page.goto("/swap");

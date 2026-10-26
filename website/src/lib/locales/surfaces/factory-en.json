@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Stable fee",
     "stableFeeBuybackNote": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks.",
-    "stableFeeNetworkNote": "Works on the People network only for now. Paying from another chain (Ethereum, Polygon, Tron, TON, Solana) is coming later.",
+    "stableFeeNetworkNote": "Works on the PEOPLE network only for now. Paying from another chain (Ethereum, Polygon, Tron, TON, Solana) is coming later.",
     "approvingStable": "Approving…",
     "payingStableFee": "Paying stable fee…",
     "creatingAfterStableFee": "Creating…",

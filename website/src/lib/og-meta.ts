@@ -14,8 +14,8 @@ export const OG_IMAGE_BY_LANG: Partial<Record<Language, string>> = {
 };
 
 const FOUNDERS_DESCRIPTION: Partial<Record<Language, string>> = {
-  en: "Be one of the first million people building a blockchain for everyone. Get your founder number, invite friends and earn points on the People testnet.",
-  ru: "Станьте одним из первых миллиона людей, строящих блокчейн для всех. Получите номер основателя, приглашайте друзей и зарабатывайте баллы в тестовой сети People.",
+  en: "Be one of the first million people building a blockchain for everyone. Get your founder number, invite friends and earn points on the PEOPLE testnet.",
+  ru: "Станьте одним из первых миллиона людей, строящих блокчейн для всех. Получите номер основателя, приглашайте друзей и зарабатывайте баллы в тестовой сети PEOPLE.",
 };
 
 export function absoluteUrl(path: string): string {
@@ -28,8 +28,8 @@ const TRANSPARENCY_DESCRIPTION: Partial<Record<Language, string>> = {
 };
 
 const LITEPAPER_DESCRIPTION: Partial<Record<Language, string>> = {
-  en: "The People litepaper: a blockchain where every user is a verified human, owned by its community and not by VCs. Product, tokenomics, roadmap and risks.",
-  ru: "Litepaper People: блокчейн, где каждый пользователь — верифицированный человек, принадлежащий сообществу, а не венчурным фондам. Продукт, токеномика, роадмап и риски.",
+  en: "The PEOPLE litepaper: a blockchain where every user is a verified human, owned by its community and not by VCs. Product, tokenomics, roadmap and risks.",
+  ru: "Litepaper PEOPLE: блокчейн, где каждый пользователь — верифицированный человек, принадлежащий сообществу, а не венчурным фондам. Продукт, токеномика, роадмап и риски.",
 };
 
 type PageKey = "home" | "founders" | "transparency" | "litepaper";

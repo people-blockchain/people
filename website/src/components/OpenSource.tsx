@@ -25,51 +25,51 @@ function GithubIcon({ className }: GithubIconProps) {
 const copy: Record<string, { line: string; aria: string }> = {
   en: {
     line: "Open source (Apache-2.0) — read and verify it on GitHub",
-    aria: "People Blockchain on GitHub",
+    aria: "PEOPLE Blockchain on GitHub",
   },
   ru: {
     line: "Открытый код (Apache-2.0) — изучайте и проверяйте на GitHub",
-    aria: "People Blockchain на GitHub",
+    aria: "PEOPLE Blockchain на GitHub",
   },
   ar: {
     line: "مفتوح المصدر (Apache-2.0) — اقرأه وتحقق منه على GitHub",
-    aria: "People Blockchain على GitHub",
+    aria: "PEOPLE Blockchain على GitHub",
   },
   de: {
     line: "Open Source (Apache-2.0) — auf GitHub lesen und überprüfen",
-    aria: "People Blockchain auf GitHub",
+    aria: "PEOPLE Blockchain auf GitHub",
   },
   es: {
     line: "Código abierto (Apache-2.0) — léelo y verifícalo en GitHub",
-    aria: "People Blockchain en GitHub",
+    aria: "PEOPLE Blockchain en GitHub",
   },
   fr: {
     line: "Open source (Apache-2.0) — à lire et à vérifier sur GitHub",
-    aria: "People Blockchain sur GitHub",
+    aria: "PEOPLE Blockchain sur GitHub",
   },
   id: {
     line: "Sumber terbuka (Apache-2.0) — baca dan verifikasi di GitHub",
-    aria: "People Blockchain di GitHub",
+    aria: "PEOPLE Blockchain di GitHub",
   },
   it: {
     line: "Open source (Apache-2.0) — leggilo e verificalo su GitHub",
-    aria: "People Blockchain su GitHub",
+    aria: "PEOPLE Blockchain su GitHub",
   },
   pt: {
     line: "Código aberto (Apache-2.0) — leia e verifique no GitHub",
-    aria: "People Blockchain no GitHub",
+    aria: "PEOPLE Blockchain no GitHub",
   },
   tr: {
     line: "Açık kaynak (Apache-2.0) — GitHub'da okuyun ve doğrulayın",
-    aria: "GitHub'da People Blockchain",
+    aria: "GitHub'da PEOPLE Blockchain",
   },
   vi: {
     line: "Mã nguồn mở (Apache-2.0) — đọc và xác minh trên GitHub",
-    aria: "People Blockchain trên GitHub",
+    aria: "PEOPLE Blockchain trên GitHub",
   },
   zh: {
     line: "开源（Apache-2.0）——在 GitHub 上阅读并验证",
-    aria: "GitHub 上的 People Blockchain",
+    aria: "GitHub 上的 PEOPLE Blockchain",
   },
 };
 

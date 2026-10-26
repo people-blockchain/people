@@ -389,7 +389,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       <label className="block text-sm">
         {t.tokens}
         <select value={assetId} disabled={busy} onChange={(event) => { setAssetId(event.target.value); setAmount(""); setError(""); }} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2">
-          <option value="ppl">People (PPL)</option>
+          <option value="ppl">PEOPLE (PPL)</option>
           {tokenRows.map(([id]) => {
             const asset = assets.find((item) => item.assetId === id);
             return <option key={id} value={id} disabled={!asset}>{asset ? `${id === "usdt" ? u.testUsdt : displayAssetName(id, asset.name)} (${displaySymbol(id, asset.symbol, u)}) · ${id}` : id}</option>;
@@ -452,7 +452,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         <summary className="cursor-pointer text-sm font-semibold text-warm">{t.faucet}</summary>
         <p className="mt-1 text-xs text-ink-3">{t.faucetHint}</p>
         <label className="mt-3 block text-sm">{t.amount} · PPL<input className="mt-2 w-full rounded-xl border border-line bg-bg px-3 py-2" inputMode="decimal" value={faucetAmount} onChange={e => setFaucetAmount(e.target.value)} disabled={busy} maxLength={50} /></label>
-        <a href="https://node.peopleblockchain.network/faucet" target="_blank" rel="noreferrer" className="mt-3 block text-sm text-brand">People&apos;s Blockchain testnet · PPL · 97401 ↗</a>
+        <a href="https://node.peopleblockchain.network/faucet" target="_blank" rel="noreferrer" className="mt-3 block text-sm text-brand">PEOPLE Blockchain testnet · PPL · 97401 ↗</a>
         <button type="button" disabled={busy} onClick={() => void doFaucet(faucetAmount)} className="mt-3 rounded-xl border border-warm px-4 py-2 text-sm font-semibold disabled:opacity-40">{t.faucet}</button>
       </details>
       <div className="flex flex-wrap gap-3">
@@ -571,7 +571,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
             <p className="text-xs text-ink-3">{c.identity}</p>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
-                <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">People</span></span>
+                <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
                 <span className="font-mono">{account ? formatPpl(account.balance) : "—"}</span>
               </li>
               {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {

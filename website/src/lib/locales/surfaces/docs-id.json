@@ -1,7 +1,7 @@
 {
   "eyebrow": "BASIS PENGETAHUAN / PEOPLE",
   "title": "Pahami.\nCoba.\nIkut serta.",
-  "description": "Dari dompet pertama hingga node Anda sendiri — panduan praktis ke People’s Blockchain.",
+  "description": "Dari dompet pertama hingga node Anda sendiri — panduan praktis ke PEOPLE Blockchain.",
   "notice": "Jaringan uji",
   "noticeText": "Mainnet belum diluncurkan. Operasi yang tersedia bergantung pada koneksi situs dan versi jaringan. Koin uji bukan janji pendapatan.",
   "contents": "Dalam panduan ini",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "Cara kerja People",
+      "title": "Cara kerja PEOPLE",
       "lead": "Blockchain adalah catatan bersama operasi. Dompet Anda menandatangani tindakan, node memverifikasi, dan validator memasukkannya ke blok.",
       "items": [
         {
           "title": "PPL adalah koin jaringan",
-          "text": "People (PPL) membayar biaya jaringan dan operasi protokol. PPL uji untuk menguji jaringan; memegangnya tidak berarti Anda telah menghasilkan uang."
+          "text": "PEOPLE (PPL) membayar biaya jaringan dan operasi protokol. PPL uji untuk menguji jaringan; memegangnya tidak berarti Anda telah menghasilkan uang."
         },
         {
           "title": "Peserta, node, validator",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — koin jaringan",
-      "lead": "People (PPL) membayar biaya jaringan dan tindakan protokol di rantai ini.",
+      "lead": "PEOPLE (PPL) membayar biaya jaringan dan tindakan protokol di rantai ini.",
       "items": [
         {
           "title": "Koin uji",

@@ -6,7 +6,7 @@ import { SITE_NAME } from "@/lib/site";
 import { loadDiscoverFeedForPage } from "@/lib/discover/feed-server";
 
 export const metadata: Metadata = {
-  title: "Project feed | People",
+  title: "Project feed | PEOPLE",
   description: "Project cards from founders. Your reactions help ideas reach the next circle.",
   alternates: { canonical: "/discover" },
   openGraph: {

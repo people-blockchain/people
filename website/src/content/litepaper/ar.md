@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "البلوكتشين حيث كل مستخدم إنسان موثق. مملوك للناس وليس لرؤوس الأموال."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **البلوكتشين حيث كل مستخدم إنسان موثق.**
 > **مملوك للناس وليس لرؤوس الأموال.**
@@ -63,7 +63,7 @@ status: public-draft
 
 ## 4. التكنولوجيا
 
-**Cosmos EVM.** يعمل People على كومة Cosmos EVM: عقود ذكية متوافقة مع Ethereum وعناوين 0x على سلسلة Cosmos.
+**Cosmos EVM.** يعمل PEOPLE على كومة Cosmos EVM: عقود ذكية متوافقة مع Ethereum وعناوين 0x على سلسلة Cosmos.
 
 | المعامل | القيمة |
 |---|---|
@@ -185,7 +185,7 @@ status: public-draft
 
 حقائق عامة قابلة للتحقق فقط عن شبكات أخرى. المصادر أدناه.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | الرسوم المحروقة | يتم حرق الرسم الأساسي ¹ | يتم حرق 50% من الرسم الأساسي ² | **0% محروقة** |
 | من يستقبل الرسوم | يحصل المدققون على الرسم الأولويتي (البقشيش) ¹ | يحصل المدققون على 50% من الرسم الأساسي و 100% من الرسم الأولويتي ² | **المدققون 30 · المجتمع 25 · الخزانة 20 · السيولة 10 · النمو 15** |

@@ -1,4 +1,4 @@
-# People Connect: handoff to the website owner
+# PEOPLE Connect: handoff to the website owner
 
 The website owner / their agent performs the production release. The mobile agents prepared and tested the implementation; they have not changed production, merged main, applied production SQL or enabled the gateway.
 

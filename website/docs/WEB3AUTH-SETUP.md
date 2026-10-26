@@ -1,4 +1,4 @@
-# Web3Auth setup (People Wallet)
+# Web3Auth setup (PEOPLE Wallet)
 
 **Status:** IMPLEMENTED. Production uses the owner **Sapphire Mainnet** Client ID baked into `web3auth-config.ts` (overridable via `NEXT_PUBLIC_WEB3AUTH_CLIENT_ID`). Optional Vercel env: `NEXT_PUBLIC_WEB3AUTH_NETWORK=sapphire_mainnet`.
 

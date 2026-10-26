@@ -6,7 +6,7 @@
 **Status:** VERIFIED & DOCUMENTED  
 
 > **Historical / superseded for native asset naming.** Current runtime native asset is
-> **People** (`PPL`, id `ppl`). This verification quotes exact legacy `VLS` values at named
+> **PEOPLE** (`PPL`, id `ppl`). This verification quotes exact legacy `VLS` values at named
 > commits. Do not treat `VLS` below as the live ticker.
 
 ---
@@ -105,7 +105,7 @@ In `packages/core/src/index.ts`, historical Phase 1 baseline:
 ```typescript
 export const PROVISIONAL_FEE_SPLIT: FeeSplitConfig = {
   validatorShare: 40,   // 40%
-  communityShare: 25,   // 25% (Community / People's Pool)
+  communityShare: 25,   // 25% (Community / PEOPLE Pool)
   treasuryShare: 20,    // 20% (Treasury Reserve)
   liquidityShare: 10,   // 10% (Liquidity & Ecosystem Reserve)
   burnShare: 5          // 5%  (Protocol Burn)

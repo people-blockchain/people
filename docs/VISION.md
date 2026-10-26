@@ -1,19 +1,19 @@
-# People's Blockchain — Vision v0.1
+# PEOPLE Blockchain — Vision v0.1
 
 **Status:** Draft / Foundational Product Vision  
 **Date:** 2026-09-22  
-**Network:** People's Blockchain  
-**Brand:** People  
-**Native asset:** People (ticker **PPL**)
+**Network:** PEOPLE Blockchain  
+**Brand:** PEOPLE  
+**Native asset:** PEOPLE (ticker **PPL**)
 
-> Naming follows `docs/TERMINOLOGY.md`: the brand is **People**, the network is
-> **People's Blockchain** and the native token is **People** with the ticker **PPL**.
+> Naming follows `docs/TERMINOLOGY.md`: the brand is **PEOPLE**, the network is
+> **PEOPLE Blockchain** and the native token is **PEOPLE** with the ticker **PPL**.
 
 ---
 
 ## 1. Purpose
 
-People's Blockchain is a consumer-oriented blockchain network designed to make participation in a blockchain economy simple for ordinary people using a phone, tablet, or computer.
+PEOPLE Blockchain is a consumer-oriented blockchain network designed to make participation in a blockchain economy simple for ordinary people using a phone, tablet, or computer.
 
 The project combines four ideas into one network:
 
@@ -117,9 +117,9 @@ Validators are economically different from mobile participants. They receive rew
 
 ## 5. The native asset
 
-The network has a native asset: **People**, with the ticker **PPL**.
+The network has a native asset: **PEOPLE**, with the ticker **PPL**.
 
-People is intended to be the native economic and settlement asset of the blockchain.
+PEOPLE is intended to be the native economic and settlement asset of the blockchain.
 
 Its roles are expected to include:
 
@@ -162,7 +162,7 @@ The exact formula, limits, decay rules, anti-Sybil mechanics, and reward convers
 
 ## 7. The Community Pool
 
-A defining feature of People's Blockchain is a protocol-level **Community Pool / People's Pool**.
+A defining feature of PEOPLE Blockchain is a protocol-level **Community Pool / PEOPLE Pool**.
 
 When a new user-created token is launched, a predetermined portion of its supply is intended to be allocated automatically to the Community Pool according to protocol rules.
 
@@ -180,7 +180,7 @@ The Community Pool is therefore a core economic primitive, not a marketing campa
 
 ## 8. User-created token economy
 
-People's Blockchain should allow an ordinary user to create a token through a simple interface.
+PEOPLE Blockchain should allow an ordinary user to create a token through a simple interface.
 
 The intended flow is approximately:
 
@@ -266,7 +266,7 @@ The protocol must ultimately be designed so that economic value is connected to 
 
 ## 12. Product philosophy
 
-People's Blockchain should prioritize:
+PEOPLE Blockchain should prioritize:
 
 ### Simplicity
 
@@ -294,9 +294,9 @@ The system can begin with controlled infrastructure during development and testi
 
 ---
 
-## 13. What People's Blockchain is not
+## 13. What PEOPLE Blockchain is not
 
-People's Blockchain is not intended to be:
+PEOPLE Blockchain is not intended to be:
 
 - a proof-of-work mining network where phones perform expensive computation;
 - a simple referral pyramid where rewards depend primarily on recruitment;
@@ -336,7 +336,7 @@ The current project is being developed from the existing **PEOPLE Network** code
 
 The original PEOPLE Network repository/ZIP is preserved unchanged as the reference baseline.
 
-The new People's Blockchain repository is a separate development project that may reuse, redesign, refactor, or replace parts of the PEOPLE Network implementation.
+The new PEOPLE Blockchain repository is a separate development project that may reuse, redesign, refactor, or replace parts of the PEOPLE Network implementation.
 
 The existing technical foundation includes blockchain/network concepts such as:
 
@@ -349,7 +349,7 @@ The existing technical foundation includes blockchain/network concepts such as:
 - explorer functionality;
 - SDK/application layers.
 
-The People's Blockchain project will not assume that existing PEOPLE Network economic rules are final.
+The PEOPLE Blockchain project will not assume that existing PEOPLE Network economic rules are final.
 
 ---
 
@@ -409,7 +409,7 @@ No AI agent should infer these values without an approved specification.
 
 ## 18. Long-term vision
 
-People's Blockchain aims to become a global, consumer-oriented blockchain economy where a person can start with a phone and progress through multiple levels of participation:
+PEOPLE Blockchain aims to become a global, consumer-oriented blockchain economy where a person can start with a phone and progress through multiple levels of participation:
 
 **Participant → Contributor → Creator → Validator**
 

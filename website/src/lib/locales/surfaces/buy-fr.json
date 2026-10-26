@@ -46,7 +46,7 @@
     "belowMin": "Saisissez un montant pour voir le devis.",
     "cta": "Connectez un portefeuille pour acheter",
     "ctaConnected": "Acheter des PPL",
-    "wallets": "People Wallet (connexion avec Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (connexion avec Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Mode de paiement",
     "payOnBase": "Payer sur Base",
     "payFromOther": "Payer depuis un autre réseau",
@@ -107,7 +107,7 @@
     "termsLink": "Conditions",
     "help": "Besoin d’aide ? {support}",
     "supportLink": "Assistance",
-    "noWalletHint": "Pas de portefeuille ? Choisissez Google ou e-mail : un People Wallet est créé pour vous. Pour payer, il vous faut des USDC sur Base dans ce portefeuille ou dans un portefeuille que vous connectez.",
+    "noWalletHint": "Pas de portefeuille ? Choisissez Google ou e-mail : un PEOPLE Wallet est créé pour vous. Pour payer, il vous faut des USDC sur Base dans ce portefeuille ou dans un portefeuille que vous connectez.",
     "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
     "feesTitle": "Frais et délais",
     "feesBody": "Frais : les frais du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; les frais d’échange ou de bridge de LI.FI — affichés dans le widget avant confirmation ; les frais de revente à la réserve — 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve).",
@@ -127,7 +127,7 @@
     "wrongNetwork": "L’achat se fait sur le réseau Base. Votre portefeuille est sur un autre réseau.",
     "switchToBase": "Passer sur Base",
     "switchRejected": "Le réseau n’a pas été changé. L’achat nécessite Base — réessayez.",
-    "embeddedNoBase": "People Wallet ne peut pas encore payer sur le réseau Base. Pour acheter, connectez MetaMask, Trust Wallet ou WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet ne peut pas encore payer sur le réseau Base. Pour acheter, connectez MetaMask, Trust Wallet ou WalletConnect."
   },
   "whyPriceRises": {
     "title": "Pourquoi le prix monte",

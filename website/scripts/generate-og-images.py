@@ -43,7 +43,7 @@ SCRATCH = os.path.join(B.ROOT, ".og-work")
 CARDS = {
     "en": {
         "eyebrow": "PEOPLE // BLOCKCHAIN",
-        "headline": "Powered by People. Owned by Communities.",
+        "headline": "Powered by PEOPLE. Owned by Communities.",
         "tags": ["PARTICIPATE", "CREATE", "OWN"],
     },
     "ru": {

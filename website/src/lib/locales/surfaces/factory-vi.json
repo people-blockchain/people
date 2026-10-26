@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Phí bằng stablecoin",
     "stableFeeBuybackNote": "100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai.",
-    "stableFeeNetworkNote": "Hiện chỉ hoạt động trên mạng People. Thanh toán từ một chuỗi khác (Ethereum, Polygon, Tron, TON, Solana) sẽ có sau.",
+    "stableFeeNetworkNote": "Hiện chỉ hoạt động trên mạng PEOPLE. Thanh toán từ một chuỗi khác (Ethereum, Polygon, Tron, TON, Solana) sẽ có sau.",
     "approvingStable": "Đang phê duyệt…",
     "payingStableFee": "Đang trả phí…",
     "creatingAfterStableFee": "Đang tạo…",

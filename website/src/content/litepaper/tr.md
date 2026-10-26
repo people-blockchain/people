@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir. İnsanların sahip olduğu, VC'lerin değil."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir.**
 > **İnsanların sahip olduğu, VC'lerin değil.**
@@ -63,7 +63,7 @@ Kod olmadan yapabileceğiniz şeyler:
 
 ## 4. Teknoloji
 
-**Cosmos EVM.** People, Cosmos EVM yığınında çalışır: Ethereum uyumlu akıllı sözleşmeler ve Cosmos zincirinde 0x adresleri.
+**Cosmos EVM.** PEOPLE, Cosmos EVM yığınında çalışır: Ethereum uyumlu akıllı sözleşmeler ve Cosmos zincirinde 0x adresleri.
 
 | Parametre | Değer |
 |---|---|
@@ -185,7 +185,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kaynaklar aşağıda.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Yakılan ücretler | Temel ücret yakılır ¹ | Temel ücretin %50'si yakılır ² | **%0 yakılır** |
 | Ücreti alan | Doğrulayıcılar öncelik ücretini (bahşiş) alır ¹ | Doğrulayıcılar temel ücretin %50'sini ve öncelik ücretinin %100'ünü alırlar ² | **Doğrulayıcılar 30 · Topluluk 25 · Hazine 20 · Likidite 10 · Büyüme 15** |

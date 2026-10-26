@@ -38,7 +38,7 @@ export function isWalletAddress(value: string): boolean {
  * ever being a byte string a wallet could be asked to sign as a transaction payload, so a
  * captured bind signature can never be replayed as a tx signature (or vice versa).
  */
-export const WALLET_BIND_DOMAIN = "\x19People Partner Portal: wallet bind v1\n";
+export const WALLET_BIND_DOMAIN = "\x19PEOPLE Partner Portal: wallet bind v1\n";
 
 export function buildWalletBindMessage(input: {
   email: string;
@@ -49,7 +49,7 @@ export function buildWalletBindMessage(input: {
   return (
     WALLET_BIND_DOMAIN +
     [
-      "People Partner Portal",
+      "PEOPLE Partner Portal",
       "Prove wallet ownership. This does not move funds.",
       `Email: ${input.email}`,
       `Nonce: ${input.nonce}`,

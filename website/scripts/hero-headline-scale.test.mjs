@@ -10,12 +10,12 @@ import {
 test("heroHeadlineMaxWordChars uses longest word across main and accent", () => {
   assert.equal(heroHeadlineMaxWordChars("БЛОКЧЕЙН", "ДЛЯ СООБЩЕСТВА"), 10);
   assert.equal(heroHeadlineMaxWordChars("BLOCKCHAIN", "FÜR DIE GEMEINSCHAFT"), 12);
-  assert.equal(heroHeadlineMaxWordChars("PEOPLE'S", "BLOCKCHAIN"), 10);
+  assert.equal(heroHeadlineMaxWordChars("PEOPLE", "BLOCKCHAIN"), 10);
 });
 
 test("heroHeadlineUsesWideGlyphs detects Cyrillic and Arabic", () => {
   assert.equal(heroHeadlineUsesWideGlyphs("БЛОКЧЕЙН", "ДЛЯ СООБЩЕСТВА"), true);
-  assert.equal(heroHeadlineUsesWideGlyphs("PEOPLE'S", "BLOCKCHAIN"), false);
+  assert.equal(heroHeadlineUsesWideGlyphs("PEOPLE", "BLOCKCHAIN"), false);
   assert.equal(heroHeadlineUsesWideGlyphs("بلوك تشين", "للمجتمع"), true);
 });
 
@@ -28,7 +28,7 @@ test("heroHeadlineMaxWordCharsFromLines uses longest word on a single line", () 
 });
 
 test("heroHeadlineCqiMultiplier is more conservative for long wide-script words", () => {
-  const en = heroHeadlineCqiMultiplier(10, "PEOPLE'S", "BLOCKCHAIN");
+  const en = heroHeadlineCqiMultiplier(10, "PEOPLE", "BLOCKCHAIN");
   const ru = heroHeadlineCqiMultiplier(10, "БЛОКЧЕЙН", "ДЛЯ СООБЩЕСТВА");
   const deLong = heroHeadlineCqiMultiplier(12, "BLOCKCHAIN", "FÜR DIE GEMEINSCHAFT");
   assert.ok(en > ru);

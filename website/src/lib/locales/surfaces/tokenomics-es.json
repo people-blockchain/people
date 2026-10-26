@@ -42,7 +42,7 @@
   "unsoldTitle": "Tokens no vendidos",
   "unsoldBody": "La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.",
   "feeTitle": "Reparto de comisiones de red",
-  "feeLead": "Cada comisión de protocolo en People sigue Model A aprobada:",
+  "feeLead": "Cada comisión de protocolo en PEOPLE sigue Model A aprobada:",
   "feeNote": "Cada comisión de protocolo se reparte: 30% validadores, 25% pool comunitario, 20% tesorería, 10% liquidez, 15% Growth, 0% quemado.",
   "buybackTitle": "Recompras",
   "buybackBody": "100% de las tarifas de lanzamiento de tokens y NFT (USDC/USDT) se destinan a recompras públicas de PPL. El contrato StableFeeGateway está implementado y desplegado en la testnet: cada tarifa de lanzamiento de stablecoin va al receptor público de recompras. 30% de las tarifas de red se destinan a recompras públicas de PPL (tesorería 20% + liquidez 10%). El 70% restante de las tarifas de red se destina a validadores (30%), el fondo comunitario (25%) y el Growth Pool (15%) — y todo vuelve finalmente a los participantes. El PPL recomprado se divide luego 30/25/20/10/15 por el multisig de tesorería 2-de-3 — esa división es una política de multisig publicada, no una regla aplicada on-chain.",

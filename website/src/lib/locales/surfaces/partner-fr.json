@@ -6,7 +6,7 @@
   "googleCta": "Continuer avec Google",
   "or": "ou",
   "checkEmailTitle": "Vérifiez votre e-mail",
-  "checkEmailLead": "Si un compte peut être créé pour cette adresse, un lien People à usage unique est en route.",
+  "checkEmailLead": "Si un compte peut être créé pour cette adresse, un lien PEOPLE à usage unique est en route.",
   "backToLogin": "Retour à la connexion",
   "notConfigured": "La connexion partenaire n'est pas configurée sur ce déploiement. L'opérateur doit définir AUTH_SECRET, DATABASE_URL et au moins AUTH_RESEND_KEY ou OAuth Google.",
   "googleOff": "Connexion Google pas encore configurée.",
@@ -60,8 +60,8 @@
   "logIn": "Connexion",
   "cabinet": "Espace",
   "growthNote": "Les paiements Growth restent L1 70% / L2 30% du budget de récompense Growth. Cet espace ne modifie pas l'économie du protocole.",
-  "footerNote": "Données protocole en lecture seule. Actif natif : People (PPL).",
-  "magicLinkSubject": "Connexion au portail partenaire People",
+  "footerNote": "Données protocole en lecture seule. Actif natif : PEOPLE (PPL).",
+  "magicLinkSubject": "Connexion au portail partenaire PEOPLE",
   "magicLinkHeading": "Connexion partenaire",
   "magicLinkBody": "Utilisez ce lien à usage unique pour ouvrir votre espace partenaire. Il expire rapidement et ne fonctionne qu'une fois.",
   "magicLinkCta": "Se connecter",
@@ -80,8 +80,8 @@
   "signInAgreementAfter": ".",
   "authErrorSessionExpired": "Votre session a expiré. Reconnectez-vous.",
   "authErrorUnavailable": "L’espace partenaire est momentanément indisponible. Réessayez dans une minute.",
-  "localWalletHeading": "People Wallet on this device",
+  "localWalletHeading": "PEOPLE Wallet on this device",
   "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your People Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your People Wallet… refresh in a moment or open the wallet page."
+  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
+  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
 }

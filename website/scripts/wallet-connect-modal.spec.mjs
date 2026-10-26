@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000";
 /** Default public backend is cosmos-evm: /swap and /create/token gate on an EVM
- *  wallet (MetaMask / Trust / WalletConnect), not on the People sign-in modal. */
+ *  wallet (MetaMask / Trust / WalletConnect), not on the PEOPLE sign-in modal. */
 const LEGACY_BACKEND = ["legacy", "people-node"].includes(
   (process.env.NEXT_PUBLIC_CHAIN ?? "").trim().toLowerCase(),
 );
@@ -51,7 +51,7 @@ async function assertEvmConnectMenu(page) {
   await expect(menu).toBeVisible({ timeout: 15000 });
   await expect(menu.getByTestId("wallet-connect-metamask")).toBeVisible();
   await expect(menu.getByTestId("wallet-connect-trust")).toBeVisible();
-  await expect(page.locator("main").getByRole("link", { name: /People Wallet/ })).toHaveAttribute("href", "/wallet");
+  await expect(page.locator("main").getByRole("link", { name: /PEOPLE Wallet/ })).toHaveAttribute("href", "/wallet");
   await expect(page.locator("dialog[open]")).toHaveCount(0);
 }
 
@@ -120,7 +120,7 @@ const ENTRY_POINTS = [
     height: 900,
     path: "/create/nft",
     // On the EVM backend the NFT wizard signs through the connected EVM wallet (E2E-M3),
-    // so it shows the inline external-wallet menu, not the stepped People sign-in modal.
+    // so it shows the inline external-wallet menu, not the stepped PEOPLE sign-in modal.
     kind: LEGACY_BACKEND ? "modal-after-nft-steps" : "evm-connect",
   },
   {

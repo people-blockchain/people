@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "Nasıl katılırım",
-    "subtitle": "People’s Blockchain’e topluluk katılımcısı olarak katılın — telefondan, tabletle veya tarayıcıdan.",
+    "subtitle": "PEOPLE Blockchain’e topluluk katılımcısı olarak katılın — telefondan, tabletle veya tarayıcıdan.",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "Oluştur"
       }
     ],
-    "ctaJoin": "People’s Blockchain’e katıl",
+    "ctaJoin": "PEOPLE Blockchain’e katıl",
     "ctaHow": "Nasıl çalışır"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People, Topluluk için blokzincir’in yerel varlığıdır. Ticker: PPL.",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE, Topluluk için blokzincir’in yerel varlığıdır. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",

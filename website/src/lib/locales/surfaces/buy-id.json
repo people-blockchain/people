@@ -46,7 +46,7 @@
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
     "cta": "Hubungkan dompet untuk membeli",
     "ctaConnected": "Beli PPL",
-    "wallets": "People Wallet (masuk dengan Google atau email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (masuk dengan Google atau email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Cara bayar",
     "payOnBase": "Bayar di Base",
     "payFromOther": "Bayar dari jaringan lain",
@@ -107,7 +107,7 @@
     "termsLink": "Ketentuan",
     "help": "Butuh bantuan? {support}",
     "supportLink": "Dukungan",
-    "noWalletHint": "Belum punya dompet? Pilih Google atau email — People Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
+    "noWalletHint": "Belum punya dompet? Pilih Google atau email — PEOPLE Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
     "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
     "feesTitle": "Biaya dan waktu",
     "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar US$0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum Anda konfirmasi; biaya penjualan kembali ke cadangan — 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan).",
@@ -127,7 +127,7 @@
     "wrongNetwork": "Pembelian berlangsung di jaringan Base. Dompet Anda ada di jaringan lain.",
     "switchToBase": "Beralih ke Base",
     "switchRejected": "Jaringan tidak dialihkan. Pembelian memerlukan Base — coba lagi.",
-    "embeddedNoBase": "People Wallet belum bisa membayar di jaringan Base. Untuk membeli, hubungkan MetaMask, Trust Wallet, atau WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet belum bisa membayar di jaringan Base. Untuk membeli, hubungkan MetaMask, Trust Wallet, atau WalletConnect."
   },
   "whyPriceRises": {
     "title": "Mengapa harga naik",
