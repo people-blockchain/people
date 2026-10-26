@@ -19,12 +19,19 @@ The hub sells PPL allocation on a bonding curve for allowlisted stablecoins on B
 
 ## Rollout plan
 
+**The code can be merged before the hub is deployed.** Production has no `NEXT_PUBLIC_SALE_HUB_ADDRESS`, `NEXT_PUBLIC_SALE_CHAIN` is unset (sale mode `base`), and no `NEXT_PUBLIC_SEPOLIA_*` / `NEXT_PUBLIC_BASE_TEST_*` variables exist. In that state:
+
+- the production guard (`VERCEL_ENV=production`) throws only for a sale mode other than `base`; a missing hub address is not an error, so the build passes;
+- `/buy` shows the "sale opens soon" state: closed headline, disabled main button, no bridge widget, no balance reads, no hub or RPC calls, and a purchase attempt stops with `sale_not_configured` before any wallet prompt.
+
+Merging first therefore cannot expose a buy flow or break the build. Then, in this order:
+
 1. **Deploy the hub** with `DeployPplCurveHub.s.sol` (`OWNER` = Safe, `TREASURY` = Safe, a different broadcaster, `OPEN_SALE` unset).
-2. **Safe `setToken`** for canonical Base USDC and USDT. This must happen before `open()`.
-3. **Set the env** in the Vercel Preview environment first: `NEXT_PUBLIC_SALE_HUB_ADDRESS` with `NEXT_PUBLIC_SALE_CHAIN` unset (or `base`). Production builds (`VERCEL_ENV=production`) fail if the sale mode is anything but `base`.
+2. **Safe `setToken`** for canonical Base USDC and USDT. This must happen before `open()`; tokens cannot be added later.
+3. **Set the env** `NEXT_PUBLIC_SALE_HUB_ADDRESS` in the Vercel **Preview** environment, with `NEXT_PUBLIC_SALE_CHAIN` unset (or `base`). Production builds fail if the sale mode is anything but `base`.
 4. **Preview:** check the preview deployment end to end (quote, limits, treasury guard message, the "Buy on Base" button after a bridge delivery).
-5. **Merge** to `main`, set the same env for Production.
-6. **Safe `open()`** at the planned opening time (after the tokens are allowlisted; they cannot be added later).
+5. **Production:** set the same `NEXT_PUBLIC_SALE_HUB_ADDRESS` for Production and redeploy (the variable is inlined at build time). The page stays on "soon" until the owner opens the sale on-chain.
+6. **Safe `open()`** at the planned opening time.
 
 ## Test hub on Base mainnet (8453)
 
