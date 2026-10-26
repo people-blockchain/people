@@ -1,30 +1,62 @@
 {
   "note": "Owner fills saleContract after approved mainnet deploy. Do not commit private keys.",
-  "treasurySafe": "",
+  "treasurySafe": "0x60E8F06E8E7db0C6f8c5B388c00485DF08790AB6",
   "chains": {
     "1": {
       "name": "Ethereum",
       "saleContract": "",
-      "usdt": { "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "decimals": 6 },
-      "usdc": { "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "decimals": 6 }
+      "usdt": {
+        "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "decimals": 6
+      },
+      "usdc": {
+        "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "decimals": 6
+      }
     },
     "56": {
       "name": "BNB Chain",
       "saleContract": "",
-      "usdt": { "address": "0x55d398326f99059fF775485246999027B3197955", "decimals": 18 },
-      "usdc": { "address": "0x8AC76a51cc950d9822EEE5674B141ff43154C6A0", "decimals": 18 }
+      "usdt": {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "decimals": 18
+      },
+      "usdc": {
+        "address": "0x8AC76a51cc950d9822EEE5674B141ff43154C6A0",
+        "decimals": 18
+      }
     },
     "137": {
       "name": "Polygon",
       "saleContract": "",
-      "usdt": { "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F", "decimals": 6 },
-      "usdc": { "address": "0x3c499c542cEF5E3811eD2ac1691cC68c50f2166F", "decimals": 6 }
+      "usdt": {
+        "address": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        "decimals": 6
+      },
+      "usdc": {
+        "address": "0x3c499c542cEF5E3811eD2ac1691cC68c50f2166F",
+        "decimals": 6
+      }
     },
     "8453": {
       "name": "Base",
-      "saleContract": "",
-      "usdt": { "address": "", "decimals": 6 },
-      "usdc": { "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "decimals": 6 }
+      "saleContract": "0x84388772788B7a383Dc2a0bDCd655D15A8279DC8",
+      "usdt": {
+        "address": "",
+        "decimals": 6
+      },
+      "usdc": {
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "decimals": 6
+      },
+      "saleContractDeployTx": "0x7b887686b1adbf4a22aea101875351dbaac8f1068cce9a4b5704c3a465b78b5a",
+      "saleContractStatus": "deployed; owner=treasury=Safe; tokens not allowlisted; not open; Sourcify exact_match",
+      "deprecatedTestHub": {
+        "address": "0x0A647e27476cfb86E45537034f1E8931d214bA28",
+        "status": "deprecated, paused (TEST hub with mock tokens, old 3-arg buyWith); do not use",
+        "pauseTx": "0x41b0751b493dbf0aab34e55e33a1db3ee5ca7f75c256fce450edd2d50655f4c0",
+        "note": "same address on Base Sepolia 84532 is a different, active test hub"
+      }
     }
   }
 }
