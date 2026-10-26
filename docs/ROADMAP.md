@@ -1,4 +1,4 @@
-# Дорожная карта People's Blockchain
+# Дорожная карта PEOPLE Blockchain
 
 **Единый источник статусов (машиночитаемый):** [`roadmap.json`](./roadmap.json) (копия для сайта: `website/src/lib/roadmap-catalog.data.json`, синхронизируется тестом `website/scripts/roadmap-catalog.test.mjs`)  
 **Публичная страница:** [peopleblockchain.network/roadmap](https://www.peopleblockchain.network/roadmap) (после деплоя)

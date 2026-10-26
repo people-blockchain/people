@@ -1,11 +1,11 @@
 {
   "tag": "Testnet governance",
   "title": "Governance",
-  "lead": "Browse on-chain proposals on PEOPLE Blockchain testnet (people_97401-1) and cast your vote with your People Wallet.",
+  "lead": "Browse on-chain proposals on PEOPLE Blockchain testnet (people_97401-1) and cast your vote with your PEOPLE Wallet.",
   "networkBadge": "PEOPLE Blockchain testnet · chain 97401",
   "unreachable": "Couldn't reach the governance module right now. Showing the last loaded data.",
   "loadError": "Couldn't load proposals. Try again shortly.",
-  "connectPrompt": "Connect your People Wallet to vote on proposals.",
+  "connectPrompt": "Connect your PEOPLE Wallet to vote on proposals.",
   "votingPowerNote": "Your voting power is your bonded stake. Staking isn't live on this testnet yet, so your vote is recorded on-chain but currently carries 0 voting power.",
   "listTitle": "Proposals",
   "listEmpty": "No proposals yet.",

@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "رسوم العملة المستقرة",
     "stableFeeBuybackNote": "100% من رسوم إطلاق الرموز وNFT (USDC/USDT) تذهب إلى عمليات إعادة شراء PPL العامة.",
-    "stableFeeNetworkNote": "يعمل حاليًا فقط على شبكة People. الدفع من شبكة أخرى (Ethereum، Polygon، Tron، TON، Solana) سيتوفر لاحقًا.",
+    "stableFeeNetworkNote": "يعمل حاليًا فقط على شبكة PEOPLE. الدفع من شبكة أخرى (Ethereum، Polygon، Tron، TON، Solana) سيتوفر لاحقًا.",
     "approvingStable": "جارٍ الموافقة…",
     "payingStableFee": "جارٍ دفع الرسوم…",
     "creatingAfterStableFee": "جارٍ الإنشاء…",

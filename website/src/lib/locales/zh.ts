@@ -119,7 +119,7 @@ export const zh: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "社区",
     "headlineSub": "区块链",
     "lead": "旨在连接创作者、社区、多资产经济系统以及已验证人类网络参与的区块链基础设施。",
@@ -1073,7 +1073,7 @@ export const zh: LocaleContent = {
     "title": "技术架构体系",
     "subtitle": "社区区块链 沿着严谨的三阶段架构路径演进。每一层级均确定性地奠基在其下方的核心基础设施之上。",
     "umbrellaTitle": "项目统筹管理",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "协议管理者",
     "umbrellaDesc": "社区区块链 的品牌与协议守护者。",
     "targetTitle": "核心网络目标",

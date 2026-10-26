@@ -119,7 +119,7 @@ export const ru: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // СПЕЦИФИКАЦИЯ ПРОТОКОЛА",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "PEOPLE'S",
     "headlineSub": "BLOCKCHAIN",
     "lead": "Блокчейн-инфраструктура, созданная для объединения авторов, сообществ, мультиактивных экономических систем и верифицированного участия людей.",
@@ -1073,7 +1073,7 @@ export const ru: LocaleContent = {
     "title": "Техническая архитектура",
     "subtitle": "Блокчейн для сообщества развивается в строгой трехфазной последовательности. Каждый слой детерминированно опирается на проверенный фундамент под ним.",
     "umbrellaTitle": "Управляющая организация",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Хранитель протокола",
     "umbrellaDesc": "Бренд и хранитель блокчейна для сообщества.",
     "targetTitle": "Целевая сеть",
@@ -1289,7 +1289,7 @@ export const ru: LocaleContent = {
     "mainnet": "Основная сеть",
     "mainnetTitle": "Основная сеть: сеть Base, где идёт продажа PPL",
     "testnet": "Тестовая сеть",
-    "testnetTitle": "Тестовая сеть: тестовая сеть People для создания токенов и NFT"
+    "testnetTitle": "Тестовая сеть: тестовая сеть PEOPLE для создания токенов и NFT"
   },
   "a11y": {
     "skipToContent": "К содержимому",

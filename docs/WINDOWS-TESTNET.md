@@ -1,6 +1,6 @@
 # Internal testnet на Windows (ноутбук)
 
-**Это не mainnet.** Этот гайд поднимает **локальный internal testnet** People’s Blockchain: две ноды + explorer через Docker Compose (как после PR #13). Репозиторий **приватный** — не публиковать, секреты не коммитить, mainnet не деплоить.
+**Это не mainnet.** Этот гайд поднимает **локальный internal testnet** PEOPLE Blockchain: две ноды + explorer через Docker Compose (как после PR #13). Репозиторий **приватный** — не публиковать, секреты не коммитить, mainnet не деплоить.
 
 Ноутбук — **оператор локальных нод**, а не «вся сеть» и не mainnet. Faucet работает **только на node-1**.
 

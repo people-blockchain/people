@@ -1,7 +1,7 @@
 {
   "eyebrow": "Million Founders · Season 1",
   "heroTitle": "Be one of the first million people building a blockchain for everyone.",
-  "heroSub": "No code, no crypto skills. Get your founder number, invite friends, and earn points when they launch tokens, NFTs and club cards on the People testnet.",
+  "heroSub": "No code, no crypto skills. Get your founder number, invite friends, and earn points when they launch tokens, NFTs and club cards on the PEOPLE testnet.",
   "ctaClaim": "Claim my founder number",
   "ctaHow": "How it works",
   "disclaimer": "Preliminary. Points, rates and season budget may change before mainnet. Not a promise of income.",
@@ -46,11 +46,11 @@
     },
     {
       "title": "Create a wallet",
-      "body": "Sign in with Google or email and link your People wallet in a few taps."
+      "body": "Sign in with Google or email and link your PEOPLE wallet in a few taps."
     },
     {
       "title": "Do one testnet action",
-      "body": "A swap, an NFT mint or a token launch on the People testnet."
+      "body": "A swap, an NFT mint or a token launch on the PEOPLE testnet."
     }
   ],
   "inviteLine": "Invite friends: you earn when THEY do step 3.",
@@ -66,8 +66,8 @@
   "gpplTitle": "gPPL — governance votes",
   "gppl": [
     {
-      "title": "People's governance token",
-      "body": "gPPL is the People governance token. Holders vote on DAO proposals."
+      "title": "PEOPLE governance token",
+      "body": "gPPL is the PEOPLE governance token. Holders vote on DAO proposals."
     },
     {
       "title": "1,000,000 gPPL, held by the DAO",
@@ -116,7 +116,7 @@
       "cta": "Open templates"
     }
   ],
-  "buildTestnet": "Open the People testnet",
+  "buildTestnet": "Open the PEOPLE testnet",
   "ranksEyebrow": "Early entry",
   "ranksTitle": "Earlier founders get a bigger multiplier",
   "ranksHint": "Applies to activity points of the founder number holder. Preliminary.",

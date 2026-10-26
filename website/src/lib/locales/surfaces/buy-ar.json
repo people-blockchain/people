@@ -46,7 +46,7 @@
     "belowMin": "أدخل مبلغًا لرؤية العرض.",
     "cta": "اربط محفظة للشراء",
     "ctaConnected": "اشترِ PPL",
-    "wallets": "People Wallet (تسجيل الدخول عبر Google أو البريد الإلكتروني) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (تسجيل الدخول عبر Google أو البريد الإلكتروني) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "طريقة الدفع",
     "payOnBase": "الدفع على Base",
     "payFromOther": "الدفع من شبكة أخرى",
@@ -94,7 +94,7 @@
     "termsLink": "الشروط",
     "help": "تحتاج إلى مساعدة؟ {support}",
     "supportLink": "الدعم",
-    "noWalletHint": "ليست لديك محفظة؟ اختر Google أو البريد الإلكتروني وستُنشأ لك محفظة People Wallet. للدفع تحتاج إلى USDC على Base في هذه المحفظة أو في محفظة تربطها.",
+    "noWalletHint": "ليست لديك محفظة؟ اختر Google أو البريد الإلكتروني وستُنشأ لك محفظة PEOPLE Wallet. للدفع تحتاج إلى USDC على Base في هذه المحفظة أو في محفظة تربطها.",
     "sellBackTerms": "البيع للاحتياطي متاح للمستخدمين الموثَّقين فقط. يمكن بيع كل دفعة بعد احتفاظ 30 يومًا بسعر المنحنى لحظة البيع. الحد الإجمالي: 2% من الاحتياطي يوميًا لجميع المستخدمين و2,000 دولار للشخص يوميًا. الرسوم 1.5% (3% إذا تجاوزت مبيعات اليوم 1% من الاحتياطي). يُغلق بعد التخرّج (graduation). تستلم المبلغ بعملة USDC على شبكة Base.",
     "feesTitle": "الرسوم والمدة",
     "feesBody": "الرسوم: رسوم شبكة Base (الغاز) وتُدفع بعملة ETH — عادةً نحو $0.01؛ رسوم التبديل أو الجسر من LI.FI — تظهر في الأداة قبل التأكيد؛ رسوم البيع للاحتياطي — 1.5% (3% إذا تجاوزت مبيعات اليوم 1% من الاحتياطي).",
@@ -114,7 +114,7 @@
     "wrongNetwork": "يتم الشراء على شبكة Base. محفظتك على شبكة أخرى.",
     "switchToBase": "التبديل إلى Base",
     "switchRejected": "لم يتم تبديل الشبكة. الشراء يتطلب شبكة Base — حاول مرة أخرى.",
-    "embeddedNoBase": "لا تدعم محفظة People Wallet الدفع على شبكة Base بعد. للشراء، اربط MetaMask أو Trust Wallet أو WalletConnect."
+    "embeddedNoBase": "لا تدعم محفظة PEOPLE Wallet الدفع على شبكة Base بعد. للشراء، اربط MetaMask أو Trust Wallet أو WalletConnect."
   },
   "whyPriceRises": {
     "title": "لماذا يرتفع السعر",

@@ -7,7 +7,7 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Governance | PEOPLE Blockchain",
   description:
-    "Browse on-chain governance proposals on PEOPLE Blockchain testnet and vote with your People Wallet.",
+    "Browse on-chain governance proposals on PEOPLE Blockchain testnet and vote with your PEOPLE Wallet.",
   alternates: { canonical: "/governance" },
   openGraph: {
     title: "Governance",

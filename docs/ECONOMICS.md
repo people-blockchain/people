@@ -1,20 +1,20 @@
-# PEOPLE'S BLOCKCHAIN — ECONOMICS v0.1
+# PEOPLE BLOCKCHAIN — ECONOMICS v0.1
 
 Status: Working economic specification
 Version: 0.1
 Date: 2026-09-22
 
-> This document defines the first working economic model for People's Blockchain. Values marked as **provisional** are design parameters for simulation and are not final protocol constants until tested on a testnet.
+> This document defines the first working economic model for PEOPLE Blockchain. Values marked as **provisional** are design parameters for simulation and are not final protocol constants until tested on a testnet.
 >
-> **Terminology:** the brand is **People**, the network is **People's Blockchain** and the
-> native token is **People**, ticker **PPL**, runtime id `ppl`. Historical `vls`/`VLS`/`Vallis`
+> **Terminology:** the brand is **PEOPLE**, the network is **PEOPLE Blockchain** and the
+> native token is **PEOPLE**, ticker **PPL**, runtime id `ppl`. Historical `vls`/`VLS`/`Vallis`
 > appear only in archive notes.
 
 ---
 
 ## 1. Economic Objective
 
-People's Blockchain is designed around a two-sided economy:
+PEOPLE Blockchain is designed around a two-sided economy:
 
 1. **Participants** bring verified human participation, attention, community activity and curation.
 2. **Creators** launch tokens, NFTs and communities and need distribution, liquidity and users.
@@ -27,10 +27,10 @@ The native asset must therefore have genuine utility inside the network rather t
 
 ## 2. Native Asset
 
-Token: **People**
+Token: **PEOPLE**
 Ticker: **PPL**
 
-People is the native economic asset of the blockchain.
+PEOPLE is the native economic asset of the blockchain.
 
 Primary utilities:
 
@@ -43,7 +43,7 @@ Primary utilities:
 - governance in later phases;
 - premium network functionality.
 
-People is **not** the default mobile-mining reward.
+PEOPLE is **not** the default mobile-mining reward.
 
 Mobile participants primarily earn rights to ecosystem rewards and a share of network-generated value. This prevents the core asset from becoming an unlimited faucet.
 
@@ -68,7 +68,7 @@ No retail pre-mine or guaranteed investor allocation is assumed by this specific
 
 ## 4. Validator Emission
 
-Total supply is fixed at 1,000,000,000 PPL. New People (PPL) beyond that fixed supply can only be created through the validator/security budget, under the schedule below.
+Total supply is fixed at 1,000,000,000 PPL. New PEOPLE (PPL) beyond that fixed supply can only be created through the validator/security budget, under the schedule below.
 
 Approved annual target for net protocol emission:
 
@@ -133,7 +133,7 @@ Examples:
 | Destination | Share |
 |---|---:|
 | Validators | 30% |
-| People's / Community Pool | 25% |
+| PEOPLE / Community Pool | 25% |
 | Treasury | 20% |
 | Liquidity & Ecosystem | 10% |
 | Growth Pool | 15% |
@@ -145,7 +145,7 @@ The historical provisional table (40 / 25 / 20 / 10 / 5) is retained only as a r
 
 1. 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks.
 2. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%).
-3. The remaining 70% of network fees go to validators (30%), the People's / Community Pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants.
+3. The remaining 70% of network fees go to validators (30%), the PEOPLE / Community Pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants.
 
 Do not describe this as "100% of all fees". Model A shares above are unchanged; buybacks describe what happens to the treasury and liquidity shares and to USDC/USDT launch fees (see `docs/design/buyback.md`).
 
@@ -161,7 +161,7 @@ A future return of a non-zero burn share would require an explicit founder-gated
 
 ---
 
-## 8. People's / Community Pool
+## 8. PEOPLE / Community Pool
 
 The Community Pool is the main bridge between mobile participation and the wider creator economy.
 
@@ -311,7 +311,7 @@ The project may later support external liquidity and wrapped representations of 
 
 ## 17. External Liquidity
 
-People's Blockchain should eventually have a path for PPL to be acquired with external assets such as stablecoins.
+PEOPLE Blockchain should eventually have a path for PPL to be acquired with external assets such as stablecoins.
 
 This is necessary because internal circulation alone does not create new external demand.
 

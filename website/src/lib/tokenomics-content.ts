@@ -152,7 +152,7 @@ const en: TokenomicsCopy = {
   launchOrderBody:
     "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
   feeTitle: "Network fee split",
-  feeLead: "Every protocol fee on People follows the approved Model A routing:",
+  feeLead: "Every protocol fee on PEOPLE follows the approved Model A routing:",
   feeNote: FEE_SPLIT_PLAIN.en,
   buybackTitle: "Buybacks",
   buybackBody:
@@ -211,7 +211,7 @@ const ru: TokenomicsCopy = {
       "200M PPL (20%): в годы 1–4 выплаты 6%, 5%, 5%, 4% от total supply в год (60M / 50M / 50M / 40M PPL) плюс 30% сетевых комиссий.",
     team: "15% эмиссии: 0% при запуске, клифф 6 месяцев, затем линейная ежемесячная разблокировка 18 месяцев (всего 24 месяца).",
     treasury: "Тратится только после голосования DAO; хранится в мультисиге.",
-    sale: "25% при genesis в People, остальное ежемесячно 9 месяцев.",
+    sale: "25% при genesis в PEOPLE, остальное ежемесячно 9 месяцев.",
     liquidity: "Пул PPL/USDT при закрытии продажи; LP заблокирован 2+ года.",
   },
   donutTitle: "Распределение",
@@ -264,7 +264,7 @@ const ru: TokenomicsCopy = {
   launchOrderBody:
     "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
   feeTitle: "Деление сетевой комиссии",
-  feeLead: "Каждая протокольная комиссия в People следует утверждённой Model A:",
+  feeLead: "Каждая протокольная комиссия в PEOPLE следует утверждённой Model A:",
   feeNote: FEE_SPLIT_PLAIN.ru,
   buybackTitle: "Выкуп",
   buybackBody:

@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Envía pequeñas propinas de agradecimiento a creadores y equipos en la red People.",
+      "title": "PEOPLE Tips",
+      "summary": "Envía pequeñas propinas de agradecimiento a creadores y equipos en la red PEOPLE.",
       "idea": "Da las gracias con un token pensado para microapoyo: conciertos, streams y mantenedores open source.",
       "audience": "Fans, mecenas y equipos que recogen muchos «gracias» pequeños.",
       "whyToken": "Las propinas quedan en el libro de la comunidad, no en un saldo cerrado de una app.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Cambia tokens de prueba de la comunidad por PPL en el navegador.",
       "idea": "Intercambia tokens demo de la comunidad por PPL en el navegador, sin cuenta de exchange aparte.",
       "audience": "Quienes prueban activos de testnet antes de comprometerse con un proyecto.",

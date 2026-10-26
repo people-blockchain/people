@@ -1,7 +1,7 @@
 {
   "eyebrow": "CƠ SỞ TRI THỨC / PEOPLE",
   "title": "Hiểu.\nThử.\nTham gia.",
-  "description": "Từ ví đầu tiên đến nút của bạn — hướng dẫn thực tế về People’s Blockchain.",
+  "description": "Từ ví đầu tiên đến nút của bạn — hướng dẫn thực tế về PEOPLE Blockchain.",
   "notice": "Mạng thử",
   "noticeText": "Mainnet chưa ra mắt. Thao tác khả dụng phụ thuộc kết nối trang và phiên bản mạng. Coin thử không phải lời hứa thu nhập.",
   "contents": "Trong hướng dẫn này",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "People hoạt động thế nào",
+      "title": "PEOPLE hoạt động thế nào",
       "lead": "Blockchain là bản ghi thao tác dùng chung. Ví ký hành động, nút xác minh, validator đưa vào khối.",
       "items": [
         {
           "title": "PPL là đồng mạng",
-          "text": "People (PPL) trả phí mạng và thao tác giao thức. PPL thử dùng để thử mạng; giữ nó không nghĩa là bạn đã kiếm tiền."
+          "text": "PEOPLE (PPL) trả phí mạng và thao tác giao thức. PPL thử dùng để thử mạng; giữ nó không nghĩa là bạn đã kiếm tiền."
         },
         {
           "title": "Người tham gia, nút, trình xác thực",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — đồng tiền của mạng",
-      "lead": "People (PPL) trả phí mạng và các thao tác giao thức trên chuỗi này.",
+      "lead": "PEOPLE (PPL) trả phí mạng và các thao tác giao thức trên chuỗi này.",
       "items": [
         {
           "title": "Đồng thử nghiệm",

@@ -218,7 +218,7 @@ export function EvmTokenLaunch() {
       <Eyebrow>{page.title}</Eyebrow>
       <h1 className="mt-3 text-h2 font-bold">{page.title}</h1>
       <Chip tone="value" className="mt-4">
-        People&apos;s Blockchain testnet · chain 97401
+        PEOPLE Blockchain testnet · chain 97401
       </Chip>
       {!signer ? (
         <div className="mt-8">

@@ -42,7 +42,7 @@
   "unsoldTitle": "Jetons invendus",
   "unsoldBody": "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
   "feeTitle": "Répartition des frais réseau",
-  "feeLead": "Chaque frais de protocole sur People suit la Model A approuvée :",
+  "feeLead": "Chaque frais de protocole sur PEOPLE suit la Model A approuvée :",
   "feeNote": "Chaque frais de protocole est réparti : 30 % validateurs, 25 % pool communautaire, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé.",
   "buybackTitle": "Rachats",
   "buybackBody": "100% des frais de lancement de tokens et NFT (USDC/USDT) vont aux rachats publics de PPL. Le contrat StableFeeGateway est implémenté et déployé sur le testnet : chaque frais de lancement en stablecoin va au destinataire public des rachats. 30% des frais de réseau vont aux rachats publics de PPL (trésorerie 20% + liquidité 10%). Les 70% restants des frais de réseau vont aux validateurs (30%), au pool communautaire (25%) et au Growth Pool (15%) — et tout cela revient finalement aux participants. Les PPL rachetés sont ensuite répartis 30/25/20/10/15 par le multisig de trésorerie 2-sur-3 — cette répartition est une politique de multisig publiée, pas une règle appliquée on-chain.",

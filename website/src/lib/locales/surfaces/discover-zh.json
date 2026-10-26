@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "在 People 网络上向创作者和团队发送小额感谢小费。",
+      "title": "PEOPLE Tips",
+      "summary": "在 PEOPLE 网络上向创作者和团队发送小额感谢小费。",
       "idea": "用为微支持设计的代币表达感谢——演唱会、直播和开源维护者。",
       "audience": "粉丝、赞助人和收集许多小小「谢谢」的团队。",
       "whyToken": "小费留在社区自己的账本中，而不是封闭应用余额。",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "在浏览器中将社区测试代币兑换为 PPL。",
       "idea": "在浏览器中将社区演示代币兑换为 PPL——无需单独的交易所账户。",
       "audience": "在投入项目前试用测试网资产的人。",

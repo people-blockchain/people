@@ -1,6 +1,6 @@
-# People's Chain (Cosmos EVM) — Stage 1
+# PEOPLE Chain (Cosmos EVM) — Stage 1
 
-Cosmos EVM–based execution layer for People's Blockchain. The legacy TypeScript node in `people-node/` is **unchanged**; this folder is the new validator stack.
+Cosmos EVM–based execution layer for PEOPLE Blockchain. The legacy TypeScript node in `people-node/` is **unchanged**; this folder is the new validator stack.
 
 | Parameter | Value |
 | --- | --- |
@@ -9,7 +9,7 @@ Cosmos EVM–based execution layer for People's Blockchain. The legacy TypeScrip
 | Native denom (base) | `appl` (18 decimals; display **PPL**, alias **aPPL**) |
 | Bech32 prefix | `people` (`people1…` accounts) |
 | Upstream | [cosmos/evm](https://github.com/cosmos/evm) — tag in `COSMOS_EVM_VERSION` (`v0.4.0`) **and** the commit it must resolve to in `COSMOS_EVM_COMMIT`; the build compares `git rev-parse HEAD` against the pin and refuses to build on a mismatch |
-| Node binary | `peopled` (example `evmd` with People's config) |
+| Node binary | `peopled` (example `evmd` with PEOPLE config) |
 
 ## Quick start (local, 3 validators, one host)
 

@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Frais en stablecoin",
     "stableFeeBuybackNote": "100% des frais de lancement de tokens et NFT (USDC/USDT) vont aux rachats publics de PPL.",
-    "stableFeeNetworkNote": "Fonctionne uniquement sur le réseau People pour l'instant. Payer depuis une autre chaîne (Ethereum, Polygon, Tron, TON, Solana) arrivera plus tard.",
+    "stableFeeNetworkNote": "Fonctionne uniquement sur le réseau PEOPLE pour l'instant. Payer depuis une autre chaîne (Ethereum, Polygon, Tron, TON, Solana) arrivera plus tard.",
     "approvingStable": "Approbation…",
     "payingStableFee": "Paiement des frais…",
     "creatingAfterStableFee": "Création…",

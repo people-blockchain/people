@@ -1,7 +1,7 @@
 {
   "eyebrow": "知识库 / PEOPLE",
   "title": "理解。\n试用。\n参与。",
-  "description": "从第一只钱包到你自己的节点 — People’s Blockchain 实用指南。",
+  "description": "从第一只钱包到你自己的节点 — PEOPLE Blockchain 实用指南。",
   "notice": "测试网络",
   "noticeText": "Mainnet 尚未启动。可用操作取决于站点连接与网络版本。测试币不是收入承诺。",
   "contents": "本指南中",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "People 如何运作",
+      "title": "PEOPLE 如何运作",
       "lead": "区块链是共享的操作记录。钱包签署操作，节点验证，验证者写入区块。",
       "items": [
         {
           "title": "PPL 是网络币",
-          "text": "People（PPL）支付网络手续费与协议操作。测试 PPL 用于测试网络；持有并不表示你已赚钱。"
+          "text": "PEOPLE（PPL）支付网络手续费与协议操作。测试 PPL 用于测试网络；持有并不表示你已赚钱。"
         },
         {
           "title": "参与者、节点、验证者",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — 网络的币",
-      "lead": "People（PPL）用于支付这条链上的网络手续费和协议操作。",
+      "lead": "PEOPLE（PPL）用于支付这条链上的网络手续费和协议操作。",
       "items": [
         {
           "title": "测试币",

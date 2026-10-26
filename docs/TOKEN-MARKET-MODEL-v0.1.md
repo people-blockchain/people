@@ -4,7 +4,7 @@
 
 **Status:** `DESIGN DRAFT / PROPOSED` — not approved as protocol, mainnet, or production economics.
 
-**Purpose.** This document defines a conceptual Token Market Model for user-created assets on People's Blockchain: how issuance connects to algorithmic price discovery (bonding curve), buy/sell mechanics, liquidity, launch bootstrap, possible later AMM maturity, trading-fee *destinations* (without inventing percentages), transparency, and a future implementation roadmap.
+**Purpose.** This document defines a conceptual Token Market Model for user-created assets on PEOPLE Blockchain: how issuance connects to algorithmic price discovery (bonding curve), buy/sell mechanics, liquidity, launch bootstrap, possible later AMM maturity, trading-fee *destinations* (without inventing percentages), transparency, and a future implementation roadmap.
 
 **What this is.**
 
@@ -21,7 +21,7 @@
 **Attached Bonding Curve source material was not present in this session workspace; draft synthesizes owner outline + existing repo references.** Candidate attachment path and Desktop/Downloads were searched for bonding/curve market-model source material; none matching a dedicated Bonding Curve brief was found. Concept and language therefore follow the owner section outline plus `docs/TOKEN-ECONOMY.md`, `docs/TOKEN-FACTORY.md`, `docs/ECONOMICS.md`, `docs/ECONOMIC-MODEL-v0.1.md` (Model A headers), `docs/PHASE-2-IMPLEMENTATION.md`, and `packages/core/src/curve.ts` (reference only).
 
 **Date:** 2026-09-26  
-**Terminology:** brand **People**, network **People's Blockchain**, native token **People**, ticker **PPL** (`docs/TERMINOLOGY.md`). Legacy on-chain asset id `"vls"` may appear where implementation is described.
+**Terminology:** brand **PEOPLE**, network **PEOPLE Blockchain**, native token **PEOPLE**, ticker **PPL** (`docs/TERMINOLOGY.md`). Legacy on-chain asset id `"vls"` may appear where implementation is described.
 
 ---
 
@@ -236,7 +236,7 @@ Post-migration rules that already appear as product intent elsewhere: protocol-c
 Without assigning shares here, destinations that may be considered in a future decision include (non-exhaustive, non-normative):
 
 - Validators / security budget  
-- People's / Community Pool  
+- PEOPLE / Community Pool  
 - Treasury  
 - Liquidity & Ecosystem (network reserve)  
 - Growth Pool  

@@ -100,7 +100,7 @@ const en: TransparencyCopy = {
   hero: {
     eyebrow: "TRANSPARENCY",
     title: "Team & transparency",
-    lead: "Who is behind People, how the project is funded and what anyone can verify on-chain. No team names and no faces — verifiable facts instead.",
+    lead: "Who is behind PEOPLE, how the project is funded and what anyone can verify on-chain. No team names and no faces — verifiable facts instead.",
     secondaryCta: "Check the explorer",
   },
   investors: {
@@ -146,7 +146,7 @@ const en: TransparencyCopy = {
   treasury: {
     eyebrow: "TREASURY",
     title: "Treasury and spending",
-    body: "The network-fee treasury is a 2-of-3 multisig on the People network; every spend is visible in the explorer. Sale proceeds go to the project multisig on Base, published before the sale opens.",
+    body: "The network-fee treasury is a 2-of-3 multisig on the PEOPLE network; every spend is visible in the explorer. Sale proceeds go to the project multisig on Base, published before the sale opens.",
     points: [
       "Signer addresses of the multisigs are published before the sale opens.",
       "Every outgoing treasury transaction is a public explorer entry.",
@@ -244,7 +244,7 @@ const ru: TransparencyCopy = {
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
     title: "Команда и прозрачность",
-    lead: "Кто стоит за People, как проект финансируется и что каждый может проверить on-chain. Ни имён команды, ни лиц — только проверяемые факты.",
+    lead: "Кто стоит за PEOPLE, как проект финансируется и что каждый может проверить on-chain. Ни имён команды, ни лиц — только проверяемые факты.",
     secondaryCta: "Проверить в explorer",
   },
   investors: {
@@ -290,7 +290,7 @@ const ru: TransparencyCopy = {
   treasury: {
     eyebrow: "КАЗНА",
     title: "Казна и расходы",
-    body: "Казна комиссий сети — мультисиг 2 из 3 в сети People; каждый расход виден в обозревателе. Средства продажи идут в мультисиг проекта в сети Base; его адрес публикуется до открытия продажи.",
+    body: "Казна комиссий сети — мультисиг 2 из 3 в сети PEOPLE; каждый расход виден в обозревателе. Средства продажи идут в мультисиг проекта в сети Base; его адрес публикуется до открытия продажи.",
     points: [
       "Адреса подписантов мультисигов публикуются до открытия продажи.",
       "Каждая исходящая транзакция казны — публичная запись в explorer.",

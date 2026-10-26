@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   keywords: [
-    "People",
+    "PEOPLE",
     "PEOPLE Blockchain",
     "Блокчейн для сообщества",
     "Blockchain für die Gemeinschaft",
@@ -61,7 +61,9 @@ export const metadata: Metadata = {
     "Proof of Humanity",
     "Blockchain Infrastructure",
   ],
-  authors: [{ name: "People" }],
+  authors: [{ name: "PEOPLE" }],
+  applicationName: "PEOPLE",
+  appleWebApp: { title: "PEOPLE", capable: true },
   openGraph: {
     title: SITE_OG_TITLE,
     description: SITE_OG_DESCRIPTION,

@@ -5,17 +5,17 @@
 **Author / Role:** Antigravity / Senior Blockchain Engineer & Technical Architect  
 **Repository Baseline:** PEOPLE Network
 
-**Target Platform:** People's Blockchain
+**Target Platform:** PEOPLE Blockchain
 
 > **Historical / superseded for native asset naming.** Current runtime native asset is
-> **People** (`PPL`, id `ppl`). `VLS` / `vls` / `Vallis` below record this document’s
+> **PEOPLE** (`PPL`, id `ppl`). `VLS` / `vls` / `Vallis` below record this document’s
 > original checkout. Do not treat them as the live asset identity.
 
 ---
 
 ## 1. Executive Summary
 
-Phase 1 establishes the multi-asset ledger foundation and integer-safe fee distribution architecture for People's Blockchain.
+Phase 1 establishes the multi-asset ledger foundation and integer-safe fee distribution architecture for PEOPLE Blockchain.
 
 Prior to Phase 1, the PEOPLE Network core was strictly a single-asset ledger (`balance: number` of native VLS), transaction fees were directly merged into epoch base issuance, and no secondary assets, community pool state, or separable fee destinations existed.
 

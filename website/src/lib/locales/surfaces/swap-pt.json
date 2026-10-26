@@ -37,7 +37,7 @@
   "helpLock": "Uma pequena quantidade mínima de cotas LP permanece bloqueada para o pool não poder ser esvaziado. A liquidez vinda da curva de lançamento também permanece bloqueada.",
   "tokensEmpty": "Ainda não há tokens na rede. Lance um no Token Factory — pools de swap surgem após liquidez.",
   "searchTokens": "Pesquisar por nome ou símbolo",
-  "networkBadge": "Rede People · chain 97401",
+  "networkBadge": "Rede PEOPLE · chain 97401",
   "selectToken": "Selecionar token",
   "closePicker": "Fechar",
   "gasFeeNote": "Pago como gas em PPL ao assinar"

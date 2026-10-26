@@ -119,7 +119,7 @@ export const ar: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "بلوك تشين",
     "headlineSub": "للمجتمع",
     "lead": "بنية تحتية للبلوكتشين مصممة لربط المبتكرين، والمجتمعات، والأنظمة الاقتصادية متعددة الأصول، بمشاركة موثقة من شبكة بشرية حقيقية.",
@@ -481,7 +481,7 @@ export const ar: LocaleContent = {
     "title": "الهندسة المعمارية التقنية",
     "subtitle": "يتطور بلوك تشين للمجتمع عبر تسلسل معماري صارم من ثلاث مراحل. تبنى كل طبقة بشكل حتمي على الأساسات الموضوعة تحتها.",
     "umbrellaTitle": "مظلة المشروع",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "راعي البروتوكول",
     "umbrellaDesc": "العلامة التجارية والراعي لـ بلوك تشين للمجتمع.",
     "targetTitle": "هدف الشبكة الأساسية",

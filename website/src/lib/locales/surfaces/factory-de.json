@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Stablecoin-Gebühr",
     "stableFeeBuybackNote": "100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe.",
-    "stableFeeNetworkNote": "Funktioniert vorerst nur im People-Netzwerk. Die Zahlung von einer anderen Chain (Ethereum, Polygon, Tron, TON, Solana) kommt später.",
+    "stableFeeNetworkNote": "Funktioniert vorerst nur im PEOPLE-Netzwerk. Die Zahlung von einer anderen Chain (Ethereum, Polygon, Tron, TON, Solana) kommt später.",
     "approvingStable": "Wird genehmigt…",
     "payingStableFee": "Gebühr wird bezahlt…",
     "creatingAfterStableFee": "Wird erstellt…",

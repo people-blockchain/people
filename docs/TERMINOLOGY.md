@@ -1,6 +1,6 @@
 # Terminology
 
-This document defines **current** names for the People's Blockchain monorepo. Older
+This document defines **current** names for the PEOPLE Blockchain monorepo. Older
 browser storage keys and environment variable names are migrated automatically on read; no
 manual action is required for existing installs.
 
@@ -9,7 +9,7 @@ manual action is required for existing installs.
 | Term | Usage |
 |------|--------|
 | **PEOPLE** / **PEOPLE Network** | User-visible product and network name (PEOPLE in caps in UI and docs) |
-| **People (PPL)** | Native asset on the live Cosmos EVM testnet/mainnet |
+| **PEOPLE (PPL)** | Native asset on the live Cosmos EVM testnet/mainnet |
 | **people-node** | Legacy TypeScript node + web stack (`people-node/`, npm scope `@people/*`) |
 | **people-devnet** | Default chain id string for local legacy devnet only |
 
@@ -45,8 +45,8 @@ in product copy; they exist only inside migration helpers and compatibility read
 ## Historical economic labels
 
 Some archived reports still mention **Vallis (VLS)** as the identifier used in the legacy
-ledger implementation. The live network asset is **People (PPL)**. When editing runtime
-code or user-facing text, use PPL/People only.
+ledger implementation. The live network asset is **PEOPLE (PPL)**. When editing runtime
+code or user-facing text, use PPL/PEOPLE only.
 
 ## What not to rename
 

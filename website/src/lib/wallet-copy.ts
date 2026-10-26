@@ -73,7 +73,7 @@ export type WalletCopyContent = {
 
 const baseWalletCopy: Record<string, WalletCopyContent> = {
   en: {
-    title: "People Wallet",
+    title: "PEOPLE Wallet",
     lead: "Non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers.",
     create: "Create a new wallet",
     import: "Import wallet",
@@ -126,15 +126,15 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
     signInDivider: "Or use a password on this device",
-    signInOpening: "Opening your People Wallet…",
+    signInOpening: "Opening your PEOPLE Wallet…",
     signInUnavailable: "Account wallet sign-in is not available on this deployment.",
     signingIn: "Signing in…",
     cloudExportHint:
-      "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+      "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
     cloudDisconnect: "Disconnect",
   },
   ru: {
-    title: "People Wallet",
+    title: "PEOPLE Wallet",
     lead: "Некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы.",
     create: "Создать кошелёк",
     import: "Импортировать",
@@ -187,11 +187,11 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
     signInDivider: "Или пароль только на этом устройстве",
-    signInOpening: "Открываем People Wallet…",
+    signInOpening: "Открываем PEOPLE Wallet…",
     signInUnavailable: "Вход в кошелёк по аккаунту недоступен на этом окружении.",
     signingIn: "Вход…",
     cloudExportHint:
-      "Тот же Google или email восстановит кошелёк на любом устройстве. Экспортируйте ключ только если нужна копия вне People.",
+      "Тот же Google или email восстановит кошелёк на любом устройстве. Экспортируйте ключ только если нужна копия вне PEOPLE.",
     cloudDisconnect: "Отключить",
   },
   es: walletEs as WalletCopyContent,

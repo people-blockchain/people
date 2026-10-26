@@ -46,7 +46,7 @@
     "belowMin": "Enter an amount to see your quote.",
     "cta": "Connect a wallet to buy",
     "ctaConnected": "Buy PPL",
-    "wallets": "People Wallet (sign in with Google or email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (sign in with Google or email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
@@ -94,7 +94,7 @@
     "termsLink": "Terms",
     "help": "Need help? {support}",
     "supportLink": "Support",
-    "noWalletHint": "No wallet? Choose Google or email — a People Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
+    "noWalletHint": "No wallet? Choose Google or email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
     "sellBackTerms": "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
     "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, or 3% when that day's sell-backs exceed 1% of the reserve.",
@@ -114,7 +114,7 @@
     "wrongNetwork": "The purchase runs on the Base network. Your wallet is on another network.",
     "switchToBase": "Switch to Base",
     "switchRejected": "The network was not switched. The purchase needs Base — try again.",
-    "embeddedNoBase": "People Wallet cannot pay on Base yet. To buy, connect MetaMask, Trust Wallet or WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet cannot pay on Base yet. To buy, connect MetaMask, Trust Wallet or WalletConnect."
   },
   "whyPriceRises": {
     "title": "Why the price rises",
@@ -246,8 +246,8 @@
         "a": "No. It applies while the curve is running. The curve closes at {graduation} raised, around {graduationPrice} per PPL, below the cap. After graduation the pool price is set by the free market, with no upper and no lower limit — it can fall a long way, even close to zero."
       },
       {
-        "q": "Do I need the People network in my wallet?",
-        "a": "No. The sale runs on Base only: you pay in USDC or USDT on Base. The People network is separate and is not needed to buy."
+        "q": "Do I need the PEOPLE network in my wallet?",
+        "a": "No. The sale runs on Base only: you pay in USDC or USDT on Base. The PEOPLE network is separate and is not needed to buy."
       },
       {
         "q": "When can I send PPL to someone else?",
@@ -314,7 +314,7 @@
     "notes": [
       {
         "marker": "*",
-        "text": "PPL is the utility token of the People network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
+        "text": "PPL is the utility token of the PEOPLE network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice."
       },
       {
         "marker": "**",
