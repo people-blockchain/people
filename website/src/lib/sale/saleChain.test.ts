@@ -4,6 +4,7 @@ import test from "node:test";
 import { BASE_USDC_ADDRESS, BASE_USDT_ADDRESS, hubPaymentToken } from "./bridge.ts";
 import { saleContractAddress, saleContractConfigured } from "./config.ts";
 import {
+  assertProductionSaleMode,
   BASE_MAINNET_USDC,
   BASE_MAINNET_USDT,
   resolveSaleChain,
@@ -198,5 +199,31 @@ test("faucet is on only in base-test; test-token flag covers both test modes", (
   assert.deepEqual([main.testTokens, sepolia.testTokens, test_.testTokens], [false, true, true]);
   for (const value of [undefined, "", "base", "mainnet", "base-sepolia"]) {
     assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: value }).faucet, false, String(value));
+  }
+});
+
+test("production build (VERCEL_ENV=production) fails for any non-base sale mode", () => {
+  for (const mode of ["base-test", "base-sepolia", "  Base-Test "]) {
+    assert.throws(
+      () => resolveSaleChain({ ...BASE_TEST_ENV, NEXT_PUBLIC_SALE_CHAIN: mode, VERCEL_ENV: "production" }),
+      /production build[\s\S]*sale mode "base"/,
+      mode,
+    );
+  }
+  assert.throws(() => assertProductionSaleMode({ VERCEL_ENV: "production" }, "base-test"), /base-test/);
+});
+
+test("production build with base mode (or no flag) resolves normally", () => {
+  for (const value of [undefined, "", "base", "mainnet"]) {
+    const chain = resolveSaleChain({ NEXT_PUBLIC_SALE_CHAIN: value, NEXT_PUBLIC_SALE_HUB_ADDRESS: HUB, VERCEL_ENV: "production" });
+    assert.equal(chain.key, "base", String(value));
+    assert.equal(chain.hubAddress, HUB);
+  }
+});
+
+test("preview, development and unset VERCEL_ENV keep the test modes available", () => {
+  for (const vercelEnv of ["preview", "development", "", undefined]) {
+    assert.equal(resolveSaleChain({ ...BASE_TEST_ENV, VERCEL_ENV: vercelEnv }).key, "base-test", String(vercelEnv));
+    assert.equal(resolveSaleChain({ ...SEPOLIA_ENV, VERCEL_ENV: vercelEnv }).key, "base-sepolia", String(vercelEnv));
   }
 });
