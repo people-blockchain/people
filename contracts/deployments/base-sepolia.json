@@ -1,0 +1,40 @@
+{
+  "note": "TEST deployment on Base Sepolia. Mock stablecoins have public mint and no value.",
+  "chainId": 84532,
+  "network": "base-sepolia",
+  "sourceCommit": "4126d3bee76c11d7a16b9f0ec835eef481c1ee01",
+  "script": "contracts/script/DeployPplCurveHub.s.sol (DEPLOY_MOCKS=true OPEN_SALE=true)",
+  "deployer": "0x7fE21c2F027511DCC55A19EFc49F7a9C4419EB15",
+  "owner": "0x7fE21c2F027511DCC55A19EFc49F7a9C4419EB15",
+  "treasury": "0x7fE21c2F027511DCC55A19EFc49F7a9C4419EB15",
+  "deployedAt": "2026-10-26T13:39:53Z",
+  "contracts": {
+    "PplCurveHub": {
+      "address": "0x0A647e27476cfb86E45537034f1E8931d214bA28",
+      "tx": "0xd866e5e71588eb980a5336c404f75a41490e3dff8e9863aa74272c41ad51161d",
+      "sourcify": "exact_match"
+    },
+    "MockUSDC": {
+      "name": "TEST USDC",
+      "symbol": "tUSDC",
+      "decimals": 6,
+      "address": "0xd5066Db05658b3AEa4cB1AcdEdAcb80a4B9a7505",
+      "tx": "0xda1a144a8591c62e8c8a604cac25849ad131a764815ea17771b550c1f6bf9922",
+      "sourcify": "exact_match"
+    },
+    "MockUSDT": {
+      "name": "TEST USDT",
+      "symbol": "tUSDT",
+      "decimals": 6,
+      "address": "0xc74192fa32F7d95a9eCCAdb0D7a9A73594EcBDFa",
+      "tx": "0xa19eeb9701fe1feb355a79e26a6486cbc79f81537ddefc521076fcc6671f9339",
+      "sourcify": "exact_match"
+    }
+  },
+  "setupTxs": {
+    "setToken(tUSDC,true)": "0xe0bd4b251433f541218eba79bc0398fd3f3280ea834dbff3400b1cc0087efaf7",
+    "setToken(tUSDT,true)": "0x903e6f0b538b9555c0775cfd38823360b561091f389eccd96aa332d8ec686e66",
+    "open()": "0x3f10b028fd7a1570f5319998992c4912fe2007fc00fb88d0800d780e375519ba"
+  },
+  "warning": "Same addresses as the TEST copy on Base mainnet (8453), but the ABI differs: here buyWith has 4 args (recipient), on 8453 it has 3."
+}
