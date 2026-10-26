@@ -7,6 +7,10 @@
  * `NEXT_PUBLIC_BASE_TEST_*`; it is the only mode that shows the test-token faucet. Anything else,
  * or no flag, is Base mainnet with the production addresses.
  *
+ * Production guard: a Vercel production build (`VERCEL_ENV=production`) must run in `base` mode. Any
+ * other mode (test hub, test tokens, faucet, Sepolia) makes `resolveSaleChain` throw, which fails the
+ * build instead of shipping a test contour to the production domain.
+ *
  * `resolveSaleChain` is pure: it takes the env object as an argument so it can be unit-tested.
  * Next.js inlines `process.env.NEXT_PUBLIC_*` only for literal property accesses, hence the explicit
  * list in `readSaleChainEnv`.
@@ -64,8 +68,20 @@ export function resolveSaleChainKey(env: SaleChainEnv): SaleChainKey {
   return raw === "base-sepolia" || raw === "base-test" ? raw : "base";
 }
 
+/** Throws when a Vercel production build is configured for anything but Base mainnet sale mode. */
+export function assertProductionSaleMode(env: SaleChainEnv, key: SaleChainKey): void {
+  if ((env.VERCEL_ENV ?? "").trim().toLowerCase() === "production" && key !== "base") {
+    throw new Error(
+      `NEXT_PUBLIC_SALE_CHAIN resolves to "${key}" in a production build (VERCEL_ENV=production). ` +
+        `Production must use sale mode "base": unset NEXT_PUBLIC_SALE_CHAIN (or set it to "base") for the ` +
+        `Production environment. Test modes ("base-sepolia", "base-test") are allowed only in Preview/Development.`,
+    );
+  }
+}
+
 export function resolveSaleChain(env: SaleChainEnv): SaleChain {
   const key = resolveSaleChainKey(env);
+  assertProductionSaleMode(env, key);
   if (key === "base-sepolia") {
     return {
       key: "base-sepolia",
@@ -122,6 +138,7 @@ export function resolveSaleChain(env: SaleChainEnv): SaleChain {
 /** Reads the public env at call time (literal accesses so Next.js can inline them). */
 export function readSaleChainEnv(): SaleChainEnv {
   return {
+    VERCEL_ENV: process.env.VERCEL_ENV,
     NEXT_PUBLIC_SALE_CHAIN: process.env.NEXT_PUBLIC_SALE_CHAIN,
     NEXT_PUBLIC_BASE_RPC_URL: process.env.NEXT_PUBLIC_BASE_RPC_URL,
     NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL: process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL,
