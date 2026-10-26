@@ -46,7 +46,7 @@
     "belowMin": "Nhập số tiền để xem báo giá.",
     "cta": "Kết nối ví để mua",
     "ctaConnected": "Mua PPL",
-    "wallets": "People Wallet (đăng nhập bằng Google hoặc email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (đăng nhập bằng Google hoặc email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Cách thanh toán",
     "payOnBase": "Thanh toán trên Base",
     "payFromOther": "Thanh toán từ mạng khác",
@@ -94,7 +94,7 @@
     "termsLink": "Điều khoản",
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
-    "noWalletHint": "Chưa có ví? Chọn Google hoặc email — People Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
+    "noWalletHint": "Chưa có ví? Chọn Google hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
     "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
     "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí swap hoặc bridge của LI.FI — hiển thị trong widget trước khi bạn xác nhận; phí bán lại vào quỹ dự trữ — 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ).",
@@ -114,7 +114,7 @@
     "wrongNetwork": "Giao dịch mua diễn ra trên mạng Base. Ví của bạn đang ở mạng khác.",
     "switchToBase": "Chuyển sang Base",
     "switchRejected": "Chưa chuyển mạng. Giao dịch mua cần mạng Base — hãy thử lại.",
-    "embeddedNoBase": "People Wallet chưa thể thanh toán trên mạng Base. Để mua, hãy kết nối MetaMask, Trust Wallet hoặc WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet chưa thể thanh toán trên mạng Base. Để mua, hãy kết nối MetaMask, Trust Wallet hoặc WalletConnect."
   },
   "whyPriceRises": {
     "title": "Vì sao giá tăng",

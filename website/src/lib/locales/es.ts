@@ -119,7 +119,7 @@ export const es: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // ESPECIFICACIÓN DEL PROTOCOLO",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "PEOPLE'S",
     "headlineSub": "BLOCKCHAIN",
     "lead": "Una infraestructura blockchain diseñada para conectar creadores, comunidades, sistemas económicos multi-activo y participación verificada en una red humana.",
@@ -1073,7 +1073,7 @@ export const es: LocaleContent = {
     "title": "Arquitectura técnica",
     "subtitle": "Blockchain para la comunidad evoluciona a través de una rigurosa secuencia arquitectónica de tres fases. Cada nivel se construye de forma determinista sobre los cimientos establecidos debajo de él.",
     "umbrellaTitle": "Marco del proyecto",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Custodio del protocolo",
     "umbrellaDesc": "Marca y custodio de Blockchain para la comunidad.",
     "targetTitle": "Objetivo de red central",

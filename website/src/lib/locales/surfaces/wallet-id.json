@@ -52,9 +52,9 @@
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Or use a password on this device",
-  "signInOpening": "Opening your People Wallet…",
+  "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
   "cloudDisconnect": "Disconnect"
 }

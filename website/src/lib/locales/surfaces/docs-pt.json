@@ -1,7 +1,7 @@
 {
   "eyebrow": "BASE DE CONHECIMENTO / PEOPLE",
   "title": "Percebe.\nExperimenta.\nParticipa.",
-  "description": "Da tua primeira carteira ao teu próprio nó — um guia prático da People’s Blockchain.",
+  "description": "Da tua primeira carteira ao teu próprio nó — um guia prático da PEOPLE Blockchain.",
   "notice": "Rede de teste",
   "noticeText": "A Mainnet ainda não arrancou. As operações disponíveis dependem da ligação do sítio e da versão da rede. Moedas de teste não são uma promessa de rendimento.",
   "contents": "Neste guia",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "Como o People funciona",
+      "title": "Como o PEOPLE funciona",
       "lead": "Uma blockchain é um registo partilhado de operações. A tua carteira assina uma ação, os nós verificam-na e os validadores incluem-na em blocos.",
       "items": [
         {
           "title": "PPL é a moeda da rede",
-          "text": "People (PPL) paga taxas de rede e operações de protocolo. PPL de teste serve para testar a rede; tê-lo não significa que ganhaste dinheiro."
+          "text": "PEOPLE (PPL) paga taxas de rede e operações de protocolo. PPL de teste serve para testar a rede; tê-lo não significa que ganhaste dinheiro."
         },
         {
           "title": "Participante, nó, validador",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — a moeda da rede",
-      "lead": "People (PPL) paga as taxas da rede e as ações do protocolo nesta cadeia.",
+      "lead": "PEOPLE (PPL) paga as taxas da rede e as ações do protocolo nesta cadeia.",
       "items": [
         {
           "title": "Moedas de teste",

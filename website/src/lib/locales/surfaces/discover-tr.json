@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "People ağında içerik üreticilerine ve ekiplere küçük teşekkür bahşişleri gönderin.",
+      "title": "PEOPLE Tips",
+      "summary": "PEOPLE ağında içerik üreticilerine ve ekiplere küçük teşekkür bahşişleri gönderin.",
       "idea": "Mikro destek için yapılmış bir token ile teşekkür edin — konserler, yayınlar ve açık kaynak maintainer’ları.",
       "audience": "Küçük teşekkürleri toplayan hayranlar, destekçiler ve ekipler.",
       "whyToken": "Bahşişler kapalı bir uygulama bakiyesi yerine topluluğun kendi defterinde kalır.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Test topluluk tokenlerini tarayıcıda PPL ile takas edin.",
       "idea": "Demo topluluk tokenlerini tarayıcıda PPL ile değiştirin — ayrı bir borsa hesabı gerekmez.",
       "audience": "Bir projeye bağlanmadan önce testnet varlıklarını deneyenler.",

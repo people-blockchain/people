@@ -79,4 +79,4 @@ try {
 } finally {
   await browser.close();
 }
-console.log("People Wallet screenshots saved to", outDir);
+console.log("PEOPLE Wallet screenshots saved to", outDir);

@@ -59,7 +59,7 @@ test.describe("Header «Sign in» label", () => {
   }
 });
 
-test.describe("People Wallet sign-in while the SDK loads", () => {
+test.describe("PEOPLE Wallet sign-in while the SDK loads", () => {
   test("Google button shows an explicit loading status, not a dead grey button", async ({ page }) => {
     await setLocale(page, "ru");
     // Hold every third-party request open so the Web3Auth SDK stays in its loading phase.

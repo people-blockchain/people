@@ -37,7 +37,7 @@
   "helpLock": "Una pequeña cantidad mínima de participaciones LP permanece bloqueada para que el fondo no pueda vaciarse. La liquidez llegada de una curva de lanzamiento también permanece bloqueada.",
   "tokensEmpty": "Aún no hay tokens en la red. Lance uno en Token Factory; los pools de swap aparecen al añadir liquidez.",
   "searchTokens": "Buscar por nombre o símbolo",
-  "networkBadge": "Red People · cadena 97401",
+  "networkBadge": "Red PEOPLE · cadena 97401",
   "selectToken": "Elegir token",
   "closePicker": "Cerrar",
   "gasFeeNote": "Se paga como gas en PPL al firmar"

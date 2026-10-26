@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Invia piccole mance di ringraziamento a creator e team sulla rete People.",
+      "title": "PEOPLE Tips",
+      "summary": "Invia piccole mance di ringraziamento a creator e team sulla rete PEOPLE.",
       "idea": "Ringrazia con un token pensato per il micro-sostegno — concerti, stream e maintainer open source.",
       "audience": "Fan, patroni e team che raccolgono molti piccoli «grazie».",
       "whyToken": "Le mance restano nel registro della comunità invece che in un saldo chiuso di app.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Scambia token comunitari di test per PPL nel browser.",
       "idea": "Scambia token demo comunitari con PPL nel browser — senza account exchange separato.",
       "audience": "Chi prova asset testnet prima di impegnarsi in un progetto.",

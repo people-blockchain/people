@@ -1,7 +1,7 @@
 {
   "eyebrow": "WISSENSBASIS / PEOPLE",
   "title": "Verstehen.\nAusprobieren.\nTeilnehmen.",
-  "description": "Von Ihrer ersten Wallet bis zu Ihrem eigenen Knoten — eine praktische Anleitung zu People’s Blockchain.",
+  "description": "Von Ihrer ersten Wallet bis zu Ihrem eigenen Knoten — eine praktische Anleitung zu PEOPLE Blockchain.",
   "notice": "Testnetz",
   "noticeText": "Mainnet ist nicht gestartet. Verfügbare Vorgänge hängen von der Site-Verbindung und der Netzversion ab. Testmünzen sind kein Einkommensversprechen.",
   "contents": "In diesem Leitfaden",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "Wie People funktioniert",
+      "title": "Wie PEOPLE funktioniert",
       "lead": "Eine Blockchain ist ein gemeinsames Protokoll von Vorgängen. Ihre Wallet signiert eine Aktion, Knoten prüfen sie, und Validatoren nehmen sie in Blöcke auf.",
       "items": [
         {
           "title": "PPL ist die Netz-Münze",
-          "text": "People (PPL) zahlt Netzgebühren und Protokollvorgänge. Test-PPL dient zum Testen des Netzes; Halten bedeutet nicht, dass Sie Geld verdient haben."
+          "text": "PEOPLE (PPL) zahlt Netzgebühren und Protokollvorgänge. Test-PPL dient zum Testen des Netzes; Halten bedeutet nicht, dass Sie Geld verdient haben."
         },
         {
           "title": "Teilnehmer, Node, Validator",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — die Münze des Netzwerks",
-      "lead": "People (PPL) bezahlt Netzwerkgebühren und Protokollaktionen auf dieser Kette.",
+      "lead": "PEOPLE (PPL) bezahlt Netzwerkgebühren und Protokollaktionen auf dieser Kette.",
       "items": [
         {
           "title": "Testmünzen",

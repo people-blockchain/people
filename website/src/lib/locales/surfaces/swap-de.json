@@ -37,7 +37,7 @@
   "helpLock": "Ein kleines Mindestmaß an LP-Anteilen bleibt gesperrt, damit der Pool nicht geleert werden kann. Liquidität aus einer Bonding-Curve-Migration bleibt ebenfalls gesperrt.",
   "tokensEmpty": "Noch keine Tokens im Netz. Starten Sie einen in Token Factory — Swap-Pools kommen mit Liquidität.",
   "searchTokens": "Nach Name oder Symbol suchen",
-  "networkBadge": "People-Netzwerk · Chain 97401",
+  "networkBadge": "PEOPLE-Netzwerk · Chain 97401",
   "selectToken": "Token wählen",
   "closePicker": "Schließen",
   "gasFeeNote": "Als Gas in PPL beim Signieren"

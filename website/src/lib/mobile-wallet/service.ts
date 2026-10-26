@@ -3,7 +3,7 @@ import { getAddress, isAddress, verifyMessage, type Address, type Hex } from "vi
 
 export const PEOPLE_CONNECT_ORIGIN = "https://www.peopleblockchain.network";
 export const LOCAL_CONNECT_ORIGIN = "http://127.0.0.1:18080";
-export const CONNECTION_STATEMENT = "Connect People Wallet to the PEOPLE website. No transactions are authorized.";
+export const CONNECTION_STATEMENT = "Connect PEOPLE Wallet to the PEOPLE website. No transactions are authorized.";
 const PAIR_MS = 120_000, SESSION_MS = 900_000;
 const idPattern = /^[0-9a-f]{32}$/, tokenPattern = /^[0-9a-f]{64}$/;
 export type MessageRequest = { id: string; method: "personal_sign"; message: string; expiresAt: string; status: "pending" | "approved" | "rejected" | "expired"; signature?: Hex; code?: number };

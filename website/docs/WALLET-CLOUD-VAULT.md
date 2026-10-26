@@ -1,4 +1,4 @@
-# People Wallet — cloud vault (Auth.js)
+# PEOPLE Wallet — cloud vault (Auth.js)
 
 **Status:** IMPLEMENTED (website testnet). Not a Mainnet security audit.
 

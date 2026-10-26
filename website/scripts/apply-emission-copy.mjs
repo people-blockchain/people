@@ -33,7 +33,7 @@ const tokenomics = {
     launchOrderBody:
       "Primero el airdrop de fundadores. La venta comunitaria de PPL solo después de 1.000 personas verificadas y un multisig publicado.",
     feeTitle: "Reparto de comisiones de red",
-    feeLead: "Cada comisión de protocolo en People sigue Model A aprobada:",
+    feeLead: "Cada comisión de protocolo en PEOPLE sigue Model A aprobada:",
   },
   pt: {
     supplyBody:
@@ -59,7 +59,7 @@ const tokenomics = {
     launchOrderBody:
       "Primeiro o airdrop de fundadores. A venda comunitária de PPL só após 1.000 pessoas verificadas e multisig publicado.",
     feeTitle: "Divisão das taxas de rede",
-    feeLead: "Cada taxa de protocolo em People segue a Model A aprovada:",
+    feeLead: "Cada taxa de protocolo em PEOPLE segue a Model A aprovada:",
   },
   fr: {
     supplyBody:
@@ -85,7 +85,7 @@ const tokenomics = {
     launchOrderBody:
       "D’abord l’airdrop fondateurs. La vente PPL communautaire seulement après 1 000 personnes vérifiées et un multisig publié.",
     feeTitle: "Répartition des frais réseau",
-    feeLead: "Chaque frais de protocole sur People suit la Model A approuvée :",
+    feeLead: "Chaque frais de protocole sur PEOPLE suit la Model A approuvée :",
   },
   de: {
     supplyBody:
@@ -111,7 +111,7 @@ const tokenomics = {
     launchOrderBody:
       "Zuerst Gründer-Airdrop. Der öffentliche PPL-Verkauf erst nach 1.000 verifizierten Personen und veröffentlichtem Multisig.",
     feeTitle: "Aufteilung der Netzwerkgebühren",
-    feeLead: "Jede Protokollgebühr auf People folgt der genehmigten Model A:",
+    feeLead: "Jede Protokollgebühr auf PEOPLE folgt der genehmigten Model A:",
   },
   it: {
     supplyBody:
@@ -137,7 +137,7 @@ const tokenomics = {
     launchOrderBody:
       "Prima l’airdrop fondatori. La vendita PPL community solo dopo 1.000 persone verificate e multisig pubblicato.",
     feeTitle: "Suddivisione commissioni di rete",
-    feeLead: "Ogni commissione di protocollo su People segue la Model A approvata:",
+    feeLead: "Ogni commissione di protocollo su PEOPLE segue la Model A approvata:",
   },
   tr: {
     supplyBody:
@@ -163,7 +163,7 @@ const tokenomics = {
     launchOrderBody:
       "Önce kurucu airdrop. Topluluk PPL satışı yalnızca 1.000 doğrulanmış kişi ve yayınlanmış multisig sonrası.",
     feeTitle: "Ağ ücreti dağılımı",
-    feeLead: "People’daki her protokol ücreti onaylı Model A’yı izler:",
+    feeLead: "PEOPLE’daki her protokol ücreti onaylı Model A’yı izler:",
   },
   vi: {
     supplyBody:
@@ -189,7 +189,7 @@ const tokenomics = {
     launchOrderBody:
       "Airdrop nhà sáng lập trước. Bán PPL cộng đồng chỉ sau 1.000 người xác minh và multisig công bố.",
     feeTitle: "Phân chia phí mạng",
-    feeLead: "Mỗi phí giao thức trên People theo Model A đã duyệt:",
+    feeLead: "Mỗi phí giao thức trên PEOPLE theo Model A đã duyệt:",
   },
   id: {
     supplyBody:
@@ -215,7 +215,7 @@ const tokenomics = {
     launchOrderBody:
       "Airdrop pendiri dulu. Penjualan PPL komunitas hanya setelah 1.000 orang terverifikasi dan multisig dipublikasikan.",
     feeTitle: "Pembagian biaya jaringan",
-    feeLead: "Setiap biaya protokol di People mengikuti Model A yang disetujui:",
+    feeLead: "Setiap biaya protokol di PEOPLE mengikuti Model A yang disetujui:",
   },
   zh: {
     supplyBody:
@@ -238,7 +238,7 @@ const tokenomics = {
     launchOrderTitle: "启动顺序",
     launchOrderBody: "先进行创始人空投。社区 PPL 销售仅在 1,000 名已验证用户与公开多签之后开放。",
     feeTitle: "网络手续费分配",
-    feeLead: "People 上每笔协议手续费遵循已批准的 Model A：",
+    feeLead: "PEOPLE 上每笔协议手续费遵循已批准的 Model A：",
   },
   ar: {
     supplyBody:
@@ -263,7 +263,7 @@ const tokenomics = {
     launchOrderBody:
       "إيردروب المؤسسين أولًا. بيع PPL للمجتمع فقط بعد 1,000 شخص موثّق وmultisig منشور.",
     feeTitle: "تقسيم رسوم الشبكة",
-    feeLead: "كل رسوم بروتوكول على People تتبع Model A المعتمدة:",
+    feeLead: "كل رسوم بروتوكول على PEOPLE تتبع Model A المعتمدة:",
   },
   en: {
     supplyBody:
@@ -289,7 +289,7 @@ const tokenomics = {
     launchOrderBody:
       "Founders airdrop runs first. The community PPL sale opens only after 1,000 verified people are registered and sale proceeds are secured by a published multisig.",
     feeTitle: "Network fee split",
-    feeLead: "Every protocol fee on People follows the approved Model A routing:",
+    feeLead: "Every protocol fee on PEOPLE follows the approved Model A routing:",
   },
 };
 

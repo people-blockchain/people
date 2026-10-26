@@ -1,4 +1,4 @@
-# PEOPLE'S BLOCKCHAIN — TOKEN ECONOMY v0.1
+# PEOPLE BLOCKCHAIN — TOKEN ECONOMY v0.1
 
 Status: Working product/economic specification
 Version: 0.1
@@ -6,14 +6,14 @@ Date: 2026-09-22
 
 > This document defines the first working model for user-created tokens, Community Pool allocation, token launches, bonding curves and DEX liquidity. Parameters marked **provisional** must be simulated and tested before becoming immutable protocol constants.
 >
-> **Terminology:** the brand is **People**, the network is **People's Blockchain** and the
-> native token is **People**, ticker **PPL** (`docs/TERMINOLOGY.md`).
+> **Terminology:** the brand is **PEOPLE**, the network is **PEOPLE Blockchain** and the
+> native token is **PEOPLE**, ticker **PPL** (`docs/TERMINOLOGY.md`).
 
 ---
 
 ## 1. Purpose
 
-People's Blockchain is not only a blockchain with a native coin. It is a network where ordinary users can create economic assets:
+PEOPLE Blockchain is not only a blockchain with a native coin. It is a network where ordinary users can create economic assets:
 
 - community tokens;
 - project tokens;
@@ -33,7 +33,7 @@ The basic promise is:
 
 ## 2. Native Settlement Asset
 
-All official user-created token markets should use the native asset of the network — **People**, ticker **PPL** — as the primary settlement asset.
+All official user-created token markets should use the native asset of the network — **PEOPLE**, ticker **PPL** — as the primary settlement asset.
 
 Examples:
 

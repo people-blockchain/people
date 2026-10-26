@@ -1,4 +1,4 @@
-/* Minimal service worker for People Wallet PWA installability (scope /wallet). */
+/* Minimal service worker for PEOPLE Wallet PWA installability (scope /wallet). */
 self.addEventListener("install", (event) => {
   event.waitUntil(self.skipWaiting());
 });

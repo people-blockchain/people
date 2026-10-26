@@ -17,9 +17,9 @@ export const docsContent: Record<Language, Guide> = {
   "ru": {
     "eyebrow": "БАЗА ЗНАНИЙ / PEOPLE",
     "title": "Разберитесь.\nПопробуйте.\nУчаствуйте.",
-    "description": "От первого кошелька до своей ноды — понятное руководство по People’s Blockchain.",
+    "description": "От первого кошелька до своей ноды — понятное руководство по PEOPLE Blockchain.",
     "notice": "Тестовая сеть",
-    "noticeText": "Mainnet сети People ещё не запущен. Продажа PPL — отдельно: она идёт в сети Base и откроется после публикации контракта продажи. Доступность операций зависит от подключения сайта и версии сети. Тестовые монеты не являются обещанием дохода.",
+    "noticeText": "Mainnet сети PEOPLE ещё не запущен. Продажа PPL — отдельно: она идёт в сети Base и откроется после публикации контракта продажи. Доступность операций зависит от подключения сайта и версии сети. Тестовые монеты не являются обещанием дохода.",
     "contents": "В этом руководстве",
     "search": "Найти в документации",
     "empty": "Ничего не найдено. Попробуйте «кошелёк», «награды» или «нода».",
@@ -54,12 +54,12 @@ export const docsContent: Record<Language, Guide> = {
     "sections": [
       {
         "id": "basics",
-        "title": "Как устроен People",
+        "title": "Как устроен PEOPLE",
         "lead": "Блокчейн — общая история операций. Кошелёк подписывает действие, ноды проверяют его, а валидаторы включают в блоки.",
         "items": [
           {
             "title": "PPL — монета сети",
-            "text": "People (PPL) используется для сетевых комиссий и операций протокола. Тестовые PPL предназначены для проверки сети; их наличие не означает денежный доход."
+            "text": "PEOPLE (PPL) используется для сетевых комиссий и операций протокола. Тестовые PPL предназначены для проверки сети; их наличие не означает денежный доход."
           },
           {
             "title": "Участник, нода и валидатор",
@@ -421,7 +421,7 @@ export const docsContent: Record<Language, Guide> = {
       {
         "id": "ppl-native",
         "title": "PPL — монета сети",
-        "lead": "People (PPL) оплачивает комиссии сети и действия протокола в этой цепочке.",
+        "lead": "PEOPLE (PPL) оплачивает комиссии сети и действия протокола в этой цепочке.",
         "items": [
           {
             "title": "Тестовые монеты",
@@ -488,9 +488,9 @@ export const docsContent: Record<Language, Guide> = {
   "en": {
     "eyebrow": "KNOWLEDGE BASE / PEOPLE",
     "title": "Understand.\nTry it.\nTake part.",
-    "description": "From your first wallet to your own node — a practical guide to People’s Blockchain.",
+    "description": "From your first wallet to your own node — a practical guide to PEOPLE Blockchain.",
     "notice": "Test network",
-    "noticeText": "Mainnet of the People network has not launched. The PPL sale is separate: it runs on Base and opens once the sale contract is published. Available operations depend on the site connection and network version. Test coins are not a promise of income.",
+    "noticeText": "Mainnet of the PEOPLE network has not launched. The PPL sale is separate: it runs on Base and opens once the sale contract is published. Available operations depend on the site connection and network version. Test coins are not a promise of income.",
     "contents": "In this guide",
     "search": "Search documentation",
     "empty": "No results. Try “wallet”, “rewards” or “node”.",
@@ -525,12 +525,12 @@ export const docsContent: Record<Language, Guide> = {
     "sections": [
       {
         "id": "basics",
-        "title": "How People works",
+        "title": "How PEOPLE works",
         "lead": "A blockchain is a shared record of operations. Your wallet signs an action, nodes verify it, and validators include it in blocks.",
         "items": [
           {
             "title": "PPL is the network coin",
-            "text": "People (PPL) pays for network fees and protocol operations. Test PPL is for testing the network; holding it does not mean you have earned money."
+            "text": "PEOPLE (PPL) pays for network fees and protocol operations. Test PPL is for testing the network; holding it does not mean you have earned money."
           },
           {
             "title": "Participant, node, validator",
@@ -892,7 +892,7 @@ export const docsContent: Record<Language, Guide> = {
       {
         "id": "ppl-native",
         "title": "PPL — the network coin",
-        "lead": "People (PPL) pays for network fees and protocol actions on this chain.",
+        "lead": "PEOPLE (PPL) pays for network fees and protocol actions on this chain.",
         "items": [
           {
             "title": "Test coins",

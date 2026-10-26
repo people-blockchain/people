@@ -1,7 +1,7 @@
 /**
  * WEB-M3 — HTML responses must carry a Content-Security-Policy in *report-only* mode: present so
  * violations are observable, report-only so a mis-scoped source cannot break sign-in, and scoped
- * to the hosts the app actually talks to (Web3Auth, MetaMask, Google, the People node, Turnstile,
+ * to the hosts the app actually talks to (Web3Auth, MetaMask, Google, the PEOPLE node, Turnstile,
  * WalletConnect, vercel.live).
  */
 import assert from "node:assert/strict";

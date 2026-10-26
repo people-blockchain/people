@@ -37,7 +37,7 @@
   "helpLock": "Una piccola quantità minima di quote LP resta bloccata così il pool non può essere svuotato. Anche la liquidità arrivata da una curva di lancio resta bloccata.",
   "tokensEmpty": "Nessun token sulla rete. Creane uno in Token Factory — i pool di swap arrivano con la liquidità.",
   "searchTokens": "Cerca per nome o simbolo",
-  "networkBadge": "Rete People · chain 97401",
+  "networkBadge": "Rete PEOPLE · chain 97401",
   "selectToken": "Seleziona token",
   "closePicker": "Chiudi",
   "gasFeeNote": "Pagato come gas in PPL alla firma"

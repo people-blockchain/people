@@ -37,7 +37,7 @@
   "helpLock": "Une petite quantité minimale de parts LP reste verrouillée pour que le pool ne puisse pas être vidé. La liquidité issue d'une courbe de lancement reste aussi verrouillée.",
   "tokensEmpty": "Pas encore de jetons sur le réseau. Lancez-en un dans Token Factory — les pools apparaissent avec la liquidité.",
   "searchTokens": "Rechercher par nom ou symbole",
-  "networkBadge": "Réseau People · chaîne 97401",
+  "networkBadge": "Réseau PEOPLE · chaîne 97401",
   "selectToken": "Choisir un jeton",
   "closePicker": "Fermer",
   "gasFeeNote": "Payé en gaz PPL à la signature"

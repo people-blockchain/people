@@ -6,7 +6,7 @@
   "googleCta": "Продолжить с Google",
   "or": "или",
   "checkEmailTitle": "Проверьте почту",
-  "checkEmailLead": "Если для этого адреса можно создать вход, одноразовая ссылка People уже отправлена.",
+  "checkEmailLead": "Если для этого адреса можно создать вход, одноразовая ссылка PEOPLE уже отправлена.",
   "backToLogin": "Назад ко входу",
   "notConfigured": "Вход партнёра на этом деплое не настроен. Нужны AUTH_SECRET, DATABASE_URL и хотя бы Resend или Google OAuth.",
   "googleOff": "Вход через Google ещё не настроен.",
@@ -60,8 +60,8 @@
   "logIn": "Вход для партнёров",
   "cabinet": "Кабинет",
   "growthNote": "Выплаты Growth остаются L1 70% / L2 30% бюджета награды Growth. Кабинет не меняет экономику протокола.",
-  "footerNote": "Данные протокола только для чтения. Нативный актив: People (PPL).",
-  "magicLinkSubject": "Вход в кабинет партнёра People",
+  "footerNote": "Данные протокола только для чтения. Нативный актив: PEOPLE (PPL).",
+  "magicLinkSubject": "Вход в кабинет партнёра PEOPLE",
   "magicLinkHeading": "Вход в кабинет партнёра",
   "magicLinkBody": "Перейдите по одноразовой ссылке, чтобы войти в кабинет партнёра. Срок действия ограничен, ссылка работает один раз.",
   "magicLinkCta": "Войти",
@@ -80,8 +80,8 @@
   "signInAgreementAfter": ".",
   "authErrorSessionExpired": "Сессия закончилась. Войдите снова.",
   "authErrorUnavailable": "Кабинет партнёра временно недоступен. Попробуйте через минуту.",
-  "localWalletHeading": "People Wallet на этом устройстве",
+  "localWalletHeading": "PEOPLE Wallet на этом устройстве",
   "localWalletLead": "Разблокируйте или импортируйте кошелёк с паролем только в этом браузере. Для партнёрского кабинета нужен вход через Google или email выше.",
-  "walletAutoLead": "People Wallet привязан к этому аккаунту. Тот же адрес на сайте и в кабинете партнёра — отдельная привязка не нужна.",
-  "walletProvisioning": "Настраиваем People Wallet… обновите страницу или откройте кошелёк."
+  "walletAutoLead": "PEOPLE Wallet привязан к этому аккаунту. Тот же адрес на сайте и в кабинете партнёра — отдельная привязка не нужна.",
+  "walletProvisioning": "Настраиваем PEOPLE Wallet… обновите страницу или откройте кошелёк."
 }

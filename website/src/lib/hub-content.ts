@@ -132,7 +132,7 @@ const rawHub = {
       tag: "JOIN",
       title: "How to participate",
       subtitle:
-        "Join People’s Blockchain as a community participant — from a phone, tablet, or browser.",
+        "Join PEOPLE Blockchain as a community participant — from a phone, tablet, or browser.",
       steps: [
         {
           num: "01",
@@ -163,7 +163,7 @@ const rawHub = {
           cta: "Create",
         },
       ],
-      ctaJoin: "Join People’s Blockchain",
+      ctaJoin: "Join PEOPLE Blockchain",
       ctaHow: "How it works",
     },
     whatIs: {
@@ -289,9 +289,9 @@ const rawHub = {
     ppl: {
       id: "ppl",
       tag: "NATIVE ASSET",
-      title: "People (PPL)",
+      title: "PEOPLE (PPL)",
       summary:
-        "People is the native asset of PEOPLE Blockchain. Ticker: PPL.",
+        "PEOPLE is the native asset of PEOPLE Blockchain. Ticker: PPL.",
       cards: [
         {
           title: "UTILITY",
@@ -741,9 +741,9 @@ const rawHub = {
     ppl: {
       id: "ppl",
       tag: "NATIVE ASSET",
-      title: "People (PPL)",
+      title: "PEOPLE (PPL)",
       summary:
-        "People — нативный актив блокчейна для сообщества. Тикер: PPL.",
+        "PEOPLE — нативный актив блокчейна для сообщества. Тикер: PPL.",
       cards: [
         {
           title: "UTILITY",

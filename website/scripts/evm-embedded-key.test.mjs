@@ -1,4 +1,4 @@
-// Regression: the People Wallet vault stores the key as bare hex (no `0x`),
+// Regression: the PEOPLE Wallet vault stores the key as bare hex (no `0x`),
 // and `createEmbeddedWalletClient` used to pass it straight to viem's
 // `privateKeyToAccount`, which throws
 //   "invalid private key, expected hex or 32 bytes, got string"

@@ -26,7 +26,7 @@ export function HowItWorksPublic() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-      <Eyebrow tone="brand">People&apos;s Blockchain</Eyebrow>
+      <Eyebrow tone="brand">PEOPLE Blockchain</Eyebrow>
       <h1 className="mt-3 text-h2 font-bold tracking-tight text-ink">{t.title}</h1>
       <p className="mt-4 text-lg font-medium leading-relaxed text-ink-2">{t.loopLine}</p>
 

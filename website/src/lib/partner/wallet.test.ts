@@ -9,7 +9,7 @@ import {
   verifyWalletProof,
 } from "./wallet.ts";
 
-test("wallet proof verifies a secp256k1 signature over the People challenge", () => {
+test("wallet proof verifies a secp256k1 signature over the PEOPLE challenge", () => {
   const keys = generateWalletKeyPair();
   const message = buildWalletBindMessage({
     email: "partner@example.com",

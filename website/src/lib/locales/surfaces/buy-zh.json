@@ -46,7 +46,7 @@
     "belowMin": "输入金额以查看报价。",
     "cta": "连接钱包以购买",
     "ctaConnected": "购买 PPL",
-    "wallets": "People Wallet（通过 Google 或邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet（通过 Google 或邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "支付方式",
     "payOnBase": "在 Base 支付",
     "payFromOther": "从其他网络支付",
@@ -94,7 +94,7 @@
     "termsLink": "《条款》",
     "help": "需要帮助？{support}",
     "supportLink": "支持",
-    "noWalletHint": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 People Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
+    "noWalletHint": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
     "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每批持有满 30 天后，可按卖出时的曲线价格卖回。总限额：全体用户每日合计不超过储备的 2%，每人每日不超过 2,000 美元。费用 1.5%（当日卖回超过储备的 1% 时为 3%）。毕业（graduation）后关闭。您将在 Base 网络上收到 USDC。",
     "feesTitle": "费用与时间",
     "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%（当日卖回超过储备的 1% 时为 3%）。",
@@ -114,7 +114,7 @@
     "wrongNetwork": "购买在 Base 网络上进行。你的钱包当前在其他网络。",
     "switchToBase": "切换到 Base",
     "switchRejected": "网络未切换。购买需要 Base 网络，请重试。",
-    "embeddedNoBase": "People Wallet 暂不支持在 Base 网络付款。如需购买，请连接 MetaMask、Trust Wallet 或 WalletConnect。"
+    "embeddedNoBase": "PEOPLE Wallet 暂不支持在 Base 网络付款。如需购买，请连接 MetaMask、Trust Wallet 或 WalletConnect。"
   },
   "whyPriceRises": {
     "title": "价格为何上涨",

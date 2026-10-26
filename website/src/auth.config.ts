@@ -38,7 +38,7 @@ const googleId = process.env.AUTH_GOOGLE_ID?.trim();
 const googleSecret = process.env.AUTH_GOOGLE_SECRET?.trim();
 const resendKey = process.env.AUTH_RESEND_KEY?.trim();
 const emailFrom =
-  process.env.AUTH_EMAIL_FROM?.trim() || "People <noreply@peopleblockchain.network>";
+  process.env.AUTH_EMAIL_FROM?.trim() || "PEOPLE <noreply@peopleblockchain.network>";
 
 const providers: NextAuthConfig["providers"] = [];
 
