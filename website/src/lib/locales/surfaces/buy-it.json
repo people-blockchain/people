@@ -62,6 +62,7 @@
     "bridgeReady": "Bridge completato — termina l’acquisto su Base sotto.",
     "autoBuyReceived": "Pagamento ricevuto — conferma nel wallet l’acquisto di PPL per {amount}.",
     "autoBuyBelowMin": "Pagamento ricevuto ({amount}), ma inferiore all’acquisto minimo di {min}. Aggiungi fondi per continuare.",
+    "autoBuyCta": "Acquista su {chain}",
     "testnetNote": "Modalità test: rete Base Sepolia, token di test senza valore reale.",
     "testModeNote": "Modalità test: i token TEST USDC / TEST USDT non hanno alcun valore.",
     "faucetButton": "Ottieni USDC di test",

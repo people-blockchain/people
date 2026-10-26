@@ -62,6 +62,7 @@
     "bridgeReady": "Köprü tamam — alışı Base'de aşağıda tamamlayın.",
     "autoBuyReceived": "Ödeme alındı — cüzdanınızda {amount} tutarındaki PPL alımını onaylayın.",
     "autoBuyBelowMin": "Ödeme alındı ({amount}), ancak {min} asgari alım tutarının altında. Devam etmek için bakiye ekleyin.",
+    "autoBuyCta": "{chain} üzerinde satın al",
     "testnetNote": "Test modu: Base Sepolia ağı, gerçek değeri olmayan test tokenları.",
     "testModeNote": "Test modu: TEST USDC / TEST USDT tokenlarının değeri yoktur.",
     "faucetButton": "Test USDC al",

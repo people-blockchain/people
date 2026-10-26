@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
@@ -177,4 +178,28 @@ test("a route event and the balance growth of the same payment do not both start
     input({ source: "balance", balanceBefore: BigInt(0), balanceAfter: usdc("100"), seq: 1 }, { alreadyTriggered: triggered, busy: true }),
   );
   assert.deepEqual(fromBalance, { action: "none", reason: "busy" });
+});
+
+const here = (path: string) => new URL(path, import.meta.url);
+
+test("delivery handling never signs: handleDelivery has no buy() call, the user clicks the CTA", () => {
+  const src = readFileSync(here("../../components/buy/BuyForm.tsx"), "utf8");
+  const start = src.indexOf("const handleDelivery = useCallback(");
+  const end = src.indexOf("const onBridgeComplete = useCallback(");
+  assert.ok(start > 0 && end > start, "handleDelivery block found");
+  const block = src.slice(start, end);
+  assert.doesNotMatch(block, /\bbuy\s*\(/);
+  assert.doesNotMatch(block, /\bvoid\s+buy\b/);
+  // the only place that starts the flow is the click handler
+  assert.match(src, /autoBuyCta/);
+  assert.match(src, /onClick=\{\(\) => void onBuyClick\(\)\}/);
+});
+
+test("every locale has the 'Buy on <chain>' string with the {chain} placeholder", () => {
+  for (const lang of ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"]) {
+    const json = JSON.parse(readFileSync(here(`../locales/surfaces/buy-${lang}.json`), "utf8"));
+    const label = json.form?.autoBuyCta;
+    assert.equal(typeof label, "string", lang);
+    assert.ok(label.includes("{chain}"), lang);
+  }
 });

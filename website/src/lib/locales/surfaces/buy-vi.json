@@ -62,6 +62,7 @@
     "bridgeReady": "Bridge hoàn tất — hoàn tất mua trên Base bên dưới.",
     "autoBuyReceived": "Đã nhận thanh toán — hãy xác nhận trong ví việc mua PPL trị giá {amount}.",
     "autoBuyBelowMin": "Đã nhận thanh toán ({amount}) nhưng thấp hơn mức mua tối thiểu {min}. Hãy nạp thêm để tiếp tục.",
+    "autoBuyCta": "Mua trên {chain}",
     "testnetNote": "Chế độ thử nghiệm: mạng Base Sepolia, token thử nghiệm không có giá trị thực.",
     "testModeNote": "Chế độ thử nghiệm: token TEST USDC / TEST USDT không có giá trị.",
     "faucetButton": "Nhận USDC thử nghiệm",

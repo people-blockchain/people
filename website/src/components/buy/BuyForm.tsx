@@ -11,7 +11,7 @@ import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
 import { decideAutoBuy, deliveredFromRoute, type AutoBuyTrigger } from "@/lib/sale/autoBuy";
-import { BASE_USDC_ADDRESS, hubPaymentToken } from "@/lib/sale/bridge";
+import { hubPaymentToken } from "@/lib/sale/bridge";
 import {
   MIN_GAS_ETH,
   SALE,
@@ -171,10 +171,10 @@ export function BuyForm({
     await buy({ provider, account: evmAddress as Address, token: payToken, amountUsd: parsed.value });
   }, [connected, openWalletModal, provider, parsed, buy, evmAddress, payToken]);
 
-  // Auto-start of the purchase step once the bridged/swapped USDC has arrived on Base. Only the
-  // step starts; approve and buy are still signed by the user in the wallet.
+  // Once the bridged/swapped USDC has arrived on Base the form is only prepared: the amount is filled
+  // in and the main button turns into "Buy on <chain>". Nothing is ever signed or sent without a click
+  // on that button (no auto-approve, no auto-buy).
   const triggeredRef = useRef<Set<string>>(new Set());
-  const startingRef = useRef(false);
   const latestRef = useRef({ open, busy, provider, evmAddress });
   useEffect(() => {
     latestRef.current = { open, busy, provider, evmAddress };
@@ -190,7 +190,7 @@ export function BuyForm({
         minUsd: SALE.minPerBuyUsd,
         maxUsd: SALE.maxPerBuyUsd,
         alreadyTriggered: triggeredRef.current,
-        busy: cur.busy || startingRef.current,
+        busy: cur.busy,
       });
       if (decision.action === "none") {
         if (decision.reason === "below-min" && decision.amountUsd !== undefined) {
@@ -199,22 +199,13 @@ export function BuyForm({
         return;
       }
       triggeredRef.current.add(decision.key);
-      startingRef.current = true;
       setAmount(decision.amountUsd.toFixed(2));
       setBridgeIssue(null);
       setConversionReady(true);
       setBalanceTick((n) => n + 1);
       setAutoBuy({ kind: "received", amountUsd: decision.amountUsd });
-      void buy({
-        provider: cur.provider,
-        account: cur.evmAddress as Address,
-        token: BASE_USDC_ADDRESS,
-        amountUsd: decision.amountUsd,
-      }).finally(() => {
-        startingRef.current = false;
-      });
     },
-    [buy],
+    [],
   );
 
   const onBridgeComplete = useCallback(
@@ -374,7 +365,15 @@ export function BuyForm({
         ? fillCopy(t.form.autoBuyReceived, { amount: usd(autoBuy.amountUsd, lang) })
         : "";
 
-  const ctaLabel = !open ? t.form.ctaClosed : connected ? t.form.ctaConnected : t.form.cta;
+  // After a delivery the user must click this button to start approve + buy; it is never triggered automatically.
+  const awaitingAutoBuyClick = autoBuy?.kind === "received" && status.step === "idle";
+  const ctaLabel = !open
+    ? t.form.ctaClosed
+    : !connected
+      ? t.form.cta
+      : awaitingAutoBuyClick
+        ? fillCopy(t.form.autoBuyCta, { chain: SALE_CHAIN.name })
+        : t.form.ctaConnected;
 
   const body = (
     <div className="space-y-4" data-testid={testId}>
@@ -635,6 +634,7 @@ export function BuyForm({
         <button
           type="button"
           data-testid="buy-cta"
+          data-autobuy-ready={awaitingAutoBuyClick ? "true" : undefined}
           disabled={buttonDisabled}
           onClick={() => void onBuyClick()}
           className="inline-flex min-h-13 w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-base font-semibold text-brand-ink shadow-[0_14px_36px_-16px_rgba(3,105,161,0.8)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none"

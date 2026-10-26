@@ -62,6 +62,7 @@
     "bridgeReady": "Bridge selesai — selesaikan pembelian di Base di bawah.",
     "autoBuyReceived": "Pembayaran diterima — konfirmasikan pembelian PPL senilai {amount} di dompet Anda.",
     "autoBuyBelowMin": "Pembayaran diterima ({amount}), tetapi di bawah pembelian minimum {min}. Tambahkan dana untuk melanjutkan.",
+    "autoBuyCta": "Beli di {chain}",
     "testnetNote": "Mode uji: jaringan Base Sepolia, token uji tanpa nilai nyata.",
     "testModeNote": "Mode uji: token TEST USDC / TEST USDT tidak bernilai.",
     "faucetButton": "Dapatkan USDC uji",
