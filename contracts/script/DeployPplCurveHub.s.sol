@@ -14,6 +14,9 @@ import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 /// Mocks are allowed on Base Sepolia (84532) and local (31337); on Base mainnet (8453) they are an
 /// explicit TEST deployment that additionally requires TEST_DEPLOY_MAINNET=true.
 /// Non-mock deploys on 8453 must use the canonical Base USDC/USDT.
+/// On Base mainnet (8453) OWNER and TREASURY must be contracts (Safe), and TREASURY must not be the
+/// broadcaster: the hub measures the treasury balance delta, so a buyer equal to the treasury can never
+/// complete a purchase (`TransferMismatch`), and an EOA owner/treasury defeats the multisig custody model.
 /// `setToken` and `open` are owner-only: they run here only when the broadcaster is the OWNER;
 /// otherwise the owner (a Safe) must send them after the deploy.
 /// After `open()` the hub only lets the owner disable tokens (`setToken(token, true)` reverts), so every
@@ -21,6 +24,20 @@ import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 contract DeployPplCurveHub is Script {
     address internal constant BASE_USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     address internal constant BASE_USDT = 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2;
+
+    /// @dev Base mainnet guard, part 1: owner and treasury must be contracts (Safe). Runs before the broadcast starts.
+    function _checkMainnetContracts(address owner, address treasury) internal view {
+        if (block.chainid != 8453) return;
+        require(owner.code.length > 0, "owner: must be a contract (Safe) on Base mainnet");
+        require(treasury.code.length > 0, "treasury: must be a contract (Safe) on Base mainnet");
+    }
+
+    /// @dev Base mainnet guard, part 2: the broadcaster is only known once the broadcast has started; the check
+    /// still runs before anything is deployed, so a revert aborts the script with nothing sent.
+    function _checkMainnetBroadcaster(address treasury, address broadcaster) internal view {
+        if (block.chainid != 8453) return;
+        require(treasury != broadcaster, "treasury: must not be the broadcaster (buyer == treasury reverts TransferMismatch)");
+    }
 
     function run() external returns (PplCurveHub hub) {
         address owner = vm.envAddress("OWNER");
@@ -42,8 +59,11 @@ contract DeployPplCurveHub is Script {
             require(usdt == address(0) || usdt == BASE_USDT, "usdt: not canonical Base USDT");
         }
 
+        _checkMainnetContracts(owner, treasury);
+
         vm.startBroadcast();
         (, address broadcaster,) = vm.readCallers();
+        _checkMainnetBroadcaster(treasury, broadcaster);
 
         if (deployMocks) {
             usdc = address(new MockUSDC());
