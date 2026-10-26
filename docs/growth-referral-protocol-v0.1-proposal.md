@@ -2,7 +2,7 @@
 
 ## STATUS
 
-**Historical proposal.** Active Beta Growth/Referral payout weights are **L1 = 70**, **L2 = 30** of the Growth reward budget. Runtime referral structure is **L1/L2 only** (`MAX_PARTICIPANT_REFERRAL_DEPTH = 2`); there are no L3–L5 graph edges and no unpaid-level weights. Current native asset is **People / PPL** (`ppl`); `vls` / Vallis mentions below are historical audit of an older tree. See `docs/PROTOCOL-DECISIONS.md` and `docs/ECONOMIC-MODEL-v0.1.md`. Do not treat the 50/25/15/7/3 figures or depth-5 compatibility notes below as the live Beta model.
+**Historical proposal.** Active Beta Growth/Referral payout weights are **L1 = 70**, **L2 = 30** of the Growth reward budget. Runtime referral structure is **L1/L2 only** (`MAX_PARTICIPANT_REFERRAL_DEPTH = 2`); there are no L3–L5 graph edges and no unpaid-level weights. Current native asset is **PEOPLE / PPL** (`ppl`); `vls` / Vallis mentions below are historical audit of an older tree. See `docs/PROTOCOL-DECISIONS.md` and `docs/ECONOMIC-MODEL-v0.1.md`. Do not treat the 50/25/15/7/3 figures or depth-5 compatibility notes below as the live Beta model.
 
 - Документ = **APPROVED / Growth / Referral Protocol v0.1** (architecture; payout weights superseded as above)
 - Economic Model v0.1 = **не изменялся**. Источник параметров: `docs/ECONOMIC-MODEL-v0.1.md` на `main`

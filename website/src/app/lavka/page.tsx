@@ -8,7 +8,7 @@ import { isAuthConfigured } from "@/lib/partner/guards";
 import { linkPartnerWalletFromVaultIfAbsent } from "@/lib/partner/service";
 
 export const metadata: Metadata = {
-  title: "Local shop | People",
+  title: "Local shop | PEOPLE",
   description: "Merchant loyalty passes and checkout QR on PEOPLE Blockchain testnet.",
   alternates: { canonical: "/lavka" },
   robots: { index: false, follow: false },

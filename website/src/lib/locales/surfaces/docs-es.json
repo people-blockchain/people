@@ -1,7 +1,7 @@
 {
   "eyebrow": "BASE DE CONOCIMIENTO / PEOPLE",
   "title": "Entiende.\nPruébalo.\nParticipa.",
-  "description": "Desde tu primera cartera hasta tu propio nodo — una guía práctica de People’s Blockchain.",
+  "description": "Desde tu primera cartera hasta tu propio nodo — una guía práctica de PEOPLE Blockchain.",
   "notice": "Red de prueba",
   "noticeText": "Mainnet no ha arrancado. Las operaciones disponibles dependen de la conexión del sitio y de la versión de la red. Las monedas de prueba no son una promesa de ingresos.",
   "contents": "En esta guía",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "Cómo funciona People",
+      "title": "Cómo funciona PEOPLE",
       "lead": "Una cadena de bloques es un registro compartido de operaciones. Tu cartera firma una acción, los nodos la verifican y los validadores la incluyen en bloques.",
       "items": [
         {
           "title": "PPL es la moneda de la red",
-          "text": "People (PPL) paga las comisiones de red y las operaciones de protocolo. El PPL de prueba sirve para probar la red; tenerlo no significa que hayas ganado dinero."
+          "text": "PEOPLE (PPL) paga las comisiones de red y las operaciones de protocolo. El PPL de prueba sirve para probar la red; tenerlo no significa que hayas ganado dinero."
         },
         {
           "title": "Participante, nodo, validador",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — la moneda de la red",
-      "lead": "People (PPL) paga las comisiones de la red y las acciones del protocolo en esta cadena.",
+      "lead": "PEOPLE (PPL) paga las comisiones de la red y las acciones del protocolo en esta cadena.",
       "items": [
         {
           "title": "Monedas de prueba",

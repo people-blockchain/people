@@ -42,7 +42,7 @@
   "unsoldTitle": "Satılmayan tokenler",
   "unsoldBody": "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
   "feeTitle": "Ağ ücreti dağılımı",
-  "feeLead": "People’daki her protokol ücreti onaylı Model A’yı izler:",
+  "feeLead": "PEOPLE’daki her protokol ücreti onaylı Model A’yı izler:",
   "feeNote": "Her protokol ücreti: %30 doğrulayıcı, %25 topluluk havuzu, %20 hazine, %10 likidite, %15 Growth, %0 yakım.",
   "buybackTitle": "Geri alımlar",
   "buybackBody": "Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider. StableFeeGateway sözleşmesi testnet'te uygulanmış ve dağıtılmıştır: her stablecoin lansman ücreti halka açık geri alım alıcısına gider. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10). Ağ ücretlerinin kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider — ve hepsi nihayetinde katılımcılara geri döner. Geri alınan PPL daha sonra 2/3 hazine multisig'i tarafından 30/25/20/10/15 olarak bölünür — bu bölünme yayınlanmış bir multisig politikasıdır, zincir üzerinde uygulanan bir kural değildir.",

@@ -6,7 +6,7 @@
   "googleCta": "Continua con Google",
   "or": "oppure",
   "checkEmailTitle": "Controlla la posta",
-  "checkEmailLead": "Se per quell'indirizzo si può creare un account, un link People monouso è in arrivo.",
+  "checkEmailLead": "Se per quell'indirizzo si può creare un account, un link PEOPLE monouso è in arrivo.",
   "backToLogin": "Torna all'accesso",
   "notConfigured": "L'accesso partner non è configurato su questo deploy. L'operatore deve impostare AUTH_SECRET, DATABASE_URL e almeno AUTH_RESEND_KEY o OAuth Google.",
   "googleOff": "Accesso Google non ancora configurato.",
@@ -60,8 +60,8 @@
   "logIn": "Accedi",
   "cabinet": "Area",
   "growthNote": "I pagamenti Growth restano L1 70% / L2 30% del budget reward Growth. Quest'area non cambia l'economia del protocollo.",
-  "footerNote": "Dati protocollo in sola lettura. Asset nativo: People (PPL).",
-  "magicLinkSubject": "Accedi al portale partner People",
+  "footerNote": "Dati protocollo in sola lettura. Asset nativo: PEOPLE (PPL).",
+  "magicLinkSubject": "Accedi al portale partner PEOPLE",
   "magicLinkHeading": "Accesso portale partner",
   "magicLinkBody": "Usa questo link monouso per aprire la tua area partner. Scade rapidamente e funziona una sola volta.",
   "magicLinkCta": "Accedi",
@@ -80,8 +80,8 @@
   "signInAgreementAfter": ".",
   "authErrorSessionExpired": "La sessione è scaduta. Accedi di nuovo.",
   "authErrorUnavailable": "L’area partner non è disponibile al momento. Riprova tra un minuto.",
-  "localWalletHeading": "People Wallet on this device",
+  "localWalletHeading": "PEOPLE Wallet on this device",
   "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your People Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your People Wallet… refresh in a moment or open the wallet page."
+  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
+  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
 }

@@ -27,7 +27,7 @@ The curve is a ramp. The first buyers buy at the bottom, where the price is lowe
 - **No promised returns.** Nobody is promised a profit, a percentage or a payout.
 - **No payouts from new buyers to old buyers.** Your money buys PPL at the formula price; it is not passed to people who came earlier.
 - **No recruiting rewards.** You get nothing for bringing in other buyers.
-- **You hold what you bought.** PPL is recorded to you on the People network the moment you buy, and you can sell it back to the curve. PPL transfers to other people and pool trading open with the full network launch: at 1,000 verified participants, and no later than 6 months.
+- **You hold what you bought.** PPL is recorded to you on the PEOPLE network the moment you buy, and you can sell it back to the curve. PPL transfers to other people and pool trading open with the full network launch: at 1,000 verified participants, and no later than 6 months.
 - **Public rules.** The price formula, the ceiling, the graduation point and where the money goes are fixed and published before the start.
 
 ## What goes wrong on curves without a ceiling, and what we do differently
@@ -70,7 +70,7 @@ MetaMask, Phantom, Trust Wallet, any wallet over WalletConnect, Tonkeeper (TON C
 ---
 
 ## Small print
-\* PPL is the utility token of the People network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice.
+\* PPL is the utility token of the PEOPLE network. On the curve its price follows the published formula, and after graduation it is set by the market: it can fall as well as rise. PPL is not a security, not a share in a company, not a deposit and not an investment product, and no profit, yield or return of any kind is promised or guaranteed. Figures shown before a purchase are estimates computed from the published formula and are confirmed on-chain before you sign. Nothing on this page is investment, legal or tax advice.
 
 \*\* Participation may be restricted or unavailable where you live, and checking the rules that apply to you is your own responsibility. Use only money you can afford to lose.
 

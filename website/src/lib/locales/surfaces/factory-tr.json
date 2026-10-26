@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Stabil coin ücreti",
     "stableFeeBuybackNote": "Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider.",
-    "stableFeeNetworkNote": "Şimdilik yalnızca People ağında çalışır. Başka bir zincirden (Ethereum, Polygon, Tron, TON, Solana) ödeme daha sonra gelecek.",
+    "stableFeeNetworkNote": "Şimdilik yalnızca PEOPLE ağında çalışır. Başka bir zincirden (Ethereum, Polygon, Tron, TON, Solana) ödeme daha sonra gelecek.",
     "approvingStable": "Onaylanıyor…",
     "payingStableFee": "Ücret ödeniyor…",
     "creatingAfterStableFee": "Oluşturuluyor…",

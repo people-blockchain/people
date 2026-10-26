@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Senden Sie kleine Dankeschön-Trinkgelder an Creator und Teams im People-Netzwerk.",
+      "title": "PEOPLE Tips",
+      "summary": "Senden Sie kleine Dankeschön-Trinkgelder an Creator und Teams im PEOPLE-Netzwerk.",
       "idea": "Sagen Sie Danke mit einem Token für Mikro-Unterstützung — Konzerte, Streams und Open-Source-Maintainer.",
       "audience": "Fans, Paten und Teams, die viele kleine Danksagungen sammeln.",
       "whyToken": "Trinkgelder bleiben im eigenen Ledger der Community statt in einem geschlossenen App-Guthaben.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Tauschen Sie Test-Community-Tokens gegen PPL direkt im Browser.",
       "idea": "Tauschen Sie Demo-Community-Tokens gegen PPL im Browser — ohne separates Exchange-Konto.",
       "audience": "Alle, die Testnet-Assets ausprobieren, bevor sie sich für ein Projekt entscheiden.",

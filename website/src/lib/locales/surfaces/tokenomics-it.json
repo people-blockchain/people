@@ -42,7 +42,7 @@
   "unsoldTitle": "Token invenduti",
   "unsoldBody": "La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
   "feeTitle": "Suddivisione commissioni di rete",
-  "feeLead": "Ogni commissione di protocollo su People segue la Model A approvata:",
+  "feeLead": "Ogni commissione di protocollo su PEOPLE segue la Model A approvata:",
   "feeNote": "Ogni commissione di protocollo: 30% validatori, 25% pool community, 20% tesoro, 10% liquidità, 15% Growth, 0% bruciato.",
   "buybackTitle": "Riacquisti",
   "buybackBody": "100% delle commissioni di lancio di token e NFT (USDC/USDT) va ai riacquisti pubblici di PPL. Il contratto StableFeeGateway è implementato e distribuito sulla testnet: ogni commissione di lancio in stablecoin va al destinatario pubblico dei riacquisti. Il 30% delle commissioni di rete va ai riacquisti pubblici di PPL (tesoreria 20% + liquidità 10%). Il restante 70% delle commissioni di rete va ai validatori (30%), al pool della community (25%) e al Growth Pool (15%) — e tutto alla fine torna ai partecipanti. I PPL riacquistati vengono poi suddivisi 30/25/20/10/15 dal multisig di tesoreria 2-su-3 — quella suddivisione è una policy multisig pubblicata, non una regola applicata on-chain.",

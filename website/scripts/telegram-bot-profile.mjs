@@ -30,7 +30,7 @@ export const COMMANDS = [
 ];
 
 /** One English display name for every language (default + all overrides) — never localized. */
-export const BOT_NAME = "People Blockchain Helper";
+export const BOT_NAME = "PEOPLE Blockchain Helper";
 
 /** Profile copy per locale. Telegram caps: name ≤64, short description ≤120, description ≤512. */
 export const PROFILE = {

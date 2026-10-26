@@ -46,7 +46,7 @@
     "belowMin": "Informe um valor para ver a cotação.",
     "cta": "Conecte uma carteira para comprar",
     "ctaConnected": "Comprar PPL",
-    "wallets": "People Wallet (entrar com Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (entrar com Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Como você paga",
     "payOnBase": "Pagar na Base",
     "payFromOther": "Pagar de outra rede",
@@ -94,7 +94,7 @@
     "termsLink": "Termos",
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
-    "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma People Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
+    "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
     "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva por dia para todos e US$ 2.000 por pessoa por dia. Taxa de 1,5% (3% se as vendas do dia passarem de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
     "feesBody": "Taxas: a taxa da rede Base (gas), paga em ETH — normalmente cerca de US$ 0,01; a taxa de swap ou bridge da LI.FI — exibida no widget antes de você confirmar; a taxa de venda de volta à reserva — 1,5% (3% se as vendas do dia passarem de 1% da reserva).",
@@ -114,7 +114,7 @@
     "wrongNetwork": "A compra acontece na rede Base. Sua carteira está em outra rede.",
     "switchToBase": "Mudar para Base",
     "switchRejected": "A rede não foi trocada. A compra exige Base — tente novamente.",
-    "embeddedNoBase": "A People Wallet ainda não consegue pagar na rede Base. Para comprar, conecte MetaMask, Trust Wallet ou WalletConnect."
+    "embeddedNoBase": "A PEOPLE Wallet ainda não consegue pagar na rede Base. Para comprar, conecte MetaMask, Trust Wallet ou WalletConnect."
   },
   "whyPriceRises": {
     "title": "Por que o preço sobe",

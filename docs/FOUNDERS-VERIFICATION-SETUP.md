@@ -25,7 +25,7 @@
 
 1. Откройте Telegram и найдите **@BotFather**: https://t.me/BotFather  
 2. Отправьте команду `/newbot`.  
-3. Введите **отображаемое имя** бота (например `People Founders`).  
+3. Введите **отображаемое имя** бота (например `PEOPLE Founders`).  
 4. Введите **username** (должен заканчиваться на `bot`, например `PeopleFoundersBot`).  
 5. BotFather пришлёт **HTTP API token** — скопируйте его целиком в `FOUNDERS_TELEGRAM_BOT_TOKEN`.  
 6. В `FOUNDERS_TELEGRAM_BOT_USERNAME` укажите username **без** символа `@`.  

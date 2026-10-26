@@ -58,7 +58,7 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
                 {nav.slogan}
               </p>
               <span className="mt-3 block font-mono text-[11px] uppercase tracking-[0.18em] text-ink-3">
-                People
+                PEOPLE
               </span>
               {t.networkName ? (
                 <>

@@ -82,7 +82,7 @@ export function renderMagicLinkEmail(input: {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:#0d1119;border:1px solid rgba(148,163,184,0.16);border-radius:16px;padding:32px;">
           <tr>
             <td align="center" style="padding-bottom:20px;">
-              <img src="${LOGO_URL}" width="48" height="48" alt="People" style="display:block;border-radius:12px;" />
+              <img src="${LOGO_URL}" width="48" height="48" alt="PEOPLE" style="display:block;border-radius:12px;" />
             </td>
           </tr>
           <tr>

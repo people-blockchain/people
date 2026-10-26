@@ -117,7 +117,7 @@ export const en = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "PEOPLE'S",
     "headlineSub": "BLOCKCHAIN",
     "lead": "A blockchain infrastructure designed to connect creators, communities, multi-asset economic systems, and verified human network participation.",
@@ -1071,7 +1071,7 @@ export const en = {
     "title": "Technical Architecture",
     "subtitle": "PEOPLE Blockchain evolves through a strict three-phase architectural sequence. Each tier builds deterministically upon the foundations established below it.",
     "umbrellaTitle": "Project Umbrella",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Protocol Steward",
     "umbrellaDesc": "Brand and steward of PEOPLE Blockchain.",
     "targetTitle": "Core Network Target",
@@ -1287,7 +1287,7 @@ export const en = {
     "mainnet": "Mainnet",
     "mainnetTitle": "Mainnet: the Base network, where the PPL sale runs",
     "testnet": "Testnet",
-    "testnetTitle": "Testnet: the People test network for creating tokens and NFTs"
+    "testnetTitle": "Testnet: the PEOPLE test network for creating tokens and NFTs"
   },
   "a11y": {
     "skipToContent": "Skip to content",

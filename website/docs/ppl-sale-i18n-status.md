@@ -46,7 +46,7 @@ Every other surface keeps its existing translations; nothing was removed.
 - `transparency.auditLine` is the exact public line (EN/RU) naming the three
   models in `AI_AUDITS` (`config.ts`). Keep it in sync when that list changes.
   `transparency.auditBounty` is a short bug-bounty mention on the next line.
-- `faq.items[2]` is the "add the People network to your wallet" question; it is
+- `faq.items[2]` is the "add the PEOPLE network to your wallet" question; it is
   the one that renders the add-network button underneath.
 - `faq.pumpCols` must stay a 3-item array, matching `faq.pumpRows`
   (`problem` / `what` / `ours`).

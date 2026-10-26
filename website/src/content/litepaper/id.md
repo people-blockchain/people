@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "Blockchain di mana setiap pengguna adalah manusia yang terverifikasi. Dimiliki oleh orang-orang, bukan VC."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **Blockchain di mana setiap pengguna adalah manusia yang terverifikasi.**
 > **Dimiliki oleh orang-orang, bukan VC.**
@@ -63,7 +63,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 ## 4. Teknologi
 
-**Cosmos EVM.** People berjalan di stack Cosmos EVM: kontrak pintar yang kompatibel dengan Ethereum dan alamat 0x di chain Cosmos.
+**Cosmos EVM.** PEOPLE berjalan di stack Cosmos EVM: kontrak pintar yang kompatibel dengan Ethereum dan alamat 0x di chain Cosmos.
 
 | Parameter | Nilai |
 |---|---|
@@ -185,7 +185,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 
 Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawah.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Biaya terbakar | Biaya dasar terbakar ¹ | 50% dari biaya dasar terbakar ² | **0% terbakar** |
 | Siapa yang menerima biaya | Validator mendapat biaya prioritas (tip) ¹ | Validator mendapat 50% dari biaya dasar dan 100% dari biaya prioritas ² | **Validator 30 · Komunitas 25 · Treasury 20 · Likuiditas 10 · Pertumbuhan 15** |

@@ -22,7 +22,7 @@ The wallet request is bounded to 10,001 accounts. If truncated to 10,000, the UI
 explicitly labels counts and charts as partial. This is a fetched view, not a
 block-pinned atomic snapshot across all requests; it can be refreshed manually.
 
-Explorer data loading uses the existing People logo with pulse/orbit CSS animation,
+Explorer data loading uses the existing PEOPLE logo with pulse/orbit CSS animation,
 an accessible status label and reduced-motion support. Errors and empty results
 are separate from loading states. New detail copy is provided in Russian and
 English; other selected languages currently use English for the new detail labels.

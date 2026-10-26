@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "区块链，每个用户都是经过验证的真人。由人民拥有，而非风投。"
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **区块链，每个用户都是经过验证的真人。**
 > **由人民拥有，而非风投。**
@@ -63,7 +63,7 @@ status: public-draft
 
 ## 4. 技术
 
-**Cosmos EVM。** People 运行在 Cosmos EVM 堆栈上：Ethereum兼容的智能合约和 0x 地址在 Cosmos 链上。
+**Cosmos EVM。** PEOPLE 运行在 Cosmos EVM 堆栈上：Ethereum兼容的智能合约和 0x 地址在 Cosmos 链上。
 
 | 参数 | 值 |
 |---|---|
@@ -185,7 +185,7 @@ status: public-draft
 
 仅关于其他网络的可验证公开事实。来源如下。
 
-| | 以太坊 | Solana | People |
+| | 以太坊 | Solana | PEOPLE |
 |---|---|---|---|
 | 销毁的费用 | 基础费用被销毁 ¹ | 50%的基础费用被销毁 ² | **0%销毁** |
 | 谁收取费用 | 验证器获得优先费用（小费） ¹ | 验证器获得50%的基础费用和100%的优先费用 ² | **验证器30 · 社区25 · 财库20 · 流动性10 · 增长15** |
