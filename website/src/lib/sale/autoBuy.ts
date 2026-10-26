@@ -7,8 +7,10 @@
  *  - `reduceBalanceSample` turns successive balance samples into delivery events;
  *  - `deliveredFromRoute` extracts the delivered USDC amount from a LI.FI route.
  *
- * Starting the step only opens the existing approve + buyWith flow; every transaction is still
- * signed by the user in the wallet. No contract call on the destination side is made by LI.FI.
+ * A "start" decision only PREPARES the form (amount filled in, main button relabelled "Buy on <chain>").
+ * It never signs or sends anything: the approve + buyWith flow runs only after the user clicks that
+ * button, and every transaction is signed by the user in the wallet. No contract call on the
+ * destination side is made by LI.FI.
  */
 
 import { BASE_MAINNET_USDC, type SaleChainKey } from "@/lib/sale/saleChain";

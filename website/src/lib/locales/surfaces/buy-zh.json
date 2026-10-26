@@ -62,6 +62,7 @@
     "bridgeReady": "跨链完成 — 请在下方于 Base 完成购买。",
     "autoBuyReceived": "已收到付款 — 请在钱包中确认 {amount} 的 PPL 购买。",
     "autoBuyBelowMin": "已收到付款（{amount}），但低于最低购买额 {min}。请补充资金后继续。",
+    "autoBuyCta": "在 {chain} 上购买",
     "testnetNote": "测试模式：Base Sepolia 网络，测试代币无真实价值。",
     "testModeNote": "测试模式：TEST USDC / TEST USDT 代币没有价值。",
     "faucetButton": "领取测试 USDC",

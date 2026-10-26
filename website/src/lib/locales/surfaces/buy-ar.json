@@ -62,6 +62,7 @@
     "bridgeReady": "اكتمل الجسر — أكمل الشراء على Base أدناه.",
     "autoBuyReceived": "تم استلام الدفعة — أكّد في محفظتك شراء PPL بقيمة {amount}.",
     "autoBuyBelowMin": "تم استلام الدفعة ({amount})، لكنها أقل من الحد الأدنى للشراء {min}. أضف رصيداً للمتابعة.",
+    "autoBuyCta": "اشترِ على {chain}",
     "testnetNote": "وضع الاختبار: شبكة Base Sepolia، رموز تجريبية بلا قيمة حقيقية.",
     "testModeNote": "وضع الاختبار: رموز TEST USDC / TEST USDT بلا قيمة.",
     "faucetButton": "احصل على USDC تجريبي",
