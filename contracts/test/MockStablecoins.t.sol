@@ -59,6 +59,54 @@ contract DeployPplCurveHubMocksTest is Test {
         _test_mocksRejectedOnOtherChains();
         _resetEnv();
         _test_nonMockMainnetStillRequiresCanonicalTokens();
+        _resetEnv();
+        _test_mainnetRolesGuard();
+    }
+
+    /// @dev Marks `who` as a contract (a Safe stand-in) for the 8453 role checks.
+    function _asContract(address who) internal {
+        vm.etch(who, hex"00");
+    }
+
+    /// L-4: on Base mainnet OWNER and TREASURY must be contracts and TREASURY must not be the broadcaster.
+    function _test_mainnetRolesGuard() internal {
+        vm.chainId(8453);
+        address safeOwner = makeAddr("safeOwner");
+        address safeTreasury = makeAddr("safeTreasury");
+        vm.setEnv("OWNER", vm.toString(safeOwner));
+        vm.setEnv("TREASURY", vm.toString(safeTreasury));
+
+        // EOA owner
+        _asContract(safeTreasury);
+        vm.expectRevert(bytes("owner: must be a contract (Safe) on Base mainnet"));
+        script.run();
+
+        // EOA treasury
+        _asContract(safeOwner);
+        vm.etch(safeTreasury, "");
+        vm.expectRevert(bytes("treasury: must be a contract (Safe) on Base mainnet"));
+        script.run();
+
+        // treasury == broadcaster (contract-ish, so only the broadcaster rule can fire)
+        _asContract(DEFAULT_SENDER);
+        vm.setEnv("TREASURY", vm.toString(DEFAULT_SENDER));
+        vm.expectRevert(bytes("treasury: must not be the broadcaster (buyer == treasury reverts TransferMismatch)"));
+        script.run();
+        vm.stopBroadcast();
+
+        // both Safes, broadcaster is a third party: deploys; the hub is owned by the Safe, nothing is opened
+        _asContract(safeTreasury);
+        vm.setEnv("TREASURY", vm.toString(safeTreasury));
+        PplCurveHub hub = script.run();
+        assertEq(hub.owner(), safeOwner);
+        assertEq(hub.treasury(), safeTreasury);
+        assertEq(hub.openedAt(), 0);
+
+        // the guard is mainnet-only: an EOA owner/treasury is still fine on Base Sepolia
+        vm.chainId(84532);
+        vm.setEnv("OWNER", vm.toString(makeAddr("eoaOwner")));
+        vm.setEnv("TREASURY", vm.toString(makeAddr("eoaTreasury")));
+        assertEq(script.run().openedAt(), 0);
     }
 
     function _resetEnv() internal {
@@ -84,6 +132,9 @@ contract DeployPplCurveHubMocksTest is Test {
         vm.setEnv("TEST_DEPLOY_MAINNET", "true");
         vm.setEnv("OWNER", vm.toString(DEFAULT_SENDER));
         vm.setEnv("OPEN_SALE", "true");
+        // Base mainnet requires contract owner/treasury (L-4)
+        _asContract(DEFAULT_SENDER);
+        _asContract(treasury);
         vm.recordLogs();
         PplCurveHub hub = script.run();
         assertGt(hub.openedAt(), 0);
