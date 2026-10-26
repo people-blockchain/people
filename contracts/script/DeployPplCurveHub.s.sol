@@ -16,8 +16,8 @@ import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 /// Non-mock deploys on 8453 must use the canonical Base USDC/USDT.
 /// `setToken` and `open` are owner-only: they run here only when the broadcaster is the OWNER;
 /// otherwise the owner (a Safe) must send them after the deploy.
-/// The hub freezes its allowlist at `open()` (`setToken` reverts afterwards), so every `setToken`
-/// must be sent BEFORE `open()`; the script keeps that order.
+/// After `open()` the hub only lets the owner disable tokens (`setToken(token, true)` reverts), so every
+/// enabling `setToken` must be sent BEFORE `open()`; the script keeps that order.
 contract DeployPplCurveHub is Script {
     address internal constant BASE_USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     address internal constant BASE_USDT = 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2;
@@ -68,7 +68,7 @@ contract DeployPplCurveHub is Script {
         console2.log("chainId", block.chainid);
         if (!isOwner) {
             console2.log("WARNING: broadcaster is not OWNER; tokens are NOT allowlisted and the sale is NOT open.");
-            console2.log("The owner must call setToken for USDC/USDT first and only then open() (allowlist is frozen at open).");
+            console2.log("The owner must call setToken for USDC/USDT first and only then open() (tokens cannot be enabled after open).");
             if (usdc != address(0)) console2.log("allowlist USDC", usdc);
             if (usdt != address(0)) console2.log("allowlist USDT", usdt);
             if (openSale) console2.log("OPEN_SALE requested: owner must call open()");
