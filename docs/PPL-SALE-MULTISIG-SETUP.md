@@ -15,6 +15,8 @@ Use the same **2-of-3 threshold** as the treasury multisig (three separately hel
 
 EVM chains (**BNB Chain, Base, Ethereum, Polygon**) use the `PeopleCommunitySale` contract; stablecoins flow to the **EVM Safe treasury** configured at deploy time (`SALE_TREASURY`), not the transfer receivers below.
 
+> The Base bonding-curve sale (`PplCurveHub`) has its own runbook: [PPL-CURVE-HUB.md](PPL-CURVE-HUB.md) (deploy guards, treasury migration, peg monitoring, rollout).
+
 ## Environment variables (Vercel / server)
 
 ```bash
