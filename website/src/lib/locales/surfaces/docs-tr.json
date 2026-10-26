@@ -1,7 +1,7 @@
 {
   "eyebrow": "BİLGİ TABANI / PEOPLE",
   "title": "Anlayın.\nDeneyin.\nKatılın.",
-  "description": "İlk cüzdanınızdan kendi düğümünüze — People’s Blockchain için pratik bir kılavuz.",
+  "description": "İlk cüzdanınızdan kendi düğümünüze — PEOPLE Blockchain için pratik bir kılavuz.",
   "notice": "Test ağı",
   "noticeText": "Mainnet başlamadı. Kullanılabilir işlemler site bağlantısına ve ağ sürümüne bağlıdır. Test coinleri gelir sözü değildir.",
   "contents": "Bu rehberde",
@@ -30,12 +30,12 @@
   "sections": [
     {
       "id": "basics",
-      "title": "People nasıl çalışır",
+      "title": "PEOPLE nasıl çalışır",
       "lead": "Bir blockchain paylaşılan bir işlem kaydıdır. Cüzdanınız bir eylemi imzalar, düğümler doğrular, doğrulayıcılar bloklara alır.",
       "items": [
         {
           "title": "PPL ağın parasıdır",
-          "text": "People (PPL) ağ ücretleri ve protokol işlemlerini öder. Test PPL ağı denemek içindir; tutmak para kazandığınız anlamına gelmez."
+          "text": "PEOPLE (PPL) ağ ücretleri ve protokol işlemlerini öder. Test PPL ağı denemek içindir; tutmak para kazandığınız anlamına gelmez."
         },
         {
           "title": "Katılımcı, düğüm, doğrulayıcı",
@@ -397,7 +397,7 @@
     {
       "id": "ppl-native",
       "title": "PPL — ağın parası",
-      "lead": "People (PPL) bu zincirdeki ağ ücretlerini ve protokol işlemlerini öder.",
+      "lead": "PEOPLE (PPL) bu zincirdeki ağ ücretlerini ve protokol işlemlerini öder.",
       "items": [
         {
           "title": "Test paraları",

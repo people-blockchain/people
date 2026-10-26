@@ -26,7 +26,7 @@ export class PeopleMobileProvider {
   private closeLocal() {
     if (this.closed) return;
     this.closed = true; this.token = ""; this.stopMonitoring();
-    for (const listener of this.listeners) listener({ code: 4900, message: "People mobile connection ended" });
+    for (const listener of this.listeners) listener({ code: 4900, message: "PEOPLE mobile connection ended" });
   }
   private async readState(): Promise<State> {
     for (;;) {

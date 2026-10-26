@@ -7,15 +7,15 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..", "src/lib/locale
 
 const base = {
   title: "Buy PPL",
-  lead: "Pay with USDT or USDC on your preferred network. PPL is credited to your People wallet address.",
+  lead: "Pay with USDT or USDC on your preferred network. PPL is credited to your PEOPLE wallet address.",
   networksList: "BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana",
   contractsRow: "Sale contracts (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)",
   salePayBody:
-    "Stablecoins on BNB Chain, Base, Ethereum and Polygon go through the on-chain sale contract. Tron (USDT TRC-20), TON (USDT jetton) and Solana (USDT/USDC SPL) use a transfer to the project multisig with a unique amount and your People address for matching.",
+    "Stablecoins on BNB Chain, Base, Ethereum and Polygon go through the on-chain sale contract. Tron (USDT TRC-20), TON (USDT jetton) and Solana (USDT/USDC SPL) use a transfer to the project multisig with a unique amount and your PEOPLE address for matching.",
   pendingBadge: "Pending",
   network: "Network",
   stable: "Stablecoin",
-  peopleAddress: "People wallet address (0x)",
+  peopleAddress: "PEOPLE wallet address (0x)",
   amountUsdt: "Amount (USDT)",
   quotePpl: "Estimated PPL",
   createOrder: "Create payment",
@@ -34,15 +34,15 @@ const locales = {
   en: base,
   ru: {
     title: "Купить PPL",
-    lead: "Оплатите USDT или USDC в удобной сети. PPL зачисляются на ваш адрес в People.",
+    lead: "Оплатите USDT или USDC в удобной сети. PPL зачисляются на ваш адрес в PEOPLE.",
     networksList: "BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana",
     contractsRow: "Контракты продажи (BNB Chain, Base, Ethereum, Polygon, Tron, TON, Solana)",
     salePayBody:
-      "Стейблкоины в BNB Chain, Base, Ethereum и Polygon — через on-chain контракт продажи. Tron (USDT TRC-20), TON (jetton USDT) и Solana (USDT/USDC SPL) — перевод на мультисиг проекта с уникальной суммой и адресом People для сопоставления.",
+      "Стейблкоины в BNB Chain, Base, Ethereum и Polygon — через on-chain контракт продажи. Tron (USDT TRC-20), TON (jetton USDT) и Solana (USDT/USDC SPL) — перевод на мультисиг проекта с уникальной суммой и адресом PEOPLE для сопоставления.",
     pendingBadge: "скоро",
     network: "Сеть",
     stable: "Стейблкоин",
-    peopleAddress: "Адрес кошелька People (0x)",
+    peopleAddress: "Адрес кошелька PEOPLE (0x)",
     amountUsdt: "Сумма (USDT)",
     quotePpl: "Оценка PPL",
     createOrder: "Создать платёж",

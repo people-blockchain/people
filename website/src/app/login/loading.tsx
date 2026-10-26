@@ -9,7 +9,7 @@ export default function LoginLoading() {
       aria-live="polite"
       aria-busy="true"
     >
-      <Logo alt="People" className="h-9 opacity-80" />
+      <Logo alt="PEOPLE" className="h-9 opacity-80" />
       <p className="mt-6 text-sm font-medium text-ink-3">…</p>
     </div>
   );

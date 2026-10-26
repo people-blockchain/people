@@ -96,10 +96,10 @@ test("sale config states the fixed facts", () => {
   assert.doesNotMatch(config, /durationDays|SUPPORTED_WALLETS|AI_AUDITS/);
 });
 
-test("the sale never targets the People chain on /buy", () => {
+test("the sale never targets the PEOPLE chain on /buy", () => {
   for (const file of ["src/components/buy/BuyForm.tsx", "src/lib/sale/useBuyPpl.ts", "src/context/ExternalWalletContext.tsx"]) {
     const text = readFileSync(join(root, file), "utf8");
-    assert.doesNotMatch(text, /ensurePeopleChain\(/, `${file}: no People chain switch`);
+    assert.doesNotMatch(text, /ensurePeopleChain\(/, `${file}: no PEOPLE chain switch`);
     assert.doesNotMatch(text, /0x17c79/i, file);
   }
 });

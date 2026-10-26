@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Send small thank-you tips to creators and teams on the People network.",
+      "title": "PEOPLE Tips",
+      "summary": "Send small thank-you tips to creators and teams on the PEOPLE network.",
       "idea": "Say thanks with a token built for micro-support — concerts, streams, and open-source maintainers.",
       "audience": "Fans, patrons, and teams that collect many small thank-yous.",
       "whyToken": "Tips stay in the community’s own ledger instead of a closed app balance.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Swap test community tokens for PPL right in the browser.",
       "idea": "Exchange demo community tokens against PPL in the browser — no separate exchange account.",
       "audience": "People trying testnet assets before they commit to a project.",

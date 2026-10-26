@@ -1,4 +1,4 @@
-# Compact UX / Information Architecture — People's Blockchain public site
+# Compact UX / Information Architecture — PEOPLE Blockchain public site
 
 **Status:** `IMPLEMENTED` as a presentation change on the public Next.js site (`website/`).  
 **Scope:** Compact hub IA (#18) plus selling first screen / core value proposition (this follow-up).  
@@ -33,7 +33,7 @@ In 5–10 seconds, without significant scroll, the visitor must see:
 
 | Signal | Where |
 | --- | --- |
-| People's Blockchain | Hero H1 |
+| PEOPLE Blockchain | Hero H1 |
 | Community participation | Slogan + value line |
 | 10% token community allocation | Hero pillar (mandatory 10%, not 10%+ — no approved extra) |
 | Network fees | Hero pillar + Model A bar |
@@ -48,7 +48,7 @@ Legal copy: community participation / community-driven / built by the community.
 
 ### Hero structure
 
-1. PEOPLE'S BLOCKCHAIN  
+1. PEOPLE BLOCKCHAIN  
 2. Created by people. For the community.  
 3. Community participates in the value created by the network.  
 4. Three compact pillars: **10%** / **Network fees** / **70/30 Growth referral**  
@@ -69,7 +69,7 @@ Reference UX **logic** (not visual brand): [auswandernhilft.de](https://auswande
 #community-value       Three distinct mechanisms
 #partner               Growth referral L1/L2 (70/30)
 #join                  How to participate (no new auth route)
-#what-is               What is People's Blockchain
+#what-is               What is PEOPLE Blockchain
 #what-can-i-do         Roles (also keeps #audiences)
 #how-the-network-works Flow (also keeps #how-it-works-teaser)
 #ppl                   Native asset

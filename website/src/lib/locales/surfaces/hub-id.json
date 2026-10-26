@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "Cara berpartisipasi",
-    "subtitle": "Bergabung dengan People’s Blockchain sebagai peserta komunitas — dari telepon, tablet, atau peramban.",
+    "subtitle": "Bergabung dengan PEOPLE Blockchain sebagai peserta komunitas — dari telepon, tablet, atau peramban.",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "Buat"
       }
     ],
-    "ctaJoin": "Gabung People’s Blockchain",
+    "ctaJoin": "Gabung PEOPLE Blockchain",
     "ctaHow": "Cara kerjanya"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People adalah aset asli Blockchain untuk komunitas. Ticker: PPL.",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE adalah aset asli Blockchain untuk komunitas. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",

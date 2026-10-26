@@ -119,7 +119,7 @@ export const vi: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "PEOPLE'S",
     "headlineSub": "BLOCKCHAIN",
     "lead": "Hạ tầng blockchain được thiết kế để kết nối các nhà sáng tạo, cộng đồng, hệ thống kinh tế đa tài sản và sự tham gia mạng lưới con người đã được xác thực.",
@@ -1073,7 +1073,7 @@ export const vi: LocaleContent = {
     "title": "Kiến trúc Kỹ thuật",
     "subtitle": "Blockchain dành cho cộng đồng phát triển qua một trình tự kiến trúc ba giai đoạn nghiêm ngặt. Mỗi tầng được xây dựng một cách tất định dựa trên nền tảng được thiết lập bên dưới nó.",
     "umbrellaTitle": "Dự án Tổng thể",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Đơn vị Quản trị Giao thức",
     "umbrellaDesc": "Thương hiệu và đơn vị quản lý Blockchain dành cho cộng đồng.",
     "targetTitle": "Mục tiêu Mạng lưới Cốt lõi",

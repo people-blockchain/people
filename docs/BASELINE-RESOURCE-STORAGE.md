@@ -1,4 +1,4 @@
-# People's Blockchain — baseline resource & storage (code + runtime audit)
+# PEOPLE Blockchain — baseline resource & storage (code + runtime audit)
 
 | Field | Value |
 | --- | --- |
@@ -10,7 +10,7 @@
 
 This document grounds claims in the current legacy people-node node code. It does **not** depend on AGENTS.md PR #16. Where `docs/BASELINE-AUDIT.md` disagrees with code, **code wins** (called out below).
 
-> **Historical / superseded for native asset naming.** Written against a checkout whose native id was still `vls`. Current runtime native asset is **People / PPL** (`ppl`). Env `VLS_PRICE_USD` below is the name as found; nodes now also accept `PPL_PRICE_USD`.
+> **Historical / superseded for native asset naming.** Written against a checkout whose native id was still `vls`. Current runtime native asset is **PEOPLE / PPL** (`ppl`). Env `VLS_PRICE_USD` below is the name as found; nodes now also accept `PPL_PRICE_USD`.
 
 ---
 

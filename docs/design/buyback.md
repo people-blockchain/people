@@ -7,7 +7,7 @@ changed from the original design-only text. Owner-approved policy (this batch): 
 unchanged, treasury + liquidity shares fund public buybacks, visible in the explorer. Website
 copy (`/tokenomics`, `/how-it-works`, `/fees`) describes the batched swap-and-split as
 **preliminary** policy; the stablecoin launch fee itself is live, with an owner-approved price
-(5.00 USD token launch, 10.00 USD NFT mint — owner decision, 2026-10-12) and is People-network-only for
+(5.00 USD token launch, 10.00 USD NFT mint — owner decision, 2026-10-12) and is PEOPLE-network-only for
 now; cross-chain stablecoin payment (Ethereum, Polygon, Tron, TON, Solana) is not built yet.
 
 **OWNER DECISION (2026-10-12):** the token/NFT launch fee paid in USDC/USDT goes **100%**
@@ -74,7 +74,7 @@ module.** Reasons:
   transaction: easy to audit, easy to pause (don't sign), easy to change cadence or venue later
   without a chain upgrade.
 
-Two multisig-shaped things already exist on People and must not be confused:
+Two multisig-shaped things already exist on PEOPLE and must not be confused:
 
 | Name | Kind | Holds | Used for |
 | --- | --- | --- | --- |
@@ -112,7 +112,7 @@ per the hard constraint for this batch, those deployed, already-immutable contra
 bytecode are not touched. What changed from the original design-only draft (points 1–3 below are
 the original text, kept for history; point 4 is what actually shipped):
 
-1. **No bridged stablecoin exists on People (97401) for mainnet yet.** `contracts/deployments/97401.json`
+1. **No bridged stablecoin exists on PEOPLE (97401) for mainnet yet.** `contracts/deployments/97401.json`
    has no mainnet USDC/USDT address. On testnet this is no longer a blocker: `TestStablecoin.sol`
    (`contracts/src/samples/TestStablecoin.sol`) already ships two 6-decimal mocks, tUSDC/tUSDT
    (`website/src/data/evm-test-stables-97401.json`), and `StableFeeGateway` accepts any
@@ -162,7 +162,7 @@ the original text, kept for history; point 4 is what actually shipped):
 
 The website (`/create/token`, `/create/nft`, `/fees`) describes this as live on testnet with an
 **owner-approved** stable price (§8) — 5.00 USD for a token launch, 10.00 USD for an NFT mint —
-not yet wired to a mainnet bridged stablecoin, and People-network-only; paying the stable fee
+not yet wired to a mainnet bridged stablecoin, and PEOPLE-network-only; paying the stable fee
 from another chain (Ethereum, Polygon, Tron, TON, Solana) is not built yet.
 
 ## 6. Explorer visibility

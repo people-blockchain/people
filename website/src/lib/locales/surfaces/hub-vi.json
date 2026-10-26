@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "Cách tham gia",
-    "subtitle": "Tham gia People’s Blockchain với tư cách người tham gia cộng đồng — từ điện thoại, máy tính bảng hoặc trình duyệt.",
+    "subtitle": "Tham gia PEOPLE Blockchain với tư cách người tham gia cộng đồng — từ điện thoại, máy tính bảng hoặc trình duyệt.",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "Tạo"
       }
     ],
-    "ctaJoin": "Tham gia People’s Blockchain",
+    "ctaJoin": "Tham gia PEOPLE Blockchain",
     "ctaHow": "Cách hoạt động"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People là tài sản gốc của Blockchain dành cho cộng đồng. Mã: PPL.",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE là tài sản gốc của Blockchain dành cho cộng đồng. Mã: PPL.",
     "cards": [
       {
         "title": "UTILITY",

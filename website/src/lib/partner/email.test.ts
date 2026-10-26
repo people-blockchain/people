@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { renderMagicLinkEmail, resolveMagicLinkLocale } from "./email.ts";
 
-test("magic-link email is People-branded and contains the sign-in URL", () => {
+test("magic-link email is PEOPLE-branded and contains the sign-in URL", () => {
   const mail = renderMagicLinkEmail({
     url: "https://www.peopleblockchain.network/api/auth/callback/resend?token=demo",
     host: "www.peopleblockchain.network",
     locale: "en",
   });
-  assert.match(mail.subject, /People Partner Portal/);
+  assert.match(mail.subject, /PEOPLE Partner Portal/);
   assert.match(mail.html, /Partner Portal sign-in/);
   assert.match(mail.html, /https:\/\/www\.peopleblockchain\.network\/brand\/icon-192\.png/);
   assert.match(mail.html, /https:\/\/www\.peopleblockchain\.network\/api\/auth\/callback\/resend\?token=demo/);

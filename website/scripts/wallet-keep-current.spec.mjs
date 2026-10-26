@@ -71,7 +71,7 @@ test("fresh device: Create/Import still offered", async ({ page }) => {
   await expect(page.getByTestId("wallet-create-import").first()).toBeVisible({ timeout: 15000 });
 });
 
-test("MetaMask connects even when the People network switch fails", async ({ page }) => {
+test("MetaMask connects even when the PEOPLE network switch fails", async ({ page }) => {
   await page.addInitScript((address) => {
     window.__walletCalls = [];
     window.ethereum = {

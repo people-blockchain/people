@@ -32,7 +32,7 @@ SALE_CONTRACT_POLYGON=
 # Cron: POST /api/sale/watch (TronGrid, TON Center, Solana public RPC)
 SALE_CRON_SECRET=
 
-# People chain delivery (testnet / pre-genesis crediting). Never commit the key.
+# PEOPLE chain delivery (testnet / pre-genesis crediting). Never commit the key.
 SALE_DELIVERY_PRIVATE_KEY=
 
 # Optional dedicated RPC for payment verification
@@ -55,6 +55,6 @@ Copy the same names into `website/.env.local` for local checkout testing.
 ## Payment matching
 
 - **EVM:** `Purchased` event on the sale contract; confirmations per chain in `ppl-sale-evm.json`.
-- **Tron / TON / Solana:** unique stable amount (+ memo on TON/Solana when supported) and buyer People `0x` address; watcher job `POST /api/sale/watch` with `Authorization: Bearer $SALE_CRON_SECRET`.
+- **Tron / TON / Solana:** unique stable amount (+ memo on TON/Solana when supported) and buyer PEOPLE `0x` address; watcher job `POST /api/sale/watch` with `Authorization: Bearer $SALE_CRON_SECRET`.
 
-Delivery uses `SALE_DELIVERY_PRIVATE_KEY` to submit a People `transfer` when configured; otherwise orders stay `paid` until manual settlement.
+Delivery uses `SALE_DELIVERY_PRIVATE_KEY` to submit a PEOPLE `transfer` when configured; otherwise orders stay `paid` until manual settlement.

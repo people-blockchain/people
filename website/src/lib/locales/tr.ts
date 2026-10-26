@@ -119,7 +119,7 @@ export const tr: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "PEOPLE'S",
     "headlineSub": "BLOCKCHAIN",
     "lead": "İçerik üreticilerini, toplulukları, çok varlıklı ekonomik sistemleri ve doğrulanmış insan ağı katılımını birbirine bağlamak için tasarlanmış blokzincir altyapısı.",
@@ -1073,7 +1073,7 @@ export const tr: LocaleContent = {
     "title": "Teknik Mimari",
     "subtitle": "Topluluk için blokzincir, üç aşamalı katı bir mimari sıra üzerinden gelişir. Her kademe, altında kurulan temeller üzerinde deterministik olarak inşa edilir.",
     "umbrellaTitle": "Çatı Proje",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Protokol Yöneticisi",
     "umbrellaDesc": "Topluluk için blokzincirin markası ve yöneticisi.",
     "targetTitle": "Temel Ağ Hedefi",

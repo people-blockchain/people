@@ -37,7 +37,7 @@
   "helpLock": "Một lượng LP tối thiểu nhỏ bị khóa để nhóm không thể bị rút hết. Thanh khoản từ đường cong phát hành cũng bị khóa.",
   "tokensEmpty": "Chưa có token trên mạng. Phát hành trong Token Factory — pool swap xuất hiện khi có thanh khoản.",
   "searchTokens": "Tìm theo tên hoặc ký hiệu",
-  "networkBadge": "Mạng People · chain 97401",
+  "networkBadge": "Mạng PEOPLE · chain 97401",
   "selectToken": "Chọn token",
   "closePicker": "Đóng",
   "gasFeeNote": "Trả gas bằng PPL khi ký"

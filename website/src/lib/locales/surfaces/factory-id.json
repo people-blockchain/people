@@ -82,7 +82,7 @@
     "payWithPpl": "PPL",
     "stableFeeLabel": "Biaya stablecoin",
     "stableFeeBuybackNote": "100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik.",
-    "stableFeeNetworkNote": "Untuk saat ini hanya berfungsi di jaringan People. Membayar dari rantai lain (Ethereum, Polygon, Tron, TON, Solana) akan hadir nanti.",
+    "stableFeeNetworkNote": "Untuk saat ini hanya berfungsi di jaringan PEOPLE. Membayar dari rantai lain (Ethereum, Polygon, Tron, TON, Solana) akan hadir nanti.",
     "approvingStable": "Menyetujui…",
     "payingStableFee": "Membayar biaya…",
     "creatingAfterStableFee": "Membuat…",

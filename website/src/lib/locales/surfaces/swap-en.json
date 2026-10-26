@@ -37,7 +37,7 @@
   "helpLock": "A small minimum of LP shares stays locked so the pool cannot be emptied. Liquidity that arrived from a bonding-curve migration stays locked too.",
   "tokensEmpty": "No tokens on this network yet. Launch one in Token Factory — swap pools appear after liquidity is added.",
   "searchTokens": "Search by name or symbol",
-  "networkBadge": "People network · chain 97401",
+  "networkBadge": "PEOPLE network · chain 97401",
   "selectToken": "Select token",
   "closePicker": "Close",
   "gasFeeNote": "Paid as gas in PPL when you sign"

@@ -5,18 +5,18 @@
 **Author / Role:** Antigravity / Senior Blockchain Engineer & Technical Architect  
 **Repository Baseline:** PEOPLE Network
 
-**Target Platform:** People's Blockchain
+**Target Platform:** PEOPLE Blockchain
 **Working reference:** `docs/TOKEN-ECONOMY.md` (not an Approved Public Specification)  
 
 > **Historical / superseded for native asset naming.** Current runtime native asset is
-> **People** (`PPL`, id `ppl`). This report describes Phase 2 as built against the then-legacy
+> **PEOPLE** (`PPL`, id `ppl`). This report describes Phase 2 as built against the then-legacy
 > on-chain id `vls`. Do not treat `vls`/`VLS` below as the live asset identity.
 
 ---
 
 ## 1. Executive Summary
 
-Phase 2 introduces the **Token Factory** and **Virtual Constant-Product Bonding Curve** to People's Blockchain.
+Phase 2 introduces the **Token Factory** and **Virtual Constant-Product Bonding Curve** to PEOPLE Blockchain.
 
 Building directly upon the multi-asset ledger and fee-routing foundation delivered in Phase 1, Phase 2 implements:
 1. Protocol-level `tokenCreate` transaction with deterministic 5-way token allocation (60% Curve, 10% Community Pool, 15% Creator, 10% Liquidity Reserve, 5% Ecosystem Reserve).

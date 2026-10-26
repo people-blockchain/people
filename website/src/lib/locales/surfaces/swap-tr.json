@@ -37,7 +37,7 @@
   "helpLock": "Havuzun boşaltılamaması için küçük bir asgari LP payı kilitli kalır. Bağlanma eğrisi göçünden gelen likidite de kilitli kalır.",
   "tokensEmpty": "Ağda henüz token yok. Token Factory’de başlatın — swap havuzları likiditeyle gelir.",
   "searchTokens": "Ad veya sembolle ara",
-  "networkBadge": "People ağı · zincir 97401",
+  "networkBadge": "PEOPLE ağı · zincir 97401",
   "selectToken": "Token seç",
   "closePicker": "Kapat",
   "gasFeeNote": "İmzalarken PPL gazı olarak ödenir"

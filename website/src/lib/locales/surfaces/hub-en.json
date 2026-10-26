@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "How to participate",
-    "subtitle": "Join People’s Blockchain as a community participant — from a phone, tablet, or browser.",
+    "subtitle": "Join PEOPLE Blockchain as a community participant — from a phone, tablet, or browser.",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "Create"
       }
     ],
-    "ctaJoin": "Join People’s Blockchain",
+    "ctaJoin": "Join PEOPLE Blockchain",
     "ctaHow": "How it works"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People is the native asset of PEOPLE Blockchain. Ticker: PPL.",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE is the native asset of PEOPLE Blockchain. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",

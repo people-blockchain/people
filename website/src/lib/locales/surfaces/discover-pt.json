@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Envie pequenas gorjetas de agradecimento a criadores e equipas na rede People.",
+      "title": "PEOPLE Tips",
+      "summary": "Envie pequenas gorjetas de agradecimento a criadores e equipas na rede PEOPLE.",
       "idea": "Agradeça com um token feito para microapoio — concertos, streams e mantenedores open source.",
       "audience": "Fãs, patronos e equipas que recolhem muitos «obrigados» pequenos.",
       "whyToken": "As gorjetas ficam no livro-razão da comunidade, não num saldo fechado de app.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Troque tokens de teste da comunidade por PPL no navegador.",
       "idea": "Troque tokens demo da comunidade por PPL no navegador — sem conta de exchange separada.",
       "audience": "Quem experimenta ativos de testnet antes de se comprometer com um projeto.",

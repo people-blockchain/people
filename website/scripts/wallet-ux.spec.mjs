@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {createECDH,createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 
-// Covers the sheet-based People Wallet (Send / Receive / Settings dialogs,
+// Covers the sheet-based PEOPLE Wallet (Send / Receive / Settings dialogs,
 // Tokens / NFT / Activity tabs). Chain reads are mocked on both public
 // backends: `/api/evm/compat/*` (default cosmos-evm) and `/api/network/*`
 // (legacy people-node). Nothing here broadcasts a transaction: the test stops at

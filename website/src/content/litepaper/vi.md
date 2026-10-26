@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "Blockchain nơi mỗi người dùng là một con người đã được xác minh. Sở hữu bởi con người, không phải các quỹ VC."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **Blockchain nơi mỗi người dùng là một con người đã được xác minh.**
 > **Sở hữu bởi con người, không phải các quỹ VC.**
@@ -63,7 +63,7 @@ Những gì bạn có thể làm mà không cần mã:
 
 ## 4. Công nghệ
 
-**Cosmos EVM.** People chạy trên ngăn xếp Cosmos EVM: hợp đồng thông minh tương thích Ethereum và địa chỉ 0x trên chuỗi Cosmos.
+**Cosmos EVM.** PEOPLE chạy trên ngăn xếp Cosmos EVM: hợp đồng thông minh tương thích Ethereum và địa chỉ 0x trên chuỗi Cosmos.
 
 | Tham số | Giá trị |
 |---|---|
@@ -185,7 +185,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 
 Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. Nguồn dưới đây.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Phí bị đốt cháy | Phí cơ sở bị đốt cháy ¹ | 50% phí cơ sở bị đốt cháy ² | **0% bị đốt cháy** |
 | Ai nhận phí | Trình xác thực nhận phí ưu tiên (mẹo) ¹ | Trình xác thực nhận 50% phí cơ sở và 100% phí ưu tiên ² | **Trình xác thực 30 · Cộng đồng 25 · Kho tài sản 20 · Tính thanh khoản 10 · Tăng trưởng 15** |
