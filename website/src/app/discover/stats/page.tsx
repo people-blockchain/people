@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { DiscoverStatsPanel } from "@/components/discover/DiscoverStatsPanel";
 
 export const metadata: Metadata = {
-  title: "Feed metrics | People",
+  title: "Feed metrics | PEOPLE",
   robots: { index: false, follow: false },
 };
 

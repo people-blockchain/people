@@ -51,9 +51,9 @@ test("the treasury is a 2-of-3 multisig created before mainnet, with no address 
   assert.match(copy, /2-of-3/, "the approved 2-of-3 threshold must be stated");
   assert.match(copy, /2-из-3/, "the approved 2-of-3 threshold must be stated (RU)");
   assert.doesNotMatch(copy, /0x[0-9a-fA-F]{6,}/, "no address may appear on this page yet");
-  assert.match(copy, /2-of-3 multisig on the People network/);
+  assert.match(copy, /2-of-3 multisig on the PEOPLE network/);
   assert.doesNotMatch(copy, /created before mainnet/);
-  assert.match(copy, /мультисиг 2 из 3 в сети People/);
+  assert.match(copy, /мультисиг 2 из 3 в сети PEOPLE/);
 });
 
 test("the audit names three AI models and never claims an external audit passed", () => {

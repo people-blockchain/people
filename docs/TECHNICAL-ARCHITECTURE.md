@@ -1,17 +1,17 @@
-# PEOPLE'S BLOCKCHAIN — TECHNICAL ARCHITECTURE v0.1
+# PEOPLE BLOCKCHAIN — TECHNICAL ARCHITECTURE v0.1
 
 **Status:** Working architecture specification
 **Date:** 2026-10-14 (runtime status); body still includes legacy design history
 **Base (historical):** PEOPLE Network reference codebase
 **Current runtime:** Cosmos EVM testnet chain id **97401** (`chain/`, public RPC + Solidity contracts)
-**Network:** People's Blockchain
-**Brand:** People
-**Native asset:** People (ticker **PPL**)
+**Network:** PEOPLE Blockchain
+**Brand:** PEOPLE
+**Native asset:** PEOPLE (ticker **PPL**)
 
-> **Terminology:** runtime native asset is **People** / **PPL** / id `ppl`. Legacy `vls` /
+> **Terminology:** runtime native asset is **PEOPLE** / **PPL** / id `ppl`. Legacy `vls` /
 > `VLS` / `Vallis` appear only in historical notes. See `docs/TERMINOLOGY.md`.
 
-> This document maps the People's Blockchain concept onto the existing PEOPLE Network codebase. It deliberately separates **what already exists**, **what should be preserved**, and **what must be added or redesigned**. It is an architectural source of truth for AI coding agents. Agents must not invent protocol economics that are not explicitly approved in the project documents.
+> This document maps the PEOPLE Blockchain concept onto the existing PEOPLE Network codebase. It deliberately separates **what already exists**, **what should be preserved**, and **what must be added or redesigned**. It is an architectural source of truth for AI coding agents. Agents must not invent protocol economics that are not explicitly approved in the project documents.
 
 ---
 
@@ -38,7 +38,7 @@ Conceptually:
 ```text
 PEOPLE Network Reference Codebase
         ↓
-People's Blockchain
+PEOPLE Blockchain
         ├── Preserve working blockchain primitives
         ├── Redesign economic layer
         ├── Add participation protocol
@@ -115,7 +115,7 @@ lightValidatorWeightMultiplier = 0.5
 attestationFinalityThreshold = 0.67
 ```
 
-These values are **reference implementation parameters only** and must not be assumed to be People's Blockchain mainnet parameters.
+These values are **reference implementation parameters only** and must not be assumed to be PEOPLE Blockchain mainnet parameters.
 
 ### Decision
 
@@ -139,7 +139,7 @@ Reference implementation includes:
 
 This mechanism is useful for validator security and should be retained as a foundation.
 
-### Important People's Blockchain rule
+### Important PEOPLE Blockchain rule
 
 **Mobile participants must not be treated like validators.**
 
@@ -179,7 +179,7 @@ vote
 
 ### Future transaction families
 
-People's Blockchain will need protocol transaction types for at least:
+PEOPLE Blockchain will need protocol transaction types for at least:
 
 ```text
 registerParticipant
@@ -300,7 +300,7 @@ Blockchain
   → Earn
 ```
 
-### People's Blockchain mental model
+### PEOPLE Blockchain mental model
 
 ```text
 Participate
@@ -336,7 +336,7 @@ A user may later become a real validator by operating a supported node on a comp
 
 ---
 
-## 11. New protocol layer: People's Participation Protocol
+## 11. New protocol layer: PEOPLE Participation Protocol
 
 This is the main new subsystem.
 
@@ -370,7 +370,7 @@ The formal mathematical simulation model and invariants are documented in `ECONO
 
 ## 12. Identity and Anti-Sybil layer
 
-The reference PEOPLE Network code does not provide the consumer-grade proof-of-human system required by People's Blockchain.
+The reference PEOPLE Network code does not provide the consumer-grade proof-of-human system required by PEOPLE Blockchain.
 
 We therefore need a new identity/anti-Sybil subsystem.
 
@@ -421,7 +421,7 @@ Core responsibilities:
 
 ### Architectural principle
 
-A user-created token is an application-level asset secured by the People's Blockchain.
+A user-created token is an application-level asset secured by the PEOPLE Blockchain.
 
 It is not a new blockchain.
 
@@ -526,7 +526,7 @@ Media storage can use external/object storage/content-addressed infrastructure i
 
 The current PEOPLE Network implementation uses a simple account-balance model with the native **PPL** asset and validator issuance.
 
-People's Blockchain requires this layer to evolve into the economic model described in `ECONOMICS.md`.
+PEOPLE Blockchain requires this layer to evolve into the economic model described in `ECONOMICS.md`.
 
 The implementation must eventually support separate accounting concepts for:
 
@@ -567,7 +567,7 @@ This prevents the misconception that everyone with a phone is securing consensus
 
 The current PEOPLE Network governance is validator/stake-oriented.
 
-It may be retained for early network administration, but long-term governance needs a dedicated design for People's Blockchain.
+It may be retained for early network administration, but long-term governance needs a dedicated design for PEOPLE Blockchain.
 
 Do not assume that one-unit-one-vote or pure stake-weighted governance is the final model.
 
@@ -787,7 +787,7 @@ Existing code is **not automatically the intended final behavior**.
 
 ## 28. Current conclusion
 
-The existing PEOPLE Network codebase is a useful blockchain foundation, not the finished People's Blockchain.
+The existing PEOPLE Network codebase is a useful blockchain foundation, not the finished PEOPLE Blockchain.
 
 The most important architectural decision is to build the project as two clearly separated layers:
 
@@ -797,7 +797,7 @@ Consensus / P2P / Blocks / Validators / Storage / Wallet
 
                     +
 
-PEOPLE'S ECONOMY
+PEOPLE ECONOMY
 Participation / Community Pool / Token Factory / NFT / DEX / Rewards
 ```
 

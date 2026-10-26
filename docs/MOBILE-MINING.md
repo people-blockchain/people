@@ -1,11 +1,11 @@
-# PEOPLE'S BLOCKCHAIN — MOBILE MINING v0.1
+# PEOPLE BLOCKCHAIN — MOBILE MINING v0.1
 
-> **Terminology:** the brand is **People**, the network is **People's Blockchain** and the
-> native token is **People**, ticker **PPL** (`docs/TERMINOLOGY.md`).
+> **Terminology:** the brand is **PEOPLE**, the network is **PEOPLE Blockchain** and the
+> native token is **PEOPLE**, ticker **PPL** (`docs/TERMINOLOGY.md`).
 
 ## 1. Purpose
 
-Mobile Mining is the user participation layer of People's Blockchain.
+Mobile Mining is the user participation layer of PEOPLE Blockchain.
 
 Its purpose is to let ordinary users participate in the network from a phone, tablet, or browser without requiring specialized hardware.
 

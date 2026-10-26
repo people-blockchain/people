@@ -46,7 +46,7 @@
     "belowMin": "Fiyat teklifini görmek için tutar girin.",
     "cta": "Satın almak için cüzdan bağlayın",
     "ctaConnected": "PPL satın al",
-    "wallets": "People Wallet (Google veya e-posta ile giriş) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (Google veya e-posta ile giriş) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Ödeme yöntemi",
     "payOnBase": "Base'de öde",
     "payFromOther": "Başka bir ağdan öde",
@@ -107,7 +107,7 @@
     "termsLink": "Koşulları",
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
-    "noWalletHint": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir People Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
+    "noWalletHint": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
     "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
     "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık US$0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3).",
@@ -127,7 +127,7 @@
     "wrongNetwork": "Satın alma Base ağında yapılır. Cüzdanınız başka bir ağda.",
     "switchToBase": "Base'e geç",
     "switchRejected": "Ağ değiştirilmedi. Satın alma için Base gerekir — tekrar deneyin.",
-    "embeddedNoBase": "People Wallet henüz Base ağında ödeme yapamıyor. Satın almak için MetaMask, Trust Wallet veya WalletConnect bağlayın."
+    "embeddedNoBase": "PEOPLE Wallet henüz Base ağında ödeme yapamıyor. Satın almak için MetaMask, Trust Wallet veya WalletConnect bağlayın."
   },
   "whyPriceRises": {
     "title": "Fiyat neden yükselir",

@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 
 const EXT_COPY: Record<string, { noApp: string; install: string; timeout: string; useGoogle: string }> = {
   en: {
-    noApp: "{wallet} did not open. On a phone without the {wallet} app, install it first, or use the People Wallet above (Continue with Google) — it needs no app.",
+    noApp: "{wallet} did not open. On a phone without the {wallet} app, install it first, or use the PEOPLE Wallet above (Continue with Google) — it needs no app.",
     install: "Install {wallet}",
     timeout: "{wallet} did not answer. Close this window and try again, or use Continue with Google above.",
     useGoogle: "Use Continue with Google",
   },
   ru: {
-    noApp: "{wallet} не открылся. Если на телефоне нет приложения {wallet}, сначала установите его — или используйте People Wallet выше («Продолжить с Google»), приложение не нужно.",
+    noApp: "{wallet} не открылся. Если на телефоне нет приложения {wallet}, сначала установите его — или используйте PEOPLE Wallet выше («Продолжить с Google»), приложение не нужно.",
     install: "Установить {wallet}",
     timeout: "{wallet} не ответил. Закройте окно и попробуйте снова или войдите через Google выше.",
     useGoogle: "Войти через Google",

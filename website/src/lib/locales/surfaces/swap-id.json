@@ -37,7 +37,7 @@
   "helpLock": "Sejumlah kecil saham LP minimum tetap terkunci agar kolam tidak dapat dikosongkan. Likuiditas dari migrasi kurva peluncuran juga tetap terkunci.",
   "tokensEmpty": "Belum ada token di jaringan. Luncurkan di Token Factory — pool swap muncul setelah likuiditas.",
   "searchTokens": "Cari nama atau simbol",
-  "networkBadge": "Jaringan People · chain 97401",
+  "networkBadge": "Jaringan PEOPLE · chain 97401",
   "selectToken": "Pilih token",
   "closePicker": "Tutup",
   "gasFeeNote": "Dibayar sebagai gas PPL saat menandatangani"

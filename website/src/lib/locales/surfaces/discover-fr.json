@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Envoyez de petits pourboires de remerciement aux créateurs et équipes sur le réseau People.",
+      "title": "PEOPLE Tips",
+      "summary": "Envoyez de petits pourboires de remerciement aux créateurs et équipes sur le réseau PEOPLE.",
       "idea": "Dites merci avec un jeton pensé pour le micro-soutien — concerts, streams et mainteneurs open source.",
       "audience": "Fans, mécènes et équipes qui collectent beaucoup de petits mercis.",
       "whyToken": "Les pourboires restent sur le registre de la communauté, pas dans un solde d’app fermé.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Échangez des jetons communautaires de test contre des PPL dans le navigateur.",
       "idea": "Échangez des jetons démo communautaires contre des PPL dans le navigateur, sans compte d’exchange séparé.",
       "audience": "Ceux qui essaient des actifs testnet avant de s’engager dans un projet.",

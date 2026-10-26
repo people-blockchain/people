@@ -304,7 +304,7 @@ const overlays = {
     releaseEscrow: "An Shop freigeben",
     refundEscrow: "Erstattung anfordern",
     disputeEscrow: "Streit eröffnen",
-    escrowLocked: "Mittel im People's-Blockchain-Testnet gesperrt.",
+    escrowLocked: "Mittel im PEOPLE-Blockchain-Testnet gesperrt.",
     visitsLeft: "Besuche übrig: {{n}}",
     founderWelcome: "Sie sind Million Founders Nr. {{n}}.",
     founderAlready: "Gründer Nr. {{n}}",

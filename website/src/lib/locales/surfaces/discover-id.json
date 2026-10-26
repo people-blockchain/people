@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Kirim tip terima kasih kecil ke kreator dan tim di jaringan People.",
+      "title": "PEOPLE Tips",
+      "summary": "Kirim tip terima kasih kecil ke kreator dan tim di jaringan PEOPLE.",
       "idea": "Ucapkan terima kasih dengan token untuk dukungan mikro — konser, streaming, dan maintainer open source.",
       "audience": "Penggemar, patron, dan tim yang mengumpulkan banyak ucapan terima kasih kecil.",
       "whyToken": "Tip tetap di buku besar komunitas, bukan saldo aplikasi tertutup.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Tukar token komunitas uji ke PPL langsung di browser.",
       "idea": "Tukar token demo komunitas ke PPL di browser — tanpa akun exchange terpisah.",
       "audience": "Orang yang mencoba aset testnet sebelum berkomitmen pada proyek.",

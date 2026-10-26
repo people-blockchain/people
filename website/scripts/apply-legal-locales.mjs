@@ -75,7 +75,7 @@ const chrome = {
     terms: { title: "Conditions d'utilisation", subtitle: "Règles d'utilisation du site PEOPLE Blockchain et des outils partenaires pendant la phase test/bêta.", backHome: "Retour à l'accueil", relatedTerms: "Conditions d'utilisation", relatedPrivacy: "Politique de confidentialité", contactTitle: "Contact", saleTitle: "Vente publique de PPL" },
   },
   de: {
-    privacy: { title: "Datenschutz", subtitle: "Wie die People's-Blockchain-Website Informationen beim Surfen, Anmelden oder Nutzen von Partner-Tools verarbeitet.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt" },
+    privacy: { title: "Datenschutz", subtitle: "Wie die PEOPLE-Blockchain-Website Informationen beim Surfen, Anmelden oder Nutzen von Partner-Tools verarbeitet.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt" },
     terms: { title: "Nutzungsbedingungen", subtitle: "Regeln für die Website PEOPLE Blockchain und Partner-Tools, solange das Netz im Test/Beta ist.", backHome: "Zur Startseite", relatedTerms: "Nutzungsbedingungen", relatedPrivacy: "Datenschutz", contactTitle: "Kontakt", saleTitle: "Öffentlicher PPL-Verkauf" },
   },
   it: {

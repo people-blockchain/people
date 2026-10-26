@@ -95,7 +95,7 @@ the site theme is a class on `<html>`, so a `prefers-color-scheme` media query
 would desync from the user's toggle.
 
 The header deliberately uses the **compact** lockup. In the approved artwork the
-tagline is ¼ of PEOPLE's cap height, which at header size is a sub-pixel stroke
+tagline is ¼ of PEOPLE cap height, which at header size is a sub-pixel stroke
 that renders as a smear; it is only used where it is large enough to read.
 
 ### Social cards

@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "如何参与",
-    "subtitle": "以社区参与者身份加入 People’s Blockchain — 用手机、平板或浏览器。",
+    "subtitle": "以社区参与者身份加入 PEOPLE Blockchain — 用手机、平板或浏览器。",
     "steps": [
       {
         "num": "01",
@@ -147,7 +147,7 @@
         "cta": "创建"
       }
     ],
-    "ctaJoin": "加入 People’s Blockchain",
+    "ctaJoin": "加入 PEOPLE Blockchain",
     "ctaHow": "如何运作"
   },
   "whatIs": {
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "People (PPL)",
-    "summary": "People 是 社区区块链 的原生资产。代码：PPL。",
+    "title": "PEOPLE (PPL)",
+    "summary": "PEOPLE 是 社区区块链 的原生资产。代码：PPL。",
     "cards": [
       {
         "title": "UTILITY",

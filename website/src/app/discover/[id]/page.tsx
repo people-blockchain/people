@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const detail = await loadDiscoverProjectDetailForPage(id);
   const title = discoverProjectTitleForMetadata(detail, id);
   return {
-    title: `${title} | People`,
+    title: `${title} | PEOPLE`,
     alternates: { canonical: `/discover/${id}` },
   };
 }

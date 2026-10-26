@@ -34,7 +34,7 @@ test("no keyless rpc.ankr.com URL remains in the website sources", () => {
   assert.deepEqual(offenders, []);
 });
 
-test("Web3Auth chain config targets the People EVM chain with a keyless https RPC", async () => {
+test("Web3Auth chain config targets the PEOPLE EVM chain with a keyless https RPC", async () => {
   delete process.env.NEXT_PUBLIC_EVM_RPC_URL;
   delete process.env.EVM_RPC_URL;
   const { buildWeb3AuthChainConfig } = await import("../src/lib/web3auth-chain-config.ts");

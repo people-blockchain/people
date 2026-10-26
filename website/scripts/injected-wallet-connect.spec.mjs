@@ -71,7 +71,7 @@ for (const viewport of VIEWPORTS) {
       const calls = await walletCallMethods(page);
       expect(calls).toContain("eth_requestAccounts");
       // Connecting never changes the network: the PPL sale runs on Base, and Base is requested only
-      // when the user presses Buy or "Switch to Base". The People chain is never added on connect.
+      // when the user presses Buy or "Switch to Base". The PEOPLE chain is never added on connect.
       expect(calls).not.toContain("wallet_switchEthereumChain");
       expect(calls).not.toContain("wallet_addEthereumChain");
       const chainCalls = await page.evaluate(() =>

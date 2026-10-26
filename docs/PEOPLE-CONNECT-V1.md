@@ -17,7 +17,7 @@ All responses use `Cache-Control: no-store`; no permissive CORS. Browser actions
 Every body includes `version:1` and `action` below. Hex IDs/capabilities have the lengths above. ISO timestamps are UTC RFC3339; clients validate them, compare with local time and reject expired values. Addresses are nonzero EIP-55 validated, normalized checksum form. Signatures are 65-byte `0x` hex EIP-191 (no custom crypto).
 
 1. Browser `create`: no other fields. Returns `{id,browserToken,link,expiresAt}`.
-2. Phone `challenge`: `{id,pairToken,address}`. Returns `{id,origin,chainId:97401,address,message,nonce,issuedAt,expiresAt}`. `message` is canonical SIWE/ERC-4361: first-party domain, that address, fixed statement `Connect People Wallet to the PEOPLE website. No transactions are authorized.`, URI `<origin>/connect/mobile`, version 1, chain 97401, server nonce, issued-at and expiration-time. Client verifies every field/statement, then shows the message and domain before authenticating.
+2. Phone `challenge`: `{id,pairToken,address}`. Returns `{id,origin,chainId:97401,address,message,nonce,issuedAt,expiresAt}`. `message` is canonical SIWE/ERC-4361: first-party domain, that address, fixed statement `Connect PEOPLE Wallet to the PEOPLE website. No transactions are authorized.`, URI `<origin>/connect/mobile`, version 1, chain 97401, server nonce, issued-at and expiration-time. Client verifies every field/statement, then shows the message and domain before authenticating.
 3. Phone `connect`: `{id,pairToken,address,message,signature,phoneToken}`. Phone generates a fresh independent random capability **before** submission. Server reconstructs the exact SIWE message, verifies signature/account, then atomically consumes the pairing and establishes one session. Returns `{session}`. After an uncertain response, phone may `poll` with its pre-generated token; never sign/connect again automatically.
 4. Browser `status`: `{id,browserToken}`. Returns `{state,session?,request?}`. Session shape below. Pending pairing exposes no phone capability.
 5. Browser `request`: `{id,browserToken,message}`. Message is nonempty UTF-8, at most 8192 bytes, no Unicode Cc/Cf characters except LF/TAB, no unpaired surrogates. One pending request per session; resolved/expired request can be replaced. Returns `{request}`.
@@ -45,7 +45,7 @@ The following is an exact template with LF separators and **no trailing LF**, ex
 ${origin} wants you to sign in with your Ethereum account:
 ${address}
 
-Connect People Wallet to the PEOPLE website. No transactions are authorized.
+Connect PEOPLE Wallet to the PEOPLE website. No transactions are authorized.
 
 URI: ${origin}/connect/mobile
 Version: 1

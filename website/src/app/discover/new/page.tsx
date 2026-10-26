@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { DiscoverCreateForm } from "@/components/discover/DiscoverCreateForm";
 
 export const metadata: Metadata = {
-  title: "Share a project | People",
+  title: "Share a project | PEOPLE",
   robots: { index: false, follow: true },
 };
 

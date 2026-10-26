@@ -88,8 +88,8 @@
       ]
     },
     "discover-seed-v1-tpitp": {
-      "title": "People Tips",
-      "summary": "Gửi tip cảm ơn nhỏ cho người sáng tạo và đội ngũ trên mạng People.",
+      "title": "PEOPLE Tips",
+      "summary": "Gửi tip cảm ơn nhỏ cho người sáng tạo và đội ngũ trên mạng PEOPLE.",
       "idea": "Cảm ơn bằng token cho hỗ trợ vi mô — concert, stream và maintainer mã nguồn mở.",
       "audience": "Fan, nhà tài trợ và đội nhận nhiều lời cảm ơn nhỏ.",
       "whyToken": "Tip nằm trong sổ cái của cộng đồng thay vì số dư kín trong app.",
@@ -112,7 +112,7 @@
       ]
     },
     "discover-seed-v1-swap": {
-      "title": "People Swap",
+      "title": "PEOPLE Swap",
       "summary": "Đổi token cộng đồng thử sang PPL ngay trên trình duyệt.",
       "idea": "Đổi token demo cộng đồng lấy PPL trên trình duyệt — không cần tài khoản sàn riêng.",
       "audience": "Người thử tài sản testnet trước khi gắn với một dự án.",

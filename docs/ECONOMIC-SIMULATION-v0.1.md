@@ -1,12 +1,12 @@
-# PEOPLE'S BLOCKCHAIN — ECONOMIC SIMULATION & SPECIFICATION v0.1
+# PEOPLE BLOCKCHAIN — ECONOMIC SIMULATION & SPECIFICATION v0.1
 
 **Status:** Working simulation and economic specification  
 **Version:** 0.1  
 **Date:** 2026-09-22  
 **Source-of-Truth Level:** Protocol Specification Document  
 
-> **Terminology:** the brand is **People**, the network is **People's Blockchain** and the
-> native token is **People**, ticker **PPL** (`docs/TERMINOLOGY.md`).
+> **Terminology:** the brand is **PEOPLE**, the network is **PEOPLE Blockchain** and the
+> native token is **PEOPLE**, ticker **PPL** (`docs/TERMINOLOGY.md`).
 
 > [!IMPORTANT]
 > **SIMULATION PARAMETERS ONLY NOTICE**  
@@ -16,7 +16,7 @@
 
 ## 1. Dynamic Participant Pool Architecture
 
-The People's Blockchain connects real network usage to participant incentives via a deterministic, multi-stage value pipeline:
+The PEOPLE Blockchain connects real network usage to participant incentives via a deterministic, multi-stage value pipeline:
 
 ```text
 Network Activity
@@ -138,7 +138,7 @@ $$\text{Power} = \min\left(\text{Base} \times \sqrt{\text{Activity}} \times \sqr
 
 ## 4. Humanity and Sybil Resistance Layer
 
-A fundamental architectural principle of People's Blockchain is the separation between identity verification and economic reward calculation:
+A fundamental architectural principle of PEOPLE Blockchain is the separation between identity verification and economic reward calculation:
 
 ```text
 ┌────────────────────────────────────────────────────────┐

@@ -209,11 +209,11 @@ export async function clientNav(page, linkName, fallbackPath) {
 }
 
 /**
- * Connects the embedded People Wallet on a page that offers it: a button when
+ * Connects the embedded PEOPLE Wallet on a page that offers it: a button when
  * an unlocked session exists, a link to /wallet when it does not.
  */
 export async function connectEmbeddedWallet(page) {
-  const button = page.getByRole("button", { name: "People Wallet (this browser)" });
+  const button = page.getByRole("button", { name: "PEOPLE Wallet (this browser)" });
   if (await button.count()) {
     await button.first().click();
     await page.waitForTimeout(2000);
@@ -240,7 +240,7 @@ async function openSheet(page, trigger, sheet) {
 }
 
 /**
- * Drives the site's own People Wallet onboarding ("Import wallet"): a 64-char
+ * Drives the site's own PEOPLE Wallet onboarding ("Import wallet"): a 64-char
  * hex key plus a local password. Nothing about the key is ever emitted.
  */
 export async function importPeopleWallet(page) {
@@ -258,7 +258,7 @@ export async function importPeopleWallet(page) {
 }
 
 /**
- * Unlocks an already-stored People Wallet (same browser context only). A
+ * Unlocks an already-stored PEOPLE Wallet (same browser context only). A
  * reloaded /wallet shows the onboarding screen with an "Unlock" entry instead
  * of the wallet itself, so every flow after the first has to go through here.
  */

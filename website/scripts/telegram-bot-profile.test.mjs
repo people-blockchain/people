@@ -63,7 +63,7 @@ test("applyProfile is idempotent and never leaks the token", async () => {
 test("verifyProfile reads back the name and commands per locale", async () => {
   const fetchImpl = async (url) => {
     const method = String(url).split("/").pop();
-    if (method === "getMyName") return new Response(JSON.stringify({ ok: true, result: { name: "People Blockchain Helper" } }));
+    if (method === "getMyName") return new Response(JSON.stringify({ ok: true, result: { name: "PEOPLE Blockchain Helper" } }));
     return new Response(
       JSON.stringify({ ok: true, result: COMMANDS.map((c) => ({ command: c.command, description: c.label.en })) }),
     );
@@ -71,7 +71,7 @@ test("verifyProfile reads back the name and commands per locale", async () => {
   const verified = await verifyProfile("1:2", { fetchImpl });
   assert.equal(verified.length, SITE_LOCALES.length);
   for (const row of verified) {
-    assert.equal(row.name, "People Blockchain Helper");
+    assert.equal(row.name, "PEOPLE Blockchain Helper");
     assert.deepEqual(row.commands, ["verify", "support", "bug"]);
   }
 });

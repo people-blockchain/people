@@ -6,11 +6,11 @@ import { isAuthConfigured, isGoogleConfigured, isResendConfigured } from "@/lib/
 import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Sign in | People",
-  description: "Sign in with Google or email for your People Wallet and partner cabinet.",
+  title: "Sign in | PEOPLE",
+  description: "Sign in with Google or email for your PEOPLE Wallet and partner cabinet.",
   robots: { index: false, follow: false },
   openGraph: {
-    title: "Sign in | People",
+    title: "Sign in | PEOPLE",
     siteName: SITE_NAME,
   },
 };

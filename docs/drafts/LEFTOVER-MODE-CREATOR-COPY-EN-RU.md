@@ -18,7 +18,7 @@
 
 ### Short launch summary (optional blurb above submit)
 
-When you launch a token on People:
+When you launch a token on PEOPLE:
 
 1. **10%** of supply goes to your token’s **community pool** at creation.  
 2. You choose what happens to **curve leftovers** after AMM migration and to **unsold** tokens if the curve is finalized after **180 days**: **burn** (default) or **community pool**.  
@@ -51,7 +51,7 @@ At launch, a creator may opt into an issuer referral program: by default **5%** 
 
 ### Краткое резюме запуска
 
-При запуске токена в People:
+При запуске токена в PEOPLE:
 
 1. **10%** эмиссии сразу идёт в **пул сообщества** вашего токена.  
 2. Вы выбираете судьбу **остатка кривой** после миграции в AMM и **нераспроданного** при финализации через **180 дней**: **сжигание** (по умолчанию) или **пул сообщества**.  

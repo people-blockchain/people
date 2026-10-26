@@ -17,7 +17,7 @@ import { partnerSharePath, REFERRAL_COOKIE } from "@/lib/partner/referral";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Partner cabinet | People",
+  title: "Partner cabinet | PEOPLE",
   robots: { index: false, follow: false },
 };
 

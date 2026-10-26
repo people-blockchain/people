@@ -1,4 +1,4 @@
-# People's Blockchain
+# PEOPLE Blockchain
 
 A blockchain project focused on mass participation, creator-owned tokens, community distribution and an open creator economy.
 
@@ -13,7 +13,7 @@ A blockchain project focused on mass participation, creator-owned tokens, commun
 
 ## Vision
 
-People's Blockchain is designed to make blockchain participation accessible to ordinary users using phones, tablets and computers.
+PEOPLE Blockchain is designed to make blockchain participation accessible to ordinary users using phones, tablets and computers.
 
 The network combines:
 
@@ -57,9 +57,9 @@ Nodes that maintain blockchain consensus, validate transactions and secure the n
 
 ## Native Asset
 
-The native asset of People's Blockchain is **People**, with the ticker **PPL**.
+The native asset of PEOPLE Blockchain is **PEOPLE**, with the ticker **PPL**.
 
-People is intended to provide the economic foundation of the network.
+PEOPLE is intended to provide the economic foundation of the network.
 
 Potential uses include:
 
@@ -80,7 +80,7 @@ Final tokenomics are defined in:
 
 ## Participation Mining
 
-People's Blockchain does not rely on traditional proof-of-work mining for ordinary mobile users.
+PEOPLE Blockchain does not rely on traditional proof-of-work mining for ordinary mobile users.
 
 Mobile participation is based on a separate Participation Mining model.
 
@@ -135,7 +135,7 @@ Potential use cases include:
 
 The network is intended to support native NFT creation and ownership.
 
-NFT functionality will be integrated into the broader People's Blockchain economy.
+NFT functionality will be integrated into the broader PEOPLE Blockchain economy.
 
 ---
 
@@ -163,7 +163,7 @@ The detailed parameters are not yet final.
 
 ## Blockchain Foundation
 
-People's Blockchain was developed from the PEOPLE Network reference codebase (historical origin only).
+PEOPLE Blockchain was developed from the PEOPLE Network reference codebase (historical origin only).
 
 **Current public testnet (2026-10):** Cosmos EVM chain id **97401** (`people_97401-1`), RPC `https://node.peopleblockchain.network/rpc`, chain sources in `chain/`. The public site at `www.peopleblockchain.network` already offers asset creation (token/NFT factories), bonding curve launch, AMM/swap, explorer, and multisig against live Solidity contracts under `contracts/` (addresses in `website/src/data/evm-deployments-97401.json`).
 
@@ -247,7 +247,7 @@ The project is being developed in stages:
 2. Establish a stable baseline.
 3. Define protocol economics.
 4. Define participation mechanics.
-5. Implement the People's Blockchain protocol.
+5. Implement the PEOPLE Blockchain protocol.
 6. Implement the creator and token economy.
 7. Implement consumer products.
 8. Test on internal and public testnets.
@@ -293,7 +293,7 @@ The current priority is to:
 
 1. audit the existing PEOPLE Network foundation;
 2. establish a reproducible development baseline;
-3. define the People's Blockchain economics;
+3. define the PEOPLE Blockchain economics;
 4. define Participation Mining;
 5. design the Community Pool;
 6. design Token Factory and creator economy;
@@ -346,7 +346,7 @@ Mainnet
 
 ## Project Philosophy
 
-People's Blockchain is intended to make blockchain participation accessible to people who do not have:
+PEOPLE Blockchain is intended to make blockchain participation accessible to people who do not have:
 
 - expensive hardware;
 - advanced blockchain knowledge;
@@ -399,10 +399,10 @@ This flywheel is a core design objective, but its final economic parameters are 
 
 ## Important Terminology
 
-### People (PPL)
+### PEOPLE (PPL)
 
-The native asset of People's Blockchain. The brand is **People**, the network is
-**People's Blockchain** and the ticker is **PPL**.
+The native asset of PEOPLE Blockchain. The brand is **PEOPLE**, the network is
+**PEOPLE Blockchain** and the ticker is **PPL**.
 
 Official slogans:
 
@@ -413,7 +413,7 @@ See `docs/TERMINOLOGY.md` for the complete terminology source of truth.
 
 ### Native asset identifier (`ppl`)
 
-The official product and token identity is **People (PPL)**.
+The official product and token identity is **PEOPLE (PPL)**.
 
 The **on-chain** asset identifier is `ppl` (lowercase map key, same convention as the former
 `vls`). Genesis `AssetMetadata` is `name: "People"` / `symbol: "PPL"`. Old LevelDB snapshots
@@ -499,7 +499,7 @@ The protocol is being designed and tested as experimental blockchain infrastruct
 
 ## Repository layout
 
-- `chain/` — Cosmos EVM chain (People testnet, chain id 97401) and helper scripts
+- `chain/` — Cosmos EVM chain (PEOPLE testnet, chain id 97401) and helper scripts
 - `contracts/` — Solidity contracts (Foundry); `contracts/lib/*` are git submodules
 - `people-node/` — node / validator software (TypeScript)
 - `website/` — Next.js web app (deployed on Vercel)

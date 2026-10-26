@@ -13,7 +13,7 @@ export const DISCOVER_SEED_PROJECTS = [
   },
   {
     id: `${DISCOVER_SEED_MARKER}-tpitp`,
-    title: "People Tips",
+    title: "PEOPLE Tips",
     idea: "Say thanks with a token built for micro-support — concerts, streams, and open-source maintainers.",
     audience: "Fans, patrons, and teams that collect many small thank-yous.",
     whyToken: "Tips stay in the community’s own ledger instead of a closed app balance.",
@@ -33,7 +33,7 @@ export const DISCOVER_SEED_PROJECTS = [
   },
   {
     id: `${DISCOVER_SEED_MARKER}-swap`,
-    title: "People Swap",
+    title: "PEOPLE Swap",
     idea: "Exchange demo community tokens against PPL in the browser — no separate exchange account.",
     audience: "People trying testnet assets before they commit to a project.",
     whyToken: "Liquidity pairs show real price discovery for new launches on the network.",

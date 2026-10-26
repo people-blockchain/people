@@ -1,10 +1,10 @@
 {
   "hero": {
     "eyebrow": "PEOPLE Blockchain",
-    "title": "How People works, in 1 minute.",
+    "title": "How PEOPLE works, in 1 minute.",
     "lead": "A wallet, one check that you are a person, and then you can launch, mint, swap or vote. No code and no crypto background.",
     "testnetBadge": "Public testnet. Not mainnet yet.",
-    "saleNote": "The People network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
+    "saleNote": "The PEOPLE network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
   },
   "steps": {
     "eyebrow": "Three steps",
@@ -117,7 +117,7 @@
     "items": [
       {
         "q": "Is this mainnet?",
-        "a": "No. The People network is a public testnet. The tokens and balances here are for testing and carry no value. The PPL sale is separate: it runs on Base, in USDC or USDT, and opens once the sale contract is published."
+        "a": "No. The PEOPLE network is a public testnet. The tokens and balances here are for testing and carry no value. The PPL sale is separate: it runs on Base, in USDC or USDT, and opens once the sale contract is published."
       },
       {
         "q": "Do I need to know how to code?",

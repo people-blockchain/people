@@ -12,11 +12,11 @@
 
 Восемь решений founder закрыты в этом тексте. Новых параметров сверх уже зафиксированного набора нет. Смена механики остатка и добавление fee source — только новая версия спецификации или отдельное изменение спецификации, не правка этой таблицы.
 
-Вариант B архитектуры не переоткрывается: отдельный Growth Pool, выплата не вычитается из приглашённого, пул ограничивает сумму, платим за квалифицированную активность. Источник устройства: People Growth Protocol v0.1, draft PR #1, ветка `cursor/people-growth-protocol-v0-1-e9eb`, коммит `0deea80`.
+Вариант B архитектуры не переоткрывается: отдельный Growth Pool, выплата не вычитается из приглашённого, пул ограничивает сумму, платим за квалифицированную активность. Источник устройства: PEOPLE Growth Protocol v0.1, draft PR #1, ветка `cursor/people-growth-protocol-v0-1-e9eb`, коммит `0deea80`.
 
 USD в стресс-тесте — внешний масштаб объёма комиссий, не цена PPL. Скрипт `growth-model-v0.1-stress.py` по-прежнему кодирует прежний warmup (делитель 8, эпоха 1 с `B = 0`). Этот warmup не является bootstrap C. Остаток около **4,5 × I** после прогрева скрипта — следствие того warmup.
 
-Native asset (current): **People**, ticker **PPL**, runtime map id **`ppl`**. There is no parallel current `vls` asset. Load-time migration remaps old snapshot keys `vls` → `ppl`.
+Native asset (current): **PEOPLE**, ticker **PPL**, runtime map id **`ppl`**. There is no parallel current `vls` asset. Load-time migration remaps old snapshot keys `vls` → `ppl`.
 
 Implementation status of Growth Pool, settlement, and live Model A split is recorded in `docs/PROTOCOL-DECISIONS.md` and must match code. This document’s economic identities (Model A percentages, Beta L1=70 / L2=30) are not changed by asset rename. Where this file previously drifted from runtime (score formula, maturation, L1 age), **runtime + `docs/PROTOCOL-DECISIONS.md` win**; those rows are synced below.
 
@@ -220,7 +220,7 @@ Growth Epoch = 201 600 блоков ≈ 7 суток при интервале �
 | Parameter | Value | Status |
 | --- | --- | --- |
 | Fee Split | Validators 30 / Community Pool 25 / Treasury 20 / Liquidity & Ecosystem 10 / Growth Pool 15 / Burn 0 | APPROVED |
-| Native asset | People / ticker PPL / runtime id `ppl` (legacy snapshot key `vls` migrated on load) | CURRENT runtime |
+| Native asset | PEOPLE / ticker PPL / runtime id `ppl` (legacy snapshot key `vls` migrated on load) | CURRENT runtime |
 | Growth Pool | 15% eligible PPL fees, отдельный bucket; новой эмиссии нет; не CP, не treasury, не validator reward, не liquidity, не burn | APPROVED |
 | Growth Epoch | 201 600 блоков ≈ 7 суток при 3 с; не validator epoch | APPROVED |
 | Budget `B` | `B = min(available, reference)`; запас `B` не поднимает | APPROVED |

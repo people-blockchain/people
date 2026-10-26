@@ -119,7 +119,7 @@ export const id: LocaleContent = {
   },
   "hero": {
     "tag": "PEOPLE // PROTOCOL SPECIFICATION",
-    "orgName": "People",
+    "orgName": "PEOPLE",
     "headlineMain": "BLOCKCHAIN",
     "headlineSub": "MASYARAKAT",
     "lead": "Infrastruktur blockchain yang dirancang untuk menghubungkan kreator, komunitas, sistem ekonomi multi-aset, dan partisipasi jaringan manusia yang terverifikasi.",
@@ -481,7 +481,7 @@ export const id: LocaleContent = {
     "title": "Arsitektur Teknis",
     "subtitle": "Blockchain untuk komunitas berkembang melalui urutan arsitektur tiga fase yang ketat. Setiap tingkatan dibangun secara deterministik di atas fondasi yang telah mapan di bawahnya.",
     "umbrellaTitle": "Payung Proyek",
-    "umbrellaName": "People",
+    "umbrellaName": "PEOPLE",
     "umbrellaRole": "Pengelola Protokol",
     "umbrellaDesc": "Merek dan pengelola Blockchain untuk komunitas.",
     "targetTitle": "Target Jaringan Inti",

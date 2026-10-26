@@ -17,7 +17,7 @@ export function AgentsPublic() {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-56 bg-[radial-gradient(45%_70%_at_85%_0%,rgba(245,158,11,0.14),transparent_70%),radial-gradient(35%_55%_at_0%_10%,rgba(3,105,161,0.10),transparent_70%)] dark:bg-[radial-gradient(45%_70%_at_85%_0%,rgba(251,191,36,0.12),transparent_70%),radial-gradient(35%_55%_at_0%_10%,rgba(76,196,248,0.12),transparent_70%)]"
         aria-hidden="true"
       />
-      <Eyebrow tone="brand">People&apos;s Blockchain</Eyebrow>
+      <Eyebrow tone="brand">PEOPLE Blockchain</Eyebrow>
       <h1 className="mt-3 text-h2 font-bold tracking-tight text-ink">{t.hero.title}</h1>
       <p className="mt-4 text-lg font-medium leading-relaxed text-ink-2">{t.hero.lead}</p>
 

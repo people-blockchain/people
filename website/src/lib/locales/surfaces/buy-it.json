@@ -46,7 +46,7 @@
     "belowMin": "Inserisci un importo per vedere il preventivo.",
     "cta": "Collega un wallet per acquistare",
     "ctaConnected": "Compra PPL",
-    "wallets": "People Wallet (accesso con Google o email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (accesso con Google o email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Come paghi",
     "payOnBase": "Paga su Base",
     "payFromOther": "Paga da un’altra rete",
@@ -107,7 +107,7 @@
     "termsLink": "Termini",
     "help": "Serve aiuto? {support}",
     "supportLink": "Assistenza",
-    "noWalletHint": "Non hai un wallet? Scegli Google o email: verrà creato per te un People Wallet. Per pagare servono USDC su Base in quel wallet o in un wallet che colleghi.",
+    "noWalletHint": "Non hai un wallet? Scegli Google o email: verrà creato per te un PEOPLE Wallet. Per pagare servono USDC su Base in quel wallet o in un wallet che colleghi.",
     "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
     "feesTitle": "Commissioni e tempi",
     "feesBody": "Commissioni: la commissione della rete Base (gas), pagata in ETH — di solito circa $0,01; la commissione di swap o bridge di LI.FI — mostrata nel widget prima della conferma; la commissione di rivendita alla riserva — 1,5% (3% se le rivendite del giorno superano l’1% della riserva).",
@@ -127,7 +127,7 @@
     "wrongNetwork": "L’acquisto avviene sulla rete Base. Il tuo wallet è su un’altra rete.",
     "switchToBase": "Passa a Base",
     "switchRejected": "La rete non è stata cambiata. L’acquisto richiede Base: riprova.",
-    "embeddedNoBase": "People Wallet non può ancora pagare sulla rete Base. Per acquistare collega MetaMask, Trust Wallet o WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet non può ancora pagare sulla rete Base. Per acquistare collega MetaMask, Trust Wallet o WalletConnect."
   },
   "whyPriceRises": {
     "title": "Perché il prezzo sale",

@@ -42,7 +42,7 @@
   "unsoldTitle": "Token chưa bán",
   "unsoldBody": "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
   "feeTitle": "Phân chia phí mạng",
-  "feeLead": "Mỗi phí giao thức trên People theo Model A đã duyệt:",
+  "feeLead": "Mỗi phí giao thức trên PEOPLE theo Model A đã duyệt:",
   "feeNote": "Mỗi phí giao thức: 30% validator, 25% pool cộng đồng, 20% quỹ, 10% thanh khoản, 15% Growth, 0% đốt.",
   "buybackTitle": "Mua lại",
   "buybackBody": "100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai. Hợp đồng StableFeeGateway đã được triển khai và vận hành trên testnet: mọi khoản phí khởi chạy stablecoin đều được chuyển đến địa chỉ nhận mua lại công khai. 30% phí mạng được dùng cho các đợt mua lại PPL công khai (kho bạc 20% + thanh khoản 10%). 70% phí mạng còn lại được chia cho các validator (30%), quỹ cộng đồng (25%) và Growth Pool (15%) — và cuối cùng tất cả đều quay trở lại với người tham gia. PPL đã mua lại sau đó được chia theo tỷ lệ 30/25/20/10/15 bởi multisig kho bạc 2-of-3 — tỷ lệ chia này là chính sách multisig đã công bố, không phải quy tắc được thực thi trên chuỗi.",

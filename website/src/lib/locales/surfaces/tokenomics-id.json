@@ -42,7 +42,7 @@
   "unsoldTitle": "Token tidak terjual",
   "unsoldBody": "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
   "feeTitle": "Pembagian biaya jaringan",
-  "feeLead": "Setiap biaya protokol di People mengikuti Model A yang disetujui:",
+  "feeLead": "Setiap biaya protokol di PEOPLE mengikuti Model A yang disetujui:",
   "feeNote": "Setiap biaya protokol: 30% validator, 25% pool komunitas, 20% perbendaharaan, 10% likuiditas, 15% Growth, 0% dibakar.",
   "buybackTitle": "Buyback",
   "buybackBody": "100% dari biaya peluncuran token dan NFT (USDC/USDT) masuk ke pembelian kembali PPL publik. Kontrak StableFeeGateway telah diimplementasikan dan di-deploy di testnet: setiap biaya peluncuran stablecoin masuk ke penerima pembelian kembali publik. 30% dari biaya jaringan masuk ke pembelian kembali PPL publik (treasury 20% + likuiditas 10%). Sisa 70% dari biaya jaringan masuk ke validator (30%), community pool (25%) dan Growth Pool (15%) — dan semuanya pada akhirnya kembali ke peserta. PPL yang dibeli kembali kemudian dibagi 30/25/20/10/15 oleh multisig treasury 2-of-3 — pembagian itu adalah kebijakan multisig yang dipublikasikan, bukan aturan yang diberlakukan on-chain.",

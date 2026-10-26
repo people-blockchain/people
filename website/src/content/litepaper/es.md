@@ -1,5 +1,5 @@
 ---
-title: "People Blockchain — Litepaper"
+title: "PEOPLE Blockchain — Litepaper"
 description: "La blockchain donde cada usuario es una persona verificada. Propiedad de las personas, no de capitales de riesgo."
 slug: /litepaper
 version: "1.1"
@@ -7,7 +7,7 @@ date: 2026-10
 status: public-draft
 ---
 
-# People Blockchain — Litepaper
+# PEOPLE Blockchain — Litepaper
 
 > **La blockchain donde cada usuario es una persona verificada.**
 > **Propiedad de las personas, no de capitales de riesgo.**
@@ -63,7 +63,7 @@ Lo que puedes hacer sin código:
 
 ## 4. Tecnología
 
-**Cosmos EVM.** People se ejecuta en un stack Cosmos EVM: contratos inteligentes compatibles con Ethereum y direcciones 0x en una cadena Cosmos.
+**Cosmos EVM.** PEOPLE se ejecuta en un stack Cosmos EVM: contratos inteligentes compatibles con Ethereum y direcciones 0x en una cadena Cosmos.
 
 | Parámetro | Valor |
 |---|---|
@@ -185,7 +185,7 @@ No se prometen fechas. Cada etapa comienza cuando se cumple su condición.
 
 Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 
-| | Ethereum | Solana | People |
+| | Ethereum | Solana | PEOPLE |
 |---|---|---|---|
 | Comisiones quemadas | La comisión base se quema ¹ | El 50% de la comisión base se quema ² | **0% quemado** |
 | Quién recibe las comisiones | Los validadores obtienen la comisión prioritaria (propina) ¹ | Los validadores obtienen el 50% de la comisión base y el 100% de la comisión prioritaria ² | **Validadores 30 · Comunidad 25 · Tesorería 20 · Liquidez 10 · Crecimiento 15** |
