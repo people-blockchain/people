@@ -67,9 +67,9 @@ library PplCurveMath {
 /// People chain off this contract. Stablecoins go straight to the immutable `treasury`; the hub
 /// never holds funds.
 ///
-/// Peg assumption: every allowlisted token is valued at exactly 1 USD. The allowlist is fixed before
-/// `open()` (`setToken` reverts afterwards); if a token depegs after opening, the owner can only
-/// `pause()` the sale.
+/// Peg assumption: every allowlisted token is valued at exactly 1 USD. Tokens can only be enabled
+/// before `open()` (`setToken(token, true)` reverts afterwards, including re-enabling); if a token
+/// depegs after opening, the owner can disable it with `setToken(token, false)` or `pause()` the sale.
 ///
 /// TODO v2: sell-back (SELL_BACK in website config) — not implemented, no sell-back in v1.
 contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
@@ -187,11 +187,11 @@ contract PplCurveHub is ReentrancyGuard, Ownable2Step, Pausable {
     }
 
     /// @notice Allows or disables a payment token. Enabling reads and stores its decimals (1..18).
-    /// Every allowed token is treated as exactly 1 USD (peg assumption). The allowlist is frozen
-    /// once `open()` has been called: reverts with `SaleAlreadyOpened` afterwards (enable and disable).
-    /// Pause the sale instead if a token must be stopped after opening.
+    /// Every allowed token is treated as exactly 1 USD (peg assumption). The allowlist can only
+    /// shrink once `open()` has been called: enabling (a new token or re-enabling a disabled one)
+    /// reverts with `SaleAlreadyOpened`, disabling (e.g. on a depeg) stays available to the owner.
     function setToken(address token, bool allowed) external onlyOwner {
-        if (openedAt != 0) revert SaleAlreadyOpened();
+        if (allowed && openedAt != 0) revert SaleAlreadyOpened();
         if (token == address(0)) revert ZeroAddress();
         uint8 d;
         if (allowed) {

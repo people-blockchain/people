@@ -484,18 +484,38 @@ contract PplCurveHubTest is Test {
         vm.stopPrank();
     }
 
-    function test_setTokenRevertsAfterOpen() public {
+    function test_setTokenDisableAfterOpenBlocksBuy() public {
+        vm.expectEmit(true, false, false, true, address(hub));
+        emit TokenSet(address(usdc), false, 0);
+        vm.prank(owner);
+        hub.setToken(address(usdc), false);
+        (bool allowed,) = hub.tokenInfo(address(usdc));
+        assertFalse(allowed);
+        // the other token is unaffected
+        (bool usdtAllowed,) = hub.tokenInfo(address(usdt));
+        assertTrue(usdtAllowed);
+
+        usdc.mint(alice, 10e6);
+        vm.startPrank(alice);
+        usdc.approve(address(hub), type(uint256).max);
+        vm.expectRevert(PplCurveHub.TokenNotAllowed.selector);
+        hub.buyWith(address(usdc), 10e6, 0, alice);
+        vm.stopPrank();
+
+        // disabling also works while paused
+        vm.startPrank(owner);
+        hub.pause();
+        hub.setToken(address(usdt), false);
+        vm.stopPrank();
+        (bool usdtAfter,) = hub.tokenInfo(address(usdt));
+        assertFalse(usdtAfter);
+    }
+
+    function test_setTokenEnableNewTokenRevertsAfterOpen() public {
         MockToken other = new MockToken("OTH", 6);
-        // enable after open
         vm.prank(owner);
         vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
         hub.setToken(address(other), true);
-        // disable after open (an already allowed token stays allowed)
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
-        hub.setToken(address(usdc), false);
-        (bool allowed,) = hub.tokenInfo(address(usdc));
-        assertTrue(allowed);
         (bool otherAllowed,) = hub.tokenInfo(address(other));
         assertFalse(otherAllowed);
         // the check precedes argument validation
@@ -506,8 +526,27 @@ contract PplCurveHubTest is Test {
         vm.startPrank(owner);
         hub.pause();
         vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
-        hub.setToken(address(usdt), false);
+        hub.setToken(address(other), true);
         vm.stopPrank();
+    }
+
+    function test_setTokenReEnableRevertsAfterOpen() public {
+        vm.startPrank(owner);
+        hub.setToken(address(usdc), false);
+        vm.expectRevert(PplCurveHub.SaleAlreadyOpened.selector);
+        hub.setToken(address(usdc), true);
+        vm.stopPrank();
+        (bool allowed,) = hub.tokenInfo(address(usdc));
+        assertFalse(allowed);
+    }
+
+    function test_setTokenDisableAfterOpenOnlyOwner() public {
+        vm.startPrank(alice);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        hub.setToken(address(usdc), false);
+        vm.stopPrank();
+        (bool allowed,) = hub.tokenInfo(address(usdc));
+        assertTrue(allowed);
     }
 
     function test_setTokenValidation() public {
