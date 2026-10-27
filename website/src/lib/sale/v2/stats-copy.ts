@@ -56,6 +56,14 @@ export function v2SaleWindowValue(input: {
   });
 }
 
+/**
+ * Sale-window caption key under the card. V2 drops the "whichever comes first"
+ * caption entirely; the legacy layout keeps its usual key.
+ */
+export function saleWindowCaptionKey(input: { v2Enabled: boolean }): "saleWindowHint" | null {
+  return input.v2Enabled ? null : "saleWindowHint";
+}
+
 /** Resolves the phase-mapped stats row to final, localised strings. */
 export function resolveStatsStatus(input: {
   copy: BuyCopy;
