@@ -24,11 +24,11 @@ import { useSalePhase } from "@/lib/sale/sale-state";
 const HERO_FORM_ID = "buy-form";
 
 /** `/buy` — the PPL sale page. */
-export function BuyPage() {
+export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const { stats, trades } = useSaleData();
-  const { phase, hubAcceptsUsdt } = useSalePhase();
+  const { phase, hubAcceptsUsdt } = useSalePhase(initialSaleOpen);
   const open = phase === "open";
 
   const isRtl = lang === "ar";
