@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Стартовая цена после открытия — {start}",
     "saleWindow": "Срок продажи",
     "saleWindowValue": "До распродажи или {term}",
+    "saleWindowV2": "7 дней whitelist с {date}, затем открытая продажа до {term}",
     "saleWindowHint": "Что наступит раньше. Продлений нет.",
     "endsByHint": "Крайняя дата. Раньше, если всё распродано."
   },

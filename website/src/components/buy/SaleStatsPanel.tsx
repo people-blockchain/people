@@ -8,7 +8,7 @@ import { fillCopy, formatMonths, intlLocale } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
 import type { V2Phase } from "@/lib/sale/v2/constants";
 import { statsCopyKeys } from "@/lib/sale/v2/logic";
-import { resolveStatsStatus } from "@/lib/sale/v2/stats-copy";
+import { resolveStatsStatus, v2SaleWindowValue } from "@/lib/sale/v2/stats-copy";
 
 
 type Stat = { key: string; label: string; value: string; hint: string; accent?: boolean };
@@ -17,6 +17,7 @@ type V2Stats = {
   enabled: boolean;
   phase: V2Phase | null;
   spotPriceUsd: number | null;
+  openDate?: string | null;
 };
 
 /**
@@ -59,12 +60,14 @@ export function SaleStatsPanel({
       hint: status.hint,
       accent: true,
     },
-    keys.window === "open"
+    keys.window === "open" && !v2Enabled
       ? { key: "window", label: s.saleWindow, value: endsText, hint: s.endsByHint }
       : {
           key: "window",
           label: s.saleWindow,
-          value: fillCopy(s.saleWindowValue, { term: formatMonths(SALE.saleTermMonths, lang) }),
+          value: v2Enabled
+            ? v2SaleWindowValue({ copy: t, lang, openDate: v2?.openDate })
+            : fillCopy(s.saleWindowValue, { term: formatMonths(SALE.saleTermMonths, lang) }),
           hint: s.saleWindowHint,
         },
   ];

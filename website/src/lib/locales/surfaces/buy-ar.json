@@ -34,6 +34,7 @@
     "startPriceOnOpen": "سعر البداية عند الافتتاح: {start}",
     "saleWindow": "مدة البيع",
     "saleWindowValue": "حتى نفاد الكمية أو {term}",
+    "saleWindowV2": "قائمة بيضاء لمدة 7 أيام ابتداءً من {date}، ثم بيع مفتوح حتى {term}",
     "saleWindowHint": "أيهما أقرب. لا يوجد تمديد.",
     "endsByHint": "آخر موعد للانتهاء. أبكر إذا نفدت الكمية."
   },

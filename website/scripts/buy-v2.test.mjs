@@ -22,6 +22,12 @@ import {
   statsCopyKeys,
   validateV2BuyAmount,
 } from "../src/lib/sale/v2/logic.ts";
+import {
+  V2_OPEN_DATE_DEFAULT,
+  formatV2OpenDate,
+  parseV2OpenDate,
+  v2SaleWindowValue,
+} from "../src/lib/sale/v2/stats-copy.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
@@ -298,5 +304,37 @@ test("v2 copy never uses banned explorer or Safe wording", () => {
     const v2 = JSON.parse(raw).v2;
     const blob = JSON.stringify(v2);
     assert.doesNotMatch(blob, /basescan|\bRPC\b|\bGnosis\b|\bSafe\b/, `${lang} v2`);
+  }
+});
+
+test("the v2 open date defaults, rejects invalid values and accepts a custom ISO date", () => {
+  assert.equal(V2_OPEN_DATE_DEFAULT, "2026-12-01");
+  assert.equal(parseV2OpenDate(undefined).toISOString(), "2026-12-01T00:00:00.000Z");
+  assert.equal(parseV2OpenDate("").toISOString(), "2026-12-01T00:00:00.000Z");
+  assert.equal(parseV2OpenDate("not-a-date").toISOString(), "2026-12-01T00:00:00.000Z");
+  assert.equal(parseV2OpenDate("2026-02-30").toISOString(), "2026-12-01T00:00:00.000Z");
+  assert.equal(parseV2OpenDate("2027-02-15").toISOString(), "2027-02-15T00:00:00.000Z");
+});
+
+test("the v2 sale window contains the locale-formatted opening date", () => {
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
+  const custom = "2027-02-15";
+  const formatted = formatV2OpenDate(custom, "en");
+  assert.match(formatted, /2027/);
+  const value = v2SaleWindowValue({ copy: en, lang: "en", openDate: custom });
+  assert.ok(value.includes(formatted), value);
+  assert.match(value, /whitelist/i);
+  assert.match(value, /24 months/);
+  assert.equal(
+    v2SaleWindowValue({ copy: en, lang: "en", openDate: "bogus" }),
+    "7-day whitelist from 1 Dec 2026, then open sale up to 24 months",
+  );
+});
+
+test("all 12 locales have the v2 sale-window key with a {date} placeholder", () => {
+  for (const lang of LANGS) {
+    const stats = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).stats;
+    assert.equal(typeof stats.saleWindowV2, "string", `${lang} stats.saleWindowV2`);
+    assert.ok(stats.saleWindowV2.includes("{date}"), `${lang} needs {date}`);
   }
 });

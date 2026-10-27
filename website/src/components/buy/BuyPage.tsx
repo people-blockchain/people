@@ -120,7 +120,7 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
             <SaleStatsPanel
               stats={stats}
               phase={phase}
-              v2={{ enabled: v2Buy, phase: v2Phase.phase, spotPriceUsd: v2SpotPriceUsd }}
+              v2={{ enabled: v2Buy, phase: v2Phase.phase, spotPriceUsd: v2SpotPriceUsd, openDate: env.NEXT_PUBLIC_PPL_V2_OPEN_DATE }}
             />
           </div>
 

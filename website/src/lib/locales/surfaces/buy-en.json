@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Starting price once it opens: {start}",
     "saleWindow": "Sale window",
     "saleWindowValue": "Until sold out or {term}",
+    "saleWindowV2": "7-day whitelist from {date}, then open sale up to {term}",
     "saleWindowHint": "Whichever comes first. No extensions.",
     "endsByHint": "Latest end date. Earlier if it sells out."
   },

@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Giá khởi điểm khi mở: {start}",
     "saleWindow": "Thời hạn đợt bán",
     "saleWindowValue": "Đến khi bán hết hoặc {term}",
+    "saleWindowV2": "Whitelist 7 ngày từ {date}, sau đó mở bán đến {term}",
     "saleWindowHint": "Tùy mốc nào đến trước. Không gia hạn.",
     "endsByHint": "Ngày kết thúc muộn nhất. Sớm hơn nếu bán hết."
   },
