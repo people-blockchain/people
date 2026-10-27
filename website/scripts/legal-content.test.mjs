@@ -3,11 +3,14 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { content } from "../src/lib/content.ts";
 import { legalBundle } from "../src/lib/legal-content.ts";
+import { legalMetadataFields } from "../src/lib/legal-metadata-fields.ts";
 import { LEGAL_CONTACT_EMAIL } from "../src/lib/legal-contact.ts";
 import { SITE_ROUTES } from "../src/lib/site.ts";
 import {
   NON_EN_LEGAL_LOCALES,
+  flattenStrings,
   findUntranslated,
   structurePaths,
   untranslatedReasons,
@@ -173,3 +176,52 @@ for (const lang of NON_EN_LEGAL_LOCALES) {
     );
   });
 }
+
+test("localized metadata and English-prevails notice are never untranslated English", () => {
+  for (const kind of ["terms", "privacy"]) {
+    const en = legalMetadataFields("en", kind);
+    for (const lang of NON_EN_LEGAL_LOCALES) {
+      const fields = legalMetadataFields(lang, kind);
+      for (const key of Object.keys(en)) {
+        const value = fields[key];
+        assert.ok(value?.trim(), `${lang}/${kind} metadata ${key} is empty`);
+        assert.deepEqual(untranslatedReasons(value, en[key]), [], `${lang}/${kind} metadata ${key}`);
+      }
+      assert.ok(fields.title.endsWith(" | PEOPLE Blockchain"), `${lang}/${kind} title suffix`);
+      const doc = loadLegal(lang)[kind];
+      const enDoc = loadLegal("en")[kind];
+      for (const key of ["englishPrevails", "englishLink"]) {
+        assert.deepEqual(untranslatedReasons(doc[key], enDoc[key]), [], `${lang}/${kind}.${key}`);
+      }
+    }
+  }
+});
+
+// Header, navigation and footer strings rendered on /terms and /privacy. Labels below are
+// product names or loanwords that are legitimately the same as English in some locales.
+const NAV_FOOTER_SAME_AS_EN_OK = new Set(["Million Founders", "Staking", "Litepaper", "Explorer", "Governance", "Menu", "Architecture"]);
+
+test("header, nav and footer strings on legal pages are localized in every locale", () => {
+  const pick = (c) => ({
+    nav: c.nav,
+    footer: c.footer,
+    a11y: { footer: c.a11y.footer, navPrimary: c.a11y.navPrimary, navMobile: c.a11y.navMobile },
+  });
+  const en = flattenStrings(pick(content.en));
+  for (const lang of NON_EN_LEGAL_LOCALES) {
+    const localized = flattenStrings(pick(content[lang]));
+    for (const [path, enValue] of en) {
+      if (!enValue.trim() || path.endsWith(".href")) continue;
+      assert.ok(localized.has(path), `${lang}: ${path} missing`);
+      const value = localized.get(path);
+      if (value === enValue) {
+        assert.ok(NAV_FOOTER_SAME_AS_EN_OK.has(value), `${lang}: ${path} is still English ("${value}")`);
+      }
+    }
+  }
+});
+
+test("language switcher close button label is localized, not hard-coded", () => {
+  const src = readFileSync(join(root, "src/components/LanguageSwitcher.tsx"), "utf8");
+  assert.doesNotMatch(src, /aria-label="Close"/);
+});
