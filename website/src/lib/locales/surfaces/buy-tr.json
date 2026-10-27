@@ -13,7 +13,9 @@
     "headlineClosed": "PPL satışı yakında açılıyor",
     "headlineWhitelist": "PPL satışı: doğrulanmış beyaz liste aşaması",
     "subWhitelist": "İlk 7 gün: yalnızca doğrulanmış kişiler. Katılmak için World ID veya Human Passport ile doğrulanın.",
-    "statsTitleClosed": "Eğride — açılış yakında"
+    "statsTitleClosed": "Eğride — açılış yakında",
+    "statsTitleWhitelist": "Eğride — beyaz liste aşaması",
+    "statsTitleOpen": "Eğride — açık satış"
   },
   "stats": {
     "price": "Güncel fiyat",
@@ -27,6 +29,8 @@
     "notOpenYet": "Henüz açılmadı",
     "progressLabel": "{target} graduation hedefine ilerleme",
     "saleStatus": "Satış durumu",
+    "whitelistStatus": "Beyaz liste: yalnızca doğrulanmış kişiler",
+    "openStatus": "Açık",
     "startPriceOnOpen": "Açılıştaki başlangıç fiyatı: {start}",
     "saleWindow": "Satış süresi",
     "saleWindowValue": "Tükenene kadar veya {term}",

@@ -13,7 +13,9 @@
     "headlineClosed": "Đợt bán PPL sắp mở",
     "headlineWhitelist": "Bán PPL: giai đoạn danh sách trắng đã xác minh",
     "subWhitelist": "7 ngày đầu: chỉ người đã xác minh. Xác minh bằng World ID hoặc Human Passport để tham gia.",
-    "statsTitleClosed": "Trên đường cong — sắp mở bán"
+    "statsTitleClosed": "Trên đường cong — sắp mở bán",
+    "statsTitleWhitelist": "Trên đường cong — giai đoạn danh sách trắng",
+    "statsTitleOpen": "Trên đường cong — mở bán"
   },
   "stats": {
     "price": "Giá hiện tại",
@@ -27,6 +29,8 @@
     "notOpenYet": "Chưa mở",
     "progressLabel": "Tiến độ tới graduation ở mức {target}",
     "saleStatus": "Trạng thái đợt bán",
+    "whitelistStatus": "Danh sách trắng: chỉ người đã xác minh",
+    "openStatus": "Đang mở",
     "startPriceOnOpen": "Giá khởi điểm khi mở: {start}",
     "saleWindow": "Thời hạn đợt bán",
     "saleWindowValue": "Đến khi bán hết hoặc {term}",

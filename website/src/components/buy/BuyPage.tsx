@@ -11,7 +11,10 @@ import {
   readV2Env,
   resolveV2Chain,
   shouldRenderV2Buy,
+  spotPriceWadToUsd,
+  statsCopyKeys,
 } from "@/lib/sale/v2/logic";
+import { resolveStatsStatus } from "@/lib/sale/v2/stats-copy";
 import { useV2Phase } from "@/lib/sale/v2/useV2Sale";
 import { Reveal } from "@/components/motion/Reveal";
 import { WARM_SECTION, WarmSection } from "@/components/warm/warm-ui";
@@ -54,6 +57,18 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
   const v2Chain = useMemo(() => resolveV2Chain(env), [env]);
   const v2Phase = useV2Phase({ chain: v2Chain, previewState, enabled: v2Buy });
   const headingPhase = heroPhase({ v2Enabled: v2Buy, phase: v2Phase.phase, legacyOpen: open });
+  const statsKeys = statsCopyKeys({ v2Enabled: v2Buy, phase: v2Phase.phase, legacyOpen: open });
+  const v2SpotPriceUsd =
+    v2Phase.spotPriceWad === null ? null : spotPriceWadToUsd(v2Phase.spotPriceWad);
+  const statsSpotPriceUsd = v2Buy ? v2SpotPriceUsd : stats.spotPriceUsd;
+  const statsLive = headingPhase !== "closed";
+  const bottomStats = resolveStatsStatus({
+    copy: t,
+    lang,
+    keys: statsKeys,
+    v2Enabled: v2Buy,
+    spotPriceUsd: statsSpotPriceUsd,
+  });
   const heroTitle =
     headingPhase === "whitelist"
       ? t.hero.headlineWhitelist
@@ -102,7 +117,11 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
           </div>
 
           <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <SaleStatsPanel stats={stats} phase={phase} />
+            <SaleStatsPanel
+              stats={stats}
+              phase={phase}
+              v2={{ enabled: v2Buy, phase: v2Phase.phase, spotPriceUsd: v2SpotPriceUsd }}
+            />
           </div>
 
           <div className="order-4 lg:col-start-2 lg:row-start-3">
@@ -195,21 +214,13 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
             {t.bottomCta.eyebrow}
           </p>
           <h2 id="buy-bottom-title" className="mt-2 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-            {open ? t.bottomCta.title : t.bottomCta.titleClosed}
+            {statsLive ? t.bottomCta.title : t.bottomCta.titleClosed}
           </h2>
-          <p className="mt-3 text-sm text-ink-2 sm:text-base">{open ? t.bottomCta.lead : t.bottomCta.leadClosed}</p>
+          <p className="mt-3 text-sm text-ink-2 sm:text-base">{statsLive ? t.bottomCta.lead : t.bottomCta.leadClosed}</p>
           <div className="mt-6 inline-flex flex-col rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
-            <span className="text-xs font-medium text-ink-3">{open ? t.stats.price : t.stats.saleStatus}</span>
-            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">
-              {open && stats.spotPriceUsd !== null
-                ? pricePerPpl(stats.spotPriceUsd, lang)
-                : t.stats.notOpenYet}
-            </span>
-            <span className="mt-1 text-[11px] text-ink-3">
-              {fillCopy(open ? t.stats.priceStartHint : t.stats.startPriceOnOpen, {
-                start: pricePerPpl(CURVE.startPriceUsd, lang),
-              })}
-            </span>
+            <span className="text-xs font-medium text-ink-3">{bottomStats.label}</span>
+            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">{bottomStats.value}</span>
+            <span className="mt-1 text-[11px] text-ink-3">{bottomStats.hint}</span>
           </div>
           <a
             href={`#${HERO_FORM_ID}`}

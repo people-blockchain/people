@@ -13,7 +13,9 @@
     "headlineClosed": "Penjualan PPL segera dibuka",
     "headlineWhitelist": "Penjualan PPL: fase daftar putih terverifikasi",
     "subWhitelist": "7 hari pertama: hanya orang terverifikasi. Verifikasi dengan World ID atau Human Passport untuk ikut serta.",
-    "statsTitleClosed": "Di kurva — segera dibuka"
+    "statsTitleClosed": "Di kurva — segera dibuka",
+    "statsTitleWhitelist": "Di kurva — fase daftar putih",
+    "statsTitleOpen": "Di kurva — penjualan terbuka"
   },
   "stats": {
     "price": "Harga saat ini",
@@ -27,6 +29,8 @@
     "notOpenYet": "Belum dibuka",
     "progressLabel": "Progres menuju graduation di {target}",
     "saleStatus": "Status penjualan",
+    "whitelistStatus": "Daftar putih: hanya pengguna terverifikasi",
+    "openStatus": "Terbuka",
     "startPriceOnOpen": "Harga awal saat dibuka: {start}",
     "saleWindow": "Masa penjualan",
     "saleWindowValue": "Hingga habis atau {term}",

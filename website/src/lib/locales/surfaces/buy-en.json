@@ -13,7 +13,9 @@
     "headlineClosed": "The PPL sale opens soon",
     "headlineWhitelist": "PPL sale: verified whitelist phase",
     "subWhitelist": "First 7 days: verified people only. Verify with World ID or Human Passport to take part.",
-    "statsTitleClosed": "On the curve — opening soon"
+    "statsTitleClosed": "On the curve — opening soon",
+    "statsTitleWhitelist": "On the curve — whitelist phase",
+    "statsTitleOpen": "On the curve — open sale"
   },
   "stats": {
     "price": "Current price",
@@ -27,6 +29,8 @@
     "notOpenYet": "Not open yet",
     "progressLabel": "Progress to the {target} graduation",
     "saleStatus": "Sale status",
+    "whitelistStatus": "Whitelist: verified only",
+    "openStatus": "Open",
     "startPriceOnOpen": "Starting price once it opens: {start}",
     "saleWindow": "Sale window",
     "saleWindowValue": "Until sold out or {term}",

@@ -149,6 +149,7 @@ export function useV2Refresh() {
 export type V2PhaseSnapshot = {
   phase: V2Phase | null;
   openedAtSec: number;
+  spotPriceWad: bigint | null;
 };
 
 /**
@@ -166,19 +167,20 @@ export function useV2Phase(input: {
   const [state, setState] = useState<V2PhaseSnapshot>(() => ({
     phase: enabled ? (preview?.phase ?? null) : null,
     openedAtSec: enabled ? (preview?.openedAtSec ?? 0) : 0,
+    spotPriceWad: enabled ? (preview?.spotPriceWad ?? null) : null,
   }));
 
   useEffect(() => {
     if (!enabled) {
-      setState({ phase: null, openedAtSec: 0 });
+      setState({ phase: null, openedAtSec: 0, spotPriceWad: null });
       return;
     }
     if (preview) {
-      setState({ phase: preview.phase, openedAtSec: preview.openedAtSec });
+      setState({ phase: preview.phase, openedAtSec: preview.openedAtSec, spotPriceWad: preview.spotPriceWad });
       return;
     }
     if (!chain.hubAddress) {
-      setState({ phase: null, openedAtSec: 0 });
+      setState({ phase: null, openedAtSec: 0, spotPriceWad: null });
       return;
     }
     let active = true;
@@ -190,12 +192,15 @@ export function useV2Phase(input: {
     void Promise.all([
       client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "phase" }),
       client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "openedAt" }),
+      client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "spotPriceWad" }),
     ])
-      .then(([phase, openedAt]) => {
-        if (active) setState({ phase: asPhase(phase), openedAtSec: Number(openedAt) });
+      .then(([phase, openedAt, spotPriceWad]) => {
+        if (active) {
+          setState({ phase: asPhase(phase), openedAtSec: Number(openedAt), spotPriceWad });
+        }
       })
       .catch(() => {
-        if (active) setState({ phase: null, openedAtSec: 0 });
+        if (active) setState({ phase: null, openedAtSec: 0, spotPriceWad: null });
       });
     return () => {
       active = false;

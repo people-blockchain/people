@@ -221,6 +221,65 @@ export function heroPhase(input: {
   return "closed";
 }
 
+export type V2StatsCopyKeys = {
+  eyebrow: "statsTitle" | "statsTitleClosed" | "statsTitleWhitelist" | "statsTitleOpen";
+  statusLabel: "price" | "saleStatus";
+  statusValue: "spotPrice" | "notOpenYet" | "whitelistStatus" | "openStatus";
+  statusHint: "priceStartHint" | "startPriceOnOpen" | "whitelistStatus" | "openStatus";
+  window: "open" | "closed";
+};
+
+function legacyStatsCopyKeys(legacyOpen: boolean): V2StatsCopyKeys {
+  return legacyOpen
+    ? {
+        eyebrow: "statsTitle",
+        statusLabel: "price",
+        statusValue: "spotPrice",
+        statusHint: "priceStartHint",
+        window: "open",
+      }
+    : {
+        eyebrow: "statsTitleClosed",
+        statusLabel: "saleStatus",
+        statusValue: "notOpenYet",
+        statusHint: "startPriceOnOpen",
+        window: "closed",
+      };
+}
+
+/**
+ * Maps the phase shown on `/buy` to the copy keys for the stats block below the
+ * form. With the V2 flag off the result is exactly the legacy mapping; with it
+ * on, the whitelist and open phases get their own eyebrow and status.
+ */
+export function statsCopyKeys(input: {
+  v2Enabled: boolean;
+  phase: V2Phase | null | undefined;
+  legacyOpen: boolean;
+}): V2StatsCopyKeys {
+  if (!input.v2Enabled) return legacyStatsCopyKeys(input.legacyOpen);
+  const phase = heroPhase(input);
+  if (phase === "whitelist") {
+    return {
+      eyebrow: "statsTitleWhitelist",
+      statusLabel: "price",
+      statusValue: "spotPrice",
+      statusHint: "whitelistStatus",
+      window: "open",
+    };
+  }
+  if (phase === "open") {
+    return {
+      eyebrow: "statsTitleOpen",
+      statusLabel: "price",
+      statusValue: "spotPrice",
+      statusHint: "openStatus",
+      window: "open",
+    };
+  }
+  return legacyStatsCopyKeys(false);
+}
+
 export type V2PhaseView = {
   phase: V2Phase;
   /** Whole days left in the 7-day whitelist window, or null outside it. */

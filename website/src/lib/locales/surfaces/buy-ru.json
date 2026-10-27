@@ -13,7 +13,9 @@
     "headlineClosed": "Продажа PPL скоро откроется",
     "headlineWhitelist": "Продажа PPL: фаза вайтлиста для подтверждённых",
     "subWhitelist": "Первые 7 дней — только для подтверждённых людей. Подтвердите личность через World ID или Human Passport, чтобы участвовать.",
-    "statsTitleClosed": "Кривая цены — скоро открытие"
+    "statsTitleClosed": "Кривая цены — скоро открытие",
+    "statsTitleWhitelist": "Кривая цены — фаза вайтлиста",
+    "statsTitleOpen": "Кривая цены — открытая продажа"
   },
   "stats": {
     "price": "Текущая цена",
@@ -27,6 +29,8 @@
     "notOpenYet": "Пока не открыта",
     "progressLabel": "Прогресс до выпуска в пул на {target}",
     "saleStatus": "Статус продажи",
+    "whitelistStatus": "Вайтлист: только для подтверждённых",
+    "openStatus": "Открыта",
     "startPriceOnOpen": "Стартовая цена после открытия — {start}",
     "saleWindow": "Срок продажи",
     "saleWindowValue": "До распродажи или {term}",

@@ -13,7 +13,9 @@
     "headlineClosed": "La venta de PPL abre pronto",
     "headlineWhitelist": "Venta de PPL: fase de lista blanca verificada",
     "subWhitelist": "Los primeros 7 días: solo personas verificadas. Verifícate con World ID o Human Passport para participar.",
-    "statsTitleClosed": "En la curva — apertura próxima"
+    "statsTitleClosed": "En la curva — apertura próxima",
+    "statsTitleWhitelist": "En la curva — fase de lista blanca",
+    "statsTitleOpen": "En la curva — venta abierta"
   },
   "stats": {
     "price": "Precio actual",
@@ -27,6 +29,8 @@
     "notOpenYet": "Aún no abierta",
     "progressLabel": "Progreso hacia la graduación (cierre de la curva) en {target}",
     "saleStatus": "Estado de la venta",
+    "whitelistStatus": "Lista blanca: solo verificados",
+    "openStatus": "Abierta",
     "startPriceOnOpen": "Precio inicial al abrir: {start}",
     "saleWindow": "Plazo de la venta",
     "saleWindowValue": "Hasta agotarse o {term}",

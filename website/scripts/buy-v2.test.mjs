@@ -19,6 +19,7 @@ import {
   resolveV2Chain,
   sellBackUnlockMs,
   shouldRenderV2Buy,
+  statsCopyKeys,
   validateV2BuyAmount,
 } from "../src/lib/sale/v2/logic.ts";
 
@@ -143,6 +144,53 @@ test("the hero follows the V2 whitelist phase, and legacy pages keep their old p
   assert.equal(heroPhase({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: true }), "open");
 });
 
+test("stats copy keys follow the V2 phase and fall back to legacy keys when the flag is off", () => {
+  assert.deepEqual(
+    statsCopyKeys({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: false }),
+    {
+      eyebrow: "statsTitleClosed",
+      statusLabel: "saleStatus",
+      statusValue: "notOpenYet",
+      statusHint: "startPriceOnOpen",
+      window: "closed",
+    },
+  );
+  assert.deepEqual(
+    statsCopyKeys({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: true }),
+    {
+      eyebrow: "statsTitle",
+      statusLabel: "price",
+      statusValue: "spotPrice",
+      statusHint: "priceStartHint",
+      window: "open",
+    },
+  );
+  assert.deepEqual(
+    statsCopyKeys({ v2Enabled: true, phase: V2_PHASES.Whitelist, legacyOpen: false }),
+    {
+      eyebrow: "statsTitleWhitelist",
+      statusLabel: "price",
+      statusValue: "spotPrice",
+      statusHint: "whitelistStatus",
+      window: "open",
+    },
+  );
+  assert.deepEqual(
+    statsCopyKeys({ v2Enabled: true, phase: V2_PHASES.Open, legacyOpen: false }),
+    {
+      eyebrow: "statsTitleOpen",
+      statusLabel: "price",
+      statusValue: "spotPrice",
+      statusHint: "openStatus",
+      window: "open",
+    },
+  );
+  assert.equal(
+    statsCopyKeys({ v2Enabled: true, phase: V2_PHASES.NotOpen, legacyOpen: true }).eyebrow,
+    "statsTitleClosed",
+  );
+});
+
 test("phase view allows buying only in whitelist/open and counts the 7-day window", () => {
   const opened = Date.UTC(2026, 9, 18, 12, 0, 0) / 1000;
   const now = Date.UTC(2026, 9, 20, 12, 0, 0);
@@ -207,6 +255,29 @@ test("all 12 locales carry a real whitelist hero title and subtitle", () => {
     if (lang !== "en") {
       assert.notEqual(hero.headlineWhitelist, en.headlineWhitelist, `${lang} needs a translation`);
       assert.notEqual(hero.subWhitelist, en.subWhitelist, `${lang} needs a subtitle translation`);
+    }
+  }
+});
+
+test("all 12 locales carry real whitelist/open stats copy", () => {
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
+  assert.equal(en.hero.statsTitleWhitelist, "On the curve — whitelist phase");
+  assert.equal(en.hero.statsTitleOpen, "On the curve — open sale");
+  assert.equal(en.stats.whitelistStatus, "Whitelist: verified only");
+  assert.equal(en.stats.openStatus, "Open");
+  for (const lang of LANGS) {
+    const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
+    for (const key of ["statsTitleWhitelist", "statsTitleOpen"]) {
+      assert.ok(copy.hero[key], `${lang} is missing hero.${key}`);
+      if (lang !== "en") {
+        assert.notEqual(copy.hero[key], en.hero[key], `${lang} needs a translation for hero.${key}`);
+      }
+    }
+    for (const key of ["whitelistStatus", "openStatus"]) {
+      assert.ok(copy.stats[key], `${lang} is missing stats.${key}`);
+      if (lang !== "en") {
+        assert.notEqual(copy.stats[key], en.stats[key], `${lang} needs a translation for stats.${key}`);
+      }
     }
   }
 });
