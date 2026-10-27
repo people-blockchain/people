@@ -2,21 +2,11 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LegalDocument } from "@/components/legal/LegalDocument";
-import { SITE_NAME } from "@/lib/site";
+import { buildLegalMetadata } from "@/lib/legal-metadata";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | PEOPLE Blockchain",
-  description:
-    "How the PEOPLE Blockchain website collects and uses information for partner sign-in, referrals, and non-custodial wallets.",
-  alternates: { canonical: "/privacy" },
-  openGraph: {
-    title: "Privacy Policy",
-    description: "Privacy practices for www.peopleblockchain.network.",
-    type: "website",
-    siteName: SITE_NAME,
-    url: "/privacy",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildLegalMetadata("privacy");
+}
 
 export default function PrivacyPage() {
   return (

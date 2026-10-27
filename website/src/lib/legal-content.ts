@@ -26,6 +26,8 @@ export type LegalPageContent = {
   contactBody: string;
   /** Shown on non-English pages: the English text is the binding one. */
   englishPrevails?: string;
+  /** Label of the link from that notice to the English version of the same page. */
+  englishLink?: string;
   blocks: LegalBlock[];
 };
 

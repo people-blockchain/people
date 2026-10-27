@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku."
+    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku.",
+    "englishLink": "Baca versi bahasa Inggris"
   },
   "terms": {
     "title": "Ketentuan layanan",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "Penjualan PPL publik",
-    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku."
+    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku.",
+    "englishLink": "Baca versi bahasa Inggris"
   }
 }

@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "如各语言版本有出入，以英文版本为准。"
+    "englishPrevails": "如各语言版本有出入，以英文版本为准。",
+    "englishLink": "查看英文版"
   },
   "terms": {
     "title": "服务条款",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "PPL 公开销售",
-    "englishPrevails": "如各语言版本有出入，以英文版本为准。"
+    "englishPrevails": "如各语言版本有出入，以英文版本为准。",
+    "englishLink": "查看英文版"
   }
 }
