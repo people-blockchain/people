@@ -42,11 +42,11 @@ export function FounderCard({
         data-testid="founders-card"
       >
         <div className={`founders-card-inner ${flipped ? "is-flipped" : ""}`}>
-          <div className="founders-card-face relative aspect-[1.586] overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,#0369a1_0%,#4f46e5_55%,#f59e0b_130%)] p-5 text-white shadow-[var(--elev-2)] sm:p-6">
+          <div className="founders-card-face relative grid overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,#0369a1_0%,#4f46e5_55%,#f59e0b_130%)] p-5 text-white shadow-[var(--elev-2)] sm:p-6">
             <div className="founders-card-sheen pointer-events-none absolute inset-0" aria-hidden="true" />
             <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" aria-hidden="true" />
             <div className="pointer-events-none absolute -bottom-16 -left-6 h-44 w-44 rounded-full bg-amber-300/20" aria-hidden="true" />
-            <div className="relative flex h-full flex-col justify-between">
+            <div className="relative flex flex-col justify-between">
               <div className="flex items-center justify-between gap-3">
                 <PeopleWordmark tone="white" className="h-7" />
                 <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium">{t.cardNetwork}</span>
