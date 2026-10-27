@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Milyon Kurucu · Sezon 1",
+  "cardFounder": "Kurucu",
+  "cardNumberPlaceholder": "Numaran burada",
+  "cardNetwork": "PEOPLE testneti",
+  "cardFlipHint": "Çevirmek için dokun",
+  "cardBackTitle": "Kurucu kartın",
+  "cardCountry": "Ülke",
+  "cardRank": "Erken giriş sırası",
+  "cardPoints": "Puan",
+  "cardBackLines": [
+    "Doğrulanmış bir kişi, bir numara.",
+    "Seviyen doğrulama zamanına göre belirlenir; numaran seviye içinde kura ile çekilir.",
+    "Paylaş: arkadaşların kendi kartını alır."
+  ]
+}

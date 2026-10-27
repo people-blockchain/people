@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Un Milione di Fondatori · Stagione 1",
+  "cardFounder": "Fondatore",
+  "cardNumberPlaceholder": "Il tuo numero qui",
+  "cardNetwork": "Testnet PEOPLE",
+  "cardFlipHint": "Tocca per girare",
+  "cardBackTitle": "La tua carta fondatore",
+  "cardCountry": "Paese",
+  "cardRank": "Posizione di ingresso anticipato",
+  "cardPoints": "Punti",
+  "cardBackLines": [
+    "Una persona verificata, un numero.",
+    "Il tuo livello dipende da quando ti verifichi; il numero viene estratto all'interno del livello.",
+    "Condividila: i tuoi amici ricevono la loro."
+  ]
+}
