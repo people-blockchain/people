@@ -9,6 +9,15 @@ Foundry consists of:
 - **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
 - **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
+## Dependencies (pinned)
+
+Installed with `forge install` into `contracts/lib` (git submodules), versions pinned in `foundry.lock`:
+
+- OpenZeppelin Contracts **v5.0.2** (`dbb6104ce834628e473d2173bbc9d47f81a9eec3`)
+- forge-std **v1.17.0** (`f3dae6e6ee381f25eb6a246f7da9b85c91a68219`)
+
+Fresh checkout: `cd contracts && forge install` (restores the pinned revisions).
+
 ## Documentation
 
 https://book.getfoundry.sh/
