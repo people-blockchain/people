@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, ChevronDown, Globe, X } from "lucide-react";
 import type { Language } from "@/context/LanguageContext";
+import { content } from "@/lib/content";
 import { CATALOGUE, getLanguageOption } from "@/lib/languages";
 
 interface LanguageSwitcherProps {
@@ -203,7 +204,7 @@ export function LanguageSwitcher({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Close"
+                aria-label={content[value].nav.closeLabel}
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-surface-2 hover:text-ink active:scale-95"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
