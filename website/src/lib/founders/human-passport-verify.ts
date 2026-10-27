@@ -135,3 +135,58 @@ export async function verifyHumanPassportForUser(
   await deps.applyStrongVerification(userId);
   return { ok: true };
 }
+
+export type HumanPassportScoreLookup =
+  | { ok: true; score: number; threshold: number; address: string; passing: boolean }
+  | { ok: false; error: "not_configured" | "wallet_not_linked" | "verification_failed" };
+
+/**
+ * Read-only score lookup used by sale eligibility. It shares the Stamps v2 URL/response rules
+ * with `verifyHumanPassportForUser` but never upgrades a verification level: a below-threshold
+ * score is returned as `passing: false` so the caller can decide.
+ */
+export async function fetchHumanPassportScore(input: {
+  walletAddress: string | null | undefined;
+  fetch: typeof fetch;
+  readConfig?: () => FoundersHumanPassportConfig | null;
+}): Promise<HumanPassportScoreLookup> {
+  const config = (input.readConfig ?? readFoundersHumanPassportConfig)();
+  if (!config) return { ok: false, error: "not_configured" };
+
+  const linked = input.walletAddress?.trim();
+  if (!linked || !isAddress(linked, { strict: false })) {
+    return { ok: false, error: "wallet_not_linked" };
+  }
+  const address = getAddress(linked);
+
+  const url = `https://api.passport.xyz/v2/stamps/${encodeURIComponent(config.scorerId)}/score/${address}`;
+  let response: Response;
+  try {
+    response = await input.fetch(url, {
+      headers: { "X-API-KEY": config.apiKey },
+      cache: "no-store",
+    });
+  } catch {
+    return { ok: false, error: "verification_failed" };
+  }
+  if (!response.ok) return { ok: false, error: "verification_failed" };
+
+  const data = (await response.json()) as PassportScoreResponse;
+  if (data.error) return { ok: false, error: "verification_failed" };
+  if (data.address && (!isAddress(data.address, { strict: false }) || getAddress(data.address) !== address)) {
+    return { ok: false, error: "verification_failed" };
+  }
+
+  const score = parseScore(data.score);
+  if (score === null) return { ok: false, error: "verification_failed" };
+
+  const threshold = parseScore(data.threshold) ?? config.minScore;
+  const minRequired = Math.max(config.minScore, threshold);
+  return {
+    ok: true,
+    score,
+    threshold: minRequired,
+    address,
+    passing: data.passing_score === true || score >= minRequired,
+  };
+}
