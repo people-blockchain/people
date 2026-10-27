@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "Em caso de divergência entre traduções, prevalece a versão em inglês."
+    "englishPrevails": "Em caso de divergência entre traduções, prevalece a versão em inglês.",
+    "englishLink": "Ler a versão em inglês"
   },
   "terms": {
     "title": "Termos de serviço",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "Venda pública de PPL",
-    "englishPrevails": "Em caso de divergência entre traduções, prevalece a versão em inglês."
+    "englishPrevails": "Em caso de divergência entre traduções, prevalece a versão em inglês.",
+    "englishLink": "Ler a versão em inglês"
   }
 }

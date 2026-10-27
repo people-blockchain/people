@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "Nếu các bản dịch khác nhau, bản tiếng Anh được áp dụng."
+    "englishPrevails": "Nếu các bản dịch khác nhau, bản tiếng Anh được áp dụng.",
+    "englishLink": "Đọc bản tiếng Anh"
   },
   "terms": {
     "title": "Điều khoản dịch vụ",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "Bán PPL công khai",
-    "englishPrevails": "Nếu các bản dịch khác nhau, bản tiếng Anh được áp dụng."
+    "englishPrevails": "Nếu các bản dịch khác nhau, bản tiếng Anh được áp dụng.",
+    "englishLink": "Đọc bản tiếng Anh"
   }
 }

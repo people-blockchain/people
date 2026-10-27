@@ -20,12 +20,35 @@ function renderParagraph(text: string, email: string) {
 }
 
 export function LegalDocument({ kind }: { kind: "privacy" | "terms" }) {
-  const { lang } = useLanguage();
+  const { lang, setLang } = useLanguage();
   const doc: LegalPageContent = legalCopy[lang][kind];
   const email = LEGAL_CONTACT_EMAIL;
+  const englishPath = kind === "privacy" ? "/privacy" : "/terms";
 
   return (
     <div className="mx-auto max-w-3xl px-5 pb-24 pt-14 sm:px-8 md:pt-20">
+      {lang !== "en" && doc.englishPrevails ? (
+        // The site has no locale-prefixed routes: language is a stored preference, so the
+        // English version of this page is the same path with the preference switched to en.
+        <p
+          className="mb-8 rounded-lg border border-line bg-surface px-4 py-3 text-sm leading-relaxed text-ink-2"
+          role="note"
+          data-testid="english-prevails"
+        >
+          {doc.englishPrevails}{" "}
+          {doc.englishLink ? (
+            <Link
+              href={englishPath}
+              hrefLang="en"
+              onClick={() => setLang("en")}
+              className="font-medium text-brand underline underline-offset-2"
+              data-testid="english-version-link"
+            >
+              {doc.englishLink}
+            </Link>
+          ) : null}
+        </p>
+      ) : null}
       <header className="border-b border-line pb-10">
         <p className="font-mono text-xs uppercase tracking-widest text-brand">PEOPLE</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{doc.title}</h1>
@@ -35,11 +58,6 @@ export function LegalDocument({ kind }: { kind: "privacy" | "terms" }) {
         <p className="mt-6 font-mono text-xs text-ink-3">
           {doc.effectiveLabel}: {doc.effectiveDate}
         </p>
-        {doc.englishPrevails ? (
-          <p className="mt-3 text-sm text-ink-2" data-testid="english-prevails">
-            {doc.englishPrevails}
-          </p>
-        ) : null}
       </header>
 
       <div className="prose-legal mt-10 space-y-10">

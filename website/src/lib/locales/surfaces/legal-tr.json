@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "Çeviriler arasında fark olursa İngilizce sürüm geçerlidir."
+    "englishPrevails": "Çeviriler arasında fark olursa İngilizce sürüm geçerlidir.",
+    "englishLink": "İngilizce sürümü oku"
   },
   "terms": {
     "title": "Hizmet şartları",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "Halka açık PPL satışı",
-    "englishPrevails": "Çeviriler arasında fark olursa İngilizce sürüm geçerlidir."
+    "englishPrevails": "Çeviriler arasında fark olursa İngilizce sürüm geçerlidir.",
+    "englishLink": "İngilizce sürümü oku"
   }
 }

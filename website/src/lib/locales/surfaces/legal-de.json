@@ -90,7 +90,8 @@
         ]
       }
     ],
-    "englishPrevails": "Bei Abweichungen zwischen Übersetzungen gilt die englische Fassung."
+    "englishPrevails": "Bei Abweichungen zwischen Übersetzungen gilt die englische Fassung.",
+    "englishLink": "Englische Version lesen"
   },
   "terms": {
     "title": "Nutzungsbedingungen",
@@ -177,7 +178,7 @@
         ]
       }
     ],
-    "saleTitle": "Öffentlicher PPL-Verkauf",
-    "englishPrevails": "Bei Abweichungen zwischen Übersetzungen gilt die englische Fassung."
+    "englishPrevails": "Bei Abweichungen zwischen Übersetzungen gilt die englische Fassung.",
+    "englishLink": "Englische Version lesen"
   }
 }

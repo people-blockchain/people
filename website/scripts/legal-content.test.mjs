@@ -6,6 +6,12 @@ import { fileURLToPath } from "node:url";
 import { legalBundle } from "../src/lib/legal-content.ts";
 import { LEGAL_CONTACT_EMAIL } from "../src/lib/legal-contact.ts";
 import { SITE_ROUTES } from "../src/lib/site.ts";
+import {
+  NON_EN_LEGAL_LOCALES,
+  findUntranslated,
+  structurePaths,
+  untranslatedReasons,
+} from "./legal-untranslated.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
@@ -104,3 +110,66 @@ test("legal-en.json is valid JSON on disk", () => {
   assert.equal(parsed.privacy.title, "Privacy Policy");
   assert.equal(parsed.terms.title, "Terms of Service");
 });
+
+const loadLegal = (lang) => JSON.parse(readFileSync(join(surfaces, `legal-${lang}.json`), "utf8"));
+
+test("every non-en legal locale has exactly the same keys and sections as en", () => {
+  const enPaths = structurePaths(loadLegal("en"));
+  for (const lang of NON_EN_LEGAL_LOCALES) {
+    const paths = structurePaths(loadLegal(lang));
+    assert.deepEqual(
+      enPaths.filter((p) => !paths.includes(p)),
+      [],
+      `${lang}: keys missing vs en`,
+    );
+    assert.deepEqual(
+      paths.filter((p) => !enPaths.includes(p)),
+      [],
+      `${lang}: keys not present in en`,
+    );
+  }
+});
+
+test("English notice keys exist in en and in every locale", () => {
+  const en = loadLegal("en");
+  for (const page of ["terms", "privacy"]) {
+    assert.equal(en[page].englishPrevails, "In case of discrepancies, the English version prevails.");
+    assert.ok(en[page].englishLink, `en/${page}.englishLink`);
+    for (const lang of NON_EN_LEGAL_LOCALES) {
+      const doc = loadLegal(lang)[page];
+      assert.ok(doc.englishPrevails?.trim(), `${lang}/${page}.englishPrevails`);
+      assert.ok(doc.englishLink?.trim(), `${lang}/${page}.englishLink`);
+    }
+  }
+});
+
+test("legal document shows the English-prevails notice with a link to the English page", () => {
+  const src = readFileSync(join(root, "src/components/legal/LegalDocument.tsx"), "utf8");
+  assert.match(src, /lang !== "en"/);
+  assert.match(src, /data-testid="english-version-link"/);
+  assert.match(src, /setLang\("en"\)/);
+  assert.match(src, /kind === "privacy" \? "\/privacy" : "\/terms"/);
+  for (const page of ["terms", "privacy"]) {
+    const route = readFileSync(join(root, `src/app/${page}/page.tsx`), "utf8");
+    assert.match(route, /buildLegalMetadata\(/, `${page} metadata must be localized`);
+  }
+});
+
+test("untranslated-English detector flags English prose and accepts translations", () => {
+  const en = "We do not sell your personal information and you may ask us to delete it.";
+  assert.ok(untranslatedReasons(en, en).length > 0);
+  assert.ok(untranslatedReasons("Мы не продаём ваши персональные данные.", en).length === 0);
+  assert.ok(untranslatedReasons("Мы используем Vercel, Neon, Resend и Human Passport.", en).length === 0);
+  assert.ok(untranslatedReasons("Children", "Children").length > 0);
+});
+
+for (const lang of NON_EN_LEGAL_LOCALES) {
+  test(`legal-${lang}.json contains no untranslated English`, () => {
+    const found = findUntranslated(loadLegal(lang), loadLegal("en"), lang);
+    assert.deepEqual(
+      found.map((f) => `${f.path} (${f.reasons.join("; ")})`),
+      [],
+      `${lang}: ${found.length} string(s) still English`,
+    );
+  });
+}
