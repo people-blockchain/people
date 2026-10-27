@@ -26,6 +26,7 @@ import {
   V2_OPEN_DATE_DEFAULT,
   formatV2OpenDate,
   parseV2OpenDate,
+  saleWindowCaptionKey,
   v2SaleWindowValue,
 } from "../src/lib/sale/v2/stats-copy.ts";
 
@@ -329,6 +330,11 @@ test("the v2 sale window contains the locale-formatted opening date", () => {
     v2SaleWindowValue({ copy: en, lang: "en", openDate: "bogus" }),
     "7-day whitelist from 1 Dec 2026, then open sale up to 24 months",
   );
+});
+
+test("the v2 sale-window caption is dropped and the legacy caption key is kept", () => {
+  assert.equal(saleWindowCaptionKey({ v2Enabled: true }), null);
+  assert.equal(saleWindowCaptionKey({ v2Enabled: false }), "saleWindowHint");
 });
 
 test("all 12 locales have the v2 sale-window key with a {date} placeholder", () => {
