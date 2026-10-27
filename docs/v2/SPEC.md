@@ -43,7 +43,7 @@ v2 adds no new economic constants.
 | `FEE_LOW_BPS` / `FEE_HIGH_BPS` | 150 / 300 | `SELL_BACK.feePct/feeHighPct` |
 | `FEE_HIGH_THRESHOLD_BPS` | 100 (1% of day-start reserve) | `SELL_BACK.feeHighThresholdReservePct` |
 | `MAX_LOTS_PER_SELL` | 50 (gas bound per tx, not economic; larger sales = several txs) | — |
-| `LIQUIDITY_RELEASE_DELAY` | 30 days public notice before reserve → liquidity (Q1; option B = 14 days) | Q1 |
+| `LIQUIDITY_RELEASE_DELAY` | 30 days public notice before reserve → liquidity (Q1, DECIDED option A) | Q1 |
 | `usdc` | immutable; Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`; Sepolia: MockUSDC (6 dec) | D7 |
 | `treasury` | immutable, constructor arg (mainnet = Safe above) | D1 |
 | `liquidityReceiver` | immutable, constructor arg, `≠ treasury`, `≠ owner`, `≠ 0` — only exit of the reserve (Q1) | Q1 |
@@ -200,15 +200,14 @@ working during the notice (unless graduated) so holders who disagree can exit wi
 `LIQUIDITY_RELEASE_DELAY` has passed and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
 (`liquidityReleased`), sell-back then closes. There is no other owner path that moves reserve USDC.
 
-Options for Alex (one constant / one constructor arg to change):
-- **Timelock length:** (A, implemented) **30 days** — equals the sell-back hold, so any lot bought before the
-  notice becomes sellable before execution; (B) 14 days — faster launch, but lots bought in the last 2 weeks
-  before the notice cannot exit.
-- **Destination:** (A, implemented) a **purpose-built liquidity escrow contract** fixed at deploy (e.g. the
-  LP-seeding/bridge escrow for the PEOPLE network launch; its code, not the Safe, decides where USDC goes); (B) the
-  destination is passed in `announceLiquidityRelease(to)` and published with the notice — flexible, but then the
-  "never to the team" guarantee rests on public scrutiny during the notice, not on code. Recommendation: A, and
-  the escrow must be deployed and reviewed before mainnet deploy of the hub (it is a constructor arg).
+DECIDED (Alex, 2026-10-27):
+- **Timelock length: A, 30 days** (implemented) — equals the sell-back hold, so any lot bought before the notice
+  becomes sellable before execution. (B, 14 days, rejected: lots bought in the last 2 weeks before the notice
+  could not exit.)
+- **Destination: A, immutable liquidity escrow** (implemented) — `liquidityReceiver` is a purpose-built escrow
+  contract fixed at deploy, so its code, not the Safe, decides where USDC goes (§5.4b). (B, destination passed in
+  `announceLiquidityRelease(to)`, rejected: the "never to the team" guarantee would rest on public scrutiny, not code.)
+  The escrow must be deployed and reviewed before the mainnet deploy of the hub (it is a constructor arg).
 Note: the contract cannot verify that the PEOPLE network actually launched; the announcement + 30-day public
 notice is the safeguard.
 
@@ -217,13 +216,28 @@ reserve leaves only via the timelocked release above. The 50/50 liquidity/multis
 and LP lock from site copy remain off-chain Safe operations with public reporting. Unsold PPL = `SUPPLY_PPL −
 soldPpl` (view `unsoldPpl()`) → Community Pool on the PEOPLE network.
 
+### 5.4b LiquidityEscrow (`PplLiquidityEscrow`)
+The immutable `liquidityReceiver` of the hub. After `executeLiquidityRelease` the reserve USDC sits here.
+- Owner (Ownable2Step; `renounceOwnership` reverts) calls `announce(destination, planHash)`: `destination` must be
+  a **contract** (`code.length > 0`) and not `0`, not the escrow owner, not the treasury — an LP-seeding / bridge
+  contract, never an EOA or team wallet. One pending announcement at a time; emits
+  `ReleaseAnnounced(destination, planHash, executableAt)`; `planHash` commits to a published plan.
+- `NOTICE = 30 days`. `execute()` is **permissionless** after the notice, re-checks `destination` against the
+  current owner/treasury (ownership may have changed), sends the **full USDC balance** to the announced
+  destination, clears the pending release. Repeatable; each release needs a new announcement.
+- `cancel()` (owner) clears the pending release. Nothing else moves USDC: no rescue, no owner withdrawal.
+- Honest limit: the escrow checks only that the destination is a contract, not what it does. On mainnet the final
+  LP-seeding/bridge destination contract MUST be reviewed (code, upgradeability, admin keys) **before** the
+  escrow release is executed; the 30-day notice exists so that review and public scrutiny can happen first.
+  Tests: `test/PplLiquidityEscrow.t.sol`.
+
 ### 5.5 Expiry without graduation (D3, Q1)
 At `openedAt + TERM` buys stop. Sell-back continues with identical limits (30-day hold, 2%/$2k per day, fees)
 while `reserveUsd6` covers the payout and is **never closed by time**. `unsoldPpl()` → Community Pool. The only
 end is the timelocked liquidity release at the PEOPLE network launch (§5.4).
 
 ### 5.5a Delivery freeze (Q2)
-Q2 (Alex): when PPL are delivered on the PEOPLE network, the buyer's Base record is frozen so it cannot be sold
+Q2 (Alex). DECIDED (Alex, 2026-10-27): stays as implemented. When PPL are delivered on the PEOPLE network, the buyer's Base record is frozen so it cannot be sold
 back (no double spend). `markDelivered(address[] holders)` (owner) sets `delivered[h] = true` and emits
 `Delivered(h, pplOf[h])`; frozen addresses cannot `sellBack` and cannot receive new buys. `pplOf`/lots stay as
 an immutable record (invariant 3 unchanged). Allowed only once the sale is over (`graduated`) or the launch release
@@ -333,7 +347,7 @@ ABI differs from v1 (`buyWith(token,…)` → `buy(…)`); website must use a v2
 | Reentrancy | — | `nonReentrant`, CEI, USDC has no hooks | — |
 | USDC blacklist / upgrade (Circle) | reserve frozen | none on-chain | external, disclose |
 | Owner abuse (pause forever) | sell-back blocked | pause cannot move funds; Safe 2-of-3; public | trust in Safe |
-| Owner abuse (early launch announcement) | reserve → liquidityReceiver after 30 d | receiver immutable and ≠ Safe; 30-day public notice, sell-back stays open meanwhile (daily caps limit how much can exit) | Q1 option A; receiver code reviewed before mainnet |
+| Owner abuse (early launch announcement) | reserve → liquidityReceiver after 30 d | receiver immutable and ≠ Safe; 30-day public notice, sell-back stays open meanwhile (daily caps limit how much can exit) | Q1 DECIDED option A (§5.4b); destination contract reviewed before escrow release |
 | Owner `unbind` abuse | user loses verified status | does not touch lots/pplOf; event emitted | trust in Safe |
 | Referral self-dealing | fake referrals | `≠ msg.sender/recipient`; payouts off-chain on net (not sold-back) volume after hold | sybil referrers |
 | Wrong contract (v1) used by UI | funds to v1 | v1 never opened → `buyWith` reverts; site config points only to v2 | — |
@@ -404,8 +418,8 @@ verifier-signing API route (§5.3).
 ## 13. Questions for Alex — answered 2026-10-27
 
 - **Q1** Sell-back never closes by time; reserve never to Safe/team; exit only to liquidity via timelock +
-  public notice → §5.4 (options for timelock length and destination listed there; 30 days + immutable escrow
-  implemented).
+  public notice → §5.4, §5.4b. DECIDED (Alex, 2026-10-27): timelock 30 days (A), destination immutable
+  liquidity escrow (A); both implemented.
 - **Q2** Delivered records frozen → §5.5a.
 - **Q3** Marginal fee confirmed → §5.2 (site copy fix flagged).
 - **Q4** KMS sign-only signer, expiry + nonce, owner-only rotation, Human Passport or World ID, backend

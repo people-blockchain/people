@@ -770,6 +770,32 @@ contract PplCurveHubV2SellTest is HubV2Base {
         hub.markDelivered(hs);
     }
 
+    function test_sellBackRevertsForDeliveredHolder() public {
+        _seedRaised(SMALL_RAISED);
+        _prepare(alice);
+        _prepare(carol);
+        _buyN(alice, 2, MAX_BUY);
+        _buyN(carol, 2, MAX_BUY);
+        _warpBy(30 days + 1);
+        _announce();
+
+        address[] memory hs = new address[](1);
+        hs[0] = alice;
+        vm.prank(owner);
+        hub.markDelivered(hs);
+        assertTrue(hub.delivered(alice));
+
+        // delivered (frozen) buyer cannot sell back during the notice, even with unlocked lots
+        uint256 pplAlice = hub.pplOf(alice);
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.IsDelivered.selector);
+        hub.sellBack(pplAlice / 10, 0);
+        assertEq(hub.pplOf(alice), pplAlice, "record untouched");
+
+        // a non-delivered holder can still sell back during the notice
+        assertGt(_sell(carol, hub.pplOf(carol) / 10), 0, "non-delivered holder unaffected");
+    }
+
     function test_markDeliveredOnlyAfterSaleOver() public {
         _unlockedHolder();
         address[] memory hs = new address[](1);
