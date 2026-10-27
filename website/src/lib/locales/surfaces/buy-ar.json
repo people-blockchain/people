@@ -13,7 +13,9 @@
     "headlineClosed": "بيع PPL يُفتح قريبًا",
     "headlineWhitelist": "بيع PPL: مرحلة القائمة البيضاء الموثّقة",
     "subWhitelist": "أول 7 أيام: للأشخاص الموثّقين فقط. وثّق هويتك عبر World ID أو Human Passport للمشاركة.",
-    "statsTitleClosed": "على المنحنى — الافتتاح قريبًا"
+    "statsTitleClosed": "على المنحنى — الافتتاح قريبًا",
+    "statsTitleWhitelist": "على المنحنى — مرحلة القائمة البيضاء",
+    "statsTitleOpen": "على المنحنى — البيع المفتوح"
   },
   "stats": {
     "price": "السعر الحالي",
@@ -27,6 +29,8 @@
     "notOpenYet": "لم يُفتح بعد",
     "progressLabel": "التقدم نحو التخرّج عند {target}",
     "saleStatus": "حالة البيع",
+    "whitelistStatus": "القائمة البيضاء: للموثّقين فقط",
+    "openStatus": "مفتوح",
     "startPriceOnOpen": "سعر البداية عند الافتتاح: {start}",
     "saleWindow": "مدة البيع",
     "saleWindowValue": "حتى نفاد الكمية أو {term}",
