@@ -338,5 +338,83 @@
         "text": "Die oben genannten KI-gestützten Prüfungen hat das Projektteam durchgeführt. Sie sind kein Sicherheitsaudit, und ein externes Audit gibt es noch nicht. Ein Bug-Bounty senkt das Risiko, beseitigt es aber nicht: Keine Prüfung kann beweisen, dass Software fehlerfrei ist."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Whitelist-Phase",
+      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "daysLeft": "Noch {days} Tage",
+      "openTitle": "Öffentliche Phase",
+      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "notOpenTitle": "Verkauf noch nicht geöffnet",
+      "notOpenBody": "Käufe öffnen, sobald der Vertrag in die Whitelist-Phase eintritt.",
+      "expiredTitle": "Verkauf beendet",
+      "graduatedTitle": "Verkauf abgeschlossen",
+      "closedBody": "Käufe sind geschlossen."
+    },
+    "verify": {
+      "title": "Erste 7 Tage: nur verifizierte Personen",
+      "body": "Verifiziere dich mit World ID oder Human Passport, um teilzunehmen.",
+      "telegramNote": "Telegram allein reicht nicht.",
+      "ctaVerify": "Jetzt verifizieren",
+      "ctaSignIn": "Anmelden zum Verifizieren",
+      "confirmTitle": "Ein Schritt on-chain fehlt",
+      "confirmBody": "Bestätige deine verifizierte Identität auf Base, um den Kauf freizuschalten.",
+      "ctaConfirm": "On-chain bestätigen",
+      "confirming": "On-chain wird bestätigt…",
+      "confirmed": "On-chain bestätigt. Du kannst kaufen.",
+      "error": "On-chain-Bestätigung fehlgeschlagen. Versuche es erneut.",
+      "notEligible": "Dieses Konto ist nicht für die Whitelist berechtigt.",
+      "connectWallet": "Verbinde eine Wallet, um fortzufahren.",
+      "alreadyVerified": "Bereits on-chain bestätigt."
+    },
+    "form": {
+      "title": "PPL kaufen",
+      "network": "Netzwerk",
+      "token": "Token",
+      "amount": "Betrag",
+      "networkBase": "Base",
+      "networkOther": "Anderes Netzwerk",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "PPL-Schätzung",
+      "minimum": "Mindestbetrag",
+      "price": "Aktueller PPL-Preis",
+      "eta": "Ankunft in etwa {eta}",
+      "fees": "Gebühren: {fees}",
+      "feesToggle": "Gebührendetails",
+      "feesBody": "Die Base-Netzwerkgebühr liegt meist bei etwa 0,01 $. Die LI.FI-Tausch- oder Bridge-Gebühr wird im Widget vor der Bestätigung angezeigt.",
+      "lifiLine": "Tausch über LI.FI, Kauf in USDC auf Base",
+      "sellbackLine": "Rückverkauf öffnet nach 30 Tagen; Rückkauf-Limits — Details",
+      "sellbackLink": "Details",
+      "cta": "PPL kaufen",
+      "connecting": "Verbinden…",
+      "buying": "Bestätigen…",
+      "connect": "Wallet verbinden, um zu kaufen",
+      "switch": "Zu Base wechseln",
+      "wrongNetwork": "Wechsle deine Wallet zu Base, um zu kaufen.",
+      "invalid": "Gib einen Dollarbetrag ein.",
+      "belowMin": "Das Minimum ist {min}.",
+      "overMax": "Das Maximum ist {max} pro Kauf.",
+      "overDay": "Das Tageslimit ist {max} pro Adresse.",
+      "needVerification": "Schließe die Verifizierung oben ab, um zu kaufen.",
+      "needWallet": "Verbinde eine Wallet, um dein Angebot zu sehen.",
+      "preview": "Vorschau: Es wird keine Transaktion gesendet.",
+      "bridgeHint": "Tausche zuerst mit LI.FI in USDC auf Base und schließe dann den Kauf ab.",
+      "error": "Der Kauf wurde nicht abgeschlossen. Versuche es erneut."
+    },
+    "success": {
+      "title": "Kauf abgeschlossen",
+      "credited": "{ppl} PPL gutgeschrieben an {address}",
+      "tx": "Transaktion ansehen",
+      "unlock": "Rückverkauf öffnet am {date}",
+      "again": "Mehr PPL kaufen"
+    },
+    "partial": {
+      "title": "USDC angekommen — PPL nicht gekauft",
+      "body": "Der Tausch hat {amount} USDC auf Base geliefert, aber der PPL-Kauf wurde nicht abgeschlossen.",
+      "topUp": "PPL mit {amount} USDC kaufen",
+      "hint": "Dies wiederholt den Kauf auf Base mit den erhaltenen USDC."
+    }
   }
 }

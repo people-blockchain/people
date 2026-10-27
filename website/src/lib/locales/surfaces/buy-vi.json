@@ -338,5 +338,83 @@
         "text": "Các đánh giá có hỗ trợ AI nêu trên do đội ngũ dự án thực hiện. Đây không phải kiểm toán bảo mật, và chưa có kiểm toán độc lập bên ngoài. Bug bounty giảm rủi ro nhưng không loại bỏ được: không đánh giá nào chứng minh được phần mềm không có lỗi."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Giai đoạn danh sách trắng",
+      "whitelistBody": "7 ngày đầu: chỉ người đã xác minh. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 mỗi ngày.",
+      "daysLeft": "Còn {days} ngày",
+      "openTitle": "Giai đoạn công khai",
+      "openBody": "Mở cho tất cả. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 mỗi ngày.",
+      "notOpenTitle": "Chưa mở bán",
+      "notOpenBody": "Việc mua sẽ mở khi hợp đồng vào giai đoạn danh sách trắng.",
+      "expiredTitle": "Đã kết thúc bán",
+      "graduatedTitle": "Đã tốt nghiệp",
+      "closedBody": "Việc mua đã đóng."
+    },
+    "verify": {
+      "title": "7 ngày đầu chỉ dành cho người đã xác minh",
+      "body": "Xác minh bằng World ID hoặc Human Passport để tham gia.",
+      "telegramNote": "Chỉ Telegram là không đủ.",
+      "ctaVerify": "Xác minh ngay",
+      "ctaSignIn": "Đăng nhập để xác minh",
+      "confirmTitle": "Còn một bước trên chuỗi",
+      "confirmBody": "Xác nhận danh tính đã xác minh trên Base để mở khóa việc mua.",
+      "ctaConfirm": "Xác nhận trên chuỗi",
+      "confirming": "Đang xác nhận trên chuỗi…",
+      "confirmed": "Đã xác nhận trên chuỗi. Bạn có thể mua.",
+      "error": "Không thể xác nhận trên chuỗi. Hãy thử lại.",
+      "notEligible": "Tài khoản này không đủ điều kiện cho danh sách trắng.",
+      "connectWallet": "Kết nối ví để tiếp tục.",
+      "alreadyVerified": "Đã xác nhận trên chuỗi."
+    },
+    "form": {
+      "title": "Mua PPL",
+      "network": "Mạng",
+      "token": "Token",
+      "amount": "Số tiền",
+      "networkBase": "Base",
+      "networkOther": "Mạng khác",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Ước tính PPL",
+      "minimum": "Tối thiểu nhận được",
+      "price": "Giá PPL hiện tại",
+      "eta": "Đến trong khoảng {eta}",
+      "fees": "Phí: {fees}",
+      "feesToggle": "Chi tiết phí",
+      "feesBody": "Phí mạng Base thường khoảng $0,01. Phí hoán đổi hoặc cầu nối LI.FI được hiển thị trong widget trước khi xác nhận.",
+      "lifiLine": "Hoán đổi qua LI.FI, mua bằng USDC trên Base",
+      "sellbackLine": "Bán lại mở sau 30 ngày; giới hạn mua lại — chi tiết",
+      "sellbackLink": "chi tiết",
+      "cta": "Mua PPL",
+      "connecting": "Đang kết nối…",
+      "buying": "Đang xác nhận…",
+      "connect": "Kết nối ví để mua",
+      "switch": "Chuyển sang Base",
+      "wrongNetwork": "Chuyển ví sang Base để mua.",
+      "invalid": "Nhập số tiền bằng đô la.",
+      "belowMin": "Tối thiểu là {min}.",
+      "overMax": "Tối đa là {max} mỗi lần mua.",
+      "overDay": "Giới hạn mỗi ngày là {max} mỗi địa chỉ.",
+      "needVerification": "Hoàn tất xác minh ở trên để mua.",
+      "needWallet": "Kết nối ví để xem báo giá.",
+      "preview": "Xem trước: sẽ không gửi giao dịch nào.",
+      "bridgeHint": "Trước tiên hoán đổi sang USDC trên Base bằng LI.FI, sau đó hoàn tất việc mua.",
+      "error": "Việc mua không thành công. Hãy thử lại."
+    },
+    "success": {
+      "title": "Mua hoàn tất",
+      "credited": "{ppl} PPL đã ghi có vào {address}",
+      "tx": "Xem giao dịch",
+      "unlock": "Bán lại mở vào {date}",
+      "again": "Mua thêm PPL"
+    },
+    "partial": {
+      "title": "USDC đã đến — chưa mua được PPL",
+      "body": "Hoán đổi đã chuyển {amount} USDC trên Base, nhưng việc mua PPL không thành công.",
+      "topUp": "Mua PPL bằng {amount} USDC",
+      "hint": "Thao tác này thử lại việc mua trên Base bằng số USDC đã nhận."
+    }
   }
 }
