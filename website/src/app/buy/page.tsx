@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 
 import { SiteChrome } from "@/components/SiteChrome";
 import { BuyPage } from "@/components/buy/BuyPage";
+import { resolveHubOpen } from "@/lib/sale/hub-open";
 import buyEn from "@/lib/locales/surfaces/buy-en.json" with { type: "json" };
 import { SITE_NAME } from "@/lib/site";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: `${buyEn.meta.title} | PEOPLE Blockchain`,
@@ -18,10 +21,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
+  const initialOpen = await resolveHubOpen();
   return (
     <SiteChrome>
-      <BuyPage />
+      <BuyPage initialSaleOpen={initialOpen} />
     </SiteChrome>
   );
 }
