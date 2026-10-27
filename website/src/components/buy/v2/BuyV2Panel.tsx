@@ -11,12 +11,13 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
-import { fillCopy, intlLocale, ppl, pricePerPpl, usd } from "@/lib/sale/format";
+import { fillCopy, intlLocale, ppl, pricePerPpl, usd, usdcAmount } from "@/lib/sale/format";
 import { V2_PHASES, V2_SALE } from "@/lib/sale/v2/constants";
 import {
   estimatePplOut,
   isV2PreviewEnabled,
   minPplOutFromEstimate,
+  panelVisibility,
   parseV2PreviewState,
   partialTopUpAmount,
   phaseView,
@@ -53,13 +54,6 @@ function txUrl(explorer: string | null, hash: string): string | null {
 
 function shortAddress(address: string): string {
   return `${address.slice(0, 6)}…${address.slice(-4)}`;
-}
-
-function amountText(value: number, lang: string): string {
-  return value.toLocaleString(intlLocale(lang), {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
 }
 
 function SellbackLine({ line, linkText }: { line: string; linkText: string }) {
@@ -154,6 +148,11 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
     buyFailed: Boolean(partialState),
     receivedUsdc: partialState?.receivedUsdc ?? 0,
   });
+  const visibility = panelVisibility({
+    hasPurchase: Boolean(purchase),
+    hasPartial: Boolean(partialState),
+  });
+  const topUpAmountText = usdcAmount(topUp ?? partialState?.receivedUsdc ?? 0, lang);
 
   const wrongNetwork =
     canBuy && account && provider && walletChainId !== null && walletChainId !== chain.id;
@@ -223,7 +222,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   };
 
   const onTopUp = async () => {
-    if (!topUp) return;
+    if (!topUp || preview) return;
     await runPurchase(topUp);
   };
 
@@ -245,7 +244,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
       <div className="space-y-4">
         <V2PhaseBanner view={view} copy={t.banner} />
 
-        {showVerification ? (
+        {visibility.showVerification && showVerification ? (
           <V2VerificationGate
             copy={t.verify}
             signedIn={verification.signedIn}
@@ -256,13 +255,13 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
             onConfirm={() => void onConfirm()}
             onConnect={onConnect}
           />
-        ) : verifiedOnChain ? (
+        ) : visibility.showVerification && verifiedOnChain ? (
           <p className="rounded-xl border border-value/40 bg-value/5 px-3 py-2 text-sm font-medium text-ink" data-testid="v2-verified">
             {t.verify.alreadyVerified}
           </p>
         ) : null}
 
-        {purchase ? (
+        {visibility.showSuccess && purchase ? (
           <div className="rounded-2xl border border-value/40 bg-value/5 p-4" data-testid="v2-success">
             <p className="text-base font-bold text-ink">{t.success.title}</p>
             <p className="mt-1 text-sm text-ink-2">
@@ -304,26 +303,26 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
           </div>
         ) : null}
 
-        {partialState ? (
+        {visibility.showTopUp && partialState ? (
           <div className="rounded-2xl border border-amber-500/40 bg-amber-500/5 p-4" data-testid="v2-partial">
             <p className="text-base font-bold text-ink">{t.partial.title}</p>
             <p className="mt-1 text-sm text-ink-2">
-              {fillCopy(t.partial.body, { amount: usd(partialState.receivedUsdc, lang) })}
+              {fillCopy(t.partial.body, { amount: topUpAmountText })}
             </p>
             <button
               type="button"
               onClick={() => void onTopUp()}
-              disabled={!topUp || busy || Boolean(preview)}
+              disabled={!topUp || busy}
               className="mt-3 min-h-11 rounded-full bg-brand px-5 text-sm font-semibold text-brand-ink disabled:cursor-not-allowed disabled:opacity-55"
               data-testid="v2-topup"
             >
-              {t.partial.topUp.replace("{amount}", amountText(topUp ?? partialState.receivedUsdc, lang))}
+              {fillCopy(t.partial.topUp, { amount: topUpAmountText })}
             </button>
             <p className="mt-2 text-xs text-ink-3">{t.partial.hint}</p>
           </div>
         ) : null}
 
-        {!purchase ? (
+        {visibility.showForm ? (
           <>
             <div className="grid gap-3 sm:grid-cols-3">
               <div>

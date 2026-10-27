@@ -11,6 +11,8 @@
     "statsNote": "",
     "ctaScroll": "Đường cong hoạt động thế nào",
     "headlineClosed": "Đợt bán PPL sắp mở",
+    "headlineWhitelist": "Bán PPL: giai đoạn danh sách trắng đã xác minh",
+    "subWhitelist": "7 ngày đầu: chỉ người đã xác minh. Xác minh bằng World ID hoặc Human Passport để tham gia.",
     "statsTitleClosed": "Trên đường cong — sắp mở bán"
   },
   "stats": {

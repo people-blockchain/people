@@ -11,6 +11,8 @@
     "statsNote": "",
     "ctaScroll": "Как работает кривая",
     "headlineClosed": "Продажа PPL скоро откроется",
+    "headlineWhitelist": "Продажа PPL: фаза вайтлиста для подтверждённых",
+    "subWhitelist": "Первые 7 дней — только для подтверждённых людей. Подтвердите личность через World ID или Human Passport, чтобы участвовать.",
     "statsTitleClosed": "Кривая цены — скоро открытие"
   },
   "stats": {

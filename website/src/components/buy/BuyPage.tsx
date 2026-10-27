@@ -1,7 +1,18 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
+
 import { useLanguage } from "@/context/LanguageContext";
-import { readV2Env, shouldRenderV2Buy } from "@/lib/sale/v2/logic";
+import {
+  heroPhase,
+  isV2PreviewEnabled,
+  parseV2PreviewState,
+  readV2Env,
+  resolveV2Chain,
+  shouldRenderV2Buy,
+} from "@/lib/sale/v2/logic";
+import { useV2Phase } from "@/lib/sale/v2/useV2Sale";
 import { Reveal } from "@/components/motion/Reveal";
 import { WARM_SECTION, WarmSection } from "@/components/warm/warm-ui";
 import { buyCopy } from "@/lib/buy-content";
@@ -34,7 +45,22 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
   const open = phase === "open";
 
   const isRtl = lang === "ar";
-  const v2Buy = shouldRenderV2Buy(readV2Env());
+  const searchParams = useSearchParams();
+  const env = useMemo(() => readV2Env(), []);
+  const v2Buy = shouldRenderV2Buy(env);
+  const previewState = isV2PreviewEnabled(env)
+    ? parseV2PreviewState(searchParams.get("v2state"))
+    : null;
+  const v2Chain = useMemo(() => resolveV2Chain(env), [env]);
+  const v2Phase = useV2Phase({ chain: v2Chain, previewState, enabled: v2Buy });
+  const headingPhase = heroPhase({ v2Enabled: v2Buy, phase: v2Phase.phase, legacyOpen: open });
+  const heroTitle =
+    headingPhase === "whitelist"
+      ? t.hero.headlineWhitelist
+      : headingPhase === "open"
+        ? t.hero.headline
+        : t.hero.headlineClosed;
+  const heroSub = headingPhase === "whitelist" ? t.hero.subWhitelist : t.hero.sub;
 
   return (
     <div
@@ -56,10 +82,10 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
               id="buy-hero-title"
               className="mt-2 text-[clamp(1.75rem,6vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink"
             >
-              {open ? t.hero.headline : t.hero.headlineClosed}
+              {heroTitle}
             </h1>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              {t.hero.sub}
+              {heroSub}
               <FootnoteRef marker="*" />
             </p>
           </div>
