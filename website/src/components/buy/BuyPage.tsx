@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/context/LanguageContext";
+import { readV2Env, shouldRenderV2Buy } from "@/lib/sale/v2/logic";
 import { Reveal } from "@/components/motion/Reveal";
 import { WARM_SECTION, WarmSection } from "@/components/warm/warm-ui";
 import { buyCopy } from "@/lib/buy-content";
@@ -8,6 +9,7 @@ import { CURVE } from "@/lib/sale/config";
 import { fillCopy, pricePerPpl } from "@/lib/sale/format";
 
 import { BuyForm } from "./BuyForm";
+import { BuyV2Panel } from "./v2/BuyV2Panel";
 import { BuyWhyPriceRises } from "./BuyWhyPriceRises";
 import { CurveChart } from "./CurveChart";
 import { SaleFaq } from "./SaleFaq";
@@ -32,6 +34,7 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
   const open = phase === "open";
 
   const isRtl = lang === "ar";
+  const v2Buy = shouldRenderV2Buy(readV2Env());
 
   return (
     <div
@@ -65,7 +68,11 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
             id={HERO_FORM_ID}
             className="order-2 scroll-mt-[calc(3.5rem+0.75rem)] lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:scroll-mt-24"
           >
-            <BuyForm soldPpl={stats.soldPpl} phase={phase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
+            {v2Buy ? (
+              <BuyV2Panel testId="buy-form-hero" />
+            ) : (
+              <BuyForm soldPpl={stats.soldPpl} phase={phase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
+            )}
           </div>
 
           <div className="order-3 lg:col-start-1 lg:row-start-2">
