@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PAY_FROM_OTHER_CHAINS, SALE, SELL_BACK } from "@/lib/sale/config";
+import { resolveHubOpen } from "@/lib/sale/hub-open";
 import { getBaseSaleNetwork } from "@/lib/sale/sale-hub";
 import { totalDeliveredSoldPpl } from "@/lib/sale/service";
 import { BONDING_CURVE, bondingCurvePriceUsdt } from "@/lib/tokenomics";
@@ -8,6 +9,7 @@ import { SALE_MAX_USDT } from "@/lib/sale/economics";
 export async function GET() {
   const sold = await totalDeliveredSoldPpl();
   const base = getBaseSaleNetwork();
+  const hubOpen = await resolveHubOpen();
   return NextResponse.json({
     soldPpl: sold,
     supplyPpl: BONDING_CURVE.supplyPpl,
@@ -21,7 +23,7 @@ export async function GET() {
       id: base.id,
       label: base.label,
       chainId: base.chainId,
-      enabled: base.enabled,
+      enabled: hubOpen,
       stables: base.stables,
       saleContract: base.evm.saleContract,
     },

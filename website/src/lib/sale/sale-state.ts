@@ -31,12 +31,17 @@ function loadConfig(): Promise<Resolved> {
  * (env, visible to the client) and `hub.enabled` from `/api/sale/config`.
  * Until that is known — or if it cannot be loaded — the page says "closed".
  */
-export function useSalePhase(): { phase: SalePhase; loading: boolean; hubAcceptsUsdt: boolean } {
+export function useSalePhase(initialOpen?: boolean): {
+  phase: SalePhase;
+  loading: boolean;
+  hubAcceptsUsdt: boolean;
+} {
   const configured = saleContractConfigured();
-  const [state, setState] = useState<{ done: boolean; value: Resolved }>({
-    done: !configured,
-    value: { open: false, hubAcceptsUsdt: false },
-  });
+  const [state, setState] = useState<{ done: boolean; value: Resolved }>(() =>
+    initialOpen !== undefined
+      ? { done: true, value: { open: initialOpen, hubAcceptsUsdt: false } }
+      : { done: !configured, value: { open: false, hubAcceptsUsdt: false } },
+  );
 
   useEffect(() => {
     if (!configured) return;
