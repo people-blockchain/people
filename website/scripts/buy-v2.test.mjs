@@ -5,11 +5,14 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import { V2_PHASES } from "../src/lib/sale/v2/constants.ts";
+import { fillCopy, usdcAmount } from "../src/lib/sale/format.ts";
 import {
   estimatePplOut,
+  heroPhase,
   isV2BuyEnabled,
   isV2PreviewEnabled,
   minPplOutFromEstimate,
+  panelVisibility,
   partialTopUpAmount,
   phaseView,
   previewSnapshot,
@@ -94,6 +97,52 @@ test("a swap that succeeded while buy() failed yields the received USDC top-up",
   assert.equal(partialTopUpAmount({ swapSucceeded: true, buyFailed: true, receivedUsdc: 0 }), null);
 });
 
+test("USDC amounts use one formatter with exactly two decimals in text and button", () => {
+  assert.equal(usdcAmount(123.45, "en"), "123.45");
+  assert.equal(usdcAmount(123.4, "en"), "123.40");
+  assert.equal(usdcAmount(123.456, "en"), "123.46");
+
+  const amount = usdcAmount(
+    partialTopUpAmount({ swapSucceeded: true, buyFailed: true, receivedUsdc: 123.456 }),
+    "en",
+  );
+  const copy = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).v2.partial;
+  const body = fillCopy(copy.body, { amount });
+  const button = fillCopy(copy.topUp, { amount });
+  assert.match(body, /123\.45 USDC/);
+  assert.match(button, /123\.45 USDC/);
+  assert.ok(body.includes(`${amount} USDC`));
+  assert.ok(button.includes(`${amount} USDC`));
+});
+
+test("the partial state is a single top-up card with no form or main CTA", () => {
+  const partial = panelVisibility({ hasPurchase: true, hasPartial: true });
+  assert.deepEqual(partial, {
+    showForm: false,
+    showVerification: false,
+    showSuccess: false,
+    showTopUp: true,
+  });
+  const normal = panelVisibility({ hasPurchase: false, hasPartial: false });
+  assert.equal(normal.showForm, true);
+  assert.equal(normal.showTopUp, false);
+  const success = panelVisibility({ hasPurchase: true, hasPartial: false });
+  assert.equal(success.showForm, false);
+  assert.equal(success.showSuccess, true);
+  assert.equal(success.showTopUp, false);
+});
+
+test("the hero follows the V2 whitelist phase, and legacy pages keep their old phase", () => {
+  assert.equal(
+    heroPhase({ v2Enabled: true, phase: V2_PHASES.Whitelist, legacyOpen: false }),
+    "whitelist",
+  );
+  assert.equal(heroPhase({ v2Enabled: true, phase: V2_PHASES.Open, legacyOpen: false }), "open");
+  assert.equal(heroPhase({ v2Enabled: true, phase: V2_PHASES.NotOpen, legacyOpen: true }), "closed");
+  assert.equal(heroPhase({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: false }), "closed");
+  assert.equal(heroPhase({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: true }), "open");
+});
+
 test("phase view allows buying only in whitelist/open and counts the 7-day window", () => {
   const opened = Date.UTC(2026, 9, 18, 12, 0, 0) / 1000;
   const now = Date.UTC(2026, 9, 20, 12, 0, 0);
@@ -144,6 +193,21 @@ test("all 12 locales carry every v2 key", () => {
     const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).v2;
     assert.ok(copy, `${lang} is missing v2`);
     assert.deepEqual(v2Keys(copy).sort(), expected, `${lang} v2 keys`);
+  }
+});
+
+test("all 12 locales carry a real whitelist hero title and subtitle", () => {
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).hero;
+  assert.equal(en.headlineWhitelist, "PPL sale: verified whitelist phase");
+  for (const lang of LANGS) {
+    const hero = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).hero;
+    assert.ok(hero.headlineWhitelist, `${lang} is missing hero.headlineWhitelist`);
+    assert.ok(hero.subWhitelist, `${lang} is missing hero.subWhitelist`);
+    assert.notEqual(hero.headlineWhitelist, hero.headlineClosed, `${lang} whitelist title`);
+    if (lang !== "en") {
+      assert.notEqual(hero.headlineWhitelist, en.headlineWhitelist, `${lang} needs a translation`);
+      assert.notEqual(hero.subWhitelist, en.subWhitelist, `${lang} needs a subtitle translation`);
+    }
   }
 });
 

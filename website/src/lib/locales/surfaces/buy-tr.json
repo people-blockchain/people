@@ -11,6 +11,8 @@
     "statsNote": "",
     "ctaScroll": "Eğri nasıl çalışır",
     "headlineClosed": "PPL satışı yakında açılıyor",
+    "headlineWhitelist": "PPL satışı: doğrulanmış beyaz liste aşaması",
+    "subWhitelist": "İlk 7 gün: yalnızca doğrulanmış kişiler. Katılmak için World ID veya Human Passport ile doğrulanın.",
     "statsTitleClosed": "Eğride — açılış yakında"
   },
   "stats": {

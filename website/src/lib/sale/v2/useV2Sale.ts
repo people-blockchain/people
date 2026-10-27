@@ -145,3 +145,62 @@ export function useV2Refresh() {
   const refresh = useCallback(() => setKey((n) => n + 1), []);
   return { refreshKey: key, refresh };
 }
+
+export type V2PhaseSnapshot = {
+  phase: V2Phase | null;
+  openedAtSec: number;
+};
+
+/**
+ * Reads only the phase needed by the page hero, so the heading can follow the
+ * V2 whitelist state without duplicating the rest of the sale snapshot.
+ */
+export function useV2Phase(input: {
+  chain: V2Chain;
+  previewState: V2PreviewState | null;
+  refreshKey?: number;
+  enabled?: boolean;
+}): V2PhaseSnapshot {
+  const { chain, previewState, refreshKey = 0, enabled = true } = input;
+  const preview = useMemo(() => (previewState ? previewSnapshot(previewState) : null), [previewState]);
+  const [state, setState] = useState<V2PhaseSnapshot>(() => ({
+    phase: enabled ? (preview?.phase ?? null) : null,
+    openedAtSec: enabled ? (preview?.openedAtSec ?? 0) : 0,
+  }));
+
+  useEffect(() => {
+    if (!enabled) {
+      setState({ phase: null, openedAtSec: 0 });
+      return;
+    }
+    if (preview) {
+      setState({ phase: preview.phase, openedAtSec: preview.openedAtSec });
+      return;
+    }
+    if (!chain.hubAddress) {
+      setState({ phase: null, openedAtSec: 0 });
+      return;
+    }
+    let active = true;
+    const client = createPublicClient({
+      chain: chain.chain,
+      transport: http(undefined, { timeout: 12_000 }),
+    });
+    const hub = chain.hubAddress as Address;
+    void Promise.all([
+      client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "phase" }),
+      client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "openedAt" }),
+    ])
+      .then(([phase, openedAt]) => {
+        if (active) setState({ phase: asPhase(phase), openedAtSec: Number(openedAt) });
+      })
+      .catch(() => {
+        if (active) setState({ phase: null, openedAtSec: 0 });
+      });
+    return () => {
+      active = false;
+    };
+  }, [chain.chain, chain.hubAddress, enabled, preview, refreshKey]);
+
+  return state;
+}

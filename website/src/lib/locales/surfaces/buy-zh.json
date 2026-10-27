@@ -11,6 +11,8 @@
     "statsNote": "",
     "ctaScroll": "曲线如何运作",
     "headlineClosed": "PPL 销售即将开放",
+    "headlineWhitelist": "PPL 销售：已验证白名单阶段",
+    "subWhitelist": "前 7 天仅限已验证用户。使用 World ID 或 Human Passport 完成验证即可参与。",
     "statsTitleClosed": "曲线数据 — 即将开放"
   },
   "stats": {

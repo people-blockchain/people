@@ -11,6 +11,8 @@
     "statsNote": "",
     "ctaScroll": "Comment fonctionne la courbe",
     "headlineClosed": "La vente de PPL ouvre bientôt",
+    "headlineWhitelist": "Vente de PPL : phase de liste blanche vérifiée",
+    "subWhitelist": "7 premiers jours : personnes vérifiées uniquement. Vérifiez-vous avec World ID ou Human Passport pour participer.",
     "statsTitleClosed": "Sur la courbe — ouverture prochaine"
   },
   "stats": {

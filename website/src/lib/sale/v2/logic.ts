@@ -181,6 +181,46 @@ export function partialTopUpAmount(outcome: V2PurchaseOutcome): number | null {
   return Math.floor(outcome.receivedUsdc * 100) / 100;
 }
 
+export type V2PanelVisibility = {
+  showForm: boolean;
+  showVerification: boolean;
+  showSuccess: boolean;
+  showTopUp: boolean;
+};
+
+/**
+ * Once the swap has landed USDC and only the buy failed, the panel is a single
+ * top-up card: no form, no estimates, no fees, no LI.FI line, no main CTA.
+ */
+export function panelVisibility(input: {
+  hasPurchase: boolean;
+  hasPartial: boolean;
+}): V2PanelVisibility {
+  if (input.hasPartial) {
+    return { showForm: false, showVerification: false, showSuccess: false, showTopUp: true };
+  }
+  return {
+    showForm: !input.hasPurchase,
+    showVerification: true,
+    showSuccess: input.hasPurchase,
+    showTopUp: false,
+  };
+}
+
+export type V2HeroPhase = "whitelist" | "open" | "closed";
+
+/** The hero title follows the V2 phase when the V2 panel is enabled. */
+export function heroPhase(input: {
+  v2Enabled: boolean;
+  phase: V2Phase | null | undefined;
+  legacyOpen: boolean;
+}): V2HeroPhase {
+  if (!input.v2Enabled) return input.legacyOpen ? "open" : "closed";
+  if (input.phase === V2_PHASES.Whitelist) return "whitelist";
+  if (input.phase === V2_PHASES.Open) return "open";
+  return "closed";
+}
+
 export type V2PhaseView = {
   phase: V2Phase;
   /** Whole days left in the 7-day whitelist window, or null outside it. */
