@@ -1,0 +1,16 @@
+{
+  "eyebrow": "百万创始人 · 第 1 季",
+  "cardFounder": "创始人",
+  "cardNumberPlaceholder": "你的编号在此",
+  "cardNetwork": "PEOPLE 测试网",
+  "cardFlipHint": "点击翻转",
+  "cardBackTitle": "你的创始人卡",
+  "cardCountry": "国家/地区",
+  "cardRank": "早期加入排名",
+  "cardPoints": "积分",
+  "cardBackLines": [
+    "一位已验证的真人，一个编号。",
+    "等级取决于你的验证时间；编号在等级内抽取。",
+    "可分享——你的朋友会获得各自的卡片。"
+  ]
+}
