@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Prix de départ à l’ouverture : {start}",
     "saleWindow": "Durée de la vente",
     "saleWindowValue": "Jusqu’à épuisement ou {term}",
+    "saleWindowV2": "Whitelist de 7 jours à partir du {date}, puis vente ouverte jusqu’à {term}",
     "saleWindowHint": "Selon la première échéance. Aucune prolongation.",
     "endsByHint": "Date limite. Plus tôt en cas d’épuisement."
   },

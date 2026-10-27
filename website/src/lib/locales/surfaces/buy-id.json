@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Harga awal saat dibuka: {start}",
     "saleWindow": "Masa penjualan",
     "saleWindowValue": "Hingga habis atau {term}",
+    "saleWindowV2": "Whitelist 7 hari mulai {date}, lalu penjualan terbuka hingga {term}",
     "saleWindowHint": "Mana yang lebih dulu. Tanpa perpanjangan.",
     "endsByHint": "Tanggal berakhir paling lambat. Lebih awal jika habis."
   },

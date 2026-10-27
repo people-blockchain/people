@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Precio inicial al abrir: {start}",
     "saleWindow": "Plazo de la venta",
     "saleWindowValue": "Hasta agotarse o {term}",
+    "saleWindowV2": "Whitelist de 7 días desde el {date}, luego venta abierta hasta {term}",
     "saleWindowHint": "Lo que ocurra primero. Sin prórrogas.",
     "endsByHint": "Fecha límite. Antes, si se agota."
   },

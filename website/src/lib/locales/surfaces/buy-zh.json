@@ -34,6 +34,7 @@
     "startPriceOnOpen": "开放时的起始价格：{start}",
     "saleWindow": "销售期限",
     "saleWindowValue": "售罄或 {term}",
+    "saleWindowV2": "自 {date} 起 7 天白名单，随后开放销售，最长 {term}",
     "saleWindowHint": "以先到者为准。不会延期。",
     "endsByHint": "最晚结束日期。如提前售罄则更早结束。"
   },

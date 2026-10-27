@@ -34,6 +34,7 @@
     "startPriceOnOpen": "Açılıştaki başlangıç fiyatı: {start}",
     "saleWindow": "Satış süresi",
     "saleWindowValue": "Tükenene kadar veya {term}",
+    "saleWindowV2": "{date} tarihinden itibaren 7 günlük whitelist, ardından {term} kadar açık satış",
     "saleWindowHint": "Hangisi önce gerçekleşirse. Uzatma yok.",
     "endsByHint": "En geç bitiş tarihi. Tükenirse daha erken."
   },
