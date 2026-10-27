@@ -1,0 +1,113 @@
+{
+  "note": "anvil fork of Base Sepolia (chain 84532), not a live deployment",
+  "deployment": {
+    "chainId": 84532,
+    "hub": "0x21c250f0f5710306028b0e8c6597dd816f6d5e03",
+    "escrow": "0x837110e89b088dc148525a7d88b10b2b9af62bdf",
+    "usdc": "0xd5066Db05658b3AEa4cB1AcdEdAcb80a4B9a7505",
+    "treasury": "0x000000000000000000000000000000000000dEaD",
+    "owner": "0x6588D28e3e8B2F9CaEd77aA5a5a16F0e3494D921",
+    "verifier": "0x4b4835507d2148334FB3dBD939C42A5a7D2c18aB",
+    "txs": [
+      {
+        "name": "PplLiquidityEscrow",
+        "type": "CREATE",
+        "hash": "0xd4ec7ae321e3c2b78fee50b6d56d75fed624d98650cd1d871ab5bba3f1c6bae6"
+      },
+      {
+        "name": "PplCurveHubV2",
+        "type": "CREATE",
+        "hash": "0x271602f35a96ecd123ad4a4ee20d7c6c542283b872e61f777638be8b861e4bd7"
+      },
+      {
+        "name": "PplCurveHubV2",
+        "type": "CALL",
+        "hash": "0x161fbb5232c2624509d9cf0a175fb9081e880b7c5beaca06a8279914227fd55f"
+      }
+    ]
+  },
+  "e2e": {
+    "chainId": 84532,
+    "network": "fork",
+    "hub": "0x21c250f0f5710306028b0e8c6597dd816f6d5e03",
+    "steps": [
+      {
+        "label": "mint 1000 tUSDC",
+        "tx": "0xd1d731f0ca4b86988422528a1e6ef8e7de7888a647082bae0d57f55cac694dea",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "approve hub",
+        "tx": "0xda94d1fe9effd59b222368e88e68ac0b97d9ce706d351a6290f4966f50de9c0e",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "verify(person)",
+        "tx": "0x0bec5f8b41a8306993005f3c322ca1e992ddbd77ed3ba1c998aaf179fc948ab8",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "buy 100 USDC",
+        "tx": "0xae955a99f504e2699f2244bb47e5c9a72bf41e99cf2f847ff289343c36efcc41",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "buy 501 USDC (over MAX)",
+        "tx": "0x5b1b0af569080273e8cb5a89ea043dd672af79a099f09c87ecb9b3bdcc210ebe",
+        "status": "reverted",
+        "note": "expected AboveMax (eth_call confirmed)"
+      },
+      {
+        "label": "sellBack before 30d hold",
+        "tx": "0x96639646c07a3075d3234081a4b4ca3cba0fffd61b8507639e6005b609f2aaa1",
+        "status": "reverted",
+        "note": "expected NotEnoughUnlocked (eth_call confirmed)"
+      },
+      {
+        "label": "sellBack after 31d (both fee tiers)",
+        "tx": "0x1974c7c514c151342fd8c246b83231d341256bc428c818dc3bc634f11168705f",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "announceLiquidityRelease",
+        "tx": "0xb4ba32bc18924005e67dd13ab5ea16d3b6ea48fd6c01cfd0c1aa78a10a11b0a5",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "markDelivered([deployer])",
+        "tx": "0x5b5b59039417e57be72a60f007bb24358bc67ec1b3e4e267f7c29e5e69e67523",
+        "status": "success",
+        "note": ""
+      },
+      {
+        "label": "sellBack after delivered",
+        "tx": "0x907fd12ffdca34fd744f003db1511bbfa1051104aad3603bb1a3c0fa2768881f",
+        "status": "reverted",
+        "note": "expected IsDelivered (eth_call confirmed)"
+      }
+    ]
+  },
+  "forkwarp": {
+    "warpDays": 31,
+    "reserveUsd6": "50000000",
+    "feeLineUsd6": "500000",
+    "globalCapUsd6": "1000000",
+    "pplIn": "149941350244815136424",
+    "grossUsd6": "750291",
+    "lowPartUsd6": "500000",
+    "highPartUsd6": "250291",
+    "feeUsd6": "15009",
+    "expectedFeeUsd6": "15009",
+    "payoutUsd6": "735282",
+    "usdcBalanceDelta": "735282",
+    "soldBackEventMatches": true,
+    "feeMatchesSpec": true,
+    "tx": "0x1974c7c514c151342fd8c246b83231d341256bc428c818dc3bc634f11168705f"
+  }
+}
