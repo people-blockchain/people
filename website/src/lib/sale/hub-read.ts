@@ -68,6 +68,34 @@ export const PPL_CURVE_HUB_ABI = [
     inputs: [{ type: "address" }, { type: "uint256" }],
     outputs: [{ type: "uint256" }],
   },
+  {
+    type: "function",
+    name: "verifier",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address" }],
+  },
+  {
+    type: "function",
+    name: "bindNonce",
+    stateMutability: "view",
+    inputs: [{ type: "bytes32" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "personOf",
+    stateMutability: "view",
+    inputs: [{ type: "address" }],
+    outputs: [{ type: "bytes32" }],
+  },
+  {
+    type: "function",
+    name: "accountOfPerson",
+    stateMutability: "view",
+    inputs: [{ type: "bytes32" }],
+    outputs: [{ type: "address" }],
+  },
 ] as const;
 
 /** Base mainnet USDC — default stable for hub `quoteBuy` previews on `/buy`. */
