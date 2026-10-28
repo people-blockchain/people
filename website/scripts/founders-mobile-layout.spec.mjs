@@ -50,8 +50,8 @@ async function setLocale(page) {
 
 /**
  * Mobile: the whole document must not scroll sideways.
- * Desktop: only the /founders content is checked. The shared site header is
- * exactly 1280px wide at 1280 and its width varies with the Chromium build;
+ * Desktop: only the /bounty founders content is checked. The shared site header
+ * is exactly 1280px wide at 1280 and its width varies with the Chromium build;
  * that is covered by the header specs, not by this page.
  */
 async function assertNoOverflow(page, label, width) {
@@ -65,27 +65,21 @@ async function assertNoOverflow(page, label, width) {
   assert.ok(overflow <= 2, `${label}: horizontal overflow ${overflow}px`);
 }
 
-test.describe("founders page layout", () => {
+test.describe("bounty page layout", () => {
   for (const width of WIDTHS) {
-    test(`/founders logged out @ ${width}px`, async ({ page }) => {
+    test(`/bounty logged out @ ${width}px`, async ({ page }) => {
       await setLocale(page);
       await page.setViewportSize({ width, height: 800 });
-      await page.goto(`${BASE}/founders`, { waitUntil: "networkidle" });
+      await page.goto(`${BASE}/bounty`, { waitUntil: "networkidle" });
 
-      await expect(page.getByRole("heading", { level: 1 })).toContainText("Million Founders");
-      await expect(page.getByTestId("founders-cta-claim")).toBeVisible();
-      // The header carries the only PEOPLE lockup; the hero must not duplicate it.
-      const heroWordmarksOutsideCard = await page
-        .getByTestId("founders-hero")
-        .evaluate((hero) =>
-          [...hero.querySelectorAll('[data-testid="founders-wordmark"]')].filter((el) => !el.closest('[data-testid="founders-card"]')).length,
-        );
-      assert.equal(heroWordmarksOutsideCard, 0, "hero must not duplicate the header PEOPLE lockup");
+      await expect(page.getByRole("heading", { level: 1 })).toContainText("Earn PPL with PEOPLE");
+      await expect(page.getByTestId("bounty-hero")).toBeVisible();
+      await expect(page.getByTestId("bounty-hero-buy")).toBeVisible();
       await expect(page.getByText(/World ID/)).toHaveCount(0);
-      await assertNoOverflow(page, `/founders@${width}px`, width);
+      await assertNoOverflow(page, `/bounty@${width}px`, width);
     });
 
-    test(`/founders logged in (mocked) @ ${width}px`, async ({ page }) => {
+    test(`/bounty logged in (mocked) @ ${width}px`, async ({ page }) => {
       await setLocale(page);
       await page.route("**/api/founders/million-counter", (r) =>
         r.fulfill({ json: { current: MOCK_STATS.verifiedCount, goal: MOCK_STATS.goal, source: "verified" } }),
@@ -93,14 +87,13 @@ test.describe("founders page layout", () => {
       await page.route("**/api/founders/me", (r) => r.fulfill({ json: MOCK_ME }));
       await page.route("**/api/founders/referral", (r) => r.fulfill({ json: MOCK_REFERRAL }));
       await page.setViewportSize({ width, height: 800 });
-      await page.goto(`${BASE}/founders`, { waitUntil: "networkidle" });
+      await page.goto(`${BASE}/bounty`, { waitUntil: "networkidle" });
 
       await expect(page.getByTestId("founders-personal")).toBeVisible();
       await expect(page.getByTestId("founders-active-count")).toContainText("0/50");
       await expect(page.getByTestId("founders-verification").getByRole("heading", { level: 2 })).toBeVisible();
-      await expect(page.getByTestId("founders-tiers")).toBeVisible();
-      await expect(page.getByTestId("founders-mosaic")).toBeVisible();
-      await assertNoOverflow(page, `/founders logged in@${width}px`, width);
+      await expect(page.getByTestId("founders-page")).toBeVisible();
+      await assertNoOverflow(page, `/bounty logged in@${width}px`, width);
     });
   }
 });

@@ -1,0 +1,124 @@
+{
+  "navLabel": "Earn PPL",
+  "homeCta": "Earn PPL",
+  "hero": {
+    "eyebrow": "EARN PPL",
+    "title": "Earn PPL with PEOPLE",
+    "lead": "One place for your founder number, points, personal referral link, bounties and the community reward pool.",
+    "ctaEarn": "Start earning",
+    "ctaSale": "Go to the PPL sale",
+    "disclaimer": "Testnet stage. Points and rewards are preliminary, require human verification and are not a promise of income."
+  },
+  "countdown": {
+    "eyebrow": "PPL SALE · 1 DECEMBER 2026",
+    "title": "Countdown to the PPL sale",
+    "lead": "The public PPL sale opens on 1 December 2026 and runs on Base.",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "open": "The PPL sale is open.",
+    "openCta": "Buy PPL",
+    "dateLabel": "Opening date",
+    "unavailable": "The opening date has not been announced."
+  },
+  "stats": {
+    "eyebrow": "COMMUNITY",
+    "title": "Participants",
+    "lead": "Only verified people are counted.",
+    "verified": "verified participants",
+    "countries": "countries",
+    "goal": "Goal",
+    "missing": "Participant data is not available right now."
+  },
+  "leaderboard": {
+    "eyebrow": "LEADERBOARD",
+    "title": "Top ambassadors",
+    "lead": "Ranked by verified invitees. Bots and unverified accounts do not count.",
+    "founder": "Founder",
+    "invites": "verified invitees",
+    "ambassador": "Ambassador",
+    "missing": "The leaderboard has no real data yet."
+  },
+  "tasks": {
+    "eyebrow": "POINTS",
+    "title": "Your points and tasks",
+    "lead": "Points are awarded for real actions after human verification. Buying PPL and joining airdrops are not rewarded.",
+    "yourPoints": "Your points",
+    "yourNumber": "Founder number",
+    "notFounder": "Sign in and claim a founder number to start earning points.",
+    "signIn": "Open wallet",
+    "dailyCap": "Daily cap",
+    "perAction": "per action",
+    "points": "points",
+    "tasksLabel": "Tasks",
+    "open": "Open",
+    "verification": "Human verification required."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Swap PPL", "href": "/swap" },
+    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Launch a token", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Mint an NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Vote in governance", "href": "/governance" },
+    { "id": "discover_reaction", "label": "React to a project", "href": "/discover" },
+    { "id": "discover_follow", "label": "Follow a project", "href": "/discover" },
+    { "id": "invite", "label": "Invite a verified person", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "REFERRAL",
+    "title": "Invite people, earn from the Growth Pool",
+    "lead": "Two levels: L1 for direct invitees and L2 for their invitees. Points are credited only for verified invitees who take a real action.",
+    "l1": "L1 · direct invitee",
+    "points": "points",
+    "l2": "L2 · second level",
+    "l2Value": "{{percent}} of the L1 invitee's referral points (L2)",
+    "poolLabel": "Season 1 referral pool",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% immediately, the rest over 52 weeks, conditional on activity.",
+    "yourLink": "Your personal referral link",
+    "signIn": "Sign in and claim a founder number to get your personal link.",
+    "cabinet": "Open partner cabinet",
+    "growthNote": "Growth referral payouts come from the Growth Pool: 15% of eligible network fees. L1 and L2 weights are 70/30 of that budget."
+  },
+  "bounties": {
+    "eyebrow": "BOUNTIES",
+    "title": "Bounties",
+    "lead": "Extra ways to earn PPL from the Community & rewards pool.",
+    "bugTitle": "Bug bounty",
+    "bugBody": "Report a vulnerability or a product bug with the bug button on any page. Accepted reports are rewarded in founder points.",
+    "bugCta": "Report a bug",
+    "creatorTitle": "Creator referral bounty",
+    "creatorBody": "Issuers may reserve an optional 5% of supply (maximum 10%) for invite rewards, with a default invite bounty of 5% of the invitee's purchase.",
+    "creatorCta": "Launch a token",
+    "contentTitle": "Content and community bounties",
+    "contentBody": "Follow the task board and announcements. A new bounty is added only when it has a real budget and rules."
+  },
+  "tokenomics": {
+    "eyebrow": "FUNDING",
+    "title": "Where every reward comes from",
+    "lead": "Rewards are paid only from the Community & rewards pool. No new PPL is minted for them.",
+    "communityLabel": "Community & rewards",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Released over 6 years.",
+    "seasonLabel": "Season 1 (proposed)",
+    "seasonValue": "20M PPL over 3 months",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% immediately, the rest over 12 months, conditional on activity.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% of eligible network fees",
+    "sourceCta": "Read the tokenomics"
+  },
+  "personal": {
+    "eyebrow": "YOUR ACCOUNT",
+    "title": "Founder dashboard",
+    "lead": "Your number, points, referral link and tasks update automatically."
+  },
+  "final": {
+    "title": "Ready to earn PPL?",
+    "lead": "Claim a founder number, complete tasks and invite verified people.",
+    "cta": "Start earning",
+    "sale": "Go to the PPL sale"
+  }
+}

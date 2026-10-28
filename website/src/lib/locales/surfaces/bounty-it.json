@@ -1,0 +1,124 @@
+{
+  "navLabel": "Guadagna PPL",
+  "homeCta": "Guadagna PPL",
+  "hero": {
+    "eyebrow": "GUADAGNA PPL",
+    "title": "Guadagna PPL con PEOPLE",
+    "lead": "Un unico posto per il tuo numero di fondatore, i punti, il link di invito personale, le bounty e il fondo ricompense della community.",
+    "ctaEarn": "Inizia a guadagnare",
+    "ctaSale": "Vai alla vendita PPL",
+    "disclaimer": "Fase testnet. Punti e ricompense sono preliminari, richiedono la verifica umana e non sono una promessa di reddito."
+  },
+  "countdown": {
+    "eyebrow": "VENDITA PPL · 1 DICEMBRE 2026",
+    "title": "Conto alla rovescia per la vendita PPL",
+    "lead": "La vendita pubblica PPL apre il 1 dicembre 2026 e si svolge su Base.",
+    "days": "giorni",
+    "hours": "ore",
+    "minutes": "minuti",
+    "seconds": "secondi",
+    "open": "La vendita PPL è aperta.",
+    "openCta": "Compra PPL",
+    "dateLabel": "Data di apertura",
+    "unavailable": "La data di apertura non è ancora stata annunciata."
+  },
+  "stats": {
+    "eyebrow": "COMMUNITY",
+    "title": "Partecipanti",
+    "lead": "Vengono conteggiate solo le persone verificate.",
+    "verified": "partecipanti verificati",
+    "countries": "paesi",
+    "goal": "Obiettivo",
+    "missing": "I dati dei partecipanti non sono disponibili in questo momento."
+  },
+  "leaderboard": {
+    "eyebrow": "CLASSIFICA",
+    "title": "Migliori ambasciatori",
+    "lead": "Ordinati per invitati verificati. Bot e account non verificati non contano.",
+    "founder": "Fondatore",
+    "invites": "invitati verificati",
+    "ambassador": "Ambasciatore",
+    "missing": "La classifica non ha ancora dati reali."
+  },
+  "tasks": {
+    "eyebrow": "PUNTI",
+    "title": "I tuoi punti e compiti",
+    "lead": "I punti vengono assegnati per azioni reali dopo la verifica umana. Comprare PPL e partecipare agli airdrop non dà ricompense.",
+    "yourPoints": "I tuoi punti",
+    "yourNumber": "Numero di fondatore",
+    "notFounder": "Accedi e richiedi un numero di fondatore per iniziare a guadagnare punti.",
+    "signIn": "Apri portafoglio",
+    "dailyCap": "Limite giornaliero",
+    "perAction": "per azione",
+    "points": "punti",
+    "tasksLabel": "Compiti",
+    "open": "Apri",
+    "verification": "Richiesta la verifica umana."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Scambia PPL", "href": "/swap" },
+    { "id": "stake", "label": "Fai staking di PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Lancia un token", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Conia un NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Vota nella governance", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Reagisci a un progetto", "href": "/discover" },
+    { "id": "discover_follow", "label": "Segui un progetto", "href": "/discover" },
+    { "id": "invite", "label": "Invita una persona verificata", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "INVITI",
+    "title": "Invita persone e guadagna dal Growth Pool",
+    "lead": "Due livelli: L1 per gli invitati diretti e L2 per i loro invitati. I punti vengono accreditati solo per invitati verificati che compiono un'azione reale.",
+    "l1": "L1 · invitato diretto",
+    "points": "punti",
+    "l2": "L2 · secondo livello",
+    "l2Value": "{{percent}} dei punti invito dell'invitato L1 (L2)",
+    "poolLabel": "Fondo inviti della stagione 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% subito, il resto in 52 settimane, condizionato all'attività.",
+    "yourLink": "Il tuo link di invito personale",
+    "signIn": "Accedi e richiedi un numero di fondatore per ottenere il tuo link personale.",
+    "cabinet": "Apri l'area partner",
+    "growthNote": "I pagamenti degli inviti Growth provengono dal Growth Pool: 15% delle commissioni di rete idonee. I pesi L1 e L2 sono 70/30 di quel budget."
+  },
+  "bounties": {
+    "eyebrow": "BOUNTY",
+    "title": "Bounty",
+    "lead": "Modi aggiuntivi per guadagnare PPL dal fondo Community e ricompense.",
+    "bugTitle": "Bug bounty",
+    "bugBody": "Segnala una vulnerabilità o un bug del prodotto con il pulsante bug presente su ogni pagina. Le segnalazioni accettate vengono ricompensate con punti fondatore.",
+    "bugCta": "Segnala un bug",
+    "creatorTitle": "Bounty inviti del creatore",
+    "creatorBody": "Gli emittenti possono riservare facoltativamente il 5% dell'offerta (massimo 10%) per ricompense di invito, con una bounty predefinita del 5% dell'acquisto dell'invitato.",
+    "creatorCta": "Lancia un token",
+    "contentTitle": "Bounty per contenuti e community",
+    "contentBody": "Segui la bacheca dei compiti e gli annunci. Una nuova bounty viene aggiunta solo quando ha un budget e regole reali."
+  },
+  "tokenomics": {
+    "eyebrow": "FINANZIAMENTO",
+    "title": "Da dove viene ogni ricompensa",
+    "lead": "Le ricompense vengono pagate solo dal fondo Community e ricompense. Non viene coniato nuovo PPL per esse.",
+    "communityLabel": "Community e ricompense",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Rilasciato in 6 anni.",
+    "seasonLabel": "Stagione 1 (proposta)",
+    "seasonValue": "20M PPL in 3 mesi",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% subito, il resto in 12 mesi, condizionato all'attività.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% delle commissioni di rete idonee",
+    "sourceCta": "Leggi la tokenomics"
+  },
+  "personal": {
+    "eyebrow": "IL TUO ACCOUNT",
+    "title": "Dashboard del fondatore",
+    "lead": "Numero, punti, link di invito e compiti si aggiornano automaticamente."
+  },
+  "final": {
+    "title": "Pronto a guadagnare PPL?",
+    "lead": "Richiedi un numero di fondatore, completa i compiti e invita persone verificate.",
+    "cta": "Inizia a guadagnare",
+    "sale": "Vai alla vendita PPL"
+  }
+}
