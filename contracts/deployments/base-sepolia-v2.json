@@ -1,0 +1,26 @@
+{
+  "chainId": 84532,
+  "hub": "0x21c250f0f5710306028b0e8c6597dd816f6d5e03",
+  "escrow": "0x837110e89b088dc148525a7d88b10b2b9af62bdf",
+  "usdc": "0xd5066Db05658b3AEa4cB1AcdEdAcb80a4B9a7505",
+  "treasury": "0x000000000000000000000000000000000000dEaD",
+  "owner": "0x6588D28e3e8B2F9CaEd77aA5a5a16F0e3494D921",
+  "verifier": "0x4b4835507d2148334FB3dBD939C42A5a7D2c18aB",
+  "txs": [
+    {
+      "name": "PplLiquidityEscrow",
+      "type": "CREATE",
+      "hash": "0xa573077cada7a946b1cc6f50e9c65230b034049888b41bc62cb85372d038d2d7"
+    },
+    {
+      "name": "PplCurveHubV2",
+      "type": "CREATE",
+      "hash": "0x16b2a1b2861d17b88febc66665bbf689240280102b9c3ac3ea02742a937f8ae7"
+    },
+    {
+      "name": "PplCurveHubV2",
+      "type": "CALL",
+      "hash": "0x47247dc02e56548a610236158185f940f34527c240458cba6ba6c0abd65f6b63"
+    }
+  ]
+}

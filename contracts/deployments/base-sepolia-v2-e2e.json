@@ -1,0 +1,61 @@
+{
+  "chainId": 84532,
+  "network": "live",
+  "hub": "0x21c250f0f5710306028b0e8c6597dd816f6d5e03",
+  "steps": [
+    {
+      "label": "mint 1000 tUSDC",
+      "tx": "0x3f504f2bc9074c2a245879d36072acd5cc976ca10867aa7b25d8b4dfe1db60d9",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "approve hub",
+      "tx": "0xd6c98ea21fbb1d579a8296eacaed2f51490b7ac4e8b1cd989ab3264a714dd346",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "verify(person)",
+      "tx": "0xba8e9a2db4d8413aa736853ed0d41777b1a5408e5d4b67f493939d16fa5ad234",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "buy 100 USDC",
+      "tx": "0x0b6ddc0f33b28ab615e8aaeea9717fd2cb72cdf0b78d0fa1c7b8e70aa854d508",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "buy 501 USDC (over MAX)",
+      "tx": "0x42d9dc912a04b1e2978209dad69c0a5e4841421df1de69af392bdd566f99163c",
+      "status": "reverted",
+      "note": "expected AboveMax (eth_call confirmed)"
+    },
+    {
+      "label": "sellBack before 30d hold",
+      "tx": "0xf25d9885fcf78eca78dfc294c1e803cb3c6e46827e4508500f4d47e0ec25c7dd",
+      "status": "reverted",
+      "note": "expected NotEnoughUnlocked (eth_call confirmed)"
+    },
+    {
+      "label": "announceLiquidityRelease",
+      "tx": "0x12e23831212f6d9427323f8f422859c55c7cbc9c7966b439abba7a87abaa37e5",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "markDelivered([deployer])",
+      "tx": "0x73334e0b4d07f03a168307b3174f5efaa59428e119d72a51fc30804a49de94d4",
+      "status": "success",
+      "note": ""
+    },
+    {
+      "label": "sellBack after delivered",
+      "tx": "0xb2977ec80e9574869f108fc64c4271eec08018690abc1538c4f3123105bc6956",
+      "status": "reverted",
+      "note": "expected IsDelivered (eth_call confirmed)"
+    }
+  ]
+}
