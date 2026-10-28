@@ -1,4 +1,7 @@
 {
+  "memoPublic": "El memo se guarda en la cadena de bloques y es público.",
+  "memoContract": "El memo solo se puede enviar a una dirección de cartera normal, no a un contrato.",
+  "memoInvalid": "El memo contiene caracteres que no se pueden guardar en la cadena de bloques.",
   "overview": "Resumen",
   "sendTab": "Enviar",
   "historyTab": "Actividad",

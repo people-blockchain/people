@@ -312,6 +312,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           privateKey: session.privateKey as Hex,
           to: txDraft.to as `0x${string}`,
           amountPpl: txDraft.amount,
+          memo: typeof txDraft.payload?.memo === "string" ? txDraft.payload.memo : undefined,
         });
         trackPending(chainId, session.address, { ...txDraft, id: hash });
       } else {
@@ -330,7 +331,12 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       setAmount("");
       await loadChain(session.address);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.error);
+      const message = err instanceof Error ? err.message : "";
+      setError(
+        message === "memo_contract" ? c.memoContract
+          : message === "invalid_memo" ? c.memoInvalid
+            : message || t.error,
+      );
     } finally {
       setBusy(false);
     }
@@ -413,7 +419,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         ))}
       </div>
       <p className="text-xs text-ink-3">{fill(u.maxHint, { fee: formatPpl(DEFAULT_TRANSFER_FEE) })}</p>
-      <label className="block text-sm">{c.memo}<textarea value={memo} maxLength={256} onChange={event=>setMemo(event.target.value)} rows={2} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /><span className="text-xs text-ink-3">{memo.length}/256</span></label>
+      <label className="block text-sm">{c.memo}<textarea value={memo} maxLength={256} onChange={event=>setMemo(event.target.value)} rows={2} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /><span className="text-xs text-ink-3">{memo.length}/256 · {c.memoPublic}</span></label>
       <p className="text-xs text-ink-3">{t.fee}: {DEFAULT_TRANSFER_FEE} PPL</p>
       <button type="button" disabled={busy || !account || !to.trim() || !amount.trim() || (assetId !== "ppl" && !selectedAsset)} onClick={() => void doSend(Date.now())} className="w-full rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-ink disabled:opacity-40">
         {c.review}

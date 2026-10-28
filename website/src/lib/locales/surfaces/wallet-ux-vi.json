@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Ghi chú được lưu trên blockchain và công khai.",
+  "memoContract": "Ghi chú chỉ có thể được gửi đến địa chỉ ví thông thường, không phải hợp đồng.",
+  "memoInvalid": "Ghi chú chứa các ký tự không thể lưu trên blockchain.",
   "overview": "Tổng quan",
   "sendTab": "Gửi",
   "historyTab": "Lịch sử",

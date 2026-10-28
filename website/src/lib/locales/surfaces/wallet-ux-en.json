@@ -1,4 +1,7 @@
 {
+  "memoPublic": "The memo is stored on the blockchain and is public.",
+  "memoContract": "Memos can only be sent to a regular wallet address, not a contract.",
+  "memoInvalid": "The memo contains characters that cannot be stored on the blockchain.",
   "addressError": "Check the recipient address.",
   "amountError": "Enter a valid positive amount.",
   "precisionError": "Too many decimal places for this token.",
