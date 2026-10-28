@@ -1,4 +1,7 @@
 {
+  "memoPublic": "备注保存在区块链上，所有人均可查看。",
+  "memoContract": "备注只能发送到普通钱包地址，不能发送到合约。",
+  "memoInvalid": "备注包含无法存储在区块链上的字符。",
   "overview": "概览",
   "sendTab": "发送",
   "historyTab": "历史",

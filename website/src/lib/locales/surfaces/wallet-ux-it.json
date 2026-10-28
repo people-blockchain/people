@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Il memo viene salvato sulla blockchain ed è pubblico.",
+  "memoContract": "Il memo può essere inviato solo a un normale indirizzo di portafoglio, non a un contratto.",
+  "memoInvalid": "Il memo contiene caratteri che non possono essere salvati sulla blockchain.",
   "overview": "Panoramica",
   "sendTab": "Invia",
   "historyTab": "Cronologia",

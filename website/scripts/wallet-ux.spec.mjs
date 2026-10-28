@@ -93,6 +93,31 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  await review.getByRole('button',{name:'Cancel',exact:true}).click();
  balance=10;
 
+ // Native memo is part of the signed EVM request, beyond the local activity journal.
+ if (!legacyBackend) {
+  let signed;
+  await page.route('**/api/evm/rpc',async route=>{
+   const r=route.request().postDataJSON(); let result;
+   if(r.method==='eth_fillTransaction') {await route.fulfill({json:{jsonrpc:'2.0',id:r.id,error:{code:-32601,message:'unsupported'}}});return;}
+   if(r.method==='eth_getTransactionCount')result='0x0';
+   else if(r.method==='eth_chainId')result='0x17c79';
+   else if(r.method==='eth_estimateGas')result='0x7000';
+   else if(r.method==='eth_gasPrice'||r.method==='eth_maxPriorityFeePerGas')result='0x3b9aca00';
+   else if(r.method==='eth_getBlockByNumber')result={number:'0x1',baseFeePerGas:'0x3b9aca00'};
+   else if(r.method==='eth_sendRawTransaction'){signed=r.params[0];result='0x'+'ab'.repeat(32);}
+   else throw Error(`Unexpected wallet RPC ${r.method}`);
+   await route.fulfill({json:{jsonrpc:'2.0',id:r.id,result}});
+  });
+  await page.getByTestId('wallet-action-send').click();
+  await expect(send).toContainText('The memo is stored on the blockchain and is public.');
+  await send.getByRole('button',{name:'Review payment',exact:true}).click();
+  await expect(review).toContainText('Invoice 42');
+  await review.getByRole('button',{name:'Confirm and send'}).click();
+  await expect.poll(()=>signed).toBeTruthy();
+  expect(parseTransaction(signed).data).toBe(stringToHex('Invoice 42'));
+  await expect(review).toHaveCount(0);
+ }
+
  // Receive shows the full address.
  await page.getByTestId('wallet-action-receive').click();
  await expect(page.getByTestId('wallet-receive-dialog')).toContainText(key.address);
@@ -127,6 +152,11 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
   const localeTabs=page.getByRole('tablist',{name:copy.walletTabsAria});
   for(const name of [copy.tokensTab,copy.nftTab,copy.historyTab])await expect(localeTabs.getByRole('tab',{name,exact:true})).toBeVisible();
   await expect(page.getByTestId('wallet-action-send')).toHaveText(copy.sendTab);
+  await page.getByTestId('wallet-action-send').click();
+  await expect(page.getByRole('dialog')).toContainText(copy.memoPublic);
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  if(lang==='ru')await page.screenshot({path:'test-results/wallet-memo-ru-390.png'});
+  await page.keyboard.press('Escape');
   await page.getByTestId('wallet-settings-button').click();
   const localeSettings=page.getByRole('dialog',{name:copy.settingsTab});
   await expect(localeSettings.getByRole('button',{name:copy.download,exact:true})).toBeVisible();

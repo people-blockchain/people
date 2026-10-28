@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Memo disimpan di blockchain dan bersifat publik.",
+  "memoContract": "Memo hanya dapat dikirim ke alamat dompet biasa, bukan ke kontrak.",
+  "memoInvalid": "Memo berisi karakter yang tidak dapat disimpan di blockchain.",
   "overview": "Ringkasan",
   "sendTab": "Kirim",
   "historyTab": "Riwayat",

@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Le mémo est enregistré sur la blockchain et est public.",
+  "memoContract": "Un mémo ne peut être envoyé qu’à une adresse de portefeuille classique, pas à un contrat.",
+  "memoInvalid": "Le mémo contient des caractères qui ne peuvent pas être enregistrés sur la blockchain.",
   "overview": "Aperçu",
   "sendTab": "Envoyer",
   "historyTab": "Historique",

@@ -1,4 +1,5 @@
-import { parseEther, type Hex } from "viem";
+import { parseEther, stringToHex, type Hex } from "viem";
+import { transactionMemo } from "@/lib/evm/transaction-memo";
 import { createEmbeddedWalletClient } from "@/lib/evm/client";
 
 /**
@@ -18,16 +19,33 @@ export function pplAmountToDecimalString(amount: number, decimals = 18): string 
   return fixed;
 }
 
+export function nativeTransferRequest(input: {
+  to: `0x${string}`; amountPpl: number; memo?: string;
+}) {
+  const memo = input.memo;
+  const data = memo ? stringToHex(memo) : undefined;
+  if (memo && (memo.length > 256 || transactionMemo({ to: input.to, input: data }) !== memo)) {
+    throw new Error("invalid_memo");
+  }
+  return { to: input.to, value: parseEther(pplAmountToDecimalString(input.amountPpl)),
+    ...(data ? { data } : {}),
+  };
+}
+
 export async function sendNativeTransfer(input: {
   privateKey: Hex;
   to: `0x${string}`;
   amountPpl: number;
+  memo?: string;
 }): Promise<`0x${string}`> {
+  const request = nativeTransferRequest(input);
+  if (request.data) {
+    const { createBrowserPublicClient } = await import("@/lib/evm/client");
+    const code = await createBrowserPublicClient().getCode({ address: input.to });
+    if (code && code !== "0x") throw new Error("memo_contract");
+  }
   const client = createEmbeddedWalletClient(input.privateKey);
-  const hash = await client.sendTransaction({
-    to: input.to,
-    value: parseEther(pplAmountToDecimalString(input.amountPpl)),
-  });
+  const hash = await client.sendTransaction(request);
   return hash;
 }
 
