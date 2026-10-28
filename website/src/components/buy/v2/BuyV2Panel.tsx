@@ -11,7 +11,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
-import { fillCopy, intlLocale, ppl, pricePerPpl, usd, usdcAmount } from "@/lib/sale/format";
+import { fillCopy, intlLocale, ppl, pricePerPpl, usd, usdCents, usdcAmount } from "@/lib/sale/format";
 import { V2_PHASES, V2_SALE } from "@/lib/sale/v2/constants";
 import {
   estimatePplOut,
@@ -405,7 +405,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3" data-testid="v2-fees">
-                  <dt className="text-ink-2">{fillCopy(t.form.fees, { fees: usd(0.01, lang) })}</dt>
+                  <dt className="text-ink-2">{fillCopy(t.form.fees, { fees: usdCents(0.01, lang) })}</dt>
                 </div>
                 {network === "other" ? (
                   <div className="flex items-baseline justify-between gap-3" data-testid="v2-eta">

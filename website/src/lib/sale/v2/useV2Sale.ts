@@ -209,3 +209,47 @@ export function useV2Phase(input: {
 
   return state;
 }
+
+/**
+ * Today's remaining sell-back room for all sellers together, read from
+ * `sellBackCapToday()` in USD. `null` while there is no live reading (flag off,
+ * no hub, preview, or a failed read) — the page then says so instead of
+ * showing a number.
+ */
+export function useV2SellBackToday(input: {
+  chain: V2Chain;
+  enabled: boolean;
+  refreshKey?: number;
+}): number | null {
+  const { chain, enabled, refreshKey = 0 } = input;
+  const [remainingUsd, setRemainingUsd] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!enabled || !chain.hubAddress) {
+      setRemainingUsd(null);
+      return;
+    }
+    let active = true;
+    const client = createPublicClient({
+      chain: chain.chain,
+      transport: http(undefined, { timeout: 12_000 }),
+    });
+    void client
+      .readContract({
+        address: chain.hubAddress as Address,
+        abi: PPL_CURVE_HUB_V2_ABI,
+        functionName: "sellBackCapToday",
+      })
+      .then(([globalRemainingUsd6]) => {
+        if (active) setRemainingUsd(Number(globalRemainingUsd6) / 1_000_000);
+      })
+      .catch(() => {
+        if (active) setRemainingUsd(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [chain.chain, chain.hubAddress, enabled, refreshKey]);
+
+  return remainingUsd;
+}

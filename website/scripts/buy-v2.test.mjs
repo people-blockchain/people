@@ -251,35 +251,28 @@ test("all 12 locales carry every v2 key", () => {
   }
 });
 
-test("all 12 locales carry a real whitelist hero title and subtitle", () => {
+test("all 12 locales carry a translated hero with one sentence per sale phase", () => {
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).hero;
-  assert.equal(en.headlineWhitelist, "PPL sale: verified whitelist phase");
+  assert.equal(en.headline, "Blockchain for everyone. Finally.");
+  const phaseKeys = ["subUpcoming", "subWhitelist", "subOpen", "subEnded"];
   for (const lang of LANGS) {
     const hero = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).hero;
-    assert.ok(hero.headlineWhitelist, `${lang} is missing hero.headlineWhitelist`);
-    assert.ok(hero.subWhitelist, `${lang} is missing hero.subWhitelist`);
-    assert.notEqual(hero.headlineWhitelist, hero.headlineClosed, `${lang} whitelist title`);
-    if (lang !== "en") {
-      assert.notEqual(hero.headlineWhitelist, en.headlineWhitelist, `${lang} needs a translation`);
-      assert.notEqual(hero.subWhitelist, en.subWhitelist, `${lang} needs a subtitle translation`);
+    for (const key of ["headline", "lead", "ctaVerify", "ctaBuy", ...phaseKeys]) {
+      assert.ok(hero[key], `${lang} is missing hero.${key}`);
+      if (lang !== "en") assert.notEqual(hero[key], en[key], `${lang} needs a translation for hero.${key}`);
     }
+    assert.equal(new Set(phaseKeys.map((key) => hero[key])).size, phaseKeys.length, `${lang}: one sentence per phase`);
+    assert.ok(hero.subUpcoming.includes("{date}"), `${lang}: opening date placeholder`);
+    assert.ok(hero.subWhitelist.includes("{days}"), `${lang}: whitelist days placeholder`);
   }
 });
 
 test("all 12 locales carry real whitelist/open stats copy", () => {
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
-  assert.equal(en.hero.statsTitleWhitelist, "On the curve — whitelist phase");
-  assert.equal(en.hero.statsTitleOpen, "On the curve — open sale");
   assert.equal(en.stats.whitelistStatus, "Whitelist: verified only");
   assert.equal(en.stats.openStatus, "Open");
   for (const lang of LANGS) {
     const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
-    for (const key of ["statsTitleWhitelist", "statsTitleOpen"]) {
-      assert.ok(copy.hero[key], `${lang} is missing hero.${key}`);
-      if (lang !== "en") {
-        assert.notEqual(copy.hero[key], en.hero[key], `${lang} needs a translation for hero.${key}`);
-      }
-    }
     for (const key of ["whitelistStatus", "openStatus"]) {
       assert.ok(copy.stats[key], `${lang} is missing stats.${key}`);
       if (lang !== "en") {
