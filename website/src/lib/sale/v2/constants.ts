@@ -13,8 +13,16 @@ export const V2_SALE = {
   minPerBuyUsd: 10,
   maxPerBuyUsd: 500,
   maxPerDayUsd: 2_000,
+  /** Minimum gap between two purchases for the same address (`BUY_COOLDOWN`). */
+  cooldownSeconds: 60,
   /** 1% slippage on the estimated PPL output. */
   slippageBps: 100,
+  /** Share of each purchase kept in the hub as the sell-back reserve (`RESERVE_BPS`, SPEC D1). */
+  reserveSharePct: 50,
+  /** Treasury / owner Safe threshold (SPEC D1: 2-of-3). */
+  treasurySigners: { m: 2, n: 3 },
+  /** Public notice before the reserve can move to liquidity (`LIQUIDITY_RELEASE_DELAY`, SPEC §5.4). */
+  releaseNoticeDays: 30,
 } as const;
 
 export const V2_PHASES = {

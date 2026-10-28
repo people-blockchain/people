@@ -57,6 +57,16 @@ export const PPL_CURVE_HUB_V2_ABI = [
     inputs: [],
     outputs: [{ name: "", type: "uint256" }],
   },
+  {
+    type: "function",
+    name: "sellBackCapToday",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [
+      { name: "globalRemainingUsd6", type: "uint256" },
+      { name: "feeLowRemainingUsd6", type: "uint256" },
+    ],
+  },
 ] as const;
 
 export const ZERO_BYTES32 = `0x${"0".repeat(64)}` as const;
