@@ -358,7 +358,7 @@ export const SITE_ROUTES = [
   { path: "/wallet", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/explorer", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/swap", changeFrequency: "weekly" as const, priority: 0.85 },
-  { path: "/founders", changeFrequency: "weekly" as const, priority: 0.88 },
+  { path: "/bounty", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/litepaper", changeFrequency: "monthly" as const, priority: 0.8 },
   { path: "/transparency", changeFrequency: "monthly" as const, priority: 0.7 },
   { path: "/ecosystem", changeFrequency: "monthly" as const, priority: 0.75 },

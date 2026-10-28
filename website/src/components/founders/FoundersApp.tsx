@@ -54,7 +54,8 @@ type Me = {
 const WALLET_LINK_RETRIES = 5;
 const WALLET_LINK_RETRY_MS = 700;
 
-export function FoundersApp() {
+export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bounty" } = {}) {
+  const embedded = variant === "bounty";
   const { lang } = useLanguage();
   const base = foundersPublic[lang];
   const t = foundersPromoCopy(lang);
@@ -453,7 +454,7 @@ export function FoundersApp() {
   return (
     <div className="founders-warm" data-testid="founders-page">
       {founder && card ? (
-        <div ref={personalRef}>
+        <div ref={personalRef} id="founder-dashboard">
           <FoundersPersonal
             t={t}
             r={r}
@@ -473,7 +474,7 @@ export function FoundersApp() {
             onReload={load}
           />
         </div>
-      ) : (
+      ) : embedded ? null : (
         <FoundersLandingHero
           copy={landing}
           promo={t}
@@ -566,18 +567,22 @@ export function FoundersApp() {
         </section>
       ) : null}
 
-      {founder ? (
+      {founder && !embedded ? (
         <div className="mx-auto max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
           <FoundersMillionCounterBar copy={landing} lang={lang} counter={millionCounter} />
         </div>
       ) : null}
 
-      <FoundersNftSection copy={landing} />
-      <FoundersTiersSection copy={landing} />
-      <FoundersSpecialSection copy={landing} />
-      <FoundersSealSection copy={landing} />
-      <FoundersLandingFaq copy={landing} />
-      <FoundersLandingFinalCta copy={landing} onCta={handleJoinCta} showCta={!founder} />
+      {embedded ? null : (
+        <>
+          <FoundersNftSection copy={landing} />
+          <FoundersTiersSection copy={landing} />
+          <FoundersSpecialSection copy={landing} />
+          <FoundersSealSection copy={landing} />
+          <FoundersLandingFaq copy={landing} />
+          <FoundersLandingFinalCta copy={landing} onCta={handleJoinCta} showCta={!founder} />
+        </>
+      )}
     </div>
   );
 }

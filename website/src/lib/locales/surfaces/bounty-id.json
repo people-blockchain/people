@@ -1,0 +1,124 @@
+{
+  "navLabel": "Dapatkan PPL",
+  "homeCta": "Dapatkan PPL",
+  "hero": {
+    "eyebrow": "DAPATKAN PPL",
+    "title": "Dapatkan PPL bersama PEOPLE",
+    "lead": "Satu tempat untuk nomor pendiri, poin, tautan rujukan pribadi, bounty, dan kumpulan hadiah komunitas.",
+    "ctaEarn": "Mulai dapatkan",
+    "ctaSale": "Buka penjualan PPL",
+    "disclaimer": "Tahap testnet. Poin dan hadiah bersifat sementara, memerlukan verifikasi manusia, dan bukan janji pendapatan."
+  },
+  "countdown": {
+    "eyebrow": "PENJUALAN PPL · 1 DESEMBER 2026",
+    "title": "Hitung mundur penjualan PPL",
+    "lead": "Penjualan PPL publik dibuka pada 1 Desember 2026 dan berjalan di Base.",
+    "days": "hari",
+    "hours": "jam",
+    "minutes": "menit",
+    "seconds": "detik",
+    "open": "Penjualan PPL sudah dibuka.",
+    "openCta": "Beli PPL",
+    "dateLabel": "Tanggal pembukaan",
+    "unavailable": "Tanggal pembukaan belum diumumkan."
+  },
+  "stats": {
+    "eyebrow": "KOMUNITAS",
+    "title": "Peserta",
+    "lead": "Hanya orang terverifikasi yang dihitung.",
+    "verified": "peserta terverifikasi",
+    "countries": "negara",
+    "goal": "Target",
+    "missing": "Data peserta tidak tersedia saat ini."
+  },
+  "leaderboard": {
+    "eyebrow": "PAPAN PERINGKAT",
+    "title": "Duta teratas",
+    "lead": "Diurutkan berdasarkan undangan terverifikasi. Bot dan akun yang belum terverifikasi tidak dihitung.",
+    "founder": "Pendiri",
+    "invites": "undangan terverifikasi",
+    "ambassador": "Duta",
+    "missing": "Papan peringkat belum memiliki data nyata."
+  },
+  "tasks": {
+    "eyebrow": "POIN",
+    "title": "Poin dan tugas Anda",
+    "lead": "Poin diberikan untuk tindakan nyata setelah verifikasi manusia. Membeli PPL dan mengikuti airdrop tidak diberi hadiah.",
+    "yourPoints": "Poin Anda",
+    "yourNumber": "Nomor pendiri",
+    "notFounder": "Masuk dan klaim nomor pendiri untuk mulai mendapatkan poin.",
+    "signIn": "Buka dompet",
+    "dailyCap": "Batas harian",
+    "perAction": "per tindakan",
+    "points": "poin",
+    "tasksLabel": "Tugas",
+    "open": "Buka",
+    "verification": "Verifikasi manusia diperlukan."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Tukar PPL", "href": "/swap" },
+    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Luncurkan token", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Cetak NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Voting di tata kelola", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Bereaksi pada proyek", "href": "/discover" },
+    { "id": "discover_follow", "label": "Ikuti proyek", "href": "/discover" },
+    { "id": "invite", "label": "Undang orang terverifikasi", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "RUJUKAN",
+    "title": "Undang orang dan dapatkan dari Growth Pool",
+    "lead": "Dua level: L1 untuk undangan langsung dan L2 untuk undangan mereka. Poin hanya dikreditkan untuk undangan terverifikasi yang melakukan tindakan nyata.",
+    "l1": "L1 · undangan langsung",
+    "points": "poin",
+    "l2": "L2 · level kedua",
+    "l2Value": "{{percent}} dari poin rujukan undangan L1 (L2)",
+    "poolLabel": "Kumpulan rujukan musim 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% langsung, sisanya selama 52 minggu, dengan syarat aktivitas.",
+    "yourLink": "Tautan rujukan pribadi Anda",
+    "signIn": "Masuk dan klaim nomor pendiri untuk mendapatkan tautan pribadi.",
+    "cabinet": "Buka kabinet mitra",
+    "growthNote": "Pembayaran rujukan Growth berasal dari Growth Pool: 15% biaya jaringan yang memenuhi syarat. Bobot L1 dan L2 adalah 70/30 dari anggaran itu."
+  },
+  "bounties": {
+    "eyebrow": "BOUNTY",
+    "title": "Bounty",
+    "lead": "Cara tambahan untuk mendapatkan PPL dari kumpulan Komunitas dan hadiah.",
+    "bugTitle": "Bounty bug",
+    "bugBody": "Laporkan kerentanan atau bug produk dengan tombol bug di halaman mana pun. Laporan yang diterima diberi hadiah poin pendiri.",
+    "bugCta": "Laporkan bug",
+    "creatorTitle": "Bounty rujukan pembuat token",
+    "creatorBody": "Penerbit dapat secara opsional menyisihkan 5% pasokan (maksimum 10%) untuk hadiah undangan, dengan bounty undangan default 5% dari pembelian undangan.",
+    "creatorCta": "Luncurkan token",
+    "contentTitle": "Bounty konten dan komunitas",
+    "contentBody": "Ikuti papan tugas dan pengumuman. Bounty baru hanya ditambahkan jika memiliki anggaran dan aturan nyata."
+  },
+  "tokenomics": {
+    "eyebrow": "PENDANAAN",
+    "title": "Dari mana setiap hadiah berasal",
+    "lead": "Hadiah hanya dibayarkan dari kumpulan Komunitas dan hadiah. Tidak ada PPL baru yang dicetak untuk itu.",
+    "communityLabel": "Komunitas dan hadiah",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Dirilis selama 6 tahun.",
+    "seasonLabel": "Musim 1 (usulan)",
+    "seasonValue": "20M PPL selama 3 bulan",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% langsung, sisanya selama 12 bulan, dengan syarat aktivitas.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% biaya jaringan yang memenuhi syarat",
+    "sourceCta": "Baca tokenomi"
+  },
+  "personal": {
+    "eyebrow": "AKUN ANDA",
+    "title": "Dasbor pendiri",
+    "lead": "Nomor, poin, tautan rujukan, dan tugas Anda diperbarui otomatis."
+  },
+  "final": {
+    "title": "Siap mendapatkan PPL?",
+    "lead": "Klaim nomor pendiri, selesaikan tugas, dan undang orang terverifikasi.",
+    "cta": "Mulai dapatkan",
+    "sale": "Buka penjualan PPL"
+  }
+}

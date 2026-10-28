@@ -1,0 +1,124 @@
+{
+  "navLabel": "赚取 PPL",
+  "homeCta": "赚取 PPL",
+  "hero": {
+    "eyebrow": "赚取 PPL",
+    "title": "与 PEOPLE 一起赚取 PPL",
+    "lead": "一个页面集中展示你的创始人编号、积分、个人推荐链接、赏金和社区奖励池。",
+    "ctaEarn": "开始赚取",
+    "ctaSale": "前往 PPL 销售",
+    "disclaimer": "测试网阶段。积分和奖励均为初步安排，需要完成真人验证，且不构成收益承诺。"
+  },
+  "countdown": {
+    "eyebrow": "PPL 销售 · 2026 年 12 月 1 日",
+    "title": "PPL 销售倒计时",
+    "lead": "公开 PPL 销售将于 2026 年 12 月 1 日在 Base 上开启。",
+    "days": "天",
+    "hours": "小时",
+    "minutes": "分钟",
+    "seconds": "秒",
+    "open": "PPL 销售已开启。",
+    "openCta": "购买 PPL",
+    "dateLabel": "开放日期",
+    "unavailable": "开放日期尚未公布。"
+  },
+  "stats": {
+    "eyebrow": "社区",
+    "title": "参与者",
+    "lead": "仅统计已完成验证的人。",
+    "verified": "位已验证参与者",
+    "countries": "个国家",
+    "goal": "目标",
+    "missing": "参与者数据目前不可用。"
+  },
+  "leaderboard": {
+    "eyebrow": "排行榜",
+    "title": "顶级大使",
+    "lead": "按已验证邀请人数排名。机器人和未验证账户不计入。",
+    "founder": "创始人",
+    "invites": "位已验证邀请",
+    "ambassador": "大使",
+    "missing": "排行榜暂无真实数据。"
+  },
+  "tasks": {
+    "eyebrow": "积分",
+    "title": "你的积分与任务",
+    "lead": "真人验证后完成真实操作可获得积分。购买 PPL 和参与空投不计奖励。",
+    "yourPoints": "你的积分",
+    "yourNumber": "创始人编号",
+    "notFounder": "登录并领取创始人编号，开始赚取积分。",
+    "signIn": "打开钱包",
+    "dailyCap": "每日上限",
+    "perAction": "每次操作",
+    "points": "积分",
+    "tasksLabel": "任务",
+    "open": "打开",
+    "verification": "需要真人验证。"
+  },
+  "taskItems": [
+    { "id": "swap", "label": "兑换 PPL", "href": "/swap" },
+    { "id": "stake", "label": "质押 PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "发行代币", "href": "/create/token" },
+    { "id": "nft_mint", "label": "铸造 NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "参与治理投票", "href": "/governance" },
+    { "id": "discover_reaction", "label": "对项目做出反应", "href": "/discover" },
+    { "id": "discover_follow", "label": "关注项目", "href": "/discover" },
+    { "id": "invite", "label": "邀请已验证的人", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "推荐",
+    "title": "邀请他人，从 Growth Pool 获得奖励",
+    "lead": "两个层级：L1 为直接邀请，L2 为他们邀请的人。只有完成真实操作的已验证邀请才计入积分。",
+    "l1": "L1 · 直接邀请",
+    "points": "积分",
+    "l2": "L2 · 第二层",
+    "l2Value": "L1 被邀请人推荐积分的 {{percent}}（L2）",
+    "poolLabel": "第 1 季推荐池",
+    "poolValue": "600 万 PPL",
+    "vestingLabel": "归属",
+    "vestingValue": "立即释放 10%，其余在 52 周内释放，并取决于活跃度。",
+    "yourLink": "你的个人推荐链接",
+    "signIn": "登录并领取创始人编号，获取你的个人链接。",
+    "cabinet": "打开合作伙伴面板",
+    "growthNote": "Growth 推荐奖励来自 Growth Pool：符合条件的网络手续费的 15%。L1 和 L2 权重为该预算的 70/30。"
+  },
+  "bounties": {
+    "eyebrow": "赏金",
+    "title": "赏金",
+    "lead": "从「社区与奖励」池赚取 PPL 的额外方式。",
+    "bugTitle": "漏洞赏金",
+    "bugBody": "通过任意页面的错误按钮报告漏洞或产品问题。被接受的报告将获得创始人积分奖励。",
+    "bugCta": "报告问题",
+    "creatorTitle": "创作者推荐赏金",
+    "creatorBody": "发行方可选择预留 5% 的供应量（最多 10%）用于邀请奖励，默认邀请赏金为被邀请者购买额的 5%。",
+    "creatorCta": "发行代币",
+    "contentTitle": "内容与社区赏金",
+    "contentBody": "关注任务板和公告。只有具备真实预算和规则时才会新增赏金。"
+  },
+  "tokenomics": {
+    "eyebrow": "资金来源",
+    "title": "每项奖励来自哪里",
+    "lead": "奖励仅从「社区与奖励」池支付，不会为此增发新的 PPL。",
+    "communityLabel": "社区与奖励",
+    "communityValue": "35% · 3.5 亿 PPL",
+    "communityNote": "在 6 年内释放。",
+    "seasonLabel": "第 1 季（提议）",
+    "seasonValue": "3 个月内 2000 万 PPL",
+    "vestingLabel": "归属",
+    "vestingValue": "立即释放 10%，其余在 12 个月内释放，并取决于活跃度。",
+    "growthLabel": "Growth Pool",
+    "growthValue": "符合条件的网络手续费的 15%",
+    "sourceCta": "阅读代币经济"
+  },
+  "personal": {
+    "eyebrow": "你的账户",
+    "title": "创始人面板",
+    "lead": "你的编号、积分、推荐链接和任务会自动更新。"
+  },
+  "final": {
+    "title": "准备好赚取 PPL 了吗？",
+    "lead": "领取创始人编号，完成任务并邀请已验证的人。",
+    "cta": "开始赚取",
+    "sale": "前往 PPL 销售"
+  }
+}
