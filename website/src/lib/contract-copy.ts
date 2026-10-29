@@ -3,7 +3,7 @@ export const contractCopy = {
   en: {
       "tag": "SMART CONTRACT",
       "title": "Describe the contract in plain words",
-      "lead": "Write what the contract should do, in any language you like. We match it to a checked template: vesting, staking, airdrop, escrow, multi-signature wallet, DAO vote or timelock. Tokens and NFTs have their own simpler forms.",
+      "lead": "Write what the contract should do, in any language you like. We match it to a checked template: vesting, staking, airdrop, escrow, crowdfunding with refunds, multi-signature wallet, DAO vote or timelock. Tokens and NFTs have their own simpler forms.",
       "label": "What should the contract do?",
       "placeholder": "Example: release my team’s tokens evenly over 12 months",
       "examplesLabel": "Or start from an example:",
@@ -14,6 +14,7 @@ export const contractCopy = {
       ],
       "generate": "Prepare the contract",
       "generateHint": "Write at least 8 characters.",
+      "crowdfundPrompt": "Crowdfund with a goal and refunds: collect money until a deadline, and give it back to contributors if the goal is not reached",
       "compile": "Check the code",
       "compileHint": "We check that the code builds before you pay anything.",
       "deploy": "Sign and publish from my wallet",
@@ -41,12 +42,12 @@ export const contractCopy = {
       "settingsHint": "Fill these in before publishing. Your own wallet address is filled in where it fits.",
       "invalidAddress": "Enter a wallet or contract address that starts with 0x.",
       "invalidNumber": "Enter a number greater than zero.",
-      "fields": {"token": "Token contract address", "stakingToken": "Address of the token people stake", "rewardToken": "Address of the reward token", "beneficiary": "Who receives the tokens (wallet address)", "seller": "Seller's wallet address", "owners": "Owners' wallet addresses (one per line)", "threshold": "How many owners must approve", "duration": "Release period, in days", "total": "Total amount, in tokens", "quorum": "Votes needed to pass, in tokens", "votingPeriod": "Voting period, in days", "timeout": "Refund the buyer after, in days", "delay": "Waiting time before an action runs, in hours"}
+      "fields": {"token": "Token contract address", "stakingToken": "Address of the token people stake", "rewardToken": "Address of the reward token", "beneficiary": "Who receives the tokens (wallet address)", "seller": "Seller's wallet address", "owners": "Owners' wallet addresses (one per line)", "threshold": "How many owners must approve", "duration": "Release period, in days", "total": "Total amount, in tokens", "quorum": "Votes needed to pass, in tokens", "votingPeriod": "Voting period, in days", "timeout": "Refund the buyer after, in days", "delay": "Waiting time before an action runs, in hours", "goal": "Funding goal, in PPL"}
   },
   ru: {
       "tag": "СМАРТ-КОНТРАКТ",
       "title": "Опишите контракт обычными словами",
-      "lead": "Напишите, что должен делать контракт, на любом языке. Мы подберём проверенный шаблон: вестинг, стейкинг, раздача, эскроу, кошелёк с несколькими подписями, голосование DAO или таймлок. Для токенов и NFT есть отдельные, более простые формы.",
+      "lead": "Напишите, что должен делать контракт, на любом языке. Мы подберём проверенный шаблон: вестинг, стейкинг, раздача, эскроу, сбор денег с возвратом, кошелёк с несколькими подписями, голосование DAO или таймлок. Для токенов и NFT есть отдельные, более простые формы.",
       "label": "Что должен делать контракт?",
       "placeholder": "Например: выдавать токены команде равными частями 12 месяцев",
       "examplesLabel": "Или начните с примера:",
@@ -57,6 +58,7 @@ export const contractCopy = {
       ],
       "generate": "Подготовить контракт",
       "generateHint": "Напишите хотя бы 8 символов.",
+      "crowdfundPrompt": "Сбор денег с возвратом: собрать средства до дедлайна, а если цель не достигнута, вернуть их участникам",
       "compile": "Проверить код",
       "compileHint": "Мы проверим, что код собирается, ещё до оплаты.",
       "deploy": "Подписать и опубликовать из кошелька",
@@ -84,12 +86,12 @@ export const contractCopy = {
       "settingsHint": "Заполните перед публикацией. Где подходит, уже подставлен адрес вашего кошелька.",
       "invalidAddress": "Введите адрес кошелька или контракта, начинающийся с 0x.",
       "invalidNumber": "Введите число больше нуля.",
-      "fields": {"token": "Адрес контракта токена", "stakingToken": "Адрес токена, который вносят в стейкинг", "rewardToken": "Адрес токена для наград", "beneficiary": "Кто получает токены (адрес кошелька)", "seller": "Адрес кошелька продавца", "owners": "Адреса кошельков владельцев (по одному в строке)", "threshold": "Сколько владельцев должны одобрить", "duration": "Срок выдачи, в днях", "total": "Общая сумма, в токенах", "quorum": "Голосов для принятия, в токенах", "votingPeriod": "Срок голосования, в днях", "timeout": "Вернуть деньги покупателю через, дней", "delay": "Ожидание перед выполнением действия, в часах"}
+      "fields": {"token": "Адрес контракта токена", "stakingToken": "Адрес токена, который вносят в стейкинг", "rewardToken": "Адрес токена для наград", "beneficiary": "Кто получает токены (адрес кошелька)", "seller": "Адрес кошелька продавца", "owners": "Адреса кошельков владельцев (по одному в строке)", "threshold": "Сколько владельцев должны одобрить", "duration": "Срок выдачи, в днях", "total": "Общая сумма, в токенах", "quorum": "Голосов для принятия, в токенах", "votingPeriod": "Срок голосования, в днях", "timeout": "Вернуть деньги покупателю через, дней", "delay": "Ожидание перед выполнением действия, в часах", "goal": "Цель сбора, в PPL"}
   },
   es: {
       "tag": "CONTRATO INTELIGENTE",
       "title": "Describe el contrato con palabras sencillas",
-      "lead": "Escribe qué debe hacer el contrato, en el idioma que quieras. Lo asociamos a una plantilla revisada: vesting, staking, airdrop, depósito en garantía, cartera multifirma, votación DAO o bloqueo temporal. Los tokens y NFT tienen sus propios formularios, más sencillos.",
+      "lead": "Escribe qué debe hacer el contrato, en el idioma que quieras. Lo asociamos a una plantilla revisada: vesting, staking, airdrop, depósito en garantía, colecta con reembolso, cartera multifirma, votación DAO o bloqueo temporal. Los tokens y NFT tienen sus propios formularios, más sencillos.",
       "label": "¿Qué debe hacer el contrato?",
       "placeholder": "Ejemplo: liberar los tokens de mi equipo por partes iguales durante 12 meses",
       "examplesLabel": "O empieza con un ejemplo:",
@@ -100,6 +102,7 @@ export const contractCopy = {
       ],
       "generate": "Preparar el contrato",
       "generateHint": "Escribe al menos 8 caracteres.",
+      "crowdfundPrompt": "Colecta con meta y reembolso: reunir dinero hasta una fecha límite y devolverlo a los participantes si no se alcanza la meta",
       "compile": "Comprobar el código",
       "compileHint": "Comprobamos que el código compila antes de que pagues nada.",
       "deploy": "Firmar y publicar desde mi cartera",
@@ -127,12 +130,12 @@ export const contractCopy = {
       "settingsHint": "Rellénalos antes de publicar. Donde encaja, ya aparece la dirección de tu cartera.",
       "invalidAddress": "Introduce una dirección de cartera o contrato que empiece por 0x.",
       "invalidNumber": "Introduce un número mayor que cero.",
-      "fields": {"token": "Dirección del contrato del token", "stakingToken": "Dirección del token que se deposita", "rewardToken": "Dirección del token de recompensa", "beneficiary": "Quién recibe los tokens (dirección de cartera)", "seller": "Dirección de cartera del vendedor", "owners": "Direcciones de los propietarios (una por línea)", "threshold": "Cuántos propietarios deben aprobar", "duration": "Periodo de liberación, en días", "total": "Cantidad total, en tokens", "quorum": "Votos necesarios para aprobar, en tokens", "votingPeriod": "Periodo de votación, en días", "timeout": "Devolver al comprador tras, en días", "delay": "Espera antes de ejecutar una acción, en horas"}
+      "fields": {"token": "Dirección del contrato del token", "stakingToken": "Dirección del token que se deposita", "rewardToken": "Dirección del token de recompensa", "beneficiary": "Quién recibe los tokens (dirección de cartera)", "seller": "Dirección de cartera del vendedor", "owners": "Direcciones de los propietarios (una por línea)", "threshold": "Cuántos propietarios deben aprobar", "duration": "Periodo de liberación, en días", "total": "Cantidad total, en tokens", "quorum": "Votos necesarios para aprobar, en tokens", "votingPeriod": "Periodo de votación, en días", "timeout": "Devolver al comprador tras, en días", "delay": "Espera antes de ejecutar una acción, en horas", "goal": "Meta de recaudación, en PPL"}
   },
   pt: {
       "tag": "CONTRATO INTELIGENTE",
       "title": "Descreva o contrato em palavras simples",
-      "lead": "Escreva o que o contrato deve fazer, no idioma que preferir. Associamos a um modelo verificado: vesting, staking, airdrop, garantia (escrow), carteira multiassinatura, votação DAO ou bloqueio temporal. Tokens e NFT têm formulários próprios, mais simples.",
+      "lead": "Escreva o que o contrato deve fazer, no idioma que preferir. Associamos a um modelo verificado: vesting, staking, airdrop, garantia (escrow), vaquinha com reembolso, carteira multiassinatura, votação DAO ou bloqueio temporal. Tokens e NFT têm formulários próprios, mais simples.",
       "label": "O que o contrato deve fazer?",
       "placeholder": "Exemplo: libertar os tokens da minha equipa em partes iguais durante 12 meses",
       "examplesLabel": "Ou comece por um exemplo:",
@@ -143,6 +146,7 @@ export const contractCopy = {
       ],
       "generate": "Preparar o contrato",
       "generateHint": "Escreva pelo menos 8 caracteres.",
+      "crowdfundPrompt": "Vaquinha com meta e reembolso: arrecadar dinheiro até um prazo e devolver aos apoiadores se a meta não for atingida",
       "compile": "Verificar o código",
       "compileHint": "Verificamos que o código compila antes de pagar qualquer coisa.",
       "deploy": "Assinar e publicar a partir da carteira",
@@ -170,12 +174,12 @@ export const contractCopy = {
       "settingsHint": "Preenche antes de publicar. Onde faz sentido, já aparece o endereço da tua carteira.",
       "invalidAddress": "Introduz um endereço de carteira ou contrato que comece por 0x.",
       "invalidNumber": "Introduz um número maior que zero.",
-      "fields": {"token": "Endereço do contrato do token", "stakingToken": "Endereço do token depositado", "rewardToken": "Endereço do token de recompensa", "beneficiary": "Quem recebe os tokens (endereço da carteira)", "seller": "Endereço da carteira do vendedor", "owners": "Endereços dos proprietários (um por linha)", "threshold": "Quantos proprietários têm de aprovar", "duration": "Período de libertação, em dias", "total": "Quantidade total, em tokens", "quorum": "Votos necessários para aprovar, em tokens", "votingPeriod": "Período de votação, em dias", "timeout": "Reembolsar o comprador após, em dias", "delay": "Espera antes de executar uma ação, em horas"}
+      "fields": {"token": "Endereço do contrato do token", "stakingToken": "Endereço do token depositado", "rewardToken": "Endereço do token de recompensa", "beneficiary": "Quem recebe os tokens (endereço da carteira)", "seller": "Endereço da carteira do vendedor", "owners": "Endereços dos proprietários (um por linha)", "threshold": "Quantos proprietários têm de aprovar", "duration": "Período de libertação, em dias", "total": "Quantidade total, em tokens", "quorum": "Votos necessários para aprovar, em tokens", "votingPeriod": "Período de votação, em dias", "timeout": "Reembolsar o comprador após, em dias", "delay": "Espera antes de executar uma ação, em horas", "goal": "Meta de arrecadação, em PPL"}
   },
   fr: {
       "tag": "CONTRAT INTELLIGENT",
       "title": "Décrivez le contrat avec des mots simples",
-      "lead": "Écrivez ce que le contrat doit faire, dans la langue de votre choix. Nous l’associons à un modèle vérifié : vesting, staking, airdrop, séquestre, portefeuille multisignature, vote DAO ou verrou temporel. Les jetons et NFT ont leurs propres formulaires, plus simples.",
+      "lead": "Écrivez ce que le contrat doit faire, dans la langue de votre choix. Nous l’associons à un modèle vérifié : vesting, staking, airdrop, séquestre, collecte avec remboursement, portefeuille multisignature, vote DAO ou verrou temporel. Les jetons et NFT ont leurs propres formulaires, plus simples.",
       "label": "Que doit faire le contrat ?",
       "placeholder": "Exemple : verser les jetons de mon équipe en parts égales pendant 12 mois",
       "examplesLabel": "Ou partez d’un exemple :",
@@ -186,6 +190,7 @@ export const contractCopy = {
       ],
       "generate": "Préparer le contrat",
       "generateHint": "Écrivez au moins 8 caractères.",
+      "crowdfundPrompt": "Collecte avec objectif et remboursement : réunir de l’argent jusqu’à une date limite et le rendre aux contributeurs si l’objectif n’est pas atteint",
       "compile": "Vérifier le code",
       "compileHint": "Nous vérifions que le code se compile avant que vous ne payiez quoi que ce soit.",
       "deploy": "Signer et publier depuis mon portefeuille",
@@ -213,12 +218,12 @@ export const contractCopy = {
       "settingsHint": "Remplissez-les avant de publier. L’adresse de votre portefeuille est déjà indiquée là où elle convient.",
       "invalidAddress": "Saisissez une adresse de portefeuille ou de contrat commençant par 0x.",
       "invalidNumber": "Saisissez un nombre supérieur à zéro.",
-      "fields": {"token": "Adresse du contrat du jeton", "stakingToken": "Adresse du jeton mis en staking", "rewardToken": "Adresse du jeton de récompense", "beneficiary": "Qui reçoit les jetons (adresse du portefeuille)", "seller": "Adresse du portefeuille du vendeur", "owners": "Adresses des propriétaires (une par ligne)", "threshold": "Nombre de propriétaires qui doivent approuver", "duration": "Période de libération, en jours", "total": "Montant total, en jetons", "quorum": "Votes nécessaires pour adopter, en jetons", "votingPeriod": "Durée du vote, en jours", "timeout": "Rembourser l’acheteur après, en jours", "delay": "Attente avant l’exécution d’une action, en heures"}
+      "fields": {"token": "Adresse du contrat du jeton", "stakingToken": "Adresse du jeton mis en staking", "rewardToken": "Adresse du jeton de récompense", "beneficiary": "Qui reçoit les jetons (adresse du portefeuille)", "seller": "Adresse du portefeuille du vendeur", "owners": "Adresses des propriétaires (une par ligne)", "threshold": "Nombre de propriétaires qui doivent approuver", "duration": "Période de libération, en jours", "total": "Montant total, en jetons", "quorum": "Votes nécessaires pour adopter, en jetons", "votingPeriod": "Durée du vote, en jours", "timeout": "Rembourser l’acheteur après, en jours", "delay": "Attente avant l’exécution d’une action, en heures", "goal": "Objectif de collecte, en PPL"}
   },
   de: {
       "tag": "SMART CONTRACT",
       "title": "Beschreiben Sie den Vertrag in einfachen Worten",
-      "lead": "Schreiben Sie in einer beliebigen Sprache, was der Vertrag tun soll. Wir ordnen ihn einer geprüften Vorlage zu: Vesting, Staking, Airdrop, Treuhand, Multisig-Wallet, DAO-Abstimmung oder Zeitsperre. Für Token und NFTs gibt es eigene, einfachere Formulare.",
+      "lead": "Schreiben Sie in einer beliebigen Sprache, was der Vertrag tun soll. Wir ordnen ihn einer geprüften Vorlage zu: Vesting, Staking, Airdrop, Treuhand, Crowdfunding mit Rückerstattung, Multisig-Wallet, DAO-Abstimmung oder Zeitsperre. Für Token und NFTs gibt es eigene, einfachere Formulare.",
       "label": "Was soll der Vertrag tun?",
       "placeholder": "Beispiel: die Token meines Teams 12 Monate lang in gleichen Teilen freigeben",
       "examplesLabel": "Oder mit einem Beispiel starten:",
@@ -229,6 +234,7 @@ export const contractCopy = {
       ],
       "generate": "Vertrag vorbereiten",
       "generateHint": "Schreiben Sie mindestens 8 Zeichen.",
+      "crowdfundPrompt": "Crowdfunding mit Ziel und Rückerstattung: Geld bis zu einer Frist sammeln und an die Geldgeber zurückgeben, wenn das Ziel nicht erreicht wird",
       "compile": "Code prüfen",
       "compileHint": "Wir prüfen, ob sich der Code bauen lässt, bevor Sie etwas bezahlen.",
       "deploy": "Mit meiner Wallet signieren und veröffentlichen",
@@ -256,12 +262,12 @@ export const contractCopy = {
       "settingsHint": "Vor dem Veröffentlichen ausfüllen. Wo es passt, ist Ihre eigene Wallet-Adresse schon eingetragen.",
       "invalidAddress": "Geben Sie eine Wallet- oder Vertragsadresse ein, die mit 0x beginnt.",
       "invalidNumber": "Geben Sie eine Zahl größer als null ein.",
-      "fields": {"token": "Adresse des Token-Vertrags", "stakingToken": "Adresse des gestakten Tokens", "rewardToken": "Adresse des Belohnungs-Tokens", "beneficiary": "Wer die Token erhält (Wallet-Adresse)", "seller": "Wallet-Adresse des Verkäufers", "owners": "Wallet-Adressen der Eigentümer (eine pro Zeile)", "threshold": "Wie viele Eigentümer zustimmen müssen", "duration": "Auszahlungszeitraum, in Tagen", "total": "Gesamtmenge, in Token", "quorum": "Nötige Stimmen, in Token", "votingPeriod": "Abstimmungsdauer, in Tagen", "timeout": "Käufer erstatten nach, Tagen", "delay": "Wartezeit vor einer Aktion, in Stunden"}
+      "fields": {"token": "Adresse des Token-Vertrags", "stakingToken": "Adresse des gestakten Tokens", "rewardToken": "Adresse des Belohnungs-Tokens", "beneficiary": "Wer die Token erhält (Wallet-Adresse)", "seller": "Wallet-Adresse des Verkäufers", "owners": "Wallet-Adressen der Eigentümer (eine pro Zeile)", "threshold": "Wie viele Eigentümer zustimmen müssen", "duration": "Auszahlungszeitraum, in Tagen", "total": "Gesamtmenge, in Token", "quorum": "Nötige Stimmen, in Token", "votingPeriod": "Abstimmungsdauer, in Tagen", "timeout": "Käufer erstatten nach, Tagen", "delay": "Wartezeit vor einer Aktion, in Stunden", "goal": "Spendenziel, in PPL"}
   },
   it: {
       "tag": "SMART CONTRACT",
       "title": "Descrivi il contratto con parole semplici",
-      "lead": "Scrivi cosa deve fare il contratto, nella lingua che preferisci. Lo abbiniamo a un modello verificato: vesting, staking, airdrop, deposito a garanzia, portafoglio multifirma, voto DAO o blocco temporale. Token e NFT hanno moduli propri, più semplici.",
+      "lead": "Scrivi cosa deve fare il contratto, nella lingua che preferisci. Lo abbiniamo a un modello verificato: vesting, staking, airdrop, deposito a garanzia, raccolta fondi con rimborso, portafoglio multifirma, voto DAO o blocco temporale. Token e NFT hanno moduli propri, più semplici.",
       "label": "Cosa deve fare il contratto?",
       "placeholder": "Esempio: rilasciare i token del mio team in parti uguali per 12 mesi",
       "examplesLabel": "Oppure parti da un esempio:",
@@ -272,6 +278,7 @@ export const contractCopy = {
       ],
       "generate": "Prepara il contratto",
       "generateHint": "Scrivi almeno 8 caratteri.",
+      "crowdfundPrompt": "Raccolta fondi con obiettivo e rimborso: raccogliere denaro fino a una scadenza e restituirlo ai sostenitori se l’obiettivo non è raggiunto",
       "compile": "Controlla il codice",
       "compileHint": "Controlliamo che il codice si compili prima che tu paghi qualcosa.",
       "deploy": "Firma e pubblica dal mio portafoglio",
@@ -299,12 +306,12 @@ export const contractCopy = {
       "settingsHint": "Compilale prima di pubblicare. Dove serve, c’è già l’indirizzo del tuo portafoglio.",
       "invalidAddress": "Inserisci un indirizzo di portafoglio o contratto che inizi con 0x.",
       "invalidNumber": "Inserisci un numero maggiore di zero.",
-      "fields": {"token": "Indirizzo del contratto del token", "stakingToken": "Indirizzo del token messo in staking", "rewardToken": "Indirizzo del token di ricompensa", "beneficiary": "Chi riceve i token (indirizzo del portafoglio)", "seller": "Indirizzo del portafoglio del venditore", "owners": "Indirizzi dei proprietari (uno per riga)", "threshold": "Quanti proprietari devono approvare", "duration": "Periodo di rilascio, in giorni", "total": "Quantità totale, in token", "quorum": "Voti necessari per approvare, in token", "votingPeriod": "Durata del voto, in giorni", "timeout": "Rimborsa l’acquirente dopo, in giorni", "delay": "Attesa prima di eseguire un’azione, in ore"}
+      "fields": {"token": "Indirizzo del contratto del token", "stakingToken": "Indirizzo del token messo in staking", "rewardToken": "Indirizzo del token di ricompensa", "beneficiary": "Chi riceve i token (indirizzo del portafoglio)", "seller": "Indirizzo del portafoglio del venditore", "owners": "Indirizzi dei proprietari (uno per riga)", "threshold": "Quanti proprietari devono approvare", "duration": "Periodo di rilascio, in giorni", "total": "Quantità totale, in token", "quorum": "Voti necessari per approvare, in token", "votingPeriod": "Durata del voto, in giorni", "timeout": "Rimborsa l’acquirente dopo, in giorni", "delay": "Attesa prima di eseguire un’azione, in ore", "goal": "Obiettivo di raccolta, in PPL"}
   },
   tr: {
       "tag": "AKILLI SÖZLEŞME",
       "title": "Sözleşmeyi basit kelimelerle anlatın",
-      "lead": "Sözleşmenin ne yapması gerektiğini istediğiniz dilde yazın. Bunu kontrol edilmiş bir şablonla eşleştiririz: hak ediş (vesting), staking, airdrop, emanet, çok imzalı cüzdan, DAO oylaması veya zaman kilidi. Token ve NFT’lerin kendi, daha basit formları var.",
+      "lead": "Sözleşmenin ne yapması gerektiğini istediğiniz dilde yazın. Bunu kontrol edilmiş bir şablonla eşleştiririz: hak ediş (vesting), staking, airdrop, emanet, iadeli bağış toplama, çok imzalı cüzdan, DAO oylaması veya zaman kilidi. Token ve NFT’lerin kendi, daha basit formları var.",
       "label": "Sözleşme ne yapmalı?",
       "placeholder": "Örnek: ekibimin tokenlarını 12 ay boyunca eşit parçalarla serbest bırak",
       "examplesLabel": "Ya da bir örnekle başlayın:",
@@ -315,6 +322,7 @@ export const contractCopy = {
       ],
       "generate": "Sözleşmeyi hazırla",
       "generateHint": "En az 8 karakter yazın.",
+      "crowdfundPrompt": "Hedefli ve iadeli bağış toplama: son tarihe kadar para topla, hedefe ulaşılmazsa katılımcılara geri öde",
       "compile": "Kodu kontrol et",
       "compileHint": "Siz bir şey ödemeden önce kodun derlendiğini kontrol ederiz.",
       "deploy": "Cüzdanımla imzala ve yayınla",
@@ -342,12 +350,12 @@ export const contractCopy = {
       "settingsHint": "Yayımlamadan önce doldurun. Uygun yerlerde kendi cüzdan adresiniz zaten yazılı.",
       "invalidAddress": "0x ile başlayan bir cüzdan veya sözleşme adresi girin.",
       "invalidNumber": "Sıfırdan büyük bir sayı girin.",
-      "fields": {"token": "Token sözleşmesinin adresi", "stakingToken": "Stake edilen tokenin adresi", "rewardToken": "Ödül tokeninin adresi", "beneficiary": "Tokenleri kim alacak (cüzdan adresi)", "seller": "Satıcının cüzdan adresi", "owners": "Sahiplerin cüzdan adresleri (her satıra bir)", "threshold": "Kaç sahibin onaylaması gerekir", "duration": "Serbest bırakma süresi, gün", "total": "Toplam miktar, token", "quorum": "Kabul için gereken oy, token", "votingPeriod": "Oylama süresi, gün", "timeout": "Alıcıya iade süresi, gün", "delay": "Bir işlem çalışmadan önce bekleme, saat"}
+      "fields": {"token": "Token sözleşmesinin adresi", "stakingToken": "Stake edilen tokenin adresi", "rewardToken": "Ödül tokeninin adresi", "beneficiary": "Tokenleri kim alacak (cüzdan adresi)", "seller": "Satıcının cüzdan adresi", "owners": "Sahiplerin cüzdan adresleri (her satıra bir)", "threshold": "Kaç sahibin onaylaması gerekir", "duration": "Serbest bırakma süresi, gün", "total": "Toplam miktar, token", "quorum": "Kabul için gereken oy, token", "votingPeriod": "Oylama süresi, gün", "timeout": "Alıcıya iade süresi, gün", "delay": "Bir işlem çalışmadan önce bekleme, saat", "goal": "Toplama hedefi, PPL cinsinden"}
   },
   vi: {
       "tag": "HỢP ĐỒNG THÔNG MINH",
       "title": "Mô tả hợp đồng bằng lời đơn giản",
-      "lead": "Viết hợp đồng cần làm gì, bằng ngôn ngữ bạn muốn. Chúng tôi ghép nó với một mẫu đã được kiểm tra: vesting, staking, airdrop, ký quỹ, ví nhiều chữ ký, bỏ phiếu DAO hoặc khóa thời gian. Token và NFT có biểu mẫu riêng, đơn giản hơn.",
+      "lead": "Viết hợp đồng cần làm gì, bằng ngôn ngữ bạn muốn. Chúng tôi ghép nó với một mẫu đã được kiểm tra: vesting, staking, airdrop, ký quỹ, gây quỹ có hoàn tiền, ví nhiều chữ ký, bỏ phiếu DAO hoặc khóa thời gian. Token và NFT có biểu mẫu riêng, đơn giản hơn.",
       "label": "Hợp đồng cần làm gì?",
       "placeholder": "Ví dụ: trả token cho nhóm của tôi đều nhau trong 12 tháng",
       "examplesLabel": "Hoặc bắt đầu từ một ví dụ:",
@@ -358,6 +366,7 @@ export const contractCopy = {
       ],
       "generate": "Chuẩn bị hợp đồng",
       "generateHint": "Viết ít nhất 8 ký tự.",
+      "crowdfundPrompt": "Gây quỹ có mục tiêu và hoàn tiền: thu tiền đến một hạn chót, và trả lại cho người đóng góp nếu không đạt mục tiêu",
       "compile": "Kiểm tra mã",
       "compileHint": "Chúng tôi kiểm tra mã có biên dịch được trước khi bạn trả bất cứ thứ gì.",
       "deploy": "Ký và đăng từ ví của tôi",
@@ -385,12 +394,12 @@ export const contractCopy = {
       "settingsHint": "Điền trước khi phát hành. Ở chỗ phù hợp, địa chỉ ví của bạn đã được điền sẵn.",
       "invalidAddress": "Nhập địa chỉ ví hoặc hợp đồng bắt đầu bằng 0x.",
       "invalidNumber": "Nhập một số lớn hơn 0.",
-      "fields": {"token": "Địa chỉ hợp đồng token", "stakingToken": "Địa chỉ token được stake", "rewardToken": "Địa chỉ token thưởng", "beneficiary": "Ai nhận token (địa chỉ ví)", "seller": "Địa chỉ ví người bán", "owners": "Địa chỉ ví của chủ sở hữu (mỗi dòng một địa chỉ)", "threshold": "Số chủ sở hữu cần phê duyệt", "duration": "Thời gian giải phóng, tính bằng ngày", "total": "Tổng số lượng, tính bằng token", "quorum": "Số phiếu cần để thông qua, tính bằng token", "votingPeriod": "Thời gian bỏ phiếu, tính bằng ngày", "timeout": "Hoàn tiền cho người mua sau, tính bằng ngày", "delay": "Thời gian chờ trước khi thực hiện, tính bằng giờ"}
+      "fields": {"token": "Địa chỉ hợp đồng token", "stakingToken": "Địa chỉ token được stake", "rewardToken": "Địa chỉ token thưởng", "beneficiary": "Ai nhận token (địa chỉ ví)", "seller": "Địa chỉ ví người bán", "owners": "Địa chỉ ví của chủ sở hữu (mỗi dòng một địa chỉ)", "threshold": "Số chủ sở hữu cần phê duyệt", "duration": "Thời gian giải phóng, tính bằng ngày", "total": "Tổng số lượng, tính bằng token", "quorum": "Số phiếu cần để thông qua, tính bằng token", "votingPeriod": "Thời gian bỏ phiếu, tính bằng ngày", "timeout": "Hoàn tiền cho người mua sau, tính bằng ngày", "delay": "Thời gian chờ trước khi thực hiện, tính bằng giờ", "goal": "Mục tiêu gây quỹ, tính bằng PPL"}
   },
   id: {
       "tag": "KONTRAK PINTAR",
       "title": "Jelaskan kontrak dengan kata-kata sederhana",
-      "lead": "Tulis apa yang harus dilakukan kontrak, dalam bahasa apa pun. Kami mencocokkannya dengan templat yang sudah diperiksa: vesting, staking, airdrop, escrow, dompet multi-tanda tangan, voting DAO, atau timelock. Token dan NFT punya formulir sendiri yang lebih sederhana.",
+      "lead": "Tulis apa yang harus dilakukan kontrak, dalam bahasa apa pun. Kami mencocokkannya dengan templat yang sudah diperiksa: vesting, staking, airdrop, escrow, penggalangan dana dengan pengembalian, dompet multi-tanda tangan, voting DAO, atau timelock. Token dan NFT punya formulir sendiri yang lebih sederhana.",
       "label": "Apa yang harus dilakukan kontrak?",
       "placeholder": "Contoh: lepaskan token tim saya dalam bagian yang sama selama 12 bulan",
       "examplesLabel": "Atau mulai dari contoh:",
@@ -401,6 +410,7 @@ export const contractCopy = {
       ],
       "generate": "Siapkan kontrak",
       "generateHint": "Tulis minimal 8 karakter.",
+      "crowdfundPrompt": "Penggalangan dana dengan target dan pengembalian: kumpulkan uang hingga batas waktu, lalu kembalikan ke penyumbang jika target tidak tercapai",
       "compile": "Periksa kode",
       "compileHint": "Kami memeriksa kode bisa dikompilasi sebelum Anda membayar apa pun.",
       "deploy": "Tanda tangani dan terbitkan dari dompet saya",
@@ -428,12 +438,12 @@ export const contractCopy = {
       "settingsHint": "Isi sebelum menerbitkan. Di tempat yang cocok, alamat dompet Anda sudah terisi.",
       "invalidAddress": "Masukkan alamat dompet atau kontrak yang diawali 0x.",
       "invalidNumber": "Masukkan angka lebih dari nol.",
-      "fields": {"token": "Alamat kontrak token", "stakingToken": "Alamat token yang di-stake", "rewardToken": "Alamat token hadiah", "beneficiary": "Siapa yang menerima token (alamat dompet)", "seller": "Alamat dompet penjual", "owners": "Alamat dompet pemilik (satu per baris)", "threshold": "Berapa pemilik yang harus menyetujui", "duration": "Periode pelepasan, dalam hari", "total": "Jumlah total, dalam token", "quorum": "Suara yang dibutuhkan, dalam token", "votingPeriod": "Lama voting, dalam hari", "timeout": "Kembalikan dana pembeli setelah, dalam hari", "delay": "Waktu tunggu sebelum tindakan dijalankan, dalam jam"}
+      "fields": {"token": "Alamat kontrak token", "stakingToken": "Alamat token yang di-stake", "rewardToken": "Alamat token hadiah", "beneficiary": "Siapa yang menerima token (alamat dompet)", "seller": "Alamat dompet penjual", "owners": "Alamat dompet pemilik (satu per baris)", "threshold": "Berapa pemilik yang harus menyetujui", "duration": "Periode pelepasan, dalam hari", "total": "Jumlah total, dalam token", "quorum": "Suara yang dibutuhkan, dalam token", "votingPeriod": "Lama voting, dalam hari", "timeout": "Kembalikan dana pembeli setelah, dalam hari", "delay": "Waktu tunggu sebelum tindakan dijalankan, dalam jam", "goal": "Target dana, dalam PPL"}
   },
   zh: {
       "tag": "智能合约",
       "title": "用简单的话描述合约",
-      "lead": "用任何语言写下合约要做什么。我们会匹配一个经过审查的模板：归属释放、质押、空投、托管、多签钱包、DAO 投票或时间锁。代币和 NFT 有各自更简单的表单。",
+      "lead": "用任何语言写下合约要做什么。我们会匹配一个经过审查的模板：归属释放、质押、空投、托管、可退款的众筹、多签钱包、DAO 投票或时间锁。代币和 NFT 有各自更简单的表单。",
       "label": "合约要做什么？",
       "placeholder": "例如：在 12 个月内平均释放我团队的代币",
       "examplesLabel": "或者从示例开始：",
@@ -444,6 +454,7 @@ export const contractCopy = {
       ],
       "generate": "准备合约",
       "generateHint": "请至少写 8 个字符。",
+      "crowdfundPrompt": "带目标和退款的众筹：在截止日期前募集资金，未达目标则退还给出资人",
       "compile": "检查代码",
       "compileHint": "在你付费之前，我们会先检查代码能否编译。",
       "deploy": "用我的钱包签名并发布",
@@ -471,12 +482,12 @@ export const contractCopy = {
       "settingsHint": "发布前请填写。合适的位置已填入你自己的钱包地址。",
       "invalidAddress": "请输入以 0x 开头的钱包或合约地址。",
       "invalidNumber": "请输入大于零的数字。",
-      "fields": {"token": "代币合约地址", "stakingToken": "质押代币的地址", "rewardToken": "奖励代币的地址", "beneficiary": "接收代币的人（钱包地址）", "seller": "卖方钱包地址", "owners": "所有者钱包地址（每行一个）", "threshold": "需要多少位所有者批准", "duration": "释放期（天）", "total": "总数量（代币）", "quorum": "通过所需票数（代币）", "votingPeriod": "投票期（天）", "timeout": "多少天后退款给买方", "delay": "操作执行前的等待时间（小时）"}
+      "fields": {"token": "代币合约地址", "stakingToken": "质押代币的地址", "rewardToken": "奖励代币的地址", "beneficiary": "接收代币的人（钱包地址）", "seller": "卖方钱包地址", "owners": "所有者钱包地址（每行一个）", "threshold": "需要多少位所有者批准", "duration": "释放期（天）", "total": "总数量（代币）", "quorum": "通过所需票数（代币）", "votingPeriod": "投票期（天）", "timeout": "多少天后退款给买方", "delay": "操作执行前的等待时间（小时）", "goal": "募资目标，以 PPL 计"}
   },
   ar: {
       "tag": "عقد ذكي",
       "title": "صِف العقد بكلمات بسيطة",
-      "lead": "اكتب ما يجب أن يفعله العقد بأي لغة تريد. نطابقه مع قالب تمت مراجعته: استحقاق تدريجي، أو تخزين (staking)، أو توزيع مجاني، أو ضمان، أو محفظة متعددة التوقيعات، أو تصويت DAO، أو قفل زمني. للرموز وNFT نماذج خاصة أبسط.",
+      "lead": "اكتب ما يجب أن يفعله العقد بأي لغة تريد. نطابقه مع قالب تمت مراجعته: استحقاق تدريجي، أو تخزين (staking)، أو توزيع مجاني، أو ضمان، أو تمويل جماعي مع استرداد، أو محفظة متعددة التوقيعات، أو تصويت DAO، أو قفل زمني. للرموز وNFT نماذج خاصة أبسط.",
       "label": "ماذا يجب أن يفعل العقد؟",
       "placeholder": "مثال: صرف رموز فريقي بأجزاء متساوية على مدى 12 شهرًا",
       "examplesLabel": "أو ابدأ من مثال:",
@@ -487,6 +498,7 @@ export const contractCopy = {
       ],
       "generate": "تجهيز العقد",
       "generateHint": "اكتب 8 أحرف على الأقل.",
+      "crowdfundPrompt": "تمويل جماعي بهدف واسترداد: جمع المال حتى موعد نهائي، وإعادته للمساهمين إذا لم يتحقق الهدف",
       "compile": "فحص الكود",
       "compileHint": "نتحقق من أن الكود يُبنى قبل أن تدفع أي شيء.",
       "deploy": "التوقيع والنشر من محفظتي",
@@ -514,7 +526,7 @@ export const contractCopy = {
       "settingsHint": "املأها قبل النشر. وُضع عنوان محفظتك حيث يناسب.",
       "invalidAddress": "أدخل عنوان محفظة أو عقد يبدأ بـ 0x.",
       "invalidNumber": "أدخل رقمًا أكبر من صفر.",
-      "fields": {"token": "عنوان عقد الرمز", "stakingToken": "عنوان الرمز الذي يُودَع", "rewardToken": "عنوان رمز المكافأة", "beneficiary": "من يستلم الرموز (عنوان المحفظة)", "seller": "عنوان محفظة البائع", "owners": "عناوين محافظ المالكين (عنوان في كل سطر)", "threshold": "كم مالكًا يجب أن يوافق", "duration": "مدة الإطلاق بالأيام", "total": "الكمية الإجمالية بالرموز", "quorum": "الأصوات اللازمة للإقرار بالرموز", "votingPeriod": "مدة التصويت بالأيام", "timeout": "إعادة المبلغ للمشتري بعد (أيام)", "delay": "الانتظار قبل تنفيذ الإجراء بالساعات"}
+      "fields": {"token": "عنوان عقد الرمز", "stakingToken": "عنوان الرمز الذي يُودَع", "rewardToken": "عنوان رمز المكافأة", "beneficiary": "من يستلم الرموز (عنوان المحفظة)", "seller": "عنوان محفظة البائع", "owners": "عناوين محافظ المالكين (عنوان في كل سطر)", "threshold": "كم مالكًا يجب أن يوافق", "duration": "مدة الإطلاق بالأيام", "total": "الكمية الإجمالية بالرموز", "quorum": "الأصوات اللازمة للإقرار بالرموز", "votingPeriod": "مدة التصويت بالأيام", "timeout": "إعادة المبلغ للمشتري بعد (أيام)", "delay": "الانتظار قبل تنفيذ الإجراء بالساعات", "goal": "هدف التمويل، بـ PPL"}
   },
 };
 export type ContractCopy = (typeof contractCopy)["en"];

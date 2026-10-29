@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { Address } from "viem";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
@@ -68,7 +69,10 @@ export function ContractWizard() {
   const { lang } = useLanguage();
   const t: ContractCopy = (contractCopy as Record<string, ContractCopy>)[lang] ?? contractCopy.en;
   const { signer } = useExternalWallet();
-  const [prompt, setPrompt] = useState("");
+  const searchParams = useSearchParams();
+  const prefillCrowdfund = searchParams?.get("template") === "crowdfund";
+  const promptEdited = useRef(false);
+  const [prompt, setPrompt] = useState(prefillCrowdfund ? t.crowdfundPrompt : "");
   const [compose, setCompose] = useState<ComposeResult | null>(null);
   const [compiled, setCompiled] = useState<CompileResult | null>(null);
   const [params, setParams] = useState<Params | null>(null);
@@ -98,6 +102,11 @@ export function ContractWizard() {
   const gasPricePpl = params?.gasPricePpl ?? APPROVED_CONTRACT_GAS_PRICE_PPL;
   const typicalDeployFee =
     params?.quoteTypicalDeployFeePpl ?? TYPICAL_CONTRACT_DEPLOY_FEE_PPL;
+
+  useEffect(() => {
+    // Landing from the "Start crowdfunding" card: keep the prefill in the visitor's language until they type.
+    if (prefillCrowdfund && !promptEdited.current) setPrompt(t.crowdfundPrompt);
+  }, [prefillCrowdfund, t.crowdfundPrompt]);
 
   useEffect(() => {
     // E2E-M1: on the EVM chain the legacy compat layer only implements `contracts/<address>`,
@@ -215,7 +224,10 @@ export function ContractWizard() {
         className="mt-2 w-full rounded-2xl border border-line bg-surface-2 p-4 text-sm"
         rows={4}
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(e) => {
+          promptEdited.current = true;
+          setPrompt(e.target.value);
+        }}
         placeholder={t.placeholder}
       />
       <p className="mt-2 text-xs text-ink-3">{t.examplesLabel}</p>
@@ -224,7 +236,10 @@ export function ContractWizard() {
           <button
             key={example}
             type="button"
-            onClick={() => setPrompt(example)}
+            onClick={() => {
+              promptEdited.current = true;
+              setPrompt(example);
+            }}
             className="min-h-11 rounded-full border border-line bg-surface px-3 py-2 text-left text-xs text-ink-2 hover:border-brand hover:text-brand"
           >
             {example}
