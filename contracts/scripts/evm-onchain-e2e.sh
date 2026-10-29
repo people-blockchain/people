@@ -35,7 +35,7 @@ TOKEN=$(echo "$TX" | jq -r --arg t "$TOKEN_CREATED" '.logs[]? | select(.topics[0
 TOKEN=$(cast parse-bytes32-address "$TOKEN")
 echo "token=$TOKEN"
 
-cast send "$CURVE" "buy(address,uint256)" "$TOKEN" 0 \
+cast send "$CURVE" "buy(address,uint256,uint256)" "$TOKEN" 1 "$(( $(date +%s) + 3600 ))" \
   --rpc-url "$RPC" --private-key "$PK" --value 2ether >/dev/null
 echo "curve buy ok"
 
