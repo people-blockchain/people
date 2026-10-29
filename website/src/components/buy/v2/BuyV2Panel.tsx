@@ -410,7 +410,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                 {network === "other" ? (
                   <div className="flex items-baseline justify-between gap-3" data-testid="v2-eta">
                     <dt className="text-ink-2">
-                      {fillCopy(t.form.eta, { eta: "1–20 min" })}
+                      {fillCopy(t.form.eta, { eta: t.form.etaDuration })}
                     </dt>
                   </div>
                 ) : null}

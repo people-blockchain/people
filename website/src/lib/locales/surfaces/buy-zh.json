@@ -344,6 +344,7 @@
       "estimate": "PPL 预估",
       "minimum": "最低获得",
       "price": "当前 PPL 价格",
+      "etaDuration": "1–20 分钟",
       "eta": "约 {eta} 到达",
       "fees": "费用：{fees}",
       "feesToggle": "费用详情",

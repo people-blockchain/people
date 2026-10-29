@@ -344,6 +344,7 @@
       "estimate": "PPL tahmini",
       "minimum": "Alınacak minimum",
       "price": "Güncel PPL fiyatı",
+      "etaDuration": "1–20 dk",
       "eta": "Yaklaşık {eta} içinde ulaşır",
       "fees": "Ücretler: {fees}",
       "feesToggle": "Ücret ayrıntıları",

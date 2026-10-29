@@ -330,5 +330,5 @@ test("the page has one main button per screen: hero and final call to action onl
   const hero = read("src/components/buy/BuyHero.tsx");
   assert.equal(hero.match(/<BuyCta /g)?.length, 1);
   assert.match(hero, /href="\/founders#verify"/);
-  assert.match(page, /href="\/bounty"/);
+  assert.doesNotMatch(page, /href="\/bounty"/);
 });
