@@ -80,8 +80,9 @@ function topicAddress(topic: string | undefined): string {
  * Cosmos EVM nodes reject eth_getLogs over more than 10,000 blocks
  * ("maximum [from, to] blocks distance: 10000"), so a single 0x1..latest query
  * threw and the whole pool/token scan came back empty on a long-running chain.
- * Scan in windows from the deployment block instead; a window that still fails
- * after one retry rejects the scan so callers never treat a partial list as whole.
+ * Scan in windows from the deployment block instead. The catalog's incremental scan isolates a
+ * failed window (partial result), while the strict `fetchLogsWindowed` callers still reject so they
+ * never treat a partial list as whole.
  */
 export const LOG_WINDOW_BLOCKS = 9_000;
 
@@ -171,10 +172,7 @@ const WINDOW_LOG_TTL_MS = 15 * 60_000;
 const MAX_WINDOW_CACHE_ENTRIES = 400;
 const windowLogsCache = new Map<string, { at: number; value: RpcLog[] }>();
 
-/**
- * Per-scan `eth_getLogs` concurrency. The token catalog scans several factories at once, so it can
- * afford a higher chunk size than small single-contract scans.
- */
+/** Per-scan `eth_getLogs` concurrency for the non-catalog windowed scans. */
 export const MAX_PARALLEL_LOG_WINDOWS = 6;
 /**
  * Global in-flight cap across every caller in this server instance. A cold catalog scan runs five
@@ -182,6 +180,13 @@ export const MAX_PARALLEL_LOG_WINDOWS = 6;
  * validator at once (the 2026-10-17 memory incident).
  */
 export const MAX_GLOBAL_LOG_WINDOWS = 8;
+/**
+ * Token-catalog scans run factories one after another, so this is also the global in-flight cap for
+ * catalog `eth_getLogs`: the node slows down sharply at six or more parallel range queries.
+ */
+export const MAX_CATALOG_LOG_WINDOWS = 4;
+/** `eth_getLogs` gets a shorter timeout than ordinary calls: a slow window is retried, not awaited. */
+export const LOG_GETLOGS_TIMEOUT_MS = 12_000;
 let logWindowsInFlight = 0;
 const logWindowQueue: Array<() => void> = [];
 
@@ -238,7 +243,12 @@ async function readLogWindowFromNode(address: string, topics: readonly LogTopic[
     logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
     let logs: unknown;
     try {
-      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]);
+      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)], {
+        timeoutMs: LOG_GETLOGS_TIMEOUT_MS,
+        // A single HTML proxy page or timeout must not block the remaining windows behind the
+        // per-URL backoff; the caller retries this window on its own schedule.
+        ignoreBackoff: true,
+      });
     } catch (error) {
       throw new LogWindowRpcError(error instanceof Error ? error.message : "rpc_logs_failed");
     }
@@ -308,8 +318,23 @@ export async function fetchLogsWindowed(
 
 export type LogScanOutcome = {
   logs: RpcLog[];
-  /** False when the history scan stopped at its deadline; the tail was still read. */
+  /** False when the history scan stopped at its deadline or at least one window failed. */
   complete: boolean;
+  /** Windows that exhausted their retries (the rest of the scan still ran). */
+  failedWindows?: number;
+};
+
+export type LogScanOptions = {
+  /** Capture window failures instead of rejecting; failed windows are left out of the result. */
+  resilient?: boolean;
+  /** Delays before each retry; `[0]` is the historical single immediate retry. */
+  retryDelays?: readonly number[];
+  /** Per-scan concurrency cap, bounded by the process-wide cap. */
+  maxParallel?: number;
+  /** Read recent history first, so new events surface before a long backlog. */
+  historyNewestFirst?: boolean;
+  /** Called as each window completes, letting a catalog publish partial results early. */
+  onWindowLogs?: (logs: RpcLog[]) => void;
 };
 
 /**
@@ -321,6 +346,9 @@ export type LogScanOutcome = {
  *
  * `toBlockHint` caps a superseded factory's scan at its successor's first block. `deadlineAt` lets
  * the catalog stop history work early and resume from the persisted cursor on the next request.
+ *
+ * The incremental scan is resilient by default: a failed window marks the outcome incomplete but
+ * never rejects, and the cursor only advances across contiguous successful windows.
  */
 export async function fetchLogsWindowedIncrementalResult(
   address: string,
@@ -328,9 +356,14 @@ export async function fetchLogsWindowedIncrementalResult(
   fromBlockHint?: number,
   toBlockHint?: number,
   deadlineAt?: number,
+  options: LogScanOptions = {},
 ): Promise<LogScanOutcome> {
   const topics: LogTopic[] = [typeof topic === "string" ? topic : [...topic]];
-  return fetchLogsWindowedCore(address, topics, fromBlockHint, cursorKeyForTopics(topics), toBlockHint, deadlineAt);
+  return fetchLogsWindowedCore(address, topics, fromBlockHint, cursorKeyForTopics(topics), toBlockHint, deadlineAt, {
+    resilient: true,
+    retryDelays: [500, 1500],
+    ...options,
+  });
 }
 
 export async function fetchLogsWindowedIncremental(
@@ -339,11 +372,12 @@ export async function fetchLogsWindowedIncremental(
   fromBlockHint?: number,
   toBlockHint?: number,
   deadlineAt?: number,
+  options: LogScanOptions = {},
 ): Promise<RpcLog[]> {
-  return (await fetchLogsWindowedIncrementalResult(address, topic, fromBlockHint, toBlockHint, deadlineAt)).logs;
+  return (await fetchLogsWindowedIncrementalResult(address, topic, fromBlockHint, toBlockHint, deadlineAt, options)).logs;
 }
 
-type ScannedLogWindow = { from: number; to: number; logs: RpcLog[] };
+type ScannedLogWindow = { from: number; to: number; logs: RpcLog[]; ok: boolean };
 
 function cursorKeyForTopics(topics: readonly LogTopic[]): string {
   return topics
@@ -356,6 +390,10 @@ function logBlockNumber(log: RpcLog): number | null {
   return Number.isFinite(block) ? block : null;
 }
 
+function sleep(ms: number): Promise<void> {
+  return ms > 0 ? new Promise((resolve) => setTimeout(resolve, ms)) : Promise.resolve();
+}
+
 async function readCachedLogWindow(
   address: string,
   topics: readonly LogTopic[],
@@ -363,7 +401,11 @@ async function readCachedLogWindow(
   to: number,
   latest: number,
   now: number,
-  { endBlock, fresh = false }: { endBlock?: number; fresh?: boolean } = {},
+  {
+    endBlock,
+    fresh = false,
+    retryDelays = [0],
+  }: { endBlock?: number; fresh?: boolean; retryDelays?: readonly number[] } = {},
 ): Promise<RpcLog[]> {
   const key = windowCacheKey(address, topics, from, to);
   const isImmutable = (typeof endBlock === "number" && to <= endBlock) || to < latest - LOG_WINDOW_BLOCKS;
@@ -371,12 +413,14 @@ async function readCachedLogWindow(
     const entry = windowLogsCache.get(key);
     if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
   }
-  // A transient node failure must not silently drop this window's logs and leave callers with
-  // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
-  // stale catalog instead of caching a short one.
-  const logs =
-    (await readLogWindow(address, topics, from, to, isImmutable)) ??
-    (await readLogWindow(address, topics, from, to, isImmutable));
+  // Retry a transient node failure a small, bounded number of times before giving up. The catalog
+  // passes [500, 1500]; older callers keep the historical single immediate retry.
+  let logs: RpcLog[] | null = null;
+  for (let attempt = 0; attempt <= retryDelays.length; attempt++) {
+    if (attempt > 0) await sleep(retryDelays[attempt - 1]);
+    logs = await readLogWindow(address, topics, from, to, isImmutable);
+    if (logs) break;
+  }
   if (!logs) throw new Error("log_window_unavailable");
   rememberWindowLogs(key, logs);
   return logs;
@@ -389,10 +433,14 @@ async function fetchLogsWindowedCore(
   cursorTopic: string | null,
   toBlockHint?: number,
   deadlineAt?: number,
+  options: LogScanOptions = {},
 ): Promise<LogScanOutcome> {
+  const resilient = options.resilient ?? false;
+  const retryDelays = options.retryDelays ?? [0];
+  const maxParallel = Math.max(1, options.maxParallel ?? MAX_PARALLEL_LOG_WINDOWS);
   const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
   const tip = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
-  if (!Number.isFinite(tip)) return { logs: [], complete: true };
+  if (!Number.isFinite(tip)) return { logs: [], complete: false, failedWindows: 1 };
   const scanLatest =
     typeof toBlockHint === "number" && toBlockHint >= 0 ? Math.min(tip, toBlockHint) : tip;
   const start = Math.max(
@@ -418,19 +466,35 @@ async function fetchLogsWindowedCore(
 
   const now = Date.now();
   const scanned: ScannedLogWindow[] = [];
+  const readWindow = async (
+    [from, to]: [number, number],
+    readOptions: { endBlock?: number; fresh?: boolean } = {},
+  ): Promise<ScannedLogWindow> => {
+    try {
+      const logs = await readCachedLogWindow(address, topics, from, to, tip, now, {
+        ...readOptions,
+        retryDelays,
+      });
+      options.onWindowLogs?.(logs);
+      return { from, to, logs, ok: true };
+    } catch (error) {
+      // The token catalog cannot let one window blank the whole list: keep the other windows and
+      // tell the caller the result is incomplete. Other callers keep their strict behaviour.
+      if (!resilient) throw error;
+      return { from, to, logs: [], ok: false };
+    }
+  };
+  const failedWindowCount = () => scanned.filter((window) => !window.ok).length;
+
   if (!cursorTopic) {
     const windows = logWindows(Math.max(start, lastBlock + 1), scanLatest);
-    if (!windows.length) return { logs: cursorLogs, complete: true };
-    scanned.push(
-      ...(await Promise.all(
-        windows.map(async ([from, to]) => ({
-          from,
-          to,
-          logs: await readCachedLogWindow(address, topics, from, to, tip, now),
-        })),
-      )),
-    );
-    return { logs: [...cursorLogs, ...scanned.flatMap(({ logs }) => logs)], complete: true };
+    if (!windows.length) return { logs: cursorLogs, complete: true, failedWindows: 0 };
+    scanned.push(...(await Promise.all(windows.map((window) => readWindow(window)))));
+    return {
+      logs: [...cursorLogs, ...scanned.flatMap(({ logs }) => logs)],
+      complete: scanned.every((window) => window.ok),
+      failedWindows: failedWindowCount(),
+    };
   }
 
   // The current factory has no successor, so its last two windows are the only place a new token
@@ -439,52 +503,68 @@ async function fetchLogsWindowedCore(
   const historyWindows = historyFrom <= tailStart - 1 ? logWindows(historyFrom, tailStart - 1) : [];
 
   if (!tailWindows.length && !historyWindows.length) {
-    return { logs: visibleCursorLogs, complete: true };
+    return { logs: visibleCursorLogs, complete: true, failedWindows: 0 };
   }
 
+  let complete = true;
   // Tail first: fresh tokens must show even when history work runs out of time below.
   if (tailWindows.length) {
-    scanned.push(
-      ...(await Promise.all(
-        tailWindows.map(async ([from, to]) => ({
-          from,
-          to,
-          logs: await readCachedLogWindow(address, topics, from, to, tip, now, { fresh: true }),
-        })),
-      )),
+    const tailScanned = await Promise.all(
+      tailWindows.map((window) => readWindow(window, { fresh: true })),
     );
+    scanned.push(...tailScanned);
+    if (tailScanned.some((window) => !window.ok)) complete = false;
   }
 
-  // Persist immutable windows as they complete, so a serverless timeout during the initial
-  // history scan still leaves a cursor and the next invocation continues instead of restarting.
-  let complete = true;
-  let storedLogs = visibleCursorLogs;
-  let storedLastBlock = lastBlock;
-  let persistCursor = true;
+  // Persist immutable windows as they form a contiguous successful prefix, so a later invocation
+  // resumes instead of restarting. A failed or unscanned window is a hard stop: the cursor never
+  // advances past it, even if newer windows succeeded.
+  const historyScanned: ScannedLogWindow[] = [];
   const immutableEnd = typeof toBlockHint === "number" ? scanLatest + 1 : tip - LOG_WINDOW_BLOCKS;
-  for (let i = 0; i < historyWindows.length; i += MAX_PARALLEL_LOG_WINDOWS) {
+  let persistedThrough = lastBlock;
+  let persistCursor = true;
+  const persistContiguous = async () => {
+    if (!cursorTopic || !persistCursor) return;
+    const byFrom = new Map(historyScanned.map((window) => [window.from, window]));
+    const contiguous: ScannedLogWindow[] = [];
+    for (const [from, to] of historyWindows) {
+      const window = byFrom.get(from);
+      if (!window || !window.ok || window.to >= immutableEnd) break;
+      contiguous.push(window);
+    }
+    if (!contiguous.length) return;
+    const end = contiguous[contiguous.length - 1].to;
+    if (end <= persistedThrough) return;
+    const logs = [...visibleCursorLogs, ...contiguous.flatMap((window) => window.logs)];
+    if (await writeLogScanCursor(address, cursorTopic, end, logs)) {
+      persistedThrough = end;
+    } else {
+      // Stop retrying the DB for this scan after the first failure; the next call retries.
+      persistCursor = false;
+    }
+  };
+
+  const orderedHistory = options.historyNewestFirst ? [...historyWindows].reverse() : historyWindows;
+  for (let i = 0; i < orderedHistory.length; i += maxParallel) {
     if (typeof deadlineAt === "number" && Date.now() >= deadlineAt) {
       complete = false;
       break;
     }
-    const chunk = historyWindows.slice(i, i + MAX_PARALLEL_LOG_WINDOWS);
+    const chunk = orderedHistory.slice(i, i + maxParallel);
     const chunkLogs = await Promise.all(
-      chunk.map(async ([from, to]) => ({
-        from,
-        to,
-        logs: await readCachedLogWindow(address, topics, from, to, tip, now, { endBlock: toBlockHint }),
-      })),
+      chunk.map((window) => readWindow(window, { endBlock: toBlockHint })),
     );
     scanned.push(...chunkLogs);
-    const completed = chunkLogs.filter(({ to }) => to < immutableEnd);
-    if (!persistCursor || !completed.length) continue;
-    storedLogs = [...storedLogs, ...completed.flatMap(({ logs }) => logs)];
-    storedLastBlock = Math.max(storedLastBlock, ...completed.map(({ to }) => to));
-    // Stop retrying the DB for this scan after the first failure; the next call retries.
-    persistCursor = await writeLogScanCursor(address, cursorTopic, storedLastBlock, storedLogs);
+    historyScanned.push(...chunkLogs);
+    if (chunkLogs.some((window) => !window.ok)) complete = false;
+    await persistContiguous();
   }
 
-  return { logs: [...visibleCursorLogs, ...scanned.flatMap(({ logs }) => logs)], complete };
+  return {
+    logs: [...visibleCursorLogs, ...scanned.flatMap(({ logs }) => logs)],
+    complete,
+    failedWindows: failedWindowCount(),
+  };
 }
 
 const SEL_FACTORY = "0xc45a0155";
@@ -575,6 +655,14 @@ const CATALOG_STALE_MS = 30_000;
 export const CATALOG_PARTIAL_STALE_MS = 15_000;
 /** Wall-clock budget for one cold token catalog scan; the current factory tail is always read. */
 export const TOKEN_CATALOG_SCAN_BUDGET_MS = 45_000;
+/** A cold request waits at most this long before serving the partial list while the scan continues. */
+export const TOKEN_CATALOG_SOFT_DEADLINE_MS = 8_000;
+let tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
+
+/** Shorten the cold-response wait in tests; `null` restores the production 8 s deadline. */
+export function setTokenCatalogSoftDeadlineForTests(ms: number | null): void {
+  tokenCatalogSoftDeadlineMs = ms ?? TOKEN_CATALOG_SOFT_DEADLINE_MS;
+}
 const CATALOG_REVALIDATE_SECONDS = 60;
 export const CHAIN_CATALOG_TAGS = ["evm-chain-catalog"];
 
@@ -582,12 +670,16 @@ let tokensCache: { at: number; value: CatalogToken[]; partial?: boolean } | null
 let poolsCache: { at: number; value: CatalogPool[] } | null = null;
 let tokensRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
+/** Tokens found so far by the in-flight scan, published tail-first for cold requests. */
+let tokenCatalogProgress: { addresses: Set<string>; tokens: CatalogToken[] } | null = null;
 
 export function resetChainCatalogCacheForTests(): void {
   tokensCache = null;
   poolsCache = null;
   tokensRefreshing = null;
   poolsRefreshing = null;
+  tokenCatalogProgress = null;
+  tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
   windowLogsCache.clear();
   logWindowsPeak = 0;
   resetRpcBackoffForTests();
@@ -631,46 +723,44 @@ const scanPoolsCached = unstable_cache(discoverPoolsOnChainUncached, ["evm-chain
 
 export type CatalogTokenScanResult = {
   tokens: CatalogToken[];
-  /** False when at least one factory history scan hit its deadline; the tail is still included. */
+  /** False when at least one factory history scan failed or hit its deadline; the tail is included. */
   complete: boolean;
 };
 
-export async function discoverTokensOnChainUncached(
-  deadlineAt = Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS,
-): Promise<CatalogTokenScanResult> {
+function staticTokenAddresses(dep: ReturnType<typeof readEvmDeployments>): Set<string> {
+  const out = new Set<string>();
+  for (const addr of Object.values(dep.assetMap ?? {})) {
+    if (addr) out.add(getAddress(addr).toLowerCase());
+  }
+  return out;
+}
+
+/** Minimal rows from deployment/seed metadata, used before any on-chain read completes. */
+function staticTokenRows(dep: ReturnType<typeof readEvmDeployments>): CatalogToken[] {
+  return [...staticTokenAddresses(dep)].map((lower) => {
+    const token = getAddress(lower);
+    const assetId = resolveLogicalAssetId(token);
+    const seed = seedAssetMeta(assetId);
+    return enrichAssetRow({
+      assetId,
+      tokenAddress: token,
+      name: seed?.name ?? assetId.slice(0, 10),
+      symbol: seed?.symbol ?? "TKN",
+      decimals: seed?.decimals ?? 18,
+      totalSupply: 0,
+      creator: dep.deployer || "0x0",
+      status: "active",
+      type: "token",
+      verified: Boolean(seed),
+    });
+  });
+}
+
+/** Reads ERC-20 metadata for every known address in one batch and turns it into catalog rows. */
+async function buildTokenRows(addresses: Iterable<string>): Promise<CatalogToken[]> {
   const dep = readEvmDeployments();
-  const factory = dep.contracts.tokenFactory;
-  if (!factory) return { tokens: [], complete: true };
-
-  const staticMap = Object.entries(dep.assetMap ?? {});
-  // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
-  // keep showing up in the catalog. Each superseded factory stops at its successor's start block;
-  // both event signatures are OR-ed into one getLogs filter per window.
-  const scans = tokenFactoryScans();
-  const results = await Promise.all(
-    scans.map((scan) =>
-      fetchLogsWindowedIncrementalResult(
-        scan.address,
-        [TOKEN_CREATED_TOPIC, TOKEN_CREATED_LEFTOVER_TOPIC],
-        scan.fromBlock,
-        scan.toBlock,
-        deadlineAt,
-      ),
-    ),
-  );
-  const complete = results.every((result) => result.complete);
-  const fromLogs = results.flatMap((result) => result.logs);
-
-  const tokenAddrs = new Set<string>();
-  for (const [, addr] of staticMap) {
-    if (addr) tokenAddrs.add(getAddress(addr).toLowerCase());
-  }
-  for (const log of fromLogs) {
-    const t = topicAddress(log.topics?.[1]);
-    if (t) tokenAddrs.add(t.toLowerCase());
-  }
-  const tokens = [...tokenAddrs].map((lower) => getAddress(lower));
-  if (!tokens.length) return { tokens: [], complete };
+  const tokens = [...new Set([...addresses].map((address) => address.toLowerCase()))].map((lower) => getAddress(lower));
+  if (!tokens.length) return [];
 
   // Six reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
   // sequential per-token loop measured ~3.8 s. `creator()` and `metadataURI()` are optional on
@@ -719,7 +809,113 @@ export async function discoverTokensOnChainUncached(
     });
     return applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
   });
-  return { tokens: rows.sort((a, b) => a.symbol.localeCompare(b.symbol)), complete };
+  return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+}
+
+function addLogTokenAddresses(addresses: Set<string>, logs: readonly RpcLog[]): boolean {
+  let added = false;
+  for (const log of logs) {
+    let token: string;
+    try {
+      token = topicAddress(log.topics?.[1]);
+    } catch {
+      continue;
+    }
+    if (!token) continue;
+    const lower = token.toLowerCase();
+    if (addresses.has(lower)) continue;
+    addresses.add(lower);
+    added = true;
+  }
+  return added;
+}
+
+export async function discoverTokensOnChainUncached(
+  deadlineAt = Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS,
+): Promise<CatalogTokenScanResult> {
+  const startedAt = Date.now();
+  const dep = readEvmDeployments();
+  const factory = dep.contracts.tokenFactory;
+  if (!factory) return { tokens: [], complete: true };
+
+  // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
+  // keep showing up in the catalog. Each superseded factory stops at its successor's start block;
+  // both event signatures are OR-ed into one getLogs filter per window.
+  // Current factory first (tail, then history newest-first), then superseded factories whose
+  // history is immutable and shared through the existing 24h cache.
+  const scans = tokenFactoryScans();
+  const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
+  const ordered = current ? [current, ...scans.filter((scan) => scan !== current).reverse()] : [];
+  const addresses = staticTokenAddresses(dep);
+  tokenCatalogProgress = { addresses: new Set(addresses), tokens: staticTokenRows(dep) };
+
+  let progressBuilding: Promise<void> | null = null;
+  let progressDirty = false;
+  const refreshProgress = () => {
+    progressDirty = true;
+    if (progressBuilding) return;
+    progressBuilding = (async () => {
+      while (progressDirty) {
+        progressDirty = false;
+        const snapshot = new Set(addresses);
+        try {
+          const rows = await buildTokenRows(snapshot);
+          tokenCatalogProgress = { addresses: snapshot, tokens: rows };
+        } catch {
+          // Keep the previous (static or earlier) partial list.
+        }
+      }
+      progressBuilding = null;
+    })();
+  };
+
+  let complete = true;
+  let failedWindows = 0;
+  let failedFactories = 0;
+  for (let index = 0; index < ordered.length; index++) {
+    // The first (current) factory always gets its tail read; later factories stop at the deadline.
+    if (index > 0 && Date.now() >= deadlineAt) {
+      complete = false;
+      break;
+    }
+    const scan = ordered[index];
+    try {
+      const result = await fetchLogsWindowedIncrementalResult(
+        scan.address,
+        [TOKEN_CREATED_TOPIC, TOKEN_CREATED_LEFTOVER_TOPIC],
+        scan.fromBlock,
+        scan.toBlock,
+        deadlineAt,
+        {
+          resilient: true,
+          retryDelays: [500, 1500],
+          maxParallel: MAX_CATALOG_LOG_WINDOWS,
+          historyNewestFirst: true,
+          onWindowLogs: (logs) => {
+            if (addLogTokenAddresses(addresses, logs)) refreshProgress();
+          },
+        },
+      );
+      if (!result.complete) complete = false;
+      failedWindows += result.failedWindows ?? 0;
+      if (addLogTokenAddresses(addresses, result.logs)) refreshProgress();
+    } catch {
+      // One factory must never blank the catalog; the other factories' tokens still show.
+      failedFactories += 1;
+      complete = false;
+    }
+  }
+
+  if (progressBuilding) await progressBuilding;
+  const tokens = await buildTokenRows(addresses);
+  tokenCatalogProgress = { addresses: new Set(addresses), tokens };
+  if (failedWindows || failedFactories) {
+    const elapsedMs = Date.now() - startedAt;
+    console.warn(
+      `[evm-catalog] token scan incomplete: failedWindows=${failedWindows} failedFactories=${failedFactories} elapsedMs=${elapsedMs}`,
+    );
+  }
+  return { tokens, complete };
 }
 
 async function loadTokens(): Promise<CatalogToken[]> {
@@ -764,7 +960,29 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
     }
     return cached.value;
   }
-  return loadTokens();
+
+  // Cold instance: start the full scan, but do not keep the request waiting for long history.
+  // The tail is read first, so the progress list already carries freshly created tokens.
+  if (!tokensRefreshing) {
+    tokensRefreshing = loadTokens()
+      .catch(() => tokensCache?.value ?? tokenCatalogProgress?.tokens ?? [])
+      .finally(() => {
+        tokensRefreshing = null;
+      });
+  }
+  const task = tokensRefreshing;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<{ timedOut: true }>((resolve) => {
+    timer = setTimeout(() => resolve({ timedOut: true }), tokenCatalogSoftDeadlineMs);
+  });
+  const outcome = await Promise.race([
+    task.then((value) => ({ timedOut: false as const, value })),
+    timeout,
+  ]);
+  if (timer) clearTimeout(timer);
+  if (!outcome.timedOut) return outcome.value;
+  // Never return an empty list when the deployment/seed catalog already has tokens.
+  return tokenCatalogProgress?.tokens.length ? tokenCatalogProgress.tokens : tokensCache?.value ?? [];
 }
 
 async function pairReserves(pair: string, wppl: string): Promise<CatalogPool | null> {

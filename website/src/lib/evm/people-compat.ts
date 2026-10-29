@@ -532,6 +532,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
         }),
       };
     }
+    console.warn("[evm-compat] token catalog empty; serving static assetMap fallback");
     const dep = readEvmDeployments();
     const rows: AssetRow[] = [];
     for (const assetId of Object.keys(dep.assetMap ?? {})) {

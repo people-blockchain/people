@@ -43,8 +43,13 @@ function noteRpcSuccess(url: string): void {
 }
 
 /** POSTs a JSON-RPC body, honouring and updating the per-URL backoff. */
-async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{ res: Response; payload: unknown }> {
-  if (rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+async function postRpc(
+  url: string,
+  body: unknown,
+  timeoutMs: number,
+  { ignoreBackoff = false }: { ignoreBackoff?: boolean } = {},
+): Promise<{ res: Response; payload: unknown }> {
+  if (!ignoreBackoff && rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
   let res: Response;
   let payload: unknown;
   try {
@@ -56,11 +61,11 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
       signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (error) {
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
     throw error;
   }
   if (RPC_RETRYABLE_STATUS.has(res.status)) {
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
     const detail = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
     throw new Error(detail?.error?.message ?? `rpc_http_${res.status}`);
   }
@@ -68,17 +73,32 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
     payload = await res.json();
   } catch (error) {
     // A truncated/HTML body (proxy error page, dropped connection) is a node-side failure.
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
     throw error;
   }
   noteRpcSuccess(url);
   return { res, payload };
 }
 
-export async function evmJsonRpc<T>(method: string, params: unknown[] = []): Promise<T> {
+export type EvmJsonRpcOptions = {
+  /** Per-call abort timeout; defaults to 20 s. */
+  timeoutMs?: number;
+  /**
+   * Read through an active per-URL backoff instead of failing fast. Used by `eth_getLogs` retries
+   * so one bad window cannot short-circuit the rest of a catalog scan.
+   */
+  ignoreBackoff?: boolean;
+};
+
+export async function evmJsonRpc<T>(method: string, params: unknown[] = [], options: EvmJsonRpcOptions = {}): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
-  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, 20_000);
+  const { res, payload: raw } = await postRpc(
+    url,
+    { jsonrpc: "2.0", id: 1, method, params },
+    options.timeoutMs ?? 20_000,
+    { ignoreBackoff: options.ignoreBackoff },
+  );
   const payload = raw as { result?: T; error?: { message?: string } };
   if (!res.ok || payload?.error) {
     throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);
