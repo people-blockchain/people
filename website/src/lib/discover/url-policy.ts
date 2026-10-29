@@ -4,11 +4,13 @@
  * browsers treat as `/`) must never be stored — they would open a cross-origin redirect.
  */
 
+import { isSafeInAppPath } from "@/lib/safe-return-path";
+
 /** In-app absolute path, or an absolute http(s) URL. Everything else is rejected. */
 export function isSafeLinkTarget(value: string): boolean {
   if (!value) return false;
-  if (value.startsWith("//") || value.includes("\\")) return false;
-  if (value.startsWith("/")) return true;
+  if (value.startsWith("/")) return isSafeInAppPath(value);
+  if (value.includes("\\")) return false;
   try {
     const url = new URL(value);
     return url.protocol === "http:" || url.protocol === "https:";

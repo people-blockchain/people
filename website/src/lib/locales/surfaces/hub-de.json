@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Nicht-kustodiales Wallet erstellen",
-        "body": "Erzeugen Sie eine 12-Wörter-Phrase im Browser, schreiben Sie sie auf und verschlüsseln Sie sie mit einem Passwort. Schlüssel verlassen dieses Gerät nie.",
+        "title": "Wallet erstellen",
+        "body": "Erzeugen Sie eine 12-Wörter-Phrase im Browser, schreiben Sie sie auf und verschlüsseln Sie sie mit einem Passwort. Schlüssel verlassen dieses Gerät nie. Oder melden Sie sich mit Google an und erhalten eine Cloud-Wallet: Ihr Schlüssel wird verschlüsselt auf PEOPLE-Servern gespeichert, und die Infrastruktur von PEOPLE kann ihn entschlüsseln.",
         "href": "/wallet",
         "cta": "Wallet öffnen"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Eine Person mit Wallet auf Telefon, Tablet oder Browser.",
-        "detail": "Beginnen Sie mit einem nicht-kustodialen Konto auf Telefon, Tablet oder Browser. Sie treten als Person in der Gemeinschaft bei — nicht als Validator."
+        "detail": "Beginnen Sie mit einer Wallet auf Telefon, Tablet oder Browser. Sie treten als Person in der Gemeinschaft bei — nicht als Validator."
       },
       {
         "id": "transaction",

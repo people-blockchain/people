@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Emanetsiz cüzdan oluştur",
-        "body": "Tarayıcıda 12 kelimelik bir ifade üretin, yazın ve bir parolayla şifreleyin. Anahtarlar bu cihazı asla terk etmez.",
+        "title": "Cüzdan oluştur",
+        "body": "Tarayıcıda 12 kelimelik bir ifade üretin, yazın ve bir parolayla şifreleyin. Anahtarlar bu cihazı asla terk etmez. Ya da Google ile giriş yaparak bulut cüzdanı alın: anahtarınız PEOPLE sunucularında şifreli saklanır ve PEOPLE altyapısı onu çözebilir.",
         "href": "/wallet",
         "cta": "Cüzdanı aç"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Telefon, tablet veya tarayıcıda cüzdanı olan bir kişi.",
-        "detail": "Telefonda, tablette veya tarayıcıda saklamasız bir hesapla başlayın. Toplulukta bir kişi olarak katılırsınız — doğrulayıcı olarak değil."
+        "detail": "Telefonda, tablette veya tarayıcıda bir cüzdanla başlayın. Toplulukta bir kişi olarak katılırsınız — doğrulayıcı olarak değil."
       },
       {
         "id": "transaction",
