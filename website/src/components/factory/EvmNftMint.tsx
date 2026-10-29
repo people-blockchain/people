@@ -114,6 +114,16 @@ function formatPplWei(wei: bigint): string {
   return trimmed ? `${whole}.${trimmed}` : whole;
 }
 
+/** Fire-and-forget: the server re-verifies the NftMinted event from the receipt itself. */
+async function recordNftMintAction(hash: string): Promise<void> {
+  try {
+    const { recordFounderAction } = await import("@/lib/founders/client");
+    await recordFounderAction("nft_mint", hash);
+  } catch {
+    /* points are best-effort; never block the mint result */
+  }
+}
+
 function mintErrorState(err: unknown): ErrorState {
   if (err instanceof MintFlowError) return { key: err.key };
   const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
@@ -433,6 +443,7 @@ export function EvmNftMint() {
         if (receipt.status !== "success") throw new Error(`receipt: mint reverted (${current.mintTx})`);
         const collection = getAddress(current.collection as string);
         const tokenId = tokenIdFromReceipt(receipt, factory, collection);
+        void recordNftMintAction(current.mintTx);
         persist({ status: "done", tokenId: tokenId?.toString() });
         setResult({ collection, tokenId, mintTx: current.mintTx, createTx: current.createTx ?? null });
         return;
@@ -607,6 +618,7 @@ export function EvmNftMint() {
       const mintReceipt = await waitFor(mintHash);
       if (mintReceipt.status !== "success") throw new Error(`receipt: mint reverted (${mintHash})`);
       const tokenId = tokenIdFromReceipt(mintReceipt, factory, collection);
+      void recordNftMintAction(mintHash);
       persist({ status: "done", tokenId: tokenId?.toString() });
       setResult({ collection, tokenId, mintTx: mintHash, createTx });
     } catch (err) {
