@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextAuthRequest } from "next-auth";
 import { authConfig } from "@/auth.config";
+import { localeFromBuyPath } from "@/lib/locale-detect";
+import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/preferences";
 import { isLoginPath, isPartnerPath, LOGIN_PATH } from "@/lib/partner/guards";
 import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCode } from "@/lib/partner/referral";
 
@@ -28,7 +30,21 @@ export const proxy = auth((request: NextAuthRequest) => {
   const session = request.auth;
   let response: NextResponse;
 
-  if (isPartnerPath(pathname) && !session?.user) {
+  const buyLocale = localeFromBuyPath(pathname);
+  if (buyLocale) {
+    // `/tr/buy` → `/buy` in Turkish: the redirect keeps the query string (?ref=…)
+    // and stores the language the server reads when it renders `/buy`.
+    const buy = request.nextUrl.clone();
+    buy.pathname = "/buy";
+    response = NextResponse.redirect(buy);
+    response.cookies.set(LANG_COOKIE, buyLocale, {
+      path: "/",
+      maxAge: LANG_COOKIE_MAX_AGE,
+      sameSite: "lax",
+      httpOnly: false,
+      secure: request.nextUrl.protocol === "https:",
+    });
+  } else if (isPartnerPath(pathname) && !session?.user) {
     const login = request.nextUrl.clone();
     login.pathname = LOGIN_PATH;
     login.search = "";
@@ -64,5 +80,12 @@ export const proxy = auth((request: NextAuthRequest) => {
 });
 
 export const config = {
-  matcher: ["/partner/:path*", "/partner", "/login/:path*", "/login", "/"],
+  matcher: [
+    "/partner/:path*",
+    "/partner",
+    "/login/:path*",
+    "/login",
+    "/",
+    "/(en|ru|es|pt|fr|de|it|tr|vi|id|zh|ar)/buy",
+  ],
 };

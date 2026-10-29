@@ -121,11 +121,11 @@
       {
         "title": "Đợt bán PPL công khai",
         "body": [
-          "Các thông số của đợt bán (công thức đường cong, lộ trình giá, giới hạn và mục tiêu graduation) được công bố trên trang /buy. Việc mua vẫn bị vô hiệu hóa cho đến khi hợp đồng bán được công bố; việc kết nối ví không ràng buộc bạn với bất kỳ điều gì.",
+          "Các thông số của đợt bán (công thức đường cong, lộ trình giá, giới hạn và thời hạn bán: cho đến khi bán hết hoặc 24 tháng, tùy điều kiện nào đến trước) được công bố trên trang /buy. Việc mua vẫn bị vô hiệu hóa cho đến khi hợp đồng bán được công bố; việc kết nối ví không ràng buộc bạn với bất kỳ điều gì.",
           "Không yêu cầu KYC để mua. Việc bán lại yêu cầu bằng chứng về danh tính con người (Human Passport hoặc Telegram), và đây không phải là KYC.",
           "Đợt bán diễn ra cho đến khi bán hết (đường cong đóng khi huy động đạt 4 triệu USD) hoặc trong 24 tháng kể từ khi mở bán, tùy điều kiện nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
           "Thời hạn bán, công thức giá và các giới hạn không thay đổi sau khi đợt bán mở.",
-          "Bán lại không phải là hoàn tiền: Bán lại cho quỹ dự trữ — chỉ dành cho người dùng đã xác minh. Mỗi lô có thể được bán lại sau 30 ngày nắm giữ, theo giá trên đường cong tại thời điểm bạn bán. Tổng lượng bán lại được giới hạn ở mức 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và 2.000 USD mỗi người mỗi ngày. Phí: 1,5%, hoặc 3% khi lượng bán lại trong ngày đó đã vượt quá 1% quỹ dự trữ. Đóng lại sau graduation. Thanh toán bằng USDC trên Base.",
+          "Bán lại không phải là hoàn tiền: Bán lại cho quỹ dự trữ — chỉ dành cho người dùng đã xác minh. Mỗi lô có thể được bán lại sau 30 ngày nắm giữ, theo giá trên đường cong tại thời điểm bạn bán. Tổng lượng bán lại được giới hạn ở mức 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và 2.000 USD mỗi địa chỉ mỗi ngày. Phí: 1,5%, hoặc 3% khi lượng bán lại trong ngày đó đã vượt quá 1% quỹ dự trữ. Đóng lại sau graduation. Thanh toán bằng USDC trên Base.",
           "Không nội dung nào trên trang web này là lời chào bán hay cam kết bán PPL tại những nơi việc bán bị hạn chế, và việc tham gia có thể không khả dụng tại khu vực pháp lý của bạn."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Không nội dung nào trên trang web này là lời khuyên về đầu tư, thuế hay pháp lý. Chúng tôi không cam kết lợi nhuận, lợi tức, giá token, việc niêm yết hay thu nhập dưới bất kỳ hình thức nào.",
           "PPL thử nghiệm và các tài sản khác của mạng thử nghiệm không có giá trị tiền tệ. Việc nắm giữ hoặc kiếm được token thử nghiệm không cho bạn quyền nhận token mainnet, tiền hay các phần phân bổ trong tương lai, trừ khi chúng tôi công bố một chương trình riêng, có tính ràng buộc — và chương trình như vậy không được cam kết ở đây."
+        ]
+      },
+      {
+        "title": "Công bố về bán PPL",
+        "body": [
+          "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau khi bán kết thúc thị trường quyết định và có thể tăng hoặc giảm. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hẹn hay bảo đảm lợi nhuận hay hoàn vốn.",
+          "Tham gia có thể bị hạn chế hoặc không khả dụng nơi bạn sống; kiểm tra quy định áp dụng là trách nhiệm của bạn. Chỉ dùng số tiền bạn có thể chấp nhận mất.",
+          "Các đánh giá bảo mật hỗ trợ AI trên trang web do đội dự án thực hiện. Không phải kiểm toán bên ngoài; kiểm toán bảo mật bên thứ ba hoàn tất trước mainnet. Bug bounty giảm rủi ro nhưng không loại bỏ hoàn toàn."
         ]
       },
       {
