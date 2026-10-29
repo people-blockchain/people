@@ -1,6 +1,8 @@
 import * as real from "../../src/lib/evm/log-scan-cursor.ts";
 
 export const writeLogScanCursor = real.writeLogScanCursor;
+export const readCatalogSnapshot = real.readCatalogSnapshot;
+export const writeCatalogSnapshot = real.writeCatalogSnapshot;
 
 /** Test hook: `EVM_TEST_FAIL_CURSOR_FACTORY=<address>` makes that factory's scan reject. */
 export async function readLogScanCursor(address, topic) {
