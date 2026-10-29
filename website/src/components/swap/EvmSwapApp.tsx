@@ -14,6 +14,8 @@ import { useAssetRegistry } from "@/hooks/useAssetRegistry";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { readEvmDeployments, evmContractsReady } from "@/lib/evm/config";
+import { ensureAllowance, SwapApproveError } from "@/lib/evm/swap-approve";
+import type { TransferPublicClient } from "@/lib/evm/wallet-send";
 import { networkJson } from "@/lib/network-client";
 import { erc20Abi, pairAbi, routerAbi } from "@/lib/evm/client";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
@@ -130,6 +132,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
   const [slippageBps, setSlippageBps] = useState<number>(100);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
   const [txHash, setTxHash] = useState("");
   const [pplBalanceWei, setPplBalanceWei] = useState<bigint>(BigInt(0));
   const [tokenBalanceUnits, setTokenBalanceUnits] = useState<bigint>(BigInt(0));
@@ -425,12 +428,22 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
           value: parsed.amountInBaseUnits,
         });
       } else {
-        await writeViaActiveSigner(signer, {
-          address: tokenContract,
-          abi: erc20Abi,
-          functionName: "approve",
-          args: [router, parsed.amountInBaseUnits],
+        await ensureAllowance({
+          client: readPublicClient() as unknown as TransferPublicClient,
+          token: tokenContract,
+          owner: signer.address as Address,
+          spender: router,
+          amount: parsed.amountInBaseUnits,
+          onApproving: () => setStatus(t.approving),
+          sendApprove: () =>
+            writeViaActiveSigner(signer, {
+              address: tokenContract,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [router, parsed.amountInBaseUnits],
+            }),
         });
+        setStatus("");
         hash = await writeViaActiveSigner(signer, {
           address: router,
           abi: routerAbi,
@@ -443,8 +456,15 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
       void recordFounderAction("swap", hash);
       void refreshChain();
     } catch (err) {
-      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.error));
+      if (err instanceof SwapApproveError) {
+        setError(
+          err.code === "approve_timeout" ? t.approveTimeout : err.code === "allowance_low" ? t.allowanceLow : t.approveReverted,
+        );
+      } else {
+        setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.error));
+      }
     } finally {
+      setStatus("");
       setBusy(false);
     }
   };
@@ -746,7 +766,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                     onClick={() => void swap()}
                     disabled={busy || Boolean(blocker)}
                   >
-                    {busy ? u.sending : blocker ?? u.swapNow}
+                    {busy ? status || u.sending : blocker ?? u.swapNow}
                   </button>
                 )}
               </div>

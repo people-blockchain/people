@@ -40,5 +40,9 @@
   "networkBadge": "Jaringan PEOPLE · chain 97401",
   "selectToken": "Pilih token",
   "closePicker": "Tutup",
-  "gasFeeNote": "Dibayar sebagai gas PPL saat menandatangani"
+  "gasFeeNote": "Dibayar sebagai gas PPL saat menandatangani",
+  "approving": "Menyetujui token…",
+  "approveReverted": "Persetujuan token gagal, tidak ada yang ditukar. Coba lagi.",
+  "approveTimeout": "Persetujuan token masih tertunda. Periksa dompet Anda lalu coba lagi.",
+  "allowanceLow": "Persetujuan belum berlaku (batas terlalu rendah). Coba lagi."
 }

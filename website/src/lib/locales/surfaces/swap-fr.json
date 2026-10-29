@@ -40,5 +40,9 @@
   "networkBadge": "Réseau PEOPLE · chaîne 97401",
   "selectToken": "Choisir un jeton",
   "closePicker": "Fermer",
-  "gasFeeNote": "Payé en gaz PPL à la signature"
+  "gasFeeNote": "Payé en gaz PPL à la signature",
+  "approving": "Approbation du jeton…",
+  "approveReverted": "L'approbation du jeton a échoué, aucun échange n'a eu lieu. Réessayez.",
+  "approveTimeout": "L'approbation du jeton est toujours en attente. Vérifiez votre portefeuille puis réessayez.",
+  "allowanceLow": "L'approbation n'a pas été prise en compte (limite trop basse). Réessayez."
 }
