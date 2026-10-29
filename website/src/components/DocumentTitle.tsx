@@ -23,6 +23,7 @@ export function DocumentTitle() {
     else if (pathname.startsWith("/wallet")) document.title = titles.wallet;
     else if (pathname.startsWith("/explorer")) document.title = titles.explorer;
     else if (pathname === "/swap") document.title = titles.swap;
+    else if (pathname === "/bounty") document.title = titles.founders;
     else if (pathname === "/founders") document.title = titles.founders;
     else if (pathname === "/transparency") document.title = titles.transparency;
     else if (pathname === "/privacy") document.title = titles.privacy;

@@ -1,0 +1,124 @@
+{
+  "navLabel": "Ganar PPL",
+  "homeCta": "Ganar PPL",
+  "hero": {
+    "eyebrow": "GANA PPL",
+    "title": "Gana PPL con PEOPLE",
+    "lead": "Un solo lugar para tu número de fundador, puntos, enlace de referido personal, recompensas y el fondo de recompensas de la comunidad.",
+    "ctaEarn": "Empezar a ganar",
+    "ctaSale": "Ir a la venta de PPL",
+    "disclaimer": "Etapa de testnet. Los puntos y las recompensas son preliminares, requieren verificación humana y no son una promesa de ingresos."
+  },
+  "countdown": {
+    "eyebrow": "VENTA DE PPL · 1 DE DICIEMBRE DE 2026",
+    "title": "Cuenta atrás para la venta de PPL",
+    "lead": "La venta pública de PPL abre el 1 de diciembre de 2026. Pagas en USDC o USDT en Base, y los PPL se acreditan de inmediato en tu dirección de la red PEOPLE.",
+    "days": "días",
+    "hours": "horas",
+    "minutes": "minutos",
+    "seconds": "segundos",
+    "open": "La venta de PPL está abierta.",
+    "openCta": "Comprar PPL",
+    "dateLabel": "Fecha de apertura",
+    "unavailable": "La fecha de apertura aún no se ha anunciado."
+  },
+  "stats": {
+    "eyebrow": "COMUNIDAD",
+    "title": "Participantes",
+    "lead": "Solo se cuentan las personas verificadas.",
+    "verified": "participantes verificados",
+    "countries": "países",
+    "goal": "Objetivo",
+    "missing": "Los datos de participantes no están disponibles ahora mismo."
+  },
+  "leaderboard": {
+    "eyebrow": "CLASIFICACIÓN",
+    "title": "Mejores embajadores",
+    "lead": "Ordenados por invitados verificados. Los bots y las cuentas sin verificar no cuentan.",
+    "founder": "Fundador",
+    "invites": "invitados verificados",
+    "ambassador": "Embajador",
+    "missing": "La clasificación aún no tiene datos reales."
+  },
+  "tasks": {
+    "eyebrow": "PUNTOS",
+    "title": "Tus puntos y tareas",
+    "lead": "Los puntos se otorgan por acciones reales tras la verificación humana. Comprar PPL y participar en airdrops no se recompensa.",
+    "yourPoints": "Tus puntos",
+    "yourNumber": "Número de fundador",
+    "notFounder": "Inicia sesión y reclama un número de fundador para empezar a ganar puntos.",
+    "signIn": "Abrir cartera",
+    "dailyCap": "Límite diario",
+    "perAction": "por acción",
+    "points": "puntos",
+    "tasksLabel": "Tareas",
+    "open": "Abrir",
+    "verification": "Se requiere verificación humana."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Intercambiar PPL", "href": "/swap" },
+    { "id": "stake", "label": "Hacer staking de PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Lanzar un token", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Acuñar un NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Votar en la gobernanza", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Reaccionar a un proyecto", "href": "/discover" },
+    { "id": "discover_follow", "label": "Seguir un proyecto", "href": "/discover" },
+    { "id": "invite", "label": "Invitar a una persona verificada", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "REFERIDOS",
+    "title": "Invita a personas y gana del Growth Pool",
+    "lead": "Dos niveles: L1 para invitados directos y L2 para sus invitados. Los puntos solo se acreditan por invitados verificados que realizan una acción real.",
+    "l1": "L1 · invitado directo",
+    "points": "puntos",
+    "l2": "L2 · segundo nivel",
+    "l2Value": "{{percent}} de los puntos de referido del invitado L1 (L2)",
+    "poolLabel": "Fondo de referidos de la temporada 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% de inmediato y el resto durante 52 semanas, condicionado a la actividad.",
+    "yourLink": "Tu enlace de referido personal",
+    "signIn": "Inicia sesión y reclama un número de fundador para obtener tu enlace personal.",
+    "cabinet": "Abrir el panel de socio",
+    "growthNote": "Los pagos de referidos Growth provienen del Growth Pool: 15% de las comisiones de red elegibles. Los pesos L1 y L2 son 70/30 de ese presupuesto."
+  },
+  "bounties": {
+    "eyebrow": "RECOMPENSAS",
+    "title": "Recompensas",
+    "lead": "Formas adicionales de ganar PPL del fondo Comunidad y recompensas.",
+    "bugTitle": "Recompensa por errores",
+    "bugBody": "Informa de una vulnerabilidad o un error de producto con el botón de errores de cualquier página. Los informes aceptados se recompensan con puntos de fundador.",
+    "bugCta": "Informar de un error",
+    "creatorTitle": "Recompensa de referidos del creador",
+    "creatorBody": "Los emisores pueden reservar opcionalmente el 5% del suministro (máximo 10%) para recompensas por invitación, con una recompensa por invitación del 5% de la compra del invitado por defecto.",
+    "creatorCta": "Lanzar un token",
+    "contentTitle": "Recompensas de contenido y comunidad",
+    "contentBody": "Sigue el tablero de tareas y los anuncios. Una nueva recompensa solo se añade cuando tiene un presupuesto y unas reglas reales."
+  },
+  "tokenomics": {
+    "eyebrow": "FINANCIACIÓN",
+    "title": "De dónde sale cada recompensa",
+    "lead": "Las recompensas se pagan solo del fondo Comunidad y recompensas. No se acuña nuevo PPL para ellas.",
+    "communityLabel": "Comunidad y recompensas",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Liberado durante 6 años.",
+    "seasonLabel": "Temporada 1 (propuesta)",
+    "seasonValue": "20M PPL en 3 meses",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% de inmediato y el resto durante 12 meses, condicionado a la actividad.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% de las comisiones de red elegibles",
+    "sourceCta": "Leer la tokenomía"
+  },
+  "personal": {
+    "eyebrow": "TU CUENTA",
+    "title": "Panel del fundador",
+    "lead": "Tu número, puntos, enlace de referido y tareas se actualizan automáticamente."
+  },
+  "final": {
+    "title": "¿Listo para ganar PPL?",
+    "lead": "Reclama un número de fundador, completa tareas e invita a personas verificadas.",
+    "cta": "Empezar a ganar",
+    "sale": "Ir a la venta de PPL"
+  }
+}

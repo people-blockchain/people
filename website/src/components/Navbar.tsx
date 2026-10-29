@@ -16,6 +16,7 @@ import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { content } from "@/lib/content";
+import { bountyCopy } from "@/lib/bounty-content";
 import { BRAND_TAGLINE } from "@/lib/site";
 import { bugReportCopy } from "@/lib/bug-reports/copy";
 
@@ -58,7 +59,13 @@ const HOW_IT_WORKS_HREF = "/how-it-works";
 const DISCOVER_HREF = "/discover";
 const DESKTOP_NAV_MIN_WIDTH = 1024;
 
-type NavLink = { label: string; href: string; compactOnly?: boolean; external?: boolean };
+type NavLink = {
+  label: string;
+  href: string;
+  compactOnly?: boolean;
+  moreBelowXl?: boolean;
+  external?: boolean;
+};
 
 function MoreMenu({
   label,
@@ -120,9 +127,11 @@ function MoreMenu({
           >
             {links.map((link) => (
               <li
-                key={`${link.href}${link.compactOnly ? "-compact" : ""}`}
+                key={`${link.href}${link.compactOnly ? "-compact" : ""}${link.moreBelowXl ? "-more-xl" : ""}`}
                 role="none"
-                className={link.compactOnly ? "2xl:hidden" : undefined}
+                className={
+                  link.compactOnly ? "2xl:hidden" : link.moreBelowXl ? "xl:hidden" : undefined
+                }
               >
                 <a
                   role="menuitem"
@@ -150,6 +159,8 @@ export function Navbar() {
   const { toggleTheme } = useTheme();
   const pathname = usePathname();
   const t = content[lang].nav;
+  const bounty = bountyCopy(lang);
+  const bountyLink: NavLink = { label: bounty.navLabel, href: "/bounty" };
   const supportLabel = bugReportCopy[lang].supportLink;
   const supportLink: NavLink[] = SUPPORT_TG_URL
     ? [{ label: supportLabel, href: supportUrlWithLocale(SUPPORT_TG_URL, lang), external: true }]
@@ -159,10 +170,11 @@ export function Navbar() {
   const moreMenuLinks = [
     ...(howItWorksLink ? [{ ...howItWorksLink, compactOnly: true as const }] : []),
     ...(discoverLink ? [{ ...discoverLink, compactOnly: true as const }] : []),
+    { ...bountyLink, moreBelowXl: true as const },
     ...t.moreLinks,
     ...supportLink,
   ];
-  const sheetLinks: NavLink[] = [...t.links, ...t.moreLinks, ...supportLink];
+  const sheetLinks: NavLink[] = [...t.links, bountyLink, ...t.moreLinks, ...supportLink];
 
   const getHref = (href: string) => (pathname !== "/" && href.startsWith("#") ? `/${href}` : href);
 
@@ -296,7 +308,9 @@ export function Navbar() {
             max-w-7xl container exactly at the xl breakpoint (1280px, same as
             max-w-7xl itself, so there's no slack), which overflowed the page
             by ~27px when these two were inline there. 2xl (1536px) has real
-            room to spare. */}
+            room to spare. Earn PPL only goes inline from xl: at 1024px it
+            pushed the long-locale header into the sign-in button, so below xl
+            it lives in More (like the sheet, which always lists it). */}
         <nav
           aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
@@ -314,6 +328,9 @@ export function Navbar() {
               {link.label}
             </a>
           ))}
+          <a href={bountyLink.href} className={NAV_LINK.replace("inline-flex", "hidden xl:inline-flex")}>
+            {bountyLink.label}
+          </a>
           <MoreMenu label={t.moreLabel} links={moreMenuLinks} getHref={getHref} />
         </nav>
 
@@ -398,7 +415,7 @@ export function Navbar() {
                     ))}
                     <li>
                       <Link
-                        href="/partner"
+                        href="/bounty"
                         onClick={() => setOpen(false)}
                         className="flex items-center justify-between gap-4 border-b border-line py-4 text-lg font-semibold text-ink"
                       >

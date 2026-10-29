@@ -74,7 +74,11 @@ export function HomeWarmFoundersTeaser() {
 
             <p className="mt-4 text-sm text-ink-3">{t.cardHint}</p>
 
-            <Link href={t.href} className={`${WARM_PRIMARY_BTN} mt-6 w-full sm:w-auto`} data-testid="home-warm-founders-cta">
+            <Link
+              href={t.href === "/founders" ? "/bounty" : t.href}
+              className={`${WARM_PRIMARY_BTN} mt-6 w-full sm:w-auto`}
+              data-testid="home-warm-founders-cta"
+            >
               {t.cta}
             </Link>
           </Reveal>
