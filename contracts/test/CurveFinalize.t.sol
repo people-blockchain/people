@@ -62,7 +62,7 @@ contract CurveFinalizeTest is Test {
     function test_anyoneFinalizesAfter180Days_unsoldToCommunityPool() public {
         address token = _launchMode(1); // CommunityPool
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         uint256 poolBefore = vault.balances(token);
         (, , uint256 eco,) = curve.curves(token);
         uint256 expectedUnsold = IERC20(token).balanceOf(address(curve)) - eco;
@@ -79,7 +79,7 @@ contract CurveFinalizeTest is Test {
 
         vm.prank(buyer);
         vm.expectRevert();
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
 
         vm.prank(anyone);
         vm.expectRevert(BondingCurveMarket.NotFinalizable.selector);
@@ -89,7 +89,7 @@ contract CurveFinalizeTest is Test {
     function test_holdersCanStillSellAfterFinalize_tokensGoToPool() public {
         address token = _launch();
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         uint256 bought = IERC20(token).balanceOf(buyer);
         vm.warp(block.timestamp + 181 days);
         curve.finalize(token);
@@ -98,7 +98,7 @@ contract CurveFinalizeTest is Test {
 
         vm.startPrank(buyer);
         IERC20(token).approve(address(curve), bought);
-        curve.sell(token, bought, 0);
+        curve.sell(token, bought, 1, block.timestamp);
         vm.stopPrank();
 
         assertGt(buyer.balance, nativeBefore, "seller paid");
@@ -111,7 +111,7 @@ contract CurveFinalizeTest is Test {
         address token = _launchMode(1); // CommunityPool so leftovers still land in the vault
         uint256 alloc = vault.balances(token);
         vm.prank(buyer);
-        curve.buy{value: 50_000 ether}(token, 0);
+        curve.buy{value: 50_000 ether}(token, 1, block.timestamp);
         assertTrue(curve.isMigrated(token), "migrated");
         assertEq(IERC20(token).balanceOf(address(0x7EA5)), 0, "treasury gets no leftovers");
         assertGt(vault.balances(token), alloc, "leftovers added to the community pool");
@@ -127,7 +127,7 @@ contract CurveFinalizeTest is Test {
         uint256 alloc = vault.balances(token);
         uint256 burnBefore = IERC20(token).balanceOf(address(0xdead));
         vm.prank(buyer);
-        curve.buy{value: 50_000 ether}(token, 0);
+        curve.buy{value: 50_000 ether}(token, 1, block.timestamp);
         assertTrue(curve.isMigrated(token), "migrated");
         assertEq(IERC20(token).balanceOf(address(0x7EA5)), 0, "treasury gets no leftovers");
         assertEq(vault.balances(token), alloc, "burn mode: pool not credited leftovers");
@@ -137,7 +137,7 @@ contract CurveFinalizeTest is Test {
     function test_vaultDepositOnlyCreditsReceived() public {
         address token = _launch();
         vm.prank(buyer);
-        curve.buy{value: 1 ether}(token, 0);
+        curve.buy{value: 1 ether}(token, 1, block.timestamp);
         uint256 amt = IERC20(token).balanceOf(buyer) / 2;
         uint256 before = vault.balances(token);
         vm.startPrank(buyer);

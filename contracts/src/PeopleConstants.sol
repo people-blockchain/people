@@ -14,6 +14,10 @@ library PeopleConstants {
     uint256 internal constant NFT_MINT_FEE = 2_925_000_000_000_000_000;
     uint256 internal constant VESTING_DURATION = 180 days;
     uint256 internal constant PEOPLE_EVM_CHAIN_ID = 97401;
+    /// ERC-20 precompile that fronts the chain's native PPL balance. An "ERC-20 transfer" on this
+    /// address moves native PPL, so contracts holding native funds must never treat it as an
+    /// ordinary token.
+    address internal constant NATIVE_PPL_ERC20 = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     // --------------------------------------------------- optional creator promo share
     // Owner decision 2026-10-13: a creator may optionally set aside an extra promo share for

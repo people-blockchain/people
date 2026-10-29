@@ -52,12 +52,12 @@ contract PocCurveZeroSellDrainTest is Test {
         );
 
         vm.prank(victim);
-        bondingCurve.buy{value: 10 ether}(token, 0);
+        bondingCurve.buy{value: 10 ether}(token, 1, block.timestamp);
 
         uint256 attackerBalBefore = attacker.balance;
         vm.prank(attacker);
         vm.expectRevert(CurveMath.InsufficientInput.selector);
-        bondingCurve.sell(token, 0, 0);
+        bondingCurve.sell(token, 0, 1, block.timestamp);
 
         assertEq(attacker.balance, attackerBalBefore, "zero-token sell must not pay out any native PPL");
     }
@@ -74,11 +74,11 @@ contract PocCurveZeroSellDrainTest is Test {
         uint256 attackerBalBefore = attacker.balance;
         for (uint256 i = 0; i < 5; i++) {
             vm.prank(victim);
-            bondingCurve.buy{value: 10 ether}(token, 0);
+            bondingCurve.buy{value: 10 ether}(token, 1, block.timestamp);
 
             vm.prank(attacker);
             vm.expectRevert(CurveMath.InsufficientInput.selector);
-            bondingCurve.sell(token, 0, 0);
+            bondingCurve.sell(token, 0, 1, block.timestamp);
         }
         assertEq(attacker.balance, attackerBalBefore, "attacker token balance is zero throughout; no PPL extracted");
     }
