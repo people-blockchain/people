@@ -27,6 +27,7 @@ export type NftErrorKey =
   | "errNetwork"
   | "errNetworkRpc"
   | "errStableFeeUnavailable"
+  | "errStableDailyCap"
   | "errInsufficientPpl"
   | "errInsufficientPplGeneric"
   | "errPinFailed"
