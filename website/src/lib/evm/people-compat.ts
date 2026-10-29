@@ -11,9 +11,9 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
-import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { enrichAssetRow, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
-import { readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
+import { readAllFactoryNfts, readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
 
 type AssetRow = {
   assetId: string;
@@ -304,8 +304,12 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const dep = readEvmDeployments();
     const catalog = await discoverTokensOnChain().catch(() => []);
     const tokens = [
-      ...catalog.map((row) => ({ assetId: row.assetId, address: row.tokenAddress })),
-      ...Object.entries(dep.assetMap ?? {}).map(([assetId, address]) => ({ assetId, address })),
+      ...catalog.map((row) => ({ assetId: row.assetId, address: row.tokenAddress, decimals: row.decimals })),
+      ...Object.entries(dep.assetMap ?? {}).map(([assetId, address]) => ({
+        assetId,
+        address,
+        decimals: seedAssetMeta(assetId)?.decimals,
+      })),
     ];
     const held = await readTokenBalances(addr, tokens).catch(() => ({}));
     return {
@@ -343,12 +347,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
 
   if (root === "nfts") {
     const owner = search.get("owner");
-    // Snapshot rows plus NFTs the owner minted through the NFT factory (read live, so a new mint
-    // shows without a redeploy of the snapshot).
-    const seedRows = listSeedNfts(owner ?? undefined);
-    const minted = owner && isAddress(owner) ? await readOwnedFactoryNfts(owner).catch(() => []) : [];
-    const known = new Set(seedRows.map((r) => `${r.collection ?? ""}:${r.onChainTokenId ?? ""}`.toLowerCase()));
-    const rows = visibleNfts([...seedRows, ...minted.filter((m) => !known.has(`${m.collection}:${m.onChainTokenId}`.toLowerCase()))]);
+    // Real NFTs only, read from the NFT factory's mint logs and confirmed with a live `ownerOf`:
+    // the owner's holdings with `?owner=`, otherwise the newest minted tokens. The demo snapshot in
+    // the deployment file is never listed.
+    const found = owner
+      ? isAddress(owner) ? await readOwnedFactoryNfts(owner).catch(() => []) : []
+      : await readAllFactoryNfts().catch(() => []);
+    const rows = visibleNfts(found);
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];

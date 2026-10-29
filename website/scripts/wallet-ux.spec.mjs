@@ -59,7 +59,9 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  await page.getByRole('button',{name:/Test NFT/}).click();
  const nft=page.getByRole('dialog',{name:'NFT details'});
  await expect(nft).toContainText('nft-1');
- if (process.env.NFT_TRANSFERS_ENABLED!=='1') await expect(nft.getByRole('button',{name:'Review payment'})).toHaveCount(0);
+ // NFT transfers are on unless NFT_TRANSFERS_ENABLED=0.
+ if (process.env.NFT_TRANSFERS_ENABLED==='0') await expect(nft.getByRole('button',{name:'Review payment'})).toHaveCount(0);
+ else await expect(nft.getByRole('button',{name:'Review payment'})).toBeVisible();
  await nft.getByRole('button',{name:'Close'}).click();
  await expect(nft).toHaveCount(0);
  await tabs.getByRole('tab',{name:'Activity',exact:true}).click();

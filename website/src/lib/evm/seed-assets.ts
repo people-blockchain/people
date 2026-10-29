@@ -76,34 +76,3 @@ export function enrichAssetRow<T extends { assetId: string; name?: string; symbo
     imageUri: meta.creationMetadata?.image,
   };
 }
-
-export function listSeedNfts(owner?: string): Array<{
-  nftId: string;
-  name: string;
-  description?: string;
-  imageUri?: string;
-  owner: string;
-  creator: string;
-  collection?: string;
-  onChainTokenId?: string;
-}> {
-  const dep = readEvmDeployments();
-  const onChain = dep.nfts ?? [];
-  const ownerLc = owner?.toLowerCase();
-  const rows = onChain
-    .filter((n) => !ownerLc || n.owner?.toLowerCase() === ownerLc)
-    .map((n) => {
-      const staticMeta = catalog.nfts[n.nftId] ?? null;
-      return {
-        nftId: n.nftId,
-        name: n.name ?? staticMeta?.name ?? n.nftId,
-        description: n.description ?? staticMeta?.description,
-        imageUri: n.imageUri ?? staticMeta?.imageUri,
-        owner: n.owner,
-        creator: n.creator ?? n.owner,
-        collection: n.collection,
-        onChainTokenId: n.onChainTokenId,
-      };
-    });
-  return rows;
-}
