@@ -64,7 +64,7 @@
     "steps": [
       {
         "title": "Xác minh",
-        "body": "Chứng minh một lần rằng bạn là người thật, bằng World ID hoặc Human Passport. Chỉ Telegram thì chưa đủ."
+        "body": "Chứng minh một lần rằng bạn là người thật: bằng Telegram (số điện thoại) hoặc Human Passport."
       },
       {
         "title": "Chọn số tiền và mạng",
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Vì sao cần xác minh?",
-        "a": "Để mỗi người mua là một người thật. Mỗi người có một địa chỉ, và giới hạn áp dụng cho người chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Hãy xác minh bằng World ID hoặc Human Passport; chỉ Telegram thì chưa đủ. Không có dữ liệu cá nhân nào được ghi lên blockchain."
+        "a": "Để mỗi người mua là một người thật. Mỗi người có một địa chỉ, và giới hạn áp dụng cho người chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Bạn có thể xác minh bằng Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
       },
       {
         "q": "Khi nào tôi có thể gửi PPL cho người khác?",
@@ -314,8 +314,7 @@
     },
     "verify": {
       "title": "7 ngày đầu chỉ dành cho người đã xác minh",
-      "body": "Xác minh bằng World ID hoặc Human Passport để tham gia.",
-      "telegramNote": "Chỉ Telegram là không đủ.",
+      "body": "Xác minh bằng Telegram (số điện thoại) hoặc Human Passport để tham gia.",
       "ctaVerify": "Xác minh ngay",
       "ctaSignIn": "Đăng nhập để xác minh",
       "confirmTitle": "Còn một bước trên chuỗi",

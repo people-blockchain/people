@@ -64,7 +64,7 @@
     "steps": [
       {
         "title": "完成验证",
-        "body": "用 World ID 或 Human Passport 证明一次你是真实的人。仅有 Telegram 不够。"
+        "body": "通过 Telegram（电话号码）或 Human Passport 证明一次你是真实的人。"
       },
       {
         "title": "选择金额和网络",
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "为什么需要验证？",
-        "a": "为了让每位买家都是真实的人。一人一个地址，限额针对的是人，而不是机器人。前 {whitelistDays} 天仅限已验证的人购买。可用 World ID 或 Human Passport 验证；仅有 Telegram 不够。不会有任何个人数据写入区块链。"
+        "a": "为了让每位买家都是真实的人。一人一个地址，限额针对的是人，而不是机器人。前 {whitelistDays} 天仅限已验证的人购买。可通过 Telegram 或 Human Passport 验证。不会有任何个人数据写入区块链。"
       },
       {
         "q": "我什么时候可以把 PPL 发送给别人？",
@@ -314,8 +314,7 @@
     },
     "verify": {
       "title": "前 7 天仅限已验证用户",
-      "body": "使用 World ID 或 Human Passport 验证后即可参与。",
-      "telegramNote": "仅有 Telegram 不够。",
+      "body": "通过 Telegram（电话号码）或 Human Passport 验证后即可参与。",
       "ctaVerify": "立即验证",
       "ctaSignIn": "登录后验证",
       "confirmTitle": "还差一个链上步骤",

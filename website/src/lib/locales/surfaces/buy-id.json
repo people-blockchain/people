@@ -64,7 +64,7 @@
     "steps": [
       {
         "title": "Verifikasi",
-        "body": "Buktikan sekali bahwa Anda orang sungguhan, dengan World ID atau Human Passport. Telegram saja tidak cukup."
+        "body": "Buktikan sekali bahwa Anda orang sungguhan: via Telegram (nomor telepon) atau Human Passport."
       },
       {
         "title": "Pilih jumlah dan jaringan",
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Mengapa perlu verifikasi?",
-        "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk orang, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Verifikasi dengan World ID atau Human Passport; Telegram saja tidak cukup. Tidak ada data pribadi yang ditulis ke blockchain."
+        "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk orang, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Anda dapat memverifikasi via Telegram atau Human Passport. Tidak ada data pribadi yang ditulis ke blockchain."
       },
       {
         "q": "Kapan saya bisa mengirim PPL ke orang lain?",
@@ -314,8 +314,7 @@
     },
     "verify": {
       "title": "7 hari pertama hanya untuk orang terverifikasi",
-      "body": "Verifikasi dengan World ID atau Human Passport untuk ikut serta.",
-      "telegramNote": "Telegram saja tidak cukup.",
+      "body": "Verifikasi via Telegram (nomor telepon) atau Human Passport untuk ikut serta.",
       "ctaVerify": "Verifikasi sekarang",
       "ctaSignIn": "Masuk untuk memverifikasi",
       "confirmTitle": "Tersisa satu langkah on-chain",
