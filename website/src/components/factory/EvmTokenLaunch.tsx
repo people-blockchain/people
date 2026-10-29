@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { formatEther, getAddress, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
 import { uxCopy } from "@/lib/ux-copy";
+import { createTokenLaunchTxStore, outcomeOfReceipt, planTokenRestore, type TokenLaunchStage } from "@/lib/launch-tx";
+import { browserStorage } from "@/lib/nft-mint-draft";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
@@ -159,6 +161,9 @@ export function EvmTokenLaunch() {
   const [confirmationTimedOut, setConfirmationTimedOut] = useState(false);
   const [pplBalance, setPplBalance] = useState<bigint | null>(null);
   const submitLock = useRef(false);
+  const txStore = useMemo(() => createTokenLaunchTxStore(browserStorage), []);
+  // Set while a transaction from an earlier visit is being checked, or after it was settled.
+  const [restoreNotice, setRestoreNotice] = useState<"checking" | "payment_counted" | "failed" | null>(null);
   const [payWith, setPayWith] = useState<"PPL" | StableAsset["id"]>("PPL");
   const [stableFeeUsd6, setStableFeeUsd6] = useState<bigint | null>(null);
   const [stage, setStage] = useState<"idle" | "approving" | "payingFee" | "creating" | "waiting">("idle");
@@ -218,6 +223,64 @@ export function EvmTokenLaunch() {
     }
   };
 
+  // A closed tab must not leave the form waiting: read the stored hash's receipt on return.
+  const signerAddress = signer?.address ?? null;
+  useEffect(() => {
+    if (!signerAddress) return;
+    const stored = txStore.load(signerAddress);
+    if (!stored) return;
+    let cancelled = false;
+    setName(stored.name);
+    setSymbol(stored.symbol);
+    setSupply(stored.supply);
+    setRestoreNotice("checking");
+    if (stored.stage === "create") setPendingHash(stored.hash);
+    void (async () => {
+      const client = readPublicClient();
+      let receipt: CreateReceipt | null = null;
+      try {
+        receipt = (await client.getTransactionReceipt({ hash: stored.hash })) as unknown as CreateReceipt;
+      } catch {
+        // not mined yet (or the node could not answer): wait for it like a fresh submit would
+        try {
+          receipt = await waitForCreateReceipt(client, stored.hash);
+        } catch {
+          receipt = null;
+        }
+      }
+      if (cancelled) return;
+      const plan = planTokenRestore(stored.stage, outcomeOfReceipt(receipt));
+      if (plan === "pending") {
+        setRestoreNotice(null);
+        if (stored.stage === "create") setConfirmationTimedOut(true);
+        return;
+      }
+      txStore.clear(signerAddress);
+      setPendingHash("");
+      if (plan === "created" && receipt) {
+        const factory = dep.contracts.tokenFactory;
+        const tokenAddress = factory ? tokenAddressFromCreateReceipt(receipt, factory) : null;
+        const total = wholeTokensToBaseUnits(stored.supply, String(LAUNCH_DECIMALS));
+        if (tokenAddress && total !== null) {
+          setCreated({ address: tokenAddress, name: stored.name, symbol: stored.symbol, hash: stored.hash, totalSupply: total });
+          setRestoreNotice(null);
+          return;
+        }
+        // The receipt succeeded but carries no token: send the user to their address page.
+        setPendingHash(stored.hash);
+        setConfirmationTimedOut(true);
+        setRestoreNotice(null);
+        return;
+      }
+      setRestoreNotice(plan === "payment_counted" ? "payment_counted" : "failed");
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Only when the wallet address changes; the store and contract addresses are stable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signerAddress, txStore]);
+
   const registerIssuerReferral = async (receipt: CreateReceipt, totalSupply: bigint, factory: string) => {
     try {
       const tokenAddress = tokenAddressFromCreateReceipt(receipt, factory);
@@ -247,7 +310,19 @@ export function EvmTokenLaunch() {
     setConfirmationTimedOut(false);
     setIssuerReferralMsg("");
     setStage("idle");
+    setRestoreNotice(null);
     let sentHash: `0x${string}` | null = null;
+    // Written before the receipt wait so a closed tab can restore the outcome (see the restore effect).
+    const remember = (stage: TokenLaunchStage, hash: `0x${string}`) =>
+      txStore.save({
+        version: 1,
+        owner: signer.address.toLowerCase(),
+        stage,
+        hash,
+        name: name.trim(),
+        symbol: symbol.trim().toUpperCase(),
+        supply,
+      });
     try {
       const client = readPublicClient();
       if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
@@ -308,8 +383,10 @@ export function EvmTokenLaunch() {
             functionName: "payLaunchFee",
             args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
           });
+          remember("pay", payHash);
           const payReceipt = await client.waitForTransactionReceipt({ hash: payHash });
           if (payReceipt.status !== "success") {
+            txStore.clear(signer.address);
             let payError: unknown = new Error(`payLaunchFee reverted (${payHash})`);
             try {
               await client.simulateContract({
@@ -393,6 +470,7 @@ export function EvmTokenLaunch() {
 
       const hash = await writeViaActiveSigner(signer, { ...request });
       sentHash = hash;
+      remember("create", hash);
       setPendingHash(hash);
       setStage("waiting");
       const { recordFounderAction } = await import("@/lib/founders/client");
@@ -400,6 +478,7 @@ export function EvmTokenLaunch() {
       const receipt = await waitForCreateReceipt(client, hash);
       if (!createReceiptSucceeded(receipt)) {
         console.error("[create] createToken reverted", receipt);
+        txStore.clear(signer.address);
         setPendingHash("");
         setError(nm.errUnknown);
         return;
@@ -413,6 +492,7 @@ export function EvmTokenLaunch() {
         hash,
         totalSupply: total,
       });
+      txStore.clear(signer.address);
       setPendingHash("");
       setStage("idle");
       if (issuerReferral) {
@@ -478,6 +558,8 @@ export function EvmTokenLaunch() {
             : null;
 
   const resetFlow = () => {
+    if (signerAddress) txStore.clear(signerAddress);
+    setRestoreNotice(null);
     setCreated(null);
     setPendingHash("");
     setConfirmationTimedOut(false);
@@ -734,6 +816,15 @@ export function EvmTokenLaunch() {
                 </button>
               </div>
             </div>
+          ) : null}
+          {restoreNotice ? (
+            <p role="status" data-testid="token-restore-notice" className={restoreNotice === "failed" ? "text-sm text-warm" : "text-sm text-ink-2"}>
+              {restoreNotice === "checking"
+                ? nm.txRestoring
+                : restoreNotice === "payment_counted"
+                  ? nm.txPaymentCounted
+                  : nm.txFailedBefore}
+            </p>
           ) : null}
           {error ? <p className="text-sm text-warm">{error}</p> : null}
           {issuerReferralMsg ? <p className="text-sm text-ink-2">{issuerReferralMsg}</p> : null}

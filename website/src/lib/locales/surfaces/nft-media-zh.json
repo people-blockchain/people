@@ -79,5 +79,8 @@
   "createViewAddress": "在区块浏览器中打开地址",
   "createTimeoutTitle": "交易已发送",
   "createTimeoutBody": "确认所需时间比平时更长。请查看区块浏览器，不要重复发送。只有在确认尚未创建任何内容时，才使用“再创建一个”。",
-  "createTimeoutExplorer": "在区块浏览器中查看您的地址"
+  "createTimeoutExplorer": "在区块浏览器中查看您的地址",
+  "txRestoring": "正在检查你之前的交易…",
+  "txPaymentCounted": "你的付款已计入。点击按钮即可完成，不会再次扣费。",
+  "txFailedBefore": "上一笔交易未在网络上成功。你可以重试。"
 }

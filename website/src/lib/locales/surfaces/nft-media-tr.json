@@ -79,5 +79,8 @@
   "createViewAddress": "Adresi gezgininde aç",
   "createTimeoutTitle": "İşlem gönderildi",
   "createTimeoutBody": "Onay normalden uzun sürüyor. Gezginini kontrol et ve işlemi tekrar gönderme. Hiçbir şeyin oluşturulmadığından eminsen «Yeni oluştur» seçeneğini kullan.",
-  "createTimeoutExplorer": "Adresini gezgininde kontrol et"
+  "createTimeoutExplorer": "Adresini gezgininde kontrol et",
+  "txRestoring": "Önceki işleminiz kontrol ediliyor…",
+  "txPaymentCounted": "Ödemeniz zaten sayıldı. Tamamlamak için düğmeye basın — tekrar ücret alınmayacak.",
+  "txFailedBefore": "Önceki işlem ağda gerçekleşmedi. Tekrar deneyebilirsiniz."
 }

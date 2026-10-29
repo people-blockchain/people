@@ -79,5 +79,8 @@
   "createViewAddress": "Apri l’indirizzo nell’esploratore",
   "createTimeoutTitle": "Transazione inviata",
   "createTimeoutBody": "La conferma sta richiedendo più tempo del solito. Controlla l’esploratore e non inviarla di nuovo. Usa «Crea un altro» solo se sei sicuro che non sia stato creato nulla.",
-  "createTimeoutExplorer": "Controlla il tuo indirizzo nell’esploratore"
+  "createTimeoutExplorer": "Controlla il tuo indirizzo nell’esploratore",
+  "txRestoring": "Controllo della tua transazione precedente…",
+  "txPaymentCounted": "Il tuo pagamento è già stato conteggiato. Premi il pulsante per completare: non ti verrà addebitato di nuovo.",
+  "txFailedBefore": "La transazione precedente non è andata a buon fine sulla rete. Puoi riprovare."
 }

@@ -79,5 +79,8 @@
   "createViewAddress": "Buka alamat di penjelajah",
   "createTimeoutTitle": "Transaksi terkirim",
   "createTimeoutBody": "Konfirmasi memakan waktu lebih lama dari biasanya. Periksa penjelajah dan jangan kirim ulang. Gunakan «Buat lagi» hanya jika Anda yakin belum ada yang dibuat.",
-  "createTimeoutExplorer": "Periksa alamat Anda di penjelajah"
+  "createTimeoutExplorer": "Periksa alamat Anda di penjelajah",
+  "txRestoring": "Memeriksa transaksi Anda sebelumnya…",
+  "txPaymentCounted": "Pembayaran Anda sudah tercatat. Tekan tombol untuk menyelesaikan — Anda tidak akan ditagih lagi.",
+  "txFailedBefore": "Transaksi sebelumnya tidak berhasil di jaringan. Anda dapat mencoba lagi."
 }
