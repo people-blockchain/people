@@ -308,7 +308,24 @@ export function EvmTokenLaunch() {
             functionName: "payLaunchFee",
             args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
           });
-          await client.waitForTransactionReceipt({ hash: payHash });
+          const payReceipt = await client.waitForTransactionReceipt({ hash: payHash });
+          if (payReceipt.status !== "success") {
+            let payError: unknown = new Error(`payLaunchFee reverted (${payHash})`);
+            try {
+              await client.simulateContract({
+                account: signer.address,
+                address: gateway,
+                abi: stableFeeGatewayAbi,
+                functionName: "payLaunchFee",
+                args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
+                blockNumber: payReceipt.blockNumber > BigInt(0) ? payReceipt.blockNumber - BigInt(1) : undefined,
+              });
+            } catch (simulationError) {
+              payError = simulationError;
+            }
+            console.error("[create] payLaunchFee reverted", payError);
+            throw payError;
+          }
           stableFeePaid = true;
         }
       }
@@ -420,6 +437,9 @@ export function EvmTokenLaunch() {
       switch (code) {
         case "stable_fee_unavailable":
           setError(nm.errStableFeeUnavailable);
+          break;
+        case "stable_daily_cap":
+          setError(nm.errStableDailyCap);
           break;
         case "insufficient_funds":
           setError(

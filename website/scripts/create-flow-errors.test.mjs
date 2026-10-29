@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { toFunctionSelector } from "viem";
 import {
   INSUFFICIENT_FLOAT_SELECTOR,
+  STABLE_DAILY_CAP_SELECTOR,
   checkBalanceForCost,
   classifyCreateFlowError,
   requiredFeeValue,
@@ -30,6 +31,26 @@ test("InsufficientFloat is detected by errorName on a nested cause", () => {
   });
   const err = new Error("outer", { cause: inner });
   assert.equal(classifyCreateFlowError(err).code, "stable_fee_unavailable");
+});
+
+test("DailyCapExceeded selector matches the StableFeeGateway custom error", () => {
+  assert.equal(toFunctionSelector("DailyCapExceeded(address)"), STABLE_DAILY_CAP_SELECTOR);
+});
+
+test("DailyCapExceeded is detected from selector data on a nested cause", () => {
+  const inner = Object.assign(new Error("execution reverted"), {
+    data: `${STABLE_DAILY_CAP_SELECTOR}${"00".repeat(32)}`,
+  });
+  const err = new Error("outer", { cause: inner });
+  assert.equal(classifyCreateFlowError(err).code, "stable_daily_cap");
+});
+
+test("DailyCapExceeded is detected by errorName on a nested cause", () => {
+  const inner = Object.assign(new Error("reverted"), {
+    data: { errorName: "DailyCapExceeded", args: ["0x0000000000000000000000000000000000000001"] },
+  });
+  const err = new Error("outer", { cause: inner });
+  assert.equal(classifyCreateFlowError(err).code, "stable_daily_cap");
 });
 
 test("insufficient funds is detected and have/want amounts are parsed", () => {
@@ -82,6 +103,7 @@ test("requiredFeeValue subtracts the prepaid credit, capped at the fee", () => {
 test("all 12 nft-media locales carry the create-flow error keys", () => {
   const keys = [
     "errStableFeeUnavailable",
+    "errStableDailyCap",
     "errInsufficientPpl",
     "errInsufficientPplGeneric",
     "errNetworkRpc",

@@ -69,6 +69,7 @@
   "errTimeout": "La transaction prend trop de temps. Elle n'a pas été renvoyée ; utilisez « Poursuivre l'émission » pour la vérifier.",
   "errUnknown": "Un problème est survenu. Aucune émission en double. Réessayez.",
   "errStableFeeUnavailable": "Le paiement en stablecoins est temporairement indisponible. Payez en PPL.",
+  "errStableDailyCap": "La limite quotidienne de paiement en stablecoins de ce portefeuille est atteinte. Payez en PPL ou réessayez demain.",
   "errInsufficientPpl": "Pas assez de PPL : il vous faut {needed} PPL (frais + gaz), votre solde est de {balance} PPL.",
   "errInsufficientPplGeneric": "Pas assez de PPL pour couvrir les frais et le gaz. Rechargez et réessayez.",
   "errNetworkRpc": "Le réseau ne répond pas. Vérifiez votre connexion et réessayez.",

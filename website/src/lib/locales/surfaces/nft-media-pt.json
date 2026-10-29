@@ -69,6 +69,7 @@
   "errTimeout": "A transação está demorando demais. Ela não foi reenviada; use «Continuar a emissão» para verificá-la.",
   "errUnknown": "Algo deu errado. Nada foi emitido duas vezes. Tente de novo.",
   "errStableFeeUnavailable": "O pagamento em stablecoin está temporariamente indisponível. Pague em PPL.",
+  "errStableDailyCap": "O limite diário de pagamento em stablecoin para esta carteira foi atingido. Pague em PPL ou tente novamente amanhã.",
   "errInsufficientPpl": "PPL insuficiente: você precisa de {needed} PPL (taxa + gás) e tem {balance} PPL.",
   "errInsufficientPplGeneric": "PPL insuficiente para cobrir a taxa e o gás. Recarregue e tente novamente.",
   "errNetworkRpc": "A rede não está respondendo. Verifique sua conexão e tente novamente.",

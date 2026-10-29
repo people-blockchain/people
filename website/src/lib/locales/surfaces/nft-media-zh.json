@@ -69,6 +69,7 @@
   "errTimeout": "交易耗时过长。未重复发送；请使用“继续铸造”来检查。",
   "errUnknown": "出了点问题。没有重复铸造。请重试。",
   "errStableFeeUnavailable": "稳定币支付暂时不可用，请使用 PPL 支付。",
+  "errStableDailyCap": "此钱包已达到每日稳定币支付限额。请使用 PPL 支付或明天再试。",
   "errInsufficientPpl": "PPL 不足：需要 {needed} PPL（费用 + gas），当前余额 {balance} PPL。",
   "errInsufficientPplGeneric": "PPL 不足以支付费用和 gas。请充值后重试。",
   "errNetworkRpc": "网络无响应。请检查连接后重试。",

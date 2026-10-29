@@ -17,6 +17,7 @@ import {
 
 export type CreateFlowErrorCode =
   | "stable_fee_unavailable"
+  | "stable_daily_cap"
   | "insufficient_funds"
   | "wallet_rejected"
   | "network"
@@ -24,6 +25,9 @@ export type CreateFlowErrorCode =
 
 /** `InsufficientFloat(uint256,uint256)` from `StableFeeGateway`. */
 export const INSUFFICIENT_FLOAT_SELECTOR = "0x51dd3741";
+
+/** `DailyCapExceeded(address)` from `StableFeeGateway`. */
+export const STABLE_DAILY_CAP_SELECTOR = "0x89dc0b80";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -169,6 +173,14 @@ export function classifyCreateFlowError(err: unknown): {
     info.lower.includes("insufficientfloat");
 
   if (stableFeeUnavailable) return { code: "stable_fee_unavailable" };
+
+  const stableDailyCap =
+    info.errorNames.includes("DailyCapExceeded") ||
+    info.names.includes("DailyCapExceeded") ||
+    info.hexes.some((hex) => hex.toLowerCase().includes(STABLE_DAILY_CAP_SELECTOR)) ||
+    info.lower.includes("dailycapexceeded");
+
+  if (stableDailyCap) return { code: "stable_daily_cap" };
 
   const insufficientFunds =
     info.insufficientFundsClass ||

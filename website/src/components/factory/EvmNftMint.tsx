@@ -109,6 +109,8 @@ function mintErrorState(err: unknown): ErrorState {
   switch (code) {
     case "stable_fee_unavailable":
       return { key: "errStableFeeUnavailable" };
+    case "stable_daily_cap":
+      return { key: "errStableDailyCap" };
     case "insufficient_funds":
       return neededWei !== undefined && balanceWei !== undefined
         ? { key: "errInsufficientPpl", neededWei, balanceWei }
@@ -420,9 +422,29 @@ export function EvmNftMint() {
         if (credit < fee) {
           const stable = stableAssets.find((asset) => asset.id === current.payWith);
           if (!stable || !gateway || stableFeeUsd6 === null) throw new Error("stable fee unavailable");
+          const waitForPay = async (hash: `0x${string}`) => {
+            const receipt = await waitFor(hash);
+            if (receipt.status === "success") return;
+            let payError: unknown = new Error(`receipt: payLaunchFee reverted (${hash})`);
+            try {
+              await client.simulateContract({
+                account: signer.address,
+                address: gateway,
+                abi: stableFeeGatewayAbi,
+                functionName: "payLaunchFee",
+                args: [GATEWAY_KIND.NFT_MINT, stable.address],
+                blockNumber: receipt.blockNumber > BigInt(0) ? receipt.blockNumber - BigInt(1) : undefined,
+              });
+            } catch (simulationError) {
+              payError = simulationError;
+            }
+            console.error("[mint] payLaunchFee reverted", payError);
+            persist({ payTx: undefined });
+            throw payError;
+          };
           if (current.payTx) {
             setMintStep("waiting");
-            await waitFor(current.payTx as `0x${string}`);
+            await waitForPay(current.payTx as `0x${string}`);
           } else {
             const allowance = await client.readContract({
               address: stable.address,
@@ -450,7 +472,7 @@ export function EvmNftMint() {
             });
             persist({ payTx: payHash });
             setMintStep("waiting");
-            await waitFor(payHash);
+            await waitForPay(payHash);
           }
         }
         persist({ payDone: true });

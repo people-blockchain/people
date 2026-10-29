@@ -69,6 +69,7 @@
   "errTimeout": "Giao dịch mất quá nhiều thời gian. Giao dịch không được gửi lại; hãy dùng «Tiếp tục phát hành» để kiểm tra.",
   "errUnknown": "Đã xảy ra lỗi. Không có phát hành trùng. Hãy thử lại.",
   "errStableFeeUnavailable": "Thanh toán bằng stablecoin tạm thời không khả dụng. Vui lòng thanh toán bằng PPL.",
+  "errStableDailyCap": "Đã đạt giới hạn thanh toán stablecoin hàng ngày cho ví này. Hãy thanh toán bằng PPL hoặc thử lại vào ngày mai.",
   "errInsufficientPpl": "Không đủ PPL: bạn cần {needed} PPL (phí + gas), số dư của bạn là {balance} PPL.",
   "errInsufficientPplGeneric": "Không đủ PPL để trả phí và gas. Hãy nạp thêm và thử lại.",
   "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại.",
