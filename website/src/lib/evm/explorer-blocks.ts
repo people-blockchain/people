@@ -152,7 +152,7 @@ function toExplorerTx(tx: RpcTx): EvmExplorerTx {
   const memo = transactionMemo(tx);
   return {
     id: tx.hash,
-    type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+    type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
     from: tx.from,
     to: tx.to ?? undefined,
     amount: Number(formatUnits(valueWei, 18)),
@@ -213,7 +213,7 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
   const memo = transactionMemo(tx);
   return {
     id: tx.hash,
-    type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+    type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
     from: tx.from,
     to: tx.to ?? undefined,
     amount: Number(formatUnits(valueWei, 18)),

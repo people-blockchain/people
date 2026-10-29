@@ -43,5 +43,6 @@
   "minted": "Frappés",
   "totalSupply": "Offre totale",
   "mintPrice": "Prix de frappe",
-  "pplBalance": "Solde PPL"
+  "pplBalance": "Solde PPL",
+  "memo": "Mémo"
 }
