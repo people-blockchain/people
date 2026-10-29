@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "PPL 不足以支付费用和 gas。请充值后重试。",
   "errNetworkRpc": "网络无响应。请检查连接后重试。",
   "createSuccessTitle": "代币已创建",
-  "createSuccessLead": "代币现已在 People Blockchain 上线。",
+  "createSuccessLead": "代币现已在 PEOPLE Blockchain 上线。",
   "createViewToken": "在区块浏览器中打开代币",
   "createViewAddress": "在区块浏览器中打开地址",
   "createTimeoutTitle": "交易已发送",

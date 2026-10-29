@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "PPL غير كافٍ لتغطية الرسوم والغاز. قم بتعبئة الرصيد وأعد المحاولة.",
   "errNetworkRpc": "الشبكة لا تستجيب. تحقق من اتصالك وأعد المحاولة.",
   "createSuccessTitle": "تم إنشاء الرمز",
-  "createSuccessLead": "الرمز متاح الآن على People Blockchain.",
+  "createSuccessLead": "الرمز متاح الآن على PEOPLE Blockchain.",
   "createViewToken": "فتح الرمز في المستكشف",
   "createViewAddress": "فتح العنوان في المستكشف",
   "createTimeoutTitle": "تم إرسال المعاملة",

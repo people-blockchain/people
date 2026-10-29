@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "Недостаточно PPL для комиссии и газа. Пополните баланс и повторите.",
   "errNetworkRpc": "Сеть не отвечает. Проверьте подключение и повторите.",
   "createSuccessTitle": "Токен создан",
-  "createSuccessLead": "Токен уже доступен в сети People Blockchain.",
+  "createSuccessLead": "Токен уже доступен в сети PEOPLE Blockchain.",
   "createViewToken": "Открыть токен в обозревателе",
   "createViewAddress": "Открыть адрес в обозревателе",
   "createTimeoutTitle": "Транзакция отправлена",
