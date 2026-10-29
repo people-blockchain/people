@@ -89,7 +89,9 @@
           "We may update this policy. We will post the new version on this page and change the effective date above."
         ]
       }
-    ]
+    ],
+    "englishPrevails": "In case of discrepancies, the English version prevails.",
+    "englishLink": "Read the English version"
   },
   "terms": {
     "title": "Terms of Service",
@@ -175,6 +177,8 @@
           "We may change these terms. Continued use after the effective date of an update means you accept the revised terms. Material changes will be posted on this page."
         ]
       }
-    ]
+    ],
+    "englishPrevails": "In case of discrepancies, the English version prevails.",
+    "englishLink": "Read the English version"
   }
 }

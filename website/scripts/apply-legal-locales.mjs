@@ -7,6 +7,13 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+if (!process.argv.includes("--force")) {
+  console.error(
+    "Refusing to run: this regenerates every legal-<lang>.json from English and would overwrite full translations (legal-ru.json is fully translated). Pass --force only to rebuild from scratch.",
+  );
+  process.exit(1);
+}
+
 const surfaces = join(dirname(fileURLToPath(import.meta.url)), "../src/lib/locales/surfaces");
 const en = JSON.parse(readFileSync(join(surfaces, "legal-en.json"), "utf8"));
 
