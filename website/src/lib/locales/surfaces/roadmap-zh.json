@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "固定 10 亿 PPL：第 1–4 年 0% 通胀；200M 验证者池按 6/5/5/4% + 手续费 30%；启动奖励仅 35% 社区池；第 5 年起每年最多 2% 须投票；创始人空投先于销售（1,000 已验证 + 多签）。手续费 30/25/20/10/15/0，见 /tokenomics 与 /how-it-works。"
+      "summary": "固定 10 亿 PPL：第 1–4 年 0% 通胀；200M 验证者池按 6/5/5/4% + 手续费 30%；启动奖励仅 35% 社区池；第 5 年起每年最多 2% 须投票；PPL 销售已在 Base 上线，通过 PplCurveHub 支持 USDC/USDT；其他链可通过跨链小组件支付（不支持 TON）；持续至售罄或 24 个月，以先到者为准，不延期；未售出的 PPL 归入 Community Pool；仅限已验证用户回售，并有 30 天持有期和限额。手续费 30/25/20/10/15/0，见 /tokenomics 与 /how-it-works。"
     },
     "discover-feed": {
       "title": "项目动态",
