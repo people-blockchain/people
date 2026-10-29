@@ -32,6 +32,16 @@ export function nativeTransferRequest(input: {
   };
 }
 
+export function calldataFloorGas(data: Hex): bigint {
+  let zeroBytes = 0;
+  let nonZeroBytes = 0;
+  for (let i = 2; i < data.length; i += 2) {
+    if (data.slice(i, i + 2) === "00") zeroBytes += 1;
+    else nonZeroBytes += 1;
+  }
+  return BigInt(21000) + BigInt(10) * BigInt(zeroBytes + 4 * nonZeroBytes);
+}
+
 export async function sendNativeTransfer(input: {
   privateKey: Hex;
   to: `0x${string}`;
@@ -39,13 +49,24 @@ export async function sendNativeTransfer(input: {
   memo?: string;
 }): Promise<`0x${string}`> {
   const request = nativeTransferRequest(input);
+  const client = createEmbeddedWalletClient(input.privateKey);
+  let transaction: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint } =
+    request;
   if (request.data) {
     const { createBrowserPublicClient } = await import("@/lib/evm/client");
-    const code = await createBrowserPublicClient().getCode({ address: input.to });
+    const publicClient = createBrowserPublicClient();
+    const code = await publicClient.getCode({ address: input.to });
     if (code && code !== "0x") throw new Error("memo_contract");
+    const estimate = await publicClient.estimateGas({
+      account: client.account.address,
+      to: request.to,
+      value: request.value,
+      data: request.data,
+    });
+    const floor = calldataFloorGas(request.data);
+    transaction = { ...request, gas: estimate > floor ? estimate : floor };
   }
-  const client = createEmbeddedWalletClient(input.privateKey);
-  const hash = await client.sendTransaction(request);
+  const hash = await client.sendTransaction(transaction);
   return hash;
 }
 
