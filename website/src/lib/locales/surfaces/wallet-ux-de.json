@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Das Memo wird in der Blockchain gespeichert und ist öffentlich.",
+  "memoContract": "Memos können nur an eine normale Wallet-Adresse gesendet werden, nicht an einen Vertrag.",
+  "memoInvalid": "Das Memo enthält Zeichen, die nicht in der Blockchain gespeichert werden können.",
   "overview": "Übersicht",
   "sendTab": "Senden",
   "historyTab": "Verlauf",

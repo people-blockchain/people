@@ -1,4 +1,5 @@
 import { formatUnits, type Hash } from "viem";
+import { transactionMemo } from "@/lib/evm/transaction-memo";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
 
@@ -33,6 +34,7 @@ export type EvmExplorerTx = {
   amount?: number;
   fee?: number;
   blockHeight?: number;
+  payload?: { memo: string };
 };
 
 function hexToNumber(hex: string | undefined): number {
@@ -147,6 +149,7 @@ export async function fetchRecentBlocks(limit: number): Promise<EvmExplorerBlock
 
 function toExplorerTx(tx: RpcTx): EvmExplorerTx {
   const valueWei = BigInt(tx.value ?? "0x0");
+  const memo = transactionMemo(tx);
   return {
     id: tx.hash,
     type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
@@ -154,6 +157,7 @@ function toExplorerTx(tx: RpcTx): EvmExplorerTx {
     to: tx.to ?? undefined,
     amount: Number(formatUnits(valueWei, 18)),
     blockHeight: hexToNumber(tx.blockNumber),
+    ...(memo ? { payload: { memo } } : {}),
   };
 }
 
@@ -206,6 +210,7 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
   const gasPrice = BigInt(receipt?.effectiveGasPrice ?? "0x0");
   const feeWei = gasUsed * gasPrice;
   const valueWei = BigInt(tx.value ?? "0x0");
+  const memo = transactionMemo(tx);
   return {
     id: tx.hash,
     type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
@@ -214,6 +219,7 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
     amount: Number(formatUnits(valueWei, 18)),
     fee: Number(formatUnits(feeWei, 18)),
     blockHeight: hexToNumber(tx.blockNumber),
+    ...(memo ? { payload: { memo } } : {}),
   };
 }
 
