@@ -105,6 +105,10 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
    else if(r.method==='eth_gasPrice'||r.method==='eth_maxPriorityFeePerGas')result='0x3b9aca00';
    else if(r.method==='eth_getBlockByNumber')result={number:'0x1',baseFeePerGas:'0x3b9aca00'};
    else if(r.method==='eth_sendRawTransaction'){signed=r.params[0];result='0x'+'ab'.repeat(32);}
+   else if(r.method==='eth_getCode'||r.method==='eth_call')result='0x';
+   else if(r.method==='eth_blockNumber')result='0x0';
+   else if(r.method==='eth_getBalance')result='0x8ac7230489e80000';
+   else if(r.method==='eth_getTransactionReceipt')result=null;
    else throw Error(`Unexpected wallet RPC ${r.method}`);
    await route.fulfill({json:{jsonrpc:'2.0',id:r.id,result}});
   });
