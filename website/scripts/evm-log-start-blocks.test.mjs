@@ -5,6 +5,7 @@ import { encodeAbiParameters, encodeEventTopics } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import {
+  MAX_GLOBAL_LOG_WINDOWS,
   MAX_PARALLEL_LOG_WINDOWS,
   fetchLogsWindowed,
   logStartBlock,
@@ -394,8 +395,9 @@ test("fetchTokenMarketSnapshot falls back to per-block requests when the node re
 
 // --- load shedding: window concurrency cap, exponential backoff, pair start blocks ------------
 
-test("fetchLogsWindowed never has more than MAX_PARALLEL_LOG_WINDOWS eth_getLogs in flight", async (t) => {
-  assert.equal(MAX_PARALLEL_LOG_WINDOWS, 2);
+test("fetchLogsWindowed never has more than MAX_GLOBAL_LOG_WINDOWS eth_getLogs in flight", async (t) => {
+  assert.equal(MAX_PARALLEL_LOG_WINDOWS, 6);
+  assert.equal(MAX_GLOBAL_LOG_WINDOWS, 8);
   let inFlight = 0;
   let peak = 0;
   const node = createServer((req, res) => {
@@ -432,8 +434,8 @@ test("fetchLogsWindowed never has more than MAX_PARALLEL_LOG_WINDOWS eth_getLogs
     fetchLogsWindowed(contract("bondingCurve"), [SELL_TOPIC]),
   ]);
   assert.ok(peak >= 1);
-  assert.ok(peak <= MAX_PARALLEL_LOG_WINDOWS, `peak ${peak}`);
-  assert.ok(logWindowConcurrencyPeakForTests() <= MAX_PARALLEL_LOG_WINDOWS);
+  assert.ok(peak <= MAX_GLOBAL_LOG_WINDOWS, `peak ${peak}`);
+  assert.ok(logWindowConcurrencyPeakForTests() <= MAX_GLOBAL_LOG_WINDOWS);
 });
 
 test("fetchLogsWindowed honours a later fromBlock hint but never scans before the contract's start", async (t) => {

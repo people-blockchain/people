@@ -7,9 +7,9 @@ import { readLogScanCursor, writeLogScanCursor } from "@/lib/evm/log-scan-cursor
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
-const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
+export const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
 /** Same event with the trailing `uint8 leftoverMode` (owner rule 2026-10-13 factories). */
-const TOKEN_CREATED_LEFTOVER_TOPIC = "0xdcb5d6c49a959a42d0c67fe9b9aa48b4da6065c9f47789f71789f629d84d30f1";
+export const TOKEN_CREATED_LEFTOVER_TOPIC = "0xdcb5d6c49a959a42d0c67fe9b9aa48b4da6065c9f47789f71789f629d84d30f1";
 const PAIR_CREATED_TOPIC = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9";
 
 // ERC-20 / Uniswap-V2 selectors, spelled out so the catalog scan stays dependency-free.
@@ -29,6 +29,12 @@ type RpcLog = {
   data?: string;
   blockNumber?: string;
 };
+
+/**
+ * One JSON-RPC log-filter topic position. `null` is a wildcard and an array is an OR of topics
+ * (e.g. both `TokenCreated` signatures in a single `eth_getLogs` call).
+ */
+type LogTopic = string | string[] | null;
 
 export type CatalogToken = {
   assetId: string;
@@ -119,6 +125,43 @@ export function logStartBlock(address: string): number {
   return ammStarts.length ? Math.min(...ammStarts) : deploymentStartBlock();
 }
 
+export type TokenFactoryScan = {
+  key: string;
+  address: string;
+  fromBlock: number;
+  /** Inclusive end block for a superseded factory; `undefined` for the current one (scan to tip). */
+  toBlock?: number;
+};
+
+/**
+ * Token factories ordered by deployment. A factory is superseded by the next one, so its history
+ * ends at the block before the newer factory starts: no token can ever be created on it after that.
+ * Only the current `tokenFactory` stays open-ended and is scanned up to the chain tip.
+ */
+export function tokenFactoryScans(): TokenFactoryScan[] {
+  const dep = readEvmDeployments();
+  const startBlocks = dep.startBlocks ?? {};
+  const ordered = Object.entries(dep.contracts ?? {})
+    .filter(([key, address]) => /^tokenFactory(V\d+)?$/.test(key) && Boolean(address))
+    .map(([key, address]) => {
+      const start = startBlocks[key];
+      return {
+        key,
+        address: address as string,
+        fromBlock: typeof start === "number" && start > 0 ? start : deploymentStartBlock(),
+      };
+    })
+    .sort((a, b) => a.fromBlock - b.fromBlock || a.key.localeCompare(b.key));
+
+  return ordered.map((entry, index) => {
+    const next = ordered[index + 1];
+    return {
+      ...entry,
+      ...(next ? { toBlock: next.fromBlock - 1 } : {}),
+    };
+  });
+}
+
 /**
  * Log results for a window that sits more than a full window behind the tip can never gain new
  * entries (the chain is attested/finalised), so they are reused for a long time. The tip window is
@@ -129,17 +172,21 @@ const MAX_WINDOW_CACHE_ENTRIES = 400;
 const windowLogsCache = new Map<string, { at: number; value: RpcLog[] }>();
 
 /**
- * At most this many `eth_getLogs` windows are in flight per server instance, across every caller.
- * Each window is a full 9 000-block range scan on the node; firing dozens at once (one batch per
- * pair/curve/agent scan, several scans per page) is what pushed the shared validator over its
- * memory limit on 2026-10-17.
+ * Per-scan `eth_getLogs` concurrency. The token catalog scans several factories at once, so it can
+ * afford a higher chunk size than small single-contract scans.
  */
-export const MAX_PARALLEL_LOG_WINDOWS = 2;
+export const MAX_PARALLEL_LOG_WINDOWS = 6;
+/**
+ * Global in-flight cap across every caller in this server instance. A cold catalog scan runs five
+ * factory scans concurrently; without this cap they would fire up to 30 range scans at the shared
+ * validator at once (the 2026-10-17 memory incident).
+ */
+export const MAX_GLOBAL_LOG_WINDOWS = 8;
 let logWindowsInFlight = 0;
 const logWindowQueue: Array<() => void> = [];
 
 async function withLogWindowSlot<T>(work: () => Promise<T>): Promise<T> {
-  if (logWindowsInFlight >= MAX_PARALLEL_LOG_WINDOWS) {
+  if (logWindowsInFlight >= MAX_GLOBAL_LOG_WINDOWS) {
     await new Promise<void>((resolve) => logWindowQueue.push(resolve));
   } else {
     logWindowsInFlight++;
@@ -160,8 +207,10 @@ export function logWindowConcurrencyPeakForTests(): number {
   return logWindowsPeak;
 }
 
-function windowCacheKey(address: string, topics: Array<string | null>, from: number, to: number): string {
-  return `${address.toLowerCase()}|${topics.map((topic) => topic ?? "*").join(",")}|${from}|${to}`;
+function windowCacheKey(address: string, topics: readonly LogTopic[], from: number, to: number): string {
+  return `${address.toLowerCase()}|${topics
+    .map((topic) => (Array.isArray(topic) ? `[${topic.join("+")}]` : topic ?? "*"))
+    .join(",")}|${from}|${to}`;
 }
 
 function rememberWindowLogs(key: string, value: RpcLog[]): void {
@@ -172,7 +221,7 @@ function rememberWindowLogs(key: string, value: RpcLog[]): void {
   windowLogsCache.set(key, { at: Date.now(), value });
 }
 
-function rpcLogFilter(address: string, topics: Array<string | null>, from: number, to: number) {
+function rpcLogFilter(address: string, topics: readonly LogTopic[], from: number, to: number) {
   return {
     address: getAddress(address),
     topics,
@@ -184,7 +233,7 @@ function rpcLogFilter(address: string, topics: Array<string | null>, from: numbe
 /** Marks an error raised by the node (as opposed to the Next data cache being unavailable). */
 class LogWindowRpcError extends Error {}
 
-async function readLogWindowFromNode(address: string, topics: Array<string | null>, from: number, to: number): Promise<RpcLog[]> {
+async function readLogWindowFromNode(address: string, topics: readonly LogTopic[], from: number, to: number): Promise<RpcLog[]> {
   return withLogWindowSlot(async () => {
     logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
     let logs: unknown;
@@ -212,7 +261,7 @@ const readImmutableLogWindowShared = unstable_cache(readLogWindowFromNode, ["evm
 
 async function readLogWindow(
   address: string,
-  topics: Array<string | null>,
+  topics: readonly LogTopic[],
   from: number,
   to: number,
   immutable: boolean,
@@ -238,7 +287,7 @@ async function readLogWindow(
  *
  * - Windows come from the per-process cache, then (for immutable windows) the shared Next data
  *   cache, and only then from the node.
- * - Node reads are capped at `MAX_PARALLEL_LOG_WINDOWS` in flight across the whole process, so a
+ * - Node reads are capped at `MAX_GLOBAL_LOG_WINDOWS` in flight across the whole process, so a
  *   cold page render cannot fire dozens of range scans at the validator at once.
  * - `rpc-server.ts` backs off exponentially after node failures, so an unhealthy node is not
  *   hammered with retries. A failed window is retried once; if it still fails the scan rejects
@@ -250,41 +299,78 @@ async function readLogWindow(
  */
 export async function fetchLogsWindowed(
   address: string,
-  topics: Array<string | null>,
+  topics: readonly LogTopic[],
   fromBlockHint?: number,
 ): Promise<RpcLog[]> {
-  return fetchLogsWindowedCore(address, topics, fromBlockHint, null);
+  const result = await fetchLogsWindowedCore(address, topics, fromBlockHint, null);
+  return result.logs;
 }
+
+export type LogScanOutcome = {
+  logs: RpcLog[];
+  /** False when the history scan stopped at its deadline; the tail was still read. */
+  complete: boolean;
+};
 
 /**
  * Incremental variant used by the token catalog. Immutable windows (those that can no longer gain
- * logs) are persisted per `address` + `topic`, so a later scan starts at the stored `lastBlock`
- * instead of replaying the whole chain history. The tip windows are always re-read so a freshly
- * created token appears immediately. Without DATABASE_URL, or on any DB error, this behaves like
- * `fetchLogsWindowed`.
+ * logs) are persisted per `address` + combined topic key, so a later scan starts at the stored
+ * `lastBlock` instead of replaying the whole chain history. For an open-ended (current) factory the
+ * last two windows up to the tip are always re-read, so a freshly created token appears on every
+ * refresh. Without DATABASE_URL, or on any DB error, this behaves like `fetchLogsWindowed`.
+ *
+ * `toBlockHint` caps a superseded factory's scan at its successor's first block. `deadlineAt` lets
+ * the catalog stop history work early and resume from the persisted cursor on the next request.
  */
+export async function fetchLogsWindowedIncrementalResult(
+  address: string,
+  topic: string | readonly string[],
+  fromBlockHint?: number,
+  toBlockHint?: number,
+  deadlineAt?: number,
+): Promise<LogScanOutcome> {
+  const topics: LogTopic[] = [typeof topic === "string" ? topic : [...topic]];
+  return fetchLogsWindowedCore(address, topics, fromBlockHint, cursorKeyForTopics(topics), toBlockHint, deadlineAt);
+}
+
 export async function fetchLogsWindowedIncremental(
   address: string,
-  topic: string,
+  topic: string | readonly string[],
   fromBlockHint?: number,
+  toBlockHint?: number,
+  deadlineAt?: number,
 ): Promise<RpcLog[]> {
-  return fetchLogsWindowedCore(address, [topic], fromBlockHint, topic);
+  return (await fetchLogsWindowedIncrementalResult(address, topic, fromBlockHint, toBlockHint, deadlineAt)).logs;
 }
 
 type ScannedLogWindow = { from: number; to: number; logs: RpcLog[] };
 
+function cursorKeyForTopics(topics: readonly LogTopic[]): string {
+  return topics
+    .map((topic) => (Array.isArray(topic) ? [...topic].sort().join("+") : topic ?? "*"))
+    .join("|");
+}
+
+function logBlockNumber(log: RpcLog): number | null {
+  const block = log.blockNumber ? Number.parseInt(log.blockNumber, 16) : Number.NaN;
+  return Number.isFinite(block) ? block : null;
+}
+
 async function readCachedLogWindow(
   address: string,
-  topics: Array<string | null>,
+  topics: readonly LogTopic[],
   from: number,
   to: number,
   latest: number,
   now: number,
+  { endBlock, fresh = false }: { endBlock?: number; fresh?: boolean } = {},
 ): Promise<RpcLog[]> {
   const key = windowCacheKey(address, topics, from, to);
-  const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
-  const entry = windowLogsCache.get(key);
-  if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
+  const isImmutable = (typeof endBlock === "number" && to <= endBlock) || to < latest - LOG_WINDOW_BLOCKS;
+  if (!fresh) {
+    const entry = windowLogsCache.get(key);
+    if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
+  }
   // A transient node failure must not silently drop this window's logs and leave callers with
   // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
   // stale catalog instead of caching a short one.
@@ -298,53 +384,107 @@ async function readCachedLogWindow(
 
 async function fetchLogsWindowedCore(
   address: string,
-  topics: Array<string | null>,
+  topics: readonly LogTopic[],
   fromBlockHint: number | undefined,
   cursorTopic: string | null,
-): Promise<RpcLog[]> {
+  toBlockHint?: number,
+  deadlineAt?: number,
+): Promise<LogScanOutcome> {
   const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
-  const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
-  if (!Number.isFinite(latest)) return [];
-  const start = Math.max(logStartBlock(address), typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0);
+  const tip = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
+  if (!Number.isFinite(tip)) return { logs: [], complete: true };
+  const scanLatest =
+    typeof toBlockHint === "number" && toBlockHint >= 0 ? Math.min(tip, toBlockHint) : tip;
+  const start = Math.max(
+    logStartBlock(address),
+    typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0,
+  );
   const storedCursor = cursorTopic ? await readLogScanCursor(address, cursorTopic) : null;
   // A cursor at/after the reported tip means the node regressed (or was reset): re-scan instead
   // of trusting blocks it no longer serves.
-  const cursor = storedCursor && storedCursor.lastBlock < latest ? storedCursor : null;
+  const cursor = storedCursor && storedCursor.lastBlock < tip ? storedCursor : null;
   const lastBlock = cursor?.lastBlock ?? -1;
-  const windows = logWindows(Math.max(start, lastBlock + 1), latest);
-  if (!windows.length) return cursor?.logs ?? [];
+  const cursorLogs = cursor?.logs ?? [];
+  const allWindows = logWindows(start, scanLatest);
+  const tailWindows = typeof toBlockHint === "number" ? [] : allWindows.slice(-2);
+  const tailStart = tailWindows.length ? tailWindows[0][0] : scanLatest + 1;
+  // An old cursor may have scanned past a superseded factory's successor or into the current
+  // factory's tail, which is re-read below; drop those blocks so the result has no duplicates.
+  const visibleCursorLogs = cursorLogs.filter((log) => {
+    const block = logBlockNumber(log);
+    if (block === null) return true;
+    return typeof toBlockHint === "number" ? block <= scanLatest : block < tailStart;
+  });
 
   const now = Date.now();
   const scanned: ScannedLogWindow[] = [];
   if (!cursorTopic) {
+    const windows = logWindows(Math.max(start, lastBlock + 1), scanLatest);
+    if (!windows.length) return { logs: cursorLogs, complete: true };
     scanned.push(
       ...(await Promise.all(
-        windows.map(async ([from, to]) => ({ from, to, logs: await readCachedLogWindow(address, topics, from, to, latest, now) })),
+        windows.map(async ([from, to]) => ({
+          from,
+          to,
+          logs: await readCachedLogWindow(address, topics, from, to, tip, now),
+        })),
       )),
     );
-  } else {
-    // Persist immutable windows as they complete, so a serverless timeout during the initial
-    // history scan still leaves a cursor and the next invocation continues instead of restarting.
-    const topic = cursorTopic;
-    let storedLogs = cursor?.logs ?? [];
-    let storedLastBlock = lastBlock;
-    let persistCursor = true;
-    const immutableEnd = latest - LOG_WINDOW_BLOCKS;
-    for (let i = 0; i < windows.length; i += MAX_PARALLEL_LOG_WINDOWS) {
-      const chunk = windows.slice(i, i + MAX_PARALLEL_LOG_WINDOWS);
-      const chunkLogs = await Promise.all(
-        chunk.map(async ([from, to]) => ({ from, to, logs: await readCachedLogWindow(address, topics, from, to, latest, now) })),
-      );
-      scanned.push(...chunkLogs);
-      const completed = chunkLogs.filter(({ to }) => to < immutableEnd);
-      if (!persistCursor || !completed.length) continue;
-      storedLogs = [...storedLogs, ...completed.flatMap(({ logs }) => logs)];
-      storedLastBlock = Math.max(storedLastBlock, ...completed.map(({ to }) => to));
-      // Stop retrying the DB for this scan after the first failure; the next call retries.
-      persistCursor = await writeLogScanCursor(address, topic, storedLastBlock, storedLogs);
-    }
+    return { logs: [...cursorLogs, ...scanned.flatMap(({ logs }) => logs)], complete: true };
   }
-  return [...(cursor?.logs ?? []), ...scanned.flatMap(({ logs }) => logs)];
+
+  // The current factory has no successor, so its last two windows are the only place a new token
+  // can appear. Read them on every refresh, even when a cursor covers the rest of history.
+  const historyFrom = Math.max(start, lastBlock + 1);
+  const historyWindows = historyFrom <= tailStart - 1 ? logWindows(historyFrom, tailStart - 1) : [];
+
+  if (!tailWindows.length && !historyWindows.length) {
+    return { logs: visibleCursorLogs, complete: true };
+  }
+
+  // Tail first: fresh tokens must show even when history work runs out of time below.
+  if (tailWindows.length) {
+    scanned.push(
+      ...(await Promise.all(
+        tailWindows.map(async ([from, to]) => ({
+          from,
+          to,
+          logs: await readCachedLogWindow(address, topics, from, to, tip, now, { fresh: true }),
+        })),
+      )),
+    );
+  }
+
+  // Persist immutable windows as they complete, so a serverless timeout during the initial
+  // history scan still leaves a cursor and the next invocation continues instead of restarting.
+  let complete = true;
+  let storedLogs = visibleCursorLogs;
+  let storedLastBlock = lastBlock;
+  let persistCursor = true;
+  const immutableEnd = typeof toBlockHint === "number" ? scanLatest + 1 : tip - LOG_WINDOW_BLOCKS;
+  for (let i = 0; i < historyWindows.length; i += MAX_PARALLEL_LOG_WINDOWS) {
+    if (typeof deadlineAt === "number" && Date.now() >= deadlineAt) {
+      complete = false;
+      break;
+    }
+    const chunk = historyWindows.slice(i, i + MAX_PARALLEL_LOG_WINDOWS);
+    const chunkLogs = await Promise.all(
+      chunk.map(async ([from, to]) => ({
+        from,
+        to,
+        logs: await readCachedLogWindow(address, topics, from, to, tip, now, { endBlock: toBlockHint }),
+      })),
+    );
+    scanned.push(...chunkLogs);
+    const completed = chunkLogs.filter(({ to }) => to < immutableEnd);
+    if (!persistCursor || !completed.length) continue;
+    storedLogs = [...storedLogs, ...completed.flatMap(({ logs }) => logs)];
+    storedLastBlock = Math.max(storedLastBlock, ...completed.map(({ to }) => to));
+    // Stop retrying the DB for this scan after the first failure; the next call retries.
+    persistCursor = await writeLogScanCursor(address, cursorTopic, storedLastBlock, storedLogs);
+  }
+
+  return { logs: [...visibleCursorLogs, ...scanned.flatMap(({ logs }) => logs)], complete };
 }
 
 const SEL_FACTORY = "0xc45a0155";
@@ -431,10 +571,14 @@ export function applyTokenImage<T extends { imageUri?: string; creationMetadata?
 
 /** On-chain catalog scans are expensive; the cached copy is refreshed in the background. */
 const CATALOG_STALE_MS = 30_000;
+/** A scan stopped by its deadline is resumed on the next request instead of being cached as whole. */
+export const CATALOG_PARTIAL_STALE_MS = 15_000;
+/** Wall-clock budget for one cold token catalog scan; the current factory tail is always read. */
+export const TOKEN_CATALOG_SCAN_BUDGET_MS = 45_000;
 const CATALOG_REVALIDATE_SECONDS = 60;
 export const CHAIN_CATALOG_TAGS = ["evm-chain-catalog"];
 
-let tokensCache: { at: number; value: CatalogToken[] } | null = null;
+let tokensCache: { at: number; value: CatalogToken[]; partial?: boolean } | null = null;
 let poolsCache: { at: number; value: CatalogPool[] } | null = null;
 let tokensRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
@@ -449,37 +593,73 @@ export function resetChainCatalogCacheForTests(): void {
   resetRpcBackoffForTests();
 }
 
+/** Carries a partial scan out of `unstable_cache` so a deadline-stopped list is never shared. */
+class PartialTokenCatalogError extends Error {
+  readonly tokens: CatalogToken[];
+
+  constructor(tokens: CatalogToken[]) {
+    super("evm_token_catalog_partial");
+    this.name = "PartialTokenCatalogError";
+    this.tokens = tokens;
+  }
+}
+
 /**
  * Cross-request cache so a cold server instance (or a second Vercel lambda) does not repeat the
  * full log scan for every visitor. Sanitised by the in-process stale-while-revalidate below, which
  * guarantees no request ever *awaits* a re-scan after the first one.
+ *
+ * A deadline-stopped scan is deliberately thrown out of the shared cache: the next request must
+ * resume from the persisted cursor instead of being served a partial catalog for a minute.
  */
-const scanTokensCached = unstable_cache(discoverTokensOnChainUncached, ["evm-chain-catalog-tokens-v1"], {
-  revalidate: CATALOG_REVALIDATE_SECONDS,
-  tags: CHAIN_CATALOG_TAGS,
-});
+const scanTokensCached = unstable_cache(
+  async (): Promise<CatalogToken[]> => {
+    const result = await discoverTokensOnChainUncached();
+    if (!result.complete) throw new PartialTokenCatalogError(result.tokens);
+    return result.tokens;
+  },
+  ["evm-chain-catalog-tokens-v2"],
+  {
+    revalidate: CATALOG_REVALIDATE_SECONDS,
+    tags: CHAIN_CATALOG_TAGS,
+  },
+);
 const scanPoolsCached = unstable_cache(discoverPoolsOnChainUncached, ["evm-chain-catalog-pools-v1"], {
   revalidate: CATALOG_REVALIDATE_SECONDS,
   tags: CHAIN_CATALOG_TAGS,
 });
 
-async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
+export type CatalogTokenScanResult = {
+  tokens: CatalogToken[];
+  /** False when at least one factory history scan hit its deadline; the tail is still included. */
+  complete: boolean;
+};
+
+export async function discoverTokensOnChainUncached(
+  deadlineAt = Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS,
+): Promise<CatalogTokenScanResult> {
   const dep = readEvmDeployments();
   const factory = dep.contracts.tokenFactory;
-  if (!factory) return [];
+  if (!factory) return { tokens: [], complete: true };
 
   const staticMap = Object.entries(dep.assetMap ?? {});
   // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
-  // keep showing up in the catalog.
-  const factories = contractVersions(dep, "tokenFactory");
-  const fromLogs = (
-    await Promise.all(
-      factories.flatMap((f) => [
-        fetchLogsWindowedIncremental(f, TOKEN_CREATED_TOPIC),
-        fetchLogsWindowedIncremental(f, TOKEN_CREATED_LEFTOVER_TOPIC),
-      ]),
-    )
-  ).flat();
+  // keep showing up in the catalog. Each superseded factory stops at its successor's start block;
+  // both event signatures are OR-ed into one getLogs filter per window.
+  const scans = tokenFactoryScans();
+  const results = await Promise.all(
+    scans.map((scan) =>
+      fetchLogsWindowedIncrementalResult(
+        scan.address,
+        [TOKEN_CREATED_TOPIC, TOKEN_CREATED_LEFTOVER_TOPIC],
+        scan.fromBlock,
+        scan.toBlock,
+        deadlineAt,
+      ),
+    ),
+  );
+  const complete = results.every((result) => result.complete);
+  const fromLogs = results.flatMap((result) => result.logs);
 
   const tokenAddrs = new Set<string>();
   for (const [, addr] of staticMap) {
@@ -490,7 +670,7 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
     if (t) tokenAddrs.add(t.toLowerCase());
   }
   const tokens = [...tokenAddrs].map((lower) => getAddress(lower));
-  if (!tokens.length) return [];
+  if (!tokens.length) return { tokens: [], complete };
 
   // Six reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
   // sequential per-token loop measured ~3.8 s. `creator()` and `metadataURI()` are optional on
@@ -539,13 +719,26 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
     });
     return applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
   });
-  return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  return { tokens: rows.sort((a, b) => a.symbol.localeCompare(b.symbol)), complete };
 }
 
 async function loadTokens(): Promise<CatalogToken[]> {
   try {
-    const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
-    tokensCache = { at: Date.now(), value };
+    let value: CatalogToken[] = [];
+    let partial = false;
+    try {
+      value = await scanTokensCached();
+    } catch (error) {
+      if (error instanceof PartialTokenCatalogError) {
+        value = error.tokens;
+        partial = true;
+      } else {
+        const direct = await discoverTokensOnChainUncached();
+        value = direct.tokens;
+        partial = !direct.complete;
+      }
+    }
+    tokensCache = { at: Date.now(), value, partial };
     return value;
   } catch (error) {
     // Both the shared cache and the direct scan failed: serve the last good catalog rather than
@@ -558,7 +751,8 @@ async function loadTokens(): Promise<CatalogToken[]> {
 export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   const cached = tokensCache;
   if (cached) {
-    if (Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
+    const staleAfter = cached.partial ? CATALOG_PARTIAL_STALE_MS : CATALOG_STALE_MS;
+    if (Date.now() - cached.at < staleAfter) return cached.value;
     // Serve the stale catalog at once and re-scan in the background: no visitor is made to wait
     // for the full scan a second time.
     if (!tokensRefreshing) {
