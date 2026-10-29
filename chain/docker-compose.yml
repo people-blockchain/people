@@ -1,4 +1,9 @@
 # 3-validator People's local testnet (Cosmos EVM). Run `scripts/init-testnet.sh` first.
+#
+# P2P (26656 / per-node host ports) is the only service published on all interfaces.
+# CometBFT RPC, REST, gRPC, and EVM JSON-RPC are bound to 127.0.0.1 on the host for local
+# dev tools. Production/public RPC must run on separate non-validator nodes behind a reverse
+# proxy with rate limits (see docs/NODE-SECURITY.md).
 services:
   peopled-0:
     build: .
@@ -7,11 +12,14 @@ services:
     environment:
       NODE_ID: "0"
       CHAIN_ID: people_97401-1
+      # Listen on all interfaces inside the container so host 127.0.0.1 port maps work.
+      PEOPLE_JSONRPC_BIND: "0.0.0.0"
     ports:
-      - "26656-26657:26656-26657"
-      - "1317:1317"
-      - "9090:9090"
-      - "8545-8546:8545-8546"
+      - "26656:26656"
+      - "127.0.0.1:26657:26657"
+      - "127.0.0.1:1317:1317"
+      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:8545-8546:8545-8546"
     # M11-3: each validator sees only its own data directory (and keyring) — a compromised
     # container can no longer read the other validators' keys from a shared /data mount.
     volumes:
@@ -26,11 +34,13 @@ services:
     environment:
       NODE_ID: "1"
       CHAIN_ID: people_97401-1
+      PEOPLE_JSONRPC_BIND: "0.0.0.0"
     ports:
-      - "26666-26667:26656-26657"
-      - "1318:1317"
-      - "9091:9090"
-      - "8555-8556:8545-8546"
+      - "26666:26656"
+      - "127.0.0.1:26667:26657"
+      - "127.0.0.1:1318:1317"
+      - "127.0.0.1:9091:9090"
+      - "127.0.0.1:8555-8556:8545-8546"
     # M11-3: each validator sees only its own data directory (and keyring) — a compromised
     # container can no longer read the other validators' keys from a shared /data mount.
     volumes:
@@ -45,11 +55,13 @@ services:
     environment:
       NODE_ID: "2"
       CHAIN_ID: people_97401-1
+      PEOPLE_JSONRPC_BIND: "0.0.0.0"
     ports:
-      - "26676-26677:26656-26657"
-      - "1319:1317"
-      - "9092:9090"
-      - "8565-8566:8545-8546"
+      - "26676:26656"
+      - "127.0.0.1:26677:26657"
+      - "127.0.0.1:1319:1317"
+      - "127.0.0.1:9092:9090"
+      - "127.0.0.1:8565-8566:8545-8546"
     # M11-3: each validator sees only its own data directory (and keyring) — a compromised
     # container can no longer read the other validators' keys from a shared /data mount.
     volumes:

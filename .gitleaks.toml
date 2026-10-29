@@ -1,24 +1,51 @@
-# Extends the default gitleaks rules. Allowlist only known non-secrets.
+# Extends the default gitleaks rules. Allowlist only known non-secrets (never whole paths).
 [extend]
 useDefault = true
 
-[allowlist]
-description = "Public contract addresses, event topics and documented public dev/test keys"
-paths = [
-  '''contracts/deployments/.*\.json''',
-  '''website/src/data/evm-deployments-.*\.json''',
-  # documented public dev/test keys (cosmos/evm dev0, unit-test fixtures) - zero balance, never used on funded networks
-  '''chain/scripts/contracts-smoke\.sh''',
-  '''contracts/scripts/smoke-local\.sh''',
-  '''website/scripts/evm-embedded-key\.test\.mjs''',
-  '''website/scripts/wallet-keep-current\.spec\.mjs''',
-  '''website/scripts/evm-log-start-blocks\.test\.mjs''',
-  # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
-  '''website/src/lib/web3auth-config\.ts''',
+# Documented public dev / test material (zero balance; not for funded networks).
+[[allowlists]]
+description = "cosmos/evm dev0 deployer key (comments and env examples)"
+stopwords = [
+  "88cbead91aee890d27bf06e003ade3d4e952427e88f88d31d61d3ef5e5d54305",
 ]
+
+[[allowlists]]
+description = "ethers.js public documentation example private key"
+stopwords = [
+  "4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318",
+]
+
+[[allowlists]]
+description = "Hardhat / viem trivial unit-test private key"
+stopwords = [
+  "0000000000000000000000000000000000000000000000000000000000000001",
+]
+
+[[allowlists]]
+description = "Web3Auth Sapphire client id (public, domain-restricted in dashboard)"
+stopwords = [
+  "BLEizYwklbFp1syYHcNF7rMcHIQEQqJohQow_EYWRvvjFFh_r31eJYKohdC_vBR0V5Gk5-xh5AUGQCQNxLDkmG8",
+]
+
+[[allowlists]]
+description = "keccak event topic constants in source"
 regexTarget = "line"
 regexes = [
-  # keccak event topics (TOKEN_CREATED etc.)
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
+  '''0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724''',
+  '''0xdcb5d6c49a959a42d0c67fe9b9aa48b4da6065c9f47789f71789f629d84d30f1''',
 ]
+
+[[allowlists]]
+description = "public EVM addresses and protocol contract key names are not secrets"
+regexes = [
+  '''^0x[a-fA-F0-9]{40}$''',
+  '''^(registry|tokenFactory|bondingCurve|router|wppl|ammFactory|nftFactory|creatorVesting|communityVault|peopleMultisig|gateway|promoRewardsVault)(V[0-9]+)?(Deprecated)?$''',
+]
+
+[[allowlists]]
+description = "pre-2026-10-19 unit-test fixture key in initial commit (replaced by 0x…01); history is not rewritten"
+condition = "AND"
+commits = ["d97db213f022e62fca68dcdc000f63e02e1968cf"]
+paths = ['''website/scripts/evm-embedded-key\.test\.mjs''']

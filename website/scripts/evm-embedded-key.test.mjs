@@ -8,7 +8,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { normalizePrivateKey } from "../src/lib/evm/client.ts";
 
-const KEY = "354c6c6289e051c8ba47045aaf3762693015d3d7b729f0070fcbbb4e014634d2";
+// Trivial test key 0x…01 (address 0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf) — normalization only, never funded.
+const KEY = "0000000000000000000000000000000000000000000000000000000000000001";
 const PREFIXED = `0x${KEY}`;
 
 test("bare hex from the vault is accepted and prefixed for viem", () => {
