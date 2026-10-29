@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { isAddress } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { networkJson } from "@/lib/network-client";
 import { explorerCopy } from "@/lib/explorer-copy";
@@ -16,16 +17,18 @@ import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import { resolveMarketTokenAddress } from "@/lib/evm/market-token";
+import { fetchJsonWithTimeout, timeoutSignal } from "@/lib/fetch-timeout";
+import { resolveTokenMeta, type Erc20Meta, type ResolvedTokenMeta } from "@/lib/evm-token-meta";
 
 type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
-type Data = { asset: Token; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
+type Data = { asset: Token; meta: ResolvedTokenMeta; fromCatalog: boolean; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
 
 export function TokenView({ assetId }: { assetId: string }) {
   const { lang } = useLanguage();
   const t = explorerCopy[lang];
   const u = uxCopy[lang];
-  const c = tokenExplorerCopy[lang === "ru" ? "ru" : "en"];
+  const c = { ...tokenExplorerCopy.en, ...(tokenExplorerCopy[lang] ?? {}) };
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,25 +40,37 @@ export function TokenView({ assetId }: { assetId: string }) {
     async function load() {
       try {
         if (isHiddenAsset(assetId)) throw new Error("hidden_asset");
-        const [asset, accountResult] = await Promise.all([
-          networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal: controller.signal }),
+        // Every request has its own deadline so the loader always ends (error + retry on failure).
+        const evm = isAddress(assetId, { strict: false });
+        const [catalog, accountResult, contract] = await Promise.all([
+          networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal: timeoutSignal(8000, controller.signal) })
+            .then(value => (value && typeof value === "object" && Object.keys(value).length ? value : null))
+            .catch(error => { if (!evm) throw error; return null; }),
           networkJson<ExplorerAccount[]>(
             `accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`,
-            { signal: controller.signal },
+            { signal: timeoutSignal(8000, controller.signal) },
           )
             .then(accounts => Array.isArray(accounts) ? accounts : null).catch(() => null),
+          evm
+            ? fetchJsonWithTimeout<Erc20Meta>(`/api/explorer/token/${encodeURIComponent(assetId)}/meta`, { timeoutMs: 8000, signal: controller.signal }).catch(() => null)
+            : Promise.resolve(null),
         ]);
+        const meta = resolveTokenMeta({ assetId, contract, catalog });
+        if (!catalog && !evm) throw new Error("not_found");
+        const asset: Token = evm
+          ? { assetId, tokenAddress: assetId, status: "—", type: "token", creator: "", totalSupply: 0, ...(catalog ?? {}), name: meta.name, symbol: meta.symbol, decimals: meta.decimals ?? catalog?.decimals }
+          : catalog!;
         let timestamp: number | null = null;
         if (asset.createdAt !== undefined) {
-          const block = await networkJson<{ header?: { height?: number; timestamp?: number } }>(`blocks/${asset.createdAt}`, { signal: controller.signal }).catch(() => null);
+          const block = await networkJson<{ header?: { height?: number; timestamp?: number } }>(`blocks/${asset.createdAt}`, { signal: timeoutSignal(5000, controller.signal) }).catch(() => null);
           timestamp = creationTimestamp(block, asset.createdAt);
           if (timestamp === null && !controller.signal.aborted) {
-            const archived = await fetch(`/api/explorer/token/${encodeURIComponent(assetId)}/created`, { signal: controller.signal }).then(r => r.ok ? r.json() : null).catch(() => null);
+            const archived = await fetch(`/api/explorer/token/${encodeURIComponent(assetId)}/created`, { signal: timeoutSignal(5000, controller.signal) }).then(r => r.ok ? r.json() : null).catch(() => null);
             if (typeof archived?.timestamp === "number" && Number.isFinite(archived.timestamp) && archived.timestamp > 0) timestamp = archived.timestamp;
           }
         }
         if (controller.signal.aborted) return;
-        setData({ asset, accounts: accountResult?.slice(0, ACCOUNT_SCAN_LIMIT) ?? null, partial: (accountResult?.length ?? 0) > ACCOUNT_SCAN_LIMIT, timestamp, fetchedAt: Date.now() });
+        setData({ asset, meta, fromCatalog: Boolean(catalog), accounts: accountResult?.slice(0, ACCOUNT_SCAN_LIMIT) ?? null, partial: (accountResult?.length ?? 0) > ACCOUNT_SCAN_LIMIT, timestamp, fetchedAt: Date.now() });
       } catch { if (!controller.signal.aborted) setError(true); }
       finally { if (!controller.signal.aborted) setLoading(false); }
     }
@@ -70,6 +85,8 @@ export function TokenView({ assetId }: { assetId: string }) {
   const chart = holderChart(distribution.holders);
   const amount = (value: number) => formatAssetAmount(assetId, value, asset);
   const marketTokenAddress = assetId === "ppl" || assetId === "usdt" ? null : resolveMarketTokenAddress(assetId);
+  const supplyText = data?.meta.supplyText ?? (data?.meta.catalogSupply != null ? amount(data.meta.catalogSupply) : null);
+  const supplyValue = supplyText === null ? "—" : `${supplyText} ${symbol}`;
   const gradient = chart.map((slice, i) => { const start = chart.slice(0, i).reduce((sum, row) => sum + row.share, 0); return `${colors[i]} ${start}% ${start + slice.share}%`; }).join(", ");
 
   return <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -84,13 +101,13 @@ export function TokenView({ assetId }: { assetId: string }) {
       {assetId === "usdt" ? <p className="mt-4 text-sm text-warm">{u.testUsdtNote}</p> : null}
       {marketTokenAddress ? <TokenMarketPanel tokenAddress={marketTokenAddress} symbol={symbol} className="mt-8" /> : null}
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        {[[u.totalSupply, `${amount(asset.totalSupply)} ${symbol}`], [c.holders, data?.accounts ? `${data.partial ? "≥ " : ""}${distribution.holders.length}` : "—"], [c.held, data?.accounts ? `${amount(distribution.total)} ${symbol}` : "—"]].map(([label, value]) => <div key={label} className="rounded-2xl border border-line bg-surface p-5"><p className="text-sm text-ink-3">{label}</p><p className="mt-2 break-words text-xl font-bold">{value}</p></div>)}
+        {[[u.totalSupply, supplyValue], [c.holders, data?.accounts ? `${data.partial ? "≥ " : ""}${distribution.holders.length}` : "—"], [c.held, data?.accounts ? `${amount(distribution.total)} ${symbol}` : "—"]].map(([label, value]) => <div key={label} className="rounded-2xl border border-line bg-surface p-5"><p className="text-sm text-ink-3">{label}</p><p className="mt-2 break-words text-xl font-bold">{value}</p></div>)}
       </div>
       <dl className="mt-6 grid gap-5 rounded-2xl border border-line p-5 text-sm sm:grid-cols-2">
-        <div><dt className="text-ink-3">{c.created}</dt><dd className="mt-1">{data?.timestamp ? new Date(data.timestamp).toLocaleString(lang) : asset.createdAt === undefined ? c.genesis : c.unknownDate}{asset.createdAt !== undefined ? <Link className="ml-2 text-brand" href={`/explorer/block/${asset.createdAt}`}>#{asset.createdAt}</Link> : null}</dd></div>
-        <div><dt className="text-ink-3">{t.creator}</dt><dd className="mt-1 break-all font-mono">{asset.creator.startsWith("0x") ? <Link className="text-brand" href={`/explorer/address/${asset.creator}`}>{asset.creator}</Link> : asset.creator}</dd></div>
+        <div><dt className="text-ink-3">{c.created}</dt><dd className="mt-1">{data?.timestamp ? new Date(data.timestamp).toLocaleString(lang) : asset.createdAt === undefined && data?.fromCatalog ? c.genesis : c.unknownDate}{asset.createdAt !== undefined ? <Link className="ml-2 text-brand" href={`/explorer/block/${asset.createdAt}`}>#{asset.createdAt}</Link> : null}</dd></div>
+        <div><dt className="text-ink-3">{t.creator}</dt><dd className="mt-1 break-all font-mono">{!asset.creator ? "—" : asset.creator.startsWith("0x") ? <Link className="text-brand" href={`/explorer/address/${asset.creator}`}>{asset.creator}</Link> : asset.creator}</dd></div>
         <div><dt className="text-ink-3">{c.status}</dt><dd>{asset.status}</dd></div>
-        <div><dt className="text-ink-3">{c.decimals}</dt><dd>{assetDecimals(asset)}</dd></div>
+        <div><dt className="text-ink-3">{c.decimals}</dt><dd>{asset.decimals === undefined ? "—" : assetDecimals(asset)}</dd></div>
       </dl>
       {typeof asset.creationMetadata?.description === "string" ? <div className="mt-6"><h2 className="font-bold">{c.description}</h2><p className="mt-2 whitespace-pre-wrap break-words text-sm text-ink-2">{asset.creationMetadata.description}</p></div> : null}
       <section className="mt-10" aria-labelledby="holder-title">
