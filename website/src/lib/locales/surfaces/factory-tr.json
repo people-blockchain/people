@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Görsel",
-    "imageHint": "PNG, JPEG veya WebP. Bir dosya yükleyin ya da bir görsel bağlantısı yapıştırın. Önce bir önizleme görürsünüz.",
+    "imageHint": "PNG, JPEG, WebP veya GIF. Bir dosya yükleyin ya da bir görsel bağlantısı yapıştırın. Önce bir önizleme görürsünüz.",
     "imageUrl": "Veya bir görsel URL’si yapıştırın",
     "name": "Ad",
     "description": "Açıklama",
@@ -110,5 +110,16 @@
     "busy": "Görseller oluşturuluyor…",
     "connectWallet": "Öde adımında cüzdanı bağlayın veya Cüzdan'ı açıp geri dönün.",
     "errorGeneric": "Görseller oluşturulamadı. Tekrar deneyin."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP veya GIF, en fazla 1,5 MB.",
+    "tooLarge": "Dosya çok büyük: en fazla 1,5 MB olabilir.",
+    "unsupportedType": "Bu dosya türü desteklenmiyor. PNG, JPEG, WebP veya GIF kullanın.",
+    "contentMismatch": "Dosya içeriği türüyle eşleşmiyor. Dosyayı PNG, JPEG, WebP veya GIF olarak yeniden dışa aktarın.",
+    "rateLimited": "Çok fazla yükleme yapıldı. Birkaç dakika bekleyip tekrar deneyin.",
+    "signIn": "Dosya yüklemek için giriş yapın.",
+    "missingFile": "Önce bir dosya seçin.",
+    "network": "Ağ sorunu. Bağlantınızı kontrol edip tekrar deneyin.",
+    "failed": "Dosya yüklenemedi. Tekrar deneyin."
   }
 }

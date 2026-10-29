@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "图片",
-    "imageHint": "PNG、JPEG 或 WebP。上传文件或粘贴图片链接，你会先看到预览。",
+    "imageHint": "PNG、JPEG、WebP 或 GIF。上传文件或粘贴图片链接，你会先看到预览。",
     "imageUrl": "或粘贴图片 URL",
     "name": "名称",
     "description": "描述",
@@ -110,5 +110,16 @@
     "busy": "正在生成…",
     "connectWallet": "请先在付款步骤连接钱包，或打开钱包后返回。",
     "errorGeneric": "无法生成图片，请重试。"
+  },
+  "upload": {
+    "hint": "PNG、JPEG、WebP 或 GIF，最大 1.5 MB。",
+    "tooLarge": "文件过大：最大为 1.5 MB。",
+    "unsupportedType": "不支持此文件类型。请使用 PNG、JPEG、WebP 或 GIF。",
+    "contentMismatch": "文件内容与其类型不符。请重新导出为 PNG、JPEG、WebP 或 GIF。",
+    "rateLimited": "上传次数过多。请等待几分钟后重试。",
+    "signIn": "请先登录再上传文件。",
+    "missingFile": "请先选择文件。",
+    "network": "网络出现问题。请检查连接后重试。",
+    "failed": "文件上传失败。请重试。"
   }
 }

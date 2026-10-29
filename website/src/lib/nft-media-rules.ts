@@ -17,13 +17,14 @@ export const NFT_METADATA_MAX_BYTES = 262_144;
 /** Bytes of a video that are enough to validate its container header. */
 export const NFT_VIDEO_HEAD_BYTES = 4096;
 
-export type NftImageKind = "png" | "jpeg" | "webp" | "svg";
+export type NftImageKind = "png" | "jpeg" | "webp" | "gif" | "svg";
 export type NftVideoType = "video/mp4" | "video/webm";
 
 export const NFT_IMAGE_MIME: Record<NftImageKind, string> = {
   png: "image/png",
   jpeg: "image/jpeg",
   webp: "image/webp",
+  gif: "image/gif",
   svg: "image/svg+xml",
 };
 
@@ -31,6 +32,7 @@ export const NFT_IMAGE_EXT: Record<NftImageKind, string> = {
   png: "png",
   jpeg: "jpg",
   webp: "webp",
+  gif: "gif",
   svg: "svg",
 };
 
@@ -45,6 +47,7 @@ export function imageKindFromMime(mime: string): NftImageKind | null {
   if (type === "image/png") return "png";
   if (type === "image/jpeg" || type === "image/jpg") return "jpeg";
   if (type === "image/webp") return "webp";
+  if (type === "image/gif") return "gif";
   if (type === "image/svg+xml") return "svg";
   return null;
 }
@@ -77,6 +80,8 @@ export function sniffNftImage(bytes: Uint8Array): NftImageKind | null {
   if (startsWith(bytes, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) return "png";
   if (startsWith(bytes, [0xff, 0xd8, 0xff])) return "jpeg";
   if (ascii(bytes, 0, 4) === "RIFF" && ascii(bytes, 8, 12) === "WEBP") return "webp";
+  // GIF87a / GIF89a plus the 7-byte logical screen descriptor.
+  if (bytes.length >= 13 && (ascii(bytes, 0, 6) === "GIF87a" || ascii(bytes, 0, 6) === "GIF89a")) return "gif";
   const head = new TextDecoder("utf-8").decode(bytes.subarray(0, 4096));
   if (SVG_PROLOG.test(head)) return "svg";
   return null;

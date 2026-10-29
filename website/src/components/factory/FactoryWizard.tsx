@@ -15,6 +15,8 @@ import { Chip, Eyebrow } from "@/components/ui/primitives";
 import { uxCopy, fill } from "@/lib/ux-copy";
 import { formatPpl } from "@/lib/asset-amounts";
 import { FactoryIconGenerator } from "@/components/factory/FactoryIconGenerator";
+import { UploadHint } from "@/components/factory/UploadHint";
+import { UPLOAD_IMAGE_ACCEPT, checkUploadSize, postUploadForm, uploadErrorMessage } from "@/lib/upload-response";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { EvmTokenLaunch } from "@/components/factory/EvmTokenLaunch";
 import { EvmNftMint } from "@/components/factory/EvmNftMint";
@@ -87,6 +89,8 @@ function PeopleFactoryWizard({ kind }: Props) {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ txId: string; idHint: string } | null>(null);
   const [error, setError] = useState("");
+  // A rejected file is not a failed submit: it is shown beside the file field, without the submit prefix.
+  const [uploadError, setUploadError] = useState("");
 
   useEffect(() => {
     void fetch("/api/factory/config")
@@ -103,22 +107,27 @@ function PeopleFactoryWizard({ kind }: Props) {
 
   const onFile = useCallback(async (file: File | null) => {
     if (!file) return;
-    setError("");
+    setUploadError("");
+    // Cheap pre-check with the server limit: a larger body would be cut off by the hosting platform.
+    const tooBig = checkUploadSize(file.size);
+    if (tooBig) {
+      setUploadError(uploadErrorMessage(tooBig, copy.upload));
+      return;
+    }
     const local = URL.createObjectURL(file);
     setPreview(local);
     const body = new FormData();
     body.set("file", file);
-    const res = await fetch("/api/factory/media", { method: "POST", body });
-    const data = (await res.json()) as { uri?: string; previewUrl?: string; error?: string };
-    if (!res.ok || !data.uri) {
-      setError(data.error ?? "upload");
+    const result = await postUploadForm<{ uri?: string; previewUrl?: string }>("/api/factory/media", body);
+    if (!result.ok || !result.data.uri) {
+      setUploadError(uploadErrorMessage(result.ok ? "upload_failed" : result.code, copy.upload));
       return;
     }
-    setImageUri(data.uri);
-    if (data.previewUrl) {
-      setPreview(data.previewUrl);
+    setImageUri(result.data.uri);
+    if (result.data.previewUrl) {
+      setPreview(result.data.previewUrl);
     }
-  }, []);
+  }, [copy.upload]);
 
   const applyUrl = () => {
     const url = imageUrlInput.trim();
@@ -247,12 +256,20 @@ function PeopleFactoryWizard({ kind }: Props) {
           <h2 className="text-base font-bold text-ink">{copy.form.image}</h2>
           <p className="text-sm text-ink-2">{copy.form.imageHint}</p>
           {config.mediaPersist ? (
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(event) => void onFile(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm text-ink-2"
-            />
+            <>
+              <input
+                type="file"
+                accept={UPLOAD_IMAGE_ACCEPT}
+                onChange={(event) => void onFile(event.target.files?.[0] ?? null)}
+                className="block w-full text-sm text-ink-2"
+              />
+              <UploadHint copy={copy.upload} />
+              {uploadError ? (
+                <p role="alert" data-testid="upload-error" className="mt-2 text-sm text-warm">
+                  {uploadError}
+                </p>
+              ) : null}
+            </>
           ) : null}
           {config.aiIconEnabled ? (
             <FactoryIconGenerator

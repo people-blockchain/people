@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Imagen",
-    "imageHint": "PNG, JPEG o WebP. Sube un archivo o pega un enlace a una imagen. Primero verás una vista previa.",
+    "imageHint": "PNG, JPEG, WebP o GIF. Sube un archivo o pega un enlace a una imagen. Primero verás una vista previa.",
     "imageUrl": "O pega una URL de imagen",
     "name": "Nombre",
     "description": "Descripción",
@@ -110,5 +110,16 @@
     "busy": "Creando imágenes…",
     "connectWallet": "Conecta tu monedero en el paso Pagar o abre Monedero y vuelve.",
     "errorGeneric": "No se pudieron crear las imágenes. Inténtalo de nuevo."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP o GIF, hasta 1,5 MB.",
+    "tooLarge": "El archivo es demasiado grande: el máximo es 1,5 MB.",
+    "unsupportedType": "Este tipo de archivo no es compatible. Usa PNG, JPEG, WebP o GIF.",
+    "contentMismatch": "El contenido del archivo no coincide con su tipo. Expórtalo de nuevo como PNG, JPEG, WebP o GIF.",
+    "rateLimited": "Demasiadas subidas. Espera unos minutos e inténtalo de nuevo.",
+    "signIn": "Inicia sesión para subir un archivo.",
+    "missingFile": "Elige un archivo primero.",
+    "network": "Problema de red. Comprueba tu conexión e inténtalo de nuevo.",
+    "failed": "No se pudo subir el archivo. Inténtalo de nuevo."
   }
 }

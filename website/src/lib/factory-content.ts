@@ -1,4 +1,5 @@
 import type { Language } from "@/lib/preferences";
+import type { UploadCopy } from "@/lib/upload-response";
 import factoryAr from "./locales/surfaces/factory-ar.json" with { type: "json" };
 import factoryDe from "./locales/surfaces/factory-de.json" with { type: "json" };
 import factoryEs from "./locales/surfaces/factory-es.json" with { type: "json" };
@@ -126,6 +127,8 @@ export type FactoryCopyContent = {
     connectWallet: string;
     errorGeneric: string;
   };
+  /** Upload hint and error messages for image files (token picture, icon generator). */
+  upload: UploadCopy;
 };
 
 const baseFactoryCopy: Record<string, FactoryCopyContent> = {
@@ -169,7 +172,7 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
     },
     form: {
       image: "Picture",
-      imageHint: "PNG, JPEG or WebP. Upload a file or paste a link to an image. You will see a preview first.",
+      imageHint: "PNG, JPEG, WebP or GIF. Upload a file or paste a link to an image. You will see a preview first.",
       imageUrl: "Or paste an image URL",
       name: "Name",
       description: "Description",
@@ -245,6 +248,17 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       connectWallet: "Connect your wallet on the Pay step first, or open Wallet and return here.",
       errorGeneric: "Could not create pictures. Try again.",
     },
+    upload: {
+      hint: "PNG, JPEG, WebP or GIF, up to 1.5 MB.",
+      tooLarge: "File is too large — maximum 1.5 MB.",
+      unsupportedType: "This file type is not supported. Use PNG, JPEG, WebP or GIF.",
+      contentMismatch: "The file content does not match its type. Export it again as PNG, JPEG, WebP or GIF.",
+      rateLimited: "Too many uploads. Wait a few minutes and try again.",
+      signIn: "Sign in to upload a file.",
+      missingFile: "Choose a file first.",
+      network: "Network problem. Check your connection and try again.",
+      failed: "The file could not be uploaded. Try again.",
+    },
   },
   ru: {
     navLabel: "Создать",
@@ -286,7 +300,7 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
     },
     form: {
       image: "Картинка",
-      imageHint: "PNG, JPEG или WebP. Загрузите файл или вставьте ссылку на картинку. Сначала вы увидите превью.",
+      imageHint: "PNG, JPEG, WebP или GIF. Загрузите файл или вставьте ссылку на картинку. Сначала вы увидите превью.",
       imageUrl: "Или вставьте URL картинки",
       name: "Название",
       description: "Описание",
@@ -361,6 +375,17 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       busy: "Создаём картинки…",
       connectWallet: "Сначала подключите кошелёк (шаг «Оплата») или откройте раздел «Кошелёк».",
       errorGeneric: "Не удалось создать картинки. Попробуйте ещё раз.",
+    },
+    upload: {
+      hint: "PNG, JPEG, WebP или GIF, до 1,5 МБ.",
+      tooLarge: "Файл слишком большой — максимум 1,5 МБ.",
+      unsupportedType: "Этот тип файла не поддерживается. Используйте PNG, JPEG, WebP или GIF.",
+      contentMismatch: "Содержимое файла не соответствует его типу. Экспортируйте его заново как PNG, JPEG, WebP или GIF.",
+      rateLimited: "Слишком много загрузок. Подождите несколько минут и повторите.",
+      signIn: "Войдите, чтобы загрузить файл.",
+      missingFile: "Сначала выберите файл.",
+      network: "Проблема с сетью. Проверьте соединение и повторите.",
+      failed: "Не удалось загрузить файл. Попробуйте ещё раз.",
     },
   },
   es: factoryEs as FactoryCopyContent,

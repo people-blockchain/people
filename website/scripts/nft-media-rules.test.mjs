@@ -56,7 +56,7 @@ test("a PNG renamed .svg is a type mismatch, not an SVG", () => {
   assert.equal(sniffNftImage(fixture("image.png")), "png");
   assert.notEqual(sniffNftImage(fixture("image.png")), imageKindFromMime("image/svg+xml"));
   assert.equal(imageKindFromMime("image/svg+xml"), "svg");
-  assert.equal(imageKindFromMime("image/gif"), null);
+  assert.equal(imageKindFromMime("image/gif"), "gif");
   assert.equal(imageKindFromMime("text/html"), null);
 });
 
@@ -105,7 +105,8 @@ test("client pre-checks: size boundaries and extension fallback for empty types"
   assert.equal(effectiveMime({ name: "clip.WEBM", type: "" }), "video/webm");
   assert.equal(checkVideoFile({ name: "clip.mp4", type: "", size: 10 }).ok, true);
   assert.deepEqual(checkVideoFile({ name: "clip.mov", type: "video/quicktime", size: 10 }), { ok: false, key: "errUnsupportedType" });
-  assert.deepEqual(checkImageFile({ name: "a.gif", type: "image/gif", size: 10 }), { ok: false, key: "errUnsupportedType" });
+  assert.equal(checkImageFile({ name: "a.gif", type: "image/gif", size: 10 }).ok, true);
+  assert.deepEqual(checkImageFile({ name: "a.bmp", type: "image/bmp", size: 10 }), { ok: false, key: "errUnsupportedType" });
   assert.equal(errorKeyForServerCode("svg_rejected"), "errSvgRejected");
   assert.equal(errorKeyForServerCode("something_new"), "errUnknown");
 });

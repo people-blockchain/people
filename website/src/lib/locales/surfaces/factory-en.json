@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Picture",
-    "imageHint": "PNG, JPEG or WebP. Upload a file or paste a link to an image. You will see a preview first.",
+    "imageHint": "PNG, JPEG, WebP or GIF. Upload a file or paste a link to an image. You will see a preview first.",
     "imageUrl": "Or paste an image URL",
     "name": "Name",
     "description": "Description",
@@ -110,5 +110,16 @@
     "busy": "Creating pictures…",
     "connectWallet": "Connect your wallet on the Pay step first, or open Wallet and return here.",
     "errorGeneric": "Could not create pictures. Try again."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP or GIF, up to 1.5 MB.",
+    "tooLarge": "File is too large — maximum 1.5 MB.",
+    "unsupportedType": "This file type is not supported. Use PNG, JPEG, WebP or GIF.",
+    "contentMismatch": "The file content does not match its type. Export it again as PNG, JPEG, WebP or GIF.",
+    "rateLimited": "Too many uploads. Wait a few minutes and try again.",
+    "signIn": "Sign in to upload a file.",
+    "missingFile": "Choose a file first.",
+    "network": "Network problem. Check your connection and try again.",
+    "failed": "The file could not be uploaded. Try again."
   }
 }

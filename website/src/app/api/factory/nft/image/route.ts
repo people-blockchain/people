@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   if (!(await nftRateAllowed(request, NFT_RATE.image))) return nftError("rate_limited", 429);
 
   const raw = await readRequestBytesCapped(request, Math.max(NFT_IMAGE_MAX_BYTES, NFT_SVG_MAX_BYTES) + BODY_SLACK_BYTES);
-  if (!raw) return nftError("file_too_large", 413);
+  if (!raw) return NextResponse.json({ error: "file_too_large", maxBytes: NFT_IMAGE_MAX_BYTES }, { status: 413 });
 
   let file: FormDataEntryValue | null;
   try {
@@ -44,7 +44,9 @@ export async function POST(request: Request) {
   const declared = imageKindFromMime(file.type);
   if (!declared) return nftError("unsupported_type", 415);
   if (file.size <= 0) return nftError("missing_file", 400);
-  if (file.size > maxBytesForImage(declared)) return nftError("file_too_large", 413);
+  if (file.size > maxBytesForImage(declared)) {
+    return NextResponse.json({ error: "file_too_large", maxBytes: maxBytesForImage(declared) }, { status: 413 });
+  }
 
   const original = new Uint8Array(await file.arrayBuffer());
   const kind = sniffNftImage(original);
