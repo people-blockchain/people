@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "How the curve works",
     "headlineClosed": "The PPL sale opens soon",
-    "statsTitleClosed": "On the curve — opening soon"
+    "headlineWhitelist": "PPL sale: verified whitelist phase",
+    "subWhitelist": "First 7 days: verified people only. Verify with World ID or Human Passport to take part.",
+    "statsTitleClosed": "On the curve — opening soon",
+    "statsTitleWhitelist": "On the curve — whitelist phase",
+    "statsTitleOpen": "On the curve — open sale"
   },
   "stats": {
     "price": "Current price",
@@ -25,9 +29,12 @@
     "notOpenYet": "Not open yet",
     "progressLabel": "Progress to the {target} graduation",
     "saleStatus": "Sale status",
+    "whitelistStatus": "Whitelist: verified only",
+    "openStatus": "Open",
     "startPriceOnOpen": "Starting price once it opens: {start}",
     "saleWindow": "Sale window",
     "saleWindowValue": "Until sold out or {term}",
+    "saleWindowV2": "7-day whitelist from {date}, then open sale up to {term}",
     "saleWindowHint": "Whichever comes first. No extensions.",
     "endsByHint": "Latest end date. Earlier if it sells out."
   },
@@ -338,5 +345,83 @@
         "text": "The AI-assisted reviews named above were run by the project team. They are not a security audit, and no external audit has been done yet. A bug bounty reduces risk but does not remove it: no review can prove software free of defects."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Whitelist phase",
+      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 per day.",
+      "daysLeft": "{days} days left",
+      "openTitle": "Public phase",
+      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 per day.",
+      "notOpenTitle": "Sale not open yet",
+      "notOpenBody": "Purchases open when the contract enters the whitelist phase.",
+      "expiredTitle": "Sale ended",
+      "graduatedTitle": "Sale graduated",
+      "closedBody": "Purchases are closed."
+    },
+    "verify": {
+      "title": "First 7 days: verified people only",
+      "body": "Verify with World ID or Human Passport to take part.",
+      "telegramNote": "Telegram alone is not enough.",
+      "ctaVerify": "Verify now",
+      "ctaSignIn": "Sign in to verify",
+      "confirmTitle": "One on-chain step left",
+      "confirmBody": "Confirm your verified identity on Base to unlock buying.",
+      "ctaConfirm": "Confirm on-chain",
+      "confirming": "Confirming on-chain…",
+      "confirmed": "Confirmed on-chain. You can buy.",
+      "error": "Could not confirm on-chain. Try again.",
+      "notEligible": "This account is not eligible for the whitelist.",
+      "connectWallet": "Connect a wallet to continue.",
+      "alreadyVerified": "Already confirmed on-chain."
+    },
+    "form": {
+      "title": "Buy PPL",
+      "network": "Network",
+      "token": "Token",
+      "amount": "Amount",
+      "networkBase": "Base",
+      "networkOther": "Other network",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "PPL estimate",
+      "minimum": "Minimum received",
+      "price": "Current PPL price",
+      "eta": "Arrives in about {eta}",
+      "fees": "Fees: {fees}",
+      "feesToggle": "Fee details",
+      "feesBody": "The Base network fee is usually about $0.01. The LI.FI swap or bridge fee is shown in the widget before you confirm.",
+      "lifiLine": "Swap via LI.FI, purchase in USDC on Base",
+      "sellbackLine": "Sell-back opens after 30 days; buy-back limits — details",
+      "sellbackLink": "details",
+      "cta": "Buy PPL",
+      "connecting": "Connecting…",
+      "buying": "Confirming…",
+      "connect": "Connect a wallet to buy",
+      "switch": "Switch to Base",
+      "wrongNetwork": "Switch your wallet to Base to buy.",
+      "invalid": "Enter an amount in dollars.",
+      "belowMin": "The minimum is {min}.",
+      "overMax": "The maximum is {max} per purchase.",
+      "overDay": "The daily limit is {max} per address.",
+      "needVerification": "Complete the verification step above to buy.",
+      "needWallet": "Connect a wallet to see your quote.",
+      "preview": "Preview: no transaction will be sent.",
+      "bridgeHint": "Swap to USDC on Base with LI.FI first, then complete the purchase.",
+      "error": "The purchase did not go through. Try again."
+    },
+    "success": {
+      "title": "Purchase complete",
+      "credited": "{ppl} PPL credited to {address}",
+      "tx": "View transaction",
+      "unlock": "Sell-back unlocks on {date}",
+      "again": "Buy more PPL"
+    },
+    "partial": {
+      "title": "USDC arrived — PPL not bought",
+      "body": "Your swap delivered {amount} USDC on Base, but the PPL purchase did not go through.",
+      "topUp": "Buy PPL with {amount} USDC",
+      "hint": "This retries the purchase on Base with the USDC you received."
+    }
   }
 }

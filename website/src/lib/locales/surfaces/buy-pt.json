@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "Como a curva funciona",
     "headlineClosed": "A venda de PPL abre em breve",
-    "statsTitleClosed": "Na curva — abertura em breve"
+    "headlineWhitelist": "Venda de PPL: fase de lista de permissões verificada",
+    "subWhitelist": "Primeiros 7 dias: apenas pessoas verificadas. Verifique-se com World ID ou Human Passport para participar.",
+    "statsTitleClosed": "Na curva — abertura em breve",
+    "statsTitleWhitelist": "Na curva — fase de lista de permissões",
+    "statsTitleOpen": "Na curva — venda aberta"
   },
   "stats": {
     "price": "Preço atual",
@@ -25,9 +29,12 @@
     "notOpenYet": "Ainda não aberta",
     "progressLabel": "Progresso até a graduação em {target}",
     "saleStatus": "Status da venda",
+    "whitelistStatus": "Lista de permissões: apenas verificados",
+    "openStatus": "Aberta",
     "startPriceOnOpen": "Preço inicial na abertura: {start}",
     "saleWindow": "Prazo da venda",
     "saleWindowValue": "Até esgotar ou {term}",
+    "saleWindowV2": "Whitelist de 7 dias a partir de {date}, depois venda aberta por até {term}",
     "saleWindowHint": "O que ocorrer primeiro. Sem prorrogação.",
     "endsByHint": "Data-limite. Antes, se esgotar."
   },
@@ -338,5 +345,83 @@
         "text": "As revisões com IA citadas acima foram feitas pela equipe do projeto. Não são uma auditoria de segurança, e ainda não houve auditoria externa. Um bug bounty reduz o risco, mas não o elimina: nenhuma revisão prova que um software não tem defeitos."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Fase de lista de permissões",
+      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "daysLeft": "Faltam {days} dias",
+      "openTitle": "Fase pública",
+      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "notOpenTitle": "A venda ainda não está aberta",
+      "notOpenBody": "As compras abrem quando o contrato entra na fase de lista de permissões.",
+      "expiredTitle": "Venda encerrada",
+      "graduatedTitle": "Venda graduada",
+      "closedBody": "As compras estão encerradas."
+    },
+    "verify": {
+      "title": "Nos primeiros 7 dias, apenas pessoas verificadas",
+      "body": "Verifique-se com World ID ou Human Passport para participar.",
+      "telegramNote": "Apenas o Telegram não basta.",
+      "ctaVerify": "Verificar agora",
+      "ctaSignIn": "Entre para verificar",
+      "confirmTitle": "Falta um passo na rede",
+      "confirmBody": "Confirme sua identidade verificada na Base para liberar a compra.",
+      "ctaConfirm": "Confirmar na rede",
+      "confirming": "Confirmando na rede…",
+      "confirmed": "Confirmado na rede. Você já pode comprar.",
+      "error": "Não foi possível confirmar na rede. Tente novamente.",
+      "notEligible": "Esta conta não é elegível para a lista de permissões.",
+      "connectWallet": "Conecte uma carteira para continuar.",
+      "alreadyVerified": "Já confirmado na rede."
+    },
+    "form": {
+      "title": "Comprar PPL",
+      "network": "Rede",
+      "token": "Token",
+      "amount": "Valor",
+      "networkBase": "Base",
+      "networkOther": "Outra rede",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Estimativa de PPL",
+      "minimum": "Mínimo a receber",
+      "price": "Preço atual do PPL",
+      "eta": "Chega em cerca de {eta}",
+      "fees": "Taxas: {fees}",
+      "feesToggle": "Detalhes das taxas",
+      "feesBody": "A taxa de rede na Base costuma ser de cerca de $0,01. A taxa de troca ou ponte da LI.FI aparece no widget antes da confirmação.",
+      "lifiLine": "Troca via LI.FI, compra em USDC na Base",
+      "sellbackLine": "A venda de volta abre após 30 dias; limites de recompra — detalhes",
+      "sellbackLink": "detalhes",
+      "cta": "Comprar PPL",
+      "connecting": "Conectando…",
+      "buying": "Confirmando…",
+      "connect": "Conecte uma carteira para comprar",
+      "switch": "Mudar para Base",
+      "wrongNetwork": "Mude sua carteira para Base para comprar.",
+      "invalid": "Informe um valor em dólares.",
+      "belowMin": "O mínimo é {min}.",
+      "overMax": "O máximo é {max} por compra.",
+      "overDay": "O limite diário é {max} por endereço.",
+      "needVerification": "Conclua a verificação acima para comprar.",
+      "needWallet": "Conecte uma carteira para ver sua cotação.",
+      "preview": "Prévia: nenhuma transação será enviada.",
+      "bridgeHint": "Primeiro troque para USDC na Base com a LI.FI e depois conclua a compra.",
+      "error": "A compra não foi concluída. Tente novamente."
+    },
+    "success": {
+      "title": "Compra concluída",
+      "credited": "{ppl} PPL creditados em {address}",
+      "tx": "Ver transação",
+      "unlock": "A venda de volta abre em {date}",
+      "again": "Comprar mais PPL"
+    },
+    "partial": {
+      "title": "Os USDC chegaram — o PPL não foi comprado",
+      "body": "A troca entregou {amount} USDC na Base, mas a compra de PPL não foi concluída.",
+      "topUp": "Comprar PPL com {amount} USDC",
+      "hint": "Isso repete a compra na Base com os USDC recebidos."
+    }
   }
 }

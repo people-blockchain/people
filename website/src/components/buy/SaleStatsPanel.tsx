@@ -3,52 +3,73 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { buyCopy } from "@/lib/buy-content";
 import type { SaleStats } from "@/lib/sale/adapter";
-import { CURVE, SALE } from "@/lib/sale/config";
-import { fillCopy, formatMonths, intlLocale, pricePerPpl } from "@/lib/sale/format";
+import { SALE } from "@/lib/sale/config";
+import { fillCopy, formatMonths, intlLocale } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
+import type { V2Phase } from "@/lib/sale/v2/constants";
+import { statsCopyKeys } from "@/lib/sale/v2/logic";
+import { resolveStatsStatus, saleWindowCaptionKey, v2SaleWindowValue } from "@/lib/sale/v2/stats-copy";
 
 
 type Stat = { key: string; label: string; value: string; hint: string; accent?: boolean };
+
+type V2Stats = {
+  enabled: boolean;
+  phase: V2Phase | null;
+  spotPriceUsd: number | null;
+  openDate?: string | null;
+};
 
 /**
  * Live figures from the chain adapter. Every value is either a real reading or
  * an em dash — nothing here is simulated while the sale contract is undeployed.
  */
-export function SaleStatsPanel({ stats, phase = "closed" }: { stats: SaleStats; phase?: SalePhase }) {
+export function SaleStatsPanel({
+  stats,
+  phase = "closed",
+  v2,
+}: {
+  stats: SaleStats;
+  phase?: SalePhase;
+  v2?: V2Stats;
+}) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const s = t.stats;
 
   const none = s.none;
+  const v2Enabled = v2?.enabled === true;
+  const keys = statsCopyKeys({
+    v2Enabled,
+    phase: v2?.phase ?? null,
+    legacyOpen: phase === "open",
+  });
+  const spotPriceUsd = v2Enabled ? (v2?.spotPriceUsd ?? null) : stats.spotPriceUsd;
 
-  const open = phase === "open";
   const endsText = stats.endsAt
     ? new Intl.DateTimeFormat(intlLocale(lang), { dateStyle: "medium", timeZone: "UTC" }).format(new Date(stats.endsAt))
     : none;
 
+  const status = resolveStatsStatus({ copy: t, lang, keys, v2Enabled, spotPriceUsd });
+  const windowCaptionKey = saleWindowCaptionKey({ v2Enabled });
+
   const rows: Stat[] = [
-    open
-      ? {
-          key: "price",
-          label: s.price,
-          value: stats.spotPriceUsd === null ? s.notOpenYet : pricePerPpl(stats.spotPriceUsd, lang),
-          hint: fillCopy(s.priceStartHint, { start: pricePerPpl(CURVE.startPriceUsd, lang) }),
-          accent: true,
-        }
-      : {
-          key: "price",
-          label: s.saleStatus,
-          value: s.notOpenYet,
-          hint: fillCopy(s.startPriceOnOpen, { start: pricePerPpl(CURVE.startPriceUsd, lang) }),
-          accent: true,
-        },
-    open
+    {
+      key: "price",
+      label: status.label,
+      value: status.value,
+      hint: status.hint,
+      accent: true,
+    },
+    keys.window === "open" && !v2Enabled
       ? { key: "window", label: s.saleWindow, value: endsText, hint: s.endsByHint }
       : {
           key: "window",
           label: s.saleWindow,
-          value: fillCopy(s.saleWindowValue, { term: formatMonths(SALE.saleTermMonths, lang) }),
-          hint: s.saleWindowHint,
+          value: v2Enabled
+            ? v2SaleWindowValue({ copy: t, lang, openDate: v2?.openDate })
+            : fillCopy(s.saleWindowValue, { term: formatMonths(SALE.saleTermMonths, lang) }),
+          hint: windowCaptionKey ? s[windowCaptionKey] : "",
         },
   ];
 
@@ -56,7 +77,7 @@ export function SaleStatsPanel({ stats, phase = "closed" }: { stats: SaleStats; 
     <div data-testid="sale-stats">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-ink-3">
-          {open ? t.hero.statsTitle : t.hero.statsTitleClosed}
+          {t.hero[keys.eyebrow]}
         </h2>
       </div>
 

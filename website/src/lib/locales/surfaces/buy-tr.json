@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "Eğri nasıl çalışır",
     "headlineClosed": "PPL satışı yakında açılıyor",
-    "statsTitleClosed": "Eğride — açılış yakında"
+    "headlineWhitelist": "PPL satışı: doğrulanmış beyaz liste aşaması",
+    "subWhitelist": "İlk 7 gün: yalnızca doğrulanmış kişiler. Katılmak için World ID veya Human Passport ile doğrulanın.",
+    "statsTitleClosed": "Eğride — açılış yakında",
+    "statsTitleWhitelist": "Eğride — beyaz liste aşaması",
+    "statsTitleOpen": "Eğride — açık satış"
   },
   "stats": {
     "price": "Güncel fiyat",
@@ -25,9 +29,12 @@
     "notOpenYet": "Henüz açılmadı",
     "progressLabel": "{target} graduation hedefine ilerleme",
     "saleStatus": "Satış durumu",
+    "whitelistStatus": "Beyaz liste: yalnızca doğrulanmış kişiler",
+    "openStatus": "Açık",
     "startPriceOnOpen": "Açılıştaki başlangıç fiyatı: {start}",
     "saleWindow": "Satış süresi",
     "saleWindowValue": "Tükenene kadar veya {term}",
+    "saleWindowV2": "{date} tarihinden itibaren 7 günlük whitelist, ardından {term} kadar açık satış",
     "saleWindowHint": "Hangisi önce gerçekleşirse. Uzatma yok.",
     "endsByHint": "En geç bitiş tarihi. Tükenirse daha erken."
   },
@@ -338,5 +345,83 @@
         "text": "Yukarıda adı geçen yapay zekâ destekli incelemeleri proje ekibi yürüttü. Bunlar bir güvenlik denetimi değildir ve henüz harici bir denetim yapılmadı. Hata ödülü riski azaltır ama ortadan kaldırmaz: hiçbir inceleme bir yazılımın hatasız olduğunu kanıtlayamaz."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Beyaz liste aşaması",
+      "whitelistBody": "İlk 7 gün: yalnızca doğrulanmış kişiler. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "daysLeft": "{days} gün kaldı",
+      "openTitle": "Herkese açık aşama",
+      "openBody": "Herkese açık. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "notOpenTitle": "Satış henüz açılmadı",
+      "notOpenBody": "Sözleşme beyaz liste aşamasına geçtiğinde alımlar açılır.",
+      "expiredTitle": "Satış sona erdi",
+      "graduatedTitle": "Satış mezun oldu",
+      "closedBody": "Alımlar kapalı."
+    },
+    "verify": {
+      "title": "İlk 7 gün yalnızca doğrulanmış kişiler",
+      "body": "Katılmak için World ID veya Human Passport ile doğrulan.",
+      "telegramNote": "Yalnızca Telegram yeterli değil.",
+      "ctaVerify": "Şimdi doğrulan",
+      "ctaSignIn": "Doğrulanmak için giriş yap",
+      "confirmTitle": "Zincir üstünde bir adım kaldı",
+      "confirmBody": "Alımı açmak için doğrulanmış kimliğini Base üzerinde onayla.",
+      "ctaConfirm": "Zincir üstünde onayla",
+      "confirming": "Zincir üstünde onaylanıyor…",
+      "confirmed": "Zincir üstünde onaylandı. Satın alabilirsin.",
+      "error": "Zincir üstünde onaylanamadı. Tekrar dene.",
+      "notEligible": "Bu hesap beyaz liste için uygun değil.",
+      "connectWallet": "Devam etmek için bir cüzdan bağla.",
+      "alreadyVerified": "Zincir üstünde zaten onaylandı."
+    },
+    "form": {
+      "title": "PPL satın al",
+      "network": "Ağ",
+      "token": "Token",
+      "amount": "Tutar",
+      "networkBase": "Base",
+      "networkOther": "Diğer ağ",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "PPL tahmini",
+      "minimum": "Alınacak minimum",
+      "price": "Güncel PPL fiyatı",
+      "eta": "Yaklaşık {eta} içinde ulaşır",
+      "fees": "Ücretler: {fees}",
+      "feesToggle": "Ücret ayrıntıları",
+      "feesBody": "Base ağ ücreti genellikle yaklaşık $0,01’dir. LI.FI takas veya köprü ücreti onaydan önce widget’ta gösterilir.",
+      "lifiLine": "LI.FI ile takas, Base üzerinde USDC ile satın alım",
+      "sellbackLine": "Geri satış 30 gün sonra açılır; geri alım limitleri — ayrıntılar",
+      "sellbackLink": "ayrıntılar",
+      "cta": "PPL satın al",
+      "connecting": "Bağlanıyor…",
+      "buying": "Onaylanıyor…",
+      "connect": "Satın almak için cüzdan bağla",
+      "switch": "Base’e geç",
+      "wrongNetwork": "Satın almak için cüzdanını Base’e geçir.",
+      "invalid": "Dolar cinsinden bir tutar gir.",
+      "belowMin": "Minimum {min}.",
+      "overMax": "İşlem başına maksimum {max}.",
+      "overDay": "Günlük limit adres başına {max}.",
+      "needVerification": "Satın almak için yukarıdaki doğrulamayı tamamla.",
+      "needWallet": "Teklifini görmek için cüzdan bağla.",
+      "preview": "Önizleme: hiçbir işlem gönderilmeyecek.",
+      "bridgeHint": "Önce LI.FI ile Base üzerinde USDC’ye takas yap, sonra alımı tamamla.",
+      "error": "Alım gerçekleşmedi. Tekrar dene."
+    },
+    "success": {
+      "title": "Alım tamamlandı",
+      "credited": "{ppl} PPL {address} adresine geçti",
+      "tx": "İşlemi görüntüle",
+      "unlock": "Geri satış {date} tarihinde açılır",
+      "again": "Daha fazla PPL al"
+    },
+    "partial": {
+      "title": "USDC geldi — PPL alınmadı",
+      "body": "Takas Base üzerinde {amount} USDC teslim etti, ancak PPL alımı gerçekleşmedi.",
+      "topUp": "{amount} USDC ile PPL al",
+      "hint": "Alınan USDC ile Base üzerindeki alım yeniden denenir."
+    }
   }
 }

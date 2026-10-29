@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "曲线如何运作",
     "headlineClosed": "PPL 销售即将开放",
-    "statsTitleClosed": "曲线数据 — 即将开放"
+    "headlineWhitelist": "PPL 销售：已验证白名单阶段",
+    "subWhitelist": "前 7 天仅限已验证用户。使用 World ID 或 Human Passport 完成验证即可参与。",
+    "statsTitleClosed": "曲线数据 — 即将开放",
+    "statsTitleWhitelist": "曲线数据 — 白名单阶段",
+    "statsTitleOpen": "曲线数据 — 公开销售"
   },
   "stats": {
     "price": "当前价格",
@@ -25,9 +29,12 @@
     "notOpenYet": "尚未开放",
     "progressLabel": "距 {target} 毕业的进度",
     "saleStatus": "销售状态",
+    "whitelistStatus": "白名单：仅限已验证用户",
+    "openStatus": "已开放",
     "startPriceOnOpen": "开放时的起始价格：{start}",
     "saleWindow": "销售期限",
     "saleWindowValue": "售罄或 {term}",
+    "saleWindowV2": "自 {date} 起 7 天白名单，随后开放销售，最长 {term}",
     "saleWindowHint": "以先到者为准。不会延期。",
     "endsByHint": "最晚结束日期。如提前售罄则更早结束。"
   },
@@ -338,5 +345,83 @@
         "text": "上述 AI 辅助审查由项目团队运行。它们不是安全审计，目前也尚未进行外部审计。漏洞赏金可以降低风险，但不能消除风险：任何审查都无法证明软件没有缺陷。"
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "白名单阶段",
+      "whitelistBody": "前 7 天仅限已验证用户。单笔最低 $10 / 最高 $500 / 每天 $2,000。",
+      "daysLeft": "剩余 {days} 天",
+      "openTitle": "公开阶段",
+      "openBody": "对所有人开放。单笔最低 $10 / 最高 $500 / 每天 $2,000。",
+      "notOpenTitle": "销售尚未开放",
+      "notOpenBody": "合约进入白名单阶段后即可购买。",
+      "expiredTitle": "销售已结束",
+      "graduatedTitle": "销售已毕业",
+      "closedBody": "购买已关闭。"
+    },
+    "verify": {
+      "title": "前 7 天仅限已验证用户",
+      "body": "使用 World ID 或 Human Passport 验证后即可参与。",
+      "telegramNote": "仅有 Telegram 不够。",
+      "ctaVerify": "立即验证",
+      "ctaSignIn": "登录后验证",
+      "confirmTitle": "还差一个链上步骤",
+      "confirmBody": "在 Base 上确认已验证身份，即可解锁购买。",
+      "ctaConfirm": "在链上确认",
+      "confirming": "正在链上确认…",
+      "confirmed": "已在链上确认。可以购买了。",
+      "error": "无法在链上确认。请重试。",
+      "notEligible": "此账户不符合白名单条件。",
+      "connectWallet": "连接钱包以继续。",
+      "alreadyVerified": "已在链上确认。"
+    },
+    "form": {
+      "title": "购买 PPL",
+      "network": "网络",
+      "token": "代币",
+      "amount": "金额",
+      "networkBase": "Base",
+      "networkOther": "其他网络",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "PPL 预估",
+      "minimum": "最低获得",
+      "price": "当前 PPL 价格",
+      "eta": "约 {eta} 到达",
+      "fees": "费用：{fees}",
+      "feesToggle": "费用详情",
+      "feesBody": "Base 网络费用通常约为 $0.01。LI.FI 兑换或跨链费用会在确认前的组件中显示。",
+      "lifiLine": "通过 LI.FI 兑换，在 Base 上用 USDC 购买",
+      "sellbackLine": "30 天后可回售；回购限额 — 详情",
+      "sellbackLink": "详情",
+      "cta": "购买 PPL",
+      "connecting": "连接中…",
+      "buying": "确认中…",
+      "connect": "连接钱包以购买",
+      "switch": "切换到 Base",
+      "wrongNetwork": "请将钱包切换到 Base 后购买。",
+      "invalid": "请输入美元金额。",
+      "belowMin": "最低为 {min}。",
+      "overMax": "单笔最高为 {max}。",
+      "overDay": "每个地址每日限额为 {max}。",
+      "needVerification": "请完成上方的验证后购买。",
+      "needWallet": "连接钱包以查看报价。",
+      "preview": "预览：不会发送任何交易。",
+      "bridgeHint": "先用 LI.FI 在 Base 上兑换为 USDC，然后完成购买。",
+      "error": "购买未成功。请重试。"
+    },
+    "success": {
+      "title": "购买完成",
+      "credited": "{ppl} PPL 已记入 {address}",
+      "tx": "查看交易",
+      "unlock": "回售将于 {date} 开放",
+      "again": "继续购买 PPL"
+    },
+    "partial": {
+      "title": "USDC 已到账 — 未买到 PPL",
+      "body": "兑换已将 {amount} USDC 送到 Base，但 PPL 购买未成功。",
+      "topUp": "用 {amount} USDC 购买 PPL",
+      "hint": "这将用已收到的 USDC 在 Base 上重试购买。"
+    }
   }
 }

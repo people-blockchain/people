@@ -1,6 +1,21 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
+
 import { useLanguage } from "@/context/LanguageContext";
+import {
+  heroPhase,
+  isV2PreviewEnabled,
+  parseV2PreviewState,
+  readV2Env,
+  resolveV2Chain,
+  shouldRenderV2Buy,
+  spotPriceWadToUsd,
+  statsCopyKeys,
+} from "@/lib/sale/v2/logic";
+import { resolveStatsStatus } from "@/lib/sale/v2/stats-copy";
+import { useV2Phase } from "@/lib/sale/v2/useV2Sale";
 import { Reveal } from "@/components/motion/Reveal";
 import { WARM_SECTION, WarmSection } from "@/components/warm/warm-ui";
 import { buyCopy } from "@/lib/buy-content";
@@ -8,6 +23,7 @@ import { CURVE } from "@/lib/sale/config";
 import { fillCopy, pricePerPpl } from "@/lib/sale/format";
 
 import { BuyForm } from "./BuyForm";
+import { BuyV2Panel } from "./v2/BuyV2Panel";
 import { BuyWhyPriceRises } from "./BuyWhyPriceRises";
 import { CurveChart } from "./CurveChart";
 import { SaleFaq } from "./SaleFaq";
@@ -32,6 +48,34 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
   const open = phase === "open";
 
   const isRtl = lang === "ar";
+  const searchParams = useSearchParams();
+  const env = useMemo(() => readV2Env(), []);
+  const v2Buy = shouldRenderV2Buy(env);
+  const previewState = isV2PreviewEnabled(env)
+    ? parseV2PreviewState(searchParams.get("v2state"))
+    : null;
+  const v2Chain = useMemo(() => resolveV2Chain(env), [env]);
+  const v2Phase = useV2Phase({ chain: v2Chain, previewState, enabled: v2Buy });
+  const headingPhase = heroPhase({ v2Enabled: v2Buy, phase: v2Phase.phase, legacyOpen: open });
+  const statsKeys = statsCopyKeys({ v2Enabled: v2Buy, phase: v2Phase.phase, legacyOpen: open });
+  const v2SpotPriceUsd =
+    v2Phase.spotPriceWad === null ? null : spotPriceWadToUsd(v2Phase.spotPriceWad);
+  const statsSpotPriceUsd = v2Buy ? v2SpotPriceUsd : stats.spotPriceUsd;
+  const statsLive = headingPhase !== "closed";
+  const bottomStats = resolveStatsStatus({
+    copy: t,
+    lang,
+    keys: statsKeys,
+    v2Enabled: v2Buy,
+    spotPriceUsd: statsSpotPriceUsd,
+  });
+  const heroTitle =
+    headingPhase === "whitelist"
+      ? t.hero.headlineWhitelist
+      : headingPhase === "open"
+        ? t.hero.headline
+        : t.hero.headlineClosed;
+  const heroSub = headingPhase === "whitelist" ? t.hero.subWhitelist : t.hero.sub;
 
   return (
     <div
@@ -53,10 +97,10 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
               id="buy-hero-title"
               className="mt-2 text-[clamp(1.75rem,6vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink"
             >
-              {open ? t.hero.headline : t.hero.headlineClosed}
+              {heroTitle}
             </h1>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              {t.hero.sub}
+              {heroSub}
               <FootnoteRef marker="*" />
             </p>
           </div>
@@ -65,11 +109,19 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
             id={HERO_FORM_ID}
             className="order-2 scroll-mt-[calc(3.5rem+0.75rem)] lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:scroll-mt-24"
           >
-            <BuyForm soldPpl={stats.soldPpl} phase={phase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
+            {v2Buy ? (
+              <BuyV2Panel testId="buy-form-hero" />
+            ) : (
+              <BuyForm soldPpl={stats.soldPpl} phase={phase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
+            )}
           </div>
 
           <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <SaleStatsPanel stats={stats} phase={phase} />
+            <SaleStatsPanel
+              stats={stats}
+              phase={phase}
+              v2={{ enabled: v2Buy, phase: v2Phase.phase, spotPriceUsd: v2SpotPriceUsd, openDate: env.NEXT_PUBLIC_PPL_V2_OPEN_DATE }}
+            />
           </div>
 
           <div className="order-4 lg:col-start-2 lg:row-start-3">
@@ -162,21 +214,13 @@ export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
             {t.bottomCta.eyebrow}
           </p>
           <h2 id="buy-bottom-title" className="mt-2 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-            {open ? t.bottomCta.title : t.bottomCta.titleClosed}
+            {statsLive ? t.bottomCta.title : t.bottomCta.titleClosed}
           </h2>
-          <p className="mt-3 text-sm text-ink-2 sm:text-base">{open ? t.bottomCta.lead : t.bottomCta.leadClosed}</p>
+          <p className="mt-3 text-sm text-ink-2 sm:text-base">{statsLive ? t.bottomCta.lead : t.bottomCta.leadClosed}</p>
           <div className="mt-6 inline-flex flex-col rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
-            <span className="text-xs font-medium text-ink-3">{open ? t.stats.price : t.stats.saleStatus}</span>
-            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">
-              {open && stats.spotPriceUsd !== null
-                ? pricePerPpl(stats.spotPriceUsd, lang)
-                : t.stats.notOpenYet}
-            </span>
-            <span className="mt-1 text-[11px] text-ink-3">
-              {fillCopy(open ? t.stats.priceStartHint : t.stats.startPriceOnOpen, {
-                start: pricePerPpl(CURVE.startPriceUsd, lang),
-              })}
-            </span>
+            <span className="text-xs font-medium text-ink-3">{bottomStats.label}</span>
+            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">{bottomStats.value}</span>
+            <span className="mt-1 text-[11px] text-ink-3">{bottomStats.hint}</span>
           </div>
           <a
             href={`#${HERO_FORM_ID}`}
