@@ -3,7 +3,7 @@
   "title": "Verstehen.\nAusprobieren.\nTeilnehmen.",
   "description": "Von Ihrer ersten Wallet bis zu Ihrem eigenen Knoten — eine praktische Anleitung zu PEOPLE Blockchain.",
   "notice": "Testnetz",
-  "noticeText": "Mainnet ist nicht gestartet. Verfügbare Vorgänge hängen von der Site-Verbindung und der Netzversion ab. Testmünzen sind kein Einkommensversprechen.",
+  "noticeText": "Das Mainnet des PEOPLE-Netzwerks und der PPL-Verkauf starten gemeinsam am 1. Dezember 2026; bis dahin ist das Netzwerk ein Testnetz. PPL werden mit USDC oder USDT auf Base bezahlt und sofort im PEOPLE-Mainnet ausgegeben und gutgeschrieben. Verfügbare Vorgänge hängen von der Site-Verbindung und der Netzversion ab. Testmünzen sind kein Einkommensversprechen.",
   "contents": "In diesem Leitfaden",
   "search": "Dokumentation durchsuchen",
   "empty": "Keine Treffer. Versuchen Sie „Wallet“, „Belohnungen“ oder „Node“.",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Was Sie nutzen können",
-      "lead": "Was im Testnetz schon funktioniert und was danach kommt. Ein Mainnet-Datum gibt es noch nicht.",
+      "lead": "Was im Testnetz schon funktioniert und was danach kommt. Mainnet und PPL-Verkauf starten am 1. Dezember 2026.",
       "items": [
         {
           "title": "Jetzt verfügbar · Testnetz",
