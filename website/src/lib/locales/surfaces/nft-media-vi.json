@@ -67,5 +67,17 @@
   "errFactoryMissing": "Nhà máy NFT chưa được triển khai trên mạng này.",
   "errWrongNetwork": "Ví của bạn đang ở mạng khác. Hãy chuyển sang mạng thử nghiệm của PEOPLE Blockchain rồi thử lại.",
   "errTimeout": "Giao dịch mất quá nhiều thời gian. Giao dịch không được gửi lại; hãy dùng «Tiếp tục phát hành» để kiểm tra.",
-  "errUnknown": "Đã xảy ra lỗi. Không có phát hành trùng. Hãy thử lại."
+  "errUnknown": "Đã xảy ra lỗi. Không có phát hành trùng. Hãy thử lại.",
+  "errStableFeeUnavailable": "Thanh toán bằng stablecoin tạm thời không khả dụng. Vui lòng thanh toán bằng PPL.",
+  "errStableDailyCap": "Đã đạt giới hạn thanh toán stablecoin hàng ngày cho ví này. Hãy thanh toán bằng PPL hoặc thử lại vào ngày mai.",
+  "errInsufficientPpl": "Không đủ PPL: bạn cần {needed} PPL (phí + gas), số dư của bạn là {balance} PPL.",
+  "errInsufficientPplGeneric": "Không đủ PPL để trả phí và gas. Hãy nạp thêm và thử lại.",
+  "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại.",
+  "createSuccessTitle": "Đã tạo token",
+  "createSuccessLead": "Token hiện đã hoạt động trên PEOPLE Blockchain.",
+  "createViewToken": "Mở token trong trình duyệt chuỗi",
+  "createViewAddress": "Mở địa chỉ trong trình duyệt chuỗi",
+  "createTimeoutTitle": "Đã gửi giao dịch",
+  "createTimeoutBody": "Việc xác nhận mất nhiều thời gian hơn bình thường. Hãy kiểm tra trình duyệt chuỗi và không gửi lại. Chỉ dùng «Tạo thêm» khi bạn chắc chắn chưa có gì được tạo.",
+  "createTimeoutExplorer": "Kiểm tra địa chỉ của bạn trong trình duyệt chuỗi"
 }
