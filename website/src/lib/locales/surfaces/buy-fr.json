@@ -1,17 +1,184 @@
 {
   "meta": {
-    "title": "Acheter PPL",
-    "description": "Le PPL est vendu sur une courbe de prix publique sur Base. Le prix part de 0,005 $ et monte à chaque achat. La vente dure jusqu’à épuisement ou 24 mois, selon la première échéance. Les achats sont définitifs."
+    "title": "Acheter des PPL",
+    "description": "Le PPL est le jeton du réseau PEOPLE. Son prix suit une formule publiée à l’avance et monte à mesure que les PPL se vendent. Les 7 premiers jours sont réservés aux personnes vérifiées. Les achats sont définitifs."
   },
   "hero": {
-    "eyebrow": "Vente PPL",
-    "headline": "Achetez des PPL sur la courbe de prix publique",
-    "sub": "Le prix suit une courbe publique et monte à mesure que des PPL sont vendus. Acheter plus tôt signifie un prix de départ plus bas, pas un gain garanti.",
-    "statsTitle": "Sur la courbe",
-    "statsNote": "",
-    "ctaScroll": "Comment fonctionne la courbe",
-    "headlineClosed": "La vente de PPL ouvre bientôt",
-    "statsTitleClosed": "Sur la courbe — ouverture prochaine"
+    "eyebrow": "Vente de PPL",
+    "headline": "La blockchain pour tous. Enfin.",
+    "lead": "Avant, il fallait être un as de la technique. Aujourd’hui, il suffit d’être une personne.",
+    "subUpcoming": "La vente de PPL ouvre le {date}.",
+    "subWhitelist": "La vente de PPL est ouverte. Les {days} premiers jours sont réservés aux personnes vérifiées.",
+    "subOpen": "La vente de PPL est ouverte à tous.",
+    "subEnded": "La vente de PPL est terminée.",
+    "ctaVerify": "Faites-vous vérifier pour être des {days} premiers jours",
+    "ctaBuy": "Acheter des PPL",
+    "ctaEnded": "Voir les règles de revente",
+    "countdownLabel": "Avant l’ouverture de la vente",
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "countdownDone": "La date d’ouverture est arrivée. Les achats commencent dès que le contrat de vente est ouvert.",
+    "startPrice": "Prix de départ : {price} par PPL",
+    "livePrice": "Prix actuel : {price} par PPL"
+  },
+  "before": {
+    "eyebrow": "Ce qui change",
+    "title": "Avant, et avec PEOPLE",
+    "beforeLabel": "Avant",
+    "afterLabel": "Avec PEOPLE",
+    "rows": [
+      {
+        "before": "Phrases de récupération, frais de gas et une dizaine d’étapes avant la première action.",
+        "after": "Connexion avec Google ou par e-mail, comme dans n’importe quelle appli."
+      },
+      {
+        "before": "Des bots et des faux comptes à côté des vraies personnes.",
+        "after": "Uniquement des personnes vérifiées : une personne, une adresse."
+      },
+      {
+        "before": "La plupart des jetons vont aux initiés avant tout le monde.",
+        "after": "{communityPct} de tous les PPL reviennent à la communauté. L’équipe reçoit {teamPct}, débloqués sur {teamVesting}."
+      }
+    ]
+  },
+  "ppl": {
+    "eyebrow": "Ce qu’est le PPL",
+    "title": "Le PPL en trois lignes",
+    "lines": [
+      "Le PPL est le jeton du réseau PEOPLE.",
+      "Son prix suit une formule publiée à l’avance : il monte quand on achète des PPL et baisse quand on les revend.",
+      "PEOPLE ne fixe ni n’augmente le prix. Personne ne le bouge à la main."
+    ],
+    "chartAria": "Prix du PPL selon la formule publiée : {start} au départ, {end} à la fermeture de la courbe",
+    "youAreHere": "Vous êtes ici",
+    "chartStart": "Départ {price}",
+    "chartEnd": "{price} à la fermeture de la courbe",
+    "axisSold": "PPL vendus",
+    "detailsToggle": "Détails : la formule",
+    "details": "C’est une courbe de prix (bonding curve) : prix = {start} × e^(k·x), où x est le nombre de millions de PPL vendus et k = ln(50)/100. Chaque achat fait monter le prix le long de la courbe, chaque revente le fait descendre. La courbe compte {supply} PPL. Elle se ferme quand {graduation} ont été levés (vers {end} par PPL) ou {term} après l’ouverture, selon ce qui arrive en premier."
+  },
+  "how": {
+    "eyebrow": "Comment acheter",
+    "title": "Trois étapes",
+    "steps": [
+      {
+        "title": "Faites-vous vérifier",
+        "body": "Prouvez une fois que vous êtes une vraie personne : via Telegram (numéro de téléphone) ou Human Passport."
+      },
+      {
+        "title": "Choisissez le montant et le réseau",
+        "body": "De {min} à {max} par achat. Payez en USDC ou en USDT ; les paiements depuis d’autres réseaux sont convertis automatiquement. Le paiement se fait sur Base."
+      },
+      {
+        "title": "Les PPL directement dans votre portefeuille PEOPLE",
+        "body": "Vous payez en USDC ou en USDT, et les PPL sont crédités instantanément à votre adresse sur le réseau PEOPLE."
+      }
+    ],
+    "verifyLink": "Comment se faire vérifier"
+  },
+  "feed": {
+    "title": "Derniers achats et ventes",
+    "empty": "Pas encore d’opérations.",
+    "buy": "Achat",
+    "sell": "Vente",
+    "link": "Voir",
+    "example": "Exemple",
+    "exampleNote": "Opérations d’exemple pour voir à quoi ressemble la liste. Ce ne sont pas de vraies données."
+  },
+  "rules": {
+    "eyebrow": "Les règles",
+    "title": "Les mêmes règles pour tous",
+    "lead": "Elles sont fixées dans le contrat de vente. Personne ne peut changer les limites ni la formule.",
+    "items": [
+      {
+        "title": "{whitelistDays} premiers jours : personnes vérifiées uniquement",
+        "body": "Une personne, une adresse. De {min} à {max} par achat, jusqu’à {perDay} par adresse et par jour (UTC), et une pause de {cooldown} secondes entre deux achats."
+      },
+      {
+        "title": "{reservePct} de chaque achat reste en réserve",
+        "body": "Cette part reste dans le contrat de vente pour payer les reventes. Personne dans l’équipe ne peut la retirer. Les {treasuryPct} restants financent le projet."
+      },
+      {
+        "title": "Revente après {holdDays} jours",
+        "body": "Chaque achat peut être revendu {holdDays} jours après avoir été fait, au prix de la courbe à ce moment-là. Par jour : jusqu’à {sellDailyPct} de la réserve pour l’ensemble des vendeurs et jusqu’à {sellPerAddress} par adresse. Frais de {feeLow} ; {feeHigh} sur la part qui dépasse {feeThreshold} de la réserve ce jour-là. Personnes vérifiées uniquement."
+      },
+      {
+        "title": "Vérifiable par tous",
+        "body": "Le contrat de vente est public : chaque achat peut y être vérifié. L’argent du projet est dans un portefeuille où chaque paiement exige {signersM} signatures sur {signersN}."
+      }
+    ],
+    "todayTitle": "Revente possible aujourd’hui",
+    "todayLive": "Aujourd’hui, on peut encore revendre jusqu’à {amount}, tous vendeurs confondus.",
+    "todayUpcoming": "Rien pour l’instant : les premiers achats pourront être revendus {holdDays} jours après l’ouverture de la vente.",
+    "todayUnknown": "Ce chiffre est lu en direct dans le contrat et n’est pas disponible pour le moment.",
+    "todayClosed": "La revente est fermée : la courbe s’est fermée.",
+    "contractTitle": "Contrat de vente sur Base",
+    "contractPending": "L’adresse sera publiée ici avant l’ouverture de la vente. N’achetez que via cette adresse.",
+    "explorerLink": "Ouvrir sur Basescan",
+    "copy": "Copier",
+    "copied": "Copié",
+    "auditLine": "Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (examen mené par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé.",
+    "reviewReports": "Rapports d’examen : {links}",
+    "auditBounty": "Vous avez trouvé une vulnérabilité ? Signalez-la avec le bouton de bug, sur n’importe quelle page.",
+    "detailsToggle": "Détails",
+    "details": [
+      "Réserve : les USDC conservés dans le contrat de vente. Les reventes sont payées avec, et les frais de revente y restent. Plus la réserve est petite, plus la limite quotidienne de revente est basse. La revente ferme définitivement quand la courbe se ferme.",
+      "La réserve ne quitte le contrat que sous forme de liquidité PPL, à la fermeture de la courbe, et seulement après un préavis public de {releaseDays} jours. La revente continue de fonctionner pendant le préavis.",
+      "Trésorerie : un portefeuille multisig ({signersM} signatures sur {signersN}) qui reçoit les {treasuryPct} restants de chaque achat.",
+      "Le multisig peut mettre en pause les achats et la revente. Il ne peut ni déplacer la réserve, ni changer les limites ou la formule, ni prolonger la vente.",
+      "La vente dure jusqu’à ce que {graduation} soient levés ou {term} après l’ouverture, selon ce qui arrive en premier. Les PPL invendus vont au Community Pool. Les achats sont définitifs.",
+      "Équipe : {teamPct} de tous les PPL. Rien pendant {cliff}, puis chaque mois pendant {linear}, à compter du lancement complet du réseau."
+    ]
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Réponses courtes",
+    "items": [
+      {
+        "q": "Pourquoi faut-il se faire vérifier ?",
+        "a": "Pour que chaque acheteur soit une vraie personne. Une personne a une adresse, et les limites s’appliquent aux personnes, pas aux bots. Les {whitelistDays} premiers jours sont réservés aux personnes vérifiées. Vous pouvez vous vérifier via Telegram ou Human Passport. Aucune donnée personnelle n’est inscrite sur la blockchain."
+      },
+      {
+        "q": "Quand puis-je envoyer des PPL à d’autres personnes ?",
+        "a": "Les PPL sont crédités sur le réseau PEOPLE juste après votre achat. Au début, le réseau ne reçoit que des PPL : les transferts entre participants ouvriront plus tard, lorsqu’il y aura environ 1 000 participants vérifiés. D’ici là, vous pouvez revendre les PPL à la réserve selon les règles ci-dessus."
+      },
+      {
+        "q": "Depuis quels réseaux puis-je payer ?",
+        "a": "Sur Base : en USDC, ou en USDT, converti automatiquement en USDC moyennant de petits frais. Depuis d’autres réseaux, le paiement est converti automatiquement : réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana. TON n’est pas pris en charge. L’achat lui-même se fait toujours en USDC sur Base."
+      },
+      {
+        "q": "Combien peut-on revendre aujourd’hui ?",
+        "a": "Chaque achat peut être revendu {holdDays} jours après avoir été fait. Chaque jour, l’ensemble des vendeurs peut revendre jusqu’à {sellDailyPct} de la réserve, et chaque adresse jusqu’à {sellPerAddress}. Petite réserve, petite limite quotidienne. Le chiffre du jour figure dans les règles ci-dessus."
+      },
+      {
+        "q": "Puis-je être remboursé ?",
+        "a": "Non. Tous les achats sont définitifs. Le seul retour possible est la revente à la réserve, selon les règles ci-dessus."
+      }
+    ],
+    "riskTitle": "Avertissement sur les risques",
+    "riskBody": "Le PPL peut perdre de la valeur. N’achetez que ce que vous pouvez vous permettre de risquer. Respectez les lois de votre pays."
+  },
+  "finalCta": {
+    "eyebrow": "Prêt ?",
+    "bounty": "ou gagnez des PPL en accomplissant des missions"
+  },
+  "footnote": {
+    "title": "Notes",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "Le PPL est le jeton utilitaire du réseau PEOPLE. Pendant la vente, son prix suit la formule publiée ; ensuite, c’est le marché qui le fixe, et il peut baisser comme monter. Le PPL n’est ni un titre financier, ni une part de société, ni un dépôt, ni un produit d’investissement. Aucun profit, rendement ou retour n’est promis ni garanti. Les chiffres affichés avant un achat sont des estimations ; les montants exacts sont confirmés on-chain avant votre signature. Rien sur cette page ne constitue un conseil en investissement, juridique ou fiscal."
+      },
+      {
+        "marker": "**",
+        "text": "La participation peut être restreinte ou indisponible là où vous vivez ; vérifier les règles qui s’appliquent à vous relève de votre responsabilité. N’utilisez que de l’argent que vous pouvez vous permettre de perdre."
+      },
+      {
+        "marker": "***",
+        "text": "Les examens assistés par IA cités plus haut ont été menés par l’équipe du projet. Ce ne sont pas des audits de sécurité, et aucun audit externe n’a encore été réalisé. Un bug bounty réduit le risque sans le supprimer : aucun examen ne peut prouver qu’un logiciel est exempt de défauts."
+      }
+    ]
   },
   "stats": {
     "price": "Prix actuel",
@@ -25,9 +192,12 @@
     "notOpenYet": "Pas encore ouverte",
     "progressLabel": "Progression vers la graduation à {target}",
     "saleStatus": "Statut de la vente",
+    "whitelistStatus": "Liste blanche : utilisateurs vérifiés uniquement",
+    "openStatus": "Ouverte",
     "startPriceOnOpen": "Prix de départ à l’ouverture : {start}",
     "saleWindow": "Durée de la vente",
     "saleWindowValue": "Jusqu’à épuisement ou {term}",
+    "saleWindowV2": "Whitelist de 7 jours à partir du {date}, puis vente ouverte jusqu’à {term}",
     "saleWindowHint": "Selon la première échéance. Aucune prolongation.",
     "endsByHint": "Date limite. Plus tôt en cas d’épuisement."
   },
@@ -40,7 +210,7 @@
     "priceAfter": "Prix après votre achat",
     "estimate": "Estimation. Le montant exact est confirmé on-chain avant votre signature.",
     "limitPerBuy": "{min}–{max} par achat",
-    "limitPerDay": "Jusqu’à {amount} par personne sur toute période de 24 heures",
+    "limitPerDay": "Jusqu’à {amount} par adresse et par jour (UTC)",
     "cooldown": "Pause de {seconds} s entre deux achats",
     "overLimit": "Maximum {amount} en un achat.",
     "belowMin": "Saisissez un montant pour voir le devis.",
@@ -92,7 +262,7 @@
     "viewTx": "Voir sur Basescan",
     "txRejected": "Vous avez annulé la signature. Aucun montant n’a été débité.",
     "priceMoved": "Le prix a bougé de plus de 1 % avant la confirmation : rien n’a été acheté. Vérifiez le nouveau devis et réessayez.",
-    "limitHit": "Une limite de la vente a bloqué cet achat (par achat, sur 24 heures ou pause entre deux achats). Rien n’a été acheté.",
+    "limitHit": "Une limite de la vente a arrêté cet achat (par achat, par jour ou pause entre deux achats). Rien n’a été acheté.",
     "txFailed": "La transaction a échoué : {reason}. Aucun PPL n’a été acheté.",
     "tryAgain": "Réessayer",
     "balanceLine": "Dans votre portefeuille sur Base : {balance} {token} · {eth} ETH",
@@ -101,20 +271,20 @@
     "riskTitle": "Avertissement sur les risques",
     "riskBody": "Les cryptoactifs sont risqués : le prix peut baisser, vous ne pourrez peut-être pas revendre tout de suite et les achats ne sont pas remboursables. N’utilisez que de l’argent que vous pouvez perdre.",
     "riskMoreToggle": "Tous les risques",
-    "riskMore": "Par ailleurs : les PPL ne peuvent pas être envoyés à d’autres personnes avant le lancement complet du réseau. La revente à la réserve est réservée aux utilisateurs vérifiés, après 30 jours de détention et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut réserver les achats aux utilisateurs vérifiés.",
+    "riskMore": "Par ailleurs : les transferts de PPL entre participants ouvriront plus tard, lorsque le réseau PEOPLE comptera environ 1 000 participants vérifiés. La revente à la réserve est réservée aux utilisateurs vérifiés, 30 jours après chaque achat et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut mettre en pause les achats et la revente.",
     "saleTermsNote": "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "termsAgree": "En achetant, vous acceptez les {terms}.",
     "termsLink": "Conditions",
     "help": "Besoin d’aide ? {support}",
     "supportLink": "Assistance",
     "noWalletHint": "Pas de portefeuille ? Choisissez Google ou e-mail : un PEOPLE Wallet est créé pour vous. Pour payer, il vous faut des USDC sur Base dans ce portefeuille ou dans un portefeuille que vous connectez.",
-    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
+    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque achat peut être revendu 30 jours après avoir été fait, au prix de la courbe au moment de la vente. Limites journalières : 2 % de la réserve pour tous, et 2 000 $ par adresse. Frais de 1,5 % ; 3 % seulement sur la part des reventes du jour qui dépasse 1 % de la réserve. Fermée quand la courbe se ferme. Vous recevez des USDC sur Base.",
     "feesTitle": "Frais et délais",
-    "feesBody": "Frais : les frais du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; les frais d’échange ou de bridge de LI.FI — affichés dans le widget avant confirmation ; les frais de revente à la réserve — 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve).",
+    "feesBody": "Frais : ceux du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; ceux d’échange ou de pont de LI.FI — affichés dans le widget avant confirmation ; ceux de revente à la réserve — 1,5 %, et 3 % seulement sur la part des reventes du jour qui dépasse 1 % de la réserve.",
     "timingBody": "Un achat sur Base est confirmé en quelques secondes. Les paiements depuis d’autres réseaux arrivent en général en 1 à 20 minutes. Les reventes sont réglées en USDC sur Base.",
     "getUsdc": "Pas encore d’USDC ? Achetez-en sur une plateforme d’échange et retirez-les sur le réseau Base, ou payez depuis un autre réseau ci-dessous. Il vous faut aussi un peu d’ETH sur Base pour les frais.",
     "glossaryBase": "Base est un réseau à frais réduits construit sur Ethereum. USDC et USDT sont des stablecoins indexés sur le dollar américain. LI.FI est le service qui échange les jetons et les transfère entre réseaux.",
-    "phishing": "La seule adresse officielle de la vente figure sur cette page. L’équipe ne vous demandera jamais votre phrase de récupération et n’envoie jamais de liens de paiement en message privé.",
+    "phishing": "La seule adresse officielle de la vente figure sur cette page. PEOPLE ne vous demandera jamais votre phrase de récupération et n’envoie jamais de liens de paiement en message privé.",
     "stableUsdtDirectOption": "USDT sur Base (bridgé)",
     "payFromNetworks": "Fonctionne depuis les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana. TON n’est pas pris en charge.",
     "bridgeSteps": "Étape 1. Échangez vos jetons contre des USDC sur Base dans le widget (en général 1 à 20 minutes). Étape 2. Achetez des PPL avec le bouton ci-dessous.",
@@ -129,214 +299,82 @@
     "switchRejected": "Le réseau n’a pas été changé. L’achat nécessite Base — réessayez.",
     "embeddedNoBase": "PEOPLE Wallet ne peut pas encore payer sur le réseau Base. Pour acheter, connectez MetaMask, Trust Wallet ou WalletConnect."
   },
-  "whyPriceRises": {
-    "title": "Pourquoi le prix monte",
-    "noManualLead": "L’équipe PEOPLE ne fixe ni n’augmente le prix. Une formule publique dans le contrat de vente le fixe automatiquement : chaque achat déplace le prix le long de la courbe.",
-    "mechanism": "Un prix fixé par une formule publique : il ne dépend que du nombre de PPL vendus, et chacun pourra le vérifier on-chain une fois le contrat publié.",
-    "example": "D’après les paramètres publiés : {startPrice} par PPL au départ, {midPrice} après {midSold} PPL vendus (~{midRaised} levés) et {gradPrice} à la graduation ({gradRaised} levés).",
-    "explainerLink": "Comment fonctionne la courbe",
-    "chartAria": "Courbe de prix de la vente PPL : prix et PPL vendus",
-    "chartAxisSold": "PPL vendus",
-    "chartAxisPrice": "Prix, $",
-    "chartMarker": "{price} · {sold}",
-    "contractPendingNote": "Le contrat n’est pas encore publié. Une fois publié, chacun pourra vérifier la formule on-chain.",
-    "plainTitle": "En clair",
-    "plain": [
-      "Courbe de prix (bonding curve) — une formule publique : plus il y a de PPL vendus, plus le prix est élevé.",
-      "Graduation (clôture de la courbe) — le moment où 4 M$ sont levés : la courbe se ferme et un pool public de PPL s’ouvre.",
-      "Les jetons LP sont bloqués 24 mois : personne ne peut retirer l’argent du pool pendant cette période.",
-      "Multisig — un portefeuille où plusieurs personnes doivent approuver chaque paiement.",
-      "Pool DEX — un pool d’échange ouvert où chacun peut échanger des PPL.",
-      "Un lot correspond à un achat ; les 30 jours courent à partir de chaque achat. Vérifié signifie que vous avez prouvé une fois être une personne unique (Human Passport ou Telegram) — {howItWorks}. La réserve, ce sont les USDC détenus dans le contrat de vente ; les reventes sont payées à partir d’elle.",
-      "Revente : vous vendez des PPL à la réserve. Rachat : le projet achète des PPL avec les revenus des frais. Ce sont deux mécanismes différents."
-    ]
-  },
-  "curve": {
-    "eyebrow": "La formule",
-    "title": "Une courbe, visible par tous",
-    "lead": "Le prix n’est pas fixé à la main. prix = {start} × e^(k·x), où x sont des millions de PPL vendus et k = ln(50)/100. Chaque chiffre ci-dessous vient de cette formule.",
-    "axisRaised": "Levé, $",
-    "axisPrice": "Prix par PPL, $",
-    "youAreHere": "Vous êtes ici",
-    "notOpen": "",
-    "marker": "{raised} levés",
-    "markerPrice": "{price} par PPL",
-    "markerSold": "{sold} PPL vendus",
-    "graduationTag": "Graduation",
-    "ceilingNote": "Le plafond de {ceiling} n’est atteint que si tous les {supply} PPL sont vendus. La courbe se ferme avant, à {graduation} levés.",
-    "feedTitle": "Achats et ventes récents",
-    "feedEmpty": "Pas encore d’opérations.",
-    "feedBuy": "Achat",
-    "feedSell": "Vente",
-    "feedLink": "Voir",
-    "capScope": "Le plafond de {ceiling} ne s’applique que pendant la vente sur la courbe. Après la graduation, le prix du pool est fixé par le marché libre, sans limite haute ni basse — le prix peut fortement baisser, jusqu’à presque zéro.",
-    "formulaToggle": "Pour les curieux : la formule"
-  },
-  "whatYouGet": {
-    "eyebrow": "Ce que vous obtenez",
-    "title": "Ce qu’un achat vous apporte vraiment",
-    "items": [
-      {
-        "title": "Des PPL sur votre adresse tout de suite",
-        "body": "Les PPL sont crédités sur votre adresse tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après le lancement complet du réseau. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat."
-      },
-      {
-        "title": "Revente à la réserve",
-        "body": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
-      },
-      {
-        "title": "Les transferts ouvrent au lancement complet du réseau",
-        "body": "L’envoi de PPL à d’autres personnes et les échanges dans le pool commencent au lancement complet du réseau, une fois que {verified} participants vérifiés ont rejoint."
-      },
-      {
-        "title": "À {graduation}, la courbe se ferme",
-        "body": "Pendant la vente, l’argent des achats reste dans la réserve de la vente sur Base et sert à payer les reventes. À la graduation, {liquidityShare} va dans le pool public avec des PPL au dernier prix de la courbe (jetons LP bloqués pendant {lockPeriod}), et {multisigShare} va au multisig du projet, avec un reporting public de chaque dépense."
-      }
-    ]
-  },
-  "timeline": {
-    "eyebrow": "Ordre des événements",
-    "title": "De la courbe au marché libre",
-    "steps": [
-      {
-        "title": "La courbe",
-        "body": "{supply} PPL sur une courbe publique de {start} jusqu’à un plafond de {ceiling}. Chacun peut acheter tant que la vente est ouverte : jusqu’à ce que la courbe se ferme à {graduation} levés ou {term} après l’ouverture, selon la première échéance. Aucune prolongation."
-      },
-      {
-        "title": "Graduation à {graduation}",
-        "body": "La courbe s’arrête. {liquidityShare} des fonds levés et des PPL au dernier prix de la courbe vont dans un pool DEX public exactement à ce prix, sans saut. Les jetons LP sont bloqués pendant {lockPeriod}. {multisigShare} va au multisig du projet, avec un reporting public. La revente à la réserve ferme."
-      },
-      {
-        "title": "Lancement complet du réseau",
-        "body": "Les transferts de PPL entre portefeuilles et les échanges dans le pool ouvrent au lancement complet du réseau, une fois que {verified} participants vérifiés ont rejoint."
-      },
-      {
-        "title": "Sans épuisement : {term} après l’ouverture",
-        "body": "Si la courbe ne s’est pas fermée d’ici là, la vente prend fin sans prolongation. Les PPL invendus vont au Community Pool. L’argent déjà payé n’est pas remboursé."
-      }
-    ]
-  },
-  "transparency": {
-    "eyebrow": "Transparence",
-    "title": "Contrat, fonds et code",
-    "lead": "Le contrat de vente, où vont les fonds, les revues de sécurité du code et le déblocage des jetons de l’équipe.",
-    "saleContract": "Contrat de vente (PplCurveHub sur Base)",
-    "saleContractPending": "Contrat de vente : PplCurveHub sur Base (chain ID 8453). Pas encore publié — l’adresse et un lien vers l’explorateur de blocs apparaîtront ici avant l’ouverture de la vente.",
-    "verifiedSource": "Code source vérifié",
-    "auditTitle": "Examens de sécurité",
-    "auditLine": "Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (lancés par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé.",
-    "explorerLink": "Ouvrir sur Basescan",
-    "allocationTitle": "Où vont 1 milliard de PPL",
-    "allocationNote": "Offre fixe de {supply} PPL. La part de la vente, ce sont les {salePct} sur la courbe.",
-    "vestingTitle": "Vesting équipe",
-    "vestingBody": "Le vesting de l’équipe commence au lancement complet du réseau : pendant les {cliffPeriod} premiers, l’équipe ne reçoit aucun jeton ; ensuite, ils se débloquent chaque mois pendant {linearPeriod} de plus — {totalPeriod} au total.",
-    "fundsTitle": "Où vont les fonds de la vente",
-    "fundsBody": "Pendant la vente, l’argent des achats reste dans la réserve de la vente sur Base et sert à payer les reventes. À la graduation, {liquidityShare} va dans le pool public avec des PPL au dernier prix de la courbe (jetons LP bloqués pendant {lockPeriod}), et {multisigShare} va au multisig du projet, avec un reporting public de chaque dépense.",
-    "auditBounty": "Bug bounty : signalez une vulnérabilité avec le bouton de bug présent sur chaque page.",
-    "reviewReports": "Rapports d’examen : {links}",
-    "addressesTitle": "Adresses sur Base",
-    "addrHub": "Contrat de vente (PplCurveHub)",
-    "addrPpl": "Jeton PPL",
-    "addrMultisig": "Multisig du projet",
-    "addrMultisigThreshold": "{m} signatures sur {n}",
-    "addrUsdc": "USDC sur Base",
-    "addrUsdt": "USDT sur Base (bridgé)",
-    "addrPending": "Publiée ici avant l’ouverture de la vente",
-    "copy": "Copier",
-    "copied": "Copié",
-    "adminPowers": "Le multisig du projet peut réserver les achats aux utilisateurs vérifiés (par exemple en cas d’attaque de bots). Les utilisateurs non vérifiés ne peuvent alors plus acheter tant que ce mode n’est pas désactivé."
-  },
-  "faq": {
-    "eyebrow": "FAQ",
-    "title": "Questions, réponses",
-    "items": [
-      {
-        "q": "Puis-je revendre mes PPL ?",
-        "a": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base."
-      },
-      {
-        "q": "Le plafond de {ceiling} est-il permanent ?",
-        "a": "Non. Il s’applique tant que la courbe fonctionne. La courbe se ferme à {graduation} levés, vers {graduationPrice} par PPL, sous le plafond. Après la graduation, le prix du pool est fixé par le marché libre, sans limite haute ni basse — il peut fortement baisser, jusqu’à presque zéro."
-      },
-      {
-        "q": "Ai-je besoin du réseau PEOPLE dans mon portefeuille ?",
-        "a": "Non. La vente se déroule uniquement sur Base : vous payez en USDC ou USDT sur Base. Le réseau PEOPLE est distinct et inutile pour acheter."
-      },
-      {
-        "q": "Quand puis-je envoyer des PPL à quelqu’un ?",
-        "a": "Au lancement complet du réseau, une fois que {verified} participants vérifiés ont rejoint. D’ici là, vous pouvez acheter tant que la vente est ouverte ; la revente est limitée : utilisateurs vérifiés uniquement, 30 jours après chaque achat, dans les limites journalières et jusqu’à la graduation."
-      },
-      {
-        "q": "Puis-je être remboursé ?",
-        "a": "Non. Tous les achats sont définitifs : aucun remboursement. La vente n’est pas prolongée ; les PPL invendus vont au Community Pool."
-      },
-      {
-        "q": "Depuis quels réseaux puis-je payer ?",
-        "a": "Sur Base, en USDC ou en USDT. Depuis d’autres réseaux, via l’échange automatique intégré (LI.FI) : les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana fonctionnent. TON n’est pas pris en charge."
-      }
-    ],
-    "pumpTitle": "Ce qui va mal sur les courbes sans plafond",
-    "pumpLead": "Les courbes de prix (bonding curves) se sont popularisées via des launchpads comme pump.fun. Voici leurs problèmes connus et notre approche.",
-    "pumpCols": [
-      "Problème",
-      "Ce qui se passe",
-      "Notre protection"
-    ],
-    "pumpRows": [
-      {
-        "problem": "Les derniers acheteurs paient trop",
-        "what": "Le prix monte sans limite ; les derniers acheteurs avant la graduation paient bien plus que les premiers.",
-        "ours": "Le prix monte quand même : à la graduation, il vaut environ 32 fois le prix de départ, donc les derniers acheteurs paient plus que les premiers. La courbe se ferme à {graduation}, vers {graduationPrice}, sous le plafond de {ceiling}."
-      },
-      {
-        "problem": "Des bots qui achètent en premier",
-        "what": "Des scripts achètent dans les premières secondes depuis de nombreux portefeuilles puis revendent aux vrais utilisateurs.",
-        "ours": "Jusqu’à {perBuy} par achat, {perDay} par personne sur toute période de 24 heures et une pause de {cooldown} s entre deux achats. Les limites par compte rendent plus difficile la constitution rapide d’une grosse position, sans exclure qu’une personne utilise plusieurs portefeuilles."
-      },
-      {
-        "problem": "Ventes massives",
-        "what": "De gros détenteurs vendent tout d’un coup et font chuter le prix.",
-        "ours": "La revente à la réserve est plafonnée à 2 % de la réserve par jour pour tous et à 2 000 $ par personne et par jour. Les frais financent le rachat de PPL par le projet (un mécanisme distinct), et la liquidité du pool est bloquée pendant {lockPeriod}."
-      },
-      {
-        "problem": "Un prix pire que celui affiché",
-        "what": "Une opération s’exécute à un prix bien pire que celui affiché.",
-        "ours": "Protection contre le glissement : si le prix évolue en votre défaveur de plus de 1 % avant la confirmation de l’achat, la transaction est annulée."
-      },
-      {
-        "problem": "Cotations lancées sur un effet de hype",
-        "what": "Le jeton est poussé sur des exchanges en pleine vente.",
-        "ours": "Aucune cotation pendant la vente. Les échanges dans le pool commencent au lancement complet du réseau."
-      }
-    ]
-  },
-  "bottomCta": {
-    "eyebrow": "Prêt ?",
-    "title": "Achetez des PPL au prix actuel de la courbe",
-    "lead": "Le même formulaire et la même courbe de prix pour tous.",
-    "scrollToForm": "Retour au formulaire d’achat",
-    "titleClosed": "La vente ouvre bientôt",
-    "leadClosed": "Le jour de l’ouverture, le prix actuel s’affichera ici."
-  },
-  "sticky": {
-    "label": "Acheter PPL",
-    "price": "à partir de {price}"
-  },
-  "footnote": {
-    "title": "Avertissements",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL est le jeton utilitaire du réseau PEOPLE. Sur la courbe son prix suit la formule publiée ; après la graduation, il est fixé par le marché : il peut baisser autant que monter. PPL n’est pas un titre, une part d’entreprise, un dépôt ni un produit d’investissement ; aucun profit, rendement ou retour n’est promis ou garanti. Les chiffres avant achat sont des estimations selon la formule publiée et confirmés on-chain avant signature. Rien sur cette page n’est un conseil en investissement, juridique ou fiscal."
-      },
-      {
-        "marker": "**",
-        "text": "La participation peut être restreinte ou indisponible où vous vivez ; vérifier les règles qui s’appliquent à vous relève de votre responsabilité. N’utilisez que de l’argent que vous pouvez perdre."
-      },
-      {
-        "marker": "***",
-        "text": "Les examens assistés par IA cités plus haut ont été menés par l’équipe du projet. Ce ne sont pas des audits de sécurité, et aucun audit externe n’a encore été réalisé. Un bug bounty réduit le risque sans le supprimer : aucun examen ne peut prouver qu’un logiciel est exempt de défauts."
-      }
-    ]
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Phase de liste blanche",
+      "whitelistBody": "7 premiers jours : personnes vérifiées uniquement. Minimum 10 $ / maximum 500 $ par achat / 2 000 $ par jour.",
+      "daysLeft": "Encore {days} jours",
+      "openTitle": "Phase publique",
+      "openBody": "Ouvert à tous. Minimum 10 $ / maximum 500 $ par achat / 2 000 $ par jour.",
+      "notOpenTitle": "La vente n’est pas encore ouverte",
+      "notOpenBody": "Les achats ouvrent lorsque le contrat entre en phase de liste blanche.",
+      "expiredTitle": "Vente terminée",
+      "graduatedTitle": "Vente graduée",
+      "closedBody": "Les achats sont fermés."
+    },
+    "verify": {
+      "title": "Les 7 premiers jours : personnes vérifiées uniquement",
+      "body": "Vérifiez-vous via Telegram (numéro de téléphone) ou Human Passport pour participer.",
+      "ctaVerify": "Se vérifier",
+      "ctaSignIn": "Connectez-vous pour vous vérifier",
+      "confirmTitle": "Il reste une étape on-chain",
+      "confirmBody": "Confirmez votre identité vérifiée sur Base pour débloquer l’achat.",
+      "ctaConfirm": "Confirmer on-chain",
+      "confirming": "Confirmation on-chain…",
+      "confirmed": "Confirmé on-chain. Vous pouvez acheter.",
+      "error": "Impossible de confirmer on-chain. Réessayez.",
+      "notEligible": "Ce compte n’est pas éligible à la liste blanche.",
+      "connectWallet": "Connectez un portefeuille pour continuer.",
+      "alreadyVerified": "Déjà confirmé on-chain."
+    },
+    "form": {
+      "title": "Acheter PPL",
+      "network": "Réseau",
+      "token": "Jeton",
+      "amount": "Montant",
+      "networkBase": "Base",
+      "networkOther": "Autre réseau",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Estimation PPL",
+      "minimum": "Minimum reçu",
+      "price": "Prix actuel du PPL",
+      "etaDuration": "1–20 min",
+      "eta": "Arrivée en environ {eta}",
+      "fees": "Frais : {fees}",
+      "feesToggle": "Détail des frais",
+      "feesBody": "Les frais de réseau sur Base sont généralement d’environ 0,01 $. Les frais d’échange ou de pont LI.FI sont affichés dans le widget avant confirmation.",
+      "lifiLine": "Échange via LI.FI, achat en USDC sur Base",
+      "sellbackLine": "La revente ouvre après 30 jours ; limites de rachat — détails",
+      "sellbackLink": "détails",
+      "cta": "Acheter PPL",
+      "connecting": "Connexion…",
+      "buying": "Confirmation…",
+      "connect": "Connectez un portefeuille pour acheter",
+      "switch": "Passer sur Base",
+      "wrongNetwork": "Passez votre portefeuille sur Base pour acheter.",
+      "invalid": "Saisissez un montant en dollars.",
+      "belowMin": "Le minimum est {min}.",
+      "overMax": "Le maximum est {max} par achat.",
+      "overDay": "La limite quotidienne est {max} par adresse.",
+      "needVerification": "Terminez la vérification ci-dessus pour acheter.",
+      "needWallet": "Connectez un portefeuille pour voir votre devis.",
+      "preview": "Aperçu : aucune transaction ne sera envoyée.",
+      "bridgeHint": "Échangez d’abord en USDC sur Base avec LI.FI, puis finalisez l’achat.",
+      "error": "L’achat n’a pas abouti. Réessayez."
+    },
+    "success": {
+      "title": "Achat terminé",
+      "credited": "{ppl} PPL crédités sur {address}",
+      "tx": "Voir la transaction",
+      "unlock": "La revente ouvre le {date}",
+      "again": "Acheter plus de PPL"
+    },
+    "partial": {
+      "title": "Les USDC sont arrivés — le PPL n’a pas été acheté",
+      "body": "L’échange a livré {amount} USDC sur Base, mais l’achat de PPL n’a pas abouti.",
+      "topUp": "Acheter du PPL avec {amount} USDC",
+      "hint": "Cela relance l’achat sur Base avec les USDC reçus."
+    }
   }
 }

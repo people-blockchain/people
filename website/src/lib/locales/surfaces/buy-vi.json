@@ -1,17 +1,184 @@
 {
   "meta": {
     "title": "Mua PPL",
-    "description": "PPL được bán theo một đường cong giá công khai trên Base. Giá bắt đầu từ $0,005 và tăng sau mỗi lần mua. Đợt bán kéo dài đến khi bán hết hoặc 24 tháng, tùy mốc nào đến trước. Mọi giao dịch mua đều là cuối cùng."
+    "description": "PPL là token của mạng PEOPLE. Giá theo một công thức được công bố trước và tăng dần khi PPL được bán. 7 ngày đầu chỉ dành cho người đã xác minh. Mọi giao dịch mua là cuối cùng."
   },
   "hero": {
-    "eyebrow": "Bán PPL",
-    "headline": "Mua PPL theo đường cong giá công khai",
-    "sub": "Giá đi theo một đường cong công khai và tăng khi có thêm PPL được bán. Mua sớm nghĩa là giá khởi điểm thấp hơn, không phải lợi nhuận được đảm bảo.",
-    "statsTitle": "Trên đường cong",
-    "statsNote": "",
-    "ctaScroll": "Đường cong hoạt động thế nào",
-    "headlineClosed": "Đợt bán PPL sắp mở",
-    "statsTitleClosed": "Trên đường cong — sắp mở bán"
+    "eyebrow": "Mở bán PPL",
+    "headline": "Blockchain cho mọi người. Cuối cùng cũng đến.",
+    "lead": "Trước đây bạn phải là dân kỹ thuật. Giờ chỉ cần là một con người.",
+    "subUpcoming": "Đợt bán PPL mở vào ngày {date}.",
+    "subWhitelist": "Đợt bán PPL đã mở. {days} ngày đầu chỉ dành cho người đã xác minh.",
+    "subOpen": "Đợt bán PPL đã mở cho mọi người.",
+    "subEnded": "Đợt bán PPL đã kết thúc.",
+    "ctaVerify": "Xác minh để có mặt trong {days} ngày đầu",
+    "ctaBuy": "Mua PPL",
+    "ctaEnded": "Xem quy tắc bán lại",
+    "countdownLabel": "Còn lại đến khi mở bán",
+    "days": "ngày",
+    "hours": "giờ",
+    "minutes": "phút",
+    "countdownDone": "Đã đến ngày mở bán. Việc mua bắt đầu ngay khi hợp đồng bán được mở.",
+    "startPrice": "Giá khởi điểm: {price} mỗi PPL",
+    "livePrice": "Giá hiện tại: {price} mỗi PPL"
+  },
+  "before": {
+    "eyebrow": "Điều gì thay đổi",
+    "title": "Trước đây và với PEOPLE",
+    "beforeLabel": "Trước đây",
+    "afterLabel": "Với PEOPLE",
+    "rows": [
+      {
+        "before": "Cụm từ khôi phục, phí gas và cả chục bước trước thao tác đầu tiên.",
+        "after": "Đăng nhập bằng Google hoặc email, như mọi ứng dụng bình thường."
+      },
+      {
+        "before": "Bot và tài khoản giả lẫn với người thật.",
+        "after": "Chỉ người đã xác minh: một người, một địa chỉ."
+      },
+      {
+        "before": "Phần lớn token về tay người trong cuộc trước tất cả mọi người.",
+        "after": "{communityPct} tổng số PPL dành cho cộng đồng. Đội ngũ nhận {teamPct}, được mở khóa dần trong {teamVesting}."
+      }
+    ]
+  },
+  "ppl": {
+    "eyebrow": "PPL là gì",
+    "title": "PPL trong ba dòng",
+    "lines": [
+      "PPL là token của mạng PEOPLE.",
+      "Giá theo một công thức được công bố trước: tăng khi PPL được mua và giảm khi PPL được bán lại.",
+      "PEOPLE không đặt hay nâng giá. Không ai điều chỉnh giá bằng tay."
+    ],
+    "chartAria": "Giá PPL theo công thức đã công bố: {start} lúc bắt đầu, {end} khi đường cong đóng lại",
+    "youAreHere": "Bạn ở đây",
+    "chartStart": "Khởi điểm {price}",
+    "chartEnd": "{price} khi đường cong đóng",
+    "axisSold": "PPL đã bán",
+    "detailsToggle": "Chi tiết: công thức",
+    "details": "Đây là đường cong giá (bonding curve): giá = {start} × e^(k·x), trong đó x là số triệu PPL đã bán và k = ln(50)/100. Mỗi lần mua đẩy giá lên theo đường cong, mỗi lần bán lại kéo giá xuống. Trên đường cong có {supply} PPL. Đường cong đóng lại khi đã huy động được {graduation} (giá khoảng {end} mỗi PPL) hoặc {term} sau khi mở, tùy điều nào đến trước."
+  },
+  "how": {
+    "eyebrow": "Cách mua",
+    "title": "Ba bước",
+    "steps": [
+      {
+        "title": "Xác minh",
+        "body": "Chứng minh một lần rằng bạn là người thật: bằng Telegram (số điện thoại) hoặc Human Passport."
+      },
+      {
+        "title": "Chọn số tiền và mạng",
+        "body": "Từ {min} đến {max} mỗi lần mua. Thanh toán bằng USDC hoặc USDT; thanh toán từ mạng khác được tự động quy đổi. Việc thanh toán diễn ra trên Base."
+      },
+      {
+        "title": "PPL vào thẳng ví PEOPLE của bạn",
+        "body": "Bạn thanh toán bằng USDC hoặc USDT, và PPL được ghi có ngay vào địa chỉ của bạn trên mạng PEOPLE."
+      }
+    ],
+    "verifyLink": "Cách xác minh"
+  },
+  "feed": {
+    "title": "Giao dịch mua và bán gần đây",
+    "empty": "Chưa có giao dịch.",
+    "buy": "Mua",
+    "sell": "Bán",
+    "link": "Xem",
+    "example": "Ví dụ",
+    "exampleNote": "Giao dịch ví dụ để xem trước giao diện danh sách. Không phải dữ liệu thật."
+  },
+  "rules": {
+    "eyebrow": "Quy tắc",
+    "title": "Quy tắc như nhau cho mọi người",
+    "lead": "Các quy tắc được ghi cố định trong hợp đồng bán. Không ai có thể thay đổi giới hạn hay công thức.",
+    "items": [
+      {
+        "title": "{whitelistDays} ngày đầu: chỉ người đã xác minh",
+        "body": "Một người, một địa chỉ. Từ {min} đến {max} mỗi lần mua, tối đa {perDay} mỗi địa chỉ mỗi ngày (UTC), và nghỉ {cooldown} giây giữa hai lần mua."
+      },
+      {
+        "title": "{reservePct} mỗi giao dịch mua được giữ làm quỹ dự trữ",
+        "body": "Khoản này nằm trong hợp đồng bán để chi trả cho việc bán lại. Không ai trong đội ngũ rút được. {treasuryPct} còn lại dùng để phát triển dự án."
+      },
+      {
+        "title": "Bán lại sau {holdDays} ngày",
+        "body": "Mỗi giao dịch mua có thể bán lại {holdDays} ngày sau đó, theo giá đường cong tại thời điểm bán. Mỗi ngày: tối đa {sellDailyPct} quỹ dự trữ cho tất cả người bán cộng lại và tối đa {sellPerAddress} mỗi địa chỉ. Phí {feeLow}; {feeHigh} cho phần vượt {feeThreshold} quỹ dự trữ trong ngày đó. Chỉ dành cho người đã xác minh."
+      },
+      {
+        "title": "Ai cũng có thể kiểm tra",
+        "body": "Hợp đồng bán là công khai, mọi giao dịch mua trong đó đều kiểm tra được. Tiền của dự án nằm trong một ví mà mỗi khoản chi cần {signersM} trên {signersN} chữ ký."
+      }
+    ],
+    "todayTitle": "Có thể bán lại hôm nay",
+    "todayLive": "Hôm nay vẫn có thể bán lại tối đa {amount}, tính chung cho tất cả người bán.",
+    "todayUpcoming": "Chưa có: những giao dịch mua đầu tiên có thể bán lại {holdDays} ngày sau khi mở bán.",
+    "todayUnknown": "Con số này được đọc trực tiếp từ hợp đồng và hiện chưa có.",
+    "todayClosed": "Bán lại đã đóng: đường cong đã đóng.",
+    "contractTitle": "Hợp đồng bán trên Base",
+    "contractPending": "Địa chỉ sẽ được công bố tại đây trước khi mở bán. Chỉ mua qua địa chỉ đó.",
+    "explorerLink": "Mở trên Basescan",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "auditLine": "Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án thực hiện). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.",
+    "reviewReports": "Báo cáo xem xét: {links}",
+    "auditBounty": "Phát hiện lỗ hổng? Hãy báo bằng nút báo lỗi trên bất kỳ trang nào.",
+    "detailsToggle": "Chi tiết",
+    "details": [
+      "Quỹ dự trữ: lượng USDC nằm trong hợp đồng bán. Việc bán lại được chi trả từ quỹ này, và phí bán lại được giữ lại trong quỹ. Quỹ càng nhỏ thì giới hạn bán lại mỗi ngày càng thấp. Khi đường cong đóng, việc bán lại đóng vĩnh viễn.",
+      "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng, và chỉ sau thông báo công khai trước {releaseDays} ngày. Trong thời gian thông báo, việc bán lại vẫn hoạt động.",
+      "Ngân quỹ: một ví multisig ({signersM} trên {signersN} chữ ký) nhận {treasuryPct} còn lại của mỗi giao dịch mua.",
+      "Multisig có thể tạm dừng việc mua và bán lại. Multisig không thể chuyển quỹ dự trữ, thay đổi giới hạn hay công thức, hoặc kéo dài đợt bán.",
+      "Đợt bán kéo dài đến khi huy động đủ {graduation} hoặc {term} sau khi mở, tùy điều nào đến trước. PPL chưa bán chuyển vào Community Pool. Mọi giao dịch mua là cuối cùng.",
+      "Đội ngũ: {teamPct} tổng số PPL. Không nhận gì trong {cliff} đầu, sau đó nhận hằng tháng trong {linear}, tính từ khi ra mắt mạng đầy đủ."
+    ]
+  },
+  "faq": {
+    "eyebrow": "Câu hỏi",
+    "title": "Trả lời ngắn",
+    "items": [
+      {
+        "q": "Vì sao cần xác minh?",
+        "a": "Để mỗi người mua là một người thật. Mỗi người có một địa chỉ, và giới hạn áp dụng cho người chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Bạn có thể xác minh bằng Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
+      },
+      {
+        "q": "Khi nào tôi có thể gửi PPL cho người khác?",
+        "a": "PPL được ghi có trên mạng PEOPLE ngay sau khi bạn mua. Ban đầu mạng chỉ tiếp nhận PPL: các giao dịch chuyển giữa người tham gia sẽ mở sau, khi có khoảng 1.000 người tham gia đã xác minh. Trước đó, bạn có thể bán PPL lại vào quỹ dự trữ theo các quy tắc ở trên."
+      },
+      {
+        "q": "Tôi có thể thanh toán từ những mạng nào?",
+        "a": "Trên Base: USDC, hoặc USDT được tự động đổi sang USDC với một khoản phí nhỏ. Từ các mạng khác, khoản thanh toán được tự động quy đổi: các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana. TON không được hỗ trợ. Bản thân giao dịch mua luôn diễn ra bằng USDC trên Base."
+      },
+      {
+        "q": "Hôm nay có thể bán lại bao nhiêu?",
+        "a": "Mỗi giao dịch mua có thể bán lại {holdDays} ngày sau đó. Mỗi ngày, tất cả người bán cộng lại có thể bán lại tối đa {sellDailyPct} quỹ dự trữ, mỗi địa chỉ tối đa {sellPerAddress}. Quỹ nhỏ thì giới hạn mỗi ngày cũng nhỏ. Con số hôm nay được hiển thị trong phần quy tắc ở trên."
+      },
+      {
+        "q": "Tôi có được hoàn tiền không?",
+        "a": "Không. Mọi giao dịch mua là cuối cùng. Cách duy nhất để rút lại là bán vào quỹ dự trữ theo các quy tắc ở trên."
+      }
+    ],
+    "riskTitle": "Cảnh báo rủi ro",
+    "riskBody": "PPL có thể mất giá. Chỉ mua số tiền bạn chấp nhận rủi ro. Tuân thủ luật pháp của quốc gia bạn."
+  },
+  "finalCta": {
+    "eyebrow": "Sẵn sàng?",
+    "bounty": "hoặc kiếm PPL bằng cách làm nhiệm vụ"
+  },
+  "footnote": {
+    "title": "Ghi chú",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL là token tiện ích của mạng PEOPLE. Trong đợt bán, giá theo công thức đã công bố; sau đó thị trường quyết định giá, và giá có thể giảm cũng như tăng. PPL không phải là chứng khoán, cổ phần công ty, khoản tiền gửi hay sản phẩm đầu tư. Không có lợi nhuận, lợi suất hay khoản hoàn vốn nào được hứa hẹn hoặc bảo đảm. Các con số hiển thị trước khi mua là ước tính; số tiền chính xác được xác nhận trên chuỗi trước khi bạn ký. Không nội dung nào trên trang này là tư vấn đầu tư, pháp lý hay thuế."
+      },
+      {
+        "marker": "**",
+        "text": "Việc tham gia có thể bị hạn chế hoặc không khả dụng ở nơi bạn sống; kiểm tra các quy định áp dụng cho bạn là trách nhiệm của bạn. Chỉ dùng số tiền bạn có thể chấp nhận mất."
+      },
+      {
+        "marker": "***",
+        "text": "Các đợt xem xét có hỗ trợ AI nêu trên do đội ngũ dự án thực hiện. Đó không phải là kiểm toán bảo mật, và chưa có kiểm toán độc lập bên ngoài. Chương trình thưởng lỗi giúp giảm rủi ro nhưng không loại bỏ được: không đợt xem xét nào chứng minh được phần mềm không có lỗi."
+      }
+    ]
   },
   "stats": {
     "price": "Giá hiện tại",
@@ -25,9 +192,12 @@
     "notOpenYet": "Chưa mở",
     "progressLabel": "Tiến độ tới graduation ở mức {target}",
     "saleStatus": "Trạng thái đợt bán",
+    "whitelistStatus": "Danh sách trắng: chỉ người đã xác minh",
+    "openStatus": "Đang mở",
     "startPriceOnOpen": "Giá khởi điểm khi mở: {start}",
     "saleWindow": "Thời hạn đợt bán",
     "saleWindowValue": "Đến khi bán hết hoặc {term}",
+    "saleWindowV2": "Whitelist 7 ngày từ {date}, sau đó mở bán đến {term}",
     "saleWindowHint": "Tùy mốc nào đến trước. Không gia hạn.",
     "endsByHint": "Ngày kết thúc muộn nhất. Sớm hơn nếu bán hết."
   },
@@ -40,7 +210,7 @@
     "priceAfter": "Giá sau giao dịch của bạn",
     "estimate": "Đây là ước tính. Số lượng chính xác được xác nhận on-chain trước khi bạn ký.",
     "limitPerBuy": "{min}–{max} mỗi lần mua",
-    "limitPerDay": "Tối đa {amount} mỗi người trong bất kỳ 24 giờ nào",
+    "limitPerDay": "Tối đa {amount} mỗi địa chỉ mỗi ngày (UTC)",
     "cooldown": "Nghỉ {seconds} giây giữa các lần mua",
     "overLimit": "Tối đa {amount} trong một lần mua.",
     "belowMin": "Nhập số tiền để xem báo giá.",
@@ -92,7 +262,7 @@
     "viewTx": "Xem trên Basescan",
     "txRejected": "Bạn đã hủy chữ ký. Không có khoản tiền nào bị trừ.",
     "priceMoved": "Giá đã thay đổi hơn 1% trước khi xác nhận nên giao dịch mua không được thực hiện. Hãy xem báo giá mới và thử lại.",
-    "limitHit": "Một giới hạn của đợt bán đã chặn giao dịch này (mỗi lần mua, trong 24 giờ hoặc thời gian nghỉ giữa các lần mua). Chưa mua gì.",
+    "limitHit": "Một giới hạn của đợt bán đã dừng giao dịch mua này (mỗi lần mua, mỗi ngày hoặc thời gian nghỉ giữa các lần mua). Không có gì được mua.",
     "txFailed": "Giao dịch thất bại: {reason}. Chưa mua được PPL.",
     "tryAgain": "Thử lại",
     "balanceLine": "Trong ví của bạn trên Base: {balance} {token} · {eth} ETH",
@@ -101,20 +271,20 @@
     "riskTitle": "Cảnh báo rủi ro",
     "riskBody": "Tiền mã hóa có rủi ro: giá có thể giảm, bạn có thể không bán được ngay và các giao dịch mua không được hoàn tiền. Chỉ dùng số tiền bạn chấp nhận mất.",
     "riskMoreToggle": "Tất cả rủi ro",
-    "riskMore": "Ngoài ra: không thể gửi PPL cho người khác cho đến khi ra mắt mạng đầy đủ. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, sau 30 ngày nắm giữ và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể giới hạn việc mua chỉ cho người dùng đã xác minh.",
+    "riskMore": "Ngoài ra: việc chuyển PPL giữa những người tham gia sẽ mở sau, khi mạng PEOPLE có khoảng 1.000 người tham gia đã xác minh. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, 30 ngày sau mỗi giao dịch mua và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể tạm dừng việc mua và bán lại.",
     "saleTermsNote": "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
     "termsAgree": "Khi mua, bạn đồng ý với {terms}.",
     "termsLink": "Điều khoản",
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
     "noWalletHint": "Chưa có ví? Chọn Google hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
-    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
+    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn mỗi ngày: 2% quỹ dự trữ cho tất cả mọi người cộng lại và $2.000 mỗi địa chỉ. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong ngày vượt 1% quỹ dự trữ. Đóng khi đường cong đóng. Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
-    "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí swap hoặc bridge của LI.FI — hiển thị trong widget trước khi bạn xác nhận; phí bán lại vào quỹ dự trữ — 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ).",
+    "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí hoán đổi hoặc cầu nối của LI.FI — hiển thị trong widget trước khi xác nhận; phí bán lại vào quỹ dự trữ — 1,5%, và 3% chỉ cho phần bán lại trong ngày vượt 1% quỹ dự trữ.",
     "timingBody": "Giao dịch mua trên Base được xác nhận trong vài giây. Thanh toán từ mạng khác thường đến trong 1–20 phút. Tiền bán lại được trả bằng USDC trên mạng Base.",
     "getUsdc": "Chưa có USDC? Mua trên sàn giao dịch rồi rút về mạng Base, hoặc thanh toán từ mạng khác ở bên dưới. Bạn cũng cần một ít ETH trên Base để trả phí.",
     "glossaryBase": "Base là mạng phí thấp xây dựng trên Ethereum. USDC và USDT là stablecoin neo theo đô la Mỹ. LI.FI là dịch vụ hoán đổi token và chuyển chúng giữa các mạng.",
-    "phishing": "Địa chỉ chính thức duy nhất của đợt bán được hiển thị trên trang này. Đội ngũ không bao giờ hỏi cụm từ khôi phục (seed phrase) của bạn và không gửi liên kết thanh toán qua tin nhắn riêng.",
+    "phishing": "Địa chỉ chính thức duy nhất của đợt bán được hiển thị trên trang này. PEOPLE không bao giờ hỏi cụm từ khôi phục (seed phrase) của bạn và không gửi liên kết thanh toán qua tin nhắn riêng.",
     "stableUsdtDirectOption": "USDT trên Base (bridged)",
     "payFromNetworks": "Hoạt động từ các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana. TON không được hỗ trợ.",
     "bridgeSteps": "Bước 1. Đổi token của bạn sang USDC trên Base trong widget (thường 1–20 phút). Bước 2. Mua PPL bằng nút bên dưới.",
@@ -129,214 +299,82 @@
     "switchRejected": "Chưa chuyển mạng. Giao dịch mua cần mạng Base — hãy thử lại.",
     "embeddedNoBase": "PEOPLE Wallet chưa thể thanh toán trên mạng Base. Để mua, hãy kết nối MetaMask, Trust Wallet hoặc WalletConnect."
   },
-  "whyPriceRises": {
-    "title": "Vì sao giá tăng",
-    "noManualLead": "Đội ngũ PEOPLE không đặt hay nâng giá. Một công thức công khai trong hợp đồng bán tự động đặt giá: mỗi giao dịch mua đẩy giá đi dọc theo đường cong.",
-    "mechanism": "Giá theo công thức công khai: giá chỉ phụ thuộc vào số PPL đã bán, và bất kỳ ai cũng có thể kiểm tra on-chain sau khi hợp đồng được công bố.",
-    "example": "Theo tham số công bố: {startPrice} mỗi PPL khi bắt đầu, {midPrice} sau khi bán {midSold} PPL (~{midRaised} huy động) và {gradPrice} khi graduation ({gradRaised} huy động).",
-    "explainerLink": "Đường cong hoạt động thế nào",
-    "chartAria": "Đường cong giá bán PPL: giá và PPL đã bán",
-    "chartAxisSold": "PPL đã bán",
-    "chartAxisPrice": "Giá, $",
-    "chartMarker": "{price} · {sold}",
-    "contractPendingNote": "Hợp đồng chưa được công bố. Khi công bố, bất kỳ ai cũng có thể kiểm tra công thức on-chain.",
-    "plainTitle": "Nói đơn giản",
-    "plain": [
-      "Đường cong giá (bonding curve) — một công thức giá công khai: càng nhiều PPL được bán, giá càng cao.",
-      "Graduation (đường cong đóng) — thời điểm gom đủ $4M: đường cong đóng lại và một pool PPL công khai được mở.",
-      "Token LP bị khóa 24 tháng: không ai có thể rút tiền khỏi pool trong thời gian đó.",
-      "Multisig — ví mà mỗi khoản thanh toán phải được nhiều người phê duyệt.",
-      "Pool DEX — pool trao đổi mở, nơi bất kỳ ai cũng có thể giao dịch PPL.",
-      "Một lô là một lần mua; 30 ngày được tính từ mỗi lần mua. Đã xác minh nghĩa là bạn đã chứng minh một lần rằng mình là một người duy nhất (Human Passport hoặc Telegram) — {howItWorks}. Quỹ dự trữ là số USDC nằm trong hợp đồng bán; tiền bán lại được trả từ đó.",
-      "Bán lại: bạn bán PPL vào quỹ dự trữ. Mua lại: dự án mua PPL bằng thu nhập từ phí. Đây là hai cơ chế khác nhau."
-    ]
-  },
-  "curve": {
-    "eyebrow": "Công thức",
-    "title": "Một đường cong, ai cũng thấy",
-    "lead": "Giá không đặt tay. giá = {start} × e^(k·x), với x là triệu PPL đã bán và k = ln(50)/100. Mọi số bên dưới tính từ công thức đó.",
-    "axisRaised": "Đã gom, $",
-    "axisPrice": "Giá mỗi PPL, $",
-    "youAreHere": "Bạn ở đây",
-    "notOpen": "",
-    "marker": "đã gom {raised}",
-    "markerPrice": "{price} mỗi PPL",
-    "markerSold": "đã bán {sold} PPL",
-    "graduationTag": "Graduation",
-    "ceilingNote": "Trần {ceiling} chỉ đạt nếu bán hết {supply} PPL. Đường cong đóng trước, khi gom {graduation}.",
-    "feedTitle": "Mua bán gần đây",
-    "feedEmpty": "Chưa có giao dịch.",
-    "feedBuy": "Mua",
-    "feedSell": "Bán",
-    "feedLink": "Xem",
-    "capScope": "Mức trần {ceiling} chỉ áp dụng trong đợt bán trên đường cong. Sau graduation, giá trong pool do thị trường tự do quyết định, không có trần và không có sàn — giá có thể giảm mạnh, thậm chí gần về 0.",
-    "formulaToggle": "Dành cho người tò mò: công thức"
-  },
-  "whatYouGet": {
-    "eyebrow": "Bạn nhận được gì",
-    "title": "Một lần mua thực sự cho bạn gì",
-    "items": [
-      {
-        "title": "PPL vào địa chỉ của bạn ngay",
-        "body": "PPL được ghi vào địa chỉ của bạn ngay, nhưng bạn chỉ có thể gửi cho người khác sau khi ra mắt mạng đầy đủ. Chỉ người dùng đã xác minh mới bán lại được, 30 ngày sau mỗi lần mua."
-      },
-      {
-        "title": "Bán lại vào quỹ dự trữ",
-        "body": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
-      },
-      {
-        "title": "Chuyển khoản mở khi ra mắt mạng đầy đủ",
-        "body": "Gửi PPL cho người khác và giao dịch trong pool bắt đầu khi ra mắt mạng đầy đủ, lúc có {verified} người tham gia đã xác minh."
-      },
-      {
-        "title": "Ở mức {graduation}, đường cong đóng",
-        "body": "Trong thời gian bán, tiền mua nằm trong quỹ dự trữ của đợt bán trên Base và dùng để trả cho các giao dịch bán lại. Khi graduation, {liquidityShare} được đưa vào pool công khai cùng PPL theo giá cuối của đường cong (token LP bị khóa {lockPeriod}), và {multisigShare} chuyển vào multisig của dự án, kèm báo cáo công khai cho mỗi khoản chi."
-      }
-    ]
-  },
-  "timeline": {
-    "eyebrow": "Trình tự sự kiện",
-    "title": "Từ đường cong tới thị trường tự do",
-    "steps": [
-      {
-        "title": "Đường cong",
-        "body": "{supply} PPL trên một đường cong công khai từ {start} đến mức trần {ceiling}. Bất kỳ ai cũng có thể mua khi đợt bán đang mở: cho đến khi đường cong đóng ở mức {graduation} hoặc sau {term} kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn."
-      },
-      {
-        "title": "Graduation ở mức {graduation}",
-        "body": "Đường cong dừng lại. {liquidityShare} số tiền gom được cùng PPL theo giá cuối của đường cong được đưa vào một pool DEX công khai đúng ở mức giá đó, không nhảy giá. Token LP bị khóa {lockPeriod}. {multisigShare} chuyển vào multisig của dự án, có báo cáo công khai. Bán lại vào quỹ dự trữ đóng lại."
-      },
-      {
-        "title": "Ra mắt mạng đầy đủ",
-        "body": "Chuyển PPL giữa các ví và giao dịch trong pool mở khi ra mắt mạng đầy đủ, lúc có {verified} người tham gia đã xác minh."
-      },
-      {
-        "title": "Nếu chưa bán hết: {term} sau ngày mở",
-        "body": "Nếu đến lúc đó đường cong chưa đóng, đợt bán kết thúc và không gia hạn. PPL chưa bán chuyển vào Community Pool. Số tiền đã trả không được hoàn lại."
-      }
-    ]
-  },
-  "transparency": {
-    "eyebrow": "Minh bạch",
-    "title": "Hợp đồng, tiền và mã nguồn",
-    "lead": "Hợp đồng bán, tiền bán đi đâu, các đợt rà soát bảo mật mã và cách token đội ngũ mở khóa.",
-    "saleContract": "Hợp đồng bán (PplCurveHub trên Base)",
-    "saleContractPending": "Hợp đồng bán: PplCurveHub trên Base (chain ID 8453). Chưa công bố — địa chỉ và liên kết tới trình khám phá khối sẽ xuất hiện ở đây trước khi mở bán.",
-    "verifiedSource": "Mã nguồn đã xác minh",
-    "auditTitle": "Đánh giá bảo mật",
-    "auditLine": "Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.",
-    "explorerLink": "Mở trên Basescan",
-    "allocationTitle": "1 tỷ PPL phân bổ thế nào",
-    "allocationNote": "Cung cố định {supply} PPL. Phần bán là {salePct} trên đường cong.",
-    "vestingTitle": "Mở khóa token của đội ngũ (vesting)",
-    "vestingBody": "Vesting của đội ngũ bắt đầu khi ra mắt mạng đầy đủ: trong {cliffPeriod} đầu, đội ngũ không nhận token nào; sau đó token được mở khóa hằng tháng trong {linearPeriod} tiếp theo — tổng cộng {totalPeriod}.",
-    "fundsTitle": "Tiền bán đi đâu",
-    "fundsBody": "Trong thời gian bán, tiền mua nằm trong quỹ dự trữ của đợt bán trên Base và dùng để trả cho các giao dịch bán lại. Khi graduation, {liquidityShare} được đưa vào pool công khai cùng PPL theo giá cuối của đường cong (token LP bị khóa {lockPeriod}), và {multisigShare} chuyển vào multisig của dự án, kèm báo cáo công khai cho mỗi khoản chi.",
-    "auditBounty": "Bug bounty: báo cáo lỗ hổng bằng nút báo lỗi trên bất kỳ trang nào.",
-    "reviewReports": "Báo cáo đánh giá: {links}",
-    "addressesTitle": "Địa chỉ trên Base",
-    "addrHub": "Hợp đồng bán (PplCurveHub)",
-    "addrPpl": "Token PPL",
-    "addrMultisig": "Multisig của dự án",
-    "addrMultisigThreshold": "{m}/{n} chữ ký",
-    "addrUsdc": "USDC trên Base",
-    "addrUsdt": "USDT trên Base (bridged)",
-    "addrPending": "Sẽ được công bố ở đây trước khi mở bán",
-    "copy": "Sao chép",
-    "copied": "Đã sao chép",
-    "adminPowers": "Multisig của dự án có thể giới hạn việc mua chỉ cho người dùng đã xác minh (ví dụ khi bị bot tấn công). Khi đó người dùng chưa xác minh không thể mua cho đến khi chế độ này được tắt."
-  },
-  "faq": {
-    "eyebrow": "FAQ",
-    "title": "Câu hỏi và trả lời",
-    "items": [
-      {
-        "q": "Tôi có thể bán lại PPL không?",
-        "a": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base."
-      },
-      {
-        "q": "Mức trần {ceiling} có vĩnh viễn không?",
-        "a": "Không. Mức trần áp dụng khi đường cong còn hoạt động. Đường cong đóng ở mức {graduation}, khoảng {graduationPrice} mỗi PPL, thấp hơn mức trần. Sau graduation, giá trong pool do thị trường tự do quyết định, không có trần và không có sàn — giá có thể giảm mạnh, thậm chí gần về 0."
-      },
-      {
-        "q": "Ví của tôi có cần mạng PEOPLE không?",
-        "a": "Không. Đợt bán chỉ chạy trên Base: bạn thanh toán bằng USDC hoặc USDT trên Base. Mạng PEOPLE là mạng riêng và không cần để mua."
-      },
-      {
-        "q": "Khi nào tôi có thể gửi PPL cho người khác?",
-        "a": "Khi ra mắt mạng đầy đủ, lúc có {verified} người tham gia đã xác minh. Trước đó bạn có thể mua khi đợt bán đang mở; bán lại bị giới hạn: chỉ người dùng đã xác minh, 30 ngày sau mỗi lần mua, trong giới hạn hằng ngày và trước graduation."
-      },
-      {
-        "q": "Tôi có được hoàn tiền không?",
-        "a": "Không. Mọi giao dịch mua đều là cuối cùng: không hoàn tiền. Đợt bán không được gia hạn; PPL chưa bán chuyển vào Community Pool."
-      },
-      {
-        "q": "Tôi có thể thanh toán từ những mạng nào?",
-        "a": "Trên Base — bằng USDC hoặc USDT. Từ các mạng khác — qua công cụ hoán đổi tự động tích hợp (LI.FI): các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana đều dùng được. TON không được hỗ trợ."
-      }
-    ],
-    "pumpTitle": "Những gì sai trên các đường cong không có trần",
-    "pumpLead": "Đường cong giá (bonding curve) trở nên phổ biến nhờ các launchpad như pump.fun. Đây là những vấn đề đã biết của chúng và cách chúng tôi xử lý.",
-    "pumpCols": [
-      "Vấn đề",
-      "Điều gì xảy ra",
-      "Biện pháp của chúng tôi"
-    ],
-    "pumpRows": [
-      {
-        "problem": "Người mua muộn trả quá nhiều",
-        "what": "Giá tăng không giới hạn; người mua cuối trước graduation trả gấp nhiều lần người mua đầu.",
-        "ours": "Giá vẫn tăng: khi graduation, giá gấp khoảng 32 lần giá khởi điểm, nên người mua muộn trả nhiều hơn người mua sớm. Đường cong đóng ở mức {graduation}, khoảng {graduationPrice}, thấp hơn mức trần {ceiling}."
-      },
-      {
-        "problem": "Bot mua trước",
-        "what": "Script mua trong giây đầu từ nhiều ví rồi bán cho người thật.",
-        "ours": "Tối đa {perBuy} mỗi lần mua, {perDay} mỗi người trong bất kỳ 24 giờ nào và nghỉ {cooldown} giây giữa các lần mua. Giới hạn theo tài khoản khiến việc gom nhanh một vị thế lớn khó hơn, nhưng không ngăn được một người dùng nhiều ví."
-      },
-      {
-        "problem": "Bán tháo ồ ạt",
-        "what": "Người nắm giữ lớn bán hết một lúc khiến giá sụp đổ.",
-        "ours": "Bán lại vào quỹ dự trữ bị giới hạn ở 2% quỹ dự trữ mỗi ngày cho tất cả và $2.000 mỗi người mỗi ngày. Phí được dùng để dự án mua lại PPL (một cơ chế riêng), và thanh khoản của pool bị khóa {lockPeriod}."
-      },
-      {
-        "problem": "Giá tệ hơn giá hiển thị",
-        "what": "Giao dịch khớp ở giá tệ hơn nhiều so với hiển thị.",
-        "ours": "Bảo vệ trượt giá: nếu giá biến động bất lợi cho bạn hơn 1% trước khi giao dịch mua được xác nhận, giao dịch sẽ bị hủy."
-      },
-      {
-        "problem": "Niêm yết theo cơn sốt",
-        "what": "Token bị đẩy lên sàn giữa đợt bán.",
-        "ours": "Không niêm yết trong thời gian bán. Giao dịch trong pool bắt đầu khi ra mắt mạng đầy đủ."
-      }
-    ]
-  },
-  "bottomCta": {
-    "eyebrow": "Sẵn sàng?",
-    "title": "Mua PPL theo giá hiện tại của đường cong",
-    "lead": "Cùng một biểu mẫu, cùng một đường cong giá cho mọi người.",
-    "scrollToForm": "Quay lại form mua",
-    "titleClosed": "Đợt bán sắp mở",
-    "leadClosed": "Vào ngày mở bán, giá hiện tại sẽ hiển thị ở đây."
-  },
-  "sticky": {
-    "label": "Mua PPL",
-    "price": "từ {price}"
-  },
-  "footnote": {
-    "title": "Ghi chú",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL là token tiện ích của mạng PEOPLE. Trên đường cong giá theo công thức công bố; sau graduation do thị trường quyết định: có thể giảm cũng như tăng. PPL không phải chứng khoán, cổ phần công ty, tiền gửi hay sản phẩm đầu tư; không hứa hay bảo đảm lợi nhuận hay lợi suất. Số liệu trước khi mua là ước tính theo công thức công bố và được xác nhận on-chain trước khi ký. Không có gì trên trang này là tư vấn đầu tư, pháp lý hay thuế."
-      },
-      {
-        "marker": "**",
-        "text": "Tham gia có thể bị hạn chế hoặc không khả dụng nơi bạn sống; kiểm tra quy định áp dụng là trách nhiệm của bạn. Chỉ dùng số tiền bạn chấp nhận mất."
-      },
-      {
-        "marker": "***",
-        "text": "Các đánh giá có hỗ trợ AI nêu trên do đội ngũ dự án thực hiện. Đây không phải kiểm toán bảo mật, và chưa có kiểm toán độc lập bên ngoài. Bug bounty giảm rủi ro nhưng không loại bỏ được: không đánh giá nào chứng minh được phần mềm không có lỗi."
-      }
-    ]
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Giai đoạn danh sách trắng",
+      "whitelistBody": "7 ngày đầu: chỉ người đã xác minh. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 mỗi ngày.",
+      "daysLeft": "Còn {days} ngày",
+      "openTitle": "Giai đoạn công khai",
+      "openBody": "Mở cho tất cả. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 mỗi ngày.",
+      "notOpenTitle": "Chưa mở bán",
+      "notOpenBody": "Việc mua sẽ mở khi hợp đồng vào giai đoạn danh sách trắng.",
+      "expiredTitle": "Đã kết thúc bán",
+      "graduatedTitle": "Đã tốt nghiệp",
+      "closedBody": "Việc mua đã đóng."
+    },
+    "verify": {
+      "title": "7 ngày đầu chỉ dành cho người đã xác minh",
+      "body": "Xác minh bằng Telegram (số điện thoại) hoặc Human Passport để tham gia.",
+      "ctaVerify": "Xác minh ngay",
+      "ctaSignIn": "Đăng nhập để xác minh",
+      "confirmTitle": "Còn một bước trên chuỗi",
+      "confirmBody": "Xác nhận danh tính đã xác minh trên Base để mở khóa việc mua.",
+      "ctaConfirm": "Xác nhận trên chuỗi",
+      "confirming": "Đang xác nhận trên chuỗi…",
+      "confirmed": "Đã xác nhận trên chuỗi. Bạn có thể mua.",
+      "error": "Không thể xác nhận trên chuỗi. Hãy thử lại.",
+      "notEligible": "Tài khoản này không đủ điều kiện cho danh sách trắng.",
+      "connectWallet": "Kết nối ví để tiếp tục.",
+      "alreadyVerified": "Đã xác nhận trên chuỗi."
+    },
+    "form": {
+      "title": "Mua PPL",
+      "network": "Mạng",
+      "token": "Token",
+      "amount": "Số tiền",
+      "networkBase": "Base",
+      "networkOther": "Mạng khác",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Ước tính PPL",
+      "minimum": "Tối thiểu nhận được",
+      "price": "Giá PPL hiện tại",
+      "etaDuration": "1–20 phút",
+      "eta": "Đến trong khoảng {eta}",
+      "fees": "Phí: {fees}",
+      "feesToggle": "Chi tiết phí",
+      "feesBody": "Phí mạng Base thường khoảng $0,01. Phí hoán đổi hoặc cầu nối LI.FI được hiển thị trong widget trước khi xác nhận.",
+      "lifiLine": "Hoán đổi qua LI.FI, mua bằng USDC trên Base",
+      "sellbackLine": "Bán lại mở sau 30 ngày; giới hạn mua lại — chi tiết",
+      "sellbackLink": "chi tiết",
+      "cta": "Mua PPL",
+      "connecting": "Đang kết nối…",
+      "buying": "Đang xác nhận…",
+      "connect": "Kết nối ví để mua",
+      "switch": "Chuyển sang Base",
+      "wrongNetwork": "Chuyển ví sang Base để mua.",
+      "invalid": "Nhập số tiền bằng đô la.",
+      "belowMin": "Tối thiểu là {min}.",
+      "overMax": "Tối đa là {max} mỗi lần mua.",
+      "overDay": "Giới hạn mỗi ngày là {max} mỗi địa chỉ.",
+      "needVerification": "Hoàn tất xác minh ở trên để mua.",
+      "needWallet": "Kết nối ví để xem báo giá.",
+      "preview": "Xem trước: sẽ không gửi giao dịch nào.",
+      "bridgeHint": "Trước tiên hoán đổi sang USDC trên Base bằng LI.FI, sau đó hoàn tất việc mua.",
+      "error": "Việc mua không thành công. Hãy thử lại."
+    },
+    "success": {
+      "title": "Mua hoàn tất",
+      "credited": "{ppl} PPL đã ghi có vào {address}",
+      "tx": "Xem giao dịch",
+      "unlock": "Bán lại mở vào {date}",
+      "again": "Mua thêm PPL"
+    },
+    "partial": {
+      "title": "USDC đã đến — chưa mua được PPL",
+      "body": "Hoán đổi đã chuyển {amount} USDC trên Base, nhưng việc mua PPL không thành công.",
+      "topUp": "Mua PPL bằng {amount} USDC",
+      "hint": "Thao tác này thử lại việc mua trên Base bằng số USDC đã nhận."
+    }
   }
 }
