@@ -7,6 +7,7 @@
   },
   "scripts": {
     "test:faucet": "node --test faucet.test.mjs",
+    "test:founder-nft-genesis": "python3 -m unittest test_generate_founder_nft_genesis",
     "faucet": "node faucet-server.mjs"
   }
 }
