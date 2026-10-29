@@ -8,7 +8,6 @@ import {
   type FounderVerificationLevel,
 } from "./verification.ts";
 import { readFoundersHumanPassportConfig } from "./human-passport-config.ts";
-import { readFoundersWorldIdConfig } from "./world-id-config.ts";
 
 export type TelegramPhoneVerificationError =
   | "phone_taken"
@@ -120,11 +119,6 @@ export async function getFounderVerificationLevel(userId: string): Promise<Found
   const db = await getDbReady();
   const row = await db.select().from(founders).where(eq(founders.userId, userId)).limit(1);
   return (row[0]?.verificationLevel ?? 0) as FounderVerificationLevel;
-}
-
-/** World ID 4.0 (app id, rp id, signing key). */
-export function worldIdConfigured(): boolean {
-  return readFoundersWorldIdConfig() !== null;
 }
 
 export function humanPassportConfigured(): boolean {

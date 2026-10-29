@@ -330,22 +330,6 @@ export const founderSlotCounts = pgTable("founder_slot_count", {
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
 });
 
-export const founderWorldIdNullifiers = pgTable(
-  "founder_world_id_nullifier",
-  {
-    nullifier: numeric("nullifier", { precision: 78, scale: 0 }).notNull(),
-    action: text("action").notNull(),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    verifiedAt: timestamp("verifiedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
-  },
-  (row) => [
-    primaryKey({ columns: [row.nullifier, row.action] }),
-    uniqueIndex("founder_world_id_user_action_idx").on(row.userId, row.action),
-  ],
-);
-
 export const founderTelegramChats = pgTable("founder_telegram_chat", {
   chatId: text("chatId").primaryKey(),
   userId: text("userId")

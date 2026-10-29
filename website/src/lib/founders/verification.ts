@@ -6,7 +6,7 @@ export const VERIFICATION_LEVEL_NONE = 0;
 export const VERIFICATION_LEVEL_TELEGRAM_PHONE = 1;
 export const VERIFICATION_LEVEL_STRONG = 2;
 
-/** Human verification at 100% of base points (World ID / strong tier). */
+/** Human verification at 100% of base points (strong tier). */
 export const VERIFICATION_POINTS_FACTOR_FULL = 1;
 /** Telegram phone tier — half of the strong verification points factor. */
 export const VERIFICATION_POINTS_FACTOR_TELEGRAM = 0.5;
@@ -24,8 +24,7 @@ export function canEarnFounderPoints(level: FounderVerificationLevel): boolean {
 
 /**
  * M20-4: free factory icon generations are a founder perk. Only a wallet bound to a founder
- * verified via Telegram phone (level 1) or a strong/human check (level 2 — Human Passport;
- * World ID is hidden, see api/founders/verify) qualifies. Anything else (unregistered wallet,
+ * verified via Telegram phone (level 1) or a strong/human check (level 2 — Human Passport) qualifies. Anything else (unregistered wallet,
  * level 0) must pay.
  */
 export function isFounderVerifiedForFreeIcons(level: FounderVerificationLevel): boolean {

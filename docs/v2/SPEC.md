@@ -178,7 +178,7 @@ Backend (website) signs EIP-712 `Verification(address account, bytes32 personId,
 with the `verifier` key, reusing the site's existing verification flow. Q4 (Alex, 2026-10-27):
 - signer key lives in a cloud KMS, sign-only, non-exportable; rotation/revocation only by the owner (Safe) via
   `setVerifier` (`address(0)` = revoked, all `verify` calls fail);
-- admission requires Human Passport (score threshold) **or** World ID; Telegram alone is not enough;
+- admission requires Human Passport (score threshold); Telegram alone is not enough;
 - backend stores hashes of all of a person's identifiers and refuses to sign if any of them is already bound to
   another address (cross-provider dedupe is off-chain);
 - `personId = keccak256(serverSecret, canonical person key)` — no PII on-chain.
@@ -408,6 +408,6 @@ verifier-signing API route (§5.3).
   implemented).
 - **Q2** Delivered records frozen → §5.5a.
 - **Q3** Marginal fee confirmed → §5.2 (site copy fix flagged).
-- **Q4** KMS sign-only signer, expiry + nonce, owner-only rotation, Human Passport or World ID, backend
+- **Q4** KMS sign-only signer, expiry + nonce, owner-only rotation, Human Passport, backend
   cross-identifier dedupe → §5.3.
 - **Q5** Buys and sell-back per UTC calendar day → §3 (copy fix: "per day (UTC)" instead of "any 24 hours").
