@@ -142,31 +142,49 @@ export function EvmTokenLaunch() {
           setError(form.stableFeeBuybackNote);
           return;
         }
-        const allowance = await client.readContract({
-          address: stable.address,
-          abi: erc20Abi,
-          functionName: "allowance",
-          args: [signer.address, gateway],
-        });
-        if (allowance < stableFeeUsd6) {
-          setStage("approving");
-          const approveHash = await writeViaActiveSigner(signer, {
+        // Prepaid credit already covers the fee: skip approve + payLaunchFee so we do not charge twice.
+        const [fee, credit] = await Promise.all([
+          client.readContract({
+            address: dep.contracts.tokenFactory as `0x${string}`,
+            abi: factoryAbi,
+            functionName: "tokenCreateFee",
+          }),
+          client.readContract({
+            address: dep.contracts.tokenFactory as `0x${string}`,
+            abi: factoryLaunchAbi,
+            functionName: "prepaidCredit",
+            args: [signer.address],
+          }),
+        ]);
+        if (credit >= fee) {
+          stableFeePaid = true;
+        } else {
+          const allowance = await client.readContract({
             address: stable.address,
             abi: erc20Abi,
-            functionName: "approve",
-            args: [gateway, stableFeeUsd6],
+            functionName: "allowance",
+            args: [signer.address, gateway],
           });
-          await client.waitForTransactionReceipt({ hash: approveHash });
+          if (allowance < stableFeeUsd6) {
+            setStage("approving");
+            const approveHash = await writeViaActiveSigner(signer, {
+              address: stable.address,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [gateway, stableFeeUsd6],
+            });
+            await client.waitForTransactionReceipt({ hash: approveHash });
+          }
+          setStage("payingFee");
+          const payHash = await writeViaActiveSigner(signer, {
+            address: gateway,
+            abi: stableFeeGatewayAbi,
+            functionName: "payLaunchFee",
+            args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
+          });
+          await client.waitForTransactionReceipt({ hash: payHash });
+          stableFeePaid = true;
         }
-        setStage("payingFee");
-        const payHash = await writeViaActiveSigner(signer, {
-          address: gateway,
-          abi: stableFeeGatewayAbi,
-          functionName: "payLaunchFee",
-          args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
-        });
-        await client.waitForTransactionReceipt({ hash: payHash });
-        stableFeePaid = true;
       }
 
       setStage("creating");
