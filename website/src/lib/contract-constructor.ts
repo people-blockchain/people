@@ -25,6 +25,7 @@ const PARAMS: Record<string, { kind: FieldKind; labelKey: string }> = {
   owners_: { kind: "addressList", labelKey: "owners" },
   threshold_: { kind: "count", labelKey: "threshold" },
   duration_: { kind: "days", labelKey: "duration" },
+  goal_: { kind: "tokenAmount", labelKey: "goal" },
   total_: { kind: "tokenAmount", labelKey: "total" },
   quorum_: { kind: "tokenAmount", labelKey: "quorum" },
   votingPeriod_: { kind: "days", labelKey: "votingPeriod" },

@@ -72,7 +72,7 @@ export function FactoryHub() {
     { href: "/create/token", icon: TOKEN_ICON, label: t.tokenNav, body: t.token.lead, cta: t.hub.tokenCta },
     { href: "/create/nft", icon: NFT_ICON, label: t.nftNav, body: t.nft.lead, cta: t.hub.nftCta },
     { href: "/explorer/contracts", icon: ESCROW_ICON, label: t.hub.escrowCta, body: t.hub.escrowLead, cta: t.hub.escrowCta },
-    { href: "/explorer/contracts", icon: CROWDFUND_ICON, label: t.hub.crowdfundCta, body: t.hub.crowdfundLead, cta: t.hub.crowdfundCta },
+    { href: "/create/contract?template=crowdfund", icon: CROWDFUND_ICON, label: t.hub.crowdfundCta, body: t.hub.crowdfundLead, cta: t.hub.crowdfundCta },
     { href: "/create/contract", icon: CONTRACT_ICON, label: t.contractNav, body: t.contractLead, cta: t.hub.contractCta },
     { href: "/lavka", icon: LAVKA_ICON, label: t.hub.lavkaCta, body: t.hub.lavkaLead, cta: t.hub.lavkaCta },
   ];

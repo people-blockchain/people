@@ -5,7 +5,8 @@ export type ContractTemplateId =
   | "escrow"
   | "multisig"
   | "dao"
-  | "timelock";
+  | "timelock"
+  | "crowdfund";
 
 export interface ContractTemplate {
   id: ContractTemplateId;
@@ -393,6 +394,63 @@ contract SimpleTimelock is Ownable {
     }
 }
 `
+  },
+  {
+    id: "crowdfund",
+    titleEn: "Crowdfund with refund",
+    titleRu: "Сбор средств с возвратом",
+    summaryEn: "Collects native coin toward a goal before a deadline. If the goal is reached the owner claims the funds once; if not, every contributor can take their money back.",
+    summaryRu: "Собирает натив до дедлайна. Если цель достигнута, владелец один раз забирает сумму; если нет, каждый участник может вернуть свои деньги.",
+    keywords: [
+      "crowdfund", "crowdfunding", "fundraise", "fundraising", "raise money", "raise funds", "goal", "refund", "donate", "donation", "pledge",
+      "краудфанд", "сбор денег", "сбор средств", "собрать", "возврат", "пожертвов", "фандрайз", "цель сбора"
+    ],
+    fileName: "SimpleCrowdfund.sol",
+    paramHintsEn: ["Funding goal in PPL", "campaign duration in days"],
+    paramHintsRu: ["Цель сбора в PPL", "длительность сбора в днях"],
+    source: `${HEADER}import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract SimpleCrowdfund is Ownable, ReentrancyGuard {
+    uint256 public immutable goal;
+    uint256 public immutable deadline;
+    uint256 public raised;
+    bool public claimed;
+    mapping(address => uint256) public contributions;
+
+    constructor(uint256 goal_, uint256 duration_) Ownable(msg.sender) {
+        require(goal_ > 0 && duration_ > 0, "params");
+        goal = goal_;
+        deadline = block.timestamp + duration_;
+    }
+
+    function contribute() external payable {
+        require(block.timestamp < deadline && !claimed && msg.value > 0, "closed");
+        contributions[msg.sender] += msg.value;
+        raised += msg.value;
+    }
+
+    function goalReached() public view returns (bool) {
+        return raised >= goal;
+    }
+
+    function claim() external onlyOwner nonReentrant {
+        require(goalReached() && !claimed, "goal");
+        claimed = true;
+        (bool ok, ) = owner().call{value: address(this).balance}("");
+        require(ok, "pay");
+    }
+
+    function refund() external nonReentrant {
+        require(block.timestamp >= deadline && !goalReached(), "wait");
+        uint256 amount = contributions[msg.sender];
+        require(amount > 0, "none");
+        contributions[msg.sender] = 0;
+        (bool ok, ) = msg.sender.call{value: amount}("");
+        require(ok, "pay");
+    }
+}
+`
   }
 ];
 
@@ -400,12 +458,25 @@ export function findTemplateById(id: string): ContractTemplate | undefined {
   return CONTRACT_TEMPLATES.find((item) => item.id === id);
 }
 
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Latin keywords match at a word start (so "vest" does not hit "invest"); Cyrillic keywords are stems. */
+function keywordHits(text: string, word: string): boolean {
+  const kw = word.toLowerCase();
+  if (/^[a-z0-9 -]+$/.test(kw)) {
+    return new RegExp(`(^|[^a-z0-9])${escapeRegExp(kw)}`).test(text);
+  }
+  return text.includes(kw);
+}
+
 export function matchTemplate(prompt: string): ContractTemplate {
   const text = prompt.toLowerCase();
   let best = CONTRACT_TEMPLATES[0]!;
   let score = 0;
   for (const template of CONTRACT_TEMPLATES) {
-    const hits = template.keywords.filter((word) => text.includes(word.toLowerCase())).length;
+    const hits = template.keywords.filter((word) => keywordHits(text, word)).length;
     if (hits > score) {
       score = hits;
       best = template;
