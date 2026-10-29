@@ -1,4 +1,5 @@
-import { parseEther, type Hex } from "viem";
+import { parseEther, stringToHex, type Hex } from "viem";
+import { transactionMemo } from "@/lib/evm/transaction-memo";
 import { createEmbeddedWalletClient } from "@/lib/evm/client";
 
 /**
@@ -18,16 +19,54 @@ export function pplAmountToDecimalString(amount: number, decimals = 18): string 
   return fixed;
 }
 
+export function nativeTransferRequest(input: {
+  to: `0x${string}`; amountPpl: number; memo?: string;
+}) {
+  const memo = input.memo;
+  const data = memo ? stringToHex(memo) : undefined;
+  if (memo && (memo.length > 256 || transactionMemo({ to: input.to, input: data }) !== memo)) {
+    throw new Error("invalid_memo");
+  }
+  return { to: input.to, value: parseEther(pplAmountToDecimalString(input.amountPpl)),
+    ...(data ? { data } : {}),
+  };
+}
+
+export function calldataFloorGas(data: Hex): bigint {
+  let zeroBytes = 0;
+  let nonZeroBytes = 0;
+  for (let i = 2; i < data.length; i += 2) {
+    if (data.slice(i, i + 2) === "00") zeroBytes += 1;
+    else nonZeroBytes += 1;
+  }
+  return BigInt(21000) + BigInt(10) * BigInt(zeroBytes + 4 * nonZeroBytes);
+}
+
 export async function sendNativeTransfer(input: {
   privateKey: Hex;
   to: `0x${string}`;
   amountPpl: number;
+  memo?: string;
 }): Promise<`0x${string}`> {
+  const request = nativeTransferRequest(input);
   const client = createEmbeddedWalletClient(input.privateKey);
-  const hash = await client.sendTransaction({
-    to: input.to,
-    value: parseEther(pplAmountToDecimalString(input.amountPpl)),
-  });
+  let transaction: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint } =
+    request;
+  if (request.data) {
+    const { createBrowserPublicClient } = await import("@/lib/evm/client");
+    const publicClient = createBrowserPublicClient();
+    const code = await publicClient.getCode({ address: input.to });
+    if (code && code !== "0x") throw new Error("memo_contract");
+    const estimate = await publicClient.estimateGas({
+      account: client.account.address,
+      to: request.to,
+      value: request.value,
+      data: request.data,
+    });
+    const floor = calldataFloorGas(request.data);
+    transaction = { ...request, gas: estimate > floor ? estimate : floor };
+  }
+  const hash = await client.sendTransaction(transaction);
   return hash;
 }
 

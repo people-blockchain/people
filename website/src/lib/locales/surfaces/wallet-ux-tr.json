@@ -1,4 +1,7 @@
 {
+  "memoPublic": "Not blokzincirde saklanır ve herkese açıktır.",
+  "memoContract": "Notlar yalnızca normal bir cüzdan adresine gönderilebilir, bir sözleşmeye gönderilemez.",
+  "memoInvalid": "Not, blokzincirde saklanamayan karakterler içeriyor.",
   "overview": "Genel bakış",
   "sendTab": "Gönder",
   "historyTab": "Geçmiş",

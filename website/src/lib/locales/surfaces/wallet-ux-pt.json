@@ -1,4 +1,7 @@
 {
+  "memoPublic": "O memo é guardado na blockchain e é público.",
+  "memoContract": "O memo só pode ser enviado para um endereço de carteira comum, não para um contrato.",
+  "memoInvalid": "O memo contém caracteres que não podem ser guardados na blockchain.",
   "overview": "Visão geral",
   "sendTab": "Enviar",
   "historyTab": "Atividade",
