@@ -476,7 +476,7 @@ test("rpc backoff doubles from the base delay and is capped", () => {
   assert.equal(rpcBackoffDelayMs(50), RPC_BACKOFF_MAX_MS);
 });
 
-test("after a node failure, calls fail fast without touching the node until the backoff expires", async (t) => {
+test("after a node failure, single calls fail fast while log scans read through the backoff", async (t) => {
   let hits = 0;
   const node = createServer((req, res) => {
     req.resume();
@@ -502,10 +502,13 @@ test("after a node failure, calls fail fast without touching the node until the 
   assert.ok(rpcBackoffRemainingMs() > 0);
   assert.ok(rpcBackoffRemainingMs() <= RPC_BACKOFF_BASE_MS);
 
-  // Backing off: neither single calls nor a whole log scan reach the node.
+  // Backing off: a single call never reaches the node ...
   await assert.rejects(evmJsonRpc("eth_blockNumber"), /rpc_backoff/);
-  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
   assert.equal(hits, 1);
+  // ... but log windows read through it (a failure noted for an unrelated call must not blank a
+  // scan), and a node that keeps failing still yields no logs.
+  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
+  assert.ok(hits > 1, "log scan did not read through the backoff");
 });
 
 test("a JSON-RPC error is an answer from a healthy node and does not trigger backoff", async (t) => {

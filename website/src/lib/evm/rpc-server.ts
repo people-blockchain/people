@@ -123,7 +123,10 @@ type RpcBatchEntry<T> = { id?: number; result?: T; error?: { message?: string } 
  * JSON-RPC `error` member) yields `null` in its slot instead of rejecting the whole batch, so one
  * bad token cannot blank the catalog.
  */
-export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T | null>> {
+export async function evmJsonRpcBatch<T>(
+  calls: RpcBatchCall[],
+  options: Pick<EvmJsonRpcOptions, "ignoreBackoff"> = {},
+): Promise<Array<T | null>> {
   const out: Array<T | null> = [];
   if (!calls.length) return out;
   const url = readEvmRpcUrl();
@@ -136,7 +139,7 @@ export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T
       method: call.method,
       params: call.params ?? [],
     }));
-    const { res, payload: raw } = await postRpc(url, body, 30_000);
+    const { res, payload: raw } = await postRpc(url, body, 30_000, { ignoreBackoff: options.ignoreBackoff });
     if (!res.ok) throw new Error(`rpc_http_${res.status}`);
     const payload = raw as Array<RpcBatchEntry<T>> | RpcBatchEntry<T>;
     // A node that rejects batch arrays answers with a single error object rather than an array.

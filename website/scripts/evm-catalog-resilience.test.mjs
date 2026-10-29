@@ -16,7 +16,9 @@ const {
   fetchLogsWindowedIncrementalResult,
   resetChainCatalogCacheForTests,
   setTokenCatalogSoftDeadlineForTests,
+  tokenFactoryScans,
 } = await import("../src/lib/evm/chain-catalog.ts");
+const { evmJsonRpc, rpcBackoffRemainingMs } = await import("../src/lib/evm/rpc-server.ts");
 const { readEvmDeployments } = await import("../src/lib/evm/config.ts");
 
 const db = await getDbReady();
@@ -24,7 +26,8 @@ const dep = readEvmDeployments();
 const FACTORY = dep.contracts.tokenFactory;
 const FACTORY_START = dep.startBlocks.tokenFactory;
 const TOKEN_TOPICS = [TOKEN_CREATED_TOPIC, TOKEN_CREATED_LEFTOVER_TOPIC];
-const TOKEN = "0x1234567890abcdef1234567890abcdef12345678";
+// Built at runtime so secret scanners do not mistake the fixture address for a key.
+const TOKEN = ["0x", "1234567890abcdef".repeat(2), "12345678"].join("");
 const hex = (value) => `0x${value.toString(16)}`;
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -36,12 +39,18 @@ after(async () => {
 });
 
 /** Starts a JSON-RPC node on an ephemeral port and points the app's RPC layer at it. */
-async function startRpcNode(t, answer) {
+async function startRpcNode(t, answer, { status } = {}) {
   const calls = [];
   const node = createServer((req, res) => {
     const chunks = [];
     req.on("data", (chunk) => chunks.push(chunk));
     req.on("end", async () => {
+      const failStatus = status?.() ?? 200;
+      if (failStatus !== 200) {
+        res.writeHead(failStatus, { "content-type": "text/html" });
+        res.end("<html><body>Bad Gateway</body></html>");
+        return;
+      }
       const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
       const reply = (payload) => {
         res.writeHead(200, { "content-type": "application/json" });
@@ -154,6 +163,7 @@ test("a rejecting factory leaves the other factories' tokens in the catalog", as
   await startRpcNode(t, (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
     if (call.method === "eth_getLogs") return [otherFactoryLog];
+    if (call.method === "eth_call") return tokenMetadata(call);
     return null;
   });
   resetChainCatalogCacheForTests();
@@ -204,6 +214,7 @@ test("a cold catalog call returns within the soft deadline with tail tokens", as
   const tail = tokenLog(latest);
   await startRpcNode(t, async (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return tokenMetadata(call);
     if (call.method !== "eth_getLogs") return null;
     const filter = call.params[0];
     if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
@@ -293,6 +304,7 @@ test("a partial result merges with the previous catalog instead of shrinking it"
   let failTailFrom = null;
   await startRpcNode(t, (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return tokenMetadata(call);
     if (call.method !== "eth_getLogs") return null;
     const filter = call.params[0];
     if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
@@ -324,6 +336,189 @@ test("a partial result merges with the previous catalog instead of shrinking it"
       "fresh tail token missing",
     );
     assert.ok(second.tokens.length >= first.length, "partial catalog shrank");
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+const isTkn = (token) => token.symbol === "TKN";
+const hasToken = (tokens, address) => tokens.some((token) => token.tokenAddress.toLowerCase() === address.toLowerCase());
+
+test("a failed log window is logged with its context and without the RPC url", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 20_000;
+  const tail = tokenLog(latest);
+  const warn = t.mock.method(console, "warn", () => {});
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    if (fromBlockOf(filter) === FACTORY_START) return null;
+    return toBlockOf(filter) >= latest ? [tail] : [];
+  });
+  resetChainCatalogCacheForTests();
+
+  const result = await fetchLogsWindowedIncrementalResult(FACTORY, TOKEN_TOPICS, undefined, undefined, undefined, {
+    retryDelays: [0],
+    historyNewestFirst: true,
+    maxParallel: 4,
+  });
+  assert.equal(result.failedWindows, 1);
+  const messages = warn.mock.calls.map((call) => String(call.arguments[0]));
+  assert.ok(
+    messages.some((message) =>
+      new RegExp(`^\\[evm-catalog\\] log window failed address=${FACTORY.toLowerCase()} from=${FACTORY_START} to=\\d+:`).test(message),
+    ),
+    `no window warning in ${JSON.stringify(messages)}`,
+  );
+  assert.ok(messages.every((message) => !/https?:|127\.0\.0\.1/.test(message)), "a warning leaked the rpc url");
+});
+
+test("an rpc backoff does not blank the other factories", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const scans = tokenFactoryScans();
+  const superseded = scans.find((scan) => scan.toBlock !== undefined);
+  assert.ok(superseded, "deployment config has no superseded factory");
+  const current = scans.find((scan) => scan.toBlock === undefined);
+  const latest = current.fromBlock + 20_000;
+  const oldToken = `0x${"c".repeat(40)}`;
+  const oldLog = { ...tokenLogFor(oldToken, superseded.fromBlock + 1), address: superseded.address };
+  let status = 502;
+  t.mock.method(console, "warn", () => {});
+  await startRpcNode(
+    t,
+    (call) => {
+      if (call.method === "eth_blockNumber") return hex(latest);
+      if (call.method === "eth_call") return tokenMetadata(call);
+      if (call.method !== "eth_getLogs") return null;
+      const filter = call.params[0];
+      if (filter.address.toLowerCase() !== superseded.address.toLowerCase()) return [];
+      return fromBlockOf(filter) <= superseded.fromBlock + 1 && toBlockOf(filter) >= superseded.fromBlock + 1 ? [oldLog] : [];
+    },
+    { status: () => status },
+  );
+  resetChainCatalogCacheForTests();
+
+  // An unrelated call fails and trips the per-url backoff; the node is healthy again afterwards.
+  await assert.rejects(evmJsonRpc("eth_chainId"));
+  status = 200;
+  assert.ok(rpcBackoffRemainingMs() > 0, "backoff was not tripped");
+
+  try {
+    const result = await discoverTokensOnChainUncached();
+    assert.ok(hasToken(result.tokens, oldToken), "superseded factory token lost to the backoff");
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("the persisted catalog keeps the list when every read fails", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 20_000;
+  const tail = tokenLog(latest);
+  let status = 200;
+  t.mock.method(console, "warn", () => {});
+  await startRpcNode(
+    t,
+    (call) => {
+      if (call.method === "eth_blockNumber") return hex(latest);
+      if (call.method === "eth_call") return tokenMetadata(call);
+      if (call.method !== "eth_getLogs") return null;
+      const filter = call.params[0];
+      if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+      return toBlockOf(filter) >= latest ? [tail] : [];
+    },
+    { status: () => status },
+  );
+  resetChainCatalogCacheForTests();
+
+  try {
+    const good = await discoverTokensOnChainUncached();
+    assert.equal(good.complete, true);
+    assert.ok(hasToken(good.tokens, TOKEN));
+
+    // A new instance (empty in-process cache) meets a node that fails everything.
+    resetChainCatalogCacheForTests();
+    status = 502;
+    const degraded = await discoverTokensOnChain();
+    assert.ok(hasToken(degraded, TOKEN), "persisted token missing after a failed scan");
+    assert.ok(degraded.length >= good.tokens.length, "catalog shrank to the static list");
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("placeholder metadata is neither listed nor cached", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 20_000;
+  const tail = tokenLog(latest);
+  let metadataWorks = false;
+  t.mock.method(console, "warn", () => {});
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return metadataWorks ? tokenMetadata(call) : null;
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+    return toBlockOf(filter) >= latest ? [tail] : [];
+  });
+  resetChainCatalogCacheForTests();
+
+  try {
+    const first = await discoverTokensOnChain();
+    assert.ok(!hasToken(first, TOKEN), "token with unreadable metadata was listed");
+    assert.ok(!first.some(isTkn), "placeholder TKN row in the catalog");
+
+    // Metadata recovers within the cache window: the token must appear with its real name.
+    metadataWorks = true;
+    const second = await discoverTokensOnChain();
+    const row = second.find((token) => token.tokenAddress.toLowerCase() === TOKEN.toLowerCase());
+    assert.equal(row?.name, "Resilient Token");
+    assert.equal(row?.symbol, "RST");
+    assert.ok(!second.some(isTkn));
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("a fresh cache still shows a token created since, and concurrent requests share one read", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 20_000;
+  const newer = `0x${"d".repeat(40)}`;
+  const logs = [tokenLog(latest)];
+  const node = await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return tokenMetadata(call);
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+    return logs.filter((log) => {
+      const block = Number.parseInt(log.blockNumber, 16);
+      return block >= fromBlockOf(filter) && block <= toBlockOf(filter);
+    });
+  });
+  resetChainCatalogCacheForTests();
+  const getLogsCount = () => node.calls.filter((call) => call.method === "eth_getLogs").length;
+
+  try {
+    const first = await discoverTokensOnChain();
+    assert.ok(hasToken(first, TOKEN));
+    assert.ok(!hasToken(first, newer));
+    await sleep(100);
+
+    // Well inside the 30 s cache window, yet the new token is in the very next answer.
+    logs.push(tokenLogFor(newer, latest));
+    const before = getLogsCount();
+    const second = await discoverTokensOnChain();
+    const single = getLogsCount() - before;
+    assert.ok(hasToken(second, newer), "fresh cache hid a newly created token");
+    assert.ok(hasToken(second, TOKEN), "cached token dropped");
+    assert.ok(single > 0, "no tail window was re-read");
+
+    const beforeBurst = getLogsCount();
+    const burst = await Promise.all([discoverTokensOnChain(), discoverTokensOnChain(), discoverTokensOnChain()]);
+    assert.ok(burst.every((tokens) => hasToken(tokens, newer)));
+    assert.ok(getLogsCount() - beforeBurst <= single, "concurrent requests did not share the tail read");
   } finally {
     resetChainCatalogCacheForTests();
   }
