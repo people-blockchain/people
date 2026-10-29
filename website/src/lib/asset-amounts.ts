@@ -19,6 +19,7 @@ export type AssetInfo = {
   symbol?: string;
   name?: string;
   decimals?: number;
+  imageUri?: string;
   creationMetadata?: { image?: unknown; [key: string]: unknown };
 };
 

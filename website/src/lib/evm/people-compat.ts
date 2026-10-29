@@ -1,4 +1,4 @@
-import { encodeFunctionData, formatUnits, getAddress, isAddress, parseAbi } from "viem";
+import { decodeEventLog, encodeFunctionData, formatUnits, getAddress, isAddress, parseAbi, type Hex } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import {
   fetchBlockByHeight,
@@ -9,10 +9,23 @@ import {
 } from "@/lib/evm/explorer-blocks";
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
-import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
+import {
+  LOG_WINDOW_BLOCKS,
+  discoverPoolsOnChain,
+  discoverTokensOnChain,
+  fetchLogsWindowed,
+  logStartBlock,
+} from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
+import {
+  NFT_MINTED_TOPIC,
+  nftFactoryAddress,
+  nftMintedEvent,
+} from "@/lib/evm/nft-factory";
+import { ipfsGatewayUrlForUri } from "@/lib/ipfs";
+import { readCappedText } from "@/lib/read-capped-text";
 
 type AssetRow = {
   assetId: string;
@@ -132,7 +145,7 @@ const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view retu
  * is checked first (no RPC); otherwise one `isPeopleToken` eth_call per factory version (current
  * and legacy `tokenFactoryVn`) — never a log scan.
  */
-async function resolveKnownToken(assetIdOrAddress: string): Promise<string | null> {
+export async function resolveKnownToken(assetIdOrAddress: string): Promise<string | null> {
   const dep = readEvmDeployments();
   const needle = assetIdOrAddress.trim().toLowerCase();
   if (!needle) return null;
@@ -151,6 +164,242 @@ async function resolveKnownToken(assetIdOrAddress: string): Promise<string | nul
     if (/^0x0*1$/.test(out ?? "")) return token;
   }
   return null;
+}
+
+const BALANCE_OF_ABI = parseAbi(["function balanceOf(address) view returns (uint256)"]);
+const OWNER_OF_SELECTOR = "0x6352211e";
+
+function extraTokenAddresses(raw: string | null): string[] {
+  if (!raw) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const part of raw.split(",")) {
+    const value = part.trim();
+    if (!isAddress(value)) continue;
+    const lower = value.toLowerCase();
+    if (seen.has(lower)) continue;
+    seen.add(lower);
+    out.push(lower);
+    if (out.length >= 20) break;
+  }
+  return out;
+}
+
+/**
+ * ERC-20 balances for a wallet. Catalog tokens come from the factory scan; `tokens=` lets the
+ * wallet ask about its own freshly created tokens before the catalog has indexed them. Only
+ * factory tokens are accepted. A read failure yields no token rows rather than failing the whole
+ * address response.
+ */
+async function walletTokenBalances(
+  owner: string,
+  catalog: Awaited<ReturnType<typeof discoverTokensOnChain>>,
+  tokensParam: string | null,
+): Promise<Record<string, number>> {
+  try {
+    const wanted = new Map<string, { assetId: string; decimals: number; creator: string }>();
+    for (const row of catalog) {
+      if (!row.tokenAddress || !isAddress(row.tokenAddress)) continue;
+      wanted.set(row.tokenAddress.toLowerCase(), {
+        assetId: row.assetId,
+        decimals: row.decimals,
+        creator: row.creator,
+      });
+    }
+    for (const raw of extraTokenAddresses(tokensParam)) {
+      if (wanted.has(raw)) continue;
+      const resolved = await resolveKnownToken(raw).catch(() => null);
+      if (!resolved) continue;
+      const token = getAddress(resolved);
+      const decimals = Number(await erc20Uint(token, "0x313ce567")) || 18;
+      wanted.set(token.toLowerCase(), {
+        assetId: token.toLowerCase(),
+        decimals,
+        creator: "",
+      });
+    }
+    const tokens = [...wanted.keys()].map((lower) => getAddress(lower));
+    if (!tokens.length) return {};
+    const data = encodeFunctionData({ abi: BALANCE_OF_ABI, functionName: "balanceOf", args: [getAddress(owner)] });
+    const rawBalances = await evmJsonRpcBatch<string>(
+      tokens.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
+    ).catch(() => []);
+    const balances: Record<string, number> = {};
+    const ownerLower = owner.toLowerCase();
+    tokens.forEach((token, index) => {
+      const row = wanted.get(token.toLowerCase());
+      if (!row) return;
+      let units = BigInt(0);
+      try {
+        units = BigInt(rawBalances[index] ?? "0x0");
+      } catch {
+        units = BigInt(0);
+      }
+      const value = Number(formatUnits(units, row.decimals));
+      if (value > 0 || row.creator.toLowerCase() === ownerLower) {
+        balances[row.assetId.toLowerCase()] = value;
+      }
+    });
+    return balances;
+  } catch {
+    return {};
+  }
+}
+
+type MintedNftRow = {
+  nftId: string;
+  name: string;
+  description?: string;
+  imageUri?: string;
+  owner: string;
+  creator: string;
+  collection: string;
+  onChainTokenId: string;
+};
+
+const MINTED_NFT_CACHE_TTL_MS = 60_000;
+const MINTED_NFT_CACHE_MAX = 100;
+const mintedNftCache = new Map<string, { at: number; value: MintedNftRow[] }>();
+const MINTED_NFT_SCAN_WINDOWS = 100;
+
+export function resetMintedNftCacheForTests(): void {
+  mintedNftCache.clear();
+}
+
+function addressTopic(address: string): string {
+  return `0x${address.toLowerCase().replace(/^0x/, "").padStart(64, "0")}`;
+}
+
+function metadataImage(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const uri = value.trim();
+  return /^(ipfs|https):\/\/[^\s]+$/i.test(uri) ? uri : undefined;
+}
+
+async function readTokenUriMetadata(tokenUri: string): Promise<{ name?: string; description?: string; image?: string } | null> {
+  const uri = tokenUri.trim();
+  if (!/^(ipfs|https):\/\//i.test(uri)) return null;
+  let url = uri;
+  if (uri.startsWith("ipfs://")) {
+    try {
+      url = ipfsGatewayUrlForUri(uri);
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const res = await fetch(url, {
+      headers: { accept: "application/json" },
+      signal: AbortSignal.timeout(8_000),
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const text = await readCappedText(res, 64 * 1024);
+    if (!text) return null;
+    const json = JSON.parse(text) as { name?: unknown; description?: unknown; image?: unknown };
+    return {
+      ...(typeof json.name === "string" && json.name.trim() ? { name: json.name.trim().slice(0, 200) } : {}),
+      ...(typeof json.description === "string" && json.description.trim()
+        ? { description: json.description.trim().slice(0, 2_000) }
+        : {}),
+      ...(metadataImage(json.image) ? { image: metadataImage(json.image) } : {}),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** NFTs minted through NftFactory to `owner`, verified by a current `ownerOf` read. */
+async function mintedNftsForOwner(owner: string): Promise<MintedNftRow[]> {
+  const cacheKey = owner.toLowerCase();
+  const cached = mintedNftCache.get(cacheKey);
+  if (cached && Date.now() - cached.at < MINTED_NFT_CACHE_TTL_MS) return cached.value;
+
+  const factory = nftFactoryAddress();
+  if (!factory) return [];
+  const latest = await fetchLatestBlockNumber().catch(() => 0);
+  if (!latest) return [];
+  // Bounded window: recent mints only, never a full-chain scan on every wallet open.
+  const from = Math.max(logStartBlock(factory), latest - MINTED_NFT_SCAN_WINDOWS * LOG_WINDOW_BLOCKS);
+  const logs = await fetchLogsWindowed(
+    factory,
+    [NFT_MINTED_TOPIC, null, null, addressTopic(owner)],
+    from,
+  ).catch(() => []);
+
+  const candidates = new Map<string, { collection: string; tokenId: bigint; tokenUri: string }>();
+  for (const log of logs) {
+    if (log.address && log.address.toLowerCase() !== factory.toLowerCase()) continue;
+    try {
+      const decoded = decodeEventLog({
+        abi: [nftMintedEvent],
+        data: (log.data ?? "0x") as Hex,
+        topics: (log.topics ?? []) as [Hex, ...Hex[]],
+      });
+      if (decoded.eventName !== "NftMinted") continue;
+      if (decoded.args.owner.toLowerCase() !== cacheKey) continue;
+      const collection = getAddress(decoded.args.collection);
+      candidates.set(`${collection.toLowerCase()}:${decoded.args.tokenId.toString()}`, {
+        collection,
+        tokenId: decoded.args.tokenId,
+        tokenUri: decoded.args.tokenURI,
+      });
+    } catch {
+      // A log from a different ABI in the same topic slot is ignored.
+    }
+  }
+  if (!candidates.size) {
+    rememberMintedNfts(cacheKey, []);
+    return [];
+  }
+
+  const list = [...candidates.values()];
+  const owners = await evmJsonRpcBatch<string>(
+    list.map((item) => ({
+      method: "eth_call",
+      params: [
+        {
+          to: item.collection,
+          data: `${OWNER_OF_SELECTOR}${item.tokenId.toString(16).padStart(64, "0")}`,
+        },
+        "latest",
+      ],
+    })),
+  ).catch(() => list.map(() => null));
+
+  const stillOwned = list.filter((item, index) => {
+    const out = owners[index];
+    if (!out || out === "0x" || out.length < 66) return false;
+    return `0x${out.slice(-40)}`.toLowerCase() === cacheKey;
+  });
+
+  const rows = await Promise.all(
+    stillOwned.map(async (item): Promise<MintedNftRow> => {
+      const meta = await readTokenUriMetadata(item.tokenUri);
+      return {
+        nftId: `${item.collection.toLowerCase()}-${item.tokenId.toString()}`,
+        name: meta?.name ?? `NFT #${item.tokenId.toString()}`,
+        ...(meta?.description ? { description: meta.description } : {}),
+        ...(meta?.image ? { imageUri: meta.image } : {}),
+        owner: getAddress(owner),
+        creator: getAddress(owner),
+        collection: item.collection,
+        onChainTokenId: item.tokenId.toString(),
+      };
+    }),
+  );
+  rememberMintedNfts(cacheKey, rows);
+  return rows;
+}
+
+function rememberMintedNfts(owner: string, rows: MintedNftRow[]): void {
+  mintedNftCache.delete(owner);
+  while (mintedNftCache.size >= MINTED_NFT_CACHE_MAX) {
+    const oldest = mintedNftCache.keys().next().value;
+    if (oldest === undefined) break;
+    mintedNftCache.delete(oldest);
+  }
+  mintedNftCache.set(owner, { at: Date.now(), value: rows });
 }
 
 export async function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
@@ -298,9 +547,18 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     }
     const balance = weiToPpl(BigInt(balanceHex));
     const nonce = Number.parseInt(nonceHex, 16);
+    // Token rows are additive: a failed scan or balance read still returns the native balance.
+    const catalog = await discoverTokensOnChain().catch(() => []);
+    const tokenBalances = await walletTokenBalances(addr, catalog, search.get("tokens"));
     return {
       status: 200,
-      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: 0 },
+      body: {
+        balance,
+        nonce,
+        balances: { ppl: balance, ...tokenBalances },
+        outgoingTxs: nonce,
+        incomingTxs: 0,
+      },
     };
   }
 
@@ -332,8 +590,22 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "nfts") {
-    const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
+    const ownerRaw = search.get("owner");
+    const owner = ownerRaw && isAddress(ownerRaw) ? getAddress(ownerRaw) : null;
+    const seedRows = visibleNfts(listSeedNfts(ownerRaw ?? undefined));
+    const mintedRows = owner ? await mintedNftsForOwner(owner).catch(() => []) : [];
+    // Dedupe by collection+token id (falling back to nftId) so a seeded NFT that was also minted
+    // through the factory is listed once.
+    const seen = new Set<string>();
+    const rows: typeof seedRows = [];
+    for (const row of [...seedRows, ...mintedRows]) {
+      const key = row.collection && row.onChainTokenId
+        ? `${row.collection.toLowerCase()}:${row.onChainTokenId}`
+        : row.nftId.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      rows.push(row);
+    }
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];

@@ -157,8 +157,8 @@ export function buildMintRequest(factory: Address, collection: Address, tokenUri
 type ReceiptLike = { logs?: readonly { address: string; topics: readonly Hex[]; data: Hex }[] };
 
 /** keccak256 of the event signatures, kept in sync with `contracts/scripts/seed-97401-nft.mjs`. */
-const COLLECTION_CREATED_TOPIC = "0x5fead977881b23a0dbf2f905699203f29cefea57a576d2d4f412523191258e84";
-const NFT_MINTED_TOPIC = "0xf8b1b480f3e90cec0b9871e75e1c6401bf4db0127701d88d80f0a9d0b39accf7";
+export const COLLECTION_CREATED_TOPIC = "0x5fead977881b23a0dbf2f905699203f29cefea57a576d2d4f412523191258e84";
+export const NFT_MINTED_TOPIC = "0xf8b1b480f3e90cec0b9871e75e1c6401bf4db0127701d88d80f0a9d0b39accf7";
 
 function topicAddress(topic: Hex | undefined): Address | null {
   if (!topic || topic.length < 42) return null;

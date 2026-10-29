@@ -4,6 +4,7 @@ export interface TransferAsset {
   symbol: string;
   decimals: number;
   tokenAddress?: string;
+  imageUri?: string;
   creationMetadata?: { image?: unknown };
 }
 
