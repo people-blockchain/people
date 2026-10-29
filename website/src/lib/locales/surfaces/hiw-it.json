@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Wallet",
-          "text": "Wallet non custodial su telefono o browser. Le chiavi non lasciano il dispositivo."
+          "text": "Crea un wallet su telefono o browser. Un wallet del browser a 12 parole è non custodial: le chiavi non lasciano il dispositivo. Un wallet cloud (accesso con Google o email) è conservato cifrato sui server di PEOPLE, e l'infrastruttura di PEOPLE è in grado di decifrarlo."
         },
         {
           "title": "Crea un token",

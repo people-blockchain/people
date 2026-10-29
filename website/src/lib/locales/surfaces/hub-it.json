@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Crea un portafoglio non-custodial",
-        "body": "Genera una frase di 12 parole nel browser, annotala e crittografala con una password. Le chiavi non lasciano mai questo dispositivo.",
+        "title": "Crea un portafoglio",
+        "body": "Genera una frase di 12 parole nel browser, annotala e crittografala con una password. Le chiavi non lasciano mai questo dispositivo. Oppure accedi con Google per un wallet cloud: la tua chiave è conservata cifrata sui server di PEOPLE e l'infrastruttura di PEOPLE è in grado di decifrarla.",
         "href": "/wallet",
         "cta": "Apri il portafoglio"
       },
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Una persona con un portafoglio su telefono, tablet o browser.",
-        "detail": "Inizia con un account non custodial su telefono, tablet o browser. Entri come persona nella comunità — non come validatore."
+        "detail": "Inizia con un wallet su telefono, tablet o browser. Entri come persona nella comunità — non come validatore."
       },
       {
         "id": "transaction",

@@ -1,15 +1,29 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from "jose";
-import { verifyWeb3AuthIdToken, WEB3AUTH_ID_TOKEN_MAX_AGE_SEC } from "@/lib/web3auth-id-token";
-import { WEB3AUTH_ID_TOKEN_ISSUER } from "@/lib/web3auth-config";
+import {
+  describeWeb3AuthIdTokenForLog,
+  verifyWeb3AuthIdToken,
+  WEB3AUTH_ID_TOKEN_MAX_AGE_SEC,
+} from "@/lib/web3auth-id-token";
+import {
+  WEB3AUTH_CITADEL_ID_TOKEN_ISSUER,
+  WEB3AUTH_ID_TOKEN_ISSUER,
+} from "@/lib/web3auth-config";
 
 const CLIENT_ID = "test-client-id";
 const web3auth = await generateKeyPair("ES256");
+const citadel = await generateKeyPair("ES256");
 const attacker = await generateKeyPair("ES256");
 const jwk = { ...(await exportJWK(web3auth.publicKey)), kid: "w3a-1", alg: "ES256" };
+const citadelJwk = { ...(await exportJWK(citadel.publicKey)), kid: "citadel-1", alg: "ES256" };
 const keySet = createLocalJWKSet({ keys: [jwk] });
+const citadelKeySet = createLocalJWKSet({ keys: [citadelJwk] });
 const opts = { keySet, clientId: CLIENT_ID };
+const citadelOpts = {
+  keySets: { [WEB3AUTH_CITADEL_ID_TOKEN_ISSUER]: citadelKeySet },
+  clientId: CLIENT_ID,
+};
 
 const b64 = (o) => Buffer.from(JSON.stringify(o), "utf8").toString("base64url");
 const nowSec = () => Math.floor(Date.now() / 1000);
@@ -125,4 +139,95 @@ test("unknown verifier without email_verified: accepted, but emailVerified stays
   );
   assert.equal(profile.email, "ada@example.com");
   assert.equal(profile.emailVerified, false);
+});
+
+test("citadel v11 token with new claim names is mapped to verifier/verifierId/aggregateVerifier", async () => {
+  const token = await sign(
+    {
+      iss: WEB3AUTH_CITADEL_ID_TOKEN_ISSUER,
+      verifier: undefined,
+      verifierId: undefined,
+      aggregateVerifier: undefined,
+      userId: "citadel-user-1",
+      authConnectionId: "google-oauth2",
+      groupedAuthConnectionId: "w3a-google",
+    },
+    { key: citadel.privateKey, kid: "citadel-1" },
+  );
+
+  const profile = await verifyWeb3AuthIdToken(token, citadelOpts);
+  assert.equal(profile.email, "ada@example.com");
+  assert.equal(profile.verifier, "google-oauth2");
+  assert.equal(profile.verifierId, "citadel-user-1");
+  assert.equal(profile.aggregateVerifier, "w3a-google");
+  assert.equal(profile.emailVerified, true);
+});
+
+test("citadel v11 token with legacy claim names is still accepted", async () => {
+  const token = await sign(
+    { iss: WEB3AUTH_CITADEL_ID_TOKEN_ISSUER },
+    { key: citadel.privateKey, kid: "citadel-1" },
+  );
+
+  const profile = await verifyWeb3AuthIdToken(token, citadelOpts);
+  assert.equal(profile.verifier, "web3auth");
+  assert.equal(profile.verifierId, "ada@example.com");
+  assert.equal(profile.aggregateVerifier, "w3a-google");
+});
+
+test("citadel token with a foreign audience is rejected", async () => {
+  const token = await sign(
+    { iss: WEB3AUTH_CITADEL_ID_TOKEN_ISSUER, aud: "other-project" },
+    { key: citadel.privateKey, kid: "citadel-1" },
+  );
+  await assert.rejects(verifyWeb3AuthIdToken(token, citadelOpts));
+});
+
+test("unknown issuer is rejected before any key is looked up", async () => {
+  const token = await sign(
+    { iss: "https://authjs.web3auth.io" },
+    { key: citadel.privateKey, kid: "citadel-1" },
+  );
+  await assert.rejects(verifyWeb3AuthIdToken(token, citadelOpts), /id_token_unknown_issuer/);
+});
+
+test("citadel-iss token signed by the legacy key is rejected (key set routed by iss)", async () => {
+  const token = await sign(
+    { iss: WEB3AUTH_CITADEL_ID_TOKEN_ISSUER },
+    { key: web3auth.privateKey, kid: "w3a-1" },
+  );
+  await assert.rejects(verifyWeb3AuthIdToken(token, citadelOpts));
+});
+
+test("legacy api-auth issuer still verifies through its own key set", async () => {
+  const token = await sign({});
+  const profile = await verifyWeb3AuthIdToken(token, { ...citadelOpts, keySet });
+  assert.equal(profile.email, "ada@example.com");
+  assert.equal(profile.verifier, "web3auth");
+});
+
+test("describeWeb3AuthIdTokenForLog exposes routing metadata but never the email", async () => {
+  const token = await sign(
+    { iss: WEB3AUTH_CITADEL_ID_TOKEN_ISSUER, email: "secret@example.com" },
+    { key: citadel.privateKey, kid: "citadel-1" },
+  );
+
+  const info = describeWeb3AuthIdTokenForLog(token);
+  assert.equal(info.kid, "citadel-1");
+  assert.equal(info.alg, "ES256");
+  assert.equal(info.iss, WEB3AUTH_CITADEL_ID_TOKEN_ISSUER);
+  assert.equal(info.aud, CLIENT_ID);
+  assert.deepEqual(info.claimNames, [...info.claimNames].sort(), "claim names are sorted");
+  assert.ok(info.claimNames.includes("email"));
+
+  const serialized = JSON.stringify(info);
+  assert.equal(serialized.includes("secret@example.com"), false, "must not leak the email value");
+  assert.equal(serialized.includes(token), false, "must not leak the token");
+});
+
+test("describeWeb3AuthIdTokenForLog never throws on a malformed token", () => {
+  const info = describeWeb3AuthIdTokenForLog("not-a-jwt");
+  assert.deepEqual(info.claimNames, []);
+  assert.equal(info.iss, null);
+  assert.equal(info.alg, null);
 });

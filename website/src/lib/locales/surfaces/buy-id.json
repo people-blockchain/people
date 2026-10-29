@@ -1,17 +1,184 @@
 {
   "meta": {
     "title": "Beli PPL",
-    "description": "PPL dijual pada kurva harga publik di Base. Harga mulai dari US$0,005 dan naik setiap kali ada pembelian. Penjualan berlangsung hingga habis terjual atau 24 bulan, mana yang lebih dulu. Pembelian bersifat final."
+    "description": "PPL adalah token jaringan PEOPLE. Harganya mengikuti formula yang dipublikasikan sejak awal dan naik seiring PPL terjual. 7 hari pertama hanya untuk orang terverifikasi. Pembelian bersifat final."
   },
   "hero": {
     "eyebrow": "Penjualan PPL",
-    "headline": "Beli PPL di kurva harga publik",
-    "sub": "Harga mengikuti kurva publik dan naik seiring lebih banyak PPL terjual. Membeli lebih awal berarti harga awal lebih rendah, bukan keuntungan yang dijamin.",
-    "statsTitle": "Di kurva",
-    "statsNote": "",
-    "ctaScroll": "Cara kerja kurva",
-    "headlineClosed": "Penjualan PPL segera dibuka",
-    "statsTitleClosed": "Di kurva — segera dibuka"
+    "headline": "Blockchain untuk semua orang. Akhirnya.",
+    "lead": "Dulu Anda harus paham teknis. Sekarang cukup menjadi manusia.",
+    "subUpcoming": "Penjualan PPL dibuka pada {date}.",
+    "subWhitelist": "Penjualan PPL sudah dibuka. {days} hari pertama hanya untuk orang terverifikasi.",
+    "subOpen": "Penjualan PPL terbuka untuk semua orang.",
+    "subEnded": "Penjualan PPL telah berakhir.",
+    "ctaVerify": "Verifikasi untuk ikut di {days} hari pertama",
+    "ctaBuy": "Beli PPL",
+    "ctaEnded": "Lihat aturan jual kembali",
+    "countdownLabel": "Menuju pembukaan penjualan",
+    "days": "hari",
+    "hours": "jam",
+    "minutes": "menit",
+    "countdownDone": "Tanggal pembukaan telah tiba. Pembelian dimulai begitu kontrak penjualan dibuka.",
+    "startPrice": "Harga awal: {price} per PPL",
+    "livePrice": "Harga saat ini: {price} per PPL"
+  },
+  "before": {
+    "eyebrow": "Apa yang berubah",
+    "title": "Dulu, dan bersama PEOPLE",
+    "beforeLabel": "Dulu",
+    "afterLabel": "Bersama PEOPLE",
+    "rows": [
+      {
+        "before": "Frasa pemulihan, gas, dan selusin langkah sebelum tindakan pertama.",
+        "after": "Masuk dengan Google atau email, seperti aplikasi biasa."
+      },
+      {
+        "before": "Bot dan akun palsu di samping orang sungguhan.",
+        "after": "Hanya orang terverifikasi: satu orang, satu alamat."
+      },
+      {
+        "before": "Sebagian besar token jatuh ke orang dalam sebelum yang lain.",
+        "after": "{communityPct} dari seluruh PPL untuk komunitas. Tim mendapat {teamPct}, dibuka bertahap selama {teamVesting}."
+      }
+    ]
+  },
+  "ppl": {
+    "eyebrow": "Apa itu PPL",
+    "title": "PPL dalam tiga baris",
+    "lines": [
+      "PPL adalah token jaringan PEOPLE.",
+      "Harganya mengikuti formula yang dipublikasikan sejak awal: naik saat PPL dibeli dan turun saat PPL dijual kembali.",
+      "PEOPLE tidak menetapkan atau menaikkan harga. Tidak ada yang menggesernya secara manual."
+    ],
+    "chartAria": "Harga PPL menurut formula yang dipublikasikan: {start} di awal, {end} saat kurva ditutup",
+    "youAreHere": "Anda di sini",
+    "chartStart": "Awal {price}",
+    "chartEnd": "{price} saat kurva ditutup",
+    "axisSold": "PPL terjual",
+    "detailsToggle": "Detail: formulanya",
+    "details": "Ini adalah kurva harga (bonding curve): harga = {start} × e^(k·x), dengan x = jutaan PPL yang terjual dan k = ln(50)/100. Setiap pembelian menggeser harga naik di sepanjang kurva, setiap penjualan kembali menggesernya turun. Ada {supply} PPL di kurva. Kurva ditutup saat {graduation} sudah terkumpul (sekitar {end} per PPL) atau {term} setelah pembukaan, mana yang lebih dulu."
+  },
+  "how": {
+    "eyebrow": "Cara membeli",
+    "title": "Tiga langkah",
+    "steps": [
+      {
+        "title": "Verifikasi",
+        "body": "Buktikan sekali bahwa Anda orang sungguhan: via Telegram (nomor telepon) atau Human Passport."
+      },
+      {
+        "title": "Pilih jumlah dan jaringan",
+        "body": "{min} sampai {max} per pembelian. Bayar dengan USDC atau USDT; pembayaran dari jaringan lain ditukar otomatis. Pembayaran berlangsung di Base."
+      },
+      {
+        "title": "PPL langsung ke dompet PEOPLE Anda",
+        "body": "Anda membayar dengan USDC atau USDT, dan PPL langsung dikreditkan ke alamat Anda di jaringan PEOPLE."
+      }
+    ],
+    "verifyLink": "Cara verifikasi"
+  },
+  "feed": {
+    "title": "Pembelian dan penjualan terbaru",
+    "empty": "Belum ada transaksi.",
+    "buy": "Beli",
+    "sell": "Jual",
+    "link": "Lihat",
+    "example": "Contoh",
+    "exampleNote": "Transaksi contoh untuk melihat tampilan daftar. Bukan data sungguhan."
+  },
+  "rules": {
+    "eyebrow": "Aturannya",
+    "title": "Aturan yang sama untuk semua",
+    "lead": "Aturan ini tertulis di kontrak penjualan. Tidak ada yang bisa mengubah batas atau formulanya.",
+    "items": [
+      {
+        "title": "{whitelistDays} hari pertama: hanya orang terverifikasi",
+        "body": "Satu orang, satu alamat. {min} sampai {max} per pembelian, hingga {perDay} per alamat per hari (UTC), dan jeda {cooldown} detik di antara pembelian."
+      },
+      {
+        "title": "{reservePct} dari setiap pembelian tetap menjadi cadangan",
+        "body": "Dana ini tetap di kontrak penjualan untuk membayar penjualan kembali. Tidak ada anggota tim yang bisa menariknya. {treasuryPct} sisanya mendanai proyek."
+      },
+      {
+        "title": "Jual kembali setelah {holdDays} hari",
+        "body": "Setiap pembelian dapat dijual kembali {holdDays} hari setelahnya, dengan harga kurva saat itu. Per hari: hingga {sellDailyPct} cadangan untuk semua penjual bersama dan hingga {sellPerAddress} per alamat. Biaya {feeLow}; {feeHigh} untuk bagian di atas {feeThreshold} cadangan pada hari itu. Hanya untuk orang terverifikasi."
+      },
+      {
+        "title": "Siapa pun bisa memeriksa",
+        "body": "Kontrak penjualan bersifat publik, dan setiap pembelian di dalamnya bisa diperiksa. Dana proyek disimpan di dompet yang setiap pembayarannya butuh {signersM} dari {signersN} tanda tangan."
+      }
+    ],
+    "todayTitle": "Penjualan kembali yang tersedia hari ini",
+    "todayLive": "Hari ini masih bisa dijual kembali hingga {amount}, untuk semua penjual bersama.",
+    "todayUpcoming": "Belum ada: pembelian pertama dapat dijual kembali {holdDays} hari setelah penjualan dibuka.",
+    "todayUnknown": "Angka ini dibaca langsung dari kontrak dan saat ini belum tersedia.",
+    "todayClosed": "Penjualan kembali ditutup: kurva sudah ditutup.",
+    "contractTitle": "Kontrak penjualan di Base",
+    "contractPending": "Alamatnya akan dipublikasikan di sini sebelum penjualan dibuka. Beli hanya melalui alamat itu.",
+    "explorerLink": "Buka di Basescan",
+    "copy": "Salin",
+    "copied": "Tersalin",
+    "auditLine": "Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1 (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.",
+    "reviewReports": "Laporan peninjauan: {links}",
+    "auditBounty": "Menemukan celah keamanan? Laporkan lewat tombol bug di halaman mana pun.",
+    "detailsToggle": "Detail",
+    "details": [
+      "Cadangan: USDC yang disimpan di kontrak penjualan. Penjualan kembali dibayar dari sini, dan biaya penjualan kembali tetap di sini. Makin kecil cadangan, makin kecil batas harian penjualan kembali. Penjualan kembali ditutup selamanya saat kurva ditutup.",
+      "Cadangan hanya keluar dari kontrak sebagai likuiditas PPL, saat kurva ditutup, dan hanya setelah pemberitahuan publik {releaseDays} hari sebelumnya. Selama masa pemberitahuan, penjualan kembali tetap berjalan.",
+      "Kas: dompet multisig ({signersM} dari {signersN} tanda tangan) yang menerima {treasuryPct} sisa dari setiap pembelian.",
+      "Multisig dapat menjeda pembelian dan penjualan kembali. Multisig tidak bisa memindahkan cadangan, mengubah batas atau formula, maupun memperpanjang penjualan.",
+      "Penjualan berlangsung sampai {graduation} terkumpul atau {term} setelah pembukaan, mana yang lebih dulu. PPL yang tidak terjual masuk ke Community Pool. Pembelian bersifat final.",
+      "Tim: {teamPct} dari seluruh PPL. Tidak ada selama {cliff} pertama, lalu bulanan selama {linear}, dihitung sejak peluncuran jaringan penuh."
+    ]
+  },
+  "faq": {
+    "eyebrow": "Pertanyaan",
+    "title": "Jawaban singkat",
+    "items": [
+      {
+        "q": "Mengapa perlu verifikasi?",
+        "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk alamat dompet, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Anda dapat memverifikasi via Telegram atau Human Passport. Tidak ada data pribadi yang ditulis ke blockchain."
+      },
+      {
+        "q": "Kapan saya bisa mengirim PPL ke orang lain?",
+        "a": "PPL dikreditkan di jaringan PEOPLE tepat setelah pembelian Anda. Pada awalnya jaringan hanya menerima PPL: transfer antar peserta dibuka nanti, setelah ada sekitar 1.000 peserta terverifikasi. Sampai saat itu Anda dapat menjual PPL kembali ke cadangan sesuai aturan di atas."
+      },
+      {
+        "q": "Dari jaringan mana saya bisa membayar?",
+        "a": "Di Base: USDC, atau USDT yang otomatis ditukar ke USDC dengan biaya kecil. Dari jaringan lain, pembayaran ditukar otomatis: jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana. TON tidak didukung. Pembeliannya sendiri selalu berlangsung dalam USDC di Base."
+      },
+      {
+        "q": "Berapa yang bisa dijual kembali hari ini?",
+        "a": "Setiap pembelian dapat dijual kembali {holdDays} hari setelahnya. Setiap hari, semua penjual bersama dapat menjual kembali hingga {sellDailyPct} cadangan, dan setiap alamat hingga {sellPerAddress}. Cadangan kecil berarti batas harian kecil. Angka hari ini ditampilkan di bagian aturan di atas."
+      },
+      {
+        "q": "Bisakah saya meminta pengembalian dana?",
+        "a": "Tidak. Semua pembelian bersifat final. Satu-satunya jalan kembali adalah menjual ke cadangan sesuai aturan di atas."
+      }
+    ],
+    "riskTitle": "Peringatan risiko",
+    "riskBody": "Nilai PPL bisa turun. Belilah hanya sebanyak yang sanggup Anda pertaruhkan. Patuhi hukum di negara Anda."
+  },
+  "finalCta": {
+    "eyebrow": "Siap?",
+    "bounty": "atau dapatkan PPL dengan menyelesaikan tugas"
+  },
+  "footnote": {
+    "title": "Catatan",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL adalah token utilitas jaringan PEOPLE. Selama penjualan, harganya mengikuti formula yang dipublikasikan; setelah itu pasar yang menentukan, dan harga bisa turun maupun naik. PPL bukan efek, bukan saham perusahaan, bukan simpanan, dan bukan produk investasi. Tidak ada keuntungan, imbal hasil, atau pengembalian apa pun yang dijanjikan atau dijamin. Angka yang ditampilkan sebelum pembelian adalah perkiraan; jumlah pastinya dikonfirmasi on-chain sebelum Anda menandatangani. Tidak ada isi halaman ini yang merupakan nasihat investasi, hukum, atau pajak."
+      },
+      {
+        "marker": "**",
+        "text": "Partisipasi mungkin dibatasi atau tidak tersedia di tempat Anda tinggal; memeriksa aturan yang berlaku bagi Anda adalah tanggung jawab Anda. Gunakan hanya uang yang sanggup Anda relakan hilang."
+      },
+      {
+        "marker": "***",
+        "text": "Peninjauan berbantuan AI yang disebut di atas dijalankan oleh tim proyek. Itu bukan audit keamanan, dan belum ada audit eksternal. Program bug bounty mengurangi risiko tetapi tidak menghilangkannya: tidak ada peninjauan yang bisa membuktikan perangkat lunak bebas cacat."
+      }
+    ]
   },
   "stats": {
     "price": "Harga saat ini",
@@ -25,9 +192,12 @@
     "notOpenYet": "Belum dibuka",
     "progressLabel": "Progres menuju graduation di {target}",
     "saleStatus": "Status penjualan",
+    "whitelistStatus": "Daftar putih: hanya pengguna terverifikasi",
+    "openStatus": "Terbuka",
     "startPriceOnOpen": "Harga awal saat dibuka: {start}",
     "saleWindow": "Masa penjualan",
     "saleWindowValue": "Hingga habis atau {term}",
+    "saleWindowV2": "Whitelist 7 hari mulai {date}, lalu penjualan terbuka hingga {term}",
     "saleWindowHint": "Mana yang lebih dulu. Tanpa perpanjangan.",
     "endsByHint": "Tanggal berakhir paling lambat. Lebih awal jika habis."
   },
@@ -40,7 +210,7 @@
     "priceAfter": "Harga setelah pembelian Anda",
     "estimate": "Ini perkiraan. Jumlah pastinya dikonfirmasi on-chain sebelum Anda menandatangani.",
     "limitPerBuy": "{min}–{max} per pembelian",
-    "limitPerDay": "Hingga {amount} per orang dalam 24 jam mana pun",
+    "limitPerDay": "Hingga {amount} per alamat per hari (UTC)",
     "cooldown": "Jeda {seconds} detik antarpembelian",
     "overLimit": "Maksimum {amount} dalam satu pembelian.",
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
@@ -92,7 +262,7 @@
     "viewTx": "Lihat di Basescan",
     "txRejected": "Anda membatalkan tanda tangan. Tidak ada dana yang ditarik.",
     "priceMoved": "Harga bergerak lebih dari 1% sebelum konfirmasi, jadi tidak ada yang dibeli. Periksa penawaran baru dan coba lagi.",
-    "limitHit": "Batas penjualan menghentikan pembelian ini (per pembelian, per 24 jam, atau jeda antarpembelian). Tidak ada yang dibeli.",
+    "limitHit": "Batas penjualan menghentikan pembelian ini (per pembelian, per hari, atau jeda antarpembelian). Tidak ada yang dibeli.",
     "txFailed": "Transaksi gagal: {reason}. Tidak ada PPL yang dibeli.",
     "tryAgain": "Coba lagi",
     "balanceLine": "Di dompet Anda di Base: {balance} {token} · {eth} ETH",
@@ -101,20 +271,20 @@
     "riskTitle": "Peringatan risiko",
     "riskBody": "Kripto berisiko: harga bisa turun, Anda mungkin tidak bisa langsung menjual, dan pembelian tidak dapat dikembalikan. Gunakan hanya uang yang sanggup Anda rugikan.",
     "riskMoreToggle": "Semua risiko",
-    "riskMore": "Selain itu: PPL tidak dapat dikirim ke orang lain sampai peluncuran jaringan penuh. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, setelah masa tunggu 30 hari dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat membatasi pembelian hanya untuk pengguna terverifikasi.",
+    "riskMore": "Selain itu: transfer PPL antar peserta dibuka nanti, setelah jaringan PEOPLE memiliki sekitar 1.000 peserta terverifikasi. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, 30 hari setelah setiap pembelian dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat menjeda pembelian dan penjualan kembali.",
     "saleTermsNote": "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
     "termsAgree": "Dengan membeli, Anda menyetujui {terms}.",
     "termsLink": "Ketentuan",
     "help": "Butuh bantuan? {support}",
     "supportLink": "Dukungan",
     "noWalletHint": "Belum punya dompet? Pilih Google atau email — PEOPLE Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
-    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
+    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap pembelian dapat dijual kembali 30 hari setelahnya, dengan harga kurva pada saat penjualan. Batas harian: 2% dari cadangan untuk semua orang bersama dan $2.000 per alamat. Biaya 1,5%; 3% hanya untuk bagian penjualan kembali hari itu yang melebihi 1% cadangan. Ditutup saat kurva ditutup. Dana diterima dalam USDC di jaringan Base.",
     "feesTitle": "Biaya dan waktu",
-    "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar US$0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum Anda konfirmasi; biaya penjualan kembali ke cadangan — 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan).",
+    "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar $0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum konfirmasi; biaya penjualan kembali ke cadangan — 1,5%, dan 3% hanya untuk bagian penjualan kembali hari itu yang melebihi 1% cadangan.",
     "timingBody": "Pembelian di Base dikonfirmasi dalam hitungan detik. Pembayaran dari jaringan lain biasanya tiba dalam 1–20 menit. Pembayaran penjualan kembali dikirim dalam USDC di jaringan Base.",
     "getUsdc": "Belum punya USDC? Beli di bursa lalu tarik ke jaringan Base, atau bayar dari jaringan lain di bawah. Anda juga perlu sedikit ETH di Base untuk biaya.",
     "glossaryBase": "Base adalah jaringan berbiaya rendah yang dibangun di atas Ethereum. USDC dan USDT adalah stablecoin yang dipatok ke dolar AS. LI.FI adalah layanan yang menukar token dan memindahkannya antarjaringan.",
-    "phishing": "Satu-satunya alamat resmi penjualan ditampilkan di halaman ini. Tim tidak pernah meminta frasa pemulihan (seed phrase) Anda dan tidak pernah mengirim tautan pembayaran lewat pesan pribadi.",
+    "phishing": "Satu-satunya alamat resmi penjualan ditampilkan di halaman ini. PEOPLE tidak pernah meminta frasa pemulihan (seed phrase) Anda dan tidak pernah mengirim tautan pembayaran lewat pesan pribadi.",
     "stableUsdtDirectOption": "USDT di Base (bridged)",
     "payFromNetworks": "Berfungsi dari jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana. TON tidak didukung.",
     "bridgeSteps": "Langkah 1. Tukar token Anda menjadi USDC di Base di widget (biasanya 1–20 menit). Langkah 2. Beli PPL dengan tombol di bawah.",
@@ -129,214 +299,82 @@
     "switchRejected": "Jaringan tidak dialihkan. Pembelian memerlukan Base — coba lagi.",
     "embeddedNoBase": "PEOPLE Wallet belum bisa membayar di jaringan Base. Untuk membeli, hubungkan MetaMask, Trust Wallet, atau WalletConnect."
   },
-  "whyPriceRises": {
-    "title": "Mengapa harga naik",
-    "noManualLead": "Tim PEOPLE tidak menetapkan atau menaikkan harga. Harga ditetapkan otomatis oleh formula publik di kontrak penjualan: setiap pembelian menggeser harga di sepanjang kurva.",
-    "mechanism": "Harga berdasarkan formula publik: harga hanya bergantung pada jumlah PPL yang terjual, dan siapa pun dapat memeriksanya on-chain setelah kontrak dipublikasikan.",
-    "example": "Dari parameter yang dipublikasikan: {startPrice} per PPL di awal, {midPrice} setelah {midSold} PPL terjual (~{midRaised} terkumpul), dan {gradPrice} saat graduation ({gradRaised} terkumpul).",
-    "explainerLink": "Cara kerja kurva",
-    "chartAria": "Kurva harga penjualan PPL: harga dan PPL terjual",
-    "chartAxisSold": "PPL terjual",
-    "chartAxisPrice": "Harga, $",
-    "chartMarker": "{price} · {sold}",
-    "contractPendingNote": "Kontrak belum dipublikasikan. Setelah dipublikasikan, siapa pun dapat memeriksa formulanya on-chain.",
-    "plainTitle": "Singkatnya",
-    "plain": [
-      "Kurva harga (bonding curve) — formula harga publik: makin banyak PPL terjual, makin tinggi harganya.",
-      "Graduation (kurva ditutup) — saat $4M terkumpul: kurva ditutup dan pool PPL publik dibuka.",
-      "Token LP dikunci selama 24 bulan: tidak ada yang bisa menarik uang pool selama itu.",
-      "Multisig — dompet yang setiap pembayarannya harus disetujui beberapa orang.",
-      "Pool DEX — pool pertukaran terbuka tempat siapa pun dapat memperdagangkan PPL.",
-      "Lot adalah satu pembelian; 30 hari dihitung dari setiap pembelian. Terverifikasi berarti Anda pernah membuktikan bahwa Anda orang yang unik (Human Passport atau Telegram) — {howItWorks}. Cadangan adalah USDC yang disimpan di kontrak penjualan; penjualan kembali dibayar dari situ.",
-      "Penjualan kembali: Anda menjual PPL ke cadangan. Pembelian kembali: proyek membeli PPL dengan pendapatan biaya. Ini dua mekanisme yang berbeda."
-    ]
-  },
-  "curve": {
-    "eyebrow": "Formulanya",
-    "title": "Satu kurva, terlihat semua orang",
-    "lead": "Harga tidak ditetapkan manual. harga = {start} × e^(k·x), x juta PPL terjual, k = ln(50)/100. Setiap angka di bawah dihitung dari formula itu.",
-    "axisRaised": "Terkumpul, $",
-    "axisPrice": "Harga per PPL, $",
-    "youAreHere": "Anda di sini",
-    "notOpen": "",
-    "marker": "{raised} terkumpul",
-    "markerPrice": "{price} per PPL",
-    "markerSold": "{sold} PPL terjual",
-    "graduationTag": "Graduation",
-    "ceilingNote": "Plafon {ceiling} hanya tercapai jika semua {supply} PPL terjual. Kurva tutup lebih dulu, saat {graduation} terkumpul.",
-    "feedTitle": "Beli jual terbaru",
-    "feedEmpty": "Belum ada transaksi.",
-    "feedBuy": "Beli",
-    "feedSell": "Jual",
-    "feedLink": "Lihat",
-    "capScope": "Plafon {ceiling} hanya berlaku selama penjualan di kurva. Setelah graduation, harga pool ditentukan pasar bebas tanpa batas atas maupun bawah — harga bisa turun jauh, bahkan mendekati nol.",
-    "formulaToggle": "Untuk yang penasaran: formulanya"
-  },
-  "whatYouGet": {
-    "eyebrow": "Yang Anda dapat",
-    "title": "Apa yang sebenarnya diberikan pembelian",
-    "items": [
-      {
-        "title": "PPL langsung di alamat Anda",
-        "body": "PPL langsung dikreditkan ke alamat Anda, tetapi Anda baru bisa mengirimkannya ke orang lain setelah peluncuran jaringan penuh. Hanya pengguna terverifikasi yang bisa menjual kembali, 30 hari setelah setiap pembelian."
-      },
-      {
-        "title": "Penjualan kembali ke cadangan",
-        "body": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
-      },
-      {
-        "title": "Transfer dibuka saat peluncuran jaringan penuh",
-        "body": "Mengirim PPL ke orang lain dan berdagang di pool dimulai saat peluncuran jaringan penuh, ketika {verified} peserta terverifikasi telah bergabung."
-      },
-      {
-        "title": "Di {graduation} kurva ditutup",
-        "body": "Selama penjualan berlangsung, uang pembelian tetap di cadangan penjualan di Base dan dipakai membayar penjualan kembali. Saat graduation, {liquidityShare} masuk ke pool publik bersama PPL pada harga kurva terakhir (token LP dikunci selama {lockPeriod}), dan {multisigShare} masuk ke multisig proyek, dengan laporan publik untuk setiap pengeluaran."
-      }
-    ]
-  },
-  "timeline": {
-    "eyebrow": "Urutan peristiwa",
-    "title": "Dari kurva ke pasar bebas",
-    "steps": [
-      {
-        "title": "Kurva",
-        "body": "{supply} PPL di kurva publik dari {start} hingga plafon {ceiling}. Siapa pun dapat membeli selama penjualan dibuka: hingga kurva ditutup saat {graduation} terkumpul atau {term} setelah pembukaan, mana yang lebih dulu. Tanpa perpanjangan."
-      },
-      {
-        "title": "Graduation di {graduation}",
-        "body": "Kurva berhenti. {liquidityShare} dari dana terkumpul ditambah PPL pada harga kurva terakhir masuk ke pool DEX publik tepat pada harga itu, tanpa lonjakan. Token LP dikunci selama {lockPeriod}. {multisigShare} masuk ke multisig proyek dengan pelaporan publik. Penjualan kembali ke cadangan ditutup."
-      },
-      {
-        "title": "Peluncuran jaringan penuh",
-        "body": "Transfer PPL antardompet dan perdagangan di pool dibuka saat peluncuran jaringan penuh, ketika {verified} peserta terverifikasi telah bergabung."
-      },
-      {
-        "title": "Jika tidak habis: {term} setelah pembukaan",
-        "body": "Jika kurva belum ditutup saat itu, penjualan berakhir tanpa perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Uang yang sudah dibayar tidak dikembalikan."
-      }
-    ]
-  },
-  "transparency": {
-    "eyebrow": "Transparansi",
-    "title": "Kontrak, dana, dan kode",
-    "lead": "Kontrak penjualan, kemana uang penjualan, tinjauan keamanan kode, dan cara token tim dibuka.",
-    "saleContract": "Kontrak penjualan (PplCurveHub di Base)",
-    "saleContractPending": "Kontrak penjualan: PplCurveHub di Base (chain ID 8453). Belum dipublikasikan — alamat dan tautan penjelajah blok akan muncul di sini sebelum penjualan dibuka.",
-    "verifiedSource": "Sumber terverifikasi",
-    "auditTitle": "Tinjauan keamanan",
-    "auditLine": "Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1 (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.",
-    "explorerLink": "Buka di Basescan",
-    "allocationTitle": "Ke mana 1 miliar PPL pergi",
-    "allocationNote": "Pasokan tetap {supply} PPL. Bagian penjualan adalah {salePct} di kurva.",
-    "vestingTitle": "Vesting tim",
-    "vestingBody": "Vesting tim dimulai saat peluncuran jaringan penuh: selama {cliffPeriod} pertama tim tidak menerima token, lalu token dibuka setiap bulan selama {linearPeriod} berikutnya — total {totalPeriod}.",
-    "fundsTitle": "Ke mana uang penjualan pergi",
-    "fundsBody": "Selama penjualan berlangsung, uang pembelian tetap di cadangan penjualan di Base dan dipakai membayar penjualan kembali. Saat graduation, {liquidityShare} masuk ke pool publik bersama PPL pada harga kurva terakhir (token LP dikunci selama {lockPeriod}), dan {multisigShare} masuk ke multisig proyek, dengan laporan publik untuk setiap pengeluaran.",
-    "auditBounty": "Bug bounty: laporkan kerentanan dengan tombol bug di halaman mana pun.",
-    "reviewReports": "Laporan tinjauan: {links}",
-    "addressesTitle": "Alamat di Base",
-    "addrHub": "Kontrak penjualan (PplCurveHub)",
-    "addrPpl": "Token PPL",
-    "addrMultisig": "Multisig proyek",
-    "addrMultisigThreshold": "{m} dari {n} tanda tangan",
-    "addrUsdc": "USDC di Base",
-    "addrUsdt": "USDT di Base (bridged)",
-    "addrPending": "Akan dipublikasikan di sini sebelum penjualan dibuka",
-    "copy": "Salin",
-    "copied": "Tersalin",
-    "adminPowers": "Multisig proyek dapat membatasi pembelian hanya untuk pengguna terverifikasi (misalnya saat ada serangan bot). Selama mode itu aktif, pengguna yang belum terverifikasi tidak dapat membeli."
-  },
-  "faq": {
-    "eyebrow": "FAQ",
-    "title": "Pertanyaan, dijawab",
-    "items": [
-      {
-        "q": "Bisakah saya menjual PPL kembali?",
-        "a": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base."
-      },
-      {
-        "q": "Apakah plafon {ceiling} permanen?",
-        "a": "Tidak. Plafon berlaku selama kurva berjalan. Kurva ditutup saat {graduation} terkumpul, sekitar {graduationPrice} per PPL, di bawah plafon. Setelah graduation, harga pool ditentukan pasar bebas tanpa batas atas maupun bawah — bisa turun jauh, bahkan mendekati nol."
-      },
-      {
-        "q": "Apakah saya perlu jaringan PEOPLE di dompet?",
-        "a": "Tidak. Penjualan hanya berjalan di Base: Anda membayar dengan USDC atau USDT di Base. Jaringan PEOPLE terpisah dan tidak diperlukan untuk membeli."
-      },
-      {
-        "q": "Kapan saya bisa mengirim PPL ke orang lain?",
-        "a": "Saat peluncuran jaringan penuh, ketika {verified} peserta terverifikasi telah bergabung. Sebelum itu Anda bisa membeli selama penjualan dibuka; penjualan kembali dibatasi: hanya pengguna terverifikasi, 30 hari setelah setiap pembelian, dalam batas harian, dan sampai graduation."
-      },
-      {
-        "q": "Bisakah uang saya dikembalikan?",
-        "a": "Tidak. Semua pembelian bersifat final: tidak ada pengembalian dana. Penjualan tidak diperpanjang; PPL yang tidak terjual masuk ke Community Pool."
-      },
-      {
-        "q": "Dari jaringan mana saya bisa membayar?",
-        "a": "Di Base — dengan USDC atau USDT. Dari jaringan lain — melalui penukaran otomatis bawaan (LI.FI): jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana berfungsi. TON tidak didukung."
-      }
-    ],
-    "pumpTitle": "Apa yang salah pada kurva tanpa plafon",
-    "pumpLead": "Kurva harga (bonding curve) menjadi populer lewat launchpad seperti pump.fun. Inilah masalah yang sudah dikenal dan apa yang kami lakukan.",
-    "pumpCols": [
-      "Masalah",
-      "Apa yang terjadi",
-      "Perlindungan kami"
-    ],
-    "pumpRows": [
-      {
-        "problem": "Pembeli yang terlambat membayar terlalu mahal",
-        "what": "Harga naik tanpa batas; pembeli terakhir sebelum graduation membayar berkali lipat dari pembeli pertama.",
-        "ours": "Harga tetap naik: saat graduation harganya sekitar 32 kali harga awal, jadi pembeli yang terlambat membayar lebih mahal daripada yang awal. Kurva ditutup di {graduation}, sekitar {graduationPrice}, di bawah plafon {ceiling}."
-      },
-      {
-        "problem": "Bot yang membeli lebih dulu",
-        "what": "Skrip membeli di detik pertama dari banyak dompet lalu menjual ke orang sungguhan.",
-        "ours": "Hingga {perBuy} per pembelian, {perDay} per orang dalam 24 jam mana pun, dan jeda {cooldown} detik antarpembelian. Batas per akun mempersulit pengumpulan posisi besar dengan cepat, tetapi tidak mencegah satu orang memakai beberapa dompet."
-      },
-      {
-        "problem": "Aksi jual besar-besaran",
-        "what": "Pemegang besar menjual semuanya sekaligus dan harga anjlok.",
-        "ours": "Penjualan kembali dibatasi 2% dari cadangan per hari untuk semua orang dan $2.000 per orang per hari. Biayanya dipakai untuk pembelian kembali PPL oleh proyek (mekanisme terpisah), dan likuiditas pool dikunci selama {lockPeriod}."
-      },
-      {
-        "problem": "Harga lebih buruk dari yang ditampilkan",
-        "what": "Transaksi terisi di harga jauh lebih buruk dari yang ditampilkan.",
-        "ours": "Perlindungan slippage: jika harga bergerak merugikan Anda lebih dari 1% sebelum pembelian dikonfirmasi, transaksi dibatalkan."
-      },
-      {
-        "problem": "Listing yang didorong hype",
-        "what": "Token didorong ke exchange di tengah penjualan.",
-        "ours": "Tidak ada listing selama penjualan. Perdagangan di pool dimulai saat peluncuran jaringan penuh."
-      }
-    ]
-  },
-  "bottomCta": {
-    "eyebrow": "Siap?",
-    "title": "Beli PPL dengan harga kurva saat ini",
-    "lead": "Formulir yang sama, kurva harga yang sama untuk semua.",
-    "scrollToForm": "Kembali ke formulir beli",
-    "titleClosed": "Penjualan segera dibuka",
-    "leadClosed": "Pada hari pembukaan, harga saat ini akan muncul di sini."
-  },
-  "sticky": {
-    "label": "Beli PPL",
-    "price": "dari {price}"
-  },
-  "footnote": {
-    "title": "Catatan",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti formula yang dipublikasikan; setelah graduation ditetapkan pasar: bisa turun maupun naik. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; tidak ada keuntungan atau imbal hasil yang dijanjikan atau dijamin. Angka sebelum pembelian adalah perkiraan dari formula yang dipublikasikan dan dikonfirmasi on-chain sebelum menandatangani. Tidak ada di halaman ini yang merupakan saran investasi, hukum, atau pajak."
-      },
-      {
-        "marker": "**",
-        "text": "Partisipasi mungkin dibatasi atau tidak tersedia di tempat Anda tinggal; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang sanggup Anda rugikan."
-      },
-      {
-        "marker": "***",
-        "text": "Tinjauan berbantuan AI yang disebut di atas dijalankan oleh tim proyek. Ini bukan audit keamanan, dan belum ada audit eksternal. Bug bounty mengurangi risiko tetapi tidak menghilangkannya: tidak ada tinjauan yang dapat membuktikan perangkat lunak bebas cacat."
-      }
-    ]
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Fase daftar putih",
+      "whitelistBody": "7 hari pertama: hanya orang terverifikasi. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "daysLeft": "Tersisa {days} hari",
+      "openTitle": "Fase publik",
+      "openBody": "Terbuka untuk semua. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "notOpenTitle": "Penjualan belum dibuka",
+      "notOpenBody": "Pembelian dibuka saat kontrak masuk fase daftar putih.",
+      "expiredTitle": "Penjualan berakhir",
+      "graduatedTitle": "Penjualan lulus",
+      "closedBody": "Pembelian ditutup."
+    },
+    "verify": {
+      "title": "7 hari pertama hanya untuk orang terverifikasi",
+      "body": "Verifikasi via Telegram (nomor telepon) atau Human Passport untuk ikut serta.",
+      "ctaVerify": "Verifikasi sekarang",
+      "ctaSignIn": "Masuk untuk memverifikasi",
+      "confirmTitle": "Tersisa satu langkah on-chain",
+      "confirmBody": "Konfirmasi identitas terverifikasi Anda di Base untuk membuka pembelian.",
+      "ctaConfirm": "Konfirmasi on-chain",
+      "confirming": "Mengonfirmasi on-chain…",
+      "confirmed": "Terkonfirmasi on-chain. Anda bisa membeli.",
+      "error": "Tidak dapat mengonfirmasi on-chain. Coba lagi.",
+      "notEligible": "Akun ini tidak memenuhi syarat daftar putih.",
+      "connectWallet": "Hubungkan dompet untuk melanjutkan.",
+      "alreadyVerified": "Sudah terkonfirmasi on-chain."
+    },
+    "form": {
+      "title": "Beli PPL",
+      "network": "Jaringan",
+      "token": "Token",
+      "amount": "Jumlah",
+      "networkBase": "Base",
+      "networkOther": "Jaringan lain",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Perkiraan PPL",
+      "minimum": "Minimum diterima",
+      "price": "Harga PPL saat ini",
+      "etaDuration": "1–20 menit",
+      "eta": "Tiba dalam sekitar {eta}",
+      "fees": "Biaya: {fees}",
+      "feesToggle": "Detail biaya",
+      "feesBody": "Biaya jaringan Base biasanya sekitar $0,01. Biaya tukar atau jembatan LI.FI ditampilkan di widget sebelum konfirmasi.",
+      "lifiLine": "Tukar via LI.FI, beli dengan USDC di Base",
+      "sellbackLine": "Jual kembali terbuka setelah 30 hari; batas beli kembali — detail",
+      "sellbackLink": "detail",
+      "cta": "Beli PPL",
+      "connecting": "Menghubungkan…",
+      "buying": "Mengonfirmasi…",
+      "connect": "Hubungkan dompet untuk membeli",
+      "switch": "Pindah ke Base",
+      "wrongNetwork": "Pindahkan dompet Anda ke Base untuk membeli.",
+      "invalid": "Masukkan jumlah dalam dolar.",
+      "belowMin": "Minimumnya {min}.",
+      "overMax": "Maksimalnya {max} per pembelian.",
+      "overDay": "Batas harian {max} per alamat.",
+      "needVerification": "Selesaikan verifikasi di atas untuk membeli.",
+      "needWallet": "Hubungkan dompet untuk melihat penawaran.",
+      "preview": "Pratinjau: tidak ada transaksi yang akan dikirim.",
+      "bridgeHint": "Tukar dulu ke USDC di Base dengan LI.FI, lalu selesaikan pembelian.",
+      "error": "Pembelian tidak berhasil. Coba lagi."
+    },
+    "success": {
+      "title": "Pembelian selesai",
+      "credited": "{ppl} PPL dikreditkan ke {address}",
+      "tx": "Lihat transaksi",
+      "unlock": "Jual kembali terbuka pada {date}",
+      "again": "Beli PPL lagi"
+    },
+    "partial": {
+      "title": "USDC tiba — PPL tidak terbeli",
+      "body": "Penukaran mengirim {amount} USDC di Base, tetapi pembelian PPL tidak berhasil.",
+      "topUp": "Beli PPL dengan {amount} USDC",
+      "hint": "Ini mengulang pembelian di Base dengan USDC yang diterima."
+    }
   }
 }

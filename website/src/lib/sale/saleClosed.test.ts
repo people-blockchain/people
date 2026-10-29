@@ -143,7 +143,7 @@ test("the closed state is the 'sale opens soon' copy in every locale", () => {
     const copy = JSON.parse(
       readFileSync(join(import.meta.dirname, `../locales/surfaces/buy-${locale}.json`), "utf8"),
     ) as { hero: Record<string, string>; form: Record<string, string> };
-    for (const value of [copy.hero.headlineClosed, copy.hero.statsTitleClosed, copy.form.ctaClosed, copy.form.openingDateTba]) {
+    for (const value of [copy.hero.subUpcoming, copy.hero.countdownLabel, copy.form.ctaClosed, copy.form.openingDateTba]) {
       assert.ok(typeof value === "string" && value.trim().length > 0, locale);
     }
   }

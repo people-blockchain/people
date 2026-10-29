@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Cüzdan",
-          "text": "Telefonda veya tarayıcıda saklamayan cüzdan. Anahtarlar cihazınızdan çıkmaz."
+          "text": "Telefonda veya tarayıcıda bir cüzdan oluşturun. 12 kelimelik tarayıcı cüzdanı emanetsizdir: anahtarlar cihazınızdan çıkmaz. Bulut cüzdanı (Google veya e-posta ile giriş) PEOPLE sunucularında şifreli saklanır ve PEOPLE altyapısı onu çözebilir."
         },
         {
           "title": "Token oluştur",
@@ -20,7 +20,7 @@
           "text": "Lansman eğrisinde, sonra token/PPL havuzunda alıp satın."
         },
         {
-          "title": "Topluluğa %27",
+          "title": "Topluluğa %10",
           "text": "Her standart token arzının %10'sini kendi topluluk havuzuna gönderir."
         },
         {

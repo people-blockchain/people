@@ -1,6 +1,6 @@
 {
   "title": "Wallet",
-  "lead": "Nicht-kustodial. Schlüssel entstehen in diesem Browser, werden mit Ihrem Passwort verschlüsselt und nie an unsere Server gesendet.",
+  "lead": "Browser-Wallet: nicht-kustodial. Schlüssel entstehen in diesem Browser, werden mit Ihrem Passwort verschlüsselt und nie an unsere Server gesendet. Die Anmeldung mit Google oder E-Mail erstellt stattdessen eine Cloud-Wallet: PEOPLE speichert Ihren Schlüssel verschlüsselt, und die Infrastruktur von PEOPLE kann ihn entschlüsseln.",
   "create": "Neues Wallet erstellen",
   "import": "Wallet importieren",
   "unlock": "Entsperren",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "Ihr Schlüssel wird verschlüsselt auf PEOPLE-Servern gespeichert, damit Sie ihn per Anmeldung wiederherstellen können. Die Infrastruktur von PEOPLE kann ihn entschlüsseln. Für volle Selbstverwahrung nutzen Sie eine Browser-Wallet oder eine externe Wallet. Exportieren Sie den privaten Schlüssel nur, wenn Sie eine Sicherung außerhalb von PEOPLE brauchen.",
   "cloudDisconnect": "Disconnect"
 }

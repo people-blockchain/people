@@ -66,10 +66,11 @@ test("BuyForm uses LI.FI widget and USDT swap panel", () => {
   assert.match(BUY_FORM_SRC, /hubPaymentToken/);
 });
 
-test("locale-prefixed /buy redirects to /buy", () => {
-  const config = readFileSync(join(root, "next.config.ts"), "utf8");
-  assert.match(config, /\$\{locale\}\/buy/);
-  assert.match(config, /destination: "\/buy"/);
+test("locale-prefixed /buy redirects to /buy in the proxy (it must set the language cookie)", () => {
+  const proxy = readFileSync(join(root, "src/proxy.ts"), "utf8");
+  assert.match(proxy, /localeFromBuyPath\(pathname\)/);
+  assert.match(proxy, /pathname = "\/buy"/);
+  assert.match(proxy, /\/\(en\|ru\|es\|pt\|fr\|de\|it\|tr\|vi\|id\|zh\|ar\)\/buy/);
 });
 
 test("bridge docs URL is documented for operators", () => {

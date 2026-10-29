@@ -51,6 +51,26 @@ export function usd(amount: number, lang = "en"): string {
   return withCurrency(Math.round(amount).toLocaleString(intlLocale(lang), { useGrouping: true }), lang);
 }
 
+/** Dollars and cents, e.g. `$0.01` — for fees, where whole dollars would read as `$0`. */
+export function usdCents(amount: number, lang = "en"): string {
+  return withCurrency(
+    amount.toLocaleString(intlLocale(lang), { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true }),
+    lang,
+  );
+}
+
+/**
+ * The numeric part of a USDC amount with exactly two decimals, e.g. `123.45`.
+ * The partial-state copy supplies the `USDC` ticker around this shared value.
+ */
+export function usdcAmount(amount: number, lang = "en"): string {
+  return amount.toLocaleString(intlLocale(lang), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+    useGrouping: true,
+  });
+}
+
 /** Compact dollars for axis labels and markers, e.g. `$1M`, `$500K`. */
 export function usdCompact(amount: number, lang = "en"): string {
   return withCurrency(compactNumber(amount, lang), lang);

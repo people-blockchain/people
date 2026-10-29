@@ -11,7 +11,7 @@
  * three-step change:
  *   1. add the id to `Language` in `lib/preferences.ts`;
  *   2. add the `content[code]` translation block in `lib/content.ts`;
- *   3. append the entry below (and to `AVAILABLE_LANGUAGE_CODES`).
+ *   3. add the entry below in switcher display order (and to `AVAILABLE_LANGUAGE_CODES`).
  *
  * The UI scales to dozens of locales without layout changes: the desktop
  * switcher is a dropdown, the mobile sheet renders a scrollable list.
@@ -38,9 +38,9 @@ export const CATALOGUE: readonly LanguageOption[] = [
   { code: "tr", short: "TR", endonym: "Türkçe", english: "Turkish" },
   { code: "vi", short: "VI", endonym: "Tiếng Việt", english: "Vietnamese" },
   { code: "id", short: "ID", endonym: "Bahasa Indonesia", english: "Indonesian" },
+  { code: "ru", short: "RU", endonym: "Русский", english: "Russian" },
   { code: "zh", short: "ZH", endonym: "简体中文", english: "Chinese" },
   { code: "ar", short: "AR", endonym: "العربية", english: "Arabic" },
-  { code: "ru", short: "RU", endonym: "Русский", english: "Russian" },
 ] as const;
 
 /** Locales that currently have a full translation in `lib/content`. */

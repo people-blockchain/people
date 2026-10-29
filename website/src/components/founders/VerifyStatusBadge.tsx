@@ -71,7 +71,7 @@ export function VerifyStatusBadge({ variant = "chip", onNavigate }: { variant?: 
         }`;
   return (
     <Link
-      href="/founders#verify"
+      href="/bounty#verify"
       role={variant === "menu" ? "menuitem" : undefined}
       data-testid={`verify-status-${variant}`}
       data-status={status}

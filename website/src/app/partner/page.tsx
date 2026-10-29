@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { auth } from "@/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PartnerCabinet } from "@/components/partner/PartnerCabinet";
+import { bountyCopy } from "@/lib/bounty-content";
+import { languageFromAcceptLanguage } from "@/lib/locale-detect";
 import { isAuthConfigured } from "@/lib/partner/guards";
 import {
   attachReferralIfEligible,
@@ -110,10 +113,21 @@ export default async function PartnerPage() {
     }
   }
 
+  const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
+  const bountyLabel = bountyCopy(lang).navLabel;
+
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">
       <Navbar />
       <main id="main" className="warm-page flex-1">
+        <div className="mx-auto max-w-6xl px-4 pt-6 sm:px-6 lg:px-8">
+          <Link
+            href="/bounty"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+          >
+            ← {bountyLabel}
+          </Link>
+        </div>
         <PartnerCabinet
           email={cabinet.email}
           referralCode={cabinet.referralCode}

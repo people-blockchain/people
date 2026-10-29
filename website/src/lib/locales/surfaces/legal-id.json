@@ -1,183 +1,192 @@
 {
   "privacy": {
-    "title": "Kebijakan privasi",
-    "subtitle": "Bagaimana situs PEOPLE Blockchain menangani informasi saat menjelajah, masuk, atau menggunakan alat mitra.",
-    "effectiveLabel": "Effective date",
+    "title": "Kebijakan Privasi",
+    "subtitle": "Cara situs web PEOPLE Blockchain menangani informasi saat Anda menjelajah, masuk, atau menggunakan alat mitra.",
+    "effectiveLabel": "Tanggal berlaku",
     "effectiveDate": "23 Oktober 2026",
     "backHome": "Kembali ke beranda",
-    "relatedTerms": "Ketentuan layanan",
-    "relatedPrivacy": "Kebijakan privasi",
+    "relatedTerms": "Ketentuan Layanan",
+    "relatedPrivacy": "Kebijakan Privasi",
     "contactTitle": "Kontak",
-    "contactBody": "For privacy questions, access or correction requests, or account deletion, email {email}. We respond using that address for this site.",
+    "contactBody": "Untuk pertanyaan privasi, permintaan akses atau koreksi data, atau penghapusan akun, kirim email ke {email}. Kami membalas melalui alamat tersebut untuk situs ini.",
     "blocks": [
       {
-        "title": "Who this policy is for",
+        "title": "Siapa yang tercakup dalam kebijakan ini",
         "body": [
-          "This policy describes the website at www.peopleblockchain.network (the \"site\"), operated by the PEOPLE Blockchain project operators (\"we\", \"us\"). It applies when you visit public pages, use the in-browser wallet, explore the test network, or sign in to the partner portal.",
-          "This policy does not replace the public nature of blockchain data. On-chain activity on the PEOPLE Blockchain test network is visible to anyone and cannot be made private after it is confirmed."
+          "Kebijakan ini menjelaskan situs web di www.peopleblockchain.network (\"situs\"), yang dioperasikan oleh para operator proyek PEOPLE Blockchain (\"kami\"). Kebijakan ini berlaku saat Anda mengunjungi halaman publik, menggunakan dompet di dalam browser, menjelajahi jaringan uji coba, atau masuk ke portal mitra.",
+          "Kebijakan ini tidak mengubah sifat publik dari data blockchain. Aktivitas on-chain di jaringan uji coba PEOPLE Blockchain dapat dilihat oleh siapa saja dan tidak dapat dibuat privat setelah dikonfirmasi."
         ]
       },
       {
-        "title": "Information we collect",
+        "title": "Informasi yang kami kumpulkan",
         "body": [
-          "Partner sign-in with Google: if you choose \"Continue with Google\", Google OAuth shares your name, email address, and profile picture with us so we can create or identify your account.",
-          "Partner sign-in with email: if you request a magic link, we collect the email address you type, send a one-time sign-in link through Resend, and store verification tokens needed to complete sign-in.",
-          "Account and partner records in our database (hosted on Neon Postgres): your user id, linked OAuth account fields (provider, provider account id, and tokens returned by the provider where applicable), session records, email verification timestamps, partner referral code, who referred you (if recorded at registration), wallet public address and public key after you bind a wallet, and timestamps such as when the partner profile was created or the wallet was bound.",
-          "Referral attribution: if you arrive with a referral link or code, we may store a referral cookie (people_partner_ref) for up to 30 days so we can attach you to the inviting partner when you first sign in, using a first-wins rule.",
-          "Server logs and security data: like most websites, our host (Vercel) may process connection metadata needed to deliver pages and protect the service. We do not run third-party advertising or analytics scripts on this site in the application code."
+          "Masuk mitra dengan Google: jika Anda memilih \"Continue with Google\", Google OAuth membagikan nama, alamat email, dan foto profil Anda kepada kami agar kami dapat membuat atau mengenali akun Anda.",
+          "Masuk mitra dengan email: jika Anda meminta tautan ajaib (magic link), kami mengumpulkan alamat email yang Anda ketik, mengirim tautan masuk sekali pakai melalui Resend, dan menyimpan token verifikasi yang diperlukan untuk menyelesaikan proses masuk.",
+          "Data akun dan mitra di basis data kami (dihosting di Neon Postgres): id pengguna Anda, kolom akun OAuth yang tertaut (penyedia, id akun penyedia, dan token yang dikembalikan oleh penyedia bila berlaku), catatan sesi, waktu verifikasi email, kode referral mitra, siapa yang mereferensikan Anda (jika dicatat saat pendaftaran), alamat publik dan kunci publik dompet setelah Anda menautkan dompet, serta stempel waktu seperti saat profil mitra dibuat atau dompet ditautkan.",
+          "Atribusi referral: jika Anda datang melalui tautan atau kode referral, kami dapat menyimpan cookie referral (people_partner_ref) hingga 30 hari agar kami dapat mengaitkan Anda dengan mitra pengundang saat Anda pertama kali masuk, dengan aturan pemenang pertama (first-wins).",
+          "Log server dan data keamanan: seperti kebanyakan situs web, host kami (Vercel) dapat memproses metadata koneksi yang diperlukan untuk menyajikan halaman dan melindungi layanan. Pada kode aplikasi, kami tidak menjalankan skrip iklan atau analitik pihak ketiga di situs ini."
         ]
       },
       {
-        "title": "Information stored only in your browser",
+        "title": "Informasi yang hanya disimpan di browser Anda",
         "body": [
-          "Non-custodial wallets: wallet keys are created and encrypted in your browser. Encrypted private keys and optional mnemonics are saved in localStorage under the key ppl-web-wallets. Language (people_lang) and colour theme (people_theme) preferences are also stored in localStorage.",
-          "We never receive your wallet private keys, seed phrases, or wallet encryption password. Only public addresses and public keys are sent to our servers when you choose to bind a wallet to your partner profile."
+          "Dompet non-kustodial: kunci dompet dibuat dan dienkripsi di browser Anda. Kunci privat terenkripsi dan mnemonik opsional disimpan di localStorage dengan kunci ppl-web-wallets. Preferensi bahasa (people_lang) dan tema warna (people_theme) juga disimpan di localStorage.",
+          "Kami tidak pernah menerima kunci privat dompet, frasa seed, atau kata sandi enkripsi dompet Anda. Hanya alamat publik dan kunci publik yang dikirim ke server kami ketika Anda memilih untuk menautkan dompet ke profil mitra Anda."
         ]
       },
       {
-        "title": "Cookies and similar technologies",
+        "title": "Cookie dan teknologi serupa",
         "body": [
-          "Sign-in session: when you use the partner portal, Auth.js / NextAuth sets cookies needed to keep you signed in and to protect sign-in (for example session and CSRF-related cookies). These are used for authentication and security, not for advertising.",
-          "Referral cookie: people_partner_ref remembers an invite code for up to 30 days when you have not already been attributed.",
-          "We do not use SMS for sign-in. Telegram verification: if you choose it, you share your phone number once with our Telegram bot; we store it to enforce one account per person."
+          "Sesi masuk: saat Anda menggunakan portal mitra, Auth.js / NextAuth menetapkan cookie yang diperlukan untuk menjaga Anda tetap masuk dan melindungi proses masuk (misalnya cookie sesi dan cookie terkait CSRF). Cookie ini digunakan untuk autentikasi dan keamanan, bukan untuk iklan.",
+          "Cookie referral: people_partner_ref mengingat kode undangan hingga 30 hari ketika Anda belum dikaitkan dengan mitra mana pun.",
+          "Kami tidak menggunakan SMS untuk masuk. Verifikasi Telegram: jika Anda memilihnya, Anda membagikan nomor telepon sekali kepada bot Telegram kami; kami menyimpannya untuk memastikan satu akun per orang."
         ]
       },
       {
-        "title": "How we use information",
+        "title": "Cara kami menggunakan informasi",
         "body": [
-          "We use the data above to operate the site, authenticate partners, send magic-link emails you request, display your partner cabinet, attribute referrals at registration, verify wallet ownership when you bind an address, and read public test-network data for balances you choose to view.",
-          "We do not sell your personal information."
+          "Kami menggunakan data di atas untuk mengoperasikan situs, mengautentikasi mitra, mengirim email magic link yang Anda minta, menampilkan kabinet mitra Anda, mengatribusikan referral saat pendaftaran, memverifikasi kepemilikan dompet saat Anda menautkan alamat, dan membaca data publik jaringan uji coba untuk saldo yang Anda pilih untuk dilihat.",
+          "Kami tidak menjual informasi pribadi Anda."
         ]
       },
       {
-        "title": "Blockchain and test network",
+        "title": "Blockchain dan jaringan uji coba",
         "body": [
-          "PEOPLE Blockchain is offered as a public test network (beta). Transactions, addresses, and balances on the chain are public and permanent once included. Test PPL has no monetary value and is not a promise of future value or income. Purchases in the PPL sale are public transactions on Base.",
-          "Deleting your website account does not remove or change on-chain history."
+          "PEOPLE Blockchain ditawarkan sebagai jaringan uji coba publik (beta). Transaksi, alamat, dan saldo di chain bersifat publik dan permanen setelah dimasukkan. PPL uji coba tidak memiliki nilai moneter dan bukan janji nilai atau penghasilan di masa depan. Pembelian dalam penjualan PPL adalah transaksi publik di Base.",
+          "Menghapus akun situs web Anda tidak menghapus atau mengubah riwayat on-chain."
         ]
       },
       {
-        "title": "Service providers",
+        "title": "Penyedia layanan",
         "body": [
-          "We rely on service providers that process data on our behalf: Vercel (hosting), Neon (database), Google (optional OAuth sign-in), and Resend (transactional email for magic links). They handle data according to their own terms and our instructions for operating the site. Human Passport and Telegram (verification), LI.FI (swap and bridge widget on /buy) and WalletConnect (wallet connection)."
+          "Kami mengandalkan penyedia layanan yang memproses data atas nama kami: Vercel (hosting), Neon (basis data), Google (masuk OAuth opsional), dan Resend (email transaksional untuk magic link). Mereka menangani data sesuai ketentuan mereka sendiri dan instruksi kami untuk mengoperasikan situs. Selain itu ada Human Passport dan Telegram (verifikasi), LI.FI (widget swap dan bridge di /buy), serta WalletConnect (koneksi dompet)."
         ]
       },
       {
-        "title": "Retention",
+        "title": "Penyimpanan data",
         "body": [
-          "We keep partner and account data while your account exists or as needed to operate the service and meet legal obligations. Magic-link and verification tokens expire automatically. Referral cookies expire after 30 days unless cleared earlier."
+          "Kami menyimpan data mitra dan akun selama akun Anda ada atau sebagaimana diperlukan untuk mengoperasikan layanan dan memenuhi kewajiban hukum. Token magic link dan verifikasi kedaluwarsa secara otomatis. Cookie referral kedaluwarsa setelah 30 hari kecuali dihapus lebih awal."
         ]
       },
       {
-        "title": "Your rights",
+        "title": "Hak Anda",
         "body": [
-          "Depending on where you live, you may have rights to access, correct, or delete personal data we hold about you.",
-          "You can ask us for a copy of the account data we store or ask us to correct inaccurate profile information by emailing {email}.",
-          "You can ask us to delete your account. When we delete your user record from our database, related rows (account links, sessions, verification tokens, and partner profile) are removed through database cascade rules. We cannot delete public blockchain data tied to your wallet addresses.",
-          "You can clear browser localStorage at any time to remove wallets and preferences stored on your device. That does not delete server-side account data."
+          "Tergantung tempat tinggal Anda, Anda mungkin memiliki hak untuk mengakses, mengoreksi, atau menghapus data pribadi yang kami simpan tentang Anda.",
+          "Anda dapat meminta salinan data akun yang kami simpan atau meminta kami mengoreksi informasi profil yang tidak akurat dengan mengirim email ke {email}.",
+          "Anda dapat meminta kami menghapus akun Anda. Ketika kami menghapus catatan pengguna Anda dari basis data, baris terkait (tautan akun, sesi, token verifikasi, dan profil mitra) ikut terhapus melalui aturan cascade basis data. Kami tidak dapat menghapus data blockchain publik yang terkait dengan alamat dompet Anda.",
+          "Anda dapat menghapus localStorage browser kapan saja untuk menghilangkan dompet dan preferensi yang tersimpan di perangkat Anda. Hal itu tidak menghapus data akun di sisi server."
         ]
       },
       {
-        "title": "Children",
+        "title": "Anak-anak",
         "body": [
-          "The site is not directed at children under 16, and we do not knowingly collect personal data from children."
+          "Situs ini tidak ditujukan untuk anak di bawah usia 16 tahun, dan kami tidak dengan sengaja mengumpulkan data pribadi dari anak-anak."
         ]
       },
       {
-        "title": "Changes",
+        "title": "Perubahan",
         "body": [
-          "We may update this policy. We will post the new version on this page and change the effective date above."
+          "Kami dapat memperbarui kebijakan ini. Kami akan memposting versi baru di halaman ini dan mengubah tanggal berlaku di atas."
         ]
       }
     ],
-    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku."
+    "englishPrevails": "Jika terdapat perbedaan, versi bahasa Inggris yang berlaku.",
+    "englishLink": "Baca versi bahasa Inggris"
   },
   "terms": {
-    "title": "Ketentuan layanan",
-    "subtitle": "Aturan menggunakan situs PEOPLE Blockchain dan alat mitra saat jaringan dalam uji/beta.",
-    "effectiveLabel": "Effective date",
+    "title": "Ketentuan Layanan",
+    "subtitle": "Aturan penggunaan situs web PEOPLE Blockchain dan alat mitra selama jaringan masih dalam tahap uji coba/beta.",
+    "effectiveLabel": "Tanggal berlaku",
     "effectiveDate": "23 Oktober 2026",
     "backHome": "Kembali ke beranda",
-    "relatedTerms": "Ketentuan layanan",
-    "relatedPrivacy": "Kebijakan privasi",
+    "relatedTerms": "Ketentuan Layanan",
+    "relatedPrivacy": "Kebijakan Privasi",
     "contactTitle": "Kontak",
-    "contactBody": "Questions about these terms: email {email}.",
+    "contactBody": "Pertanyaan tentang ketentuan ini: kirim email ke {email}.",
     "blocks": [
       {
-        "title": "Agreement",
+        "title": "Perjanjian",
         "body": [
-          "By using www.peopleblockchain.network you agree to these Terms of Service and our Privacy Policy. If you do not agree, do not use the site.",
-          "The site is operated by the PEOPLE Blockchain project operators. We do not state a registered company name or office address in these terms."
+          "Dengan menggunakan www.peopleblockchain.network, Anda menyetujui Ketentuan Layanan ini dan Kebijakan Privasi kami. Jika Anda tidak setuju, jangan gunakan situs ini.",
+          "Situs ini dioperasikan oleh para operator proyek PEOPLE Blockchain. Dalam ketentuan ini kami tidak mencantumkan nama perusahaan terdaftar maupun alamat kantor."
         ]
       },
       {
-        "title": "Test network and beta status",
+        "title": "Jaringan uji coba dan status beta",
         "body": [
-          "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
-          "The PEOPLE network is still a test network. The PPL sale is separate: it runs on Base mainnet with real USDC or USDT."
+          "PEOPLE Blockchain disediakan sebagai jaringan uji coba / beta. Fitur dapat berubah, rusak, atau ditarik tanpa pemberitahuan. Situs dan jaringan disediakan \"apa adanya\" (\"as is\") dan \"sebagaimana tersedia\" (\"as available\").",
+          "Jaringan PEOPLE masih merupakan jaringan uji coba. Penjualan PPL bersifat terpisah: penjualan berjalan di Base mainnet dengan USDC atau USDT sungguhan."
         ]
       },
       {
         "title": "Penjualan PPL publik",
         "body": [
-          "Sale parameters (curve formula, price path, limits and the graduation target) are published on the /buy page. Purchases stay disabled until the sale contract is published; connecting a wallet commits you to nothing.",
-          "No KYC is required to buy. Selling back requires proof of humanity (Human Passport or Telegram), which is not KYC.",
-          "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
-          "The sale term, price formula and limits do not change after the sale opens.",
-          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
-          "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction."
+          "Parameter penjualan (rumus kurva, jalur harga, batas, dan jangka waktu penjualan: hingga habis terjual atau 24 bulan, mana yang lebih dulu) dipublikasikan di halaman /buy. Pembelian tetap dinonaktifkan hingga kontrak penjualan dipublikasikan; menghubungkan dompet tidak mengikat Anda pada apa pun.",
+          "KYC tidak diperlukan untuk membeli. Menjual kembali memerlukan bukti kemanusiaan (Human Passport atau Telegram), yang bukan KYC.",
+          "Penjualan berlangsung hingga habis terjual (kurva ditutup saat dana terkumpul mencapai $4 juta) atau selama 24 bulan sejak dibuka, mana yang lebih dulu. Tanpa perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tanpa pengembalian dana: setiap pembelian bersifat final.",
+          "Jangka waktu penjualan, rumus harga, dan batas tidak berubah setelah penjualan dibuka.",
+          "Jual kembali bukan pengembalian dana: Jual kembali ke cadangan (reserve) — hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tahan 30 hari, pada harga kurva saat Anda menjual. Total penjualan kembali dibatasi 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biaya: 1,5%, atau 3% bila penjualan kembali pada hari itu sudah melebihi 1% dari cadangan. Ditutup setelah graduation. Pembayaran dalam USDC di Base.",
+          "Tidak ada apa pun di situs ini yang merupakan penawaran atau janji untuk menjual PPL di tempat yang penjualannya dibatasi, dan partisipasi mungkin tidak tersedia di yurisdiksi Anda."
         ]
       },
       {
-        "title": "No investment or financial advice",
+        "title": "Bukan nasihat investasi atau keuangan",
         "body": [
-          "Nothing on this site is investment, tax, or legal advice. We do not promise profits, returns, token price, listing, or income of any kind.",
-          "Test PPL and other test-network assets have no monetary value. Holding or earning test tokens does not entitle you to mainnet tokens, money, or future allocations unless we publish a separate, binding program—and none is promised here."
+          "Tidak ada apa pun di situs ini yang merupakan nasihat investasi, pajak, atau hukum. Kami tidak menjanjikan keuntungan, imbal hasil, harga token, pencatatan (listing), atau penghasilan dalam bentuk apa pun.",
+          "PPL uji coba dan aset jaringan uji coba lainnya tidak memiliki nilai moneter. Memegang atau memperoleh token uji coba tidak memberi Anda hak atas token mainnet, uang, atau alokasi di masa depan, kecuali kami mempublikasikan program tersendiri yang mengikat—dan tidak ada yang dijanjikan di sini."
         ]
       },
       {
-        "title": "Your wallet and keys",
+        "title": "Pengungkapan penjualan PPL",
         "body": [
-          "Wallets on this site are non-custodial: you create and control keys in your browser. You are solely responsible for safeguarding seed phrases, private keys, and passwords. If you lose them, we cannot recover funds or access for you.",
-          "Never share secrets with anyone claiming to be support. We will never ask for your seed phrase or private key."
+          "PPL adalah token utilitas jaringan PEOPLE. Di kurva harganya mengikuti rumus yang dipublikasikan; setelah penjualan berakhir pasar yang menentukan dan bisa naik atau turun. PPL bukan sekuritas, saham perusahaan, deposito, atau produk investasi; keuntungan atau pengembalian tidak dijanjikan.",
+          "Partisipasi mungkin dibatasi atau tidak tersedia di wilayah Anda; memeriksa aturan yang berlaku adalah tanggung jawab Anda. Gunakan hanya uang yang siap Anda rugikan.",
+          "Tinjauan keamanan berbantuan AI yang disebut di situs dilakukan oleh tim proyek. Bukan audit eksternal; audit keamanan pihak ketiga diselesaikan sebelum mainnet. Bug bounty mengurangi risiko tetapi tidak menghilangkannya."
         ]
       },
       {
-        "title": "Acceptable use",
+        "title": "Dompet dan kunci Anda",
         "body": [
-          "You agree not to misuse the site or network: no unlawful activity, harassment, fraud, attempts to break security, denial-of-service attacks, scraping that harms service availability, or interference with other users or validators.",
-          "You are responsible for activity performed with your signed-in account and with wallets you control."
+          "Dompet di situs ini bersifat non-kustodial: Anda membuat dan mengendalikan kunci di browser Anda. Anda bertanggung jawab sepenuhnya untuk menjaga frasa seed, kunci privat, dan kata sandi. Jika Anda kehilangannya, kami tidak dapat memulihkan dana atau akses untuk Anda.",
+          "Jangan pernah membagikan rahasia kepada siapa pun yang mengaku sebagai dukungan. Kami tidak akan pernah meminta frasa seed atau kunci privat Anda."
         ]
       },
       {
-        "title": "Partner program and referrals",
+        "title": "Penggunaan yang dapat diterima",
         "body": [
-          "The partner portal lets you sign in, receive a referral code and invite link, see direct (L1) and second-line (L2) partners you referred in our database, and bind a wallet address to view public on-chain Growth-related figures.",
-          "Referral relationships are stored off-chain for the website when you register with someone's invite link, subject to depth limits (no third-line referrals in the partner graph). On-chain Growth fee sharing follows protocol rules (including L1 70% / L2 30% of the Growth reward budget where applicable on the network). Displayed accruals depend on live network data and may be unavailable if a node is not connected.",
-          "Referral and Growth mechanics do not guarantee referrals, payouts, partners, or income. Results depend on real network activity, eligibility rules, and protocol parameters that can change."
+          "Anda setuju untuk tidak menyalahgunakan situs atau jaringan: tidak ada aktivitas melanggar hukum, pelecehan, penipuan, upaya menembus keamanan, serangan denial-of-service, scraping yang merugikan ketersediaan layanan, atau gangguan terhadap pengguna atau validator lain.",
+          "Anda bertanggung jawab atas aktivitas yang dilakukan dengan akun Anda yang sedang masuk dan dengan dompet yang Anda kendalikan."
         ]
       },
       {
-        "title": "Third-party services",
+        "title": "Program mitra dan referral",
         "body": [
-          "Sign-in may use Google or email delivery through Resend. Paying from other networks uses LI.FI (swap and bridge); wallet connections may use WalletConnect; verification uses Human Passport or Telegram. Your use of those services is also subject to their terms."
+          "Portal mitra memungkinkan Anda masuk, menerima kode referral dan tautan undangan, melihat mitra langsung (L1) dan lapis kedua (L2) yang Anda referensikan di basis data kami, serta menautkan alamat dompet untuk melihat angka publik on-chain terkait Growth.",
+          "Hubungan referral disimpan off-chain untuk situs web saat Anda mendaftar dengan tautan undangan seseorang, dengan batas kedalaman (tidak ada referral lapis ketiga dalam grafik mitra). Pembagian biaya Growth on-chain mengikuti aturan protokol (termasuk L1 70% / L2 30% dari anggaran hadiah Growth bila berlaku di jaringan). Akrual yang ditampilkan bergantung pada data jaringan langsung dan mungkin tidak tersedia jika node tidak terhubung.",
+          "Mekanisme referral dan Growth tidak menjamin referral, pembayaran, mitra, atau penghasilan. Hasilnya bergantung pada aktivitas jaringan yang sebenarnya, aturan kelayakan, dan parameter protokol yang dapat berubah."
         ]
       },
       {
-        "title": "Disclaimers",
+        "title": "Layanan pihak ketiga",
         "body": [
-          "To the fullest extent permitted by law, we disclaim warranties of merchantability, fitness for a particular purpose, and non-infringement. We are not liable for indirect, incidental, or consequential damages arising from use of the site or test network, including loss of tokens, keys, or data.",
-          "Some jurisdictions do not allow certain limitations; in those cases our liability is limited to the maximum allowed by law."
+          "Proses masuk dapat menggunakan Google atau pengiriman email melalui Resend. Pembayaran dari jaringan lain menggunakan LI.FI (swap dan bridge); koneksi dompet dapat menggunakan WalletConnect; verifikasi menggunakan Human Passport atau Telegram. Penggunaan layanan tersebut oleh Anda juga tunduk pada ketentuan mereka."
         ]
       },
       {
-        "title": "Changes",
+        "title": "Penafian",
         "body": [
-          "We may change these terms. Continued use after the effective date of an update means you accept the revised terms. Material changes will be posted on this page."
+          "Sejauh diizinkan oleh hukum, kami menyangkal jaminan kelayakan untuk diperdagangkan, kesesuaian untuk tujuan tertentu, dan tidak adanya pelanggaran hak. Kami tidak bertanggung jawab atas kerugian tidak langsung, insidental, atau konsekuensial yang timbul dari penggunaan situs atau jaringan uji coba, termasuk hilangnya token, kunci, atau data.",
+          "Beberapa yurisdiksi tidak mengizinkan pembatasan tertentu; dalam hal itu tanggung jawab kami dibatasi sampai batas maksimum yang diizinkan hukum."
+        ]
+      },
+      {
+        "title": "Perubahan",
+        "body": [
+          "Kami dapat mengubah ketentuan ini. Penggunaan yang berlanjut setelah tanggal berlaku suatu pembaruan berarti Anda menerima ketentuan yang telah direvisi. Perubahan material akan diposting di halaman ini."
         ]
       }
     ],
-    "saleTitle": "Penjualan PPL publik",
-    "englishPrevails": "Jika terjemahan berbeda, versi bahasa Inggris yang berlaku."
+    "englishPrevails": "Jika terdapat perbedaan, versi bahasa Inggris yang berlaku.",
+    "englishLink": "Baca versi bahasa Inggris"
   }
 }

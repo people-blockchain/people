@@ -471,7 +471,7 @@ export const it: LocaleContent = {
         {
           "num": "01",
           "title": "Crea un account",
-          "desc": "Genera un wallet leggero e non-custodial direttamente su smartphone, tablet o browser.",
+          "desc": "Genera un wallet leggero direttamente su smartphone, tablet o browser: un wallet del browser in autocustodia, oppure un wallet cloud che ripristini accedendo.",
           "highlight": "Nessun requisito hardware"
         },
         {

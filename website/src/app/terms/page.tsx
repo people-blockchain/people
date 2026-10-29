@@ -2,21 +2,11 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LegalDocument } from "@/components/legal/LegalDocument";
-import { SITE_NAME } from "@/lib/site";
+import { buildLegalMetadata } from "@/lib/legal-metadata";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | PEOPLE Blockchain",
-  description:
-    "Terms for using the PEOPLE Blockchain website and partner tools on the public test network.",
-  alternates: { canonical: "/terms" },
-  openGraph: {
-    title: "Terms of Service",
-    description: "Terms of service for www.peopleblockchain.network.",
-    type: "website",
-    siteName: SITE_NAME,
-    url: "/terms",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return buildLegalMetadata("terms");
+}
 
 export default function TermsPage() {
   return (

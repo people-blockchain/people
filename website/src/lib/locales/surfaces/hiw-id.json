@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Dompet",
-          "text": "Dompet non-kustodial di ponsel atau browser. Kunci tidak meninggalkan perangkat."
+          "text": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud (masuk dengan Google atau email) disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya."
         },
         {
           "title": "Buat token",
