@@ -473,3 +473,18 @@ export const TOKEN_ICON_SCHEMA_STATEMENTS = [
   "updated_at" timestamp NOT NULL DEFAULT now()
 )`,
 ];
+
+/**
+ * Incremental `eth_getLogs` cursor for the token catalog. The immutable logs already read for a
+ * factory address + event topic are persisted with the last covered block, so later scans skip
+ * the historical windows instead of replaying them on every cold serverless invocation.
+ */
+export const EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "evm_log_scan_cursor" (
+  "address" text NOT NULL,
+  "topic" text NOT NULL,
+  "last_block" bigint NOT NULL,
+  "logs" jsonb NOT NULL,
+  PRIMARY KEY ("address", "topic")
+)`,
+];
