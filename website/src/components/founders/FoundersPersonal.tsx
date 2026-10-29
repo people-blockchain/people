@@ -210,8 +210,8 @@ export function FoundersPersonal({
 
           {referral ? (
             <div className="grid gap-3 sm:grid-cols-[1fr_2fr]">
-              <div className="rounded-3xl bg-brand p-5 text-brand-ink" data-testid="founders-active-count">
-                <p className="whitespace-nowrap font-mono text-3xl font-bold">
+              <div className="min-w-0 rounded-3xl bg-brand p-5 text-brand-ink" data-testid="founders-active-count">
+                <p className="break-words font-mono text-[clamp(1.5rem,2.4vw,2.25rem)] font-bold leading-tight">
                   {fill(t.activeOfMax, { active: referral.activeCount, max: referral.maxActiveInvitees })}
                 </p>
                 <p className="mt-1 text-sm opacity-90">{t.activeOfMaxHint}</p>

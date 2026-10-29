@@ -1,6 +1,6 @@
 {
   "title": "Dompet",
-  "lead": "Non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami.",
+  "lead": "Dompet peramban: non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami. Masuk dengan Google atau email justru membuat dompet cloud: PEOPLE menyimpan kunci Anda terenkripsi dan infrastrukturnya dapat mendekripsinya.",
   "create": "Buat dompet baru",
   "import": "Impor dompet",
   "unlock": "Buka kunci",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "Kunci Anda disimpan terenkripsi di server PEOPLE agar dapat dipulihkan dengan masuk. Infrastruktur PEOPLE mampu mendekripsinya. Untuk kendali penuh atas kunci Anda sendiri, gunakan dompet peramban atau dompet eksternal. Ekspor kunci privat hanya jika Anda memerlukan cadangan di luar PEOPLE.",
   "cloudDisconnect": "Disconnect"
 }

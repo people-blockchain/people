@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Wallet in 30 Sekunden",
-        "sub": "Ihre Schlüssel bleiben auf Ihrem Smartphone oder in Ihrem Browser."
+        "sub": "Browser-Wallet: Ihre Schlüssel bleiben auf Ihrem Gerät. Cloud-Wallet: verschlüsselt auf PEOPLE-Servern gespeichert."
       },
       {
         "id": "token",

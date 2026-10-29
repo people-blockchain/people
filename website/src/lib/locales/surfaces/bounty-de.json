@@ -1,0 +1,124 @@
+{
+  "navLabel": "PPL verdienen",
+  "homeCta": "PPL verdienen",
+  "hero": {
+    "eyebrow": "PPL VERDIENEN",
+    "title": "Verdiene PPL mit PEOPLE",
+    "lead": "Ein Ort für deine Gründernummer, Punkte, deinen persönlichen Empfehlungslink, Bounties und den Community-Belohnungspool.",
+    "ctaEarn": "Jetzt verdienen",
+    "ctaSale": "Zum PPL-Verkauf",
+    "disclaimer": "Testnet-Phase. Punkte und Belohnungen sind vorläufig, erfordern eine menschliche Verifizierung und sind kein Einkommensversprechen."
+  },
+  "countdown": {
+    "eyebrow": "PPL-VERKAUF · 1. DEZEMBER 2026",
+    "title": "Countdown zum PPL-Verkauf",
+    "lead": "Der öffentliche PPL-Verkauf startet am 1. Dezember 2026. Du zahlst in USDC oder USDT auf Base, und PPL werden sofort deiner Adresse im PEOPLE-Netzwerk gutgeschrieben.",
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Minuten",
+    "seconds": "Sekunden",
+    "open": "Der PPL-Verkauf ist geöffnet.",
+    "openCta": "PPL kaufen",
+    "dateLabel": "Startdatum",
+    "unavailable": "Das Startdatum wurde noch nicht angekündigt."
+  },
+  "stats": {
+    "eyebrow": "COMMUNITY",
+    "title": "Teilnehmer",
+    "lead": "Nur verifizierte Personen werden gezählt.",
+    "verified": "verifizierte Teilnehmer",
+    "countries": "Länder",
+    "goal": "Ziel",
+    "missing": "Teilnehmerdaten sind derzeit nicht verfügbar."
+  },
+  "leaderboard": {
+    "eyebrow": "RANGLISTE",
+    "title": "Top-Botschafter",
+    "lead": "Sortiert nach verifizierten Eingeladenen. Bots und unverifizierte Konten zählen nicht.",
+    "founder": "Gründer",
+    "invites": "verifizierte Eingeladene",
+    "ambassador": "Botschafter",
+    "missing": "Die Rangliste hat noch keine echten Daten."
+  },
+  "tasks": {
+    "eyebrow": "PUNKTE",
+    "title": "Deine Punkte und Aufgaben",
+    "lead": "Punkte gibt es für echte Aktionen nach der menschlichen Verifizierung. PPL-Käufe und Airdrop-Teilnahmen werden nicht belohnt.",
+    "yourPoints": "Deine Punkte",
+    "yourNumber": "Gründernummer",
+    "notFounder": "Melde dich an und sichere dir eine Gründernummer, um Punkte zu verdienen.",
+    "signIn": "Wallet öffnen",
+    "dailyCap": "Tageslimit",
+    "perAction": "pro Aktion",
+    "points": "Punkte",
+    "tasksLabel": "Aufgaben",
+    "open": "Öffnen",
+    "verification": "Menschliche Verifizierung erforderlich."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "PPL tauschen", "href": "/swap" },
+    { "id": "stake", "label": "PPL staken", "href": "/staking" },
+    { "id": "token_launch", "label": "Token starten", "href": "/create/token" },
+    { "id": "nft_mint", "label": "NFT prägen", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "In der Governance abstimmen", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Auf ein Projekt reagieren", "href": "/discover" },
+    { "id": "discover_follow", "label": "Einem Projekt folgen", "href": "/discover" },
+    { "id": "invite", "label": "Eine verifizierte Person einladen", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "EMPFEHLUNGEN",
+    "title": "Lade Menschen ein und verdiene am Growth Pool",
+    "lead": "Zwei Ebenen: L1 für direkte Eingeladene und L2 für deren Eingeladene. Punkte werden nur für verifizierte Eingeladene gutgeschrieben, die eine echte Aktion ausführen.",
+    "l1": "L1 · direkt Eingeladener",
+    "points": "Punkte",
+    "l2": "L2 · zweite Ebene",
+    "l2Value": "{{percent}} der Empfehlungspunkte des L1-Eingeladenen (L2)",
+    "poolLabel": "Empfehlungspool der Saison 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% sofort, der Rest über 52 Wochen, abhängig von Aktivität.",
+    "yourLink": "Dein persönlicher Empfehlungslink",
+    "signIn": "Melde dich an und sichere dir eine Gründernummer, um deinen persönlichen Link zu erhalten.",
+    "cabinet": "Partner-Cabinet öffnen",
+    "growthNote": "Growth-Empfehlungsauszahlungen kommen aus dem Growth Pool: 15% der förderfähigen Netzwerkgebühren. Die L1- und L2-Gewichte sind 70/30 dieses Budgets."
+  },
+  "bounties": {
+    "eyebrow": "BOUNTIES",
+    "title": "Bounties",
+    "lead": "Zusätzliche Wege, PPL aus dem Pool Community & Belohnungen zu verdienen.",
+    "bugTitle": "Bug-Bounty",
+    "bugBody": "Melde eine Schwachstelle oder einen Produktfehler über die Bug-Schaltfläche auf jeder Seite. Angenommene Berichte werden mit Gründerpunkten belohnt.",
+    "bugCta": "Bug melden",
+    "creatorTitle": "Empfehlungsbounty des Erstellers",
+    "creatorBody": "Emittenten können optional 5% des Angebots (maximal 10%) für Einladungsbelohnungen reservieren, mit einer standardmäßigen Einladungsbounty von 5% des Kaufs des Eingeladenen.",
+    "creatorCta": "Token starten",
+    "contentTitle": "Content- und Community-Bounties",
+    "contentBody": "Folge dem Aufgabenboard und den Ankündigungen. Eine neue Bounty wird nur hinzugefügt, wenn sie ein echtes Budget und echte Regeln hat."
+  },
+  "tokenomics": {
+    "eyebrow": "FINANZIERUNG",
+    "title": "Woher jede Belohnung kommt",
+    "lead": "Belohnungen werden nur aus dem Pool Community & Belohnungen bezahlt. Es werden keine neuen PPL dafür geprägt.",
+    "communityLabel": "Community & Belohnungen",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Über 6 Jahre freigegeben.",
+    "seasonLabel": "Saison 1 (Vorschlag)",
+    "seasonValue": "20M PPL über 3 Monate",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% sofort, der Rest über 12 Monate, abhängig von Aktivität.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% der förderfähigen Netzwerkgebühren",
+    "sourceCta": "Tokenomik lesen"
+  },
+  "personal": {
+    "eyebrow": "DEIN KONTO",
+    "title": "Gründer-Dashboard",
+    "lead": "Deine Nummer, Punkte, dein Empfehlungslink und deine Aufgaben werden automatisch aktualisiert."
+  },
+  "final": {
+    "title": "Bereit, PPL zu verdienen?",
+    "lead": "Sichere dir eine Gründernummer, erledige Aufgaben und lade verifizierte Personen ein.",
+    "cta": "Jetzt verdienen",
+    "sale": "Zum PPL-Verkauf"
+  }
+}

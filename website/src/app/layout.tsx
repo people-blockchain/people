@@ -164,7 +164,7 @@ export default async function RootLayout({
           {content[lang].a11y.skipToContent}
         </a>
         <ThemeProvider initialTheme={theme}>
-        <LanguageProvider>
+        <LanguageProvider initialLang={lang}>
           <WalletProvider>
             <ChainProviders>
             <WalletModalProvider>

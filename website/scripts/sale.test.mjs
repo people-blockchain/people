@@ -118,10 +118,10 @@ test("/buy explorer links point at Basescan", () => {
   const config = readFileSync(join(root, "src/lib/sale/config.ts"), "utf8");
   assert.match(config, /BASESCAN = "https:\/\/basescan\.org"/);
   for (const fn of ["basescanAddressUrl", "basescanTxUrl"]) assert.match(config, new RegExp(fn));
-  const transparency = readFileSync(join(root, "src/components/buy/SaleTransparency.tsx"), "utf8");
-  assert.match(transparency, /target="_blank"/);
-  assert.match(transparency, /rel="noopener noreferrer"/);
-  assert.doesNotMatch(transparency, /next\/link/);
+  const rules = readFileSync(join(root, "src/components/buy/SaleRules.tsx"), "utf8");
+  assert.match(rules, /target="_blank"/);
+  assert.match(rules, /rel="noopener noreferrer"/);
+  assert.doesNotMatch(rules, /next\/link/);
   for (const file of ["src/lib/sale/config.ts", "src/lib/sale/adapter.ts", "src/components/buy/TradeFeed.tsx"]) {
     assert.doesNotMatch(readFileSync(join(root, file), "utf8"), /etherscan|bscscan|solscan|tronscan/i, file);
   }
@@ -133,31 +133,33 @@ test("/buy page sets dir=rtl for Arabic", () => {
   assert.match(page, /dir=\{isRtl \? "rtl" : "ltr"\}/);
 });
 
-test("/buy stats panel shows only status/price and the sale window", () => {
-  const panel = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
-  assert.doesNotMatch(panel, /key: "raised"/);
-  assert.doesNotMatch(panel, /role="progressbar"/);
-  assert.doesNotMatch(panel, /graduationProgress/);
-  assert.match(panel, /key: "price"/);
-  assert.match(panel, /key: "window"/);
-  assert.doesNotMatch(panel, /key: "sold"/);
-  assert.doesNotMatch(panel, /key: "buyers"/);
+test("/buy hero shows only the countdown or the live price — no raise counters", () => {
+  const hero = readFileSync(join(root, "src/components/buy/BuyHero.tsx"), "utf8");
+  assert.doesNotMatch(hero, /raisedUsd|buyers|soldPpl/);
+  assert.doesNotMatch(hero, /role="progressbar"/);
+  assert.doesNotMatch(hero, /graduationProgress/);
+  assert.match(hero, /OpeningCountdown/);
+  assert.match(hero, /t\.livePrice/);
 });
 
-test("/buy why-price block leads with no manual pricing (12 languages)", () => {
+test("/buy 'what PPL is' block says PEOPLE (not a team) does not set the price (12 languages)", () => {
   const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+  const teamWords = /\bteam\b|команда|equipo|equipe|équipe|\bTeam\b|ekib|đội ngũ|\btim\b|团队|فريق/i;
   for (const lang of langs) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
-    assert.ok(doc.whyPriceRises?.noManualLead, lang);
-    assert.match(doc.whyPriceRises.noManualLead, /PEOPLE/, `${lang}: brand caps`);
-    assert.doesNotMatch(doc.whyPriceRises.mechanism, /Uniswap|Bancor|pump\.fun|Virtuals/i, `${lang}: no third-party brands`);
-    assert.ok(doc.whyPriceRises.plain.length >= 7, `${lang}: plain-words list`);
-    assert.ok(doc.whyPriceRises.chartAxisSold, lang);
+    assert.equal(doc.ppl?.lines?.length, 3, `${lang}: three lines`);
+    const noManual = doc.ppl.lines[2];
+    assert.match(noManual, /PEOPLE/, `${lang}: brand caps`);
+    assert.doesNotMatch(noManual, teamWords, `${lang}: PEOPLE is the community, not the team`);
+    assert.doesNotMatch(doc.ppl.lines.join(" "), /Uniswap|Bancor|pump\.fun|Virtuals/i, `${lang}: no third-party brands`);
+    assert.ok(doc.ppl.axisSold, lang);
     assert.match(doc.form.sellBackTerms, /30/, `${lang}: sell-back hold`);
     assert.doesNotMatch(doc.form.sellBackTerms, /any time|в любой момент|à tout moment|jederzeit|en cualquier momento/i, `${lang}: no anytime sell-back`);
   }
+  const ru = JSON.parse(readFileSync(join(surfaces, "buy-ru.json"), "utf8"));
+  assert.match(ru.ppl.lines[2], /^PEOPLE не назначает и не поднимает цену\./);
   const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
-  assert.match(page, /BuyWhyPriceRises/);
+  assert.match(page, /WhatIsPpl/);
 });
 
 test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
@@ -165,9 +167,9 @@ test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
   for (const lang of nonEn) {
     const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
     const blob = JSON.stringify(doc);
-    assert.doesNotMatch(doc.whyPriceRises.mechanism, /price = f\(tokens/i, lang);
+    assert.doesNotMatch(doc.ppl.lines.join(" "), /price = |bonding curve/i, `${lang}: no formula or jargon in the three lines`);
     assert.doesNotMatch(blob, /sell-back/i, lang);
-    assert.match(doc.whyPriceRises.plain[0], /bonding curve/i, `${lang}: bonding curve gloss`);
+    assert.match(doc.ppl.details, /bonding curve/i, `${lang}: bonding curve gloss, inside details only`);
   }
   const ru = JSON.parse(readFileSync(join(surfaces, "buy-ru.json"), "utf8"));
   assert.match(ru.form.sellBackTerms, /Продажа обратно в резерв/);
@@ -175,22 +177,22 @@ test("/buy non-EN locales use plain language (no raw sale jargon)", () => {
 });
 
 test("/buy UI omits dev-facing stats and form disclaimers", () => {
-  const stats = readFileSync(join(root, "src/components/buy/SaleStatsPanel.tsx"), "utf8");
-  assert.doesNotMatch(stats, /statsNote/);
+  const hero = readFileSync(join(root, "src/components/buy/BuyHero.tsx"), "utf8");
+  assert.doesNotMatch(hero, /statsNote/);
   const form = readFileSync(join(root, "src/components/buy/BuyForm.tsx"), "utf8");
   assert.doesNotMatch(form, /disabledNote/);
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8"));
-  assert.equal(en.hero.statsNote, "");
+  assert.equal(en.hero.statsNote, undefined);
   assert.equal(en.form.disabledNote, undefined);
 });
 
 test("/buy AI review copy names exactly the three models and never says audit", () => {
   const expected = ["Claude Opus 5.5", "GPT Astra", "Fable 5.1"];
-  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).transparency;
+  const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).rules;
   for (const model of expected) assert.match(en.auditLine, new RegExp(model.replace(".", "\\.")));
   assert.match(en.auditLine, /not a security audit/);
   for (const lang of ["en", "ru"]) {
-    const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).transparency;
+    const copy = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).rules;
     assert.ok(copy.auditBounty, `buy-${lang}: bug bounty mention`);
     assert.doesNotMatch(JSON.stringify(copy), /Sonnet|independent AI audit|независимых AI-аудита/i, `buy-${lang}`);
   }
