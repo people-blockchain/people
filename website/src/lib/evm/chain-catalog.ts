@@ -335,6 +335,8 @@ export type LogScanOptions = {
   historyNewestFirst?: boolean;
   /** Called as each window completes, letting a catalog publish partial results early. */
   onWindowLogs?: (logs: RpcLog[]) => void;
+  /** Called once the current factory's tail windows (and their rows) are ready. */
+  onTailReady?: () => void | Promise<void>;
 };
 
 /**
@@ -463,6 +465,9 @@ async function fetchLogsWindowedCore(
     if (block === null) return true;
     return typeof toBlockHint === "number" ? block <= scanLatest : block < tailStart;
   });
+  // Publish already-persisted history immediately, so a cold instance shows every token the cursor
+  // knows about even if the rest of the history scan has not run yet.
+  if (cursorTopic && visibleCursorLogs.length) options.onWindowLogs?.(visibleCursorLogs);
 
   const now = Date.now();
   const scanned: ScannedLogWindow[] = [];
@@ -514,6 +519,8 @@ async function fetchLogsWindowedCore(
     );
     scanned.push(...tailScanned);
     if (tailScanned.some((window) => !window.ok)) complete = false;
+    // The caller may publish the tail now; history below is still bounded by the soft deadline.
+    if (options.onTailReady) await options.onTailReady();
   }
 
   // Persist immutable windows as they form a contiguous successful prefix, so a later invocation
@@ -672,6 +679,27 @@ let tokensRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
 /** Tokens found so far by the in-flight scan, published tail-first for cold requests. */
 let tokenCatalogProgress: { addresses: Set<string>; tokens: CatalogToken[] } | null = null;
+/** Incremented per on-chain scan so a cold request can wait for the tail of *its* scan. */
+let tokenCatalogScanGeneration = 0;
+let tokenCatalogTailReady: { generation: number; promise: Promise<void> } | null = null;
+/** The current factory's tail is ~2 requests; a cold request always waits up to this long for it. */
+export const TOKEN_CATALOG_TAIL_WAIT_MS = 12_000;
+
+type TokenMetadataCacheEntry = {
+  name?: string;
+  symbol?: string;
+  decimals?: number;
+  creator?: string;
+  totalSupply?: bigint;
+  metadataUri?: string;
+};
+
+/**
+ * Immutable ERC-20 metadata (name/symbol/decimals/creator) is kept per token for the lifetime of the
+ * process. A failed batch or a transient node error then reuses the last good values instead of
+ * caching a placeholder "TKN" row. totalSupply/metadataURI are refreshed whenever the read works.
+ */
+const tokenMetadataCache = new Map<string, TokenMetadataCacheEntry>();
 
 export function resetChainCatalogCacheForTests(): void {
   tokensCache = null;
@@ -679,6 +707,9 @@ export function resetChainCatalogCacheForTests(): void {
   tokensRefreshing = null;
   poolsRefreshing = null;
   tokenCatalogProgress = null;
+  tokenCatalogScanGeneration = 0;
+  tokenCatalogTailReady = null;
+  tokenMetadataCache.clear();
   tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
   windowLogsCache.clear();
   logWindowsPeak = 0;
@@ -756,38 +787,107 @@ function staticTokenRows(dep: ReturnType<typeof readEvmDeployments>): CatalogTok
   });
 }
 
-/** Reads ERC-20 metadata for every known address in one batch and turns it into catalog rows. */
-async function buildTokenRows(addresses: Iterable<string>): Promise<CatalogToken[]> {
+const ROW_READS = 6;
+const METADATA_BATCH_TOKENS = 20;
+const METADATA_FALLBACK_CONCURRENCY = 4;
+/** Rows that only exist because both name and symbol reads failed and no cached metadata exists. */
+const placeholderTokenRows = new WeakSet<CatalogToken>();
+
+type TokenRowBuild = { rows: CatalogToken[]; complete: boolean };
+
+function metadataCalls(tokens: string[]) {
+  return tokens.flatMap((token) => [
+    { method: "eth_call", params: [{ to: token, data: SEL_NAME }, "latest"] },
+    { method: "eth_call", params: [{ to: token, data: SEL_SYMBOL }, "latest"] },
+    { method: "eth_call", params: [{ to: token, data: SEL_DECIMALS }, "latest"] },
+    { method: "eth_call", params: [{ to: token, data: SEL_TOTAL_SUPPLY }, "latest"] },
+    { method: "eth_call", params: [{ to: token, data: SEL_CREATOR }, "latest"] },
+    { method: "eth_call", params: [{ to: token, data: SEL_METADATA_URI }, "latest"] },
+  ]);
+}
+
+async function readMetadataChunk(tokens: string[]): Promise<Array<string | null>> {
+  try {
+    return await evmJsonRpcBatch<string>(metadataCalls(tokens));
+  } catch {
+    // Retry a transport-level batch failure once before falling back per token.
+    try {
+      return await evmJsonRpcBatch<string>(metadataCalls(tokens));
+    } catch {
+      return tokens.flatMap(() => [null, null, null, null, null, null] as Array<string | null>);
+    }
+  }
+}
+
+/** Reads ERC-20 metadata for every known address and turns it into catalog rows. */
+async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuild> {
   const dep = readEvmDeployments();
   const tokens = [...new Set([...addresses].map((address) => address.toLowerCase()))].map((lower) => getAddress(lower));
-  if (!tokens.length) return [];
+  if (!tokens.length) return { rows: [], complete: true };
 
-  // Six reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
-  // sequential per-token loop measured ~3.8 s. `creator()` and `metadataURI()` are optional on
-  // older stacks, so a failed slot stays empty instead of failing the catalog.
-  const ROW_READS = 6;
-  const metadata = await evmJsonRpcBatch<string>(
-    tokens.flatMap((token) => [
-      { method: "eth_call", params: [{ to: token, data: SEL_NAME }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_SYMBOL }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_DECIMALS }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_TOTAL_SUPPLY }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_CREATOR }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_METADATA_URI }, "latest"] },
-    ]),
-  ).catch(() => tokens.flatMap(() => [null, null, null, null, null, null] as Array<string | null>));
+  // Small batches keep one bad chunk from blanking every token. A failed chunk is retried once;
+  // tokens whose name/symbol/decimals are still missing then get individual eth_calls.
+  const metadata: Array<string | null> = [];
+  for (let index = 0; index < tokens.length; index += METADATA_BATCH_TOKENS) {
+    metadata.push(...(await readMetadataChunk(tokens.slice(index, index + METADATA_BATCH_TOKENS))));
+  }
+  const fallbackIndexes: number[] = [];
+  for (let index = 0; index < tokens.length; index++) {
+    const offset = index * ROW_READS;
+    const cached = tokenMetadataCache.get(tokens[index].toLowerCase());
+    const missingName = metadata[offset] === null && !cached?.name;
+    const missingSymbol = metadata[offset + 1] === null && !cached?.symbol;
+    const missingDecimals = metadata[offset + 2] === null && cached?.decimals === undefined;
+    if (missingName || missingSymbol || missingDecimals) fallbackIndexes.push(index);
+  }
+  for (let index = 0; index < fallbackIndexes.length; index += METADATA_FALLBACK_CONCURRENCY) {
+    const chunk = fallbackIndexes.slice(index, index + METADATA_FALLBACK_CONCURRENCY);
+    await Promise.all(
+      chunk.map(async (tokenIndex) => {
+        const token = tokens[tokenIndex];
+        const offset = tokenIndex * ROW_READS;
+        const [name, symbol, decimals] = await Promise.all([
+          evmJsonRpc<string>("eth_call", [{ to: token, data: SEL_NAME }, "latest"]).catch(() => null),
+          evmJsonRpc<string>("eth_call", [{ to: token, data: SEL_SYMBOL }, "latest"]).catch(() => null),
+          evmJsonRpc<string>("eth_call", [{ to: token, data: SEL_DECIMALS }, "latest"]).catch(() => null),
+        ]);
+        if (name !== null) metadata[offset] = name;
+        if (symbol !== null) metadata[offset + 1] = symbol;
+        if (decimals !== null) metadata[offset + 2] = decimals;
+      }),
+    );
+  }
 
   // Off-chain icon overrides are optional: no DATABASE_URL (or a DB error) simply leaves the
   // on-chain metadataURI in place.
   const iconOverrides = await readTokenIconOverrides(tokens).catch(() => new Map<string, string>());
 
+  let complete = true;
   const rows: CatalogToken[] = tokens.map((token, index) => {
-    const name = decodeErc20String(metadata[index * ROW_READS]);
-    const symbol = decodeErc20String(metadata[index * ROW_READS + 1]);
-    const decimals = Number(decodeUint(metadata[index * ROW_READS + 2])) || 18;
-    const supplyWei = decodeUint(metadata[index * ROW_READS + 3]);
-    const creator = decodeAddress(metadata[index * ROW_READS + 4]) || dep.deployer || "0x0";
-    const chainImage = tokenImageFromMetadataUri(decodeErc20String(metadata[index * ROW_READS + 5]));
+    const offset = index * ROW_READS;
+    const cached = tokenMetadataCache.get(token.toLowerCase());
+    const name = decodeErc20String(metadata[offset]) || cached?.name || "";
+    const symbol = decodeErc20String(metadata[offset + 1]) || cached?.symbol || "";
+    const onChainDecimals =
+      metadata[offset + 2] && metadata[offset + 2] !== "0x"
+        ? Number(decodeUint(metadata[offset + 2]))
+        : null;
+    const decimals = onChainDecimals !== null && Number.isFinite(onChainDecimals)
+      ? onChainDecimals
+      : cached?.decimals ?? 18;
+    const supplyWei =
+      metadata[offset + 3] && metadata[offset + 3] !== "0x"
+        ? decodeUint(metadata[offset + 3])
+        : cached?.totalSupply ?? BigInt(0);
+    const onChainCreator = decodeAddress(metadata[offset + 4]);
+    const creator = onChainCreator || cached?.creator || dep.deployer || "0x0";
+    const uri =
+      metadata[offset + 5] === null
+        ? cached?.metadataUri ?? ""
+        : metadata[offset + 5] === "0x"
+          ? ""
+          : decodeErc20String(metadata[offset + 5]);
+    const chainImage = tokenImageFromMetadataUri(uri);
     const assetId = resolveLogicalAssetId(token);
     const seed = seedAssetMeta(assetId);
     // Token metadata is permissionless: anyone can deploy a contract that calls itself
@@ -807,9 +907,44 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<CatalogToken
       verified: Boolean(seed),
       ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
     });
-    return applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
+    const row = applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
+
+    const next: TokenMetadataCacheEntry = { ...cached };
+    if (name) next.name = name;
+    if (symbol) next.symbol = symbol;
+    if (onChainDecimals !== null) next.decimals = onChainDecimals;
+    if (onChainCreator) next.creator = onChainCreator;
+    if (metadata[offset + 3] && metadata[offset + 3] !== "0x") next.totalSupply = supplyWei;
+    if (metadata[offset + 5] !== null) next.metadataUri = uri;
+    tokenMetadataCache.set(token.toLowerCase(), next);
+
+    // Both name and symbol failed and there is no seed/cached metadata: this row is a placeholder.
+    if (!seed && !name && !symbol) {
+      placeholderTokenRows.add(row);
+      complete = false;
+    }
+    return row;
   });
-  return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  return { rows: rows.sort((a, b) => a.symbol.localeCompare(b.symbol)), complete };
+}
+
+/** Union a partial scan into the previous catalog by address, preferring rows with real metadata. */
+function mergePartialTokenRows(previous: CatalogToken[], next: CatalogToken[]): CatalogToken[] {
+  const byAddress = new Map<string, CatalogToken>();
+  for (const row of previous) byAddress.set(row.tokenAddress.toLowerCase(), row);
+  for (const row of next) {
+    const key = row.tokenAddress.toLowerCase();
+    const old = byAddress.get(key);
+    if (!old) {
+      byAddress.set(key, row);
+      continue;
+    }
+    const oldPlaceholder = placeholderTokenRows.has(old);
+    const newPlaceholder = placeholderTokenRows.has(row);
+    // Prefer real metadata; on a tie keep the fresh row (its supply may have moved).
+    byAddress.set(key, oldPlaceholder && !newPlaceholder ? row : oldPlaceholder === newPlaceholder ? row : old);
+  }
+  return [...byAddress.values()].sort((a, b) => a.symbol.localeCompare(b.symbol));
 }
 
 function addLogTokenAddresses(addresses: Set<string>, logs: readonly RpcLog[]): boolean {
@@ -847,6 +982,12 @@ export async function discoverTokensOnChainUncached(
   const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
   const ordered = current ? [current, ...scans.filter((scan) => scan !== current).reverse()] : [];
   const addresses = staticTokenAddresses(dep);
+  const generation = ++tokenCatalogScanGeneration;
+  let resolveTail!: () => void;
+  const tailReady = new Promise<void>((resolve) => {
+    resolveTail = resolve;
+  });
+  tokenCatalogTailReady = { generation, promise: tailReady };
   tokenCatalogProgress = { addresses: new Set(addresses), tokens: staticTokenRows(dep) };
 
   let progressBuilding: Promise<void> | null = null;
@@ -859,8 +1000,8 @@ export async function discoverTokensOnChainUncached(
         progressDirty = false;
         const snapshot = new Set(addresses);
         try {
-          const rows = await buildTokenRows(snapshot);
-          tokenCatalogProgress = { addresses: snapshot, tokens: rows };
+          const built = await buildTokenRows(snapshot);
+          tokenCatalogProgress = { addresses: snapshot, tokens: built.rows };
         } catch {
           // Keep the previous (static or earlier) partial list.
         }
@@ -879,6 +1020,7 @@ export async function discoverTokensOnChainUncached(
       break;
     }
     const scan = ordered[index];
+    const isCurrent = scan === current;
     try {
       const result = await fetchLogsWindowedIncrementalResult(
         scan.address,
@@ -894,6 +1036,13 @@ export async function discoverTokensOnChainUncached(
           onWindowLogs: (logs) => {
             if (addLogTokenAddresses(addresses, logs)) refreshProgress();
           },
+          onTailReady: isCurrent
+            ? async () => {
+                // Publish the tail rows before the cold request returns, even if history is slow.
+                if (progressBuilding) await progressBuilding;
+                resolveTail();
+              }
+            : undefined,
         },
       );
       if (!result.complete) complete = false;
@@ -903,11 +1052,20 @@ export async function discoverTokensOnChainUncached(
       // One factory must never blank the catalog; the other factories' tokens still show.
       failedFactories += 1;
       complete = false;
+    } finally {
+      // A failed current factory must not leave a cold request waiting for a tail that never comes.
+      if (isCurrent) resolveTail();
     }
   }
 
   if (progressBuilding) await progressBuilding;
-  const tokens = await buildTokenRows(addresses);
+  const built = await buildTokenRows(addresses);
+  if (!built.complete) complete = false;
+  let tokens = built.rows;
+  // A partial scan must never shrink the cached catalog it was meant to extend.
+  if (!complete && tokensCache?.value.length) {
+    tokens = mergePartialTokenRows(tokensCache.value, tokens);
+  }
   tokenCatalogProgress = { addresses: new Set(addresses), tokens };
   if (failedWindows || failedFactories) {
     const elapsedMs = Date.now() - startedAt;
@@ -934,6 +1092,10 @@ async function loadTokens(): Promise<CatalogToken[]> {
         partial = !direct.complete;
       }
     }
+    // Keep the union even if the shared cache handed us a smaller partial list.
+    if (partial && tokensCache?.value.length) {
+      value = mergePartialTokenRows(tokensCache.value, value);
+    }
     tokensCache = { at: Date.now(), value, partial };
     return value;
   } catch (error) {
@@ -941,6 +1103,19 @@ async function loadTokens(): Promise<CatalogToken[]> {
     // an empty or partial one.
     if (tokensCache) return tokensCache.value;
     throw error;
+  }
+}
+
+/** Waits until the scan that started at/after `sinceGeneration` has published its tail. */
+async function waitForTailReady(sinceGeneration: number, timeoutMs: number): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const tail = tokenCatalogTailReady;
+    if (tail && (sinceGeneration > 0 ? tail.generation >= sinceGeneration : tail.generation > 0)) {
+      await Promise.race([tail.promise, sleep(Math.max(0, deadline - Date.now()))]);
+      return;
+    }
+    await sleep(20);
   }
 }
 
@@ -962,8 +1137,11 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   }
 
   // Cold instance: start the full scan, but do not keep the request waiting for long history.
-  // The tail is read first, so the progress list already carries freshly created tokens.
-  if (!tokensRefreshing) {
+  // The current factory tail is read first, and is always awaited (up to its own longer budget)
+  // before the partial response, so freshly created tokens cannot be missed.
+  const scanAlreadyRunning = Boolean(tokensRefreshing);
+  const generationAtStart = scanAlreadyRunning ? tokenCatalogScanGeneration : tokenCatalogScanGeneration + 1;
+  if (!scanAlreadyRunning) {
     tokensRefreshing = loadTokens()
       .catch(() => tokensCache?.value ?? tokenCatalogProgress?.tokens ?? [])
       .finally(() => {
@@ -981,6 +1159,14 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   ]);
   if (timer) clearTimeout(timer);
   if (!outcome.timedOut) return outcome.value;
+
+  // Only history is cut by the soft deadline. Wait for this scan's tail (static + tail + whatever
+  // history finished meanwhile) rather than returning the pre-tail static list.
+  const tailOutcome = await Promise.race([
+    task.then((value) => ({ settled: true as const, value })),
+    waitForTailReady(generationAtStart, TOKEN_CATALOG_TAIL_WAIT_MS).then(() => ({ settled: false as const })),
+  ]);
+  if (tailOutcome.settled) return tailOutcome.value;
   // Never return an empty list when the deployment/seed catalog already has tokens.
   return tokenCatalogProgress?.tokens.length ? tokenCatalogProgress.tokens : tokensCache?.value ?? [];
 }
