@@ -121,11 +121,11 @@
       {
         "title": "Vendita pubblica di PPL",
         "body": [
-          "I parametri della vendita (formula della curva, andamento del prezzo, limiti e obiettivo di graduation) sono pubblicati nella pagina /buy. Gli acquisti restano disabilitati finché il contratto della vendita non viene pubblicato; collegare un wallet non ti vincola a nulla.",
+          "I parametri della vendita (formula della curva, andamento del prezzo, limiti e la durata della vendita: fino all'esaurimento o 24 mesi, a seconda di quale evento si verifichi per primo) sono pubblicati nella pagina /buy. Gli acquisti restano disabilitati finché il contratto della vendita non viene pubblicato; collegare un wallet non ti vincola a nulla.",
           "Per acquistare non è richiesto alcun KYC. La rivendita richiede una prova di umanità (Human Passport o Telegram), che non è KYC.",
           "La vendita dura fino all'esaurimento (la curva si chiude a 4 milioni di dollari raccolti) oppure per 24 mesi dall'apertura, a seconda di quale evento si verifichi per primo. Nessuna proroga. I PPL invenduti vanno alla Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
           "La durata della vendita, la formula del prezzo e i limiti non cambiano dopo l'apertura della vendita.",
-          "La rivendita non è un rimborso: rivendita alla riserva — solo per utenti verificati. Ogni lotto può essere rivenduto dopo un periodo di detenzione di 30 giorni, al prezzo della curva nel momento in cui vendi. Il totale delle rivendite è limitato al 2% della riserva al giorno per tutti e a 2.000 $ al giorno per persona. Commissione: 1,5%, oppure 3% quando le rivendite di quel giorno superano già l'1% della riserva. Si chiude dopo la graduation. Pagamenti in USDC su Base.",
+          "La rivendita non è un rimborso: rivendita alla riserva — solo per utenti verificati. Ogni lotto può essere rivenduto dopo un periodo di detenzione di 30 giorni, al prezzo della curva nel momento in cui vendi. Il totale delle rivendite è limitato al 2% della riserva al giorno per tutti e a 2.000 $ al giorno per indirizzo. Commissione: 1,5%, oppure 3% quando le rivendite di quel giorno superano già l'1% della riserva. Si chiude dopo la graduation. Pagamenti in USDC su Base.",
           "Nulla su questo sito costituisce un'offerta o una promessa di vendere PPL nei luoghi in cui la vendita è soggetta a restrizioni, e la partecipazione potrebbe non essere disponibile nella tua giurisdizione."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Nulla su questo sito costituisce una consulenza di investimento, fiscale o legale. Non promettiamo profitti, rendimenti, prezzo del token, quotazione né reddito di alcun tipo.",
           "I PPL di test e gli altri asset della rete di test non hanno alcun valore monetario. Detenere o guadagnare token di test non ti dà diritto a token della mainnet, a denaro né ad assegnazioni future, salvo che non pubblichiamo un programma distinto e vincolante, e qui non ne viene promesso alcuno."
+        ]
+      },
+      {
+        "title": "Informativa sulla vendita PPL",
+        "body": [
+          "PPL è il token di utilità della rete PEOPLE. Sulla curva il prezzo segue la formula pubblicata; dopo la vendita è fissato dal mercato e può salire o scendere. PPL non è un titolo, una quota societaria, un deposito né un prodotto d'investimento; non sono promessi né garantiti profitto, rendimento o rimborso.",
+          "La partecipazione può essere limitata o non disponibile dove vivi; verificare le regole applicabili è tua responsabilità. Usa solo denaro che puoi permetterti di perdere.",
+          "Le revisioni di sicurezza assistite da IA indicate sul sito sono state svolte dal team del progetto. Non sono un audit esterno; un audit di sicurezza di terze parti viene completato prima del mainnet. Il bug bounty riduce il rischio ma non lo elimina."
         ]
       },
       {

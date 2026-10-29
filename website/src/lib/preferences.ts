@@ -34,7 +34,7 @@ const THEME_KEY = "people_theme";
 
 /** Mirrors `LANG_KEY` into a cookie so the server can pick the same locale for SSR markdown. */
 export const LANG_COOKIE = "people_lang";
-const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+export const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 /**
  * Mirrors `THEME_KEY` into a cookie so the *server* can render the right
@@ -192,24 +192,26 @@ let themeCache: Theme | null = null;
 
 export function getLanguageSnapshot(): Language {
   if (langCache === null) {
+    let stored: Language | null = null;
+    let fromCookie: Language | null = null;
     try {
       ensureClientStorageMigrated();
-      const stored = localStorage.getItem(LANG_KEY) as Language;
-      // No saved choice: the language cookie (set when only SSR has run, e.g.
-      // a shared link with no localStorage yet) wins next, then the browser language.
-      langCache = stored && VALID_LANGS.has(stored)
-        ? stored
-        : languageFromCookie(readCookieWithLegacy(LANG_COOKIE, LEGACY_LANG_COOKIE)) ?? browserLanguage();
+      const value = localStorage.getItem(LANG_KEY) as Language;
+      stored = value && VALID_LANGS.has(value) ? value : null;
     } catch {
-      langCache =
-        languageFromCookie(readCookieWithLegacy(LANG_COOKIE, LEGACY_LANG_COOKIE)) ?? browserLanguage();
+      /* storage unavailable — fall through to the cookie */
     }
+    try {
+      fromCookie = languageFromCookie(readCookieWithLegacy(LANG_COOKIE, LEGACY_LANG_COOKIE));
+    } catch {
+      /* cookies unavailable — fall through to the browser language */
+    }
+    // The cookie is what the server rendered with: it is written together with
+    // localStorage on every explicit choice and by the `/{locale}/buy` redirect,
+    // so it wins. Then the stored choice, then the browser language.
+    langCache = fromCookie ?? stored ?? browserLanguage();
   }
   return langCache;
-}
-
-export function getServerLanguageSnapshot(): Language {
-  return "en";
 }
 
 export function getThemeSnapshot(): Theme {

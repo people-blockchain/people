@@ -121,11 +121,11 @@
       {
         "title": "Vente publique de PPL",
         "body": [
-          "Les paramètres de la vente (formule de la courbe, trajectoire des prix, limites et objectif de graduation) sont publiés sur la page /buy. Les achats restent désactivés tant que le contrat de vente n'est pas publié ; connecter un portefeuille ne vous engage à rien.",
+          "Les paramètres de la vente (formule de la courbe, trajectoire des prix, limites et la durée de la vente : jusqu'à épuisement ou 24 mois, selon la première de ces échéances) sont publiés sur la page /buy. Les achats restent désactivés tant que le contrat de vente n'est pas publié ; connecter un portefeuille ne vous engage à rien.",
           "Aucun KYC n'est requis pour acheter. La revente à la réserve exige une preuve d'humanité (Human Passport ou Telegram), qui n'est pas un KYC.",
           "La vente se poursuit jusqu'à épuisement (la courbe se ferme à 4 M$ levés) ou pendant 24 mois à compter de l'ouverture, selon la première de ces échéances. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
           "La durée de la vente, la formule de prix et les limites ne changent pas après l'ouverture de la vente.",
-          "La revente n'est pas un remboursement : revente à la réserve — réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après une période de détention de 30 jours, au prix de la courbe au moment de la revente. Le total des reventes est plafonné à 2 % de la réserve par jour pour l'ensemble des utilisateurs et à 2 000 $ par personne et par jour. Frais : 1,5 %, ou 3 % lorsque les reventes de la journée dépassent déjà 1 % de la réserve. Se ferme après la graduation. Versements en USDC sur Base.",
+          "La revente n'est pas un remboursement : revente à la réserve — réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après une période de détention de 30 jours, au prix de la courbe au moment de la revente. Le total des reventes est plafonné à 2 % de la réserve par jour pour l'ensemble des utilisateurs et à 2 000 $ par adresse et par jour. Frais : 1,5 %, ou 3 % lorsque les reventes de la journée dépassent déjà 1 % de la réserve. Se ferme après la graduation. Versements en USDC sur Base.",
           "Rien sur ce site ne constitue une offre ni une promesse de vendre des PPL là où la vente est restreinte, et la participation peut être indisponible dans votre juridiction."
         ]
       },
@@ -134,6 +134,14 @@
         "body": [
           "Rien sur ce site ne constitue un conseil en investissement, fiscal ou juridique. Nous ne promettons aucun profit, rendement, prix de jeton, cotation ni revenu, de quelque nature que ce soit.",
           "Les PPL de test et les autres actifs du réseau de test n'ont aucune valeur monétaire. Détenir ou gagner des jetons de test ne vous donne droit ni à des jetons du mainnet, ni à de l'argent, ni à de futures attributions, sauf si nous publions un programme distinct et contraignant — et aucun n'est promis ici."
+        ]
+      },
+      {
+        "title": "Informations sur la vente de PPL",
+        "body": [
+          "PPL est le jeton utilitaire du réseau PEOPLE. Sur la courbe, son prix suit la formule publiée ; après la vente, il est fixé par le marché et peut monter ou baisser. PPL n'est pas un titre, une part d'entreprise, un dépôt ni un produit d'investissement ; aucun profit, rendement ou retour n'est promis ni garanti.",
+          "La participation peut être restreinte ou indisponible où vous vivez ; vérifier les règles applicables vous incombe. N'utilisez que de l'argent que vous pouvez perdre.",
+          "Les revues de sécurité assistées par IA mentionnées sur le site ont été réalisées par l'équipe du projet. Ce ne sont pas des audits externes ; un audit de sécurité tiers est réalisé avant le mainnet. La prime aux bugs réduit le risque sans l'éliminer."
         ]
       },
       {
