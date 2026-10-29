@@ -43,5 +43,6 @@
   "minted": "Đã đúc",
   "totalSupply": "Tổng cung",
   "mintPrice": "Giá đúc",
-  "pplBalance": "Số dư PPL"
+  "pplBalance": "Số dư PPL",
+  "memo": "Ghi chú"
 }

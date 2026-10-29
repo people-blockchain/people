@@ -1,3 +1,4 @@
+import { transactionMemo } from "./transaction-memo";
 import type { ExplorerFeed, LiveBlock, LivePhase, LiveTransaction } from "../explorer-live";
 
 /** A bounded recent window, not a full transaction-history index. */
@@ -26,10 +27,12 @@ function decodeBlock(value: unknown, height: number): LiveBlock {
   const transactions: LiveTransaction[] = block.transactions.map((tx) => {
     if (!tx || typeof tx !== "object" || typeof tx.hash !== "string") throw new Error("invalid_transaction");
     const wei = BigInt(tx.value ?? "0x0");
+    const memo = transactionMemo(tx);
     return {
       id: tx.hash, from: tx.from, to: tx.to ?? undefined,
-      type: tx.input && tx.input !== "0x" ? "contract" : "transfer",
+      type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
       amount: Number(wei) / 1e18, blockHeight: height,
+      ...(memo ? { payload: { memo } } : {}),
     };
   });
   return {

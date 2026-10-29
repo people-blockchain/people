@@ -30,6 +30,7 @@ export type ExplorerCopyContent = {
   to: string;
   amount: string;
   fee: string;
+  memo: string;
   status: string;
   time: string;
   gas: string;
@@ -80,6 +81,7 @@ const baseExplorerCopy: Record<string, ExplorerCopyContent> = {
     to: "To",
     amount: "Amount",
     fee: "Fee",
+    memo: "Memo",
     status: "Status",
     time: "Time",
     gas: "Gas",
@@ -128,6 +130,7 @@ const baseExplorerCopy: Record<string, ExplorerCopyContent> = {
     to: "Кому",
     amount: "Сумма",
     fee: "Комиссия",
+    memo: "Мемо",
     status: "Статус",
     time: "Время",
     gas: "Газ",

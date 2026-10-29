@@ -222,6 +222,14 @@ export function TxView({ id }: { id: string }) {
             <dt className="text-ink-3">{t.fee}</dt>
             <dd>{txFeeText(tx)}</dd>
           </div>
+          {typeof tx.payload?.memo === "string" && tx.payload.memo ? (
+            <div>
+              <dt className="text-ink-3">{t.memo}</dt>
+              <dd className="whitespace-pre-wrap break-words" data-testid="tx-memo">
+                {tx.payload.memo}
+              </dd>
+            </div>
+          ) : null}
           {tx.blockHeight !== undefined ? (
             <div>
               <dt className="text-ink-3">{t.height}</dt>

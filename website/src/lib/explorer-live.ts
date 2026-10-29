@@ -6,6 +6,7 @@ export interface LiveTransaction {
   amount?: number;
   fee?: number;
   blockHeight?: number;
+  payload?: { memo: string };
 }
 
 export interface LiveBlock {

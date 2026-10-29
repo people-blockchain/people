@@ -43,5 +43,6 @@
   "minted": "Basılan",
   "totalSupply": "Toplam arz",
   "mintPrice": "Basım fiyatı",
-  "pplBalance": "PPL bakiyesi"
+  "pplBalance": "PPL bakiyesi",
+  "memo": "Not"
 }
