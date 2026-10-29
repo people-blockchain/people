@@ -68,11 +68,11 @@
       },
       {
         "title": "Elige el importe y la red",
-        "body": "De {min} a {max} por compra. Paga en USDC o USDT; los pagos desde otras redes se cambian automáticamente. La compra en sí se hace en Base."
+        "body": "De {min} a {max} por compra. Paga en USDC o USDT; los pagos desde otras redes se cambian automáticamente. El pago se hace en Base."
       },
       {
-        "title": "El PPL está en tu dirección",
-        "body": "El PPL se acredita en tu dirección en cuanto se completa la compra. Pasará a tu billetera en la red PEOPLE cuando se lance la red."
+        "title": "PPL directo a tu billetera de PEOPLE",
+        "body": "Pagas en USDC o USDT, y el PPL se acredita al instante en tu dirección de la red PEOPLE."
       }
     ],
     "verifyLink": "Cómo verificarte"
@@ -124,7 +124,7 @@
     "detailsToggle": "Detalles",
     "details": [
       "Reserva: los USDC que se guardan en el contrato de venta. Con ellos se pagan las reventas, y las comisiones de reventa se quedan en ella. Cuanto menor es la reserva, menor es el límite diario de reventa. La reventa se cierra para siempre cuando se cierra la curva.",
-      "La reserva solo sale del contrato como liquidez de PPL, al cerrarse la curva o al lanzarse la red PEOPLE, y solo tras un aviso público de {releaseDays} días. Durante el aviso la reventa sigue funcionando.",
+      "La reserva solo sale del contrato como liquidez de PPL, al cerrarse la curva, y solo tras un aviso público de {releaseDays} días. Durante el aviso la reventa sigue funcionando.",
       "Tesorería: una billetera multifirma ({signersM} de {signersN} firmas) que recibe el otro {treasuryPct} de cada compra.",
       "La multifirma puede pausar las compras y la reventa. No puede mover la reserva, cambiar los límites ni la fórmula, ni prolongar la venta.",
       "La venta dura hasta recaudar {graduation} o {term} desde la apertura, lo que ocurra primero. El PPL no vendido va al Community Pool. Las compras son definitivas.",
@@ -140,12 +140,8 @@
         "a": "Para que cada comprador sea una persona real. Cada persona tiene una dirección, y los límites se aplican a personas, no a bots. Los primeros {whitelistDays} días son solo para personas verificadas. Verifícate con World ID o Human Passport; Telegram solo no basta. No se guarda ningún dato personal en la blockchain."
       },
       {
-        "q": "¿Por qué no puedo enviar PPL a otra persona ahora?",
-        "a": "Hasta que se lance la red PEOPLE, tu PPL es un registro en el contrato de venta en Base. Enviar PPL a otras personas será posible cuando se lance la red. Hasta entonces puedes revenderlo a la reserva con las reglas de arriba."
-      },
-      {
-        "q": "¿Qué pasa cuando se lance la red PEOPLE?",
-        "a": "Tu PPL llega a tu dirección en la red PEOPLE. A partir de ahí el registro en Base se congela y ya no se puede revender a la reserva. La reserva solo puede pasar a liquidez de PPL tras un aviso público de {releaseDays} días, y durante ese aviso la reventa sigue funcionando."
+        "q": "¿Cuándo puedo enviar PPL a otras personas?",
+        "a": "El PPL se acredita en la red PEOPLE justo después de tu compra. Al principio la red solo recibe PPL: las transferencias entre participantes se abrirán más adelante, cuando haya unos 1000 participantes verificados. Hasta entonces puedes revender el PPL a la reserva con las reglas de arriba."
       },
       {
         "q": "¿Desde qué redes puedo pagar?",
@@ -275,7 +271,7 @@
     "riskTitle": "Aviso de riesgo",
     "riskBody": "Las criptomonedas conllevan riesgo: el precio puede bajar, quizá no puedas vender de inmediato y las compras no se reembolsan. Usa solo dinero que puedas permitirte perder.",
     "riskMoreToggle": "Todos los riesgos",
-    "riskMore": "Además: no puedes enviar PPL a otras personas hasta que se lance la red PEOPLE. La venta de vuelta a la reserva es solo para usuarios verificados, 30 días después de cada compra y dentro de los límites diarios. El contrato de venta solo ha sido revisado por modelos de IA; todavía no hay auditoría externa. La multifirma del proyecto puede pausar las compras y la venta de vuelta.",
+    "riskMore": "Además: las transferencias de PPL entre participantes se abrirán más adelante, cuando la red PEOPLE tenga unos 1000 participantes verificados. La venta de vuelta a la reserva es solo para usuarios verificados, 30 días después de cada compra y dentro de los límites diarios. El contrato de venta solo ha sido revisado por modelos de IA; todavía no hay auditoría externa. La multifirma del proyecto puede pausar las compras y la venta de vuelta.",
     "saleTermsNote": "La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.",
     "termsAgree": "Al comprar aceptas los {terms}.",
     "termsLink": "Términos",

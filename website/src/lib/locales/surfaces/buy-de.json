@@ -68,11 +68,11 @@
       },
       {
         "title": "Betrag und Netzwerk wählen",
-        "body": "{min} bis {max} pro Kauf. Zahlen Sie in USDC oder USDT; Zahlungen aus anderen Netzwerken werden automatisch getauscht. Der Kauf selbst läuft auf Base."
+        "body": "{min} bis {max} pro Kauf. Zahlen Sie in USDC oder USDT; Zahlungen aus anderen Netzwerken werden automatisch getauscht. Die Zahlung läuft auf Base."
       },
       {
-        "title": "PPL auf Ihrer Adresse",
-        "body": "PPL werden Ihrer Adresse gutgeschrieben, sobald der Kauf durch ist. In Ihr Wallet im PEOPLE-Netzwerk wechseln sie beim Start des Netzwerks."
+        "title": "PPL direkt in Ihre PEOPLE-Wallet",
+        "body": "Sie zahlen in USDC oder USDT, und PPL werden sofort Ihrer Adresse im PEOPLE-Netzwerk gutgeschrieben."
       }
     ],
     "verifyLink": "So verifizieren Sie sich"
@@ -124,7 +124,7 @@
     "detailsToggle": "Details",
     "details": [
       "Reserve: die USDC im Verkaufsvertrag. Aus ihr werden Rückverkäufe bezahlt, und Rückverkaufsgebühren bleiben in ihr. Je kleiner die Reserve, desto kleiner das tägliche Rückverkaufslimit. Wenn die Kurve schließt, endet der Rückverkauf endgültig.",
-      "Die Reserve verlässt den Vertrag nur als PPL-Liquidität – beim Schließen der Kurve oder beim Start des PEOPLE-Netzwerks – und erst nach einer öffentlichen Ankündigung {releaseDays} Tage vorher. Während dieser Frist läuft der Rückverkauf weiter.",
+      "Die Reserve verlässt den Vertrag nur als PPL-Liquidität, beim Schließen der Kurve, und erst nach einer öffentlichen Ankündigung {releaseDays} Tage vorher. Während dieser Frist läuft der Rückverkauf weiter.",
       "Treasury: ein Multisig-Wallet ({signersM} von {signersN} Signaturen), das die anderen {treasuryPct} jedes Kaufs erhält.",
       "Die Multisig kann Käufe und Rückverkauf pausieren. Sie kann die Reserve nicht bewegen, Limits oder Formel nicht ändern und den Verkauf nicht verlängern.",
       "Der Verkauf läuft, bis {graduation} eingenommen sind, oder {term} ab Start – je nachdem, was zuerst eintritt. Nicht verkaufte PPL gehen in den Community Pool. Käufe sind endgültig.",
@@ -140,12 +140,8 @@
         "a": "Damit jeder Käufer ein echter Mensch ist. Eine Person hat eine Adresse, und die Limits gelten für Menschen, nicht für Bots. Die ersten {whitelistDays} Tage sind nur für verifizierte Menschen. Verifizieren Sie sich mit World ID oder Human Passport; Telegram allein reicht nicht. Persönliche Daten werden nicht in die Blockchain geschrieben."
       },
       {
-        "q": "Warum kann ich PPL jetzt nicht an andere senden?",
-        "a": "Bis zum Start des PEOPLE-Netzwerks sind Ihre PPL ein Eintrag im Verkaufsvertrag auf Base. Das Senden von PPL an andere Menschen öffnet mit dem Netzwerkstart. Bis dahin können Sie nach den Regeln oben an die Reserve zurückverkaufen."
-      },
-      {
-        "q": "Was passiert beim Start des PEOPLE-Netzwerks?",
-        "a": "Ihre PPL werden an Ihre Adresse im PEOPLE-Netzwerk geliefert. Danach wird der Eintrag auf Base eingefroren und kann nicht mehr an die Reserve zurückverkauft werden. Die Reserve kann erst nach einer öffentlichen Ankündigung {releaseDays} Tage vorher zu PPL-Liquidität werden, und während dieser Frist läuft der Rückverkauf weiter."
+        "q": "Wann kann ich PPL an andere Menschen senden?",
+        "a": "PPL werden direkt nach dem Kauf im PEOPLE-Netzwerk gutgeschrieben. Zunächst nimmt das Netzwerk nur PPL an: Überweisungen zwischen Teilnehmern öffnen später, sobald es etwa 1.000 verifizierte Teilnehmer gibt. Bis dahin können Sie PPL nach den Regeln oben an die Reserve zurückverkaufen."
       },
       {
         "q": "Aus welchen Netzwerken kann ich zahlen?",
@@ -275,7 +271,7 @@
     "riskTitle": "Risikohinweis",
     "riskBody": "Krypto ist riskant: Der Preis kann fallen, ein sofortiger Verkauf ist eventuell nicht möglich, und Käufe werden nicht erstattet. Setzen Sie nur Geld ein, dessen Verlust Sie verkraften können.",
     "riskMoreToggle": "Alle Risiken",
-    "riskMore": "Außerdem: PPL kann vor dem Start des PEOPLE-Netzwerks nicht an andere Personen gesendet werden. Der Rückverkauf an die Reserve ist nur für verifizierte Nutzer möglich, 30 Tage nach jedem Kauf und innerhalb der Tageslimits. Der Verkaufsvertrag wurde nur von KI-Modellen geprüft; ein externes Audit gibt es noch nicht. Die Multisig des Projekts kann Käufe und Rückverkauf pausieren.",
+    "riskMore": "Außerdem: PPL-Überweisungen zwischen Teilnehmern öffnen später, sobald das PEOPLE-Netzwerk etwa 1.000 verifizierte Teilnehmer hat. Der Rückverkauf an die Reserve ist nur für verifizierte Nutzer möglich, 30 Tage nach jedem Kauf und innerhalb der Tageslimits. Der Verkaufsvertrag wurde nur von KI-Modellen geprüft; ein externes Audit gibt es noch nicht. Die Multisig des Projekts kann Käufe und Rückverkauf pausieren.",
     "saleTermsNote": "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.",
     "termsAgree": "Mit dem Kauf stimmen Sie den {terms} zu.",
     "termsLink": "Nutzungsbedingungen",

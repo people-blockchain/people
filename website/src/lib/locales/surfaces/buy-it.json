@@ -68,11 +68,11 @@
       },
       {
         "title": "Scegli importo e rete",
-        "body": "Da {min} a {max} per acquisto. Paga in USDC o USDT; i pagamenti da altre reti vengono convertiti automaticamente. L’acquisto vero e proprio avviene su Base."
+        "body": "Da {min} a {max} per acquisto. Paga in USDC o USDT; i pagamenti da altre reti vengono convertiti automaticamente. Il pagamento avviene su Base."
       },
       {
-        "title": "I PPL sono al tuo indirizzo",
-        "body": "I PPL vengono accreditati al tuo indirizzo appena l’acquisto va a buon fine. Passeranno al tuo wallet sulla rete PEOPLE al lancio della rete."
+        "title": "I PPL direttamente nel tuo wallet PEOPLE",
+        "body": "Paghi in USDC o USDT e i PPL vengono accreditati subito al tuo indirizzo sulla rete PEOPLE."
       }
     ],
     "verifyLink": "Come verificarti"
@@ -124,7 +124,7 @@
     "detailsToggle": "Dettagli",
     "details": [
       "Riserva: gli USDC conservati nel contratto di vendita. Con essa si pagano le rivendite, e le commissioni di rivendita restano lì. Più la riserva è piccola, più è basso il limite giornaliero di rivendita. La rivendita si chiude per sempre quando si chiude la curva.",
-      "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva o al lancio della rete PEOPLE, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso la rivendita continua a funzionare.",
+      "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso la rivendita continua a funzionare.",
       "Tesoreria: un wallet multisig ({signersM} firme su {signersN}) che riceve l’altro {treasuryPct} di ogni acquisto.",
       "Il multisig può mettere in pausa acquisti e rivendita. Non può spostare la riserva, cambiare i limiti o la formula, né prolungare la vendita.",
       "La vendita dura finché non si raccolgono {graduation} oppure {term} dall’apertura, a seconda di cosa avviene prima. I PPL invenduti vanno al Community Pool. Gli acquisti sono definitivi.",
@@ -140,12 +140,8 @@
         "a": "Perché ogni acquirente sia una persona reale. Una persona ha un indirizzo, e i limiti valgono per le persone, non per i bot. I primi {whitelistDays} giorni sono solo per persone verificate. Verificati con World ID o Human Passport; Telegram da solo non basta. Nessun dato personale viene scritto sulla blockchain."
       },
       {
-        "q": "Perché adesso non posso inviare PPL a qualcuno?",
-        "a": "Fino al lancio della rete PEOPLE, i tuoi PPL sono una registrazione nel contratto di vendita su Base. L’invio di PPL ad altre persone si apre al lancio della rete. Fino ad allora puoi rivenderli alla riserva secondo le regole sopra."
-      },
-      {
-        "q": "Cosa succede al lancio della rete PEOPLE?",
-        "a": "I tuoi PPL arrivano al tuo indirizzo sulla rete PEOPLE. Da quel momento la registrazione su Base viene congelata e non si può più rivendere alla riserva. La riserva può diventare liquidità PPL solo dopo un preavviso pubblico di {releaseDays} giorni, e durante il preavviso la rivendita continua a funzionare."
+        "q": "Quando posso inviare PPL ad altre persone?",
+        "a": "I PPL vengono accreditati sulla rete PEOPLE subito dopo l’acquisto. All’inizio la rete riceve solo PPL: i trasferimenti tra partecipanti apriranno più avanti, quando ci saranno circa 1.000 partecipanti verificati. Fino ad allora puoi rivendere i PPL alla riserva secondo le regole sopra."
       },
       {
         "q": "Da quali reti posso pagare?",
@@ -275,7 +271,7 @@
     "riskTitle": "Avviso sul rischio",
     "riskBody": "Le crypto-attività sono rischiose: il prezzo può scendere, potresti non riuscire a vendere subito e gli acquisti non sono rimborsabili. Usa solo denaro che puoi permetterti di perdere.",
     "riskMoreToggle": "Tutti i rischi",
-    "riskMore": "Inoltre: i PPL non possono essere inviati ad altre persone fino al lancio della rete PEOPLE. La rivendita alla riserva è solo per utenti verificati, 30 giorni dopo ogni acquisto ed entro i limiti giornalieri. Il contratto di vendita è stato esaminato solo da modelli di IA; non è ancora stato fatto alcun audit esterno. Il multisig del progetto può mettere in pausa acquisti e rivendita.",
+    "riskMore": "Inoltre: i trasferimenti di PPL tra partecipanti apriranno più avanti, quando la rete PEOPLE avrà circa 1.000 partecipanti verificati. La rivendita alla riserva è solo per utenti verificati, 30 giorni dopo ogni acquisto ed entro i limiti giornalieri. Il contratto di vendita è stato esaminato solo da modelli di IA; non è ancora stato fatto alcun audit esterno. Il multisig del progetto può mettere in pausa acquisti e rivendita.",
     "saleTermsNote": "La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
     "termsAgree": "Acquistando accetti i {terms}.",
     "termsLink": "Termini",

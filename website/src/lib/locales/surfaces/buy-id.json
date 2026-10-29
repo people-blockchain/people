@@ -68,11 +68,11 @@
       },
       {
         "title": "Pilih jumlah dan jaringan",
-        "body": "{min} sampai {max} per pembelian. Bayar dengan USDC atau USDT; pembayaran dari jaringan lain ditukar otomatis. Pembeliannya sendiri berlangsung di Base."
+        "body": "{min} sampai {max} per pembelian. Bayar dengan USDC atau USDT; pembayaran dari jaringan lain ditukar otomatis. Pembayaran berlangsung di Base."
       },
       {
-        "title": "PPL ada di alamat Anda",
-        "body": "PPL dikreditkan ke alamat Anda begitu pembelian selesai. PPL berpindah ke dompet Anda di jaringan PEOPLE saat jaringan diluncurkan."
+        "title": "PPL langsung ke dompet PEOPLE Anda",
+        "body": "Anda membayar dengan USDC atau USDT, dan PPL langsung dikreditkan ke alamat Anda di jaringan PEOPLE."
       }
     ],
     "verifyLink": "Cara verifikasi"
@@ -124,7 +124,7 @@
     "detailsToggle": "Detail",
     "details": [
       "Cadangan: USDC yang disimpan di kontrak penjualan. Penjualan kembali dibayar dari sini, dan biaya penjualan kembali tetap di sini. Makin kecil cadangan, makin kecil batas harian penjualan kembali. Penjualan kembali ditutup selamanya saat kurva ditutup.",
-      "Cadangan hanya keluar dari kontrak sebagai likuiditas PPL, saat kurva ditutup atau jaringan PEOPLE diluncurkan, dan hanya setelah pemberitahuan publik {releaseDays} hari sebelumnya. Selama masa pemberitahuan, penjualan kembali tetap berjalan.",
+      "Cadangan hanya keluar dari kontrak sebagai likuiditas PPL, saat kurva ditutup, dan hanya setelah pemberitahuan publik {releaseDays} hari sebelumnya. Selama masa pemberitahuan, penjualan kembali tetap berjalan.",
       "Kas: dompet multisig ({signersM} dari {signersN} tanda tangan) yang menerima {treasuryPct} sisa dari setiap pembelian.",
       "Multisig dapat menjeda pembelian dan penjualan kembali. Multisig tidak bisa memindahkan cadangan, mengubah batas atau formula, maupun memperpanjang penjualan.",
       "Penjualan berlangsung sampai {graduation} terkumpul atau {term} setelah pembukaan, mana yang lebih dulu. PPL yang tidak terjual masuk ke Community Pool. Pembelian bersifat final.",
@@ -140,12 +140,8 @@
         "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk orang, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Verifikasi dengan World ID atau Human Passport; Telegram saja tidak cukup. Tidak ada data pribadi yang ditulis ke blockchain."
       },
       {
-        "q": "Mengapa saya belum bisa mengirim PPL ke orang lain sekarang?",
-        "a": "Sampai jaringan PEOPLE diluncurkan, PPL Anda adalah catatan di kontrak penjualan di Base. Pengiriman PPL ke orang lain dibuka saat jaringan diluncurkan. Sampai saat itu, Anda bisa menjual kembali ke cadangan sesuai aturan di atas."
-      },
-      {
-        "q": "Apa yang terjadi saat jaringan PEOPLE diluncurkan?",
-        "a": "PPL Anda dikirim ke alamat Anda di jaringan PEOPLE. Setelah itu, catatan di Base dibekukan dan tidak bisa lagi dijual kembali ke cadangan. Cadangan hanya bisa menjadi likuiditas PPL setelah pemberitahuan publik {releaseDays} hari sebelumnya, dan selama masa itu penjualan kembali tetap berjalan."
+        "q": "Kapan saya bisa mengirim PPL ke orang lain?",
+        "a": "PPL dikreditkan di jaringan PEOPLE tepat setelah pembelian Anda. Pada awalnya jaringan hanya menerima PPL: transfer antar peserta dibuka nanti, setelah ada sekitar 1.000 peserta terverifikasi. Sampai saat itu Anda dapat menjual PPL kembali ke cadangan sesuai aturan di atas."
       },
       {
         "q": "Dari jaringan mana saya bisa membayar?",
@@ -275,7 +271,7 @@
     "riskTitle": "Peringatan risiko",
     "riskBody": "Kripto berisiko: harga bisa turun, Anda mungkin tidak bisa langsung menjual, dan pembelian tidak dapat dikembalikan. Gunakan hanya uang yang sanggup Anda rugikan.",
     "riskMoreToggle": "Semua risiko",
-    "riskMore": "Selain itu: PPL tidak dapat dikirim ke orang lain sampai jaringan PEOPLE diluncurkan. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, 30 hari setelah setiap pembelian dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat menjeda pembelian dan penjualan kembali.",
+    "riskMore": "Selain itu: transfer PPL antar peserta dibuka nanti, setelah jaringan PEOPLE memiliki sekitar 1.000 peserta terverifikasi. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, 30 hari setelah setiap pembelian dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat menjeda pembelian dan penjualan kembali.",
     "saleTermsNote": "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
     "termsAgree": "Dengan membeli, Anda menyetujui {terms}.",
     "termsLink": "Ketentuan",
