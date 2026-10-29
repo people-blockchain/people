@@ -1,17 +1,184 @@
 {
   "meta": {
     "title": "PPL satın al",
-    "description": "PPL, Base ağında herkese açık bir fiyat eğrisi üzerinden satılır. Fiyat US$0,005'ten başlar ve her alımda yükselir. Satış, tükenene kadar veya 24 ay boyunca sürer; hangisi önce gerçekleşirse. Alımlar kesindir."
+    "description": "PPL, PEOPLE ağının tokenidir. Fiyatı önceden yayımlanmış bir formüle göre belirlenir ve PPL satıldıkça yükselir. İlk 7 gün yalnızca doğrulanmış kişiler içindir. Satın alımlar kesindir."
   },
   "hero": {
     "eyebrow": "PPL satışı",
-    "headline": "PPL'i herkese açık fiyat eğrisinden alın",
-    "sub": "Fiyat herkese açık bir eğriyi izler ve daha fazla PPL satıldıkça yükselir. Erken almak daha düşük başlangıç fiyatı demektir; garanti kâr değildir.",
-    "statsTitle": "Eğride",
-    "statsNote": "",
-    "ctaScroll": "Eğri nasıl çalışır",
-    "headlineClosed": "PPL satışı yakında açılıyor",
-    "statsTitleClosed": "Eğride — açılış yakında"
+    "headline": "Herkes için blokzincir. Sonunda.",
+    "lead": "Eskiden teknik uzman olmak gerekiyordu. Artık insan olmak yeterli.",
+    "subUpcoming": "PPL satışı {date} tarihinde açılıyor.",
+    "subWhitelist": "PPL satışı açık. İlk {days} gün yalnızca doğrulanmış kişiler içindir.",
+    "subOpen": "PPL satışı herkese açık.",
+    "subEnded": "PPL satışı sona erdi.",
+    "ctaVerify": "Doğrulanın, ilk {days} günde yerinizi alın",
+    "ctaBuy": "PPL satın al",
+    "ctaEnded": "Geri satış kurallarını gör",
+    "countdownLabel": "Satışın açılmasına",
+    "days": "gün",
+    "hours": "saat",
+    "minutes": "dakika",
+    "countdownDone": "Açılış tarihi geldi. Satış sözleşmesi açılır açılmaz alımlar başlar.",
+    "startPrice": "Başlangıç fiyatı: PPL başına {price}",
+    "livePrice": "Güncel fiyat: PPL başına {price}"
+  },
+  "before": {
+    "eyebrow": "Ne değişiyor",
+    "title": "Önce ve PEOPLE ile",
+    "beforeLabel": "Önce",
+    "afterLabel": "PEOPLE ile",
+    "rows": [
+      {
+        "before": "Kurtarma ifadeleri, gas ücretleri ve ilk işlemden önce bir düzine adım.",
+        "after": "Sıradan bir uygulama gibi Google ya da e-posta ile giriş."
+      },
+      {
+        "before": "Gerçek insanların yanında botlar ve sahte hesaplar.",
+        "after": "Yalnızca doğrulanmış kişiler: bir kişi, bir adres."
+      },
+      {
+        "before": "Tokenlerin çoğu herkesten önce içeridekilere gider.",
+        "after": "Tüm PPL'nin {communityPct} kadarı topluluğa ayrılır. Ekip {teamPct} alır ve bu pay {teamVesting} boyunca kademeli açılır."
+      }
+    ]
+  },
+  "ppl": {
+    "eyebrow": "PPL nedir",
+    "title": "Üç satırda PPL",
+    "lines": [
+      "PPL, PEOPLE ağının tokenidir.",
+      "Fiyatı önceden yayımlanmış bir formüle göre belirlenir: PPL satın alındıkça yükselir, geri satıldıkça düşer.",
+      "PEOPLE fiyatı belirlemez ve yükseltmez. Kimse onu elle oynatmaz."
+    ],
+    "chartAria": "Yayımlanmış formüle göre PPL fiyatı: başlangıçta {start}, eğri kapandığında {end}",
+    "youAreHere": "Buradasınız",
+    "chartStart": "Başlangıç {price}",
+    "chartEnd": "Eğri kapanırken {price}",
+    "axisSold": "Satılan PPL",
+    "detailsToggle": "Ayrıntılar: formül",
+    "details": "Bu bir fiyat eğrisidir (bonding curve): fiyat = {start} × e^(k·x); burada x milyon cinsinden satılan PPL, k = ln(50)/100. Her alım fiyatı eğri boyunca yukarı, her geri satış aşağı taşır. Eğride {supply} PPL var. Eğri, {graduation} toplandığında (PPL başına yaklaşık {end}) ya da açılıştan {term} sonra, hangisi önce gelirse, kapanır."
+  },
+  "how": {
+    "eyebrow": "Nasıl alınır",
+    "title": "Üç adım",
+    "steps": [
+      {
+        "title": "Doğrulanın",
+        "body": "Gerçek bir insan olduğunuzu bir kez kanıtlayın: Telegram (telefon numarası) ya da Human Passport ile."
+      },
+      {
+        "title": "Tutarı ve ağı seçin",
+        "body": "Alım başına {min} ile {max} arası. USDC ya da USDT ile ödeyin; başka ağlardan gelen ödemeler otomatik olarak dönüştürülür. Ödeme Base ağında gerçekleşir."
+      },
+      {
+        "title": "PPL doğrudan PEOPLE cüzdanınıza",
+        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE ağındaki adresinize yazılır."
+      }
+    ],
+    "verifyLink": "Nasıl doğrulanırım"
+  },
+  "feed": {
+    "title": "Son alımlar ve satımlar",
+    "empty": "Henüz işlem yok.",
+    "buy": "Alım",
+    "sell": "Satım",
+    "link": "Görüntüle",
+    "example": "Örnek",
+    "exampleNote": "Listenin nasıl görüneceğini göstermek için örnek işlemler. Gerçek veri değildir."
+  },
+  "rules": {
+    "eyebrow": "Kurallar",
+    "title": "Herkes için aynı kurallar",
+    "lead": "Satış sözleşmesine yazılıdır. Sınırları ya da formülü kimse değiştiremez.",
+    "items": [
+      {
+        "title": "İlk {whitelistDays} gün: yalnızca doğrulanmış kişiler",
+        "body": "Bir kişi, bir adres. Alım başına {min} ile {max} arası, adres başına günde (UTC) en fazla {perDay} ve iki alım arasında {cooldown} saniye bekleme."
+      },
+      {
+        "title": "Her alımın {reservePct} kadarı rezervde kalır",
+        "body": "Geri satışları ödemek için satış sözleşmesinde kalır. Ekipten kimse onu çekemez. Kalan {treasuryPct} projeyi finanse eder."
+      },
+      {
+        "title": "{holdDays} gün sonra geri satış",
+        "body": "Her alım, yapıldıktan {holdDays} gün sonra o anki eğri fiyatından geri satılabilir. Günlük: tüm satıcılar için toplamda rezervin en fazla {sellDailyPct} kadarı ve adres başına en fazla {sellPerAddress}. Ücret {feeLow}; o gün rezervin {feeThreshold} kadarını aşan kısım için {feeHigh}. Yalnızca doğrulanmış kişiler."
+      },
+      {
+        "title": "Herkes kontrol edebilir",
+        "body": "Satış sözleşmesi herkese açıktır; içindeki her alım kontrol edilebilir. Projenin parası, her ödeme için {signersN} imzadan {signersM} tanesinin gerektiği bir cüzdanda durur."
+      }
+    ],
+    "todayTitle": "Bugün yapılabilecek geri satış",
+    "todayLive": "Bugün tüm satıcılar için toplamda hâlâ {amount} tutarına kadar geri satış yapılabilir.",
+    "todayUpcoming": "Henüz yok: ilk alımlar, satış açıldıktan {holdDays} gün sonra geri satılabilir.",
+    "todayUnknown": "Bu rakam sözleşmeden canlı okunur ve şu anda alınamıyor.",
+    "todayClosed": "Geri satış kapalı: eğri kapandı.",
+    "contractTitle": "Base ağındaki satış sözleşmesi",
+    "contractPending": "Adres, satış açılmadan önce burada yayımlanacak. Yalnızca o adres üzerinden alın.",
+    "explorerLink": "Basescan'de aç",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "auditLine": "Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (incelemeyi proje ekibi yürüttü). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.",
+    "reviewReports": "İnceleme raporları: {links}",
+    "auditBounty": "Bir güvenlik açığı mı buldunuz? Herhangi bir sayfadaki hata düğmesiyle bildirin.",
+    "detailsToggle": "Ayrıntılar",
+    "details": [
+      "Rezerv: satış sözleşmesinde tutulan USDC. Geri satışlar buradan ödenir ve geri satış ücretleri burada kalır. Rezerv ne kadar küçükse günlük geri satış sınırı da o kadar küçüktür. Eğri kapandığında geri satış kalıcı olarak kapanır.",
+      "Rezerv sözleşmeden yalnızca PPL likiditesi olarak çıkar: eğri kapandığında ve ancak {releaseDays} günlük kamuya açık bir duyurudan sonra. Duyuru süresince geri satış çalışmaya devam eder.",
+      "Hazine: her alımın kalan {treasuryPct} kadarını alan çoklu imza cüzdanı ({signersN} imzadan {signersM}).",
+      "Çoklu imza cüzdanı alımları ve geri satışı duraklatabilir. Rezervi taşıyamaz, sınırları ya da formülü değiştiremez, satışı uzatamaz.",
+      "Satış, {graduation} toplanana ya da açılıştan itibaren {term} dolana kadar, hangisi önce gelirse, sürer. Satılmayan PPL Community Pool'a gider. Satın alımlar kesindir.",
+      "Ekip: tüm PPL'nin {teamPct} kadarı. İlk {cliff} hiçbir şey yok, sonra {linear} boyunca her ay; tam ağ lansmanından itibaren sayılır."
+    ]
+  },
+  "faq": {
+    "eyebrow": "Sorular",
+    "title": "Kısa yanıtlar",
+    "items": [
+      {
+        "q": "Doğrulama neden gerekli?",
+        "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil cüzdan adreslerine uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. Telegram ya da Human Passport ile doğrulanabilirsiniz. Blokzincire hiçbir kişisel veri yazılmaz."
+      },
+      {
+        "q": "PPL'yi başkalarına ne zaman gönderebilirim?",
+        "a": "PPL, satın alımınızdan hemen sonra PEOPLE ağında kaydedilir. Başlangıçta ağ yalnızca PPL alır: katılımcılar arasındaki transferler daha sonra, ağda yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. O zamana kadar PPL'yi yukarıdaki kurallarla rezerve geri satabilirsiniz."
+      },
+      {
+        "q": "Hangi ağlardan ödeme yapabilirim?",
+        "a": "Base'de: USDC ya da küçük bir ücretle otomatik olarak USDC'ye dönüştürülen USDT. Başka ağlardan yapılan ödeme otomatik olarak dönüştürülür: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana. TON desteklenmez. Alımın kendisi her zaman Base'de USDC ile gerçekleşir."
+      },
+      {
+        "q": "Bugün ne kadar geri satılabilir?",
+        "a": "Her alım, yapıldıktan {holdDays} gün sonra geri satılabilir. Her gün tüm satıcılar birlikte rezervin en fazla {sellDailyPct} kadarını, her adres ise en fazla {sellPerAddress} geri satabilir. Rezerv küçükse günlük sınır da küçüktür. Bugünkü rakam yukarıdaki kurallarda gösterilir."
+      },
+      {
+        "q": "Paramı geri alabilir miyim?",
+        "a": "Hayır. Tüm alımlar kesindir. Geri dönmenin tek yolu, yukarıdaki kurallarla rezerve geri satmaktır."
+      }
+    ],
+    "riskTitle": "Risk uyarısı",
+    "riskBody": "PPL değer kaybedebilir. Yalnızca riske atabileceğiniz kadar alın. Ülkenizin yasalarına uyun."
+  },
+  "finalCta": {
+    "eyebrow": "Hazır mısınız?",
+    "bounty": "ya da görevleri tamamlayarak PPL kazanın"
+  },
+  "footnote": {
+    "title": "Notlar",
+    "notes": [
+      {
+        "marker": "*",
+        "text": "PPL, PEOPLE ağının fayda tokenidir. Satış sırasında fiyatı yayımlanmış formüle uyar; sonrasında fiyatı piyasa belirler ve yükselebileceği gibi düşebilir de. PPL bir menkul kıymet, şirket payı, mevduat ya da yatırım ürünü değildir. Hiçbir kâr, getiri ya da geri dönüş vaat edilmez veya garanti edilmez. Alımdan önce gösterilen rakamlar tahmindir; kesin tutarlar imzalamadan önce zincir üzerinde doğrulanır. Bu sayfadaki hiçbir şey yatırım, hukuk ya da vergi tavsiyesi değildir."
+      },
+      {
+        "marker": "**",
+        "text": "Yaşadığınız yerde katılım kısıtlı olabilir ya da hiç mümkün olmayabilir; size uygulanan kuralları kontrol etmek sizin sorumluluğunuzdadır. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın."
+      },
+      {
+        "marker": "***",
+        "text": "Yukarıda adı geçen yapay zekâ destekli incelemeleri proje ekibi yürüttü. Bunlar bir güvenlik denetimi değildir ve henüz harici bir denetim yapılmadı. Hata ödülü programı riski azaltır ama ortadan kaldırmaz: hiçbir inceleme bir yazılımın hatasız olduğunu kanıtlayamaz."
+      }
+    ]
   },
   "stats": {
     "price": "Güncel fiyat",
@@ -25,9 +192,12 @@
     "notOpenYet": "Henüz açılmadı",
     "progressLabel": "{target} graduation hedefine ilerleme",
     "saleStatus": "Satış durumu",
+    "whitelistStatus": "Beyaz liste: yalnızca doğrulanmış kişiler",
+    "openStatus": "Açık",
     "startPriceOnOpen": "Açılıştaki başlangıç fiyatı: {start}",
     "saleWindow": "Satış süresi",
     "saleWindowValue": "Tükenene kadar veya {term}",
+    "saleWindowV2": "{date} tarihinden itibaren 7 günlük whitelist, ardından {term} kadar açık satış",
     "saleWindowHint": "Hangisi önce gerçekleşirse. Uzatma yok.",
     "endsByHint": "En geç bitiş tarihi. Tükenirse daha erken."
   },
@@ -40,7 +210,7 @@
     "priceAfter": "Alımınızdan sonraki fiyat",
     "estimate": "Bu bir tahmindir. Kesin miktar, imzalamadan önce zincir üzerinde onaylanır.",
     "limitPerBuy": "Alım başına {min}–{max}",
-    "limitPerDay": "Herhangi bir 24 saatte kişi başına en fazla {amount}",
+    "limitPerDay": "Adres başına günde (UTC) en fazla {amount}",
     "cooldown": "Alımlar arasında {seconds} sn bekleme",
     "overLimit": "Tek alımda en fazla {amount}.",
     "belowMin": "Fiyat teklifini görmek için tutar girin.",
@@ -92,7 +262,7 @@
     "viewTx": "Basescan'de görüntüle",
     "txRejected": "İmzayı iptal ettiniz. Hiçbir ücret alınmadı.",
     "priceMoved": "Fiyat onaydan önce %1'den fazla değiştiği için alım yapılmadı. Yeni teklifi kontrol edip tekrar deneyin.",
-    "limitHit": "Bir satış sınırı bu alımı durdurdu (alım başına, 24 saatlik veya alımlar arası bekleme). Hiçbir şey satın alınmadı.",
+    "limitHit": "Bir satış sınırı bu alımı durdurdu (alım başına, günlük ya da alımlar arasındaki bekleme). Hiçbir şey satın alınmadı.",
     "txFailed": "İşlem başarısız oldu: {reason}. PPL satın alınmadı.",
     "tryAgain": "Tekrar dene",
     "balanceLine": "Base'deki cüzdanınızda: {balance} {token} · {eth} ETH",
@@ -101,20 +271,20 @@
     "riskTitle": "Risk uyarısı",
     "riskBody": "Kripto risklidir: fiyat düşebilir, hemen satamayabilirsiniz ve alımlar iade edilmez. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın.",
     "riskMoreToggle": "Tüm riskler",
-    "riskMore": "Ayrıca: ağın tam lansmanına kadar PPL başkalarına gönderilemez. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; 30 günlük bekleme süresinden sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları doğrulanmış kullanıcılarla sınırlayabilir.",
+    "riskMore": "Ayrıca: PPL'nin katılımcılar arasındaki transferleri daha sonra, PEOPLE ağında yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; her alımdan 30 gün sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları ve geri satışı duraklatabilir.",
     "saleTermsNote": "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
     "termsAgree": "Satın alarak {terms} kabul etmiş olursunuz.",
     "termsLink": "Koşulları",
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
     "noWalletHint": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
-    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Günlük sınırlar: herkes için toplamda rezervin %2'si ve adres başına $2.000. Ücret %1,5; günün geri satışlarında yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandığında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
-    "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık US$0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3).",
+    "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık $0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5, ve yalnızca günün geri satışlarında rezervin %1'ini aşan kısım için %3.",
     "timingBody": "Base'de bir alım saniyeler içinde onaylanır. Diğer ağlardan ödemeler genellikle 1–20 dakikada ulaşır. Geri satış ödemeleri Base ağında USDC olarak yapılır.",
     "getUsdc": "Henüz USDC'niz yok mu? Bir borsadan alıp Base ağına çekin ya da aşağıdan başka bir ağdan ödeyin. Ücretler için Base'de biraz ETH de gerekir.",
     "glossaryBase": "Base, Ethereum üzerine kurulu düşük ücretli bir ağdır. USDC ve USDT, ABD dolarına sabitlenmiş stablecoin'lerdir. LI.FI, token'ları takas eden ve ağlar arasında taşıyan hizmettir.",
-    "phishing": "Satışın tek resmî adresi bu sayfada gösterilir. Ekip asla kurtarma ifadenizi (seed phrase) istemez ve özel mesajla ödeme bağlantısı göndermez.",
+    "phishing": "Satışın tek resmî adresi bu sayfada gösterilir. PEOPLE asla kurtarma ifadenizi (seed phrase) istemez ve özel mesajla ödeme bağlantısı göndermez.",
     "stableUsdtDirectOption": "Base üzerinde USDT (köprülenmiş)",
     "payFromNetworks": "EVM ağlarından (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana'dan çalışır. TON desteklenmez.",
     "bridgeSteps": "Adım 1. Widget'ta token'larınızı Base üzerinde USDC'ye takas edin (genellikle 1–20 dakika). Adım 2. Aşağıdaki düğmeyle PPL satın alın.",
@@ -129,214 +299,82 @@
     "switchRejected": "Ağ değiştirilmedi. Satın alma için Base gerekir — tekrar deneyin.",
     "embeddedNoBase": "PEOPLE Wallet henüz Base ağında ödeme yapamıyor. Satın almak için MetaMask, Trust Wallet veya WalletConnect bağlayın."
   },
-  "whyPriceRises": {
-    "title": "Fiyat neden yükselir",
-    "noManualLead": "PEOPLE ekibi fiyatı belirlemez ve yükseltmez. Fiyatı satış sözleşmesindeki herkese açık bir formül otomatik olarak belirler: her alım fiyatı eğri boyunca ilerletir.",
-    "mechanism": "Herkese açık formülle fiyatlama: fiyat yalnızca kaç PPL satıldığına bağlıdır ve sözleşme yayımlandıktan sonra herkes bunu zincir üzerinde kontrol edebilir.",
-    "example": "Yayımlanan parametrelerle: başta PPL için {startPrice}, {midSold} PPL satıldıktan sonra {midPrice} (~{midRaised} toplanan) ve graduation anında {gradPrice} ({gradRaised} toplanan).",
-    "explainerLink": "Eğri nasıl çalışır",
-    "chartAria": "PPL satış fiyat eğrisi: fiyat ve satılan PPL",
-    "chartAxisSold": "Satılan PPL",
-    "chartAxisPrice": "Fiyat, $",
-    "chartMarker": "{price} · {sold}",
-    "contractPendingNote": "Sözleşme henüz yayımlanmadı. Yayımlandığında herkes formülü zincir üzerinde kontrol edebilecek.",
-    "plainTitle": "Kısaca",
-    "plain": [
-      "Fiyat eğrisi (bonding curve) — herkese açık bir fiyat formülü: ne kadar çok PPL satılırsa fiyat o kadar yükselir.",
-      "Graduation (eğrinin kapanışı) — $4M toplandığı an: eğri kapanır ve herkese açık bir PPL havuzu açılır.",
-      "LP token'ları 24 ay kilitlidir: bu süre boyunca kimse havuzdaki parayı çekemez.",
-      "Çoklu imza (multisig) — her ödemeyi birkaç kişinin onaylaması gereken bir cüzdan.",
-      "DEX havuzu — herkesin PPL alıp satabildiği açık bir takas havuzu.",
-      "Lot, tek bir alımdır; 30 gün her alımdan itibaren sayılır. Doğrulanmış kullanıcı, benzersiz bir kişi olduğunu bir kez kanıtlamış (Human Passport veya Telegram) kişidir — {howItWorks}. Rezerv, satış sözleşmesinde tutulan USDC'dir; geri satışlar buradan ödenir.",
-      "Geri satış: siz PPL'i rezerve satarsınız. Geri alım: proje, ücret gelirleriyle PPL satın alır. Bunlar iki farklı mekanizmadır."
-    ]
-  },
-  "curve": {
-    "eyebrow": "Formül",
-    "title": "Herkesin gördüğü tek eğri",
-    "lead": "Fiyat elle belirlenmez. fiyat = {start} × e^(k·x); x satılan PPL milyonları, k = ln(50)/100. Aşağıdaki her rakam bu formülden gelir.",
-    "axisRaised": "Toplanan, $",
-    "axisPrice": "PPL başına fiyat, $",
-    "youAreHere": "Buradasınız",
-    "notOpen": "",
-    "marker": "{raised} toplandı",
-    "markerPrice": "PPL başına {price}",
-    "markerSold": "{sold} PPL satıldı",
-    "graduationTag": "Graduation",
-    "ceilingNote": "{ceiling} tavanına yalnızca tüm {supply} PPL satılırsa ulaşılır. Eğri önce {graduation} toplanınca kapanır.",
-    "feedTitle": "Son alım ve satımlar",
-    "feedEmpty": "Henüz işlem yok.",
-    "feedBuy": "Alım",
-    "feedSell": "Satım",
-    "feedLink": "Görüntüle",
-    "capScope": "{ceiling} tavanı yalnızca eğri üzerindeki satış sırasında geçerlidir. Graduation sonrasında havuz fiyatını serbest piyasa belirler; üst ve alt sınır yoktur — fiyat çok düşebilir, sıfıra yakın bile.",
-    "formulaToggle": "Merak edenler için: formül"
-  },
-  "whatYouGet": {
-    "eyebrow": "Ne alırsınız",
-    "title": "Bir alım size gerçekte ne verir",
-    "items": [
-      {
-        "title": "PPL hemen adresinizde",
-        "body": "PPL hemen adresinize yazılır, ancak ağın tam lansmanına kadar başkalarına gönderemezsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür."
-      },
-      {
-        "title": "Rezerve geri satış",
-        "body": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
-      },
-      {
-        "title": "Transferler ağın tam lansmanıyla açılır",
-        "body": "PPL'i başkalarına göndermek ve havuzda işlem yapmak, {verified} doğrulanmış katılımcıya ulaşıldığında, ağın tam lansmanıyla başlar."
-      },
-      {
-        "title": "{graduation} toplanınca eğri kapanır",
-        "body": "Satış sürerken alım parası Base'deki satış rezervinde kalır ve geri satışları öder. Graduation'da {liquidityShare} kadarı son eğri fiyatından PPL ile birlikte herkese açık havuza gider (LP token'ları {lockPeriod} boyunca kilitli), {multisigShare} kadarı ise her harcama kamuya raporlanarak projenin çoklu imza cüzdanına gider."
-      }
-    ]
-  },
-  "timeline": {
-    "eyebrow": "Olay sırası",
-    "title": "Eğriden serbest piyasaya",
-    "steps": [
-      {
-        "title": "Eğri",
-        "body": "Herkese açık bir eğride {start} fiyatından {ceiling} tavanına kadar {supply} PPL. Satış açıkken herkes alım yapabilir: eğri {graduation} toplanınca kapanana veya açılıştan itibaren {term} geçene kadar; hangisi önce gerçekleşirse. Uzatma yok."
-      },
-      {
-        "title": "Graduation: {graduation}",
-        "body": "Eğri durur. Toplanan tutarın {liquidityShare} kadarı ve son eğri fiyatından PPL, tam bu fiyattan ve sıçrama olmadan herkese açık bir DEX havuzuna gider. LP token'ları {lockPeriod} boyunca kilitlidir. {multisigShare} kadarı kamuya açık raporlamayla projenin çoklu imza cüzdanına gider. Rezerve geri satış kapanır."
-      },
-      {
-        "title": "Ağın tam lansmanı",
-        "body": "Cüzdanlar arası PPL transferleri ve havuzda işlem, {verified} doğrulanmış katılımcıya ulaşıldığında ağın tam lansmanıyla açılır."
-      },
-      {
-        "title": "Tükenmezse: açılıştan {term} sonra",
-        "body": "Eğri o zamana kadar kapanmadıysa satış uzatılmadan sona erer. Satılmayan PPL Community Pool'a gider. Ödenmiş tutarlar iade edilmez."
-      }
-    ]
-  },
-  "transparency": {
-    "eyebrow": "Şeffaflık",
-    "title": "Sözleşme, para ve kod",
-    "lead": "Satış sözleşmesi, satış gelirinin gittiği yer, kodun güvenlik incelemeleri ve ekip tokenlarının açılması.",
-    "saleContract": "Satış sözleşmesi (Base üzerinde PplCurveHub)",
-    "saleContractPending": "Satış sözleşmesi: Base üzerinde PplCurveHub (chain ID 8453). Henüz yayımlanmadı — adres ve blok gezgini bağlantısı satış açılmadan önce burada görünecek.",
-    "verifiedSource": "Doğrulanmış kaynak kod",
-    "auditTitle": "Güvenlik incelemeleri",
-    "auditLine": "Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.",
-    "explorerLink": "Basescan'de aç",
-    "allocationTitle": "1 milyar PPL nereye gidiyor",
-    "allocationNote": "Sabit arz {supply} PPL. Satış payı, eğrideki {salePct}.",
-    "vestingTitle": "Ekip token kilidi (vesting)",
-    "vestingBody": "Ekip vesting'i ağın tam lansmanıyla başlar: ilk {cliffPeriod} boyunca ekip hiç token almaz, ardından token'lar {linearPeriod} boyunca her ay açılır — toplam {totalPeriod}.",
-    "fundsTitle": "Satış gelirleri nereye gidiyor",
-    "fundsBody": "Satış sürerken alım parası Base'deki satış rezervinde kalır ve geri satışları öder. Graduation'da {liquidityShare} kadarı son eğri fiyatından PPL ile birlikte herkese açık havuza gider (LP token'ları {lockPeriod} boyunca kilitli), {multisigShare} kadarı ise her harcama kamuya raporlanarak projenin çoklu imza cüzdanına gider.",
-    "auditBounty": "Hata ödülü: herhangi bir sayfadaki hata düğmesiyle bir güvenlik açığını bildirin.",
-    "reviewReports": "İnceleme raporları: {links}",
-    "addressesTitle": "Base üzerindeki adresler",
-    "addrHub": "Satış sözleşmesi (PplCurveHub)",
-    "addrPpl": "PPL token'ı",
-    "addrMultisig": "Projenin çoklu imza cüzdanı",
-    "addrMultisigThreshold": "{n} imzadan {m}",
-    "addrUsdc": "Base üzerinde USDC",
-    "addrUsdt": "Base üzerinde USDT (köprülenmiş)",
-    "addrPending": "Satış açılmadan önce burada yayımlanacak",
-    "copy": "Kopyala",
-    "copied": "Kopyalandı",
-    "adminPowers": "Projenin çoklu imza cüzdanı alımları yalnızca doğrulanmış kullanıcılarla sınırlayabilir (örneğin bir bot saldırısında). Bu durumda mod kapatılana kadar doğrulanmamış kullanıcılar alım yapamaz."
-  },
-  "faq": {
-    "eyebrow": "SSS",
-    "title": "Sorular, yanıtlar",
-    "items": [
-      {
-        "q": "PPL'i geri satabilir miyim?",
-        "a": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız."
-      },
-      {
-        "q": "{ceiling} tavanı kalıcı mı?",
-        "a": "Hayır. Eğri çalıştığı sürece geçerlidir. Eğri {graduation} toplanınca, PPL başına yaklaşık {graduationPrice} fiyatında, tavanın altında kapanır. Graduation sonrasında havuz fiyatını serbest piyasa belirler; üst ve alt sınır yoktur — fiyat çok düşebilir, sıfıra yakın bile."
-      },
-      {
-        "q": "Cüzdanımda PEOPLE ağı gerekli mi?",
-        "a": "Hayır. Satış yalnızca Base üzerinde yapılır: Base'te USDC veya USDT ile ödersiniz. PEOPLE ağı ayrıdır ve satın almak için gerekmez."
-      },
-      {
-        "q": "PPL'i başkasına ne zaman gönderebilirim?",
-        "a": "{verified} doğrulanmış katılımcıya ulaşıldığında, ağın tam lansmanıyla. O zamana kadar satış açıkken alım yapabilirsiniz; geri satış sınırlıdır: yalnızca doğrulanmış kullanıcılar, her alımdan 30 gün sonra, günlük sınırlar içinde ve graduation'a kadar."
-      },
-      {
-        "q": "Paramı geri alabilir miyim?",
-        "a": "Hayır. Tüm alımlar kesindir: iade yoktur. Satış uzatılmaz; satılmayan PPL Community Pool'a gider."
-      },
-      {
-        "q": "Hangi ağlardan ödeme yapabilirim?",
-        "a": "Base'de USDC veya USDT ile. Diğer ağlardan yerleşik otomatik takas (LI.FI) ile: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana çalışır. TON desteklenmez."
-      }
-    ],
-    "pumpTitle": "Tavansız eğrilerde neler ters gider",
-    "pumpLead": "Fiyat eğrileri (bonding curves) pump.fun gibi launchpad'lerle popüler oldu. Bilinen sorunları ve bizim çözümümüz şunlar.",
-    "pumpCols": [
-      "Sorun",
-      "Ne olur",
-      "Korumamız"
-    ],
-    "pumpRows": [
-      {
-        "problem": "Geç alanlar fazla öder",
-        "what": "Fiyat sınırsız yükselir; graduation öncesi son alıcılar ilk alıcılardan kat kat fazla öder.",
-        "ours": "Fiyat yine de yükselir: graduation anında başlangıç fiyatının yaklaşık 32 katıdır, yani geç alanlar erken alanlardan daha fazla öder. Eğri {graduation} toplanınca, yaklaşık {graduationPrice} fiyatında, {ceiling} tavanının altında kapanır."
-      },
-      {
-        "problem": "İlk alan botlar",
-        "what": "Scriptler ilk saniyelerde çok cüzdandan alır, gerçek kullanıcılara satar.",
-        "ours": "Alım başına en fazla {perBuy}, herhangi bir 24 saatte kişi başına {perDay} ve alımlar arasında {cooldown} sn bekleme. Hesap başına sınırlar hızla büyük pozisyon toplamayı zorlaştırır, ancak bir kişinin birden fazla cüzdan kullanmasını engelleyemez."
-      },
-      {
-        "problem": "Toplu satışlar",
-        "what": "Büyük sahipler her şeyi birden satar ve fiyat çöker.",
-        "ours": "Rezerve geri satış, herkes için günde rezervin %2'si ve kişi başına günde $2.000 ile sınırlıdır. Ücret, projenin PPL geri alımına gider (ayrı bir mekanizma); havuz likiditesi {lockPeriod} boyunca kilitlidir."
-      },
-      {
-        "problem": "Gösterilenden kötü fiyat",
-        "what": "İşlem gösterilenden çok daha kötü fiyattan gerçekleşir.",
-        "ours": "Kayma koruması: fiyat alımınız onaylanmadan önce aleyhinize %1'den fazla değişirse işlem iptal edilir."
-      },
-      {
-        "problem": "Hype ile yapılan listelemeler",
-        "what": "Token satış ortasında borsalara itilir.",
-        "ours": "Satış sırasında listeleme yok. Havuzda işlem, ağın tam lansmanıyla başlar."
-      }
-    ]
-  },
-  "bottomCta": {
-    "eyebrow": "Hazır mısınız?",
-    "title": "PPL'i güncel eğri fiyatından alın",
-    "lead": "Herkes için aynı form, aynı fiyat eğrisi.",
-    "scrollToForm": "Satın alma formuna dön",
-    "titleClosed": "Satış yakında açılıyor",
-    "leadClosed": "Açılış günü güncel fiyat burada görünecek."
-  },
-  "sticky": {
-    "label": "PPL satın al",
-    "price": "{price}'den itibaren"
-  },
-  "footnote": {
-    "title": "Notlar",
-    "notes": [
-      {
-        "marker": "*",
-        "text": "PPL, PEOPLE ağının utility token'ıdır. Eğride fiyat yayınlanan formülü izler; graduation sonrasında piyasa belirler: düşebilir de yükselebilir. PPL menkul kıymet, şirket payı, mevduat veya yatırım ürünü değildir; kar, getiri veya geri dönüş vaat veya garanti edilmez. Alım öncesi rakamlar yayınlanan formüle göre tahmindir ve imzadan önce zincir üstünde onaylanır. Bu sayfa yatırım, hukuk veya vergi tavsiyesi değildir."
-      },
-      {
-        "marker": "**",
-        "text": "Katılım bulunduğunuz yerde kısıtlı veya kullanılamayabilir; size uyan kuralları kontrol etmek sizin sorumluluğunuzdur. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın."
-      },
-      {
-        "marker": "***",
-        "text": "Yukarıda adı geçen yapay zekâ destekli incelemeleri proje ekibi yürüttü. Bunlar bir güvenlik denetimi değildir ve henüz harici bir denetim yapılmadı. Hata ödülü riski azaltır ama ortadan kaldırmaz: hiçbir inceleme bir yazılımın hatasız olduğunu kanıtlayamaz."
-      }
-    ]
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Beyaz liste aşaması",
+      "whitelistBody": "İlk 7 gün: yalnızca doğrulanmış kişiler. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "daysLeft": "{days} gün kaldı",
+      "openTitle": "Herkese açık aşama",
+      "openBody": "Herkese açık. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "notOpenTitle": "Satış henüz açılmadı",
+      "notOpenBody": "Sözleşme beyaz liste aşamasına geçtiğinde alımlar açılır.",
+      "expiredTitle": "Satış sona erdi",
+      "graduatedTitle": "Satış mezun oldu",
+      "closedBody": "Alımlar kapalı."
+    },
+    "verify": {
+      "title": "İlk 7 gün yalnızca doğrulanmış kişiler",
+      "body": "Katılmak için Telegram (telefon numarası) veya Human Passport ile doğrulan.",
+      "ctaVerify": "Şimdi doğrulan",
+      "ctaSignIn": "Doğrulanmak için giriş yap",
+      "confirmTitle": "Zincir üstünde bir adım kaldı",
+      "confirmBody": "Alımı açmak için doğrulanmış kimliğini Base üzerinde onayla.",
+      "ctaConfirm": "Zincir üstünde onayla",
+      "confirming": "Zincir üstünde onaylanıyor…",
+      "confirmed": "Zincir üstünde onaylandı. Satın alabilirsin.",
+      "error": "Zincir üstünde onaylanamadı. Tekrar dene.",
+      "notEligible": "Bu hesap beyaz liste için uygun değil.",
+      "connectWallet": "Devam etmek için bir cüzdan bağla.",
+      "alreadyVerified": "Zincir üstünde zaten onaylandı."
+    },
+    "form": {
+      "title": "PPL satın al",
+      "network": "Ağ",
+      "token": "Token",
+      "amount": "Tutar",
+      "networkBase": "Base",
+      "networkOther": "Diğer ağ",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "PPL tahmini",
+      "minimum": "Alınacak minimum",
+      "price": "Güncel PPL fiyatı",
+      "etaDuration": "1–20 dk",
+      "eta": "Yaklaşık {eta} içinde ulaşır",
+      "fees": "Ücretler: {fees}",
+      "feesToggle": "Ücret ayrıntıları",
+      "feesBody": "Base ağ ücreti genellikle yaklaşık $0,01’dir. LI.FI takas veya köprü ücreti onaydan önce widget’ta gösterilir.",
+      "lifiLine": "LI.FI ile takas, Base üzerinde USDC ile satın alım",
+      "sellbackLine": "Geri satış 30 gün sonra açılır; geri alım limitleri — ayrıntılar",
+      "sellbackLink": "ayrıntılar",
+      "cta": "PPL satın al",
+      "connecting": "Bağlanıyor…",
+      "buying": "Onaylanıyor…",
+      "connect": "Satın almak için cüzdan bağla",
+      "switch": "Base’e geç",
+      "wrongNetwork": "Satın almak için cüzdanını Base’e geçir.",
+      "invalid": "Dolar cinsinden bir tutar gir.",
+      "belowMin": "Minimum {min}.",
+      "overMax": "İşlem başına maksimum {max}.",
+      "overDay": "Günlük limit adres başına {max}.",
+      "needVerification": "Satın almak için yukarıdaki doğrulamayı tamamla.",
+      "needWallet": "Teklifini görmek için cüzdan bağla.",
+      "preview": "Önizleme: hiçbir işlem gönderilmeyecek.",
+      "bridgeHint": "Önce LI.FI ile Base üzerinde USDC’ye takas yap, sonra alımı tamamla.",
+      "error": "Alım gerçekleşmedi. Tekrar dene."
+    },
+    "success": {
+      "title": "Alım tamamlandı",
+      "credited": "{ppl} PPL {address} adresine geçti",
+      "tx": "İşlemi görüntüle",
+      "unlock": "Geri satış {date} tarihinde açılır",
+      "again": "Daha fazla PPL al"
+    },
+    "partial": {
+      "title": "USDC geldi — PPL alınmadı",
+      "body": "Takas Base üzerinde {amount} USDC teslim etti, ancak PPL alımı gerçekleşmedi.",
+      "topUp": "{amount} USDC ile PPL al",
+      "hint": "Alınan USDC ile Base üzerindeki alım yeniden denenir."
+    }
   }
 }

@@ -67,5 +67,17 @@
   "errFactoryMissing": "A fábrica de NFT ainda não foi implantada nesta rede.",
   "errWrongNetwork": "Sua carteira está em outra rede. Mude para a rede de teste do PEOPLE Blockchain e tente de novo.",
   "errTimeout": "A transação está demorando demais. Ela não foi reenviada; use «Continuar a emissão» para verificá-la.",
-  "errUnknown": "Algo deu errado. Nada foi emitido duas vezes. Tente de novo."
+  "errUnknown": "Algo deu errado. Nada foi emitido duas vezes. Tente de novo.",
+  "errStableFeeUnavailable": "O pagamento em stablecoin está temporariamente indisponível. Pague em PPL.",
+  "errStableDailyCap": "O limite diário de pagamento em stablecoin para esta carteira foi atingido. Pague em PPL ou tente novamente amanhã.",
+  "errInsufficientPpl": "PPL insuficiente: você precisa de {needed} PPL (taxa + gás) e tem {balance} PPL.",
+  "errInsufficientPplGeneric": "PPL insuficiente para cobrir a taxa e o gás. Recarregue e tente novamente.",
+  "errNetworkRpc": "A rede não está respondendo. Verifique sua conexão e tente novamente.",
+  "createSuccessTitle": "Token criado",
+  "createSuccessLead": "O token já está ativo na PEOPLE Blockchain.",
+  "createViewToken": "Abrir token no explorador",
+  "createViewAddress": "Abrir endereço no explorador",
+  "createTimeoutTitle": "Transação enviada",
+  "createTimeoutBody": "A confirmação está demorando mais que o normal. Verifique o explorador e não envie novamente. Use «Criar outro» apenas se tiver certeza de que nada foi criado.",
+  "createTimeoutExplorer": "Verificar seu endereço no explorador"
 }

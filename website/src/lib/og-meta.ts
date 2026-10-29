@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DOCUMENT_TITLES, NETWORK_NAME_BY_LANG, SITE_NAME, SITE_OG_DESCRIPTION, SITE_OG_DESCRIPTION_RU, SITE_URL } from "@/lib/site";
+import { bountyCopy } from "./bounty-content";
 import type { Language } from "./preferences";
 
 const OG_LOCALE: Record<Language, string> = {
@@ -32,7 +33,7 @@ const LITEPAPER_DESCRIPTION: Partial<Record<Language, string>> = {
   ru: "Litepaper PEOPLE: блокчейн, где каждый пользователь — верифицированный человек, принадлежащий сообществу, а не венчурным фондам. Продукт, токеномика, роадмап и риски.",
 };
 
-type PageKey = "home" | "founders" | "transparency" | "litepaper";
+type PageKey = "home" | "founders" | "bounty" | "transparency" | "litepaper";
 
 /**
  * Open Graph + Twitter metadata for a public page, localized where copy exists
@@ -42,24 +43,29 @@ type PageKey = "home" | "founders" | "transparency" | "litepaper";
  */
 export function buildPageMetadata(page: PageKey, lang: Language): Metadata {
   const titles = DOCUMENT_TITLES[lang];
+  const bounty = page === "bounty" ? bountyCopy(lang) : null;
   const title =
-    page === "home"
-      ? titles.home
-      : page === "founders"
-        ? titles.founders
-        : page === "litepaper"
-          ? titles.litepaper
-          : titles.transparency;
+    bounty
+      ? `${bounty.hero.title} | ${SITE_NAME}`
+      : page === "home"
+        ? titles.home
+        : page === "founders"
+          ? titles.founders
+          : page === "litepaper"
+            ? titles.litepaper
+            : titles.transparency;
   const description =
-    page === "home"
-      ? lang === "ru" ? SITE_OG_DESCRIPTION_RU : SITE_OG_DESCRIPTION
-      : page === "founders"
-        ? FOUNDERS_DESCRIPTION[lang] ?? FOUNDERS_DESCRIPTION.en!
-        : page === "litepaper"
-          ? LITEPAPER_DESCRIPTION[lang] ?? LITEPAPER_DESCRIPTION.en!
-          : TRANSPARENCY_DESCRIPTION[lang] ?? TRANSPARENCY_DESCRIPTION.en!;
+    bounty
+      ? bounty.hero.lead
+      : page === "home"
+        ? lang === "ru" ? SITE_OG_DESCRIPTION_RU : SITE_OG_DESCRIPTION
+        : page === "founders"
+          ? FOUNDERS_DESCRIPTION[lang] ?? FOUNDERS_DESCRIPTION.en!
+          : page === "litepaper"
+            ? LITEPAPER_DESCRIPTION[lang] ?? LITEPAPER_DESCRIPTION.en!
+            : TRANSPARENCY_DESCRIPTION[lang] ?? TRANSPARENCY_DESCRIPTION.en!;
   const path =
-    page === "home" ? "/" : page === "founders" ? "/founders" : page === "litepaper" ? "/litepaper" : "/transparency";
+    page === "home" ? "/" : page === "founders" ? "/founders" : page === "bounty" ? "/bounty" : page === "litepaper" ? "/litepaper" : "/transparency";
   const image = absoluteUrl(OG_IMAGE_BY_LANG[lang] ?? OG_IMAGE_BY_LANG.en!);
   const alt = `${SITE_NAME} — ${NETWORK_NAME_BY_LANG[lang]}`;
   return {

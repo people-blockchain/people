@@ -1,6 +1,6 @@
 {
   "title": "Cüzdan",
-  "lead": "Emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez.",
+  "lead": "Tarayıcı cüzdanı: emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez. Google veya e-posta ile giriş ise bunun yerine bir bulut cüzdanı oluşturur: PEOPLE anahtarınızı şifreli saklar ve altyapısı onu çözebilir.",
   "create": "Yeni cüzdan oluştur",
   "import": "Cüzdan içe aktar",
   "unlock": "Kilidi aç",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "Anahtarınız, giriş yaparak geri yükleyebilmeniz için PEOPLE sunucularında şifrelenmiş olarak saklanır. PEOPLE altyapısı onu çözebilir. Tam öz-saklama için tarayıcı cüzdanı veya harici bir cüzdan kullanın. Özel anahtarı yalnızca PEOPLE dışında bir yedeğe ihtiyacınız varsa dışa aktarın.",
   "cloudDisconnect": "Disconnect"
 }

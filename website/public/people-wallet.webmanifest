@@ -1,7 +1,7 @@
 {
   "name": "PEOPLE",
   "short_name": "PEOPLE",
-  "description": "Non-custodial PEOPLE Wallet for PPL and assets on PEOPLE Blockchain testnet.",
+  "description": "PEOPLE Wallet for PPL and assets on PEOPLE Blockchain testnet.",
   "start_url": "/wallet",
   "scope": "/wallet",
   "display": "standalone",

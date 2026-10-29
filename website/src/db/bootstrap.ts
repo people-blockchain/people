@@ -16,6 +16,7 @@ import {
   FACTORY_ICON_SCHEMA_STATEMENTS,
   TOKEN_ICON_SCHEMA_STATEMENTS,
   EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS,
+  SALE_PERSON_BINDING_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
@@ -87,6 +88,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // Incremental eth_getLogs cursor for the token catalog (skips already-read immutable windows).
     for (const statement of EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0020_sale_person_binding.sql — PplCurveHubV2 person + hashed identifiers.
+    for (const statement of SALE_PERSON_BINDING_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {

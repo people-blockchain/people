@@ -1,199 +1,180 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
+
 import { useLanguage } from "@/context/LanguageContext";
 import { Reveal } from "@/components/motion/Reveal";
 import { WARM_SECTION, WarmSection } from "@/components/warm/warm-ui";
 import { buyCopy } from "@/lib/buy-content";
-import { CURVE } from "@/lib/sale/config";
-import { fillCopy, pricePerPpl } from "@/lib/sale/format";
-
-import { BuyForm } from "./BuyForm";
-import { BuyWhyPriceRises } from "./BuyWhyPriceRises";
-import { CurveChart } from "./CurveChart";
-import { SaleFaq } from "./SaleFaq";
-import { SaleStatsPanel } from "./SaleStatsPanel";
-import { SaleTimeline } from "./SaleTimeline";
-import { SaleTransparency } from "./SaleTransparency";
-import { SmallPrint, FootnoteRef } from "./SmallPrint";
-import { StickyBuyBar } from "./StickyBuyBar";
-import { TradeFeed } from "./TradeFeed";
-import { WhatYouGet } from "./WhatYouGet";
-import { useSaleData } from "./useSaleData";
+import type { SaleTrade } from "@/lib/sale/adapter";
+import { buyPagePhase, curvePosition, formatOpenDate, soldPplForSpotPrice } from "@/lib/sale/buy-page";
+import { basescanAddressUrl } from "@/lib/sale/config";
+import { parseV2OpenDate } from "@/lib/sale/v2/stats-copy";
+import { V2_PHASES } from "@/lib/sale/v2/constants";
+import {
+  isV2PreviewEnabled,
+  parseV2PreviewState,
+  readV2Env,
+  resolveV2Chain,
+  shouldRenderV2Buy,
+  spotPriceWadToUsd,
+} from "@/lib/sale/v2/logic";
+import { useV2Phase, useV2SellBackToday } from "@/lib/sale/v2/useV2Sale";
 import { useSalePhase } from "@/lib/sale/sale-state";
 
-const HERO_FORM_ID = "buy-form";
+import { BeforeAfter } from "./BeforeAfter";
+import { BuyForm } from "./BuyForm";
+import { BUY_FORM_ID, BUY_RULES_ID, BuyCta, BuyHero, heroSub } from "./BuyHero";
+import { HowToBuy } from "./HowToBuy";
+import { SaleFaq } from "./SaleFaq";
+import { SaleRules } from "./SaleRules";
+import { SmallPrint } from "./SmallPrint";
+import { TradeFeed } from "./TradeFeed";
+import { WhatIsPpl } from "./WhatIsPpl";
+import { useSaleData } from "./useSaleData";
+import { BuyV2Panel } from "./v2/BuyV2Panel";
 
-/** `/buy` — the PPL sale page. */
-export function BuyPage({ initialSaleOpen }: { initialSaleOpen?: boolean }) {
+/**
+ * `/buy` — the PPL sale page, written for people who have never bought a
+ * token: hero → before/with PEOPLE → what PPL is → how to buy (+ the purchase
+ * widget) → the rules → FAQ → final call to action. One main button per screen.
+ *
+ * `exampleTrades` is non-null only on a non-production deployment opened with
+ * `?demo=1`; the server decides (see `app/buy/page.tsx`).
+ */
+export function BuyPage({
+  initialSaleOpen,
+  exampleTrades = null,
+}: {
+  initialSaleOpen?: boolean;
+  exampleTrades?: SaleTrade[] | null;
+}) {
   const { lang } = useLanguage();
   const t = buyCopy[lang];
   const { stats, trades } = useSaleData();
-  const { phase, hubAcceptsUsdt } = useSalePhase(initialSaleOpen);
-  const open = phase === "open";
+  const { phase: legacyPhase, hubAcceptsUsdt } = useSalePhase(initialSaleOpen);
 
   const isRtl = lang === "ar";
+  const searchParams = useSearchParams();
+  const env = useMemo(() => readV2Env(), []);
+  const v2Buy = shouldRenderV2Buy(env);
+  const previewState = isV2PreviewEnabled(env)
+    ? parseV2PreviewState(searchParams.get("v2state"))
+    : null;
+  const v2Chain = useMemo(() => resolveV2Chain(env), [env]);
+  const v2Phase = useV2Phase({ chain: v2Chain, previewState, enabled: v2Buy });
+
+  const phase = buyPagePhase({ v2Enabled: v2Buy, v2Phase: v2Phase.phase, legacyOpen: legacyPhase === "open" });
+  const spotPriceUsd = v2Buy
+    ? v2Phase.spotPriceWad === null
+      ? null
+      : spotPriceWadToUsd(v2Phase.spotPriceWad)
+    : stats.spotPriceUsd;
+  const liveSoldPpl = v2Buy ? (spotPriceUsd === null ? null : soldPplForSpotPrice(spotPriceUsd)) : stats.soldPpl;
+  const position = curvePosition({ phase, liveSoldPpl });
+  const sellBackTodayUsd = useV2SellBackToday({
+    chain: v2Chain,
+    enabled: v2Buy && previewState === null && phase !== "upcoming",
+  });
+
+  const contractAddress = v2Buy ? v2Chain.hubAddress : stats.contractAddress;
+  const explorerUrl = contractAddress
+    ? v2Buy
+      ? v2Chain.explorer
+        ? `${v2Chain.explorer}/address/${contractAddress}`
+        : null
+      : basescanAddressUrl(contractAddress)
+    : null;
+
+  const openDateRaw = env.NEXT_PUBLIC_PPL_V2_OPEN_DATE;
+  const openDateText = formatOpenDate(parseV2OpenDate(openDateRaw), lang);
 
   return (
-    <div
-      data-testid="buy-page"
-      dir={isRtl ? "rtl" : "ltr"}
-      className={isRtl ? "buy-page-rtl" : undefined}
-    >
-      {/* 1 — Hero: the pitch and the stats on the left, the form on the right */}
-      <section
-        className="border-b border-line bg-canvas-2 pt-[max(0px,env(safe-area-inset-top))]"
-        aria-labelledby="buy-hero-title"
-      >
-        <div className={`${WARM_SECTION} grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:grid-rows-[auto_1fr_auto] lg:gap-10`}>
-          <div className="order-1 lg:col-start-1 lg:row-start-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
-              {t.hero.eyebrow}
-            </p>
-            <h1
-              id="buy-hero-title"
-              className="mt-2 text-[clamp(1.75rem,6vw,3rem)] font-bold leading-[1.08] tracking-tight text-ink"
-            >
-              {open ? t.hero.headline : t.hero.headlineClosed}
-            </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-              {t.hero.sub}
-              <FootnoteRef marker="*" />
-            </p>
-          </div>
+    <div data-testid="buy-page" dir={isRtl ? "rtl" : "ltr"} className={isRtl ? "buy-page-rtl" : undefined}>
+      {/* a — Hero: headline, one sentence, countdown, one button */}
+      <BuyHero phase={phase} openDateRaw={openDateRaw} spotPriceUsd={spotPriceUsd} />
 
-          <div
-            id={HERO_FORM_ID}
-            className="order-2 scroll-mt-[calc(3.5rem+0.75rem)] lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:scroll-mt-24"
-          >
-            <BuyForm soldPpl={stats.soldPpl} phase={phase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
-          </div>
+      {/* b — Before → with PEOPLE */}
+      <WarmSection id="before-after" eyebrow={t.before.eyebrow} title={t.before.title}>
+        <Reveal>
+          <BeforeAfter />
+        </Reveal>
+      </WarmSection>
 
-          <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <SaleStatsPanel stats={stats} phase={phase} />
-          </div>
+      {/* c — What PPL is, with the curve and "you are here" */}
+      <WarmSection id="what-is-ppl" eyebrow={t.ppl.eyebrow} title={t.ppl.title} tone="canvas-2">
+        <Reveal>
+          <WhatIsPpl position={position} />
+        </Reveal>
+      </WarmSection>
 
-          <div className="order-4 lg:col-start-2 lg:row-start-3">
-            <BuyWhyPriceRises phase={phase} />
+      {/* d — How to buy: three steps, then the purchase widget and the live feed */}
+      <WarmSection id="how-to-buy" eyebrow={t.how.eyebrow} title={t.how.title}>
+        <Reveal>
+          <HowToBuy />
+        </Reveal>
+        <div className="mt-8 grid items-start gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          {/* testId kept as "buy-form-hero" for the existing screenshot specs. */}
+          <div id={BUY_FORM_ID} className="scroll-mt-[calc(3.5rem+0.75rem)] lg:scroll-mt-24">
+            {v2Buy ? (
+              <BuyV2Panel testId="buy-form-hero" />
+            ) : (
+              <BuyForm soldPpl={stats.soldPpl} phase={legacyPhase} hubAcceptsUsdt={hubAcceptsUsdt} testId="buy-form-hero" />
+            )}
           </div>
-        </div>
-      </section>
-
-      {/* 2 — The curve itself, plus the live trade feed */}
-      <WarmSection
-        id="curve"
-        eyebrow={t.curve.eyebrow}
-        title={t.curve.title}
-      >
-        <details className="mt-4 text-sm text-ink-2" data-testid="curve-formula">
-          <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-ink">
-            {t.curve.formulaToggle}
-          </summary>
-          <p className="pb-2">{fillCopy(t.curve.lead, { start: pricePerPpl(CURVE.startPriceUsd, lang) })}</p>
-        </details>
-        <div className="mt-8 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
           <Reveal>
-            <CurveChart stats={stats} />
-          </Reveal>
-          <Reveal delay={80}>
-            <TradeFeed trades={trades} />
+            <TradeFeed trades={trades} examples={exampleTrades} />
           </Reveal>
         </div>
-
-        {/* Owner decision 2026-10-16: the scope of the cap is stated in full
-            size, never as small print. */}
-        <Reveal>
-          <p
-            data-testid="cap-scope"
-            className="mt-5 rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4 text-sm font-medium leading-relaxed text-ink sm:text-base"
-          >
-            {fillCopy(t.curve.capScope, { ceiling: pricePerPpl(CURVE.ceilingPriceUsd, lang) })}
-            <FootnoteRef marker="*" />
-          </p>
-        </Reveal>
       </WarmSection>
 
-      {/* 3 — What a purchase gets you */}
+      {/* e — The rules: limits, reserve, sell-back, public contract */}
       <WarmSection
-        id="what-you-get"
-        eyebrow={t.whatYouGet.eyebrow}
-        title={t.whatYouGet.title}
+        id={BUY_RULES_ID}
+        eyebrow={t.rules.eyebrow}
+        title={t.rules.title}
+        lead={t.rules.lead}
         tone="canvas-2"
+        className="scroll-mt-20"
       >
         <Reveal>
-          <WhatYouGet />
+          <SaleRules
+            phase={phase}
+            graduated={v2Buy && v2Phase.phase === V2_PHASES.Graduated}
+            sellBackTodayUsd={sellBackTodayUsd}
+            contractAddress={contractAddress}
+            explorerUrl={explorerUrl}
+          />
         </Reveal>
       </WarmSection>
 
-      {/* 4 — Order of events */}
-      <WarmSection id="timeline" eyebrow={t.timeline.eyebrow} title={t.timeline.title}>
-        <Reveal>
-          <SaleTimeline />
-        </Reveal>
-      </WarmSection>
-
-      {/* 5 — The sale contract, the split of the raise, the reviews, the allocation */}
-      <WarmSection
-        id="transparency"
-        eyebrow={t.transparency.eyebrow}
-        title={t.transparency.title}
-        lead={t.transparency.lead}
-        tone="canvas-2"
-      >
-        <Reveal>
-          <SaleTransparency stats={stats} />
-        </Reveal>
-      </WarmSection>
-
-      {/* 6 — FAQ (risks live in the small print at the foot of the page) */}
-      <WarmSection id="faq" eyebrow={t.faq.eyebrow} title={t.faq.title}>
+      {/* f — FAQ and the risk warning */}
+      <WarmSection id="faq" eyebrow={t.faq.eyebrow} title={t.faq.title} className="scroll-mt-20">
         <Reveal>
           <SaleFaq />
         </Reveal>
       </WarmSection>
 
-      {/* 7 — Bottom CTA: scroll back to the single buy form in the hero */}
-      <section
-        id="buy-now"
-        className="scroll-mt-20 border-t border-line bg-canvas-2"
-        aria-labelledby="buy-bottom-title"
-      >
-        <div className={`${WARM_SECTION} max-w-2xl`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">
-            {t.bottomCta.eyebrow}
-          </p>
-          <h2 id="buy-bottom-title" className="mt-2 text-2xl font-bold leading-tight text-ink sm:text-3xl">
-            {open ? t.bottomCta.title : t.bottomCta.titleClosed}
+      {/* g — Final call to action: the hero again */}
+      <section className="border-t border-line bg-canvas-2" aria-labelledby="buy-final-title" data-testid="buy-final-cta">
+        <div className={`${WARM_SECTION} text-center`}>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">{t.finalCta.eyebrow}</p>
+          <h2 id="buy-final-title" className="mx-auto mt-2 max-w-2xl text-2xl font-bold leading-tight text-ink sm:text-4xl">
+            {t.hero.headline}
           </h2>
-          <p className="mt-3 text-sm text-ink-2 sm:text-base">{open ? t.bottomCta.lead : t.bottomCta.leadClosed}</p>
-          <div className="mt-6 inline-flex flex-col rounded-2xl border border-brand/40 bg-brand/5 px-5 py-4">
-            <span className="text-xs font-medium text-ink-3">{open ? t.stats.price : t.stats.saleStatus}</span>
-            <span className="mt-0.5 font-mono text-2xl font-bold text-brand">
-              {open && stats.spotPriceUsd !== null
-                ? pricePerPpl(stats.spotPriceUsd, lang)
-                : t.stats.notOpenYet}
-            </span>
-            <span className="mt-1 text-[11px] text-ink-3">
-              {fillCopy(open ? t.stats.priceStartHint : t.stats.startPriceOnOpen, {
-                start: pricePerPpl(CURVE.startPriceUsd, lang),
-              })}
-            </span>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-ink-2 sm:text-base">
+            {t.hero.lead} {heroSub(t.hero, phase, openDateText)}
+          </p>
+          <div className="mt-7 flex justify-center">
+            <BuyCta phase={phase} testId="buy-final-cta-button" />
           </div>
-          <a
-            href={`#${HERO_FORM_ID}`}
-            className="mt-8 inline-flex min-h-13 items-center justify-center rounded-full bg-brand px-8 py-3.5 text-base font-semibold text-brand-ink shadow-[0_14px_36px_-16px_rgba(3,105,161,0.8)] transition hover:brightness-110"
-          >
-            {t.bottomCta.scrollToForm}
-          </a>
         </div>
       </section>
 
       <div className={`${WARM_SECTION} !py-8`}>
         <SmallPrint />
       </div>
-
-      {/* Mobile-only sticky CTA; adds room so it never covers the small print. */}
-      <div className="h-20 sm:hidden" aria-hidden="true" />
-      <StickyBuyBar stats={stats} targetId={HERO_FORM_ID} phase={phase} />
     </div>
   );
 }

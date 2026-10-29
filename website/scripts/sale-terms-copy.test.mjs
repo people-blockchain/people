@@ -33,12 +33,23 @@ test("every buy locale has the same keys, array lengths and placeholders as en",
   }
 });
 
-test("sell-back, what-you-get and FAQ share one text; funds text is shared too", () => {
+test("rules and FAQ take every sale number from the contract placeholders", () => {
+  const needs = (text, keys, where) => {
+    for (const key of keys) assert.ok(text.includes(`{${key}}`), `${where}: {${key}}`);
+  };
   for (const lang of LANGS) {
     const b = buy[lang];
-    assert.equal(b.whatYouGet.items[1].body, b.form.sellBackTerms, `${lang}: whatYouGet[1]`);
-    assert.equal(b.faq.items[0].a, b.form.sellBackTerms, `${lang}: faq[0]`);
-    assert.equal(b.whatYouGet.items[3].body, b.transparency.fundsBody, `${lang}: funds`);
+    const [limits, reserve, sellBack, contract] = b.rules.items.map((item) => `${item.title} ${item.body}`);
+    needs(limits, ["whitelistDays", "min", "max", "perDay", "cooldown"], `${lang}: rules.items[0]`);
+    needs(reserve, ["reservePct", "treasuryPct"], `${lang}: rules.items[1]`);
+    needs(sellBack, ["holdDays", "sellDailyPct", "sellPerAddress", "feeLow", "feeHigh", "feeThreshold"], `${lang}: rules.items[2]`);
+    needs(contract, ["signersM", "signersN"], `${lang}: rules.items[3]`);
+    needs(b.faq.items[3].a, ["holdDays", "sellDailyPct", "sellPerAddress"], `${lang}: faq sell-back answer`);
+    needs(b.rules.details.join(" "), ["releaseDays"], `${lang}: rules details release notice`);
+    // No literal sale numbers in the new blocks: a digit there would bypass the contract constants.
+    for (const text of [limits, reserve, sellBack, contract, b.faq.items[3].a]) {
+      assert.doesNotMatch(text.replace(/\{\w+\}/g, ""), /\d/, `${lang}: literal number in ${text}`);
+    }
   }
 });
 
@@ -51,12 +62,12 @@ test("terms are stated in every language", () => {
     assert.match(sb, /2[.,\s  ]?000/, `${lang}: $2,000`);
     assert.match(b.form.saleTermsNote, /24/, `${lang}: 24 months`);
     assert.match(b.form.saleTermsNote, /Community Pool/, `${lang}: Community Pool`);
-    for (const text of [b.form.payFromNetworks, b.faq.items[5].a]) {
+    for (const text of [b.form.payFromNetworks, b.faq.items[2].a]) {
       for (const word of ["Tron", "Solana", "TON"]) assert.match(text, new RegExp(word), `${lang}: ${word}`);
       assert.match(text, /EVM/, `${lang}: EVM`);
     }
     assert.doesNotMatch(JSON.stringify(b), /Tonkeeper|TRC-20|jetton/i, lang);
-    for (const key of [b.form.riskBody, b.form.riskTitle, b.form.saleTermsNote, b.faq.items[4].a]) {
+    for (const key of [b.form.riskBody, b.form.riskTitle, b.form.saleTermsNote, b.faq.items[4].a, b.faq.riskBody]) {
       assert.ok(key && key.length > 1, `${lang}: risk/refund copy present`);
     }
   }

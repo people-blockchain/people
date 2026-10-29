@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Un portefeuille en 30 secondes",
-        "sub": "Vos clés restent sur votre téléphone ou dans votre navigateur."
+        "sub": "Portefeuille de navigateur : vos clés restent sur votre appareil. Portefeuille cloud : stocké chiffré sur les serveurs de PEOPLE."
       },
       {
         "id": "token",

@@ -806,3 +806,55 @@ export const evmLogScanCursors = pgTable(
   },
   (row) => [primaryKey({ columns: [row.address, row.topic] })],
 );
+
+/**
+ * PplCurveHubV2 person binding: one private person key per user, a stable public personId
+ * (bytes32 hex) attested by the sale verifier, and the hashed identifiers that belong to it.
+ * Additive only — see drizzle/0020_sale_person_binding.sql.
+ */
+export const salePersons = pgTable(
+  "sale_person",
+  {
+    personKey: text("personKey").primaryKey(),
+    personId: text("personId").notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("sale_person_person_id_idx").on(row.personId),
+    uniqueIndex("sale_person_user_id_idx").on(row.userId),
+  ],
+);
+
+/** HMAC hashes only; the raw wallet/nullifier/Telegram/phone value is never stored here. */
+export const salePersonIdentifiers = pgTable(
+  "sale_person_identifier",
+  {
+    idHash: text("idHash").primaryKey(),
+    kind: text("kind").notNull(),
+    personKey: text("personKey")
+      .notNull()
+      .references(() => salePersons.personKey, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("sale_person_identifier_person_idx").on(row.personKey)],
+);
+
+/** Latest verifier attestation issued for a personId, including the on-chain bind nonce. */
+export const saleBindings = pgTable(
+  "sale_binding",
+  {
+    personId: text("personId").primaryKey(),
+    account: text("account").notNull(),
+    chainId: integer("chainId").notNull(),
+    hub: text("hub").notNull(),
+    nonce: text("nonce").notNull(),
+    deadline: timestamp("deadline", { mode: "date" }).notNull(),
+    status: text("status").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [uniqueIndex("sale_binding_account_lower_idx").on(sql`lower(${row.account})`)],
+);
