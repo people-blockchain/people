@@ -58,11 +58,11 @@ export function useV2Sale(input: {
     let active = true;
     void fetch("/api/founders/me", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
-      .then((json: { signedIn?: boolean; verifiedHuman?: boolean } | null) => {
+      .then((json: { signedIn?: boolean; saleVerified?: boolean } | null) => {
         if (!active) return;
         setVerification({
           signedIn: json?.signedIn === true,
-          verifiedHuman: json?.verifiedHuman === true,
+          verifiedHuman: json?.saleVerified === true,
           loading: false,
         });
       })

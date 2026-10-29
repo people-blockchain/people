@@ -15,7 +15,7 @@ process.env.SALE_ID_HMAC_SECRET = "test-id-hmac-secret";
 
 function decide(overrides = {}) {
   return decideSaleEligibility({
-    hasWorldId: false,
+    hasTelegramPhone: false,
     hpScore: null,
     hpThreshold: 20,
     identifierHashes: [],
@@ -26,21 +26,32 @@ function decide(overrides = {}) {
   });
 }
 
-test("telegram alone is not eligible", () => {
+test("telegram phone verified is eligible", () => {
   const decision = decide({
-    identifierHashes: [hashIdentifier("tg", "123456")],
+    hasTelegramPhone: true,
+    identifierHashes: [
+      hashIdentifier("tg", "123456"),
+      hashIdentifier("phone", "phone-hash"),
+    ],
   });
+  assert.deepEqual(decision, { ok: true });
+});
+
+test("Human Passport score at the threshold is eligible", () => {
+  const decision = decide({
+    hpScore: 20,
+    hpThreshold: 20,
+    identifierHashes: [hashIdentifier("hp_wallet", ACCOUNT)],
+  });
+  assert.deepEqual(decision, { ok: true });
+});
+
+test("neither telegram phone nor HP is not eligible", () => {
+  const decision = decide();
   assert.deepEqual(decision, { ok: false, reason: "not_eligible" });
 });
 
-test("phone alone is not eligible", () => {
-  const decision = decide({
-    identifierHashes: [hashIdentifier("phone", "phone-hash")],
-  });
-  assert.deepEqual(decision, { ok: false, reason: "not_eligible" });
-});
-
-test("telegram plus phone still is not eligible", () => {
+test("tg/phone identifiers without verified telegram phone are not eligible", () => {
   const decision = decide({
     identifierHashes: [
       hashIdentifier("tg", "123456"),
@@ -48,23 +59,6 @@ test("telegram plus phone still is not eligible", () => {
     ],
   });
   assert.deepEqual(decision, { ok: false, reason: "not_eligible" });
-});
-
-test("World ID qualifies", () => {
-  const decision = decide({
-    hasWorldId: true,
-    identifierHashes: [hashIdentifier("world_nullifier", "0xabc")],
-  });
-  assert.deepEqual(decision, { ok: true });
-});
-
-test("Human Passport score at the threshold qualifies", () => {
-  const decision = decide({
-    hpScore: 20,
-    hpThreshold: 20,
-    identifierHashes: [hashIdentifier("hp_wallet", ACCOUNT)],
-  });
-  assert.deepEqual(decision, { ok: true });
 });
 
 test("Human Passport score below the threshold is denied", () => {
@@ -79,7 +73,7 @@ test("Human Passport score below the threshold is denied", () => {
 test("an identifier owned by another person is denied", () => {
   const tgHash = hashIdentifier("tg", "123456");
   const decision = decide({
-    hasWorldId: true,
+    hasTelegramPhone: true,
     identifierHashes: [tgHash],
     existingBindings: new Map([
       [tgHash, { personKey: OTHER_PERSON, account: OTHER_ACCOUNT }],
@@ -90,8 +84,8 @@ test("an identifier owned by another person is denied", () => {
 
 test("a requested account bound elsewhere is denied", () => {
   const decision = decide({
-    hasWorldId: true,
-    identifierHashes: [hashIdentifier("world_nullifier", "0xabc")],
+    hasTelegramPhone: true,
+    identifierHashes: [hashIdentifier("hp_wallet", ACCOUNT)],
     existingBindings: new Map([
       ["some-other-hash", { personKey: OTHER_PERSON, account: ACCOUNT }],
     ]),
@@ -102,7 +96,7 @@ test("a requested account bound elsewhere is denied", () => {
 test("the same person cannot reuse the same identifiers for a different account", () => {
   const tgHash = hashIdentifier("tg", "123456");
   const decision = decide({
-    hasWorldId: true,
+    hasTelegramPhone: true,
     identifierHashes: [tgHash],
     existingBindings: new Map([
       [tgHash, { personKey: PERSON, account: OTHER_ACCOUNT }],
