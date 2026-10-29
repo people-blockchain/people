@@ -88,6 +88,7 @@
   "tokenIconErrDimensions": "The image must be at least 64×64 px.",
   "tokenIconErrRead": "Could not read this image. Try another file.",
   "tokenIconErrUpload": "Could not upload the icon. Try again.",
+  "tokenCreateWithoutIcon": "Create without icon",
   "tokenStepIcon": "Upload icon",
   "tokenStepConfirm": "Confirm in wallet",
   "tokenStepWaiting": "Waiting for confirmation",
