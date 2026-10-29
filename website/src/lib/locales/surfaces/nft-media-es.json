@@ -67,5 +67,9 @@
   "errFactoryMissing": "La fábrica de NFT aún no está desplegada en esta red.",
   "errWrongNetwork": "Tu monedero está en otra red. Cambia a la red de pruebas de PEOPLE Blockchain e inténtalo de nuevo.",
   "errTimeout": "La transacción tarda demasiado. No se volvió a enviar; usa «Continuar la emisión» para comprobarla.",
-  "errUnknown": "Algo salió mal. No se emitió dos veces. Inténtalo de nuevo."
+  "errUnknown": "Algo salió mal. No se emitió dos veces. Inténtalo de nuevo.",
+  "errStableFeeUnavailable": "El pago con stablecoins no está disponible temporalmente. Paga en PPL.",
+  "errInsufficientPpl": "No hay suficiente PPL: necesitas {needed} PPL (comisión + gas) y tienes {balance} PPL.",
+  "errInsufficientPplGeneric": "No hay suficiente PPL para cubrir la comisión y el gas. Recarga y vuelve a intentarlo.",
+  "errNetworkRpc": "La red no responde. Comprueba tu conexión y vuelve a intentarlo."
 }
