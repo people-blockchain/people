@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFT",
+  "loading": "Memuat NFT…",
+  "retry": "Coba lagi",
+  "notFound": "NFT ini tidak ditemukan di jaringan ini.",
+  "unavailable": "Jaringan sementara tidak tersedia. Silakan coba lagi.",
+  "collection": "Koleksi",
+  "tokenId": "ID token",
+  "owner": "Pemilik",
+  "tokenUri": "URI token",
+  "description": "Deskripsi",
+  "openOnIpfs": "Buka di gateway IPFS",
+  "openOriginalImage": "Buka gambar asli",
+  "imageUnavailable": "Gambar tidak dapat dimuat.",
+  "noImage": "NFT ini tidak memiliki gambar yang dapat ditampilkan di sini.",
+  "metadataUnavailable": "Metadata tidak dapat dimuat, sehingga hanya data on-chain yang ditampilkan.",
+  "externalUriNote": "URI token ini mengarah ke alamat eksternal. URI ditampilkan tetapi tidak dibuka di sini.",
+  "viewNft": "Lihat NFT saya"
+}
