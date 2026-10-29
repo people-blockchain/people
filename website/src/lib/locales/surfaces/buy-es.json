@@ -64,7 +64,7 @@
     "steps": [
       {
         "title": "Verifícate",
-        "body": "Demuestra una sola vez que eres una persona real, con World ID o Human Passport. Telegram solo no basta."
+        "body": "Demuestra una sola vez que eres una persona real: con Telegram (número de teléfono) o Human Passport."
       },
       {
         "title": "Elige el importe y la red",
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "¿Por qué hace falta verificarse?",
-        "a": "Para que cada comprador sea una persona real. Cada persona tiene una dirección, y los límites se aplican a personas, no a bots. Los primeros {whitelistDays} días son solo para personas verificadas. Verifícate con World ID o Human Passport; Telegram solo no basta. No se guarda ningún dato personal en la blockchain."
+        "a": "Para que cada comprador sea una persona real. Cada persona tiene una dirección, y los límites se aplican a personas, no a bots. Los primeros {whitelistDays} días son solo para personas verificadas. Puedes verificarte con Telegram o Human Passport. No se guarda ningún dato personal en la blockchain."
       },
       {
         "q": "¿Cuándo puedo enviar PPL a otras personas?",
@@ -314,8 +314,7 @@
     },
     "verify": {
       "title": "En los primeros 7 días solo compran personas verificadas",
-      "body": "Verifícate con World ID o Human Passport para participar.",
-      "telegramNote": "Solo Telegram no es suficiente.",
+      "body": "Verifícate con Telegram (número de teléfono) o Human Passport para participar.",
       "ctaVerify": "Verificarme",
       "ctaSignIn": "Inicia sesión para verificarte",
       "confirmTitle": "Falta un paso en la red",

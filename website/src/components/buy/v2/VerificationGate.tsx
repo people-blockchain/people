@@ -37,9 +37,6 @@ export function V2VerificationGate({
       <div className="rounded-2xl border border-line bg-surface-2 p-4" data-testid="v2-verify-gate">
         <p className="text-sm font-semibold text-ink">{copy.title}</p>
         <p className="mt-1 text-sm text-ink-2">{copy.body}</p>
-        <p className="mt-1 text-xs text-ink-3" data-testid="v2-telegram-note">
-          {copy.telegramNote}
-        </p>
         <Link
           href={signedIn ? "/founders#verify" : "/login?callbackUrl=%2Ffounders%3Fhash%3Dverify"}
           className="mt-3 inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-5 text-sm font-semibold text-brand-ink"

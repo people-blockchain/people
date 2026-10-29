@@ -64,7 +64,7 @@
     "steps": [
       {
         "title": "Doğrulanın",
-        "body": "Gerçek bir insan olduğunuzu bir kez kanıtlayın: World ID ya da Human Passport ile. Tek başına Telegram yeterli değildir."
+        "body": "Gerçek bir insan olduğunuzu bir kez kanıtlayın: Telegram (telefon numarası) ya da Human Passport ile."
       },
       {
         "title": "Tutarı ve ağı seçin",
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Doğrulama neden gerekli?",
-        "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil insanlara uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. World ID ya da Human Passport ile doğrulanın; tek başına Telegram yeterli değildir. Blokzincire hiçbir kişisel veri yazılmaz."
+        "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil insanlara uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. Telegram ya da Human Passport ile doğrulanabilirsiniz. Blokzincire hiçbir kişisel veri yazılmaz."
       },
       {
         "q": "PPL'yi başkalarına ne zaman gönderebilirim?",
@@ -314,8 +314,7 @@
     },
     "verify": {
       "title": "İlk 7 gün yalnızca doğrulanmış kişiler",
-      "body": "Katılmak için World ID veya Human Passport ile doğrulan.",
-      "telegramNote": "Yalnızca Telegram yeterli değil.",
+      "body": "Katılmak için Telegram (telefon numarası) veya Human Passport ile doğrulan.",
       "ctaVerify": "Şimdi doğrulan",
       "ctaSignIn": "Doğrulanmak için giriş yap",
       "confirmTitle": "Zincir üstünde bir adım kaldı",
