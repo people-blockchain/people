@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "PPL tidak cukup untuk menutupi biaya dan gas. Isi ulang saldo dan coba lagi.",
   "errNetworkRpc": "Jaringan tidak merespons. Periksa koneksi Anda dan coba lagi.",
   "createSuccessTitle": "Token dibuat",
-  "createSuccessLead": "Token kini aktif di People Blockchain.",
+  "createSuccessLead": "Token kini aktif di PEOPLE Blockchain.",
   "createViewToken": "Buka token di penjelajah",
   "createViewAddress": "Buka alamat di penjelajah",
   "createTimeoutTitle": "Transaksi terkirim",

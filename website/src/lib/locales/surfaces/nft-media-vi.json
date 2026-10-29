@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "Không đủ PPL để trả phí và gas. Hãy nạp thêm và thử lại.",
   "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại.",
   "createSuccessTitle": "Đã tạo token",
-  "createSuccessLead": "Token hiện đã hoạt động trên People Blockchain.",
+  "createSuccessLead": "Token hiện đã hoạt động trên PEOPLE Blockchain.",
   "createViewToken": "Mở token trong trình duyệt chuỗi",
   "createViewAddress": "Mở địa chỉ trong trình duyệt chuỗi",
   "createTimeoutTitle": "Đã gửi giao dịch",

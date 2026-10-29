@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "Pas assez de PPL pour couvrir les frais et le gaz. Rechargez et réessayez.",
   "errNetworkRpc": "Le réseau ne répond pas. Vérifiez votre connexion et réessayez.",
   "createSuccessTitle": "Token créé",
-  "createSuccessLead": "Le token est maintenant actif sur People Blockchain.",
+  "createSuccessLead": "Le token est maintenant actif sur PEOPLE Blockchain.",
   "createViewToken": "Ouvrir le token dans l’explorateur",
   "createViewAddress": "Ouvrir l’adresse dans l’explorateur",
   "createTimeoutTitle": "Transaction envoyée",

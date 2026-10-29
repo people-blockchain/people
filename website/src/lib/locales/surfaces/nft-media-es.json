@@ -74,7 +74,7 @@
   "errInsufficientPplGeneric": "No hay suficiente PPL para cubrir la comisión y el gas. Recarga y vuelve a intentarlo.",
   "errNetworkRpc": "La red no responde. Comprueba tu conexión y vuelve a intentarlo.",
   "createSuccessTitle": "Token creado",
-  "createSuccessLead": "El token ya está activo en People Blockchain.",
+  "createSuccessLead": "El token ya está activo en PEOPLE Blockchain.",
   "createViewToken": "Abrir token en el explorador",
   "createViewAddress": "Abrir dirección en el explorador",
   "createTimeoutTitle": "Transacción enviada",
