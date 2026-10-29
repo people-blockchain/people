@@ -460,3 +460,16 @@ export const FACTORY_ICON_SCHEMA_STATEMENTS = [
 )`,
   `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
 ];
+
+/**
+ * Creator-signed token icon overrides. The token contract only lets the factory change
+ * `metadataURI`, so the catalog applies this off-chain record instead.
+ */
+export const TOKEN_ICON_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "token_icon_override" (
+  "token_address" text PRIMARY KEY NOT NULL,
+  "image_uri" text NOT NULL,
+  "updated_by" text NOT NULL,
+  "updated_at" timestamp NOT NULL DEFAULT now()
+)`,
+];

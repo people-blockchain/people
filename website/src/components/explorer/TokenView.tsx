@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { isAddress } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { useExternalWalletOptional, signViaActiveSigner } from "@/context/ExternalWalletContext";
 import { networkJson } from "@/lib/network-client";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { tokenExplorerCopy } from "@/lib/token-explorer-copy";
@@ -16,6 +18,9 @@ import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import { resolveMarketTokenAddress } from "@/lib/evm/market-token";
+import { uploadTokenIcon } from "@/lib/token-icon-upload";
+import { tokenIconMessage } from "@/lib/token-icon-rules";
+import { TokenIconUpload } from "@/components/factory/TokenIconUpload";
 
 type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
 type Data = { asset: Token; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
@@ -31,6 +36,12 @@ export function TokenView({ assetId }: { assetId: string }) {
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const [visible, setVisible] = useState(25);
+  const { signer } = useExternalWalletOptional() ?? { signer: null };
+  const [iconOpen, setIconOpen] = useState(false);
+  const [iconFile, setIconFile] = useState<File | null>(null);
+  const [iconBusy, setIconBusy] = useState(false);
+  const [iconNotice, setIconNotice] = useState("");
+  const [iconError, setIconError] = useState("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -71,16 +82,88 @@ export function TokenView({ assetId }: { assetId: string }) {
   const amount = (value: number) => formatAssetAmount(assetId, value, asset);
   const marketTokenAddress = assetId === "ppl" || assetId === "usdt" ? null : resolveMarketTokenAddress(assetId);
   const gradient = chart.map((slice, i) => { const start = chart.slice(0, i).reduce((sum, row) => sum + row.share, 0); return `${colors[i]} ${start}% ${start + slice.share}%`; }).join(", ");
+  const iconTokenAddress = asset?.tokenAddress && isAddress(asset.tokenAddress)
+    ? asset.tokenAddress
+    : isAddress(assetId) ? assetId : null;
+  const canEditIcon = Boolean(
+    signer &&
+      asset &&
+      iconTokenAddress &&
+      typeof asset.creator === "string" &&
+      isAddress(asset.creator) &&
+      asset.creator.toLowerCase() === signer.address.toLowerCase(),
+  );
+
+  async function saveIcon() {
+    if (!signer || !asset || !iconTokenAddress || !iconFile || iconBusy) return;
+    setIconBusy(true);
+    setIconError("");
+    setIconNotice("");
+    try {
+      const imageUri = await uploadTokenIcon(iconFile);
+      const issuedAt = new Date().toISOString();
+      const token = iconTokenAddress.toLowerCase();
+      const signature = await signViaActiveSigner(signer, tokenIconMessage(token, imageUri, issuedAt));
+      const response = await fetch("/api/evm/token-icon", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ token, imageUri, signature, issuedAt }),
+      });
+      if (!response.ok) throw new Error("token_icon_update_failed");
+      setIconNotice(u.tokenIconUpdateSuccess);
+      setIconOpen(false);
+      setIconFile(null);
+      reload();
+    } catch {
+      setIconError(u.tokenIconUpdateFailed);
+    } finally {
+      setIconBusy(false);
+    }
+  }
 
   return <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
     <Eyebrow><Link href="/explorer">{t.title}</Link> / <Link href="/explorer/tokens">{t.tokens}</Link></Eyebrow>
     <NetworkStatus />
     {loading ? <PeopleLoader /> : error || !asset ? <div className="mt-8 rounded-2xl border border-line p-6"><p>{t.networkUnavailable} / {t.notFound}</p><button onClick={reload} className="mt-3 text-brand">{c.retry}</button></div> : <>
       <header className="mt-8 flex flex-wrap items-center gap-4">
-        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={asset.creationMetadata?.image} name={symbol} className="h-16 w-16" testBadgeLabel={u.testTokenNote} />
+        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={asset.creationMetadata?.image ?? asset.imageUri} name={symbol} className="h-16 w-16" testBadgeLabel={u.testTokenNote} />
         <div className="min-w-0 flex-1"><h1 className="break-words text-h2 font-bold">{assetId === "usdt" ? u.testUsdt : displayAssetName(assetId, asset.name)}</h1><p className="break-all font-mono text-sm text-ink-3">{symbol} · {assetId}</p></div>
+        {canEditIcon ? (
+          <button
+            type="button"
+            onClick={() => { setIconOpen((open) => !open); setIconError(""); setIconNotice(""); }}
+            className="rounded-xl border border-line px-4 py-2 text-sm text-brand"
+          >
+            {u.tokenChangeIcon}
+          </button>
+        ) : null}
         <button onClick={reload} className="rounded-xl border border-line px-4 py-2 text-sm text-brand">{c.refresh}</button>
       </header>
+      {canEditIcon && iconOpen ? (
+        <div className="mt-4 rounded-2xl border border-line bg-surface p-4" data-testid="token-icon-editor">
+          <h2 className="font-bold text-ink">{u.tokenIconUpdateTitle}</h2>
+          <p className="mt-1 text-xs text-ink-3">{u.tokenIconUpdateHint}</p>
+          <div className="mt-3">
+            <TokenIconUpload
+              copy={u}
+              file={iconFile}
+              disabled={iconBusy}
+              currentImage={typeof asset.creationMetadata?.image === "string" ? asset.creationMetadata.image : asset.imageUri}
+              onFile={(file) => { setIconFile(file); setIconError(""); }}
+            />
+          </div>
+          {iconError ? <p role="alert" className="mt-2 text-sm text-warm">{iconError}</p> : null}
+          <button
+            type="button"
+            disabled={iconBusy || !iconFile}
+            onClick={() => void saveIcon()}
+            className="mt-3 rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-brand-ink disabled:opacity-40"
+          >
+            {iconBusy ? u.tokenIconUpdateSave : u.tokenIconUpdateSign}
+          </button>
+        </div>
+      ) : null}
+      {iconNotice ? <p className="mt-4 text-sm text-value">{iconNotice}</p> : null}
       {assetId === "usdt" ? <p className="mt-4 text-sm text-warm">{u.testUsdtNote}</p> : null}
       {marketTokenAddress ? <TokenMarketPanel tokenAddress={marketTokenAddress} symbol={symbol} className="mt-8" /> : null}
       <div className="mt-8 grid gap-4 sm:grid-cols-3">

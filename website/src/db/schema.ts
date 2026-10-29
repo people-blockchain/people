@@ -778,3 +778,14 @@ export const apiRateLimits = pgTable(
   },
   (row) => [index("api_rate_limit_expires_idx").on(row.expiresAt)],
 );
+
+/**
+ * Owner-editable token icon. The ERC-20 contract only lets the factory change `metadataURI`, so
+ * a creator-signed message records the new image off-chain and the catalog applies it on read.
+ */
+export const tokenIconOverrides = pgTable("token_icon_override", {
+  tokenAddress: text("token_address").primaryKey(),
+  imageUri: text("image_uri").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});

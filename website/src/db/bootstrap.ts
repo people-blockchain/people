@@ -14,6 +14,7 @@ import {
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
   WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
   FACTORY_ICON_SCHEMA_STATEMENTS,
+  TOKEN_ICON_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
@@ -77,6 +78,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0019_factory_icon_usage.sql — durable icon-payment/quota/rate-limit tables.
     for (const statement of FACTORY_ICON_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // Creator-signed token icon overrides (off-chain because only the factory may set metadataURI).
+    for (const statement of TOKEN_ICON_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {
