@@ -29,15 +29,12 @@ test("founders promo RU matches EN structure", () => {
   assert.deepEqual(shape(strip(ru)), shape(strip(en)));
 });
 
-test("founders copy names only Telegram and Human Passport verification", () => {
+test("founders copy has no clawback wording", () => {
   const files = readdirSync(surfaces).filter((f) => f.startsWith("founders-"));
   for (const f of files) {
     const text = readFileSync(join(surfaces, f), "utf8");
-    assert.doesNotMatch(text, /World ID/i, f);
     assert.doesNotMatch(text, /clawback/i, f);
   }
-  const component = readFileSync(join(root, "src/components/founders/FoundersApp.tsx"), "utf8");
-  assert.doesNotMatch(component, /WorldId/);
 });
 
 test("founders promo copy still powers card and referral UI strings", () => {

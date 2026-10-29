@@ -5,7 +5,6 @@ import {
   WALLET_VAULT_SCHEMA_STATEMENTS,
   FOUNDERS_SCHEMA_STATEMENTS,
   FOUNDERS_V2_SCHEMA_STATEMENTS,
-  FOUNDERS_WORLD_ID_SCHEMA_STATEMENTS,
   FOUNDER_DEMO_AIRDROP_SCHEMA_STATEMENTS,
   FOUNDER_REFERRAL_SCHEMA_STATEMENTS,
   FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
@@ -46,9 +45,6 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0005_founders_verification.sql — applied here on first DB use (no manual migrate).
     for (const statement of FOUNDERS_V2_SCHEMA_STATEMENTS) {
-      await client.unsafe(statement);
-    }
-    for (const statement of FOUNDERS_WORLD_ID_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
     for (const statement of FOUNDER_DEMO_AIRDROP_SCHEMA_STATEMENTS) {

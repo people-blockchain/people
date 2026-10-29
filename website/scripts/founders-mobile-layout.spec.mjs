@@ -75,7 +75,6 @@ test.describe("bounty page layout", () => {
       await expect(page.getByRole("heading", { level: 1 })).toContainText("Earn PPL with PEOPLE");
       await expect(page.getByTestId("bounty-hero")).toBeVisible();
       await expect(page.getByTestId("bounty-hero-buy")).toBeVisible();
-      await expect(page.getByText(/World ID/)).toHaveCount(0);
       await assertNoOverflow(page, `/bounty@${width}px`, width);
     });
 

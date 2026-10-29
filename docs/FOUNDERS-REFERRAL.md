@@ -17,7 +17,7 @@ Not to be confused with the 15% fee partner split (Beta L1=70 / L2=30 of the Gro
 
 All required, otherwise 0 points:
 
-1. Verified via the Telegram phone bot or Human Passport (`founder.verifiedAt`, set only by those two flows; the registration-time level bump for invitees of strong inviters and World ID do **not** set it).
+1. Verified via the Telegram phone bot or Human Passport (`founder.verifiedAt`, set only by those two flows; the registration-time level bump for invitees of strong inviters does **not** set it).
 2. Wallet created.
 3. At least one real testnet action in the points ledger: `swap`, `pool_create`, `nft_mint`, `token_launch`, `governance_vote`. Discover reactions/follows do not count.
 

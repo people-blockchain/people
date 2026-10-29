@@ -241,7 +241,7 @@ export async function registerFounder(
   const invitedByUserId: string | null =
     opts?.invitedByUserId && opts.invitedByUserId !== userId ? opts.invitedByUserId : null;
   // Registration never grants a verification level, invited or not: levels 1/2 come only
-  // from the invitee's own Telegram-phone/World-ID/Human-Passport verification.
+  // from the invitee's own Telegram-phone/Human-Passport verification.
   const verificationLevel: FounderVerificationLevel = 0;
 
   const walletAddress = human.walletAddress.toLowerCase();
