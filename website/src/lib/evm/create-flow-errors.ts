@@ -210,6 +210,16 @@ export function classifyCreateFlowError(err: unknown): {
   return { code: "unknown" };
 }
 
+/**
+ * PPL the factory still expects as `msg.value`: the fee minus any credit prepaid through the
+ * StableFeeGateway, never negative and never taking more credit than the fee itself.
+ */
+export function requiredFeeValue(feeWei: bigint, creditWei: bigint): bigint {
+  const credit = creditWei < feeWei ? creditWei : feeWei;
+  const value = feeWei - credit;
+  return value > BigInt(0) ? value : BigInt(0);
+}
+
 /** Compare a wallet balance with the PPL needed for a fee plus gas. */
 export function checkBalanceForCost(
   balanceWei: bigint,

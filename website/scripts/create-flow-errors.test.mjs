@@ -8,6 +8,7 @@ import {
   INSUFFICIENT_FLOAT_SELECTOR,
   checkBalanceForCost,
   classifyCreateFlowError,
+  requiredFeeValue,
 } from "../src/lib/evm/create-flow-errors.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -68,6 +69,14 @@ test("checkBalanceForCost compares balance with fee plus gas", () => {
   assert.deepEqual(enough, { ok: true, neededWei: 7n, balanceWei: 10n });
   const short = checkBalanceForCost(1_295n, 2_925n);
   assert.deepEqual(short, { ok: false, neededWei: 2_925n, balanceWei: 1_295n });
+});
+
+test("requiredFeeValue subtracts the prepaid credit, capped at the fee", () => {
+  const fee = 2_925_000_000_000_000_000n;
+  assert.equal(requiredFeeValue(fee, 0n), fee);
+  assert.equal(requiredFeeValue(fee, fee), 0n);
+  assert.equal(requiredFeeValue(fee, fee + 1n), 0n);
+  assert.equal(requiredFeeValue(fee, 1_000_000_000_000_000_000n), fee - 1_000_000_000_000_000_000n);
 });
 
 test("all 12 nft-media locales carry the create-flow error keys", () => {

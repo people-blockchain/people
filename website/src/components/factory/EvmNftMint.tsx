@@ -34,7 +34,7 @@ import {
   type StableAsset,
 } from "@/lib/evm/stable-fee-gateway";
 import { checkImageFile, checkVideoFile, NftSaveError, type NftErrorKey } from "@/lib/nft-media-client";
-import { checkBalanceForCost, classifyCreateFlowError } from "@/lib/evm/create-flow-errors";
+import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { NFT_DESCRIPTION_MAX, NFT_NAME_MAX, NFT_NAME_MIN, type NftVideoType } from "@/lib/nft-media-rules";
 import {
   browserStorage,
@@ -487,7 +487,20 @@ export function EvmNftMint() {
         }
       }
 
-      const mintRequest = buildMintRequest(factory, collection, current.tokenUri, fee);
+      let mintFeeValue = fee;
+      try {
+        const mintCredit = await client.readContract({
+          address: factory,
+          abi: nftFactoryAbi,
+          functionName: "prepaidCredit",
+          args: [signer.address],
+        });
+        mintFeeValue = requiredFeeValue(fee, mintCredit);
+      } catch {
+        // Re-read failed: only trust a stable payment already recorded in this attempt.
+        mintFeeValue = current.payWith !== "PPL" && current.payDone ? BigInt(0) : fee;
+      }
+      const mintRequest = buildMintRequest(factory, collection, current.tokenUri, mintFeeValue);
       try {
         const balance = await client.getBalance({ address: signer.address });
         let gasCost = BigInt(0);
@@ -502,7 +515,7 @@ export function EvmNftMint() {
             /* keep the fee-only floor when the node cannot estimate */
           }
         }
-        const balanceCheck = checkBalanceForCost(balance, fee + gasCost);
+        const balanceCheck = checkBalanceForCost(balance, mintFeeValue + gasCost);
         if (!balanceCheck.ok) {
           setError({
             key: "errInsufficientPpl",

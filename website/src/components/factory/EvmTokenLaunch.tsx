@@ -11,7 +11,7 @@ import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
-import { checkBalanceForCost, classifyCreateFlowError } from "@/lib/evm/create-flow-errors";
+import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import {
   PROMO_BPS_OPTIONS,
@@ -135,6 +135,7 @@ export function EvmTokenLaunch() {
       }
       const total = units;
 
+      let stableFeePaid = false;
       if (payWith !== "PPL") {
         const stable = stableAssets.find((asset) => asset.id === payWith);
         if (!stable || !gateway || stableFeeUsd6 === null) {
@@ -165,6 +166,7 @@ export function EvmTokenLaunch() {
           args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
         });
         await client.waitForTransactionReceipt({ hash: payHash });
+        stableFeePaid = true;
       }
 
       setStage("creating");
@@ -174,6 +176,20 @@ export function EvmTokenLaunch() {
         abi: factoryAbi,
         functionName: "tokenCreateFee",
       });
+      let feeValue = fee;
+      try {
+        const credit = await client.readContract({
+          address: factory,
+          abi: factoryLaunchAbi,
+          functionName: "prepaidCredit",
+          args: [signer.address],
+        });
+        feeValue = requiredFeeValue(fee, credit);
+      } catch {
+        // A failed read must not make us underpay: only a stable payment that just succeeded
+        // proves the fee is already covered by credit.
+        feeValue = payWith !== "PPL" && stableFeePaid ? BigInt(0) : fee;
+      }
       const metadataURI = `ipfs://people/${symbol.trim()}`;
       // One entry point carries both creator choices: the promo share (0/5/10%) and what happens
       // to curve leftovers / the unsold remainder (0 = burn, 1 = the token's community pool).
@@ -182,7 +198,7 @@ export function EvmTokenLaunch() {
         abi: factoryLaunchAbi,
         functionName: "createToken",
         args: [name.trim(), symbol.trim().toUpperCase(), LAUNCH_DECIMALS, total, metadataURI, promoBps, leftoverMode],
-        value: fee,
+        value: feeValue,
       } as const;
 
       if (payWith === "PPL") {
@@ -200,7 +216,7 @@ export function EvmTokenLaunch() {
               /* keep the fee-only floor when the node cannot estimate */
             }
           }
-          const balanceCheck = checkBalanceForCost(balance, fee + gasCost);
+          const balanceCheck = checkBalanceForCost(balance, feeValue + gasCost);
           if (!balanceCheck.ok) {
             setError(
               nm.errInsufficientPpl
