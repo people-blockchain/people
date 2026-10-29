@@ -93,11 +93,11 @@
     "items": [
       {
         "title": "First {whitelistDays} days: verified people only",
-        "body": "One person, one address. From {min} to {max} per purchase, up to {perDay} per address per day (UTC), and a {cooldown}-second pause between purchases."
+        "body": "One person, one address. From {min} to {max} per purchase, up to {perDay} per person in any rolling 24 hours, and a {cooldown}-second pause between purchases."
       },
       {
         "title": "{reservePct} of every purchase stays as a reserve",
-        "body": "It stays in the sale contract to pay for sell-backs. Nobody on the team can withdraw it. The other {treasuryPct} funds the project."
+        "body": "It stays in the sale contract to pay for sell-backs. Nobody on the team can withdraw it. The other {treasuryPct} goes to the project wallet immediately, with each purchase."
       },
       {
         "title": "Sell back after {holdDays} days",
@@ -125,7 +125,7 @@
     "details": [
       "Reserve: the USDC kept in the sale contract. Sell-backs are paid from it, and sell-back fees stay in it. The smaller the reserve, the smaller the daily sell-back limit. Sell-back closes for good once the curve closes.",
       "The reserve leaves the contract only as PPL liquidity, when the curve closes, and only after a public notice of {releaseDays} days. Sell-back keeps working during the notice.",
-      "Treasury: a multisig wallet ({signersM} of {signersN} signatures) that receives the other {treasuryPct} of each purchase.",
+      "Treasury: a multisig wallet ({signersM} of {signersN} signatures) that receives the other {treasuryPct} of each purchase immediately, at the moment of purchase.",
       "The multisig can pause buying and sell-back. It cannot move the reserve, change the limits or the formula, or extend the sale.",
       "The sale runs until {graduation} has been raised or for {term} after opening, whichever comes first. Unsold PPL goes to the Community Pool. Purchases are final.",
       "Team: {teamPct} of all PPL. Nothing for the first {cliff}, then monthly over {linear}, counted from the full network launch."
@@ -210,7 +210,7 @@
     "priceAfter": "Price after your purchase",
     "estimate": "Estimate. The exact amount is confirmed on-chain before you sign.",
     "limitPerBuy": "{min}–{max} per purchase",
-    "limitPerDay": "Up to {amount} per address per day (UTC)",
+    "limitPerDay": "Up to {amount} per person in any rolling 24 hours",
     "cooldown": "{seconds} s pause between purchases",
     "overLimit": "Maximum {amount} in one purchase.",
     "belowMin": "Enter an amount to see your quote.",
@@ -262,7 +262,7 @@
     "viewTx": "View on Basescan",
     "txRejected": "You cancelled the signature. No money was taken.",
     "priceMoved": "The price moved by more than 1% before confirmation, so nothing was bought. Check the new quote and try again.",
-    "limitHit": "A sale limit stopped this purchase (per purchase, per day or the pause between purchases). Nothing was bought.",
+    "limitHit": "A sale limit stopped this purchase (per purchase, per 24 hours or the pause between purchases). Nothing was bought.",
     "txFailed": "The transaction failed: {reason}. No PPL was bought.",
     "tryAgain": "Try again",
     "balanceLine": "In your wallet on Base: {balance} {token} · {eth} ETH",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Whitelist phase",
-      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 per day.",
+      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 per person per rolling 24 hours.",
       "daysLeft": "{days} days left",
       "openTitle": "Public phase",
-      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 per day.",
+      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 per person per rolling 24 hours.",
       "notOpenTitle": "Sale not open yet",
       "notOpenBody": "Purchases open when the contract enters the whitelist phase.",
       "expiredTitle": "Sale ended",
@@ -356,7 +356,7 @@
       "invalid": "Enter an amount in dollars.",
       "belowMin": "The minimum is {min}.",
       "overMax": "The maximum is {max} per purchase.",
-      "overDay": "The daily limit is {max} per address.",
+      "overDay": "The limit is {max} per person over the last 24 hours.",
       "needVerification": "Complete the verification step above to buy.",
       "needWallet": "Connect a wallet to see your quote.",
       "preview": "Preview: no transaction will be sent.",

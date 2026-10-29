@@ -162,7 +162,7 @@ Cada etapa comienza cuando se cumple su gate. Salvo el lanzamiento de mainnet y 
 ## 9. Seguridad
 
 - Revisado por modelos de IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (ejecutados por el equipo del proyecto). No es una auditoría de seguridad. Todavía no se ha hecho ninguna auditoría externa. Bug bounty on every page.
-- **Multifirmas.** Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base; su dirección y su umbral de firmas se publican antes de que abra la venta.
+- **Multifirmas.** Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base recibe el 50% de cada compra de inmediato, en el momento de la compra; el otro 50% se queda en el contrato de venta como reserva para las reventas. Su dirección y su umbral de firmas se publican antes de que abra la venta.
 - **Direcciones publicadas.** El contrato de venta y la multifirma receptora se publican antes de que abra la venta; los contratos de vesting y de bloqueo de LP, con el lanzamiento completo de la red. Sin marcadores provisionales.
 - **Defensa contra bots.** Verificación de humanos, límites por dispositivo e IP, límites de puntos diarios y recuperación de bots.
 - **Componentes de construcción probados.** Los contratos sin código se ensamblan a partir de plantillas de OpenZeppelin.
@@ -221,6 +221,6 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 - Comisiones de lanzamiento: el plan aprobado es un importe fijo de **1 USD por lanzamiento de token y 2 USD por mint de NFT**, pagadero en PPL, USDT o USDC, con un 20% de descuento al pagar en PPL a un precio TWAP; las fábricas desplegadas aún cobran una comisión fija en PPL.
 - La **venta comunitaria de PPL** usa la curva exponencial publicada en `/buy` (inicio **$0.005** por PPL; precios y límites públicos; la compra sigue desactivada hasta el hub). No hay KYC ni comprobaciones de elegibilidad en este sitio.
 - Seguridad: Revisado por modelos de IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (ejecutados por el equipo del proyecto). No es una auditoría de seguridad. Todavía no se ha hecho ninguna auditoría externa.; bug bounty on every page.
-- Multifirmas. Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base; su dirección y su umbral de firmas se publican antes de que abra la venta.
+- Multifirmas. Tesorería de comisiones de red: una multifirma 2 de 3 en la red PEOPLE. Fondos de la venta: la multifirma del proyecto en Base recibe el 50% de cada compra de inmediato, en el momento de la compra; el otro 50% se queda en el contrato de venta como reserva para las reventas. Su dirección y su umbral de firmas se publican antes de que abra la venta.
 - Si la curva de un token no se agota en **180 días** desde el lanzamiento, cualquiera puede finalizarla y los tokens no vendidos van al pool comunitario de ese token. Una curva agotada pasa a liquidez como antes. (Activo en testnet.)
 - La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.

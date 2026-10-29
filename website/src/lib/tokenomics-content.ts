@@ -132,7 +132,7 @@ const en: TokenomicsCopy = {
   saleCurveBullets: [
     "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
     "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
-    "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
+    "50% of every purchase goes to the treasury multisig immediately, at the moment of purchase; the other 50% stays in the sale contract as the reserve that pays for sell-backs.",
     "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per person per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
     "$10–$500 per purchase; Up to $2,000 per person in any 24 hours; 60 s pause between purchases",
   ],
@@ -244,7 +244,7 @@ const ru: TokenomicsCopy = {
   saleCurveBullets: [
     "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
     "Продажа идёт до распродажи (кривая закрывается при сборе $4M) или 24 месяца с момента открытия — что наступит раньше. Продлений нет. Непроданные PPL уходят в Community Pool. Возвратов нет: каждая покупка окончательна.",
-    "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
+    "50% каждой покупки сразу, в момент покупки, поступают в мультисиг казны; остальные 50% остаются в контракте продажи как резерв для обратного выкупа (продажи обратно).",
     "Продажа обратно в резерв — только для верифицированных пользователей. Каждую партию можно продать после 30 дней удержания по цене кривой на момент продажи. Общий лимит — 2% резерва в сутки на всех и $2 000 в сутки на человека. Комиссия 1,5% (3%, если за день уже продано обратно больше 1% резерва). Закрывается после выпуска в пул (graduation). Выплата — в USDC в сети Base.",
     "$10–$500 за покупку; До $2 000 на человека за любые 24 часа; Пауза 60 с между покупками",
   ],

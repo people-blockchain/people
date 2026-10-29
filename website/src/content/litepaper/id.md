@@ -162,7 +162,7 @@ Setiap tahap dimulai ketika gatnya terpenuhi. Selain peluncuran mainnet dan penj
 ## 9. Keamanan
 
 - Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1 (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal. Bug bounty on every page.
-- **Multisig.** Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base; alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
+- **Multisig.** Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base langsung menerima 50% dari setiap pembelian pada saat pembelian; 50% sisanya tetap di kontrak penjualan sebagai cadangan untuk penjualan kembali. Alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
 - **Alamat yang dipublikasikan.** Kontrak penjualan dan multisig penerima dipublikasikan sebelum penjualan dibuka; kontrak vesting dan kunci LP saat peluncuran jaringan penuh. Tanpa placeholder.
 - **Pertahanan bot.** Verifikasi manusia, batas per-perangkat dan per-IP, batas poin harian, dan clawback bot.
 - **Blok bangunan yang terbukti.** Kontrak tanpa kode dirakit dari template OpenZeppelin.
@@ -221,6 +221,6 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **1 USD per peluncuran token dan 2 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
 - **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
 - Keamanan: Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1 (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.; bug bounty on every page.
-- Multisig. Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base; alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
+- Multisig. Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base langsung menerima 50% dari setiap pembelian pada saat pembelian; 50% sisanya tetap di kontrak penjualan sebagai cadangan untuk penjualan kembali. Alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
 - Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
 - Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.

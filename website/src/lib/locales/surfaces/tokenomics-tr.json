@@ -98,7 +98,7 @@
   "saleCurveBullets": [
     "Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.",
     "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
-    "Toplanan %50 kilitli likidite / %50 proje multisig; LP tokenları 24 ay kilitli.",
+    "Her alımın %50'si alım anında hemen hazine multisig'ine gider; kalan %50 geri satışları ödeyen rezerv olarak satış sözleşmesinde kalır.",
     "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "Alım başına $10–$500; Herhangi bir 24 saatte kişi başına en fazla $2,000; Alımlar arasında 60 sn bekleme"
   ],

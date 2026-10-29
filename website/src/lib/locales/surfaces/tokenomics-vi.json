@@ -98,7 +98,7 @@
   "saleCurveBullets": [
     "100.000.000 PPL trên đường cong (10% cung); bắt đầu $0,005, tăng mũ, trần $0,25 chỉ trên đường cong.",
     "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
-    "Gom 50% thanh khoản khóa / 50% multisig dự án; token LP khóa 24 tháng.",
+    "50% mỗi giao dịch mua được chuyển ngay vào multisig ngân quỹ vào đúng thời điểm mua; 50% còn lại nằm trong hợp đồng bán làm quỹ dự trữ để chi trả cho việc bán lại.",
     "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và $2.000 mỗi người mỗi ngày. Phí 1,5% (3% nếu lượng bán lại trong ngày vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
     "$10–$500 mỗi lần mua; Tối đa $2,000 mỗi người trong bất kỳ 24 giờ nào; Nghỉ 60 giây giữa các lần mua"
   ],

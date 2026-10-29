@@ -93,11 +93,11 @@
     "items": [
       {
         "title": "Primi {whitelistDays} giorni: solo persone verificate",
-        "body": "Una persona, un indirizzo. Da {min} a {max} per acquisto, fino a {perDay} per indirizzo al giorno (UTC) e una pausa di {cooldown} secondi tra un acquisto e l’altro."
+        "body": "Una persona, un indirizzo. Da {min} a {max} per acquisto, fino a {perDay} per persona in qualsiasi finestra mobile di 24 ore e una pausa di {cooldown} secondi tra un acquisto e l’altro."
       },
       {
         "title": "Il {reservePct} di ogni acquisto resta come riserva",
-        "body": "Resta nel contratto di vendita per pagare le rivendite. Nessuno del team può prelevarlo. L’altro {treasuryPct} finanzia il progetto."
+        "body": "Resta nel contratto di vendita per pagare le rivendite. Nessuno del team può prelevarlo. L’altro {treasuryPct} va subito, con ogni acquisto, al wallet del progetto."
       },
       {
         "title": "Rivendi dopo {holdDays} giorni",
@@ -125,7 +125,7 @@
     "details": [
       "Riserva: gli USDC conservati nel contratto di vendita. Con essa si pagano le rivendite, e le commissioni di rivendita restano lì. Più la riserva è piccola, più è basso il limite giornaliero di rivendita. La rivendita si chiude per sempre quando si chiude la curva.",
       "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso la rivendita continua a funzionare.",
-      "Tesoreria: un wallet multisig ({signersM} firme su {signersN}) che riceve l’altro {treasuryPct} di ogni acquisto.",
+      "Tesoreria: un wallet multisig ({signersM} firme su {signersN}) che riceve subito, al momento dell’acquisto, l’altro {treasuryPct} di ogni acquisto.",
       "Il multisig può mettere in pausa acquisti e rivendita. Non può spostare la riserva, cambiare i limiti o la formula, né prolungare la vendita.",
       "La vendita dura finché non si raccolgono {graduation} oppure {term} dall’apertura, a seconda di cosa avviene prima. I PPL invenduti vanno al Community Pool. Gli acquisti sono definitivi.",
       "Team: il {teamPct} di tutti i PPL. Niente per {cliff}, poi ogni mese per {linear}, a partire dal lancio completo della rete."
@@ -210,7 +210,7 @@
     "priceAfter": "Prezzo dopo il tuo acquisto",
     "estimate": "Stima. La quantità esatta viene confermata on-chain prima della firma.",
     "limitPerBuy": "{min}–{max} per acquisto",
-    "limitPerDay": "Fino a {amount} per indirizzo al giorno (UTC)",
+    "limitPerDay": "Fino a {amount} per persona in qualsiasi finestra mobile di 24 ore",
     "cooldown": "Pausa di {seconds} s tra un acquisto e l’altro",
     "overLimit": "Massimo {amount} in un acquisto.",
     "belowMin": "Inserisci un importo per vedere il preventivo.",
@@ -262,7 +262,7 @@
     "viewTx": "Vedi su Basescan",
     "txRejected": "Hai annullato la firma. Non è stato addebitato nulla.",
     "priceMoved": "Il prezzo si è mosso di oltre l’1% prima della conferma, quindi non è stato acquistato nulla. Controlla il nuovo preventivo e riprova.",
-    "limitHit": "Un limite della vendita ha fermato questo acquisto (per acquisto, al giorno o pausa tra acquisti). Non è stato acquistato nulla.",
+    "limitHit": "Un limite della vendita ha fermato questo acquisto (per acquisto, per 24 ore o pausa tra acquisti). Non è stato acquistato nulla.",
     "txFailed": "La transazione non è riuscita: {reason}. Nessun PPL acquistato.",
     "tryAgain": "Riprova",
     "balanceLine": "Nel tuo wallet su Base: {balance} {token} · {eth} ETH",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Fase whitelist",
-      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 per persona in qualsiasi finestra mobile di 24 ore.",
       "daysLeft": "Mancano {days} giorni",
       "openTitle": "Fase pubblica",
-      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 per persona in qualsiasi finestra mobile di 24 ore.",
       "notOpenTitle": "Vendita non ancora aperta",
       "notOpenBody": "Gli acquisti aprono quando il contratto entra nella fase whitelist.",
       "expiredTitle": "Vendita terminata",
@@ -356,7 +356,7 @@
       "invalid": "Inserisci un importo in dollari.",
       "belowMin": "Il minimo è {min}.",
       "overMax": "Il massimo è {max} per acquisto.",
-      "overDay": "Il limite giornaliero è {max} per indirizzo.",
+      "overDay": "Il limite è {max} per persona nelle ultime 24 ore.",
       "needVerification": "Completa la verifica sopra per acquistare.",
       "needWallet": "Collega un wallet per vedere il preventivo.",
       "preview": "Anteprima: nessuna transazione verrà inviata.",
