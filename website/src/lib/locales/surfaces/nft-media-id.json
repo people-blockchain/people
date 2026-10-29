@@ -67,5 +67,9 @@
   "errFactoryMissing": "Pabrik NFT belum diterapkan di jaringan ini.",
   "errWrongNetwork": "Dompet Anda berada di jaringan lain. Beralih ke jaringan uji PEOPLE Blockchain lalu coba lagi.",
   "errTimeout": "Transaksi terlalu lama. Transaksi tidak dikirim ulang; gunakan «Lanjutkan pencetakan» untuk memeriksanya.",
-  "errUnknown": "Terjadi kesalahan. Tidak ada pencetakan ganda. Coba lagi."
+  "errUnknown": "Terjadi kesalahan. Tidak ada pencetakan ganda. Coba lagi.",
+  "errStableFeeUnavailable": "Pembayaran stablecoin untuk sementara tidak tersedia. Silakan bayar dengan PPL.",
+  "errInsufficientPpl": "PPL tidak cukup: Anda memerlukan {needed} PPL (biaya + gas), saldo Anda {balance} PPL.",
+  "errInsufficientPplGeneric": "PPL tidak cukup untuk menutupi biaya dan gas. Isi ulang saldo dan coba lagi.",
+  "errNetworkRpc": "Jaringan tidak merespons. Periksa koneksi Anda dan coba lagi."
 }

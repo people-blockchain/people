@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatEther } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
+import { nftMediaCopy } from "@/lib/nft-media-copy";
 import { uxCopy } from "@/lib/ux-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
+import { checkBalanceForCost, classifyCreateFlowError } from "@/lib/evm/create-flow-errors";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import {
   PROMO_BPS_OPTIONS,
@@ -33,6 +36,12 @@ const ERC20_TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a116
 const ZERO_TOPIC = "0x0000000000000000000000000000000000000000000000000000000000000000";
 const LAUNCH_DECIMALS = 6;
 
+function formatPplWei(wei: bigint): string {
+  const [whole, fraction = ""] = formatEther(wei).split(".");
+  const trimmed = fraction.slice(0, 4).replace(/0+$/, "");
+  return trimmed ? `${whole}.${trimmed}` : whole;
+}
+
 export function EvmTokenLaunch() {
   const { lang } = useLanguage();
   const page = factoryCopy[lang].token;
@@ -41,6 +50,7 @@ export function EvmTokenLaunch() {
   // shows English text rather than nothing at all.
   const form = { ...factoryCopy.en.form, ...factoryCopy[lang].form };
   const u = uxCopy[lang];
+  const nm = nftMediaCopy[lang];
   const { signer } = useExternalWallet();
   const dep = readEvmDeployments();
   const gateway = stableFeeGatewayAddress();
@@ -167,13 +177,44 @@ export function EvmTokenLaunch() {
       const metadataURI = `ipfs://people/${symbol.trim()}`;
       // One entry point carries both creator choices: the promo share (0/5/10%) and what happens
       // to curve leftovers / the unsold remainder (0 = burn, 1 = the token's community pool).
-      const hash = await writeViaActiveSigner(signer, {
+      const request = {
         address: factory,
         abi: factoryLaunchAbi,
         functionName: "createToken",
         args: [name.trim(), symbol.trim().toUpperCase(), LAUNCH_DECIMALS, total, metadataURI, promoBps, leftoverMode],
         value: fee,
-      });
+      } as const;
+
+      if (payWith === "PPL") {
+        try {
+          const balance = await client.getBalance({ address: signer.address });
+          let gasCost = BigInt(0);
+          try {
+            const gas = await client.estimateContractGas({ account: signer.address, ...request });
+            gasCost = gas * (await client.getGasPrice());
+          } catch {
+            try {
+              const gas = await client.estimateContractGas({ account: signer.address, ...request, value: BigInt(0) });
+              gasCost = gas * (await client.getGasPrice());
+            } catch {
+              /* keep the fee-only floor when the node cannot estimate */
+            }
+          }
+          const balanceCheck = checkBalanceForCost(balance, fee + gasCost);
+          if (!balanceCheck.ok) {
+            setError(
+              nm.errInsufficientPpl
+                .replaceAll("{needed}", formatPplWei(balanceCheck.neededWei))
+                .replaceAll("{balance}", formatPplWei(balanceCheck.balanceWei)),
+            );
+            return;
+          }
+        } catch {
+          /* if the balance cannot be read, let the wallet report it */
+        }
+      }
+
+      const hash = await writeViaActiveSigner(signer, { ...request });
       setTx(hash);
       const { recordFounderAction } = await import("@/lib/founders/client");
       void recordFounderAction("token_launch", hash);
@@ -181,7 +222,30 @@ export function EvmTokenLaunch() {
         void registerIssuerReferral(hash, total);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "submit");
+      console.error(err);
+      const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
+      switch (code) {
+        case "stable_fee_unavailable":
+          setError(nm.errStableFeeUnavailable);
+          break;
+        case "insufficient_funds":
+          setError(
+            neededWei !== undefined && balanceWei !== undefined
+              ? nm.errInsufficientPpl
+                  .replaceAll("{needed}", formatPplWei(neededWei))
+                  .replaceAll("{balance}", formatPplWei(balanceWei))
+              : nm.errInsufficientPplGeneric,
+          );
+          break;
+        case "wallet_rejected":
+          setError(nm.errWalletRejected);
+          break;
+        case "network":
+          setError(nm.errNetworkRpc);
+          break;
+        default:
+          setError(nm.errUnknown);
+      }
     } finally {
       setBusy(false);
       setStage("idle");

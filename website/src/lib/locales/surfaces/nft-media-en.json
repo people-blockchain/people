@@ -67,5 +67,9 @@
   "errFactoryMissing": "The NFT factory is not deployed on this network yet.",
   "errWrongNetwork": "Your wallet is on a different network. Switch to PEOPLE Blockchain testnet and try again.",
   "errTimeout": "The transaction is taking too long. It was not sent again; use Continue to check it.",
-  "errUnknown": "Something went wrong. Nothing was minted twice. Try again."
+  "errUnknown": "Something went wrong. Nothing was minted twice. Try again.",
+  "errStableFeeUnavailable": "Stablecoin payment is temporarily unavailable. Please pay in PPL.",
+  "errInsufficientPpl": "Not enough PPL: you need {needed} PPL (fee + gas) but have {balance} PPL.",
+  "errInsufficientPplGeneric": "Not enough PPL to cover the fee and gas. Top up and try again.",
+  "errNetworkRpc": "The network is not responding. Check your connection and try again."
 }

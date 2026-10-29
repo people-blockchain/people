@@ -67,5 +67,9 @@
   "errFactoryMissing": "Nhà máy NFT chưa được triển khai trên mạng này.",
   "errWrongNetwork": "Ví của bạn đang ở mạng khác. Hãy chuyển sang mạng thử nghiệm của PEOPLE Blockchain rồi thử lại.",
   "errTimeout": "Giao dịch mất quá nhiều thời gian. Giao dịch không được gửi lại; hãy dùng «Tiếp tục phát hành» để kiểm tra.",
-  "errUnknown": "Đã xảy ra lỗi. Không có phát hành trùng. Hãy thử lại."
+  "errUnknown": "Đã xảy ra lỗi. Không có phát hành trùng. Hãy thử lại.",
+  "errStableFeeUnavailable": "Thanh toán bằng stablecoin tạm thời không khả dụng. Vui lòng thanh toán bằng PPL.",
+  "errInsufficientPpl": "Không đủ PPL: bạn cần {needed} PPL (phí + gas), số dư của bạn là {balance} PPL.",
+  "errInsufficientPplGeneric": "Không đủ PPL để trả phí và gas. Hãy nạp thêm và thử lại.",
+  "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại."
 }

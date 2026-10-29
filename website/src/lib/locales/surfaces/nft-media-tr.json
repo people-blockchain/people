@@ -67,5 +67,9 @@
   "errFactoryMissing": "NFT fabrikası bu ağda henüz dağıtılmadı.",
   "errWrongNetwork": "Cüzdanınız başka bir ağda. PEOPLE Blockchain test ağına geçip tekrar deneyin.",
   "errTimeout": "İşlem çok uzun sürüyor. Yeniden gönderilmedi; denetlemek için «Basıma devam et» seçeneğini kullanın.",
-  "errUnknown": "Bir şeyler ters gitti. İki kez basım yapılmadı. Tekrar deneyin."
+  "errUnknown": "Bir şeyler ters gitti. İki kez basım yapılmadı. Tekrar deneyin.",
+  "errStableFeeUnavailable": "Stablecoin ödemesi geçici olarak kullanılamıyor. Lütfen PPL ile ödeyin.",
+  "errInsufficientPpl": "Yeterli PPL yok: {needed} PPL gerekli (ücret + gas), bakiyeniz {balance} PPL.",
+  "errInsufficientPplGeneric": "Ücret ve gas için yeterli PPL yok. Bakiyenizi yükleyip tekrar deneyin.",
+  "errNetworkRpc": "Ağ yanıt vermiyor. Bağlantınızı kontrol edip tekrar deneyin."
 }

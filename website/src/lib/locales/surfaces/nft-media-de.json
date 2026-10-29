@@ -67,5 +67,9 @@
   "errFactoryMissing": "Die NFT-Factory ist in diesem Netzwerk noch nicht bereitgestellt.",
   "errWrongNetwork": "Deine Wallet ist in einem anderen Netzwerk. Wechsle zum Testnetz von PEOPLE Blockchain und versuche es erneut.",
   "errTimeout": "Die Transaktion dauert zu lange. Sie wurde nicht erneut gesendet; prüfe sie mit „Mint fortsetzen“.",
-  "errUnknown": "Etwas ist schiefgelaufen. Es wurde nicht doppelt geminted. Versuche es erneut."
+  "errUnknown": "Etwas ist schiefgelaufen. Es wurde nicht doppelt geminted. Versuche es erneut.",
+  "errStableFeeUnavailable": "Stablecoin-Zahlung ist vorübergehend nicht verfügbar. Bitte zahlen Sie in PPL.",
+  "errInsufficientPpl": "Nicht genug PPL: Sie benötigen {needed} PPL (Gebühr + Gas), Ihr Guthaben beträgt {balance} PPL.",
+  "errInsufficientPplGeneric": "Nicht genug PPL für Gebühr und Gas. Laden Sie Ihr Guthaben auf und versuchen Sie es erneut.",
+  "errNetworkRpc": "Das Netzwerk antwortet nicht. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
 }
