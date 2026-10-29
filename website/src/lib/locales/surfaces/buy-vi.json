@@ -68,11 +68,11 @@
       },
       {
         "title": "Chọn số tiền và mạng",
-        "body": "Từ {min} đến {max} mỗi lần mua. Thanh toán bằng USDC hoặc USDT; thanh toán từ mạng khác được tự động quy đổi. Bản thân giao dịch mua diễn ra trên Base."
+        "body": "Từ {min} đến {max} mỗi lần mua. Thanh toán bằng USDC hoặc USDT; thanh toán từ mạng khác được tự động quy đổi. Việc thanh toán diễn ra trên Base."
       },
       {
-        "title": "PPL nằm ở địa chỉ của bạn",
-        "body": "PPL được ghi có vào địa chỉ của bạn ngay khi giao dịch mua hoàn tất. PPL sẽ chuyển sang ví của bạn trên mạng PEOPLE khi mạng ra mắt."
+        "title": "PPL vào thẳng ví PEOPLE của bạn",
+        "body": "Bạn thanh toán bằng USDC hoặc USDT, và PPL được ghi có ngay vào địa chỉ của bạn trên mạng PEOPLE."
       }
     ],
     "verifyLink": "Cách xác minh"
@@ -124,7 +124,7 @@
     "detailsToggle": "Chi tiết",
     "details": [
       "Quỹ dự trữ: lượng USDC nằm trong hợp đồng bán. Việc bán lại được chi trả từ quỹ này, và phí bán lại được giữ lại trong quỹ. Quỹ càng nhỏ thì giới hạn bán lại mỗi ngày càng thấp. Khi đường cong đóng, việc bán lại đóng vĩnh viễn.",
-      "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng hoặc khi mạng PEOPLE ra mắt, và chỉ sau thông báo công khai trước {releaseDays} ngày. Trong thời gian thông báo, việc bán lại vẫn hoạt động.",
+      "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng, và chỉ sau thông báo công khai trước {releaseDays} ngày. Trong thời gian thông báo, việc bán lại vẫn hoạt động.",
       "Ngân quỹ: một ví multisig ({signersM} trên {signersN} chữ ký) nhận {treasuryPct} còn lại của mỗi giao dịch mua.",
       "Multisig có thể tạm dừng việc mua và bán lại. Multisig không thể chuyển quỹ dự trữ, thay đổi giới hạn hay công thức, hoặc kéo dài đợt bán.",
       "Đợt bán kéo dài đến khi huy động đủ {graduation} hoặc {term} sau khi mở, tùy điều nào đến trước. PPL chưa bán chuyển vào Community Pool. Mọi giao dịch mua là cuối cùng.",
@@ -140,12 +140,8 @@
         "a": "Để mỗi người mua là một người thật. Mỗi người có một địa chỉ, và giới hạn áp dụng cho người chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Hãy xác minh bằng World ID hoặc Human Passport; chỉ Telegram thì chưa đủ. Không có dữ liệu cá nhân nào được ghi lên blockchain."
       },
       {
-        "q": "Vì sao bây giờ tôi chưa gửi PPL cho người khác được?",
-        "a": "Cho đến khi mạng PEOPLE ra mắt, PPL của bạn là một bản ghi trong hợp đồng bán trên Base. Việc gửi PPL cho người khác sẽ mở khi mạng ra mắt. Trước đó, bạn có thể bán lại vào quỹ dự trữ theo các quy tắc ở trên."
-      },
-      {
-        "q": "Điều gì xảy ra khi mạng PEOPLE ra mắt?",
-        "a": "PPL của bạn được chuyển đến địa chỉ của bạn trên mạng PEOPLE. Sau đó, bản ghi trên Base bị đóng băng và không thể bán lại vào quỹ dự trữ nữa. Quỹ dự trữ chỉ có thể chuyển thành thanh khoản PPL sau thông báo công khai trước {releaseDays} ngày, và trong thời gian đó việc bán lại vẫn hoạt động."
+        "q": "Khi nào tôi có thể gửi PPL cho người khác?",
+        "a": "PPL được ghi có trên mạng PEOPLE ngay sau khi bạn mua. Ban đầu mạng chỉ tiếp nhận PPL: các giao dịch chuyển giữa người tham gia sẽ mở sau, khi có khoảng 1.000 người tham gia đã xác minh. Trước đó, bạn có thể bán PPL lại vào quỹ dự trữ theo các quy tắc ở trên."
       },
       {
         "q": "Tôi có thể thanh toán từ những mạng nào?",
@@ -275,7 +271,7 @@
     "riskTitle": "Cảnh báo rủi ro",
     "riskBody": "Tiền mã hóa có rủi ro: giá có thể giảm, bạn có thể không bán được ngay và các giao dịch mua không được hoàn tiền. Chỉ dùng số tiền bạn chấp nhận mất.",
     "riskMoreToggle": "Tất cả rủi ro",
-    "riskMore": "Ngoài ra: không thể gửi PPL cho người khác cho đến khi mạng PEOPLE ra mắt. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, 30 ngày sau mỗi giao dịch mua và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể tạm dừng việc mua và bán lại.",
+    "riskMore": "Ngoài ra: việc chuyển PPL giữa những người tham gia sẽ mở sau, khi mạng PEOPLE có khoảng 1.000 người tham gia đã xác minh. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, 30 ngày sau mỗi giao dịch mua và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể tạm dừng việc mua và bán lại.",
     "saleTermsNote": "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
     "termsAgree": "Khi mua, bạn đồng ý với {terms}.",
     "termsLink": "Điều khoản",

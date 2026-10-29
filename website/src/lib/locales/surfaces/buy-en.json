@@ -68,11 +68,11 @@
       },
       {
         "title": "Choose the amount and network",
-        "body": "From {min} to {max} per purchase. Pay in USDC or USDT; payments from other networks are swapped automatically. The purchase itself goes through on Base."
+        "body": "From {min} to {max} per purchase. Pay in USDC or USDT; payments from other networks are swapped automatically. The payment goes through on Base."
       },
       {
-        "title": "PPL is on your address",
-        "body": "PPL is credited to your address as soon as the purchase goes through. It moves to your wallet on the PEOPLE network when the network launches."
+        "title": "PPL straight to your PEOPLE wallet",
+        "body": "You pay in USDC or USDT, and PPL is credited instantly to your address on the PEOPLE network."
       }
     ],
     "verifyLink": "How to get verified"
@@ -124,7 +124,7 @@
     "detailsToggle": "Details",
     "details": [
       "Reserve: the USDC kept in the sale contract. Sell-backs are paid from it, and sell-back fees stay in it. The smaller the reserve, the smaller the daily sell-back limit. Sell-back closes for good once the curve closes.",
-      "The reserve leaves the contract only as PPL liquidity, when the curve closes or the PEOPLE network launches, and only after a public notice of {releaseDays} days. Sell-back keeps working during the notice.",
+      "The reserve leaves the contract only as PPL liquidity, when the curve closes, and only after a public notice of {releaseDays} days. Sell-back keeps working during the notice.",
       "Treasury: a multisig wallet ({signersM} of {signersN} signatures) that receives the other {treasuryPct} of each purchase.",
       "The multisig can pause buying and sell-back. It cannot move the reserve, change the limits or the formula, or extend the sale.",
       "The sale runs until {graduation} has been raised or for {term} after opening, whichever comes first. Unsold PPL goes to the Community Pool. Purchases are final.",
@@ -140,12 +140,8 @@
         "a": "So that every buyer is a real person. One person gets one address, and the limits apply to people, not bots. The first {whitelistDays} days are for verified people only. Verify with World ID or Human Passport; Telegram alone is not enough. No personal data is written to the blockchain."
       },
       {
-        "q": "Why can't I send PPL to someone right now?",
-        "a": "Until the PEOPLE network launches, your PPL is a record in the sale contract on Base. Sending PPL to other people opens when the network launches. Until then you can sell back to the reserve under the rules above."
-      },
-      {
-        "q": "What happens when the PEOPLE network launches?",
-        "a": "Your PPL is delivered to your address on the PEOPLE network. After that the record on Base is frozen and can no longer be sold back to the reserve. The reserve can move into PPL liquidity only after a public notice of {releaseDays} days, and sell-back keeps working during the notice."
+        "q": "When can I send PPL to other people?",
+        "a": "PPL is credited on the PEOPLE network right after your purchase. At first the network only receives PPL: transfers between participants open later, once there are about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above."
       },
       {
         "q": "Which networks can I pay from?",
@@ -275,7 +271,7 @@
     "riskTitle": "Risk warning",
     "riskBody": "Crypto is risky: the price can fall, you may not be able to sell right away, and purchases cannot be refunded. Only use money you can afford to lose.",
     "riskMoreToggle": "All risks",
-    "riskMore": "Also: PPL cannot be sent to other people until the PEOPLE network launches. Selling back to the reserve is for verified users only, 30 days after each purchase and within daily limits. The sale contract has been reviewed only by AI models; no external audit has been done yet. The project multisig can pause buying and selling back.",
+    "riskMore": "Also: PPL transfers between participants open later, once the PEOPLE network has about 1,000 verified participants. Selling back to the reserve is for verified users only, 30 days after each purchase and within daily limits. The sale contract has been reviewed only by AI models; no external audit has been done yet. The project multisig can pause buying and selling back.",
     "saleTermsNote": "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
     "termsAgree": "By buying you agree to the {terms}.",
     "termsLink": "Terms",

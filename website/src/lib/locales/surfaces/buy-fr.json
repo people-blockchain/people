@@ -68,11 +68,11 @@
       },
       {
         "title": "Choisissez le montant et le réseau",
-        "body": "De {min} à {max} par achat. Payez en USDC ou en USDT ; les paiements depuis d’autres réseaux sont convertis automatiquement. L’achat lui-même se fait sur Base."
+        "body": "De {min} à {max} par achat. Payez en USDC ou en USDT ; les paiements depuis d’autres réseaux sont convertis automatiquement. Le paiement se fait sur Base."
       },
       {
-        "title": "Les PPL sont à votre adresse",
-        "body": "Les PPL sont crédités à votre adresse dès que l’achat est passé. Ils rejoindront votre portefeuille sur le réseau PEOPLE au lancement du réseau."
+        "title": "Les PPL directement dans votre portefeuille PEOPLE",
+        "body": "Vous payez en USDC ou en USDT, et les PPL sont crédités instantanément à votre adresse sur le réseau PEOPLE."
       }
     ],
     "verifyLink": "Comment se faire vérifier"
@@ -124,7 +124,7 @@
     "detailsToggle": "Détails",
     "details": [
       "Réserve : les USDC conservés dans le contrat de vente. Les reventes sont payées avec, et les frais de revente y restent. Plus la réserve est petite, plus la limite quotidienne de revente est basse. La revente ferme définitivement quand la courbe se ferme.",
-      "La réserve ne quitte le contrat que sous forme de liquidité PPL, à la fermeture de la courbe ou au lancement du réseau PEOPLE, et seulement après un préavis public de {releaseDays} jours. La revente continue de fonctionner pendant le préavis.",
+      "La réserve ne quitte le contrat que sous forme de liquidité PPL, à la fermeture de la courbe, et seulement après un préavis public de {releaseDays} jours. La revente continue de fonctionner pendant le préavis.",
       "Trésorerie : un portefeuille multisig ({signersM} signatures sur {signersN}) qui reçoit les {treasuryPct} restants de chaque achat.",
       "Le multisig peut mettre en pause les achats et la revente. Il ne peut ni déplacer la réserve, ni changer les limites ou la formule, ni prolonger la vente.",
       "La vente dure jusqu’à ce que {graduation} soient levés ou {term} après l’ouverture, selon ce qui arrive en premier. Les PPL invendus vont au Community Pool. Les achats sont définitifs.",
@@ -140,12 +140,8 @@
         "a": "Pour que chaque acheteur soit une vraie personne. Une personne a une adresse, et les limites s’appliquent aux personnes, pas aux bots. Les {whitelistDays} premiers jours sont réservés aux personnes vérifiées. Faites-vous vérifier avec World ID ou Human Passport ; Telegram seul ne suffit pas. Aucune donnée personnelle n’est inscrite sur la blockchain."
       },
       {
-        "q": "Pourquoi ne puis-je pas envoyer de PPL à quelqu’un maintenant ?",
-        "a": "Jusqu’au lancement du réseau PEOPLE, vos PPL sont un enregistrement dans le contrat de vente sur Base. L’envoi de PPL à d’autres personnes ouvre au lancement du réseau. D’ici là, vous pouvez revendre à la réserve selon les règles ci-dessus."
-      },
-      {
-        "q": "Que se passe-t-il au lancement du réseau PEOPLE ?",
-        "a": "Vos PPL sont livrés à votre adresse sur le réseau PEOPLE. Ensuite, l’enregistrement sur Base est gelé et ne peut plus être revendu à la réserve. La réserve ne peut devenir de la liquidité PPL qu’après un préavis public de {releaseDays} jours, et la revente continue de fonctionner pendant ce préavis."
+        "q": "Quand puis-je envoyer des PPL à d’autres personnes ?",
+        "a": "Les PPL sont crédités sur le réseau PEOPLE juste après votre achat. Au début, le réseau ne reçoit que des PPL : les transferts entre participants ouvriront plus tard, lorsqu’il y aura environ 1 000 participants vérifiés. D’ici là, vous pouvez revendre les PPL à la réserve selon les règles ci-dessus."
       },
       {
         "q": "Depuis quels réseaux puis-je payer ?",
@@ -275,7 +271,7 @@
     "riskTitle": "Avertissement sur les risques",
     "riskBody": "Les cryptoactifs sont risqués : le prix peut baisser, vous ne pourrez peut-être pas revendre tout de suite et les achats ne sont pas remboursables. N’utilisez que de l’argent que vous pouvez perdre.",
     "riskMoreToggle": "Tous les risques",
-    "riskMore": "Par ailleurs : les PPL ne peuvent pas être envoyés à d’autres personnes avant le lancement du réseau PEOPLE. La revente à la réserve est réservée aux utilisateurs vérifiés, 30 jours après chaque achat et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut mettre en pause les achats et la revente.",
+    "riskMore": "Par ailleurs : les transferts de PPL entre participants ouvriront plus tard, lorsque le réseau PEOPLE comptera environ 1 000 participants vérifiés. La revente à la réserve est réservée aux utilisateurs vérifiés, 30 jours après chaque achat et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut mettre en pause les achats et la revente.",
     "saleTermsNote": "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "termsAgree": "En achetant, vous acceptez les {terms}.",
     "termsLink": "Conditions",

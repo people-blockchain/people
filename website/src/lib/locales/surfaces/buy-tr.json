@@ -68,11 +68,11 @@
       },
       {
         "title": "Tutarı ve ağı seçin",
-        "body": "Alım başına {min} ile {max} arası. USDC ya da USDT ile ödeyin; başka ağlardan gelen ödemeler otomatik olarak dönüştürülür. Alımın kendisi Base ağında gerçekleşir."
+        "body": "Alım başına {min} ile {max} arası. USDC ya da USDT ile ödeyin; başka ağlardan gelen ödemeler otomatik olarak dönüştürülür. Ödeme Base ağında gerçekleşir."
       },
       {
-        "title": "PPL adresinizde",
-        "body": "Alım tamamlanır tamamlanmaz PPL adresinize yazılır. Ağ açıldığında PEOPLE ağındaki cüzdanınıza geçer."
+        "title": "PPL doğrudan PEOPLE cüzdanınıza",
+        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE ağındaki adresinize yazılır."
       }
     ],
     "verifyLink": "Nasıl doğrulanırım"
@@ -124,7 +124,7 @@
     "detailsToggle": "Ayrıntılar",
     "details": [
       "Rezerv: satış sözleşmesinde tutulan USDC. Geri satışlar buradan ödenir ve geri satış ücretleri burada kalır. Rezerv ne kadar küçükse günlük geri satış sınırı da o kadar küçüktür. Eğri kapandığında geri satış kalıcı olarak kapanır.",
-      "Rezerv sözleşmeden yalnızca PPL likiditesi olarak çıkar: eğri kapandığında ya da PEOPLE ağı açıldığında ve ancak {releaseDays} günlük kamuya açık bir duyurudan sonra. Duyuru süresince geri satış çalışmaya devam eder.",
+      "Rezerv sözleşmeden yalnızca PPL likiditesi olarak çıkar: eğri kapandığında ve ancak {releaseDays} günlük kamuya açık bir duyurudan sonra. Duyuru süresince geri satış çalışmaya devam eder.",
       "Hazine: her alımın kalan {treasuryPct} kadarını alan çoklu imza cüzdanı ({signersN} imzadan {signersM}).",
       "Çoklu imza cüzdanı alımları ve geri satışı duraklatabilir. Rezervi taşıyamaz, sınırları ya da formülü değiştiremez, satışı uzatamaz.",
       "Satış, {graduation} toplanana ya da açılıştan itibaren {term} dolana kadar, hangisi önce gelirse, sürer. Satılmayan PPL Community Pool'a gider. Satın alımlar kesindir.",
@@ -140,12 +140,8 @@
         "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil insanlara uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. World ID ya da Human Passport ile doğrulanın; tek başına Telegram yeterli değildir. Blokzincire hiçbir kişisel veri yazılmaz."
       },
       {
-        "q": "Neden şu anda PPL'yi birine gönderemiyorum?",
-        "a": "PEOPLE ağı açılana kadar PPL'niz, Base ağındaki satış sözleşmesinde bir kayıttır. PPL'yi başkalarına göndermek ağ açıldığında mümkün olur. O zamana kadar yukarıdaki kurallarla rezerve geri satabilirsiniz."
-      },
-      {
-        "q": "PEOPLE ağı açıldığında ne olur?",
-        "a": "PPL'niz PEOPLE ağındaki adresinize teslim edilir. Ardından Base'deki kayıt dondurulur ve artık rezerve geri satılamaz. Rezerv ancak {releaseDays} günlük kamuya açık bir duyurudan sonra PPL likiditesine dönüşebilir; duyuru süresince geri satış çalışmaya devam eder."
+        "q": "PPL'yi başkalarına ne zaman gönderebilirim?",
+        "a": "PPL, satın alımınızdan hemen sonra PEOPLE ağında kaydedilir. Başlangıçta ağ yalnızca PPL alır: katılımcılar arasındaki transferler daha sonra, ağda yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. O zamana kadar PPL'yi yukarıdaki kurallarla rezerve geri satabilirsiniz."
       },
       {
         "q": "Hangi ağlardan ödeme yapabilirim?",
@@ -275,7 +271,7 @@
     "riskTitle": "Risk uyarısı",
     "riskBody": "Kripto risklidir: fiyat düşebilir, hemen satamayabilirsiniz ve alımlar iade edilmez. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın.",
     "riskMoreToggle": "Tüm riskler",
-    "riskMore": "Ayrıca: PEOPLE ağı açılana kadar PPL başkalarına gönderilemez. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; her alımdan 30 gün sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları ve geri satışı duraklatabilir.",
+    "riskMore": "Ayrıca: PPL'nin katılımcılar arasındaki transferleri daha sonra, PEOPLE ağında yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; her alımdan 30 gün sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları ve geri satışı duraklatabilir.",
     "saleTermsNote": "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
     "termsAgree": "Satın alarak {terms} kabul etmiş olursunuz.",
     "termsLink": "Koşulları",
