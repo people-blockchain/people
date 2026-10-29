@@ -43,5 +43,6 @@
   "minted": "Minted",
   "totalSupply": "Total supply",
   "mintPrice": "Mint price",
-  "pplBalance": "PPL balance"
+  "pplBalance": "PPL balance",
+  "memo": "Memo"
 }

@@ -43,5 +43,6 @@
   "minted": "Coniati",
   "totalSupply": "Offerta totale",
   "mintPrice": "Prezzo di conio",
-  "pplBalance": "Saldo PPL"
+  "pplBalance": "Saldo PPL",
+  "memo": "Memo"
 }

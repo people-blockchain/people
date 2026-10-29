@@ -43,5 +43,6 @@
   "minted": "已铸造",
   "totalSupply": "总供应量",
   "mintPrice": "铸造价格",
-  "pplBalance": "PPL 余额"
+  "pplBalance": "PPL 余额",
+  "memo": "备注"
 }

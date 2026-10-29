@@ -43,5 +43,6 @@
   "minted": "المسكوك",
   "totalSupply": "إجمالي العرض",
   "mintPrice": "سعر السك",
-  "pplBalance": "رصيد PPL"
+  "pplBalance": "رصيد PPL",
+  "memo": "مذكرة"
 }
