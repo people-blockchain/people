@@ -1,0 +1,27 @@
+{
+  "note": "Template for script/DeployMainnet.s.sol. Copy to deployments/mainnet.config.json (git-ignored by convention, do not commit real values until reviewed) and run with DEPLOY_CONFIG=deployments/mainnet.config.json. NO private keys here: sign with the forge CLI (--account / --ledger) and pass the matching --sender. Every address is a string; empty required fields make the script revert. 'wppl' may stay empty to deploy a fresh WPPL. Equivalent env vars (when DEPLOY_CONFIG is unset): MAINNET_CHAIN_ID, DEPLOYER_ADDRESS, TREASURY_MULTISIG, FEE_RECIPIENT, AGENT_EXECUTOR, WPPL, STABLE_USDC, STABLE_USDT, TOKEN_FEE_USD6, NFT_FEE_USD6, TIMELOCK_MIN_DELAY, LAVKA_TREASURY, LAVKA_VALIDATORS, LAVKA_GROWTH_POOL, LAVKA_LIQUIDITY_ECOSYSTEM.",
+  "chainId": 0,
+  "deployer": "",
+  "deployerNote": "Fresh single-use address that signs the deploy. It ends with no ownership, no timelock role and no wallet role (the script verifies this). Must differ from every governed address below.",
+  "treasuryMultisig": "",
+  "treasuryMultisigNote": "Existing 2-of-3 PeopleMultisig. Becomes ONLY proposer + canceller on the timelock (never admin), and GUARDIAN (freeze-only) on CommunityAgentWallet. The script requires threshold()==2 and ownerCount()==3.",
+  "feeRecipient": "",
+  "feeRecipientNote": "Treasury-controlled address that accepts native PPL (token-create fee, NFT fee, curve fee, leftover tokens). Never the deployer.",
+  "agentExecutor": "",
+  "agentExecutorNote": "EXECUTOR_ROLE of CommunityAgentWallet: may spend within the wallet limits. Never the deployer.",
+  "wppl": "",
+  "stableUsdc": "",
+  "stableUsdt": "",
+  "stableNote": "Must be deployed 6-decimals ERC-20s. They are allow-listed on StableFeeGateway by timelock operations scheduled by the script; execute them after the delay.",
+  "tokenFeeUsd6": 1000000,
+  "nftFeeUsd6": 2000000,
+  "timelockMinDelaySeconds": 172800,
+  "timelockMinDelayNote": "Default 2 days (172800). The script rejects anything below 1 day (86400).",
+  "lavka": {
+    "treasury": "",
+    "validators": "",
+    "growthPool": "",
+    "liquidityEcosystem": "",
+    "note": "LavkaPayments fee buckets. All four must be non-zero, distinct from the deployer, and set explicitly. The community bucket is the CommunityTokenVault deployed by this script."
+  }
+}
