@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Vì sao cần xác minh?",
-        "a": "Để mỗi người mua là một người thật. Mỗi người có một địa chỉ, và giới hạn áp dụng cho người chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Bạn có thể xác minh bằng Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
+        "a": "Để người mua là người thật. Một người có một địa chỉ, và giới hạn áp dụng cho địa chỉ ví chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Bạn có thể xác minh bằng Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
       },
       {
         "q": "Khi nào tôi có thể gửi PPL cho người khác?",
