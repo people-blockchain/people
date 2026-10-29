@@ -22,7 +22,7 @@ import { uploadTokenIcon } from "@/lib/token-icon-upload";
 import { tokenIconMessage } from "@/lib/token-icon-rules";
 import { TokenIconUpload } from "@/components/factory/TokenIconUpload";
 
-type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
+type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string; verified?: boolean };
 type Data = { asset: Token; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
 
@@ -93,6 +93,10 @@ export function TokenView({ assetId }: { assetId: string }) {
       isAddress(asset.creator) &&
       asset.creator.toLowerCase() === signer.address.toLowerCase(),
   );
+  // Only curated seed assets predate the chain. A factory token without a known block must not
+  // claim to be a genesis asset; the row is omitted instead.
+  const isSeedAsset = asset?.verified === true;
+  const showCreated = Boolean(asset && (asset.createdAt !== undefined || isSeedAsset));
 
   async function saveIcon() {
     if (!signer || !asset || !iconTokenAddress || !iconFile || iconBusy) return;
@@ -170,7 +174,7 @@ export function TokenView({ assetId }: { assetId: string }) {
         {[[u.totalSupply, `${amount(asset.totalSupply)} ${symbol}`], [c.holders, data?.accounts ? `${data.partial ? "≥ " : ""}${distribution.holders.length}` : "—"], [c.held, data?.accounts ? `${amount(distribution.total)} ${symbol}` : "—"]].map(([label, value]) => <div key={label} className="rounded-2xl border border-line bg-surface p-5"><p className="text-sm text-ink-3">{label}</p><p className="mt-2 break-words text-xl font-bold">{value}</p></div>)}
       </div>
       <dl className="mt-6 grid gap-5 rounded-2xl border border-line p-5 text-sm sm:grid-cols-2">
-        <div><dt className="text-ink-3">{c.created}</dt><dd className="mt-1">{data?.timestamp ? new Date(data.timestamp).toLocaleString(lang) : asset.createdAt === undefined ? c.genesis : c.unknownDate}{asset.createdAt !== undefined ? <Link className="ml-2 text-brand" href={`/explorer/block/${asset.createdAt}`}>#{asset.createdAt}</Link> : null}</dd></div>
+        {showCreated ? <div><dt className="text-ink-3">{c.created}</dt><dd className="mt-1">{data?.timestamp ? new Date(data.timestamp).toLocaleString(lang) : asset.createdAt === undefined ? c.genesis : c.unknownDate}{asset.createdAt !== undefined ? <Link className="ml-2 text-brand" href={`/explorer/block/${asset.createdAt}`}>#{asset.createdAt}</Link> : null}</dd></div> : null}
         <div><dt className="text-ink-3">{t.creator}</dt><dd className="mt-1 break-all font-mono">{asset.creator.startsWith("0x") ? <Link className="text-brand" href={`/explorer/address/${asset.creator}`}>{asset.creator}</Link> : asset.creator}</dd></div>
         <div><dt className="text-ink-3">{c.status}</dt><dd>{asset.status}</dd></div>
         <div><dt className="text-ink-3">{c.decimals}</dt><dd>{assetDecimals(asset)}</dd></div>

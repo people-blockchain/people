@@ -26,6 +26,7 @@ import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { partnerCopy } from "@/lib/partner/copy";
 import { useWallet } from "@/context/WalletContext";
+import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
@@ -81,6 +82,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     refresh,
     changePassword,
   } = useWallet();
+  const external = useExternalWalletOptional();
+  const externalAddress = session ? null : external?.signer?.address ?? null;
+  const walletAddress = session?.address ?? externalAddress;
   const isCloud = session?.kind === "cloud";
   const [tab, setTab] = useState<"tokens" | "nft" | "history">("tokens");
   const [sheet, setSheet] = useState<null | "send" | "receive" | "settings">(null);
@@ -120,7 +124,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   }, []);
 
   useEffect(() => {
-    const address = session?.address;
+    const address = walletAddress;
     if (!address) return;
     let stopped = false;
     let pending = false;
@@ -208,7 +212,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       window.removeEventListener("online", onVisible);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [session?.address, wsUrl, chainId]);
+  }, [walletAddress, wsUrl, chainId]);
 
   const tokenRows = useMemo(() => {
     const balances = account?.balances ?? {};
@@ -405,7 +409,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     }
   }
 
-  const shortAddress = session ? `${session.address.slice(0, 6)}…${session.address.slice(-4)}` : "";
+  const shortAddress = walletAddress ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}` : "";
 
   async function submitPasswordChange() {
     setError("");
@@ -543,11 +547,59 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       {notice ? <p className="mb-4 text-sm text-value">{notice}</p> : null}
 
       {!session ? (
-        <div className="rounded-3xl border border-line bg-surface p-6 shadow-sm">
-          <PeopleWalletMark size="lg" className="mb-3" />
-          <p className="text-sm text-ink-2">{t.lead}</p>
-          <WalletConnectPanel className="mt-6" />
-        </div>
+        <>
+          <div className="rounded-3xl border border-line bg-surface p-6 shadow-sm">
+            <PeopleWalletMark size="lg" className="mb-3" />
+            <p className="text-sm text-ink-2">{t.lead}</p>
+            <WalletConnectPanel className="mt-6" />
+          </div>
+          {externalAddress ? (
+            <div className="mt-4 rounded-3xl border border-line bg-surface p-6 shadow-sm" data-testid="external-wallet-tokens">
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-mono text-sm text-ink-2" title={externalAddress}>{shortAddress}</p>
+                <button
+                  type="button"
+                  className="rounded-lg px-2 py-1 text-xs font-semibold text-brand hover:bg-surface-2"
+                  onClick={() => {
+                    void navigator.clipboard.writeText(externalAddress);
+                    setNotice(t.copied);
+                  }}
+                >
+                  {c.copy}
+                </button>
+              </div>
+              <p className="mt-3 text-xs font-medium uppercase tracking-wide text-ink-3">{c.totalBalance}</p>
+              <p className="mt-1 flex items-center gap-3 text-3xl font-black text-ink">
+                <AssetImage assetId="ppl" name="PPL" className="h-10 w-10" />
+                {account ? formatPpl(account.balance) : "—"} <span className="text-lg font-bold text-ink-2">{t.ppl}</span>
+              </p>
+              <h2 className="mt-5 text-sm font-semibold text-ink">{c.tokensTab}</h2>
+              <label className="mt-2 block text-sm">{c.search}<input type="search" value={search} onChange={event=>setSearch(event.target.value)} className="mt-2 w-full rounded-xl border border-line bg-surface px-3 py-2" /></label>
+              <ul className="mt-3 space-y-2 text-sm">
+                <li className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
+                  <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
+                  <span className="font-mono">{account ? formatPpl(account.balance) : "—"}</span>
+                </li>
+                {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {
+                  const asset = assets.find((item) => item.assetId === id);
+                  return (
+                    <li key={id} className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
+                      <Link href={`/explorer/tokens#${encodeURIComponent(id)}`} className="flex min-w-0 items-center gap-3 text-brand hover:underline">
+                        <AssetImage assetId={id} tokenAddress={asset?.tokenAddress} src={asset?.creationMetadata?.image ?? asset?.imageUri} name={displaySymbol(id, asset?.symbol, u)} testBadgeLabel={u.testTokenNote} />
+                        <span className="min-w-0 truncate font-semibold">{id === "usdt" ? u.testUsdt : displayAssetName(id, asset?.name)}</span>
+                      </Link>
+                      <span className="min-w-0 break-all text-right font-mono">{formatAssetUnits(value, asset?.decimals ?? -1)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="mt-4 flex flex-wrap gap-3 text-sm">
+                <Link href={`/explorer/address/${externalAddress}`} className="font-semibold text-brand hover:underline">{t.explorer}</Link>
+                <Link href="/create" className="font-semibold text-brand hover:underline">{t.factory}</Link>
+              </div>
+            </div>
+          ) : null}
+        </>
       ) : null}
 
       {session ? (

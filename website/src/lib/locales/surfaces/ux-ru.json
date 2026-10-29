@@ -88,6 +88,7 @@
   "tokenIconErrDimensions": "Картинка должна быть не меньше 64×64 px.",
   "tokenIconErrRead": "Не удалось прочитать картинку. Попробуйте другой файл.",
   "tokenIconErrUpload": "Не удалось загрузить значок. Попробуйте ещё раз.",
+  "tokenCreateWithoutIcon": "Создать без значка",
   "tokenStepIcon": "Загрузка значка",
   "tokenStepConfirm": "Подтверждение в кошельке",
   "tokenStepWaiting": "Ждём подтверждения",

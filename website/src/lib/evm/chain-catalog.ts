@@ -337,6 +337,24 @@ export function tokenImageFromMetadataUri(uri: string | null | undefined): strin
   return null;
 }
 
+/**
+ * Applies the image precedence shared by the catalog and the single-asset fallback: an owner
+ * icon override wins, then curated/seed metadata, then the on-chain metadataURI image.
+ */
+export function applyTokenImage<T extends { imageUri?: string; creationMetadata?: { image?: string; [key: string]: unknown } }>(
+  row: T,
+  override: string | null | undefined,
+  chainImage: string | null | undefined,
+): T {
+  const imageUri = override ?? (row.imageUri ? undefined : chainImage ?? undefined);
+  if (!imageUri) return row;
+  return {
+    ...row,
+    imageUri,
+    creationMetadata: { ...(row.creationMetadata ?? {}), image: imageUri },
+  } as T;
+}
+
 /** On-chain catalog scans are expensive; the cached copy is refreshed in the background. */
 const CATALOG_STALE_MS = 30_000;
 const CATALOG_REVALIDATE_SECONDS = 60;
@@ -445,14 +463,7 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
       verified: Boolean(seed),
       ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
     });
-    const override = iconOverrides.get(token.toLowerCase());
-    const imageUri = override ?? (enriched.imageUri ? undefined : chainImage ?? undefined);
-    if (!imageUri) return enriched;
-    return {
-      ...enriched,
-      imageUri,
-      creationMetadata: { ...(enriched.creationMetadata ?? {}), image: imageUri },
-    };
+    return applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
   });
   return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
 }

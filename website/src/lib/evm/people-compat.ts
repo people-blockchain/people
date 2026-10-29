@@ -11,13 +11,16 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import {
   LOG_WINDOW_BLOCKS,
+  applyTokenImage,
   discoverPoolsOnChain,
   discoverTokensOnChain,
   fetchLogsWindowed,
   logStartBlock,
+  tokenImageFromMetadataUri,
 } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
-import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { enrichAssetRow, listSeedNfts, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 import { evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
 import {
   NFT_MINTED_TOPIC,
@@ -29,6 +32,7 @@ import { readCappedText } from "@/lib/read-capped-text";
 
 type AssetRow = {
   assetId: string;
+  tokenAddress?: string;
   name: string;
   symbol: string;
   decimals: number;
@@ -36,7 +40,10 @@ type AssetRow = {
   creator: string;
   status: string;
   type: string;
+  verified?: boolean;
   createdAt?: number;
+  imageUri?: string;
+  creationMetadata?: { image?: string; description?: string; website?: string; testnet?: boolean };
 };
 
 function parseLimit(raw: string | null, fallback: number): number {
@@ -66,6 +73,16 @@ async function erc20Uint(token: string, selector: string): Promise<bigint> {
     return BigInt(out);
   } catch {
     return BigInt(0);
+  }
+}
+
+async function erc20Address(token: string, selector: string): Promise<string> {
+  const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(token), data: selector }, "latest"]).catch(() => "0x");
+  if (!out || out === "0x" || out.length < 66) return "";
+  try {
+    return getAddress(`0x${out.slice(-40)}`);
+  } catch {
+    return "";
   }
 }
 
@@ -110,32 +127,49 @@ async function nftCollectionStats(collection: string): Promise<NftCollectionStat
 
 async function loadAsset(assetId: string): Promise<AssetRow | null> {
   const dep = readEvmDeployments();
-  const tokenAddr = dep.assetMap[assetId] ?? (isAddress(assetId) ? assetId : null);
+  const mapped = dep.assetMap[assetId];
+  // A factory token may not be in the catalog cache yet: verify it through the factory registry
+  // before reading it, so creator()/metadataURI() come from the token and not from the deployer.
+  const tokenAddr =
+    mapped ??
+    (await resolveKnownToken(assetId).catch(() => null)) ??
+    (isAddress(assetId) ? assetId : null);
   if (!tokenAddr || !isAddress(tokenAddr)) return null;
   const token = getAddress(tokenAddr);
-  const [name, symbol] = await Promise.all([
+  const [name, symbol, creator, metadataUri] = await Promise.all([
     erc20String(token, "0x06fdde03"),
     erc20String(token, "0x95d89b41"),
+    erc20Address(token, "0x02d05d3f"),
+    erc20String(token, "0x03ee438c"),
   ]);
   const decimals = Number(await erc20Uint(token, "0x313ce567")) || 18;
   const supplyWei = await erc20Uint(token, "0x18160ddd");
-  const base = {
-    assetId: assetId.toLowerCase(),
-    name: name || assetId,
-    symbol: symbol || assetId.slice(0, 6).toUpperCase(),
+  const logicalAssetId = resolveLogicalAssetId(token);
+  const seed = seedAssetMeta(logicalAssetId);
+  const base: AssetRow = {
+    assetId: logicalAssetId,
+    tokenAddress: token,
+    name: name || logicalAssetId,
+    symbol: symbol || logicalAssetId.slice(0, 6).toUpperCase(),
     decimals,
     totalSupply: Number(formatUnits(supplyWei, decimals)),
-    creator: dep.deployer ?? "0x0",
+    creator: creator || dep.deployer || "0x0",
     status: "active",
     type: "token",
+    verified: Boolean(seed),
   };
-  const seed = seedAssetMeta(base.assetId);
-  return enrichAssetRow({
+  const enriched = enrichAssetRow({
     ...base,
     name: seed?.name ?? base.name,
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
+  const overrides = await readTokenIconOverrides([token]).catch(() => new Map<string, string>());
+  return applyTokenImage(
+    enriched,
+    overrides.get(token.toLowerCase()),
+    tokenImageFromMetadataUri(metadataUri),
+  );
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -211,31 +245,56 @@ async function walletTokenBalances(
       const resolved = await resolveKnownToken(raw).catch(() => null);
       if (!resolved) continue;
       const token = getAddress(resolved);
-      const decimals = Number(await erc20Uint(token, "0x313ce567")) || 18;
+      const [decimalsRaw, creator] = await Promise.all([
+        erc20Uint(token, "0x313ce567"),
+        erc20Address(token, "0x02d05d3f"),
+      ]);
       wanted.set(token.toLowerCase(), {
         assetId: token.toLowerCase(),
-        decimals,
-        creator: "",
+        decimals: Number(decimalsRaw) || 18,
+        creator,
       });
     }
     const tokens = [...wanted.keys()].map((lower) => getAddress(lower));
     if (!tokens.length) return {};
     const data = encodeFunctionData({ abi: BALANCE_OF_ABI, functionName: "balanceOf", args: [getAddress(owner)] });
-    const rawBalances = await evmJsonRpcBatch<string>(
-      tokens.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
-    ).catch(() => []);
+    // A single batch over every catalog token can exceed the public node's limit and lose all
+    // balances. Keep chunks small and fall back to one eth_call per item when a chunk fails.
+    const BALANCE_BATCH_SIZE = 20;
+    const rawBalances: Array<string | null> = [];
+    for (let start = 0; start < tokens.length; start += BALANCE_BATCH_SIZE) {
+      const chunk = tokens.slice(start, start + BALANCE_BATCH_SIZE);
+      let results: Array<string | null>;
+      try {
+        results = await evmJsonRpcBatch<string>(
+          chunk.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
+        );
+      } catch {
+        results = chunk.map(() => null);
+      }
+      const resolved = await Promise.all(
+        chunk.map((token, index) => {
+          const value = results[index] ?? null;
+          if (value !== null) return value;
+          return evmJsonRpc<string>("eth_call", [{ to: token, data }, "latest"]).catch(() => null);
+        }),
+      );
+      rawBalances.push(...resolved);
+    }
     const balances: Record<string, number> = {};
     const ownerLower = owner.toLowerCase();
     tokens.forEach((token, index) => {
       const row = wanted.get(token.toLowerCase());
       if (!row) return;
+      const raw = rawBalances[index] ?? null;
       let units = BigInt(0);
       try {
-        units = BigInt(rawBalances[index] ?? "0x0");
+        units = BigInt(raw ?? "0x0");
       } catch {
         units = BigInt(0);
       }
       const value = Number(formatUnits(units, row.decimals));
+      // A creator keeps their token listed even with a zero balance or a failed read.
       if (value > 0 || row.creator.toLowerCase() === ownerLower) {
         balances[row.assetId.toLowerCase()] = value;
       }

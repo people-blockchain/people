@@ -30,7 +30,7 @@ const addressWord = (value) => value.toLowerCase().replace(/^0x/, "").padStart(6
 const stringWord = (value) => encodeAbiParameters([{ type: "string" }], [value]);
 const TRUE_WORD = `0x${word(1)}`;
 
-function answerFor(tokens) {
+function answerFor(tokens, factoryTokens = [EXTRA]) {
   return (call) => {
     if (call.method === "eth_blockNumber") return hex(HEAD);
     if (call.method === "eth_getLogs") return [];
@@ -42,7 +42,7 @@ function answerFor(tokens) {
     const selector = data.slice(0, 10);
     if (selector === SEL.isPeopleToken) {
       const asked = `0x${data.slice(-40)}`.toLowerCase();
-      return asked === EXTRA.toLowerCase() ? TRUE_WORD : `0x${"0".repeat(64)}`;
+      return factoryTokens.some((address) => address.toLowerCase() === asked) ? TRUE_WORD : `0x${"0".repeat(64)}`;
     }
     const token = tokens.find((row) => row.address.toLowerCase() === to);
     if (!token) return `0x${"0".repeat(64)}`;
@@ -57,7 +57,7 @@ function answerFor(tokens) {
   };
 }
 
-async function startRpcNode(t, answer) {
+async function startRpcNode(t, answer, rejectBatch = () => false) {
   const calls = [];
   const node = createServer((req, res) => {
     const chunks = [];
@@ -67,6 +67,10 @@ async function startRpcNode(t, answer) {
       res.writeHead(200, { "content-type": "application/json" });
       if (Array.isArray(body)) {
         calls.push(...body);
+        if (rejectBatch(body)) {
+          res.end(JSON.stringify({ jsonrpc: "2.0", id: null, error: { message: "batch too large" } }));
+          return;
+        }
         res.end(JSON.stringify(body.map((call) => ({ jsonrpc: "2.0", id: call.id, result: answer(call) ?? null }))));
         return;
       }
@@ -207,4 +211,91 @@ test("nfts?owner= includes a factory mint verified by ownerOf and parses its met
   assert.equal(row.description, "A minted NFT");
   assert.equal(row.imageUri, "ipfs://bafy-image");
   assert.equal(row.owner.toLowerCase(), owner.toLowerCase());
+});
+
+function extraAddresses(count) {
+  return Array.from({ length: count }, (_, index) => `0x${(index + 1).toString(16).padStart(40, "0")}`);
+}
+
+function isBalanceBatch(body) {
+  return body.some((call) => String(call.params?.[0]?.data ?? "").startsWith(SEL.balanceOf));
+}
+
+test("large token lists are batched in chunks of at most 20 calls", async (t) => {
+  const assetMap = Object.entries(readEvmDeployments().assetMap);
+  const created = assetMap[0];
+  const holding = assetMap[1];
+  const extras = extraAddresses(20);
+  const tokens = [
+    {
+      address: created[1], name: "Created Token", symbol: "CREATED", decimals: 6,
+      supply: 1_000_000n * 1_000_000n, creator: OWNER, metadataURI: "", balance: 0n,
+    },
+    {
+      address: holding[1], name: "Holding Token", symbol: "HOLD", decimals: 6,
+      supply: 1_000_000n * 1_000_000n, creator: OTHER, metadataURI: "", balance: 123_456_789n,
+    },
+    ...assetMap.slice(2).map(([assetId, address]) => ({
+      address, name: assetId, symbol: assetId.toUpperCase(), decimals: 6,
+      supply: 1_000_000n, creator: OTHER, metadataURI: "", balance: 0n,
+    })),
+    ...extras.map((address, index) => ({
+      address, name: `Extra ${index}`, symbol: `EX${index}`, decimals: 6,
+      supply: 1_000_000n, creator: index === 0 ? OWNER : OTHER, metadataURI: "",
+      balance: index === 0 ? 0n : BigInt(1_000_000 * (index + 1)),
+    })),
+  ];
+  // The public node rejects oversized batches. A 26-token balance read must still work.
+  await startRpcNode(t, answerFor(tokens, extras), (body) => isBalanceBatch(body) && body.length > 20);
+
+  const res = await handleEvmCompatGet(
+    `/address/${OWNER}`,
+    new URLSearchParams({ tokens: extras.join(",") }),
+  );
+  assert.equal(res.status, 200);
+  assert.equal(res.body.balances[holding[0].toLowerCase()], 123.456789);
+  assert.equal(res.body.balances[extras[0].toLowerCase()], 0);
+  assert.equal(res.body.balances[extras[19].toLowerCase()], 20);
+  assert.equal(res.body.balances[created[0].toLowerCase()], 0);
+});
+
+test("a rejected balance batch falls back to one eth_call per token", async (t) => {
+  const assetMap = Object.entries(readEvmDeployments().assetMap);
+  const created = assetMap[0];
+  const holding = assetMap[1];
+  const tokens = [
+    {
+      address: created[1], name: "Created Token", symbol: "CREATED", decimals: 6,
+      supply: 1_000_000n * 1_000_000n, creator: OWNER, metadataURI: "", balance: 0n,
+    },
+    {
+      address: holding[1], name: "Holding Token", symbol: "HOLD", decimals: 6,
+      supply: 1_000_000n * 1_000_000n, creator: OTHER, metadataURI: "", balance: 42_000_000n,
+    },
+  ];
+  await startRpcNode(t, answerFor(tokens), (body) => isBalanceBatch(body));
+
+  const res = await handleEvmCompatGet(`/address/${OWNER}`, new URLSearchParams());
+  assert.equal(res.status, 200);
+  assert.equal(res.body.balances[holding[0].toLowerCase()], 42);
+  assert.equal(res.body.balances[created[0].toLowerCase()], 0);
+});
+
+test("a fresh factory token not in the catalog reports its on-chain creator and metadata image", async (t) => {
+  const token = "0x00000000000000000000000000000000000e7a6b";
+  const metadataURI = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
+  await startRpcNode(t, answerFor([
+    {
+      address: token, name: "Fresh Token", symbol: "FRESH", decimals: 6,
+      supply: 1_000_000n * 1_000_000n, creator: OWNER, metadataURI, balance: 0n,
+    },
+  ], [token]));
+
+  const res = await handleEvmCompatGet(`/assets/${token}`, new URLSearchParams());
+  assert.equal(res.status, 200);
+  assert.equal(res.body.creator.toLowerCase(), OWNER.toLowerCase());
+  assert.equal(res.body.imageUri, metadataURI);
+  assert.equal(res.body.creationMetadata.image, metadataURI);
+  assert.equal(res.body.verified, false);
+  assert.equal(res.body.tokenAddress.toLowerCase(), token);
 });

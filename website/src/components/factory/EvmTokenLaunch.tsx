@@ -76,6 +76,7 @@ export function EvmTokenLaunch() {
   >("idle");
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [iconUri, setIconUri] = useState("");
+  const [iconUploadFailed, setIconUploadFailed] = useState(false);
   const [knownTokens, setKnownTokens] = useState<DuplicateToken[]>([]);
   const [confirmDuplicate, setConfirmDuplicate] = useState(false);
   const [created, setCreated] = useState<CreatedTokenRecord | null>(null);
@@ -181,8 +182,9 @@ export function EvmTokenLaunch() {
     }
   };
 
-  const submit = async () => {
+  const submit = async (options?: { skipIcon?: boolean }) => {
     if (submitLock.current || !signer || !dep.contracts.tokenFactory) return;
+    const skipIcon = options?.skipIcon === true;
     submitLock.current = true;
     setBusy(true);
     setError("");
@@ -207,13 +209,15 @@ export function EvmTokenLaunch() {
       }
 
       let metadataURI = iconUri || `ipfs://people/${symbol.trim()}`;
-      if (iconFile && !iconUri) {
+      if (iconFile && !iconUri && !skipIcon) {
         setStage("uploading");
         try {
           const uploaded = await uploadTokenIcon(iconFile);
           setIconUri(uploaded);
+          setIconUploadFailed(false);
           metadataURI = uploaded;
         } catch {
+          setIconUploadFailed(true);
           setError(u.tokenIconErrUpload);
           return;
         }
@@ -316,6 +320,7 @@ export function EvmTokenLaunch() {
     setSupply("");
     setIconFile(null);
     setIconUri("");
+    setIconUploadFailed(false);
     setTx("");
     setError("");
     setConfirmDuplicate(false);
@@ -444,6 +449,7 @@ export function EvmTokenLaunch() {
             onFile={(file) => {
               setIconFile(file);
               setIconUri("");
+              setIconUploadFailed(false);
               setError("");
             }}
           />
@@ -659,6 +665,23 @@ export function EvmTokenLaunch() {
             <p className="mt-2 text-xs text-ink-3">{r.launchHint}</p>
           </div>
           {error ? <p className="text-sm text-warm">{error}</p> : null}
+          {iconUploadFailed ? (
+            <button
+              type="button"
+              disabled={busy}
+              data-testid="token-create-without-icon"
+              onClick={() => {
+                setIconUploadFailed(false);
+                setIconFile(null);
+                setIconUri("");
+                setError("");
+                void submit({ skipIcon: true });
+              }}
+              className="rounded-xl border border-line px-4 py-2 text-sm font-semibold text-brand disabled:opacity-40"
+            >
+              {u.tokenCreateWithoutIcon}
+            </button>
+          ) : null}
           {tx ? <p className="text-sm text-brand">{u.sent}: {tx.slice(0, 18)}…</p> : null}
           {issuerReferralMsg ? <p className="text-sm text-ink-2">{issuerReferralMsg}</p> : null}
           <button
