@@ -1,7 +1,11 @@
 import { and, eq } from "drizzle-orm";
 import { getDbReady, isDatabaseConfigured } from "@/db";
 import { accounts, users } from "@/db/schema";
-import { verifyWeb3AuthIdToken, type Web3AuthProfile } from "@/lib/web3auth-id-token";
+import {
+  describeWeb3AuthIdTokenForLog,
+  verifyWeb3AuthIdToken,
+  type Web3AuthProfile,
+} from "@/lib/web3auth-id-token";
 import { ensurePartner } from "@/lib/partner/service";
 import { isVerifierAllowed } from "@/lib/web3auth-verifier-allowlist";
 import { isDiscoverAdminEmail } from "@/lib/discover/admin-config";
@@ -147,6 +151,7 @@ export async function authorizeWeb3AuthIdToken(idToken: string) {
     console.warn(
       "[auth] web3auth idToken verification failed",
       error instanceof Error ? error.message : error,
+      describeWeb3AuthIdTokenForLog(idToken),
     );
     return null;
   }
