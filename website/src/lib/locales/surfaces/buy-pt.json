@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Por que preciso me verificar?",
-        "a": "Para que cada comprador seja uma pessoa real. Cada pessoa tem um endereço, e os limites valem para pessoas, não para bots. Os primeiros {whitelistDays} dias são só para pessoas verificadas. Você pode se verificar via Telegram ou Human Passport. Nenhum dado pessoal é gravado na blockchain."
+        "a": "Para que cada comprador seja uma pessoa real. Cada pessoa tem um endereço, e os limites valem para endereços de carteira, não para bots. Os primeiros {whitelistDays} dias são só para pessoas verificadas. Você pode se verificar via Telegram ou Human Passport. Nenhum dado pessoal é gravado na blockchain."
       },
       {
         "q": "Quando posso enviar PPL para outras pessoas?",

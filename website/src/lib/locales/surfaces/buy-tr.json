@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Doğrulama neden gerekli?",
-        "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil insanlara uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. Telegram ya da Human Passport ile doğrulanabilirsiniz. Blokzincire hiçbir kişisel veri yazılmaz."
+        "a": "Her alıcının gerçek bir insan olması için. Bir kişinin bir adresi olur ve sınırlar botlara değil cüzdan adreslerine uygulanır. İlk {whitelistDays} gün yalnızca doğrulanmış kişiler içindir. Telegram ya da Human Passport ile doğrulanabilirsiniz. Blokzincire hiçbir kişisel veri yazılmaz."
       },
       {
         "q": "PPL'yi başkalarına ne zaman gönderebilirim?",

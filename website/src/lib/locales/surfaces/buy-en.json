@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Why do I need verification?",
-        "a": "So that every buyer is a real person. One person gets one address, and the limits apply to people, not bots. The first {whitelistDays} days are for verified people only. You can verify via Telegram or Human Passport. No personal data is written to the blockchain."
+        "a": "So that every buyer is a real person. One person gets one address, and the limits apply to wallet addresses, not bots. The first {whitelistDays} days are for verified people only. You can verify via Telegram or Human Passport. No personal data is written to the blockchain."
       },
       {
         "q": "When can I send PPL to other people?",
