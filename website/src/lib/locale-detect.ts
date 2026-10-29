@@ -56,3 +56,9 @@ export function languageFromRequest(
 ): Language {
   return languageFromCookie(cookieValue) ?? languageFromAcceptLanguage(acceptLanguageHeader);
 }
+
+/** `/tr/buy` (or `/tr/buy/`) → "tr"; any other path, or an unknown locale prefix → null. */
+export function localeFromBuyPath(pathname: string): Language | null {
+  const match = /^\/([a-z]{2})\/buy\/?$/.exec(pathname);
+  return match ? languageFromCookie(match[1]) : null;
+}

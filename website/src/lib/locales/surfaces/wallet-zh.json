@@ -1,6 +1,6 @@
 {
   "title": "钱包",
-  "lead": "非托管。密钥在本浏览器中生成，用你的密码加密，绝不会发送到我们的服务器。",
+  "lead": "浏览器钱包：非托管。密钥在本浏览器中生成，用你的密码加密，绝不会发送到我们的服务器。使用 Google 或邮箱登录则会创建云钱包：PEOPLE 以加密形式存储你的密钥，其基础设施能够解密。",
   "create": "创建新钱包",
   "import": "导入钱包",
   "unlock": "解锁",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your PEOPLE Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+  "cloudExportHint": "您的密钥以加密形式存储在 PEOPLE 服务器上，方便您登录后恢复。PEOPLE 的基础设施能够解密该密钥。如需完全自主保管，请使用浏览器钱包或外部钱包。 仅在需要 PEOPLE 之外的备份时才导出私钥。",
   "cloudDisconnect": "Disconnect"
 }

@@ -91,8 +91,11 @@ export const SELL_BACK = {
 /** Source ecosystems the built-in swap widget accepts. TON is not supported. */
 export const PAY_FROM_OTHER_CHAINS = { evm: true, tron: true, solana: true, ton: false } as const;
 
-/** ISO date the sale opens (UTC). `null` until announced; the page then says so. */
-export const SALE_OPENING_DATE_UTC: string | null = null;
+/**
+ * ISO date the sale opens (UTC). `null` until announced; the page then says so.
+ * Same date as the `/buy` hero countdown (`V2_OPEN_DATE_DEFAULT` in `v2/stats-copy.ts`).
+ */
+export const SALE_OPENING_DATE_UTC: string | null = "2026-12-01";
 
 /** Minimum native balance (ETH) needed on Base to pay the network fee. */
 export const MIN_GAS_ETH = 0.00002;

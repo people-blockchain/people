@@ -74,7 +74,7 @@ export type WalletCopyContent = {
 const baseWalletCopy: Record<string, WalletCopyContent> = {
   en: {
     title: "PEOPLE Wallet",
-    lead: "Non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers.",
+    lead: "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
     create: "Create a new wallet",
     import: "Import wallet",
     unlock: "Unlock",
@@ -130,12 +130,12 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     signInUnavailable: "Account wallet sign-in is not available on this deployment.",
     signingIn: "Signing in…",
     cloudExportHint:
-      "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside PEOPLE.",
+      "Your key is stored encrypted on PEOPLE servers so you can restore it by signing in. PEOPLE's infrastructure is able to decrypt it. For full self-custody, use a browser wallet or an external wallet. Export the private key only if you need a backup outside PEOPLE.",
     cloudDisconnect: "Disconnect",
   },
   ru: {
     title: "PEOPLE Wallet",
-    lead: "Некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы.",
+    lead: "Браузерный кошелёк: некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы. Вход через Google или email создаёт вместо него облачный кошелёк: PEOPLE хранит ваш ключ в зашифрованном виде, и её инфраструктура способна его расшифровать.",
     create: "Создать кошелёк",
     import: "Импортировать",
     unlock: "Разблокировать",
@@ -191,7 +191,7 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     signInUnavailable: "Вход в кошелёк по аккаунту недоступен на этом окружении.",
     signingIn: "Вход…",
     cloudExportHint:
-      "Тот же Google или email восстановит кошелёк на любом устройстве. Экспортируйте ключ только если нужна копия вне PEOPLE.",
+      "Ваш ключ хранится в зашифрованном виде на серверах PEOPLE, чтобы вы могли восстановить его после входа. Инфраструктура PEOPLE способна его расшифровать. Для полной самостоятельной защиты ключа используйте браузерный кошелёк или внешний кошелёк. Экспортируйте ключ только если нужна копия вне PEOPLE.",
     cloudDisconnect: "Отключить",
   },
   es: walletEs as WalletCopyContent,

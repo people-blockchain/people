@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "30 saniyede cüzdan",
-        "sub": "Anahtarlarınız telefonunuzda veya tarayıcınızda kalır."
+        "sub": "Tarayıcı cüzdanı: anahtarlarınız cihazınızda kalır. Bulut cüzdanı: PEOPLE sunucularında şifreli saklanır."
       },
       {
         "id": "token",
@@ -103,7 +103,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "%27",
+        "stat": "%10",
         "title": "her yeni token o tokenin topluluk havuzuna gider",
         "body": "Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
       },

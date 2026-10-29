@@ -127,6 +127,13 @@
       "when": 1759392000000,
       "tag": "0017_founder_passport_wallet",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1759395600000,
+      "tag": "0020_sale_person_binding",
+      "breakpoints": true
     }
   ]
 }

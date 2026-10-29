@@ -67,5 +67,17 @@
   "errFactoryMissing": "NFT fabrikası bu ağda henüz dağıtılmadı.",
   "errWrongNetwork": "Cüzdanınız başka bir ağda. PEOPLE Blockchain test ağına geçip tekrar deneyin.",
   "errTimeout": "İşlem çok uzun sürüyor. Yeniden gönderilmedi; denetlemek için «Basıma devam et» seçeneğini kullanın.",
-  "errUnknown": "Bir şeyler ters gitti. İki kez basım yapılmadı. Tekrar deneyin."
+  "errUnknown": "Bir şeyler ters gitti. İki kez basım yapılmadı. Tekrar deneyin.",
+  "errStableFeeUnavailable": "Stablecoin ödemesi geçici olarak kullanılamıyor. Lütfen PPL ile ödeyin.",
+  "errStableDailyCap": "Bu cüzdan için günlük stablecoin ödeme limitine ulaşıldı. PPL ile ödeyin veya yarın tekrar deneyin.",
+  "errInsufficientPpl": "Yeterli PPL yok: {needed} PPL gerekli (ücret + gas), bakiyeniz {balance} PPL.",
+  "errInsufficientPplGeneric": "Ücret ve gas için yeterli PPL yok. Bakiyenizi yükleyip tekrar deneyin.",
+  "errNetworkRpc": "Ağ yanıt vermiyor. Bağlantınızı kontrol edip tekrar deneyin.",
+  "createSuccessTitle": "Token oluşturuldu",
+  "createSuccessLead": "Token artık PEOPLE Blockchain üzerinde yayında.",
+  "createViewToken": "Tokenı gezgininde aç",
+  "createViewAddress": "Adresi gezgininde aç",
+  "createTimeoutTitle": "İşlem gönderildi",
+  "createTimeoutBody": "Onay normalden uzun sürüyor. Gezginini kontrol et ve işlemi tekrar gönderme. Hiçbir şeyin oluşturulmadığından eminsen «Yeni oluştur» seçeneğini kullan.",
+  "createTimeoutExplorer": "Adresini gezgininde kontrol et"
 }

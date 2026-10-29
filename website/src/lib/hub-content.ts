@@ -143,8 +143,8 @@ const rawHub = {
         },
         {
           num: "02",
-          title: "Create a non-custodial wallet",
-          body: "Generate a 12-word phrase in the browser and encrypt it with a password, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave this device.",
+          title: "Create a wallet",
+          body: "Generate a 12-word phrase in the browser and encrypt it with a password: a non-custodial browser wallet whose keys never leave this device. Or sign in with Google for a cloud wallet: your key is stored encrypted on PEOPLE servers, and PEOPLE's infrastructure is able to decrypt it.",
           href: "/wallet",
           cta: "Open wallet",
         },
@@ -246,7 +246,7 @@ const rawHub = {
           title: "USER",
           summary: "A person with a wallet on a phone, tablet, or browser.",
           detail:
-            "Start with a non-custodial account on a phone, tablet, or browser. You join as a person in the community — not as a validator.",
+            "Start with a wallet on a phone, tablet, or browser. You join as a person in the community — not as a validator.",
         },
         {
           id: "transaction",
@@ -595,8 +595,8 @@ const rawHub = {
         },
         {
           num: "02",
-          title: "Создайте некастодиальный кошелёк",
-          body: "Сгенерируйте фразу из 12 слов в браузере и зашифруйте её паролем, либо войдите через Google для синхронизированного кошелька. У кошелька с фразой ключи не покидают устройство.",
+          title: "Создайте кошелёк",
+          body: "Сгенерируйте фразу из 12 слов в браузере и зашифруйте её паролем — это некастодиальный браузерный кошелёк, ключи не покидают устройство. Или войдите через Google и получите облачный кошелёк: ваш ключ хранится в зашифрованном виде на серверах PEOPLE, и инфраструктура PEOPLE способна его расшифровать.",
           href: "/wallet",
           cta: "Открыть кошелёк",
         },
@@ -698,7 +698,7 @@ const rawHub = {
           title: "USER",
           summary: "Человек с кошельком на телефоне, планшете или в браузере.",
           detail:
-            "Старт — некастодиальный аккаунт на телефоне, планшете или в браузере. Вы входите как человек в сообществе — не как валидатор.",
+            "Старт — кошелёк на телефоне, планшете или в браузере. Вы входите как человек в сообществе — не как валидатор.",
         },
         {
           id: "transaction",

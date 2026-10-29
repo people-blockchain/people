@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
 import { OpenSourceLine, GithubNavLink } from "@/components/OpenSource";
 import { useLanguage } from "@/context/LanguageContext";
-import { PARTNER_LOGIN_HREF, PARTNER_PATH_PREFIX } from "@/lib/partner/guards";
+import { PARTNER_LOGIN_HREF } from "@/lib/partner/guards";
 import { content } from "@/lib/content";
 import { homePublic } from "@/lib/home-public-content";
 import { bugReportCopy } from "@/lib/bug-reports/copy";
@@ -150,7 +150,7 @@ export function Footer({ showNotInvestmentDisclaimer = false }: FooterProps) {
                 </li>
                 <li>
                   <Link
-                    href={PARTNER_PATH_PREFIX}
+                    href="/bounty"
                     className="text-ink-2 transition-colors hover:text-brand"
                     data-testid="footer-partner-join"
                   >
