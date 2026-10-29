@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Mengapa perlu verifikasi?",
-        "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk orang, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Anda dapat memverifikasi via Telegram atau Human Passport. Tidak ada data pribadi yang ditulis ke blockchain."
+        "a": "Agar setiap pembeli adalah orang sungguhan. Satu orang punya satu alamat, dan batasnya berlaku untuk alamat dompet, bukan bot. {whitelistDays} hari pertama hanya untuk orang terverifikasi. Anda dapat memverifikasi via Telegram atau Human Passport. Tidak ada data pribadi yang ditulis ke blockchain."
       },
       {
         "q": "Kapan saya bisa mengirim PPL ke orang lain?",

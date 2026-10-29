@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Pourquoi faut-il se faire vérifier ?",
-        "a": "Pour que chaque acheteur soit une vraie personne. Une personne a une adresse, et les limites s’appliquent aux personnes, pas aux bots. Les {whitelistDays} premiers jours sont réservés aux personnes vérifiées. Vous pouvez vous vérifier via Telegram ou Human Passport. Aucune donnée personnelle n’est inscrite sur la blockchain."
+        "a": "Pour que chaque acheteur soit une vraie personne. Une personne a une adresse, et les limites s’appliquent aux adresses de portefeuille, pas aux bots. Les {whitelistDays} premiers jours sont réservés aux personnes vérifiées. Vous pouvez vous vérifier via Telegram ou Human Passport. Aucune donnée personnelle n’est inscrite sur la blockchain."
       },
       {
         "q": "Quand puis-je envoyer des PPL à d’autres personnes ?",
