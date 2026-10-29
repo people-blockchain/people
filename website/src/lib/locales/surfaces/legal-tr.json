@@ -115,13 +115,13 @@
         "title": "Test ağı ve beta durumu",
         "body": [
           "PEOPLE Blockchain, bir test / beta ağı olarak sunulmaktadır. Özellikler önceden bildirilmeksizin değişebilir, bozulabilir veya kaldırılabilir. Site ve ağ \"olduğu gibi\" ve \"mevcut olduğu şekilde\" sunulmaktadır.",
-          "PEOPLE ağı hâlâ bir test ağıdır. PPL satışı ayrıdır: Base ana ağında (mainnet) gerçek USDC veya USDT ile gerçekleşir."
+          "PEOPLE ağı, mainnet 1 Aralık 2026'da başlayana kadar herkese açık bir test ağıdır. PPL satışı mainnet ile birlikte başlar: ödeme Base üzerinde gerçek USDC veya USDT ile yapılır ve PPL, PEOPLE mainnet'inde hemen hesaba yazılır."
         ]
       },
       {
         "title": "Herkese açık PPL satışı",
         "body": [
-          "Satış parametreleri (eğri formülü, fiyat yolu, limitler ve satış süresi: tükenene kadar veya 24 ay, hangisi önce gerçekleşirse) /buy sayfasında yayımlanır. Satış sözleşmesi yayımlanana kadar alımlar devre dışı kalır; bir cüzdanı bağlamak sizi hiçbir şeye bağlamaz.",
+          "Satış parametreleri (eğri formülü, fiyat yolu, limitler ve satış süresi: tükenene kadar veya 24 ay, hangisi önce gerçekleşirse) /buy sayfasında yayımlanır. Satış, 1 Aralık 2026'da mainnet ile birlikte başlar; bir cüzdanı bağlamak sizi hiçbir şeye bağlamaz.",
           "Satın almak için KYC gerekmez. Geri satış, KYC olmayan bir insan olduğunu kanıtlama (Human Passport veya Telegram) gerektirir.",
           "Satış, tükenene kadar (eğri 4 milyon $ toplandığında kapanır) veya açılıştan itibaren 24 ay boyunca, hangisi önce gerçekleşirse o zamana kadar sürer. Uzatma yoktur. Satılmayan PPL, Community Pool'a gider. İade yoktur: her satın alma kesindir.",
           "Satış süresi, fiyat formülü ve limitler satış açıldıktan sonra değişmez.",

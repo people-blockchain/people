@@ -3,7 +3,7 @@
   "title": "Capisci.\nProva.\nPartecipa.",
   "description": "Dal primo portafoglio al tuo nodo — una guida pratica a PEOPLE Blockchain.",
   "notice": "Rete di prova",
-  "noticeText": "Mainnet non è partita. Le operazioni disponibili dipendono dalla connessione del sito e dalla versione di rete. Le monete di test non sono una promessa di reddito.",
+  "noticeText": "Il mainnet della rete PEOPLE e la vendita di PPL partono insieme il 1° dicembre 2026; fino ad allora la rete è di test. I PPL si pagano in USDC o USDT su Base e vengono emessi e accreditati subito sul mainnet PEOPLE. Le operazioni disponibili dipendono dalla connessione del sito e dalla versione di rete. Le monete di test non sono una promessa di reddito.",
   "contents": "In questa guida",
   "search": "Cerca nella documentazione",
   "empty": "Nessun risultato. Prova «portafoglio», «ricompense» o «nodo».",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Cosa puoi usare",
-      "lead": "Cosa funziona già sulla rete di test e cosa arriva dopo. Non c’è una data per la mainnet.",
+      "lead": "Cosa funziona già sulla rete di test e cosa arriva dopo. Mainnet e vendita di PPL partono il 1° dicembre 2026.",
       "items": [
         {
           "title": "Disponibile ora · rete di test",

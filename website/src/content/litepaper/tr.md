@@ -144,10 +144,10 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Base üzerinde PPL satışı** | PPL satışı yalnızca Base üzerinde yapılır (PplCurveHub, USDC veya USDT). Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; satış sözleşmesi yayınlanana kadar alımlar kapalı. PEOPLE ağının mainnet'i ayrı bir adımdır. | Satış sözleşmesi (Base'te PplCurveHub) ve alıcı multisig yayınlandı |
+| **Mainnet ve PPL satışı** | PEOPLE ağının mainnet'i ve PPL satışı 1 Aralık 2026'da birlikte başlar. Ödeme Base üzerinde USDC veya USDT ile yapılır; PPL'ler PEOPLE mainnet'inde hemen ihraç edilir ve hesaba yazılır. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında. | 1 Aralık 2026'da lansman |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
-Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
+Her aşama kapısı karşılandığında başlar. 1 Aralık 2026'daki mainnet ve PPL satışı lansmanı dışında tarih için taahhüt verilmez.
 
 ---
 

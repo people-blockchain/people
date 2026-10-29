@@ -115,13 +115,13 @@
         "title": "Test network and beta status",
         "body": [
           "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
-          "The PEOPLE network is still a test network. The PPL sale is separate: it runs on Base mainnet with real USDC or USDT."
+          "The PEOPLE network is a public test network until mainnet launches on December 1, 2026. The PPL sale launches together with mainnet: it is paid with real USDC or USDT on Base, and PPL are credited immediately on PEOPLE mainnet."
         ]
       },
       {
         "title": "Public PPL sale",
         "body": [
-          "Sale parameters (curve formula, price path, limits, and the sale term: until sold out or 24 months, whichever comes first) are published on the /buy page. Purchases stay disabled until the sale contract is published; connecting a wallet commits you to nothing.",
+          "Sale parameters (curve formula, price path, limits, and the sale term: until sold out or 24 months, whichever comes first) are published on the /buy page. The sale launches together with mainnet on December 1, 2026; connecting a wallet commits you to nothing.",
           "No KYC is required to buy. Selling back requires proof of humanity (Human Passport or Telegram), which is not KYC.",
           "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
           "The sale term, price formula and limits do not change after the sale opens.",

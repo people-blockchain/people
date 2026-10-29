@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): tahun 1–4 membayar 6%, 5%, 5%, 4% dari total pasokan per tahun (60M / 50M / 50M / 40M PPL) plus 30% biaya jaringan.",
     "team": "15% dari suplai: 0% saat peluncuran, cliff 6 bulan, lalu 18 bulan pembukaan bulanan linear (total 24 bulan).",
     "treasury": "Hanya setelah vote DAO; di multisig.",
-    "sale": "Dijual di kurva publik di Base (PplCurveHub). PPL dikreditkan segera setelah pembelian; transfer dibuka saat peluncuran jaringan penuh.",
+    "sale": "Dijual di kurva publik; pembayaran dengan USDC atau USDT di Base. PPL langsung dikreditkan di mainnet PEOPLE. Pada awalnya jaringan hanya bisa menerima; transfer antarorang dibuka setelah sekitar 1.000 peserta terverifikasi.",
     "liquidity": "Pool PPL/USDC saat graduation; token LP dikunci selama 24 bulan."
   },
   "donutTitle": "Alokasi",
@@ -36,7 +36,7 @@
   "salePayTitle": "Cara Anda akan membayar",
   "salePayBody": "Di Base — dengan USDC atau USDT. Dari jaringan lain — melalui penukaran otomatis bawaan (LI.FI): jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana berfungsi. TON tidak didukung. Dana diterima dalam USDC di jaringan Base.",
   "saleDeliveryTitle": "Cara menerima PPL",
-  "saleDeliveryBody": "PPL langsung dikreditkan ke alamat Anda, tetapi Anda baru bisa mengirimkannya ke orang lain setelah peluncuran jaringan penuh. Hanya pengguna terverifikasi yang bisa menjual kembali, 30 hari setelah setiap pembelian.",
+  "saleDeliveryBody": "PPL langsung dikreditkan ke alamat Anda di mainnet PEOPLE. Pada awalnya jaringan hanya bisa menerima: Anda baru bisa mengirim PPL ke orang lain setelah sekitar 1.000 peserta terverifikasi. Hanya pengguna terverifikasi yang bisa menjual kembali, 30 hari setelah setiap pembelian.",
   "curveTitle": "Kurva bonding",
   "curveLead": "Kurva eksponensial: harga mulai $0,005 per PPL dan naik setiap pembelian, hingga batas $0,25 selama kurva terbuka. Graduation menutup kurva saat terkumpul $4M.",
   "unsoldTitle": "Token tidak terjual",
@@ -50,7 +50,7 @@
   "contractsLead": "Setiap alamat dipublikasikan di sini begitu kontraknya ada — tanpa placeholder.",
   "contractRows": [
     {
-      "name": "Kontrak penjualan (PplCurveHub, Base)",
+      "name": "Kontrak penjualan (Base)",
       "status": "Dipublikasikan sebelum penjualan dibuka"
     },
     {
@@ -88,12 +88,12 @@
     "Dari tahun 5, emisi baru maks. 2% per tahun dan hanya lewat voting komunitas."
   ],
   "launchOrderTitle": "Urutan peluncuran",
-  "launchOrderBody": "Penjualan PPL dibuka setelah kontrak penjualan (PplCurveHub di Base) dan multisig penerima dipublikasikan. Transfer dan perdagangan di pool dibuka saat peluncuran jaringan penuh, dengan 1.000 orang terverifikasi.",
+  "launchOrderBody": "Penjualan PPL dan mainnet PEOPLE diluncurkan bersamaan pada 1 Desember 2026. PPL diterbitkan dan langsung dikreditkan di mainnet PEOPLE. Pada awalnya jaringan hanya bisa menerima; transfer antarorang dan perdagangan di pool dibuka setelah sekitar 1.000 peserta terverifikasi.",
   "pplFeeTariffsLink": "Tarif biaya PPL",
   "explorerLink": "Penjelajah",
   "backToDocsLink": "Kembali ke dokumentasi",
   "salePublicTitle": "Parameter penjualan yang dipublikasikan",
-  "salePublicBody": "Harga, batas, dan rumus kurva publik di /buy. Pembelian tetap nonaktif sampai kontrak hub penjualan di-deploy; menghubungkan dompet tidak mengikat Anda.",
+  "salePublicBody": "Harga, batas, dan rumus kurva publik di /buy. Penjualan dibuka bersamaan dengan mainnet pada 1 Desember 2026; menghubungkan dompet tidak mengikat Anda.",
   "salePublicCta": "Buka halaman /buy",
   "saleCurveBullets": [
     "100.000.000 PPL di kurva (10% pasokan); awal $0,005, kenaikan eksponensial, batas $0,25 hanya di kurva.",

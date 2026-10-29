@@ -144,10 +144,10 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Venda de PPL na Base** | A venda de PPL ocorre apenas na Base (PplCurveHub, USDC ou USDT). Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`; compras permanecem desativadas até o contrato de venda ser publicado. O mainnet da rede PEOPLE é uma etapa separada. | Contrato de venda (PplCurveHub na Base) e multisig receptor publicados |
+| **Mainnet e venda de PPL** | O mainnet da rede PEOPLE e a venda de PPL começam juntos em 1 de dezembro de 2026. O pagamento é em USDC ou USDT na Base; os PPL são emitidos e creditados imediatamente no mainnet da PEOPLE. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`. | Lançamento em 1 de dezembro de 2026 |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
-Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
+Cada estágio começa quando seu portão é cumprido. Exceto o lançamento da mainnet e da venda de PPL em 1 de dezembro de 2026, nenhuma data é prometida.
 
 ---
 

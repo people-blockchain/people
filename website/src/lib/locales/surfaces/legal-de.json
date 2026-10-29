@@ -115,13 +115,13 @@
         "title": "Testnetz und Beta-Status",
         "body": [
           "PEOPLE Blockchain wird als Test-/Beta-Netzwerk bereitgestellt. Funktionen können sich ändern, ausfallen oder ohne Vorankündigung entfernt werden. Die Website und das Netzwerk werden „wie besehen“ und „wie verfügbar“ bereitgestellt.",
-          "Das PEOPLE-Netzwerk ist weiterhin ein Testnetz. Der PPL-Verkauf ist davon getrennt: Er läuft auf dem Base-Mainnet mit echten USDC oder USDT."
+          "Das PEOPLE-Netzwerk ist bis zum Start des Mainnets am 1. Dezember 2026 ein öffentliches Testnetz. Der PPL-Verkauf startet gemeinsam mit dem Mainnet: Bezahlt wird mit echten USDC oder USDT auf Base, und PPL wird sofort im PEOPLE-Mainnet gutgeschrieben."
         ]
       },
       {
         "title": "Öffentlicher PPL-Verkauf",
         "body": [
-          "Die Verkaufsparameter (Kurvenformel, Preisverlauf, Limits und die Verkaufslaufzeit: bis ausverkauft oder 24 Monate, je nachdem, was zuerst eintritt) sind auf der Seite /buy veröffentlicht. Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist; das Verbinden einer Wallet verpflichtet Sie zu nichts.",
+          "Die Verkaufsparameter (Kurvenformel, Preisverlauf, Limits und die Verkaufslaufzeit: bis ausverkauft oder 24 Monate, je nachdem, was zuerst eintritt) sind auf der Seite /buy veröffentlicht. Der Verkauf startet gemeinsam mit dem Mainnet am 1. Dezember 2026; das Verbinden einer Wallet verpflichtet Sie zu nichts.",
           "Für den Kauf ist kein KYC erforderlich. Der Rückverkauf setzt einen Nachweis der Menschlichkeit voraus (Human Passport oder Telegram), der kein KYC ist.",
           "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ eingeworbenem Betrag) oder 24 Monate ab Eröffnung – je nachdem, was zuerst eintritt. Keine Verlängerungen. Nicht verkaufte PPL gehen an den Community Pool. Keine Rückerstattungen: Jeder Kauf ist endgültig.",
           "Laufzeit des Verkaufs, Preisformel und Limits ändern sich nach der Eröffnung des Verkaufs nicht.",

@@ -21,7 +21,7 @@
     "validators": "200M PPL (%20): yıl 1–4 toplam arzın yıllık %6, %5, %5, %4 (60M / 50M / 50M / 40M PPL) artı ağ ücretlerinin %30’u.",
     "team": "Arzın %15'i: lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal aylık kilit açılımı (toplam 24 ay).",
     "treasury": "Yalnızca DAO oylarından sonra; multisig’de.",
-    "sale": "Base üzerindeki herkese açık eğride satılır (PplCurveHub). PPL alımdan hemen sonra hesaba yazılır; transferler ağın tam lansmanıyla açılır.",
+    "sale": "Herkese açık eğride satılır; ödeme Base üzerinde USDC veya USDT ile yapılır. PPL, PEOPLE mainnet'inde hemen hesaba yazılır. Başlangıçta ağ yalnızca alımı kabul eder; kişiler arası transferler yaklaşık 1.000 doğrulanmış katılımcıdan sonra açılır.",
     "liquidity": "Graduation'da PPL/USDC havuzu; LP token'ları 24 ay kilitli."
   },
   "donutTitle": "Dağılım",
@@ -36,7 +36,7 @@
   "salePayTitle": "Nasıl ödeyeceksiniz",
   "salePayBody": "Base'de USDC veya USDT ile. Diğer ağlardan yerleşik otomatik takas (LI.FI) ile: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana çalışır. TON desteklenmez. Ödemeyi USDC olarak Base ağında alırsınız.",
   "saleDeliveryTitle": "PPL nasıl alınır",
-  "saleDeliveryBody": "PPL hemen adresinize yazılır, ancak ağın tam lansmanına kadar başkalarına gönderemezsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür.",
+  "saleDeliveryBody": "PPL, PEOPLE mainnet'inde hemen adresinize yazılır. Başlangıçta ağ yalnızca alımı kabul eder: PPL'yi başkalarına yaklaşık 1.000 doğrulanmış katılımcıdan sonra gönderebilirsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür.",
   "curveTitle": "Bonding eğrisi",
   "curveLead": "Üstel eğri: fiyat PPL başına $0,005'ten başlar ve eğri açıkken her alımla $0,25 tavanına kadar yükselir. Mezuniyet eğriyi $4M toplanınca kapatır.",
   "unsoldTitle": "Satılmayan tokenler",
@@ -50,7 +50,7 @@
   "contractsLead": "Her adres, sözleşme oluşturulduğunda burada yayımlanır — yer tutucu yok.",
   "contractRows": [
     {
-      "name": "Satış sözleşmesi (PplCurveHub, Base)",
+      "name": "Satış sözleşmesi (Base)",
       "status": "Satış açılmadan önce yayımlanır"
     },
     {
@@ -88,12 +88,12 @@
     "5. yıldan itibaren yeni emisyon yılda en fazla %2 ve yalnızca topluluk oyuyla."
   ],
   "launchOrderTitle": "Lansman sırası",
-  "launchOrderBody": "PPL satışı, satış sözleşmesi (Base üzerinde PplCurveHub) ve alıcı çoklu imza cüzdanı yayımlandığında açılır. Transferler ve havuzda işlem, 1.000 doğrulanmış kişiyle ağın tam lansmanında açılır.",
+  "launchOrderBody": "PPL satışı ve PEOPLE mainnet'i 1 Aralık 2026'da birlikte başlar. PPL, PEOPLE mainnet'inde hemen ihraç edilir ve hesaba yazılır. Başlangıçta ağ yalnızca alımı kabul eder; kişiler arası transferler ve havuzda işlem yaklaşık 1.000 doğrulanmış katılımcıdan sonra açılır.",
   "pplFeeTariffsLink": "PPL ücret tarifeleri",
   "explorerLink": "Kaşif",
   "backToDocsLink": "Belgelere geri dön",
   "salePublicTitle": "Yayınlanan satış parametreleri",
-  "salePublicBody": "Fiyatlar, limitler ve eğri formülü /buy'da herkese açıktır. Satış hub sözleşmesi deploy edilene kadar alımlar kapalıdır; cüzdan bağlamak sizi hiçbir şeye bağlamaz.",
+  "salePublicBody": "Fiyatlar, limitler ve eğri formülü /buy'da herkese açıktır. Satış, 1 Aralık 2026'da mainnet ile birlikte açılır; cüzdan bağlamak sizi hiçbir şeye bağlamaz.",
   "salePublicCta": "/buy sayfasını aç",
   "saleCurveBullets": [
     "Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.",

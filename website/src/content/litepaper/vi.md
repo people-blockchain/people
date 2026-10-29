@@ -144,10 +144,10 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Bán PPL trên Base** | Đợt bán PPL chỉ chạy trên Base (PplCurveHub, USDC hoặc USDT). Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hợp đồng bán được công bố. Mainnet của mạng PEOPLE là bước riêng. | Đã công bố hợp đồng bán (PplCurveHub trên Base) và multisig nhận tiền |
+| **Mainnet và bán PPL** | Mainnet của mạng PEOPLE và đợt bán PPL ra mắt cùng nhau vào ngày 1 tháng 12 năm 2026. Thanh toán bằng USDC hoặc USDT trên Base; PPL được phát hành và ghi có ngay trên mainnet PEOPLE. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`. | Ra mắt ngày 1 tháng 12 năm 2026 |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
-Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.
+Mỗi giai đoạn bắt đầu khi cổng của nó được đáp ứng. Ngoài việc ra mắt mainnet và bán PPL vào ngày 1 tháng 12 năm 2026, không có ngày nào được hứa.
 
 ---
 

@@ -115,13 +115,13 @@
         "title": "Jaringan uji coba dan status beta",
         "body": [
           "PEOPLE Blockchain disediakan sebagai jaringan uji coba / beta. Fitur dapat berubah, rusak, atau ditarik tanpa pemberitahuan. Situs dan jaringan disediakan \"apa adanya\" (\"as is\") dan \"sebagaimana tersedia\" (\"as available\").",
-          "Jaringan PEOPLE masih merupakan jaringan uji coba. Penjualan PPL bersifat terpisah: penjualan berjalan di Base mainnet dengan USDC atau USDT sungguhan."
+          "Jaringan PEOPLE adalah jaringan uji coba publik sampai mainnet diluncurkan pada 1 Desember 2026. Penjualan PPL diluncurkan bersamaan dengan mainnet: pembayaran dengan USDC atau USDT sungguhan di Base, dan PPL langsung dikreditkan di mainnet PEOPLE."
         ]
       },
       {
         "title": "Penjualan PPL publik",
         "body": [
-          "Parameter penjualan (rumus kurva, jalur harga, batas, dan jangka waktu penjualan: hingga habis terjual atau 24 bulan, mana yang lebih dulu) dipublikasikan di halaman /buy. Pembelian tetap dinonaktifkan hingga kontrak penjualan dipublikasikan; menghubungkan dompet tidak mengikat Anda pada apa pun.",
+          "Parameter penjualan (rumus kurva, jalur harga, batas, dan jangka waktu penjualan: hingga habis terjual atau 24 bulan, mana yang lebih dulu) dipublikasikan di halaman /buy. Penjualan diluncurkan bersamaan dengan mainnet pada 1 Desember 2026; menghubungkan dompet tidak mengikat Anda pada apa pun.",
           "KYC tidak diperlukan untuk membeli. Menjual kembali memerlukan bukti kemanusiaan (Human Passport atau Telegram), yang bukan KYC.",
           "Penjualan berlangsung hingga habis terjual (kurva ditutup saat dana terkumpul mencapai $4 juta) atau selama 24 bulan sejak dibuka, mana yang lebih dulu. Tanpa perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tanpa pengembalian dana: setiap pembelian bersifat final.",
           "Jangka waktu penjualan, rumus harga, dan batas tidak berubah setelah penjualan dibuka.",

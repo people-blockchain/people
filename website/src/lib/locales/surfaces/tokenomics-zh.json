@@ -21,7 +21,7 @@
     "validators": "200M PPL（20%）：第 1–4 年每年支付总供应的 6%、5%、5%、4%（60M / 50M / 50M / 40M PPL），另加网络手续费的 30%。",
     "team": "占总量 15%：上线时解锁 0%，6 个月锁定期，之后 18 个月按月线性解锁（共 24 个月）。",
     "treasury": "仅 DAO 投票后支出；多签保管。",
-    "sale": "在 Base 上的公开曲线（PplCurveHub）出售。购买后 PPL 立即记入；转账在网络全面上线时开放。",
+    "sale": "在公开曲线上出售；使用 Base 上的 USDC 或 USDT 支付。PPL 立即记入 PEOPLE 主网。网络起初仅可接收；人与人之间的转账在约 1,000 名已验证参与者后开放。",
     "liquidity": "毕业时建立 PPL/USDC 池；LP 代币锁定 24 个月。"
   },
   "donutTitle": "分配",
@@ -36,7 +36,7 @@
   "salePayTitle": "你将如何支付",
   "salePayBody": "在 Base 上可用 USDC 或 USDT。从其他网络可通过内置自动兑换（LI.FI）：支持 EVM 网络（Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 等）、Tron 和 Solana。不支持 TON。 您将在 Base 网络上收到 USDC.",
   "saleDeliveryTitle": "如何收到 PPL",
-  "saleDeliveryBody": "PPL 会立即记入您的地址，但在网络全面上线之前不能发送给他人。只有已验证用户可以卖回，且须在每次购买 30 天后。",
+  "saleDeliveryBody": "PPL 会立即记入您在 PEOPLE 主网上的地址。网络起初仅可接收：约 1,000 名已验证参与者之后，您才能把 PPL 发送给他人。只有已验证用户可以卖回，且须在每次购买 30 天后。",
   "curveTitle": "联合曲线",
   "curveLead": "指数曲线：价格从每 PPL $0.005 起，随每次购买上升，曲线开放期间最高 $0.25。达到 $400 万募集额时毕业并关闭曲线。",
   "unsoldTitle": "未售出代币",
@@ -50,7 +50,7 @@
   "contractsLead": "每个地址都会在合约创建后立即在此公布——不使用占位地址。",
   "contractRows": [
     {
-      "name": "销售合约（PplCurveHub，Base）",
+      "name": "销售合约（Base）",
       "status": "在销售开放前公布"
     },
     {
@@ -88,12 +88,12 @@
     "第 5 年起，新发行每年最多 2%，且须社区治理投票。"
   ],
   "launchOrderTitle": "启动顺序",
-  "launchOrderBody": "PPL 销售在销售合约（Base 上的 PplCurveHub）和收款多签公布后开放。转账和池内交易在网络全面上线时开放，届时需有 1,000 名已验证用户。",
+  "launchOrderBody": "PPL 销售与 PEOPLE 主网将于 2026年12月1日同时上线。PPL 在 PEOPLE 主网上立即发行并记入。网络起初仅可接收；人与人之间的转账和池内交易在约 1,000 名已验证参与者后开放。",
   "pplFeeTariffsLink": "PPL 费率",
   "explorerLink": "浏览器",
   "backToDocsLink": "返回文档",
   "salePublicTitle": "已公布的销售参数",
-  "salePublicBody": "价格、限额与曲线公式在 /buy 公开。销售 hub 合约部署前购买保持关闭；连接钱包不构成任何承诺。",
+  "salePublicBody": "价格、限额与曲线公式在 /buy 公开。销售于 2026年12月1日与主网同时开放；连接钱包不构成任何承诺。",
   "salePublicCta": "打开 /buy 页面",
   "saleCurveBullets": [
     "曲线上 100,000,000 PPL（供应 10%）；起始 $0.005，指数上升，仅曲线上限 $0.25。",

@@ -3,7 +3,7 @@
   "title": "Anlayın.\nDeneyin.\nKatılın.",
   "description": "İlk cüzdanınızdan kendi düğümünüze — PEOPLE Blockchain için pratik bir kılavuz.",
   "notice": "Test ağı",
-  "noticeText": "Mainnet başlamadı. Kullanılabilir işlemler site bağlantısına ve ağ sürümüne bağlıdır. Test coinleri gelir sözü değildir.",
+  "noticeText": "PEOPLE ağının mainnet'i ve PPL satışı 1 Aralık 2026'da birlikte başlar; o zamana kadar ağ bir test ağıdır. PPL, Base üzerinde USDC veya USDT ile ödenir ve PEOPLE mainnet'inde hemen ihraç edilip hesaba yazılır. Kullanılabilir işlemler site bağlantısına ve ağ sürümüne bağlıdır. Test coinleri gelir sözü değildir.",
   "contents": "Bu rehberde",
   "search": "Belgelerde ara",
   "empty": "Sonuç yok. “cüzdan”, “ödüller” veya “düğüm” deneyin.",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Neleri kullanabilirsiniz",
-      "lead": "Test ağında şimdiden çalışanlar ve sonra gelecekler. Mainnet için bir tarih yok.",
+      "lead": "Test ağında şimdiden çalışanlar ve sonra gelecekler. Mainnet ve PPL satışı 1 Aralık 2026'da başlar.",
       "items": [
         {
           "title": "Şimdi kullanılabilir · test ağı",

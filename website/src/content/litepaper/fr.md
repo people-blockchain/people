@@ -144,10 +144,10 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Vente PPL sur Base** | La vente PPL se déroule uniquement sur Base (PplCurveHub, USDC ou USDT). Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le contrat de vente n'est pas publié. Le mainnet du réseau PEOPLE est une étape distincte. | Contrat de vente (PplCurveHub sur Base) et multisig destinataire publiés |
+| **Mainnet et vente PPL** | Le mainnet du réseau PEOPLE et la vente PPL démarrent ensemble le 1er décembre 2026. Le paiement se fait en USDC ou USDT sur Base ; les PPL sont émis et crédités immédiatement sur le mainnet PEOPLE. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy`. | Lancement le 1er décembre 2026 |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
-Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
+Chaque étape commence quand son jalon est atteint. Hormis le lancement du mainnet et de la vente de PPL le 1er décembre 2026, aucune date n'est promise.
 
 ---
 

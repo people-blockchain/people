@@ -144,10 +144,10 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **PPL-Verkauf auf Base** | Der PPL-Verkauf läuft nur auf Base (PplCurveHub, USDC oder USDT). Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist. Das Mainnet des PEOPLE-Netzwerks ist ein separater Schritt. | Verkaufsvertrag (PplCurveHub auf Base) und empfangende Multisig veröffentlicht |
+| **Mainnet und PPL-Verkauf** | Das Mainnet des PEOPLE-Netzwerks und der PPL-Verkauf starten gemeinsam am 1. Dezember 2026. Bezahlt wird mit USDC oder USDT auf Base; PPL werden sofort im PEOPLE-Mainnet ausgegeben und gutgeschrieben. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`. | Start am 1. Dezember 2026 |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
-Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
+Jede Phase startet, wenn ihre Gate erfüllt ist. Außer dem Start von Mainnet und PPL-Verkauf am 1. Dezember 2026 sind keine Termine garantiert.
 
 ---
 

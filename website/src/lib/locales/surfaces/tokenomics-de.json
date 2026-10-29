@@ -21,7 +21,7 @@
     "validators": "200M PPL (20 %): Jahre 1–4 zahlen 6 %, 5 %, 5 %, 4 % des Gesamtangebots pro Jahr (60M / 50M / 50M / 40M PPL) plus 30 % der Netzwerkgebühren.",
     "team": "15 % des Angebots: 0 % zum Start, 6 Monate Cliff, danach 18 Monate lineare monatliche Freigabe (insgesamt 24 Monate).",
     "treasury": "Nur nach DAO-Votes; in Multisig.",
-    "sale": "Verkauf auf der öffentlichen Kurve auf Base (PplCurveHub). PPL wird direkt nach dem Kauf gutgeschrieben; Überweisungen öffnen mit dem vollständigen Netzwerkstart.",
+    "sale": "Verkauf auf der öffentlichen Kurve; Zahlung in USDC oder USDT auf Base. PPL wird sofort im PEOPLE-Mainnet gutgeschrieben. Zunächst ist das Netzwerk nur zum Empfangen offen; Überweisungen zwischen Personen öffnen nach etwa 1.000 verifizierten Teilnehmenden.",
     "liquidity": "PPL/USDC-Pool bei der Graduation; LP-Token 24 Monate gesperrt."
   },
   "donutTitle": "Zuteilung",
@@ -36,7 +36,7 @@
   "salePayTitle": "Wie Sie zahlen würden",
   "salePayBody": "Auf Base mit USDC oder USDT. Aus anderen Netzwerken über den integrierten automatischen Tausch (LI.FI): EVM-Netzwerke (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und weitere), Tron und Solana funktionieren. TON wird nicht unterstützt. Auszahlung in USDC auf Base.",
   "saleDeliveryTitle": "So erhalten Sie PPL",
-  "saleDeliveryBody": "PPL wird Ihrer Adresse sofort gutgeschrieben, aber an andere senden können Sie es erst nach dem vollständigen Netzwerkstart. Zurückverkaufen können nur verifizierte Nutzer, 30 Tage nach jedem Kauf.",
+  "saleDeliveryBody": "PPL wird Ihrer Adresse sofort im PEOPLE-Mainnet gutgeschrieben. Zunächst ist das Netzwerk nur zum Empfangen offen: An andere senden können Sie PPL nach etwa 1.000 verifizierten Teilnehmenden. Zurückverkaufen können nur verifizierte Nutzer, 30 Tage nach jedem Kauf.",
   "curveTitle": "Bonding-Kurve",
   "curveLead": "Exponentialkurve: Der Preis startet bei 0,005 $ pro PPL und steigt mit jedem Kauf bis zu einer Obergrenze von 0,25 $, solange die Kurve offen ist. Graduation schließt die Kurve bei 4 M$ Einnahmen.",
   "unsoldTitle": "Unverkaufte Token",
@@ -50,7 +50,7 @@
   "contractsLead": "Jede Adresse wird hier veröffentlicht, sobald der Vertrag existiert — ohne Platzhalter.",
   "contractRows": [
     {
-      "name": "Verkaufsvertrag (PplCurveHub, Base)",
+      "name": "Verkaufsvertrag (Base)",
       "status": "Wird vor dem Verkaufsstart veröffentlicht"
     },
     {
@@ -88,12 +88,12 @@
     "Ab Jahr 5 höchstens 2 % neue Emission pro Jahr und nur per Governance-Vote."
   ],
   "launchOrderTitle": "Startreihenfolge",
-  "launchOrderBody": "Der PPL-Verkauf öffnet, sobald der Verkaufsvertrag (PplCurveHub auf Base) und die empfangende Multisig veröffentlicht sind. Überweisungen und Handel im Pool öffnen mit dem vollständigen Netzwerkstart, bei 1.000 verifizierten Personen.",
+  "launchOrderBody": "Der PPL-Verkauf und das PEOPLE-Mainnet starten gemeinsam am 1. Dezember 2026. PPL wird sofort im PEOPLE-Mainnet ausgegeben und gutgeschrieben. Zunächst ist das Netzwerk nur zum Empfangen offen; Überweisungen zwischen Personen und Handel im Pool öffnen nach etwa 1.000 verifizierten Teilnehmenden.",
   "pplFeeTariffsLink": "PPL-Gebührentarife",
   "explorerLink": "Explorer",
   "backToDocsLink": "Zurück zur Dokumentation",
   "salePublicTitle": "Veröffentlichte Verkaufsparameter",
-  "salePublicBody": "Preise, Limits und Kurvenformel sind öffentlich auf /buy. Käufe bleiben deaktiviert, bis der Sale-Hub-Vertrag deployed ist; Wallet verbinden verpflichtet zu nichts.",
+  "salePublicBody": "Preise, Limits und Kurvenformel sind öffentlich auf /buy. Der Verkauf öffnet gemeinsam mit dem Mainnet am 1. Dezember 2026; Wallet verbinden verpflichtet zu nichts.",
   "salePublicCta": "Seite /buy öffnen",
   "saleCurveBullets": [
     "100.000.000 PPL auf der Kurve (10 % des Angebots); Start 0,005 $, exponentieller Anstieg, Deckel 0,25 $ nur auf der Kurve.",

@@ -19,7 +19,7 @@ export const docsContent: Record<Language, Guide> = {
     "title": "Разберитесь.\nПопробуйте.\nУчаствуйте.",
     "description": "От первого кошелька до своей ноды — понятное руководство по PEOPLE Blockchain.",
     "notice": "Тестовая сеть",
-    "noticeText": "Mainnet сети PEOPLE ещё не запущен. Продажа PPL — отдельно: она идёт в сети Base и откроется после публикации контракта продажи. Доступность операций зависит от подключения сайта и версии сети. Тестовые монеты не являются обещанием дохода.",
+    "noticeText": "Mainnet сети PEOPLE и продажа PPL запускаются вместе 1 декабря 2026; до этого сеть тестовая. Оплата PPL — в USDC или USDT в сети Base, PPL выпускаются и зачисляются сразу в mainnet PEOPLE. Доступность операций зависит от подключения сайта и версии сети. Тестовые монеты не являются обещанием дохода.",
     "contents": "В этом руководстве",
     "search": "Найти в документации",
     "empty": "Ничего не найдено. Попробуйте «кошелёк», «награды» или «нода».",
@@ -401,7 +401,7 @@ export const docsContent: Record<Language, Guide> = {
       {
         "id": "product-phases",
         "title": "Что уже можно использовать",
-        "lead": "Что уже работает в тестовой сети и что будет дальше. Дата mainnet не назначена.",
+        "lead": "Что уже работает в тестовой сети и что будет дальше. Mainnet и продажа PPL запускаются 1 декабря 2026.",
         "items": [
           {
             "title": "Доступно сейчас · тестовая сеть",
@@ -490,7 +490,7 @@ export const docsContent: Record<Language, Guide> = {
     "title": "Understand.\nTry it.\nTake part.",
     "description": "From your first wallet to your own node — a practical guide to PEOPLE Blockchain.",
     "notice": "Test network",
-    "noticeText": "Mainnet of the PEOPLE network has not launched. The PPL sale is separate: it runs on Base and opens once the sale contract is published. Available operations depend on the site connection and network version. Test coins are not a promise of income.",
+    "noticeText": "PEOPLE mainnet and the PPL sale launch together on December 1, 2026; until then the network is a test network. PPL are paid for in USDC or USDT on Base and are issued and credited immediately on PEOPLE mainnet. Available operations depend on the site connection and network version. Test coins are not a promise of income.",
     "contents": "In this guide",
     "search": "Search documentation",
     "empty": "No results. Try “wallet”, “rewards” or “node”.",
@@ -872,7 +872,7 @@ export const docsContent: Record<Language, Guide> = {
       {
         "id": "product-phases",
         "title": "What you can use",
-        "lead": "What already works on the test network and what comes after it. No mainnet date is set.",
+        "lead": "What already works on the test network and what comes after it. Mainnet and the PPL sale launch on December 1, 2026.",
         "items": [
           {
             "title": "Available now · test network",
