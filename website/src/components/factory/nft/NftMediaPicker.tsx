@@ -3,7 +3,7 @@
 import type { NftMediaCopy } from "@/lib/nft-media-copy";
 import type { NftKind } from "./saveNftFiles";
 
-const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg";
+const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,image/svg+xml,.png,.jpg,.jpeg,.webp,.gif,.svg";
 const VIDEO_ACCEPT = "video/mp4,video/webm,.mp4,.webm";
 
 const segment = (active: boolean) =>

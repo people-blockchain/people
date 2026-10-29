@@ -110,6 +110,9 @@ test("image route: declared type must match the real bytes (415)", async () => {
   assert.equal(res.status, 415);
   res = await imageRoute(imageRequest(Buffer.from("GIF89a...."), "a.gif", "image/gif"));
   assert.equal(res.status, 415);
+  assert.equal((await res.json()).error, "content_type_mismatch");
+  res = await imageRoute(imageRequest(Buffer.from("BM......"), "a.bmp", "image/bmp"));
+  assert.equal(res.status, 415);
   assert.equal((await res.json()).error, "unsupported_type");
   assert.equal(pinned.length, 0);
 });

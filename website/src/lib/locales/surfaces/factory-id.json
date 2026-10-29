@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Gambar",
-    "imageHint": "PNG, JPEG, atau WebP. Unggah file atau tempel tautan gambar. Anda akan melihat pratinjau lebih dulu.",
+    "imageHint": "PNG, JPEG, WebP, atau GIF. Unggah file atau tempel tautan gambar. Anda akan melihat pratinjau lebih dulu.",
     "imageUrl": "Atau tempel URL gambar",
     "name": "Nama",
     "description": "Deskripsi",
@@ -110,5 +110,16 @@
     "busy": "Membuat gambar…",
     "connectWallet": "Hubungkan dompet di langkah Bayar atau buka Dompet lalu kembali.",
     "errorGeneric": "Gambar tidak bisa dibuat. Coba lagi."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP, atau GIF, maksimal 1,5 MB.",
+    "tooLarge": "Berkas terlalu besar: ukuran maksimal 1,5 MB.",
+    "unsupportedType": "Jenis berkas ini tidak didukung. Gunakan PNG, JPEG, WebP, atau GIF.",
+    "contentMismatch": "Isi berkas tidak sesuai dengan jenisnya. Ekspor ulang sebagai PNG, JPEG, WebP, atau GIF.",
+    "rateLimited": "Terlalu banyak unggahan. Tunggu beberapa menit lalu coba lagi.",
+    "signIn": "Masuk untuk mengunggah berkas.",
+    "missingFile": "Pilih berkas terlebih dahulu.",
+    "network": "Masalah jaringan. Periksa koneksi Anda lalu coba lagi.",
+    "failed": "Berkas tidak dapat diunggah. Coba lagi."
   }
 }

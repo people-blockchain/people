@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Ảnh",
-    "imageHint": "PNG, JPEG hoặc WebP. Tải tệp lên hoặc dán liên kết ảnh. Bạn sẽ thấy bản xem trước trước.",
+    "imageHint": "PNG, JPEG, WebP hoặc GIF. Tải tệp lên hoặc dán liên kết ảnh. Bạn sẽ thấy bản xem trước trước.",
     "imageUrl": "Hoặc dán URL ảnh",
     "name": "Tên",
     "description": "Mô tả",
@@ -110,5 +110,16 @@
     "busy": "Đang tạo hình…",
     "connectWallet": "Kết nối ví ở bước Thanh toán hoặc mở Ví rồi quay lại.",
     "errorGeneric": "Không tạo được hình. Thử lại."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP hoặc GIF, tối đa 1,5 MB.",
+    "tooLarge": "Tệp quá lớn: dung lượng tối đa là 1,5 MB.",
+    "unsupportedType": "Loại tệp này không được hỗ trợ. Hãy dùng PNG, JPEG, WebP hoặc GIF.",
+    "contentMismatch": "Nội dung tệp không khớp với loại tệp. Hãy xuất lại dưới dạng PNG, JPEG, WebP hoặc GIF.",
+    "rateLimited": "Tải lên quá nhiều lần. Hãy đợi vài phút rồi thử lại.",
+    "signIn": "Hãy đăng nhập để tải tệp lên.",
+    "missingFile": "Hãy chọn một tệp trước.",
+    "network": "Lỗi mạng. Hãy kiểm tra kết nối và thử lại.",
+    "failed": "Không thể tải tệp lên. Hãy thử lại."
   }
 }

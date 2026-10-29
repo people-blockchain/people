@@ -12,6 +12,7 @@ import { useWallet } from "@/context/WalletContext";
 import { ConnectWalletButton } from "@/components/wallet/ConnectWalletButton";
 import { formatPpl } from "@/lib/asset-amounts";
 import { fill } from "@/lib/ux-copy";
+import { checkUploadSize, postUploadForm, uploadErrorMessage } from "@/lib/upload-response";
 
 type QuotaState = {
   enabled: boolean;
@@ -223,21 +224,27 @@ export function FactoryIconGenerator({
     setError("");
     try {
       const res = await fetch(variant.preview);
+      if (!res.ok) throw new Error("variant_fetch");
       const blob = await res.blob();
-      const body = new FormData();
-      body.set("file", new File([blob], "icon.png", { type: "image/png" }));
-      const up = await fetch("/api/factory/media", { method: "POST", body });
-      const data = (await up.json()) as { uri?: string; previewUrl?: string; error?: string };
-      if (!up.ok || !data.uri) {
-        setError(data.error ?? ic.errorGeneric);
+      const tooBig = checkUploadSize(blob.size);
+      if (tooBig) {
+        setError(uploadErrorMessage(tooBig, copy.upload));
         return;
       }
-      const preview = data.previewUrl ?? data.uri;
-      onPicked(data.uri, preview);
+      const body = new FormData();
+      body.set("file", new File([blob], "icon.png", { type: "image/png" }));
+      const up = await postUploadForm<{ uri?: string; previewUrl?: string }>("/api/factory/media", body);
+      if (!up.ok || !up.data.uri) {
+        setError(uploadErrorMessage(up.ok ? "upload_failed" : up.code, copy.upload));
+        return;
+      }
+      const preview = up.data.previewUrl ?? up.data.uri;
+      onPicked(up.data.uri, preview);
       setOpen(false);
       setVariants([]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : ic.errorGeneric);
+      console.error("icon variant upload failed", err);
+      setError(ic.errorGeneric);
     } finally {
       setBusy(false);
     }

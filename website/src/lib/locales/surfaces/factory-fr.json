@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Image",
-    "imageHint": "PNG, JPEG ou WebP. Importez un fichier ou collez le lien d’une image. Vous verrez d’abord un aperçu.",
+    "imageHint": "PNG, JPEG, WebP ou GIF. Importez un fichier ou collez le lien d’une image. Vous verrez d’abord un aperçu.",
     "imageUrl": "Ou collez une URL d’image",
     "name": "Nom",
     "description": "Description",
@@ -110,5 +110,16 @@
     "busy": "Création des images…",
     "connectWallet": "Connectez le portefeuille à l'étape Payer ou ouvrez Portefeuille puis revenez.",
     "errorGeneric": "Impossible de créer les images. Réessayez."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP ou GIF, jusqu’à 1,5 Mo.",
+    "tooLarge": "Le fichier est trop volumineux : la taille maximale est de 1,5 Mo.",
+    "unsupportedType": "Ce type de fichier n’est pas pris en charge. Utilisez PNG, JPEG, WebP ou GIF.",
+    "contentMismatch": "Le contenu du fichier ne correspond pas à son type. Exportez-le à nouveau en PNG, JPEG, WebP ou GIF.",
+    "rateLimited": "Trop d’envois. Attendez quelques minutes et réessayez.",
+    "signIn": "Connectez-vous pour importer un fichier.",
+    "missingFile": "Choisissez d’abord un fichier.",
+    "network": "Problème de réseau. Vérifiez votre connexion et réessayez.",
+    "failed": "Le fichier n’a pas pu être importé. Réessayez."
   }
 }

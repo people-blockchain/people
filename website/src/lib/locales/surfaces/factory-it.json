@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Immagine",
-    "imageHint": "PNG, JPEG o WebP. Carica un file o incolla il link di un’immagine. Prima vedrai un’anteprima.",
+    "imageHint": "PNG, JPEG, WebP o GIF. Carica un file o incolla il link di un’immagine. Prima vedrai un’anteprima.",
     "imageUrl": "Oppure incolla un URL immagine",
     "name": "Nome",
     "description": "Descrizione",
@@ -110,5 +110,16 @@
     "busy": "Creazione immagini…",
     "connectWallet": "Collega il portafoglio nel passo Paga o apri Portafoglio e torna.",
     "errorGeneric": "Impossibile creare le immagini. Riprova."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP o GIF, fino a 1,5 MB.",
+    "tooLarge": "Il file è troppo grande: il massimo è 1,5 MB.",
+    "unsupportedType": "Questo tipo di file non è supportato. Usa PNG, JPEG, WebP o GIF.",
+    "contentMismatch": "Il contenuto del file non corrisponde al suo tipo. Esportalo di nuovo come PNG, JPEG, WebP o GIF.",
+    "rateLimited": "Troppi caricamenti. Attendi qualche minuto e riprova.",
+    "signIn": "Accedi per caricare un file.",
+    "missingFile": "Scegli prima un file.",
+    "network": "Problema di rete. Controlla la connessione e riprova.",
+    "failed": "Impossibile caricare il file. Riprova."
   }
 }
