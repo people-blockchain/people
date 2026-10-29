@@ -3,6 +3,7 @@ import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { readLogScanCursor, writeLogScanCursor } from "@/lib/evm/log-scan-cursor";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
@@ -252,32 +253,98 @@ export async function fetchLogsWindowed(
   topics: Array<string | null>,
   fromBlockHint?: number,
 ): Promise<RpcLog[]> {
+  return fetchLogsWindowedCore(address, topics, fromBlockHint, null);
+}
+
+/**
+ * Incremental variant used by the token catalog. Immutable windows (those that can no longer gain
+ * logs) are persisted per `address` + `topic`, so a later scan starts at the stored `lastBlock`
+ * instead of replaying the whole chain history. The tip windows are always re-read so a freshly
+ * created token appears immediately. Without DATABASE_URL, or on any DB error, this behaves like
+ * `fetchLogsWindowed`.
+ */
+export async function fetchLogsWindowedIncremental(
+  address: string,
+  topic: string,
+  fromBlockHint?: number,
+): Promise<RpcLog[]> {
+  return fetchLogsWindowedCore(address, [topic], fromBlockHint, topic);
+}
+
+type ScannedLogWindow = { from: number; to: number; logs: RpcLog[] };
+
+async function readCachedLogWindow(
+  address: string,
+  topics: Array<string | null>,
+  from: number,
+  to: number,
+  latest: number,
+  now: number,
+): Promise<RpcLog[]> {
+  const key = windowCacheKey(address, topics, from, to);
+  const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
+  const entry = windowLogsCache.get(key);
+  if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
+  // A transient node failure must not silently drop this window's logs and leave callers with
+  // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
+  // stale catalog instead of caching a short one.
+  const logs =
+    (await readLogWindow(address, topics, from, to, isImmutable)) ??
+    (await readLogWindow(address, topics, from, to, isImmutable));
+  if (!logs) throw new Error("log_window_unavailable");
+  rememberWindowLogs(key, logs);
+  return logs;
+}
+
+async function fetchLogsWindowedCore(
+  address: string,
+  topics: Array<string | null>,
+  fromBlockHint: number | undefined,
+  cursorTopic: string | null,
+): Promise<RpcLog[]> {
   const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
   const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
   if (!Number.isFinite(latest)) return [];
   const start = Math.max(logStartBlock(address), typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0);
-  const windows = logWindows(start, latest);
-  if (!windows.length) return [];
+  const storedCursor = cursorTopic ? await readLogScanCursor(address, cursorTopic) : null;
+  // A cursor at/after the reported tip means the node regressed (or was reset): re-scan instead
+  // of trusting blocks it no longer serves.
+  const cursor = storedCursor && storedCursor.lastBlock < latest ? storedCursor : null;
+  const lastBlock = cursor?.lastBlock ?? -1;
+  const windows = logWindows(Math.max(start, lastBlock + 1), latest);
+  if (!windows.length) return cursor?.logs ?? [];
 
   const now = Date.now();
-  const results = await Promise.all(
-    windows.map(async ([from, to]) => {
-      const key = windowCacheKey(address, topics, from, to);
-      const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
-      const entry = windowLogsCache.get(key);
-      if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
-      // A transient node failure must not silently drop this window's logs and leave callers with
-      // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
-      // stale catalog instead of caching a short one.
-      const logs =
-        (await readLogWindow(address, topics, from, to, isImmutable)) ??
-        (await readLogWindow(address, topics, from, to, isImmutable));
-      if (!logs) throw new Error("log_window_unavailable");
-      rememberWindowLogs(key, logs);
-      return logs;
-    }),
-  );
-  return results.flat();
+  const scanned: ScannedLogWindow[] = [];
+  if (!cursorTopic) {
+    scanned.push(
+      ...(await Promise.all(
+        windows.map(async ([from, to]) => ({ from, to, logs: await readCachedLogWindow(address, topics, from, to, latest, now) })),
+      )),
+    );
+  } else {
+    // Persist immutable windows as they complete, so a serverless timeout during the initial
+    // history scan still leaves a cursor and the next invocation continues instead of restarting.
+    const topic = cursorTopic;
+    let storedLogs = cursor?.logs ?? [];
+    let storedLastBlock = lastBlock;
+    let persistCursor = true;
+    const immutableEnd = latest - LOG_WINDOW_BLOCKS;
+    for (let i = 0; i < windows.length; i += MAX_PARALLEL_LOG_WINDOWS) {
+      const chunk = windows.slice(i, i + MAX_PARALLEL_LOG_WINDOWS);
+      const chunkLogs = await Promise.all(
+        chunk.map(async ([from, to]) => ({ from, to, logs: await readCachedLogWindow(address, topics, from, to, latest, now) })),
+      );
+      scanned.push(...chunkLogs);
+      const completed = chunkLogs.filter(({ to }) => to < immutableEnd);
+      if (!persistCursor || !completed.length) continue;
+      storedLogs = [...storedLogs, ...completed.flatMap(({ logs }) => logs)];
+      storedLastBlock = Math.max(storedLastBlock, ...completed.map(({ to }) => to));
+      // Stop retrying the DB for this scan after the first failure; the next call retries.
+      persistCursor = await writeLogScanCursor(address, topic, storedLastBlock, storedLogs);
+    }
+  }
+  return [...(cursor?.logs ?? []), ...scanned.flatMap(({ logs }) => logs)];
 }
 
 const SEL_FACTORY = "0xc45a0155";
@@ -408,8 +475,8 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
   const fromLogs = (
     await Promise.all(
       factories.flatMap((f) => [
-        fetchLogsWindowed(f, [TOKEN_CREATED_TOPIC]),
-        fetchLogsWindowed(f, [TOKEN_CREATED_LEFTOVER_TOPIC]),
+        fetchLogsWindowedIncremental(f, TOKEN_CREATED_TOPIC),
+        fetchLogsWindowedIncremental(f, TOKEN_CREATED_LEFTOVER_TOPIC),
       ]),
     )
   ).flat();

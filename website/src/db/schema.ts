@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  bigint,
   boolean,
   doublePrecision,
   index,
@@ -789,3 +790,19 @@ export const tokenIconOverrides = pgTable("token_icon_override", {
   updatedBy: text("updated_by").notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
 });
+
+/**
+ * Incremental `eth_getLogs` cursor for the token catalog. Each row keeps the immutable logs a
+ * scan has already read for one factory address + event topic, plus the last block it covered,
+ * so the next scan asks the node only for the windows after it instead of replaying history.
+ */
+export const evmLogScanCursors = pgTable(
+  "evm_log_scan_cursor",
+  {
+    address: text("address").notNull(),
+    topic: text("topic").notNull(),
+    lastBlock: bigint("last_block", { mode: "number" }).notNull(),
+    logs: jsonb("logs").notNull(),
+  },
+  (row) => [primaryKey({ columns: [row.address, row.topic] })],
+);

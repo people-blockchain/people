@@ -15,6 +15,7 @@ import {
   WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
   FACTORY_ICON_SCHEMA_STATEMENTS,
   TOKEN_ICON_SCHEMA_STATEMENTS,
+  EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
@@ -82,6 +83,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // Creator-signed token icon overrides (off-chain because only the factory may set metadataURI).
     for (const statement of TOKEN_ICON_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // Incremental eth_getLogs cursor for the token catalog (skips already-read immutable windows).
+    for (const statement of EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {
