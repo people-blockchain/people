@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { stringToHex, parseTransaction } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
-import { nativeTransferRequest, sendNativeTransfer } from '../src/lib/evm/wallet-send.ts';
+import { calldataFloorGas, nativeTransferRequest, sendNativeTransfer } from '../src/lib/evm/wallet-send.ts';
 import { transactionMemo } from '../src/lib/evm/transaction-memo.ts';
 import { handleEvmCompatGet } from '../src/lib/evm/people-compat.ts';
 const to = '0x1111111111111111111111111111111111111111';
@@ -26,7 +26,7 @@ test('actual native send signs and submits exact UTF-8 memo; gas is estimated wi
       case 'eth_getCode': result='0x'; break;
       case 'eth_getTransactionCount': result='0x0'; break;
       case 'eth_chainId': result='0x17c79'; break;
-      case 'eth_estimateGas': result='0x7000'; break;
+      case 'eth_estimateGas': result='0x52f8'; break;
       case 'eth_gasPrice': result='0x3b9aca00'; break;
       case 'eth_maxPriorityFeePerGas': result='0x3b9aca00'; break;
       case 'eth_getBlockByNumber': result={number:'0x1',baseFeePerGas:'0x3b9aca00'}; break;
@@ -41,7 +41,12 @@ test('actual native send signs and submits exact UTF-8 memo; gas is estimated wi
   assert.equal(tx.value,10n**18n);
   assert.equal(tx.to.toLowerCase(),to);
   assert.equal(seen.find(r=>r.method==='eth_estimateGas').params[0].data,stringToHex(memo));
-  assert.ok(tx.gas>=28672n);
+  assert.ok(tx.gas>=calldataFloorGas(stringToHex(memo)));
+});
+
+test('calldataFloorGas applies the EIP-7623 10-per-token floor', () => {
+  assert.equal(calldataFloorGas('0x0102030405060708090a0b0c0d0e0f'),21600n);
+  assert.equal(calldataFloorGas('0x00'),21010n);
 });
 
 test('memo to a contract address rejects with memo_contract and never submits a transaction', async t => {
