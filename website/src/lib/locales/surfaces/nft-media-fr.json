@@ -79,5 +79,8 @@
   "createViewAddress": "Ouvrir l’adresse dans l’explorateur",
   "createTimeoutTitle": "Transaction envoyée",
   "createTimeoutBody": "La confirmation prend plus de temps que d’habitude. Vérifiez l’explorateur et ne renvoyez pas la transaction. N’utilisez « Créer un autre » que si vous êtes sûr que rien n’a été créé.",
-  "createTimeoutExplorer": "Vérifier votre adresse dans l’explorateur"
+  "createTimeoutExplorer": "Vérifier votre adresse dans l’explorateur",
+  "txRestoring": "Vérification de votre transaction précédente…",
+  "txPaymentCounted": "Votre paiement a déjà été comptabilisé. Appuyez sur le bouton pour terminer : vous ne serez pas débité à nouveau.",
+  "txFailedBefore": "La transaction précédente n'a pas abouti sur le réseau. Vous pouvez réessayer."
 }

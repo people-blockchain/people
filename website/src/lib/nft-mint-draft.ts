@@ -121,6 +121,46 @@ export function createDraftStore(getStorage: () => StorageLike | null) {
   };
 }
 
+/** What the form tells the user after the stored transaction was checked against its receipt. */
+export type DraftRestoreNotice = "payment_counted" | "failed" | null;
+
+export type DraftRestore = {
+  /** Fields to merge into the draft (`undefined` removes a hash that can never confirm). */
+  patch: Partial<NftMintDraft>;
+  notice: DraftRestoreNotice;
+  /** The mint transaction succeeded: read its token id from the receipt and finish. */
+  mintSucceeded: boolean;
+};
+
+/** The one transaction a reload has to look at: the most advanced hash the draft holds. */
+export function pendingDraftTx(draft: NftMintDraft): { step: "pay" | "create" | "mint"; hash: string } | null {
+  if (draft.status === "done") return null;
+  if (draft.mintTx) return { step: "mint", hash: draft.mintTx };
+  if (draft.createTx && !draft.collection) return { step: "create", hash: draft.createTx };
+  if (draft.payTx && draft.payWith !== "PPL" && !draft.payDone) return { step: "pay", hash: draft.payTx };
+  return null;
+}
+
+/**
+ * Turns the receipt outcome of `pendingDraftTx` into draft changes. A failed transaction drops its
+ * hash so the retry sends a fresh one; a confirmed payment is marked done so it is never charged twice.
+ */
+export function restoreFromReceipt(
+  step: "pay" | "create" | "mint",
+  outcome: "success" | "failed" | "pending",
+): DraftRestore {
+  const none: DraftRestore = { patch: {}, notice: null, mintSucceeded: false };
+  if (outcome === "pending") return none;
+  if (outcome === "success") {
+    if (step === "mint") return { ...none, mintSucceeded: true };
+    if (step === "pay") return { patch: { payDone: true }, notice: "payment_counted", mintSucceeded: false };
+    return none;
+  }
+  if (step === "mint") return { patch: { mintTx: undefined, mintAttempted: undefined }, notice: "failed", mintSucceeded: false };
+  if (step === "create") return { patch: { createTx: undefined }, notice: "failed", mintSucceeded: false };
+  return { patch: { payTx: undefined }, notice: "failed", mintSucceeded: false };
+}
+
 export function browserStorage(): StorageLike | null {
   try {
     return typeof window === "undefined" ? null : window.localStorage;

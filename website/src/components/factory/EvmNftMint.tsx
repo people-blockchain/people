@@ -34,6 +34,7 @@ import {
   stableFeeGatewayAddress,
   type StableAsset,
 } from "@/lib/evm/stable-fee-gateway";
+import { outcomeOfReceipt } from "@/lib/launch-tx";
 import { checkImageFile, checkVideoFile, NftSaveError, type NftErrorKey } from "@/lib/nft-media-client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { NFT_DESCRIPTION_MAX, NFT_NAME_MAX, NFT_NAME_MIN, type NftVideoType } from "@/lib/nft-media-rules";
@@ -41,7 +42,9 @@ import {
   browserStorage,
   createDraftStore,
   isResumable,
+  pendingDraftTx,
   planResume,
+  restoreFromReceipt,
   type NftMintDraft,
   type NftMintMode,
 } from "@/lib/nft-mint-draft";
@@ -168,10 +171,11 @@ export function EvmNftMint() {
   const [draft, setDraft] = useState<NftMintDraft | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState<ErrorState | null>(null);
-  const [errorFrom, setErrorFrom] = useState<"save" | "mint" | null>(null);
+  const [errorFrom, setErrorFrom] = useState<"pick" | "save" | "mint" | null>(null);
   const [payWith, setPayWith] = useState<PayWith>("PPL");
   const [stableFeeUsd6, setStableFeeUsd6] = useState<bigint | null>(null);
   const [mintStep, setMintStep] = useState<"approving" | "payingFee" | "confirmCreate" | "confirmMint" | "waiting" | null>(null);
+  const [restoreNotice, setRestoreNotice] = useState<"checking" | "payment_counted" | "failed" | null>(null);
   const mintLock = useRef(false);
   const saveLock = useRef(false);
 
@@ -247,6 +251,36 @@ export function EvmNftMint() {
         createTx: stored.createTx ?? null,
       });
     }
+    // A closed tab may have left a sent transaction behind: read its receipt instead of waiting.
+    const tx = pendingDraftTx(stored);
+    if (!tx) return;
+    let cancelled = false;
+    setRestoreNotice("checking");
+    void (async () => {
+      let receipt: Awaited<ReturnType<ReturnType<typeof readPublicClient>["getTransactionReceipt"]>> | null = null;
+      try {
+        receipt = await readPublicClient().getTransactionReceipt({ hash: tx.hash as `0x${string}` });
+      } catch {
+        receipt = null; // not mined yet: the continue button waits for it
+      }
+      if (cancelled) return;
+      const restored = restoreFromReceipt(tx.step, outcomeOfReceipt(receipt));
+      setRestoreNotice(restored.notice);
+      let next: NftMintDraft = { ...stored, ...restored.patch };
+      if (restored.mintSucceeded && receipt && factory && stored.collection) {
+        const collection = getAddress(stored.collection);
+        const tokenId = tokenIdFromReceipt(receipt, factory, collection);
+        next = { ...next, status: "done", tokenId: tokenId?.toString() };
+        setResult({ collection, tokenId, mintTx: stored.mintTx ?? null, createTx: stored.createTx ?? null });
+      }
+      if (Object.keys(restored.patch).length > 0 || next.status === "done") {
+        draftStore.save(next);
+        setDraft(next);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
     // Only when the wallet address changes; the draft store is stable.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signerAddress, draftStore]);
@@ -289,7 +323,7 @@ export function EvmNftMint() {
     const checked = checkImageFile(file);
     if (!checked.ok) {
       setError({ key: checked.key });
-      setErrorFrom("save");
+      setErrorFrom("pick");
       return;
     }
     (target === "image" ? setImageFile : setCoverFile)({ file, mime: checked.mime });
@@ -301,7 +335,7 @@ export function EvmNftMint() {
     const checked = checkVideoFile(file);
     if (!checked.ok) {
       setError({ key: checked.key });
-      setErrorFrom("save");
+      setErrorFrom("pick");
       return;
     }
     setVideoFile({ file, mime: checked.mime });
@@ -793,6 +827,15 @@ export function EvmNftMint() {
               {nm.stageReady}
             </p>
           ) : null}
+          {restoreNotice ? (
+            <p role="status" data-testid="nft-restore-notice" className={restoreNotice === "failed" ? "text-sm text-warm" : "text-sm text-ink-2"}>
+              {restoreNotice === "checking"
+                ? nm.txRestoring
+                : restoreNotice === "payment_counted"
+                  ? nm.txPaymentCounted
+                  : nm.txFailedBefore}
+            </p>
+          ) : null}
           {resuming ? (
             <p role="status" data-testid="nft-resume-notice" className="text-sm text-ink-2">
               {nm.resumeNotice}
@@ -807,7 +850,7 @@ export function EvmNftMint() {
           {error && errorText ? (
             <div role="alert" data-testid="nft-error" data-error-key={error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
               <p>
-                {form.error}: {errorText}
+                {errorFrom === "pick" ? errorText : `${form.error}: ${errorText}`}
               </p>
             </div>
           ) : null}

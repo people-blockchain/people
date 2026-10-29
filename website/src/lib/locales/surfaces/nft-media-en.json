@@ -79,5 +79,8 @@
   "createViewAddress": "Open address in explorer",
   "createTimeoutTitle": "Transaction sent",
   "createTimeoutBody": "Confirmation is taking longer than usual. Check the explorer and do not submit again. Use “Create another” only when you are sure nothing was created.",
-  "createTimeoutExplorer": "Check your address in the explorer"
+  "createTimeoutExplorer": "Check your address in the explorer",
+  "txRestoring": "Checking your previous transaction…",
+  "txPaymentCounted": "Your payment was already counted. Press the button to finish — you will not be charged again.",
+  "txFailedBefore": "The previous transaction did not go through on the network. You can try again."
 }
