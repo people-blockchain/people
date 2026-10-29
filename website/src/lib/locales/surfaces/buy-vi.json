@@ -344,6 +344,7 @@
       "estimate": "Ước tính PPL",
       "minimum": "Tối thiểu nhận được",
       "price": "Giá PPL hiện tại",
+      "etaDuration": "1–20 phút",
       "eta": "Đến trong khoảng {eta}",
       "fees": "Phí: {fees}",
       "feesToggle": "Chi tiết phí",

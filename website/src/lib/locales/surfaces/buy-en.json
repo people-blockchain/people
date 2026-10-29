@@ -344,6 +344,7 @@
       "estimate": "PPL estimate",
       "minimum": "Minimum received",
       "price": "Current PPL price",
+      "etaDuration": "1–20 min",
       "eta": "Arrives in about {eta}",
       "fees": "Fees: {fees}",
       "feesToggle": "Fee details",

@@ -344,6 +344,7 @@
       "estimate": "Perkiraan PPL",
       "minimum": "Minimum diterima",
       "price": "Harga PPL saat ini",
+      "etaDuration": "1–20 menit",
       "eta": "Tiba dalam sekitar {eta}",
       "fees": "Biaya: {fees}",
       "feesToggle": "Detail biaya",

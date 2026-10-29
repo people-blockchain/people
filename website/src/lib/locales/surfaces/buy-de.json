@@ -344,6 +344,7 @@
       "estimate": "PPL-Schätzung",
       "minimum": "Mindestbetrag",
       "price": "Aktueller PPL-Preis",
+      "etaDuration": "1–20 Min.",
       "eta": "Ankunft in etwa {eta}",
       "fees": "Gebühren: {fees}",
       "feesToggle": "Gebührendetails",

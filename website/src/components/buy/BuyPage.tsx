@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
@@ -157,7 +156,7 @@ export function BuyPage({
         </Reveal>
       </WarmSection>
 
-      {/* g — Final call to action: the hero again, plus the bounty route */}
+      {/* g — Final call to action: the hero again */}
       <section className="border-t border-line bg-canvas-2" aria-labelledby="buy-final-title" data-testid="buy-final-cta">
         <div className={`${WARM_SECTION} text-center`}>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">{t.finalCta.eyebrow}</p>
@@ -170,11 +169,6 @@ export function BuyPage({
           <div className="mt-7 flex justify-center">
             <BuyCta phase={phase} testId="buy-final-cta-button" />
           </div>
-          <p className="mt-4 text-sm">
-            <Link href="/bounty" className="inline-flex min-h-11 items-center font-semibold text-brand underline-offset-2 hover:underline">
-              {t.finalCta.bounty}
-            </Link>
-          </p>
         </div>
       </section>
 

@@ -344,6 +344,7 @@
       "estimate": "تقدير PPL",
       "minimum": "الحد الأدنى المستلم",
       "price": "سعر PPL الحالي",
+      "etaDuration": "1–20 دقيقة",
       "eta": "يصل خلال نحو {eta}",
       "fees": "الرسوم: {fees}",
       "feesToggle": "تفاصيل الرسوم",
