@@ -13,6 +13,7 @@ import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-cat
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
+import { readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
 
 type AssetRow = {
   assetId: string;
@@ -298,9 +299,18 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     }
     const balance = weiToPpl(BigInt(balanceHex));
     const nonce = Number.parseInt(nonceHex, 16);
+    // ERC-20 holdings come from live `balanceOf`, not the catalog's own balances (it has none): the
+    // wallet lists exactly the keys of `balances`, so without this a created token never shows.
+    const dep = readEvmDeployments();
+    const catalog = await discoverTokensOnChain().catch(() => []);
+    const tokens = [
+      ...catalog.map((row) => ({ assetId: row.assetId, address: row.tokenAddress })),
+      ...Object.entries(dep.assetMap ?? {}).map(([assetId, address]) => ({ assetId, address })),
+    ];
+    const held = await readTokenBalances(addr, tokens).catch(() => ({}));
     return {
       status: 200,
-      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: 0 },
+      body: { balance, nonce, balances: { ppl: balance, ...held }, outgoingTxs: nonce, incomingTxs: 0 },
     };
   }
 
@@ -333,7 +343,12 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
 
   if (root === "nfts") {
     const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
+    // Snapshot rows plus NFTs the owner minted through the NFT factory (read live, so a new mint
+    // shows without a redeploy of the snapshot).
+    const seedRows = listSeedNfts(owner ?? undefined);
+    const minted = owner && isAddress(owner) ? await readOwnedFactoryNfts(owner).catch(() => []) : [];
+    const known = new Set(seedRows.map((r) => `${r.collection ?? ""}:${r.onChainTokenId ?? ""}`.toLowerCase()));
+    const rows = visibleNfts([...seedRows, ...minted.filter((m) => !known.has(`${m.collection}:${m.onChainTokenId}`.toLowerCase()))]);
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];
