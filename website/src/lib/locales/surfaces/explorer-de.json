@@ -43,5 +43,6 @@
   "minted": "Geprägt",
   "totalSupply": "Gesamtangebot",
   "mintPrice": "Prägepreis",
-  "pplBalance": "PPL-Guthaben"
+  "pplBalance": "PPL-Guthaben",
+  "memo": "Memo"
 }

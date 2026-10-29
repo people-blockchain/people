@@ -1,5 +1,6 @@
 import { formatUnits } from "viem";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
+import { transactionMemo } from "@/lib/evm/transaction-memo";
 import type { EvmExplorerTx } from "@/lib/evm/explorer-blocks";
 
 type RpcCall = { method: string; params: unknown[] };
@@ -91,7 +92,8 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
   const value = tx.value || "0x0";
   const amount = Number(formatUnits(BigInt(value), 18));
   const blockHeight = parseHexInt(tx.blockNumber);
-  const type: string = tx.input && tx.input !== "0x" ? "contract_call" : "transfer";
+  const memo = transactionMemo(tx);
+  const type: string = tx.input && tx.input !== "0x" && !memo ? "contract_call" : "transfer";
   return {
     id: tx.hash,
     type,
@@ -99,6 +101,7 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
     to: tx.to ?? undefined,
     amount,
     blockHeight,
+    ...(memo ? { payload: { memo } } : {}),
   };
 }
 

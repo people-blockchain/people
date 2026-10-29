@@ -43,5 +43,6 @@
   "minted": "Cunhados",
   "totalSupply": "Suprimento total",
   "mintPrice": "Preço de cunhagem",
-  "pplBalance": "Saldo PPL"
+  "pplBalance": "Saldo PPL",
+  "memo": "Memo"
 }

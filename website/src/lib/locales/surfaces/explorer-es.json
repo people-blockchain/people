@@ -43,5 +43,6 @@
   "minted": "Acuñados",
   "totalSupply": "Suministro total",
   "mintPrice": "Precio de acuñación",
-  "pplBalance": "Saldo PPL"
+  "pplBalance": "Saldo PPL",
+  "memo": "Memo"
 }

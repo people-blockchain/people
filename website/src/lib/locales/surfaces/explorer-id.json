@@ -43,5 +43,6 @@
   "minted": "Dicetak",
   "totalSupply": "Total pasokan",
   "mintPrice": "Harga cetak",
-  "pplBalance": "Saldo PPL"
+  "pplBalance": "Saldo PPL",
+  "memo": "Memo"
 }
