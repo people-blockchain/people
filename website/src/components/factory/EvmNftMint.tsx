@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { getAddress, isAddress, type Address } from "viem";
+import { formatEther, getAddress, isAddress, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { uxCopy } from "@/lib/ux-copy";
@@ -34,6 +34,7 @@ import {
   type StableAsset,
 } from "@/lib/evm/stable-fee-gateway";
 import { checkImageFile, checkVideoFile, NftSaveError, type NftErrorKey } from "@/lib/nft-media-client";
+import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { NFT_DESCRIPTION_MAX, NFT_NAME_MAX, NFT_NAME_MIN, type NftVideoType } from "@/lib/nft-media-rules";
 import {
   browserStorage,
@@ -68,7 +69,7 @@ type Saved = {
 };
 
 type Picked = { file: File; mime: string };
-type ErrorState = { key: NftErrorKey | "notEnoughFee"; detail?: string };
+type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint };
 
 const RECEIPT_TIMEOUT_MS = 180_000;
 const ZERO_ADDRESS_FREE = /^0x[0-9a-fA-F]{40}$/;
@@ -96,25 +97,43 @@ function useObjectUrl(picked: Picked | null): string | null {
   return url;
 }
 
+function formatPplWei(wei: bigint): string {
+  const [whole, fraction = ""] = formatEther(wei).split(".");
+  const trimmed = fraction.slice(0, 4).replace(/0+$/, "");
+  return trimmed ? `${whole}.${trimmed}` : whole;
+}
+
 function mintErrorState(err: unknown): ErrorState {
   if (err instanceof MintFlowError) return { key: err.key };
-  const { code, detail } = classifyNftWriteError(err);
+  const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
   switch (code) {
+    case "stable_fee_unavailable":
+      return { key: "errStableFeeUnavailable" };
+    case "stable_daily_cap":
+      return { key: "errStableDailyCap" };
+    case "insufficient_funds":
+      return neededWei !== undefined && balanceWei !== undefined
+        ? { key: "errInsufficientPpl", neededWei, balanceWei }
+        : { key: "errInsufficientPplGeneric" };
+    case "network":
+      return { key: "errNetworkRpc" };
     case "wallet_rejected":
       return { key: "errWalletRejected" };
-    case "insufficient_funds":
-    case "insufficient_fee":
-      return { key: "notEnoughFee", detail };
+  }
+  const { code: legacyCode } = classifyNftWriteError(err);
+  switch (legacyCode) {
+    case "wallet_rejected":
+      return { key: "errWalletRejected" };
     case "not_collection_creator":
-      return { key: "errNotCreator", detail };
+      return { key: "errNotCreator" };
     case "receipt_failed":
-      return { key: "errReverted", detail };
+      return { key: "errReverted" };
     case "chain_mismatch":
-      return { key: "errWrongNetwork", detail };
+      return { key: "errWrongNetwork" };
     case "timeout":
-      return { key: "errTimeout", detail };
+      return { key: "errTimeout" };
     default:
-      return { key: "errUnknown", detail };
+      return { key: "errUnknown" };
   }
 }
 
@@ -335,8 +354,9 @@ export function EvmNftMint() {
         isSvg,
       });
     } catch (err) {
+      console.error(err);
       const key: NftErrorKey = err instanceof NftSaveError ? err.key : "errNetwork";
-      setError({ key, detail: err instanceof Error ? err.message : undefined });
+      setError({ key });
       setErrorFrom("save");
     } finally {
       saveLock.current = false;
@@ -402,9 +422,29 @@ export function EvmNftMint() {
         if (credit < fee) {
           const stable = stableAssets.find((asset) => asset.id === current.payWith);
           if (!stable || !gateway || stableFeeUsd6 === null) throw new Error("stable fee unavailable");
+          const waitForPay = async (hash: `0x${string}`) => {
+            const receipt = await waitFor(hash);
+            if (receipt.status === "success") return;
+            let payError: unknown = new Error(`receipt: payLaunchFee reverted (${hash})`);
+            try {
+              await client.simulateContract({
+                account: signer.address,
+                address: gateway,
+                abi: stableFeeGatewayAbi,
+                functionName: "payLaunchFee",
+                args: [GATEWAY_KIND.NFT_MINT, stable.address],
+                blockNumber: receipt.blockNumber > BigInt(0) ? receipt.blockNumber - BigInt(1) : undefined,
+              });
+            } catch (simulationError) {
+              payError = simulationError;
+            }
+            console.error("[mint] payLaunchFee reverted", payError);
+            persist({ payTx: undefined });
+            throw payError;
+          };
           if (current.payTx) {
             setMintStep("waiting");
-            await waitFor(current.payTx as `0x${string}`);
+            await waitForPay(current.payTx as `0x${string}`);
           } else {
             const allowance = await client.readContract({
               address: stable.address,
@@ -432,7 +472,7 @@ export function EvmNftMint() {
             });
             persist({ payTx: payHash });
             setMintStep("waiting");
-            await waitFor(payHash);
+            await waitForPay(payHash);
           }
         }
         persist({ payDone: true });
@@ -469,11 +509,52 @@ export function EvmNftMint() {
         }
       }
 
+      let mintFeeValue = fee;
+      try {
+        const mintCredit = await client.readContract({
+          address: factory,
+          abi: nftFactoryAbi,
+          functionName: "prepaidCredit",
+          args: [signer.address],
+        });
+        mintFeeValue = requiredFeeValue(fee, mintCredit);
+      } catch {
+        // Re-read failed: only trust a stable payment already recorded in this attempt.
+        mintFeeValue = current.payWith !== "PPL" && current.payDone ? BigInt(0) : fee;
+      }
+      const mintRequest = buildMintRequest(factory, collection, current.tokenUri, mintFeeValue);
+      try {
+        const balance = await client.getBalance({ address: signer.address });
+        let gasCost = BigInt(0);
+        try {
+          const gas = await client.estimateContractGas({ account: signer.address, ...mintRequest });
+          gasCost = gas * (await client.getGasPrice());
+        } catch {
+          try {
+            const gas = await client.estimateContractGas({ account: signer.address, ...mintRequest, value: BigInt(0) });
+            gasCost = gas * (await client.getGasPrice());
+          } catch {
+            /* keep the fee-only floor when the node cannot estimate */
+          }
+        }
+        const balanceCheck = checkBalanceForCost(balance, mintFeeValue + gasCost);
+        if (!balanceCheck.ok) {
+          setError({
+            key: "errInsufficientPpl",
+            neededWei: balanceCheck.neededWei,
+            balanceWei: balanceCheck.balanceWei,
+          });
+          return;
+        }
+      } catch {
+        /* if the balance cannot be read, let the wallet report it */
+      }
+
       setMintStep("confirmMint");
       persist({ mintAttempted: true });
       let mintHash: `0x${string}`;
       try {
-        mintHash = await writeViaActiveSigner(signer, buildMintRequest(factory, collection, current.tokenUri, fee));
+        mintHash = await writeViaActiveSigner(signer, mintRequest);
       } catch (err) {
         // A refused prompt sent nothing, so the next try may mint without the "already minted" lookup.
         if (classifyNftWriteError(err).code === "wallet_rejected") persist({ mintAttempted: false });
@@ -487,6 +568,7 @@ export function EvmNftMint() {
       persist({ status: "done", tokenId: tokenId?.toString() });
       setResult({ collection, tokenId, mintTx: mintHash, createTx });
     } catch (err) {
+      console.error(err);
       setError(mintErrorState(err));
       setErrorFrom("mint");
     } finally {
@@ -536,7 +618,17 @@ export function EvmNftMint() {
   const previewImage = saved ? saved.imagePreviewUrl : kind === "image" && !imageFile && /^https:\/\//.test(imageUrl.trim()) ? imageUrl.trim() : imageLocalUrl;
   const previewVideo = saved ? saved.videoPreviewUrl ?? null : videoLocalUrl;
   const previewIsSvg = saved ? saved.isSvg : (kind === "image" ? imageFile : coverFile)?.mime === "image/svg+xml";
-  const errorText = error ? (error.key === "notEnoughFee" ? u.notEnoughFee : nm[error.key]) : null;
+  const errorText = error
+    ? error.key === "notEnoughFee"
+      ? u.notEnoughFee
+      : error.key === "errInsufficientPpl"
+        ? error.neededWei !== undefined && error.balanceWei !== undefined
+          ? nm.errInsufficientPpl
+              .replaceAll("{needed}", formatPplWei(error.neededWei))
+              .replaceAll("{balance}", formatPplWei(error.balanceWei))
+          : nm.errInsufficientPplGeneric
+        : nm[error.key]
+    : null;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -716,14 +808,6 @@ export function EvmNftMint() {
               <p>
                 {form.error}: {errorText}
               </p>
-              {error.detail ? (
-                <details className="mt-1 text-xs text-ink-3">
-                  <summary>{nm.technicalDetails}</summary>
-                  <p className="mt-1 break-all" dir="ltr">
-                    {error.detail}
-                  </p>
-                </details>
-              ) : null}
             </div>
           ) : null}
 
