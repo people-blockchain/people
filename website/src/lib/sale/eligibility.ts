@@ -13,7 +13,6 @@ import { getDbReady } from "@/db";
 import {
   founderPhoneRegistry,
   founderTelegramUsers,
-  founderWorldIdNullifiers,
   founders,
   saleBindings,
   salePersonIdentifiers,
@@ -24,6 +23,7 @@ import {
   type HumanPassportScoreLookup,
 } from "@/lib/founders/human-passport-verify";
 import type { FoundersHumanPassportConfig } from "@/lib/founders/human-passport-config";
+import { VERIFICATION_LEVEL_TELEGRAM_PHONE } from "@/lib/founders/verification";
 
 export const SALE_IDENTIFIER_KINDS = ["hp_wallet", "world_nullifier", "tg", "phone"] as const;
 export type SaleIdentifierKind = (typeof SALE_IDENTIFIER_KINDS)[number];
@@ -44,7 +44,7 @@ export type SaleExistingBinding = {
 };
 
 export type SaleEligibilityInput = {
-  hasWorldId: boolean;
+  hasTelegramPhone: boolean;
   hpScore: number | null;
   hpThreshold: number;
   identifierHashes: readonly string[];
@@ -110,17 +110,17 @@ function allBindings(
 }
 
 /**
- * Pure sale eligibility rule. World ID OR a Human Passport score at/above the threshold is
- * required; Telegram/phone identifiers alone never qualify (they are only extra keys on an
- * already-eligible person). Any identifier owned by another person, or a requested account
- * already bound elsewhere, denies the request.
+ * Pure sale eligibility rule. A Telegram-verified phone OR a Human Passport score at/above the
+ * threshold is required; World ID is not an accepted path. Telegram/phone identifiers alone never
+ * qualify (they are only extra keys on an already-eligible person). Any identifier owned by another
+ * person, or a requested account already bound elsewhere, denies the request.
  */
 export function decideSaleEligibility(input: SaleEligibilityInput): SaleEligibilityDecision {
   const hpPasses =
     typeof input.hpScore === "number" &&
     Number.isFinite(input.hpScore) &&
     input.hpScore >= input.hpThreshold;
-  if (!input.hasWorldId && !hpPasses) return { ok: false, reason: "not_eligible" };
+  if (!input.hasTelegramPhone && !hpPasses) return { ok: false, reason: "not_eligible" };
 
   const requested = input.requestedAccount.trim().toLowerCase();
   if (!requested) return { ok: false, reason: "account_bound_elsewhere" };
@@ -157,7 +157,7 @@ export const computePersonId = derivePersonId;
 export type CollectedSaleIdentifiers = {
   person: { personKey: string; personId: Hex; userId: string } | null;
   identifiers: SaleIdentifier[];
-  hasWorldId: boolean;
+  hasTelegramPhone: boolean;
   hpLookup: HumanPassportScoreLookup;
   hpScore: number | null;
   hpThreshold: number;
@@ -180,8 +180,9 @@ function dedupeIdentifiers(identifiers: SaleIdentifier[]): SaleIdentifier[] {
 
 /**
  * Collects every eligible identifier for a user. The wallet used for Human Passport is added
- * as `hp_wallet` only when the live score passes; World ID nullifier rows, the linked Telegram
- * id and the stored phone hash are always collected but cannot qualify on their own.
+ * as `hp_wallet` only when the live score passes; the linked Telegram id and the stored phone
+ * hash are always collected but cannot qualify on their own. A verified Telegram phone is
+ * detected from the founder verification level plus a stored phone (founder row or registry).
  */
 export async function collectSaleIdentifiersForUser(
   userId: string,
@@ -211,14 +212,10 @@ export async function collectSaleIdentifiersForUser(
 
   if (!founder) {
     const hpLookup: HumanPassportScoreLookup = { ok: false, error: "wallet_not_linked" };
-    return { person, identifiers: [], hasWorldId: false, hpLookup, hpScore: null, hpThreshold: Number.POSITIVE_INFINITY };
+    return { person, identifiers: [], hasTelegramPhone: false, hpLookup, hpScore: null, hpThreshold: Number.POSITIVE_INFINITY };
   }
 
-  const [worldRows, telegramRows, phoneRows] = await Promise.all([
-    db
-      .select({ nullifier: founderWorldIdNullifiers.nullifier })
-      .from(founderWorldIdNullifiers)
-      .where(eq(founderWorldIdNullifiers.userId, userId)),
+  const [telegramRows, phoneRows] = await Promise.all([
     db
       .select({ telegramUserId: founderTelegramUsers.telegramUserId })
       .from(founderTelegramUsers)
@@ -246,9 +243,6 @@ export async function collectSaleIdentifiersForUser(
   if (hpLookup.ok && hpLookup.passing) {
     identifiers.push({ kind: "hp_wallet", value: hpLookup.address });
   }
-  for (const row of worldRows) {
-    identifiers.push({ kind: "world_nullifier", value: String(row.nullifier) });
-  }
   for (const row of telegramRows) {
     identifiers.push({ kind: "tg", value: row.telegramUserId });
   }
@@ -259,10 +253,14 @@ export async function collectSaleIdentifiersForUser(
     identifiers.push({ kind: "phone", value: row.phoneHash });
   }
 
+  const hasPhone = Boolean(founder.phoneHash?.trim()) || phoneRows.length > 0;
+  const hasTelegramPhone =
+    founder.verificationLevel >= VERIFICATION_LEVEL_TELEGRAM_PHONE && hasPhone;
+
   return {
     person,
     identifiers: dedupeIdentifiers(identifiers),
-    hasWorldId: worldRows.length > 0,
+    hasTelegramPhone,
     hpLookup,
     hpScore,
     hpThreshold,
@@ -275,7 +273,7 @@ export type SaleEligibilityServiceResult =
       personKey: string;
       personId: Hex;
       identifiers: SaleIdentifier[];
-      hasWorldId: boolean;
+      hasTelegramPhone: boolean;
       hpScore: number | null;
       hpThreshold: number;
     }
@@ -374,7 +372,7 @@ export async function evaluateSaleEligibilityForUser(
   });
 
   const decision = decideSaleEligibility({
-    hasWorldId: collected.hasWorldId,
+    hasTelegramPhone: collected.hasTelegramPhone,
     hpScore: collected.hpScore,
     hpThreshold: collected.hpThreshold,
     identifierHashes: hashes,
@@ -423,7 +421,7 @@ export async function evaluateSaleEligibilityForUser(
       personKey: storedPerson.personKey,
       personId: storedPerson.personId as Hex,
       identifiers: collected.identifiers,
-      hasWorldId: collected.hasWorldId,
+      hasTelegramPhone: collected.hasTelegramPhone,
       hpScore: collected.hpScore,
       hpThreshold: collected.hpThreshold,
     };
