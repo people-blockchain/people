@@ -73,8 +73,8 @@ function topicAddress(topic: string | undefined): string {
  * Cosmos EVM nodes reject eth_getLogs over more than 10,000 blocks
  * ("maximum [from, to] blocks distance: 10000"), so a single 0x1..latest query
  * threw and the whole pool/token scan came back empty on a long-running chain.
- * Scan in windows from the deployment block instead; a failed window is skipped
- * so static entries from the deployment JSON still show.
+ * Scan in windows from the deployment block instead; a window that still fails
+ * after one retry rejects the scan so callers never treat a partial list as whole.
  */
 export const LOG_WINDOW_BLOCKS = 9_000;
 
@@ -240,7 +240,8 @@ async function readLogWindow(
  * - Node reads are capped at `MAX_PARALLEL_LOG_WINDOWS` in flight across the whole process, so a
  *   cold page render cannot fire dozens of range scans at the validator at once.
  * - `rpc-server.ts` backs off exponentially after node failures, so an unhealthy node is not
- *   hammered with retries; failed windows are simply skipped (and not cached).
+ *   hammered with retries. A failed window is retried once; if it still fails the scan rejects
+ *   with `log_window_unavailable` rather than returning a partial result.
  *
  * `fromBlockHint` can only move the start later (e.g. a pair's own factory start block).
  * `topics` follows the JSON-RPC log filter: `null` is a wildcard position. The window cache key
@@ -265,9 +266,15 @@ export async function fetchLogsWindowed(
       const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
       const entry = windowLogsCache.get(key);
       if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
-      const logs = await readLogWindow(address, topics, from, to, isImmutable);
-      if (logs) rememberWindowLogs(key, logs);
-      return logs ?? [];
+      // A transient node failure must not silently drop this window's logs and leave callers with
+      // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
+      // stale catalog instead of caching a short one.
+      const logs =
+        (await readLogWindow(address, topics, from, to, isImmutable)) ??
+        (await readLogWindow(address, topics, from, to, isImmutable));
+      if (!logs) throw new Error("log_window_unavailable");
+      rememberWindowLogs(key, logs);
+      return logs;
     }),
   );
   return results.flat();
@@ -469,9 +476,16 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
 }
 
 async function loadTokens(): Promise<CatalogToken[]> {
-  const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
-  tokensCache = { at: Date.now(), value };
-  return value;
+  try {
+    const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
+    tokensCache = { at: Date.now(), value };
+    return value;
+  } catch (error) {
+    // Both the shared cache and the direct scan failed: serve the last good catalog rather than
+    // an empty or partial one.
+    if (tokensCache) return tokensCache.value;
+    throw error;
+  }
 }
 
 export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
@@ -625,7 +639,7 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
     if (indexed && indexed.length) {
       for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
     } else {
-      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]);
+      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]).catch(() => []);
       for (const log of fromLogs) {
         const pair = topicAddress(log.topics?.[2]);
         if (pair) pairAddrs.add(pair.toLowerCase());

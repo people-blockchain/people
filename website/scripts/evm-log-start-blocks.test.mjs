@@ -225,6 +225,31 @@ test("fetchLogsWindowed returns nothing when the node cannot report a tip", asyn
   assert.deepEqual(logFilters(node.calls), []);
 });
 
+test("fetchLogsWindowed retries a failed window once before succeeding", async (t) => {
+  const attempts = new Map();
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(LATEST);
+    if (call.method !== "eth_getLogs") return [];
+    const key = `${call.params[0].fromBlock}-${call.params[0].toBlock}`;
+    const count = (attempts.get(key) ?? 0) + 1;
+    attempts.set(key, count);
+    return count === 1 ? null : [];
+  });
+  resetChainCatalogCacheForTests();
+
+  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
+  const counts = [...attempts.values()];
+  assert.ok(counts.length > 0);
+  assert.ok(counts.every((count) => count === 2), counts.join(","));
+});
+
+test("fetchLogsWindowed rejects with log_window_unavailable when a window still fails after one retry", async (t) => {
+  await startRpcNode(t, (call) => (call.method === "eth_blockNumber" ? hex(LATEST) : null));
+  resetChainCatalogCacheForTests();
+
+  await assert.rejects(fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), /log_window_unavailable/);
+});
+
 // --- market-data.ts: the same windowing through a full snapshot ------------------------------
 
 // The package targets ES2017, so BigInt literals (`10n`) do not compile — spell them out.
