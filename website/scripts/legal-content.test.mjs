@@ -3,9 +3,18 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { content } from "../src/lib/content.ts";
 import { legalBundle } from "../src/lib/legal-content.ts";
+import { legalMetadataFields } from "../src/lib/legal-metadata-fields.ts";
 import { LEGAL_CONTACT_EMAIL } from "../src/lib/legal-contact.ts";
 import { SITE_ROUTES } from "../src/lib/site.ts";
+import {
+  NON_EN_LEGAL_LOCALES,
+  flattenStrings,
+  findUntranslated,
+  structurePaths,
+  untranslatedReasons,
+} from "./legal-untranslated.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
@@ -103,4 +112,116 @@ test("legal-en.json is valid JSON on disk", () => {
   const parsed = JSON.parse(raw);
   assert.equal(parsed.privacy.title, "Privacy Policy");
   assert.equal(parsed.terms.title, "Terms of Service");
+});
+
+const loadLegal = (lang) => JSON.parse(readFileSync(join(surfaces, `legal-${lang}.json`), "utf8"));
+
+test("every non-en legal locale has exactly the same keys and sections as en", () => {
+  const enPaths = structurePaths(loadLegal("en"));
+  for (const lang of NON_EN_LEGAL_LOCALES) {
+    const paths = structurePaths(loadLegal(lang));
+    assert.deepEqual(
+      enPaths.filter((p) => !paths.includes(p)),
+      [],
+      `${lang}: keys missing vs en`,
+    );
+    assert.deepEqual(
+      paths.filter((p) => !enPaths.includes(p)),
+      [],
+      `${lang}: keys not present in en`,
+    );
+  }
+});
+
+test("English notice keys exist in en and in every locale", () => {
+  const en = loadLegal("en");
+  for (const page of ["terms", "privacy"]) {
+    assert.equal(en[page].englishPrevails, "In case of discrepancies, the English version prevails.");
+    assert.ok(en[page].englishLink, `en/${page}.englishLink`);
+    for (const lang of NON_EN_LEGAL_LOCALES) {
+      const doc = loadLegal(lang)[page];
+      assert.ok(doc.englishPrevails?.trim(), `${lang}/${page}.englishPrevails`);
+      assert.ok(doc.englishLink?.trim(), `${lang}/${page}.englishLink`);
+    }
+  }
+});
+
+test("legal document shows the English-prevails notice with a link to the English page", () => {
+  const src = readFileSync(join(root, "src/components/legal/LegalDocument.tsx"), "utf8");
+  assert.match(src, /lang !== "en"/);
+  assert.match(src, /data-testid="english-version-link"/);
+  assert.match(src, /setLang\("en"\)/);
+  assert.match(src, /kind === "privacy" \? "\/privacy" : "\/terms"/);
+  for (const page of ["terms", "privacy"]) {
+    const route = readFileSync(join(root, `src/app/${page}/page.tsx`), "utf8");
+    assert.match(route, /buildLegalMetadata\(/, `${page} metadata must be localized`);
+  }
+});
+
+test("untranslated-English detector flags English prose and accepts translations", () => {
+  const en = "We do not sell your personal information and you may ask us to delete it.";
+  assert.ok(untranslatedReasons(en, en).length > 0);
+  assert.ok(untranslatedReasons("Мы не продаём ваши персональные данные.", en).length === 0);
+  assert.ok(untranslatedReasons("Мы используем Vercel, Neon, Resend и Human Passport.", en).length === 0);
+  assert.ok(untranslatedReasons("Children", "Children").length > 0);
+});
+
+for (const lang of NON_EN_LEGAL_LOCALES) {
+  test(`legal-${lang}.json contains no untranslated English`, () => {
+    const found = findUntranslated(loadLegal(lang), loadLegal("en"), lang);
+    assert.deepEqual(
+      found.map((f) => `${f.path} (${f.reasons.join("; ")})`),
+      [],
+      `${lang}: ${found.length} string(s) still English`,
+    );
+  });
+}
+
+test("localized metadata and English-prevails notice are never untranslated English", () => {
+  for (const kind of ["terms", "privacy"]) {
+    const en = legalMetadataFields("en", kind);
+    for (const lang of NON_EN_LEGAL_LOCALES) {
+      const fields = legalMetadataFields(lang, kind);
+      for (const key of Object.keys(en)) {
+        const value = fields[key];
+        assert.ok(value?.trim(), `${lang}/${kind} metadata ${key} is empty`);
+        assert.deepEqual(untranslatedReasons(value, en[key]), [], `${lang}/${kind} metadata ${key}`);
+      }
+      assert.ok(fields.title.endsWith(" | PEOPLE Blockchain"), `${lang}/${kind} title suffix`);
+      const doc = loadLegal(lang)[kind];
+      const enDoc = loadLegal("en")[kind];
+      for (const key of ["englishPrevails", "englishLink"]) {
+        assert.deepEqual(untranslatedReasons(doc[key], enDoc[key]), [], `${lang}/${kind}.${key}`);
+      }
+    }
+  }
+});
+
+// Header, navigation and footer strings rendered on /terms and /privacy. Labels below are
+// product names or loanwords that are legitimately the same as English in some locales.
+const NAV_FOOTER_SAME_AS_EN_OK = new Set(["Million Founders", "Staking", "Litepaper", "Explorer", "Governance", "Menu", "Architecture"]);
+
+test("header, nav and footer strings on legal pages are localized in every locale", () => {
+  const pick = (c) => ({
+    nav: c.nav,
+    footer: c.footer,
+    a11y: { footer: c.a11y.footer, navPrimary: c.a11y.navPrimary, navMobile: c.a11y.navMobile },
+  });
+  const en = flattenStrings(pick(content.en));
+  for (const lang of NON_EN_LEGAL_LOCALES) {
+    const localized = flattenStrings(pick(content[lang]));
+    for (const [path, enValue] of en) {
+      if (!enValue.trim() || path.endsWith(".href")) continue;
+      assert.ok(localized.has(path), `${lang}: ${path} missing`);
+      const value = localized.get(path);
+      if (value === enValue) {
+        assert.ok(NAV_FOOTER_SAME_AS_EN_OK.has(value), `${lang}: ${path} is still English ("${value}")`);
+      }
+    }
+  }
+});
+
+test("language switcher close button label is localized, not hard-coded", () => {
+  const src = readFileSync(join(root, "src/components/LanguageSwitcher.tsx"), "utf8");
+  assert.doesNotMatch(src, /aria-label="Close"/);
 });
