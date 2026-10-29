@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { uxCopy } from "@/lib/ux-copy";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
+import { nftExplorerCopy } from "@/lib/nft-explorer-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
@@ -894,15 +895,24 @@ export function EvmNftMint() {
           ) : null}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             {result.tokenId !== null ? (
-              <a
-                href={peoplescanNftUrl(result.collection, result.tokenId)}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="nft-peoplescan-link"
-                className="inline-flex w-full justify-center rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink sm:w-auto"
-              >
-                {nm.viewOnPeoplescan}
-              </a>
+              <>
+                <Link
+                  href={`/explorer/nft/${result.collection}/${result.tokenId.toString()}`}
+                  data-testid="nft-view-link"
+                  className="inline-flex w-full justify-center rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink sm:w-auto"
+                >
+                  {nftExplorerCopy[lang].viewNft}
+                </Link>
+                <a
+                  href={peoplescanNftUrl(result.collection, result.tokenId)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="nft-peoplescan-link"
+                  className="text-sm font-semibold text-brand"
+                >
+                  {nm.viewOnPeoplescan}
+                </a>
+              </>
             ) : null}
             <button type="button" onClick={createAnother} className="text-sm font-semibold text-brand">
               {nm.createAnother}

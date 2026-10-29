@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFT",
+  "loading": "正在加载 NFT…",
+  "retry": "重试",
+  "notFound": "在此网络上未找到该 NFT。",
+  "unavailable": "网络暂时不可用，请重试。",
+  "collection": "合集",
+  "tokenId": "代币 ID",
+  "owner": "持有者",
+  "tokenUri": "代币 URI",
+  "description": "描述",
+  "openOnIpfs": "在 IPFS 网关中打开",
+  "openOriginalImage": "打开原图",
+  "imageUnavailable": "无法加载图片。",
+  "noImage": "此 NFT 没有可在此处显示的图片。",
+  "metadataUnavailable": "无法加载元数据，因此仅显示链上数据。",
+  "externalUriNote": "此代币 URI 指向外部地址。这里只显示，不会打开。",
+  "viewNft": "查看我的 NFT"
+}

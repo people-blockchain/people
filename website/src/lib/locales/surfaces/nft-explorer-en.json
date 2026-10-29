@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFTs",
+  "loading": "Loading NFT…",
+  "retry": "Try again",
+  "notFound": "This NFT was not found on this network.",
+  "unavailable": "Network temporarily unavailable. Please try again.",
+  "collection": "Collection",
+  "tokenId": "Token ID",
+  "owner": "Owner",
+  "tokenUri": "Token URI",
+  "description": "Description",
+  "openOnIpfs": "Open on an IPFS gateway",
+  "openOriginalImage": "Open original image",
+  "imageUnavailable": "The image could not be loaded.",
+  "noImage": "This NFT has no image that can be shown here.",
+  "metadataUnavailable": "The metadata could not be loaded, so only on-chain data is shown.",
+  "externalUriNote": "This token URI points to an external address. It is shown but not opened here.",
+  "viewNft": "View your NFT"
+}

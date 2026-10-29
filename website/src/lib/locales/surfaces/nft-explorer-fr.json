@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFT",
+  "loading": "Chargement du NFT…",
+  "retry": "Réessayer",
+  "notFound": "Ce NFT est introuvable sur ce réseau.",
+  "unavailable": "Réseau temporairement indisponible. Veuillez réessayer.",
+  "collection": "Collection",
+  "tokenId": "ID du token",
+  "owner": "Propriétaire",
+  "tokenUri": "URI du token",
+  "description": "Description",
+  "openOnIpfs": "Ouvrir sur une passerelle IPFS",
+  "openOriginalImage": "Ouvrir l'image originale",
+  "imageUnavailable": "L'image n'a pas pu être chargée.",
+  "noImage": "Ce NFT n'a pas d'image pouvant être affichée ici.",
+  "metadataUnavailable": "Les métadonnées n'ont pas pu être chargées ; seules les données de la chaîne sont affichées.",
+  "externalUriNote": "Cet URI de token pointe vers une adresse externe. Il est affiché mais n'est pas ouvert ici.",
+  "viewNft": "Voir mon NFT"
+}

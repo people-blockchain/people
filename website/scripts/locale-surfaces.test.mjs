@@ -26,6 +26,7 @@ const surfaces = [
   "litepaper",
   "samples",
   "nft-media",
+  "nft-explorer",
 ];
 
 function load(name) {
