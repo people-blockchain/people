@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "稳定币支付暂时不可用，请使用 PPL 支付。",
   "errInsufficientPpl": "PPL 不足：需要 {needed} PPL（费用 + gas），当前余额 {balance} PPL。",
   "errInsufficientPplGeneric": "PPL 不足以支付费用和 gas。请充值后重试。",
-  "errNetworkRpc": "网络无响应。请检查连接后重试。"
+  "errNetworkRpc": "网络无响应。请检查连接后重试。",
+  "createSuccessTitle": "代币已创建",
+  "createSuccessLead": "代币现已在 People Blockchain 上线。",
+  "createViewToken": "在区块浏览器中打开代币",
+  "createViewAddress": "在区块浏览器中打开地址",
+  "createTimeoutTitle": "交易已发送",
+  "createTimeoutBody": "确认所需时间比平时更长。请查看区块浏览器，不要重复发送。只有在确认尚未创建任何内容时，才使用“再创建一个”。",
+  "createTimeoutExplorer": "在区块浏览器中查看您的地址"
 }

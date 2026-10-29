@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "Stablecoin ödemesi geçici olarak kullanılamıyor. Lütfen PPL ile ödeyin.",
   "errInsufficientPpl": "Yeterli PPL yok: {needed} PPL gerekli (ücret + gas), bakiyeniz {balance} PPL.",
   "errInsufficientPplGeneric": "Ücret ve gas için yeterli PPL yok. Bakiyenizi yükleyip tekrar deneyin.",
-  "errNetworkRpc": "Ağ yanıt vermiyor. Bağlantınızı kontrol edip tekrar deneyin."
+  "errNetworkRpc": "Ağ yanıt vermiyor. Bağlantınızı kontrol edip tekrar deneyin.",
+  "createSuccessTitle": "Token oluşturuldu",
+  "createSuccessLead": "Token artık People Blockchain üzerinde yayında.",
+  "createViewToken": "Tokenı gezgininde aç",
+  "createViewAddress": "Adresi gezgininde aç",
+  "createTimeoutTitle": "İşlem gönderildi",
+  "createTimeoutBody": "Onay normalden uzun sürüyor. Gezginini kontrol et ve işlemi tekrar gönderme. Hiçbir şeyin oluşturulmadığından eminsen «Yeni oluştur» seçeneğini kullan.",
+  "createTimeoutExplorer": "Adresini gezgininde kontrol et"
 }

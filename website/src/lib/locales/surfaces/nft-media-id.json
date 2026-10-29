@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "Pembayaran stablecoin untuk sementara tidak tersedia. Silakan bayar dengan PPL.",
   "errInsufficientPpl": "PPL tidak cukup: Anda memerlukan {needed} PPL (biaya + gas), saldo Anda {balance} PPL.",
   "errInsufficientPplGeneric": "PPL tidak cukup untuk menutupi biaya dan gas. Isi ulang saldo dan coba lagi.",
-  "errNetworkRpc": "Jaringan tidak merespons. Periksa koneksi Anda dan coba lagi."
+  "errNetworkRpc": "Jaringan tidak merespons. Periksa koneksi Anda dan coba lagi.",
+  "createSuccessTitle": "Token dibuat",
+  "createSuccessLead": "Token kini aktif di People Blockchain.",
+  "createViewToken": "Buka token di penjelajah",
+  "createViewAddress": "Buka alamat di penjelajah",
+  "createTimeoutTitle": "Transaksi terkirim",
+  "createTimeoutBody": "Konfirmasi memakan waktu lebih lama dari biasanya. Periksa penjelajah dan jangan kirim ulang. Gunakan «Buat lagi» hanya jika Anda yakin belum ada yang dibuat.",
+  "createTimeoutExplorer": "Periksa alamat Anda di penjelajah"
 }

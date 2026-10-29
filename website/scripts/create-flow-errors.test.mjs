@@ -98,3 +98,41 @@ test("all 12 nft-media locales carry the create-flow error keys", () => {
     assert.match(copy.errInsufficientPpl, /\{balance\}/, `${lang} balance placeholder`);
   }
 });
+
+test("all 12 nft-media locales carry the token-created success and timeout keys", () => {
+  const keys = [
+    "createSuccessTitle",
+    "createSuccessLead",
+    "createViewToken",
+    "createViewAddress",
+    "createTimeoutTitle",
+    "createTimeoutBody",
+    "createTimeoutExplorer",
+  ];
+  for (const lang of ["ar", "de", "en", "es", "fr", "id", "it", "pt", "ru", "tr", "vi", "zh"]) {
+    const copy = JSON.parse(
+      readFileSync(join(root, "src/lib/locales/surfaces", `nft-media-${lang}.json`), "utf8"),
+    );
+    for (const key of keys) {
+      assert.equal(typeof copy[key], "string", `${lang} ${key}`);
+      assert.ok(copy[key].trim().length > 0, `${lang} ${key} is empty`);
+    }
+  }
+});
+
+test("token launch waits for the receipt and locks resubmission until reset", () => {
+  const src = readFileSync(join(root, "src/components/factory/EvmTokenLaunch.tsx"), "utf8");
+  assert.match(src, /timeout: RECEIPT_WAIT_TIMEOUT_MS/);
+  assert.match(src, /pollingInterval: RECEIPT_POLL_INTERVAL_MS/);
+  assert.match(src, /method: "eth_getTransactionReceipt"/);
+  assert.match(src, /MANUAL_POLL_TIMEOUT_MS = 60_000/);
+  assert.match(src, /MANUAL_POLL_INTERVAL_MS = 3_000/);
+  assert.match(src, /const submitLock = useRef\(false\)/);
+  assert.match(src, /if \(submitLock\.current \|\| pendingHash/);
+  assert.match(src, /setPendingHash\(hash\)/);
+  assert.match(src, /Boolean\(pendingHash\)/);
+  assert.match(src, /setConfirmationTimedOut\(true\)/);
+  assert.match(src, /\/explorer\/address\/\$\{signer\.address\}/);
+  assert.match(src, /\/explorer\/token\/\$\{created\.address\}/);
+  assert.match(src, /\/explorer\/address\/\$\{created\.address\}/);
+});

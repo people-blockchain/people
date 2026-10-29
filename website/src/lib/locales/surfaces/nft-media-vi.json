@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "Thanh toán bằng stablecoin tạm thời không khả dụng. Vui lòng thanh toán bằng PPL.",
   "errInsufficientPpl": "Không đủ PPL: bạn cần {needed} PPL (phí + gas), số dư của bạn là {balance} PPL.",
   "errInsufficientPplGeneric": "Không đủ PPL để trả phí và gas. Hãy nạp thêm và thử lại.",
-  "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại."
+  "errNetworkRpc": "Mạng không phản hồi. Kiểm tra kết nối và thử lại.",
+  "createSuccessTitle": "Đã tạo token",
+  "createSuccessLead": "Token hiện đã hoạt động trên People Blockchain.",
+  "createViewToken": "Mở token trong trình duyệt chuỗi",
+  "createViewAddress": "Mở địa chỉ trong trình duyệt chuỗi",
+  "createTimeoutTitle": "Đã gửi giao dịch",
+  "createTimeoutBody": "Việc xác nhận mất nhiều thời gian hơn bình thường. Hãy kiểm tra trình duyệt chuỗi và không gửi lại. Chỉ dùng «Tạo thêm» khi bạn chắc chắn chưa có gì được tạo.",
+  "createTimeoutExplorer": "Kiểm tra địa chỉ của bạn trong trình duyệt chuỗi"
 }
