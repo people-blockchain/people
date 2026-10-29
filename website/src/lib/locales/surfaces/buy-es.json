@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "¿Por qué hace falta verificarse?",
-        "a": "Para que cada comprador sea una persona real. Cada persona tiene una dirección, y los límites se aplican a personas, no a bots. Los primeros {whitelistDays} días son solo para personas verificadas. Puedes verificarte con Telegram o Human Passport. No se guarda ningún dato personal en la blockchain."
+        "a": "Para que cada comprador sea una persona real. Cada persona tiene una dirección, y los límites se aplican a direcciones de billetera, no a bots. Los primeros {whitelistDays} días son solo para personas verificadas. Puedes verificarte con Telegram o Human Passport. No se guarda ningún dato personal en la blockchain."
       },
       {
         "q": "¿Cuándo puedo enviar PPL a otras personas?",

@@ -56,14 +56,11 @@ const ADDRESS = {
   ar: /عنوان/,
 };
 
-// Localized legal files add these on top of the English source (titles are translated, the body stays English).
-const LEGAL_LOCALE_ONLY = new Set(["privacy.englishPrevails", "terms.englishPrevails", "terms.saleTitle"]);
-
 test("legal-*.json has the same structure as the English source in all 12 locales", () => {
   const expected = shape(surface("legal", "en")).sort();
   for (const lang of LANGS) {
-    const actual = shape(surface("legal", lang)).filter((p) => lang === "en" || !LEGAL_LOCALE_ONLY.has(p));
-    assert.deepEqual(actual.sort(), expected, `legal-${lang}.json`);
+    const actual = shape(surface("legal", lang)).sort();
+    assert.deepEqual(actual, expected, `legal-${lang}.json`);
   }
 });
 
@@ -142,8 +139,12 @@ test("proxy redirects /xx/buy to /buy keeping the query and setting the language
 
 test("next.config.ts has no /buy locale redirects (a config redirect cannot set the cookie)", () => {
   const cfg = read("next.config.ts");
-  assert.doesNotMatch(cfg, /source:\s*["'`][^"'`]*buy/);
-  assert.doesNotMatch(cfg, /source:\s*["'`]\/(\(?[a-z]{2}\b|:locale)/);
+  const start = cfg.indexOf("async redirects()");
+  const end = cfg.indexOf("async headers()");
+  assert.ok(start >= 0 && end > start, "redirects() and headers() blocks are present");
+  const redirects = cfg.slice(start, end);
+  assert.doesNotMatch(redirects, /source:\s*["'`][^"'`]*buy/);
+  assert.doesNotMatch(redirects, /source:\s*["'`]\/(\(?[a-z]{2}\b|:locale)/);
 });
 
 test("the root layout renders with the request language, not a hardcoded English snapshot", () => {
