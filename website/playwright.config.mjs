@@ -14,6 +14,7 @@ const config = {
     "web3auth-connect-click.spec.mjs",
     "tokenomics-hiw-mobile-layout.spec.mjs",
     "founders-mobile-layout.spec.mjs",
+    "bounty-hub-layout.spec.mjs",
     "partner-login-click.spec.mjs",
     "header-logo-theme.spec.mjs",
     "network-status.spec.mjs",

@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { content } from "@/lib/content";
 import { homeWarmCopy } from "@/lib/home-warm-content";
+import { bountyCopy } from "@/lib/bounty-content";
 import {
   heroHeadlineCqiMultiplier,
   heroHeadlineMaxWordCharsFromLines,
@@ -30,6 +31,7 @@ const MAX_HEADLINE_LINES = 3;
 export function HomeWarmHero() {
   const { lang } = useLanguage();
   const t = homeWarmCopy(lang).hero;
+  const bounty = bountyCopy(lang);
 
   const mainLines = t.headlineMainLines;
   const accentLines = t.headlineAccentLines;
@@ -135,11 +137,11 @@ export function HomeWarmHero() {
             <Reveal delay={100}>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Link
-                  href="/founders"
+                  href="/bounty"
                   className={WARM_HERO_BTN}
                   data-testid="home-hero-founder-cta"
                 >
-                  {t.ctaFounder}
+                  {bounty.homeCta}
                 </Link>
                 <HomeWalletCta label={content[lang].nav.ctaJoin} className={WARM_HERO_BTN} />
               </div>

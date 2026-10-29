@@ -1,0 +1,124 @@
+{
+  "navLabel": "Gagner PPL",
+  "homeCta": "Gagner PPL",
+  "hero": {
+    "eyebrow": "GAGNEZ PPL",
+    "title": "Gagnez PPL avec PEOPLE",
+    "lead": "Un seul endroit pour votre numéro de fondateur, vos points, votre lien de parrainage personnel, les primes et le fonds de récompenses de la communauté.",
+    "ctaEarn": "Commencer à gagner",
+    "ctaSale": "Aller à la vente PPL",
+    "disclaimer": "Phase testnet. Les points et récompenses sont préliminaires, exigent une vérification humaine et ne constituent pas une promesse de revenus."
+  },
+  "countdown": {
+    "eyebrow": "VENTE PPL · 1ER DÉCEMBRE 2026",
+    "title": "Compte à rebours de la vente PPL",
+    "lead": "La vente publique PPL ouvre le 1er décembre 2026. Vous payez en USDC ou USDT sur Base, et les PPL sont crédités immédiatement à votre adresse dans le réseau PEOPLE.",
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "seconds": "secondes",
+    "open": "La vente PPL est ouverte.",
+    "openCta": "Acheter PPL",
+    "dateLabel": "Date d'ouverture",
+    "unavailable": "La date d'ouverture n'a pas encore été annoncée."
+  },
+  "stats": {
+    "eyebrow": "COMMUNAUTÉ",
+    "title": "Participants",
+    "lead": "Seules les personnes vérifiées sont comptées.",
+    "verified": "participants vérifiés",
+    "countries": "pays",
+    "goal": "Objectif",
+    "missing": "Les données des participants ne sont pas disponibles pour le moment."
+  },
+  "leaderboard": {
+    "eyebrow": "CLASSEMENT",
+    "title": "Meilleurs ambassadeurs",
+    "lead": "Classés par invités vérifiés. Les bots et les comptes non vérifiés ne comptent pas.",
+    "founder": "Fondateur",
+    "invites": "invités vérifiés",
+    "ambassador": "Ambassadeur",
+    "missing": "Le classement n'a pas encore de données réelles."
+  },
+  "tasks": {
+    "eyebrow": "POINTS",
+    "title": "Vos points et tâches",
+    "lead": "Les points sont attribués pour des actions réelles après vérification humaine. Acheter des PPL et participer à des airdrops n'est pas récompensé.",
+    "yourPoints": "Vos points",
+    "yourNumber": "Numéro de fondateur",
+    "notFounder": "Connectez-vous et réclamez un numéro de fondateur pour commencer à gagner des points.",
+    "signIn": "Ouvrir le portefeuille",
+    "dailyCap": "Plafond quotidien",
+    "perAction": "par action",
+    "points": "points",
+    "tasksLabel": "Tâches",
+    "open": "Ouvrir",
+    "verification": "Vérification humaine requise."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Échanger des PPL", "href": "/swap" },
+    { "id": "stake", "label": "Staker des PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Lancer un jeton", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Créer un NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Voter dans la gouvernance", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Réagir à un projet", "href": "/discover" },
+    { "id": "discover_follow", "label": "Suivre un projet", "href": "/discover" },
+    { "id": "invite", "label": "Inviter une personne vérifiée", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "PARRAINAGE",
+    "title": "Invitez des personnes et gagnez sur le Growth Pool",
+    "lead": "Deux niveaux : L1 pour les invités directs et L2 pour leurs invités. Les points ne sont crédités que pour les invités vérifiés qui réalisent une action réelle.",
+    "l1": "L1 · invité direct",
+    "points": "points",
+    "l2": "L2 · deuxième niveau",
+    "l2Value": "{{percent}} des points de parrainage de l'invité L1 (L2)",
+    "poolLabel": "Fonds de parrainage de la saison 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% immédiatement, le reste sur 52 semaines, sous condition d'activité.",
+    "yourLink": "Votre lien de parrainage personnel",
+    "signIn": "Connectez-vous et réclamez un numéro de fondateur pour obtenir votre lien personnel.",
+    "cabinet": "Ouvrir l'espace partenaire",
+    "growthNote": "Les paiements de parrainage Growth proviennent du Growth Pool : 15% des frais de réseau éligibles. Les poids L1 et L2 sont 70/30 de ce budget."
+  },
+  "bounties": {
+    "eyebrow": "PRIMES",
+    "title": "Primes",
+    "lead": "D'autres façons de gagner des PPL depuis le fonds Communauté et récompenses.",
+    "bugTitle": "Prime aux bugs",
+    "bugBody": "Signalez une vulnérabilité ou un bug produit avec le bouton de bug présent sur chaque page. Les rapports acceptés sont récompensés en points de fondateur.",
+    "bugCta": "Signaler un bug",
+    "creatorTitle": "Prime de parrainage du créateur",
+    "creatorBody": "Les émetteurs peuvent réserver en option 5% de l'offre (maximum 10%) pour des récompenses d'invitation, avec une prime d'invitation par défaut de 5% de l'achat de l'invité.",
+    "creatorCta": "Lancer un jeton",
+    "contentTitle": "Primes de contenu et de communauté",
+    "contentBody": "Suivez le tableau des tâches et les annonces. Une nouvelle prime n'est ajoutée que lorsqu'elle dispose d'un budget et de règles réels."
+  },
+  "tokenomics": {
+    "eyebrow": "FINANCEMENT",
+    "title": "D'où vient chaque récompense",
+    "lead": "Les récompenses sont payées uniquement depuis le fonds Communauté et récompenses. Aucun PPL nouveau n'est créé pour elles.",
+    "communityLabel": "Communauté et récompenses",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Libéré sur 6 ans.",
+    "seasonLabel": "Saison 1 (proposition)",
+    "seasonValue": "20M PPL sur 3 mois",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% immédiatement, le reste sur 12 mois, sous condition d'activité.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% des frais de réseau éligibles",
+    "sourceCta": "Lire la tokenomique"
+  },
+  "personal": {
+    "eyebrow": "VOTRE COMPTE",
+    "title": "Tableau de bord du fondateur",
+    "lead": "Votre numéro, vos points, votre lien de parrainage et vos tâches sont mis à jour automatiquement."
+  },
+  "final": {
+    "title": "Prêt à gagner des PPL ?",
+    "lead": "Réclamez un numéro de fondateur, accomplissez des tâches et invitez des personnes vérifiées.",
+    "cta": "Commencer à gagner",
+    "sale": "Aller à la vente PPL"
+  }
+}

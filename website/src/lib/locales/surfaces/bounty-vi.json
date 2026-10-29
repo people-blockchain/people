@@ -1,0 +1,124 @@
+{
+  "navLabel": "Kiếm PPL",
+  "homeCta": "Kiếm PPL",
+  "hero": {
+    "eyebrow": "KIẾM PPL",
+    "title": "Kiếm PPL cùng PEOPLE",
+    "lead": "Một nơi duy nhất cho số người sáng lập, điểm, liên kết giới thiệu cá nhân, tiền thưởng và quỹ thưởng cộng đồng.",
+    "ctaEarn": "Bắt đầu kiếm",
+    "ctaSale": "Đến đợt bán PPL",
+    "disclaimer": "Giai đoạn testnet. Điểm và phần thưởng là tạm thời, cần xác minh con người và không phải là lời hứa về thu nhập."
+  },
+  "countdown": {
+    "eyebrow": "BÁN PPL · 1 THÁNG 12 NĂM 2026",
+    "title": "Đếm ngược đến đợt bán PPL",
+    "lead": "Đợt bán PPL công khai mở vào ngày 1 tháng 12 năm 2026. Bạn thanh toán bằng USDC hoặc USDT trên Base, và PPL được ghi có ngay vào địa chỉ của bạn trong mạng PEOPLE.",
+    "days": "ngày",
+    "hours": "giờ",
+    "minutes": "phút",
+    "seconds": "giây",
+    "open": "Đợt bán PPL đã mở.",
+    "openCta": "Mua PPL",
+    "dateLabel": "Ngày mở",
+    "unavailable": "Ngày mở chưa được công bố."
+  },
+  "stats": {
+    "eyebrow": "CỘNG ĐỒNG",
+    "title": "Người tham gia",
+    "lead": "Chỉ những người đã xác minh mới được tính.",
+    "verified": "người tham gia đã xác minh",
+    "countries": "quốc gia",
+    "goal": "Mục tiêu",
+    "missing": "Dữ liệu người tham gia hiện không có sẵn."
+  },
+  "leaderboard": {
+    "eyebrow": "BẢNG XẾP HẠNG",
+    "title": "Đại sứ hàng đầu",
+    "lead": "Xếp theo người được mời đã xác minh. Bot và tài khoản chưa xác minh không được tính.",
+    "founder": "Người sáng lập",
+    "invites": "người được mời đã xác minh",
+    "ambassador": "Đại sứ",
+    "missing": "Bảng xếp hạng chưa có dữ liệu thật."
+  },
+  "tasks": {
+    "eyebrow": "ĐIỂM",
+    "title": "Điểm và nhiệm vụ của bạn",
+    "lead": "Điểm được trao cho hành động thật sau khi xác minh con người. Mua PPL và tham gia airdrop không được thưởng.",
+    "yourPoints": "Điểm của bạn",
+    "yourNumber": "Số người sáng lập",
+    "notFounder": "Đăng nhập và nhận số người sáng lập để bắt đầu kiếm điểm.",
+    "signIn": "Mở ví",
+    "dailyCap": "Giới hạn hàng ngày",
+    "perAction": "mỗi hành động",
+    "points": "điểm",
+    "tasksLabel": "Nhiệm vụ",
+    "open": "Mở",
+    "verification": "Cần xác minh con người."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "Đổi PPL", "href": "/swap" },
+    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
+    { "id": "token_launch", "label": "Phát hành token", "href": "/create/token" },
+    { "id": "nft_mint", "label": "Đúc NFT", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Bỏ phiếu quản trị", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Phản ứng với dự án", "href": "/discover" },
+    { "id": "discover_follow", "label": "Theo dõi dự án", "href": "/discover" },
+    { "id": "invite", "label": "Mời một người đã xác minh", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "GIỚI THIỆU",
+    "title": "Mời mọi người và kiếm từ Growth Pool",
+    "lead": "Hai cấp: L1 cho người được mời trực tiếp và L2 cho người họ mời. Điểm chỉ được cộng cho người được mời đã xác minh và có hành động thật.",
+    "l1": "L1 · người được mời trực tiếp",
+    "points": "điểm",
+    "l2": "L2 · cấp thứ hai",
+    "l2Value": "{{percent}} điểm giới thiệu của người được mời L1 (L2)",
+    "poolLabel": "Quỹ giới thiệu mùa 1",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% ngay lập tức, phần còn lại trong 52 tuần, có điều kiện hoạt động.",
+    "yourLink": "Liên kết giới thiệu cá nhân của bạn",
+    "signIn": "Đăng nhập và nhận số người sáng lập để lấy liên kết cá nhân.",
+    "cabinet": "Mở bảng đối tác",
+    "growthNote": "Các khoản thanh toán giới thiệu Growth đến từ Growth Pool: 15% phí mạng đủ điều kiện. Trọng số L1 và L2 là 70/30 của ngân sách đó."
+  },
+  "bounties": {
+    "eyebrow": "TIỀN THƯỞNG",
+    "title": "Tiền thưởng",
+    "lead": "Thêm cách kiếm PPL từ quỹ Cộng đồng và phần thưởng.",
+    "bugTitle": "Thưởng báo lỗi",
+    "bugBody": "Báo cáo lỗ hổng hoặc lỗi sản phẩm bằng nút báo lỗi trên bất kỳ trang nào. Báo cáo được chấp nhận sẽ được thưởng điểm người sáng lập.",
+    "bugCta": "Báo lỗi",
+    "creatorTitle": "Thưởng giới thiệu của người phát hành",
+    "creatorBody": "Người phát hành có thể tùy chọn dành 5% nguồn cung (tối đa 10%) cho thưởng mời, với mức thưởng mặc định là 5% giao dịch mua của người được mời.",
+    "creatorCta": "Phát hành token",
+    "contentTitle": "Thưởng nội dung và cộng đồng",
+    "contentBody": "Theo dõi bảng nhiệm vụ và thông báo. Tiền thưởng mới chỉ được thêm khi có ngân sách và quy tắc thật."
+  },
+  "tokenomics": {
+    "eyebrow": "TÀI TRỢ",
+    "title": "Mọi phần thưởng đến từ đâu",
+    "lead": "Phần thưởng chỉ được trả từ quỹ Cộng đồng và phần thưởng. Không có PPL mới nào được đúc cho chúng.",
+    "communityLabel": "Cộng đồng và phần thưởng",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "Mở khóa trong 6 năm.",
+    "seasonLabel": "Mùa 1 (đề xuất)",
+    "seasonValue": "20M PPL trong 3 tháng",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% ngay lập tức, phần còn lại trong 12 tháng, có điều kiện hoạt động.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "15% phí mạng đủ điều kiện",
+    "sourceCta": "Đọc tokenomics"
+  },
+  "personal": {
+    "eyebrow": "TÀI KHOẢN CỦA BẠN",
+    "title": "Bảng điều khiển người sáng lập",
+    "lead": "Số, điểm, liên kết giới thiệu và nhiệm vụ của bạn được cập nhật tự động."
+  },
+  "final": {
+    "title": "Sẵn sàng kiếm PPL?",
+    "lead": "Nhận số người sáng lập, hoàn thành nhiệm vụ và mời những người đã xác minh.",
+    "cta": "Bắt đầu kiếm",
+    "sale": "Đến đợt bán PPL"
+  }
+}

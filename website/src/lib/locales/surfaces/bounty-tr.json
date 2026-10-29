@@ -1,0 +1,124 @@
+{
+  "navLabel": "PPL kazan",
+  "homeCta": "PPL kazan",
+  "hero": {
+    "eyebrow": "PPL KAZAN",
+    "title": "PEOPLE ile PPL kazan",
+    "lead": "Kurucu numaran, puanların, kişisel davet bağlantın, ödüller ve topluluk ödül havuzu tek yerde.",
+    "ctaEarn": "Kazanmaya başla",
+    "ctaSale": "PPL satışına git",
+    "disclaimer": "Testnet aşaması. Puanlar ve ödüller ön niteliktedir, insan doğrulaması gerektirir ve gelir vaadi değildir."
+  },
+  "countdown": {
+    "eyebrow": "PPL SATIŞI · 1 ARALIK 2026",
+    "title": "PPL satışına geri sayım",
+    "lead": "Halka açık PPL satışı 1 Aralık 2026'da açılır. Base üzerinde USDC veya USDT ile ödeme yaparsınız ve PPL, PEOPLE ağındaki adresinize anında yatırılır.",
+    "days": "gün",
+    "hours": "saat",
+    "minutes": "dakika",
+    "seconds": "saniye",
+    "open": "PPL satışı açık.",
+    "openCta": "PPL satın al",
+    "dateLabel": "Açılış tarihi",
+    "unavailable": "Açılış tarihi henüz duyurulmadı."
+  },
+  "stats": {
+    "eyebrow": "TOPLULUK",
+    "title": "Katılımcılar",
+    "lead": "Yalnızca doğrulanmış kişiler sayılır.",
+    "verified": "doğrulanmış katılımcı",
+    "countries": "ülke",
+    "goal": "Hedef",
+    "missing": "Katılımcı verileri şu anda kullanılamıyor."
+  },
+  "leaderboard": {
+    "eyebrow": "LİDERLİK TABLOSU",
+    "title": "En iyi elçiler",
+    "lead": "Doğrulanmış davetlilere göre sıralanır. Botlar ve doğrulanmamış hesaplar sayılmaz.",
+    "founder": "Kurucu",
+    "invites": "doğrulanmış davetli",
+    "ambassador": "Elçi",
+    "missing": "Liderlik tablosunda henüz gerçek veri yok."
+  },
+  "tasks": {
+    "eyebrow": "PUANLAR",
+    "title": "Puanların ve görevlerin",
+    "lead": "Puanlar insan doğrulamasından sonra gerçek eylemler için verilir. PPL satın almak ve airdrop'lara katılmak ödüllendirilmez.",
+    "yourPoints": "Puanların",
+    "yourNumber": "Kurucu numarası",
+    "notFounder": "Puan kazanmaya başlamak için giriş yap ve kurucu numarası al.",
+    "signIn": "Cüzdanı aç",
+    "dailyCap": "Günlük limit",
+    "perAction": "eylem başına",
+    "points": "puan",
+    "tasksLabel": "Görevler",
+    "open": "Aç",
+    "verification": "İnsan doğrulaması gerekli."
+  },
+  "taskItems": [
+    { "id": "swap", "label": "PPL takas et", "href": "/swap" },
+    { "id": "stake", "label": "PPL stake et", "href": "/staking" },
+    { "id": "token_launch", "label": "Token başlat", "href": "/create/token" },
+    { "id": "nft_mint", "label": "NFT bas", "href": "/create/nft" },
+    { "id": "governance_vote", "label": "Yönetişimde oy ver", "href": "/governance" },
+    { "id": "discover_reaction", "label": "Bir projeye tepki ver", "href": "/discover" },
+    { "id": "discover_follow", "label": "Bir projeyi takip et", "href": "/discover" },
+    { "id": "invite", "label": "Doğrulanmış bir kişiyi davet et", "href": "#referral" }
+  ],
+  "referral": {
+    "eyebrow": "DAVETLER",
+    "title": "İnsanları davet et, Growth Pool'dan kazan",
+    "lead": "İki seviye: doğrudan davetliler için L1 ve onların davetlileri için L2. Puanlar yalnızca gerçek bir eylemde bulunan doğrulanmış davetliler için verilir.",
+    "l1": "L1 · doğrudan davetli",
+    "points": "puan",
+    "l2": "L2 · ikinci seviye",
+    "l2Value": "L1 davetlisinin davet puanlarının {{percent}} kadarı (L2)",
+    "poolLabel": "1. sezon davet havuzu",
+    "poolValue": "6M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% hemen, kalanı 52 hafta boyunca, aktivite şartıyla.",
+    "yourLink": "Kişisel davet bağlantın",
+    "signIn": "Kişisel bağlantını almak için giriş yap ve kurucu numarası al.",
+    "cabinet": "Partner panelini aç",
+    "growthNote": "Growth davet ödemeleri Growth Pool'dan gelir: uygun ağ ücretlerinin 15%'i. L1 ve L2 ağırlıkları bu bütçenin 70/30'u."
+  },
+  "bounties": {
+    "eyebrow": "ÖDÜLLER",
+    "title": "Ödüller",
+    "lead": "Topluluk ve ödüller havuzundan PPL kazanmanın ek yolları.",
+    "bugTitle": "Hata ödülü",
+    "bugBody": "Herhangi bir sayfadaki hata düğmesiyle bir güvenlik açığı veya ürün hatası bildir. Kabul edilen raporlar kurucu puanıyla ödüllendirilir.",
+    "bugCta": "Hata bildir",
+    "creatorTitle": "Oluşturucu davet ödülü",
+    "creatorBody": "Yayıncılar isteğe bağlı olarak arzın 5%'ini (en fazla 10%) davet ödülleri için ayırabilir; varsayılan davet ödülü davetlinin satın alımının 5%'idir.",
+    "creatorCta": "Token başlat",
+    "contentTitle": "İçerik ve topluluk ödülleri",
+    "contentBody": "Görev panosunu ve duyuruları takip et. Yeni bir ödül yalnızca gerçek bir bütçesi ve kuralları olduğunda eklenir."
+  },
+  "tokenomics": {
+    "eyebrow": "FİNANSMAN",
+    "title": "Her ödül nereden geliyor",
+    "lead": "Ödüller yalnızca Topluluk ve ödüller havuzundan ödenir. Bunlar için yeni PPL basılmaz.",
+    "communityLabel": "Topluluk ve ödüller",
+    "communityValue": "35% · 350M PPL",
+    "communityNote": "6 yıl boyunca serbest bırakılır.",
+    "seasonLabel": "1. sezon (öneri)",
+    "seasonValue": "3 ayda 20M PPL",
+    "vestingLabel": "Vesting",
+    "vestingValue": "10% hemen, kalanı 12 ay boyunca, aktivite şartıyla.",
+    "growthLabel": "Growth Pool",
+    "growthValue": "uygun ağ ücretlerinin 15%'i",
+    "sourceCta": "Tokenomik'i oku"
+  },
+  "personal": {
+    "eyebrow": "HESABIN",
+    "title": "Kurucu panosu",
+    "lead": "Numaran, puanların, davet bağlantın ve görevlerin otomatik güncellenir."
+  },
+  "final": {
+    "title": "PPL kazanmaya hazır mısın?",
+    "lead": "Kurucu numarası al, görevleri tamamla ve doğrulanmış kişileri davet et.",
+    "cta": "Kazanmaya başla",
+    "sale": "PPL satışına git"
+  }
+}
