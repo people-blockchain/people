@@ -6,6 +6,7 @@ import { formatEther, getAddress, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
+import { describePreflightError, txPreflightCopy } from "@/lib/tx-preflight-copy";
 import { uxCopy } from "@/lib/ux-copy";
 import { createTokenLaunchTxStore, outcomeOfReceipt, planTokenRestore, type TokenLaunchStage } from "@/lib/launch-tx";
 import { browserStorage } from "@/lib/nft-mint-draft";
@@ -513,6 +514,11 @@ export function EvmTokenLaunch() {
         return;
       }
       console.error(err);
+      const preflight = describePreflightError(err, lang);
+      if (preflight) {
+        setError(preflight.text);
+        return;
+      }
       const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
       switch (code) {
         case "stable_fee_unavailable":
@@ -827,6 +833,18 @@ export function EvmTokenLaunch() {
             </p>
           ) : null}
           {error ? <p className="text-sm text-warm">{error}</p> : null}
+          {payWith !== "PPL" && [txPreflightCopy[lang].dailyLimit, txPreflightCopy[lang].stableUnavailable, nm.errStableDailyCap, nm.errStableFeeUnavailable].includes(error) ? (
+            <button
+              type="button"
+              className="rounded-lg border border-warm/40 px-3 py-1.5 text-sm font-semibold text-warm"
+              onClick={() => {
+                setPayWith("PPL");
+                setError("");
+              }}
+            >
+              {txPreflightCopy[lang].payWithPpl}
+            </button>
+          ) : null}
           {issuerReferralMsg ? <p className="text-sm text-ink-2">{issuerReferralMsg}</p> : null}
           <button
             type="button"

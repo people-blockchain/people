@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "Batas harian pembayaran stablecoin untuk dompet ini sudah habis. Tidak ada yang dikirim dan tidak ada gas yang terpakai.",
+  "payWithPpl": "Bayar dengan PPL",
+  "stableUnavailable": "Pembayaran stablecoin sementara tidak tersedia. Tidak ada yang dikirim dan tidak ada gas yang terpakai. Anda bisa membayar dengan PPL.",
+  "reverted": "Uji coba menunjukkan transaksi ini akan gagal, jadi tidak dikirim dan tidak ada gas yang terpakai. Alasan: {reason}",
+  "revertedNoReason": "Uji coba menunjukkan transaksi ini akan gagal, jadi tidak dikirim dan tidak ada gas yang terpakai.",
+  "panic": "Uji coba menunjukkan kontrak akan gagal dengan kesalahan internal (kode {code}), jadi transaksi tidak dikirim dan tidak ada gas yang terpakai."
+}

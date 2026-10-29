@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "此钱包今日的稳定币支付额度已用完。未发送任何交易，也未消耗 gas。",
+  "payWithPpl": "改用 PPL 支付",
+  "stableUnavailable": "稳定币支付暂时不可用。未发送任何交易，也未消耗 gas。你可以改用 PPL 支付。",
+  "reverted": "试运行显示该交易会失败，因此未发送，也未消耗 gas。原因：{reason}",
+  "revertedNoReason": "试运行显示该交易会失败，因此未发送，也未消耗 gas。",
+  "panic": "试运行显示合约会因内部错误（代码 {code}）而失败，因此未发送交易，也未消耗 gas。"
+}

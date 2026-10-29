@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Address } from "viem";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import {
   readPublicClient,
   sendViaActiveSigner,
@@ -185,23 +186,16 @@ export function ContractWizard() {
       // A contract-creation tx: creation code + ABI-encoded constructor args in `data`, no `to`.
       const tx = buildContractDeployTx({ data: deployBytecode(compiled.bytecode, ctorEncoded.hex) });
       const client = readPublicClient();
-      // Gas comes from the chain (eth_estimateGas); the wizard's heuristic limit is only a
-      // floor, so a stale local estimate can never under-price the deploy.
-      let gas = BigInt(gasLimit);
-      try {
-        const estimate = await client.estimateGas({ account: signer.address, data: tx.data });
-        if (estimate > gas) gas = estimate;
-      } catch {
-        // Keep the heuristic limit when the node cannot estimate (transient RPC miss).
-      }
-      const hash = await sendViaActiveSigner(signer, { ...tx, gas });
+      // Simulation + gas (eth_estimateGas * 1.2) happen inside sendViaActiveSigner; a deploy that
+      // would revert is never sent. The limit shown above is only a fee quote.
+      const hash = await sendViaActiveSigner(signer, tx);
       const receipt = await client.waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") throw new Error(`receipt: deploy reverted (${hash})`);
       const address = contractAddressFromReceipt(receipt);
       if (!address) throw new Error("contract address not found in the deploy receipt");
       setDeployed({ address, hash });
     } catch (err) {
-      setError(classifyContractDeployError(err).detail);
+      setError(describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail);
     } finally {
       setBusy(false);
     }

@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "Se agotó el límite diario de pago con stablecoins de esta billetera. No se envió nada y no se gastó gas.",
+  "payWithPpl": "Pagar con PPL",
+  "stableUnavailable": "El pago con stablecoins no está disponible por ahora. No se envió nada y no se gastó gas. Puedes pagar con PPL.",
+  "reverted": "Una prueba mostró que esta transacción fallaría, así que no se envió y no se gastó gas. Motivo: {reason}",
+  "revertedNoReason": "Una prueba mostró que esta transacción fallaría, así que no se envió y no se gastó gas.",
+  "panic": "Una prueba mostró que el contrato fallaría con un error interno (código {code}), así que la transacción no se envió y no se gastó gas."
+}
