@@ -150,5 +150,15 @@
   "install": "Yükle",
   "signInGoogle": "Google ile giriş yap",
   "back": "Geri",
-  "openWallet": "{wallet} uygulamasını aç"
+  "openWallet": "{wallet} uygulamasını aç",
+  "sendSubmitting": "İşlem gönderiliyor…",
+  "sendConfirming": "Onay bekleniyor…",
+  "tokenSent": "Token transferi onaylandı.",
+  "nftSent": "NFT transferi onaylandı.",
+  "sendReverted": "İşlem ağda başarısız oldu. Hiçbir şey aktarılmadı.",
+  "sendTimeout": "Henüz onaylanmadı. Tekrar göndermeden önce işlemi gezginde kontrol edin.",
+  "sendReplaced": "İşlem başka bir işlemle değiştirildi. Hiçbir şey aktarılmadı.",
+  "nftNotOwner": "Bu NFT artık cüzdanınızda değil.",
+  "tokenSendFailed": "Token gönderilemedi. Lütfen tekrar deneyin.",
+  "nftSendFailed": "NFT gönderilemedi. Lütfen tekrar deneyin."
 }

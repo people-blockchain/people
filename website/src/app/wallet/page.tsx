@@ -25,7 +25,7 @@ export default function WalletPage() {
   return (
     <SiteChrome>
       <Suspense fallback={null}>
-        <WalletApp wsUrl={resolveNodeWebSocketUrl()} chainId={resolvePublicChainId()} nftTransfersEnabled={process.env.NFT_TRANSFERS_ENABLED === "1"} />
+        <WalletApp wsUrl={resolveNodeWebSocketUrl()} chainId={resolvePublicChainId()} nftTransfersEnabled={process.env.NFT_TRANSFERS_ENABLED !== "0"} />
       </Suspense>
     </SiteChrome>
   );

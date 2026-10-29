@@ -1,10 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
+import { formatUnits } from "viem";
 
 import { resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
+import { seedAssetMeta } from "../src/lib/evm/seed-assets.ts";
 import {
   balanceOfData,
   ownerOfData,
@@ -53,22 +55,31 @@ test("calldata encodes the owner / token id as one 32-byte word", () => {
   assert.equal(ownerOfData(BigInt(255)), `0x6352211e${"0".repeat(62)}ff`);
 });
 
-test("readTokenBalances keeps positive balances for tokens the catalog never listed", async (t) => {
+test("readTokenBalances returns human amounts, using caller decimals or the token's own decimals()", async (t) => {
+  const SIX = "0x3333333333333333333333333333333333333333";
   await startRpcNode(t, (call) => {
     if (call.method !== "eth_call") return null;
-    const { to } = call.params[0];
-    return to.toLowerCase() === TOKEN ? word(1_000_000_000_000) : word(0);
+    const { to, data } = call.params[0];
+    if (data === "0x313ce567") return word(6);
+    if (data.startsWith("0x70a08231")) {
+      if (to.toLowerCase() === TOKEN) return word(1_500_000_000_000);
+      if (to.toLowerCase() === SIX) return word(78_038_183);
+    }
+    return word(0);
   });
   const out = await readTokenBalances(OWNER, [
-    { assetId: TOKEN, address: TOKEN },
+    { assetId: TOKEN, address: TOKEN, decimals: 6 },
+    { assetId: "alias-of-token", address: TOKEN, decimals: 6 },
+    { assetId: "six", address: SIX },
     { assetId: "empty", address: OTHER },
     { assetId: "bad", address: "not-an-address" },
   ]);
-  assert.deepEqual(out, { [TOKEN]: 1_000_000_000_000 });
+  assert.deepEqual(out, { [TOKEN]: 1_500_000, six: 78.038183 });
 });
 
-test("address route returns ERC-20 balances next to ppl for deployment-mapped tokens", async (t) => {
+test("address route returns human ERC-20 balances next to ppl for deployment-mapped tokens", async (t) => {
   const [assetId, address] = Object.entries(readEvmDeployments().assetMap)[0];
+  const decimals = seedAssetMeta(assetId)?.decimals ?? 18;
   await startRpcNode(t, (call) => {
     if (call.method === "eth_blockNumber") return hex(100);
     if (call.method === "eth_getBalance") return hex(5n * 10n ** 18n);
@@ -76,14 +87,15 @@ test("address route returns ERC-20 balances next to ppl for deployment-mapped to
     if (call.method === "eth_getLogs") return [];
     if (call.method === "eth_call") {
       const { to, data } = call.params[0];
-      if (to.toLowerCase() === address.toLowerCase() && data.startsWith("0x70a08231")) return word(42);
+      if (to.toLowerCase() === address.toLowerCase() && data.startsWith("0x70a08231")) return word(42_000_000);
+      if (data === "0x313ce567") return word(decimals);
     }
     return "0x";
   });
   const { status, body } = await handleEvmCompatGet(`address/${OWNER}`, new URLSearchParams());
   assert.equal(status, 200);
   assert.equal(body.balances.ppl, 5);
-  assert.equal(body.balances[assetId.toLowerCase()], 42);
+  assert.equal(body.balances[assetId.toLowerCase()], Number(formatUnits(42_000_000n, decimals)));
 });
 
 test("readOwnedFactoryNfts lists only tokens ownerOf still reports for the owner", async (t) => {
@@ -108,4 +120,53 @@ test("readOwnedFactoryNfts lists only tokens ownerOf still reports for the owner
   assert.equal(nfts[0].collection.toLowerCase(), COLLECTION);
   assert.equal(nfts[0].nftId, `${COLLECTION}:0`);
   assert.deepEqual(await readOwnedFactoryNfts("nope"), []);
+});
+
+function nftNode(t, owners) {
+  const minted = (id, minter) => ({
+    topics: ["0x00", pad(COLLECTION), word(id), pad(minter)],
+    data: "0x",
+    blockNumber: hex(HEAD - 10),
+  });
+  return startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(HEAD);
+    if (call.method === "eth_getLogs") return [minted(0, OWNER), minted(1, OWNER), minted(2, OTHER)];
+    if (call.method === "eth_call") {
+      const { data } = call.params[0];
+      for (const [id, owner] of Object.entries(owners)) if (data === ownerOfData(BigInt(id))) return owner ? pad(owner) : null;
+    }
+    return "0x";
+  });
+}
+
+test("explorer /nfts without an owner lists real factory mints with live owners, never the demo seeds", async (t) => {
+  const seeds = (readEvmDeployments().nfts ?? []).map((n) => n.nftId);
+  assert.ok(seeds.length > 0, "fixture: the deployment snapshot still carries demo NFTs");
+  await nftNode(t, { 0: OTHER, 1: OWNER, 2: null });
+  const { status, body } = await handleEvmCompatGet("nfts", new URLSearchParams());
+  assert.equal(status, 200);
+  const ids = body.map((row) => row.nftId);
+  for (const seed of seeds) assert.ok(!ids.includes(seed), `seed ${seed} must not be listed`);
+  assert.deepEqual([...ids].sort(), [`${COLLECTION}:0`, `${COLLECTION}:1`]);
+  const moved = body.find((row) => row.onChainTokenId === "0");
+  assert.equal(moved.owner.toLowerCase(), OTHER);
+  assert.equal(moved.creator.toLowerCase(), OWNER);
+});
+
+test("wallet /nfts?owner= lists only tokens ownerOf reports for the owner, no demo seeds", async (t) => {
+  await nftNode(t, { 0: OTHER, 1: OWNER, 2: OWNER });
+  const { body } = await handleEvmCompatGet("nfts", new URLSearchParams({ owner: OWNER }));
+  assert.deepEqual(body.map((row) => row.nftId).sort(), [`${COLLECTION}:1`, `${COLLECTION}:2`]);
+  const none = await handleEvmCompatGet("nfts", new URLSearchParams({ owner: "nope" }));
+  assert.deepEqual(none.body, []);
+});
+
+test("parseNftId accepts only collection:decimalTokenId", async () => {
+  const { parseNftId } = await import("../src/lib/evm/nft-id.ts");
+  const ok = parseNftId(`${COLLECTION}:7`);
+  assert.equal(ok.collection.toLowerCase(), COLLECTION);
+  assert.equal(ok.tokenId, 7n);
+  for (const bad of ["nft-1", `${COLLECTION}:`, `${COLLECTION}:01`, `${COLLECTION}:1:2`, `${COLLECTION}:-1`, "0x12:1"]) {
+    assert.equal(parseNftId(bad), null, bad);
+  }
 });
