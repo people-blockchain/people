@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Sejuta Pendiri · Musim 1",
+  "cardFounder": "Pendiri",
+  "cardNumberPlaceholder": "Nomormu di sini",
+  "cardNetwork": "Testnet PEOPLE",
+  "cardFlipHint": "Ketuk untuk membalik",
+  "cardBackTitle": "Kartu pendirimu",
+  "cardCountry": "Negara",
+  "cardRank": "Peringkat masuk awal",
+  "cardPoints": "Poin",
+  "cardBackLines": [
+    "Satu orang terverifikasi, satu nomor.",
+    "Tingkatmu mengikuti waktu verifikasi; nomormu diundi di dalam tingkat.",
+    "Bisa dibagikan — temanmu mendapat kartunya sendiri."
+  ]
+}
