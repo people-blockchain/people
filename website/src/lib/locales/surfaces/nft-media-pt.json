@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "O pagamento em stablecoin está temporariamente indisponível. Pague em PPL.",
   "errInsufficientPpl": "PPL insuficiente: você precisa de {needed} PPL (taxa + gás) e tem {balance} PPL.",
   "errInsufficientPplGeneric": "PPL insuficiente para cobrir a taxa e o gás. Recarregue e tente novamente.",
-  "errNetworkRpc": "A rede não está respondendo. Verifique sua conexão e tente novamente."
+  "errNetworkRpc": "A rede não está respondendo. Verifique sua conexão e tente novamente.",
+  "createSuccessTitle": "Token criado",
+  "createSuccessLead": "O token já está ativo na People Blockchain.",
+  "createViewToken": "Abrir token no explorador",
+  "createViewAddress": "Abrir endereço no explorador",
+  "createTimeoutTitle": "Transação enviada",
+  "createTimeoutBody": "A confirmação está demorando mais que o normal. Verifique o explorador e não envie novamente. Use «Criar outro» apenas se tiver certeza de que nada foi criado.",
+  "createTimeoutExplorer": "Verificar seu endereço no explorador"
 }

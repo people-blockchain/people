@@ -71,5 +71,12 @@
   "errStableFeeUnavailable": "الدفع بالعملات المستقرة غير متاح مؤقتًا. يرجى الدفع بـ PPL.",
   "errInsufficientPpl": "PPL غير كافٍ: تحتاج إلى {needed} PPL (الرسوم + الغاز)، ورصيدك {balance} PPL.",
   "errInsufficientPplGeneric": "PPL غير كافٍ لتغطية الرسوم والغاز. قم بتعبئة الرصيد وأعد المحاولة.",
-  "errNetworkRpc": "الشبكة لا تستجيب. تحقق من اتصالك وأعد المحاولة."
+  "errNetworkRpc": "الشبكة لا تستجيب. تحقق من اتصالك وأعد المحاولة.",
+  "createSuccessTitle": "تم إنشاء الرمز",
+  "createSuccessLead": "الرمز متاح الآن على People Blockchain.",
+  "createViewToken": "فتح الرمز في المستكشف",
+  "createViewAddress": "فتح العنوان في المستكشف",
+  "createTimeoutTitle": "تم إرسال المعاملة",
+  "createTimeoutBody": "يستغرق التأكيد وقتًا أطول من المعتاد. تحقق من المستكشف ولا ترسل المعاملة مرة أخرى. استخدم «إنشاء آخر» فقط عندما تتأكد من عدم إنشاء أي شيء.",
+  "createTimeoutExplorer": "تحقق من عنوانك في المستكشف"
 }
