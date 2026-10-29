@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {createECDH,createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
+import {parseTransaction,stringToHex} from 'viem';
 
 // Covers the sheet-based PEOPLE Wallet (Send / Receive / Settings dialogs,
 // Tokens / NFT / Activity tabs). Chain reads are mocked on both public
