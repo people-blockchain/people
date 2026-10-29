@@ -40,5 +40,9 @@
   "networkBadge": "Red PEOPLE · cadena 97401",
   "selectToken": "Elegir token",
   "closePicker": "Cerrar",
-  "gasFeeNote": "Se paga como gas en PPL al firmar"
+  "gasFeeNote": "Se paga como gas en PPL al firmar",
+  "approving": "Aprobando el token…",
+  "approveReverted": "La aprobación del token falló y no se hizo el intercambio. Inténtalo de nuevo.",
+  "approveTimeout": "La aprobación del token sigue pendiente. Revisa tu cartera y vuelve a intentarlo.",
+  "allowanceLow": "La aprobación no se aplicó (el límite es demasiado bajo). Inténtalo de nuevo."
 }

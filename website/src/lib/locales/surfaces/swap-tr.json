@@ -40,5 +40,9 @@
   "networkBadge": "PEOPLE ağı · zincir 97401",
   "selectToken": "Token seç",
   "closePicker": "Kapat",
-  "gasFeeNote": "İmzalarken PPL gazı olarak ödenir"
+  "gasFeeNote": "İmzalarken PPL gazı olarak ödenir",
+  "approving": "Token onaylanıyor…",
+  "approveReverted": "Token onayı başarısız oldu, takas yapılmadı. Tekrar deneyin.",
+  "approveTimeout": "Token onayı hâlâ bekliyor. Cüzdanınızı kontrol edip tekrar deneyin.",
+  "allowanceLow": "Onay uygulanmadı (limit çok düşük). Tekrar deneyin."
 }
