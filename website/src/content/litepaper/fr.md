@@ -162,7 +162,7 @@ Chaque étape commence quand son jalon est atteint. Hormis le lancement du mainn
 ## 9. Sécurité
 
 - Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (lancés par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé. Bug bounty on every page.
-- **Multisigs.** Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base ; son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
+- **Multisigs.** Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base reçoit immédiatement 50 % de chaque achat, au moment de l’achat ; les 50 % restants restent dans le contrat de vente comme réserve pour les reventes. Son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
 - **Adresses publiées.** Le contrat de vente et le multisig destinataire sont publiés avant l’ouverture de la vente ; les contrats de vesting et de verrouillage des LP, au lancement complet du réseau. Aucune adresse fictive.
 - **Défense contre les bots.** Vérification humaine, limites par appareil et par IP, plafonds de points quotidiens et récupération de points des bots.
 - **Blocs de construction éprouvés.** Les contrats sans code sont assemblés à partir de modèles OpenZeppelin.
@@ -221,6 +221,6 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 - Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - La **vente communautaire de PPL** suit la courbe exponentielle publiée sur `/buy` (départ **0,005 $** par PPL ; prix et limites publics ; achat désactivé jusqu'au hub). Aucun KYC ni contrôle d'éligibilité sur ce site.
 - Sécurité : Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (lancés par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé. ; bug bounty on every page.
-- Multisigs. Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base ; son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
+- Multisigs. Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base reçoit immédiatement 50 % de chaque achat, au moment de l’achat ; les 50 % restants restent dans le contrat de vente comme réserve pour les reventes. Son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
 - Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
 - La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.

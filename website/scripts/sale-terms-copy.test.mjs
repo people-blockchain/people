@@ -47,9 +47,12 @@ test("rules and FAQ take every sale number from the contract placeholders", () =
     needs(b.faq.items[3].a, ["holdDays", "sellDailyPct", "sellPerAddress"], `${lang}: faq sell-back answer`);
     needs(b.rules.details.join(" "), ["releaseDays"], `${lang}: rules details release notice`);
     // No literal sale numbers in the new blocks: a digit there would bypass the contract constants.
+    // The only literal figure allowed is the fixed 24-hour purchase window in the limits rule.
     for (const text of [limits, reserve, sellBack, contract, b.faq.items[3].a]) {
-      assert.doesNotMatch(text.replace(/\{\w+\}/g, ""), /\d/, `${lang}: literal number in ${text}`);
+      const bare = text.replace(/\{\w+\}/g, "").replace(text === limits ? /\b24\b/ : /^$/, "");
+      assert.doesNotMatch(bare, /\d/, `${lang}: literal number in ${text}`);
     }
+    assert.match(b.rules.items[0].body, /\b24\b/, `${lang}: rolling 24-hour window in rules.items[0]`);
   }
 });
 

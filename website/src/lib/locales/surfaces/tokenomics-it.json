@@ -98,7 +98,7 @@
   "saleCurveBullets": [
     "100.000.000 PPL sulla curva (10% dell'offerta); partenza $0,005, crescita esponenziale, tetto $0,25 solo sulla curva.",
     "La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
-    "Raccolta 50% liquidità bloccata / 50% multisig progetto; token LP bloccati 24 mesi.",
+    "Il 50% di ogni acquisto va subito, al momento dell’acquisto, al multisig della tesoreria; l’altro 50% resta nel contratto di vendita come riserva per pagare le rivendite.",
     "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
     "$10–$500 per acquisto; Fino a $2,000 a persona in qualsiasi arco di 24 ore; Pausa di 60 s tra un acquisto e l’altro"
   ],

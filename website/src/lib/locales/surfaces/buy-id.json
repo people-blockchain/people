@@ -93,11 +93,11 @@
     "items": [
       {
         "title": "{whitelistDays} hari pertama: hanya orang terverifikasi",
-        "body": "Satu orang, satu alamat. {min} sampai {max} per pembelian, hingga {perDay} per alamat per hari (UTC), dan jeda {cooldown} detik di antara pembelian."
+        "body": "Satu orang, satu alamat. {min} sampai {max} per pembelian, hingga {perDay} per orang dalam 24 jam bergulir mana pun, dan jeda {cooldown} detik di antara pembelian."
       },
       {
         "title": "{reservePct} dari setiap pembelian tetap menjadi cadangan",
-        "body": "Dana ini tetap di kontrak penjualan untuk membayar penjualan kembali. Tidak ada anggota tim yang bisa menariknya. {treasuryPct} sisanya mendanai proyek."
+        "body": "Dana ini tetap di kontrak penjualan untuk membayar penjualan kembali. Tidak ada anggota tim yang bisa menariknya. {treasuryPct} sisanya langsung masuk ke dompet proyek, bersamaan dengan setiap pembelian."
       },
       {
         "title": "Jual kembali setelah {holdDays} hari",
@@ -125,7 +125,7 @@
     "details": [
       "Cadangan: USDC yang disimpan di kontrak penjualan. Penjualan kembali dibayar dari sini, dan biaya penjualan kembali tetap di sini. Makin kecil cadangan, makin kecil batas harian penjualan kembali. Penjualan kembali ditutup selamanya saat kurva ditutup.",
       "Cadangan hanya keluar dari kontrak sebagai likuiditas PPL, saat kurva ditutup, dan hanya setelah pemberitahuan publik {releaseDays} hari sebelumnya. Selama masa pemberitahuan, penjualan kembali tetap berjalan.",
-      "Kas: dompet multisig ({signersM} dari {signersN} tanda tangan) yang menerima {treasuryPct} sisa dari setiap pembelian.",
+      "Kas: dompet multisig ({signersM} dari {signersN} tanda tangan) yang langsung menerima {treasuryPct} sisa dari setiap pembelian pada saat pembelian.",
       "Multisig dapat menjeda pembelian dan penjualan kembali. Multisig tidak bisa memindahkan cadangan, mengubah batas atau formula, maupun memperpanjang penjualan.",
       "Penjualan berlangsung sampai {graduation} terkumpul atau {term} setelah pembukaan, mana yang lebih dulu. PPL yang tidak terjual masuk ke Community Pool. Pembelian bersifat final.",
       "Tim: {teamPct} dari seluruh PPL. Tidak ada selama {cliff} pertama, lalu bulanan selama {linear}, dihitung sejak peluncuran jaringan penuh."
@@ -210,7 +210,7 @@
     "priceAfter": "Harga setelah pembelian Anda",
     "estimate": "Ini perkiraan. Jumlah pastinya dikonfirmasi on-chain sebelum Anda menandatangani.",
     "limitPerBuy": "{min}–{max} per pembelian",
-    "limitPerDay": "Hingga {amount} per alamat per hari (UTC)",
+    "limitPerDay": "Hingga {amount} per orang dalam 24 jam bergulir mana pun",
     "cooldown": "Jeda {seconds} detik antarpembelian",
     "overLimit": "Maksimum {amount} dalam satu pembelian.",
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
@@ -262,7 +262,7 @@
     "viewTx": "Lihat di Basescan",
     "txRejected": "Anda membatalkan tanda tangan. Tidak ada dana yang ditarik.",
     "priceMoved": "Harga bergerak lebih dari 1% sebelum konfirmasi, jadi tidak ada yang dibeli. Periksa penawaran baru dan coba lagi.",
-    "limitHit": "Batas penjualan menghentikan pembelian ini (per pembelian, per hari, atau jeda antarpembelian). Tidak ada yang dibeli.",
+    "limitHit": "Batas penjualan menghentikan pembelian ini (per pembelian, per 24 jam, atau jeda antarpembelian). Tidak ada yang dibeli.",
     "txFailed": "Transaksi gagal: {reason}. Tidak ada PPL yang dibeli.",
     "tryAgain": "Coba lagi",
     "balanceLine": "Di dompet Anda di Base: {balance} {token} · {eth} ETH",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Fase daftar putih",
-      "whitelistBody": "7 hari pertama: hanya orang terverifikasi. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "whitelistBody": "7 hari pertama: hanya orang terverifikasi. Minimal $10 / maksimal $500 per pembelian / $2.000 per orang per 24 jam bergulir.",
       "daysLeft": "Tersisa {days} hari",
       "openTitle": "Fase publik",
-      "openBody": "Terbuka untuk semua. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "openBody": "Terbuka untuk semua. Minimal $10 / maksimal $500 per pembelian / $2.000 per orang per 24 jam bergulir.",
       "notOpenTitle": "Penjualan belum dibuka",
       "notOpenBody": "Pembelian dibuka saat kontrak masuk fase daftar putih.",
       "expiredTitle": "Penjualan berakhir",
@@ -356,7 +356,7 @@
       "invalid": "Masukkan jumlah dalam dolar.",
       "belowMin": "Minimumnya {min}.",
       "overMax": "Maksimalnya {max} per pembelian.",
-      "overDay": "Batas harian {max} per alamat.",
+      "overDay": "Batasnya {max} per orang dalam 24 jam terakhir.",
       "needVerification": "Selesaikan verifikasi di atas untuk membeli.",
       "needWallet": "Hubungkan dompet untuk melihat penawaran.",
       "preview": "Pratinjau: tidak ada transaksi yang akan dikirim.",

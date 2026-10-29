@@ -162,7 +162,7 @@ Jede Phase startet, wenn ihre Gate erfüllt ist. Außer dem Start von Mainnet un
 ## 9. Sicherheit
 
 - Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht. Bug bounty on every page.
-- **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
+- **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base erhält 50 % jedes Kaufs sofort, im Moment des Kaufs; die anderen 50 % bleiben im Verkaufsvertrag als Reserve für Rückverkäufe. Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
 - **Veröffentlichte Adressen.** Verkaufsvertrag und empfangende Multisig werden vor dem Verkaufsstart veröffentlicht, Vesting- und LP-Sperrverträge beim vollständigen Netzwerkstart. Keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
 - **Bewährte Bausteine.** No-Code-Verträge werden aus OpenZeppelin-Vorlagen zusammengesetzt.
@@ -221,6 +221,6 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
 - Sicherheit: Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.; Bug bounty on every page.
-- Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
+- Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base erhält 50 % jedes Kaufs sofort, im Moment des Kaufs; die anderen 50 % bleiben im Verkaufsvertrag als Reserve für Rückverkäufe. Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
 - Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.

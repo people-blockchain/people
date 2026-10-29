@@ -93,11 +93,11 @@
     "items": [
       {
         "title": "Primeiros {whitelistDays} dias: só pessoas verificadas",
-        "body": "Uma pessoa, um endereço. De {min} a {max} por compra, até {perDay} por endereço por dia (UTC) e uma pausa de {cooldown} segundos entre compras."
+        "body": "Uma pessoa, um endereço. De {min} a {max} por compra, até {perDay} por pessoa em qualquer janela móvel de 24 horas e uma pausa de {cooldown} segundos entre compras."
       },
       {
         "title": "{reservePct} de cada compra fica como reserva",
-        "body": "Fica no contrato de venda para pagar as revendas. Ninguém da equipe pode sacá-la. Os outros {treasuryPct} financiam o projeto."
+        "body": "Fica no contrato de venda para pagar as revendas. Ninguém da equipe pode sacá-la. Os outros {treasuryPct} vão imediatamente, a cada compra, para a carteira do projeto."
       },
       {
         "title": "Revenda após {holdDays} dias",
@@ -125,7 +125,7 @@
     "details": [
       "Reserva: os USDC guardados no contrato de venda. As revendas são pagas com ela, e as taxas de revenda ficam nela. Quanto menor a reserva, menor o limite diário de revenda. A revenda fecha de vez quando a curva fecha.",
       "A reserva só sai do contrato como liquidez de PPL, quando a curva fecha, e só depois de um aviso público de {releaseDays} dias. A revenda continua funcionando durante o aviso.",
-      "Tesouraria: uma carteira multisig ({signersM} de {signersN} assinaturas) que recebe os outros {treasuryPct} de cada compra.",
+      "Tesouraria: uma carteira multisig ({signersM} de {signersN} assinaturas) que recebe imediatamente, no momento da compra, os outros {treasuryPct} de cada compra.",
       "O multisig pode pausar as compras e a revenda. Não pode mover a reserva, mudar os limites ou a fórmula, nem prorrogar a venda.",
       "A venda dura até arrecadar {graduation} ou {term} após a abertura, o que acontecer primeiro. O PPL não vendido vai para o Community Pool. As compras são definitivas.",
       "Equipe: {teamPct} de todo o PPL. Nada nos primeiros {cliff}; depois, mensalmente ao longo de {linear}, contando a partir do lançamento completo da rede."
@@ -210,7 +210,7 @@
     "priceAfter": "Preço após sua compra",
     "estimate": "É uma estimativa. A quantidade exata é confirmada na rede antes de você assinar.",
     "limitPerBuy": "{min}–{max} por compra",
-    "limitPerDay": "Até {amount} por endereço por dia (UTC)",
+    "limitPerDay": "Até {amount} por pessoa em qualquer janela móvel de 24 horas",
     "cooldown": "Pausa de {seconds} s entre compras",
     "overLimit": "Máximo {amount} em uma compra.",
     "belowMin": "Informe um valor para ver a cotação.",
@@ -262,7 +262,7 @@
     "viewTx": "Ver no Basescan",
     "txRejected": "Você cancelou a assinatura. Nada foi cobrado.",
     "priceMoved": "O preço mudou mais de 1% antes da confirmação, então nada foi comprado. Confira a nova cotação e tente de novo.",
-    "limitHit": "Um limite da venda interrompeu esta compra (por compra, por dia ou a pausa entre compras). Nada foi comprado.",
+    "limitHit": "Um limite da venda interrompeu esta compra (por compra, por 24 horas ou a pausa entre compras). Nada foi comprado.",
     "txFailed": "A transação falhou: {reason}. Nenhum PPL foi comprado.",
     "tryAgain": "Tentar de novo",
     "balanceLine": "Na sua carteira na Base: {balance} {token} · {eth} ETH",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Fase de lista de permissões",
-      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 por pessoa em qualquer janela móvel de 24 horas.",
       "daysLeft": "Faltam {days} dias",
       "openTitle": "Fase pública",
-      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 por pessoa em qualquer janela móvel de 24 horas.",
       "notOpenTitle": "A venda ainda não está aberta",
       "notOpenBody": "As compras abrem quando o contrato entra na fase de lista de permissões.",
       "expiredTitle": "Venda encerrada",
@@ -356,7 +356,7 @@
       "invalid": "Informe um valor em dólares.",
       "belowMin": "O mínimo é {min}.",
       "overMax": "O máximo é {max} por compra.",
-      "overDay": "O limite diário é {max} por endereço.",
+      "overDay": "O limite é {max} por pessoa nas últimas 24 horas.",
       "needVerification": "Conclua a verificação acima para comprar.",
       "needWallet": "Conecte uma carteira para ver sua cotação.",
       "preview": "Prévia: nenhuma transação será enviada.",

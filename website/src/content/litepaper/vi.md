@@ -162,7 +162,7 @@ Mỗi giai đoạn bắt đầu khi cổng của nó được đáp ứng. Ngoà
 ## 9. Bảo mật
 
 - Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài. Bug bounty on every page.
-- **Multisig.** Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
+- **Multisig.** Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base nhận ngay 50% mỗi giao dịch mua vào đúng thời điểm mua; 50% còn lại nằm trong hợp đồng bán làm quỹ dự trữ cho việc bán lại. Địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
 - **Địa chỉ được công bố.** Hợp đồng bán và multisig nhận tiền được công bố trước khi mở bán; hợp đồng vesting và khóa LP được công bố khi ra mắt mạng đầy đủ. Không dùng địa chỉ giả.
 - **Phòng chống bot.** Xác minh con người, giới hạn mỗi thiết bị và mỗi IP, giới hạn điểm hàng ngày và lấy lại bot.
 - **Các khối xây dựng đã được chứng minh.** Hợp đồng không cần mã được lắp ráp từ các mẫu OpenZeppelin.
@@ -221,6 +221,6 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Không có KYC hay kiểm tra điều kiện trên trang này.
 - Bảo mật: Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.; bug bounty on every page.
-- Multisig. Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
+- Multisig. Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base nhận ngay 50% mỗi giao dịch mua vào đúng thời điểm mua; 50% còn lại nằm trong hợp đồng bán làm quỹ dự trữ cho việc bán lại. Địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
 - Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
 - Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.
