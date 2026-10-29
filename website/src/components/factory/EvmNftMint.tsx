@@ -8,6 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { uxCopy } from "@/lib/ux-copy";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
+import { describePreflightError, txPreflightCopy } from "@/lib/tx-preflight-copy";
 import { nftExplorerCopy } from "@/lib/nft-explorer-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
@@ -73,7 +74,13 @@ type Saved = {
 };
 
 type Picked = { file: File; mime: string };
-type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint };
+type ErrorState = {
+  key: NftErrorKey | "notEnoughFee" | "txPreflight";
+  neededWei?: bigint;
+  balanceWei?: bigint;
+  text?: string;
+  offerPpl?: boolean;
+};
 
 const RECEIPT_TIMEOUT_MS = 180_000;
 const ZERO_ADDRESS_FREE = /^0x[0-9a-fA-F]{40}$/;
@@ -604,7 +611,8 @@ export function EvmNftMint() {
       setResult({ collection, tokenId, mintTx: mintHash, createTx });
     } catch (err) {
       console.error(err);
-      setError(mintErrorState(err));
+      const preflight = describePreflightError(err, lang);
+      setError(preflight ? { key: "txPreflight", text: preflight.text, offerPpl: preflight.offerPpl } : mintErrorState(err));
       setErrorFrom("mint");
     } finally {
       mintLock.current = false;
@@ -654,7 +662,9 @@ export function EvmNftMint() {
   const previewVideo = saved ? saved.videoPreviewUrl ?? null : videoLocalUrl;
   const previewIsSvg = saved ? saved.isSvg : (kind === "image" ? imageFile : coverFile)?.mime === "image/svg+xml";
   const errorText = error
-    ? error.key === "notEnoughFee"
+    ? error.key === "txPreflight"
+      ? (error.text ?? null)
+      : error.key === "notEnoughFee"
       ? u.notEnoughFee
       : error.key === "errInsufficientPpl"
         ? error.neededWei !== undefined && error.balanceWei !== undefined
@@ -852,6 +862,20 @@ export function EvmNftMint() {
               <p>
                 {errorFrom === "pick" ? errorText : `${form.error}: ${errorText}`}
               </p>
+              {(error.offerPpl || error.key === "errStableDailyCap") && payWith !== "PPL" ? (
+                <button
+                  type="button"
+                  data-testid="nft-pay-ppl-instead"
+                  className="mt-2 rounded-lg border border-warm/40 px-3 py-1.5 font-semibold"
+                  onClick={() => {
+                    setPayWith("PPL");
+                    setError(null);
+                    setErrorFrom(null);
+                  }}
+                >
+                  {txPreflightCopy[lang].payWithPpl}
+                </button>
+              ) : null}
             </div>
           ) : null}
 

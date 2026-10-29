@@ -130,10 +130,14 @@ function fakeClients(calls: Call[], opts: { st?: Partial<PreflightState>; allowa
       if (a.functionName === "allowance") return opts.allowance ?? BigInt(0);
       return hubReads[a.functionName];
     },
-    simulateContract: async (a: { functionName: string }) => {
+    // Preflight (tx-preflight.ts): eth_call then eth_estimateGas, both succeed in these flows.
+    call: async () => ({ data: "0x" }),
+    estimateGas: async () => BigInt(100_000),
+    simulateContract: async (a: { functionName: string; address: string; abi: unknown; args: unknown }) => {
       calls.push(`simulate:${a.functionName}`);
       if (opts.simulateError) throw opts.simulateError;
-      return { request: { functionName: a.functionName } };
+      // Like viem: the simulated request carries address/abi/args, which the preflight re-encodes.
+      return { request: { address: a.address, abi: a.abi, functionName: a.functionName, args: a.args } };
     },
     waitForTransactionReceipt: async () => {
       calls.push("receipt");
@@ -141,7 +145,8 @@ function fakeClients(calls: Call[], opts: { st?: Partial<PreflightState>; allowa
     },
   };
   const walletClient = {
-    writeContract: async (a: { functionName: string }) => {
+    writeContract: async (a: { functionName: string; gas?: bigint }) => {
+      assert.equal(a.gas, BigInt(120_000), "gas = estimate * 1.2");
       calls.push(`write:${a.functionName}`);
       return "0xabc";
     },

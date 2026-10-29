@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "Das tägliche Zahllimit in Stablecoins für diese Wallet ist ausgeschöpft. Es wurde nichts gesendet und kein Gas verbraucht.",
+  "payWithPpl": "Stattdessen mit PPL zahlen",
+  "stableUnavailable": "Die Zahlung in Stablecoins ist vorübergehend nicht verfügbar. Es wurde nichts gesendet und kein Gas verbraucht. Du kannst mit PPL zahlen.",
+  "reverted": "Ein Testlauf hat gezeigt, dass diese Transaktion fehlschlagen würde. Sie wurde deshalb nicht gesendet und es wurde kein Gas verbraucht. Grund: {reason}",
+  "revertedNoReason": "Ein Testlauf hat gezeigt, dass diese Transaktion fehlschlagen würde. Sie wurde deshalb nicht gesendet und es wurde kein Gas verbraucht.",
+  "panic": "Ein Testlauf hat gezeigt, dass der Vertrag mit einem internen Fehler (Code {code}) fehlschlagen würde. Die Transaktion wurde nicht gesendet und es wurde kein Gas verbraucht."
+}

@@ -16,6 +16,7 @@ import {
 } from "viem";
 
 import { ensureSaleChain, type EIP1193Provider } from "@/lib/evm/client";
+import { preflightWriteContract } from "@/lib/evm/preflight-write";
 import { SALE, SALE_CHAIN, saleContractAddress } from "@/lib/sale/config";
 import { pplCurveHubAbi } from "@/lib/sale/pplCurveHub.abi";
 
@@ -142,7 +143,7 @@ export function evaluatePreflight(
 
 /** Clients the purchase flow needs; injected so the call order can be tested without a network. */
 export type BuyClients = {
-  publicClient: Pick<PublicClient, "readContract" | "simulateContract" | "waitForTransactionReceipt" | "getBlock">;
+  publicClient: Pick<PublicClient, "readContract" | "simulateContract" | "waitForTransactionReceipt" | "getBlock" | "call" | "estimateGas">;
   walletClient: Pick<WalletClient, "writeContract">;
 };
 
@@ -221,14 +222,15 @@ export async function executeBuy(
     });
     if (allowance < amountIn) {
       onStatus({ step: "approving" });
-      const approveHash = await walletClient.writeContract({
+      const approve = {
         address: params.token,
         abi: erc20Abi,
         functionName: "approve",
         args: [hub, amountIn],
-        account: params.account,
-        chain: SALE_CHAIN.viemChain,
-      });
+      } as const;
+      const approveHash = await preflightWriteContract(publicClient, params.account, approve, (gas) =>
+        walletClient.writeContract({ ...approve, gas, account: params.account, chain: SALE_CHAIN.viemChain }),
+      );
       assertReceiptSuccess(await publicClient.waitForTransactionReceipt({ hash: approveHash }));
     }
 
@@ -243,7 +245,9 @@ export async function executeBuy(
 
     // 4. send
     onStatus({ step: "buying" });
-    const hash = await walletClient.writeContract(request);
+    const hash = await preflightWriteContract(publicClient, params.account, request as never, (gas) =>
+      walletClient.writeContract({ ...request, gas } as never),
+    );
     onStatus({ step: "pending" });
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
     assertReceiptSuccess(receipt);

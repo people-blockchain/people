@@ -13,6 +13,7 @@ import {
 } from "viem";
 
 import type { EIP1193Provider } from "@/lib/evm/client";
+import { preflightWriteContract } from "@/lib/evm/preflight-write";
 import { SITE_URL } from "@/lib/site";
 import { PPL_CURVE_HUB_V2_ABI, ZERO_ADDRESS } from "./abi";
 import { V2_SALE } from "./constants";
@@ -134,14 +135,15 @@ export function useV2Buy() {
         chain: chain.chain,
         transport: http(undefined, { timeout: 12_000 }),
       });
-      const hash = await walletClient.writeContract({
+      const verify = {
         address: proof.hub,
         abi: PPL_CURVE_HUB_V2_ABI,
         functionName: "verify",
         args: [proof.personId, BigInt(proof.deadline), proof.signature],
-        account,
-        chain: chain.chain,
-      });
+      } as const;
+      const hash = await preflightWriteContract(publicClient, account, verify, (gas) =>
+        walletClient.writeContract({ ...verify, gas, account, chain: chain.chain }),
+      );
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") throw new Error("transaction reverted");
       setVerifyStatus({ step: "done", txHash: hash, pplOutWei: BigInt(0), boughtAtMs: Date.now() });
@@ -185,28 +187,25 @@ export function useV2Buy() {
         });
         if (allowance < amountIn) {
           setBuyStatus({ step: "signing" });
-          const approveHash = await walletClient.writeContract({
-            address: usdc,
-            abi: erc20Abi,
-            functionName: "approve",
-            args: [hub, amountIn],
-            account,
-            chain: chain.chain,
-          });
+          const approve = { address: usdc, abi: erc20Abi, functionName: "approve", args: [hub, amountIn] } as const;
+          const approveHash = await preflightWriteContract(publicClient, account, approve, (gas) =>
+            walletClient.writeContract({ ...approve, gas, account, chain: chain.chain }),
+          );
           const approveReceipt = await publicClient.waitForTransactionReceipt({ hash: approveHash });
           if (approveReceipt.status !== "success") throw new Error("approval reverted");
         }
         const expected = estimatePplOut(amountIn, spotPriceWad);
         const minPplOut = minPplOutFromEstimate(expected, V2_SALE.slippageBps);
         setBuyStatus({ step: "buying" });
-        const hash = await walletClient.writeContract({
+        const buy = {
           address: hub,
           abi: PPL_CURVE_HUB_V2_ABI,
           functionName: "buy",
           args: [amountIn, minPplOut, account, ZERO_ADDRESS],
-          account,
-          chain: chain.chain,
-        });
+        } as const;
+        const hash = await preflightWriteContract(publicClient, account, buy, (gas) =>
+          walletClient.writeContract({ ...buy, gas, account, chain: chain.chain }),
+        );
         const receipt = await publicClient.waitForTransactionReceipt({ hash });
         if (receipt.status !== "success") throw new Error("transaction reverted");
         const done = {

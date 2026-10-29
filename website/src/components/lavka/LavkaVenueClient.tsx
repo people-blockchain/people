@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { encodePacked, keccak256, parseEther, stringToHex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { lavkaPublic } from "@/lib/lavka-public-content";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
@@ -118,8 +119,8 @@ export function LavkaVenueClient({ slug, mode }: { slug: string; mode: VenueMode
       await client.waitForTransactionReceipt({ hash });
       setMessage(t.successProgram);
       await refreshBalance();
-    } catch {
-      setError(t.errorTx);
+    } catch (err) {
+      setError(describePreflightError(err, lang)?.text ?? t.errorTx);
     } finally {
       setBusy(false);
     }
@@ -161,8 +162,8 @@ export function LavkaVenueClient({ slug, mode }: { slug: string; mode: VenueMode
       }
       setMessage(t.successRedeem);
       await refreshBalance();
-    } catch {
-      setError(t.errorTx);
+    } catch (err) {
+      setError(describePreflightError(err, lang)?.text ?? t.errorTx);
     } finally {
       setBusy(false);
     }
@@ -185,8 +186,8 @@ export function LavkaVenueClient({ slug, mode }: { slug: string; mode: VenueMode
       const client = readPublicClient();
       await client.waitForTransactionReceipt({ hash });
       setMessage(t.successPay);
-    } catch {
-      setError(t.errorTx);
+    } catch (err) {
+      setError(describePreflightError(err, lang)?.text ?? t.errorTx);
     } finally {
       setBusy(false);
     }
@@ -228,8 +229,8 @@ export function LavkaVenueClient({ slug, mode }: { slug: string; mode: VenueMode
         }),
       });
       setMessage(t.successEscrow);
-    } catch {
-      setError(t.errorTx);
+    } catch (err) {
+      setError(describePreflightError(err, lang)?.text ?? t.errorTx);
     } finally {
       setBusy(false);
     }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowDownUp } from "lucide-react";
 import { formatEther, getAddress, isAddress, parseEther, type Address, type Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { swapCopy } from "@/lib/swap-content";
@@ -442,7 +443,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
       void recordFounderAction("swap", hash);
       void refreshChain();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.error);
+      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.error));
     } finally {
       setBusy(false);
     }

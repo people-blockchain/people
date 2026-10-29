@@ -23,6 +23,7 @@ test('actual native send signs and submits exact UTF-8 memo; gas is estimated wi
     let result;
     switch(request.method) {
       case 'eth_fillTransaction': return Response.json({jsonrpc:'2.0',id:request.id,error:{code:-32601,message:'unsupported'}});
+      case 'eth_call': result='0x'; break;
       case 'eth_getCode': result='0x'; break;
       case 'eth_getTransactionCount': result='0x0'; break;
       case 'eth_chainId': result='0x17c79'; break;

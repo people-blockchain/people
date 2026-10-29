@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { createPublicClient, createWalletClient, custom, http, parseAbi, parseUnits, type Address } from "viem";
 
 import { ensureSaleChain, type EIP1193Provider } from "@/lib/evm/client";
+import { preflightWriteContract } from "@/lib/evm/preflight-write";
 import { SALE_CHAIN, saleTokenAddress } from "@/lib/sale/config";
 import { assertReceiptSuccess, classifyBuyError } from "@/lib/sale/useBuyPpl";
 
@@ -42,12 +43,15 @@ export async function runFaucet(
       account: params.account,
     });
     onStatus({ step: "minting" });
-    const hash = await walletClient.writeContract({
+    const mint = {
       address: token,
       abi: testTokenAbi,
       functionName: "mint",
       args: [params.account, parseUnits(String(FAUCET_AMOUNT_USDC), 6)],
-    });
+    } as const;
+    const hash = await preflightWriteContract(publicClient, params.account, mint, (gas) =>
+      walletClient.writeContract({ ...mint, gas }),
+    );
     onStatus({ step: "pending" });
     assertReceiptSuccess(await publicClient.waitForTransactionReceipt({ hash }));
     return finish({ step: "done", txHash: hash });

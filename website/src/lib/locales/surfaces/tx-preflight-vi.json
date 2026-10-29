@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "Hạn mức thanh toán stablecoin hằng ngày của ví này đã dùng hết. Chưa gửi gì và không mất gas.",
+  "payWithPpl": "Thanh toán bằng PPL",
+  "stableUnavailable": "Thanh toán bằng stablecoin tạm thời không dùng được. Chưa gửi gì và không mất gas. Bạn có thể thanh toán bằng PPL.",
+  "reverted": "Lần chạy thử cho thấy giao dịch này sẽ thất bại nên đã không được gửi và không mất gas. Lý do: {reason}",
+  "revertedNoReason": "Lần chạy thử cho thấy giao dịch này sẽ thất bại nên đã không được gửi và không mất gas.",
+  "panic": "Lần chạy thử cho thấy hợp đồng sẽ thất bại với lỗi nội bộ (mã {code}) nên giao dịch đã không được gửi và không mất gas."
+}

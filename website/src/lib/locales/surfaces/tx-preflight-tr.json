@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "Bu cüzdan için günlük stablecoin ödeme limiti doldu. Hiçbir şey gönderilmedi ve gaz harcanmadı.",
+  "payWithPpl": "Bunun yerine PPL ile öde",
+  "stableUnavailable": "Stablecoin ile ödeme şu an kullanılamıyor. Hiçbir şey gönderilmedi ve gaz harcanmadı. PPL ile ödeyebilirsin.",
+  "reverted": "Bir deneme çalıştırması bu işlemin başarısız olacağını gösterdi; bu yüzden gönderilmedi ve gaz harcanmadı. Neden: {reason}",
+  "revertedNoReason": "Bir deneme çalıştırması bu işlemin başarısız olacağını gösterdi; bu yüzden gönderilmedi ve gaz harcanmadı.",
+  "panic": "Bir deneme çalıştırması sözleşmenin dahili bir hatayla (kod {code}) başarısız olacağını gösterdi; bu yüzden işlem gönderilmedi ve gaz harcanmadı."
+}

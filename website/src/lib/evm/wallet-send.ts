@@ -1,6 +1,7 @@
 import { parseEther, stringToHex, type Hex } from "viem";
 import { transactionMemo } from "@/lib/evm/transaction-memo";
 import { createEmbeddedWalletClient } from "@/lib/evm/client";
+import { preflightAndSend } from "@/lib/evm/tx-preflight";
 
 /**
  * Decimal string without exponent notation. `String(1e-7)` yields "1e-7", which
@@ -50,24 +51,21 @@ export async function sendNativeTransfer(input: {
 }): Promise<`0x${string}`> {
   const request = nativeTransferRequest(input);
   const client = createEmbeddedWalletClient(input.privateKey);
-  let transaction: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint } =
-    request;
+  const { createBrowserPublicClient } = await import("@/lib/evm/client");
+  const publicClient = createBrowserPublicClient();
   if (request.data) {
-    const { createBrowserPublicClient } = await import("@/lib/evm/client");
-    const publicClient = createBrowserPublicClient();
     const code = await publicClient.getCode({ address: input.to });
     if (code && code !== "0x") throw new Error("memo_contract");
-    const estimate = await publicClient.estimateGas({
-      account: client.account.address,
-      to: request.to,
-      value: request.value,
-      data: request.data,
-    });
-    const floor = calldataFloorGas(request.data);
-    transaction = { ...request, gas: estimate > floor ? estimate : floor };
   }
-  const hash = await client.sendTransaction(transaction);
-  return hash;
+  // Simulate + estimate before signing; gas is the estimate + 20%, never below the calldata floor.
+  return preflightAndSend(
+    publicClient,
+    ({ gas }) => {
+      const floor = request.data ? calldataFloorGas(request.data) : BigInt(0);
+      return client.sendTransaction({ ...request, gas: gas > floor ? gas : floor });
+    },
+    { account: client.account.address, to: request.to, value: request.value, data: request.data },
+  );
 }
 
 export async function waitForReceipt(hash: `0x${string}`, timeoutMs = 60_000): Promise<boolean> {

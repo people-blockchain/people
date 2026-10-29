@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatUnits, zeroAddress, type Address } from "viem";
 import { erc20Abi } from "@/lib/evm/client";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { useExternalWallet, readPublicClient, sendViaActiveSigner, writeViaActiveSigner } from "@/context/ExternalWalletContext";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { samplesCopy } from "@/lib/samples-copy";
@@ -91,7 +92,7 @@ function FaucetButton() {
       setBalances((prev) => ({ ...prev, [assetId]: formatUnits(balance, asset.decimals) }));
       setDone((prev) => (prev.includes(assetId) ? prev : [...prev, assetId]));
     } catch (err) {
-      const detail = classifyContractDeployError(err).detail;
+      const detail = describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail;
       setError(/faucetcooldown/i.test(detail) ? t.faucetCooldown : detail);
     } finally {
       setBusy(null);
@@ -206,20 +207,14 @@ function TemplateCard({ template }: { template: SampleTemplate }) {
     try {
       const tx = buildContractDeployTx({ data: encoded.data, value });
       const client = readPublicClient();
-      let gas: bigint | undefined;
-      try {
-        gas = await client.estimateGas({ account: signer.address, data: tx.data, value: tx.value });
-      } catch {
-        gas = undefined;
-      }
-      const hash = await sendViaActiveSigner(signer, gas ? { ...tx, gas } : tx);
+      const hash = await sendViaActiveSigner(signer, tx);
       const receipt = await client.waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") throw new Error(`receipt: deploy reverted (${hash})`);
       const address = contractAddressFromReceipt(receipt);
       if (!address) throw new Error("contract address not found in the deploy receipt");
       setDeploy((prev) => ({ ...prev, busy: false, result: { address, hash } }));
     } catch (err) {
-      setDeploy((prev) => ({ ...prev, busy: false, error: classifyContractDeployError(err).detail }));
+      setDeploy((prev) => ({ ...prev, busy: false, error: describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail }));
     }
   };
 
@@ -239,7 +234,7 @@ function TemplateCard({ template }: { template: SampleTemplate }) {
       await client.waitForTransactionReceipt({ hash: approveHash });
       setDeploy((prev) => ({ ...prev, approveBusy: false, approveDone: true }));
     } catch (err) {
-      setDeploy((prev) => ({ ...prev, approveBusy: false, settleError: classifyContractDeployError(err).detail }));
+      setDeploy((prev) => ({ ...prev, approveBusy: false, settleError: describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail }));
       return;
     }
     setDeploy((prev) => ({ ...prev, depositBusy: true }));
@@ -254,7 +249,7 @@ function TemplateCard({ template }: { template: SampleTemplate }) {
       await client.waitForTransactionReceipt({ hash: depositHash });
       setDeploy((prev) => ({ ...prev, depositBusy: false, depositDone: true }));
     } catch (err) {
-      setDeploy((prev) => ({ ...prev, depositBusy: false, settleError: classifyContractDeployError(err).detail }));
+      setDeploy((prev) => ({ ...prev, depositBusy: false, settleError: describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail }));
     }
   };
 

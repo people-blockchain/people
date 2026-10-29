@@ -4,7 +4,8 @@ import { privateKeyToAccount } from "viem/accounts";
 import { getDbReady } from "@/db";
 import { founderDemoTokenAirdrops, founders } from "@/db/schema";
 import { peopleEvmChain, readEvmDeployments } from "@/lib/evm/config";
-import { evmPublicClient, estimateGasMargin, legacyGasOverrides } from "@/lib/evm/legacy-gas";
+import { evmPublicClient, legacyGasOverrides } from "@/lib/evm/legacy-gas";
+import { preflightTx } from "@/lib/evm/tx-preflight";
 import { VERIFICATION_LEVEL_TELEGRAM_PHONE } from "./verification";
 import {
   isAirdropDelivered,
@@ -207,21 +208,17 @@ export async function claimFounderDemoAirdrop(userId: string): Promise<FounderDe
           await publicClient.readContract({ address: tokenAddr, abi: erc20Abi, functionName: "decimals" }),
         );
         const amount = BigInt(FOUNDER_DEMO_TOKENS_PER_KIND) * BigInt(10) ** BigInt(decimals);
-        const gas = await estimateGasMargin(publicClient, () =>
-          publicClient.estimateContractGas({
-            address: tokenAddr,
-            abi: erc20Abi,
-            functionName: "transfer",
-            args: [recipient, amount],
-            account,
-          }),
-        );
+        const data = encodeFunctionData({ abi: erc20Abi, functionName: "transfer", args: [recipient, amount] });
+        // Simulate + estimate before signing: a transfer that would revert is never recorded or sent.
+        const preflight = await preflightTx(publicClient, { account: account.address, to: tokenAddr, data });
+        if (!preflight.ok) return { state: "pending" };
+        const gas = preflight.gas;
         const raw = await account.signTransaction({
           type: "legacy",
           chainId: peopleEvmChain.id,
           nonce,
           to: tokenAddr,
-          data: encodeFunctionData({ abi: erc20Abi, functionName: "transfer", args: [recipient, amount] }),
+          data,
           gas,
           gasPrice: fees.gasPrice,
         });
