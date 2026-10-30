@@ -301,18 +301,21 @@ export async function pairLogStartBlock(pair: string): Promise<number> {
  * Decodes ABI-encoded `string` return data. Author-controlled: control characters are stripped and
  * length is capped so a token cannot spoof a catalog entry with invisible/homoglyph padding.
  */
-function decodeErc20String(out: string | null | undefined): string {
+function decodeErc20String(out: string | null | undefined, maxLength = 64): string {
   if (!out || out === "0x" || out.length < 130) return "";
   try {
     return Buffer.from(out.slice(130), "hex")
       .toString("utf8")
       .replace(/[\u0000-\u001f\u007f]/g, "")
       .trim()
-      .slice(0, 64);
+      .slice(0, maxLength);
   } catch {
     return "";
   }
 }
+
+/** A `metadataURI` (`ipfs://<CIDv0>/metadata.json` is ~67 chars) needs a longer cap than a name/symbol. */
+const METADATA_URI_MAX_LENGTH = 256;
 
 function decodeUint(out: string | null | undefined): bigint {
   if (!out || out === "0x") return BigInt(0);
@@ -453,7 +456,7 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
     const decimals = Number(decodeUint(metadata[index * ROW_READS + 2])) || 18;
     const supplyWei = decodeUint(metadata[index * ROW_READS + 3]);
     const creator = decodeAddress(metadata[index * ROW_READS + 4]) || dep.deployer || "0x0";
-    const chainImage = tokenImageFromMetadataUri(decodeErc20String(metadata[index * ROW_READS + 5]));
+    const chainImage = tokenImageFromMetadataUri(decodeErc20String(metadata[index * ROW_READS + 5], METADATA_URI_MAX_LENGTH));
     const assetId = resolveLogicalAssetId(token);
     const seed = seedAssetMeta(assetId);
     // Token metadata is permissionless: anyone can deploy a contract that calls itself

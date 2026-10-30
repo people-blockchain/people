@@ -75,14 +75,25 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
   return { res, payload };
 }
 
+/**
+ * A JSON-RPC `error` member answered by a healthy node (typically an `eth_call` revert). Distinct
+ * from transport failures (timeout, backoff, HTTP 5xx) so callers can tell "contract says no" from
+ * "could not ask".
+ */
+export class EvmRpcResponseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "EvmRpcResponseError";
+  }
+}
+
 export async function evmJsonRpc<T>(method: string, params: unknown[] = []): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
   const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, 20_000);
   const payload = raw as { result?: T; error?: { message?: string } };
-  if (!res.ok || payload?.error) {
-    throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);
-  }
+  if (payload?.error) throw new EvmRpcResponseError(payload.error.message ?? "rpc_error");
+  if (!res.ok) throw new Error(`rpc_http_${res.status}`);
   return payload.result as T;
 }
 
