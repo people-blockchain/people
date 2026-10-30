@@ -44,5 +44,10 @@
   "totalSupply": "Gesamtangebot",
   "mintPrice": "Prägepreis",
   "pplBalance": "PPL-Guthaben",
-  "memo": "Memo"
+  "memo": "Memo",
+  "contractDeployTx": "Deploy-Transaktion",
+  "contractVerifiedTemplate": "Verifiziert: Der Bytecode entspricht der Vorlage „{name}“",
+  "contractSourceUnknown": "Quellcode nicht verfügbar: Der Bytecode entspricht keiner bekannten Vorlage.",
+  "contractCampaignLink": "Kampagnenseite öffnen",
+  "contractPartial": "Einige Daten konnten gerade nicht aus dem Netzwerk geladen werden; angezeigt wird, was verfügbar ist."
 }

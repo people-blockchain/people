@@ -455,7 +455,7 @@ export function ContractWizard() {
           <p className="font-semibold text-ink">{t.success}</p>
           <p className="break-all">
             {t.contractAddress}:{" "}
-            <Link className="font-mono text-brand hover:underline" href={`/explorer/address/${deployed.address}`}>
+            <Link className="font-mono text-brand hover:underline" href={`/explorer/contract/${deployed.address}`}>
               {deployed.address}
             </Link>
           </p>

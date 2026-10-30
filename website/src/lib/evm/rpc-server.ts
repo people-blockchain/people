@@ -75,10 +75,14 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
   return { res, payload };
 }
 
-export async function evmJsonRpc<T>(method: string, params: unknown[] = []): Promise<T> {
+export async function evmJsonRpc<T>(
+  method: string,
+  params: unknown[] = [],
+  opts: { timeoutMs?: number } = {}
+): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
-  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, 20_000);
+  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, opts.timeoutMs ?? 20_000);
   const payload = raw as { result?: T; error?: { message?: string } };
   if (!res.ok || payload?.error) {
     throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);

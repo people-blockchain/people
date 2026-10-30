@@ -44,5 +44,10 @@
   "totalSupply": "总供应量",
   "mintPrice": "铸造价格",
   "pplBalance": "PPL 余额",
-  "memo": "备注"
+  "memo": "备注",
+  "contractDeployTx": "部署交易",
+  "contractVerifiedTemplate": "已验证：字节码与“{name}”模板一致",
+  "contractSourceUnknown": "无法提供源代码：字节码与任何已知模板都不匹配。",
+  "contractCampaignLink": "打开众筹页面",
+  "contractPartial": "部分数据暂时无法从网络加载，仅显示可用内容。"
 }

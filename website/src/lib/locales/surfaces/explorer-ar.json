@@ -44,5 +44,10 @@
   "totalSupply": "إجمالي العرض",
   "mintPrice": "سعر السك",
   "pplBalance": "رصيد PPL",
-  "memo": "مذكرة"
+  "memo": "مذكرة",
+  "contractDeployTx": "معاملة النشر",
+  "contractVerifiedTemplate": "تم التحقق: الشيفرة الثنائية تطابق القالب «{name}»",
+  "contractSourceUnknown": "المصدر غير متاح: الشيفرة الثنائية لا تطابق أي قالب معروف.",
+  "contractCampaignLink": "افتح صفحة الحملة",
+  "contractPartial": "تعذّر تحميل بعض البيانات من الشبكة الآن؛ نعرض المتاح منها."
 }
