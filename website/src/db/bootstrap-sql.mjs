@@ -495,3 +495,20 @@ export const SALE_PERSON_BINDING_SCHEMA_STATEMENTS = [
 )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "sale_binding_account_lower_idx" ON "sale_binding" (lower("account"))`,
 ];
+
+/**
+ * Keep in sync with `website/drizzle/0021_founder_nft_person.sql`. Founder NFT personId keyed by
+ * sha256 digests of Human Passport stamp nullifiers; no raw nullifier or wallet is stored.
+ */
+export const FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_nft_person" (
+  "personId" text PRIMARY KEY NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE TABLE IF NOT EXISTS "founder_nft_stamp_hash" (
+  "stampHash" text PRIMARY KEY NOT NULL,
+  "personId" text NOT NULL REFERENCES "founder_nft_person"("personId") ON DELETE CASCADE,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_nft_stamp_hash_person_idx" ON "founder_nft_stamp_hash" ("personId")`,
+];

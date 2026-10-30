@@ -134,6 +134,13 @@
       "when": 1759395600000,
       "tag": "0020_sale_person_binding",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1759399200000,
+      "tag": "0021_founder_nft_person",
+      "breakpoints": true
     }
   ]
 }

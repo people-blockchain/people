@@ -830,3 +830,25 @@ export const saleBindings = pgTable(
   },
   (row) => [uniqueIndex("sale_binding_account_lower_idx").on(sql`lower(${row.account})`)],
 );
+
+/**
+ * Founder NFT personId registry — see drizzle/0021_founder_nft_person.sql and docs/founder-nft.md.
+ * `personId` is opaque (random bytes32 hex), assigned on first sight of a person's stamps.
+ */
+export const founderNftPersons = pgTable("founder_nft_person", {
+  personId: text("personId").primaryKey(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
+/** sha256 digests of Human Passport stamp nullifiers; the raw nullifier is never stored. */
+export const founderNftStampHashes = pgTable(
+  "founder_nft_stamp_hash",
+  {
+    stampHash: text("stampHash").primaryKey(),
+    personId: text("personId")
+      .notNull()
+      .references(() => founderNftPersons.personId, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("founder_nft_stamp_hash_person_idx").on(row.personId)],
+);
