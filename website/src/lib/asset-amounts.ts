@@ -115,31 +115,79 @@ export function formatUsd6(usd6: bigint): string {
   return `${neg ? "-" : ""}${dollars.toString()}.${frac}`;
 }
 
-/** Integer wei string, or null when the field is missing or not a base-10 integer. */
+const HEX_WEI = /^0[xX][0-9a-fA-F]+$/;
+
+/**
+ * Integer wei: a bigint, a base-10 digit string, or a 0x hex quantity.
+ * Decimal strings are not wei; callers that mean human PPL parse those separately.
+ */
 export function weiFromField(raw: unknown): bigint | null {
   if (typeof raw === "bigint") return raw >= BigInt(0) ? raw : null;
-  if (typeof raw === "string" && /^\d+$/.test(raw)) {
-    try {
-      return BigInt(raw);
-    } catch {
-      return null;
-    }
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  if (!/^\d+$/.test(text) && !HEX_WEI.test(text)) return null;
+  try {
+    return BigInt(text);
+  } catch {
+    return null;
   }
-  return null;
 }
 
-/** Prefer an integer `balanceWei` field. A decimal `balance` string is parsed exactly. */
+/**
+ * Legacy nodes and route mocks send native PPL as a JSON number (human units,
+ * at most 6 decimal places). Scale that to 18-decimal wei without `amount * 1e18`,
+ * which cannot represent 0.1 exactly.
+ */
+function pplNumberToWei(amount: number): bigint | null {
+  if (!Number.isFinite(amount) || amount < 0) return null;
+  let text: string;
+  try {
+    text = amount.toFixed(6);
+  } catch {
+    return null;
+  }
+  if (!/^\d+\.\d{6}$/.test(text)) return null;
+  const [whole, frac] = text.split(".");
+  return BigInt(whole) * (BigInt(10) ** BigInt(PPL_WEI_DECIMALS)) + BigInt(frac) * (BigInt(10) ** BigInt(12));
+}
+
+/** Human PPL (number or decimal string) or a raw hex wei quantity. */
+function humanOrHexToWei(raw: unknown): bigint | null {
+  if (typeof raw === "number") return pplNumberToWei(raw);
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  if (HEX_WEI.test(text)) return weiFromField(text);
+  return parsePplInput(text);
+}
+
+/**
+ * Wei from whatever an account payload actually carries.
+ * Integer or hex `balanceWei` / `balances.pplWei` win.
+ * A decimal string on those fields is human PPL.
+ * Legacy `balance` and `balances.ppl` are human PPL numbers or decimal strings, or hex wei.
+ */
 export function readBalanceWei(body: unknown): bigint | null {
   if (!body || typeof body !== "object") return null;
   const rec = body as Record<string, unknown>;
   const direct = weiFromField(rec.balanceWei);
   if (direct !== null) return direct;
-  const balances = rec.balances;
-  if (balances && typeof balances === "object") {
-    const mapped = weiFromField((balances as Record<string, unknown>).pplWei);
-    if (mapped !== null) return mapped;
+  if (typeof rec.balanceWei === "string") {
+    const decimal = parsePplInput(rec.balanceWei);
+    if (decimal !== null) return decimal;
   }
-  if (typeof rec.balance === "string") return parsePplInput(rec.balance);
+  const balances = rec.balances;
+  const map = balances && typeof balances === "object" ? (balances as Record<string, unknown>) : null;
+  if (map) {
+    const mapped = weiFromField(map.pplWei);
+    if (mapped !== null) return mapped;
+    if (typeof map.pplWei === "string") {
+      const decimal = parsePplInput(map.pplWei);
+      if (decimal !== null) return decimal;
+    }
+  }
+  const fromBalance = humanOrHexToWei(rec.balance);
+  if (fromBalance !== null) return fromBalance;
+  if (map) return humanOrHexToWei(map.ppl);
   return null;
 }
 

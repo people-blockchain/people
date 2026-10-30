@@ -8,6 +8,8 @@ import {
   maxSendWei,
   parsePplInput,
   pplWeiToUsd6,
+  readBalanceWei,
+  weiFromField,
 } from "../src/lib/asset-amounts.ts";
 import { maxTransferAmount } from "../src/lib/wallet-activity.ts";
 
@@ -57,4 +59,23 @@ test("USD conversion stays in fixed-point until the final string", () => {
   assert.equal(formatUsd6(usd6), "0.50");
   assert.equal(formatUsd6(1n), "0.00");
   assert.equal(formatUsd6(10_000n), "0.01");
+});
+
+test("account balance becomes wei from legacy numbers, hex, and decimal strings", () => {
+  const ten = parseUnits("10", 18);
+  assert.equal(readBalanceWei({ balance: 10, nonce: 0, balances: { demo: 1_230_000 } }), ten);
+  assert.equal(readBalanceWei({ balance: 0.1 }), parseUnits("0.1", 18));
+  assert.equal(readBalanceWei({ balance: 13.84472 }), parseUnits("13.84472", 18));
+  assert.equal(readBalanceWei({ balance: "10" }), ten);
+  assert.equal(readBalanceWei({ balance: "99.995125" }), parseUnits("99.995125", 18));
+  assert.equal(readBalanceWei({ balance: "0x8ac7230489e80000" }), ten);
+  assert.equal(readBalanceWei({ balanceWei: "10000000000000000000" }), ten);
+  assert.equal(readBalanceWei({ balanceWei: "0x8ac7230489e80000", balance: 1 }), ten);
+  assert.equal(readBalanceWei({ balanceWei: "10.5" }), parseUnits("10.5", 18));
+  assert.equal(readBalanceWei({ balances: { ppl: 7 } }), parseUnits("7", 18));
+  assert.equal(readBalanceWei({ balances: { pplWei: "1000", ppl: 7 } }), 1000n);
+  assert.equal(weiFromField("0x10"), 16n);
+  assert.equal(weiFromField("1000"), 1000n);
+  assert.equal(readBalanceWei({ balance: -1 }), null);
+  assert.equal(readBalanceWei({}), null);
 });
