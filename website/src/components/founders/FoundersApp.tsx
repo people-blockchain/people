@@ -574,9 +574,7 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
         </div>
       ) : null}
 
-      {embedded ? (
-        <FoundersNftCard signedIn={signedIn} />
-      ) : (
+      {embedded ? null : (
         <>
           <FoundersNftSection copy={landing} />
           <FoundersNftCard signedIn={signedIn} />
