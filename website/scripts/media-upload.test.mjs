@@ -353,7 +353,7 @@ test("on Vercel the sign limit follows the forwarding headers per client", async
   process.env.VERCEL = "1";
   try {
     const fields = { kind: "token-icon", type: "image/png", size: 32, sha256: "ef".repeat(32) };
-    const forwarded = { "x-forwarded-for": "1.2.3.4, 5.6.7.8" };
+    const forwarded = { "x-forwarded-for": "127.0.0.2, 127.0.0.3" };
     for (let i = 0; i < DIRECT_UPLOAD_RATE.signIp.limit; i++) {
       const body = await signedBody(freshAccount(), fields);
       const res = await signRoute(jsonRequest("/api/factory/upload/sign", body, forwarded));
@@ -364,11 +364,11 @@ test("on Vercel the sign limit follows the forwarding headers per client", async
     assert.equal(limited.status, 429);
     assert.equal((await limited.json()).error, "rate_limited");
     const other = await signedBody(freshAccount(), fields);
-    const allowed = await signRoute(jsonRequest("/api/factory/upload/sign", other, { "x-real-ip": "5.6.7.8" }));
+    const allowed = await signRoute(jsonRequest("/api/factory/upload/sign", other, { "x-real-ip": "127.0.0.3" }));
     assert.equal(allowed.status, 200);
     const preferred = await signedBody(freshAccount(), fields);
     const fromVercel = await signRoute(
-      jsonRequest("/api/factory/upload/sign", preferred, { "x-vercel-forwarded-for": "1.2.3.4", "x-forwarded-for": "5.6.7.8" }),
+      jsonRequest("/api/factory/upload/sign", preferred, { "x-vercel-forwarded-for": "127.0.0.2", "x-forwarded-for": "127.0.0.3" }),
     );
     assert.equal(fromVercel.status, 429);
   } finally {
