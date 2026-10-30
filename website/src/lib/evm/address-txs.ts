@@ -1,4 +1,3 @@
-import { formatUnits } from "viem";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
 import { transactionMemo } from "@/lib/evm/transaction-memo";
 import type { EvmExplorerTx } from "@/lib/evm/explorer-blocks";
@@ -90,7 +89,7 @@ function addrTopic(address: string): string {
 
 function mapTx(tx: RpcTx): EvmExplorerTx {
   const value = tx.value || "0x0";
-  const amount = Number(formatUnits(BigInt(value), 18));
+  const valueWei = BigInt(value);
   const blockHeight = parseHexInt(tx.blockNumber);
   const memo = transactionMemo(tx);
   const type: string = tx.input && tx.input !== "0x" && !memo ? "contract_call" : "transfer";
@@ -99,7 +98,7 @@ function mapTx(tx: RpcTx): EvmExplorerTx {
     type,
     from: tx.from,
     to: tx.to ?? undefined,
-    amount,
+    amountWei: valueWei.toString(),
     blockHeight,
     ...(memo ? { payload: { memo } } : {}),
   };

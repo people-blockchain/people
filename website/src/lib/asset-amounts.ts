@@ -6,8 +6,190 @@
  * Never print a token amount without dividing by its decimals.
  */
 
+import { formatUnits as viemFormatUnits, parseUnits as viemParseUnits } from "viem";
 import { displayAssetSymbol } from "@/lib/hidden-assets";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
+
+/** Native PPL uses 18 decimal wei. All amount and fee arithmetic stays in this unit. */
+export const PPL_WEI_DECIMALS = 18;
+/** 0.0001 PPL. A positive amount below this is shown as dust, not rounded to zero. */
+export const PPL_DUST_WEI = BigInt(10) ** BigInt(14);
+export const PPL_DUST_LABEL = "< 0.0001 PPL";
+
+function stripFractionZeros(raw: string): string {
+  if (!raw.includes(".")) return raw;
+  const stripped = raw.replace(/0+$/, "").replace(/\.$/, "");
+  return stripped === "" ? "0" : stripped;
+}
+
+/**
+ * Parse a PPL amount typed by a person. Accepts a comma or a dot as the decimal
+ * separator. Returns null for empty, signed, scientific, or over-precise input.
+ */
+export function parsePplInput(text: string): bigint | null {
+  const clean = text.trim().replace(/[\s\u00a0]/g, "").replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(clean)) return null;
+  const fraction = clean.split(".")[1] ?? "";
+  if (fraction.length > PPL_WEI_DECIMALS) return null;
+  try {
+    return viemParseUnits(clean, PPL_WEI_DECIMALS);
+  } catch {
+    return null;
+  }
+}
+
+/** Full precision, no rounding. Trailing zeros are removed. */
+export function formatPplExact(wei: bigint): string {
+  if (wei <= BigInt(0)) return "0";
+  return stripFractionZeros(viemFormatUnits(wei, PPL_WEI_DECIMALS));
+}
+
+/**
+ * Balances and lists: at most 4 decimal places, trailing zeros removed.
+ * Amounts greater than zero and below 0.0001 PPL use `dustLabel`.
+ */
+export function formatPplDisplay(wei: bigint, dustLabel = PPL_DUST_LABEL): string {
+  if (wei <= BigInt(0)) return "0";
+  if (wei < PPL_DUST_WEI) return dustLabel;
+  const step = PPL_DUST_WEI;
+  const rounded = (wei + step / BigInt(2)) / step;
+  const whole = rounded / BigInt(10_000);
+  const frac = rounded % BigInt(10_000);
+  const intText = group(whole.toString());
+  if (frac === BigInt(0)) return intText;
+  const fracText = frac.toString().padStart(4, "0").replace(/0+$/, "");
+  return `${intText}.${fracText}`;
+}
+
+/** Compact label, with the PPL ticker. Dust text already includes it. */
+export function formatPplLabeled(wei: bigint, dustLabel = PPL_DUST_LABEL): string {
+  const compact = formatPplDisplay(wei, dustLabel);
+  return compact.startsWith("<") ? compact : `${compact} PPL`;
+}
+
+/** Spendable wei after reserving a fee. Never uses floating point. */
+export function maxSendWei(balanceWei: bigint, feeWei: bigint): bigint {
+  if (balanceWei <= BigInt(0)) return BigInt(0);
+  if (feeWei <= BigInt(0)) return balanceWei;
+  if (balanceWei <= feeWei) return BigInt(0);
+  return balanceWei - feeWei;
+}
+
+/** `numerator/denominator` of the spendable balance, floored in wei. */
+export function fractionOfPplWei(balanceWei: bigint, feeWei: bigint, numerator: bigint, denominator: bigint): bigint {
+  if (denominator <= BigInt(0) || numerator <= BigInt(0)) return BigInt(0);
+  return (maxSendWei(balanceWei, feeWei) * numerator) / denominator;
+}
+
+/**
+ * USD with 6 decimals (micro-USD) from PPL wei and a USD-per-PPL price in 1e18 wad.
+ * `usd6 = pplWei * priceWad / 1e30`.
+ */
+export function pplWeiToUsd6(pplWei: bigint, priceWad: bigint): bigint {
+  if (pplWei <= BigInt(0) || priceWad <= BigInt(0)) return BigInt(0);
+  return (pplWei * priceWad) / BigInt(10) ** BigInt(30);
+}
+
+/**
+ * USD-per-unit wad (1e18) to a dollar string.
+ * Prices under $0.01 keep four decimal places; larger prices keep at least two.
+ */
+export function formatUsdWad(wad: bigint): string {
+  if (wad <= BigInt(0)) return "0.00";
+  const step = BigInt(10) ** BigInt(14);
+  const rounded = (wad + step / BigInt(2)) / step;
+  const whole = rounded / BigInt(10_000);
+  const frac = rounded % BigInt(10_000);
+  const minDigits = rounded < BigInt(100) ? 4 : 2;
+  const fracText = frac.toString().padStart(4, "0").replace(/0+$/, "").padEnd(minDigits, "0");
+  return `${whole.toString()}.${fracText}`;
+}
+
+/** Micro-USD to a 2-decimal dollar string, half up. No floating point. */
+export function formatUsd6(usd6: bigint): string {
+  const neg = usd6 < BigInt(0);
+  const v = neg ? -usd6 : usd6;
+  const cents = (v + BigInt(5_000)) / BigInt(10_000);
+  const dollars = cents / BigInt(100);
+  const frac = (cents % BigInt(100)).toString().padStart(2, "0");
+  return `${neg ? "-" : ""}${dollars.toString()}.${frac}`;
+}
+
+const HEX_WEI = /^0[xX][0-9a-fA-F]+$/;
+
+/**
+ * Integer wei: a bigint, a base-10 digit string, or a 0x hex quantity.
+ * Decimal strings are not wei; callers that mean human PPL parse those separately.
+ */
+export function weiFromField(raw: unknown): bigint | null {
+  if (typeof raw === "bigint") return raw >= BigInt(0) ? raw : null;
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  if (!/^\d+$/.test(text) && !HEX_WEI.test(text)) return null;
+  try {
+    return BigInt(text);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Legacy nodes and route mocks send native PPL as a JSON number (human units,
+ * at most 6 decimal places). Scale that to 18-decimal wei without `amount * 1e18`,
+ * which cannot represent 0.1 exactly.
+ */
+function pplNumberToWei(amount: number): bigint | null {
+  if (!Number.isFinite(amount) || amount < 0) return null;
+  let text: string;
+  try {
+    text = amount.toFixed(6);
+  } catch {
+    return null;
+  }
+  if (!/^\d+\.\d{6}$/.test(text)) return null;
+  const [whole, frac] = text.split(".");
+  return BigInt(whole) * (BigInt(10) ** BigInt(PPL_WEI_DECIMALS)) + BigInt(frac) * (BigInt(10) ** BigInt(12));
+}
+
+/** Human PPL (number or decimal string) or a raw hex wei quantity. */
+function humanOrHexToWei(raw: unknown): bigint | null {
+  if (typeof raw === "number") return pplNumberToWei(raw);
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  if (HEX_WEI.test(text)) return weiFromField(text);
+  return parsePplInput(text);
+}
+
+/**
+ * Wei from whatever an account payload actually carries.
+ * Integer or hex `balanceWei` / `balances.pplWei` win.
+ * A decimal string on those fields is human PPL.
+ * Legacy `balance` and `balances.ppl` are human PPL numbers or decimal strings, or hex wei.
+ */
+export function readBalanceWei(body: unknown): bigint | null {
+  if (!body || typeof body !== "object") return null;
+  const rec = body as Record<string, unknown>;
+  const direct = weiFromField(rec.balanceWei);
+  if (direct !== null) return direct;
+  if (typeof rec.balanceWei === "string") {
+    const decimal = parsePplInput(rec.balanceWei);
+    if (decimal !== null) return decimal;
+  }
+  const balances = rec.balances;
+  const map = balances && typeof balances === "object" ? (balances as Record<string, unknown>) : null;
+  if (map) {
+    const mapped = weiFromField(map.pplWei);
+    if (mapped !== null) return mapped;
+    if (typeof map.pplWei === "string") {
+      const decimal = parsePplInput(map.pplWei);
+      if (decimal !== null) return decimal;
+    }
+  }
+  const fromBalance = humanOrHexToWei(rec.balance);
+  if (fromBalance !== null) return fromBalance;
+  if (map) return humanOrHexToWei(map.ppl);
+  return null;
+}
 
 export const NATIVE_ASSET_ID = "ppl";
 export const DEFAULT_TOKEN_DECIMALS = 6;

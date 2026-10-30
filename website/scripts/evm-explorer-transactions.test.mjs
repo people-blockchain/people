@@ -19,8 +19,8 @@ test("transaction detail route returns the confirmed faucet transfer and actual 
   const response = await handleEvmCompatGet(`transactions/${hash}`, new URLSearchParams());
   assert.equal(response.status, 200);
   assert.deepEqual(response.body, {
-    id: hash, type: "transfer", from, to, amount: 1,
-    fee: Number(21000n * 6256132n) / 1e18, blockHeight: 39,
+    id: hash, type: "transfer", from, to, amountWei: "1000000000000000000",
+    feeWei: (21000n * 6256132n).toString(), blockHeight: 39,
   });
   assert.deepEqual(calls.map(({ method, params }) => ({ method, params })), [
     { method: "eth_getTransactionByHash", params: [hash] },

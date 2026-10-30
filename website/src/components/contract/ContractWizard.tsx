@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { Address } from "viem";
+import { parseUnits, type Address } from "viem";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -18,17 +18,17 @@ import {
   contractAddressFromReceipt,
 } from "@/lib/evm/contract-deploy";
 import {
-  APPROVED_CONTRACT_GAS_PRICE_PPL,
-  TYPICAL_CONTRACT_DEPLOY_FEE_PPL,
+  APPROVED_CONTRACT_GAS_PRICE_WEI,
+  TYPICAL_CONTRACT_DEPLOY_FEE_WEI,
 } from "@/lib/factory-fees";
 import {
   defaultGasLimitFromEstimate,
   estimateContractDeployGas,
-  quoteContractFeePpl,
+  quoteContractFeeWei,
 } from "@/lib/contract-gas-estimate";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
 import { contractCopy, type ContractCopy } from "@/lib/contract-copy";
-import { formatPpl } from "@/lib/asset-amounts";
+import { formatPplExact } from "@/lib/asset-amounts";
 import {
   constructorFields,
   defaultFieldValue,
@@ -63,6 +63,22 @@ interface Params {
   ownerApprovedPublicTariff?: boolean;
 }
 
+/** Legacy `contracts/params` quotes are decimal PPL numbers. Fees stay in wei. */
+function legacyPplToWei(value: number | undefined, fallback: bigint): bigint {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) return fallback;
+  try {
+    return parseUnits(String(value), 18);
+  } catch {
+    // String(8.7e-7) is "8.7e-7", which parseUnits rejects. Expand, then give up.
+    try {
+      const expanded = value.toFixed(18).replace(/0+$/, "").replace(/\.$/, "");
+      return parseUnits(expanded, 18);
+    } catch {
+      return fallback;
+    }
+  }
+}
+
 export function ContractWizard() {
   const { lang } = useLanguage();
   const t: ContractCopy = (contractCopy as Record<string, ContractCopy>)[lang] ?? contractCopy.en;
@@ -94,9 +110,11 @@ export function ContractWizard() {
   );
   const ctorEncoded = useMemo(() => encodeConstructorArgs(ctorFields, ctorValues), [ctorFields, ctorValues]);
 
-  const gasPricePpl = params?.gasPricePpl ?? APPROVED_CONTRACT_GAS_PRICE_PPL;
-  const typicalDeployFee =
-    params?.quoteTypicalDeployFeePpl ?? TYPICAL_CONTRACT_DEPLOY_FEE_PPL;
+  const gasPriceWei = legacyPplToWei(params?.gasPricePpl, APPROVED_CONTRACT_GAS_PRICE_WEI);
+  const typicalDeployFeeWei = legacyPplToWei(
+    params?.quoteTypicalDeployFeePpl,
+    TYPICAL_CONTRACT_DEPLOY_FEE_WEI
+  );
 
   useEffect(() => {
     // E2E-M1: on the EVM chain the legacy compat layer only implements `contracts/<address>`,
@@ -253,10 +271,10 @@ export function ContractWizard() {
       <p className="mt-3 text-xs text-ink-3">{t.templates}</p>
       <div className="mt-6 rounded-2xl border border-line bg-surface-2 p-4 text-sm text-ink-2">
         <p>
-          {t.gasPrice}: <span className="font-mono text-ink">{gasPricePpl.toFixed(8)} {t.perGas}</span>
+          {t.gasPrice}: <span className="font-mono text-ink">{formatPplExact(gasPriceWei)} {t.perGas}</span>
         </p>
         <p className="mt-1">
-          {t.deployEstimate} <span className="font-mono text-ink">{formatPpl(typicalDeployFee)} PPL</span>
+          {t.deployEstimate} <span className="font-mono text-ink">{formatPplExact(typicalDeployFeeWei)} PPL</span>
         </p>
         <p className="mt-2 text-xs text-ink-3">
           <Link href="/fees" className="text-brand hover:underline">
@@ -359,7 +377,7 @@ export function ContractWizard() {
               <p>
                 {t.maxPrepay}:{" "}
                 <span className="font-mono text-ink">
-                  {formatPpl(quoteContractFeePpl(gasLimit, gasPricePpl))} PPL
+                  {formatPplExact(quoteContractFeeWei(gasLimit, gasPriceWei))} PPL
                 </span>{" "}
                 ({t.fee})
               </p>

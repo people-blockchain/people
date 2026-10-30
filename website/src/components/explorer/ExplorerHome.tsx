@@ -13,7 +13,7 @@ import { connectExplorer, type LivePhase } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { uxCopy } from "@/lib/ux-copy";
-import { txSummary } from "@/lib/tx-display";
+import { txExactTitle, txSummary } from "@/lib/tx-display";
 import { useAssetRegistry } from "@/hooks/useAssetRegistry";
 import { SkeletonRows } from "./ExplorerSkeleton";
 import { ExplorerSubnav } from "./ExplorerSubnav";
@@ -31,6 +31,8 @@ export interface TxRow {
   to?: string;
   amount?: number;
   fee?: number;
+  amountWei?: string;
+  feeWei?: string;
   assetId?: string;
   payload?: Record<string, unknown> | null;
   blockHeight?: number;
@@ -203,7 +205,7 @@ export function ExplorerHome({
                   <Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="font-mono text-xs text-brand hover:underline">
                     {tx.id.slice(0, 18)}…
                   </Link>
-                  <p className="mt-1 text-ink-2">
+                  <p className="mt-1 text-ink-2" title={txExactTitle(tx)}>
                     {txSummary(tx, assets, u, t.fee)}
                   </p>
                 </li>
