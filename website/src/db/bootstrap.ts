@@ -16,6 +16,7 @@ import {
   FACTORY_ICON_SCHEMA_STATEMENTS,
   SALE_PERSON_BINDING_SCHEMA_STATEMENTS,
   FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
+  FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
@@ -87,6 +88,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0021_founder_nft_person.sql — Founder NFT personId + HP stamp-nullifier digests.
     for (const statement of FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0022_founder_nft_auth_nonce.sql — single-use wallet signature nonce.
+    for (const statement of FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {

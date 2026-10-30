@@ -512,3 +512,19 @@ export const FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS = [
 )`,
   `CREATE INDEX IF NOT EXISTS "founder_nft_stamp_hash_person_idx" ON "founder_nft_stamp_hash" ("personId")`,
 ];
+
+/**
+ * Keep in sync with `website/drizzle/0022_founder_nft_auth_nonce.sql`. Single-use wallet
+ * signature nonce for Founder NFT mint and rebind. The code is random; no key is stored.
+ */
+export const FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_nft_auth_nonce" (
+  "code" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "chainId" integer NOT NULL,
+  "expiresAt" timestamp NOT NULL,
+  "usedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_nft_auth_nonce_user_idx" ON "founder_nft_auth_nonce" ("userId")`,
+];

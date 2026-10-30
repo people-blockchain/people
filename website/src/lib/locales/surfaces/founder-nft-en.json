@@ -14,6 +14,8 @@
   "yourNftHint": "It is soulbound: it cannot be sold or transferred.",
   "rebindTitle": "Move your Founder NFT to this wallet",
   "rebindLead": "Your Human Passport already owns Founder NFT {{n}} at {{holder}}. You can move the same number to this wallet. The old token is burned after a 72-hour waiting period.",
+  "dedupTitle": "This wallet cannot be verified again",
+  "dedupLead": "These Human Passport stamps were already used by another wallet, so this account cannot reach verification. You can move Founder NFT {{n}} from {{holder}} to this wallet. The old token is burned after a 72-hour waiting period.",
   "rebindButton": "Move Founder NFT {{n}} here",
   "rebindPendingTitle": "Your move to this wallet is pending",
   "rebindPendingWait": "Waiting period: {{time}} left. The current holder can cancel until then.",
@@ -40,5 +42,6 @@
   "errNoPending": "There is no pending move, or it can no longer be changed.",
   "errConflict": "Your Human Passport matches more than one person. Please contact support.",
   "errUnavailable": "The network or Human Passport is not responding. Please try again.",
-  "errGeneric": "Something went wrong. Please try again."
+  "errGeneric": "Something went wrong. Please try again.",
+  "errWalletAuth": "Confirm this wallet and try again. The confirmation was missing, expired, or signed by a different address."
 }

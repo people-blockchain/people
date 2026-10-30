@@ -14,6 +14,8 @@
   "yourNftHint": "它与你绑定：不能出售或转让。",
   "rebindTitle": "将你的 Founder NFT 迁移到此钱包",
   "rebindLead": "你的 Human Passport 已在 {{holder}} 持有 Founder NFT {{n}}。你可以把同一编号迁移到此钱包。旧代币将在 72 小时等待期后销毁。",
+  "dedupTitle": "此钱包无法再次验证",
+  "dedupLead": "这些 Human Passport 印章已被另一个钱包使用，因此此账户无法达到验证等级。你可以将 Founder NFT {{n}} 从 {{holder}} 移到此钱包。旧代币会在 72 小时等待后销毁。",
   "rebindButton": "将 Founder NFT {{n}} 迁移到这里",
   "rebindPendingTitle": "迁移到此钱包的请求待处理",
   "rebindPendingWait": "等待期：还剩 {{time}}。在此之前，当前持有人可以取消。",
@@ -40,5 +42,6 @@
   "errNoPending": "没有待处理的迁移，或已无法更改。",
   "errConflict": "你的 Human Passport 匹配到多个人，请联系支持。",
   "errUnavailable": "网络或 Human Passport 无响应，请重试。",
-  "errGeneric": "出了点问题，请重试。"
+  "errGeneric": "出了点问题，请重试。",
+  "errWalletAuth": "请确认此钱包后再试。确认缺失、已过期，或由其他地址签名。"
 }

@@ -14,6 +14,8 @@
   "yourNftHint": "Il est lié à vous : il ne peut être ni vendu ni transféré.",
   "rebindTitle": "Déplacez votre Founder NFT vers ce portefeuille",
   "rebindLead": "Votre Human Passport possède déjà le Founder NFT {{n}} à l'adresse {{holder}}. Vous pouvez déplacer le même numéro vers ce portefeuille. L'ancien jeton est brûlé après un délai d'attente de 72 heures.",
+  "dedupTitle": "Ce portefeuille ne peut pas être vérifié une nouvelle fois",
+  "dedupLead": "Ces tampons Human Passport ont déjà été utilisés par un autre portefeuille, donc ce compte ne peut pas atteindre la vérification. Vous pouvez déplacer le Founder NFT {{n}} de {{holder}} vers ce portefeuille. L'ancien jeton est brûlé après 72 heures d'attente.",
   "rebindButton": "Déplacer ici le Founder NFT {{n}}",
   "rebindPendingTitle": "Le transfert vers ce portefeuille est en attente",
   "rebindPendingWait": "Délai d'attente : il reste {{time}}. Le titulaire actuel peut annuler d'ici là.",
@@ -40,5 +42,6 @@
   "errNoPending": "Aucun transfert en attente, ou il ne peut plus être modifié.",
   "errConflict": "Votre Human Passport correspond à plusieurs personnes. Contactez l'assistance.",
   "errUnavailable": "Le réseau ou Human Passport ne répond pas. Réessayez.",
-  "errGeneric": "Une erreur s'est produite. Réessayez."
+  "errGeneric": "Une erreur s'est produite. Réessayez.",
+  "errWalletAuth": "Confirmez ce portefeuille et réessayez. La confirmation était absente, expirée ou signée par une autre adresse."
 }

@@ -49,7 +49,8 @@ async function rowForToken(
 }
 
 /**
- * Founder NFT rows for `/wallet` and `/explorer/nfts`. No public address configured means no rows.
+ * Founder NFT rows for `/wallet` and `/explorer/nfts`. No public address, an invalid address, or an
+ * address that disagrees with `founderNft` / `peopleFounderNft` in static evm-deployments means no rows.
  * Any RPC or decode failure returns an empty list so the existing NFT list still renders.
  */
 export async function listFounderNftRows(owner?: string): Promise<FounderNftExplorerRow[]> {

@@ -64,6 +64,7 @@ export type FounderNftErrorKey =
   | "errNoPending"
   | "errConflict"
   | "errUnavailable"
+  | "errWalletAuth"
   | "errGeneric";
 
 const REVERT_KEYS: Array<[string, FounderNftErrorKey]> = [
@@ -101,6 +102,8 @@ export function founderNftWriteErrorKey(error: unknown): FounderNftErrorKey {
 /** Maps an error code from `/api/founders/nft/*` to a localized copy key. */
 export function founderNftApiErrorKey(status: number, code: string | undefined): FounderNftErrorKey {
   if (status === 503 || code === "not_configured") return "errNotConfigured";
+  if (code === "wallet_auth_expired") return "errExpired";
+  if (code?.startsWith("wallet_auth")) return "errWalletAuth";
   if (code === "hp_required") return "errNotEligible";
   if (code === "identity_conflict") return "errConflict";
   if (code === "not_available") return "errAlreadyHolder";

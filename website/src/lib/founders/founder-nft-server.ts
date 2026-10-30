@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { createFounderNftChainReader, createFounderNftViemClient } from "./founder-nft-chain";
+import { consumeFounderNftAuthNonce, readFounderNftAuthNonce } from "./founder-nft-auth-nonce";
 import { readFounderNftPublicConfig, readFounderNftSignerAccount } from "./founder-nft-config";
 import {
   fetchHumanPassportStampNullifiers,
@@ -23,6 +24,8 @@ export function founderNftServiceDeps(): FounderNftServiceDeps {
     chain: (config) => createFounderNftChainReader(createFounderNftViemClient(config, readEvmRpcUrl()), config),
     now: () => Math.floor(Date.now() / 1000),
     randomNonce: () => BigInt(`0x${randomBytes(16).toString("hex")}`),
+    readWalletAuth: readFounderNftAuthNonce,
+    consumeWalletAuth: consumeFounderNftAuthNonce,
   };
 }
 

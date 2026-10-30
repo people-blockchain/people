@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { readPublicClient, useExternalWalletOptional, writeViaActiveSigner } from "@/context/ExternalWalletContext";
+import { readPublicClient, signViaActiveSigner, useExternalWalletOptional, writeViaActiveSigner } from "@/context/ExternalWalletContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { fillFounderNftTemplate, founderNftCopy, type FounderNftCopy } from "@/lib/founder-nft-content";
 import { readFounderNftPublicConfig } from "@/lib/founders/founder-nft-config";
+import { buildFounderNftWalletAuthMessage } from "@/lib/founders/founder-nft-wallet-auth";
 import type { FounderNftSignature, FounderNftStatus } from "@/lib/founders/founder-nft-service";
 import {
   buildFounderNftCancelRequest,
@@ -143,12 +144,33 @@ export function FoundersNftCard({ signedIn }: { signedIn: boolean }) {
   const reload = useCallback(() => setRevision((value) => value + 1), []);
 
   async function requestSignature(action: "mint" | "rebind"): Promise<FounderNftSignature | null> {
-    if (!address) return null;
+    if (!address || !signer) return null;
+    const nonceResponse = await fetch("/api/founders/nft/auth-nonce", { cache: "no-store", credentials: "same-origin" });
+    const nonceBody: unknown = await nonceResponse.json().catch(() => null);
+    if (!nonceResponse.ok || !isRecord(nonceBody)) {
+      const code = isRecord(nonceBody) && typeof nonceBody.error === "string" ? nonceBody.error : undefined;
+      setErrorKey(founderNftApiErrorKey(nonceResponse.status, code));
+      setPhase("ready");
+      return null;
+    }
+    const nonce = nonceBody.nonce;
+    const expiresAt = nonceBody.expiresAt;
+    const chainId = nonceBody.chainId;
+    if (typeof nonce !== "string" || typeof expiresAt !== "string" || typeof chainId !== "number") {
+      setErrorKey("errGeneric");
+      setPhase("ready");
+      return null;
+    }
+    setPhase("wallet");
+    const walletSignature = await signViaActiveSigner(
+      signer,
+      buildFounderNftWalletAuthMessage({ address, nonce, chainId, expiresAt }),
+    );
     const response = await fetch("/api/founders/nft/signature", {
       method: "POST",
       credentials: "same-origin",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ action, address }),
+      body: JSON.stringify({ action, address, nonce, chainId, walletSignature }),
     });
     const body: unknown = await response.json().catch(() => null);
     if (!response.ok) {
@@ -310,9 +332,14 @@ export function FoundersNftCard({ signedIn }: { signedIn: boolean }) {
 
         {address && status && !showDisabled && status.state === "rebind_available" ? (
           <div className="mt-5 space-y-3">
-            <p className="text-sm font-semibold text-ink">{copy.rebindTitle}</p>
+            <p className="text-sm font-semibold text-ink" data-testid={status.dedup ? "founders-founder-nft-dedup" : undefined}>
+              {status.dedup ? copy.dedupTitle : copy.rebindTitle}
+            </p>
             <p className="text-sm text-ink-2">
-              {fillFounderNftTemplate(copy.rebindLead, { n: number, holder: shortAddress(status.oldHolder) })}
+              {fillFounderNftTemplate(status.dedup ? copy.dedupLead : copy.rebindLead, {
+                n: number,
+                holder: shortAddress(status.oldHolder),
+              })}
             </p>
             <button
               type="button"

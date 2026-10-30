@@ -14,6 +14,8 @@
   "yourNftHint": "NFT này gắn liền với bạn: không thể bán hay chuyển nhượng.",
   "rebindTitle": "Chuyển Founder NFT của bạn sang ví này",
   "rebindLead": "Human Passport của bạn đã sở hữu Founder NFT {{n}} tại {{holder}}. Bạn có thể chuyển cùng số đó sang ví này. Token cũ sẽ bị đốt sau thời gian chờ 72 giờ.",
+  "dedupTitle": "Ví này không thể được xác minh lại",
+  "dedupLead": "Các dấu Human Passport này đã được một ví khác dùng, nên tài khoản này không thể đạt mức xác minh. Bạn có thể chuyển Founder NFT {{n}} từ {{holder}} sang ví này. Token cũ bị đốt sau 72 giờ chờ.",
   "rebindButton": "Chuyển Founder NFT {{n}} về đây",
   "rebindPendingTitle": "Việc chuyển sang ví này đang chờ xử lý",
   "rebindPendingWait": "Thời gian chờ: còn {{time}}. Chủ sở hữu hiện tại có thể hủy trước đó.",
@@ -40,5 +42,6 @@
   "errNoPending": "Không có yêu cầu chuyển nào đang chờ hoặc không thể thay đổi nữa.",
   "errConflict": "Human Passport của bạn khớp với nhiều hơn một người. Vui lòng liên hệ hỗ trợ.",
   "errUnavailable": "Mạng hoặc Human Passport không phản hồi. Vui lòng thử lại.",
-  "errGeneric": "Đã xảy ra lỗi. Vui lòng thử lại."
+  "errGeneric": "Đã xảy ra lỗi. Vui lòng thử lại.",
+  "errWalletAuth": "Hãy xác nhận ví này và thử lại. Lời xác nhận bị thiếu, đã hết hạn hoặc do một địa chỉ khác ký."
 }

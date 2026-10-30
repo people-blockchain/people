@@ -54,6 +54,12 @@ test("extractStampNullifiers reads nullifiers[], falls back to legacy hash, dedu
   assert.deepEqual(lib.extractStampNullifiers(items), ["v0:a", "v0:legacy", "v1:b"]);
   assert.deepEqual(lib.extractStampNullifiers(undefined), []);
   assert.deepEqual(lib.extractStampNullifiers([stamp({})]), []);
+  const fresh = stamp({ nullifiers: ["v0:a"] });
+  const reused = { ...stamp({ nullifiers: ["v0:b"] }), dedup: true };
+  assert.equal(lib.stampItemsAreDeduped([reused]), true);
+  assert.equal(lib.stampItemsAreDeduped([fresh]), false);
+  assert.equal(lib.stampItemsAreDeduped([reused, fresh]), false);
+  assert.equal(lib.stampItemsAreDeduped([]), false);
 });
 
 test("hashStampNullifier is deterministic, hex, and never echoes the raw value", () => {
@@ -186,7 +192,7 @@ test("fetchHumanPassportStampNullifiers reads /v2/stamps/{address}, follows same
     fetch: fetchMock,
     readConfig: () => CONFIG,
   });
-  assert.deepEqual(res, { ok: true, address: WALLET_A, nullifiers: ["v0:x", "v0:y"] });
+  assert.deepEqual(res, { ok: true, address: WALLET_A, nullifiers: ["v0:x", "v0:y"], deduped: false });
   assert.equal(calls[0].url, `https://api.passport.xyz/v2/stamps/${WALLET_A}?limit=1000`);
   assert.equal(calls[1].url, "https://api.passport.xyz/v2/stamps/page-2");
   assert.ok(calls.every((c) => c.key === "test-key"));
@@ -199,7 +205,7 @@ test("fetchHumanPassportStampNullifiers refuses foreign next pages, bad input an
   // foreign `next` is not followed; the page read so far is returned
   assert.deepEqual(
     await lib.fetchHumanPassportStampNullifiers({ walletAddress: WALLET_A, fetch: foreign, readConfig: () => CONFIG }),
-    { ok: true, address: WALLET_A, nullifiers: ["v0:z"] },
+    { ok: true, address: WALLET_A, nullifiers: ["v0:z"], deduped: false },
   );
   const never = async () => {
     throw new Error("must not fetch");
@@ -239,4 +245,43 @@ test("founder nft person bootstrap mirrors drizzle 0021 SQL file", async () => {
   for (let i = 0; i < fromFile.length; i += 1) {
     assert.equal(FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "), fromFile[i].replace(/\s+/g, " "));
   }
+});
+
+test("founder nft auth nonce bootstrap mirrors drizzle 0022 SQL file", async () => {
+  const { FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
+  const fromFile = readFileSync(join(root, "drizzle/0022_founder_nft_auth_nonce.sql"), "utf8")
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n")
+    .split(";")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+  assert.equal(FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS.length, fromFile.length);
+  for (let i = 0; i < fromFile.length; i += 1) {
+    assert.equal(FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "), fromFile[i].replace(/\s+/g, " "));
+  }
+});
+
+test("a wallet auth nonce is single-use, expires, and keeps its chain id", async () => {
+  const auth = await import("../src/lib/founders/founder-nft-auth-nonce.ts");
+  const userId = "fnft-auth-user";
+  await db.insert(schema.users).values({ id: userId, email: "fnft-auth@example.test" });
+  const created = await auth.createFounderNftAuthNonce(userId, 97401);
+  const row = await auth.readFounderNftAuthNonce(userId, created.nonce);
+  assert.equal(row.chainId, 97401);
+  assert.equal(row.used, false);
+  assert.equal(row.expiresAt, created.expiresAt);
+  assert.equal(await auth.consumeFounderNftAuthNonce(userId, created.nonce), true);
+  assert.equal(await auth.consumeFounderNftAuthNonce(userId, created.nonce), false);
+  assert.equal((await auth.readFounderNftAuthNonce(userId, created.nonce)).used, true);
+
+  const second = await auth.createFounderNftAuthNonce(userId, 97401);
+  await db
+    .update(schema.founderNftAuthNonces)
+    .set({ expiresAt: new Date(Date.now() - 1000) })
+    .where(eq(schema.founderNftAuthNonces.code, second.nonce));
+  assert.equal(await auth.consumeFounderNftAuthNonce(userId, second.nonce), false);
+  const expired = await auth.readFounderNftAuthNonce(userId, second.nonce);
+  assert.equal(expired.used, false);
+  assert.ok(Date.parse(expired.expiresAt) < Date.now());
 });

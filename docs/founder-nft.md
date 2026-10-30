@@ -174,13 +174,15 @@ Tests: `cd chain/scripts && python3 -m unittest test_generate_founder_nft_genesi
 
 ## Website
 
-The founders block shows a Founder NFT card when the public contract address is set. `/founders` redirects to `/bounty`, so the card is rendered in both `FoundersApp` variants (the bounty earn block and the standalone landing). `/wallet` and `/explorer/nfts` list the tokens through the existing `nfts` compat read. Founder's Seal copy is unchanged.
+The founders block shows a Founder NFT card when the public contract address is set and, if static `evm-deployments` also lists `founderNft` or `peopleFounderNft`, that entry is the same address. `/founders` redirects to `/bounty`, so the card is rendered in both `FoundersApp` variants (the bounty earn block and the standalone landing). `/wallet` and `/explorer/nfts` list the tokens through the existing `nfts` compat read. Founder's Seal copy is unchanged.
+
+Before a Mint or Rebind signature is issued, the connected wallet must sign a server nonce (`GET /api/founders/nft/auth-nonce`). The message is rebuilt on the server from the stored row (`Address`, `Nonce`, `Chain ID`, `Expiration Time`) and checked with `verifyMessage`: the recovered address must be the wallet that will send the transaction, the chain id must be the one stored with the nonce, and the nonce is single-use. Expired and replayed nonces are rejected. The nonce lives in `founder_nft_auth_nonce` (same shape as `founder_passport_nonce`: random code, user, expiry, `usedAt`). No extra secret is required. `cancelRebind` and `executeRebind` are still sent by the wallet with no backend signature.
 
 ### Environment
 
 | Variable | Where | Meaning |
 | --- | --- | --- |
-| `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` | client and server | contract address. Unset or malformed: the card is hidden and no Founder NFT rows are added |
+| `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` | client and server | contract address. Unset, malformed, or different from a `founderNft` / `peopleFounderNft` entry in static evm-deployments: the card is hidden and no Founder NFT rows are added |
 | `NEXT_PUBLIC_FOUNDER_NFT_CHAIN_ID` | client and server | optional chain id. Defaults to `97401` (PEOPLE testnet) |
 | `FOUNDER_NFT_SIGNER_PK` | server only | EIP-712 signer key. Never sent to the browser. If it is missing, `POST /api/founders/nft/signature` returns 503 `not_configured` with `reason: "signer"` and the card shows a disabled state |
 
@@ -191,7 +193,8 @@ The founders block shows a Founder NFT card when the public contract address is 
 Both routes use the existing founders session guard.
 
 - `GET /api/founders/nft/status?address=` — what the card may offer for the connected wallet. Body `{ status, signerReady }`. `401` and `403` hide the card. `503` is the disabled state.
-- `POST /api/founders/nft/signature` — body `{ action: "mint" | "rebind", address }`. Returns an EIP-712 `Mint` or `Rebind` signature whose typed data matches the contract (`personId`, `to` / `oldHolder`+`newHolder`, `nonce`, `deadline`; domain name `PeopleFounderNFT`, version `1`, `chainId`, `verifyingContract`). The signer key stays in the server environment.
+- `GET /api/founders/nft/auth-nonce` — `{ nonce, expiresAt, chainId }` for the wallet to sign. `503` when the contract address is unset. The nonce is stored server-side and can be consumed once.
+- `POST /api/founders/nft/signature` — body `{ action: "mint" | "rebind", address, nonce, chainId, walletSignature }`. Returns an EIP-712 `Mint` or `Rebind` signature whose typed data matches the contract (`personId`, `to` / `oldHolder`+`newHolder`, `nonce`, `deadline`; domain name `PeopleFounderNFT`, version `1`, `chainId`, `verifyingContract`) only after the wallet signature checks out. Missing signature, a different signer, an expired nonce, a replayed nonce, and a different chain id are rejected and no EIP-712 signature is returned. The signer key stays in the server environment.
 
 `cancelRebind` and `executeRebind` are sent by the wallet with no backend signature. The card shows a pending move with a countdown, a Cancel button for the current holder while `now < executeAfter`, and Execute for the new holder once the 72 hours have elapsed.
 
@@ -201,7 +204,7 @@ Both routes use the existing founders session guard.
 | --- | --- |
 | `can_mint` | "Get Founder NFT" (level 2 only) |
 | `holder` | "Your Founder NFT #N", plus Cancel while a move is still inside the delay |
-| `rebind_available` | request the same number onto this wallet |
+| `rebind_available` | request the same number onto this wallet. When `dedup` is true the card explains that these Human Passport stamps were already used by another wallet, so this account cannot be verified again, and the only action is the rebind button |
 | `rebind_pending` | countdown, then Execute |
 | `minted_elsewhere`, `mint_closed`, `not_eligible` | text only, no button |
 
@@ -209,18 +212,20 @@ A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature retu
 
 ### personId
 
-The website does not derive a new id scheme. `personId` is the opaque `bytes32` stored in `founder_nft_person`, keyed by Human Passport stamp-nullifier hashes in `founder_nft_stamp_hash` (`website/src/lib/founders/founder-nft-person.ts`). Rebind is offered only when that person already has a token and the founder row has a signature-proven `passportWallet`. The new address's Human Passport score is not consulted.
+The website does not derive a new id scheme. `personId` is the opaque `bytes32` stored in `founder_nft_person`, keyed by Human Passport stamp-nullifier hashes in `founder_nft_stamp_hash` (`website/src/lib/founders/founder-nft-person.ts`). Stamps are read for the connected wallet (the address that will send the transaction).
+
+A new account that cannot reach verification level 2 because those stamps were already used is handled only by rebind: if the nullifiers already map to a person who holds a token, the card shows the dedup message and a rebind button, and mint is refused. That includes stamps Human Passport marks `dedup: true` (score 0) and any below-level-2 founder whose stamps already match a minted person. The new address's score is not consulted. A level-2 founder whose stamps match a token, without `dedup` and without a signature-proven `passportWallet`, still sees the "link your Human Passport wallet" text and no rebind button.
 
 ### Wallet and explorer rows
 
-`website/src/lib/evm/founder-nft-rows.ts` is appended in the `nfts` branch of `people-compat.ts`. With an `owner` query it reads that address's token. Without one it lists token ids `1..min(totalSupply, 50)`. Each row is `{ nftId: "founder-nft-<id>", name, imageUri, owner, creator: owner, collection: <contract>, onChainTokenId }`, with name and image taken from `tokenURI`. A failed read returns no Founder NFT rows and leaves the rest of the list intact. The collection is not part of the static `evm-deployments` file; the address comes from the environment at runtime.
+`website/src/lib/evm/founder-nft-rows.ts` is appended in the `nfts` branch of `people-compat.ts`. With an `owner` query it reads that address's token. Without one it lists token ids `1..min(totalSupply, 50)`. Each row is `{ nftId: "founder-nft-<id>", name, imageUri, owner, creator: owner, collection: <contract>, onChainTokenId }`, with name and image taken from `tokenURI`. A failed read returns no Founder NFT rows and leaves the rest of the list intact. The address comes from `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS`. If static evm-deployments also has `founderNft` or `peopleFounderNft`, that value must be the same address; a mismatch, an empty value, or an invalid value yields no rows and does not fail the request. `tokenOfOwner` reads `Transfer` logs in windows of at most 9,000 blocks (newest window first). It never asks for one open-ended range. If a window is refused, it falls back to walking at most 500 ids.
 
 ## Open questions
 
-- **OPEN QUESTION:** when a level-2 founder has no `passportWallet`, mint reads Human Passport stamps for `walletAddress`. That address is not signature-proven the way `passportWallet` is. Rebind does not use this fallback.
-- **OPEN QUESTION:** Human Passport LIFO dedup scores a new account at 0, so that account cannot reach verification level 2 on its own. Rebind therefore uses the stamp nullifiers of the signature-proven `passportWallet`, not the new account's score.
-- **OPEN QUESTION:** `tokenOfOwner` scans `Transfer` logs from the earliest block and, if the RPC rejects that range, walks at most 500 ids. A node with a tight `eth_getLogs` window and a supply above that cap can miss a holder.
-- **OPEN QUESTION:** the collection is not listed in static `evm-deployments`. Wallet and explorer rows appear only when `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` is set at runtime.
+- **OPEN QUESTION:** mint now reads Human Passport stamps for the connected wallet, not for `walletAddress` when that differs. A level-2 founder who connects a different address with no stamps is not offered a mint.
+- **OPEN QUESTION:** if reused stamps were never stored in `founder_nft_stamp_hash` (the original mint did not go through this table), a new deduped account cannot be matched to a `personId`, so rebind is not offered.
+- **OPEN QUESTION:** the id-walk fallback still stops at 500 tokens. A node that rejects a 9,000-block window and a supply above that cap can miss a holder.
+- **OPEN QUESTION:** static `evm-deployments` does not list this collection yet. Rows appear when `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` is set and does not conflict with a future `founderNft` / `peopleFounderNft` entry.
 - **OPEN QUESTION:** `.env.example` was left unchanged so this work does not touch env files. The variable names above have to be set by the operator outside the repo.
 
 ## Tests
@@ -228,4 +233,4 @@ The website does not derive a new id scheme. `personId` is the opaque `bytes32` 
 `contracts/test/PeopleFounderNFT.t.sol` (unit + fuzz, incl. signer rotation/revocation, owner checks,
 rebind timelock and holder cancel), `PeopleFounderNFT.invariant.t.sol` (exactly one
 token per `personId`, at most one per address, supply equals successful mints, ids dense),
-`DeployFounderNFT.t.sol` (script env handling and chain guard). Website: `website/scripts/founder-nft-service.test.mjs` (level-1 refusal, mint and rebind recovery, stale pending, 503, bad input), `founder-nft-typed-data.test.mjs` (type strings against the contract, recovery of a key generated in the test), `founder-nft-ui.test.mjs` (countdown, error keys, `decodeFunctionData` of the four writes, locales). Run from `website/` with `npm run lint`, `npm run typecheck`, and `npm test`.
+`DeployFounderNFT.t.sol` (script env handling and chain guard). Website: `website/scripts/founder-nft-service.test.mjs` (level-1 refusal, mint and rebind recovery, wallet-signature rejection, dedup rebind, stale pending, 503, bad input), `founder-nft-typed-data.test.mjs` (type strings against the contract, recovery of a key generated in the test), `founder-nft-ui.test.mjs` (countdown, error keys, `decodeFunctionData` of the four writes, locales, empty or mismatched collection address, bounded log windows), `founder-nft-person.integration.test.mjs` (person table, stamp dedup flag, auth-nonce single use). Run from `website/` with `npm run lint`, `npm run typecheck`, and `npm test`.
