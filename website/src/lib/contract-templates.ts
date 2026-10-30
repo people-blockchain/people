@@ -14,6 +14,8 @@ export interface ContractTemplate {
   titleRu: string;
   summaryEn: string;
   summaryRu: string;
+  /** Summaries for the other site languages; missing ones fall back to summaryEn. */
+  summaryI18n?: Partial<Record<string, string>>;
   keywords: string[];
   fileName: string;
   /** Solidity 0.8.24, OpenZeppelin 5.x imports. */
@@ -192,8 +194,20 @@ contract BatchAirdrop is Ownable, ReentrancyGuard {
     id: "escrow",
     titleEn: "Simple escrow",
     titleRu: "Эскроу",
-    summaryEn: "Buyer deposits ETH-like native value; seller and buyer must both confirm before release, or a timeout refunds the buyer.",
-    summaryRu: "Покупатель вносит натив; выплата продавцу после двух подтверждений или возврат по таймеру.",
+    summaryEn: "Buyer deposits PPL; seller and buyer must both confirm before release, or a timeout refunds the buyer.",
+    summaryRu: "Покупатель вносит PPL; выплата продавцу после двух подтверждений или возврат по таймеру.",
+    summaryI18n: {
+      es: "El comprador deposita PPL; vendedor y comprador deben confirmar antes de liberar el pago, o al vencer el plazo se reembolsa al comprador.",
+      pt: "O comprador deposita PPL; vendedor e comprador precisam confirmar antes da liberação, ou o prazo expira e o comprador é reembolsado.",
+      fr: "L’acheteur dépose des PPL ; le vendeur et l’acheteur doivent tous deux confirmer avant le versement, sinon l’acheteur est remboursé à l’échéance.",
+      de: "Der Käufer hinterlegt PPL; Verkäufer und Käufer müssen beide bestätigen, bevor ausgezahlt wird, sonst erhält der Käufer nach Ablauf der Frist sein Geld zurück.",
+      it: "L’acquirente deposita PPL; venditore e acquirente devono entrambi confermare prima dello sblocco, altrimenti alla scadenza l’acquirente viene rimborsato.",
+      tr: "Alıcı PPL yatırır; ödeme serbest bırakılmadan önce satıcı ve alıcının ikisi de onaylamalıdır, aksi halde süre dolunca alıcıya iade edilir.",
+      vi: "Người mua gửi PPL; người bán và người mua đều phải xác nhận trước khi giải ngân, nếu không, hết thời hạn người mua được hoàn tiền.",
+      id: "Pembeli menyetor PPL; penjual dan pembeli harus sama-sama mengonfirmasi sebelum dana dilepas, atau dana dikembalikan ke pembeli saat batas waktu habis.",
+      zh: "买方存入 PPL；卖方和买方都确认后才放款，否则超时后退款给买方。",
+      ar: "يودِع المشتري PPL؛ ويجب أن يؤكد البائع والمشتري معًا قبل تحرير المبلغ، وإلا يُعاد المبلغ إلى المشتري عند انتهاء المهلة."
+    },
     keywords: ["escrow", "эскроу", "deposit", "hold", "условн"],
     fileName: "SimpleEscrow.sol",
     paramHintsEn: ["Seller address", "timeout seconds"],
@@ -456,6 +470,13 @@ contract SimpleCrowdfund is Ownable, ReentrancyGuard {
 
 export function findTemplateById(id: string): ContractTemplate | undefined {
   return CONTRACT_TEMPLATES.find((item) => item.id === id);
+}
+
+/** Template summary in a site language: ru/en fields first, then summaryI18n, then English. */
+export function templateSummary(template: ContractTemplate, lang: string): string {
+  if (lang === "ru") return template.summaryRu;
+  if (lang === "en") return template.summaryEn;
+  return template.summaryI18n?.[lang] ?? template.summaryEn;
 }
 
 function escapeRegExp(text: string): string {

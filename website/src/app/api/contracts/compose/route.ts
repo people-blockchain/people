@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { CONTRACT_COMPOSE_RATE_PER_MIN, MAX_CONTRACT_PROMPT_BYTES, utf8ByteLength } from "@/lib/contract-api-guards";
-import { CONTRACT_TEMPLATES, findTemplateById, matchTemplate } from "@/lib/contract-templates";
+import { CONTRACT_TEMPLATES, findTemplateById, matchTemplate, templateSummary } from "@/lib/contract-templates";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
 export const runtime = "nodejs";
 
 interface ComposeBody {
   prompt?: string;
-  lang?: "en" | "ru";
+  lang?: string;
   freeform?: boolean;
 }
 
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
   const params = { ...heuristicParams(prompt), ...(ai?.params ?? {}) };
   const summary =
     ai?.summary ||
-    (lang === "ru" ? template.summaryRu : template.summaryEn);
+    templateSummary(template, typeof body.lang === "string" ? body.lang : lang);
 
   return NextResponse.json({
     templateId: template.id,
