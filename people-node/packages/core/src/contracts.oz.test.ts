@@ -92,6 +92,9 @@ function bytecodeForTemplate(
   if (template.id === "staking") {
     return concatConstructor(compiled.bytecode, `0x${encodeAddress(token)}${encodeAddress(token)}`);
   }
+  if (template.id === "crowdfund") {
+    return concatConstructor(compiled.bytecode, `0x${encodeUint(1_000n)}${encodeUint(86_400n)}`);
+  }
   if (template.id === "dao") {
     return concatConstructor(compiled.bytecode, `0x${encodeAddress(token)}${encodeUint(1n)}${encodeUint(60n)}`);
   }
@@ -129,7 +132,7 @@ describe("OpenZeppelin templates on @ethereumjs/evm", () => {
     expect(APPROVED_CONTRACT_GAS_PRICE_PPL).toBe(8.7e-7);
     const templates = loadWebsiteTemplates();
     expect(templates.map((item) => item.id).sort()).toEqual(
-      ["airdrop", "dao", "escrow", "multisig", "staking", "timelock", "vesting"].sort()
+      ["airdrop", "crowdfund", "dao", "escrow", "multisig", "staking", "timelock", "vesting"].sort()
     );
 
     const erc20 = compileSolidity("PeopleERC20.sol", ERC20_SOURCE);
