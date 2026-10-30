@@ -1,0 +1,4 @@
+# Synthetic test fixtures (const TOKEN = 20-byte test address, not a secret) in commits of other open PR branches
+4087fb7ff6a8826a5ef2f4f7a8cff2a1836a8f8f:website/scripts/evm-catalog-resilience.test.mjs:generic-api-key:27
+1a11fb2e65bb10b79cedd45f90404e73f25ba610:website/scripts/wallet-send.test.mjs:generic-api-key:30
+4388287df58dcea0a0bc8db6bfeb5200f22d9cd8:website/scripts/wallet-holdings.test.mjs:generic-api-key:25
