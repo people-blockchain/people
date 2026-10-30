@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "Le réseau rejetterait cette transaction : elle n'a pas été envoyée et rien n'a été débité. Raison : {reason}",
+  "preflightRevertGeneric": "Le réseau rejetterait cette transaction : elle n'a pas été envoyée et rien n'a été débité.",
+  "preflightDailyLimit": "La limite quotidienne de paiement en stablecoin est atteinte. Rien n'a été débité. Payez en PPL ou réessayez après minuit UTC.",
+  "preflightPayInPplHint": "Astuce : si vous avez choisi de payer en stablecoin, passez au paiement en PPL et réessayez."
+}

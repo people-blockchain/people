@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "Das Netzwerk würde diese Transaktion ablehnen, daher wurde sie nicht gesendet und nichts abgebucht. Grund: {reason}",
+  "preflightRevertGeneric": "Das Netzwerk würde diese Transaktion ablehnen, daher wurde sie nicht gesendet und nichts abgebucht.",
+  "preflightDailyLimit": "Das Tageslimit für Zahlungen mit Stablecoins ist erreicht. Es wurde nichts abgebucht. Zahle stattdessen in PPL oder versuche es nach Mitternacht UTC erneut.",
+  "preflightPayInPplHint": "Tipp: Wenn du die Zahlung per Stablecoin gewählt hast, wechsle zur Zahlung in PPL und versuche es erneut."
+}
