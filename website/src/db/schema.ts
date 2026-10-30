@@ -780,6 +780,20 @@ export const apiRateLimits = pgTable(
 );
 
 /**
+ * Fixed-window counters for direct-upload sign requests, one row per client per window.
+ * DDL is applied from `upload-sign-rate-sql.mjs` during schema bootstrap.
+ */
+export const uploadSignRates = pgTable(
+  "upload_sign_rate",
+  {
+    bucketKey: text("bucketKey").primaryKey(),
+    count: integer("count").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+  },
+  (row) => [index("upload_sign_rate_expires_idx").on(row.expiresAt)],
+);
+
+/**
  * One-time nonces for direct media upload. Issued and consumed by `/api/factory/upload/*`.
  * DDL is applied from `upload-nonce-sql.mjs` during schema bootstrap.
  */

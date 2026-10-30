@@ -1,7 +1,31 @@
 import { PinataError, pinataFailure, pinataJwt } from "./ipfs.ts";
+import { DIRECT_UPLOAD_MAX_BYTES } from "./media-upload-rules.ts";
 
 const PINATA_TIMEOUT_MS = 25_000;
 type FetchLike = typeof fetch;
+
+/**
+ * Same network on the signed upload and on later file reads/deletes.
+ * Stays public: verify reads the public gateway, and a private file cannot be
+ * published in place without a second upload.
+ */
+export const PINATA_UPLOAD_NETWORK = "public" as const;
+
+/** Pinata counts the whole multipart body, not the file alone. At least 64 KiB, or 2%. */
+export const PINATA_MULTIPART_HEADROOM_MIN_BYTES = 64 * 1024;
+
+export function pinataMultipartHeadroom(declaredBytes: number): number {
+  return Math.max(PINATA_MULTIPART_HEADROOM_MIN_BYTES, Math.ceil((declaredBytes * 2) / 100));
+}
+
+/**
+ * `max_file_size` for `POST /v3/files/sign`, in bytes. Declared size plus multipart headroom,
+ * never above the 25 MB ceiling plus that same headroom.
+ */
+export function pinataSignedUploadMaxBytes(declaredBytes: number, ceiling = DIRECT_UPLOAD_MAX_BYTES): number {
+  const cap = ceiling + pinataMultipartHeadroom(ceiling);
+  return Math.min(declaredBytes + pinataMultipartHeadroom(declaredBytes), cap);
+}
 
 /**
  * Short-lived Pinata v3 signed upload URL. The signature fixes the MIME list, the maximum
@@ -22,9 +46,9 @@ export async function createPinataSignedUpload(
       date: Math.floor(Date.now() / 1000),
       expires: params.expiresSec ?? 120,
       filename: params.filename,
-      max_file_size: params.maxBytes,
+      max_file_size: pinataSignedUploadMaxBytes(params.maxBytes),
       allow_mime_types: [...params.mimeTypes],
-      network: "public",
+      network: PINATA_UPLOAD_NETWORK,
     }),
     signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
   });

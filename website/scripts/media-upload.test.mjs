@@ -5,6 +5,12 @@ import test, { beforeEach, afterEach } from "node:test";
 import { privateKeyToAccount } from "viem/accounts";
 import { verifyMessage } from "viem";
 import { resetRateLimitStoresForTests, setSharedRateLimitBackendForTests } from "../src/lib/api-rate-limit.ts";
+import {
+  UploadSignRateStoreError,
+  allowDirectUploadSignIp,
+  resetUploadSignRatesForTests,
+  setUploadSignRateMemoryForTests,
+} from "../src/lib/upload-sign-rate-store.ts";
 import { GET as nonceRoute } from "../src/app/api/factory/upload/nonce/route.ts";
 import { POST as signRoute } from "../src/app/api/factory/upload/sign/route.ts";
 import { POST as verifyRoute } from "../src/app/api/factory/upload/verify/route.ts";
@@ -14,11 +20,13 @@ import { sniffDirectMedia } from "../src/lib/media-upload-magic.ts";
 import { DIRECT_UPLOAD_RATE, directUploadAddressAllowed } from "../src/lib/media-upload-rate.ts";
 import {
   DIRECT_UPLOAD_MAX_BYTES,
+  DIRECT_UPLOAD_NONCE_TTL_MS,
   directUploadSignMessage,
   mimeAllowedForKind,
   validateDirectUploadFields,
 } from "../src/lib/media-upload-rules.ts";
 import { createPinataSignedVideoUpload } from "../src/lib/ipfs.ts";
+import { PINATA_UPLOAD_NETWORK, createPinataSignedUpload, pinataSignedUploadMaxBytes } from "../src/lib/pinata-signed-upload.ts";
 import { issueUploadNonce, resetUploadNoncesForTests } from "../src/lib/upload-nonce-store.ts";
 
 const CID = "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
@@ -27,6 +35,8 @@ const previousJwt = process.env.PINATA_JWT;
 
 let signBodies;
 let deleted;
+let deleteCalls;
+let deleteStatus;
 let fileRecord;
 let gatewayBytes;
 
@@ -34,10 +44,10 @@ const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const freshAccount = () => privateKeyToAccount(`0x${randomBytes(32).toString("hex")}`);
-const jsonRequest = (url, body) =>
+const jsonRequest = (url, body, headers = {}) =>
   new Request(`http://localhost${url}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify(body),
   });
 
@@ -45,9 +55,12 @@ beforeEach(() => {
   process.env.PINATA_JWT = "test-jwt-not-a-real-key";
   setSharedRateLimitBackendForTests(null);
   resetRateLimitStoresForTests();
+  resetUploadSignRatesForTests();
   resetUploadNoncesForTests();
   signBodies = [];
   deleted = [];
+  deleteCalls = [];
+  deleteStatus = 200;
   fileRecord = { id: "file-1234", cid: CID, size: 1, mime_type: "image/png" };
   gatewayBytes = null;
   globalThis.fetch = async (url, init = {}) => {
@@ -56,10 +69,11 @@ beforeEach(() => {
       signBodies.push(JSON.parse(init.body));
       return json({ data: "https://uploads.pinata.cloud/v3/files/token" });
     }
-    if (target.startsWith("https://api.pinata.cloud/v3/files/public/")) {
+    if (target.startsWith("https://api.pinata.cloud/v3/files/")) {
       if (init.method === "DELETE") {
+        deleteCalls.push({ url: target, method: "DELETE" });
         deleted.push(target.split("/").pop());
-        return json({});
+        return json({}, deleteStatus);
       }
       return json({ data: fileRecord });
     }
@@ -143,7 +157,8 @@ test("GIF is accepted and the signed URL is bound to that type and the declared 
   assert.equal((await res.json()).url, "https://uploads.pinata.cloud/v3/files/token");
   assert.equal(signBodies.length, 1);
   assert.deepEqual(signBodies[0].allow_mime_types, ["image/gif"]);
-  assert.equal(signBodies[0].max_file_size, 2_000_000);
+  assert.equal(signBodies[0].max_file_size, pinataSignedUploadMaxBytes(2_000_000));
+  assert.equal(signBodies[0].network, PINATA_UPLOAD_NETWORK);
   assert.equal(signBodies[0].expires, 120);
   const icon = await signRoute(
     jsonRequest("/api/factory/upload/sign", { kind: "token-icon", type: "image/gif", size: 10, sha256: "ab".repeat(32) }),
@@ -175,8 +190,52 @@ test("a spoofed Content-Type is rejected and the file is deleted", async () => {
     jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes) }),
   );
   assert.equal(res.status, 422);
-  assert.equal((await res.json()).error, "content_mismatch");
+  const body = await res.json();
+  assert.equal(body.error, "content_mismatch");
+  assert.equal(body.cleanup, "deleted");
   assert.deepEqual(deleted, ["file-1234"]);
+  assert.deepEqual(deleteCalls, [
+    { url: `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-1234`, method: "DELETE" },
+  ]);
+  assert.equal(deleteCalls[0].url.includes(CID), false);
+});
+
+test("a content mismatch reports a failed delete instead of hiding it", async () => {
+  deleteStatus = 500;
+  const warnings = [];
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    warnings.push(args);
+  };
+  try {
+    const bytes = Buffer.from("GIF89a-not-a-png");
+    fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
+    gatewayBytes = bytes;
+    const res = await verifyRoute(
+      jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes) }),
+    );
+    assert.equal(res.status, 422);
+    const body = await res.json();
+    assert.equal(body.error, "content_mismatch");
+    assert.equal(body.cleanup, "delete_failed");
+    assert.equal(deleteCalls.length, 1);
+    assert.equal(deleteCalls[0].url, `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-1234`);
+    const logged = JSON.stringify(warnings);
+    assert.match(logged, /delete failed/);
+    assert.match(logged, /file-1234/);
+    assert.match(logged, new RegExp(PINATA_UPLOAD_NETWORK));
+    assert.equal(logged.includes(process.env.PINATA_JWT), false);
+    assert.equal(logged.includes("Bearer"), false);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("verify refuses a content id in place of the Pinata file id", async () => {
+  const res = await verifyRoute(jsonRequest("/api/factory/upload/verify", { id: CID, kind: "nft-image", sha256: "ab".repeat(32) }));
+  assert.equal(res.status, 400);
+  assert.equal((await res.json()).error, "invalid_request");
+  assert.equal(deleteCalls.length, 0);
 });
 
 test("sha256 mismatch deletes the file", async () => {
@@ -187,7 +246,9 @@ test("sha256 mismatch deletes the file", async () => {
     jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: "11".repeat(32) }),
   );
   assert.equal(res.status, 422);
-  assert.equal((await res.json()).error, "sha256_mismatch");
+  const body = await res.json();
+  assert.equal(body.error, "sha256_mismatch");
+  assert.equal(body.cleanup, "deleted");
   assert.deepEqual(deleted, ["file-1234"]);
 });
 
@@ -214,6 +275,29 @@ test("nonce replay is rejected", async () => {
   assert.equal(second.status, 409);
   assert.equal((await second.json()).error, "nonce_used");
   assert.equal(signBodies.length, 1);
+});
+
+test("a nonce expires after five minutes", async (t) => {
+  t.mock.timers.enable({ apis: ["Date"], now: 1_700_000_000_000 });
+  const account = freshAccount();
+  const nonceRes = await nonceRoute(new Request(`http://localhost/api/factory/upload/nonce?address=${account.address}`));
+  assert.equal(nonceRes.status, 200);
+  const issued = await nonceRes.json();
+  t.mock.timers.tick(DIRECT_UPLOAD_NONCE_TTL_MS);
+  const res = await signRoute(
+    jsonRequest("/api/factory/upload/sign", {
+      kind: "nft-image",
+      type: "image/png",
+      size: 32,
+      sha256: "ab".repeat(32),
+      address: account.address,
+      signature: `0x${"11".repeat(65)}`,
+      nonce: issued.nonce,
+    }),
+  );
+  assert.equal(res.status, 401);
+  assert.equal((await res.json()).error, "nonce_expired");
+  assert.equal(signBodies.length, 0);
 });
 
 test("an expired nonce is rejected", async () => {
@@ -262,6 +346,51 @@ test("sign is rate-limited by IP", async () => {
   assert.equal((await res.json()).error, "rate_limited");
 });
 
+test("on Vercel the sign limit follows the forwarding headers per client", async () => {
+  const previous = process.env.VERCEL;
+  process.env.VERCEL = "1";
+  try {
+    const fields = { kind: "token-icon", type: "image/png", size: 32, sha256: "ef".repeat(32) };
+    const forwarded = { "x-forwarded-for": "1.2.3.4, 5.6.7.8" };
+    for (let i = 0; i < DIRECT_UPLOAD_RATE.signIp.limit; i++) {
+      const body = await signedBody(freshAccount(), fields);
+      const res = await signRoute(jsonRequest("/api/factory/upload/sign", body, forwarded));
+      assert.equal(res.status, 200, `attempt ${i}`);
+    }
+    const blocked = await signedBody(freshAccount(), fields);
+    const limited = await signRoute(jsonRequest("/api/factory/upload/sign", blocked, forwarded));
+    assert.equal(limited.status, 429);
+    assert.equal((await limited.json()).error, "rate_limited");
+    const other = await signedBody(freshAccount(), fields);
+    const allowed = await signRoute(jsonRequest("/api/factory/upload/sign", other, { "x-real-ip": "5.6.7.8" }));
+    assert.equal(allowed.status, 200);
+    const preferred = await signedBody(freshAccount(), fields);
+    const fromVercel = await signRoute(
+      jsonRequest("/api/factory/upload/sign", preferred, { "x-vercel-forwarded-for": "1.2.3.4", "x-forwarded-for": "5.6.7.8" }),
+    );
+    assert.equal(fromVercel.status, 429);
+  } finally {
+    if (previous === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = previous;
+  }
+});
+
+test("the sign IP store fails closed when the database is required and missing", async () => {
+  const previous = process.env.DATABASE_URL;
+  delete process.env.DATABASE_URL;
+  setUploadSignRateMemoryForTests(false);
+  try {
+    await assert.rejects(
+      () => allowDirectUploadSignIp("client-a", 1, 60_000),
+      (err) => err instanceof UploadSignRateStoreError,
+    );
+  } finally {
+    if (previous === undefined) delete process.env.DATABASE_URL;
+    else process.env.DATABASE_URL = previous;
+    resetUploadSignRatesForTests();
+  }
+});
+
 test("address rate helper counts one wallet on its own", async () => {
   const rule = { namespace: "direct-upload-test-address", limit: 1, windowMs: 60_000 };
   assert.equal(await directUploadAddressAllowed("0xabc", rule), true);
@@ -283,9 +412,36 @@ test("createPinataSignedVideoUpload still wraps the shared signer", async () => 
   assert.equal(seen.url, "https://uploads.pinata.cloud/v3/files/sign");
   assert.equal(seen.method, "POST");
   assert.deepEqual(seen.body.allow_mime_types, ["video/mp4"]);
-  assert.equal(seen.body.max_file_size, 20_000_000);
+  assert.equal(seen.body.max_file_size, pinataSignedUploadMaxBytes(20_000_000));
   assert.equal(seen.body.expires, 120);
-  assert.equal(seen.body.network, "public");
+  assert.equal(seen.body.network, PINATA_UPLOAD_NETWORK);
+});
+
+test("signed upload limit adds multipart headroom for 5 MB and 20 MB and caps at 25 MB", async () => {
+  assert.equal(pinataSignedUploadMaxBytes(5_000_000), 5_100_000);
+  assert.equal(pinataSignedUploadMaxBytes(20_000_000), 20_400_000);
+  assert.equal(pinataSignedUploadMaxBytes(DIRECT_UPLOAD_MAX_BYTES), 25_500_000);
+  assert.equal(pinataSignedUploadMaxBytes(DIRECT_UPLOAD_MAX_BYTES + 5_000_000), 25_500_000);
+  const seen = [];
+  const fetchImpl = async (url, init) => {
+    seen.push({ url: String(url), method: init.method, body: JSON.parse(init.body) });
+    return json({ data: "https://uploads.pinata.cloud/v3/files/signed-token" });
+  };
+  for (const maxBytes of [5_000_000, 20_000_000]) {
+    await createPinataSignedUpload(
+      { filename: "people-direct.bin", mimeTypes: ["image/png"], maxBytes, expiresSec: 120 },
+      fetchImpl,
+    );
+  }
+  assert.equal(seen.length, 2);
+  assert.equal(seen[0].url, "https://uploads.pinata.cloud/v3/files/sign");
+  assert.equal(seen[0].method, "POST");
+  assert.equal(seen[0].body.max_file_size, 5_100_000);
+  assert.equal(seen[1].body.max_file_size, 20_400_000);
+  assert.equal(seen[0].body.network, PINATA_UPLOAD_NETWORK);
+  assert.deepEqual(seen[0].body.allow_mime_types, ["image/png"]);
+  assert.equal(seen[0].body.filename, "people-direct.bin");
+  assert.equal(seen[0].body.expires, 120);
 });
 
 test("client signs the shared message and posts the original bytes", async () => {

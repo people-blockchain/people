@@ -4,6 +4,9 @@ import { getDbReady } from "@/db";
 import { uploadNonces } from "@/db/schema";
 import { DIRECT_UPLOAD_NONCE_TTL_MS } from "./media-upload-rules.ts";
 
+/** Keep a spent or expired nonce long enough for a late sign to report nonce_expired. */
+export const UPLOAD_NONCE_EXPIRED_RETENTION_MS = 60 * 60 * 1000;
+
 export type NonceStatus = "ok" | "nonce_used" | "nonce_expired" | "nonce_missing";
 
 export type UploadNonceRow = {
@@ -45,10 +48,15 @@ export function classifyNonce(
   return "ok";
 }
 
+function sweepBefore(now: number): number {
+  return now - UPLOAD_NONCE_EXPIRED_RETENTION_MS;
+}
+
 function sweepMemory(now: number): void {
   if (memory.size < 5000) return;
+  const cutoff = sweepBefore(now);
   for (const [key, row] of memory) {
-    if (row.expiresAt <= now) memory.delete(key);
+    if (row.expiresAt <= cutoff) memory.delete(key);
   }
 }
 
@@ -78,7 +86,7 @@ export async function issueUploadNonce(input: {
   }
   try {
     const db = await getDbReady();
-    await db.delete(uploadNonces).where(lt(uploadNonces.expiresAt, new Date(now)));
+    await db.delete(uploadNonces).where(lt(uploadNonces.expiresAt, new Date(sweepBefore(now))));
     await db.insert(uploadNonces).values({
       nonce,
       address: input.address,

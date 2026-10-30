@@ -171,12 +171,27 @@ export async function createPinataSignedVideoUpload(
   );
 }
 
+export type PinataFileNetwork = "public" | "private";
+
 export type PinataFileRecord = { id: string; cid: string; size: number; mimeType: string };
 
+export function pinataFileUrl(network: PinataFileNetwork, id: string): string {
+  return `https://api.pinata.cloud/v3/files/${network}/${encodeURIComponent(id)}`;
+}
+
+function assertPinataFileId(id: string): void {
+  if (!id || isValidIpfsCid(id)) throw new PinataError("pin_failed");
+}
+
 /** File record from this account's Pinata storage; a CID that belongs to someone else never resolves. */
-export async function getPinataFile(id: string, fetchImpl: FetchLike = fetch): Promise<PinataFileRecord> {
+export async function getPinataFile(
+  id: string,
+  fetchImpl: FetchLike = fetch,
+  network: PinataFileNetwork = "public",
+): Promise<PinataFileRecord> {
+  assertPinataFileId(id);
   const jwt = pinataJwt();
-  const res = await fetchImpl(`https://api.pinata.cloud/v3/files/public/${encodeURIComponent(id)}`, {
+  const res = await fetchImpl(pinataFileUrl(network, id), {
     headers: { Authorization: `Bearer ${jwt}` },
     signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
   });
@@ -185,15 +200,21 @@ export async function getPinataFile(id: string, fetchImpl: FetchLike = fetch): P
     data?: { id?: string; cid?: string; size?: number; mime_type?: string };
   };
   const data = body.data;
-  if (!data || typeof data.cid !== "string" || !isValidIpfsCid(data.cid) || typeof data.size !== "number") {
+  if (!data || typeof data.id !== "string" || typeof data.cid !== "string" || !isValidIpfsCid(data.cid) || typeof data.size !== "number") {
     throw new PinataError("pin_failed");
   }
-  return { id: String(data.id ?? id), cid: data.cid, size: data.size, mimeType: String(data.mime_type ?? "") };
+  assertPinataFileId(data.id);
+  return { id: data.id, cid: data.cid, size: data.size, mimeType: String(data.mime_type ?? "") };
 }
 
-export async function deletePinataFile(id: string, fetchImpl: FetchLike = fetch): Promise<void> {
+export async function deletePinataFile(
+  id: string,
+  fetchImpl: FetchLike = fetch,
+  network: PinataFileNetwork = "public",
+): Promise<void> {
+  assertPinataFileId(id);
   const jwt = pinataJwt();
-  const res = await fetchImpl(`https://api.pinata.cloud/v3/files/public/${encodeURIComponent(id)}`, {
+  const res = await fetchImpl(pinataFileUrl(network, id), {
     method: "DELETE",
     headers: { Authorization: `Bearer ${jwt}` },
     signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
