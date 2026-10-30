@@ -47,7 +47,7 @@ import {
 import { NftMediaPicker } from "./nft/NftMediaPicker";
 import { NftPreview } from "./nft/NftPreview";
 import { NftStages } from "./nft/NftStages";
-import { saveNftFiles, stagesFor, type NftKind, type StageRow } from "./nft/saveNftFiles";
+import { directUploadAlertText, saveNftFiles, stagesFor, type NftKind, type StageRow } from "./nft/saveNftFiles";
 
 type Mode = NftMintMode;
 type PayWith = "PPL" | StableAsset["id"];
@@ -69,7 +69,7 @@ type Saved = {
 };
 
 type Picked = { file: File; mime: string };
-type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint };
+type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint; uploadCode?: string };
 
 const RECEIPT_TIMEOUT_MS = 180_000;
 const ZERO_ADDRESS_FREE = /^0x[0-9a-fA-F]{40}$/;
@@ -356,7 +356,7 @@ export function EvmNftMint() {
     } catch (err) {
       console.error(err);
       const key: NftErrorKey = err instanceof NftSaveError ? err.key : "errNetwork";
-      setError({ key });
+      setError({ key, uploadCode: err instanceof NftSaveError ? err.uploadCode : undefined });
       setErrorFrom("save");
     } finally {
       saveLock.current = false;
@@ -619,7 +619,8 @@ export function EvmNftMint() {
   const previewVideo = saved ? saved.videoPreviewUrl ?? null : videoLocalUrl;
   const previewIsSvg = saved ? saved.isSvg : (kind === "image" ? imageFile : coverFile)?.mime === "image/svg+xml";
   const errorText = error
-    ? error.key === "notEnoughFee"
+    ? directUploadAlertText(lang, error.uploadCode) ??
+      (error.key === "notEnoughFee"
       ? u.notEnoughFee
       : error.key === "errInsufficientPpl"
         ? error.neededWei !== undefined && error.balanceWei !== undefined
@@ -627,7 +628,7 @@ export function EvmNftMint() {
               .replaceAll("{needed}", formatPplWei(error.neededWei))
               .replaceAll("{balance}", formatPplWei(error.balanceWei))
           : nm.errInsufficientPplGeneric
-        : nm[error.key]
+        : nm[error.key])
     : null;
 
   return (
@@ -804,7 +805,7 @@ export function EvmNftMint() {
           ) : null}
 
           {error && errorText ? (
-            <div role="alert" data-testid="nft-error" data-error-key={error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
+            <div role="alert" data-testid="nft-error" data-error-key={error.uploadCode ?? error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
               <p>
                 {form.error}: {errorText}
               </p>

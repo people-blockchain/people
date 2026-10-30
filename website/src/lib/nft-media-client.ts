@@ -69,10 +69,13 @@ const SERVER_ERROR_KEYS: Record<string, NftErrorKey> = {
 export class NftSaveError extends Error {
   readonly key: NftErrorKey;
   readonly detail: string;
-  constructor(key: NftErrorKey, detail: string) {
+  /** Direct-upload error code, when the alert should use the media-upload strings. */
+  readonly uploadCode?: string;
+  constructor(key: NftErrorKey, detail: string, uploadCode?: string) {
     super(detail);
     this.key = key;
     this.detail = detail;
+    this.uploadCode = uploadCode;
     this.name = "NftSaveError";
   }
 }
