@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import type { Address } from "viem";
+import { parseUnits, type Address } from "viem";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
 import {
@@ -10,6 +10,8 @@ import {
   sendViaActiveSigner,
   useExternalWallet,
 } from "@/context/ExternalWalletContext";
+import { networkJson } from "@/lib/network-client";
+import { isCosmosEvmChain } from "@/lib/chain-mode";
 import {
   buildContractDeployTx,
   classifyContractDeployError,
@@ -52,6 +54,31 @@ interface CompileResult {
   abi: unknown;
 }
 
+interface Params {
+  gasPricePpl?: number;
+  quoteDeployFeePpl?: number;
+  quoteTypicalDeployFeePpl?: number;
+  typicalDeployGas?: number;
+  defaultTxGasLimit?: number;
+  ownerApprovedPublicTariff?: boolean;
+}
+
+/** Legacy `contracts/params` quotes are decimal PPL numbers. Fees stay in wei. */
+function legacyPplToWei(value: number | undefined, fallback: bigint): bigint {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) return fallback;
+  try {
+    return parseUnits(String(value), 18);
+  } catch {
+    // String(8.7e-7) is "8.7e-7", which parseUnits rejects. Expand, then give up.
+    try {
+      const expanded = value.toFixed(18).replace(/0+$/, "").replace(/\.$/, "");
+      return parseUnits(expanded, 18);
+    } catch {
+      return fallback;
+    }
+  }
+}
+
 export function ContractWizard() {
   const { lang } = useLanguage();
   const t: ContractCopy = (contractCopy as Record<string, ContractCopy>)[lang] ?? contractCopy.en;
@@ -59,6 +86,7 @@ export function ContractWizard() {
   const [prompt, setPrompt] = useState("");
   const [compose, setCompose] = useState<ComposeResult | null>(null);
   const [compiled, setCompiled] = useState<CompileResult | null>(null);
+  const [params, setParams] = useState<Params | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [deployed, setDeployed] = useState<{ address: Address; hash: string } | null>(null);
@@ -82,8 +110,20 @@ export function ContractWizard() {
   );
   const ctorEncoded = useMemo(() => encodeConstructorArgs(ctorFields, ctorValues), [ctorFields, ctorValues]);
 
-  const gasPriceWei = APPROVED_CONTRACT_GAS_PRICE_WEI;
-  const typicalDeployFeeWei = TYPICAL_CONTRACT_DEPLOY_FEE_WEI;
+  const gasPriceWei = legacyPplToWei(params?.gasPricePpl, APPROVED_CONTRACT_GAS_PRICE_WEI);
+  const typicalDeployFeeWei = legacyPplToWei(
+    params?.quoteTypicalDeployFeePpl,
+    TYPICAL_CONTRACT_DEPLOY_FEE_WEI
+  );
+
+  useEffect(() => {
+    // E2E-M1: on the EVM chain the legacy compat layer only implements `contracts/<address>`,
+    // so `contracts/params` would 404 on every load. Keep the built-in tariff constants.
+    if (isCosmosEvmChain()) return;
+    void networkJson<Params>("contracts/params")
+      .then(setParams)
+      .catch(() => setParams(null));
+  }, []);
 
   const generate = async () => {
     setBusy(true);
