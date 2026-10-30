@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { formatEther, getAddress, type Address } from "viem";
+import { encodeFunctionData, formatEther, getAddress, type Abi, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
@@ -14,6 +14,8 @@ import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/con
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
+import { TxPreflightError, preflightAndSend } from "@/lib/evm/tx-preflight";
+import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import { networkJson } from "@/lib/network-client";
 import {
@@ -153,6 +155,7 @@ export function EvmTokenLaunch() {
   const form = { ...factoryCopy.en.form, ...factoryCopy[lang].form };
   const u = uxCopy[lang];
   const nm = nftMediaCopy[lang];
+  const pf = txPreflightCopy[lang];
   const { signer } = useExternalWallet();
   const dep = readEvmDeployments();
   const gateway = stableFeeGatewayAddress();
@@ -294,6 +297,20 @@ export function EvmTokenLaunch() {
     let sentHash: `0x${string}` | null = null;
     try {
       const client = readPublicClient();
+      // Simulate (eth_call + estimateGas) before the wallet prompt: a tx that would revert is never
+      // sent, and the real send carries the estimate plus a 20% gas buffer.
+      const sendChecked = (request: { address: Address; abi: Abi; functionName: string; args: readonly unknown[]; value?: bigint }) =>
+        preflightAndSend(
+          client,
+          (tx) => writeViaActiveSigner(signer, { ...request, gas: tx.gas }),
+          {
+            account: signer.address,
+            to: request.address,
+            data: encodeFunctionData({ abi: request.abi, functionName: request.functionName, args: request.args }),
+            value: request.value,
+          },
+          { abi: CREATE_FLOW_ERRORS_ABI },
+        );
       if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
         setError(u.supplyMinError);
         return;
@@ -379,7 +396,7 @@ export function EvmTokenLaunch() {
             await client.waitForTransactionReceipt({ hash: approveHash });
           }
           setStage("payingFee");
-          const payHash = await writeViaActiveSigner(signer, {
+          const payHash = await sendChecked({
             address: gateway,
             abi: stableFeeGatewayAbi,
             functionName: "payLaunchFee",
@@ -468,7 +485,7 @@ export function EvmTokenLaunch() {
       }
 
       setStage("confirming");
-      const hash = await writeViaActiveSigner(signer, { ...request });
+      const hash = await sendChecked(request);
       sentHash = hash;
       setTx(hash);
       setPendingHash(hash);
@@ -524,6 +541,10 @@ export function EvmTokenLaunch() {
         return;
       }
       console.error(err);
+      if (err instanceof TxPreflightError) {
+        setError(preflightErrorMessage(err.reason, pf, { payingWithStable: payWith !== "PPL" }));
+        return;
+      }
       const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
       switch (code) {
         case "stable_fee_unavailable":
