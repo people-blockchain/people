@@ -8,7 +8,7 @@ import {
   fetchTransaction,
 } from "@/lib/evm/explorer-blocks";
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
-import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
+import { aggregateHoldersFromTransfers, findTokenCreationBlock } from "@/lib/evm/transfer-index";
 import {
   LOG_WINDOW_BLOCKS,
   applyTokenImage,
@@ -165,10 +165,22 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
 
+/** The node could not be asked whether an address is a factory token (timeout, backoff, HTTP 5xx). */
+export class KnownTokenLookupError extends Error {
+  constructor(message = "known_token_lookup_failed") {
+    super(message);
+    this.name = "KnownTokenLookupError";
+  }
+}
+
 /**
  * Token address for an assetId/address the site knows about, else null. The deployment assetMap
  * is checked first (no RPC); otherwise one `isPeopleToken` eth_call per factory version (current
  * and legacy `tokenFactoryVn`) — never a log scan.
+ *
+ * null means every factory answered "no" (a JSON-RPC revert counts as "no"). When a factory could
+ * not be asked at all and no other factory vouched for the token, this throws
+ * `KnownTokenLookupError`, so a transient RPC failure is never mistaken for "not a token".
  */
 export async function resolveKnownToken(assetIdOrAddress: string): Promise<string | null> {
   const dep = readEvmDeployments();
@@ -184,10 +196,18 @@ export async function resolveKnownToken(assetIdOrAddress: string): Promise<strin
   const factories = Object.entries(dep.contracts ?? {})
     .filter(([key, addr]) => /^tokenFactory(V\d+)?$/.test(key) && addr && isAddress(addr))
     .map(([, addr]) => addr as string);
+  let unreachable = false;
   for (const factory of factories) {
-    const out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]).catch(() => "0x");
+    let out: string | undefined;
+    try {
+      out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]);
+    } catch (error) {
+      if (!(error instanceof EvmRpcResponseError)) unreachable = true;
+      continue;
+    }
     if (/^0x0*1$/.test(out ?? "")) return token;
   }
+  if (unreachable) throw new KnownTokenLookupError();
   return null;
 }
 
@@ -600,12 +620,28 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const dep = readEvmDeployments();
     // Holders come from a full Transfer-log scan, so only known tokens (deployment assetMap or
     // the factory registry) may trigger one; an arbitrary address must not buy a chain scan.
-    const token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
+    let token: string | null;
+    try {
+      token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
+    } catch {
+      // The registry could not be asked: say so (the client offers a retry) instead of "unknown".
+      return { status: 502, body: { error: "rpc_unavailable" } };
+    }
     if (!token || !isAddress(token)) {
       if (assetId) return { status: 404, body: { error: "unknown_token" } };
       return { status: 200, body: [] };
     }
-    const holders = await aggregateHoldersFromTransfers(token).catch(() => []);
+    // Only a factory token can be younger than the deployment block; start its scan at its creation
+    // block (null = unknown, scan from the deployment block).
+    const isSeedToken = Object.values(dep.assetMap).some((addr) => addr && addr.toLowerCase() === token.toLowerCase());
+    const creationBlock = isSeedToken ? null : await findTokenCreationBlock(token);
+    let holders: Awaited<ReturnType<typeof aggregateHoldersFromTransfers>>;
+    try {
+      holders = await aggregateHoldersFromTransfers(token, creationBlock ?? undefined);
+    } catch {
+      // A failed scan is not an empty holder list.
+      return { status: 502, body: { error: "rpc_unavailable" } };
+    }
     const asset = await loadAsset(assetId ?? token).catch(() => null);
     const decimals = asset?.decimals ?? 18;
     return {
