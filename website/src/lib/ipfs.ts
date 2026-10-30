@@ -1,4 +1,5 @@
 import { ipfsGatewayBase } from "./factory-icon-config.ts";
+import { sniffImageType, sniffVideoType } from "./media-sniff.ts";
 
 const CID_V0 = /^Qm[1-9A-HJ-NP-Za-km-z]{44}$/;
 const CID_V1 = /^b[a-z2-7]{58,}$/;
@@ -211,6 +212,16 @@ export function resolveIpfsContentType(rawContentType: string | null, subPath: s
   return EXTENSION_CONTENT_TYPES[last.slice(dot + 1).toLowerCase()] ?? null;
 }
 
+/**
+ * Media type from the file's magic bytes, limited to the inert types above; null otherwise.
+ * Used only when the gateway sends a generic/missing type for a path without a known extension
+ * (a bare `ipfs://<cid>` image): without it such WebP/PNG/GIF NFTs were refused with 415.
+ */
+export function sniffIpfsContentType(bytes: Uint8Array): string | null {
+  const buf = Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  return sniffImageType(buf) ?? sniffVideoType(buf);
+}
+
 export type IpfsFetchResult =
   | { ok: true; body: Uint8Array; contentType: string }
   | { ok: false; status: 404 | 413 | 415 | 502; error: "not_found" | "payload_too_large" | "unsupported_media_type" | "gateway_error" };
@@ -263,8 +274,11 @@ async function fetchFromGateway(
       void res.body?.cancel().catch(() => undefined);
       return { kind: "retry", status: res.status };
     }
-    const contentType = resolveIpfsContentType(res.headers.get("content-type"), subPath);
-    if (!contentType) {
+    const upstreamType = normalizeIpfsContentType(res.headers.get("content-type"));
+    let contentType = resolveIpfsContentType(upstreamType, subPath);
+    // A generic/missing type on a path without a known extension is decided from the bytes below.
+    const sniff = !contentType && (!upstreamType || GENERIC_UPSTREAM_TYPES.has(upstreamType));
+    if (!contentType && !sniff) {
       void res.body?.cancel().catch(() => undefined);
       return { kind: "fatal", status: 415 };
     }
@@ -295,6 +309,8 @@ async function fetchFromGateway(
       body.set(c, offset);
       offset += c.byteLength;
     }
+    contentType ??= sniffIpfsContentType(body);
+    if (!contentType) return { kind: "fatal", status: 415 };
     return { kind: "ok", body, contentType };
   })();
   try {

@@ -197,7 +197,7 @@ test("content type is inferred from extension when upstream is generic", async (
   }
 });
 
-test("generic upstream type without a known extension is rejected with 415", async () => {
+test("generic upstream type without a known extension and unrecognized bytes is rejected with 415", async () => {
   for (const sub of ["", "file", "file.bin", "x.html", "x.svg"]) {
     const fetchImpl = async () => ok(PNG, "application/octet-stream");
     const r = await fetchIpfsFromGateways(CID, sub, { fetchImpl });
