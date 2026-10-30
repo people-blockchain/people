@@ -46,7 +46,7 @@ interface AccountView {
   balances: Record<string, number>;
 }
 
-type ChainAccount = { nonce?: number; balanceWei?: string; balance?: number; balances?: Record<string, number> };
+type ChainAccount = { nonce?: number; balanceWei?: string; balance?: number | string; balances?: Record<string, number> };
 
 interface FaucetFundResult {
   ok?: boolean;
@@ -259,7 +259,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       if (health.chainId !== chainId && String(health.chainId) !== String(chainId)) throw new Error(c.networkMismatch);
       if (readPending(chainId,session.address).some(tx=>tx.from===session.address && tx.nonce===fresh.nonce)) throw new Error(c.pendingOutgoing);
       if (memo.length > 256) throw new Error(c.memoLong);
-      const freshWei = readBalanceWei(fresh) ?? BigInt(0);
+      const parsedWei = readBalanceWei(fresh);
+      const freshWei = parsedWei ?? BigInt(0);
+      const nativeKnown = parsedWei !== null;
       const legacyBalance = typeof fresh.balance === "number" ? fresh.balance : 0;
       const protocolFeeWei = isCosmosEvmChain() ? BigInt(0) : DEFAULT_TRANSFER_FEE_WEI;
       let transferAmount = 0;
@@ -267,7 +269,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       try {
         if (nft && (!parseWalletAddress(nftTo) || parseWalletAddress(nftTo)?.toLowerCase()===session.address.toLowerCase())) throw new Error("address");
         if (nft && freshWei < protocolFeeWei && !(legacyBalance >= DEFAULT_TRANSFER_FEE)) throw new Error("fee");
-        if (!nft && assetId === "ppl" && fresh.balanceWei) {
+        if (!nft && assetId === "ppl" && nativeKnown) {
           const parsed = parsePplInput(amount);
           if (parsed === null || parsed <= BigInt(0)) throw new Error("amount");
           if (parsed > freshWei) throw new Error("balance");
@@ -301,7 +303,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         type: nft ? "nftTransfer" : "transfer",
         payload: nft ? {nftId:nft.nftId} : memo ? {memo} : undefined,
       };
-      const pplSend = Boolean(fresh.balanceWei) && (nft || assetId === "ppl");
+      const pplSend = nativeKnown && (nft || assetId === "ppl");
       setDraft({
         tx,
         amountWei: transferWei,
