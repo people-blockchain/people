@@ -16,6 +16,7 @@ interface ContractView {
   nonce?: number;
   verifiedSource?: { source?: string; templateId?: string; name?: string } | null;
   deployTxId?: string | null;
+  partial?: boolean;
   receipts?: Array<{
     txId: string;
     status: number;
@@ -39,8 +40,13 @@ export function ContractExplorer({ address }: { address: string }) {
         setSource(typeof text === "string" ? text : "");
         setError("");
       })
-      .catch(() => setError(t.contractNotFound));
-  }, [address, t.contractNotFound]);
+      // 404 means there is no code at this address; anything else is the node being unreachable.
+      .catch((err: unknown) =>
+        setError(err instanceof Error && err.message === "not_found" ? t.contractNotFound : t.networkUnavailable)
+      );
+  }, [address, t.contractNotFound, t.networkUnavailable]);
+
+  const templateId = data?.verifiedSource?.templateId;
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -54,6 +60,7 @@ export function ContractExplorer({ address }: { address: string }) {
       </div>
       {error ? <p className="mt-4 text-sm text-warm">{error}</p> : null}
       {!data && !error ? <PeopleLoader /> : null}
+      {data?.partial ? <p className="mt-4 text-sm text-ink-3">{t.contractPartial}</p> : null}
       {data ? (
         <dl className="mt-6 space-y-3 text-sm">
           <div>
@@ -68,6 +75,16 @@ export function ContractExplorer({ address }: { address: string }) {
               )}
             </dd>
           </div>
+          {data.deployTxId ? (
+            <div>
+              <dt className="text-ink-3">{t.contractDeployTx}</dt>
+              <dd>
+                <Link className="break-all font-mono text-brand" href={`/explorer/tx/${encodeURIComponent(data.deployTxId)}`}>
+                  {data.deployTxId}
+                </Link>
+              </dd>
+            </div>
+          ) : null}
           {data.code ? (
             <details className="rounded-2xl border border-line bg-surface-2 p-3">
               <summary className="cursor-pointer text-sm font-medium text-ink-2">{t.technicalDetails}</summary>
@@ -80,6 +97,20 @@ export function ContractExplorer({ address }: { address: string }) {
         </dl>
       ) : null}
       <h2 className="mt-8 font-bold">{t.contractSource}</h2>
+      {data?.verifiedSource?.name ? (
+        <p className="mt-2 text-sm text-brand" data-testid="contract-verified">
+          {t.contractVerifiedTemplate.replace("{name}", data.verifiedSource.name)}
+        </p>
+      ) : data ? (
+        <p className="mt-2 text-sm text-ink-3">{t.contractSourceUnknown}</p>
+      ) : null}
+      {templateId === "crowdfund" ? (
+        <p className="mt-2 text-sm">
+          <Link className="text-brand hover:underline" href={`/crowdfund/${address}`}>
+            {t.contractCampaignLink}
+          </Link>
+        </p>
+      ) : null}
       <pre className="mt-2 max-h-80 overflow-auto rounded-2xl border border-line bg-surface-2 p-3 text-xs">
         {source || "—"}
       </pre>

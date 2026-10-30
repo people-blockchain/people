@@ -44,5 +44,10 @@
   "totalSupply": "Total pasokan",
   "mintPrice": "Harga cetak",
   "pplBalance": "Saldo PPL",
-  "memo": "Memo"
+  "memo": "Memo",
+  "contractDeployTx": "Transaksi deploy",
+  "contractVerifiedTemplate": "Terverifikasi: bytecode cocok dengan templat “{name}”",
+  "contractSourceUnknown": "Kode sumber tidak tersedia: bytecode tidak cocok dengan templat yang dikenal.",
+  "contractCampaignLink": "Buka halaman kampanye",
+  "contractPartial": "Sebagian data belum dapat dimuat dari jaringan; menampilkan yang tersedia."
 }

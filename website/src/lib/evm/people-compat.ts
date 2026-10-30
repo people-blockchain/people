@@ -14,6 +14,10 @@ import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
 import { readAllFactoryNfts, readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
+import { loadContractInfo } from "@/lib/evm/contract-info";
+
+/** Per-read bound for the address summary; the shared RPC default (20 s) is too long for a page. */
+const ADDRESS_READ_TIMEOUT_MS = 8_000;
 
 type AssetRow = {
   assetId: string;
@@ -287,18 +291,15 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
       }
     }
     // Balance + nonce only — never wait on the history scan (that blocked the page for 18–40s).
-    let balanceHex: string;
-    let nonceHex: string;
-    try {
-      [balanceHex, nonceHex] = await Promise.all([
-        evmJsonRpc<string>("eth_getBalance", [addr, "latest"]),
-        evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"]),
-      ]);
-    } catch {
-      return { status: 502, body: { error: "rpc_unavailable" } };
-    }
-    const balance = weiToPpl(BigInt(balanceHex));
-    const nonce = Number.parseInt(nonceHex, 16);
+    // Each read is independent and time-bounded: one failed read returns the other with
+    // `partial: true` instead of failing the whole address with 502.
+    const [balanceRead, nonceRead] = await Promise.allSettled([
+      evmJsonRpc<string>("eth_getBalance", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
+      evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
+    ]);
+    const balance = balanceRead.status === "fulfilled" && balanceRead.value ? weiToPpl(BigInt(balanceRead.value)) : null;
+    const nonce = nonceRead.status === "fulfilled" && nonceRead.value ? Number.parseInt(nonceRead.value, 16) : null;
+    if (balance === null && nonce === null) return { status: 502, body: { error: "rpc_unavailable" } };
     // ERC-20 holdings come from live `balanceOf`, not the catalog's own balances (it has none): the
     // wallet lists exactly the keys of `balances`, so without this a created token never shows.
     const dep = readEvmDeployments();
@@ -314,7 +315,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const held = await readTokenBalances(addr, tokens).catch(() => ({}));
     return {
       status: 200,
-      body: { balance, nonce, balances: { ppl: balance, ...held }, outgoingTxs: nonce, incomingTxs: 0 },
+      body: {
+        ...(balance === null ? {} : { balance }),
+        ...(nonce === null ? {} : { nonce, outgoingTxs: nonce }),
+        balances: { ...(balance === null ? {} : { ppl: balance }), ...held },
+        incomingTxs: 0,
+        ...(balance === null || nonce === null ? { partial: true } : {}),
+      },
     };
   }
 
@@ -394,9 +401,12 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "contracts" && segments[1] && isAddress(segments[1])) {
-    const code = await evmJsonRpc<string>("eth_getCode", [getAddress(segments[1]), "latest"]).catch(() => "0x");
-    if (!code || code === "0x") return { status: 404, body: { error: "not_found" } };
-    return { status: 200, body: { address: getAddress(segments[1]), verified: false } };
+    // A failed code read is "node unavailable", not "no contract here": the explorer search uses
+    // the 404 to fall back to the plain address page.
+    const result = await loadContractInfo(segments[1]);
+    if (result.status === "not_found") return { status: 404, body: { error: "not_found" } };
+    if (result.status === "unavailable") return { status: 502, body: { error: "rpc_unavailable" } };
+    return { status: 200, body: result.info };
   }
 
   return { status: 404, body: { error: "not_found" } };

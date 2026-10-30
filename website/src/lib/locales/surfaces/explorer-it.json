@@ -44,5 +44,10 @@
   "totalSupply": "Offerta totale",
   "mintPrice": "Prezzo di conio",
   "pplBalance": "Saldo PPL",
-  "memo": "Memo"
+  "memo": "Memo",
+  "contractDeployTx": "Transazione di deploy",
+  "contractVerifiedTemplate": "Verificato: il bytecode corrisponde al modello «{name}»",
+  "contractSourceUnknown": "Sorgente non disponibile: il bytecode non corrisponde a nessun modello noto.",
+  "contractCampaignLink": "Apri la pagina della campagna",
+  "contractPartial": "Alcuni dati non sono stati caricati dalla rete; mostriamo quelli disponibili."
 }

@@ -44,5 +44,10 @@
   "totalSupply": "Tổng cung",
   "mintPrice": "Giá đúc",
   "pplBalance": "Số dư PPL",
-  "memo": "Ghi chú"
+  "memo": "Ghi chú",
+  "contractDeployTx": "Giao dịch triển khai",
+  "contractVerifiedTemplate": "Đã xác minh: bytecode khớp với mẫu “{name}”",
+  "contractSourceUnknown": "Không có mã nguồn: bytecode không khớp với mẫu nào đã biết.",
+  "contractCampaignLink": "Mở trang chiến dịch",
+  "contractPartial": "Một số dữ liệu hiện chưa tải được từ mạng; đang hiển thị phần có sẵn."
 }
