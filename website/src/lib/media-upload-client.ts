@@ -233,7 +233,7 @@ export async function uploadDirect(
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, kind, sha256 }),
+      body: JSON.stringify({ id, kind, sha256, size: fields.fields.size }),
     },
     fetchImpl,
   );

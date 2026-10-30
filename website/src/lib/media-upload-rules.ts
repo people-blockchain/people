@@ -56,6 +56,27 @@ export function isUploadDomain(value: string): boolean {
   return value.length > 0 && value.length <= 255 && !/[\s/]/.test(value) && !value.includes("://");
 }
 
+/**
+ * Pinata's file `size` is the UnixFS DAG size, which is larger than the file for multi-block
+ * objects. The signed declaration is the file length. `recordSize` is only a sanity ceiling.
+ */
+export function declaredUploadSizeError(size: unknown): "invalid_request" | "file_too_large" | null {
+  if (typeof size !== "number" || !Number.isSafeInteger(size) || size <= 0) return "invalid_request";
+  if (size > DIRECT_UPLOAD_MAX_BYTES) return "file_too_large";
+  return null;
+}
+
+export function downloadedBytesMatchDeclaration(
+  declared: number,
+  recordSize: number,
+  downloaded: number,
+  overflow: boolean,
+): boolean {
+  if (!Number.isInteger(recordSize) || recordSize < declared) return false;
+  if (overflow || downloaded !== declared) return false;
+  return true;
+}
+
 export type DirectUploadFields = {
   kind: DirectUploadKind;
   type: string;
