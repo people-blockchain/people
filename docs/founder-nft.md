@@ -185,8 +185,9 @@ Before a Mint or Rebind signature is issued, the connected wallet must sign a se
 | `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` | client and server | contract address. Unset, malformed, or different from a `founderNft` / `peopleFounderNft` entry in static evm-deployments: the card is hidden and no Founder NFT rows are added |
 | `NEXT_PUBLIC_FOUNDER_NFT_CHAIN_ID` | client and server | optional chain id. Defaults to `97401` (PEOPLE testnet) |
 | `FOUNDER_NFT_SIGNER_PK` | server only | EIP-712 signer key. Never sent to the browser. If it is missing, `POST /api/founders/nft/signature` returns 503 `not_configured` with `reason: "signer"` and the card shows a disabled state |
+| `FOUNDER_NFT_TEST_ALLOWLIST` | server only | Comma-separated wallets. Skips only the level-2 check, and only when `VERCEL_ENV` is not `production` and the contract chain id is `97401`. Production ignores it. Login and the verified-human gate still apply |
 
-`.env.example` is intentionally unchanged. These names are documented here only.
+`FOUNDER_NFT_TEST_ALLOWLIST` is a commented line in `.env.example` with no value. The contract address and the signer key stay out of that file.
 
 ### Routes
 
@@ -208,7 +209,7 @@ Both routes use the existing founders session guard.
 | `rebind_pending` | countdown, then Execute |
 | `minted_elsewhere`, `mint_closed`, `not_eligible` | text only, no button |
 
-A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature returns `403` `hp_required` and no signature. A pending rebind recorded under an older `signerEpoch` is ignored (the contract would revert with `StaleRebind`).
+A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature returns `403` `hp_required` and no signature. `FOUNDER_NFT_TEST_ALLOWLIST` is the only exception, and it skips just that level check (see Environment). A pending rebind recorded under an older `signerEpoch` is ignored (the contract would revert with `StaleRebind`).
 
 ### personId
 

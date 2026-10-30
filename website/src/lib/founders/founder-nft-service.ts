@@ -13,8 +13,12 @@ import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
 
 /**
  * Founder NFT backend rules (docs/founder-nft.md). Eligibility is hard-coded: ONLY Human Passport
- * (verification level 2) can mint; Telegram-only users never get a signature. I/O (database, Passport
- * HTTP, chain RPC, signer key, clock) is injected so the rules stay testable.
+ * (verification level 2) can mint; Telegram-only users never get a signature. The one exception is
+ * `FOUNDER_NFT_TEST_ALLOWLIST`: a comma-separated wallet list that skips only that level check, and
+ * only when `VERCEL_ENV` is not `production` and the contract chain id is 97401. Production ignores
+ * the variable. Login, the verified-human gate, the wallet proof, and stamp checks still apply.
+ * There is no other switch. I/O (database, Passport HTTP, chain RPC, signer key, clock) is injected
+ * so the rules stay testable.
  *
  * Identity: `personId` comes from the Human Passport stamp nullifiers of the connected wallet, matched
  * against `founder_nft_stamp_hash`. A wallet whose stamps already belong to a person with a token,
@@ -26,6 +30,33 @@ import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
 
 /** Signatures are short-lived: the contract also enforces the deadline. */
 export const FOUNDER_NFT_SIGNATURE_TTL_SECONDS = 10 * 60;
+
+/** PEOPLE testnet. The test allowlist cannot skip the level check on any other chain. */
+const FOUNDER_NFT_TEST_ALLOWLIST_CHAIN_ID = 97401;
+
+/**
+ * True only for a listed wallet, outside Vercel production, on chain 97401.
+ * Skips the verification-level comparison and nothing else. Fail closed when
+ * `VERCEL_ENV` is `production`, even if the variable is set.
+ */
+function founderNftTestAllowlistSkipsHpLevel(address: string, chainId: number): boolean {
+  if (process.env.VERCEL_ENV === "production") return false;
+  if (chainId !== FOUNDER_NFT_TEST_ALLOWLIST_CHAIN_ID) return false;
+  const wallet = validWallet(address);
+  if (!wallet) return false;
+  const raw = process.env.FOUNDER_NFT_TEST_ALLOWLIST;
+  if (!raw) return false;
+  for (const part of raw.split(",")) {
+    const item = part.trim();
+    if (!item || !isAddress(item, { strict: false })) continue;
+    try {
+      if (getAddress(item) === wallet) return true;
+    } catch {
+      // A malformed entry is not a match.
+    }
+  }
+  return false;
+}
 
 export type FounderNftFounder = {
   verificationLevel: number;
@@ -165,7 +196,9 @@ async function evaluate(
     const founder = await deps.loadFounder(userId);
     if (!founder) return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
     const hpWallet = validWallet(founder.passportWallet);
-    const strong = founder.verificationLevel >= VERIFICATION_LEVEL_STRONG;
+    const strong =
+      founder.verificationLevel >= VERIFICATION_LEVEL_STRONG ||
+      founderNftTestAllowlistSkipsHpLevel(address, config.chainId);
 
     // Stamps of the wallet that will send the transaction. A new address presents the same
     // nullifiers Human Passport already scored elsewhere (often with dedup and score 0).
