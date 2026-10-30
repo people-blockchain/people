@@ -15,5 +15,6 @@
   "pinFailed": "Berkas tidak dapat disimpan. Ulangi unggahan.",
   "badSignature": "Tanda tangan dompet tidak cocok dengan unggahan ini. Ulangi unggahan.",
   "verifyUnavailable": "Berkas sudah disimpan tetapi belum dapat diperiksa. Ulangi unggahan.",
-  "invalidRequest": "Permintaan unggah tidak valid. Ulangi unggahan."
+  "invalidRequest": "Permintaan unggah tidak valid. Ulangi unggahan.",
+  "timeout": "Pengunggahan terlalu lama. Ulangi unggahan."
 }

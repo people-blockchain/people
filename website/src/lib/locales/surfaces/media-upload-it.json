@@ -15,5 +15,6 @@
   "pinFailed": "Impossibile salvare il file. Ripeti il caricamento.",
   "badSignature": "La firma del portafoglio non corrisponde a questo caricamento. Ripeti il caricamento.",
   "verifyUnavailable": "Il file è stato salvato, ma non è ancora stato possibile verificarlo. Ripeti il caricamento.",
-  "invalidRequest": "La richiesta di caricamento non è valida. Ripeti il caricamento."
+  "invalidRequest": "La richiesta di caricamento non è valida. Ripeti il caricamento.",
+  "timeout": "Il caricamento ha richiesto troppo tempo. Ripeti il caricamento."
 }

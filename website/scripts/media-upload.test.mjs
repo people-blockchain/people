@@ -681,6 +681,33 @@ test("client signs the shared message and posts the original bytes", async () =>
   assert.deepEqual(Buffer.from(await posted.arrayBuffer()), bytes);
 });
 
+test("a stalled upload ends as a timeout instead of hanging", async () => {
+  const account = freshAccount();
+  const file = new File([Buffer.from("GIF89a-x")], "a.gif", { type: "image/gif" });
+  const fetchImpl = (_url, init) =>
+    new Promise((_resolve, reject) => {
+      const signal = init?.signal;
+      if (!signal) {
+        reject(new Error("missing timeout"));
+        return;
+      }
+      if (signal.aborted) {
+        reject(signal.reason);
+        return;
+      }
+      signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+    });
+  await assert.rejects(
+    () =>
+      uploadDirect(file, "nft-image", {
+        fetchImpl,
+        timeoutMs: 30,
+        signer: { address: account.address, signMessage: (message) => account.signMessage({ message }) },
+      }),
+    (err) => err instanceof MediaUploadError && err.code === "timeout",
+  );
+});
+
 test("an expired upload link and a declined wallet map to their own messages", async () => {
   const account = freshAccount();
   const file = new File([Buffer.from("GIF89a-x")], "a.gif", { type: "image/gif" });

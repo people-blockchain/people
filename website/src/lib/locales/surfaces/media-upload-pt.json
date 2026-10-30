@@ -15,5 +15,6 @@
   "pinFailed": "Não foi possível guardar o arquivo. Tente o envio outra vez.",
   "badSignature": "A assinatura da carteira não confere com este envio. Tente o envio outra vez.",
   "verifyUnavailable": "O arquivo foi guardado, mas ainda não pôde ser verificado. Tente o envio outra vez.",
-  "invalidRequest": "O pedido de envio não é válido. Tente o envio outra vez."
+  "invalidRequest": "O pedido de envio não é válido. Tente o envio outra vez.",
+  "timeout": "O envio demorou demais. Envie o arquivo de novo."
 }

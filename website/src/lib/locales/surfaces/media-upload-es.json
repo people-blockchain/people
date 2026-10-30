@@ -15,5 +15,6 @@
   "pinFailed": "No se pudo guardar el archivo. Reintenta la subida.",
   "badSignature": "La firma de la cartera no coincide con esta subida. Reintenta la subida.",
   "verifyUnavailable": "El archivo se guardó, pero aún no se pudo comprobar. Reintenta la subida.",
-  "invalidRequest": "La solicitud de subida no es válida. Reintenta la subida."
+  "invalidRequest": "La solicitud de subida no es válida. Reintenta la subida.",
+  "timeout": "La carga tardó demasiado. Vuelve a subir el archivo."
 }

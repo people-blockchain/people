@@ -40,6 +40,7 @@ const MESSAGE_KEY = {
   bad_signature: "badSignature",
   verify_unavailable: "verifyUnavailable",
   invalid_request: "invalidRequest",
+  timeout: "timeout",
 } as const satisfies Record<string, keyof MediaUploadCopy>;
 
 export type MediaUploadMessageCode = keyof typeof MESSAGE_KEY;

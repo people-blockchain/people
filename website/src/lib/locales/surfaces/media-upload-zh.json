@@ -15,5 +15,6 @@
   "pinFailed": "文件未能保存。请重新上传。",
   "badSignature": "钱包签名与此次上传不符。请重新上传。",
   "verifyUnavailable": "文件已保存，但暂时无法完成检查。请重新上传。",
-  "invalidRequest": "上传请求无效。请重新上传。"
+  "invalidRequest": "上传请求无效。请重新上传。",
+  "timeout": "上传时间过长。请重新上传。"
 }

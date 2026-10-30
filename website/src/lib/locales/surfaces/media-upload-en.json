@@ -15,5 +15,6 @@
   "pinFailed": "The file could not be stored. Retry the upload.",
   "badSignature": "The wallet signature does not match this upload. Retry the upload.",
   "verifyUnavailable": "The file was stored but could not be checked yet. Retry the upload.",
-  "invalidRequest": "The upload request is not valid. Retry the upload."
+  "invalidRequest": "The upload request is not valid. Retry the upload.",
+  "timeout": "The upload took too long. Retry the upload."
 }
