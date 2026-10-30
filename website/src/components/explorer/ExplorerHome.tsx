@@ -10,7 +10,7 @@ import { networkJson } from "@/lib/network-client";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { connectExplorer, type LivePhase } from "@/lib/explorer-live";
-import { connectEvmExplorer, explorerHomePhase } from "@/lib/evm/explorer-live";
+import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { uxCopy } from "@/lib/ux-copy";
 import { txSummary } from "@/lib/tx-display";
@@ -147,7 +147,7 @@ export function ExplorerHome({
       <p className="mt-3 max-w-2xl text-lead text-ink-2">{t.lead}</p>
       <ExplorerSubnav />
       <div className="mt-4">
-        <NetworkStatus phase={explorerHomePhase(phase, blocks.length, txs.length)} />
+        <NetworkStatus phase={phase} />
       </div>
       <nav className="mt-4 flex flex-wrap gap-4 text-sm font-semibold">
         <Link href="/explorer/contracts" className="text-brand">

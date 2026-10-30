@@ -42,15 +42,6 @@ function decodeBlock(value: unknown, height: number): LiveBlock {
   };
 }
 
-/**
- * Home-page chip. `offline` is the "network unavailable" badge, and it is only honest when the
- * feed itself is empty. A snapshot that already arrived (SSR or a partial block window) stays up.
- */
-export function explorerHomePhase(phase: LivePhase, blockCount: number, txCount: number): LivePhase {
-  if (phase === "offline" && (blockCount > 0 || txCount > 0)) return "online";
-  return phase;
-}
-
 /** EVM JSON-RPC subscriptions and reads share one socket. No periodic HTTP scans. */
 export function connectEvmExplorer(options: {
   url: string;
