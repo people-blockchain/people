@@ -9,7 +9,7 @@ const { resetRateLimitStoresForTests, setSharedRateLimitBackendForTests } = awai
 );
 const { POST } = await import("../src/app/api/contracts/compile/route.ts");
 const { CONTRACT_TEMPLATES } = await import("../src/lib/contract-templates.ts");
-const { CONTRACT_COMPILE_RATE_PER_MIN, MAX_CONTRACT_SOURCE_BYTES } = await import(
+const { CONTRACT_COMPILE_IP_RATE_PER_MIN, MAX_CONTRACT_SOURCE_BYTES } = await import(
   "../src/lib/contract-api-guards.ts"
 );
 
@@ -37,21 +37,14 @@ function reset() {
   resetRateLimitStoresForTests();
 }
 
-test("anonymous compile is rejected before any work", async () => {
+test("anonymous compile (no session) serves the precompiled artifact for a known template", async () => {
   reset();
   globalThis.__compileTestSession = null;
-  const res = await post(templateBody());
-  assert.equal(res.status, 401);
-  assert.equal((await res.json()).error, "sign_in_required");
-});
-
-test("signed-in user gets the precompiled artifact for a known template", async () => {
-  reset();
-  globalThis.__compileTestSession = { user: { id: "u-template" } };
   const res = await post(templateBody());
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.match(body.bytecode, /^0x[0-9a-f]+$/i);
+  assert.match(body.deployedBytecode, /^(0x)?[0-9a-f]+$/i);
   assert.ok(Array.isArray(body.abi));
 });
 
@@ -89,13 +82,22 @@ test("oversized source is rejected with 413", async () => {
   assert.equal((await res.json()).error, "source_too_large");
 });
 
-test("per-user rate limit returns 429", async () => {
+test("per-IP rate limit returns 429 for anonymous callers and does not affect other IPs", async () => {
   reset();
-  globalThis.__compileTestSession = { user: { id: "u-rate" } };
-  for (let i = 0; i < CONTRACT_COMPILE_RATE_PER_MIN; i += 1) {
-    assert.equal((await post(templateBody())).status, 200, `request ${i + 1}`);
+  globalThis.__compileTestSession = null;
+  const prevVercel = process.env.VERCEL;
+  process.env.VERCEL = "1";
+  try {
+    const from = (ip) => post(templateBody(), { "x-vercel-forwarded-for": ip });
+    for (let i = 0; i < CONTRACT_COMPILE_IP_RATE_PER_MIN; i += 1) {
+      assert.equal((await from("203.0.113.7")).status, 200, `request ${i + 1}`);
+    }
+    const limited = await from("203.0.113.7");
+    assert.equal(limited.status, 429);
+    assert.equal((await limited.json()).error, "rate_limited");
+    assert.equal((await from("203.0.113.8")).status, 200);
+  } finally {
+    if (prevVercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = prevVercel;
   }
-  const limited = await post(templateBody());
-  assert.equal(limited.status, 429);
-  assert.equal((await limited.json()).error, "rate_limited");
 });
