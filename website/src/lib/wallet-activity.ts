@@ -1,6 +1,10 @@
+import { formatPplExact, maxSendWei } from "@/lib/asset-amounts";
+
 export interface WalletOperation {
   id: string; from: string; to: string; amount: number; fee: number; nonce?: number;
   timestamp: number; type: string; assetId?: string; blockHeight?: number;
+  /** Integer wei strings. Display and send math use these, not `amount`/`fee`. */
+  amountWei?: string; feeWei?: string;
   payload?: Record<string, unknown>;
 }
 const key = (chain: string, address: string) => `people-wallet-activity:${chain}:${address.toLowerCase()}`;
@@ -13,7 +17,7 @@ export function readPending(chain: string, address: string): WalletOperation[] {
 }
 /** Store only public transaction fields, never a signature, signing key or seed. */
 export function trackPending(chain: string, address: string, tx: WalletOperation) {
-  const record: WalletOperation = { id: tx.id, from: tx.from, to: tx.to, amount: tx.amount, fee: tx.fee, nonce: tx.nonce, timestamp: tx.timestamp, type: tx.type, assetId: tx.assetId, payload: tx.payload };
+  const record: WalletOperation = { id: tx.id, from: tx.from, to: tx.to, amount: tx.amount, fee: tx.fee, amountWei: tx.amountWei, feeWei: tx.feeWei, nonce: tx.nonce, timestamp: tx.timestamp, type: tx.type, assetId: tx.assetId, payload: tx.payload };
   try { localStorage.setItem(key(chain, address), JSON.stringify([record, ...readPending(chain, address).filter((item) => item.id !== tx.id)].slice(0, 100))); } catch { /* Storage may be disabled; live history still works. */ }
 }
 export function forgetPending(chain: string, address: string, confirmedIds: string[]) {
@@ -34,8 +38,7 @@ export function parseWalletAddress(value: string): string | null {
     return match?.[1] ?? null;
   } catch { return null; }
 }
-export function maxTransferAmount(balance: number, fee: number): string {
-  if (!Number.isFinite(balance) || balance <= fee) return "0";
-  // Round down so floating-point subtraction cannot overspend the account.
-  return String(Math.max(0, Math.floor((balance - fee) * 1e8) / 1e8));
+/** Exact decimal string for the amount field: balance minus fee, in wei. */
+export function maxTransferAmount(balanceWei: bigint, feeWei: bigint): string {
+  return formatPplExact(maxSendWei(balanceWei, feeWei));
 }

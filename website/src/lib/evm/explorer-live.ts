@@ -31,7 +31,7 @@ function decodeBlock(value: unknown, height: number): LiveBlock {
     return {
       id: tx.hash, from: tx.from, to: tx.to ?? undefined,
       type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
-      amount: Number(wei) / 1e18, blockHeight: height,
+      amountWei: wei.toString(), blockHeight: height,
       ...(memo ? { payload: { memo } } : {}),
     };
   });
