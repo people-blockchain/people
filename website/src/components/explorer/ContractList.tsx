@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { networkJson } from "@/lib/network-client";
+import { loadExplorerRead, showNetworkUnavailable } from "@/lib/explorer-load";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { NetworkStatus } from "@/components/NetworkStatus";
@@ -35,9 +36,13 @@ export function ContractList({ initialLoaded = false }: { initialLoaded?: boolea
       setLoading(false);
       return () => { alive = false; };
     }
-    void networkJson<typeof items>("contracts")
-      .then((body) => { if (alive) setItems(Array.isArray(body) ? body : []); })
-      .catch(() => { if (alive) setFailed(true); })
+    void loadExplorerRead((signal) => networkJson<typeof items>("contracts", { signal }))
+      .then((result) => {
+        if (!alive) return;
+        if (result.ok) setItems(Array.isArray(result.value) ? result.value : []);
+        // 404 is "no index", which the empty state already covers. Only a real read failure badges.
+        else if (!result.missing) setFailed(true);
+      })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
   }, []);
@@ -55,10 +60,10 @@ export function ContractList({ initialLoaded = false }: { initialLoaded?: boolea
       <div className="mt-8">
         <SampleContracts />
       </div>
-      {failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
+      {showNetworkUnavailable(failed, items.length) ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
       {loading ? <SkeletonRows /> : null}
       <ul className="mt-6 divide-y divide-line rounded-2xl border border-line" aria-busy={loading} hidden={loading}>
-        {!loading && !failed && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
+        {!loading && !showNetworkUnavailable(failed, items.length) && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
         {items.map((item) => (
           <li key={item.address} className="px-4 py-3 text-sm">
             <Link className="font-mono text-brand" href={`/explorer/contract/${item.address}`}>
