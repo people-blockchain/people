@@ -57,7 +57,7 @@ function countdownText(executeAfter: number, now: number, copy: FounderNftCopy):
 }
 
 /**
- * Founder NFT actions on /founders. Hidden when the contract address is unset, the visitor is
+ * Founder NFT actions. Hidden when the contract address is unset, the visitor is
  * signed out, or the status route answers 401/403. Does not render Founder's Seal copy.
  */
 export function FoundersNftCard({ signedIn }: { signedIn: boolean }) {
