@@ -4,6 +4,7 @@ import { TokenList, type PoolRow, type TokenRow } from "@/components/explorer/Ex
 import { SITE_NAME } from "@/lib/site";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
+import { compatAssetRows } from "@/lib/explorer/token-catalog-list";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 
 export const metadata: Metadata = {
@@ -32,7 +33,7 @@ async function loadInitialTokenData(): Promise<{ assets: TokenRow[]; pools: Pool
     withTimeout(handleEvmCompatGet("liquidity-pools", empty).catch(() => fallback), SSR_PREFETCH_BUDGET_MS, fallback),
   ]);
   return {
-    assets: Array.isArray(assetsResult.body) ? (assetsResult.body as TokenRow[]) : [],
+    assets: compatAssetRows<TokenRow>(assetsResult.body),
     pools: Array.isArray(poolsResult.body) ? (poolsResult.body as PoolRow[]) : [],
   };
 }

@@ -98,9 +98,13 @@ export type TokenLoadOptions<Asset, Accounts> = {
  * the asset request settles, whatever the distribution is doing. Resolves when everything has
  * settled; callbacks are never invoked after `signal` aborts.
  */
-export async function loadTokenPage<Asset, Accounts>(options: TokenLoadOptions<Asset, Accounts>): Promise<void> {
+export async function loadTokenPage<Asset, Accounts>(options: TokenLoadOptions<Asset, Accounts> & {
+  /** Already-known row (catalog list or this browser's cache). Painted before the network read. */
+  initialAsset?: Asset;
+}): Promise<void> {
   const { signal } = options;
   const live = () => !signal?.aborted;
+  if (options.initialAsset !== undefined && live()) options.onAsset(options.initialAsset);
   const budget = {
     asset: options.timeoutMs?.asset ?? TOKEN_ASSET_TIMEOUT_MS,
     accounts: options.timeoutMs?.accounts ?? TOKEN_ACCOUNTS_TIMEOUT_MS,

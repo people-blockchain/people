@@ -150,5 +150,6 @@
   "install": "Installa",
   "signInGoogle": "Accedi con Google",
   "back": "Indietro",
-  "openWallet": "Apri {wallet}"
+  "openWallet": "Apri {wallet}",
+  "balancesPartial": "Alcuni saldi sono ancora in caricamento. Gli importi mostrati sono quelli già ricevuti."
 }

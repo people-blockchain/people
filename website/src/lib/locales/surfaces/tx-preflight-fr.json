@@ -2,5 +2,15 @@
   "preflightRevert": "Le réseau rejetterait cette transaction : elle n'a pas été envoyée et rien n'a été débité. Raison : {reason}",
   "preflightRevertGeneric": "Le réseau rejetterait cette transaction : elle n'a pas été envoyée et rien n'a été débité.",
   "preflightDailyLimit": "La limite quotidienne de paiement en stablecoin est atteinte. Rien n'a été débité. Payez en PPL ou réessayez après minuit UTC.",
-  "preflightPayInPplHint": "Astuce : si vous avez choisi de payer en stablecoin, passez au paiement en PPL et réessayez."
+  "preflightPayInPplHint": "Astuce : si vous avez choisi de payer en stablecoin, passez au paiement en PPL et réessayez.",
+  "errorInsufficientFloat": "La réserve de stablecoin ne couvre pas ces frais pour le moment. Rien n'a été envoyé ni débité. Payez en PPL.",
+  "errorStableNotAccepted": "Ce stablecoin n'est pas accepté pour les frais de création. Rien n'a été envoyé ni débité. Payez en PPL.",
+  "errorFeeOutOfBounds": "Les frais de création sont hors de la plage autorisée. Rien n'a été envoyé ni débité.",
+  "errorPplTransferFailed": "Le paiement en PPL n'a pas abouti. Rien n'a été envoyé ni débité.",
+  "errorEnforcedPause": "La création de jetons est en pause. Rien n'a été envoyé ni débité. Réessayez plus tard.",
+  "errorUnauthorized": "Ce portefeuille ne peut pas terminer cette étape. Rien n'a été envoyé ni débité.",
+  "errorErc20Allowance": "Le portefeuille n'a pas approuvé assez de stablecoin. Rien n'a été envoyé ni débité.",
+  "errorErc20Balance": "Le portefeuille n'a pas assez de stablecoin pour ces frais. Rien n'a été envoyé ni débité.",
+  "errorSafeTransfer": "Le transfert de stablecoin a échoué. Rien n'a été envoyé ni débité. Payez en PPL.",
+  "preflightDetails": "Détails techniques"
 }

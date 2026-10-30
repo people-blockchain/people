@@ -68,10 +68,27 @@ export const CREATE_FLOW_ERRORS_ABI = [
   { type: "error", name: "SafeERC20FailedOperation", inputs: [{ name: "token", type: "address" }] },
 ] as const satisfies Abi;
 
+const FRIENDLY_REVERT = {
+  InsufficientFloat: "errorInsufficientFloat",
+  StableNotAccepted: "errorStableNotAccepted",
+  FeeOutOfBounds: "errorFeeOutOfBounds",
+  PplTransferFailed: "errorPplTransferFailed",
+  EnforcedPause: "errorEnforcedPause",
+  Unauthorized: "errorUnauthorized",
+  ERC20InsufficientAllowance: "errorErc20Allowance",
+  ERC20InsufficientBalance: "errorErc20Balance",
+  SafeERC20FailedOperation: "errorSafeTransfer",
+} as const satisfies Record<string, keyof TxPreflightCopy>;
+
+function friendlyRevertKey(name: string | undefined): keyof typeof FRIENDLY_REVERT | undefined {
+  if (!name || !Object.prototype.hasOwnProperty.call(FRIENDLY_REVERT, name)) return undefined;
+  return name as keyof typeof FRIENDLY_REVERT;
+}
+
 /**
- * User-facing text for a preflight revert. The daily stablecoin cap gets its own message that
- * points at paying in PPL; any other revert shows the decoded reason, plus the PPL hint when the
- * user chose to pay with a stablecoin (the extra `payLaunchFee` leg is the usual culprit).
+ * User-facing text for a preflight revert. Known custom errors get a sentence from the locale.
+ * `Error(string)` still includes the contract's own sentence. The raw custom-error text stays out
+ * of this string; `preflightErrorDetails` returns it for the details toggle.
  */
 export function preflightErrorMessage(
   reason: RevertReason,
@@ -79,7 +96,21 @@ export function preflightErrorMessage(
   opts: { payingWithStable: boolean },
 ): string {
   if (isDailyLimitRevert(reason)) return t.preflightDailyLimit;
+  const key = friendlyRevertKey(reason.errorName);
+  if (key) {
+    const friendly = t[FRIENDLY_REVERT[key]];
+    if (opts.payingWithStable && !friendly.includes("PPL")) return `${friendly} ${t.preflightPayInPplHint}`;
+    return friendly;
+  }
   const known = reason.kind === "error" || reason.kind === "custom" || reason.kind === "panic";
   const base = known && reason.message ? t.preflightRevert.replace("{reason}", reason.message) : t.preflightRevertGeneric;
   return opts.payingWithStable ? `${base} ${t.preflightPayInPplHint}` : base;
+}
+
+/** Raw revert text for a known custom error. Empty for `Error(string)`, panics, and unknown noise. */
+export function preflightErrorDetails(reason: RevertReason): string {
+  const raw = reason.message ?? "";
+  if (isDailyLimitRevert(reason)) return raw;
+  if (!friendlyRevertKey(reason.errorName)) return "";
+  return raw;
 }

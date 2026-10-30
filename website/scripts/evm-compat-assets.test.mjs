@@ -207,7 +207,7 @@ test("a direct image metadataURI is used as is without a fetch", async (t) => {
   assert.deepEqual(gatewayCalls, []);
 });
 
-test("a node failure while reading the token throws TokenReadError, no fabricated row", async (t) => {
+test("a node failure while reading the token is partial, with no fabricated row", async (t) => {
   await startNode(t, {
     [SEL.name]: { http: 503 },
     [SEL.symbol]: { http: 503 },
@@ -217,10 +217,11 @@ test("a node failure while reading the token throws TokenReadError, no fabricate
     [SEL.totalSupply]: { http: 503 },
   });
   stubGateway(t, {});
-  await assert.rejects(handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams()), (error) => {
-    assert.ok(error instanceof TokenReadError);
-    return true;
-  });
+  const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(res.status, 200);
+  assert.equal(res.body.partial, true);
+  assert.equal(res.body.symbol, undefined);
+  assert.equal(res.body.name, undefined);
 });
 
 test("an RPC backoff (node already failing) is a read error, not an address-derived symbol", async (t) => {
@@ -232,9 +233,15 @@ test("an RPC backoff (node already failing) is a read error, not an address-deri
   t.after(() => {
     process.env.EVM_RPC_URL = failing;
   });
-  await assert.rejects(handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams()), TokenReadError);
+  const first = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(first.status, 200);
+  assert.equal(first.body.partial, true);
+  assert.equal(first.body.symbol, undefined);
   // Same again: now through the backoff path.
-  await assert.rejects(handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams()), TokenReadError);
+  const second = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(second.status, 200);
+  assert.equal(second.body.partial, true);
+  assert.equal(second.body.symbol, undefined);
 });
 
 test("a token without symbol()/creator() gets TKN and no creator, never the deployer", async (t) => {
@@ -263,13 +270,12 @@ test("a catalog row resolves metadata.json to the gateway image and keeps the pa
 });
 
 test("single-asset route: a catalog hit is enriched with the JSON image and the real creator", async (t) => {
-  let creatorReads = 0;
-  // The catalog scan cannot read creator() (falls back to the deployer); the live read can.
+  // Cold reads use the token contract directly. A cached row whose creator is only the deployer
+  // is completed by that same live read, without a getLogs scan.
   await startNode(
     t,
     tokenAnswers({
-      [SEL.creator]: () =>
-        ++creatorReads === 1 ? { error: "execution reverted" } : encodeAbiParameters([{ type: "address" }], [CREATOR]),
+      [SEL.creator]: encodeAbiParameters([{ type: "address" }], [CREATOR]),
     }),
     { logs: true },
   );

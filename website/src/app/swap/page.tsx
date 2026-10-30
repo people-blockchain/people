@@ -5,6 +5,7 @@ import { SwapApp } from "@/components/swap/SwapApp";
 import { SITE_NAME } from "@/lib/site";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
+import { compatAssetRows } from "@/lib/explorer/token-catalog-list";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";
@@ -38,7 +39,7 @@ async function loadInitialSwapData(): Promise<{ pools: PoolRow[]; assets: AssetI
   ]);
   return {
     pools: Array.isArray(poolsResult.body) ? (poolsResult.body as PoolRow[]) : [],
-    assets: Array.isArray(assetsResult.body) ? (assetsResult.body as AssetInfo[]) : [],
+    assets: compatAssetRows<AssetInfo>(assetsResult.body),
   };
 }
 

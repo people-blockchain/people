@@ -16,6 +16,7 @@ import { GENESIS_ALLOCATIONS, formatPpl } from "@/lib/tokenomics";
 import { tokenomicsCopy } from "@/lib/tokenomics-content";
 import { FOUNDER_COUNTRY_OPTIONS, countryFlagEmoji } from "@/lib/founders/countries";
 import { visibleAssets, visibleNfts } from "@/lib/hidden-assets";
+import { compatAssetRows } from "@/lib/explorer/token-catalog-list";
 import { networkJson } from "@/lib/network-client";
 import { Reveal } from "@/components/motion/Reveal";
 import {
@@ -607,7 +608,7 @@ export function TransparencyPage() {
     // Community-created assets come from the public node, not the database.
     void networkJson<{ assetId: string }[]>("assets")
       .then((body) => {
-        const list = Array.isArray(body) ? visibleAssets(body) : [];
+        const list = visibleAssets(compatAssetRows<{ assetId: string }>(body));
         if (alive) {
           setCreated((current) => ({
             ...current,

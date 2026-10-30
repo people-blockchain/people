@@ -1,6 +1,13 @@
 import { ipfsGatewayUrlForUri } from "@/lib/ipfs";
 import { isPublicHttpsHost } from "@/lib/nft-media-rules";
 import { readCappedText } from "@/lib/read-capped-text";
+import {
+  RequestDeadlineError,
+  boundedTimeoutMs,
+  currentDeadline,
+  deadlineExpired,
+  linkAbort,
+} from "@/lib/evm/request-deadline";
 
 export type TokenUriMetadata = { name?: string; description?: string; image?: string };
 
@@ -29,7 +36,11 @@ function safeHttpsUrl(uri: string): string | null {
  * Fetches a JSON metadata document (`ipfs://` through the fixed gateway, or a public `https://`
  * URL) with a timeout and a size cap. Any failure yields null.
  */
-export async function readTokenUriMetadata(tokenUri: string): Promise<TokenUriMetadata | null> {
+export async function readTokenUriMetadata(
+  tokenUri: string,
+  timeoutMs = TOKEN_URI_FETCH_TIMEOUT_MS,
+  deadlineAt?: number,
+): Promise<TokenUriMetadata | null> {
   const uri = tokenUri.trim();
   let url: string | null;
   if (/^ipfs:\/\//i.test(uri)) {
@@ -44,14 +55,29 @@ export async function readTokenUriMetadata(tokenUri: string): Promise<TokenUriMe
     url = null;
   }
   if (!url) return null;
+  const at = deadlineAt ?? currentDeadline()?.at;
+  const attempt = linkAbort(boundedTimeoutMs(timeoutMs, at), currentDeadline()?.signal);
   try {
     const res = await fetch(url, {
       headers: { accept: "application/json" },
-      signal: AbortSignal.timeout(TOKEN_URI_FETCH_TIMEOUT_MS),
+      signal: attempt.signal,
       cache: "no-store",
     });
     if (!res.ok) return null;
-    const text = await readCappedText(res, TOKEN_URI_MAX_BYTES);
+    const text = await Promise.race([
+      readCappedText(res, TOKEN_URI_MAX_BYTES),
+      new Promise<null>((resolve) => {
+        if (attempt.signal.aborted) {
+          resolve(null);
+          return;
+        }
+        attempt.signal.addEventListener("abort", () => resolve(null), { once: true });
+      }),
+    ]);
+    if (attempt.signal.aborted) {
+      await res.body?.cancel().catch(() => {});
+      return null;
+    }
     if (!text) return null;
     const json = JSON.parse(text) as { name?: unknown; description?: unknown; image?: unknown };
     return {
@@ -61,8 +87,11 @@ export async function readTokenUriMetadata(tokenUri: string): Promise<TokenUriMe
         : {}),
       ...(metadataImage(json.image) ? { image: metadataImage(json.image) } : {}),
     };
-  } catch {
+  } catch (error) {
+    if (error instanceof RequestDeadlineError) return null;
     return null;
+  } finally {
+    attempt.cancel();
   }
 }
 
@@ -99,18 +128,23 @@ function rememberImage(uri: string, value: string | undefined): void {
  */
 export async function fetchCachedMetadataImage(
   uri: string,
-  fetchJson: (tokenUri: string) => Promise<TokenUriMetadata | null> = readTokenUriMetadata,
+  fetchJson?: (tokenUri: string) => Promise<TokenUriMetadata | null>,
+  deadlineAt?: number,
 ): Promise<string | undefined> {
   const key = uri.trim();
   const cached = imageCache.get(key);
   if (cached && cached.expiresAt > Date.now()) return cached.value;
+  const at = deadlineAt ?? currentDeadline()?.at;
+  const read = fetchJson ?? ((tokenUri: string) => readTokenUriMetadata(tokenUri, boundedTimeoutMs(TOKEN_URI_FETCH_TIMEOUT_MS, at), at));
   let image: string | undefined;
   try {
-    const meta = await fetchJson(key);
+    const meta = await read(key);
     image = metadataImage(meta?.image);
   } catch {
     image = undefined;
   }
+  // A deadline abort is not a real miss: the next request must be allowed to fetch the image.
+  if (deadlineExpired(at)) return image;
   rememberImage(key, image);
   return image;
 }

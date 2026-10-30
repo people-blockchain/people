@@ -17,7 +17,7 @@ import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "
 import { TxPreflightError, preflightAndSend, preflightTx } from "@/lib/evm/tx-preflight";
 import { preflightTokenCreateRpc, preflightTxWithRetry } from "@/lib/factory/token-create-preflight";
 import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
-import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
+import { CREATE_FLOW_ERRORS_ABI, preflightErrorDetails, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import { networkJson } from "@/lib/network-client";
 import {
@@ -177,7 +177,12 @@ export function EvmTokenLaunch() {
   const [supply, setSupply] = useState("");
   const [busy, setBusy] = useState(false);
   const [tx, setTx] = useState("");
-  const [error, setError] = useState("");
+  const [error, setErrorText] = useState("");
+  const [errorDetails, setErrorDetails] = useState("");
+  const setError = (text: string, details = "") => {
+    setErrorText(text);
+    setErrorDetails(details);
+  };
   const [created, setCreated] = useState<CreatedTokenRecord | null>(null);
   const [pendingHash, setPendingHash] = useState<`0x${string}` | "">("");
   const [confirmationTimedOut, setConfirmationTimedOut] = useState(false);
@@ -659,7 +664,10 @@ export function EvmTokenLaunch() {
       }
       console.error(err);
       if (err instanceof TxPreflightError) {
-        setError(preflightErrorMessage(err.reason, pf, { payingWithStable: payWith !== "PPL" }));
+        setError(
+          preflightErrorMessage(err.reason, pf, { payingWithStable: payWith !== "PPL" }),
+          preflightErrorDetails(err.reason),
+        );
         return;
       }
       const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
@@ -1079,7 +1087,17 @@ export function EvmTokenLaunch() {
               </div>
             </div>
           ) : null}
-          {error ? <p className="text-sm text-warm">{error}</p> : null}
+          {error ? (
+            <div className="text-sm text-warm">
+              <p>{error}</p>
+              {errorDetails ? (
+                <details className="mt-1">
+                  <summary className="cursor-pointer text-xs text-ink-3">{pf.preflightDetails}</summary>
+                  <p className="mt-1 break-all font-mono text-xs text-ink-3">{errorDetails}</p>
+                </details>
+              ) : null}
+            </div>
+          ) : null}
           {iconUploadFailed ? (
             <button
               type="button"

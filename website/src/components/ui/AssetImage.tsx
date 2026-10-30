@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { displayTokenImageUrl } from "@/lib/ipfs";
+import { tokenPageImageUrl } from "@/lib/explorer/token-page-image";
 import { tokenIconByAddress } from "@/lib/token-icons";
 
 function imageUrl(value: unknown): string | null {
-  if (typeof value !== "string" || !value.trim()) return null;
-  return displayTokenImageUrl(value);
+  return tokenPageImageUrl(value);
 }
 
 /** Stable 32-bit FNV-1a hash of a ticker, used for the fallback gradient. */
@@ -49,22 +48,22 @@ function isTestBadge(known: Known): boolean {
  * tokens, not the real asset; tokens with on-chain images show them; everything else gets a
  * colour gradient plus the ticker's first letter.
  */
-export function AssetImage({ src, name, nft = false, className = "h-10 w-10", assetId, tokenAddress, testBadgeLabel }: {
-  src?: unknown; name: string; nft?: boolean; className?: string; assetId?: string; tokenAddress?: string; testBadgeLabel?: string;
+export function AssetImage({ src, name, nft = false, className = "h-10 w-10", assetId, tokenAddress, testBadgeLabel, eager = false }: {
+  src?: unknown; name: string; nft?: boolean; className?: string; assetId?: string; tokenAddress?: string; testBadgeLabel?: string; eager?: boolean;
 }) {
   const { known, url: knownUrl } = nft ? { known: null, url: null } : knownAsset(assetId, name, tokenAddress);
   const url = knownUrl ?? imageUrl(src);
-  return <AssetImageView key={url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} />;
+  return <AssetImageView key={url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} eager={eager} />;
 }
 
-function AssetImageView({ url, name, nft, className, known, testBadgeLabel }: {
-  url: string | null; name: string; nft: boolean; className: string; known: Known; testBadgeLabel?: string;
+function AssetImageView({ url, name, nft, className, known, testBadgeLabel, eager }: {
+  url: string | null; name: string; nft: boolean; className: string; known: Known; testBadgeLabel?: string; eager: boolean;
 }) {
   const [failed, setFailed] = useState(false);
   const showImage = url && !failed;
   const letter = (name.trim().replace(/^t(?=[A-Z])/, "").charAt(0) || "?").toUpperCase();
   return (
-    <span className={`relative inline-flex shrink-0 ${className}`} aria-hidden={testBadgeLabel ? undefined : true} title={isTestBadge(known) ? testBadgeLabel : undefined}>
+    <span className={`relative inline-flex shrink-0 ${className}`} style={{ minWidth: "1rem", minHeight: "1rem" }} aria-hidden={testBadgeLabel ? undefined : true} title={isTestBadge(known) ? testBadgeLabel : undefined}>
       <span
         className={`inline-flex h-full w-full items-center justify-center overflow-hidden ${nft ? "rounded-xl border border-line bg-canvas" : "rounded-full"}  ${!nft && !showImage ? "" : !nft && known !== "ppl" ? "border border-line bg-canvas" : ""}`}
         style={!nft && !showImage ? { backgroundImage: tickerGradient(name) } : undefined}
@@ -72,7 +71,7 @@ function AssetImageView({ url, name, nft, className, known, testBadgeLabel }: {
         {showImage ? (
           // External on-chain image URLs are dynamic; loading directly avoids server image proxying.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={url} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} className={`h-full w-full object-cover`} />
+          <img src={url} alt="" width={64} height={64} loading={eager ? "eager" : "lazy"} decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} className="h-full w-full min-h-full min-w-full object-cover" />
         ) : nft ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-1/2 w-1/2 text-ink-3">
             <rect x="3" y="3" width="18" height="18" rx="3" />

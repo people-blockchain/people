@@ -2,5 +2,15 @@
   "preflightRevert": "The network would reject this transaction, so it was not sent and nothing was charged. Reason: {reason}",
   "preflightRevertGeneric": "The network would reject this transaction, so it was not sent and nothing was charged.",
   "preflightDailyLimit": "The daily limit for paying with a stablecoin has been reached. Nothing was charged. Pay in PPL instead, or try again after midnight UTC.",
-  "preflightPayInPplHint": "Tip: if you chose to pay with a stablecoin, switch to paying in PPL and try again."
+  "preflightPayInPplHint": "Tip: if you chose to pay with a stablecoin, switch to paying in PPL and try again.",
+  "errorInsufficientFloat": "The stablecoin pool cannot cover this fee right now. Nothing was sent and nothing was charged. Pay in PPL instead.",
+  "errorStableNotAccepted": "This stablecoin is not accepted for the creation fee. Nothing was sent and nothing was charged. Pay in PPL instead.",
+  "errorFeeOutOfBounds": "The creation fee is outside the allowed range. Nothing was sent and nothing was charged.",
+  "errorPplTransferFailed": "The PPL payment could not be completed. Nothing was sent and nothing was charged.",
+  "errorEnforcedPause": "Token creation is paused right now. Nothing was sent and nothing was charged. Try again later.",
+  "errorUnauthorized": "This wallet is not allowed to complete that step. Nothing was sent and nothing was charged.",
+  "errorErc20Allowance": "The wallet has not approved enough of the stablecoin. Nothing was sent and nothing was charged.",
+  "errorErc20Balance": "The wallet does not hold enough of the stablecoin for this fee. Nothing was sent and nothing was charged.",
+  "errorSafeTransfer": "The stablecoin transfer failed. Nothing was sent and nothing was charged. Pay in PPL instead.",
+  "preflightDetails": "Technical details"
 }

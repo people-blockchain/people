@@ -150,5 +150,6 @@
   "install": "安装",
   "signInGoogle": "使用 Google 登录",
   "back": "返回",
-  "openWallet": "打开 {wallet}"
+  "openWallet": "打开 {wallet}",
+  "balancesPartial": "部分余额仍在加载。显示的金额是已经收到的金额。"
 }

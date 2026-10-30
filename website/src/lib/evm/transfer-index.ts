@@ -1,6 +1,15 @@
 import { getAddress, type Hex } from "viem";
 import { EvmRpcResponseError, evmJsonRpc } from "@/lib/evm/rpc-server";
 import { readEvmDeployments } from "@/lib/evm/config";
+import {
+  RequestDeadlineError,
+  boundedTimeoutMs,
+  currentDeadline,
+  deadlineExpired,
+  isRequestDeadlineError,
+  retryDelayMs,
+  sleepMs,
+} from "@/lib/evm/request-deadline";
 
 /** First block worth scanning: the protocol deployment block when recorded, else genesis. */
 function deploymentStartBlock(): number {
@@ -50,10 +59,6 @@ export function maxTransferScanWindows(): number {
 const LOG_RETRY_DELAYS_MS = [200, 500] as const;
 const LOG_READ_TIMEOUT_MS = 12_000;
 
-function sleepMs(ms: number): Promise<void> {
-  return ms > 0 ? new Promise((resolve) => setTimeout(resolve, ms)) : Promise.resolve();
-}
-
 function isTransientLogRpc(error: unknown): boolean {
   if (!(error instanceof Error) || error instanceof EvmRpcResponseError) return false;
   if (error.name === "TimeoutError" || error.name === "AbortError") return true;
@@ -62,18 +67,26 @@ function isTransientLogRpc(error: unknown): boolean {
   return /rpc_http_(408|425|429|500|502|503|504)/.test(error.message) || /failed to fetch|network/i.test(error.message);
 }
 
-async function getLogsWithRetry(filter: Record<string, unknown>): Promise<RpcLog[]> {
+async function getLogsWithRetry(filter: Record<string, unknown>, deadlineAt?: number): Promise<RpcLog[]> {
+  const at = deadlineAt ?? currentDeadline()?.at;
   let lastError: unknown;
   for (let attempt = 0; attempt <= LOG_RETRY_DELAYS_MS.length; attempt++) {
-    if (attempt > 0) await sleepMs(LOG_RETRY_DELAYS_MS[attempt - 1]);
+    if (attempt > 0) {
+      const wait = retryDelayMs(LOG_RETRY_DELAYS_MS[attempt - 1] ?? 0, at);
+      if (wait === null) break;
+      await sleepMs(wait);
+      if (deadlineExpired(at)) break;
+    }
     try {
       const chunk = await evmJsonRpc<RpcLog[]>("eth_getLogs", [filter], {
-        timeoutMs: LOG_READ_TIMEOUT_MS,
+        timeoutMs: boundedTimeoutMs(LOG_READ_TIMEOUT_MS, at),
         ignoreBackoff: true,
+        deadlineAt: at,
       });
       return Array.isArray(chunk) ? chunk : [];
     } catch (error) {
       lastError = error;
+      if (isRequestDeadlineError(error) || deadlineExpired(at)) throw new RequestDeadlineError();
       if (attempt === LOG_RETRY_DELAYS_MS.length || !isTransientLogRpc(error)) throw error;
     }
   }
@@ -96,18 +109,24 @@ export async function fetchTransferLogs(
  * Transfer logs for one token. When the range is longer than the window cap, the default keeps the
  * oldest windows (stable for tests). `preferHead` keeps the newest windows instead, so a factory
  * token whose creation block could not be found still includes the mint near the chain tip.
- * A window that fails after retries marks the scan partial when another window succeeded; if every
- * window fails, the error is thrown (an empty list must not be cached as "no holders").
+ * A window that fails after retries marks the scan partial. If every window fails, or the request
+ * deadline stops the read, the result is an empty partial scan (an empty list must not be cached
+ * as "no holders").
  */
 export async function fetchTransferLogsDetailed(
   tokenAddress: string,
   fromBlock = deploymentStartBlock(),
   toBlock?: number,
   maxWindows = maxTransferScanWindows(),
-  options?: { preferHead?: boolean },
+  options?: { preferHead?: boolean; deadlineAt?: number },
 ): Promise<TransferScan> {
   const token = getAddress(tokenAddress);
-  const head = toBlock ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", [], { timeoutMs: LOG_READ_TIMEOUT_MS, ignoreBackoff: true }));
+  const at = options?.deadlineAt ?? currentDeadline()?.at;
+  const head = toBlock ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", [], {
+    timeoutMs: boundedTimeoutMs(LOG_READ_TIMEOUT_MS, at),
+    ignoreBackoff: true,
+    deadlineAt: at,
+  }));
   const first = Math.max(0, fromBlock);
   const windowBlocks = 9_000;
   const capped = head - first + 1 > maxWindows * windowBlocks;
@@ -125,6 +144,10 @@ export async function fetchTransferLogsDetailed(
   let failed = 0;
   let lastError: unknown;
   for (let start = scanFrom; start <= latest; start += windowBlocks) {
+    if (deadlineExpired(at)) {
+      failed += 1;
+      break;
+    }
     const end = Math.min(latest, start + windowBlocks - 1);
     try {
       logs.push(...await getLogsWithRetry({
@@ -132,14 +155,20 @@ export async function fetchTransferLogsDetailed(
         topics: [TRANSFER_TOPIC],
         fromBlock: `0x${start.toString(16)}`,
         toBlock: `0x${end.toString(16)}`,
-      }));
+      }, at));
       succeeded += 1;
     } catch (error) {
       failed += 1;
       lastError = error;
+      if (isRequestDeadlineError(error)) break;
     }
   }
-  if (succeeded === 0) throw lastError instanceof Error ? lastError : new Error("log_rpc_failed");
+  if (succeeded === 0) {
+    // An empty holder list must not look complete. The route answers 200 partial so the
+    // client can retry, and nothing is cached.
+    if (failed > 0 || deadlineExpired(at)) return { transfers: [], partial: true };
+    throw lastError instanceof Error ? lastError : new Error("log_rpc_failed");
+  }
   const transfers = logs
     .map((log) => {
       const topics = log.topics ?? [];
@@ -155,7 +184,7 @@ export async function fetchTransferLogsDetailed(
       };
     })
     .filter((row) => row.from && row.to && row.transactionHash);
-  return { transfers, partial: failed > 0 };
+  return { transfers, partial: failed > 0 || deadlineExpired(at) };
 }
 
 /** Bound on `eth_getCode` probes for one creation-block search (2^26 blocks is far beyond any chain here). */
@@ -201,14 +230,23 @@ export async function findTokenCreationBlock(tokenAddress: string, head?: number
     rememberCreationBlock(key, cached);
     return cached;
   }
-  const deadline = Date.now() + CREATION_SEARCH_BUDGET_MS;
+  const requestAt = currentDeadline()?.at;
+  const deadline = Math.min(Date.now() + CREATION_SEARCH_BUDGET_MS, requestAt ?? Number.POSITIVE_INFINITY);
   let calls = 0;
   const codeAt = async (block: number): Promise<boolean> => {
-    if (calls++ >= CREATION_SEARCH_MAX_CALLS || Date.now() > deadline) throw new Error("creation_search_budget");
-    return hasCode(await evmJsonRpc<string>("eth_getCode", [token, `0x${block.toString(16)}`], { timeoutMs: 8_000, ignoreBackoff: true }));
+    if (calls++ >= CREATION_SEARCH_MAX_CALLS || Date.now() > deadline || deadlineExpired(deadline)) throw new Error("creation_search_budget");
+    return hasCode(await evmJsonRpc<string>("eth_getCode", [token, `0x${block.toString(16)}`], {
+      timeoutMs: boundedTimeoutMs(8_000, deadline),
+      ignoreBackoff: true,
+      deadlineAt: deadline,
+    }));
   };
   try {
-    const tip = head ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", [], { timeoutMs: 8_000, ignoreBackoff: true }));
+    const tip = head ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", [], {
+      timeoutMs: boundedTimeoutMs(8_000, deadline),
+      ignoreBackoff: true,
+      deadlineAt: deadline,
+    }));
     if (!Number.isFinite(tip) || tip < 0 || !(await codeAt(tip))) return null;
     let lo = deploymentStartBlock();
     let hi = tip;
@@ -265,16 +303,21 @@ export async function aggregateHoldersFromTransfers(tokenAddress: string, fromBl
 
 /**
  * Same aggregation as {@link aggregateHoldersFromTransfers}, plus `partial` when a window failed
- * after retries or the scan was capped. A total failure still throws. Partial scans are not cached.
+ * after retries, the scan was capped, or the request deadline stopped it. A total failure is an
+ * empty partial scan. Partial scans are not cached.
  */
-export async function aggregateHoldersDetailed(tokenAddress: string, fromBlock?: number, options?: { preferHead?: boolean }): Promise<HolderScan> {
+export async function aggregateHoldersDetailed(
+  tokenAddress: string,
+  fromBlock?: number,
+  options?: { preferHead?: boolean; deadlineAt?: number },
+): Promise<HolderScan> {
   const cacheKey = tokenAddress.trim().toLowerCase();
   const cached = holdersCache.get(cacheKey);
   if (cached && Date.now() - cached.at < HOLDERS_TTL_MS) {
     rememberHolders(cacheKey, cached);
     return { holders: cached.value, partial: false };
   }
-  // Scan failures propagate: an incomplete scan must never be cached or shown as "no holders".
+  // An incomplete scan must never be cached or shown as "no holders".
   const scan = await fetchTransferLogsDetailed(tokenAddress, fromBlock, undefined, maxTransferScanWindows(), options);
   const transfers = scan.transfers;
   const balances = new Map<string, bigint>();

@@ -150,5 +150,6 @@
   "install": "Install",
   "signInGoogle": "Sign in with Google",
   "back": "Back",
-  "openWallet": "Open {wallet}"
+  "openWallet": "Open {wallet}",
+  "balancesPartial": "Some balances are still loading. The amounts shown are the ones already received."
 }
