@@ -14,6 +14,8 @@
   "yourNftHint": "Es ist an dich gebunden: Es kann weder verkauft noch übertragen werden.",
   "rebindTitle": "Verschiebe dein Founder NFT in diese Wallet",
   "rebindLead": "Dein Human Passport besitzt bereits das Founder NFT {{n}} bei {{holder}}. Du kannst dieselbe Nummer in diese Wallet verschieben. Das alte Token wird nach einer Wartezeit von 72 Stunden verbrannt.",
+  "dedupTitle": "Diese Wallet kann nicht erneut verifiziert werden",
+  "dedupLead": "Diese Human-Passport-Stempel wurden bereits von einer anderen Wallet verwendet, daher erreicht dieses Konto die Verifizierung nicht. Du kannst Founder NFT {{n}} von {{holder}} auf diese Wallet verschieben. Das alte Token wird nach 72 Stunden Wartezeit verbrannt.",
   "rebindButton": "Founder NFT {{n}} hierher verschieben",
   "rebindPendingTitle": "Die Verschiebung in diese Wallet steht aus",
   "rebindPendingWait": "Wartezeit: noch {{time}}. Der aktuelle Inhaber kann bis dahin abbrechen.",
@@ -40,5 +42,6 @@
   "errNoPending": "Es gibt keine ausstehende Verschiebung oder sie kann nicht mehr geändert werden.",
   "errConflict": "Dein Human Passport passt zu mehr als einer Person. Bitte wende dich an den Support.",
   "errUnavailable": "Das Netzwerk oder Human Passport antwortet nicht. Bitte versuche es erneut.",
-  "errGeneric": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+  "errGeneric": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+  "errWalletAuth": "Bestätige diese Wallet und versuche es erneut. Die Bestätigung fehlte, ist abgelaufen oder wurde von einer anderen Adresse signiert."
 }

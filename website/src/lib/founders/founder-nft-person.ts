@@ -168,8 +168,26 @@ export async function findFounderNftPerson(nullifiers: readonly string[]): Promi
   return { kind: "none" };
 }
 
+/**
+ * True when every stamp that contributes a nullifier is marked `dedup: true` (Human Passport LIFO:
+ * this wallet is re-presenting stamps already scored for another address, so its score stays 0).
+ * A mix of fresh and deduped stamps is not treated as deduped.
+ */
+export function stampItemsAreDeduped(items: unknown): boolean {
+  if (!Array.isArray(items)) return false;
+  let contributing = 0;
+  let deduped = 0;
+  for (const item of items) {
+    if (!isRecord(item)) continue;
+    if (extractStampNullifiers([item]).length === 0) continue;
+    contributing += 1;
+    if (item.dedup === true) deduped += 1;
+  }
+  return contributing > 0 && deduped === contributing;
+}
+
 export type HumanPassportStampsLookup =
-  | { ok: true; address: string; nullifiers: string[] }
+  | { ok: true; address: string; nullifiers: string[]; /** True when every contributing stamp is `dedup: true`. */ deduped?: boolean }
   | { ok: false; error: "not_configured" | "invalid_address" | "verification_failed" };
 
 /**
@@ -203,7 +221,7 @@ export async function fetchHumanPassportStampNullifiers(input: {
     url = nextStampsPage(data.next);
   }
   if (url) return { ok: false, error: "verification_failed" };
-  return { ok: true, address, nullifiers: extractStampNullifiers(items) };
+  return { ok: true, address, nullifiers: extractStampNullifiers(items), deduped: stampItemsAreDeduped(items) };
 }
 
 function nextStampsPage(next: unknown): string | null {

@@ -14,6 +14,8 @@
   "yourNftHint": "NFT ini terikat pada Anda: tidak dapat dijual atau dipindahtangankan.",
   "rebindTitle": "Pindahkan Founder NFT Anda ke dompet ini",
   "rebindLead": "Human Passport Anda sudah memiliki Founder NFT {{n}} di {{holder}}. Anda dapat memindahkan nomor yang sama ke dompet ini. Token lama dibakar setelah masa tunggu 72 jam.",
+  "dedupTitle": "Dompet ini tidak dapat diverifikasi lagi",
+  "dedupLead": "Stempel Human Passport ini sudah dipakai dompet lain, jadi akun ini tidak dapat mencapai verifikasi. Anda dapat memindahkan Founder NFT {{n}} dari {{holder}} ke dompet ini. Token lama dibakar setelah masa tunggu 72 jam.",
   "rebindButton": "Pindahkan Founder NFT {{n}} ke sini",
   "rebindPendingTitle": "Pemindahan ke dompet ini sedang menunggu",
   "rebindPendingWait": "Masa tunggu: tersisa {{time}}. Pemegang saat ini dapat membatalkan sampai saat itu.",
@@ -40,5 +42,6 @@
   "errNoPending": "Tidak ada pemindahan yang menunggu atau sudah tidak dapat diubah.",
   "errConflict": "Human Passport Anda cocok dengan lebih dari satu orang. Hubungi dukungan.",
   "errUnavailable": "Jaringan atau Human Passport tidak merespons. Silakan coba lagi.",
-  "errGeneric": "Terjadi kesalahan. Silakan coba lagi."
+  "errGeneric": "Terjadi kesalahan. Silakan coba lagi.",
+  "errWalletAuth": "Konfirmasi dompet ini dan coba lagi. Konfirmasi tidak ada, kedaluwarsa, atau ditandatangani alamat lain."
 }

@@ -14,6 +14,8 @@
   "yourNftHint": "Sana bağlıdır: satılamaz ve devredilemez.",
   "rebindTitle": "Founder NFT'ni bu cüzdana taşı",
   "rebindLead": "Human Passport'un {{holder}} adresinde zaten {{n}} numaralı Founder NFT'ye sahip. Aynı numarayı bu cüzdana taşıyabilirsin. Eski token 72 saatlik bekleme süresinden sonra yakılır.",
+  "dedupTitle": "Bu cüzdan yeniden doğrulanamaz",
+  "dedupLead": "Bu Human Passport damgaları başka bir cüzdan tarafından kullanılmış, bu yüzden bu hesap doğrulamaya ulaşamaz. Founder NFT {{n}} numarasını {{holder}} adresinden bu cüzdana taşıyabilirsin. Eski token 72 saatlik beklemeden sonra yakılır.",
   "rebindButton": "Founder NFT {{n}} numarasını buraya taşı",
   "rebindPendingTitle": "Bu cüzdana taşıma beklemede",
   "rebindPendingWait": "Bekleme süresi: {{time}} kaldı. Mevcut sahip o zamana kadar iptal edebilir.",
@@ -40,5 +42,6 @@
   "errNoPending": "Bekleyen bir taşıma yok ya da artık değiştirilemiyor.",
   "errConflict": "Human Passport'un birden fazla kişiyle eşleşiyor. Lütfen destekle iletişime geç.",
   "errUnavailable": "Ağ veya Human Passport yanıt vermiyor. Lütfen tekrar dene.",
-  "errGeneric": "Bir şeyler ters gitti. Lütfen tekrar dene."
+  "errGeneric": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+  "errWalletAuth": "Bu cüzdanı onayla ve yeniden dene. Onay eksikti, süresi dolmuştu veya başka bir adres tarafından imzalandı."
 }

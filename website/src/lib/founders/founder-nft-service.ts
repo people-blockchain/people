@@ -4,6 +4,11 @@ import type { FounderNftChainReader, FounderNftPendingRebind } from "./founder-n
 import type { FounderNftPublicConfig } from "./founder-nft-config.ts";
 import type { FounderNftPersonLookup, FounderNftPersonResult, HumanPassportStampsLookup } from "./founder-nft-person.ts";
 import { signFounderNftMint, signFounderNftRebind } from "./founder-nft-typed-data.ts";
+import {
+  verifyFounderNftWalletAuth,
+  type FounderNftWalletAuthProof,
+  type FounderNftWalletAuthRow,
+} from "./founder-nft-wallet-auth.ts";
 import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
 
 /**
@@ -11,10 +16,12 @@ import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
  * (verification level 2) can mint; Telegram-only users never get a signature. I/O (database, Passport
  * HTTP, chain RPC, signer key, clock) is injected so the rules stay testable.
  *
- * Identity: `personId` comes from the Human Passport stamp nullifiers of the founder's HP wallet
- * (`passportWallet`, signature-proven; or `walletAddress` for a level-2 founder who never linked one).
- * Rebind additionally requires the signature-proven `passportWallet`, because the new wallet's own
- * score is deliberately not used and its stamps are the only proof of "same person".
+ * Identity: `personId` comes from the Human Passport stamp nullifiers of the connected wallet, matched
+ * against `founder_nft_stamp_hash`. A wallet whose stamps already belong to a person with a token,
+ * and which cannot reach level 2 (Human Passport dedup), may only rebind that token.
+ *
+ * Mint and rebind signatures are issued only after the wallet signs a server nonce (see
+ * `founder-nft-wallet-auth.ts`). The EIP-712 signer key never leaves the server.
  */
 
 /** Signatures are short-lived: the contract also enforces the deadline. */
@@ -37,6 +44,10 @@ export type FounderNftServiceDeps = {
   /** Unix seconds. */
   now: () => number;
   randomNonce: () => bigint;
+  /** Stored wallet-auth nonce for this user, or null when it was never issued to them. */
+  readWalletAuth: (userId: string, nonce: string) => Promise<FounderNftWalletAuthRow | null>;
+  /** Atomically claims the nonce. False when it was already used or is expired. */
+  consumeWalletAuth: (userId: string, nonce: string) => Promise<boolean>;
 };
 
 export type FounderNftPendingView = { oldHolder: string; newHolder: string; executeAfter: number };
@@ -45,7 +56,7 @@ export type FounderNftStatus =
   | { state: "holder"; tokenId: string; personId: Hex; pending: FounderNftPendingView | null }
   | { state: "can_mint" }
   | { state: "mint_closed" }
-  | { state: "rebind_available"; tokenId: string; personId: Hex; oldHolder: string }
+  | { state: "rebind_available"; tokenId: string; personId: Hex; oldHolder: string; dedup: boolean }
   | { state: "rebind_pending"; tokenId: string; personId: Hex; pending: FounderNftPendingView }
   | { state: "minted_elsewhere" }
   | { state: "not_eligible" };
@@ -61,7 +72,12 @@ export type FounderNftError = {
     | "identity_conflict"
     | "not_available"
     | "chain_unavailable"
-    | "verification_failed";
+    | "verification_failed"
+    | "wallet_auth_missing"
+    | "wallet_auth_invalid"
+    | "wallet_auth_expired"
+    | "wallet_auth_replayed"
+    | "wallet_auth_chain";
   /** Which missing piece makes the feature unavailable (503 only). */
   reason?: "contract" | "signer" | "human_passport";
   /** Current state when the requested action does not fit it (409 `not_available`). */
@@ -147,19 +163,23 @@ async function evaluate(
     }
 
     const founder = await deps.loadFounder(userId);
-    const hpWallet = validWallet(founder?.passportWallet);
-    const wallet =
-      hpWallet ?? (founder && founder.verificationLevel >= VERIFICATION_LEVEL_STRONG ? validWallet(founder.walletAddress) : null);
-    if (!founder || !wallet) return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
+    if (!founder) return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
+    const hpWallet = validWallet(founder.passportWallet);
+    const strong = founder.verificationLevel >= VERIFICATION_LEVEL_STRONG;
 
-    const stamps = await deps.fetchNullifiers(wallet);
+    // Stamps of the wallet that will send the transaction. A new address presents the same
+    // nullifiers Human Passport already scored elsewhere (often with dedup and score 0).
+    const stamps = await deps.fetchNullifiers(address);
     if (!stamps.ok) {
-      if (stamps.error === "not_configured") return fail(503, "not_configured", { reason: "human_passport" });
+      if (stamps.error === "not_configured") {
+        if (!strong) return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
+        return fail(503, "not_configured", { reason: "human_passport" });
+      }
       if (stamps.error === "verification_failed") return fail(502, "verification_failed");
       return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
     }
     const nullifiers = stamps.nullifiers;
-    const strong = founder.verificationLevel >= VERIFICATION_LEVEL_STRONG;
+    const deduped = stamps.deduped === true;
 
     const person = await deps.findPerson(nullifiers);
     if (person.kind === "conflict") return fail(409, "identity_conflict");
@@ -168,7 +188,7 @@ async function evaluate(
       const tokenId = await reader.tokenOfPerson(personId);
       if (tokenId > BigInt(0)) {
         const oldHolder = await reader.ownerOf(tokenId);
-        if (!oldHolder || !hpWallet) {
+        if (!oldHolder) {
           return { ok: true, value: { ...base, nullifiers, status: { state: "minted_elsewhere" } } };
         }
         const pending = live(await reader.pendingRebind(personId), oldHolder);
@@ -184,20 +204,26 @@ async function evaluate(
             },
           };
         }
-        return {
-          ok: true,
-          value: {
-            ...base,
-            nullifiers,
-            personId,
-            oldHolder,
-            status: { state: "rebind_available", tokenId: tokenId.toString(), personId, oldHolder },
-          },
-        };
+        // Below level 2, or stamps HP itself marked dedup: this account cannot mint. Rebind only.
+        // A level-2 founder still needs the signature-proven passport wallet for the other path.
+        const dedup = deduped || !strong;
+        if (dedup || hpWallet) {
+          return {
+            ok: true,
+            value: {
+              ...base,
+              nullifiers,
+              personId,
+              oldHolder,
+              status: { state: "rebind_available", tokenId: tokenId.toString(), personId, oldHolder, dedup },
+            },
+          };
+        }
+        return { ok: true, value: { ...base, nullifiers, status: { state: "minted_elsewhere" } } };
       }
     }
 
-    if (!strong || nullifiers.length === 0) {
+    if (!strong || deduped || nullifiers.length === 0) {
       return { ok: true, value: { ...base, nullifiers, status: { state: "not_eligible" } } };
     }
     const deadline = await reader.mintDeadline();
@@ -219,15 +245,25 @@ export async function getFounderNftStatus(
   return { ok: true, status: result.value.status, signerReady: deps.readSigner() !== null };
 }
 
+const WALLET_AUTH_ERROR: Record<string, FounderNftError["error"]> = {
+  missing: "wallet_auth_missing",
+  invalid_signature: "wallet_auth_invalid",
+  expired: "wallet_auth_expired",
+  replayed: "wallet_auth_replayed",
+  wrong_chain: "wallet_auth_chain",
+};
+
 /**
  * EIP-712 Mint / Rebind signature for `address` (which must be the wallet that will send the
- * transaction: the contract requires `msg.sender == to / newHolder`). Only issued when the current
- * state allows the action, so a Telegram-only user can never obtain one.
+ * transaction: the contract requires `msg.sender == to / newHolder`). Issued only when that wallet
+ * has just signed a server nonce and the current state allows the action. A Telegram-only user,
+ * and a deduped account that already has a token, never receive a mint signature.
  */
 export async function issueFounderNftSignature(
   action: string,
   userId: string,
   address: string,
+  walletAuth: FounderNftWalletAuthProof | null,
   deps: FounderNftServiceDeps,
 ): Promise<FounderNftSignatureResult> {
   if (action !== "mint" && action !== "rebind") return fail(400, "invalid_action");
@@ -235,6 +271,16 @@ export async function issueFounderNftSignature(
   if (!config) return fail(503, "not_configured", { reason: "contract" });
   const signer = deps.readSigner();
   if (!signer) return fail(503, "not_configured", { reason: "signer" });
+  if (!validWallet(address)) return fail(400, "invalid_address");
+
+  const auth = await verifyFounderNftWalletAuth({
+    address,
+    proof: walletAuth,
+    nowMs: deps.now() * 1000,
+    readNonce: (nonce) => deps.readWalletAuth(userId, nonce),
+    consumeNonce: (nonce) => deps.consumeWalletAuth(userId, nonce),
+  });
+  if (!auth.ok) return fail(403, WALLET_AUTH_ERROR[auth.reason] ?? "wallet_auth_invalid");
 
   const result = await evaluate(userId, address, deps);
   if (!result.ok) return result;

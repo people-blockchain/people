@@ -31,6 +31,26 @@ const transferEvent = parseAbiItem("event Transfer(address indexed from, address
 const SCAN_LIMIT = 500;
 const SCAN_CHUNK = 25;
 
+/**
+ * Cosmos EVM rejects `eth_getLogs` over more than 10,000 blocks. Each window stays at or under
+ * 9,000, matching the rest of the site. A holder lookup never uses one open-ended range.
+ */
+export const FOUNDER_NFT_LOG_WINDOW_BLOCKS = BigInt(9_000);
+
+export function founderNftLogWindows(
+  fromBlock: bigint,
+  toBlock: bigint,
+  size = FOUNDER_NFT_LOG_WINDOW_BLOCKS,
+): Array<{ fromBlock: bigint; toBlock: bigint }> {
+  if (size <= BigInt(0) || toBlock < fromBlock) return [];
+  const out: Array<{ fromBlock: bigint; toBlock: bigint }> = [];
+  for (let start = fromBlock; start <= toBlock; start += size) {
+    const end = start + size - BigInt(1);
+    out.push({ fromBlock: start, toBlock: end > toBlock ? toBlock : end });
+  }
+  return out;
+}
+
 export function createFounderNftViemClient(config: FounderNftPublicConfig, rpcUrl: string): PublicClient {
   const chain = defineChain({
     id: config.chainId,
@@ -61,14 +81,24 @@ export function createFounderNftChainReader(client: PublicClient, config: Founde
       if ((await reader.balanceOf(owner)) === BigInt(0)) return BigInt(0);
       const want = owner.toLowerCase();
       try {
-        const logs = await client.getLogs({ address, event: transferEvent, args: { to: owner }, fromBlock: "earliest" });
-        for (const log of [...logs].reverse()) {
-          const id = log.args.tokenId;
-          if (id === undefined) continue;
-          if ((await reader.ownerOf(id))?.toLowerCase() === want) return id;
+        const latest = await client.getBlockNumber();
+        const windows = founderNftLogWindows(BigInt(0), latest).reverse();
+        for (const window of windows) {
+          const logs = await client.getLogs({
+            address,
+            event: transferEvent,
+            args: { to: owner },
+            fromBlock: window.fromBlock,
+            toBlock: window.toBlock,
+          });
+          for (const log of [...logs].reverse()) {
+            const id = log.args.tokenId;
+            if (id === undefined) continue;
+            if ((await reader.ownerOf(id))?.toLowerCase() === want) return id;
+          }
         }
       } catch {
-        /* node refuses the log range: fall back to walking the (small) id space */
+        /* a window was refused: fall back to walking the (small) id space */
       }
       const total = await reader.totalSupply();
       const last = total > BigInt(SCAN_LIMIT) ? SCAN_LIMIT : Number(total);

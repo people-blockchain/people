@@ -4,6 +4,8 @@ import { decodeFunctionData, encodeFunctionData, getAddress } from "viem";
 import { founderNftCopy, fillFounderNftTemplate } from "../src/lib/founder-nft-content.ts";
 import { founderNftListedTokenIds, listFounderNftRows } from "../src/lib/evm/founder-nft-rows.ts";
 import { founderNftAbi } from "../src/lib/founders/founder-nft-abi.ts";
+import { createFounderNftChainReader, founderNftLogWindows } from "../src/lib/founders/founder-nft-chain.ts";
+import { readFounderNftPublicConfig } from "../src/lib/founders/founder-nft-config.ts";
 import {
   buildFounderNftCancelRequest,
   buildFounderNftExecuteRequest,
@@ -52,6 +54,9 @@ test("wallet and API errors map to copy keys", () => {
   assert.equal(founderNftWriteErrorKey(new Error("NotHolder")), "errNotHolder");
   assert.equal(founderNftWriteErrorKey(new Error("something else")), "errGeneric");
   assert.equal(founderNftApiErrorKey(503, "not_configured"), "errNotConfigured");
+  assert.equal(founderNftApiErrorKey(403, "wallet_auth_missing"), "errWalletAuth");
+  assert.equal(founderNftApiErrorKey(403, "wallet_auth_expired"), "errExpired");
+  assert.equal(founderNftApiErrorKey(403, "wallet_auth_chain"), "errWalletAuth");
   assert.equal(founderNftApiErrorKey(403, "hp_required"), "errNotEligible");
   assert.equal(founderNftApiErrorKey(409, "identity_conflict"), "errConflict");
   assert.equal(founderNftApiErrorKey(502, "chain_unavailable"), "errUnavailable");
@@ -103,8 +108,12 @@ test("copy template and locale keys", () => {
   for (const [lang, copy] of Object.entries(founderNftCopy)) {
     assert.deepEqual(Object.keys(copy).sort(), enKeys, lang);
     if (lang !== "en") assert.notEqual(copy.mintButton, founderNftCopy.en.mintButton, lang);
+    if (lang !== "en") assert.notEqual(copy.dedupLead, founderNftCopy.en.dedupLead, lang);
+    if (lang !== "en") assert.notEqual(copy.errWalletAuth, founderNftCopy.en.errWalletAuth, lang);
     assert.match(copy.yourNft, /\{\{n\}\}/, lang);
     assert.match(copy.rebindLead, /\{\{holder\}\}/, lang);
+    assert.match(copy.dedupLead, /\{\{n\}\}/, lang);
+    assert.match(copy.dedupLead, /\{\{holder\}\}/, lang);
   }
 });
 
@@ -119,8 +128,59 @@ test("explorer lists ids 1..min(supply, 50) and skips the chain when unconfigure
   try {
     assert.deepEqual(await listFounderNftRows(holder), []);
     assert.deepEqual(await listFounderNftRows(), []);
+    process.env.NEXT_PUBLIC_FOUNDER_NFT_ADDRESS = "not-an-address";
+    assert.deepEqual(await listFounderNftRows(holder), []);
+    process.env.NEXT_PUBLIC_FOUNDER_NFT_ADDRESS = "";
+    assert.deepEqual(await listFounderNftRows(), []);
   } finally {
     if (previous === undefined) delete process.env.NEXT_PUBLIC_FOUNDER_NFT_ADDRESS;
     else process.env.NEXT_PUBLIC_FOUNDER_NFT_ADDRESS = previous;
   }
+});
+
+test("an empty, invalid, or deployment-mismatched collection address disables the feature", () => {
+  const listed = getAddress("0x0000000000000000000000000000000000000004");
+  const env = getAddress("0x0000000000000000000000000000000000000005");
+  assert.equal(readFounderNftPublicConfig({ address: "" }, {}), null);
+  assert.equal(readFounderNftPublicConfig({ address: "not-an-address" }, {}), null);
+  assert.equal(readFounderNftPublicConfig({ address: env }, { founderNft: listed }), null);
+  assert.equal(readFounderNftPublicConfig({ address: env }, { peopleFounderNft: "not-an-address" }), null);
+  assert.deepEqual(readFounderNftPublicConfig({ address: env }, { founderNft: env }), { address: env, chainId: 97401 });
+  assert.deepEqual(readFounderNftPublicConfig({ address: env, chainId: "nope" }, {}), { address: env, chainId: 97401 });
+});
+
+test("log windows stay within 9,000 blocks and cover the range", () => {
+  const windows = founderNftLogWindows(0n, 25_000n);
+  let cursor = 0n;
+  for (const window of windows) {
+    assert.equal(window.fromBlock, cursor);
+    assert.ok(window.toBlock >= window.fromBlock);
+    assert.ok(window.toBlock - window.fromBlock + 1n <= 9_000n);
+    cursor = window.toBlock + 1n;
+  }
+  assert.equal(cursor, 25_001n);
+  assert.deepEqual(founderNftLogWindows(5n, 4n), []);
+});
+
+test("tokenOfOwner queries getLogs in bounded windows and never an open range", async () => {
+  const calls = [];
+  const client = {
+    getBlockNumber: async () => 12_000n,
+    getLogs: async (args) => {
+      calls.push(args);
+      assert.notEqual(args.fromBlock, "earliest");
+      assert.notEqual(args.toBlock, "latest");
+      assert.equal(typeof args.fromBlock, "bigint");
+      assert.ok(args.toBlock - args.fromBlock + 1n <= 9_000n);
+      return [];
+    },
+    readContract: async (args) => {
+      if (args.functionName === "balanceOf") return 1n;
+      if (args.functionName === "totalSupply") return 0n;
+      return null;
+    },
+  };
+  const chainReader = createFounderNftChainReader(client, config);
+  assert.equal(await chainReader.tokenOfOwner(holder), 0n);
+  assert.equal(calls.length, 2);
 });
