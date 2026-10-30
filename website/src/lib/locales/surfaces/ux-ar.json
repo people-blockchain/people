@@ -48,6 +48,8 @@
   "pool": "المجمع",
   "noTx": "لا توجد معاملات بعد — أجرِ أول معاملة من محفظتك",
   "loadMore": "تحميل المزيد",
+  "historyLoadingOlder": "جارٍ تحميل السجل الأقدم…",
+  "historyPartial": "تم تحميل السجل جزئيًا",
   "several": "عدة مستلمين",
   "yourBalance": "رصيدك: {amount} PPL",
   "notEnoughFee": "لا يكفي PPL للرسوم. احصل أولًا على PPL تجريبي من محفظتك.",

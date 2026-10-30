@@ -48,6 +48,8 @@
   "pool": "Pool",
   "noTx": "No transactions yet — make one in your wallet",
   "loadMore": "Load more",
+  "historyLoadingOlder": "Loading older history…",
+  "historyPartial": "History partially loaded",
   "several": "Several recipients",
   "yourBalance": "Your balance: {amount} PPL",
   "notEnoughFee": "Not enough PPL for the fee. Get test PPL in your wallet first.",

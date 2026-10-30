@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { networkJson } from "@/lib/network-client";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
-import { forgetPending, operationStatus, readPending, type WalletOperation } from "@/lib/wallet-activity";
+import { forgetPending, operationStatus, parseHistoryResponse, readPending, type WalletOperation } from "@/lib/wallet-activity";
 import { formatTokenBalance, type TransferAsset } from "@/lib/token-transfer";
 import { formatPpl, txAmountAssetId } from "@/lib/asset-amounts";
 import { uxCopy, displaySymbol, txTypeLabel } from "@/lib/ux-copy";
@@ -15,17 +15,34 @@ export function WalletHistory({address, chainId, revision, assets}: {address:str
   const [limit,setLimit] = useState(50); const [filter,setFilter] = useState("all");
   const [finalized,setFinalized] = useState(0); const [now,setNow] = useState(0);
   const [error,setError] = useState(false); const [more,setMore] = useState(false);
+  const [nextBeforeBlock,setNextBeforeBlock] = useState<number | undefined>(undefined);
+  const [loadingMore,setLoadingMore] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    void Promise.all([
-      networkJson<WalletOperation[]>(`address/${address}/transactions?limit=${limit}&offset=0`, {signal:controller.signal,cache:"no-store"}),
-      networkJson<{finalizedHeight?:number}>("metrics", {signal:controller.signal,cache:"no-store"}),
-    ]).then(([history,metrics]) => {
+    const metricsPromise = networkJson<{finalizedHeight?:number}>("metrics", {signal:controller.signal,cache:"no-store"});
+    void (async () => {
+      let before: number | undefined;
+      let combined: WalletOperation[] = [];
+      let hasMore = false;
+      let next: number | undefined;
+      for (let round = 0; round < 4; round++) {
+        const params = new URLSearchParams({limit:String(limit)});
+        if (before !== undefined) params.set("beforeBlock", String(before));
+        const body = await networkJson<unknown>(`address/${address}/transactions?${params}`, {signal:controller.signal,cache:"no-store"});
+        const parsed = parseHistoryResponse(body);
+        const seen = new Set(combined.map(tx => tx.id));
+        combined = [...combined, ...parsed.items.filter(tx => !seen.has(tx.id))];
+        next = parsed.nextBeforeBlock;
+        hasMore = parsed.hasMore || (Array.isArray(body) && parsed.items.length >= limit) || (parsed.partial && next !== undefined && combined.length > 0);
+        if (!(parsed.partial && combined.length === 0 && next !== undefined && next !== before)) break;
+        before = next;
+      }
+      const metrics = await metricsPromise;
       if (controller.signal.aborted) return;
-      forgetPending(chainId,address,history.map(tx=>tx.id));
-      setRows([...readPending(chainId,address),...history].sort((a,b)=>b.timestamp-a.timestamp));
-      setFinalized(metrics.finalizedHeight ?? 0); setNow(Date.now()); setError(false); setMore(history.length>=limit);
-    }).catch(() => {if (!controller.signal.aborted) {setError(true);setRows(prev => [...readPending(chainId,address),...prev.filter(tx=>tx.blockHeight)]);setNow(Date.now());}});
+      forgetPending(chainId,address,combined.map(tx=>tx.id));
+      setRows([...readPending(chainId,address),...combined].sort((a,b)=>b.timestamp-a.timestamp));
+      setFinalized(metrics.finalizedHeight ?? 0); setNow(Date.now()); setError(false); setMore(hasMore); setNextBeforeBlock(next);
+    })().catch(() => {if (!controller.signal.aborted) {setError(true);setRows(prev => [...readPending(chainId,address),...prev.filter(tx=>tx.blockHeight)]);setNow(Date.now());}});
     return () => controller.abort();
   },[address,chainId,revision,limit]);
   return <section className="rounded-2xl border border-line bg-surface p-4"><h2 className="font-bold">{c.history}</h2>
@@ -37,6 +54,18 @@ export function WalletHistory({address, chainId, revision, assets}: {address:str
       const outgoing=tx.from.toLowerCase()===address.toLowerCase(); const amountAsset=txAmountAssetId(tx); const asset=assets.find(a=>a.assetId===amountAsset); const native=amountAsset==="ppl";
       const operationName: Record<string,string> = { transfer:c.transferType, nftTransfer:c.nftTransferType, registerParticipant:c.registrationType, participantReferral:c.referralType, growthClaim:c.rewardsType, nftMint:c.nftMintType };
       return <li key={tx.id} className="py-4"><div className="flex flex-wrap justify-between gap-2"><Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="text-brand hover:underline">{outgoing?c.outgoing:c.incoming} · {operationName[tx.type] ?? txTypeLabel(tx.type, u)}</Link><span className="break-all font-mono text-sm">{tx.type==="nftTransfer"?String(tx.payload?.nftId??"NFT"):`${native?formatPpl(tx.amount):formatTokenBalance(tx.amount,asset?.decimals??-1)} ${native?"PPL":displaySymbol(amountAsset, asset?.symbol, u)}`}</span></div><p className="mt-1 break-all font-mono text-xs text-ink-3">{outgoing?tx.to:tx.from==="faucet"?c.faucetSender:tx.from}</p><p className="mt-2 text-xs text-ink-2">{c[operationStatus(tx,finalized,now)]} · {new Date(tx.timestamp).toLocaleString(lang)}</p>{typeof tx.payload?.memo==="string" && <p className="mt-2 break-words text-sm">{c.memo}: {tx.payload.memo}</p>}</li>;
-    })}</ul>{more && <button type="button" className="mt-3 text-sm text-brand" onClick={()=>setLimit(l=>l+50)}>{c.more}</button>}
+    })}</ul>{more && <button type="button" className="mt-3 text-sm text-brand" disabled={loadingMore} onClick={() => {
+      if (nextBeforeBlock === undefined) { setLimit(l => l + 50); return; }
+      setLoadingMore(true);
+      const params = new URLSearchParams({limit:String(limit), beforeBlock:String(nextBeforeBlock)});
+      void networkJson<unknown>(`address/${address}/transactions?${params}`, {cache:"no-store"}).then(body => {
+        const parsed = parseHistoryResponse(body);
+        setRows(prev => {
+          const seen = new Set(prev.map(tx => tx.id));
+          return [...prev, ...parsed.items.filter(tx => !seen.has(tx.id))].sort((a,b)=>b.timestamp-a.timestamp);
+        });
+        setMore(parsed.hasMore || (parsed.partial && parsed.nextBeforeBlock !== undefined)); setNextBeforeBlock(parsed.nextBeforeBlock); setError(false);
+      }).catch(() => setError(true)).finally(() => setLoadingMore(false));
+    }}>{c.more}</button>}
   </section>;
 }

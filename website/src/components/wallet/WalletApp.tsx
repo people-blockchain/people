@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { connectExplorer } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
@@ -56,6 +56,25 @@ interface FaucetFundResult {
 /** The faucet allows 100 PPL per address per day; the one-tap action always asks for the max. */
 const FAUCET_MAX_PPL = "100";
 
+const WALLET_TABS = ["tokens", "nft", "history"] as const;
+type WalletTab = (typeof WALLET_TABS)[number];
+
+/** WAI-ARIA automatic tabs: ArrowLeft/ArrowRight wrap, Home/End jump, and the focused tab is selected. */
+function onWalletTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, current: WalletTab, select: (tab: WalletTab) => void) {
+  const index = WALLET_TABS.indexOf(current);
+  const next =
+    event.key === "ArrowRight" ? WALLET_TABS[(index + 1) % WALLET_TABS.length]
+    : event.key === "ArrowLeft" ? WALLET_TABS[(index + WALLET_TABS.length - 1) % WALLET_TABS.length]
+    : event.key === "Home" ? WALLET_TABS[0]
+    : event.key === "End" ? WALLET_TABS[WALLET_TABS.length - 1]
+    : null;
+  if (!next) return;
+  event.preventDefault();
+  select(next);
+  const id = `wallet-tab-${next}`;
+  requestAnimationFrame(() => document.getElementById(id)?.focus());
+}
+
 export function WalletApp({ wsUrl, chainId, nftTransfersEnabled = false }: { wsUrl: string; chainId: string; nftTransfersEnabled?: boolean }) {
   const { session } = useWallet();
   return <WalletView key={session?.address ?? "locked"} wsUrl={wsUrl} chainId={chainId} nftTransfersEnabled={nftTransfersEnabled} />;
@@ -81,7 +100,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     changePassword,
   } = useWallet();
   const isCloud = session?.kind === "cloud";
-  const [tab, setTab] = useState<"tokens" | "nft" | "history">("tokens");
+  const [tab, setTab] = useState<WalletTab>("tokens");
   const [sheet, setSheet] = useState<null | "send" | "receive" | "settings">(null);
   const [pwCurrent, setPwCurrent] = useState("");
   const [pwNew, setPwNew] = useState("");
@@ -564,9 +583,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
 
           <WalletInstallButton />
 
-          <div role="tablist" aria-label={c.walletTabsAria} className="grid grid-cols-3 gap-1 rounded-2xl border border-line bg-surface p-1.5">
-            {(["tokens", "nft", "history"] as const).map((value) => (
-              <button key={value} type="button" role="tab" id={`wallet-tab-${value}`} aria-selected={tab === value} aria-controls={`wallet-panel-${value}`} tabIndex={tab === value ? 0 : -1} onClick={() => setTab(value)} className={`min-w-0 rounded-xl px-1 py-3 text-xs font-semibold sm:text-sm ${tab === value ? "bg-brand text-brand-ink" : "text-ink-3 hover:bg-surface-2 hover:text-ink"}`}>
+          <div role="tablist" aria-label={c.walletTabsAria} className="scroll-mt-20 grid grid-cols-3 gap-1 rounded-2xl border border-line bg-surface p-1.5">
+            {WALLET_TABS.map((value) => (
+              <button key={value} type="button" role="tab" id={`wallet-tab-${value}`} aria-selected={tab === value} aria-controls={`wallet-panel-${value}`} tabIndex={tab === value ? 0 : -1} onClick={() => setTab(value)} onKeyDown={(event) => onWalletTabKeyDown(event, value, setTab)} className={`scroll-mt-20 min-w-0 rounded-xl px-1 py-3 text-xs font-semibold sm:text-sm ${tab === value ? "bg-brand text-brand-ink" : "text-ink-3 hover:bg-surface-2 hover:text-ink"}`}>
                 {value === "tokens" ? c.tokensTab : value === "nft" ? c.nftTab : c.historyTab}
               </button>
             ))}

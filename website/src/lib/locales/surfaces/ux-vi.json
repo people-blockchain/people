@@ -48,6 +48,8 @@
   "pool": "Pool",
   "noTx": "Chưa có giao dịch — hãy thực hiện giao dịch đầu tiên trong ví",
   "loadMore": "Tải thêm",
+  "historyLoadingOlder": "Đang tải lịch sử cũ hơn…",
+  "historyPartial": "Lịch sử mới tải một phần",
   "several": "Nhiều người nhận",
   "yourBalance": "Số dư của bạn: {amount} PPL",
   "notEnoughFee": "Không đủ PPL để trả phí. Hãy nhận PPL thử nghiệm trong ví trước.",
