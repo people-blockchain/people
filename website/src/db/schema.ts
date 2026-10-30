@@ -780,7 +780,8 @@ export const apiRateLimits = pgTable(
 );
 
 /**
- * Fixed-window counters for direct-upload sign requests, one row per client per window.
+ * Older fixed-window counters. Kept so existing databases are not rewritten.
+ * New decisions use `uploadSignRateHits`.
  * DDL is applied from `upload-sign-rate-sql.mjs` during schema bootstrap.
  */
 export const uploadSignRates = pgTable(
@@ -791,6 +792,17 @@ export const uploadSignRates = pgTable(
     expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
   },
   (row) => [index("upload_sign_rate_expires_idx").on(row.expiresAt)],
+);
+
+/** One row per sign attempt that reached the limiter, for a true sliding window. */
+export const uploadSignRateHits = pgTable(
+  "upload_sign_rate_hit",
+  {
+    id: text("id").primaryKey(),
+    subjectKey: text("subjectKey").notNull(),
+    hitAt: timestamp("hitAt", { mode: "date" }).notNull(),
+  },
+  (row) => [index("upload_sign_rate_hit_subject_idx").on(row.subjectKey, row.hitAt)],
 );
 
 /**
