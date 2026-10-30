@@ -1,6 +1,7 @@
 // Upload size pre-check, response parsing (never raw body text) and the server side of the
 // 1.5 MB limit and GIF support. Route code is called directly with a stubbed Pinata fetch.
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import test, { beforeEach, afterEach } from "node:test";
 import { resetRateLimitStoresForTests, setSharedRateLimitBackendForTests } from "../src/lib/api-rate-limit.ts";
 import { POST as nftImageRoute } from "../src/app/api/factory/nft/image/route.ts";
@@ -19,6 +20,7 @@ const DIR_CID = "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 const FLAT_CID = "QmYwAPJzv5CZsnA625s3Xv2gteR83C12YCZqGbv3bdgqm4";
 const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 73, 72, 68, 82]);
 const gif = (magic = "GIF89a") => Buffer.concat([Buffer.from(magic, "latin1"), Buffer.from([1, 0, 1, 0, 0x80, 0, 0, 0x3b])]);
+const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 
 const copy = {
   hint: "hint",
@@ -191,6 +193,8 @@ test("factory media route: GIF is accepted byte for byte, bad bytes are rejected
     assert.equal(pinned[0].type, "image/gif");
     assert.ok(pinned[0].name.endsWith(".gif"));
     assert.ok(pinned[0].bytes.equals(bytes), "stored bytes equal the upload");
+    assert.equal(sha256(pinned[0].bytes), sha256(bytes));
+    assert.equal(body.sha256, sha256(bytes));
   }
   pinned = [];
   let res = await processMediaUpload(formRequest(PNG, "a.gif", "image/gif"));
@@ -228,6 +232,8 @@ test("nft image route: oversize is JSON 413 with maxBytes; GIF is pinned as is",
   assert.equal(body.uri, `ipfs://${DIR_CID}/image.gif`);
   assert.equal(pinned[0].type, "image/gif");
   assert.ok(pinned[0].bytes.equals(bytes));
+  assert.equal(sha256(pinned[0].bytes), sha256(bytes));
+  assert.equal(body.sha256, sha256(bytes));
 
   pinned = [];
   res = await nftImageRoute(formRequest(PNG, "a.gif", "image/gif", "http://localhost/api/factory/nft/image"));
