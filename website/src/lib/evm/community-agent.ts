@@ -1,5 +1,5 @@
 import { getAddress } from "viem";
-import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
+import { evmJsonRpc } from "@/lib/evm/rpc-server";
 import { readEvmDeployments } from "@/lib/evm/config";
 import { fetchLogsWindowed } from "@/lib/evm/chain-catalog";
 
@@ -13,7 +13,7 @@ const AGENT_WALLET_V2_DEPLOY_BLOCK = 220_464;
 
 export type AgentSpendEvent = {
   recipient: string;
-  amountPpl: number;
+  amountWei: string;
   blockNumber: number;
   transactionHash: string;
   timestampMs: number | null;
@@ -23,7 +23,7 @@ export type CommunityAgentSnapshot = {
   wallet: string;
   executor: string;
   guardian: string;
-  balancePpl: number;
+  balanceWei: string;
   events: AgentSpendEvent[];
 };
 
@@ -71,10 +71,10 @@ export async function fetchCommunityAgentSnapshot(limit = 10): Promise<Community
       const topics = log.topics ?? [];
       const recipientTopic = topics[2];
       const recipient = recipientTopic && recipientTopic.length >= 66 ? getAddress(`0x${recipientTopic.slice(26)}`) : "";
-      const amountPpl = weiToPpl(BigInt(log.data ?? "0x0"));
+      const amountWei = BigInt(log.data ?? "0x0").toString();
       return {
         recipient,
-        amountPpl,
+        amountWei,
         blockNumber: hexToNumber(log.blockNumber),
         transactionHash: log.transactionHash ?? "",
       };
@@ -108,7 +108,7 @@ export async function fetchCommunityAgentSnapshot(limit = 10): Promise<Community
     wallet: walletAddr,
     executor: getAddress(executor),
     guardian: getAddress(guardian),
-    balancePpl: weiToPpl(BigInt(balanceHex ?? "0x0")),
+    balanceWei: BigInt(balanceHex ?? "0x0").toString(),
     events,
   };
 }

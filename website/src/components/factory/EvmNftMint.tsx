@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { formatEther, getAddress, isAddress, type Address } from "viem";
+import { getAddress, isAddress, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { uxCopy } from "@/lib/ux-copy";
@@ -11,7 +11,7 @@ import { nftMediaCopy } from "@/lib/nft-media-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
-import { formatPpl } from "@/lib/asset-amounts";
+import { formatPplExact } from "@/lib/asset-amounts";
 import { erc20Abi } from "@/lib/evm/client";
 import {
   nftFactoryAbi,
@@ -22,7 +22,6 @@ import {
   collectionFromReceipt,
   tokenIdFromReceipt,
   classifyNftWriteError,
-  feeWeiToPpl,
   findExistingMint,
   peoplescanNftUrl,
 } from "@/lib/evm/nft-factory";
@@ -97,12 +96,6 @@ function useObjectUrl(picked: Picked | null): string | null {
     return () => URL.revokeObjectURL(objectUrl);
   }, [picked]);
   return url;
-}
-
-function formatPplWei(wei: bigint): string {
-  const [whole, fraction = ""] = formatEther(wei).split(".");
-  const trimmed = fraction.slice(0, 4).replace(/0+$/, "");
-  return trimmed ? `${whole}.${trimmed}` : whole;
 }
 
 function mintErrorState(err: unknown): ErrorState {
@@ -669,8 +662,8 @@ export function EvmNftMint() {
       : error.key === "errInsufficientPpl"
         ? error.neededWei !== undefined && error.balanceWei !== undefined
           ? nm.errInsufficientPpl
-              .replaceAll("{needed}", formatPplWei(error.neededWei))
-              .replaceAll("{balance}", formatPplWei(error.balanceWei))
+              .replaceAll("{needed}", formatPplExact(error.neededWei))
+              .replaceAll("{balance}", formatPplExact(error.balanceWei))
           : nm.errInsufficientPplGeneric
         : nm[error.key])
     : null;
@@ -790,7 +783,7 @@ export function EvmNftMint() {
           />
 
           <p className="text-sm text-ink-2">
-            {form.feeLabel}: {feeFailed ? form.feeUnset : fee === null ? "…" : `${formatPpl(feeWeiToPpl(fee))} PPL`}
+            {form.feeLabel}: {feeFailed ? form.feeUnset : fee === null ? "…" : `${formatPplExact(fee)} PPL`}
           </p>
           <p className="text-xs text-ink-3">{u.feeHint}</p>
 

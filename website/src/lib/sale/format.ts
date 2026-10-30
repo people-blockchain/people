@@ -51,6 +51,11 @@ export function usd(amount: number, lang = "en"): string {
   return withCurrency(Math.round(amount).toLocaleString(intlLocale(lang), { useGrouping: true }), lang);
 }
 
+/** A dollar string that is already fixed-point text, for example `0.50`. */
+export function usdText(amountText: string, lang = "en"): string {
+  return withCurrency(amountText, lang);
+}
+
 /** Dollars and cents, e.g. `$0.01` — for fees, where whole dollars would read as `$0`. */
 export function usdCents(amount: number, lang = "en"): string {
   return withCurrency(

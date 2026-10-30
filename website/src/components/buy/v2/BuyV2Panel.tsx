@@ -11,7 +11,10 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
 import { buyCopy } from "@/lib/buy-content";
-import { fillCopy, intlLocale, ppl, pricePerPpl, usd, usdCents, usdcAmount } from "@/lib/sale/format";
+import { fillCopy, intlLocale, usd, usdCents, usdText, usdcAmount } from "@/lib/sale/format";
+import { parseUsd6Amount } from "@/lib/sale/amount";
+import { formatPplExact, formatUsd6, formatUsdWad, pplWeiToUsd6 } from "@/lib/asset-amounts";
+import { PplAmount } from "@/components/ui/PplAmount";
 import { V2_PHASES, V2_SALE } from "@/lib/sale/v2/constants";
 import {
   estimatePplOut,
@@ -21,12 +24,9 @@ import {
   parseV2PreviewState,
   partialTopUpAmount,
   phaseView,
-  pplWeiToNumber,
   readV2Env,
   resolveV2Chain,
   sellBackUnlockMs,
-  spotPriceWadToUsd,
-  validateV2BuyAmount,
 } from "@/lib/sale/v2/logic";
 import { useV2Sale, useV2Refresh } from "@/lib/sale/v2/useV2Sale";
 import { useV2Buy, type V2TxStatus } from "@/lib/sale/v2/useV2Buy";
@@ -117,7 +117,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const [amount, setAmount] = useState("100");
   const [network, setNetwork] = useState<NetworkChoice>("base");
   const [token, setToken] = useState<TokenChoice>("USDC");
-  const [swapReady, setSwapReady] = useState<number | null>(null);
+  const [swapReady, setSwapReady] = useState<bigint | null>(null);
   const [localPurchase, setLocalPurchase] = useState<Purchase | null>(null);
   const [partial, setPartial] = useState<{ receivedUsdc: number } | null>(null);
 
@@ -130,15 +130,27 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const verifiedOnChain = Boolean(snapshot?.personId);
   const canBuy = view.buyable && (!view.whitelist || verifiedOnChain);
 
-  const parsedAmount = Number.parseFloat(amount.replace(",", "."));
-  const validation = validateV2BuyAmount({ amountUsd: parsedAmount });
+  const usd6 = parseUsd6Amount(amount, 2);
+  const minUsd6 = BigInt(V2_SALE.minPerBuyUsd) * BigInt(1_000_000);
+  const maxUsd6 = BigInt(V2_SALE.maxPerBuyUsd) * BigInt(1_000_000);
+  const dayUsd6 = BigInt(V2_SALE.maxPerDayUsd) * BigInt(1_000_000);
+  const validation =
+    usd6 === null || usd6 <= BigInt(0)
+      ? ({ ok: false, reason: "invalid" } as const)
+      : usd6 < minUsd6
+        ? ({ ok: false, reason: "below_min" } as const)
+        : usd6 > maxUsd6
+          ? ({ ok: false, reason: "over_max" } as const)
+          : usd6 > dayUsd6
+            ? ({ ok: false, reason: "over_day" } as const)
+            : ({ ok: true, usd6 } as const);
   const spotPriceWad = snapshot?.spotPriceWad ?? BigInt(0);
-  const spotPriceUsd = spotPriceWadToUsd(spotPriceWad);
   const estimate =
     validation.ok && spotPriceWad > BigInt(0)
-      ? estimatePplOut(BigInt(Math.round(validation.amountUsd * 1_000_000)), spotPriceWad)
+      ? estimatePplOut(validation.usd6, spotPriceWad)
       : BigInt(0);
   const minimum = minPplOutFromEstimate(estimate);
+  const estimateUsd6 = pplWeiToUsd6(estimate, spotPriceWad);
 
   const needsSwap = network === "other" || token === "USDT";
   const purchase = preview?.purchase ?? localPurchase;
@@ -159,7 +171,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const canSign = Boolean(provider);
 
   const amountError =
-    validation.ok || !Number.isFinite(parsedAmount) || amount.trim() === ""
+    validation.ok || amount.trim() === ""
       ? null
       : validation.reason === "below_min"
         ? fillCopy(t.form.belowMin, { min: usd(V2_SALE.minPerBuyUsd, lang) })
@@ -180,7 +192,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
     if (ok) refresh();
   };
 
-  const runPurchase = async (value: number) => {
+  const runPurchase = async (value: bigint) => {
     if (!provider || !account) {
       onConnect();
       return;
@@ -190,7 +202,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
       chain,
       provider,
       account,
-      amountUsd: value,
+      amountIn: value,
       spotPriceWad: snapshot.spotPriceWad,
     });
     if (result) {
@@ -202,7 +214,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
       setPartial(null);
       refresh();
     } else if (needsSwap) {
-      setPartial({ receivedUsdc: value });
+      setPartial({ receivedUsdc: Number(value) / 1_000_000 });
     }
   };
 
@@ -218,12 +230,14 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
       return;
     }
     if (!validation.ok) return;
-    await runPurchase(validation.amountUsd);
+    await runPurchase(validation.usd6);
   };
 
   const onTopUp = async () => {
     if (!topUp || preview) return;
-    await runPurchase(topUp);
+    const topUpUsd6 = parseUsd6Amount(topUp.toFixed(2), 2);
+    if (topUpUsd6 === null || topUpUsd6 <= BigInt(0)) return;
+    await runPurchase(topUpUsd6);
   };
 
   const ctaDisabled =
@@ -266,7 +280,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
             <p className="text-base font-bold text-ink">{t.success.title}</p>
             <p className="mt-1 text-sm text-ink-2">
               {fillCopy(t.success.credited, {
-                ppl: ppl(pplWeiToNumber(purchase.pplOutWei), lang),
+                ppl: formatPplExact(purchase.pplOutWei),
                 address: shortAddress(account ?? "0x0000000000000000000000000000000000000000"),
               })}
             </p>
@@ -389,19 +403,26 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                 <div className="flex items-baseline justify-between gap-3">
                   <dt className="text-ink-2">{t.form.estimate}</dt>
                   <dd className="font-mono font-semibold text-ink" data-testid="v2-estimate">
-                    {estimate > BigInt(0) ? `${ppl(pplWeiToNumber(estimate), lang)} PPL` : "—"}
+                    {estimate > BigInt(0) ? (
+                      <>
+                        <PplAmount wei={estimate} />
+                        {estimateUsd6 > BigInt(0) ? ` ≈ ${usdText(formatUsd6(estimateUsd6), lang)}` : ""}
+                      </>
+                    ) : (
+                      "—"
+                    )}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3">
                   <dt className="text-ink-2">{t.form.minimum}</dt>
                   <dd className="font-mono font-semibold text-ink" data-testid="v2-minimum">
-                    {minimum > BigInt(0) ? `${ppl(pplWeiToNumber(minimum), lang)} PPL` : "—"}
+                    {minimum > BigInt(0) ? <PplAmount wei={minimum} /> : "—"}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3">
                   <dt className="text-ink-2">{t.form.price}</dt>
                   <dd className="font-mono font-semibold text-ink">
-                    {spotPriceUsd > 0 ? pricePerPpl(spotPriceUsd, lang) : "—"}
+                    {spotPriceWad > BigInt(0) ? usdText(formatUsdWad(spotPriceWad), lang) : "—"}
                   </dd>
                 </div>
                 <div className="flex items-baseline justify-between gap-3" data-testid="v2-fees">
@@ -439,7 +460,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                     recipient={account}
                     toAddressName={t.form.networkBase}
                     onBridgeComplete={() => {
-                      setSwapReady(validation.ok ? validation.amountUsd : null);
+                      setSwapReady(validation.ok ? validation.usd6 : null);
                       setPartial(null);
                     }}
                     testId="v2-lifi-widget"
