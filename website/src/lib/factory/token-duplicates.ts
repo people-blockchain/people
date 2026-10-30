@@ -35,3 +35,42 @@ export function findDuplicateTokens<T extends CatalogToken>(
   }
   return out;
 }
+
+export type CatalogAssetRow = {
+  assetId?: string;
+  tokenAddress?: string;
+  name?: string;
+  symbol?: string;
+  creator?: string;
+  imageUri?: string;
+};
+
+export type DuplicateCatalogToken = CatalogToken & { creator: string; image?: string };
+
+/** Maps server catalog rows (`GET assets`) to duplicate-check entries, creators included but never filtered. */
+export function catalogRowsToTokens(rows: unknown): DuplicateCatalogToken[] {
+  if (!Array.isArray(rows)) return [];
+  const out: DuplicateCatalogToken[] = [];
+  for (const row of rows as CatalogAssetRow[]) {
+    const address = (row?.tokenAddress ?? row?.assetId ?? "").toLowerCase();
+    if (!address) continue;
+    out.push({
+      creator: (row.creator ?? "").toLowerCase(),
+      address,
+      name: row.name ?? "",
+      symbol: row.symbol ?? "",
+      ...(row.imageUri ? { image: row.imageUri } : {}),
+    });
+  }
+  return out;
+}
+
+/**
+ * Whole-catalog source for the duplicate warning. It reads only the server-side catalog (factory
+ * logs, every creator), never browser storage, so the warning is identical in a clean browser.
+ */
+export async function loadDuplicateCatalog(
+  fetchAssets: () => Promise<unknown>,
+): Promise<DuplicateCatalogToken[]> {
+  return catalogRowsToTokens(await fetchAssets());
+}
