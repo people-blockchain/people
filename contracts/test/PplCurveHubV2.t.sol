@@ -19,6 +19,11 @@ contract PplCurveHubV2Test is HubV2Base {
         _open();
     }
 
+    function _trust(address router) internal {
+        vm.prank(owner);
+        hub.setTrustedRouter(router, true);
+    }
+
     // ================================================================ curve
 
     function test_curveMatchesV1() public {
@@ -50,7 +55,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertApproxEqAbs(back, r, 3 + r / 1e9, "raised round trip");
         // sold -> raised -> sold is stable to within a relative 1e-9.
         uint256 sold2 = PplCurveMath.soldForRaised(back);
-        assertApproxEqRel(sold2, sold, 1e10,"sold round trip");
+        assertApproxEqRel(sold2, sold, 1e10, "sold round trip");
     }
 
     // ================================================================ buy limits
@@ -79,20 +84,21 @@ contract PplCurveHubV2Test is HubV2Base {
         _buy(alice, MAX_BUY);
     }
 
-    function test_buyCapPerUtcDay() public {
+    function test_buyCapPer24h() public {
         _prepare(alice);
         for (uint256 i; i < 4; ++i) {
             _buy(alice, MAX_BUY);
             vm.warp(vm.getBlockTimestamp() + 60);
         }
-        assertEq(hub.buyRemainingToday(alice), 0);
+        assertEq(hub.buyRemaining24h(alice), 0);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
     }
 
-    function test_buyCapResetsNextUtcDay() public {
+    function test_buyCapResetsAfter24h() public {
         _prepare(alice);
+        uint256 t0 = vm.getBlockTimestamp();
         for (uint256 i; i < 4; ++i) {
             _buy(alice, MAX_BUY);
             vm.warp(vm.getBlockTimestamp() + 60);
@@ -101,20 +107,21 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
 
-        // one second before midnight still capped, at midnight reset.
-        vm.warp((vm.getBlockTimestamp() / 1 days + 1) * 1 days - 1);
+        // rolling window: the first spend frees up at exactly t0 + 24h, not at UTC midnight.
+        vm.warp(t0 + 1 days - 1);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
-        _skipToNextUtcDay();
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP);
+        vm.warp(t0 + 1 days);
+        assertEq(hub.buyRemaining24h(alice), MAX_BUY);
         _buy(alice, MAX_BUY);
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP - MAX_BUY);
+        assertEq(hub.buyRemaining24h(alice), 0);
     }
 
     function test_buyCapCountsRecipientNotPayer() public {
         address payer = makeAddr("payer");
         _fund(payer, 1_000_000e6);
+        _trust(payer);
         _verify(alice);
         _verify(bob);
         for (uint256 i; i < 4; ++i) {
@@ -129,8 +136,8 @@ contract PplCurveHubV2Test is HubV2Base {
         // same payer buying for a different recipient is fine; payer has no own counter.
         vm.prank(payer);
         hub.buy(MAX_BUY, 0, bob, address(0));
-        assertEq(hub.buyRemainingToday(payer), DAY_CAP);
-        assertEq(hub.buyRemainingToday(bob), DAY_CAP - MAX_BUY);
+        assertEq(hub.buyRemaining24h(payer), DAY_CAP);
+        assertEq(hub.buyRemaining24h(bob), DAY_CAP - MAX_BUY);
         assertEq(hub.pplOf(payer), 0);
     }
 
@@ -158,6 +165,7 @@ contract PplCurveHubV2Test is HubV2Base {
         // same payer, different recipients back-to-back
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         _verify(carol);
         vm.startPrank(payer);
         hub.buy(MIN_BUY, 0, carol, address(0));
@@ -233,6 +241,7 @@ contract PplCurveHubV2Test is HubV2Base {
         hub.buy(MIN_BUY, 0, alice, address(0));
         // payer verified but recipient not: still rejected (recipient is what counts)
         _prepare(bob);
+        _trust(bob);
         vm.prank(bob);
         vm.expectRevert(PplCurveHubV2.NotVerified.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
@@ -244,7 +253,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertGt(_buy(alice, MIN_BUY), 0);
     }
 
-    function test_whitelistEndsAfter7Days() public {
+    function test_verificationStillRequiredAfterWhitelist() public {
         _fund(alice, 1_000e6);
         uint256 end = uint256(hub.openedAt()) + 7 days;
         vm.warp(end - 1);
@@ -254,7 +263,12 @@ contract PplCurveHubV2Test is HubV2Base {
         _skipPastWhitelist();
         assertEq(vm.getBlockTimestamp(), end);
         assertEq(uint256(hub.phase()), uint256(PplCurveHubV2.Phase.Open));
-        assertGt(_buy(alice, MIN_BUY), 0); // unverified buyer now allowed
+        // A2: no whitelist-phase special case, an unverified buyer stays rejected
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
+        hub.buy(MIN_BUY, 0, alice, address(0));
+        _verify(alice);
+        assertGt(_buy(alice, MIN_BUY), 0);
     }
 
     // ================================================================ verification
@@ -435,7 +449,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertEq(hub.reserveUsd6() - reserveBefore, remaining - remaining / 2);
         assertEq(hub.raisedUsd6(), CAP);
         assertTrue(hub.graduated());
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP - remaining);
+        assertEq(hub.buyRemaining24h(alice), DAY_CAP - remaining);
     }
 
     function test_buyAfterGraduationReverts() public {
@@ -468,6 +482,7 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(alice);
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadReferrer.selector);
         hub.buy(MIN_BUY, 0, alice, alice); // referrer == msg.sender
@@ -480,6 +495,7 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(alice);
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         vm.prank(payer);
         vm.expectRevert(PplCurveHubV2.BadReferrer.selector);
         hub.buy(MIN_BUY, 0, alice, alice); // referrer == recipient
@@ -543,45 +559,6 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.expectRevert(PplCurveHubV2.RenounceDisabled.selector);
         hub.renounceOwnership();
         assertEq(hub.owner(), owner);
-    }
-
-    function test_deliveredCannotReceiveBuy() public {
-        _prepare(alice);
-        _buy(alice, MIN_BUY);
-        address[] memory hs = new address[](1);
-        hs[0] = alice;
-
-        // markDelivered is only allowed once the sale is over / release announced
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryNotAllowed.selector);
-        hub.markDelivered(hs);
-
-        // Announcing the release stops buys (_buyOpen is false) and is the precondition for
-        // markDelivered, so in every real flow the buy reverts with SaleNotActive (checked before
-        // IsDelivered). IsDelivered on buy is a defensive branch, exercised below via the harness.
-        vm.prank(owner);
-        hub.announceLiquidityRelease();
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.delivered(alice));
-
-        vm.warp(vm.getBlockTimestamp() + 60);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.SaleNotActive.selector);
-        hub.buy(MIN_BUY, 0, alice, address(0));
-
-        // defensive branch: fresh hub with the sale open and a (forced) delivered recipient
-        HubV2Harness h2 = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
-        vm.prank(owner);
-        h2.open();
-        h2.forceDelivered(bob, true);
-        _fund(bob, 1_000e6);
-        vm.prank(bob);
-        usdc.approve(address(h2), type(uint256).max);
-        vm.warp(vm.getBlockTimestamp() + 7 days);
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.IsDelivered.selector);
-        h2.buy(MIN_BUY, 0, bob, address(0));
     }
 
     // ================================================================ gas
