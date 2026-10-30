@@ -1,21 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { resolveAssetImageUrl } from "@/lib/asset-image-src";
 import { tokenIconByAddress } from "@/lib/token-icons";
-
-function imageUrl(value: unknown): string | null {
-  if (typeof value !== "string" || !value.trim()) return null;
-  const trimmed = value.trim();
-  // Site-relative images (bundled token icons).
-  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return trimmed;
-  try {
-    const source = trimmed.startsWith("ipfs://")
-      ? `https://ipfs.io/ipfs/${trimmed.slice(7).replace(/^ipfs\//, "")}`
-      : trimmed;
-    const url = new URL(source);
-    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password ? url.href : null;
-  } catch { return null; }
-}
 
 /** Stable 32-bit FNV-1a hash of a ticker, used for the fallback gradient. */
 export function tickerHash(text: string): number {
@@ -61,7 +48,7 @@ export function AssetImage({ src, name, nft = false, className = "h-10 w-10", as
   src?: unknown; name: string; nft?: boolean; className?: string; assetId?: string; tokenAddress?: string; testBadgeLabel?: string;
 }) {
   const { known, url: knownUrl } = nft ? { known: null, url: null } : knownAsset(assetId, name, tokenAddress);
-  const url = knownUrl ?? imageUrl(src);
+  const url = knownUrl ?? resolveAssetImageUrl(src);
   return <AssetImageView key={url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} />;
 }
 
@@ -78,7 +65,7 @@ function AssetImageView({ url, name, nft, className, known, testBadgeLabel }: {
         style={!nft && !showImage ? { backgroundImage: tickerGradient(name) } : undefined}
       >
         {showImage ? (
-          // External on-chain image URLs are dynamic; loading directly avoids server image proxying.
+          // ipfs:// is already a same-origin /api/ipfs URL; other URLs stay as given.
           // eslint-disable-next-line @next/next/no-img-element
           <img src={url} alt="" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} className={`h-full w-full object-cover`} />
         ) : nft ? (
