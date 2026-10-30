@@ -159,11 +159,6 @@ export function ContractWizard() {
         })
       });
       const body = (await res.json()) as CompileResult & { error?: string; details?: string[] };
-      if (res.status === 401 || body.error === "sign_in_required") {
-        throw new Error(
-          lang === "ru" ? "Войдите в аккаунт, чтобы проверить код контракта." : "Sign in to check the contract code."
-        );
-      }
       if (!res.ok) {
         throw new Error(body.details?.[0] ?? body.error ?? t.error);
       }

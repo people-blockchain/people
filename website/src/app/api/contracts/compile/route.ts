@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { lookupPrecompiledTemplate } from "@/lib/contract-precompiled";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import {
   CONTRACT_COMPILE_IP_RATE_PER_MIN,
-  CONTRACT_COMPILE_RATE_PER_MIN,
   MAX_CONTRACT_SOURCE_BYTES,
   sourceWithinLimit
 } from "@/lib/contract-api-guards";
@@ -17,23 +15,17 @@ export const maxDuration = 60;
 const MAX_BODY_BYTES = MAX_CONTRACT_SOURCE_BYTES * 2 + 1024;
 
 /**
- * MF-16: sign-in is required, and this endpoint never invokes solc. It only serves artifacts that
- * were precompiled at build time from the reviewed templates, matched by template id, file name
- * and exact source hash. Arbitrary ("freeform") Solidity is rejected server-side: the former
- * `freeform` flag and `CONTRACT_AI_FREEFORM` env switch were only a client-side hint.
+ * MF-16: this endpoint never invokes solc. It only serves artifacts that were precompiled at build
+ * time from the reviewed templates, matched by template id, file name and exact source hash.
+ * Arbitrary ("freeform") Solidity is rejected server-side: the former `freeform` flag and
+ * `CONTRACT_AI_FREEFORM` env switch were only a client-side hint.
+ *
+ * No sign-in: the contract wizard has no wallet/account session, and a table lookup of public
+ * artifacts needs no identity. Abuse is bounded by the shared (Postgres-backed) per-IP rate limit.
  */
 export async function POST(request: Request) {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) {
-    return NextResponse.json({ error: "sign_in_required" }, { status: 401 });
-  }
-
   const ip = clientIpFromRequest(request);
-  if (
-    !(await checkSharedRateLimit("contracts-compile-user", userId, CONTRACT_COMPILE_RATE_PER_MIN, 60_000)) ||
-    !(await checkSharedRateLimit("contracts-compile-ip", ip, CONTRACT_COMPILE_IP_RATE_PER_MIN, 60_000))
-  ) {
+  if (!(await checkSharedRateLimit("contracts-compile-ip", ip, CONTRACT_COMPILE_IP_RATE_PER_MIN, 60_000))) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 
