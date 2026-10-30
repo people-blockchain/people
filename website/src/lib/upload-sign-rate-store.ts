@@ -1,11 +1,9 @@
-import { lt, sql } from "drizzle-orm";
+import { and, eq, gt, lte } from "drizzle-orm";
 import { getDbReady } from "@/db";
-import { uploadSignRates } from "@/db/schema";
+import { uploadSignRateHits } from "@/db/schema";
 import { rateLimitKey } from "./api-rate-limit.ts";
 
-type Bucket = { count: number; expiresAt: number };
-
-const memory = new Map<string, Bucket>();
+const memory = new Map<string, number[]>();
 
 /** `true` forces the in-process map, `false` forces the database, `null` follows DATABASE_URL. */
 let forceMemory: boolean | null = null;
@@ -22,50 +20,54 @@ function memoryOnly(): boolean {
   return !process.env.DATABASE_URL?.trim();
 }
 
-function bucketKey(subject: string, windowStart: number): string {
-  return `${rateLimitKey(subject)}:${windowStart}`;
+/**
+ * Sliding window: a hit counts until it is older than `windowMs`. The returned list includes
+ * the hit being decided, so the 11th request inside the span is stored and refused.
+ */
+export function decideSlidingWindow(
+  existing: readonly number[],
+  now: number,
+  windowMs: number,
+  limit: number,
+): { allow: boolean; hits: number[] } {
+  const cutoff = now - windowMs;
+  const hits = existing.filter((at) => at > cutoff);
+  hits.push(now);
+  return { allow: hits.length <= limit, hits };
 }
 
-function sweepMemory(now: number): void {
-  for (const [key, row] of memory) {
-    if (row.expiresAt <= now) memory.delete(key);
-  }
+function allowMemory(key: string, limit: number, windowMs: number, now: number): boolean {
+  const decision = decideSlidingWindow(memory.get(key) ?? [], now, windowMs, limit);
+  memory.set(key, decision.hits);
+  return decision.allow;
 }
 
-function allowMemory(key: string, limit: number, expiresAt: number, now: number): boolean {
-  sweepMemory(now);
-  const row = memory.get(key) ?? { count: 0, expiresAt };
-  row.count += 1;
-  row.expiresAt = expiresAt;
-  memory.set(key, row);
-  return row.count <= limit;
-}
-
-async function allowDatabase(key: string, limit: number, expiresAt: number, now: number): Promise<boolean> {
+async function allowDatabase(key: string, limit: number, windowMs: number, now: number): Promise<boolean> {
   const db = await getDbReady();
-  await db.delete(uploadSignRates).where(lt(uploadSignRates.expiresAt, new Date(now)));
-  const [row] = await db
-    .insert(uploadSignRates)
-    .values({ bucketKey: key, count: 1, expiresAt: new Date(expiresAt) })
-    .onConflictDoUpdate({
-      target: uploadSignRates.bucketKey,
-      set: { count: sql`${uploadSignRates.count} + 1` },
-    })
-    .returning({ count: uploadSignRates.count });
-  return Number(row?.count ?? 1) <= limit;
+  const cutoff = new Date(now - windowMs);
+  await db.delete(uploadSignRateHits).where(lte(uploadSignRateHits.hitAt, cutoff));
+  await db.insert(uploadSignRateHits).values({ id: crypto.randomUUID(), subjectKey: key, hitAt: new Date(now) });
+  const rows = await db
+    .select({ id: uploadSignRateHits.id })
+    .from(uploadSignRateHits)
+    .where(and(eq(uploadSignRateHits.subjectKey, key), gt(uploadSignRateHits.hitAt, cutoff)));
+  return rows.length <= limit;
 }
 
 /**
- * One slot in the direct-upload sign budget. The database is the source of truth when
- * configured, so a new server process does not start the count over.
+ * One slot in the direct-upload sign budget. Every call that reaches this function is counted.
+ * The database is the source of truth when configured, so a new server process does not start over.
  */
-export async function allowDirectUploadSignIp(subject: string, limit: number, windowMs: number, now = Date.now()): Promise<boolean> {
-  const windowStart = Math.floor(now / windowMs) * windowMs;
-  const key = bucketKey(subject, windowStart);
-  const expiresAt = windowStart + windowMs * 2;
-  if (memoryOnly()) return allowMemory(key, limit, expiresAt, now);
+export async function allowDirectUploadSignIp(
+  subject: string,
+  limit: number,
+  windowMs: number,
+  now = Date.now(),
+): Promise<boolean> {
+  const key = rateLimitKey(subject);
+  if (memoryOnly()) return allowMemory(key, limit, windowMs, now);
   try {
-    return await allowDatabase(key, limit, expiresAt, now);
+    return await allowDatabase(key, limit, windowMs, now);
   } catch (error) {
     if (error instanceof UploadSignRateStoreError) throw error;
     throw new UploadSignRateStoreError();

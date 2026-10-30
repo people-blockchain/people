@@ -15,9 +15,8 @@ const signRoute = signRouteModule.POST;
 const { resetRateLimitStoresForTests } = await import("../src/lib/api-rate-limit.ts");
 const { DIRECT_UPLOAD_RATE } = await import("../src/lib/media-upload-rate.ts");
 const { issueUploadNonce, setUploadNonceMemoryForTests } = await import("../src/lib/upload-nonce-store.ts");
-const { allowDirectUploadSignIp, resetUploadSignRatesForTests, setUploadSignRateMemoryForTests } = await import(
-  "../src/lib/upload-sign-rate-store.ts"
-);
+const { allowDirectUploadSignIp, decideSlidingWindow, resetUploadSignRatesForTests, setUploadSignRateMemoryForTests } =
+  await import("../src/lib/upload-sign-rate-store.ts");
 const { UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS } = await import("../src/db/upload-sign-rate-sql.mjs");
 
 const previousJwt = process.env.PINATA_JWT;
@@ -36,6 +35,52 @@ test("sign rate ddl is idempotent and applied from bootstrap", () => {
   }
   const bootstrap = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "../src/db/bootstrap.ts"), "utf8");
   assert.match(bootstrap, /UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS/);
+});
+
+function spanStart() {
+  const windowMs = 10 * 60_000;
+  const boundary = 1_700_004_000_000;
+  return { windowMs, boundary, start: boundary - 30_000 };
+}
+
+async function assertTenMinuteSpan(label, probe) {
+  const { windowMs, boundary, start } = spanStart();
+  assert.equal(boundary % windowMs, 0);
+  assert.ok(start + 2 * 60_000 > boundary);
+  for (let i = 0; i < 10; i += 1) {
+    assert.equal(await probe(start), true, `${label} slot ${i}`);
+  }
+  assert.equal(await probe(start), false, `${label} 11th`);
+  assert.equal(await probe(start + 2 * 60_000), false, `${label} plus 2 min`);
+  assert.equal(await probe(boundary + 1_000), false, `${label} across the boundary`);
+  assert.equal(await probe(start + windowMs), true, `${label} after 10 min`);
+}
+
+test("a sliding window keeps the 11th blocked across a fixed-window boundary", () => {
+  const { windowMs, boundary, start } = spanStart();
+  let hits = [];
+  for (let i = 0; i < 10; i += 1) {
+    const step = decideSlidingWindow(hits, start, windowMs, 10);
+    assert.equal(step.allow, true);
+    hits = step.hits;
+  }
+  const blocked = decideSlidingWindow(hits, start, windowMs, 10);
+  assert.equal(blocked.allow, false);
+  const later = decideSlidingWindow(blocked.hits, start + 2 * 60_000, windowMs, 10);
+  assert.equal(later.allow, false);
+  assert.equal(decideSlidingWindow(later.hits, boundary + 1_000, windowMs, 10).allow, false);
+  assert.equal(decideSlidingWindow(later.hits, start + windowMs, windowMs, 10).allow, true);
+});
+
+test("the in-memory sign budget is a 10 minute sliding window", async () => {
+  resetUploadSignRatesForTests();
+  await assertTenMinuteSpan("memory", (now) => allowDirectUploadSignIp("client-slide", 10, 10 * 60_000, now));
+});
+
+test("the database sign budget is a 10 minute sliding window", async () => {
+  setUploadSignRateMemoryForTests(false);
+  await assertTenMinuteSpan("db", (now) => allowDirectUploadSignIp("client-slide-db", 10, 10 * 60_000, now));
+  setUploadSignRateMemoryForTests(true);
 });
 
 test("the in-memory sign budget reopens when the window ends", async (t) => {
