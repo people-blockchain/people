@@ -17,6 +17,7 @@ import {
 
 import { ensureSaleChain, type EIP1193Provider } from "@/lib/evm/client";
 import { SALE, SALE_CHAIN, saleContractAddress } from "@/lib/sale/config";
+import { scaleUsd6 } from "@/lib/sale/amount";
 import { pplCurveHubAbi } from "@/lib/sale/pplCurveHub.abi";
 
 export type BuyStatus =
@@ -35,6 +36,8 @@ export type BuyParams = {
   account: Address;
   token: Address;
   amountUsd: number;
+  /** Micro-USD. When set, this is what gets approved instead of `amountUsd.toFixed`. */
+  amountIn?: bigint;
 };
 
 /** Maps a thrown wallet / RPC error to a user-facing reason. Exported for tests. */
@@ -204,7 +207,7 @@ export async function executeBuy(
   };
   try {
     const decimals = await publicClient.readContract({ address: params.token, abi: erc20Abi, functionName: "decimals" });
-    const amountIn = parseUnits(params.amountUsd.toFixed(2), decimals);
+    const amountIn = params.amountIn !== undefined ? scaleUsd6(params.amountIn, decimals) : parseUnits(params.amountUsd.toFixed(2), decimals);
 
     // 1. quote + checks that do not depend on the allowance
     const state = await readPreflightState(publicClient, hub, params, amountIn, decimals);

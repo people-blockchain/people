@@ -180,7 +180,7 @@ test("fetchRecentTransactions pulls the recent window with full transactions in 
     type: "transfer",
     from: MINER,
     to: MINER,
-    amount: 1,
+    amountWei: "1000000000000000000",
     blockHeight: HEAD,
   });
 });

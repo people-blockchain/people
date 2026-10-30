@@ -13,8 +13,9 @@ import { PeopleLoader } from "@/components/ui/PeopleLoader";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { uxCopy, displaySymbol, txTypeLabel } from "@/lib/ux-copy";
 import { isHiddenAsset, visibleNfts } from "@/lib/hidden-assets";
-import { txAmountText, txFeeText, txSummary } from "@/lib/tx-display";
-import { assetDecimals, formatPpl, formatUnits } from "@/lib/asset-amounts";
+import { txAmountText, txExactTitle, txFeeText, txSummary } from "@/lib/tx-display";
+import { assetDecimals, formatUnits, readBalanceWei } from "@/lib/asset-amounts";
+import { PplAmount } from "@/components/ui/PplAmount";
 import { useAssetRegistry } from "@/hooks/useAssetRegistry";
 
 export function BlockView({ height }: { height: string }) {
@@ -75,7 +76,7 @@ export function BlockView({ height }: { height: string }) {
             <Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="font-mono text-brand hover:underline">
               {tx.id}
             </Link>{" "}
-            <span className="text-ink-2">{txSummary(tx, assets, u, t.fee)}</span>
+            <span className="text-ink-2" title={txExactTitle(tx)}>{txSummary(tx, assets, u, t.fee)}</span>
           </li>
         ))}
       </ul>
@@ -216,11 +217,11 @@ export function TxView({ id }: { id: string }) {
           </div>
           <div>
             <dt className="text-ink-3">{t.amount}</dt>
-            <dd data-testid="tx-amount">{txAmountText(tx, assets, u)}</dd>
+            <dd data-testid="tx-amount" title={txExactTitle(tx)}>{txAmountText(tx, assets, u, "exact")}</dd>
           </div>
           <div>
             <dt className="text-ink-3">{t.fee}</dt>
-            <dd>{txFeeText(tx)}</dd>
+            <dd title={txExactTitle(tx)}>{txFeeText(tx, "exact", u.pplDust)}</dd>
           </div>
           {typeof tx.payload?.memo === "string" && tx.payload.memo ? (
             <div>
@@ -373,7 +374,7 @@ export function AddressView({ address }: { address: string }) {
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-3">{t.pplBalance}</p>
       <p className="mt-1 flex items-center gap-3 text-2xl font-black" data-testid="address-ppl">
         <AssetImage assetId="ppl" name="PPL" className="h-9 w-9" />
-        {account ? formatPpl(account.balance) : "—"} PPL
+        {account && readBalanceWei(account) !== null ? <PplAmount wei={readBalanceWei(account) as bigint} dustLabel={u.pplDust} className="inline cursor-pointer border-0 bg-transparent p-0 text-inherit" /> : "—"}
       </p>
       <p className="text-sm text-ink-3">
         {u.operations}: {u.sent} {account?.outgoingTxs ?? account?.nonce ?? 0} · {u.received}{" "}
@@ -414,7 +415,7 @@ export function AddressView({ address }: { address: string }) {
             <Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="font-mono text-brand hover:underline">
               {tx.id}
             </Link>{" "}
-            <span className="text-ink-2">{txSummary(tx, assets, u, t.fee)}</span>
+            <span className="text-ink-2" title={txExactTitle(tx)}>{txSummary(tx, assets, u, t.fee)}</span>
           </li>
         ))}
       </ul>
