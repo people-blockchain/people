@@ -4,7 +4,11 @@
  * appended to the bytecode on deploy.
  */
 
-export type FieldKind = "address" | "addressList" | "tokenAmount" | "days" | "hours" | "count";
+/**
+ * `duration` is a days + hours pair written as "D:H" (e.g. "3:12"); a bare number is read as days.
+ * It is used where a short campaign length needs hour precision (crowdfund).
+ */
+export type FieldKind = "address" | "addressList" | "tokenAmount" | "days" | "hours" | "duration" | "count";
 
 export type ConstructorField = {
   /** Parameter name in the Solidity constructor, e.g. `delay_`. */
@@ -39,7 +43,7 @@ export const TOKEN_DECIMALS = 18;
 type AbiInput = { name?: string; type?: string };
 type AbiItem = { type?: string; inputs?: AbiInput[] };
 
-export function constructorFields(abi: unknown): ConstructorField[] {
+export function constructorFields(abi: unknown, templateId?: string): ConstructorField[] {
   if (!Array.isArray(abi)) return [];
   const ctor = (abi as AbiItem[]).find((item) => item?.type === "constructor");
   return (ctor?.inputs ?? []).map((input, index) => {
@@ -48,7 +52,11 @@ export function constructorFields(abi: unknown): ConstructorField[] {
     if (abiType !== "address" && abiType !== "uint256" && abiType !== "address[]") {
       throw new Error(`Unsupported constructor input type: ${input.type}`);
     }
-    const known = PARAMS[name];
+    // The crowdfund length is entered as days + hours (not a seconds count or fractional days).
+    const known =
+      templateId === "crowdfund" && name === "duration_"
+        ? { kind: "duration" as FieldKind, labelKey: "campaignDuration" }
+        : PARAMS[name];
     const kind: FieldKind =
       known?.kind ?? (abiType === "address" ? "address" : abiType === "address[]" ? "addressList" : "count");
     return { name, abiType, kind, labelKey: known?.labelKey ?? name };
@@ -65,7 +73,7 @@ export function defaultFieldValue(field: ConstructorField, ownAddress?: string):
     case "threshold_":
       return "1";
     case "duration_":
-      return "365";
+      return field.kind === "duration" ? "30:0" : "365";
     case "votingPeriod_":
       return "3";
     case "timeout_":
@@ -115,10 +123,26 @@ export function parseDecimalUnits(text: string, decimals: number): bigint | null
   return value > B0 ? value : null;
 }
 
+/** "D:H" (or a bare day count) -> seconds; null unless it is a positive whole duration. */
+export function parseDaysHours(text: string): bigint | null {
+  const m = /^\s*(\d+)\s*(?::\s*(\d*)\s*)?$/.exec(text);
+  if (!m) return null;
+  const seconds = BigInt(m[1]!) * SEC_DAY + BigInt(m[2] || "0") * SEC_HOUR;
+  return seconds > B0 ? seconds : null;
+}
+
+/** Splits a "D:H" value for the two inputs; anything unparsable becomes empty fields. */
+export function splitDaysHours(text: string): { days: string; hours: string } {
+  const m = /^\s*(\d*)\s*(?::\s*(\d*)\s*)?$/.exec(text);
+  return { days: m?.[1] ?? "", hours: m?.[2] ?? "" };
+}
+
 function parseUintField(field: ConstructorField, text: string): bigint | null {
   switch (field.kind) {
     case "tokenAmount":
       return parseDecimalUnits(text, TOKEN_DECIMALS);
+    case "duration":
+      return parseDaysHours(text);
     case "days": {
       const v = parseDecimalUnits(text, 6);
       return v ? (v * SEC_DAY) / MICRO || null : null;

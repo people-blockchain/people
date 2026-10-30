@@ -30,12 +30,14 @@ import {
 } from "@/lib/contract-gas-estimate";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
 import { contractCopy, type ContractCopy } from "@/lib/contract-copy";
+import { crowdfundCopy } from "@/lib/crowdfund/campaign-copy";
 import { formatPpl } from "@/lib/asset-amounts";
 import {
   constructorFields,
   defaultFieldValue,
   deployBytecode,
   encodeConstructorArgs,
+  splitDaysHours,
   type ConstructorField,
 } from "@/lib/contract-constructor";
 
@@ -65,6 +67,54 @@ interface Params {
   ownerApprovedPublicTariff?: boolean;
 }
 
+/** Two whole-number inputs (days, hours) stored as "D:H" (see `parseDaysHours`). */
+function DaysHoursInput({
+  id,
+  value,
+  invalid,
+  daysLabel,
+  hoursLabel,
+  onChange,
+}: {
+  id: string;
+  value: string;
+  invalid: boolean;
+  daysLabel: string;
+  hoursLabel: string;
+  onChange: (next: string) => void;
+}) {
+  const { days, hours } = splitDaysHours(value);
+  const digits = (text: string) => text.replace(/\D/g, "").slice(0, 5);
+  const box = "w-24 rounded-lg border border-line bg-surface px-3 py-2 text-sm";
+  return (
+    <span className="mt-1 flex items-center gap-2">
+      <input
+        id={id}
+        type="text"
+        inputMode="numeric"
+        aria-invalid={invalid}
+        aria-label={daysLabel}
+        autoComplete="off"
+        value={days}
+        onChange={(e) => onChange(`${digits(e.target.value)}:${hours}`)}
+        className={box}
+      />
+      <span className="text-ink-2">{daysLabel}</span>
+      <input
+        type="text"
+        inputMode="numeric"
+        aria-invalid={invalid}
+        aria-label={hoursLabel}
+        autoComplete="off"
+        value={hours}
+        onChange={(e) => onChange(`${days}:${digits(e.target.value)}`)}
+        className={box}
+      />
+      <span className="text-ink-2">{hoursLabel}</span>
+    </span>
+  );
+}
+
 export function ContractWizard() {
   const { lang } = useLanguage();
   const t: ContractCopy = (contractCopy as Record<string, ContractCopy>)[lang] ?? contractCopy.en;
@@ -83,13 +133,14 @@ export function ContractWizard() {
   const [gasLimit, setGasLimit] = useState<number | null>(null);
   const [ctorEdits, setCtorEdits] = useState<Record<string, string>>({});
 
+  const cf = crowdfundCopy[lang];
   const ctorFields = useMemo<ConstructorField[]>(() => {
     try {
-      return compiled ? constructorFields(compiled.abi) : [];
+      return compiled ? constructorFields(compiled.abi, compose?.templateId) : [];
     } catch {
       return [];
     }
-  }, [compiled]);
+  }, [compiled, compose?.templateId]);
   const ctorValues = useMemo(
     () =>
       Object.fromEntries(
@@ -166,7 +217,7 @@ export function ContractWizard() {
       setCtorEdits({});
       let argRoom = 0;
       try {
-        argRoom = constructorFields(body.abi).length + 8;
+        argRoom = constructorFields(body.abi, compose.templateId).length + 8;
       } catch {
         argRoom = 8;
       }
@@ -306,7 +357,10 @@ export function ContractWizard() {
                 <p className="mt-1 text-xs text-ink-3">{t.settingsHint}</p>
               </div>
               {ctorFields.map((field) => {
-                const label = (t.fields as Record<string, string>)[field.labelKey] ?? field.name;
+                const label =
+                  (t.fields as Record<string, string>)[field.labelKey] ??
+                  (cf as Record<string, string>)[field.labelKey] ??
+                  field.name;
                 const value = ctorValues[field.name] ?? "";
                 const invalid = !ctorEncoded.ok && ctorEncoded.field === field.name;
                 const isNumber = field.kind === "count" || field.kind === "days" || field.kind === "hours" || field.kind === "tokenAmount";
@@ -323,6 +377,15 @@ export function ContractWizard() {
                     <span className="text-ink-2">{label}</span>
                     {field.kind === "addressList" ? (
                       <textarea {...common} rows={3} spellCheck={false} />
+                    ) : field.kind === "duration" ? (
+                      <DaysHoursInput
+                        id={common.id}
+                        value={value}
+                        invalid={invalid}
+                        daysLabel={cf.unitDays}
+                        hoursLabel={cf.unitHours}
+                        onChange={(next) => setCtorEdits((prev) => ({ ...prev, [field.name]: next }))}
+                      />
                     ) : (
                       <input
                         {...common}
@@ -396,6 +459,13 @@ export function ContractWizard() {
               {deployed.address}
             </Link>
           </p>
+          {compose?.templateId === "crowdfund" ? (
+            <p>
+              <Link className="font-semibold text-brand hover:underline" href={`/crowdfund/${deployed.address}`}>
+                {cf.openCampaign}
+              </Link>
+            </p>
+          ) : null}
           <p className="break-all">
             {t.transaction}:{" "}
             <Link
