@@ -45,6 +45,34 @@ export function ipfsGatewayUrlForUri(uri: string): string {
 }
 
 /**
+ * URL an `<img>` can load. `ipfs://<cid>/image.png` keeps the path on the configured gateway.
+ * Site-relative and public https URLs pass through. Anything else (including a metadata JSON
+ * document — resolve that first) is not an image URL.
+ */
+export function displayTokenImageUrl(uri: string | null | undefined): string | null {
+  const value = (uri ?? "").trim();
+  if (!value) return null;
+  if (value.startsWith("/") && !value.startsWith("//")) return value;
+  if (/^ipfs:\/\//i.test(value)) {
+    try {
+      return ipfsGatewayUrlForUri(value);
+    } catch {
+      return null;
+    }
+  }
+  if (/^https:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      if (url.username || url.password) return null;
+      return url.href;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+/**
  * Only inert media types may be proxied back to the browser from the site's own origin.
  * `text/html`/`image/svg+xml` (or any unlisted/missing type) must be rejected — serving them
  * from `/api/ipfs/*` would let arbitrary IPFS content run as same-origin script (M20-1).

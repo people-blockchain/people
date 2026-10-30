@@ -6,6 +6,8 @@ import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta 
 import { warnCatalog } from "@/lib/evm/catalog-log";
 import { readCatalogSnapshot, readLogScanCursor, writeCatalogSnapshot, writeLogScanCursor } from "@/lib/evm/log-scan-cursor";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
+import { fetchCachedMetadataImage } from "@/lib/evm/token-uri-metadata";
+import { displayTokenImageUrl } from "@/lib/ipfs";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 export const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
@@ -736,7 +738,7 @@ function decodeAddress(ret: string | null | undefined): string {
 /**
  * Token `metadataURI()` may be an icon address (ipfs://… or https://…). The old launch flow wrote
  * the non-image placeholder `ipfs://people/<SYMBOL>`, which must never replace the gradient icon.
- * A `.../metadata.json` address is a JSON document (the catalog never fetches it), so it is not an image.
+ * A `.../metadata.json` address is a JSON document, not an image; the catalog fetches it and reads `image`.
  */
 export function tokenImageFromMetadataUri(uri: string | null | undefined): string | null {
   const value = (uri ?? "").trim();
@@ -746,6 +748,34 @@ export function tokenImageFromMetadataUri(uri: string | null | undefined): strin
   if (/^ipfs:\/\/[^\s]+$/i.test(value)) return value;
   if (/^https:\/\/[^\s]+$/i.test(value)) return value;
   return null;
+}
+
+/** Gateway https for a real image URI. Invalid ipfs stays unchanged so a non-CID placeholder is not dropped. */
+function shownTokenImage(uri: string | null | undefined): string | null {
+  const direct = tokenImageFromMetadataUri(uri);
+  if (!direct) return null;
+  return displayTokenImageUrl(direct) ?? direct;
+}
+
+const METADATA_JSON_SUFFIX = /\/metadata\.json(?:[?#].*)?$/i;
+const CATALOG_IMAGE_CONCURRENCY = 4;
+
+/** Fills catalog rows whose on-chain URI is a metadata JSON document, not an image file. */
+async function resolveCatalogImages(rows: CatalogToken[], uris: Map<string, string>): Promise<void> {
+  const jobs = rows.filter((row) => !row.imageUri);
+  for (let index = 0; index < jobs.length; index += CATALOG_IMAGE_CONCURRENCY) {
+    await Promise.all(
+      jobs.slice(index, index + CATALOG_IMAGE_CONCURRENCY).map(async (row) => {
+        const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+        if (!METADATA_JSON_SUFFIX.test(uri) || uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return;
+        const image = shownTokenImage(await fetchCachedMetadataImage(uri));
+        if (!image) return;
+        const next = applyTokenImage(row, undefined, image);
+        row.imageUri = next.imageUri;
+        row.creationMetadata = next.creationMetadata;
+      }),
+    );
+  }
 }
 
 /**
@@ -1008,6 +1038,7 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuil
 
   let skipped = 0;
   const rows: CatalogToken[] = [];
+  const metadataByToken = new Map<string, string>();
   tokens.forEach((token, index) => {
     const offset = index * ROW_READS;
     const cached = tokenMetadataCache.get(token.toLowerCase());
@@ -1039,7 +1070,8 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuil
         : metadata[offset + 5] === "0x"
           ? ""
           : decodeErc20String(metadata[offset + 5], METADATA_URI_MAX_LENGTH);
-    const chainImage = tokenImageFromMetadataUri(uri);
+    const chainImage = shownTokenImage(uri);
+    metadataByToken.set(token.toLowerCase(), uri);
     // Token metadata is permissionless: anyone can deploy a contract that calls itself
     // "People"/"PPL". Curated assets carry seed metadata, so a row whose assetId has none but
     // whose name/symbol matches a curated one is flagged instead of being presented as it.
@@ -1057,7 +1089,9 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuil
       verified: Boolean(seed),
       ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
     });
-    rows.push(applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage));
+    const overrideRaw = iconOverrides.get(token.toLowerCase());
+    const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? overrideRaw) : undefined;
+    rows.push(applyTokenImage(enriched, override, chainImage));
 
     // Only successful reads reach the cache.
     const next: TokenMetadataCacheEntry = { ...cached };
@@ -1069,6 +1103,7 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuil
     if (metadata[offset + 5] !== null) next.metadataUri = uri;
     tokenMetadataCache.set(token.toLowerCase(), next);
   });
+  await resolveCatalogImages(rows, metadataByToken);
   return { rows: sortTokenRows(rows), complete: skipped === 0, skipped };
 }
 

@@ -1,20 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { displayTokenImageUrl } from "@/lib/ipfs";
 import { tokenIconByAddress } from "@/lib/token-icons";
 
 function imageUrl(value: unknown): string | null {
   if (typeof value !== "string" || !value.trim()) return null;
-  const trimmed = value.trim();
-  // Site-relative images (bundled token icons).
-  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return trimmed;
-  try {
-    const source = trimmed.startsWith("ipfs://")
-      ? `https://ipfs.io/ipfs/${trimmed.slice(7).replace(/^ipfs\//, "")}`
-      : trimmed;
-    const url = new URL(source);
-    return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password ? url.href : null;
-  } catch { return null; }
+  return displayTokenImageUrl(value);
 }
 
 /** Stable 32-bit FNV-1a hash of a ticker, used for the fallback gradient. */

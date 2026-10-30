@@ -167,8 +167,8 @@ test("a factory token reports its own symbol/name/creator and the metadata JSON 
   assert.equal(res.body.decimals, 6);
   assert.equal(res.body.totalSupply, 5);
   assert.equal(res.body.tokenAddress.toLowerCase(), TOKEN);
-  assert.equal(res.body.imageUri, LOGO_URI);
-  assert.equal(res.body.creationMetadata.image, LOGO_URI);
+  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(res.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
 });
 
 test("a metadata JSON without an image gives no imageUri", async (t) => {
@@ -202,7 +202,8 @@ test("a direct image metadataURI is used as is without a fetch", async (t) => {
   await startNode(t, tokenAnswers({ [SEL.metadataURI]: str(LOGO_URI) }));
   const gatewayCalls = stubGateway(t, {});
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
-  assert.equal(res.body.imageUri, LOGO_URI);
+  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(res.body.imageUri, /\/logo\.png$/);
   assert.deepEqual(gatewayCalls, []);
 });
 
@@ -248,14 +249,17 @@ test("a token without symbol()/creator() gets TKN and no creator, never the depl
   assert.equal(res.body.creator, undefined);
 });
 
-test("a catalog row with a CIDv0 metadata.json URI has no truncated imageUri", async (t) => {
+test("a catalog row resolves metadata.json to the gateway image and keeps the path", async (t) => {
   await startNode(t, tokenAnswers(), { logs: true });
+  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
   const rows = await discoverTokensOnChain();
   const row = rows.find((r) => r.tokenAddress?.toLowerCase() === TOKEN);
   assert.ok(row, "factory token is in the catalog");
   assert.equal(row.symbol, "PCOIN");
-  assert.equal(row.imageUri, undefined);
-  assert.equal(row.creationMetadata?.image, undefined);
+  assert.equal(row.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(row.imageUri, /\/logo\.png$/);
+  assert.equal(String(row.imageUri).includes("metadata.json"), false);
+  assert.equal(row.creationMetadata?.image, ipfsGatewayUrlForUri(LOGO_URI));
 });
 
 test("single-asset route: a catalog hit is enriched with the JSON image and the real creator", async (t) => {
@@ -273,8 +277,8 @@ test("single-asset route: a catalog hit is enriched with the JSON image and the 
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.symbol, "PCOIN");
-  assert.equal(res.body.imageUri, LOGO_URI);
-  assert.equal(res.body.creationMetadata.image, LOGO_URI);
+  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(res.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
   assert.equal(res.body.creator, CREATOR);
 });
 

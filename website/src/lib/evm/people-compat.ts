@@ -8,7 +8,7 @@ import {
   fetchTransaction,
 } from "@/lib/evm/explorer-blocks";
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
-import { aggregateHoldersFromTransfers, findTokenCreationBlock } from "@/lib/evm/transfer-index";
+import { aggregateHoldersDetailed, findTokenCreationBlock } from "@/lib/evm/transfer-index";
 import {
   LOG_WINDOW_BLOCKS,
   applyTokenImage,
@@ -23,6 +23,7 @@ import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 import { EvmRpcResponseError, evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
 import { FALLBACK_TOKEN_SYMBOL, readTokenOnchain, resolveTokenImageUri } from "@/lib/evm/token-onchain";
 import { readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
+import { displayTokenImageUrl } from "@/lib/ipfs";
 import {
   NFT_MINTED_TOPIC,
   nftFactoryAddress,
@@ -129,6 +130,29 @@ function isTransientTokenRpcError(error: unknown): boolean {
 }
 
 /**
+ * One JSON-RPC read with a short backoff. Transient 5xx/timeout/network/`rpc_backoff` are retried;
+ * a contract revert (`EvmRpcResponseError`) is not. `ignoreBackoff` so a catalog burst cannot
+ * fail this call before it is attempted.
+ */
+async function readRpc<T>(method: string, params: unknown[]): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= TOKEN_READ_RETRY_DELAYS_MS.length; attempt++) {
+    if (attempt > 0) await sleepMs(TOKEN_READ_RETRY_DELAYS_MS[attempt - 1]);
+    try {
+      return await evmJsonRpc<T>(method, params, {
+        timeoutMs: TOKEN_READ_TIMEOUT_MS,
+        ignoreBackoff: true,
+      });
+    } catch (error) {
+      if (error instanceof EvmRpcResponseError) throw error;
+      lastError = error;
+      if (attempt === TOKEN_READ_RETRY_DELAYS_MS.length || !isTransientTokenRpcError(error)) throw error;
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error("token_rpc_failed");
+}
+
+/**
  * `eth_call` adapter for `readTokenOnchain`: null = revert/empty, throw = transport failure.
  * Ignores the shared per-URL backoff (a catalog burst of 503s must not fail this read) and retries
  * a transient failure twice.
@@ -193,7 +217,10 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     readTokenIconOverrides([token]).catch(() => new Map<string, string>()),
     resolveTokenImageUri(onchain.metadataUri),
   ]);
-  return applyTokenImage(enriched, overrides.get(token.toLowerCase()), chainImage);
+  const overrideRaw = overrides.get(token.toLowerCase());
+  const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? overrideRaw) : undefined;
+  const image = chainImage ? (displayTokenImageUrl(chainImage) ?? chainImage) : undefined;
+  return applyTokenImage(enriched, override, image);
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -273,7 +300,8 @@ async function walletTokenBalances(
   owner: string,
   catalog: Awaited<ReturnType<typeof discoverTokensOnChain>>,
   tokensParam: string | null,
-): Promise<Record<string, number>> {
+): Promise<{ balances: Record<string, number>; partial: boolean }> {
+  let partial = false;
   try {
     const wanted = new Map<string, { assetId: string; decimals: number; creator: string }>();
     for (const row of catalog) {
@@ -300,27 +328,34 @@ async function walletTokenBalances(
       });
     }
     const tokens = [...wanted.keys()].map((lower) => getAddress(lower));
-    if (!tokens.length) return {};
+    if (!tokens.length) return { balances: {}, partial };
     const data = encodeFunctionData({ abi: BALANCE_OF_ABI, functionName: "balanceOf", args: [getAddress(owner)] });
     // A single batch over every catalog token can exceed the public node's limit and lose all
     // balances. Keep chunks small and fall back to one eth_call per item when a chunk fails.
     const BALANCE_BATCH_SIZE = 20;
-    const rawBalances: Array<string | null> = [];
+    const rawBalances: Array<{ ok: true; value: string } | { ok: false }> = [];
     for (let start = 0; start < tokens.length; start += BALANCE_BATCH_SIZE) {
       const chunk = tokens.slice(start, start + BALANCE_BATCH_SIZE);
       let results: Array<string | null>;
       try {
         results = await evmJsonRpcBatch<string>(
           chunk.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
+          { ignoreBackoff: true },
         );
       } catch {
         results = chunk.map(() => null);
       }
       const resolved = await Promise.all(
-        chunk.map((token, index) => {
-          const value = results[index] ?? null;
-          if (value !== null) return value;
-          return evmJsonRpc<string>("eth_call", [{ to: token, data }, "latest"]).catch(() => null);
+        chunk.map(async (token, index) => {
+          const value = results[index];
+          if (typeof value === "string" && value !== "0x") return { ok: true as const, value };
+          try {
+            const single = await readRpc<string>("eth_call", [{ to: token, data }, "latest"]);
+            if (!single || single === "0x") return { ok: false as const };
+            return { ok: true as const, value: single };
+          } catch {
+            return { ok: false as const };
+          }
         }),
       );
       rawBalances.push(...resolved);
@@ -330,22 +365,28 @@ async function walletTokenBalances(
     tokens.forEach((token, index) => {
       const row = wanted.get(token.toLowerCase());
       if (!row) return;
-      const raw = rawBalances[index] ?? null;
+      const raw = rawBalances[index];
+      if (!raw?.ok) {
+        partial = true;
+        return;
+      }
       let units = BigInt(0);
       try {
-        units = BigInt(raw ?? "0x0");
+        units = BigInt(raw.value);
       } catch {
-        units = BigInt(0);
+        partial = true;
+        return;
       }
       const value = Number(formatUnits(units, row.decimals));
-      // A creator keeps their token listed even with a zero balance or a failed read.
+      // A creator keeps their token listed even with a zero balance. A failed read is omitted
+      // and flagged partial instead of being shown as zero or failing the whole address.
       if (value > 0 || row.creator.toLowerCase() === ownerLower) {
         balances[row.assetId.toLowerCase()] = value;
       }
     });
-    return balances;
+    return { balances, partial };
   } catch {
-    return {};
+    return { balances: {}, partial: true };
   }
 }
 
@@ -625,8 +666,8 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     let nonceHex: string;
     try {
       [balanceHex, nonceHex] = await Promise.all([
-        evmJsonRpc<string>("eth_getBalance", [addr, "latest"]),
-        evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"]),
+        readRpc<string>("eth_getBalance", [addr, "latest"]),
+        readRpc<string>("eth_getTransactionCount", [addr, "latest"]),
       ]);
     } catch {
       return { status: 502, body: { error: "rpc_unavailable" } };
@@ -634,6 +675,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const balance = weiToPpl(BigInt(balanceHex));
     const nonce = Number.parseInt(nonceHex, 16);
     // Token rows are additive: a failed scan or balance read still returns the native balance.
+    // Catalog tokens include launches on the current tokenFactory (and legacy factories).
     const catalog = await discoverTokensOnChain().catch(() => []);
     const tokenBalances = await walletTokenBalances(addr, catalog, search.get("tokens"));
     return {
@@ -641,9 +683,10 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
       body: {
         balance,
         nonce,
-        balances: { ppl: balance, ...tokenBalances },
+        balances: { ppl: balance, ...tokenBalances.balances },
         outgoingTxs: nonce,
         incomingTxs: 0,
+        ...(tokenBalances.partial ? { partial: true } : {}),
       },
     };
   }
@@ -668,27 +711,29 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     // Only a factory token can be younger than the deployment block; start its scan at its creation
     // block (null = unknown, scan from the deployment block).
     const isSeedToken = Object.values(dep.assetMap).some((addr) => addr && addr.toLowerCase() === token.toLowerCase());
+    // Seed tokens are scanned from the deployment block. A factory token whose creation block
+    // cannot be found also starts there, but keeps the newest windows so a mint at the tip is included.
     const creationBlock = isSeedToken ? null : await findTokenCreationBlock(token);
-    let holders: Awaited<ReturnType<typeof aggregateHoldersFromTransfers>>;
+    const creationUnknown = !isSeedToken && creationBlock == null;
+    let scan: Awaited<ReturnType<typeof aggregateHoldersDetailed>>;
     try {
-      holders = await aggregateHoldersFromTransfers(token, creationBlock ?? undefined);
+      scan = await aggregateHoldersDetailed(token, creationBlock ?? undefined, { preferHead: creationUnknown });
     } catch {
       // A failed scan is not an empty holder list.
       return { status: 502, body: { error: "rpc_unavailable" } };
     }
     const asset = await loadAsset(assetId ?? token).catch(() => null);
     const decimals = asset?.decimals ?? 18;
-    return {
-      status: 200,
-      body: holders.map((row) => ({
-        address: row.address,
-        balance: Number(formatUnits(row.balance, decimals)),
-        balances: {
-          ppl: 0,
-          [(assetId ?? token).toLowerCase()]: Number(formatUnits(row.balance, decimals)),
-        },
-      })),
-    };
+    const accounts = scan.holders.map((row) => ({
+      address: row.address,
+      balance: Number(formatUnits(row.balance, decimals)),
+      balances: {
+        ppl: 0,
+        [(assetId ?? token).toLowerCase()]: Number(formatUnits(row.balance, decimals)),
+      },
+    }));
+    if (scan.partial) return { status: 200, body: { accounts, partial: true } };
+    return { status: 200, body: accounts };
   }
 
   if (root === "nfts") {
