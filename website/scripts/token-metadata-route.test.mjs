@@ -73,7 +73,7 @@ test("token metadata: success pins metadata.json in a directory and omits image 
   assert.equal(pinned[0].name, "metadata.json");
   assert.equal(pinned[0].type, "application/json");
   assert.equal(pinned[0].wrap, JSON.stringify({ wrapWithDirectory: true }));
-  assert.equal(pinned[0].text, JSON.stringify({ name: "Plain", symbol: "PLN", description: "" }));
+  assert.equal(pinned[0].text, JSON.stringify({ name: "Plain", symbol: "PLN", description: "Plain (PLN) token on PEOPLE" }));
   assert.ok(!("image" in body.json));
 });
 
@@ -81,7 +81,7 @@ test("token metadata: with a logo the JSON carries the image, and the client hel
   const image = `ipfs://${DIR_CID}/icon.png`;
   const res = await metadataRoute(request({ name: "Plain", symbol: "PLN", image }));
   assert.equal(res.status, 200);
-  assert.equal(pinned[0].text, JSON.stringify({ name: "Plain", symbol: "PLN", description: "", image }));
+  assert.equal(pinned[0].text, JSON.stringify({ name: "Plain", symbol: "PLN", description: "Plain (PLN) token on PEOPLE", image }));
 
   const viaClient = await pinTokenMetadata({ name: "Plain", symbol: "PLN", image }, async (url, init) => {
     assert.equal(url, "/api/factory/token/metadata");

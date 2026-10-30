@@ -145,9 +145,20 @@ test("metadata JSON: exact keys and order, animation_url only for video", () => 
   assert.deepEqual(Object.keys(photo), ["name", "description", "image"]);
   assert.equal(photo.name, "Badge");
   const video = buildNftMetadata({ name: "Clip", description: "", image, animationUrl: animation });
-  assert.deepEqual(Object.keys(video), ["name", "image", "animation_url"]);
-  assert.equal(JSON.stringify(video), JSON.stringify({ name: "Clip", image, animation_url: animation }));
+  assert.deepEqual(Object.keys(video), ["name", "description", "image", "animation_url"]);
+  assert.equal(video.description, "Clip NFT on PEOPLE");
+  assert.equal(
+    JSON.stringify(video),
+    JSON.stringify({ name: "Clip", description: "Clip NFT on PEOPLE", image, animation_url: animation }),
+  );
   assert.equal(JSON.stringify(buildNftMetadata({ name: "AB", description: "d", image, animationUrl: animation })), JSON.stringify({ name: "AB", description: "d", image, animation_url: animation }));
+});
+
+test("a blank NFT description defaults to the name on PEOPLE and other text is kept trimmed", () => {
+  const image = `ipfs://${CID_V1}/image.png`;
+  assert.equal(buildNftMetadata({ name: " Badge ", description: " \n\t ", image }).description, "Badge NFT on PEOPLE");
+  assert.equal(buildNftMetadata({ name: "Badge", image }).description, "Badge NFT on PEOPLE");
+  assert.equal(buildNftMetadata({ name: "Badge", description: "  Kept text  ", image }).description, "Kept text");
 });
 
 test("metadata JSON: limits and bad addresses are refused", () => {
