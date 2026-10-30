@@ -18,13 +18,14 @@ import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/tok
 import { networkJson } from "@/lib/network-client";
 import {
   addCreatedToken,
-  createdTokensForAddress,
-  findDuplicateTokens,
   readCreatedTokens,
   type CreatedTokenRecord,
   type DuplicateToken,
 } from "@/lib/created-tokens";
 import { uploadTokenIcon } from "@/lib/token-icon-upload";
+import { findDuplicateTokens } from "@/lib/factory/token-duplicates";
+import { pinTokenMetadataForCreate } from "@/lib/factory/token-metadata";
+import { pinTokenMetadata } from "@/lib/token-metadata-client";
 import { TokenIconUpload } from "./TokenIconUpload";
 import {
   PROMO_BPS_OPTIONS,
@@ -207,8 +208,8 @@ export function EvmTokenLaunch() {
     };
   }, [gateway, payWith]);
 
-  // Duplicate source: local records from earlier launches + the on-chain catalog's creator field.
-  // The catalog is best-effort; local records work even before the factory scan indexes the token.
+  // Duplicate source: the whole on-chain catalog (every creator) + local records from this browser
+  // as a supplementary source (they work even before the factory scan indexes a fresh token).
   const signerAddress = signer?.address ?? "";
   useEffect(() => {
     if (!signerAddress) {
@@ -216,10 +217,7 @@ export function EvmTokenLaunch() {
       return;
     }
     let cancelled = false;
-    const local = createdTokensForAddress(
-      readCreatedTokens(typeof window !== "undefined" ? window.localStorage : null),
-      signerAddress,
-    );
+    const local = readCreatedTokens(typeof window !== "undefined" ? window.localStorage : null);
     setKnownTokens(local);
     void networkJson<Array<{ assetId: string; tokenAddress?: string; name?: string; symbol?: string; creator?: string; imageUri?: string }>>(
       "assets",
@@ -227,11 +225,10 @@ export function EvmTokenLaunch() {
     )
       .then((rows) => {
         if (cancelled || !Array.isArray(rows)) return;
-        const creator = signerAddress.toLowerCase();
         const chain: DuplicateToken[] = rows
-          .filter((row) => row.creator?.toLowerCase() === creator)
+          .filter((row) => Boolean(row.tokenAddress ?? row.assetId))
           .map((row) => ({
-            creator,
+            creator: (row.creator ?? "").toLowerCase(),
             address: (row.tokenAddress ?? row.assetId).toLowerCase(),
             name: row.name ?? "",
             symbol: row.symbol ?? "",
@@ -252,8 +249,8 @@ export function EvmTokenLaunch() {
   }, [signerAddress]);
 
   const duplicates = useMemo(
-    () => findDuplicateTokens(knownTokens, { creator: signerAddress, name, symbol }),
-    [knownTokens, signerAddress, name, symbol],
+    () => findDuplicateTokens(knownTokens, { name, symbol }),
+    [knownTokens, name, symbol],
   );
 
   useEffect(() => {
@@ -327,25 +324,38 @@ export function EvmTokenLaunch() {
         return;
       }
       const total = units;
-      const existing = findDuplicateTokens(knownTokens, { creator: signer.address, name, symbol });
+      const existing = findDuplicateTokens(knownTokens, { name, symbol });
       if (existing.length && !confirmDuplicate) {
         setError(u.tokenDuplicateTitle);
         return;
       }
 
-      let metadataURI = iconUri || `ipfs://people/${symbol.trim()}`;
+      let iconImage = iconUri;
       if (iconFile && !iconUri && !skipIcon) {
         setStage("uploading");
         try {
           const uploaded = await uploadTokenIcon(iconFile);
           setIconUri(uploaded);
           setIconUploadFailed(false);
-          metadataURI = uploaded;
+          iconImage = uploaded;
         } catch {
           setIconUploadFailed(true);
           setError(u.tokenIconErrUpload);
           return;
         }
+      }
+
+      // Always pin the metadata JSON before any transaction: nothing is sent (or charged) if it fails.
+      setStage("uploading");
+      let metadataURI: string;
+      try {
+        metadataURI = await pinTokenMetadataForCreate(
+          { name, symbol: symbol.trim().toUpperCase(), image: iconImage || undefined },
+          (json) => pinTokenMetadata(json),
+        );
+      } catch {
+        setError(u.tokenMetadataErrPin);
+        return;
       }
 
       let stableFeePaid = false;
@@ -500,7 +510,7 @@ export function EvmTokenLaunch() {
         name: name.trim(),
         symbol: symbol.trim().toUpperCase(),
         tx: hash,
-        image: metadataURI.startsWith("ipfs://people/") ? "" : metadataURI,
+        image: iconImage,
         createdAt: nowMs(),
       };
       const nextRecords = addCreatedToken(
