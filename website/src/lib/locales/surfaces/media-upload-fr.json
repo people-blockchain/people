@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Ce fichier dépasse 25 Mo.",
+  "unsupportedFormat": "Ce format de fichier n'est pas pris en charge.",
+  "linkExpired": "Le lien d'envoi a expiré. Relancez l'envoi.",
+  "sha256Mismatch": "Le fichier envoyé ne correspond pas à son empreinte. Relancez l'envoi.",
+  "rateLimited": "Trop d'envois. Attendez quelques minutes et réessayez.",
+  "network": "Problème de réseau. Vérifiez la connexion et réessayez.",
+  "walletRejected": "Le portefeuille a refusé la signature. Rien n'a été envoyé.",
+  "nonceUsed": "Cette autorisation d'envoi a déjà été utilisée. Relancez l'envoi.",
+  "nonceExpired": "Cette autorisation d'envoi a expiré. Relancez l'envoi.",
+  "nonceMissing": "Cette autorisation d'envoi n'est pas valide. Relancez l'envoi.",
+  "contentMismatch": "Le contenu du fichier ne correspond pas à son type. L'envoi a été refusé.",
+  "sizeMismatch": "La taille du fichier enregistré ne correspond pas. L'envoi a été refusé.",
+  "storageUnavailable": "Le stockage de fichiers est indisponible pour le moment. Réessayez plus tard.",
+  "pinFailed": "Le fichier n'a pas pu être enregistré. Relancez l'envoi.",
+  "badSignature": "La signature du portefeuille ne correspond pas à cet envoi. Relancez l'envoi.",
+  "verifyUnavailable": "Le fichier a été enregistré, mais la vérification n'a pas encore abouti. Relancez l'envoi.",
+  "invalidRequest": "La demande d'envoi n'est pas valide. Relancez l'envoi."
+}

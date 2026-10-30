@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Bu dosya 25 MB sınırından büyük.",
+  "unsupportedFormat": "Bu dosya biçimi desteklenmiyor.",
+  "linkExpired": "Yükleme bağlantısının süresi doldu. Yüklemeyi yeniden deneyin.",
+  "sha256Mismatch": "Yüklenen dosya sağlama toplamıyla eşleşmiyor. Yüklemeyi yeniden deneyin.",
+  "rateLimited": "Çok fazla yükleme. Birkaç dakika bekleyip yeniden deneyin.",
+  "network": "Ağ sorunu. Bağlantınızı kontrol edip yeniden deneyin.",
+  "walletRejected": "Cüzdan imzayı reddetti. Hiçbir şey yüklenmedi.",
+  "nonceUsed": "Bu yükleme onayı zaten kullanıldı. Yüklemeyi yeniden deneyin.",
+  "nonceExpired": "Bu yükleme onayının süresi doldu. Yüklemeyi yeniden deneyin.",
+  "nonceMissing": "Bu yükleme onayı geçerli değil. Yüklemeyi yeniden deneyin.",
+  "contentMismatch": "Dosya içeriği türüyle eşleşmiyor. Yükleme reddedildi.",
+  "sizeMismatch": "Kayıtlı dosyanın boyutu eşleşmiyor. Yükleme reddedildi.",
+  "storageUnavailable": "Dosya depolama şu anda kullanılamıyor. Daha sonra yeniden deneyin.",
+  "pinFailed": "Dosya kaydedilemedi. Yüklemeyi yeniden deneyin.",
+  "badSignature": "Cüzdan imzası bu yüklemeyle eşleşmiyor. Yüklemeyi yeniden deneyin.",
+  "verifyUnavailable": "Dosya kaydedildi ancak henüz doğrulanamadı. Yüklemeyi yeniden deneyin.",
+  "invalidRequest": "Yükleme isteği geçerli değil. Yüklemeyi yeniden deneyin."
+}

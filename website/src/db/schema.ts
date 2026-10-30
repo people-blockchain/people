@@ -780,6 +780,23 @@ export const apiRateLimits = pgTable(
 );
 
 /**
+ * One-time nonces for direct media upload. Issued and consumed by `/api/factory/upload/*`.
+ * DDL is applied from `upload-nonce-sql.mjs` during schema bootstrap.
+ */
+export const uploadNonces = pgTable(
+  "upload_nonce",
+  {
+    nonce: text("nonce").primaryKey(),
+    address: text("address").notNull(),
+    domain: text("domain").notNull(),
+    expiry: text("expiry").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+    consumedAt: timestamp("consumedAt", { mode: "date" }),
+  },
+  (row) => [index("upload_nonce_expires_idx").on(row.expiresAt)],
+);
+
+/**
  * PplCurveHubV2 person binding: one private person key per user, a stable public personId
  * (bytes32 hex) attested by the sale verifier, and the hashed identifiers that belong to it.
  * Additive only — see drizzle/0020_sale_person_binding.sql.

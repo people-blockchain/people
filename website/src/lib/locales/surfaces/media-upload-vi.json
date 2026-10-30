@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Tệp này lớn hơn 25 MB.",
+  "unsupportedFormat": "Định dạng tệp này không được hỗ trợ.",
+  "linkExpired": "Liên kết tải lên đã hết hạn. Hãy tải lên lại.",
+  "sha256Mismatch": "Tệp đã tải không khớp với mã kiểm tra. Hãy tải lên lại.",
+  "rateLimited": "Quá nhiều lần tải lên. Hãy đợi vài phút rồi thử lại.",
+  "network": "Sự cố mạng. Hãy kiểm tra kết nối và thử lại.",
+  "walletRejected": "Ví đã từ chối chữ ký. Không có gì được tải lên.",
+  "nonceUsed": "Phê duyệt tải lên này đã được dùng. Hãy tải lên lại.",
+  "nonceExpired": "Phê duyệt tải lên này đã hết hạn. Hãy tải lên lại.",
+  "nonceMissing": "Phê duyệt tải lên này không hợp lệ. Hãy tải lên lại.",
+  "contentMismatch": "Nội dung tệp không khớp với loại tệp. Bản tải lên đã bị từ chối.",
+  "sizeMismatch": "Kích thước tệp đã lưu không khớp. Bản tải lên đã bị từ chối.",
+  "storageUnavailable": "Kho tệp hiện không dùng được. Hãy thử lại sau.",
+  "pinFailed": "Không lưu được tệp. Hãy tải lên lại.",
+  "badSignature": "Chữ ký ví không khớp với bản tải lên này. Hãy tải lên lại.",
+  "verifyUnavailable": "Tệp đã được lưu nhưng chưa kiểm tra được. Hãy tải lên lại.",
+  "invalidRequest": "Yêu cầu tải lên không hợp lệ. Hãy tải lên lại."
+}

@@ -26,6 +26,7 @@ const surfaces = [
   "litepaper",
   "samples",
   "nft-media",
+  "media-upload",
 ];
 
 function load(name) {

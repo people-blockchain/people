@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Este archivo supera los 25 MB.",
+  "unsupportedFormat": "Este formato de archivo no es compatible.",
+  "linkExpired": "El enlace de subida caducó. Reintenta la subida.",
+  "sha256Mismatch": "El archivo subido no coincide con su suma de comprobación. Reintenta la subida.",
+  "rateLimited": "Demasiadas subidas. Espera unos minutos e inténtalo de nuevo.",
+  "network": "Problema de red. Comprueba tu conexión e inténtalo de nuevo.",
+  "walletRejected": "La cartera rechazó la firma. No se subió nada.",
+  "nonceUsed": "Esta autorización de subida ya se usó. Reintenta la subida.",
+  "nonceExpired": "Esta autorización de subida caducó. Reintenta la subida.",
+  "nonceMissing": "Esta autorización de subida no es válida. Reintenta la subida.",
+  "contentMismatch": "El contenido del archivo no coincide con su tipo. La subida fue rechazada.",
+  "sizeMismatch": "El tamaño del archivo guardado no coincide. La subida fue rechazada.",
+  "storageUnavailable": "El almacenamiento de archivos no está disponible ahora. Inténtalo más tarde.",
+  "pinFailed": "No se pudo guardar el archivo. Reintenta la subida.",
+  "badSignature": "La firma de la cartera no coincide con esta subida. Reintenta la subida.",
+  "verifyUnavailable": "El archivo se guardó, pero aún no se pudo comprobar. Reintenta la subida.",
+  "invalidRequest": "La solicitud de subida no es válida. Reintenta la subida."
+}

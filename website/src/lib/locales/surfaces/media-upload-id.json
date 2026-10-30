@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Berkas ini lebih besar dari 25 MB.",
+  "unsupportedFormat": "Format berkas ini tidak didukung.",
+  "linkExpired": "Tautan unggah sudah kedaluwarsa. Ulangi unggahan.",
+  "sha256Mismatch": "Berkas yang diunggah tidak cocok dengan checksum. Ulangi unggahan.",
+  "rateLimited": "Terlalu banyak unggahan. Tunggu beberapa menit lalu coba lagi.",
+  "network": "Masalah jaringan. Periksa koneksi lalu coba lagi.",
+  "walletRejected": "Dompet menolak tanda tangan. Tidak ada yang diunggah.",
+  "nonceUsed": "Persetujuan unggah ini sudah dipakai. Ulangi unggahan.",
+  "nonceExpired": "Persetujuan unggah ini sudah kedaluwarsa. Ulangi unggahan.",
+  "nonceMissing": "Persetujuan unggah ini tidak valid. Ulangi unggahan.",
+  "contentMismatch": "Isi berkas tidak sesuai dengan jenisnya. Unggahan ditolak.",
+  "sizeMismatch": "Ukuran berkas yang tersimpan tidak cocok. Unggahan ditolak.",
+  "storageUnavailable": "Penyimpanan berkas sedang tidak tersedia. Coba lagi nanti.",
+  "pinFailed": "Berkas tidak dapat disimpan. Ulangi unggahan.",
+  "badSignature": "Tanda tangan dompet tidak cocok dengan unggahan ini. Ulangi unggahan.",
+  "verifyUnavailable": "Berkas sudah disimpan tetapi belum dapat diperiksa. Ulangi unggahan.",
+  "invalidRequest": "Permintaan unggah tidak valid. Ulangi unggahan."
+}

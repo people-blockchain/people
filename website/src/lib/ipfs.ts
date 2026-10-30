@@ -106,14 +106,14 @@ export class PinataError extends Error {
 type FetchLike = typeof fetch;
 const PINATA_TIMEOUT_MS = 25_000;
 
-function pinataJwt(): string {
+export function pinataJwt(): string {
   const jwt = process.env.PINATA_JWT?.trim();
   if (!jwt) throw new PinataError("pinata_not_configured");
   return jwt;
 }
 
 /** 401/403 mean the key lacks the scope for this endpoint; anything else non-2xx is a generic failure. */
-function pinataFailure(status: number): PinataError {
+export function pinataFailure(status: number): PinataError {
   return new PinataError(status === 401 || status === 403 ? "pinata_scope_missing" : "pin_failed");
 }
 
@@ -159,24 +159,16 @@ export async function createPinataSignedVideoUpload(
   params: { filename: string; mimeType: "video/mp4" | "video/webm"; maxBytes: number; expiresSec?: number },
   fetchImpl: FetchLike = fetch,
 ): Promise<{ url: string }> {
-  const jwt = pinataJwt();
-  const res = await fetchImpl("https://uploads.pinata.cloud/v3/files/sign", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      date: Math.floor(Date.now() / 1000),
-      expires: params.expiresSec ?? 120,
+  const { createPinataSignedUpload } = await import("./pinata-signed-upload.ts");
+  return createPinataSignedUpload(
+    {
       filename: params.filename,
-      max_file_size: params.maxBytes,
-      allow_mime_types: [params.mimeType],
-      network: "public",
-    }),
-    signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
-  });
-  if (!res.ok) throw pinataFailure(res.status);
-  const body = (await res.json().catch(() => ({}))) as { data?: unknown };
-  if (typeof body.data !== "string" || !body.data.startsWith("https://")) throw new PinataError("pin_failed");
-  return { url: body.data };
+      mimeTypes: [params.mimeType],
+      maxBytes: params.maxBytes,
+      expiresSec: params.expiresSec,
+    },
+    fetchImpl,
+  );
 }
 
 export type PinataFileRecord = { id: string; cid: string; size: number; mimeType: string };

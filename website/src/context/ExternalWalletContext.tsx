@@ -34,6 +34,7 @@ import {
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
 import { SALE_CHAIN } from "@/lib/sale/config";
 import { PeopleMobileProvider } from "@/lib/mobile-wallet/browser";
+import { setDirectUploadSigner } from "@/lib/media-upload-signer";
 import type { MobileSession } from "@/lib/mobile-wallet/service";
 
 export type WalletConnectorKind = "embedded" | "injected" | "walletconnect" | "people-mobile";
@@ -279,6 +280,19 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
     onWalletConnectOpenRef.current = hooks.onOpen ?? null;
     onWalletConnectFailedRef.current = hooks.onFailed ?? null;
   }, []);
+
+  useEffect(() => {
+    if (!signer) {
+      setDirectUploadSigner(null);
+      return;
+    }
+    const active = signer;
+    setDirectUploadSigner({
+      address: active.address,
+      signMessage: (message) => signViaActiveSigner(active, message),
+    });
+    return () => setDirectUploadSigner(null);
+  }, [signer]);
 
   const value = useMemo(
     () => ({ signer, chainId, switchToBase, setWalletConnectHooks, connectInjected, connectWalletConnect, connectEmbedded, connectPeopleMobile, disconnect }),

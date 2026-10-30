@@ -16,6 +16,7 @@ import {
   FACTORY_ICON_SCHEMA_STATEMENTS,
   SALE_PERSON_BINDING_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
+import { UPLOAD_NONCE_SCHEMA_STATEMENTS } from "./upload-nonce-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
 
@@ -82,6 +83,9 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0020_sale_person_binding.sql — PplCurveHubV2 person + hashed identifiers.
     for (const statement of SALE_PERSON_BINDING_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {
