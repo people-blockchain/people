@@ -6,6 +6,7 @@ import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {Ownable, Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
 import {IERC5192} from "./IERC5192.sol";
 
 /// @title PeopleFounderNFT
@@ -16,18 +17,22 @@ import {IERC5192} from "./IERC5192.sol";
 /// authorisation ONLY for a person verified through Human Passport (level 2). Telegram-only users are
 /// never signed for. This check happens before signing; on-chain the signature is the sole gate.
 ///
-/// SIGNER RISK. `signer` is immutable: there is no rotation, no owner and no arbitrary mint. If the
-/// signing key is compromised, an attacker can issue new tokens (to fresh `personId`s) and rebind
-/// existing ones until the key is replaced by redeploying. Mitigation: a short mint window
-/// (`mintDeadline`, fixed in the constructor) after which `mint` is permanently closed. Note that
-/// `rebind` stays signable after the window, so the key remains security-relevant for rebinds.
+/// SIGNER. `signer` is rotatable by `owner` (intended: a Safe multisig) via `setSigner`, and can be
+/// switched off with `revokeSigner` (signer = 0 disables mint and rebind). The owner has no other power:
+/// it cannot mint, move or burn tokens. Every rotation/revocation bumps `signerEpoch`; a signature is
+/// only checked against the CURRENT signer, so signatures issued by a rotated (leaked) key stop working
+/// immediately, including issued-but-unused ones, and rebinds requested under an older epoch can no
+/// longer be executed. A short mint window (`mintDeadline`, fixed in the constructor) still caps
+/// issuance; rebind stays available after it.
 ///
-/// REBIND. `rebind` moves an existing token (same token id, same `personId`) from `oldHolder` to
-/// `newHolder` on a backend-signed authorisation (wallet recovery / migration). It is not a new
-/// issuance: it does not consume a new id, does not change `totalMinted`/`totalSupply`, and is
-/// therefore allowed after `mintDeadline`. There is no on/off switch. The caller must be `newHolder`.
-/// Mint and rebind share one nonce space per `personId`.
-contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
+/// REBIND. Two steps with a `REBIND_DELAY` (72h) timelock. `requestRebind` (backend-signed, called by
+/// `newHolder`) records a pending move of an existing token from `oldHolder` to `newHolder`. During the
+/// delay the CURRENT holder can `cancelRebind`. From `executeAfter` on, `newHolder` calls
+/// `executeRebind`, which burns the token at the holder and mints the SAME id to `newHolder` (no new
+/// issuance: `totalMinted`/`totalSupply` unchanged; allowed after `mintDeadline`). A new valid request
+/// for the same `personId` replaces the pending one and restarts the delay. Mint and rebind requests
+/// share one nonce space per `personId`.
+contract PeopleFounderNFT is ERC721, EIP712, Ownable2Step, IERC5192 {
     using Strings for uint256;
 
     bytes32 public constant MINT_TYPEHASH =
@@ -35,24 +40,45 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
     bytes32 public constant REBIND_TYPEHASH =
         keccak256("Rebind(bytes32 personId,address oldHolder,address newHolder,uint256 nonce,uint256 deadline)");
 
-    /// @notice Address whose signatures authorise `mint` and `rebind`. Immutable.
-    address public immutable signer;
-    /// @notice Last timestamp (inclusive) at which `mint` is accepted. Does not limit `rebind`.
+    /// @notice Minimum time between `requestRebind` and `executeRebind`; the holder may cancel meanwhile.
+    uint256 public constant REBIND_DELAY = 72 hours;
+
+    /// @notice Address whose signatures authorise `mint` and `requestRebind`; zero means revoked.
+    address public signer;
+    /// @notice Incremented on every `setSigner`/`revokeSigner`; pending rebinds are tied to their epoch.
+    uint64 public signerEpoch;
+    /// @notice Last timestamp (inclusive) at which `mint` is accepted. Does not limit rebind.
     uint256 public immutable mintDeadline;
 
     /// @notice Count of ids issued so far (ids are 1..totalMinted).
     uint256 public totalMinted;
 
+    struct PendingRebind {
+        address oldHolder;
+        uint64 executeAfter;
+        address newHolder;
+        uint64 signerEpoch;
+    }
+
     mapping(bytes32 personId => uint256 tokenId) private _tokenOfPerson;
     mapping(uint256 tokenId => bytes32 personId) private _personOf;
-    /// @notice Whether `nonce` has been consumed for `personId` (shared by mint and rebind).
+    /// @notice Whether `nonce` has been consumed for `personId` (shared by mint and rebind requests).
     mapping(bytes32 personId => mapping(uint256 nonce => bool used)) public usedNonces;
+    /// @notice Pending rebind per person (`executeAfter == 0` means none).
+    mapping(bytes32 personId => PendingRebind) public pendingRebinds;
 
     event Minted(bytes32 indexed personId, uint256 indexed tokenId, address indexed to);
+    event SignerUpdated(address indexed previousSigner, address indexed newSigner, uint64 epoch);
+    event SignerRevoked(address indexed previousSigner, uint64 epoch);
+    event RebindRequested(
+        bytes32 indexed personId, uint256 indexed tokenId, address oldHolder, address newHolder, uint256 executeAfter
+    );
+    event RebindCancelled(bytes32 indexed personId, uint256 indexed tokenId, address indexed holder);
     event Rebound(bytes32 indexed personId, uint256 indexed tokenId, address oldHolder, address newHolder);
 
     error Soulbound();
     error ZeroSigner();
+    error SignerDisabled();
     error InvalidMintDeadline();
     error MintWindowClosed();
     error Expired();
@@ -65,15 +91,42 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
     error AddressAlreadyHolder();
     error OldHolderHasNoToken();
     error PersonMismatch();
+    error NoPendingRebind();
+    error NotHolder();
+    error RebindDelayActive();
+    error RebindDelayElapsed();
+    error StaleRebind();
 
-    constructor(address signer_, uint256 mintDeadline_)
+    constructor(address owner_, address signer_, uint256 mintDeadline_)
         ERC721("People Founder", "PFOUNDER")
         EIP712("PeopleFounderNFT", "1")
+        Ownable(owner_)
     {
         if (signer_ == address(0)) revert ZeroSigner();
         if (mintDeadline_ <= block.timestamp) revert InvalidMintDeadline();
         signer = signer_;
         mintDeadline = mintDeadline_;
+        emit SignerUpdated(address(0), signer_, 0);
+    }
+
+    // ------------------------------------------------------------------ signer administration
+
+    /// @notice Rotate the backend signer. Signatures by the previous signer stop working immediately and
+    /// rebinds requested under the previous epoch can no longer be executed.
+    function setSigner(address newSigner) external onlyOwner {
+        if (newSigner == address(0)) revert ZeroSigner();
+        address previous = signer;
+        signer = newSigner;
+        uint64 epoch = ++signerEpoch;
+        emit SignerUpdated(previous, newSigner, epoch);
+    }
+
+    /// @notice Disable the signer: `mint`, `requestRebind` and `executeRebind` revert until `setSigner`.
+    function revokeSigner() external onlyOwner {
+        address previous = signer;
+        signer = address(0);
+        uint64 epoch = ++signerEpoch;
+        emit SignerRevoked(previous, epoch);
     }
 
     // ------------------------------------------------------------------ mint / rebind
@@ -99,9 +152,9 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
         emit Minted(personId, tokenId, to);
     }
 
-    /// @notice Move the person's existing token from `oldHolder` to the caller (`newHolder`) on a backend
-    /// signature. Same token id; supply is unchanged. Allowed after `mintDeadline`.
-    function rebind(
+    /// @notice Step 1 of a rebind: record a backend-signed move of the person's token from `oldHolder` to
+    /// the caller (`newHolder`). Executable after `REBIND_DELAY`; replaces any pending request.
+    function requestRebind(
         bytes32 personId,
         address oldHolder,
         address newHolder,
@@ -119,11 +172,43 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
         if (tokenId == 0 || _ownerOf(tokenId) != oldHolder) revert PersonMismatch();
         if (balanceOf(newHolder) != 0) revert AddressAlreadyHolder();
 
+        uint256 executeAfter = block.timestamp + REBIND_DELAY;
+        pendingRebinds[personId] = PendingRebind({
+            oldHolder: oldHolder, executeAfter: uint64(executeAfter), newHolder: newHolder, signerEpoch: signerEpoch
+        });
+        emit RebindRequested(personId, tokenId, oldHolder, newHolder, executeAfter);
+    }
+
+    /// @notice The current holder of the person's token cancels a pending rebind before its delay elapses.
+    function cancelRebind(bytes32 personId) external {
+        PendingRebind memory pending = pendingRebinds[personId];
+        if (pending.executeAfter == 0) revert NoPendingRebind();
+        if (block.timestamp >= pending.executeAfter) revert RebindDelayElapsed();
+        uint256 tokenId = _tokenOfPerson[personId];
+        if (_ownerOf(tokenId) != msg.sender) revert NotHolder();
+
+        delete pendingRebinds[personId];
+        emit RebindCancelled(personId, tokenId, msg.sender);
+    }
+
+    /// @notice Step 2 of a rebind: once `REBIND_DELAY` has passed, `newHolder` receives the SAME token id.
+    function executeRebind(bytes32 personId) external {
+        PendingRebind memory pending = pendingRebinds[personId];
+        if (pending.executeAfter == 0) revert NoPendingRebind();
+        if (msg.sender != pending.newHolder) revert NotRecipient();
+        if (block.timestamp < pending.executeAfter) revert RebindDelayActive();
+        if (signer == address(0)) revert SignerDisabled();
+        if (pending.signerEpoch != signerEpoch) revert StaleRebind();
+        uint256 tokenId = _tokenOfPerson[personId];
+        if (_ownerOf(tokenId) != pending.oldHolder) revert PersonMismatch();
+        if (balanceOf(pending.newHolder) != 0) revert AddressAlreadyHolder();
+
+        delete pendingRebinds[personId];
         _burn(tokenId);
-        _mint(newHolder, tokenId);
+        _mint(pending.newHolder, tokenId);
 
         emit Locked(tokenId);
-        emit Rebound(personId, tokenId, oldHolder, newHolder);
+        emit Rebound(personId, tokenId, pending.oldHolder, pending.newHolder);
     }
 
     // ------------------------------------------------------------------ views
@@ -133,7 +218,7 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
         return _hashTypedDataV4(keccak256(abi.encode(MINT_TYPEHASH, personId, to, nonce, deadline)));
     }
 
-    /// @notice EIP-712 digest the backend signs for `rebind`.
+    /// @notice EIP-712 digest the backend signs for `requestRebind`.
     function rebindDigest(bytes32 personId, address oldHolder, address newHolder, uint256 nonce, uint256 deadline)
         public
         view
@@ -216,6 +301,7 @@ contract PeopleFounderNFT is ERC721, EIP712, IERC5192 {
     }
 
     function _checkSignature(bytes32 digest, bytes calldata signature) private view {
+        if (signer == address(0)) revert SignerDisabled();
         (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(digest, signature);
         if (err != ECDSA.RecoverError.NoError || recovered != signer) revert InvalidSignature();
     }
