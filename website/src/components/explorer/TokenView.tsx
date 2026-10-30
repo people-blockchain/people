@@ -6,7 +6,7 @@ import { isAddress } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { useExternalWalletOptional, signViaActiveSigner } from "@/context/ExternalWalletContext";
 import { networkJson } from "@/lib/network-client";
-import { TOKEN_ACCOUNTS_TIMEOUT_MS, TOKEN_TIMESTAMP_TIMEOUT_MS, loadAccounts, loadTokenPage, withTimeout } from "@/lib/explorer/token-load";
+import { TOKEN_ACCOUNTS_TIMEOUT_MS, TOKEN_TIMESTAMP_TIMEOUT_MS, loadAccounts, loadTokenPage, parseHolderPayload, withTimeout, type HolderPayload } from "@/lib/explorer/token-load";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { tokenExplorerCopy } from "@/lib/token-explorer-copy";
 import { ACCOUNT_SCAN_LIMIT, formatShare, tokenHolders, holderChart, creationTimestamp, type ExplorerAccount } from "@/lib/token-explorer";
@@ -30,6 +30,15 @@ type Holders = { status: "loading" | "ready" | "failed"; accounts: ExplorerAccou
 const HOLDERS_LOADING: Holders = { status: "loading", accounts: null, partial: false };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
 
+function holderState(payload: HolderPayload | null): Holders {
+  if (!payload) return { status: "ready", accounts: [], partial: true };
+  return {
+    status: "ready",
+    accounts: payload.accounts.slice(0, ACCOUNT_SCAN_LIMIT) as ExplorerAccount[],
+    partial: payload.partial || payload.accounts.length > ACCOUNT_SCAN_LIMIT,
+  };
+}
+
 export function TokenView({ assetId }: { assetId: string }) {
   const { lang } = useLanguage();
   const t = explorerCopy[lang];
@@ -48,9 +57,20 @@ export function TokenView({ assetId }: { assetId: string }) {
   const [iconNotice, setIconNotice] = useState("");
   const [iconError, setIconError] = useState("");
 
-  const fetchHolders = useCallback((signal: AbortSignal) =>
-    networkJson<ExplorerAccount[]>(`accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`, { signal })
-      .then(accounts => Array.isArray(accounts) ? accounts : null), [assetId]);
+  const fetchHolders = useCallback(async (signal: AbortSignal): Promise<HolderPayload | null> => {
+    const once = async () => parseHolderPayload(await networkJson<unknown>(`accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`, { signal }));
+    try {
+      const first = await once();
+      if (first) return first;
+    } catch {
+      /* one automatic retry; a second failure becomes an empty partial state */
+    }
+    try {
+      return await once();
+    } catch {
+      return null;
+    }
+  }, [assetId]);
   const holdersAbort = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -61,7 +81,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     setError(false);
     setLoading(true);
     if (isHiddenAsset(assetId)) { setError(true); setLoading(false); return () => controller.abort(); }
-    void loadTokenPage<Token, ExplorerAccount[]>({
+    void loadTokenPage<Token, HolderPayload>({
       signal: controller.signal,
       fetchAsset: signal => networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal }),
       fetchAccounts: fetchHolders,
@@ -77,9 +97,7 @@ export function TokenView({ assetId }: { assetId: string }) {
       // The page is shown once the asset is known; distribution and date fill in later.
       onAsset: asset => { setData({ asset, timestamp: asset.createdAt === undefined ? null : undefined, fetchedAt: Date.now() }); setLoading(false); },
       onAssetFailed: () => { setError(true); setLoading(false); },
-      onAccounts: result => setHolders(result.ok
-        ? { status: "ready", accounts: result.value.slice(0, ACCOUNT_SCAN_LIMIT), partial: result.value.length > ACCOUNT_SCAN_LIMIT }
-        : { status: "failed", accounts: null, partial: false }),
+      onAccounts: result => setHolders(holderState(result.ok ? result.value : null)),
       onTimestamp: timestamp => setData(prev => prev ? { ...prev, timestamp } : prev),
     });
     return () => controller.abort();
@@ -92,9 +110,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     setHolders(HOLDERS_LOADING);
     void loadAccounts(fetchHolders, TOKEN_ACCOUNTS_TIMEOUT_MS, controller.signal).then(result => {
       if (controller.signal.aborted) return;
-      setHolders(result.ok
-        ? { status: "ready", accounts: result.value.slice(0, ACCOUNT_SCAN_LIMIT), partial: result.value.length > ACCOUNT_SCAN_LIMIT }
-        : { status: "failed", accounts: null, partial: false });
+      setHolders(holderState(result.ok ? result.value : null));
     });
   }
 
@@ -208,7 +224,7 @@ export function TokenView({ assetId }: { assetId: string }) {
         <h2 id="holder-title" className="text-xl font-bold">{c.distribution}</h2>
         <p className="mt-2 max-w-3xl text-sm text-ink-3">{c.note}</p>
         {holders.partial ? <p role="status" className="mt-3 text-sm text-warm">{c.partial}</p> : null}
-        {holders.status === "loading" ? <p role="status" aria-live="polite" className="mt-5 text-ink-3">{c.loadingDistribution}</p> : holders.status === "failed" ? <div role="alert" className="mt-5"><p className="text-warm">{c.failed}</p><button type="button" onClick={retryHolders} className="mt-3 text-sm text-brand">{c.retry}</button></div> : !distribution.holders.length ? <p className="mt-5 text-ink-3">{c.noHolders}</p> : <>
+        {holders.status === "loading" ? <p role="status" aria-live="polite" className="mt-5 text-ink-3">{c.loadingDistribution}</p> : !distribution.holders.length ? <div className="mt-5"><p className="text-ink-3">{c.noHolders}</p>{holders.partial ? <button type="button" onClick={retryHolders} className="mt-3 text-sm text-brand">{c.retry}</button> : null}</div> : <>
           <div className="mt-6 grid items-center gap-8 rounded-2xl border border-line p-6 sm:grid-cols-[240px_1fr]">
             <div role="img" aria-label={`${c.distribution}: ${chart.map(row => `${row.label === "other" ? c.other : row.label} ${formatShare(row.share)}`).join(", ")}`} className="relative mx-auto grid h-52 w-52 place-items-center rounded-full" style={{ background: `conic-gradient(${gradient})` }}>
               <div className="grid h-36 w-36 place-content-center rounded-full bg-surface text-center"><strong className="text-3xl">{distribution.holders.length}</strong><span className="mt-1 text-xs text-ink-3">{c.holders}</span></div>

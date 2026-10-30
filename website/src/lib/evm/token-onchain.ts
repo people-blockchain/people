@@ -9,7 +9,16 @@ import {
   type Hex,
 } from "viem";
 import { tokenImageFromMetadataUri } from "@/lib/evm/chain-catalog";
-import { readTokenUriMetadata, type TokenUriMetadata } from "@/lib/evm/token-uri-metadata";
+import {
+  fetchCachedMetadataImage,
+  readTokenUriMetadata,
+  resetTokenImageCacheForTests as resetMetadataImageCacheForTests,
+  tokenImageCacheSizeForTests as metadataImageCacheSizeForTests,
+  TOKEN_IMAGE_CACHE_MAX,
+  type TokenUriMetadata,
+} from "@/lib/evm/token-uri-metadata";
+
+export { TOKEN_IMAGE_CACHE_MAX };
 
 /**
  * Pure token reader. `call` is an injected `eth_call`: it resolves to the returned hex, or to null
@@ -135,31 +144,13 @@ export async function readTokenOnchain(call: TokenCall, token: Address): Promise
 export type FetchTokenMetadata = (uri: string) => Promise<TokenUriMetadata | null>;
 
 const METADATA_JSON_SUFFIX = /\/metadata\.json(?:[?#].*)?$/i;
-export const TOKEN_IMAGE_CACHE_TTL_MS = 5 * 60_000;
-export const TOKEN_IMAGE_NEGATIVE_TTL_MS = 30_000;
-export const TOKEN_IMAGE_CACHE_MAX = 500;
-
-const imageCache = new Map<string, { expiresAt: number; value: string | undefined }>();
 
 export function resetTokenImageCacheForTests(): void {
-  imageCache.clear();
+  resetMetadataImageCacheForTests();
 }
 
 export function tokenImageCacheSizeForTests(): number {
-  return imageCache.size;
-}
-
-function rememberImage(uri: string, value: string | undefined): void {
-  imageCache.delete(uri);
-  imageCache.set(uri, {
-    expiresAt: Date.now() + (value ? TOKEN_IMAGE_CACHE_TTL_MS : TOKEN_IMAGE_NEGATIVE_TTL_MS),
-    value,
-  });
-  while (imageCache.size > TOKEN_IMAGE_CACHE_MAX) {
-    const oldest = imageCache.keys().next().value;
-    if (oldest === undefined) break;
-    imageCache.delete(oldest);
-  }
+  return metadataImageCacheSizeForTests();
 }
 
 /**
@@ -176,15 +167,6 @@ export async function resolveTokenImageUri(
   if (!uri) return undefined;
   if (!METADATA_JSON_SUFFIX.test(uri)) return tokenImageFromMetadataUri(uri) ?? undefined;
   if (uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return undefined;
-  const cached = imageCache.get(uri);
-  if (cached && cached.expiresAt > Date.now()) return cached.value;
-  let image: string | undefined;
-  try {
-    const meta = await fetchJson(uri);
-    image = tokenImageFromMetadataUri(meta?.image) ?? undefined;
-  } catch {
-    image = undefined;
-  }
-  rememberImage(uri, image);
-  return image;
+  const image = await fetchCachedMetadataImage(uri, fetchJson);
+  return tokenImageFromMetadataUri(image) ?? undefined;
 }

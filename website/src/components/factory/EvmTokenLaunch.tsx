@@ -15,6 +15,8 @@ import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { TxPreflightError, preflightAndSend, preflightTx } from "@/lib/evm/tx-preflight";
+import { preflightTokenCreateRpc, preflightTxWithRetry } from "@/lib/factory/token-create-preflight";
+import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
 import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import { networkJson } from "@/lib/network-client";
@@ -309,18 +311,20 @@ export function EvmTokenLaunch() {
       const client = readPublicClient();
       // Simulate (eth_call + estimateGas) before the wallet prompt: a tx that would revert is never
       // sent, and the real send carries the estimate plus a 20% gas buffer.
-      const sendChecked = (request: { address: Address; abi: Abi; functionName: string; args: readonly unknown[]; value?: bigint }) =>
-        preflightAndSend(
+      const sendChecked = async (request: { address: Address; abi: Abi; functionName: string; args: readonly unknown[]; value?: bigint }) => {
+        const tx = {
+          account: signer.address,
+          to: request.address,
+          data: encodeFunctionData({ abi: request.abi, functionName: request.functionName, args: request.args }),
+          value: request.value,
+        };
+        return preflightAndSend(
           client,
-          (tx) => writeViaActiveSigner(signer, { ...request, gas: tx.gas }),
-          {
-            account: signer.address,
-            to: request.address,
-            data: encodeFunctionData({ abi: request.abi, functionName: request.functionName, args: request.args }),
-            value: request.value,
-          },
-          { abi: CREATE_FLOW_ERRORS_ABI },
+          (ready) => writeViaActiveSigner(signer, { ...request, gas: ready.gas }),
+          tx,
+          { abi: CREATE_FLOW_ERRORS_ABI, simulate: (c, t, o) => preflightTxWithRetry(c, t, o) },
         );
+      };
       if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
         setError(u.supplyMinError);
         return;
@@ -334,6 +338,95 @@ export function EvmTokenLaunch() {
       const existing = findDuplicateTokens(knownTokens, { name, symbol });
       if (existing.length && !confirmDuplicate) {
         setError(u.tokenDuplicateTitle);
+        return;
+      }
+
+      if (payWith !== "PPL") {
+        const stableReady = stableAssets.find((asset) => asset.id === payWith);
+        if (!stableReady || !gateway || stableFeeUsd6 === null) {
+          setError(form.stableFeeBuybackNote);
+          return;
+        }
+      }
+
+      // Chain id, payer balance, and a placeholder createToken simulation. Nothing is pinned until this passes.
+      const rpcReady = await preflightTokenCreateRpc({
+        expectedChainId: PEOPLE_EIP155_CHAIN_ID,
+        payer: signer.address,
+        client: {
+          getChainId: () => client.getChainId(),
+          getBalance: () => client.getBalance({ address: signer.address }),
+          simulateCreate: async () => {
+            const factory = dep.contracts.tokenFactory as `0x${string}`;
+            const fee = await client.readContract({
+              address: factory,
+              abi: factoryAbi,
+              functionName: "tokenCreateFee",
+            });
+            let credit = BigInt(0);
+            try {
+              credit = await client.readContract({
+                address: factory,
+                abi: factoryLaunchAbi,
+                functionName: "prepaidCredit",
+                args: [signer.address],
+              });
+            } catch {
+              credit = BigInt(0);
+            }
+            const payingWithStable = payWith !== "PPL";
+            const createValue = requiredFeeValue(fee, credit);
+            if (payingWithStable && credit < fee && gateway) {
+              const stable = stableAssets.find((asset) => asset.id === payWith);
+              if (!stable) throw new Error("stable_fee_unavailable");
+              const pay = await preflightTx(
+                client,
+                {
+                  account: signer.address,
+                  to: gateway,
+                  data: encodeFunctionData({
+                    abi: stableFeeGatewayAbi,
+                    functionName: "payLaunchFee",
+                    args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
+                  }),
+                },
+                { abi: CREATE_FLOW_ERRORS_ABI },
+              );
+              if (!pay.ok) throw new TxPreflightError(pay.reason);
+            }
+            const created = await preflightTx(
+              client,
+              {
+                account: signer.address,
+                to: factory,
+                data: encodeFunctionData({
+                  abi: factoryLaunchAbi,
+                  functionName: "createToken",
+                  args: [
+                    name.trim(),
+                    symbol.trim().toUpperCase(),
+                    LAUNCH_DECIMALS,
+                    total,
+                    TOKEN_CREATE_PREFLIGHT_METADATA_URI,
+                    promoBps,
+                    leftoverMode,
+                  ],
+                }),
+                value: createValue,
+              },
+              { abi: CREATE_FLOW_ERRORS_ABI },
+            );
+            if (!created.ok) {
+              // A stable payer does not hold the PPL shortfall; that value is only on the simulation.
+              if (payingWithStable && createValue > BigInt(0) && isSenderBalanceMiss(created.reason.message)) return;
+              if (isSenderBalanceMiss(created.reason.message)) throw new Error(created.reason.message);
+              throw new TxPreflightError(created.reason);
+            }
+          },
+        },
+      });
+      if (!rpcReady.ok) {
+        setError(nm.errNetworkRpc);
         return;
       }
 
@@ -352,15 +445,8 @@ export function EvmTokenLaunch() {
         }
       }
 
-      if (payWith !== "PPL") {
-        const stableReady = stableAssets.find((asset) => asset.id === payWith);
-        if (!stableReady || !gateway || stableFeeUsd6 === null) {
-          setError(form.stableFeeBuybackNote);
-          return;
-        }
-      }
-
-      // Simulate first. Pin the metadata JSON only after that passes, so a revert never uploads it.
+      // Metadata is pinned only after the duplicate check and the RPC preflight. The real
+      // metadata URI is simulated again in sendChecked before the wallet prompt.
       setStage("uploading");
       let metadataURI: string;
       try {
@@ -370,73 +456,7 @@ export function EvmTokenLaunch() {
           {
             duplicates: existing,
             confirmed: confirmDuplicate,
-            preflight: async () => {
-              const factory = dep.contracts.tokenFactory as `0x${string}`;
-              const fee = await client.readContract({
-                address: factory,
-                abi: factoryAbi,
-                functionName: "tokenCreateFee",
-              });
-              let credit = BigInt(0);
-              try {
-                credit = await client.readContract({
-                  address: factory,
-                  abi: factoryLaunchAbi,
-                  functionName: "prepaidCredit",
-                  args: [signer.address],
-                });
-              } catch {
-                credit = BigInt(0);
-              }
-              const payingWithStable = payWith !== "PPL";
-              const createValue = requiredFeeValue(fee, credit);
-              if (payingWithStable && credit < fee && gateway) {
-                const stable = stableAssets.find((asset) => asset.id === payWith);
-                if (!stable) throw new Error("stable_fee_unavailable");
-                const pay = await preflightTx(
-                  client,
-                  {
-                    account: signer.address,
-                    to: gateway,
-                    data: encodeFunctionData({
-                      abi: stableFeeGatewayAbi,
-                      functionName: "payLaunchFee",
-                      args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
-                    }),
-                  },
-                  { abi: CREATE_FLOW_ERRORS_ABI },
-                );
-                if (!pay.ok) throw new TxPreflightError(pay.reason);
-              }
-              const created = await preflightTx(
-                client,
-                {
-                  account: signer.address,
-                  to: factory,
-                  data: encodeFunctionData({
-                    abi: factoryLaunchAbi,
-                    functionName: "createToken",
-                    args: [
-                      name.trim(),
-                      symbol.trim().toUpperCase(),
-                      LAUNCH_DECIMALS,
-                      total,
-                      TOKEN_CREATE_PREFLIGHT_METADATA_URI,
-                      promoBps,
-                      leftoverMode,
-                    ],
-                  }),
-                  value: createValue,
-                },
-                { abi: CREATE_FLOW_ERRORS_ABI },
-              );
-              if (!created.ok) {
-                // A stable payer does not hold the PPL shortfall; that value is only on the simulation.
-                if (payingWithStable && createValue > BigInt(0) && isSenderBalanceMiss(created.reason.message)) return;
-                if (isSenderBalanceMiss(created.reason.message)) throw new Error(created.reason.message);
-                throw new TxPreflightError(created.reason);
-              }
-            },
+            preflight: async () => true,
           },
         );
       } catch (err) {

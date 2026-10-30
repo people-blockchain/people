@@ -10,7 +10,8 @@ import { Eyebrow } from "@/components/ui/primitives";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { SkeletonRows } from "./ExplorerSkeleton";
 import { uxCopy, displaySymbol } from "@/lib/ux-copy";
-import { displayAssetName, visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { displayAssetName, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { mergeTokenCatalogRows, tokenCatalogRows } from "@/lib/explorer/token-catalog-list";
 import { ExplorerSubnav } from "./ExplorerSubnav";
 import { assetDecimals, formatAssetUnits, formatPpl } from "@/lib/asset-amounts";
 
@@ -38,7 +39,7 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
   const t = explorerCopy[lang];
   const u = uxCopy[lang];
   const prefetched = Boolean(initialAssets?.length);
-  const [items, setItems] = useState<TokenRow[]>(() => visibleAssets(initialAssets ?? []));
+  const [items, setItems] = useState<TokenRow[]>(() => tokenCatalogRows(initialAssets ?? []));
   const [pools, setPools] = useState<PoolRow[]>(() => visiblePools(initialPools ?? []));
 
   const [loading, setLoading] = useState(!prefetched);
@@ -47,7 +48,11 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
   useEffect(() => {
     let alive = true;
     void networkJson<TokenRow[]>("assets")
-      .then((body) => { if (alive) setItems(Array.isArray(body) ? visibleAssets(body) : []); })
+      .then((body) => {
+        if (!alive) return;
+        const next = tokenCatalogRows(Array.isArray(body) ? body : []);
+        setItems((current) => mergeTokenCatalogRows(current, next));
+      })
       // A failed background refresh must not replace the prefetched rows with an error notice.
       .catch(() => { if (alive && !prefetched) setFailed(true); })
       .finally(() => { if (alive) setLoading(false); });

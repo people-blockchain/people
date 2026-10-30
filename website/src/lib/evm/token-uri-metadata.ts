@@ -65,3 +65,52 @@ export async function readTokenUriMetadata(tokenUri: string): Promise<TokenUriMe
     return null;
   }
 }
+
+export const TOKEN_IMAGE_CACHE_TTL_MS = 5 * 60_000;
+export const TOKEN_IMAGE_NEGATIVE_TTL_MS = 30_000;
+export const TOKEN_IMAGE_CACHE_MAX = 500;
+
+const imageCache = new Map<string, { expiresAt: number; value: string | undefined }>();
+
+export function resetTokenImageCacheForTests(): void {
+  imageCache.clear();
+}
+
+export function tokenImageCacheSizeForTests(): number {
+  return imageCache.size;
+}
+
+function rememberImage(uri: string, value: string | undefined): void {
+  imageCache.delete(uri);
+  imageCache.set(uri, {
+    expiresAt: Date.now() + (value ? TOKEN_IMAGE_CACHE_TTL_MS : TOKEN_IMAGE_NEGATIVE_TTL_MS),
+    value,
+  });
+  while (imageCache.size > TOKEN_IMAGE_CACHE_MAX) {
+    const oldest = imageCache.keys().next().value;
+    if (oldest === undefined) break;
+    imageCache.delete(oldest);
+  }
+}
+
+/**
+ * Fetches a pinned metadata JSON and returns its `image` (ipfs:// or https://), or undefined.
+ * Failures are cached for a shorter time than hits so a blip does not stick.
+ */
+export async function fetchCachedMetadataImage(
+  uri: string,
+  fetchJson: (tokenUri: string) => Promise<TokenUriMetadata | null> = readTokenUriMetadata,
+): Promise<string | undefined> {
+  const key = uri.trim();
+  const cached = imageCache.get(key);
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
+  let image: string | undefined;
+  try {
+    const meta = await fetchJson(key);
+    image = metadataImage(meta?.image);
+  } catch {
+    image = undefined;
+  }
+  rememberImage(key, image);
+  return image;
+}

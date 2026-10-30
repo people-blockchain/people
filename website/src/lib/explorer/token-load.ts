@@ -53,6 +53,17 @@ export function withTimeout<T>(run: (signal: AbortSignal) => Promise<T>, timeout
 
 export type AccountsResult<A> = { ok: true; value: A } | { ok: false };
 
+export type HolderPayload = { accounts: { address: string }[]; partial: boolean };
+
+/** Accepts the historical array body and `{ accounts, partial }` from a scan that lost a window. */
+export function parseHolderPayload(body: unknown): HolderPayload | null {
+  if (Array.isArray(body)) return { accounts: body as HolderPayload["accounts"], partial: false };
+  if (!body || typeof body !== "object") return null;
+  const accounts = (body as { accounts?: unknown }).accounts;
+  if (!Array.isArray(accounts)) return null;
+  return { accounts: accounts as HolderPayload["accounts"], partial: (body as { partial?: unknown }).partial === true };
+}
+
 /** Loads the distribution; any failure (HTTP error, timeout, malformed body) is `{ ok: false }`. */
 export async function loadAccounts<A>(
   fetchAccounts: (signal: AbortSignal) => Promise<A | null>,

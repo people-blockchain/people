@@ -266,9 +266,14 @@ export async function preflightAndSend(
   client: PreflightClient,
   send: (tx: PreflightTx & { gas: bigint }) => Promise<Hex>,
   tx: PreflightTx,
-  opts?: { abi?: Abi },
+  opts?: {
+    abi?: Abi;
+    /** Replaces `preflightTx` (for example a retrying wrapper). The send itself is never retried. */
+    simulate?: (client: PreflightClient, tx: PreflightTx, opts?: { abi?: Abi }) => Promise<PreflightResult>;
+  },
 ): Promise<Hex> {
-  const result = await preflightTx(client, tx, opts);
+  const simulate = opts?.simulate ?? preflightTx;
+  const result = await simulate(client, tx, opts);
   if (!result.ok) throw new TxPreflightError(result.reason);
   return send({ ...tx, gas: result.gas });
 }

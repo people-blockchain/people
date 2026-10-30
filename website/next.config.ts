@@ -172,6 +172,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "peopleblockchain.network" },
       { protocol: "https", hostname: "**.vercel.app" },
       { protocol: "https", hostname: "ipfs.io" },
+      { protocol: "https", hostname: "gateway.pinata.cloud" },
       { protocol: "https", hostname: "**.ipfs.dweb.link" },
       { protocol: "https", hostname: "**.ipfs.w3s.link" },
     ],

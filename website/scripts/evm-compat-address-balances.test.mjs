@@ -4,9 +4,10 @@ import { createServer } from "node:http";
 import { encodeAbiParameters, encodeEventTopics, toFunctionSelector } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
-import { resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
+import { logStartBlock, resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { handleEvmCompatGet, resetMintedNftCacheForTests } from "../src/lib/evm/people-compat.ts";
 import { NFT_MINTED_TOPIC, nftFactoryAddress, nftMintedEvent } from "../src/lib/evm/nft-factory.ts";
+import { ipfsGatewayUrlForUri } from "../src/lib/ipfs.ts";
 
 const hex = (value) => `0x${value.toString(16)}`;
 const HEAD = 100_000;
@@ -64,18 +65,38 @@ async function startRpcNode(t, answer, rejectBatch = () => false) {
     req.on("data", (chunk) => chunks.push(chunk));
     req.on("end", () => {
       const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-      res.writeHead(200, { "content-type": "application/json" });
+      const replyOne = (call) => {
+        const result = answer(call);
+        if (result && typeof result === "object" && result.http) {
+          return { http: result.http, error: { message: `rpc_http_${result.http}` } };
+        }
+        return { result: result ?? null };
+      };
       if (Array.isArray(body)) {
         calls.push(...body);
         if (rejectBatch(body)) {
+          res.writeHead(200, { "content-type": "application/json" });
           res.end(JSON.stringify({ jsonrpc: "2.0", id: null, error: { message: "batch too large" } }));
           return;
         }
-        res.end(JSON.stringify(body.map((call) => ({ jsonrpc: "2.0", id: call.id, result: answer(call) ?? null }))));
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify(body.map((call) => {
+          const one = replyOne(call);
+          return one.error
+            ? { jsonrpc: "2.0", id: call.id, error: one.error }
+            : { jsonrpc: "2.0", id: call.id, result: one.result };
+        })));
         return;
       }
       calls.push(body);
-      res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result: answer(body) ?? null }));
+      const one = replyOne(body);
+      if (one.http) {
+        res.writeHead(one.http, { "content-type": "application/json" });
+        res.end(JSON.stringify({ error: one.error }));
+        return;
+      }
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result: one.result }));
     });
   });
   await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
@@ -294,8 +315,69 @@ test("a fresh factory token not in the catalog reports its on-chain creator and 
   const res = await handleEvmCompatGet(`/assets/${token}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.creator.toLowerCase(), OWNER.toLowerCase());
-  assert.equal(res.body.imageUri, metadataURI);
-  assert.equal(res.body.creationMetadata.image, metadataURI);
+  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(metadataURI));
+  assert.equal(res.body.creationMetadata.image, ipfsGatewayUrlForUri(metadataURI));
   assert.equal(res.body.verified, false);
   assert.equal(res.body.tokenAddress.toLowerCase(), token);
+});
+
+test("one balance read fails with 503 and the response is partial 200 with the other tokens", async (t) => {
+  const dep = readEvmDeployments();
+  const factory = dep.contracts.tokenFactory;
+  assert.ok(factory, "deployment has a token factory");
+  const assetMap = Object.entries(dep.assetMap);
+  const holding = assetMap[0];
+  const failing = assetMap[1];
+  assert.ok(holding && failing);
+  const created = "0x00000000000000000000000000000000000e7a11";
+  const head = logStartBlock(factory) + 50;
+  const topic = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
+  const tokens = [
+    {
+      address: holding[1], name: "Holding", symbol: "HOLD", decimals: 6,
+      supply: 1_000_000n, creator: OTHER, metadataURI: "", balance: 2_000_000n,
+    },
+    {
+      address: failing[1], name: "Failing", symbol: "FAIL", decimals: 6,
+      supply: 1_000_000n, creator: OTHER, metadataURI: "", balance: 9_000_000n,
+    },
+    {
+      address: created, name: "Fresh", symbol: "FRESH", decimals: 6,
+      supply: 5_000_000n, creator: OTHER, metadataURI: "", balance: 3_000_000n,
+    },
+  ];
+  for (const [, address] of assetMap.slice(2)) {
+    tokens.push({
+      address, name: "Other", symbol: "OTH", decimals: 6,
+      supply: 1n, creator: OTHER, metadataURI: "", balance: 0n,
+    });
+  }
+  const base = answerFor(tokens, [created]);
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(head);
+    if (call.method === "eth_getLogs") {
+      const filter = call.params[0] ?? {};
+      const topic0 = filter.topics?.[0];
+      const createdTopic = topic0 === topic || (Array.isArray(topic0) && topic0.includes(topic));
+      if (!createdTopic || String(filter.address).toLowerCase() !== factory.toLowerCase()) return [];
+      return [{
+        address: factory,
+        topics: [topic, `0x${created.slice(2).padStart(64, "0")}`],
+        data: "0x",
+      }];
+    }
+    if (call.method === "eth_call") {
+      const to = String(call.params[0]?.to ?? "").toLowerCase();
+      const data = String(call.params[0]?.data ?? "");
+      if (data.slice(0, 10) === SEL.balanceOf && to === failing[1].toLowerCase()) return { http: 503 };
+    }
+    return base(call);
+  });
+
+  const res = await handleEvmCompatGet(`/address/${OWNER}`, new URLSearchParams());
+  assert.equal(res.status, 200);
+  assert.equal(res.body.partial, true);
+  assert.equal(res.body.balances[holding[0].toLowerCase()], 2);
+  assert.equal(res.body.balances[failing[0].toLowerCase()], undefined);
+  assert.equal(res.body.balances[created.toLowerCase()], 3);
 });

@@ -38,7 +38,7 @@ async function startRpcNode(t, answer) {
       const result = answer(body);
       if (result && typeof result === "object" && "http" in result) {
         res.writeHead(result.http, { "content-type": "application/json" });
-        res.end(JSON.stringify({ error: { message: "node unavailable" } }));
+        res.end(JSON.stringify({ error: { message: `rpc_http_${result.http}` } }));
         return;
       }
       res.writeHead(200, { "content-type": "application/json" });
@@ -143,6 +143,64 @@ test("every factory answering false is 404 unknown_token", async (t) => {
   assert.equal(res.status, 404);
   assert.deepEqual(res.body, { error: "unknown_token" });
   assert.equal(getLogCalls(calls).length, 0);
+});
+
+test("a holder scan retries a transient getLogs failure and then returns holders", async (t) => {
+  const token = "0x00000000000000000000000000000000000f0008";
+  const created = deployBlock() + 1_000;
+  const head = created + 20;
+  let logs = 0;
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(head);
+    if (isRegistryCall(call)) return String(call.params[0].data).toLowerCase().endsWith(token.slice(2)) ? TRUE_WORD : FALSE_WORD;
+    if (call.method === "eth_getCode") return Number.parseInt(call.params[1], 16) >= created ? "0x6080604052" : "0x";
+    if (call.method === "eth_getLogs") {
+      logs += 1;
+      if (logs === 1) return { http: 503 };
+      return [{
+        address: token,
+        topics: [TRANSFER_TOPIC, ZERO_ADDRESS_TOPIC, `0x${"0".repeat(24)}${HOLDER.slice(2)}`],
+        data: hex(2n * 10n ** 18n),
+        blockNumber: hex(created + 1),
+        transactionHash: `0x${"cd".repeat(32)}`,
+      }];
+    }
+    return "0x";
+  });
+  const res = await handleEvmCompatGet("/accounts", new URLSearchParams({ assetId: token }));
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body));
+  assert.equal(res.body.length, 1);
+  assert.equal(res.body[0].address.toLowerCase(), HOLDER);
+  assert.ok(logs >= 2);
+});
+
+test("a holder window that keeps failing is a partial 200 when another window succeeded", async (t) => {
+  const token = "0x00000000000000000000000000000000000f0009";
+  const created = 700_000;
+  const head = created + 10_000;
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(head);
+    if (isRegistryCall(call)) return TRUE_WORD;
+    if (call.method === "eth_getCode") return Number.parseInt(call.params[1], 16) >= created ? "0x6080604052" : "0x";
+    if (call.method === "eth_getLogs") {
+      const from = Number.parseInt(call.params[0].fromBlock, 16);
+      if (from > created + 8_999) return { http: 503 };
+      return [{
+        address: token,
+        topics: [TRANSFER_TOPIC, ZERO_ADDRESS_TOPIC, `0x${"0".repeat(24)}${HOLDER.slice(2)}`],
+        data: hex(4n * 10n ** 18n),
+        blockNumber: hex(created + 2),
+        transactionHash: `0x${"ef".repeat(32)}`,
+      }];
+    }
+    return "0x";
+  });
+  const res = await handleEvmCompatGet("/accounts", new URLSearchParams({ assetId: token }));
+  assert.equal(res.status, 200);
+  assert.equal(res.body.partial, true);
+  assert.equal(res.body.accounts.length, 1);
+  assert.equal(res.body.accounts[0].address.toLowerCase(), HOLDER);
 });
 
 test("a failing holder scan is 502, never an empty holder list", async (t) => {
