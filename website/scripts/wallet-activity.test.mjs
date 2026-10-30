@@ -1,5 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import { parseUnits } from 'viem';
 import {readPending,trackPending,forgetPending,operationStatus,parseWalletAddress,maxTransferAmount} from '../src/lib/wallet-activity.ts';
 test('pending history is scoped, deduplicated and never stores credentials',()=>{
   const values=new Map();globalThis.localStorage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};
@@ -21,7 +22,12 @@ test('QR address validation rejects unsafe schemes and malformed recipients',()=
  for(const value of ['javascript:alert(1)','0x123','https://example.com/?address='+address])assert.equal(parseWalletAddress(value),null);
 });
 test('maximum native payment leaves the approved fee available',()=>{
- for(const balance of [10,0.004875,0,100.123456789]){
-  const max=Number(maxTransferAmount(balance,0.004875));assert.ok(max>=0);if(balance>=0.004875)assert.ok(max+0.004875<=balance+1e-12);
+ const fee=parseUnits('0.004875',18);
+ for(const balance of ['10','0.004875','0','100.123456789']){
+  const balanceWei=parseUnits(balance,18);
+  const maxWei=parseUnits(maxTransferAmount(balanceWei,fee),18);
+  assert.ok(maxWei>=0n);
+  if(balanceWei>=fee)assert.equal(maxWei+fee,balanceWei);
+  else assert.equal(maxWei,0n);
  }
 });

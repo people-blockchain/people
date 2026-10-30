@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { AgentsPublicCopy } from "@/lib/agents-public-content";
 import type { Language } from "@/lib/preferences";
+import { weiFromField } from "@/lib/asset-amounts";
+import { PplAmount } from "@/components/ui/PplAmount";
 
 type LiveAgentCopy = AgentsPublicCopy["liveAgent"];
 
 type AgentSpendEvent = {
   recipient: string;
-  amountPpl: number;
+  amountWei: string;
   blockNumber: number;
   transactionHash: string;
   timestampMs: number | null;
@@ -19,7 +21,7 @@ type Snapshot = {
   wallet: string;
   executor: string;
   guardian: string;
-  balancePpl: number;
+  balanceWei: string;
   events: AgentSpendEvent[];
 };
 
@@ -89,7 +91,7 @@ export function CommunityAgentLive({ copy, lang }: { copy: LiveAgentCopy; lang: 
           <div className="flex items-center justify-between gap-3 py-1.5">
             <dt className="text-xs text-ink-3">{copy.balanceLabel}</dt>
             <dd className="font-mono text-sm font-semibold text-ink">
-              {snapshot.balancePpl.toLocaleString(lang, { maximumFractionDigits: 4 })} PPL
+              <PplAmount wei={weiFromField(snapshot.balanceWei) ?? BigInt(0)} />
             </dd>
           </div>
         </dl>
@@ -117,7 +119,7 @@ export function CommunityAgentLive({ copy, lang }: { copy: LiveAgentCopy; lang: 
                 className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-sm"
               >
                 <span className="font-mono font-semibold text-ink">
-                  {event.amountPpl.toLocaleString(lang, { maximumFractionDigits: 4 })} PPL
+                  <PplAmount wei={weiFromField(event.amountWei) ?? BigInt(0)} />
                 </span>
                 <Link
                   href={`/explorer/address/${event.recipient}`}

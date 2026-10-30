@@ -13,7 +13,7 @@ import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-cat
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { assembleNftRows, listMintedNfts, readNftTokenOnChain, type ChainNft } from "@/lib/evm/nft-chain";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
+import { evmJsonRpc } from "@/lib/evm/rpc-server";
 
 type AssetRow = {
   assetId: string;
@@ -297,11 +297,17 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     } catch {
       return { status: 502, body: { error: "rpc_unavailable" } };
     }
-    const balance = weiToPpl(BigInt(balanceHex));
+    const balanceWei = BigInt(balanceHex);
     const nonce = Number.parseInt(nonceHex, 16);
     return {
       status: 200,
-      body: { balance, nonce, balances: { ppl: balance }, outgoingTxs: nonce, incomingTxs: 0 },
+      body: {
+        balanceWei: balanceWei.toString(),
+        nonce,
+        balances: {},
+        outgoingTxs: nonce,
+        incomingTxs: 0,
+      },
     };
   }
 
