@@ -74,7 +74,7 @@ export function TokenView({ assetId }: { assetId: string }) {
         const archived = await withTimeout(s => fetch(`/api/explorer/token/${encodeURIComponent(assetId)}/created`, { signal: s }).then(r => r.ok ? r.json() : null), TOKEN_TIMESTAMP_TIMEOUT_MS, signal).catch(() => null);
         return typeof archived?.timestamp === "number" ? archived.timestamp : null;
       },
-      // The page is shown as soon as the asset is known; distribution and date fill in later.
+      // The page is shown once the asset is known; distribution and date fill in later.
       onAsset: asset => { setData({ asset, timestamp: asset.createdAt === undefined ? null : undefined, fetchedAt: Date.now() }); setLoading(false); },
       onAssetFailed: () => { setError(true); setLoading(false); },
       onAccounts: result => setHolders(result.ok
