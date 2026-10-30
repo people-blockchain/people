@@ -774,15 +774,26 @@ test("a stalled upload ends as a timeout instead of hanging", async () => {
   const fetchImpl = (_url, init) =>
     new Promise((_resolve, reject) => {
       const signal = init?.signal;
+      // AbortSignal.timeout() does not ref its timer. A real stalled upload holds
+      // a socket; without a ref'd handle Node 22 drains the loop and cancels the
+      // test before that timer can reject.
+      let settled = false;
+      const gaveUp = setTimeout(() => finish(new Error("stalled fetch was not aborted")), 500);
+      function finish(error) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(gaveUp);
+        reject(error);
+      }
       if (!signal) {
-        reject(new Error("missing timeout"));
+        finish(new Error("missing timeout"));
         return;
       }
       if (signal.aborted) {
-        reject(signal.reason);
+        finish(signal.reason);
         return;
       }
-      signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+      signal.addEventListener("abort", () => finish(signal.reason), { once: true });
     });
   await assert.rejects(
     () =>
