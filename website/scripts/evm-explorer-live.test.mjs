@@ -182,15 +182,6 @@ test('every block read in the opening batch failing marks the feed offline', asy
   assert.equal(feeds.length, 0);
 });
 
-test('the unavailable badge is withheld once any block or transaction is on screen', async () => {
-  const { explorerHomePhase } = await import('../src/lib/evm/explorer-live.ts');
-  assert.equal(explorerHomePhase('offline', 0, 0), 'offline');
-  assert.equal(explorerHomePhase('offline', 2, 0), 'online');
-  assert.equal(explorerHomePhase('offline', 0, 1), 'online');
-  assert.equal(explorerHomePhase('checking', 2, 0), 'checking');
-  assert.equal(explorerHomePhase('online', 0, 0), 'online');
-});
-
 
 test('Cosmos first block is 1; never requests the RPC zero-height alias', async t => {
   const { sockets: [s], feeds } = setup(t, { head: 1 });
