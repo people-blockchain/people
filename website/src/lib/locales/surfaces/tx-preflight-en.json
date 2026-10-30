@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "The network would reject this transaction, so it was not sent and nothing was charged. Reason: {reason}",
+  "preflightRevertGeneric": "The network would reject this transaction, so it was not sent and nothing was charged.",
+  "preflightDailyLimit": "The daily limit for paying with a stablecoin has been reached. Nothing was charged. Pay in PPL instead, or try again after midnight UTC.",
+  "preflightPayInPplHint": "Tip: if you chose to pay with a stablecoin, switch to paying in PPL and try again."
+}

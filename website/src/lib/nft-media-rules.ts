@@ -127,7 +127,7 @@ export function parseIpfsMediaUri(uri: string): { cid: string; path: string } | 
   return { cid, path: segments.join("/") };
 }
 
-function isPublicHttpsHost(hostname: string): boolean {
+export function isPublicHttpsHost(hostname: string): boolean {
   if (!hostname.includes(".") || hostname.startsWith("[")) return false;
   if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) return false;
   const lower = hostname.toLowerCase();

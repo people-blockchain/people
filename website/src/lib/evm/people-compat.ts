@@ -1,4 +1,4 @@
-import { decodeEventLog, encodeFunctionData, formatUnits, getAddress, isAddress, parseAbi, type Hex } from "viem";
+import { decodeEventLog, encodeFunctionData, formatUnits, getAddress, isAddress, parseAbi, type Address, type Hex } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import {
   fetchBlockByHeight,
@@ -8,7 +8,7 @@ import {
   fetchTransaction,
 } from "@/lib/evm/explorer-blocks";
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
-import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
+import { aggregateHoldersFromTransfers, findTokenCreationBlock } from "@/lib/evm/transfer-index";
 import {
   LOG_WINDOW_BLOCKS,
   applyTokenImage,
@@ -16,19 +16,18 @@ import {
   discoverTokensOnChain,
   fetchLogsWindowed,
   logStartBlock,
-  tokenImageFromMetadataUri,
 } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, listSeedNfts, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
-import { evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
+import { EvmRpcResponseError, evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
+import { FALLBACK_TOKEN_SYMBOL, readTokenOnchain, resolveTokenImageUri } from "@/lib/evm/token-onchain";
+import { readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
 import {
   NFT_MINTED_TOPIC,
   nftFactoryAddress,
   nftMintedEvent,
 } from "@/lib/evm/nft-factory";
-import { ipfsGatewayUrlForUri } from "@/lib/ipfs";
-import { readCappedText } from "@/lib/read-capped-text";
 
 type AssetRow = {
   assetId: string;
@@ -37,7 +36,7 @@ type AssetRow = {
   symbol: string;
   decimals: number;
   totalSupply: number;
-  creator: string;
+  creator?: string;
   status: string;
   type: string;
   verified?: boolean;
@@ -50,20 +49,6 @@ function parseLimit(raw: string | null, fallback: number): number {
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) return fallback;
   return Math.min(Math.floor(n), 100);
-}
-
-async function erc20String(token: string, selector: string): Promise<string> {
-  const addr = getAddress(token);
-  const data = selector;
-  const out = await evmJsonRpc<string>("eth_call", [{ to: addr, data }, "latest"]).catch(() => "0x");
-  if (!out || out === "0x" || out.length < 130) return "";
-  const hex = out.slice(130);
-  try {
-    const bytes = Buffer.from(hex, "hex");
-    return bytes.toString("utf8").replace(/\0/g, "").trim();
-  } catch {
-    return "";
-  }
 }
 
 async function erc20Uint(token: string, selector: string): Promise<bigint> {
@@ -125,35 +110,42 @@ async function nftCollectionStats(collection: string): Promise<NftCollectionStat
   };
 }
 
+/** `eth_call` adapter for `readTokenOnchain`: null = revert/empty, throw = transport failure. */
+async function tokenCall(to: Address, data: Hex): Promise<Hex | null> {
+  try {
+    return (await evmJsonRpc<Hex>("eth_call", [{ to, data }, "latest"])) ?? null;
+  } catch (error) {
+    if (error instanceof EvmRpcResponseError) return null;
+    throw error;
+  }
+}
+
+/** Throws `TokenReadError` when the node could not be asked (the route must not cache that). */
 async function loadAsset(assetId: string): Promise<AssetRow | null> {
   const dep = readEvmDeployments();
   const mapped = dep.assetMap[assetId];
   // A factory token may not be in the catalog cache yet: verify it through the factory registry
   // before reading it, so creator()/metadataURI() come from the token and not from the deployer.
-  const tokenAddr =
-    mapped ??
-    (await resolveKnownToken(assetId).catch(() => null)) ??
-    (isAddress(assetId) ? assetId : null);
+  const known = mapped ?? (await resolveKnownToken(assetId).catch(() => null));
+  const tokenAddr = known ?? (isAddress(assetId) ? assetId : null);
   if (!tokenAddr || !isAddress(tokenAddr)) return null;
   const token = getAddress(tokenAddr);
-  const [name, symbol, creator, metadataUri] = await Promise.all([
-    erc20String(token, "0x06fdde03"),
-    erc20String(token, "0x95d89b41"),
-    erc20Address(token, "0x02d05d3f"),
-    erc20String(token, "0x03ee438c"),
-  ]);
-  const decimals = Number(await erc20Uint(token, "0x313ce567")) || 18;
-  const supplyWei = await erc20Uint(token, "0x18160ddd");
+  const inAssetMap = Object.values(dep.assetMap).some((addr) => addr && addr.toLowerCase() === token.toLowerCase());
+  // Only deployment-mapped (seed) assets may fall back to the deployer; anything else is read live.
+  const factoryToken = !inAssetMap;
+  const onchain = await readTokenOnchain(tokenCall, token);
+  const decimals = onchain.decimals ?? 18;
   const logicalAssetId = resolveLogicalAssetId(token);
   const seed = seedAssetMeta(logicalAssetId);
+  const creator = onchain.creator ?? (factoryToken ? undefined : dep.deployer || "0x0");
   const base: AssetRow = {
     assetId: logicalAssetId,
     tokenAddress: token,
-    name: name || logicalAssetId,
-    symbol: symbol || logicalAssetId.slice(0, 6).toUpperCase(),
+    name: onchain.name || logicalAssetId,
+    symbol: onchain.symbol || FALLBACK_TOKEN_SYMBOL,
     decimals,
-    totalSupply: Number(formatUnits(supplyWei, decimals)),
-    creator: creator || dep.deployer || "0x0",
+    totalSupply: Number(formatUnits(onchain.totalSupply ?? BigInt(0), decimals)),
+    ...(creator ? { creator } : {}),
     status: "active",
     type: "token",
     verified: Boolean(seed),
@@ -164,20 +156,31 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
-  const overrides = await readTokenIconOverrides([token]).catch(() => new Map<string, string>());
-  return applyTokenImage(
-    enriched,
-    overrides.get(token.toLowerCase()),
-    tokenImageFromMetadataUri(metadataUri),
-  );
+  const [overrides, chainImage] = await Promise.all([
+    readTokenIconOverrides([token]).catch(() => new Map<string, string>()),
+    resolveTokenImageUri(onchain.metadataUri),
+  ]);
+  return applyTokenImage(enriched, overrides.get(token.toLowerCase()), chainImage);
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
+
+/** The node could not be asked whether an address is a factory token (timeout, backoff, HTTP 5xx). */
+export class KnownTokenLookupError extends Error {
+  constructor(message = "known_token_lookup_failed") {
+    super(message);
+    this.name = "KnownTokenLookupError";
+  }
+}
 
 /**
  * Token address for an assetId/address the site knows about, else null. The deployment assetMap
  * is checked first (no RPC); otherwise one `isPeopleToken` eth_call per factory version (current
  * and legacy `tokenFactoryVn`) — never a log scan.
+ *
+ * null means every factory answered "no" (a JSON-RPC revert counts as "no"). When a factory could
+ * not be asked at all and no other factory vouched for the token, this throws
+ * `KnownTokenLookupError`, so a transient RPC failure is never mistaken for "not a token".
  */
 export async function resolveKnownToken(assetIdOrAddress: string): Promise<string | null> {
   const dep = readEvmDeployments();
@@ -193,10 +196,18 @@ export async function resolveKnownToken(assetIdOrAddress: string): Promise<strin
   const factories = Object.entries(dep.contracts ?? {})
     .filter(([key, addr]) => /^tokenFactory(V\d+)?$/.test(key) && addr && isAddress(addr))
     .map(([, addr]) => addr as string);
+  let unreachable = false;
   for (const factory of factories) {
-    const out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]).catch(() => "0x");
+    let out: string | undefined;
+    try {
+      out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]);
+    } catch (error) {
+      if (!(error instanceof EvmRpcResponseError)) unreachable = true;
+      continue;
+    }
     if (/^0x0*1$/.test(out ?? "")) return token;
   }
+  if (unreachable) throw new KnownTokenLookupError();
   return null;
 }
 
@@ -327,45 +338,6 @@ export function resetMintedNftCacheForTests(): void {
 
 function addressTopic(address: string): string {
   return `0x${address.toLowerCase().replace(/^0x/, "").padStart(64, "0")}`;
-}
-
-function metadataImage(value: unknown): string | undefined {
-  if (typeof value !== "string") return undefined;
-  const uri = value.trim();
-  return /^(ipfs|https):\/\/[^\s]+$/i.test(uri) ? uri : undefined;
-}
-
-async function readTokenUriMetadata(tokenUri: string): Promise<{ name?: string; description?: string; image?: string } | null> {
-  const uri = tokenUri.trim();
-  if (!/^(ipfs|https):\/\//i.test(uri)) return null;
-  let url = uri;
-  if (uri.startsWith("ipfs://")) {
-    try {
-      url = ipfsGatewayUrlForUri(uri);
-    } catch {
-      return null;
-    }
-  }
-  try {
-    const res = await fetch(url, {
-      headers: { accept: "application/json" },
-      signal: AbortSignal.timeout(8_000),
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const text = await readCappedText(res, 64 * 1024);
-    if (!text) return null;
-    const json = JSON.parse(text) as { name?: unknown; description?: unknown; image?: unknown };
-    return {
-      ...(typeof json.name === "string" && json.name.trim() ? { name: json.name.trim().slice(0, 200) } : {}),
-      ...(typeof json.description === "string" && json.description.trim()
-        ? { description: json.description.trim().slice(0, 2_000) }
-        : {}),
-      ...(metadataImage(json.image) ? { image: metadataImage(json.image) } : {}),
-    };
-  } catch {
-    return null;
-  }
 }
 
 /** NFTs minted through NftFactory to `owner`, verified by a current `ownerOf` read. */
@@ -536,8 +508,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const dep = readEvmDeployments();
     const rows: AssetRow[] = [];
     for (const assetId of Object.keys(dep.assetMap ?? {})) {
-      const row = await loadAsset(assetId);
-      if (row) rows.push(row);
+      // One failing RPC read skips that row instead of failing the whole listing.
+      try {
+        const row = await loadAsset(assetId);
+        if (row) rows.push(row);
+      } catch {
+        // skipped
+      }
     }
     return { status: 200, body: rows };
   }
@@ -547,6 +524,22 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const hit = onChain.find((t) => t.assetId === decodeURIComponent(segments[1]).toLowerCase());
     if (hit) {
       const enriched = enrichAssetRow(hit);
+      // The catalog scan cannot read a pinned metadata JSON and falls back to the deployer when
+      // creator() was unreadable: complete both from a live single-token read when it can.
+      const deployerFallback = (readEvmDeployments().deployer || "0x0").toLowerCase();
+      const creatorIsFallback = String(enriched.creator ?? "").toLowerCase() === deployerFallback;
+      if (!enriched.imageUri || creatorIsFallback) {
+        const live = await loadAsset(hit.tokenAddress ?? hit.assetId).catch(() => null);
+        if (live) {
+          if (!enriched.imageUri && live.imageUri) {
+            enriched.imageUri = live.imageUri;
+            enriched.creationMetadata = { ...(enriched.creationMetadata ?? {}), image: live.imageUri };
+          }
+          if (creatorIsFallback && live.creator && live.creator.toLowerCase() !== deployerFallback) {
+            enriched.creator = live.creator;
+          }
+        }
+      }
       return {
         status: 200,
         body: {
@@ -628,13 +621,29 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const dep = readEvmDeployments();
     // Holders come from a full Transfer-log scan, so only known tokens (deployment assetMap or
     // the factory registry) may trigger one; an arbitrary address must not buy a chain scan.
-    const token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
+    let token: string | null;
+    try {
+      token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
+    } catch {
+      // The registry could not be asked: say so (the client offers a retry) instead of "unknown".
+      return { status: 502, body: { error: "rpc_unavailable" } };
+    }
     if (!token || !isAddress(token)) {
       if (assetId) return { status: 404, body: { error: "unknown_token" } };
       return { status: 200, body: [] };
     }
-    const holders = await aggregateHoldersFromTransfers(token).catch(() => []);
-    const asset = await loadAsset(assetId ?? token);
+    // Only a factory token can be younger than the deployment block; start its scan at its creation
+    // block (null = unknown, scan from the deployment block).
+    const isSeedToken = Object.values(dep.assetMap).some((addr) => addr && addr.toLowerCase() === token.toLowerCase());
+    const creationBlock = isSeedToken ? null : await findTokenCreationBlock(token);
+    let holders: Awaited<ReturnType<typeof aggregateHoldersFromTransfers>>;
+    try {
+      holders = await aggregateHoldersFromTransfers(token, creationBlock ?? undefined);
+    } catch {
+      // A failed scan is not an empty holder list.
+      return { status: 502, body: { error: "rpc_unavailable" } };
+    }
+    const asset = await loadAsset(assetId ?? token).catch(() => null);
     const decimals = asset?.decimals ?? 18;
     return {
       status: 200,

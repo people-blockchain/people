@@ -21,4 +21,6 @@ regexes = [
   # keccak event topics (TOKEN_CREATED etc.)
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
+  # EVM contract addresses used as fixtures in tests (public, 20-byte hex)
+  '''const TOKEN\s*=\s*"0x[0-9a-fA-F]{40}"''',
 ]

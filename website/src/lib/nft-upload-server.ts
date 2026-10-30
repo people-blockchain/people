@@ -11,6 +11,7 @@ export const NFT_RATE = {
   videoSign: { namespace: "nft-video-sign", limit: 6, windowMs: 60 * 60_000 },
   videoVerify: { namespace: "nft-video-verify", limit: 12, windowMs: 60 * 60_000 },
   metadata: { namespace: "nft-metadata", limit: 30, windowMs: 10 * 60_000 },
+  tokenMetadata: { namespace: "token-metadata", limit: 30, windowMs: 10 * 60_000 },
   videoDaily: { namespace: "nft-video-daily", limit: 200, windowMs: 24 * 60 * 60_000 },
 } as const satisfies Record<string, NftRateRule>;
 

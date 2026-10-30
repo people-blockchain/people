@@ -670,18 +670,21 @@ export async function pairLogStartBlock(pair: string): Promise<number> {
  * Decodes ABI-encoded `string` return data. Author-controlled: control characters are stripped and
  * length is capped so a token cannot spoof a catalog entry with invisible/homoglyph padding.
  */
-function decodeErc20String(out: string | null | undefined): string {
+function decodeErc20String(out: string | null | undefined, maxLength = 64): string {
   if (!out || out === "0x" || out.length < 130) return "";
   try {
     return Buffer.from(out.slice(130), "hex")
       .toString("utf8")
       .replace(/[\u0000-\u001f\u007f]/g, "")
       .trim()
-      .slice(0, 64);
+      .slice(0, maxLength);
   } catch {
     return "";
   }
 }
+
+/** A `metadataURI` (`ipfs://<CIDv0>/metadata.json` is ~67 chars) needs a longer cap than a name/symbol. */
+const METADATA_URI_MAX_LENGTH = 256;
 
 function decodeUint(out: string | null | undefined): bigint {
   if (!out || out === "0x") return BigInt(0);
@@ -704,10 +707,13 @@ function decodeAddress(ret: string | null | undefined): string {
 /**
  * Token `metadataURI()` may be an icon address (ipfs://… or https://…). The old launch flow wrote
  * the non-image placeholder `ipfs://people/<SYMBOL>`, which must never replace the gradient icon.
+ * A `.../metadata.json` address is a JSON document (the catalog never fetches it), so it is not an image.
  */
 export function tokenImageFromMetadataUri(uri: string | null | undefined): string | null {
   const value = (uri ?? "").trim();
   if (!value || value === "ipfs://people" || value.startsWith("ipfs://people/")) return null;
+  // New launches point at a pinned metadata JSON (`ipfs://<CID>/metadata.json`), not an image.
+  if (/\/metadata\.json(?:[?#].*)?$/i.test(value)) return null;
   if (/^ipfs:\/\/[^\s]+$/i.test(value)) return value;
   if (/^https:\/\/[^\s]+$/i.test(value)) return value;
   return null;
@@ -1003,7 +1009,7 @@ async function buildTokenRows(addresses: Iterable<string>): Promise<TokenRowBuil
         ? cached?.metadataUri ?? ""
         : metadata[offset + 5] === "0x"
           ? ""
-          : decodeErc20String(metadata[offset + 5]);
+          : decodeErc20String(metadata[offset + 5], METADATA_URI_MAX_LENGTH);
     const chainImage = tokenImageFromMetadataUri(uri);
     // Token metadata is permissionless: anyone can deploy a contract that calls itself
     // "People"/"PPL". Curated assets carry seed metadata, so a row whose assetId has none but
