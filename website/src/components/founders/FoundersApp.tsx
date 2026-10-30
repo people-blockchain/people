@@ -28,6 +28,7 @@ import {
   FoundersTiersSection,
   type MillionCounter,
 } from "./FoundersLandingSections";
+import { FoundersNftCard } from "./FoundersNftCard";
 import { HumanPassportFlow } from "./HumanPassportFlow";
 
 type Me = {
@@ -573,9 +574,12 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
         </div>
       ) : null}
 
-      {embedded ? null : (
+      {embedded ? (
+        <FoundersNftCard signedIn={signedIn} />
+      ) : (
         <>
           <FoundersNftSection copy={landing} />
+          <FoundersNftCard signedIn={signedIn} />
           <FoundersTiersSection copy={landing} />
           <FoundersSpecialSection copy={landing} />
           <FoundersSealSection copy={landing} />
