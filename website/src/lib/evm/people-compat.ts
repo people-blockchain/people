@@ -110,14 +110,47 @@ async function nftCollectionStats(collection: string): Promise<NftCollectionStat
   };
 }
 
-/** `eth_call` adapter for `readTokenOnchain`: null = revert/empty, throw = transport failure. */
+const TOKEN_READ_TIMEOUT_MS = 8_000;
+/** Two retries after the first attempt, short enough that one cold asset read still returns quickly. */
+const TOKEN_READ_RETRY_DELAYS_MS = [200, 500] as const;
+
+function sleepMs(ms: number): Promise<void> {
+  return ms > 0 ? new Promise((resolve) => setTimeout(resolve, ms)) : Promise.resolve();
+}
+
+/** 5xx, timeout, and network failures. A contract revert is `EvmRpcResponseError` and is not retried. */
+function isTransientTokenRpcError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+  if (error.message === "evm_rpc_unconfigured") return false;
+  if (error.name === "TimeoutError" || error.name === "AbortError") return true;
+  if (error instanceof TypeError) return true;
+  if (error.message === "rpc_backoff") return true;
+  return /^rpc_http_(408|425|429|500|502|503|504)$/.test(error.message);
+}
+
+/**
+ * `eth_call` adapter for `readTokenOnchain`: null = revert/empty, throw = transport failure.
+ * Ignores the shared per-URL backoff (a catalog burst of 503s must not fail this read) and retries
+ * a transient failure twice.
+ */
 async function tokenCall(to: Address, data: Hex): Promise<Hex | null> {
-  try {
-    return (await evmJsonRpc<Hex>("eth_call", [{ to, data }, "latest"])) ?? null;
-  } catch (error) {
-    if (error instanceof EvmRpcResponseError) return null;
-    throw error;
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= TOKEN_READ_RETRY_DELAYS_MS.length; attempt++) {
+    if (attempt > 0) await sleepMs(TOKEN_READ_RETRY_DELAYS_MS[attempt - 1]);
+    try {
+      return (
+        (await evmJsonRpc<Hex>("eth_call", [{ to, data }, "latest"], {
+          timeoutMs: TOKEN_READ_TIMEOUT_MS,
+          ignoreBackoff: true,
+        })) ?? null
+      );
+    } catch (error) {
+      if (error instanceof EvmRpcResponseError) return null;
+      lastError = error;
+      if (attempt === TOKEN_READ_RETRY_DELAYS_MS.length || !isTransientTokenRpcError(error)) throw error;
+    }
   }
+  throw lastError instanceof Error ? lastError : new Error("token_rpc_failed");
 }
 
 /** Throws `TokenReadError` when the node could not be asked (the route must not cache that). */

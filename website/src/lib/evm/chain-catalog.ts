@@ -186,6 +186,12 @@ export const MAX_GLOBAL_LOG_WINDOWS = 8;
  * catalog `eth_getLogs`: the node slows down sharply at six or more parallel range queries.
  */
 export const MAX_CATALOG_LOG_WINDOWS = 4;
+/**
+ * Backoff before each extra read of a current-factory tail window. A public node answers 503 to a
+ * burst of range queries and then serves the same window in under a second, so the tail is retried
+ * on its own schedule instead of being dropped.
+ */
+export const TAIL_LOG_RETRY_DELAYS = [500, 1_500, 4_000] as const;
 /** `eth_getLogs` gets a shorter timeout than ordinary calls: a slow window is retried, not awaited. */
 export const LOG_GETLOGS_TIMEOUT_MS = 12_000;
 let logWindowsInFlight = 0;
@@ -334,6 +340,8 @@ export type LogScanOptions = {
   resilient?: boolean;
   /** Delays before each retry; `[0]` is the historical single immediate retry. */
   retryDelays?: readonly number[];
+  /** Backoff for current-factory tail windows. History keeps `retryDelays`. */
+  tailRetryDelays?: readonly number[];
   /** Per-scan concurrency cap, bounded by the process-wide cap. */
   maxParallel?: number;
   /** Read recent history first, so new events surface before a long backlog. */
@@ -357,7 +365,9 @@ export type LogScanOptions = {
  * the catalog stop history work early and resume from the persisted cursor on the next request.
  *
  * The incremental scan is resilient by default: a failed window marks the outcome incomplete but
- * never rejects, and the cursor only advances across contiguous successful windows.
+ * never rejects, and the cursor only advances across contiguous successful windows. A current-factory
+ * tail window that still fails after its own backoff is read once more after history, so a 503
+ * during the rest of the scan is not stored as "no new tokens".
  */
 export async function fetchLogsWindowedIncrementalResult(
   address: string,
@@ -371,6 +381,7 @@ export async function fetchLogsWindowedIncrementalResult(
   return fetchLogsWindowedCore(address, topics, fromBlockHint, cursorKeyForTopics(topics), toBlockHint, deadlineAt, {
     resilient: true,
     retryDelays: [500, 1500],
+    tailRetryDelays: TAIL_LOG_RETRY_DELAYS,
     ...options,
   });
 }
@@ -415,7 +426,7 @@ export async function fetchLogsTailResult(
         const logs = await readCachedLogWindow(address, topics, from, to, tip, now, {
           endBlock: toBlockHint,
           fresh: typeof toBlockHint !== "number",
-          retryDelays: options.retryDelays ?? [500, 1500],
+          retryDelays: options.retryDelays ?? TAIL_LOG_RETRY_DELAYS,
         });
         options.onWindowLogs?.(logs);
         return { logs, ok: true };
@@ -513,6 +524,7 @@ async function fetchLogsWindowedCore(
 ): Promise<LogScanOutcome> {
   const resilient = options.resilient ?? false;
   const retryDelays = options.retryDelays ?? [0];
+  const tailRetryDelays = options.tailRetryDelays ?? TAIL_LOG_RETRY_DELAYS;
   const maxParallel = Math.max(1, options.maxParallel ?? MAX_PARALLEL_LOG_WINDOWS);
   const tip = options.tip ?? (await readChainTip());
   if (tip === null) return { logs: [], complete: false, failedWindows: 1 };
@@ -546,12 +558,13 @@ async function fetchLogsWindowedCore(
   const scanned: ScannedLogWindow[] = [];
   const readWindow = async (
     [from, to]: [number, number],
-    readOptions: { endBlock?: number; fresh?: boolean } = {},
+    readOptions: { endBlock?: number; fresh?: boolean; retryDelays?: readonly number[] } = {},
   ): Promise<ScannedLogWindow> => {
     try {
       const logs = await readCachedLogWindow(address, topics, from, to, tip, now, {
-        ...readOptions,
-        retryDelays,
+        endBlock: readOptions.endBlock,
+        fresh: readOptions.fresh,
+        retryDelays: readOptions.retryDelays ?? retryDelays,
       });
       options.onWindowLogs?.(logs);
       return { from, to, logs, ok: true };
@@ -586,10 +599,11 @@ async function fetchLogsWindowedCore(
   }
 
   let complete = true;
-  // Tail first: fresh tokens must show even when history work runs out of time below.
+  let historyTruncated = false;
+  // Tail first, and alone: superseded factories and history must not compete with these windows.
   if (tailWindows.length) {
     const tailScanned = await Promise.all(
-      tailWindows.map((window) => readWindow(window, { fresh: true })),
+      tailWindows.map((window) => readWindow(window, { fresh: true, retryDelays: tailRetryDelays })),
     );
     scanned.push(...tailScanned);
     if (tailScanned.some((window) => !window.ok)) complete = false;
@@ -630,6 +644,7 @@ async function fetchLogsWindowedCore(
   for (let i = 0; i < orderedHistory.length; i += maxParallel) {
     if (typeof deadlineAt === "number" && Date.now() >= deadlineAt) {
       complete = false;
+      historyTruncated = true;
       break;
     }
     const chunk = orderedHistory.slice(i, i + maxParallel);
@@ -640,6 +655,20 @@ async function fetchLogsWindowedCore(
     historyScanned.push(...chunkLogs);
     if (chunkLogs.some((window) => !window.ok)) complete = false;
     await persistContiguous();
+  }
+
+  // The tail is not part of history or the cursor, so a window that failed while the node was
+  // busy is invisible forever unless it is read again after that work has finished.
+  if (tailWindows.length) {
+    const tailFroms = new Set(tailWindows.map(([from]) => from));
+    for (let index = 0; index < scanned.length; index++) {
+      const window = scanned[index];
+      if (!window || !tailFroms.has(window.from) || window.ok) continue;
+      scanned[index] = await readWindow([window.from, window.to], { fresh: true, retryDelays: tailRetryDelays });
+    }
+    const tailsOk = scanned.filter((window) => tailFroms.has(window.from)).every((window) => window.ok);
+    const historyOk = historyScanned.every((window) => window.ok);
+    complete = tailsOk && historyOk && !historyTruncated;
   }
 
   return {
@@ -1186,33 +1215,33 @@ export async function discoverTokensOnChainUncached(
     failedWindows += 1;
   }
 
-  // The newest windows of every superseded factory are awaited as well, so the tail published to
-  // a cold request covers all factories. A failure here is only logged: the history pass below
-  // re-reads the same windows and decides whether the scan is complete.
-  const supersededTails =
-    tip === null
-      ? Promise.resolve()
-      : Promise.all(
-          ordered
-            .filter((scan) => scan !== current)
-            .map((scan) =>
-              fetchLogsTailResult(scan.address, TOKEN_CREATED_TOPICS, scan.fromBlock, scan.toBlock, {
-                tip,
-                onWindowLogs: (logs) => {
-                  if (addLogTokenAddresses(addresses, logs)) refreshProgress();
-                },
-              }).catch((error) => {
-                warnCatalog("factory tail", error, { factory: scan.key });
-              }),
-            ),
-        ).then(() => undefined);
+  // Superseded tails start only after the current factory tail has been read. Starting them
+  // together is the burst that makes the public node answer 503 for the newest window.
+  const readSupersededTails = async () => {
+    if (tip === null) return;
+    await Promise.all(
+      ordered
+        .filter((scan) => scan !== current)
+        .map((scan) =>
+          fetchLogsTailResult(scan.address, TOKEN_CREATED_TOPICS, scan.fromBlock, scan.toBlock, {
+            tip,
+            retryDelays: TAIL_LOG_RETRY_DELAYS,
+            onWindowLogs: (logs) => {
+              if (addLogTokenAddresses(addresses, logs)) refreshProgress();
+            },
+          }).catch((error) => {
+            warnCatalog("factory tail", error, { factory: scan.key });
+          }),
+        ),
+    );
+  };
 
   let tailPublished = false;
   const publishTail = async () => {
     if (tailPublished) return;
     tailPublished = true;
     try {
-      await supersededTails;
+      await readSupersededTails();
       if (progressBuilding) await progressBuilding;
       await persistCatalogSnapshot(tokenCatalogProgress?.tokens ?? [], tip ?? 0);
     } finally {
@@ -1350,18 +1379,32 @@ function refreshCachedTail(): Promise<CatalogToken[]> {
     if (tip === null) return base;
     const known = new Set(base.map((row) => row.tokenAddress.toLowerCase()));
     const seen = new Set<string>();
-    await Promise.all(
-      tokenFactoryScans().map((scan) =>
-        fetchLogsTailResult(scan.address, TOKEN_CREATED_TOPICS, scan.fromBlock, scan.toBlock, {
+    const scans = tokenFactoryScans();
+    const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
+    const rest = scans.filter((scan) => scan !== current);
+    const readTail = async (scan: TokenFactoryScan): Promise<boolean> => {
+      try {
+        const result = await fetchLogsTailResult(scan.address, TOKEN_CREATED_TOPICS, scan.fromBlock, scan.toBlock, {
           tip,
+          retryDelays: TAIL_LOG_RETRY_DELAYS,
           onWindowLogs: (logs) => {
             addLogTokenAddresses(seen, logs);
           },
-        }).catch((error) => {
-          warnCatalog("cached tail", error, { factory: scan.key });
-        }),
-      ),
-    );
+        });
+        return result.complete && (result.failedWindows ?? 0) === 0;
+      } catch (error) {
+        warnCatalog("cached tail", error, { factory: scan.key });
+        return false;
+      }
+    };
+    const failed: TokenFactoryScan[] = [];
+    const note = async (scan: TokenFactoryScan) => {
+      if (!(await readTail(scan))) failed.push(scan);
+    };
+    // Current factory first, so its tail is not one of eight parallel range queries.
+    if (current) await note(current);
+    await Promise.all(rest.map((scan) => note(scan)));
+    for (const scan of failed) await readTail(scan);
     const added = [...seen].filter((lower) => !known.has(lower));
     if (!added.length) return base;
     const built = await buildTokenRows(added);
