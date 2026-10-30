@@ -5,6 +5,7 @@ import { SITE_NAME } from "@/lib/site";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
+import { compatList } from "@/lib/compat-list";
 
 export const metadata: Metadata = {
   title: "Tokens | PEOPLE Blockchain",
@@ -32,8 +33,8 @@ async function loadInitialTokenData(): Promise<{ assets: TokenRow[]; pools: Pool
     withTimeout(handleEvmCompatGet("liquidity-pools", empty).catch(() => fallback), SSR_PREFETCH_BUDGET_MS, fallback),
   ]);
   return {
-    assets: Array.isArray(assetsResult.body) ? (assetsResult.body as TokenRow[]) : [],
-    pools: Array.isArray(poolsResult.body) ? (poolsResult.body as PoolRow[]) : [],
+    assets: compatList<TokenRow>(assetsResult.body, "assets"),
+    pools: compatList<PoolRow>(poolsResult.body, "pools"),
   };
 }
 

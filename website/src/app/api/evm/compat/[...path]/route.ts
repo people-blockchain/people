@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
+import { compatPartial } from "@/lib/compat-list";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
+import { isRequestDeadlineError } from "@/lib/evm/rpc-server";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
 const RATE_LIMIT = 120;
@@ -35,12 +37,14 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
   const joined = (path ?? []).map((p) => encodeURIComponent(p)).join("/");
   try {
     const { status, body } = await handleEvmCompatGet(joined, request.nextUrl.searchParams);
-    const cacheControl = status === 200 ? cacheHeaderFor(joined) : null;
+    // A partial catalog must not sit in the edge cache as if it were complete.
+    const cacheControl = status === 200 && !compatPartial(body) ? cacheHeaderFor(joined) : null;
     return NextResponse.json(body, {
       status,
       ...(cacheControl ? { headers: { "Cache-Control": cacheControl } } : {}),
     });
-  } catch {
+  } catch (error) {
+    if (isRequestDeadlineError(error)) return NextResponse.json({ partial: true }, { status: 200 });
     return NextResponse.json({ error: "compat_unavailable" }, { status: 502 });
   }
 }

@@ -2,7 +2,8 @@ import { formatUnits, getAddress, isAddress, toEventSelector } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import { fetchLogsWindowed } from "@/lib/evm/chain-catalog";
 import { nftMintedEvent } from "@/lib/evm/nft-factory";
-import { evmJsonRpcBatch } from "@/lib/evm/rpc-server";
+import { evmJsonRpcBatch, isRequestDeadlineError } from "@/lib/evm/rpc-server";
+import { deadlineExpired } from "@/lib/evm/request-deadline";
 
 /**
  * What an address holds, read straight from the contracts. The wallet used to show only what the
@@ -135,7 +136,12 @@ async function readFactoryNfts(owner?: string): Promise<OwnedNft[]> {
   const scan = async (topic: string | null) =>
     (
       await Promise.all(
-        factories.map((factory) => fetchLogsWindowed(factory, [NFT_MINTED_TOPIC, null, null, topic]).catch(() => [])),
+        factories.map((factory) =>
+          fetchLogsWindowed(factory, [NFT_MINTED_TOPIC, null, null, topic]).catch((error: unknown) => {
+            if (isRequestDeadlineError(error) || deadlineExpired()) throw error;
+            return [];
+          }),
+        ),
       )
     ).flat();
   // Owner query: the owner's own mints first, then the newest mints of everyone (the same scan the

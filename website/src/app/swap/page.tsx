@@ -8,6 +8,7 @@ import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { SSR_PREFETCH_BUDGET_MS, withTimeout } from "@/lib/ssr-prefetch";
 import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";
+import { compatList } from "@/lib/compat-list";
 
 export const metadata: Metadata = {
   title: "Swap | PEOPLE Blockchain",
@@ -37,8 +38,8 @@ async function loadInitialSwapData(): Promise<{ pools: PoolRow[]; assets: AssetI
     withTimeout(handleEvmCompatGet("assets", empty).catch(() => fallback), SSR_PREFETCH_BUDGET_MS, fallback),
   ]);
   return {
-    pools: Array.isArray(poolsResult.body) ? (poolsResult.body as PoolRow[]) : [],
-    assets: Array.isArray(assetsResult.body) ? (assetsResult.body as AssetInfo[]) : [],
+    pools: compatList<PoolRow>(poolsResult.body, "pools"),
+    assets: compatList<AssetInfo>(assetsResult.body, "assets"),
   };
 }
 

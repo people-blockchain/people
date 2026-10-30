@@ -17,6 +17,7 @@ import { readEvmDeployments, evmContractsReady } from "@/lib/evm/config";
 import { ensureAllowance, SwapApproveError } from "@/lib/evm/swap-approve";
 import type { TransferPublicClient } from "@/lib/evm/wallet-send";
 import { networkJson } from "@/lib/network-client";
+import { compatList } from "@/lib/compat-list";
 import { erc20Abi, pairAbi, routerAbi } from "@/lib/evm/client";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { minAmountOutWithSlippageBaseUnits, quoteExactInBaseUnits } from "@/lib/amm-math";
@@ -227,8 +228,8 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
 
   const loadPools = useCallback(async () => {
     try {
-      const rows = await networkJson<RawPoolRow[]>("liquidity-pools");
-      setPools(mapPoolRows(Array.isArray(rows) ? rows : []));
+      const rows = await networkJson<RawPoolRow[] | { pools?: RawPoolRow[] }>("liquidity-pools");
+      setPools(mapPoolRows(compatList<RawPoolRow>(rows, "pools")));
       setReachable(true);
     } catch {
       setReachable(false);

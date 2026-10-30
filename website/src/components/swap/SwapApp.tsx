@@ -14,6 +14,7 @@ import { swapCopy } from "@/lib/swap-content";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
+import { compatList } from "@/lib/compat-list";
 import { minAmountOutWithSlippage, quoteExactIn } from "@/lib/amm-math";
 import { assetDecimals, formatPpl, formatUnits, parseUnits } from "@/lib/asset-amounts";
 import {
@@ -75,12 +76,10 @@ function PeopleSwapApp() {
 
   const load = useCallback(async () => {
     try {
-      const next = await networkJson<SwapPool[]>("liquidity-pools");
+      const next = await networkJson<SwapPool[] | { pools?: SwapPool[] }>("liquidity-pools");
       // Deepest pool (largest PPL reserve) first, so it is also the default choice.
       setPools(
-        Array.isArray(next)
-          ? visiblePools(next.filter((p) => p.status !== "inactive")).sort((a, b) => b.nativeReserve - a.nativeReserve)
-          : []
+        visiblePools(compatList<SwapPool>(next, "pools").filter((p) => p.status !== "inactive")).sort((a, b) => b.nativeReserve - a.nativeReserve)
       );
       setReachable(true);
     } catch {
