@@ -1,4 +1,14 @@
 import { readEvmRpcUrl } from "@/lib/evm/config";
+import {
+  RequestDeadlineError,
+  boundedTimeoutMs,
+  currentDeadline,
+  deadlineExpired,
+  isRequestDeadlineError,
+  linkAbort,
+} from "@/lib/evm/request-deadline";
+
+export { RequestDeadlineError, isRequestDeadlineError };
 
 /**
  * Exponential backoff for the shared PEOPLE node.
@@ -42,9 +52,44 @@ function noteRpcSuccess(url: string): void {
   backoffByUrl.delete(url);
 }
 
+/** HTTP failure from the node (408/429/5xx). A JSON-RPC `error` member is not this: the node answered. */
+export class EvmRpcHttpError extends Error {
+  readonly status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "EvmRpcHttpError";
+    this.status = status;
+  }
+}
+
+export function isIncompleteRpcError(error: unknown): boolean {
+  if (isRequestDeadlineError(error)) return true;
+  if (error instanceof EvmRpcHttpError) return true;
+  if (deadlineExpired()) return true;
+  if (!(error instanceof Error)) return false;
+  if (error.name === "AbortError" || error.name === "TimeoutError") return true;
+  return error.message === "rpc_backoff" || error.message.startsWith("rpc_http_");
+}
+
+type PostRpcOptions = {
+  /** Read through an active per-URL backoff. Log-window retries use this so one 503 cannot skip the rest. */
+  ignoreBackoff?: boolean;
+  signal?: AbortSignal;
+  deadlineAt?: number;
+};
+
 /** POSTs a JSON-RPC body, honouring and updating the per-URL backoff. */
-async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{ res: Response; payload: unknown }> {
-  if (rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+async function postRpc(
+  url: string,
+  body: unknown,
+  timeoutMs: number,
+  options: PostRpcOptions = {},
+): Promise<{ res: Response; payload: unknown }> {
+  const parent = options.signal ?? currentDeadline()?.signal;
+  const at = options.deadlineAt ?? currentDeadline()?.at;
+  if (!options.ignoreBackoff && rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+  if (parent?.aborted || timeoutMs <= 0) throw new RequestDeadlineError();
+  const attempt = linkAbort(timeoutMs, parent);
   let res: Response;
   let payload: unknown;
   try {
@@ -53,16 +98,22 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
       headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify(body),
       cache: "no-store",
-      signal: AbortSignal.timeout(timeoutMs),
+      signal: attempt.signal,
     });
   } catch (error) {
-    noteRpcFailure(url);
+    const deadlineHit = Boolean(parent?.aborted || deadlineExpired(at));
+    // A deadline abort is our stop, not a node failure: backing off would block the next request
+    // from continuing a cached scan.
+    if (!deadlineHit && !options.ignoreBackoff) noteRpcFailure(url);
+    if (deadlineHit) throw new RequestDeadlineError();
     throw error;
+  } finally {
+    attempt.cancel();
   }
   if (RPC_RETRYABLE_STATUS.has(res.status)) {
-    noteRpcFailure(url);
+    if (!options.ignoreBackoff) noteRpcFailure(url);
     const detail = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
-    throw new Error(detail?.error?.message ?? `rpc_http_${res.status}`);
+    throw new EvmRpcHttpError(res.status, detail?.error?.message ?? `rpc_http_${res.status}`);
   }
   try {
     payload = await res.json();
@@ -75,14 +126,30 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
   return { res, payload };
 }
 
+export type EvmJsonRpcOptions = {
+  /** Per-call abort timeout; defaults to 20 s and is shortened to the request deadline. */
+  timeoutMs?: number;
+  /** Read through an active per-URL backoff. Used by `eth_getLogs` so one bad window cannot stall the scan. */
+  ignoreBackoff?: boolean;
+  signal?: AbortSignal;
+  /** Absolute `Date.now()` deadline. Defaults to the request deadline when one is active. */
+  deadlineAt?: number;
+};
+
 export async function evmJsonRpc<T>(
   method: string,
   params: unknown[] = [],
-  opts: { timeoutMs?: number } = {}
+  opts: EvmJsonRpcOptions = {}
 ): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
-  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, opts.timeoutMs ?? 20_000);
+  const deadlineAt = opts.deadlineAt ?? currentDeadline()?.at;
+  const { res, payload: raw } = await postRpc(
+    url,
+    { jsonrpc: "2.0", id: 1, method, params },
+    boundedTimeoutMs(opts.timeoutMs ?? 20_000, deadlineAt),
+    { ignoreBackoff: opts.ignoreBackoff, signal: opts.signal, deadlineAt },
+  );
   const payload = raw as { result?: T; error?: { message?: string } };
   if (!res.ok || payload?.error) {
     throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);
@@ -107,12 +174,16 @@ type RpcBatchEntry<T> = { id?: number; result?: T; error?: { message?: string } 
  * JSON-RPC `error` member) yields `null` in its slot instead of rejecting the whole batch, so one
  * bad token cannot blank the catalog.
  */
-export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T | null>> {
+export async function evmJsonRpcBatch<T>(
+  calls: RpcBatchCall[],
+  options: Pick<EvmJsonRpcOptions, "ignoreBackoff" | "timeoutMs" | "deadlineAt" | "signal"> = {},
+): Promise<Array<T | null>> {
   const out: Array<T | null> = [];
   if (!calls.length) return out;
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
   for (let i = 0; i < calls.length; i += RPC_BATCH_MAX) {
+    if (currentDeadline()?.signal.aborted || deadlineExpired(options.deadlineAt)) throw new RequestDeadlineError();
     const chunk = calls.slice(i, i + RPC_BATCH_MAX);
     const body = chunk.map((call, index) => ({
       jsonrpc: "2.0",
@@ -120,7 +191,12 @@ export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T
       method: call.method,
       params: call.params ?? [],
     }));
-    const { res, payload: raw } = await postRpc(url, body, 30_000);
+    const deadlineAt = options.deadlineAt ?? currentDeadline()?.at;
+    const { res, payload: raw } = await postRpc(url, body, boundedTimeoutMs(options.timeoutMs ?? 30_000, deadlineAt), {
+      ignoreBackoff: options.ignoreBackoff,
+      signal: options.signal,
+      deadlineAt,
+    });
     if (!res.ok) throw new Error(`rpc_http_${res.status}`);
     const payload = raw as Array<RpcBatchEntry<T>> | RpcBatchEntry<T>;
     // A node that rejects batch arrays answers with a single error object rather than an array.

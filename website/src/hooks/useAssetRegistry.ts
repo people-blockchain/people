@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { networkJson } from "@/lib/network-client";
 import type { AssetInfo } from "@/lib/asset-amounts";
+import { compatList } from "@/lib/compat-list";
 
 let cache: Record<string, AssetInfo> | null = null;
 let inflight: Promise<Record<string, AssetInfo>> | null = null;
@@ -15,9 +16,9 @@ function seedCache(initialAssets: AssetInfo[]): Record<string, AssetInfo> {
 function load(): Promise<Record<string, AssetInfo>> {
   if (cache) return Promise.resolve(cache);
   if (!inflight) {
-    inflight = networkJson<AssetInfo[]>("assets")
+    inflight = networkJson<AssetInfo[] | { assets?: AssetInfo[] }>("assets")
       .then((list) => {
-        cache = Object.fromEntries((Array.isArray(list) ? list : []).map((a) => [a.assetId.toLowerCase(), a]));
+        cache = Object.fromEntries(compatList<AssetInfo>(list, "assets").map((a) => [a.assetId.toLowerCase(), a]));
         return cache;
       })
       .catch(() => {

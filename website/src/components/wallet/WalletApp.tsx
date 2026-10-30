@@ -38,6 +38,7 @@ import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
+import { compatList } from "@/lib/compat-list";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import type { WalletOnboardingMode } from "./useWalletOnboarding";
 import { PeopleWalletMark } from "./PeopleWalletMark";
@@ -154,7 +155,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           setRevision(r => r + 1);
         }
         if (owned.status === "fulfilled") setNfts(Array.isArray(owned.value) ? owned.value : []);
-        if (registry.status === "fulfilled" && Array.isArray(registry.value)) setAssets(registry.value);
+        if (registry.status === "fulfilled") setAssets(compatList<TransferAsset>(registry.value, "assets"));
       } while (queued && !stopped);
       pending = false;
     };

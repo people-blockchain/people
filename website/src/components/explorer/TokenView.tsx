@@ -19,6 +19,7 @@ import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import { resolveMarketTokenAddress } from "@/lib/evm/market-token";
 import { fetchJsonWithTimeout, timeoutSignal } from "@/lib/fetch-timeout";
 import { resolveTokenMeta, type Erc20Meta, type ResolvedTokenMeta } from "@/lib/evm-token-meta";
+import { compatList, compatPartial } from "@/lib/compat-list";
 
 type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
 type Data = { asset: Token; meta: ResolvedTokenMeta; fromCatalog: boolean; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
@@ -42,24 +43,31 @@ export function TokenView({ assetId }: { assetId: string }) {
         if (isHiddenAsset(assetId)) throw new Error("hidden_asset");
         // Every request has its own deadline so the loader always ends (error + retry on failure).
         const evm = isAddress(assetId, { strict: false });
+        let catalogPartial = false;
         const [catalog, accountResult, contract] = await Promise.all([
-          networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal: timeoutSignal(8000, controller.signal) })
-            .then(value => (value && typeof value === "object" && Object.keys(value).length ? value : null))
-            .catch(error => { if (!evm) throw error; return null; }),
-          networkJson<ExplorerAccount[]>(
+          networkJson<Token & { partial?: boolean }>(`assets/${encodeURIComponent(assetId)}`, { signal: timeoutSignal(8000, controller.signal) })
+            .then(value => {
+              if (!value || typeof value !== "object") return null;
+              if (value.partial) catalogPartial = true;
+              if (value.assetId || value.symbol || value.name) return value;
+              return null;
+            })
+            .catch(error => { if (!evm && !catalogPartial) throw error; return null; }),
+          networkJson<ExplorerAccount[] | { accounts?: ExplorerAccount[]; partial?: boolean }>(
             `accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`,
             { signal: timeoutSignal(8000, controller.signal) },
           )
-            .then(accounts => Array.isArray(accounts) ? accounts : null).catch(() => null),
+            .then(accounts => ({ rows: compatList<ExplorerAccount>(accounts, "accounts"), partial: compatPartial(accounts) }))
+            .catch(() => null),
           evm
             ? fetchJsonWithTimeout<Erc20Meta>(`/api/explorer/token/${encodeURIComponent(assetId)}/meta`, { timeoutMs: 8000, signal: controller.signal }).catch(() => null)
             : Promise.resolve(null),
         ]);
         const meta = resolveTokenMeta({ assetId, contract, catalog });
-        if (!catalog && !evm) throw new Error("not_found");
+        if (!catalog && !evm && !catalogPartial) throw new Error("not_found");
         const asset: Token = evm
           ? { assetId, tokenAddress: assetId, status: "—", type: "token", creator: "", totalSupply: 0, ...(catalog ?? {}), name: meta.name, symbol: meta.symbol, decimals: meta.decimals ?? catalog?.decimals }
-          : catalog!;
+          : catalog ?? { assetId, name: assetId, symbol: assetId, decimals: 18, totalSupply: 0, creator: "", status: "—", type: "token" };
         let timestamp: number | null = null;
         if (asset.createdAt !== undefined) {
           const block = await networkJson<{ header?: { height?: number; timestamp?: number } }>(`blocks/${asset.createdAt}`, { signal: timeoutSignal(5000, controller.signal) }).catch(() => null);
@@ -70,7 +78,16 @@ export function TokenView({ assetId }: { assetId: string }) {
           }
         }
         if (controller.signal.aborted) return;
-        setData({ asset, meta, fromCatalog: Boolean(catalog), accounts: accountResult?.slice(0, ACCOUNT_SCAN_LIMIT) ?? null, partial: (accountResult?.length ?? 0) > ACCOUNT_SCAN_LIMIT, timestamp, fetchedAt: Date.now() });
+        const holderRows = accountResult?.rows ?? null;
+        setData({
+          asset,
+          meta,
+          fromCatalog: Boolean(catalog),
+          accounts: holderRows ? holderRows.slice(0, ACCOUNT_SCAN_LIMIT) : null,
+          partial: Boolean(accountResult?.partial) || catalogPartial || (holderRows?.length ?? 0) > ACCOUNT_SCAN_LIMIT || Boolean(catalog?.partial),
+          timestamp,
+          fetchedAt: Date.now(),
+        });
       } catch { if (!controller.signal.aborted) setError(true); }
       finally { if (!controller.signal.aborted) setLoading(false); }
     }

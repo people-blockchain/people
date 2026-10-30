@@ -14,6 +14,7 @@ import { uxCopy, displaySymbol } from "@/lib/ux-copy";
 import { displayAssetName, visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { ExplorerSubnav } from "./ExplorerSubnav";
 import { assetDecimals, formatAssetUnits, formatPpl } from "@/lib/asset-amounts";
+import { compatList } from "@/lib/compat-list";
 
 export type TokenRow = {
   assetId: string;
@@ -52,13 +53,13 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
     void loadExplorerRead((signal) => networkJson<TokenRow[]>("assets", { signal }))
       .then((result) => {
         if (!alive) return;
-        if (result.ok) setItems(Array.isArray(result.value) ? visibleAssets(result.value) : []);
+        if (result.ok) setItems(visibleAssets(compatList<TokenRow>(result.value, "assets")));
         else if (!result.missing && !prefetched) setFailed(true);
       })
       .finally(() => { if (alive) setLoading(false); });
     void loadExplorerRead((signal) => networkJson<PoolRow[]>("liquidity-pools", { signal }))
       .then((result) => {
-        if (alive && result.ok) setPools(Array.isArray(result.value) ? visiblePools(result.value) : []);
+        if (alive && result.ok) setPools(visiblePools(compatList<PoolRow>(result.value, "pools")));
       });
     return () => { alive = false; };
   }, [prefetched]);

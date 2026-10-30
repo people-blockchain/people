@@ -1,8 +1,9 @@
 import { unstable_cache } from "next/cache";
 import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
-import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, evmJsonRpcBatch, isIncompleteRpcError, isRequestDeadlineError, RequestDeadlineError, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { currentDeadline, deadlineExpired, retryDelayMs, sleepMs } from "@/lib/evm/request-deadline";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
@@ -132,19 +133,50 @@ export const MAX_PARALLEL_LOG_WINDOWS = 2;
 let logWindowsInFlight = 0;
 const logWindowQueue: Array<() => void> = [];
 
+function releaseLogWindowSlot(): void {
+  const next = logWindowQueue.shift();
+  // Hand the slot straight to the next waiter; only free it when nobody is queued.
+  if (next) next();
+  else logWindowsInFlight--;
+}
+
 async function withLogWindowSlot<T>(work: () => Promise<T>): Promise<T> {
+  const signal = currentDeadline()?.signal;
+  if (signal?.aborted) throw new RequestDeadlineError();
+  let ownsSlot = false;
   if (logWindowsInFlight >= MAX_PARALLEL_LOG_WINDOWS) {
-    await new Promise<void>((resolve) => logWindowQueue.push(resolve));
+    const acquired = await new Promise<boolean>((resolve) => {
+      let settled = false;
+      const finish = (got: boolean) => {
+        if (settled) return;
+        settled = true;
+        signal?.removeEventListener("abort", onAbort);
+        resolve(got);
+      };
+      const onWake = () => finish(true);
+      const onAbort = () => {
+        const index = logWindowQueue.indexOf(onWake);
+        if (index >= 0) logWindowQueue.splice(index, 1);
+        finish(false);
+      };
+      logWindowQueue.push(onWake);
+      if (signal?.aborted) onAbort();
+      else signal?.addEventListener("abort", onAbort, { once: true });
+    });
+    if (!acquired || signal?.aborted || deadlineExpired()) {
+      if (acquired) releaseLogWindowSlot();
+      throw new RequestDeadlineError();
+    }
+    ownsSlot = true;
   } else {
     logWindowsInFlight++;
+    ownsSlot = true;
   }
   try {
+    if (signal?.aborted || deadlineExpired()) throw new RequestDeadlineError();
     return await work();
   } finally {
-    const next = logWindowQueue.shift();
-    // Hand the slot straight to the next waiter; only free it when nobody is queued.
-    if (next) next();
-    else logWindowsInFlight--;
+    if (ownsSlot) releaseLogWindowSlot();
   }
 }
 
@@ -183,7 +215,9 @@ async function readLogWindowFromNode(address: string, topics: Array<string | nul
     logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
     let logs: unknown;
     try {
-      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]);
+      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)], {
+        ignoreBackoff: Boolean(currentDeadline()),
+      });
     } catch (error) {
       throw new LogWindowRpcError(error instanceof Error ? error.message : "rpc_logs_failed");
     }
@@ -212,7 +246,8 @@ async function readLogWindow(
   immutable: boolean,
 ): Promise<RpcLog[] | null> {
   const lower = address.toLowerCase();
-  if (immutable) {
+  // A live deadline must not sit behind the shared data cache: that wrapper cannot see the abort.
+  if (immutable && !currentDeadline()) {
     try {
       return await readImmutableLogWindowShared(lower, topics, from, to);
     } catch (error) {
@@ -241,31 +276,107 @@ async function readLogWindow(
  * `topics` follows the JSON-RPC log filter: `null` is a wildcard position. The window cache key
  * includes every topic, so a buy scan and a sell scan of the same address do not collide.
  */
+/** Retries for the newest windows only. History keeps a single attempt. Sleeps stop at the request deadline. */
+const TAIL_WINDOW_COUNT = 2;
+const TAIL_LOG_RETRY_DELAYS = [500, 1_500] as const;
+const SCAN_PARTIAL = Symbol("scanPartial");
+
+export function scanIsPartial(value: object | null | undefined): boolean {
+  return Boolean(value && (value as { [SCAN_PARTIAL]?: boolean })[SCAN_PARTIAL]);
+}
+
+/** Empty scan result that callers must surface as `partial: true` rather than a complete miss. */
+export function partialScan<T>(rows: T[] = []): T[] {
+  return markScanPartial(rows, true);
+}
+
+function markScanPartial<T extends object>(value: T, partial: boolean): T {
+  if (partial) Object.assign(value, { [SCAN_PARTIAL]: true });
+  return value;
+}
+
+/**
+ * Chain tip, retried only while a request deadline is active. A 503 storm sleeps inside that
+ * deadline and then gives up; callers keep whatever windows were already cached.
+ */
+async function readChainTip(): Promise<{ tip: number | null; failed: boolean }> {
+  if (currentDeadline()?.signal.aborted || deadlineExpired()) return { tip: null, failed: true };
+  try {
+    const latestHex = await evmJsonRpc<string>("eth_blockNumber", [], {
+      ignoreBackoff: Boolean(currentDeadline()),
+    });
+    const latest = typeof latestHex === "string" && latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
+    // A node that answered with something other than a block number is not a transport failure.
+    if (Number.isFinite(latest)) return { tip: latest, failed: false };
+    return { tip: null, failed: false };
+  } catch {
+    // Outside a compat request a missed tip is an empty scan, as before. Inside one it is partial.
+    return { tip: null, failed: Boolean(currentDeadline()) };
+  }
+}
+
+async function readWindowWithTailRetry(
+  address: string,
+  topics: Array<string | null>,
+  from: number,
+  to: number,
+  immutable: boolean,
+  isTail: boolean,
+): Promise<RpcLog[] | null> {
+  const retryDelays = currentDeadline() && isTail ? TAIL_LOG_RETRY_DELAYS : [];
+  for (let attempt = 0; ; attempt++) {
+    if (currentDeadline()?.signal.aborted || (attempt > 0 && deadlineExpired())) return null;
+    if (attempt > 0) {
+      const wait = retryDelayMs(retryDelays[attempt - 1] ?? 0);
+      if (wait === null) return null;
+      await sleepMs(wait);
+      if (deadlineExpired()) return null;
+    }
+    try {
+      const logs = await readLogWindow(address, topics, from, to, immutable);
+      if (logs) return logs;
+    } catch (error) {
+      if (isRequestDeadlineError(error) || deadlineExpired()) return null;
+    }
+    if (attempt >= retryDelays.length) return null;
+  }
+}
+
 export async function fetchLogsWindowed(
   address: string,
   topics: Array<string | null>,
   fromBlockHint?: number,
 ): Promise<RpcLog[]> {
-  const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
-  const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
-  if (!Number.isFinite(latest)) return [];
+  const tip = await readChainTip();
+  if (tip.tip === null) return markScanPartial([], tip.failed && Boolean(currentDeadline()));
+  const latest = tip.tip;
   const start = Math.max(logStartBlock(address), typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0);
   const windows = logWindows(start, latest);
   if (!windows.length) return [];
 
   const now = Date.now();
+  const tailFrom = Math.max(0, windows.length - TAIL_WINDOW_COUNT);
+  let partial = false;
   const results = await Promise.all(
-    windows.map(async ([from, to]) => {
+    windows.map(async ([from, to], index) => {
       const key = windowCacheKey(address, topics, from, to);
       const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
       const entry = windowLogsCache.get(key);
       if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
-      const logs = await readLogWindow(address, topics, from, to, isImmutable);
-      if (logs) rememberWindowLogs(key, logs);
-      return logs ?? [];
+      if (currentDeadline()?.signal.aborted || deadlineExpired()) {
+        partial = true;
+        return [] as RpcLog[];
+      }
+      const logs = await readWindowWithTailRetry(address, topics, from, to, isImmutable, index >= tailFrom);
+      if (logs) {
+        rememberWindowLogs(key, logs);
+        return logs;
+      }
+      if (currentDeadline()) partial = true;
+      return [] as RpcLog[];
     }),
   );
-  return results.flat();
+  return markScanPartial(results.flat(), partial || Boolean(currentDeadline() && deadlineExpired()));
 }
 
 const SEL_FACTORY = "0xc45a0155";
@@ -359,14 +470,14 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
   // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
   // keep showing up in the catalog.
   const factories = contractVersions(dep, "tokenFactory");
-  const fromLogs = (
-    await Promise.all(
-      factories.flatMap((f) => [
-        fetchLogsWindowed(f, [TOKEN_CREATED_TOPIC]),
-        fetchLogsWindowed(f, [TOKEN_CREATED_LEFTOVER_TOPIC]),
-      ]),
-    )
-  ).flat();
+  const logScans = await Promise.all(
+    factories.flatMap((f) => [
+      fetchLogsWindowed(f, [TOKEN_CREATED_TOPIC]),
+      fetchLogsWindowed(f, [TOKEN_CREATED_LEFTOVER_TOPIC]),
+    ]),
+  );
+  let partial = logScans.some((logs) => scanIsPartial(logs)) || deadlineExpired();
+  const fromLogs = logScans.flat();
 
   const tokenAddrs = new Set<string>();
   for (const [, addr] of staticMap) {
@@ -377,18 +488,31 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
     if (t) tokenAddrs.add(t.toLowerCase());
   }
   const tokens = [...tokenAddrs].map((lower) => getAddress(lower));
-  if (!tokens.length) return [];
+  if (!tokens.length) return markScanPartial([], partial);
 
   // Four reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
-  // sequential per-token loop measured ~3.8 s.
-  const metadata = await evmJsonRpcBatch<string>(
-    tokens.flatMap((token) => [
-      { method: "eth_call", params: [{ to: token, data: SEL_NAME }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_SYMBOL }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_DECIMALS }, "latest"] },
-      { method: "eth_call", params: [{ to: token, data: SEL_TOTAL_SUPPLY }, "latest"] },
-    ]),
-  ).catch(() => tokens.flatMap(() => [null, null, null, null] as Array<string | null>));
+  // sequential per-token loop measured ~3.8 s. A deadline abort keeps the rows already known
+  // from the deployment map and the log windows cached above.
+  let metadata: Array<string | null>;
+  if (currentDeadline()?.signal.aborted || deadlineExpired()) {
+    partial = true;
+    metadata = tokens.flatMap(() => [null, null, null, null]);
+  } else {
+    try {
+      metadata = await evmJsonRpcBatch<string>(
+        tokens.flatMap((token) => [
+          { method: "eth_call", params: [{ to: token, data: SEL_NAME }, "latest"] },
+          { method: "eth_call", params: [{ to: token, data: SEL_SYMBOL }, "latest"] },
+          { method: "eth_call", params: [{ to: token, data: SEL_DECIMALS }, "latest"] },
+          { method: "eth_call", params: [{ to: token, data: SEL_TOTAL_SUPPLY }, "latest"] },
+        ]),
+        { ignoreBackoff: Boolean(currentDeadline()) },
+      );
+    } catch (error) {
+      if (currentDeadline() && (isIncompleteRpcError(error) || isRequestDeadlineError(error))) partial = true;
+      metadata = tokens.flatMap(() => [null, null, null, null]);
+    }
+  }
 
   const rows: CatalogToken[] = tokens.map((token, index) => {
     const name = decodeErc20String(metadata[index * 4]);
@@ -415,12 +539,17 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
       ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
     });
   });
-  return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  return markScanPartial(rows.sort((a, b) => a.symbol.localeCompare(b.symbol)), partial || deadlineExpired());
 }
 
 async function loadTokens(): Promise<CatalogToken[]> {
-  const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
-  tokensCache = { at: Date.now(), value };
+  // A live deadline must not sit behind unstable_cache: that wrapper cannot abort.
+  const value = currentDeadline()
+    ? await discoverTokensOnChainUncached()
+    : await scanTokensCached().catch(() => discoverTokensOnChainUncached());
+  // A partial list is not "fresh". Window cache already holds the ranges that succeeded, so the
+  // next request continues from there instead of serving a frozen incomplete catalog.
+  if (!scanIsPartial(value)) tokensCache = { at: Date.now(), value };
   return value;
 }
 
@@ -553,6 +682,7 @@ async function factoryPairAddresses(ammFactory: string): Promise<string[] | null
 }
 
 async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
+  let poolsPartial = deadlineExpired();
   const dep = readEvmDeployments();
   const wppl = dep.contracts.wppl;
   const ammFactory = dep.contracts.ammFactory;
@@ -576,6 +706,7 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
       for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
     } else {
       const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]);
+      if (scanIsPartial(fromLogs)) poolsPartial = true;
       for (const log of fromLogs) {
         const pair = topicAddress(log.topics?.[2]);
         if (pair) pairAddrs.add(pair.toLowerCase());
@@ -584,14 +715,24 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
   }
 
   const pairs = [...pairAddrs].map((lower) => getAddress(lower));
-  if (!pairs.length) return [];
+  if (!pairs.length) return markScanPartial([], poolsPartial);
 
-  return pairReservesBatch(pairs, getAddress(wppl));
+  try {
+    const pools = await pairReservesBatch(pairs, getAddress(wppl));
+    return markScanPartial(pools, poolsPartial || deadlineExpired());
+  } catch (error) {
+    if (isRequestDeadlineError(error) || deadlineExpired() || (currentDeadline() && isIncompleteRpcError(error))) {
+      return markScanPartial([], true);
+    }
+    throw error;
+  }
 }
 
 async function loadPools(): Promise<CatalogPool[]> {
-  const value = await scanPoolsCached().catch(() => discoverPoolsOnChainUncached());
-  poolsCache = { at: Date.now(), value };
+  const value = currentDeadline()
+    ? await discoverPoolsOnChainUncached()
+    : await scanPoolsCached().catch(() => discoverPoolsOnChainUncached());
+  if (!scanIsPartial(value)) poolsCache = { at: Date.now(), value };
   return value;
 }
 
