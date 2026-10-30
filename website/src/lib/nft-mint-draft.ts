@@ -58,6 +58,20 @@ export function isResumable(draft: NftMintDraft | null): boolean {
   return Boolean(draft && draft.status !== "done" && (draft.payTx || draft.createTx || draft.mintTx || draft.collection || draft.mintAttempted));
 }
 
+/**
+ * The mint is already on chain. Close the draft so a reload shows the result instead of the
+ * "still in progress" notice, and so the next click cannot send a second mint.
+ */
+export function applyConfirmedMint(draft: NftMintDraft, tokenId: string, mintTx?: string): NftMintDraft {
+  return {
+    ...draft,
+    status: "done",
+    tokenId,
+    ...(mintTx ? { mintTx } : {}),
+    mintAttempted: false,
+  };
+}
+
 export const NFT_DRAFT_KEY = "people_nft_mint_draft_v1";
 
 export type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;

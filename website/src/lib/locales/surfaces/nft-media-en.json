@@ -42,6 +42,7 @@
   "storedAt": "Stored at",
   "metadataLabel": "Metadata",
   "viewOnPeoplescan": "View on PeopleScan",
+  "viewHere": "View this NFT",
   "technicalDetails": "Technical details",
   "errCoverRequired": "Choose a cover image for the video.",
   "errUnsupportedType": "This file type is not supported. Use PNG, JPEG, WebP, GIF or SVG for images, MP4 or WebM for video.",

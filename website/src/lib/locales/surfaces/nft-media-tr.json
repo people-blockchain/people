@@ -42,6 +42,7 @@
   "storedAt": "Saklandığı yer",
   "metadataLabel": "Üst veri",
   "viewOnPeoplescan": "PeopleScan'de görüntüle",
+  "viewHere": "Bu NFT'yi görüntüle",
   "technicalDetails": "Teknik ayrıntılar",
   "errCoverRequired": "Video için bir kapak görseli seçin.",
   "errUnsupportedType": "Bu dosya türü desteklenmiyor. Görseller için PNG, JPEG, WebP, GIF veya SVG, video için MP4 veya WebM kullanın.",
