@@ -335,10 +335,13 @@ function decodeAddress(ret: string | null | undefined): string {
 /**
  * Token `metadataURI()` may be an icon address (ipfs://… or https://…). The old launch flow wrote
  * the non-image placeholder `ipfs://people/<SYMBOL>`, which must never replace the gradient icon.
+ * A `.../metadata.json` address is a JSON document (the catalog never fetches it), so it is not an image.
  */
 export function tokenImageFromMetadataUri(uri: string | null | undefined): string | null {
   const value = (uri ?? "").trim();
   if (!value || value === "ipfs://people" || value.startsWith("ipfs://people/")) return null;
+  // New launches point at a pinned metadata JSON (`ipfs://<CID>/metadata.json`), not an image.
+  if (/\/metadata\.json(?:[?#].*)?$/i.test(value)) return null;
   if (/^ipfs:\/\/[^\s]+$/i.test(value)) return value;
   if (/^https:\/\/[^\s]+$/i.test(value)) return value;
   return null;
