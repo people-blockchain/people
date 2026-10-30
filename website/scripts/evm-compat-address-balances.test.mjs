@@ -4,7 +4,7 @@ import { createServer } from "node:http";
 import { encodeAbiParameters, encodeEventTopics, toFunctionSelector } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
-import { logStartBlock, resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
+import { logStartBlock, resetChainCatalogCacheForTests, seedTokenCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { handleEvmCompatGet, resetMintedNftCacheForTests } from "../src/lib/evm/people-compat.ts";
 import { NFT_MINTED_TOPIC, nftFactoryAddress, nftMintedEvent } from "../src/lib/evm/nft-factory.ts";
 import { ipfsGatewayUrlForUri } from "../src/lib/ipfs.ts";
@@ -373,6 +373,19 @@ test("one balance read fails with 503 and the response is partial 200 with the o
     }
     return base(call);
   });
+  // The fresh token is already in the catalog cache. The address route must not scan logs to see it.
+  seedTokenCatalogCacheForTests([{
+    assetId: created.toLowerCase(),
+    tokenAddress: created,
+    name: "Fresh",
+    symbol: "FRESH",
+    decimals: 6,
+    totalSupply: 5,
+    creator: OTHER,
+    status: "active",
+    type: "token",
+    verified: false,
+  }]);
 
   const res = await handleEvmCompatGet(`/address/${OWNER}`, new URLSearchParams());
   assert.equal(res.status, 200);

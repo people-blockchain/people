@@ -150,5 +150,6 @@
   "install": "Yükle",
   "signInGoogle": "Google ile giriş yap",
   "back": "Geri",
-  "openWallet": "{wallet} uygulamasını aç"
+  "openWallet": "{wallet} uygulamasını aç",
+  "balancesPartial": "Bazı bakiyeler hâlâ yükleniyor. Gösterilen tutarlar şimdiden alınanlardır."
 }

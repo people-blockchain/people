@@ -49,9 +49,14 @@ export type DuplicateCatalogToken = CatalogToken & { creator: string; image?: st
 
 /** Maps server catalog rows (`GET assets`) to duplicate-check entries, creators included but never filtered. */
 export function catalogRowsToTokens(rows: unknown): DuplicateCatalogToken[] {
-  if (!Array.isArray(rows)) return [];
+  const list = Array.isArray(rows)
+    ? rows
+    : rows && typeof rows === "object" && Array.isArray((rows as { assets?: unknown }).assets)
+      ? (rows as { assets: unknown[] }).assets
+      : null;
+  if (!list) return [];
   const out: DuplicateCatalogToken[] = [];
-  for (const row of rows as CatalogAssetRow[]) {
+  for (const row of list as CatalogAssetRow[]) {
     const address = (row?.tokenAddress ?? row?.assetId ?? "").toLowerCase();
     if (!address) continue;
     out.push({

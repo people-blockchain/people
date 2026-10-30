@@ -11,7 +11,8 @@ import { AssetImage } from "@/components/ui/AssetImage";
 import { SkeletonRows } from "./ExplorerSkeleton";
 import { uxCopy, displaySymbol } from "@/lib/ux-copy";
 import { displayAssetName, visibleNfts, visiblePools } from "@/lib/hidden-assets";
-import { mergeTokenCatalogRows, tokenCatalogRows } from "@/lib/explorer/token-catalog-list";
+import { compatAssetRows, mergeSeenIntoCatalog, mergeTokenCatalogRows, readSeenTokens, rememberSeenTokens, tokenCatalogRows } from "@/lib/explorer/token-catalog-list";
+import { readCreatedTokens } from "@/lib/created-tokens";
 import { ExplorerSubnav } from "./ExplorerSubnav";
 import { assetDecimals, formatAssetUnits, formatPpl } from "@/lib/asset-amounts";
 
@@ -47,11 +48,28 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
 
   useEffect(() => {
     let alive = true;
+    const storage = typeof window === "undefined" ? null : window.localStorage;
+    const kept = [
+      ...readSeenTokens(storage),
+      ...readCreatedTokens(storage).map((row) => ({
+        assetId: row.address,
+        tokenAddress: row.address,
+        name: row.name,
+        symbol: row.symbol,
+        creationMetadata: row.image ? { image: row.image } : undefined,
+        createdAt: row.createdAt,
+      })),
+    ];
+    if (kept.length) setItems((current) => mergeSeenIntoCatalog(current, kept));
     void networkJson<TokenRow[]>("assets")
       .then((body) => {
         if (!alive) return;
-        const next = tokenCatalogRows(Array.isArray(body) ? body : []);
-        setItems((current) => mergeTokenCatalogRows(current, next));
+        const next = tokenCatalogRows(compatAssetRows<TokenRow>(body));
+        setItems((current) => {
+          const merged = mergeSeenIntoCatalog(mergeTokenCatalogRows(current, next), kept);
+          rememberSeenTokens(storage, merged);
+          return merged;
+        });
       })
       // A failed background refresh must not replace the prefetched rows with an error notice.
       .catch(() => { if (alive && !prefetched) setFailed(true); })

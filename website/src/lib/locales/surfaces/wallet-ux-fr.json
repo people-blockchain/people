@@ -150,5 +150,6 @@
   "install": "Installer",
   "signInGoogle": "Se connecter avec Google",
   "back": "Retour",
-  "openWallet": "Ouvrir {wallet}"
+  "openWallet": "Ouvrir {wallet}",
+  "balancesPartial": "Certains soldes sont encore en cours de chargement. Les montants affichés sont ceux déjà reçus."
 }

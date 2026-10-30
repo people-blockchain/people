@@ -2,5 +2,15 @@
   "preflightRevert": "Jaringan akan menolak transaksi ini, jadi tidak dikirim dan tidak ada biaya yang dipotong. Alasan: {reason}",
   "preflightRevertGeneric": "Jaringan akan menolak transaksi ini, jadi tidak dikirim dan tidak ada biaya yang dipotong.",
   "preflightDailyLimit": "Batas harian pembayaran dengan stablecoin telah tercapai. Tidak ada biaya yang dipotong. Bayar dengan PPL atau coba lagi setelah tengah malam UTC.",
-  "preflightPayInPplHint": "Tips: jika Anda memilih membayar dengan stablecoin, beralihlah ke pembayaran dengan PPL lalu coba lagi."
+  "preflightPayInPplHint": "Tips: jika Anda memilih membayar dengan stablecoin, beralihlah ke pembayaran dengan PPL lalu coba lagi.",
+  "errorInsufficientFloat": "Cadangan stablecoin belum menutupi biaya ini. Tidak ada yang terkirim dan tidak ada yang terpotong. Bayar dengan PPL.",
+  "errorStableNotAccepted": "Stablecoin ini tidak diterima untuk biaya pembuatan. Tidak ada yang terkirim dan tidak ada yang terpotong. Bayar dengan PPL.",
+  "errorFeeOutOfBounds": "Biaya pembuatan berada di luar rentang yang diizinkan. Tidak ada yang terkirim dan tidak ada yang terpotong.",
+  "errorPplTransferFailed": "Pembayaran PPL tidak selesai. Tidak ada yang terkirim dan tidak ada yang terpotong.",
+  "errorEnforcedPause": "Pembuatan token sedang dijeda. Tidak ada yang terkirim dan tidak ada yang terpotong. Coba lagi nanti.",
+  "errorUnauthorized": "Dompet ini tidak diizinkan menyelesaikan langkah itu. Tidak ada yang terkirim dan tidak ada yang terpotong.",
+  "errorErc20Allowance": "Dompet belum menyetujui stablecoin yang cukup. Tidak ada yang terkirim dan tidak ada yang terpotong.",
+  "errorErc20Balance": "Dompet tidak memegang stablecoin yang cukup untuk biaya ini. Tidak ada yang terkirim dan tidak ada yang terpotong.",
+  "errorSafeTransfer": "Transfer stablecoin gagal. Tidak ada yang terkirim dan tidak ada yang terpotong. Bayar dengan PPL.",
+  "preflightDetails": "Rincian teknis"
 }

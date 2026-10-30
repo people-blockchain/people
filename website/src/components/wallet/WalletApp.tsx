@@ -30,6 +30,7 @@ import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
+import { compatAssetRows } from "@/lib/explorer/token-catalog-list";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import type { WalletOnboardingMode } from "./useWalletOnboarding";
 import { PeopleWalletMark } from "./PeopleWalletMark";
@@ -39,12 +40,9 @@ import { WalletSoonAction } from "./WalletSoonOption";
 import { walletFeatures, walletShowsSoonPlaceholders } from "@/lib/wallet-features";
 import { disconnectPeopleWallet } from "@/lib/wallet-disconnect";
 import { faucetErrorMessage } from "@/lib/faucet-error";
+import { formatWalletNative, mapWalletAccount, type WalletAccountView } from "@/lib/wallet-account-view";
 
-interface AccountView {
-  balance: number;
-  nonce: number;
-  balances: Record<string, number>;
-}
+type AccountView = WalletAccountView;
 
 interface FaucetFundResult {
   ok?: boolean;
@@ -153,13 +151,15 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         if (stopped) break;
         setCreatedTokens(localCreated);
         if (balance.status === "fulfilled") {
-          const acc = balance.value;
-          setAccount({ balance: Number(acc.balance ?? 0), nonce: Number(acc.nonce ?? 0), balances: acc.balances ?? {} });
-          setRevision(r => r + 1);
+          const mapped = mapWalletAccount(balance.value);
+          if (mapped) {
+            setAccount(mapped);
+            setRevision(r => r + 1);
+          }
         }
         if (owned.status === "fulfilled") setNfts(Array.isArray(owned.value) ? owned.value : []);
-        if (registry.status === "fulfilled" && Array.isArray(registry.value)) {
-          let merged = registry.value;
+        if (registry.status === "fulfilled") {
+          let merged = compatAssetRows<TransferAsset>(registry.value);
           const has = (row: CreatedTokenRecord) =>
             merged.some(
               (asset) =>
@@ -293,10 +293,12 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     setNotice("");
     try {
       if (nft && !nftTransfersEnabled) throw new Error(c.nftUpgrade);
-      const [fresh, health] = await Promise.all([
-        networkJson<AccountView>(`address/${session.address}`, { cache: "no-store" }),
+      const [rawFresh, health] = await Promise.all([
+        networkJson<unknown>(`address/${session.address}`, { cache: "no-store" }),
         networkJson<{ chainId: string }>("health", { cache: "no-store" }),
       ]);
+      const fresh = mapWalletAccount(rawFresh);
+      if (!fresh || fresh.balance === null) throw new Error(c.unavailable);
       if (health.chainId !== chainId && String(health.chainId) !== String(chainId)) throw new Error(c.networkMismatch);
       if (readPending(chainId,session.address).some(tx=>tx.from===session.address && tx.nonce===fresh.nonce)) throw new Error(c.pendingOutgoing);
       if (memo.length > 256) throw new Error(c.memoLong);
@@ -342,7 +344,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     if (!session || !draft) return;
     setBusy(true);setError("");
     try {
-      const [fresh,health] = await Promise.all([networkJson<AccountView>(`address/${session.address}`,{cache:"no-store"}),networkJson<{chainId:string}>("health",{cache:"no-store"})]);
+      const [rawFresh,health] = await Promise.all([networkJson<unknown>(`address/${session.address}`,{cache:"no-store"}),networkJson<{chainId:string}>("health",{cache:"no-store"})]);
+      const fresh = mapWalletAccount(rawFresh);
+      if (!fresh || fresh.balance === null) throw new Error(c.feeChanged);
       const txDraft = draft.tx;
       if (txDraft.type==="nftTransfer" && !nftTransfersEnabled) throw new Error(c.nftUpgrade);
       if(fresh.balance!==draft.reviewedNative || (fresh.balances?.[txDraft.assetId??"ppl"]??0)!==draft.reviewedAsset) throw new Error(c.feeChanged);
@@ -571,14 +575,15 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
               <p className="mt-3 text-xs font-medium uppercase tracking-wide text-ink-3">{c.totalBalance}</p>
               <p className="mt-1 flex items-center gap-3 text-3xl font-black text-ink">
                 <AssetImage assetId="ppl" name="PPL" className="h-10 w-10" />
-                {account ? formatPpl(account.balance) : "—"} <span className="text-lg font-bold text-ink-2">{t.ppl}</span>
+                {formatWalletNative(account, formatPpl)} <span className="text-lg font-bold text-ink-2">{t.ppl}</span>
+                {account?.partial ? <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-warm">{c.balancesPartial}</span> : null}
               </p>
               <h2 className="mt-5 text-sm font-semibold text-ink">{c.tokensTab}</h2>
               <label className="mt-2 block text-sm">{c.search}<input type="search" value={search} onChange={event=>setSearch(event.target.value)} className="mt-2 w-full rounded-xl border border-line bg-surface px-3 py-2" /></label>
               <ul className="mt-3 space-y-2 text-sm">
                 <li className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
                   <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
-                  <span className="font-mono">{account ? formatPpl(account.balance) : "—"}</span>
+                  <span className="font-mono">{formatWalletNative(account, formatPpl)}</span>
                 </li>
                 {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {
                   const asset = assets.find((item) => item.assetId === id);
@@ -629,7 +634,8 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
             <p className="mt-3 text-xs font-medium uppercase tracking-wide text-ink-3">{c.totalBalance}</p>
             <p className="mt-1 flex items-center gap-3 text-3xl font-black text-ink" data-testid="wallet-ppl">
               <AssetImage assetId="ppl" name="PPL" className="h-10 w-10" />
-              {account ? formatPpl(account.balance) : "—"} <span className="text-lg font-bold text-ink-2">{t.ppl}</span>
+              {formatWalletNative(account, formatPpl)} <span className="text-lg font-bold text-ink-2">{t.ppl}</span>
+              {account?.partial ? <span className="mt-1 block text-xs font-medium normal-case tracking-normal text-warm" role="status">{c.balancesPartial}</span> : null}
             </p>
           </div>
 
@@ -672,7 +678,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
             <ul className="space-y-2 text-sm">
               <li className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
                 <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
-                <span className="font-mono">{account ? formatPpl(account.balance) : "—"}</span>
+                <span className="font-mono">{formatWalletNative(account, formatPpl)}</span>
               </li>
               {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {
                 const asset = assets.find((item) => item.assetId === id);

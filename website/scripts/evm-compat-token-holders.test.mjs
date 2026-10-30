@@ -127,12 +127,13 @@ test("when the creation block is unknown the scan starts at the deployment block
   assert.equal(Number.parseInt(getLogCalls(calls)[0].params[0].fromBlock, 16), deployBlock());
 });
 
-test("a transient RPC failure on isPeopleToken is 502 rpc_unavailable, not 404", async (t) => {
+test("a transient RPC failure on isPeopleToken is partial, not 404", async (t) => {
   const token = "0x00000000000000000000000000000000000f0005";
   const calls = await startRpcNode(t, (call) => (isRegistryCall(call) ? { http: 503 } : call.method === "eth_blockNumber" ? hex(100) : "0x"));
   const res = await handleEvmCompatGet("/accounts", new URLSearchParams({ assetId: token }));
-  assert.equal(res.status, 502);
-  assert.deepEqual(res.body, { error: "rpc_unavailable" });
+  assert.equal(res.status, 200);
+  assert.equal(res.body.partial, true);
+  assert.deepEqual(res.body.accounts, []);
   assert.equal(getLogCalls(calls).length, 0);
 });
 
@@ -203,7 +204,7 @@ test("a holder window that keeps failing is a partial 200 when another window su
   assert.equal(res.body.accounts[0].address.toLowerCase(), HOLDER);
 });
 
-test("a failing holder scan is 502, never an empty holder list", async (t) => {
+test("a failing holder scan is partial, never an empty holder list", async (t) => {
   const token = "0x00000000000000000000000000000000000f0007";
   await startRpcNode(t, (call) => {
     if (call.method === "eth_blockNumber") return hex(deployBlock() + 5_000);
@@ -212,6 +213,7 @@ test("a failing holder scan is 502, never an empty holder list", async (t) => {
     return "0x";
   });
   const res = await handleEvmCompatGet("/accounts", new URLSearchParams({ assetId: token }));
-  assert.equal(res.status, 502);
-  assert.deepEqual(res.body, { error: "rpc_unavailable" });
+  assert.equal(res.status, 200);
+  assert.equal(res.body.partial, true);
+  assert.deepEqual(res.body.accounts, []);
 });

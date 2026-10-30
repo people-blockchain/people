@@ -150,5 +150,6 @@
   "install": "Pasang",
   "signInGoogle": "Masuk dengan Google",
   "back": "Kembali",
-  "openWallet": "Buka {wallet}"
+  "openWallet": "Buka {wallet}",
+  "balancesPartial": "Sebagian saldo masih dimuat. Jumlah yang tampil adalah yang sudah diterima."
 }

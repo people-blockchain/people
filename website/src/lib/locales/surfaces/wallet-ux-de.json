@@ -150,5 +150,6 @@
   "install": "Installieren",
   "signInGoogle": "Mit Google anmelden",
   "back": "Zurück",
-  "openWallet": "{wallet} öffnen"
+  "openWallet": "{wallet} öffnen",
+  "balancesPartial": "Einige Guthaben werden noch geladen. Die angezeigten Beträge sind die bereits empfangenen."
 }

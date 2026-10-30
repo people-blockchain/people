@@ -150,5 +150,6 @@
   "install": "تثبيت",
   "signInGoogle": "تسجيل الدخول عبر Google",
   "back": "رجوع",
-  "openWallet": "فتح {wallet}"
+  "openWallet": "فتح {wallet}",
+  "balancesPartial": "بعض الأرصدة ما زالت تُحمَّل. المبالغ المعروضة هي التي تم استلامها."
 }

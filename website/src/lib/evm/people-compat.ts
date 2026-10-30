@@ -12,16 +12,28 @@ import { aggregateHoldersDetailed, findTokenCreationBlock } from "@/lib/evm/tran
 import {
   LOG_WINDOW_BLOCKS,
   applyTokenImage,
+  catalogListIsPartial,
   discoverPoolsOnChain,
   discoverTokensOnChain,
   fetchLogsWindowed,
   logStartBlock,
+  peekCachedCatalogTokens,
 } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, listSeedNfts, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 import { EvmRpcResponseError, evmJsonRpc, evmJsonRpcBatch, weiToPpl } from "@/lib/evm/rpc-server";
-import { FALLBACK_TOKEN_SYMBOL, readTokenOnchain, resolveTokenImageUri } from "@/lib/evm/token-onchain";
+import {
+  RequestDeadlineError,
+  boundedTimeoutMs,
+  currentDeadline,
+  deadlineExpired,
+  isRequestDeadlineError,
+  retryDelayMs,
+  runWithRequestDeadline,
+  sleepMs,
+} from "@/lib/evm/request-deadline";
+import { FALLBACK_TOKEN_SYMBOL, TokenReadError, readTokenOnchain, resolveTokenImageUri } from "@/lib/evm/token-onchain";
 import { readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
 import { displayTokenImageUrl } from "@/lib/ipfs";
 import {
@@ -41,6 +53,7 @@ type AssetRow = {
   status: string;
   type: string;
   verified?: boolean;
+  partial?: boolean;
   createdAt?: number;
   imageUri?: string;
   creationMetadata?: { image?: string; description?: string; website?: string; testnet?: boolean };
@@ -114,9 +127,50 @@ async function nftCollectionStats(collection: string): Promise<NftCollectionStat
 const TOKEN_READ_TIMEOUT_MS = 8_000;
 /** Two retries after the first attempt, short enough that one cold asset read still returns quickly. */
 const TOKEN_READ_RETRY_DELAYS_MS = [200, 500] as const;
+/** Wallet balances must answer in a few seconds, even when some token calls hang. */
+const WALLET_BALANCE_BUDGET_MS = 3_000;
+const NATIVE_ATTEMPT_TIMEOUT_MS = 700;
+const NATIVE_RETRY_DELAYS_MS = [120, 280] as const;
+const ADDRESS_CACHE_TTL_MS = 15_000;
+const ADDRESS_PARTIAL_CACHE_TTL_MS = 1_500;
+/** Metadata JSON is optional. Basic token fields are returned if this elapses. */
+const TOKEN_IMAGE_BUDGET_MS = 1_200;
 
-function sleepMs(ms: number): Promise<void> {
-  return ms > 0 ? new Promise((resolve) => setTimeout(resolve, ms)) : Promise.resolve();
+type AddressBalanceBody = {
+  balance?: number;
+  nonce: number;
+  balances: Record<string, number>;
+  outgoingTxs: number;
+  incomingTxs: number;
+  partial?: boolean;
+};
+
+const addressBalanceCache = new Map<string, { at: number; partial: boolean; body: AddressBalanceBody }>();
+
+function withinBudget<T>(work: Promise<T>, ms: number, fallback: T): Promise<T> {
+  const parent = currentDeadline()?.signal;
+  const at = currentDeadline()?.at;
+  if (parent?.aborted || deadlineExpired(at) || ms <= 0) return Promise.resolve(fallback);
+  const wait = typeof at === "number" ? Math.min(ms, Math.max(1, at - Date.now())) : ms;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let onAbort: (() => void) | undefined;
+  return new Promise<T>((resolve) => {
+    let settled = false;
+    const finish = (value: T) => {
+      if (settled) return;
+      settled = true;
+      if (timer) clearTimeout(timer);
+      if (onAbort) parent?.removeEventListener("abort", onAbort);
+      resolve(value);
+    };
+    onAbort = () => finish(fallback);
+    parent?.addEventListener("abort", onAbort);
+    timer = setTimeout(() => finish(fallback), wait);
+    work.then(
+      (value) => finish(value),
+      () => finish(fallback),
+    );
+  });
 }
 
 /** 5xx, timeout, and network failures. A contract revert is `EvmRpcResponseError` and is not retried. */
@@ -130,50 +184,38 @@ function isTransientTokenRpcError(error: unknown): boolean {
 }
 
 /**
- * One JSON-RPC read with a short backoff. Transient 5xx/timeout/network/`rpc_backoff` are retried;
- * a contract revert (`EvmRpcResponseError`) is not. `ignoreBackoff` so a catalog burst cannot
- * fail this call before it is attempted.
- */
-async function readRpc<T>(method: string, params: unknown[]): Promise<T> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt <= TOKEN_READ_RETRY_DELAYS_MS.length; attempt++) {
-    if (attempt > 0) await sleepMs(TOKEN_READ_RETRY_DELAYS_MS[attempt - 1]);
-    try {
-      return await evmJsonRpc<T>(method, params, {
-        timeoutMs: TOKEN_READ_TIMEOUT_MS,
-        ignoreBackoff: true,
-      });
-    } catch (error) {
-      if (error instanceof EvmRpcResponseError) throw error;
-      lastError = error;
-      if (attempt === TOKEN_READ_RETRY_DELAYS_MS.length || !isTransientTokenRpcError(error)) throw error;
-    }
-  }
-  throw lastError instanceof Error ? lastError : new Error("token_rpc_failed");
-}
-
-/**
  * `eth_call` adapter for `readTokenOnchain`: null = revert/empty, throw = transport failure.
  * Ignores the shared per-URL backoff (a catalog burst of 503s must not fail this read) and retries
  * a transient failure twice.
  */
-async function tokenCall(to: Address, data: Hex): Promise<Hex | null> {
+async function tokenCall(to: Address, data: Hex, signal?: AbortSignal): Promise<Hex | null> {
+  const at = currentDeadline()?.at;
   let lastError: unknown;
   for (let attempt = 0; attempt <= TOKEN_READ_RETRY_DELAYS_MS.length; attempt++) {
-    if (attempt > 0) await sleepMs(TOKEN_READ_RETRY_DELAYS_MS[attempt - 1]);
+    if (signal?.aborted || (attempt > 0 && deadlineExpired(at))) break;
+    if (attempt > 0) {
+      const wait = retryDelayMs(TOKEN_READ_RETRY_DELAYS_MS[attempt - 1] ?? 0, at);
+      if (wait === null) break;
+      await sleepMs(wait, signal);
+      if (signal?.aborted || deadlineExpired(at)) break;
+    }
     try {
       return (
         (await evmJsonRpc<Hex>("eth_call", [{ to, data }, "latest"], {
-          timeoutMs: TOKEN_READ_TIMEOUT_MS,
+          timeoutMs: boundedTimeoutMs(TOKEN_READ_TIMEOUT_MS, at),
           ignoreBackoff: true,
+          deadlineAt: at,
+          signal,
         })) ?? null
       );
     } catch (error) {
       if (error instanceof EvmRpcResponseError) return null;
+      if (isRequestDeadlineError(error) || deadlineExpired(at)) throw new RequestDeadlineError();
       lastError = error;
       if (attempt === TOKEN_READ_RETRY_DELAYS_MS.length || !isTransientTokenRpcError(error)) throw error;
     }
   }
+  if (deadlineExpired(at) || signal?.aborted) throw new RequestDeadlineError();
   throw lastError instanceof Error ? lastError : new Error("token_rpc_failed");
 }
 
@@ -190,7 +232,27 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
   const inAssetMap = Object.values(dep.assetMap).some((addr) => addr && addr.toLowerCase() === token.toLowerCase());
   // Only deployment-mapped (seed) assets may fall back to the deployer; anything else is read live.
   const factoryToken = !inAssetMap;
-  const onchain = await readTokenOnchain(tokenCall, token);
+  // One failed getter stops the others from retrying. A sibling that kept going would otherwise
+  // outlive this read and, in tests, talk to whatever RPC URL is left after the caller returns.
+  const reads = new AbortController();
+  const onDeadline = () => reads.abort();
+  currentDeadline()?.signal.addEventListener("abort", onDeadline);
+  let readFailed = false;
+  let onchain: Awaited<ReturnType<typeof readTokenOnchain>>;
+  try {
+  onchain = await readTokenOnchain(async (to, data) => {
+    try {
+      return await tokenCall(to, data, reads.signal);
+    } catch (error) {
+      if (readFailed) return null;
+      readFailed = true;
+      reads.abort();
+      throw error;
+    }
+  }, token);
+  } finally {
+    currentDeadline()?.signal.removeEventListener("abort", onDeadline);
+  }
   const decimals = onchain.decimals ?? 18;
   const logicalAssetId = resolveLogicalAssetId(token);
   const seed = seedAssetMeta(logicalAssetId);
@@ -213,14 +275,26 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
-  const [overrides, chainImage] = await Promise.all([
-    readTokenIconOverrides([token]).catch(() => new Map<string, string>()),
-    resolveTokenImageUri(onchain.metadataUri),
-  ]);
+  const imageStarted = Date.now();
+  const [overrides, chainImage] = await withinBudget(
+    Promise.all([
+      readTokenIconOverrides([token]).catch(() => new Map<string, string>()),
+      resolveTokenImageUri(onchain.metadataUri, (uri) =>
+        readTokenUriMetadata(uri, boundedTimeoutMs(TOKEN_IMAGE_BUDGET_MS), currentDeadline()?.at),
+      ),
+    ]),
+    TOKEN_IMAGE_BUDGET_MS,
+    [new Map<string, string>(), undefined] as [Map<string, string>, string | undefined],
+  );
   const overrideRaw = overrides.get(token.toLowerCase());
-  const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? overrideRaw) : undefined;
-  const image = chainImage ? (displayTokenImageUrl(chainImage) ?? chainImage) : undefined;
-  return applyTokenImage(enriched, override, image);
+  const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? undefined) : undefined;
+  const image = chainImage ? (displayTokenImageUrl(chainImage) ?? undefined) : undefined;
+  const row = applyTokenImage(enriched, override, image);
+  // A fast gateway failure is just "no image". Waiting out the image budget or the request
+  // deadline means the document was not read, so the row stays partial for the next request.
+  const imageBudgetHit = Boolean(onchain.metadataUri) && !image && Date.now() - imageStarted >= TOKEN_IMAGE_BUDGET_MS - 25;
+  if (imageBudgetHit || (deadlineExpired() && !image)) return { ...row, partial: true };
+  return row;
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -258,9 +332,16 @@ export async function resolveKnownToken(assetIdOrAddress: string): Promise<strin
     .map(([, addr]) => addr as string);
   let unreachable = false;
   for (const factory of factories) {
+    if (deadlineExpired()) {
+      unreachable = true;
+      break;
+    }
     let out: string | undefined;
     try {
-      out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]);
+      out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"], {
+        timeoutMs: boundedTimeoutMs(8_000),
+        deadlineAt: currentDeadline()?.at,
+      });
     } catch (error) {
       if (!(error instanceof EvmRpcResponseError)) unreachable = true;
       continue;
@@ -290,30 +371,168 @@ function extraTokenAddresses(raw: string | null): string[] {
   return out;
 }
 
+/** One `eth_getBalance`, retried on nginx 503 / timeout. Does not consult the shared backoff. */
+async function readNativeWei(addr: string, deadlineAt?: number): Promise<bigint> {
+  const at = deadlineAt ?? currentDeadline()?.at;
+  let last: unknown;
+  for (let attempt = 0; attempt <= NATIVE_RETRY_DELAYS_MS.length; attempt++) {
+    if (attempt > 0) {
+      const wait = retryDelayMs(NATIVE_RETRY_DELAYS_MS[attempt - 1] ?? 0, at);
+      if (wait === null) break;
+      await sleepMs(wait);
+      if (deadlineExpired(at)) break;
+    }
+    try {
+      const hex = await evmJsonRpc<string>("eth_getBalance", [addr, "latest"], {
+        timeoutMs: boundedTimeoutMs(NATIVE_ATTEMPT_TIMEOUT_MS, at),
+        ignoreBackoff: true,
+        deadlineAt: at,
+      });
+      return BigInt(hex);
+    } catch (error) {
+      last = error;
+      if (isRequestDeadlineError(error) || deadlineExpired(at)) break;
+      if (error instanceof EvmRpcResponseError) throw error;
+      if (attempt === NATIVE_RETRY_DELAYS_MS.length || !isTransientTokenRpcError(error)) break;
+    }
+  }
+  throw last instanceof Error ? last : new Error("balance_unavailable");
+}
+
+async function readAddressNonce(addr: string, deadlineAt?: number): Promise<number> {
+  const at = deadlineAt ?? currentDeadline()?.at;
+  const hex = await evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"], {
+    timeoutMs: boundedTimeoutMs(NATIVE_ATTEMPT_TIMEOUT_MS, at),
+    ignoreBackoff: true,
+    deadlineAt: at,
+  });
+  const nonce = Number.parseInt(hex, 16);
+  if (!Number.isFinite(nonce)) throw new Error("nonce_unavailable");
+  return nonce;
+}
+
+type WalletTokenRow = { assetId: string; decimals: number; creator: string };
+
 /**
- * ERC-20 balances for a wallet. Catalog tokens come from the factory scan; `tokens=` lets the
- * wallet ask about its own freshly created tokens before the catalog has indexed them. Only
- * factory tokens are accepted. A read failure yields no token rows rather than failing the whole
- * address response.
+ * Tokens whose balances can be read with `balanceOf`. Uses the in-memory catalog and the
+ * deployment asset map. Never starts an `eth_getLogs` scan.
+ */
+async function knownWalletTokens(deadlineAt: number): Promise<{ wanted: Map<string, WalletTokenRow>; partial: boolean }> {
+  const wanted = new Map<string, WalletTokenRow>();
+  let partial = false;
+  for (const row of peekCachedCatalogTokens()) {
+    if (!row.tokenAddress || !isAddress(row.tokenAddress)) continue;
+    wanted.set(row.tokenAddress.toLowerCase(), {
+      assetId: row.assetId,
+      decimals: row.decimals,
+      creator: row.creator,
+    });
+  }
+  const missing: string[] = [];
+  for (const addr of Object.values(readEvmDeployments().assetMap ?? {})) {
+    if (!addr || !isAddress(addr)) continue;
+    const token = getAddress(addr);
+    if (wanted.has(token.toLowerCase())) continue;
+    missing.push(token);
+  }
+  if (!missing.length) return { wanted, partial };
+  const rememberStub = (token: string) => {
+    const assetId = resolveLogicalAssetId(token);
+    const seed = seedAssetMeta(assetId);
+    wanted.set(token.toLowerCase(), {
+      assetId,
+      decimals: seed?.decimals ?? 18,
+      creator: "",
+    });
+  };
+  if (Date.now() >= deadlineAt) {
+    for (const token of missing) rememberStub(token);
+    return { wanted, partial: true };
+  }
+  const timeoutMs = Math.max(200, Math.min(1_200, deadlineAt - Date.now()));
+  let results: Array<string | null>;
+  try {
+    results = await evmJsonRpcBatch<string>(
+      missing.flatMap((token) => [
+        { method: "eth_call", params: [{ to: token, data: "0x313ce567" }, "latest"] },
+        { method: "eth_call", params: [{ to: token, data: "0x02d05d3f" }, "latest"] },
+      ]),
+      { ignoreBackoff: true, timeoutMs, deadlineAt },
+    );
+  } catch {
+    results = missing.flatMap(() => [null, null]);
+    partial = true;
+  }
+  missing.forEach((token, index) => {
+    const decRaw = results[index * 2];
+    const creatorRaw = results[index * 2 + 1];
+    let decimals: number | null = null;
+    if (typeof decRaw === "string" && decRaw !== "0x") {
+      try {
+        const n = Number(BigInt(decRaw));
+        if (Number.isInteger(n) && n >= 0 && n <= 18) decimals = n;
+      } catch {
+        partial = true;
+      }
+    } else {
+      partial = true;
+    }
+    let creator = "";
+    if (typeof creatorRaw === "string" && creatorRaw.length >= 66) {
+      try {
+        creator = getAddress(`0x${creatorRaw.slice(-40)}`);
+      } catch {
+        partial = true;
+      }
+    } else {
+      partial = true;
+    }
+    const assetId = resolveLogicalAssetId(token);
+    const seed = seedAssetMeta(assetId);
+    wanted.set(token.toLowerCase(), {
+      assetId,
+      decimals: decimals ?? seed?.decimals ?? 18,
+      creator,
+    });
+  });
+  return { wanted, partial };
+}
+
+async function readBalanceCall(token: string, data: string, timeoutMs: number, deadlineAt?: number): Promise<string | null> {
+  try {
+    const value = await evmJsonRpc<string>("eth_call", [{ to: token, data }, "latest"], {
+      timeoutMs: boundedTimeoutMs(timeoutMs, deadlineAt),
+      ignoreBackoff: true,
+      deadlineAt,
+    });
+    return value && value !== "0x" ? value : null;
+  } catch (error) {
+    if (isTransientTokenRpcError(error)) return null;
+    return null;
+  }
+}
+
+/**
+ * ERC-20 balances for a wallet. Tokens come from the in-memory catalog and the deployment map,
+ * read with batched `balanceOf` inside `deadlineAt`. `tokens=` asks about freshly created tokens
+ * before the catalog has indexed them. A failed or hung read is omitted and flagged partial.
  */
 async function walletTokenBalances(
   owner: string,
-  catalog: Awaited<ReturnType<typeof discoverTokensOnChain>>,
   tokensParam: string | null,
+  deadlineAt: number,
 ): Promise<{ balances: Record<string, number>; partial: boolean }> {
   let partial = false;
   try {
-    const wanted = new Map<string, { assetId: string; decimals: number; creator: string }>();
-    for (const row of catalog) {
-      if (!row.tokenAddress || !isAddress(row.tokenAddress)) continue;
-      wanted.set(row.tokenAddress.toLowerCase(), {
-        assetId: row.assetId,
-        decimals: row.decimals,
-        creator: row.creator,
-      });
-    }
+    const known = await knownWalletTokens(deadlineAt);
+    partial = known.partial;
+    const wanted = known.wanted;
     for (const raw of extraTokenAddresses(tokensParam)) {
       if (wanted.has(raw)) continue;
+      if (Date.now() >= deadlineAt) {
+        partial = true;
+        break;
+      }
       const resolved = await resolveKnownToken(raw).catch(() => null);
       if (!resolved) continue;
       const token = getAddress(resolved);
@@ -335,12 +554,18 @@ async function walletTokenBalances(
     const BALANCE_BATCH_SIZE = 20;
     const rawBalances: Array<{ ok: true; value: string } | { ok: false }> = [];
     for (let start = 0; start < tokens.length; start += BALANCE_BATCH_SIZE) {
+      if (Date.now() >= deadlineAt) {
+        partial = true;
+        rawBalances.push(...tokens.slice(start).map(() => ({ ok: false as const })));
+        break;
+      }
       const chunk = tokens.slice(start, start + BALANCE_BATCH_SIZE);
+      const timeoutMs = Math.max(200, Math.min(1_200, deadlineAt - Date.now()));
       let results: Array<string | null>;
       try {
         results = await evmJsonRpcBatch<string>(
           chunk.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
-          { ignoreBackoff: true },
+          { ignoreBackoff: true, timeoutMs, deadlineAt },
         );
       } catch {
         results = chunk.map(() => null);
@@ -349,13 +574,13 @@ async function walletTokenBalances(
         chunk.map(async (token, index) => {
           const value = results[index];
           if (typeof value === "string" && value !== "0x") return { ok: true as const, value };
-          try {
-            const single = await readRpc<string>("eth_call", [{ to: token, data }, "latest"]);
-            if (!single || single === "0x") return { ok: false as const };
-            return { ok: true as const, value: single };
-          } catch {
-            return { ok: false as const };
-          }
+          if (Date.now() >= deadlineAt) return { ok: false as const };
+          const singleTimeout = Math.max(200, Math.min(800, deadlineAt - Date.now()));
+          const single = await readBalanceCall(token, data, singleTimeout, deadlineAt);
+          if (single) return { ok: true as const, value: single };
+          if (Date.now() >= deadlineAt) return { ok: false as const };
+          const retried = await readBalanceCall(token, data, Math.max(200, Math.min(800, deadlineAt - Date.now())), deadlineAt);
+          return retried ? { ok: true as const, value: retried } : { ok: false as const };
         }),
       );
       rawBalances.push(...resolved);
@@ -406,8 +631,13 @@ const MINTED_NFT_CACHE_MAX = 100;
 const mintedNftCache = new Map<string, { at: number; value: MintedNftRow[] }>();
 const MINTED_NFT_SCAN_WINDOWS = 100;
 
+export function resetAddressBalanceCacheForTests(): void {
+  addressBalanceCache.clear();
+}
+
 export function resetMintedNftCacheForTests(): void {
   mintedNftCache.clear();
+  addressBalanceCache.clear();
 }
 
 function addressTopic(address: string): string {
@@ -507,7 +737,11 @@ function rememberMintedNfts(owner: string, rows: MintedNftRow[]): void {
   mintedNftCache.set(owner, { at: Date.now(), value: rows });
 }
 
-export async function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
+export function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
+  return runWithRequestDeadline(() => handleEvmCompatGetInner(path, search));
+}
+
+async function handleEvmCompatGetInner(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
   const segments = path.replace(/^\//, "").split("/").filter(Boolean);
   const root = segments[0]?.toLowerCase() ?? "";
 
@@ -555,55 +789,71 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "assets" && segments.length === 1) {
-    const onChain = await discoverTokensOnChain().catch(() => []);
-    if (onChain.length) {
+    let catalogFailed = false;
+    const onChain = await discoverTokensOnChain().catch(() => {
+      catalogFailed = true;
+      return peekCachedCatalogTokens();
+    });
+    const mapped = visibleAssets(onChain.map((row) => enrichAssetRow(row))).map((enriched) => {
       return {
-        status: 200,
-        body: visibleAssets(onChain.map((row) => enrichAssetRow(row))).map((enriched) => {
-          return {
-            assetId: enriched.assetId,
-            tokenAddress: enriched.tokenAddress,
-            name: enriched.name,
-            symbol: enriched.symbol,
-            decimals: enriched.decimals,
-            totalSupply: enriched.totalSupply,
-            creator: enriched.creator,
-            status: enriched.status,
-            type: enriched.type,
-            verified: enriched.verified,
-            ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
-            creationMetadata: enriched.creationMetadata,
-            imageUri: enriched.imageUri,
-          };
-        }),
+        assetId: enriched.assetId,
+        tokenAddress: enriched.tokenAddress,
+        name: enriched.name,
+        symbol: enriched.symbol,
+        decimals: enriched.decimals,
+        totalSupply: enriched.totalSupply,
+        creator: enriched.creator,
+        status: enriched.status,
+        type: enriched.type,
+        verified: enriched.verified,
+        ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
+        creationMetadata: enriched.creationMetadata,
+        imageUri: enriched.imageUri,
       };
+    });
+    const listPartial = catalogFailed || catalogListIsPartial(onChain) || deadlineExpired();
+    if (onChain.length || (listPartial && deadlineExpired())) {
+      return { status: 200, body: listPartial ? { assets: mapped, partial: true } : mapped };
     }
     console.warn("[evm-compat] token catalog empty; serving static assetMap fallback");
     const dep = readEvmDeployments();
     const rows: AssetRow[] = [];
+    let skipped = listPartial;
     for (const assetId of Object.keys(dep.assetMap ?? {})) {
+      if (deadlineExpired()) {
+        skipped = true;
+        break;
+      }
       // One failing RPC read skips that row instead of failing the whole listing.
       try {
         const row = await loadAsset(assetId);
         if (row) rows.push(row);
       } catch {
-        // skipped
+        skipped = true;
       }
     }
+    if (skipped || deadlineExpired()) return { status: 200, body: { assets: rows, partial: true } };
     return { status: 200, body: rows };
   }
 
   if (root === "assets" && segments[1]) {
-    const onChain = await discoverTokensOnChain().catch(() => []);
-    const hit = onChain.find((t) => t.assetId === decodeURIComponent(segments[1]).toLowerCase());
-    if (hit) {
+    const rawId = decodeURIComponent(segments[1]);
+    const key = rawId.toLowerCase();
+    // A warm catalog row is enough to paint the page. Cold instances do single eth_calls,
+    // never a getLogs scan, so the first paint is not stuck behind the catalog history.
+    const hit = peekCachedCatalogTokens().find(
+      (row) => row.assetId.toLowerCase() === key || row.tokenAddress.toLowerCase() === key,
+    );
+    if (hit?.name && hit.symbol) {
       const enriched = enrichAssetRow(hit);
-      // The catalog scan cannot read a pinned metadata JSON and falls back to the deployer when
-      // creator() was unreadable: complete both from a live single-token read when it can.
       const deployerFallback = (readEvmDeployments().deployer || "0x0").toLowerCase();
       const creatorIsFallback = String(enriched.creator ?? "").toLowerCase() === deployerFallback;
       if (!enriched.imageUri || creatorIsFallback) {
-        const live = await loadAsset(hit.tokenAddress ?? hit.assetId).catch(() => null);
+        const live = await withinBudget(
+          loadAsset(hit.tokenAddress ?? hit.assetId),
+          TOKEN_IMAGE_BUDGET_MS,
+          null,
+        );
         if (live) {
           if (!enriched.imageUri && live.imageUri) {
             enriched.imageUri = live.imageUri;
@@ -614,6 +864,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
           }
         }
       }
+      const imageMissed = deadlineExpired() && !enriched.imageUri;
       return {
         status: 200,
         body: {
@@ -629,12 +880,23 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
           ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
           creationMetadata: enriched.creationMetadata,
           imageUri: enriched.imageUri,
+          ...(imageMissed ? { partial: true } : {}),
         },
       };
     }
-    const asset = await loadAsset(decodeURIComponent(segments[1]));
-    if (!asset) return { status: 404, body: { error: "not_found" } };
-    return { status: 200, body: asset };
+    try {
+      const asset = await loadAsset(rawId);
+      if (!asset) {
+        if (deadlineExpired()) return { status: 200, body: { partial: true } };
+        return { status: 404, body: { error: "not_found" } };
+      }
+      return { status: 200, body: asset };
+    } catch (error) {
+      if (error instanceof TokenReadError || isRequestDeadlineError(error) || deadlineExpired()) {
+        return { status: 200, body: { partial: true } };
+      }
+      throw error;
+    }
   }
 
   if (root === "address" && segments[1] && isAddress(segments[1])) {
@@ -661,34 +923,36 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
         return { status: 502, body: { error: "rpc_unavailable" } };
       }
     }
-    // Balance + nonce only — never wait on the history scan (that blocked the page for 18–40s).
-    let balanceHex: string;
-    let nonceHex: string;
-    try {
-      [balanceHex, nonceHex] = await Promise.all([
-        readRpc<string>("eth_getBalance", [addr, "latest"]),
-        readRpc<string>("eth_getTransactionCount", [addr, "latest"]),
-      ]);
-    } catch {
-      return { status: 502, body: { error: "rpc_unavailable" } };
+    // Native balance is one eth_getBalance with short retries (including nginx 503). Token rows
+    // are balanceOf against the known catalog, inside a hard budget. A hung call does not wait
+    // on a getLogs scan and does not turn the whole response into 502.
+    const cacheKey = `${addr.toLowerCase()}|${(search.get("tokens") ?? "").toLowerCase()}`;
+    const cachedBalance = addressBalanceCache.get(cacheKey);
+    if (
+      cachedBalance &&
+      Date.now() - cachedBalance.at < (cachedBalance.partial ? ADDRESS_PARTIAL_CACHE_TTL_MS : ADDRESS_CACHE_TTL_MS)
+    ) {
+      return { status: 200, body: cachedBalance.body };
     }
-    const balance = weiToPpl(BigInt(balanceHex));
-    const nonce = Number.parseInt(nonceHex, 16);
-    // Token rows are additive: a failed scan or balance read still returns the native balance.
-    // Catalog tokens include launches on the current tokenFactory (and legacy factories).
-    const catalog = await discoverTokensOnChain().catch(() => []);
-    const tokenBalances = await walletTokenBalances(addr, catalog, search.get("tokens"));
-    return {
-      status: 200,
-      body: {
-        balance,
-        nonce,
-        balances: { ppl: balance, ...tokenBalances.balances },
-        outgoingTxs: nonce,
-        incomingTxs: 0,
-        ...(tokenBalances.partial ? { partial: true } : {}),
-      },
+    const deadline = Math.min(Date.now() + WALLET_BALANCE_BUDGET_MS, currentDeadline()?.at ?? Number.POSITIVE_INFINITY);
+    const [native, nonceResult, tokenBalances] = await Promise.all([
+      readNativeWei(addr, deadline).then((value) => ({ ok: true as const, value })).catch(() => ({ ok: false as const })),
+      readAddressNonce(addr, deadline).then((value) => ({ ok: true as const, value })).catch(() => ({ ok: false as const })),
+      walletTokenBalances(addr, search.get("tokens"), deadline),
+    ]);
+    const balance = native.ok ? weiToPpl(native.value) : undefined;
+    const nonce = nonceResult.ok ? nonceResult.value : 0;
+    const partial = !native.ok || !nonceResult.ok || tokenBalances.partial || deadlineExpired(deadline);
+    const body: AddressBalanceBody = {
+      ...(balance === undefined ? {} : { balance }),
+      nonce,
+      balances: { ...(balance === undefined ? {} : { ppl: balance }), ...tokenBalances.balances },
+      outgoingTxs: nonce,
+      incomingTxs: 0,
+      ...(partial ? { partial: true } : {}),
     };
+    addressBalanceCache.set(cacheKey, { at: Date.now(), partial, body });
+    return { status: 200, body };
   }
 
   if (root === "accounts") {
@@ -701,8 +965,8 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     try {
       token = assetId ? await resolveKnownToken(assetId) : (Object.values(dep.assetMap)[0] ?? null);
     } catch {
-      // The registry could not be asked: say so (the client offers a retry) instead of "unknown".
-      return { status: 502, body: { error: "rpc_unavailable" } };
+      // The registry could not be asked. A partial list is retryable and is not "unknown token".
+      return { status: 200, body: { accounts: [], partial: true } };
     }
     if (!token || !isAddress(token)) {
       if (assetId) return { status: 404, body: { error: "unknown_token" } };
@@ -717,10 +981,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const creationUnknown = !isSeedToken && creationBlock == null;
     let scan: Awaited<ReturnType<typeof aggregateHoldersDetailed>>;
     try {
-      scan = await aggregateHoldersDetailed(token, creationBlock ?? undefined, { preferHead: creationUnknown });
+      scan = await aggregateHoldersDetailed(token, creationBlock ?? undefined, {
+        preferHead: creationUnknown,
+        deadlineAt: currentDeadline()?.at,
+      });
     } catch {
-      // A failed scan is not an empty holder list.
-      return { status: 502, body: { error: "rpc_unavailable" } };
+      // A failed scan is not an empty holder list. Whatever was read is returned as partial.
+      return { status: 200, body: { accounts: [], partial: true } };
     }
     const asset = await loadAsset(assetId ?? token).catch(() => null);
     const decimals = asset?.decimals ?? 18;

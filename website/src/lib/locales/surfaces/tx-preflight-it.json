@@ -2,5 +2,15 @@
   "preflightRevert": "La rete rifiuterebbe questa transazione, quindi non è stata inviata e non è stato addebitato nulla. Motivo: {reason}",
   "preflightRevertGeneric": "La rete rifiuterebbe questa transazione, quindi non è stata inviata e non è stato addebitato nulla.",
   "preflightDailyLimit": "Il limite giornaliero per i pagamenti in stablecoin è stato raggiunto. Non è stato addebitato nulla. Paga in PPL oppure riprova dopo la mezzanotte UTC.",
-  "preflightPayInPplHint": "Suggerimento: se hai scelto di pagare con una stablecoin, passa al pagamento in PPL e riprova."
+  "preflightPayInPplHint": "Suggerimento: se hai scelto di pagare con una stablecoin, passa al pagamento in PPL e riprova.",
+  "errorInsufficientFloat": "La riserva di stablecoin non copre questa commissione adesso. Non è stato inviato né addebitato nulla. Paga in PPL.",
+  "errorStableNotAccepted": "Questa stablecoin non è accettata per la commissione di creazione. Non è stato inviato né addebitato nulla. Paga in PPL.",
+  "errorFeeOutOfBounds": "La commissione di creazione è fuori dall'intervallo consentito. Non è stato inviato né addebitato nulla.",
+  "errorPplTransferFailed": "Il pagamento in PPL non è stato completato. Non è stato inviato né addebitato nulla.",
+  "errorEnforcedPause": "La creazione di token è in pausa. Non è stato inviato né addebitato nulla. Riprova più tardi.",
+  "errorUnauthorized": "Questo portafoglio non può completare questo passaggio. Non è stato inviato né addebitato nulla.",
+  "errorErc20Allowance": "Il portafoglio non ha approvato abbastanza stablecoin. Non è stato inviato né addebitato nulla.",
+  "errorErc20Balance": "Il portafoglio non ha abbastanza stablecoin per questa commissione. Non è stato inviato né addebitato nulla.",
+  "errorSafeTransfer": "Il trasferimento di stablecoin non è riuscito. Non è stato inviato né addebitato nulla. Paga in PPL.",
+  "preflightDetails": "Dettagli tecnici"
 }

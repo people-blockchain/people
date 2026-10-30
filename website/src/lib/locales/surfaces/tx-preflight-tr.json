@@ -2,5 +2,15 @@
   "preflightRevert": "Ağ bu işlemi reddederdi, bu yüzden gönderilmedi ve hiçbir ücret alınmadı. Neden: {reason}",
   "preflightRevertGeneric": "Ağ bu işlemi reddederdi, bu yüzden gönderilmedi ve hiçbir ücret alınmadı.",
   "preflightDailyLimit": "Stablecoin ile ödeme için günlük limite ulaşıldı. Hiçbir ücret alınmadı. PPL ile ödeyin veya UTC gece yarısından sonra tekrar deneyin.",
-  "preflightPayInPplHint": "İpucu: stablecoin ile ödemeyi seçtiyseniz PPL ile ödemeye geçip tekrar deneyin."
+  "preflightPayInPplHint": "İpucu: stablecoin ile ödemeyi seçtiyseniz PPL ile ödemeye geçip tekrar deneyin.",
+  "errorInsufficientFloat": "Stablecoin havuzu bu ücreti şu anda karşılayamıyor. Hiçbir şey gönderilmedi ve ücret alınmadı. PPL ile ödeyin.",
+  "errorStableNotAccepted": "Bu stablecoin oluşturma ücreti için kabul edilmiyor. Hiçbir şey gönderilmedi ve ücret alınmadı. PPL ile ödeyin.",
+  "errorFeeOutOfBounds": "Oluşturma ücreti izin verilen aralığın dışında. Hiçbir şey gönderilmedi ve ücret alınmadı.",
+  "errorPplTransferFailed": "PPL ödemesi tamamlanamadı. Hiçbir şey gönderilmedi ve ücret alınmadı.",
+  "errorEnforcedPause": "Token oluşturma şu anda duraklatıldı. Hiçbir şey gönderilmedi ve ücret alınmadı. Daha sonra deneyin.",
+  "errorUnauthorized": "Bu cüzdan bu adımı tamamlayamaz. Hiçbir şey gönderilmedi ve ücret alınmadı.",
+  "errorErc20Allowance": "Cüzdan yeterli stablecoin onayı vermedi. Hiçbir şey gönderilmedi ve ücret alınmadı.",
+  "errorErc20Balance": "Cüzdanda bu ücret için yeterli stablecoin yok. Hiçbir şey gönderilmedi ve ücret alınmadı.",
+  "errorSafeTransfer": "Stablecoin transferi başarısız oldu. Hiçbir şey gönderilmedi ve ücret alınmadı. PPL ile ödeyin.",
+  "preflightDetails": "Teknik ayrıntılar"
 }

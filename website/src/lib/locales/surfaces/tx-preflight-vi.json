@@ -2,5 +2,15 @@
   "preflightRevert": "Mạng sẽ từ chối giao dịch này nên nó chưa được gửi và không bị trừ phí. Lý do: {reason}",
   "preflightRevertGeneric": "Mạng sẽ từ chối giao dịch này nên nó chưa được gửi và không bị trừ phí.",
   "preflightDailyLimit": "Đã đạt giới hạn thanh toán bằng stablecoin trong ngày. Không bị trừ phí. Hãy thanh toán bằng PPL hoặc thử lại sau nửa đêm UTC.",
-  "preflightPayInPplHint": "Mẹo: nếu bạn chọn thanh toán bằng stablecoin, hãy chuyển sang thanh toán bằng PPL rồi thử lại."
+  "preflightPayInPplHint": "Mẹo: nếu bạn chọn thanh toán bằng stablecoin, hãy chuyển sang thanh toán bằng PPL rồi thử lại.",
+  "errorInsufficientFloat": "Kho stablecoin hiện không đủ cho khoản phí này. Không có gì được gửi và không bị trừ phí. Hãy trả bằng PPL.",
+  "errorStableNotAccepted": "Stablecoin này không được nhận cho phí tạo token. Không có gì được gửi và không bị trừ phí. Hãy trả bằng PPL.",
+  "errorFeeOutOfBounds": "Phí tạo token nằm ngoài khoảng cho phép. Không có gì được gửi và không bị trừ phí.",
+  "errorPplTransferFailed": "Thanh toán bằng PPL không hoàn tất. Không có gì được gửi và không bị trừ phí.",
+  "errorEnforcedPause": "Việc tạo token đang tạm dừng. Không có gì được gửi và không bị trừ phí. Hãy thử lại sau.",
+  "errorUnauthorized": "Ví này không được phép hoàn tất bước đó. Không có gì được gửi và không bị trừ phí.",
+  "errorErc20Allowance": "Ví chưa phê duyệt đủ stablecoin. Không có gì được gửi và không bị trừ phí.",
+  "errorErc20Balance": "Ví không có đủ stablecoin cho khoản phí này. Không có gì được gửi và không bị trừ phí.",
+  "errorSafeTransfer": "Chuyển stablecoin thất bại. Không có gì được gửi và không bị trừ phí. Hãy trả bằng PPL.",
+  "preflightDetails": "Chi tiết kỹ thuật"
 }

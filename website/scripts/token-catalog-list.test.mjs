@@ -20,7 +20,11 @@ test("the token list shows every public token, including a new one, with no view
   assert.ok(listed.some((row) => row.assetId === fresh.assetId));
   assert.equal(listed.some((row) => String(row.name).startsWith("E2E Audit")), false);
   const src = readFileSync(new URL("../src/components/explorer/ExplorerLists.tsx", import.meta.url), "utf8");
-  assert.doesNotMatch(src, /matchMedia|innerWidth|sessionStorage|localStorage/);
+  assert.doesNotMatch(src, /matchMedia|innerWidth|sessionStorage/);
+  assert.match(src, /localStorage/);
+  assert.match(src, /readSeenTokens/);
+  assert.match(src, /mergeSeenIntoCatalog/);
+  assert.match(src, /rememberSeenTokens/);
 });
 
 test("a stale refresh cannot drop a token already shown, and a newly returned token is added", () => {

@@ -7,6 +7,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useExternalWalletOptional, signViaActiveSigner } from "@/context/ExternalWalletContext";
 import { networkJson } from "@/lib/network-client";
 import { TOKEN_ACCOUNTS_TIMEOUT_MS, TOKEN_TIMESTAMP_TIMEOUT_MS, loadAccounts, loadTokenPage, parseHolderPayload, withTimeout, type HolderPayload } from "@/lib/explorer/token-load";
+import { findRememberedToken, readSeenTokens, rememberSeenTokens } from "@/lib/explorer/token-catalog-list";
+import { tokenPageImageSrc } from "@/lib/explorer/token-page-image";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { tokenExplorerCopy } from "@/lib/token-explorer-copy";
 import { ACCOUNT_SCAN_LIMIT, formatShare, tokenHolders, holderChart, creationTimestamp, type ExplorerAccount } from "@/lib/token-explorer";
@@ -81,8 +83,27 @@ export function TokenView({ assetId }: { assetId: string }) {
     setError(false);
     setLoading(true);
     if (isHiddenAsset(assetId)) { setError(true); setLoading(false); return () => controller.abort(); }
+    const storage = typeof window === "undefined" ? null : window.localStorage;
+    const remembered = findRememberedToken(readSeenTokens(storage), assetId);
+    const initialAsset: Token | undefined = remembered
+      ? {
+          assetId: remembered.assetId,
+          tokenAddress: remembered.tokenAddress,
+          name: remembered.name,
+          symbol: remembered.symbol,
+          decimals: remembered.decimals,
+          totalSupply: remembered.totalSupply ?? 0,
+          creator: remembered.creator ?? "",
+          status: remembered.status ?? "active",
+          type: remembered.type ?? "token",
+          verified: remembered.verified,
+          imageUri: remembered.imageUri,
+          creationMetadata: remembered.creationMetadata,
+        }
+      : undefined;
     void loadTokenPage<Token, HolderPayload>({
       signal: controller.signal,
+      initialAsset,
       fetchAsset: signal => networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal }),
       fetchAccounts: fetchHolders,
       needsTimestamp: asset => asset.createdAt !== undefined,
@@ -95,7 +116,11 @@ export function TokenView({ assetId }: { assetId: string }) {
         return typeof archived?.timestamp === "number" ? archived.timestamp : null;
       },
       // The page is shown once the asset is known; distribution and date fill in later.
-      onAsset: asset => { setData({ asset, timestamp: asset.createdAt === undefined ? null : undefined, fetchedAt: Date.now() }); setLoading(false); },
+      onAsset: asset => {
+        setData({ asset, timestamp: asset.createdAt === undefined ? null : undefined, fetchedAt: Date.now() });
+        setLoading(false);
+        rememberSeenTokens(typeof window === "undefined" ? null : window.localStorage, [asset]);
+      },
       onAssetFailed: () => { setError(true); setLoading(false); },
       onAccounts: result => setHolders(holderState(result.ok ? result.value : null)),
       onTimestamp: timestamp => setData(prev => prev ? { ...prev, timestamp } : prev),
@@ -170,7 +195,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     <NetworkStatus />
     {loading ? <PeopleLoader /> : error || !asset ? <div className="mt-8 rounded-2xl border border-line p-6"><p>{t.networkUnavailable} / {t.notFound}</p><button onClick={reload} className="mt-3 text-brand">{c.retry}</button></div> : <>
       <header className="mt-8 flex flex-wrap items-center gap-4">
-        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={asset.creationMetadata?.image ?? asset.imageUri} name={symbol} className="h-16 w-16" testBadgeLabel={u.testTokenNote} />
+        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={tokenPageImageSrc(asset.creationMetadata?.image, asset.imageUri)} name={symbol} className="h-16 w-16 shrink-0" testBadgeLabel={u.testTokenNote} eager />
         <div className="min-w-0 flex-1"><h1 className="break-words text-h2 font-bold">{assetId === "usdt" ? u.testUsdt : displayAssetName(assetId, asset.name)}</h1><p className="break-all font-mono text-sm text-ink-3">{symbol} · {assetId}</p></div>
         {canEditIcon ? (
           <button
@@ -215,7 +240,7 @@ export function TokenView({ assetId }: { assetId: string }) {
       </div>
       <dl className="mt-6 grid gap-5 rounded-2xl border border-line p-5 text-sm sm:grid-cols-2">
         {showCreated ? <div><dt className="text-ink-3">{c.created}</dt><dd className="mt-1">{data?.timestamp === undefined ? "…" : data.timestamp ? new Date(data.timestamp).toLocaleString(lang) : asset.createdAt === undefined ? c.genesis : c.unknownDate}{asset.createdAt !== undefined ? <Link className="ml-2 text-brand" href={`/explorer/block/${asset.createdAt}`}>#{asset.createdAt}</Link> : null}</dd></div> : null}
-        <div><dt className="text-ink-3">{t.creator}</dt><dd className="mt-1 break-all font-mono">{asset.creator.startsWith("0x") ? <Link className="text-brand" href={`/explorer/address/${asset.creator}`}>{asset.creator}</Link> : asset.creator}</dd></div>
+        <div><dt className="text-ink-3">{t.creator}</dt><dd className="mt-1 break-all font-mono">{asset.creator?.startsWith("0x") ? <Link className="text-brand" href={`/explorer/address/${asset.creator}`}>{asset.creator}</Link> : asset.creator || "—"}</dd></div>
         <div><dt className="text-ink-3">{c.status}</dt><dd>{asset.status}</dd></div>
         <div><dt className="text-ink-3">{c.decimals}</dt><dd>{assetDecimals(asset)}</dd></div>
       </dl>
