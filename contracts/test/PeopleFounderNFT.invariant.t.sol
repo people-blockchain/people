@@ -4,7 +4,7 @@ pragma solidity ^0.8.24;
 import {Test} from "forge-std/Test.sol";
 import {PeopleFounderNFT} from "../src/nft/PeopleFounderNFT.sol";
 
-/// @dev Drives random, backend-signed mint and rebind calls (successful and failing) against the NFT.
+/// @dev Drives random, backend-signed mint and (request + delayed execute) rebind calls (successful and failing) against the NFT.
 contract FounderNFTHandler is Test {
     PeopleFounderNFT public immutable nft;
     uint256 internal immutable signerPk;
@@ -55,18 +55,22 @@ contract FounderNFTHandler is Test {
         address newHolder = actors[newHolderSeed % actors.length];
         uint256 tokenId = nft.tokenOfPerson(personId);
         // Mostly target the true holder; sometimes a random actor to exercise the failure paths.
-        address oldHolder = tokenId != 0 && fallbackOldSeed % 4 != 0
-            ? nft.ownerOf(tokenId)
-            : actors[fallbackOldSeed % actors.length];
+        address oldHolder =
+            tokenId != 0 && fallbackOldSeed % 4 != 0 ? nft.ownerOf(tokenId) : actors[fallbackOldSeed % actors.length];
         uint256 n = nonce++;
         uint256 deadline = block.timestamp + 1 hours;
         bytes memory sig = _sign(nft.rebindDigest(personId, oldHolder, newHolder, n, deadline));
         vm.prank(newHolder);
-        try nft.rebind(personId, oldHolder, newHolder, n, deadline, sig) {
-            ghostRebinds++;
-        } catch {
+        try nft.requestRebind(personId, oldHolder, newHolder, n, deadline, sig) {}
+        catch {
             ghostRejected++;
+            return;
         }
+        // Wait out the timelock, then execute (step 2).
+        vm.warp(block.timestamp + nft.REBIND_DELAY());
+        vm.prank(newHolder);
+        nft.executeRebind(personId);
+        ghostRebinds++;
     }
 
     function warp(uint256 secs) external {
@@ -86,7 +90,7 @@ contract PeopleFounderNFTInvariantTest is Test {
     function setUp() public {
         vm.warp(1_800_000_000);
         uint256 signerPk = uint256(keccak256("people-founder-nft.invariant.signer"));
-        nft = new PeopleFounderNFT(vm.addr(signerPk), block.timestamp + 365 days);
+        nft = new PeopleFounderNFT(address(this), vm.addr(signerPk), block.timestamp + 365 days);
         handler = new FounderNFTHandler(nft, signerPk);
         targetContract(address(handler));
         bytes4[] memory selectors = new bytes4[](3);

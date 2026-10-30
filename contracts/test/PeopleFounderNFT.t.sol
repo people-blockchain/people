@@ -7,6 +7,7 @@ import {IERC721Metadata} from "@openzeppelin/contracts/token/ERC721/extensions/I
 import {IERC721Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
 import {PeopleFounderNFT} from "../src/nft/PeopleFounderNFT.sol";
 import {IERC5192} from "../src/nft/IERC5192.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract PeopleFounderNFTTest is Test {
     PeopleFounderNFT internal nft;
@@ -15,6 +16,8 @@ contract PeopleFounderNFTTest is Test {
     uint256 internal signerPk = uint256(keccak256("people-founder-nft.test.signer"));
     uint256 internal rogueSignerPk = uint256(keccak256("people-founder-nft.test.rogue-signer"));
     address internal signer;
+    /// @dev Stands in for the Safe multisig that owns the contract.
+    address internal owner = makeAddr("owner-safe");
 
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
@@ -32,13 +35,19 @@ contract PeopleFounderNFTTest is Test {
     event Locked(uint256 tokenId);
     event Minted(bytes32 indexed personId, uint256 indexed tokenId, address indexed to);
     event Rebound(bytes32 indexed personId, uint256 indexed tokenId, address oldHolder, address newHolder);
+    event RebindRequested(
+        bytes32 indexed personId, uint256 indexed tokenId, address oldHolder, address newHolder, uint256 executeAfter
+    );
+    event RebindCancelled(bytes32 indexed personId, uint256 indexed tokenId, address indexed holder);
+    event SignerUpdated(address indexed previousSigner, address indexed newSigner, uint64 epoch);
+    event SignerRevoked(address indexed previousSigner, uint64 epoch);
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     function setUp() public {
         vm.warp(1_800_000_000);
         signer = vm.addr(signerPk);
         mintDeadline = block.timestamp + 30 days;
-        nft = new PeopleFounderNFT(signer, mintDeadline);
+        nft = new PeopleFounderNFT(owner, signer, mintDeadline);
     }
 
     // ------------------------------------------------------------------ helpers
@@ -81,18 +90,30 @@ contract PeopleFounderNFTTest is Test {
         return nft.tokenOfPerson(personId);
     }
 
-    function _rebind(bytes32 personId, address oldHolder, address newHolder) internal {
+    /// @dev Backend-signed rebind request, submitted by `newHolder` (step 1 only).
+    function _requestRebind(bytes32 personId, address oldHolder, address newHolder) internal {
         uint256 nonce = nextNonce++;
         uint256 deadline = _deadline();
         bytes memory sig = _rebindSig(signerPk, personId, oldHolder, newHolder, nonce, deadline);
         vm.prank(newHolder);
-        nft.rebind(personId, oldHolder, newHolder, nonce, deadline, sig);
+        nft.requestRebind(personId, oldHolder, newHolder, nonce, deadline, sig);
+    }
+
+    /// @dev Full rebind: request, wait out the delay, execute.
+    function _rebind(bytes32 personId, address oldHolder, address newHolder) internal {
+        _requestRebind(personId, oldHolder, newHolder);
+        vm.warp(block.timestamp + nft.REBIND_DELAY());
+        vm.prank(newHolder);
+        nft.executeRebind(personId);
     }
 
     // ------------------------------------------------------------------ constructor
 
     function test_constructor_setsImmutables() public view {
+        assertEq(nft.owner(), owner);
         assertEq(nft.signer(), signer);
+        assertEq(nft.signerEpoch(), 0);
+        assertEq(nft.REBIND_DELAY(), 72 hours);
         assertEq(nft.mintDeadline(), mintDeadline);
         assertEq(nft.name(), "People Founder");
         assertEq(nft.symbol(), "PFOUNDER");
@@ -102,14 +123,19 @@ contract PeopleFounderNFTTest is Test {
 
     function test_constructor_revertsOnZeroSigner() public {
         vm.expectRevert(PeopleFounderNFT.ZeroSigner.selector);
-        new PeopleFounderNFT(address(0), block.timestamp + 1 days);
+        new PeopleFounderNFT(owner, address(0), block.timestamp + 1 days);
+    }
+
+    function test_constructor_revertsOnZeroOwner() public {
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableInvalidOwner.selector, address(0)));
+        new PeopleFounderNFT(address(0), signer, block.timestamp + 1 days);
     }
 
     function test_constructor_revertsOnPastOrCurrentDeadline() public {
         vm.expectRevert(PeopleFounderNFT.InvalidMintDeadline.selector);
-        new PeopleFounderNFT(signer, block.timestamp);
+        new PeopleFounderNFT(owner, signer, block.timestamp);
         vm.expectRevert(PeopleFounderNFT.InvalidMintDeadline.selector);
-        new PeopleFounderNFT(signer, block.timestamp - 1);
+        new PeopleFounderNFT(owner, signer, block.timestamp - 1);
     }
 
     // ------------------------------------------------------------------ mint
@@ -266,7 +292,7 @@ contract PeopleFounderNFTTest is Test {
 
     function test_mint_otherContractDomainReverts() public {
         // A signature for a different deployment (different verifyingContract) is not valid here.
-        PeopleFounderNFT other = new PeopleFounderNFT(signer, mintDeadline);
+        PeopleFounderNFT other = new PeopleFounderNFT(owner, signer, mintDeadline);
         uint256 deadline = _deadline();
         bytes memory sig = _sign(signerPk, other.mintDigest(P1, alice, 1, deadline));
         vm.prank(alice);
@@ -435,6 +461,19 @@ contract PeopleFounderNFTTest is Test {
         uint256 deadline = _deadline();
         bytes memory sig = _rebindSig(signerPk, P1, alice, carol, nonce, deadline);
 
+        vm.expectEmit(true, true, false, true, address(nft));
+        emit RebindRequested(P1, 1, alice, carol, block.timestamp + 72 hours);
+        vm.prank(carol);
+        nft.requestRebind(P1, alice, carol, nonce, deadline, sig);
+        // nothing moves at request time
+        assertEq(nft.ownerOf(1), alice);
+        (address pOld, uint64 pAfter, address pNew, uint64 pEpoch) = nft.pendingRebinds(P1);
+        assertEq(pOld, alice);
+        assertEq(pNew, carol);
+        assertEq(pAfter, block.timestamp + 72 hours);
+        assertEq(pEpoch, 0);
+
+        vm.warp(block.timestamp + 72 hours);
         vm.expectEmit(true, true, true, true, address(nft));
         emit Transfer(alice, address(0), 1);
         vm.expectEmit(true, true, true, true, address(nft));
@@ -444,7 +483,9 @@ contract PeopleFounderNFTTest is Test {
         vm.expectEmit(true, true, false, true, address(nft));
         emit Rebound(P1, 1, alice, carol);
         vm.prank(carol);
-        nft.rebind(P1, alice, carol, nonce, deadline, sig);
+        nft.executeRebind(P1);
+        (, uint64 clearedAfter,,) = nft.pendingRebinds(P1);
+        assertEq(clearedAfter, 0);
 
         // old holder lost the token, same number now on the new holder
         assertEq(nft.balanceOf(alice), 0);
@@ -480,7 +521,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.OldHolderHasNoToken.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_oldHolderCanMintAgainOnlyWithNewPerson() public {
@@ -509,26 +550,29 @@ contract PeopleFounderNFTTest is Test {
         uint256 deadline = _deadline();
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
 
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.NonceUsed.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_replayCannotMoveTokenBack() public {
         _mintFor(P1, alice);
         uint256 nonce = nextNonce++;
-        uint256 deadline = _deadline();
+        uint256 deadline = block.timestamp + 30 days; // outlives both delays, so the replay hits the nonce
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(bob);
+        nft.executeRebind(P1);
         _rebind(P1, bob, carol);
 
-        // alice replays the old signature after the token moved on: nonce is consumed
+        // bob replays the old signature after the token moved on: nonce is consumed
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.NonceUsed.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
         assertEq(nft.ownerOf(1), carol);
     }
 
@@ -543,7 +587,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.NonceUsed.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_mintSignatureIsNotARebindSignature() public {
@@ -554,7 +598,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _mintSig(signerPk, P1, bob, nonce, deadline);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.InvalidSignature.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_wrongPersonIdReverts() public {
@@ -566,7 +610,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P2, alice, carol, nonce, deadline);
         vm.prank(carol);
         vm.expectRevert(PeopleFounderNFT.PersonMismatch.selector);
-        nft.rebind(P2, alice, carol, nonce, deadline, sig);
+        nft.requestRebind(P2, alice, carol, nonce, deadline, sig);
     }
 
     function test_rebind_unknownPersonIdReverts() public {
@@ -576,7 +620,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P4, alice, carol, nonce, deadline);
         vm.prank(carol);
         vm.expectRevert(PeopleFounderNFT.PersonMismatch.selector);
-        nft.rebind(P4, alice, carol, nonce, deadline, sig);
+        nft.requestRebind(P4, alice, carol, nonce, deadline, sig);
     }
 
     function test_rebind_newHolderAlreadyHoldsReverts() public {
@@ -587,7 +631,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.AddressAlreadyHolder.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
         assertEq(nft.ownerOf(1), alice);
         assertEq(nft.ownerOf(2), bob);
     }
@@ -599,7 +643,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, alice, nonce, deadline);
         vm.prank(alice);
         vm.expectRevert(PeopleFounderNFT.AddressAlreadyHolder.selector);
-        nft.rebind(P1, alice, alice, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, alice, nonce, deadline, sig);
     }
 
     function test_rebind_oldHolderWithoutTokenReverts() public {
@@ -609,7 +653,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, dave, carol, nonce, deadline);
         vm.prank(carol);
         vm.expectRevert(PeopleFounderNFT.OldHolderHasNoToken.selector);
-        nft.rebind(P1, dave, carol, nonce, deadline, sig);
+        nft.requestRebind(P1, dave, carol, nonce, deadline, sig);
     }
 
     function test_rebind_oldHolderZeroAddressReverts() public {
@@ -618,7 +662,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, address(0), carol, nonce, deadline);
         vm.prank(carol);
         vm.expectRevert(PeopleFounderNFT.OldHolderHasNoToken.selector);
-        nft.rebind(P1, address(0), carol, nonce, deadline, sig);
+        nft.requestRebind(P1, address(0), carol, nonce, deadline, sig);
     }
 
     function test_rebind_expiredReverts() public {
@@ -629,7 +673,7 @@ contract PeopleFounderNFTTest is Test {
         vm.warp(deadline + 1);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.Expired.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_callerMustBeNewHolder() public {
@@ -639,11 +683,11 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, bob, nonce, deadline);
         vm.prank(carol);
         vm.expectRevert(PeopleFounderNFT.NotRecipient.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
         // the old holder cannot push the token out either
         vm.prank(alice);
         vm.expectRevert(PeopleFounderNFT.NotRecipient.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_wrongSignerReverts() public {
@@ -653,7 +697,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(rogueSignerPk, P1, alice, bob, nonce, deadline);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.InvalidSignature.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_zeroNewHolderReverts() public {
@@ -663,7 +707,7 @@ contract PeopleFounderNFTTest is Test {
         bytes memory sig = _rebindSig(signerPk, P1, alice, address(0), nonce, deadline);
         vm.prank(address(0));
         vm.expectRevert(PeopleFounderNFT.ZeroAddress.selector);
-        nft.rebind(P1, alice, address(0), nonce, deadline, sig);
+        nft.requestRebind(P1, alice, address(0), nonce, deadline, sig);
     }
 
     function test_rebind_chainIdMismatchReverts() public {
@@ -674,7 +718,7 @@ contract PeopleFounderNFTTest is Test {
         vm.chainId(block.chainid + 1);
         vm.prank(bob);
         vm.expectRevert(PeopleFounderNFT.InvalidSignature.selector);
-        nft.rebind(P1, alice, bob, nonce, deadline, sig);
+        nft.requestRebind(P1, alice, bob, nonce, deadline, sig);
     }
 
     function test_rebind_allowedAfterMintWindowCloses() public {
@@ -702,6 +746,297 @@ contract PeopleFounderNFTTest is Test {
         vm.expectRevert(PeopleFounderNFT.Soulbound.selector);
         nft.transferFrom(carol, dave, 1);
         assertTrue(nft.locked(1));
+    }
+
+    // ------------------------------------------------------------------ signer administration
+
+    function test_setSigner_ownerRotates() public {
+        address newSigner = vm.addr(rogueSignerPk);
+        vm.expectEmit(true, true, false, true, address(nft));
+        emit SignerUpdated(signer, newSigner, 1);
+        vm.prank(owner);
+        nft.setSigner(newSigner);
+        assertEq(nft.signer(), newSigner);
+        assertEq(nft.signerEpoch(), 1);
+
+        // the new key mints, the old one no longer does
+        uint256 deadline = _deadline();
+        bytes memory sig = _mintSig(rogueSignerPk, P1, alice, 1, deadline);
+        vm.prank(alice);
+        nft.mint(P1, alice, 1, deadline, sig);
+        assertEq(nft.ownerOf(1), alice);
+    }
+
+    function test_setSigner_onlyOwner() public {
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        nft.setSigner(alice);
+        // the signer itself has no admin power either
+        vm.prank(signer);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, signer));
+        nft.setSigner(alice);
+        assertEq(nft.signer(), signer);
+    }
+
+    function test_setSigner_zeroReverts() public {
+        vm.prank(owner);
+        vm.expectRevert(PeopleFounderNFT.ZeroSigner.selector);
+        nft.setSigner(address(0));
+    }
+
+    function test_revokeSigner_disablesMintAndRebind() public {
+        _mintFor(P1, alice);
+        vm.expectEmit(true, false, false, true, address(nft));
+        emit SignerRevoked(signer, 1);
+        vm.prank(owner);
+        nft.revokeSigner();
+        assertEq(nft.signer(), address(0));
+        assertEq(nft.signerEpoch(), 1);
+
+        uint256 deadline = _deadline();
+        bytes memory mintSig = _mintSig(signerPk, P2, bob, 50, deadline);
+        vm.prank(bob);
+        vm.expectRevert(PeopleFounderNFT.SignerDisabled.selector);
+        nft.mint(P2, bob, 50, deadline, mintSig);
+
+        bytes memory rebindSig = _rebindSig(signerPk, P1, alice, carol, 51, deadline);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.SignerDisabled.selector);
+        nft.requestRebind(P1, alice, carol, 51, deadline, rebindSig);
+
+        // a garbage signature cannot recover to address(0) and slip through either
+        vm.prank(bob);
+        vm.expectRevert(PeopleFounderNFT.SignerDisabled.selector);
+        nft.mint(P2, bob, 52, deadline, "");
+
+        // re-enabling restores minting
+        vm.prank(owner);
+        nft.setSigner(signer);
+        vm.prank(bob);
+        nft.mint(P2, bob, 50, deadline, mintSig);
+        assertEq(nft.ownerOf(2), bob);
+    }
+
+    function test_revokeSigner_onlyOwner() public {
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        nft.revokeSigner();
+        assertEq(nft.signer(), signer);
+    }
+
+    function test_rotation_rejectsIssuedButUnusedSignatures() public {
+        _mintFor(P1, alice);
+        // signatures issued by the old key before rotation, never submitted
+        uint256 deadline = _deadline();
+        bytes memory mintSig = _mintSig(signerPk, P2, bob, 60, deadline);
+        bytes memory rebindSig = _rebindSig(signerPk, P1, alice, carol, 61, deadline);
+
+        vm.prank(owner);
+        nft.setSigner(vm.addr(rogueSignerPk));
+
+        vm.prank(bob);
+        vm.expectRevert(PeopleFounderNFT.InvalidSignature.selector);
+        nft.mint(P2, bob, 60, deadline, mintSig);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.InvalidSignature.selector);
+        nft.requestRebind(P1, alice, carol, 61, deadline, rebindSig);
+        assertEq(nft.totalMinted(), 1);
+        assertEq(nft.ownerOf(1), alice);
+    }
+
+    function test_rotation_invalidatesPendingRebind() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol); // requested under the (now leaked) old key
+        vm.prank(owner);
+        nft.setSigner(vm.addr(rogueSignerPk));
+
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.StaleRebind.selector);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), alice);
+    }
+
+    function test_revoke_blocksPendingRebindExecution() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        vm.prank(owner);
+        nft.revokeSigner();
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.SignerDisabled.selector);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), alice);
+    }
+
+    function test_ownership_twoStepTransfer() public {
+        address newOwner = makeAddr("new-safe");
+        vm.prank(owner);
+        nft.transferOwnership(newOwner);
+        assertEq(nft.owner(), owner);
+        assertEq(nft.pendingOwner(), newOwner);
+        vm.prank(newOwner);
+        nft.acceptOwnership();
+        assertEq(nft.owner(), newOwner);
+
+        vm.prank(owner);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, owner));
+        nft.revokeSigner();
+    }
+
+    // ------------------------------------------------------------------ rebind timelock
+
+    function test_executeRebind_beforeDelayReverts() public {
+        _mintFor(P1, alice);
+        uint256 t = block.timestamp;
+        _requestRebind(P1, alice, carol);
+
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.RebindDelayActive.selector);
+        nft.executeRebind(P1);
+
+        vm.warp(t + 72 hours - 1);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.RebindDelayActive.selector);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), alice);
+
+        // exactly t + 72h is executable
+        vm.warp(t + 72 hours);
+        vm.prank(carol);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), carol);
+    }
+
+    function test_executeRebind_onlyNewHolder() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(dave);
+        vm.expectRevert(PeopleFounderNFT.NotRecipient.selector);
+        nft.executeRebind(P1);
+        vm.prank(alice);
+        vm.expectRevert(PeopleFounderNFT.NotRecipient.selector);
+        nft.executeRebind(P1);
+    }
+
+    function test_executeRebind_withoutRequestReverts() public {
+        _mintFor(P1, alice);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.NoPendingRebind.selector);
+        nft.executeRebind(P1);
+    }
+
+    function test_executeRebind_cannotRunTwice() public {
+        _mintFor(P1, alice);
+        _rebind(P1, alice, carol);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.NoPendingRebind.selector);
+        nft.executeRebind(P1);
+    }
+
+    function test_executeRebind_newHolderGainedTokenMeanwhileReverts() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        _mintFor(P2, carol); // carol picked up her own token during the delay
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.AddressAlreadyHolder.selector);
+        nft.executeRebind(P1);
+    }
+
+    function test_cancelRebind_byCurrentHolder() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        vm.warp(block.timestamp + 72 hours - 1);
+
+        vm.expectEmit(true, true, true, true, address(nft));
+        emit RebindCancelled(P1, 1, alice);
+        vm.prank(alice);
+        nft.cancelRebind(P1);
+
+        vm.warp(block.timestamp + 1 days);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.NoPendingRebind.selector);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), alice);
+    }
+
+    function test_cancelRebind_notByOthers() public {
+        _mintFor(P1, alice);
+        _mintFor(P2, bob);
+        _requestRebind(P1, alice, carol);
+
+        // neither the requester, another holder, the owner nor the signer can cancel
+        address[4] memory others = [carol, bob, owner, signer];
+        for (uint256 i; i < others.length; ++i) {
+            vm.prank(others[i]);
+            vm.expectRevert(PeopleFounderNFT.NotHolder.selector);
+            nft.cancelRebind(P1);
+        }
+        (, uint64 executeAfter,,) = nft.pendingRebinds(P1);
+        assertGt(executeAfter, 0);
+    }
+
+    function test_cancelRebind_afterDelayReverts() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        vm.warp(block.timestamp + 72 hours);
+        vm.prank(alice);
+        vm.expectRevert(PeopleFounderNFT.RebindDelayElapsed.selector);
+        nft.cancelRebind(P1);
+    }
+
+    function test_cancelRebind_withoutRequestReverts() public {
+        _mintFor(P1, alice);
+        vm.prank(alice);
+        vm.expectRevert(PeopleFounderNFT.NoPendingRebind.selector);
+        nft.cancelRebind(P1);
+    }
+
+    function test_cancelledRebind_signatureCannotBeReplayed() public {
+        _mintFor(P1, alice);
+        uint256 nonce = nextNonce++;
+        uint256 deadline = _deadline();
+        bytes memory sig = _rebindSig(signerPk, P1, alice, carol, nonce, deadline);
+        vm.prank(carol);
+        nft.requestRebind(P1, alice, carol, nonce, deadline, sig);
+        vm.prank(alice);
+        nft.cancelRebind(P1);
+
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.NonceUsed.selector);
+        nft.requestRebind(P1, alice, carol, nonce, deadline, sig);
+    }
+
+    function test_requestRebind_newRequestReplacesPendingAndRestartsDelay() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        vm.warp(block.timestamp + 48 hours);
+        uint256 t2 = block.timestamp;
+        _requestRebind(P1, alice, dave);
+
+        vm.warp(t2 + 72 hours - 1);
+        vm.prank(dave);
+        vm.expectRevert(PeopleFounderNFT.RebindDelayActive.selector);
+        nft.executeRebind(P1);
+        vm.prank(carol);
+        vm.expectRevert(PeopleFounderNFT.NotRecipient.selector);
+        nft.executeRebind(P1);
+
+        vm.warp(t2 + 72 hours);
+        vm.prank(dave);
+        nft.executeRebind(P1);
+        assertEq(nft.ownerOf(1), dave);
+    }
+
+    function test_rebind_tokenStaysLockedWhilePending() public {
+        _mintFor(P1, alice);
+        _requestRebind(P1, alice, carol);
+        assertTrue(nft.locked(1));
+        vm.prank(alice);
+        vm.expectRevert(PeopleFounderNFT.Soulbound.selector);
+        nft.transferFrom(alice, carol, 1);
     }
 
     // ------------------------------------------------------------------ fuzz

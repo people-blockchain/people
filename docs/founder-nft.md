@@ -22,8 +22,21 @@ for, so they cannot mint. The genesis generator applies the same rule independen
 
 ## Contract: `contracts/src/nft/PeopleFounderNFT.sol`
 
-ERC-721 (OpenZeppelin v5) + EIP-712 + ERC-5192. No payment, no sale, no owner, no admin mint.
-Constructor: `(address signer, uint256 mintDeadline)`, both immutable.
+ERC-721 (OpenZeppelin v5) + EIP-712 + ERC-5192 + `Ownable2Step`. No payment, no sale, no admin mint.
+Constructor: `(address owner, address signer, uint256 mintDeadline)`; `mintDeadline` is immutable.
+
+### Signer administration
+
+`owner` (intended: a Safe multisig; ownership moves with the two-step `transferOwnership` /
+`acceptOwnership`) can only manage the backend signer. It cannot mint, move or burn tokens.
+
+- `setSigner(newSigner)` rotates the key (zero reverts with `ZeroSigner`). Emits
+  `SignerUpdated(previousSigner, newSigner, epoch)`.
+- `revokeSigner()` sets `signer = 0`: `mint`, `requestRebind` and `executeRebind` revert with
+  `SignerDisabled` until a new signer is set. Emits `SignerRevoked(previousSigner, epoch)`.
+- Both bump `signerEpoch`. Signatures are checked against the **current** signer only, so after a
+  rotation every signature of the old key fails (`InvalidSignature`), including issued-but-unused ones,
+  and pending rebinds requested under an older epoch can no longer be executed (`StaleRebind`).
 
 ### Mint
 
@@ -47,41 +60,56 @@ Mint(bytes32 personId,address to,uint256 nonce,uint256 deadline)
 `safeTransferFrom`, `approve` and `setApprovalForAll` revert with `Soulbound()`.
 `supportsInterface(0xb45a3c0e)` is `true`.
 
-### Rebind
+### Rebind (two steps, 72h timelock)
 
 Wallet recovery or migration: the person's token moves to a new address **keeping the same number**.
-There is no on/off flag.
+There is no on/off flag (only `revokeSigner` stops it).
 
-`rebind(bytes32 personId, address oldHolder, address newHolder, uint256 nonce, uint256 deadline, bytes signature)`
+1. `requestRebind(bytes32 personId, address oldHolder, address newHolder, uint256 nonce, uint256 deadline, bytes signature)`,
+   called by `newHolder` with a backend signature over
 
-```
-Rebind(bytes32 personId,address oldHolder,address newHolder,uint256 nonce,uint256 deadline)
-```
+   ```
+   Rebind(bytes32 personId,address oldHolder,address newHolder,uint256 nonce,uint256 deadline)
+   ```
+
+   Records `pendingRebinds[personId] = {oldHolder, newHolder, executeAfter = now + 72h, signerEpoch}` and
+   emits `RebindRequested(personId, tokenId, oldHolder, newHolder, executeAfter)`. Nothing moves yet.
+   A new valid request for the same person replaces the pending one and restarts the delay.
+2. During the delay (`block.timestamp < executeAfter`) the **current holder** of the token can
+   `cancelRebind(personId)` (`RebindCancelled(personId, tokenId, holder)`). Nobody else can — not the
+   requester, the owner or the signer (`NotHolder`). After the delay, cancel reverts
+   (`RebindDelayElapsed`).
+3. From `executeAfter` (inclusive: exactly `t + 72h` works, `t + 72h - 1` reverts with
+   `RebindDelayActive`) `newHolder` calls `executeRebind(personId)`. Re-checks: signer not revoked,
+   same `signerEpoch`, token still at `oldHolder`, `newHolder` still holds nothing. The token is burned
+   at `oldHolder` and the **same id** is minted to `newHolder` through internal functions (the
+   soulbound lock does not apply). Emits `Rebound(personId, tokenId, oldHolder, newHolder)` (plus
+   `Transfer` burn/mint and `Locked`).
 
 - The Rebind typehash is separate, so a Mint signature can never be presented as a Rebind.
-- `msg.sender` must equal `newHolder`.
-- The token is burned at `oldHolder` and the **same id** is minted to `newHolder` through internal
-  functions (so the soulbound transfer lock does not apply). The next-id counter does not move;
-  `totalMinted` and `totalSupply` are unchanged; `tokenOfPerson(personId)` is unchanged.
-- Emits `Rebound(personId, tokenId, oldHolder, newHolder)` (plus `Transfer` burn/mint and `Locked`).
-- Reverts: expired, replayed nonce (nonces are shared with mint, per `personId`), bad signature,
-  `oldHolder` holds no token, the token of `oldHolder` is not `personId`'s (`PersonMismatch`),
-  `newHolder` already holds a Founder NFT (including `newHolder == oldHolder`).
+- The next-id counter does not move; `totalMinted`, `totalSupply` and `tokenOfPerson` are unchanged.
+- `requestRebind` reverts: expired, replayed nonce (nonces are shared with mint, per `personId`; a
+  cancelled request's nonce stays used), bad or rotated-out signature, `oldHolder` holds no token, the
+  token of `oldHolder` is not `personId`'s (`PersonMismatch`), `newHolder` already holds a Founder NFT
+  (including `newHolder == oldHolder`), caller is not `newHolder`.
 - **Rebind stays available after `mintDeadline`.** It is not new issuance (no new id, no supply
   growth), so closing the mint window must not strand people who lose a wallet.
+- The token stays locked (non-transferable) while a rebind is pending.
 
 ### Metadata and views
 
 `tokenURI(id)` is a fully on-chain base64 JSON data URI: name `People Founder #<id>`, an on-chain SVG
 image. Views: `tokenOfPerson(personId)` (0 if none), `personOf(tokenId)`, `totalMinted()`,
-`totalSupply()`, `signer`, `mintDeadline`, `mintDigest(...)`, `rebindDigest(...)`, `usedNonces`.
+`totalSupply()`, `owner`, `signer`, `signerEpoch`, `mintDeadline`, `REBIND_DELAY`, `pendingRebinds`,
+`mintDigest(...)`, `rebindDigest(...)`, `usedNonces`.
 
 ### Trust model
 
-`signer` is immutable: no rotation. A compromised signing key could issue tokens to fresh `personId`s
-(only until `mintDeadline`) and sign rebinds (also after it). Mitigation is the short mint window and
-redeploying a fixed collection if the key is ever lost. The backend should keep the key in a KMS/HSM and
-sign short-lived (minutes) deadlines.
+The backend signer is the only path to mint and to request a rebind. If its key leaks, the owner Safe
+calls `setSigner` (or `revokeSigner`) and every signature of the leaked key stops working at once,
+including unused ones and rebinds still waiting out their delay. The 72h delay plus the holder's
+`cancelRebind` gives a person time to stop a rebind they did not ask for. The short mint window still
+caps issuance. The backend should keep the key in a KMS/HSM and sign short-lived (minutes) deadlines.
 
 ### Deploy (PEOPLE testnet only)
 
@@ -91,6 +119,7 @@ other than `97401`:
 | Variable | Meaning |
 | --- | --- |
 | `FOUNDER_NFT_DEPLOYER_PK` | deployer key (never commit) |
+| `FOUNDER_NFT_OWNER` | admin address (intended: Safe multisig); may only rotate/revoke the signer |
 | `FOUNDER_NFT_SIGNER` | backend signer address |
 | `FOUNDER_NFT_MINT_DEADLINE` | unix timestamp, must be in the future |
 
@@ -130,6 +159,7 @@ Tests: `cd chain/scripts && python3 -m unittest test_generate_founder_nft_genesi
 
 ## Tests
 
-`contracts/test/PeopleFounderNFT.t.sol` (unit + fuzz), `PeopleFounderNFT.invariant.t.sol` (exactly one
+`contracts/test/PeopleFounderNFT.t.sol` (unit + fuzz, incl. signer rotation/revocation, owner checks,
+rebind timelock and holder cancel), `PeopleFounderNFT.invariant.t.sol` (exactly one
 token per `personId`, at most one per address, supply equals successful mints, ids dense),
 `DeployFounderNFT.t.sol` (script env handling and chain guard).
