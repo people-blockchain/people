@@ -6,7 +6,9 @@ import { PINATA_UPLOAD_NETWORK } from "@/lib/pinata-signed-upload";
 import { mediaBytesMatch } from "@/lib/media-upload-magic";
 import { DIRECT_UPLOAD_RATE } from "@/lib/media-upload-rate";
 import {
+  declaredUploadSizeError,
   DIRECT_UPLOAD_MAX_BYTES,
+  downloadedBytesMatchDeclaration,
   isDirectUploadKind,
   mimeAllowedForKind,
   normalizeUploadMime,
@@ -66,12 +68,20 @@ function sameHash(left: string, right: string): boolean {
  */
 export async function POST(request: Request) {
   if (!isPinataConfigured()) return nftError("storage_unavailable", 503);
-  const body = (await request.json().catch(() => null)) as { id?: unknown; kind?: unknown; sha256?: unknown } | null;
+  const body = (await request.json().catch(() => null)) as {
+    id?: unknown;
+    kind?: unknown;
+    sha256?: unknown;
+    size?: unknown;
+  } | null;
   const id = typeof body?.id === "string" ? body.id : "";
   if (!PINATA_FILE_ID.test(id) || isValidIpfsCid(id) || !isDirectUploadKind(body?.kind)) return nftError("invalid_request", 400);
   if (typeof body?.sha256 !== "string" || !SHA256_HEX.test(body.sha256.trim().toLowerCase())) {
     return nftError("invalid_request", 400);
   }
+  const sizeError = declaredUploadSizeError(body.size);
+  if (sizeError === "invalid_request") return nftError("invalid_request", 400);
+  const declared = body.size as number;
   const kind = body.kind;
   const claimedHash = body.sha256.trim().toLowerCase();
 
@@ -104,24 +114,24 @@ export async function POST(request: Request) {
     }
   };
 
-  if (!Number.isInteger(record.size) || record.size <= 0 || record.size > DIRECT_UPLOAD_MAX_BYTES) {
-    return reject(record.size > DIRECT_UPLOAD_MAX_BYTES ? "file_too_large" : "size_mismatch", record.size > DIRECT_UPLOAD_MAX_BYTES ? 413 : 422);
-  }
+  if (sizeError === "file_too_large") return reject("file_too_large", 413);
+  if (!Number.isInteger(record.size) || record.size < declared) return reject("size_mismatch", 422);
   const mime = normalizeUploadMime(record.mimeType);
   if (!mimeAllowedForKind(kind, mime)) return reject("unsupported_format", 415);
 
   let downloaded: { bytes: Uint8Array; overflow: boolean } | null;
   try {
     const res = await fetch(ipfsGatewayUrl(record.cid), {
-      headers: { Range: `bytes=0-${record.size - 1}` },
       signal: AbortSignal.timeout(GATEWAY_TIMEOUT_MS),
     });
-    downloaded = await readBounded(res, record.size);
+    downloaded = await readBounded(res, DIRECT_UPLOAD_MAX_BYTES + 1);
   } catch {
     downloaded = null;
   }
   if (!downloaded) return nftError("verify_unavailable", 503);
-  if (downloaded.overflow || downloaded.bytes.byteLength !== record.size) return reject("size_mismatch", 422);
+  if (!downloadedBytesMatchDeclaration(declared, record.size, downloaded.bytes.byteLength, downloaded.overflow)) {
+    return reject("size_mismatch", 422);
+  }
   if (!mediaBytesMatch(mime, downloaded.bytes)) return reject("content_mismatch", 422);
 
   const actual = await sha256Hex(downloaded.bytes);

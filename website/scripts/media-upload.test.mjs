@@ -21,9 +21,11 @@ import { mediaUploadCopy } from "../src/lib/media-upload-copy.ts";
 import { sniffDirectMedia } from "../src/lib/media-upload-magic.ts";
 import { DIRECT_UPLOAD_RATE, directUploadAddressAllowed } from "../src/lib/media-upload-rate.ts";
 import {
+  declaredUploadSizeError,
   DIRECT_UPLOAD_MAX_BYTES,
   DIRECT_UPLOAD_NONCE_TTL_MS,
   directUploadSignMessage,
+  downloadedBytesMatchDeclaration,
   mimeAllowedForKind,
   validateDirectUploadFields,
 } from "../src/lib/media-upload-rules.ts";
@@ -41,6 +43,8 @@ let deleteCalls;
 let deleteStatus;
 let fileRecord;
 let gatewayBytes;
+let gatewayRange;
+let verifyBodies;
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -65,6 +69,8 @@ beforeEach(() => {
   deleteStatus = 200;
   fileRecord = { id: "file-1234", cid: CID, size: 1, mime_type: "image/png" };
   gatewayBytes = null;
+  gatewayRange = undefined;
+  verifyBodies = [];
   globalThis.fetch = async (url, init = {}) => {
     const target = String(url);
     if (target === "https://uploads.pinata.cloud/v3/files/sign") {
@@ -80,6 +86,7 @@ beforeEach(() => {
       return json({ data: fileRecord });
     }
     if (!gatewayBytes) throw new Error(`unexpected fetch ${target}`);
+    gatewayRange = new Headers(init.headers).get("range");
     return new Response(gatewayBytes);
   };
 });
@@ -174,7 +181,9 @@ test("verify accepts GIF bytes and returns size, mime and sha256", async () => {
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/gif" };
   gatewayBytes = bytes;
   const sha256 = hash(bytes);
-  const res = await verifyRoute(jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256 }));
+  const res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256, size: bytes.length }),
+  );
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.uri, `ipfs://${CID}`);
@@ -182,6 +191,65 @@ test("verify accepts GIF bytes and returns size, mime and sha256", async () => {
   assert.equal(body.mime, "image/gif");
   assert.equal(body.sha256, sha256);
   assert.equal(deleted.length, 0);
+  assert.equal(gatewayRange, null);
+});
+
+test("a multi-block file passes when Pinata's DAG size is larger than the declared file length", async () => {
+  const bytes = Buffer.from("GIF89a-multiblock-payload");
+  fileRecord = { id: "file-1234", cid: CID, size: bytes.length + 80_000, mime_type: "image/gif" };
+  gatewayBytes = bytes;
+  const sha256 = hash(bytes);
+  const res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256, size: bytes.length }),
+  );
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.size, bytes.length);
+  assert.equal(body.sha256, sha256);
+  assert.equal(gatewayRange, null);
+  assert.equal(deleted.length, 0);
+  assert.equal(downloadedBytesMatchDeclaration(bytes.length, bytes.length + 80_000, bytes.length, false), true);
+  assert.equal(declaredUploadSizeError(DIRECT_UPLOAD_MAX_BYTES + 1), "file_too_large");
+});
+
+test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected", async () => {
+  const bytes = Buffer.from("GIF89a-truncated-source");
+  fileRecord = { id: "file-1234", cid: CID, size: bytes.length + 10, mime_type: "image/gif" };
+  gatewayBytes = bytes.subarray(0, bytes.length - 1);
+  let res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes), size: bytes.length }),
+  );
+  assert.equal(res.status, 422);
+  assert.equal((await res.json()).error, "size_mismatch");
+  assert.deepEqual(deleted, ["file-1234"]);
+
+  deleted.length = 0;
+  const header = Buffer.from("GIF89a");
+  const overflow = Buffer.alloc(DIRECT_UPLOAD_MAX_BYTES + 1);
+  header.copy(overflow);
+  fileRecord = { id: "file-1234", cid: CID, size: DIRECT_UPLOAD_MAX_BYTES + 50, mime_type: "image/gif" };
+  gatewayBytes = overflow;
+  res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", {
+      id: "file-1234",
+      kind: "nft-image",
+      sha256: hash(overflow),
+      size: DIRECT_UPLOAD_MAX_BYTES,
+    }),
+  );
+  assert.equal(res.status, 422);
+  assert.equal((await res.json()).error, "size_mismatch");
+
+  deleted.length = 0;
+  const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4]);
+  fileRecord = { id: "file-1234", cid: CID, size: png.length + 100, mime_type: "image/png" };
+  gatewayBytes = png;
+  res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: "11".repeat(32), size: png.length }),
+  );
+  assert.equal(res.status, 422);
+  assert.equal((await res.json()).error, "sha256_mismatch");
+  assert.equal(deleted.at(-1), "file-1234");
 });
 
 test("a spoofed Content-Type is rejected and the file is deleted", async () => {
@@ -189,7 +257,7 @@ test("a spoofed Content-Type is rejected and the file is deleted", async () => {
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
   const res = await verifyRoute(
-    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes) }),
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes), size: bytes.length }),
   );
   assert.equal(res.status, 422);
   const body = await res.json();
@@ -214,7 +282,7 @@ test("a content mismatch reports a failed delete instead of hiding it", async ()
     fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
     gatewayBytes = bytes;
     const res = await verifyRoute(
-      jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes) }),
+      jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes), size: bytes.length }),
     );
     assert.equal(res.status, 422);
     const body = await res.json();
@@ -234,7 +302,9 @@ test("a content mismatch reports a failed delete instead of hiding it", async ()
 });
 
 test("verify refuses a content id in place of the Pinata file id", async () => {
-  const res = await verifyRoute(jsonRequest("/api/factory/upload/verify", { id: CID, kind: "nft-image", sha256: "ab".repeat(32) }));
+  const res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: CID, kind: "nft-image", sha256: "ab".repeat(32), size: 4 }),
+  );
   assert.equal(res.status, 400);
   assert.equal((await res.json()).error, "invalid_request");
   assert.equal(deleteCalls.length, 0);
@@ -245,7 +315,7 @@ test("sha256 mismatch deletes the file", async () => {
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
   const res = await verifyRoute(
-    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: "11".repeat(32) }),
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: "11".repeat(32), size: bytes.length }),
   );
   assert.equal(res.status, 422);
   const body = await res.json();
@@ -479,6 +549,7 @@ test("client signs the shared message and posts the original bytes", async () =>
       return json({ data: { id: "file-1234" } });
     }
     if (target === "/api/factory/upload/verify") {
+      verifyBodies.push(JSON.parse(init.body));
       return json({
         uri: `ipfs://${CID}`,
         gatewayUrl: `https://gateway.pinata.cloud/ipfs/${CID}`,
@@ -495,6 +566,8 @@ test("client signs the shared message and posts the original bytes", async () =>
   });
   assert.equal(out.mime, "image/gif");
   assert.equal(out.sha256, sha256);
+  assert.equal(verifyBodies[0].size, file.size);
+  assert.equal(verifyBodies[0].sha256, sha256);
   assert.ok(posted);
   assert.deepEqual(Buffer.from(await posted.arrayBuffer()), bytes);
 });
