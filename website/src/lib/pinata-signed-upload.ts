@@ -5,11 +5,10 @@ const PINATA_TIMEOUT_MS = 25_000;
 type FetchLike = typeof fetch;
 
 /**
- * Same network on the signed upload and on later file reads/deletes.
- * Stays public: verify reads the public gateway, and a private file cannot be
- * published in place without a second upload.
+ * Signed uploads land on the private network. Verify reads them through a
+ * private link and only then copies the checked bytes to public.
  */
-export const PINATA_UPLOAD_NETWORK = "public" as const;
+export const PINATA_UPLOAD_NETWORK = "private" as const;
 
 /** Pinata counts the whole multipart body, not the file alone. At least 64 KiB, or 2%. */
 export const PINATA_MULTIPART_HEADROOM_MIN_BYTES = 64 * 1024;
@@ -32,7 +31,13 @@ export function pinataSignedUploadMaxBytes(declaredBytes: number, ceiling = DIRE
  * size and the lifetime. The browser then sends the original file straight to that URL.
  */
 export async function createPinataSignedUpload(
-  params: { filename: string; mimeTypes: readonly string[]; maxBytes: number; expiresSec?: number },
+  params: {
+    filename: string;
+    mimeTypes: readonly string[];
+    maxBytes: number;
+    expiresSec?: number;
+    network?: "public" | "private";
+  },
   fetchImpl: FetchLike = fetch,
 ): Promise<{ url: string }> {
   if (params.mimeTypes.length === 0 || !Number.isSafeInteger(params.maxBytes) || params.maxBytes <= 0) {
@@ -48,7 +53,7 @@ export async function createPinataSignedUpload(
       filename: params.filename,
       max_file_size: pinataSignedUploadMaxBytes(params.maxBytes),
       allow_mime_types: [...params.mimeTypes],
-      network: PINATA_UPLOAD_NETWORK,
+      network: params.network ?? PINATA_UPLOAD_NETWORK,
     }),
     signal: AbortSignal.timeout(PINATA_TIMEOUT_MS),
   });

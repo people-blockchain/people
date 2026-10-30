@@ -166,6 +166,8 @@ export async function createPinataSignedVideoUpload(
       mimeTypes: [params.mimeType],
       maxBytes: params.maxBytes,
       expiresSec: params.expiresSec,
+      // Legacy video route still verifies a public gateway read. Direct /sign stays private.
+      network: "public",
     },
     fetchImpl,
   );
