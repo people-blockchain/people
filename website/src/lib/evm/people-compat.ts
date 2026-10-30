@@ -19,7 +19,7 @@ import {
 } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError, weiToPpl } from "@/lib/evm/rpc-server";
 import { readAllFactoryNfts, readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
 import { loadContractInfo } from "@/lib/evm/contract-info";
 import { transferScanIsPartial } from "@/lib/evm/transfer-index";
@@ -418,9 +418,9 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
     return {
       status: 200,
       body: {
-        ...(balanceWei === null ? {} : { balanceWei: balanceWei.toString() }),
+        ...(balanceWei === null ? {} : { balanceWei: balanceWei.toString(), balance: weiToPpl(balanceWei) }),
         ...(nonce === null ? {} : { nonce, outgoingTxs: nonce }),
-        balances: held,
+        balances: { ...(balanceWei === null ? {} : { ppl: weiToPpl(balanceWei) }), ...held },
         incomingTxs: 0,
         ...(partial ? { partial: true } : {}),
       },
