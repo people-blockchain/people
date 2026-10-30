@@ -114,10 +114,12 @@ describe("evm json-rpc", () => {
     });
 
     test("a running batch lets timers fire", async () => {
+      // A macrotask queued before the batch only runs if the batch yields to the event loop.
+      // (A 1ms setInterval is timing dependent: 30 cheap calls can finish before it ever fires.)
       let ticks = 0;
-      const timer = setInterval(() => {
+      setImmediate(() => {
         ticks += 1;
-      }, 1);
+      });
       const h = host();
       const requests = Array.from({ length: 30 }, (_, i) => ({
         jsonrpc: "2.0" as const,
@@ -126,7 +128,6 @@ describe("evm json-rpc", () => {
         params: []
       }));
       const out = await handleJsonRpcBatch(h, requests);
-      clearInterval(timer);
       expect(out).toHaveLength(30);
       // setImmediate between calls drains the macrotask queue, so timers get a turn.
       expect(ticks).toBeGreaterThan(0);
