@@ -17,8 +17,23 @@ Eligibility is hard-coded, not configurable. The contract cannot verify a human 
 a mint authorisation **only** for a Human Passport-verified person. Telegram-only users are never signed
 for, so they cannot mint. The genesis generator applies the same rule independently (`ELIGIBLE_LEVEL = 2`).
 
-`personId` is the same `bytes32` identifier the sale contracts use (`derivePersonId` in
-`website/src/lib/sale/eligibility.ts`): one human, one `personId`.
+### `personId` (backend: `website/src/lib/founders/founder-nft-person.ts`)
+
+One human, one `personId`: an opaque random `bytes32` (0x + 64 hex) assigned on first sight and stored in
+`founder_nft_person` (`website/drizzle/0021_founder_nft_person.sql`). The dedup key is **not** the wallet
+address but the person's Human Passport stamp nullifiers, which are stable across wallets:
+
+- Source: Stamps API v2 `GET https://api.passport.xyz/v2/stamps/{address}`; each `items[].credential`
+  is the full verifiable credential. Its `credentialSubject.nullifiers` (array) are used; older
+  credentials only carry `credentialSubject.hash`, which is treated as a nullifier.
+- Stored: only `sha256("people-founder-nft:hp-nullifier:" + nullifier)` in `founder_nft_stamp_hash`
+  (`stampHash` primary key -> `personId`). No raw nullifier, wallet address or other PII.
+- Resolve: no stored match -> new `personId`; all matches point to one `personId` -> that person (new
+  stamp hashes are attached to it); matches point to several `personId`s -> refused and logged
+  (opaque ids and counts only), never merged.
+- Rebind: a new wallet must present the same nullifiers (any already-stored one identifies the person).
+  Human Passport's own LIFO dedup marks reused stamps on the new address as `dedup: true` with score 0;
+  that is expected and the new address's score is not used for rebind.
 
 ## Contract: `contracts/src/nft/PeopleFounderNFT.sol`
 
