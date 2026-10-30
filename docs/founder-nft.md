@@ -1,6 +1,6 @@
 # People Founder NFT (C8)
 
-**Status:** contracts + genesis tooling implemented, not deployed. No website integration yet.
+**Status:** contracts + genesis tooling implemented, not deployed. The website flow is integrated and stays hidden until `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` is set; issuing a signature also needs `FOUNDER_NFT_SIGNER_PK`.
 
 A free, non-transferable (soulbound) NFT for every person verified through **Human Passport**.
 One token per person, one token per address, numbered sequentially from 1.
@@ -172,9 +172,60 @@ Tests: `cd chain/scripts && python3 -m unittest test_generate_founder_nft_genesi
 `npm run test:founder-nft-genesis`, and a step in `.github/workflows/chain-ci.yml`). The fixture
 `chain/scripts/fixtures/founder-nft-snapshot.sample.json` uses synthetic addresses only.
 
+## Website
+
+The founders block shows a Founder NFT card when the public contract address is set. `/founders` redirects to `/bounty`, so the card is rendered in both `FoundersApp` variants (the bounty earn block and the standalone landing). `/wallet` and `/explorer/nfts` list the tokens through the existing `nfts` compat read. Founder's Seal copy is unchanged.
+
+### Environment
+
+| Variable | Where | Meaning |
+| --- | --- | --- |
+| `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` | client and server | contract address. Unset or malformed: the card is hidden and no Founder NFT rows are added |
+| `NEXT_PUBLIC_FOUNDER_NFT_CHAIN_ID` | client and server | optional chain id. Defaults to `97401` (PEOPLE testnet) |
+| `FOUNDER_NFT_SIGNER_PK` | server only | EIP-712 signer key. Never sent to the browser. If it is missing, `POST /api/founders/nft/signature` returns 503 `not_configured` with `reason: "signer"` and the card shows a disabled state |
+
+`.env.example` is intentionally unchanged. These names are documented here only.
+
+### Routes
+
+Both routes use the existing founders session guard.
+
+- `GET /api/founders/nft/status?address=` — what the card may offer for the connected wallet. Body `{ status, signerReady }`. `401` and `403` hide the card. `503` is the disabled state.
+- `POST /api/founders/nft/signature` — body `{ action: "mint" | "rebind", address }`. Returns an EIP-712 `Mint` or `Rebind` signature whose typed data matches the contract (`personId`, `to` / `oldHolder`+`newHolder`, `nonce`, `deadline`; domain name `PeopleFounderNFT`, version `1`, `chainId`, `verifyingContract`). The signer key stays in the server environment.
+
+`cancelRebind` and `executeRebind` are sent by the wallet with no backend signature. The card shows a pending move with a countdown, a Cancel button for the current holder while `now < executeAfter`, and Execute for the new holder once the 72 hours have elapsed.
+
+### States
+
+| State | Card |
+| --- | --- |
+| `can_mint` | "Get Founder NFT" (level 2 only) |
+| `holder` | "Your Founder NFT #N", plus Cancel while a move is still inside the delay |
+| `rebind_available` | request the same number onto this wallet |
+| `rebind_pending` | countdown, then Execute |
+| `minted_elsewhere`, `mint_closed`, `not_eligible` | text only, no button |
+
+A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature returns `403` `hp_required` and no signature. A pending rebind recorded under an older `signerEpoch` is ignored (the contract would revert with `StaleRebind`).
+
+### personId
+
+The website does not derive a new id scheme. `personId` is the opaque `bytes32` stored in `founder_nft_person`, keyed by Human Passport stamp-nullifier hashes in `founder_nft_stamp_hash` (`website/src/lib/founders/founder-nft-person.ts`). Rebind is offered only when that person already has a token and the founder row has a signature-proven `passportWallet`. The new address's Human Passport score is not consulted.
+
+### Wallet and explorer rows
+
+`website/src/lib/evm/founder-nft-rows.ts` is appended in the `nfts` branch of `people-compat.ts`. With an `owner` query it reads that address's token. Without one it lists token ids `1..min(totalSupply, 50)`. Each row is `{ nftId: "founder-nft-<id>", name, imageUri, owner, creator: owner, collection: <contract>, onChainTokenId }`, with name and image taken from `tokenURI`. A failed read returns no Founder NFT rows and leaves the rest of the list intact. The collection is not part of the static `evm-deployments` file; the address comes from the environment at runtime.
+
+## Open questions
+
+- **OPEN QUESTION:** when a level-2 founder has no `passportWallet`, mint reads Human Passport stamps for `walletAddress`. That address is not signature-proven the way `passportWallet` is. Rebind does not use this fallback.
+- **OPEN QUESTION:** Human Passport LIFO dedup scores a new account at 0, so that account cannot reach verification level 2 on its own. Rebind therefore uses the stamp nullifiers of the signature-proven `passportWallet`, not the new account's score.
+- **OPEN QUESTION:** `tokenOfOwner` scans `Transfer` logs from the earliest block and, if the RPC rejects that range, walks at most 500 ids. A node with a tight `eth_getLogs` window and a supply above that cap can miss a holder.
+- **OPEN QUESTION:** the collection is not listed in static `evm-deployments`. Wallet and explorer rows appear only when `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` is set at runtime.
+- **OPEN QUESTION:** `.env.example` was left unchanged so this work does not touch env files. The variable names above have to be set by the operator outside the repo.
+
 ## Tests
 
 `contracts/test/PeopleFounderNFT.t.sol` (unit + fuzz, incl. signer rotation/revocation, owner checks,
 rebind timelock and holder cancel), `PeopleFounderNFT.invariant.t.sol` (exactly one
 token per `personId`, at most one per address, supply equals successful mints, ids dense),
-`DeployFounderNFT.t.sol` (script env handling and chain guard).
+`DeployFounderNFT.t.sol` (script env handling and chain guard). Website: `website/scripts/founder-nft-service.test.mjs` (level-1 refusal, mint and rebind recovery, stale pending, 503, bad input), `founder-nft-typed-data.test.mjs` (type strings against the contract, recovery of a key generated in the test), `founder-nft-ui.test.mjs` (countdown, error keys, `decodeFunctionData` of the four writes, locales). Run from `website/` with `npm run lint`, `npm run typecheck`, and `npm test`.
