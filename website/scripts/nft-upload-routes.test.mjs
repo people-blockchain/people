@@ -175,7 +175,7 @@ test("video sign: validates type and size, then returns only the signed url", as
   assert.deepEqual(await res.json(), { url: "https://uploads.pinata.cloud/v3/files/token" });
   res = await signRoute(jsonRequest("/api/factory/nft/video/sign", { type: "video/quicktime", size: 1000 }));
   assert.equal(res.status, 415);
-  res = await signRoute(jsonRequest("/api/factory/nft/video/sign", { type: "video/mp4", size: 20_000_001 }));
+  res = await signRoute(jsonRequest("/api/factory/nft/video/sign", { type: "video/mp4", size: 25_000_001 }));
   assert.equal(res.status, 413);
   res = await signRoute(jsonRequest("/api/factory/nft/video/sign", { type: "video/webm", size: 0 }));
   assert.equal(res.status, 400);
@@ -209,7 +209,7 @@ test("video verify: a bad header, wrong type or oversize file is rejected and de
   assert.deepEqual(deleted, ["file-1234"]);
 
   deleted = [];
-  fileRecord = { ...fileRecord, mime_type: "video/mp4", size: 20_000_001 };
+  fileRecord = { ...fileRecord, mime_type: "video/mp4", size: 25_000_001 };
   res = await verifyRoute(jsonRequest("/api/factory/nft/video/verify", { id: "file-1234" }));
   assert.equal(res.status, 422);
   assert.deepEqual(deleted, ["file-1234"]);
