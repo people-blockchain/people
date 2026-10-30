@@ -18,12 +18,11 @@ import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/tok
 import { networkJson } from "@/lib/network-client";
 import {
   addCreatedToken,
-  readCreatedTokens,
   type CreatedTokenRecord,
   type DuplicateToken,
 } from "@/lib/created-tokens";
 import { uploadTokenIcon } from "@/lib/token-icon-upload";
-import { findDuplicateTokens } from "@/lib/factory/token-duplicates";
+import { findDuplicateTokens, loadDuplicateCatalog } from "@/lib/factory/token-duplicates";
 import { pinTokenMetadataForCreate } from "@/lib/factory/token-metadata";
 import { pinTokenMetadata } from "@/lib/token-metadata-client";
 import { TokenIconUpload } from "./TokenIconUpload";
@@ -208,35 +207,16 @@ export function EvmTokenLaunch() {
     };
   }, [gateway, payWith]);
 
-  // Duplicate source: the whole on-chain catalog (every creator) + local records from this browser
-  // as a supplementary source (they work even before the factory scan indexes a fresh token).
-  const signerAddress = signer?.address ?? "";
+  // Duplicate source: the server-side whole catalog (every creator). No localStorage, no wallet
+  // needed, so a clean browser warns exactly like a returning one.
   useEffect(() => {
-    if (!signerAddress) {
-      setKnownTokens([]);
-      return;
-    }
     let cancelled = false;
-    const local = readCreatedTokens(typeof window !== "undefined" ? window.localStorage : null);
-    setKnownTokens(local);
-    void networkJson<Array<{ assetId: string; tokenAddress?: string; name?: string; symbol?: string; creator?: string; imageUri?: string }>>(
-      "assets",
-      { cache: "no-store" },
-    )
-      .then((rows) => {
-        if (cancelled || !Array.isArray(rows)) return;
-        const chain: DuplicateToken[] = rows
-          .filter((row) => Boolean(row.tokenAddress ?? row.assetId))
-          .map((row) => ({
-            creator: (row.creator ?? "").toLowerCase(),
-            address: (row.tokenAddress ?? row.assetId).toLowerCase(),
-            name: row.name ?? "",
-            symbol: row.symbol ?? "",
-            ...(row.imageUri ? { image: row.imageUri } : {}),
-          }));
+    void loadDuplicateCatalog(() => networkJson<unknown>("assets", { cache: "no-store" }))
+      .then((chain) => {
+        if (cancelled) return;
         setKnownTokens((current) => {
-          const byAddress = new Map(current.map((row) => [row.address.toLowerCase(), row]));
-          for (const row of chain) {
+          const byAddress = new Map(chain.map((row) => [row.address.toLowerCase(), row]));
+          for (const row of current) {
             if (!byAddress.has(row.address.toLowerCase())) byAddress.set(row.address.toLowerCase(), row);
           }
           return [...byAddress.values()];
@@ -246,7 +226,7 @@ export function EvmTokenLaunch() {
     return () => {
       cancelled = true;
     };
-  }, [signerAddress]);
+  }, []);
 
   const duplicates = useMemo(
     () => findDuplicateTokens(knownTokens, { name, symbol }),
