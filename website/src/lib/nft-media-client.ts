@@ -10,6 +10,7 @@ import {
   directImageKindFromMime,
   maxBytesForDirectImage,
   type NftDirectImageKind,
+  type NftImageKind,
   type NftVideoType,
 } from "./nft-media-rules";
 
