@@ -1,4 +1,4 @@
-/** Preliminary — see docs/FOUNDERS-AND-LAVKA-PLAN.md */
+/** Preliminary — see docs/founder-nft.md */
 
 export const FOUNDER_GOAL = 1_000_000;
 
