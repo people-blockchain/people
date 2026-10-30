@@ -1,10 +1,16 @@
-import { fileForDirectUpload, MediaUploadError, uploadDirect, type MediaUploadCode } from "@/lib/media-upload-client";
+import {
+  fileForDirectUpload,
+  isMediaUploadCode,
+  MediaUploadError,
+  mediaUploadText,
+  uploadDirect,
+} from "@/lib/media-upload-client";
+import type { Language } from "@/lib/preferences";
 import { normalizeUploadMime } from "@/lib/media-upload-rules";
 import {
   NftSaveError,
   saveNftMetadata,
   uploadNftImage,
-  type NftErrorKey,
   type StoredMetadata,
   type StoredVideo,
 } from "@/lib/nft-media-client";
@@ -48,29 +54,14 @@ export type SaveResult = {
 const imageCache = new WeakMap<File, { uri: string; previewUrl: string }>();
 const videoCache = new WeakMap<File, StoredVideo>();
 
-const UPLOAD_SAVE_KEY: Record<MediaUploadCode, NftErrorKey> = {
-  file_too_large: "errTooLarge",
-  unsupported_format: "errUnsupportedType",
-  link_expired: "errTimeout",
-  sha256_mismatch: "errContentMismatch",
-  content_mismatch: "errContentMismatch",
-  size_mismatch: "errContentMismatch",
-  rate_limited: "errRateLimited",
-  network: "errNetwork",
-  wallet_rejected: "errWalletRejected",
-  wallet_missing: "errWalletRejected",
-  nonce_used: "errTimeout",
-  nonce_expired: "errTimeout",
-  nonce_missing: "errTimeout",
-  storage_unavailable: "errStorageUnavailable",
-  pin_failed: "errPinFailed",
-  bad_signature: "errWalletRejected",
-  verify_unavailable: "errVideoVerifyUnavailable",
-  invalid_request: "errMissingFile",
-};
+/** Media-upload copy for a direct-upload failure. Null keeps the legacy NFT string. */
+export function directUploadAlertText(lang: Language, code: string | undefined): string | null {
+  if (!code || !isMediaUploadCode(code)) return null;
+  return mediaUploadText(lang, code);
+}
 
 function rethrowUpload(error: unknown): never {
-  if (error instanceof MediaUploadError) throw new NftSaveError(UPLOAD_SAVE_KEY[error.code], error.code);
+  if (error instanceof MediaUploadError) throw new NftSaveError("errUnknown", error.code, error.code);
   throw error;
 }
 

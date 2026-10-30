@@ -15,6 +15,8 @@ import { GET as nonceRoute } from "../src/app/api/factory/upload/nonce/route.ts"
 import { POST as signRoute } from "../src/app/api/factory/upload/sign/route.ts";
 import { POST as verifyRoute } from "../src/app/api/factory/upload/verify/route.ts";
 import { MediaUploadError, mediaUploadText, uploadDirect, MEDIA_UPLOAD_CODES } from "../src/lib/media-upload-client.ts";
+import { directUploadAlertText } from "../src/components/factory/nft/saveNftFiles.ts";
+import { nftMediaCopy } from "../src/lib/nft-media-copy.ts";
 import { mediaUploadCopy } from "../src/lib/media-upload-copy.ts";
 import { sniffDirectMedia } from "../src/lib/media-upload-magic.ts";
 import { DIRECT_UPLOAD_RATE, directUploadAddressAllowed } from "../src/lib/media-upload-rate.ts";
@@ -540,4 +542,21 @@ test("an expired upload link and a declined wallet map to their own messages", a
     assert.match(mediaUploadCopy[lang].linkExpired, /25|Retry|повтор|Reintent|outra|Relance|Wiederhol|Ripeti|yeniden|lại|Ulangi|重新|أعد/i);
   }
   assert.notEqual(mediaUploadCopy.ru.fileTooLarge, mediaUploadCopy.en.fileTooLarge);
+});
+
+test("the NFT form shows media-upload copy for direct upload errors", () => {
+  const langs = Object.keys(mediaUploadCopy);
+  assert.equal(langs.length, 12);
+  for (const lang of langs) {
+    for (const code of MEDIA_UPLOAD_CODES) {
+      const text = directUploadAlertText(lang, code);
+      assert.equal(text, mediaUploadText(lang, code));
+      assert.equal(typeof text, "string");
+      assert.ok(text.trim().length > 0);
+    }
+    assert.notEqual(directUploadAlertText(lang, "file_too_large"), nftMediaCopy[lang].errTooLarge);
+    assert.notEqual(directUploadAlertText(lang, "nonce_expired"), nftMediaCopy[lang].errTimeout);
+    assert.notEqual(directUploadAlertText(lang, "content_mismatch"), nftMediaCopy[lang].errContentMismatch);
+    assert.equal(directUploadAlertText(lang, "not-a-code"), null);
+  }
 });
