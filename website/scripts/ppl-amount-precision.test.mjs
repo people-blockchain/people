@@ -12,6 +12,7 @@ import {
   weiFromField,
 } from "../src/lib/asset-amounts.ts";
 import { maxTransferAmount } from "../src/lib/wallet-activity.ts";
+import { quoteMaxNativeSend } from "../src/lib/evm/wallet-send.ts";
 
 const fee = parseUnits("0.004875", 18);
 
@@ -59,6 +60,34 @@ test("USD conversion stays in fixed-point until the final string", () => {
   assert.equal(formatUsd6(usd6), "0.50");
   assert.equal(formatUsd6(1n), "0.00");
   assert.equal(formatUsd6(10_000n), "0.01");
+});
+
+test("Max reserves buffered gas plus the protocol fee, and the displayed fee is that same fee", () => {
+  const balanceWei = 9687925132500000000n;
+  const gasPriceWei = 978750000000n;
+  const gasLimit = 21000n;
+  const quoted = quoteMaxNativeSend({
+    balanceWei,
+    gasPriceWei,
+    gasLimit,
+    protocolFeeWei: 0n,
+  });
+  const displayedFeeWei = quoted.feeWei;
+  // 21000 * 978750000000 * 120 / 100 = 24664500000000000
+  assert.equal(displayedFeeWei, 24664500000000000n);
+  assert.equal(quoted.maxWei, 9663260632500000000n);
+  assert.equal(quoted.maxWei, balanceWei - displayedFeeWei);
+});
+
+test("Max is zero when the balance is smaller than the reserved fee", () => {
+  const quoted = quoteMaxNativeSend({
+    balanceWei: 24664500000000000n - 1n,
+    gasPriceWei: 978750000000n,
+    gasLimit: 21000n,
+    protocolFeeWei: 0n,
+  });
+  assert.equal(quoted.maxWei, 0n);
+  assert.equal(quoted.feeWei, 24664500000000000n);
 });
 
 test("account balance becomes wei from legacy numbers, hex, and decimal strings", () => {
