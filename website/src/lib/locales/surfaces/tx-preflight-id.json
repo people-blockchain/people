@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "Jaringan akan menolak transaksi ini, jadi tidak dikirim dan tidak ada biaya yang dipotong. Alasan: {reason}",
+  "preflightRevertGeneric": "Jaringan akan menolak transaksi ini, jadi tidak dikirim dan tidak ada biaya yang dipotong.",
+  "preflightDailyLimit": "Batas harian pembayaran dengan stablecoin telah tercapai. Tidak ada biaya yang dipotong. Bayar dengan PPL atau coba lagi setelah tengah malam UTC.",
+  "preflightPayInPplHint": "Tips: jika Anda memilih membayar dengan stablecoin, beralihlah ke pembayaran dengan PPL lalu coba lagi."
+}

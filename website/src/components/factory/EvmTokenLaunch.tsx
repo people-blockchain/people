@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { formatEther, getAddress, type Address } from "viem";
+import { encodeFunctionData, formatEther, getAddress, type Abi, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
@@ -14,17 +14,19 @@ import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/con
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
+import { TxPreflightError, preflightAndSend } from "@/lib/evm/tx-preflight";
+import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import { networkJson } from "@/lib/network-client";
 import {
   addCreatedToken,
-  createdTokensForAddress,
-  findDuplicateTokens,
-  readCreatedTokens,
   type CreatedTokenRecord,
   type DuplicateToken,
 } from "@/lib/created-tokens";
 import { uploadTokenIcon } from "@/lib/token-icon-upload";
+import { findDuplicateTokens, loadDuplicateCatalog } from "@/lib/factory/token-duplicates";
+import { pinTokenMetadataForCreate } from "@/lib/factory/token-metadata";
+import { pinTokenMetadata } from "@/lib/token-metadata-client";
 import { TokenIconUpload } from "./TokenIconUpload";
 import {
   PROMO_BPS_OPTIONS,
@@ -153,6 +155,7 @@ export function EvmTokenLaunch() {
   const form = { ...factoryCopy.en.form, ...factoryCopy[lang].form };
   const u = uxCopy[lang];
   const nm = nftMediaCopy[lang];
+  const pf = txPreflightCopy[lang];
   const { signer } = useExternalWallet();
   const dep = readEvmDeployments();
   const gateway = stableFeeGatewayAddress();
@@ -207,39 +210,16 @@ export function EvmTokenLaunch() {
     };
   }, [gateway, payWith]);
 
-  // Duplicate source: local records from earlier launches + the on-chain catalog's creator field.
-  // The catalog is best-effort; local records work even before the factory scan indexes the token.
-  const signerAddress = signer?.address ?? "";
+  // Duplicate source: the server-side whole catalog (every creator). No localStorage, no wallet
+  // needed, so a clean browser warns exactly like a returning one.
   useEffect(() => {
-    if (!signerAddress) {
-      setKnownTokens([]);
-      return;
-    }
     let cancelled = false;
-    const local = createdTokensForAddress(
-      readCreatedTokens(typeof window !== "undefined" ? window.localStorage : null),
-      signerAddress,
-    );
-    setKnownTokens(local);
-    void networkJson<Array<{ assetId: string; tokenAddress?: string; name?: string; symbol?: string; creator?: string; imageUri?: string }>>(
-      "assets",
-      { cache: "no-store" },
-    )
-      .then((rows) => {
-        if (cancelled || !Array.isArray(rows)) return;
-        const creator = signerAddress.toLowerCase();
-        const chain: DuplicateToken[] = rows
-          .filter((row) => row.creator?.toLowerCase() === creator)
-          .map((row) => ({
-            creator,
-            address: (row.tokenAddress ?? row.assetId).toLowerCase(),
-            name: row.name ?? "",
-            symbol: row.symbol ?? "",
-            ...(row.imageUri ? { image: row.imageUri } : {}),
-          }));
+    void loadDuplicateCatalog(() => networkJson<unknown>("assets", { cache: "no-store" }))
+      .then((chain) => {
+        if (cancelled) return;
         setKnownTokens((current) => {
-          const byAddress = new Map(current.map((row) => [row.address.toLowerCase(), row]));
-          for (const row of chain) {
+          const byAddress = new Map(chain.map((row) => [row.address.toLowerCase(), row]));
+          for (const row of current) {
             if (!byAddress.has(row.address.toLowerCase())) byAddress.set(row.address.toLowerCase(), row);
           }
           return [...byAddress.values()];
@@ -249,11 +229,11 @@ export function EvmTokenLaunch() {
     return () => {
       cancelled = true;
     };
-  }, [signerAddress]);
+  }, []);
 
   const duplicates = useMemo(
-    () => findDuplicateTokens(knownTokens, { creator: signerAddress, name, symbol }),
-    [knownTokens, signerAddress, name, symbol],
+    () => findDuplicateTokens(knownTokens, { name, symbol }),
+    [knownTokens, name, symbol],
   );
 
   useEffect(() => {
@@ -317,6 +297,20 @@ export function EvmTokenLaunch() {
     let sentHash: `0x${string}` | null = null;
     try {
       const client = readPublicClient();
+      // Simulate (eth_call + estimateGas) before the wallet prompt: a tx that would revert is never
+      // sent, and the real send carries the estimate plus a 20% gas buffer.
+      const sendChecked = (request: { address: Address; abi: Abi; functionName: string; args: readonly unknown[]; value?: bigint }) =>
+        preflightAndSend(
+          client,
+          (tx) => writeViaActiveSigner(signer, { ...request, gas: tx.gas }),
+          {
+            account: signer.address,
+            to: request.address,
+            data: encodeFunctionData({ abi: request.abi, functionName: request.functionName, args: request.args }),
+            value: request.value,
+          },
+          { abi: CREATE_FLOW_ERRORS_ABI },
+        );
       if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
         setError(u.supplyMinError);
         return;
@@ -327,25 +321,38 @@ export function EvmTokenLaunch() {
         return;
       }
       const total = units;
-      const existing = findDuplicateTokens(knownTokens, { creator: signer.address, name, symbol });
+      const existing = findDuplicateTokens(knownTokens, { name, symbol });
       if (existing.length && !confirmDuplicate) {
         setError(u.tokenDuplicateTitle);
         return;
       }
 
-      let metadataURI = iconUri || `ipfs://people/${symbol.trim()}`;
+      let iconImage = iconUri;
       if (iconFile && !iconUri && !skipIcon) {
         setStage("uploading");
         try {
           const uploaded = await uploadTokenIcon(iconFile);
           setIconUri(uploaded);
           setIconUploadFailed(false);
-          metadataURI = uploaded;
+          iconImage = uploaded;
         } catch {
           setIconUploadFailed(true);
           setError(u.tokenIconErrUpload);
           return;
         }
+      }
+
+      // Always pin the metadata JSON before any transaction: nothing is sent (or charged) if it fails.
+      setStage("uploading");
+      let metadataURI: string;
+      try {
+        metadataURI = await pinTokenMetadataForCreate(
+          { name, symbol: symbol.trim().toUpperCase(), image: iconImage || undefined },
+          (json) => pinTokenMetadata(json),
+        );
+      } catch {
+        setError(u.tokenMetadataErrPin);
+        return;
       }
 
       let stableFeePaid = false;
@@ -389,7 +396,7 @@ export function EvmTokenLaunch() {
             await client.waitForTransactionReceipt({ hash: approveHash });
           }
           setStage("payingFee");
-          const payHash = await writeViaActiveSigner(signer, {
+          const payHash = await sendChecked({
             address: gateway,
             abi: stableFeeGatewayAbi,
             functionName: "payLaunchFee",
@@ -478,7 +485,7 @@ export function EvmTokenLaunch() {
       }
 
       setStage("confirming");
-      const hash = await writeViaActiveSigner(signer, { ...request });
+      const hash = await sendChecked(request);
       sentHash = hash;
       setTx(hash);
       setPendingHash(hash);
@@ -500,7 +507,7 @@ export function EvmTokenLaunch() {
         name: name.trim(),
         symbol: symbol.trim().toUpperCase(),
         tx: hash,
-        image: metadataURI.startsWith("ipfs://people/") ? "" : metadataURI,
+        image: iconImage,
         createdAt: nowMs(),
       };
       const nextRecords = addCreatedToken(
@@ -534,6 +541,10 @@ export function EvmTokenLaunch() {
         return;
       }
       console.error(err);
+      if (err instanceof TxPreflightError) {
+        setError(preflightErrorMessage(err.reason, pf, { payingWithStable: payWith !== "PPL" }));
+        return;
+      }
       const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
       switch (code) {
         case "stable_fee_unavailable":

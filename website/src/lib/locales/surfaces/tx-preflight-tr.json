@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "Ağ bu işlemi reddederdi, bu yüzden gönderilmedi ve hiçbir ücret alınmadı. Neden: {reason}",
+  "preflightRevertGeneric": "Ağ bu işlemi reddederdi, bu yüzden gönderilmedi ve hiçbir ücret alınmadı.",
+  "preflightDailyLimit": "Stablecoin ile ödeme için günlük limite ulaşıldı. Hiçbir ücret alınmadı. PPL ile ödeyin veya UTC gece yarısından sonra tekrar deneyin.",
+  "preflightPayInPplHint": "İpucu: stablecoin ile ödemeyi seçtiyseniz PPL ile ödemeye geçip tekrar deneyin."
+}

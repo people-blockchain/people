@@ -13,6 +13,11 @@ test("the old ipfs://people/<SYMBOL> placeholder is ignored", () => {
   assert.equal(tokenImageFromMetadataUri("ipfs://people/NBH"), null);
   assert.equal(tokenImageFromMetadataUri("ipfs://people"), null);
   assert.equal(tokenImageFromMetadataUri("ipfs://people/"), null);
+  assert.equal(
+    tokenImageFromMetadataUri("ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/metadata.json"),
+    null,
+  );
+  assert.equal(tokenImageFromMetadataUri("https://example.com/t/metadata.json"), null);
 });
 
 test("non-image and unsafe metadata URIs are ignored", () => {

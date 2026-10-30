@@ -7,6 +7,7 @@ export const tokenExplorerCopy = {
     partial: "Partial data: the account scan reached its limit. Holder count and distribution cover only the returned accounts.",
     updated: "Fetched", refresh: "Refresh", status: "Status", decimals: "Decimals", description: "About this token",
     noHolders: "No positive wallet balances found.", failed: "Could not load wallet distribution.", more: "Show more wallets",
+    loadingDistribution: "Loading wallet distribution…",
   },
   ru: {
     loading: "Загружаем данные сети…", retry: "Попробовать снова", holders: "Кошельков-владельцев", distribution: "Распределение по кошелькам",
@@ -16,6 +17,7 @@ export const tokenExplorerCopy = {
     partial: "Данные неполные: достигнут лимит просмотра аккаунтов. Число владельцев и распределение рассчитаны только по полученным аккаунтам.",
     updated: "Получено", refresh: "Обновить", status: "Статус", decimals: "Знаков после запятой", description: "О токене",
     noHolders: "Кошельки с положительным балансом не найдены.", failed: "Не удалось загрузить распределение по кошелькам.", more: "Показать ещё кошельки",
+    loadingDistribution: "Загружаем распределение по кошелькам…",
   },
   es: {
     loading: "Cargando datos de la red…", retry: "Intentar de nuevo", holders: "Titulares de monederos", distribution: "Distribución entre monederos",
@@ -25,6 +27,7 @@ export const tokenExplorerCopy = {
     partial: "Datos parciales: el escaneo de cuentas alcanzó su límite. El número de titulares y la distribución solo cubren las cuentas devueltas.",
     updated: "Obtenido", refresh: "Actualizar", status: "Estado", decimals: "Decimales", description: "Sobre este token",
     noHolders: "No se encontraron saldos positivos de monederos.", failed: "No se pudo cargar la distribución de monederos.", more: "Mostrar más monederos",
+    loadingDistribution: "Cargando la distribución de monederos…",
   },
   pt: {
     loading: "Carregando dados da rede…", retry: "Tentar novamente", holders: "Titulares de carteiras", distribution: "Distribuição entre carteiras",
@@ -34,6 +37,7 @@ export const tokenExplorerCopy = {
     partial: "Dados parciais: a varredura de contas atingiu seu limite. O número de titulares e a distribuição cobrem apenas as contas retornadas.",
     updated: "Obtido", refresh: "Atualizar", status: "Status", decimals: "Decimais", description: "Sobre este token",
     noHolders: "Nenhum saldo positivo de carteira encontrado.", failed: "Não foi possível carregar a distribuição de carteiras.", more: "Mostrar mais carteiras",
+    loadingDistribution: "Carregando a distribuição de carteiras…",
   },
   fr: {
     loading: "Chargement des données du réseau…", retry: "Réessayer", holders: "Détenteurs de portefeuilles", distribution: "Répartition entre portefeuilles",
@@ -43,6 +47,7 @@ export const tokenExplorerCopy = {
     partial: "Données partielles : le balayage des comptes a atteint sa limite. Le nombre de détenteurs et la répartition ne couvrent que les comptes renvoyés.",
     updated: "Récupéré", refresh: "Actualiser", status: "Statut", decimals: "Décimales", description: "À propos de ce token",
     noHolders: "Aucun solde positif de portefeuille trouvé.", failed: "Impossible de charger la répartition des portefeuilles.", more: "Afficher plus de portefeuilles",
+    loadingDistribution: "Chargement de la répartition des portefeuilles…",
   },
   de: {
     loading: "Netzwerkdaten werden geladen…", retry: "Erneut versuchen", holders: "Wallet-Inhaber", distribution: "Verteilung über Wallets",
@@ -52,6 +57,7 @@ export const tokenExplorerCopy = {
     partial: "Unvollständige Daten: Der Kontoscan hat sein Limit erreicht. Die Anzahl der Inhaber und die Verteilung umfassen nur die zurückgegebenen Konten.",
     updated: "Abgerufen", refresh: "Aktualisieren", status: "Status", decimals: "Dezimalstellen", description: "Über diesen Token",
     noHolders: "Keine positiven Wallet-Guthaben gefunden.", failed: "Wallet-Verteilung konnte nicht geladen werden.", more: "Weitere Wallets anzeigen",
+    loadingDistribution: "Wallet-Verteilung wird geladen…",
   },
   it: {
     loading: "Caricamento dei dati di rete…", retry: "Riprova", holders: "Titolari di wallet", distribution: "Distribuzione tra i wallet",
@@ -61,6 +67,7 @@ export const tokenExplorerCopy = {
     partial: "Dati parziali: la scansione degli account ha raggiunto il limite. Il numero di titolari e la distribuzione coprono solo gli account restituiti.",
     updated: "Recuperato", refresh: "Aggiorna", status: "Stato", decimals: "Decimali", description: "Informazioni su questo token",
     noHolders: "Nessun saldo positivo di wallet trovato.", failed: "Impossibile caricare la distribuzione dei wallet.", more: "Mostra altri wallet",
+    loadingDistribution: "Caricamento della distribuzione dei wallet…",
   },
   tr: {
     loading: "Ağ verileri yükleniyor…", retry: "Yeniden dene", holders: "Cüzdan sahipleri", distribution: "Cüzdanlar arası dağılım",
@@ -70,6 +77,7 @@ export const tokenExplorerCopy = {
     partial: "Eksik veri: hesap taraması sınırına ulaştı. Sahip sayısı ve dağılım yalnızca döndürülen hesapları kapsar.",
     updated: "Alındı", refresh: "Yenile", status: "Durum", decimals: "Ondalık basamak", description: "Bu token hakkında",
     noHolders: "Pozitif bakiyeli cüzdan bulunamadı.", failed: "Cüzdan dağılımı yüklenemedi.", more: "Daha fazla cüzdan göster",
+    loadingDistribution: "Cüzdan dağılımı yükleniyor…",
   },
   vi: {
     loading: "Đang tải dữ liệu mạng…", retry: "Thử lại", holders: "Người giữ ví", distribution: "Phân bổ giữa các ví",
@@ -79,6 +87,7 @@ export const tokenExplorerCopy = {
     partial: "Dữ liệu không đầy đủ: quá trình quét tài khoản đã đạt giới hạn. Số lượng người giữ và phân bổ chỉ bao gồm các tài khoản được trả về.",
     updated: "Đã lấy", refresh: "Làm mới", status: "Trạng thái", decimals: "Số chữ số thập phân", description: "Về token này",
     noHolders: "Không tìm thấy số dư ví dương nào.", failed: "Không thể tải phân bổ ví.", more: "Hiện thêm ví",
+    loadingDistribution: "Đang tải phân bổ ví…",
   },
   id: {
     loading: "Memuat data jaringan…", retry: "Coba lagi", holders: "Pemegang dompet", distribution: "Distribusi antar dompet",
@@ -88,6 +97,7 @@ export const tokenExplorerCopy = {
     partial: "Data sebagian: pemindaian akun mencapai batasnya. Jumlah pemegang dan distribusi hanya mencakup akun yang dikembalikan.",
     updated: "Diambil", refresh: "Segarkan", status: "Status", decimals: "Desimal", description: "Tentang token ini",
     noHolders: "Tidak ditemukan saldo dompet positif.", failed: "Gagal memuat distribusi dompet.", more: "Tampilkan lebih banyak dompet",
+    loadingDistribution: "Memuat distribusi dompet…",
   },
   zh: {
     loading: "正在加载网络数据…", retry: "重试", holders: "钱包持有人", distribution: "各钱包分布",
@@ -97,6 +107,7 @@ export const tokenExplorerCopy = {
     partial: "数据不完整：账户扫描已达到上限。持有人数量和分布仅覆盖已返回的账户。",
     updated: "获取时间", refresh: "刷新", status: "状态", decimals: "小数位数", description: "关于此代币",
     noHolders: "未找到正余额钱包。", failed: "无法加载钱包分布数据。", more: "显示更多钱包",
+    loadingDistribution: "正在加载钱包分布…",
   },
   ar: {
     loading: "جارٍ تحميل بيانات الشبكة…", retry: "إعادة المحاولة", holders: "حاملو المحافظ", distribution: "التوزيع بين المحافظ",
@@ -106,5 +117,6 @@ export const tokenExplorerCopy = {
     partial: "بيانات جزئية: بلغ فحص الحسابات حده الأقصى. يغطي عدد الحاملين والتوزيع الحسابات التي تم إرجاعها فقط.",
     updated: "تم الجلب", refresh: "تحديث", status: "الحالة", decimals: "الأرقام العشرية", description: "حول هذا الرمز",
     noHolders: "لم يتم العثور على أرصدة محافظ إيجابية.", failed: "تعذر تحميل توزيع المحافظ.", more: "عرض المزيد من المحافظ",
+    loadingDistribution: "جارٍ تحميل توزيع المحافظ…",
   },
 };
