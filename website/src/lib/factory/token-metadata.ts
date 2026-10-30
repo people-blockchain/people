@@ -1,9 +1,10 @@
 /**
  * Token metadata JSON for the factory `createToken(..., metadataURI, ...)` argument.
  *
- * The create flow always pins `{name, symbol, description, image?}` BEFORE the transaction is sent
- * and passes the resulting `ipfs://<CID>/metadata.json` on-chain. Everything here is pure (the pin
- * and create steps are injected), so it runs in the browser, the route handler and tests.
+ * The create flow pins `{name, symbol, description, image?}` only after the duplicate check and the
+ * transaction simulation both pass, then passes `ipfs://<CID>/metadata.json` on-chain. Everything
+ * here is pure (the pin and create steps are injected), so it runs in the browser, the route handler
+ * and tests.
  */
 import { cleanNftText, isAllowedMediaUri, parseIpfsMediaUri } from "../nft-media-rules.ts";
 
@@ -12,6 +13,12 @@ export const TOKEN_SYMBOL_MAX = 64;
 export const TOKEN_DESCRIPTION_MAX = 2000;
 export const TOKEN_METADATA_FILENAME = "metadata.json";
 export const TOKEN_METADATA_PIN_LOCALE_KEY = "tokenMetadataPinFailed";
+/**
+ * Stand-in `metadataURI` for simulating `createToken` before the JSON is pinned.
+ * The factory only stores the string, so the real pin can wait until the simulation passes.
+ */
+export const TOKEN_CREATE_PREFLIGHT_METADATA_URI =
+  "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/metadata.json";
 
 export type TokenMetadataInput = {
   name: string;
@@ -54,8 +61,9 @@ export function buildTokenMetadata(input: TokenMetadataInput): TokenMetadata {
   if (name.length < 1 || name.length > TOKEN_NAME_MAX) throw new TokenMetadataError("invalid_name");
   const symbol = text(input.symbol, "invalid_symbol");
   if (symbol.length < 1 || symbol.length > TOKEN_SYMBOL_MAX) throw new TokenMetadataError("invalid_symbol");
-  const description = input.description === undefined ? "" : text(input.description, "invalid_description");
-  if (description.length > TOKEN_DESCRIPTION_MAX) throw new TokenMetadataError("invalid_description");
+  const provided = input.description === undefined ? "" : text(input.description, "invalid_description");
+  if (provided.length > TOKEN_DESCRIPTION_MAX) throw new TokenMetadataError("invalid_description");
+  const description = provided.length > 0 ? provided : `${name} (${symbol}) token on PEOPLE`;
   const hasImage = input.image !== undefined && input.image !== null && input.image !== "";
   if (hasImage && !isAllowedMediaUri(input.image)) throw new TokenMetadataError("invalid_image_uri");
   return {
@@ -84,6 +92,43 @@ export function isTokenMetadataUri(uri: unknown): uri is string {
   if (typeof uri !== "string") return false;
   const parsed = parseIpfsMediaUri(uri);
   return parsed !== null && parsed.path === TOKEN_METADATA_FILENAME;
+}
+
+export class TokenCreateGateError extends Error {
+  readonly reason: "duplicate" | "preflight";
+  constructor(reason: "duplicate" | "preflight") {
+    super(reason);
+    this.name = "TokenCreateGateError";
+    this.reason = reason;
+  }
+}
+
+export type TokenCreatePreflightResult = void | boolean | { ok: boolean };
+
+function preflightFailed(result: TokenCreatePreflightResult): boolean {
+  if (result === false) return true;
+  return typeof result === "object" && result !== null && result.ok === false;
+}
+
+/**
+ * Pins only after both gates pass. An unconfirmed duplicate skips `preflight` and `pin`.
+ * A failing or throwing `preflight` skips `pin`. On success `pin` runs once.
+ */
+export async function pinTokenMetadataAfterChecks(
+  input: TokenMetadataInput,
+  pin: TokenMetadataPin,
+  checks: {
+    duplicates: readonly unknown[];
+    confirmed: boolean;
+    preflight: () => Promise<TokenCreatePreflightResult>;
+  },
+): Promise<string> {
+  if (checks.duplicates.length > 0 && !checks.confirmed) {
+    throw new TokenCreateGateError("duplicate");
+  }
+  const result = await checks.preflight();
+  if (preflightFailed(result)) throw new TokenCreateGateError("preflight");
+  return pinTokenMetadataForCreate(input, pin);
 }
 
 /** Pins the JSON through the injected `pin` and returns the validated `ipfs://<CID>/metadata.json`. */

@@ -1,10 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
+  TokenCreateGateError,
   TokenMetadataError,
   TokenMetadataPinError,
   buildTokenMetadata,
   createTokenWithMetadata,
+  pinTokenMetadataAfterChecks,
   pinTokenMetadataForCreate,
 } from "../src/lib/factory/token-metadata.ts";
 
@@ -25,7 +28,12 @@ test("metadata with a logo carries the image and is pinned verbatim", async () =
       return "0xhash";
     },
   });
-  assert.deepEqual(received, { name: "Neighbourhood", symbol: "NBH", description: "", image: ICON });
+  assert.deepEqual(received, {
+    name: "Neighbourhood",
+    symbol: "NBH",
+    description: "Neighbourhood (NBH) token on PEOPLE",
+    image: ICON,
+  });
   assert.equal(out.metadataURI, `ipfs://${CID}/metadata.json`);
   assert.equal(created, `ipfs://${CID}/metadata.json`);
   assert.equal(out.result, "0xhash");
@@ -115,4 +123,93 @@ test("invalid fields and blob:/data: images are rejected with typed codes", asyn
     assert.equal(pinCalls, 0);
   }
   assert.equal(buildTokenMetadata({ name: "N", symbol: "X", image: "https://example.com/a.png" }).image, "https://example.com/a.png");
+});
+
+test("a blank description becomes the token default and other text is kept trimmed", () => {
+  assert.equal(buildTokenMetadata({ name: " Plain ", symbol: "PLN" }).description, "Plain (PLN) token on PEOPLE");
+  assert.equal(
+    buildTokenMetadata({ name: "Plain", symbol: "PLN", description: " \n\t " }).description,
+    "Plain (PLN) token on PEOPLE",
+  );
+  assert.equal(
+    buildTokenMetadata({ name: "Plain", symbol: "PLN", description: "  Kept text  " }).description,
+    "Kept text",
+  );
+});
+
+test("an unconfirmed duplicate does not pin", async () => {
+  let pins = 0;
+  let preflights = 0;
+  await assert.rejects(
+    pinTokenMetadataAfterChecks(
+      { name: "Plain", symbol: "PLN" },
+      async () => {
+        pins += 1;
+        return `ipfs://${CID}/metadata.json`;
+      },
+      {
+        duplicates: [{ address: "0x1111111111111111111111111111111111111111" }],
+        confirmed: false,
+        preflight: async () => {
+          preflights += 1;
+          return true;
+        },
+      },
+    ),
+    (err) => err instanceof TokenCreateGateError && err.reason === "duplicate",
+  );
+  assert.equal(pins, 0);
+  assert.equal(preflights, 0);
+});
+
+test("a failed preflight does not pin", async () => {
+  const failures = [
+    async () => false,
+    async () => ({ ok: false }),
+    async () => {
+      throw new Error("simulated revert");
+    },
+  ];
+  for (const preflight of failures) {
+    let pins = 0;
+    await assert.rejects(
+      pinTokenMetadataAfterChecks(
+        { name: "Plain", symbol: "PLN" },
+        async () => {
+          pins += 1;
+          return `ipfs://${CID}/metadata.json`;
+        },
+        { duplicates: [], confirmed: false, preflight },
+      ),
+    );
+    assert.equal(pins, 0);
+  }
+});
+
+test("a passing preflight pins exactly once", async () => {
+  const order = [];
+  const uri = await pinTokenMetadataAfterChecks(
+    { name: "Plain", symbol: "PLN", description: "   " },
+    async (json) => {
+      order.push("pin");
+      assert.equal(json.description, "Plain (PLN) token on PEOPLE");
+      return `ipfs://${CID}/metadata.json`;
+    },
+    {
+      duplicates: [{ address: "0x1111111111111111111111111111111111111111" }],
+      confirmed: true,
+      preflight: async () => {
+        order.push("preflight");
+        return true;
+      },
+    },
+  );
+  assert.deepEqual(order, ["preflight", "pin"]);
+  assert.equal(uri, `ipfs://${CID}/metadata.json`);
+});
+
+test("the launch form pins metadata only through the post-check helper", () => {
+  const src = readFileSync(new URL("../src/components/factory/EvmTokenLaunch.tsx", import.meta.url), "utf8");
+  assert.match(src, /pinTokenMetadataAfterChecks/);
+  assert.doesNotMatch(src, /pinTokenMetadataForCreate/);
 });

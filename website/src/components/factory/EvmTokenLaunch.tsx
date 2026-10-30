@@ -14,7 +14,7 @@ import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/con
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
-import { TxPreflightError, preflightAndSend } from "@/lib/evm/tx-preflight";
+import { TxPreflightError, preflightAndSend, preflightTx } from "@/lib/evm/tx-preflight";
 import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
 import { networkJson } from "@/lib/network-client";
@@ -25,7 +25,12 @@ import {
 } from "@/lib/created-tokens";
 import { uploadTokenIcon } from "@/lib/token-icon-upload";
 import { findDuplicateTokens, loadDuplicateCatalog } from "@/lib/factory/token-duplicates";
-import { pinTokenMetadataForCreate } from "@/lib/factory/token-metadata";
+import {
+  TOKEN_CREATE_PREFLIGHT_METADATA_URI,
+  TokenCreateGateError,
+  TokenMetadataPinError,
+  pinTokenMetadataAfterChecks,
+} from "@/lib/factory/token-metadata";
 import { pinTokenMetadata } from "@/lib/token-metadata-client";
 import { TokenIconUpload } from "./TokenIconUpload";
 import {
@@ -65,6 +70,11 @@ class ReceiptTimeoutError extends Error {
     super("receipt timeout");
     this.name = "ReceiptTimeoutError";
   }
+}
+
+function isSenderBalanceMiss(message: string): boolean {
+  const text = message.toLowerCase();
+  return text.includes("insufficient funds") || text.includes("exceeds the balance");
 }
 
 function formatPplWei(wei: bigint): string {
@@ -342,17 +352,104 @@ export function EvmTokenLaunch() {
         }
       }
 
-      // Always pin the metadata JSON before any transaction: nothing is sent (or charged) if it fails.
+      if (payWith !== "PPL") {
+        const stableReady = stableAssets.find((asset) => asset.id === payWith);
+        if (!stableReady || !gateway || stableFeeUsd6 === null) {
+          setError(form.stableFeeBuybackNote);
+          return;
+        }
+      }
+
+      // Simulate first. Pin the metadata JSON only after that passes, so a revert never uploads it.
       setStage("uploading");
       let metadataURI: string;
       try {
-        metadataURI = await pinTokenMetadataForCreate(
+        metadataURI = await pinTokenMetadataAfterChecks(
           { name, symbol: symbol.trim().toUpperCase(), image: iconImage || undefined },
           (json) => pinTokenMetadata(json),
+          {
+            duplicates: existing,
+            confirmed: confirmDuplicate,
+            preflight: async () => {
+              const factory = dep.contracts.tokenFactory as `0x${string}`;
+              const fee = await client.readContract({
+                address: factory,
+                abi: factoryAbi,
+                functionName: "tokenCreateFee",
+              });
+              let credit = BigInt(0);
+              try {
+                credit = await client.readContract({
+                  address: factory,
+                  abi: factoryLaunchAbi,
+                  functionName: "prepaidCredit",
+                  args: [signer.address],
+                });
+              } catch {
+                credit = BigInt(0);
+              }
+              const payingWithStable = payWith !== "PPL";
+              const createValue = requiredFeeValue(fee, credit);
+              if (payingWithStable && credit < fee && gateway) {
+                const stable = stableAssets.find((asset) => asset.id === payWith);
+                if (!stable) throw new Error("stable_fee_unavailable");
+                const pay = await preflightTx(
+                  client,
+                  {
+                    account: signer.address,
+                    to: gateway,
+                    data: encodeFunctionData({
+                      abi: stableFeeGatewayAbi,
+                      functionName: "payLaunchFee",
+                      args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
+                    }),
+                  },
+                  { abi: CREATE_FLOW_ERRORS_ABI },
+                );
+                if (!pay.ok) throw new TxPreflightError(pay.reason);
+              }
+              const created = await preflightTx(
+                client,
+                {
+                  account: signer.address,
+                  to: factory,
+                  data: encodeFunctionData({
+                    abi: factoryLaunchAbi,
+                    functionName: "createToken",
+                    args: [
+                      name.trim(),
+                      symbol.trim().toUpperCase(),
+                      LAUNCH_DECIMALS,
+                      total,
+                      TOKEN_CREATE_PREFLIGHT_METADATA_URI,
+                      promoBps,
+                      leftoverMode,
+                    ],
+                  }),
+                  value: createValue,
+                },
+                { abi: CREATE_FLOW_ERRORS_ABI },
+              );
+              if (!created.ok) {
+                // A stable payer does not hold the PPL shortfall; that value is only on the simulation.
+                if (payingWithStable && createValue > BigInt(0) && isSenderBalanceMiss(created.reason.message)) return;
+                if (isSenderBalanceMiss(created.reason.message)) throw new Error(created.reason.message);
+                throw new TxPreflightError(created.reason);
+              }
+            },
+          },
         );
-      } catch {
-        setError(u.tokenMetadataErrPin);
-        return;
+      } catch (err) {
+        if (err instanceof TokenCreateGateError && err.reason === "duplicate") {
+          setError(u.tokenDuplicateTitle);
+          return;
+        }
+        if (err instanceof TxPreflightError) throw err;
+        if (err instanceof TokenMetadataPinError) {
+          setError(u.tokenMetadataErrPin);
+          return;
+        }
+        throw err;
       }
 
       let stableFeePaid = false;
