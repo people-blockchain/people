@@ -48,6 +48,8 @@
   "pool": "Fondo",
   "noTx": "Aún no hay transacciones: haz la primera en tu billetera",
   "loadMore": "Cargar más",
+  "historyLoadingOlder": "Cargando el historial anterior…",
+  "historyPartial": "Historial cargado solo en parte",
   "several": "Varios destinatarios",
   "yourBalance": "Tu saldo: {amount} PPL",
   "notEnoughFee": "No tienes PPL suficiente para la comisión. Consigue PPL de prueba en tu billetera.",

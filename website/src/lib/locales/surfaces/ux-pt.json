@@ -48,6 +48,8 @@
   "pool": "Pool",
   "noTx": "Ainda não há transações — faça a primeira na sua carteira",
   "loadMore": "Carregar mais",
+  "historyLoadingOlder": "A carregar o histórico mais antigo…",
+  "historyPartial": "Histórico carregado em parte",
   "several": "Vários destinatários",
   "yourBalance": "Seu saldo: {amount} PPL",
   "notEnoughFee": "PPL insuficiente para a taxa. Obtenha PPL de teste na sua carteira.",

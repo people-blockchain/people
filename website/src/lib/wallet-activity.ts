@@ -39,3 +39,47 @@ export function maxTransferAmount(balance: number, fee: number): string {
   // Round down so floating-point subtraction cannot overspend the account.
   return String(Math.max(0, Math.floor((balance - fee) * 1e8) / 1e8));
 }
+
+export type ParsedHistory = {
+  items: WalletOperation[];
+  hasMore: boolean;
+  partial: boolean;
+  nextBeforeBlock?: number;
+};
+
+function historyTimestamp(value: unknown, now: number): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : now;
+}
+
+/** Accept a legacy array or the `{ items, hasMore, partial, nextBeforeBlock }` page. */
+export function parseHistoryResponse(body: unknown, now = Date.now()): ParsedHistory {
+  const record = body && typeof body === "object" && !Array.isArray(body) ? body as Record<string, unknown> : null;
+  const raw = Array.isArray(body) ? body : Array.isArray(record?.items) ? record.items : [];
+  const items: WalletOperation[] = [];
+  for (const row of raw) {
+    if (!row || typeof row !== "object") continue;
+    const tx = row as Record<string, unknown>;
+    if (typeof tx.id !== "string" || typeof tx.from !== "string") continue;
+    const item: WalletOperation = {
+      id: tx.id,
+      from: tx.from,
+      to: typeof tx.to === "string" ? tx.to : "",
+      amount: typeof tx.amount === "number" && Number.isFinite(tx.amount) ? tx.amount : 0,
+      fee: typeof tx.fee === "number" && Number.isFinite(tx.fee) ? tx.fee : 0,
+      timestamp: historyTimestamp(tx.timestamp, now),
+      type: typeof tx.type === "string" ? tx.type : "transfer",
+    };
+    if (typeof tx.nonce === "number") item.nonce = tx.nonce;
+    if (typeof tx.assetId === "string") item.assetId = tx.assetId;
+    if (typeof tx.blockHeight === "number") item.blockHeight = tx.blockHeight;
+    if (tx.payload && typeof tx.payload === "object") item.payload = tx.payload as Record<string, unknown>;
+    items.push(item);
+  }
+  const nextBeforeBlock = typeof record?.nextBeforeBlock === "number" ? record.nextBeforeBlock : undefined;
+  return {
+    items,
+    hasMore: Boolean(record?.hasMore),
+    partial: Boolean(record?.partial || record?.truncated),
+    ...(nextBeforeBlock !== undefined ? { nextBeforeBlock } : {}),
+  };
+}

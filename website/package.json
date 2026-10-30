@@ -20,7 +20,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "test:audit": "node --import ./scripts/node-test-paths.mjs --experimental-strip-types --test scripts/audit-signing.test.mjs scripts/amm-math.test.mjs scripts/audit-copy.test.mjs",
-    "test:explorer-live": "node --import ./scripts/node-test-paths.mjs --experimental-strip-types --test scripts/explorer-live.test.mjs scripts/evm-explorer-live.test.mjs scripts/evm-explorer-batch.test.mjs scripts/evm-explorer-blocks.test.mjs scripts/evm-explorer-transactions.test.mjs",
+    "test:explorer-live": "node --import ./scripts/node-test-paths.mjs --experimental-strip-types --test scripts/explorer-live.test.mjs scripts/evm-explorer-live.test.mjs scripts/evm-explorer-batch.test.mjs scripts/evm-explorer-blocks.test.mjs scripts/evm-explorer-transactions.test.mjs scripts/address-history.test.mjs",
     "test:token-explorer": "node --import ./scripts/node-test-paths.mjs --experimental-strip-types --test scripts/token-explorer.test.mjs scripts/archive-block-time.test.mjs"
   },
   "dependencies": {

@@ -246,6 +246,39 @@ export function TxView({ id }: { id: string }) {
   );
 }
 
+type AddressTxRow = {
+  id: string;
+  type?: string;
+  amount?: number;
+  fee?: number;
+  assetId?: string;
+  from?: string;
+  to?: string;
+  blockHeight?: number;
+  payload?: Record<string, unknown> | null;
+};
+
+type AddressTxPage = {
+  items: AddressTxRow[];
+  hasMore: boolean;
+  nextBeforeBlock?: number;
+  incoming?: number;
+  partial: boolean;
+};
+
+function readAddressTxPage(body: unknown): AddressTxPage {
+  if (Array.isArray(body)) return { items: body as AddressTxRow[], hasMore: false, partial: false };
+  const record = body && typeof body === "object" ? body as Record<string, unknown> : {};
+  const nextBeforeBlock = typeof record.nextBeforeBlock === "number" ? record.nextBeforeBlock : undefined;
+  return {
+    items: Array.isArray(record.items) ? record.items as AddressTxRow[] : [],
+    hasMore: Boolean(record.hasMore),
+    ...(nextBeforeBlock !== undefined ? { nextBeforeBlock } : {}),
+    ...(typeof record.incoming === "number" ? { incoming: record.incoming } : {}),
+    partial: Boolean(record.partial || record.truncated),
+  };
+}
+
 export function AddressView({ address }: { address: string }) {
   const { lang } = useLanguage();
   const t = explorerCopy[lang];
@@ -258,7 +291,7 @@ export function AddressView({ address }: { address: string }) {
     incomingTxs?: number;
     outgoingTxs?: number;
   } | null>(null);
-  const [txs, setTxs] = useState<Array<{ id: string; type?: string; amount?: number; fee?: number; assetId?: string; from?: string; to?: string; blockHeight?: number; payload?: Record<string, unknown> | null }>>([]);
+  const [txs, setTxs] = useState<AddressTxRow[]>([]);
   const [nfts, setNfts] = useState<Array<{ nftId: string; name: string }>>([]);
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [txsLoading, setTxsLoading] = useState(true);
@@ -267,6 +300,7 @@ export function AddressView({ address }: { address: string }) {
   const [hasMore, setHasMore] = useState(false);
   const [nextBeforeBlock, setNextBeforeBlock] = useState<number | undefined>(undefined);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [historyNote, setHistoryNote] = useState<null | "loading" | "partial">(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -307,51 +341,67 @@ export function AddressView({ address }: { address: string }) {
     setHasMore(false);
     setNextBeforeBlock(undefined);
     setIncoming(0);
-    void networkJson<{
-      items?: typeof txs;
-      hasMore?: boolean;
-      nextBeforeBlock?: number;
-      incoming?: number;
-    }>(`address/${encodeURIComponent(address)}/transactions?limit=30`, { signal: controller.signal })
-      .then((body) => {
+    setHistoryNote(null);
+    void (async () => {
+      let before: number | undefined;
+      let combined: AddressTxRow[] = [];
+      let partial = false;
+      let hasMorePage = false;
+      let next: number | undefined;
+      let incomingCount = 0;
+      for (let round = 0; round < 4; round++) {
         if (controller.signal.aborted) return;
-        const items = Array.isArray(body) ? body : body.items ?? [];
-        setTxs(items);
-        setHasMore(Boolean(!Array.isArray(body) && body.hasMore));
-        setNextBeforeBlock(!Array.isArray(body) ? body.nextBeforeBlock : undefined);
-        if (!Array.isArray(body) && typeof body.incoming === "number") setIncoming(body.incoming);
-        setTxsLoading(false);
-      })
-      .catch(() => {
+        if (round > 0) setHistoryNote("loading");
+        const qs = before === undefined ? "limit=30" : `limit=30&beforeBlock=${before}`;
+        const body = await networkJson<unknown>(
+          `address/${encodeURIComponent(address)}/transactions?${qs}`,
+          { signal: controller.signal },
+        );
         if (controller.signal.aborted) return;
-        setTxs([]);
-        setTxsLoading(false);
-      });
+        const page = readAddressTxPage(body);
+        const seen = new Set(combined.map((tx) => tx.id));
+        combined = [...combined, ...page.items.filter((tx) => !seen.has(tx.id))];
+        partial = page.partial;
+        hasMorePage = page.hasMore;
+        next = page.nextBeforeBlock;
+        if (typeof page.incoming === "number") incomingCount = Math.max(incomingCount, page.incoming);
+        if (!partial || combined.length > 0 || next === undefined || next === before) break;
+        before = next;
+      }
+      if (controller.signal.aborted) return;
+      setTxs(combined);
+      setHasMore(hasMorePage);
+      setNextBeforeBlock(next);
+      setIncoming(incomingCount);
+      setHistoryNote(partial ? "partial" : null);
+      setTxsLoading(false);
+    })().catch(() => {
+      if (controller.signal.aborted) return;
+      setTxs([]);
+      setHistoryNote(null);
+      setTxsLoading(false);
+    });
     return () => controller.abort();
   }, [address]);
 
   const loadMore = () => {
     if (!hasMore || loadingMore || nextBeforeBlock === undefined) return;
     setLoadingMore(true);
-    void networkJson<{
-      items?: typeof txs;
-      hasMore?: boolean;
-      nextBeforeBlock?: number;
-      incoming?: number;
-    }>(
+    void networkJson<unknown>(
       `address/${encodeURIComponent(address)}/transactions?limit=30&beforeBlock=${nextBeforeBlock}`,
     )
       .then((body) => {
-        const items = Array.isArray(body) ? body : body.items ?? [];
+        const page = readAddressTxPage(body);
         setTxs((prev) => {
           const seen = new Set(prev.map((t) => t.id));
-          return [...prev, ...items.filter((t) => !seen.has(t.id))];
+          return [...prev, ...page.items.filter((t) => !seen.has(t.id))];
         });
-        setHasMore(Boolean(!Array.isArray(body) && body.hasMore));
-        setNextBeforeBlock(!Array.isArray(body) ? body.nextBeforeBlock : undefined);
-        if (!Array.isArray(body) && typeof body.incoming === "number") {
-          setIncoming((prev) => Math.max(prev, body.incoming ?? 0));
+        setHasMore(page.hasMore);
+        setNextBeforeBlock(page.nextBeforeBlock);
+        if (typeof page.incoming === "number") {
+          setIncoming((prev) => Math.max(prev, page.incoming ?? 0));
         }
+        setHistoryNote(page.partial ? "partial" : null);
       })
       .catch(() => {
         setHasMore(false);
@@ -406,9 +456,11 @@ export function AddressView({ address }: { address: string }) {
         ))}
       </ul>
       <h2 className="mt-8 font-bold">{t.transactions}</h2>
+      {txsLoading && historyNote === "loading" ? <p role="status" className="mt-2 text-sm text-ink-3">{u.historyLoadingOlder}</p> : null}
       {txsLoading ? <PeopleLoader /> : null}
+      {!txsLoading && historyNote === "partial" ? <p role="status" className="mt-2 text-sm text-ink-3">{u.historyPartial}</p> : null}
       <ul className="mt-2 space-y-2 text-sm">
-        {!txsLoading && txs.length === 0 ? <li className="text-ink-3">{u.noTx}</li> : null}
+        {!txsLoading && txs.length === 0 && historyNote !== "partial" ? <li className="text-ink-3">{u.noTx}</li> : null}
         {txs.map((tx) => (
           <li key={tx.id}>
             <Link href={`/explorer/tx/${encodeURIComponent(tx.id)}`} className="font-mono text-brand hover:underline">
