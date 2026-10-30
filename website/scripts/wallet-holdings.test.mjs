@@ -24,7 +24,7 @@ const word = (v) => `0x${BigInt(v).toString(16).padStart(64, "0")}`;
 const HEAD = 480_000;
 const OWNER = "0x1111111111111111111111111111111111111111";
 const OTHER = "0x2222222222222222222222222222222222222222";
-const TOKEN = "0xd2dd2666990a77921e034f44ec920d6b49390ba9";
+const TOKEN = "0x7777777777777777777777777777777777777777";
 const COLLECTION = "0xead74edb323da357b1ea37180bb48bf1f7b4d582";
 const pad = (a) => `0x${a.slice(2).padStart(64, "0")}`;
 
