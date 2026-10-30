@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { networkJson } from "@/lib/network-client";
+import { loadExplorerRead, showNetworkUnavailable } from "@/lib/explorer-load";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { AssetImage } from "@/components/ui/AssetImage";
@@ -46,14 +47,19 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
 
   useEffect(() => {
     let alive = true;
-    void networkJson<TokenRow[]>("assets")
-      .then((body) => { if (alive) setItems(Array.isArray(body) ? visibleAssets(body) : []); })
-      // A failed background refresh must not replace the prefetched rows with an error notice.
-      .catch(() => { if (alive && !prefetched) setFailed(true); })
+    // Assets and pools are independent. A failed pool read must not badge the token list, and a
+    // failed asset read must not badge it either once rows (including a prefetch) are on screen.
+    void loadExplorerRead((signal) => networkJson<TokenRow[]>("assets", { signal }))
+      .then((result) => {
+        if (!alive) return;
+        if (result.ok) setItems(Array.isArray(result.value) ? visibleAssets(result.value) : []);
+        else if (!result.missing && !prefetched) setFailed(true);
+      })
       .finally(() => { if (alive) setLoading(false); });
-    void networkJson<PoolRow[]>("liquidity-pools")
-      .then((body) => setPools(Array.isArray(body) ? visiblePools(body) : []))
-      .catch(() => { if (alive && !prefetched) setPools([]); });
+    void loadExplorerRead((signal) => networkJson<PoolRow[]>("liquidity-pools", { signal }))
+      .then((result) => {
+        if (alive && result.ok) setPools(Array.isArray(result.value) ? visiblePools(result.value) : []);
+      });
     return () => { alive = false; };
   }, [prefetched]);
 
@@ -67,10 +73,10 @@ export function TokenList({ initialAssets, initialPools }: { initialAssets?: Tok
       <div className="mt-4">
         <NetworkStatus />
       </div>
-      {failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
+      {showNetworkUnavailable(failed, items.length) ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
       {loading ? <SkeletonRows /> : null}
       <ul className="mt-6 divide-y divide-line rounded-2xl border border-line" data-testid="token-list" aria-busy={loading} hidden={loading}>
-        {!loading && !failed && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
+        {!loading && !showNetworkUnavailable(failed, items.length) && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
         {items.map((asset) => {
           const decimals = assetDecimals(asset);
           const isNative = asset.assetId === "ppl";
@@ -146,10 +152,12 @@ export function NftList({ initialNfts }: { initialNfts?: NftRow[] } = {}) {
   const [failed, setFailed] = useState(false);
   useEffect(() => {
     let alive = true;
-    void networkJson<NftRow[]>("nfts")
-      .then((body) => { if (alive) setItems(Array.isArray(body) ? visibleNfts(body) : []); })
-      // A failed background refresh must not replace the prefetched rows with an error notice.
-      .catch(() => { if (alive && !prefetched) setFailed(true); })
+    void loadExplorerRead((signal) => networkJson<NftRow[]>("nfts", { signal }))
+      .then((result) => {
+        if (!alive) return;
+        if (result.ok) setItems(Array.isArray(result.value) ? visibleNfts(result.value) : []);
+        else if (!result.missing && !prefetched) setFailed(true);
+      })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
   }, [prefetched]);
@@ -164,10 +172,10 @@ export function NftList({ initialNfts }: { initialNfts?: NftRow[] } = {}) {
       <div className="mt-4">
         <NetworkStatus />
       </div>
-      {failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
+      {showNetworkUnavailable(failed, items.length) ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
       {loading ? <SkeletonRows /> : null}
       <ul className="mt-6 divide-y divide-line rounded-2xl border border-line" aria-busy={loading} hidden={loading}>
-        {!loading && !failed && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
+        {!loading && !showNetworkUnavailable(failed, items.length) && items.length === 0 ? <li className="px-4 py-3 text-sm text-ink-3">{t.empty}</li> : null}
         {items.map((nft) => {
           const creator = nft.creator ?? nft.owner;
           return (

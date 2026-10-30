@@ -367,8 +367,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     const stats = new Map<string, NftCollectionStats>();
     await Promise.all(
       collections.map(async (collection) => {
-        stats.set(collection.toLowerCase(), await nftCollectionStats(collection));
-      })
+        try {
+          stats.set(collection.toLowerCase(), await nftCollectionStats(collection));
+        } catch {
+          // One collection's stats must not fail the NFT list that was already read.
+          stats.set(collection.toLowerCase(), {});
+        }
+      }),
     );
     return {
       status: 200,

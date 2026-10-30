@@ -132,10 +132,26 @@ test('cleanup rejects pending reads without updating UI or reconnecting', async 
   assert.deepEqual(phases, ['checking']); assert.equal(feeds.length, 0); assert.equal(s.closed, true);
 });
 
-test('malformed block responses fail instead of marking fabricated empty data online', async t => {
-  const { sockets: [s], phases, feeds } = setup(t, { holdBlocks: true });
-  s.onopen(); await flush(); s.reply(s.sent.at(-1).id, null); await flush();
-  assert.equal(phases.at(-1), 'offline'); assert.equal(feeds.length, 0);
+test('one malformed block is skipped; the rest of the batch still comes online', async t => {
+  const { sockets: [s], phases, feeds } = setup(t, { holdBlocks: true, head: 4 });
+  s.onopen(); await flush();
+  const reads = s.sent.filter(r => r.method === 'eth_getBlockByNumber');
+  assert.equal(reads.length, 4);
+  s.reply(reads.at(-1).id, null);
+  for (const request of reads.slice(0, -1)) s.blockReply(request);
+  await flush();
+  assert.equal(phases.at(-1), 'online');
+  assert.equal(feeds.at(-1).blocks.length, 3);
+  assert.equal(feeds.at(-1).blocks.some(block => block.header.height === 1), false);
+});
+
+test('a batch of only malformed blocks stays offline instead of fabricating an empty feed', async t => {
+  const { sockets: [s], phases, feeds } = setup(t, { holdBlocks: true, head: 4 });
+  s.onopen(); await flush();
+  for (const request of s.sent.filter(r => r.method === 'eth_getBlockByNumber')) s.reply(request.id, null);
+  await flush();
+  assert.equal(phases.at(-1), 'offline');
+  assert.equal(feeds.length, 0);
 });
 
 test('pending block request times out and cannot leave a stuck connecting state', async t => {
@@ -144,11 +160,35 @@ test('pending block request times out and cannot leave a stuck connecting state'
   assert.equal(phases.at(-1), 'offline'); assert.equal(s.closed, true); assert.equal(feeds.length, 0);
 });
 
-test('RPC error responses mark the connection offline', async t => {
-  const { sockets: [s], phases } = setup(t, { holdBlocks: true });
+test('one RPC error keeps the blocks that loaded', async t => {
+  const { sockets: [s], phases, feeds } = setup(t, { holdBlocks: true, head: 4 });
   s.onopen(); await flush();
-  s.receive({ id: s.sent.at(-1).id, error: { code: -32000, message: 'unavailable' } }); await flush();
+  const reads = s.sent.filter(r => r.method === 'eth_getBlockByNumber');
+  s.receive({ id: reads.at(-1).id, error: { code: -32000, message: 'unavailable' } });
+  for (const request of reads.slice(0, -1)) s.blockReply(request);
+  await flush();
+  assert.equal(phases.at(-1), 'online');
+  assert.equal(feeds.at(-1).blocks.length, 3);
+});
+
+test('every block read in the opening batch failing marks the feed offline', async t => {
+  const { sockets: [s], phases, feeds } = setup(t, { holdBlocks: true, head: 4 });
+  s.onopen(); await flush();
+  for (const request of s.sent.filter(r => r.method === 'eth_getBlockByNumber')) {
+    s.receive({ id: request.id, error: { code: -32000, message: 'unavailable' } });
+  }
+  await flush();
   assert.equal(phases.at(-1), 'offline');
+  assert.equal(feeds.length, 0);
+});
+
+test('the unavailable badge is withheld once any block or transaction is on screen', async () => {
+  const { explorerHomePhase } = await import('../src/lib/evm/explorer-live.ts');
+  assert.equal(explorerHomePhase('offline', 0, 0), 'offline');
+  assert.equal(explorerHomePhase('offline', 2, 0), 'online');
+  assert.equal(explorerHomePhase('offline', 0, 1), 'online');
+  assert.equal(explorerHomePhase('checking', 2, 0), 'checking');
+  assert.equal(explorerHomePhase('online', 0, 0), 'online');
 });
 
 
