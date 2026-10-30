@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Este arquivo é maior que 25 MB.",
+  "unsupportedFormat": "Este formato de arquivo não é suportado.",
+  "linkExpired": "O link de envio expirou. Tente o envio outra vez.",
+  "sha256Mismatch": "O arquivo enviado não confere com a soma de verificação. Tente o envio outra vez.",
+  "rateLimited": "Envios demais. Espere alguns minutos e tente de novo.",
+  "network": "Problema de rede. Verifique a conexão e tente de novo.",
+  "walletRejected": "A carteira recusou a assinatura. Nada foi enviado.",
+  "nonceUsed": "Esta autorização de envio já foi usada. Tente o envio outra vez.",
+  "nonceExpired": "Esta autorização de envio expirou. Tente o envio outra vez.",
+  "nonceMissing": "Esta autorização de envio não é válida. Tente o envio outra vez.",
+  "contentMismatch": "O conteúdo do arquivo não corresponde ao tipo. O envio foi recusado.",
+  "sizeMismatch": "O tamanho do arquivo guardado não confere. O envio foi recusado.",
+  "storageUnavailable": "O armazenamento de arquivos não está disponível agora. Tente mais tarde.",
+  "pinFailed": "Não foi possível guardar o arquivo. Tente o envio outra vez.",
+  "badSignature": "A assinatura da carteira não confere com este envio. Tente o envio outra vez.",
+  "verifyUnavailable": "O arquivo foi guardado, mas ainda não pôde ser verificado. Tente o envio outra vez.",
+  "invalidRequest": "O pedido de envio não é válido. Tente o envio outra vez."
+}

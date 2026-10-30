@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "此文件大于 25 MB。",
+  "unsupportedFormat": "不支持此文件格式。",
+  "linkExpired": "上传链接已过期。请重新上传。",
+  "sha256Mismatch": "已上传的文件与校验和不一致。请重新上传。",
+  "rateLimited": "上传次数过多。请等待几分钟后再试。",
+  "network": "网络出现问题。请检查连接后再试。",
+  "walletRejected": "钱包拒绝了签名。没有上传任何内容。",
+  "nonceUsed": "此上传授权已被使用。请重新上传。",
+  "nonceExpired": "此上传授权已过期。请重新上传。",
+  "nonceMissing": "此上传授权无效。请重新上传。",
+  "contentMismatch": "文件内容与类型不符。上传已被拒绝。",
+  "sizeMismatch": "已保存文件的大小不一致。上传已被拒绝。",
+  "storageUnavailable": "文件存储目前不可用。请稍后再试。",
+  "pinFailed": "文件未能保存。请重新上传。",
+  "badSignature": "钱包签名与此次上传不符。请重新上传。",
+  "verifyUnavailable": "文件已保存，但暂时无法完成检查。请重新上传。",
+  "invalidRequest": "上传请求无效。请重新上传。"
+}

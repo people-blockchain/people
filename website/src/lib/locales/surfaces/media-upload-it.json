@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "Questo file supera i 25 MB.",
+  "unsupportedFormat": "Questo formato di file non è supportato.",
+  "linkExpired": "Il link di caricamento è scaduto. Ripeti il caricamento.",
+  "sha256Mismatch": "Il file caricato non corrisponde al checksum. Ripeti il caricamento.",
+  "rateLimited": "Troppi caricamenti. Attendi qualche minuto e riprova.",
+  "network": "Problema di rete. Controlla la connessione e riprova.",
+  "walletRejected": "Il portafoglio ha rifiutato la firma. Non è stato caricato nulla.",
+  "nonceUsed": "Questa autorizzazione di caricamento è già stata usata. Ripeti il caricamento.",
+  "nonceExpired": "Questa autorizzazione di caricamento è scaduta. Ripeti il caricamento.",
+  "nonceMissing": "Questa autorizzazione di caricamento non è valida. Ripeti il caricamento.",
+  "contentMismatch": "Il contenuto del file non corrisponde al tipo. Il caricamento è stato rifiutato.",
+  "sizeMismatch": "La dimensione del file salvato non corrisponde. Il caricamento è stato rifiutato.",
+  "storageUnavailable": "L'archivio file non è disponibile in questo momento. Riprova più tardi.",
+  "pinFailed": "Impossibile salvare il file. Ripeti il caricamento.",
+  "badSignature": "La firma del portafoglio non corrisponde a questo caricamento. Ripeti il caricamento.",
+  "verifyUnavailable": "Il file è stato salvato, ma non è ancora stato possibile verificarlo. Ripeti il caricamento.",
+  "invalidRequest": "La richiesta di caricamento non è valida. Ripeti il caricamento."
+}

@@ -1,0 +1,19 @@
+{
+  "fileTooLarge": "This file is larger than 25 MB.",
+  "unsupportedFormat": "This file format is not supported.",
+  "linkExpired": "The upload link expired. Retry the upload.",
+  "sha256Mismatch": "The uploaded file does not match its checksum. Retry the upload.",
+  "rateLimited": "Too many uploads. Wait a few minutes and try again.",
+  "network": "Network problem. Check your connection and try again.",
+  "walletRejected": "The wallet declined the signature. Nothing was uploaded.",
+  "nonceUsed": "This upload approval was already used. Retry the upload.",
+  "nonceExpired": "This upload approval expired. Retry the upload.",
+  "nonceMissing": "This upload approval is not valid. Retry the upload.",
+  "contentMismatch": "The file content does not match its type. The upload was rejected.",
+  "sizeMismatch": "The stored file size does not match. The upload was rejected.",
+  "storageUnavailable": "File storage is not available right now. Try again later.",
+  "pinFailed": "The file could not be stored. Retry the upload.",
+  "badSignature": "The wallet signature does not match this upload. Retry the upload.",
+  "verifyUnavailable": "The file was stored but could not be checked yet. Retry the upload.",
+  "invalidRequest": "The upload request is not valid. Retry the upload."
+}
