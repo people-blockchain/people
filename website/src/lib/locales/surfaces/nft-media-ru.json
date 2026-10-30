@@ -42,6 +42,7 @@
   "storedAt": "Хранится по адресу",
   "metadataLabel": "Метаданные",
   "viewOnPeoplescan": "Открыть в PeopleScan",
+  "viewHere": "Открыть этот NFT",
   "technicalDetails": "Технические подробности",
   "errCoverRequired": "Выберите обложку для видео.",
   "errUnsupportedType": "Этот тип файла не поддерживается. Для изображений используйте PNG, JPEG, WebP, GIF или SVG, для видео — MP4 или WebM.",

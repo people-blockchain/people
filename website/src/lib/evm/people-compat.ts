@@ -11,6 +11,7 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { assembleNftRows, listMintedNfts, readNftTokenOnChain, type ChainNft } from "@/lib/evm/nft-chain";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc, weiToPpl } from "@/lib/evm/rpc-server";
 
@@ -332,8 +333,23 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "nfts") {
-    const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
+    const owner = search.get("owner") ?? undefined;
+    const collection = search.get("collection") ?? undefined;
+    const tokenId = search.get("tokenId") ?? undefined;
+    const seed = listSeedNfts(owner);
+    const minted = owner ? await listMintedNfts(owner).catch(() => []) : [];
+    let direct: ChainNft | null = null;
+    if (owner && collection && tokenId && /^\d+$/.test(tokenId) && isAddress(collection)) {
+      const wantCollection = getAddress(collection).toLowerCase();
+      const indexed = assembleNftRows(seed, minted, null, owner);
+      const hit = indexed.some(
+        (row) =>
+          row.nftId.toLowerCase() === `${wantCollection}:${tokenId}` ||
+          (row.collection?.toLowerCase() === wantCollection && row.onChainTokenId === tokenId),
+      );
+      if (!hit) direct = await readNftTokenOnChain(collection, BigInt(tokenId)).catch(() => null);
+    }
+    const rows = visibleNfts(assembleNftRows(seed, minted, direct, owner, collection, tokenId));
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];

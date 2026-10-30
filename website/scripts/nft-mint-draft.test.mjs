@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createDraftStore, isResumable, planResume } from "../src/lib/nft-mint-draft.ts";
+import { applyConfirmedMint, createDraftStore, isResumable, planResume } from "../src/lib/nft-mint-draft.ts";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
 const base = () => ({
@@ -44,6 +44,20 @@ test("stablecoin payment is paid once: a pay hash is awaited, a finished payment
 
 test("a done draft only shows the result", () => {
   assert.deepEqual(planResume({ ...base(), status: "done", mintTx: "0x2", collection: "0xabc" }), ["show_result"]);
+});
+
+test("a confirmed mint closes the draft so the resume notice cannot return", () => {
+  const open = { ...base(), status: "in_progress", collection: "0xabc", mintTx: "0x2", mintAttempted: true };
+  assert.equal(isResumable(open), true);
+  const done = applyConfirmedMint(open, "0", "0x2");
+  assert.equal(done.status, "done");
+  assert.equal(done.tokenId, "0");
+  assert.equal(done.mintTx, "0x2");
+  assert.equal(done.mintAttempted, false);
+  assert.equal(isResumable(done), false);
+  assert.deepEqual(planResume(done), ["show_result"]);
+  const kept = applyConfirmedMint({ ...open, mintTx: "0x2" }, "0");
+  assert.equal(kept.mintTx, "0x2");
 });
 
 test("resumable means a transaction or collection exists", () => {

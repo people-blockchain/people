@@ -44,6 +44,14 @@ interface AccountView {
   balances: Record<string, number>;
 }
 
+type WalletNft = {
+  nftId: string;
+  name: string;
+  imageUri?: string;
+  collection?: string;
+  onChainTokenId?: string;
+};
+
 interface FaucetFundResult {
   ok?: boolean;
   error?: string;
@@ -90,14 +98,14 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   const [memo, setMemo] = useState("");
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState<{tx:UnsignedTx; display:string; remaining:string; reviewedNative:number; reviewedAsset:number} | null>(null);
-  const [selectedNft, setSelectedNft] = useState<{nftId:string;name:string;imageUri?:string}|null>(null);
+  const [selectedNft, setSelectedNft] = useState<WalletNft | null>(null);
   const [nftTo, setNftTo] = useState("");
   const [walletName, setWalletName] = useState("");
   const [connectOverlay, setConnectOverlay] = useState<null | { mode: WalletOnboardingMode; walletId?: string }>(
     null
   );
   const [account, setAccount] = useState<AccountView | null>(null);
-  const [nfts, setNfts] = useState<Array<{ nftId: string; name: string; imageUri?: string }>>([]);
+  const [nfts, setNfts] = useState<WalletNft[]>([]);
   const [qr, setQr] = useState("");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
@@ -134,7 +142,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         const init = { signal: controller.signal, cache: "no-store" as const };
         const [balance, owned, registry] = await Promise.allSettled([
           networkJson<AccountView>(`address/${address}`, init),
-          networkJson<Array<{ nftId: string; name: string; imageUri?: string }>>(`nfts?owner=${encodeURIComponent(address)}`, init),
+          networkJson<WalletNft[]>(`nfts?owner=${encodeURIComponent(address)}`, init),
           networkJson<TransferAsset[]>("assets", init),
         ]);
         if (stopped) break;
@@ -609,6 +617,11 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
                       <span className="mt-2 block truncate font-semibold">{nft.name}</span>
                       <span className="block truncate font-mono text-xs text-ink-3">{nft.nftId}</span>
                     </button>
+                    {nft.collection && nft.onChainTokenId ? (
+                      <Link href={`/nft/${nft.collection}/${nft.onChainTokenId}`} className="mt-2 inline-block text-xs font-semibold text-brand hover:underline">
+                        {t.nfts} #{nft.onChainTokenId}
+                      </Link>
+                    ) : null}
                   </li>
                 ))}
               </ul>
@@ -668,6 +681,11 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           <p className="my-3 break-all font-mono text-xs">{c.assetId}: {selectedNft.nftId}</p>
           <p className="mb-3 break-all font-mono text-xs">{c.owner}: {session.address}</p>
           <Link href={`/explorer/nfts#${encodeURIComponent(selectedNft.nftId)}`} className="text-sm text-brand">{t.explorer}</Link>
+          {selectedNft.collection && selectedNft.onChainTokenId ? (
+            <Link href={`/nft/${selectedNft.collection}/${selectedNft.onChainTokenId}`} className="mt-2 block text-sm font-semibold text-brand hover:underline">
+              {t.nfts} #{selectedNft.onChainTokenId}
+            </Link>
+          ) : null}
           {nftTransfersEnabled ? (
             <>
               <div className="mt-4">
