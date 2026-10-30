@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { connectExplorer } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
-import { sendNativeTransfer } from "@/lib/evm/wallet-send";
+import { nativeSendGasLimit, quoteMaxNativeSend, readNativeGasPriceWei, sendNativeTransfer, FALLBACK_GAS_PRICE_WEI } from "@/lib/evm/wallet-send";
 import type { Hex } from "viem";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { RecipientField } from "./RecipientField";
@@ -12,11 +12,11 @@ import { WalletDialog } from "./WalletDialog";
 import { WalletHistory } from "./WalletHistory";
 import { WalletConnectPanel } from "./WalletConnectPanel";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
-import { maxTransferAmount, parseWalletAddress, readPending, trackPending } from "@/lib/wallet-activity";
+import { parseWalletAddress, readPending, trackPending } from "@/lib/wallet-activity";
 import { upsertWallet } from "@/lib/wallet-vault";
 import type { UnsignedTx } from "@/lib/people-sign";
 import { formatTokenBalance, validateTransfer, type TransferAsset } from "@/lib/token-transfer";
-import { formatAssetUnits, formatPplExact, formatPplLabeled, fractionOfPplWei, maxSendWei, parsePplInput, readBalanceWei } from "@/lib/asset-amounts";
+import { formatAssetUnits, formatPplExact, formatPplLabeled, maxSendWei, parsePplInput, readBalanceWei } from "@/lib/asset-amounts";
 import { PplAmount } from "@/components/ui/PplAmount";
 import { DEFAULT_TRANSFER_FEE_WEI } from "@/lib/factory-fees";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
@@ -107,6 +107,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   const [amount, setAmount] = useState("");
   const [faucetAmount, setFaucetAmount] = useState("10");
   const [assetId, setAssetId] = useState("ppl");
+  const [gasPriceWei, setGasPriceWei] = useState(FALLBACK_GAS_PRICE_WEI);
   const [assets, setAssets] = useState<TransferAsset[]>([]);
   const [busy, setBusy] = useState(false);
   /** In flight for the one-tap faucet action only (drives its "Requesting…" label). */
@@ -182,6 +183,17 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     };
   }, [session?.address, wsUrl, chainId]);
 
+  useEffect(() => {
+    if (sheet !== "send") return;
+    let stopped = false;
+    void readNativeGasPriceWei().then((price) => {
+      if (!stopped) setGasPriceWei(price);
+    });
+    return () => {
+      stopped = true;
+    };
+  }, [sheet]);
+
   const tokenRows = useMemo(() => {
     const balances = account?.balances ?? {};
     return Object.entries(balances).filter(([id, value]) => id !== "ppl" && Number(value) > 0 && !isHiddenAsset(id));
@@ -191,6 +203,13 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   const selectedSymbol = displaySymbol(assetId, selectedAsset?.symbol, u);
   const selectedBalanceWei = account?.balanceWei ?? BigInt(0);
   const selectedTokenBalance = assetId === "ppl" ? 0 : Number(account?.balances[assetId] ?? 0);
+  const protocolFeeWei = isCosmosEvmChain() ? BigInt(0) : DEFAULT_TRANSFER_FEE_WEI;
+  const nativeSendQuote = quoteMaxNativeSend({
+    balanceWei: selectedBalanceWei,
+    gasPriceWei,
+    gasLimit: nativeSendGasLimit(memo),
+    protocolFeeWei,
+  });
   const sendLabel = t.send.replace(/PPL/g, selectedSymbol);
   const transferErrors: Record<string, string> = {
     address: c.addressError, amount: c.amountError, precision: c.precisionError,
@@ -264,6 +283,14 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       const nativeKnown = parsedWei !== null;
       const legacyBalance = typeof fresh.balance === "number" ? fresh.balance : 0;
       const protocolFeeWei = isCosmosEvmChain() ? BigInt(0) : DEFAULT_TRANSFER_FEE_WEI;
+      const liveGasPriceWei = await readNativeGasPriceWei();
+      setGasPriceWei(liveGasPriceWei);
+      const reserved = quoteMaxNativeSend({
+        balanceWei: freshWei,
+        gasPriceWei: liveGasPriceWei,
+        gasLimit: nativeSendGasLimit(memo),
+        protocolFeeWei,
+      });
       let transferAmount = 0;
       let transferWei = BigInt(0);
       try {
@@ -273,7 +300,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           const parsed = parsePplInput(amount);
           if (parsed === null || parsed <= BigInt(0)) throw new Error("amount");
           if (parsed > freshWei) throw new Error("balance");
-          if (freshWei < protocolFeeWei + parsed) throw new Error("fee");
+          if (freshWei < reserved.feeWei + parsed) throw new Error("fee");
           transferWei = parsed;
         } else if (!nft) {
           transferAmount = validateTransfer({
@@ -304,15 +331,16 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         payload: nft ? {nftId:nft.nftId} : memo ? {memo} : undefined,
       };
       const pplSend = nativeKnown && (nft || assetId === "ppl");
+      const shownFeeWei = !nft && assetId === "ppl" && nativeKnown ? reserved.feeWei : protocolFeeWei;
       setDraft({
         tx,
         amountWei: transferWei,
-        protocolFeeWei,
+        protocolFeeWei: shownFeeWei,
         reviewedWei: freshWei,
         reviewedAsset: fresh.balances?.[tx.assetId ?? "ppl"] ?? 0,
         display: nft ? nft.name : pplSend ? `${formatPplExact(transferWei)} ${selectedSymbol}` : `${formatTokenBalance(transferAmount, selectedAsset?.decimals ?? -1)} ${selectedSymbol}`,
         remaining: pplSend
-          ? `${formatPplExact(maxSendWei(freshWei, protocolFeeWei + transferWei))} PPL`
+          ? `${formatPplExact(maxSendWei(freshWei, shownFeeWei + transferWei))} PPL`
           : `${formatTokenBalance((fresh.balances?.[assetId] ?? 0) - transferAmount, selectedAsset?.decimals ?? -1)} ${selectedSymbol}`,
       });
       setSheet(null);
@@ -441,18 +469,18 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       <RecipientField value={to} onChange={setTo} label={t.to} storageKey={`people-contacts:${chainId}:${session.address}`} disabled={busy} />
       <label className="block text-sm">
         {t.amount}
-        <span className="relative mt-1 block"><input aria-label={t.amount} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} className="w-full rounded-xl border border-line bg-canvas py-2 pl-3 pr-20" /><button type="button" disabled={busy||!account} className="absolute inset-y-0 right-3 text-xs font-semibold text-brand" onClick={()=>setAmount(assetId==="ppl"?maxTransferAmount(selectedBalanceWei, DEFAULT_TRANSFER_FEE_WEI):formatTokenBalance(selectedTokenBalance,selectedAsset?.decimals??-1))}>{u.max}</button></span>
+        <span className="relative mt-1 block"><input aria-label={t.amount} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} className="w-full rounded-xl border border-line bg-canvas py-2 pl-3 pr-20" /><button type="button" disabled={busy||!account} className="absolute inset-y-0 right-3 text-xs font-semibold text-brand" onClick={()=>setAmount(assetId==="ppl"?formatPplExact(nativeSendQuote.maxWei):formatTokenBalance(selectedTokenBalance,selectedAsset?.decimals??-1))}>{u.max}</button></span>
       </label>
       <div className="flex flex-wrap gap-2">
         {[0.25, 0.5, 0.75].map((f) => (
-          <button key={f} type="button" disabled={busy || !account} onClick={() => setAmount(assetId === "ppl" ? formatPplExact(fractionOfPplWei(selectedBalanceWei, DEFAULT_TRANSFER_FEE_WEI, BigInt(f * 100), BigInt(100))) : fractionOfBalance({ fraction: f, pplIn: false, pplBalance: 0, tokenBalance: selectedTokenBalance, decimals: selectedAsset?.decimals ?? 6, fee: DEFAULT_TRANSFER_FEE, pplWholeOnly: false }))} className="min-h-9 rounded-lg border border-line px-2.5 text-xs font-semibold text-ink-2 hover:border-brand disabled:opacity-40">
+          <button key={f} type="button" disabled={busy || !account} onClick={() => setAmount(assetId === "ppl" ? formatPplExact((nativeSendQuote.maxWei * BigInt(f * 100)) / BigInt(100)) : fractionOfBalance({ fraction: f, pplIn: false, pplBalance: 0, tokenBalance: selectedTokenBalance, decimals: selectedAsset?.decimals ?? 6, fee: DEFAULT_TRANSFER_FEE, pplWholeOnly: false }))} className="min-h-9 rounded-lg border border-line px-2.5 text-xs font-semibold text-ink-2 hover:border-brand disabled:opacity-40">
             {f * 100}%
           </button>
         ))}
       </div>
-      <p className="text-xs text-ink-3">{fill(u.maxHint, { fee: formatPplExact(DEFAULT_TRANSFER_FEE_WEI) })}</p>
+      <p className="text-xs text-ink-3">{fill(u.maxHint, { fee: formatPplExact(nativeSendQuote.feeWei) })}</p>
       <label className="block text-sm">{c.memo}<textarea value={memo} maxLength={256} onChange={event=>setMemo(event.target.value)} rows={2} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /><span className="text-xs text-ink-3">{memo.length}/256 · {c.memoPublic}</span></label>
-      <p className="text-xs text-ink-3">{t.fee}: {formatPplExact(DEFAULT_TRANSFER_FEE_WEI)} PPL</p>
+      <p className="text-xs text-ink-3">{t.fee}: {formatPplExact(nativeSendQuote.feeWei)} PPL</p>
       <button type="button" disabled={busy || !account || !to.trim() || !amount.trim() || (assetId !== "ppl" && !selectedAsset)} onClick={() => void doSend(Date.now())} className="w-full rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-brand-ink disabled:opacity-40">
         {c.review}
       </button>
