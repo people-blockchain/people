@@ -145,6 +145,29 @@ export async function resolveFounderNftPerson(
   throw new Error("unreachable");
 }
 
+export type FounderNftPersonLookup =
+  | { kind: "none" }
+  | { kind: "found"; personId: string }
+  | { kind: "conflict" };
+
+/**
+ * Read-only counterpart of `resolveFounderNftPerson`: never creates a person or attaches hashes.
+ * Used by status reads and by rebind, which must only ever target a person that already exists.
+ */
+export async function findFounderNftPerson(nullifiers: readonly string[]): Promise<FounderNftPersonLookup> {
+  const hashes = [...new Set(nullifiers.map(hashStampNullifier))].sort();
+  if (hashes.length === 0) return { kind: "none" };
+  const db = await getDbReady();
+  const matches = await db
+    .select({ stampHash: founderNftStampHashes.stampHash, personId: founderNftStampHashes.personId })
+    .from(founderNftStampHashes)
+    .where(inArray(founderNftStampHashes.stampHash, hashes));
+  const decision = decideFounderNftPerson(hashes, matches);
+  if (decision.kind === "existing") return { kind: "found", personId: decision.personId };
+  if (decision.kind === "conflict") return { kind: "conflict" };
+  return { kind: "none" };
+}
+
 export type HumanPassportStampsLookup =
   | { ok: true; address: string; nullifiers: string[] }
   | { ok: false; error: "not_configured" | "invalid_address" | "verification_failed" };
