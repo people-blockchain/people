@@ -47,6 +47,8 @@ let gatewayBytes;
 let gatewayRange;
 let verifyBodies;
 let gatewayStatus;
+let gatewayStream;
+let gatewayChunks;
 let downloadLinkStatus;
 let publicCid;
 let publicUploads;
@@ -82,6 +84,8 @@ beforeEach(() => {
   gatewayRange = undefined;
   verifyBodies = [];
   gatewayStatus = 200;
+  gatewayStream = false;
+  gatewayChunks = 0;
   downloadLinkStatus = 200;
   publicCid = CID;
   publicUploads = [];
@@ -123,7 +127,24 @@ beforeEach(() => {
     const publicGateway = `https://gateway.pinata.cloud/ipfs/${CID}`;
     if ((target === PRIVATE_BYTES || (legacyPublic && target === publicGateway)) && gatewayBytes) {
       gatewayRange = new Headers(init.headers).get("range");
-      return new Response(gatewayBytes);
+      if (!gatewayStream) return new Response(gatewayBytes);
+      const source = gatewayBytes;
+      const chunkSize = 64 * 1024;
+      let offset = 0;
+      return new Response(
+        new ReadableStream({
+          pull(controller) {
+            if (offset >= source.length) {
+              controller.close();
+              return;
+            }
+            const end = Math.min(offset + chunkSize, source.length);
+            controller.enqueue(Uint8Array.from(source.subarray(offset, end)));
+            offset = end;
+            gatewayChunks += 1;
+          },
+        }),
+      );
     }
     throw new Error(`unexpected fetch ${target}`);
   };
@@ -257,6 +278,72 @@ test("a multi-block file passes when Pinata's DAG size is larger than the declar
   assert.deepEqual(deleted, ["file-1234"]);
   assert.equal(downloadedBytesMatchDeclaration(bytes.length, bytes.length + 80_000, bytes.length, false), true);
   assert.equal(declaredUploadSizeError(DIRECT_UPLOAD_MAX_BYTES + 1), "file_too_large");
+});
+
+function paintPng(bytes) {
+  bytes.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 0);
+}
+
+function paintMp4(bytes) {
+  bytes.write("ftyp", 4, "ascii");
+  bytes.write("isom", 8, "ascii");
+}
+
+function paintWebp(bytes) {
+  bytes.write("RIFF", 0, "ascii");
+  bytes.write("WEBP", 8, "ascii");
+}
+
+test("verify accepts streamed PNG, MP4 and WebP payloads when the private DAG is larger", async () => {
+  gatewayStream = true;
+  const cases = [
+    { kind: "nft-image", mime: "image/png", size: 5_000_000, paint: paintPng },
+    { kind: "nft-video", mime: "video/mp4", size: 20_000_000, paint: paintMp4 },
+    { kind: "nft-image", mime: "image/webp", size: 535_000, paint: paintWebp },
+  ];
+  for (const item of cases) {
+    const bytes = Buffer.alloc(item.size);
+    item.paint(bytes);
+    const sha256 = hash(bytes);
+    const recordSize = bytes.length + Math.ceil(bytes.length * 0.005);
+    assert.ok(recordSize > bytes.length);
+    fileRecord = { id: "file-1234", cid: CID, size: recordSize, mime_type: item.mime };
+    gatewayBytes = bytes;
+    publicUploads.length = 0;
+    deleted.length = 0;
+    deleteCalls.length = 0;
+    gatewayChunks = 0;
+    const res = await verifyRoute(
+      jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: item.kind, sha256, size: bytes.length }),
+    );
+    const body = await res.json();
+    assert.equal(res.status, 200, `${item.mime} ${body.error ?? ""}`);
+    assert.equal(body.size, bytes.length);
+    assert.equal(body.mime, item.mime);
+    assert.equal(body.sha256, sha256);
+    assert.equal(publicUploads.length, 1, item.mime);
+    assert.equal(publicUploads[0].get("network"), "public");
+    assert.equal(publicUploads[0].get("file").size, bytes.length);
+    assert.deepEqual(deleted, ["file-1234"]);
+    assert.equal(deleteCalls[0].url, "https://api.pinata.cloud/v3/files/private/file-1234");
+    assert.ok(gatewayChunks > 1, `${item.mime} bounded read`);
+  }
+
+  publicUploads.length = 0;
+  deleted.length = 0;
+  deleteCalls.length = 0;
+  fileRecord = { id: "file-1234", cid: CID, size: 25_000_001, mime_type: "image/png" };
+  const tooBig = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", {
+      id: "file-1234",
+      kind: "nft-image",
+      sha256: "ab".repeat(32),
+      size: 25_000_001,
+    }),
+  );
+  assert.equal(tooBig.status, 413);
+  assert.equal((await tooBig.json()).error, "file_too_large");
+  assert.equal(publicUploads.length, 0);
 });
 
 test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected", async () => {

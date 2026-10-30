@@ -27,6 +27,14 @@ const text = (s) => new TextEncoder().encode(s);
 const CID_V1 = "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 const CID_V0 = "QmYwAPJzv5CZsnA625s3Xv2gteR83C12YCZqGbv3bdgqm4";
 
+test("NftMediaPicker accept includes GIF and WebP", () => {
+  const picker = readFileSync(new URL("../src/components/factory/nft/NftMediaPicker.tsx", import.meta.url), "utf8");
+  assert.match(picker, /const IMAGE_ACCEPT = NFT_IMAGE_ACCEPT/);
+  assert.match(picker, /accept=\{IMAGE_ACCEPT\}/);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/gif/);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/webp/);
+});
+
 test("limits match PeopleScan caps", () => {
   assert.equal(NFT_IMAGE_MAX_BYTES, 1_500_000);
   assert.equal(NFT_SVG_MAX_BYTES, 262_144);
