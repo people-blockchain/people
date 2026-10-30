@@ -93,6 +93,78 @@ export async function fetchTransferLogs(
     .filter((row) => row.from && row.to && row.transactionHash);
 }
 
+/** Bound on `eth_getCode` probes for one creation-block search (2^26 blocks is far beyond any chain here). */
+const CREATION_SEARCH_MAX_CALLS = 32;
+/** Total time one creation-block search may take before the caller falls back to the deployment block. */
+const CREATION_SEARCH_BUDGET_MS = 6_000;
+const CREATION_CACHE_MAX_ENTRIES = 256;
+/** Creation blocks never change, so a found value is kept for the process lifetime (LRU-bounded). */
+const creationBlockCache = new Map<string, number>();
+
+export function resetTokenCreationBlockCacheForTests(): void {
+  creationBlockCache.clear();
+}
+
+function rememberCreationBlock(key: string, block: number): void {
+  creationBlockCache.delete(key);
+  while (creationBlockCache.size >= CREATION_CACHE_MAX_ENTRIES) {
+    const oldest = creationBlockCache.keys().next().value;
+    if (oldest === undefined) break;
+    creationBlockCache.delete(oldest);
+  }
+  creationBlockCache.set(key, block);
+}
+
+const hasCode = (code: unknown): boolean => typeof code === "string" && /^0x[0-9a-f]*[1-9a-f][0-9a-f]*$/i.test(code);
+
+/**
+ * First block at which `tokenAddress` has contract code, found by binary search over `eth_getCode`
+ * (about log2(head) calls). Returns null when it cannot be determined cheaply and reliably (node
+ * without historical state, no code at the head, transport failure, budget exhausted); callers
+ * then fall back to the deployment block. Never throws.
+ */
+export async function findTokenCreationBlock(tokenAddress: string, head?: number): Promise<number | null> {
+  let token: string;
+  try {
+    token = getAddress(tokenAddress);
+  } catch {
+    return null;
+  }
+  const key = token.toLowerCase();
+  const cached = creationBlockCache.get(key);
+  if (cached !== undefined) {
+    rememberCreationBlock(key, cached);
+    return cached;
+  }
+  const deadline = Date.now() + CREATION_SEARCH_BUDGET_MS;
+  let calls = 0;
+  const codeAt = async (block: number): Promise<boolean> => {
+    if (calls++ >= CREATION_SEARCH_MAX_CALLS || Date.now() > deadline) throw new Error("creation_search_budget");
+    return hasCode(await evmJsonRpc<string>("eth_getCode", [token, `0x${block.toString(16)}`]));
+  };
+  try {
+    const tip = head ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", []));
+    if (!Number.isFinite(tip) || tip < 0 || !(await codeAt(tip))) return null;
+    let lo = deploymentStartBlock();
+    let hi = tip;
+    if (lo >= hi) return null;
+    // Invariant for the loop: no code at lo, code at hi.
+    if (await codeAt(lo)) {
+      rememberCreationBlock(key, lo);
+      return lo;
+    }
+    while (hi - lo > 1) {
+      const mid = lo + Math.floor((hi - lo) / 2);
+      if (await codeAt(mid)) hi = mid;
+      else lo = mid;
+    }
+    rememberCreationBlock(key, hi);
+    return hi;
+  } catch {
+    return null;
+  }
+}
+
 export type TokenHolderRow = { address: string; balance: bigint };
 
 /** Full-history log scans are expensive; cache briefly to blunt anonymous scraping. */
@@ -120,14 +192,15 @@ function rememberHolders(key: string, entry: { at: number; value: TokenHolderRow
 }
 
 /** Aggregate wallet balances from Transfer logs (excludes zero-balance addresses). */
-export async function aggregateHoldersFromTransfers(tokenAddress: string): Promise<TokenHolderRow[]> {
+export async function aggregateHoldersFromTransfers(tokenAddress: string, fromBlock?: number): Promise<TokenHolderRow[]> {
   const cacheKey = tokenAddress.trim().toLowerCase();
   const cached = holdersCache.get(cacheKey);
   if (cached && Date.now() - cached.at < HOLDERS_TTL_MS) {
     rememberHolders(cacheKey, cached);
     return cached.value;
   }
-  const transfers = await fetchTransferLogs(tokenAddress);
+  // Scan failures propagate: an incomplete scan must never be cached or shown as "no holders".
+  const transfers = await fetchTransferLogs(tokenAddress, fromBlock);
   const balances = new Map<string, bigint>();
   for (const t of transfers) {
     if (t.from !== "0x0000000000000000000000000000000000000000") {
