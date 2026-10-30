@@ -19,7 +19,7 @@ import {
 } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError, weiToPpl } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError } from "@/lib/evm/rpc-server";
 import { readAllFactoryNfts, readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
 import { loadContractInfo } from "@/lib/evm/contract-info";
 import { transferScanIsPartial } from "@/lib/evm/transfer-index";
@@ -380,9 +380,9 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
       evmJsonRpc<string>("eth_getBalance", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
       evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
     ]);
-    const balance = balanceRead.status === "fulfilled" && balanceRead.value ? weiToPpl(BigInt(balanceRead.value)) : null;
+    const balanceWei = balanceRead.status === "fulfilled" && balanceRead.value ? BigInt(balanceRead.value) : null;
     const nonce = nonceRead.status === "fulfilled" && nonceRead.value ? Number.parseInt(nonceRead.value, 16) : null;
-    if (balance === null && nonce === null) {
+    if (balanceWei === null && nonce === null) {
       const reason = (read: PromiseSettledResult<unknown>) => (read.status === "rejected" ? read.reason : undefined);
       // A node that answered with a JSON-RPC error is still "unavailable". A 503, abort, or the
       // request deadline is an incomplete read: 200 partial, never 502/504.
@@ -414,13 +414,13 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
       if (!(deadlineHit(error) || isIncompleteRpcError(error))) throw error;
       holdingsIncomplete = true;
     }
-    const partial = balance === null || nonce === null || holdingsIncomplete || deadlineHit();
+    const partial = balanceWei === null || nonce === null || holdingsIncomplete || deadlineHit();
     return {
       status: 200,
       body: {
-        ...(balance === null ? {} : { balance }),
+        ...(balanceWei === null ? {} : { balanceWei: balanceWei.toString() }),
         ...(nonce === null ? {} : { nonce, outgoingTxs: nonce }),
-        balances: { ...(balance === null ? {} : { ppl: balance }), ...held },
+        balances: held,
         incomingTxs: 0,
         ...(partial ? { partial: true } : {}),
       },
