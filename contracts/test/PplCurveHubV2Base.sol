@@ -21,11 +21,6 @@ contract HubV2Harness is PplCurveHubV2 {
     function forceReserve(uint256 r) external {
         reserveUsd6 = r;
     }
-
-    /// @dev Defensive-branch access: `delivered` cannot be set while the sale is open via the real API.
-    function forceDelivered(address a, bool v) external {
-        delivered[a] = v;
-    }
 }
 
 /// @dev Shared setup + helpers for PplCurveHubV2 tests.
@@ -40,6 +35,10 @@ abstract contract HubV2Base is Test {
         keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
     bytes32 internal constant VERIFICATION_TYPEHASH =
         keccak256("Verification(address account,bytes32 personId,uint256 nonce,uint256 deadline)");
+    bytes32 internal constant MAINNET_RETURN_TYPEHASH = keccak256(
+        "MainnetReturn(bytes32 personId,address seller,uint256 pplAmount,uint256 sourceChainId,bytes32 returnId,uint256 deadline)"
+    );
+    uint256 internal constant PEOPLE_CHAIN_ID = 97401;
 
     MockUSDC internal usdc;
     HubV2Harness internal hub;
@@ -49,6 +48,9 @@ abstract contract HubV2Base is Test {
     address internal liquidityReceiver;
     uint256 internal verifierPk = 0xA11CE5;
     address internal verifier;
+    uint256 internal returnVerifierPk = 0xBEEF5;
+    address internal returnVerifier;
+    uint256 internal _returnNonce;
 
     function setUp() public virtual {
         vm.warp(START);
@@ -58,15 +60,16 @@ abstract contract HubV2Base is Test {
         verifier = vm.addr(verifierPk);
         usdc = new MockUSDC();
         hub = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
+        returnVerifier = vm.addr(returnVerifierPk);
+        vm.prank(owner);
+        hub.setReturnVerifier(returnVerifier);
     }
 
     // ---- signing / verification
 
     function _digest(address account, bytes32 personId, uint256 deadline) internal view returns (bytes32) {
         bytes32 domain = keccak256(
-            abi.encode(
-                EIP712_DOMAIN_TYPEHASH, keccak256("PplCurveHubV2"), keccak256("1"), block.chainid, address(hub)
-            )
+            abi.encode(EIP712_DOMAIN_TYPEHASH, keccak256("PplCurveHubV2"), keccak256("1"), block.chainid, address(hub))
         );
         bytes32 structHash =
             keccak256(abi.encode(VERIFICATION_TYPEHASH, account, personId, hub.bindNonce(personId), deadline));
@@ -98,6 +101,71 @@ abstract contract HubV2Base is Test {
         bytes memory sig = _sign(account, personId, deadline);
         vm.prank(account);
         hub.verify(personId, deadline, sig);
+    }
+
+    // ---- sell-back attestations (A1)
+
+    /// @dev Raw MainnetReturn signature under an arbitrary hub address / chain id / fields.
+    function _signReturnRaw(
+        uint256 pk,
+        address hubAddr,
+        uint256 chainId,
+        bytes32 personId,
+        address seller,
+        uint256 ppl,
+        uint256 sourceChainId,
+        bytes32 returnId,
+        uint256 deadline
+    ) internal pure returns (bytes memory) {
+        bytes32 domain = keccak256(
+            abi.encode(EIP712_DOMAIN_TYPEHASH, keccak256("PplCurveHubV2"), keccak256("1"), chainId, hubAddr)
+        );
+        bytes32 structHash =
+            keccak256(abi.encode(MAINNET_RETURN_TYPEHASH, personId, seller, ppl, sourceChainId, returnId, deadline));
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(pk, keccak256(abi.encodePacked("\x19\x01", domain, structHash)));
+        return abi.encodePacked(r, s, v);
+    }
+
+    /// @dev Valid attestation by the configured return verifier for `seller`'s current person.
+    function _signReturn(address seller, uint256 ppl, bytes32 returnId, uint256 deadline)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return _signReturnRaw(
+            returnVerifierPk,
+            address(hub),
+            block.chainid,
+            hub.personOf(seller),
+            seller,
+            ppl,
+            PEOPLE_CHAIN_ID,
+            returnId,
+            deadline
+        );
+    }
+
+    function _freshReturnId() internal returns (bytes32) {
+        return keccak256(abi.encode("returnId", ++_returnNonce));
+    }
+
+    /// @dev `who` sells `ppl` with a fresh returnId and a valid attestation (deadline = now + 1h).
+    function _sellBack(address who, uint256 ppl, uint256 minOut) internal returns (uint256) {
+        bytes32 id = _freshReturnId();
+        uint256 deadline = vm.getBlockTimestamp() + 1 hours;
+        bytes memory sig = _signReturn(who, ppl, id, deadline);
+        vm.prank(who);
+        return hub.sellBack(ppl, minOut, id, deadline, sig);
+    }
+
+    /// @dev Same call with a valid attestation, expecting `sellBack` to revert with `err`.
+    function _expectSellBackRevert(address who, uint256 ppl, uint256 minOut, bytes4 err) internal {
+        bytes32 id = _freshReturnId();
+        uint256 deadline = vm.getBlockTimestamp() + 1 hours;
+        bytes memory sig = _signReturn(who, ppl, id, deadline);
+        vm.expectRevert(err);
+        vm.prank(who);
+        hub.sellBack(ppl, minOut, id, deadline, sig);
     }
 
     // ---- lifecycle / funds
