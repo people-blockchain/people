@@ -7,7 +7,6 @@ import {
   custom,
   erc20Abi,
   http,
-  parseUnits,
   type Address,
   type Hex,
 } from "viem";
@@ -153,8 +152,8 @@ export function useV2Buy() {
   }, []);
 
   const buyPpl = useCallback(
-    async (ctx: V2BuyContext & { amountUsd: number; spotPriceWad: bigint }) => {
-      const { chain, provider, account, amountUsd, spotPriceWad } = ctx;
+    async (ctx: V2BuyContext & { amountIn: bigint; spotPriceWad: bigint }) => {
+      const { chain, provider, account, amountIn, spotPriceWad } = ctx;
       try {
         setBuyStatus({ step: "switching" });
         if (!(await ensureV2Chain(provider, chain))) {
@@ -174,7 +173,10 @@ export function useV2Buy() {
           transport: custom(provider),
           account,
         });
-        const amountIn = parseUnits(amountUsd.toFixed(2), 6);
+        if (amountIn <= BigInt(0)) {
+          setBuyStatus({ step: "error", reason: "notConfigured" });
+          return null;
+        }
         const usdc = chain.usdcAddress as Address;
         const hub = chain.hubAddress as Address;
         const allowance = await publicClient.readContract({

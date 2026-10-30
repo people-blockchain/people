@@ -1,3 +1,26 @@
+import { parseUnits } from "viem";
+
+/** Micro-USD (6 decimals) from a dollar string. Null when the text is not a plain decimal. */
+export function parseUsd6Amount(raw: string, maxFraction = 6): bigint | null {
+  const cleaned = raw.replace(/[\s\u00a0]/g, "");
+  const match = new RegExp(`^(\\d+)(?:[.,](\\d{1,${maxFraction}}))?$`).exec(cleaned);
+  if (!match) return null;
+  const fraction = match[2] ?? "";
+  try {
+    return parseUnits(fraction ? `${match[1]}.${fraction}` : match[1], 6);
+  } catch {
+    return null;
+  }
+}
+
+/** Scale 6-decimal USD into a token's base units without floating point. */
+export function scaleUsd6(usd6: bigint, decimals: number): bigint {
+  if (!Number.isInteger(decimals) || decimals < 0 || decimals > 18) return BigInt(0);
+  if (decimals === 6) return usd6;
+  if (decimals > 6) return usd6 * BigInt(10) ** BigInt(decimals - 6);
+  return usd6 / BigInt(10) ** BigInt(6 - decimals);
+}
+
 /**
  * Parses the dollar amount typed into the buy form.
  *

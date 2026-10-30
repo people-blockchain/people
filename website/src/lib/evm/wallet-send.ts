@@ -19,15 +19,23 @@ export function pplAmountToDecimalString(amount: number, decimals = 18): string 
   return fixed;
 }
 
+function transferValueWei(input: { amountWei?: bigint; amountPpl?: number }): bigint {
+  if (input.amountWei !== undefined) {
+    if (input.amountWei <= BigInt(0)) throw new Error("invalid_amount");
+    return input.amountWei;
+  }
+  return parseEther(pplAmountToDecimalString(input.amountPpl ?? Number.NaN));
+}
+
 export function nativeTransferRequest(input: {
-  to: `0x${string}`; amountPpl: number; memo?: string;
+  to: `0x${string}`; amountPpl?: number; amountWei?: bigint; memo?: string;
 }) {
   const memo = input.memo;
   const data = memo ? stringToHex(memo) : undefined;
   if (memo && (memo.length > 256 || transactionMemo({ to: input.to, input: data }) !== memo)) {
     throw new Error("invalid_memo");
   }
-  return { to: input.to, value: parseEther(pplAmountToDecimalString(input.amountPpl)),
+  return { to: input.to, value: transferValueWei(input),
     ...(data ? { data } : {}),
   };
 }
@@ -45,7 +53,8 @@ export function calldataFloorGas(data: Hex): bigint {
 export async function sendNativeTransfer(input: {
   privateKey: Hex;
   to: `0x${string}`;
-  amountPpl: number;
+  amountPpl?: number;
+  amountWei?: bigint;
   memo?: string;
 }): Promise<`0x${string}`> {
   const request = nativeTransferRequest(input);
