@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { isPinataConfigured } from "@/lib/factory-icon-config";
-import { deletePinataFile, getPinataFile, ipfsGatewayUrl, PinataError } from "@/lib/ipfs";
+import { deletePinataFile, getPinataFile, ipfsGatewayUrl, isValidIpfsCid, PinataError } from "@/lib/ipfs";
+import { PINATA_UPLOAD_NETWORK } from "@/lib/pinata-signed-upload";
 import { mediaBytesMatch } from "@/lib/media-upload-magic";
 import { DIRECT_UPLOAD_RATE } from "@/lib/media-upload-rate";
 import {
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
   if (!isPinataConfigured()) return nftError("storage_unavailable", 503);
   const body = (await request.json().catch(() => null)) as { id?: unknown; kind?: unknown; sha256?: unknown } | null;
   const id = typeof body?.id === "string" ? body.id : "";
-  if (!PINATA_FILE_ID.test(id) || !isDirectUploadKind(body?.kind)) return nftError("invalid_request", 400);
+  if (!PINATA_FILE_ID.test(id) || isValidIpfsCid(id) || !isDirectUploadKind(body?.kind)) return nftError("invalid_request", 400);
   if (typeof body?.sha256 !== "string" || !SHA256_HEX.test(body.sha256.trim().toLowerCase())) {
     return nftError("invalid_request", 400);
   }
@@ -79,15 +80,28 @@ export async function POST(request: Request) {
 
   let record;
   try {
-    record = await getPinataFile(id);
+    record = await getPinataFile(id, fetch, PINATA_UPLOAD_NETWORK);
   } catch (error) {
     if (error instanceof PinataError && error.code === "pin_failed") return nftError("content_mismatch", 422);
     return pinataErrorResponse(error, "storage_unavailable");
   }
 
   const reject = async (error: string, status: number) => {
-    await deletePinataFile(id).catch(() => {});
-    return nftError(error, status);
+    const fileId = record.id;
+    try {
+      await deletePinataFile(fileId, fetch, PINATA_UPLOAD_NETWORK);
+      return NextResponse.json(
+        { error, cleanup: "deleted" },
+        { status, headers: { "Cache-Control": "no-store" } },
+      );
+    } catch (deleteError) {
+      const code = deleteError instanceof PinataError ? deleteError.code : "delete_failed";
+      console.warn("[upload-verify] delete failed", { fileId, network: PINATA_UPLOAD_NETWORK, code });
+      return NextResponse.json(
+        { error, cleanup: "delete_failed" },
+        { status, headers: { "Cache-Control": "no-store" } },
+      );
+    }
   };
 
   if (!Number.isInteger(record.size) || record.size <= 0 || record.size > DIRECT_UPLOAD_MAX_BYTES) {

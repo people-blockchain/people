@@ -7,7 +7,8 @@ import {
   validateDirectUploadFields,
 } from "@/lib/media-upload-rules";
 import { DIRECT_UPLOAD_RATE, directUploadAddressAllowed } from "@/lib/media-upload-rate";
-import { nftError, nftGlobalRateAllowed, nftRateAllowed, pinataErrorResponse } from "@/lib/nft-upload-server";
+import { clientIpFromRequest } from "@/lib/request-client-ip";
+import { nftError, nftGlobalRateAllowed, pinataErrorResponse } from "@/lib/nft-upload-server";
 import { createPinataSignedUpload } from "@/lib/pinata-signed-upload";
 import {
   classifyNonce,
@@ -15,6 +16,7 @@ import {
   readUploadNonce,
   UploadNonceStoreError,
 } from "@/lib/upload-nonce-store";
+import { UploadSignRateStoreError, allowDirectUploadSignIp } from "@/lib/upload-sign-rate-store";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -60,7 +62,20 @@ export async function POST(request: Request) {
   if (typeof body.nonce !== "string" || !NONCE.test(body.nonce)) return nftError("invalid_request", 400);
 
   const address = getAddress(body.address);
-  if (!(await nftRateAllowed(request, DIRECT_UPLOAD_RATE.signIp))) return nftError("rate_limited", 429);
+  try {
+    const ipAllowed = await allowDirectUploadSignIp(
+      clientIpFromRequest(request),
+      DIRECT_UPLOAD_RATE.signIp.limit,
+      DIRECT_UPLOAD_RATE.signIp.windowMs,
+    );
+    if (!ipAllowed) return nftError("rate_limited", 429);
+  } catch (error) {
+    if (error instanceof UploadSignRateStoreError) {
+      console.warn("[upload-sign-rate] store unavailable");
+      return nftError("storage_unavailable", 503);
+    }
+    throw error;
+  }
   if (!(await directUploadAddressAllowed(address, DIRECT_UPLOAD_RATE.signAddress))) {
     return nftError("rate_limited", 429);
   }
