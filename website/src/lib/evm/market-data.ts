@@ -231,8 +231,8 @@ async function curveTrades(bondingCurve: string, token: string): Promise<MarketT
   const [buyTopic] = encodeEventTopics({ abi: curveEventsAbi, eventName: "CurveBuy" });
   const [sellTopic] = encodeEventTopics({ abi: curveEventsAbi, eventName: "CurveSell" });
   const [buyLogs, sellLogs] = await Promise.all([
-    fetchLogsWindowed(bondingCurve, [buyTopic, tokenTopic]),
-    fetchLogsWindowed(bondingCurve, [sellTopic, tokenTopic]),
+    fetchLogsWindowed(bondingCurve, [buyTopic, tokenTopic]).catch(() => []),
+    fetchLogsWindowed(bondingCurve, [sellTopic, tokenTopic]).catch(() => []),
   ]);
   const blockHexes = [...buyLogs, ...sellLogs].map((log) => log.blockNumber).filter((v): v is string => Boolean(v));
   const timestamps = await blockTimestampsMs(blockHexes);
@@ -282,7 +282,7 @@ async function ammTrades(pair: string, decimals: number): Promise<MarketTrade[]>
 
   const [swapTopic] = encodeEventTopics({ abi: swapEventAbi, eventName: "Swap" });
   // Start at the creating factory's deploy block, not the legacy V1 factory's block 58.
-  const logs = await fetchLogsWindowed(pair, [swapTopic], await pairLogStartBlock(pair));
+  const logs = await fetchLogsWindowed(pair, [swapTopic], await pairLogStartBlock(pair)).catch(() => []);
   const timestamps = await blockTimestampsMs(logs.map((log) => log.blockNumber).filter((v): v is string => Boolean(v)));
 
   const trades: MarketTrade[] = [];

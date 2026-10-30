@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "Mạng sẽ từ chối giao dịch này nên nó chưa được gửi và không bị trừ phí. Lý do: {reason}",
+  "preflightRevertGeneric": "Mạng sẽ từ chối giao dịch này nên nó chưa được gửi và không bị trừ phí.",
+  "preflightDailyLimit": "Đã đạt giới hạn thanh toán bằng stablecoin trong ngày. Không bị trừ phí. Hãy thanh toán bằng PPL hoặc thử lại sau nửa đêm UTC.",
+  "preflightPayInPplHint": "Mẹo: nếu bạn chọn thanh toán bằng stablecoin, hãy chuyển sang thanh toán bằng PPL rồi thử lại."
+}

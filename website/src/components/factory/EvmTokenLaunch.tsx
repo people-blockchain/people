@@ -1,19 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { formatEther, getAddress, type Address } from "viem";
+import { encodeFunctionData, formatEther, getAddress, type Abi, type Address } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
 import { uxCopy } from "@/lib/ux-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
+import { AssetImage } from "@/components/ui/AssetImage";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { evmContractsReady, readEvmDeployments } from "@/lib/evm/config";
 import { erc20Abi, factoryAbi, factoryLaunchAbi } from "@/lib/evm/client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
+import { TxPreflightError, preflightAndSend, preflightTx } from "@/lib/evm/tx-preflight";
+import { CREATE_FLOW_ERRORS_ABI, preflightErrorMessage, txPreflightCopy } from "@/lib/evm/tx-preflight-copy";
 import { isTokenSupplyWholeAmountValid, wholeTokensToBaseUnits } from "@/lib/token-supply-limits";
+import { networkJson } from "@/lib/network-client";
+import {
+  addCreatedToken,
+  type CreatedTokenRecord,
+  type DuplicateToken,
+} from "@/lib/created-tokens";
+import { uploadTokenIcon } from "@/lib/token-icon-upload";
+import { findDuplicateTokens, loadDuplicateCatalog } from "@/lib/factory/token-duplicates";
+import {
+  TOKEN_CREATE_PREFLIGHT_METADATA_URI,
+  TokenCreateGateError,
+  TokenMetadataPinError,
+  pinTokenMetadataAfterChecks,
+} from "@/lib/factory/token-metadata";
+import { pinTokenMetadata } from "@/lib/token-metadata-client";
+import { TokenIconUpload } from "./TokenIconUpload";
 import {
   PROMO_BPS_OPTIONS,
   PROMO_RECIPIENT_CAP_BPS,
@@ -46,19 +65,16 @@ const MANUAL_POLL_INTERVAL_MS = 3_000;
 
 type CreateReceiptLog = { address?: string; topics?: readonly string[] };
 type CreateReceipt = { status?: string; logs?: readonly CreateReceiptLog[] };
-type CreatedToken = {
-  address: Address;
-  name: string;
-  symbol: string;
-  hash: `0x${string}`;
-  totalSupply: bigint;
-};
-
 class ReceiptTimeoutError extends Error {
   constructor(readonly hash: `0x${string}`) {
     super("receipt timeout");
     this.name = "ReceiptTimeoutError";
   }
+}
+
+function isSenderBalanceMiss(message: string): boolean {
+  const text = message.toLowerCase();
+  return text.includes("insufficient funds") || text.includes("exceeds the balance");
 }
 
 function formatPplWei(wei: bigint): string {
@@ -136,6 +152,10 @@ async function waitForCreateReceipt(
   throw new ReceiptTimeoutError(hash);
 }
 
+function nowMs() {
+  return Date.now();
+}
+
 export function EvmTokenLaunch() {
   const { lang } = useLanguage();
   const page = factoryCopy[lang].token;
@@ -145,6 +165,7 @@ export function EvmTokenLaunch() {
   const form = { ...factoryCopy.en.form, ...factoryCopy[lang].form };
   const u = uxCopy[lang];
   const nm = nftMediaCopy[lang];
+  const pf = txPreflightCopy[lang];
   const { signer } = useExternalWallet();
   const dep = readEvmDeployments();
   const gateway = stableFeeGatewayAddress();
@@ -153,15 +174,23 @@ export function EvmTokenLaunch() {
   const [symbol, setSymbol] = useState("");
   const [supply, setSupply] = useState("");
   const [busy, setBusy] = useState(false);
+  const [tx, setTx] = useState("");
   const [error, setError] = useState("");
-  const [created, setCreated] = useState<CreatedToken | null>(null);
+  const [created, setCreated] = useState<CreatedTokenRecord | null>(null);
   const [pendingHash, setPendingHash] = useState<`0x${string}` | "">("");
   const [confirmationTimedOut, setConfirmationTimedOut] = useState(false);
   const [pplBalance, setPplBalance] = useState<bigint | null>(null);
   const submitLock = useRef(false);
   const [payWith, setPayWith] = useState<"PPL" | StableAsset["id"]>("PPL");
   const [stableFeeUsd6, setStableFeeUsd6] = useState<bigint | null>(null);
-  const [stage, setStage] = useState<"idle" | "approving" | "payingFee" | "creating" | "waiting">("idle");
+  const [stage, setStage] = useState<
+    "idle" | "uploading" | "approving" | "payingFee" | "creating" | "confirming" | "waiting"
+  >("idle");
+  const [iconFile, setIconFile] = useState<File | null>(null);
+  const [iconUri, setIconUri] = useState("");
+  const [iconUploadFailed, setIconUploadFailed] = useState(false);
+  const [knownTokens, setKnownTokens] = useState<DuplicateToken[]>([]);
+  const [confirmDuplicate, setConfirmDuplicate] = useState(false);
   // Issuer referral program is OFF unless the issuer ticks the box.
   /** 0 = Burn (default), 1 = CommunityPool — owner rule 2026-10-13. */
   const [leftoverMode, setLeftoverMode] = useState<0 | 1>(0);
@@ -190,6 +219,32 @@ export function EvmTokenLaunch() {
       cancelled = true;
     };
   }, [gateway, payWith]);
+
+  // Duplicate source: the server-side whole catalog (every creator). No localStorage, no wallet
+  // needed, so a clean browser warns exactly like a returning one.
+  useEffect(() => {
+    let cancelled = false;
+    void loadDuplicateCatalog(() => networkJson<unknown>("assets", { cache: "no-store" }))
+      .then((chain) => {
+        if (cancelled) return;
+        setKnownTokens((current) => {
+          const byAddress = new Map(chain.map((row) => [row.address.toLowerCase(), row]));
+          for (const row of current) {
+            if (!byAddress.has(row.address.toLowerCase())) byAddress.set(row.address.toLowerCase(), row);
+          }
+          return [...byAddress.values()];
+        });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const duplicates = useMemo(
+    () => findDuplicateTokens(knownTokens, { name, symbol }),
+    [knownTokens, name, symbol],
+  );
 
   useEffect(() => {
     if (!signer) {
@@ -239,10 +294,12 @@ export function EvmTokenLaunch() {
     }
   };
 
-  const submit = async () => {
+  const submit = async (options?: { skipIcon?: boolean }) => {
     if (submitLock.current || pendingHash || !signer || !dep.contracts.tokenFactory) return;
+    const skipIcon = options?.skipIcon === true;
     submitLock.current = true;
     setBusy(true);
+    setTx("");
     setError("");
     setConfirmationTimedOut(false);
     setIssuerReferralMsg("");
@@ -250,6 +307,20 @@ export function EvmTokenLaunch() {
     let sentHash: `0x${string}` | null = null;
     try {
       const client = readPublicClient();
+      // Simulate (eth_call + estimateGas) before the wallet prompt: a tx that would revert is never
+      // sent, and the real send carries the estimate plus a 20% gas buffer.
+      const sendChecked = (request: { address: Address; abi: Abi; functionName: string; args: readonly unknown[]; value?: bigint }) =>
+        preflightAndSend(
+          client,
+          (tx) => writeViaActiveSigner(signer, { ...request, gas: tx.gas }),
+          {
+            account: signer.address,
+            to: request.address,
+            data: encodeFunctionData({ abi: request.abi, functionName: request.functionName, args: request.args }),
+            value: request.value,
+          },
+          { abi: CREATE_FLOW_ERRORS_ABI },
+        );
       if (!isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS))) {
         setError(u.supplyMinError);
         return;
@@ -260,6 +331,126 @@ export function EvmTokenLaunch() {
         return;
       }
       const total = units;
+      const existing = findDuplicateTokens(knownTokens, { name, symbol });
+      if (existing.length && !confirmDuplicate) {
+        setError(u.tokenDuplicateTitle);
+        return;
+      }
+
+      let iconImage = iconUri;
+      if (iconFile && !iconUri && !skipIcon) {
+        setStage("uploading");
+        try {
+          const uploaded = await uploadTokenIcon(iconFile);
+          setIconUri(uploaded);
+          setIconUploadFailed(false);
+          iconImage = uploaded;
+        } catch {
+          setIconUploadFailed(true);
+          setError(u.tokenIconErrUpload);
+          return;
+        }
+      }
+
+      if (payWith !== "PPL") {
+        const stableReady = stableAssets.find((asset) => asset.id === payWith);
+        if (!stableReady || !gateway || stableFeeUsd6 === null) {
+          setError(form.stableFeeBuybackNote);
+          return;
+        }
+      }
+
+      // Simulate first. Pin the metadata JSON only after that passes, so a revert never uploads it.
+      setStage("uploading");
+      let metadataURI: string;
+      try {
+        metadataURI = await pinTokenMetadataAfterChecks(
+          { name, symbol: symbol.trim().toUpperCase(), image: iconImage || undefined },
+          (json) => pinTokenMetadata(json),
+          {
+            duplicates: existing,
+            confirmed: confirmDuplicate,
+            preflight: async () => {
+              const factory = dep.contracts.tokenFactory as `0x${string}`;
+              const fee = await client.readContract({
+                address: factory,
+                abi: factoryAbi,
+                functionName: "tokenCreateFee",
+              });
+              let credit = BigInt(0);
+              try {
+                credit = await client.readContract({
+                  address: factory,
+                  abi: factoryLaunchAbi,
+                  functionName: "prepaidCredit",
+                  args: [signer.address],
+                });
+              } catch {
+                credit = BigInt(0);
+              }
+              const payingWithStable = payWith !== "PPL";
+              const createValue = requiredFeeValue(fee, credit);
+              if (payingWithStable && credit < fee && gateway) {
+                const stable = stableAssets.find((asset) => asset.id === payWith);
+                if (!stable) throw new Error("stable_fee_unavailable");
+                const pay = await preflightTx(
+                  client,
+                  {
+                    account: signer.address,
+                    to: gateway,
+                    data: encodeFunctionData({
+                      abi: stableFeeGatewayAbi,
+                      functionName: "payLaunchFee",
+                      args: [GATEWAY_KIND.TOKEN_LAUNCH, stable.address],
+                    }),
+                  },
+                  { abi: CREATE_FLOW_ERRORS_ABI },
+                );
+                if (!pay.ok) throw new TxPreflightError(pay.reason);
+              }
+              const created = await preflightTx(
+                client,
+                {
+                  account: signer.address,
+                  to: factory,
+                  data: encodeFunctionData({
+                    abi: factoryLaunchAbi,
+                    functionName: "createToken",
+                    args: [
+                      name.trim(),
+                      symbol.trim().toUpperCase(),
+                      LAUNCH_DECIMALS,
+                      total,
+                      TOKEN_CREATE_PREFLIGHT_METADATA_URI,
+                      promoBps,
+                      leftoverMode,
+                    ],
+                  }),
+                  value: createValue,
+                },
+                { abi: CREATE_FLOW_ERRORS_ABI },
+              );
+              if (!created.ok) {
+                // A stable payer does not hold the PPL shortfall; that value is only on the simulation.
+                if (payingWithStable && createValue > BigInt(0) && isSenderBalanceMiss(created.reason.message)) return;
+                if (isSenderBalanceMiss(created.reason.message)) throw new Error(created.reason.message);
+                throw new TxPreflightError(created.reason);
+              }
+            },
+          },
+        );
+      } catch (err) {
+        if (err instanceof TokenCreateGateError && err.reason === "duplicate") {
+          setError(u.tokenDuplicateTitle);
+          return;
+        }
+        if (err instanceof TxPreflightError) throw err;
+        if (err instanceof TokenMetadataPinError) {
+          setError(u.tokenMetadataErrPin);
+          return;
+        }
+        throw err;
+      }
 
       let stableFeePaid = false;
       if (payWith !== "PPL") {
@@ -302,7 +493,7 @@ export function EvmTokenLaunch() {
             await client.waitForTransactionReceipt({ hash: approveHash });
           }
           setStage("payingFee");
-          const payHash = await writeViaActiveSigner(signer, {
+          const payHash = await sendChecked({
             address: gateway,
             abi: stableFeeGatewayAbi,
             functionName: "payLaunchFee",
@@ -351,7 +542,6 @@ export function EvmTokenLaunch() {
         // proves the fee is already covered by credit.
         feeValue = payWith !== "PPL" && stableFeePaid ? BigInt(0) : fee;
       }
-      const metadataURI = `ipfs://people/${symbol.trim()}`;
       // One entry point carries both creator choices: the promo share (0/5/10%) and what happens
       // to curve leftovers / the unsold remainder (0 = burn, 1 = the token's community pool).
       const request = {
@@ -391,8 +581,10 @@ export function EvmTokenLaunch() {
         }
       }
 
-      const hash = await writeViaActiveSigner(signer, { ...request });
+      setStage("confirming");
+      const hash = await sendChecked(request);
       sentHash = hash;
+      setTx(hash);
       setPendingHash(hash);
       setStage("waiting");
       const { recordFounderAction } = await import("@/lib/founders/client");
@@ -406,13 +598,26 @@ export function EvmTokenLaunch() {
       }
       const tokenAddress = tokenAddressFromCreateReceipt(receipt, factory);
       if (!tokenAddress) throw new Error("token address not found in createToken receipt");
-      setCreated({
-        address: tokenAddress,
+      const record: CreatedTokenRecord = {
+        creator: signer.address.toLowerCase(),
+        address: tokenAddress.toLowerCase(),
         name: name.trim(),
         symbol: symbol.trim().toUpperCase(),
-        hash,
-        totalSupply: total,
+        tx: hash,
+        image: iconImage,
+        createdAt: nowMs(),
+      };
+      const nextRecords = addCreatedToken(
+        typeof window !== "undefined" ? window.localStorage : null,
+        record,
+      );
+      setKnownTokens((current) => {
+        const byAddress = new Map(current.map((row) => [row.address.toLowerCase(), row]));
+        byAddress.set(record.address, record);
+        return [...byAddress.values()];
       });
+      void nextRecords;
+      setCreated(record);
       setPendingHash("");
       setStage("idle");
       if (issuerReferral) {
@@ -433,6 +638,10 @@ export function EvmTokenLaunch() {
         return;
       }
       console.error(err);
+      if (err instanceof TxPreflightError) {
+        setError(preflightErrorMessage(err.reason, pf, { payingWithStable: payWith !== "PPL" }));
+        return;
+      }
       const { code, neededWei, balanceWei } = classifyCreateFlowError(err);
       switch (code) {
         case "stable_fee_unavailable":
@@ -467,15 +676,29 @@ export function EvmTokenLaunch() {
   };
 
   const stageLabel =
-    stage === "approving"
-      ? form.approvingStable
-      : stage === "payingFee"
-        ? form.payingStableFee
-        : stage === "creating"
-          ? form.creatingAfterStableFee
-          : stage === "waiting"
-            ? nm.stageWaitingTx
-            : null;
+    stage === "uploading"
+      ? u.tokenIconUploading
+      : stage === "approving"
+        ? form.approvingStable
+        : stage === "payingFee"
+          ? form.payingStableFee
+          : stage === "creating"
+            ? form.creatingAfterStableFee
+            : stage === "confirming"
+              ? u.tokenStepConfirm
+              : stage === "waiting"
+                ? nm.stageWaitingTx
+                : null;
+
+  const activeStep =
+    stage === "uploading"
+      ? 0
+      : stage === "approving" || stage === "payingFee" || stage === "creating" || stage === "confirming"
+        ? 1
+        : stage === "waiting"
+          ? 2
+          : -1;
+  const progressSteps = [u.tokenStepIcon, u.tokenStepConfirm, u.tokenStepWaiting];
 
   const resetFlow = () => {
     setCreated(null);
@@ -486,6 +709,11 @@ export function EvmTokenLaunch() {
     setName("");
     setSymbol("");
     setSupply("");
+    setIconFile(null);
+    setIconUri("");
+    setIconUploadFailed(false);
+    setTx("");
+    setConfirmDuplicate(false);
     setPromoBps(0);
     setLeftoverMode(0);
     setIssuerReferral(false);
@@ -528,37 +756,44 @@ export function EvmTokenLaunch() {
           <ConnectWalletMenu />
         </div>
       ) : created ? (
-        <section className="mt-8 space-y-3 rounded-2xl border border-value/40 bg-surface p-4" data-testid="token-result">
-          <h2 className="font-bold text-ink">{nm.createSuccessTitle}</h2>
-          <p className="text-sm text-ink-2">{nm.createSuccessLead}</p>
+        <section className="mt-8 space-y-4 rounded-2xl border border-value/40 bg-surface p-5" data-testid="token-create-result">
+          <div className="flex items-center gap-4">
+            <AssetImage
+              assetId={created.address}
+              tokenAddress={created.address}
+              src={created.image || undefined}
+              name={created.symbol || created.name}
+              className="h-16 w-16"
+            />
+            <div className="min-w-0">
+              <h2 className="text-xl font-bold text-ink">{u.tokenCreateSuccess}</h2>
+              <p className="mt-1 text-sm text-ink-2">{u.tokenCreateSuccessLead}</p>
+            </div>
+          </div>
           <dl className="grid gap-2 text-sm sm:grid-cols-2">
             <div>
-              <dt className="text-ink-3">{form.name}</dt>
+              <dt className="text-xs text-ink-3">{form.name}</dt>
               <dd className="font-semibold text-ink">{created.name}</dd>
             </div>
             <div>
-              <dt className="text-ink-3">{form.ticker}</dt>
+              <dt className="text-xs text-ink-3">{form.ticker}</dt>
               <dd className="font-semibold text-ink">{created.symbol}</dd>
             </div>
             <div className="sm:col-span-2">
-              <dt className="text-ink-3">{form.address}</dt>
-              <dd className="break-all font-mono">
-                <Link href={`/explorer/address/${created.address}`} className="text-brand hover:underline" dir="ltr">
-                  {created.address}
-                </Link>
-              </dd>
+              <dt className="text-xs text-ink-3">{u.tokenAddressLabel}</dt>
+              <dd className="break-all font-mono text-sm text-ink">{created.address}</dd>
             </div>
             <div className="sm:col-span-2">
-              <dt className="text-ink-3">{form.txId}</dt>
-              <dd className="break-all font-mono">
-                <Link href={`/explorer/tx/${encodeURIComponent(created.hash)}`} className="text-brand hover:underline" dir="ltr">
-                  {created.hash}
+              <dt className="text-xs text-ink-3">{form.txId}</dt>
+              <dd className="break-all">
+                <Link href={`/explorer/tx/${encodeURIComponent(created.tx)}`} className="font-mono text-sm text-brand hover:underline" dir="ltr">
+                  {created.tx}
                 </Link>
               </dd>
             </div>
             {pplBalance !== null ? (
               <div className="sm:col-span-2">
-                <dt className="text-ink-3">{form.balance}</dt>
+                <dt className="text-xs text-ink-3">{form.balance}</dt>
                 <dd className="text-ink">{formatPplWei(pplBalance)} PPL</dd>
               </div>
             ) : null}
@@ -569,7 +804,10 @@ export function EvmTokenLaunch() {
               href={`/explorer/token/${created.address}`}
               className="inline-flex w-full justify-center rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink sm:w-auto"
             >
-              {nm.createViewToken}
+              {u.tokenViewToken}
+            </Link>
+            <Link href="/wallet" className="inline-flex w-full justify-center rounded-xl border border-line px-6 py-3 font-semibold text-ink sm:w-auto">
+              {u.tokenOpenWallet}
             </Link>
             <Link
               href={`/explorer/address/${created.address}`}
@@ -578,16 +816,96 @@ export function EvmTokenLaunch() {
               {nm.createViewAddress}
             </Link>
             <button type="button" onClick={resetFlow} className="text-sm font-semibold text-brand">
-              {nm.createAnother}
+              {u.tokenCreateAnother}
             </button>
           </div>
         </section>
       ) : (
         <div className="mt-8 space-y-4">
-          <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.name} value={name} onChange={(e) => setName(e.target.value)} />
-          <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.ticker} value={symbol} onChange={(e) => setSymbol(e.target.value)} />
-          <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={u.supplyPlaceholder} value={supply} onChange={(e) => setSupply(e.target.value)} />
+          <TokenIconUpload
+            copy={u}
+            file={iconFile}
+            disabled={busy}
+            onFile={(file) => {
+              setIconFile(file);
+              setIconUri("");
+              setIconUploadFailed(false);
+              setError("");
+            }}
+          />
+          <input
+            className="w-full rounded-xl border border-line px-3 py-3"
+            placeholder={form.name}
+            value={name}
+            disabled={busy}
+            onChange={(e) => {
+              setName(e.target.value);
+              setConfirmDuplicate(false);
+            }}
+          />
+          <input
+            className="w-full rounded-xl border border-line px-3 py-3"
+            placeholder={form.ticker}
+            value={symbol}
+            disabled={busy}
+            onChange={(e) => {
+              setSymbol(e.target.value);
+              setConfirmDuplicate(false);
+            }}
+          />
+          <input
+            className="w-full rounded-xl border border-line px-3 py-3"
+            placeholder={u.supplyPlaceholder}
+            value={supply}
+            disabled={busy}
+            onChange={(e) => setSupply(e.target.value)}
+          />
           <p className="text-xs text-ink-3">{u.supplyHint}</p>
+
+          {duplicates.length > 0 ? (
+            <div className="rounded-xl border border-warm/50 bg-surface p-3 text-sm" data-testid="token-duplicate-warning">
+              <p className="font-semibold text-warm">{u.tokenDuplicateTitle}</p>
+              <p className="mt-1 text-xs text-ink-3">{u.tokenDuplicateLead}</p>
+              <ul className="mt-2 space-y-1">
+                {duplicates.map((row) => (
+                  <li key={row.address} className="break-all">
+                    <Link href={`/explorer/token/${row.address.toLowerCase()}`} className="font-semibold text-brand hover:underline">
+                      {row.name || row.symbol} ({row.symbol || row.address})
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <label className="mt-3 flex items-start gap-2 text-sm text-ink-2">
+                <input
+                  type="checkbox"
+                  className="mt-1"
+                  checked={confirmDuplicate}
+                  disabled={busy}
+                  onChange={(e) => setConfirmDuplicate(e.target.checked)}
+                />
+                <span>{u.tokenDuplicateConfirm}</span>
+              </label>
+              <p className="mt-2 text-xs text-ink-3">{u.tokenDuplicateInline}</p>
+            </div>
+          ) : null}
+
+          <ol className="space-y-2 rounded-xl border border-line p-3 text-sm" data-testid="token-create-progress">
+            {progressSteps.map((label, index) => {
+              const done = activeStep >= 0 && index < activeStep;
+              const active = activeStep === index;
+              return (
+                <li
+                  key={label}
+                  className={`flex items-center gap-2 ${active ? "font-semibold text-brand" : done ? "text-value" : "text-ink-3"}`}
+                >
+                  <span className={`inline-flex h-5 w-5 items-center justify-center rounded-full border text-xs ${active ? "border-brand text-brand" : done ? "border-value text-value" : "border-line"}`}>
+                    {done ? "✓" : index + 1}
+                  </span>
+                  <span>{label}</span>
+                </li>
+              );
+            })}
+          </ol>
 
           {stableAssets.length > 0 ? (
             <div className="rounded-xl border border-line p-3" data-testid="stable-fee-option">
@@ -595,8 +913,9 @@ export function EvmTokenLaunch() {
               <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   type="button"
+                  disabled={busy}
                   onClick={() => setPayWith("PPL")}
-                  className={`rounded-xl px-3 py-2 text-sm ${payWith === "PPL" ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
+                  className={`rounded-xl px-3 py-2 text-sm disabled:opacity-60 ${payWith === "PPL" ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
                 >
                   {form.payWithPpl}
                 </button>
@@ -604,8 +923,9 @@ export function EvmTokenLaunch() {
                   <button
                     key={asset.id}
                     type="button"
+                    disabled={busy}
                     onClick={() => setPayWith(asset.id)}
-                    className={`rounded-xl px-3 py-2 text-sm ${payWith === asset.id ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
+                    className={`rounded-xl px-3 py-2 text-sm disabled:opacity-60 ${payWith === asset.id ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
                   >
                     {asset.symbol}
                   </button>
@@ -637,6 +957,7 @@ export function EvmTokenLaunch() {
                   className="mt-1"
                   name="leftoverMode"
                   checked={leftoverMode === 0}
+                  disabled={busy}
                   onChange={() => setLeftoverMode(0)}
                 />
                 <span>
@@ -650,6 +971,7 @@ export function EvmTokenLaunch() {
                   className="mt-1"
                   name="leftoverMode"
                   checked={leftoverMode === 1}
+                  disabled={busy}
                   onChange={() => setLeftoverMode(1)}
                 />
                 <span>
@@ -669,8 +991,9 @@ export function EvmTokenLaunch() {
                   key={bps}
                   type="button"
                   aria-pressed={promoBps === bps}
+                  disabled={busy}
                   onClick={() => setPromoBps(bps)}
-                  className={`rounded-xl px-3 py-2 text-sm ${promoBps === bps ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
+                  className={`rounded-xl px-3 py-2 text-sm disabled:opacity-60 ${promoBps === bps ? "bg-brand text-brand-ink" : "bg-surface-2"}`}
                 >
                   {bps === 0 ? form.promoOptionNone : form.promoOptionLabel.replace("{{pct}}", String(bps / 100))}
                 </button>
@@ -712,6 +1035,7 @@ export function EvmTokenLaunch() {
                 type="checkbox"
                 className="mt-1"
                 checked={issuerReferral}
+                disabled={busy}
                 onChange={(e) => setIssuerReferral(e.target.checked)}
               />
               <span>
@@ -736,6 +1060,24 @@ export function EvmTokenLaunch() {
             </div>
           ) : null}
           {error ? <p className="text-sm text-warm">{error}</p> : null}
+          {iconUploadFailed ? (
+            <button
+              type="button"
+              disabled={busy}
+              data-testid="token-create-without-icon"
+              onClick={() => {
+                setIconUploadFailed(false);
+                setIconFile(null);
+                setIconUri("");
+                setError("");
+                void submit({ skipIcon: true });
+              }}
+              className="rounded-xl border border-line px-4 py-2 text-sm font-semibold text-brand disabled:opacity-40"
+            >
+              {u.tokenCreateWithoutIcon}
+            </button>
+          ) : null}
+          {tx ? <p className="text-sm text-brand">{u.sent}: {tx.slice(0, 18)}…</p> : null}
           {issuerReferralMsg ? <p className="text-sm text-ink-2">{issuerReferralMsg}</p> : null}
           <button
             type="button"
@@ -744,7 +1086,8 @@ export function EvmTokenLaunch() {
               Boolean(pendingHash) ||
               name.trim().length < 2 ||
               !isTokenSupplyWholeAmountValid(supply, String(LAUNCH_DECIMALS)) ||
-              (payWith !== "PPL" && stableFeeUsd6 === null)
+              (payWith !== "PPL" && stableFeeUsd6 === null) ||
+              (duplicates.length > 0 && !confirmDuplicate)
             }
             onClick={() => void submit()}
             className="rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink disabled:opacity-40"

@@ -3,6 +3,7 @@ import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
@@ -15,6 +16,8 @@ const SEL_NAME = "0x06fdde03";
 const SEL_SYMBOL = "0x95d89b41";
 const SEL_DECIMALS = "0x313ce567";
 const SEL_TOTAL_SUPPLY = "0x18160ddd";
+const SEL_CREATOR = "0x02d05d3f";
+const SEL_METADATA_URI = "0x03ee438c";
 const SEL_TOKEN0 = "0x0dfe1681";
 const SEL_TOKEN1 = "0xd21220a7";
 const SEL_RESERVES = "0x0902f1ac";
@@ -40,6 +43,8 @@ export type CatalogToken = {
   verified: boolean;
   /** Curated assetId whose name/symbol this uncurated token copies, if any. */
   impersonates?: string;
+  creationMetadata?: { image?: string; description?: string; website?: string; testnet?: boolean };
+  imageUri?: string;
 };
 
 export type CatalogPool = {
@@ -68,8 +73,8 @@ function topicAddress(topic: string | undefined): string {
  * Cosmos EVM nodes reject eth_getLogs over more than 10,000 blocks
  * ("maximum [from, to] blocks distance: 10000"), so a single 0x1..latest query
  * threw and the whole pool/token scan came back empty on a long-running chain.
- * Scan in windows from the deployment block instead; a failed window is skipped
- * so static entries from the deployment JSON still show.
+ * Scan in windows from the deployment block instead; a window that still fails
+ * after one retry rejects the scan so callers never treat a partial list as whole.
  */
 export const LOG_WINDOW_BLOCKS = 9_000;
 
@@ -235,7 +240,8 @@ async function readLogWindow(
  * - Node reads are capped at `MAX_PARALLEL_LOG_WINDOWS` in flight across the whole process, so a
  *   cold page render cannot fire dozens of range scans at the validator at once.
  * - `rpc-server.ts` backs off exponentially after node failures, so an unhealthy node is not
- *   hammered with retries; failed windows are simply skipped (and not cached).
+ *   hammered with retries. A failed window is retried once; if it still fails the scan rejects
+ *   with `log_window_unavailable` rather than returning a partial result.
  *
  * `fromBlockHint` can only move the start later (e.g. a pair's own factory start block).
  * `topics` follows the JSON-RPC log filter: `null` is a wildcard position. The window cache key
@@ -260,9 +266,15 @@ export async function fetchLogsWindowed(
       const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
       const entry = windowLogsCache.get(key);
       if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
-      const logs = await readLogWindow(address, topics, from, to, isImmutable);
-      if (logs) rememberWindowLogs(key, logs);
-      return logs ?? [];
+      // A transient node failure must not silently drop this window's logs and leave callers with
+      // a partial list. Retry the window once, then fail the whole scan so the caller can keep a
+      // stale catalog instead of caching a short one.
+      const logs =
+        (await readLogWindow(address, topics, from, to, isImmutable)) ??
+        (await readLogWindow(address, topics, from, to, isImmutable));
+      if (!logs) throw new Error("log_window_unavailable");
+      rememberWindowLogs(key, logs);
+      return logs;
     }),
   );
   return results.flat();
@@ -289,18 +301,21 @@ export async function pairLogStartBlock(pair: string): Promise<number> {
  * Decodes ABI-encoded `string` return data. Author-controlled: control characters are stripped and
  * length is capped so a token cannot spoof a catalog entry with invisible/homoglyph padding.
  */
-function decodeErc20String(out: string | null | undefined): string {
+function decodeErc20String(out: string | null | undefined, maxLength = 64): string {
   if (!out || out === "0x" || out.length < 130) return "";
   try {
     return Buffer.from(out.slice(130), "hex")
       .toString("utf8")
       .replace(/[\u0000-\u001f\u007f]/g, "")
       .trim()
-      .slice(0, 64);
+      .slice(0, maxLength);
   } catch {
     return "";
   }
 }
+
+/** A `metadataURI` (`ipfs://<CIDv0>/metadata.json` is ~67 chars) needs a longer cap than a name/symbol. */
+const METADATA_URI_MAX_LENGTH = 256;
 
 function decodeUint(out: string | null | undefined): bigint {
   if (!out || out === "0x") return BigInt(0);
@@ -313,7 +328,44 @@ function decodeUint(out: string | null | undefined): bigint {
 
 function decodeAddress(ret: string | null | undefined): string {
   if (!ret || ret === "0x" || ret.length < 66) return "";
-  return getAddress(`0x${ret.slice(-40)}`);
+  try {
+    return getAddress(`0x${ret.slice(-40)}`);
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Token `metadataURI()` may be an icon address (ipfs://… or https://…). The old launch flow wrote
+ * the non-image placeholder `ipfs://people/<SYMBOL>`, which must never replace the gradient icon.
+ * A `.../metadata.json` address is a JSON document (the catalog never fetches it), so it is not an image.
+ */
+export function tokenImageFromMetadataUri(uri: string | null | undefined): string | null {
+  const value = (uri ?? "").trim();
+  if (!value || value === "ipfs://people" || value.startsWith("ipfs://people/")) return null;
+  // New launches point at a pinned metadata JSON (`ipfs://<CID>/metadata.json`), not an image.
+  if (/\/metadata\.json(?:[?#].*)?$/i.test(value)) return null;
+  if (/^ipfs:\/\/[^\s]+$/i.test(value)) return value;
+  if (/^https:\/\/[^\s]+$/i.test(value)) return value;
+  return null;
+}
+
+/**
+ * Applies the image precedence shared by the catalog and the single-asset fallback: an owner
+ * icon override wins, then curated/seed metadata, then the on-chain metadataURI image.
+ */
+export function applyTokenImage<T extends { imageUri?: string; creationMetadata?: { image?: string; [key: string]: unknown } }>(
+  row: T,
+  override: string | null | undefined,
+  chainImage: string | null | undefined,
+): T {
+  const imageUri = override ?? (row.imageUri ? undefined : chainImage ?? undefined);
+  if (!imageUri) return row;
+  return {
+    ...row,
+    imageUri,
+    creationMetadata: { ...(row.creationMetadata ?? {}), image: imageUri },
+  } as T;
 }
 
 /** On-chain catalog scans are expensive; the cached copy is refreshed in the background. */
@@ -379,49 +431,67 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
   const tokens = [...tokenAddrs].map((lower) => getAddress(lower));
   if (!tokens.length) return [];
 
-  // Four reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
-  // sequential per-token loop measured ~3.8 s.
+  // Six reads per token, all tokens in one batch: ~0.4 s for 13 tokens where the previous
+  // sequential per-token loop measured ~3.8 s. `creator()` and `metadataURI()` are optional on
+  // older stacks, so a failed slot stays empty instead of failing the catalog.
+  const ROW_READS = 6;
   const metadata = await evmJsonRpcBatch<string>(
     tokens.flatMap((token) => [
       { method: "eth_call", params: [{ to: token, data: SEL_NAME }, "latest"] },
       { method: "eth_call", params: [{ to: token, data: SEL_SYMBOL }, "latest"] },
       { method: "eth_call", params: [{ to: token, data: SEL_DECIMALS }, "latest"] },
       { method: "eth_call", params: [{ to: token, data: SEL_TOTAL_SUPPLY }, "latest"] },
+      { method: "eth_call", params: [{ to: token, data: SEL_CREATOR }, "latest"] },
+      { method: "eth_call", params: [{ to: token, data: SEL_METADATA_URI }, "latest"] },
     ]),
-  ).catch(() => tokens.flatMap(() => [null, null, null, null] as Array<string | null>));
+  ).catch(() => tokens.flatMap(() => [null, null, null, null, null, null] as Array<string | null>));
+
+  // Off-chain icon overrides are optional: no DATABASE_URL (or a DB error) simply leaves the
+  // on-chain metadataURI in place.
+  const iconOverrides = await readTokenIconOverrides(tokens).catch(() => new Map<string, string>());
 
   const rows: CatalogToken[] = tokens.map((token, index) => {
-    const name = decodeErc20String(metadata[index * 4]);
-    const symbol = decodeErc20String(metadata[index * 4 + 1]);
-    const decimals = Number(decodeUint(metadata[index * 4 + 2])) || 18;
-    const supplyWei = decodeUint(metadata[index * 4 + 3]);
+    const name = decodeErc20String(metadata[index * ROW_READS]);
+    const symbol = decodeErc20String(metadata[index * ROW_READS + 1]);
+    const decimals = Number(decodeUint(metadata[index * ROW_READS + 2])) || 18;
+    const supplyWei = decodeUint(metadata[index * ROW_READS + 3]);
+    const creator = decodeAddress(metadata[index * ROW_READS + 4]) || dep.deployer || "0x0";
+    const chainImage = tokenImageFromMetadataUri(decodeErc20String(metadata[index * ROW_READS + 5], METADATA_URI_MAX_LENGTH));
     const assetId = resolveLogicalAssetId(token);
     const seed = seedAssetMeta(assetId);
     // Token metadata is permissionless: anyone can deploy a contract that calls itself
     // "People"/"PPL". Curated assets carry seed metadata, so a row whose assetId has none but
     // whose name/symbol matches a curated one is flagged instead of being presented as it.
     const impersonates = seed ? undefined : curatedAssetKeys().get((symbol || name).trim().toLowerCase());
-    return enrichAssetRow({
+    const enriched = enrichAssetRow({
       assetId,
       tokenAddress: token,
       name: seed?.name ?? (name || assetId.slice(0, 10)),
       symbol: seed?.symbol ?? (symbol || "TKN"),
       decimals: seed?.decimals ?? decimals,
       totalSupply: Number(formatUnits(supplyWei, decimals)),
-      creator: dep.deployer ?? "0x0",
+      creator,
       status: "active",
       type: "token",
       verified: Boolean(seed),
       ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
     });
+    return applyTokenImage(enriched, iconOverrides.get(token.toLowerCase()), chainImage);
   });
   return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
 }
 
 async function loadTokens(): Promise<CatalogToken[]> {
-  const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
-  tokensCache = { at: Date.now(), value };
-  return value;
+  try {
+    const value = await scanTokensCached().catch(() => discoverTokensOnChainUncached());
+    tokensCache = { at: Date.now(), value };
+    return value;
+  } catch (error) {
+    // Both the shared cache and the direct scan failed: serve the last good catalog rather than
+    // an empty or partial one.
+    if (tokensCache) return tokensCache.value;
+    throw error;
+  }
 }
 
 export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
@@ -575,7 +645,7 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
     if (indexed && indexed.length) {
       for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
     } else {
-      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]);
+      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]).catch(() => []);
       for (const log of fromLogs) {
         const pair = topicAddress(log.topics?.[2]);
         if (pair) pairAddrs.add(pair.toLowerCase());

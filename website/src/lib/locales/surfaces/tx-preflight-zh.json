@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "网络会拒绝这笔交易，因此未发送，也未扣费。原因：{reason}",
+  "preflightRevertGeneric": "网络会拒绝这笔交易，因此未发送，也未扣费。",
+  "preflightDailyLimit": "稳定币支付的每日额度已用完，未扣费。请改用 PPL 支付，或在 UTC 午夜之后重试。",
+  "preflightPayInPplHint": "提示：如果您选择了稳定币支付，请改用 PPL 支付后重试。"
+}

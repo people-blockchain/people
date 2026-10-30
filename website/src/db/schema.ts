@@ -780,6 +780,17 @@ export const apiRateLimits = pgTable(
 );
 
 /**
+ * Owner-editable token icon. The ERC-20 contract only lets the factory change `metadataURI`, so
+ * a creator-signed message records the new image off-chain and the catalog applies it on read.
+ */
+export const tokenIconOverrides = pgTable("token_icon_override", {
+  tokenAddress: text("token_address").primaryKey(),
+  imageUri: text("image_uri").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
+/**
  * PplCurveHubV2 person binding: one private person key per user, a stable public personId
  * (bytes32 hex) attested by the sale verifier, and the hashed identifiers that belong to it.
  * Additive only — see drizzle/0020_sale_person_binding.sql.

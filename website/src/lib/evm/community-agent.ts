@@ -56,7 +56,7 @@ type RpcLog = {
 async function fetchAgentSpendLogs(wallet: string): Promise<RpcLog[]> {
   const configured = readEvmDeployments().startBlocks?.agentWallet;
   const fromBlock = typeof configured === "number" && configured > 0 ? configured : AGENT_WALLET_V2_DEPLOY_BLOCK;
-  return fetchLogsWindowed(wallet, [AGENT_SPEND_TOPIC], fromBlock);
+  return fetchLogsWindowed(wallet, [AGENT_SPEND_TOPIC], fromBlock).catch(() => []);
 }
 
 export async function fetchCommunityAgentSnapshot(limit = 10): Promise<CommunityAgentSnapshot> {

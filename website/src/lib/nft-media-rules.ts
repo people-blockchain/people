@@ -127,7 +127,7 @@ export function parseIpfsMediaUri(uri: string): { cid: string; path: string } | 
   return { cid, path: segments.join("/") };
 }
 
-function isPublicHttpsHost(hostname: string): boolean {
+export function isPublicHttpsHost(hostname: string): boolean {
   if (!hostname.includes(".") || hostname.startsWith("[")) return false;
   if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) return false;
   const lower = hostname.toLowerCase();
@@ -191,7 +191,7 @@ export type NftMetadata = {
 
 /**
  * ERC-721 metadata JSON with the key order `name, description, image, animation_url`.
- * `description` is omitted when empty and `animation_url` exists only for video.
+ * A blank description becomes `"<name> NFT on PEOPLE"`. `animation_url` exists only for video.
  */
 export function buildNftMetadata(input: {
   name: string;
@@ -201,15 +201,16 @@ export function buildNftMetadata(input: {
 }): NftMetadata {
   const name = cleanNftText(input.name ?? "").trim();
   if (name.length < NFT_NAME_MIN || name.length > NFT_NAME_MAX) throw new NftMetadataError("invalid_name");
-  const description = cleanNftText(input.description ?? "").trim();
-  if (description.length > NFT_DESCRIPTION_MAX) throw new NftMetadataError("invalid_description");
+  const provided = cleanNftText(input.description ?? "").trim();
+  if (provided.length > NFT_DESCRIPTION_MAX) throw new NftMetadataError("invalid_description");
+  const description = provided.length > 0 ? provided : `${name} NFT on PEOPLE`;
   if (!isAllowedMediaUri(input.image)) throw new NftMetadataError("invalid_image_uri");
   const hasVideo = input.animationUrl !== undefined && input.animationUrl !== null;
   if (hasVideo && !isBareIpfsUri(input.animationUrl)) throw new NftMetadataError("invalid_animation_uri");
   // Key order is part of the contract: name, description, image, animation_url.
   const metadata: NftMetadata = {
     name,
-    ...(description ? { description } : {}),
+    description,
     image: input.image,
     ...(hasVideo ? { animation_url: input.animationUrl as string } : {}),
   };

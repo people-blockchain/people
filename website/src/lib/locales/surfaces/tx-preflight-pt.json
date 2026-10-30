@@ -1,0 +1,6 @@
+{
+  "preflightRevert": "A rede rejeitaria esta transação, por isso ela não foi enviada e nada foi cobrado. Motivo: {reason}",
+  "preflightRevertGeneric": "A rede rejeitaria esta transação, por isso ela não foi enviada e nada foi cobrado.",
+  "preflightDailyLimit": "O limite diário de pagamento com stablecoin foi atingido. Nada foi cobrado. Pague em PPL ou tente novamente após a meia-noite UTC.",
+  "preflightPayInPplHint": "Dica: se você escolheu pagar com uma stablecoin, mude para pagar em PPL e tente novamente."
+}
