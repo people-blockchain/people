@@ -1,6 +1,6 @@
 /**
  * Preliminary mainnet founder reward mechanics — display + unit tests.
- * See docs/FOUNDERS-AND-LAVKA-PLAN.md (track A) and /founders copy.
+ * See docs/founder-nft.md and /founders copy.
  */
 
 /** 10% of personal founder reward unlocks at mainnet day one. */
