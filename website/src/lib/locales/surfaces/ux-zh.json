@@ -48,6 +48,8 @@
   "pool": "池子",
   "noTx": "还没有交易——在钱包里完成第一笔吧",
   "loadMore": "加载更多",
+  "historyLoadingOlder": "正在加载更早的记录…",
+  "historyPartial": "历史记录只加载了一部分",
   "several": "多个收款人",
   "yourBalance": "你的余额：{amount} PPL",
   "notEnoughFee": "PPL 不足以支付手续费。请先在钱包中领取测试 PPL。",

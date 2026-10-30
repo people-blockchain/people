@@ -48,6 +48,8 @@
   "pool": "Pool",
   "noTx": "Belum ada transaksi — buat yang pertama di dompet Anda",
   "loadMore": "Muat lagi",
+  "historyLoadingOlder": "Memuat riwayat yang lebih lama…",
+  "historyPartial": "Riwayat baru termuat sebagian",
   "several": "Beberapa penerima",
   "yourBalance": "Saldo Anda: {amount} PPL",
   "notEnoughFee": "PPL tidak cukup untuk biaya. Dapatkan PPL uji di dompet Anda terlebih dahulu.",

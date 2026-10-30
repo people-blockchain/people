@@ -269,6 +269,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
         const beforeRaw = search.get("beforeBlock");
         const beforeBlock =
           beforeRaw && /^\d+$/.test(beforeRaw) ? Number(beforeRaw) : undefined;
+        // `offset` is optional. Pages continue with `beforeBlock`; a missing offset is a full first page.
         const history = await fetchAddressHistory(addr, limit, { beforeBlock });
         return {
           status: 200,
@@ -279,6 +280,8 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
             outgoing: history.outgoing,
             incoming: history.incoming,
             truncated: history.truncated ?? false,
+            partial: Boolean(history.partial),
+            prunedBeforeBlock: history.prunedBeforeBlock ?? null,
           },
         };
       } catch {

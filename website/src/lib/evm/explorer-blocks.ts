@@ -34,6 +34,8 @@ export type EvmExplorerTx = {
   amount?: number;
   fee?: number;
   blockHeight?: number;
+  /** Block timestamp in milliseconds, when the header was available. */
+  timestamp?: number;
   payload?: { memo: string };
 };
 

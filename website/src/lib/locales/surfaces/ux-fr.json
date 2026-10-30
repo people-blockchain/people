@@ -48,6 +48,8 @@
   "pool": "Pool",
   "noTx": "Aucune transaction pour l’instant — faites-en une dans votre portefeuille",
   "loadMore": "Charger davantage",
+  "historyLoadingOlder": "Chargement de l’historique plus ancien…",
+  "historyPartial": "Historique chargé en partie",
   "several": "Plusieurs destinataires",
   "yourBalance": "Votre solde : {amount} PPL",
   "notEnoughFee": "Pas assez de PPL pour les frais. Obtenez d’abord des PPL de test dans votre portefeuille.",
