@@ -15,5 +15,6 @@
   "pinFailed": "Die Datei konnte nicht gespeichert werden. Wiederholen Sie den Upload.",
   "badSignature": "Die Wallet-Signatur passt nicht zu diesem Upload. Wiederholen Sie den Upload.",
   "verifyUnavailable": "Die Datei wurde gespeichert, konnte aber noch nicht geprüft werden. Wiederholen Sie den Upload.",
-  "invalidRequest": "Die Upload-Anfrage ist ungültig. Wiederholen Sie den Upload."
+  "invalidRequest": "Die Upload-Anfrage ist ungültig. Wiederholen Sie den Upload.",
+  "timeout": "Der Upload hat zu lange gedauert. Wiederholen Sie den Upload."
 }

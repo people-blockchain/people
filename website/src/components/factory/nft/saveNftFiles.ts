@@ -4,6 +4,7 @@ import {
   MediaUploadError,
   mediaUploadText,
   uploadDirect,
+  type UploadDirectOptions,
 } from "@/lib/media-upload-client";
 import type { Language } from "@/lib/preferences";
 import { normalizeUploadMime } from "@/lib/media-upload-rules";
@@ -40,6 +41,8 @@ export type SaveInput = {
   videoFile: File | null;
   videoMime: NftVideoType | "";
   onStage: (id: StageId, patch: Partial<StageRow>) => void;
+  /** Test hook. Production uses the direct upload. */
+  upload?: (file: File, kind: "nft-image" | "nft-video", options?: UploadDirectOptions) => ReturnType<typeof uploadDirect>;
 };
 
 export type SaveResult = {
@@ -90,7 +93,7 @@ async function storeImage(input: SaveInput, id: StageId, file: File, mime: strin
       return { uri: legacy.uri, previewUrl: legacy.previewUrl };
     }
     try {
-      const out = await uploadDirect(fileForDirectUpload(file, type), "nft-image");
+      const out = await (input.upload ?? uploadDirect)(fileForDirectUpload(file, type), "nft-image");
       return { uri: out.uri, previewUrl: out.gatewayUrl };
     } catch (error) {
       rethrowUpload(error);
@@ -125,7 +128,7 @@ export async function saveNftFiles(input: SaveInput): Promise<SaveResult> {
     } else {
       video = await step(input, "video", async () => {
         try {
-          const out = await uploadDirect(fileForDirectUpload(videoFile, videoMime), "nft-video");
+          const out = await (input.upload ?? uploadDirect)(fileForDirectUpload(videoFile, videoMime), "nft-video");
           return { uri: out.uri, gatewayUrl: out.gatewayUrl };
         } catch (error) {
           rethrowUpload(error);

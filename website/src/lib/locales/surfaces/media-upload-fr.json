@@ -15,5 +15,6 @@
   "pinFailed": "Le fichier n'a pas pu être enregistré. Relancez l'envoi.",
   "badSignature": "La signature du portefeuille ne correspond pas à cet envoi. Relancez l'envoi.",
   "verifyUnavailable": "Le fichier a été enregistré, mais la vérification n'a pas encore abouti. Relancez l'envoi.",
-  "invalidRequest": "La demande d'envoi n'est pas valide. Relancez l'envoi."
+  "invalidRequest": "La demande d'envoi n'est pas valide. Relancez l'envoi.",
+  "timeout": "L'envoi a pris trop de temps. Relancez l'envoi."
 }

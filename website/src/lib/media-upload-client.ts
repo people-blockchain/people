@@ -37,6 +37,7 @@ export const MEDIA_UPLOAD_CODES = [
   "bad_signature",
   "verify_unavailable",
   "invalid_request",
+  "timeout",
 ] as const;
 
 export type MediaUploadCode = (typeof MEDIA_UPLOAD_CODES)[number];
@@ -60,7 +61,21 @@ const MESSAGE_CODE: Record<MediaUploadCode, MediaUploadMessageCode> = {
   bad_signature: "bad_signature",
   verify_unavailable: "verify_unavailable",
   invalid_request: "invalid_request",
+  timeout: "timeout",
 };
+
+export const DIRECT_UPLOAD_CLIENT_TIMEOUT_MS = 90_000;
+
+function isTimeoutError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null || !("name" in error)) return false;
+  return error.name === "TimeoutError" || error.name === "AbortError";
+}
+
+function withClientTimeout(init: RequestInit | undefined, timeoutMs: number): RequestInit {
+  const next: RequestInit = { ...init };
+  if (!next.signal) next.signal = AbortSignal.timeout(timeoutMs);
+  return next;
+}
 
 export function isMediaUploadCode(value: string): value is MediaUploadCode {
   return (MEDIA_UPLOAD_CODES as readonly string[]).includes(value);
@@ -82,6 +97,7 @@ export class MediaUploadError extends Error {
 export type UploadDirectOptions = {
   fetchImpl?: typeof fetch;
   signer?: DirectUploadSigner;
+  timeoutMs?: number;
 };
 
 export type DirectUploadResult = {
@@ -124,8 +140,8 @@ async function requestJson<T>(url: string, init: RequestInit, fetchImpl: typeof 
   let res: Response;
   try {
     res = await fetchImpl(url, init);
-  } catch {
-    throw new MediaUploadError("network");
+  } catch (error) {
+    throw new MediaUploadError(isTimeoutError(error) ? "timeout" : "network");
   }
   if (!res.ok) throw new MediaUploadError(await readCode(res));
   return (await res.json()) as T;
@@ -147,6 +163,7 @@ export async function uploadDirect(
   options: UploadDirectOptions = {},
 ): Promise<DirectUploadResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
+  const timeoutMs = options.timeoutMs ?? DIRECT_UPLOAD_CLIENT_TIMEOUT_MS;
   if (!Number.isSafeInteger(file.size) || file.size <= 0) throw new MediaUploadError("invalid_request");
   if (file.size > DIRECT_UPLOAD_MAX_BYTES) throw new MediaUploadError("file_too_large");
   const type = normalizeUploadMime(file.type);
@@ -167,7 +184,7 @@ export async function uploadDirect(
 
   const issued = await requestJson<{ nonce?: unknown; expiry?: unknown; domain?: unknown }>(
     `/api/factory/upload/nonce?address=${encodeURIComponent(address)}`,
-    { method: "GET" },
+    withClientTimeout({ method: "GET" }, timeoutMs),
     fetchImpl,
   );
   if (typeof issued.nonce !== "string" || typeof issued.expiry !== "string" || typeof issued.domain !== "string") {
@@ -192,7 +209,8 @@ export async function uploadDirect(
 
   const signed = await requestJson<{ url?: unknown }>(
     "/api/factory/upload/sign",
-    {
+    withClientTimeout(
+      {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -205,6 +223,8 @@ export async function uploadDirect(
         nonce: issued.nonce,
       }),
     },
+      timeoutMs,
+    ),
     fetchImpl,
   );
   if (typeof signed.url !== "string" || !signed.url.startsWith("https://")) throw new MediaUploadError("pin_failed");
@@ -214,9 +234,9 @@ export async function uploadDirect(
   try {
     const form = new FormData();
     form.append("file", uploadFile, uploadFile.name);
-    uploaded = await fetchImpl(signed.url, { method: "POST", body: form });
-  } catch {
-    throw new MediaUploadError("network");
+    uploaded = await fetchImpl(signed.url, withClientTimeout({ method: "POST", body: form }, timeoutMs));
+  } catch (error) {
+    throw new MediaUploadError(isTimeoutError(error) ? "timeout" : "network");
   }
   if (!uploaded.ok) {
     if (uploaded.status === 413) throw new MediaUploadError("file_too_large");
@@ -230,11 +250,14 @@ export async function uploadDirect(
 
   const verified = await requestJson<Partial<DirectUploadResult>>(
     "/api/factory/upload/verify",
-    {
+    withClientTimeout(
+      {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, kind, sha256, size: fields.fields.size }),
     },
+      timeoutMs,
+    ),
     fetchImpl,
   );
   if (

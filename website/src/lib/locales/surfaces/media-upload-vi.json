@@ -15,5 +15,6 @@
   "pinFailed": "Không lưu được tệp. Hãy tải lên lại.",
   "badSignature": "Chữ ký ví không khớp với bản tải lên này. Hãy tải lên lại.",
   "verifyUnavailable": "Tệp đã được lưu nhưng chưa kiểm tra được. Hãy tải lên lại.",
-  "invalidRequest": "Yêu cầu tải lên không hợp lệ. Hãy tải lên lại."
+  "invalidRequest": "Yêu cầu tải lên không hợp lệ. Hãy tải lên lại.",
+  "timeout": "Tải lên mất quá nhiều thời gian. Hãy tải lên lại."
 }

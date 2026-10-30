@@ -15,5 +15,6 @@
   "pinFailed": "Dosya kaydedilemedi. Yüklemeyi yeniden deneyin.",
   "badSignature": "Cüzdan imzası bu yüklemeyle eşleşmiyor. Yüklemeyi yeniden deneyin.",
   "verifyUnavailable": "Dosya kaydedildi ancak henüz doğrulanamadı. Yüklemeyi yeniden deneyin.",
-  "invalidRequest": "Yükleme isteği geçerli değil. Yüklemeyi yeniden deneyin."
+  "invalidRequest": "Yükleme isteği geçerli değil. Yüklemeyi yeniden deneyin.",
+  "timeout": "Yükleme çok uzun sürdü. Yüklemeyi yeniden deneyin."
 }
