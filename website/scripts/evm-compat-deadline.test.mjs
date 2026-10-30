@@ -51,9 +51,15 @@ async function listen(node) {
   };
 }
 
-function closeNode(node) {
+async function closeNode(node) {
   node.closeAllConnections?.();
-  node.close();
+  if (node.listening) {
+    await new Promise((resolve) => node.close(() => resolve(undefined)));
+  }
+  // Undici clears its parser timers from the socket close. On Node 22 that clearTimeout
+  // must run before node:test resets mock timers; a later clear deletes the next test's
+  // deadline timer by stale heap index, and the following hang-mode fetch never aborts.
+  for (let i = 0; i < 4; i++) await new Promise((resolve) => setImmediate(resolve));
 }
 
 async function withRpc(t, mode, run) {
@@ -81,10 +87,10 @@ async function withRpc(t, mode, run) {
     });
   });
   const restoreEnv = await listen(node);
-  t.after(() => {
+  t.after(async () => {
     restoreEnv();
     resetCaches();
-    closeNode(node);
+    await closeNode(node);
   });
   return run();
 }
@@ -137,10 +143,10 @@ test("a healthy RPC omits partial", async (t) => {
     });
   });
   const restoreEnv = await listen(node);
-  t.after(() => {
+  t.after(async () => {
     restoreEnv();
     resetCaches();
-    closeNode(node);
+    await closeNode(node);
   });
   for (const [path, search] of cases) {
     const res = await handleEvmCompatGet(path, search);
