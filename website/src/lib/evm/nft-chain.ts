@@ -29,7 +29,7 @@ export { inAppNftPath, nftIndexPath };
 export const RECENT_MINT_WINDOWS = 4;
 
 /** Hard cap for one owner listing, including the tip, fresh windows, cached windows, and stats. */
-export const NFT_OWNER_LIST_BUDGET_MS = 8_000;
+export const NFT_OWNER_LIST_BUDGET_MS = 6_000;
 
 /** Older windows read after the fresh ones, per request. The rest wait for a cursor. */
 export const NFT_HISTORY_WINDOWS_PER_PAGE = 4;

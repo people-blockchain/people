@@ -60,7 +60,7 @@ async function useNode(t, server) {
 
 test("a slow log window returns inside the budget with partial and a cursor", async (t) => {
   const budgetMs = 350;
-  assert.equal(NFT_OWNER_LIST_BUDGET_MS, 8_000);
+  assert.equal(NFT_OWNER_LIST_BUDGET_MS, 6_000);
   setNftOwnerListBudgetForTests(budgetMs);
   const dep = readEvmDeployments();
   const factoryStart = dep.startBlocks.nftFactory;
