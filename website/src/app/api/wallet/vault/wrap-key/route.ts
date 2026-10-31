@@ -4,6 +4,7 @@ import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { getUserWrapKeyHex, isAuthTimeFresh, isWalletVaultConfigured } from "@/lib/wallet-cloud-server";
 import { checkDurableWrapKeyRateLimit, recordWalletVaultAccess } from "@/lib/wallet-vault-access-log";
+import { hasAuthJsSessionCookie } from "@/lib/wallet-wrap-key-diagnostics";
 import { NextResponse } from "next/server";
 
 /** Key material responses must never be cached by a shared cache or the browser disk cache. */
@@ -17,6 +18,16 @@ export async function GET(request: Request) {
   await ensurePartnerSchema();
   const session = await auth();
   if (!session?.user?.id) {
+    // Same status as reauth_required. Name which gate failed (never the cookie, token, or email).
+    const reason = session ? "no_user_id" : "no_session";
+    const sessionCookie = hasAuthJsSessionCookie(request.headers.get("cookie"));
+    const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "").replace(
+      /[\r\n]/g,
+      "",
+    );
+    console.warn(
+      `[wallet-vault] wrap-key unauthorized: reason=${reason} sessionCookie=${sessionCookie} host=${host}`,
+    );
     return NextResponse.json({ error: "unauthorized" }, { status: 401, headers: NO_STORE });
   }
   const userId = session.user.id;

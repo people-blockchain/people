@@ -138,6 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "Không thể thêm mạng PEOPLE vào {wallet}. Hãy chấp thuận yêu cầu mạng trong ví và thử lại.",
   "signInSessionExpired": "Phiên đăng nhập đã hết hạn. Hãy chọn lại phương thức đăng nhập.",
+  "signInSessionMissing": "Không tìm thấy phiên đăng nhập. Hãy chọn lại phương thức đăng nhập để mở ví.",
   "signInRateLimited": "Quá nhiều lần thử. Vui lòng đợi vài phút.",
   "unlockWrongPassword": "Sai mật khẩu cho ví này.",
   "unlockUnavailable": "Không thể mở khóa ví này trên thiết bị này. Hãy đăng nhập bằng Google hoặc email.",

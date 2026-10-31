@@ -5,6 +5,7 @@ import {
   decryptPrivateKeyFromVault,
   encryptPrivateKeyForVault,
 } from "@/lib/wallet-cloud-crypto";
+import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 export type CloudWalletSession = {
   id: string;
   address: string;
@@ -14,7 +15,24 @@ export type CloudWalletSession = {
   userId: string;
 };
 
-export type AuthSessionUser = { id: string; email?: string | null };
+export type AuthSessionUser = { id: string; email?: string | null; authTime?: number };
+
+/** Outcome of checking a just-refreshed Auth.js session before retrying the vault open. */
+export type CloudSessionRetryDecision = "ok" | "unauthorized" | "reauth_required";
+
+/**
+ * After Web3Auth re-sign-in, retry the vault only when the session has a user id and an authTime
+ * inside the reauth window. No id is anonymous (`unauthorized`); a missing or stale authTime is
+ * the same gate the wrap-key route enforces (`reauth_required`).
+ */
+export function cloudSessionRetryDecision(
+  session: { id?: string | null; authTime?: number | null } | null | undefined,
+  nowMs: number = Date.now(),
+): CloudSessionRetryDecision {
+  if (!session?.id) return "unauthorized";
+  if (!isAuthTimeFresh(session.authTime, nowMs)) return "reauth_required";
+  return "ok";
+}
 
 /**
  * A cloud-vault failure carrying the route's machine code (`reauth_required`, `unauthorized`,
@@ -36,16 +54,16 @@ export function isWalletCloudErrorCode(err: unknown, code: string): boolean {
 }
 
 /** Read the route's `{error}` body, or fall back to a call-site label when it is absent. */
-async function errorCodeFrom(res: Response, fallback: string): Promise<string> {
+export async function errorCodeFrom(res: Response, fallback: string): Promise<string> {
   const body = (await res.json().catch(() => ({}))) as { error?: string };
   return typeof body.error === "string" && body.error ? body.error : fallback;
 }
 
-async function fetchWrapKey(): Promise<string> {
+export async function fetchWrapKey(): Promise<string> {
   const res = await fetch("/api/wallet/vault/wrap-key", { credentials: "include" });
   if (!res.ok) {
     // 401 carries either `unauthorized` (no session) or `reauth_required` (session older than the
-    // 15-minute window): the two need different recovery, so the code must survive to the caller.
+    // 5-minute reauth window): the two need different recovery, so the code must survive to the caller.
     throw new WalletCloudError(await errorCodeFrom(res, "wrap_key_failed"));
   }
   const data = (await res.json()) as { wrapKeyHex: string };
@@ -78,9 +96,16 @@ export async function fetchVaultRecordClient(): Promise<{ address: string } | nu
 export async function fetchAuthSessionUser(): Promise<AuthSessionUser | null> {
   const res = await fetch("/api/auth/session", { credentials: "include", cache: "no-store" });
   if (!res.ok) return null;
-  // Auth.js answers `null` (valid JSON) when nobody is signed in.
-  const data = (await res.json().catch(() => null)) as { user?: AuthSessionUser | null } | null;
-  return data?.user?.id ? data.user : null;
+  // Auth.js answers `null` (valid JSON) when nobody is signed in. `authTime` sits on the session,
+  // next to `user`, because the jwt/session callbacks store it there.
+  const data = (await res.json().catch(() => null)) as {
+    user?: { id?: string; email?: string | null } | null;
+    authTime?: unknown;
+  } | null;
+  const id = data?.user?.id;
+  if (!id) return null;
+  const authTime = typeof data?.authTime === "number" ? data.authTime : undefined;
+  return { id, email: data?.user?.email, authTime };
 }
 
 export function cloudSessionId(userId: string): string {
