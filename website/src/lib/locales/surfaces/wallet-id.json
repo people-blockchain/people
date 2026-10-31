@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "Kunci Anda disimpan terenkripsi di server PEOPLE agar dapat dipulihkan dengan masuk. Infrastruktur PEOPLE mampu mendekripsinya. Untuk kendali penuh atas kunci Anda sendiri, gunakan dompet peramban atau dompet eksternal. Ekspor kunci privat hanya jika Anda memerlukan cadangan di luar PEOPLE.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "Alamat yang dikendalikan kunci ini",
+  "importInvalidKey": "Masukkan frasa 12 kata atau kunci privat heksadesimal 64 karakter."
 }

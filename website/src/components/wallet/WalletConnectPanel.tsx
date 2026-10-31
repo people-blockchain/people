@@ -1,6 +1,7 @@
 "use client";
 
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
+import { previewWalletImport } from "@/lib/wallet-seed";
 import { useWalletOnboarding, type WalletOnboardingMode } from "./useWalletOnboarding";
 import { WalletConnectSoonSection } from "./WalletSoonOption";
 import { UnifiedWalletAuthPanel } from "./UnifiedWalletAuthPanel";
@@ -55,6 +56,9 @@ export function WalletConnectPanel({
     setError,
   } = flow;
   const c = walletUxCopy(lang);
+  const importPreview = mode === "import" ? previewWalletImport(importText) : null;
+  const importReady =
+    Boolean(importPreview && "address" in importPreview) || importText.trim().startsWith("{");
 
   if (flow.session && mode === "home") {
     return null;
@@ -225,6 +229,15 @@ export function WalletConnectPanel({
             rows={4}
             className="w-full rounded-xl border border-line bg-surface px-3 py-2 font-mono text-xs"
           />
+          {importPreview && "address" in importPreview ? (
+            <p className="text-sm text-ink-2" data-testid="import-address-preview">
+              {t.importAddress}
+              <span className="mt-1 block break-all font-mono text-xs text-ink">{importPreview.address}</span>
+            </p>
+          ) : null}
+          {importPreview && "error" in importPreview ? (
+            <p className="text-sm text-warm">{t.importInvalidKey}</p>
+          ) : null}
           <label className="block text-sm">
             {t.password}
             <input
@@ -236,7 +249,7 @@ export function WalletConnectPanel({
           </label>
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || !importReady}
             onClick={() => void doImport()}
             className="rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-brand-ink disabled:opacity-40"
           >

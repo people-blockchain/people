@@ -11,6 +11,7 @@ paths = [
   '''chain/scripts/contracts-smoke\.sh''',
   '''contracts/scripts/smoke-local\.sh''',
   '''website/scripts/evm-embedded-key\.test\.mjs''',
+  '''website/scripts/wallet-import-derivation\.test\.mjs''',
   '''website/scripts/wallet-keep-current\.spec\.mjs''',
   '''website/scripts/evm-log-start-blocks\.test\.mjs''',
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)

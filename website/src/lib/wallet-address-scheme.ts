@@ -1,6 +1,7 @@
 import * as secp from "@noble/secp256k1";
 import { keccak_256 } from "@noble/hashes/sha3.js";
 import { sha256 } from "@noble/hashes/sha2.js";
+import { isCosmosEvmChain } from "./chain-mode.ts";
 
 /** Must match `EIP155_CHAIN_ID` in people-node when JSON-RPC is live. */
 export const PEOPLE_EIP155_CHAIN_ID = 97401;
@@ -14,17 +15,35 @@ export function legacyAddressFromPublicKey(publicKeyHex: string): string {
   return `0x${bytesToHex(sha256(bytes)).slice(0, 40)}`;
 }
 
+/** EIP-55 mixed-case checksum. Display form matches viem `privateKeyToAccount`. */
+function checksumAddress(lowerHex: string): string {
+  const body = lowerHex.replace(/^0x/i, "").toLowerCase();
+  const hash = bytesToHex(keccak_256(new TextEncoder().encode(body)));
+  let out = "0x";
+  for (let i = 0; i < body.length; i += 1) {
+    const nibble = Number.parseInt(hash[i] ?? "0", 16);
+    const char = body[i] ?? "";
+    out += nibble >= 8 ? char.toUpperCase() : char;
+  }
+  return out;
+}
+
 export function evmAddressFromPublicKey(publicKeyHex: string): string {
   const hex = publicKeyHex.replace(/^0x/i, "");
   const uncompressed = secp.Point.fromHex(hex).toBytes(false);
   const hash = keccak_256(uncompressed.slice(1));
-  return `0x${bytesToHex(hash.slice(-20))}`;
+  return checksumAddress(bytesToHex(hash.slice(-20)));
 }
 
 export type WalletAddressSchemeConfig = "legacy" | "evm" | "auto";
 
-/** Off by default — prod keeps sha256 addresses until operators enable EVM canonical. */
+/**
+ * Cosmos EVM (the default backend, chain 97401) owns the keccak address.
+ * sha256 stays only on an explicitly legacy backend. A probe (`auto`) cannot
+ * switch an EVM backend back to a sha256 receive address.
+ */
 export function readWalletAddressSchemeConfig(): WalletAddressSchemeConfig {
+  if (isCosmosEvmChain()) return "evm";
   const raw = process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES?.trim().toLowerCase();
   if (raw === "1" || raw === "true" || raw === "evm") return "evm";
   if (raw === "auto") return "auto";

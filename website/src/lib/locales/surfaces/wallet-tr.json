@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "Anahtarınız, giriş yaparak geri yükleyebilmeniz için PEOPLE sunucularında şifrelenmiş olarak saklanır. PEOPLE altyapısı onu çözebilir. Tam öz-saklama için tarayıcı cüzdanı veya harici bir cüzdan kullanın. Özel anahtarı yalnızca PEOPLE dışında bir yedeğe ihtiyacınız varsa dışa aktarın.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "Bu anahtarın kontrol ettiği adres",
+  "importInvalidKey": "12 kelimelik bir ifade veya 64 karakterlik onaltılık özel anahtar girin."
 }

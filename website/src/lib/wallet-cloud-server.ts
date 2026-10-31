@@ -123,7 +123,7 @@ export async function verifyVaultPayload(userId: string, input: VaultUpsertInput
     return { ok: false, error: "invalid_ciphertext" };
   }
   const derived = keyFromPrivate(privateKey);
-  if (derived.address !== address) {
+  if (derived.address.toLowerCase() !== address) {
     return { ok: false, error: "address_mismatch" };
   }
   if (normalizeHex(derived.publicKey) !== publicKey) {
