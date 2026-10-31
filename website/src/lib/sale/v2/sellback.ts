@@ -120,6 +120,44 @@ export function largestPplUnderCaps(
   return best;
 }
 
+/**
+ * PPL to sell now. The exact unpaid ceiling is used whenever it fits the caps,
+ * including a remainder below the minimum. Otherwise the largest slice that fits.
+ */
+export async function choosePayableSlice(
+  left: bigint,
+  quote: (ppl: bigint) => Promise<{ gross: bigint; payout: bigint }>,
+  personalRemainingUsd6: bigint,
+  globalRemainingUsd6: bigint,
+): Promise<{ payable: bigint; payout: bigint }> {
+  const fits = async (ppl: bigint) => {
+    if (ppl <= BigInt(0)) return false;
+    const row = await quote(ppl);
+    return row.gross > BigInt(0) && row.payout > BigInt(0) && row.gross <= personalRemainingUsd6 && row.gross <= globalRemainingUsd6;
+  };
+  if (left <= BigInt(0)) return { payable: BigInt(0), payout: BigInt(0) };
+  if (await fits(left)) {
+    const row = await quote(left);
+    return { payable: left, payout: row.payout };
+  }
+  let lo = BigInt(0);
+  let hi = left;
+  let best = BigInt(0);
+  for (let i = 0; i < 64 && lo + BigInt(1) < hi; i++) {
+    const mid = (lo + hi) / BigInt(2);
+    if (await fits(mid)) {
+      best = mid;
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+  if (best <= BigInt(0)) return { payable: BigInt(0), payout: BigInt(0) };
+  const chosen = await quote(best);
+  if (chosen.payout <= BigInt(0)) return { payable: BigInt(0), payout: BigInt(0) };
+  return { payable: best, payout: chosen.payout };
+}
+
 /** Sell-back stays available from open through graduation. Liquidity release is a separate flag. */
 export function sellBackOpen(phase: V2Phase): boolean {
   return phase !== V2_PHASES.NotOpen;

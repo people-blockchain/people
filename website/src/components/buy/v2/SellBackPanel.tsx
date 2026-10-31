@@ -6,10 +6,12 @@ import type { Address, Hex } from "viem";
 import type { EIP1193Provider } from "@/lib/evm/client";
 import { intlLocale, ppl, usd } from "@/lib/sale/format";
 import { pplWeiToNumber, usd6ToNumber, validV2Address, type V2Chain } from "@/lib/sale/v2/logic";
+import { newBurnAllowed } from "@/lib/sale/v2/pending-payout";
 import { sellBackOpen } from "@/lib/sale/v2/sellback";
 import {
   formatPplInput,
   parsePplInput,
+  usePendingPayouts,
   useV2SellBack,
   useV2SellBackView,
 } from "@/lib/sale/v2/useV2SellBack";
@@ -57,6 +59,10 @@ export type SellBackCopy = {
   reserve: string;
   reverted: string;
   switchRejected: string;
+  pendingTitle: string;
+  pendingBody: string;
+  continuePayout: string;
+  confirmAnotherSale: string;
 };
 
 const ERROR_KEYS = [
@@ -115,8 +121,17 @@ export function SellBackPanel({
   const open = sellBackOpen(phase) && Boolean(personId);
   const [amount, setAmount] = useState("");
   const [seeded, setSeeded] = useState(false);
+  const [allowAnother, setAllowAnother] = useState(false);
   const parsed = parsePplInput(amount);
-  const { status, sellBack, busy } = useV2SellBack();
+  const { status, sellBack, resumePayout, busy } = useV2SellBack();
+  const burn = validV2Address(burnAddress ?? undefined);
+  const { pending } = usePendingPayouts({
+    chain,
+    account,
+    burnAddress: burn,
+    enabled: open && !preview && Boolean(account),
+    refreshKey: refreshKey + status.step.length,
+  });
   const view = useV2SellBackView({
     chain,
     account,
@@ -136,13 +151,24 @@ export function SellBackPanel({
   const unlocked = preview ? BigInt(0) : view.unlockedPpl;
   const feeLabel = view.feeBand === "high" ? copy.feeHigh : view.feeBand === "mixed" ? copy.feeMixed : copy.feeLow;
   const tooMuch = parsed !== null && parsed > unlocked;
-  const burn = validV2Address(burnAddress ?? undefined);
+  const anotherBurn = newBurnAllowed(pending.length, allowAnother);
   const canSubmit = Boolean(
-    !preview && provider && account && personId && burn && parsed && !tooMuch && parsed <= unlocked && !busy && !view.loading,
+    !preview &&
+      provider &&
+      account &&
+      personId &&
+      burn &&
+      parsed &&
+      !tooMuch &&
+      parsed <= unlocked &&
+      !busy &&
+      !view.loading &&
+      anotherBurn,
   );
 
   const onSubmit = async () => {
     if (!canSubmit || !provider || !account || !personId || !burn || !parsed) return;
+    if (!newBurnAllowed(pending.length, allowAnother)) return;
     const done = await sellBack({
       chain,
       provider,
@@ -150,6 +176,21 @@ export function SellBackPanel({
       personId,
       pplIn: parsed,
       burnAddress: burn as Address,
+      allowAnotherBurn: anotherBurn,
+    });
+    if (done) onDone();
+  };
+
+  const onContinue = async (returnId: string) => {
+    const item = pending.find((row) => row.returnId.toLowerCase() === returnId.toLowerCase());
+    if (!item || !provider || !account || !personId || !burn || busy) return;
+    const done = await resumePayout({
+      chain,
+      provider,
+      account,
+      personId,
+      burnAddress: burn as Address,
+      pending: item,
     });
     if (done) onDone();
   };
@@ -158,6 +199,34 @@ export function SellBackPanel({
     <section className="mt-4 space-y-3 rounded-2xl border border-line bg-surface p-4" data-testid="v2-return-panel">
       <h3 className="text-sm font-semibold text-ink">{copy.title}</h3>
       <p className="text-xs text-ink-3">{copy.payoutNote}</p>
+      {pending.length > 0 ? (
+        <div className="space-y-2 rounded-xl border border-amber-500/40 bg-amber-500/5 p-3" data-testid="v2-pending-payouts">
+          <p className="text-sm font-semibold text-ink">{copy.pendingTitle}</p>
+          <p className="text-xs text-ink-2">{copy.pendingBody}</p>
+          {pending.map((item) => (
+            <button
+              key={item.returnId}
+              type="button"
+              onClick={() => void onContinue(item.returnId)}
+              disabled={busy}
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-surface disabled:opacity-55"
+              data-testid="v2-continue-payout"
+            >
+              {copy.continuePayout}
+            </button>
+          ))}
+          {!allowAnother ? (
+            <button
+              type="button"
+              onClick={() => setAllowAnother(true)}
+              className="text-xs font-semibold text-ink-2 underline"
+              data-testid="v2-confirm-another-sale"
+            >
+              {copy.confirmAnotherSale}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       <dl className="space-y-2 text-sm">
         <div className="flex items-baseline justify-between gap-3">
           <dt className="text-ink-2">{copy.available}</dt>

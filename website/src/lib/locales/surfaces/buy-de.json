@@ -414,7 +414,11 @@
       "tooMany": "Zu viele Verkäufe in diesem 24-Stunden-Fenster.",
       "reserve": "Die Reserve deckt diese Auszahlung nicht.",
       "reverted": "Die Transaktion wurde zurückgesetzt.",
-      "switchRejected": "Das Netzwerk wurde nicht gewechselt."
+      "switchRejected": "Das Netzwerk wurde nicht gewechselt.",
+      "pendingTitle": "Ausstehende Auszahlungen",
+      "pendingBody": "Ein Verkauf wartet auf die USDC-Auszahlung auf Base. Schließe diese Auszahlung ab, bevor du mehr PPL verkaufst.",
+      "continuePayout": "Auszahlung fortsetzen",
+      "confirmAnotherSale": "Trotzdem mehr verkaufen"
     }
   }
 }

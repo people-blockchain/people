@@ -4,7 +4,7 @@ import { decodeEventLog, getAddress, parseAbiItem, type Address, type Hex } from
 export const PEOPLE_MAINNET_CHAIN_ID = 97401;
 
 export const RETURN_BURNED_EVENT = parseAbiItem(
-  "event ReturnBurned(bytes32 indexed returnId, address indexed from, address indexed hub, bytes32 personId, address seller, uint256 amount)",
+  "event ReturnBurned(bytes32 indexed returnId, address indexed from, address indexed hub, bytes32 personId, address seller, uint256 amount, uint256 destChainId)",
 );
 
 export const PPL_RETURN_BURN_ABI = [
@@ -30,6 +30,7 @@ export const PPL_RETURN_BURN_ABI = [
       { name: "personId", type: "bytes32", indexed: false },
       { name: "seller", type: "address", indexed: false },
       { name: "amount", type: "uint256", indexed: false },
+      { name: "destChainId", type: "uint256", indexed: false },
     ],
   },
 ] as const;
@@ -54,6 +55,7 @@ export type ReturnBurn = {
   personId: Hex;
   seller: Address;
   amount: bigint;
+  destChainId: bigint;
 };
 
 export type ReturnLog = { address?: string; topics: readonly Hex[]; data: Hex };
@@ -65,7 +67,7 @@ function sameAddress(a: string, b: string): boolean {
 /** The first `ReturnBurned` log from `burn` whose hub matches. */
 export function decodeReturnBurned(
   logs: readonly ReturnLog[],
-  expected: { burn: Address; hub: Address; returnId?: Hex },
+  expected: { burn: Address; hub: Address; returnId?: Hex; destChainId?: bigint },
 ): ReturnBurn | null {
   for (const log of logs) {
     if (!log.address || !sameAddress(log.address, expected.burn)) continue;
@@ -83,10 +85,12 @@ export function decodeReturnBurned(
         personId: Hex;
         seller: Address;
         amount: bigint;
+        destChainId: bigint;
       };
       if (!sameAddress(args.hub, expected.hub)) continue;
       if (expected.returnId && args.returnId.toLowerCase() !== expected.returnId.toLowerCase()) continue;
-      if (args.amount <= BigInt(0)) continue;
+      if (expected.destChainId !== undefined && args.destChainId !== expected.destChainId) continue;
+      if (args.amount <= BigInt(0) || args.destChainId <= BigInt(0)) continue;
       return {
         returnId: args.returnId,
         from: getAddress(args.from),
@@ -94,6 +98,7 @@ export function decodeReturnBurned(
         personId: args.personId,
         seller: getAddress(args.seller),
         amount: args.amount,
+        destChainId: args.destChainId,
       };
     } catch {
       continue;

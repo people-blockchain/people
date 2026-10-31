@@ -15,12 +15,7 @@ import type { EIP1193Provider } from "@/lib/evm/client";
 import { approveErc20IfNeeded } from "@/lib/evm/erc20-allowance";
 import { SITE_URL } from "@/lib/site";
 import { PPL_CURVE_HUB_V2_ABI, ZERO_ADDRESS } from "./abi";
-import { V2_SALE } from "./constants";
-import {
-  estimatePplOut,
-  minPplOutFromEstimate,
-  type V2Chain,
-} from "./logic";
+import { chargedBuyUsd6, estimatePplOut, minPplOutForChargedBuy, type V2Chain } from "./logic";
 import { buildV2OwnershipMessage, saleDomain } from "./ownership";
 
 export type V2TxStatus =
@@ -131,7 +126,7 @@ export function useV2Buy() {
         method: "POST",
         headers: { "content-type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ account, ownershipSignature, nonceCode: challenge.nonce }),
+        body: JSON.stringify({ account, ownershipSignature, nonceCode: challenge.nonce, version: "v2" }),
       });
       if (!res.ok) {
         setVerifyStatus({ step: "error", reason: (await res.json().catch(() => null))?.error ?? "verifyFailed" });
@@ -219,8 +214,14 @@ export function useV2Buy() {
         if (!approved.ok) {
           throw new Error(approved.reason === "reverted" ? "approval reverted" : "allowance unchanged");
         }
-        const expected = estimatePplOut(amountIn, spotPriceWad);
-        const minPplOut = minPplOutFromEstimate(expected, V2_SALE.slippageBps);
+        const [raisedUsd6, raiseCapUsd6] = await Promise.all([
+          publicClient.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "raisedUsd6" }),
+          publicClient.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "RAISE_CAP_USD6" }),
+        ]);
+        const remainingUsd6 = raiseCapUsd6 > raisedUsd6 ? raiseCapUsd6 - raisedUsd6 : BigInt(0);
+        const charged = chargedBuyUsd6(amountIn, remainingUsd6);
+        const expected = estimatePplOut(charged, spotPriceWad);
+        const minPplOut = minPplOutForChargedBuy({ amountIn, remainingUsd6, spotPriceWad });
         setBuyStatus({ step: "buying" });
         const hash = await walletClient.writeContract({
           address: hub,

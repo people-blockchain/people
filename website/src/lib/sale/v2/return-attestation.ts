@@ -159,8 +159,15 @@ export async function createReturnAttestation(input: {
     }
   }
 
-  const burned = decodeReturnBurned(receipt.logs, { burn, hub, returnId: requestedId });
-  if (!burned) return { ok: false, status: 422, error: "return_not_found" };
+  const burned = decodeReturnBurned(receipt.logs, {
+    burn,
+    hub,
+    returnId: requestedId,
+    destChainId: BigInt(input.hubChainId),
+  });
+  if (!burned || burned.destChainId !== BigInt(input.hubChainId)) {
+    return { ok: false, status: 422, error: "return_not_found" };
+  }
 
   let verifier: Address;
   try {
@@ -182,7 +189,7 @@ export async function createReturnAttestation(input: {
       seller: burned.seller,
       pplAmount: burned.amount,
       sourceChainId: PEOPLE_MAINNET_CHAIN_ID,
-      destChainId: input.hubChainId,
+      destChainId: Number(burned.destChainId),
       returnId: burned.returnId,
       deadline,
     },
@@ -196,7 +203,7 @@ export async function createReturnAttestation(input: {
       seller: burned.seller,
       pplAmount: burned.amount.toString(),
       sourceChainId: PEOPLE_MAINNET_CHAIN_ID,
-      destChainId: input.hubChainId,
+      destChainId: Number(burned.destChainId),
       returnId: burned.returnId,
       deadline: Number(deadline),
       signature,
