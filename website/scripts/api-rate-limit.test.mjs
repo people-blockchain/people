@@ -110,6 +110,23 @@ test("shared limiter defers to the shared store (budget shared across instances)
   }
 });
 
+test("shared denials do not keep the local bucket closed after the store starts allowing", async () => {
+  resetRateLimitStoresForTests();
+  let sharedAllows = false;
+  setSharedRateLimitBackendForTests(async () => sharedAllows);
+  try {
+    for (let i = 0; i < 5; i += 1) {
+      const denied = await checkSharedRateLimitDetail("release", "subject", 1, 60_000);
+      assert.equal(denied.allowed, false);
+    }
+    sharedAllows = true;
+    const allowed = await checkSharedRateLimitDetail("release", "subject", 1, 60_000);
+    assert.equal(allowed.allowed, true);
+  } finally {
+    setSharedRateLimitBackendForTests(undefined);
+  }
+});
+
 test("a local rejection never reaches the shared store", async () => {
   resetRateLimitStoresForTests();
   let calls = 0;

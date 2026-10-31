@@ -102,6 +102,26 @@ function takeSlidingWindow(
   };
 }
 
+/**
+ * Undo the increment {@link takeSlidingWindow} just applied. A shared-store rejection must not
+ * stay in the process bucket: that bucket's window starts at the first local hit, which can be
+ * later than the store's fixed window, so rejected retries would keep this instance closed
+ * after the store had already opened a new window.
+ */
+function releaseSlidingWindowIncrement(namespace: string, key: string): void {
+  const map = stores.get(namespace);
+  if (!map) return;
+  const id = rateLimitKey(key);
+  const bucket = map.get(id);
+  if (!bucket) return;
+  bucket.count -= 1;
+  if (bucket.count <= 0) {
+    map.delete(id);
+    return;
+  }
+  map.set(id, bucket);
+}
+
 /** In-process per-key sliding window rate limit. Prefer `checkSharedRateLimit` in routes. */
 export function checkSlidingWindowRateLimit(
   namespace: string,
@@ -159,7 +179,9 @@ export async function checkSharedRateLimitDetail(
       timer = setTimeout(() => reject(new Error("shared rate limit timed out")), SHARED_TIMEOUT_MS);
     });
     const raw = await Promise.race([backend(namespace, rateLimitKey(key), maxPerWindow, windowMs), timeout]);
-    return normalizeRateLimitVerdict(raw, windowMs);
+    const verdict = normalizeRateLimitVerdict(raw, windowMs);
+    if (!verdict.allowed) releaseSlidingWindowIncrement(namespace, key);
+    return verdict;
   } catch (error) {
     sharedDisabledUntil = Date.now() + SHARED_COOLDOWN_MS;
     console.warn(

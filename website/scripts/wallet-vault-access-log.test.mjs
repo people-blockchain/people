@@ -14,6 +14,16 @@ const { recordWalletVaultAccess, checkDurableWrapKeyRateLimit } = await import(
 
 const db = await getDbReady();
 
+test("recordWalletVaultAccess surfaces a failed insert instead of dropping it", async () => {
+  await assert.rejects(() =>
+    recordWalletVaultAccess({
+      userId: "missing-access-log-user",
+      route: "wallet/vault/wrap-key",
+      outcome: "reauth_required",
+    }),
+  );
+});
+
 test("recordWalletVaultAccess inserts a row with no key material fields", async () => {
   const userId = "access-log-user-1";
   await db.insert(schema.users).values({ id: userId });

@@ -46,11 +46,36 @@ function retryAfterFrom(res: Response, body: { retryAfter?: unknown }): number |
   return Number.isFinite(header) && header > 0 ? header : null;
 }
 
+/**
+ * Shared across the session bridge and the sign-in card. A 429 in either place has to pause
+ * the other; a ref inside one component cannot.
+ */
+let rateLimitedUntil = 0;
+
+export function cloudRateLimitedUntil(): number {
+  return rateLimitedUntil;
+}
+
+export function resetCloudRateLimitForTests(): void {
+  rateLimitedUntil = 0;
+}
+
+function rememberRateLimit(seconds: number | null): void {
+  const wait = seconds != null && seconds > 0 ? seconds : 60;
+  const until = Date.now() + wait * 1000;
+  if (until > rateLimitedUntil) rateLimitedUntil = until;
+}
+
 /** Read the route's `{error}` body, or fall back to a call-site label when it is absent. */
-async function errorFrom(res: Response, fallback: string): Promise<WalletCloudError> {
+export async function errorFrom(res: Response, fallback: string): Promise<WalletCloudError> {
   const body = (await res.json().catch(() => ({}))) as { error?: string; retryAfter?: unknown };
-  const code = typeof body.error === "string" && body.error ? body.error : fallback;
-  return new WalletCloudError(code, retryAfterFrom(res, body));
+  const reported = typeof body.error === "string" && body.error ? body.error : "";
+  // A 429 with an empty or non-JSON body is still a rate limit. Falling through to the
+  // call-site label made the sign-in card show a generic failure instead of the wait.
+  const code = reported || (res.status === 429 ? "rate_limited" : fallback);
+  const retryAfterSeconds = retryAfterFrom(res, body);
+  if (res.status === 429) rememberRateLimit(retryAfterSeconds);
+  return new WalletCloudError(code, retryAfterSeconds);
 }
 
 /** Locale template uses `{minutes}`, rounded up so a short wait never displays as zero. */
@@ -77,7 +102,7 @@ export function cloudSessionMayRestore(blockedUntil: number, now = Date.now()): 
   return now >= blockedUntil;
 }
 
-async function fetchWrapKey(): Promise<string> {
+export async function fetchWrapKey(): Promise<string> {
   const res = await fetch("/api/wallet/vault/wrap-key", { credentials: "include" });
   if (!res.ok) {
     // 401 carries either `unauthorized` (no session) or `reauth_required` (session older than the
@@ -152,10 +177,15 @@ export async function unlockCloudVaultSession(
   };
 }
 
-export async function createCloudVaultWallet(userId: string): Promise<CloudWalletSession> {
-  const existing = await fetchVaultRecord();
-  if (existing) {
-    return unlockCloudVaultSession(userId, existing);
+export async function createCloudVaultWallet(
+  userId: string,
+  options?: { skipInitialCheck?: boolean },
+): Promise<CloudWalletSession> {
+  if (!options?.skipInitialCheck) {
+    const existing = await fetchVaultRecord();
+    if (existing) {
+      return unlockCloudVaultSession(userId, existing);
+    }
   }
   const wrapKeyHex = await fetchWrapKey();
   const generated = generateWalletKeyPair();
@@ -197,7 +227,8 @@ export async function ensureCloudWalletSession(
 ): Promise<CloudWalletSession> {
   const vault = options && "vault" in options ? (options.vault ?? null) : await fetchVaultRecord();
   if (vault) return unlockCloudVaultSession(user.id, vault);
-  return createCloudVaultWallet(user.id);
+  // The caller already learned there is no vault (this read, or `{ vault: null }`).
+  return createCloudVaultWallet(user.id, { skipInitialCheck: true });
 }
 
 export async function exportCloudPrivateKey(session: CloudWalletSession): Promise<string> {

@@ -23,10 +23,15 @@ import { checkDurableWrapKeyRateLimitDetail } from "@/lib/wallet-vault-access-lo
  * address cannot create them without bound.
  *
  * Wrap-key delivery stays at 20 per account per 5 minutes — the previous short-window figure —
- * so a fresh session cannot pull the key more often than before. Failures stay at 30 per
- * account per 15 minutes and are not raised. A successful wrap-key is the only reset. A missing
- * client address ("unknown") is not an address: keying the per-address buckets on it would merge
- * every such account into one budget, so that check is skipped.
+ * and the same window has an address ceiling so one host cannot pull keys for every account
+ * behind it. The address ceiling is below the vault-read address ceiling: a wrap key unwraps
+ * the ciphertext, so it is not given the same burst. A missing client address ("unknown") is
+ * not an address: keying the per-address buckets on it would merge every such account into one
+ * budget, so that check is skipped.
+ *
+ * Separately, Postgres keeps a 30 per account per 15 minutes ceiling over every wrap-key
+ * outcome except `rate_limited` — successes and `reauth_required` both count. A success does
+ * not clear or shorten that window. A vault read is a different route and never does either.
  */
 export const WALLET_VAULT_READ_ACCOUNT_MAX = 60;
 export const WALLET_VAULT_READ_WINDOW_MS = 5 * 60 * 1000;
@@ -38,6 +43,7 @@ export const WALLET_VAULT_WRITE_IP_MAX = 1000;
 
 export const WALLET_VAULT_WRAP_ACCOUNT_MAX = 20;
 export const WALLET_VAULT_WRAP_WINDOW_MS = 5 * 60 * 1000;
+export const WALLET_VAULT_WRAP_IP_MAX = 1000;
 export const WALLET_VAULT_WRAP_FAILURE_MAX = 30;
 export const WALLET_VAULT_WRAP_FAILURE_WINDOW_MS = 15 * 60 * 1000;
 export const WALLET_VAULT_WRAP_ROUTE = "wallet/vault/wrap-key";
@@ -47,6 +53,7 @@ const READ_IP = "wallet-vault-read-ip";
 const WRITE_ACCOUNT = "wallet-vault-write";
 const WRITE_IP = "wallet-vault-write-ip";
 const WRAP_DELIVERY = "wallet-vault-wrap-key";
+const WRAP_IP = "wallet-vault-wrap-key-ip";
 
 /** Null when this value must not be used as a shared per-address bucket. */
 export function walletVaultIpRateLimitKey(ip: string): string | null {
@@ -64,11 +71,15 @@ async function checkAccountAndAddress(
   addressMax: number,
   windowMs: number,
 ): Promise<RateLimitVerdict> {
-  const account = await checkSharedRateLimitDetail(accountNamespace, userId, accountMax, windowMs);
-  if (!account.allowed) return account;
+  // The shared address bucket is checked before the account bucket. An address rejection
+  // (carrier-grade NAT, or a noisy neighbor on the same egress) must not spend the account's
+  // own ceiling — that ceiling has to survive a move to another network.
   const addressKey = walletVaultIpRateLimitKey(ip);
-  if (!addressKey) return account;
-  return checkSharedRateLimitDetail(addressNamespace, addressKey, addressMax, windowMs);
+  if (addressKey) {
+    const address = await checkSharedRateLimitDetail(addressNamespace, addressKey, addressMax, windowMs);
+    if (!address.allowed) return address;
+  }
+  return checkSharedRateLimitDetail(accountNamespace, userId, accountMax, windowMs);
 }
 
 export function checkWalletVaultReadLimit(userId: string, ip: string): Promise<RateLimitVerdict> {
@@ -106,11 +117,14 @@ export function checkWalletVaultWrapKeyFailures(userId: string): Promise<RateLim
 }
 
 /** How often a session that already passed the reauth check may receive the wrap key. */
-export function checkWalletVaultWrapKeyDelivery(userId: string): Promise<RateLimitVerdict> {
-  return checkSharedRateLimitDetail(
+export function checkWalletVaultWrapKeyDelivery(userId: string, ip: string): Promise<RateLimitVerdict> {
+  return checkAccountAndAddress(
     WRAP_DELIVERY,
+    WRAP_IP,
     userId,
+    ip,
     WALLET_VAULT_WRAP_ACCOUNT_MAX,
+    WALLET_VAULT_WRAP_IP_MAX,
     WALLET_VAULT_WRAP_WINDOW_MS,
   );
 }
