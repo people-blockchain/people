@@ -2,7 +2,13 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { useWallet } from "@/context/WalletContext";
-import { fetchAuthSessionUser, ensureCloudWalletSession, isCloudSessionId } from "@/lib/wallet-cloud-client";
+import {
+  fetchAuthSessionUser,
+  ensureCloudWalletSession,
+  isCloudSessionId,
+  cloudRestoreBlockedUntil,
+  cloudSessionMayRestore,
+} from "@/lib/wallet-cloud-client";
 import { rememberAuthEmail } from "@/lib/wallet-auth-storage";
 import { isUserDisconnected } from "@/lib/wallet-disconnect";
 
@@ -17,6 +23,8 @@ export function CloudWalletSessionBridge() {
   const { session, connectCloud, markSessionHydrated } = useWallet();
   const inFlight = useRef(false);
   const needsReauth = useRef(false);
+  /** Epoch ms. A rate-limited restore stays quiet until Retry-After has elapsed. */
+  const rateLimitedUntil = useRef(0);
   // The vault lookup below is async; a local session restored from the tab store on load
   // (E2E-H2) must win that race instead of being silently replaced by the cloud wallet.
   const latestSession = useRef(session);
@@ -32,6 +40,7 @@ export function CloudWalletSessionBridge() {
     // retrying on every focus/visibility change only floods the route with 401s. The user
     // re-opens it through the sign-in card, which re-establishes a fresh session.
     if (needsReauth.current) return;
+    if (!cloudSessionMayRestore(rateLimitedUntil.current)) return;
     inFlight.current = true;
     void (async () => {
       try {
@@ -46,6 +55,8 @@ export function CloudWalletSessionBridge() {
         } catch (err) {
           const code = err instanceof Error ? err.message : "";
           if (code === "reauth_required" || code === "unauthorized") needsReauth.current = true;
+          const blockedUntil = cloudRestoreBlockedUntil(err);
+          if (blockedUntil !== null) rateLimitedUntil.current = blockedUntil;
           /* otherwise the vault may not exist yet — user connects via Wallet modal */
         }
       } finally {

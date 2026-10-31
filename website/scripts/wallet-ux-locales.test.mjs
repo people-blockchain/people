@@ -10,6 +10,7 @@ for(const lang of languages) {
    assert.deepEqual(Object.keys(copy).sort(),Object.keys(en).sort());
    for(const [key,value] of Object.entries(copy))assert.ok(typeof value==='string'&&value.trim(),`${lang}.${key}`);
    for(const key of ['memoLong'])assert.ok(copy[key].includes('256'));
+   assert.match(copy.signInRateLimited, /\{minutes\}/);
    for(const key of ['total','feeError'])assert.ok(copy[key].includes('PPL'));
    if(lang!=='en')for(const key of ['overview','sendTab','historyTab','settingsTab','review','confirm','cameraError','addressError','feeError'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);
    if(lang!=='en'&&lang!=='ru')for(const key of ['migrationTitle','migrationBody','migrationExisting','migrationNew','migrationKeepExisting'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);

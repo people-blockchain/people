@@ -138,7 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "Impossible d'ajouter le réseau PEOPLE à {wallet}. Approuvez la demande de réseau dans le portefeuille et réessayez.",
   "signInSessionExpired": "Votre session a expiré. Touchez à nouveau votre méthode de connexion.",
-  "signInRateLimited": "Trop de tentatives. Patientez quelques minutes.",
+  "signInRateLimited": "Trop de tentatives. Patientez {minutes} minutes, puis réessayez.",
   "unlockWrongPassword": "Mot de passe incorrect pour ce portefeuille.",
   "unlockUnavailable": "Impossible de déverrouiller ce portefeuille sur cet appareil. Connectez-vous avec Google ou e-mail.",
   "extHeading": "J’ai un portefeuille (MetaMask, Trust Wallet, WalletConnect)",

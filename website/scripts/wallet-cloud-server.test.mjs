@@ -191,7 +191,11 @@ test("getUserWrapKeyHex fails closed (does not throw unhandled) when the vault s
 
 test("getUserWrapKeyHex still migrates and returns a wrap key once the dedicated secret is set", async () => {
   await withEnv(
-    { AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too", PEOPLE_WALLET_VAULT_SECRET: "z".repeat(32) },
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "z".repeat(32),
+      DATABASE_URL: "postgres://unit-test/wallet-vault",
+    },
     async () => {
       const db = await getDbReady();
       const userId = "wallet-wrapkey-migration-user";
