@@ -109,6 +109,13 @@ export function tokenImageCacheSizeForTests(): number {
   return imageCache.size;
 }
 
+/** In-memory hit only. A miss is `undefined` and does not start a gateway read. */
+export function peekCachedMetadataImage(uri: string): string | undefined {
+  const cached = imageCache.get(uri.trim());
+  if (!cached || cached.expiresAt <= Date.now()) return undefined;
+  return cached.value;
+}
+
 function rememberImage(uri: string, value: string | undefined): void {
   imageCache.delete(uri);
   imageCache.set(uri, {

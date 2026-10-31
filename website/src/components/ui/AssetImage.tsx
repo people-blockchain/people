@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { tokenPageImageUrl } from "@/lib/explorer/token-page-image";
+import { assetImageAfterError, assetImageSources, ipfsContentKey } from "@/lib/ipfs";
 import { tokenIconByAddress } from "@/lib/token-icons";
 
 function imageUrl(value: unknown): string | null {
@@ -53,14 +54,17 @@ export function AssetImage({ src, name, nft = false, className = "h-10 w-10", as
 }) {
   const { known, url: knownUrl } = nft ? { known: null, url: null } : knownAsset(assetId, name, tokenAddress);
   const url = knownUrl ?? imageUrl(src);
-  return <AssetImageView key={url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} eager={eager} />;
+  // Key on the CID, not the gateway, so a Pinata URL and a later ipfs.io URL stay one image.
+  return <AssetImageView key={ipfsContentKey(url) ?? url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} eager={eager} />;
 }
 
 function AssetImageView({ url, name, nft, className, known, testBadgeLabel, eager }: {
   url: string | null; name: string; nft: boolean; className: string; known: Known; testBadgeLabel?: string; eager: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
-  const showImage = url && !failed;
+  const sources = assetImageSources(url);
+  const [index, setIndex] = useState(0);
+  const src = index < sources.length ? sources[index] : null;
+  const showImage = Boolean(src);
   const letter = (name.trim().replace(/^t(?=[A-Z])/, "").charAt(0) || "?").toUpperCase();
   return (
     <span className={`relative inline-flex shrink-0 ${className}`} style={{ minWidth: "1rem", minHeight: "1rem" }} aria-hidden={testBadgeLabel ? undefined : true} title={isTestBadge(known) ? testBadgeLabel : undefined}>
@@ -71,7 +75,7 @@ function AssetImageView({ url, name, nft, className, known, testBadgeLabel, eage
         {showImage ? (
           // External on-chain image URLs are dynamic; loading directly avoids server image proxying.
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={url} alt="" width={64} height={64} loading={eager ? "eager" : "lazy"} decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} className="h-full w-full min-h-full min-w-full object-cover" />
+          <img src={src ?? undefined} alt="" width={64} height={64} loading={eager ? "eager" : "lazy"} decoding="async" referrerPolicy="no-referrer" onError={() => setIndex((current) => assetImageAfterError(current, sources.length).index)} className="h-full w-full min-h-full min-w-full object-cover" />
         ) : nft ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-1/2 w-1/2 text-ink-3">
             <rect x="3" y="3" width="18" height="18" rx="3" />
