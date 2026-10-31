@@ -56,15 +56,34 @@ export function isRequestDeadlineError(error: unknown): boolean {
   return error instanceof RequestDeadlineError;
 }
 
+/**
+ * Drop a timer once. A second `clearTimeout` after mock-timer reset deletes the next test's
+ * timer on Node 22 (stale heap index). Unref so a leftover deadline cannot hold the process open.
+ */
+function armTimer(ms: number, onFire: () => void): () => void {
+  let settled = false;
+  const timer = setTimeout(() => {
+    if (settled) return;
+    settled = true;
+    onFire();
+  }, ms);
+  timer.unref?.();
+  return () => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+  };
+}
+
 /** Resolves when `ms` elapses or the request deadline aborts. Never rejects. */
 export function sleepMs(ms: number, signal?: AbortSignal): Promise<void> {
   const parent = signal ?? currentDeadline()?.signal;
   if (ms <= 0 || parent?.aborted) return Promise.resolve();
   return new Promise((resolve) => {
-    const timer = setTimeout(finish, ms);
+    const cancel = armTimer(ms, finish);
     const onAbort = () => finish();
     function finish() {
-      clearTimeout(timer);
+      cancel();
       parent?.removeEventListener("abort", onAbort);
       resolve();
     }
@@ -83,13 +102,13 @@ export function linkAbort(ms: number, parent?: AbortSignal): { signal: AbortSign
     controller.abort();
     return { signal: controller.signal, cancel: () => {} };
   }
-  const timer = setTimeout(() => controller.abort(), ms);
+  const cancelTimer = armTimer(ms, () => controller.abort());
   const onAbort = () => controller.abort();
   upstream?.addEventListener("abort", onAbort, { once: true });
   return {
     signal: controller.signal,
     cancel: () => {
-      clearTimeout(timer);
+      cancelTimer();
       upstream?.removeEventListener("abort", onAbort);
     },
   };
@@ -106,12 +125,12 @@ export function runOutsideRequestDeadline<T>(fn: () => T): T {
 export function runWithRequestDeadline<T>(fn: () => Promise<T>, ms = API_REQUEST_DEADLINE_MS): Promise<T> {
   const controller = new AbortController();
   const at = Date.now() + ms;
-  const timer = setTimeout(() => controller.abort(), Math.max(0, ms));
+  const cancelTimer = armTimer(Math.max(0, ms), () => controller.abort());
   return deadlines.run({ at, signal: controller.signal }, async () => {
     try {
       return await fn();
     } finally {
-      clearTimeout(timer);
+      cancelTimer();
     }
   });
 }

@@ -103,7 +103,7 @@ export const LOG_WINDOW_BLOCKS = 9_000;
  * Catalog `eth_getLogs` stays under this. A 9k-block query to the public node does not return,
  * so the history scan would abort the same windows on every request.
  */
-const CATALOG_LOG_WINDOW_BLOCKS = 800;
+export const CATALOG_LOG_WINDOW_BLOCKS = 800;
 
 export function logWindows(fromBlock: number, latest: number, size = LOG_WINDOW_BLOCKS): Array<[number, number]> {
   const out: Array<[number, number]> = [];
