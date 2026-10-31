@@ -402,29 +402,38 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.prank(alice);
         hub.verify(pid, deadline, oldSig);
 
-        vm.prank(owner);
+        vm.prank(alice);
         hub.unbind(alice);
         assertEq(hub.personOf(alice), bytes32(0));
         assertEq(hub.accountOfPerson(pid), address(0));
         assertEq(hub.bindNonce(pid), 1);
+        assertEq(hub.pinnedAccount(pid), alice);
 
-        // the old attestation (nonce 0) is dead, for the same or any other account
+        // the old attestation (nonce 0) is dead
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
         hub.verify(pid, deadline, oldSig);
 
-        // fresh attestation with the new nonce works (e.g. re-binding to a new address)
+        // a new verifier cannot hand this person to another address
         bytes memory fresh = _sign(bob, pid, deadline);
         vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
         hub.verify(pid, deadline, fresh);
-        assertEq(hub.accountOfPerson(pid), bob);
 
-        // unbinding an unbound address reverts; only owner may unbind
-        vm.prank(owner);
+        // the pinned account can verify again with the new nonce
+        bytes memory again = _sign(alice, pid, deadline);
+        vm.prank(alice);
+        hub.verify(pid, deadline, again);
+        assertEq(hub.accountOfPerson(pid), alice);
+
+        // unbinding an unbound address reverts; another account cannot unbind
+        vm.prank(alice);
+        hub.unbind(alice);
+        vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.NotBound.selector);
         hub.unbind(alice);
         vm.prank(alice);
-        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        vm.expectRevert(PplCurveHubV2.UnbindDenied.selector);
         hub.unbind(bob);
     }
 
@@ -584,16 +593,19 @@ contract PplCurveHubV2Test is HubV2Base {
 
     function test_setVerifierRevokes() public {
         bytes32 pid = keccak256("p");
-        uint256 deadline = vm.getBlockTimestamp() + 1 days;
+        uint256 deadline = vm.getBlockTimestamp() + 30 days;
         bytes memory sigOld = _sign(bob, pid, deadline);
         _verify(alice);
 
         vm.prank(alice);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
-        hub.setVerifier(address(0));
+        hub.queueSetVerifier(address(0));
 
         vm.prank(owner);
-        hub.setVerifier(address(0));
+        bytes32 id = hub.queueSetVerifier(address(0));
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetVerifier(id);
         assertEq(hub.verifier(), address(0));
 
         // signature from the revoked verifier no longer binds anyone
@@ -606,7 +618,10 @@ contract PplCurveHubV2Test is HubV2Base {
         // rotate to a new key
         uint256 pk2 = 0xB0B;
         vm.prank(owner);
-        hub.setVerifier(vm.addr(pk2));
+        bytes32 id2 = hub.queueSetVerifier(vm.addr(pk2));
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetVerifier(id2);
         bytes memory sigNew = _signWith(pk2, bob, pid, deadline);
         vm.prank(bob);
         hub.verify(pid, deadline, sigNew);

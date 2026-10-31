@@ -36,7 +36,7 @@ abstract contract HubV2Base is Test {
     bytes32 internal constant VERIFICATION_TYPEHASH =
         keccak256("Verification(address account,bytes32 personId,uint256 nonce,uint256 deadline)");
     bytes32 internal constant MAINNET_RETURN_TYPEHASH = keccak256(
-        "MainnetReturn(bytes32 personId,address seller,uint256 pplAmount,uint256 sourceChainId,bytes32 returnId,uint256 deadline)"
+        "MainnetReturn(bytes32 personId,address hub,address seller,uint256 pplAmount,uint256 sourceChainId,uint256 destChainId,bytes32 returnId,uint256 deadline)"
     );
     uint256 internal constant PEOPLE_CHAIN_ID = 97401;
 
@@ -61,8 +61,24 @@ abstract contract HubV2Base is Test {
         usdc = new MockUSDC();
         hub = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
         returnVerifier = vm.addr(returnVerifierPk);
+        _installReturnVerifier(hub, returnVerifier);
+    }
+
+    /// @dev Queue and wait out the 48-hour admin timelock. Leaves time `ADMIN_TIMELOCK` later.
+    function _installReturnVerifier(HubV2Harness h, address v) internal {
         vm.prank(owner);
-        hub.setReturnVerifier(returnVerifier);
+        bytes32 id = h.queueSetReturnVerifier(v);
+        vm.warp(vm.getBlockTimestamp() + h.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        h.executeSetReturnVerifier(id);
+    }
+
+    function _rescue(address token, uint256 amount) internal {
+        vm.prank(owner);
+        bytes32 id = hub.queueRescue(token, amount);
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeRescue(id);
     }
 
     // ---- signing / verification
@@ -105,23 +121,37 @@ abstract contract HubV2Base is Test {
 
     // ---- sell-back attestations (A1)
 
-    /// @dev Raw MainnetReturn signature under an arbitrary hub address / chain id / fields.
+    /// @dev Raw MainnetReturn signature. `domainHub`/`domainChainId` are the EIP-712 domain;
+    /// `structHub` and `destChainId` are fields the hub checks against `address(this)` and `block.chainid`.
     function _signReturnRaw(
         uint256 pk,
-        address hubAddr,
-        uint256 chainId,
+        address domainHub,
+        uint256 domainChainId,
         bytes32 personId,
+        address structHub,
         address seller,
         uint256 ppl,
         uint256 sourceChainId,
+        uint256 destChainId,
         bytes32 returnId,
         uint256 deadline
     ) internal pure returns (bytes memory) {
         bytes32 domain = keccak256(
-            abi.encode(EIP712_DOMAIN_TYPEHASH, keccak256("PplCurveHubV2"), keccak256("1"), chainId, hubAddr)
+            abi.encode(EIP712_DOMAIN_TYPEHASH, keccak256("PplCurveHubV2"), keccak256("1"), domainChainId, domainHub)
         );
-        bytes32 structHash =
-            keccak256(abi.encode(MAINNET_RETURN_TYPEHASH, personId, seller, ppl, sourceChainId, returnId, deadline));
+        bytes32 structHash = keccak256(
+            abi.encode(
+                MAINNET_RETURN_TYPEHASH,
+                personId,
+                structHub,
+                seller,
+                ppl,
+                sourceChainId,
+                destChainId,
+                returnId,
+                deadline
+            )
+        );
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(pk, keccak256(abi.encodePacked("\x19\x01", domain, structHash)));
         return abi.encodePacked(r, s, v);
     }
@@ -137,9 +167,11 @@ abstract contract HubV2Base is Test {
             address(hub),
             block.chainid,
             hub.personOf(seller),
+            address(hub),
             seller,
             ppl,
             PEOPLE_CHAIN_ID,
+            block.chainid,
             returnId,
             deadline
         );
@@ -155,7 +187,7 @@ abstract contract HubV2Base is Test {
         uint256 deadline = vm.getBlockTimestamp() + 1 hours;
         bytes memory sig = _signReturn(who, ppl, id, deadline);
         vm.prank(who);
-        return hub.sellBack(ppl, minOut, id, deadline, sig);
+        return hub.sellBack(ppl, minOut, id, deadline, ppl, sig);
     }
 
     /// @dev Same call with a valid attestation, expecting `sellBack` to revert with `err`.
@@ -165,7 +197,7 @@ abstract contract HubV2Base is Test {
         bytes memory sig = _signReturn(who, ppl, id, deadline);
         vm.expectRevert(err);
         vm.prank(who);
-        hub.sellBack(ppl, minOut, id, deadline, sig);
+        hub.sellBack(ppl, minOut, id, deadline, ppl, sig);
     }
 
     // ---- lifecycle / funds
