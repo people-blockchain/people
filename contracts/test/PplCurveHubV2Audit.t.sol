@@ -1637,4 +1637,66 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(live, 2);
         assertLt(live, hub.GLOBAL_SELL_CAPACITY());
     }
+
+    /// @dev The unpaid remainder of a returnId that was already paid in part is payable even when
+    /// its gross is below `minSellUsd6`. The person and global caps still apply; the remainder
+    /// waits until the window has room, then pays. A smaller slice of that remainder does not.
+    function test_m_attestedRemainderPaysBelowMinSell() public {
+        _limits(20, MIN_BUY, 10, hub.MAX_MIN_SELL_USD6());
+        _seedRaised(BIG_RAISED);
+        _prepare(alice);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(1 days);
+        _buy(alice, MAX_BUY);
+        _warpBy(30 days);
+
+        uint256 unlocked = hub.sellableNow(alice);
+        uint256 room = hub.sellRemaining24h(alice);
+        (uint256 fit,) = _pplAround(room);
+        (uint256 dust,) = _pplAround(1e6);
+        assertGt(dust, 1);
+        assertGt(fit, dust);
+        assertLt(fit + dust, unlocked, "other unlocked PPL remain");
+        assertGe(_quoteGross(fit), hub.minSellUsd6());
+        assertLt(_quoteGross(dust), hub.minSellUsd6());
+
+        uint256 ceiling = fit + dust;
+        bytes32 id = _freshReturnId();
+        uint256 deadline = _now() + 2 days;
+        bytes memory sig = _signReturn(alice, ceiling, id, deadline);
+
+        vm.prank(alice);
+        hub.sellBack(fit, 0, id, deadline, ceiling, sig);
+        assertEq(hub.returnClaimedPpl(id), fit);
+        assertFalse(hub.returnUsed(id));
+
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.PersonDayCap.selector);
+        hub.sellBack(dust, 0, id, deadline, ceiling, sig);
+        assertEq(hub.returnClaimedPpl(id), fit);
+
+        vm.warp(_now() + 1 days);
+        (uint256 leftGross,,) = hub.quoteSellBack(alice, dust);
+        assertGt(leftGross, 0);
+        assertLt(leftGross, hub.minSellUsd6());
+        assertLt(dust, hub.sellableNow(alice), "remainder is not the whole unlocked position");
+        (uint256 globalRoom,) = hub.sellBackCapToday();
+        assertTrue(leftGross != globalRoom && leftGross != hub.sellRemaining24h(alice));
+
+        uint256 slice = dust / 2;
+        (uint256 sliceGross,,) = hub.quoteSellBack(alice, slice);
+        assertGt(sliceGross, 0);
+        assertLt(sliceGross, hub.minSellUsd6());
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BelowMinSell.selector);
+        hub.sellBack(slice, 0, id, deadline, ceiling, sig);
+
+        vm.prank(alice);
+        assertGt(hub.sellBack(dust, 0, id, deadline, ceiling, sig), 0);
+        assertEq(hub.returnClaimedPpl(id), ceiling);
+        assertTrue(hub.returnUsed(id));
+    }
 }

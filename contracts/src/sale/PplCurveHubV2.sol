@@ -278,7 +278,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// @notice A4 limits per person per rolling 24h, owner-set within bounds (`setWindowLimits`):
     /// at most `maxBuysPer24h` buys and `maxSellsPer24h` sell-backs, each buy >= `minBuyUsd6`
     /// (except the final partial fill) and each sell-back gross >= `minSellUsd6` (except selling
-    /// the unlocked position, or exactly the remaining global or person cap). They bound the window
+    /// the unlocked position, exactly the remaining global or person cap, or the unpaid remainder
+    /// of a `returnId` that has already been paid in part). They bound the window
     /// size and so the gas of every buy/sell. `minSellUsd6` cannot exceed `MAX_MIN_SELL_USD6`.
     uint8 public maxBuysPer24h = 20;
     uint8 public maxSellsPer24h = 10;
@@ -512,8 +513,10 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
 
         uint256 globalCap = (windowRef * SELL_GLOBAL_CAP_BPS) / BPS;
         if (windowGross + gross > globalCap) revert GlobalDayCap();
-        if (live == GLOBAL_SELL_CAPACITY && !RollingWindow24h.inLatestBucket(_globalSellWindow, GLOBAL_SELL_CAPACITY, GLOBAL_SELL_BUCKET))
-        {
+        if (
+            live == GLOBAL_SELL_CAPACITY
+                && !RollingWindow24h.inLatestBucket(_globalSellWindow, GLOBAL_SELL_CAPACITY, GLOBAL_SELL_BUCKET)
+        ) {
             revert GlobalWindowFull();
         }
         (uint256 sold24h, uint256 sells24h) = RollingWindow24h.prune(_sellWindow[person], RollingWindow24h.CAPACITY);
@@ -522,7 +525,11 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         uint256 globalRoom = globalCap - windowGross;
         uint256 personRoom = SELL_CAP_DAY_USD6 - sold24h;
         if (gross < minSellUsd6 && pplIn != unlocked && gross != globalRoom && gross != personRoom) {
-            revert BelowMinSell();
+            // Only the unpaid remainder of a returnId already paid in part. A fresh sell of
+            // `pplAmount` still has to clear `minSellUsd6`. Read claimed here so sells that
+            // already clear the minimum do not pay for it.
+            uint256 claimed = returnClaimedPpl[returnId];
+            if (claimed == 0 || pplIn != pplAmount - claimed) revert BelowMinSell();
         }
 
         uint256 fee = _sellFee(gross, windowRef, windowGross);
