@@ -62,17 +62,19 @@ export function curatedAssetKeys(): Map<string, string> {
   return keys;
 }
 
-export function enrichAssetRow<T extends { assetId: string; name?: string; symbol?: string; decimals?: number }>(
+export function enrichAssetRow<T extends { assetId: string; name?: string; symbol?: string; decimals?: number; imageUri?: string; creationMetadata?: { image?: string } }>(
   row: T,
 ): T & { creationMetadata?: SeedAssetMeta["creationMetadata"]; imageUri?: string } {
   const meta = seedAssetMeta(row.assetId);
   if (!meta) return row;
+  const seedImage = meta.creationMetadata?.image;
+  const image = seedImage || row.imageUri;
   return {
     ...row,
     name: meta.name ?? row.name,
     symbol: meta.symbol ?? row.symbol,
     decimals: meta.decimals ?? row.decimals,
-    creationMetadata: meta.creationMetadata,
-    imageUri: meta.creationMetadata?.image,
+    creationMetadata: seedImage ? meta.creationMetadata : { ...meta.creationMetadata, ...(image ? { image } : {}) },
+    imageUri: image,
   };
 }

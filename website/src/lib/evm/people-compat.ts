@@ -10,9 +10,11 @@ import {
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import {
+  applyTokenImage,
   discoverPoolsOnChain,
   discoverTokensOnChain,
   partialScan,
+  readImmediateTokenImage,
   scanIsPartial,
   type CatalogPool,
   type CatalogToken,
@@ -144,12 +146,15 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     type: "token",
   };
   const seed = seedAssetMeta(base.assetId);
-  return enrichAssetRow({
+  const seeded = enrichAssetRow({
     ...base,
     name: seed?.name ?? base.name,
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
+  // The document URL is returned immediately. Resolving its image must not hold the row or mark it partial.
+  const chainImage = await readImmediateTokenImage(token);
+  return applyTokenImage(seeded, undefined, chainImage);
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -284,7 +289,8 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
         imageUri: enriched.imageUri,
       };
     });
-    if (scanIsPartial(onChain) || deadlineHit()) return { status: 200, body: { assets: mapped, partial: true } };
+    // Logos never make the list partial. Only a missed catalog or RPC read does.
+    if (scanIsPartial(onChain)) return { status: 200, body: { assets: mapped, partial: true } };
     if (onChain.length) return { status: 200, body: mapped };
     const dep = readEvmDeployments();
     const rows: AssetRow[] = [];
@@ -310,7 +316,7 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
     const hit = onChain.find((t) => t.assetId === requested);
     if (hit) {
       const enriched = enrichAssetRow(hit);
-      const partial = scanIsPartial(onChain) || deadlineHit();
+      const partial = scanIsPartial(onChain);
       return {
         status: 200,
         body: {
