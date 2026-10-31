@@ -49,7 +49,7 @@ test("tokenomics surfaces: sale is on Base only; pay-from list has Tron and Sola
   for (const file of readdirSync(surfaces).filter((f) => f.startsWith("tokenomics-") && f.endsWith(".json"))) {
     const doc = JSON.parse(readFileSync(join(surfaces, file), "utf8"));
     const name = doc.contractRows?.[0]?.name ?? "";
-    assert.match(name, /PplCurveHub/, file);
+    assert.doesNotMatch(name, /PplCurveHub/, file);
     assert.match(name, /Base/, file);
     assert.doesNotMatch(name, /BNB|Polygon|Tron|Cosmos/i, file);
     for (const word of ["Tron", "Solana", "TON", "EVM"]) assert.match(doc.salePayBody ?? "", new RegExp(word), `${file} ${word}`);

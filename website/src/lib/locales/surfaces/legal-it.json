@@ -115,13 +115,13 @@
         "title": "Rete di test e stato beta",
         "body": [
           "PEOPLE Blockchain è fornita come rete di test / beta. Le funzionalità possono cambiare, smettere di funzionare o essere ritirate senza preavviso. Il sito e la rete sono forniti \"così come sono\" e \"come disponibili\".",
-          "La rete PEOPLE è ancora una rete di test. La vendita di PPL è un'attività distinta: si svolge sulla mainnet di Base con USDC o USDT reali."
+          "La rete PEOPLE è una rete di test pubblica fino al lancio della mainnet il 1° dicembre 2026. La vendita di PPL parte insieme alla mainnet: si paga con USDC o USDT reali su Base e i PPL vengono accreditati subito sulla mainnet PEOPLE."
         ]
       },
       {
         "title": "Vendita pubblica di PPL",
         "body": [
-          "I parametri della vendita (formula della curva, andamento del prezzo, limiti e la durata della vendita: fino all'esaurimento o 24 mesi, a seconda di quale evento si verifichi per primo) sono pubblicati nella pagina /buy. Gli acquisti restano disabilitati finché il contratto della vendita non viene pubblicato; collegare un wallet non ti vincola a nulla.",
+          "I parametri della vendita (formula della curva, andamento del prezzo, limiti e la durata della vendita: fino all'esaurimento o 24 mesi, a seconda di quale evento si verifichi per primo) sono pubblicati nella pagina /buy. La vendita parte insieme alla mainnet il 1° dicembre 2026; collegare un wallet non ti vincola a nulla.",
           "Per acquistare non è richiesto alcun KYC. La rivendita richiede una prova di umanità (Human Passport o Telegram), che non è KYC.",
           "La vendita dura fino all'esaurimento (la curva si chiude a 4 milioni di dollari raccolti) oppure per 24 mesi dall'apertura, a seconda di quale evento si verifichi per primo. Nessuna proroga. I PPL invenduti vanno alla Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
           "La durata della vendita, la formula del prezzo e i limiti non cambiano dopo l'apertura della vendita.",

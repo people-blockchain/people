@@ -150,5 +150,15 @@
   "install": "Cài đặt",
   "signInGoogle": "Đăng nhập bằng Google",
   "back": "Quay lại",
-  "openWallet": "Mở {wallet}"
+  "openWallet": "Mở {wallet}",
+  "sendSubmitting": "Đang gửi giao dịch…",
+  "sendConfirming": "Đang chờ xác nhận…",
+  "tokenSent": "Đã xác nhận chuyển token.",
+  "nftSent": "Đã xác nhận chuyển NFT.",
+  "sendReverted": "Giao dịch thất bại trên mạng. Chưa có gì được chuyển.",
+  "sendTimeout": "Chưa được xác nhận. Hãy kiểm tra giao dịch trong trình khám phá trước khi gửi lại.",
+  "sendReplaced": "Giao dịch đã bị thay thế bằng giao dịch khác. Chưa có gì được chuyển.",
+  "nftNotOwner": "NFT này không còn trong ví của bạn.",
+  "tokenSendFailed": "Không thể gửi token. Vui lòng thử lại.",
+  "nftSendFailed": "Không thể gửi NFT. Vui lòng thử lại."
 }

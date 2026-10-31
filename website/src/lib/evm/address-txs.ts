@@ -59,12 +59,8 @@ async function runBatch<T>(calls: RpcCall[], deadline: Deadline): Promise<Array<
     const chunk = calls.slice(i, i + BATCH_SIZE);
     const remaining = Math.max(200, deadline.at - Date.now());
     try {
-      const part = await Promise.race([
-        evmJsonRpcBatch<T>(chunk),
-        new Promise<Array<T | null>>((resolve) =>
-          setTimeout(() => resolve(chunk.map(() => null)), remaining),
-        ),
-      ]);
+      // The timeout aborts the in-flight batch; a race that only stops waiting would leave the fetch running.
+      const part = await evmJsonRpcBatch<T>(chunk, { timeoutMs: remaining });
       out.push(...part);
     } catch {
       out.push(...chunk.map(() => null));

@@ -115,13 +115,13 @@
         "title": "Mạng thử nghiệm và trạng thái beta",
         "body": [
           "PEOPLE Blockchain được cung cấp dưới dạng mạng thử nghiệm / beta. Các tính năng có thể thay đổi, gặp lỗi hoặc bị gỡ bỏ mà không cần báo trước. Trang web và mạng được cung cấp trên cơ sở \"nguyên trạng\" (\"as is\") và \"theo khả năng sẵn có\" (\"as available\").",
-          "Mạng PEOPLE vẫn là một mạng thử nghiệm. Đợt bán PPL là hoạt động riêng biệt: đợt bán diễn ra trên Base mainnet bằng USDC hoặc USDT thật."
+          "Mạng PEOPLE là mạng thử nghiệm công khai cho đến khi mainnet ra mắt vào ngày 1 tháng 12 năm 2026. Đợt bán PPL ra mắt cùng mainnet: thanh toán bằng USDC hoặc USDT thật trên Base, và PPL được ghi có ngay trên mainnet PEOPLE."
         ]
       },
       {
         "title": "Đợt bán PPL công khai",
         "body": [
-          "Các thông số của đợt bán (công thức đường cong, lộ trình giá, giới hạn và thời hạn bán: cho đến khi bán hết hoặc 24 tháng, tùy điều kiện nào đến trước) được công bố trên trang /buy. Việc mua vẫn bị vô hiệu hóa cho đến khi hợp đồng bán được công bố; việc kết nối ví không ràng buộc bạn với bất kỳ điều gì.",
+          "Các thông số của đợt bán (công thức đường cong, lộ trình giá, giới hạn và thời hạn bán: cho đến khi bán hết hoặc 24 tháng, tùy điều kiện nào đến trước) được công bố trên trang /buy. Đợt bán ra mắt cùng mainnet vào ngày 1 tháng 12 năm 2026; việc kết nối ví không ràng buộc bạn với bất kỳ điều gì.",
           "Không yêu cầu KYC để mua. Việc bán lại yêu cầu bằng chứng về danh tính con người (Human Passport hoặc Telegram), và đây không phải là KYC.",
           "Đợt bán diễn ra cho đến khi bán hết (đường cong đóng khi huy động đạt 4 triệu USD) hoặc trong 24 tháng kể từ khi mở bán, tùy điều kiện nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
           "Thời hạn bán, công thức giá và các giới hạn không thay đổi sau khi đợt bán mở.",

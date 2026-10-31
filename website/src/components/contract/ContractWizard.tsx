@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { parseUnits, type Address } from "viem";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import {
   readPublicClient,
   sendViaActiveSigner,
@@ -28,12 +30,14 @@ import {
 } from "@/lib/contract-gas-estimate";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
 import { contractCopy, type ContractCopy } from "@/lib/contract-copy";
+import { crowdfundCopy } from "@/lib/crowdfund/campaign-copy";
 import { formatPplExact } from "@/lib/asset-amounts";
 import {
   constructorFields,
   defaultFieldValue,
   deployBytecode,
   encodeConstructorArgs,
+  splitDaysHours,
   type ConstructorField,
 } from "@/lib/contract-constructor";
 
@@ -63,6 +67,54 @@ interface Params {
   ownerApprovedPublicTariff?: boolean;
 }
 
+/** Two whole-number inputs (days, hours) stored as "D:H" (see `parseDaysHours`). */
+function DaysHoursInput({
+  id,
+  value,
+  invalid,
+  daysLabel,
+  hoursLabel,
+  onChange,
+}: {
+  id: string;
+  value: string;
+  invalid: boolean;
+  daysLabel: string;
+  hoursLabel: string;
+  onChange: (next: string) => void;
+}) {
+  const { days, hours } = splitDaysHours(value);
+  const digits = (text: string) => text.replace(/\D/g, "").slice(0, 5);
+  const box = "w-24 rounded-lg border border-line bg-surface px-3 py-2 text-sm";
+  return (
+    <span className="mt-1 flex items-center gap-2">
+      <input
+        id={id}
+        type="text"
+        inputMode="numeric"
+        aria-invalid={invalid}
+        aria-label={daysLabel}
+        autoComplete="off"
+        value={days}
+        onChange={(e) => onChange(`${digits(e.target.value)}:${hours}`)}
+        className={box}
+      />
+      <span className="text-ink-2">{daysLabel}</span>
+      <input
+        type="text"
+        inputMode="numeric"
+        aria-invalid={invalid}
+        aria-label={hoursLabel}
+        autoComplete="off"
+        value={hours}
+        onChange={(e) => onChange(`${days}:${digits(e.target.value)}`)}
+        className={box}
+      />
+      <span className="text-ink-2">{hoursLabel}</span>
+    </span>
+  );
+}
+
 /** Legacy `contracts/params` quotes are decimal PPL numbers. Fees stay in wei. */
 function legacyPplToWei(value: number | undefined, fallback: bigint): bigint {
   if (typeof value !== "number" || !Number.isFinite(value) || value < 0) return fallback;
@@ -83,7 +135,10 @@ export function ContractWizard() {
   const { lang } = useLanguage();
   const t: ContractCopy = (contractCopy as Record<string, ContractCopy>)[lang] ?? contractCopy.en;
   const { signer } = useExternalWallet();
-  const [prompt, setPrompt] = useState("");
+  const searchParams = useSearchParams();
+  const prefillCrowdfund = searchParams?.get("template") === "crowdfund";
+  const promptEdited = useRef(false);
+  const [prompt, setPrompt] = useState(prefillCrowdfund ? t.crowdfundPrompt : "");
   const [compose, setCompose] = useState<ComposeResult | null>(null);
   const [compiled, setCompiled] = useState<CompileResult | null>(null);
   const [params, setParams] = useState<Params | null>(null);
@@ -94,13 +149,14 @@ export function ContractWizard() {
   const [gasLimit, setGasLimit] = useState<number | null>(null);
   const [ctorEdits, setCtorEdits] = useState<Record<string, string>>({});
 
+  const cf = crowdfundCopy[lang];
   const ctorFields = useMemo<ConstructorField[]>(() => {
     try {
-      return compiled ? constructorFields(compiled.abi) : [];
+      return compiled ? constructorFields(compiled.abi, compose?.templateId) : [];
     } catch {
       return [];
     }
-  }, [compiled]);
+  }, [compiled, compose?.templateId]);
   const ctorValues = useMemo(
     () =>
       Object.fromEntries(
@@ -115,6 +171,11 @@ export function ContractWizard() {
     params?.quoteTypicalDeployFeePpl,
     TYPICAL_CONTRACT_DEPLOY_FEE_WEI
   );
+
+  useEffect(() => {
+    // Landing from the "Start crowdfunding" card: keep the prefill in the visitor's language until they type.
+    if (prefillCrowdfund && !promptEdited.current) setPrompt(t.crowdfundPrompt);
+  }, [prefillCrowdfund, t.crowdfundPrompt]);
 
   useEffect(() => {
     // E2E-M1: on the EVM chain the legacy compat layer only implements `contracts/<address>`,
@@ -167,11 +228,6 @@ export function ContractWizard() {
         })
       });
       const body = (await res.json()) as CompileResult & { error?: string; details?: string[] };
-      if (res.status === 401 || body.error === "sign_in_required") {
-        throw new Error(
-          lang === "ru" ? "Войдите в аккаунт, чтобы проверить код контракта." : "Sign in to check the contract code."
-        );
-      }
       if (!res.ok) {
         throw new Error(body.details?.[0] ?? body.error ?? t.error);
       }
@@ -179,7 +235,7 @@ export function ContractWizard() {
       setCtorEdits({});
       let argRoom = 0;
       try {
-        argRoom = constructorFields(body.abi).length + 8;
+        argRoom = constructorFields(body.abi, compose.templateId).length + 8;
       } catch {
         argRoom = 8;
       }
@@ -203,23 +259,16 @@ export function ContractWizard() {
       // A contract-creation tx: creation code + ABI-encoded constructor args in `data`, no `to`.
       const tx = buildContractDeployTx({ data: deployBytecode(compiled.bytecode, ctorEncoded.hex) });
       const client = readPublicClient();
-      // Gas comes from the chain (eth_estimateGas); the wizard's heuristic limit is only a
-      // floor, so a stale local estimate can never under-price the deploy.
-      let gas = BigInt(gasLimit);
-      try {
-        const estimate = await client.estimateGas({ account: signer.address, data: tx.data });
-        if (estimate > gas) gas = estimate;
-      } catch {
-        // Keep the heuristic limit when the node cannot estimate (transient RPC miss).
-      }
-      const hash = await sendViaActiveSigner(signer, { ...tx, gas });
+      // Simulation + gas (eth_estimateGas * 1.2) happen inside sendViaActiveSigner; a deploy that
+      // would revert is never sent. The limit shown above is only a fee quote.
+      const hash = await sendViaActiveSigner(signer, tx);
       const receipt = await client.waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") throw new Error(`receipt: deploy reverted (${hash})`);
       const address = contractAddressFromReceipt(receipt);
       if (!address) throw new Error("contract address not found in the deploy receipt");
       setDeployed({ address, hash });
     } catch (err) {
-      setError(classifyContractDeployError(err).detail);
+      setError(describePreflightError(err, lang)?.text ?? classifyContractDeployError(err).detail);
     } finally {
       setBusy(false);
     }
@@ -239,7 +288,10 @@ export function ContractWizard() {
         className="mt-2 w-full rounded-2xl border border-line bg-surface-2 p-4 text-sm"
         rows={4}
         value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(e) => {
+          promptEdited.current = true;
+          setPrompt(e.target.value);
+        }}
         placeholder={t.placeholder}
       />
       <p className="mt-2 text-xs text-ink-3">{t.examplesLabel}</p>
@@ -248,7 +300,10 @@ export function ContractWizard() {
           <button
             key={example}
             type="button"
-            onClick={() => setPrompt(example)}
+            onClick={() => {
+              promptEdited.current = true;
+              setPrompt(example);
+            }}
             className="min-h-11 rounded-full border border-line bg-surface px-3 py-2 text-left text-xs text-ink-2 hover:border-brand hover:text-brand"
           >
             {example}
@@ -320,7 +375,10 @@ export function ContractWizard() {
                 <p className="mt-1 text-xs text-ink-3">{t.settingsHint}</p>
               </div>
               {ctorFields.map((field) => {
-                const label = (t.fields as Record<string, string>)[field.labelKey] ?? field.name;
+                const label =
+                  (t.fields as Record<string, string>)[field.labelKey] ??
+                  (cf as Record<string, string>)[field.labelKey] ??
+                  field.name;
                 const value = ctorValues[field.name] ?? "";
                 const invalid = !ctorEncoded.ok && ctorEncoded.field === field.name;
                 const isNumber = field.kind === "count" || field.kind === "days" || field.kind === "hours" || field.kind === "tokenAmount";
@@ -337,6 +395,15 @@ export function ContractWizard() {
                     <span className="text-ink-2">{label}</span>
                     {field.kind === "addressList" ? (
                       <textarea {...common} rows={3} spellCheck={false} />
+                    ) : field.kind === "duration" ? (
+                      <DaysHoursInput
+                        id={common.id}
+                        value={value}
+                        invalid={invalid}
+                        daysLabel={cf.unitDays}
+                        hoursLabel={cf.unitHours}
+                        onChange={(next) => setCtorEdits((prev) => ({ ...prev, [field.name]: next }))}
+                      />
                     ) : (
                       <input
                         {...common}
@@ -406,10 +473,17 @@ export function ContractWizard() {
           <p className="font-semibold text-ink">{t.success}</p>
           <p className="break-all">
             {t.contractAddress}:{" "}
-            <Link className="font-mono text-brand hover:underline" href={`/explorer/address/${deployed.address}`}>
+            <Link className="font-mono text-brand hover:underline" href={`/explorer/contract/${deployed.address}`}>
               {deployed.address}
             </Link>
           </p>
+          {compose?.templateId === "crowdfund" ? (
+            <p>
+              <Link className="font-semibold text-brand hover:underline" href={`/crowdfund/${deployed.address}`}>
+                {cf.openCampaign}
+              </Link>
+            </p>
+          ) : null}
           <p className="break-all">
             {t.transaction}:{" "}
             <Link

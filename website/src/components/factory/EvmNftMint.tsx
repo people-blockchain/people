@@ -8,6 +8,8 @@ import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { uxCopy } from "@/lib/ux-copy";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
+import { describePreflightError, txPreflightCopy } from "@/lib/tx-preflight-copy";
+import { nftExplorerCopy } from "@/lib/nft-explorer-copy";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
@@ -32,6 +34,7 @@ import {
   stableFeeGatewayAddress,
   type StableAsset,
 } from "@/lib/evm/stable-fee-gateway";
+import { outcomeOfReceipt } from "@/lib/launch-tx";
 import { checkImageFile, checkVideoFile, NftSaveError, type NftErrorKey } from "@/lib/nft-media-client";
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { NFT_DESCRIPTION_MAX, NFT_NAME_MAX, NFT_NAME_MIN, type NftVideoType } from "@/lib/nft-media-rules";
@@ -39,7 +42,9 @@ import {
   browserStorage,
   createDraftStore,
   isResumable,
+  pendingDraftTx,
   planResume,
+  restoreFromReceipt,
   type NftMintDraft,
   type NftMintMode,
 } from "@/lib/nft-mint-draft";
@@ -68,7 +73,13 @@ type Saved = {
 };
 
 type Picked = { file: File; mime: string };
-type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint };
+type ErrorState = {
+  key: NftErrorKey | "notEnoughFee" | "txPreflight";
+  neededWei?: bigint;
+  balanceWei?: bigint;
+  text?: string;
+  offerPpl?: boolean;
+};
 
 const RECEIPT_TIMEOUT_MS = 180_000;
 const ZERO_ADDRESS_FREE = /^0x[0-9a-fA-F]{40}$/;
@@ -94,6 +105,16 @@ function useObjectUrl(picked: Picked | null): string | null {
     return () => URL.revokeObjectURL(objectUrl);
   }, [picked]);
   return url;
+}
+
+/** Fire-and-forget: the server re-verifies the NftMinted event from the receipt itself. */
+async function recordNftMintAction(hash: string): Promise<void> {
+  try {
+    const { recordFounderAction } = await import("@/lib/founders/client");
+    await recordFounderAction("nft_mint", hash);
+  } catch {
+    /* points are best-effort; never block the mint result */
+  }
 }
 
 function mintErrorState(err: unknown): ErrorState {
@@ -160,10 +181,11 @@ export function EvmNftMint() {
   const [draft, setDraft] = useState<NftMintDraft | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState<ErrorState | null>(null);
-  const [errorFrom, setErrorFrom] = useState<"save" | "mint" | null>(null);
+  const [errorFrom, setErrorFrom] = useState<"pick" | "save" | "mint" | null>(null);
   const [payWith, setPayWith] = useState<PayWith>("PPL");
   const [stableFeeUsd6, setStableFeeUsd6] = useState<bigint | null>(null);
   const [mintStep, setMintStep] = useState<"approving" | "payingFee" | "confirmCreate" | "confirmMint" | "waiting" | null>(null);
+  const [restoreNotice, setRestoreNotice] = useState<"checking" | "payment_counted" | "failed" | null>(null);
   const mintLock = useRef(false);
   const saveLock = useRef(false);
 
@@ -239,6 +261,36 @@ export function EvmNftMint() {
         createTx: stored.createTx ?? null,
       });
     }
+    // A closed tab may have left a sent transaction behind: read its receipt instead of waiting.
+    const tx = pendingDraftTx(stored);
+    if (!tx) return;
+    let cancelled = false;
+    setRestoreNotice("checking");
+    void (async () => {
+      let receipt: Awaited<ReturnType<ReturnType<typeof readPublicClient>["getTransactionReceipt"]>> | null = null;
+      try {
+        receipt = await readPublicClient().getTransactionReceipt({ hash: tx.hash as `0x${string}` });
+      } catch {
+        receipt = null; // not mined yet: the continue button waits for it
+      }
+      if (cancelled) return;
+      const restored = restoreFromReceipt(tx.step, outcomeOfReceipt(receipt));
+      setRestoreNotice(restored.notice);
+      let next: NftMintDraft = { ...stored, ...restored.patch };
+      if (restored.mintSucceeded && receipt && factory && stored.collection) {
+        const collection = getAddress(stored.collection);
+        const tokenId = tokenIdFromReceipt(receipt, factory, collection);
+        next = { ...next, status: "done", tokenId: tokenId?.toString() };
+        setResult({ collection, tokenId, mintTx: stored.mintTx ?? null, createTx: stored.createTx ?? null });
+      }
+      if (Object.keys(restored.patch).length > 0 || next.status === "done") {
+        draftStore.save(next);
+        setDraft(next);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
     // Only when the wallet address changes; the draft store is stable.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signerAddress, draftStore]);
@@ -281,7 +333,7 @@ export function EvmNftMint() {
     const checked = checkImageFile(file);
     if (!checked.ok) {
       setError({ key: checked.key });
-      setErrorFrom("save");
+      setErrorFrom("pick");
       return;
     }
     (target === "image" ? setImageFile : setCoverFile)({ file, mime: checked.mime });
@@ -293,7 +345,7 @@ export function EvmNftMint() {
     const checked = checkVideoFile(file);
     if (!checked.ok) {
       setError({ key: checked.key });
-      setErrorFrom("save");
+      setErrorFrom("pick");
       return;
     }
     setVideoFile({ file, mime: checked.mime });
@@ -384,6 +436,7 @@ export function EvmNftMint() {
         if (receipt.status !== "success") throw new Error(`receipt: mint reverted (${current.mintTx})`);
         const collection = getAddress(current.collection as string);
         const tokenId = tokenIdFromReceipt(receipt, factory, collection);
+        void recordNftMintAction(current.mintTx);
         persist({ status: "done", tokenId: tokenId?.toString() });
         setResult({ collection, tokenId, mintTx: current.mintTx, createTx: current.createTx ?? null });
         return;
@@ -558,11 +611,13 @@ export function EvmNftMint() {
       const mintReceipt = await waitFor(mintHash);
       if (mintReceipt.status !== "success") throw new Error(`receipt: mint reverted (${mintHash})`);
       const tokenId = tokenIdFromReceipt(mintReceipt, factory, collection);
+      void recordNftMintAction(mintHash);
       persist({ status: "done", tokenId: tokenId?.toString() });
       setResult({ collection, tokenId, mintTx: mintHash, createTx });
     } catch (err) {
       console.error(err);
-      setError(mintErrorState(err));
+      const preflight = describePreflightError(err, lang);
+      setError(preflight ? { key: "txPreflight", text: preflight.text, offerPpl: preflight.offerPpl } : mintErrorState(err));
       setErrorFrom("mint");
     } finally {
       mintLock.current = false;
@@ -612,7 +667,9 @@ export function EvmNftMint() {
   const previewVideo = saved ? saved.videoPreviewUrl ?? null : videoLocalUrl;
   const previewIsSvg = saved ? saved.isSvg : (kind === "image" ? imageFile : coverFile)?.mime === "image/svg+xml";
   const errorText = error
-    ? error.key === "notEnoughFee"
+    ? error.key === "txPreflight"
+      ? (error.text ?? null)
+      : error.key === "notEnoughFee"
       ? u.notEnoughFee
       : error.key === "errInsufficientPpl"
         ? error.neededWei !== undefined && error.balanceWei !== undefined
@@ -785,6 +842,15 @@ export function EvmNftMint() {
               {nm.stageReady}
             </p>
           ) : null}
+          {restoreNotice ? (
+            <p role="status" data-testid="nft-restore-notice" className={restoreNotice === "failed" ? "text-sm text-warm" : "text-sm text-ink-2"}>
+              {restoreNotice === "checking"
+                ? nm.txRestoring
+                : restoreNotice === "payment_counted"
+                  ? nm.txPaymentCounted
+                  : nm.txFailedBefore}
+            </p>
+          ) : null}
           {resuming ? (
             <p role="status" data-testid="nft-resume-notice" className="text-sm text-ink-2">
               {nm.resumeNotice}
@@ -799,8 +865,22 @@ export function EvmNftMint() {
           {error && errorText ? (
             <div role="alert" data-testid="nft-error" data-error-key={error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
               <p>
-                {form.error}: {errorText}
+                {errorFrom === "pick" ? errorText : `${form.error}: ${errorText}`}
               </p>
+              {(error.offerPpl || error.key === "errStableDailyCap") && payWith !== "PPL" ? (
+                <button
+                  type="button"
+                  data-testid="nft-pay-ppl-instead"
+                  className="mt-2 rounded-lg border border-warm/40 px-3 py-1.5 font-semibold"
+                  onClick={() => {
+                    setPayWith("PPL");
+                    setError(null);
+                    setErrorFrom(null);
+                  }}
+                >
+                  {txPreflightCopy[lang].payWithPpl}
+                </button>
+              ) : null}
             </div>
           ) : null}
 
@@ -887,15 +967,24 @@ export function EvmNftMint() {
           ) : null}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             {result.tokenId !== null ? (
-              <a
-                href={peoplescanNftUrl(result.collection, result.tokenId)}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="nft-peoplescan-link"
-                className="inline-flex w-full justify-center rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink sm:w-auto"
-              >
-                {nm.viewOnPeoplescan}
-              </a>
+              <>
+                <Link
+                  href={`/explorer/nft/${result.collection}/${result.tokenId.toString()}`}
+                  data-testid="nft-view-link"
+                  className="inline-flex w-full justify-center rounded-xl bg-brand px-6 py-3 font-semibold text-brand-ink sm:w-auto"
+                >
+                  {nftExplorerCopy[lang].viewNft}
+                </Link>
+                <a
+                  href={peoplescanNftUrl(result.collection, result.tokenId)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="nft-peoplescan-link"
+                  className="text-sm font-semibold text-brand"
+                >
+                  {nm.viewOnPeoplescan}
+                </a>
+              </>
             ) : null}
             <button type="button" onClick={createAnother} className="text-sm font-semibold text-brand">
               {nm.createAnother}

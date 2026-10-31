@@ -1,6 +1,7 @@
 import { getAddress, type Hex } from "viem";
-import { evmJsonRpc } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError } from "@/lib/evm/rpc-server";
 import { readEvmDeployments } from "@/lib/evm/config";
+import { currentDeadline, deadlineExpired } from "@/lib/evm/request-deadline";
 
 /** First block worth scanning: the protocol deployment block when recorded, else genesis. */
 function deploymentStartBlock(): number {
@@ -37,6 +38,19 @@ function topicAddress(topic: string | undefined): string {
 }
 
 const DEFAULT_MAX_SCAN_WINDOWS = 500;
+const SCAN_PARTIAL = Symbol("scanPartial");
+
+/** Completed `eth_getLogs` windows. A deadline keeps these so the next request does not rescan them. */
+const transferWindowCache = new Map<string, RpcLog[]>();
+
+export function transferScanIsPartial(value: object | null | undefined): boolean {
+  return Boolean(value && (value as { [SCAN_PARTIAL]?: boolean })[SCAN_PARTIAL]);
+}
+
+function markTransferPartial<T extends object>(value: T, partial: boolean): T {
+  if (partial) Object.assign(value, { [SCAN_PARTIAL]: true });
+  return value;
+}
 
 /**
  * Upper bound on sequential `eth_getLogs` windows one scan may issue, so a single request cannot
@@ -54,7 +68,20 @@ export async function fetchTransferLogs(
   maxWindows = maxTransferScanWindows(),
 ): Promise<IndexedTransfer[]> {
   const token = getAddress(tokenAddress);
-  const head = toBlock ?? hexToNumber(await evmJsonRpc<string>("eth_blockNumber", []));
+  const underDeadline = Boolean(currentDeadline());
+  let head: number;
+  if (toBlock !== undefined) {
+    head = toBlock;
+  } else {
+    try {
+      head = hexToNumber(await evmJsonRpc<string>("eth_blockNumber", [], { ignoreBackoff: underDeadline }));
+    } catch (error) {
+      if (underDeadline && (isRequestDeadlineError(error) || isIncompleteRpcError(error) || deadlineExpired())) {
+        return markTransferPartial([], true);
+      }
+      throw error;
+    }
+  }
   const first = Math.max(0, fromBlock);
   // Past the cap the scan stops at a fixed block: results stay consistent, just stale.
   const latest = Math.min(head, first + maxWindows * 9_000 - 1);
@@ -63,20 +90,50 @@ export async function fetchTransferLogs(
   }
   // Cosmos EVM caps eth_getLogs at 10,000 blocks per query; scan in windows.
   const logs: RpcLog[] = [];
+  let partial = false;
   for (let start = first; start <= latest; start += 9_000) {
+    if (currentDeadline()?.signal.aborted || deadlineExpired()) {
+      partial = true;
+      break;
+    }
     const end = Math.min(latest, start + 8_999);
-    const chunk = await evmJsonRpc<RpcLog[]>("eth_getLogs", [
-      {
-        address: token,
-        topics: [TRANSFER_TOPIC],
-        fromBlock: `0x${start.toString(16)}`,
-        toBlock: `0x${end.toString(16)}`,
-      },
-    ]);
-    if (Array.isArray(chunk)) logs.push(...chunk);
+    const cacheKey = `${token.toLowerCase()}|${start}|${end}`;
+    // Only a compat request (one that has the shared deadline) reuses windows. Other callers keep
+    // the historical "every scan hits the node" behaviour, including the window-cap tests.
+    if (underDeadline) {
+      const cached = transferWindowCache.get(cacheKey);
+      if (cached) {
+        logs.push(...cached);
+        continue;
+      }
+    }
+    let chunk: RpcLog[];
+    try {
+      chunk = await evmJsonRpc<RpcLog[]>("eth_getLogs", [
+        {
+          address: token,
+          topics: [TRANSFER_TOPIC],
+          fromBlock: `0x${start.toString(16)}`,
+          toBlock: `0x${end.toString(16)}`,
+        },
+      ], { ignoreBackoff: underDeadline });
+    } catch (error) {
+      if (isRequestDeadlineError(error) || deadlineExpired() || (underDeadline && isIncompleteRpcError(error))) {
+        partial = true;
+        break;
+      }
+      throw error;
+    }
+    if (Array.isArray(chunk)) {
+      if (underDeadline) transferWindowCache.set(cacheKey, chunk);
+      logs.push(...chunk);
+    } else if (underDeadline) {
+      partial = true;
+      break;
+    }
   }
-  if (!Array.isArray(logs)) return [];
-  return logs
+  if (!Array.isArray(logs)) return markTransferPartial([], partial);
+  const indexed = logs
     .map((log) => {
       const topics = log.topics ?? [];
       const from = topicAddress(topics[1]);
@@ -91,6 +148,7 @@ export async function fetchTransferLogs(
       };
     })
     .filter((row) => row.from && row.to && row.transactionHash);
+  return markTransferPartial(indexed, partial);
 }
 
 export type TokenHolderRow = { address: string; balance: bigint };
@@ -103,6 +161,7 @@ const holdersCache = new Map<string, { at: number; value: TokenHolderRow[] }>();
 
 export function resetTransferIndexCacheForTests(): void {
   holdersCache.clear();
+  transferWindowCache.clear();
 }
 
 export function holdersCacheSizeForTests(): number {
@@ -128,6 +187,7 @@ export async function aggregateHoldersFromTransfers(tokenAddress: string): Promi
     return cached.value;
   }
   const transfers = await fetchTransferLogs(tokenAddress);
+  const partial = transferScanIsPartial(transfers);
   const balances = new Map<string, bigint>();
   for (const t of transfers) {
     if (t.from !== "0x0000000000000000000000000000000000000000") {
@@ -139,8 +199,10 @@ export async function aggregateHoldersFromTransfers(tokenAddress: string): Promi
     .filter(([, bal]) => bal > BigInt(0))
     .map(([address, balance]) => ({ address, balance }))
     .sort((a, b) => (a.balance > b.balance ? -1 : a.balance < b.balance ? 1 : a.address.localeCompare(b.address)));
-  rememberHolders(cacheKey, { at: Date.now(), value });
-  return value;
+  // A partial holder list is not cached as complete: the window cache above is what the next
+  // request continues from.
+  if (!partial) rememberHolders(cacheKey, { at: Date.now(), value });
+  return markTransferPartial(value, partial);
 }
 
 export function listKnownTokenAddresses(): string[] {

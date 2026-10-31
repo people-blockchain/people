@@ -146,10 +146,10 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **PPL sale on Base** | The PPL sale runs on Base only (PplCurveHub, USDC or USDT). Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale contract is published. Mainnet of the PEOPLE network is a separate step. | Sale contract (PplCurveHub on Base) and receiving multisig published |
+| **Mainnet and PPL sale** | PEOPLE mainnet and the PPL sale launch together on December 1, 2026. Pay in USDC or USDT on Base; PPL are issued and credited immediately on PEOPLE mainnet. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`. | Launch on December 1, 2026 |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
-No dates are promised. Each stage starts when its gate is met.
+Each stage starts when its gate is met. Apart from the December 1, 2026 mainnet and PPL sale launch, no dates are promised.
 
 ---
 
@@ -164,7 +164,7 @@ No dates are promised. Each stage starts when its gate is met.
 ## 9. Security
 
 - Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.
-- **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
+- **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base receives 50% of every purchase immediately, at the moment of purchase; the other 50% stays in the sale contract as the sell-back reserve. The multisig's address and signer threshold are published before the sale opens.
 - **Published addresses.** The sale contract and the receiving multisig are published before the sale opens; vesting and LP-lock contracts at the full network launch. No placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
 - **Proven building blocks.** No-code contracts are assembled from OpenZeppelin templates.
@@ -223,6 +223,6 @@ Only verifiable public facts about other networks. Sources below.
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). No KYC or sale-eligibility checks are run on this site.
 - Security: Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty on every page.
-- Multisigs. Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
+- Multisigs. Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base receives 50% of every purchase immediately, at the moment of purchase; the other 50% stays in the sale contract as the sell-back reserve. The multisig's address and signer threshold are published before the sale opens.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
 - The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.

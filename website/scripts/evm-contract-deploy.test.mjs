@@ -66,7 +66,7 @@ test("E2E-M1: ContractWizard only fetches contracts/params off the EVM chain", a
 test("E2E-M1: ContractList only fetches the legacy contracts index off the EVM chain", async () => {
   const src = await readFile(new URL("../src/components/explorer/ContractList.tsx", import.meta.url), "utf8");
   const guard = src.indexOf("isCosmosEvmChain()");
-  const fetch = src.indexOf('networkJson<typeof items>("contracts")');
+  const fetch = src.indexOf('networkJson<typeof items>("contracts"');
   assert.ok(guard > -1, "the list must gate the legacy contracts fetch");
   assert.ok(fetch > -1, "the legacy contracts fetch is still present for the legacy chain");
   assert.ok(guard < fetch, "the EVM guard must run before the contracts fetch");

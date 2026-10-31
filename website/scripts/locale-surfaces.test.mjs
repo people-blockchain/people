@@ -26,6 +26,7 @@ const surfaces = [
   "litepaper",
   "samples",
   "nft-media",
+  "nft-explorer",
 ];
 
 function load(name) {
@@ -162,4 +163,54 @@ test("nft-media surface: image and video limits are stated the same way in every
     assert.match(copy.imageFileHint, /1[.,]5/, lang);
     assert.match(copy.imageFileHint, /256/, lang);
   }
+});
+
+test("launch copy: mainnet and the PPL sale launch together on 2026-12-01, no hub name or separate-step claims", () => {
+  const names = ["docs", "litepaper", "tokenomics", "legal"];
+  for (const lang of ["en", "ru", ...extra]) {
+    for (const name of names) {
+      const file = `${name}-${lang}.json`;
+      if (name === "docs" && lang === "ru") continue;
+      if (name === "tokenomics" && (lang === "en" || lang === "ru")) continue;
+      const raw = readFileSync(join(dir, file), "utf8");
+      assert.doesNotMatch(raw, /PplCurveHub/, file);
+      assert.doesNotMatch(raw, /8438/, file);
+    }
+    const lp = load(`litepaper-${lang}.json`).charts.roadmapStages[1];
+    assert.match(lp.gate, /2026/, `litepaper gate ${lang}`);
+    assert.match(lp.body, /USDC/, lang);
+    assert.match(lp.body, /USDT/, lang);
+    const legal = load(`legal-${lang}.json`).terms.blocks[1].body[1];
+    assert.match(legal, /2026/, `legal ${lang}`);
+    assert.match(legal, /USDC/, lang);
+    if (lang !== "en" && lang !== "ru") {
+      const tk = load(`tokenomics-${lang}.json`);
+      assert.match(tk.launchOrderBody, /2026/, `tokenomics ${lang}`);
+      assert.match(tk.launchOrderBody, /1[.,\s]?000/, `tokenomics ${lang}`);
+      assert.match(tk.bucketNotes.sale, /USDC/, lang);
+      assert.match(tk.bucketNotes.sale, /USDT/, lang);
+      assert.doesNotMatch(tk.contractRows[0].name, /PplCurveHub/, lang);
+    }
+    if (lang !== "ru") {
+      const docs = load(`docs-${lang}.json`);
+      assert.match(docs.noticeText, /2026/, `docs ${lang}`);
+      assert.match(docs.sections[11].lead, /2026/, `docs ${lang}`);
+    }
+    const md = readFileSync(join(root, "src/content/litepaper", `${lang}.md`), "utf8");
+    assert.doesNotMatch(md, /PplCurveHub/, lang);
+    assert.match(md, /2026/, lang);
+  }
+});
+
+test("launch copy: inline en/ru content states the 2026-12-01 launch and drops the old claims", () => {
+  for (const file of ["docs-content.ts", "tokenomics-content.ts", "transparency-content.ts"]) {
+    const raw = readFileSync(join(root, "src/lib", file), "utf8");
+    assert.doesNotMatch(raw, /PplCurveHub/, file);
+    assert.doesNotMatch(raw, /No mainnet date is set|Дата mainnet не назначена|has not launched|ещё не запущен/, file);
+    assert.match(raw, /December 1, 2026/, file);
+    assert.match(raw, /1 декабря 2026/, file);
+  }
+  const transparency = readFileSync(join(root, "src/lib/transparency-content.ts"), "utf8");
+  assert.doesNotMatch(transparency, /Mainnet work starts once 1,000/);
+  assert.doesNotMatch(transparency, /Работа над mainnet начинается/);
 });

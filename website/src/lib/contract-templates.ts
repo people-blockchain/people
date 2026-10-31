@@ -5,7 +5,8 @@ export type ContractTemplateId =
   | "escrow"
   | "multisig"
   | "dao"
-  | "timelock";
+  | "timelock"
+  | "crowdfund";
 
 export interface ContractTemplate {
   id: ContractTemplateId;
@@ -13,6 +14,8 @@ export interface ContractTemplate {
   titleRu: string;
   summaryEn: string;
   summaryRu: string;
+  /** Summaries for the other site languages; missing ones fall back to summaryEn. */
+  summaryI18n?: Partial<Record<string, string>>;
   keywords: string[];
   fileName: string;
   /** Solidity 0.8.24, OpenZeppelin 5.x imports. */
@@ -191,8 +194,20 @@ contract BatchAirdrop is Ownable, ReentrancyGuard {
     id: "escrow",
     titleEn: "Simple escrow",
     titleRu: "Эскроу",
-    summaryEn: "Buyer deposits ETH-like native value; seller and buyer must both confirm before release, or a timeout refunds the buyer.",
-    summaryRu: "Покупатель вносит натив; выплата продавцу после двух подтверждений или возврат по таймеру.",
+    summaryEn: "Buyer deposits PPL; seller and buyer must both confirm before release, or a timeout refunds the buyer.",
+    summaryRu: "Покупатель вносит PPL; выплата продавцу после двух подтверждений или возврат по таймеру.",
+    summaryI18n: {
+      es: "El comprador deposita PPL; vendedor y comprador deben confirmar antes de liberar el pago, o al vencer el plazo se reembolsa al comprador.",
+      pt: "O comprador deposita PPL; vendedor e comprador precisam confirmar antes da liberação, ou o prazo expira e o comprador é reembolsado.",
+      fr: "L’acheteur dépose des PPL ; le vendeur et l’acheteur doivent tous deux confirmer avant le versement, sinon l’acheteur est remboursé à l’échéance.",
+      de: "Der Käufer hinterlegt PPL; Verkäufer und Käufer müssen beide bestätigen, bevor ausgezahlt wird, sonst erhält der Käufer nach Ablauf der Frist sein Geld zurück.",
+      it: "L’acquirente deposita PPL; venditore e acquirente devono entrambi confermare prima dello sblocco, altrimenti alla scadenza l’acquirente viene rimborsato.",
+      tr: "Alıcı PPL yatırır; ödeme serbest bırakılmadan önce satıcı ve alıcının ikisi de onaylamalıdır, aksi halde süre dolunca alıcıya iade edilir.",
+      vi: "Người mua gửi PPL; người bán và người mua đều phải xác nhận trước khi giải ngân, nếu không, hết thời hạn người mua được hoàn tiền.",
+      id: "Pembeli menyetor PPL; penjual dan pembeli harus sama-sama mengonfirmasi sebelum dana dilepas, atau dana dikembalikan ke pembeli saat batas waktu habis.",
+      zh: "买方存入 PPL；卖方和买方都确认后才放款，否则超时后退款给买方。",
+      ar: "يودِع المشتري PPL؛ ويجب أن يؤكد البائع والمشتري معًا قبل تحرير المبلغ، وإلا يُعاد المبلغ إلى المشتري عند انتهاء المهلة."
+    },
     keywords: ["escrow", "эскроу", "deposit", "hold", "условн"],
     fileName: "SimpleEscrow.sol",
     paramHintsEn: ["Seller address", "timeout seconds"],
@@ -393,6 +408,63 @@ contract SimpleTimelock is Ownable {
     }
 }
 `
+  },
+  {
+    id: "crowdfund",
+    titleEn: "Crowdfund with refund",
+    titleRu: "Сбор средств с возвратом",
+    summaryEn: "Collects native coin toward a goal before a deadline. If the goal is reached the owner claims the funds once; if not, every contributor can take their money back.",
+    summaryRu: "Собирает натив до дедлайна. Если цель достигнута, владелец один раз забирает сумму; если нет, каждый участник может вернуть свои деньги.",
+    keywords: [
+      "crowdfund", "crowdfunding", "fundraise", "fundraising", "raise money", "raise funds", "goal", "refund", "donate", "donation", "pledge",
+      "краудфанд", "сбор денег", "сбор средств", "собрать", "возврат", "пожертвов", "фандрайз", "цель сбора"
+    ],
+    fileName: "SimpleCrowdfund.sol",
+    paramHintsEn: ["Funding goal in PPL", "campaign duration in days"],
+    paramHintsRu: ["Цель сбора в PPL", "длительность сбора в днях"],
+    source: `${HEADER}import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract SimpleCrowdfund is Ownable, ReentrancyGuard {
+    uint256 public immutable goal;
+    uint256 public immutable deadline;
+    uint256 public raised;
+    bool public claimed;
+    mapping(address => uint256) public contributions;
+
+    constructor(uint256 goal_, uint256 duration_) Ownable(msg.sender) {
+        require(goal_ > 0 && duration_ > 0, "params");
+        goal = goal_;
+        deadline = block.timestamp + duration_;
+    }
+
+    function contribute() external payable {
+        require(block.timestamp < deadline && !claimed && msg.value > 0, "closed");
+        contributions[msg.sender] += msg.value;
+        raised += msg.value;
+    }
+
+    function goalReached() public view returns (bool) {
+        return raised >= goal;
+    }
+
+    function claim() external onlyOwner nonReentrant {
+        require(goalReached() && !claimed, "goal");
+        claimed = true;
+        (bool ok, ) = owner().call{value: address(this).balance}("");
+        require(ok, "pay");
+    }
+
+    function refund() external nonReentrant {
+        require(block.timestamp >= deadline && !goalReached(), "wait");
+        uint256 amount = contributions[msg.sender];
+        require(amount > 0, "none");
+        contributions[msg.sender] = 0;
+        (bool ok, ) = msg.sender.call{value: amount}("");
+        require(ok, "pay");
+    }
+}
+`
   }
 ];
 
@@ -400,12 +472,32 @@ export function findTemplateById(id: string): ContractTemplate | undefined {
   return CONTRACT_TEMPLATES.find((item) => item.id === id);
 }
 
+/** Template summary in a site language: ru/en fields first, then summaryI18n, then English. */
+export function templateSummary(template: ContractTemplate, lang: string): string {
+  if (lang === "ru") return template.summaryRu;
+  if (lang === "en") return template.summaryEn;
+  return template.summaryI18n?.[lang] ?? template.summaryEn;
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Latin keywords match at a word start (so "vest" does not hit "invest"); Cyrillic keywords are stems. */
+function keywordHits(text: string, word: string): boolean {
+  const kw = word.toLowerCase();
+  if (/^[a-z0-9 -]+$/.test(kw)) {
+    return new RegExp(`(^|[^a-z0-9])${escapeRegExp(kw)}`).test(text);
+  }
+  return text.includes(kw);
+}
+
 export function matchTemplate(prompt: string): ContractTemplate {
   const text = prompt.toLowerCase();
   let best = CONTRACT_TEMPLATES[0]!;
   let score = 0;
   for (const template of CONTRACT_TEMPLATES) {
-    const hits = template.keywords.filter((word) => text.includes(word.toLowerCase())).length;
+    const hits = template.keywords.filter((word) => keywordHits(text, word)).length;
     if (hits > score) {
       score = hits;
       best = template;

@@ -40,5 +40,9 @@
   "networkBadge": "PEOPLE network · chain 97401",
   "selectToken": "Select token",
   "closePicker": "Close",
-  "gasFeeNote": "Paid as gas in PPL when you sign"
+  "gasFeeNote": "Paid as gas in PPL when you sign",
+  "approving": "Approving token…",
+  "approveReverted": "Token approval failed, nothing was swapped. Try again.",
+  "approveTimeout": "Token approval is still pending. Check your wallet, then try again.",
+  "allowanceLow": "The approval did not go through (allowance is too low). Try again."
 }

@@ -3,7 +3,7 @@
   "title": "Hiểu.\nThử.\nTham gia.",
   "description": "Từ ví đầu tiên đến nút của bạn — hướng dẫn thực tế về PEOPLE Blockchain.",
   "notice": "Mạng thử",
-  "noticeText": "Mainnet chưa ra mắt. Thao tác khả dụng phụ thuộc kết nối trang và phiên bản mạng. Coin thử không phải lời hứa thu nhập.",
+  "noticeText": "Mainnet của mạng PEOPLE và đợt bán PPL ra mắt cùng nhau vào ngày 1 tháng 12 năm 2026; đến lúc đó mạng vẫn là mạng thử nghiệm. PPL được thanh toán bằng USDC hoặc USDT trên Base, được phát hành và ghi có ngay trên mainnet PEOPLE. Thao tác khả dụng phụ thuộc kết nối trang và phiên bản mạng. Coin thử không phải lời hứa thu nhập.",
   "contents": "Trong hướng dẫn này",
   "search": "Tìm trong tài liệu",
   "empty": "Không có kết quả. Thử “ví”, “phần thưởng” hoặc “nút”.",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Bạn có thể dùng gì",
-      "lead": "Những gì đã chạy trên mạng thử nghiệm và những gì đến sau. Chưa có ngày ra mainnet.",
+      "lead": "Những gì đã chạy trên mạng thử nghiệm và những gì đến sau. Mainnet và đợt bán PPL ra mắt vào ngày 1 tháng 12 năm 2026.",
       "items": [
         {
           "title": "Có ngay · mạng thử nghiệm",

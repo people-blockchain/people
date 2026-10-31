@@ -3,7 +3,7 @@
   "title": "Comprenez.\nEssayez.\nParticipez.",
   "description": "Du premier portefeuille à votre propre nœud — un guide pratique de PEOPLE Blockchain.",
   "notice": "Réseau de test",
-  "noticeText": "Le Mainnet n’a pas été lancé. Les opérations disponibles dépendent de la connexion du site et de la version du réseau. Les pièces de test ne sont pas une promesse de revenu.",
+  "noticeText": "Le mainnet du réseau PEOPLE et la vente de PPL démarrent ensemble le 1er décembre 2026 ; d’ici là, le réseau est un réseau de test. Les PPL se paient en USDC ou USDT sur Base et sont émis et crédités immédiatement sur le mainnet PEOPLE. Les opérations disponibles dépendent de la connexion du site et de la version du réseau. Les pièces de test ne sont pas une promesse de revenu.",
   "contents": "Dans ce guide",
   "search": "Rechercher dans la documentation",
   "empty": "Aucun résultat. Essayez « portefeuille », « récompenses » ou « nœud ».",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Ce que vous pouvez utiliser",
-      "lead": "Ce qui fonctionne déjà sur le réseau de test et ce qui vient ensuite. Aucune date de mainnet n’est fixée.",
+      "lead": "Ce qui fonctionne déjà sur le réseau de test et ce qui vient ensuite. Le mainnet et la vente de PPL démarrent le 1er décembre 2026.",
       "items": [
         {
           "title": "Disponible maintenant · réseau de test",

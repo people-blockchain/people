@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFT'ler",
+  "loading": "NFT yükleniyor…",
+  "retry": "Yeniden dene",
+  "notFound": "Bu NFT bu ağda bulunamadı.",
+  "unavailable": "Ağ geçici olarak kullanılamıyor. Lütfen tekrar deneyin.",
+  "collection": "Koleksiyon",
+  "tokenId": "Token kimliği",
+  "owner": "Sahip",
+  "tokenUri": "Token URI",
+  "description": "Açıklama",
+  "openOnIpfs": "IPFS ağ geçidinde aç",
+  "openOriginalImage": "Orijinal görseli aç",
+  "imageUnavailable": "Görsel yüklenemedi.",
+  "noImage": "Bu NFT'nin burada gösterilebilecek bir görseli yok.",
+  "metadataUnavailable": "Meta veriler yüklenemedi, bu yüzden yalnızca zincir üzerindeki veriler gösteriliyor.",
+  "externalUriNote": "Bu token URI harici bir adrese işaret ediyor. Gösteriliyor ancak burada açılmıyor.",
+  "viewNft": "NFT'mi görüntüle"
+}

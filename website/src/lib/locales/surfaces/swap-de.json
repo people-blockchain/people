@@ -40,5 +40,9 @@
   "networkBadge": "PEOPLE-Netzwerk · Chain 97401",
   "selectToken": "Token wählen",
   "closePicker": "Schließen",
-  "gasFeeNote": "Als Gas in PPL beim Signieren"
+  "gasFeeNote": "Als Gas in PPL beim Signieren",
+  "approving": "Token wird freigegeben…",
+  "approveReverted": "Die Token-Freigabe ist fehlgeschlagen, es wurde nichts getauscht. Versuche es erneut.",
+  "approveTimeout": "Die Token-Freigabe steht noch aus. Prüfe deine Wallet und versuche es erneut.",
+  "allowanceLow": "Die Freigabe wurde nicht übernommen (Limit zu niedrig). Versuche es erneut."
 }

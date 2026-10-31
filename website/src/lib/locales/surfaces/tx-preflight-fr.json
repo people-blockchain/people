@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "La limite quotidienne de paiement en stablecoins de ce portefeuille est atteinte. Rien n’a été envoyé et aucun gaz n’a été dépensé.",
+  "payWithPpl": "Payer en PPL",
+  "stableUnavailable": "Le paiement en stablecoins est momentanément indisponible. Rien n’a été envoyé et aucun gaz n’a été dépensé. Vous pouvez payer en PPL.",
+  "reverted": "Un test a montré que cette transaction échouerait ; elle n’a donc pas été envoyée et aucun gaz n’a été dépensé. Motif : {reason}",
+  "revertedNoReason": "Un test a montré que cette transaction échouerait ; elle n’a donc pas été envoyée et aucun gaz n’a été dépensé.",
+  "panic": "Un test a montré que le contrat échouerait avec une erreur interne (code {code}) ; la transaction n’a donc pas été envoyée et aucun gaz n’a été dépensé."
+}

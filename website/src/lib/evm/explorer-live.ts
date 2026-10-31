@@ -102,10 +102,10 @@ export function connectEvmExplorer(options: {
       if (dead || stopped) return Promise.reject(new Error("connection_closed"));
       const id = ++nextId;
       return new Promise((resolve, reject) => {
+        // One slow read must not tear down the socket; the caller keeps the blocks that did arrive.
         const timeout = setTimeout(() => {
           pending.delete(id);
           reject(new Error("rpc_timeout"));
-          fail();
         }, 20_000);
         pending.set(id, { resolve, reject, timeout });
         try { socket.send(JSON.stringify({ jsonrpc: "2.0", id, method, params })); }
@@ -116,6 +116,7 @@ export function connectEvmExplorer(options: {
       if (syncing || dead || stopped || !ready) return;
       syncing = true;
       try {
+        let stalled = 0;
         while (!dead && !stopped && (blocks[0]?.header.height ?? -1) < target) {
           const head = target;
           if (head < 1) throw new Error("chain_not_started");
@@ -129,12 +130,18 @@ export function connectEvmExplorer(options: {
               { length: Math.min(BLOCK_READ_CONCURRENCY, h - start + 1) },
               (_, index) => h - index,
             );
-            const batch = await Promise.all(heights.map(async (height) => {
+            const settled = await Promise.allSettled(heights.map(async (height) => {
               const raw = await request("eth_getBlockByNumber", [`0x${height.toString(16)}`, true]);
               return decodeBlock(raw, height);
             }));
             if (dead || stopped) return;
-            next.push(...batch);
+            const decoded = settled.flatMap((result) => result.status === "fulfilled" ? [result.value] : []);
+            // Every read in this batch failed. An empty feed is an outage; rows already on screen stay.
+            if (decoded.length === 0) {
+              if (next.length === 0 && retained.length === 0) throw new Error("block_reads_failed");
+              break;
+            }
+            next.push(...decoded);
             blocks = [...next, ...retained].slice(0, EVM_EXPLORER_WINDOW);
             const transactions = blocks.flatMap((block) => block.transactions).slice(0, 12);
             attempts = 0;
@@ -142,6 +149,11 @@ export function connectEvmExplorer(options: {
             if (!published && !dead && !stopped) options.onPhase("online");
             published = true;
           }
+          const after = blocks[0]?.header.height ?? -1;
+          if (after === previous) {
+            stalled += 1;
+            if (stalled >= 2) break;
+          } else stalled = 0;
         }
       } catch { fail(); }
       finally { syncing = false; }

@@ -9,10 +9,26 @@ import {
 } from "@/lib/evm/explorer-blocks";
 import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
-import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
+import {
+  applyTokenImage,
+  discoverPoolsOnChain,
+  discoverTokensOnChain,
+  partialScan,
+  readImmediateTokenImage,
+  scanIsPartial,
+  type CatalogPool,
+  type CatalogToken,
+} from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
-import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { evmJsonRpc } from "@/lib/evm/rpc-server";
+import { enrichAssetRow, seedAssetMeta } from "@/lib/evm/seed-assets";
+import { evmJsonRpc, isIncompleteRpcError, isRequestDeadlineError, weiToPpl } from "@/lib/evm/rpc-server";
+import { readAllFactoryNfts, readOwnedFactoryNfts, readTokenBalances } from "@/lib/evm/wallet-holdings";
+import { loadContractInfo } from "@/lib/evm/contract-info";
+import { transferScanIsPartial } from "@/lib/evm/transfer-index";
+import { deadlineExpired, runWithRequestDeadline } from "@/lib/evm/request-deadline";
+
+/** Per-read bound for the address summary; the shared RPC default (20 s) is too long for a page. */
+const ADDRESS_READ_TIMEOUT_MS = 8_000;
 
 type AssetRow = {
   assetId: string;
@@ -26,6 +42,10 @@ type AssetRow = {
   createdAt?: number;
 };
 
+function rethrowDeadline(error: unknown): void {
+  if (isRequestDeadlineError(error) || deadlineExpired()) throw error;
+}
+
 function parseLimit(raw: string | null, fallback: number): number {
   const n = Number(raw);
   if (!Number.isFinite(n) || n <= 0) return fallback;
@@ -35,7 +55,10 @@ function parseLimit(raw: string | null, fallback: number): number {
 async function erc20String(token: string, selector: string): Promise<string> {
   const addr = getAddress(token);
   const data = selector;
-  const out = await evmJsonRpc<string>("eth_call", [{ to: addr, data }, "latest"]).catch(() => "0x");
+  const out = await evmJsonRpc<string>("eth_call", [{ to: addr, data }, "latest"]).catch((error: unknown) => {
+    if (isIncompleteRpcError(error) || isRequestDeadlineError(error)) throw error;
+    return "0x";
+  });
   if (!out || out === "0x" || out.length < 130) return "";
   const hex = out.slice(130);
   try {
@@ -48,7 +71,10 @@ async function erc20String(token: string, selector: string): Promise<string> {
 
 async function erc20Uint(token: string, selector: string): Promise<bigint> {
   const addr = getAddress(token);
-  const out = await evmJsonRpc<string>("eth_call", [{ to: addr, data: selector }, "latest"]).catch(() => "0x0");
+  const out = await evmJsonRpc<string>("eth_call", [{ to: addr, data: selector }, "latest"]).catch((error: unknown) => {
+    if (isIncompleteRpcError(error) || isRequestDeadlineError(error)) throw error;
+    return "0x0";
+  });
   try {
     return BigInt(out);
   } catch {
@@ -61,7 +87,10 @@ async function erc20Uint(token: string, selector: string): Promise<bigint> {
  * a revert/empty result yields null, so the UI omits the field instead of showing a fabricated 0.
  */
 async function optionalUint(token: string, selector: string): Promise<bigint | null> {
-  const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(token), data: selector }, "latest"]).catch(() => null);
+  const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(token), data: selector }, "latest"]).catch((error: unknown) => {
+    if (isIncompleteRpcError(error) || isRequestDeadlineError(error)) throw error;
+    return null;
+  });
   if (!out || out === "0x") return null;
   try {
     return BigInt(out);
@@ -117,12 +146,15 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     type: "token",
   };
   const seed = seedAssetMeta(base.assetId);
-  return enrichAssetRow({
+  const seeded = enrichAssetRow({
     ...base,
     name: seed?.name ?? base.name,
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
+  // The document URL is the image. This request does not fetch the gateway.
+  const chainImage = await readImmediateTokenImage(token);
+  return applyTokenImage(seeded, undefined, chainImage);
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -147,37 +179,67 @@ async function resolveKnownToken(assetIdOrAddress: string): Promise<string | nul
     .filter(([key, addr]) => /^tokenFactory(V\d+)?$/.test(key) && addr && isAddress(addr))
     .map(([, addr]) => addr as string);
   for (const factory of factories) {
-    const out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]).catch(() => "0x");
+    const out = await evmJsonRpc<string>("eth_call", [{ to: factory, data }, "latest"]).catch((error: unknown) => {
+      rethrowDeadline(error);
+      return "0x";
+    });
     if (/^0x0*1$/.test(out ?? "")) return token;
   }
   return null;
 }
 
-export async function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
+function deadlineHit(error?: unknown): boolean {
+  return isRequestDeadlineError(error) || deadlineExpired();
+}
+
+export function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
+  return runWithRequestDeadline(() =>
+    handleEvmCompatGetInner(path, search).catch((error: unknown) => {
+      // Only the shared deadline becomes a partial 200. A single HTTP 503 on a route that does not
+      // scan (a transaction lookup) still rejects so callers can tell "node answered 503" from "we stopped".
+      if (deadlineHit(error)) return { status: 200, body: { partial: true } };
+      throw error;
+    }),
+  );
+}
+
+async function handleEvmCompatGetInner(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
   const segments = path.replace(/^\//, "").split("/").filter(Boolean);
   const root = segments[0]?.toLowerCase() ?? "";
 
   if (root === "health") {
-    const height = await fetchLatestBlockNumber().catch(() => 0);
+    const height = await fetchLatestBlockNumber().catch((error: unknown) => {
+      rethrowDeadline(error);
+      return 0;
+    });
     return { status: 200, body: { status: "ok", chainId: "97401", height } };
   }
 
   if (root === "blocks" && segments.length === 1) {
     const limit = parseLimit(search.get("limit"), 20);
-    const blocks = await fetchRecentBlocks(limit).catch(() => []);
+    const blocks = await fetchRecentBlocks(limit).catch((error: unknown) => {
+      rethrowDeadline(error);
+      return [];
+    });
     return { status: 200, body: blocks };
   }
 
   if (root === "blocks" && segments[1] && /^\d+$/.test(segments[1])) {
     const height = Number(segments[1]);
-    const block = await fetchBlockByHeight(height).catch(() => null);
+    const block = await fetchBlockByHeight(height).catch((error: unknown) => {
+      rethrowDeadline(error);
+      return null;
+    });
     if (!block) return { status: 404, body: { error: "not_found" } };
     return { status: 200, body: block };
   }
 
   if (root === "transactions" && segments.length === 1) {
     const limit = parseLimit(search.get("limit"), 20);
-    const txs = await fetchRecentTransactions(limit).catch(() => []);
+    const txs = await fetchRecentTransactions(limit).catch((error: unknown) => {
+      rethrowDeadline(error);
+      return [];
+    });
     return { status: 200, body: txs };
   }
 
@@ -195,49 +257,66 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
     // Reserves must come from live `getReserves()` reads only. The deployment JSON is a
     // build-time snapshot; serving it here would let swap quotes price against stale
     // reserves, so an unavailable scan yields no pools instead.
-    const onChain = await discoverPoolsOnChain().catch(() => []);
+    const onChain = await discoverPoolsOnChain().catch((error: unknown) => {
+      if (deadlineHit(error) || isIncompleteRpcError(error)) return partialScan<CatalogPool>();
+      throw error;
+    });
     // Listings only: pools of retired/fixture tokens never reach the swap UI or pool lists.
-    return { status: 200, body: visiblePools(onChain) };
+    const pools = visiblePools(onChain);
+    if (scanIsPartial(onChain) || deadlineHit()) return { status: 200, body: { pools, partial: true } };
+    return { status: 200, body: pools };
   }
 
   if (root === "assets" && segments.length === 1) {
-    const onChain = await discoverTokensOnChain().catch(() => []);
-    if (onChain.length) {
+    const onChain = await discoverTokensOnChain().catch((error: unknown) => {
+      if (deadlineHit(error) || isIncompleteRpcError(error)) return partialScan<CatalogToken>();
+      throw error;
+    });
+    const mapped = visibleAssets(onChain.map((row) => enrichAssetRow(row))).map((enriched) => {
       return {
-        status: 200,
-        body: visibleAssets(onChain.map((row) => enrichAssetRow(row))).map((enriched) => {
-          return {
-            assetId: enriched.assetId,
-            tokenAddress: enriched.tokenAddress,
-            name: enriched.name,
-            symbol: enriched.symbol,
-            decimals: enriched.decimals,
-            totalSupply: enriched.totalSupply,
-            creator: enriched.creator,
-            status: enriched.status,
-            type: enriched.type,
-            verified: enriched.verified,
-            ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
-            creationMetadata: enriched.creationMetadata,
-            imageUri: enriched.imageUri,
-          };
-        }),
+        assetId: enriched.assetId,
+        tokenAddress: enriched.tokenAddress,
+        name: enriched.name,
+        symbol: enriched.symbol,
+        decimals: enriched.decimals,
+        totalSupply: enriched.totalSupply,
+        creator: enriched.creator,
+        status: enriched.status,
+        type: enriched.type,
+        verified: enriched.verified,
+        ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
+        creationMetadata: enriched.creationMetadata,
+        imageUri: enriched.imageUri,
       };
-    }
+    });
+    // Logos never make the list partial. Only a missed catalog or RPC read does.
+    if (scanIsPartial(onChain)) return { status: 200, body: { assets: mapped, partial: true } };
+    if (onChain.length) return { status: 200, body: mapped };
     const dep = readEvmDeployments();
     const rows: AssetRow[] = [];
     for (const assetId of Object.keys(dep.assetMap ?? {})) {
-      const row = await loadAsset(assetId);
-      if (row) rows.push(row);
+      if (deadlineHit()) return { status: 200, body: { assets: rows, partial: true } };
+      try {
+        const row = await loadAsset(assetId);
+        if (row) rows.push(row);
+      } catch (error) {
+        if (deadlineHit(error) || isIncompleteRpcError(error)) return { status: 200, body: { assets: rows, partial: true } };
+        throw error;
+      }
     }
     return { status: 200, body: rows };
   }
 
   if (root === "assets" && segments[1]) {
-    const onChain = await discoverTokensOnChain().catch(() => []);
-    const hit = onChain.find((t) => t.assetId === decodeURIComponent(segments[1]).toLowerCase());
+    const requested = decodeURIComponent(segments[1]).toLowerCase();
+    const onChain = await discoverTokensOnChain().catch((error: unknown) => {
+      if (deadlineHit(error) || isIncompleteRpcError(error)) return partialScan<CatalogToken>();
+      throw error;
+    });
+    const hit = onChain.find((t) => t.assetId === requested);
     if (hit) {
       const enriched = enrichAssetRow(hit);
+      const partial = scanIsPartial(onChain);
       return {
         status: 200,
         body: {
@@ -253,12 +332,19 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
           ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
           creationMetadata: enriched.creationMetadata,
           imageUri: enriched.imageUri,
+          ...(partial ? { partial: true } : {}),
         },
       };
     }
-    const asset = await loadAsset(decodeURIComponent(segments[1]));
-    if (!asset) return { status: 404, body: { error: "not_found" } };
-    return { status: 200, body: asset };
+    if (scanIsPartial(onChain) || deadlineHit()) return { status: 200, body: { partial: true } };
+    try {
+      const asset = await loadAsset(decodeURIComponent(segments[1]));
+      if (!asset) return { status: 404, body: { error: "not_found" } };
+      return { status: 200, body: deadlineHit() ? { ...asset, partial: true } : asset };
+    } catch (error) {
+      if (deadlineHit(error) || isIncompleteRpcError(error)) return { status: 200, body: { partial: true } };
+      throw error;
+    }
   }
 
   if (root === "address" && segments[1] && isAddress(segments[1])) {
@@ -270,6 +356,7 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
         const beforeBlock =
           beforeRaw && /^\d+$/.test(beforeRaw) ? Number(beforeRaw) : undefined;
         const history = await fetchAddressHistory(addr, limit, { beforeBlock });
+        const partial = deadlineHit() || history.truncated === true && deadlineExpired();
         return {
           status: 200,
           body: {
@@ -279,33 +366,69 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
             outgoing: history.outgoing,
             incoming: history.incoming,
             truncated: history.truncated ?? false,
+            ...(partial ? { partial: true } : {}),
           },
         };
-      } catch {
+      } catch (error) {
+        if (deadlineHit(error)) {
+          return {
+            status: 200,
+            body: { items: [], hasMore: false, outgoing: 0, incoming: 0, truncated: true, partial: true },
+          };
+        }
         return { status: 502, body: { error: "rpc_unavailable" } };
       }
     }
     // Balance + nonce only — never wait on the history scan (that blocked the page for 18–40s).
-    let balanceHex: string;
-    let nonceHex: string;
-    try {
-      [balanceHex, nonceHex] = await Promise.all([
-        evmJsonRpc<string>("eth_getBalance", [addr, "latest"]),
-        evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"]),
-      ]);
-    } catch {
+    // Each read is independent and time-bounded: one failed read returns the other with
+    // `partial: true` instead of failing the whole address with 502.
+    const [balanceRead, nonceRead] = await Promise.allSettled([
+      evmJsonRpc<string>("eth_getBalance", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
+      evmJsonRpc<string>("eth_getTransactionCount", [addr, "latest"], { timeoutMs: ADDRESS_READ_TIMEOUT_MS }),
+    ]);
+    const balanceWei = balanceRead.status === "fulfilled" && balanceRead.value ? BigInt(balanceRead.value) : null;
+    const nonce = nonceRead.status === "fulfilled" && nonceRead.value ? Number.parseInt(nonceRead.value, 16) : null;
+    if (balanceWei === null && nonce === null) {
+      const reason = (read: PromiseSettledResult<unknown>) => (read.status === "rejected" ? read.reason : undefined);
+      // A node that answered with a JSON-RPC error is still "unavailable". A 503, abort, or the
+      // request deadline is an incomplete read: 200 partial, never 502/504.
+      if (deadlineHit(reason(balanceRead)) || deadlineHit(reason(nonceRead)) || isIncompleteRpcError(reason(balanceRead)) || isIncompleteRpcError(reason(nonceRead))) {
+        return { status: 200, body: { balances: {}, incomingTxs: 0, partial: true } };
+      }
       return { status: 502, body: { error: "rpc_unavailable" } };
     }
-    const balanceWei = BigInt(balanceHex);
-    const nonce = Number.parseInt(nonceHex, 16);
+    // ERC-20 holdings come from live `balanceOf`, not the catalog's own balances (it has none): the
+    // wallet lists exactly the keys of `balances`, so without this a created token never shows.
+    const dep = readEvmDeployments();
+    const catalog = await discoverTokensOnChain().catch((error: unknown) => {
+      if (deadlineHit(error) || isIncompleteRpcError(error)) return partialScan<CatalogToken>();
+      return [];
+    });
+    const tokens = [
+      ...catalog.map((row) => ({ assetId: row.assetId, address: row.tokenAddress, decimals: row.decimals })),
+      ...Object.entries(dep.assetMap ?? {}).map(([assetId, address]) => ({
+        assetId,
+        address,
+        decimals: seedAssetMeta(assetId)?.decimals,
+      })),
+    ];
+    let held: Record<string, number> = {};
+    let holdingsIncomplete = scanIsPartial(catalog);
+    try {
+      held = await readTokenBalances(addr, tokens);
+    } catch (error) {
+      if (!(deadlineHit(error) || isIncompleteRpcError(error))) throw error;
+      holdingsIncomplete = true;
+    }
+    const partial = balanceWei === null || nonce === null || holdingsIncomplete || deadlineHit();
     return {
       status: 200,
       body: {
-        balanceWei: balanceWei.toString(),
-        nonce,
-        balances: {},
-        outgoingTxs: nonce,
+        ...(balanceWei === null ? {} : { balanceWei: balanceWei.toString(), balance: weiToPpl(balanceWei) }),
+        ...(nonce === null ? {} : { nonce, outgoingTxs: nonce }),
+        balances: { ...(balanceWei === null ? {} : { ppl: weiToPpl(balanceWei) }), ...held },
         incomingTxs: 0,
+        ...(partial ? { partial: true } : {}),
       },
     };
   }
@@ -321,33 +444,63 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
       if (assetId) return { status: 404, body: { error: "unknown_token" } };
       return { status: 200, body: [] };
     }
-    const holders = await aggregateHoldersFromTransfers(token).catch(() => []);
-    const asset = await loadAsset(assetId ?? token);
+    let holders: Awaited<ReturnType<typeof aggregateHoldersFromTransfers>> = [];
+    try {
+      holders = await aggregateHoldersFromTransfers(token);
+    } catch (error) {
+      if (!(deadlineHit(error) || isIncompleteRpcError(error))) throw error;
+      return { status: 200, body: { accounts: [], partial: true } };
+    }
+    let asset: AssetRow | null = null;
+    let assetIncomplete = false;
+    try {
+      asset = await loadAsset(assetId ?? token);
+    } catch (error) {
+      if (!(deadlineHit(error) || isIncompleteRpcError(error))) throw error;
+      assetIncomplete = true;
+    }
     const decimals = asset?.decimals ?? 18;
-    return {
-      status: 200,
-      body: holders.map((row) => ({
-        address: row.address,
-        balance: Number(formatUnits(row.balance, decimals)),
-        balances: {
-          ppl: 0,
-          [(assetId ?? token).toLowerCase()]: Number(formatUnits(row.balance, decimals)),
-        },
-      })),
-    };
+    const accounts = holders.map((row) => ({
+      address: row.address,
+      balance: Number(formatUnits(row.balance, decimals)),
+      balances: {
+        ppl: 0,
+        [(assetId ?? token).toLowerCase()]: Number(formatUnits(row.balance, decimals)),
+      },
+    }));
+    if (transferScanIsPartial(holders) || assetIncomplete || deadlineHit()) {
+      return { status: 200, body: { accounts, partial: true } };
+    }
+    return { status: 200, body: accounts };
   }
 
   if (root === "nfts") {
     const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
+    // Real NFTs only, read from the NFT factory's mint logs and confirmed with a live `ownerOf`:
+    // the owner's holdings with `?owner=`, otherwise the newest minted tokens. The demo snapshot in
+    // the deployment file is never listed.
+    const found = await (owner
+      ? isAddress(owner) ? readOwnedFactoryNfts(owner) : Promise.resolve([])
+      : readAllFactoryNfts()
+    ).catch((error: unknown) => {
+      rethrowDeadline(error);
+      return [];
+    });
+    const rows = visibleNfts(found);
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];
     const stats = new Map<string, NftCollectionStats>();
     await Promise.all(
       collections.map(async (collection) => {
-        stats.set(collection.toLowerCase(), await nftCollectionStats(collection));
-      })
+        try {
+          stats.set(collection.toLowerCase(), await nftCollectionStats(collection));
+        } catch (error) {
+          // One collection's stats must not fail the NFT list that was already read.
+          rethrowDeadline(error);
+          stats.set(collection.toLowerCase(), {});
+        }
+      }),
     );
     return {
       status: 200,
@@ -366,11 +519,17 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   if (root === "search") {
     const q = (search.get("q") ?? "").trim();
     if (/^\d+$/.test(q)) {
-      const block = await fetchBlockByHeight(Number(q)).catch(() => null);
+      const block = await fetchBlockByHeight(Number(q)).catch((error: unknown) => {
+        rethrowDeadline(error);
+        return null;
+      });
       return { status: 200, body: { blocks: block ? [block] : [], transactions: [], addresses: [] } };
     }
     if (q.startsWith("0x") && q.length === 66) {
-      const tx = await fetchTransaction(q).catch(() => null);
+      const tx = await fetchTransaction(q).catch((error: unknown) => {
+        rethrowDeadline(error);
+        return null;
+      });
       return { status: 200, body: { blocks: [], transactions: tx ? [tx] : [], addresses: [] } };
     }
     if (isAddress(q)) {
@@ -380,9 +539,15 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "contracts" && segments[1] && isAddress(segments[1])) {
-    const code = await evmJsonRpc<string>("eth_getCode", [getAddress(segments[1]), "latest"]).catch(() => "0x");
-    if (!code || code === "0x") return { status: 404, body: { error: "not_found" } };
-    return { status: 200, body: { address: getAddress(segments[1]), verified: false } };
+    // A failed code read is "node unavailable", not "no contract here": the explorer search uses
+    // the 404 to fall back to the plain address page.
+    const result = await loadContractInfo(segments[1]);
+    if (result.status === "not_found") return { status: 404, body: { error: "not_found" } };
+    if (result.status === "unavailable") {
+      if (deadlineHit()) return { status: 200, body: { partial: true } };
+      return { status: 502, body: { error: "rpc_unavailable" } };
+    }
+    return { status: 200, body: result.info };
   }
 
   return { status: 404, body: { error: "not_found" } };

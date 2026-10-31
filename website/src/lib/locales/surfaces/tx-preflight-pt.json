@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "O limite diário de pagamento com stablecoins desta carteira foi atingido. Nada foi enviado e nenhum gás foi gasto.",
+  "payWithPpl": "Pagar com PPL",
+  "stableUnavailable": "O pagamento com stablecoins está indisponível no momento. Nada foi enviado e nenhum gás foi gasto. Você pode pagar com PPL.",
+  "reverted": "Um teste mostrou que esta transação falharia, por isso ela não foi enviada e nenhum gás foi gasto. Motivo: {reason}",
+  "revertedNoReason": "Um teste mostrou que esta transação falharia, por isso ela não foi enviada e nenhum gás foi gasto.",
+  "panic": "Um teste mostrou que o contrato falharia com um erro interno (código {code}), por isso a transação não foi enviada e nenhum gás foi gasto."
+}

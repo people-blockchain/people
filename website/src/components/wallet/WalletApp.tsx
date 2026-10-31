@@ -4,7 +4,21 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { connectExplorer } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
-import { nativeSendGasLimit, quoteMaxNativeSend, readNativeGasPriceWei, sendNativeTransfer, FALLBACK_GAS_PRICE_WEI } from "@/lib/evm/wallet-send";
+import {
+  WalletSendError,
+  humanAmountText,
+  nativeSendGasLimit,
+  quoteMaxNativeSend,
+  readNativeGasPriceWei,
+  sendErc20Transfer,
+  sendNativeTransfer,
+  sendNftTransfer,
+  validateEvmTokenTransfer,
+  FALLBACK_GAS_PRICE_WEI,
+  type SendStage,
+} from "@/lib/evm/wallet-send";
+import { parseNftId } from "@/lib/evm/nft-id";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import type { Hex } from "viem";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { RecipientField } from "./RecipientField";
@@ -30,6 +44,7 @@ import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
+import { compatList } from "@/lib/compat-list";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import type { WalletOnboardingMode } from "./useWalletOnboarding";
 import { PeopleWalletMark } from "./PeopleWalletMark";
@@ -60,7 +75,7 @@ interface FaucetFundResult {
 /** The faucet allows 100 PPL per address per day; the one-tap action always asks for the max. */
 const FAUCET_MAX_PPL = "100";
 
-export function WalletApp({ wsUrl, chainId, nftTransfersEnabled = false }: { wsUrl: string; chainId: string; nftTransfersEnabled?: boolean }) {
+export function WalletApp({ wsUrl, chainId, nftTransfersEnabled = true }: { wsUrl: string; chainId: string; nftTransfersEnabled?: boolean }) {
   const { session } = useWallet();
   return <WalletView key={session?.address ?? "locked"} wsUrl={wsUrl} chainId={chainId} nftTransfersEnabled={nftTransfersEnabled} />;
 }
@@ -149,7 +164,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           setRevision(r => r + 1);
         }
         if (owned.status === "fulfilled") setNfts(Array.isArray(owned.value) ? owned.value : []);
-        if (registry.status === "fulfilled" && Array.isArray(registry.value)) setAssets(registry.value);
+        if (registry.status === "fulfilled") setAssets(compatList<TransferAsset>(registry.value, "assets"));
       } while (queued && !stopped);
       pending = false;
     };
@@ -266,6 +281,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
 
   async function doSend(timestamp: number, nft?: {nftId:string;name:string}) {
     if (!session || !account) return;
+    const evmTokens = isCosmosEvmChain() && assetId !== "ppl";
     setBusy(true);
     setError("");
     setNotice("");
@@ -293,16 +309,27 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       });
       let transferAmount = 0;
       let transferWei = BigInt(0);
+      let amountUnits: string | undefined;
       try {
         if (nft && (!parseWalletAddress(nftTo) || parseWalletAddress(nftTo)?.toLowerCase()===session.address.toLowerCase())) throw new Error("address");
         if (nft && freshWei < protocolFeeWei && !(legacyBalance >= DEFAULT_TRANSFER_FEE)) throw new Error("fee");
-        if (!nft && assetId === "ppl" && nativeKnown) {
+        if (nft) transferAmount = 0;
+        else if (evmTokens) {
+          // EVM ERC-20: balances are human numbers and the exact amount is carried as base units.
+          const checked = validateEvmTokenTransfer({
+            to, amount, decimals: selectedAsset?.decimals ?? -1,
+            balance: fresh.balances?.[assetId] ?? 0,
+            nativeBalance: freshWei > BigInt(0) ? 1 : 0,
+          });
+          transferAmount = checked.human;
+          amountUnits = checked.units.toString();
+        } else if (assetId === "ppl" && nativeKnown) {
           const parsed = parsePplInput(amount);
           if (parsed === null || parsed <= BigInt(0)) throw new Error("amount");
           if (parsed > freshWei) throw new Error("balance");
           if (freshWei < reserved.feeWei + parsed) throw new Error("fee");
           transferWei = parsed;
-        } else if (!nft) {
+        } else {
           transferAmount = validateTransfer({
             to, amount, assetId, decimals: selectedAsset?.decimals ?? -1,
             balance: assetId === "ppl" ? legacyBalance : fresh.balances?.[assetId] ?? 0,
@@ -328,20 +355,24 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         nonce: Number(fresh.nonce ?? 0),
         timestamp,
         type: nft ? "nftTransfer" : "transfer",
-        payload: nft ? {nftId:nft.nftId} : memo ? {memo} : undefined,
+        payload: nft ? {nftId:nft.nftId} : amountUnits ? {amountUnits} : memo ? {memo} : undefined,
       };
       const pplSend = nativeKnown && (nft || assetId === "ppl");
       const shownFeeWei = !nft && assetId === "ppl" && nativeKnown ? reserved.feeWei : protocolFeeWei;
+      const tokenRemaining = Math.max(0, (fresh.balances?.[assetId] ?? 0) - transferAmount);
+      const tokenText = (value: number) => evmTokens
+        ? formatAssetUnits(value, selectedAsset?.decimals ?? -1, 18)
+        : formatTokenBalance(value, selectedAsset?.decimals ?? -1);
       setDraft({
         tx,
         amountWei: transferWei,
         protocolFeeWei: shownFeeWei,
         reviewedWei: freshWei,
         reviewedAsset: fresh.balances?.[tx.assetId ?? "ppl"] ?? 0,
-        display: nft ? nft.name : pplSend ? `${formatPplExact(transferWei)} ${selectedSymbol}` : `${formatTokenBalance(transferAmount, selectedAsset?.decimals ?? -1)} ${selectedSymbol}`,
+        display: nft ? nft.name : pplSend ? `${formatPplExact(transferWei)} ${selectedSymbol}` : `${tokenText(transferAmount)} ${selectedSymbol}`,
         remaining: pplSend
           ? `${formatPplExact(maxSendWei(freshWei, shownFeeWei + transferWei))} PPL`
-          : `${formatTokenBalance((fresh.balances?.[assetId] ?? 0) - transferAmount, selectedAsset?.decimals ?? -1)} ${selectedSymbol}`,
+          : `${tokenText(tokenRemaining)} ${selectedSymbol}`,
       });
       setSheet(null);
       setSelectedNft(null);
@@ -350,9 +381,31 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     } finally {setBusy(false);}
   }
 
+  /** Friendly text for a failed ERC-20 / NFT send; `kind` picks the generic fallback. */
+  function describeTokenSendError(err: unknown, kind: "token" | "nft"): string {
+    const preflight = describePreflightError(err, lang);
+    if (preflight) return preflight.text;
+    if (err instanceof WalletSendError) {
+      switch (err.code) {
+        case "insufficient_token_balance": return c.balanceError;
+        case "not_nft_owner": return c.nftNotOwner;
+        case "tx_reverted": return c.sendReverted;
+        case "tx_timeout": return c.sendTimeout;
+        case "tx_replaced": return c.sendReplaced;
+        case "invalid_address": return c.addressError;
+        default: return c.amountError;
+      }
+    }
+    const text = err instanceof Error ? err.message : "";
+    if (text === c.unavailable || text === c.assetError) return text;
+    if (/insufficient funds|exceeds the balance|gas required exceeds/i.test(text)) return c.feeError;
+    return kind === "nft" ? c.nftSendFailed : c.tokenSendFailed;
+  }
+
   async function confirmSend() {
     if (!session || !draft) return;
     setBusy(true);setError("");
+    let sentNotice = t.submitted;
     try {
       const [fresh,health] = await Promise.all([networkJson<ChainAccount>(`address/${session.address}`,{cache:"no-store"}),networkJson<{chainId:string}>("health",{cache:"no-store"})]);
       const txDraft = draft.tx;
@@ -367,14 +420,41 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         if(!owned.some(n=>n.nftId===txDraft.payload?.nftId)) throw new Error(c.unavailable);
       }
       if (isCosmosEvmChain()) {
-        if (txDraft.assetId !== "ppl" || txDraft.type !== "transfer") throw new Error(c.assetError);
-        const hash = await sendNativeTransfer({
-          privateKey: session.privateKey as Hex,
-          to: txDraft.to as `0x${string}`,
-          amountWei: draft.amountWei,
-          memo: typeof txDraft.payload?.memo === "string" ? txDraft.payload.memo : undefined,
-        });
-        trackPending(chainId, session.address, { ...txDraft, id: hash, amountWei: draft.amountWei.toString(), feeWei: draft.protocolFeeWei.toString() });
+        if (txDraft.type === "nftTransfer" || txDraft.assetId !== "ppl") {
+          const kind = txDraft.type === "nftTransfer" ? "nft" : "token";
+          const onStage = (stage: SendStage) => setNotice(stage === "sending" ? c.sendSubmitting : c.sendConfirming);
+          try {
+            let hash: string;
+            if (kind === "nft") {
+              const ref = parseNftId(String(txDraft.payload?.nftId ?? ""));
+              if (!ref) throw new Error(c.unavailable);
+              hash = await sendNftTransfer({
+                privateKey: session.privateKey as Hex, collection: ref.collection, tokenId: ref.tokenId,
+                to: txDraft.to, onStage,
+              });
+            } else {
+              const asset = assets.find((item) => item.assetId === txDraft.assetId);
+              const units = txDraft.payload?.amountUnits;
+              if (!asset?.tokenAddress || typeof units !== "string" || !/^\d+$/.test(units)) throw new Error(c.assetError);
+              hash = await sendErc20Transfer({
+                privateKey: session.privateKey as Hex, token: asset.tokenAddress, to: txDraft.to,
+                amountUnits: BigInt(units), onStage,
+              });
+            }
+            trackPending(chainId, session.address, { ...txDraft, id: hash, amountWei: draft.amountWei.toString(), feeWei: draft.protocolFeeWei.toString() });
+            sentNotice = kind === "nft" ? c.nftSent : c.tokenSent;
+          } catch (err) {
+            throw new Error(describeTokenSendError(err, kind));
+          }
+        } else {
+          const hash = await sendNativeTransfer({
+            privateKey: session.privateKey as Hex,
+            to: txDraft.to as `0x${string}`,
+            amountWei: draft.amountWei,
+            memo: typeof txDraft.payload?.memo === "string" ? txDraft.payload.memo : undefined,
+          });
+          trackPending(chainId, session.address, { ...txDraft, id: hash, amountWei: draft.amountWei.toString(), feeWei: draft.protocolFeeWei.toString() });
+        }
       } else {
         const tx=signFactoryTx(session.privateKey,txDraft);
         const result = await networkJson<{ accepted?: boolean; error?: string }>("tx", {
@@ -386,7 +466,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         trackPending(chainId,session.address,tx);
       }
       setRevision(r=>r+1);setDraft(null);setMemo("");setNftTo("");
-      setNotice(t.submitted);
+      setNotice(sentNotice);
       setTo("");
       setAmount("");
       await loadChain(session.address);
@@ -469,11 +549,11 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       <RecipientField value={to} onChange={setTo} label={t.to} storageKey={`people-contacts:${chainId}:${session.address}`} disabled={busy} />
       <label className="block text-sm">
         {t.amount}
-        <span className="relative mt-1 block"><input aria-label={t.amount} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} className="w-full rounded-xl border border-line bg-canvas py-2 pl-3 pr-20" /><button type="button" disabled={busy||!account} className="absolute inset-y-0 right-3 text-xs font-semibold text-brand" onClick={()=>setAmount(assetId==="ppl"?formatPplExact(nativeSendQuote.maxWei):formatTokenBalance(selectedTokenBalance,selectedAsset?.decimals??-1))}>{u.max}</button></span>
+        <span className="relative mt-1 block"><input aria-label={t.amount} inputMode="decimal" value={amount} onChange={(event) => setAmount(event.target.value)} className="w-full rounded-xl border border-line bg-canvas py-2 pl-3 pr-20" /><button type="button" disabled={busy||!account} className="absolute inset-y-0 right-3 text-xs font-semibold text-brand" onClick={()=>setAmount(assetId==="ppl"?formatPplExact(nativeSendQuote.maxWei):isCosmosEvmChain()?humanAmountText(selectedTokenBalance,selectedAsset?.decimals??-1):formatTokenBalance(selectedTokenBalance,selectedAsset?.decimals??-1))}>{u.max}</button></span>
       </label>
       <div className="flex flex-wrap gap-2">
         {[0.25, 0.5, 0.75].map((f) => (
-          <button key={f} type="button" disabled={busy || !account} onClick={() => setAmount(assetId === "ppl" ? formatPplExact((nativeSendQuote.maxWei * BigInt(f * 100)) / BigInt(100)) : fractionOfBalance({ fraction: f, pplIn: false, pplBalance: 0, tokenBalance: selectedTokenBalance, decimals: selectedAsset?.decimals ?? 6, fee: DEFAULT_TRANSFER_FEE, pplWholeOnly: false }))} className="min-h-9 rounded-lg border border-line px-2.5 text-xs font-semibold text-ink-2 hover:border-brand disabled:opacity-40">
+          <button key={f} type="button" disabled={busy || !account} onClick={() => setAmount(assetId === "ppl" ? formatPplExact((nativeSendQuote.maxWei * BigInt(f * 100)) / BigInt(100)) : isCosmosEvmChain() ? humanAmountText(selectedTokenBalance, selectedAsset?.decimals ?? -1, f) : fractionOfBalance({ fraction: f, pplIn: false, pplBalance: 0, tokenBalance: selectedTokenBalance, decimals: selectedAsset?.decimals ?? 6, fee: DEFAULT_TRANSFER_FEE, pplWholeOnly: false }))} className="min-h-9 rounded-lg border border-line px-2.5 text-xs font-semibold text-ink-2 hover:border-brand disabled:opacity-40">
             {f * 100}%
           </button>
         ))}
@@ -733,7 +813,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
               <div className="mt-4">
                 <RecipientField value={nftTo} onChange={setNftTo} label={t.to} storageKey={`people-contacts:${chainId}:${session.address}`} disabled={busy} />
               </div>
-              <p className="my-3 text-sm">{t.fee}: {formatPplExact(DEFAULT_TRANSFER_FEE_WEI)} PPL</p>
+              {isCosmosEvmChain() ? null : <p className="my-3 text-sm">{t.fee}: {formatPplExact(DEFAULT_TRANSFER_FEE_WEI)} PPL</p>}
               <button type="button" disabled={busy || !nftTo.trim()} onClick={() => void doSend(Date.now(), selectedNft)} className="rounded-xl bg-brand px-4 py-2 text-sm text-brand-ink disabled:opacity-40">
                 {c.review}
               </button>

@@ -115,13 +115,13 @@
         "title": "Rede de teste e status beta",
         "body": [
           "A PEOPLE Blockchain é oferecida como uma rede de teste/beta. Os recursos podem mudar, falhar ou ser retirados sem aviso prévio. O site e a rede são fornecidos «no estado em que se encontram» e «conforme a disponibilidade».",
-          "A rede PEOPLE ainda é uma rede de teste. A venda de PPL é separada: ocorre na Base mainnet com USDC ou USDT reais."
+          "A rede PEOPLE é uma rede de teste pública até o lançamento da mainnet em 1 de dezembro de 2026. A venda de PPL começa junto com a mainnet: o pagamento é feito com USDC ou USDT reais na Base, e os PPL são creditados imediatamente na mainnet da PEOPLE."
         ]
       },
       {
         "title": "Venda pública de PPL",
         "body": [
-          "Os parâmetros da venda (fórmula da curva, trajetória de preço, limites e o prazo da venda: até se esgotar ou 24 meses, o que ocorrer primeiro) são publicados na página /buy. As compras permanecem desativadas até que o contrato da venda seja publicado; conectar uma carteira não obriga você a nada.",
+          "Os parâmetros da venda (fórmula da curva, trajetória de preço, limites e o prazo da venda: até se esgotar ou 24 meses, o que ocorrer primeiro) são publicados na página /buy. A venda começa junto com a mainnet em 1 de dezembro de 2026; conectar uma carteira não obriga você a nada.",
           "Não é exigido KYC para comprar. A recompra pela reserva exige prova de humanidade (Human Passport ou Telegram), que não é KYC.",
           "A venda dura até se esgotar (a curva fecha ao atingir $4M arrecadados) ou por 24 meses a partir da abertura, o que ocorrer primeiro. Sem prorrogações. O PPL não vendido vai para o Community Pool. Sem reembolsos: toda compra é definitiva.",
           "O prazo da venda, a fórmula de preço e os limites não mudam depois que a venda é aberta.",

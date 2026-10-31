@@ -26,7 +26,6 @@ const THIRD_PARTY = [
   /web3auth/i,
   /google|gstatic|googleapis|accounts\./i,
   /vercel\.live|vercel\.com/i,
-  /worldcoin|idkit/i,
   /metamask|trustwallet|coinbase|inpage/i,
   /turnstile|cloudflare/i,
   /favicon/i,

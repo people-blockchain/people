@@ -144,10 +144,10 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **PPL-Verkauf auf Base** | Der PPL-Verkauf läuft nur auf Base (PplCurveHub, USDC oder USDT). Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist. Das Mainnet des PEOPLE-Netzwerks ist ein separater Schritt. | Verkaufsvertrag (PplCurveHub auf Base) und empfangende Multisig veröffentlicht |
+| **Mainnet und PPL-Verkauf** | Das Mainnet des PEOPLE-Netzwerks und der PPL-Verkauf starten gemeinsam am 1. Dezember 2026. Bezahlt wird mit USDC oder USDT auf Base; PPL werden sofort im PEOPLE-Mainnet ausgegeben und gutgeschrieben. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`. | Start am 1. Dezember 2026 |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
-Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
+Jede Phase startet, wenn ihre Gate erfüllt ist. Außer dem Start von Mainnet und PPL-Verkauf am 1. Dezember 2026 sind keine Termine garantiert.
 
 ---
 
@@ -162,7 +162,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 ## 9. Sicherheit
 
 - Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht. Bug bounty on every page.
-- **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
+- **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base erhält 50 % jedes Kaufs sofort, im Moment des Kaufs; die anderen 50 % bleiben im Verkaufsvertrag als Reserve für Rückverkäufe. Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
 - **Veröffentlichte Adressen.** Verkaufsvertrag und empfangende Multisig werden vor dem Verkaufsstart veröffentlicht, Vesting- und LP-Sperrverträge beim vollständigen Netzwerkstart. Keine Platzhalter.
 - **Bot-Abwehr.** Verifizierung von Menschen, Pro-Gerät- und Pro-IP-Limits, tägliche Punkt-Caps und Bot-Rückforderung.
 - **Bewährte Bausteine.** No-Code-Verträge werden aus OpenZeppelin-Vorlagen zusammengesetzt.
@@ -221,6 +221,6 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.
 - Sicherheit: Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.; Bug bounty on every page.
-- Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
+- Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base erhält 50 % jedes Kaufs sofort, im Moment des Kaufs; die anderen 50 % bleiben im Verkaufsvertrag als Reserve für Rückverkäufe. Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
 - Ist die Bonding-Curve eines Tokens **180 Tage** nach dem Launch nicht ausverkauft, kann jeder sie abschließen; die unverkauften Token gehen in den Community-Pool dieses Tokens. Eine ausverkaufte Curve geht wie bisher in die Liquidität. (Im Testnet live.)
 - Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.

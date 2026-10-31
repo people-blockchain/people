@@ -48,7 +48,7 @@
   },
   "form": {
     "image": "Bild",
-    "imageHint": "PNG, JPEG oder WebP. Laden Sie eine Datei hoch oder fügen Sie einen Bildlink ein. Zuerst sehen Sie eine Vorschau.",
+    "imageHint": "PNG, JPEG, WebP oder GIF. Laden Sie eine Datei hoch oder fügen Sie einen Bildlink ein. Zuerst sehen Sie eine Vorschau.",
     "imageUrl": "Oder eine Bild-URL einfügen",
     "name": "Name",
     "description": "Beschreibung",
@@ -110,5 +110,16 @@
     "busy": "Bilder werden erstellt…",
     "connectWallet": "Verbinden Sie die Wallet im Schritt Bezahlen oder öffnen Sie Wallet und kehren zurück.",
     "errorGeneric": "Bilder konnten nicht erstellt werden. Bitte erneut versuchen."
+  },
+  "upload": {
+    "hint": "PNG, JPEG, WebP oder GIF, bis 1,5 MB.",
+    "tooLarge": "Die Datei ist zu groß: Das Maximum beträgt 1,5 MB.",
+    "unsupportedType": "Dieser Dateityp wird nicht unterstützt. Verwenden Sie PNG, JPEG, WebP oder GIF.",
+    "contentMismatch": "Der Dateiinhalt passt nicht zum Dateityp. Exportieren Sie die Datei erneut als PNG, JPEG, WebP oder GIF.",
+    "rateLimited": "Zu viele Uploads. Warten Sie einige Minuten und versuchen Sie es erneut.",
+    "signIn": "Melden Sie sich an, um eine Datei hochzuladen.",
+    "missingFile": "Wählen Sie zuerst eine Datei aus.",
+    "network": "Netzwerkproblem. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    "failed": "Die Datei konnte nicht hochgeladen werden. Versuchen Sie es erneut."
   }
 }

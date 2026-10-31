@@ -144,10 +144,10 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Base üzerinde PPL satışı** | PPL satışı yalnızca Base üzerinde yapılır (PplCurveHub, USDC veya USDT). Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; satış sözleşmesi yayınlanana kadar alımlar kapalı. PEOPLE ağının mainnet'i ayrı bir adımdır. | Satış sözleşmesi (Base'te PplCurveHub) ve alıcı multisig yayınlandı |
+| **Mainnet ve PPL satışı** | PEOPLE ağının mainnet'i ve PPL satışı 1 Aralık 2026'da birlikte başlar. Ödeme Base üzerinde USDC veya USDT ile yapılır; PPL'ler PEOPLE mainnet'inde hemen ihraç edilir ve hesaba yazılır. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında. | 1 Aralık 2026'da lansman |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
-Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
+Her aşama kapısı karşılandığında başlar. 1 Aralık 2026'daki mainnet ve PPL satışı lansmanı dışında tarih için taahhüt verilmez.
 
 ---
 
@@ -162,7 +162,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 ## 9. Güvenlik
 
 - Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı. Bug bounty on every page.
-- **Çoklu imza cüzdanları.** Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
+- **Çoklu imza cüzdanları.** Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı her alımın %50'sini alım anında hemen alır; kalan %50 geri satışlar için rezerv olarak satış sözleşmesinde kalır. Adresi ve imza eşiği satış açılmadan önce yayımlanır.
 - **Yayımlanan adresler.** Satış sözleşmesi ve alıcı çoklu imza cüzdanı satış açılmadan önce; vesting ve LP kilidi sözleşmeleri ağın tam lansmanında yayımlanır. Yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
 - **Kanıtlanmış yapı taşları.** Kod gerektirmeyen sözleşmeler OpenZeppelin şablonlarından birleştirilir.
@@ -221,6 +221,6 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.
 - Güvenlik: Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.; bug bounty on every page.
-- Çoklu imza cüzdanları. Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
+- Çoklu imza cüzdanları. Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı her alımın %50'sini alım anında hemen alır; kalan %50 geri satışlar için rezerv olarak satış sözleşmesinde kalır. Adresi ve imza eşiği satış açılmadan önce yayımlanır.
 - Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
 - Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.

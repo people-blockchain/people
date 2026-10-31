@@ -21,7 +21,7 @@
     "validators": "200M PPL (20 %) : années 1–4 versent 6 %, 5 %, 5 %, 4 % du supply total par an (60M / 50M / 50M / 40M PPL) plus 30 % des frais réseau.",
     "team": "15 % de l'offre : 0 % au lancement, cliff de 6 mois, puis 18 mois de déblocage mensuel linéaire (24 mois au total).",
     "treasury": "Dépensé seulement après votes DAO ; en multisig.",
-    "sale": "Vendu sur la courbe publique sur Base (PplCurveHub). Les PPL sont crédités juste après l’achat ; les transferts ouvrent au lancement complet du réseau.",
+    "sale": "Vendu sur la courbe publique ; paiement en USDC ou USDT sur Base. Les PPL sont crédités immédiatement sur le mainnet PEOPLE. Au début, le réseau est en réception seule ; les transferts entre personnes s’ouvrent après environ 1 000 participants vérifiés.",
     "liquidity": "Pool PPL/USDC à la graduation ; jetons LP bloqués pendant 24 mois."
   },
   "donutTitle": "Allocation",
@@ -36,7 +36,7 @@
   "salePayTitle": "Comment vous paieriez",
   "salePayBody": "Sur Base, en USDC ou en USDT. Depuis d’autres réseaux, via l’échange automatique intégré (LI.FI) : les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana fonctionnent. TON n’est pas pris en charge. Vous recevez les fonds en USDC sur Base.",
   "saleDeliveryTitle": "Comment recevoir des PPL",
-  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après le lancement complet du réseau. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
+  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse tout de suite sur le mainnet PEOPLE. Au début, le réseau est en réception seule : vous pourrez envoyer des PPL à d’autres personnes après environ 1 000 participants vérifiés. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
   "curveTitle": "Courbe de bonding",
   "curveLead": "Courbe exponentielle : le prix démarre à 0,005 $ par PPL et monte à chaque achat, jusqu'à un plafond de 0,25 $ tant que la courbe est ouverte. La graduation ferme la courbe à 4 M$ levés.",
   "unsoldTitle": "Jetons invendus",
@@ -50,7 +50,7 @@
   "contractsLead": "Chaque adresse est publiée ici dès que le contrat existe — sans adresse fictive.",
   "contractRows": [
     {
-      "name": "Contrat de vente (PplCurveHub, Base)",
+      "name": "Contrat de vente (Base)",
       "status": "Publié avant l’ouverture de la vente"
     },
     {
@@ -88,17 +88,17 @@
     "À partir de l’année 5, émission nouvelle max. 2 % par an et seulement par vote communautaire."
   ],
   "launchOrderTitle": "Ordre de lancement",
-  "launchOrderBody": "La vente de PPL ouvre dès que le contrat de vente (PplCurveHub sur Base) et le multisig destinataire sont publiés. Les transferts et les échanges dans le pool ouvrent au lancement complet du réseau, avec 1 000 personnes vérifiées.",
+  "launchOrderBody": "La vente de PPL et le mainnet PEOPLE démarrent ensemble le 1er décembre 2026. Les PPL sont émis et crédités immédiatement sur le mainnet PEOPLE. Au début, le réseau est en réception seule ; les transferts entre personnes et les échanges dans le pool s’ouvrent après environ 1 000 participants vérifiés.",
   "pplFeeTariffsLink": "Tarifs des frais PPL",
   "explorerLink": "Explorateur",
   "backToDocsLink": "Retour à la documentation",
   "salePublicTitle": "Paramètres de vente publiés",
-  "salePublicBody": "Prix, limites et formule de la courbe sont publics sur /buy. Les achats restent désactivés tant que le contrat hub de vente n'est pas déployé ; connecter un portefeuille ne vous engage à rien.",
+  "salePublicBody": "Prix, limites et formule de la courbe sont publics sur /buy. La vente ouvre avec le mainnet le 1er décembre 2026 ; connecter un portefeuille ne vous engage à rien.",
   "salePublicCta": "Ouvrir la page /buy",
   "saleCurveBullets": [
     "100 000 000 PPL sur la courbe (10 % de l'offre) ; départ 0,005 $, hausse exponentielle, plafond 0,25 $ sur la courbe seulement.",
     "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
-    "Levée 50 % liquidité verrouillée / 50 % multisig projet ; jetons LP verrouillés 24 mois.",
+    "50 % de chaque achat vont immédiatement, au moment de l’achat, au multisig de la trésorerie ; les 50 % restants restent dans le contrat de vente comme réserve qui paie les reventes.",
     "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
     "$10–$500 par achat; Jusqu’à $2,000 par personne sur toute période de 24 heures; Pause de 60 s entre deux achats"
   ],

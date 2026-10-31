@@ -3,7 +3,7 @@
   "title": "Pahami.\nCoba.\nIkut serta.",
   "description": "Dari dompet pertama hingga node Anda sendiri — panduan praktis ke PEOPLE Blockchain.",
   "notice": "Jaringan uji",
-  "noticeText": "Mainnet belum diluncurkan. Operasi yang tersedia bergantung pada koneksi situs dan versi jaringan. Koin uji bukan janji pendapatan.",
+  "noticeText": "Mainnet jaringan PEOPLE dan penjualan PPL diluncurkan bersamaan pada 1 Desember 2026; sampai saat itu jaringan masih berupa jaringan uji. PPL dibayar dengan USDC atau USDT di Base, lalu diterbitkan dan langsung dikreditkan di mainnet PEOPLE. Operasi yang tersedia bergantung pada koneksi situs dan versi jaringan. Koin uji bukan janji pendapatan.",
   "contents": "Dalam panduan ini",
   "search": "Cari dokumentasi",
   "empty": "Tidak ada hasil. Coba “dompet”, “imbalan”, atau “node”.",
@@ -377,7 +377,7 @@
     {
       "id": "product-phases",
       "title": "Yang bisa Anda gunakan",
-      "lead": "Apa yang sudah berjalan di jaringan uji dan apa yang datang berikutnya. Belum ada tanggal mainnet.",
+      "lead": "Apa yang sudah berjalan di jaringan uji dan apa yang datang berikutnya. Mainnet dan penjualan PPL diluncurkan pada 1 Desember 2026.",
       "items": [
         {
           "title": "Tersedia sekarang · jaringan uji",

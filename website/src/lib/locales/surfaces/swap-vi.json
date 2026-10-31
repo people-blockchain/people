@@ -40,5 +40,9 @@
   "networkBadge": "Mạng PEOPLE · chain 97401",
   "selectToken": "Chọn token",
   "closePicker": "Đóng",
-  "gasFeeNote": "Trả gas bằng PPL khi ký"
+  "gasFeeNote": "Trả gas bằng PPL khi ký",
+  "approving": "Đang phê duyệt token…",
+  "approveReverted": "Phê duyệt token thất bại, chưa hoán đổi gì. Hãy thử lại.",
+  "approveTimeout": "Phê duyệt token vẫn đang chờ. Kiểm tra ví rồi thử lại.",
+  "allowanceLow": "Phê duyệt chưa có hiệu lực (hạn mức quá thấp). Hãy thử lại."
 }

@@ -40,5 +40,9 @@
   "networkBadge": "Rete PEOPLE · chain 97401",
   "selectToken": "Seleziona token",
   "closePicker": "Chiudi",
-  "gasFeeNote": "Pagato come gas in PPL alla firma"
+  "gasFeeNote": "Pagato come gas in PPL alla firma",
+  "approving": "Approvazione del token…",
+  "approveReverted": "L'approvazione del token non è riuscita, nessuno scambio effettuato. Riprova.",
+  "approveTimeout": "L'approvazione del token è ancora in sospeso. Controlla il portafoglio e riprova.",
+  "allowanceLow": "L'approvazione non è stata applicata (limite troppo basso). Riprova."
 }

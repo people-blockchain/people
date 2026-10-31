@@ -25,7 +25,7 @@ import {
 import type { FoundersHumanPassportConfig } from "@/lib/founders/human-passport-config";
 import { VERIFICATION_LEVEL_TELEGRAM_PHONE } from "@/lib/founders/verification";
 
-export const SALE_IDENTIFIER_KINDS = ["hp_wallet", "world_nullifier", "tg", "phone"] as const;
+export const SALE_IDENTIFIER_KINDS = ["hp_wallet", "tg", "phone"] as const;
 export type SaleIdentifierKind = (typeof SALE_IDENTIFIER_KINDS)[number];
 
 export type SaleIdentifier = {
@@ -111,7 +111,7 @@ function allBindings(
 
 /**
  * Pure sale eligibility rule. A Telegram-verified phone OR a Human Passport score at/above the
- * threshold is required; World ID is not an accepted path. Telegram/phone identifiers alone never
+ * threshold is required. Telegram/phone identifiers alone never
  * qualify (they are only extra keys on an already-eligible person). Any identifier owned by another
  * person, or a requested account already bound elsewhere, denies the request.
  */

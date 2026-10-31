@@ -44,5 +44,10 @@
   "totalSupply": "Total supply",
   "mintPrice": "Mint price",
   "pplBalance": "PPL balance",
-  "memo": "Memo"
+  "memo": "Memo",
+  "contractDeployTx": "Deploy transaction",
+  "contractVerifiedTemplate": "Verified: the bytecode matches the “{name}” template",
+  "contractSourceUnknown": "Source not available: the bytecode does not match a known template.",
+  "contractCampaignLink": "Open the campaign page",
+  "contractPartial": "Some details could not be loaded from the network right now; showing what is available."
 }

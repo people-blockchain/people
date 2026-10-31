@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { formatEther, parseEther, type Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { stakingCopy } from "@/lib/staking-content";
@@ -227,7 +228,7 @@ export function StakingApp() {
       closeModals();
       await refreshAfterTx();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.delegateError);
+      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.delegateError));
     } finally {
       setBusy(false);
     }
@@ -257,7 +258,7 @@ export function StakingApp() {
       closeModals();
       await refreshAfterTx();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.undelegateError);
+      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.undelegateError));
     } finally {
       setBusy(false);
     }
@@ -287,7 +288,7 @@ export function StakingApp() {
       closeModals();
       await refreshAfterTx();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.redelegateError);
+      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.redelegateError));
     } finally {
       setBusy(false);
     }
@@ -308,7 +309,7 @@ export function StakingApp() {
       setNotice(t.claimRewardsSuccess);
       await refreshAfterTx();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.claimRewardsError);
+      setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.claimRewardsError));
     } finally {
       setBusy(false);
     }

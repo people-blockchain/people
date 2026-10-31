@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowDownUp } from "lucide-react";
 import { getAddress, isAddress, type Address, type Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
 import { swapCopy } from "@/lib/swap-content";
@@ -13,7 +14,10 @@ import { useAssetRegistry } from "@/hooks/useAssetRegistry";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { Eyebrow, Chip } from "@/components/ui/primitives";
 import { readEvmDeployments, evmContractsReady } from "@/lib/evm/config";
+import { ensureAllowance, SwapApproveError } from "@/lib/evm/swap-approve";
+import type { TransferPublicClient } from "@/lib/evm/wallet-send";
 import { networkJson } from "@/lib/network-client";
+import { compatList } from "@/lib/compat-list";
 import { erc20Abi, pairAbi, routerAbi } from "@/lib/evm/client";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { minAmountOutWithSlippageBaseUnits, quoteExactInBaseUnits } from "@/lib/amm-math";
@@ -136,6 +140,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
   const [slippageBps, setSlippageBps] = useState<number>(100);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
   const [txHash, setTxHash] = useState("");
   const [pplBalanceWei, setPplBalanceWei] = useState<bigint>(BigInt(0));
   const [tokenBalanceUnits, setTokenBalanceUnits] = useState<bigint>(BigInt(0));
@@ -230,8 +235,8 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
 
   const loadPools = useCallback(async () => {
     try {
-      const rows = await networkJson<RawPoolRow[]>("liquidity-pools");
-      setPools(mapPoolRows(Array.isArray(rows) ? rows : []));
+      const rows = await networkJson<RawPoolRow[] | { pools?: RawPoolRow[] }>("liquidity-pools");
+      setPools(mapPoolRows(compatList<RawPoolRow>(rows, "pools")));
       setReachable(true);
     } catch {
       setReachable(false);
@@ -438,12 +443,22 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
           value: parsed.amountInBaseUnits,
         });
       } else {
-        await writeViaActiveSigner(signer, {
-          address: tokenContract,
-          abi: erc20Abi,
-          functionName: "approve",
-          args: [router, parsed.amountInBaseUnits],
+        await ensureAllowance({
+          client: readPublicClient() as unknown as TransferPublicClient,
+          token: tokenContract,
+          owner: signer.address as Address,
+          spender: router,
+          amount: parsed.amountInBaseUnits,
+          onApproving: () => setStatus(t.approving),
+          sendApprove: () =>
+            writeViaActiveSigner(signer, {
+              address: tokenContract,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [router, parsed.amountInBaseUnits],
+            }),
         });
+        setStatus("");
         hash = await writeViaActiveSigner(signer, {
           address: router,
           abi: routerAbi,
@@ -456,8 +471,15 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
       void recordFounderAction("swap", hash);
       void refreshChain();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.error);
+      if (err instanceof SwapApproveError) {
+        setError(
+          err.code === "approve_timeout" ? t.approveTimeout : err.code === "allowance_low" ? t.allowanceLow : t.approveReverted,
+        );
+      } else {
+        setError(describePreflightError(err, lang)?.text ?? (err instanceof Error ? err.message : t.error));
+      }
     } finally {
+      setStatus("");
       setBusy(false);
     }
   };
@@ -791,7 +813,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                     onClick={() => void swap()}
                     disabled={busy || Boolean(blocker)}
                   >
-                    {busy ? u.sending : blocker ?? u.swapNow}
+                    {busy ? status || u.sending : blocker ?? u.swapNow}
                   </button>
                 )}
               </div>

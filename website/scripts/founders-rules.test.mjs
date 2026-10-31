@@ -22,7 +22,6 @@ import {
 } from "../src/lib/founders/antibot.ts";
 import { estimatePplPerPoint, formatPplPerPointEstimate } from "../src/lib/founders/season-pool.ts";
 import { isFounderVerifiedForFreeIcons, verificationPointsFactor } from "../src/lib/founders/verification.ts";
-import { nullifierHexToDecimal } from "../src/lib/founders/world-id-nullifier.ts";
 import {
   applyEarlySaleFee,
   canAccrueFounderRewards,
@@ -182,9 +181,4 @@ test("early sale fee is 10% on day 0 and 0% on day 30", () => {
 test("founder staking bonus adds 25% to APR rate", () => {
   assert.equal(validatorAprWithFounderStakeBonus(800), 1000);
   assert.equal(validatorAprWithFounderStakeBonus(400), 500);
-});
-
-test("world id nullifier hex converts to decimal for storage", () => {
-  assert.equal(nullifierHexToDecimal("0x0"), "0");
-  assert.equal(nullifierHexToDecimal("0x10"), "16");
 });

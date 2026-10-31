@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { parseEther } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import { lavkaPublic } from "@/lib/lavka-public-content";
 import { FOUNDER_COUNTRY_OPTIONS } from "@/lib/founders/countries";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
@@ -141,8 +142,8 @@ export function LavkaMerchantApp() {
       if (!res.ok) throw new Error("api");
       setProgramTitle("");
       await load();
-    } catch {
-      setError(t.errorTx);
+    } catch (err) {
+      setError(describePreflightError(err, lang)?.text ?? t.errorTx);
     } finally {
       setCreating(false);
     }

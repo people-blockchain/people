@@ -150,5 +150,15 @@
   "install": "Installieren",
   "signInGoogle": "Mit Google anmelden",
   "back": "Zurück",
-  "openWallet": "{wallet} öffnen"
+  "openWallet": "{wallet} öffnen",
+  "sendSubmitting": "Transaktion wird gesendet…",
+  "sendConfirming": "Warten auf Bestätigung…",
+  "tokenSent": "Token-Überweisung bestätigt.",
+  "nftSent": "NFT-Übertragung bestätigt.",
+  "sendReverted": "Die Transaktion ist im Netzwerk fehlgeschlagen. Es wurde nichts übertragen.",
+  "sendTimeout": "Noch nicht bestätigt. Prüfe die Transaktion im Explorer, bevor du erneut sendest.",
+  "sendReplaced": "Die Transaktion wurde durch eine andere ersetzt. Es wurde nichts übertragen.",
+  "nftNotOwner": "Dieses NFT befindet sich nicht mehr in deiner Wallet.",
+  "tokenSendFailed": "Der Token konnte nicht gesendet werden. Bitte versuche es erneut.",
+  "nftSendFailed": "Das NFT konnte nicht gesendet werden. Bitte versuche es erneut."
 }

@@ -12,6 +12,7 @@ import {
   type NftImageKind,
   type NftVideoType,
 } from "./nft-media-rules";
+import { parseUploadResponse } from "./upload-response";
 
 export type NftErrorKey =
   | "errCoverRequired"
@@ -48,6 +49,9 @@ export type NftErrorKey =
 /** Error codes returned by the `/api/factory/nft/*` routes, mapped to a copy key. */
 const SERVER_ERROR_KEYS: Record<string, NftErrorKey> = {
   unsupported_type: "errUnsupportedType",
+  upload_failed: "errPinFailed",
+  network: "errNetwork",
+  sign_in_required: "errUnknown",
   file_too_large: "errTooLarge",
   content_type_mismatch: "errContentMismatch",
   svg_rejected: "errSvgRejected",
@@ -86,6 +90,7 @@ const EXT_TYPES: Record<string, string> = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
   webp: "image/webp",
+  gif: "image/gif",
   svg: "image/svg+xml",
   mp4: "video/mp4",
   webm: "video/webm",
@@ -133,9 +138,10 @@ export type StoredVideo = { uri: string; gatewayUrl: string };
 
 export type StoredMetadata = { tokenUri: string; gatewayUrl: string };
 
+/** Maps any failed response (JSON from our routes, or a platform text/HTML page) to a copy key; the body text is never kept. */
 async function readError(res: Response): Promise<NftSaveError> {
-  const body = (await res.json().catch(() => ({}))) as { error?: unknown };
-  const code = typeof body.error === "string" ? body.error : `http_${res.status}`;
+  const parsed = await parseUploadResponse(res);
+  const code = parsed.ok ? `http_${res.status}` : parsed.code;
   return new NftSaveError(errorKeyForServerCode(code), code);
 }
 
@@ -155,6 +161,9 @@ async function postJson<T>(url: string, payload: unknown, fetchImpl: typeof fetc
 }
 
 export async function uploadNftImage(file: File, mime: string, fetchImpl: typeof fetch = fetch): Promise<StoredImage> {
+  // Refuse an oversize file before sending: a body past the platform limit would come back as plain text.
+  const picked = checkImageFile({ name: file.name, type: mime, size: file.size });
+  if (!picked.ok) throw new NftSaveError(picked.key, picked.key);
   const form = new FormData();
   form.append("file", new File([file], file.name, { type: mime }));
   let res: Response;
@@ -163,13 +172,17 @@ export async function uploadNftImage(file: File, mime: string, fetchImpl: typeof
   } catch (err) {
     throw new NftSaveError("errNetwork", err instanceof Error ? err.message : "network");
   }
-  if (!res.ok) throw await readError(res);
-  const body = (await res.json()) as {
-    uri: string;
-    gatewayUrl: string;
-    kind: NftImageKind;
+  const parsed = await parseUploadResponse<{
+    uri?: string;
+    gatewayUrl?: string;
+    kind?: NftImageKind;
     sanitizedSvgBase64?: string;
-  };
+  }>(res);
+  if (!parsed.ok) throw new NftSaveError(errorKeyForServerCode(parsed.code), parsed.code);
+  const body = parsed.data;
+  if (typeof body.uri !== "string" || typeof body.gatewayUrl !== "string" || !body.kind) {
+    throw new NftSaveError("errPinFailed", "upload_failed");
+  }
   return {
     uri: body.uri,
     gatewayUrl: body.gatewayUrl,

@@ -44,5 +44,10 @@
   "totalSupply": "Suministro total",
   "mintPrice": "Precio de acuñación",
   "pplBalance": "Saldo PPL",
-  "memo": "Memo"
+  "memo": "Memo",
+  "contractDeployTx": "Transacción de despliegue",
+  "contractVerifiedTemplate": "Verificado: el bytecode coincide con la plantilla «{name}»",
+  "contractSourceUnknown": "Código fuente no disponible: el bytecode no coincide con ninguna plantilla conocida.",
+  "contractCampaignLink": "Abrir la página de la campaña",
+  "contractPartial": "Algunos datos no se pudieron cargar de la red ahora; se muestra lo disponible."
 }

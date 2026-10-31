@@ -268,7 +268,9 @@ test("outdated claims are gone: 180 days, sell back any time, the $0.25 cap, all
     assert.doesNotMatch(blob, /any time|anytime|в любой момент/i, lang);
   }
   assert.doesNotMatch(JSON.stringify(buy.en), /purchase money stays in the sale reserve|all (the )?money/i);
-  assert.doesNotMatch(JSON.stringify(buy.en), /any 24 hours/i, "Q5: per UTC day");
+  // The purchase limit is per person in a rolling 24 hours, not per address per UTC day.
+  assert.match(buy.en.form.limitPerDay, /per person in any rolling 24 hours/i);
+  assert.doesNotMatch(JSON.stringify(buy.en), /per address per day|per day \(UTC\)|per UTC day/i);
 });
 
 test("red lines: no profit promises, no 'x' multiples, no early-BTC comparisons, no urgency", () => {

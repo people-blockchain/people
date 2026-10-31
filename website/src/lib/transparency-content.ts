@@ -146,7 +146,7 @@ const en: TransparencyCopy = {
   treasury: {
     eyebrow: "TREASURY",
     title: "Treasury and spending",
-    body: "The network-fee treasury is a 2-of-3 multisig on the PEOPLE network; every spend is visible in the explorer. Sale proceeds go to the project multisig on Base, published before the sale opens.",
+    body: "The network-fee treasury is a 2-of-3 multisig on the PEOPLE network; every spend is visible in the explorer. Sale proceeds: the project multisig on Base receives 50% of every purchase immediately, at the moment of purchase; the other 50% stays in the sale contract as the sell-back reserve. The multisig address is published before the sale opens.",
     points: [
       "Signer addresses of the multisigs are published before the sale opens.",
       "Every outgoing treasury transaction is a public explorer entry.",
@@ -165,7 +165,7 @@ const en: TransparencyCopy = {
   launch: {
     eyebrow: "LAUNCH PLAN",
     title: "Million Founders, testnet, mainnet",
-    lead: "The order is fixed, and each step opens only after the previous one is done.",
+    lead: "The plan is fixed: mainnet and the PPL sale launch on December 1, 2026.",
     steps: [
       {
         title: "Public testnet with points",
@@ -173,7 +173,7 @@ const en: TransparencyCopy = {
       },
       {
         title: "1,000 verified people",
-        body: "Mainnet work starts once 1,000 people have been verified on the network.",
+        body: "Transfers between people unlock after about 1,000 verified participants; until then the network is receive-only.",
       },
       {
         title: "Treasury multisig",
@@ -181,7 +181,7 @@ const en: TransparencyCopy = {
       },
       {
         title: "Mainnet and the PPL sale",
-        body: "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
+        body: "PEOPLE mainnet and the PPL sale launch together on December 1, 2026. Pay in USDC or USDT on Base; PPL are issued and credited immediately on PEOPLE mainnet. At first the network is receive-only; transfers between people and pool trading unlock after about 1,000 verified participants.",
       },
     ],
   },
@@ -290,7 +290,7 @@ const ru: TransparencyCopy = {
   treasury: {
     eyebrow: "КАЗНА",
     title: "Казна и расходы",
-    body: "Казна комиссий сети — мультисиг 2 из 3 в сети PEOPLE; каждый расход виден в обозревателе. Средства продажи идут в мультисиг проекта в сети Base; его адрес публикуется до открытия продажи.",
+    body: "Казна комиссий сети — мультисиг 2 из 3 в сети PEOPLE; каждый расход виден в обозревателе. Средства продажи: мультисиг проекта в сети Base сразу, в момент покупки, получает 50% каждой покупки; остальные 50% остаются в контракте продажи как резерв для обратного выкупа. Адрес мультисига публикуется до открытия продажи.",
     points: [
       "Адреса подписантов мультисигов публикуются до открытия продажи.",
       "Каждая исходящая транзакция казны — публичная запись в explorer.",
@@ -309,7 +309,7 @@ const ru: TransparencyCopy = {
   launch: {
     eyebrow: "ПЛАН ЗАПУСКА",
     title: "Миллион основателей, testnet, mainnet",
-    lead: "Порядок фиксирован, и каждый шаг открывается только после предыдущего.",
+    lead: "План фиксирован: mainnet и продажа PPL запускаются 1 декабря 2026.",
     steps: [
       {
         title: "Публичный testnet с баллами",
@@ -317,7 +317,7 @@ const ru: TransparencyCopy = {
       },
       {
         title: "1 000 verified people",
-        body: "Работа над mainnet начинается, когда в сети верифицированы 1 000 человек.",
+        body: "Переводы между людьми открываются примерно после 1 000 верифицированных участников; до этого сеть работает только на приём.",
       },
       {
         title: "Мультисиг казны",
@@ -325,7 +325,7 @@ const ru: TransparencyCopy = {
       },
       {
         title: "Mainnet и продажа PPL",
-        body: "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
+        body: "Mainnet PEOPLE и продажа PPL запускаются вместе 1 декабря 2026. Оплата в USDC или USDT в сети Base; PPL выпускаются и зачисляются сразу в mainnet PEOPLE. Сначала сеть работает только на приём; переводы между людьми и торговля в пуле открываются примерно после 1 000 верифицированных участников.",
       },
     ],
   },

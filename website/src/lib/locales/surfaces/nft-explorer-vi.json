@@ -1,0 +1,19 @@
+{
+  "breadcrumb": "NFT",
+  "loading": "Đang tải NFT…",
+  "retry": "Thử lại",
+  "notFound": "Không tìm thấy NFT này trên mạng này.",
+  "unavailable": "Mạng tạm thời không khả dụng. Vui lòng thử lại.",
+  "collection": "Bộ sưu tập",
+  "tokenId": "ID token",
+  "owner": "Chủ sở hữu",
+  "tokenUri": "URI của token",
+  "description": "Mô tả",
+  "openOnIpfs": "Mở trên cổng IPFS",
+  "openOriginalImage": "Mở ảnh gốc",
+  "imageUnavailable": "Không thể tải ảnh.",
+  "noImage": "NFT này không có ảnh để hiển thị ở đây.",
+  "metadataUnavailable": "Không thể tải siêu dữ liệu nên chỉ hiển thị dữ liệu trên chuỗi.",
+  "externalUriNote": "URI của token này trỏ đến một địa chỉ bên ngoài. URI được hiển thị nhưng không được mở tại đây.",
+  "viewNft": "Xem NFT của tôi"
+}

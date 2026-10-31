@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Address, Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
+import { describePreflightError } from "@/lib/tx-preflight-copy";
 import {
   createBrowserPublicClient,
   createInjectedWalletClient,
@@ -11,6 +12,7 @@ import {
   type DiscoveredWallet,
 } from "@/lib/evm/client";
 import { isMobileBrowser } from "@/lib/mobile-env";
+import { preflightWriteContract } from "@/lib/evm/preflight-write";
 
 const MULTISIG: Address = "0xbE38DD4bEA1406878FF40AE1D5cE7c7e6Dc7ddaB";
 const GATEWAY: Address = "0x78e9F226de7078ec9D03F96bA3e62B6995ecc5d9";
@@ -455,15 +457,21 @@ export function MultisigPanel() {
       await ensurePeopleChain(provider);
       const wallet = createInjectedWalletClient(provider);
       await createBrowserPublicClient().simulateContract({ address: MULTISIG, abi, functionName, args: args as never, account });
-      const hash = await wallet.writeContract({
-        gas: functionName === "submit" ? undefined : BigInt(300000),
-        address: MULTISIG,
-        abi,
-        functionName,
-        args: args as never,
+      const hash = await preflightWriteContract(
+        createBrowserPublicClient(),
         account,
-        chain: wallet.chain,
-      });
+        { address: MULTISIG, abi, functionName, args },
+        (gas) =>
+          wallet.writeContract({
+            gas,
+            address: MULTISIG,
+            abi,
+            functionName,
+            args: args as never,
+            account,
+            chain: wallet.chain,
+          }),
+      );
       setStatus(`${t.sent}: ${hash}`);
       const receipt = await createBrowserPublicClient().waitForTransactionReceipt({ hash });
       if (receipt.status !== "success") {
@@ -478,7 +486,7 @@ export function MultisigPanel() {
       }
       await load();
     } catch (e) {
-      setStatus(decodeRevert(e));
+      setStatus(describePreflightError(e, lang)?.text ?? decodeRevert(e));
     } finally {
       setSending(false);
     }

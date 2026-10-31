@@ -90,14 +90,28 @@ test("terms carry the PPL sale term and the sale disclosures block in every loca
   }
 });
 
-test("buy limits are per address, never per person, in every locale", () => {
-  assert.match(surface("buy", "en").form.limitPerDay, /per address/);
+test("purchase limits are per person in a rolling 24 hours; sell-back limits stay per address, in every locale", () => {
+  assert.match(surface("buy", "en").form.limitPerDay, /per person/);
+  assert.match(surface("buy", "en").form.limitPerDay, /rolling 24 hours/);
   for (const lang of LANGS) {
-    const file = read(`src/lib/locales/surfaces/buy-${lang}.json`);
-    assert.doesNotMatch(file, PER_PERSON[lang], `buy-${lang}.json`);
-    const { form } = surface("buy", lang);
-    assert.match(form.limitPerDay, ADDRESS[lang], `buy-${lang} form.limitPerDay`);
-    assert.match(form.sellBackTerms, ADDRESS[lang], `buy-${lang} form.sellBackTerms`);
+    const b = surface("buy", lang);
+    // The first sentence of the limits rule is "One person, one address." (verification); the limit follows it.
+    const limitSentence = b.rules.items[0].body.split(/[.。]/).slice(1).join(" ");
+    const purchaseLimits = {
+      "rules.items[0].body (limit part)": limitSentence,
+      "form.limitPerDay": b.form.limitPerDay,
+      "v2.form.overDay": b.v2.form.overDay,
+      "v2.banner.whitelistBody": b.v2.banner.whitelistBody,
+      "v2.banner.openBody": b.v2.banner.openBody,
+    };
+    for (const [key, text] of Object.entries(purchaseLimits)) {
+      assert.match(text, PER_PERSON[lang], `buy-${lang} ${key}: per person`);
+      assert.doesNotMatch(text, ADDRESS[lang], `buy-${lang} ${key}: not per address`);
+      assert.doesNotMatch(text, /UTC/, `buy-${lang} ${key}: not a UTC day`);
+    }
+    assert.doesNotMatch(b.form.limitHit, /UTC/, `buy-${lang} form.limitHit`);
+    // The sell-back limit is a different thing and stays per address.
+    assert.match(b.form.sellBackTerms, ADDRESS[lang], `buy-${lang} form.sellBackTerms`);
   }
 });
 

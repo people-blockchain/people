@@ -39,17 +39,6 @@ function statementsFromLavkaSqlFile() {
     .filter(Boolean);
 }
 
-function statementsFromWorldIdSqlFile() {
-  const raw = readFileSync(join(root, "drizzle/0006_founders_world_id_nullifier.sql"), "utf8");
-  return raw
-    .split("\n")
-    .filter((line) => !line.trim().startsWith("--"))
-    .join("\n")
-    .split(";")
-    .map((chunk) => chunk.trim())
-    .filter(Boolean);
-}
-
 test("lavka bootstrap mirrors drizzle 0007 SQL file", async () => {
   const { LAVKA_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
   const fromFile = statementsFromLavkaSqlFile();
@@ -57,18 +46,6 @@ test("lavka bootstrap mirrors drizzle 0007 SQL file", async () => {
   for (let i = 0; i < fromFile.length; i += 1) {
     assert.equal(
       LAVKA_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "),
-      fromFile[i].replace(/\s+/g, " "),
-    );
-  }
-});
-
-test("founders world id bootstrap mirrors drizzle 0006 SQL file", async () => {
-  const { FOUNDERS_WORLD_ID_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
-  const fromFile = statementsFromWorldIdSqlFile();
-  assert.equal(FOUNDERS_WORLD_ID_SCHEMA_STATEMENTS.length, fromFile.length);
-  for (let i = 0; i < fromFile.length; i += 1) {
-    assert.equal(
-      FOUNDERS_WORLD_ID_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "),
       fromFile[i].replace(/\s+/g, " "),
     );
   }

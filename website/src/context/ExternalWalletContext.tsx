@@ -25,6 +25,8 @@ import {
 import { createWalletClient, custom } from "viem";
 import { useWallet } from "@/context/WalletContext";
 import { DEFAULT_EVM_RPC_URL } from "@/lib/evm/public-endpoints";
+import { preflightAndSend } from "@/lib/evm/tx-preflight";
+import { preflightWriteContract, type PreflightWriteRequest } from "@/lib/evm/preflight-write";
 import {
   WALLET_APP_REDIRECT,
   isMobileBrowser,
@@ -300,15 +302,25 @@ export function useExternalWalletOptional() {
 }
 
 export async function writeViaActiveSigner(signer: ActiveEvmSigner, request: Record<string, unknown>) {
-  if (signer.kind === "embedded" && signer.privateKey) {
-    const client = createEmbeddedWalletClient(signer.privateKey);
-    // viem WriteContractParameters varies by ABI inference; runtime args are validated on-chain.
-    return client.writeContract(request as never);
-  }
-  if (!signer.provider) throw new Error("missing_provider");
-  const chain = peopleViemChain(browserEvmRpcUrl());
-  const client = createWalletClient({ chain, transport: custom(signer.provider), account: signer.address });
-  return client.writeContract({ ...request, account: signer.address } as never);
+  // Simulate + estimate first: a call that would revert is never signed or sent, and the gas limit
+  // is the node's estimate + 20% (any `gas` a caller passes is ignored). See lib/evm/tx-preflight.
+  const write = request;
+  return preflightWriteContract(
+    createBrowserPublicClient(),
+    signer.address,
+    request as unknown as PreflightWriteRequest,
+    async (gas) => {
+      if (signer.kind === "embedded" && signer.privateKey) {
+        const client = createEmbeddedWalletClient(signer.privateKey);
+        // viem WriteContractParameters varies by ABI inference; runtime args are validated on-chain.
+        return client.writeContract({ ...write, gas } as never);
+      }
+      if (!signer.provider) throw new Error("missing_provider");
+      const chain = peopleViemChain(browserEvmRpcUrl());
+      const client = createWalletClient({ chain, transport: custom(signer.provider), account: signer.address });
+      return client.writeContract({ ...write, gas, account: signer.address } as never);
+    },
+  );
 }
 
 /** Sign a plain text message (EIP-191 `personal_sign`) through the active signer. */
@@ -330,16 +342,23 @@ export async function signViaActiveSigner(signer: ActiveEvmSigner, message: stri
  */
 export async function sendViaActiveSigner(
   signer: ActiveEvmSigner,
-  tx: { data: Hex; value?: bigint; gas?: bigint },
+  tx: { data: Hex; value?: bigint },
 ): Promise<`0x${string}`> {
-  if (signer.kind === "embedded" && signer.privateKey) {
-    const client = createEmbeddedWalletClient(signer.privateKey);
-    return client.sendTransaction({ data: tx.data, value: tx.value ?? BigInt(0), gas: tx.gas });
-  }
-  if (!signer.provider) throw new Error("missing_provider");
-  const chain = peopleViemChain(browserEvmRpcUrl());
-  const client = createWalletClient({ chain, transport: custom(signer.provider), account: signer.address });
-  return client.sendTransaction({ data: tx.data, value: tx.value ?? BigInt(0), gas: tx.gas, account: signer.address } as never);
+  const value = tx.value ?? BigInt(0);
+  return preflightAndSend(
+    createBrowserPublicClient(),
+    async ({ gas }) => {
+      if (signer.kind === "embedded" && signer.privateKey) {
+        const client = createEmbeddedWalletClient(signer.privateKey);
+        return client.sendTransaction({ data: tx.data, value, gas });
+      }
+      if (!signer.provider) throw new Error("missing_provider");
+      const chain = peopleViemChain(browserEvmRpcUrl());
+      const client = createWalletClient({ chain, transport: custom(signer.provider), account: signer.address });
+      return client.sendTransaction({ data: tx.data, value, gas, account: signer.address } as never);
+    },
+    { account: signer.address, data: tx.data, value },
+  );
 }
 
 export { createBrowserPublicClient as readPublicClient };

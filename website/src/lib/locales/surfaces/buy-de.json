@@ -93,11 +93,11 @@
     "items": [
       {
         "title": "Erste {whitelistDays} Tage: nur verifizierte Menschen",
-        "body": "Eine Person, eine Adresse. {min} bis {max} pro Kauf, bis zu {perDay} pro Adresse und Tag (UTC) und {cooldown} Sekunden Pause zwischen zwei Käufen."
+        "body": "Eine Person, eine Adresse. {min} bis {max} pro Kauf, bis zu {perDay} pro Person innerhalb beliebiger gleitender 24 Stunden und {cooldown} Sekunden Pause zwischen zwei Käufen."
       },
       {
         "title": "{reservePct} jedes Kaufs bleiben als Reserve",
-        "body": "Sie bleiben im Verkaufsvertrag und bezahlen Rückverkäufe. Niemand im Team kann sie abheben. Die anderen {treasuryPct} finanzieren das Projekt."
+        "body": "Sie bleiben im Verkaufsvertrag und bezahlen Rückverkäufe. Niemand im Team kann sie abheben. Die anderen {treasuryPct} gehen sofort, bei jedem Kauf, an die Projekt-Wallet."
       },
       {
         "title": "Rückverkauf nach {holdDays} Tagen",
@@ -125,7 +125,7 @@
     "details": [
       "Reserve: die USDC im Verkaufsvertrag. Aus ihr werden Rückverkäufe bezahlt, und Rückverkaufsgebühren bleiben in ihr. Je kleiner die Reserve, desto kleiner das tägliche Rückverkaufslimit. Wenn die Kurve schließt, endet der Rückverkauf endgültig.",
       "Die Reserve verlässt den Vertrag nur als PPL-Liquidität, beim Schließen der Kurve, und erst nach einer öffentlichen Ankündigung {releaseDays} Tage vorher. Während dieser Frist läuft der Rückverkauf weiter.",
-      "Treasury: ein Multisig-Wallet ({signersM} von {signersN} Signaturen), das die anderen {treasuryPct} jedes Kaufs erhält.",
+      "Treasury: ein Multisig-Wallet ({signersM} von {signersN} Signaturen), das die anderen {treasuryPct} jedes Kaufs sofort im Moment des Kaufs erhält.",
       "Die Multisig kann Käufe und Rückverkauf pausieren. Sie kann die Reserve nicht bewegen, Limits oder Formel nicht ändern und den Verkauf nicht verlängern.",
       "Der Verkauf läuft, bis {graduation} eingenommen sind, oder {term} ab Start – je nachdem, was zuerst eintritt. Nicht verkaufte PPL gehen in den Community Pool. Käufe sind endgültig.",
       "Team: {teamPct} aller PPL. {cliff} lang nichts, danach monatlich über {linear}, gerechnet ab dem vollständigen Netzwerkstart."
@@ -210,7 +210,7 @@
     "priceAfter": "Preis nach Ihrem Kauf",
     "estimate": "Schätzung. Die genaue Menge wird vor Ihrer Signatur on-chain bestätigt.",
     "limitPerBuy": "{min}–{max} pro Kauf",
-    "limitPerDay": "Bis zu {amount} pro Adresse und Tag (UTC)",
+    "limitPerDay": "Bis zu {amount} pro Person in beliebigen gleitenden 24 Stunden",
     "cooldown": "{seconds} s Pause zwischen Käufen",
     "overLimit": "Maximal {amount} in einem Kauf.",
     "belowMin": "Betrag eingeben, um ein Angebot zu sehen.",
@@ -262,7 +262,7 @@
     "viewTx": "Auf Basescan ansehen",
     "txRejected": "Sie haben die Signatur abgebrochen. Es wurde nichts abgebucht.",
     "priceMoved": "Der Preis hat sich vor der Bestätigung um mehr als 1 % bewegt, daher wurde nichts gekauft. Prüfen Sie das neue Angebot und versuchen Sie es erneut.",
-    "limitHit": "Ein Verkaufslimit hat diesen Kauf gestoppt (pro Kauf, pro Tag oder Pause zwischen Käufen). Es wurde nichts gekauft.",
+    "limitHit": "Ein Verkaufslimit hat diesen Kauf gestoppt (pro Kauf, pro 24 Stunden oder Pause zwischen Käufen). Es wurde nichts gekauft.",
     "txFailed": "Die Transaktion ist fehlgeschlagen: {reason}. Es wurden keine PPL gekauft.",
     "tryAgain": "Erneut versuchen",
     "balanceLine": "In Ihrer Wallet auf Base: {balance} {token} · {eth} ETH",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Whitelist-Phase",
-      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Person in gleitenden 24 Stunden.",
       "daysLeft": "Noch {days} Tage",
       "openTitle": "Öffentliche Phase",
-      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Person in gleitenden 24 Stunden.",
       "notOpenTitle": "Verkauf noch nicht geöffnet",
       "notOpenBody": "Käufe öffnen, sobald der Vertrag in die Whitelist-Phase eintritt.",
       "expiredTitle": "Verkauf beendet",
@@ -356,7 +356,7 @@
       "invalid": "Gib einen Dollarbetrag ein.",
       "belowMin": "Das Minimum ist {min}.",
       "overMax": "Das Maximum ist {max} pro Kauf.",
-      "overDay": "Das Tageslimit ist {max} pro Adresse.",
+      "overDay": "Das Limit ist {max} pro Person in den letzten 24 Stunden.",
       "needVerification": "Schließe die Verifizierung oben ab, um zu kaufen.",
       "needWallet": "Verbinde eine Wallet, um dein Angebot zu sehen.",
       "preview": "Vorschau: Es wird keine Transaktion gesendet.",

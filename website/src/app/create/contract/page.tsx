@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -22,7 +23,9 @@ export default function CreateContractPage() {
     <div className="flex min-h-screen flex-col bg-canvas text-ink">
       <Navbar />
       <main id="main" className="warm-page flex-1">
-        <ContractWizard />
+        <Suspense fallback={null}>
+          <ContractWizard />
+        </Suspense>
       </main>
       <Footer />
     </div>

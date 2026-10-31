@@ -44,5 +44,10 @@
   "totalSupply": "Toplam arz",
   "mintPrice": "Basım fiyatı",
   "pplBalance": "PPL bakiyesi",
-  "memo": "Not"
+  "memo": "Not",
+  "contractDeployTx": "Dağıtım işlemi",
+  "contractVerifiedTemplate": "Doğrulandı: bytecode “{name}” şablonuyla eşleşiyor",
+  "contractSourceUnknown": "Kaynak kod yok: bytecode bilinen bir şablonla eşleşmiyor.",
+  "contractCampaignLink": "Kampanya sayfasını aç",
+  "contractPartial": "Bazı veriler şu anda ağdan yüklenemedi; mevcut olanlar gösteriliyor."
 }

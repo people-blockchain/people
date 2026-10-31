@@ -1,0 +1,8 @@
+{
+  "dailyLimit": "The daily stablecoin payment limit for this wallet is used up. Nothing was sent and no gas was spent.",
+  "payWithPpl": "Pay in PPL instead",
+  "stableUnavailable": "Stablecoin payment is temporarily unavailable. Nothing was sent and no gas was spent. You can pay in PPL instead.",
+  "reverted": "A test run showed this transaction would fail, so it was not sent and no gas was spent. Reason: {reason}",
+  "revertedNoReason": "A test run showed this transaction would fail, so it was not sent and no gas was spent.",
+  "panic": "A test run showed the contract would fail with an internal error (code {code}), so the transaction was not sent and no gas was spent."
+}

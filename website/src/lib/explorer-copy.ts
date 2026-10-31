@@ -58,6 +58,11 @@ export type ExplorerCopyContent = {
   contractReceiptMeta: string;
   technicalDetails: string;
   contractBytecode: string;
+  contractDeployTx: string;
+  contractVerifiedTemplate: string;
+  contractSourceUnknown: string;
+  contractCampaignLink: string;
+  contractPartial: string;
 };
 
 const baseExplorerCopy: Record<string, ExplorerCopyContent> = {
@@ -109,6 +114,11 @@ const baseExplorerCopy: Record<string, ExplorerCopyContent> = {
     contractReceiptMeta: "Status {status} · gas {gas} · {logs} log entries",
     technicalDetails: "Technical details",
     contractBytecode: "Bytecode",
+    contractDeployTx: "Deploy transaction",
+    contractVerifiedTemplate: "Verified: the bytecode matches the “{name}” template",
+    contractSourceUnknown: "Source not available: the bytecode does not match a known template.",
+    contractCampaignLink: "Open the campaign page",
+    contractPartial: "Some details could not be loaded from the network right now; showing what is available.",
   },
   ru: {
     title: "Сканер",
@@ -158,6 +168,11 @@ const baseExplorerCopy: Record<string, ExplorerCopyContent> = {
     contractReceiptMeta: "Статус {status} · gas {gas} · {logs} записей в журнале",
     technicalDetails: "Технические детали",
     contractBytecode: "Байткод",
+    contractDeployTx: "Транзакция деплоя",
+    contractVerifiedTemplate: "Проверено: байткод совпадает с шаблоном «{name}»",
+    contractSourceUnknown: "Исходник недоступен: байткод не совпадает ни с одним известным шаблоном.",
+    contractCampaignLink: "Открыть страницу сбора",
+    contractPartial: "Часть данных сейчас не удалось загрузить из сети; показано то, что доступно.",
   },
   es: explorerEs as ExplorerCopyContent,
   pt: explorerPt as ExplorerCopyContent,

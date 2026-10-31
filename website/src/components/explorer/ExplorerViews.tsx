@@ -6,6 +6,7 @@ import { WalletGateLink } from "@/components/wallet/WalletGateLink";
 import { useLanguage } from "@/context/LanguageContext";
 import { explorerCopy } from "@/lib/explorer-copy";
 import { networkJson } from "@/lib/network-client";
+import { loadExplorerRead, showNetworkUnavailable } from "@/lib/explorer-load";
 import { fetchCosmosTx, isCosmosTxHash, type CosmosTxSummary } from "@/lib/cosmos-tx";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
@@ -263,27 +264,24 @@ export function AddressView({ address }: { address: string }) {
   const [nfts, setNfts] = useState<Array<{ nftId: string; name: string }>>([]);
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [txsLoading, setTxsLoading] = useState(true);
-  const [failed, setFailed] = useState(false);
+  const [summaryFailed, setSummaryFailed] = useState(false);
+  const [txsFailed, setTxsFailed] = useState(false);
   const [incoming, setIncoming] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [nextBeforeBlock, setNextBeforeBlock] = useState<number | undefined>(undefined);
   const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
+    let alive = true;
     const controller = new AbortController();
     setSummaryLoading(true);
-    setFailed(false);
-    void networkJson<NonNullable<typeof account>>(`address/${encodeURIComponent(address)}`, {
-      signal: controller.signal,
-    })
-      .then((a) => {
-        if (controller.signal.aborted) return;
-        setAccount(a);
-        setSummaryLoading(false);
-      })
-      .catch(() => {
-        if (controller.signal.aborted) return;
-        setFailed(true);
+    setSummaryFailed(false);
+    setAccount(null);
+    void loadExplorerRead((signal) => networkJson<NonNullable<typeof account>>(`address/${encodeURIComponent(address)}`, { signal }))
+      .then((result) => {
+        if (!alive) return;
+        if (result.ok) setAccount(result.value);
+        else setSummaryFailed(true);
         setSummaryLoading(false);
       });
 
@@ -298,37 +296,40 @@ export function AddressView({ address }: { address: string }) {
         /* optional */
       });
 
-    return () => controller.abort();
+    return () => { alive = false; controller.abort(); };
   }, [address]);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let alive = true;
     setTxsLoading(true);
+    setTxsFailed(false);
     setTxs([]);
     setHasMore(false);
     setNextBeforeBlock(undefined);
     setIncoming(0);
-    void networkJson<{
+    void loadExplorerRead((signal) => networkJson<{
       items?: typeof txs;
       hasMore?: boolean;
       nextBeforeBlock?: number;
       incoming?: number;
-    }>(`address/${encodeURIComponent(address)}/transactions?limit=30`, { signal: controller.signal })
-      .then((body) => {
-        if (controller.signal.aborted) return;
+    }>(`address/${encodeURIComponent(address)}/transactions?limit=30`, { signal }))
+      .then((result) => {
+        if (!alive) return;
+        if (!result.ok) {
+          setTxs([]);
+          setTxsFailed(true);
+          setTxsLoading(false);
+          return;
+        }
+        const body = result.value;
         const items = Array.isArray(body) ? body : body.items ?? [];
         setTxs(items);
         setHasMore(Boolean(!Array.isArray(body) && body.hasMore));
         setNextBeforeBlock(!Array.isArray(body) ? body.nextBeforeBlock : undefined);
         if (!Array.isArray(body) && typeof body.incoming === "number") setIncoming(body.incoming);
         setTxsLoading(false);
-      })
-      .catch(() => {
-        if (controller.signal.aborted) return;
-        setTxs([]);
-        setTxsLoading(false);
       });
-    return () => controller.abort();
+    return () => { alive = false; };
   }, [address]);
 
   const loadMore = () => {
@@ -370,7 +371,7 @@ export function AddressView({ address }: { address: string }) {
       <div className="mt-4">
         <NetworkStatus />
       </div>
-      {summaryLoading ? <PeopleLoader /> : failed ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
+      {summaryLoading ? <PeopleLoader /> : showNetworkUnavailable(summaryFailed && txsFailed && !txsLoading, (account ? 1 : 0) + txs.length) ? <p role="alert" className="mt-6 text-warm">{t.networkUnavailable}</p> : null}
       <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-ink-3">{t.pplBalance}</p>
       <p className="mt-1 flex items-center gap-3 text-2xl font-black" data-testid="address-ppl">
         <AssetImage assetId="ppl" name="PPL" className="h-9 w-9" />
