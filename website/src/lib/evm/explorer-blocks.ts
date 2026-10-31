@@ -1,4 +1,4 @@
-import { formatUnits, type Hash } from "viem";
+import { type Hash } from "viem";
 import { transactionMemo } from "@/lib/evm/transaction-memo";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
@@ -33,6 +33,9 @@ export type EvmExplorerTx = {
   to?: string;
   amount?: number;
   fee?: number;
+  /** Integer wei. Display and arithmetic use this, not the legacy number. */
+  amountWei?: string;
+  feeWei?: string;
   blockHeight?: number;
   payload?: { memo: string };
 };
@@ -155,7 +158,7 @@ function toExplorerTx(tx: RpcTx): EvmExplorerTx {
     type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
     from: tx.from,
     to: tx.to ?? undefined,
-    amount: Number(formatUnits(valueWei, 18)),
+    amountWei: valueWei.toString(),
     blockHeight: hexToNumber(tx.blockNumber),
     ...(memo ? { payload: { memo } } : {}),
   };
@@ -216,8 +219,8 @@ export async function fetchTransaction(hash: string): Promise<EvmExplorerTx | nu
     type: tx.input && tx.input !== "0x" && !memo ? "contract" : "transfer",
     from: tx.from,
     to: tx.to ?? undefined,
-    amount: Number(formatUnits(valueWei, 18)),
-    fee: Number(formatUnits(feeWei, 18)),
+    amountWei: valueWei.toString(),
+    feeWei: feeWei.toString(),
     blockHeight: hexToNumber(tx.blockNumber),
     ...(memo ? { payload: { memo } } : {}),
   };

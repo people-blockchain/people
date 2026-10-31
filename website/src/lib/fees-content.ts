@@ -10,12 +10,13 @@ import feesPt from "./locales/surfaces/fees-pt.json" with { type: "json" };
 import feesTr from "./locales/surfaces/fees-tr.json" with { type: "json" };
 import feesVi from "./locales/surfaces/fees-vi.json" with { type: "json" };
 import feesZh from "./locales/surfaces/fees-zh.json" with { type: "json" };
+import { formatPplExact } from "@/lib/asset-amounts";
 import {
-  APPROVED_CONTRACT_GAS_PRICE_PPL,
-  DEFAULT_NFT_MINT_FEE_PPL,
-  DEFAULT_TOKEN_CREATE_FEE_PPL,
-  DEFAULT_TRANSFER_FEE_PPL,
-  TYPICAL_CONTRACT_DEPLOY_FEE_PPL,
+  APPROVED_CONTRACT_GAS_PRICE_WEI,
+  DEFAULT_NFT_MINT_FEE_WEI,
+  DEFAULT_TOKEN_CREATE_FEE_WEI,
+  DEFAULT_TRANSFER_FEE_WEI,
+  TYPICAL_CONTRACT_DEPLOY_FEE_WEI,
 } from "@/lib/factory-fees";
 
 export type FeesCopyContent = {
@@ -47,27 +48,27 @@ const baseFeesCopy: Record<string, FeesCopyContent> = {
     table: [
       {
         operation: "Ordinary transfer",
-        amount: `${DEFAULT_TRANSFER_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_TRANSFER_FEE_WEI)} PPL`,
         note: "Sending PPL or a token to someone",
       },
       {
         operation: "Token create (minimum)",
-        amount: `${DEFAULT_TOKEN_CREATE_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_TOKEN_CREATE_FEE_WEI)} PPL`,
         note: "Launching your own token",
       },
       {
         operation: "NFT mint (minimum)",
-        amount: `${DEFAULT_NFT_MINT_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_NFT_MINT_FEE_WEI)} PPL`,
         note: "Creating one NFT",
       },
       {
         operation: "Contract gas price",
-        amount: `${APPROVED_CONTRACT_GAS_PRICE_PPL.toFixed(8)} PPL per gas unit`,
+        amount: `${formatPplExact(APPROVED_CONTRACT_GAS_PRICE_WEI)} PPL per gas unit`,
         note: "Paid in advance when you publish or use a contract",
       },
       {
         operation: "Typical contract deploy (estimate)",
-        amount: `~${TYPICAL_CONTRACT_DEPLOY_FEE_PPL} PPL`,
+        amount: `~${formatPplExact(TYPICAL_CONTRACT_DEPLOY_FEE_WEI)} PPL`,
         note: "A simple token contract (about 1,200,000 gas units)",
       },
     ],
@@ -96,27 +97,27 @@ const baseFeesCopy: Record<string, FeesCopyContent> = {
     table: [
       {
         operation: "Обычный перевод",
-        amount: `${DEFAULT_TRANSFER_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_TRANSFER_FEE_WEI)} PPL`,
         note: "Отправка PPL или токена другому человеку",
       },
       {
         operation: "Создание токена (минимум)",
-        amount: `${DEFAULT_TOKEN_CREATE_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_TOKEN_CREATE_FEE_WEI)} PPL`,
         note: "Запуск собственного токена",
       },
       {
         operation: "Минт NFT (минимум)",
-        amount: `${DEFAULT_NFT_MINT_FEE_PPL} PPL`,
+        amount: `${formatPplExact(DEFAULT_NFT_MINT_FEE_WEI)} PPL`,
         note: "Создание одного NFT",
       },
       {
         operation: "Цена газа контракта",
-        amount: `${APPROVED_CONTRACT_GAS_PRICE_PPL.toFixed(8)} PPL за единицу газа`,
+        amount: `${formatPplExact(APPROVED_CONTRACT_GAS_PRICE_WEI)} PPL за единицу газа`,
         note: "Оплачивается заранее, когда вы публикуете или используете контракт",
       },
       {
         operation: "Типичный деплой (оценка)",
-        amount: `~${TYPICAL_CONTRACT_DEPLOY_FEE_PPL} PPL`,
+        amount: `~${formatPplExact(TYPICAL_CONTRACT_DEPLOY_FEE_WEI)} PPL`,
         note: "Простой контракт токена (около 1 200 000 единиц газа)",
       },
     ],

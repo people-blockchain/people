@@ -1,8 +1,11 @@
+import { readBalanceWei } from "@/lib/asset-amounts";
 import { isHiddenAsset } from "@/lib/hidden-assets";
 import { testStableMeta } from "@/lib/evm/test-stables";
 
 export type WalletAccountView = {
   balance: number | null;
+  /** Exact native wei when the address payload or the numeric balance can produce one. */
+  balanceWei: bigint | null;
   nonce: number;
   balances: Record<string, number>;
   partial: boolean;
@@ -106,25 +109,28 @@ export function mapWalletAccount(payload: unknown): WalletAccountView | null {
   const body = payload as {
     error?: unknown;
     balance?: unknown;
+    balanceWei?: unknown;
     nonce?: unknown;
     balances?: unknown;
     partial?: unknown;
   };
   if (typeof body.error === "string") return null;
   const balance = typeof body.balance === "number" && Number.isFinite(body.balance) ? body.balance : null;
+  const balanceWei = readBalanceWei(payload);
   const balances: Record<string, number> = {};
   if (body.balances && typeof body.balances === "object") {
     for (const [key, value] of Object.entries(body.balances as Record<string, unknown>)) {
       if (typeof value === "number" && Number.isFinite(value)) balances[key] = value;
     }
   }
-  if (balance === null && Object.keys(balances).length === 0) return null;
+  if (balance === null && balanceWei === null && Object.keys(balances).length === 0) return null;
   const nonce = typeof body.nonce === "number" && Number.isFinite(body.nonce) ? body.nonce : 0;
   return {
     balance,
+    balanceWei,
     nonce,
     balances,
-    partial: body.partial === true || balance === null,
+    partial: body.partial === true || (balance === null && balanceWei === null),
   };
 }
 

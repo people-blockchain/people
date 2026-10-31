@@ -41,7 +41,7 @@ test('EVM initial snapshot is bounded and newHeads update blocks and confirmed t
   assert.equal(feeds.at(-1).blocks[0].header.height, 100);
   s.notify(101); await flush();
   assert.equal(feeds.at(-1).blocks[0].header.height, 101);
-  assert.equal(feeds.at(-1).transactions[0].amount, 1);
+  assert.equal(feeds.at(-1).transactions[0].amountWei, "1000000000000000000");
   assert.equal(s.sent.filter(r => r.method === 'eth_getBlockByNumber').length, 41);
   assert.deepEqual(phases, ['checking', 'online', 'online']);
   s.notify(101); s.notify(999, 'unrelated'); await flush();
@@ -96,7 +96,7 @@ test('older confirmed transfers arrive during backfill without delaying the firs
   for (const request of requests().slice(4, 8)) s.blockReply(request);
   await flush();
   assert.equal(feeds.at(-1).transactions[0].id, 'older-tx');
-  assert.equal(feeds.at(-1).transactions[0].amount, 1);
+  assert.equal(feeds.at(-1).transactions[0].amountWei, "1000000000000000000");
   assert.equal(feeds.at(-1).transactions[0].blockHeight, 96);
 });
 

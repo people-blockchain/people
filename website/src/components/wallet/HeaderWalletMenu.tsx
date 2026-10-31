@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
-import { formatPpl } from "@/lib/asset-amounts";
+import { formatPplExact, formatPplLabeled, readBalanceWei } from "@/lib/asset-amounts";
 import { content } from "@/lib/content";
 import { networkJson } from "@/lib/network-client";
 import { shortWalletAddress } from "@/lib/partner/bind-errors";
@@ -40,7 +40,7 @@ export function HeaderWalletMenu({ layout, onDismiss }: { layout: Layout; onDism
   const externalSigner = session ? null : externalWallet?.signer ?? null;
   const address = session?.address ?? externalSigner?.address ?? null;
   const [open, setOpen] = useState(false);
-  const [balance, setBalance] = useState<number | null>(null);
+  const [balanceWei, setBalanceWei] = useState<bigint | null>(null);
   const [disconnecting, setDisconnecting] = useState(false);
   const [copied, setCopied] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -49,14 +49,14 @@ export function HeaderWalletMenu({ layout, onDismiss }: { layout: Layout; onDism
 
   const refreshBalance = useCallback(async () => {
     if (!address) {
-      setBalance(null);
+      setBalanceWei(null);
       return;
     }
     try {
-      const body = await networkJson<{ balance?: number }>(`address/${address}`, { cache: "no-store" });
-      setBalance(Number(body.balance ?? 0));
+      const body = await networkJson<unknown>(`address/${address}`, { cache: "no-store" });
+      setBalanceWei(readBalanceWei(body));
     } catch {
-      setBalance(null);
+      setBalanceWei(null);
     }
   }, [address]);
 
@@ -180,7 +180,8 @@ export function HeaderWalletMenu({ layout, onDismiss }: { layout: Layout; onDism
       : "header-label flex h-9 max-w-[9.5rem] shrink-0 items-center gap-1 rounded-lg border border-line bg-surface-2 px-2 text-[11px] font-semibold text-ink sm:max-w-[10.5rem] sm:text-xs xl:max-w-[12rem] xl:px-2.5";
 
   const short = shortWalletAddress(address);
-  const pplLabel = balance === null ? "…" : formatPpl(balance);
+  const pplExact = balanceWei === null ? "" : `${formatPplExact(balanceWei)} PPL`;
+  const pplLabel = balanceWei === null ? "…" : formatPplLabeled(balanceWei, u.pplDust);
 
   return (
     <div ref={menuContainerRef} className="relative flex shrink-0 items-center gap-2">
@@ -202,7 +203,7 @@ export function HeaderWalletMenu({ layout, onDismiss }: { layout: Layout; onDism
         ) : (
           <>
             <span className="min-w-0 truncate font-mono">{short}</span>
-            <span className="shrink-0 text-value">{pplLabel}</span>
+            <span className="shrink-0 text-value" title={pplExact}>{pplLabel}</span>
             <ChevronDown className={`h-3 w-3 shrink-0 text-ink-3 ${open ? "rotate-180" : ""}`} aria-hidden="true" />
           </>
         )}
@@ -230,6 +231,11 @@ export function HeaderWalletMenu({ layout, onDismiss }: { layout: Layout; onDism
                 }}
               />
             </li>
+            {pplExact ? (
+              <li role="none" className="px-3 py-2 font-mono text-xs text-ink-2" title={pplExact}>
+                {pplExact}
+              </li>
+            ) : null}
             <li role="none">
               <button
                 type="button"
