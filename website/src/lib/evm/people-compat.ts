@@ -75,6 +75,28 @@ async function optionalUint(token: string, selector: string): Promise<bigint | n
 
 type NftCollectionStats = { minted?: number; totalSupply?: number; mintPriceWei?: bigint };
 
+type FounderListRow = Awaited<ReturnType<typeof listFounderNftRows>>[number];
+
+/** A present collection or tokenId must match; an absent one does not drop the row. */
+function founderRowsForQuery(rows: readonly FounderListRow[], collection?: string, tokenId?: string): FounderListRow[] {
+  const wantCollection = collection && isAddress(collection) ? getAddress(collection).toLowerCase() : "";
+  const wantTokenId = tokenId ? tokenId : "";
+  if (!wantCollection && !wantTokenId) return [...rows];
+  return rows.filter((row) => {
+    if (wantCollection && row.collection.toLowerCase() !== wantCollection) return false;
+    if (wantTokenId && row.onChainTokenId !== wantTokenId) return false;
+    return true;
+  });
+}
+
+async function readFounderNftRows(owner: string | undefined, collection?: string, tokenId?: string): Promise<FounderListRow[]> {
+  try {
+    return founderRowsForQuery(await listFounderNftRows(owner), collection, tokenId);
+  } catch {
+    return [];
+  }
+}
+
 /**
  * On-chain stats for an NFT collection. PeopleNFT exposes `nextTokenId` (monotonic, no burns) as the
  * minted count but no `totalSupply` and no price; a collection that does expose `totalSupply`/a mint
@@ -347,18 +369,16 @@ export async function handleEvmCompatGet(
     const owner = search.get("owner") ?? undefined;
     const collection = search.get("collection") ?? undefined;
     const tokenId = search.get("tokenId") ?? undefined;
-    let founderRows: Awaited<ReturnType<typeof listFounderNftRows>> = [];
-    try {
-      founderRows = await listFounderNftRows(owner);
-    } catch {
-      founderRows = [];
-    }
     const seed = listSeedNfts(owner);
     if (!owner) {
+      const founderRows = await readFounderNftRows(owner, collection, tokenId);
       return { status: 200, body: visibleNfts([...assembleNftRows(seed, [], null), ...founderRows]) };
     }
     const cursor = readOwnerNftCursor(search);
     if (cursor === "invalid") return { status: 400, body: { error: "bad_cursor" } };
+    // The cursor names the next factory-log window. Founder rows are not part of that scan,
+    // so they belong on the first page only, and a later page does not read them again.
+    const founderRows = cursor === null ? await readFounderNftRows(owner, collection, tokenId) : [];
     const deadlineAt = nftOwnerListDeadlineAt();
     const wantDirect = Boolean(collection && tokenId && /^\d+$/.test(tokenId) && isAddress(collection));
     let page: MintedNftPage = { items: [], partial: true, next: "tip" };
