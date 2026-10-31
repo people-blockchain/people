@@ -5,7 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { encodeAbiParameters, encodeEventTopics, getAddress } from "viem";
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
-import { fetchLogsWindowed, LOG_WINDOW_BLOCKS, logWindows, resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
+import { fetchLogsWindowed, LOG_WINDOW_BLOCKS, logWindowConcurrencyPeakForTests, logWindows, resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { NFT_MINTED_TOPIC, nftMintedEvent } from "../src/lib/evm/nft-factory.ts";
 import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
 import { resetRpcBackoffForTests } from "../src/lib/evm/rpc-server.ts";
@@ -106,6 +106,14 @@ test("a slow log window returns inside the budget with partial and a cursor", as
   assert.ok(Array.isArray(viaRoute.body));
   assert.equal(viaRoute.headers?.["X-Nfts-Partial"], "1");
   assert.equal(viaRoute.headers?.["X-Nfts-Next"], `${newest[0]}-${newest[1]}`);
+
+  const viaV2 = await handleEvmCompatGet("nfts", new URLSearchParams({ owner: OWNER, v: "2" }));
+  assert.equal(Array.isArray(viaV2.body), false);
+  assert.equal(viaV2.body.partial, true);
+  assert.equal(viaV2.body.next, `${newest[0]}-${newest[1]}`);
+  assert.ok(Array.isArray(viaV2.body.items));
+  assert.equal(viaV2.headers?.["X-Nfts-Partial"], "1");
+  assert.equal(viaV2.headers?.["X-Nfts-Next"], viaV2.body.next);
 });
 
 test("a mint in the newest window is on the first page", async (t) => {
@@ -246,4 +254,54 @@ test("a fresh mint window is not queued behind a saturated history scan", async 
   releaseHistory();
   await history;
   await pagePromise;
+});
+
+test("one page reads several windows, and a repeat visit reuses immutable windows", async (t) => {
+  setNftHistoryPageSizeForTests(4);
+  const dep = readEvmDeployments();
+  const factoryStart = dep.startBlocks.nftFactory;
+  const latest = factoryStart + 8 * LOG_WINDOW_BLOCKS;
+  const ranges = new Map();
+  const server = await listen((req, res) => {
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      const reply = (result) => {
+        res.writeHead(200, { "content-type": "application/json" });
+        res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result }));
+      };
+      if (body.method === "eth_getLogs") {
+        const filter = body.params?.[0] ?? {};
+        const key = `${filter.fromBlock}-${filter.toBlock}`;
+        ranges.set(key, (ranges.get(key) ?? 0) + 1);
+        setTimeout(() => reply([]), 30);
+        return;
+      }
+      reply(body.method === "eth_blockNumber" ? `0x${latest.toString(16)}` : "0x");
+    });
+  });
+  await useNode(t, server);
+
+  const cold = await listMintedNfts(OWNER);
+  const coldCalls = [...ranges.values()].reduce((sum, count) => sum + count, 0);
+  assert.ok(coldCalls >= 3, `expected several windows, saw ${coldCalls}`);
+  assert.ok(logWindowConcurrencyPeakForTests() >= 2, "windows in a page run in parallel");
+  assert.equal(cold.partial, true);
+  assert.equal(typeof cold.next, "string");
+
+  const warmStarted = Date.now();
+  await listMintedNfts(OWNER);
+  const warmMs = Date.now() - warmStarted;
+  const repeated = [...ranges.values()].filter((count) => count > 1).length;
+  const cached = [...ranges.values()].filter((count) => count === 1).length;
+  assert.ok(cached >= 1, "immutable windows were not read again");
+  assert.ok(repeated <= 2, `repeat reread ${repeated} windows`);
+  assert.ok(warmMs < 1_000, `warm visit took ${warmMs}ms`);
+
+  const viaV2 = await handleEvmCompatGet("nfts", new URLSearchParams({ owner: OWNER, v: "2", cursor: cold.next }));
+  assert.equal(viaV2.body.partial === true || viaV2.body.partial === false, true);
+  assert.ok(Array.isArray(viaV2.body.items));
+  assert.equal(viaV2.headers?.["X-Nfts-Partial"], viaV2.body.partial ? "1" : "0");
+  if (viaV2.body.partial) assert.equal(viaV2.headers?.["X-Nfts-Next"], viaV2.body.next);
 });

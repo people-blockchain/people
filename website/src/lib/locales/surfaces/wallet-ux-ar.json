@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "المحفظة متصلة للعرض فقط. لا تستورد هذه الصفحة المفتاح. أرسل من تطبيق المحفظة.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "استغرق تسجيل الدخول وقتًا طويلًا. تحقق من الاتصال وحاول مجددًا.",
   "signInRetry": "إعادة المحاولة",

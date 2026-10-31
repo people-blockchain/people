@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Подключённый кошелёк",
+  "externalReadOnly": "Просмотр подключённого кошелька. Ключ не импортируется. Отправка — в приложении кошелька.",
   "disconnectExternal": "Отключить",
   "signInTimeout": "Вход занял слишком много времени. Проверьте соединение и повторите.",
   "signInRetry": "Повторить",

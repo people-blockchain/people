@@ -18,7 +18,7 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { fetchLogWindow, LOG_WINDOW_BLOCKS, logStartBlock, logWindows } from "@/lib/evm/chain-catalog";
+import { fetchLogWindow, LOG_WINDOW_BLOCKS, logStartBlock, logWindows, MAX_PARALLEL_LOG_WINDOWS } from "@/lib/evm/chain-catalog";
 import { evmJsonRpc, withRpcCallContext } from "@/lib/evm/rpc-server";
 import { nftFactoryAddress, nftMintedEvent, NFT_MINTED_TOPIC, peopleNftAbi } from "@/lib/evm/nft-factory";
 import { inAppNftPath, nftIndexPath } from "@/lib/evm/nft-paths";
@@ -218,21 +218,48 @@ async function listMintedNftsWithin(owner: string, cursor: string | null, deadli
   const pageSize = historyWindowsPerPage();
   const logs: Array<{ address?: string; topics?: readonly string[]; data?: string }> = [];
   let historyRead = 0;
-  for (let index = resumeWindowIndex(windows, cursor); index >= 0; index -= 1) {
-    const [from, to] = windows[index];
-    const isRecent = index >= recentFloor;
-    if (!isRecent && historyRead >= pageSize) {
+  let index = resumeWindowIndex(windows, cursor);
+  while (index >= 0) {
+    if (Date.now() >= deadlineAt) {
+      const [from, to] = windows[index];
       return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
     }
-    const priority = isRecent ? "recent" : "history";
-    const chunk = await withRpcCallContext({ deadlineAt, logPriority: priority }, () =>
-      fetchLogWindow(factory, topics, from, to, latest),
+    const batch: number[] = [];
+    let look = index;
+    let historyInBatch = 0;
+    while (look >= 0 && batch.length < MAX_PARALLEL_LOG_WINDOWS) {
+      const isRecent = look >= recentFloor;
+      if (!isRecent && historyRead + historyInBatch >= pageSize) break;
+      batch.push(look);
+      if (!isRecent) historyInBatch += 1;
+      look -= 1;
+    }
+    if (!batch.length) {
+      const [from, to] = windows[index];
+      return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
+    }
+    // Fresh windows use the recent lane and are listed first. A batch stays inside the
+    // process-wide log limit so a slow window cannot queue extra reads past the deadline.
+    const chunks = await Promise.all(
+      batch.map((windowIndex) => {
+        const [from, to] = windows[windowIndex];
+        const priority = windowIndex >= recentFloor ? "recent" : "history";
+        return withRpcCallContext({ deadlineAt, logPriority: priority }, () =>
+          fetchLogWindow(factory, topics, from, to, latest),
+        );
+      }),
     );
-    if (chunk === null) {
-      return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
+    for (let batchIndex = 0; batchIndex < batch.length; batchIndex += 1) {
+      const windowIndex = batch[batchIndex];
+      const [from, to] = windows[windowIndex];
+      const chunk = chunks[batchIndex];
+      if (chunk === null) {
+        return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
+      }
+      logs.push(...chunk);
+      if (windowIndex < recentFloor) historyRead += 1;
     }
-    logs.push(...chunk);
-    if (!isRecent) historyRead += 1;
+    index = look;
   }
   return { items: nftsFromMintLogs(logs, owner), partial: false };
 }
