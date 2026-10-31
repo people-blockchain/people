@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { encodeFunctionData, formatEther, getAddress, type Abi, type Address } from "viem";
+import { encodeFunctionData, getAddress, type Abi, type Address } from "viem";
+import { formatPplDisplay, formatPplExact } from "@/lib/asset-amounts";
 import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import { nftMediaCopy } from "@/lib/nft-media-copy";
@@ -77,12 +78,6 @@ class ReceiptTimeoutError extends Error {
 function isSenderBalanceMiss(message: string): boolean {
   const text = message.toLowerCase();
   return text.includes("insufficient funds") || text.includes("exceeds the balance");
-}
-
-function formatPplWei(wei: bigint): string {
-  const [whole, fraction = ""] = formatEther(wei).split(".");
-  const trimmed = fraction.slice(0, 4).replace(/0+$/, "");
-  return trimmed ? `${whole}.${trimmed}` : whole;
 }
 
 function addressFromTopic(topic: string | undefined): Address | null {
@@ -596,8 +591,8 @@ export function EvmTokenLaunch() {
           if (!balanceCheck.ok) {
             setError(
               nm.errInsufficientPpl
-                .replaceAll("{needed}", formatPplWei(balanceCheck.neededWei))
-                .replaceAll("{balance}", formatPplWei(balanceCheck.balanceWei)),
+                .replaceAll("{needed}", formatPplExact(balanceCheck.neededWei))
+                .replaceAll("{balance}", formatPplExact(balanceCheck.balanceWei)),
             );
             return;
           }
@@ -682,8 +677,8 @@ export function EvmTokenLaunch() {
           setError(
             neededWei !== undefined && balanceWei !== undefined
               ? nm.errInsufficientPpl
-                  .replaceAll("{needed}", formatPplWei(neededWei))
-                  .replaceAll("{balance}", formatPplWei(balanceWei))
+                  .replaceAll("{needed}", formatPplExact(neededWei))
+                  .replaceAll("{balance}", formatPplExact(balanceWei))
               : nm.errInsufficientPplGeneric,
           );
           break;
@@ -822,7 +817,7 @@ export function EvmTokenLaunch() {
             {pplBalance !== null ? (
               <div className="sm:col-span-2">
                 <dt className="text-xs text-ink-3">{form.balance}</dt>
-                <dd className="text-ink">{formatPplWei(pplBalance)} PPL</dd>
+                <dd className="text-ink" title={`${formatPplExact(pplBalance)} PPL`}>{formatPplDisplay(pplBalance)} PPL</dd>
               </div>
             ) : null}
           </dl>

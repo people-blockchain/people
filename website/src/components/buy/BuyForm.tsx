@@ -21,7 +21,8 @@ import {
   saleTokenAddress,
   type SaleStableSymbol,
 } from "@/lib/sale/config";
-import { parseUsdAmount } from "@/lib/sale/amount";
+import { parseUsd6Amount, parseUsdAmount } from "@/lib/sale/amount";
+import { formatPplExact } from "@/lib/asset-amounts";
 import { quoteBuy } from "@/lib/sale/curve";
 import { fillCopy, intlLocale, ppl, pricePerPpl, usd } from "@/lib/sale/format";
 import type { SalePhase } from "@/lib/sale/sale-state";
@@ -168,8 +169,15 @@ export function BuyForm({
     }
     if (!provider || !parsed.ok || !payToken) return;
     setSwitchFailed(false);
-    await buy({ provider, account: evmAddress as Address, token: payToken, amountUsd: parsed.value });
-  }, [connected, openWalletModal, provider, parsed, buy, evmAddress, payToken]);
+    const amountIn = parseUsd6Amount(amount, 2);
+    await buy({
+      provider,
+      account: evmAddress as Address,
+      token: payToken,
+      amountUsd: parsed.value,
+      ...(amountIn !== null ? { amountIn } : {}),
+    });
+  }, [connected, openWalletModal, provider, parsed, buy, evmAddress, payToken, amount]);
 
   // Once the bridged/swapped USDC has arrived on Base the form is only prepared: the amount is filled
   // in and the main button turns into "Buy on <chain>". Nothing is ever signed or sent without a click
@@ -341,7 +349,7 @@ export function BuyForm({
       case "pending":
         return t.form.stepPending;
       case "done":
-        return fillCopy(t.form.success, { ppl: ppl(Number(status.pplOut) / 1e18, lang) });
+        return fillCopy(t.form.success, { ppl: formatPplExact(status.pplOut) });
       case "error":
         return status.reason === "txFailed"
           ? fillCopy(t.form.txFailed, { reason: status.detail ?? "" })

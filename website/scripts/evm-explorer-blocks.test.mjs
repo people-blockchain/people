@@ -41,7 +41,7 @@ test('recent transaction scan stops at requested count and returns real values',
     { hash: 'tx', value: '0xde0b6b3a7640000', blockNumber: '0x2' },
   ] }));
   const txs = await fetchRecentTransactions(1);
-  assert.equal(rpc.calls.length, 2); assert.equal(txs[0].amount, 1); assert.equal(txs[0].blockHeight, 2);
+  assert.equal(rpc.calls.length, 2); assert.equal(txs[0].amountWei, "1000000000000000000"); assert.equal(txs[0].blockHeight, 2);
 });
 
 

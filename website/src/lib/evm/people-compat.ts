@@ -140,6 +140,8 @@ const TOKEN_IMAGE_BUDGET_MS = 1_200;
 
 type AddressBalanceBody = {
   balance?: number;
+  /** Exact native balance in wei, alongside the human `balance` number. */
+  balanceWei?: string;
   nonce: number;
   balances: Record<string, number>;
   outgoingTxs: number;
@@ -1076,7 +1078,7 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
     const nonce = nonceResult.ok ? nonceResult.value : 0;
     const partial = !native.ok || !nonceResult.ok || tokenBalances.partial || deadlineExpired(deadline);
     const body: AddressBalanceBody = {
-      ...(balance === undefined ? {} : { balance }),
+      ...(balance === undefined || !native.ok ? {} : { balance, balanceWei: native.value.toString() }),
       nonce,
       balances: { ...(balance === undefined ? {} : { ppl: balance }), ...tokenBalances.balances },
       outgoingTxs: nonce,

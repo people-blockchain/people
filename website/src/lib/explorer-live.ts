@@ -5,6 +5,8 @@ export interface LiveTransaction {
   to?: string;
   amount?: number;
   fee?: number;
+  amountWei?: string;
+  feeWei?: string;
   blockHeight?: number;
   payload?: { memo: string };
 }
