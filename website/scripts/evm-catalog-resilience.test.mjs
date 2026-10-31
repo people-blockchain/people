@@ -22,6 +22,8 @@ const {
 const { evmJsonRpc, rpcBackoffRemainingMs } = await import("../src/lib/evm/rpc-server.ts");
 const { runWithRequestDeadline } = await import("../src/lib/evm/request-deadline.ts");
 const { readEvmDeployments } = await import("../src/lib/evm/config.ts");
+const { isHiddenAssetRow } = await import("../src/lib/hidden-assets.ts");
+const tokenCatalogBaseline = (await import("../src/data/evm-token-catalog.json", { with: { type: "json" } })).default;
 
 const db = await getDbReady();
 const dep = readEvmDeployments();
@@ -605,6 +607,151 @@ test("a fresh cache still shows a token created since, and concurrent requests s
     const burst = await Promise.all([discoverTokensOnChain(), discoverTokensOnChain(), discoverTokensOnChain()]);
     assert.ok(burst.every((tokens) => hasToken(tokens, newer)));
     assert.ok(getLogsCount() - beforeBurst <= single, "concurrent requests did not share the tail read");
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+const BASELINE_TIP = tokenCatalogBaseline.tip;
+const CREATED_AFTER_BASELINE = "0x0000000000000000000000000000000000000abc";
+const DIRECT_LOGO = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/logo.png";
+const DOCUMENT_LOGO = "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi/metadata.json";
+
+function baselineMetadata(call, metadataUri) {
+  const data = call.params?.[0]?.data;
+  if (data === SEL_METADATA_URI) return encodeString(metadataUri);
+  if (data === SEL_NAME) return encodeString("Tail Token");
+  if (data === SEL_SYMBOL) return encodeString("TAIL");
+  if (data === SEL_DECIMALS) return encodeUint(6);
+  if (data === SEL_TOTAL_SUPPLY) return encodeUint(1_000_000n);
+  if (data === SEL_CREATOR) return encodeAddress(dep.deployer ?? CREATED_AFTER_BASELINE);
+  return "0x";
+}
+
+/** Mock node whose tip sits just after the committed catalog. History before that tip must not be read. */
+async function startBaselineNode(t, { tip, metadataUri, hangGateway = false }) {
+  const fromBlocks = [];
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(tip);
+    if (call.method === "eth_call") return baselineMetadata(call, metadataUri);
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    const from = fromBlockOf(filter);
+    fromBlocks.push(from);
+    if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+    const to = toBlockOf(filter);
+    if (from <= tip && tip <= to) return [tokenLogFor(CREATED_AFTER_BASELINE, tip)];
+    return [];
+  });
+  let restoreFetch = () => {};
+  let stopGateway = () => {};
+  if (hangGateway) {
+    const originalFetch = globalThis.fetch;
+    const stop = new AbortController();
+    stopGateway = () => stop.abort();
+    globalThis.fetch = (input, init) => {
+      const url = String(input instanceof Request ? input.url : input);
+      if (url.includes("127.0.0.1")) return originalFetch(input, init);
+      return new Promise((resolve, reject) => {
+        const abort = () => reject(new DOMException("aborted", "AbortError"));
+        if (init?.signal?.aborted || stop.signal.aborted) {
+          abort();
+          return;
+        }
+        init?.signal?.addEventListener("abort", abort, { once: true });
+        stop.signal.addEventListener("abort", abort, { once: true });
+      });
+    };
+    restoreFetch = () => {
+      globalThis.fetch = originalFetch;
+    };
+  }
+  t.after(() => {
+    stopGateway();
+    restoreFetch();
+  });
+  return { fromBlocks };
+}
+
+function assertBaselineListed(tokens) {
+  assert.equal(catalogListIsPartial(tokens), false);
+  assert.ok(
+    tokens.some((token) => token.tokenAddress.toLowerCase() === CREATED_AFTER_BASELINE),
+    "token created after the baseline tip is missing",
+  );
+  for (const row of tokenCatalogBaseline.tokens) {
+    if (isHiddenAssetRow(row)) continue;
+    assert.ok(
+      tokens.some((token) => token.tokenAddress.toLowerCase() === row.tokenAddress.toLowerCase()),
+      row.symbol,
+    );
+  }
+}
+
+test("baseline plus the tail is the full list without walking history", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const tip = BASELINE_TIP + 40;
+  const { fromBlocks } = await startBaselineNode(t, { tip, metadataUri: DIRECT_LOGO });
+  resetChainCatalogCacheForTests();
+  try {
+    const started = Date.now();
+    const tokens = await discoverTokensOnChain();
+    const elapsed = Date.now() - started;
+    assertBaselineListed(tokens);
+    assert.ok(fromBlocks.length > 0, "expected a post-baseline getLogs");
+    assert.ok(fromBlocks.every((from) => from > BASELINE_TIP), `history walk from ${Math.min(...fromBlocks)}`);
+    const created = tokens.find((token) => token.tokenAddress.toLowerCase() === CREATED_AFTER_BASELINE);
+    assert.match(String(created?.imageUri), /^https:\/\//);
+    const withLogo = tokens.filter((token) => /^https?:\/\//.test(token.imageUri ?? ""));
+    assert.ok(withLogo.length > 1, "baseline rows did not get image URLs");
+    assert.ok(elapsed < 3_000, `baseline catalog took ${elapsed} ms`);
+  } finally {
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("a failed snapshot write still returns the full in-memory list and logs once", async (t) => {
+  await db.delete(evmLogScanCursors);
+  setDatabaseConfiguredForTests(false);
+  const tip = BASELINE_TIP + 2_000;
+  await startBaselineNode(t, { tip, metadataUri: DIRECT_LOGO });
+  const warnings = [];
+  t.mock.method(console, "warn", (...args) => {
+    warnings.push(args.map(String).join(" "));
+  });
+  resetChainCatalogCacheForTests();
+  try {
+    const first = await discoverTokensOnChain();
+    const second = await discoverTokensOnChain();
+    assertBaselineListed(first);
+    assertBaselineListed(second);
+    const snapshotWarnings = warnings.filter((line) => line.includes("catalog snapshot write") && line.includes("write_failed"));
+    const cursorWarnings = warnings.filter((line) => line.includes("cursor persist") && line.includes("write_failed"));
+    assert.equal(snapshotWarnings.length, 1, warnings.join("\n"));
+    assert.equal(cursorWarnings.length, 1, warnings.join("\n"));
+  } finally {
+    setDatabaseConfiguredForTests(true);
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("a slow metadata gateway does not mark the catalog partial or hold the list", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const tip = BASELINE_TIP + 40;
+  await startBaselineNode(t, { tip, metadataUri: DOCUMENT_LOGO, hangGateway: true });
+  resetChainCatalogCacheForTests();
+  try {
+    const started = Date.now();
+    const tokens = await Promise.race([
+      discoverTokensOnChain(),
+      sleep(4_000).then(() => null),
+    ]);
+    const elapsed = Date.now() - started;
+    assert.ok(tokens, "a slow metadata gateway held the catalog");
+    assertBaselineListed(tokens);
+    const created = tokens.find((token) => token.tokenAddress.toLowerCase() === CREATED_AFTER_BASELINE);
+    assert.match(String(created?.imageUri), /metadata\.json/);
+    assert.ok(elapsed < 3_000, `catalog waited ${elapsed} ms on the gateway`);
   } finally {
     resetChainCatalogCacheForTests();
   }

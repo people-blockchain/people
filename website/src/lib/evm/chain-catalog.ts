@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getAddress, formatUnits } from "viem";
+import tokenCatalogBaseline from "@/data/evm-token-catalog.json" with { type: "json" };
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
@@ -784,8 +785,8 @@ async function fetchLogsWindowedCore(
     if (await writeLogScanCursor(address, cursorTopic, end, logs)) {
       persistedThrough = end;
     } else {
-      // Stop retrying the DB for this scan after the first failure; the next call retries.
-      warnCatalog("cursor persist", "write_failed", { address: address.toLowerCase(), through: end });
+      // The windows already read stay in memory. Stop retrying the DB for this scan; log once.
+      warnCatalogOnce("cursor persist", "write_failed", { address: address.toLowerCase(), through: end });
       persistCursor = false;
     }
   };
@@ -1034,6 +1035,7 @@ export function resetChainCatalogCacheForTests(): void {
   tokenCatalogTailPublish = null;
   persistedTokens = null;
   persistedTokenCount = 0;
+  catalogWarnOnce.clear();
   tokenMetadataCache.clear();
   tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
   windowLogsCache.clear();
@@ -1456,6 +1458,123 @@ function isCatalogTokenRow(value: unknown): value is CatalogToken {
 let persistedTokens: Promise<CatalogToken[]> | null = null;
 /** Row count of the stored snapshot, so a scan only writes it back when the list grew. */
 let persistedTokenCount = 0;
+/** Write failures are logged once per process. Repeating them does not change the in-memory list. */
+const catalogWarnOnce = new Set<string>();
+
+function warnCatalogOnce(scope: string, error: unknown, context: Record<string, string | number | boolean> = {}): void {
+  if (catalogWarnOnce.has(scope)) return;
+  catalogWarnOnce.add(scope);
+  warnCatalog(scope, error, context);
+}
+
+type BaselineToken = {
+  tokenAddress: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  totalSupply: number;
+};
+
+/**
+ * History already walked up to this tip. A request only re-reads factory logs after it.
+ * The chain tip has to be at least this block; a shorter test chain keeps the full walk.
+ */
+function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToken> } | null {
+  const tip = tokenCatalogBaseline.tip;
+  const tokens = tokenCatalogBaseline.tokens;
+  if (typeof tip !== "number" || tip <= 0 || !Array.isArray(tokens) || tokens.length === 0) return null;
+  const byAddress = new Map<string, BaselineToken>();
+  for (const row of tokens) {
+    if (!row || typeof row.tokenAddress !== "string") continue;
+    try {
+      const tokenAddress = getAddress(row.tokenAddress);
+      byAddress.set(tokenAddress.toLowerCase(), {
+        tokenAddress,
+        name: typeof row.name === "string" ? row.name : "",
+        symbol: typeof row.symbol === "string" ? row.symbol : "",
+        decimals: typeof row.decimals === "number" && row.decimals > 0 ? row.decimals : 18,
+        totalSupply: typeof row.totalSupply === "number" && Number.isFinite(row.totalSupply) ? row.totalSupply : 0,
+      });
+    } catch {
+      // Skip a malformed baseline row; the log scan can still find the token.
+    }
+  }
+  return byAddress.size ? { tip, byAddress } : null;
+}
+
+/** Raises each factory to the first block after the baseline and drops ranges that end before it. */
+function scansAfterBaseline(scans: TokenFactoryScan[], floor: number): TokenFactoryScan[] {
+  return scans
+    .map((scan) => ({ ...scan, fromBlock: Math.max(scan.fromBlock, floor) }))
+    .filter((scan) => scan.toBlock === undefined || scan.fromBlock <= scan.toBlock);
+}
+
+function rowsFromBaseline(baseline: { byAddress: Map<string, BaselineToken> }, dep: ReturnType<typeof readEvmDeployments>): CatalogToken[] {
+  const rows: CatalogToken[] = [];
+  for (const row of baseline.byAddress.values()) {
+    const assetId = resolveLogicalAssetId(row.tokenAddress);
+    const seed = seedAssetMeta(assetId);
+    const cached = tokenMetadataCache.get(row.tokenAddress.toLowerCase());
+    tokenMetadataCache.set(row.tokenAddress.toLowerCase(), {
+      ...cached,
+      name: cached?.name || row.name,
+      symbol: cached?.symbol || row.symbol,
+      decimals: cached?.decimals ?? row.decimals,
+    });
+    const impersonates = seed ? undefined : curatedAssetKeys().get((row.symbol || row.name).trim().toLowerCase());
+    rows.push(enrichAssetRow({
+      assetId,
+      tokenAddress: row.tokenAddress,
+      name: seed?.name ?? (row.name || assetId.slice(0, 10)),
+      symbol: seed?.symbol ?? (row.symbol || "TKN"),
+      decimals: seed?.decimals ?? row.decimals,
+      totalSupply: row.totalSupply,
+      creator: dep.deployer || "0x0",
+      status: "active",
+      type: "token",
+      verified: Boolean(seed),
+      ...(impersonates && impersonates !== assetId ? { impersonates } : {}),
+    }));
+  }
+  return rows;
+}
+
+/**
+ * Logo URLs for tokens the baseline already named. One `metadataURI` batch, no gateway read.
+ * A miss leaves the row in place and does not make the catalog partial.
+ */
+async function attachBaselineImages(
+  rows: CatalogToken[],
+  deadlineAt?: number,
+  signal?: AbortSignal,
+): Promise<{ rows: CatalogToken[]; uris: Map<string, string> }> {
+  const uris = new Map<string, string>();
+  if (!rows.length) return { rows, uris };
+  const tokens = rows.map((row) => getAddress(row.tokenAddress));
+  let raw: Array<string | null>;
+  try {
+    raw = await evmJsonRpcBatch<string>(
+      tokens.map((token) => ({ method: "eth_call", params: [{ to: token, data: SEL_METADATA_URI }, "latest"] })),
+      {
+        ignoreBackoff: true,
+        timeoutMs: boundedTimeoutMs(2_500, deadlineAt),
+        deadlineAt,
+        signal,
+      },
+    );
+  } catch (error) {
+    warnCatalog("baseline images", error, { tokens: tokens.length });
+    return { rows, uris };
+  }
+  const next = rows.map((row, index) => {
+    const word = raw[index];
+    if (word == null) return row;
+    const uri = word === "0x" ? "" : decodeErc20String(word, METADATA_URI_MAX_LENGTH);
+    uris.set(row.tokenAddress.toLowerCase(), uri);
+    return applyTokenImage(row, undefined, immediateTokenImageUrl(uri));
+  });
+  return { rows: next, uris };
+}
 
 function loadPersistedTokens(): Promise<CatalogToken[]> {
   if (!persistedTokens) {
@@ -1479,12 +1598,18 @@ function loadPersistedTokens(): Promise<CatalogToken[]> {
 
 async function persistCatalogSnapshot(tokens: CatalogToken[], tip: number, force = false): Promise<void> {
   if (!tokens.length || (!force && tokens.length <= persistedTokenCount)) return;
-  if (await writeCatalogSnapshot(tip, tokens)) {
-    persistedTokenCount = tokens.length;
-    persistedTokens = Promise.resolve(tokens);
-  } else {
-    warnCatalog("catalog snapshot write", "write_failed", { tokens: tokens.length });
+  const previous = persistedTokens;
+  const wrote = await writeCatalogSnapshot(tip, tokens);
+  const prior = previous ? await previous.catch(() => [] as CatalogToken[]) : [];
+  const merged = mergeTokenRows(prior, tokens);
+  // The DB is optional. A failed write must not drop the list this process already built.
+  persistedTokens = Promise.resolve(merged);
+  if (wrote) {
+    persistedTokenCount = merged.length;
+    return;
   }
+  warnCatalogOnce("catalog snapshot write", "write_failed", { tokens: tokens.length });
+  if (force) persistedTokenCount = Math.max(persistedTokenCount, merged.length);
 }
 
 function addLogTokenAddresses(addresses: Set<string>, logs: readonly RpcLog[]): boolean {
@@ -1533,27 +1658,40 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const factory = dep.contracts.tokenFactory;
   if (!factory) return { tokens: [], complete: true };
 
+  // Everything a previous scan or instance found is the floor of this scan's result.
+  const savedRows = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? []);
+  const tip = await readChainTip(deadlineAt, signal);
+  const fileBaseline = readTokenBaseline();
+  // Below the committed tip the file is a future snapshot (tests use a short chain). At or after
+  // it, factory logs before the tip are already in the file, so this request only reads the gap.
+  const baselineUsable = Boolean(fileBaseline && tip !== null && tip >= fileBaseline.tip);
+  let scans = tokenFactoryScans();
+  if (baselineUsable && fileBaseline) scans = scansAfterBaseline(scans, fileBaseline.tip + 1);
   // Tokens launched on earlier stacks (`tokenFactoryVn`) stay on their old contracts but must
   // keep showing up in the catalog. Each superseded factory stops at its successor's start block;
   // both event signatures are OR-ed into one getLogs filter per window.
-  // Current factory first (tail, then history newest-first), then superseded factories whose
-  // history is immutable and shared through the existing 24h cache.
-  const scans = tokenFactoryScans();
+  // Current factory first (tail, then history), then superseded factories. A usable baseline has
+  // already dropped factories that ended before the tip.
   const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
   const ordered = current ? [current, ...scans.filter((scan) => scan !== current).reverse()] : [];
   const addresses = staticTokenAddresses(dep);
+  const baselineRows = baselineUsable && fileBaseline ? rowsFromBaseline(fileBaseline, dep) : [];
+  for (const row of baselineRows) addresses.add(row.tokenAddress.toLowerCase());
+  const baselineKeys = new Set(baselineRows.map((row) => row.tokenAddress.toLowerCase()));
   const generation = ++tokenCatalogScanGeneration;
   let resolveTail!: () => void;
   const tailReady = new Promise<void>((resolve) => {
     resolveTail = resolve;
   });
   tokenCatalogTailReady = { generation, promise: tailReady };
-
-  // Everything a previous scan or instance found is the floor of this scan's result.
-  const baseline = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? []);
-  tokenCatalogProgress = { addresses: new Set(addresses), tokens: mergeTokenRows(staticTokenRows(dep), baseline) };
-
-  const tip = await readChainTip(deadlineAt, signal);
+  tokenCatalogProgress = {
+    addresses: new Set(addresses),
+    tokens: mergeTokenRows(staticTokenRows(dep), savedRows, baselineRows),
+  };
+  // Logos for the committed rows start now, in parallel with the short post-baseline log read.
+  const imagesPromise = baselineRows.length
+    ? attachBaselineImages(baselineRows, deadlineAt, signal)
+    : Promise.resolve({ rows: [] as CatalogToken[], uris: new Map<string, string>() });
   let progressBuilding: Promise<void> | null = null;
   let progressDirty = false;
   const refreshProgress = () => {
@@ -1564,8 +1702,9 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
         progressDirty = false;
         const snapshot = new Set(addresses);
         try {
-          const built = await buildTokenRows(snapshot, deadlineAt, signal);
-          const tokens = mergeTokenRows(baseline, built.rows);
+          const pending = baselineUsable ? [...snapshot].filter((addr) => !baselineKeys.has(addr)) : [...snapshot];
+          const built = await buildTokenRows(pending, deadlineAt, signal);
+          const tokens = mergeTokenRows(savedRows, baselineRows, built.rows);
           tokenCatalogProgress = { addresses: snapshot, tokens };
           rememberCatalog(tokens, true, tip);
         } catch (error) {
@@ -1662,10 +1801,11 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
           windowBlocks: CATALOG_LOG_WINDOW_BLOCKS,
           tip,
           onWindowLogs: (logs) => {
-            if (addLogTokenAddresses(addresses, logs)) refreshProgress();
+            if (addLogTokenAddresses(addresses, logs) && !baselineUsable) refreshProgress();
           },
-          // Publish the tail rows before the cold request returns, even if history is slow.
-          onTailReady: isCurrent
+          // Without a baseline, publish the tail before a long history walk finishes. With one,
+          // the cold request waits for the short gap so the answer is the full list.
+          onTailReady: isCurrent && !baselineUsable
             ? (ok, historyPending) => {
                 tailWindowsOk = ok;
                 tailHistoryPending = Boolean(historyPending);
@@ -1676,7 +1816,7 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
       );
       if (!result.complete) complete = false;
       failedWindows += result.failedWindows ?? 0;
-      if (addLogTokenAddresses(addresses, result.logs)) refreshProgress();
+      if (addLogTokenAddresses(addresses, result.logs) && !baselineUsable) refreshProgress();
     } catch (error) {
       // One factory must never blank the catalog; the other factories' tokens still show.
       warnCatalog("factory scan", error, { factory: scan.key, address: scan.address.toLowerCase() });
@@ -1685,19 +1825,27 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
       if (isCurrent && tailWindowsOk === null) tailWindowsOk = false;
     } finally {
       // A failed current factory must not leave a cold request waiting for a tail that never comes.
-      if (isCurrent) await publishTail();
+      // A baseline scan answers once, after the gap and the logo batch, not at the first tail window.
+      if (isCurrent && !baselineUsable) await publishTail();
     }
   }
-  await publishTail();
+  if (!baselineUsable) await publishTail();
 
   if (progressBuilding) await progressBuilding;
-  const built = await buildTokenRows(addresses, deadlineAt, signal);
+  const imaged = await imagesPromise;
+  const freshAddresses = baselineUsable ? [...addresses].filter((addr) => !baselineKeys.has(addr)) : [...addresses];
+  const built = await buildTokenRows(freshAddresses, deadlineAt, signal);
   if (!built.complete) complete = false;
-  // The result never drops a token an earlier scan (or instance) already knew about.
-  const tokens = mergeTokenRows(baseline, built.rows);
+  // The result never drops a token an earlier scan, the saved snapshot, or the committed baseline.
+  const tokens = mergeTokenRows(savedRows, imaged.rows, built.rows);
   tokenCatalogProgress = { addresses: new Set(addresses), tokens };
   rememberCatalog(tokens, !complete, tip);
+  scheduleCatalogImages(imaged.rows, imaged.uris);
   await persistCatalogSnapshot(tokens, tip ?? 0, complete);
+  if (baselineUsable) {
+    tokenCatalogTailPublish = { generation, ok: complete && tip !== null };
+    resolveTail();
+  }
   if (!complete) {
     const elapsedMs = Date.now() - startedAt;
     console.warn(
@@ -1734,7 +1882,9 @@ async function loadTokens(): Promise<CatalogToken[]> {
     }
     // Keep the union even if the shared cache handed us a smaller list.
     value = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? [], value);
-    const tip = partial ? tokensCache?.tip : await readChainTip();
+    // The scan already stored the tip it read. Asking the node again races the request teardown
+    // and is what sent a cold answer back to the public RPC after the mock was gone.
+    const tip = typeof tokensCache?.tip === "number" ? tokensCache.tip : partial ? undefined : await readChainTip();
     // Image fills land on the cache while the tip read is in flight. Merging again keeps them.
     value = mergeTokenRows(value, tokensCache?.value ?? []);
     if (catalogWriteGeneration !== catalogGeneration) return value;
