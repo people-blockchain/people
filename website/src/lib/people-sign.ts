@@ -34,11 +34,19 @@ export function generateFactoryKey(): FactoryKeyPair {
   return keyFromPrivate(privateKey);
 }
 
+/** Trim, optional 0x/0X, upper or lower hex. Anything else is not a key. */
+export function normalizePrivateKeyHex(privateKey: string): string {
+  const hex = privateKey.trim().replace(/^0x/i, "");
+  if (!/^[0-9a-fA-F]{64}$/.test(hex)) throw new Error("invalid_private_key");
+  return hex.toLowerCase();
+}
+
 export function keyFromPrivate(privateKeyHex: string): FactoryKeyPair {
-  const secretKey = hexToBytes(privateKeyHex.replace(/^0x/, ""));
+  const secretHex = normalizePrivateKeyHex(privateKeyHex);
+  const secretKey = hexToBytes(secretHex);
   const publicKey = bytesToHex(secp.getPublicKey(secretKey, true));
   return {
-    privateKey: bytesToHex(secretKey),
+    privateKey: secretHex,
     publicKey,
     address: walletAddressFromPublicKey(publicKey),
   };
