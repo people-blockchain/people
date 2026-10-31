@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Ví đã kết nối để xem. Trang này không nhập khóa. Hãy gửi từ ứng dụng ví.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Đăng nhập mất quá nhiều thời gian. Hãy kiểm tra kết nối và thử lại.",
   "signInRetry": "Thử lại",
@@ -150,5 +151,8 @@
   "install": "Cài đặt",
   "signInGoogle": "Đăng nhập bằng Google",
   "back": "Quay lại",
-  "openWallet": "Mở {wallet}"
+  "openWallet": "Mở {wallet}",
+  "nftHistoryLoading": "Đang tải lịch sử",
+  "nftHistoryError": "Không tải được lịch sử NFT.",
+  "nftHistoryRetry": "Thử lại"
 }

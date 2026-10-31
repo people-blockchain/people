@@ -196,7 +196,10 @@ export function NftList({ initialNfts }: { initialNfts?: NftRow[] } = {}) {
                   <div className="flex min-w-0 justify-between gap-3">
                     <dt className="text-ink-3">{t.collection}</dt>
                     <dd className="min-w-0 truncate text-right">
-                      <Link href={`/explorer/address/${nft.collection}`} className="font-mono text-xs text-brand hover:underline">
+                      <Link
+                        href={nft.onChainTokenId ? `/nft/${nft.collection}/${nft.onChainTokenId}` : `/explorer/address/${nft.collection}`}
+                        className="font-mono text-xs text-brand hover:underline"
+                      >
                         {nft.onChainTokenId ? `${t.tokenId} #${nft.onChainTokenId}` : nft.collection}
                       </Link>
                     </dd>

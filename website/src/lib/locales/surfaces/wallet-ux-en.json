@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Viewing a connected wallet. This page does not import your key. Send from your wallet app.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Sign-in took too long. Check your connection and try again.",
   "signInRetry": "Try again",
@@ -150,5 +151,8 @@
   "install": "Install",
   "signInGoogle": "Sign in with Google",
   "back": "Back",
-  "openWallet": "Open {wallet}"
+  "openWallet": "Open {wallet}",
+  "nftHistoryLoading": "Loading history",
+  "nftHistoryError": "Couldn't load NFT history.",
+  "nftHistoryRetry": "Retry"
 }

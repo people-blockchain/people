@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createDraftStore, isResumable, planResume } from "../src/lib/nft-mint-draft.ts";
+import {
+  applyConfirmedMint,
+  createDraftStore,
+  isResumable,
+  planResume,
+  releaseMintAttempt,
+  shouldReleaseAttempt,
+  showsResumeNotice,
+} from "../src/lib/nft-mint-draft.ts";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
 const base = () => ({
@@ -44,6 +52,51 @@ test("stablecoin payment is paid once: a pay hash is awaited, a finished payment
 
 test("a done draft only shows the result", () => {
   assert.deepEqual(planResume({ ...base(), status: "done", mintTx: "0x2", collection: "0xabc" }), ["show_result"]);
+});
+
+test("success and a finished failure clear the in-progress notice", () => {
+  const open = {
+    ...base(),
+    status: "in_progress",
+    collection: "0xabc",
+    createTx: "0x1",
+    mintTx: "0x2",
+    mintAttempted: true,
+  };
+  assert.equal(showsResumeNotice(open, false), true);
+  // The click that is already running is guarded by the lock, not by this notice.
+  assert.equal(showsResumeNotice(open, true), false);
+  const done = applyConfirmedMint(open, "0", "0x2");
+  assert.equal(done.status, "done");
+  assert.equal(showsResumeNotice(done, false), false);
+  assert.equal(isResumable(done), false);
+  const failed = releaseMintAttempt(open, true);
+  assert.equal(failed.status, "saved");
+  assert.equal(failed.mintAttempted, false);
+  assert.equal(failed.mintTx, undefined);
+  assert.equal(failed.collection, "0xabc");
+  assert.equal(failed.createTx, "0x1");
+  assert.equal(showsResumeNotice(failed, false), false);
+  assert.equal(shouldReleaseAttempt("wallet_rejected", open), true);
+  assert.equal(shouldReleaseAttempt("receipt_failed", open), true);
+  assert.equal(shouldReleaseAttempt("timeout", open), false);
+  assert.equal(shouldReleaseAttempt("network", open), false);
+  assert.equal(shouldReleaseAttempt("unknown", open), false);
+  assert.equal(shouldReleaseAttempt("unknown", base()), true);
+});
+
+test("a confirmed mint closes the draft so the resume notice cannot return", () => {
+  const open = { ...base(), status: "in_progress", collection: "0xabc", mintTx: "0x2", mintAttempted: true };
+  assert.equal(isResumable(open), true);
+  const done = applyConfirmedMint(open, "0", "0x2");
+  assert.equal(done.status, "done");
+  assert.equal(done.tokenId, "0");
+  assert.equal(done.mintTx, "0x2");
+  assert.equal(done.mintAttempted, false);
+  assert.equal(isResumable(done), false);
+  assert.deepEqual(planResume(done), ["show_result"]);
+  const kept = applyConfirmedMint({ ...open, mintTx: "0x2" }, "0");
+  assert.equal(kept.mintTx, "0x2");
 });
 
 test("resumable means a transaction or collection exists", () => {

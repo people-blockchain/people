@@ -260,7 +260,7 @@ export function AddressView({ address }: { address: string }) {
     outgoingTxs?: number;
   } | null>(null);
   const [txs, setTxs] = useState<Array<{ id: string; type?: string; amount?: number; fee?: number; assetId?: string; from?: string; to?: string; blockHeight?: number; payload?: Record<string, unknown> | null }>>([]);
-  const [nfts, setNfts] = useState<Array<{ nftId: string; name: string }>>([]);
+  const [nfts, setNfts] = useState<Array<{ nftId: string; name: string; collection?: string; onChainTokenId?: string }>>([]);
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [txsLoading, setTxsLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -402,7 +402,14 @@ export function AddressView({ address }: { address: string }) {
       <ul className="mt-2 space-y-1 text-sm">
         {nfts.map((nft) => (
           <li key={nft.nftId} className="font-mono">
-            {nft.name} ({nft.nftId})
+            {nft.collection && nft.onChainTokenId ? (
+              <Link href={`/nft/${nft.collection}/${nft.onChainTokenId}`} className="text-brand hover:underline">
+                {nft.name}
+              </Link>
+            ) : (
+              nft.name
+            )}{" "}
+            ({nft.nftId})
           </li>
         ))}
       </ul>
