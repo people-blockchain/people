@@ -10,6 +10,7 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { PEOPLE_EIP155_CHAIN_ID } from "@/lib/wallet-address-scheme";
+import { normalizePrivateKeyHex } from "@/lib/people-sign";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 import { buildWeb3AuthChainConfig } from "@/lib/web3auth-chain-config";
 import { SALE_CHAIN } from "@/lib/sale/config";
@@ -38,13 +39,11 @@ export function createBrowserPublicClient() {
  * returns the noble encoding, no `0x`), and the legacy signing helpers accept
  * that — but viem rejects it with "invalid private key, expected hex or 32
  * bytes, got string", which killed every EVM write from the embedded wallet
- * (native Send included). Normalize here, the one place the app hands its key
- * to viem.
+ * (native Send included). Prefix it here; the shared check lives in
+ * `normalizePrivateKeyHex`.
  */
 export function normalizePrivateKey(privateKey: string): Hex {
-  const hex = privateKey.trim().replace(/^0x/i, "");
-  if (!/^[0-9a-fA-F]{64}$/.test(hex)) throw new Error("invalid_private_key");
-  return `0x${hex}`;
+  return `0x${normalizePrivateKeyHex(privateKey)}`;
 }
 
 export function createEmbeddedWalletClient(privateKey: string) {

@@ -38,7 +38,6 @@
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:82
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:89
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:96
-
 # Findings in other pushed branches scanned by CI (full clone): public token addresses in tests/catalog, and an env var NAME (not a value)
 1a11fb2e65bb10b79cedd45f90404e73f25ba610:website/scripts/wallet-send.test.mjs:generic-api-key:30
 4388287df58dcea0a0bc8db6bfeb5200f22d9cd8:website/scripts/wallet-holdings.test.mjs:generic-api-key:25
