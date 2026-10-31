@@ -90,7 +90,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         vm.expectEmit(true, true, false, true, address(hub));
         emit MainnetReturnConsumed(id, hub.personOf(alice), ppl);
         vm.prank(alice);
-        uint256 out = hub.sellBack(ppl, 0, id, deadline, sig);
+        uint256 out = hub.sellBack(ppl, 0, id, deadline, ppl, sig);
 
         assertEq(out, payout);
         assertEq(gross - fee, payout);
@@ -104,17 +104,17 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         uint256 ppl = hub.pplOf(alice) / 10;
         (bytes32 id, uint256 deadline, bytes memory sig) = _sellArgs(alice, ppl);
         vm.prank(alice);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
 
         uint256 bal = usdc.balanceOf(alice);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.ReturnUsed.selector);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         // a fresh valid signature over the same returnId does not help either
         bytes memory sig2 = _signReturn(alice, ppl, id, deadline + 1);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.ReturnUsed.selector);
-        hub.sellBack(ppl, 0, id, deadline + 1, sig2);
+        hub.sellBack(ppl, 0, id, deadline + 1, ppl, sig2);
         assertEq(usdc.balanceOf(alice), bal, "nothing paid on replay");
     }
 
@@ -124,18 +124,38 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         bytes32 id = _freshReturnId();
         uint256 deadline = _now() + 1 hours;
         bytes memory bad = _signReturnRaw(
-            0xBADBAD, address(hub), block.chainid, hub.personOf(alice), alice, ppl, PEOPLE_CHAIN_ID, id, deadline
+            0xBADBAD,
+            address(hub),
+            block.chainid,
+            hub.personOf(alice),
+            address(hub),
+            alice,
+            ppl,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, bad);
+        hub.sellBack(ppl, 0, id, deadline, ppl, bad);
         // the Verification signer is not the return signer
         bytes memory byVerifier = _signReturnRaw(
-            verifierPk, address(hub), block.chainid, hub.personOf(alice), alice, ppl, PEOPLE_CHAIN_ID, id, deadline
+            verifierPk,
+            address(hub),
+            block.chainid,
+            hub.personOf(alice),
+            address(hub),
+            alice,
+            ppl,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, byVerifier);
+        hub.sellBack(ppl, 0, id, deadline, ppl, byVerifier);
         assertFalse(hub.returnUsed(id), "failed attempt does not burn the id");
     }
 
@@ -147,40 +167,43 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         bytes memory sig = _signReturn(alice, ppl, id, deadline);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.Expired.selector);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
 
         // deadline == now is still valid
         deadline = _now();
         sig = _signReturn(alice, ppl, id, deadline);
         vm.prank(alice);
-        assertGt(hub.sellBack(ppl, 0, id, deadline, sig), 0);
+        assertGt(hub.sellBack(ppl, 0, id, deadline, ppl, sig), 0);
     }
 
     function test_a1_disabledReverts() public {
         _holder(alice, 100_000e6, 1, MAX_BUY);
         uint256 ppl = hub.pplOf(alice) / 10;
-        (bytes32 id, uint256 deadline, bytes memory sig) = _sellArgs(alice, ppl);
-
         vm.prank(owner);
-        hub.setReturnVerifier(address(0));
+        bytes32 off = hub.queueSetReturnVerifier(address(0));
+        vm.warp(_now() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetReturnVerifier(off);
         assertEq(hub.returnVerifier(), address(0));
+        (bytes32 id, uint256 deadline, bytes memory sig) = _sellArgs(alice, ppl);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.SellBackDisabled.selector);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         // an empty / garbage signature must not match address(0) either
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.SellBackDisabled.selector);
-        hub.sellBack(ppl, 0, id, deadline, new bytes(65));
+        hub.sellBack(ppl, 0, id, deadline, ppl, new bytes(65));
 
         // default of a fresh hub is disabled
         HubV2Harness fresh = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
         assertEq(fresh.returnVerifier(), address(0));
 
-        // re-enabling restores it
-        vm.prank(owner);
-        hub.setReturnVerifier(returnVerifier);
+        // re-enabling restores it (the earlier signature expired across the timelock)
+        _installReturnVerifier(hub, returnVerifier);
+        deadline = _now() + 1 hours;
+        sig = _signReturn(alice, ppl, id, deadline);
         vm.prank(alice);
-        assertGt(hub.sellBack(ppl, 0, id, deadline, sig), 0);
+        assertGt(hub.sellBack(ppl, 0, id, deadline, ppl, sig), 0);
     }
 
     function test_a1_otherHubDomainReverts() public {
@@ -194,15 +217,17 @@ contract PplCurveHubV2AuditTest is HubV2Base {
             address(other),
             block.chainid,
             hub.personOf(alice),
+            address(other),
             alice,
             ppl,
             PEOPLE_CHAIN_ID,
+            block.chainid,
             id,
             deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
     }
 
     function test_a1_otherChainIdReverts() public {
@@ -213,11 +238,11 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         vm.chainId(cid + 1);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         // back on the signed chain it is valid
         vm.chainId(cid);
         vm.prank(alice);
-        assertGt(hub.sellBack(ppl, 0, id, deadline, sig), 0);
+        assertGt(hub.sellBack(ppl, 0, id, deadline, ppl, sig), 0);
     }
 
     function test_a1_wrongFieldsRevert() public {
@@ -229,50 +254,91 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         bytes32 pid = hub.personOf(alice);
 
         // signed for another seller (bob) but alice calls
-        bytes memory forBob =
-            _signReturnRaw(returnVerifierPk, address(hub), block.chainid, pid, bob, ppl, PEOPLE_CHAIN_ID, id, deadline);
+        bytes memory forBob = _signReturnRaw(
+            returnVerifierPk,
+            address(hub),
+            block.chainid,
+            pid,
+            address(hub),
+            bob,
+            ppl,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            deadline
+        );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forBob);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forBob);
 
         // signed for another amount
         bytes memory forMore = _signReturnRaw(
-            returnVerifierPk, address(hub), block.chainid, pid, alice, ppl + 1, PEOPLE_CHAIN_ID, id, deadline
+            returnVerifierPk,
+            address(hub),
+            block.chainid,
+            pid,
+            address(hub),
+            alice,
+            ppl + 1,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forMore);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forMore);
 
         // signed for another source chain
         bytes memory forChain = _signReturnRaw(
-            returnVerifierPk, address(hub), block.chainid, pid, alice, ppl, PEOPLE_CHAIN_ID + 1, id, deadline
+            returnVerifierPk,
+            address(hub),
+            block.chainid,
+            pid,
+            address(hub),
+            alice,
+            ppl,
+            PEOPLE_CHAIN_ID + 1,
+            block.chainid,
+            id,
+            deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forChain);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forChain);
 
         // signed for another person
         bytes memory forPerson = _signReturnRaw(
-            returnVerifierPk, address(hub), block.chainid, hub.personOf(bob), alice, ppl, PEOPLE_CHAIN_ID, id, deadline
+            returnVerifierPk,
+            address(hub),
+            block.chainid,
+            hub.personOf(bob),
+            address(hub),
+            alice,
+            ppl,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            deadline
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forPerson);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forPerson);
 
         // signed for another returnId / deadline
         bytes memory forId = _signReturn(alice, ppl, keccak256("other"), deadline);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forId);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forId);
         bytes memory forDeadline = _signReturn(alice, ppl, id, deadline + 1);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(ppl, 0, id, deadline, forDeadline);
+        hub.sellBack(ppl, 0, id, deadline, ppl, forDeadline);
 
         // the intended one works
         bytes memory ok = _signReturn(alice, ppl, id, deadline);
         vm.prank(alice);
-        assertGt(hub.sellBack(ppl, 0, id, deadline, ok), 0);
+        assertGt(hub.sellBack(ppl, 0, id, deadline, ppl, ok), 0);
     }
 
     function test_a1_checkOrderBeforeAttestation() public {
@@ -280,31 +346,35 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         bytes memory junk = new bytes(65);
         // not verified / zero amount come before any attestation check (even with the verifier unset)
         vm.prank(owner);
-        hub.setReturnVerifier(address(0));
+        bytes32 off = hub.queueSetReturnVerifier(address(0));
+        vm.warp(_now() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetReturnVerifier(off);
         vm.prank(carol);
         vm.expectRevert(PplCurveHubV2.NotVerified.selector);
-        hub.sellBack(1e18, 0, bytes32(0), 0, junk);
+        hub.sellBack(1e18, 0, bytes32(0), 0, 1e18, junk);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.ZeroOut.selector);
-        hub.sellBack(0, 0, bytes32(0), 0, junk);
+        hub.sellBack(0, 0, bytes32(0), 0, 0, junk);
         // a bad attestation reverts before the lot check: locked/unowned PPL with junk sig -> BadSignature
-        vm.prank(owner);
-        hub.setReturnVerifier(returnVerifier);
+        _installReturnVerifier(hub, returnVerifier);
         uint256 tooMuch = hub.pplOf(alice) * 2;
         bytes memory bad = _signReturnRaw(
             0xBADBAD,
             address(hub),
             block.chainid,
             hub.personOf(alice),
+            address(hub),
             alice,
             tooMuch,
             PEOPLE_CHAIN_ID,
+            block.chainid,
             bytes32(0),
             _now()
         );
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
-        hub.sellBack(tooMuch, 0, bytes32(0), _now(), bad);
+        hub.sellBack(tooMuch, 0, bytes32(0), _now(), tooMuch, bad);
         // with a valid one the lots are what fail
         _expectSellBackRevert(alice, tooMuch, 0, PplCurveHubV2.NotEnoughUnlocked.selector);
     }
@@ -334,17 +404,21 @@ contract PplCurveHubV2AuditTest is HubV2Base {
             _warpBy(60);
         }
         vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.UnbindDenied.selector);
         hub.unbind(alice);
-        _bindTo(bob, pid); // fresh nonce
-        _fund(bob, 1_000_000e6);
-        assertEq(hub.buyRemaining24h(bob), 0, "bob inherits alice's window");
-
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0));
-        // and the unbound alice is out
         vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
+        hub.unbind(alice);
+        uint256 deadline = _now() + 1 days;
+        bytes memory forBob = _sign(bob, pid, deadline);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
+        hub.verify(pid, deadline, forBob);
+        bytes memory again = _sign(alice, pid, deadline);
+        vm.prank(alice);
+        hub.verify(pid, deadline, again);
+        assertEq(hub.buyRemaining24h(alice), 0, "the cap stays on the pinned account");
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
     }
 
@@ -584,16 +658,21 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
 
-        // rebind the person to another address: same window
+        // self-unbind hides the view, but the person window is still there after the same account re-verifies
         bytes32 pid = hub.personOf(alice);
-        vm.prank(owner);
+        vm.prank(alice);
         hub.unbind(alice);
-        _bindTo(bob, pid);
-        (uint256 b2, uint256 n2,,) = hub.usage24h(bob);
-        assertEq(b2, DAY_CAP);
-        assertEq(n2, amts.length);
         (uint256 b3, uint256 n3,,) = hub.usage24h(alice);
         assertEq(b3 + n3, 0, "unbound address has no usage");
+        _bindTo(alice, pid);
+        (uint256 b2, uint256 n2,,) = hub.usage24h(alice);
+        assertEq(b2, DAY_CAP);
+        assertEq(n2, amts.length);
+        uint256 deadline = _now() + 1 days;
+        bytes memory forBob = _sign(bob, pid, deadline);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
+        hub.verify(pid, deadline, forBob);
     }
 
     function test_a4_bufferFull50Buys() public {
@@ -658,17 +737,20 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         hub.setWindowLimits(20, MIN_BUY, 10, 1e6 - 1);
         vm.expectRevert(bad);
         hub.setWindowLimits(20, MIN_BUY, 10, DAY_CAP + 1);
+        uint256 maxMinSell = hub.MAX_MIN_SELL_USD6();
+        vm.expectRevert(bad);
+        hub.setWindowLimits(20, MIN_BUY, 10, maxMinSell + 1);
 
         // edges are valid
         vm.expectEmit(false, false, false, true, address(hub));
         emit WindowLimitsSet(1, 1e6, 1, 1e6);
         hub.setWindowLimits(1, 1e6, 1, 1e6);
-        hub.setWindowLimits(50, MAX_BUY, 50, DAY_CAP);
+        hub.setWindowLimits(50, MAX_BUY, 50, maxMinSell);
         vm.stopPrank();
         assertEq(hub.maxBuysPer24h(), 50);
         assertEq(hub.minBuyUsd6(), MAX_BUY);
         assertEq(hub.maxSellsPer24h(), 50);
-        assertEq(hub.minSellUsd6(), DAY_CAP);
+        assertEq(hub.minSellUsd6(), maxMinSell);
 
         vm.prank(alice);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
@@ -715,7 +797,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _expectSellBackRevert(alice, dust, 0, PplCurveHubV2.BelowMinSell.selector);
 
         // raised minimum applies to normal sells
-        _limits(20, MIN_BUY, 10, 100e6);
+        _limits(20, MIN_BUY, 10, 50e6);
         _expectSellBackRevert(alice, total / 100, 0, PplCurveHubV2.BelowMinSell.selector);
         _limits(20, MIN_BUY, 10, 1e6);
 
@@ -817,7 +899,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         vm.cool(address(hub));
         vm.prank(alice);
         g0 = gasleft();
-        hub.sellBack(ppl, 0, id, deadline, sig);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         uint256 gSell = g0 - gasleft();
         console2.log("sellBack, 10th sell entry gas", gSell);
         assertLt(gSell, 300_000, "sellBack gas");
@@ -825,7 +907,9 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
     // ================================================================ A5: person-keyed state
 
-    function test_a5_rebindSellsOldLotsFromNewAddress() public {
+    /// @dev A verifier installed after the 48h timelock cannot move lots. Owner `unbind` is refused,
+    /// and self-unbind still leaves the person pinned to the original account.
+    function test_h4_timelockedVerifierCannotTakeLots() public {
         bytes32 pid = keccak256("person-A5");
         _bindTo(alice, pid);
         _fund(alice, 1_000_000e6);
@@ -833,36 +917,85 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _buy(alice, MAX_BUY);
         _warpBy(61);
         _buy(alice, MAX_BUY);
-        uint256 lotsBefore = hub.lotCount(alice);
         uint256 pplBefore = hub.pplOf(alice);
-        assertEq(lotsBefore, 2);
         _warpBy(30 days);
+        assertEq(hub.pinnedAccount(pid), alice);
+        assertEq(hub.sellableNow(alice), pplBefore);
 
-        vm.prank(owner);
+        uint256 evilPk = 0xE417;
+        address evil = vm.addr(evilPk);
+        vm.startPrank(owner);
+        bytes32 qVerify = hub.queueSetVerifier(evil);
+        bytes32 qReturn = hub.queueSetReturnVerifier(evil);
+        vm.stopPrank();
+        vm.warp(_now() + hub.ADMIN_TIMELOCK());
+        vm.startPrank(owner);
+        hub.executeSetVerifier(qVerify);
+        hub.executeSetReturnVerifier(qReturn);
+        vm.expectRevert(PplCurveHubV2.UnbindDenied.selector);
         hub.unbind(alice);
-        _bindTo(bob, pid);
+        vm.stopPrank();
 
-        assertEq(hub.lotCount(bob), lotsBefore);
-        assertEq(hub.pplOf(bob), pplBefore);
-        assertEq(hub.pplOfPerson(pid), pplBefore);
-        assertEq(hub.sellableNow(bob), pplBefore);
-        assertEq(hub.lots(bob, 0, 2).length, 2);
+        // 48h is not a path to the reserve
+        vm.prank(owner);
+        hub.announceLiquidityRelease();
+        vm.expectRevert(PplCurveHubV2.ReleaseTimelocked.selector);
+        hub.executeLiquidityRelease();
 
-        // old address lost everything
-        assertEq(hub.pplOf(alice), 0);
-        assertEq(hub.lotCount(alice), 0);
-        assertEq(hub.sellableNow(alice), 0);
-        _expectSellBackRevert(alice, 1e18, 0, PplCurveHubV2.NotVerified.selector);
         vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
-        hub.buy(MIN_BUY, 0, alice, address(0));
+        hub.unbind(alice);
+        uint256 deadline = _now() + 1 days;
+        bytes memory steal = _signWith(evilPk, bob, pid, deadline);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
+        hub.verify(pid, deadline, steal);
+        assertEq(hub.pplOf(bob), 0);
+        assertEq(hub.sellableNow(bob), 0);
 
-        // new address sells the old lots
-        uint256 bal = usdc.balanceOf(bob);
-        uint256 payout = _sellBack(bob, pplBefore / 2, 0);
+        bytes memory back = _signWith(evilPk, alice, pid, deadline);
+        vm.prank(alice);
+        hub.verify(pid, deadline, back);
+        assertEq(hub.pplOf(alice), pplBefore);
+        assertEq(hub.sellableNow(alice), pplBefore);
+
+        bytes32 id = _freshReturnId();
+        uint256 sellDeadline = _now() + 1 hours;
+        bytes memory forBob = _signReturnRaw(
+            evilPk,
+            address(hub),
+            block.chainid,
+            pid,
+            address(hub),
+            bob,
+            pplBefore / 2,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            sellDeadline
+        );
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
+        hub.sellBack(pplBefore / 2, 0, id, sellDeadline, pplBefore / 2, forBob);
+
+        bytes memory forAlice = _signReturnRaw(
+            evilPk,
+            address(hub),
+            block.chainid,
+            pid,
+            address(hub),
+            alice,
+            pplBefore / 2,
+            PEOPLE_CHAIN_ID,
+            block.chainid,
+            id,
+            sellDeadline
+        );
+        uint256 bal = usdc.balanceOf(alice);
+        vm.prank(alice);
+        uint256 payout = hub.sellBack(pplBefore / 2, 0, id, sellDeadline, pplBefore / 2, forAlice);
         assertGt(payout, 0);
-        assertEq(usdc.balanceOf(bob) - bal, payout);
-        assertEq(hub.pplOf(bob), pplBefore - pplBefore / 2);
+        assertEq(usdc.balanceOf(alice) - bal, payout);
+        assertEq(usdc.balanceOf(bob), 0);
     }
 
     // ================================================================ A6: 50/50 split
@@ -932,10 +1065,9 @@ contract PplCurveHubV2AuditTest is HubV2Base {
     function test_a6_splitMockUsdt() public {
         MockUSDT usdt = new MockUSDT();
         hub = new HubV2Harness(address(usdt), treasury, liquidityReceiver, owner, verifier);
-        vm.startPrank(owner);
-        hub.setReturnVerifier(returnVerifier);
+        _installReturnVerifier(hub, returnVerifier);
+        vm.prank(owner);
         hub.open();
-        vm.stopPrank();
         _splitAndSellBack(address(usdt));
     }
 
@@ -1022,7 +1154,8 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
         uint256 snap = vm.snapshotState();
         assertGt(_sellBack(alice, pplExact, 0), 0);
-        assertEq(hub.sellDayGrossUsd6(), target, "exact cap consumed");
+        (uint256 usedGross,) = hub.globalSellUsed();
+        assertEq(usedGross, target, "exact cap consumed");
 
         assertTrue(vm.revertToState(snap));
         _expectSellBackRevert(alice, pplOver, 0, PplCurveHubV2.GlobalDayCap.selector);
@@ -1043,19 +1176,19 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _warpBy(60);
         _buy(alice, MAX_BUY); // $1,500 on alice
 
-        vm.prank(owner);
-        hub.unbind(alice);
-        _bindTo(bob, pid);
-        _fund(bob, 1_000_000e6);
-        assertEq(hub.buyRemaining24h(bob), DAY_CAP - 3 * MAX_BUY, "bob inherits the window");
-        _warpBy(60); // alice's cooldown belongs to the person and still applies
-        _buy(bob, MAX_BUY); // exact $2,000 across the two addresses
-        assertEq(hub.buyRemaining24h(bob), 0);
+        _warpBy(60);
+        _buy(alice, MAX_BUY); // exact $2,000 on the pinned account
+        assertEq(hub.buyRemaining24h(alice), 0);
+        uint256 bindDeadline = _now() + 1 days;
+        bytes memory forBob = _sign(bob, pid, bindDeadline);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
+        hub.verify(pid, bindDeadline, forBob);
 
         _warpBy(60); // cooldown is checked before the cap
-        vm.prank(bob);
+        vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0));
+        hub.buy(MIN_BUY, 0, alice, address(0));
 
         // a different person is not capped
         _prepare(carol);
@@ -1065,19 +1198,19 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         uint256 midnight = (_now() / 1 days + 1) * 1 days;
         assertLt(midnight, t0 + 1 days);
         vm.warp(midnight);
-        vm.prank(bob);
+        vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0));
+        hub.buy(MIN_BUY, 0, alice, address(0));
 
         vm.warp(t0 + 1 days - 1);
-        vm.prank(bob);
+        vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0));
+        hub.buy(MIN_BUY, 0, alice, address(0));
 
         vm.warp(t0 + 1 days); // only the first $500 has aged out
-        assertEq(hub.buyRemaining24h(bob), MAX_BUY);
-        _buy(bob, MAX_BUY);
-        assertEq(hub.buyRemaining24h(bob), 0);
+        assertEq(hub.buyRemaining24h(alice), MAX_BUY);
+        _buy(alice, MAX_BUY);
+        assertEq(hub.buyRemaining24h(alice), 0);
     }
 
     /// @dev $2,000 gross per person per rolling 24h on sell-back, shared by two addresses.
@@ -1103,32 +1236,28 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(_quoteGross(pplA), 1_500e6);
         uint256 t0 = _now();
         assertGt(_sellBack(alice, pplA, 0), 0);
-
-        vm.prank(owner);
-        hub.unbind(alice);
-        _bindTo(bob, pid);
-        assertEq(hub.sellRemaining24h(bob), DAY_CAP - 1_500e6, "bob inherits the sell window");
+        assertEq(hub.sellRemaining24h(alice), DAY_CAP - 1_500e6);
 
         (uint256 pplB,) = _pplAround(500e6);
-        assertLe(pplB, hub.pplOf(bob));
+        assertLe(pplB, hub.pplOf(alice));
         assertEq(_quoteGross(pplB), 500e6);
-        assertGt(_sellBack(bob, pplB, 0), 0);
-        assertEq(hub.sellRemaining24h(bob), 0, "exact $2,000");
+        assertGt(_sellBack(alice, pplB, 0), 0);
+        assertEq(hub.sellRemaining24h(alice), 0, "exact $2,000");
 
         (, uint256 pplOne) = _pplAround(0);
         assertGt(_quoteGross(pplOne), 0);
         assertEq(_quoteGross(pplOne - 1), 0);
-        assertLe(pplOne, hub.pplOf(bob));
-        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+        assertLe(pplOne, hub.pplOf(alice));
+        _expectSellBackRevert(alice, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
 
         uint256 midnight = (t0 / 1 days + 1) * 1 days;
         assertLt(midnight, t0 + 1 days);
         vm.warp(midnight);
-        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+        _expectSellBackRevert(alice, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
         vm.warp(t0 + 1 days - 1);
-        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+        _expectSellBackRevert(alice, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
         vm.warp(t0 + 1 days);
-        assertEq(hub.sellRemaining24h(bob), DAY_CAP, "both sells were at t0");
+        assertEq(hub.sellRemaining24h(alice), DAY_CAP, "both sells were at t0");
     }
 
     /// @dev Sell fee is 1.5% below 1% of the day-start reserve and 3% above, each part rounded up.
@@ -1160,8 +1289,9 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(reserveBefore - hub.reserveUsd6(), payoutLow, "reserve loses the payout only");
 
         // --- one sell split across the line; both parts round up ---
-        uint256 dayGross = hub.sellDayGrossUsd6();
-        uint256 lowRoom = line - dayGross;
+        (uint256 dayGross,) = hub.globalSellUsed();
+        uint256 lineNow = (hub.sellWindowReference() * hub.FEE_HIGH_THRESHOLD_BPS()) / 10_000;
+        uint256 lowRoom = lineNow - dayGross;
         assertGt(lowRoom % 200, 0, "low part is not a multiple of 200");
         uint256 highPart = 100_001;
         assertEq(highPart % 100, 1, "high part is not a multiple of 100");
@@ -1184,7 +1314,8 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         (, uint256 lowLeft) = hub.sellBackCapToday();
         assertEq(lowLeft, 0, "1% line used up");
         uint256 gHigh = 1_000_001;
-        assertLt(hub.sellDayGrossUsd6() + gHigh, cap);
+        (uint256 usedNow,) = hub.globalSellUsed();
+        assertLt(usedNow + gHigh, cap);
         (uint256 pplHigh,) = _pplAround(gHigh);
         assertLe(pplHigh, hub.pplOf(alice));
         assertEq(_quoteGross(pplHigh), gHigh);
@@ -1194,5 +1325,316 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         reserveBefore = hub.reserveUsd6();
         assertEq(_sellBack(alice, pplHigh, 0), payoutHigh);
         assertEq(reserveBefore - hub.reserveUsd6(), payoutHigh);
+    }
+
+    /// @dev Item 1. A sell near UTC midnight still counts until exactly t+24h. Midnight does not
+    /// free the 2% cap or the 1% fee line; t+24h-1 reverts and t+24h pays again.
+    function test_globalSellCap_rolling24hAcrossUtcMidnight() public {
+        assertEq(hub.GLOBAL_SELL_CAPACITY(), 128, "gas-bounded ring");
+        assertEq(hub.SELL_GLOBAL_CAP_BPS(), 200);
+        _seedRaised(100_000e6);
+        _prepare(alice);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(30 days);
+
+        uint256 midnight = (_now() / 1 days + 1) * 1 days;
+        vm.warp(midnight - 1 hours);
+        uint256 t0 = _now();
+        assertLt(midnight, t0 + 1 days, "sell is before the UTC midnight inside the same 24h");
+
+        uint256 target = 1_000e6;
+        (uint256 pplExact,) = _pplAround(target);
+        _alignReserve(target * 50);
+        assertGt(_sellBack(alice, pplExact, 0), 0, "exact 2% pays");
+        (, uint256 feeRoom) = hub.sellBackCapToday();
+        assertEq(feeRoom, 0, "1% fee line is the same window and is used up");
+
+        uint256 more = hub.pplOf(alice) / 20;
+        assertGt(_quoteGross(more), 0);
+        _expectSellBackRevert(alice, more, 0, PplCurveHubV2.GlobalDayCap.selector);
+
+        vm.warp(midnight);
+        _expectSellBackRevert(alice, more, 0, PplCurveHubV2.GlobalDayCap.selector);
+        (, uint256 feeAtMidnight) = hub.sellBackCapToday();
+        assertEq(feeAtMidnight, 0, "fee line does not reset at UTC midnight");
+
+        vm.warp(t0 + 1 days - 1);
+        _expectSellBackRevert(alice, more, 0, PplCurveHubV2.GlobalDayCap.selector);
+
+        vm.warp(t0 + 1 days);
+        (uint256 room,) = hub.sellBackCapToday();
+        assertEq(room, (hub.reserveUsd6() * 200) / 10_000, "cap frees at exactly t+24h");
+        assertGt(_sellBack(alice, more, 0), 0);
+    }
+
+    /// @dev Item 2. Attestation for a different amount, hub, seller or chain id does not pay,
+    /// and the same returnId cannot pay twice.
+    function test_return_replayBindsAmountHubSellerChain() public {
+        _holder(alice, 100_000e6, 1, MAX_BUY);
+        _prepare(bob);
+        uint256 ppl = hub.pplOf(alice) / 10;
+        bytes32 id = _freshReturnId();
+        uint256 deadline = _now() + 1 hours;
+        bytes32 pid = hub.personOf(alice);
+        uint256 cid = block.chainid;
+
+        bytes memory wrongAmount = _signReturnRaw(
+            returnVerifierPk, address(hub), cid, pid, address(hub), alice, ppl + 1, PEOPLE_CHAIN_ID, cid, id, deadline
+        );
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BadSignature.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, wrongAmount);
+
+        bytes memory wrongHub = _signReturnRaw(
+            returnVerifierPk, address(hub), cid, pid, address(0x1234), alice, ppl, PEOPLE_CHAIN_ID, cid, id, deadline
+        );
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BadSignature.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, wrongHub);
+
+        bytes memory wrongSeller = _signReturnRaw(
+            returnVerifierPk, address(hub), cid, pid, address(hub), bob, ppl, PEOPLE_CHAIN_ID, cid, id, deadline
+        );
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BadSignature.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, wrongSeller);
+
+        bytes memory wrongDestChain = _signReturnRaw(
+            returnVerifierPk, address(hub), cid, pid, address(hub), alice, ppl, PEOPLE_CHAIN_ID, cid + 1, id, deadline
+        );
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BadSignature.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, wrongDestChain);
+
+        bytes memory wrongSourceChain = _signReturnRaw(
+            returnVerifierPk, address(hub), cid, pid, address(hub), alice, ppl, PEOPLE_CHAIN_ID + 1, cid, id, deadline
+        );
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.BadSignature.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, wrongSourceChain);
+
+        bytes memory ok = _signReturn(alice, ppl, id, deadline);
+        vm.prank(alice);
+        assertGt(hub.sellBack(ppl, 0, id, deadline, ppl, ok), 0);
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.ReturnUsed.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, ok);
+        assertTrue(hub.returnUsed(id));
+    }
+
+    /// @dev Item 3. Verifier, return verifier and rescue wait exactly 48 hours. Non-owners cannot
+    /// queue, execute or cancel. Liquidity release stays on its 30-day notice, so 48 hours is not enough.
+    function test_adminTimelock48h_verifierReturnVerifierRescue() public {
+        assertEq(hub.ADMIN_TIMELOCK(), 48 hours);
+        bytes memory denied = abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice);
+        address next = makeAddr("nextVerifier");
+
+        vm.startPrank(alice);
+        vm.expectRevert(denied);
+        hub.queueSetVerifier(next);
+        vm.expectRevert(denied);
+        hub.executeSetVerifier(bytes32(uint256(1)));
+        vm.expectRevert(denied);
+        hub.cancel(bytes32(uint256(1)));
+        vm.expectRevert(denied);
+        hub.queueSetReturnVerifier(next);
+        vm.expectRevert(denied);
+        hub.executeSetReturnVerifier(bytes32(uint256(1)));
+        vm.expectRevert(denied);
+        hub.queueRescue(address(usdc), 0);
+        vm.expectRevert(denied);
+        hub.executeRescue(bytes32(uint256(1)));
+        vm.stopPrank();
+
+        bytes32 kind = keccak256("setVerifier");
+        bytes32 id = keccak256(abi.encode(kind, next, uint256(0), uint256(1)));
+        uint256 eta = _now() + 48 hours;
+        vm.expectEmit(true, false, false, true, address(hub));
+        emit PplCurveHubV2.Queued(id, abi.encode(kind, next, uint256(0)), eta);
+        vm.prank(owner);
+        assertEq(hub.queueSetVerifier(next), id);
+
+        vm.warp(eta - 1);
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.Timelocked.selector);
+        hub.executeSetVerifier(id);
+        vm.warp(eta);
+        vm.prank(owner);
+        hub.executeSetVerifier(id);
+        assertEq(hub.verifier(), next);
+
+        // cancel, then the cancelled id cannot execute
+        bytes32 rvKind = keccak256("setReturnVerifier");
+        address rv = makeAddr("nextReturn");
+        bytes32 rid = keccak256(abi.encode(rvKind, rv, uint256(0), uint256(2)));
+        uint256 reta = _now() + 48 hours;
+        vm.prank(owner);
+        assertEq(hub.queueSetReturnVerifier(rv), rid);
+        vm.expectEmit(true, false, false, true, address(hub));
+        emit PplCurveHubV2.Cancelled(rid);
+        vm.prank(owner);
+        hub.cancel(rid);
+        vm.warp(reta);
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.NotQueued.selector);
+        hub.executeSetReturnVerifier(rid);
+        assertEq(hub.returnVerifier(), returnVerifier);
+
+        // rescue of surplus: eta-1 reverts, eta pays treasury
+        usdc.mint(address(hub), 25e6);
+        uint256 treasuryBefore = usdc.balanceOf(treasury);
+        bytes32 rKind = keccak256("rescue");
+        bytes32 rescueId = keccak256(abi.encode(rKind, address(usdc), uint256(25e6), uint256(3)));
+        uint256 rescueEta = _now() + 48 hours;
+        vm.prank(owner);
+        assertEq(hub.queueRescue(address(usdc), 25e6), rescueId);
+        vm.warp(rescueEta - 1);
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.Timelocked.selector);
+        hub.executeRescue(rescueId);
+        vm.warp(rescueEta);
+        vm.prank(owner);
+        hub.executeRescue(rescueId);
+        assertEq(usdc.balanceOf(treasury) - treasuryBefore, 25e6);
+
+        // reserve exit is the 30-day notice, which 48 hours does not unlock
+        vm.prank(owner);
+        hub.announceLiquidityRelease();
+        uint256 announced = _now();
+        vm.warp(announced + 48 hours);
+        vm.expectRevert(PplCurveHubV2.ReleaseTimelocked.selector);
+        hub.executeLiquidityRelease();
+        assertGt(hub.LIQUIDITY_RELEASE_DELAY(), hub.ADMIN_TIMELOCK());
+    }
+
+    /// @dev Slippage does not consume the attestation. A slice can be redeemed now and the rest
+    /// after the deadline is renewed. `minUsdcOut` is the caller's, not part of the signature.
+    function test_h3_partialRenewalAndSlippage() public {
+        _holder(alice, 2_000_000e6, 2, MAX_BUY);
+        uint256 ppl = hub.pplOf(alice);
+        bytes32 id = _freshReturnId();
+        uint256 deadline = _now() + 1 hours;
+        bytes memory sig = _signReturn(alice, ppl, id, deadline);
+        (,, uint256 quoted) = hub.quoteSellBack(alice, ppl / 10);
+
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.Slippage.selector);
+        hub.sellBack(ppl / 10, quoted + 1, id, deadline, ppl, sig);
+        assertEq(hub.returnClaimedPpl(id), 0);
+        assertFalse(hub.returnUsed(id));
+
+        vm.prank(alice);
+        uint256 paid = hub.sellBack(ppl / 10, quoted, id, deadline, ppl, sig);
+        assertEq(paid, quoted);
+        assertEq(hub.returnClaimedPpl(id), ppl / 10);
+        assertFalse(hub.returnUsed(id));
+
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.ReturnExceeded.selector);
+        hub.sellBack(ppl - ppl / 10 + 1, 0, id, deadline, ppl, sig);
+
+        vm.warp(deadline + 1);
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.Expired.selector);
+        hub.sellBack(ppl / 10, 0, id, deadline, ppl, sig);
+
+        uint256 deadline2 = _now() + 1 hours;
+        bytes memory renewed = _signReturn(alice, ppl, id, deadline2);
+        vm.prank(alice);
+        assertGt(hub.sellBack(ppl / 10, 0, id, deadline2, ppl, renewed), 0);
+        assertEq(hub.returnClaimedPpl(id), (ppl / 10) * 2);
+        assertFalse(hub.returnUsed(id));
+    }
+
+    /// @dev An attested amount whose gross no longer fits the $2k person cap can still be redeemed
+    /// in slices under the same returnId.
+    function test_h3_overCapSliceStaysRedeemable() public {
+        _seedRaised(2_000_000e6);
+        _prepare(alice);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(1 days);
+        _buy(alice, MAX_BUY);
+        _warpBy(60);
+        _buy(alice, MAX_BUY);
+        _warpBy(30 days);
+
+        uint256 ppl = hub.pplOf(alice);
+        assertGt(_quoteGross(ppl), DAY_CAP, "precondition: full position is over the person cap");
+        bytes32 id = _freshReturnId();
+        uint256 deadline = _now() + 1 hours;
+        bytes memory sig = _signReturn(alice, ppl, id, deadline);
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.PersonDayCap.selector);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
+        assertEq(hub.returnClaimedPpl(id), 0);
+
+        (uint256 slice,) = _pplAround(DAY_CAP);
+        assertLe(slice, ppl);
+        assertLe(_quoteGross(slice), DAY_CAP);
+        vm.prank(alice);
+        assertGt(hub.sellBack(slice, 0, id, deadline, ppl, sig), 0);
+        assertEq(hub.returnClaimedPpl(id), slice);
+        assertFalse(hub.returnUsed(id));
+    }
+
+    /// @dev The owner cannot set minSell to the $2k cap. A position below the floor, and a sell that
+    /// exactly fills the global room, both still clear.
+    function test_m_minSellCannotDeadlock() public {
+        uint256 maxMinSell = hub.MAX_MIN_SELL_USD6();
+        vm.prank(owner);
+        hub.setWindowLimits(20, MIN_BUY, 10, maxMinSell);
+
+        _seedRaised(100_000e6);
+        _prepare(alice);
+        _buy(alice, MIN_BUY);
+        _warpBy(30 days);
+        _buy(alice, MAX_BUY);
+        uint256 unlocked = hub.sellableNow(alice);
+        assertLt(unlocked, hub.pplOf(alice));
+        (uint256 gross,,) = hub.quoteSellBack(alice, unlocked);
+        assertLt(gross, hub.minSellUsd6());
+        assertGt(_sellBack(alice, unlocked, 0), 0);
+
+        _prepare(bob);
+        _buy(bob, MAX_BUY);
+        _warpBy(30 days);
+        (uint256 fit,) = _pplAround(40e6);
+        assertLe(fit, hub.pplOf(bob));
+        uint256 exact = _quoteGross(fit);
+        _alignReserve(exact * 50);
+        assertEq((hub.sellWindowReference() * 200) / 10_000, exact);
+        assertLt(exact, hub.minSellUsd6());
+        assertGt(_sellBack(bob, fit, 0), 0);
+    }
+
+    /// @dev Many sells in one 15-minute bucket share a ring slot, so dust cannot fill all 128.
+    function test_m_globalSellsShareABucket() public {
+        vm.prank(owner);
+        hub.setWindowLimits(20, MIN_BUY, 50, 1e6);
+        _seedRaised(2_000_000e6);
+        _prepare(alice);
+        _buy(alice, MAX_BUY);
+        _warpBy(30 days);
+        (, uint256 slice) = _pplAround(5e6);
+        assertGe(_quoteGross(slice), 1e6);
+        for (uint256 i; i < 30; ++i) {
+            _sellBack(alice, slice, 0);
+        }
+        (, uint256 live) = hub.globalSellUsed();
+        assertEq(live, 1, "thirty sells, one bucket");
+        (uint256 room,) = hub.sellBackCapToday();
+        assertGt(room, 0);
+
+        vm.warp(_now() + hub.GLOBAL_SELL_BUCKET());
+        _sellBack(alice, slice, 0);
+        (, live) = hub.globalSellUsed();
+        assertEq(live, 2);
+        assertLt(live, hub.GLOBAL_SELL_CAPACITY());
     }
 }

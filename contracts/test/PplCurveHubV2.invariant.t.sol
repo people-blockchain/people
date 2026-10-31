@@ -69,6 +69,7 @@ contract HubV2Handler is Test {
     uint256 public rollingBuyViolations; // rolling-24h buy sum > cap, or live buys > maxBuysPer24h
     uint256 public rollingSellViolations; // rolling-24h sell gross > cap, or live sells > maxSellsPer24h
     uint256 public replayAccepted; // a consumed returnId paid out again
+    uint256 public globalCapViolations;
 
     // ---- curve drift (max observed)
     uint256 public maxUp; // F(raised) - sold
@@ -249,7 +250,11 @@ contract HubV2Handler is Test {
         HubV2Harness h =
             new HubV2Harness(address(u), address(0x7001), address(0x7002), address(this), vm.addr(verifierPk));
         h.open();
-        h.setReturnVerifier(vm.addr(returnPk));
+        bytes32 qid = h.queueSetReturnVerifier(vm.addr(returnPk));
+        vm.warp(vm.getBlockTimestamp() + h.ADMIN_TIMELOCK());
+        h.executeSetReturnVerifier(qid);
+        // The 48h wait is before the buy, so the hold and the bind deadline start from this timestamp.
+        uint256 opened = vm.getBlockTimestamp();
         uint256 r0 = bound(r0Seed, 0, CAP - 1_000e6);
         h.forceRaised(r0);
         uint256 res = r0 - r0 / 2;
@@ -259,7 +264,7 @@ contract HubV2Handler is Test {
 
         address a = address(uint160(0xA000 + (++_rtNonce)));
         bytes32 person = keccak256(abi.encode("rt", _rtNonce));
-        _bind(h, a, person, t0 + 1 days);
+        _bind(h, a, person, opened + 1 days);
 
         uint256 amt = bound(amtSeed, 10e6, 500e6);
         u.mint(a, amt);
@@ -268,12 +273,12 @@ contract HubV2Handler is Test {
         vm.prank(a);
         uint256 out = h.buy(amt, 0, a, address(0));
 
-        vm.warp(t0 + HOLD + bound(holdSeed, 0, 2 days));
+        vm.warp(opened + HOLD + bound(holdSeed, 0, 2 days));
         bytes32 rid = keccak256(abi.encode("rtReturn", _rtNonce));
         uint256 dl = vm.getBlockTimestamp() + 1 hours;
         bytes memory sig = _signReturn(h, a, person, out, rid, dl);
         vm.prank(a);
-        try h.sellBack(out, 0, rid, dl, sig) returns (uint256 payout) {
+        try h.sellBack(out, 0, rid, dl, out, sig) returns (uint256 payout) {
             ++rtChecks;
             if (payout > amt) {
                 ++rtViolations;
@@ -329,12 +334,14 @@ contract HubV2Handler is Test {
         bytes32 structHash = keccak256(
             abi.encode(
                 keccak256(
-                    "MainnetReturn(bytes32 personId,address seller,uint256 pplAmount,uint256 sourceChainId,bytes32 returnId,uint256 deadline)"
+                    "MainnetReturn(bytes32 personId,address hub,address seller,uint256 pplAmount,uint256 sourceChainId,uint256 destChainId,bytes32 returnId,uint256 deadline)"
                 ),
                 person,
+                address(h),
                 seller,
                 ppl,
                 uint256(97401),
+                block.chainid,
                 id,
                 deadline
             )
@@ -375,7 +382,13 @@ contract HubV2Handler is Test {
             // Router buys (recipient != buyer) do not consume own-buy slots or the cooldown. They have
             // their own count (MAX_ROUTER_BUYS_24H). The $2k amount cap stays shared.
             _logSpend(
-                _buyLog[recipient], nowTs, charged, hub.BUY_CAP_DAY_USD6(), hub.maxBuysPer24h(), true, buyer != recipient
+                _buyLog[recipient],
+                nowTs,
+                charged,
+                hub.BUY_CAP_DAY_USD6(),
+                hub.maxBuysPer24h(),
+                true,
+                buyer != recipient
             );
         } catch {}
     }
@@ -403,7 +416,7 @@ contract HubV2Handler is Test {
         uint256 dl = vm.getBlockTimestamp() + 1 hours;
         bytes memory sig = _signReturn(hub, seller, hub.personOf(seller), pplIn, rid, dl);
         vm.prank(seller);
-        try hub.sellBack(pplIn, 0, rid, dl, sig) returns (uint256 payout) {
+        try hub.sellBack(pplIn, 0, rid, dl, pplIn, sig) returns (uint256 payout) {
             ++sells;
             uint256 paid = usdc.balanceOf(seller) - bal0;
             if (paid != payout) ++payoutMismatch;
@@ -414,7 +427,7 @@ contract HubV2Handler is Test {
             _recordSell(seller, pplIn, gross, reserve0);
             // the same attestation must never pay again
             vm.prank(seller);
-            try hub.sellBack(pplIn, 0, rid, dl, sig) {
+            try hub.sellBack(pplIn, 0, rid, dl, pplIn, sig) {
                 ++replayAccepted;
             } catch {}
         } catch {}
@@ -449,6 +462,26 @@ contract HubV2Handler is Test {
         }
     }
 
+    struct GlobalSell {
+        uint64 at;
+        uint256 gross;
+        uint256 snapshot;
+    }
+
+    GlobalSell[] internal _globalSells;
+
+    /// @dev Sum of gross still inside (now-24h, now] against reserve-before-this-sell plus that sum.
+    function _noteGlobal(uint256 nowTs, uint256 gross, uint256 reserve0) internal {
+        uint256 prior;
+        for (uint256 i = _globalSells.length; i != 0; --i) {
+            if (uint256(_globalSells[i - 1].at) + 1 days <= nowTs) break;
+            prior += _globalSells[i - 1].gross;
+        }
+        uint256 ref = reserve0 + prior;
+        if (prior + gross > (ref * hub.SELL_GLOBAL_CAP_BPS()) / 10_000) ++globalCapViolations;
+        _globalSells.push(GlobalSell(uint64(nowTs), gross, ref));
+    }
+
     function _recordSell(address seller, uint256 pplIn, uint256 gross, uint256 reserve0) internal {
         uint256 nowTs = vm.getBlockTimestamp();
         uint256 day = nowTs / 1 days;
@@ -459,6 +492,7 @@ contract HubV2Handler is Test {
         }
         sellDayGross[day] += gross;
         sellUsed[seller][day] += gross;
+        _noteGlobal(nowTs, gross, reserve0);
         _logSpend(_sellLog[seller], nowTs, gross, hub.SELL_CAP_DAY_USD6(), hub.maxSellsPer24h(), false, false);
 
         // FIFO over the shadow lots; each touched lot must be older than HOLD.
@@ -701,23 +735,22 @@ contract PplCurveHubV2InvariantTest is HubV2Base {
         uint256 na = handler.actorsLength();
         for (uint256 i; i < nd; ++i) {
             uint256 day = handler.sellDays(i);
-            assertLe(
-                handler.sellDayGross(day),
-                (handler.sellDaySnapshot(day) * hub.SELL_GLOBAL_CAP_BPS()) / 10_000,
-                "global sell day cap"
-            );
             for (uint256 j; j < na; ++j) {
                 assertLe(handler.sellUsed(handler.actors(j), day), hub.SELL_CAP_DAY_USD6(), "addr sell day cap");
             }
         }
     }
 
-    /// @dev The current day's global sell-back gross never exceeds 2% of that day's reserve snapshot.
+    /// @dev Global sell-back gross over the live rolling window never exceeds 2% of
+    /// reserve + that gross (the same reference `sellBack` uses).
     function invariant_globalSellDayCap() public view {
+        assertEq(handler.globalCapViolations(), 0, "rolling 24h global sell cap");
+        (uint256 gross, uint256 live) = hub.globalSellUsed();
+        if (live == 0) return;
         assertLe(
-            hub.sellDayGrossUsd6(),
-            (hub.sellDayReserveSnapshot() * hub.SELL_GLOBAL_CAP_BPS()) / 10_000,
-            "sellDayGross > 2% of snapshot"
+            gross,
+            (hub.sellWindowReference() * hub.SELL_GLOBAL_CAP_BPS()) / 10_000,
+            "live global gross > 2% of reference"
         );
     }
 
@@ -754,17 +787,21 @@ contract PplCurveHubV2InvariantTest is HubV2Base {
 
     // ---------------------------------------------------------------- §7.9
 
+    /// @dev After graduation, buys are closed and the treasury does not receive reserve. Sell-back of an
+    /// already attested return may still reduce sold/raised/reserve until liquidity release. The
+    /// receiver then gets whatever reserve remains, which is at most the reserve at graduation.
     function invariant_frozenAfterGraduation() public view {
         if (!hub.graduated()) return;
         assertTrue(handler.gradTaken(), "graduation not snapshotted");
-        assertEq(hub.raisedUsd6(), handler.gradRaised(), "raised changed");
-        assertEq(hub.soldPpl(), handler.gradSold(), "sold changed");
-        assertEq(handler.stateHash(), handler.gradHash(), "pplOf/lots changed");
+        assertLe(hub.raisedUsd6(), handler.gradRaised(), "raised rose after graduation");
+        assertLe(hub.soldPpl(), handler.gradSold(), "sold rose after graduation");
         if (hub.liquidityReleased()) {
             assertEq(hub.reserveUsd6(), 0, "reserve after release");
-            assertEq(usdc.balanceOf(liquidityReceiver), handler.gradReserve(), "receiver != graduation reserve");
+            assertLe(
+                usdc.balanceOf(liquidityReceiver), handler.gradReserve(), "receiver got more than graduation reserve"
+            );
         } else {
-            assertEq(hub.reserveUsd6(), handler.gradReserve(), "reserve changed without release");
+            assertLe(hub.reserveUsd6(), handler.gradReserve(), "reserve rose after graduation");
         }
         assertEq(usdc.balanceOf(treasury), handler.gradTreasury(), "treasury received more after graduation");
     }

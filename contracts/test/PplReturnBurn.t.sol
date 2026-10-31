@@ -11,6 +11,7 @@ contract PplReturnBurnTest is Test {
     address internal constant HUB = address(0x4B0B);
     address internal constant SELLER = address(0x5E11);
     bytes32 internal constant PERSON = keccak256("person");
+    uint256 internal constant DEST_CHAIN = 8453;
     address internal alice = makeAddr("alice");
 
     event ReturnBurned(
@@ -28,11 +29,12 @@ contract PplReturnBurnTest is Test {
     }
 
     function test_burn_emitsAndCounts() public {
-        bytes32 expectedId = keccak256(abi.encode(block.chainid, address(burner), uint256(0)));
+        bytes32 expectedId =
+            keccak256(abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, 3 ether, address(burner), uint256(0)));
         vm.expectEmit(address(burner));
         emit ReturnBurned(expectedId, alice, HUB, PERSON, SELLER, 3 ether);
         vm.prank(alice);
-        bytes32 id = burner.burnForReturn{value: 3 ether}(HUB, PERSON, SELLER);
+        bytes32 id = burner.burnForReturn{value: 3 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
 
         assertEq(id, expectedId);
         assertEq(burner.totalBurned(), 3 ether);
@@ -43,27 +45,72 @@ contract PplReturnBurnTest is Test {
 
     function test_burn_returnIdsUnique() public {
         vm.startPrank(alice);
-        bytes32 a = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER);
-        bytes32 b = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER);
+        bytes32 a = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
+        bytes32 b = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
         vm.stopPrank();
         assertTrue(a != b);
         assertEq(burner.totalBurned(), 2 ether);
     }
 
+    /// @dev returnId changes when amount, hub, seller, source chain or destination chain changes.
+    function test_burn_returnIdBindsAmountHubSellerAndChains() public {
+        vm.prank(alice);
+        bytes32 id = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
+        assertEq(
+            id,
+            keccak256(abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, uint256(1 ether), address(burner), uint256(0)))
+        );
+
+        address otherHub = address(0x1111);
+        address otherSeller = address(0x2222);
+        vm.startPrank(alice);
+        bytes32 byAmount = burner.burnForReturn{value: 2 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
+        bytes32 byHub = burner.burnForReturn{value: 1 ether}(otherHub, PERSON, SELLER, DEST_CHAIN);
+        bytes32 bySeller = burner.burnForReturn{value: 1 ether}(HUB, PERSON, otherSeller, DEST_CHAIN);
+        bytes32 byDest = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN + 1);
+        vm.stopPrank();
+
+        assertEq(
+            byAmount,
+            keccak256(abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, uint256(2 ether), address(burner), uint256(1)))
+        );
+        assertEq(
+            byHub,
+            keccak256(
+                abi.encode(block.chainid, DEST_CHAIN, otherHub, SELLER, uint256(1 ether), address(burner), uint256(2))
+            )
+        );
+        assertEq(
+            bySeller,
+            keccak256(
+                abi.encode(block.chainid, DEST_CHAIN, HUB, otherSeller, uint256(1 ether), address(burner), uint256(3))
+            )
+        );
+        assertEq(
+            byDest,
+            keccak256(
+                abi.encode(block.chainid, DEST_CHAIN + 1, HUB, SELLER, uint256(1 ether), address(burner), uint256(4))
+            )
+        );
+        assertTrue(id != byAmount && id != byHub && id != bySeller && id != byDest);
+    }
+
     function test_burn_zeroValueReverts() public {
         vm.prank(alice);
         vm.expectRevert(PplReturnBurn.ZeroAmount.selector);
-        burner.burnForReturn(HUB, PERSON, SELLER);
+        burner.burnForReturn(HUB, PERSON, SELLER, DEST_CHAIN);
     }
 
     function test_burn_zeroParamsRevert() public {
         vm.startPrank(alice);
         vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
-        burner.burnForReturn{value: 1}(address(0), PERSON, SELLER);
+        burner.burnForReturn{value: 1}(address(0), PERSON, SELLER, DEST_CHAIN);
         vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
-        burner.burnForReturn{value: 1}(HUB, bytes32(0), SELLER);
+        burner.burnForReturn{value: 1}(HUB, bytes32(0), SELLER, DEST_CHAIN);
         vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
-        burner.burnForReturn{value: 1}(HUB, PERSON, address(0));
+        burner.burnForReturn{value: 1}(HUB, PERSON, address(0), DEST_CHAIN);
+        vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
+        burner.burnForReturn{value: 1}(HUB, PERSON, SELLER, 0);
         vm.stopPrank();
     }
 
@@ -86,7 +133,7 @@ contract PplReturnBurnTest is Test {
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/out/PplReturnBurn.sol/PplReturnBurn.json"));
         string[] memory sigs = vm.parseJsonKeys(json, ".methodIdentifiers");
         assertEq(sigs.length, 3, "unexpected function count");
-        assertTrue(_contains(sigs, "burnForReturn(address,bytes32,address)"));
+        assertTrue(_contains(sigs, "burnForReturn(address,bytes32,address,uint256)"));
         assertTrue(_contains(sigs, "totalBurned()"));
         assertTrue(_contains(sigs, "returnCount()"));
 
@@ -122,8 +169,8 @@ contract PplReturnBurnTest is Test {
         vm.assume(a > 0 && b > 0);
         vm.deal(alice, uint256(a) + b);
         vm.startPrank(alice);
-        burner.burnForReturn{value: a}(HUB, PERSON, SELLER);
-        burner.burnForReturn{value: b}(HUB, PERSON, alice);
+        burner.burnForReturn{value: a}(HUB, PERSON, SELLER, DEST_CHAIN);
+        burner.burnForReturn{value: b}(HUB, PERSON, alice, DEST_CHAIN);
         vm.stopPrank();
         assertEq(burner.totalBurned(), uint256(a) + b);
         assertEq(address(burner).balance, burner.totalBurned());
