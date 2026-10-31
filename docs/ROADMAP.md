@@ -29,7 +29,7 @@
 
 ### Награды за реальный вклад и proof of humanity
 
-Есть регистрация участника и проверки «verified human» в Discover; полная модель наград с PoH — **частично**. Расширение — программа **«Миллион основателей»** (см. `docs/FOUNDERS-AND-LAVKA-PLAN.md`).
+Есть регистрация участника и проверки «verified human» в Discover; полная модель наград с PoH — **частично**. Расширение — программа **«Миллион основателей»** (Founder NFT — `docs/founder-nft.md`).
 
 ### Миллион основателей — реферальный бонус (2 уровня)
 
@@ -127,8 +127,6 @@ MetaMask / Trust / WalletConnect и cloud vault (Web3Auth) подключены 
 | 4 | Гранты из community pool (25%); вехи 10K/100K/1M; конвертация очков в PPL на mainnet (35% бакет, 20% сразу, 12 мес активности, стейк +25%) |
 | 5 | Амбассадоры стран (топ-50 рефереров); ИИ-бот в Telegram |
 
-Подробные PR и оценки в днях — `docs/FOUNDERS-AND-LAVKA-PLAN.md`.
-
 ### Лавка — офлайн лояльность (запланировано, Preliminary)
 
 | Этап | Содержание |
@@ -160,7 +158,7 @@ MetaMask / Trust / WalletConnect и cloud vault (Web3Auth) подключены 
 
 ---
 
-*Последнее обновление структуры: 2026-10-14. Доказательства по коду — поле `evidence` в `roadmap.json`. План A/B — `docs/FOUNDERS-AND-LAVKA-PLAN.md`.*
+*Последнее обновление структуры: 2026-10-14. Доказательства по коду — поле `evidence` в `roadmap.json`.*
 
 ### App Builder (после mainnet) — `planned_unapproved`
 

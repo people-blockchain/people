@@ -11,6 +11,7 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { listFounderNftRows } from "@/lib/evm/founder-nft-rows";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc } from "@/lib/evm/rpc-server";
 
@@ -339,7 +340,13 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
 
   if (root === "nfts") {
     const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
+    let founderRows: Awaited<ReturnType<typeof listFounderNftRows>> = [];
+    try {
+      founderRows = await listFounderNftRows(owner ?? undefined);
+    } catch {
+      founderRows = [];
+    }
+    const rows = visibleNfts([...listSeedNfts(owner ?? undefined), ...founderRows]);
     // Read per-collection stats once (collections are shared across tokens); absent getters stay
     // undefined so the UI shows only fields the contract actually exposes.
     const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];

@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { renderMagicLinkEmail, resolveMagicLinkLocale } from "@/lib/partner/email";
 import { resolvePostAuthRedirectUrl } from "@/lib/partner/guards";
 import { logAuthError } from "@/lib/partner/auth-errors";
+import { applyAuthJwtCallback } from "@/lib/auth-jwt-callback";
 import { SITE_URL } from "@/lib/site";
 import { readWeb3AuthClientId } from "@/lib/web3auth-config";
 import { authorizeWeb3AuthIdToken } from "@/lib/web3auth-auth";
@@ -161,19 +162,9 @@ export const authConfig = {
       }
       return true;
     },
-    async jwt({ token, user, account }) {
-      if (user?.id) {
-        token.sub = user.id;
-        // Set once, at actual sign-in, so a reauth check can't be satisfied by a long-lived
-        // session that merely keeps getting refreshed without the user signing in again.
-        token.authTime = Date.now();
-      }
-      // api-cron.md M1: record which provider authenticated this session. `account` is only
-      // present on the sign-in that creates the token; later session reads keep the value.
-      if (typeof account?.provider === "string" && account.provider) {
-        token.provider = account.provider;
-      }
-      return token;
+    async jwt({ token, user, account, trigger, session }) {
+      // authTime moves only on a real provider login. `session` (client update()) is ignored.
+      return applyAuthJwtCallback(token, { user, account, trigger, session });
     },
     async session({ session, token }) {
       if (session.user && token.sub) {

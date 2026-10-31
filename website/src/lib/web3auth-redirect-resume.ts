@@ -121,6 +121,37 @@ export async function waitForSessionUser<T>(
   return null;
 }
 
+export type FreshSessionWait = {
+  /**
+   * Accept a session only when its authTime is strictly newer than this rejected value.
+   * The vault reauth window stays on the server: a fast client clock must not reject a
+   * session the server just issued. Omit it to accept the first session that has a user id.
+   */
+  newerThan?: number | null;
+};
+
+/**
+ * Same bounded poll as {@link waitForSessionUser}. When `newerThan` is a number, yesterday's
+ * cookie must not win: only a strictly newer authTime counts. Freshness against the wall clock
+ * is the server's check (`isAuthTimeFresh` on wrap-key), not this poll.
+ */
+export async function waitForFreshSessionUser<T extends { id?: string | null; authTime?: number | null }>(
+  fetchUser: () => Promise<T | null>,
+  delaysMs: readonly number[] = SESSION_USER_RETRY_DELAYS_MS,
+  sleep: (ms: number) => Promise<void> = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  wait?: FreshSessionWait,
+): Promise<T | null> {
+  const newerThan = wait?.newerThan;
+  for (const delay of delaysMs) {
+    if (delay > 0) await sleep(delay);
+    const user = await fetchUser().catch(() => null);
+    if (!user?.id) continue;
+    if (typeof newerThan !== "number") return user;
+    if (typeof user.authTime === "number" && user.authTime > newerThan) return user;
+  }
+  return null;
+}
+
 export type ConnectionEvents = {
   connected: boolean;
   on?: (event: string, listener: (...args: unknown[]) => void) => unknown;

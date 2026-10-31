@@ -830,3 +830,44 @@ export const saleBindings = pgTable(
   },
   (row) => [uniqueIndex("sale_binding_account_lower_idx").on(sql`lower(${row.account})`)],
 );
+
+/**
+ * Founder NFT personId registry — see drizzle/0021_founder_nft_person.sql and docs/founder-nft.md.
+ * `personId` is opaque (random bytes32 hex), assigned on first sight of a person's stamps.
+ */
+export const founderNftPersons = pgTable("founder_nft_person", {
+  personId: text("personId").primaryKey(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
+/** sha256 digests of Human Passport stamp nullifiers; the raw nullifier is never stored. */
+export const founderNftStampHashes = pgTable(
+  "founder_nft_stamp_hash",
+  {
+    stampHash: text("stampHash").primaryKey(),
+    personId: text("personId")
+      .notNull()
+      .references(() => founderNftPersons.personId, { onDelete: "cascade" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("founder_nft_stamp_hash_person_idx").on(row.personId)],
+);
+
+/**
+ * Single-use nonce proving the connected wallet signed a Founder NFT mint or rebind request.
+ * See drizzle/0022_founder_nft_auth_nonce.sql. The code is random; no key material is stored.
+ */
+export const founderNftAuthNonces = pgTable(
+  "founder_nft_auth_nonce",
+  {
+    code: text("code").primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    chainId: integer("chainId").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+    usedAt: timestamp("usedAt", { mode: "date" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("founder_nft_auth_nonce_user_idx").on(row.userId)],
+);
