@@ -127,7 +127,11 @@ function fakeClients(calls: Call[], opts: { st?: Partial<PreflightState>; allowa
     readContract: async (a: { functionName: string }) => {
       calls.push(`read:${a.functionName}`);
       if (a.functionName === "decimals") return 6;
-      if (a.functionName === "allowance") return opts.allowance ?? BigInt(0);
+      if (a.functionName === "allowance") {
+        const seen = calls.filter((c) => c === "read:allowance").length;
+        if (seen === 1) return opts.allowance ?? BigInt(0);
+        return opts.allowance && opts.allowance > BigInt(0) ? opts.allowance : BigInt(100e6);
+      }
       return hubReads[a.functionName];
     },
     simulateContract: async (a: { functionName: string }) => {

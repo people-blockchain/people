@@ -11,6 +11,7 @@ import {
 import { PPL_CURVE_HUB_ABI, saleHubPublicClient } from "@/lib/sale/hub-read";
 import { getVerifierSigner } from "@/lib/sale/verifier/signer";
 import { verificationDigest } from "@/lib/sale/verifier/typed-data";
+import { parseSaleNonceCode } from "@/lib/sale/v2/ownership";
 import { SITE_URL } from "@/lib/site";
 
 const ZERO_BYTES32 = `0x${"0".repeat(64)}` as Hex;
@@ -29,24 +30,21 @@ export function buildSaleOwnershipMessage(input: {
   account: Address;
   chainId: number;
   hub: Address;
-  nonceCode?: string;
-  issuedAt?: string;
-  expiresAt?: string;
+  nonceCode: string;
+  issuedAt: string;
+  expiresAt: string;
 }): string {
-  const lines = [
+  return [
     `${input.domain} wants you to verify this wallet for the PPL sale.`,
     "",
     "This proves wallet ownership only. It does not move funds.",
     `Address: ${input.account}`,
     `Chain ID: ${input.chainId}`,
     `Hub: ${input.hub}`,
-  ];
-  if (input.nonceCode) {
-    lines.push(`Nonce: ${input.nonceCode}`);
-    if (input.issuedAt) lines.push(`Issued At: ${input.issuedAt}`);
-    if (input.expiresAt) lines.push(`Expiration Time: ${input.expiresAt}`);
-  }
-  return lines.join("\n");
+    `Nonce: ${input.nonceCode}`,
+    `Issued At: ${input.issuedAt}`,
+    `Expiration Time: ${input.expiresAt}`,
+  ].join("\n");
 }
 
 function saleDomain(): string {
@@ -68,12 +66,14 @@ export async function POST(request: Request) {
     return errorResponse("invalid_json", 400);
   }
 
+  const nonceCode = parseSaleNonceCode(body.nonceCode);
+  if (!nonceCode) return errorResponse("nonce_required", 400);
+
   if (
     typeof body.account !== "string" ||
     !isAddress(body.account) ||
     typeof body.ownershipSignature !== "string" ||
-    !/^0x[0-9a-fA-F]{130}$/.test(body.ownershipSignature) ||
-    (body.nonceCode !== undefined && typeof body.nonceCode !== "string")
+    !/^0x[0-9a-fA-F]{130}$/.test(body.ownershipSignature)
   ) {
     return errorResponse("invalid_input", 400);
   }
@@ -84,16 +84,10 @@ export async function POST(request: Request) {
   const hub = getAddress(hubRaw);
   const chainId = SALE_CHAIN.id;
 
-  let nonceCode: string | undefined;
-  let issuedAt: string | undefined;
-  let expiresAt: string | undefined;
-  if (typeof body.nonceCode === "string" && body.nonceCode.trim()) {
-    nonceCode = body.nonceCode.trim();
-    const consumed = await consumeFounderPassportNonce(nonceCode, guard.userId);
-    if (!consumed.ok) return errorResponse("nonce_invalid", 422);
-    issuedAt = consumed.issuedAt.toISOString();
-    expiresAt = consumed.expiresAt.toISOString();
-  }
+  const consumed = await consumeFounderPassportNonce(nonceCode, guard.userId);
+  if (!consumed.ok) return errorResponse("nonce_invalid", 422);
+  const issuedAt = consumed.issuedAt.toISOString();
+  const expiresAt = consumed.expiresAt.toISOString();
 
   const message = buildSaleOwnershipMessage({
     domain: saleDomain(),

@@ -21,7 +21,7 @@
     "validators": "200M PPL (20 %) : années 1–4 versent 6 %, 5 %, 5 %, 4 % du supply total par an (60M / 50M / 50M / 40M PPL) plus 30 % des frais réseau.",
     "team": "15 % de l'offre : 0 % au lancement, cliff de 6 mois, puis 18 mois de déblocage mensuel linéaire (24 mois au total).",
     "treasury": "Dépensé seulement après votes DAO ; en multisig.",
-    "sale": "Vendu sur la courbe publique sur Base (PplCurveHub). Les PPL sont crédités juste après l’achat ; les transferts ouvrent au lancement complet du réseau.",
+    "sale": "Vendu sur la courbe publique sur Base (PplCurveHub). Les PPL sont crédités sur PEOPLE mainnet juste après l’achat ; les transferts ouvrent au lancement complet du réseau.",
     "liquidity": "Pool PPL/USDC à la graduation ; jetons LP bloqués pendant 24 mois."
   },
   "donutTitle": "Allocation",
@@ -36,7 +36,7 @@
   "salePayTitle": "Comment vous paieriez",
   "salePayBody": "Sur Base, en USDC ou en USDT. Depuis d’autres réseaux, via l’échange automatique intégré (LI.FI) : les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana fonctionnent. TON n’est pas pris en charge. Vous recevez les fonds en USDC sur Base.",
   "saleDeliveryTitle": "Comment recevoir des PPL",
-  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après le lancement complet du réseau. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
+  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse PEOPLE mainnet tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après le lancement complet du réseau. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
   "curveTitle": "Courbe de bonding",
   "curveLead": "Courbe exponentielle : le prix démarre à 0,005 $ par PPL et monte à chaque achat, jusqu'à un plafond de 0,25 $ tant que la courbe est ouverte. La graduation ferme la courbe à 4 M$ levés.",
   "unsoldTitle": "Jetons invendus",
@@ -99,8 +99,8 @@
     "100 000 000 PPL sur la courbe (10 % de l'offre) ; départ 0,005 $, hausse exponentielle, plafond 0,25 $ sur la courbe seulement.",
     "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "Levée 50 % liquidité verrouillée / 50 % multisig projet ; jetons LP verrouillés 24 mois.",
-    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour pour tous, et 2 000 $ par personne et par jour. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
-    "$10–$500 par achat; Jusqu’à $2,000 par personne sur toute période de 24 heures; Pause de 60 s entre deux achats"
+    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour UTC pour tous, et 2 000 $ par personne dans une fenêtre glissante de 24 heures. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
+    "$10–$500 par achat; Jusqu’à $2,000 par personne dans une fenêtre glissante de 24 heures; Pause de 60 s entre deux achats"
   ],
   "curveTableSold": "% vendu",
   "curveTablePrice": "Prix spot (USDC)",

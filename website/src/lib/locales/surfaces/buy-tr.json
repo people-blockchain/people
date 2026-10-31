@@ -72,7 +72,7 @@
       },
       {
         "title": "PPL doğrudan PEOPLE cüzdanınıza",
-        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE ağındaki adresinize yazılır."
+        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE mainnet üzerindeki adresinize yazılır."
       }
     ],
     "verifyLink": "Nasıl doğrulanırım"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "İlk {whitelistDays} gün: yalnızca doğrulanmış kişiler",
-        "body": "Bir kişi, bir adres. Alım başına {min} ile {max} arası, adres başına günde (UTC) en fazla {perDay} ve iki alım arasında {cooldown} saniye bekleme."
+        "body": "Bir kişi, bir adres. Alım başına {min} ile {max} arası, adres başına kayan 24 saatte en fazla {perDay} ve iki alım arasında {cooldown} saniye bekleme."
       },
       {
         "title": "Her alımın {reservePct} kadarı rezervde kalır",
@@ -101,7 +101,7 @@
       },
       {
         "title": "{holdDays} gün sonra geri satış",
-        "body": "Her alım, yapıldıktan {holdDays} gün sonra o anki eğri fiyatından geri satılabilir. Günlük: tüm satıcılar için toplamda rezervin en fazla {sellDailyPct} kadarı ve adres başına en fazla {sellPerAddress}. Ücret {feeLow}; o gün rezervin {feeThreshold} kadarını aşan kısım için {feeHigh}. Yalnızca doğrulanmış kişiler."
+        "body": "Her alım, yapıldıktan {holdDays} gün sonra o anki eğri fiyatından geri satılabilir. UTC gününde tüm satıcılar için toplamda rezervin en fazla {sellDailyPct} kadarı ve adres başına kayan 24 saatte en fazla {sellPerAddress}. Ücret {feeLow}; o UTC günü rezervin {feeThreshold} kadarını aşan kısım için {feeHigh}. Yalnızca doğrulanmış kişiler."
       },
       {
         "title": "Herkes kontrol edebilir",
@@ -149,7 +149,7 @@
       },
       {
         "q": "Bugün ne kadar geri satılabilir?",
-        "a": "Her alım, yapıldıktan {holdDays} gün sonra geri satılabilir. Her gün tüm satıcılar birlikte rezervin en fazla {sellDailyPct} kadarını, her adres ise en fazla {sellPerAddress} geri satabilir. Rezerv küçükse günlük sınır da küçüktür. Bugünkü rakam yukarıdaki kurallarda gösterilir."
+        "a": "Her alım, yapıldıktan {holdDays} gün sonra geri satılabilir. Her UTC günü tüm satıcılar birlikte rezervin en fazla {sellDailyPct} kadarını, her adres ise kayan 24 saatte en fazla {sellPerAddress} geri satabilir. Rezerv küçükse günlük sınır da küçüktür. Bugünkü rakam yukarıdaki kurallarda gösterilir."
       },
       {
         "q": "Paramı geri alabilir miyim?",
@@ -278,7 +278,7 @@
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
     "noWalletHint": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
-    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Günlük sınırlar: herkes için toplamda rezervin %2'si ve adres başına $2.000. Ücret %1,5; günün geri satışlarında yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandığında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Sınırlar: herkes için UTC gününde rezervin %2'si ve adres başına kayan 24 saatte $2.000. PPL, PEOPLE mainnet üzerinde yakılır. Ücret %1,5; günün geri satışlarında yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandığında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
     "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık $0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5, ve yalnızca günün geri satışlarında rezervin %1'ini aşan kısım için %3.",
     "timingBody": "Base'de bir alım saniyeler içinde onaylanır. Diğer ağlardan ödemeler genellikle 1–20 dakikada ulaşır. Geri satış ödemeleri Base ağında USDC olarak yapılır.",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Beyaz liste aşaması",
-      "whitelistBody": "İlk 7 gün: yalnızca doğrulanmış kişiler. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "whitelistBody": "İlk 7 gün: yalnızca doğrulanmış kişiler. Minimum $10 / işlem başına en fazla $500 / kayan 24 saatte $2.000.",
       "daysLeft": "{days} gün kaldı",
       "openTitle": "Herkese açık aşama",
-      "openBody": "Herkese açık. Minimum $10 / işlem başına en fazla $500 / günde $2.000.",
+      "openBody": "Herkese açık. Minimum $10 / işlem başına en fazla $500 / kayan 24 saatte $2.000.",
       "notOpenTitle": "Satış henüz açılmadı",
       "notOpenBody": "Sözleşme beyaz liste aşamasına geçtiğinde alımlar açılır.",
       "expiredTitle": "Satış sona erdi",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "Alım tamamlandı",
-      "credited": "{ppl} PPL {address} adresine geçti",
+      "credited": "{ppl} PPL, PEOPLE mainnet üzerinde {address} adresine geçti",
       "tx": "İşlemi görüntüle",
       "unlock": "Geri satış {date} tarihinde açılır",
       "again": "Daha fazla PPL al"
@@ -375,6 +375,46 @@
       "body": "Takas Base üzerinde {amount} USDC teslim etti, ancak PPL alımı gerçekleşmedi.",
       "topUp": "{amount} USDC ile PPL al",
       "hint": "Alınan USDC ile Base üzerindeki alım yeniden denenir."
+    },
+    "sellBack": {
+      "title": "PPL iade et",
+      "cta": "PPL iade et",
+      "available": "İade edilebilir",
+      "unlock": "Sonraki lot {date} tarihinde açılır",
+      "noneYet": "Henüz açılmış bir lot yok. Her lot, alıştan 30 gün sonra açılır.",
+      "personal": "Kalan limitiniz",
+      "personalHint": "Kayan 24 saatlik pencerede $2.000 içinden {amount} kaldı",
+      "global": "Bugün kalan rezerv",
+      "globalHint": "Rezervin günlük %2 sınırından {amount} kaldı",
+      "fee": "Ücret",
+      "feeLow": "%1,5",
+      "feeHigh": "%3",
+      "feeMixed": "Rezervin %1'ine kadar %1,5, sonrası %3",
+      "receive": "Alacağınız",
+      "amount": "İade edilecek PPL",
+      "max": "En fazla",
+      "burning": "PPL, PEOPLE mainnet üzerinde yakılıyor…",
+      "attesting": "Yakma kontrol ediliyor…",
+      "selling": "USDC, Base üzerinde ödeniyor…",
+      "done": "İade tamam. USDC, Base üzerinde ödenir.",
+      "payoutNote": "PPL, PEOPLE mainnet üzerinde yakılır. USDC’yi Base üzerinde alırsınız. Alış USDC veya USDT ile yapılır.",
+      "error": "İade tamamlanmadı. Yeniden deneyin.",
+      "rejected": "İsteği cüzdanınızda reddettiniz.",
+      "notConfigured": "İade henüz kullanılamıyor.",
+      "notEnough": "30 günü doldurmuş yeterli PPL yok.",
+      "globalCap": "Rezervin günlük %2 sınırı doldu.",
+      "personalCap": "Bu 24 saatlik penceredeki $2.000 limitiniz doldu.",
+      "slippage": "Fiyat izin verilenden fazla kaydı. Yeniden deneyin.",
+      "closed": "Geri satış kapalı.",
+      "disabled": "Geri satış kapalı.",
+      "used": "Bu iade zaten ödendi.",
+      "expired": "Onayın süresi doldu. Yeniden başlayın.",
+      "badSignature": "Onay eşleşmedi.",
+      "belowMin": "Tutar asgari iadenin altında.",
+      "tooMany": "Bu 24 saatte çok fazla iade var.",
+      "reserve": "Rezerv bu ödemeyi karşılamıyor.",
+      "reverted": "İşlem ağ tarafından geri alındı.",
+      "switchRejected": "Ağ değiştirilmedi."
     }
   }
 }
