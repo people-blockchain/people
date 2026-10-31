@@ -45,12 +45,12 @@ test("v2 verify config never uses the v1 hub, chain or signer", async () => {
     assert.equal(v1.chainId, 8453);
     assert.equal(v1.signerModeEnv, "SALE_VERIFIER_MODE");
     assert.equal(v1.signerLocalKeyEnv, "SALE_VERIFIER_LOCAL_KEY");
-    assert.equal(v1.signerKmsKeyIdVar, "SALE_VERIFIER_KMS_KEY_ID");
+    assert.equal(v1.signerKmsEnvName, "SALE_VERIFIER_KMS_KEY_ID");
     assert.equal(v2.hub, V2);
     assert.equal(v2.chainId, 84532);
     assert.equal(v2.signerModeEnv, "SALE_V2_VERIFIER_MODE");
     assert.equal(v2.signerLocalKeyEnv, "SALE_V2_VERIFIER_LOCAL_KEY");
-    assert.equal(v2.signerKmsKeyIdVar, "SALE_V2_VERIFIER_KMS_KEY_ID");
+    assert.equal(v2.signerKmsEnvName, "SALE_V2_VERIFIER_KMS_KEY_ID");
     assert.equal(resolveVerifyTarget("v2", { NEXT_PUBLIC_SALE_HUB_ADDRESS: V1 }).hub, null);
     assert.equal(
       resolveVerifyTarget("v1", { NEXT_PUBLIC_PPL_V2_HUB_ADDRESS: V2, NEXT_PUBLIC_PPL_V2_CHAIN_ID: "84532" }).hub,

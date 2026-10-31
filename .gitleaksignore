@@ -1,8 +1,7 @@
-# Synthetic test fixtures (const TOKEN = 20-byte test address, not a secret) in commits of other open PR branches
+# Synthetic test fixtures (public EVM addresses), not secrets
 4087fb7ff6a8826a5ef2f4f7a8cff2a1836a8f8f:website/scripts/evm-catalog-resilience.test.mjs:generic-api-key:27
-1a11fb2e65bb10b79cedd45f90404e73f25ba610:website/scripts/wallet-send.test.mjs:generic-api-key:30
-4388287df58dcea0a0bc8db6bfeb5200f22d9cd8:website/scripts/wallet-holdings.test.mjs:generic-api-key:25
-# Public token contract addresses (tokenAddress, 0x+40hex) and an env var name in already-pushed commits; not secrets.
+
+# Public token contract addresses in the committed catalog snapshot (0x + 40 hex), not secrets
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:103
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:110
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:117
@@ -39,6 +38,10 @@
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:82
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:89
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:96
+
+# Findings in other pushed branches scanned by CI (full clone): public token addresses in tests/catalog, and an env var NAME (not a value)
+1a11fb2e65bb10b79cedd45f90404e73f25ba610:website/scripts/wallet-send.test.mjs:generic-api-key:30
+4388287df58dcea0a0bc8db6bfeb5200f22d9cd8:website/scripts/wallet-holdings.test.mjs:generic-api-key:25
 b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json:generic-api-key:103
 b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json:generic-api-key:110
 b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json:generic-api-key:117
@@ -76,3 +79,4 @@ b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json
 b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json:generic-api-key:89
 b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json:generic-api-key:96
 c2c318689ba7b75db90dba3eda4d4f638ec3458e:website/src/lib/sale/verify-target.ts:generic-api-key:36
+cd84d0b4c4546a854fdcd1f731fa2d241120f99d:website/src/lib/sale/verify-target.ts:generic-api-key:36

@@ -10,7 +10,7 @@ export type VerifyTarget = {
   chainId: number;
   signerModeEnv: "SALE_VERIFIER_MODE" | "SALE_V2_VERIFIER_MODE";
   signerLocalKeyEnv: "SALE_VERIFIER_LOCAL_KEY" | "SALE_V2_VERIFIER_LOCAL_KEY";
-  signerKmsKeyIdVar: "SALE_VERIFIER_KMS_KEY_ID" | "SALE_V2_VERIFIER_KMS_KEY_ID";
+  signerKmsEnvName: "SALE_VERIFIER_KMS_KEY_ID" | "SALE_V2_VERIFIER_KMS_KEY_ID";
 };
 
 /** Missing or unknown versions stay on the v1 sale. Only the exact token `"v2"` selects v2. */
@@ -33,7 +33,7 @@ export function resolveVerifyTarget(version: SaleVerifyVersion, env: SaleChainEn
       chainId: chainOk ? chainId : 0,
       signerModeEnv: "SALE_V2_VERIFIER_MODE",
       signerLocalKeyEnv: "SALE_V2_VERIFIER_LOCAL_KEY",
-      signerKmsKeyIdVar: "SALE_V2_VERIFIER_KMS_KEY_ID",
+      signerKmsEnvName: "SALE_V2_VERIFIER_KMS_KEY_ID",
     };
   }
   const chain = resolveSaleChain(env);
@@ -43,7 +43,7 @@ export function resolveVerifyTarget(version: SaleVerifyVersion, env: SaleChainEn
     chainId: chain.id,
     signerModeEnv: "SALE_VERIFIER_MODE",
     signerLocalKeyEnv: "SALE_VERIFIER_LOCAL_KEY",
-    signerKmsKeyIdVar: "SALE_VERIFIER_KMS_KEY_ID",
+    signerKmsEnvName: "SALE_VERIFIER_KMS_KEY_ID",
   };
 }
 
