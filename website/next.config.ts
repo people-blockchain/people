@@ -45,6 +45,7 @@ const CONNECT_SRC_BASE = [
   "https://va.vercel-scripts.com",
   "https://auth.web3auth.io",
   "https://*.web3auth.io",
+  "wss://*.web3auth.io",
   "https://*.metamask.io",
   "https://accounts.google.com",
   "https://apis.google.com",
