@@ -10,10 +10,9 @@ import {
   ensureCloudWalletSession,
   fetchAuthSessionUser,
   fetchVaultRecordClient,
-  fetchWrapKey,
   WalletCloudError,
 } from "@/lib/wallet-cloud-client";
-import { openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
+import { createCloudVaultWithReauth, openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
 import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
@@ -272,22 +271,15 @@ export function WalletWeb3AuthSignIn({
         return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
       }
 
-      const generated = await keyPairFromWeb3AuthProvider(provider);
-
-      const wrapKeyHex = await fetchWrapKey();
-      const { encryptPrivateKeyForVault } = await import("@/lib/wallet-cloud-crypto");
-      const encryptedPrivateKey = await encryptPrivateKeyForVault(generated.privateKey, wrapKeyHex);
-      const put = await fetch("/api/wallet/vault", {
-        method: "PUT",
-        credentials: "include",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          address: generated.address,
-          publicKey: generated.publicKey,
-          encryptedPrivateKey,
-        }),
+      await createCloudVaultWithReauth({
+        deriveKey: () => keyPairFromWeb3AuthProvider(provider),
+        signInWithIdToken: async (token) => {
+          const again = await signIn("web3auth", { idToken: token, redirect: false });
+          if (!again || again.error || !again.ok) throw new WalletCloudError("reauth_required");
+        },
+        fetchSession: fetchAuthSessionUser,
+        idToken: lastIdTokenRef.current,
       });
-      if (!put.ok && put.status !== 409) throw new Error("vault_create_failed");
       return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
     },
     [finishConnect],
