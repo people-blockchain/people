@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import { applyAuthJwtCallback } from "../src/lib/auth-jwt-callback.ts";
 import { isAuthTimeFresh } from "../src/lib/wallet-reauth-window.ts";
 import { WalletCloudError, isWalletCloudErrorCode } from "../src/lib/wallet-cloud-client.ts";
-import { openCloudVaultWithReauth } from "../src/lib/wallet-reauth-flow.ts";
+import { createCloudVaultWithReauth, openCloudVaultWithReauth } from "../src/lib/wallet-reauth-flow.ts";
 import { waitForFreshSessionUser } from "../src/lib/web3auth-redirect-resume.ts";
 
 const now = 1_791_890_000_000;
@@ -307,6 +307,164 @@ test("a vault rejection after the one reauth is not signed in again", async () =
   assert.equal(wrapKeys, 1);
 });
 
+const newVaultKey = { address: "0xabc", publicKey: "pub", privateKey: "pk" };
+
+function createVaultArgs(overrides) {
+  return {
+    deriveKey: async () => newVaultKey,
+    encryptPrivateKey: async (privateKey, wrapKeyHex) => `enc:${privateKey}:${wrapKeyHex}`,
+    fetchWrapKey: async () => "aa".repeat(32),
+    putVault: async () => ({ ok: true, status: 200 }),
+    fetchSession: async () => ({ id: "user-1", authTime: now }),
+    idToken: "fresh-id-token",
+    now,
+    waitForFreshSession: instantWait,
+    signInWithIdToken: async () => {},
+    ...overrides,
+  };
+}
+
+test("new vault: stale session answers wrap-key reauth_required, one sign-in, then one PUT and wrap-key 200", async () => {
+  const token = staleToken();
+  let signIns = 0;
+  let puts = 0;
+  let wrapCalls = 0;
+  let wrapOk = 0;
+  let putBody = null;
+
+  await createCloudVaultWithReauth(
+    createVaultArgs({
+      fetchSession: async () => ({ id: token.sub, authTime: token.authTime }),
+      signInWithIdToken: async () => {
+        signIns += 1;
+        applyAuthJwtCallback(token, {
+          user: { id: "user-1" },
+          account: { provider: "web3auth" },
+          trigger: "signIn",
+          session: { authTime: now - twoHours },
+          nowMs: now,
+        });
+      },
+      fetchWrapKey: async () => {
+        wrapCalls += 1;
+        // The wrap-key route answers reauth_required while authTime is outside the window.
+        if (!isAuthTimeFresh(token.authTime, now)) throw new WalletCloudError("reauth_required");
+        wrapOk += 1;
+        return "bb".repeat(32);
+      },
+      putVault: async (body) => {
+        puts += 1;
+        putBody = body;
+        return { ok: true, status: 200 };
+      },
+    }),
+  );
+
+  assert.equal(signIns, 1);
+  assert.equal(puts, 1);
+  assert.equal(wrapCalls, 1);
+  assert.equal(wrapOk, 1);
+  assert.deepEqual(putBody, {
+    address: "0xabc",
+    publicKey: "pub",
+    encryptedPrivateKey: `enc:pk:${"bb".repeat(32)}`,
+  });
+});
+
+test("new vault: session that stays stale after sign-in throws reauth_required once and does not PUT", async () => {
+  let signIns = 0;
+  let puts = 0;
+  let wrapCalls = 0;
+  await assert.rejects(
+    () =>
+      createCloudVaultWithReauth(
+        createVaultArgs({
+          fetchSession: async () => ({ id: "user-1", authTime: now - twoHours }),
+          signInWithIdToken: async () => {
+            signIns += 1;
+          },
+          fetchWrapKey: async () => {
+            wrapCalls += 1;
+            throw new WalletCloudError("reauth_required");
+          },
+          putVault: async () => {
+            puts += 1;
+            return { ok: true, status: 200 };
+          },
+        }),
+      ),
+    (err) => isWalletCloudErrorCode(err, "reauth_required"),
+  );
+  assert.equal(signIns, 1);
+  assert.equal(puts, 0);
+  assert.equal(wrapCalls, 0);
+});
+
+test("new vault: no idToken throws reauth_required and never signs in", async () => {
+  let signIns = 0;
+  let puts = 0;
+  await assert.rejects(
+    () =>
+      createCloudVaultWithReauth(
+        createVaultArgs({
+          fetchSession: async () => ({ id: "user-1", authTime: now - twoHours }),
+          idToken: null,
+          signInWithIdToken: async () => {
+            signIns += 1;
+          },
+          putVault: async () => {
+            puts += 1;
+            return { ok: true, status: 200 };
+          },
+        }),
+      ),
+    (err) => isWalletCloudErrorCode(err, "reauth_required"),
+  );
+  assert.equal(signIns, 0);
+  assert.equal(puts, 0);
+});
+
+test("new vault: rate_limited from wrap-key is rethrown and does not sign in", async () => {
+  let signIns = 0;
+  let puts = 0;
+  let wrapCalls = 0;
+  await assert.rejects(
+    () =>
+      createCloudVaultWithReauth(
+        createVaultArgs({
+          signInWithIdToken: async () => {
+            signIns += 1;
+          },
+          fetchWrapKey: async () => {
+            wrapCalls += 1;
+            throw new WalletCloudError("rate_limited");
+          },
+          putVault: async () => {
+            puts += 1;
+            return { ok: true, status: 200 };
+          },
+        }),
+      ),
+    (err) => isWalletCloudErrorCode(err, "rate_limited"),
+  );
+  assert.equal(signIns, 0);
+  assert.equal(puts, 0);
+  assert.equal(wrapCalls, 1);
+});
+
+test("new vault: PUT 409 means the vault already exists and is not an error", async () => {
+  let signIns = 0;
+  await createCloudVaultWithReauth(
+    createVaultArgs({
+      signInWithIdToken: async () => {
+        signIns += 1;
+      },
+      putVault: async () => ({ ok: false, status: 409 }),
+    }),
+  );
+  assert.equal(signIns, 0);
+});
+
 test("WalletWeb3AuthSignIn waits for a fresh session and skips a stale auto-connect", () => {
   const src = readFileSync(join(root, "src/components/wallet/WalletWeb3AuthSignIn.tsx"), "utf8");
   const after = src.slice(src.indexOf("const afterWeb3AuthLogin"), src.indexOf("const navigateAfterSignIn"));
@@ -315,6 +473,9 @@ test("WalletWeb3AuthSignIn waits for a fresh session and skips a stale auto-conn
   const vaultAt = after.indexOf("if (vault)");
   const deriveAt = after.indexOf("keyPairFromWeb3AuthProvider");
   assert.ok(vaultAt !== -1 && deriveAt !== -1 && vaultAt < deriveAt);
+  assert.match(after, /createCloudVaultWithReauth\(/);
+  assert.match(after, /idToken: lastIdTokenRef\.current/);
+  assert.equal(after.includes("fetchWrapKey()"), false);
 
   const finish = src.slice(src.indexOf("const finishConnect"), src.indexOf("const afterWeb3AuthLogin"));
   assert.match(finish, /openCloudVaultWithReauth\(/);
