@@ -26,6 +26,68 @@ export function toIpfsUri(cid: string): string {
   return `ipfs://${parsed}`;
 }
 
+/** Public gateways tried in order when the first one rate-limits or times out. */
+export const PUBLIC_IPFS_GATEWAY_BASES = [
+  "https://gateway.pinata.cloud/ipfs",
+  "https://ipfs.io/ipfs",
+  "https://dweb.link/ipfs",
+  "https://w3s.link/ipfs",
+  "https://cloudflare-ipfs.com/ipfs",
+] as const;
+
+const GATEWAY_IPFS_PATH = /\/ipfs\/([^/?#]+)([^?#]*)/i;
+
+/** CID plus the path after it (`/image.png`), from `ipfs://` or a `/ipfs/<cid>` gateway URL. */
+export function extractIpfsPath(uri: string | null | undefined): { cid: string; suffix: string } | null {
+  const trimmed = (uri ?? "").trim();
+  if (!trimmed) return null;
+  if (/^ipfs:\/\//i.test(trimmed)) {
+    const rest = trimmed.slice("ipfs://".length).replace(/^\/+/, "");
+    const slash = rest.indexOf("/");
+    const cid = slash === -1 ? rest : rest.slice(0, slash);
+    if (!isValidIpfsCid(cid)) return null;
+    return { cid, suffix: slash === -1 ? "" : rest.slice(slash) };
+  }
+  const match = trimmed.match(GATEWAY_IPFS_PATH);
+  if (!match || !isValidIpfsCid(match[1] ?? "")) return null;
+  return { cid: match[1], suffix: match[2] ?? "" };
+}
+
+/** Stable identity for one IPFS object, so a gateway swap does not look like a new image. */
+export function ipfsContentKey(uri: string | null | undefined): string | null {
+  const parsed = extractIpfsPath(uri);
+  return parsed ? `${parsed.cid}${parsed.suffix}` : null;
+}
+
+/**
+ * Same CID on each public gateway, Pinata first. The first URL is repeated at the end so a
+ * transient failure gets one short retry before the image is given up.
+ */
+export function ipfsGatewayCandidates(uri: string | null | undefined): string[] {
+  const parsed = extractIpfsPath(uri);
+  if (!parsed) {
+    const value = (uri ?? "").trim();
+    return value ? [value] : [];
+  }
+  const urls = PUBLIC_IPFS_GATEWAY_BASES.map((base) => `${base}/${parsed.cid}${parsed.suffix}`);
+  return [...urls, urls[0]];
+}
+
+/** Sources an `<img>` should try. IPFS walks the gateway list; anything else is retried once. */
+export function assetImageSources(url: string | null | undefined): string[] {
+  const value = (url ?? "").trim();
+  if (!value) return [];
+  const candidates = ipfsGatewayCandidates(value);
+  if (candidates.length > 1) return candidates;
+  return [value, value];
+}
+
+/** Next source after `onError`. `failed` means every source, including the short retry, missed. */
+export function assetImageAfterError(index: number, count: number): { index: number; failed: boolean } {
+  const next = index + 1;
+  return { index: next, failed: count <= 0 || next >= count };
+}
+
 export function ipfsGatewayUrl(cidOrUri: string): string {
   const cid = parseIpfsUri(cidOrUri) ?? (isValidIpfsCid(cidOrUri) ? cidOrUri.trim() : null);
   if (!cid) {

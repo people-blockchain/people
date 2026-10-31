@@ -1,4 +1,5 @@
 import { visibleAssets } from "@/lib/hidden-assets";
+import { withStableImage } from "@/lib/token-image-merge";
 
 /**
  * Rows for the explorer token list. There is no viewport, page size, or visible-count cutoff:
@@ -24,7 +25,9 @@ export function tokenCatalogRows<
  * kept, so a stale refresh cannot hide a token the first response already had, and a token that
  * appears only in the refresh is added. Fields from the refresh win when both have the row.
  */
-export function mergeTokenCatalogRows<T extends { assetId: string }>(current: readonly T[], incoming: readonly T[]): T[] {
+export function mergeTokenCatalogRows<
+  T extends { assetId: string; imageUri?: string; creationMetadata?: { image?: unknown; [key: string]: unknown } },
+>(current: readonly T[], incoming: readonly T[]): T[] {
   const order: T[] = [];
   const index = new Map<string, number>();
   const put = (row: T, replace: boolean) => {
@@ -35,7 +38,7 @@ export function mergeTokenCatalogRows<T extends { assetId: string }>(current: re
       order.push(row);
       return;
     }
-    if (replace) order[at] = row;
+    if (replace) order[at] = withStableImage(order[at], row);
   };
   for (const row of current) put(row, false);
   for (const row of incoming) put(row, true);
