@@ -672,9 +672,9 @@ function assertBaselineListed(tokens) {
     "token created after the baseline tip is missing",
   );
   for (const row of tokenCatalogBaseline.tokens) {
-    if (isHiddenAssetRow(row)) continue;
+    if (isHiddenAssetRow({ ...row, tokenAddress: row.contract })) continue;
     assert.ok(
-      tokens.some((token) => token.tokenAddress.toLowerCase() === row.tokenAddress.toLowerCase()),
+      tokens.some((token) => token.tokenAddress.toLowerCase() === row.contract.toLowerCase()),
       row.symbol,
     );
   }
