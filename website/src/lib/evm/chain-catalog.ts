@@ -1424,6 +1424,7 @@ type BaselineToken = {
 /**
  * History already walked up to this tip. A request only re-reads factory logs after it.
  * The chain tip has to be at least this block; a shorter test chain keeps the full walk.
+ * Committed snapshot rows store the address as `contract`.
  */
 function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToken> } | null {
   const tip = tokenCatalogBaseline.tip;
@@ -1431,9 +1432,9 @@ function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToke
   if (typeof tip !== "number" || tip <= 0 || !Array.isArray(tokens) || tokens.length === 0) return null;
   const byAddress = new Map<string, BaselineToken>();
   for (const row of tokens) {
-    if (!row || typeof row.tokenAddress !== "string") continue;
+    if (!row || typeof row.contract !== "string") continue;
     try {
-      const tokenAddress = getAddress(row.tokenAddress);
+      const tokenAddress = getAddress(row.contract);
       byAddress.set(tokenAddress.toLowerCase(), {
         tokenAddress,
         name: typeof row.name === "string" ? row.name : "",
@@ -1446,6 +1447,13 @@ function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToke
     }
   }
   return byAddress.size ? { tip, byAddress } : null;
+}
+
+/** Checksummed addresses loaded from the committed snapshot's `contract` field. */
+export function loadedBaselineAddresses(): string[] {
+  const baseline = readTokenBaseline();
+  if (!baseline) return [];
+  return [...baseline.byAddress.values()].map((row) => row.tokenAddress);
 }
 
 /** Raises each factory to the first block after the baseline and drops ranges that end before it. */
