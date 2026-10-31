@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
-import { evmJsonRpc, evmJsonRpcBatch, readLogWindowPriority, readRpcDeadlineAt, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, evmJsonRpcBatch, readLogWindowPriority, readRpcDeadlineAt, resetRpcBackoffForTests, withRpcCallContext } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
@@ -173,10 +173,14 @@ function enqueueLogSlot(queue: SlotWaiter[], deadlineAt: number | undefined): Pr
   });
 }
 
-async function withLogWindowSlot<T>(work: () => Promise<T>, lane: LogWindowLane = "history"): Promise<T> {
+async function withLogWindowSlot<T>(
+  work: () => Promise<T>,
+  lane: LogWindowLane = "history",
+  deadlineAt = readRpcDeadlineAt(),
+): Promise<T> {
   const state = logWindowLanes[lane];
   if (state.inFlight >= MAX_PARALLEL_LOG_WINDOWS) {
-    const granted = await enqueueLogSlot(state.queue, readRpcDeadlineAt());
+    const granted = await enqueueLogSlot(state.queue, deadlineAt);
     if (!granted) throw new LogWindowRpcError("log_window_deadline");
   } else {
     state.inFlight++;
@@ -217,32 +221,53 @@ function rpcLogFilter(address: string, topics: Array<string | null>, from: numbe
   };
 }
 
-async function readLogWindowFromNode(address: string, topics: Array<string | null>, from: number, to: number): Promise<RpcLog[]> {
+/** Cap for one immutable window when the request deadline is not visible inside the shared cache callback. */
+const IMMUTABLE_LOG_WINDOW_MS = 5_000;
+
+async function readLogWindowFromNode(
+  address: string,
+  topics: Array<string | null>,
+  from: number,
+  to: number,
+  budgetMs = 20_000,
+): Promise<RpcLog[]> {
+  const outer = readRpcDeadlineAt();
+  const cap = Date.now() + budgetMs;
+  const deadlineAt = outer === undefined ? cap : Math.min(outer, cap);
+  const lane = readLogWindowPriority();
   return withLogWindowSlot(async () => {
-    const deadlineAt = readRpcDeadlineAt();
-    if (deadlineAt !== undefined && Date.now() >= deadlineAt) throw new LogWindowRpcError("log_window_deadline");
+    if (Date.now() >= deadlineAt) throw new LogWindowRpcError("log_window_deadline");
     let logs: unknown;
     try {
-      logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]);
+      // Re-bind the deadline here. unstable_cache runs the callback in its own store, so the
+      // caller's AsyncLocalStorage deadline would otherwise fall back to the 20s RPC timeout.
+      logs = await withRpcCallContext({ deadlineAt, logPriority: lane }, () =>
+        evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]),
+      );
     } catch (error) {
       throw new LogWindowRpcError(error instanceof Error ? error.message : "rpc_logs_failed");
     }
     // Throwing (rather than returning []) keeps a failed window out of every cache.
     if (!Array.isArray(logs)) throw new LogWindowRpcError("rpc_logs_unavailable");
     return logs as RpcLog[];
-  }, readLogWindowPriority());
+  }, lane, deadlineAt);
 }
 
 /**
  * Immutable windows are shared across server instances/lambdas through the Next data cache, so a
- * cold instance does not re-scan history that every other instance already read. The arguments
- * (lower-cased address, topics, range) are part of the cache key.
+ * cold instance does not re-scan history that every other instance already read. The key is the
+ * factory address, the topic filter (owner included), and the block range.
  */
 const IMMUTABLE_WINDOW_REVALIDATE_SECONDS = 24 * 60 * 60;
-const readImmutableLogWindowShared = unstable_cache(readLogWindowFromNode, ["evm-log-window-v1"], {
-  revalidate: IMMUTABLE_WINDOW_REVALIDATE_SECONDS,
-  tags: ["evm-log-windows"],
-});
+const readImmutableLogWindowShared = unstable_cache(
+  async (address: string, topicsKey: string, from: number, to: number) =>
+    readLogWindowFromNode(address, JSON.parse(topicsKey) as Array<string | null>, from, to, IMMUTABLE_LOG_WINDOW_MS),
+  ["evm-log-window-v2"],
+  {
+    revalidate: IMMUTABLE_WINDOW_REVALIDATE_SECONDS,
+    tags: ["evm-log-windows"],
+  },
+);
 
 async function readLogWindow(
   address: string,
@@ -254,7 +279,7 @@ async function readLogWindow(
   const lower = address.toLowerCase();
   if (immutable) {
     try {
-      return await readImmutableLogWindowShared(lower, topics, from, to);
+      return await readImmutableLogWindowShared(lower, JSON.stringify(topics), from, to);
     } catch (error) {
       if (error instanceof LogWindowRpcError) return null;
       const deadlineAt = readRpcDeadlineAt();

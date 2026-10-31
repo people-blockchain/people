@@ -384,19 +384,31 @@ export async function handleEvmCompatGet(
         ),
       );
     }
-    return {
-      status: 200,
-      headers: { ...nftOwnerPageHeaders(page), "Cache-Control": "private, no-store" },
-      body: rows.map((row) => {
-        const s = row.collection ? stats.get(row.collection.toLowerCase()) : undefined;
-        return {
-          ...row,
-          ...(s?.minted === undefined ? {} : { minted: s.minted }),
-          ...(s?.totalSupply === undefined ? {} : { totalSupply: s.totalSupply }),
-          ...(s?.mintPriceWei === undefined ? {} : { mintPrice: Number(formatUnits(s.mintPriceWei, 18)) }),
-        };
-      }),
-    };
+    const items = rows.map((row) => {
+      const s = row.collection ? stats.get(row.collection.toLowerCase()) : undefined;
+      return {
+        ...row,
+        ...(s?.minted === undefined ? {} : { minted: s.minted }),
+        ...(s?.totalSupply === undefined ? {} : { totalSupply: s.totalSupply }),
+        ...(s?.mintPriceWei === undefined ? {} : { mintPrice: Number(formatUnits(s.mintPriceWei, 18)) }),
+      };
+    });
+    const headers = { ...nftOwnerPageHeaders(page), "Cache-Control": "private, no-store" };
+    // Without `v=2` the body stays a JSON array: explorer, transparency, and older callers
+    // read that shape, and X-Nfts-Partial / X-Nfts-Next still carry the cursor. `v=2` repeats
+    // partial and next in the body so a client that does not see those headers can resume.
+    if (search.get("v") === "2") {
+      return {
+        status: 200,
+        headers,
+        body: {
+          items,
+          partial: page.partial === true,
+          ...(page.partial && page.next ? { next: page.next } : {}),
+        },
+      };
+    }
+    return { status: 200, headers, body: items };
   }
 
   if (root === "search") {

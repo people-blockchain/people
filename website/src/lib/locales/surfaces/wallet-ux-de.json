@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Wallet nur zur Ansicht verbunden. Diese Seite importiert keinen Schlüssel. Senden Sie in der Wallet-App.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Die Anmeldung hat zu lange gedauert. Prüfe die Verbindung und versuche es erneut.",
   "signInRetry": "Erneut versuchen",

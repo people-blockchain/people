@@ -27,6 +27,8 @@ import { useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { partnerCopy } from "@/lib/partner/copy";
 import { useWallet } from "@/context/WalletContext";
+import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
+import { resolveWalletPortfolio } from "@/lib/wallet-portfolio";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
 import { DEFAULT_TRANSFER_FEE, networkFetch, networkJson } from "@/lib/network-client";
@@ -73,7 +75,12 @@ const FAUCET_MAX_PPL = "100";
 
 export function WalletApp({ wsUrl, chainId, nftTransfersEnabled = false }: { wsUrl: string; chainId: string; nftTransfersEnabled?: boolean }) {
   const { session } = useWallet();
-  return <WalletView key={session?.address ?? "locked"} wsUrl={wsUrl} chainId={chainId} nftTransfersEnabled={nftTransfersEnabled} />;
+  const external = useExternalWalletOptional();
+  const portfolio = resolveWalletPortfolio({
+    sessionAddress: session?.address ?? null,
+    externalAddress: external?.signer?.address ?? null,
+  });
+  return <WalletView key={portfolio.address ?? "locked"} wsUrl={wsUrl} chainId={chainId} nftTransfersEnabled={nftTransfersEnabled} />;
 }
 
 function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; chainId: string; nftTransfersEnabled: boolean }) {
@@ -95,6 +102,12 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     refresh,
     changePassword,
   } = useWallet();
+  const externalWallet = useExternalWalletOptional();
+  const portfolio = resolveWalletPortfolio({
+    sessionAddress: session?.address ?? null,
+    externalAddress: externalWallet?.signer?.address ?? null,
+  });
+  const address = portfolio.address;
   const isCloud = session?.kind === "cloud";
   const [tab, setTab] = useState<"tokens" | "nft" | "history">("tokens");
   const [sheet, setSheet] = useState<null | "send" | "receive" | "settings">(null);
@@ -135,7 +148,6 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   }, []);
 
   useEffect(() => {
-    const address = session?.address;
     if (!address) return;
     let stopped = false;
     let pending = false;
@@ -191,26 +203,45 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       window.removeEventListener("online", onVisible);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [session?.address, wsUrl, chainId]);
+  }, [address, wsUrl, chainId]);
 
+  const nftLoadRef = useRef<NftLoadState>(initialNftLoadState());
   useEffect(() => {
-    const address = session?.address;
     if (!address) return;
     const controller = new AbortController();
     let stopped = false;
-    setNftLoad(initialNftLoadState());
+    const previous = nftAttempt > 0 ? nftLoadRef.current : null;
+    const resume = previous?.next ? { items: previous.items, next: previous.next } : undefined;
+    if (!resume) {
+      const fresh = initialNftLoadState();
+      nftLoadRef.current = fresh;
+      setNftLoad(fresh);
+    } else {
+      const pending: NftLoadState = {
+        phase: "ready",
+        items: resume.items,
+        partial: true,
+        historyLoading: true,
+        next: resume.next,
+      };
+      nftLoadRef.current = pending;
+      setNftLoad(pending);
+    }
     void loadOwnerNfts(address, {
       signal: controller.signal,
+      resume,
       fetchImpl: (path, init) => networkFetch(path, init),
       onState: (next) => {
-        if (!stopped) setNftLoad(next);
+        if (stopped) return;
+        nftLoadRef.current = next;
+        setNftLoad(next);
       },
     });
     return () => {
       stopped = true;
       controller.abort();
     };
-  }, [session?.address, nftAttempt]);
+  }, [address, nftAttempt]);
 
   useEffect(() => {
     if (sheet !== "send") return;
@@ -456,7 +487,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     }
   }
 
-  const shortAddress = session ? `${session.address.slice(0, 6)}…${session.address.slice(-4)}` : "";
+  const shortAddress = address ? `${address.slice(0, 6)}…${address.slice(-4)}` : "";
 
   async function submitPasswordChange() {
     setError("");
@@ -593,7 +624,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       {error ? <p className="mb-4 text-sm text-warm">{t.error}: {error}</p> : null}
       {notice ? <p className="mb-4 text-sm text-value">{notice}</p> : null}
 
-      {!session ? (
+      {!address ? (
         <div className="rounded-3xl border border-line bg-surface p-6 shadow-sm">
           <PeopleWalletMark size="lg" className="mb-3" />
           <p className="text-sm text-ink-2">{t.lead}</p>
@@ -601,24 +632,30 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         </div>
       ) : null}
 
-      {session ? (
+      {address ? (
         <div className="space-y-6">
           <header className="flex items-start justify-between gap-3">
             <PeopleWalletMark />
-            <button type="button" aria-label={c.settingsGearAria} data-testid="wallet-settings-button" onClick={() => setSheet("settings")} className="rounded-xl border border-line p-2.5 text-ink-2 hover:bg-surface-2">
-              <svg aria-hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>
-            </button>
+            {portfolio.localKeyActions ? (
+              <button type="button" aria-label={c.settingsGearAria} data-testid="wallet-settings-button" onClick={() => setSheet("settings")} className="rounded-xl border border-line p-2.5 text-ink-2 hover:bg-surface-2">
+                <svg aria-hidden width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>
+              </button>
+            ) : (
+              <button type="button" data-testid="wallet-readonly-disconnect" onClick={() => externalWallet?.disconnect()} className="rounded-xl border border-line px-3 py-2 text-sm font-semibold text-ink-2 hover:bg-surface-2">
+                {c.disconnectExternal}
+              </button>
+            )}
           </header>
 
           <div className="rounded-2xl border border-line bg-surface p-4">
             <div className="flex items-center justify-between gap-2">
-              <p className="font-mono text-sm text-ink-2" title={session.address}>{shortAddress}</p>
+              <p className="font-mono text-sm text-ink-2" title={address}>{shortAddress}</p>
               <button
                 type="button"
                 data-testid="wallet-copy-address"
                 className="rounded-lg px-2 py-1 text-xs font-semibold text-brand hover:bg-surface-2"
                 onClick={() => {
-                  void navigator.clipboard.writeText(session.address);
+                  void navigator.clipboard.writeText(address);
                   setNotice(t.copied);
                 }}
               >
@@ -630,10 +667,13 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
               <AssetImage assetId="ppl" name="PPL" className="h-10 w-10" />
               {account ? <PplAmount wei={account.balanceWei} dustLabel={u.pplDust} className="inline cursor-pointer border-0 bg-transparent p-0 text-inherit" /> : "—"}
             </p>
+            {portfolio.readOnly ? <p className="mt-3 text-sm text-ink-2" data-testid="wallet-readonly-note">{c.externalReadOnly}</p> : null}
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <button type="button" data-testid="wallet-action-send" onClick={() => setSheet("send")} className="rounded-2xl bg-brand py-4 text-sm font-bold text-brand-ink shadow-sm">{c.sendTab}</button>
+            {portfolio.localKeyActions ? (
+              <button type="button" data-testid="wallet-action-send" onClick={() => setSheet("send")} className="rounded-2xl bg-brand py-4 text-sm font-bold text-brand-ink shadow-sm">{c.sendTab}</button>
+            ) : null}
             <button type="button" data-testid="wallet-action-receive" onClick={() => setSheet("receive")} className="rounded-2xl border border-line bg-surface py-4 text-sm font-bold text-ink">{c.receiveQr}</button>
             <Link href="/swap" data-testid="wallet-action-swap" className="flex items-center justify-center rounded-2xl border border-line bg-surface py-4 text-sm font-bold text-ink">{c.swapAction}</Link>
             {walletShowsSoonPlaceholders && !walletFeatures.buy ? (
@@ -643,17 +683,19 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
               Testnet PPL for a fresh wallet. Spans the grid's full width (2 / 4 columns) so the
               action row stays tidy at 390px and on desktop instead of leaving one orphan cell.
             */}
-            <button
-              type="button"
-              data-testid="wallet-action-faucet"
-              disabled={busy}
-              onClick={() => void doFaucet(FAUCET_MAX_PPL, c.faucetSent)}
-              className="col-span-2 rounded-2xl border border-line bg-surface py-3.5 text-sm font-bold text-ink disabled:opacity-40 sm:col-span-4"
-            >
-              {faucetBusy ? c.faucetRequesting : c.faucetAction}
-            </button>
+            {portfolio.localKeyActions ? (
+              <button
+                type="button"
+                data-testid="wallet-action-faucet"
+                disabled={busy}
+                onClick={() => void doFaucet(FAUCET_MAX_PPL, c.faucetSent)}
+                className="col-span-2 rounded-2xl border border-line bg-surface py-3.5 text-sm font-bold text-ink disabled:opacity-40 sm:col-span-4"
+              >
+                {faucetBusy ? c.faucetRequesting : c.faucetAction}
+              </button>
+            ) : null}
           </div>
-          <p className="text-xs text-ink-3">{c.faucetActionHint}</p>
+          {portfolio.localKeyActions ? <p className="text-xs text-ink-3">{c.faucetActionHint}</p> : null}
 
           <WalletInstallButton />
 
@@ -687,7 +729,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
               })}
             </ul>
             <div className="flex flex-wrap gap-3 text-sm">
-              <Link href={`/explorer/address/${session.address}`} className="font-semibold text-brand hover:underline">{t.explorer}</Link>
+              <Link href={`/explorer/address/${address}`} className="font-semibold text-brand hover:underline">{t.explorer}</Link>
               <Link href="/create" className="font-semibold text-brand hover:underline">{t.factory}</Link>
             </div>
           </div>
@@ -729,7 +771,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           </div>
 
           <div id="wallet-panel-history" role="tabpanel" aria-labelledby="wallet-tab-history" hidden={tab !== "history"}>
-            {tab === "history" && <WalletHistory address={session.address} chainId={chainId} revision={revision} assets={assets} />}
+            {tab === "history" && <WalletHistory address={address} chainId={chainId} revision={revision} assets={assets} />}
           </div>
         </div>
       ) : null}
@@ -738,19 +780,19 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           {sendForm}
         </WalletDialog>
       ) : null}
-      {sheet === "receive" && session ? (
+      {sheet === "receive" && address ? (
         <WalletDialog title={c.receiveQr} onClose={() => setSheet(null)}>
           <div data-testid="wallet-receive-dialog" className="flex flex-col items-center gap-4">
             {qr ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={qr} alt="" className="h-52 w-52 rounded-xl bg-white p-3" />
             ) : null}
-            <p className="break-all text-center font-mono text-xs text-ink-2">{session.address}</p>
+            <p className="break-all text-center font-mono text-xs text-ink-2">{address}</p>
             <button
               type="button"
               className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-brand-ink"
               onClick={() => {
-                void navigator.clipboard.writeText(session.address);
+                void navigator.clipboard.writeText(address);
                 setNotice(t.copied);
               }}
             >
@@ -774,19 +816,19 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           </div>
         </WalletDialog>
       ) : null}
-      {selectedNft && session && (
+      {selectedNft && address && (
         <WalletDialog title={c.nftDetails} onClose={() => setSelectedNft(null)}>
           <AssetImage src={selectedNft.imageUri} name={selectedNft.name} nft className="mx-auto aspect-square w-48" />
           <h3 className="mt-3 font-bold">{selectedNft.name}</h3>
           <p className="my-3 break-all font-mono text-xs">{c.assetId}: {selectedNft.nftId}</p>
-          <p className="mb-3 break-all font-mono text-xs">{c.owner}: {session.address}</p>
+          <p className="mb-3 break-all font-mono text-xs">{c.owner}: {address}</p>
           <Link href={`/explorer/nfts#${encodeURIComponent(selectedNft.nftId)}`} className="text-sm text-brand">{t.explorer}</Link>
           {selectedNft.collection && selectedNft.onChainTokenId ? (
             <Link href={`/nft/${selectedNft.collection}/${selectedNft.onChainTokenId}`} className="mt-2 block text-sm font-semibold text-brand hover:underline">
               {t.nfts} #{selectedNft.onChainTokenId}
             </Link>
           ) : null}
-          {nftTransfersEnabled ? (
+          {nftTransfersEnabled && portfolio.localKeyActions && session ? (
             <>
               <div className="mt-4">
                 <RecipientField value={nftTo} onChange={setNftTo} label={t.to} storageKey={`people-contacts:${chainId}:${session.address}`} disabled={busy} />
