@@ -89,6 +89,7 @@ contract HubV2Handler is Test {
     struct Spend {
         uint256 at;
         uint256 amount;
+        bool router; // buy made for someone else; own buys and all sells are false
     }
 
     mapping(address => Spend[]) internal _buyLog;
@@ -371,7 +372,11 @@ contract HubV2Handler is Test {
                 buyDays.push(day);
             }
             buyUsed[recipient][day] += charged;
-            _logSpend(_buyLog[recipient], nowTs, charged, hub.BUY_CAP_DAY_USD6(), hub.maxBuysPer24h(), true);
+            // Router buys (recipient != buyer) do not consume own-buy slots or the cooldown. They have
+            // their own count (MAX_ROUTER_BUYS_24H). The $2k amount cap stays shared.
+            _logSpend(
+                _buyLog[recipient], nowTs, charged, hub.BUY_CAP_DAY_USD6(), hub.maxBuysPer24h(), true, buyer != recipient
+            );
         } catch {}
     }
 
@@ -415,22 +420,32 @@ contract HubV2Handler is Test {
         } catch {}
     }
 
-    /// @dev Records a spend and checks the rolling window ending now: sum within (now - 24h, now] <= cap
-    /// and live entries <= the owner-set entry limit. The max over all windows is reached at a spend.
-    function _logSpend(Spend[] storage log, uint256 nowTs, uint256 amount, uint256 cap, uint256 maxEntries, bool isBuy)
-        internal
-    {
-        log.push(Spend(nowTs, amount));
+    /// @dev Records a spend and checks the rolling window ending now. Amount sum over (now-24h, now]
+    /// <= cap. Own buys and sells also stay within the owner-set entry limit; router buys stay within
+    /// MAX_ROUTER_BUYS_24H and are not counted against the person's own buy slots.
+    function _logSpend(
+        Spend[] storage log,
+        uint256 nowTs,
+        uint256 amount,
+        uint256 cap,
+        uint256 maxEntries,
+        bool isBuy,
+        bool router
+    ) internal {
+        log.push(Spend(nowTs, amount, router));
         uint256 sum;
-        uint256 live;
+        uint256 ownLive;
+        uint256 routerLive;
         for (uint256 i = log.length; i != 0; --i) {
             if (log[i - 1].at + 1 days <= nowTs) break;
             sum += log[i - 1].amount;
-            ++live;
+            if (log[i - 1].router) ++routerLive;
+            else ++ownLive;
         }
-        if (sum > cap || live > maxEntries) {
-            if (isBuy) ++rollingBuyViolations;
-            else ++rollingSellViolations;
+        if (isBuy) {
+            if (sum > cap || ownLive > maxEntries || routerLive > hub.MAX_ROUTER_BUYS_24H()) ++rollingBuyViolations;
+        } else if (sum > cap || ownLive > maxEntries) {
+            ++rollingSellViolations;
         }
     }
 
@@ -444,7 +459,7 @@ contract HubV2Handler is Test {
         }
         sellDayGross[day] += gross;
         sellUsed[seller][day] += gross;
-        _logSpend(_sellLog[seller], nowTs, gross, hub.SELL_CAP_DAY_USD6(), hub.maxSellsPer24h(), false);
+        _logSpend(_sellLog[seller], nowTs, gross, hub.SELL_CAP_DAY_USD6(), hub.maxSellsPer24h(), false, false);
 
         // FIFO over the shadow lots; each touched lot must be older than HOLD.
         ShadowLot[] storage ls = _shadow[seller];
