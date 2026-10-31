@@ -83,7 +83,8 @@ export function verifyWalletProof(proof: WalletProof): WalletVerifyResult {
   } catch {
     return { ok: false, error: "invalid_input" };
   }
-  if (derived !== address && legacyAddressFromPublicKey(publicKey) !== address) {
+  const legacy = legacyAddressFromPublicKey(publicKey);
+  if (derived.toLowerCase() !== address && legacy.toLowerCase() !== address) {
     return { ok: false, error: "address_mismatch" };
   }
   try {
@@ -95,7 +96,8 @@ export function verifyWalletProof(proof: WalletProof): WalletVerifyResult {
   } catch {
     return { ok: false, error: "bad_signature" };
   }
-  return { ok: true, address, publicKey };
+  const canonical = derived.toLowerCase() === address ? derived : legacy;
+  return { ok: true, address: canonical, publicKey };
 }
 
 export function signWalletMessage(privateKeyHex: string, message: string): {
