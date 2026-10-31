@@ -8,15 +8,21 @@ import {
   commitCloudSession,
   createCloudVaultWallet,
   ensureCloudWalletSession,
+  errorCodeFrom,
   isWalletCloudErrorCode,
+  publishCloudSessionAfterPersist,
   unlockCloudVaultSession,
+  WalletCloudError,
 } from "../src/lib/wallet-cloud-client.ts";
 import {
   decryptPrivateKeyFromVault,
   deriveUserWrapKeyHex,
   encryptPrivateKeyForVault,
   readLegacyVaultPlaintext,
+  safeCloudLogCode,
+  sanitizeConsoleSignInLabel,
   VaultSchemaError,
+  warnCloudOpenFailed,
 } from "../src/lib/wallet-cloud-crypto.ts";
 import { addressFromPublicKey } from "../src/lib/partner/wallet.ts";
 
@@ -286,6 +292,76 @@ test("unlockCloudVaultSession: vault_not_found", async () => {
     spy.restore();
     fetchMock.restore();
   }
+});
+
+test("publishCloudSessionAfterPersist: persist failure publishes nothing and throws session_open_failed", async () => {
+  const spy = spyWarn();
+  let published = null;
+  const cloud = { id: "cloud:user_1", kind: "cloud", userId: "user_1" };
+  try {
+    await assert.rejects(
+      () =>
+        publishCloudSessionAfterPersist(
+          cloud,
+          async () => {
+            throw new Error("storage_unavailable");
+          },
+          (session) => {
+            published = session;
+          },
+        ),
+      (err) => err instanceof WalletCloudError && err.code === "session_open_failed",
+    );
+    assert.equal(published, null);
+    assert.equal(spy.warnings.at(-1)[1].code, "session_open_failed");
+  } finally {
+    spy.restore();
+  }
+});
+
+test("publishCloudSessionAfterPersist: persist success is the only path that publishes", async () => {
+  let published = null;
+  const cloud = { id: "cloud:user_1", kind: "cloud", userId: "user_1" };
+  await publishCloudSessionAfterPersist(
+    cloud,
+    async () => {},
+    (session) => {
+      published = session;
+    },
+  );
+  assert.equal(published, cloud);
+});
+
+test("logged cloud codes and sign-in labels stay machine-shaped", async () => {
+  assert.equal(safeCloudLogCode("session_open_failed"), "session_open_failed");
+  assert.equal(safeCloudLogCode("eyJhbGciOiJIUzI1NiJ9.payload"), "unknown");
+  assert.equal(safeCloudLogCode("not a code"), "unknown");
+  const spy = spyWarn();
+  try {
+    warnCloudOpenFailed({
+      code: "Bearer eyJhbGciOiJIUzI1NiJ9.payload.sig",
+      stage: "cloud_sign_in",
+      vaultPresent: false,
+      retried: false,
+    });
+    assert.equal(spy.warnings.at(-1)[1].code, "unknown");
+    assert.equal(JSON.stringify(spy.warnings).includes("eyJ"), false);
+    assert.equal(spy.warnings.at(-1)[1].vaultPresent, false);
+  } finally {
+    spy.restore();
+  }
+  const leaked = jsonResponse(500, { error: "eyJhbGciOiJIUzI1NiJ9.payload.sig" });
+  assert.equal(await errorCodeFrom(leaked, "vault_load_failed"), "unknown");
+  assert.equal(await errorCodeFrom(jsonResponse(500, { error: "reauth_required" }), "vault_load_failed"), "reauth_required");
+  assert.equal(await errorCodeFrom(jsonResponse(500, {}), "vault_load_failed"), "vault_load_failed");
+  assert.equal(sanitizeConsoleSignInLabel("session_open_failed"), "session_open_failed");
+  assert.equal(sanitizeConsoleSignInLabel("popup_closed"), "popup_closed");
+  assert.equal(
+    sanitizeConsoleSignInLabel("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.sig"),
+    "unknown",
+  );
+  assert.equal(sanitizeConsoleSignInLabel("user@example.com"), "unknown");
+  assert.equal(sanitizeConsoleSignInLabel("signed in as alice"), "unknown");
 });
 
 test("commitCloudSession: persist throw is session_open_failed and the warning drops the cause", async () => {

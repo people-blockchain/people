@@ -13,7 +13,7 @@ import {
   isCloudOpenRecoveryCode,
   WalletCloudError,
 } from "@/lib/wallet-cloud-client";
-import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
+import { sanitizeConsoleSignInLabel, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { createCloudVaultWithReauth, openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
 import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { runParticipantRegistration } from "@/lib/participant-registration";
@@ -92,10 +92,8 @@ async function endStaleRestoredSession(web3auth: Web3AuthInstance): Promise<void
 type LoginOutcome = "connected" | "migration" | "failed";
 
 function consoleSignInLabel(err: unknown): string {
-  if (err instanceof WalletCloudError) return err.code;
-  const label = signInErrorLabel(err);
-  if (label.includes("0x") || label.includes("@") || /[0-9a-fA-F]{32,}/.test(label)) return "unknown";
-  return label.slice(0, 160);
+  const label = err instanceof WalletCloudError ? err.code : signInErrorLabel(err);
+  return sanitizeConsoleSignInLabel(label);
 }
 
 function warnIfUnlogged(err: unknown, stage: string, vaultPresent: boolean): void {

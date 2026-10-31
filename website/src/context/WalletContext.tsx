@@ -27,7 +27,7 @@ import {
   upsertWallet,
   type StoredWallet,
 } from "@/lib/wallet-vault";
-import { commitCloudSession, exportCloudPrivateKey as exportCloudKey } from "@/lib/wallet-cloud-client";
+import { exportCloudPrivateKey as exportCloudKey, publishCloudSessionAfterPersist } from "@/lib/wallet-cloud-client";
 import { isCloudSessionId } from "@/lib/wallet-cloud-client";
 import {
   clearWalletSession,
@@ -237,13 +237,20 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     // Persist cloud wallets too so the header can rehydrate instantly after an Android
     // app-switch / bfcache return without waiting on /api/auth/session + vault.
     const cloud: WalletSession = { ...next, kind: "cloud", userId };
-    setSession(cloud);
-    setSessionHydrated(true);
     // Awaited by the caller: a sign-in that finishes by navigating (redirect resume, or the
     // popup flow leaving /login) must not do so before the IndexedDB/sessionStorage write
     // lands, or the next page's reload finds no session (the reported "logged out after
     // reload" bug) — `window.location.replace` can run before a fire-and-forget write settles.
-    await commitCloudSession(() => persistWalletSession(cloud, Date.now(), { strict: true }));
+    // The in-memory session is published only after that write succeeds. A storage failure
+    // throws session_open_failed and leaves the sign-in panel (and import/restore) mounted.
+    await publishCloudSessionAfterPersist(
+      cloud,
+      (session) => persistWalletSession(session, Date.now(), { strict: true }),
+      (session) => {
+        setSession(session);
+        setSessionHydrated(true);
+      },
+    );
   }, []);
 
   const exportPrivateKey = useCallback(
