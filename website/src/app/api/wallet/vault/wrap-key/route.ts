@@ -4,7 +4,7 @@ import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { getUserWrapKeyHex, isAuthTimeFresh, isWalletVaultConfigured } from "@/lib/wallet-cloud-server";
 import { checkDurableWrapKeyRateLimit, recordWalletVaultAccess } from "@/lib/wallet-vault-access-log";
-import { hasAuthJsSessionCookie } from "@/lib/wallet-wrap-key-diagnostics";
+import { hasAuthJsSessionCookie, sanitizeForwardedHost } from "@/lib/wallet-wrap-key-diagnostics";
 import { NextResponse } from "next/server";
 
 /** Key material responses must never be cached by a shared cache or the browser disk cache. */
@@ -21,9 +21,8 @@ export async function GET(request: Request) {
     // Same status as reauth_required. Name which gate failed (never the cookie, token, or email).
     const reason = session ? "no_user_id" : "no_session";
     const sessionCookie = hasAuthJsSessionCookie(request.headers.get("cookie"));
-    const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "").replace(
-      /[\r\n]/g,
-      "",
+    const host = sanitizeForwardedHost(
+      request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "",
     );
     console.warn(
       `[wallet-vault] wrap-key unauthorized: reason=${reason} sessionCookie=${sessionCookie} host=${host}`,
@@ -38,10 +37,8 @@ export async function GET(request: Request) {
   if (!isAuthTimeFresh(session.authTime)) {
     // Both 401s used to be indistinguishable in the runtime logs, which left a production
     // reauth failure looking like an anonymous request. Name the reason (never the key material).
-    console.warn(
-      `[wallet-vault] wrap-key reauth_required for user ${userId}: ` +
-        `authTime=${typeof session.authTime === "number" ? session.authTime : "absent"}`,
-    );
+    const authTimePresent = typeof session.authTime === "number";
+    console.warn(`[wallet-vault] wrap-key reauth_required authTimePresent=${authTimePresent}`);
     await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "reauth_required", ip });
     return NextResponse.json({ error: "reauth_required" }, { status: 401, headers: NO_STORE });
   }

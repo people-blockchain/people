@@ -87,8 +87,19 @@ export function isCloudOpenRecoveryCode(code: string): boolean {
     code === "decrypt_failed" ||
     code === "vault_schema_unsupported" ||
     code === "address_mismatch" ||
+    code === "address_taken" ||
     code === "session_open_failed"
   );
+}
+
+/**
+ * The Auth.js session and the Web3Auth user must be the same account. Opening the vault for
+ * `session.id` while remembering email and other fields for a different `userId` would attach
+ * the wrong wallet.
+ */
+export function assertCloudAccount(sessionId: string, userId: string): string {
+  if (sessionId !== userId) throw new WalletCloudError("account_mismatch");
+  return sessionId;
 }
 
 /** Read the route's `{error}` body, or fall back to a call-site label when it is absent. */

@@ -14,6 +14,14 @@ export function isAuthJsSessionCookieName(name: string): boolean {
   return false;
 }
 
+/**
+ * Host header for a log line. Client-supplied `x-forwarded-host` is truncated and limited to
+ * `[a-z0-9.:-]` so it cannot inject newlines or fill the log.
+ */
+export function sanitizeForwardedHost(raw: string): string {
+  return raw.toLowerCase().replace(/[^a-z0-9.:-]/g, "").slice(0, 100);
+}
+
 /** True when the Cookie header names an Auth.js session cookie, including chunked parts. */
 export function hasAuthJsSessionCookie(cookieHeader: string | null | undefined): boolean {
   if (!cookieHeader) return false;

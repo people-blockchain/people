@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import {
+  assertCloudAccount,
   ensureCloudWalletSession,
   fetchAuthSessionUser,
   fetchVaultRecordClient,
@@ -15,7 +16,6 @@ import {
 } from "@/lib/wallet-cloud-client";
 import { sanitizeConsoleSignInLabel, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { createCloudVaultWithReauth, openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
-import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
 import {
@@ -45,6 +45,7 @@ import {
   clearPendingRedirect,
   resolvePostSignInNavigation,
   runResumeOnce,
+  SESSION_USER_RETRY_DELAYS_MS,
   takePendingRedirect,
   waitForFreshSessionUser,
   waitForWeb3AuthConnected,
@@ -119,7 +120,7 @@ function messageForCloudConnectError(
   if (code === "rate_limited") return copy.signInRateLimited;
   if (code === "decrypt_failed") return copy.signInDecryptFailed;
   if (code === "vault_schema_unsupported") return copy.signInVaultUnsupported;
-  if (code === "address_mismatch") return copy.signInAddressMismatch;
+  if (code === "address_mismatch" || code === "address_taken") return copy.signInAddressMismatch;
   if (code === "session_open_failed") return copy.signInSessionOpenFailed;
   return copy.signInFailed;
 }
@@ -241,7 +242,7 @@ export function WalletWeb3AuthSignIn({
           openVault: (session, attempt) => {
             retried = attempt?.retried === true;
             return ensureCloudWalletSession(
-              { id: session.id || userId },
+              { id: assertCloudAccount(session.id, userId) },
               { retried, vaultPresent: options.vaultPresent },
             );
           },
@@ -335,6 +336,8 @@ export function WalletWeb3AuthSignIn({
   const afterWeb3AuthLogin = useCallback(
     async (idToken: string, provider: import("@web3auth/base").IProvider): Promise<LoginOutcome> => {
       lastIdTokenRef.current = idToken;
+      const previous = await fetchAuthSessionUser();
+      const previousAuthTime = typeof previous?.authTime === "number" ? previous.authTime : null;
       const auth = await signIn("web3auth", { idToken, redirect: false });
       if (!auth || auth.error || !auth.ok) {
         // The server rejects stale idTokens (replay window); a restored Web3Auth session keeps
@@ -349,7 +352,12 @@ export function WalletWeb3AuthSignIn({
 
       // The session cookie from the sign-in response can lag behind the next read on mobile.
       // A user id alone is not enough: the previous cookie is still a user, with a stale authTime.
-      const user = await waitForFreshSessionUser(fetchAuthSessionUser);
+      const user = await waitForFreshSessionUser(
+        fetchAuthSessionUser,
+        SESSION_USER_RETRY_DELAYS_MS,
+        undefined,
+        { newerThan: previousAuthTime },
+      );
       if (!user?.id) {
         warnCloudOpenFailed({ code: "reauth_required", stage: "auth_session", vaultPresent: false, retried: false });
         throw new WalletCloudError("reauth_required", { logged: true });
@@ -698,10 +706,8 @@ export function WalletWeb3AuthSignIn({
     let cancelled = false;
     void (async () => {
       const user = await fetchAuthSessionUser();
-      if (!user || cancelled) return;
-      // Nothing to refresh a session older than the reauth window (no idToken). wrap-key would
-      // only answer reauth_required; stay quiet and let the next real sign-in open the vault.
-      if (!isAuthTimeFresh(user.authTime)) return;
+      if (!user?.id || cancelled) return;
+      // wrap-key enforces the reauth window. A fast client clock must not skip a fresh session.
       await finishConnect(user.id, user.email, { silent: true });
     })();
     return () => {

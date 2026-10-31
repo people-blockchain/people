@@ -16,11 +16,13 @@ const {
   getUserWrapKeyHex,
   isAuthTimeFresh,
   isWalletVaultConfigured,
+  legacyVaultCasWhere,
   loadUserWalletVault,
   walletVaultMasterSecret,
   WALLET_VAULT_REAUTH_WINDOW_MS,
 } = await import("../src/lib/wallet-cloud-server.ts");
 const { deriveUserWrapKeyHex, encryptPrivateKeyForVault } = await import("../src/lib/wallet-cloud-crypto.ts");
+const { keyFromPrivate } = await import("../src/lib/people-sign.ts");
 const { getDbReady } = await import("./fixtures/wallet-vault-pglite-db.mjs");
 const schema = await import("../src/db/schema.ts");
 
@@ -129,7 +131,7 @@ test("loadUserWalletVault migrates a legacy vaultVersion:1 row to the dedicated 
       const legacyEncrypted = await encryptPrivateKeyForVault(privateKey, legacyWrapKeyHex);
       await db.insert(schema.userWalletVaults).values({
         userId,
-        address: `0x${"11".repeat(20)}`,
+        address: keyFromPrivate(privateKey).address,
         publicKey: `0x${"22".repeat(33)}`,
         encryptedPrivateKey: legacyEncrypted,
         vaultVersion: 1,
@@ -207,7 +209,7 @@ test("getUserWrapKeyHex still migrates and returns a wrap key once the dedicated
       const legacyEncrypted = await encryptPrivateKeyForVault(privateKey, legacyWrapKeyHex);
       await db.insert(schema.userWalletVaults).values({
         userId,
-        address: `0x${"55".repeat(20)}`,
+        address: keyFromPrivate(privateKey).address,
         publicKey: `0x${"66".repeat(33)}`,
         encryptedPrivateKey: legacyEncrypted,
         vaultVersion: 1,
@@ -221,4 +223,74 @@ test("getUserWrapKeyHex still migrates and returns a wrap key once the dedicated
       assert.equal(migrated.vaultVersion, 2);
     },
   );
+});
+
+test("legacy migration leaves the row untouched when the decrypted key address does not match", async () => {
+  await withEnv(
+    { AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too", PEOPLE_WALLET_VAULT_SECRET: "m".repeat(32) },
+    async () => {
+      const db = await getDbReady();
+      const userId = "wallet-address-mismatch-user";
+      await db.insert(schema.users).values({ id: userId });
+      const privateKey = "cd".repeat(32);
+      const legacyWrapKeyHex = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, userId);
+      const legacyEncrypted = await encryptPrivateKeyForVault(privateKey, legacyWrapKeyHex);
+      const storedAddress = keyFromPrivate("11".repeat(32)).address;
+      assert.notEqual(storedAddress.toLowerCase(), keyFromPrivate(privateKey).address.toLowerCase());
+      await db.insert(schema.userWalletVaults).values({
+        userId,
+        address: storedAddress,
+        publicKey: `0x${"77".repeat(33)}`,
+        encryptedPrivateKey: legacyEncrypted,
+        vaultVersion: 1,
+      });
+
+      const warnings = [];
+      const original = console.warn;
+      console.warn = (...args) => {
+        warnings.push(args);
+      };
+      try {
+        const loaded = await loadUserWalletVault(userId);
+        assert.equal(loaded.vaultVersion, 1);
+        assert.equal(loaded.encryptedPrivateKey, legacyEncrypted);
+        assert.equal(loaded.address, storedAddress);
+      } finally {
+        console.warn = original;
+      }
+      const text = JSON.stringify(warnings);
+      assert.match(text, /legacy_address_mismatch/);
+      assert.equal(text.includes(storedAddress), false);
+      assert.equal(text.includes(privateKey), false);
+      assert.equal(text.includes(userId), false);
+      assert.equal(text.includes(legacyEncrypted), false);
+    },
+  );
+});
+
+test("legacy migration compare-and-swap does not overwrite a version 2 row", async () => {
+  await withEnv({ PEOPLE_WALLET_VAULT_SECRET: "n".repeat(32) }, async () => {
+    const db = await getDbReady();
+    const userId = "wallet-cas-user";
+    await db.insert(schema.users).values({ id: userId });
+    const ciphertext = "ciphertext-must-stay";
+    await db.insert(schema.userWalletVaults).values({
+      userId,
+      address: `0x${"99".repeat(20)}`,
+      publicKey: `0x${"88".repeat(33)}`,
+      encryptedPrivateKey: ciphertext,
+      vaultVersion: 2,
+    });
+    const updated = await db
+      .update(schema.userWalletVaults)
+      .set({ encryptedPrivateKey: "overwritten", vaultVersion: 2 })
+      .where(legacyVaultCasWhere(userId))
+      .returning();
+    assert.equal(updated.length, 0);
+    const { eq } = await import("drizzle-orm");
+    const current = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, userId));
+    assert.equal(current.length, 1);
+    assert.equal(current[0].encryptedPrivateKey, ciphertext);
+    assert.equal(current[0].vaultVersion, 2);
+  });
 });

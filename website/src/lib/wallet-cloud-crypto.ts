@@ -27,14 +27,11 @@ export function safeCloudLogCode(code: string): string {
 }
 
 /**
- * Log and stage-line label. Safe token shape only, and JWT-like `eyJ…` strings are dropped
- * even though base64url plus dots would otherwise match the character class.
+ * Log and stage-line label. Only a short machine code is kept. Tokens (`ya29.…`, JWTs,
+ * base64url secrets), emails, addresses, and UUIDs become `unknown`.
  */
 export function sanitizeConsoleSignInLabel(label: string): string {
-  if (label.includes("0x") || label.includes("@") || /[0-9a-fA-F]{32,}/.test(label)) return "unknown";
-  if (/eyJ[A-Za-z0-9_-]+/.test(label)) return "unknown";
-  if (!/^[a-zA-Z0-9_.:-]+$/.test(label)) return "unknown";
-  return label.slice(0, 160);
+  return /^[a-z0-9_]{1,64}$/.test(label) ? label : "unknown";
 }
 
 /** Codes and booleans only. Never pass keys, addresses, ciphertext, tokens, or emails. */
@@ -46,7 +43,7 @@ export function warnCloudOpenFailed(entry: {
 }): void {
   console.warn("[wallet] cloud open failed", {
     code: safeCloudLogCode(entry.code),
-    stage: entry.stage,
+    stage: sanitizeConsoleSignInLabel(entry.stage),
     vaultPresent: entry.vaultPresent === true,
     retried: entry.retried === true,
   });
