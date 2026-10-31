@@ -138,7 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "Das PEOPLE-Netzwerk konnte nicht zu {wallet} hinzugefügt werden. Bestätige die Netzwerkanfrage in der Wallet und versuche es erneut.",
   "signInSessionExpired": "Ihre Anmeldung ist abgelaufen. Tippen Sie erneut auf Ihre Anmeldemethode.",
-  "signInRateLimited": "Zu viele Versuche. Bitte warten Sie einige Minuten.",
+  "signInRateLimited": "Zu viele Versuche. Warten Sie {minutes} Minuten und versuchen Sie es erneut.",
   "unlockWrongPassword": "Falsches Passwort für diese Wallet.",
   "unlockUnavailable": "Diese Wallet konnte auf diesem Gerät nicht entsperrt werden. Melden Sie sich mit Google oder E-Mail an.",
   "extHeading": "Ich habe eine Wallet (MetaMask, Trust Wallet, WalletConnect)",

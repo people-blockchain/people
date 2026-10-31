@@ -16,12 +16,18 @@ import { apiRateLimits } from "@/db/schema";
  * Throws if the database is unreachable — callers decide whether to fail open to the in-memory
  * limiter or closed.
  */
-export async function checkDurableRateLimit(
+export type DurableRateLimitVerdict = {
+  allowed: boolean;
+  /** Seconds until this fixed window ends. Zero when the call was allowed. */
+  retryAfterSeconds: number;
+};
+
+export async function checkDurableRateLimitDetail(
   namespace: string,
   subject: string,
   maxPerWindow: number,
-  windowMs: number
-): Promise<boolean> {
+  windowMs: number,
+): Promise<DurableRateLimitVerdict> {
   const now = Date.now();
   const windowStart = Math.floor(now / windowMs) * windowMs;
   const bucketKey = `${namespace}:${subject}:${windowStart}`;
@@ -47,7 +53,20 @@ export async function checkDurableRateLimit(
       );
     }
   }
-  return count <= maxPerWindow;
+  const allowed = count <= maxPerWindow;
+  return {
+    allowed,
+    retryAfterSeconds: allowed ? 0 : Math.max(1, Math.ceil((windowStart + windowMs - now) / 1000)),
+  };
+}
+
+export async function checkDurableRateLimit(
+  namespace: string,
+  subject: string,
+  maxPerWindow: number,
+  windowMs: number
+): Promise<boolean> {
+  return (await checkDurableRateLimitDetail(namespace, subject, maxPerWindow, windowMs)).allowed;
 }
 
 /** @internal test hook — clear one namespace's buckets. */

@@ -11,6 +11,10 @@ import {
   isWalletCloudErrorCode,
   fetchVaultRecord,
   unlockCloudVaultSession,
+  ensureCloudWalletSession,
+  formatSignInRateLimited,
+  cloudRestoreBlockedUntil,
+  cloudSessionMayRestore,
 } from "../src/lib/wallet-cloud-client.ts";
 import { deriveUserWrapKeyHex, encryptPrivateKeyForVault } from "../src/lib/wallet-cloud-crypto.ts";
 import { addressFromPublicKey } from "../src/lib/partner/wallet.ts";
@@ -101,6 +105,59 @@ test("unlockCloudVaultSession: a correctly-decrypted key that doesn't match the 
     () => unlockCloudVaultSession("user-3"),
     (err) => isWalletCloudErrorCode(err, "address_mismatch"),
   );
+});
+
+test("fetchVaultRecord keeps Retry-After on a rate_limited error", async () => {
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify({ error: "rate_limited", retryAfter: 125 }), {
+      status: 429,
+      headers: { "content-type": "application/json", "Retry-After": "125" },
+    });
+  await assert.rejects(
+    () => fetchVaultRecord(),
+    (err) => {
+      assert.ok(err instanceof WalletCloudError);
+      assert.equal(err.code, "rate_limited");
+      assert.equal(err.retryAfterSeconds, 125);
+      return true;
+    },
+  );
+});
+
+test("formatSignInRateLimited fills the wait, rounded up to at least one minute", () => {
+  assert.equal(formatSignInRateLimited("Wait {minutes} minutes", 90), "Wait 2 minutes");
+  assert.equal(formatSignInRateLimited("Wait {minutes} minutes", 60), "Wait 1 minutes");
+  assert.equal(formatSignInRateLimited("Wait {minutes} minutes", null), "Wait 1 minutes");
+});
+
+test("a rate-limited cloud restore stays paused until Retry-After elapses", () => {
+  const now = 1_000_000;
+  const until = cloudRestoreBlockedUntil(new WalletCloudError("rate_limited", 30), now);
+  assert.equal(until, now + 30_000);
+  assert.equal(cloudSessionMayRestore(until, now), false);
+  assert.equal(cloudSessionMayRestore(until, until), true);
+  assert.equal(cloudRestoreBlockedUntil(new WalletCloudError("reauth_required"), now), null);
+});
+
+test("ensureCloudWalletSession reuses a vault record instead of reading it again", async () => {
+  const wrapKeyHex = await deriveUserWrapKeyHex("real-secret", "user-prefetch");
+  const privateKey = bytesToHex(secp.utils.randomSecretKey());
+  const publicKey = bytesToHex(secp.getPublicKey(secp.etc.hexToBytes(privateKey), true));
+  const address = addressFromPublicKey(publicKey);
+  const encryptedPrivateKey = await encryptPrivateKeyForVault(privateKey, wrapKeyHex);
+  const calls = [];
+  globalThis.fetch = async (url) => {
+    calls.push(String(url));
+    if (String(url).includes("/wrap-key")) return jsonResponse(200, { wrapKeyHex });
+    throw new Error(`unexpected ${url}`);
+  };
+  const session = await ensureCloudWalletSession(
+    { id: "user-prefetch" },
+    { vault: { address, publicKey, encryptedPrivateKey } },
+  );
+  assert.equal(calls.length, 1);
+  assert.match(calls[0], /\/wrap-key$/);
+  assert.equal(session.address.toLowerCase(), address.toLowerCase());
 });
 
 test("unlockCloudVaultSession: happy path returns the decrypted key under the stored address", async () => {

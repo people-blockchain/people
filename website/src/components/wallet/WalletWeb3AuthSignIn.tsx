@@ -9,7 +9,11 @@ import { walletCopy } from "@/lib/wallet-copy";
 import {
   ensureCloudWalletSession,
   fetchAuthSessionUser,
-  fetchVaultRecordClient,
+  fetchVaultRecord,
+  formatSignInRateLimited,
+  isWalletCloudErrorCode,
+  WalletCloudError,
+  type CloudVaultRecord,
 } from "@/lib/wallet-cloud-client";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
@@ -158,9 +162,15 @@ export function WalletWeb3AuthSignIn({
       // The stage line keeps the machine label visible on phones without a console.
       setFailure(signInErrorLabel(err));
       if (err instanceof TimeoutError) return c.signInTimeout;
+      if (isWalletCloudErrorCode(err, "rate_limited") || (err instanceof Error && err.message === "rate_limited")) {
+        return formatSignInRateLimited(
+          c.signInRateLimited,
+          err instanceof WalletCloudError ? err.retryAfterSeconds : null,
+        );
+      }
       return c.signInFailed;
     },
-    [c.signInFailed, c.signInTimeout],
+    [c.signInFailed, c.signInRateLimited, c.signInTimeout],
   );
 
   useEffect(() => {
@@ -175,11 +185,12 @@ export function WalletWeb3AuthSignIn({
     async (
       userId: string,
       email?: string | null,
-      options: { silent?: boolean } = {},
+      options: { silent?: boolean; vault?: CloudVaultRecord | null } = {},
     ): Promise<boolean> => {
       // Automatic finishes (the autoConnect effect) must not put an error on the sign-in card:
       // only an attempt the user started — a click, or resuming our own redirect — may do that.
       const silent = options.silent ?? false;
+      const sessionOptions = "vault" in options ? { vault: options.vault } : undefined;
       setBusy(true);
       if (!silent) setError("");
       try {
@@ -188,7 +199,7 @@ export function WalletWeb3AuthSignIn({
         if (email) setKnownEmail(email);
         let cloud;
         try {
-          cloud = await ensureCloudWalletSession({ id: userId });
+          cloud = await ensureCloudWalletSession({ id: userId }, sessionOptions);
         } catch (first) {
           // The wrap-key route demands a sign-in from the last 15 minutes (authTime). When the
           // session cookie is older (or lost) re-establish it with the idToken of this attempt
@@ -200,7 +211,7 @@ export function WalletWeb3AuthSignIn({
           if (!again || again.error || !again.ok) throw new Error("reauth_required");
           const refreshed = await waitForSessionUser(fetchAuthSessionUser);
           if (!refreshed?.id) throw new Error("unauthorized");
-          cloud = await ensureCloudWalletSession({ id: refreshed.id });
+          cloud = await ensureCloudWalletSession({ id: refreshed.id }, sessionOptions);
         }
         // Must be awaited: callers navigate (window.location.replace) right after this
         // resolves, and a reload before the session write lands is the "logged out after
@@ -228,7 +239,10 @@ export function WalletWeb3AuthSignIn({
             code === "reauth_required" || code === "unauthorized"
               ? c.signInSessionExpired
               : code === "rate_limited"
-                ? c.signInRateLimited
+                ? formatSignInRateLimited(
+                    c.signInRateLimited,
+                    err instanceof WalletCloudError ? err.retryAfterSeconds : null,
+                  )
                 : c.signInFailed,
           );
         }
@@ -258,7 +272,7 @@ export function WalletWeb3AuthSignIn({
       if (!user?.id) throw new Error("auth_session_missing");
 
       rememberAuthEmail(user.email);
-      const vault = await fetchVaultRecordClient();
+      const vault = await fetchVaultRecord();
       const generated = await keyPairFromWeb3AuthProvider(provider);
 
       // A returning account always opens the wallet already saved for it. The Web3Auth key can
@@ -269,11 +283,20 @@ export function WalletWeb3AuthSignIn({
         if (vault.address.toLowerCase() !== generated.address.toLowerCase()) {
           console.info("[wallet] web3auth key differs from the saved wallet; opening the saved wallet");
         }
-        return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+        return (await finishConnect(user.id, user.email, { vault })) ? "connected" : "failed";
       }
 
       const wrapRes = await fetch("/api/wallet/vault/wrap-key", { credentials: "include" });
-      if (!wrapRes.ok) throw new Error("wrap_key_failed");
+      if (!wrapRes.ok) {
+        const denied = (await wrapRes.json().catch(() => ({}))) as { error?: string; retryAfter?: number };
+        if (denied.error === "rate_limited") {
+          throw new WalletCloudError(
+            "rate_limited",
+            typeof denied.retryAfter === "number" ? denied.retryAfter : null,
+          );
+        }
+        throw new Error("wrap_key_failed");
+      }
       const { wrapKeyHex } = (await wrapRes.json()) as { wrapKeyHex: string };
       const { encryptPrivateKeyForVault } = await import("@/lib/wallet-cloud-crypto");
       const encryptedPrivateKey = await encryptPrivateKeyForVault(generated.privateKey, wrapKeyHex);
@@ -287,8 +310,28 @@ export function WalletWeb3AuthSignIn({
           encryptedPrivateKey,
         }),
       });
-      if (!put.ok && put.status !== 409) throw new Error("vault_create_failed");
-      return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+      if (!put.ok && put.status !== 409) {
+        const denied = (await put.json().catch(() => ({}))) as { error?: string; retryAfter?: number };
+        if (denied.error === "rate_limited") {
+          throw new WalletCloudError(
+            "rate_limited",
+            typeof denied.retryAfter === "number" ? denied.retryAfter : null,
+          );
+        }
+        throw new Error("vault_create_failed");
+      }
+      // 409 means a vault is already stored. Its ciphertext is the saved one, so finishConnect
+      // has to read it. A write we just accepted can be unlocked from the record we sent.
+      if (put.status === 409) return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+      return (await finishConnect(user.id, user.email, {
+        vault: {
+          address: generated.address,
+          publicKey: generated.publicKey,
+          encryptedPrivateKey,
+        },
+      }))
+        ? "connected"
+        : "failed";
     },
     [finishConnect],
   );

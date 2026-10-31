@@ -138,7 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "Gagal menambahkan jaringan PEOPLE ke {wallet}. Setujui permintaan jaringan di dompet lalu coba lagi.",
   "signInSessionExpired": "Sesi masuk Anda kedaluwarsa. Ketuk metode masuk Anda lagi.",
-  "signInRateLimited": "Terlalu banyak percobaan. Tunggu beberapa menit.",
+  "signInRateLimited": "Terlalu banyak percobaan. Tunggu {minutes} menit, lalu coba lagi.",
   "unlockWrongPassword": "Kata sandi salah untuk dompet ini.",
   "unlockUnavailable": "Dompet ini tidak dapat dibuka di perangkat ini. Masuk dengan Google atau email.",
   "extHeading": "Saya punya dompet (MetaMask, Trust Wallet, WalletConnect)",

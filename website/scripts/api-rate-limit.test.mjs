@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   MAX_KEYS_PER_NAMESPACE,
   checkSharedRateLimit,
+  checkSharedRateLimitDetail,
   checkSlidingWindowRateLimit,
   rateLimitKey,
   resetRateLimitStoresForTests,
@@ -64,6 +65,22 @@ test("recently used keys survive eviction", () => {
   assert.equal(checkSlidingWindowRateLimit(ns, "hot", 2, 60_000), true);
   checkSlidingWindowRateLimit(ns, "overflow-key", 1, 60_000);
   assert.equal(checkSlidingWindowRateLimit(ns, "hot", 2, 60_000), false);
+});
+
+test("a rejected shared limit reports how many seconds remain in the window", async () => {
+  resetRateLimitStoresForTests();
+  setSharedRateLimitBackendForTests(null);
+  try {
+    const allowed = await checkSharedRateLimitDetail("retry-after", "subject", 1, 60_000);
+    assert.equal(allowed.allowed, true);
+    assert.equal(allowed.retryAfterSeconds, 0);
+    const denied = await checkSharedRateLimitDetail("retry-after", "subject", 1, 60_000);
+    assert.equal(denied.allowed, false);
+    assert.ok(denied.retryAfterSeconds >= 1 && denied.retryAfterSeconds <= 60);
+    assert.equal(await checkSharedRateLimit("retry-after-bool", "subject", 1, 60_000), true);
+  } finally {
+    setSharedRateLimitBackendForTests(undefined);
+  }
 });
 
 test("shared limiter uses the in-memory window when no store is configured", async () => {

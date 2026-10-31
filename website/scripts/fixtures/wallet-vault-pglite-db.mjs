@@ -31,3 +31,6 @@ export async function getDbReady() {
 export function isDatabaseConfigured() {
   return true;
 }
+
+/** Routes call this before reading the vault. The fixture already applied the DDL in getDbReady. */
+export async function ensurePartnerSchema() {}
