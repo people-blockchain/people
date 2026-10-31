@@ -120,5 +120,5 @@ test("a cold token page returns name and symbol without a getLogs scan", async (
   assert.equal(res.body.partial, undefined);
   assert.match(String(res.body.imageUri), /metadata\.json/);
   assert.equal(state.logs, 0);
-  assert.ok(state.fetches >= 1);
+  assert.equal(state.fetches, 0);
 });

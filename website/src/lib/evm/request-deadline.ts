@@ -16,8 +16,8 @@ export function currentDeadline(): DeadlineStore | undefined {
 }
 
 export function deadlineExpired(deadlineAt?: number): boolean {
-  // An explicit budget belongs to the caller. A catalog history scan keeps its own
-  // deadline; the request signal aborting must not fail windows that scan still owns.
+  // An explicit budget belongs to the caller. Aborting the request does not by itself
+  // expire a later deadline the caller passed in.
   if (typeof deadlineAt === "number") return Date.now() >= deadlineAt;
   const store = currentDeadline();
   if (store?.signal.aborted) return true;
@@ -116,8 +116,8 @@ export function linkAbort(ms: number, parent?: AbortSignal | null): { signal: Ab
 }
 
 /**
- * A catalog history scan started during a request must keep its own budget. Otherwise it stays
- * inside the request's deadline store and, once that request returns, every later window aborts.
+ * Leaves the request deadline store. Compat handlers must not use this to keep scanning,
+ * writing snapshots, or fetching metadata after the response has been returned.
  */
 export function runOutsideRequestDeadline<T>(fn: () => T): T {
   return deadlines.exit(fn);
@@ -132,6 +132,8 @@ export function runWithRequestDeadline<T>(fn: () => Promise<T>, ms = API_REQUEST
       return await fn();
     } finally {
       cancelTimer();
+      // Anything still tied to this request stops when the handler returns.
+      if (!controller.signal.aborted) controller.abort();
     }
   });
 }

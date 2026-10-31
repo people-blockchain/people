@@ -187,7 +187,7 @@ test("a rejecting factory leaves the other factories' tokens in the catalog", as
   }
 });
 
-test("history keeps scanning after the request aborts and the next scan resumes the cursor", async (t) => {
+test("a request deadline stops the catalog scan and does not resume it", async (t) => {
   await db.delete(evmLogScanCursors);
   const latest = FACTORY_START + 40_000;
   const seenFrom = [];
@@ -209,22 +209,9 @@ test("history keeps scanning after the request aborts and the next scan resumes 
 
   try {
     await runWithRequestDeadline(() => discoverTokensOnChain(), 80);
-    const topicKey = [...TOKEN_TOPICS].sort().join("+");
-    let cursor = null;
-    for (let attempt = 0; attempt < 40 && !cursor; attempt++) {
-      await sleep(50);
-      cursor = await readLogScanCursor(FACTORY, topicKey);
-    }
-    assert.ok(cursor && cursor.lastBlock > FACTORY_START, "cursor did not advance after the request ended");
-    const firstReads = seenFrom.filter((from) => from === FACTORY_START).length;
-    assert.equal(firstReads, 1);
-    seenFrom.length = 0;
-    await discoverTokensOnChainUncached();
-    assert.equal(
-      seenFrom.filter((from) => from === FACTORY_START).length,
-      0,
-      "resumed scan re-read the cursor prefix",
-    );
+    const atReturn = seenFrom.length;
+    await sleep(300);
+    assert.equal(seenFrom.length, atReturn, "catalog scan continued after the request returned");
   } finally {
     setTokenCatalogSoftDeadlineForTests(null);
     resetChainCatalogCacheForTests();
@@ -256,22 +243,24 @@ test("the cursor never advances past a failed window", async (t) => {
   assert.equal(await readLogScanCursor(FACTORY, topicKey), null);
 });
 
-test("a cold catalog call returns within the soft deadline with tail tokens", async (t) => {
+test("a cold catalog awaits the tail and stops history when the request deadline hits", async (t) => {
   await db.delete(evmLogScanCursors);
   const latest = FACTORY_START + 20_000;
   const tail = tokenLog(latest);
+  let logReads = 0;
   await startRpcNode(t, async (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
     if (call.method === "eth_call") return tokenMetadata(call);
     if (call.method !== "eth_getLogs") return null;
+    logReads += 1;
     const filter = call.params[0];
     if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
     if (toBlockOf(filter) >= latest) {
-      // The tail is slower than the soft deadline, but must still be awaited.
+      // The tail is slower than the soft deadline, but the request still waits for it.
       await sleep(600);
       return [tail];
     }
-    // Slow current-factory history: the cold request must not wait for it.
+    // History is slower than the request budget. It must stop with the request, not afterwards.
     await sleep(2_500);
     return [];
   });
@@ -280,56 +269,59 @@ test("a cold catalog call returns within the soft deadline with tail tokens", as
 
   try {
     const startedAt = Date.now();
-    const tokens = await discoverTokensOnChain();
+    const tokens = await runWithRequestDeadline(() => discoverTokensOnChain(), 2_000);
     const elapsed = Date.now() - startedAt;
+    const readsAtReturn = logReads;
+    await sleep(400);
     assert.ok(elapsed < 4_000, `cold catalog took ${elapsed} ms`);
     assert.ok(
       tokens.some((token) => token.tokenAddress.toLowerCase() === TOKEN.toLowerCase()),
       "tail token missing from the partial list",
     );
     assert.ok(tokens.length > 0);
-    // Let the background scan finish before the test node is torn down.
-    await sleep(3_000);
+    assert.equal(logReads, readsAtReturn, "history continued after the request returned");
   } finally {
     setTokenCatalogSoftDeadlineForTests(null);
     resetChainCatalogCacheForTests();
   }
 });
 
-test("a cold catalog returns the tail before the soft deadline and stays partial until history finishes", async (t) => {
+test("a cold catalog finishes history before it returns and does not keep scanning", async (t) => {
   await db.delete(evmLogScanCursors);
   const latest = FACTORY_START + 1_700;
   const tail = tokenLog(latest);
+  let historyReads = 0;
   await startRpcNode(t, async (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
     if (call.method === "eth_call") return tokenMetadata(call);
     if (call.method !== "eth_getLogs") return null;
     const filter = call.params[0];
     if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
-    // Older history is slow. The cold response must not wait for it.
     if (fromBlockOf(filter) === FACTORY_START) {
-      await sleep(5_000);
+      historyReads += 1;
+      await sleep(200);
       return [];
     }
     if (toBlockOf(filter) >= latest - 800) return [tail];
     return [];
   });
   resetChainCatalogCacheForTests();
-  setTokenCatalogSoftDeadlineForTests(8_000);
 
   try {
     const startedAt = Date.now();
     const tokens = await discoverTokensOnChain();
     const elapsed = Date.now() - startedAt;
+    const readsAtReturn = historyReads;
+    await sleep(250);
     assert.ok(elapsed < 3_000, `cold catalog took ${elapsed} ms`);
-    assert.equal(catalogListIsPartial(tokens), true);
+    assert.ok(elapsed >= 150, "history was left running instead of finishing inside the call");
+    assert.equal(catalogListIsPartial(tokens), false);
     assert.ok(
       tokens.some((token) => token.tokenAddress.toLowerCase() === TOKEN.toLowerCase()),
       "tail token missing",
     );
-    await sleep(6_000);
+    assert.equal(historyReads, readsAtReturn, "history continued after the catalog returned");
   } finally {
-    setTokenCatalogSoftDeadlineForTests(null);
     resetChainCatalogCacheForTests();
   }
 });

@@ -158,9 +158,9 @@ function stubGateway(t, docs) {
 
 const metaUrl = (cid = META_CID) => ipfsGatewayUrlForUri(`ipfs://${cid}/metadata.json`);
 
-test("a factory token reports its own symbol/name/creator and the metadata JSON image", async (t) => {
+test("a factory token reports its own symbol/name/creator and the metadata URL without a gateway read", async (t) => {
   await startNode(t, tokenAnswers());
-  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.symbol, "PCOIN");
@@ -171,17 +171,17 @@ test("a factory token reports its own symbol/name/creator and the metadata JSON 
   assert.equal(res.body.totalSupply, 5);
   assert.equal(res.body.tokenAddress.toLowerCase(), TOKEN);
   assert.equal(res.body.partial, undefined);
-  assert.match(String(res.body.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
+  assert.match(String(res.body.imageUri), /metadata\.json/);
   await settleTokenImageReadsForTests();
   const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
-  assert.equal(again.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.equal(again.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(String(again.body.imageUri), /metadata\.json/);
   assert.equal(again.body.partial, undefined);
+  assert.deepEqual(gatewayCalls, []);
 });
 
-test("a metadata JSON without an image gives no imageUri", async (t) => {
+test("a metadata document URL is returned without opening the gateway", async (t) => {
   await startNode(t, tokenAnswers());
-  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN" } });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN" } });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.partial, undefined);
@@ -189,12 +189,13 @@ test("a metadata JSON without an image gives no imageUri", async (t) => {
   assert.equal(res.body.symbol, "PCOIN");
   await settleTokenImageReadsForTests();
   const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
-  assert.equal(again.body.imageUri, undefined);
+  assert.match(String(again.body.imageUri), /metadata\.json/);
+  assert.deepEqual(gatewayCalls, []);
 });
 
-test("an unreachable gateway is not an error, just no image", async (t) => {
+test("an unreachable gateway is never called for the asset URL", async (t) => {
   await startNode(t, tokenAnswers());
-  stubGateway(t, { [metaUrl()]: 503 });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: 503 });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.partial, undefined);
@@ -202,8 +203,9 @@ test("an unreachable gateway is not an error, just no image", async (t) => {
   assert.equal(res.body.symbol, "PCOIN");
   await settleTokenImageReadsForTests();
   const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
-  assert.equal(again.body.imageUri, undefined);
+  assert.match(String(again.body.imageUri), /metadata\.json/);
   assert.equal(again.body.partial, undefined);
+  assert.deepEqual(gatewayCalls, []);
 });
 
 test("a legacy ipfs://people metadataURI has no image and triggers no fetch", async (t) => {
@@ -273,20 +275,19 @@ test("a token without symbol()/creator() gets TKN and no creator, never the depl
   assert.equal(res.body.creator, undefined);
 });
 
-test("a catalog row resolves metadata.json to the gateway image and keeps the path", async (t) => {
+test("a catalog row keeps the metadata document URL and does not fetch the gateway", async (t) => {
   await startNode(t, tokenAnswers(), { logs: true });
-  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
   const rows = await discoverTokensOnChain();
   const row = rows.find((r) => r.tokenAddress?.toLowerCase() === TOKEN);
   assert.ok(row, "factory token is in the catalog");
   assert.equal(catalogListIsPartial(rows), false);
   assert.equal(row.symbol, "PCOIN");
-  assert.match(String(row.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
+  assert.match(String(row.imageUri), /metadata\.json/);
   await settleTokenImageReadsForTests();
   const cached = peekCachedCatalogTokens().find((r) => r.tokenAddress?.toLowerCase() === TOKEN);
-  assert.equal(cached?.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.equal(String(cached?.imageUri).includes("metadata.json"), false);
-  assert.equal(cached?.creationMetadata?.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(String(cached?.imageUri), /metadata\.json/);
+  assert.deepEqual(gatewayCalls, []);
 });
 
 test("single-asset route: a catalog hit is enriched with the JSON image and the real creator", async (t) => {
@@ -299,17 +300,18 @@ test("single-asset route: a catalog hit is enriched with the JSON image and the 
     }),
     { logs: true },
   );
-  stubGateway(t, { [metaUrl()]: { image: LOGO_URI } });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: { image: LOGO_URI } });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.symbol, "PCOIN");
   assert.equal(res.body.partial, undefined);
-  assert.match(String(res.body.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
+  assert.match(String(res.body.imageUri), /metadata\.json/);
   assert.equal(res.body.creator, CREATOR);
   await settleTokenImageReadsForTests();
   const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
-  assert.equal(again.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.equal(again.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(String(again.body.imageUri), /metadata\.json/);
+  assert.equal(again.body.creator, CREATOR);
+  assert.deepEqual(gatewayCalls, []);
 });
 
 test("a slow metadata gateway neither marks the asset list partial nor holds it", async (t) => {
@@ -327,7 +329,7 @@ test("a slow metadata gateway neither marks the asset list partial nor holds it"
   const started = Date.now();
   const res = await handleEvmCompatGet("/assets", new URLSearchParams());
   const elapsed = Date.now() - started;
-  assert.ok(elapsed < 3_000, `asset list took ${elapsed} ms behind a hanging gateway`);
+  assert.ok(elapsed < 8_000, `asset list took ${elapsed} ms behind a hanging gateway`);
   assert.equal(res.status, 200);
   assert.ok(Array.isArray(res.body), "a slow logo wrapped the list as partial");
   const row = res.body.find((asset) => String(asset.tokenAddress).toLowerCase() === TOKEN);
@@ -336,17 +338,21 @@ test("a slow metadata gateway neither marks the asset list partial nor holds it"
 });
 
 test("a fast node returns the full asset list well under the request deadline", async (t) => {
-  await startNode(t, tokenAnswers(), { logs: true });
-  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
+  const calls = await startNode(t, tokenAnswers(), { logs: true });
+  const gatewayCalls = stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
   const started = Date.now();
   const res = await handleEvmCompatGet("/assets", new URLSearchParams());
   const elapsed = Date.now() - started;
-  assert.ok(elapsed < 3_000, `asset list took ${elapsed} ms`);
+  const callsAtReturn = calls.length;
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  assert.ok(elapsed < 8_000, `asset list took ${elapsed} ms`);
   assert.equal(res.status, 200);
   assert.ok(Array.isArray(res.body));
   assert.ok(res.body.length > 1, "the list was not the full catalog");
   assert.ok(res.body.some((asset) => String(asset.tokenAddress).toLowerCase() === TOKEN));
   assert.equal(res.body.partial, undefined);
+  assert.equal(calls.length, callsAtReturn, "RPC continued after the asset list returned");
+  assert.deepEqual(gatewayCalls, []);
 });
 
 test("assets list: one failing token read skips the row instead of failing the list", async (t) => {
