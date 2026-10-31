@@ -138,7 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "تعذّرت إضافة شبكة PEOPLE إلى {wallet}. وافق على طلب الشبكة في المحفظة ثم حاول مجددًا.",
   "signInSessionExpired": "انتهت صلاحية تسجيل الدخول. اضغط على طريقة تسجيل الدخول مرة أخرى.",
-  "signInRateLimited": "محاولات كثيرة جدًا. انتظر بضع دقائق.",
+  "signInRateLimited": "محاولات كثيرة جدًا. انتظر {minutes} دقائق ثم حاول مرة أخرى.",
   "unlockWrongPassword": "كلمة مرور خاطئة لهذه المحفظة.",
   "unlockUnavailable": "تعذر فتح هذه المحفظة على هذا الجهاز. سجّل الدخول عبر Google أو البريد الإلكتروني.",
   "extHeading": "لدي محفظة (MetaMask و Trust Wallet و WalletConnect)",

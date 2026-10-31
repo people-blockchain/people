@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   MAX_KEYS_PER_NAMESPACE,
   checkSharedRateLimit,
+  checkSharedRateLimitDetail,
   checkSlidingWindowRateLimit,
   rateLimitKey,
   resetRateLimitStoresForTests,
@@ -66,6 +67,22 @@ test("recently used keys survive eviction", () => {
   assert.equal(checkSlidingWindowRateLimit(ns, "hot", 2, 60_000), false);
 });
 
+test("a rejected shared limit reports how many seconds remain in the window", async () => {
+  resetRateLimitStoresForTests();
+  setSharedRateLimitBackendForTests(null);
+  try {
+    const allowed = await checkSharedRateLimitDetail("retry-after", "subject", 1, 60_000);
+    assert.equal(allowed.allowed, true);
+    assert.equal(allowed.retryAfterSeconds, 0);
+    const denied = await checkSharedRateLimitDetail("retry-after", "subject", 1, 60_000);
+    assert.equal(denied.allowed, false);
+    assert.ok(denied.retryAfterSeconds >= 1 && denied.retryAfterSeconds <= 60);
+    assert.equal(await checkSharedRateLimit("retry-after-bool", "subject", 1, 60_000), true);
+  } finally {
+    setSharedRateLimitBackendForTests(undefined);
+  }
+});
+
 test("shared limiter uses the in-memory window when no store is configured", async () => {
   resetRateLimitStoresForTests();
   setSharedRateLimitBackendForTests(null);
@@ -88,6 +105,23 @@ test("shared limiter defers to the shared store (budget shared across instances)
   try {
     assert.equal(await checkSharedRateLimit("shared", "2001:db8:9:9::1", 5, 60_000), false);
     assert.deepEqual(calls, [{ ns: "shared", subject: "2001:db8:9:9::/64", max: 5, windowMs: 60_000 }]);
+  } finally {
+    setSharedRateLimitBackendForTests(undefined);
+  }
+});
+
+test("shared denials do not keep the local bucket closed after the store starts allowing", async () => {
+  resetRateLimitStoresForTests();
+  let sharedAllows = false;
+  setSharedRateLimitBackendForTests(async () => sharedAllows);
+  try {
+    for (let i = 0; i < 5; i += 1) {
+      const denied = await checkSharedRateLimitDetail("release", "subject", 1, 60_000);
+      assert.equal(denied.allowed, false);
+    }
+    sharedAllows = true;
+    const allowed = await checkSharedRateLimitDetail("release", "subject", 1, 60_000);
+    assert.equal(allowed.allowed, true);
   } finally {
     setSharedRateLimitBackendForTests(undefined);
   }

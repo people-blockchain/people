@@ -4,6 +4,26 @@ import { isIP } from "node:net";
 
 type Bucket = { count: number; windowStart: number };
 
+export type RateLimitVerdict = {
+  allowed: boolean;
+  /** Seconds a rejected caller should wait. Zero when the call was allowed. */
+  retryAfterSeconds: number;
+};
+
+function retryAfterFromWindow(windowStart: number, windowMs: number, now: number): number {
+  return Math.max(1, Math.ceil((windowStart + windowMs - now) / 1000));
+}
+
+export function normalizeRateLimitVerdict(value: boolean | RateLimitVerdict, windowMs: number): RateLimitVerdict {
+  if (typeof value === "boolean") {
+    return { allowed: value, retryAfterSeconds: value ? 0 : Math.max(1, Math.ceil(windowMs / 1000)) };
+  }
+  return {
+    allowed: value.allowed,
+    retryAfterSeconds: value.allowed ? 0 : Math.max(1, Math.ceil(value.retryAfterSeconds)),
+  };
+}
+
 /** Per-namespace key cap; past it the least recently used key is evicted (never a new key refused). */
 export const MAX_KEYS_PER_NAMESPACE = 10_000;
 
@@ -52,13 +72,12 @@ export function rateLimitKey(subject: string): string {
   return `${parts.slice(0, 4).map((n) => n.toString(16)).join(":")}::/64`;
 }
 
-/** In-process per-key sliding window rate limit. Prefer `checkSharedRateLimit` in routes. */
-export function checkSlidingWindowRateLimit(
+function takeSlidingWindow(
   namespace: string,
   key: string,
   maxPerWindow: number,
-  windowMs: number
-): boolean {
+  windowMs: number,
+): RateLimitVerdict {
   const now = Date.now();
   const map = storeFor(namespace);
   const id = rateLimitKey(key);
@@ -76,10 +95,49 @@ export function checkSlidingWindowRateLimit(
   }
   bucket.count += 1;
   map.set(id, bucket);
-  return bucket.count <= maxPerWindow;
+  const allowed = bucket.count <= maxPerWindow;
+  return {
+    allowed,
+    retryAfterSeconds: allowed ? 0 : retryAfterFromWindow(bucket.windowStart, windowMs, now),
+  };
 }
 
-type SharedBackend = (namespace: string, subject: string, maxPerWindow: number, windowMs: number) => Promise<boolean>;
+/**
+ * Undo the increment {@link takeSlidingWindow} just applied. A shared-store rejection must not
+ * stay in the process bucket: that bucket's window starts at the first local hit, which can be
+ * later than the store's fixed window, so rejected retries would keep this instance closed
+ * after the store had already opened a new window.
+ */
+function releaseSlidingWindowIncrement(namespace: string, key: string): void {
+  const map = stores.get(namespace);
+  if (!map) return;
+  const id = rateLimitKey(key);
+  const bucket = map.get(id);
+  if (!bucket) return;
+  bucket.count -= 1;
+  if (bucket.count <= 0) {
+    map.delete(id);
+    return;
+  }
+  map.set(id, bucket);
+}
+
+/** In-process per-key sliding window rate limit. Prefer `checkSharedRateLimit` in routes. */
+export function checkSlidingWindowRateLimit(
+  namespace: string,
+  key: string,
+  maxPerWindow: number,
+  windowMs: number
+): boolean {
+  return takeSlidingWindow(namespace, key, maxPerWindow, windowMs).allowed;
+}
+
+type SharedBackend = (
+  namespace: string,
+  subject: string,
+  maxPerWindow: number,
+  windowMs: number,
+) => Promise<boolean | RateLimitVerdict>;
 
 /** A slow shared store must not stall the route; past this the in-memory verdict is used. */
 const SHARED_TIMEOUT_MS = 1_500;
@@ -91,8 +149,8 @@ let sharedDisabledUntil = 0;
 
 async function defaultSharedBackend(): Promise<SharedBackend | null> {
   if (!process.env.DATABASE_URL?.trim()) return null;
-  const { checkDurableRateLimit } = await import("@/lib/durable-rate-limit");
-  return checkDurableRateLimit;
+  const { checkDurableRateLimitDetail } = await import("@/lib/durable-rate-limit");
+  return checkDurableRateLimitDetail;
 }
 
 /**
@@ -100,15 +158,19 @@ async function defaultSharedBackend(): Promise<SharedBackend | null> {
  * local rejection never touches the store, and the global count is never below the local one);
  * then the Postgres fixed-window counter decides. Without DATABASE_URL, or when the store errors
  * or is slow, it fails open to the in-process verdict rather than crashing the route.
+ *
+ * `retryAfterSeconds` is how long a rejected caller should wait. Boolean callers keep using
+ * `checkSharedRateLimit`. A backend that still returns a boolean is treated as "wait out the
+ * whole window".
  */
-export async function checkSharedRateLimit(
+export async function checkSharedRateLimitDetail(
   namespace: string,
   key: string,
   maxPerWindow: number,
-  windowMs: number
-): Promise<boolean> {
-  const local = checkSlidingWindowRateLimit(namespace, key, maxPerWindow, windowMs);
-  if (!local || Date.now() < sharedDisabledUntil) return local;
+  windowMs: number,
+): Promise<RateLimitVerdict> {
+  const local = takeSlidingWindow(namespace, key, maxPerWindow, windowMs);
+  if (!local.allowed || Date.now() < sharedDisabledUntil) return local;
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const backend = sharedBackendOverride !== undefined ? sharedBackendOverride : await defaultSharedBackend();
@@ -116,7 +178,10 @@ export async function checkSharedRateLimit(
     const timeout = new Promise<never>((_, reject) => {
       timer = setTimeout(() => reject(new Error("shared rate limit timed out")), SHARED_TIMEOUT_MS);
     });
-    return await Promise.race([backend(namespace, rateLimitKey(key), maxPerWindow, windowMs), timeout]);
+    const raw = await Promise.race([backend(namespace, rateLimitKey(key), maxPerWindow, windowMs), timeout]);
+    const verdict = normalizeRateLimitVerdict(raw, windowMs);
+    if (!verdict.allowed) releaseSlidingWindowIncrement(namespace, key);
+    return verdict;
   } catch (error) {
     sharedDisabledUntil = Date.now() + SHARED_COOLDOWN_MS;
     console.warn(
@@ -127,6 +192,15 @@ export async function checkSharedRateLimit(
   } finally {
     if (timer) clearTimeout(timer);
   }
+}
+
+export async function checkSharedRateLimit(
+  namespace: string,
+  key: string,
+  maxPerWindow: number,
+  windowMs: number
+): Promise<boolean> {
+  return (await checkSharedRateLimitDetail(namespace, key, maxPerWindow, windowMs)).allowed;
 }
 
 /** @internal test hook — `null` forces in-memory only, `undefined` restores the default. */

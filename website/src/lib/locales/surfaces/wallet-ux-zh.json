@@ -138,7 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "无法将 PEOPLE 网络添加到 {wallet}。请在钱包中批准网络请求后重试。",
   "signInSessionExpired": "登录已过期。请再次点击您的登录方式以打开钱包。",
-  "signInRateLimited": "尝试次数过多，请几分钟后再试。",
+  "signInRateLimited": "尝试次数过多。请等待 {minutes} 分钟后再试。",
   "unlockWrongPassword": "此钱包的密码错误。",
   "unlockUnavailable": "无法在此设备上解锁此钱包。请使用 Google 或邮箱登录。",
   "extHeading": "我有钱包（MetaMask、Trust Wallet、WalletConnect）",

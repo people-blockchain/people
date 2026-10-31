@@ -1,14 +1,24 @@
 import { auth } from "@/auth";
 import { ensurePartnerSchema } from "@/db";
-import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { getUserWrapKeyHex, isAuthTimeFresh, isWalletVaultConfigured } from "@/lib/wallet-cloud-server";
-import { checkDurableWrapKeyRateLimit, recordWalletVaultAccess } from "@/lib/wallet-vault-access-log";
+import { reserveWalletVaultWrapKeyAttempt, setWalletVaultAccessOutcome } from "@/lib/wallet-vault-access-log";
+import {
+  WALLET_VAULT_WRAP_FAILURE_MAX,
+  WALLET_VAULT_WRAP_FAILURE_WINDOW_MS,
+  WALLET_VAULT_WRAP_ROUTE,
+  checkWalletVaultWrapKeyDelivery,
+  walletVaultRateLimitedResponse,
+} from "@/lib/wallet-vault-rate-limit";
 import { NextResponse } from "next/server";
 
 /** Key material responses must never be cached by a shared cache or the browser disk cache. */
 const NO_STORE = { "Cache-Control": "no-store", Pragma: "no-cache" };
-const ROUTE = "wallet/vault/wrap-key";
+const ROUTE = WALLET_VAULT_WRAP_ROUTE;
+
+function unavailable(): NextResponse {
+  return NextResponse.json({ error: "unavailable" }, { status: 503, headers: NO_STORE });
+}
 
 export async function GET(request: Request) {
   if (!isWalletVaultConfigured()) {
@@ -22,6 +32,26 @@ export async function GET(request: Request) {
   const userId = session.user.id;
   const ip = clientIp(request);
 
+  // The attempt row is inserted before it is counted, so concurrent requests share one ceiling.
+  // A failed insert fails closed: handing out the key without a counted row would be fail-open.
+  let attempt: { id: string; allowed: boolean; retryAfterSeconds: number };
+  try {
+    attempt = await reserveWalletVaultWrapKeyAttempt({
+      userId,
+      route: ROUTE,
+      ip,
+      maxPerWindow: WALLET_VAULT_WRAP_FAILURE_MAX,
+      windowMs: WALLET_VAULT_WRAP_FAILURE_WINDOW_MS,
+    });
+  } catch (error) {
+    console.warn(
+      "[wallet-vault] wrap-key access log insert failed",
+      error instanceof Error ? error.message : error,
+    );
+    return unavailable();
+  }
+  if (!attempt.allowed) return walletVaultRateLimitedResponse(attempt.retryAfterSeconds);
+
   // Require a recent sign-in (not just a long-lived session cookie) before handing out the
   // key that unlocks the vault ciphertext.
   if (!isAuthTimeFresh(session.authTime)) {
@@ -31,24 +61,43 @@ export async function GET(request: Request) {
       `[wallet-vault] wrap-key reauth_required for user ${userId}: ` +
         `authTime=${typeof session.authTime === "number" ? session.authTime : "absent"}`,
     );
-    await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "reauth_required", ip });
+    try {
+      await setWalletVaultAccessOutcome(attempt.id, "reauth_required");
+    } catch (error) {
+      console.warn(
+        "[wallet-vault] wrap-key access log update failed",
+        error instanceof Error ? error.message : error,
+      );
+      return unavailable();
+    }
     return NextResponse.json({ error: "reauth_required" }, { status: 401, headers: NO_STORE });
   }
 
-  // Cheap in-memory check first (fast path, survives no restart assumption needed), then the
-  // durable DB-backed check (recon.md R1: forensic trail + rate limit that isn't wiped by a
-  // deploy/restart or bypassed by hitting a different server instance).
-  const key = `${userId}:${ip}`;
-  if (!await checkSharedRateLimit("wallet-vault", key, 20, 5 * 60 * 1000)) {
-    await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "rate_limited", ip });
-    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
-  }
-  if (!(await checkDurableWrapKeyRateLimit(userId, ROUTE, 30, 15 * 60 * 1000))) {
-    await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "rate_limited", ip });
-    return NextResponse.json({ error: "rate_limited" }, { status: 429, headers: NO_STORE });
+  // Delivery ceiling, separate from the 15-minute ceiling: 20 wrap keys / 5 minutes per
+  // account, plus a per-address cap. "unknown" skips the address half.
+  const delivery = await checkWalletVaultWrapKeyDelivery(userId, ip);
+  if (!delivery.allowed) {
+    try {
+      await setWalletVaultAccessOutcome(attempt.id, "rate_limited");
+    } catch (error) {
+      console.warn(
+        "[wallet-vault] wrap-key access log update failed",
+        error instanceof Error ? error.message : error,
+      );
+      return unavailable();
+    }
+    return walletVaultRateLimitedResponse(delivery.retryAfterSeconds);
   }
 
-  const wrapKeyHex = await getUserWrapKeyHex(userId);
-  await recordWalletVaultAccess({ userId, route: ROUTE, outcome: "ok", ip });
-  return NextResponse.json({ wrapKeyHex, version: 1 }, { headers: NO_STORE });
+  try {
+    const wrapKeyHex = await getUserWrapKeyHex(userId);
+    await setWalletVaultAccessOutcome(attempt.id, "ok");
+    return NextResponse.json({ wrapKeyHex, version: 1 }, { headers: NO_STORE });
+  } catch (error) {
+    console.warn(
+      "[wallet-vault] wrap-key delivery failed closed",
+      error instanceof Error ? error.message : error,
+    );
+    return unavailable();
+  }
 }

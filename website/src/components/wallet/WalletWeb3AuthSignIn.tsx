@@ -7,9 +7,19 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import {
+  cloudRateLimitedUntil,
+  cloudSessionId,
+  cloudSessionMayRestore,
   ensureCloudWalletSession,
+  errorFrom,
   fetchAuthSessionUser,
-  fetchVaultRecordClient,
+  fetchVaultRecord,
+  fetchWrapKey,
+  formatSignInRateLimited,
+  isWalletCloudErrorCode,
+  WalletCloudError,
+  type CloudVaultRecord,
+  type CloudWalletSession,
 } from "@/lib/wallet-cloud-client";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
@@ -158,9 +168,22 @@ export function WalletWeb3AuthSignIn({
       // The stage line keeps the machine label visible on phones without a console.
       setFailure(signInErrorLabel(err));
       if (err instanceof TimeoutError) return c.signInTimeout;
+      if (isWalletCloudErrorCode(err, "rate_limited") || (err instanceof Error && err.message === "rate_limited")) {
+        return formatSignInRateLimited(
+          c.signInRateLimited,
+          err instanceof WalletCloudError ? err.retryAfterSeconds : null,
+        );
+      }
+      if (
+        isWalletCloudErrorCode(err, "reauth_required") ||
+        isWalletCloudErrorCode(err, "unauthorized") ||
+        (err instanceof Error && (err.message === "reauth_required" || err.message === "unauthorized"))
+      ) {
+        return c.signInSessionExpired;
+      }
       return c.signInFailed;
     },
-    [c.signInFailed, c.signInTimeout],
+    [c.signInFailed, c.signInRateLimited, c.signInSessionExpired, c.signInTimeout],
   );
 
   useEffect(() => {
@@ -175,32 +198,37 @@ export function WalletWeb3AuthSignIn({
     async (
       userId: string,
       email?: string | null,
-      options: { silent?: boolean } = {},
+      options: { silent?: boolean; vault?: CloudVaultRecord | null; session?: CloudWalletSession } = {},
     ): Promise<boolean> => {
       // Automatic finishes (the autoConnect effect) must not put an error on the sign-in card:
       // only an attempt the user started — a click, or resuming our own redirect — may do that.
       const silent = options.silent ?? false;
+      const sessionOptions = "vault" in options ? { vault: options.vault } : undefined;
       setBusy(true);
       if (!silent) setError("");
       try {
         clearUserDisconnected();
         rememberAuthEmail(email);
         if (email) setKnownEmail(email);
-        let cloud;
-        try {
-          cloud = await ensureCloudWalletSession({ id: userId });
-        } catch (first) {
-          // The wrap-key route demands a sign-in from the last 15 minutes (authTime). When the
-          // session cookie is older (or lost) re-establish it with the idToken of this attempt
-          // and retry once, instead of dying with a generic "sign-in failed".
-          const code = first instanceof Error ? first.message : "";
-          const idToken = lastIdTokenRef.current;
-          if ((code !== "reauth_required" && code !== "unauthorized") || !idToken) throw first;
-          const again = await signIn("web3auth", { idToken, redirect: false });
-          if (!again || again.error || !again.ok) throw new Error("reauth_required");
-          const refreshed = await waitForSessionUser(fetchAuthSessionUser);
-          if (!refreshed?.id) throw new Error("unauthorized");
-          cloud = await ensureCloudWalletSession({ id: refreshed.id });
+        let cloud: CloudWalletSession;
+        if (options.session) {
+          cloud = options.session;
+        } else {
+          try {
+            cloud = await ensureCloudWalletSession({ id: userId }, sessionOptions);
+          } catch (first) {
+            // The wrap-key route demands a sign-in from the last 15 minutes (authTime). When the
+            // session cookie is older (or lost) re-establish it with the idToken of this attempt
+            // and retry once, instead of dying with a generic "sign-in failed".
+            const code = first instanceof Error ? first.message : "";
+            const idToken = lastIdTokenRef.current;
+            if ((code !== "reauth_required" && code !== "unauthorized") || !idToken) throw first;
+            const again = await signIn("web3auth", { idToken, redirect: false });
+            if (!again || again.error || !again.ok) throw new Error("reauth_required");
+            const refreshed = await waitForSessionUser(fetchAuthSessionUser);
+            if (!refreshed?.id) throw new Error("unauthorized");
+            cloud = await ensureCloudWalletSession({ id: refreshed.id }, sessionOptions);
+          }
         }
         // Must be awaited: callers navigate (window.location.replace) right after this
         // resolves, and a reload before the session write lands is the "logged out after
@@ -228,7 +256,10 @@ export function WalletWeb3AuthSignIn({
             code === "reauth_required" || code === "unauthorized"
               ? c.signInSessionExpired
               : code === "rate_limited"
-                ? c.signInRateLimited
+                ? formatSignInRateLimited(
+                    c.signInRateLimited,
+                    err instanceof WalletCloudError ? err.retryAfterSeconds : null,
+                  )
                 : c.signInFailed,
           );
         }
@@ -258,7 +289,7 @@ export function WalletWeb3AuthSignIn({
       if (!user?.id) throw new Error("auth_session_missing");
 
       rememberAuthEmail(user.email);
-      const vault = await fetchVaultRecordClient();
+      const vault = await fetchVaultRecord();
       const generated = await keyPairFromWeb3AuthProvider(provider);
 
       // A returning account always opens the wallet already saved for it. The Web3Auth key can
@@ -269,12 +300,10 @@ export function WalletWeb3AuthSignIn({
         if (vault.address.toLowerCase() !== generated.address.toLowerCase()) {
           console.info("[wallet] web3auth key differs from the saved wallet; opening the saved wallet");
         }
-        return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+        return (await finishConnect(user.id, user.email, { vault })) ? "connected" : "failed";
       }
 
-      const wrapRes = await fetch("/api/wallet/vault/wrap-key", { credentials: "include" });
-      if (!wrapRes.ok) throw new Error("wrap_key_failed");
-      const { wrapKeyHex } = (await wrapRes.json()) as { wrapKeyHex: string };
+      const wrapKeyHex = await fetchWrapKey();
       const { encryptPrivateKeyForVault } = await import("@/lib/wallet-cloud-crypto");
       const encryptedPrivateKey = await encryptPrivateKeyForVault(generated.privateKey, wrapKeyHex);
       const put = await fetch("/api/wallet/vault", {
@@ -287,8 +316,20 @@ export function WalletWeb3AuthSignIn({
           encryptedPrivateKey,
         }),
       });
-      if (!put.ok && put.status !== 409) throw new Error("vault_create_failed");
-      return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+      if (!put.ok && put.status !== 409) throw await errorFrom(put, "vault_create_failed");
+      // 409 means a vault is already stored. Its ciphertext is the saved one, so finishConnect
+      // has to read it. A write we just accepted is already decrypted locally: pass that session
+      // through instead of asking wrap-key to decrypt the same key again.
+      if (put.status === 409) return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+      const session: CloudWalletSession = {
+        id: cloudSessionId(user.id),
+        address: generated.address,
+        privateKey: generated.privateKey,
+        publicKey: generated.publicKey,
+        kind: "cloud",
+        userId: user.id,
+      };
+      return (await finishConnect(user.id, user.email, { session })) ? "connected" : "failed";
     },
     [finishConnect],
   );
@@ -596,6 +637,7 @@ export function WalletWeb3AuthSignIn({
 
   useEffect(() => {
     if (!autoConnect || walletSession || isUserDisconnected()) return;
+    if (!cloudSessionMayRestore(cloudRateLimitedUntil())) return;
     let cancelled = false;
     void (async () => {
       const user = await fetchAuthSessionUser();

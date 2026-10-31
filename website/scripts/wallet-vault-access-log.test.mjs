@@ -14,6 +14,16 @@ const { recordWalletVaultAccess, checkDurableWrapKeyRateLimit } = await import(
 
 const db = await getDbReady();
 
+test("recordWalletVaultAccess surfaces a failed insert instead of dropping it", async () => {
+  await assert.rejects(() =>
+    recordWalletVaultAccess({
+      userId: "missing-access-log-user",
+      route: "wallet/vault/wrap-key",
+      outcome: "reauth_required",
+    }),
+  );
+});
+
 test("recordWalletVaultAccess inserts a row with no key material fields", async () => {
   const userId = "access-log-user-1";
   await db.insert(schema.users).values({ id: userId });
@@ -38,7 +48,7 @@ test("checkDurableWrapKeyRateLimit counts prior rows within the window and refus
   for (let i = 0; i < 3; i += 1) {
     const ok = await checkDurableWrapKeyRateLimit(userId, route, 3, 60_000);
     assert.equal(ok, true, `request ${i} should be within budget`);
-    await recordWalletVaultAccess({ userId, route, outcome: "ok" });
+    await recordWalletVaultAccess({ userId, route, outcome: "reauth_required" });
   }
 
   const ok = await checkDurableWrapKeyRateLimit(userId, route, 3, 60_000);
@@ -51,8 +61,8 @@ test("checkDurableWrapKeyRateLimit is scoped per user and per route", async () =
   await db.insert(schema.users).values([{ id: userA }, { id: userB }]);
   const route = "wallet/vault/wrap-key";
 
-  await recordWalletVaultAccess({ userId: userA, route, outcome: "ok" });
-  await recordWalletVaultAccess({ userId: userA, route, outcome: "ok" });
+  await recordWalletVaultAccess({ userId: userA, route, outcome: "reauth_required" });
+  assert.equal(await checkDurableWrapKeyRateLimit(userA, route, 1, 60_000), false);
 
   // userB has made no requests yet, so it is unaffected by userA's usage.
   const okForB = await checkDurableWrapKeyRateLimit(userB, route, 1, 60_000);
