@@ -19,6 +19,7 @@ const {
   tokenFactoryScans,
 } = await import("../src/lib/evm/chain-catalog.ts");
 const { evmJsonRpc, rpcBackoffRemainingMs } = await import("../src/lib/evm/rpc-server.ts");
+const { runWithRequestDeadline } = await import("../src/lib/evm/request-deadline.ts");
 const { readEvmDeployments } = await import("../src/lib/evm/config.ts");
 
 const db = await getDbReady();
@@ -183,6 +184,50 @@ test("a rejecting factory leaves the other factories' tokens in the catalog", as
   }
 });
 
+test("history keeps scanning after the request aborts and the next scan resumes the cursor", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 40_000;
+  const seenFrom = [];
+  await startRpcNode(t, async (call) => {
+    if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return tokenMetadata(call);
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+    const from = fromBlockOf(filter);
+    const to = toBlockOf(filter);
+    if (to >= latest) return [tokenLog(latest)];
+    seenFrom.push(from);
+    await sleep(40);
+    return from === FACTORY_START ? [tokenLog(FACTORY_START + 10)] : [];
+  });
+  resetChainCatalogCacheForTests();
+  setTokenCatalogSoftDeadlineForTests(30);
+
+  try {
+    await runWithRequestDeadline(() => discoverTokensOnChain(), 80);
+    const topicKey = [...TOKEN_TOPICS].sort().join("+");
+    let cursor = null;
+    for (let attempt = 0; attempt < 40 && !cursor; attempt++) {
+      await sleep(50);
+      cursor = await readLogScanCursor(FACTORY, topicKey);
+    }
+    assert.ok(cursor && cursor.lastBlock > FACTORY_START, "cursor did not advance after the request ended");
+    const firstReads = seenFrom.filter((from) => from === FACTORY_START).length;
+    assert.equal(firstReads, 1);
+    seenFrom.length = 0;
+    await discoverTokensOnChainUncached();
+    assert.equal(
+      seenFrom.filter((from) => from === FACTORY_START).length,
+      0,
+      "resumed scan re-read the cursor prefix",
+    );
+  } finally {
+    setTokenCatalogSoftDeadlineForTests(null);
+    resetChainCatalogCacheForTests();
+  }
+});
+
 test("the cursor never advances past a failed window", async (t) => {
   await db.delete(evmLogScanCursors);
   const latest = FACTORY_START + 50_000;
@@ -300,8 +345,10 @@ test("a partial result merges with the previous catalog instead of shrinking it"
   const tokenB = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
   const latest = FACTORY_START + 40_000;
   const logA = tokenLogFor(tokenA, latest);
-  const logB = tokenLogFor(tokenB, FACTORY_START + 28_000);
-  let failTailFrom = null;
+  // Inside the older tail window, so a later failed re-read of that window is not the tip.
+  const tokenBBlock = latest - 400;
+  const logB = tokenLogFor(tokenB, tokenBBlock);
+  let failTokenB = false;
   await startRpcNode(t, (call) => {
     if (call.method === "eth_blockNumber") return hex(latest);
     if (call.method === "eth_call") return tokenMetadata(call);
@@ -310,7 +357,7 @@ test("a partial result merges with the previous catalog instead of shrinking it"
     if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
     const from = fromBlockOf(filter);
     const to = toBlockOf(filter);
-    if (failTailFrom !== null && from === failTailFrom) return null;
+    if (failTokenB && from <= tokenBBlock && tokenBBlock <= to) return null;
     return [logA, logB].filter((log) => {
       const block = Number.parseInt(log.blockNumber, 16);
       return block >= from && block <= to;
@@ -323,8 +370,8 @@ test("a partial result merges with the previous catalog instead of shrinking it"
     assert.ok(first.some((token) => token.tokenAddress.toLowerCase() === tokenA.toLowerCase()));
     assert.ok(first.some((token) => token.tokenAddress.toLowerCase() === tokenB.toLowerCase()));
 
-    // The first of the two tail windows now fails: this scan only sees A, not B.
-    failTailFrom = FACTORY_START + 27_000;
+    // The window that contains B now fails: this scan only sees A, not B.
+    failTokenB = true;
     const second = await discoverTokensOnChainUncached();
     assert.equal(second.complete, false);
     assert.ok(
