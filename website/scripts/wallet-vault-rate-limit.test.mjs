@@ -26,12 +26,23 @@ const {
   WALLET_VAULT_WRAP_ACCOUNT_MAX,
   WALLET_VAULT_WRAP_FAILURE_MAX,
   WALLET_VAULT_WRAP_FAILURE_WINDOW_MS,
+  WALLET_VAULT_WRAP_IP_MAX,
   WALLET_VAULT_WRITE_ACCOUNT_MAX,
+  WALLET_VAULT_WRITE_IP_MAX,
+  WALLET_VAULT_WRITE_WINDOW_MS,
   checkWalletVaultReadLimit,
+  checkWalletVaultWrapKeyDelivery,
+  checkWalletVaultWriteLimit,
   walletVaultIpRateLimitKey,
 } = await import("../src/lib/wallet-vault-rate-limit.ts");
-const { recordWalletVaultAccess, checkDurableWrapKeyRateLimit } = await import(
-  "../src/lib/wallet-vault-access-log.ts"
+const {
+  recordWalletVaultAccess,
+  checkDurableWrapKeyRateLimit,
+  checkDurableWrapKeyRateLimitDetail,
+  reserveWalletVaultWrapKeyAttempt,
+} = await import("../src/lib/wallet-vault-access-log.ts");
+const { checkDurableRateLimitDetail, resetDurableRateLimitForTests } = await import(
+  "../src/lib/durable-rate-limit.ts"
 );
 
 const db = await getDbReady();
@@ -107,10 +118,12 @@ test("wrap-key 429 carries Retry-After", async () => {
   }
   const limited = await wrapKey(vaultRequest("/api/wallet/vault/wrap-key"));
   assert.equal(limited.status, 429);
-  assert.match(limited.headers.get("Retry-After") ?? "", /^[1-9]\d*$/);
+  const retryAfter = Number(limited.headers.get("Retry-After"));
+  // The ceiling is 15 minutes. A zone-less timestamp parsed as local time collapses this to 1.
+  assert.ok(retryAfter >= 890 && retryAfter <= 900, `Retry-After ${retryAfter}`);
   const body = await limited.json();
   assert.equal(body.error, "rate_limited");
-  assert.equal(body.retryAfter, Number(limited.headers.get("Retry-After")));
+  assert.equal(body.retryAfter, retryAfter);
 });
 
 test("wrap-key failures are cut at the previous per-user ceiling and a vault read does not reset them", async () => {
@@ -140,25 +153,83 @@ test("wrap-key failures are cut at the previous per-user ceiling and a vault rea
   );
 });
 
-test("a successful wrap-key resets the failure counter", async () => {
-  const userId = "vault-rl-reset";
+test("a successful wrap-key counts toward the ceiling and does not reopen it", async () => {
+  const userId = "vault-rl-no-reset";
   await user(userId);
   const route = "wallet/vault/wrap-key";
-  for (let i = 0; i < 2; i += 1) {
-    await recordWalletVaultAccess({ userId, route, outcome: "reauth_required" });
+  for (let i = 0; i < WALLET_VAULT_WRAP_FAILURE_MAX - 1; i += 1) {
+    await recordWalletVaultAccess({ userId, route, outcome: "ok" });
   }
-  assert.equal(await checkDurableWrapKeyRateLimit(userId, route, 3, 60_000), true);
+  assert.equal(
+    await checkDurableWrapKeyRateLimit(userId, route, WALLET_VAULT_WRAP_FAILURE_MAX, WALLET_VAULT_WRAP_FAILURE_WINDOW_MS),
+    true,
+  );
   globalThis.__walletVaultTestSession = { user: { id: userId }, authTime: Date.now() };
   const ok = await wrapKey(vaultRequest("/api/wallet/vault/wrap-key"));
   assert.equal(ok.status, 200);
-  for (let i = 0; i < 2; i += 1) {
+  assert.equal(
+    await checkDurableWrapKeyRateLimit(userId, route, WALLET_VAULT_WRAP_FAILURE_MAX, WALLET_VAULT_WRAP_FAILURE_WINDOW_MS),
+    false,
+    "the successful delivery stays inside the same ceiling",
+  );
+  const again = await wrapKey(vaultRequest("/api/wallet/vault/wrap-key"));
+  assert.equal(again.status, 429);
+});
+
+test("Retry-After waits for the attempt that still fills the ceiling, not the oldest row", async () => {
+  const userId = "vault-rl-boundary";
+  await user(userId);
+  const route = "wallet/vault/wrap-key";
+  const max = WALLET_VAULT_WRAP_FAILURE_MAX;
+  const windowMs = WALLET_VAULT_WRAP_FAILURE_WINDOW_MS;
+  for (let i = 0; i < max + 10; i += 1) {
     await recordWalletVaultAccess({ userId, route, outcome: "reauth_required" });
   }
-  assert.equal(
-    await checkDurableWrapKeyRateLimit(userId, route, 3, 60_000),
-    true,
-    "failures from before the successful wrap-key no longer count",
+  const rows = await db
+    .select({ id: schema.walletVaultAccessLogs.id })
+    .from(schema.walletVaultAccessLogs)
+    .where(eq(schema.walletVaultAccessLogs.userId, userId));
+  assert.equal(rows.length, max + 10);
+  const now = Date.now();
+  for (let i = 0; i < rows.length; i += 1) {
+    const ageMs = i < max - 1 ? 1_000 : i === max - 1 ? 10 * 60 * 1000 : 14 * 60 * 1000;
+    await db
+      .update(schema.walletVaultAccessLogs)
+      .set({ createdAt: new Date(now - ageMs) })
+      .where(eq(schema.walletVaultAccessLogs.id, rows[i].id));
+  }
+  const verdict = await checkDurableWrapKeyRateLimitDetail(userId, route, max, windowMs);
+  assert.equal(verdict.allowed, false);
+  // 10 minutes old inside a 15 minute window is about 300s. The oldest row would report about 60s.
+  assert.ok(
+    verdict.retryAfterSeconds >= 290 && verdict.retryAfterSeconds <= 310,
+    `retry ${verdict.retryAfterSeconds}`,
   );
+});
+
+test("parallel reserves cannot both take the last wrap-key slot", async () => {
+  const userId = "vault-rl-race";
+  await user(userId);
+  const route = "wallet/vault/wrap-key";
+  const [first, second] = await Promise.all([
+    reserveWalletVaultWrapKeyAttempt({ userId, route, maxPerWindow: 1, windowMs: 60_000 }),
+    reserveWalletVaultWrapKeyAttempt({ userId, route, maxPerWindow: 1, windowMs: 60_000 }),
+  ]);
+  const allowed = [first, second].filter((row) => row.allowed);
+  assert.equal(allowed.length, 1);
+  const denied = [first, second].find((row) => !row.allowed);
+  assert.ok(denied);
+  assert.ok(denied.retryAfterSeconds >= 1 && denied.retryAfterSeconds <= 60);
+});
+
+test("wrap-key fails closed when the access log cannot be written", async () => {
+  const userId = "vault-rl-log-missing-user";
+  globalThis.__walletVaultTestSession = { user: { id: userId }, authTime: Date.now() };
+  const res = await wrapKey(vaultRequest("/api/wallet/vault/wrap-key"));
+  assert.equal(res.status, 503);
+  const body = await res.json();
+  assert.equal(body.error, "unavailable");
+  assert.equal(body.wrapKeyHex, undefined);
 });
 
 test("wrap-key delivery stays capped at the previous 20 per 5 minutes", async () => {
@@ -213,6 +284,104 @@ test("responses already marked rate_limited do not extend the wrap-key block", a
   );
 });
 
+test("the write address cap is independent of the account cap and a rejection does not spend it", async () => {
+  assert.equal(WALLET_VAULT_WRITE_IP_MAX, 1000);
+  const egress = "egress-write";
+  for (let i = 0; i < WALLET_VAULT_WRITE_IP_MAX; i += 1) {
+    const verdict = await checkWalletVaultWriteLimit(`write-user-${i}`, egress);
+    assert.equal(verdict.allowed, true, `write ${i}`);
+  }
+  for (let i = 0; i < WALLET_VAULT_WRITE_ACCOUNT_MAX; i += 1) {
+    const denied = await checkWalletVaultWriteLimit("write-victim", egress);
+    assert.equal(denied.allowed, false, `victim denial ${i}`);
+  }
+  const moved = await checkWalletVaultWriteLimit("write-victim", "egress-write-other");
+  assert.equal(moved.allowed, true);
+});
+
+test("wrap-key delivery keeps a per-address cap and skips an unknown address", async () => {
+  assert.equal(WALLET_VAULT_WRAP_IP_MAX, 1000);
+  const seen = [];
+  setSharedRateLimitBackendForTests(async (namespace) => {
+    seen.push(namespace);
+    return true;
+  });
+  await checkWalletVaultWrapKeyDelivery("wrap-unknown", "unknown");
+  assert.equal(seen.includes("wallet-vault-wrap-key-ip"), false);
+
+  setSharedRateLimitBackendForTests(null);
+  resetRateLimitStoresForTests();
+  const egress = "egress-wrap";
+  for (let i = 0; i < WALLET_VAULT_WRAP_IP_MAX; i += 1) {
+    const verdict = await checkWalletVaultWrapKeyDelivery(`wrap-user-${i}`, egress);
+    assert.equal(verdict.allowed, true, `wrap ${i}`);
+  }
+  const blocked = await checkWalletVaultWrapKeyDelivery("wrap-victim", egress);
+  assert.equal(blocked.allowed, false);
+  const moved = await checkWalletVaultWrapKeyDelivery("wrap-victim", "egress-wrap-other");
+  assert.equal(moved.allowed, true);
+});
+
+test("vault routes forward the client address to a durable limiter", async () => {
+  await resetDurableRateLimitForTests("wallet-vault-read");
+  await resetDurableRateLimitForTests("wallet-vault-read-ip");
+  await resetDurableRateLimitForTests("wallet-vault-write");
+  await resetDurableRateLimitForTests("wallet-vault-write-ip");
+  await resetDurableRateLimitForTests("wallet-vault-wrap-key");
+  await resetDurableRateLimitForTests("wallet-vault-wrap-key-ip");
+  let durableCalls = 0;
+  setSharedRateLimitBackendForTests(async (namespace, subject, max, windowMs) => {
+    durableCalls += 1;
+    return checkDurableRateLimitDetail(namespace, subject, max, windowMs);
+  });
+  const userId = "vault-rl-durable-route";
+  await user(userId);
+  globalThis.__walletVaultTestSession = { user: { id: userId }, authTime: Date.now() };
+  const previous = process.env.TRUST_PROXY_HEADERS;
+  process.env.TRUST_PROXY_HEADERS = "1";
+  // TEST-NET (RFC 5737). clientIp only accepts a real address literal.
+  const address = "192.0.2.10";
+  try {
+    const read = await GET(
+      new Request("http://localhost/api/wallet/vault", { headers: { "x-real-ip": address } }),
+    );
+    assert.equal(read.status, 404);
+    for (let i = 0; i < WALLET_VAULT_WRITE_ACCOUNT_MAX; i += 1) {
+      const res = await PUT(
+        vaultRequest("/api/wallet/vault", "PUT", {}),
+      );
+      // vaultRequest has no address header, so this loop spends the account bucket only.
+      assert.notEqual(res.status, 429, `durable write ${i}`);
+    }
+    const limited = await PUT(vaultRequest("/api/wallet/vault", "PUT", {}));
+    assert.equal(limited.status, 429);
+    assert.ok(durableCalls >= WALLET_VAULT_WRITE_ACCOUNT_MAX);
+    const retryAfter = Number(limited.headers.get("Retry-After"));
+    assert.ok(retryAfter >= 1 && retryAfter <= WALLET_VAULT_WRITE_WINDOW_MS / 1000);
+
+    const seen = [];
+    setSharedRateLimitBackendForTests(async (namespace, subject) => {
+      seen.push([namespace, subject]);
+      return { allowed: false, retryAfterSeconds: 12 };
+    });
+    resetRateLimitStoresForTests();
+    const wrapped = await wrapKey(
+      new Request("http://localhost/api/wallet/vault/wrap-key", { headers: { "x-real-ip": address } }),
+    );
+    assert.equal(wrapped.status, 429);
+    assert.equal(wrapped.headers.get("Retry-After"), "12");
+    assert.deepEqual(seen[0], ["wallet-vault-wrap-key-ip", address]);
+    assert.equal(
+      seen.some(([namespace]) => namespace === "wallet-vault-wrap-key"),
+      false,
+    );
+  } finally {
+    if (previous === undefined) delete process.env.TRUST_PROXY_HEADERS;
+    else process.env.TRUST_PROXY_HEADERS = previous;
+    setSharedRateLimitBackendForTests(null);
+  }
+});
+
 test("an unknown client address does not merge accounts into one per-IP bucket", async () => {
   assert.equal(walletVaultIpRateLimitKey("unknown"), null);
   assert.equal(walletVaultIpRateLimitKey(""), null);
@@ -262,8 +431,16 @@ test("the sign-in card reuses the vault it already fetched and shows the rate-li
     "utf8",
   );
   assert.match(signIn, /finishConnect\(user\.id, user\.email, \{ vault/);
-  assert.match(bridge, /cloudRestoreBlockedUntil/);
-  assert.match(bridge, /cloudSessionMayRestore/);
-  assert.match(bridge, /if \(!cloudSessionMayRestore\(rateLimitedUntil\.current\)\) return;/);
+  assert.match(signIn, /fetchWrapKey\(/);
+  assert.match(signIn, /errorFrom\(/);
+  assert.match(signIn, /cloudSessionMayRestore\(cloudRateLimitedUntil\(\)\)/);
+  assert.match(signIn, /finishConnect\(user\.id, user\.email, \{ session/);
+  assert.match(signIn, /isWalletCloudErrorCode\(err, "reauth_required"\)/);
+  assert.match(bridge, /cloudSessionMayRestore\(cloudRateLimitedUntil\(\)\)/);
+  assert.match(bridge, /fetchVaultRecord/);
+  assert.match(bridge, /unlockCloudVaultSession/);
+  assert.match(bridge, /invalid_ciphertext/);
+  assert.match(bridge, /address_mismatch/);
+  assert.equal(bridge.includes("ensureCloudWalletSession"), false);
 });
 });

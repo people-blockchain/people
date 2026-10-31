@@ -10,11 +10,15 @@ import {
   WalletCloudError,
   isWalletCloudErrorCode,
   fetchVaultRecord,
+  fetchWrapKey,
   unlockCloudVaultSession,
   ensureCloudWalletSession,
+  createCloudVaultWallet,
   formatSignInRateLimited,
   cloudRestoreBlockedUntil,
   cloudSessionMayRestore,
+  cloudRateLimitedUntil,
+  resetCloudRateLimitForTests,
 } from "../src/lib/wallet-cloud-client.ts";
 import { deriveUserWrapKeyHex, encryptPrivateKeyForVault } from "../src/lib/wallet-cloud-crypto.ts";
 import { addressFromPublicKey } from "../src/lib/partner/wallet.ts";
@@ -107,6 +111,32 @@ test("unlockCloudVaultSession: a correctly-decrypted key that doesn't match the 
   );
 });
 
+test("a 429 with an empty body is rate_limited and pauses every caller", async () => {
+  resetCloudRateLimitForTests();
+  globalThis.fetch = async () => new Response("", { status: 429, headers: { "Retry-After": "40" } });
+  await assert.rejects(
+    () => fetchVaultRecord(),
+    (err) => {
+      assert.ok(err instanceof WalletCloudError);
+      assert.equal(err.code, "rate_limited");
+      assert.equal(err.retryAfterSeconds, 40);
+      return true;
+    },
+  );
+  const until = cloudRateLimitedUntil();
+  assert.equal(cloudSessionMayRestore(until, Date.now()), false);
+  assert.ok(until - Date.now() > 30_000);
+  assert.equal(cloudSessionMayRestore(until, until), true);
+});
+
+test("wrap-key reauth_required survives fetchWrapKey instead of a generic failure", async () => {
+  globalThis.fetch = async () => jsonResponse(401, { error: "reauth_required" });
+  await assert.rejects(
+    () => fetchWrapKey(),
+    (err) => isWalletCloudErrorCode(err, "reauth_required"),
+  );
+});
+
 test("fetchVaultRecord keeps Retry-After on a rate_limited error", async () => {
   globalThis.fetch = async () =>
     new Response(JSON.stringify({ error: "rate_limited", retryAfter: 125 }), {
@@ -137,6 +167,43 @@ test("a rate-limited cloud restore stays paused until Retry-After elapses", () =
   assert.equal(cloudSessionMayRestore(until, now), false);
   assert.equal(cloudSessionMayRestore(until, until), true);
   assert.equal(cloudRestoreBlockedUntil(new WalletCloudError("reauth_required"), now), null);
+});
+
+test("ensureCloudWalletSession does not read the vault again when it is already missing", async () => {
+  const wrapKeyHex = await deriveUserWrapKeyHex("real-secret", "user-create");
+  const calls = [];
+  globalThis.fetch = async (url, init) => {
+    const method = init?.method ?? "GET";
+    calls.push(`${method} ${url}`);
+    if (String(url).includes("/wrap-key")) return jsonResponse(200, { wrapKeyHex });
+    if (method === "PUT") return jsonResponse(200, { ok: true });
+    throw new Error(`unexpected ${method} ${url}`);
+  };
+  const session = await ensureCloudWalletSession({ id: "user-create" }, { vault: null });
+  assert.equal(session.kind, "cloud");
+  assert.equal(session.userId, "user-create");
+  assert.equal(
+    calls.some((call) => call.startsWith("GET ") && call.includes("/api/wallet/vault") && !call.includes("wrap-key")),
+    false,
+  );
+  assert.equal(calls.filter((call) => call.includes("wrap-key")).length, 1);
+});
+
+test("createCloudVaultWallet skips the initial vault read when asked", async () => {
+  const wrapKeyHex = await deriveUserWrapKeyHex("real-secret", "user-skip");
+  const calls = [];
+  globalThis.fetch = async (url, init) => {
+    const method = init?.method ?? "GET";
+    calls.push(`${method} ${url}`);
+    if (String(url).includes("/wrap-key")) return jsonResponse(200, { wrapKeyHex });
+    if (method === "PUT") return jsonResponse(200, { ok: true });
+    throw new Error(`unexpected ${method} ${url}`);
+  };
+  await createCloudVaultWallet("user-skip", { skipInitialCheck: true });
+  assert.equal(
+    calls.some((call) => call.startsWith("GET ") && call.includes("/api/wallet/vault") && !call.includes("wrap-key")),
+    false,
+  );
 });
 
 test("ensureCloudWalletSession reuses a vault record instead of reading it again", async () => {

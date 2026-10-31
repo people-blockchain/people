@@ -19,6 +19,16 @@ export async function getDbReady() {
         PARTNER_SCHEMA_STATEMENTS,
         WALLET_VAULT_SCHEMA_STATEMENTS,
         WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
+        // Same table as the factory-icon migration. Vault route tests talk to the durable
+        // limiter, which upserts this table. Not a new migration.
+        [
+          `CREATE TABLE IF NOT EXISTS "api_rate_limit" (
+  "bucketKey" text PRIMARY KEY NOT NULL,
+  "count" integer NOT NULL DEFAULT 0,
+  "expiresAt" timestamp NOT NULL
+)`,
+          `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
+        ],
       ]) {
         for (const statement of group) await client.exec(statement);
       }

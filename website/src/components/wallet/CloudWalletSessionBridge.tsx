@@ -4,9 +4,11 @@ import { useCallback, useEffect, useRef } from "react";
 import { useWallet } from "@/context/WalletContext";
 import {
   fetchAuthSessionUser,
-  ensureCloudWalletSession,
+  fetchVaultRecord,
+  unlockCloudVaultSession,
   isCloudSessionId,
-  cloudRestoreBlockedUntil,
+  isWalletCloudErrorCode,
+  cloudRateLimitedUntil,
   cloudSessionMayRestore,
 } from "@/lib/wallet-cloud-client";
 import { rememberAuthEmail } from "@/lib/wallet-auth-storage";
@@ -23,8 +25,8 @@ export function CloudWalletSessionBridge() {
   const { session, connectCloud, markSessionHydrated } = useWallet();
   const inFlight = useRef(false);
   const needsReauth = useRef(false);
-  /** Epoch ms. A rate-limited restore stays quiet until Retry-After has elapsed. */
-  const rateLimitedUntil = useRef(0);
+  /** Ciphertext that will never decrypt should not be retried on every focus event. */
+  const haltRestore = useRef(false);
   // The vault lookup below is async; a local session restored from the tab store on load
   // (E2E-H2) must win that race instead of being silently replaced by the cloud wallet.
   const latestSession = useRef(session);
@@ -40,7 +42,9 @@ export function CloudWalletSessionBridge() {
     // retrying on every focus/visibility change only floods the route with 401s. The user
     // re-opens it through the sign-in card, which re-establishes a fresh session.
     if (needsReauth.current) return;
-    if (!cloudSessionMayRestore(rateLimitedUntil.current)) return;
+    if (haltRestore.current) return;
+    // `errorFrom` records every 429 here, including one raised by the sign-in card.
+    if (!cloudSessionMayRestore(cloudRateLimitedUntil())) return;
     inFlight.current = true;
     void (async () => {
       try {
@@ -48,16 +52,23 @@ export function CloudWalletSessionBridge() {
         if (!user) return;
         rememberAuthEmail(user.email);
         try {
-          const cloud = await ensureCloudWalletSession(user);
+          // Read only. Creating a vault belongs to the sign-in card; doing it from focus
+          // events burned wrap-key and write budget for accounts that have no vault yet.
+          const vault = await fetchVaultRecord();
+          if (!vault) return;
+          const cloud = await unlockCloudVaultSession(user.id, vault);
           if (latestSession.current) return;
           connectCloud(cloud);
           await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
         } catch (err) {
           const code = err instanceof Error ? err.message : "";
           if (code === "reauth_required" || code === "unauthorized") needsReauth.current = true;
-          const blockedUntil = cloudRestoreBlockedUntil(err);
-          if (blockedUntil !== null) rateLimitedUntil.current = blockedUntil;
-          /* otherwise the vault may not exist yet — user connects via Wallet modal */
+          if (
+            isWalletCloudErrorCode(err, "invalid_ciphertext") ||
+            isWalletCloudErrorCode(err, "address_mismatch")
+          ) {
+            haltRestore.current = true;
+          }
         }
       } finally {
         inFlight.current = false;
