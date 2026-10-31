@@ -8,8 +8,9 @@ import {console2} from "forge-std/console2.sol";
 import {MockUSDC} from "../src/mocks/MockUSDC.sol";
 import {PplCurveHubV2, PplCurveMathV2} from "../src/sale/PplCurveHubV2.sol";
 import {HubV2Base, HubV2Harness} from "./PplCurveHubV2Base.sol";
+import {HubV2GasGate} from "./PplCurveHubV2Gas.t.sol";
 
-/// @dev Sell-back, fees, caps, expiry, liquidity release, delivery freeze, pause (SPEC §5.2, §5.4, §5.5, §5.5a, §6).
+/// @dev Sell-back, fees, caps, expiry, liquidity release, pause (SPEC §5.2, §5.4, §5.5, §5.5a, §6).
 contract PplCurveHubV2SellTest is HubV2Base {
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
@@ -42,8 +43,11 @@ contract PplCurveHubV2SellTest is HubV2Base {
     }
 
     function _sell(address who, uint256 ppl) internal returns (uint256 payout) {
-        vm.prank(who);
-        payout = hub.sellBack(ppl, 0);
+        payout = _sellBack(who, ppl, 0);
+    }
+
+    function _sellReverts(address who, uint256 ppl, bytes4 err) internal {
+        _expectSellBackRevert(who, ppl, 0, err);
     }
 
     /// @dev Seed a consistent curve position, then give `who` n lots of `amt` each.
@@ -93,26 +97,20 @@ contract PplCurveHubV2SellTest is HubV2Base {
         _unlock();
 
         // never verified, no lots
-        vm.prank(carol);
-        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
-        hub.sellBack(1e18, 0);
+        _sellReverts(carol, 1e18, PplCurveHubV2.NotVerified.selector);
 
-        // unbound after buying: lots stay, but selling needs a current binding
-        vm.prank(owner);
-        hub.unbind(alice);
-        uint256 ppl = hub.pplOf(alice) / 10;
+        // the account itself can unbind; lots stay pinned, but selling needs a current binding
+        uint256 ppl = hub.pplOf(alice) / 10; // read before unbind: pplOf resolves via the current binding
         vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
-        hub.sellBack(ppl, 0);
+        hub.unbind(alice);
+        _sellReverts(alice, ppl, PplCurveHubV2.NotVerified.selector);
 
         // re-verify (fresh nonce) restores the ability
         _verify(alice);
         assertGt(_sell(alice, ppl), 0, "sells after re-verify");
 
         // zero amount
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.ZeroOut.selector);
-        hub.sellBack(0, 0);
+        _sellReverts(alice, 0, PplCurveHubV2.ZeroOut.selector);
     }
 
     function test_sellBackLockedLotReverts() public {
@@ -121,9 +119,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         uint256 ppl = hub.pplOf(alice) / 2;
 
         vm.warp(boughtAt + 30 days - 1);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(ppl, 0);
+        _sellReverts(alice, ppl, PplCurveHubV2.NotEnoughUnlocked.selector);
 
         vm.warp(boughtAt + 30 days); // exactly HOLD: unlocked
         assertGt(_sell(alice, ppl), 0);
@@ -145,14 +141,10 @@ contract PplCurveHubV2SellTest is HubV2Base {
         _sell(alice, l0); // lot0 unlocked
         assertEq(hub.lotHead(alice), 1);
 
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(1, 0); // lot1 still locked
+        _sellReverts(alice, 1, PplCurveHubV2.NotEnoughUnlocked.selector); // lot1 still locked
 
         vm.warp(t1 + 30 days - 1);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(l1, 0);
+        _sellReverts(alice, l1, PplCurveHubV2.NotEnoughUnlocked.selector);
 
         vm.warp(t1 + 30 days);
         assertEq(hub.sellableNow(alice), l1);
@@ -173,9 +165,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         uint256 l1 = hub.lots(alice, 1, 1)[0].pplRemaining;
 
         // cannot skip over the locked lot to reach more PPL
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(l0 + 1, 0);
+        _sellReverts(alice, l0 + 1, PplCurveHubV2.NotEnoughUnlocked.selector);
 
         // partial head lot
         uint256 half = l0 / 2;
@@ -187,9 +177,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         // rest of head lot exactly
         _sell(alice, l0 - half);
         assertEq(hub.lotHead(alice), 1, "head advanced");
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(1, 0);
+        _sellReverts(alice, 1, PplCurveHubV2.NotEnoughUnlocked.selector);
 
         // lot1 unlocks later; sell it across a different UTC day
         vm.warp(t0 + 20 days + 30 days + 1 hours);
@@ -252,109 +240,138 @@ contract PplCurveHubV2SellTest is HubV2Base {
 
         uint256 reserveBefore = hub.reserveUsd6();
         _sell(alice, aPpl * 45 / 100);
-        assertEq(hub.sellDayReserveSnapshot(), reserveBefore, "snapshot = reserve at first sell");
+        (uint256 usedGross,) = hub.globalSellUsed();
+        uint256 windowRef = hub.sellWindowReference();
+        assertEq(windowRef, hub.reserveUsd6() + usedGross, "reference = reserve + live gross");
+        assertGt(windowRef, reserveBefore - usedGross, "fees stay inside the reference");
         (uint256 remaining,) = hub.sellBackCapToday();
-        assertEq(remaining, reserveBefore * 200 / 10_000 - hub.sellDayGrossUsd6());
+        assertEq(remaining, windowRef * 200 / 10_000 - usedGross);
 
         (uint256 gTooBig,,) = hub.quoteSellBack(bob, bPpl * 10 / 100);
         assertGt(gTooBig, remaining, "precondition: over remaining cap");
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.GlobalDayCap.selector);
-        hub.sellBack(bPpl * 10 / 100, 0);
+        _sellReverts(bob, bPpl * 10 / 100, PplCurveHubV2.GlobalDayCap.selector);
 
         (uint256 gOk,,) = hub.quoteSellBack(bob, bPpl * 5 / 100);
         assertLe(gOk, remaining, "precondition: under remaining cap");
         _sell(bob, bPpl * 5 / 100);
     }
 
-    function test_sellBackGlobalCapResetsNextUtcDay() public {
+    function test_sellBackGlobalCapRollsAt24hNotUtcMidnight() public {
         _twoSellers();
         uint256 aPpl = hub.pplOf(alice);
         uint256 bPpl = hub.pplOf(bob);
+        uint256 t0 = _now();
         _sell(alice, aPpl * 45 / 100);
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.GlobalDayCap.selector);
-        hub.sellBack(bPpl * 10 / 100, 0);
+        _sellReverts(bob, bPpl * 10 / 100, PplCurveHubV2.GlobalDayCap.selector);
 
-        _skipToNextUtcDay();
+        uint256 midnight = (t0 / 1 days + 1) * 1 days;
+        assertLt(midnight, t0 + 1 days);
+        vm.warp(midnight);
+        _sellReverts(bob, bPpl * 10 / 100, PplCurveHubV2.GlobalDayCap.selector);
+
+        vm.warp(t0 + 1 days - 1);
+        _sellReverts(bob, bPpl * 10 / 100, PplCurveHubV2.GlobalDayCap.selector);
+
+        vm.warp(t0 + 1 days);
         uint256 reserveNow = hub.reserveUsd6();
         (uint256 remaining,) = hub.sellBackCapToday();
-        assertEq(remaining, reserveNow * 200 / 10_000, "fresh cap before first sell of the day");
+        assertEq(remaining, reserveNow * 200 / 10_000, "empty window prices 2% off the current reserve");
 
-        _sell(bob, bPpl * 10 / 100); // same sell now passes
-        assertEq(hub.sellDay(), _now() / 1 days);
-        assertEq(hub.sellDayReserveSnapshot(), reserveNow);
+        _sell(bob, bPpl * 10 / 100);
+        (uint256 usedAfter,) = hub.globalSellUsed();
+        assertEq(hub.sellWindowReference(), hub.reserveUsd6() + usedAfter);
     }
 
-    function test_sellBackCapUsesDayStartSnapshot() public {
+    /// @dev A dust sell must not freeze the 2% cap. Growing the reserve raises it; after the
+    /// high-reserve sells age out, the cap follows the reserve back down.
+    function test_h1_referenceNotPinnedUpOrDown() public {
         _twoSellers();
         uint256 aPpl = hub.pplOf(alice);
         uint256 bPpl = hub.pplOf(bob);
-        uint256 s = hub.reserveUsd6();
-        _sell(alice, aPpl * 45 / 100);
-        (uint256 remBefore,) = hub.sellBackCapToday();
+        uint256 tiny = aPpl / 100;
+        uint256 t0 = _now();
+        _sell(alice, tiny);
+        (uint256 usedTiny,) = hub.globalSellUsed();
+        uint256 pinnedLow = (hub.reserveUsd6() * 200) / 10_000;
 
-        // reserve grows tenfold mid-day (e.g. other buys / top-up); the cap does not follow it
-        uint256 r = hub.reserveUsd6();
-        hub.forceReserve(r * 10);
-        usdc.mint(address(hub), r * 9);
-        (uint256 remAfter,) = hub.sellBackCapToday();
-        assertEq(remAfter, remBefore, "cap fixed to day-start snapshot");
-        assertEq(hub.sellDayReserveSnapshot(), s);
+        uint256 grown = hub.reserveUsd6() * 10;
+        hub.forceReserve(grown);
+        usdc.mint(address(hub), grown - (grown / 10));
+        (uint256 roomUp,) = hub.sellBackCapToday();
+        uint256 refUp = hub.sellWindowReference();
+        assertEq(refUp, grown + usedTiny);
+        assertGt(roomUp, pinnedLow, "cap is not stuck on the pre-growth reserve");
+        assertEq(roomUp, (refUp * 200) / 10_000 - usedTiny);
 
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.GlobalDayCap.selector);
-        hub.sellBack(bPpl * 10 / 100, 0);
+        vm.warp(t0 + 1 days);
+        (uint256 roomEmpty,) = hub.sellBackCapToday();
+        assertEq(roomEmpty, (hub.reserveUsd6() * 200) / 10_000, "aged-out dust does not keep the old cap");
 
-        // next UTC day takes a new snapshot from the (now larger) reserve
-        _skipToNextUtcDay();
-        uint256 resBefore = hub.reserveUsd6();
-        _sell(bob, bPpl * 10 / 100);
-        assertEq(hub.sellDayReserveSnapshot(), resBefore);
+        uint256 high = hub.reserveUsd6();
+        uint256 t1 = _now();
+        _sell(bob, bPpl / 2);
+        (uint256 usedHigh,) = hub.globalSellUsed();
+        uint256 reserveAfter = hub.reserveUsd6();
+
+        vm.warp(t1 + 23 hours);
+        uint256 dust = aPpl / 200;
+        _sell(alice, dust);
+        vm.warp(t1 + 1 days);
+        (uint256 usedLeft, uint256 liveLeft) = hub.globalSellUsed();
+        assertGt(liveLeft, 0, "the later sell is still inside the window");
+        assertLt(usedLeft, usedHigh, "the high-reserve sell has aged out");
+        uint256 refDown = hub.sellWindowReference();
+        assertLt(refDown, high, "reference is not stuck on the high reserve");
+        assertEq(refDown, hub.reserveUsd6() + usedLeft);
+        (uint256 roomDown,) = hub.sellBackCapToday();
+        assertLt(roomDown + usedLeft, (high * 200) / 10_000, "cannot keep withdrawing 2% of the old reserve");
+        assertLt(reserveAfter, high);
     }
 
-    /// @dev Reserve ~1M so the global cap never binds; alice holds ~2500 USDC worth over two days.
+    /// @dev Reserve ~1M so the global cap never binds; alice holds ~2500 USDC worth bought over two days
+    /// (a full 24h apart: the buy cap is a rolling window).
     function _addressCapSeller() internal returns (uint256 total) {
         _seedRaised(BIG_RAISED);
         _prepare(alice);
         _buyN(alice, 4, MAX_BUY);
-        _skipToNextUtcDay();
+        _warpBy(1 days);
         _buyN(alice, 1, MAX_BUY);
         _unlock();
         total = hub.pplOf(alice);
     }
 
-    function test_sellBackAddressCap() public {
+    function test_sellBackPersonCap() public {
         uint256 total = _addressCapSeller();
         _sell(alice, total * 70 / 100);
-        uint256 used = SELL_CAP() - hub.addressSellRemainingToday(alice);
+        uint256 used = SELL_CAP() - hub.sellRemaining24h(alice);
         assertGt(used, 1_700e6);
         assertLt(used, SELL_CAP());
 
         (uint256 g,,) = hub.quoteSellBack(alice, total * 20 / 100);
         assertGt(used + g, SELL_CAP(), "precondition: crosses 2000");
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.AddressDayCap.selector);
-        hub.sellBack(total * 20 / 100, 0);
+        _sellReverts(alice, total * 20 / 100, PplCurveHubV2.PersonDayCap.selector);
 
         // a smaller one still fits
         _sell(alice, total * 5 / 100);
-        // the address cap is per address: bob (fresh) is unaffected by alice's usage
-        assertEq(hub.addressSellRemainingToday(bob), SELL_CAP());
+        // the cap is per person: bob (fresh) is unaffected by alice's usage
+        assertEq(hub.sellRemaining24h(bob), SELL_CAP());
     }
 
-    function test_sellBackAddressCapResetsNextDay() public {
+    function test_sellBackPersonCapResetsAfter24h() public {
         uint256 total = _addressCapSeller();
         _sell(alice, total * 70 / 100);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.AddressDayCap.selector);
-        hub.sellBack(total * 20 / 100, 0);
+        uint256 t0 = _now();
+        _warpBy(1 hours);
+        _sellReverts(alice, total * 20 / 100, PplCurveHubV2.PersonDayCap.selector);
 
-        _skipToNextUtcDay();
-        assertEq(hub.addressSellRemainingToday(alice), SELL_CAP(), "reset");
+        // rolling window: frees at exactly t0 + 24h, not at UTC midnight.
+        vm.warp(t0 + 1 days - 1);
+        _sellReverts(alice, total * 20 / 100, PplCurveHubV2.PersonDayCap.selector);
+        vm.warp(t0 + 1 days);
+        assertEq(hub.sellRemaining24h(alice), SELL_CAP(), "reset");
         uint256 p = _sell(alice, total * 20 / 100);
         assertGt(p, 0);
-        assertLt(hub.addressSellRemainingToday(alice), SELL_CAP());
+        assertLt(hub.sellRemaining24h(alice), SELL_CAP());
     }
 
     function SELL_CAP() internal pure returns (uint256) {
@@ -389,13 +406,13 @@ contract PplCurveHubV2SellTest is HubV2Base {
         _sell(alice, total * 60 / 100); // crosses the line
         (, uint256 lowLeft) = hub.sellBackCapToday();
         assertEq(lowLeft, 0, "line used up");
-        uint256 dayGross = hub.sellDayGrossUsd6();
+        (uint256 dayGross,) = hub.globalSellUsed();
         assertGt(dayGross, line);
 
         uint256 ppl = total * 10 / 100;
         (uint256 gross, uint256 fee, uint256 payout) = hub.quoteSellBack(alice, ppl);
         assertEq(fee, _ceil(gross, 300), "3% ceil on the whole sell");
-        assertEq(fee, _expFee(gross, hub.sellDayReserveSnapshot(), dayGross));
+        assertEq(fee, _expFee(gross, hub.sellWindowReference(), dayGross));
         assertEq(_sell(alice, ppl), payout);
     }
 
@@ -434,16 +451,16 @@ contract PplCurveHubV2SellTest is HubV2Base {
 
     // ================================================================ phases
 
-    function test_sellBackClosedAfterGraduation() public {
+    function test_sellBackStaysOpenAfterGraduationUntilRelease() public {
         _graduate(alice);
         _unlock();
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.SellBackClosed.selector);
-        hub.sellBack(1, 0);
-        // closed before any other check
-        vm.prank(carol);
-        vm.expectRevert(PplCurveHubV2.SellBackClosed.selector);
-        hub.sellBack(1, 0);
+        uint256 ppl = hub.pplOf(alice) / 20;
+        assertGt(_sell(alice, ppl), 0, "an attested return still pays after graduation");
+        _sellReverts(carol, 1, PplCurveHubV2.NotVerified.selector);
+        _announce();
+        vm.warp(_now() + 30 days);
+        hub.executeLiquidityRelease();
+        _sellReverts(alice, ppl, PplCurveHubV2.SellBackClosed.selector);
     }
 
     function test_sellBackWorksAfterExpiry() public {
@@ -473,30 +490,24 @@ contract PplCurveHubV2SellTest is HubV2Base {
         assertGt(_sell(alice, total / 4), 0);
     }
 
-    /// @dev Natural paths cannot reach ReserveExhausted: reserve >= ~50% of raised while gross <= 2% of the
-    /// day-start reserve snapshot (and a tiny reserve also makes the snapshot cap tiny -> GlobalDayCap first).
-    /// It is reachable only when the reserve falls below the snapshot after the day's first sell-back, which
-    /// the harness forces here.
+    /// @dev The 2% reference includes the current reserve, so slashing the reserve shrinks the cap.
+    /// A payout larger than the reserve is rejected as `GlobalDayCap` before `ReserveExhausted`.
     function test_sellBackRevertsWhenReserveEmpty() public {
         _seedSeller(SMALL_RAISED, alice, 4, MAX_BUY);
         _unlock();
         uint256 total = hub.pplOf(alice);
         uint256 r0 = hub.reserveUsd6();
 
-        // fresh day with a tiny reserve: snapshot (and so the 2% cap) is tiny -> GlobalDayCap triggers first
         hub.forceReserve(1e6);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.GlobalDayCap.selector);
-        hub.sellBack(total / 20, 0);
-        hub.forceReserve(r0); // restore the real reserve (balance covers it)
+        _sellReverts(alice, total / 20, PplCurveHubV2.GlobalDayCap.selector);
+        hub.forceReserve(r0);
 
-        _sell(alice, total / 20); // sets the day snapshot
-        hub.forceReserve(1e6); // reserve drops below one payout, snapshot stays
-        (uint256 gross, uint256 fee,) = hub.quoteSellBack(alice, total / 20);
-        assertGt(gross - fee, 1e6, "precondition");
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.ReserveExhausted.selector);
-        hub.sellBack(total / 20, 0);
+        _sell(alice, total / 20);
+        hub.forceReserve(1e6);
+        (uint256 gross,,) = hub.quoteSellBack(alice, total / 20);
+        assertGt(gross, 1e6, "precondition");
+        _sellReverts(alice, total / 20, PplCurveHubV2.GlobalDayCap.selector);
+        assertEq(hub.reserveUsd6(), 1e6, "failed sell does not move the reserve");
     }
 
     function test_unsoldPplAfterExpiry() public {
@@ -529,16 +540,15 @@ contract PplCurveHubV2SellTest is HubV2Base {
         // no surplus yet: even 1 unit is refused
         vm.prank(owner);
         vm.expectRevert(PplCurveHubV2.ExceedsSurplus.selector);
-        hub.rescue(address(usdc), 1);
+        hub.queueRescue(address(usdc), 1);
 
         // a stray 100 USDC is rescuable, but not 1 unit more
         uint256 treasuryBefore = usdc.balanceOf(treasury);
         usdc.mint(address(hub), 100e6);
         vm.prank(owner);
         vm.expectRevert(PplCurveHubV2.ExceedsSurplus.selector);
-        hub.rescue(address(usdc), 100e6 + 1);
-        vm.prank(owner);
-        hub.rescue(address(usdc), 100e6);
+        hub.queueRescue(address(usdc), 100e6 + 1);
+        _rescue(address(usdc), 100e6);
         assertEq(usdc.balanceOf(treasury) - treasuryBefore, 100e6, "to treasury");
         assertEq(usdc.balanceOf(address(hub)), reserve, "reserve intact");
 
@@ -546,24 +556,22 @@ contract PplCurveHubV2SellTest is HubV2Base {
         hub.forceReserve(reserve + 1);
         vm.prank(owner);
         vm.expectRevert(PplCurveHubV2.ExceedsSurplus.selector);
-        hub.rescue(address(usdc), 0);
+        hub.queueRescue(address(usdc), 0);
         hub.forceReserve(reserve);
 
-        // other tokens are free to rescue
+        // other tokens are free to rescue (stray USDT uses this same path)
         MockUSDC other = new MockUSDC();
         other.mint(address(hub), 7e6);
-        vm.prank(owner);
-        hub.rescue(address(other), 7e6);
+        _rescue(address(other), 7e6);
         assertEq(other.balanceOf(treasury), 7e6);
 
         vm.prank(alice);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
-        hub.rescue(address(usdc), 0);
+        hub.queueRescue(address(usdc), 0);
     }
 
     function test_onlyOwnerAdmin() public {
         bytes memory err = abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice);
-        address[] memory none = new address[](0);
         vm.startPrank(alice);
         vm.expectRevert(err);
         hub.open();
@@ -572,17 +580,29 @@ contract PplCurveHubV2SellTest is HubV2Base {
         vm.expectRevert(err);
         hub.unpause();
         vm.expectRevert(err);
-        hub.setVerifier(alice);
+        hub.queueSetVerifier(alice);
         vm.expectRevert(err);
+        hub.executeSetVerifier(bytes32(uint256(1)));
+        vm.expectRevert(PplCurveHubV2.UnbindDenied.selector);
         hub.unbind(bob);
         vm.expectRevert(err);
-        hub.rescue(address(usdc), 0);
+        hub.queueRescue(address(usdc), 0);
+        vm.expectRevert(err);
+        hub.executeRescue(bytes32(uint256(1)));
+        vm.expectRevert(err);
+        hub.cancel(bytes32(uint256(1)));
         vm.expectRevert(err);
         hub.announceLiquidityRelease();
         vm.expectRevert(err);
         hub.cancelLiquidityRelease();
         vm.expectRevert(err);
-        hub.markDelivered(none);
+        hub.queueSetReturnVerifier(alice);
+        vm.expectRevert(err);
+        hub.executeSetReturnVerifier(bytes32(uint256(1)));
+        vm.expectRevert(err);
+        hub.setTrustedRouter(alice, true);
+        vm.expectRevert(err);
+        hub.setWindowLimits(20, MIN_BUY, 10, 1e6);
         vm.expectRevert(err);
         hub.transferOwnership(alice);
         vm.stopPrank();
@@ -679,23 +699,6 @@ contract PplCurveHubV2SellTest is HubV2Base {
         hub.executeLiquidityRelease();
     }
 
-    function test_cancelReleaseRevertsAfterDelivery() public {
-        _unlockedHolder();
-        _announce();
-        address[] memory hs = new address[](1);
-        hs[0] = alice;
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.deliveryStarted());
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryStarted.selector);
-        hub.cancelLiquidityRelease();
-        // the release itself is unaffected
-        _warpBy(30 days);
-        hub.executeLiquidityRelease();
-        assertTrue(hub.liquidityReleased());
-    }
-
     function test_liquidityReleaseAfterGraduation() public {
         _graduate(alice);
         uint256 reserve = hub.reserveUsd6();
@@ -735,74 +738,8 @@ contract PplCurveHubV2SellTest is HubV2Base {
         _announce();
         _warpBy(30 days);
         hub.executeLiquidityRelease();
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.SellBackClosed.selector);
-        hub.sellBack(1, 0);
+        _sellReverts(alice, 1, PplCurveHubV2.SellBackClosed.selector);
         assertEq(hub.reserveUsd6(), 0);
-    }
-
-    // ================================================================ delivery (Q2)
-
-    function test_deliveredCannotSellBack() public {
-        _seedRaised(SMALL_RAISED);
-        _prepare(alice);
-        _prepare(carol);
-        _buyN(alice, 2, MAX_BUY);
-        _buyN(carol, 2, MAX_BUY);
-        _unlock();
-        _announce();
-
-        address[] memory hs = new address[](1);
-        hs[0] = alice;
-        vm.expectEmit(true, false, false, true, address(hub));
-        emit PplCurveHubV2.Delivered(alice, hub.pplOf(alice));
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.delivered(alice));
-
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.IsDelivered.selector);
-        hub.sellBack(1e18, 0);
-        assertGt(_sell(carol, hub.pplOf(carol) / 10), 0, "non-delivered holder unaffected");
-
-        // idempotent
-        vm.prank(owner);
-        hub.markDelivered(hs);
-    }
-
-    function test_markDeliveredOnlyAfterSaleOver() public {
-        _unlockedHolder();
-        address[] memory hs = new address[](1);
-        hs[0] = alice;
-
-        // normal sale: refused
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryNotAllowed.selector);
-        hub.markDelivered(hs);
-        assertFalse(hub.deliveryStarted());
-
-        // expiry alone does not count: it needs a public release announcement
-        vm.warp(uint256(hub.openedAt()) + hub.TERM() + 1);
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryNotAllowed.selector);
-        hub.markDelivered(hs);
-
-        _announce();
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.delivered(alice));
-        assertTrue(hub.deliveryStarted());
-
-        // graduation also unlocks it (fresh hub)
-        hub = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
-        _open();
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryNotAllowed.selector);
-        hub.markDelivered(hs);
-        _graduate(bob);
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.delivered(alice));
     }
 
     // ================================================================ pause
@@ -815,9 +752,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         vm.prank(alice);
         vm.expectRevert(Pausable.EnforcedPause.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
-        vm.prank(alice);
-        vm.expectRevert(Pausable.EnforcedPause.selector);
-        hub.sellBack(1e18, 0);
+        _sellReverts(alice, 1e18, Pausable.EnforcedPause.selector);
 
         // verify still works while paused
         _verify(bob);
@@ -832,7 +767,13 @@ contract PplCurveHubV2SellTest is HubV2Base {
     // ================================================================ lots per sell / gas
 
     function test_sellBackMaxLotsPerSell() public {
-        _seedSeller(SMALL_RAISED, alice, 51, MIN_BUY); // 51 lots of 10 USDC (cooldown 60s)
+        // 51 lots of 10 USDC, 2h apart so the 20-buys-per-24h limit is not hit
+        _seedRaised(SMALL_RAISED);
+        _prepare(alice);
+        for (uint256 i; i < 51; ++i) {
+            _buy(alice, MIN_BUY);
+            _warpBy(2 hours);
+        }
         _unlock();
         assertEq(hub.lotCount(alice), 51);
 
@@ -846,12 +787,8 @@ contract PplCurveHubV2SellTest is HubV2Base {
         assertEq(hub.sellableNow(alice), first50, "view caps at 50 lots");
 
         // 51 lots in one sell: refused
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(all, 0);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.NotEnoughUnlocked.selector);
-        hub.sellBack(first50 + 1, 0);
+        _sellReverts(alice, all, PplCurveHubV2.NotEnoughUnlocked.selector);
+        _sellReverts(alice, first50 + 1, PplCurveHubV2.NotEnoughUnlocked.selector);
 
         // exactly 50 lots: works
         _sell(alice, first50);
@@ -867,12 +804,15 @@ contract PplCurveHubV2SellTest is HubV2Base {
         _seedSeller(SMALL_RAISED, alice, 1, MAX_BUY);
         _unlock();
         uint256 ppl = hub.pplOf(alice);
+        bytes32 id = _freshReturnId();
+        uint256 deadline = _now() + 1 hours;
+        bytes memory sig = _signReturn(alice, ppl, id, deadline);
         vm.prank(alice);
         uint256 g0 = gasleft();
-        hub.sellBack(ppl, 0);
+        hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         uint256 used = g0 - gasleft();
         console2.log("sellBack single-lot gas", used);
-        assertLt(used, 300_000, "single-lot sellBack gas");
+        assertLt(used, HubV2GasGate.SELL_BACK, "single-lot sellBack gas");
     }
 
     // ================================================================ fork
@@ -884,6 +824,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         vm.createSelectFork(vm.envString("BASE_FORK_RPC_URL"));
         address baseUsdc = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
         hub = new HubV2Harness(baseUsdc, treasury, liquidityReceiver, owner, verifier);
+        _installReturnVerifier(hub, returnVerifier);
         _open();
         _verify(alice);
         deal(baseUsdc, alice, 10_000e6);

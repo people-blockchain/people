@@ -75,3 +75,16 @@ The genesis tooling still encodes the old schedule and was **not** changed or re
 - `chain/emission/allocation.json` team bucket: `vesting_cliff_pct: 10`, `vesting_linear_months: 24` (10% unlocked at genesis, 90% linear over 24 months, no cliff).
 - `chain/scripts/apply-emission-genesis.py` / `validate-emission-genesis.py` build/check the team account as a `ContinuousVestingAccount`; a 6-month cliff needs `start_time = genesis + 6mo` (or a `PeriodicVestingAccount` with a zero first period), `vesting_cliff_pct: 0`, 18 months linear.
 Apply before the next genesis (mainnet); the live testnet account keeps its current schedule unless migrated.
+
+## 2026-10-30 — A11: team and treasury 0% + 6-month cliff + 18 months linear (in genesis tooling)
+
+Owner decision A11 applies the schedule above to **team and treasury** in the genesis tooling:
+- `chain/emission/allocation.json`: team and treasury buckets carry `vesting_upfront_pct: 0`,
+  `vesting_cliff_months: 6`, `vesting_linear_months: 18` (replaces `vesting_cliff_pct`).
+- `apply-emission-genesis.py`: both are `ContinuousVestingAccount`s with `original_vesting` = 100% of the bucket,
+  `start_time = genesis + 6 months`, `end_time = genesis + 24 months` (the SDK vests nothing before `start_time`,
+  then linearly from 0). The treasury multisig keeps its known 2-of-3 pub_key; only the treasury bucket is in
+  `original_vesting`, so the liquidity bucket on the same address and later fee income stay spendable.
+- `validate-emission-genesis.py` checks both schedules; `test_apply_emission_genesis.py` covers the boundaries.
+- Liquidity bucket: unchanged (TODO, owner decides). A vesting schedule cannot be changed by any message after
+  genesis; the live testnet keeps its old accounts unless migrated by a coordinated upgrade.

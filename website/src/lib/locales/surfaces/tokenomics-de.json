@@ -21,7 +21,7 @@
     "validators": "200M PPL (20 %): Jahre 1–4 zahlen 6 %, 5 %, 5 %, 4 % des Gesamtangebots pro Jahr (60M / 50M / 50M / 40M PPL) plus 30 % der Netzwerkgebühren.",
     "team": "15 % des Angebots: 0 % zum Start, 6 Monate Cliff, danach 18 Monate lineare monatliche Freigabe (insgesamt 24 Monate).",
     "treasury": "Nur nach DAO-Votes; in Multisig.",
-    "sale": "Verkauf auf der öffentlichen Kurve auf Base (PplCurveHub). PPL wird direkt nach dem Kauf gutgeschrieben; Überweisungen öffnen mit dem vollständigen Netzwerkstart.",
+    "sale": "Verkauf auf der öffentlichen Kurve auf Base (PplCurveHub). PPL wird im PEOPLE-Mainnet direkt nach dem Kauf gutgeschrieben; Überweisungen öffnen mit dem vollständigen Netzwerkstart.",
     "liquidity": "PPL/USDC-Pool bei der Graduation; LP-Token 24 Monate gesperrt."
   },
   "donutTitle": "Zuteilung",
@@ -36,7 +36,7 @@
   "salePayTitle": "Wie Sie zahlen würden",
   "salePayBody": "Auf Base mit USDC oder USDT. Aus anderen Netzwerken über den integrierten automatischen Tausch (LI.FI): EVM-Netzwerke (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche und weitere), Tron und Solana funktionieren. TON wird nicht unterstützt. Auszahlung in USDC auf Base.",
   "saleDeliveryTitle": "So erhalten Sie PPL",
-  "saleDeliveryBody": "PPL wird Ihrer Adresse sofort gutgeschrieben, aber an andere senden können Sie es erst nach dem vollständigen Netzwerkstart. Zurückverkaufen können nur verifizierte Nutzer, 30 Tage nach jedem Kauf.",
+  "saleDeliveryBody": "PPL wird Ihrer Adresse im PEOPLE-Mainnet sofort gutgeschrieben, aber an andere senden können Sie es erst nach dem vollständigen Netzwerkstart. Zurückverkaufen können nur verifizierte Nutzer, 30 Tage nach jedem Kauf.",
   "curveTitle": "Bonding-Kurve",
   "curveLead": "Exponentialkurve: Der Preis startet bei 0,005 $ pro PPL und steigt mit jedem Kauf bis zu einer Obergrenze von 0,25 $, solange die Kurve offen ist. Graduation schließt die Kurve bei 4 M$ Einnahmen.",
   "unsoldTitle": "Unverkaufte Token",
@@ -99,8 +99,8 @@
     "100.000.000 PPL auf der Kurve (10 % des Angebots); Start 0,005 $, exponentieller Anstieg, Deckel 0,25 $ nur auf der Kurve.",
     "Der Verkauf läuft, bis er ausverkauft ist (die Kurve schließt bei 4 Mio. $ Einnahmen), oder 24 Monate ab Öffnung — je nachdem, was zuerst eintritt. Keine Verlängerung. Nicht verkaufte PPL gehen in den Community Pool. Keine Rückerstattung: Jeder Kauf ist endgültig.",
     "Einnahmen 50 % gesperrte Liquidität / 50 % Projekt-Multisig; LP-Tokens 24 Monate gesperrt.",
-    "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve pro Tag für alle und 2.000 $ pro Person und Tag. Gebühr 1,5 % (3 %, wenn die Rückverkäufe des Tages 1 % der Reserve übersteigen). Endet nach der Graduation. Auszahlung in USDC auf Base.",
-    "$10–$500 pro Kauf; Bis zu $2,000 pro Person in beliebigen 24 Stunden; 60 s Pause zwischen Käufen"
+    "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jede Tranche kann nach 30 Tagen Haltefrist zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Gesamtlimit: 2 % der Reserve in jedem gleitenden 24-Stunden-Fenster für alle und 2.000 $ pro Person in einem gleitenden 24-Stunden-Fenster. Gebühr 1,5 % (3 % nur auf den Teil der Rückverkäufe dieser 24 Stunden über 1 % der Reserve). Endet nach der Graduation. Auszahlung in USDC auf Base.",
+    "$10–$500 pro Kauf; Bis zu $2,000 pro Person in einem gleitenden 24-Stunden-Fenster; 60 s Pause zwischen Käufen"
   ],
   "curveTableSold": "% verkauft",
   "curveTablePrice": "Spotpreis (USDC)",

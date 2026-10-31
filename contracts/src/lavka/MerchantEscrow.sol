@@ -24,13 +24,18 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         uint64 disputeDeadline;
     }
 
-    event EscrowCreated(uint256 indexed escrowId, address indexed merchant, address indexed customer, uint256 amount, uint64 deadline);
+    event EscrowCreated(
+        uint256 indexed escrowId, address indexed merchant, address indexed customer, uint256 amount, uint64 deadline
+    );
     event EscrowReleased(uint256 indexed escrowId);
     event EscrowRefunded(uint256 indexed escrowId);
     event DisputeOpened(uint256 indexed escrowId, uint64 disputeDeadline);
     event DisputeResolved(uint256 indexed escrowId, bool refundCustomer);
     /// @notice S2-02: emitted when an unresolved dispute auto-closes with a 50/50 split.
     event DisputeAutoSplit(uint256 indexed escrowId, uint256 toCustomer, uint256 toMerchant);
+    /// @notice A10: a push payout to `to` failed; the amount is credited to `owed[to]` instead.
+    event PayoutDeferred(address indexed to, uint256 amount);
+    event Withdrawn(address indexed to, uint256 amount);
 
     /// @notice Minimum time a customer must wait before unilaterally refunding themselves.
     uint256 public constant MIN_ESCROW_DURATION = 3 days;
@@ -41,9 +46,14 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
     /// long before the customer gains a self-refund path, so the two can never race for the
     /// same payout.
     uint256 public constant MERCHANT_CLAIM_WINDOW = 7 days;
+    /// @notice Gas forwarded to a push payout. A receiver that reverts or burns all of it cannot
+    /// block the other party's payout: its amount is credited to `owed` for `withdraw` (A10).
+    uint256 public constant PAYOUT_GAS = 100_000;
 
     uint256 public nextEscrowId = 1;
     mapping(uint256 => Escrow) public escrows;
+    /// @notice Native PPL owed to an address whose push payout failed (A10 pull fallback).
+    mapping(address => uint256) public owed;
 
     error BadStatus();
     error NotParty();
@@ -53,14 +63,18 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
     error BadDeadline();
     error DisputeWindowNotElapsed();
     error ClaimWindowElapsed();
+    error DisputeAfterDeadline();
+    error NothingOwed();
+    error WithdrawFailed();
 
     constructor(address owner_) Ownable(owner_) {}
 
-    function createEscrow(
-        address merchant,
-        uint64 deadline,
-        bytes32 termsHash
-    ) external payable nonReentrant returns (uint256 escrowId) {
+    function createEscrow(address merchant, uint64 deadline, bytes32 termsHash)
+        external
+        payable
+        nonReentrant
+        returns (uint256 escrowId)
+    {
         if (msg.value == 0) revert ZeroAmount();
         if (merchant == address(0) || merchant == msg.sender) revert BadMerchant();
         if (deadline < block.timestamp + MIN_ESCROW_DURATION) revert BadDeadline();
@@ -82,8 +96,7 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         if (e.status != Status.Locked) revert BadStatus();
         if (msg.sender != e.customer) revert NotParty();
         e.status = Status.Released;
-        (bool sent,) = e.merchant.call{value: e.amount}("");
-        require(sent, "release");
+        _pay(e.merchant, e.amount);
         emit EscrowReleased(escrowId);
     }
 
@@ -101,8 +114,7 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
             revert DeadlineNotReached();
         }
         e.status = Status.Refunded;
-        (bool sent,) = e.customer.call{value: e.amount}("");
-        require(sent, "refund");
+        _pay(e.customer, e.amount);
         emit EscrowRefunded(escrowId);
     }
 
@@ -116,15 +128,18 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         if (block.timestamp < e.deadline) revert DeadlineNotReached();
         if (block.timestamp >= uint256(e.deadline) + MERCHANT_CLAIM_WINDOW) revert ClaimWindowElapsed();
         e.status = Status.Released;
-        (bool sent,) = e.merchant.call{value: e.amount}("");
-        require(sent, "release");
+        _pay(e.merchant, e.amount);
         emit EscrowReleased(escrowId);
     }
 
+    /// @notice A10: the merchant may dispute only before `deadline`. Afterwards the merchant has
+    /// `claimRelease`; a late merchant dispute would only turn a lapsed claim (customer refund)
+    /// into a forced 50/50 split. The customer may still dispute while `Locked`.
     function openDispute(uint256 escrowId) external {
         Escrow storage e = escrows[escrowId];
         if (e.status != Status.Locked) revert BadStatus();
         if (msg.sender != e.customer && msg.sender != e.merchant) revert NotParty();
+        if (msg.sender == e.merchant && block.timestamp >= e.deadline) revert DisputeAfterDeadline();
         e.status = Status.Disputed;
         uint64 disputeDeadline = uint64(block.timestamp + DISPUTE_AUTO_CLOSE_WINDOW);
         e.disputeDeadline = disputeDeadline;
@@ -155,13 +170,11 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
     function _settleDispute(uint256 escrowId, Escrow storage e, bool refundCustomer_) internal {
         if (refundCustomer_) {
             e.status = Status.Refunded;
-            (bool sent,) = e.customer.call{value: e.amount}("");
-            require(sent, "refund");
+            _pay(e.customer, e.amount);
             emit EscrowRefunded(escrowId);
         } else {
             e.status = Status.Released;
-            (bool sent,) = e.merchant.call{value: e.amount}("");
-            require(sent, "release");
+            _pay(e.merchant, e.amount);
             emit EscrowReleased(escrowId);
         }
         emit DisputeResolved(escrowId, refundCustomer_);
@@ -174,10 +187,33 @@ contract MerchantEscrow is Ownable, ReentrancyGuard {
         uint256 toCustomer = e.amount / 2;
         uint256 toMerchant = e.amount - toCustomer;
         e.status = Status.Split;
-        (bool sentCustomer,) = e.customer.call{value: toCustomer}("");
-        require(sentCustomer, "refund");
-        (bool sentMerchant,) = e.merchant.call{value: toMerchant}("");
-        require(sentMerchant, "release");
+        _pay(e.customer, toCustomer);
+        _pay(e.merchant, toMerchant);
         emit DisputeAutoSplit(escrowId, toCustomer, toMerchant);
+    }
+
+    /// @notice Withdraw native PPL credited after a failed push payout, with all remaining gas.
+    function withdraw() external nonReentrant {
+        uint256 amount = owed[msg.sender];
+        if (amount == 0) revert NothingOwed();
+        owed[msg.sender] = 0;
+        (bool sent,) = msg.sender.call{value: amount}("");
+        if (!sent) revert WithdrawFailed();
+        emit Withdrawn(msg.sender, amount);
+    }
+
+    /// @dev A10: push with a bounded gas stipend and no returndata copy; on failure credit `owed`
+    /// so one party can never block the other's payout (or its own escrow's settlement).
+    function _pay(address to, uint256 amount) internal {
+        if (amount == 0) return;
+        uint256 gasLimit = PAYOUT_GAS;
+        bool ok;
+        assembly ("memory-safe") {
+            ok := call(gasLimit, to, amount, 0, 0, 0, 0)
+        }
+        if (!ok) {
+            owed[to] += amount;
+            emit PayoutDeferred(to, amount);
+        }
     }
 }

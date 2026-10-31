@@ -27,11 +27,13 @@ import {
   readV2Env,
   resolveV2Chain,
   sellBackUnlockMs,
+  validV2Address,
 } from "@/lib/sale/v2/logic";
 import { useV2Sale, useV2Refresh } from "@/lib/sale/v2/useV2Sale";
 import { useV2Buy, type V2TxStatus } from "@/lib/sale/v2/useV2Buy";
 
 import { V2PhaseBanner } from "./PhaseBanner";
+import { SellBackPanel } from "./SellBackPanel";
 import { V2VerificationGate } from "./VerificationGate";
 
 const BuyLifiBridge = dynamic(
@@ -508,6 +510,20 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
             <StatusError status={verifyStatus} fallback={t.verify.error} />
           </>
         ) : null}
+
+        <SellBackPanel
+          chain={chain}
+          account={account}
+          provider={provider}
+          personId={snapshot?.personId ?? null}
+          phase={snapshot?.phase ?? V2_PHASES.NotOpen}
+          lang={lang}
+          copy={t.sellBack}
+          preview={Boolean(preview)}
+          refreshKey={refreshKey}
+          burnAddress={validV2Address(env.NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS)}
+          onDone={refresh}
+        />
       </div>
     </div>
   );

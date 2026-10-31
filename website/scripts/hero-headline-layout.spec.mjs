@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
 
@@ -8,6 +9,19 @@ const LOCALES = ["en", "ru", "de", "es", "fr", "it", "pt", "tr", "vi", "zh", "id
 const DESKTOP_WIDTHS = [1024, 1280, 1440, 1920];
 
 const ARTIFACT_ROOT = process.env.HERO_SCREENSHOT_DIR ?? "/opt/cursor/artifacts";
+
+async function writableArtifactRoot() {
+  try {
+    await mkdir(ARTIFACT_ROOT, { recursive: true });
+    return ARTIFACT_ROOT;
+  } catch (error) {
+    const code = error && typeof error === "object" && "code" in error ? error.code : "";
+    if (code !== "EACCES" && code !== "EPERM" && code !== "EROFS") throw error;
+    const fallback = path.join(tmpdir(), "people-hero-artifacts");
+    await mkdir(fallback, { recursive: true });
+    return fallback;
+  }
+}
 
 async function setLocale(page, lang) {
   await page.addInitScript((value) => {
@@ -140,7 +154,7 @@ test.describe("hero headline screenshots", () => {
       await page.goto("/", { waitUntil: "networkidle" });
       await waitForHeroFit(page);
       const hero = page.locator("section").filter({ has: page.locator("h1") }).first();
-      const dir = path.join(ARTIFACT_ROOT, "screenshots", phase);
+      const dir = path.join(await writableArtifactRoot(), "screenshots", phase);
       await mkdir(dir, { recursive: true });
       const filePath = path.join(dir, `hero-${shot.name}-${phase}.png`);
       await hero.screenshot({ path: filePath });

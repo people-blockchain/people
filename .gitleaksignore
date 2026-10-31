@@ -1,5 +1,6 @@
 # Synthetic test fixtures (public EVM addresses), not secrets
 4087fb7ff6a8826a5ef2f4f7a8cff2a1836a8f8f:website/scripts/evm-catalog-resilience.test.mjs:generic-api-key:27
+
 # Public token contract addresses in the committed catalog snapshot (0x + 40 hex), not secrets
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:103
 9255b66d125a736923f3dac2f7f3f684a7bb5f6c:website/src/data/evm-token-catalog.json:generic-api-key:110

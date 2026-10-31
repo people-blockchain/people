@@ -5,29 +5,34 @@
  * format in one small pure module makes it easy to test and impossible for the
  * client to drift accidentally.
  */
+/** A usable one-time code, or null when the client omitted it. */
+export function parseSaleNonceCode(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const value = raw.trim();
+  if (!value || value.length > 200) return null;
+  return value;
+}
+
 export function buildV2OwnershipMessage(input: {
   domain: string;
   account: string;
   chainId: number;
   hub: string;
-  nonceCode?: string;
-  issuedAt?: string;
-  expiresAt?: string;
+  nonceCode: string;
+  issuedAt: string;
+  expiresAt: string;
 }): string {
-  const lines = [
+  return [
     `${input.domain} wants you to verify this wallet for the PPL sale.`,
     "",
     "This proves wallet ownership only. It does not move funds.",
     `Address: ${input.account}`,
     `Chain ID: ${input.chainId}`,
     `Hub: ${input.hub}`,
-  ];
-  if (input.nonceCode) {
-    lines.push(`Nonce: ${input.nonceCode}`);
-    if (input.issuedAt) lines.push(`Issued At: ${input.issuedAt}`);
-    if (input.expiresAt) lines.push(`Expiration Time: ${input.expiresAt}`);
-  }
-  return lines.join("\n");
+    `Nonce: ${input.nonceCode}`,
+    `Issued At: ${input.issuedAt}`,
+    `Expiration Time: ${input.expiresAt}`,
+  ].join("\n");
 }
 
 /** Same normalisation as the server: origin only, no protocol, no trailing slash. */

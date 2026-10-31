@@ -7,6 +7,7 @@ import { getAddress, isAddress, type Address, type Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
+import { approveErc20IfNeeded } from "@/lib/evm/erc20-allowance";
 import { swapCopy } from "@/lib/swap-content";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
 import { useAssetRegistry } from "@/hooks/useAssetRegistry";
@@ -438,12 +439,29 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
           value: parsed.amountInBaseUnits,
         });
       } else {
-        await writeViaActiveSigner(signer, {
-          address: tokenContract,
-          abi: erc20Abi,
-          functionName: "approve",
-          args: [router, parsed.amountInBaseUnits],
+        const client = readPublicClient();
+        const routerAddress = router;
+        const approved = await approveErc20IfNeeded({
+          amount: parsed.amountInBaseUnits,
+          readAllowance: () =>
+            client.readContract({
+              address: tokenContract,
+              abi: erc20Abi,
+              functionName: "allowance",
+              args: [signer.address, routerAddress],
+            }),
+          approve: () =>
+            writeViaActiveSigner(signer, {
+              address: tokenContract,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [routerAddress, parsed.amountInBaseUnits],
+            }),
+          waitForReceipt: (approveHash) => client.waitForTransactionReceipt({ hash: approveHash }),
         });
+        if (!approved.ok) {
+          throw new Error(approved.reason === "reverted" ? "approval reverted" : "allowance unchanged");
+        }
         hash = await writeViaActiveSigner(signer, {
           address: router,
           abi: routerAbi,
