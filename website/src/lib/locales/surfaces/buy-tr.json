@@ -414,7 +414,11 @@
       "tooMany": "Bu 24 saatte çok fazla satış var.",
       "reserve": "Rezerv bu ödemeyi karşılamıyor.",
       "reverted": "İşlem ağ tarafından geri alındı.",
-      "switchRejected": "Ağ değiştirilmedi."
+      "switchRejected": "Ağ değiştirilmedi.",
+      "pendingTitle": "Bekleyen ödemeler",
+      "pendingBody": "Bir satış, Base üzerinde USDC ödemesini bekliyor. Daha fazla PPL satmadan önce bu ödemeyi bitirin.",
+      "continuePayout": "Ödemeye devam et",
+      "confirmAnotherSale": "Yine de daha fazla sat"
     }
   }
 }

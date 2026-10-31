@@ -414,7 +414,11 @@
       "tooMany": "这 24 小时内的卖出次数太多。",
       "reserve": "储备不够支付这笔金额。",
       "reverted": "交易被网络回滚。",
-      "switchRejected": "没有切换网络。"
+      "switchRejected": "没有切换网络。",
+      "pendingTitle": "待完成的付款",
+      "pendingBody": "有一笔出售正在等待 Base 上的 USDC 付款。请先完成这笔付款，再出售更多 PPL。",
+      "continuePayout": "继续付款",
+      "confirmAnotherSale": "仍然继续出售"
     }
   }
 }

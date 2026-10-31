@@ -149,6 +149,26 @@ export function minPplOutFromEstimate(expected: bigint, slippageBps: number = V2
   return (expected * (BigInt(10_000) - bps)) / BigInt(10_000);
 }
 
+/**
+ * USDC the hub actually pulls. A buy that finishes the raise cap is charged
+ * only the remaining room, not the full requested amount.
+ */
+export function chargedBuyUsd6(amountIn: bigint, remainingUsd6: bigint): bigint {
+  if (amountIn <= BigInt(0) || remainingUsd6 <= BigInt(0)) return BigInt(0);
+  return amountIn < remainingUsd6 ? amountIn : remainingUsd6;
+}
+
+/** Slippage floor for `buy`, based on the charged amount rather than the request. */
+export function minPplOutForChargedBuy(input: {
+  amountIn: bigint;
+  remainingUsd6: bigint;
+  spotPriceWad: bigint;
+  slippageBps?: number;
+}): bigint {
+  const charged = chargedBuyUsd6(input.amountIn, input.remainingUsd6);
+  return minPplOutFromEstimate(estimatePplOut(charged, input.spotPriceWad), input.slippageBps);
+}
+
 /** Sell-back unlocks exactly 30 days after the purchase. */
 export function sellBackUnlockMs(boughtAtMs: number, holdDays: number = V2_SALE.holdDays): number {
   return boughtAtMs + holdDays * DAY_MS;

@@ -414,7 +414,11 @@
       "tooMany": "Too many sales in this 24-hour window.",
       "reserve": "The reserve cannot cover this payout.",
       "reverted": "The transaction was reverted.",
-      "switchRejected": "The network was not switched."
+      "switchRejected": "The network was not switched.",
+      "pendingTitle": "Pending payouts",
+      "pendingBody": "A sale is waiting for its USDC payout on Base. Finish that payout before selling more PPL.",
+      "continuePayout": "Continue payout",
+      "confirmAnotherSale": "Sell more anyway"
     }
   }
 }

@@ -414,7 +414,11 @@
       "tooMany": "Trop de ventes sur ces 24 heures.",
       "reserve": "La réserve ne couvre pas ce paiement.",
       "reverted": "La transaction a été annulée par le réseau.",
-      "switchRejected": "Le réseau n’a pas été changé."
+      "switchRejected": "Le réseau n’a pas été changé.",
+      "pendingTitle": "Paiements en attente",
+      "pendingBody": "Une vente attend son paiement en USDC sur Base. Terminez ce paiement avant de vendre plus de PPL.",
+      "continuePayout": "Continuer le paiement",
+      "confirmAnotherSale": "Vendre plus quand même"
     }
   }
 }

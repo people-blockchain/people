@@ -22,6 +22,7 @@ import {
 } from "../src/lib/sale/v2/return-attestation.ts";
 import {
   HOLD_SECONDS,
+  choosePayableSlice,
   largestPplUnderCaps,
   minUsdcOutFromPayout,
   sellBackAvailability,
@@ -40,10 +41,10 @@ const PERSON = keccak256(toBytes("person-1"));
 const RETURN_ID = keccak256(toBytes("return-1"));
 const AMOUNT = 10n ** 18n;
 const EVENT = parseAbiItem(
-  "event ReturnBurned(bytes32 indexed returnId, address indexed from, address indexed hub, bytes32 personId, address seller, uint256 amount)",
+  "event ReturnBurned(bytes32 indexed returnId, address indexed from, address indexed hub, bytes32 personId, address seller, uint256 amount, uint256 destChainId)",
 );
 
-function returnLog() {
+function returnLog(destChainId = 8453n) {
   const topics = encodeEventTopics({
     abi: [EVENT],
     eventName: "ReturnBurned",
@@ -54,8 +55,9 @@ function returnLog() {
       { type: "bytes32" },
       { type: "address" },
       { type: "uint256" },
+      { type: "uint256" },
     ],
-    [PERSON, SELLER, AMOUNT],
+    [PERSON, SELLER, AMOUNT, destChainId],
   );
   return { address: BURN, topics, data };
 }
@@ -142,13 +144,27 @@ test("revert names map to short error keys", () => {
   assert.equal(sellBackErrorKey({ message: "transaction reverted" }), "reverted");
 });
 
-test("ReturnBurned decodes returnId, person, seller and amount", () => {
-  const burned = decodeReturnBurned([returnLog()], { burn: BURN, hub: HUB });
+test("ReturnBurned decodes returnId, person, seller, amount and destChainId", () => {
+  const burned = decodeReturnBurned([returnLog()], { burn: BURN, hub: HUB, destChainId: 8453n });
   assert.equal(burned?.returnId, RETURN_ID);
   assert.equal(burned?.personId, PERSON);
   assert.equal(burned?.seller, SELLER);
   assert.equal(burned?.amount, AMOUNT);
-  assert.equal(decodeReturnBurned([returnLog()], { burn: BURN, hub: SELLER }), null);
+  assert.equal(burned?.destChainId, 8453n);
+  assert.equal(decodeReturnBurned([returnLog()], { burn: BURN, hub: SELLER, destChainId: 8453n }), null);
+});
+
+test("decodeReturnBurned rejects a destChainId other than the configured Base chain", () => {
+  assert.equal(decodeReturnBurned([returnLog(84532n)], { burn: BURN, hub: HUB, destChainId: 8453n }), null);
+  assert.equal(decodeReturnBurned([returnLog(8453n)], { burn: BURN, hub: HUB, destChainId: 8453n })?.destChainId, 8453n);
+});
+
+test("the exact unpaid remainder is chosen when it fits the caps", async () => {
+  const exact = await choosePayableSlice(7n, async (ppl) => ({ gross: ppl, payout: ppl }), 100n, 100n);
+  assert.deepEqual(exact, { payable: 7n, payout: 7n });
+  const sliced = await choosePayableSlice(50n, async (ppl) => ({ gross: ppl * 10n, payout: ppl }), 100n, 80n);
+  assert.equal(sliced.payable, 8n);
+  assert.equal(sliced.payout, 8n);
 });
 
 test("MainnetReturn signature recovers the return verifier on the hub domain", async () => {
@@ -287,6 +303,22 @@ test("attestation waits for 12 PEOPLE confirmations or a finalized block", async
     returnVerifier: async () => privateKeyToAccount(KEY).address,
   });
   assert.equal(finalized.ok, true);
+});
+
+test("createReturnAttestation does not sign when destChainId is not the hub chain", async () => {
+  const wrongChain = await createReturnAttestation({
+    txHash: `0x${"6".repeat(64)}`,
+    key: KEY,
+    burnAddress: BURN,
+    hubAddress: HUB,
+    hubChainId: 8453,
+    nowSec: 1_700_000_000,
+    getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [returnLog(84532n)] }),
+    headBlock: async () => 200n,
+    returnVerifier: async () => privateKeyToAccount(KEY).address,
+  });
+  assert.deepEqual(wrongChain, { ok: false, status: 422, error: "return_not_found" });
+  assert.equal("signature" in wrongChain, false);
 });
 
 test("nonceCode is required and blank values are rejected", () => {

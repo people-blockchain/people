@@ -414,7 +414,11 @@
       "tooMany": "Quá nhiều lần bán trong 24 giờ này.",
       "reserve": "Quỹ dự trữ không đủ cho khoản này.",
       "reverted": "Giao dịch đã bị hoàn nguyên.",
-      "switchRejected": "Chưa chuyển mạng."
+      "switchRejected": "Chưa chuyển mạng.",
+      "pendingTitle": "Khoản chi đang chờ",
+      "pendingBody": "Một lệnh bán đang chờ thanh toán USDC trên Base. Hãy hoàn tất khoản chi này trước khi bán thêm PPL.",
+      "continuePayout": "Tiếp tục chi trả",
+      "confirmAnotherSale": "Vẫn bán thêm"
     }
   }
 }

@@ -6,6 +6,7 @@ import {
   createWalletClient,
   custom,
   formatUnits,
+  getAddress,
   http,
   parseUnits,
   type Address,
@@ -15,8 +16,19 @@ import {
 import { createBrowserPublicClient, ensurePeopleChain, peopleViemChain, browserEvmRpcUrl, type EIP1193Provider } from "@/lib/evm/client";
 import { PPL_CURVE_HUB_V2_ABI } from "./abi";
 import type { V2Chain } from "./logic";
-import { PPL_RETURN_BURN_ABI, PEOPLE_MAINNET_CHAIN_ID, decodeReturnBurned } from "./return-burn";
-import { minUsdcOutFromPayout, sellBackErrorKey, sellBackFeeBand, sellBackPreflight, type SellLot } from "./sellback";
+import {
+  browserPendingStorage,
+  forgetPending,
+  pendingForAccount,
+  readPendingPayouts,
+  reconcilePending,
+  rememberPending,
+  writePendingPayouts,
+  type PendingPayout,
+  type SeenReturn,
+} from "./pending-payout";
+import { RETURN_BURNED_EVENT, PPL_RETURN_BURN_ABI, PEOPLE_MAINNET_CHAIN_ID, decodeReturnBurned } from "./return-burn";
+import { choosePayableSlice, minUsdcOutFromPayout, sellBackErrorKey, sellBackFeeBand, sellBackPreflight, type SellLot } from "./sellback";
 import { ensureV2Chain } from "./useV2Buy";
 
 export type SellBackStatus =
@@ -206,17 +218,47 @@ export function useV2SellBack() {
       provider: EIP1193Provider;
       account: Address;
       personId: Hex;
-      pplIn: bigint;
+      pplIn?: bigint;
       burnAddress: Address;
+      /** When false, a pending payout blocks another burn. */
+      allowAnotherBurn?: boolean;
+      /** Skip the burn and pay this sale. */
+      pending?: PendingPayout;
     }) => {
-      const { chain, provider, account, personId, pplIn, burnAddress } = ctx;
+      const { chain, provider, account, personId, burnAddress, pending } = ctx;
+      const pplIn = ctx.pplIn ?? (pending ? BigInt(pending.amount) : BigInt(0));
       try {
+        if (!pending && ctx.allowAnotherBurn === false) {
+          setStatus({ step: "error", reason: "error" });
+          return null;
+        }
         if (!chain.hubAddress) {
           setStatus({ step: "error", reason: "notConfigured" });
           return null;
         }
         const hub = chain.hubAddress as Address;
         const basePublic = publicClient(chain.chain);
+        let burnHash: Hex;
+        let burned: { returnId: Hex; amount: bigint; seller: Address; personId: Hex; destChainId: bigint };
+        if (pending) {
+          if (
+            pending.account.toLowerCase() !== account.toLowerCase() ||
+            pending.seller.toLowerCase() !== account.toLowerCase() ||
+            pending.hub.toLowerCase() !== hub.toLowerCase() ||
+            pending.destChainId !== chain.chain.id
+          ) {
+            setStatus({ step: "error", reason: "badSignature" });
+            return null;
+          }
+          burnHash = pending.burnTx;
+          burned = {
+            returnId: pending.returnId,
+            amount: BigInt(pending.amount),
+            seller: pending.seller,
+            personId: pending.personId,
+            destChainId: BigInt(pending.destChainId),
+          };
+        } else {
         const [paused, liquidityReleased, openedAt, returnVerifier, sellablePpl, personalRemainingUsd6, cap, quote] =
           await Promise.all([
             basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "paused" }),
@@ -276,7 +318,7 @@ export function useV2SellBack() {
         }
         const peopleWallet = createWalletClient({ chain: peopleChain, transport: custom(provider), account });
         const peoplePublic = createBrowserPublicClient();
-        const burnHash = await peopleWallet.writeContract({
+        burnHash = await peopleWallet.writeContract({
           address: burnAddress,
           abi: PPL_RETURN_BURN_ABI,
           functionName: "burnForReturn",
@@ -287,12 +329,39 @@ export function useV2SellBack() {
         });
         const burnReceipt = await peoplePublic.waitForTransactionReceipt({ hash: burnHash });
         if (burnReceipt.status !== "success") throw new Error("transaction reverted");
-        const burned = decodeReturnBurned(burnReceipt.logs, {
+        const decoded = decodeReturnBurned(burnReceipt.logs, {
           burn: burnAddress,
           hub: chain.hubAddress as Address,
+          destChainId: BigInt(chain.chain.id),
         });
-        if (!burned || burned.amount !== pplIn || burned.seller.toLowerCase() !== account.toLowerCase()) {
+        if (
+          !decoded ||
+          decoded.amount !== pplIn ||
+          decoded.seller.toLowerCase() !== account.toLowerCase() ||
+          decoded.destChainId !== BigInt(chain.chain.id)
+        ) {
           throw new Error("ReturnBurned");
+        }
+        burned = {
+          returnId: decoded.returnId,
+          amount: decoded.amount,
+          seller: decoded.seller,
+          personId: decoded.personId,
+          destChainId: decoded.destChainId,
+        };
+        const pendingItem: PendingPayout = {
+          returnId: burned.returnId,
+          amount: burned.amount.toString(),
+          burnTx: burnHash,
+          status: "pending",
+          account,
+          seller: burned.seller,
+          hub,
+          personId: burned.personId,
+          destChainId: chain.chain.id,
+        };
+        const storage = browserPendingStorage();
+        if (storage) rememberPending(storage, pendingItem);
         }
 
         setStatus({ step: "attesting" });
@@ -321,7 +390,7 @@ export function useV2SellBack() {
           return null;
         }
         if (
-          proof.pplAmount !== pplIn.toString() ||
+          proof.pplAmount !== burned.amount.toString() ||
           proof.returnId.toLowerCase() !== burned.returnId.toLowerCase() ||
           proof.seller.toLowerCase() !== account.toLowerCase() ||
           proof.hub.toLowerCase() !== hub.toLowerCase() ||
@@ -338,7 +407,14 @@ export function useV2SellBack() {
           return null;
         }
         const baseWallet = createWalletClient({ chain: chain.chain, transport: custom(provider), account });
-        const authorized = BigInt(proof.pplAmount);
+        const signed = BigInt(proof.pplAmount);
+        const claimed = await basePublic.readContract({
+          address: hub,
+          abi: PPL_CURVE_HUB_V2_ABI,
+          functionName: "returnClaimedPpl",
+          args: [proof.returnId],
+        });
+        const left = signed > claimed ? signed - claimed : BigInt(0);
         const [personalNow, capNow] = await Promise.all([
           basePublic.readContract({
             address: hub,
@@ -348,35 +424,20 @@ export function useV2SellBack() {
           }),
           basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "sellBackCapToday" }),
         ]);
-        const quoteNow = (amount: bigint) =>
-          basePublic.readContract({
-            address: hub,
-            abi: PPL_CURVE_HUB_V2_ABI,
-            functionName: "quoteSellBack",
-            args: [account, amount],
-          });
-        const full = await quoteNow(authorized);
-        let payable = authorized;
-        let payout = full[2];
-        const fits = (gross: bigint, pay: bigint) =>
-          gross > BigInt(0) && pay > BigInt(0) && gross <= personalNow && gross <= capNow[0];
-        if (!fits(full[0], full[2])) {
-          let lo = BigInt(0);
-          let hi = authorized;
-          payable = BigInt(0);
-          payout = BigInt(0);
-          for (let i = 0; i < 16 && lo + BigInt(1) < hi; i++) {
-            const mid = (lo + hi) / BigInt(2);
-            const row = await quoteNow(mid);
-            if (fits(row[0], row[2])) {
-              payable = mid;
-              payout = row[2];
-              lo = mid;
-            } else {
-              hi = mid;
-            }
-          }
-        }
+        const { payable, payout } = await choosePayableSlice(
+          left,
+          async (amount) => {
+            const row = await basePublic.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "quoteSellBack",
+              args: [account, amount],
+            });
+            return { gross: row[0], payout: row[2] };
+          },
+          personalNow,
+          capNow[0],
+        );
         if (payable <= BigInt(0)) {
           setStatus({ step: "error", reason: personalNow <= capNow[0] ? "personalCap" : "globalCap" });
           return null;
@@ -387,12 +448,28 @@ export function useV2SellBack() {
           address: hub,
           abi: PPL_CURVE_HUB_V2_ABI,
           functionName: "sellBack",
-          args: [payable, minUsdcOut, proof.returnId, BigInt(proof.deadline), authorized, proof.signature],
+          args: [payable, minUsdcOut, proof.returnId, BigInt(proof.deadline), signed, proof.signature],
           account,
           chain: chain.chain,
         });
         const receipt = await basePublic.waitForTransactionReceipt({ hash });
         if (receipt.status !== "success") throw new Error("transaction reverted");
+        const [claimedNow, usedNow] = await Promise.all([
+          basePublic.readContract({
+            address: hub,
+            abi: PPL_CURVE_HUB_V2_ABI,
+            functionName: "returnClaimedPpl",
+            args: [proof.returnId],
+          }),
+          basePublic.readContract({
+            address: hub,
+            abi: PPL_CURVE_HUB_V2_ABI,
+            functionName: "returnUsed",
+            args: [proof.returnId],
+          }),
+        ]);
+        const store = browserPendingStorage();
+        if (store && (usedNow || claimedNow >= signed)) forgetPending(store, proof.returnId);
         const done = { step: "done" as const, txHash: hash, payoutUsd6: payout };
         setStatus(done);
         return done;
@@ -404,10 +481,137 @@ export function useV2SellBack() {
     [],
   );
 
+  const resumePayout = useCallback(
+    async (ctx: {
+      chain: V2Chain;
+      provider: EIP1193Provider;
+      account: Address;
+      personId: Hex;
+      burnAddress: Address;
+      pending: PendingPayout;
+    }) => sellBack({ ...ctx, pending: ctx.pending, allowAnotherBurn: true }),
+    [sellBack],
+  );
+
   return {
     status,
     sellBack,
+    resumePayout,
     reset,
     busy: !["idle", "done", "error"].includes(status.step),
   };
+}
+
+export function usePendingPayouts(input: {
+  chain: V2Chain;
+  account: Address | null;
+  burnAddress: string | null;
+  enabled: boolean;
+  refreshKey?: number;
+}): { pending: PendingPayout[]; loading: boolean } {
+  const { chain, account, burnAddress, enabled, refreshKey = 0 } = input;
+  const [pending, setPending] = useState<PendingPayout[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!enabled || !account) {
+      setPending([]);
+      return;
+    }
+    const storage = browserPendingStorage();
+    const stored = storage ? pendingForAccount(readPendingPayouts(storage), account) : [];
+    setPending(stored);
+    if (!chain.hubAddress || !burnAddress) return;
+    let active = true;
+    setLoading(true);
+    const hub = chain.hubAddress as Address;
+    const burn = getAddress(burnAddress);
+    void (async () => {
+      try {
+        const people = createBrowserPublicClient();
+        const logs = await people.getLogs({
+          address: burn,
+          event: RETURN_BURNED_EVENT,
+          args: { from: account, hub },
+          fromBlock: BigInt(0),
+          toBlock: "latest",
+        });
+        const base = publicClient(chain.chain);
+        const seen: SeenReturn[] = [];
+        const noticed = new Set<string>();
+        for (const log of logs) {
+          const decoded = decodeReturnBurned(
+            [{ address: log.address, topics: log.topics, data: log.data }],
+            { burn, hub, destChainId: BigInt(chain.chain.id) },
+          );
+          if (!decoded || !log.transactionHash) continue;
+          if (decoded.seller.toLowerCase() !== account.toLowerCase() && decoded.from.toLowerCase() !== account.toLowerCase()) {
+            continue;
+          }
+          const [claimedPpl, used] = await Promise.all([
+            base.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "returnClaimedPpl",
+              args: [decoded.returnId],
+            }),
+            base.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "returnUsed",
+              args: [decoded.returnId],
+            }),
+          ]);
+          noticed.add(decoded.returnId.toLowerCase());
+          seen.push({
+            returnId: decoded.returnId,
+            claimedPpl,
+            used,
+            amount: decoded.amount,
+            burnTx: log.transactionHash,
+            account,
+            seller: decoded.seller,
+            hub,
+            personId: decoded.personId,
+            destChainId: Number(decoded.destChainId),
+          });
+        }
+        for (const item of stored) {
+          if (noticed.has(item.returnId.toLowerCase())) continue;
+          if (item.hub.toLowerCase() !== hub.toLowerCase() || item.destChainId !== chain.chain.id) continue;
+          const [claimedPpl, used] = await Promise.all([
+            base.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "returnClaimedPpl",
+              args: [item.returnId],
+            }),
+            base.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "returnUsed",
+              args: [item.returnId],
+            }),
+          ]);
+          seen.push({ returnId: item.returnId, claimedPpl, used, amount: BigInt(item.amount) });
+        }
+        if (!active) return;
+        const next = pendingForAccount(reconcilePending(stored, seen), account);
+        if (storage) {
+          const others = readPendingPayouts(storage).filter((item) => item.account.toLowerCase() !== account.toLowerCase());
+          writePendingPayouts(storage, [...others, ...next]);
+        }
+        setPending(next);
+      } catch {
+        if (active) setPending(stored);
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [account, burnAddress, chain.chain, chain.hubAddress, enabled, refreshKey]);
+
+  return { pending, loading };
 }

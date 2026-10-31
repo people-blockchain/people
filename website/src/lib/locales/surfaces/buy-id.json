@@ -414,7 +414,11 @@
       "tooMany": "Terlalu banyak penjualan dalam 24 jam ini.",
       "reserve": "Cadangan tidak menutup pembayaran ini.",
       "reverted": "Transaksi dibatalkan oleh jaringan.",
-      "switchRejected": "Jaringan tidak diganti."
+      "switchRejected": "Jaringan tidak diganti.",
+      "pendingTitle": "Pembayaran tertunda",
+      "pendingBody": "Satu penjualan menunggu pembayaran USDC di Base. Selesaikan pembayaran itu sebelum menjual lebih banyak PPL.",
+      "continuePayout": "Lanjutkan pembayaran",
+      "confirmAnotherSale": "Tetap jual lagi"
     }
   }
 }
