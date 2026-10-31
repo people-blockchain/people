@@ -6,6 +6,7 @@
 
 import { isSafeInAppPath } from "@/lib/safe-return-path";
 import { migrateWebsiteStorage } from "@/lib/storage-migration";
+import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 
 export const PENDING_KEY = "people_web3auth_pending";
 export const PENDING_MAX_AGE_MS = 10 * 60_000;
@@ -117,6 +118,26 @@ export async function waitForSessionUser<T>(
     if (delay > 0) await sleep(delay);
     const user = await fetchUser().catch(() => null);
     if (user) return user;
+  }
+  return null;
+}
+
+/**
+ * Same bounded poll as {@link waitForSessionUser}, but a user id alone is not enough: the
+ * session's authTime has to sit inside the vault reauth window. A cookie that still carries
+ * yesterday's sign-in must not win the first read. When `nowMs` is omitted, each poll reads
+ * Date.now() so a long wait is not judged against the clock at the start.
+ */
+export async function waitForFreshSessionUser<T extends { id?: string | null; authTime?: number | null }>(
+  fetchUser: () => Promise<T | null>,
+  delaysMs: readonly number[] = SESSION_USER_RETRY_DELAYS_MS,
+  sleep: (ms: number) => Promise<void> = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  nowMs?: number,
+): Promise<T | null> {
+  for (const delay of delaysMs) {
+    if (delay > 0) await sleep(delay);
+    const user = await fetchUser().catch(() => null);
+    if (user?.id && isAuthTimeFresh(user.authTime, nowMs ?? Date.now())) return user;
   }
   return null;
 }
