@@ -152,7 +152,7 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
-  // The document URL is returned immediately. Resolving its image must not hold the row or mark it partial.
+  // The document URL is the image. This request does not fetch the gateway.
   const chainImage = await readImmediateTokenImage(token);
   return applyTokenImage(seeded, undefined, chainImage);
 }

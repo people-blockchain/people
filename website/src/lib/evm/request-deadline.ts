@@ -112,8 +112,8 @@ export function linkAbort(ms: number, parent?: AbortSignal | null): { signal: Ab
 }
 
 /**
- * A catalog refresh started while answering a request must not stay inside that request's
- * deadline. Otherwise the response's abort tears down the refresh, and the next visitor repeats it.
+ * Leaves the request deadline store. Compat handlers must not use this to keep scanning,
+ * writing snapshots, or fetching metadata after the response has been returned.
  */
 export function runOutsideRequestDeadline<T>(fn: () => T): T {
   return deadlines.exit(fn);

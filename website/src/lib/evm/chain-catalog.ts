@@ -4,10 +4,10 @@ import tokenCatalogBaseline from "@/data/evm-token-catalog.json" with { type: "j
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch, isIncompleteRpcError, isRequestDeadlineError, RequestDeadlineError, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { fetchCachedMetadataImage, peekCachedMetadataImageEntry } from "@/lib/evm/token-uri-metadata";
+import { peekCachedMetadataImageEntry } from "@/lib/evm/token-uri-metadata";
 import { resolveAssetImageUrl } from "@/lib/asset-image-src";
 import { withStableImage } from "@/lib/token-image-merge";
-import { boundedTimeoutMs, currentDeadline, deadlineExpired, retryDelayMs, runOutsideRequestDeadline, sleepMs } from "@/lib/evm/request-deadline";
+import { boundedTimeoutMs, currentDeadline, deadlineExpired, retryDelayMs, sleepMs } from "@/lib/evm/request-deadline";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
@@ -452,7 +452,7 @@ function decodeAddress(ret: string | null | undefined): string {
   return getAddress(`0x${ret.slice(-40)}`);
 }
 
-/** On-chain catalog scans are expensive; the cached copy is refreshed in the background. */
+/** How long a finished in-memory catalog is served before the next read. That read stays inside the request. */
 const CATALOG_STALE_MS = 30_000;
 const CATALOG_REVALIDATE_SECONDS = 60;
 export const CHAIN_CATALOG_TAGS = ["evm-chain-catalog"];
@@ -465,9 +465,7 @@ let poolsRefreshing: Promise<CatalogPool[]> | null = null;
 let lastPartialTokens: CatalogToken[] | null = null;
 /** In-memory catalog. A failed snapshot write must not replace this with a shorter tail. */
 let persistedTokens: CatalogToken[] = [];
-let pendingImageUris: Map<string, string> | null = null;
 let snapshotWritesEnabled = true;
-let catalogGeneration = 0;
 const catalogWarnOnce = new Set<string>();
 
 export function resetChainCatalogCacheForTests(): void {
@@ -477,9 +475,7 @@ export function resetChainCatalogCacheForTests(): void {
   poolsRefreshing = null;
   lastPartialTokens = null;
   persistedTokens = [];
-  pendingImageUris = null;
   snapshotWritesEnabled = true;
-  catalogGeneration += 1;
   catalogWarnOnce.clear();
   windowLogsCache.clear();
   logWindowsPeak = 0;
@@ -492,9 +488,8 @@ export function setCatalogSnapshotWriteForTests(enabled: boolean): void {
 }
 
 /**
- * Cross-request cache so a cold server instance (or a second Vercel lambda) does not repeat the
- * full log scan for every visitor. Sanitised by the in-process stale-while-revalidate below, which
- * guarantees no request ever *awaits* a re-scan after the first one.
+ * Cross-request cache of a finished pool list. A request reuses a fresh in-memory copy.
+ * A stale copy is refreshed inside that request and is not left running after the response.
  */
 const scanPoolsCached = unstable_cache(discoverPoolsOnChainUncached, ["evm-chain-catalog-pools-v1"], {
   revalidate: CATALOG_REVALIDATE_SECONDS,
@@ -512,6 +507,7 @@ type BaselineToken = {
 /**
  * History already walked (101 windows, about two minutes on the public node). A request only
  * re-reads logs after this tip, for factories that can still emit there.
+ * Committed snapshot rows store the address as `contract`.
  */
 function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToken> } | null {
   const tip = tokenCatalogBaseline.tip;
@@ -519,9 +515,9 @@ function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToke
   if (typeof tip !== "number" || tip <= 0 || !Array.isArray(tokens) || tokens.length === 0) return null;
   const byAddress = new Map<string, BaselineToken>();
   for (const row of tokens) {
-    if (!row || typeof row.tokenAddress !== "string") continue;
+    if (!row || typeof row.contract !== "string") continue;
     try {
-      const tokenAddress = getAddress(row.tokenAddress);
+      const tokenAddress = getAddress(row.contract);
       byAddress.set(tokenAddress.toLowerCase(), {
         tokenAddress,
         name: typeof row.name === "string" ? row.name : "",
@@ -534,6 +530,13 @@ function readTokenBaseline(): { tip: number; byAddress: Map<string, BaselineToke
     }
   }
   return byAddress.size ? { tip, byAddress } : null;
+}
+
+/** Checksummed addresses loaded from the committed snapshot's `contract` field. */
+export function loadedBaselineAddresses(): string[] {
+  const baseline = readTokenBaseline();
+  if (!baseline) return [];
+  return [...baseline.byAddress.values()].map((row) => row.tokenAddress);
 }
 
 /** Superseded factories stop at the next factory's start. Scanning them through the chain tip is empty work. */
@@ -672,12 +675,11 @@ function rememberSnapshot(tokens: CatalogToken[]): CatalogToken[] {
 }
 
 /**
- * One `metadataURI` batch. A miss or a slow gateway leaves the row in place and does not make the
- * catalog partial. The document URL is returned immediately; the JSON `image` fills in later.
+ * One `metadataURI` batch. A miss leaves the row in place and does not make the catalog partial.
+ * A metadata document is already a URL. This request does not fetch a gateway for it.
  */
-async function attachTokenImages(rows: CatalogToken[]): Promise<{ rows: CatalogToken[]; uris: Map<string, string> }> {
-  const uris = new Map<string, string>();
-  if (!rows.length || deadlineExpired() || currentDeadline()?.signal.aborted) return { rows, uris };
+async function attachTokenImages(rows: CatalogToken[]): Promise<CatalogToken[]> {
+  if (!rows.length || deadlineExpired() || currentDeadline()?.signal.aborted) return rows;
   let raw: Array<string | null>;
   try {
     raw = await evmJsonRpcBatch<string>(
@@ -686,67 +688,22 @@ async function attachTokenImages(rows: CatalogToken[]): Promise<{ rows: CatalogT
     );
   } catch (error) {
     warnCatalogOnce("baseline images", error, { tokens: rows.length });
-    return { rows, uris };
+    return rows;
   }
-  const next = rows.map((row, index) => {
+  return rows.map((row, index) => {
     const word = raw[index];
     if (word == null) return row;
     const uri = word === "0x" ? "" : decodeErc20String(word, METADATA_URI_MAX_LENGTH);
-    uris.set(row.tokenAddress.toLowerCase(), uri);
     return applyTokenImage(row, undefined, immediateTokenImageUrl(uri));
   });
-  return { rows: next, uris };
-}
-
-/** Fills metadata images after the response. A slow gateway updates the cache and never marks the list partial. */
-function scheduleCatalogImages(rows: CatalogToken[], uris: Map<string, string>): void {
-  const generation = catalogGeneration;
-  const pending = rows.filter((row) => {
-    const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
-    if (!METADATA_JSON_SUFFIX.test(uri) || uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return false;
-    if (peekCachedMetadataImageEntry(uri).hit) return false;
-    return !row.imageUri || METADATA_JSON_SUFFIX.test(row.imageUri);
-  });
-  if (!pending.length) return;
-  const queue = pending.slice();
-  const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
-    while (queue.length) {
-      if (generation !== catalogGeneration) return;
-      const row = queue.shift();
-      if (!row) return;
-      const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
-      const image = shownTokenImage(await fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000));
-      if (generation !== catalogGeneration || !tokensCache) continue;
-      const value = tokensCache.value.map((item) => {
-        if (item.tokenAddress.toLowerCase() !== row.tokenAddress.toLowerCase()) return item;
-        if (image) return applyTokenImage(item, undefined, image);
-        if (!METADATA_JSON_SUFFIX.test(item.imageUri ?? "")) return item;
-        const creation = { ...(item.creationMetadata ?? {}) };
-        delete creation.image;
-        return { ...item, imageUri: undefined, creationMetadata: creation };
-      });
-      tokensCache = { ...tokensCache, value };
-    }
-  });
-  void Promise.all(workers).catch((error) => {
-    warnCatalogOnce("catalog image", error);
-  });
-}
-
-function takeImageUris(): Map<string, string> | null {
-  const uris = pendingImageUris;
-  pendingImageUris = null;
-  return uris;
 }
 
 function storeFreshTokens(value: CatalogToken[]): CatalogToken[] {
-  const uris = takeImageUris();
   tokensCache = { at: Date.now(), value };
-  if (uris) scheduleCatalogImages(value, uris);
   return value;
 }
 
-/** Logo URL for one token. Does not wait on a gateway and never throws. */
+/** Logo URL for one token. The document URL is the image. This request does not fetch the gateway. */
 export async function readImmediateTokenImage(token: string): Promise<string | null> {
   if (deadlineExpired() || currentDeadline()?.signal.aborted) return null;
   try {
@@ -755,30 +712,19 @@ export async function readImmediateTokenImage(token: string): Promise<string | n
       timeoutMs: boundedTimeoutMs(2_500),
     });
     const uri = decodeErc20String(out, METADATA_URI_MAX_LENGTH);
-    const image = immediateTokenImageUrl(uri);
-    if (uri && METADATA_JSON_SUFFIX.test(uri) && image && METADATA_JSON_SUFFIX.test(image)) {
-      void fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000);
-    }
-    return image;
+    return immediateTokenImageUrl(uri);
   } catch {
     return null;
   }
 }
 
 async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
-  const store = currentDeadline();
-  // The handler aborts its signal as soon as it returns. A cache revalidation that is still inside
-  // that context must not treat the abort as a missed read or skip logos.
-  if (store?.signal.aborted && Date.now() < store.at) {
-    return runOutsideRequestDeadline(() => discoverTokensOnChainUncached());
-  }
   const dep = readEvmDeployments();
   const factory = dep.contracts.tokenFactory;
   if (!factory) return [];
 
   const baseline = readTokenBaseline();
-  // A visitor request keeps the stored names and supplies. The background refresh (no deadline)
-  // re-reads metadata so a later response is not stuck on the baseline forever.
+  // A visitor request keeps the stored names and supplies. Nothing re-reads them after the response.
   const refreshMetadata = !currentDeadline();
   const tipRead = await readChainTip();
   const tip = tipRead.tip;
@@ -853,9 +799,8 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
   // Asset reads that missed are partial. The logo batch below is not: a slow gateway or a missing
   // metadataURI must not turn a full list into a partial response.
   const missing = partial || Boolean(currentDeadline() && deadlineExpired());
-  const imaged = missing ? { rows, uris: new Map<string, string>() } : await attachTokenImages(rows);
-  const merged = rememberSnapshot(imaged.rows);
-  pendingImageUris = imaged.uris;
+  const imagedRows = missing ? rows : await attachTokenImages(rows);
+  const merged = rememberSnapshot(imagedRows);
   return markScanPartial(merged.slice(), missing);
 }
 
@@ -882,9 +827,7 @@ async function loadTokens(): Promise<CatalogToken[]> {
   try {
     const value = await scanTokensCached();
     if (!scanIsPartial(value)) return storeFreshTokens(value);
-    takeImageUris();
   } catch (error) {
-    takeImageUris();
     if (lastPartialTokens && (isRequestDeadlineError(error) || Boolean(currentDeadline()))) {
       const partial = lastPartialTokens;
       lastPartialTokens = null;
@@ -893,30 +836,25 @@ async function loadTokens(): Promise<CatalogToken[]> {
     if (!currentDeadline() && !isRequestDeadlineError(error)) throw error;
   }
   const value = await discoverTokensOnChainUncached();
-  if (scanIsPartial(value)) {
-    takeImageUris();
-    return value;
-  }
+  if (scanIsPartial(value)) return value;
   return storeFreshTokens(value);
+}
+
+/** One in-request catalog load. A second caller awaits the same promise; nothing is left running after it settles. */
+function beginTokenLoad(): Promise<CatalogToken[]> {
+  if (tokensRefreshing) return tokensRefreshing;
+  const task = loadTokens().finally(() => {
+    if (tokensRefreshing === task) tokensRefreshing = null;
+  });
+  tokensRefreshing = task;
+  return task;
 }
 
 export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   const cached = tokensCache;
-  if (cached) {
-    if (Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
-    // Serve the stale catalog at once and re-scan outside this request's abort signal.
-    if (!tokensRefreshing) {
-      tokensRefreshing = runOutsideRequestDeadline(() =>
-        loadTokens()
-          .catch(() => cached.value)
-          .finally(() => {
-            tokensRefreshing = null;
-          }),
-      );
-    }
-    return cached.value;
-  }
-  return loadTokens();
+  if (cached && Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
+  if (cached) return beginTokenLoad().catch(() => cached.value);
+  return beginTokenLoad();
 }
 
 async function pairReserves(pair: string, wppl: string): Promise<CatalogPool | null> {
@@ -1086,16 +1024,12 @@ async function loadPools(): Promise<CatalogPool[]> {
 
 export async function discoverPoolsOnChain(): Promise<CatalogPool[]> {
   const cached = poolsCache;
-  if (cached) {
-    if (Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
-    if (!poolsRefreshing) {
-      poolsRefreshing = loadPools()
-        .catch(() => cached.value)
-        .finally(() => {
-          poolsRefreshing = null;
-        });
-    }
-    return cached.value;
+  if (cached && Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
+  if (!poolsRefreshing) {
+    const task = (cached ? loadPools().catch(() => cached.value) : loadPools()).finally(() => {
+      if (poolsRefreshing === task) poolsRefreshing = null;
+    });
+    poolsRefreshing = task;
   }
-  return loadPools();
+  return poolsRefreshing;
 }

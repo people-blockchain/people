@@ -10,9 +10,9 @@ const RATE_WINDOW_MS = 60_000;
 
 /**
  * Catalog listings (assets / liquidity-pools) are the two calls the explorer token list and the
- * swap page both block on. They are already refreshed in-process with stale-while-revalidate, so
- * letting Vercel's edge answer repeat requests for 30 s (and serve stale for 5 min while
- * revalidating) removes the full log scan from the visitor's critical path entirely.
+ * swap page both block on. A fresh in-memory list is reused. A stale one is read inside this
+ * request and does not keep running after the response. The edge cache answers repeat requests
+ * for 30 s (and may serve a previous complete response for 5 min).
  */
 const CACHE_HEADER = "public, s-maxage=30, stale-while-revalidate=300";
 
