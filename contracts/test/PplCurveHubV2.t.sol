@@ -162,18 +162,77 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(bob);
         _buy(alice, MIN_BUY);
         _buy(bob, MIN_BUY); // other recipient not affected
-        // same payer, different recipients back-to-back
+        // A trusted router buys for other people. Those buys do not use or reset the person's cooldown:
+        // they have their own count (MAX_ROUTER_BUYS_24H) and only share the $2k amount cap.
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
         _trust(payer);
         _verify(carol);
+        uint64 bobLast = hub.lastBuyAt(bob);
+        assertGt(bobLast, 0);
+        uint256 bobRemaining = hub.buyRemaining24h(bob);
         vm.startPrank(payer);
         hub.buy(MIN_BUY, 0, carol, address(0));
-        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
-        hub.buy(MIN_BUY, 0, carol, address(0));
-        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0)); // bob's own cooldown applies to buys made for him by others
+        hub.buy(MIN_BUY, 0, carol, address(0)); // back-to-back: no cooldown on the router path
+        hub.buy(MIN_BUY, 0, bob, address(0)); // bob's own cooldown does not apply to a router buy
         vm.stopPrank();
+
+        assertEq(hub.lastBuyAt(carol), 0, "router buy does not start cooldown");
+        assertEq(hub.lastBuyAt(bob), bobLast, "router buy does not reset cooldown");
+        (, uint256 carolOwn,,) = hub.usage24h(carol);
+        assertEq(carolOwn, 0, "router buys are not own slots");
+        (uint256 carolUsd, uint256 carolBuys) = hub.routerUsage24h(carol);
+        assertEq(carolBuys, 2);
+        assertEq(carolUsd, 2 * MIN_BUY);
+        (, uint256 bobOwn,,) = hub.usage24h(bob);
+        assertEq(bobOwn, 1, "bob's own buy still the only own slot");
+        assertEq(hub.buyRemaining24h(bob), bobRemaining - MIN_BUY, "router buy shares the $2k cap");
+        assertEq(hub.buyRemaining24h(carol), DAY_CAP - 2 * MIN_BUY);
+
+        // bob is still inside the cooldown his own buy started
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+        // carol was never put on cooldown, so she can buy for herself immediately
+        _fund(carol, 1_000e6);
+        _buy(carol, MIN_BUY);
+        assertGt(hub.lastBuyAt(carol), 0);
+    }
+
+    /// @dev Router buys cannot fill the victim's own window or start their cooldown, so they cannot
+    /// lock the victim out. The $2k/24h amount cap is shared: once it is spent, both paths revert.
+    function test_routerBuyCannotLockOutVictimSharesCap() public {
+        address router = makeAddr("router");
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        _prepare(alice);
+
+        for (uint256 i; i < hub.MAX_ROUTER_BUYS_24H(); ++i) {
+            vm.prank(router);
+            hub.buy(MIN_BUY, 0, alice, address(0));
+        }
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, alice, address(0));
+        assertEq(hub.lastBuyAt(alice), 0, "cooldown untouched");
+        (, uint256 ownBuys,,) = hub.usage24h(alice);
+        assertEq(ownBuys, 0, "own window empty");
+        _buy(alice, MIN_BUY); // victim buys immediately
+
+        _prepare(bob);
+        for (uint256 i; i < 3; ++i) {
+            vm.prank(router);
+            hub.buy(MAX_BUY, 0, bob, address(0));
+        }
+        _buy(bob, MAX_BUY); // 3 * $500 router + $500 own = $2,000
+        assertEq(hub.buyRemaining24h(bob), 0);
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+        vm.warp(vm.getBlockTimestamp() + 60);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
     }
 
     // ================================================================ slippage / token / split

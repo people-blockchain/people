@@ -394,12 +394,18 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(routerBal - usdc.balanceOf(router), MAX_BUY, "router pays");
         assertEq(hub.pplOf(victim), out, "victim is credited");
         assertEq(hub.lotCount(victim), 1);
-        assertEq(hub.lastBuyAt(victim), _now(), "cooldown charged to victim");
-        assertEq(hub.buyRemaining24h(victim), DAY_CAP - MAX_BUY, "limit charged to victim");
+        assertEq(hub.lastBuyAt(victim), 0, "victim cooldown untouched");
+        assertEq(hub.buyRemaining24h(victim), DAY_CAP - MAX_BUY, "amount cap charged to victim");
+        (uint256 rUsd, uint256 rBuys) = hub.routerUsage24h(victim);
+        assertEq(rUsd, MAX_BUY);
+        assertEq(rBuys, 1, "router counter");
+        (, uint256 ownBuys,,) = hub.usage24h(victim);
+        assertEq(ownBuys, 0, "own slots untouched");
         assertEq(hub.buyRemaining24h(router), DAY_CAP, "router has no counter");
+        // no cooldown on the router path, and the victim may buy on its own right away
         vm.prank(router);
-        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
         hub.buy(MIN_BUY, 0, victim, address(0));
+        _buy(victim, MIN_BUY);
 
         // revoked again
         vm.prank(owner);
@@ -415,6 +421,91 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         vm.prank(mallory);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, mallory));
         hub.setTrustedRouter(mallory, true);
+    }
+
+    function test_a3_routerBuysCappedAtFivePer24h() public {
+        address router = makeAddr("router");
+        _prepare(victim);
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        assertEq(hub.MAX_ROUTER_BUYS_24H(), 5);
+        uint256 t0 = _now();
+        for (uint256 i; i < 5; ++i) {
+            vm.prank(router);
+            hub.buy(MIN_BUY, 0, victim, address(0));
+        }
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+        // a second trusted router shares the same per-person counter
+        address router2 = makeAddr("router2");
+        _fund(router2, 1_000_000e6);
+        _trust(router2);
+        vm.prank(router2);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+        // exactly 24 h after the first router buy one slot frees up
+        vm.warp(t0 + 24 hours - 1);
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+        vm.warp(t0 + 24 hours);
+        vm.prank(router);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+    }
+
+    /// @dev Griefing: an attacker using a public trusted router (it runs any user's calldata) with
+    /// `recipient = victim` cannot fill the victim's own buy window or reset its cooldown.
+    function test_a3_routerGriefCannotFillVictimWindow() public {
+        address router = makeAddr("router");
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        _prepare(victim);
+        _limits(20, MIN_BUY, 10, 1e6);
+
+        // the attacker maxes out the router path for the victim at the minimum buy
+        for (uint256 i; i < 5; ++i) {
+            vm.prank(router);
+            hub.buy(MIN_BUY, 0, victim, address(0));
+        }
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+        (, uint256 ownBuys,,) = hub.usage24h(victim);
+        assertEq(ownBuys, 0, "victim window empty");
+        assertEq(hub.lastBuyAt(victim), 0, "victim cooldown untouched");
+
+        // the victim still has all 20 of its own buys in the same 24 h
+        for (uint256 i; i < 20; ++i) {
+            _buy(victim, MIN_BUY);
+            _warpBy(60);
+        }
+        (, ownBuys,,) = hub.usage24h(victim);
+        assertEq(ownBuys, 20);
+        vm.prank(victim);
+        vm.expectRevert(PplCurveHubV2.TooManyBuys.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+    }
+
+    function test_a3_routerAndOwnBuysShareAmountCap() public {
+        address router = makeAddr("router");
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        _prepare(victim);
+        // 3 x $500 by router + $500 own = $2,000 cap
+        for (uint256 i; i < 3; ++i) {
+            vm.prank(router);
+            hub.buy(MAX_BUY, 0, victim, address(0));
+        }
+        _buy(victim, MAX_BUY);
+        assertEq(hub.buyRemaining24h(victim), 0);
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
+        _warpBy(60);
+        vm.prank(victim);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, victim, address(0));
     }
 
     // ================================================================ A4: exact rolling 24h windows
@@ -853,5 +944,255 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _splitBuy(address(usdc), 0, amt);
         assertEq(usdc.balanceOf(treasury), amt / 2);
         assertEq(usdc.balanceOf(address(hub)), amt - amt / 2);
+    }
+
+    // ================================================================ explicit limits
+
+    function _ceilBps(uint256 amount, uint256 bps) internal pure returns (uint256) {
+        return (amount * bps + 10_000 - 1) / 10_000;
+    }
+
+    function _floorBps(uint256 amount, uint256 bps) internal pure returns (uint256) {
+        return (amount * bps) / 10_000;
+    }
+
+    function _quoteGross(uint256 ppl) internal view returns (uint256 gross) {
+        (gross,,) = hub.quoteSellBack(address(0), ppl);
+    }
+
+    /// @dev Largest ppl whose sell-back gross is <= `target`, and the smallest whose gross is > `target`.
+    function _pplAround(uint256 target) internal view returns (uint256 pplAt, uint256 pplOver) {
+        uint256 sold = hub.soldPpl();
+        require(sold > 1 && _quoteGross(sold) > target, "curve cannot reach target");
+        uint256 lo = 1;
+        uint256 hi = sold;
+        while (lo < hi) {
+            uint256 mid = (lo + hi) / 2;
+            if (_quoteGross(mid) > target) hi = mid;
+            else lo = mid + 1;
+        }
+        pplOver = lo;
+        pplAt = lo - 1;
+    }
+
+    function _alignReserve(uint256 reserve) internal {
+        uint256 bal = usdc.balanceOf(address(hub));
+        if (reserve > bal) usdc.mint(address(hub), reserve - bal);
+        hub.forceReserve(reserve);
+    }
+
+    /// @dev Hold is 30 days from the lot's own timestamp: one second early reverts, exactly HOLD pays.
+    function test_limit_hold30Days() public {
+        _seedRaised(BIG_RAISED);
+        _prepare(alice);
+        uint256 ppl = _buy(alice, MAX_BUY);
+        uint256 boughtAt = uint256(hub.lots(alice, 0, 1)[0].boughtAt);
+        assertEq(hub.HOLD(), 30 days);
+
+        vm.warp(boughtAt + hub.HOLD() - 1);
+        _expectSellBackRevert(alice, ppl, 0, PplCurveHubV2.NotEnoughUnlocked.selector);
+
+        vm.warp(boughtAt + hub.HOLD());
+        assertGt(_sellBack(alice, ppl / 2, 0), 0);
+        assertEq(hub.pplOf(alice), ppl - ppl / 2);
+    }
+
+    /// @dev Global sell-back cap is 2% of the day-start reserve. Gross equal to the cap pays;
+    /// one USDC-unit over reverts.
+    function test_limit_globalSell2PctPerDay() public {
+        _seedRaised(100_000e6);
+        _prepare(alice);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(30 days);
+        assertGe(hub.pplOf(alice), 1);
+
+        uint256 target = 1_000e6;
+        (uint256 pplExact, uint256 pplOver) = _pplAround(target);
+        assertLe(pplOver, hub.pplOf(alice), "holder owns the tip");
+        assertEq(_quoteGross(pplExact), target, "exact gross");
+        assertEq(_quoteGross(pplOver), target + 1, "one unit over");
+
+        uint256 reserve = target * 50; // 2% of this reserve is `target`
+        _alignReserve(reserve);
+        assertEq((hub.reserveUsd6() * hub.SELL_GLOBAL_CAP_BPS()) / 10_000, target);
+        assertEq(hub.SELL_GLOBAL_CAP_BPS(), 200);
+
+        uint256 snap = vm.snapshotState();
+        assertGt(_sellBack(alice, pplExact, 0), 0);
+        assertEq(hub.sellDayGrossUsd6(), target, "exact cap consumed");
+
+        assertTrue(vm.revertToState(snap));
+        _expectSellBackRevert(alice, pplOver, 0, PplCurveHubV2.GlobalDayCap.selector);
+    }
+
+    /// @dev $2,000 per person per rolling 24h on buys. Two addresses of one person share it.
+    /// UTC midnight does not reset it; the oldest buy frees at exactly 24h.
+    function test_limit_buyCap2kRolling24hTwoAddresses() public {
+        assertEq(hub.BUY_CAP_DAY_USD6(), 2_000e6);
+        bytes32 pid = keccak256("limit-buy-person");
+        _bindTo(alice, pid);
+        _fund(alice, 1_000_000e6);
+
+        uint256 t0 = _now();
+        _buy(alice, MAX_BUY);
+        _warpBy(60);
+        _buy(alice, MAX_BUY);
+        _warpBy(60);
+        _buy(alice, MAX_BUY); // $1,500 on alice
+
+        vm.prank(owner);
+        hub.unbind(alice);
+        _bindTo(bob, pid);
+        _fund(bob, 1_000_000e6);
+        assertEq(hub.buyRemaining24h(bob), DAY_CAP - 3 * MAX_BUY, "bob inherits the window");
+        _warpBy(60); // alice's cooldown belongs to the person and still applies
+        _buy(bob, MAX_BUY); // exact $2,000 across the two addresses
+        assertEq(hub.buyRemaining24h(bob), 0);
+
+        _warpBy(60); // cooldown is checked before the cap
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+
+        // a different person is not capped
+        _prepare(carol);
+        _buy(carol, MAX_BUY);
+
+        // next UTC midnight is still inside the rolling window
+        uint256 midnight = (_now() / 1 days + 1) * 1 days;
+        assertLt(midnight, t0 + 1 days);
+        vm.warp(midnight);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+
+        vm.warp(t0 + 1 days - 1);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+
+        vm.warp(t0 + 1 days); // only the first $500 has aged out
+        assertEq(hub.buyRemaining24h(bob), MAX_BUY);
+        _buy(bob, MAX_BUY);
+        assertEq(hub.buyRemaining24h(bob), 0);
+    }
+
+    /// @dev $2,000 gross per person per rolling 24h on sell-back, shared by two addresses.
+    function test_limit_sellCap2kRolling24hTwoAddresses() public {
+        assertEq(hub.SELL_CAP_DAY_USD6(), 2_000e6);
+        _seedRaised(BIG_RAISED); // reserve ~$1M, so the 2% global cap (~$20k) does not bind
+        bytes32 pid = keccak256("limit-sell-person");
+        _bindTo(alice, pid);
+        _fund(alice, 1_000_000e6);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(1 days);
+        for (uint256 i; i < 4; ++i) {
+            _buy(alice, MAX_BUY);
+            _warpBy(60);
+        }
+        _warpBy(30 days);
+
+        (uint256 pplA,) = _pplAround(1_500e6);
+        assertLe(pplA, hub.pplOf(alice));
+        assertEq(_quoteGross(pplA), 1_500e6);
+        uint256 t0 = _now();
+        assertGt(_sellBack(alice, pplA, 0), 0);
+
+        vm.prank(owner);
+        hub.unbind(alice);
+        _bindTo(bob, pid);
+        assertEq(hub.sellRemaining24h(bob), DAY_CAP - 1_500e6, "bob inherits the sell window");
+
+        (uint256 pplB,) = _pplAround(500e6);
+        assertLe(pplB, hub.pplOf(bob));
+        assertEq(_quoteGross(pplB), 500e6);
+        assertGt(_sellBack(bob, pplB, 0), 0);
+        assertEq(hub.sellRemaining24h(bob), 0, "exact $2,000");
+
+        (, uint256 pplOne) = _pplAround(0);
+        assertGt(_quoteGross(pplOne), 0);
+        assertEq(_quoteGross(pplOne - 1), 0);
+        assertLe(pplOne, hub.pplOf(bob));
+        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+
+        uint256 midnight = (t0 / 1 days + 1) * 1 days;
+        assertLt(midnight, t0 + 1 days);
+        vm.warp(midnight);
+        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+        vm.warp(t0 + 1 days - 1);
+        _expectSellBackRevert(bob, pplOne, 0, PplCurveHubV2.PersonDayCap.selector);
+        vm.warp(t0 + 1 days);
+        assertEq(hub.sellRemaining24h(bob), DAY_CAP, "both sells were at t0");
+    }
+
+    /// @dev Sell fee is 1.5% below 1% of the day-start reserve and 3% above, each part rounded up.
+    function test_limit_feeRoundsUpAcross1PctLine() public {
+        _holder(alice, 100_000e6, 4, MAX_BUY);
+        // line = floor(reserve / 100) = 500_000_001, which is not a multiple of the 1.5% modulus (200).
+        uint256 reserve = 50_000_000_100;
+        _alignReserve(reserve);
+        uint256 line = (reserve * hub.FEE_HIGH_THRESHOLD_BPS()) / 10_000;
+        assertEq(line, 500_000_001);
+        assertEq(line % 200, 1);
+        assertEq(hub.FEE_LOW_BPS(), 150);
+        assertEq(hub.FEE_HIGH_BPS(), 300);
+        uint256 cap = (reserve * hub.SELL_GLOBAL_CAP_BPS()) / 10_000;
+        assertGt(cap, line);
+
+        // --- entirely below the line, odd gross so 1.5% rounds up (above the $1 minimum) ---
+        uint256 gLow = 1_000_003;
+        (uint256 pplLow,) = _pplAround(gLow);
+        assertLe(pplLow, hub.pplOf(alice));
+        assertEq(_quoteGross(pplLow), gLow);
+        assertLt(gLow, line);
+        assertGt(gLow % 200, 0);
+        (, uint256 feeLow, uint256 payoutLow) = hub.quoteSellBack(alice, pplLow);
+        assertEq(feeLow, _ceilBps(gLow, 150));
+        assertEq(feeLow, _floorBps(gLow, 150) + 1, "1.5% rounds up");
+        uint256 reserveBefore = hub.reserveUsd6();
+        assertEq(_sellBack(alice, pplLow, 0), payoutLow);
+        assertEq(reserveBefore - hub.reserveUsd6(), payoutLow, "reserve loses the payout only");
+
+        // --- one sell split across the line; both parts round up ---
+        uint256 dayGross = hub.sellDayGrossUsd6();
+        uint256 lowRoom = line - dayGross;
+        assertGt(lowRoom % 200, 0, "low part is not a multiple of 200");
+        uint256 highPart = 100_001;
+        assertEq(highPart % 100, 1, "high part is not a multiple of 100");
+        uint256 gSplit = lowRoom + highPart;
+        assertLt(dayGross + gSplit, cap);
+        (uint256 pplSplit,) = _pplAround(gSplit);
+        assertLe(pplSplit, hub.pplOf(alice));
+        assertEq(_quoteGross(pplSplit), gSplit);
+        (, uint256 feeSplit, uint256 payoutSplit) = hub.quoteSellBack(alice, pplSplit);
+        uint256 expectLow = _ceilBps(lowRoom, 150);
+        uint256 expectHigh = _ceilBps(highPart, 300);
+        assertEq(expectLow, _floorBps(lowRoom, 150) + 1);
+        assertEq(expectHigh, _floorBps(highPart, 300) + 1);
+        assertEq(feeSplit, expectLow + expectHigh, "split fee");
+        reserveBefore = hub.reserveUsd6();
+        assertEq(_sellBack(alice, pplSplit, 0), payoutSplit);
+        assertEq(reserveBefore - hub.reserveUsd6(), payoutSplit);
+
+        // --- entirely above the line, odd gross so 3% rounds up ---
+        (, uint256 lowLeft) = hub.sellBackCapToday();
+        assertEq(lowLeft, 0, "1% line used up");
+        uint256 gHigh = 1_000_001;
+        assertLt(hub.sellDayGrossUsd6() + gHigh, cap);
+        (uint256 pplHigh,) = _pplAround(gHigh);
+        assertLe(pplHigh, hub.pplOf(alice));
+        assertEq(_quoteGross(pplHigh), gHigh);
+        (, uint256 feeHigh, uint256 payoutHigh) = hub.quoteSellBack(alice, pplHigh);
+        assertEq(feeHigh, _ceilBps(gHigh, 300));
+        assertEq(feeHigh, _floorBps(gHigh, 300) + 1, "3% rounds up");
+        reserveBefore = hub.reserveUsd6();
+        assertEq(_sellBack(alice, pplHigh, 0), payoutHigh);
+        assertEq(reserveBefore - hub.reserveUsd6(), payoutHigh);
     }
 }
