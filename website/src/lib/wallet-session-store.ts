@@ -187,15 +187,17 @@ async function getOrCreateSessionKey(): Promise<CryptoKey> {
 /** Encrypt the unlocked session into tab-scoped storage, sliding the expiry window. */
 export async function persistWalletSession(
   session: PersistedWalletSession,
-  now: number = Date.now()
+  now: number = Date.now(),
+  options?: { strict?: boolean },
 ): Promise<void> {
   if (typeof window === "undefined" || typeof indexedDB === "undefined") return;
   try {
     const key = await getOrCreateSessionKey();
     const envelope = await encryptSessionPayload(session, key, now);
     sessionStorage.setItem(WALLET_SESSION_STORAGE_KEY, JSON.stringify(envelope));
-  } catch {
-    /* persistence is best-effort; the in-memory session still works */
+  } catch (err) {
+    // Local unlock stays best-effort. Cloud sign-in passes strict so the failure is visible.
+    if (options?.strict) throw err;
   }
 }
 

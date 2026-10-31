@@ -1,4 +1,4 @@
-import { encryptPrivateKeyForVault } from "@/lib/wallet-cloud-crypto";
+import { encryptPrivateKeyForVault, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { errorCodeFrom, fetchWrapKey, WalletCloudError, type AuthSessionUser } from "@/lib/wallet-cloud-client";
 import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { SESSION_USER_RETRY_DELAYS_MS, waitForFreshSessionUser } from "@/lib/web3auth-redirect-resume";
@@ -23,8 +23,10 @@ function numericAuthTime(session: AuthSessionUser | null): number | null {
  * not win the first poll. No idToken and a session that never becomes fresh both throw
  * reauth_required — the UI asks the user to sign in. There is no loop.
  */
+export type CloudVaultOpenAttempt = { retried: boolean };
+
 export async function openCloudVaultWithReauth<T>(args: {
-  openVault: (session: AuthSessionUser) => Promise<T>;
+  openVault: (session: AuthSessionUser, attempt?: CloudVaultOpenAttempt) => Promise<T>;
   signInWithIdToken: (idToken: string) => Promise<void>;
   fetchSession: () => Promise<AuthSessionUser | null>;
   idToken?: string | null;
@@ -49,6 +51,12 @@ export async function openCloudVaultWithReauth<T>(args: {
     try {
       return await args.fetchSession();
     } catch {
+      warnCloudOpenFailed({
+        code: "session_read_failed",
+        stage: "auth_session",
+        vaultPresent: false,
+        retried: false,
+      });
       return null;
     }
   }
@@ -78,11 +86,11 @@ export async function openCloudVaultWithReauth<T>(args: {
   }
 
   try {
-    return await args.openVault(session);
+    return await args.openVault(session, { retried: false });
   } catch (err) {
     if (reauthDone || !args.idToken || !VAULT_REAUTH_CODES.has(cloudFailureCode(err))) throw err;
     const fresh = await reauth(session);
-    return await args.openVault(fresh);
+    return await args.openVault(fresh, { retried: true });
   }
 }
 

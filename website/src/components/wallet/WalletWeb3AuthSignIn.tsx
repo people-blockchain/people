@@ -10,8 +10,10 @@ import {
   ensureCloudWalletSession,
   fetchAuthSessionUser,
   fetchVaultRecordClient,
+  isCloudOpenRecoveryCode,
   WalletCloudError,
 } from "@/lib/wallet-cloud-client";
+import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { createCloudVaultWithReauth, openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
 import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { runParticipantRegistration } from "@/lib/participant-registration";
@@ -89,6 +91,18 @@ async function endStaleRestoredSession(web3auth: Web3AuthInstance): Promise<void
 
 type LoginOutcome = "connected" | "migration" | "failed";
 
+function consoleSignInLabel(err: unknown): string {
+  if (err instanceof WalletCloudError) return err.code;
+  const label = signInErrorLabel(err);
+  if (label.includes("0x") || label.includes("@") || /[0-9a-fA-F]{32,}/.test(label)) return "unknown";
+  return label.slice(0, 160);
+}
+
+function warnIfUnlogged(err: unknown, stage: string, vaultPresent: boolean): void {
+  if (!(err instanceof WalletCloudError) || err.logged) return;
+  warnCloudOpenFailed({ code: err.code, stage, vaultPresent, retried: false });
+}
+
 function messageForCloudConnectError(
   code: string,
   copy: {
@@ -96,11 +110,19 @@ function messageForCloudConnectError(
     signInRateLimited: string;
     signInSessionExpired: string;
     signInSessionMissing: string;
+    signInDecryptFailed: string;
+    signInVaultUnsupported: string;
+    signInAddressMismatch: string;
+    signInSessionOpenFailed: string;
   },
 ): string {
   if (code === "unauthorized") return copy.signInSessionMissing;
   if (code === "reauth_required") return copy.signInSessionExpired;
   if (code === "rate_limited") return copy.signInRateLimited;
+  if (code === "decrypt_failed") return copy.signInDecryptFailed;
+  if (code === "vault_schema_unsupported") return copy.signInVaultUnsupported;
+  if (code === "address_mismatch") return copy.signInAddressMismatch;
+  if (code === "session_open_failed") return copy.signInSessionOpenFailed;
   return copy.signInFailed;
 }
 
@@ -125,9 +147,12 @@ function clearPending(): void {
 export function WalletWeb3AuthSignIn({
   onConnected,
   autoConnect = false,
+  onOpenImport,
 }: {
   onConnected?: () => void;
   autoConnect?: boolean;
+  /** Opens the existing WalletConnectPanel import mode (encrypted backup or key). */
+  onOpenImport?: () => void;
 }) {
   const { lang } = useLanguage();
   const t = walletCopy[lang];
@@ -135,6 +160,7 @@ export function WalletWeb3AuthSignIn({
   const { session: walletSession, connectCloud } = useWallet();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
   const [pending, setPending] = useState<"email" | "google" | null>(null);
   const [knownEmail, setKnownEmail] = useState<string | null>(() => readLastAuthEmail());
   const lastIdTokenRef = useRef<string | null>(null);
@@ -174,9 +200,13 @@ export function WalletWeb3AuthSignIn({
   const describeError = useCallback(
     (err: unknown) => {
       // The stage line keeps the machine label visible on phones without a console.
-      setFailure(signInErrorLabel(err));
-      if (err instanceof TimeoutError) return c.signInTimeout;
-      const code = err instanceof WalletCloudError ? err.code : err instanceof Error ? err.message : "";
+      setFailure(consoleSignInLabel(err));
+      if (err instanceof TimeoutError) {
+        setErrorCode("");
+        return c.signInTimeout;
+      }
+      const code = err instanceof WalletCloudError ? err.code : err instanceof Error && /^[a-z0-9_]+$/.test(err.message) ? err.message : "unknown";
+      setErrorCode(code);
       return messageForCloudConnectError(code, c);
     },
     [c],
@@ -194,19 +224,29 @@ export function WalletWeb3AuthSignIn({
     async (
       userId: string,
       email?: string | null,
-      options: { silent?: boolean } = {},
+      options: { silent?: boolean; vaultPresent?: boolean } = {},
     ): Promise<boolean> => {
       // Automatic finishes (the autoConnect effect) must not put an error on the sign-in card:
       // only an attempt the user started — a click, or resuming our own redirect — may do that.
       const silent = options.silent ?? false;
       setBusy(true);
-      if (!silent) setError("");
+      if (!silent) {
+        setError("");
+        setErrorCode("");
+      }
+      let retried = false;
       try {
         clearUserDisconnected();
         rememberAuthEmail(email);
         if (email) setKnownEmail(email);
         const cloud = await openCloudVaultWithReauth({
-          openVault: (session) => ensureCloudWalletSession({ id: session.id || userId }),
+          openVault: (session, attempt) => {
+            retried = attempt?.retried === true;
+            return ensureCloudWalletSession(
+              { id: session.id || userId },
+              { retried, vaultPresent: options.vaultPresent },
+            );
+          },
           signInWithIdToken: async (idToken) => {
             const again = await signIn("web3auth", { idToken, redirect: false });
             if (!again || again.error || !again.ok) throw new WalletCloudError("reauth_required");
@@ -217,9 +257,24 @@ export function WalletWeb3AuthSignIn({
         // Must be awaited: callers navigate (window.location.replace) right after this
         // resolves, and a reload before the session write lands is the "logged out after
         // reload" bug — see connectCloud in WalletContext.
-        await connectCloud(cloud);
+        try {
+          await connectCloud(cloud);
+        } catch (err) {
+          if (err instanceof WalletCloudError) throw err;
+          warnCloudOpenFailed({ code: "session_open_failed", stage: "persist_session", vaultPresent: true, retried });
+          throw new WalletCloudError("session_open_failed", { logged: true });
+        }
         // Partner sync is bookkeeping; a slow response must not hold the wallet on "Opening…".
-        void fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" }).catch(() => {});
+        void fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" }).then(
+          (res) => {
+            if (!res.ok) {
+              warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried });
+            }
+          },
+          () => {
+            warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried });
+          },
+        );
         void runParticipantRegistration(cloud.privateKey, cloud.address, {
           requestFaucet: async () => {
             await networkJson("faucet/fund", {
@@ -228,14 +283,48 @@ export function WalletWeb3AuthSignIn({
               body: JSON.stringify({ address: cloud.address, amount: 10 }),
             });
           },
-        });
+        }).then(
+          (result) => {
+            if (!result.ok) {
+              warnCloudOpenFailed({
+                code: "participant_registration_failed",
+                stage: "participant_registration",
+                vaultPresent: true,
+                retried,
+              });
+            }
+          },
+          () => {
+            warnCloudOpenFailed({
+              code: "participant_registration_failed",
+              stage: "participant_registration",
+              vaultPresent: true,
+              retried,
+            });
+          },
+        );
         setMigration(null);
-        onConnected?.();
+        try {
+          onConnected?.();
+        } catch {
+          warnCloudOpenFailed({ code: "on_connected_failed", stage: "on_connected", vaultPresent: true, retried });
+          throw new WalletCloudError("on_connected_failed", { logged: true });
+        }
         return true;
       } catch (err) {
-        console.error("[wallet] cloud connect failed", err);
-        const code = err instanceof WalletCloudError ? err.code : err instanceof Error ? err.message : "";
-        if (!silent) setError(messageForCloudConnectError(code, c));
+        const code = err instanceof WalletCloudError ? err.code : "unknown";
+        if (!(err instanceof WalletCloudError) || !err.logged) {
+          warnCloudOpenFailed({
+            code,
+            stage: "finish_connect",
+            vaultPresent: options.vaultPresent === true,
+            retried,
+          });
+        }
+        if (!silent) {
+          setErrorCode(code);
+          setError(messageForCloudConnectError(code, c));
+        }
         return false;
       } finally {
         setBusy(false);
@@ -254,13 +343,19 @@ export function WalletWeb3AuthSignIn({
         // its original token, so end it to make the next attempt a fresh login.
         if (web3authRef.current) await endRestoredWeb3AuthSession(web3authRef.current);
         await logoutWeb3AuthSession();
-        throw new Error(auth?.error ?? "auth_sign_in_failed");
+        const raw = auth?.error ?? "auth_sign_in_failed";
+        const code = /^[a-z0-9_]+$/.test(raw) ? raw : "auth_sign_in_failed";
+        warnCloudOpenFailed({ code, stage: "auth_sign_in", vaultPresent: false, retried: false });
+        throw new WalletCloudError(code, { logged: true });
       }
 
       // The session cookie from the sign-in response can lag behind the next read on mobile.
       // A user id alone is not enough: the previous cookie is still a user, with a stale authTime.
       const user = await waitForFreshSessionUser(fetchAuthSessionUser);
-      if (!user?.id) throw new Error("reauth_required");
+      if (!user?.id) {
+        warnCloudOpenFailed({ code: "reauth_required", stage: "auth_session", vaultPresent: false, retried: false });
+        throw new WalletCloudError("reauth_required", { logged: true });
+      }
 
       rememberAuthEmail(user.email);
       const vault = await fetchVaultRecordClient();
@@ -268,18 +363,27 @@ export function WalletWeb3AuthSignIn({
       // A returning account opens the wallet already saved for it. The Web3Auth key is only
       // needed to create a vault; deriving it when a vault exists can throw before wrap-key runs.
       if (vault) {
-        return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
+        return (await finishConnect(user.id, user.email, { vaultPresent: true })) ? "connected" : "failed";
       }
 
-      await createCloudVaultWithReauth({
-        deriveKey: () => keyPairFromWeb3AuthProvider(provider),
-        signInWithIdToken: async (token) => {
-          const again = await signIn("web3auth", { idToken: token, redirect: false });
-          if (!again || again.error || !again.ok) throw new WalletCloudError("reauth_required");
-        },
-        fetchSession: fetchAuthSessionUser,
-        idToken: lastIdTokenRef.current,
-      });
+      try {
+        await createCloudVaultWithReauth({
+          deriveKey: () => keyPairFromWeb3AuthProvider(provider),
+          signInWithIdToken: async (token) => {
+            const again = await signIn("web3auth", { idToken: token, redirect: false });
+            if (!again || again.error || !again.ok) throw new WalletCloudError("reauth_required");
+          },
+          fetchSession: fetchAuthSessionUser,
+          idToken: lastIdTokenRef.current,
+        });
+      } catch (err) {
+        if (!(err instanceof WalletCloudError) || !err.logged) {
+          const code = err instanceof WalletCloudError ? err.code : "unknown";
+          warnCloudOpenFailed({ code, stage: "vault_create", vaultPresent: false, retried: false });
+          throw new WalletCloudError(code, { logged: true });
+        }
+        throw err;
+      }
       return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
     },
     [finishConnect],
@@ -325,6 +429,7 @@ export function WalletWeb3AuthSignIn({
       setSlow(false);
       setPending(method === "google" ? "google" : "email");
       setError("");
+      setErrorCode("");
       setFailure(null);
       setStage("connect_start");
       setBusy(true);
@@ -402,7 +507,8 @@ export function WalletWeb3AuthSignIn({
             if (outcome === "connected") navigateAfterSignIn();
           })
           .catch((err) => {
-            console.error("[wallet] web3auth sign-in failed", signInErrorLabel(err), err);
+            console.error("[wallet] web3auth sign-in failed", consoleSignInLabel(err));
+            warnIfUnlogged(err, "sign_in", false);
             if (!isCurrent()) return;
             clearPending();
             setSlow(false);
@@ -424,7 +530,7 @@ export function WalletWeb3AuthSignIn({
       // card would keep its busy state (and the chain would reject unhandled). Every start path
       // funnels its failures here, and the attempt id keeps a retired click out of this state.
       const failStart = (err: unknown) => {
-        console.error("[wallet] web3auth connect failed to start", signInErrorLabel(err), err);
+        console.error("[wallet] web3auth connect failed to start", consoleSignInLabel(err));
         if (!isCurrent()) return;
         attempts.clearSlowNotice();
         setSlow(false);
@@ -479,6 +585,7 @@ export function WalletWeb3AuthSignIn({
         // A failed-init click shows t.signInOpening and re-runs this effect; clear that line
         // once the SDK is actually up so the card does not keep reporting a completed retry.
         setError("");
+        setErrorCode("");
 
         // Returning from the mobile redirect: Web3Auth restored the session during init.
         // The flag comes from the URL itself, so a lost sessionStorage entry cannot strand it.
@@ -501,7 +608,7 @@ export function WalletWeb3AuthSignIn({
               "web3auth_restored_session_prep_timeout",
             );
           } catch (err) {
-            console.error("[wallet] stale session cleanup failed", signInErrorLabel(err), err);
+            console.error("[wallet] stale session cleanup failed", consoleSignInLabel(err));
           }
         }
         if (!instance || (!pendingRedirect && !cameBack)) return;
@@ -530,7 +637,8 @@ export function WalletWeb3AuthSignIn({
             navigateAfterSignIn(pendingRedirect?.returnTo);
           }
         } catch (err) {
-          console.error("[wallet] web3auth resume failed", err);
+          console.error("[wallet] web3auth resume failed", consoleSignInLabel(err));
+          warnIfUnlogged(err, "resume", false);
           if (mountedRef.current) setError(describeError(err));
         } finally {
           if (mountedRef.current) {
@@ -543,7 +651,7 @@ export function WalletWeb3AuthSignIn({
         // Loading the SDK is automatic: report it to the console, never on the sign-in card.
         // The failure is kept (buttons stay enabled); a click re-runs startConnect, which finds
         // no instance, shows the failure then and bumps initAttempt to try the SDK again.
-        console.error("[wallet] web3auth init failed", signInErrorLabel(err), err);
+        console.error("[wallet] web3auth init failed", consoleSignInLabel(err));
         if (cancelled) return;
         setWeb3AuthReady(false);
         setInitFailed(true);
@@ -575,6 +683,7 @@ export function WalletWeb3AuthSignIn({
 
   const retry = useCallback(() => {
     setError("");
+    setErrorCode("");
     setSlow(false);
     const last = lastAttemptRef.current;
     if (web3AuthReady && last) {
@@ -631,6 +740,16 @@ export function WalletWeb3AuthSignIn({
       {error ? (
         <div className="space-y-2" role="alert" data-testid="wallet-sign-in-error">
           <p className="text-sm text-warm">{error}</p>
+          {onOpenImport && isCloudOpenRecoveryCode(errorCode) ? (
+            <button
+              type="button"
+              data-testid="wallet-sign-in-import"
+              className="rounded-xl border border-line bg-surface px-4 py-2 text-sm font-semibold"
+              onClick={onOpenImport}
+            >
+              {t.import}
+            </button>
+          ) : null}
           <button
             type="button"
             data-testid="wallet-sign-in-retry"

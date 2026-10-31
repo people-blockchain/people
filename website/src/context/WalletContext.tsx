@@ -27,7 +27,7 @@ import {
   upsertWallet,
   type StoredWallet,
 } from "@/lib/wallet-vault";
-import { exportCloudPrivateKey as exportCloudKey } from "@/lib/wallet-cloud-client";
+import { commitCloudSession, exportCloudPrivateKey as exportCloudKey } from "@/lib/wallet-cloud-client";
 import { isCloudSessionId } from "@/lib/wallet-cloud-client";
 import {
   clearWalletSession,
@@ -243,7 +243,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     // popup flow leaving /login) must not do so before the IndexedDB/sessionStorage write
     // lands, or the next page's reload finds no session (the reported "logged out after
     // reload" bug) — `window.location.replace` can run before a fire-and-forget write settles.
-    await persistWalletSession(cloud);
+    await commitCloudSession(() => persistWalletSession(cloud, Date.now(), { strict: true }));
   }, []);
 
   const exportPrivateKey = useCallback(

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { useWallet } from "@/context/WalletContext";
-import { fetchAuthSessionUser, ensureCloudWalletSession, isCloudSessionId } from "@/lib/wallet-cloud-client";
+import { fetchAuthSessionUser, ensureCloudWalletSession, isCloudSessionId, WalletCloudError } from "@/lib/wallet-cloud-client";
+import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { rememberAuthEmail } from "@/lib/wallet-auth-storage";
 import { isUserDisconnected } from "@/lib/wallet-disconnect";
 
@@ -41,12 +42,21 @@ export function CloudWalletSessionBridge() {
         try {
           const cloud = await ensureCloudWalletSession(user);
           if (latestSession.current) return;
-          connectCloud(cloud);
-          await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
+          await connectCloud(cloud);
+          try {
+            const synced = await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
+            if (!synced.ok) {
+              warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried: false });
+            }
+          } catch {
+            warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried: false });
+          }
         } catch (err) {
-          const code = err instanceof Error ? err.message : "";
+          const code = err instanceof WalletCloudError ? err.code : "unknown";
           if (code === "reauth_required" || code === "unauthorized") needsReauth.current = true;
-          /* otherwise the vault may not exist yet — user connects via Wallet modal */
+          if (!(err instanceof WalletCloudError) || !err.logged) {
+            warnCloudOpenFailed({ code, stage: "session_bridge", vaultPresent: false, retried: false });
+          }
         }
       } finally {
         inFlight.current = false;
@@ -75,7 +85,11 @@ export function CloudWalletSessionBridge() {
 
   useEffect(() => {
     if (session && isCloudSessionId(session.id) && session.kind !== "cloud") {
-      connectCloud({ ...session, kind: "cloud", userId: session.id.replace(/^cloud:/, "") });
+      void connectCloud({ ...session, kind: "cloud", userId: session.id.replace(/^cloud:/, "") }).catch((err) => {
+        if (!(err instanceof WalletCloudError) || !err.logged) {
+          warnCloudOpenFailed({ code: "session_open_failed", stage: "persist_session", vaultPresent: true, retried: false });
+        }
+      });
     }
   }, [session, connectCloud]);
 

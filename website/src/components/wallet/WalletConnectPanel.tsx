@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { previewWalletImport } from "@/lib/wallet-seed";
 import { useWalletOnboarding, type WalletOnboardingMode } from "./useWalletOnboarding";
@@ -16,6 +17,7 @@ export function WalletConnectPanel({
   startMode,
   startUnlockWalletId,
   context = "modal",
+  importSignal = 0,
 }: {
   onConnected?: () => void;
   className?: string;
@@ -23,6 +25,8 @@ export function WalletConnectPanel({
   startUnlockWalletId?: string;
   /** `sign-in-local` skips cloud auth (used under `/login` after the shared auth block). */
   context?: "modal" | "sign-in" | "sign-in-local";
+  /** Bump to open the existing import mode from a sibling sign-in error. */
+  importSignal?: number;
 }) {
   const flow = useWalletOnboarding(onConnected, { startMode, startUnlockWalletId });
   const {
@@ -56,6 +60,17 @@ export function WalletConnectPanel({
     setError,
   } = flow;
   const c = walletUxCopy(lang);
+  const seenImportSignal = useRef(0);
+  const openImport = () => {
+    setError("");
+    setMode("import");
+  };
+  useEffect(() => {
+    if (!importSignal || importSignal === seenImportSignal.current) return;
+    seenImportSignal.current = importSignal;
+    setError("");
+    setMode("import");
+  }, [importSignal, setError, setMode]);
   const importPreview = mode === "import" ? previewWalletImport(importText) : null;
   const importReady =
     Boolean(importPreview && "address" in importPreview) || importText.trim().startsWith("{");
@@ -90,7 +105,7 @@ export function WalletConnectPanel({
       {mode === "home" && showCloudAuth ? (
         <div id="wallet-embedded-block" className={walletFeatures.externalWallets ? "border-t border-line pt-5" : ""}>
           <h3 className="mb-3 text-sm font-semibold text-ink">{c.embeddedHeading}</h3>
-          <UnifiedWalletAuthPanel onConnected={onConnected} autoConnect />
+          <UnifiedWalletAuthPanel onConnected={onConnected} autoConnect onOpenImport={openImport} />
         </div>
       ) : null}
 
@@ -105,10 +120,7 @@ export function WalletConnectPanel({
             </button>
             <button
               type="button"
-              onClick={() => {
-                setError("");
-                setMode("import");
-              }}
+              onClick={openImport}
               className="rounded-xl border border-line px-5 py-3 text-sm"
             >
               {t.import}

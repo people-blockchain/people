@@ -6,6 +6,7 @@ import {
   decryptPrivateKeyFromVault,
   deriveUserWrapKeyHex,
   encryptPrivateKeyForVault,
+  readLegacyVaultPlaintext,
 } from "@/lib/wallet-cloud-crypto";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
@@ -87,7 +88,10 @@ async function migrateLegacyVaultIfNeeded(userId: string) {
   // Without the dedicated secret there is nothing safe to migrate onto yet — wait for it.
   if (!legacySecret || !newSecret) return vault;
   const legacyWrapKeyHex = await deriveUserWrapKeyHex(legacySecret, userId);
-  const plain = await decryptPrivateKeyFromVault(vault.encryptedPrivateKey, legacyWrapKeyHex).catch(() => null);
+  const plain = await readLegacyVaultPlaintext(() =>
+    decryptPrivateKeyFromVault(vault.encryptedPrivateKey, legacyWrapKeyHex),
+  );
+  // Decrypt failure leaves the row as it is: no update, no delete.
   if (!plain) return vault;
   const newWrapKeyHex = await deriveUserWrapKeyHex(newSecret, userId);
   const encryptedPrivateKey = await encryptPrivateKeyForVault(plain, newWrapKeyHex);

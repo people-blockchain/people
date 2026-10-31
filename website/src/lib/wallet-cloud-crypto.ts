@@ -12,6 +12,50 @@ export interface VaultCiphertext {
   ct: string;
 }
 
+/** Payload is not vault JSON v1. Distinct from an AES-GCM failure, which stays the WebCrypto error. */
+export class VaultSchemaError extends Error {
+  readonly code = "vault_schema_unsupported" as const;
+  constructor() {
+    super("vault_schema_unsupported");
+    this.name = "VaultSchemaError";
+  }
+}
+
+/** Codes and booleans only. Never pass keys, addresses, ciphertext, tokens, or emails. */
+export function warnCloudOpenFailed(entry: {
+  code: string;
+  stage: string;
+  vaultPresent: boolean;
+  retried: boolean;
+}): void {
+  console.warn("[wallet] cloud open failed", {
+    code: entry.code,
+    stage: entry.stage,
+    vaultPresent: entry.vaultPresent === true,
+    retried: entry.retried === true,
+  });
+}
+
+/**
+ * Legacy migration decrypt. A throw becomes null plus a code log so the caller can leave the
+ * stored vault untouched. Nothing here writes or deletes.
+ */
+export async function readLegacyVaultPlaintext(decrypt: () => Promise<string>): Promise<string | null> {
+  try {
+    return await decrypt();
+  } catch (err) {
+    const code = err instanceof VaultSchemaError ? "vault_schema_unsupported" : "legacy_decrypt_failed";
+    warnCloudOpenFailed({ code, stage: "legacy_migrate", vaultPresent: true, retried: false });
+    return null;
+  }
+}
+
+function isVaultCiphertext(value: unknown): value is VaultCiphertext {
+  if (!value || typeof value !== "object") return false;
+  const payload = value as Partial<VaultCiphertext>;
+  return payload.v === 1 && typeof payload.iv === "string" && payload.iv.length > 0 && typeof payload.ct === "string" && payload.ct.length > 0;
+}
+
 function bytesToHex(bytes: Uint8Array): string {
   return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -54,10 +98,13 @@ export async function encryptPrivateKeyForVault(privateKeyHex: string, wrapKeyHe
 }
 
 export async function decryptPrivateKeyFromVault(payloadJson: string, wrapKeyHex: string): Promise<string> {
-  const payload = JSON.parse(payloadJson) as VaultCiphertext;
-  if (payload.v !== 1 || !payload.iv || !payload.ct) {
-    throw new Error("invalid_vault_payload");
+  let payload: unknown;
+  try {
+    payload = JSON.parse(payloadJson);
+  } catch {
+    throw new VaultSchemaError();
   }
+  if (!isVaultCiphertext(payload)) throw new VaultSchemaError();
   const key = await importAesKey(wrapKeyHex);
   const plain = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv: hexToBytes(payload.iv) },

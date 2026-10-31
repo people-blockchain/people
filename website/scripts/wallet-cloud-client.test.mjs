@@ -65,7 +65,7 @@ test("unlockCloudVaultSession: wrap-key's reauth_required propagates before the 
   assert.equal(vaultFetched, false);
 });
 
-test("unlockCloudVaultSession: a payload that won't decrypt with this wrap key is invalid_ciphertext, not a crash", async () => {
+test("unlockCloudVaultSession: a payload that won't decrypt with this wrap key is decrypt_failed, not a crash", async () => {
   const realWrapKeyHex = await deriveUserWrapKeyHex("real-secret", "user-2");
   const wrongWrapKeyHex = await deriveUserWrapKeyHex("wrong-secret", "user-2");
   const privateKey = bytesToHex(secp.utils.randomSecretKey());
@@ -81,7 +81,7 @@ test("unlockCloudVaultSession: a payload that won't decrypt with this wrap key i
   };
   await assert.rejects(
     () => unlockCloudVaultSession("user-2"),
-    (err) => isWalletCloudErrorCode(err, "invalid_ciphertext"),
+    (err) => isWalletCloudErrorCode(err, "decrypt_failed"),
   );
 });
 

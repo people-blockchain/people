@@ -8,7 +8,10 @@ import { walletCopy } from "@/lib/wallet-copy";
 import {
   ensureCloudWalletSession,
   fetchAuthSessionUser,
+  isCloudOpenRecoveryCode,
+  WalletCloudError,
 } from "@/lib/wallet-cloud-client";
+import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
 import {
@@ -18,12 +21,38 @@ import {
 } from "@/lib/wallet-auth-storage";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 
+function cloudSignInMessage(
+  code: string,
+  copy: {
+    signInFailed: string;
+    signInDecryptFailed: string;
+    signInVaultUnsupported: string;
+    signInAddressMismatch: string;
+    signInSessionOpenFailed: string;
+    signInSessionExpired: string;
+    signInSessionMissing: string;
+    signInRateLimited: string;
+  },
+): string {
+  if (code === "decrypt_failed") return copy.signInDecryptFailed;
+  if (code === "vault_schema_unsupported") return copy.signInVaultUnsupported;
+  if (code === "address_mismatch") return copy.signInAddressMismatch;
+  if (code === "session_open_failed") return copy.signInSessionOpenFailed;
+  if (code === "reauth_required") return copy.signInSessionExpired;
+  if (code === "unauthorized") return copy.signInSessionMissing;
+  if (code === "rate_limited") return copy.signInRateLimited;
+  return copy.signInFailed;
+}
+
 export function WalletCloudSignIn({
   onConnected,
   autoConnect = false,
+  onOpenImport,
 }: {
   onConnected?: () => void;
   autoConnect?: boolean;
+  /** Opens the existing WalletConnectPanel import mode (encrypted backup or key). */
+  onOpenImport?: () => void;
 }) {
   const { lang } = useLanguage();
   const t = walletCopy[lang];
@@ -31,6 +60,7 @@ export function WalletCloudSignIn({
   const { session: walletSession, connectCloud } = useWallet();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState("");
   const [pending, setPending] = useState<"email" | "google" | null>(null);
   const [knownEmail, setKnownEmail] = useState<string | null>(() => readLastAuthEmail());
   const [features, setFeatures] = useState<{ google: boolean; magic: boolean; walletVault: boolean } | null>(
@@ -56,12 +86,20 @@ export function WalletCloudSignIn({
     async (userId: string, email?: string | null) => {
       setBusy(true);
       setError("");
+      setErrorCode("");
       try {
         rememberAuthEmail(email);
         if (email) setKnownEmail(email);
         const cloud = await ensureCloudWalletSession({ id: userId });
-        connectCloud(cloud);
-        await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
+        await connectCloud(cloud);
+        try {
+          const synced = await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
+          if (!synced.ok) {
+            warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried: false });
+          }
+        } catch {
+          warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried: false });
+        }
         void runParticipantRegistration(cloud.privateKey, cloud.address, {
           requestFaucet: async () => {
             await networkJson("faucet/fund", {
@@ -70,16 +108,40 @@ export function WalletCloudSignIn({
               body: JSON.stringify({ address: cloud.address, amount: 10 }),
             });
           },
-        });
+        }).then(
+          (result) => {
+            if (!result.ok) {
+              warnCloudOpenFailed({
+                code: "participant_registration_failed",
+                stage: "participant_registration",
+                vaultPresent: true,
+                retried: false,
+              });
+            }
+          },
+          () => {
+            warnCloudOpenFailed({
+              code: "participant_registration_failed",
+              stage: "participant_registration",
+              vaultPresent: true,
+              retried: false,
+            });
+          },
+        );
         onConnected?.();
       } catch (err) {
-        setError(err instanceof Error ? err.message : t.error);
+        const code = err instanceof WalletCloudError ? err.code : "unknown";
+        if (!(err instanceof WalletCloudError) || !err.logged) {
+          warnCloudOpenFailed({ code, stage: "cloud_sign_in", vaultPresent: false, retried: false });
+        }
+        setErrorCode(code);
+        setError(cloudSignInMessage(code, c));
       } finally {
         setBusy(false);
         setPending(null);
       }
     },
-    [connectCloud, onConnected, t.error, setError, setBusy, setPending],
+    [connectCloud, onConnected, c, setError, setBusy, setPending],
   );
 
   useEffect(() => {
@@ -122,9 +184,21 @@ export function WalletCloudSignIn({
   return (
     <div className="space-y-3" data-testid="wallet-cloud-sign-in">
       {error ? (
-        <p className="text-sm text-warm">
-          {t.error}: {error}
-        </p>
+        <div className="space-y-2" role="alert">
+          <p className="text-sm text-warm">
+            {t.error}: {error}
+          </p>
+          {onOpenImport && isCloudOpenRecoveryCode(errorCode) ? (
+            <button
+              type="button"
+              data-testid="wallet-sign-in-import"
+              className="rounded-xl border border-line bg-surface px-4 py-2 text-sm font-semibold"
+              onClick={onOpenImport}
+            >
+              {t.import}
+            </button>
+          ) : null}
+        </div>
       ) : null}
       {busy ? <p className="text-sm text-value">{t.signInOpening}</p> : null}
 
