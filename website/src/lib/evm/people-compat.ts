@@ -13,6 +13,7 @@ import {
   LOG_WINDOW_BLOCKS,
   applyTokenImage,
   catalogListIsPartial,
+  immediateTokenImageUrl,
   discoverPoolsOnChain,
   discoverTokensOnChain,
   fetchLogsWindowed,
@@ -35,8 +36,8 @@ import {
   runWithRequestDeadline,
   sleepMs,
 } from "@/lib/evm/request-deadline";
-import { FALLBACK_TOKEN_SYMBOL, TokenReadError, readTokenOnchain, resolveTokenImageUri } from "@/lib/evm/token-onchain";
-import { readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
+import { FALLBACK_TOKEN_SYMBOL, TokenReadError, readTokenOnchain } from "@/lib/evm/token-onchain";
+import { fetchCachedMetadataImage, readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
 import { displayTokenImageUrl } from "@/lib/ipfs";
 import {
   NFT_MINTED_TOPIC,
@@ -279,26 +280,16 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
     symbol: seed?.symbol ?? base.symbol,
     decimals: seed?.decimals ?? base.decimals,
   });
-  const imageStarted = Date.now();
-  const [overrides, chainImage] = await withinBudget(
-    Promise.all([
-      readTokenIconOverrides([token]).catch(() => new Map<string, string>()),
-      resolveTokenImageUri(onchain.metadataUri, (uri) =>
-        readTokenUriMetadata(uri, boundedTimeoutMs(TOKEN_IMAGE_BUDGET_MS), currentDeadline()?.at),
-      ),
-    ]),
-    TOKEN_IMAGE_BUDGET_MS,
-    [new Map<string, string>(), undefined] as [Map<string, string>, string | undefined],
-  );
+  const overrides = await readTokenIconOverrides([token]).catch(() => new Map<string, string>());
   const overrideRaw = overrides.get(token.toLowerCase());
-  const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? undefined) : undefined;
-  const image = chainImage ? (displayTokenImageUrl(chainImage) ?? undefined) : undefined;
-  const row = applyTokenImage(enriched, override, image);
-  // A fast gateway failure is just "no image". Waiting out the image budget or the request
-  // deadline means the document was not read, so the row stays partial for the next request.
-  const imageBudgetHit = Boolean(onchain.metadataUri) && !image && Date.now() - imageStarted >= TOKEN_IMAGE_BUDGET_MS - 25;
-  if (imageBudgetHit || (deadlineExpired() && !image)) return { ...row, partial: true };
-  return row;
+  const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? overrideRaw) : undefined;
+  const metadataUri = (onchain.metadataUri ?? "").trim();
+  const chainImage = immediateTokenImageUrl(metadataUri);
+  // The document URL is returned immediately. Resolving its `image` must not hold the row or mark it partial.
+  if (metadataUri && /\/metadata\.json(?:[?#].*)?$/i.test(metadataUri) && chainImage && /\/metadata\.json(?:[?#].*)?$/i.test(chainImage)) {
+    void fetchCachedMetadataImage(metadataUri, undefined, Date.now() + 8_000);
+  }
+  return applyTokenImage(enriched, override, chainImage);
 }
 
 const IS_PEOPLE_TOKEN_ABI = parseAbi(["function isPeopleToken(address) view returns (bool)"]);
@@ -945,7 +936,8 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
         imageUri: enriched.imageUri,
       };
     });
-    const listPartial = catalogFailed || catalogListIsPartial(onChain) || deadlineExpired();
+    // Logos and metadata documents never make the list partial. Only a missed catalog/RPC read does.
+    const listPartial = catalogFailed || catalogListIsPartial(onChain);
     if (onChain.length || (listPartial && deadlineExpired())) {
       return { status: 200, body: listPartial ? { assets: mapped, partial: true } : mapped };
     }
@@ -998,7 +990,6 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
           }
         }
       }
-      const imageMissed = deadlineExpired() && !enriched.imageUri;
       return {
         status: 200,
         body: {
@@ -1014,7 +1005,6 @@ async function handleEvmCompatGetInner(path: string, search: URLSearchParams): P
           ...(enriched.impersonates ? { impersonates: enriched.impersonates } : {}),
           creationMetadata: enriched.creationMetadata,
           imageUri: enriched.imageUri,
-          ...(imageMissed ? { partial: true } : {}),
         },
       };
     }

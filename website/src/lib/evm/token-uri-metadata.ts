@@ -40,6 +40,7 @@ export async function readTokenUriMetadata(
   tokenUri: string,
   timeoutMs = TOKEN_URI_FETCH_TIMEOUT_MS,
   deadlineAt?: number,
+  detach = false,
 ): Promise<TokenUriMetadata | null> {
   const uri = tokenUri.trim();
   let url: string | null;
@@ -56,7 +57,7 @@ export async function readTokenUriMetadata(
   }
   if (!url) return null;
   const at = deadlineAt ?? currentDeadline()?.at;
-  const attempt = linkAbort(boundedTimeoutMs(timeoutMs, at), currentDeadline()?.signal);
+  const attempt = linkAbort(boundedTimeoutMs(timeoutMs, at), detach ? null : currentDeadline()?.signal);
   try {
     const res = await fetch(url, {
       headers: { accept: "application/json" },
@@ -100,9 +101,11 @@ export const TOKEN_IMAGE_NEGATIVE_TTL_MS = 30_000;
 export const TOKEN_IMAGE_CACHE_MAX = 500;
 
 const imageCache = new Map<string, { expiresAt: number; value: string | undefined }>();
+let imageReads: Promise<void> = Promise.resolve();
 
 export function resetTokenImageCacheForTests(): void {
   imageCache.clear();
+  imageReads = Promise.resolve();
 }
 
 export function tokenImageCacheSizeForTests(): number {
@@ -111,9 +114,24 @@ export function tokenImageCacheSizeForTests(): number {
 
 /** In-memory hit only. A miss is `undefined` and does not start a gateway read. */
 export function peekCachedMetadataImage(uri: string): string | undefined {
+  const entry = peekCachedMetadataImageEntry(uri);
+  return entry.hit ? entry.value : undefined;
+}
+
+/** Distinguishes a cache miss from a cached "no image", so a miss can still return the document URL. */
+export function peekCachedMetadataImageEntry(uri: string): { hit: true; value: string | undefined } | { hit: false } {
   const cached = imageCache.get(uri.trim());
-  if (!cached || cached.expiresAt <= Date.now()) return undefined;
-  return cached.value;
+  if (!cached || cached.expiresAt <= Date.now()) return { hit: false };
+  return { hit: true, value: cached.value };
+}
+
+/** Resolves when metadata reads started so far have settled. Tests use this; it does not start a read. */
+export function settleTokenImageReadsForTests(): Promise<void> {
+  return imageReads;
+}
+
+function trackImageRead(work: Promise<unknown>): void {
+  imageReads = Promise.all([imageReads.catch(() => undefined), work.catch(() => undefined)]).then(() => undefined);
 }
 
 function rememberImage(uri: string, value: string | undefined): void {
@@ -133,7 +151,17 @@ function rememberImage(uri: string, value: string | undefined): void {
  * Fetches a pinned metadata JSON and returns its `image` (ipfs:// or https://), or undefined.
  * Failures are cached for a shorter time than hits so a blip does not stick.
  */
-export async function fetchCachedMetadataImage(
+export function fetchCachedMetadataImage(
+  uri: string,
+  fetchJson?: (tokenUri: string) => Promise<TokenUriMetadata | null>,
+  deadlineAt?: number,
+): Promise<string | undefined> {
+  const work = fetchCachedMetadataImageNow(uri, fetchJson, deadlineAt);
+  trackImageRead(work);
+  return work;
+}
+
+async function fetchCachedMetadataImageNow(
   uri: string,
   fetchJson?: (tokenUri: string) => Promise<TokenUriMetadata | null>,
   deadlineAt?: number,
@@ -142,7 +170,8 @@ export async function fetchCachedMetadataImage(
   const cached = imageCache.get(key);
   if (cached && cached.expiresAt > Date.now()) return cached.value;
   const at = deadlineAt ?? currentDeadline()?.at;
-  const read = fetchJson ?? ((tokenUri: string) => readTokenUriMetadata(tokenUri, boundedTimeoutMs(TOKEN_URI_FETCH_TIMEOUT_MS, at), at));
+  // Detached from the compat request: a slow gateway must not abort the asset list or mark it partial.
+  const read = fetchJson ?? ((tokenUri: string) => readTokenUriMetadata(tokenUri, boundedTimeoutMs(TOKEN_URI_FETCH_TIMEOUT_MS, at), at, true));
   let image: string | undefined;
   try {
     const meta = await read(key);

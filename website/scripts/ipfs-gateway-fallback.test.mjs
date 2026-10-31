@@ -67,4 +67,14 @@ test("a later catalog merge keeps a known imageUri", () => {
   const rows = mergeCatalogTokens([previous], [{ ...incoming, imageUri: undefined, creationMetadata: undefined }]);
   assert.equal(rows[0].imageUri, image);
   assert.equal(rows[0].creationMetadata.image, image);
+  const doc = image.replace(/\/[^/]+$/, "/metadata.json");
+  const kept = withStableImage(previous, { ...incoming, imageUri: doc, creationMetadata: { image: doc } });
+  assert.equal(kept.imageUri, image);
+  assert.equal(kept.creationMetadata.image, image);
+  const replaced = withStableImage(
+    { ...previous, imageUri: doc, creationMetadata: { image: doc } },
+    { ...incoming, imageUri: image, creationMetadata: { image } },
+  );
+  assert.equal(replaced.imageUri, image);
+  assert.equal(replaced.creationMetadata.image, image);
 });

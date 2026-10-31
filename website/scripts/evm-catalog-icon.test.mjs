@@ -33,4 +33,11 @@ test("the shared image helper prefers an owner override, then seed image, then m
   assert.equal(applyTokenImage({ ...row, imageUri: undefined }, undefined, "ipfs://chain-icon").imageUri, "ipfs://chain-icon");
   assert.equal(applyTokenImage(row, undefined, "ipfs://chain-icon").imageUri, "/seed/tTOKEN.svg");
   assert.equal(applyTokenImage({ assetId: "0xtoken" }, undefined, "ipfs://new-icon").imageUri, "ipfs://new-icon");
+  const doc = "https://gateway.pinata.cloud/ipfs/bafy/metadata.json";
+  const logo = "https://gateway.pinata.cloud/ipfs/bafy/logo.png";
+  assert.equal(
+    applyTokenImage({ assetId: "0xtoken", imageUri: doc, creationMetadata: { image: doc } }, undefined, logo).imageUri,
+    logo,
+  );
+  assert.equal(applyTokenImage({ assetId: "0xtoken", imageUri: logo }, undefined, doc).imageUri, logo);
 });
