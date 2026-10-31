@@ -7,6 +7,7 @@ import {console2} from "forge-std/console2.sol";
 import {MockUSDT} from "../src/mocks/MockUSDT.sol";
 import {PplCurveHubV2} from "../src/sale/PplCurveHubV2.sol";
 import {HubV2Base, HubV2Harness} from "./PplCurveHubV2Base.sol";
+import {HubV2GasGate} from "./PplCurveHubV2Gas.t.sol";
 
 interface IMintable {
     function mint(address to, uint256 amount) external;
@@ -863,7 +864,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         (, live,,) = hub.usage24h(alice);
         assertEq(live, 50);
         console2.log("buy with 49 live entries (50th, appends) gas", gAppend);
-        assertLt(gAppend, 300_000, "50th buy gas");
+        assertLt(gAppend, HubV2GasGate.BUY_APPEND, "50th buy gas");
 
         // a buy that is refused at 50 live entries (TooManyBuys) is also bounded
         vm.cool(address(hub));
@@ -872,7 +873,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         try hub.buy(1e6, 0, alice, address(0)) {} catch {}
         uint256 gRefused = g0 - gasleft();
         console2.log("buy refused with 50 live entries gas", gRefused);
-        assertLt(gRefused, 300_000, "refused buy gas");
+        assertLt(gRefused, HubV2GasGate.BUY_REFUSED, "refused buy gas");
 
         // pruning buy: every one of the 50 entries has expired
         _warpBy(1 days);
@@ -884,7 +885,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         hub.buy(1e6, 0, alice, address(0));
         uint256 gPrune = g0 - gasleft();
         console2.log("pruning buy (50 expired entries) gas", gPrune);
-        assertLt(gPrune, 300_000, "pruning buy gas");
+        assertLt(gPrune, HubV2GasGate.BUY_PRUNE, "pruning buy gas");
         (, live,,) = hub.usage24h(alice);
         assertEq(live, 1);
 
@@ -902,7 +903,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         uint256 gSell = g0 - gasleft();
         console2.log("sellBack, 10th sell entry gas", gSell);
-        assertLt(gSell, 300_000, "sellBack gas");
+        assertLt(gSell, HubV2GasGate.SELL_BACK, "sellBack gas");
     }
 
     // ================================================================ A5: person-keyed state

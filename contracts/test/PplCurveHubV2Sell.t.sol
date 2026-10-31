@@ -8,6 +8,7 @@ import {console2} from "forge-std/console2.sol";
 import {MockUSDC} from "../src/mocks/MockUSDC.sol";
 import {PplCurveHubV2, PplCurveMathV2} from "../src/sale/PplCurveHubV2.sol";
 import {HubV2Base, HubV2Harness} from "./PplCurveHubV2Base.sol";
+import {HubV2GasGate} from "./PplCurveHubV2Gas.t.sol";
 
 /// @dev Sell-back, fees, caps, expiry, liquidity release, pause (SPEC §5.2, §5.4, §5.5, §5.5a, §6).
 contract PplCurveHubV2SellTest is HubV2Base {
@@ -811,7 +812,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         hub.sellBack(ppl, 0, id, deadline, ppl, sig);
         uint256 used = g0 - gasleft();
         console2.log("sellBack single-lot gas", used);
-        assertLt(used, 300_000, "single-lot sellBack gas");
+        assertLt(used, HubV2GasGate.SELL_BACK, "single-lot sellBack gas");
     }
 
     // ================================================================ fork
