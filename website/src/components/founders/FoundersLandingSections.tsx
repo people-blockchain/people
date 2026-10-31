@@ -2,7 +2,7 @@
 
 import type { FoundersLandingCopy } from "@/lib/founders-landing-content";
 import { Reveal } from "@/components/motion/Reveal";
-import { CountUpNumber, PersonAvatar, SectionHead } from "./founders-ui";
+import { PersonAvatar, SectionHead, fill } from "./founders-ui";
 import { FounderCard } from "./FounderCard";
 import type { FoundersPromoCopy } from "@/lib/founders-promo-content";
 import { FounderMosaicPlaceholder } from "./FounderMosaicPlaceholder";
@@ -42,10 +42,19 @@ export function FoundersMillionCounterBar({
   counter: MillionCounter | null;
   className?: string;
 }) {
+  const current = counter?.current ?? 0;
+  const goal = counter?.goal ?? 1_000_000;
   const pct =
     counter && counter.goal > 0 && counter.current > 0
       ? Math.max(0.5, Math.min(100, (counter.current / counter.goal) * 100))
       : 0;
+
+  const statusLine =
+    counter?.source === "verified"
+      ? current > 0
+        ? copy.counterLive
+        : copy.counterEmpty
+      : copy.counterStub;
 
   return (
     <div className={className} data-testid="founders-million-counter">
@@ -55,11 +64,12 @@ export function FoundersMillionCounterBar({
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-value opacity-60 motion-reduce:hidden" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-value" />
           </span>
-          <CountUpNumber
-            value={counter?.current ?? 0}
-            lang={lang}
-            className="font-mono text-3xl font-bold tabular-nums text-ink sm:text-4xl"
-          />
+          <p className="font-mono text-3xl font-bold tabular-nums text-ink sm:text-4xl">
+            {fill(copy.counterOfGoal, {
+              current: current.toLocaleString(lang),
+              goal: goal.toLocaleString(lang),
+            })}
+          </p>
           <span className="text-sm text-ink-2">{copy.counterLabel}</span>
         </div>
         <div className="min-w-0 flex-1">
@@ -72,14 +82,10 @@ export function FoundersMillionCounterBar({
         </div>
         <p className="text-sm text-ink-3">
           {copy.counterGoal}:{" "}
-          <span className="font-mono font-semibold text-ink">
-            {(counter?.goal ?? 1_000_000).toLocaleString(lang)}
-          </span>
+          <span className="font-mono font-semibold text-ink">{goal.toLocaleString(lang)}</span>
         </p>
       </div>
-      <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">
-        {counter?.source === "verified" ? copy.counterLive : copy.counterStub}
-      </p>
+      <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">{statusLine}</p>
     </div>
   );
 }

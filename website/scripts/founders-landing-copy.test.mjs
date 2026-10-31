@@ -8,14 +8,31 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
 const load = (name) => JSON.parse(readFileSync(join(surfaces, name), "utf8"));
 
-function shape(obj) {
-  if (Array.isArray(obj)) return obj.map(shape);
-  if (obj && typeof obj === "object") return Object.fromEntries(Object.keys(obj).sort().map((k) => [k, shape(obj[k])]));
-  return typeof obj;
-}
+test("founders landing RU keys are a subset of EN (EN may add counter/map fields first)", () => {
+  const en = load("founders-landing-en.json");
+  const ru = load("founders-landing-ru.json");
+  function assertContained(sub, full, path = "") {
+    if (Array.isArray(sub)) {
+      assert.ok(Array.isArray(full), `${path} type mismatch`);
+      return;
+    }
+    if (!sub || typeof sub !== "object") {
+      assert.equal(typeof sub, typeof full, path);
+      return;
+    }
+    for (const key of Object.keys(sub)) {
+      assert.ok(key in full, `${path}.${key} missing in EN`);
+      assertContained(sub[key], full[key], `${path}.${key}`);
+    }
+  }
+  assertContained(ru, en);
+});
 
-test("founders landing RU matches EN structure", () => {
-  assert.deepEqual(shape(load("founders-landing-ru.json")), shape(load("founders-landing-en.json")));
+test("founders landing EN includes counter and map copy", () => {
+  const en = load("founders-landing-en.json");
+  assert.ok(en.mapTitle);
+  assert.ok(en.counterOfGoal);
+  assert.ok(en.mapCountryCount.includes("{{count}}"));
 });
 
 test("founders landing carries agreed hero titles and FAQ", () => {

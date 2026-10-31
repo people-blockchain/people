@@ -29,6 +29,8 @@ import {
   type MillionCounter,
 } from "./FoundersLandingSections";
 import { HumanPassportFlow } from "./HumanPassportFlow";
+import { FoundersWorldMapSection } from "./FoundersWorldMap";
+import type { FounderCountryStat } from "@/lib/founders/map-stats";
 
 type Me = {
   signedIn: boolean;
@@ -62,6 +64,12 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   const landing = foundersLandingCopy(lang);
   const r = foundersReferralCopy(lang);
   const [millionCounter, setMillionCounter] = useState<MillionCounter | null>(null);
+  const [mapStats, setMapStats] = useState<{
+    countries: FounderCountryStat[];
+    byCountry: Record<string, number>;
+    verifiedCount: number;
+    available: boolean;
+  } | null>(null);
   const [me, setMe] = useState<Me | null>(null);
   const [referral, setReferral] = useState<ReferralStatus | null>(null);
   const [referralError, setReferralError] = useState(false);
@@ -87,14 +95,31 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   const personalRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
-    const [counterRes, meRes] = await Promise.all([
+    const [counterRes, mapRes, meRes] = await Promise.all([
       fetch("/api/founders/million-counter", { cache: "no-store" }).catch(() => null),
+      fetch("/api/founders/map", { cache: "no-store" }).catch(() => null),
       fetch("/api/founders/me", { cache: "no-store", credentials: "include" }).catch(() => null),
     ]);
     if (counterRes?.ok) {
       const body = (await counterRes.json()) as { current?: number; goal?: number; source?: string };
       if (typeof body.current === "number" && typeof body.goal === "number") {
         setMillionCounter({ current: body.current, goal: body.goal, source: body.source });
+      }
+    }
+    if (mapRes?.ok) {
+      const body = (await mapRes.json()) as {
+        verifiedCount?: number;
+        countries?: FounderCountryStat[];
+        byCountry?: Record<string, number>;
+        available?: boolean;
+      };
+      if (Array.isArray(body.countries) && body.byCountry && typeof body.verifiedCount === "number") {
+        setMapStats({
+          countries: body.countries,
+          byCountry: body.byCountry,
+          verifiedCount: body.verifiedCount,
+          available: body.available === true,
+        });
       }
     }
     const meBody = meRes?.ok ? ((await meRes.json()) as Me) : null;
@@ -575,6 +600,15 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
 
       {embedded ? null : (
         <>
+          <FoundersWorldMapSection
+            copy={landing}
+            lang={lang}
+            countries={mapStats?.countries ?? []}
+            byCountry={mapStats?.byCountry ?? {}}
+            verifiedCount={mapStats?.verifiedCount ?? millionCounter?.current ?? 0}
+            available={mapStats?.available ?? false}
+            countryName={countryName}
+          />
           <FoundersNftSection copy={landing} />
           <FoundersTiersSection copy={landing} />
           <FoundersSpecialSection copy={landing} />
