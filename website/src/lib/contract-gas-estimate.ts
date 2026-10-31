@@ -1,5 +1,6 @@
 import {
   APPROVED_CONTRACT_GAS_PRICE_PPL,
+  APPROVED_CONTRACT_GAS_PRICE_WEI,
   TYPICAL_CONTRACT_DEPLOY_GAS,
 } from "@/lib/factory-fees";
 
@@ -46,6 +47,12 @@ export function defaultGasLimitFromEstimate(estimate: number): number {
 
 export function quoteContractFeePpl(gasLimit: number, gasPricePpl = APPROVED_CONTRACT_GAS_PRICE_PPL): number {
   return Math.round(gasLimit * gasPricePpl * 1e6) / 1e6;
+}
+
+/** Gas limit times the approved wei gas price. Display with formatPplExact. */
+export function quoteContractFeeWei(gasLimit: number, gasPriceWei = APPROVED_CONTRACT_GAS_PRICE_WEI): bigint {
+  if (!Number.isInteger(gasLimit) || gasLimit <= 0) return BigInt(0);
+  return gasPriceWei * BigInt(gasLimit);
 }
 
 export function fallbackDeployEstimateGas(): number {

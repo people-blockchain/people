@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowDownUp } from "lucide-react";
-import { formatEther, getAddress, isAddress, parseEther, type Address, type Hex } from "viem";
+import { getAddress, isAddress, type Address, type Hex } from "viem";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/context/ExternalWalletContext";
@@ -18,13 +18,20 @@ import { networkJson } from "@/lib/network-client";
 import { erc20Abi, pairAbi, routerAbi } from "@/lib/evm/client";
 import { ConnectWalletMenu } from "@/components/wallet/ConnectWalletMenu";
 import { minAmountOutWithSlippageBaseUnits, quoteExactInBaseUnits } from "@/lib/amm-math";
-import { assetDecimals, formatPpl, parseUnits } from "@/lib/asset-amounts";
+import { assetDecimals, formatPpl, formatPplDisplay, formatPplExact, fractionOfPplWei, parsePplInput, parseUnits } from "@/lib/asset-amounts";
 import { fractionOfBalance, priceImpactPercent, quotePoolSwap, spotTokenPerPpl } from "@/lib/swap-math";
 import { isHiddenAssetRow, visiblePools } from "@/lib/hidden-assets";
 import { TEST_STABLES, normalizePoolTokenId } from "@/lib/evm/test-stables";
 import { SwapTokenPicker } from "@/components/swap/SwapTokenPicker";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import type { AssetInfo } from "@/lib/asset-amounts";
+
+/** Price impact in percent from wei reserves. The scaled ratio stays inside 1e6. */
+function impactPercentFromWei(reserveIn: bigint, amountIn: bigint): number {
+  if (reserveIn <= BigInt(0) || amountIn <= BigInt(0)) return 0;
+  const scaled = (amountIn * BigInt(1_000_000)) / (reserveIn + amountIn);
+  return Number(scaled) / 10_000;
+}
 
 /**
  * Pairs created by a legacy AMM factory (`ammFactoryVn`, earlier stacks) must be traded through
@@ -301,22 +308,18 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
     };
   }, [dep.contracts.router]);
 
-  const pplBalance = Number(formatEther(pplBalanceWei));
   const tokenBalance = Number(tokenBalanceUnits) / 10 ** decimals;
 
-  // `amountIn` is always a human number (PPL or token units), `amountInBaseUnits` the
-  // on-chain figure (wei for PPL, 10^decimals for the token) the quote and the tx use.
+  // `amountIn` stays a human number for price-impact preview. PPL amounts are parsed and
+  // compared in wei; `amountInBaseUnits` is what the quote and the transaction use.
   const parsed = useMemo(() => {
     const text = amountText.trim();
     if (!text || !selectedPool) return { kind: "empty" as const };
     if (pplIn) {
-      try {
-        const amountInBaseUnits = parseEther(text);
-        if (amountInBaseUnits <= BigInt(0)) return { kind: "empty" as const };
-        return { kind: "ok" as const, amountIn: Number(formatEther(amountInBaseUnits)), amountInBaseUnits };
-      } catch {
-        return { kind: "invalid" as const };
-      }
+      const amountInBaseUnits = parsePplInput(text);
+      if (amountInBaseUnits === null) return { kind: "invalid" as const };
+      if (amountInBaseUnits <= BigInt(0)) return { kind: "empty" as const };
+      return { kind: "ok" as const, amountIn: 0, amountInBaseUnits };
     }
     const units = parseUnits(text, decimals);
     return units && units > 0
@@ -339,8 +342,14 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
       slippageBps,
     });
     if (!q) return null;
-    return { ...q, impact: priceImpactPercent(reserveIn, parsed.amountIn) };
-  }, [selectedPool, parsed, pplIn, slippageBps, decimals]);
+    let impact = priceImpactPercent(reserveIn, parsed.amountIn);
+    if (pplIn && pairReserves && wpplAddress) {
+      const wpplIsToken0 = pairReserves.token0.toLowerCase() === wpplAddress.toLowerCase();
+      const reserveWppl = wpplIsToken0 ? pairReserves.reserve0 : pairReserves.reserve1;
+      impact = impactPercentFromWei(reserveWppl, parsed.amountInBaseUnits);
+    }
+    return { ...q, impact };
+  }, [selectedPool, parsed, pplIn, slippageBps, decimals, pairReserves, wpplAddress]);
 
   // The real slippage guard sent on-chain: computed in bigint base units from reserves read
   // straight from the pair contract (see the effect above), independent of `quote`'s
@@ -375,7 +384,7 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
   else if (parsed.kind === "empty") blocker = u.enterAmount;
   else if (parsed.kind === "invalid") blocker = u.enterAmount;
   else if (signer) {
-    if (pplIn && parsed.amountIn > pplBalance) blocker = fill(u.insufficient, { symbol: "PPL" });
+    if (pplIn && parsed.amountInBaseUnits > pplBalanceWei) blocker = fill(u.insufficient, { symbol: "PPL" });
     else if (!pplIn && parsed.amountIn > tokenBalance) blocker = fill(u.insufficient, { symbol: tokenSymbol });
   }
   if (!blocker && parsed.kind === "ok" && selectedPool) {
@@ -385,11 +394,16 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
 
   const setFraction = (fraction: number) => {
     if (!signer) return;
+    if (pplIn) {
+      const parts = BigInt(Math.round(fraction * 100));
+      setAmountText(formatPplExact(fractionOfPplWei(pplBalanceWei, BigInt(0), parts, BigInt(100))));
+      return;
+    }
     setAmountText(
       fractionOfBalance({
         fraction,
         pplIn,
-        pplBalance,
+        pplBalance: 0,
         tokenBalance,
         decimals,
         fee: EVM_SWAP_FEE_PPL,
@@ -593,8 +607,12 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                 <div className="flex items-center justify-between gap-2 text-sm text-ink-3">
                   <span>{t.tokenIn}</span>
                   {signer ? (
-                    <span data-testid="swap-balance-in">
-                      {fill(u.balance, { amount: `${fmtIn(pplIn ? pplBalance : tokenBalance)} ${symIn}` })}
+                    <span data-testid="swap-balance-in" title={pplIn ? `${formatPplExact(pplBalanceWei)} PPL` : undefined}>
+                      {fill(u.balance, {
+                        amount: pplIn
+                          ? `${formatPplDisplay(pplBalanceWei)} PPL`
+                          : `${fmtIn(tokenBalance)} ${symIn}`,
+                      })}
                     </span>
                   ) : null}
                 </div>
@@ -660,8 +678,12 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                 <div className="flex items-center justify-between gap-2 text-sm text-ink-3">
                   <span>{t.tokenOut}</span>
                   {signer ? (
-                    <span data-testid="swap-balance-out">
-                      {fill(u.balance, { amount: `${fmtOut(pplIn ? tokenBalance : pplBalance)} ${symOut}` })}
+                    <span data-testid="swap-balance-out" title={!pplIn ? `${formatPplExact(pplBalanceWei)} PPL` : undefined}>
+                      {fill(u.balance, {
+                        amount: pplIn
+                          ? `${fmtOut(tokenBalance)} ${symOut}`
+                          : `${formatPplDisplay(pplBalanceWei)} PPL`,
+                      })}
                     </span>
                   ) : null}
                 </div>
@@ -683,8 +705,16 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                     />
                     {pplIn ? <span className="max-w-[5rem] truncate">{symOut}</span> : <span>PPL</span>}
                   </button>
-                  <span className="min-w-0 flex-1 truncate text-lg font-semibold text-ink" data-testid="swap-out">
-                    {quote ? fmtOut(quote.amountOut) : "0"}
+                  <span
+                    className="min-w-0 flex-1 truncate text-lg font-semibold text-ink"
+                    data-testid="swap-out"
+                    title={!pplIn && bigintQuote ? `${formatPplExact(bigintQuote.amountOut)} PPL` : undefined}
+                  >
+                    {quote
+                      ? !pplIn && bigintQuote
+                        ? formatPplDisplay(bigintQuote.amountOut)
+                        : fmtOut(quote.amountOut)
+                      : "0"}
                   </span>
                   <span className="shrink-0 text-sm font-semibold text-ink" data-testid="swap-selected-symbol">{symOut}</span>
                 </div>
@@ -701,11 +731,23 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                 ) : null}
                 <div className="flex justify-between gap-3">
                   <dt className="text-ink-3">{u.receiveApprox}</dt>
-                  <dd className="text-right font-semibold">{quote ? `${fmtOut(quote.amountOut)} ${symOut}` : "—"}</dd>
+                  <dd className="text-right font-semibold" title={!pplIn && bigintQuote ? `${formatPplExact(bigintQuote.amountOut)} PPL` : undefined}>
+                    {quote
+                      ? !pplIn && bigintQuote
+                        ? `${formatPplDisplay(bigintQuote.amountOut)} PPL`
+                        : `${fmtOut(quote.amountOut)} ${symOut}`
+                      : "—"}
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-3">
                   <dt className="text-ink-3">{u.minReceived}</dt>
-                  <dd className="text-right">{quote ? `${fmtOut(quote.minOut)} ${symOut}` : "—"}</dd>
+                  <dd className="text-right" title={!pplIn && bigintQuote ? `${formatPplExact(bigintQuote.amountOutMin)} PPL` : undefined}>
+                    {quote
+                      ? !pplIn && bigintQuote
+                        ? `${formatPplDisplay(bigintQuote.amountOutMin)} PPL`
+                        : `${fmtOut(quote.minOut)} ${symOut}`
+                      : "—"}
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-3">
                   <dt className="text-ink-3">{u.priceImpact}</dt>
@@ -723,7 +765,11 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
                 <div className="flex justify-between gap-3">
                   <dt className="text-ink-3">{u.poolFee}</dt>
                   <dd className="text-right">
-                    {quote && parsed.kind === "ok" ? `${fmtIn((parsed.amountIn * 30) / 10_000)} ${symIn}` : "—"}
+                    {quote && parsed.kind === "ok"
+                      ? pplIn
+                        ? `${formatPplDisplay((parsed.amountInBaseUnits * BigInt(30)) / BigInt(10_000))} PPL`
+                        : `${fmtIn((parsed.amountIn * 30) / 10_000)} ${symIn}`
+                      : "—"}
                   </dd>
                 </div>
               </dl>
