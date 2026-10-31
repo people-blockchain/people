@@ -9,6 +9,7 @@ register("./fixtures/evm-catalog-fault-loader.mjs", import.meta.url);
 const { getDbReady } = await import("./fixtures/evm-log-scan-pglite-db.mjs");
 const { evmLogScanCursors } = await import("../src/db/schema.ts");
 const {
+  CATALOG_LOG_WINDOW_BLOCKS,
   TOKEN_CREATED_LEFTOVER_TOPIC,
   discoverTokensOnChain,
   discoverTokensOnChainUncached,
@@ -148,7 +149,7 @@ test("a token created after the previous scan appears on the next refresh", asyn
 test("a newest tail window that fails its first attempts is still listed by the end of the scan", async (t) => {
   await db.delete(evmLogScanCursors);
   const tip = FACTORY_START + 20_000;
-  const windows = logWindows(FACTORY_START, tip);
+  const windows = logWindows(FACTORY_START, tip, CATALOG_LOG_WINDOW_BLOCKS);
   const newest = windows.at(-1);
   const historyFroms = new Set(windows.slice(0, -2).map(([from]) => from));
   const superseded = new Set(
