@@ -1,32 +1,64 @@
 import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "@/db";
 import { FOUNDER_GOAL } from "@/lib/founders/config";
-import { getCommunityCounters } from "@/lib/founders/transparency";
+import { emptyFounderMapStats, getFounderMapStats } from "@/lib/founders/map-stats";
 
 export const dynamic = "force-dynamic";
 
+const CACHE_HEADERS = {
+  "Cache-Control": "public, max-age=60, s-maxage=120, stale-while-revalidate=300",
+};
+
+const NO_STORE_HEADERS = {
+  "Cache-Control": "no-store",
+};
+
 /**
- * Public counter for the Million Founders hero.
+ * Public counter and country aggregate for the Million Founders hero and world map.
  * Uses verified founders (human verification completed), not raw registration rows.
  */
 export async function GET() {
   const goal = FOUNDER_GOAL;
   if (!isDatabaseConfigured()) {
-    return NextResponse.json({
-      current: 0,
-      goal,
-      source: "stub",
-      todo: "Connect database to read verified founder count from getCommunityCounters",
-    });
+    const empty = emptyFounderMapStats(goal);
+    return NextResponse.json(
+      {
+        current: 0,
+        verifiedCount: 0,
+        goal,
+        countries: empty.countries,
+        byCountry: empty.byCountry,
+        source: "stub",
+      },
+      { headers: NO_STORE_HEADERS },
+    );
   }
   try {
-    const { verifiedPeople } = await getCommunityCounters();
+    const stats = await getFounderMapStats();
     return NextResponse.json(
-      { current: verifiedPeople, goal, source: "verified" },
-      { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=300" } },
+      {
+        current: stats.verifiedCount,
+        verifiedCount: stats.verifiedCount,
+        goal: stats.goal,
+        countries: stats.countries,
+        byCountry: stats.byCountry,
+        source: "verified",
+      },
+      { headers: CACHE_HEADERS },
     );
   } catch (error) {
     console.error("[founders/million-counter]", error instanceof Error ? error.message : error);
-    return NextResponse.json({ current: 0, goal, source: "error" }, { status: 500 });
+    const empty = emptyFounderMapStats(goal);
+    return NextResponse.json(
+      {
+        current: 0,
+        verifiedCount: 0,
+        goal,
+        countries: empty.countries,
+        byCountry: empty.byCountry,
+        source: "error",
+      },
+      { status: 500, headers: NO_STORE_HEADERS },
+    );
   }
 }

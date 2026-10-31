@@ -38,6 +38,14 @@ import {
   verificationPointsFactor,
   type FounderVerificationLevel,
 } from "./verification.ts";
+export {
+  aggregateVerifiedFounders,
+  emptyFounderMapStats,
+  getFounderMapStats,
+  isVerifiedFounderForMap,
+  type FounderCountryStat,
+  type FounderMapStats,
+} from "./map-stats.ts";
 
 export type FounderPublicStats = {
   verifiedCount: number;
