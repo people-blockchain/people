@@ -780,6 +780,49 @@ export const apiRateLimits = pgTable(
 );
 
 /**
+ * Older fixed-window counters. Kept so existing databases are not rewritten.
+ * New decisions use `uploadSignRateHits`.
+ * DDL is applied from `upload-sign-rate-sql.mjs` during schema bootstrap.
+ */
+export const uploadSignRates = pgTable(
+  "upload_sign_rate",
+  {
+    bucketKey: text("bucketKey").primaryKey(),
+    count: integer("count").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+  },
+  (row) => [index("upload_sign_rate_expires_idx").on(row.expiresAt)],
+);
+
+/** One row per sign attempt that reached the limiter, for a true sliding window. */
+export const uploadSignRateHits = pgTable(
+  "upload_sign_rate_hit",
+  {
+    id: text("id").primaryKey(),
+    subjectKey: text("subjectKey").notNull(),
+    hitAt: timestamp("hitAt", { mode: "date" }).notNull(),
+  },
+  (row) => [index("upload_sign_rate_hit_subject_idx").on(row.subjectKey, row.hitAt)],
+);
+
+/**
+ * One-time nonces for direct media upload. Issued and consumed by `/api/factory/upload/*`.
+ * DDL is applied from `upload-nonce-sql.mjs` during schema bootstrap.
+ */
+export const uploadNonces = pgTable(
+  "upload_nonce",
+  {
+    nonce: text("nonce").primaryKey(),
+    address: text("address").notNull(),
+    domain: text("domain").notNull(),
+    expiry: text("expiry").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+    consumedAt: timestamp("consumedAt", { mode: "date" }),
+  },
+  (row) => [index("upload_nonce_expires_idx").on(row.expiresAt)],
+);
+
+/**
  * PplCurveHubV2 person binding: one private person key per user, a stable public personId
  * (bytes32 hex) attested by the sale verifier, and the hashed identifiers that belong to it.
  * Additive only — see drizzle/0020_sale_person_binding.sql.

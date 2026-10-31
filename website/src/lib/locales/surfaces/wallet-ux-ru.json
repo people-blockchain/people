@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Подключённый кошелёк",
+  "externalReadOnly": "Просмотр подключённого кошелька. Ключ не импортируется. Отправка — в приложении кошелька.",
   "disconnectExternal": "Отключить",
   "signInTimeout": "Вход занял слишком много времени. Проверьте соединение и повторите.",
   "signInRetry": "Повторить",
@@ -155,5 +156,8 @@
   "install": "Установить",
   "signInGoogle": "Войти через Google",
   "back": "Назад",
-  "openWallet": "Открыть {wallet}"
+  "openWallet": "Открыть {wallet}",
+  "nftHistoryLoading": "Загружаем историю",
+  "nftHistoryError": "Не удалось загрузить историю NFT.",
+  "nftHistoryRetry": "Повторить"
 }

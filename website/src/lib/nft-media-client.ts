@@ -7,8 +7,9 @@ import {
   NFT_IMAGE_MAX_BYTES,
   NFT_SVG_MAX_BYTES,
   NFT_VIDEO_MAX_BYTES,
-  imageKindFromMime,
-  maxBytesForImage,
+  directImageKindFromMime,
+  maxBytesForDirectImage,
+  type NftDirectImageKind,
   type NftImageKind,
   type NftVideoType,
 } from "./nft-media-rules";
@@ -69,10 +70,13 @@ const SERVER_ERROR_KEYS: Record<string, NftErrorKey> = {
 export class NftSaveError extends Error {
   readonly key: NftErrorKey;
   readonly detail: string;
-  constructor(key: NftErrorKey, detail: string) {
+  /** Direct-upload error code, when the alert should use the media-upload strings. */
+  readonly uploadCode?: string;
+  constructor(key: NftErrorKey, detail: string, uploadCode?: string) {
     super(detail);
     this.key = key;
     this.detail = detail;
+    this.uploadCode = uploadCode;
     this.name = "NftSaveError";
   }
 }
@@ -85,6 +89,7 @@ const EXT_TYPES: Record<string, string> = {
   png: "image/png",
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
+  gif: "image/gif",
   webp: "image/webp",
   svg: "image/svg+xml",
   mp4: "video/mp4",
@@ -101,12 +106,12 @@ export function effectiveMime(file: { name: string; type: string }): string {
 export type PickedFile<K> = { ok: true; kind: K; mime: string } | { ok: false; key: NftErrorKey };
 
 /** UX pre-check for an image or cover. */
-export function checkImageFile(file: { name: string; type: string; size: number }): PickedFile<NftImageKind> {
+export function checkImageFile(file: { name: string; type: string; size: number }): PickedFile<NftDirectImageKind> {
   const mime = effectiveMime(file);
-  const kind = imageKindFromMime(mime);
+  const kind = directImageKindFromMime(mime);
   if (!kind) return { ok: false, key: "errUnsupportedType" };
   if (file.size <= 0) return { ok: false, key: "errMissingFile" };
-  if (file.size > maxBytesForImage(kind)) return { ok: false, key: "errTooLarge" };
+  if (file.size > maxBytesForDirectImage(kind)) return { ok: false, key: "errTooLarge" };
   return { ok: true, kind, mime };
 }
 

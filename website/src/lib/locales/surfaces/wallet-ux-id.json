@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Dompet terhubung untuk melihat. Halaman ini tidak mengimpor kunci. Kirim dari aplikasi dompet.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Proses masuk terlalu lama. Periksa koneksi lalu coba lagi.",
   "signInRetry": "Coba lagi",
@@ -155,5 +156,8 @@
   "install": "Pasang",
   "signInGoogle": "Masuk dengan Google",
   "back": "Kembali",
-  "openWallet": "Buka {wallet}"
+  "openWallet": "Buka {wallet}",
+  "nftHistoryLoading": "Memuat riwayat",
+  "nftHistoryError": "Riwayat NFT gagal dimuat.",
+  "nftHistoryRetry": "Coba lagi"
 }

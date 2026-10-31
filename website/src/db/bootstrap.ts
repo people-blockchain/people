@@ -18,6 +18,8 @@ import {
   FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
   FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
+import { UPLOAD_NONCE_SCHEMA_STATEMENTS } from "./upload-nonce-sql.mjs";
+import { UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS } from "./upload-sign-rate-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
 
@@ -92,6 +94,12 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0022_founder_nft_auth_nonce.sql — single-use wallet signature nonce.
     for (const statement of FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {
