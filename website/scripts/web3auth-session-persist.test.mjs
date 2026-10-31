@@ -14,8 +14,9 @@ test("WalletContext.connectCloud awaits persistWalletSession before resolving", 
   assert.match(src, /connectCloud:\s*\(session: WalletSession\) => Promise<void>/);
   const body = src.match(/const connectCloud = useCallback\(async \(next: WalletSession\) => \{[\s\S]*?\n {2}\}, \[\]\);/);
   assert.ok(body, "connectCloud implementation not found");
-  assert.match(body[0], /await persistWalletSession\(cloud\);/);
-  assert.doesNotMatch(body[0], /void persistWalletSession\(cloud\);/);
+  assert.match(body[0], /await commitCloudSession\(\(\) => persistWalletSession\(cloud,/);
+  assert.match(body[0], /strict:\s*true/);
+  assert.doesNotMatch(body[0], /void persistWalletSession/);
 });
 
 test("WalletWeb3AuthSignIn.finishConnect awaits connectCloud before it can resolve and navigate", () => {
