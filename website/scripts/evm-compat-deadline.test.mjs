@@ -3,11 +3,14 @@ import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { getAddress } from "viem";
 
+import tokenCatalogBaseline from "../src/data/evm-token-catalog.json" with { type: "json" };
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import { resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
+import { isHiddenAssetRow } from "../src/lib/hidden-assets.ts";
 import { API_REQUEST_DEADLINE_MS } from "../src/lib/evm/request-deadline.ts";
 import { resetRpcBackoffForTests } from "../src/lib/evm/rpc-server.ts";
+import { resolveLogicalAssetId } from "../src/lib/evm/seed-assets.ts";
 import { resetTransferIndexCacheForTests } from "../src/lib/evm/transfer-index.ts";
 
 /**
@@ -153,4 +156,57 @@ test("a healthy RPC omits partial", async (t) => {
     assert.equal(res.status, 200, path);
     assert.equal(isPartial(res.body), false, `${path} ${JSON.stringify(res.body)?.slice(0, 180)}`);
   }
+});
+
+test("/assets returns every visible token well under the deadline when RPC answers promptly", async (t) => {
+  resetCaches();
+  const created = getAddress("0x0000000000000000000000000000000000000abc");
+  const tip = tokenCatalogBaseline.tip + 40;
+  const node = createServer((req, res) => {
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      const one = (call) => {
+        if (call.method === "eth_blockNumber") {
+          return { jsonrpc: "2.0", id: call.id, result: `0x${tip.toString(16)}` };
+        }
+        if (call.method === "eth_getLogs") {
+          return {
+            jsonrpc: "2.0",
+            id: call.id,
+            result: [{
+              topics: [
+                "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724",
+                `0x${created.slice(2).padStart(64, "0")}`,
+              ],
+            }],
+          };
+        }
+        return { jsonrpc: "2.0", id: call.id, result: "0x" };
+      };
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify(Array.isArray(body) ? body.map(one) : one(body)));
+    });
+  });
+  const restoreEnv = await listen(node);
+  t.after(async () => {
+    restoreEnv();
+    resetCaches();
+    await closeNode(node);
+  });
+  const started = Date.now();
+  const res = await handleEvmCompatGet("assets", new URLSearchParams());
+  const elapsed = Date.now() - started;
+  assert.equal(res.status, 200);
+  assert.equal(isPartial(res.body), false, JSON.stringify(res.body)?.slice(0, 180));
+  assert.ok(Array.isArray(res.body));
+  const listed = new Set(res.body.map((row) => String(row.tokenAddress).toLowerCase()));
+  assert.ok(listed.has(created.toLowerCase()), "token created after the baseline tip");
+  for (const row of tokenCatalogBaseline.tokens) {
+    const assetId = resolveLogicalAssetId(row.tokenAddress);
+    if (isHiddenAssetRow({ assetId, tokenAddress: row.tokenAddress, name: row.name, symbol: row.symbol })) continue;
+    assert.ok(listed.has(row.tokenAddress.toLowerCase()), row.symbol);
+  }
+  assert.ok(elapsed < 3_000, `/assets took ${elapsed}ms`);
 });
