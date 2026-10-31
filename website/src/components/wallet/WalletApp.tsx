@@ -19,7 +19,7 @@ import { formatTokenBalance, validateTransfer, type TransferAsset } from "@/lib/
 import { formatAssetUnits, formatPpl } from "@/lib/asset-amounts";
 import { createdTokensForAddress, readCreatedTokens, type CreatedTokenRecord } from "@/lib/created-tokens";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
-import { displayAssetName, isHiddenAsset } from "@/lib/hidden-assets";
+import { displayAssetName } from "@/lib/hidden-assets";
 import { fractionOfBalance } from "@/lib/swap-math";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -40,7 +40,7 @@ import { WalletSoonAction } from "./WalletSoonOption";
 import { walletFeatures, walletShowsSoonPlaceholders } from "@/lib/wallet-features";
 import { disconnectPeopleWallet } from "@/lib/wallet-disconnect";
 import { faucetErrorMessage } from "@/lib/faucet-error";
-import { formatWalletNative, mapWalletAccount, type WalletAccountView } from "@/lib/wallet-account-view";
+import { formatWalletNative, mapWalletAccount, walletHoldings, type WalletAccountView } from "@/lib/wallet-account-view";
 
 type AccountView = WalletAccountView;
 
@@ -143,23 +143,22 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         const tokenQuery = localCreated.length
           ? `?tokens=${encodeURIComponent(localCreated.map((row) => row.address).join(","))}`
           : "";
-        const [balance, owned, registry] = await Promise.allSettled([
-          networkJson<AccountView>(`address/${address}${tokenQuery}`, init),
-          networkJson<Array<{ nftId: string; name: string; imageUri?: string }>>(`nfts?owner=${encodeURIComponent(address)}`, init),
-          networkJson<TransferAsset[]>("assets", init),
-        ]);
-        if (stopped) break;
         setCreatedTokens(localCreated);
-        if (balance.status === "fulfilled") {
-          const mapped = mapWalletAccount(balance.value);
+        const balanceTask = networkJson<AccountView>(`address/${address}${tokenQuery}`, init).then((value) => {
+          if (stopped || requestedAddress !== address) return;
+          const mapped = mapWalletAccount(value);
           if (mapped) {
             setAccount(mapped);
             setRevision(r => r + 1);
           }
-        }
-        if (owned.status === "fulfilled") setNfts(Array.isArray(owned.value) ? owned.value : []);
-        if (registry.status === "fulfilled") {
-          let merged = compatAssetRows<TransferAsset>(registry.value);
+        });
+        const ownedTask = networkJson<Array<{ nftId: string; name: string; imageUri?: string }>>(`nfts?owner=${encodeURIComponent(address)}`, init).then((value) => {
+          if (stopped || requestedAddress !== address) return;
+          setNfts(Array.isArray(value) ? value : []);
+        });
+        const registryTask = networkJson<TransferAsset[]>("assets", init).then(async (value) => {
+          if (stopped || requestedAddress !== address) return;
+          let merged = compatAssetRows<TransferAsset>(value);
           const has = (row: CreatedTokenRecord) =>
             merged.some(
               (asset) =>
@@ -171,7 +170,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
             const extra = await Promise.allSettled(
               missing.map((row) => networkJson<TransferAsset>(`assets/${encodeURIComponent(row.address)}`, init)),
             );
-            if (stopped) break;
+            if (stopped || requestedAddress !== address) return;
             const byId = new Map(merged.map((asset) => [asset.assetId.toLowerCase(), asset]));
             for (const result of extra) {
               if (result.status !== "fulfilled" || !result.value?.assetId) continue;
@@ -180,7 +179,8 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
             merged = [...byId.values()];
           }
           setAssets(merged);
-        }
+        });
+        await Promise.allSettled([balanceTask, ownedTask, registryTask]);
       } while (queued && !stopped);
       pending = false;
     };
@@ -214,24 +214,25 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
     };
   }, [walletAddress, wsUrl, chainId]);
 
-  const tokenRows = useMemo(() => {
-    const balances = account?.balances ?? {};
-    const rows = Object.entries(balances).filter(([id, value]) => id !== "ppl" && Number(value) > 0 && !isHiddenAsset(id));
-    const seen = new Set(rows.map(([id]) => id.toLowerCase()));
-    // A creator always sees tokens recorded in this browser, even when the vesting contract holds
-    // the whole balance (balance 0) and the catalog has not indexed the launch yet.
-    for (const created of createdTokens) {
-      const id = created.address.toLowerCase();
-      if (seen.has(id) || isHiddenAsset(id)) continue;
-      seen.add(id);
-      rows.push([id, Number(balances[id] ?? 0)]);
-    }
-    return rows;
-  }, [account, createdTokens]);
+  const holdings = useMemo(
+    () => walletHoldings(account?.balances, assets, createdTokens),
+    [account, assets, createdTokens],
+  );
 
-  const selectedAsset = assets.find((asset) => asset.assetId === assetId);
+  const selectedHolding = holdings.find((row) => row.id === assetId);
+  const selectedAsset = assets.find((asset) => asset.assetId === assetId) ?? (selectedHolding ? {
+    assetId: selectedHolding.id,
+    name: selectedHolding.name,
+    symbol: selectedHolding.symbol,
+    decimals: selectedHolding.decimals,
+    tokenAddress: selectedHolding.tokenAddress,
+    imageUri: selectedHolding.imageUri,
+    creationMetadata: selectedHolding.imageUri ? { image: selectedHolding.imageUri } : undefined,
+  } : undefined);
+  const holdingLabel = (row: { id: string; name: string; symbol: string }) =>
+    row.id === "tusdc" || row.id === "tusdt" ? row.symbol : row.id === "usdt" ? u.testUsdt : displayAssetName(row.id, row.name);
   const selectedSymbol = displaySymbol(assetId, selectedAsset?.symbol, u);
-  const selectedBalance = assetId === "ppl" ? account?.balance ?? 0 : account?.balances[assetId] ?? 0;
+  const selectedBalance = assetId === "ppl" ? account?.balance ?? 0 : selectedHolding?.amount ?? account?.balances[assetId] ?? 0;
   const sendLabel = t.send.replace(/PPL/g, selectedSymbol);
   const transferErrors: Record<string, string> = {
     address: c.addressError, amount: c.amountError, precision: c.precisionError,
@@ -446,10 +447,9 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         {t.tokens}
         <select value={assetId} disabled={busy} onChange={(event) => { setAssetId(event.target.value); setAmount(""); setError(""); }} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2">
           <option value="ppl">PEOPLE (PPL)</option>
-          {tokenRows.map(([id]) => {
-            const asset = assets.find((item) => item.assetId === id);
-            return <option key={id} value={id} disabled={!asset}>{asset ? `${id === "usdt" ? u.testUsdt : displayAssetName(id, asset.name)} (${displaySymbol(id, asset.symbol, u)}) · ${id}` : id}</option>;
-          })}
+          {holdings.map((row) => (
+            <option key={row.id} value={row.id}>{holdingLabel(row)} ({displaySymbol(row.id, row.symbol, u)})</option>
+          ))}
         </select>
       </label>
       <p className="flex items-center gap-2 break-all text-sm text-ink-3">
@@ -585,18 +585,15 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
                   <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
                   <span className="font-mono">{formatWalletNative(account, formatPpl)}</span>
                 </li>
-                {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {
-                  const asset = assets.find((item) => item.assetId === id);
-                  return (
-                    <li key={id} className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
-                      <Link href={`/explorer/tokens#${encodeURIComponent(id)}`} className="flex min-w-0 items-center gap-3 text-brand hover:underline">
-                        <AssetImage assetId={id} tokenAddress={asset?.tokenAddress} src={asset?.creationMetadata?.image ?? asset?.imageUri} name={displaySymbol(id, asset?.symbol, u)} testBadgeLabel={u.testTokenNote} />
-                        <span className="min-w-0 truncate font-semibold">{id === "usdt" ? u.testUsdt : displayAssetName(id, asset?.name)}</span>
+                {holdings.filter((row) => `${row.id} ${row.name} ${row.symbol}`.toLowerCase().includes(search.toLowerCase())).map((row) => (
+                    <li key={row.id} className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
+                      <Link href={`/explorer/tokens#${encodeURIComponent(row.id)}`} className="flex min-w-0 items-center gap-3 text-brand hover:underline">
+                        <AssetImage assetId={row.id} tokenAddress={row.tokenAddress} src={row.imageUri} name={displaySymbol(row.id, row.symbol, u)} testBadgeLabel={u.testTokenNote} />
+                        <span className="min-w-0 truncate font-semibold">{holdingLabel(row)}</span>
                       </Link>
-                      <span className="min-w-0 break-all text-right font-mono">{formatAssetUnits(value, asset?.decimals ?? -1)}</span>
+                      <span className="min-w-0 break-all text-right font-mono">{formatAssetUnits(row.amount, row.decimals)}</span>
                     </li>
-                  );
-                })}
+                ))}
               </ul>
               <div className="mt-4 flex flex-wrap gap-3 text-sm">
                 <Link href={`/explorer/address/${externalAddress}`} className="font-semibold text-brand hover:underline">{t.explorer}</Link>
@@ -680,18 +677,15 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
                 <span className="flex min-w-0 items-center gap-3"><AssetImage assetId="ppl" name="PPL" className="h-9 w-9" /><span className="font-semibold">PEOPLE</span></span>
                 <span className="font-mono">{formatWalletNative(account, formatPpl)}</span>
               </li>
-              {tokenRows.filter(([id])=>{const a=assets.find(a=>a.assetId===id);return `${id} ${a?.name} ${a?.symbol}`.toLowerCase().includes(search.toLowerCase());}).map(([id, value]) => {
-                const asset = assets.find((item) => item.assetId === id);
-                return (
-                  <li key={id} className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
-                    <Link href={`/explorer/tokens#${encodeURIComponent(id)}`} className="flex min-w-0 items-center gap-3 text-brand hover:underline">
-                      <AssetImage assetId={id} tokenAddress={asset?.tokenAddress} src={asset?.creationMetadata?.image ?? asset?.imageUri} name={displaySymbol(id, asset?.symbol, u)} testBadgeLabel={u.testTokenNote} />
-                      <span className="min-w-0 truncate font-semibold">{id === "usdt" ? u.testUsdt : displayAssetName(id, asset?.name)}</span>
-                    </Link>
-                    <span className="min-w-0 break-all text-right font-mono">{formatAssetUnits(value, asset?.decimals ?? -1)}</span>
-                  </li>
-                );
-              })}
+              {holdings.filter((row) => `${row.id} ${row.name} ${row.symbol}`.toLowerCase().includes(search.toLowerCase())).map((row) => (
+                <li key={row.id} className="flex items-center justify-between gap-3 rounded-xl border border-line p-3">
+                  <Link href={`/explorer/tokens#${encodeURIComponent(row.id)}`} className="flex min-w-0 items-center gap-3 text-brand hover:underline">
+                    <AssetImage assetId={row.id} tokenAddress={row.tokenAddress} src={row.imageUri} name={displaySymbol(row.id, row.symbol, u)} testBadgeLabel={u.testTokenNote} />
+                    <span className="min-w-0 truncate font-semibold">{holdingLabel(row)}</span>
+                  </Link>
+                  <span className="min-w-0 break-all text-right font-mono">{formatAssetUnits(row.amount, row.decimals)}</span>
+                </li>
+              ))}
             </ul>
             <div className="flex flex-wrap gap-3 text-sm">
               <Link href={`/explorer/address/${session.address}`} className="font-semibold text-brand hover:underline">{t.explorer}</Link>
