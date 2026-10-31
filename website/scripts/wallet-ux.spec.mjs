@@ -2,6 +2,7 @@ import {test,expect} from '@playwright/test';
 import {createECDH,createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
 import {parseTransaction,stringToHex} from 'viem';
+import {privateKeyToAccount} from 'viem/accounts';
 
 // Covers the sheet-based PEOPLE Wallet (Send / Receive / Settings dialogs,
 // Tokens / NFT / Activity tabs). Chain reads are mocked on both public
@@ -9,14 +10,19 @@ import {parseTransaction,stringToHex} from 'viem';
 // (legacy people-node). Nothing here broadcasts a transaction: the test stops at
 // the review step and at the "balance changed" guard, which run before any
 // signing or RPC submission.
+// The vault is still seeded under the legacy sha256 address. Unlock accepts that
+// record, then Receive, backup, and restore show the EVM address of the same key.
 const privateKey='1'.padStart(64,'0');const ecdh=createECDH('secp256k1');ecdh.setPrivateKey(Buffer.from(privateKey,'hex'));
-const key={privateKey,address:'0x'+createHash('sha256').update(ecdh.getPublicKey(null,'compressed')).digest('hex').slice(0,40)};
+const legacyAddress='0x'+createHash('sha256').update(ecdh.getPublicKey(null,'compressed')).digest('hex').slice(0,40);
+const evmAddress=privateKeyToAccount(`0x${privateKey}`).address;
+const key={privateKey,address:legacyAddress};
 const recipient='0x'+'a'.repeat(40);
 const legacyBackend=['legacy','people-node'].includes((process.env.NEXT_PUBLIC_CHAIN??'').trim().toLowerCase());
 const chainId=legacyBackend?(process.env.NEXT_PUBLIC_CHAIN_ID?.trim()||'people-public-testnet-v2-2026-09-30'):'97401';
 const LOCALES=['en','ru','es','pt','fr','de','it','tr','vi','id','zh','ar'];
 
 test('wallet reviews before signing, guards stale balances, exports encrypted backup',async({page})=>{
+ expect(legacyAddress.toLowerCase()).not.toBe(evmAddress.toLowerCase());
  const sent=[];let balance=10;
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  const seedWallet=async({key})=>{
@@ -123,9 +129,9 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
   await expect(review).toHaveCount(0);
  }
 
- // Receive shows the full address.
+ // Receive shows the EVM address of the unlocked key.
  await page.getByTestId('wallet-action-receive').click();
- await expect(page.getByTestId('wallet-receive-dialog')).toContainText(key.address);
+ await expect(page.getByTestId('wallet-receive-dialog')).toContainText(evmAddress,{ignoreCase:true});
  await page.getByRole('dialog',{name:'Receive'}).getByRole('button',{name:'Close'}).click();
 
  // Settings: encrypted backup never contains the raw key and can be restored.
@@ -135,7 +141,7 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  await settings.getByRole('button',{name:'Download encrypted backup'}).click();
  const download=await downloadPromise;expect(download.suggestedFilename()).toContain('people-wallet-');
  const backup=JSON.parse(await readFile(await download.path(),'utf8'));
- expect(backup.wallet.address).toBe(key.address);
+ expect(backup.wallet.address.toLowerCase()).toBe(evmAddress.toLowerCase());
  expect(JSON.stringify(backup)).not.toContain(key.privateKey);
  await settings.getByRole('button',{name:'Import wallet',exact:true}).click();
  const importer=page.getByRole('dialog',{name:'Import wallet'});
@@ -144,7 +150,7 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
  await importer.getByRole('button',{name:'Import wallet',exact:true}).click();
  await expect(importer).toHaveCount(0);
  const restored=await page.evaluate(()=>JSON.parse(localStorage.getItem('ppl-web-wallets')));
- expect(restored.some(w=>w.address===key.address)).toBe(true);
+ expect(restored.some(w=>w.address.toLowerCase()===evmAddress.toLowerCase())).toBe(true);
  expect(JSON.stringify(restored)).not.toContain(key.privateKey);
  await page.keyboard.press('Escape');
 

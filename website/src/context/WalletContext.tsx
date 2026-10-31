@@ -199,20 +199,26 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     if (!addressMatchesPublicKey(wallet.address, key.publicKey)) {
       throw new Error("address_mismatch");
     }
-    // Opportunistically migrate legacy KDF parameters now that the password is proven.
-    if (upgraded) {
-      let encryptedMnemonic = wallet.encryptedMnemonic;
-      if (wallet.encryptedMnemonic) {
-        try {
-          encryptedMnemonic = await encryptSecret(
-            await decryptSecret(wallet.encryptedMnemonic, password),
-            password
-          );
-        } catch {
-          encryptedMnemonic = wallet.encryptedMnemonic;
-        }
+    // A vault saved under the sha256 address still opens. The session and the
+    // stored record use the address this key owns on the current chain.
+    let encryptedMnemonic = wallet.encryptedMnemonic;
+    if (upgraded && wallet.encryptedMnemonic) {
+      try {
+        encryptedMnemonic = await encryptSecret(
+          await decryptSecret(wallet.encryptedMnemonic, password),
+          password
+        );
+      } catch {
+        encryptedMnemonic = wallet.encryptedMnemonic;
       }
-      upsertWallet({ ...wallet, encryptedPrivateKey: upgraded, encryptedMnemonic });
+    }
+    if (upgraded || wallet.address !== key.address) {
+      upsertWallet({
+        ...wallet,
+        address: key.address,
+        encryptedPrivateKey: upgraded ?? wallet.encryptedPrivateKey,
+        encryptedMnemonic,
+      });
       window.dispatchEvent(new Event("people-wallets"));
     }
     const next = toSession(wallet.id, key);
@@ -298,14 +304,14 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       if (!wallet) throw new Error("missing_wallet");
       const privateKey = await decryptSecret(wallet.encryptedPrivateKey, currentPassword);
       const key = keyFromPrivate(privateKey);
-      if (key.address.toLowerCase() !== wallet.address.toLowerCase()) {
+      if (!addressMatchesPublicKey(wallet.address, key.publicKey)) {
         throw new Error("bad_password");
       }
       const encryptedPrivateKey = await encryptSecret(key.privateKey, newPassword);
       const encryptedMnemonic = wallet.encryptedMnemonic
         ? await encryptSecret(await decryptSecret(wallet.encryptedMnemonic, currentPassword), newPassword)
         : undefined;
-      upsertWallet({ ...wallet, encryptedPrivateKey, encryptedMnemonic });
+      upsertWallet({ ...wallet, address: key.address, encryptedPrivateKey, encryptedMnemonic });
       window.dispatchEvent(new Event("people-wallets"));
     },
     [session]
