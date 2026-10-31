@@ -7,8 +7,6 @@ description = "Public contract addresses, event topics and documented public dev
 paths = [
   '''contracts/deployments/.*\.json''',
   '''website/src/data/evm-deployments-.*\.json''',
-  # public token addresses/metadata, no secrets
-  '''website/src/data/evm-token-catalog\.json''',
   # documented public dev/test keys (cosmos/evm dev0, unit-test fixtures) - zero balance, never used on funded networks
   '''chain/scripts/contracts-smoke\.sh''',
   '''contracts/scripts/smoke-local\.sh''',
