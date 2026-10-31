@@ -11,6 +11,8 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { assembleNftRows, listMintedNfts, nftOwnerListDeadlineAt, nftOwnerPageHeaders, readNftTokenOnChain, readOwnerNftCursor, type ChainNft, type MintedNftPage } from "@/lib/evm/nft-chain";
+import { withRpcCallContext } from "@/lib/evm/rpc-server";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc } from "@/lib/evm/rpc-server";
 
@@ -153,7 +155,10 @@ async function resolveKnownToken(assetIdOrAddress: string): Promise<string | nul
   return null;
 }
 
-export async function handleEvmCompatGet(path: string, search: URLSearchParams): Promise<{ status: number; body: unknown }> {
+export async function handleEvmCompatGet(
+  path: string,
+  search: URLSearchParams,
+): Promise<{ status: number; body: unknown; headers?: Record<string, string> }> {
   const segments = path.replace(/^\//, "").split("/").filter(Boolean);
   const root = segments[0]?.toLowerCase() ?? "";
 
@@ -338,29 +343,72 @@ export async function handleEvmCompatGet(path: string, search: URLSearchParams):
   }
 
   if (root === "nfts") {
-    const owner = search.get("owner");
-    const rows = visibleNfts(listSeedNfts(owner ?? undefined));
-    // Read per-collection stats once (collections are shared across tokens); absent getters stay
-    // undefined so the UI shows only fields the contract actually exposes.
-    const collections = [...new Set(rows.map((r) => r.collection).filter((c): c is string => Boolean(c)))];
+    const owner = search.get("owner") ?? undefined;
+    const collection = search.get("collection") ?? undefined;
+    const tokenId = search.get("tokenId") ?? undefined;
+    const seed = listSeedNfts(owner);
+    if (!owner) {
+      return { status: 200, body: visibleNfts(assembleNftRows(seed, [], null)) };
+    }
+    const cursor = readOwnerNftCursor(search);
+    if (cursor === "invalid") return { status: 400, body: { error: "bad_cursor" } };
+    const deadlineAt = nftOwnerListDeadlineAt();
+    const wantDirect = Boolean(collection && tokenId && /^\d+$/.test(tokenId) && isAddress(collection));
+    let page: MintedNftPage = { items: [], partial: true, next: "tip" };
+    let direct: ChainNft | null = null;
+    await withRpcCallContext({ deadlineAt }, async () => {
+      const directPromise = wantDirect
+        ? readNftTokenOnChain(collection as string, BigInt(tokenId as string)).catch(() => null)
+        : Promise.resolve(null);
+      try {
+        page = await listMintedNfts(owner, {
+          cursor: cursor && cursor !== "tip" ? `${cursor.from}-${cursor.to}` : null,
+          deadlineAt,
+        });
+      } catch {
+        page = { items: [], partial: true, next: "tip" };
+      }
+      direct = await directPromise;
+    });
+    const rows = visibleNfts(assembleNftRows(seed, page.items, direct, owner, collection, tokenId));
+    // Stats share the listing deadline. When it is already spent, the rows ship without them.
     const stats = new Map<string, NftCollectionStats>();
-    await Promise.all(
-      collections.map(async (collection) => {
-        stats.set(collection.toLowerCase(), await nftCollectionStats(collection));
-      })
-    );
-    return {
-      status: 200,
-      body: rows.map((row) => {
-        const s = row.collection ? stats.get(row.collection.toLowerCase()) : undefined;
-        return {
-          ...row,
-          ...(s?.minted === undefined ? {} : { minted: s.minted }),
-          ...(s?.totalSupply === undefined ? {} : { totalSupply: s.totalSupply }),
-          ...(s?.mintPriceWei === undefined ? {} : { mintPrice: Number(formatUnits(s.mintPriceWei, 18)) }),
-        };
-      }),
-    };
+    if (deadlineAt - Date.now() > 200) {
+      const collections = [...new Set(rows.map((row) => row.collection).filter((value): value is string => Boolean(value)))];
+      await withRpcCallContext({ deadlineAt }, () =>
+        Promise.all(
+          collections.map(async (address) => {
+            if (Date.now() >= deadlineAt) return;
+            stats.set(address.toLowerCase(), await nftCollectionStats(address));
+          }),
+        ),
+      );
+    }
+    const items = rows.map((row) => {
+      const s = row.collection ? stats.get(row.collection.toLowerCase()) : undefined;
+      return {
+        ...row,
+        ...(s?.minted === undefined ? {} : { minted: s.minted }),
+        ...(s?.totalSupply === undefined ? {} : { totalSupply: s.totalSupply }),
+        ...(s?.mintPriceWei === undefined ? {} : { mintPrice: Number(formatUnits(s.mintPriceWei, 18)) }),
+      };
+    });
+    const headers = { ...nftOwnerPageHeaders(page), "Cache-Control": "private, no-store" };
+    // Without `v=2` the body stays a JSON array: explorer, transparency, and older callers
+    // read that shape, and X-Nfts-Partial / X-Nfts-Next still carry the cursor. `v=2` repeats
+    // partial and next in the body so a client that does not see those headers can resume.
+    if (search.get("v") === "2") {
+      return {
+        status: 200,
+        headers,
+        body: {
+          items,
+          partial: page.partial === true,
+          ...(page.partial && page.next ? { next: page.next } : {}),
+        },
+      };
+    }
+    return { status: 200, headers, body: items };
   }
 
   if (root === "search") {

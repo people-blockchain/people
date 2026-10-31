@@ -1,9 +1,10 @@
 "use client";
 
 import type { NftMediaCopy } from "@/lib/nft-media-copy";
+import { NFT_IMAGE_ACCEPT } from "@/lib/nft-media-rules";
 import type { NftKind } from "./saveNftFiles";
 
-const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg";
+const IMAGE_ACCEPT = NFT_IMAGE_ACCEPT;
 const VIDEO_ACCEPT = "video/mp4,video/webm,.mp4,.webm";
 
 const segment = (active: boolean) =>

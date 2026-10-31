@@ -118,6 +118,12 @@ describe("evm json-rpc", () => {
       const timer = setInterval(() => {
         ticks += 1;
       }, 1);
+      // Node clamps timer delays to 1ms. A warm batch of eth_chainId calls
+      // finishes sooner than that, so the interval is not due yet even though
+      // setImmediate yielded between calls. Block until it is overdue. The
+      // callback still cannot run until the batch reaches the timers phase.
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 15);
+      expect(ticks).toBe(0);
       const h = host();
       const requests = Array.from({ length: 30 }, (_, i) => ({
         jsonrpc: "2.0" as const,
