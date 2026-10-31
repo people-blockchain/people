@@ -110,6 +110,14 @@ export function linkAbort(ms: number, parent?: AbortSignal): { signal: AbortSign
   };
 }
 
+/**
+ * A catalog refresh started while answering a request must not stay inside that request's
+ * deadline. Otherwise the response's abort tears down the refresh, and the next visitor repeats it.
+ */
+export function runOutsideRequestDeadline<T>(fn: () => T): T {
+  return deadlines.exit(fn);
+}
+
 export function runWithRequestDeadline<T>(fn: () => Promise<T>, ms = API_REQUEST_DEADLINE_MS): Promise<T> {
   const controller = new AbortController();
   const at = Date.now() + ms;
