@@ -10,6 +10,21 @@ import {
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch } from "@/lib/evm/rpc-server";
 import { fetchLogsWindowed, pairLogStartBlock } from "@/lib/evm/chain-catalog";
+
+/** Public-node getLogs over ~9k blocks does not return. Market history stays on short windows. */
+const MARKET_LOG_WINDOW_BLOCKS = 800;
+const MARKET_LOG_BUDGET_MS = 6_000;
+
+function marketLogOptions(deadlineAt = Date.now() + MARKET_LOG_BUDGET_MS) {
+  return {
+    deadlineAt,
+    windowBlocks: MARKET_LOG_WINDOW_BLOCKS,
+    maxParallel: 1,
+    historyNewestFirst: true,
+    resilient: true,
+    retryDelays: [400] as const,
+  };
+}
 import type { MarketTrade } from "@/lib/market-chart";
 import { curveLiquidityNative, curveProgressPercent, marketCapNative, poolLiquidityNative } from "@/lib/market-chart";
 
@@ -230,9 +245,10 @@ async function curveTrades(bondingCurve: string, token: string): Promise<MarketT
   const tokenTopic = `0x${token.slice(2).toLowerCase().padStart(64, "0")}`;
   const [buyTopic] = encodeEventTopics({ abi: curveEventsAbi, eventName: "CurveBuy" });
   const [sellTopic] = encodeEventTopics({ abi: curveEventsAbi, eventName: "CurveSell" });
+  const logOptions = marketLogOptions();
   const [buyLogs, sellLogs] = await Promise.all([
-    fetchLogsWindowed(bondingCurve, [buyTopic, tokenTopic]).catch(() => []),
-    fetchLogsWindowed(bondingCurve, [sellTopic, tokenTopic]).catch(() => []),
+    fetchLogsWindowed(bondingCurve, [buyTopic, tokenTopic], undefined, logOptions).catch(() => []),
+    fetchLogsWindowed(bondingCurve, [sellTopic, tokenTopic], undefined, logOptions).catch(() => []),
   ]);
   const blockHexes = [...buyLogs, ...sellLogs].map((log) => log.blockNumber).filter((v): v is string => Boolean(v));
   const timestamps = await blockTimestampsMs(blockHexes);
@@ -282,7 +298,7 @@ async function ammTrades(pair: string, decimals: number): Promise<MarketTrade[]>
 
   const [swapTopic] = encodeEventTopics({ abi: swapEventAbi, eventName: "Swap" });
   // Start at the creating factory's deploy block, not the legacy V1 factory's block 58.
-  const logs = await fetchLogsWindowed(pair, [swapTopic], await pairLogStartBlock(pair)).catch(() => []);
+  const logs = await fetchLogsWindowed(pair, [swapTopic], await pairLogStartBlock(pair), marketLogOptions()).catch(() => []);
   const timestamps = await blockTimestampsMs(logs.map((log) => log.blockNumber).filter((v): v is string => Boolean(v)));
 
   const trades: MarketTrade[] = [];

@@ -421,8 +421,17 @@ export async function fetchLogsWindowed(
   address: string,
   topics: readonly LogTopic[],
   fromBlockHint?: number,
+  options?: LogScanOptions & { deadlineAt?: number },
 ): Promise<RpcLog[]> {
-  const result = await fetchLogsWindowedCore(address, topics, fromBlockHint, null);
+  const result = await fetchLogsWindowedCore(
+    address,
+    topics,
+    fromBlockHint,
+    null,
+    undefined,
+    options?.deadlineAt,
+    options,
+  );
   return result.logs;
 }
 
@@ -713,10 +722,19 @@ async function fetchLogsWindowedCore(
   if (!cursorTopic) {
     const windows = logWindows(Math.max(start, lastBlock + 1), scanLatest, windowBlocks);
     if (!windows.length) return { logs: cursorLogs, complete: true, failedWindows: 0 };
-    scanned.push(...(await Promise.all(windows.map((window) => readWindow(window)))));
+    // Callers that set a concurrency cap (market history) must not enqueue every window at once:
+    // a 9k-block getLogs never returns on the public node and the queued retries restart from the
+    // same ranges. Uncapped callers keep the previous all-at-once read.
+    const ordered = options.historyNewestFirst ? [...windows].reverse() : windows;
+    const step = options.maxParallel ? maxParallel : ordered.length;
+    for (let i = 0; i < ordered.length; i += step) {
+      if (typeof deadlineAt === "number" && deadlineExpired(deadlineAt)) break;
+      const chunk = ordered.slice(i, i + step);
+      scanned.push(...(await Promise.all(chunk.map((window) => readWindow(window)))));
+    }
     return {
       logs: [...cursorLogs, ...scanned.flatMap(({ logs }) => logs)],
-      complete: scanned.every((window) => window.ok),
+      complete: scanned.length === ordered.length && scanned.every((window) => window.ok),
       failedWindows: failedWindowCount(),
     };
   }
@@ -1958,7 +1976,13 @@ async function discoverPoolsOnChainUncached(): Promise<CatalogPool[]> {
     if (indexed && indexed.length) {
       for (const addr of indexed) pairAddrs.add(addr.toLowerCase());
     } else {
-      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC]).catch(() => []);
+      const fromLogs = await fetchLogsWindowed(factory, [PAIR_CREATED_TOPIC], undefined, {
+        deadlineAt: Date.now() + 8_000,
+        windowBlocks: CATALOG_LOG_WINDOW_BLOCKS,
+        maxParallel: 1,
+        resilient: true,
+        historyNewestFirst: true,
+      }).catch(() => []);
       for (const log of fromLogs) {
         const pair = topicAddress(log.topics?.[2]);
         if (pair) pairAddrs.add(pair.toLowerCase());
