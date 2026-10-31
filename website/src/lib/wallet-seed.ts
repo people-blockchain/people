@@ -27,6 +27,26 @@ export function generateWalletMnemonic(): string {
   return generateMnemonic(wordlist, 128);
 }
 
+/**
+ * Address the import form should show before the user confirms.
+ * JSON backups need the password to decrypt, so they have no preview.
+ */
+export function previewWalletImport(
+  input: string
+): { address: string } | { error: "invalid_private_key" } | null {
+  const text = input.trim();
+  if (!text || text.startsWith("{")) return null;
+  if (isValidMnemonic(text)) return { address: keyPairFromMnemonic(text).address };
+  try {
+    return { address: keyFromPrivate(text).address };
+  } catch (err) {
+    if (err instanceof Error && err.message === "invalid_private_key") {
+      return { error: "invalid_private_key" };
+    }
+    throw err;
+  }
+}
+
 export function keyPairFromMnemonic(mnemonic: string): FactoryKeyPair {
   const normalized = normalizeMnemonic(mnemonic);
   if (!validateMnemonic(normalized, wordlist)) {

@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "Tu clave se guarda cifrada en los servidores de PEOPLE para que puedas restaurarla al iniciar sesión. La infraestructura de PEOPLE puede descifrarla. Para una autocustodia total, usa una cartera de navegador o una cartera externa. Exporta la clave privada solo si necesitas una copia de seguridad fuera de PEOPLE.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "Dirección que controla esta clave",
+  "importInvalidKey": "Introduce una frase de 12 palabras o una clave privada hexadecimal de 64 caracteres."
 }
