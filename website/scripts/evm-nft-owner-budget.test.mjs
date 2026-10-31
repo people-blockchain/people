@@ -35,13 +35,13 @@ function mintLog(owner, tokenId, collection = COLLECTION) {
 function listen(handler) {
   const server = createServer(handler);
   return new Promise((resolve) => {
-    server.listen(0, "127.0.0.1", () => resolve(server));
+    server.listen(0, "localhost", () => resolve(server));
   });
 }
 
 async function useNode(t, server) {
   const previous = process.env.EVM_RPC_URL;
-  process.env.EVM_RPC_URL = `http://127.0.0.1:${server.address().port}`;
+  process.env.EVM_RPC_URL = `http://localhost:${server.address().port}`;
   resetChainCatalogCacheForTests();
   resetRpcBackoffForTests();
   resetMintHistoryForTests();
