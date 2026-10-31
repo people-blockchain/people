@@ -138,6 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "PEOPLE ağı {wallet} cüzdanına eklenemedi. Cüzdandaki ağ isteğini onaylayıp tekrar deneyin.",
   "signInSessionExpired": "Oturumunuzun süresi doldu. Giriş yönteminize tekrar dokunun.",
+  "signInSessionMissing": "Oturum bulunamadı. Cüzdanı açmak için giriş yönteminize tekrar dokunun.",
   "signInRateLimited": "Çok fazla deneme. Birkaç dakika bekleyin.",
   "unlockWrongPassword": "Bu cüzdan için şifre yanlış.",
   "unlockUnavailable": "Bu cüzdan bu cihazda açılamadı. Google veya e-posta ile giriş yapın.",

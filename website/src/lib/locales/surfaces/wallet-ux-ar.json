@@ -138,6 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "تعذّرت إضافة شبكة PEOPLE إلى {wallet}. وافق على طلب الشبكة في المحفظة ثم حاول مجددًا.",
   "signInSessionExpired": "انتهت صلاحية تسجيل الدخول. اضغط على طريقة تسجيل الدخول مرة أخرى.",
+  "signInSessionMissing": "لم يتم العثور على جلسة تسجيل الدخول. اضغط على طريقة تسجيل الدخول مرة أخرى لفتح المحفظة.",
   "signInRateLimited": "محاولات كثيرة جدًا. انتظر بضع دقائق.",
   "unlockWrongPassword": "كلمة مرور خاطئة لهذه المحفظة.",
   "unlockUnavailable": "تعذر فتح هذه المحفظة على هذا الجهاز. سجّل الدخول عبر Google أو البريد الإلكتروني.",

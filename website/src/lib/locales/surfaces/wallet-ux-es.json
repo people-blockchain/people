@@ -138,6 +138,7 @@
   "faucetErrUnavailable": "Faucet is unavailable right now. Try again later.",
   "walletErrChainAdd": "No se pudo añadir la red PEOPLE a {wallet}. Aprueba la solicitud de red en la billetera e inténtalo de nuevo.",
   "signInSessionExpired": "Tu sesión ha caducado. Vuelve a pulsar tu método de inicio de sesión.",
+  "signInSessionMissing": "No encontramos tu sesión de inicio. Vuelve a pulsar tu método de inicio de sesión para abrir la cartera.",
   "signInRateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
   "unlockWrongPassword": "Contraseña incorrecta para esta billetera.",
   "unlockUnavailable": "No se pudo desbloquear esta billetera en este dispositivo. Inicia sesión con Google o correo.",
