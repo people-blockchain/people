@@ -4,6 +4,7 @@ import { keyFromPrivate, type FactoryKeyPair } from "@/lib/people-sign";
 import {
   decryptPrivateKeyFromVault,
   encryptPrivateKeyForVault,
+  safeCloudLogCode,
   VaultSchemaError,
   warnCloudOpenFailed,
 } from "@/lib/wallet-cloud-crypto";
@@ -93,7 +94,8 @@ export function isCloudOpenRecoveryCode(code: string): boolean {
 /** Read the route's `{error}` body, or fall back to a call-site label when it is absent. */
 export async function errorCodeFrom(res: Response, fallback: string): Promise<string> {
   const body = (await res.json().catch(() => ({}))) as { error?: string };
-  return typeof body.error === "string" && body.error ? body.error : fallback;
+  const raw = typeof body.error === "string" && body.error ? body.error : fallback;
+  return safeCloudLogCode(raw);
 }
 
 export async function fetchWrapKey(options?: CloudOpenOptions): Promise<string> {
@@ -258,6 +260,19 @@ export async function commitCloudSession(persist: () => Promise<void>, options?:
       retried: options?.retried === true,
     });
   }
+}
+
+/**
+ * Publish an in-memory cloud session only after the strict persist write succeeds.
+ * A storage failure throws `session_open_failed` and never calls `publish`.
+ */
+export async function publishCloudSessionAfterPersist<T>(
+  cloud: T,
+  persist: (cloud: T) => Promise<void>,
+  publish: (cloud: T) => void,
+): Promise<void> {
+  await commitCloudSession(() => persist(cloud));
+  publish(cloud);
 }
 
 export async function exportCloudPrivateKey(session: CloudWalletSession): Promise<string> {

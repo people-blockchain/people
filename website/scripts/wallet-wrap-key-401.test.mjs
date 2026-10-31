@@ -37,6 +37,11 @@ test("errorCodeFrom returns the route code, or the fallback when the body has no
   assert.equal(await errorCodeFrom(jsonResponse(500, {}), "wrap_key_failed"), "wrap_key_failed");
   assert.equal(await errorCodeFrom(jsonResponse(401, { error: "" }), "wrap_key_failed"), "wrap_key_failed");
   assert.equal(await errorCodeFrom(new Response("not-json", { status: 502 }), "wrap_key_failed"), "wrap_key_failed");
+  assert.equal(
+    await errorCodeFrom(jsonResponse(500, { error: "eyJhbGciOiJIUzI1NiJ9.payload" }), "wrap_key_failed"),
+    "unknown",
+  );
+  assert.equal(await errorCodeFrom(jsonResponse(500, { error: "Not a code" }), "wrap_key_failed"), "unknown");
 });
 
 test("fetchWrapKey propagates unauthorized, reauth_required, and falls back to wrap_key_failed", async () => {
