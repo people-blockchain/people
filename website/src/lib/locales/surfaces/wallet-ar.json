@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "يُخزَّن مفتاحك مشفَّرًا على خوادم PEOPLE لتتمكن من استعادته بتسجيل الدخول. بنية PEOPLE التحتية قادرة على فك تشفيره. للحصول على حفظ ذاتي كامل، استخدم محفظة المتصفح أو محفظة خارجية. صدِّر المفتاح الخاص فقط إذا احتجت إلى نسخة احتياطية خارج PEOPLE.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "العنوان الذي يتحكم به هذا المفتاح",
+  "importInvalidKey": "أدخل عبارة من 12 كلمة أو مفتاحًا خاصًا سداسيًا من 64 محرفًا."
 }

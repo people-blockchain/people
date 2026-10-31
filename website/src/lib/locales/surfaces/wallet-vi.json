@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "Khóa của bạn được lưu mã hóa trên máy chủ PEOPLE để bạn khôi phục bằng cách đăng nhập. Hạ tầng của PEOPLE có khả năng giải mã khóa đó. Để tự nắm giữ khóa hoàn toàn, hãy dùng ví trình duyệt hoặc ví ngoài. Chỉ xuất khóa riêng nếu bạn cần bản sao lưu bên ngoài PEOPLE.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "Địa chỉ do khóa này kiểm soát",
+  "importInvalidKey": "Nhập cụm 12 từ hoặc khóa riêng thập lục phân 64 ký tự."
 }

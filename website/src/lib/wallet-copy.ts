@@ -29,6 +29,8 @@ export type WalletCopyContent = {
   mnemonic: string;
   privateKey: string;
   importHint: string;
+  importAddress: string;
+  importInvalidKey: string;
   receive: string;
   send: string;
   amount: string;
@@ -91,6 +93,8 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     mnemonic: "12-word phrase",
     privateKey: "Private key (64 hex)",
     importHint: "Paste a 12-word phrase or a 64-character hex key. Both stay on this device.",
+    importAddress: "Address this key controls",
+    importInvalidKey: "Enter a 12-word phrase or a 64-character hex private key.",
     receive: "Receive",
     send: "Send PPL",
     amount: "Amount",
@@ -152,6 +156,8 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     mnemonic: "Фраза из 12 слов",
     privateKey: "Приватный ключ (64 hex)",
     importHint: "Вставьте фразу из 12 слов или 64-символьный hex-ключ. Оба остаются на устройстве.",
+    importAddress: "Адрес, который будет импортирован",
+    importInvalidKey: "Введите фразу из 12 слов или приватный ключ из 64 hex-символов.",
     receive: "Получить",
     send: "Отправить PPL",
     amount: "Сумма",

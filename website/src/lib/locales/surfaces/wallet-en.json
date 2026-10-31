@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "Your key is stored encrypted on PEOPLE servers so you can restore it by signing in. PEOPLE's infrastructure is able to decrypt it. For full self-custody, use a browser wallet or an external wallet. Export the private key only if you need a backup outside PEOPLE.",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "Address this key controls",
+  "importInvalidKey": "Enter a 12-word phrase or a 64-character hex private key."
 }

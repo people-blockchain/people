@@ -56,5 +56,7 @@
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
   "cloudExportHint": "您的密钥以加密形式存储在 PEOPLE 服务器上，方便您登录后恢复。PEOPLE 的基础设施能够解密该密钥。如需完全自主保管，请使用浏览器钱包或外部钱包。 仅在需要 PEOPLE 之外的备份时才导出私钥。",
-  "cloudDisconnect": "Disconnect"
+  "cloudDisconnect": "Disconnect",
+  "importAddress": "此密钥控制的地址",
+  "importInvalidKey": "请输入 12 个单词的助记词，或 64 位十六进制私钥。"
 }
