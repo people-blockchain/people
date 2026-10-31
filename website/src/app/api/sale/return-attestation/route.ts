@@ -29,8 +29,12 @@ function hubChain(chainId: number) {
 
 /**
  * Signs a `MainnetReturn` only after a PEOPLE-mainnet `ReturnBurned` receipt
- * is observed. The signing key is `SALE_RETURN_VERIFIER_LOCAL_KEY`; if it is
- * unset the route answers 503 and does not sign.
+ * is finalized, or has `MIN_RETURN_CONFIRMATIONS` (12) confirmations. Until
+ * then the route answers 202 `awaiting_confirmations` and does not sign.
+ * The signed struct binds amount, this hub, the seller, the PEOPLE source
+ * chain id and the destination hub chain id. The signing key is
+ * `SALE_RETURN_VERIFIER_LOCAL_KEY`; if it is unset the route answers 503 and
+ * does not sign.
  */
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
@@ -75,7 +79,16 @@ export async function POST(request: Request) {
     nowSec: Math.floor(Date.now() / 1000),
     getReceipt: async (txHash) => {
       const receipt = await people.getTransactionReceipt({ hash: txHash });
-      return { status: receipt.status, logs: receipt.logs };
+      return { status: receipt.status, blockNumber: receipt.blockNumber, logs: receipt.logs };
+    },
+    headBlock: () => people.getBlockNumber(),
+    finalizedBlock: async () => {
+      try {
+        const block = await people.getBlock({ blockTag: "finalized" });
+        return block.number ?? null;
+      } catch {
+        return null;
+      }
     },
     returnVerifier: async () => {
       if (!hubAddress || !isAddress(hubAddress)) throw new Error("not_configured");

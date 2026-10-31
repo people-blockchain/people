@@ -99,7 +99,7 @@
     "100.000.000 PPL di kurva (10% pasokan); awal $0,005, kenaikan eksponensial, batas $0,25 hanya di kurva.",
     "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
     "Dana 50% likuiditas terkunci / 50% multisig proyek; token LP terkunci 24 bulan.",
-    "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan per hari UTC untuk semua orang dan $2.000 per orang dalam jendela geser 24 jam. Biaya 1,5% (3% jika penjualan kembali hari itu melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
+    "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang dan $2.000 per orang dalam jendela geser 24 jam. Biaya 1,5% (3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
     "$10–$500 per pembelian; Hingga $2,000 per orang dalam jendela geser 24 jam; Jeda 60 detik antarpembelian"
   ],
   "curveTableSold": "% terjual",

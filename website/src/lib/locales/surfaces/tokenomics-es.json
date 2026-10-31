@@ -99,7 +99,7 @@
     "100.000.000 PPL en la curva (10% de la oferta); inicio $0,005, subida exponencial, tope $0,25 solo en la curva.",
     "La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.",
     "Recaudación 50% liquidez bloqueada / 50% multisig del proyecto; tokens LP bloqueados 24 meses.",
-    "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva por día UTC para todos y $2.000 por persona en una ventana móvil de 24 horas. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
+    "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva en cualquier ventana móvil de 24 horas para todos y $2.000 por persona en una ventana móvil de 24 horas. Comisión del 1,5 % (3 % solo sobre la parte de las ventas de esas 24 horas que supere el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
     "$10–$500 por compra; Hasta $2,000 por persona en una ventana móvil de 24 horas; Pausa de 60 s entre compras"
   ],
   "curveTableSold": "% vendido",
