@@ -130,8 +130,6 @@ const nextConfig: NextConfig = {
     return [
       { source: "/sign-in", destination: "/login", permanent: true },
       { source: "/partner/login", destination: "/login?callbackUrl=%2Fbounty", permanent: true },
-      { source: "/founders", destination: "/bounty", permanent: false },
-      { source: "/founders/:path*", destination: "/bounty", permanent: false },
       { source: "/million-founders", destination: "/bounty", permanent: false },
       { source: "/million-founders/:path*", destination: "/bounty", permanent: false },
     ];
