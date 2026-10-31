@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import { getAddress } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { issueFounderNftSignature } from "../src/lib/founders/founder-nft-service.ts";
+import { getFounderNftStatus, issueFounderNftSignature } from "../src/lib/founders/founder-nft-service.ts";
 import { buildFounderNftWalletAuthMessage } from "../src/lib/founders/founder-nft-wallet-auth.ts";
 
 const account = privateKeyToAccount(generatePrivateKey());
@@ -99,6 +99,65 @@ function serial(name, fn) {
     return run;
   });
 }
+
+function emptyStampDeps(overrides = {}) {
+  return deps({
+    fetchNullifiers: async () => ({ ok: true, address: USER, nullifiers: [], deduped: false }),
+    resolvePerson: async (nullifiers) => {
+      if (nullifiers.length === 0) return { ok: false, error: "no_stamps" };
+      return { ok: true, personId: PERSON, created: true, addedHashes: nullifiers.length };
+    },
+    ...overrides,
+  });
+}
+
+serial("allowlisted address with no stamps is eligible on testnet", async () => {
+  const store = emptyStampDeps();
+  const status = await withEnv(
+    { VERCEL_ENV: "preview", FOUNDER_NFT_TEST_ALLOWLIST: USER },
+    () => getFounderNftStatus("user-allow", USER, store),
+  );
+  assert.equal(status.ok, true);
+  if (!status.ok) return;
+  assert.equal(status.status.state, "can_mint");
+
+  const signed = await withEnv(
+    { VERCEL_ENV: "preview", FOUNDER_NFT_TEST_ALLOWLIST: USER },
+    async () => issueFounderNftSignature("mint", "user-allow", USER, await prove(store, "user-allow"), store),
+  );
+  assert.equal(signed.ok, true);
+  if (!signed.ok) return;
+  assert.equal(signed.signature.action, "mint");
+  assert.equal(signed.signature.contract.chainId, CHAIN_ID);
+});
+
+serial("allowlisted address with no stamps stays not_eligible in production", async () => {
+  const store = emptyStampDeps();
+  const status = await withEnv(
+    {
+      VERCEL_ENV: "production",
+      NODE_ENV: "development",
+      FOUNDER_NFT_TEST_ALLOWLIST: USER,
+    },
+    () => getFounderNftStatus("user-allow", USER, store),
+  );
+  assert.equal(status.ok, true);
+  if (!status.ok) return;
+  assert.equal(status.status.state, "not_eligible");
+});
+
+serial("allowlisted address with no stamps stays not_eligible on another chain", async () => {
+  const store = emptyStampDeps({
+    readConfig: () => ({ address: CONTRACT, chainId: 1 }),
+  });
+  const status = await withEnv(
+    { VERCEL_ENV: "preview", FOUNDER_NFT_TEST_ALLOWLIST: USER },
+    () => getFounderNftStatus("user-allow", USER, store),
+  );
+  assert.equal(status.ok, true);
+  if (!status.ok) return;
+  assert.equal(status.status.state, "not_eligible");
+});
 
 serial("production ignores the allowlist", async () => {
   const store = deps();

@@ -185,7 +185,7 @@ Before a Mint or Rebind signature is issued, the connected wallet must sign a se
 | `NEXT_PUBLIC_FOUNDER_NFT_ADDRESS` | client and server | contract address. Unset, malformed, or different from a `founderNft` / `peopleFounderNft` entry in static evm-deployments: the card is hidden and no Founder NFT rows are added |
 | `NEXT_PUBLIC_FOUNDER_NFT_CHAIN_ID` | client and server | optional chain id. Defaults to `97401` (PEOPLE testnet) |
 | `FOUNDER_NFT_SIGNER_PK` | server only | EIP-712 signer key. Never sent to the browser. If it is missing, `POST /api/founders/nft/signature` returns 503 `not_configured` with `reason: "signer"` and the card shows a disabled state |
-| `FOUNDER_NFT_TEST_ALLOWLIST` | server only | Comma-separated wallets. Skips only the level-2 check, and only when `VERCEL_ENV` is not `production` and the contract chain id is `97401`. Production ignores it. Login and the verified-human gate still apply |
+| `FOUNDER_NFT_TEST_ALLOWLIST` | server only | Comma-separated wallets. Passes the whole Human Passport check (level and stamps), and only when `VERCEL_ENV` is not `production` and the contract chain id is `97401`. Production ignores it. A missing list or an unknown entry fails closed. Login and the verified-human gate still apply |
 
 `FOUNDER_NFT_TEST_ALLOWLIST` is a commented line in `.env.example` with no value. The contract address and the signer key stay out of that file.
 
@@ -209,11 +209,11 @@ Both routes use the existing founders session guard.
 | `rebind_pending` | countdown, then Execute |
 | `minted_elsewhere`, `mint_closed`, `not_eligible` | text only, no button |
 
-A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature returns `403` `hp_required` and no signature. `FOUNDER_NFT_TEST_ALLOWLIST` is the only exception, and it skips just that level check (see Environment). A pending rebind recorded under an older `signerEpoch` is ignored (the contract would revert with `StaleRebind`).
+A Telegram-only founder (level 1) is `not_eligible`. Asking for a signature returns `403` `hp_required` and no signature. `FOUNDER_NFT_TEST_ALLOWLIST` is the only exception: on chain `97401` outside production it passes the whole Human Passport check, including a wallet with no stamps (see Environment). A pending rebind recorded under an older `signerEpoch` is ignored (the contract would revert with `StaleRebind`).
 
 ### personId
 
-The website does not derive a new id scheme. `personId` is the opaque `bytes32` stored in `founder_nft_person`, keyed by Human Passport stamp-nullifier hashes in `founder_nft_stamp_hash` (`website/src/lib/founders/founder-nft-person.ts`). Stamps are read for the connected wallet (the address that will send the transaction).
+The website does not derive a new id scheme. `personId` is the opaque `bytes32` stored in `founder_nft_person`, keyed by Human Passport stamp-nullifier hashes in `founder_nft_stamp_hash` (`website/src/lib/founders/founder-nft-person.ts`). Stamps are read for the connected wallet (the address that will send the transaction). The one exception is an allowlisted wallet on chain `97401` outside production that has no stamps: its mint signature uses `keccak256` of a fixed domain string plus that address, so the id is stable and non-zero, and the stamp table is not written. Production and any other chain never take this path.
 
 A new account that cannot reach verification level 2 because those stamps were already used is handled only by rebind: if the nullifiers already map to a person who holds a token, the card shows the dedup message and a rebind button, and mint is refused. That includes stamps Human Passport marks `dedup: true` (score 0) and any below-level-2 founder whose stamps already match a minted person. The new address's score is not consulted. A level-2 founder whose stamps match a token, without `dedup` and without a signature-proven `passportWallet`, still sees the "link your Human Passport wallet" text and no rebind button.
 

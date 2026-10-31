@@ -1,4 +1,4 @@
-import { getAddress, isAddress, type Address, type Hex } from "viem";
+import { encodePacked, getAddress, isAddress, keccak256, type Address, type Hex } from "viem";
 import type { PrivateKeyAccount } from "viem/accounts";
 import type { FounderNftChainReader, FounderNftPendingRebind } from "./founder-nft-chain.ts";
 import type { FounderNftPublicConfig } from "./founder-nft-config.ts";
@@ -14,15 +14,17 @@ import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
 /**
  * Founder NFT backend rules (docs/founder-nft.md). Eligibility is hard-coded: ONLY Human Passport
  * (verification level 2) can mint; Telegram-only users never get a signature. The one exception is
- * `FOUNDER_NFT_TEST_ALLOWLIST`: a comma-separated wallet list that skips only that level check, and
- * only when `VERCEL_ENV` is not `production` and the contract chain id is 97401. Production ignores
- * the variable. Login, the verified-human gate, the wallet proof, and stamp checks still apply.
+ * `FOUNDER_NFT_TEST_ALLOWLIST`: a comma-separated wallet list that passes the whole Human Passport
+ * check (verification level and stamps), and only when `VERCEL_ENV` is not `production` and the
+ * contract chain id is 97401. Production ignores the variable. A missing list, a malformed entry,
+ * or an unknown chain fails closed. Login, the verified-human gate, and the wallet proof still apply.
  * There is no other switch. I/O (database, Passport HTTP, chain RPC, signer key, clock) is injected
  * so the rules stay testable.
  *
  * Identity: `personId` comes from the Human Passport stamp nullifiers of the connected wallet, matched
- * against `founder_nft_stamp_hash`. A wallet whose stamps already belong to a person with a token,
- * and which cannot reach level 2 (Human Passport dedup), may only rebind that token.
+ * against `founder_nft_stamp_hash`. An allowlisted testnet wallet with no stamps uses a deterministic
+ * personId derived from that address instead. A wallet whose stamps already belong to a person with a
+ * token, and which cannot reach level 2 (Human Passport dedup), may only rebind that token.
  *
  * Mint and rebind signatures are issued only after the wallet signs a server nonce (see
  * `founder-nft-wallet-auth.ts`). The EIP-712 signer key never leaves the server.
@@ -31,15 +33,16 @@ import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
 /** Signatures are short-lived: the contract also enforces the deadline. */
 export const FOUNDER_NFT_SIGNATURE_TTL_SECONDS = 10 * 60;
 
-/** PEOPLE testnet. The test allowlist cannot skip the level check on any other chain. */
+/** PEOPLE testnet. The test allowlist cannot pass the HP check on any other chain. */
 const FOUNDER_NFT_TEST_ALLOWLIST_CHAIN_ID = 97401;
 
 /**
  * True only for a listed wallet, outside Vercel production, on chain 97401.
- * Skips the verification-level comparison and nothing else. Fail closed when
- * `VERCEL_ENV` is `production`, even if the variable is set.
+ * That wallet passes the whole Human Passport check, stamps included.
+ * Fail closed when `VERCEL_ENV` is `production`, the chain id is anything else,
+ * or the list or the entry is missing or not a valid address.
  */
-function founderNftTestAllowlistSkipsHpLevel(address: string, chainId: number): boolean {
+function founderNftTestAllowlistPassesHp(address: string, chainId: number): boolean {
   if (process.env.VERCEL_ENV === "production") return false;
   if (chainId !== FOUNDER_NFT_TEST_ALLOWLIST_CHAIN_ID) return false;
   const wallet = validWallet(address);
@@ -56,6 +59,11 @@ function founderNftTestAllowlistSkipsHpLevel(address: string, chainId: number): 
     }
   }
   return false;
+}
+
+/** Stable non-zero personId for an allowlisted wallet that presented no stamps. */
+function founderNftTestAllowlistPersonId(address: Address): Hex {
+  return keccak256(encodePacked(["string", "address"], ["people-founder-nft:test-allowlist:", address]));
 }
 
 export type FounderNftFounder = {
@@ -196,9 +204,8 @@ async function evaluate(
     const founder = await deps.loadFounder(userId);
     if (!founder) return { ok: true, value: { ...base, status: { state: "not_eligible" } } };
     const hpWallet = validWallet(founder.passportWallet);
-    const strong =
-      founder.verificationLevel >= VERIFICATION_LEVEL_STRONG ||
-      founderNftTestAllowlistSkipsHpLevel(address, config.chainId);
+    const allowlisted = founderNftTestAllowlistPassesHp(address, config.chainId);
+    const strong = founder.verificationLevel >= VERIFICATION_LEVEL_STRONG || allowlisted;
 
     // Stamps of the wallet that will send the transaction. A new address presents the same
     // nullifiers Human Passport already scored elsewhere (often with dedup and score 0).
@@ -256,7 +263,8 @@ async function evaluate(
       }
     }
 
-    if (!strong || deduped || nullifiers.length === 0) {
+    // Allowlist passes level and stamps together. A failed stamp lookup above stays fail-closed.
+    if (!allowlisted && (!strong || deduped || nullifiers.length === 0)) {
       return { ok: true, value: { ...base, nullifiers, status: { state: "not_eligible" } } };
     }
     const deadline = await reader.mintDeadline();
@@ -329,11 +337,20 @@ export async function issueFounderNftSignature(
       });
     }
     // First sight of a verified person creates the personId; this is the only write on the path.
-    const person = await deps.resolvePerson(ev.nullifiers);
-    if (!person.ok) {
-      return person.error === "conflict" ? fail(409, "identity_conflict") : fail(403, "hp_required", { state: "not_eligible" });
+    // An allowlisted wallet with no stamps already passed the HP check, so it does not go through
+    // the stamp registry (that call would refuse an empty set).
+    const listedWithoutStamps =
+      ev.nullifiers.length === 0 && founderNftTestAllowlistPassesHp(ev.address, ev.config.chainId);
+    let personId: Hex;
+    if (listedWithoutStamps) {
+      personId = founderNftTestAllowlistPersonId(ev.address);
+    } else {
+      const person = await deps.resolvePerson(ev.nullifiers);
+      if (!person.ok) {
+        return person.error === "conflict" ? fail(409, "identity_conflict") : fail(403, "hp_required", { state: "not_eligible" });
+      }
+      personId = person.personId as Hex;
     }
-    const personId = person.personId as Hex;
     try {
       if ((await ev.reader.tokenOfPerson(personId)) > BigInt(0)) return fail(409, "not_available", { state: "minted_elsewhere" });
     } catch {

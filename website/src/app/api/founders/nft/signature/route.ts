@@ -10,9 +10,10 @@ export const dynamic = "force-dynamic";
  * Body: `{ action: "mint" | "rebind", address, nonce, chainId, walletSignature }`.
  * The wallet signature must recover to `address` over the server nonce (see auth-nonce).
  * Issued only after the server re-checks Human Passport verification; the signer key stays in the
- * server environment (`FOUNDER_NFT_SIGNER_PK`). `FOUNDER_NFT_TEST_ALLOWLIST` may skip only the
- * level-2 check, and only outside production on chain 97401. Login and the verified-human gate
- * still apply. 503 `not_configured` when the contract or the key is unset.
+ * server environment (`FOUNDER_NFT_SIGNER_PK`). `FOUNDER_NFT_TEST_ALLOWLIST` passes the whole
+ * Human Passport check (level and stamps), and only outside production on chain 97401. A missing
+ * or unknown entry fails closed. Login and the verified-human gate still apply. 503
+ * `not_configured` when the contract or the key is unset.
  */
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
