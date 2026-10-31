@@ -186,3 +186,37 @@ test("collection and tokenId queries omit a founder nft from another collection 
   );
   assert.deepEqual(founderIds(pageItems(matched)), [FOUNDER_NFT_ID]);
 });
+
+test("an invalid collection parameter is rejected", async (t) => {
+  const dep = readEvmDeployments();
+  const latest = dep.startBlocks.nftFactory + 8 * LOG_WINDOW_BLOCKS;
+  const founderReads = { n: 0 };
+  const server = await listen((call) => rpcResult(call, latest, founderReads));
+  await useNode(t, server);
+
+  const response = await handleEvmCompatGet(
+    "nfts",
+    new URLSearchParams({ owner: OWNER, collection: "not-an-address" }),
+  );
+  assert.equal(response.status, 400);
+  assert.deepEqual(response.body, { error: "invalid_collection" });
+});
+
+test("direct founder lookup lists the token once", async (t) => {
+  const dep = readEvmDeployments();
+  const latest = dep.startBlocks.nftFactory + 8 * LOG_WINDOW_BLOCKS;
+  const founderReads = { n: 0 };
+  const server = await listen((call) => rpcResult(call, latest, founderReads));
+  await useNode(t, server);
+
+  const response = await handleEvmCompatGet(
+    "nfts",
+    new URLSearchParams({ owner: OWNER, collection: FOUNDER, tokenId: "7" }),
+  );
+  assert.equal(response.status, 200);
+  const items = pageItems(response);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].nftId, FOUNDER_NFT_ID);
+  assert.equal(items[0].onChainTokenId, "7");
+  assert.equal(String(items[0].collection).toLowerCase(), FOUNDER.toLowerCase());
+});
