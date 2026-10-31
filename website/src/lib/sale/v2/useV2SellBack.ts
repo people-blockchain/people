@@ -16,7 +16,7 @@ import { createBrowserPublicClient, ensurePeopleChain, peopleViemChain, browserE
 import { PPL_CURVE_HUB_V2_ABI } from "./abi";
 import type { V2Chain } from "./logic";
 import { PPL_RETURN_BURN_ABI, PEOPLE_MAINNET_CHAIN_ID, decodeReturnBurned } from "./return-burn";
-import { sellBackErrorKey, sellBackFeeBand, minUsdcOutFromPayout, type SellLot } from "./sellback";
+import { minUsdcOutFromPayout, sellBackErrorKey, sellBackFeeBand, sellBackPreflight, type SellLot } from "./sellback";
 import { ensureV2Chain } from "./useV2Buy";
 
 export type SellBackStatus =
@@ -169,19 +169,30 @@ function attestationReason(error: string | undefined): string {
       return "notConfigured";
     case "return_not_found":
       return "badSignature";
+    case "awaiting_confirmations":
+      return "confirming";
     default:
       return "error";
   }
 }
 
+const CONFIRMATION_POLLS = 30;
+const CONFIRMATION_WAIT_MS = 2_000;
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 type Attestation = {
   personId: Hex;
+  hub: Address;
   seller: Address;
   pplAmount: string;
+  sourceChainId: number;
+  destChainId: number;
   returnId: Hex;
   deadline: number;
   signature: Hex;
-  hub: Address;
 };
 
 export function useV2SellBack() {
@@ -202,6 +213,50 @@ export function useV2SellBack() {
       try {
         if (!chain.hubAddress) {
           setStatus({ step: "error", reason: "notConfigured" });
+          return null;
+        }
+        const hub = chain.hubAddress as Address;
+        const basePublic = publicClient(chain.chain);
+        const [paused, liquidityReleased, openedAt, returnVerifier, sellablePpl, personalRemainingUsd6, cap, quote] =
+          await Promise.all([
+            basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "paused" }),
+            basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "liquidityReleased" }),
+            basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "openedAt" }),
+            basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "returnVerifier" }),
+            basePublic.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "sellableNow",
+              args: [account],
+            }),
+            basePublic.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "sellRemaining24h",
+              args: [account],
+            }),
+            basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "sellBackCapToday" }),
+            basePublic.readContract({
+              address: hub,
+              abi: PPL_CURVE_HUB_V2_ABI,
+              functionName: "quoteSellBack",
+              args: [account, pplIn],
+            }),
+          ]);
+        const gate = sellBackPreflight({
+          opened: openedAt > BigInt(0),
+          paused,
+          liquidityReleased,
+          returnVerifier,
+          sellablePpl,
+          pplIn,
+          grossUsd6: quote[0],
+          payoutUsd6: quote[2],
+          personalRemainingUsd6,
+          globalRemainingUsd6: cap[0],
+        });
+        if (!gate.ok) {
+          setStatus({ step: "error", reason: gate.reason });
           return null;
         }
         setStatus({ step: "burning" });
@@ -225,7 +280,7 @@ export function useV2SellBack() {
           address: burnAddress,
           abi: PPL_RETURN_BURN_ABI,
           functionName: "burnForReturn",
-          args: [chain.hubAddress as Address, personId, account],
+          args: [chain.hubAddress as Address, personId, account, BigInt(chain.chain.id)],
           value: pplIn,
           account,
           chain: peopleChain,
@@ -241,19 +296,38 @@ export function useV2SellBack() {
         }
 
         setStatus({ step: "attesting" });
-        const res = await fetch("/api/sale/return-attestation", {
-          method: "POST",
-          credentials: "include",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ txHash: burnHash, returnId: burned.returnId }),
-        });
-        if (!res.ok) {
-          const payload = (await res.json().catch(() => null)) as { error?: string } | null;
-          setStatus({ step: "error", reason: attestationReason(payload?.error) });
+        let proof: Attestation | null = null;
+        for (let attempt = 0; attempt < CONFIRMATION_POLLS; attempt++) {
+          const res = await fetch("/api/sale/return-attestation", {
+            method: "POST",
+            credentials: "include",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ txHash: burnHash, returnId: burned.returnId }),
+          });
+          if (res.status === 202) {
+            await wait(CONFIRMATION_WAIT_MS);
+            continue;
+          }
+          if (!res.ok) {
+            const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+            setStatus({ step: "error", reason: attestationReason(payload?.error) });
+            return null;
+          }
+          proof = (await res.json()) as Attestation;
+          break;
+        }
+        if (!proof) {
+          setStatus({ step: "error", reason: "confirming" });
           return null;
         }
-        const proof = (await res.json()) as Attestation;
-        if (proof.pplAmount !== pplIn.toString() || proof.returnId.toLowerCase() !== burned.returnId.toLowerCase()) {
+        if (
+          proof.pplAmount !== pplIn.toString() ||
+          proof.returnId.toLowerCase() !== burned.returnId.toLowerCase() ||
+          proof.seller.toLowerCase() !== account.toLowerCase() ||
+          proof.hub.toLowerCase() !== hub.toLowerCase() ||
+          proof.destChainId !== chain.chain.id ||
+          proof.sourceChainId !== PEOPLE_MAINNET_CHAIN_ID
+        ) {
           setStatus({ step: "error", reason: "badSignature" });
           return null;
         }
@@ -263,22 +337,57 @@ export function useV2SellBack() {
           setStatus({ step: "error", reason: "switchRejected" });
           return null;
         }
-        const basePublic = publicClient(chain.chain);
         const baseWallet = createWalletClient({ chain: chain.chain, transport: custom(provider), account });
-        const hub = chain.hubAddress as Address;
-        const [, , payout] = await basePublic.readContract({
-          address: hub,
-          abi: PPL_CURVE_HUB_V2_ABI,
-          functionName: "quoteSellBack",
-          args: [account, pplIn],
-        });
+        const authorized = BigInt(proof.pplAmount);
+        const [personalNow, capNow] = await Promise.all([
+          basePublic.readContract({
+            address: hub,
+            abi: PPL_CURVE_HUB_V2_ABI,
+            functionName: "sellRemaining24h",
+            args: [account],
+          }),
+          basePublic.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "sellBackCapToday" }),
+        ]);
+        const quoteNow = (amount: bigint) =>
+          basePublic.readContract({
+            address: hub,
+            abi: PPL_CURVE_HUB_V2_ABI,
+            functionName: "quoteSellBack",
+            args: [account, amount],
+          });
+        const full = await quoteNow(authorized);
+        let payable = authorized;
+        let payout = full[2];
+        const fits = (gross: bigint, pay: bigint) =>
+          gross > BigInt(0) && pay > BigInt(0) && gross <= personalNow && gross <= capNow[0];
+        if (!fits(full[0], full[2])) {
+          let lo = BigInt(0);
+          let hi = authorized;
+          payable = BigInt(0);
+          payout = BigInt(0);
+          for (let i = 0; i < 16 && lo + BigInt(1) < hi; i++) {
+            const mid = (lo + hi) / BigInt(2);
+            const row = await quoteNow(mid);
+            if (fits(row[0], row[2])) {
+              payable = mid;
+              payout = row[2];
+              lo = mid;
+            } else {
+              hi = mid;
+            }
+          }
+        }
+        if (payable <= BigInt(0)) {
+          setStatus({ step: "error", reason: personalNow <= capNow[0] ? "personalCap" : "globalCap" });
+          return null;
+        }
         const minUsdcOut = minUsdcOutFromPayout(payout);
         if (payout <= BigInt(0) || minUsdcOut <= BigInt(0)) throw new Error("ZeroOut");
         const hash = await baseWallet.writeContract({
           address: hub,
           abi: PPL_CURVE_HUB_V2_ABI,
           functionName: "sellBack",
-          args: [pplIn, minUsdcOut, proof.returnId, BigInt(proof.deadline), proof.signature],
+          args: [payable, minUsdcOut, proof.returnId, BigInt(proof.deadline), authorized, proof.signature],
           account,
           chain: chain.chain,
         });

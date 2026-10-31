@@ -77,12 +77,12 @@ export const SELL_BACK = {
   verifiedOnly: true,
   holdDays: 30, // per lot
   priceRule: "curve-at-exit",
-  dailyCapReservePct: 2, // all sellers combined, per day
+  dailyCapReservePct: 2, // all sellers combined, any rolling 24 hours
   perPersonPerDayUsd: 2000,
   /** Goes to the PPL buyback by the project, not to the team. */
   feePct: 1.5,
   feeHighPct: 3,
-  /** The fee is `feeHighPct` once that day's sell-backs exceed this share of the reserve. */
+  /** The fee is `feeHighPct` on the part of the rolling-24h sell-backs above this share of the reserve. */
   feeHighThresholdReservePct: 1,
   closesAt: "graduation",
   payout: { token: "USDC", chainId: 8453 },

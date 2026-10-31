@@ -16,6 +16,7 @@ export const PPL_RETURN_BURN_ABI = [
       { name: "hub", type: "address" },
       { name: "personId", type: "bytes32" },
       { name: "seller", type: "address" },
+      { name: "destChainId", type: "uint256" },
     ],
     outputs: [{ name: "returnId", type: "bytes32" }],
   },
@@ -36,9 +37,11 @@ export const PPL_RETURN_BURN_ABI = [
 export const MAINNET_RETURN_TYPES = {
   MainnetReturn: [
     { name: "personId", type: "bytes32" },
+    { name: "hub", type: "address" },
     { name: "seller", type: "address" },
     { name: "pplAmount", type: "uint256" },
     { name: "sourceChainId", type: "uint256" },
+    { name: "destChainId", type: "uint256" },
     { name: "returnId", type: "bytes32" },
     { name: "deadline", type: "uint256" },
   ],

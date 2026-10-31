@@ -54,9 +54,75 @@ export function minUsdcOutFromPayout(payoutUsd6: bigint, slippageBps: number = V
   return (payoutUsd6 * (denom - bps)) / denom;
 }
 
-/** Sell-back stays open through the term (`Expired`) and stops at graduation. */
+/** 5% headroom so a price move between this check and the burn does not cross a cap. */
+export const SELL_PREFLIGHT_HEADROOM_BPS = BigInt(500);
+
+export type SellBackPreflight = {
+  opened: boolean;
+  paused: boolean;
+  liquidityReleased: boolean;
+  returnVerifier: string;
+  sellablePpl: bigint;
+  pplIn: bigint;
+  grossUsd6: bigint;
+  payoutUsd6: bigint;
+  personalRemainingUsd6: bigint;
+  globalRemainingUsd6: bigint;
+};
+
+/**
+ * Checks a sell can be paid before PPL are burned. Caps use a 5% price margin.
+ * Graduation does not close the check; liquidity release does.
+ */
+export function sellBackPreflight(input: SellBackPreflight): { ok: true } | { ok: false; reason: string } {
+  if (!input.opened || input.liquidityReleased) return { ok: false, reason: "closed" };
+  if (input.paused) return { ok: false, reason: "paused" };
+  if (input.returnVerifier.toLowerCase() === "0x0000000000000000000000000000000000000000" || input.returnVerifier === "") {
+    return { ok: false, reason: "disabled" };
+  }
+  if (input.pplIn <= BigInt(0) || input.pplIn > input.sellablePpl) return { ok: false, reason: "notEnough" };
+  if (input.grossUsd6 <= BigInt(0) || input.payoutUsd6 <= BigInt(0)) return { ok: false, reason: "notEnough" };
+  const padded = (input.grossUsd6 * (BigInt(10_000) + SELL_PREFLIGHT_HEADROOM_BPS)) / BigInt(10_000);
+  if (padded > input.personalRemainingUsd6) return { ok: false, reason: "personalCap" };
+  if (padded > input.globalRemainingUsd6) return { ok: false, reason: "globalCap" };
+  return { ok: true };
+}
+
+/**
+ * Largest amount in `(0, pplIn]` whose quoted gross fits both remaining caps.
+ * `grossOf` must be non-decreasing. Returns 0 when nothing positive fits.
+ */
+export function largestPplUnderCaps(
+  pplIn: bigint,
+  grossOf: (ppl: bigint) => bigint,
+  personalRemainingUsd6: bigint,
+  globalRemainingUsd6: bigint,
+): bigint {
+  const fits = (ppl: bigint) => {
+    if (ppl <= BigInt(0)) return false;
+    const gross = grossOf(ppl);
+    return gross > BigInt(0) && gross <= personalRemainingUsd6 && gross <= globalRemainingUsd6;
+  };
+  if (pplIn <= BigInt(0)) return BigInt(0);
+  if (fits(pplIn)) return pplIn;
+  let lo = BigInt(0);
+  let hi = pplIn;
+  let best = BigInt(0);
+  for (let i = 0; i < 40 && lo + BigInt(1) < hi; i++) {
+    const mid = (lo + hi) / BigInt(2);
+    if (fits(mid)) {
+      best = mid;
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+  }
+  return best;
+}
+
+/** Sell-back stays available from open through graduation. Liquidity release is a separate flag. */
 export function sellBackOpen(phase: V2Phase): boolean {
-  return phase !== V2_PHASES.NotOpen && phase !== V2_PHASES.Graduated;
+  return phase !== V2_PHASES.NotOpen;
 }
 
 const REVERT_KEYS: Record<string, string> = {

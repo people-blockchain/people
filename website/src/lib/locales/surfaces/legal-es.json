@@ -125,7 +125,7 @@
           "No se exige KYC para comprar. La recompra por la reserva requiere prueba de humanidad (Human Passport o Telegram), que no es KYC.",
           "La venta dura hasta que se agote (la curva se cierra al alcanzar $4M recaudados) o durante 24 meses desde su apertura, lo que ocurra primero. Sin prórrogas. El PPL no vendido pasa al Community Pool. Sin reembolsos: toda compra es definitiva.",
           "El plazo de la venta, la fórmula de precio y los límites no cambian una vez abierta la venta.",
-          "La recompra no es un reembolso: recompra por la reserva — solo para usuarios verificados. Cada lote puede venderse de vuelta tras un periodo de tenencia de 30 días, al precio de la curva en el momento en que vendes. El total de recompras está limitado al 2% de la reserva por día para todos los usuarios y a $2,000 por dirección y día. Comisión: 1.5%, o 3% cuando las recompras de ese día ya superen el 1% de la reserva. Se cierra tras la graduación. Pagos en USDC en Base.",
+          "La recompra no es un reembolso: recompra por la reserva — solo para usuarios verificados. Cada lote puede venderse de vuelta tras un periodo de tenencia de 30 días, al precio de la curva en el momento en que vendes. El total de recompras está limitado al 2% de la reserva en cualquier periodo de 24 horas corridas para todos los usuarios y a $2,000 por dirección en una ventana de 24 horas corridas. Comisión: 1.5%, o 3% solo sobre la parte de las recompras de esas 24 horas que supere el 1% de la reserva. Se cierra tras la graduación. Pagos en USDC en Base.",
           "Nada de este sitio constituye una oferta ni una promesa de vender PPL donde la venta esté restringida, y es posible que la participación no esté disponible en tu jurisdicción."
         ]
       },

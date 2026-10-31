@@ -101,7 +101,7 @@
       },
       {
         "title": "Revente après {holdDays} jours",
-        "body": "Chaque achat peut être revendu {holdDays} jours après avoir été fait, au prix de la courbe à ce moment-là. Jusqu’à {sellDailyPct} de la réserve par jour UTC pour l’ensemble des vendeurs, et jusqu’à {sellPerAddress} par adresse dans une fenêtre glissante de 24 heures. Frais de {feeLow} ; {feeHigh} sur la part qui dépasse {feeThreshold} de la réserve ce jour UTC. Personnes vérifiées uniquement."
+        "body": "Chaque achat peut être revendu {holdDays} jours après avoir été fait, au prix de la courbe à ce moment-là. Jusqu’à {sellDailyPct} de la réserve sur toute fenêtre glissante de 24 heures pour l’ensemble des vendeurs, et jusqu’à {sellPerAddress} par adresse dans une fenêtre glissante de 24 heures. Frais de {feeLow} ; {feeHigh} sur la part qui dépasse {feeThreshold} de la réserve dans ces 24 heures. Personnes vérifiées uniquement."
       },
       {
         "title": "Vérifiable par tous",
@@ -149,11 +149,11 @@
       },
       {
         "q": "Combien peut-on revendre aujourd’hui ?",
-        "a": "Chaque achat peut être revendu {holdDays} jours après avoir été fait. Chaque jour UTC, l’ensemble des vendeurs peut revendre jusqu’à {sellDailyPct} de la réserve, et chaque adresse jusqu’à {sellPerAddress} dans une fenêtre glissante de 24 heures. Petite réserve, petite limite quotidienne. Le chiffre du jour figure dans les règles ci-dessus."
+        "a": "Chaque achat peut être revendu {holdDays} jours après avoir été fait. Sur toute fenêtre glissante de 24 heures, l’ensemble des vendeurs peut revendre jusqu’à {sellDailyPct} de la réserve, et chaque adresse jusqu’à {sellPerAddress} dans une fenêtre glissante de 24 heures. Petite réserve, petite limite. Le chiffre de la fenêtre en cours figure dans les règles ci-dessus."
       },
       {
         "q": "Puis-je être remboursé ?",
-        "a": "Non. Tous les achats sont définitifs. Le seul retour possible est la revente à la réserve, selon les règles ci-dessus."
+        "a": "Non. Tous les achats sont définitifs. Le seul moyen est la revente à la réserve, selon les règles ci-dessus."
       }
     ],
     "riskTitle": "Avertissement sur les risques",
@@ -278,9 +278,9 @@
     "help": "Besoin d’aide ? {support}",
     "supportLink": "Assistance",
     "noWalletHint": "Pas de portefeuille ? Choisissez Google ou e-mail : un PEOPLE Wallet est créé pour vous. Pour payer, il vous faut des USDC sur Base dans ce portefeuille ou dans un portefeuille que vous connectez.",
-    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque achat peut être revendu 30 jours après avoir été fait, au prix de la courbe au moment de la vente. Limites : 2 % de la réserve par jour UTC pour tous, et 2 000 $ par adresse dans une fenêtre glissante de 24 heures. Les PPL sont détruits sur PEOPLE mainnet. Frais de 1,5 % ; 3 % seulement sur la part des reventes du jour qui dépasse 1 % de la réserve. Fermée quand la courbe se ferme. Vous recevez des USDC sur Base.",
+    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque achat peut être revendu 30 jours après avoir été fait, au prix de la courbe au moment de la vente. Limites : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par adresse dans une fenêtre glissante de 24 heures. Les PPL sont détruits sur PEOPLE mainnet. Frais de 1,5 % ; 3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve. Fermée quand la courbe se ferme. Vous recevez des USDC sur Base.",
     "feesTitle": "Frais et délais",
-    "feesBody": "Frais : ceux du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; ceux d’échange ou de pont de LI.FI — affichés dans le widget avant confirmation ; ceux de revente à la réserve — 1,5 %, et 3 % seulement sur la part des reventes du jour qui dépasse 1 % de la réserve.",
+    "feesBody": "Frais : ceux du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; ceux d’échange ou de pont de LI.FI — affichés dans le widget avant confirmation ; ceux de revente à la réserve — 1,5 %, et 3 % seulement sur la part des reventes sur 24 heures glissantes qui dépasse 1 % de la réserve.",
     "timingBody": "Un achat sur Base est confirmé en quelques secondes. Les paiements depuis d’autres réseaux arrivent en général en 1 à 20 minutes. Les reventes sont réglées en USDC sur Base.",
     "getUsdc": "Pas encore d’USDC ? Achetez-en sur une plateforme d’échange et retirez-les sur le réseau Base, ou payez depuis un autre réseau ci-dessous. Il vous faut aussi un peu d’ETH sur Base pour les frais.",
     "glossaryBase": "Base est un réseau à frais réduits construit sur Ethereum. USDC et USDT sont des stablecoins indexés sur le dollar américain. LI.FI est le service qui échange les jetons et les transfère entre réseaux.",
@@ -377,41 +377,41 @@
       "hint": "Cela relance l’achat sur Base avec les USDC reçus."
     },
     "sellBack": {
-      "title": "Rendre des PPL",
-      "cta": "Rendre des PPL",
-      "available": "Disponible à rendre",
+      "title": "Vendre des PPL",
+      "cta": "Vendre des PPL",
+      "available": "Disponible à la vente",
       "unlock": "Le lot suivant se débloque le {date}",
       "noneYet": "Rien n’est encore débloqué. Chaque lot s’ouvre 30 jours après l’achat.",
       "personal": "Votre limite restante",
       "personalHint": "Il reste {amount} sur 2 000 $ dans une fenêtre glissante de 24 heures",
       "global": "Réserve restante aujourd’hui",
-      "globalHint": "Il reste {amount} du plafond quotidien de 2 % de la réserve",
+      "globalHint": "Il reste {amount} du plafond de 2 % de la réserve sur 24 heures glissantes",
       "fee": "Frais",
       "feeLow": "1,5 %",
       "feeHigh": "3 %",
       "feeMixed": "1,5 % jusqu’à 1 % de la réserve, puis 3 %",
       "receive": "Vous recevez",
-      "amount": "PPL à rendre",
+      "amount": "PPL à vendre",
       "max": "Maximum",
       "burning": "Destruction des PPL sur PEOPLE mainnet…",
       "attesting": "Vérification de la destruction…",
       "selling": "Paiement des USDC sur Base…",
-      "done": "Retour terminé. Les USDC sont payés sur Base.",
+      "done": "Vente terminée. Les USDC sont payés sur Base.",
       "payoutNote": "Les PPL sont détruits sur PEOPLE mainnet. Vous recevez des USDC sur Base. L’achat se paie en USDC ou en USDT.",
-      "error": "Le retour n’a pas abouti. Réessayez.",
+      "error": "La vente n’a pas abouti. Réessayez.",
       "rejected": "Vous avez refusé la demande dans le portefeuille.",
-      "notConfigured": "Le retour n’est pas encore disponible.",
+      "notConfigured": "La vente n’est pas encore disponible.",
       "notEnough": "Pas assez de PPL au-delà des 30 jours.",
-      "globalCap": "Le plafond quotidien de 2 % de la réserve est atteint.",
+      "globalCap": "Le plafond de 2 % de la réserve sur 24 heures glissantes est atteint.",
       "personalCap": "Votre limite de 2 000 $ sur cette fenêtre de 24 heures est atteinte.",
       "slippage": "Le prix a trop bougé. Réessayez.",
       "closed": "La revente est fermée.",
       "disabled": "La revente est désactivée.",
-      "used": "Ce retour a déjà été payé.",
+      "used": "Cette vente a déjà été payée.",
       "expired": "La confirmation a expiré. Recommencez.",
       "badSignature": "La confirmation ne correspond pas.",
-      "belowMin": "Le montant est sous le minimum.",
-      "tooMany": "Trop de retours sur ces 24 heures.",
+      "belowMin": "Le montant est sous le minimum de vente.",
+      "tooMany": "Trop de ventes sur ces 24 heures.",
       "reserve": "La réserve ne couvre pas ce paiement.",
       "reverted": "La transaction a été annulée par le réseau.",
       "switchRejected": "Le réseau n’a pas été changé."

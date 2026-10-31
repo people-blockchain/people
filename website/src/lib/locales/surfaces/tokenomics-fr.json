@@ -99,7 +99,7 @@
     "100 000 000 PPL sur la courbe (10 % de l'offre) ; départ 0,005 $, hausse exponentielle, plafond 0,25 $ sur la courbe seulement.",
     "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "Levée 50 % liquidité verrouillée / 50 % multisig projet ; jetons LP verrouillés 24 mois.",
-    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve par jour UTC pour tous, et 2 000 $ par personne dans une fenêtre glissante de 24 heures. Frais de 1,5 % (3 % si les reventes du jour dépassent 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
+    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par personne dans une fenêtre glissante de 24 heures. Frais de 1,5 % (3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
     "$10–$500 par achat; Jusqu’à $2,000 par personne dans une fenêtre glissante de 24 heures; Pause de 60 s entre deux achats"
   ],
   "curveTableSold": "% vendu",

@@ -13,6 +13,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { approveErc20IfNeeded } from "../src/lib/evm/erc20-allowance.ts";
 import { parseSaleNonceCode } from "../src/lib/sale/v2/ownership.ts";
 import {
+  MIN_RETURN_CONFIRMATIONS,
   PEOPLE_MAINNET_CHAIN_ID,
   createReturnAttestation,
   decodeReturnBurned,
@@ -21,11 +22,13 @@ import {
 } from "../src/lib/sale/v2/return-attestation.ts";
 import {
   HOLD_SECONDS,
+  largestPplUnderCaps,
   minUsdcOutFromPayout,
   sellBackAvailability,
   sellBackErrorKey,
   sellBackFeeBand,
   sellBackOpen,
+  sellBackPreflight,
 } from "../src/lib/sale/v2/sellback.ts";
 
 const HUB = "0x3333333333333333333333333333333333333333";
@@ -94,12 +97,42 @@ test("min USDC out keeps 1% slippage, rounded down", () => {
   assert.equal(minUsdcOutFromPayout(0n), 0n);
 });
 
-test("sell-back stays open after the term and closes at graduation", () => {
+test("sell-back stays open after the term and after graduation", () => {
   assert.equal(sellBackOpen(1), true);
   assert.equal(sellBackOpen(2), true);
   assert.equal(sellBackOpen(3), true);
+  assert.equal(sellBackOpen(4), true);
   assert.equal(sellBackOpen(0), false);
-  assert.equal(sellBackOpen(4), false);
+});
+
+const PREFLIGHT = {
+  opened: true,
+  paused: false,
+  liquidityReleased: false,
+  returnVerifier: "0x5555555555555555555555555555555555555555",
+  sellablePpl: 100n,
+  pplIn: 40n,
+  grossUsd6: 1_000n,
+  payoutUsd6: 980n,
+  personalRemainingUsd6: 2_000n,
+  globalRemainingUsd6: 2_000n,
+};
+
+test("preflight rejects a burn that the hub cannot pay", () => {
+  assert.equal(sellBackPreflight(PREFLIGHT).ok, true);
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, sellablePpl: 10n }).reason, "notEnough");
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, paused: true }).reason, "paused");
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, liquidityReleased: true }).reason, "closed");
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, returnVerifier: "0x0000000000000000000000000000000000000000" }).reason, "disabled");
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, personalRemainingUsd6: 1_000n }).reason, "personalCap");
+  assert.equal(sellBackPreflight({ ...PREFLIGHT, globalRemainingUsd6: 1_049n }).reason, "globalCap");
+});
+
+test("a cap-fitting slice is chosen under a monotonic quote", () => {
+  const grossOf = (ppl) => ppl * 10n;
+  assert.equal(largestPplUnderCaps(100n, grossOf, 250n, 400n), 25n);
+  assert.equal(largestPplUnderCaps(20n, grossOf, 1_000n, 1_000n), 20n);
+  assert.equal(largestPplUnderCaps(20n, grossOf, 0n, 1_000n), 0n);
 });
 
 test("revert names map to short error keys", () => {
@@ -126,9 +159,11 @@ test("MainnetReturn signature recovers the return verifier on the hub domain", a
     hub: HUB,
     message: {
       personId: PERSON,
+      hub: HUB,
       seller: SELLER,
       pplAmount: AMOUNT,
       sourceChainId: PEOPLE_MAINNET_CHAIN_ID,
+      destChainId: 8453,
       returnId: RETURN_ID,
       deadline,
     },
@@ -138,9 +173,11 @@ test("MainnetReturn signature recovers the return verifier on the hub domain", a
     types: {
       MainnetReturn: [
         { name: "personId", type: "bytes32" },
+        { name: "hub", type: "address" },
         { name: "seller", type: "address" },
         { name: "pplAmount", type: "uint256" },
         { name: "sourceChainId", type: "uint256" },
+        { name: "destChainId", type: "uint256" },
         { name: "returnId", type: "bytes32" },
         { name: "deadline", type: "uint256" },
       ],
@@ -148,9 +185,11 @@ test("MainnetReturn signature recovers the return verifier on the hub domain", a
     primaryType: "MainnetReturn",
     message: {
       personId: PERSON,
+      hub: HUB,
       seller: SELLER,
       pplAmount: AMOUNT,
       sourceChainId: BigInt(PEOPLE_MAINNET_CHAIN_ID),
+      destChainId: 8453n,
       returnId: RETURN_ID,
       deadline,
     },
@@ -172,7 +211,8 @@ test("a missing return-verifier key is refused before any signature", async () =
       hubAddress: HUB,
       hubChainId: 8453,
       nowSec: 1_700_000_000,
-      getReceipt: async () => ({ status: "success", logs: [returnLog()] }),
+      getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [returnLog()] }),
+      headBlock: async () => 111n,
       returnVerifier: async () => privateKeyToAccount(KEY).address,
     });
     assert.deepEqual(result, { ok: false, status: 503, error: "signer_unavailable" });
@@ -190,7 +230,8 @@ test("attestation signs only a successful ReturnBurned for this hub", async () =
     hubAddress: HUB,
     hubChainId: 8453,
     nowSec: 1_700_000_000,
-    getReceipt: async () => ({ status: "success", logs: [returnLog()] }),
+    getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [returnLog()] }),
+    headBlock: async () => 100n + MIN_RETURN_CONFIRMATIONS - 1n,
     returnVerifier: async () => privateKeyToAccount(KEY).address,
   });
   assert.equal(result.ok, true);
@@ -198,6 +239,9 @@ test("attestation signs only a successful ReturnBurned for this hub", async () =
   assert.equal(result.body.returnId, RETURN_ID);
   assert.equal(result.body.pplAmount, AMOUNT.toString());
   assert.equal(result.body.sourceChainId, 97401);
+  assert.equal(result.body.destChainId, 8453);
+  assert.equal(result.body.hub, HUB);
+  assert.equal(result.body.seller, SELLER);
   assert.equal(result.body.deadline, 1_700_000_000 + 15 * 60);
 
   const wrongHub = await createReturnAttestation({
@@ -207,10 +251,42 @@ test("attestation signs only a successful ReturnBurned for this hub", async () =
     hubAddress: HUB,
     hubChainId: 8453,
     nowSec: 1_700_000_000,
-    getReceipt: async () => ({ status: "success", logs: [{ ...returnLog(), address: FROM }] }),
+    getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [{ ...returnLog(), address: FROM }] }),
+    headBlock: async () => 200n,
     returnVerifier: async () => privateKeyToAccount(KEY).address,
   });
   assert.deepEqual(wrongHub, { ok: false, status: 422, error: "return_not_found" });
+});
+
+test("attestation waits for 12 PEOPLE confirmations or a finalized block", async () => {
+  assert.equal(MIN_RETURN_CONFIRMATIONS, 12n);
+  const shallow = await createReturnAttestation({
+    txHash: `0x${"4".repeat(64)}`,
+    key: KEY,
+    burnAddress: BURN,
+    hubAddress: HUB,
+    hubChainId: 8453,
+    nowSec: 1_700_000_000,
+    getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [returnLog()] }),
+    headBlock: async () => 110n,
+    finalizedBlock: async () => 99n,
+    returnVerifier: async () => privateKeyToAccount(KEY).address,
+  });
+  assert.deepEqual(shallow, { ok: false, status: 202, error: "awaiting_confirmations" });
+
+  const finalized = await createReturnAttestation({
+    txHash: `0x${"5".repeat(64)}`,
+    key: KEY,
+    burnAddress: BURN,
+    hubAddress: HUB,
+    hubChainId: 8453,
+    nowSec: 1_700_000_000,
+    getReceipt: async () => ({ status: "success", blockNumber: 100n, logs: [returnLog()] }),
+    headBlock: async () => 100n,
+    finalizedBlock: async () => 100n,
+    returnVerifier: async () => privateKeyToAccount(KEY).address,
+  });
+  assert.equal(finalized.ok, true);
 });
 
 test("nonceCode is required and blank values are rejected", () => {

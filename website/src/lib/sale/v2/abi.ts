@@ -132,6 +132,20 @@ export const PPL_CURVE_HUB_V2_ABI = [
   },
   {
     type: "function",
+    name: "paused",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "liquidityReleased",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    type: "function",
     name: "sellBack",
     stateMutability: "nonpayable",
     inputs: [
@@ -139,7 +153,9 @@ export const PPL_CURVE_HUB_V2_ABI = [
       { name: "minUsdcOut", type: "uint256" },
       { name: "returnId", type: "bytes32" },
       { name: "deadline", type: "uint256" },
+      { name: "pplAmount", type: "uint256" },
       { name: "sig", type: "bytes" },
+      // sig is EIP-712 MainnetReturn(..., pplAmount = burned ceiling, ...). pplIn may be a slice of it.
     ],
     outputs: [{ name: "payout", type: "uint256" }],
   },
