@@ -5,8 +5,10 @@ import { encodeAbiParameters, getAddress, toFunctionSelector } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import {
+  catalogListIsPartial,
   discoverTokensOnChain,
   logStartBlock,
+  peekCachedCatalogTokens,
   resetChainCatalogCacheForTests,
 } from "../src/lib/evm/chain-catalog.ts";
 import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
@@ -21,6 +23,7 @@ import {
   tokenImageCacheSizeForTests,
 } from "../src/lib/evm/token-onchain.ts";
 import { ipfsGatewayUrlForUri } from "../src/lib/ipfs.ts";
+import { settleTokenImageReadsForTests } from "../src/lib/evm/token-uri-metadata.ts";
 
 /**
  * GET /api/evm/compat/assets/<factory token>: symbol/name/creator come from the token contract and
@@ -167,8 +170,13 @@ test("a factory token reports its own symbol/name/creator and the metadata JSON 
   assert.equal(res.body.decimals, 6);
   assert.equal(res.body.totalSupply, 5);
   assert.equal(res.body.tokenAddress.toLowerCase(), TOKEN);
-  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.equal(res.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(res.body.partial, undefined);
+  assert.match(String(res.body.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
+  await settleTokenImageReadsForTests();
+  const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(again.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(again.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(again.body.partial, undefined);
 });
 
 test("a metadata JSON without an image gives no imageUri", async (t) => {
@@ -176,8 +184,12 @@ test("a metadata JSON without an image gives no imageUri", async (t) => {
   stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN" } });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
-  assert.equal(res.body.imageUri, undefined);
+  assert.equal(res.body.partial, undefined);
+  assert.match(String(res.body.imageUri), /metadata\.json/);
   assert.equal(res.body.symbol, "PCOIN");
+  await settleTokenImageReadsForTests();
+  const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(again.body.imageUri, undefined);
 });
 
 test("an unreachable gateway is not an error, just no image", async (t) => {
@@ -185,8 +197,13 @@ test("an unreachable gateway is not an error, just no image", async (t) => {
   stubGateway(t, { [metaUrl()]: 503 });
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
-  assert.equal(res.body.imageUri, undefined);
+  assert.equal(res.body.partial, undefined);
+  assert.match(String(res.body.imageUri), /metadata\.json/);
   assert.equal(res.body.symbol, "PCOIN");
+  await settleTokenImageReadsForTests();
+  const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(again.body.imageUri, undefined);
+  assert.equal(again.body.partial, undefined);
 });
 
 test("a legacy ipfs://people metadataURI has no image and triggers no fetch", async (t) => {
@@ -262,11 +279,14 @@ test("a catalog row resolves metadata.json to the gateway image and keeps the pa
   const rows = await discoverTokensOnChain();
   const row = rows.find((r) => r.tokenAddress?.toLowerCase() === TOKEN);
   assert.ok(row, "factory token is in the catalog");
+  assert.equal(catalogListIsPartial(rows), false);
   assert.equal(row.symbol, "PCOIN");
-  assert.equal(row.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.match(row.imageUri, /\/logo\.png$/);
-  assert.equal(String(row.imageUri).includes("metadata.json"), false);
-  assert.equal(row.creationMetadata?.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.match(String(row.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
+  await settleTokenImageReadsForTests();
+  const cached = peekCachedCatalogTokens().find((r) => r.tokenAddress?.toLowerCase() === TOKEN);
+  assert.equal(cached?.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(String(cached?.imageUri).includes("metadata.json"), false);
+  assert.equal(cached?.creationMetadata?.image, ipfsGatewayUrlForUri(LOGO_URI));
 });
 
 test("single-asset route: a catalog hit is enriched with the JSON image and the real creator", async (t) => {
@@ -283,9 +303,50 @@ test("single-asset route: a catalog hit is enriched with the JSON image and the 
   const res = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
   assert.equal(res.status, 200);
   assert.equal(res.body.symbol, "PCOIN");
-  assert.equal(res.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
-  assert.equal(res.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(res.body.partial, undefined);
+  assert.match(String(res.body.imageUri), /gateway\.pinata\.cloud\/ipfs\//);
   assert.equal(res.body.creator, CREATOR);
+  await settleTokenImageReadsForTests();
+  const again = await handleEvmCompatGet(`/assets/${TOKEN}`, new URLSearchParams());
+  assert.equal(again.body.imageUri, ipfsGatewayUrlForUri(LOGO_URI));
+  assert.equal(again.body.creationMetadata.image, ipfsGatewayUrlForUri(LOGO_URI));
+});
+
+test("a slow metadata gateway neither marks the asset list partial nor holds it", async (t) => {
+  await startNode(t, tokenAnswers(), { logs: true });
+  const real = globalThis.fetch;
+  const gateway = new URL(metaUrl()).origin;
+  globalThis.fetch = (input, init) => {
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    if (url.startsWith(gateway)) return new Promise(() => {});
+    return real(input, init);
+  };
+  t.after(() => {
+    globalThis.fetch = real;
+  });
+  const started = Date.now();
+  const res = await handleEvmCompatGet("/assets", new URLSearchParams());
+  const elapsed = Date.now() - started;
+  assert.ok(elapsed < 3_000, `asset list took ${elapsed} ms behind a hanging gateway`);
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body), "a slow logo wrapped the list as partial");
+  const row = res.body.find((asset) => String(asset.tokenAddress).toLowerCase() === TOKEN);
+  assert.ok(row, "factory token missing from the list");
+  assert.match(String(row.imageUri), /metadata\.json/);
+});
+
+test("a fast node returns the full asset list well under the request deadline", async (t) => {
+  await startNode(t, tokenAnswers(), { logs: true });
+  stubGateway(t, { [metaUrl()]: { name: "People Coin", symbol: "PCOIN", image: LOGO_URI } });
+  const started = Date.now();
+  const res = await handleEvmCompatGet("/assets", new URLSearchParams());
+  const elapsed = Date.now() - started;
+  assert.ok(elapsed < 3_000, `asset list took ${elapsed} ms`);
+  assert.equal(res.status, 200);
+  assert.ok(Array.isArray(res.body));
+  assert.ok(res.body.length > 1, "the list was not the full catalog");
+  assert.ok(res.body.some((asset) => String(asset.tokenAddress).toLowerCase() === TOKEN));
+  assert.equal(res.body.partial, undefined);
 });
 
 test("assets list: one failing token read skips the row instead of failing the list", async (t) => {

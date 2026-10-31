@@ -190,12 +190,21 @@ test("a metadata.json that never responds does not hold the asset past the deadl
   });
   t.mock.timers.enable({ apis: ["setTimeout", "Date"] });
   const pending = handleEvmCompatGet(`/assets/${FRESH}`, new URLSearchParams());
-  await advance(t, API_REQUEST_DEADLINE_MS + 1_000);
-  const res = await pending;
+  // Localhost RPC needs real I/O turns. Fake time stays far under the image budget and the 12s deadline.
+  let res = null;
+  for (let elapsed = 0; elapsed <= 800 && !res; elapsed += 50) {
+    t.mock.timers.tick(50);
+    for (let i = 0; i < 8; i++) await new Promise((resolve) => setImmediate(resolve));
+    res = await Promise.race([
+      pending,
+      new Promise((resolve) => setImmediate(() => resolve(null))),
+    ]);
+  }
+  assert.ok(res, "a slow metadata gateway held the asset response");
   assert.equal(res.status, 200);
   assert.equal(res.body.symbol, "DDLN");
-  assert.equal(res.body.imageUri, undefined);
-  assert.equal(res.body.partial, true);
+  assert.equal(res.body.partial, undefined);
+  assert.match(String(res.body.imageUri), /metadata\.json/);
 });
 
 test("a later explicit deadline stays open after the request signal aborts", async () => {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { tokenPageImageUrl } from "@/lib/explorer/token-page-image";
+import { useEffect, useState } from "react";
+import { metadataDocumentUrl, tokenPageImageUrl } from "@/lib/explorer/token-page-image";
 import { assetImageAfterError, assetImageSources, ipfsContentKey } from "@/lib/ipfs";
 import { tokenIconByAddress } from "@/lib/token-icons";
 
@@ -53,9 +53,34 @@ export function AssetImage({ src, name, nft = false, className = "h-10 w-10", as
   src?: unknown; name: string; nft?: boolean; className?: string; assetId?: string; tokenAddress?: string; testBadgeLabel?: string; eager?: boolean;
 }) {
   const { known, url: knownUrl } = nft ? { known: null, url: null } : knownAsset(assetId, name, tokenAddress);
-  const url = knownUrl ?? imageUrl(src);
+  const direct = knownUrl ?? imageUrl(src);
+  const pendingDocument = direct ? null : metadataDocumentUrl(src);
+  const [resolved, setResolved] = useState<string | null>(null);
+  useEffect(() => {
+    if (!pendingDocument) return;
+    const controller = new AbortController();
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch(pendingDocument, { signal: controller.signal, headers: { accept: "application/json" } });
+        if (!res.ok) return;
+        const text = await res.text();
+        if (cancelled || text.length > 64 * 1024) return;
+        const json = JSON.parse(text) as { image?: unknown };
+        const image = tokenPageImageUrl(json.image);
+        if (!cancelled && image) setResolved(image);
+      } catch {
+        // The letter fallback stays. A later catalog response can carry the cached image URL.
+      }
+    })();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [pendingDocument]);
+  const url = direct ?? resolved;
   // Key on the CID, not the gateway, so a Pinata URL and a later ipfs.io URL stay one image.
-  return <AssetImageView key={ipfsContentKey(url) ?? url ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} eager={eager} />;
+  return <AssetImageView key={ipfsContentKey(url) ?? url ?? pendingDocument ?? "missing"} url={url} name={name} nft={nft} className={className} known={known} testBadgeLabel={testBadgeLabel} eager={eager} />;
 }
 
 function AssetImageView({ url, name, nft, className, known, testBadgeLabel, eager }: {

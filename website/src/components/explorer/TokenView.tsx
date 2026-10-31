@@ -195,7 +195,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     <NetworkStatus />
     {loading ? <PeopleLoader /> : error || !asset ? <div className="mt-8 rounded-2xl border border-line p-6"><p>{t.networkUnavailable} / {t.notFound}</p><button onClick={reload} className="mt-3 text-brand">{c.retry}</button></div> : <>
       <header className="mt-8 flex flex-wrap items-center gap-4">
-        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={tokenPageImageSrc(asset.creationMetadata?.image, asset.imageUri)} name={symbol} className="h-16 w-16 shrink-0" testBadgeLabel={u.testTokenNote} eager />
+        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={tokenPageImageSrc(asset.creationMetadata?.image, asset.imageUri) ?? asset.creationMetadata?.image ?? asset.imageUri} name={symbol} className="h-16 w-16 shrink-0" testBadgeLabel={u.testTokenNote} eager />
         <div className="min-w-0 flex-1"><h1 className="break-words text-h2 font-bold">{assetId === "usdt" ? u.testUsdt : displayAssetName(assetId, asset.name)}</h1><p className="break-all font-mono text-sm text-ink-3">{symbol} · {assetId}</p></div>
         {canEditIcon ? (
           <button

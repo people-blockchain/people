@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { tokenPageImageSrc, tokenPageImageUrl } from "../src/lib/explorer/token-page-image.ts";
+import { metadataDocumentUrl, tokenPageImageSrc, tokenPageImageUrl } from "../src/lib/explorer/token-page-image.ts";
 
 const CID = `Qm${"a".repeat(44)}`;
 const GATEWAY = `https://gateway.pinata.cloud/ipfs/${CID}/image.png`;
@@ -18,6 +18,9 @@ test("the token page resolver rewrites ipfs metadata images to the gateway", () 
     GATEWAY,
   );
   assert.equal(tokenPageImageSrc(`ipfs://${CID}/metadata.json`, GATEWAY), GATEWAY);
+  assert.equal(metadataDocumentUrl(`ipfs://${CID}/metadata.json`), `https://gateway.pinata.cloud/ipfs/${CID}/metadata.json`);
+  assert.equal(metadataDocumentUrl(`ipfs://${CID}/image.png`), null);
+  assert.equal(tokenPageImageUrl(`ipfs://${CID}/metadata.json`), null);
 });
 
 test("the token page and the shared image component use that resolver at every width", () => {

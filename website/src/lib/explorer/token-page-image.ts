@@ -17,3 +17,11 @@ export function tokenPageImageUrl(value: unknown): string | null {
 export function tokenPageImageSrc(creationImage: unknown, imageUri: unknown): string | null {
   return tokenPageImageUrl(creationImage) ?? tokenPageImageUrl(imageUri);
 }
+
+/** Gateway URL of a metadata JSON document. Not an `<img>` src; the client reads `image` from it. */
+export function metadataDocumentUrl(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (!trimmed || !METADATA_JSON.test(trimmed)) return null;
+  return displayTokenImageUrl(trimmed);
+}

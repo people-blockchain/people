@@ -11,6 +11,7 @@ const { readLogScanCursor } = await import("../src/lib/evm/log-scan-cursor.ts");
 const {
   TOKEN_CREATED_TOPIC,
   TOKEN_CREATED_LEFTOVER_TOPIC,
+  catalogListIsPartial,
   discoverTokensOnChain,
   discoverTokensOnChainUncached,
   fetchLogsWindowedIncrementalResult,
@@ -287,6 +288,44 @@ test("a cold catalog call returns within the soft deadline with tail tokens", as
     assert.ok(tokens.length > 0);
     // Let the background scan finish before the test node is torn down.
     await sleep(3_000);
+  } finally {
+    setTokenCatalogSoftDeadlineForTests(null);
+    resetChainCatalogCacheForTests();
+  }
+});
+
+test("a cold catalog returns the tail before the soft deadline and stays partial until history finishes", async (t) => {
+  await db.delete(evmLogScanCursors);
+  const latest = FACTORY_START + 1_700;
+  const tail = tokenLog(latest);
+  await startRpcNode(t, async (call) => {
+    if (call.method === "eth_blockNumber") return hex(latest);
+    if (call.method === "eth_call") return tokenMetadata(call);
+    if (call.method !== "eth_getLogs") return null;
+    const filter = call.params[0];
+    if (filter.address.toLowerCase() !== FACTORY.toLowerCase()) return [];
+    // Older history is slow. The cold response must not wait for it.
+    if (fromBlockOf(filter) === FACTORY_START) {
+      await sleep(5_000);
+      return [];
+    }
+    if (toBlockOf(filter) >= latest - 800) return [tail];
+    return [];
+  });
+  resetChainCatalogCacheForTests();
+  setTokenCatalogSoftDeadlineForTests(8_000);
+
+  try {
+    const startedAt = Date.now();
+    const tokens = await discoverTokensOnChain();
+    const elapsed = Date.now() - startedAt;
+    assert.ok(elapsed < 3_000, `cold catalog took ${elapsed} ms`);
+    assert.equal(catalogListIsPartial(tokens), true);
+    assert.ok(
+      tokens.some((token) => token.tokenAddress.toLowerCase() === TOKEN.toLowerCase()),
+      "tail token missing",
+    );
+    await sleep(6_000);
   } finally {
     setTokenCatalogSoftDeadlineForTests(null);
     resetChainCatalogCacheForTests();
