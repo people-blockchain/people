@@ -18,7 +18,9 @@ import {
   fetchLogsWindowed,
   logStartBlock,
   peekCachedCatalogTokens,
+  readFreshCreatedTokenAddresses,
 } from "@/lib/evm/chain-catalog";
+import { TEST_STABLES, testStableMeta } from "@/lib/evm/test-stables";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
 import { enrichAssetRow, listSeedNfts, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
@@ -353,6 +355,7 @@ export async function resolveKnownToken(assetIdOrAddress: string): Promise<strin
 }
 
 const BALANCE_OF_ABI = parseAbi(["function balanceOf(address) view returns (uint256)"]);
+const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const OWNER_OF_SELECTOR = "0x6352211e";
 
 function extraTokenAddresses(raw: string | null): string[] {
@@ -427,6 +430,13 @@ async function knownWalletTokens(deadlineAt: number): Promise<{ wanted: Map<stri
       decimals: row.decimals,
       creator: row.creator,
     });
+  }
+  // Test stables are not factory tokens and are not in the deployment map, so the catalog never
+  // lists them. A non-zero balance still has to be readable.
+  for (const stable of TEST_STABLES) {
+    const key = stable.tokenAddress.toLowerCase();
+    if (wanted.has(key)) continue;
+    wanted.set(key, { assetId: stable.assetId, decimals: stable.decimals, creator: "" });
   }
   const missing: string[] = [];
   for (const addr of Object.values(readEvmDeployments().assetMap ?? {})) {
@@ -513,9 +523,150 @@ async function readBalanceCall(token: string, data: string, timeoutMs: number, d
 }
 
 /**
- * ERC-20 balances for a wallet. Tokens come from the in-memory catalog and the deployment map,
- * read with batched `balanceOf` inside `deadlineAt`. `tokens=` asks about freshly created tokens
- * before the catalog has indexed them. A failed or hung read is omitted and flagged partial.
+ * Token contracts that sent this address a Transfer in the last 2,000 blocks. One `eth_getLogs`.
+ * A failure is partial and does not drop balances that were already known.
+ */
+async function recentReceivedTokenAddresses(
+  owner: string,
+  deadlineAt: number,
+): Promise<{ addresses: string[]; partial: boolean }> {
+  try {
+    if (Date.now() >= deadlineAt) return { addresses: [], partial: true };
+    const tipHex = await evmJsonRpc<string>("eth_blockNumber", [], {
+      timeoutMs: boundedTimeoutMs(2_000, deadlineAt),
+      ignoreBackoff: true,
+      deadlineAt,
+    });
+    const tip = Number.parseInt(tipHex, 16);
+    if (!Number.isFinite(tip)) return { addresses: [], partial: true };
+    const from = Math.max(0, tip - 2_000);
+    const logs = await evmJsonRpc<Array<{ address?: string }>>("eth_getLogs", [{
+      fromBlock: `0x${from.toString(16)}`,
+      toBlock: `0x${tip.toString(16)}`,
+      topics: [TRANSFER_TOPIC, null, addressTopic(owner)],
+    }], {
+      timeoutMs: boundedTimeoutMs(2_000, deadlineAt),
+      ignoreBackoff: true,
+      deadlineAt,
+    });
+    if (!Array.isArray(logs)) return { addresses: [], partial: true };
+    const addresses: string[] = [];
+    const seen = new Set<string>();
+    for (const log of logs) {
+      const addr = (log.address ?? "").toLowerCase();
+      if (!isAddress(addr) || seen.has(addr)) continue;
+      seen.add(addr);
+      addresses.push(addr);
+    }
+    return { addresses, partial: false };
+  } catch {
+    return { addresses: [], partial: true };
+  }
+}
+
+/**
+ * `decimals()` on a contract found via a recent Transfer. A revert or empty result is a finished
+ * read (the contract is not an ERC-20). A timeout or transport error was not read.
+ */
+async function readDiscoveredTokenDecimals(
+  token: string,
+  deadlineAt: number,
+): Promise<{ decimals: number | null; missed: boolean }> {
+  try {
+    const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(token), data: "0x313ce567" }, "latest"], {
+      timeoutMs: boundedTimeoutMs(800, deadlineAt),
+      ignoreBackoff: true,
+      deadlineAt,
+    });
+    if (!out || out === "0x") return { decimals: null, missed: false };
+    const decimals = Number(BigInt(out));
+    if (!Number.isInteger(decimals) || decimals < 0 || decimals > 18) return { decimals: 18, missed: false };
+    return { decimals, missed: false };
+  } catch (error) {
+    if (error instanceof EvmRpcResponseError) return { decimals: null, missed: false };
+    return { decimals: null, missed: true };
+  }
+}
+
+/**
+ * `balanceOf` for an already identified set. Known catalog rows are read before any `eth_getLogs`,
+ * so a slow tail cannot drop balances that were already listed.
+ */
+async function readWantedBalances(
+  owner: string,
+  wanted: Map<string, WalletTokenRow>,
+  keys: string[],
+  deadlineAt: number,
+): Promise<{ balances: Record<string, number>; partial: boolean }> {
+  const tokens = keys.map((lower) => getAddress(lower));
+  if (!tokens.length) return { balances: {}, partial: false };
+  let partial = false;
+  const data = encodeFunctionData({ abi: BALANCE_OF_ABI, functionName: "balanceOf", args: [getAddress(owner)] });
+  const BALANCE_BATCH_SIZE = 20;
+  const rawBalances: Array<{ ok: true; value: string } | { ok: false }> = [];
+  for (let start = 0; start < tokens.length; start += BALANCE_BATCH_SIZE) {
+    if (Date.now() >= deadlineAt) {
+      partial = true;
+      rawBalances.push(...tokens.slice(start).map(() => ({ ok: false as const })));
+      break;
+    }
+    const chunk = tokens.slice(start, start + BALANCE_BATCH_SIZE);
+    const timeoutMs = Math.max(200, Math.min(1_200, deadlineAt - Date.now()));
+    let results: Array<string | null>;
+    try {
+      results = await evmJsonRpcBatch<string>(
+        chunk.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
+        { ignoreBackoff: true, timeoutMs, deadlineAt },
+      );
+    } catch {
+      results = chunk.map(() => null);
+    }
+    const resolved = await Promise.all(
+      chunk.map(async (token, index) => {
+        const value = results[index];
+        if (typeof value === "string" && value !== "0x") return { ok: true as const, value };
+        if (Date.now() >= deadlineAt) return { ok: false as const };
+        const singleTimeout = Math.max(200, Math.min(800, deadlineAt - Date.now()));
+        const single = await readBalanceCall(token, data, singleTimeout, deadlineAt);
+        if (single) return { ok: true as const, value: single };
+        if (Date.now() >= deadlineAt) return { ok: false as const };
+        const retried = await readBalanceCall(token, data, Math.max(200, Math.min(800, deadlineAt - Date.now())), deadlineAt);
+        return retried ? { ok: true as const, value: retried } : { ok: false as const };
+      }),
+    );
+    rawBalances.push(...resolved);
+  }
+  const balances: Record<string, number> = {};
+  const ownerLower = owner.toLowerCase();
+  tokens.forEach((token, index) => {
+    const row = wanted.get(token.toLowerCase());
+    if (!row) return;
+    const raw = rawBalances[index];
+    if (!raw?.ok) {
+      partial = true;
+      return;
+    }
+    let units = BigInt(0);
+    try {
+      units = BigInt(raw.value);
+    } catch {
+      partial = true;
+      return;
+    }
+    const value = Number(formatUnits(units, row.decimals));
+    // A creator keeps their token listed even with a zero balance. A failed read is omitted
+    // and flagged partial instead of being shown as zero or failing the whole address.
+    if (value > 0 || row.creator.toLowerCase() === ownerLower) {
+      balances[row.assetId.toLowerCase()] = value;
+    }
+  });
+  return { balances, partial };
+}
+
+/**
+ * ERC-20 balances for a wallet. Tokens come from the in-memory catalog, the deployment map,
+ * test stables, the fresh factory tail, and recent Transfer logs. `tokens=` asks about freshly
+ * created tokens before the catalog has indexed them. A failed or hung read is omitted and flagged partial.
  */
 async function walletTokenBalances(
   owner: string,
@@ -527,6 +678,45 @@ async function walletTokenBalances(
     const known = await knownWalletTokens(deadlineAt);
     partial = known.partial;
     const wanted = known.wanted;
+    const knownBalances = await readWantedBalances(owner, wanted, [...wanted.keys()], deadlineAt);
+    partial = partial || knownBalances.partial;
+    const balances = knownBalances.balances;
+    const fresh = await readFreshCreatedTokenAddresses(deadlineAt);
+    if (!fresh.complete) partial = true;
+    const received = await recentReceivedTokenAddresses(owner, deadlineAt);
+    if (received.partial) partial = true;
+    const discovered: string[] = [];
+    for (const addr of [...fresh.addresses, ...received.addresses]) {
+      if (wanted.has(addr)) continue;
+      if (Date.now() >= deadlineAt) {
+        partial = true;
+        break;
+      }
+      const stable = testStableMeta(addr);
+      if (stable) {
+        wanted.set(stable.tokenAddress.toLowerCase(), {
+          assetId: stable.assetId,
+          decimals: stable.decimals,
+          creator: "",
+        });
+        discovered.push(stable.tokenAddress.toLowerCase());
+        continue;
+      }
+      // ERC-721 transfers share this topic. A revert or empty `decimals()` is a completed read
+      // (not an ERC-20); only a transport failure means the balance was not read.
+      const decimalsRead = await readDiscoveredTokenDecimals(addr, deadlineAt);
+      if (decimalsRead.missed) {
+        partial = true;
+        continue;
+      }
+      if (decimalsRead.decimals === null) continue;
+      wanted.set(addr, {
+        assetId: addr,
+        decimals: decimalsRead.decimals,
+        creator: "",
+      });
+      discovered.push(addr);
+    }
     for (const raw of extraTokenAddresses(tokensParam)) {
       if (wanted.has(raw)) continue;
       if (Date.now() >= deadlineAt) {
@@ -540,75 +730,17 @@ async function walletTokenBalances(
         erc20Uint(token, "0x313ce567"),
         erc20Address(token, "0x02d05d3f"),
       ]);
-      wanted.set(token.toLowerCase(), {
-        assetId: token.toLowerCase(),
+      const key = token.toLowerCase();
+      wanted.set(key, {
+        assetId: key,
         decimals: Number(decimalsRaw) || 18,
         creator,
       });
+      discovered.push(key);
     }
-    const tokens = [...wanted.keys()].map((lower) => getAddress(lower));
-    if (!tokens.length) return { balances: {}, partial };
-    const data = encodeFunctionData({ abi: BALANCE_OF_ABI, functionName: "balanceOf", args: [getAddress(owner)] });
-    // A single batch over every catalog token can exceed the public node's limit and lose all
-    // balances. Keep chunks small and fall back to one eth_call per item when a chunk fails.
-    const BALANCE_BATCH_SIZE = 20;
-    const rawBalances: Array<{ ok: true; value: string } | { ok: false }> = [];
-    for (let start = 0; start < tokens.length; start += BALANCE_BATCH_SIZE) {
-      if (Date.now() >= deadlineAt) {
-        partial = true;
-        rawBalances.push(...tokens.slice(start).map(() => ({ ok: false as const })));
-        break;
-      }
-      const chunk = tokens.slice(start, start + BALANCE_BATCH_SIZE);
-      const timeoutMs = Math.max(200, Math.min(1_200, deadlineAt - Date.now()));
-      let results: Array<string | null>;
-      try {
-        results = await evmJsonRpcBatch<string>(
-          chunk.map((token) => ({ method: "eth_call", params: [{ to: token, data }, "latest"] })),
-          { ignoreBackoff: true, timeoutMs, deadlineAt },
-        );
-      } catch {
-        results = chunk.map(() => null);
-      }
-      const resolved = await Promise.all(
-        chunk.map(async (token, index) => {
-          const value = results[index];
-          if (typeof value === "string" && value !== "0x") return { ok: true as const, value };
-          if (Date.now() >= deadlineAt) return { ok: false as const };
-          const singleTimeout = Math.max(200, Math.min(800, deadlineAt - Date.now()));
-          const single = await readBalanceCall(token, data, singleTimeout, deadlineAt);
-          if (single) return { ok: true as const, value: single };
-          if (Date.now() >= deadlineAt) return { ok: false as const };
-          const retried = await readBalanceCall(token, data, Math.max(200, Math.min(800, deadlineAt - Date.now())), deadlineAt);
-          return retried ? { ok: true as const, value: retried } : { ok: false as const };
-        }),
-      );
-      rawBalances.push(...resolved);
-    }
-    const balances: Record<string, number> = {};
-    const ownerLower = owner.toLowerCase();
-    tokens.forEach((token, index) => {
-      const row = wanted.get(token.toLowerCase());
-      if (!row) return;
-      const raw = rawBalances[index];
-      if (!raw?.ok) {
-        partial = true;
-        return;
-      }
-      let units = BigInt(0);
-      try {
-        units = BigInt(raw.value);
-      } catch {
-        partial = true;
-        return;
-      }
-      const value = Number(formatUnits(units, row.decimals));
-      // A creator keeps their token listed even with a zero balance. A failed read is omitted
-      // and flagged partial instead of being shown as zero or failing the whole address.
-      if (value > 0 || row.creator.toLowerCase() === ownerLower) {
-        balances[row.assetId.toLowerCase()] = value;
-      }
-    });
+    const discoveredBalances = await readWantedBalances(owner, wanted, discovered, deadlineAt);
+    partial = partial || discoveredBalances.partial;
+    Object.assign(balances, discoveredBalances.balances);
     return { balances, partial };
   } catch {
     return { balances: {}, partial: true };

@@ -6,8 +6,9 @@ import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta 
 import { warnCatalog } from "@/lib/evm/catalog-log";
 import { readCatalogSnapshot, readLogScanCursor, writeCatalogSnapshot, writeLogScanCursor } from "@/lib/evm/log-scan-cursor";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
-import { fetchCachedMetadataImage } from "@/lib/evm/token-uri-metadata";
+import { fetchCachedMetadataImage, peekCachedMetadataImage } from "@/lib/evm/token-uri-metadata";
 import { displayTokenImageUrl } from "@/lib/ipfs";
+import { withStableImage } from "@/lib/token-image-merge";
 import {
   API_REQUEST_DEADLINE_MS,
   RequestDeadlineError,
@@ -15,6 +16,7 @@ import {
   currentDeadline,
   deadlineExpired,
   retryDelayMs,
+  runOutsideRequestDeadline,
   sleepMs,
 } from "@/lib/evm/request-deadline";
 
@@ -97,6 +99,11 @@ function topicAddress(topic: string | undefined): string {
  * never treat a partial list as whole.
  */
 export const LOG_WINDOW_BLOCKS = 9_000;
+/**
+ * Catalog `eth_getLogs` stays under this. A 9k-block query to the public node does not return,
+ * so the history scan would abort the same windows on every request.
+ */
+const CATALOG_LOG_WINDOW_BLOCKS = 800;
 
 export function logWindows(fromBlock: number, latest: number, size = LOG_WINDOW_BLOCKS): Array<[number, number]> {
   const out: Array<[number, number]> = [];
@@ -218,26 +225,74 @@ export function catalogListIsPartial(tokens: object): boolean {
   return Boolean((tokens as { [CATALOG_PARTIAL]?: boolean })[CATALOG_PARTIAL]);
 }
 let logWindowsInFlight = 0;
-const logWindowQueue: Array<() => void> = [];
+/** Peak concurrent `eth_getLogs` windows, for tests. */
+let logWindowsPeak = 0;
+/** Address and fresh-tail reads keep these slots, so a history scan cannot queue them. */
+const INTERACTIVE_LOG_SLOTS = 2;
+type LogSlotWaiter = { interactive: boolean; resolve: () => void };
+const logWindowQueue: LogSlotWaiter[] = [];
 
-async function withLogWindowSlot<T>(work: () => Promise<T>): Promise<T> {
-  if (logWindowsInFlight >= MAX_GLOBAL_LOG_WINDOWS) {
-    await new Promise<void>((resolve) => logWindowQueue.push(resolve));
-  } else {
-    logWindowsInFlight++;
+function logSlotLimit(interactive: boolean): number {
+  return interactive ? MAX_GLOBAL_LOG_WINDOWS : Math.max(1, MAX_GLOBAL_LOG_WINDOWS - INTERACTIVE_LOG_SLOTS);
+}
+
+function takeLogSlot(interactive: boolean): boolean {
+  if (logWindowsInFlight >= logSlotLimit(interactive)) return false;
+  logWindowsInFlight += 1;
+  logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
+  return true;
+}
+
+function releaseLogSlot(): void {
+  logWindowsInFlight = Math.max(0, logWindowsInFlight - 1);
+  for (let index = 0; index < logWindowQueue.length; index++) {
+    const waiter = logWindowQueue[index];
+    if (!takeLogSlot(waiter.interactive)) continue;
+    logWindowQueue.splice(index, 1);
+    waiter.resolve();
+    return;
+  }
+}
+
+async function withLogWindowSlot<T>(
+  work: () => Promise<T>,
+  options?: { interactive?: boolean; deadlineAt?: number },
+): Promise<T> {
+  const interactive = Boolean(options?.interactive);
+  let acquired = takeLogSlot(interactive);
+  if (!acquired) {
+    await new Promise<void>((resolve, reject) => {
+      let settled = false;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const waiter: LogSlotWaiter = {
+        interactive,
+        resolve: () => {
+          if (settled) return;
+          settled = true;
+          if (timer) clearTimeout(timer);
+          resolve();
+        },
+      };
+      if (typeof options?.deadlineAt === "number") {
+        timer = setTimeout(() => {
+          if (settled) return;
+          settled = true;
+          const index = logWindowQueue.indexOf(waiter);
+          if (index >= 0) logWindowQueue.splice(index, 1);
+          reject(new RequestDeadlineError());
+        }, Math.max(0, options.deadlineAt - Date.now()));
+      }
+      logWindowQueue.push(waiter);
+    });
+    acquired = true;
   }
   try {
     return await work();
   } finally {
-    const next = logWindowQueue.shift();
-    // Hand the slot straight to the next waiter; only free it when nobody is queued.
-    if (next) next();
-    else logWindowsInFlight--;
+    if (acquired) releaseLogSlot();
   }
 }
 
-/** Peak concurrent `eth_getLogs` windows, for tests. */
-let logWindowsPeak = 0;
 export function logWindowConcurrencyPeakForTests(): number {
   return logWindowsPeak;
 }
@@ -274,9 +329,9 @@ async function readLogWindowFromNode(
   from: number,
   to: number,
   timeoutMs = boundedTimeoutMs(LOG_GETLOGS_TIMEOUT_MS),
+  rpc?: { deadlineAt?: number; signal?: AbortSignal; interactive?: boolean },
 ): Promise<RpcLog[]> {
   return withLogWindowSlot(async () => {
-    logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
     let logs: unknown;
     try {
       logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)], {
@@ -284,7 +339,11 @@ async function readLogWindowFromNode(
         // A single HTML proxy page or timeout must not block the remaining windows behind the
         // per-URL backoff; the caller retries this window on its own schedule.
         ignoreBackoff: true,
-        deadlineAt: currentDeadline()?.at,
+        // Do not fall back to the request deadline. A history scan passes its own signal and
+        // budget; linking the request abort here kills every in-flight window when that
+        // request returns.
+        deadlineAt: rpc?.deadlineAt,
+        signal: rpc?.signal,
       });
     } catch (error) {
       if (error instanceof RequestDeadlineError) throw error;
@@ -293,7 +352,7 @@ async function readLogWindowFromNode(
     // Throwing (rather than returning []) keeps a failed window out of every cache.
     if (!Array.isArray(logs)) throw new LogWindowRpcError("rpc_logs_unavailable");
     return logs as RpcLog[];
-  });
+  }, { interactive: rpc?.interactive, deadlineAt: rpc?.deadlineAt });
 }
 
 /**
@@ -314,12 +373,16 @@ async function readLogWindow(
   to: number,
   immutable: boolean,
   deadlineAt?: number,
+  signal?: AbortSignal,
 ): Promise<RpcLog[] | null> {
   const lower = address.toLowerCase();
-  const timeoutMs = boundedTimeoutMs(LOG_GETLOGS_TIMEOUT_MS, deadlineAt);
+  // Request-scoped reads stay on the short timeout. A background history window may take longer
+  // than the compat deadline; aborting it at 12s is what made the same ranges repeat forever.
+  const timeoutCap = typeof deadlineAt === "number" && deadlineAt - Date.now() > 30_000 ? 20_000 : LOG_GETLOGS_TIMEOUT_MS;
+  const timeoutMs = boundedTimeoutMs(timeoutCap, deadlineAt);
   // A live deadline must not sit behind the shared data cache: that wrapper cannot see the
   // abort signal, so a hung window would keep the request open for its own full timeout.
-  if (immutable && typeof deadlineAt !== "number" && !currentDeadline()) {
+  if (immutable && typeof deadlineAt !== "number" && !signal && !currentDeadline()) {
     try {
       return await readImmutableLogWindowShared(lower, topics, from, to);
     } catch (error) {
@@ -331,7 +394,7 @@ async function readLogWindow(
     }
   }
   try {
-    return await readLogWindowFromNode(lower, topics, from, to, timeoutMs);
+    return await readLogWindowFromNode(lower, topics, from, to, timeoutMs, { deadlineAt, signal });
   } catch (error) {
     if (error instanceof RequestDeadlineError) throw error;
     warnCatalog("eth_getLogs window", error, { address: lower, from, to });
@@ -388,6 +451,10 @@ export type LogScanOptions = {
   tip?: number;
   /** Called once the current factory's tail windows (and their rows) are ready. */
   onTailReady?: () => void | Promise<void>;
+  /** Abort that belongs to this scan. Not the compat request's signal. */
+  signal?: AbortSignal;
+  /** Block span of each `eth_getLogs`. Defaults to `LOG_WINDOW_BLOCKS`. */
+  windowBlocks?: number;
 };
 
 /**
@@ -444,17 +511,17 @@ export async function fetchLogsTailResult(
   topic: string | readonly string[],
   fromBlockHint?: number,
   toBlockHint?: number,
-  options: Pick<LogScanOptions, "retryDelays" | "onWindowLogs"> & { tip?: number; deadlineAt?: number } = {},
+  options: Pick<LogScanOptions, "retryDelays" | "onWindowLogs" | "signal" | "windowBlocks"> & { tip?: number; deadlineAt?: number } = {},
 ): Promise<LogScanOutcome> {
   const topics: LogTopic[] = [typeof topic === "string" ? topic : [...topic]];
-  const tip = options.tip ?? (await readChainTip(options.deadlineAt));
+  const tip = options.tip ?? (await readChainTip(options.deadlineAt, options.signal));
   if (tip === null) return { logs: [], complete: false, failedWindows: 1 };
   const scanLatest = typeof toBlockHint === "number" && toBlockHint >= 0 ? Math.min(tip, toBlockHint) : tip;
   const start = Math.max(
     logStartBlock(address),
     typeof fromBlockHint === "number" && fromBlockHint > 0 ? fromBlockHint : 0,
   );
-  const windows = logWindows(start, scanLatest).slice(-TAIL_WINDOW_COUNT);
+  const windows = logWindows(start, scanLatest, options.windowBlocks ?? LOG_WINDOW_BLOCKS).slice(-TAIL_WINDOW_COUNT);
   const now = Date.now();
   const scanned = await Promise.all(
     windows.map(async ([from, to]) => {
@@ -464,6 +531,7 @@ export async function fetchLogsTailResult(
           fresh: typeof toBlockHint !== "number",
           retryDelays: options.retryDelays ?? TAIL_LOG_RETRY_DELAYS,
           deadlineAt: options.deadlineAt,
+          signal: options.signal,
         });
         options.onWindowLogs?.(logs);
         return { logs, ok: true };
@@ -504,7 +572,7 @@ const TAIL_WINDOW_COUNT = 2;
  * Chain tip for a catalog scan. It reads through an active RPC backoff (a failure noted for some
  * unrelated call must not blank the scan) and retries once; `null` means the node is unreachable.
  */
-async function readChainTip(deadlineAt?: number): Promise<number | null> {
+async function readChainTip(deadlineAt?: number, signal?: AbortSignal): Promise<number | null> {
   for (let attempt = 0; attempt < 2; attempt++) {
     if (attempt > 0) {
       const wait = retryDelayMs(300, deadlineAt);
@@ -517,6 +585,7 @@ async function readChainTip(deadlineAt?: number): Promise<number | null> {
         timeoutMs: boundedTimeoutMs(8_000, deadlineAt),
         ignoreBackoff: true,
         deadlineAt,
+        signal,
       });
       const tip = Number.parseInt(hex, 16);
       if (Number.isFinite(tip)) return tip;
@@ -540,7 +609,8 @@ async function readCachedLogWindow(
     fresh = false,
     retryDelays = [0],
     deadlineAt,
-  }: { endBlock?: number; fresh?: boolean; retryDelays?: readonly number[]; deadlineAt?: number } = {},
+    signal,
+  }: { endBlock?: number; fresh?: boolean; retryDelays?: readonly number[]; deadlineAt?: number; signal?: AbortSignal } = {},
 ): Promise<RpcLog[]> {
   const key = windowCacheKey(address, topics, from, to);
   const isImmutable = (typeof endBlock === "number" && to <= endBlock) || to < latest - LOG_WINDOW_BLOCKS;
@@ -560,7 +630,7 @@ async function readCachedLogWindow(
       if (deadlineExpired(deadlineAt)) break;
     }
     try {
-      logs = await readLogWindow(address, topics, from, to, isImmutable, deadlineAt);
+      logs = await readLogWindow(address, topics, from, to, isImmutable, deadlineAt, signal);
     } catch (error) {
       if (error instanceof RequestDeadlineError) break;
       throw error;
@@ -585,7 +655,8 @@ async function fetchLogsWindowedCore(
   const retryDelays = options.retryDelays ?? [0];
   const tailRetryDelays = options.tailRetryDelays ?? TAIL_LOG_RETRY_DELAYS;
   const maxParallel = Math.max(1, options.maxParallel ?? MAX_PARALLEL_LOG_WINDOWS);
-  const tip = options.tip ?? (await readChainTip(deadlineAt));
+  const windowBlocks = Math.max(1, options.windowBlocks ?? LOG_WINDOW_BLOCKS);
+  const tip = options.tip ?? (await readChainTip(deadlineAt, options.signal));
   if (tip === null) return { logs: [], complete: false, failedWindows: 1 };
   const scanLatest =
     typeof toBlockHint === "number" && toBlockHint >= 0 ? Math.min(tip, toBlockHint) : tip;
@@ -599,7 +670,7 @@ async function fetchLogsWindowedCore(
   const cursor = storedCursor && storedCursor.lastBlock < tip ? storedCursor : null;
   const lastBlock = cursor?.lastBlock ?? -1;
   const cursorLogs = cursor?.logs ?? [];
-  const allWindows = logWindows(start, scanLatest);
+  const allWindows = logWindows(start, scanLatest, windowBlocks);
   const tailWindows = typeof toBlockHint === "number" ? [] : allWindows.slice(-TAIL_WINDOW_COUNT);
   const tailStart = tailWindows.length ? tailWindows[0][0] : scanLatest + 1;
   // An old cursor may have scanned past a superseded factory's successor or into the current
@@ -625,6 +696,7 @@ async function fetchLogsWindowedCore(
         fresh: readOptions.fresh,
         retryDelays: readOptions.retryDelays ?? retryDelays,
         deadlineAt,
+        signal: options.signal,
       });
       options.onWindowLogs?.(logs);
       return { from, to, logs, ok: true };
@@ -639,7 +711,7 @@ async function fetchLogsWindowedCore(
   const failedWindowCount = () => scanned.filter((window) => !window.ok).length;
 
   if (!cursorTopic) {
-    const windows = logWindows(Math.max(start, lastBlock + 1), scanLatest);
+    const windows = logWindows(Math.max(start, lastBlock + 1), scanLatest, windowBlocks);
     if (!windows.length) return { logs: cursorLogs, complete: true, failedWindows: 0 };
     scanned.push(...(await Promise.all(windows.map((window) => readWindow(window)))));
     return {
@@ -652,7 +724,7 @@ async function fetchLogsWindowedCore(
   // The current factory has no successor, so its last two windows are the only place a new token
   // can appear. Read them on every refresh, even when a cursor covers the rest of history.
   const historyFrom = Math.max(start, lastBlock + 1);
-  const historyWindows = historyFrom <= tailStart - 1 ? logWindows(historyFrom, tailStart - 1) : [];
+  const historyWindows = historyFrom <= tailStart - 1 ? logWindows(historyFrom, tailStart - 1, windowBlocks) : [];
 
   if (!tailWindows.length && !historyWindows.length) {
     return { logs: visibleCursorLogs, complete: true, failedWindows: 0 };
@@ -675,7 +747,7 @@ async function fetchLogsWindowedCore(
   // resumes instead of restarting. A failed or unscanned window is a hard stop: the cursor never
   // advances past it, even if newer windows succeeded.
   const historyScanned: ScannedLogWindow[] = [];
-  const immutableEnd = typeof toBlockHint === "number" ? scanLatest + 1 : tip - LOG_WINDOW_BLOCKS;
+  const immutableEnd = typeof toBlockHint === "number" ? scanLatest + 1 : tip - windowBlocks;
   let persistedThrough = lastBlock;
   let persistCursor = true;
   const persistContiguous = async () => {
@@ -821,37 +893,6 @@ function shownTokenImage(uri: string | null | undefined): string | null {
 }
 
 const METADATA_JSON_SUFFIX = /\/metadata\.json(?:[?#].*)?$/i;
-const CATALOG_IMAGE_CONCURRENCY = 4;
-
-/** Fills catalog rows whose on-chain URI is a metadata JSON document, not an image file. */
-async function resolveCatalogImages(
-  rows: CatalogToken[],
-  uris: Map<string, string>,
-  deadlineAt?: number,
-): Promise<boolean> {
-  const jobs = rows.filter((row) => !row.imageUri);
-  let partial = false;
-  for (let index = 0; index < jobs.length; index += CATALOG_IMAGE_CONCURRENCY) {
-    if (deadlineExpired(deadlineAt)) return true;
-    await Promise.all(
-      jobs.slice(index, index + CATALOG_IMAGE_CONCURRENCY).map(async (row) => {
-        if (deadlineExpired(deadlineAt)) {
-          partial = true;
-          return;
-        }
-        const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
-        if (!METADATA_JSON_SUFFIX.test(uri) || uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return;
-        const image = shownTokenImage(await fetchCachedMetadataImage(uri, undefined, deadlineAt));
-        if (deadlineExpired(deadlineAt) && !image) partial = true;
-        if (!image) return;
-        const next = applyTokenImage(row, undefined, image);
-        row.imageUri = next.imageUri;
-        row.creationMetadata = next.creationMetadata;
-      }),
-    );
-  }
-  return partial;
-}
 
 /**
  * Applies the image precedence shared by the catalog and the single-asset fallback: an owner
@@ -875,8 +916,13 @@ export function applyTokenImage<T extends { imageUri?: string; creationMetadata?
 const CATALOG_STALE_MS = 30_000;
 /** A scan stopped by its deadline is resumed on the next request instead of being cached as whole. */
 export const CATALOG_PARTIAL_STALE_MS = 15_000;
-/** Wall-clock budget for one cold token catalog scan. Kept inside the compat request deadline. */
+/** Wall-clock budget for one cold token catalog scan that a request is still waiting on. */
 export const TOKEN_CATALOG_SCAN_BUDGET_MS = API_REQUEST_DEADLINE_MS;
+/**
+ * Background history keeps running after the compat request returns. Its windows use this
+ * budget and their own abort signal, so a request deadline cannot restart the scan.
+ */
+const BACKGROUND_CATALOG_BUDGET_MS = 180_000;
 /** A cold request waits at most this long before serving the partial list while the scan continues. */
 export const TOKEN_CATALOG_SOFT_DEADLINE_MS = 8_000;
 let tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
@@ -888,9 +934,15 @@ export function setTokenCatalogSoftDeadlineForTests(ms: number | null): void {
 const CATALOG_REVALIDATE_SECONDS = 60;
 export const CHAIN_CATALOG_TAGS = ["evm-chain-catalog"];
 
-let tokensCache: { at: number; value: CatalogToken[]; partial?: boolean } | null = null;
+let tokensCache: { at: number; value: CatalogToken[]; partial?: boolean; tip?: number } | null = null;
 let poolsCache: { at: number; value: CatalogPool[] } | null = null;
 let tokensRefreshing: Promise<CatalogToken[]> | null = null;
+/** Deadline and abort for the single in-flight history scan. Independent of any request. */
+let backgroundScan: { deadlineAt: number; signal: AbortSignal } | null = null;
+let backgroundAbort: AbortController | null = null;
+/** Bumped when tests reset the cache so an in-flight scan cannot republish after the reset. */
+let catalogGeneration = 0;
+let catalogWriteGeneration = 0;
 /** In-flight tail re-read for a fresh cache; shared by concurrent requests. */
 let tailRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
@@ -923,12 +975,16 @@ export function peekCachedCatalogTokens(): CatalogToken[] {
   return tokensCache?.value ?? [];
 }
 
-/** Install a catalog snapshot for tests. Pass `null` to clear it. */
-export function seedTokenCatalogCacheForTests(tokens: CatalogToken[] | null): void {
-  tokensCache = tokens ? { at: Date.now(), value: tokens, partial: false } : null;
+/** Install a catalog snapshot for tests. Pass `null` to clear it. `tip` is the last block already merged. */
+export function seedTokenCatalogCacheForTests(tokens: CatalogToken[] | null, tip?: number): void {
+  tokensCache = tokens ? { at: Date.now(), value: tokens, partial: false, ...(typeof tip === "number" ? { tip } : {}) } : null;
 }
 
 export function resetChainCatalogCacheForTests(): void {
+  catalogGeneration += 1;
+  backgroundAbort?.abort();
+  backgroundAbort = null;
+  backgroundScan = null;
   tokensCache = null;
   poolsCache = null;
   tokensRefreshing = null;
@@ -1057,7 +1113,7 @@ function metadataCalls(tokens: string[]) {
  * is `null` and the caller falls back to single calls. Reads go through an active RPC backoff: a
  * failure noted for the log scan must not turn every token into a placeholder.
  */
-async function readMetadataChunk(tokens: string[], deadlineAt?: number): Promise<Array<string | null>> {
+async function readMetadataChunk(tokens: string[], deadlineAt?: number, signal?: AbortSignal): Promise<Array<string | null>> {
   for (let attempt = 0; attempt < 2; attempt++) {
     if (attempt > 0 && deadlineExpired(deadlineAt)) break;
     try {
@@ -1065,6 +1121,7 @@ async function readMetadataChunk(tokens: string[], deadlineAt?: number): Promise
         ignoreBackoff: true,
         timeoutMs: boundedTimeoutMs(8_000, deadlineAt),
         deadlineAt,
+        signal,
       });
     } catch (error) {
       if (error instanceof RequestDeadlineError || deadlineExpired(deadlineAt)) break;
@@ -1075,7 +1132,7 @@ async function readMetadataChunk(tokens: string[], deadlineAt?: number): Promise
 }
 
 /** Reads ERC-20 metadata for every known address and turns it into catalog rows. */
-async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number): Promise<TokenRowBuild> {
+async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number, signal?: AbortSignal): Promise<TokenRowBuild> {
   const dep = readEvmDeployments();
   const tokens = [...new Set([...addresses].map((address) => address.toLowerCase()))].map((lower) => getAddress(lower));
   if (!tokens.length) return { rows: [], complete: true, skipped: 0 };
@@ -1090,7 +1147,7 @@ async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number):
       metadata.push(...new Array<string | null>((tokens.length - index) * ROW_READS).fill(null));
       break;
     }
-    metadata.push(...(await readMetadataChunk(tokens.slice(index, index + METADATA_BATCH_TOKENS), deadlineAt)));
+    metadata.push(...(await readMetadataChunk(tokens.slice(index, index + METADATA_BATCH_TOKENS), deadlineAt, signal)));
   }
   const fallbackIndexes: number[] = [];
   for (let index = 0; index < tokens.length; index++) {
@@ -1108,6 +1165,7 @@ async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number):
       timeoutMs: boundedTimeoutMs(10_000, deadlineAt),
       ignoreBackoff: true,
       deadlineAt,
+      signal,
     }).catch(() => {
       fallbackFailures += 1;
       return null;
@@ -1210,8 +1268,11 @@ async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number):
     if (metadata[offset + 5] !== null) next.metadataUri = uri;
     tokenMetadataCache.set(token.toLowerCase(), next);
   });
-  const imagesPartial = await resolveCatalogImages(rows, metadataByToken, deadlineAt);
-  return { rows: sortTokenRows(rows), complete: skipped === 0 && !stopped && !imagesPartial, skipped };
+  // Images are best-effort. A gateway miss must not mark the token list partial or hold the response:
+  // use a cached image when one exists, and fill the rest after the rows are already returned.
+  applyCachedCatalogImages(rows, metadataByToken);
+  scheduleCatalogImages(rows, metadataByToken);
+  return { rows: sortTokenRows(rows), complete: skipped === 0 && !stopped, skipped };
 }
 
 function sortTokenRows(rows: CatalogToken[]): CatalogToken[] {
@@ -1222,12 +1283,112 @@ function sortTokenRows(rows: CatalogToken[]): CatalogToken[] {
  * Union of catalogs by address; later arguments win. Used with the last good catalog so a partial
  * or failed scan can add tokens but never remove one.
  */
+/** Union of catalogs by address. A later row wins, except an empty image never erases a known one. */
+export function mergeCatalogTokens(...lists: ReadonlyArray<readonly CatalogToken[]>): CatalogToken[] {
+  return mergeTokenRows(...lists);
+}
+
 function mergeTokenRows(...lists: ReadonlyArray<readonly CatalogToken[]>): CatalogToken[] {
   const byAddress = new Map<string, CatalogToken>();
   for (const list of lists) {
-    for (const row of list) byAddress.set(row.tokenAddress.toLowerCase(), row);
+    for (const row of list) {
+      const key = row.tokenAddress.toLowerCase();
+      byAddress.set(key, withStableImage(byAddress.get(key), row));
+    }
   }
   return sortTokenRows([...byAddress.values()]);
+}
+
+/** Copies already-fetched metadata images onto rows. Does not call a gateway. */
+function applyCachedCatalogImages(rows: CatalogToken[], uris: Map<string, string>): void {
+  for (const row of rows) {
+    if (row.imageUri) continue;
+    const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+    if (!METADATA_JSON_SUFFIX.test(uri)) continue;
+    const image = shownTokenImage(peekCachedMetadataImage(uri));
+    if (!image) continue;
+    const next = applyTokenImage(row, undefined, image);
+    row.imageUri = next.imageUri;
+    row.creationMetadata = next.creationMetadata;
+  }
+}
+
+/**
+ * Fills missing metadata images after the catalog response. A slow gateway updates the in-memory
+ * rows for the next request and never flips the list to partial.
+ */
+function scheduleCatalogImages(rows: CatalogToken[], uris: Map<string, string>): void {
+  const pending = rows.filter((row) => {
+    if (row.imageUri) return false;
+    const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+    return METADATA_JSON_SUFFIX.test(uri) && uri !== "ipfs://people" && !uri.startsWith("ipfs://people/");
+  });
+  if (!pending.length) return;
+  const generation = tokenCatalogScanGeneration;
+  void (async () => {
+    for (const row of pending) {
+      if (generation !== tokenCatalogScanGeneration && tokenCatalogScanGeneration !== 0) return;
+      const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+      const image = shownTokenImage(await fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000));
+      if (!image || !tokensCache) continue;
+      const value = tokensCache.value.map((item) =>
+        item.tokenAddress.toLowerCase() === row.tokenAddress.toLowerCase()
+          ? applyTokenImage(item, undefined, image)
+          : item,
+      );
+      tokensCache = { ...tokensCache, value };
+    }
+  })().catch((error) => {
+    warnCatalog("catalog image", error);
+  });
+}
+
+export type FreshTokenTail = { addresses: string[]; complete: boolean; tip: number | null };
+
+/**
+ * One `eth_getLogs` from the last merged block through the current tip (capped at one window).
+ * Bypasses the immutable log cache so a token mined in the latest block is visible immediately.
+ */
+export async function readFreshCreatedTokenAddresses(deadlineAt?: number): Promise<FreshTokenTail> {
+  const scans = tokenFactoryScans();
+  const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
+  if (!current) return { addresses: [], complete: true, tip: null };
+  const tip = await readChainTip(deadlineAt);
+  if (tip === null) return { addresses: [], complete: false, tip: null };
+  const remembered = tokensCache?.tip;
+  const uncapped = typeof remembered === "number" ? Math.min(remembered, tip) : Math.max(current.fromBlock, tip - CATALOG_LOG_WINDOW_BLOCKS + 1);
+  const from = Math.max(current.fromBlock, tip - CATALOG_LOG_WINDOW_BLOCKS + 1, Math.min(uncapped, tip));
+  const gapped = uncapped < from;
+  if (from > tip) return { addresses: [], complete: !gapped, tip };
+  try {
+    const logs = await readLogWindowFromNode(
+      current.address,
+      [TOKEN_CREATED_TOPICS],
+      from,
+      tip,
+      boundedTimeoutMs(3_000, deadlineAt),
+      { deadlineAt, interactive: true },
+    );
+    const addresses: string[] = [];
+    const seen = new Set<string>();
+    for (const log of logs) {
+      let token = "";
+      try {
+        token = topicAddress(log.topics?.[1]);
+      } catch {
+        token = "";
+      }
+      if (!token) continue;
+      const lower = token.toLowerCase();
+      if (seen.has(lower)) continue;
+      seen.add(lower);
+      addresses.push(lower);
+    }
+    return { addresses, complete: !gapped, tip };
+  } catch (error) {
+    warnCatalog("fresh tail", error, { factory: current.key });
+    return { addresses: [], complete: false, tip };
+  }
 }
 
 function isCatalogTokenRow(value: unknown): value is CatalogToken {
@@ -1299,8 +1460,25 @@ function addLogTokenAddresses(addresses: Set<string>, logs: readonly RpcLog[]): 
 
 const TOKEN_CREATED_TOPICS = [TOKEN_CREATED_TOPIC, TOKEN_CREATED_LEFTOVER_TOPIC];
 
+/** Merges rows into the in-memory catalog. A finished list is never flipped back to partial. */
+function rememberCatalog(tokens: CatalogToken[], partial: boolean, tip?: number | null): void {
+  if (catalogWriteGeneration !== catalogGeneration) return;
+  const merged = mergeTokenRows(tokensCache?.value ?? [], tokens);
+  const nextPartial = tokensCache?.partial === false ? false : partial;
+  const nextTip = typeof tip === "number" ? tip : tokensCache?.tip;
+  tokensCache = {
+    at: tokensCache?.at ?? Date.now(),
+    value: merged,
+    partial: nextPartial,
+    ...(typeof nextTip === "number" ? { tip: nextTip } : {}),
+  };
+}
+
 export async function discoverTokensOnChainUncached(deadlineAt?: number): Promise<CatalogTokenScanResult> {
-  const budgetAt = deadlineAt ?? currentDeadline()?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS;
+  catalogWriteGeneration = catalogGeneration;
+  const usingBackground = typeof deadlineAt !== "number" ? backgroundScan : null;
+  const signal = usingBackground?.signal;
+  const budgetAt = deadlineAt ?? usingBackground?.deadlineAt ?? currentDeadline()?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS;
   deadlineAt = budgetAt;
   const startedAt = Date.now();
   const dep = readEvmDeployments();
@@ -1327,7 +1505,7 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const baseline = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? []);
   tokenCatalogProgress = { addresses: new Set(addresses), tokens: mergeTokenRows(staticTokenRows(dep), baseline) };
 
-  const tip = await readChainTip(deadlineAt);
+  const tip = await readChainTip(deadlineAt, signal);
   let progressBuilding: Promise<void> | null = null;
   let progressDirty = false;
   const refreshProgress = () => {
@@ -1338,8 +1516,10 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
         progressDirty = false;
         const snapshot = new Set(addresses);
         try {
-          const built = await buildTokenRows(snapshot, deadlineAt);
-          tokenCatalogProgress = { addresses: snapshot, tokens: mergeTokenRows(baseline, built.rows) };
+          const built = await buildTokenRows(snapshot, deadlineAt, signal);
+          const tokens = mergeTokenRows(baseline, built.rows);
+          tokenCatalogProgress = { addresses: snapshot, tokens };
+          rememberCatalog(tokens, true, tip);
         } catch (error) {
           // Keep the previous (static or earlier) partial list.
           warnCatalog("progress rows", error);
@@ -1369,6 +1549,8 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
             tip,
             retryDelays: TAIL_LOG_RETRY_DELAYS,
             deadlineAt,
+            signal,
+            windowBlocks: CATALOG_LOG_WINDOW_BLOCKS,
             onWindowLogs: (logs) => {
               if (addLogTokenAddresses(addresses, logs)) refreshProgress();
             },
@@ -1386,7 +1568,9 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
     try {
       await readSupersededTails();
       if (progressBuilding) await progressBuilding;
-      await persistCatalogSnapshot(tokenCatalogProgress?.tokens ?? [], tip ?? 0);
+      const tailTokens = tokenCatalogProgress?.tokens ?? [];
+      rememberCatalog(tailTokens, true, tip);
+      await persistCatalogSnapshot(tailTokens, tip ?? 0);
     } finally {
       resolveTail();
     }
@@ -1409,9 +1593,13 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
         deadlineAt,
         {
           resilient: true,
-          retryDelays: [500, 1500],
-          maxParallel: MAX_CATALOG_LOG_WINDOWS,
-          historyNewestFirst: true,
+          retryDelays: [1_000],
+          maxParallel: 2,
+          // Oldest first so each successful chunk advances the cursor. The tail was already read,
+          // and newest-first never persisted a prefix when the request aborted the first chunk.
+          historyNewestFirst: false,
+          signal,
+          windowBlocks: CATALOG_LOG_WINDOW_BLOCKS,
           tip,
           onWindowLogs: (logs) => {
             if (addLogTokenAddresses(addresses, logs)) refreshProgress();
@@ -1436,11 +1624,12 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   await publishTail();
 
   if (progressBuilding) await progressBuilding;
-  const built = await buildTokenRows(addresses, deadlineAt);
+  const built = await buildTokenRows(addresses, deadlineAt, signal);
   if (!built.complete) complete = false;
   // The result never drops a token an earlier scan (or instance) already knew about.
   const tokens = mergeTokenRows(baseline, built.rows);
   tokenCatalogProgress = { addresses: new Set(addresses), tokens };
+  rememberCatalog(tokens, !complete, tip);
   await persistCatalogSnapshot(tokens, tip ?? 0, complete);
   if (!complete) {
     const elapsedMs = Date.now() - startedAt;
@@ -1456,7 +1645,15 @@ async function loadTokens(): Promise<CatalogToken[]> {
     let value: CatalogToken[] = [];
     let partial = false;
     try {
-      value = await scanTokensCached();
+      // A background history scan must not throw out of `unstable_cache`. Next logs that
+      // revalidation error into the open page render and the browser reloads mid-paint.
+      if (backgroundScan) {
+        const direct = await discoverTokensOnChainUncached();
+        value = direct.tokens;
+        partial = !direct.complete;
+      } else {
+        value = await scanTokensCached();
+      }
     } catch (error) {
       if (error instanceof PartialTokenCatalogError) {
         value = error.tokens;
@@ -1470,8 +1667,14 @@ async function loadTokens(): Promise<CatalogToken[]> {
     }
     // Keep the union even if the shared cache handed us a smaller list.
     value = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? [], value);
-    tokensCache = { at: Date.now(), value, partial };
-    return partial ? stampPartial(value, true) : value;
+    const tip = partial ? tokensCache?.tip : await readChainTip();
+    // Image fills land on the cache while the tip read is in flight. Merging again keeps them.
+    value = mergeTokenRows(value, tokensCache?.value ?? []);
+    if (catalogWriteGeneration !== catalogGeneration) return value;
+    // A later incomplete rescan must not mark a finished catalog partial again.
+    const nextPartial = partial && tokensCache?.partial !== false;
+    tokensCache = { at: Date.now(), value, partial: nextPartial, ...(typeof tip === "number" ? { tip } : {}) };
+    return nextPartial ? stampPartial(value, true) : value;
   } catch (error) {
     // Both the shared cache and the direct scan failed: serve the last good catalog rather than
     // an empty or partial one.
@@ -1497,80 +1700,80 @@ async function waitForTailReady(sinceGeneration: number, timeoutMs: number): Pro
 }
 
 function startTokenRefresh(): Promise<CatalogToken[]> {
-  const task: Promise<CatalogToken[]> = loadTokens()
+  if (tokensRefreshing) return tokensRefreshing;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), BACKGROUND_CATALOG_BUDGET_MS);
+  timer.unref?.();
+  backgroundAbort = controller;
+  backgroundScan = { deadlineAt: Date.now() + BACKGROUND_CATALOG_BUDGET_MS, signal: controller.signal };
+  const task: Promise<CatalogToken[]> = runOutsideRequestDeadline(() => loadTokens())
     .catch((error) => {
       warnCatalog("token refresh", error);
       return tokensCache?.value ?? tokenCatalogProgress?.tokens ?? [];
     })
     .finally(() => {
+      clearTimeout(timer);
       if (tokensRefreshing === task) tokensRefreshing = null;
+      if (backgroundAbort === controller) {
+        backgroundAbort = null;
+        backgroundScan = null;
+      }
     });
   tokensRefreshing = task;
   return task;
 }
 
 /**
- * A cache younger than the stale window still answers with the newest windows of every factory:
- * tokens created since the cached scan are added before returning. Concurrent requests share one
- * in-flight read, and superseded factories are served from the immutable window cache.
+ * Serves the in-memory catalog immediately and merges one fresh `getLogs` from the last merged
+ * block to the tip. A miss of that read is partial. An image miss is not. Superseded factories
+ * cannot gain tokens, so they are not scanned on this path.
  */
 function refreshCachedTail(): Promise<CatalogToken[]> {
   if (tailRefreshing) return tailRefreshing;
+  const generation = catalogGeneration;
   const task: Promise<CatalogToken[]> = (async () => {
     const base = tokensCache?.value ?? [];
-    const deadlineAt = currentDeadline()?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS;
-    const tip = await readChainTip(deadlineAt);
-    if (tip === null) return stampPartial(base.slice(), true);
+    // The request must not sit behind history. Two and a half seconds is the whole tail budget.
+    const requestAt = currentDeadline()?.at;
+    const deadlineAt = Math.min(Date.now() + 2_500, requestAt ?? Number.POSITIVE_INFINITY);
+    const fresh = await readFreshCreatedTokenAddresses(deadlineAt);
     const known = new Set(base.map((row) => row.tokenAddress.toLowerCase()));
-    const seen = new Set<string>();
-    const scans = tokenFactoryScans();
-    const current = scans.find((scan) => scan.key === "tokenFactory") ?? scans[scans.length - 1];
-    const rest = scans.filter((scan) => scan !== current);
-    const readTail = async (scan: TokenFactoryScan): Promise<boolean> => {
-      try {
-        const result = await fetchLogsTailResult(scan.address, TOKEN_CREATED_TOPICS, scan.fromBlock, scan.toBlock, {
-          tip,
-          deadlineAt,
-          retryDelays: TAIL_LOG_RETRY_DELAYS,
-          onWindowLogs: (logs) => {
-            addLogTokenAddresses(seen, logs);
-          },
-        });
-        return result.complete && (result.failedWindows ?? 0) === 0;
-      } catch (error) {
-        warnCatalog("cached tail", error, { factory: scan.key });
-        return false;
-      }
-    };
-    const failed: TokenFactoryScan[] = [];
-    const note = async (scan: TokenFactoryScan) => {
-      if (!(await readTail(scan))) failed.push(scan);
-    };
-    // Current factory first, so its tail is not one of eight parallel range queries.
-    if (current) await note(current);
-    await Promise.all(rest.map((scan) => note(scan)));
-    let tailsPartial = tokensCache?.partial === true;
-    for (const scan of failed) {
-      if (deadlineExpired(deadlineAt)) {
-        tailsPartial = true;
-        break;
-      }
-      if (!(await readTail(scan))) tailsPartial = true;
+    const added = fresh.addresses.filter((lower) => !known.has(lower));
+    let value = base;
+    let builtComplete = true;
+    if (added.length) {
+      const built = await buildTokenRows(added, deadlineAt);
+      builtComplete = built.complete;
+      if (built.rows.length) value = mergeTokenRows(base, built.rows);
     }
-    const added = [...seen].filter((lower) => !known.has(lower));
-    if (!added.length) return tailsPartial || deadlineExpired(deadlineAt) ? stampPartial(base.slice(), true) : base;
-    const built = await buildTokenRows(added, deadlineAt);
-    if (!built.rows.length) {
-      return tailsPartial || deadlineExpired(deadlineAt) || !built.complete ? stampPartial(base.slice(), true) : base;
+    const tailPartial = !fresh.complete || (added.length > 0 && !builtComplete);
+    // A tail read awaits the network. Metadata images may have been written onto the cache in
+    // that gap; publishing the pre-await list would wipe them and the next response would
+    // render letter fallbacks for logos that were already known.
+    value = mergeTokenRows(value, tokensCache?.value ?? []);
+    if (generation !== catalogGeneration) return value;
+    if (tokensCache) {
+      const historyDone = tokensCache.partial === false && !tokensRefreshing;
+      const historyOpen = Boolean(tokensRefreshing) || Boolean(tokensCache.partial);
+      const responsePartial = historyOpen || tailPartial;
+      tokensCache = {
+        ...tokensCache,
+        value,
+        // A finished history stays finished when the tip read misses, so the next request does
+        // not walk the chain again. The response itself is still partial for that miss.
+        partial: historyDone ? false : responsePartial,
+        ...(tailPartial || fresh.tip === null ? {} : { tip: fresh.tip }),
+      };
     }
-    const value = mergeTokenRows(tokensCache?.value ?? base, built.rows);
-    if (tokensCache) tokensCache = { ...tokensCache, value, partial: tailsPartial || !built.complete };
-    await persistCatalogSnapshot(value, tip);
-    return tailsPartial || deadlineExpired(deadlineAt) || !built.complete ? stampPartial(value.slice(), true) : value;
+    if (!tailPartial && fresh.tip !== null && value.length) await persistCatalogSnapshot(value, fresh.tip);
+    const listPartial = tailPartial || Boolean(tokensCache?.partial);
+    return listPartial ? stampPartial(value.slice(), true) : value;
   })()
     .catch((error) => {
       warnCatalog("cached tail", error);
-      return tokensCache?.value ?? [];
+      const base = (tokensCache?.value ?? []).slice();
+      if (tokensCache && tokensCache.partial !== false) tokensCache = { ...tokensCache, partial: true };
+      return stampPartial(base, true);
     })
     .finally(() => {
       if (tailRefreshing === task) tailRefreshing = null;
@@ -1583,7 +1786,10 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   const cached = tokensCache;
   if (cached) {
     const staleAfter = cached.partial ? CATALOG_PARTIAL_STALE_MS : CATALOG_STALE_MS;
-    if (Date.now() - cached.at < staleAfter) return refreshCachedTail();
+    // A finished catalog only re-reads the tip below. Walking history again evicts the log
+    // cache and the public node aborts those windows, which reloads the explorer page.
+    if (cached.partial !== false && Date.now() - cached.at >= staleAfter && !tokensRefreshing) void startTokenRefresh();
+    return refreshCachedTail();
   }
 
   // Stale or cold: (re)start the scan, but do not keep the request waiting for long history. The
@@ -1616,7 +1822,7 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   // Static + tail + whatever history finished meanwhile; never an empty list or a shrunk one.
   // The scan keeps the cursor, so the next request resumes instead of starting over.
   if (tokenCatalogProgress?.tokens.length) return stampPartial(tokenCatalogProgress.tokens.slice(), true);
-  return stampPartial((cached?.value ?? tokensCache?.value ?? (await loadPersistedTokens())).slice(), true);
+  return stampPartial((tokensCache?.value ?? (await loadPersistedTokens())).slice(), true);
 }
 
 async function pairReserves(pair: string, wppl: string): Promise<CatalogPool | null> {

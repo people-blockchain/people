@@ -6,7 +6,7 @@ import { encodeAbiParameters, getAddress, toFunctionSelector } from "viem";
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import { resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { resetAddressBalanceCacheForTests, handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
-import { API_REQUEST_DEADLINE_MS } from "../src/lib/evm/request-deadline.ts";
+import { API_REQUEST_DEADLINE_MS, deadlineExpired, runWithRequestDeadline } from "../src/lib/evm/request-deadline.ts";
 import { resetRpcBackoffForTests } from "../src/lib/evm/rpc-server.ts";
 import { resetTokenImageCacheForTests } from "../src/lib/evm/token-uri-metadata.ts";
 import { resetTokenCreationBlockCacheForTests, resetTransferIndexCacheForTests } from "../src/lib/evm/transfer-index.ts";
@@ -187,4 +187,14 @@ test("a metadata.json that never responds does not hold the asset past the deadl
   assert.equal(res.body.symbol, "DDLN");
   assert.equal(res.body.imageUri, undefined);
   assert.equal(res.body.partial, true);
+});
+
+test("a later explicit deadline stays open after the request signal aborts", async () => {
+  let open = false;
+  await runWithRequestDeadline(async () => {
+    const later = Date.now() + 10_000;
+    await new Promise((resolve) => setTimeout(resolve, 40));
+    open = !deadlineExpired(later);
+  }, 20);
+  assert.equal(open, true);
 });
