@@ -207,6 +207,60 @@ test("a metadata.json that never responds does not hold the asset past the deadl
   assert.match(String(res.body.imageUri), /metadata\.json/);
 });
 
+test("assets resolves inside the deadline when RPC and the gateway stay silent, then stops", async (t) => {
+  resetCaches();
+  let rpcInflight = 0;
+  let rpcOpened = 0;
+  const node = createServer((req, res) => {
+    rpcOpened += 1;
+    rpcInflight += 1;
+    const done = () => {
+      rpcInflight = Math.max(0, rpcInflight - 1);
+    };
+    req.on("close", done);
+    res.on("close", done);
+  });
+  const restoreEnv = await listen(node);
+  const originalFetch = globalThis.fetch;
+  let gatewayInflight = 0;
+  globalThis.fetch = (input, init) => {
+    const url = String(input instanceof Request ? input.url : input);
+    if (url.includes("127.0.0.1")) return originalFetch(input, init);
+    gatewayInflight += 1;
+    return new Promise((resolve, reject) => {
+      const abort = () => {
+        gatewayInflight = Math.max(0, gatewayInflight - 1);
+        reject(new DOMException("aborted", "AbortError"));
+      };
+      if (init?.signal?.aborted) {
+        abort();
+        return;
+      }
+      init?.signal?.addEventListener("abort", abort, { once: true });
+    });
+  };
+  t.after(async () => {
+    globalThis.fetch = originalFetch;
+    restoreEnv();
+    resetCaches();
+    await closeNode(node);
+  });
+  t.mock.timers.enable({ apis: ["setTimeout", "Date"] });
+  const pending = handleEvmCompatGet("/assets", new URLSearchParams());
+  await advance(t, API_REQUEST_DEADLINE_MS + 1_000);
+  const res = await pending;
+  for (let i = 0; i < 8; i++) await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(res.status, 200);
+  assert.equal(isPartial(res.body), true);
+  assert.equal(rpcInflight, 0, "RPC still in flight after /assets returned");
+  assert.equal(gatewayInflight, 0, "gateway still in flight after /assets returned");
+  const openedAtReturn = rpcOpened;
+  await advance(t, 5_000);
+  assert.equal(rpcOpened, openedAtReturn, "RPC continued after /assets returned");
+  assert.equal(rpcInflight, 0);
+  assert.equal(gatewayInflight, 0);
+});
+
 test("a later explicit deadline stays open after the request signal aborts", async () => {
   let open = false;
   await runWithRequestDeadline(async () => {

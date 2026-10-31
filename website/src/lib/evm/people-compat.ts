@@ -37,7 +37,7 @@ import {
   sleepMs,
 } from "@/lib/evm/request-deadline";
 import { FALLBACK_TOKEN_SYMBOL, TokenReadError, readTokenOnchain } from "@/lib/evm/token-onchain";
-import { fetchCachedMetadataImage, readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
+import { readTokenUriMetadata } from "@/lib/evm/token-uri-metadata";
 import { displayTokenImageUrl } from "@/lib/ipfs";
 import {
   NFT_MINTED_TOPIC,
@@ -285,10 +285,7 @@ async function loadAsset(assetId: string): Promise<AssetRow | null> {
   const override = overrideRaw ? (displayTokenImageUrl(overrideRaw) ?? overrideRaw) : undefined;
   const metadataUri = (onchain.metadataUri ?? "").trim();
   const chainImage = immediateTokenImageUrl(metadataUri);
-  // The document URL is returned immediately. Resolving its `image` must not hold the row or mark it partial.
-  if (metadataUri && /\/metadata\.json(?:[?#].*)?$/i.test(metadataUri) && chainImage && /\/metadata\.json(?:[?#].*)?$/i.test(chainImage)) {
-    void fetchCachedMetadataImage(metadataUri, undefined, Date.now() + 8_000);
-  }
+  // The document URL is the image. This request does not fetch the gateway.
   return applyTokenImage(enriched, override, chainImage);
 }
 

@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { toFunctionSelector } from "viem";
 
 import { resetChainCatalogCacheForTests, seedTokenCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
+import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import { handleEvmCompatGet, resetAddressBalanceCacheForTests, resetMintedNftCacheForTests } from "../src/lib/evm/people-compat.ts";
 import { formatWalletNative, mapWalletAccount } from "../src/lib/wallet-account-view.ts";
 
@@ -125,6 +126,12 @@ async function startRpc(t, mode) {
   const rows = [catalogRow("good", GOOD)];
   if (includeHung) rows.push(catalogRow("hung", HUNG));
   if (includeFail) rows.push(catalogRow("fail", FAIL));
+  // Deployment tokens are already known. The address route must not spend its budget
+  // re-reading their decimals before it can answer a native balance.
+  for (const [assetId, tokenAddress] of Object.entries(readEvmDeployments().assetMap ?? {})) {
+    if (!tokenAddress || rows.some((row) => row.tokenAddress.toLowerCase() === String(tokenAddress).toLowerCase())) continue;
+    rows.push(catalogRow(assetId, tokenAddress));
+  }
   seedTokenCatalogCacheForTests(rows);
   t.after(async () => {
     if (previous === undefined) delete process.env.EVM_RPC_URL;

@@ -7,7 +7,7 @@ import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta 
 import { warnCatalog } from "@/lib/evm/catalog-log";
 import { readCatalogSnapshot, readLogScanCursor, writeCatalogSnapshot, writeLogScanCursor } from "@/lib/evm/log-scan-cursor";
 import { readTokenIconOverrides } from "@/lib/evm/token-icon-overrides";
-import { fetchCachedMetadataImage, peekCachedMetadataImage, peekCachedMetadataImageEntry } from "@/lib/evm/token-uri-metadata";
+import { peekCachedMetadataImage, peekCachedMetadataImageEntry } from "@/lib/evm/token-uri-metadata";
 import { displayTokenImageUrl } from "@/lib/ipfs";
 import { withStableImage } from "@/lib/token-image-merge";
 import {
@@ -17,7 +17,6 @@ import {
   currentDeadline,
   deadlineExpired,
   retryDelayMs,
-  runOutsideRequestDeadline,
   sleepMs,
 } from "@/lib/evm/request-deadline";
 
@@ -949,18 +948,13 @@ export function immediateTokenImageUrl(uri: string | null | undefined): string |
   return displayTokenImageUrl(value);
 }
 
-/** On-chain catalog scans are expensive; the cached copy is refreshed in the background. */
+/** How long a finished in-memory catalog is served before the next tip read. */
 const CATALOG_STALE_MS = 30_000;
 /** A scan stopped by its deadline is resumed on the next request instead of being cached as whole. */
 export const CATALOG_PARTIAL_STALE_MS = 15_000;
-/** Wall-clock budget for one cold token catalog scan that a request is still waiting on. */
+/** Wall-clock budget for one token catalog scan. The request awaits it and then stops. */
 export const TOKEN_CATALOG_SCAN_BUDGET_MS = API_REQUEST_DEADLINE_MS;
-/**
- * Background history keeps running after the compat request returns. Its windows use this
- * budget and their own abort signal, so a request deadline cannot restart the scan.
- */
-const BACKGROUND_CATALOG_BUDGET_MS = 180_000;
-/** A cold request waits at most this long before serving the partial list while the scan continues. */
+/** Tests can shorten this. The scan does not keep running after the request returns. */
 export const TOKEN_CATALOG_SOFT_DEADLINE_MS = 8_000;
 let tokenCatalogSoftDeadlineMs = TOKEN_CATALOG_SOFT_DEADLINE_MS;
 
@@ -974,22 +968,19 @@ export const CHAIN_CATALOG_TAGS = ["evm-chain-catalog"];
 let tokensCache: { at: number; value: CatalogToken[]; partial?: boolean; provisional?: boolean; tip?: number } | null = null;
 let poolsCache: { at: number; value: CatalogPool[] } | null = null;
 let tokensRefreshing: Promise<CatalogToken[]> | null = null;
-/** Deadline and abort for the single in-flight history scan. Independent of any request. */
-let backgroundScan: { deadlineAt: number; signal: AbortSignal } | null = null;
-let backgroundAbort: AbortController | null = null;
+/**
+ * Captured before `unstable_cache`. That callback does not keep the request async context,
+ * so the scan reads this budget instead of starting work that outlives the handler.
+ */
+let scanBudget: { at: number; signal?: AbortSignal } | null = null;
 /** Bumped when tests reset the cache so an in-flight scan cannot republish after the reset. */
 let catalogGeneration = 0;
 let catalogWriteGeneration = 0;
 /** In-flight tail re-read for a fresh cache; shared by concurrent requests. */
 let tailRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
-/** Tokens found so far by the in-flight scan, published tail-first for cold requests. */
+/** Tokens found so far by the in-flight scan. */
 let tokenCatalogProgress: { addresses: Set<string>; tokens: CatalogToken[] } | null = null;
-/** Incremented per on-chain scan so a cold request can wait for the tail of *its* scan. */
-let tokenCatalogScanGeneration = 0;
-let tokenCatalogTailReady: { generation: number; promise: Promise<void> } | null = null;
-/** Whether the current scan's tail windows were read. History may still be running. */
-let tokenCatalogTailPublish: { generation: number; ok: boolean } | null = null;
 /** The current factory's tail is ~2 requests; a cold request always waits up to this long for it. */
 export const TOKEN_CATALOG_TAIL_WAIT_MS = 12_000;
 
@@ -1021,18 +1012,13 @@ export function seedTokenCatalogCacheForTests(tokens: CatalogToken[] | null, tip
 
 export function resetChainCatalogCacheForTests(): void {
   catalogGeneration += 1;
-  backgroundAbort?.abort();
-  backgroundAbort = null;
-  backgroundScan = null;
+  scanBudget = null;
   tokensCache = null;
   poolsCache = null;
   tokensRefreshing = null;
   tailRefreshing = null;
   poolsRefreshing = null;
   tokenCatalogProgress = null;
-  tokenCatalogScanGeneration = 0;
-  tokenCatalogTailReady = null;
-  tokenCatalogTailPublish = null;
   persistedTokens = null;
   persistedTokenCount = 0;
   catalogWarnOnce.clear();
@@ -1309,10 +1295,8 @@ async function buildTokenRows(addresses: Iterable<string>, deadlineAt?: number, 
     if (metadata[offset + 5] !== null) next.metadataUri = uri;
     tokenMetadataCache.set(token.toLowerCase(), next);
   });
-  // Images are best-effort. A gateway miss must not mark the token list partial or hold the response:
-  // use a cached image when one exists, and fill the rest after the rows are already returned.
+  // A metadata document is already a URL. This request does not fetch a gateway for it.
   applyCachedCatalogImages(rows, metadataByToken);
-  scheduleCatalogImages(rows, metadataByToken);
   return { rows: sortTokenRows(rows), complete: skipped === 0 && !stopped, skipped };
 }
 
@@ -1352,44 +1336,6 @@ function applyCachedCatalogImages(rows: CatalogToken[], uris: Map<string, string
     row.imageUri = next.imageUri;
     row.creationMetadata = next.creationMetadata;
   }
-}
-
-/**
- * Fills missing metadata images after the catalog response. A slow gateway updates the in-memory
- * rows for the next request and never flips the list to partial.
- */
-function scheduleCatalogImages(rows: CatalogToken[], uris: Map<string, string>): void {
-  const pending = rows.filter((row) => {
-    const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
-    if (!METADATA_JSON_SUFFIX.test(uri) || uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return false;
-    if (peekCachedMetadataImageEntry(uri).hit) return false;
-    return !row.imageUri || METADATA_JSON_SUFFIX.test(row.imageUri);
-  });
-  if (!pending.length) return;
-  const generation = tokenCatalogScanGeneration;
-  const queue = pending.slice();
-  const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
-    while (queue.length) {
-      if (generation !== tokenCatalogScanGeneration && tokenCatalogScanGeneration !== 0) return;
-      const row = queue.shift();
-      if (!row) return;
-      const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
-      const image = shownTokenImage(await fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000));
-      if (!tokensCache) continue;
-      const value = tokensCache.value.map((item) => {
-        if (item.tokenAddress.toLowerCase() !== row.tokenAddress.toLowerCase()) return item;
-        if (image) return applyTokenImage(item, undefined, image);
-        if (!METADATA_JSON_SUFFIX.test(item.imageUri ?? "")) return item;
-        const creation = { ...(item.creationMetadata ?? {}) };
-        delete creation.image;
-        return { ...item, imageUri: undefined, creationMetadata: creation };
-      });
-      tokensCache = { ...tokensCache, value };
-    }
-  });
-  void Promise.all(workers).catch((error) => {
-    warnCatalog("catalog image", error);
-  });
 }
 
 export type FreshTokenTail = { addresses: string[]; complete: boolean; tip: number | null };
@@ -1597,6 +1543,7 @@ function loadPersistedTokens(): Promise<CatalogToken[]> {
 }
 
 async function persistCatalogSnapshot(tokens: CatalogToken[], tip: number, force = false): Promise<void> {
+  if (deadlineExpired() || scanBudget?.signal?.aborted || (scanBudget && Date.now() >= scanBudget.at)) return;
   if (!tokens.length || (!force && tokens.length <= persistedTokenCount)) return;
   const previous = persistedTokens;
   const wrote = await writeCatalogSnapshot(tip, tokens);
@@ -1649,9 +1596,10 @@ function rememberCatalog(tokens: CatalogToken[], partial: boolean, tip?: number 
 
 export async function discoverTokensOnChainUncached(deadlineAt?: number): Promise<CatalogTokenScanResult> {
   catalogWriteGeneration = catalogGeneration;
-  const usingBackground = typeof deadlineAt !== "number" ? backgroundScan : null;
-  const signal = usingBackground?.signal;
-  const budgetAt = deadlineAt ?? usingBackground?.deadlineAt ?? currentDeadline()?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS;
+  const request = currentDeadline();
+  const bound = request ?? scanBudget;
+  const signal = bound?.signal;
+  const budgetAt = typeof deadlineAt === "number" ? deadlineAt : (bound?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS);
   deadlineAt = budgetAt;
   const startedAt = Date.now();
   const dep = readEvmDeployments();
@@ -1662,6 +1610,16 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const savedRows = mergeTokenRows(await loadPersistedTokens(), tokensCache?.value ?? []);
   const tip = await readChainTip(deadlineAt, signal);
   const fileBaseline = readTokenBaseline();
+  // The tip read used the budget and never answered. Serve the committed rows and stop.
+  if (tip === null && (deadlineExpired(deadlineAt) || signal?.aborted)) {
+    const fallback = mergeTokenRows(
+      savedRows,
+      fileBaseline ? rowsFromBaseline(fileBaseline, dep) : [],
+      staticTokenRows(dep),
+    );
+    rememberCatalog(fallback, true);
+    return { tokens: fallback, complete: false };
+  }
   // Below the committed tip the file is a future snapshot (tests use a short chain). At or after
   // it, factory logs before the tip are already in the file, so this request only reads the gap.
   const baselineUsable = Boolean(fileBaseline && tip !== null && tip >= fileBaseline.tip);
@@ -1678,12 +1636,6 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const baselineRows = baselineUsable && fileBaseline ? rowsFromBaseline(fileBaseline, dep) : [];
   for (const row of baselineRows) addresses.add(row.tokenAddress.toLowerCase());
   const baselineKeys = new Set(baselineRows.map((row) => row.tokenAddress.toLowerCase()));
-  const generation = ++tokenCatalogScanGeneration;
-  let resolveTail!: () => void;
-  const tailReady = new Promise<void>((resolve) => {
-    resolveTail = resolve;
-  });
-  tokenCatalogTailReady = { generation, promise: tailReady };
   tokenCatalogProgress = {
     addresses: new Set(addresses),
     tokens: mergeTokenRows(staticTokenRows(dep), savedRows, baselineRows),
@@ -1754,25 +1706,19 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const publishTail = async () => {
     if (tailPublished) return;
     tailPublished = true;
-    try {
-      await readSupersededTails();
-      if (progressBuilding) await progressBuilding;
-      const tailTokens = tokenCatalogProgress?.tokens ?? [];
-      const ok = tailWindowsOk !== false && tip !== null;
-      rememberCatalog(tailTokens, !ok, tip);
-      // History can keep walking. A successful tail is enough to serve the list; a later failed
-      // window may still mark the cache partial when the scan finishes.
-      if (ok && tokensCache) {
-        // A saved catalog, or a factory whose whole range was the tail, is the list. Older
-        // windows that have not been read yet are missing tokens, so that response stays partial.
-        const open = persistedTokenCount === 0 && tailHistoryPending;
-        tokensCache = { ...tokensCache, partial: open, provisional: open };
-      }
-      tokenCatalogTailPublish = { generation, ok };
-      await persistCatalogSnapshot(tailTokens, tip ?? 0);
-    } finally {
-      resolveTail();
+    await readSupersededTails();
+    if (progressBuilding) await progressBuilding;
+    const tailTokens = tokenCatalogProgress?.tokens ?? [];
+    const ok = tailWindowsOk !== false && tip !== null;
+    rememberCatalog(tailTokens, !ok, tip);
+    // A later failed window may still mark the cache partial when the scan finishes.
+    if (ok && tokensCache) {
+      // A saved catalog, or a factory whose whole range was the tail, is the list. Older
+      // windows that have not been read yet are missing tokens, so that response stays partial.
+      const open = persistedTokenCount === 0 && tailHistoryPending;
+      tokensCache = { ...tokensCache, partial: open, provisional: open };
     }
+    await persistCatalogSnapshot(tailTokens, tip ?? 0);
   };
 
   for (let index = 0; index < ordered.length && tip !== null; index++) {
@@ -1840,12 +1786,7 @@ export async function discoverTokensOnChainUncached(deadlineAt?: number): Promis
   const tokens = mergeTokenRows(savedRows, imaged.rows, built.rows);
   tokenCatalogProgress = { addresses: new Set(addresses), tokens };
   rememberCatalog(tokens, !complete, tip);
-  scheduleCatalogImages(imaged.rows, imaged.uris);
   await persistCatalogSnapshot(tokens, tip ?? 0, complete);
-  if (baselineUsable) {
-    tokenCatalogTailPublish = { generation, ok: complete && tip !== null };
-    resolveTail();
-  }
   if (!complete) {
     const elapsedMs = Date.now() - startedAt;
     console.warn(
@@ -1860,15 +1801,7 @@ async function loadTokens(): Promise<CatalogToken[]> {
     let value: CatalogToken[] = [];
     let partial = false;
     try {
-      // A background history scan must not throw out of `unstable_cache`. Next logs that
-      // revalidation error into the open page render and the browser reloads mid-paint.
-      if (backgroundScan) {
-        const direct = await discoverTokensOnChainUncached();
-        value = direct.tokens;
-        partial = !direct.complete;
-      } else {
-        value = await scanTokensCached();
-      }
+      value = await scanTokensCached();
     } catch (error) {
       if (error instanceof PartialTokenCatalogError) {
         value = error.tokens;
@@ -1905,38 +1838,22 @@ async function loadTokens(): Promise<CatalogToken[]> {
   }
 }
 
-/** Waits until the scan that started at/after `sinceGeneration` has published its tail. */
-async function waitForTailReady(sinceGeneration: number, timeoutMs: number): Promise<void> {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    const tail = tokenCatalogTailReady;
-    if (tail && (sinceGeneration > 0 ? tail.generation >= sinceGeneration : tail.generation > 0)) {
-      await Promise.race([tail.promise, sleep(Math.max(0, deadline - Date.now()))]);
-      return;
-    }
-    await sleep(20);
-  }
-}
-
-function startTokenRefresh(): Promise<CatalogToken[]> {
+/** One in-request catalog load. A second caller awaits the same promise; nothing is left running after it settles. */
+function beginTokenLoad(): Promise<CatalogToken[]> {
   if (tokensRefreshing) return tokensRefreshing;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), BACKGROUND_CATALOG_BUDGET_MS);
-  timer.unref?.();
-  backgroundAbort = controller;
-  backgroundScan = { deadlineAt: Date.now() + BACKGROUND_CATALOG_BUDGET_MS, signal: controller.signal };
-  const task: Promise<CatalogToken[]> = runOutsideRequestDeadline(() => loadTokens())
+  const request = currentDeadline();
+  scanBudget = {
+    at: request?.at ?? Date.now() + Math.min(TOKEN_CATALOG_SCAN_BUDGET_MS, TOKEN_CATALOG_TAIL_WAIT_MS),
+    signal: request?.signal,
+  };
+  const task = loadTokens()
     .catch((error) => {
       warnCatalog("token refresh", error);
       return tokensCache?.value ?? tokenCatalogProgress?.tokens ?? [];
     })
     .finally(() => {
-      clearTimeout(timer);
       if (tokensRefreshing === task) tokensRefreshing = null;
-      if (backgroundAbort === controller) {
-        backgroundAbort = null;
-        backgroundScan = null;
-      }
+      if (scanBudget?.signal === request?.signal) scanBudget = null;
     });
   tokensRefreshing = task;
   return task;
@@ -2007,33 +1924,13 @@ export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
   const cached = tokensCache;
   if (cached) {
     const staleAfter = cached.partial ? CATALOG_PARTIAL_STALE_MS : CATALOG_STALE_MS;
-    // A finished catalog only re-reads the tip below. Walking history again evicts the log
-    // cache and the public node aborts those windows, which reloads the explorer page.
-    if (cached.partial !== false && Date.now() - cached.at >= staleAfter && !tokensRefreshing) void startTokenRefresh();
+    // A finished catalog only re-reads the tip. A partial list resumes inside this request.
+    if (cached.partial !== false && Date.now() - cached.at >= staleAfter) return beginTokenLoad();
     return refreshCachedTail();
   }
-
-  // Cold: answer when the tail is published. Do not sit out the soft deadline first — that wait
-  // is what turned a ready list into an 8s partial response. History keeps running afterwards.
-  // The tail itself is still awaited up to the request deadline, including when it is slower
-  // than the soft deadline. The soft deadline stays settable for tests; it does not delay this return.
+  // The soft deadline stays settable for tests. It does not detach a scan from this call.
   void tokenCatalogSoftDeadlineMs;
-  const scanAlreadyRunning = Boolean(tokensRefreshing);
-  const generationAtStart = scanAlreadyRunning ? tokenCatalogScanGeneration : tokenCatalogScanGeneration + 1;
-  const task = tokensRefreshing ?? startTokenRefresh();
-  const deadlineAt = currentDeadline()?.at ?? Date.now() + TOKEN_CATALOG_SCAN_BUDGET_MS;
-  const tailWait = Math.min(TOKEN_CATALOG_TAIL_WAIT_MS, Math.max(0, deadlineAt - Date.now()));
-  const tailOutcome = await Promise.race([
-    task.then((value) => ({ settled: true as const, value })),
-    waitForTailReady(generationAtStart, tailWait).then(() => ({ settled: false as const })),
-  ]);
-  if (tailOutcome.settled) return tailOutcome.value;
-  const ready = (tokenCatalogProgress?.tokens ?? tokensCache?.value ?? []).slice();
-  const published = tokenCatalogTailPublish;
-  const tailOk = Boolean(published && published.generation >= generationAtStart && published.ok);
-  if (tailOk && ready.length) return tokensCache?.partial ? stampPartial(ready, true) : ready;
-  if (ready.length) return stampPartial(ready, true);
-  return stampPartial((await loadPersistedTokens()).slice(), true);
+  return beginTokenLoad();
 }
 
 async function pairReserves(pair: string, wppl: string): Promise<CatalogPool | null> {
@@ -2197,16 +2094,15 @@ async function loadPools(): Promise<CatalogPool[]> {
 
 export async function discoverPoolsOnChain(): Promise<CatalogPool[]> {
   const cached = poolsCache;
-  if (cached) {
-    if (Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
-    if (!poolsRefreshing) {
-      poolsRefreshing = loadPools()
-        .catch(() => cached.value)
-        .finally(() => {
-          poolsRefreshing = null;
-        });
-    }
-    return cached.value;
+  if (cached && Date.now() - cached.at < CATALOG_STALE_MS) return cached.value;
+  if (!poolsRefreshing) {
+    const previous = cached?.value ?? [];
+    const task = loadPools()
+      .catch(() => previous)
+      .finally(() => {
+        if (poolsRefreshing === task) poolsRefreshing = null;
+      });
+    poolsRefreshing = task;
   }
-  return loadPools();
+  return poolsRefreshing;
 }
