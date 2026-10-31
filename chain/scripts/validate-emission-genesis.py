@@ -22,6 +22,9 @@ TEAM_BUCKET = ALLOCATION["buckets"]["team"]
 TREASURY_BUCKET = ALLOCATION["buckets"]["treasury"]
 LIQUIDITY_BUCKET = ALLOCATION["buckets"]["liquidity"]
 MULTISIG = ALLOCATION["treasury_multisig"]
+VAULT_CFG = ALLOCATION["liquidity_vault"]
+VAULT_ARTIFACT = json.loads((ROOT / "emission" / "genesis-liquidity-vault.json").read_text())
+VAULT_SLOTS = ("wppl", "factory", "quote_token", "beneficiary", "seeder", "min_quote_per_ppl")
 SECONDS_PER_YEAR = 31_536_000
 SECONDS_PER_MONTH = SECONDS_PER_YEAR // 12
 # M11-7: module accounts that may still exist at genesis must never carry Minter/Burner —
@@ -210,9 +213,9 @@ def validate_file(path: Path) -> list[str]:
         if got_balance != team_total:
             errors.append(f"team balance want {team_total}, got {got_balance}")
 
-    # M11-2: treasury + liquidity share one 2-of-3 multisig account with a known pub_key.
-    # A11: it is a ContinuousVestingAccount locking only the treasury bucket (same schedule as
-    # team); the liquidity bucket stays spendable from genesis.
+    # M11-2: the treasury bucket sits on a 2-of-3 multisig account with a known pub_key.
+    # A11: it is a ContinuousVestingAccount locking the whole treasury bucket (same schedule as
+    # team). The liquidity bucket is no longer on it (open question 6: genesis liquidity vault).
     multisig_acc = find_account(g, MULTISIG["address"])
     if multisig_acc is None:
         errors.append("treasury_multisig account missing from genesis")
@@ -231,10 +234,12 @@ def validate_file(path: Path) -> list[str]:
             got_keys = [pk.get("key") for pk in pub_key.get("public_keys", [])]
             if got_keys != want_keys:
                 errors.append("treasury_multisig public_keys do not match allocation.json")
-        want_balance = int(TREASURY_BUCKET["amount_appl"]) + int(LIQUIDITY_BUCKET["amount_appl"])
+        want_balance = int(TREASURY_BUCKET["amount_appl"])
         got_balance = account_balance(g, MULTISIG["address"])
         if got_balance != want_balance:
             errors.append(f"treasury_multisig balance want {want_balance}, got {got_balance}")
+
+    check_liquidity_vault(g, errors)
 
     # Staking/distribution precompiles must be active or the website staking page's eth_call
     # queries silently return "0x" (see apply-emission-genesis.py for why init-files needs this).
@@ -257,6 +262,48 @@ def validate_file(path: Path) -> list[str]:
             errors.append(f"module account {name} must not exist in a fresh M11-2 genesis (use treasury_multisig)")
 
     return errors
+
+
+def expected_vault_storage() -> list[dict]:
+    storage = []
+    for slot, name in enumerate(VAULT_SLOTS):
+        raw = str(VAULT_CFG[name])
+        value = int(raw, 16) if raw.startswith("0x") else int(raw)
+        if value:
+            storage.append({"key": "0x" + slot.to_bytes(32, "big").hex(), "value": "0x" + value.to_bytes(32, "big").hex()})
+    return storage
+
+
+def check_liquidity_vault(g: dict, errors: list[str]) -> None:
+    """Owner decision (open question 6): the liquidity bucket is the balance of a keyless account
+    (no pub_key) carrying exactly the GenesisLiquidityVault runtime code and the parameters from
+    allocation.json; nothing else at that address."""
+    addr = LIQUIDITY_BUCKET["account"]
+    if addr != VAULT_ARTIFACT["bech32"]:
+        errors.append(f"liquidity bucket account {addr} is not the vault {VAULT_ARTIFACT['bech32']}")
+    acc = find_account(g, addr)
+    if acc is None:
+        errors.append("liquidity vault account missing from genesis")
+    else:
+        if acc.get("@type") != "/cosmos.auth.v1beta1.BaseAccount":
+            errors.append(f"liquidity vault must be a plain BaseAccount, got {acc.get('@type')}")
+        if acc.get("pub_key") is not None:
+            errors.append("liquidity vault account must have no pub_key (keyless)")
+    want_balance = int(LIQUIDITY_BUCKET["amount_appl"])
+    got_balance = account_balance(g, addr)
+    if got_balance != want_balance:
+        errors.append(f"liquidity vault balance want {want_balance}, got {got_balance}")
+    entries = [
+        a for a in g["app_state"].get("evm", {}).get("accounts") or []
+        if a.get("address", "").lower() == VAULT_ARTIFACT["address"].lower()
+    ]
+    if len(entries) != 1:
+        errors.append(f"evm.accounts must hold the liquidity vault exactly once, got {len(entries)}")
+        return
+    if entries[0].get("code") != VAULT_ARTIFACT["runtime_code"]:
+        errors.append("liquidity vault code differs from genesis-liquidity-vault.json runtime_code")
+    if entries[0].get("storage") != expected_vault_storage():
+        errors.append("liquidity vault storage differs from allocation.json liquidity_vault")
 
 
 class EmissionGenesisTests(unittest.TestCase):

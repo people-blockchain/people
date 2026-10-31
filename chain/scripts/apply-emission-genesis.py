@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOCATION_PATH = ROOT / "emission" / "allocation.json"
+VAULT_ARTIFACT_PATH = ROOT / "emission" / "genesis-liquidity-vault.json"
 DENOM = "appl"
 DISPLAY = "PPL"
 SECONDS_PER_YEAR = 31_536_000
@@ -19,6 +20,91 @@ SECONDS_PER_MONTH = SECONDS_PER_YEAR // 12
 
 def load_allocation() -> dict:
     return json.loads(ALLOCATION_PATH.read_text())
+
+
+BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+BECH32_HRP = "people"
+# GenesisLiquidityVault storage slots 0..5, in declaration order (contracts/src/sale).
+VAULT_SLOTS = ("wppl", "factory", "quote_token", "beneficiary", "seeder", "min_quote_per_ppl")
+
+
+def _bech32_polymod(values: list[int]) -> int:
+    gen = (0x3B6A57B2, 0x26508E6D, 0x1EA119FA, 0x3D4233DD, 0x2A1462B3)
+    chk = 1
+    for v in values:
+        top = chk >> 25
+        chk = (chk & 0x1FFFFFF) << 5 ^ v
+        for i in range(5):
+            chk ^= gen[i] if (top >> i) & 1 else 0
+    return chk
+
+
+def _bech32_hrp_expand(hrp: str) -> list[int]:
+    return [ord(c) >> 5 for c in hrp] + [0] + [ord(c) & 31 for c in hrp]
+
+
+def _convertbits(data: bytes | list[int], frombits: int, tobits: int, pad: bool) -> list[int]:
+    acc, bits, out, maxv = 0, 0, [], (1 << tobits) - 1
+    for value in data:
+        acc = (acc << frombits) | value
+        bits += frombits
+        while bits >= tobits:
+            bits -= tobits
+            out.append((acc >> bits) & maxv)
+    if pad and bits:
+        out.append((acc << (tobits - bits)) & maxv)
+    elif not pad and (bits >= frombits or ((acc << (tobits - bits)) & maxv)):
+        raise ValueError("invalid bech32 padding")
+    return out
+
+
+def bech32_encode(hrp: str, payload: bytes) -> str:
+    data = _convertbits(payload, 8, 5, True)
+    polymod = _bech32_polymod(_bech32_hrp_expand(hrp) + data + [0] * 6) ^ 1
+    checksum = [(polymod >> 5 * (5 - i)) & 31 for i in range(6)]
+    return hrp + "1" + "".join(BECH32_CHARSET[d] for d in data + checksum)
+
+
+def bech32_decode(addr: str) -> tuple[str, bytes]:
+    hrp, _, rest = addr.lower().rpartition("1")
+    data = [BECH32_CHARSET.index(c) for c in rest]
+    if _bech32_polymod(_bech32_hrp_expand(hrp) + data) != 1:
+        raise ValueError(f"bad bech32 checksum: {addr}")
+    return hrp, bytes(_convertbits(data[:-6], 5, 8, False))
+
+
+def evm_to_bech32(hex_addr: str) -> str:
+    raw = bytes.fromhex(hex_addr.removeprefix("0x"))
+    if len(raw) != 20:
+        raise ValueError(f"not a 20-byte address: {hex_addr}")
+    return bech32_encode(BECH32_HRP, raw)
+
+
+def load_vault_artifact() -> dict:
+    return json.loads(VAULT_ARTIFACT_PATH.read_text())
+
+
+def vault_storage(vault_cfg: dict) -> list[dict]:
+    """Owner decision (open question 6): GenesisLiquidityVault parameters as genesis storage
+    slots 0..5. Zero values are left out (zero is the EVM default); any zero parameter keeps the
+    vault sealed forever, it never makes the liquidity spendable."""
+    storage = []
+    for slot, name in enumerate(VAULT_SLOTS):
+        raw = str(vault_cfg[name])
+        value = int(raw, 16) if raw.startswith("0x") else int(raw)
+        if name != "min_quote_per_ppl" and value >> 160:
+            raise ValueError(f"liquidity_vault.{name} is not an address: {raw}")
+        if value:
+            storage.append({"key": "0x" + slot.to_bytes(32, "big").hex(), "value": "0x" + value.to_bytes(32, "big").hex()})
+    return storage
+
+
+def vault_evm_account(artifact: dict, vault_cfg: dict) -> dict:
+    # cosmos/evm x/vm InitGenesis decodes `code` with common.Hex2Bytes: plain hex, no 0x prefix.
+    code = artifact["runtime_code"]
+    if code.startswith("0x") or not code:
+        raise ValueError("runtime_code must be non-empty hex without 0x")
+    return {"address": artifact["address"], "code": code, "storage": vault_storage(vault_cfg)}
 
 
 def merge_coins(coins: list[dict]) -> list[dict]:
@@ -314,14 +400,13 @@ def apply_emission(path: Path, cfg: dict) -> None:
             next_num += 1
             existing_addrs.add(addr)
 
-    # M11-2: treasury + liquidity share one 2-of-3 multisig account whose pub_key (not just
+    # M11-2: the treasury bucket sits on a 2-of-3 multisig account whose pub_key (not just
     # address) is known at genesis. A11 (owner decision): it is a ContinuousVestingAccount locking
-    # only the treasury bucket (0% at genesis, 6-month cliff, 18 months linear); the liquidity
-    # bucket on the same address stays spendable from genesis (TODO(owner): liquidity schedule).
+    # the whole treasury bucket (0% at genesis, 6-month cliff, 18 months linear).
     multisig_cfg = cfg["treasury_multisig"]
     multisig_addr = multisig_cfg["address"]
     treasury = buckets["treasury"]
-    multisig_total = int(treasury["amount_appl"]) + int(buckets["liquidity"]["amount_appl"])
+    multisig_total = int(treasury["amount_appl"])
     treasury_locked, treasury_start, treasury_end = cliff_linear_schedule(treasury, start_time)
     if multisig_addr not in existing_addrs:
         new_accounts.append(
@@ -339,6 +424,24 @@ def apply_emission(path: Path, cfg: dict) -> None:
         next_num += 1
         existing_addrs.add(multisig_addr)
     add_balance(multisig_addr, str(multisig_total))
+
+    # Owner decision (open question 6): the liquidity bucket is not spendable. It sits at a keyless
+    # address holding GenesisLiquidityVault code whose only exit is seeding the WPPL/quote pool
+    # with the LP locked 730 days. No pub_key: no key can ever sign for this account.
+    liquidity = buckets["liquidity"]
+    artifact = load_vault_artifact()
+    vault_addr = evm_to_bech32(artifact["address"])
+    if vault_addr != artifact["bech32"] or vault_addr != liquidity["account"]:
+        raise ValueError("liquidity vault address mismatch (allocation.json / genesis-liquidity-vault.json)")
+    if vault_addr in existing_addrs:
+        raise ValueError(f"liquidity vault address {vault_addr} already has a genesis account")
+    new_accounts.append(base_account(vault_addr, next_num))
+    next_num += 1
+    existing_addrs.add(vault_addr)
+    add_balance(vault_addr, liquidity["amount_appl"])
+    evm_accounts = [a for a in app["evm"].get("accounts") or [] if a.get("address", "").lower() != artifact["address"].lower()]
+    evm_accounts.append(vault_evm_account(artifact, cfg["liquidity_vault"]))
+    app["evm"]["accounts"] = evm_accounts
 
     # A11 (owner decision): team vesting — 0% at genesis, 6-month cliff, then 18 months linear.
     team = buckets["team"]
