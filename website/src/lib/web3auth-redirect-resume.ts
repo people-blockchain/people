@@ -6,7 +6,6 @@
 
 import { isSafeInAppPath } from "@/lib/safe-return-path";
 import { migrateWebsiteStorage } from "@/lib/storage-migration";
-import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 
 export const PENDING_KEY = "people_web3auth_pending";
 export const PENDING_MAX_AGE_MS = 10 * 60_000;
@@ -122,22 +121,33 @@ export async function waitForSessionUser<T>(
   return null;
 }
 
+export type FreshSessionWait = {
+  /**
+   * Accept a session only when its authTime is strictly newer than this rejected value.
+   * The vault reauth window stays on the server: a fast client clock must not reject a
+   * session the server just issued. Omit it to accept the first session that has a user id.
+   */
+  newerThan?: number | null;
+};
+
 /**
- * Same bounded poll as {@link waitForSessionUser}, but a user id alone is not enough: the
- * session's authTime has to sit inside the vault reauth window. A cookie that still carries
- * yesterday's sign-in must not win the first read. When `nowMs` is omitted, each poll reads
- * Date.now() so a long wait is not judged against the clock at the start.
+ * Same bounded poll as {@link waitForSessionUser}. When `newerThan` is a number, yesterday's
+ * cookie must not win: only a strictly newer authTime counts. Freshness against the wall clock
+ * is the server's check (`isAuthTimeFresh` on wrap-key), not this poll.
  */
 export async function waitForFreshSessionUser<T extends { id?: string | null; authTime?: number | null }>(
   fetchUser: () => Promise<T | null>,
   delaysMs: readonly number[] = SESSION_USER_RETRY_DELAYS_MS,
   sleep: (ms: number) => Promise<void> = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
-  nowMs?: number,
+  wait?: FreshSessionWait,
 ): Promise<T | null> {
+  const newerThan = wait?.newerThan;
   for (const delay of delaysMs) {
     if (delay > 0) await sleep(delay);
     const user = await fetchUser().catch(() => null);
-    if (user?.id && isAuthTimeFresh(user.authTime, nowMs ?? Date.now())) return user;
+    if (!user?.id) continue;
+    if (typeof newerThan !== "number") return user;
+    if (typeof user.authTime === "number" && user.authTime > newerThan) return user;
   }
   return null;
 }

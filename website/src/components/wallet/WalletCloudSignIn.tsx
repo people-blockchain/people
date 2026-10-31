@@ -36,7 +36,7 @@ function cloudSignInMessage(
 ): string {
   if (code === "decrypt_failed") return copy.signInDecryptFailed;
   if (code === "vault_schema_unsupported") return copy.signInVaultUnsupported;
-  if (code === "address_mismatch") return copy.signInAddressMismatch;
+  if (code === "address_mismatch" || code === "address_taken") return copy.signInAddressMismatch;
   if (code === "session_open_failed") return copy.signInSessionOpenFailed;
   if (code === "reauth_required") return copy.signInSessionExpired;
   if (code === "unauthorized") return copy.signInSessionMissing;

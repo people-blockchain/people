@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { userWalletVaults } from "@/db/schema";
 import { keyFromPrivate } from "@/lib/people-sign";
@@ -7,6 +7,7 @@ import {
   deriveUserWrapKeyHex,
   encryptPrivateKeyForVault,
   readLegacyVaultPlaintext,
+  warnCloudOpenFailed,
 } from "@/lib/wallet-cloud-crypto";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
@@ -93,14 +94,53 @@ async function migrateLegacyVaultIfNeeded(userId: string) {
   );
   // Decrypt failure leaves the row as it is: no update, no delete.
   if (!plain) return vault;
+  let derivedAddress: string;
+  try {
+    derivedAddress = keyFromPrivate(plain).address;
+  } catch {
+    warnCloudOpenFailed({
+      code: "legacy_key_invalid",
+      stage: "legacy_migrate",
+      vaultPresent: true,
+      retried: false,
+    });
+    return vault;
+  }
+  // A decrypted key that does not belong to this row must not be written back.
+  if (derivedAddress.toLowerCase() !== vault.address.trim().toLowerCase()) {
+    warnCloudOpenFailed({
+      code: "legacy_address_mismatch",
+      stage: "legacy_migrate",
+      vaultPresent: true,
+      retried: false,
+    });
+    return vault;
+  }
   const newWrapKeyHex = await deriveUserWrapKeyHex(newSecret, userId);
   const encryptedPrivateKey = await encryptPrivateKeyForVault(plain, newWrapKeyHex);
   const now = new Date();
-  await db
+  // Compare-and-swap: only a still-version-1 row may move to version 2. A lost race leaves the row.
+  const updated = await db
     .update(userWalletVaults)
     .set({ encryptedPrivateKey, vaultVersion: 2, updatedAt: now })
-    .where(eq(userWalletVaults.userId, userId));
-  return { ...vault, encryptedPrivateKey, vaultVersion: 2, updatedAt: now };
+    .where(legacyVaultCasWhere(userId))
+    .returning();
+  if (!updated[0]) {
+    warnCloudOpenFailed({
+      code: "legacy_migrate_cas",
+      stage: "legacy_migrate",
+      vaultPresent: true,
+      retried: false,
+    });
+    const current = await db.select().from(userWalletVaults).where(eq(userWalletVaults.userId, userId)).limit(1);
+    return current[0] ?? vault;
+  }
+  return updated[0];
+}
+
+/** Version-1 rows only. A version-2 row must not be overwritten by a late migration. */
+export function legacyVaultCasWhere(userId: string) {
+  return and(eq(userWalletVaults.userId, userId), eq(userWalletVaults.vaultVersion, 1));
 }
 
 export async function loadUserWalletVault(userId: string) {

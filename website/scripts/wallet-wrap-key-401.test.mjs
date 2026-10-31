@@ -4,6 +4,9 @@
 // detection that never reads the cookie value.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   cloudSessionRetryDecision,
@@ -15,6 +18,7 @@ import { WALLET_VAULT_REAUTH_WINDOW_MS } from "../src/lib/wallet-reauth-window.t
 import {
   hasAuthJsSessionCookie,
   isAuthJsSessionCookieName,
+  sanitizeForwardedHost,
 } from "../src/lib/wallet-wrap-key-diagnostics.ts";
 
 const now = 1_791_890_000_000;
@@ -85,6 +89,22 @@ test("session check before retry: a fresh authTime is ok", () => {
     cloudSessionRetryDecision({ id: "user-1", authTime: now - 60_000 }, now),
     "ok",
   );
+});
+
+test("forwarded host is truncated and limited to safe characters", () => {
+  assert.equal(sanitizeForwardedHost("Evil.Example.COM"), "evil.example.com");
+  assert.equal(sanitizeForwardedHost("evil.com\r\nINJECTED log"), "evil.cominjectedlog");
+  assert.equal(sanitizeForwardedHost("ok-host.example:443"), "ok-host.example:443");
+  assert.equal(sanitizeForwardedHost("a".repeat(150)).length, 100);
+  assert.match(sanitizeForwardedHost("Bad Host!"), /^[a-z0-9.:-]*$/);
+  const route = readFileSync(
+    join(dirname(fileURLToPath(import.meta.url)), "../src/app/api/wallet/vault/wrap-key/route.ts"),
+    "utf8",
+  );
+  assert.match(route, /sanitizeForwardedHost\(/);
+  assert.match(route, /authTimePresent=/);
+  assert.equal(route.includes("for user"), false);
+  assert.equal(route.includes("authTime=${"), false);
 });
 
 test("session cookie detection is the cookie name only, never the value", () => {

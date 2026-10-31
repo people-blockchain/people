@@ -362,6 +362,10 @@ test("logged cloud codes and sign-in labels stay machine-shaped", async () => {
   );
   assert.equal(sanitizeConsoleSignInLabel("user@example.com"), "unknown");
   assert.equal(sanitizeConsoleSignInLabel("signed in as alice"), "unknown");
+  assert.equal(sanitizeConsoleSignInLabel("ya29.a0AfH6SMB"), "unknown");
+  assert.equal(sanitizeConsoleSignInLabel("550e8400-e29b-41d4-a716-446655440000"), "unknown");
+  assert.equal(sanitizeConsoleSignInLabel("a".repeat(65)), "unknown");
+  assert.equal(sanitizeConsoleSignInLabel("Popup_Closed"), "unknown");
 });
 
 test("commitCloudSession: persist throw is session_open_failed and the warning drops the cause", async () => {
