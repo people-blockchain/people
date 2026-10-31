@@ -22,6 +22,7 @@ import { fetchLogWindow, LOG_WINDOW_BLOCKS, logStartBlock, logWindows, MAX_PARAL
 import { evmJsonRpc, withRpcCallContext } from "@/lib/evm/rpc-server";
 import { nftFactoryAddress, nftMintedEvent, NFT_MINTED_TOPIC, peopleNftAbi } from "@/lib/evm/nft-factory";
 import { inAppNftPath, nftIndexPath } from "@/lib/evm/nft-paths";
+import { nftCardLabel } from "@/lib/nft-card-label";
 
 export { inAppNftPath, nftIndexPath };
 
@@ -157,7 +158,9 @@ export function chainNftFromMintLog(log: MintLog): ChainNft | null {
     const owner = getAddress(decoded.args.owner);
     return {
       nftId: nftIdFor(collection, tokenId),
-      name: `NFT #${tokenId.toString()}`,
+      // The mint log has tokenURI, not the JSON. The name inside that JSON is read later,
+      // outside this list's RPC budget. Until then the row keeps the id placeholder.
+      name: nftCardLabel(undefined, tokenId.toString()),
       owner,
       creator: owner,
       collection,
@@ -296,7 +299,7 @@ export async function readNftToken(
       encodeFunctionData({ abi: peopleNftAbi, functionName: "tokenURI", args: [tokenId] }),
     );
     const tokenUri = decodeFunctionResult({ abi: peopleNftAbi, functionName: "tokenURI", data: uriRaw });
-    let label = `NFT #${tokenId.toString()}`;
+    let label = nftCardLabel(undefined, tokenId.toString());
     try {
       const nameRaw = await call(
         address,
