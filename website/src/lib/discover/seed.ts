@@ -1,7 +1,6 @@
 import { count } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { discoverProjects } from "@/db/schema";
-import { readEnvWithLegacy } from "@/lib/legacy-env";
 import { DISCOVER_SEED_CATALOG, resolveDiscoverSeedIcon } from "@/lib/discover/seed-catalog";
 import { DISCOVER_SEED_PROJECTS } from "@/lib/discover/seed-data";
 
@@ -40,34 +39,41 @@ export async function seedDiscoverProjectsIfEmpty(): Promise<{ seeded: boolean; 
   return { seeded: true, count: DISCOVER_SEED_PROJECTS.length };
 }
 
+export type DiscoverTokenRow = {
+  assetId: string;
+  name?: string;
+  symbol?: string;
+  imageUri?: string | null;
+  creationMetadata?: { image?: string };
+};
+
+export const DISCOVER_TOKENS_CACHE_CONTROL = "no-store";
+
+/** Public token list for Discover. Native PPL is not a project token. */
+export function discoverTokensFromCatalog(rows: readonly DiscoverTokenRow[]): {
+  assetId: string;
+  name: string;
+  symbol: string;
+  imageUri?: string | null;
+}[] {
+  return rows
+    .filter((row) => row.assetId && row.assetId.toLowerCase() !== "ppl")
+    .slice(0, 40)
+    .map((row) => ({
+      assetId: row.assetId,
+      name: row.name ?? row.assetId,
+      symbol: row.symbol ?? row.assetId.toUpperCase(),
+      imageUri: row.imageUri ?? row.creationMetadata?.image ?? null,
+    }));
+}
+
 export async function listDiscoverTokensFromNode(): Promise<
   { assetId: string; name: string; symbol: string; imageUri?: string | null }[]
 > {
-  const base =
-    readEnvWithLegacy(process.env.PEOPLE_RPC_URL, process.env.OVN_RPC_URL) ||
-    readEnvWithLegacy(process.env.NEXT_PUBLIC_PEOPLE_RPC_URL, process.env.NEXT_PUBLIC_OVN_RPC_URL) ||
-    "https://node.peopleblockchain.network";
   try {
-    const res = await fetch(`${base.replace(/\/$/, "")}/assets`, { next: { revalidate: 60 } });
-    if (!res.ok) return [];
-    const raw = (await res.json()) as
-      | { assets?: { assetId: string; name?: string; symbol?: string; imageUri?: string; creationMetadata?: { image?: string } }[] }
-      | { assetId: string; name?: string; symbol?: string; imageUri?: string; creationMetadata?: { image?: string } }[];
-    const assets = Array.isArray(raw) ? raw : raw.assets ?? [];
-    return assets
-      .filter((a) => a.assetId && a.assetId !== "ppl")
-      .slice(0, 40)
-      .map((a) => ({
-        assetId: a.assetId,
-        name: a.name ?? a.assetId,
-        symbol: a.symbol ?? a.assetId.toUpperCase(),
-        imageUri: a.imageUri ?? a.creationMetadata?.image ?? null,
-      }));
+    const { discoverTokensOnChain } = await import("@/lib/evm/chain-catalog");
+    return discoverTokensFromCatalog(await discoverTokensOnChain());
   } catch {
-    return [
-      { assetId: "trosc2", name: "ROSCASH (Testnet demo)", symbol: "TROSC" },
-      { assetId: "tpitp2", name: "PEOPLE Tips (Testnet demo)", symbol: "TPITP" },
-      { assetId: "tmark2", name: "TMARK (Testnet demo)", symbol: "TMARK" },
-    ];
+    return [];
   }
 }
