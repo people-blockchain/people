@@ -367,8 +367,14 @@ export async function handleEvmCompatGet(
 
   if (root === "nfts") {
     const owner = search.get("owner") ?? undefined;
-    const collection = search.get("collection") ?? undefined;
+    const collectionParam = search.get("collection");
     const tokenId = search.get("tokenId") ?? undefined;
+    // A missing collection lists everything. A present one that is not an address must not
+    // collapse to "no filter" — that would show rows the caller asked to exclude.
+    if (collectionParam !== null && !isAddress(collectionParam)) {
+      return { status: 400, body: { error: "invalid_collection" } };
+    }
+    const collection = collectionParam ?? undefined;
     const seed = listSeedNfts(owner);
     if (!owner) {
       const founderRows = await readFounderNftRows(owner, collection, tokenId);
@@ -397,8 +403,15 @@ export async function handleEvmCompatGet(
       }
       direct = await directPromise;
     });
+    const assembled = assembleNftRows(seed, page.items, direct, owner, collection, tokenId);
+    // wantDirect reads the Founder contract as a normal token (`address:id`). The founder row
+    // for that same token uses `founder-nft-<id>`. Keep the founder row and drop the twin.
+    const founderKeys = new Set(founderRows.map((row) => `${row.collection.toLowerCase()}:${row.onChainTokenId}`));
     const rows = visibleNfts([
-      ...assembleNftRows(seed, page.items, direct, owner, collection, tokenId),
+      ...assembled.filter((row) => {
+        if (!row.collection || !row.onChainTokenId) return true;
+        return !founderKeys.has(`${row.collection.toLowerCase()}:${row.onChainTokenId}`);
+      }),
       ...founderRows,
     ]);
     // Stats share the listing deadline. When it is already spent, the rows ship without them.
