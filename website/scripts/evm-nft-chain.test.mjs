@@ -35,7 +35,6 @@ import {
   readNftToken,
   recentMintScanStart,
   resetMintHistoryForTests,
-  setOlderMintScanForTests,
 } from "../src/lib/evm/nft-chain.ts";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
@@ -199,7 +198,6 @@ test("holdings include a mint in the newest window without scanning the factory 
   await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
   const previous = process.env.EVM_RPC_URL;
   process.env.EVM_RPC_URL = `http://127.0.0.1:${node.address().port}`;
-  setOlderMintScanForTests(null);
   resetChainCatalogCacheForTests();
   resetRpcBackoffForTests();
   t.after(async () => {
@@ -212,15 +210,19 @@ test("holdings include a mint in the newest window without scanning the factory 
     await new Promise((resolve) => node.close(resolve));
   });
 
-  const rows = await listMintedNfts(OWNER);
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].onChainTokenId, "0");
-  assert.equal(rows[0].collection, getAddress(COLLECTION));
-  assert.equal(rows[0].owner, getAddress(OWNER));
+  const page = await listMintedNfts(OWNER);
+  assert.equal(page.items.length, 1);
+  assert.equal(page.items[0].onChainTokenId, "0");
+  assert.equal(page.items[0].collection, getAddress(COLLECTION));
+  assert.equal(page.items[0].owner, getAddress(OWNER));
   const filters = calls.filter((call) => call.method === "eth_getLogs").map((call) => call.params[0]);
   assert.ok(filters.length > 0);
   assert.ok(filters.length < 20);
-  for (const filter of filters) assert.ok(Number.parseInt(filter.fromBlock, 16) >= recentFrom);
+  assert.ok(filters.some((filter) => {
+    const from = Number.parseInt(filter.fromBlock, 16);
+    const to = Number.parseInt(filter.toBlock, 16);
+    return from <= mintBlock && mintBlock <= to;
+  }));
 });
 
 test("/nft without a token redirects to the explorer NFT list", async () => {

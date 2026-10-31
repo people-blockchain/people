@@ -25,7 +25,7 @@ import {
   findExistingMint,
   peoplescanNftUrl,
 } from "@/lib/evm/nft-factory";
-import { inAppNftPath } from "@/lib/evm/nft-chain";
+import { inAppNftPath } from "@/lib/evm/nft-paths";
 import {
   GATEWAY_KIND,
   stableFeeAssets,

@@ -150,5 +150,8 @@
   "install": "Installa",
   "signInGoogle": "Accedi con Google",
   "back": "Indietro",
-  "openWallet": "Apri {wallet}"
+  "openWallet": "Apri {wallet}",
+  "nftHistoryLoading": "Caricamento della cronologia",
+  "nftHistoryError": "Impossibile caricare la cronologia NFT.",
+  "nftHistoryRetry": "Riprova"
 }

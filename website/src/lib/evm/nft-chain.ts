@@ -3,10 +3,10 @@
  * the factory. A single token page reads `ownerOf` / `tokenURI` directly, so a token still
  * missing from the log index is not a 404.
  *
- * The factory was deployed hundreds of thousands of blocks ago. Walking every window from that
- * block takes long enough that a holdings request ends before the newest window — the only place
- * a mint from the last few hours can be. The request therefore reads a short recent span first.
- * Older mints are filled from a background scan and merged on the next read.
+ * The factory was deployed hundreds of thousands of blocks ago. One request reads the newest
+ * windows first, then a bounded page of older windows, and stops at a deadline. Whatever was
+ * not read is named by `next` so the client can continue. Nothing keeps scanning after the
+ * response.
  */
 import {
   decodeEventLog,
@@ -18,12 +18,76 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { fetchLogsWindowed, LOG_WINDOW_BLOCKS, logStartBlock } from "@/lib/evm/chain-catalog";
-import { evmJsonRpc } from "@/lib/evm/rpc-server";
+import { fetchLogWindow, LOG_WINDOW_BLOCKS, logStartBlock, logWindows } from "@/lib/evm/chain-catalog";
+import { evmJsonRpc, withRpcCallContext } from "@/lib/evm/rpc-server";
 import { nftFactoryAddress, nftMintedEvent, NFT_MINTED_TOPIC, peopleNftAbi } from "@/lib/evm/nft-factory";
+import { inAppNftPath, nftIndexPath } from "@/lib/evm/nft-paths";
+
+export { inAppNftPath, nftIndexPath };
 
 /** Recent factory windows read on the wallet request. Four windows is about a day on this chain. */
 export const RECENT_MINT_WINDOWS = 4;
+
+/** Hard cap for one owner listing, including the tip, fresh windows, cached windows, and stats. */
+export const NFT_OWNER_LIST_BUDGET_MS = 8_000;
+
+/** Older windows read after the fresh ones, per request. The rest wait for a cursor. */
+export const NFT_HISTORY_WINDOWS_PER_PAGE = 4;
+
+const NFT_CURSOR_RE = /^(\d+)-(\d+)$/;
+
+let nftOwnerListBudgetOverrideMs: number | null = null;
+let nftHistoryPageSizeOverride: number | null = null;
+
+export function setNftOwnerListBudgetForTests(ms: number | null): void {
+  nftOwnerListBudgetOverrideMs = ms;
+}
+
+export function setNftHistoryPageSizeForTests(count: number | null): void {
+  nftHistoryPageSizeOverride = count;
+}
+
+export function nftOwnerListBudgetMs(): number {
+  return nftOwnerListBudgetOverrideMs ?? NFT_OWNER_LIST_BUDGET_MS;
+}
+
+export function nftOwnerListDeadlineAt(now = Date.now()): number {
+  return now + nftOwnerListBudgetMs();
+}
+
+function historyWindowsPerPage(): number {
+  const count = nftHistoryPageSizeOverride ?? NFT_HISTORY_WINDOWS_PER_PAGE;
+  return Number.isFinite(count) && count > 0 ? Math.floor(count) : NFT_HISTORY_WINDOWS_PER_PAGE;
+}
+
+export type MintedNftPage = {
+  items: ChainNft[];
+  partial: boolean;
+  next?: string;
+};
+
+/** `from-to` of the next unread window, or `tip` to start again at the head. */
+export function readOwnerNftCursor(search: URLSearchParams): null | "tip" | { from: number; to: number } | "invalid" {
+  const explicit = search.get("cursor");
+  const fromBlock = search.get("fromBlock");
+  const toBlock = search.get("toBlock");
+  const raw = explicit && explicit.length > 0 ? explicit : fromBlock && toBlock ? `${fromBlock}-${toBlock}` : null;
+  if (raw === null) return null;
+  if (raw === "tip") return "tip";
+  const match = NFT_CURSOR_RE.exec(raw);
+  if (!match) return "invalid";
+  const from = Number(match[1]);
+  const to = Number(match[2]);
+  if (!Number.isSafeInteger(from) || !Number.isSafeInteger(to) || to < from || to - from + 1 > 10_000) return "invalid";
+  return { from, to };
+}
+
+export function nftOwnerPageHeaders(page: MintedNftPage): Record<string, string> {
+  if (!page.partial) return { "X-Nfts-Partial": "0" };
+  const headers: Record<string, string> = { "X-Nfts-Partial": "1" };
+  if (page.next) headers["X-Nfts-Next"] = page.next;
+  return headers;
+}
 
 const collectionNameAbi = [
   { type: "function", name: "name", stateMutability: "view", inputs: [], outputs: [{ type: "string" }] },
@@ -48,16 +112,6 @@ export type ChainNft = NftListRow & {
 
 type MintLog = { address?: string; topics?: readonly string[]; data?: string };
 type ContractCall = (to: Address, data: Hex) => Promise<Hex>;
-
-/** In-app token page. The explorer address page is a different route and 404s a token id. */
-export function inAppNftPath(collection: string, tokenId: bigint | number | string): string {
-  return `/nft/${collection}/${tokenId.toString()}`;
-}
-
-/** `/nft` has no token to show. The explorer already lists collections. */
-export function nftIndexPath(): string {
-  return "/explorer/nfts";
-}
 
 /**
  * First block of a wallet mint scan. `latest` is the chain tip; `factoryStart` is the factory's
@@ -129,56 +183,66 @@ export function nftsFromMintLogs(logs: readonly MintLog[], owner: string): Chain
   return rows;
 }
 
-const olderMints = new Map<string, ChainNft[]>();
-const olderInFlight = new Set<string>();
+/** Clears nothing persistent. Budget overrides stay under the test that set them. */
+export function resetMintHistoryForTests(): void {}
 
-function defaultScanOlderMints(factory: string, topics: Array<string | null>, owner: string, factoryStart: number): void {
-  const key = owner.toLowerCase();
-  if (olderInFlight.has(key) || olderMints.has(key)) return;
-  olderInFlight.add(key);
-  void fetchLogsWindowed(factory, topics, factoryStart)
-    .then((logs) => {
-      olderMints.set(key, nftsFromMintLogs(logs, owner));
-    })
-    .catch(() => {
-      /* a later wallet refresh can try the history scan again */
-    })
-    .finally(() => {
-      olderInFlight.delete(key);
-    });
+function cursorKey(from: number, to: number): string {
+  return `${from}-${to}`;
 }
 
-let scanOlderMints = defaultScanOlderMints;
-
-/** Tests substitute a no-op so a mocked node is not asked for the factory's whole history. */
-export function setOlderMintScanForTests(
-  scan: ((factory: string, topics: Array<string | null>, owner: string, factoryStart: number) => void) | null,
-): void {
-  scanOlderMints = scan ?? (() => {});
+function resumeWindowIndex(windows: Array<[number, number]>, cursor: string | null | undefined): number {
+  if (!cursor || cursor === "tip") return windows.length - 1;
+  const match = NFT_CURSOR_RE.exec(cursor);
+  if (!match) return windows.length - 1;
+  const from = Number(match[1]);
+  const to = Number(match[2]);
+  const exact = windows.findIndex(([start, end]) => start === from && end === to);
+  if (exact >= 0) return exact;
+  const sameStart = windows.findIndex(([start]) => start === from);
+  if (sameStart >= 0) return sameStart;
+  return windows.length - 1;
 }
 
-export function resetMintHistoryForTests(): void {
-  olderMints.clear();
-  olderInFlight.clear();
-  scanOlderMints = defaultScanOlderMints;
-}
-
-export async function listMintedNfts(owner: string): Promise<ChainNft[]> {
+async function listMintedNftsWithin(owner: string, cursor: string | null, deadlineAt: number): Promise<MintedNftPage> {
   const factory = nftFactoryAddress();
-  if (!factory || !isAddress(owner)) return [];
+  if (!factory || !isAddress(owner)) return { items: [], partial: false };
   const topics = mintLogTopics(owner);
   const factoryStart = nftFactoryScanStart(factory);
   const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
   const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
-  const recentFrom = Number.isFinite(latest) ? recentMintScanStart(latest, factoryStart) : factoryStart;
-  const logs = await fetchLogsWindowed(factory, topics, recentFrom);
-  const recent = nftsFromMintLogs(logs, owner);
-  const older = olderMints.get(owner.toLowerCase()) ?? [];
-  if (recentFrom > factoryStart) scanOlderMints(factory, topics, owner, factoryStart);
-  const map = new Map<string, ChainNft>();
-  for (const row of older) map.set(row.nftId, row);
-  for (const row of recent) map.set(row.nftId, row);
-  return [...map.values()];
+  if (!Number.isFinite(latest)) return { items: [], partial: true, next: "tip" };
+  const windows = logWindows(factoryStart, latest);
+  if (!windows.length) return { items: [], partial: false };
+
+  const recentFloor = Math.max(0, windows.length - RECENT_MINT_WINDOWS);
+  const pageSize = historyWindowsPerPage();
+  const logs: Array<{ address?: string; topics?: readonly string[]; data?: string }> = [];
+  let historyRead = 0;
+  for (let index = resumeWindowIndex(windows, cursor); index >= 0; index -= 1) {
+    const [from, to] = windows[index];
+    const isRecent = index >= recentFloor;
+    if (!isRecent && historyRead >= pageSize) {
+      return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
+    }
+    const priority = isRecent ? "recent" : "history";
+    const chunk = await withRpcCallContext({ deadlineAt, logPriority: priority }, () =>
+      fetchLogWindow(factory, topics, from, to, latest),
+    );
+    if (chunk === null) {
+      return { items: nftsFromMintLogs(logs, owner), partial: true, next: cursorKey(from, to) };
+    }
+    logs.push(...chunk);
+    if (!isRecent) historyRead += 1;
+  }
+  return { items: nftsFromMintLogs(logs, owner), partial: false };
+}
+
+export async function listMintedNfts(
+  owner: string,
+  options?: { cursor?: string | null; deadlineAt?: number },
+): Promise<MintedNftPage> {
+  const deadlineAt = options?.deadlineAt ?? nftOwnerListDeadlineAt();
+  return withRpcCallContext({ deadlineAt }, () => listMintedNftsWithin(owner, options?.cursor ?? null, deadlineAt));
 }
 
 /**

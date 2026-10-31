@@ -150,5 +150,8 @@
   "install": "Installieren",
   "signInGoogle": "Mit Google anmelden",
   "back": "Zurück",
-  "openWallet": "{wallet} öffnen"
+  "openWallet": "{wallet} öffnen",
+  "nftHistoryLoading": "Verlauf wird geladen",
+  "nftHistoryError": "NFT-Verlauf konnte nicht geladen werden.",
+  "nftHistoryRetry": "Wiederholen"
 }

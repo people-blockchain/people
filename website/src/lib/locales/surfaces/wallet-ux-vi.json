@@ -150,5 +150,8 @@
   "install": "Cài đặt",
   "signInGoogle": "Đăng nhập bằng Google",
   "back": "Quay lại",
-  "openWallet": "Mở {wallet}"
+  "openWallet": "Mở {wallet}",
+  "nftHistoryLoading": "Đang tải lịch sử",
+  "nftHistoryError": "Không tải được lịch sử NFT.",
+  "nftHistoryRetry": "Thử lại"
 }

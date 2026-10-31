@@ -29,7 +29,9 @@ import { partnerCopy } from "@/lib/partner/copy";
 import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import { signFactoryTx } from "@/lib/people-sign";
-import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
+import { DEFAULT_TRANSFER_FEE, networkFetch, networkJson } from "@/lib/network-client";
+import { initialNftLoadState, loadOwnerNfts, type NftLoadState, type WalletNftItem } from "@/lib/wallet-nft-loader";
+import { Loader2 } from "lucide-react";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import type { WalletOnboardingMode } from "./useWalletOnboarding";
 import { PeopleWalletMark } from "./PeopleWalletMark";
@@ -46,15 +48,16 @@ interface AccountView {
   balances: Record<string, number>;
 }
 
-type WalletNft = {
-  nftId: string;
-  name: string;
-  imageUri?: string;
-  collection?: string;
-  onChainTokenId?: string;
-};
-
 type ChainAccount = { nonce?: number; balanceWei?: string; balance?: number | string; balances?: Record<string, number> };
+
+function ownedNftPath(address: string, nft: { nftId: string; collection?: string; onChainTokenId?: string }) {
+  const params = new URLSearchParams({ owner: address });
+  if (nft.collection && nft.onChainTokenId) {
+    params.set("collection", nft.collection);
+    params.set("tokenId", nft.onChainTokenId);
+  }
+  return `nfts?${params.toString()}`;
+}
 
 interface FaucetFundResult {
   ok?: boolean;
@@ -102,14 +105,15 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   const [memo, setMemo] = useState("");
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState<{tx:UnsignedTx; amountWei:bigint; protocolFeeWei:bigint; display:string; remaining:string; reviewedWei:bigint; reviewedAsset:number} | null>(null);
-  const [selectedNft, setSelectedNft] = useState<WalletNft | null>(null);
+  const [selectedNft, setSelectedNft] = useState<WalletNftItem | null>(null);
   const [nftTo, setNftTo] = useState("");
   const [walletName, setWalletName] = useState("");
   const [connectOverlay, setConnectOverlay] = useState<null | { mode: WalletOnboardingMode; walletId?: string }>(
     null
   );
   const [account, setAccount] = useState<AccountView | null>(null);
-  const [nfts, setNfts] = useState<WalletNft[]>([]);
+  const [nftLoad, setNftLoad] = useState<NftLoadState>(initialNftLoadState);
+  const [nftAttempt, setNftAttempt] = useState(0);
   const [qr, setQr] = useState("");
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
@@ -145,9 +149,8 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         const controller = new AbortController();
         chainRequest.current = controller;
         const init = { signal: controller.signal, cache: "no-store" as const };
-        const [balance, owned, registry] = await Promise.allSettled([
+        const [balance, registry] = await Promise.allSettled([
           networkJson<ChainAccount>(`address/${address}`, init),
-          networkJson<WalletNft[]>(`nfts?owner=${encodeURIComponent(address)}`, init),
           networkJson<TransferAsset[]>("assets", init),
         ]);
         if (stopped) break;
@@ -156,7 +159,6 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           setAccount({ balanceWei: readBalanceWei(acc) ?? BigInt(0), nonce: Number(acc.nonce ?? 0), balances: acc.balances ?? {} });
           setRevision(r => r + 1);
         }
-        if (owned.status === "fulfilled") setNfts(Array.isArray(owned.value) ? owned.value : []);
         if (registry.status === "fulfilled" && Array.isArray(registry.value)) setAssets(registry.value);
       } while (queued && !stopped);
       pending = false;
@@ -190,6 +192,25 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, [session?.address, wsUrl, chainId]);
+
+  useEffect(() => {
+    const address = session?.address;
+    if (!address) return;
+    const controller = new AbortController();
+    let stopped = false;
+    setNftLoad(initialNftLoadState());
+    void loadOwnerNfts(address, {
+      signal: controller.signal,
+      fetchImpl: (path, init) => networkFetch(path, init),
+      onState: (next) => {
+        if (!stopped) setNftLoad(next);
+      },
+    });
+    return () => {
+      stopped = true;
+      controller.abort();
+    };
+  }, [session?.address, nftAttempt]);
 
   useEffect(() => {
     if (sheet !== "send") return;
@@ -322,7 +343,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         throw new Error(transferErrors[err instanceof Error ? err.message : "amount"] ?? t.error);
       }
       if (nft) {
-        const owned = await networkJson<Array<{nftId:string}>>(`nfts?owner=${session.address}`,{cache:"no-store"});
+        const owned = await networkJson<Array<{nftId:string}>>(ownedNftPath(session.address, nft),{cache:"no-store"});
         if (!owned.some(item=>item.nftId===nft.nftId)) throw new Error(c.unavailable);
       }
       const tx: UnsignedTx = {
@@ -371,7 +392,11 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       const pplSpend = txDraft.assetId === "ppl" ? draft.amountWei + draft.protocolFeeWei : draft.protocolFeeWei;
       if (fresh.nonce!==txDraft.nonce || freshWei < pplSpend || (txDraft.assetId!=="ppl" && (fresh.balances?.[txDraft.assetId??""]??0)<txDraft.amount)) throw new Error(c.feeChanged);
       if (txDraft.type==="nftTransfer") {
-        const owned=await networkJson<Array<{nftId:string}>>(`nfts?owner=${session.address}`,{cache:"no-store"});
+        const known = nftLoad.items.find((item) => item.nftId === txDraft.payload?.nftId);
+        const owned = await networkJson<Array<{nftId:string}>>(
+          known ? ownedNftPath(session.address, known) : `nfts?owner=${encodeURIComponent(session.address)}`,
+          { cache: "no-store" },
+        );
         if(!owned.some(n=>n.nftId===txDraft.payload?.nftId)) throw new Error(c.unavailable);
       }
       if (isCosmosEvmChain()) {
@@ -668,9 +693,13 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           </div>
 
           <div id="wallet-panel-nft" role="tabpanel" aria-labelledby="wallet-tab-nft" hidden={tab !== "nft"}>
-            {nfts.length === 0 ? <p className="text-sm text-ink-3">—</p> : (
+            {nftLoad.phase === "loading" && nftLoad.items.length === 0 ? (
+              <p className="flex items-center gap-2 text-sm text-ink-3">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              </p>
+            ) : nftLoad.items.length > 0 ? (
               <ul className="grid grid-cols-2 gap-3 text-sm">
-                {nfts.filter(n=>`${n.name} ${n.nftId}`.toLowerCase().includes(search.toLowerCase())).map((nft) => (
+                {nftLoad.items.filter(n=>`${n.name} ${n.nftId}`.toLowerCase().includes(search.toLowerCase())).map((nft) => (
                   <li key={nft.nftId} className="min-w-0 rounded-2xl border border-line bg-surface p-3">
                     <button type="button" onClick={()=>{setSelectedNft(nft);setNftTo("");}} className="block w-full text-left">
                       <AssetImage src={nft.imageUri} name={nft.name} nft className="aspect-square w-full" />
@@ -685,7 +714,18 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
                   </li>
                 ))}
               </ul>
+            ) : nftLoad.phase === "error" ? null : (
+              <p className="text-sm text-ink-3">—</p>
             )}
+            {nftLoad.historyLoading ? <p className="mt-3 text-sm text-ink-3">{c.nftHistoryLoading}</p> : null}
+            {nftLoad.phase === "error" ? (
+              <div className="mt-3 space-y-2">
+                <p className="text-sm text-warm">{c.nftHistoryError}</p>
+                <button type="button" className="text-sm font-semibold text-brand" onClick={() => setNftAttempt((attempt) => attempt + 1)}>
+                  {c.nftHistoryRetry}
+                </button>
+              </div>
+            ) : null}
           </div>
 
           <div id="wallet-panel-history" role="tabpanel" aria-labelledby="wallet-tab-history" hidden={tab !== "history"}>

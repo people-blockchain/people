@@ -150,5 +150,8 @@
   "install": "安装",
   "signInGoogle": "使用 Google 登录",
   "back": "返回",
-  "openWallet": "打开 {wallet}"
+  "openWallet": "打开 {wallet}",
+  "nftHistoryLoading": "正在加载历史",
+  "nftHistoryError": "无法加载 NFT 历史。",
+  "nftHistoryRetry": "重试"
 }

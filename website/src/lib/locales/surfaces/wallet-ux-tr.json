@@ -150,5 +150,8 @@
   "install": "Yükle",
   "signInGoogle": "Google ile giriş yap",
   "back": "Geri",
-  "openWallet": "{wallet} uygulamasını aç"
+  "openWallet": "{wallet} uygulamasını aç",
+  "nftHistoryLoading": "Geçmiş yükleniyor",
+  "nftHistoryError": "NFT geçmişi yüklenemedi.",
+  "nftHistoryRetry": "Yeniden dene"
 }
