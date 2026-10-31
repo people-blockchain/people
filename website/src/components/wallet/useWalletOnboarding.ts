@@ -15,6 +15,7 @@ import {
   verifyMnemonicConfirm,
 } from "@/lib/wallet-seed";
 import { keyFromPrivate } from "@/lib/people-sign";
+import { addressMatchesPublicKey } from "@/lib/wallet-address-scheme";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { requestTestnetFaucet } from "@/lib/evm/faucet-client";
 import type { StoredWallet } from "@/lib/wallet-vault";
@@ -144,13 +145,16 @@ export function useWalletOnboarding(
         const backup = JSON.parse(text);
         if (backup.version !== 1 || typeof backup.wallet?.encryptedPrivateKey !== "string") throw new Error(t.error);
         privateKey = await decryptSecret(backup.wallet.encryptedPrivateKey, password);
-        if (keyFromPrivate(privateKey).address.toLowerCase() !== String(backup.wallet.address).toLowerCase()) {
+        const imported = keyFromPrivate(privateKey);
+        if (!addressMatchesPublicKey(String(backup.wallet.address), imported.publicKey)) {
           throw new Error(t.error);
         }
         seed = backup.wallet.encryptedMnemonic
           ? await decryptSecret(backup.wallet.encryptedMnemonic, password)
           : undefined;
-        if (seed && keyPairFromMnemonic(seed).address !== keyFromPrivate(privateKey).address) throw new Error(t.error);
+        if (seed && keyPairFromMnemonic(seed).address.toLowerCase() !== imported.address.toLowerCase()) {
+          throw new Error(t.error);
+        }
         label = typeof backup.wallet.label === "string" ? backup.wallet.label : undefined;
       }
       const key = seed ? keyPairFromMnemonic(seed) : keyFromPrivate(privateKey);
@@ -165,7 +169,12 @@ export function useWalletOnboarding(
       void registerOnNetwork(key.privateKey, key.address);
       onConnected?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : t.error);
+      const message = err instanceof Error ? err.message : "";
+      if (message === "invalid_private_key" || message === "invalid_mnemonic") {
+        setError(t.importInvalidKey);
+      } else {
+        setError(message || t.error);
+      }
     } finally {
       setBusy(false);
     }
