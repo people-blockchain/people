@@ -7,12 +7,14 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { walletCopy } from "@/lib/wallet-copy";
 import {
-  cloudSessionRetryDecision,
   ensureCloudWalletSession,
   fetchAuthSessionUser,
   fetchVaultRecordClient,
   fetchWrapKey,
+  WalletCloudError,
 } from "@/lib/wallet-cloud-client";
+import { openCloudVaultWithReauth } from "@/lib/wallet-reauth-flow";
+import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { runParticipantRegistration } from "@/lib/participant-registration";
 import { networkJson } from "@/lib/network-client";
 import {
@@ -43,7 +45,7 @@ import {
   resolvePostSignInNavigation,
   runResumeOnce,
   takePendingRedirect,
-  waitForSessionUser,
+  waitForFreshSessionUser,
   waitForWeb3AuthConnected,
   writePendingRedirect,
 } from "@/lib/web3auth-redirect-resume";
@@ -175,7 +177,7 @@ export function WalletWeb3AuthSignIn({
       // The stage line keeps the machine label visible on phones without a console.
       setFailure(signInErrorLabel(err));
       if (err instanceof TimeoutError) return c.signInTimeout;
-      const code = err instanceof Error ? err.message : "";
+      const code = err instanceof WalletCloudError ? err.code : err instanceof Error ? err.message : "";
       return messageForCloudConnectError(code, c);
     },
     [c],
@@ -204,25 +206,15 @@ export function WalletWeb3AuthSignIn({
         clearUserDisconnected();
         rememberAuthEmail(email);
         if (email) setKnownEmail(email);
-        let cloud;
-        try {
-          cloud = await ensureCloudWalletSession({ id: userId });
-        } catch (first) {
-          // The wrap-key route demands a sign-in inside the 5-minute reauth window (authTime).
-          // When the session cookie is older (or lost) re-establish it with the idToken of this
-          // attempt and retry once — only if the new session has a user id and a fresh authTime.
-          const code = first instanceof Error ? first.message : "";
-          const idToken = lastIdTokenRef.current;
-          if ((code !== "reauth_required" && code !== "unauthorized") || !idToken) throw first;
-          const again = await signIn("web3auth", { idToken, redirect: false });
-          if (!again || again.error || !again.ok) throw new Error("reauth_required");
-          const refreshed = await waitForSessionUser(fetchAuthSessionUser);
-          const decision = cloudSessionRetryDecision(refreshed);
-          if (decision !== "ok" || !refreshed?.id) {
-            throw new Error(decision === "ok" ? "unauthorized" : decision);
-          }
-          cloud = await ensureCloudWalletSession({ id: refreshed.id });
-        }
+        const cloud = await openCloudVaultWithReauth({
+          openVault: (session) => ensureCloudWalletSession({ id: session.id || userId }),
+          signInWithIdToken: async (idToken) => {
+            const again = await signIn("web3auth", { idToken, redirect: false });
+            if (!again || again.error || !again.ok) throw new WalletCloudError("reauth_required");
+          },
+          fetchSession: fetchAuthSessionUser,
+          idToken: lastIdTokenRef.current,
+        });
         // Must be awaited: callers navigate (window.location.replace) right after this
         // resolves, and a reload before the session write lands is the "logged out after
         // reload" bug — see connectCloud in WalletContext.
@@ -243,7 +235,7 @@ export function WalletWeb3AuthSignIn({
         return true;
       } catch (err) {
         console.error("[wallet] cloud connect failed", err);
-        const code = err instanceof Error ? err.message : "";
+        const code = err instanceof WalletCloudError ? err.code : err instanceof Error ? err.message : "";
         if (!silent) setError(messageForCloudConnectError(code, c));
         return false;
       } finally {
@@ -267,23 +259,20 @@ export function WalletWeb3AuthSignIn({
       }
 
       // The session cookie from the sign-in response can lag behind the next read on mobile.
-      const user = await waitForSessionUser(fetchAuthSessionUser);
-      if (!user?.id) throw new Error("auth_session_missing");
+      // A user id alone is not enough: the previous cookie is still a user, with a stale authTime.
+      const user = await waitForFreshSessionUser(fetchAuthSessionUser);
+      if (!user?.id) throw new Error("reauth_required");
 
       rememberAuthEmail(user.email);
       const vault = await fetchVaultRecordClient();
-      const generated = await keyPairFromWeb3AuthProvider(provider);
 
-      // A returning account always opens the wallet already saved for it. The Web3Auth key can
-      // derive a different address (SDK/network change), but that address is never used and the
-      // old "found an existing wallet / keep current" card only ever offered one button — keeping
-      // the saved wallet — so it is done silently and the user lands straight in /wallet.
+      // A returning account opens the wallet already saved for it. The Web3Auth key is only
+      // needed to create a vault; deriving it when a vault exists can throw before wrap-key runs.
       if (vault) {
-        if (vault.address.toLowerCase() !== generated.address.toLowerCase()) {
-          console.info("[wallet] web3auth key differs from the saved wallet; opening the saved wallet");
-        }
         return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
       }
+
+      const generated = await keyPairFromWeb3AuthProvider(provider);
 
       const wrapKeyHex = await fetchWrapKey();
       const { encryptPrivateKeyForVault } = await import("@/lib/wallet-cloud-crypto");
@@ -611,7 +600,9 @@ export function WalletWeb3AuthSignIn({
     void (async () => {
       const user = await fetchAuthSessionUser();
       if (!user || cancelled) return;
-      // Automatic: a failure here must not show an error on the card (console only).
+      // Nothing to refresh a session older than the reauth window (no idToken). wrap-key would
+      // only answer reauth_required; stay quiet and let the next real sign-in open the vault.
+      if (!isAuthTimeFresh(user.authTime)) return;
       await finishConnect(user.id, user.email, { silent: true });
     })();
     return () => {

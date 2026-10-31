@@ -154,7 +154,13 @@ test("existing admin account: an already-bound Web3Auth identity still signs in"
 
 test("auth.config wires provider through jwt/session and still verifies Google emails", () => {
   const config = readFileSync(join(root, "src/auth.config.ts"), "utf8");
-  assert.match(config, /account\?\.provider/, "jwt callback must record the sign-in provider");
+  assert.match(
+    config,
+    /async jwt\([\s\S]*?applyAuthJwtCallback\(/,
+    "jwt callback must call applyAuthJwtCallback",
+  );
+  const jwtCallback = readFileSync(join(root, "src/lib/auth-jwt-callback.ts"), "utf8");
+  assert.match(jwtCallback, /account\?\.provider/, "jwt callback must record the sign-in provider");
   assert.match(config, /session\.provider = token\.provider/);
   assert.match(config, /profile\.email_verified !== true/, "Google profile must still reject unverified emails");
   const dts = readFileSync(join(root, "src/types/next-auth.d.ts"), "utf8");
