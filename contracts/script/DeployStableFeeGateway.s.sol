@@ -11,8 +11,9 @@ import {StableFeeGateway} from "../src/fees/StableFeeGateway.sol";
 /// GATEWAY_NFT_FACTORY (the already-deployed, unchanged factories).
 ///
 /// Env (optional, owner-approved pricing — see docs/design/buyback.md §8):
-/// GATEWAY_TOKEN_STABLE_FEE_USD6 (default 5_000000 = 5.00 USD for a token launch),
-/// GATEWAY_NFT_STABLE_FEE_USD6 (default 10_000000 = 10.00 USD for an NFT mint).
+/// GATEWAY_TOKEN_STABLE_FEE_USD6 (default 1_000000 = 1.00 USD for a token launch),
+/// GATEWAY_NFT_STABLE_FEE_USD6 (default 2_000000 = 2.00 USD for an NFT mint).
+/// Defaults match the website and the live gateway (A9).
 ///
 /// C-01/S1-02 fix: after this script runs, the factories' owner (the multisig/timelock) must
 /// separately call `tokenFactory.setGateway(address(gateway))` and
@@ -21,8 +22,8 @@ import {StableFeeGateway} from "../src/fees/StableFeeGateway.sol";
 /// `payLaunchFee` is unreachable (every `creditPrepaidFee` call reverts `Unauthorized`) until
 /// both are wired.
 contract DeployStableFeeGateway is Script {
-    uint256 internal constant APPROVED_TOKEN_STABLE_FEE_USD6 = 5_000000; // 5.00 USD — owner-approved
-    uint256 internal constant APPROVED_NFT_STABLE_FEE_USD6 = 10_000000; // 10.00 USD — owner-approved
+    uint256 internal constant APPROVED_TOKEN_STABLE_FEE_USD6 = 1_000000; // 1.00 USD — owner-approved
+    uint256 internal constant APPROVED_NFT_STABLE_FEE_USD6 = 2_000000; // 2.00 USD — owner-approved
 
     function run() external returns (StableFeeGateway gateway) {
         address owner = vm.envAddress("GATEWAY_OWNER");

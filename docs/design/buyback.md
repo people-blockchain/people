@@ -7,7 +7,7 @@ changed from the original design-only text. Owner-approved policy (this batch): 
 unchanged, treasury + liquidity shares fund public buybacks, visible in the explorer. Website
 copy (`/tokenomics`, `/how-it-works`, `/fees`) describes the batched swap-and-split as
 **preliminary** policy; the stablecoin launch fee itself is live, with an owner-approved price
-(5.00 USD token launch, 10.00 USD NFT mint — owner decision, 2026-10-12) and is PEOPLE-network-only for
+(1.00 USD token launch, 2.00 USD NFT mint — owner decision, PR #72 / A9) and is PEOPLE-network-only for
 now; cross-chain stablecoin payment (Ethereum, Polygon, Tron, TON, Solana) is not built yet.
 
 **OWNER DECISION (2026-10-12):** the token/NFT launch fee paid in USDC/USDT goes **100%**
@@ -161,7 +161,7 @@ the original text, kept for history; point 4 is what actually shipped):
    fee gateway.
 
 The website (`/create/token`, `/create/nft`, `/fees`) describes this as live on testnet with an
-**owner-approved** stable price (§8) — 5.00 USD for a token launch, 10.00 USD for an NFT mint —
+**owner-approved** stable price (§8) — 1.00 USD for a token launch, 2.00 USD for an NFT mint —
 not yet wired to a mainnet bridged stablecoin, and PEOPLE-network-only; paying the stable fee
 from another chain (Ethereum, Polygon, Tron, TON, Solana) is not built yet.
 
@@ -205,8 +205,8 @@ deploy script `contracts/script/DeployStableFeeGateway.s.sol`, self-review
   This is deliberate: a stablecoin fee priced directly off a PPL/USD oracle would reintroduce the
   exact price dependency a *fixed* USD launch fee is meant to avoid, and no oracle/pool-based PPL
   pricing decision has been approved yet.
-- **The deploy script's default values are the owner-approved price** (owner decision, 2026-10-12): 5.00
-  USD for a token launch, 10.00 USD for an NFT mint (`DeployStableFeeGateway.s.sol`,
+- **The deploy script's default values are the owner-approved price** (owner decision, PR #72 / A9): 1.00
+  USD for a token launch, 2.00 USD for an NFT mint (`DeployStableFeeGateway.s.sol`,
   `APPROVED_TOKEN_STABLE_FEE_USD6` / `APPROVED_NFT_STABLE_FEE_USD6`), overridable via
   `GATEWAY_TOKEN_STABLE_FEE_USD6` / `GATEWAY_NFT_STABLE_FEE_USD6` env vars. The owner can change
   them post-deploy with `setStableFee` at any time, within the min/max bounds, with no redeploy.
