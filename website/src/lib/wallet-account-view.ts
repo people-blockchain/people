@@ -1,9 +1,101 @@
+import { isHiddenAsset } from "@/lib/hidden-assets";
+import { testStableMeta } from "@/lib/evm/test-stables";
+
 export type WalletAccountView = {
   balance: number | null;
   nonce: number;
   balances: Record<string, number>;
   partial: boolean;
 };
+
+export type WalletAssetMeta = {
+  assetId: string;
+  tokenAddress?: string;
+  name?: string;
+  symbol?: string;
+  decimals?: number;
+  imageUri?: string;
+  creationMetadata?: { image?: unknown };
+};
+
+export type WalletHolding = {
+  id: string;
+  amount: number;
+  name: string;
+  symbol: string;
+  decimals: number;
+  tokenAddress?: string;
+  imageUri?: string;
+};
+
+export type WalletChainState = {
+  account: WalletAccountView | null;
+  assets: WalletAssetMeta[];
+};
+
+function imageOf(asset: WalletAssetMeta | undefined): string | undefined {
+  const fromMeta = asset?.creationMetadata?.image;
+  if (typeof fromMeta === "string" && fromMeta.trim()) return fromMeta;
+  return asset?.imageUri;
+}
+
+function findAsset(assets: readonly WalletAssetMeta[], id: string): WalletAssetMeta | undefined {
+  const key = id.toLowerCase();
+  return assets.find(
+    (asset) => asset.assetId.toLowerCase() === key || asset.tokenAddress?.toLowerCase() === key,
+  );
+}
+
+/**
+ * Token rows for the wallet list. Balances are enough: names and logos fill in when the asset
+ * catalog arrives. Test stables are labelled from their known metadata even when the catalog
+ * omits them, whether the balance key is `tusdc` or the contract address.
+ */
+export function walletHoldings(
+  balances: Record<string, number> | undefined,
+  assets: readonly WalletAssetMeta[] = [],
+  created: readonly { address: string }[] = [],
+): WalletHolding[] {
+  const rows = new Map<string, WalletHolding>();
+  const put = (rawId: string, amount: number, force: boolean) => {
+    if (isHiddenAsset(rawId)) return;
+    const asset = findAsset(assets, rawId);
+    const stable = testStableMeta(rawId) ?? testStableMeta(asset?.tokenAddress) ?? testStableMeta(asset?.assetId);
+    const id = (stable?.assetId ?? rawId).toLowerCase();
+    if (id === "ppl" || isHiddenAsset(id)) return;
+    const current = rows.get(id);
+    const nextAmount = Math.max(current?.amount ?? 0, amount);
+    if (!force && nextAmount <= 0 && !current) return;
+    const decimals = stable?.decimals ?? asset?.decimals ?? current?.decimals ?? 18;
+    rows.set(id, {
+      id,
+      amount: nextAmount,
+      name: stable?.name ?? asset?.name ?? current?.name ?? id,
+      symbol: stable?.symbol ?? asset?.symbol ?? current?.symbol ?? id.toUpperCase(),
+      decimals: Number.isInteger(decimals) && decimals >= 0 && decimals <= 18 ? decimals : 18,
+      tokenAddress: stable?.tokenAddress ?? asset?.tokenAddress ?? current?.tokenAddress,
+      imageUri: imageOf(asset) ?? current?.imageUri,
+    });
+  };
+  for (const [id, value] of Object.entries(balances ?? {})) {
+    if (typeof value !== "number" || !Number.isFinite(value)) continue;
+    put(id, value, false);
+  }
+  for (const row of created) put(row.address, Number(balances?.[row.address.toLowerCase()] ?? balances?.[row.address] ?? 0), true);
+  return [...rows.values()];
+}
+
+/** Address payload first. Assets stay as they were so the native balance can render alone. */
+export function reduceWalletChain(
+  state: WalletChainState,
+  event: { type: "address"; payload: unknown } | { type: "assets"; rows: readonly WalletAssetMeta[] },
+): WalletChainState {
+  if (event.type === "address") {
+    const account = mapWalletAccount(event.payload);
+    return { account: account ?? state.account, assets: state.assets };
+  }
+  return { account: state.account, assets: [...event.rows] };
+}
 
 /**
  * Maps a compat address payload onto the wallet screen. A finite native balance is shown as a
