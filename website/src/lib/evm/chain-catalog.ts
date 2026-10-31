@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { getAddress, formatUnits } from "viem";
 import { readEvmDeployments } from "@/lib/evm/config";
-import { evmJsonRpc, evmJsonRpcBatch, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
+import { evmJsonRpc, evmJsonRpcBatch, readLogWindowPriority, readRpcDeadlineAt, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
@@ -129,27 +129,69 @@ const windowLogsCache = new Map<string, { at: number; value: RpcLog[] }>();
  * memory limit on 2026-10-17.
  */
 export const MAX_PARALLEL_LOG_WINDOWS = 2;
-let logWindowsInFlight = 0;
-const logWindowQueue: Array<() => void> = [];
 
-async function withLogWindowSlot<T>(work: () => Promise<T>): Promise<T> {
-  if (logWindowsInFlight >= MAX_PARALLEL_LOG_WINDOWS) {
-    await new Promise<void>((resolve) => logWindowQueue.push(resolve));
+/**
+ * History scans and the wallet's newest mint windows do not share a queue. A cold catalog walk
+ * holds the history lane; a fresh mint window still gets a slot of its own, so it cannot sit
+ * behind somebody else's older ranges until the function deadline.
+ */
+type LogWindowLane = "recent" | "history";
+type SlotWaiter = { grant: () => void };
+
+const logWindowLanes: Record<LogWindowLane, { inFlight: number; queue: SlotWaiter[] }> = {
+  recent: { inFlight: 0, queue: [] },
+  history: { inFlight: 0, queue: [] },
+};
+
+/** Peak concurrent `eth_getLogs` windows on one lane, for tests. */
+let logWindowsPeak = 0;
+
+/** Marks an error raised by the node (as opposed to the Next data cache being unavailable). */
+class LogWindowRpcError extends Error {}
+
+function enqueueLogSlot(queue: SlotWaiter[], deadlineAt: number | undefined): Promise<boolean> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const clock: { timer?: ReturnType<typeof setTimeout> } = {};
+    const entry: SlotWaiter = {
+      grant() {
+        if (settled) return;
+        settled = true;
+        clearTimeout(clock.timer);
+        resolve(true);
+      },
+    };
+    queue.push(entry);
+    if (deadlineAt === undefined) return;
+    clock.timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      const index = queue.indexOf(entry);
+      if (index >= 0) queue.splice(index, 1);
+      resolve(false);
+    }, Math.max(0, deadlineAt - Date.now()));
+  });
+}
+
+async function withLogWindowSlot<T>(work: () => Promise<T>, lane: LogWindowLane = "history"): Promise<T> {
+  const state = logWindowLanes[lane];
+  if (state.inFlight >= MAX_PARALLEL_LOG_WINDOWS) {
+    const granted = await enqueueLogSlot(state.queue, readRpcDeadlineAt());
+    if (!granted) throw new LogWindowRpcError("log_window_deadline");
   } else {
-    logWindowsInFlight++;
+    state.inFlight++;
   }
+  logWindowsPeak = Math.max(logWindowsPeak, state.inFlight);
   try {
     return await work();
   } finally {
-    const next = logWindowQueue.shift();
+    const next = state.queue.shift();
     // Hand the slot straight to the next waiter; only free it when nobody is queued.
-    if (next) next();
-    else logWindowsInFlight--;
+    if (next) next.grant();
+    else state.inFlight--;
   }
 }
 
-/** Peak concurrent `eth_getLogs` windows, for tests. */
-let logWindowsPeak = 0;
 export function logWindowConcurrencyPeakForTests(): number {
   return logWindowsPeak;
 }
@@ -175,12 +217,10 @@ function rpcLogFilter(address: string, topics: Array<string | null>, from: numbe
   };
 }
 
-/** Marks an error raised by the node (as opposed to the Next data cache being unavailable). */
-class LogWindowRpcError extends Error {}
-
 async function readLogWindowFromNode(address: string, topics: Array<string | null>, from: number, to: number): Promise<RpcLog[]> {
   return withLogWindowSlot(async () => {
-    logWindowsPeak = Math.max(logWindowsPeak, logWindowsInFlight);
+    const deadlineAt = readRpcDeadlineAt();
+    if (deadlineAt !== undefined && Date.now() >= deadlineAt) throw new LogWindowRpcError("log_window_deadline");
     let logs: unknown;
     try {
       logs = await evmJsonRpc<RpcLog[]>("eth_getLogs", [rpcLogFilter(address, topics, from, to)]);
@@ -190,7 +230,7 @@ async function readLogWindowFromNode(address: string, topics: Array<string | nul
     // Throwing (rather than returning []) keeps a failed window out of every cache.
     if (!Array.isArray(logs)) throw new LogWindowRpcError("rpc_logs_unavailable");
     return logs as RpcLog[];
-  });
+  }, readLogWindowPriority());
 }
 
 /**
@@ -217,6 +257,8 @@ async function readLogWindow(
       return await readImmutableLogWindowShared(lower, topics, from, to);
     } catch (error) {
       if (error instanceof LogWindowRpcError) return null;
+      const deadlineAt = readRpcDeadlineAt();
+      if (deadlineAt !== undefined && Date.now() >= deadlineAt - 50) return null;
       // Outside the Next runtime (node tests, scripts) there is no data cache: read directly.
     }
   }
@@ -266,6 +308,31 @@ export async function fetchLogsWindowed(
     }),
   );
   return results.flat();
+}
+
+/**
+ * One log window. A memory or shared-cache hit returns immediately. A miss uses the caller's log
+ * lane and RPC deadline; `null` means the window was not read (deadline or node error) and must
+ * not be treated as an empty range.
+ */
+export async function fetchLogWindow(
+  address: string,
+  topics: Array<string | null>,
+  from: number,
+  to: number,
+  latest: number,
+): Promise<RpcLog[] | null> {
+  if (!Number.isFinite(from) || !Number.isFinite(to) || !Number.isFinite(latest) || to < from) return [];
+  const key = windowCacheKey(address, topics, from, to);
+  const isImmutable = to < latest - LOG_WINDOW_BLOCKS;
+  const now = Date.now();
+  const entry = windowLogsCache.get(key);
+  if (entry && (!isImmutable || now - entry.at < WINDOW_LOG_TTL_MS)) return entry.value;
+  const deadlineAt = readRpcDeadlineAt();
+  if (deadlineAt !== undefined && deadlineAt - now < 50) return null;
+  const logs = await readLogWindow(address, topics, from, to, isImmutable);
+  if (logs) rememberWindowLogs(key, logs);
+  return logs;
 }
 
 const SEL_FACTORY = "0xc45a0155";
@@ -333,6 +400,10 @@ export function resetChainCatalogCacheForTests(): void {
   poolsRefreshing = null;
   windowLogsCache.clear();
   logWindowsPeak = 0;
+  logWindowLanes.recent.inFlight = 0;
+  logWindowLanes.recent.queue.length = 0;
+  logWindowLanes.history.inFlight = 0;
+  logWindowLanes.history.queue.length = 0;
   resetRpcBackoffForTests();
 }
 

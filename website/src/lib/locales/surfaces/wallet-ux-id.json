@@ -150,5 +150,8 @@
   "install": "Pasang",
   "signInGoogle": "Masuk dengan Google",
   "back": "Kembali",
-  "openWallet": "Buka {wallet}"
+  "openWallet": "Buka {wallet}",
+  "nftHistoryLoading": "Memuat riwayat",
+  "nftHistoryError": "Riwayat NFT gagal dimuat.",
+  "nftHistoryRetry": "Coba lagi"
 }

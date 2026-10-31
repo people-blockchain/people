@@ -150,5 +150,8 @@
   "install": "تثبيت",
   "signInGoogle": "تسجيل الدخول عبر Google",
   "back": "رجوع",
-  "openWallet": "فتح {wallet}"
+  "openWallet": "فتح {wallet}",
+  "nftHistoryLoading": "جارٍ تحميل السجل",
+  "nftHistoryError": "تعذر تحميل سجل NFT.",
+  "nftHistoryRetry": "إعادة المحاولة"
 }

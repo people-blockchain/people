@@ -150,5 +150,8 @@
   "install": "Установить",
   "signInGoogle": "Войти через Google",
   "back": "Назад",
-  "openWallet": "Открыть {wallet}"
+  "openWallet": "Открыть {wallet}",
+  "nftHistoryLoading": "Загружаем историю",
+  "nftHistoryError": "Не удалось загрузить историю NFT.",
+  "nftHistoryRetry": "Повторить"
 }
