@@ -13,6 +13,7 @@ import {
 } from "viem";
 
 import type { EIP1193Provider } from "@/lib/evm/client";
+import { approveErc20IfNeeded } from "@/lib/evm/erc20-allowance";
 import { SITE_URL } from "@/lib/site";
 import { PPL_CURVE_HUB_V2_ABI, ZERO_ADDRESS } from "./abi";
 import { V2_SALE } from "./constants";
@@ -44,7 +45,7 @@ function messageFor(error: unknown): string {
   return raw || "failed";
 }
 
-async function ensureV2Chain(provider: EIP1193Provider, chain: V2Chain): Promise<boolean> {
+export async function ensureV2Chain(provider: EIP1193Provider, chain: V2Chain): Promise<boolean> {
   const hexId = `0x${chain.id.toString(16)}`;
   const switchTo = () =>
     provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
@@ -107,17 +108,31 @@ export function useV2Buy() {
         transport: custom(provider),
         account,
       });
+      const nonceRes = await fetch("/api/founders/passport-wallet/nonce", { credentials: "include" });
+      if (!nonceRes.ok) {
+        setVerifyStatus({ step: "error", reason: "verifyFailed" });
+        return false;
+      }
+      const challenge = (await nonceRes.json()) as { nonce?: string; issuedAt?: string; expiresAt?: string };
+      if (!challenge.nonce || !challenge.issuedAt || !challenge.expiresAt) {
+        setVerifyStatus({ step: "error", reason: "verifyFailed" });
+        return false;
+      }
       const message = buildV2OwnershipMessage({
         domain: saleDomain(SITE_URL),
         account,
         chainId: chain.id,
         hub: chain.hubAddress,
+        nonceCode: challenge.nonce,
+        issuedAt: challenge.issuedAt,
+        expiresAt: challenge.expiresAt,
       });
       const ownershipSignature = await walletClient.signMessage({ account, message });
       const res = await fetch("/api/sale/verify-signature", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ account, ownershipSignature }),
+        credentials: "include",
+        body: JSON.stringify({ account, ownershipSignature, nonceCode: challenge.nonce }),
       });
       if (!res.ok) {
         setVerifyStatus({ step: "error", reason: (await res.json().catch(() => null))?.error ?? "verifyFailed" });
@@ -177,24 +192,30 @@ export function useV2Buy() {
         const amountIn = parseUnits(amountUsd.toFixed(2), 6);
         const usdc = chain.usdcAddress as Address;
         const hub = chain.hubAddress as Address;
-        const allowance = await publicClient.readContract({
-          address: usdc,
-          abi: erc20Abi,
-          functionName: "allowance",
-          args: [account, hub],
+        const approved = await approveErc20IfNeeded({
+          amount: amountIn,
+          readAllowance: () =>
+            publicClient.readContract({
+              address: usdc,
+              abi: erc20Abi,
+              functionName: "allowance",
+              args: [account, hub],
+            }),
+          approve: () => {
+            setBuyStatus({ step: "signing" });
+            return walletClient.writeContract({
+              address: usdc,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [hub, amountIn],
+              account,
+              chain: chain.chain,
+            });
+          },
+          waitForReceipt: (hash) => publicClient.waitForTransactionReceipt({ hash }),
         });
-        if (allowance < amountIn) {
-          setBuyStatus({ step: "signing" });
-          const approveHash = await walletClient.writeContract({
-            address: usdc,
-            abi: erc20Abi,
-            functionName: "approve",
-            args: [hub, amountIn],
-            account,
-            chain: chain.chain,
-          });
-          const approveReceipt = await publicClient.waitForTransactionReceipt({ hash: approveHash });
-          if (approveReceipt.status !== "success") throw new Error("approval reverted");
+        if (!approved.ok) {
+          throw new Error(approved.reason === "reverted" ? "approval reverted" : "allowance unchanged");
         }
         const expected = estimatePplOut(amountIn, spotPriceWad);
         const minPplOut = minPplOutFromEstimate(expected, V2_SALE.slippageBps);

@@ -15,6 +15,14 @@ async function setLocale(page, lang) {
 }
 
 async function assertDesktopHeader(page, lang, width) {
+  await page.waitForFunction(
+    () => {
+      const brand = document.querySelector("header a.group");
+      return Boolean(brand && brand.getBoundingClientRect().width > 80);
+    },
+    undefined,
+    { timeout: 8_000 },
+  );
   const metrics = await page.evaluate(() => {
     const stack = document.querySelector(".header-brand-bundle");
     const nav = document.querySelector("header nav");

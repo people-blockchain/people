@@ -72,7 +72,7 @@
       },
       {
         "title": "I PPL direttamente nel tuo wallet PEOPLE",
-        "body": "Paghi in USDC o USDT e i PPL vengono accreditati subito al tuo indirizzo sulla rete PEOPLE."
+        "body": "Paghi in USDC o USDT e i PPL vengono accreditati subito al tuo indirizzo su PEOPLE mainnet."
       }
     ],
     "verifyLink": "Come verificarti"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "Primi {whitelistDays} giorni: solo persone verificate",
-        "body": "Una persona, un indirizzo. Da {min} a {max} per acquisto, fino a {perDay} per indirizzo al giorno (UTC) e una pausa di {cooldown} secondi tra un acquisto e l’altro."
+        "body": "Una persona, un indirizzo. Da {min} a {max} per acquisto, fino a {perDay} per indirizzo in una finestra mobile di 24 ore e una pausa di {cooldown} secondi tra un acquisto e l’altro."
       },
       {
         "title": "Il {reservePct} di ogni acquisto resta come riserva",
@@ -101,7 +101,7 @@
       },
       {
         "title": "Rivendi dopo {holdDays} giorni",
-        "body": "Ogni acquisto può essere rivenduto {holdDays} giorni dopo, al prezzo della curva in quel momento. Al giorno: fino al {sellDailyPct} della riserva per tutti i venditori insieme e fino a {sellPerAddress} per indirizzo. Commissione {feeLow}; {feeHigh} sulla parte oltre l’{feeThreshold} della riserva in quel giorno. Solo persone verificate."
+        "body": "Ogni acquisto può essere rivenduto {holdDays} giorni dopo, al prezzo della curva in quel momento. Fino al {sellDailyPct} della riserva per giorno UTC per tutti i venditori insieme, e fino a {sellPerAddress} per indirizzo in una finestra mobile di 24 ore. Commissione {feeLow}; {feeHigh} sulla parte oltre l’{feeThreshold} della riserva in quel giorno UTC UTC. Solo persone verificate."
       },
       {
         "title": "Chiunque può verificare",
@@ -141,7 +141,7 @@
       },
       {
         "q": "Quando posso inviare PPL ad altre persone?",
-        "a": "I PPL vengono accreditati sulla rete PEOPLE subito dopo l’acquisto. All’inizio la rete riceve solo PPL: i trasferimenti tra partecipanti apriranno più avanti, quando ci saranno circa 1.000 partecipanti verificati. Fino ad allora puoi rivendere i PPL alla riserva secondo le regole sopra."
+        "a": "I PPL vengono accreditati su PEOPLE mainnet subito dopo l’acquisto. All’inizio la rete riceve solo PPL: i trasferimenti tra partecipanti apriranno più avanti, quando ci saranno circa 1.000 partecipanti verificati. Fino ad allora puoi rivendere i PPL alla riserva secondo le regole sopra."
       },
       {
         "q": "Da quali reti posso pagare?",
@@ -149,7 +149,7 @@
       },
       {
         "q": "Quanto si può rivendere oggi?",
-        "a": "Ogni acquisto può essere rivenduto {holdDays} giorni dopo. Ogni giorno, tutti i venditori insieme possono rivendere fino al {sellDailyPct} della riserva, e ogni indirizzo fino a {sellPerAddress}. Riserva piccola, limite giornaliero piccolo. Il dato di oggi è nelle regole sopra."
+        "a": "Ogni acquisto può essere rivenduto {holdDays} giorni dopo. Ogni giorno UTC, tutti i venditori insieme possono rivendere fino al {sellDailyPct} della riserva, e ogni indirizzo fino a {sellPerAddress} in una finestra mobile di 24 ore. Riserva piccola, limite giornaliero piccolo. Il dato di oggi è nelle regole sopra."
       },
       {
         "q": "Posso avere un rimborso?",
@@ -210,7 +210,7 @@
     "priceAfter": "Prezzo dopo il tuo acquisto",
     "estimate": "Stima. La quantità esatta viene confermata on-chain prima della firma.",
     "limitPerBuy": "{min}–{max} per acquisto",
-    "limitPerDay": "Fino a {amount} per indirizzo al giorno (UTC)",
+    "limitPerDay": "Fino a {amount} per indirizzo in una finestra mobile di 24 ore",
     "cooldown": "Pausa di {seconds} s tra un acquisto e l’altro",
     "overLimit": "Massimo {amount} in un acquisto.",
     "belowMin": "Inserisci un importo per vedere il preventivo.",
@@ -278,7 +278,7 @@
     "help": "Serve aiuto? {support}",
     "supportLink": "Assistenza",
     "noWalletHint": "Non hai un wallet? Scegli Google o email: verrà creato per te un PEOPLE Wallet. Per pagare servono USDC su Base in quel wallet o in un wallet che colleghi.",
-    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni acquisto può essere rivenduto 30 giorni dopo, al prezzo della curva nel momento della vendita. Limiti giornalieri: 2% della riserva per tutti insieme e $2.000 per indirizzo. Commissione 1,5%; 3% solo sulla parte delle rivendite del giorno oltre l’1% della riserva. Si chiude quando si chiude la curva. Ricevi USDC su Base.",
+    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni acquisto può essere rivenduto 30 giorni dopo, al prezzo della curva nel momento della vendita. Limiti: 2% della riserva per giorno UTC per tutti insieme, e $2.000 per indirizzo in una finestra mobile di 24 ore. I PPL vengono bruciati su PEOPLE mainnet. Commissione 1,5%; 3% solo sulla parte delle rivendite del giorno oltre l’1% della riserva. Si chiude quando si chiude la curva. Ricevi USDC su Base.",
     "feesTitle": "Commissioni e tempi",
     "feesBody": "Commissioni: quella della rete Base (gas), pagata in ETH — di solito circa $0,01; quella di scambio o bridge di LI.FI — mostrata nel widget prima della conferma; quella di rivendita alla riserva — 1,5%, e 3% solo sulla parte delle rivendite del giorno oltre l’1% della riserva.",
     "timingBody": "Un acquisto su Base viene confermato in pochi secondi. I pagamenti da altre reti arrivano di solito in 1–20 minuti. Le rivendite vengono pagate in USDC su Base.",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Fase whitelist",
-      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 in una finestra mobile di 24 ore.",
       "daysLeft": "Mancano {days} giorni",
       "openTitle": "Fase pubblica",
-      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 in una finestra mobile di 24 ore.",
       "notOpenTitle": "Vendita non ancora aperta",
       "notOpenBody": "Gli acquisti aprono quando il contratto entra nella fase whitelist.",
       "expiredTitle": "Vendita terminata",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "Acquisto completato",
-      "credited": "{ppl} PPL accreditati su {address}",
+      "credited": "{ppl} PPL accreditati su PEOPLE mainnet a {address}",
       "tx": "Vedi transazione",
       "unlock": "La rivendita si sblocca il {date}",
       "again": "Acquista altri PPL"
@@ -375,6 +375,46 @@
       "body": "Lo scambio ha consegnato {amount} USDC su Base, ma l’acquisto di PPL non è andato a buon fine.",
       "topUp": "Acquista PPL con {amount} USDC",
       "hint": "Riprova l’acquisto su Base con gli USDC ricevuti."
+    },
+    "sellBack": {
+      "title": "Restituisci PPL",
+      "cta": "Restituisci PPL",
+      "available": "Disponibile da restituire",
+      "unlock": "Il lotto successivo si sblocca il {date}",
+      "noneYet": "Non c’è ancora nulla di sbloccato. Ogni lotto si apre 30 giorni dopo l’acquisto.",
+      "personal": "Il tuo limite rimasto",
+      "personalHint": "Restano {amount} di $2.000 in una finestra mobile di 24 ore",
+      "global": "Riserva rimasta oggi",
+      "globalHint": "Restano {amount} del tetto giornaliero del 2% della riserva",
+      "fee": "Commissione",
+      "feeLow": "1,5%",
+      "feeHigh": "3%",
+      "feeMixed": "1,5% fino all’1% della riserva, poi 3%",
+      "receive": "Ricevi",
+      "amount": "PPL da restituire",
+      "max": "Massimo",
+      "burning": "Bruciatura dei PPL su PEOPLE mainnet…",
+      "attesting": "Controllo della bruciatura…",
+      "selling": "Pagamento di USDC su Base…",
+      "done": "Restituzione completata. Gli USDC vengono pagati su Base.",
+      "payoutNote": "I PPL vengono bruciati su PEOPLE mainnet. Ricevi USDC su Base. L’acquisto si paga in USDC o USDT.",
+      "error": "La restituzione non è andata a buon fine. Riprova.",
+      "rejected": "Hai rifiutato la richiesta nel wallet.",
+      "notConfigured": "La restituzione non è ancora disponibile.",
+      "notEnough": "Non ci sono abbastanza PPL oltre i 30 giorni.",
+      "globalCap": "Il tetto giornaliero del 2% della riserva è esaurito.",
+      "personalCap": "Il tuo limite di $2.000 in questa finestra di 24 ore è esaurito.",
+      "slippage": "Il prezzo si è mosso troppo. Riprova.",
+      "closed": "La rivendita è chiusa.",
+      "disabled": "La rivendita è disattivata.",
+      "used": "Questa restituzione è già stata pagata.",
+      "expired": "La conferma è scaduta. Ricomincia.",
+      "badSignature": "La conferma non corrisponde.",
+      "belowMin": "L’importo è sotto il minimo.",
+      "tooMany": "Troppe restituzioni in queste 24 ore.",
+      "reserve": "La riserva non copre questo pagamento.",
+      "reverted": "La transazione è stata annullata.",
+      "switchRejected": "La rete non è stata cambiata."
     }
   }
 }
