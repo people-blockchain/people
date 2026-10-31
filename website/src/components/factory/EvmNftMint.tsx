@@ -25,6 +25,7 @@ import {
   findExistingMint,
   peoplescanNftUrl,
 } from "@/lib/evm/nft-factory";
+import { inAppNftPath } from "@/lib/evm/nft-paths";
 import {
   GATEWAY_KIND,
   stableFeeAssets,
@@ -36,17 +37,21 @@ import { checkImageFile, checkVideoFile, NftSaveError, type NftErrorKey } from "
 import { checkBalanceForCost, classifyCreateFlowError, requiredFeeValue } from "@/lib/evm/create-flow-errors";
 import { NFT_DESCRIPTION_MAX, NFT_NAME_MAX, NFT_NAME_MIN, type NftVideoType } from "@/lib/nft-media-rules";
 import {
+  applyConfirmedMint,
   browserStorage,
   createDraftStore,
   isResumable,
   planResume,
+  releaseMintAttempt,
+  shouldReleaseAttempt,
+  showsResumeNotice,
   type NftMintDraft,
   type NftMintMode,
 } from "@/lib/nft-mint-draft";
 import { NftMediaPicker } from "./nft/NftMediaPicker";
 import { NftPreview } from "./nft/NftPreview";
 import { NftStages } from "./nft/NftStages";
-import { saveNftFiles, stagesFor, type NftKind, type StageRow } from "./nft/saveNftFiles";
+import { directUploadAlertText, saveNftFiles, stagesFor, type NftKind, type StageRow } from "./nft/saveNftFiles";
 
 type Mode = NftMintMode;
 type PayWith = "PPL" | StableAsset["id"];
@@ -68,7 +73,7 @@ type Saved = {
 };
 
 type Picked = { file: File; mime: string };
-type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint };
+type ErrorState = { key: NftErrorKey | "notEnoughFee"; neededWei?: bigint; balanceWei?: bigint; uploadCode?: string };
 
 const RECEIPT_TIMEOUT_MS = 180_000;
 const ZERO_ADDRESS_FREE = /^0x[0-9a-fA-F]{40}$/;
@@ -94,6 +99,14 @@ function useObjectUrl(picked: Picked | null): string | null {
     return () => URL.revokeObjectURL(objectUrl);
   }, [picked]);
   return url;
+}
+
+function attemptFailureCode(err: unknown): string {
+  if (err instanceof MintFlowError) return "input";
+  const flow = classifyCreateFlowError(err);
+  if (flow.code === "network") return "network";
+  if (flow.code !== "unknown") return flow.code;
+  return classifyNftWriteError(err).code;
 }
 
 function mintErrorState(err: unknown): ErrorState {
@@ -243,7 +256,35 @@ export function EvmNftMint() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signerAddress, draftStore]);
 
+  // A receipt wait can time out after the mint is already in a block. The draft then still
+  // looks unfinished. If the collection's latest token is this metadata, close the attempt.
+  useEffect(() => {
+    if (busy || !signerAddress || !draft || draft.status === "done") return;
+    if (!draft.mintAttempted && !draft.mintTx) return;
+    if (!draft.collection || !isAddress(draft.collection)) return;
+    let cancelled = false;
+    const collection = getAddress(draft.collection);
+    void findExistingMint(readPublicClient(), collection, draft.tokenUri, getAddress(signerAddress))
+      .then((tokenId) => {
+        if (cancelled || tokenId === null) return;
+        const next = applyConfirmedMint(draft, tokenId.toString());
+        draftStore.save(next);
+        setDraft(next);
+        setResult({
+          collection,
+          tokenId,
+          mintTx: next.mintTx ?? null,
+          createTx: next.createTx ?? null,
+        });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [busy, signerAddress, draft, draftStore]);
+
   const resuming = isResumable(draft);
+  const showResumeNotice = showsResumeNotice(draft, busy);
   const locked = busy || saving || resuming;
   const collectionValid = mode === "single" || isAddress(collectionInput.trim());
   const detailsValid = name.trim().length >= NFT_NAME_MIN && name.trim().length <= NFT_NAME_MAX && description.length <= NFT_DESCRIPTION_MAX;
@@ -349,7 +390,7 @@ export function EvmNftMint() {
     } catch (err) {
       console.error(err);
       const key: NftErrorKey = err instanceof NftSaveError ? err.key : "errNetwork";
-      setError({ key });
+      setError({ key, uploadCode: err instanceof NftSaveError ? err.uploadCode : undefined });
       setErrorFrom("save");
     } finally {
       saveLock.current = false;
@@ -374,6 +415,13 @@ export function EvmNftMint() {
       setDraft(current);
     };
     const waitFor = (hash: `0x${string}`) => client.waitForTransactionReceipt({ hash, timeout: RECEIPT_TIMEOUT_MS });
+    const finishMint = async (collection: Address, minted: bigint | null, mintTx: string | null) => {
+      const tokenId = minted ?? (await findExistingMint(client, collection, current.tokenUri, signer.address));
+      if (tokenId === null) return false;
+      persist(applyConfirmedMint(current, tokenId.toString(), mintTx ?? undefined));
+      setResult({ collection, tokenId, mintTx, createTx: current.createTx ?? null });
+      return true;
+    };
     try {
       persist({ status: "in_progress" });
       const steps = planResume(current);
@@ -384,8 +432,9 @@ export function EvmNftMint() {
         if (receipt.status !== "success") throw new Error(`receipt: mint reverted (${current.mintTx})`);
         const collection = getAddress(current.collection as string);
         const tokenId = tokenIdFromReceipt(receipt, factory, collection);
-        persist({ status: "done", tokenId: tokenId?.toString() });
-        setResult({ collection, tokenId, mintTx: current.mintTx, createTx: current.createTx ?? null });
+        if (!(await finishMint(collection, tokenId, current.mintTx ?? null))) {
+          throw new Error("mint confirmed but token id was not found");
+        }
         return;
       }
       if (fee === null) throw new Error("fee unavailable");
@@ -471,7 +520,6 @@ export function EvmNftMint() {
         persist({ payDone: true });
       }
 
-      let createTx = current.createTx ?? null;
       if (current.mode === "single" && !collection) {
         let createHash = current.createTx as `0x${string}` | undefined;
         if (!createHash) {
@@ -488,16 +536,14 @@ export function EvmNftMint() {
         const parsed = collectionFromReceipt(createReceipt, factory);
         if (!parsed) throw new Error("collection address not found in the create receipt");
         collection = parsed;
-        createTx = createHash;
-        persist({ collection: parsed });
+        persist({ collection: parsed, createTx: createHash });
       }
       if (!collection) throw new Error("collection unknown");
 
       if (current.mintAttempted) {
         const existing = await findExistingMint(client, collection, current.tokenUri, signer.address);
         if (existing !== null) {
-          persist({ status: "done", tokenId: existing.toString() });
-          setResult({ collection, tokenId: existing, mintTx: current.mintTx ?? null, createTx });
+          await finishMint(collection, existing, current.mintTx ?? null);
           return;
         }
       }
@@ -537,6 +583,7 @@ export function EvmNftMint() {
             neededWei: balanceCheck.neededWei,
             balanceWei: balanceCheck.balanceWei,
           });
+          persist(releaseMintAttempt(current));
           return;
         }
       } catch {
@@ -558,10 +605,22 @@ export function EvmNftMint() {
       const mintReceipt = await waitFor(mintHash);
       if (mintReceipt.status !== "success") throw new Error(`receipt: mint reverted (${mintHash})`);
       const tokenId = tokenIdFromReceipt(mintReceipt, factory, collection);
-      persist({ status: "done", tokenId: tokenId?.toString() });
-      setResult({ collection, tokenId, mintTx: mintHash, createTx });
+      if (!(await finishMint(collection, tokenId, mintHash))) {
+        throw new Error("mint confirmed but token id was not found");
+      }
     } catch (err) {
+      const recoveredCollection =
+        current.collection && isAddress(current.collection) ? getAddress(current.collection) : null;
+      if (recoveredCollection && (current.mintAttempted || current.mintTx)) {
+        try {
+          if (await finishMint(recoveredCollection, null, current.mintTx ?? null)) return;
+        } catch (recoverErr) {
+          console.error(recoverErr);
+        }
+      }
       console.error(err);
+      const code = attemptFailureCode(err);
+      if (shouldReleaseAttempt(code, current)) persist(releaseMintAttempt(current, code === "receipt_failed"));
       setError(mintErrorState(err));
       setErrorFrom("mint");
     } finally {
@@ -612,7 +671,8 @@ export function EvmNftMint() {
   const previewVideo = saved ? saved.videoPreviewUrl ?? null : videoLocalUrl;
   const previewIsSvg = saved ? saved.isSvg : (kind === "image" ? imageFile : coverFile)?.mime === "image/svg+xml";
   const errorText = error
-    ? error.key === "notEnoughFee"
+    ? directUploadAlertText(lang, error.uploadCode) ??
+      (error.key === "notEnoughFee"
       ? u.notEnoughFee
       : error.key === "errInsufficientPpl"
         ? error.neededWei !== undefined && error.balanceWei !== undefined
@@ -620,7 +680,7 @@ export function EvmNftMint() {
               .replaceAll("{needed}", formatPplExact(error.neededWei))
               .replaceAll("{balance}", formatPplExact(error.balanceWei))
           : nm.errInsufficientPplGeneric
-        : nm[error.key]
+        : nm[error.key])
     : null;
 
   return (
@@ -785,7 +845,7 @@ export function EvmNftMint() {
               {nm.stageReady}
             </p>
           ) : null}
-          {resuming ? (
+          {showResumeNotice ? (
             <p role="status" data-testid="nft-resume-notice" className="text-sm text-ink-2">
               {nm.resumeNotice}
             </p>
@@ -797,7 +857,7 @@ export function EvmNftMint() {
           ) : null}
 
           {error && errorText ? (
-            <div role="alert" data-testid="nft-error" data-error-key={error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
+            <div role="alert" data-testid="nft-error" data-error-key={error.uploadCode ?? error.key} className="rounded-xl border border-warm/40 p-3 text-sm text-warm">
               <p>
                 {form.error}: {errorText}
               </p>
@@ -886,6 +946,15 @@ export function EvmNftMint() {
             </p>
           ) : null}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            {result.tokenId !== null ? (
+              <Link
+                href={inAppNftPath(result.collection, result.tokenId)}
+                data-testid="nft-result-link"
+                className="inline-flex w-full justify-center rounded-xl border border-line px-6 py-3 font-semibold text-ink sm:w-auto"
+              >
+                {nm.viewHere}
+              </Link>
+            ) : null}
             {result.tokenId !== null ? (
               <a
                 href={peoplescanNftUrl(result.collection, result.tokenId)}

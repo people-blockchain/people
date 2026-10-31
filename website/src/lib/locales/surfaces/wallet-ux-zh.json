@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "已连接钱包，仅供查看。此页面不会导入密钥。请在钱包应用中发送。",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "登录耗时过长。请检查网络后重试。",
   "signInRetry": "重试",
@@ -155,5 +156,8 @@
   "install": "安装",
   "signInGoogle": "使用 Google 登录",
   "back": "返回",
-  "openWallet": "打开 {wallet}"
+  "openWallet": "打开 {wallet}",
+  "nftHistoryLoading": "正在加载历史",
+  "nftHistoryError": "无法加载 NFT 历史。",
+  "nftHistoryRetry": "重试"
 }

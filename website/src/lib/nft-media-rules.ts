@@ -3,13 +3,16 @@
  *
  * The limits mirror what PeopleScan accepts when it renders an NFT (see
  * `docs/NFT-MEDIA.md` in that project): metadata JSON up to 262,144 bytes, rasters under its
- * 2,000,000-byte cap, SVG up to 262,144 bytes, MP4/WebM up to 20,000,000 bytes. Everything here
+ * 2,000,000-byte cap, SVG up to 262,144 bytes. The mint form sends PNG, JPEG, WebP, GIF and
+ * video through the direct upload, up to 25 MB, unchanged. Everything here
  * is plain `Uint8Array` code so it runs in Node route handlers and in the browser.
  */
 
 export const NFT_IMAGE_MAX_BYTES = 1_500_000;
 export const NFT_SVG_MAX_BYTES = 262_144;
-export const NFT_VIDEO_MAX_BYTES = 20_000_000;
+/** Raster images and video on the direct-upload form. SVG stays on the smaller legacy cap. */
+export const NFT_DIRECT_MEDIA_MAX_BYTES = 25_000_000;
+export const NFT_VIDEO_MAX_BYTES = NFT_DIRECT_MEDIA_MAX_BYTES;
 export const NFT_NAME_MIN = 2;
 export const NFT_NAME_MAX = 200;
 export const NFT_DESCRIPTION_MAX = 8000;
@@ -18,6 +21,7 @@ export const NFT_METADATA_MAX_BYTES = 262_144;
 export const NFT_VIDEO_HEAD_BYTES = 4096;
 
 export type NftImageKind = "png" | "jpeg" | "webp" | "svg";
+export type NftDirectImageKind = NftImageKind | "gif";
 export type NftVideoType = "video/mp4" | "video/webm";
 
 export const NFT_IMAGE_MIME: Record<NftImageKind, string> = {
@@ -49,10 +53,26 @@ export function imageKindFromMime(mime: string): NftImageKind | null {
   return null;
 }
 
-/** Largest allowed file for an image kind. */
+/** Image kinds the mint form may send. GIF uses the direct upload; SVG stays on the legacy route. */
+export function directImageKindFromMime(mime: string): NftDirectImageKind | null {
+  const kind = imageKindFromMime(mime);
+  if (kind) return kind;
+  const type = mime.split(";")[0]?.trim().toLowerCase();
+  return type === "image/gif" ? "gif" : null;
+}
+
+/** Largest allowed file for an image kind on the legacy image route. */
 export function maxBytesForImage(kind: NftImageKind): number {
   return kind === "svg" ? NFT_SVG_MAX_BYTES : NFT_IMAGE_MAX_BYTES;
 }
+
+/** Largest file the mint form accepts before the direct upload. */
+export function maxBytesForDirectImage(kind: NftDirectImageKind): number {
+  return kind === "svg" ? NFT_SVG_MAX_BYTES : NFT_DIRECT_MEDIA_MAX_BYTES;
+}
+
+export const NFT_IMAGE_ACCEPT =
+  "image/png,image/jpeg,image/webp,image/gif,image/svg+xml,.png,.jpg,.jpeg,.webp,.gif,.svg";
 
 function startsWith(bytes: Uint8Array, signature: readonly number[]): boolean {
   if (bytes.length < signature.length) return false;

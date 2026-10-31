@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import {
   NFT_DESCRIPTION_MAX,
+  NFT_DIRECT_MEDIA_MAX_BYTES,
+  NFT_IMAGE_ACCEPT,
   NFT_IMAGE_MAX_BYTES,
   NFT_METADATA_MAX_BYTES,
   NFT_SVG_MAX_BYTES,
@@ -24,10 +27,19 @@ const text = (s) => new TextEncoder().encode(s);
 const CID_V1 = "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 const CID_V0 = "QmYwAPJzv5CZsnA625s3Xv2gteR83C12YCZqGbv3bdgqm4";
 
+test("NftMediaPicker accept includes GIF and WebP", () => {
+  const picker = readFileSync(new URL("../src/components/factory/nft/NftMediaPicker.tsx", import.meta.url), "utf8");
+  assert.match(picker, /const IMAGE_ACCEPT = NFT_IMAGE_ACCEPT/);
+  assert.match(picker, /accept=\{IMAGE_ACCEPT\}/);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/gif/);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/webp/);
+});
+
 test("limits match PeopleScan caps", () => {
   assert.equal(NFT_IMAGE_MAX_BYTES, 1_500_000);
   assert.equal(NFT_SVG_MAX_BYTES, 262_144);
-  assert.equal(NFT_VIDEO_MAX_BYTES, 20_000_000);
+  assert.equal(NFT_DIRECT_MEDIA_MAX_BYTES, 25_000_000);
+  assert.equal(NFT_VIDEO_MAX_BYTES, 25_000_000);
   assert.equal(NFT_METADATA_MAX_BYTES, 262_144);
   assert.equal(maxBytesForImage("png"), 1_500_000);
   assert.equal(maxBytesForImage("svg"), 262_144);
@@ -88,7 +100,7 @@ test("video header rules match PeopleScan validVideo", () => {
   assert.equal(validVideoHeader(new Uint8Array(4096).fill(7), "video/webm", 5000), false);
 });
 
-test("video size boundaries: 20,000,000 passes, 20,000,001 does not", () => {
+test("video size boundaries: 25 MB passes, one byte over does not", () => {
   const mp4 = fixture("video.mp4").subarray(0, 4096);
   assert.equal(validVideoHeader(mp4, "video/mp4", NFT_VIDEO_MAX_BYTES), true);
   assert.equal(validVideoHeader(mp4, "video/mp4", NFT_VIDEO_MAX_BYTES + 1), false);
@@ -96,16 +108,21 @@ test("video size boundaries: 20,000,000 passes, 20,000,001 does not", () => {
 });
 
 test("client pre-checks: size boundaries and extension fallback for empty types", () => {
-  assert.equal(checkImageFile({ name: "a.png", type: "image/png", size: 1_500_000 }).ok, true);
-  assert.deepEqual(checkImageFile({ name: "a.png", type: "image/png", size: 1_500_001 }), { ok: false, key: "errTooLarge" });
+  assert.equal(checkImageFile({ name: "a.png", type: "image/png", size: NFT_DIRECT_MEDIA_MAX_BYTES }).ok, true);
+  assert.deepEqual(checkImageFile({ name: "a.png", type: "image/png", size: NFT_DIRECT_MEDIA_MAX_BYTES + 1 }), { ok: false, key: "errTooLarge" });
+  assert.equal(checkImageFile({ name: "a.webp", type: "image/webp", size: NFT_DIRECT_MEDIA_MAX_BYTES }).ok, true);
+  assert.equal(checkImageFile({ name: "a.gif", type: "image/gif", size: NFT_DIRECT_MEDIA_MAX_BYTES }).ok, true);
+  assert.equal(checkImageFile({ name: "a.gif", type: "", size: 10 }).ok, true);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/gif/);
+  assert.match(NFT_IMAGE_ACCEPT, /image\/webp/);
   assert.equal(checkImageFile({ name: "a.svg", type: "image/svg+xml", size: 262_144 }).ok, true);
   assert.deepEqual(checkImageFile({ name: "a.svg", type: "image/svg+xml", size: 262_145 }), { ok: false, key: "errTooLarge" });
-  assert.equal(checkVideoFile({ name: "a.mp4", type: "video/mp4", size: 20_000_000 }).ok, true);
-  assert.deepEqual(checkVideoFile({ name: "a.mp4", type: "video/mp4", size: 20_000_001 }), { ok: false, key: "errTooLarge" });
+  assert.equal(checkVideoFile({ name: "a.mp4", type: "video/mp4", size: NFT_VIDEO_MAX_BYTES }).ok, true);
+  assert.deepEqual(checkVideoFile({ name: "a.mp4", type: "video/mp4", size: NFT_VIDEO_MAX_BYTES + 1 }), { ok: false, key: "errTooLarge" });
   assert.equal(effectiveMime({ name: "clip.WEBM", type: "" }), "video/webm");
   assert.equal(checkVideoFile({ name: "clip.mp4", type: "", size: 10 }).ok, true);
   assert.deepEqual(checkVideoFile({ name: "clip.mov", type: "video/quicktime", size: 10 }), { ok: false, key: "errUnsupportedType" });
-  assert.deepEqual(checkImageFile({ name: "a.gif", type: "image/gif", size: 10 }), { ok: false, key: "errUnsupportedType" });
+  assert.equal(checkImageFile({ name: "a.gif", type: "image/gif", size: 10 }).ok, true);
   assert.equal(errorKeyForServerCode("svg_rejected"), "errSvgRejected");
   assert.equal(errorKeyForServerCode("something_new"), "errUnknown");
 });
@@ -173,4 +190,21 @@ test("metadata JSON: limits and bad addresses are refused", () => {
   const control = buildNftMetadata({ name: "A\u0000b\u0007c", description: "line1\r\nline2\u0001", image });
   assert.equal(control.name, "Abc");
   assert.equal(control.description, "line1\nline2");
+});
+
+test("direct-upload hints exist in all 12 locales and do not mention 1.5 MB", () => {
+  const langs = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+  const dir = new URL("../src/lib/locales/surfaces/", import.meta.url);
+  const files = readdirSync(dir).filter((name) => name.startsWith("nft-media-"));
+  assert.equal(files.length, langs.length);
+  for (const lang of langs) {
+    const copy = JSON.parse(readFileSync(join(dir.pathname, `nft-media-${lang}.json`), "utf8"));
+    for (const key of ["imageFileHint", "videoFileHint", "coverHint", "errUnsupportedType", "errTooLarge"]) {
+      assert.equal(typeof copy[key], "string", `${lang} ${key}`);
+      assert.ok(copy[key].trim().length > 0);
+    }
+    assert.match(copy.imageFileHint, /GIF|gif/);
+    assert.match(copy.imageFileHint, /25/);
+    assert.doesNotMatch(JSON.stringify(copy), /1[.,]5/);
+  }
 });

@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Cüzdan yalnızca görüntülemek için bağlı. Bu sayfa anahtarı içe aktarmaz. Gönderim cüzdan uygulamasından yapılır.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Giriş çok uzun sürdü. Bağlantınızı kontrol edip tekrar deneyin.",
   "signInRetry": "Tekrar dene",
@@ -155,5 +156,8 @@
   "install": "Yükle",
   "signInGoogle": "Google ile giriş yap",
   "back": "Geri",
-  "openWallet": "{wallet} uygulamasını aç"
+  "openWallet": "{wallet} uygulamasını aç",
+  "nftHistoryLoading": "Geçmiş yükleniyor",
+  "nftHistoryError": "NFT geçmişi yüklenemedi.",
+  "nftHistoryRetry": "Yeniden dene"
 }

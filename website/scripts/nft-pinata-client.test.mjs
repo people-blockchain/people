@@ -9,6 +9,7 @@ import {
   ipfsGatewayUrlForUri,
   pinBytesToIpfs,
 } from "../src/lib/ipfs.ts";
+import { pinataSignedUploadMaxBytes } from "../src/lib/pinata-signed-upload.ts";
 
 const DIR_CID = "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 
@@ -83,7 +84,7 @@ test(
     assert.equal(seen.url, "https://uploads.pinata.cloud/v3/files/sign");
     assert.equal(seen.method, "POST");
     assert.equal(seen.body.expires, 120);
-    assert.equal(seen.body.max_file_size, 20_000_000);
+    assert.equal(seen.body.max_file_size, pinataSignedUploadMaxBytes(20_000_000));
     assert.deepEqual(seen.body.allow_mime_types, ["video/mp4"]);
     assert.equal(seen.body.network, "public");
     assert.equal(seen.body.filename, "people-nft-1.mp4");

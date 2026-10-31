@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Carteira ligada só para consulta. Esta página não importa a chave. Envie pela aplicação da carteira.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "O login demorou demais. Verifique a conexão e tente novamente.",
   "signInRetry": "Tentar novamente",
@@ -155,5 +156,8 @@
   "install": "Instalar",
   "signInGoogle": "Entrar com Google",
   "back": "Voltar",
-  "openWallet": "Abrir {wallet}"
+  "openWallet": "Abrir {wallet}",
+  "nftHistoryLoading": "A carregar o histórico",
+  "nftHistoryError": "Não foi possível carregar o histórico de NFT.",
+  "nftHistoryRetry": "Tentar novamente"
 }

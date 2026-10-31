@@ -27,6 +27,7 @@ const surfaces = [
   "litepaper",
   "samples",
   "nft-media",
+  "media-upload",
 ];
 
 function load(name) {
@@ -158,9 +159,13 @@ test("nft-media surface: image and video limits are stated the same way in every
     const copy = load(`nft-media-${lang}.json`);
     assert.match(copy.videoFileHint, /MP4/, lang);
     assert.match(copy.videoFileHint, /WebM/, lang);
-    assert.match(copy.videoFileHint, /20/, lang);
+    assert.match(copy.videoFileHint, /25/, lang);
     assert.match(copy.imageFileHint, /SVG/, lang);
-    assert.match(copy.imageFileHint, /1[.,]5/, lang);
+    assert.match(copy.imageFileHint, /GIF|gif/, lang);
+    assert.match(copy.imageFileHint, /25/, lang);
     assert.match(copy.imageFileHint, /256/, lang);
+    assert.doesNotMatch(copy.imageFileHint, /1[.,]5/);
+    assert.doesNotMatch(copy.errTooLarge, /1[.,]5/);
+    assert.doesNotMatch(copy.videoFileHint, /\b20\b/);
   }
 });

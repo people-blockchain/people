@@ -115,6 +115,7 @@
   "connectTrust": "Trust Wallet",
   "connectWalletConnect": "WalletConnect",
   "externalConnected": "Connected wallet",
+  "externalReadOnly": "Wallet nur zur Ansicht verbunden. Diese Seite importiert keinen Schlüssel. Senden Sie in der Wallet-App.",
   "disconnectExternal": "Disconnect",
   "signInTimeout": "Die Anmeldung hat zu lange gedauert. Prüfe die Verbindung und versuche es erneut.",
   "signInRetry": "Erneut versuchen",
@@ -155,5 +156,8 @@
   "install": "Installieren",
   "signInGoogle": "Mit Google anmelden",
   "back": "Zurück",
-  "openWallet": "{wallet} öffnen"
+  "openWallet": "{wallet} öffnen",
+  "nftHistoryLoading": "Verlauf wird geladen",
+  "nftHistoryError": "NFT-Verlauf konnte nicht geladen werden.",
+  "nftHistoryRetry": "Wiederholen"
 }
