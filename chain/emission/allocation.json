@@ -52,7 +52,7 @@
       "vesting_linear_months": 18,
       "legacy_module_name": "people_treasury",
       "owner_placeholder": true,
-      "note": "A11 (owner decision): same schedule as team, 0% at genesis, 6-month cliff, then 18 months linear. The 2-of-3 treasury_multisig below is a ContinuousVestingAccount whose original_vesting is this bucket only; the liquidity bucket shares the address and stays spendable from genesis. Spendable only by the 2-of-3 treasury_multisig below (owner, co-founder, owner's cold address). An existing network upgrading from the old people_treasury module account sweeps its balance here via the v2-treasury-multisig gov software-upgrade (see chain/overrides/evmd/upgrades). Path to on-chain governance: the multisig can later transfer custody to x/gov (e.g. by moving funds to the community pool) via a further coordinated upgrade."
+      "note": "A11 (owner decision): same schedule as team, 0% at genesis, 6-month cliff, then 18 months linear. The 2-of-3 treasury_multisig below is a ContinuousVestingAccount whose original_vesting and genesis balance are this whole bucket (the liquidity bucket no longer shares the address: it sits in the genesis liquidity vault, see liquidity_vault). Spendable only by the 2-of-3 treasury_multisig below (owner, co-founder, owner's cold address). An existing network upgrading from the old people_treasury module account sweeps its balance here via the v2-treasury-multisig gov software-upgrade (see chain/overrides/evmd/upgrades). Path to on-chain governance: the multisig can later transfer custody to x/gov (e.g. by moving funds to the community pool) via a further coordinated upgrade."
     },
     "sale": {
       "id": "sale",
@@ -70,12 +70,22 @@
       "pct": 5,
       "amount_appl": "50000000000000000000000000",
       "label": "Liquidity",
-      "account": "people1e9ymgxdtdgszjg7knu0gk9uy2dff8sm4pd0zl2",
-      "account_kind": "multisig_2of3",
+      "account": "people1kdctgqa0dalteqlm8dyhcwy07rk73xlr3f03e0",
+      "account_kind": "genesis_liquidity_vault",
       "legacy_module_name": "people_liquidity",
       "owner_placeholder": true,
-      "note": "M11-2 (owner-approved): same 2-of-3 treasury_multisig as the treasury bucket (shared custody is a deliberate consolidation, not an accident); see treasury note for the upgrade/governance path. TODO(owner decides): liquidity unlock schedule; unchanged by A11, spendable from genesis (not part of the multisig's original_vesting)."
+      "note": "Owner decision (PR #72, open question 6): genesis liquidity is not spendable. The bucket is the bank balance of a keyless address (last 20 bytes of keccak256(\"PEOPLE genesis liquidity vault\"), no private key exists) that holds GenesisLiquidityVault runtime code (chain/emission/genesis-liquidity-vault.json) set in genesis evm.accounts. Its only exit is seed(): wrap to WPPL, add to the WPPL/quote pool at or above the price floor, LP minted straight into a new LiquidityLock (730 days, immutable). No owner, setter, withdraw, receive/fallback, delegatecall or selfdestruct; parameters are fixed in genesis storage (see liquidity_vault)."
     }
+  },
+  "liquidity_vault": {
+    "wppl": "0x0000000000000000000000000000000000000000",
+    "factory": "0x0000000000000000000000000000000000000000",
+    "quote_token": "0x0000000000000000000000000000000000000000",
+    "beneficiary": "0x0000000000000000000000000000000000000000",
+    "seeder": "0x0000000000000000000000000000000000000000",
+    "min_quote_per_ppl": "0",
+    "owner_placeholder": true,
+    "note": "GenesisLiquidityVault storage slots 0..5, written into genesis and immutable afterwards. wppl/factory: the WPPL and PeopleAmmFactory addresses on the PEOPLE network (predicted CREATE addresses of the deployer's first transactions, or genesis-embedded contracts); quote_token: the bridged stablecoin; beneficiary: EVM address (e.g. a Safe) that receives the LP from each LiquidityLock after 730 days; seeder: the only EVM caller of seed(), brings the quote tokens; min_quote_per_ppl: price floor in quote base units per 1 PPL (1e18 aPPL). Any zero (the current placeholders) or a wrong address keeps the liquidity sealed forever: fail-safe, never spendable. Owner must set real values before mainnet genesis."
   },
   "treasury_multisig": {
     "threshold": 2,

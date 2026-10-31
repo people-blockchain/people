@@ -9,7 +9,7 @@ via_ir = true
 evm_version = "paris"
 ffi = true
 
-fs_permissions = [{ access = "read-write", path = "./deployments" }, { access = "read", path = "./broadcast" }, { access = "read", path = "./out" }]
+fs_permissions = [{ access = "read-write", path = "./deployments" }, { access = "read", path = "./broadcast" }, { access = "read", path = "./out" }, { access = "read", path = "../chain/emission" }]
 
 [rpc_endpoints]
 local = "http://127.0.0.1:8545"
