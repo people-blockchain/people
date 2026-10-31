@@ -1,4 +1,11 @@
 import { readEvmRpcUrl } from "@/lib/evm/config";
+import {
+  RequestDeadlineError,
+  boundedTimeoutMs,
+  currentDeadline,
+  deadlineExpired,
+  linkAbort,
+} from "@/lib/evm/request-deadline";
 
 /**
  * Exponential backoff for the shared PEOPLE node.
@@ -43,8 +50,17 @@ function noteRpcSuccess(url: string): void {
 }
 
 /** POSTs a JSON-RPC body, honouring and updating the per-URL backoff. */
-async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{ res: Response; payload: unknown }> {
-  if (rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+async function postRpc(
+  url: string,
+  body: unknown,
+  timeoutMs: number,
+  { ignoreBackoff = false, signal, deadlineAt }: { ignoreBackoff?: boolean; signal?: AbortSignal; deadlineAt?: number } = {},
+): Promise<{ res: Response; payload: unknown }> {
+  if (!ignoreBackoff && rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+  const parent = signal ?? currentDeadline()?.signal;
+  const at = deadlineAt ?? currentDeadline()?.at;
+  if (parent?.aborted || timeoutMs <= 0) throw new RequestDeadlineError();
+  const attempt = linkAbort(timeoutMs, parent);
   let res: Response;
   let payload: unknown;
   try {
@@ -53,14 +69,17 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
       headers: { "content-type": "application/json", accept: "application/json" },
       body: JSON.stringify(body),
       cache: "no-store",
-      signal: AbortSignal.timeout(timeoutMs),
+      signal: attempt.signal,
     });
   } catch (error) {
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
+    if (parent?.aborted || deadlineExpired(at)) throw new RequestDeadlineError();
     throw error;
+  } finally {
+    attempt.cancel();
   }
   if (RPC_RETRYABLE_STATUS.has(res.status)) {
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
     const detail = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
     throw new Error(detail?.error?.message ?? `rpc_http_${res.status}`);
   }
@@ -68,21 +87,52 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
     payload = await res.json();
   } catch (error) {
     // A truncated/HTML body (proxy error page, dropped connection) is a node-side failure.
-    noteRpcFailure(url);
+    if (!ignoreBackoff) noteRpcFailure(url);
     throw error;
   }
   noteRpcSuccess(url);
   return { res, payload };
 }
 
-export async function evmJsonRpc<T>(method: string, params: unknown[] = []): Promise<T> {
+export type EvmJsonRpcOptions = {
+  /** Per-call abort timeout; defaults to 20 s and is shortened to the request deadline. */
+  timeoutMs?: number;
+  /**
+   * Read through an active per-URL backoff instead of failing fast. Used by `eth_getLogs` retries
+   * so one bad window cannot short-circuit the rest of a catalog scan.
+   */
+  ignoreBackoff?: boolean;
+  /** Stops the attempt when the request deadline aborts. */
+  signal?: AbortSignal;
+  /** Absolute `Date.now()` deadline. Defaults to the request deadline when one is active. */
+  deadlineAt?: number;
+};
+
+/**
+ * A JSON-RPC `error` member answered by a healthy node (typically an `eth_call` revert). Distinct
+ * from transport failures (timeout, backoff, HTTP 5xx) so callers can tell "contract says no" from
+ * "could not ask".
+ */
+export class EvmRpcResponseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "EvmRpcResponseError";
+  }
+}
+
+export async function evmJsonRpc<T>(method: string, params: unknown[] = [], options: EvmJsonRpcOptions = {}): Promise<T> {
   const url = readEvmRpcUrl();
   if (!url) throw new Error("evm_rpc_unconfigured");
-  const { res, payload: raw } = await postRpc(url, { jsonrpc: "2.0", id: 1, method, params }, 20_000);
+  const deadlineAt = options.deadlineAt ?? currentDeadline()?.at;
+  const { res, payload: raw } = await postRpc(
+    url,
+    { jsonrpc: "2.0", id: 1, method, params },
+    boundedTimeoutMs(options.timeoutMs ?? 20_000, deadlineAt),
+    { ignoreBackoff: options.ignoreBackoff, signal: options.signal, deadlineAt },
+  );
   const payload = raw as { result?: T; error?: { message?: string } };
-  if (!res.ok || payload?.error) {
-    throw new Error(payload?.error?.message ?? `rpc_http_${res.status}`);
-  }
+  if (payload?.error) throw new EvmRpcResponseError(payload.error.message ?? "rpc_error");
+  if (!res.ok) throw new Error(`rpc_http_${res.status}`);
   return payload.result as T;
 }
 
@@ -103,7 +153,10 @@ type RpcBatchEntry<T> = { id?: number; result?: T; error?: { message?: string } 
  * JSON-RPC `error` member) yields `null` in its slot instead of rejecting the whole batch, so one
  * bad token cannot blank the catalog.
  */
-export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T | null>> {
+export async function evmJsonRpcBatch<T>(
+  calls: RpcBatchCall[],
+  options: Pick<EvmJsonRpcOptions, "ignoreBackoff" | "timeoutMs" | "deadlineAt" | "signal"> = {},
+): Promise<Array<T | null>> {
   const out: Array<T | null> = [];
   if (!calls.length) return out;
   const url = readEvmRpcUrl();
@@ -116,7 +169,12 @@ export async function evmJsonRpcBatch<T>(calls: RpcBatchCall[]): Promise<Array<T
       method: call.method,
       params: call.params ?? [],
     }));
-    const { res, payload: raw } = await postRpc(url, body, 30_000);
+    const deadlineAt = options.deadlineAt ?? currentDeadline()?.at;
+    const { res, payload: raw } = await postRpc(url, body, boundedTimeoutMs(options.timeoutMs ?? 30_000, deadlineAt), {
+      ignoreBackoff: options.ignoreBackoff,
+      signal: options.signal,
+      deadlineAt,
+    });
     if (!res.ok) throw new Error(`rpc_http_${res.status}`);
     const payload = raw as Array<RpcBatchEntry<T>> | RpcBatchEntry<T>;
     // A node that rejects batch arrays answers with a single error object rather than an array.

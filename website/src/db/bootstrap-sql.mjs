@@ -462,6 +462,34 @@ export const FACTORY_ICON_SCHEMA_STATEMENTS = [
 ];
 
 /**
+ * Creator-signed token icon overrides. The token contract only lets the factory change
+ * `metadataURI`, so the catalog applies this off-chain record instead.
+ */
+export const TOKEN_ICON_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "token_icon_override" (
+  "token_address" text PRIMARY KEY NOT NULL,
+  "image_uri" text NOT NULL,
+  "updated_by" text NOT NULL,
+  "updated_at" timestamp NOT NULL DEFAULT now()
+)`,
+];
+
+/**
+ * Incremental `eth_getLogs` cursor for the token catalog. The immutable logs already read for a
+ * factory address + event topic are persisted with the last covered block, so later scans skip
+ * the historical windows instead of replaying them on every cold serverless invocation.
+ */
+export const EVM_LOG_SCAN_CURSOR_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "evm_log_scan_cursor" (
+  "address" text NOT NULL,
+  "topic" text NOT NULL,
+  "last_block" bigint NOT NULL,
+  "logs" jsonb NOT NULL,
+  PRIMARY KEY ("address", "topic")
+)`,
+];
+
+/**
  * Keep in sync with `website/drizzle/0020_sale_person_binding.sql`. PplCurveHubV2 needs a
  * private person key/public personId per account plus HMAC-only identifiers; no raw
  * wallet/nullifier/Telegram/phone value is stored in these tables.

@@ -7,7 +7,8 @@ import type { NextConfig } from "next";
  * root layout's theme boot script / JSON-LD as inline scripts, and dropping the keyword needs a
  * per-request nonce issued by the proxy on every route (the proxy matcher is currently limited to
  * auth and referral paths) plus dynamic rendering everywhere. That is a separate change; until it
- * lands, an HTML-injection bug can still run script. `'unsafe-eval'` stays absent, and
+ * lands, an HTML-injection bug can still run script. `'unsafe-eval'` is added only for
+ * `next dev` (React's development runtime needs it); production responses omit it, and
  * `object-src`, `base-uri`, `form-action` and `frame-ancestors` are locked down.
  *
  * Sources are the ones the app actually loads: Web3Auth (`*.web3auth.io`), MetaMask embedded
@@ -65,13 +66,14 @@ const CONNECT_SRC_BASE = [
 ];
 
 function buildCsp(connectSrc: string[]): string {
+  const devEval = process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : "";
   return [
     "default-src 'self'",
     "base-uri 'self'",
     "object-src 'none'",
     "frame-ancestors 'none'",
     "form-action 'self'",
-    "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://vercel.live https://challenges.cloudflare.com",
+    `script-src 'self' 'unsafe-inline'${devEval} https://va.vercel-scripts.com https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://vercel.live https://challenges.cloudflare.com`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data: https://fonts.gstatic.com",
@@ -172,6 +174,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "peopleblockchain.network" },
       { protocol: "https", hostname: "**.vercel.app" },
       { protocol: "https", hostname: "ipfs.io" },
+      { protocol: "https", hostname: "gateway.pinata.cloud" },
       { protocol: "https", hostname: "**.ipfs.dweb.link" },
       { protocol: "https", hostname: "**.ipfs.w3s.link" },
     ],

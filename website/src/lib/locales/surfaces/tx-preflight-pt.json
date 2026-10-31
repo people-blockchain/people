@@ -1,0 +1,16 @@
+{
+  "preflightRevert": "A rede rejeitaria esta transação, por isso ela não foi enviada e nada foi cobrado. Motivo: {reason}",
+  "preflightRevertGeneric": "A rede rejeitaria esta transação, por isso ela não foi enviada e nada foi cobrado.",
+  "preflightDailyLimit": "O limite diário de pagamento com stablecoin foi atingido. Nada foi cobrado. Pague em PPL ou tente novamente após a meia-noite UTC.",
+  "preflightPayInPplHint": "Dica: se você escolheu pagar com uma stablecoin, mude para pagar em PPL e tente novamente.",
+  "errorInsufficientFloat": "A reserva de stablecoin não cobre esta taxa agora. Nada foi enviado e nada foi cobrado. Pague em PPL.",
+  "errorStableNotAccepted": "Esta stablecoin não é aceite para a taxa de criação. Nada foi enviado e nada foi cobrado. Pague em PPL.",
+  "errorFeeOutOfBounds": "A taxa de criação está fora do intervalo permitido. Nada foi enviado e nada foi cobrado.",
+  "errorPplTransferFailed": "O pagamento em PPL não foi concluído. Nada foi enviado e nada foi cobrado.",
+  "errorEnforcedPause": "A criação de tokens está pausada. Nada foi enviado e nada foi cobrado. Tente mais tarde.",
+  "errorUnauthorized": "Esta carteira não pode concluir esse passo. Nada foi enviado e nada foi cobrado.",
+  "errorErc20Allowance": "A carteira não aprovou stablecoin suficiente. Nada foi enviado e nada foi cobrado.",
+  "errorErc20Balance": "A carteira não tem stablecoin suficiente para esta taxa. Nada foi enviado e nada foi cobrado.",
+  "errorSafeTransfer": "A transferência de stablecoin falhou. Nada foi enviado e nada foi cobrado. Pague em PPL.",
+  "preflightDetails": "Detalhes técnicos"
+}

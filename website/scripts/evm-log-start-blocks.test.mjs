@@ -5,6 +5,7 @@ import { encodeAbiParameters, encodeEventTopics } from "viem";
 
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import {
+  MAX_GLOBAL_LOG_WINDOWS,
   MAX_PARALLEL_LOG_WINDOWS,
   fetchLogsWindowed,
   logStartBlock,
@@ -225,6 +226,31 @@ test("fetchLogsWindowed returns nothing when the node cannot report a tip", asyn
   assert.deepEqual(logFilters(node.calls), []);
 });
 
+test("fetchLogsWindowed retries a failed window once before succeeding", async (t) => {
+  const attempts = new Map();
+  await startRpcNode(t, (call) => {
+    if (call.method === "eth_blockNumber") return hex(LATEST);
+    if (call.method !== "eth_getLogs") return [];
+    const key = `${call.params[0].fromBlock}-${call.params[0].toBlock}`;
+    const count = (attempts.get(key) ?? 0) + 1;
+    attempts.set(key, count);
+    return count === 1 ? null : [];
+  });
+  resetChainCatalogCacheForTests();
+
+  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
+  const counts = [...attempts.values()];
+  assert.ok(counts.length > 0);
+  assert.ok(counts.every((count) => count === 2), counts.join(","));
+});
+
+test("fetchLogsWindowed rejects with log_window_unavailable when a window still fails after one retry", async (t) => {
+  await startRpcNode(t, (call) => (call.method === "eth_blockNumber" ? hex(LATEST) : null));
+  resetChainCatalogCacheForTests();
+
+  await assert.rejects(fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), /log_window_unavailable/);
+});
+
 // --- market-data.ts: the same windowing through a full snapshot ------------------------------
 
 // The package targets ES2017, so BigInt literals (`10n`) do not compile — spell them out.
@@ -369,8 +395,9 @@ test("fetchTokenMarketSnapshot falls back to per-block requests when the node re
 
 // --- load shedding: window concurrency cap, exponential backoff, pair start blocks ------------
 
-test("fetchLogsWindowed never has more than MAX_PARALLEL_LOG_WINDOWS eth_getLogs in flight", async (t) => {
-  assert.equal(MAX_PARALLEL_LOG_WINDOWS, 2);
+test("fetchLogsWindowed never has more than MAX_GLOBAL_LOG_WINDOWS eth_getLogs in flight", async (t) => {
+  assert.equal(MAX_PARALLEL_LOG_WINDOWS, 6);
+  assert.equal(MAX_GLOBAL_LOG_WINDOWS, 8);
   let inFlight = 0;
   let peak = 0;
   const node = createServer((req, res) => {
@@ -407,8 +434,8 @@ test("fetchLogsWindowed never has more than MAX_PARALLEL_LOG_WINDOWS eth_getLogs
     fetchLogsWindowed(contract("bondingCurve"), [SELL_TOPIC]),
   ]);
   assert.ok(peak >= 1);
-  assert.ok(peak <= MAX_PARALLEL_LOG_WINDOWS, `peak ${peak}`);
-  assert.ok(logWindowConcurrencyPeakForTests() <= MAX_PARALLEL_LOG_WINDOWS);
+  assert.ok(peak <= MAX_GLOBAL_LOG_WINDOWS, `peak ${peak}`);
+  assert.ok(logWindowConcurrencyPeakForTests() <= MAX_GLOBAL_LOG_WINDOWS);
 });
 
 test("fetchLogsWindowed honours a later fromBlock hint but never scans before the contract's start", async (t) => {
@@ -449,7 +476,7 @@ test("rpc backoff doubles from the base delay and is capped", () => {
   assert.equal(rpcBackoffDelayMs(50), RPC_BACKOFF_MAX_MS);
 });
 
-test("after a node failure, calls fail fast without touching the node until the backoff expires", async (t) => {
+test("after a node failure, single calls fail fast while log scans read through the backoff", async (t) => {
   let hits = 0;
   const node = createServer((req, res) => {
     req.resume();
@@ -475,10 +502,13 @@ test("after a node failure, calls fail fast without touching the node until the 
   assert.ok(rpcBackoffRemainingMs() > 0);
   assert.ok(rpcBackoffRemainingMs() <= RPC_BACKOFF_BASE_MS);
 
-  // Backing off: neither single calls nor a whole log scan reach the node.
+  // Backing off: a single call never reaches the node ...
   await assert.rejects(evmJsonRpc("eth_blockNumber"), /rpc_backoff/);
-  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
   assert.equal(hits, 1);
+  // ... but log windows read through it (a failure noted for an unrelated call must not blank a
+  // scan), and a node that keeps failing still yields no logs.
+  assert.deepEqual(await fetchLogsWindowed(contract("bondingCurve"), [BUY_TOPIC]), []);
+  assert.ok(hits > 1, "log scan did not read through the backoff");
 });
 
 test("a JSON-RPC error is an answer from a healthy node and does not trigger backoff", async (t) => {

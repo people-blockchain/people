@@ -1,0 +1,16 @@
+{
+  "preflightRevert": "La red rechazaría esta transacción, así que no se envió y no se cobró nada. Motivo: {reason}",
+  "preflightRevertGeneric": "La red rechazaría esta transacción, así que no se envió y no se cobró nada.",
+  "preflightDailyLimit": "Se alcanzó el límite diario de pago con stablecoin. No se cobró nada. Paga en PPL o inténtalo de nuevo después de medianoche UTC.",
+  "preflightPayInPplHint": "Consejo: si elegiste pagar con una stablecoin, cambia a pagar en PPL e inténtalo de nuevo.",
+  "errorInsufficientFloat": "La reserva de stablecoin no cubre esta comisión ahora. No se envió nada y no se cobró nada. Paga en PPL.",
+  "errorStableNotAccepted": "Esta stablecoin no se acepta para la comisión de creación. No se envió nada y no se cobró nada. Paga en PPL.",
+  "errorFeeOutOfBounds": "La comisión de creación está fuera del rango permitido. No se envió nada y no se cobró nada.",
+  "errorPplTransferFailed": "El pago en PPL no se pudo completar. No se envió nada y no se cobró nada.",
+  "errorEnforcedPause": "La creación de tokens está en pausa. No se envió nada y no se cobró nada. Inténtalo más tarde.",
+  "errorUnauthorized": "Este monedero no puede completar ese paso. No se envió nada y no se cobró nada.",
+  "errorErc20Allowance": "El monedero no ha aprobado suficiente stablecoin. No se envió nada y no se cobró nada.",
+  "errorErc20Balance": "El monedero no tiene suficiente stablecoin para esta comisión. No se envió nada y no se cobró nada.",
+  "errorSafeTransfer": "La transferencia de stablecoin falló. No se envió nada y no se cobró nada. Paga en PPL.",
+  "preflightDetails": "Detalles técnicos"
+}

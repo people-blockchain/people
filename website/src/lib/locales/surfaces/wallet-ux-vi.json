@@ -150,5 +150,6 @@
   "install": "Cài đặt",
   "signInGoogle": "Đăng nhập bằng Google",
   "back": "Quay lại",
-  "openWallet": "Mở {wallet}"
+  "openWallet": "Mở {wallet}",
+  "balancesPartial": "Một số số dư vẫn đang tải. Các số tiền hiển thị là những khoản đã nhận được."
 }

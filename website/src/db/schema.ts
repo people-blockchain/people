@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  bigint,
   boolean,
   doublePrecision,
   index,
@@ -777,6 +778,33 @@ export const apiRateLimits = pgTable(
     expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
   },
   (row) => [index("api_rate_limit_expires_idx").on(row.expiresAt)],
+);
+
+/**
+ * Owner-editable token icon. The ERC-20 contract only lets the factory change `metadataURI`, so
+ * a creator-signed message records the new image off-chain and the catalog applies it on read.
+ */
+export const tokenIconOverrides = pgTable("token_icon_override", {
+  tokenAddress: text("token_address").primaryKey(),
+  imageUri: text("image_uri").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
+/**
+ * Incremental `eth_getLogs` cursor for the token catalog. Each row keeps the immutable logs a
+ * scan has already read for one factory address + event topic, plus the last block it covered,
+ * so the next scan asks the node only for the windows after it instead of replaying history.
+ */
+export const evmLogScanCursors = pgTable(
+  "evm_log_scan_cursor",
+  {
+    address: text("address").notNull(),
+    topic: text("topic").notNull(),
+    lastBlock: bigint("last_block", { mode: "number" }).notNull(),
+    logs: jsonb("logs").notNull(),
+  },
+  (row) => [primaryKey({ columns: [row.address, row.topic] })],
 );
 
 /**

@@ -150,5 +150,6 @@
   "install": "Установить",
   "signInGoogle": "Войти через Google",
   "back": "Назад",
-  "openWallet": "Открыть {wallet}"
+  "openWallet": "Открыть {wallet}",
+  "balancesPartial": "Часть балансов ещё загружается. Показаны суммы, которые уже получены."
 }

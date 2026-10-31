@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { networkJson } from "@/lib/network-client";
 import type { AssetInfo } from "@/lib/asset-amounts";
+import { compatAssetRows } from "@/lib/explorer/token-catalog-list";
 
 let cache: Record<string, AssetInfo> | null = null;
 let inflight: Promise<Record<string, AssetInfo>> | null = null;
@@ -17,7 +18,7 @@ function load(): Promise<Record<string, AssetInfo>> {
   if (!inflight) {
     inflight = networkJson<AssetInfo[]>("assets")
       .then((list) => {
-        cache = Object.fromEntries((Array.isArray(list) ? list : []).map((a) => [a.assetId.toLowerCase(), a]));
+        cache = Object.fromEntries(compatAssetRows<AssetInfo>(list).map((a) => [a.assetId.toLowerCase(), a]));
         return cache;
       })
       .catch(() => {

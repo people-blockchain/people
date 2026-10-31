@@ -1,0 +1,16 @@
+{
+  "preflightRevert": "Das Netzwerk würde diese Transaktion ablehnen, daher wurde sie nicht gesendet und nichts abgebucht. Grund: {reason}",
+  "preflightRevertGeneric": "Das Netzwerk würde diese Transaktion ablehnen, daher wurde sie nicht gesendet und nichts abgebucht.",
+  "preflightDailyLimit": "Das Tageslimit für Zahlungen mit Stablecoins ist erreicht. Es wurde nichts abgebucht. Zahle stattdessen in PPL oder versuche es nach Mitternacht UTC erneut.",
+  "preflightPayInPplHint": "Tipp: Wenn du die Zahlung per Stablecoin gewählt hast, wechsle zur Zahlung in PPL und versuche es erneut.",
+  "errorInsufficientFloat": "Der Stablecoin-Vorrat deckt diese Gebühr gerade nicht. Nichts wurde gesendet und nichts abgebucht. Zahle in PPL.",
+  "errorStableNotAccepted": "Dieser Stablecoin wird für die Erstellungsgebühr nicht akzeptiert. Nichts wurde gesendet und nichts abgebucht. Zahle in PPL.",
+  "errorFeeOutOfBounds": "Die Erstellungsgebühr liegt außerhalb des erlaubten Bereichs. Nichts wurde gesendet und nichts abgebucht.",
+  "errorPplTransferFailed": "Die PPL-Zahlung konnte nicht abgeschlossen werden. Nichts wurde gesendet und nichts abgebucht.",
+  "errorEnforcedPause": "Die Token-Erstellung ist gerade pausiert. Nichts wurde gesendet und nichts abgebucht. Versuche es später erneut.",
+  "errorUnauthorized": "Dieses Wallet darf diesen Schritt nicht ausführen. Nichts wurde gesendet und nichts abgebucht.",
+  "errorErc20Allowance": "Das Wallet hat nicht genug Stablecoin freigegeben. Nichts wurde gesendet und nichts abgebucht.",
+  "errorErc20Balance": "Das Wallet hält nicht genug Stablecoin für diese Gebühr. Nichts wurde gesendet und nichts abgebucht.",
+  "errorSafeTransfer": "Die Stablecoin-Überweisung ist fehlgeschlagen. Nichts wurde gesendet und nichts abgebucht. Zahle in PPL.",
+  "preflightDetails": "Technische Einzelheiten"
+}

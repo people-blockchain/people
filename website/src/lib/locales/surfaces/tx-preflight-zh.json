@@ -1,0 +1,16 @@
+{
+  "preflightRevert": "网络会拒绝这笔交易，因此未发送，也未扣费。原因：{reason}",
+  "preflightRevertGeneric": "网络会拒绝这笔交易，因此未发送，也未扣费。",
+  "preflightDailyLimit": "稳定币支付的每日额度已用完，未扣费。请改用 PPL 支付，或在 UTC 午夜之后重试。",
+  "preflightPayInPplHint": "提示：如果您选择了稳定币支付，请改用 PPL 支付后重试。",
+  "errorInsufficientFloat": "稳定币池目前无法支付这笔费用。没有发送任何内容，也没有扣费。请改用 PPL 支付。",
+  "errorStableNotAccepted": "创建费用不接受这种稳定币。没有发送任何内容，也没有扣费。请改用 PPL 支付。",
+  "errorFeeOutOfBounds": "创建费用超出允许范围。没有发送任何内容，也没有扣费。",
+  "errorPplTransferFailed": "PPL 付款未能完成。没有发送任何内容，也没有扣费。",
+  "errorEnforcedPause": "代币创建目前已暂停。没有发送任何内容，也没有扣费。请稍后再试。",
+  "errorUnauthorized": "此钱包不能完成该步骤。没有发送任何内容，也没有扣费。",
+  "errorErc20Allowance": "钱包批准的稳定币额度不足。没有发送任何内容，也没有扣费。",
+  "errorErc20Balance": "钱包中的稳定币不足以支付这笔费用。没有发送任何内容，也没有扣费。",
+  "errorSafeTransfer": "稳定币转账失败。没有发送任何内容，也没有扣费。请改用 PPL 支付。",
+  "preflightDetails": "展开后可查看技术详情。"
+}
