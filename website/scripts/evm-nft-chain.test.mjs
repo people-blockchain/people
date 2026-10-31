@@ -1,5 +1,6 @@
 // A minted token is invisible when the wallet only lists the seed catalog and /nft/<collection>/<id>
 // has no page. These cover the log decode, the direct ownerOf read, and the factory scan start.
+import { createServer } from "node:http";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -13,6 +14,8 @@ import {
   toBytes,
 } from "viem";
 import { readEvmDeployments } from "../src/lib/evm/config.ts";
+import { resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
+import { resetRpcBackoffForTests } from "../src/lib/evm/rpc-server.ts";
 import {
   COLLECTION_CREATED_TOPIC,
   NFT_MINTED_TOPIC,
@@ -23,11 +26,16 @@ import {
   assembleNftRows,
   chainNftFromMintLog,
   inAppNftPath,
+  listMintedNfts,
   mintLogTopics,
   nftFactoryScanStart,
   nftIdFor,
+  nftIndexPath,
   nftsFromMintLogs,
   readNftToken,
+  recentMintScanStart,
+  resetMintHistoryForTests,
+  setOlderMintScanForTests,
 } from "../src/lib/evm/nft-chain.ts";
 
 const OWNER = "0x1111111111111111111111111111111111111111";
@@ -149,4 +157,79 @@ test("the factory log scan starts at the factory block, after the chain deploy b
   assert.equal(typeof dep.startBlocks.nftFactory, "number");
   assert.equal(nftFactoryScanStart(factory), dep.startBlocks.nftFactory);
   assert.ok(nftFactoryScanStart(factory) > dep.deployBlock);
+});
+
+test("a wallet mint scan stays near the tip instead of the factory deploy block", () => {
+  const dep = readEvmDeployments();
+  const factoryStart = dep.startBlocks.nftFactory;
+  const latest = factoryStart + 40 * 9_000;
+  const recent = recentMintScanStart(latest, factoryStart);
+  assert.ok(recent > factoryStart);
+  assert.ok(latest - recent <= 4 * 9_000);
+  assert.equal(recentMintScanStart(factoryStart + 10, factoryStart), factoryStart);
+});
+
+test("holdings include a mint in the newest window without scanning the factory deploy block", async (t) => {
+  const dep = readEvmDeployments();
+  const factoryStart = dep.startBlocks.nftFactory;
+  const latest = factoryStart + 40 * 9_000;
+  const recentFrom = recentMintScanStart(latest, factoryStart);
+  const mintBlock = latest - 20;
+  assert.ok(mintBlock >= recentFrom);
+
+  const calls = [];
+  const node = createServer((req, res) => {
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      calls.push(body);
+      let result = null;
+      if (body.method === "eth_blockNumber") result = `0x${latest.toString(16)}`;
+      else if (body.method === "eth_getLogs") {
+        const filter = body.params?.[0] ?? {};
+        const from = Number.parseInt(filter.fromBlock, 16);
+        const to = Number.parseInt(filter.toBlock, 16);
+        result = from <= mintBlock && mintBlock <= to ? [mintLog(OWNER, 0n)] : [];
+      }
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result }));
+    });
+  });
+  await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
+  const previous = process.env.EVM_RPC_URL;
+  process.env.EVM_RPC_URL = `http://127.0.0.1:${node.address().port}`;
+  setOlderMintScanForTests(null);
+  resetChainCatalogCacheForTests();
+  resetRpcBackoffForTests();
+  t.after(async () => {
+    if (previous === undefined) delete process.env.EVM_RPC_URL;
+    else process.env.EVM_RPC_URL = previous;
+    resetMintHistoryForTests();
+    resetChainCatalogCacheForTests();
+    resetRpcBackoffForTests();
+    node.closeAllConnections?.();
+    await new Promise((resolve) => node.close(resolve));
+  });
+
+  const rows = await listMintedNfts(OWNER);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].onChainTokenId, "0");
+  assert.equal(rows[0].collection, getAddress(COLLECTION));
+  assert.equal(rows[0].owner, getAddress(OWNER));
+  const filters = calls.filter((call) => call.method === "eth_getLogs").map((call) => call.params[0]);
+  assert.ok(filters.length > 0);
+  assert.ok(filters.length < 20);
+  for (const filter of filters) assert.ok(Number.parseInt(filter.fromBlock, 16) >= recentFrom);
+});
+
+test("/nft without a token redirects to the explorer NFT list", async () => {
+  assert.equal(nftIndexPath(), "/explorer/nfts");
+  const { default: page } = await import("../src/app/nft/page.ts");
+  try {
+    page();
+    assert.fail("expected a redirect");
+  } catch (err) {
+    assert.equal(err.digest, "NEXT_REDIRECT;replace;/explorer/nfts;307;");
+  }
 });

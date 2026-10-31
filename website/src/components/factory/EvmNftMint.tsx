@@ -42,6 +42,9 @@ import {
   createDraftStore,
   isResumable,
   planResume,
+  releaseMintAttempt,
+  shouldReleaseAttempt,
+  showsResumeNotice,
   type NftMintDraft,
   type NftMintMode,
 } from "@/lib/nft-mint-draft";
@@ -96,6 +99,14 @@ function useObjectUrl(picked: Picked | null): string | null {
     return () => URL.revokeObjectURL(objectUrl);
   }, [picked]);
   return url;
+}
+
+function attemptFailureCode(err: unknown): string {
+  if (err instanceof MintFlowError) return "input";
+  const flow = classifyCreateFlowError(err);
+  if (flow.code === "network") return "network";
+  if (flow.code !== "unknown") return flow.code;
+  return classifyNftWriteError(err).code;
 }
 
 function mintErrorState(err: unknown): ErrorState {
@@ -273,6 +284,7 @@ export function EvmNftMint() {
   }, [busy, signerAddress, draft, draftStore]);
 
   const resuming = isResumable(draft);
+  const showResumeNotice = showsResumeNotice(draft, busy);
   const locked = busy || saving || resuming;
   const collectionValid = mode === "single" || isAddress(collectionInput.trim());
   const detailsValid = name.trim().length >= NFT_NAME_MIN && name.trim().length <= NFT_NAME_MAX && description.length <= NFT_DESCRIPTION_MAX;
@@ -571,6 +583,7 @@ export function EvmNftMint() {
             neededWei: balanceCheck.neededWei,
             balanceWei: balanceCheck.balanceWei,
           });
+          persist(releaseMintAttempt(current));
           return;
         }
       } catch {
@@ -606,6 +619,8 @@ export function EvmNftMint() {
         }
       }
       console.error(err);
+      const code = attemptFailureCode(err);
+      if (shouldReleaseAttempt(code, current)) persist(releaseMintAttempt(current, code === "receipt_failed"));
       setError(mintErrorState(err));
       setErrorFrom("mint");
     } finally {
@@ -830,7 +845,7 @@ export function EvmNftMint() {
               {nm.stageReady}
             </p>
           ) : null}
-          {resuming ? (
+          {showResumeNotice ? (
             <p role="status" data-testid="nft-resume-notice" className="text-sm text-ink-2">
               {nm.resumeNotice}
             </p>

@@ -1,7 +1,12 @@
 /**
  * Freshly minted NFTs are not in the seed catalog. The wallet list reads `NftMinted` logs from
- * the factory (starting at that contract's own first block). A single token page reads
- * `ownerOf` / `tokenURI` directly, so a token still missing from the log index is not a 404.
+ * the factory. A single token page reads `ownerOf` / `tokenURI` directly, so a token still
+ * missing from the log index is not a 404.
+ *
+ * The factory was deployed hundreds of thousands of blocks ago. Walking every window from that
+ * block takes long enough that a holdings request ends before the newest window — the only place
+ * a mint from the last few hours can be. The request therefore reads a short recent span first.
+ * Older mints are filled from a background scan and merged on the next read.
  */
 import {
   decodeEventLog,
@@ -13,9 +18,12 @@ import {
   type Address,
   type Hex,
 } from "viem";
-import { fetchLogsWindowed, logStartBlock } from "@/lib/evm/chain-catalog";
+import { fetchLogsWindowed, LOG_WINDOW_BLOCKS, logStartBlock } from "@/lib/evm/chain-catalog";
 import { evmJsonRpc } from "@/lib/evm/rpc-server";
 import { nftFactoryAddress, nftMintedEvent, NFT_MINTED_TOPIC, peopleNftAbi } from "@/lib/evm/nft-factory";
+
+/** Recent factory windows read on the wallet request. Four windows is about a day on this chain. */
+export const RECENT_MINT_WINDOWS = 4;
 
 const collectionNameAbi = [
   { type: "function", name: "name", stateMutability: "view", inputs: [], outputs: [{ type: "string" }] },
@@ -44,6 +52,22 @@ type ContractCall = (to: Address, data: Hex) => Promise<Hex>;
 /** In-app token page. The explorer address page is a different route and 404s a token id. */
 export function inAppNftPath(collection: string, tokenId: bigint | number | string): string {
   return `/nft/${collection}/${tokenId.toString()}`;
+}
+
+/** `/nft` has no token to show. The explorer already lists collections. */
+export function nftIndexPath(): string {
+  return "/explorer/nfts";
+}
+
+/**
+ * First block of a wallet mint scan. `latest` is the chain tip; `factoryStart` is the factory's
+ * own first block. The result is never earlier than the factory, and never more than `windows`
+ * log windows behind the tip.
+ */
+export function recentMintScanStart(latest: number, factoryStart: number, windows = RECENT_MINT_WINDOWS): number {
+  const start = Number.isFinite(factoryStart) && factoryStart > 0 ? factoryStart : 0;
+  if (!Number.isFinite(latest) || latest <= start) return start;
+  return Math.max(start, latest - windows * LOG_WINDOW_BLOCKS + 1);
 }
 
 export function nftIdFor(collection: string, tokenId: bigint | number | string): string {
@@ -105,11 +129,56 @@ export function nftsFromMintLogs(logs: readonly MintLog[], owner: string): Chain
   return rows;
 }
 
+const olderMints = new Map<string, ChainNft[]>();
+const olderInFlight = new Set<string>();
+
+function defaultScanOlderMints(factory: string, topics: Array<string | null>, owner: string, factoryStart: number): void {
+  const key = owner.toLowerCase();
+  if (olderInFlight.has(key) || olderMints.has(key)) return;
+  olderInFlight.add(key);
+  void fetchLogsWindowed(factory, topics, factoryStart)
+    .then((logs) => {
+      olderMints.set(key, nftsFromMintLogs(logs, owner));
+    })
+    .catch(() => {
+      /* a later wallet refresh can try the history scan again */
+    })
+    .finally(() => {
+      olderInFlight.delete(key);
+    });
+}
+
+let scanOlderMints = defaultScanOlderMints;
+
+/** Tests substitute a no-op so a mocked node is not asked for the factory's whole history. */
+export function setOlderMintScanForTests(
+  scan: ((factory: string, topics: Array<string | null>, owner: string, factoryStart: number) => void) | null,
+): void {
+  scanOlderMints = scan ?? (() => {});
+}
+
+export function resetMintHistoryForTests(): void {
+  olderMints.clear();
+  olderInFlight.clear();
+  scanOlderMints = defaultScanOlderMints;
+}
+
 export async function listMintedNfts(owner: string): Promise<ChainNft[]> {
   const factory = nftFactoryAddress();
   if (!factory || !isAddress(owner)) return [];
-  const logs = await fetchLogsWindowed(factory, mintLogTopics(owner), nftFactoryScanStart(factory));
-  return nftsFromMintLogs(logs, owner);
+  const topics = mintLogTopics(owner);
+  const factoryStart = nftFactoryScanStart(factory);
+  const latestHex = await evmJsonRpc<string>("eth_blockNumber", []).catch(() => "");
+  const latest = latestHex ? Number.parseInt(latestHex, 16) : Number.NaN;
+  const recentFrom = Number.isFinite(latest) ? recentMintScanStart(latest, factoryStart) : factoryStart;
+  const logs = await fetchLogsWindowed(factory, topics, recentFrom);
+  const recent = nftsFromMintLogs(logs, owner);
+  const older = olderMints.get(owner.toLowerCase()) ?? [];
+  if (recentFrom > factoryStart) scanOlderMints(factory, topics, owner, factoryStart);
+  const map = new Map<string, ChainNft>();
+  for (const row of older) map.set(row.nftId, row);
+  for (const row of recent) map.set(row.nftId, row);
+  return [...map.values()];
 }
 
 /**
