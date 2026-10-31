@@ -206,9 +206,9 @@ test("/assets returns every visible token well under the deadline when RPC answe
   const listed = new Set(res.body.map((row) => String(row.tokenAddress).toLowerCase()));
   assert.ok(listed.has(created.toLowerCase()), "token created after the baseline tip");
   for (const row of tokenCatalogBaseline.tokens) {
-    const assetId = resolveLogicalAssetId(row.tokenAddress);
-    if (isHiddenAssetRow({ assetId, tokenAddress: row.tokenAddress, name: row.name, symbol: row.symbol })) continue;
-    assert.ok(listed.has(row.tokenAddress.toLowerCase()), row.symbol);
+    const assetId = resolveLogicalAssetId(row.contract);
+    if (isHiddenAssetRow({ assetId, tokenAddress: row.contract, name: row.name, symbol: row.symbol })) continue;
+    assert.ok(listed.has(row.contract.toLowerCase()), row.symbol);
   }
   assert.ok(elapsed < 3_000, `/assets took ${elapsed}ms`);
 });
@@ -226,9 +226,9 @@ function assertVisibleBaseline(body, created) {
   const listed = new Set(body.map((row) => String(row.tokenAddress).toLowerCase()));
   assert.ok(listed.has(created.toLowerCase()), "token created after the baseline tip");
   for (const row of tokenCatalogBaseline.tokens) {
-    const assetId = resolveLogicalAssetId(row.tokenAddress);
-    if (isHiddenAssetRow({ assetId, tokenAddress: row.tokenAddress, name: row.name, symbol: row.symbol })) continue;
-    assert.ok(listed.has(row.tokenAddress.toLowerCase()), row.symbol);
+    const assetId = resolveLogicalAssetId(row.contract);
+    if (isHiddenAssetRow({ assetId, tokenAddress: row.contract, name: row.name, symbol: row.symbol })) continue;
+    assert.ok(listed.has(row.contract.toLowerCase()), row.symbol);
   }
 }
 
@@ -325,11 +325,16 @@ test("a slow metadata gateway neither marks the asset list partial nor holds it"
   const restoreEnv = await listen(node);
   const realFetch = globalThis.fetch;
   const stop = new AbortController();
+  let gatewayInflight = 0;
   globalThis.fetch = (input, init) => {
     const url = String(input instanceof Request ? input.url : input);
     if (url.includes("127.0.0.1")) return realFetch(input, init);
+    gatewayInflight += 1;
     return new Promise((resolve, reject) => {
-      const abort = () => reject(new DOMException("aborted", "AbortError"));
+      const abort = () => {
+        gatewayInflight = Math.max(0, gatewayInflight - 1);
+        reject(new DOMException("aborted", "AbortError"));
+      };
       if (init?.signal?.aborted || stop.signal.aborted) {
         abort();
         return;
@@ -348,10 +353,131 @@ test("a slow metadata gateway neither marks the asset list partial nor holds it"
   const started = Date.now();
   const res = await handleEvmCompatGet("assets", new URLSearchParams());
   const elapsed = Date.now() - started;
+  for (let i = 0; i < 8; i++) await new Promise((resolve) => setImmediate(resolve));
   assert.ok(elapsed < 3_000, `asset list waited ${elapsed} ms on the gateway`);
   assertVisibleBaseline(res.body, created);
   const row = res.body.find((asset) => String(asset.tokenAddress).toLowerCase() === created.toLowerCase());
   assert.match(String(row.imageUri), /metadata\.json/);
   const withLogo = res.body.filter((asset) => typeof asset.imageUri === "string" && asset.imageUri.includes("metadata.json"));
   assert.ok(withLogo.length > 1, "baseline rows did not get image URLs");
+  assert.equal(gatewayInflight, 0, "gateway still in flight after /assets returned");
+});
+
+test("assets resolves inside the deadline when RPC stays silent, then stops", async (t) => {
+  resetCaches();
+  let rpcInflight = 0;
+  let rpcOpened = 0;
+  const node = createServer((req, res) => {
+    rpcOpened += 1;
+    rpcInflight += 1;
+    const done = () => {
+      rpcInflight = Math.max(0, rpcInflight - 1);
+    };
+    req.on("close", done);
+    res.on("close", done);
+  });
+  const restoreEnv = await listen(node);
+  const realFetch = globalThis.fetch;
+  let gatewayInflight = 0;
+  globalThis.fetch = (input, init) => {
+    const url = String(input instanceof Request ? input.url : input);
+    if (url.includes("127.0.0.1")) return realFetch(input, init);
+    gatewayInflight += 1;
+    return new Promise((resolve, reject) => {
+      const abort = () => {
+        gatewayInflight = Math.max(0, gatewayInflight - 1);
+        reject(new DOMException("aborted", "AbortError"));
+      };
+      if (init?.signal?.aborted) {
+        abort();
+        return;
+      }
+      init?.signal?.addEventListener("abort", abort, { once: true });
+    });
+  };
+  t.after(async () => {
+    globalThis.fetch = realFetch;
+    restoreEnv();
+    resetCaches();
+    await closeNode(node);
+  });
+  t.mock.timers.enable({ apis: ["setTimeout", "Date"] });
+  const pending = handleEvmCompatGet("assets", new URLSearchParams());
+  await advance(t, API_REQUEST_DEADLINE_MS + 1_000);
+  const res = await pending;
+  for (let i = 0; i < 8; i++) await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(res.status, 200);
+  assert.equal(isPartial(res.body), true);
+  assert.equal(rpcInflight, 0, "RPC still in flight after /assets returned");
+  assert.equal(gatewayInflight, 0, "gateway still in flight after /assets returned");
+  const openedAtReturn = rpcOpened;
+  await advance(t, 5_000);
+  assert.equal(rpcOpened, openedAtReturn, "RPC continued after /assets returned");
+  assert.equal(rpcInflight, 0);
+  assert.equal(gatewayInflight, 0);
+});
+
+test("a stale catalog is reread inside the request and does not keep scanning after it", async (t) => {
+  resetCaches();
+  const tip = tokenCatalogBaseline.tip + 40;
+  let hang = false;
+  let rpcInflight = 0;
+  let rpcOpened = 0;
+  const node = createServer((req, res) => {
+    rpcOpened += 1;
+    rpcInflight += 1;
+    const done = () => {
+      rpcInflight = Math.max(0, rpcInflight - 1);
+    };
+    req.on("close", done);
+    res.on("close", done);
+    if (hang) return;
+    const chunks = [];
+    req.on("data", (chunk) => chunks.push(chunk));
+    req.on("end", () => {
+      const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      const one = (call) => {
+        if (call.method === "eth_blockNumber") return { jsonrpc: "2.0", id: call.id, result: `0x${tip.toString(16)}` };
+        if (call.method === "eth_getLogs") return { jsonrpc: "2.0", id: call.id, result: [] };
+        return { jsonrpc: "2.0", id: call.id, result: "0x" };
+      };
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify(Array.isArray(body) ? body.map(one) : one(body)));
+      done();
+    });
+  });
+  const restoreEnv = await listen(node);
+  t.after(async () => {
+    restoreEnv();
+    resetCaches();
+    await closeNode(node);
+  });
+  t.mock.timers.enable({ apis: ["setTimeout", "Date"] });
+  const first = handleEvmCompatGet("assets", new URLSearchParams());
+  for (let i = 0; i < 40 && rpcOpened === 0; i++) await new Promise((resolve) => setImmediate(resolve));
+  const warmed = await Promise.race([
+    first,
+    (async () => {
+      await advance(t, 2_000);
+      return null;
+    })(),
+  ]);
+  assert.ok(warmed, "the first catalog read did not finish");
+  assert.equal(isPartial(warmed.body), false);
+  hang = true;
+  await advance(t, 31_000);
+  const openedBefore = rpcOpened;
+  const pending = handleEvmCompatGet("assets", new URLSearchParams());
+  await advance(t, API_REQUEST_DEADLINE_MS + 1_000);
+  const res = await pending;
+  for (let i = 0; i < 8; i++) await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(res.status, 200);
+  assert.equal(rpcInflight, 0, "RPC still in flight after the stale refresh returned");
+  if (!isPartial(res.body)) {
+    assert.equal(rpcOpened, openedBefore, "a cached list still opened RPC after it was already served");
+  }
+  const openedAtReturn = rpcOpened;
+  await advance(t, 5_000);
+  assert.equal(rpcOpened, openedAtReturn, "RPC continued after the stale refresh returned");
+  assert.equal(rpcInflight, 0);
 });
