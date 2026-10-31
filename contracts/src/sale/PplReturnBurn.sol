@@ -28,13 +28,15 @@ contract PplReturnBurn {
     /// @param personId The person whose lots are sold back.
     /// @param seller The hub-chain address allowed to call `sellBack` for this return.
     /// @param amount Burned PPL (wei) = `MainnetReturn.pplAmount`. Bound into `returnId`.
+    /// @param destChainId Hub chain id bound into `returnId`. Signers must match it to their hub.
     event ReturnBurned(
         bytes32 indexed returnId,
         address indexed from,
         address indexed hub,
         bytes32 personId,
         address seller,
-        uint256 amount
+        uint256 amount,
+        uint256 destChainId
     );
 
     error ZeroAmount();
@@ -56,6 +58,6 @@ contract PplReturnBurn {
         returnId =
             keccak256(abi.encode(block.chainid, destChainId, hub, seller, msg.value, address(this), returnCount++));
         totalBurned += msg.value;
-        emit ReturnBurned(returnId, msg.sender, hub, personId, seller, msg.value);
+        emit ReturnBurned(returnId, msg.sender, hub, personId, seller, msg.value, destChainId);
     }
 }

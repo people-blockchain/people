@@ -20,7 +20,8 @@ contract PplReturnBurnTest is Test {
         address indexed hub,
         bytes32 personId,
         address seller,
-        uint256 amount
+        uint256 amount,
+        uint256 destChainId
     );
 
     function setUp() public {
@@ -32,7 +33,7 @@ contract PplReturnBurnTest is Test {
         bytes32 expectedId =
             keccak256(abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, 3 ether, address(burner), uint256(0)));
         vm.expectEmit(address(burner));
-        emit ReturnBurned(expectedId, alice, HUB, PERSON, SELLER, 3 ether);
+        emit ReturnBurned(expectedId, alice, HUB, PERSON, SELLER, 3 ether, DEST_CHAIN);
         vm.prank(alice);
         bytes32 id = burner.burnForReturn{value: 3 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
 
@@ -41,6 +42,16 @@ contract PplReturnBurnTest is Test {
         assertEq(burner.returnCount(), 1);
         assertEq(address(burner).balance, 3 ether);
         assertEq(alice.balance, 97 ether);
+    }
+
+    function test_burn_emitsDestChainId() public {
+        bytes32 expectedId = keccak256(
+            abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, uint256(1 ether), address(burner), uint256(0))
+        );
+        vm.expectEmit(true, true, true, true, address(burner));
+        emit ReturnBurned(expectedId, alice, HUB, PERSON, SELLER, 1 ether, DEST_CHAIN);
+        vm.prank(alice);
+        burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
     }
 
     function test_burn_returnIdsUnique() public {

@@ -741,10 +741,59 @@ contract PplCurveHubV2InvariantTest is HubV2Base {
         }
     }
 
+    /// @dev Sell inside the cap, then `executeLiquidityRelease` while that 15-minute bucket is
+    /// still live. Release zeros the reserve and closes sell-back without clearing the ring, so
+    /// `sellWindowReference()` collapses to the live gross and the raw ratio is ~50x the 2% cap.
+    /// Every sell was checked against the pre-release reference; the invariant must not treat the
+    /// terminal state as a breach.
+    function test_regression_globalSellDayCap_afterLiquidityRelease() public {
+        address alice = actors[0];
+        _seedRaised(100_000e6);
+        _buy(alice, MAX_BUY);
+
+        vm.prank(owner);
+        hub.announceLiquidityRelease();
+        vm.warp(vm.getBlockTimestamp() + 30 days);
+
+        uint256 ppl = hub.sellableNow(alice);
+        assertGt(ppl, 0);
+        assertGt(_sellBack(alice, ppl, 0), 0);
+
+        (uint256 gross,) = hub.globalSellUsed();
+        assertGt(gross, 0);
+        assertGt(hub.reserveUsd6(), 0);
+        assertLe(
+            gross,
+            (hub.sellWindowReference() * hub.SELL_GLOBAL_CAP_BPS()) / 10_000,
+            "cap holds while the reserve is still there"
+        );
+
+        hub.executeLiquidityRelease();
+        assertTrue(hub.liquidityReleased());
+        assertEq(hub.reserveUsd6(), 0);
+        (uint256 grossAfter, uint256 liveAfter) = hub.globalSellUsed();
+        assertEq(grossAfter, gross, "bucket survives release");
+        assertGt(liveAfter, 0);
+        assertEq(hub.sellWindowReference(), grossAfter, "reference collapsed to the live gross");
+        assertGt(
+            grossAfter,
+            (hub.sellWindowReference() * hub.SELL_GLOBAL_CAP_BPS()) / 10_000,
+            "raw post-release ratio is the CI failure shape"
+        );
+        _expectSellBackRevert(alice, 1, 0, PplCurveHubV2.SellBackClosed.selector);
+
+        invariant_globalSellDayCap();
+    }
+
     /// @dev Global sell-back gross over the live rolling window never exceeds 2% of
-    /// reserve + that gross (the same reference `sellBack` uses).
+    /// reserve + that gross (the same reference `sellBack` uses), while sell-back is open.
+    /// `executeLiquidityRelease` zeros the reserve and closes sell-back without clearing the
+    /// 15-minute ring, so the reference collapses to the live gross and the raw ratio is
+    /// gross > 2% of gross. Sells cannot happen after that, and each sell was already checked
+    /// against the pre-release reference (`globalCapViolations`).
     function invariant_globalSellDayCap() public view {
         assertEq(handler.globalCapViolations(), 0, "rolling 24h global sell cap");
+        if (hub.liquidityReleased()) return;
         (uint256 gross, uint256 live) = hub.globalSellUsed();
         if (live == 0) return;
         assertLe(
