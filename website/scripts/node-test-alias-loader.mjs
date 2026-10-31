@@ -26,6 +26,10 @@ export async function resolve(specifier, context, nextResolve) {
   if (specifier === "next/server") {
     return nextResolve("next/server.js", context);
   }
+  // Same missing `exports` entry as `next/server`. The page at `/nft` calls `redirect`.
+  if (specifier === "next/navigation") {
+    return nextResolve("next/navigation.js", context);
+  }
   // Next/TS allow extensionless relative imports (`./bootstrap`); Node's ESM resolver does
   // not, so map them to the real file before handing off.
   if (specifier.startsWith(".") && !/\.[a-zA-Z0-9]+$/.test(specifier) && context.parentURL) {

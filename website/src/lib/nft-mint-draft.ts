@@ -58,6 +58,56 @@ export function isResumable(draft: NftMintDraft | null): boolean {
   return Boolean(draft && draft.status !== "done" && (draft.payTx || draft.createTx || draft.mintTx || draft.collection || draft.mintAttempted));
 }
 
+/**
+ * The mint is already on chain. Close the draft so a reload shows the result instead of the
+ * "still in progress" notice, and so the next click cannot send a second mint.
+ */
+export function applyConfirmedMint(draft: NftMintDraft, tokenId: string, mintTx?: string): NftMintDraft {
+  return {
+    ...draft,
+    status: "done",
+    tokenId,
+    ...(mintTx ? { mintTx } : {}),
+    mintAttempted: false,
+  };
+}
+
+/**
+ * The attempt ended without a mint to resume: the wallet refused, the tx reverted, or the
+ * inputs were rejected. `status` leaves `in_progress` so the form stops saying a previous
+ * attempt is still running. A collection and its create hash stay, so a retry does not deploy
+ * a second collection. A reverted mint hash is dropped so the retry can send a new one.
+ */
+export function releaseMintAttempt(draft: NftMintDraft, clearMintTx = false): NftMintDraft {
+  return {
+    ...draft,
+    status: "saved",
+    mintAttempted: false,
+    ...(clearMintTx ? { mintTx: undefined } : {}),
+  };
+}
+
+/**
+ * Timeout and a dropped connection are not finished: the tx may still land, so the draft stays
+ * open. `unknown` after a mint was broadcast stays open for the same reason. Everything else
+ * (reject, revert, not enough fee, bad input) is finished.
+ */
+export function shouldReleaseAttempt(code: string, draft: Pick<NftMintDraft, "mintTx" | "mintAttempted">): boolean {
+  if (code === "timeout" || code === "network") return false;
+  if (code === "unknown" && (draft.mintTx || draft.mintAttempted)) return false;
+  return true;
+}
+
+/**
+ * The notice is for a stored attempt that is not the one running now. `busy` is the in-flight
+ * attempt; a second click is refused by the caller while that is true. A confirmed mint
+ * (`done`) and a released attempt (`saved`) do not show it.
+ */
+export function showsResumeNotice(draft: NftMintDraft | null, busy: boolean): boolean {
+  if (busy || !draft || draft.status !== "in_progress") return false;
+  return Boolean(draft.payTx || draft.createTx || draft.mintTx || draft.mintAttempted);
+}
+
 export const NFT_DRAFT_KEY = "people_nft_mint_draft_v1";
 
 export type StorageLike = Pick<Storage, "getItem" | "setItem" | "removeItem">;

@@ -1,0 +1,20 @@
+{
+  "fileTooLarge": "Diese Datei ist größer als 25 MB.",
+  "unsupportedFormat": "Dieses Dateiformat wird nicht unterstützt.",
+  "linkExpired": "Der Upload-Link ist abgelaufen. Wiederholen Sie den Upload.",
+  "sha256Mismatch": "Die hochgeladene Datei stimmt nicht mit der Prüfsumme überein. Wiederholen Sie den Upload.",
+  "rateLimited": "Zu viele Uploads. Warten Sie einige Minuten und versuchen Sie es erneut.",
+  "network": "Netzwerkproblem. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+  "walletRejected": "Die Wallet hat die Signatur abgelehnt. Es wurde nichts hochgeladen.",
+  "nonceUsed": "Diese Upload-Freigabe wurde bereits verwendet. Wiederholen Sie den Upload.",
+  "nonceExpired": "Diese Upload-Freigabe ist abgelaufen. Wiederholen Sie den Upload.",
+  "nonceMissing": "Diese Upload-Freigabe ist ungültig. Wiederholen Sie den Upload.",
+  "contentMismatch": "Der Dateiinhalt entspricht nicht dem Typ. Der Upload wurde abgelehnt.",
+  "sizeMismatch": "Die Größe der gespeicherten Datei stimmt nicht. Der Upload wurde abgelehnt.",
+  "storageUnavailable": "Der Dateispeicher ist gerade nicht verfügbar. Versuchen Sie es später erneut.",
+  "pinFailed": "Die Datei konnte nicht gespeichert werden. Wiederholen Sie den Upload.",
+  "badSignature": "Die Wallet-Signatur passt nicht zu diesem Upload. Wiederholen Sie den Upload.",
+  "verifyUnavailable": "Die Datei wurde gespeichert, konnte aber noch nicht geprüft werden. Wiederholen Sie den Upload.",
+  "invalidRequest": "Die Upload-Anfrage ist ungültig. Wiederholen Sie den Upload.",
+  "timeout": "Der Upload hat zu lange gedauert. Wiederholen Sie den Upload."
+}
