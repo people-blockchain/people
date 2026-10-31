@@ -12,6 +12,7 @@ import { assetDecimals, formatAssetAmount, type AssetInfo } from "@/lib/asset-am
 import { uxCopy, displaySymbol } from "@/lib/ux-copy";
 import { displayAssetName, isHiddenAsset } from "@/lib/hidden-assets";
 import { AssetImage } from "@/components/ui/AssetImage";
+import { tokenPageImageSrc } from "@/lib/explorer/token-page-image";
 import { PeopleLoader } from "@/components/ui/PeopleLoader";
 import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
@@ -21,7 +22,7 @@ import { fetchJsonWithTimeout, timeoutSignal } from "@/lib/fetch-timeout";
 import { resolveTokenMeta, type Erc20Meta, type ResolvedTokenMeta } from "@/lib/evm-token-meta";
 import { compatList, compatPartial } from "@/lib/compat-list";
 
-type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
+type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string; imageUri?: string };
 type Data = { asset: Token; meta: ResolvedTokenMeta; fromCatalog: boolean; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
 
@@ -111,7 +112,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     <NetworkStatus />
     {loading ? <PeopleLoader /> : error || !asset ? <div className="mt-8 rounded-2xl border border-line p-6"><p>{t.networkUnavailable} / {t.notFound}</p><button onClick={reload} className="mt-3 text-brand">{c.retry}</button></div> : <>
       <header className="mt-8 flex flex-wrap items-center gap-4">
-        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={asset.creationMetadata?.image} name={symbol} className="h-16 w-16" testBadgeLabel={u.testTokenNote} />
+        <AssetImage assetId={assetId} tokenAddress={asset.tokenAddress} src={tokenPageImageSrc(asset.creationMetadata?.image, asset.imageUri) ?? asset.creationMetadata?.image ?? asset.imageUri} name={symbol} className="h-16 w-16" testBadgeLabel={u.testTokenNote} />
         <div className="min-w-0 flex-1"><h1 className="break-words text-h2 font-bold">{assetId === "usdt" ? u.testUsdt : displayAssetName(assetId, asset.name)}</h1><p className="break-all font-mono text-sm text-ink-3">{symbol} · {assetId}</p></div>
         <button onClick={reload} className="rounded-xl border border-line px-4 py-2 text-sm text-brand">{c.refresh}</button>
       </header>

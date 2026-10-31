@@ -91,9 +91,10 @@ export function sleepMs(ms: number, signal?: AbortSignal): Promise<void> {
  * Abort signal that fires after `ms` or when `parent` aborts. Uses `setTimeout` so tests
  * can fake the clock. `cancel` must run when the attempt finishes, so the timer does not linger.
  */
-export function linkAbort(ms: number, parent?: AbortSignal): { signal: AbortSignal; cancel: () => void } {
+export function linkAbort(ms: number, parent?: AbortSignal | null): { signal: AbortSignal; cancel: () => void } {
   const controller = new AbortController();
-  const upstream = parent ?? currentDeadline()?.signal;
+  // `null` keeps a metadata read off the request signal. `undefined` still follows the request.
+  const upstream = parent === null ? undefined : (parent ?? currentDeadline()?.signal);
   if (upstream?.aborted || ms <= 0) {
     controller.abort();
     return { signal: controller.signal, cancel: () => {} };

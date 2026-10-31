@@ -4,7 +4,10 @@ import tokenCatalogBaseline from "@/data/evm-token-catalog.json" with { type: "j
 import { readEvmDeployments } from "@/lib/evm/config";
 import { evmJsonRpc, evmJsonRpcBatch, isIncompleteRpcError, isRequestDeadlineError, RequestDeadlineError, resetRpcBackoffForTests } from "@/lib/evm/rpc-server";
 import { curatedAssetKeys, enrichAssetRow, resolveLogicalAssetId, seedAssetMeta } from "@/lib/evm/seed-assets";
-import { currentDeadline, deadlineExpired, retryDelayMs, runOutsideRequestDeadline, sleepMs } from "@/lib/evm/request-deadline";
+import { fetchCachedMetadataImage, peekCachedMetadataImageEntry } from "@/lib/evm/token-uri-metadata";
+import { resolveAssetImageUrl } from "@/lib/asset-image-src";
+import { withStableImage } from "@/lib/token-image-merge";
+import { boundedTimeoutMs, currentDeadline, deadlineExpired, retryDelayMs, runOutsideRequestDeadline, sleepMs } from "@/lib/evm/request-deadline";
 
 /** `TokenCreated(address,address,string,string,uint8,uint256,(uint256×5))` — pre-leftoverMode factories. */
 const TOKEN_CREATED_TOPIC = "0x10911c4cd4fbfa42352cbeb31e021abbab48257dff3d94957b57da33a205d724";
@@ -17,6 +20,7 @@ const SEL_NAME = "0x06fdde03";
 const SEL_SYMBOL = "0x95d89b41";
 const SEL_DECIMALS = "0x313ce567";
 const SEL_TOTAL_SUPPLY = "0x18160ddd";
+const SEL_METADATA_URI = "0x03ee438c";
 const SEL_TOKEN0 = "0x0dfe1681";
 const SEL_TOKEN1 = "0xd21220a7";
 const SEL_RESERVES = "0x0902f1ac";
@@ -42,6 +46,8 @@ export type CatalogToken = {
   verified: boolean;
   /** Curated assetId whose name/symbol this uncurated token copies, if any. */
   impersonates?: string;
+  imageUri?: string;
+  creationMetadata?: { image?: string; [key: string]: unknown };
 };
 
 export type CatalogPool = {
@@ -416,18 +422,21 @@ export async function pairLogStartBlock(pair: string): Promise<number> {
  * Decodes ABI-encoded `string` return data. Author-controlled: control characters are stripped and
  * length is capped so a token cannot spoof a catalog entry with invisible/homoglyph padding.
  */
-function decodeErc20String(out: string | null | undefined): string {
+function decodeErc20String(out: string | null | undefined, maxLength = 64): string {
   if (!out || out === "0x" || out.length < 130) return "";
   try {
     return Buffer.from(out.slice(130), "hex")
       .toString("utf8")
       .replace(/[\u0000-\u001f\u007f]/g, "")
       .trim()
-      .slice(0, 64);
+      .slice(0, maxLength);
   } catch {
     return "";
   }
 }
+
+/** A `metadataURI` (`ipfs://<CIDv0>/metadata.json` is ~67 chars) needs a longer cap than a name/symbol. */
+const METADATA_URI_MAX_LENGTH = 256;
 
 function decodeUint(out: string | null | undefined): bigint {
   if (!out || out === "0x") return BigInt(0);
@@ -454,6 +463,12 @@ let tokensRefreshing: Promise<CatalogToken[]> | null = null;
 let poolsRefreshing: Promise<CatalogPool[]> | null = null;
 /** Partial rows from a cache fill that must not be stored. The caller still returns them. */
 let lastPartialTokens: CatalogToken[] | null = null;
+/** In-memory catalog. A failed snapshot write must not replace this with a shorter tail. */
+let persistedTokens: CatalogToken[] = [];
+let pendingImageUris: Map<string, string> | null = null;
+let snapshotWritesEnabled = true;
+let catalogGeneration = 0;
+const catalogWarnOnce = new Set<string>();
 
 export function resetChainCatalogCacheForTests(): void {
   tokensCache = null;
@@ -461,9 +476,19 @@ export function resetChainCatalogCacheForTests(): void {
   tokensRefreshing = null;
   poolsRefreshing = null;
   lastPartialTokens = null;
+  persistedTokens = [];
+  pendingImageUris = null;
+  snapshotWritesEnabled = true;
+  catalogGeneration += 1;
+  catalogWarnOnce.clear();
   windowLogsCache.clear();
   logWindowsPeak = 0;
   resetRpcBackoffForTests();
+}
+
+/** Tests force the snapshot write to fail. The served list stays the baseline plus anything new. */
+export function setCatalogSnapshotWriteForTests(enabled: boolean): void {
+  snapshotWritesEnabled = enabled;
 }
 
 /**
@@ -571,7 +596,182 @@ function fieldsFromMetadata(
   return { name, symbol, decimals, totalSupply };
 }
 
+const METADATA_JSON_SUFFIX = /\/metadata\.json(?:[?#].*)?$/i;
+
+function shownTokenImage(uri: string | null | undefined): string | null {
+  const value = (uri ?? "").trim();
+  if (!value || value === "ipfs://people" || value.startsWith("ipfs://people/")) return null;
+  if (METADATA_JSON_SUFFIX.test(value)) return null;
+  if (!/^ipfs:\/\/[^\s]+$/i.test(value) && !/^https:\/\/[^\s]+$/i.test(value) && !(value.startsWith("/") && !value.startsWith("//"))) return null;
+  return resolveAssetImageUrl(value);
+}
+
+/**
+ * Display URL for a token logo without waiting on a gateway. A direct image URI is rewritten
+ * immediately. A `metadata.json` URI uses the cached `image` or, until that read finishes, the
+ * document URL itself so the client can resolve the picture.
+ */
+export function immediateTokenImageUrl(uri: string | null | undefined): string | null {
+  const value = (uri ?? "").trim();
+  const direct = shownTokenImage(value);
+  if (direct) return direct;
+  if (!value || !METADATA_JSON_SUFFIX.test(value) || value === "ipfs://people" || value.startsWith("ipfs://people/")) return null;
+  const cached = peekCachedMetadataImageEntry(value);
+  if (cached.hit) return shownTokenImage(cached.value);
+  return resolveAssetImageUrl(value);
+}
+
+/** Owner override, then a real logo already on the row, then the on-chain metadata URI. */
+export function applyTokenImage<T extends { imageUri?: string; creationMetadata?: { image?: string; [key: string]: unknown } }>(
+  row: T,
+  override: string | null | undefined,
+  chainImage: string | null | undefined,
+): T {
+  const current = row.imageUri ?? "";
+  const placeholder = METADATA_JSON_SUFFIX.test(current);
+  const imageUri = override ?? (!current || placeholder ? chainImage ?? undefined : undefined);
+  if (!imageUri) return row;
+  return {
+    ...row,
+    imageUri,
+    creationMetadata: { ...(row.creationMetadata ?? {}), image: imageUri },
+  };
+}
+
+function warnCatalogOnce(scope: string, error: unknown, context: Record<string, string | number | boolean> = {}): void {
+  if (catalogWarnOnce.has(scope)) return;
+  catalogWarnOnce.add(scope);
+  const message = typeof error === "string" ? error : error instanceof Error ? error.message : "unknown_error";
+  const fields = Object.entries(context).map(([key, value]) => `${key}=${value}`).join(" ");
+  console.warn(`[evm-catalog] ${scope} failed${fields ? ` ${fields}` : ""}: ${message.replace(/https?:\/\/\S+/gi, "<url>").slice(0, 160)}`);
+}
+
+function mergeTokenRows(...lists: ReadonlyArray<readonly CatalogToken[]>): CatalogToken[] {
+  const byAddress = new Map<string, CatalogToken>();
+  for (const list of lists) {
+    for (const row of list) {
+      const key = row.tokenAddress.toLowerCase();
+      byAddress.set(key, withStableImage(byAddress.get(key), row));
+    }
+  }
+  return [...byAddress.values()];
+}
+
+/**
+ * The committed JSON file is the only baseline snapshot. This write remembers the merged list for
+ * the process. A failed write logs once and still returns that full list, never the tail alone.
+ */
+function rememberSnapshot(tokens: CatalogToken[]): CatalogToken[] {
+  if (!tokens.length) return tokens;
+  const merged = mergeTokenRows(persistedTokens, tokens).sort((a, b) => a.symbol.localeCompare(b.symbol));
+  persistedTokens = merged;
+  if (!snapshotWritesEnabled) {
+    warnCatalogOnce("catalog snapshot write", "write_failed", { tokens: merged.length });
+  }
+  return merged;
+}
+
+/**
+ * One `metadataURI` batch. A miss or a slow gateway leaves the row in place and does not make the
+ * catalog partial. The document URL is returned immediately; the JSON `image` fills in later.
+ */
+async function attachTokenImages(rows: CatalogToken[]): Promise<{ rows: CatalogToken[]; uris: Map<string, string> }> {
+  const uris = new Map<string, string>();
+  if (!rows.length || deadlineExpired() || currentDeadline()?.signal.aborted) return { rows, uris };
+  let raw: Array<string | null>;
+  try {
+    raw = await evmJsonRpcBatch<string>(
+      rows.map((row) => ({ method: "eth_call", params: [{ to: getAddress(row.tokenAddress), data: SEL_METADATA_URI }, "latest"] })),
+      { ignoreBackoff: true, timeoutMs: boundedTimeoutMs(2_500) },
+    );
+  } catch (error) {
+    warnCatalogOnce("baseline images", error, { tokens: rows.length });
+    return { rows, uris };
+  }
+  const next = rows.map((row, index) => {
+    const word = raw[index];
+    if (word == null) return row;
+    const uri = word === "0x" ? "" : decodeErc20String(word, METADATA_URI_MAX_LENGTH);
+    uris.set(row.tokenAddress.toLowerCase(), uri);
+    return applyTokenImage(row, undefined, immediateTokenImageUrl(uri));
+  });
+  return { rows: next, uris };
+}
+
+/** Fills metadata images after the response. A slow gateway updates the cache and never marks the list partial. */
+function scheduleCatalogImages(rows: CatalogToken[], uris: Map<string, string>): void {
+  const generation = catalogGeneration;
+  const pending = rows.filter((row) => {
+    const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+    if (!METADATA_JSON_SUFFIX.test(uri) || uri === "ipfs://people" || uri.startsWith("ipfs://people/")) return false;
+    if (peekCachedMetadataImageEntry(uri).hit) return false;
+    return !row.imageUri || METADATA_JSON_SUFFIX.test(row.imageUri);
+  });
+  if (!pending.length) return;
+  const queue = pending.slice();
+  const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
+    while (queue.length) {
+      if (generation !== catalogGeneration) return;
+      const row = queue.shift();
+      if (!row) return;
+      const uri = uris.get(row.tokenAddress.toLowerCase()) ?? "";
+      const image = shownTokenImage(await fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000));
+      if (generation !== catalogGeneration || !tokensCache) continue;
+      const value = tokensCache.value.map((item) => {
+        if (item.tokenAddress.toLowerCase() !== row.tokenAddress.toLowerCase()) return item;
+        if (image) return applyTokenImage(item, undefined, image);
+        if (!METADATA_JSON_SUFFIX.test(item.imageUri ?? "")) return item;
+        const creation = { ...(item.creationMetadata ?? {}) };
+        delete creation.image;
+        return { ...item, imageUri: undefined, creationMetadata: creation };
+      });
+      tokensCache = { ...tokensCache, value };
+    }
+  });
+  void Promise.all(workers).catch((error) => {
+    warnCatalogOnce("catalog image", error);
+  });
+}
+
+function takeImageUris(): Map<string, string> | null {
+  const uris = pendingImageUris;
+  pendingImageUris = null;
+  return uris;
+}
+
+function storeFreshTokens(value: CatalogToken[]): CatalogToken[] {
+  const uris = takeImageUris();
+  tokensCache = { at: Date.now(), value };
+  if (uris) scheduleCatalogImages(value, uris);
+  return value;
+}
+
+/** Logo URL for one token. Does not wait on a gateway and never throws. */
+export async function readImmediateTokenImage(token: string): Promise<string | null> {
+  if (deadlineExpired() || currentDeadline()?.signal.aborted) return null;
+  try {
+    const out = await evmJsonRpc<string>("eth_call", [{ to: getAddress(token), data: SEL_METADATA_URI }, "latest"], {
+      ignoreBackoff: true,
+      timeoutMs: boundedTimeoutMs(2_500),
+    });
+    const uri = decodeErc20String(out, METADATA_URI_MAX_LENGTH);
+    const image = immediateTokenImageUrl(uri);
+    if (uri && METADATA_JSON_SUFFIX.test(uri) && image && METADATA_JSON_SUFFIX.test(image)) {
+      void fetchCachedMetadataImage(uri, undefined, Date.now() + 8_000);
+    }
+    return image;
+  } catch {
+    return null;
+  }
+}
+
 async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
+  const store = currentDeadline();
+  // The handler aborts its signal as soon as it returns. A cache revalidation that is still inside
+  // that context must not treat the abort as a missed read or skip logos.
+  if (store?.signal.aborted && Date.now() < store.at) {
+    return runOutsideRequestDeadline(() => discoverTokensOnChainUncached());
+  }
   const dep = readEvmDeployments();
   const factory = dep.contracts.tokenFactory;
   if (!factory) return [];
@@ -649,7 +849,14 @@ async function discoverTokensOnChainUncached(): Promise<CatalogToken[]> {
     const fields = metadataByAddress.get(lower) ?? known.get(lower) ?? { name: "", symbol: "", decimals: 18, totalSupply: 0 };
     return catalogRow(token, fields, dep);
   });
-  return markScanPartial(rows.sort((a, b) => a.symbol.localeCompare(b.symbol)), partial || deadlineExpired());
+  rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  // Asset reads that missed are partial. The logo batch below is not: a slow gateway or a missing
+  // metadataURI must not turn a full list into a partial response.
+  const missing = partial || Boolean(currentDeadline() && deadlineExpired());
+  const imaged = missing ? { rows, uris: new Map<string, string>() } : await attachTokenImages(rows);
+  const merged = rememberSnapshot(imaged.rows);
+  pendingImageUris = imaged.uris;
+  return markScanPartial(merged.slice(), missing);
 }
 
 /**
@@ -666,7 +873,7 @@ async function discoverTokensForCache(): Promise<CatalogToken[]> {
   return value;
 }
 
-const scanTokensCached = unstable_cache(discoverTokensForCache, ["evm-chain-catalog-tokens-v2"], {
+const scanTokensCached = unstable_cache(discoverTokensForCache, ["evm-chain-catalog-tokens-v3"], {
   revalidate: CATALOG_REVALIDATE_SECONDS,
   tags: CHAIN_CATALOG_TAGS,
 });
@@ -674,11 +881,10 @@ const scanTokensCached = unstable_cache(discoverTokensForCache, ["evm-chain-cata
 async function loadTokens(): Promise<CatalogToken[]> {
   try {
     const value = await scanTokensCached();
-    if (!scanIsPartial(value)) {
-      tokensCache = { at: Date.now(), value };
-      return value;
-    }
+    if (!scanIsPartial(value)) return storeFreshTokens(value);
+    takeImageUris();
   } catch (error) {
+    takeImageUris();
     if (lastPartialTokens && (isRequestDeadlineError(error) || Boolean(currentDeadline()))) {
       const partial = lastPartialTokens;
       lastPartialTokens = null;
@@ -687,8 +893,11 @@ async function loadTokens(): Promise<CatalogToken[]> {
     if (!currentDeadline() && !isRequestDeadlineError(error)) throw error;
   }
   const value = await discoverTokensOnChainUncached();
-  if (!scanIsPartial(value)) tokensCache = { at: Date.now(), value };
-  return value;
+  if (scanIsPartial(value)) {
+    takeImageUris();
+    return value;
+  }
+  return storeFreshTokens(value);
 }
 
 export async function discoverTokensOnChain(): Promise<CatalogToken[]> {
