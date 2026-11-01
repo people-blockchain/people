@@ -32,7 +32,7 @@
     {
       "id": "tokenomics-1b-ppl",
       "status": "proposed_pending_vote",
-      "evidence": "Fixed 1B PPL public copy on `/tokenomics` and `/how-it-works`: years 1–4 at 0% inflation; 200M validator pool on 6/5/5/4% of supply per year plus 30% of fees; launch rewards from 35% community pool; year 5+ max 2%/year by vote; founders airdrop before sale at 1,000 verified people + multisig; Model A fee split 30/25/20/10/15/0 (preliminary, governance-gated)."
+      "evidence": "Fixed 1B PPL public copy on `/tokenomics` and `/how-it-works`: years 1–4 at 0% inflation; 200M validator pool on 6/5/5/4% of supply per year plus 30% of fees; launch rewards from 35% community pool; year 5+ max 2%/year by vote; PPL sale is live on Base via PplCurveHub for USDC/USDT; pay from other chains via the cross-chain widget (TON not supported); runs until sold out or 24 months, whichever comes first, with no extensions; unsold PPL goes to the Community Pool; sell-back is for verified people only, with a 30-day hold and limits; Model A fee split 30/25/20/10/15/0 (preliminary, governance-gated)."
     },
     {
       "id": "discover-feed",
