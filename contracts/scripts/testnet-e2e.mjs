@@ -92,9 +92,16 @@ async function send(req) {
   // Like the site: estimate first (preflight), then send with gas x1.2 and the node's gas price.
   // If the node cannot estimate, fall back to a fixed limit and record that (it is a finding).
   await pause(1500);
-  const gas = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName);
-  const need = gas * GAS_PRICE + (req.value ?? 0n);
+  let gas = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName);
   const have = await pub.getBalance({ address: account.address });
+  if (gas * GAS_PRICE + (req.value ?? 0n) > have) {
+    // A wallet that trusts this estimate would refuse to send. Record it, re-estimate once to see
+    // whether the node is just inconsistent, then try a sane fixed limit to learn the real gas use.
+    const again = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName + " (re-estimate)");
+    estimateNotes.push({ label: req.functionName, inflatedEstimateGasLimit: gas.toString(), reEstimateGasLimit: again.toString(), retryWith: FALLBACK_GAS.toString() });
+    gas = again * GAS_PRICE + (req.value ?? 0n) <= have ? again : FALLBACK_GAS;
+  }
+  const need = gas * GAS_PRICE + (req.value ?? 0n);
   if (need > have) throw new Error(`${req.functionName}: needs ${formatEther(need)} PPL upfront (gas limit ${gas} x ${GAS_PRICE} wei + value ${formatEther(req.value ?? 0n)}), wallet has ${formatEther(have)}`);
   const hash = await retry(() => wallet.writeContract({ ...req, gas, gasPrice: GAS_PRICE, type: "legacy" }));
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
