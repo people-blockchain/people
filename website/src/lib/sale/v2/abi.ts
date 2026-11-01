@@ -218,6 +218,13 @@ export const PPL_CURVE_HUB_V2_ABI = [
     inputs: [],
     outputs: [{ name: "", type: "address" }],
   },
+  {
+    type: "function",
+    name: "returnCosigner",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "address" }],
+  },
 ] as const;
 
 export const ZERO_BYTES32 = `0x${"0".repeat(64)}` as const;

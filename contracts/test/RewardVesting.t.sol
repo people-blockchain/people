@@ -15,7 +15,7 @@ contract RewardVestingTest is Test {
 
     function setUp() public {
         vesting = new RewardVesting(owner);
-        burner = new PplReturnBurn(owner);
+        burner = new PplReturnBurn(owner, makeAddr("saleWallet"));
         vm.deal(owner, 100 ether);
         vm.startPrank(owner);
         vesting.setForbiddenRecipient(address(burner), true);

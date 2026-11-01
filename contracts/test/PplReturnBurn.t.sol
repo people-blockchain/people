@@ -14,6 +14,7 @@ contract PplReturnBurnTest is Test {
     uint256 internal constant DEST_CHAIN = 8453;
     address internal alice = makeAddr("alice");
     address internal owner = makeAddr("burnOwner");
+    address internal saleWallet = makeAddr("saleWallet");
 
     event ReturnBurned(
         bytes32 indexed returnId,
@@ -27,7 +28,7 @@ contract PplReturnBurnTest is Test {
 
     function setUp() public {
         owner = makeAddr("burnOwner");
-        burner = new PplReturnBurn(owner);
+        burner = new PplReturnBurn(owner, saleWallet);
         _installReporter(owner, type(uint256).max, 1 days);
         vm.deal(alice, 100 ether);
     }
@@ -73,7 +74,7 @@ contract PplReturnBurnTest is Test {
     }
 
     function test_reporterCreditCap_enforced() public {
-        PplReturnBurn fresh = new PplReturnBurn(owner);
+        PplReturnBurn fresh = new PplReturnBurn(owner, saleWallet);
         _installReporterOn(fresh, owner, 5 ether, 1 days);
         vm.startPrank(owner);
         fresh.creditHubPurchase(alice, 3 ether);
@@ -102,9 +103,10 @@ contract PplReturnBurnTest is Test {
         bytes32 id = burner.burnForReturn{value: 3 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
 
         assertEq(id, expectedId);
-        assertEq(burner.totalBurned(), 3 ether);
+        assertEq(burner.totalReturned(), 3 ether);
         assertEq(burner.returnCount(), 1);
-        assertEq(address(burner).balance, 3 ether);
+        assertEq(address(burner).balance, 0, "nothing stays in the contract");
+        assertEq(saleWallet.balance, 3 ether, "returned PPL go back to the sale wallet");
         assertEq(alice.balance, 97 ether);
     }
 
@@ -126,7 +128,7 @@ contract PplReturnBurnTest is Test {
         bytes32 b = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
         vm.stopPrank();
         assertTrue(a != b);
-        assertEq(burner.totalBurned(), 2 ether);
+        assertEq(burner.totalReturned(), 2 ether);
     }
 
     /// @dev returnId changes when amount, hub, seller, source chain or destination chain changes.
@@ -210,7 +212,8 @@ contract PplReturnBurnTest is Test {
     function test_burn_abiOnlyBurnIsStateChanging() public view {
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/out/PplReturnBurn.sol/PplReturnBurn.json"));
         string[] memory sigs = vm.parseJsonKeys(json, ".methodIdentifiers");
-        assertEq(sigs.length, 20, "unexpected function count");
+        assertEq(sigs.length, 21, "unexpected function count");
+        assertTrue(_contains(sigs, "returnRecipient()"));
         assertTrue(_contains(sigs, "ADMIN_TIMELOCK()"));
         assertTrue(_contains(sigs, "GRACE_PERIOD()"));
         assertTrue(_contains(sigs, "burnForReturn(address,bytes32,address,uint256)"));
@@ -229,7 +232,7 @@ contract PplReturnBurnTest is Test {
         assertTrue(_contains(sigs, "reporterCreditUsed()"));
         assertTrue(_contains(sigs, "reporterCreditWindowStart()"));
         assertTrue(_contains(sigs, "returnCount()"));
-        assertTrue(_contains(sigs, "totalBurned()"));
+        assertTrue(_contains(sigs, "totalReturned()"));
         assertTrue(_contains(sigs, "transferOwnership(address)"));
 
         uint256 mutating;
@@ -246,15 +249,15 @@ contract PplReturnBurnTest is Test {
         assertEq(mutating, 9, "burnForReturn, creditHubPurchase, queue/execute reporter+cap, cancel, Ownable");
     }
 
-    /// @notice Runtime bytecode has no DELEGATECALL, CALLCODE, SELFDESTRUCT or CALL, so nothing
-    /// can move the burned balance out.
+    /// @notice Runtime bytecode has no DELEGATECALL, CALLCODE or SELFDESTRUCT. The single CALL is
+    /// the forward to the immutable `returnRecipient` (checked by the balance tests).
     function test_burn_bytecodeHasNoValueExit() public view {
         bytes memory code = address(burner).code;
         uint256 metaLen = (uint256(uint8(code[code.length - 2])) << 8) | uint256(uint8(code[code.length - 1]));
         uint256 end = code.length - metaLen - 2;
         for (uint256 i; i < end; ++i) {
             uint8 op = uint8(code[i]);
-            assertTrue(op != 0xf1 && op != 0xf2 && op != 0xf4 && op != 0xff, "forbidden opcode");
+            assertTrue(op != 0xf2 && op != 0xf4 && op != 0xff, "forbidden opcode");
             if (op >= 0x60 && op <= 0x7f) i += op - 0x5f;
         }
     }
@@ -267,8 +270,43 @@ contract PplReturnBurnTest is Test {
         burner.burnForReturn{value: a}(HUB, PERSON, SELLER, DEST_CHAIN);
         burner.burnForReturn{value: b}(HUB, PERSON, alice, DEST_CHAIN);
         vm.stopPrank();
-        assertEq(burner.totalBurned(), uint256(a) + b);
-        assertEq(address(burner).balance, burner.totalBurned());
+        assertEq(burner.totalReturned(), uint256(a) + b);
+        assertEq(saleWallet.balance, burner.totalReturned());
+        assertEq(address(burner).balance, 0);
+    }
+
+    function test_constructorRejectsBadRecipient() public {
+        vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
+        new PplReturnBurn(owner, address(0));
+    }
+
+    /// @notice A recipient that rejects PPL makes the whole return revert, so a return never
+    /// counts unless the PPL actually reached the sale wallet.
+    function test_returnRevertsIfRecipientRejects() public {
+        PplReturnBurn strict = new PplReturnBurn(owner, address(new ReturnRejecter()));
+        _installReporterOn(strict, owner, type(uint256).max, 1 days);
+        vm.prank(owner);
+        strict.creditHubPurchase(alice, 1 ether);
+        vm.prank(alice);
+        vm.expectRevert(PplReturnBurn.ForwardFailed.selector);
+        strict.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
+        assertEq(strict.hubPurchasedPpl(alice), 1 ether, "credit restored on revert");
+        assertEq(strict.totalReturned(), 0);
+    }
+
+    /// @notice A recipient that re-enters can only spend the caller's own remaining credit.
+    function test_reentrantRecipientCannotExceedCredit() public {
+        ReturnReenterer r = new ReturnReenterer();
+        PplReturnBurn b2 = new PplReturnBurn(owner, address(r));
+        r.setTarget(b2);
+        _installReporterOn(b2, owner, type(uint256).max, 1 days);
+        vm.prank(owner);
+        b2.creditHubPurchase(alice, 1 ether);
+        vm.prank(alice);
+        b2.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
+        assertTrue(r.reentryFailed());
+        assertEq(b2.hubPurchasedPpl(alice), 0);
+        assertEq(b2.totalReturned(), 1 ether);
     }
 
     function _contains(string[] memory list, string memory item) internal pure returns (bool) {
@@ -276,5 +314,25 @@ contract PplReturnBurnTest is Test {
             if (keccak256(bytes(list[i])) == keccak256(bytes(item))) return true;
         }
         return false;
+    }
+}
+
+contract ReturnRejecter {}
+
+contract ReturnReenterer {
+    PplReturnBurn public target;
+    bool public reentryFailed;
+
+    function setTarget(PplReturnBurn t) external {
+        target = t;
+    }
+
+    receive() external payable {
+        if (address(target) != address(0) && msg.sender == address(target)) {
+            try target.burnForReturn{value: msg.value}(address(1), bytes32(uint256(1)), address(1), 1) {}
+            catch {
+                reentryFailed = true;
+            }
+        }
     }
 }

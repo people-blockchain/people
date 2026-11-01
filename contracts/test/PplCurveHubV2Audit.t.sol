@@ -48,8 +48,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
     }
 
     function _limits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) internal {
-        vm.prank(owner);
-        hub.setWindowLimits(maxBuys, minBuy, maxSells, minSell);
+        hub.testSetWindowLimits(maxBuys, minBuy, maxSells, minSell);
     }
 
     function _bindTo(address account, bytes32 pid) internal {
@@ -720,39 +719,76 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         bytes memory bad = abi.encodeWithSelector(PplCurveHubV2.BadLimits.selector);
         vm.startPrank(owner);
         vm.expectRevert(bad);
-        hub.setWindowLimits(0, MIN_BUY, 10, 1e6);
+        hub.queueSetWindowLimits(0, MIN_BUY, 10, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(51, MIN_BUY, 10, 1e6);
+        hub.queueSetWindowLimits(51, MIN_BUY, 10, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MIN_BUY, 0, 1e6);
+        hub.queueSetWindowLimits(20, MIN_BUY, 0, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MIN_BUY, 51, 1e6);
+        hub.queueSetWindowLimits(20, MIN_BUY, 51, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, 1e6 - 1, 10, 1e6);
+        hub.queueSetWindowLimits(20, 1e6 - 1, 10, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MAX_BUY + 1, 10, 1e6);
+        hub.queueSetWindowLimits(20, MAX_BUY + 1, 10, 1e6);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MIN_BUY, 10, 1e6 - 1);
+        hub.queueSetWindowLimits(20, MIN_BUY, 10, 1e6 - 1);
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MIN_BUY, 10, DAY_CAP + 1);
+        hub.queueSetWindowLimits(20, MIN_BUY, 10, DAY_CAP + 1);
         uint256 maxMinSell = hub.MAX_MIN_SELL_USD6();
         vm.expectRevert(bad);
-        hub.setWindowLimits(20, MIN_BUY, 10, maxMinSell + 1);
+        hub.queueSetWindowLimits(20, MIN_BUY, 10, maxMinSell + 1);
 
         // edges are valid
+        bytes32 id = hub.queueSetWindowLimits(1, 1e6, 1, 1e6);
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
         vm.expectEmit(false, false, false, true, address(hub));
         emit WindowLimitsSet(1, 1e6, 1, 1e6);
-        hub.setWindowLimits(1, 1e6, 1, 1e6);
-        hub.setWindowLimits(50, MAX_BUY, 50, maxMinSell);
+        hub.executeSetWindowLimits(id);
+        id = hub.queueSetWindowLimits(50, MAX_BUY, 50, maxMinSell);
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        hub.executeSetWindowLimits(id);
         vm.stopPrank();
         assertEq(hub.maxBuysPer24h(), 50);
         assertEq(hub.minBuyUsd6(), MAX_BUY);
         assertEq(hub.maxSellsPer24h(), 50);
         assertEq(hub.minSellUsd6(), maxMinSell);
 
-        vm.prank(alice);
+        vm.startPrank(alice);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
-        hub.setWindowLimits(20, MIN_BUY, 10, 1e6);
+        hub.queueSetWindowLimits(20, MIN_BUY, 10, 1e6);
+        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        hub.executeSetWindowLimits(id);
+        vm.stopPrank();
+    }
+
+    /// @dev Audit 2026-11-01: a raised minimum binds only after the 48-hour timelock, can be
+    /// cancelled, and nothing changes in the meantime.
+    function test_a4_windowLimitsTimelocked() public {
+        uint256 maxMinSell = hub.MAX_MIN_SELL_USD6();
+        vm.prank(owner);
+        bytes32 id = hub.queueSetWindowLimits(20, MAX_BUY, 10, maxMinSell);
+        assertEq(hub.minBuyUsd6(), MIN_BUY, "unchanged while queued");
+
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK() - 1);
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.Timelocked.selector);
+        hub.executeSetWindowLimits(id);
+
+        vm.prank(owner);
+        hub.cancel(id);
+        vm.warp(vm.getBlockTimestamp() + 1);
+        vm.prank(owner);
+        vm.expectRevert(PplCurveHubV2.NotQueued.selector);
+        hub.executeSetWindowLimits(id);
+        assertEq(hub.minBuyUsd6(), MIN_BUY);
+
+        // a fresh queue waits the full delay again, then applies
+        vm.prank(owner);
+        id = hub.queueSetWindowLimits(20, 50e6, 10, 1e6);
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetWindowLimits(id);
+        assertEq(hub.minBuyUsd6(), 50e6);
     }
 
     function test_a4_raisedMinBuyRevertsBelowMin() public {
@@ -1585,8 +1621,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
     /// exactly fills the global room, both still clear.
     function test_m_minSellCannotDeadlock() public {
         uint256 maxMinSell = hub.MAX_MIN_SELL_USD6();
-        vm.prank(owner);
-        hub.setWindowLimits(20, MIN_BUY, 10, maxMinSell);
+        hub.testSetWindowLimits(20, MIN_BUY, 10, maxMinSell);
 
         _seedRaised(100_000e6);
         _prepare(alice);
@@ -1613,8 +1648,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
     /// @dev Many sells in one 15-minute bucket share a ring slot, so dust cannot fill all 128.
     function test_m_globalSellsShareABucket() public {
-        vm.prank(owner);
-        hub.setWindowLimits(20, MIN_BUY, 50, 1e6);
+        hub.testSetWindowLimits(20, MIN_BUY, 50, 1e6);
         _seedRaised(2_000_000e6);
         _prepare(alice);
         _buy(alice, MAX_BUY);
