@@ -1,4 +1,4 @@
-import { SOCIAL_PROFILES } from "@/lib/social-profiles";
+import { SOCIAL_PROFILES, type SocialProfile } from "@/lib/social-profiles";
 
 const iconClass = "h-[18px] w-[18px]";
 
@@ -44,7 +44,9 @@ const ICONS = {
 export function SocialLinks({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
-      {SOCIAL_PROFILES.map((profile) => {
+      {SOCIAL_PROFILES.filter((profile): profile is SocialProfile & { id: keyof typeof ICONS } =>
+        Object.hasOwn(ICONS, profile.id),
+      ).map((profile) => {
         const Icon = ICONS[profile.id];
         return (
           <a

@@ -292,6 +292,8 @@ export async function registerFounder(
 
   const profile = await getFounderByUserId(userId);
   if (!profile) throw new Error("founder insert missing");
+  const { tryAwardQuestFounderCard } = await import("./quest/service.ts");
+  await tryAwardQuestFounderCard(userId);
   return { ok: true, profile };
 }
 
