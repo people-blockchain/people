@@ -71,13 +71,19 @@ let GAS_PRICE = null;
 const FALLBACK_GAS = 3_000_000n;
 const estimateNotes = [];
 const gasLog = [];
+const staleNode = [];
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 async function retry(fn, tries = 4) {
   for (let i = 0; ; i++) {
     try { return await fn(); } catch (e) {
       const msg = String(e?.shortMessage || e?.message || e);
-      if (i + 1 >= tries || !/Missing or invalid parameters|429|rate|timeout|fetch failed/i.test(msg)) throw e;
-      await pause(3000 * (i + 1));
+      // "exceeds the balance" here means a stale RPC node: the public endpoint can answer from a
+      // node that has not seen our last transaction (balance 0 right after the faucet). send()
+      // already checked the balance on a fresh read, so wait and ask again, and record it.
+      const stale = /exceeds the balance|insufficient funds/i.test(msg);
+      if (i + 1 >= tries || !(stale || /Missing or invalid parameters|429|rate|timeout|fetch failed/i.test(msg))) throw e;
+      if (stale) staleNode.push(msg.slice(0, 80));
+      await pause((stale ? 8000 : 3000) * (i + 1));
     }
   }
 }
@@ -97,6 +103,7 @@ async function send(req) {
   if (gas * GAS_PRICE + (req.value ?? 0n) > have) {
     // A wallet that trusts this estimate would refuse to send. Record it, re-estimate once to see
     // whether the node is just inconsistent, then try a sane fixed limit to learn the real gas use.
+    await pause(8000);
     const again = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName + " (re-estimate)");
     estimateNotes.push({ label: req.functionName, inflatedEstimateGasLimit: gas.toString(), reEstimateGasLimit: again.toString(), retryWith: FALLBACK_GAS.toString() });
     gas = again * GAS_PRICE + (req.value ?? 0n) <= have ? again : FALLBACK_GAS;
@@ -267,6 +274,6 @@ main()
   .catch((e) => record("unexpected", false, { error: String(e?.message || e) }))
   .finally(() => {
     const failed = results.filter((r) => !r.ok).length;
-    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, estimateNotes, gasLog, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
+    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, estimateNotes, staleNode, gasLog, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
     process.exit(failed ? 1 : 0);
   });
