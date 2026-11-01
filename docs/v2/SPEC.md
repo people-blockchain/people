@@ -225,6 +225,16 @@ Options for Alex (one constant / one constructor arg to change):
 Note: the contract cannot verify that the PEOPLE network actually launched; the announcement + 30-day public
 notice is the safeguard.
 
+Escrow (implemented, `src/sale/ReserveLiquidityEscrow.sol`, tests `test/ReserveLiquidityEscrow.t.sol`): the
+liquidity is PPL/USDC in a `PeoplePair` on the PEOPLE network with LP held by `LiquidityLock`, and no USDC bridge
+to PEOPLE exists yet, so the hub's `liquidityReceiver` is this escrow. It holds the reserve until a destination
+contract (bridge adapter / LP seeder) is active. The Safe proposes a destination with a public description hash;
+anyone activates it after `DESTINATION_DELAY` (30 days, can run in parallel with the hub notice); anyone then
+`release(token)`s the whole balance to it. The destination must have code and can never be the escrow, the owner,
+the pending owner or the immutable `treasury`; changing an active destination needs a new 30-day notice; no
+owner withdraw, no renounce, no upgrade. Residual trust: the Safe chooses the destination contract, and the
+30-day public notice is the check, so each destination's code must be published and reviewed during its notice.
+
 Graduation: triggered inside `buy` when `raisedUsd6` reaches `RAISE_CAP_USD6`; buys and sell-backs stop forever,
 reserve leaves only via the timelocked release above. The 50/50 liquidity/multisig split of the treasury half
 and LP lock from site copy remain off-chain Safe operations with public reporting. Unsold PPL = `SUPPLY_PPL −
