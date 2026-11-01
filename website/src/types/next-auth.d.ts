@@ -9,7 +9,7 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
     };
-    /** Epoch ms the user last actually signed in (set once at sign-in, not refreshed by session reads). */
+    /** Epoch ms of the last provider sign-in. Session reads and client update() do not move it. */
     authTime?: number;
     /** Auth.js provider id this session signed in with (e.g. "google", "resend", "web3auth"). */
     provider?: string;

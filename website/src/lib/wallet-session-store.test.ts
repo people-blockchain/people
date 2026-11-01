@@ -180,6 +180,27 @@ describe("wallet session store", () => {
     assert.equal(storage.has(WALLET_SESSION_STORAGE_KEY), false);
   });
 
+  it("strict persist without IndexedDB throws storage_unavailable", async () => {
+    delete (globalThis as { indexedDB?: unknown }).indexedDB;
+    await assert.rejects(
+      () => persistWalletSession(SESSION, 1_000, { strict: true }),
+      (err: unknown) => err instanceof Error && err.message === "storage_unavailable",
+    );
+  });
+
+  it("strict persist failure clears a stale session envelope", async () => {
+    storage.set(WALLET_SESSION_STORAGE_KEY, "{\"v\":1,\"stale\":true}");
+    const store = globalThis.sessionStorage as { setItem: (key: string, value: string) => void };
+    store.setItem = () => {
+      throw new Error("quota");
+    };
+    await assert.rejects(
+      () => persistWalletSession(SESSION, 1_000, { strict: true }),
+      (err: unknown) => err instanceof Error && err.message === "quota",
+    );
+    assert.equal(storage.has(WALLET_SESSION_STORAGE_KEY), false);
+  });
+
   it("clears both the ciphertext and the IndexedDB key on lock", async () => {
     await persistWalletSession(SESSION);
     await clearWalletSession();

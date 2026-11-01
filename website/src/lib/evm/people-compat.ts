@@ -11,6 +11,7 @@ import { fetchAddressHistory } from "@/lib/evm/address-txs";
 import { aggregateHoldersFromTransfers } from "@/lib/evm/transfer-index";
 import { discoverPoolsOnChain, discoverTokensOnChain } from "@/lib/evm/chain-catalog";
 import { visibleAssets, visibleNfts, visiblePools } from "@/lib/hidden-assets";
+import { listFounderNftRows } from "@/lib/evm/founder-nft-rows";
 import { assembleNftRows, listMintedNfts, nftOwnerListDeadlineAt, nftOwnerPageHeaders, readNftTokenOnChain, readOwnerNftCursor, type ChainNft, type MintedNftPage } from "@/lib/evm/nft-chain";
 import { withRpcCallContext } from "@/lib/evm/rpc-server";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
@@ -73,6 +74,28 @@ async function optionalUint(token: string, selector: string): Promise<bigint | n
 }
 
 type NftCollectionStats = { minted?: number; totalSupply?: number; mintPriceWei?: bigint };
+
+type FounderListRow = Awaited<ReturnType<typeof listFounderNftRows>>[number];
+
+/** A present collection or tokenId must match; an absent one does not drop the row. */
+function founderRowsForQuery(rows: readonly FounderListRow[], collection?: string, tokenId?: string): FounderListRow[] {
+  const wantCollection = collection && isAddress(collection) ? getAddress(collection).toLowerCase() : "";
+  const wantTokenId = tokenId ? tokenId : "";
+  if (!wantCollection && !wantTokenId) return [...rows];
+  return rows.filter((row) => {
+    if (wantCollection && row.collection.toLowerCase() !== wantCollection) return false;
+    if (wantTokenId && row.onChainTokenId !== wantTokenId) return false;
+    return true;
+  });
+}
+
+async function readFounderNftRows(owner: string | undefined, collection?: string, tokenId?: string): Promise<FounderListRow[]> {
+  try {
+    return founderRowsForQuery(await listFounderNftRows(owner), collection, tokenId);
+  } catch {
+    return [];
+  }
+}
 
 /**
  * On-chain stats for an NFT collection. PeopleNFT exposes `nextTokenId` (monotonic, no burns) as the
@@ -344,14 +367,24 @@ export async function handleEvmCompatGet(
 
   if (root === "nfts") {
     const owner = search.get("owner") ?? undefined;
-    const collection = search.get("collection") ?? undefined;
+    const collectionParam = search.get("collection");
     const tokenId = search.get("tokenId") ?? undefined;
+    // A missing collection lists everything. A present one that is not an address must not
+    // collapse to "no filter" — that would show rows the caller asked to exclude.
+    if (collectionParam !== null && !isAddress(collectionParam)) {
+      return { status: 400, body: { error: "invalid_collection" } };
+    }
+    const collection = collectionParam ?? undefined;
     const seed = listSeedNfts(owner);
     if (!owner) {
-      return { status: 200, body: visibleNfts(assembleNftRows(seed, [], null)) };
+      const founderRows = await readFounderNftRows(owner, collection, tokenId);
+      return { status: 200, body: visibleNfts([...assembleNftRows(seed, [], null), ...founderRows]) };
     }
     const cursor = readOwnerNftCursor(search);
     if (cursor === "invalid") return { status: 400, body: { error: "bad_cursor" } };
+    // The cursor names the next factory-log window. Founder rows are not part of that scan,
+    // so they belong on the first page only, and a later page does not read them again.
+    const founderRows = cursor === null ? await readFounderNftRows(owner, collection, tokenId) : [];
     const deadlineAt = nftOwnerListDeadlineAt();
     const wantDirect = Boolean(collection && tokenId && /^\d+$/.test(tokenId) && isAddress(collection));
     let page: MintedNftPage = { items: [], partial: true, next: "tip" };
@@ -370,7 +403,17 @@ export async function handleEvmCompatGet(
       }
       direct = await directPromise;
     });
-    const rows = visibleNfts(assembleNftRows(seed, page.items, direct, owner, collection, tokenId));
+    const assembled = assembleNftRows(seed, page.items, direct, owner, collection, tokenId);
+    // wantDirect reads the Founder contract as a normal token (`address:id`). The founder row
+    // for that same token uses `founder-nft-<id>`. Keep the founder row and drop the twin.
+    const founderKeys = new Set(founderRows.map((row) => `${row.collection.toLowerCase()}:${row.onChainTokenId}`));
+    const rows = visibleNfts([
+      ...assembled.filter((row) => {
+        if (!row.collection || !row.onChainTokenId) return true;
+        return !founderKeys.has(`${row.collection.toLowerCase()}:${row.onChainTokenId}`);
+      }),
+      ...founderRows,
+    ]);
     // Stats share the listing deadline. When it is already spent, the rows ship without them.
     const stats = new Map<string, NftCollectionStats>();
     if (deadlineAt - Date.now() > 200) {

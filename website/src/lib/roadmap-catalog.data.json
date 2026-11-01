@@ -77,7 +77,7 @@
     {
       "id": "rewards-proof-of-humanity",
       "status": "in_progress",
-      "evidence": "`registerParticipant` tx type; Discover verified-human gates (`website/src/lib/discover/verified-human.ts`). Extended by founders program in `docs/FOUNDERS-AND-LAVKA-PLAN.md` — full PoH + points not shipped."
+      "evidence": "`registerParticipant` tx type; Discover verified-human gates (`website/src/lib/discover/verified-human.ts`). Extended by the founders program (Founder NFT: `docs/founder-nft.md`) — full PoH + points not shipped."
     },
     {
       "id": "founders-stage1-founders-page",
@@ -127,7 +127,7 @@
     {
       "id": "ai-group-buy-negotiation",
       "status": "planned_unapproved",
-      "evidence": "Track C in `docs/FOUNDERS-AND-LAVKA-PLAN.md` — roadmap only, Later; no spec or code."
+      "evidence": "Track C — roadmap only, Later; no spec or code."
     },
     {
       "id": "erc8004-x402-agents",

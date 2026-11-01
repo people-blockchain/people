@@ -22,6 +22,7 @@ const surfaces = [
   "roadmap",
   "ecosystem",
   "founders",
+  "founder-nft",
   "lavka",
   "litepaper",
   "samples",

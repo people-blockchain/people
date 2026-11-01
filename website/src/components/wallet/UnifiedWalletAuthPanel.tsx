@@ -18,11 +18,13 @@ export function UnifiedWalletAuthPanel({
   autoConnect = false,
   showAgreement = false,
   showExplainer = true,
+  onOpenImport,
 }: {
   onConnected?: () => void;
   autoConnect?: boolean;
   showAgreement?: boolean;
   showExplainer?: boolean;
+  onOpenImport?: () => void;
 }) {
   const { lang } = useLanguage();
   const c = walletUxCopy(lang);
@@ -38,9 +40,9 @@ export function UnifiedWalletAuthPanel({
         </p>
       ) : null}
       {mpcActive ? (
-        <WalletWeb3AuthSignIn onConnected={onConnected} autoConnect={autoConnect} />
+        <WalletWeb3AuthSignIn onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
       ) : (
-        <WalletCloudSignIn onConnected={onConnected} autoConnect={autoConnect} />
+        <WalletCloudSignIn onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
       )}
       {showAgreement ? (
         <p className="text-center text-xs leading-relaxed text-ink-3">
