@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Triệu Nhà sáng lập · Mùa 1",
+  "cardFounder": "Nhà sáng lập",
+  "cardNumberPlaceholder": "Số của bạn ở đây",
+  "cardNetwork": "Mạng thử nghiệm PEOPLE",
+  "cardFlipHint": "Chạm để lật",
+  "cardBackTitle": "Thẻ nhà sáng lập của bạn",
+  "cardCountry": "Quốc gia",
+  "cardRank": "Thứ hạng vào sớm",
+  "cardPoints": "Điểm",
+  "cardBackLines": [
+    "Một người đã xác minh, một con số.",
+    "Cấp độ của bạn theo thời điểm xác minh; số của bạn được bốc thăm trong cấp độ.",
+    "Có thể chia sẻ — bạn bè sẽ nhận thẻ của riêng họ."
+  ]
+}
