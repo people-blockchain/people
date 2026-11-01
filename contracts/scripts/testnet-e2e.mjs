@@ -197,16 +197,22 @@ async function main() {
   });
 
   // 3. curve buy and sell
+  let bought = 0n;
   if (token) {
     await step("curve buy", async () => {
+      // The creator wallet already holds its unlocked creator share, so measure what the buy added.
+      const pre = await pub.readContract({ address: token, abi: erc20Abi, functionName: "balanceOf", args: [account.address] });
       const r = await send({ address: C.bondingCurve, abi: curveAbi, functionName: "buy", args: [token, 1n], value: 10n ** 18n });
       const bal = await pub.readContract({ address: token, abi: erc20Abi, functionName: "balanceOf", args: [account.address] });
-      if (bal === 0n) throw new Error("no tokens after buy");
-      return { tokens: formatEther(bal), tx: r.transactionHash };
+      if (bal <= pre) throw new Error("no tokens after buy");
+      bought = bal - pre;
+      return { tokensBought: formatEther(bought), creatorShareHeld: formatEther(pre), tx: r.transactionHash };
     });
     await step("curve sell", async () => {
-      const bal = await pub.readContract({ address: token, abi: erc20Abi, functionName: "balanceOf", args: [account.address] });
-      const half = bal / 2n;
+      // Sell half of what was bought. Selling more than buyers paid in reverts with
+      // InsufficientLiquidity by design: the curve only pays out PPL that buyers put in.
+      if (!bought) throw new Error("buy step did not run");
+      const half = bought / 2n;
       await send({ address: token, abi: erc20Abi, functionName: "approve", args: [C.bondingCurve, half] });
       const before = await pub.getBalance({ address: account.address });
       // Diagnose before sending: what the sell costs at different gas limits, and who gets the fee.
