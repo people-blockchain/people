@@ -53,7 +53,19 @@ export type SaleEligibilityInput = {
     | Readonly<Record<string, SaleExistingBinding>>;
   requestedAccount: string;
   personKey: string;
+  /** Bot-wave switch (`SALE_REQUIRE_HUMAN_PASSPORT`): Telegram phone alone no longer qualifies. */
+  requireHumanPassport?: boolean;
 };
+
+/**
+ * Off by default. When the owner sets `SALE_REQUIRE_HUMAN_PASSPORT=1` (e.g. a bot wave buying
+ * with virtual phone numbers), new sale verifications need a Human Passport score at or above the
+ * threshold. People already bound on-chain stay bound: the hub binding is permanent.
+ */
+export function saleRequiresHumanPassport(env: Readonly<Record<string, string | undefined>> = process.env): boolean {
+  const raw = (env.SALE_REQUIRE_HUMAN_PASSPORT ?? "").trim().toLowerCase();
+  return raw === "1" || raw === "true" || raw === "yes";
+}
 
 export type SaleEligibilityDecision =
   | { ok: true }
@@ -121,6 +133,7 @@ export function decideSaleEligibility(input: SaleEligibilityInput): SaleEligibil
     Number.isFinite(input.hpScore) &&
     input.hpScore >= input.hpThreshold;
   if (!input.hasTelegramPhone && !hpPasses) return { ok: false, reason: "not_eligible" };
+  if (input.requireHumanPassport && !hpPasses) return { ok: false, reason: "not_eligible" };
 
   const requested = input.requestedAccount.trim().toLowerCase();
   if (!requested) return { ok: false, reason: "account_bound_elsewhere" };
@@ -379,6 +392,7 @@ export async function evaluateSaleEligibilityForUser(
     existingBindings,
     requestedAccount,
     personKey,
+    requireHumanPassport: saleRequiresHumanPassport(),
   });
   if (!decision.ok) return decision;
 
