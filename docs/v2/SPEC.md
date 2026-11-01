@@ -49,6 +49,8 @@ v2 adds no new economic constants.
 | `usdc` | immutable; Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`; Sepolia: MockUSDC (6 dec) | D7 |
 | `treasury` | immutable, constructor arg (mainnet = Safe above) | D1 |
 | Base mainnet deploy guard | on chain id 8453 the constructor reverts unless `usdc` is Circle USDC `0x8335…2913` (`NotBaseUsdc`) and `treasury`, `owner` and `liquidityReceiver` all have code (`NotContract`), so proceeds can never be pointed at a plain key | audit 2026-11-01 |
+| Anti-spam limits (A4) | `queueSetWindowLimits` → `executeSetWindowLimits` after the 48 h `ADMIN_TIMELOCK` (cancel with `cancel(id)`); bounds checked at queue and execute; no immediate setter | audit 2026-11-01 |
+| `returnCosigner` | second, independent `MainnetReturn` signer (separate server and key, docs/v2/RETURN-COSIGNER.md); when set, `sig` must be verifier ‖ cosigner (130 bytes); on chain id 8453 `sellBack` reverts `CosignerRequired` until set; 48 h timelock; must differ from `returnVerifier` (`SameSigner`) | audit 2026-11-01 |
 | `liquidityReceiver` | immutable, constructor arg, `≠ treasury`, `≠ owner`, `≠ 0` — only exit of the reserve (Q1) | Q1 |
 
 ## 3. State
@@ -154,9 +156,17 @@ Payer = `msg.sender` (wallet or LI.FI executor); limits, cooldown, whitelist and
 
 ### 5.2 sellBack (curve-at-exit, D9)
 
+**Returned PPL are not burned (owner decision 2026-11-01).** The seller hands the PPL in to `PplReturnBurn`
+on the PEOPLE network, which forwards them in the same call to its immutable `returnRecipient`, the sale
+distribution wallet. `sellBack` lowers `soldPpl`, so returned PPL are unsold supply again: they can be delivered
+to a later buyer, and what is left at the end goes to the Community Pool with the rest of `unsoldPpl()`. This
+replaces the earlier burn design, which contradicted the fixed-supply, 0%-burn model (docs/ECONOMICS.md §7)
+and would have left the sale wallet short of PPL the hub still counts as unsold. Contract and event names
+(`burnForReturn`, `ReturnBurned`) are kept for the attestation signer.
+
 **Reward PPL (§5.2 owner rule):** quest/founder rewards on the PEOPLE network live in `RewardVesting`
 (`contracts/src/vesting/RewardVesting.sol`). Locked or unlocked reward balance must not be sold back
-into the hub. On-chain: `PplReturnBurn` only accepts burns up to each sender's `hubPurchasedPpl`
+into the hub. On-chain: `PplReturnBurn` only accepts returns up to each sender's `hubPurchasedPpl`
 (credited by the delivery relayer after hub buys); reward `claim` and plain transfers do not credit
 that ledger. On Base, `sellBack` is capped by `_pplPurchasedViaHub − _pplReturnedViaSellBack` for
 the bound person (in addition to unlocked lots). The hub's immutable `rewardBuyerForbidden` address

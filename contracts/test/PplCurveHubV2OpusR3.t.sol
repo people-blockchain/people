@@ -20,7 +20,7 @@ contract PplCurveHubV2OpusR3Test is HubV2Base {
 
     function setUp() public override {
         super.setUp();
-        burner = new PplReturnBurn(owner);
+        burner = new PplReturnBurn(owner, makeAddr("saleWallet"));
         vm.startPrank(owner);
         bytes32 capId = burner.queueSetReporterCreditCap(1000 ether, 1 days);
         bytes32 repId = burner.queueSetPurchaseReporter(owner);

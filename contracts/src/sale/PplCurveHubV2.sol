@@ -227,6 +227,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     bytes32 private constant OP_SET_RETURN_VERIFIER = keccak256("setReturnVerifier");
     bytes32 private constant OP_SET_TRUSTED_ROUTER = keccak256("setTrustedRouter");
     bytes32 private constant OP_RESCUE = keccak256("rescue");
+    bytes32 private constant OP_SET_WINDOW_LIMITS = keccak256("setWindowLimits");
+    bytes32 private constant OP_SET_RETURN_COSIGNER = keccak256("setReturnCosigner");
 
     IERC20 public immutable usdc;
     address public immutable treasury;
@@ -253,6 +255,10 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     address public verifier;
     /// @notice Signer of `MainnetReturn` attestations. address(0) disables sell-back (safe default).
     address public returnVerifier;
+    /// @notice Second, independent `MainnetReturn` signer (a separate server and key). When set,
+    /// every attestation needs both signatures (`sig` = verifier sig ‖ cosigner sig, 130 bytes), so
+    /// one compromised server cannot sign alone. Required on Base mainnet (audit 2026-11-01).
+    address public returnCosigner;
     uint64 public openedAt;
     bool public graduated;
     uint64 public releaseAnnouncedAt;
@@ -336,6 +342,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     event Unbound(address indexed account, bytes32 indexed personId);
     event VerifierSet(address indexed previous, address indexed current);
     event ReturnVerifierSet(address indexed previous, address indexed current);
+    event ReturnCosignerSet(address indexed previous, address indexed current);
     event TrustedRouterSet(address indexed router, bool trusted);
     event WindowLimitsSet(uint256 maxBuysPer24h, uint256 minBuyUsd6, uint256 maxSellsPer24h, uint256 minSellUsd6);
     event SaleOpened(uint256 openedAt, uint256 whitelistEndsAt, uint256 closesAt);
@@ -382,6 +389,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     error ReserveExhausted();
     error Expired();
     error BadSignature();
+    error CosignerRequired();
+    error SameSigner();
     error BadNonce();
     error AlreadyBound();
     error NotBound();
@@ -692,8 +701,23 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// @notice Execute a queued `queueSetReturnVerifier`.
     function executeSetReturnVerifier(bytes32 id) external onlyOwner {
         AdminOp memory op = _take(id, OP_SET_RETURN_VERIFIER);
+        if (op.who != address(0) && op.who == returnCosigner) revert SameSigner();
         emit ReturnVerifierSet(returnVerifier, op.who);
         returnVerifier = op.who;
+    }
+
+    /// @notice Queue the second `MainnetReturn` signer. Same 48-hour wait. `address(0)` drops the
+    /// second signature, which on Base mainnet disables sell-back (`CosignerRequired`).
+    function queueSetReturnCosigner(address c) external onlyOwner returns (bytes32 id) {
+        id = _queue(OP_SET_RETURN_COSIGNER, c, 0);
+    }
+
+    /// @notice Execute a queued `queueSetReturnCosigner`. Must differ from `returnVerifier`.
+    function executeSetReturnCosigner(bytes32 id) external onlyOwner {
+        AdminOp memory op = _take(id, OP_SET_RETURN_COSIGNER);
+        if (op.who != address(0) && op.who == returnVerifier) revert SameSigner();
+        emit ReturnCosignerSet(returnCosigner, op.who);
+        returnCosigner = op.who;
     }
 
     /// @notice Owner cancels a queued verifier change or rescue. A cancelled id cannot be executed.
@@ -726,15 +750,44 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         emit TrustedRouterSet(op.who, trusted);
     }
 
-    /// @notice Set the A4 rolling-24h anti-spam limits (see `maxBuysPer24h`). Entry limits are
-    /// 1..RollingWindow24h.CAPACITY; minimums are MIN_AMOUNT_FLOOR_USD6..MAX_BUY_USD6 (buy) and
-    /// MIN_AMOUNT_FLOOR_USD6..MAX_MIN_SELL_USD6 (sell-back). The $2k caps themselves are constants.
-    function setWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) external onlyOwner {
+    /// @notice Queue new A4 rolling-24h anti-spam limits (see `maxBuysPer24h`); they apply after the
+    /// 48-hour `ADMIN_TIMELOCK`, so buyers see a raised minimum before it binds (audit 2026-11-01).
+    /// Entry limits are 1..RollingWindow24h.CAPACITY; minimums are MIN_AMOUNT_FLOOR_USD6..MAX_BUY_USD6
+    /// (buy) and MIN_AMOUNT_FLOOR_USD6..MAX_MIN_SELL_USD6 (sell-back). The $2k caps are constants.
+    function queueSetWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell)
+        external
+        onlyOwner
+        returns (bytes32 id)
+    {
+        _checkWindowLimits(maxBuys, minBuy, maxSells, minSell);
+        id = _queue(OP_SET_WINDOW_LIMITS, address(0), _packWindowLimits(maxBuys, minBuy, maxSells, minSell));
+    }
+
+    /// @notice Execute a queued `queueSetWindowLimits`.
+    function executeSetWindowLimits(bytes32 id) external onlyOwner {
+        AdminOp memory op = _take(id, OP_SET_WINDOW_LIMITS);
+        uint256 p = op.amount;
+        _setWindowLimits(uint8(p), uint64(p >> 8), uint8(p >> 72), uint64(p >> 80));
+    }
+
+    function _packWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell)
+        internal
+        pure
+        returns (uint256)
+    {
+        return maxBuys | (minBuy << 8) | (maxSells << 72) | (minSell << 80);
+    }
+
+    function _checkWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) internal pure {
         uint256 cap = RollingWindow24h.CAPACITY;
         if (
             maxBuys == 0 || maxBuys > cap || maxSells == 0 || maxSells > cap || minBuy < MIN_AMOUNT_FLOOR_USD6
                 || minBuy > MAX_BUY_USD6 || minSell < MIN_AMOUNT_FLOOR_USD6 || minSell > MAX_MIN_SELL_USD6
         ) revert BadLimits();
+    }
+
+    function _setWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) internal {
+        _checkWindowLimits(maxBuys, minBuy, maxSells, minSell);
         maxBuysPer24h = uint8(maxBuys);
         minBuyUsd6 = uint64(minBuy);
         maxSellsPer24h = uint8(maxSells);
@@ -1006,7 +1059,15 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
                 )
             )
         );
-        if (ECDSA.recover(digest, sig) != signer) revert BadSignature();
+        address cosigner = returnCosigner;
+        if (cosigner == address(0)) {
+            if (block.chainid == BASE_MAINNET_CHAIN_ID) revert CosignerRequired();
+            if (ECDSA.recover(digest, sig) != signer) revert BadSignature();
+        } else {
+            if (sig.length != 130) revert BadSignature();
+            if (ECDSA.recover(digest, sig[:65]) != signer) revert BadSignature();
+            if (ECDSA.recover(digest, sig[65:]) != cosigner) revert BadSignature();
+        }
     }
 
     /// @dev Records a successful slice of `returnId`. The id is consumed once the signed ceiling is met.

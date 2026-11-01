@@ -35,6 +35,11 @@ contract HubV2Harness is PplCurveHubV2 {
         emit TrustedRouterSet(router, trusted);
     }
 
+    /// @dev Test-only fast path; production uses `queueSetWindowLimits` / `executeSetWindowLimits`.
+    function testSetWindowLimits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) external {
+        _setWindowLimits(maxBuys, minBuy, maxSells, minSell);
+    }
+
     /// @dev Test-only adjustment of hub purchase / return ledger (SPEC §5.2 tests).
     function testForceHubReturned(address account, uint256 returned) external {
         bytes32 person = personOf[account];

@@ -1,4 +1,4 @@
-import { getAddress, hashTypedData, isAddress, isHex, type Address, type Hex } from "viem";
+import { concatHex, getAddress, hashTypedData, isAddress, isHex, recoverAddress, size, type Address, type Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 import { createLocalVerifierSigner } from "../verifier/local.ts";
@@ -12,7 +12,9 @@ import {
   type ReturnLog,
 } from "./return-burn";
 
-const ATTESTATION_TTL_SECONDS = 15 * 60;
+export const ATTESTATION_TTL_SECONDS = 15 * 60;
+/** Slack allowed when the cosigner is handed the primary attestation's deadline. */
+const DEADLINE_SKEW_SECONDS = 60;
 
 /**
  * PEOPLE blocks required before a `MainnetReturn` is signed, counting the
@@ -50,12 +52,32 @@ export function getReturnVerifierSigner(
   hubChainId: number,
   env: Record<string, string | undefined> = process.env,
 ): VerifierSigner | null {
-  const rawMode = (env.SALE_RETURN_VERIFIER_MODE ?? "").trim().toLowerCase();
-  const localKey = env.SALE_RETURN_VERIFIER_LOCAL_KEY?.trim();
+  return resolveSigner(hubChainId, env, "SALE_RETURN_VERIFIER");
+}
+
+/**
+ * Second, independent `MainnetReturn` signer, run on a separate server (scripts/return-cosigner.ts).
+ * Same rules as the primary: `SALE_RETURN_COSIGNER_MODE=kms` with `SALE_RETURN_COSIGNER_KMS_KEY_ID`,
+ * or `local` with `SALE_RETURN_COSIGNER_LOCAL_KEY` on Base Sepolia only.
+ */
+export function getReturnCosignerSigner(
+  hubChainId: number,
+  env: Record<string, string | undefined> = process.env,
+): VerifierSigner | null {
+  return resolveSigner(hubChainId, env, "SALE_RETURN_COSIGNER");
+}
+
+function resolveSigner(
+  hubChainId: number,
+  env: Record<string, string | undefined>,
+  prefix: "SALE_RETURN_VERIFIER" | "SALE_RETURN_COSIGNER",
+): VerifierSigner | null {
+  const rawMode = (env[`${prefix}_MODE`] ?? "").trim().toLowerCase();
+  const localKey = env[`${prefix}_LOCAL_KEY`]?.trim();
   const mode = rawMode || (localKey ? "local" : "");
   try {
     if (mode === "kms") {
-      const keyId = env.SALE_RETURN_VERIFIER_KMS_KEY_ID?.trim();
+      const keyId = env[`${prefix}_KMS_KEY_ID`]?.trim();
       if (!keyId) return null;
       return createKmsVerifierSigner({ client: createAwsKmsClient(), keyId });
     }
@@ -174,9 +196,20 @@ export async function createReturnAttestation(input: {
   getReceipt: (txHash: Hex) => Promise<{ status: string; blockNumber: bigint; logs: readonly ReturnLog[] }>;
   headBlock: () => Promise<bigint>;
   finalizedBlock?: () => Promise<bigint | null>;
+  /** On-chain address `signer` must match (`returnVerifier`, or `returnCosigner` for the cosigner). */
   returnVerifier: () => Promise<Address>;
+  /** Cosigner only: sign for the primary attestation's deadline instead of now + TTL. */
+  deadlineSec?: number;
 }): Promise<AttestationSuccess | AttestationFailure> {
   if (!input.signer) return { ok: false, status: 503, error: "signer_unavailable" };
+  if (
+    input.deadlineSec !== undefined &&
+    (!Number.isSafeInteger(input.deadlineSec) ||
+      input.deadlineSec <= input.nowSec ||
+      input.deadlineSec > input.nowSec + ATTESTATION_TTL_SECONDS + DEADLINE_SKEW_SECONDS)
+  ) {
+    return { ok: false, status: 400, error: "invalid_deadline" };
+  }
   if (!input.burnAddress || !isAddress(input.burnAddress) || !input.hubAddress || !isAddress(input.hubAddress)) {
     return { ok: false, status: 503, error: "not_configured" };
   }
@@ -240,9 +273,11 @@ export async function createReturnAttestation(input: {
   } catch {
     return { ok: false, status: 503, error: "signer_unavailable" };
   }
-  if (signerAddress !== verifier) return { ok: false, status: 503, error: "verifier_mismatch" };
+  if (verifier === ZERO_ADDRESS || signerAddress !== verifier) {
+    return { ok: false, status: 503, error: "verifier_mismatch" };
+  }
 
-  const deadline = BigInt(input.nowSec + ATTESTATION_TTL_SECONDS);
+  const deadline = BigInt(input.deadlineSec ?? input.nowSec + ATTESTATION_TTL_SECONDS);
   let signature: Hex;
   try {
     signature = await input.signer.signDigest(
@@ -280,6 +315,92 @@ export async function createReturnAttestation(input: {
       chainId: input.hubChainId,
     },
   };
+}
+
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+export type CosignResult =
+  | { ok: true; signature: Hex }
+  | { ok: false; status: 202 | 503; error: string };
+
+/**
+ * Adds the independent cosigner's signature to a primary attestation. The hub needs both once
+ * `returnCosigner` is set, and on Base mainnet a cosigner is mandatory, so this never returns a
+ * single signature there. The cosigner's answer is checked against the on-chain `returnCosigner`
+ * before it is used.
+ */
+export async function addCosignature(input: {
+  primary: AttestationSuccess["body"];
+  txHash: string;
+  hubChainId: number;
+  cosigner: () => Promise<Address>;
+  cosignerUrl: string | undefined;
+  cosignerToken: string | undefined;
+  fetchImpl?: typeof fetch;
+}): Promise<CosignResult> {
+  let onchain: Address;
+  try {
+    onchain = getAddress(await input.cosigner());
+  } catch {
+    return { ok: false, status: 503, error: "onchain_unavailable" };
+  }
+  if (onchain === ZERO_ADDRESS) {
+    if (input.hubChainId === 8453) return { ok: false, status: 503, error: "cosigner_required" };
+    return { ok: true, signature: input.primary.signature };
+  }
+  const url = input.cosignerUrl?.trim();
+  const token = input.cosignerToken?.trim();
+  if (!url || !token) return { ok: false, status: 503, error: "cosigner_not_configured" };
+
+  let res: Response;
+  try {
+    res = await (input.fetchImpl ?? fetch)(url, {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        txHash: input.txHash,
+        returnId: input.primary.returnId,
+        deadline: input.primary.deadline,
+      }),
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch {
+    return { ok: false, status: 503, error: "cosigner_unavailable" };
+  }
+  if (res.status === 202) return { ok: false, status: 202, error: "awaiting_confirmations" };
+  if (!res.ok) return { ok: false, status: 503, error: "cosigner_refused" };
+  let sig: unknown;
+  try {
+    sig = ((await res.json()) as { signature?: unknown }).signature;
+  } catch {
+    return { ok: false, status: 503, error: "cosigner_unavailable" };
+  }
+  if (typeof sig !== "string" || !isHex(sig) || size(sig) !== 65) {
+    return { ok: false, status: 503, error: "cosigner_refused" };
+  }
+  const p = input.primary;
+  const digest = mainnetReturnDigest({
+    chainId: p.chainId,
+    hub: p.hub,
+    message: {
+      personId: p.personId,
+      hub: p.hub,
+      seller: p.seller,
+      pplAmount: BigInt(p.pplAmount),
+      sourceChainId: p.sourceChainId,
+      destChainId: p.destChainId,
+      returnId: p.returnId,
+      deadline: BigInt(p.deadline),
+    },
+  });
+  let recovered: Address;
+  try {
+    recovered = getAddress(await recoverAddress({ hash: digest, signature: sig }));
+  } catch {
+    return { ok: false, status: 503, error: "cosigner_refused" };
+  }
+  if (recovered !== onchain) return { ok: false, status: 503, error: "cosigner_mismatch" };
+  return { ok: true, signature: concatHex([p.signature, sig]) };
 }
 
 export function readHubChainId(raw: string | undefined): number {
