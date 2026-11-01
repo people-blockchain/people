@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "Come funziona la curva",
     "headlineClosed": "La vendita di PPL apre a breve",
-    "statsTitleClosed": "Sulla curva — apertura a breve"
+    "headlineWhitelist": "Vendita PPL: fase whitelist verificata",
+    "subWhitelist": "Primi 7 giorni: solo persone verificate. Verifica la tua identità con World ID o Human Passport per partecipare.",
+    "statsTitleClosed": "Sulla curva — apertura a breve",
+    "statsTitleWhitelist": "Sulla curva — fase whitelist",
+    "statsTitleOpen": "Sulla curva — vendita aperta"
   },
   "stats": {
     "price": "Prezzo attuale",
@@ -25,9 +29,12 @@
     "notOpenYet": "Non ancora aperta",
     "progressLabel": "Avanzamento verso la graduation a {target}",
     "saleStatus": "Stato della vendita",
+    "whitelistStatus": "Whitelist: solo utenti verificati",
+    "openStatus": "Aperta",
     "startPriceOnOpen": "Prezzo di partenza all’apertura: {start}",
     "saleWindow": "Durata della vendita",
     "saleWindowValue": "Fino all’esaurimento o {term}",
+    "saleWindowV2": "Whitelist di 7 giorni dal {date}, poi vendita aperta fino a {term}",
     "saleWindowHint": "A seconda di quale evento si verifichi prima. Nessuna proroga.",
     "endsByHint": "Data di fine massima. Prima, se esaurita."
   },
@@ -338,5 +345,83 @@
         "text": "Le revisioni assistite da IA citate sopra sono state eseguite dal team del progetto. Non sono un audit di sicurezza e non è ancora stato fatto alcun audit esterno. Un bug bounty riduce il rischio ma non lo elimina: nessuna revisione può dimostrare che un software sia privo di difetti."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Fase whitelist",
+      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "daysLeft": "Mancano {days} giorni",
+      "openTitle": "Fase pubblica",
+      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 al giorno.",
+      "notOpenTitle": "Vendita non ancora aperta",
+      "notOpenBody": "Gli acquisti aprono quando il contratto entra nella fase whitelist.",
+      "expiredTitle": "Vendita terminata",
+      "graduatedTitle": "Vendita graduata",
+      "closedBody": "Gli acquisti sono chiusi."
+    },
+    "verify": {
+      "title": "Primi 7 giorni: solo persone verificate",
+      "body": "Verificati con World ID o Human Passport per partecipare.",
+      "telegramNote": "Solo Telegram non basta.",
+      "ctaVerify": "Verificati ora",
+      "ctaSignIn": "Accedi per verificarti",
+      "confirmTitle": "Manca un passaggio on-chain",
+      "confirmBody": "Conferma la tua identità verificata su Base per sbloccare l’acquisto.",
+      "ctaConfirm": "Conferma on-chain",
+      "confirming": "Conferma on-chain…",
+      "confirmed": "Confermato on-chain. Puoi acquistare.",
+      "error": "Impossibile confermare on-chain. Riprova.",
+      "notEligible": "Questo account non è idoneo alla whitelist.",
+      "connectWallet": "Collega un wallet per continuare.",
+      "alreadyVerified": "Già confermato on-chain."
+    },
+    "form": {
+      "title": "Acquista PPL",
+      "network": "Rete",
+      "token": "Token",
+      "amount": "Importo",
+      "networkBase": "Base",
+      "networkOther": "Altra rete",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Stima PPL",
+      "minimum": "Minimo ricevuto",
+      "price": "Prezzo attuale di PPL",
+      "eta": "Arriva in circa {eta}",
+      "fees": "Commissioni: {fees}",
+      "feesToggle": "Dettagli commissioni",
+      "feesBody": "La commissione di rete su Base è di solito circa $0,01. La commissione di scambio o bridge LI.FI è mostrata nel widget prima della conferma.",
+      "lifiLine": "Scambio via LI.FI, acquisto in USDC su Base",
+      "sellbackLine": "La rivendita apre dopo 30 giorni; limiti di riacquisto — dettagli",
+      "sellbackLink": "dettagli",
+      "cta": "Acquista PPL",
+      "connecting": "Connessione…",
+      "buying": "Conferma…",
+      "connect": "Collega un wallet per acquistare",
+      "switch": "Passa a Base",
+      "wrongNetwork": "Passa il wallet a Base per acquistare.",
+      "invalid": "Inserisci un importo in dollari.",
+      "belowMin": "Il minimo è {min}.",
+      "overMax": "Il massimo è {max} per acquisto.",
+      "overDay": "Il limite giornaliero è {max} per indirizzo.",
+      "needVerification": "Completa la verifica sopra per acquistare.",
+      "needWallet": "Collega un wallet per vedere il preventivo.",
+      "preview": "Anteprima: nessuna transazione verrà inviata.",
+      "bridgeHint": "Prima scambia in USDC su Base con LI.FI, poi completa l’acquisto.",
+      "error": "L’acquisto non è andato a buon fine. Riprova."
+    },
+    "success": {
+      "title": "Acquisto completato",
+      "credited": "{ppl} PPL accreditati su {address}",
+      "tx": "Vedi transazione",
+      "unlock": "La rivendita si sblocca il {date}",
+      "again": "Acquista altri PPL"
+    },
+    "partial": {
+      "title": "Gli USDC sono arrivati — PPL non acquistati",
+      "body": "Lo scambio ha consegnato {amount} USDC su Base, ma l’acquisto di PPL non è andato a buon fine.",
+      "topUp": "Acquista PPL con {amount} USDC",
+      "hint": "Riprova l’acquisto su Base con gli USDC ricevuti."
+    }
   }
 }

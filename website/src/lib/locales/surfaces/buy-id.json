@@ -11,7 +11,11 @@
     "statsNote": "",
     "ctaScroll": "Cara kerja kurva",
     "headlineClosed": "Penjualan PPL segera dibuka",
-    "statsTitleClosed": "Di kurva — segera dibuka"
+    "headlineWhitelist": "Penjualan PPL: fase daftar putih terverifikasi",
+    "subWhitelist": "7 hari pertama: hanya orang terverifikasi. Verifikasi dengan World ID atau Human Passport untuk ikut serta.",
+    "statsTitleClosed": "Di kurva — segera dibuka",
+    "statsTitleWhitelist": "Di kurva — fase daftar putih",
+    "statsTitleOpen": "Di kurva — penjualan terbuka"
   },
   "stats": {
     "price": "Harga saat ini",
@@ -25,9 +29,12 @@
     "notOpenYet": "Belum dibuka",
     "progressLabel": "Progres menuju graduation di {target}",
     "saleStatus": "Status penjualan",
+    "whitelistStatus": "Daftar putih: hanya pengguna terverifikasi",
+    "openStatus": "Terbuka",
     "startPriceOnOpen": "Harga awal saat dibuka: {start}",
     "saleWindow": "Masa penjualan",
     "saleWindowValue": "Hingga habis atau {term}",
+    "saleWindowV2": "Whitelist 7 hari mulai {date}, lalu penjualan terbuka hingga {term}",
     "saleWindowHint": "Mana yang lebih dulu. Tanpa perpanjangan.",
     "endsByHint": "Tanggal berakhir paling lambat. Lebih awal jika habis."
   },
@@ -338,5 +345,83 @@
         "text": "Tinjauan berbantuan AI yang disebut di atas dijalankan oleh tim proyek. Ini bukan audit keamanan, dan belum ada audit eksternal. Bug bounty mengurangi risiko tetapi tidak menghilangkannya: tidak ada tinjauan yang dapat membuktikan perangkat lunak bebas cacat."
       }
     ]
+  },
+  "v2": {
+    "banner": {
+      "whitelistTitle": "Fase daftar putih",
+      "whitelistBody": "7 hari pertama: hanya orang terverifikasi. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "daysLeft": "Tersisa {days} hari",
+      "openTitle": "Fase publik",
+      "openBody": "Terbuka untuk semua. Minimal $10 / maksimal $500 per pembelian / $2.000 per hari.",
+      "notOpenTitle": "Penjualan belum dibuka",
+      "notOpenBody": "Pembelian dibuka saat kontrak masuk fase daftar putih.",
+      "expiredTitle": "Penjualan berakhir",
+      "graduatedTitle": "Penjualan lulus",
+      "closedBody": "Pembelian ditutup."
+    },
+    "verify": {
+      "title": "7 hari pertama hanya untuk orang terverifikasi",
+      "body": "Verifikasi dengan World ID atau Human Passport untuk ikut serta.",
+      "telegramNote": "Telegram saja tidak cukup.",
+      "ctaVerify": "Verifikasi sekarang",
+      "ctaSignIn": "Masuk untuk memverifikasi",
+      "confirmTitle": "Tersisa satu langkah on-chain",
+      "confirmBody": "Konfirmasi identitas terverifikasi Anda di Base untuk membuka pembelian.",
+      "ctaConfirm": "Konfirmasi on-chain",
+      "confirming": "Mengonfirmasi on-chain…",
+      "confirmed": "Terkonfirmasi on-chain. Anda bisa membeli.",
+      "error": "Tidak dapat mengonfirmasi on-chain. Coba lagi.",
+      "notEligible": "Akun ini tidak memenuhi syarat daftar putih.",
+      "connectWallet": "Hubungkan dompet untuk melanjutkan.",
+      "alreadyVerified": "Sudah terkonfirmasi on-chain."
+    },
+    "form": {
+      "title": "Beli PPL",
+      "network": "Jaringan",
+      "token": "Token",
+      "amount": "Jumlah",
+      "networkBase": "Base",
+      "networkOther": "Jaringan lain",
+      "tokenUsdc": "USDC",
+      "tokenUsdt": "USDT",
+      "estimate": "Perkiraan PPL",
+      "minimum": "Minimum diterima",
+      "price": "Harga PPL saat ini",
+      "eta": "Tiba dalam sekitar {eta}",
+      "fees": "Biaya: {fees}",
+      "feesToggle": "Detail biaya",
+      "feesBody": "Biaya jaringan Base biasanya sekitar $0,01. Biaya tukar atau jembatan LI.FI ditampilkan di widget sebelum konfirmasi.",
+      "lifiLine": "Tukar via LI.FI, beli dengan USDC di Base",
+      "sellbackLine": "Jual kembali terbuka setelah 30 hari; batas beli kembali — detail",
+      "sellbackLink": "detail",
+      "cta": "Beli PPL",
+      "connecting": "Menghubungkan…",
+      "buying": "Mengonfirmasi…",
+      "connect": "Hubungkan dompet untuk membeli",
+      "switch": "Pindah ke Base",
+      "wrongNetwork": "Pindahkan dompet Anda ke Base untuk membeli.",
+      "invalid": "Masukkan jumlah dalam dolar.",
+      "belowMin": "Minimumnya {min}.",
+      "overMax": "Maksimalnya {max} per pembelian.",
+      "overDay": "Batas harian {max} per alamat.",
+      "needVerification": "Selesaikan verifikasi di atas untuk membeli.",
+      "needWallet": "Hubungkan dompet untuk melihat penawaran.",
+      "preview": "Pratinjau: tidak ada transaksi yang akan dikirim.",
+      "bridgeHint": "Tukar dulu ke USDC di Base dengan LI.FI, lalu selesaikan pembelian.",
+      "error": "Pembelian tidak berhasil. Coba lagi."
+    },
+    "success": {
+      "title": "Pembelian selesai",
+      "credited": "{ppl} PPL dikreditkan ke {address}",
+      "tx": "Lihat transaksi",
+      "unlock": "Jual kembali terbuka pada {date}",
+      "again": "Beli PPL lagi"
+    },
+    "partial": {
+      "title": "USDC tiba — PPL tidak terbeli",
+      "body": "Penukaran mengirim {amount} USDC di Base, tetapi pembelian PPL tidak berhasil.",
+      "topUp": "Beli PPL dengan {amount} USDC",
+      "hint": "Ini mengulang pembelian di Base dengan USDC yang diterima."
+    }
   }
 }
