@@ -13,6 +13,7 @@ import {
   isV2BuyEnabled,
   isV2PreviewEnabled,
   minPplOutForChargedBuy,
+  minPplOutFromQuote,
   minPplOutFromEstimate,
   panelVisibility,
   partialTopUpAmount,
@@ -280,7 +281,9 @@ test("all 12 locales carry a translated hero with one sentence per sale phase", 
     }
     assert.equal(new Set(phaseKeys.map((key) => hero[key])).size, phaseKeys.length, `${lang}: one sentence per phase`);
     assert.ok(hero.subUpcoming.includes("{date}"), `${lang}: opening date placeholder`);
-    assert.ok(hero.subWhitelist.includes("{days}"), `${lang}: whitelist days placeholder`);
+    // The contract requires verification for the whole sale, so the launch-week sentence
+    // must not imply that buying opens to unverified people later.
+    assert.ok(!hero.subWhitelist.includes("{days}"), `${lang}: no launch-week countdown in the hero`);
   }
 });
 
@@ -334,11 +337,11 @@ test("the v2 sale window contains the locale-formatted opening date", () => {
   assert.match(formatted, /2027/);
   const value = v2SaleWindowValue({ copy: en, lang: "en", openDate: custom });
   assert.ok(value.includes(formatted), value);
-  assert.match(value, /whitelist/i);
+  assert.match(value, /verified people only/i);
   assert.match(value, /24 months/);
   assert.equal(
     v2SaleWindowValue({ copy: en, lang: "en", openDate: "bogus" }),
-    "7-day whitelist from 1 Dec 2026, then open sale up to 24 months",
+    "From 1 Dec 2026, for up to 24 months, verified people only",
   );
 });
 
@@ -353,4 +356,20 @@ test("all 12 locales have the v2 sale-window key with a {date} placeholder", () 
     assert.equal(typeof stats.saleWindowV2, "string", `${lang} stats.saleWindowV2`);
     assert.ok(stats.saleWindowV2.includes("{date}"), `${lang} needs {date}`);
   }
+});
+
+test("buy slippage floor is 1% under the contract's own quoteBuy", () => {
+  assert.equal(minPplOutFromQuote(BigInt(1_000_000)), BigInt(990_000));
+  assert.equal(minPplOutFromQuote(BigInt(0)), BigInt(0));
+  const hook = readFileSync(join(root, "src/lib/sale/v2/useV2Buy.ts"), "utf8");
+  assert.match(hook, /functionName: "quoteBuy"/);
+  assert.match(hook, /eventName: "Bought"/, "success shows the PPL the contract actually credited");
+});
+
+test("sell-back shows as closed only after the liquidity release, not at graduation", () => {
+  const rules = readFileSync(join(root, "src/components/buy/SaleRules.tsx"), "utf8");
+  const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
+  assert.match(rules, /sellBackClosed\s*\n?\s*\? t\.todayClosed/);
+  assert.match(page, /sellBackClosed=\{v2Buy && sellBackToday\.released\}/);
+  assert.doesNotMatch(page, /graduated=\{/);
 });

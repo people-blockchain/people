@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "购买 PPL",
-    "description": "PPL 是 PEOPLE 网络的代币。价格按事先公布的公式计算，随 PPL 售出而上涨。前 7 天仅限已验证的人参与。购买不可撤销。"
+    "description": "PPL 是 PEOPLE 网络的代币。价格按事先公布的公式计算，随售出数量上涨。只有已验证的用户才能购买。购买不可撤销。"
   },
   "hero": {
     "eyebrow": "PPL 销售",
     "headline": "人人可用的区块链。终于来了。",
     "lead": "过去你得是技术达人。现在，只要你是一个真实的人就够了。",
     "subUpcoming": "PPL 销售将于 {date}开启。",
-    "subWhitelist": "PPL 销售已开启。前 {days} 天仅限已验证的人参与。",
-    "subOpen": "PPL 销售已向所有人开放。",
+    "subWhitelist": "PPL 销售已开启。只有已验证的用户才能购买。",
+    "subOpen": "PPL 销售已开启。任何已验证的用户都可以购买。",
     "subEnded": "PPL 销售已结束。",
     "ctaVerify": "完成验证，赶上前 {days} 天",
     "ctaBuy": "购买 PPL",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "规则",
     "title": "人人适用同一套规则",
-    "lead": "规则写在销售合约里。任何人都无法更改限额或公式。",
+    "lead": "这些规则写在销售合约里。任何人都无法修改公式、金额限额、等待期或费用。",
     "items": [
       {
-        "title": "前 {whitelistDays} 天：仅限已验证的人",
+        "title": "仅限已验证用户",
         "body": "一人一个地址。每笔 {min} 至 {max}，每个地址在滚动 24 小时内最多 {perDay}，两笔购买之间间隔 {cooldown} 秒。"
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "今天所有卖家合计还可卖回最多 {amount}。",
     "todayUpcoming": "暂时没有：最早的购买要在销售开启 {holdDays} 天后才能卖回。",
     "todayUnknown": "该数字实时读取自合约，目前无法获取。",
-    "todayClosed": "卖回已关闭：曲线已关闭。",
+    "todayClosed": "卖回已关闭：储备已转为 PPL 流动性。",
     "contractTitle": "Base 上的销售合约",
     "contractPending": "地址将在销售开启前公布在这里。只通过这个地址购买。",
     "explorerLink": "在 Basescan 上查看",
@@ -123,10 +123,10 @@
     "auditBounty": "发现漏洞？请在任意页面通过错误报告按钮提交。",
     "detailsToggle": "详情",
     "details": [
-      "储备：存放在销售合约中的 USDC。卖回从这里支付，卖回费用也留在这里。储备越少，每日卖回限额越低。曲线关闭后，卖回永久关闭。",
-      "储备只能以 PPL 流动性的形式离开合约：在曲线关闭时，并且必须提前 {releaseDays} 天公开通知。通知期间卖回照常进行。",
+      "储备是存放在销售合约中的 USDC。卖回从中支付，卖回费用留在其中。储备越少，每日卖回限额越小。曲线关闭后卖回继续开放，直到储备转为流动性。",
+      "储备只能以 PPL 流动性的形式离开合约：在曲线关闭或 PEOPLE 网络上线时，并且须提前 {releaseDays} 天公开通知。通知期间暂停新的购买，卖回照常进行。",
       "金库：一个多签钱包（{signersN} 个签名中需要 {signersM} 个），接收每笔购买其余的 {treasuryPct}。",
-      "多签可以暂停购买和卖回，但不能转移储备、不能更改限额或公式，也不能延长销售。",
+      "多签可以暂停购买和卖回，并在固定范围内调整防刷设置：每天的购买和卖回次数以及最低金额。它无法转走储备，无法修改公式、单地址限额或费用，也无法延长销售。",
       "销售持续到募集满 {graduation}，或自开启起满 {term}，以先到者为准。未售出的 PPL 进入 Community Pool。购买不可撤销。",
       "团队：全部 PPL 的 {teamPct}。前 {cliff}没有任何解锁，之后在 {linear}内按月解锁，从网络全面上线起算。"
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "为什么需要验证？",
-        "a": "为了让每位买家都是真实的人。一人一个钱包地址，限额针对的是钱包地址，而不是机器人。前 {whitelistDays} 天仅限已验证的人购买。可通过 Telegram 或 Human Passport 验证。不会有任何个人数据写入区块链。"
+        "a": "为了确保每位买家都是真人。一人一个地址，限额按地址计算，机器人无法叠加。整个销售期间都需要验证。可以通过 Telegram 或 Human Passport 完成验证。个人数据不会写入区块链。"
       },
       {
         "q": "我什么时候可以把 PPL 发送给别人？",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "开放时的起始价格：{start}",
     "saleWindow": "销售期限",
     "saleWindowValue": "售罄或 {term}",
-    "saleWindowV2": "自 {date} 起 7 天白名单，随后开放销售，最长 {term}",
+    "saleWindowV2": "自 {date} 起，最长 {term}，仅限已验证用户",
     "saleWindowHint": "以先到者为准。不会延期。",
     "endsByHint": "最晚结束日期。如提前售罄则更早结束。"
   },
@@ -278,7 +278,7 @@
     "help": "需要帮助？{support}",
     "supportLink": "支持",
     "noWalletHint": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
-    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 在 PEOPLE 主网销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭时卖回随之关闭。你将在 Base 网络上收到 USDC。",
+    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 在 PEOPLE 主网销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭后卖回继续开放，直到储备转为流动性。你将在 Base 网络上收到 USDC。",
     "feesTitle": "费用与时间",
     "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%，仅对该滚动 24 小时卖回中超过储备 1% 的部分收取 3%。",
     "timingBody": "Base 上的购买几秒内即可确认。来自其他网络的付款通常在 1–20 分钟内到账。卖回款项以 Base 网络上的 USDC 支付。",
@@ -301,11 +301,11 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "白名单阶段",
-      "whitelistBody": "前 7 天仅限已验证用户。单笔最低 $10 / 最高 $500 / 滚动 24 小时内 $2,000。",
+      "whitelistTitle": "首周",
+      "whitelistBody": "仅限已验证用户。单笔 $10–$500，任意 24 小时内最多 $2,000。",
       "daysLeft": "剩余 {days} 天",
-      "openTitle": "公开阶段",
-      "openBody": "对所有人开放。单笔最低 $10 / 最高 $500 / 滚动 24 小时内 $2,000。",
+      "openTitle": "销售进行中",
+      "openBody": "仍需验证。单笔 $10–$500，任意 24 小时内最多 $2,000。",
       "notOpenTitle": "销售尚未开放",
       "notOpenBody": "合约进入白名单阶段后即可购买。",
       "expiredTitle": "销售已结束",
@@ -313,7 +313,7 @@
       "closedBody": "购买已关闭。"
     },
     "verify": {
-      "title": "前 7 天仅限已验证用户",
+      "title": "只有已验证的用户才能购买",
       "body": "通过 Telegram（电话号码）或 Human Passport 验证后即可参与。",
       "ctaVerify": "立即验证",
       "ctaSignIn": "登录后验证",
@@ -397,7 +397,7 @@
       "attesting": "正在核对销毁…",
       "selling": "正在 Base 上支付 USDC…",
       "done": "卖出完成。USDC 在 Base 上支付。",
-      "payoutNote": "PPL 在 PEOPLE 主网销毁。您在 Base 上收到 USDC。购买可用 USDC 或 USDT。",
+      "payoutNote": "PPL 在 PEOPLE 主网销毁，你将在 Base 网络上收到 USDC。",
       "error": "卖出没有完成。请再试一次。",
       "rejected": "您在钱包里拒绝了请求。",
       "notConfigured": "卖出暂时不可用。",

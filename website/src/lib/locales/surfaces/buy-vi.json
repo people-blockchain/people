@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "Mua PPL",
-    "description": "PPL là token của mạng PEOPLE. Giá theo một công thức được công bố trước và tăng dần khi PPL được bán. 7 ngày đầu chỉ dành cho người đã xác minh. Mọi giao dịch mua là cuối cùng."
+    "description": "PPL là token của mạng PEOPLE. Giá được tính theo công thức công bố trước và tăng dần khi PPL được bán ra. Chỉ người đã xác minh mới được mua. Giao dịch mua là cuối cùng."
   },
   "hero": {
     "eyebrow": "Mở bán PPL",
     "headline": "Blockchain cho mọi người. Cuối cùng cũng đến.",
     "lead": "Trước đây bạn phải là dân kỹ thuật. Giờ chỉ cần là một con người.",
     "subUpcoming": "Đợt bán PPL mở vào ngày {date}.",
-    "subWhitelist": "Đợt bán PPL đã mở. {days} ngày đầu chỉ dành cho người đã xác minh.",
-    "subOpen": "Đợt bán PPL đã mở cho mọi người.",
+    "subWhitelist": "Đợt bán PPL đã mở. Chỉ người đã xác minh mới được mua.",
+    "subOpen": "Đợt bán PPL đã mở. Bất kỳ ai đã xác minh đều có thể mua.",
     "subEnded": "Đợt bán PPL đã kết thúc.",
     "ctaVerify": "Xác minh để có mặt trong {days} ngày đầu",
     "ctaBuy": "Mua PPL",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "Quy tắc",
     "title": "Quy tắc như nhau cho mọi người",
-    "lead": "Các quy tắc được ghi cố định trong hợp đồng bán. Không ai có thể thay đổi giới hạn hay công thức.",
+    "lead": "Các quy tắc được ghi trong hợp đồng bán. Không ai có thể thay đổi công thức, giới hạn số tiền, thời gian chờ hay mức phí.",
     "items": [
       {
-        "title": "{whitelistDays} ngày đầu: chỉ người đã xác minh",
+        "title": "Chỉ người đã xác minh",
         "body": "Một người, một địa chỉ. Từ {min} đến {max} mỗi lần mua, tối đa {perDay} mỗi địa chỉ trong cửa sổ trượt 24 giờ, và nghỉ {cooldown} giây giữa hai lần mua."
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "Hôm nay vẫn có thể bán lại tối đa {amount}, tính chung cho tất cả người bán.",
     "todayUpcoming": "Chưa có: những giao dịch mua đầu tiên có thể bán lại {holdDays} ngày sau khi mở bán.",
     "todayUnknown": "Con số này được đọc trực tiếp từ hợp đồng và hiện chưa có.",
-    "todayClosed": "Bán lại đã đóng: đường cong đã đóng.",
+    "todayClosed": "Bán lại đã đóng: quỹ dự trữ đã được chuyển thành thanh khoản PPL.",
     "contractTitle": "Hợp đồng bán trên Base",
     "contractPending": "Địa chỉ sẽ được công bố tại đây trước khi mở bán. Chỉ mua qua địa chỉ đó.",
     "explorerLink": "Mở trên Basescan",
@@ -123,10 +123,10 @@
     "auditBounty": "Phát hiện lỗ hổng? Hãy báo bằng nút báo lỗi trên bất kỳ trang nào.",
     "detailsToggle": "Chi tiết",
     "details": [
-      "Quỹ dự trữ: lượng USDC nằm trong hợp đồng bán. Việc bán lại được chi trả từ quỹ này, và phí bán lại được giữ lại trong quỹ. Quỹ càng nhỏ thì giới hạn bán lại mỗi ngày càng thấp. Khi đường cong đóng, việc bán lại đóng vĩnh viễn.",
-      "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng, và chỉ sau thông báo công khai trước {releaseDays} ngày. Trong thời gian thông báo, việc bán lại vẫn hoạt động.",
+      "Quỹ dự trữ là số USDC nằm trong hợp đồng bán. Tiền bán lại được trả từ quỹ này và phí bán lại được giữ lại trong đó. Quỹ càng nhỏ thì giới hạn bán lại mỗi ngày càng nhỏ. Sau khi đường cong đóng, bán lại vẫn hoạt động cho đến khi quỹ dự trữ được chuyển thành thanh khoản.",
+      "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng hoặc khi mạng PEOPLE ra mắt, và chỉ sau thông báo công khai {releaseDays} ngày. Trong thời gian thông báo, giao dịch mua mới dừng lại nhưng bán lại vẫn hoạt động.",
       "Ngân quỹ: một ví multisig ({signersM} trên {signersN} chữ ký) nhận {treasuryPct} còn lại của mỗi giao dịch mua.",
-      "Multisig có thể tạm dừng việc mua và bán lại. Multisig không thể chuyển quỹ dự trữ, thay đổi giới hạn hay công thức, hoặc kéo dài đợt bán.",
+      "Multisig có thể tạm dừng mua và bán lại, và điều chỉnh chống spam trong giới hạn cố định: số lần mua và bán lại mỗi ngày và số tiền tối thiểu. Multisig không thể rút quỹ dự trữ, thay đổi công thức, giới hạn mỗi địa chỉ hay mức phí, cũng không thể kéo dài đợt bán.",
       "Đợt bán kéo dài đến khi huy động đủ {graduation} hoặc {term} sau khi mở, tùy điều nào đến trước. PPL chưa bán chuyển vào Community Pool. Mọi giao dịch mua là cuối cùng.",
       "Đội ngũ: {teamPct} tổng số PPL. Không nhận gì trong {cliff} đầu, sau đó nhận hằng tháng trong {linear}, tính từ khi ra mắt mạng đầy đủ."
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Vì sao cần xác minh?",
-        "a": "Để người mua là người thật. Một người có một địa chỉ, và giới hạn áp dụng cho địa chỉ ví chứ không phải bot. {whitelistDays} ngày đầu chỉ dành cho người đã xác minh. Bạn có thể xác minh bằng Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
+        "a": "Để bảo đảm người mua nào cũng là người thật. Một người chỉ có một địa chỉ, và giới hạn áp dụng cho địa chỉ đó nên bot không thể nhân bản giới hạn. Cần xác minh trong suốt đợt bán. Bạn có thể xác minh qua Telegram hoặc Human Passport. Không có dữ liệu cá nhân nào được ghi lên blockchain."
       },
       {
         "q": "Khi nào tôi có thể gửi PPL cho người khác?",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "Giá khởi điểm khi mở: {start}",
     "saleWindow": "Thời hạn đợt bán",
     "saleWindowValue": "Đến khi bán hết hoặc {term}",
-    "saleWindowV2": "Whitelist 7 ngày từ {date}, sau đó mở bán đến {term}",
+    "saleWindowV2": "Từ {date}, tối đa {term}, chỉ người đã xác minh",
     "saleWindowHint": "Tùy mốc nào đến trước. Không gia hạn.",
     "endsByHint": "Ngày kết thúc muộn nhất. Sớm hơn nếu bán hết."
   },
@@ -278,7 +278,7 @@
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
     "noWalletHint": "Chưa có ví? Chọn Google hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
-    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người cộng lại, và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. PPL bị đốt trên PEOPLE mainnet. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ. Đóng khi đường cong đóng. Bạn nhận USDC trên mạng Base.",
+    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người cộng lại, và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. PPL bị đốt trên PEOPLE mainnet. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ. Vẫn mở sau khi đường cong đóng, cho đến khi quỹ dự trữ được chuyển thành thanh khoản. Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
     "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí hoán đổi hoặc cầu nối của LI.FI — hiển thị trong widget trước khi xác nhận; phí bán lại vào quỹ dự trữ — 1,5%, và 3% chỉ cho phần bán lại trong cửa sổ trượt 24 giờ vượt 1% quỹ dự trữ.",
     "timingBody": "Giao dịch mua trên Base được xác nhận trong vài giây. Thanh toán từ mạng khác thường đến trong 1–20 phút. Tiền bán lại được trả bằng USDC trên mạng Base.",
@@ -301,11 +301,11 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "Giai đoạn danh sách trắng",
-      "whitelistBody": "7 ngày đầu: chỉ người đã xác minh. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 trong cửa sổ trượt 24 giờ.",
+      "whitelistTitle": "Tuần ra mắt",
+      "whitelistBody": "Chỉ người đã xác minh. $10–$500 mỗi lần mua, tối đa $2.000 trong 24 giờ bất kỳ.",
       "daysLeft": "Còn {days} ngày",
-      "openTitle": "Giai đoạn công khai",
-      "openBody": "Mở cho tất cả. Tối thiểu $10 / tối đa $500 mỗi lần mua / $2.000 trong cửa sổ trượt 24 giờ.",
+      "openTitle": "Đang mở bán",
+      "openBody": "Vẫn cần xác minh. $10–$500 mỗi lần mua, tối đa $2.000 trong 24 giờ bất kỳ.",
       "notOpenTitle": "Chưa mở bán",
       "notOpenBody": "Việc mua sẽ mở khi hợp đồng vào giai đoạn danh sách trắng.",
       "expiredTitle": "Đã kết thúc bán",
@@ -313,7 +313,7 @@
       "closedBody": "Việc mua đã đóng."
     },
     "verify": {
-      "title": "7 ngày đầu chỉ dành cho người đã xác minh",
+      "title": "Chỉ người đã xác minh mới được mua",
       "body": "Xác minh bằng Telegram (số điện thoại) hoặc Human Passport để tham gia.",
       "ctaVerify": "Xác minh ngay",
       "ctaSignIn": "Đăng nhập để xác minh",
@@ -397,7 +397,7 @@
       "attesting": "Đang kiểm tra lần đốt…",
       "selling": "Đang trả USDC trên Base…",
       "done": "Đã bán xong. USDC được trả trên Base.",
-      "payoutNote": "PPL bị đốt trên PEOPLE mainnet. Bạn nhận USDC trên Base. Lần mua thanh toán bằng USDC hoặc USDT.",
+      "payoutNote": "PPL bị đốt trên PEOPLE mainnet và bạn nhận USDC trên mạng Base.",
       "error": "Việc bán không hoàn tất. Hãy thử lại.",
       "rejected": "Bạn đã từ chối yêu cầu trong ví.",
       "notConfigured": "Chưa thể bán PPL.",

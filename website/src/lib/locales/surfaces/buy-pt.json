@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "Comprar PPL",
-    "description": "PPL é o token da rede PEOPLE. O preço segue uma fórmula publicada com antecedência e sobe conforme o PPL é vendido. Os primeiros 7 dias são só para pessoas verificadas. As compras são definitivas."
+    "description": "PPL é o token da rede PEOPLE. O preço segue uma fórmula publicada com antecedência e sobe conforme o PPL é vendido. Só pessoas verificadas podem comprar. As compras são definitivas."
   },
   "hero": {
     "eyebrow": "Venda de PPL",
     "headline": "Blockchain para todos. Finalmente.",
     "lead": "Antes era preciso ser especialista em tecnologia. Agora basta ser uma pessoa.",
     "subUpcoming": "A venda de PPL abre em {date}.",
-    "subWhitelist": "A venda de PPL está aberta. Os primeiros {days} dias são só para pessoas verificadas.",
-    "subOpen": "A venda de PPL está aberta para todos.",
+    "subWhitelist": "A venda de PPL está aberta. Só pessoas verificadas podem comprar.",
+    "subOpen": "A venda de PPL está aberta. Qualquer pessoa verificada pode comprar.",
     "subEnded": "A venda de PPL terminou.",
     "ctaVerify": "Verifique-se para entrar nos primeiros {days} dias",
     "ctaBuy": "Comprar PPL",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "As regras",
     "title": "As mesmas regras para todos",
-    "lead": "Elas estão fixadas no contrato de venda. Ninguém pode mudar os limites ou a fórmula.",
+    "lead": "Estão escritas no contrato de venda. Ninguém pode mudar a fórmula, os limites de valor, o prazo de espera ou as taxas.",
     "items": [
       {
-        "title": "Primeiros {whitelistDays} dias: só pessoas verificadas",
+        "title": "Só pessoas verificadas",
         "body": "Uma pessoa, um endereço. De {min} a {max} por compra, até {perDay} por endereço numa janela móvel de 24 horas e uma pausa de {cooldown} segundos entre compras."
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "Hoje ainda é possível revender até {amount}, somando todos os vendedores.",
     "todayUpcoming": "Ainda nada: as primeiras compras poderão ser revendidas {holdDays} dias após a abertura da venda.",
     "todayUnknown": "Este número é lido do contrato em tempo real e não está disponível agora.",
-    "todayClosed": "A revenda está fechada: a curva fechou.",
+    "todayClosed": "A recompra está encerrada: a reserva foi convertida em liquidez de PPL.",
     "contractTitle": "Contrato de venda na Base",
     "contractPending": "O endereço será publicado aqui antes da abertura da venda. Compre somente por esse endereço.",
     "explorerLink": "Abrir no Basescan",
@@ -123,10 +123,10 @@
     "auditBounty": "Encontrou uma vulnerabilidade? Informe pelo botão de bug em qualquer página.",
     "detailsToggle": "Detalhes",
     "details": [
-      "Reserva: os USDC guardados no contrato de venda. As revendas são pagas com ela, e as taxas de revenda ficam nela. Quanto menor a reserva, menor o limite diário de revenda. A revenda fecha de vez quando a curva fecha.",
-      "A reserva só sai do contrato como liquidez de PPL, quando a curva fecha, e só depois de um aviso público de {releaseDays} dias. A revenda continua funcionando durante o aviso.",
+      "A reserva são os USDC guardados no contrato de venda. As recompras são pagas com ela, e as taxas de recompra ficam nela. Quanto menor a reserva, menor o limite diário de recompra. A recompra continua funcionando depois que a curva fecha, até a reserva ir para a liquidez.",
+      "A reserva só sai do contrato como liquidez de PPL, quando a curva fecha ou quando a rede PEOPLE é lançada, e só depois de um aviso público de {releaseDays} dias. Durante o aviso, novas compras param, mas a recompra continua funcionando.",
       "Tesouraria: uma carteira multisig ({signersM} de {signersN} assinaturas) que recebe os outros {treasuryPct} de cada compra.",
-      "O multisig pode pausar as compras e a revenda. Não pode mover a reserva, mudar os limites ou a fórmula, nem prorrogar a venda.",
+      "O multisig pode pausar as compras e a recompra, e ajustar dentro de limites fixos a proteção contra spam: quantas compras e vendas por dia e o valor mínimo. Não pode mover a reserva, mudar a fórmula, os limites por endereço ou as taxas, nem prorrogar a venda.",
       "A venda dura até arrecadar {graduation} ou {term} após a abertura, o que acontecer primeiro. O PPL não vendido vai para o Community Pool. As compras são definitivas.",
       "Equipe: {teamPct} de todo o PPL. Nada nos primeiros {cliff}; depois, mensalmente ao longo de {linear}, contando a partir do lançamento completo da rede."
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Por que preciso me verificar?",
-        "a": "Para que cada comprador seja uma pessoa real. Cada pessoa tem um endereço, e os limites valem para endereços de carteira, não para bots. Os primeiros {whitelistDays} dias são só para pessoas verificadas. Você pode se verificar via Telegram ou Human Passport. Nenhum dado pessoal é gravado na blockchain."
+        "a": "Para que cada comprador seja uma pessoa real. Cada pessoa tem um endereço e os limites valem para esse endereço, então bots não conseguem multiplicá-los. A verificação é exigida durante toda a venda. Você pode se verificar pelo Telegram ou pelo Human Passport. Nenhum dado pessoal é gravado na blockchain."
       },
       {
         "q": "Quando posso enviar PPL para outras pessoas?",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "Preço inicial na abertura: {start}",
     "saleWindow": "Prazo da venda",
     "saleWindowValue": "Até esgotar ou {term}",
-    "saleWindowV2": "Whitelist de 7 dias a partir de {date}, depois venda aberta por até {term}",
+    "saleWindowV2": "A partir de {date}, por até {term}, só pessoas verificadas",
     "saleWindowHint": "O que ocorrer primeiro. Sem prorrogação.",
     "endsByHint": "Data-limite. Antes, se esgotar."
   },
@@ -278,7 +278,7 @@
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
     "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
-    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL é queimado na PEOPLE mainnet. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Encerra quando a curva fecha. Você recebe em USDC na rede Base.",
+    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL é queimado na PEOPLE mainnet. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Continua aberta depois que a curva fecha, até a reserva ir para a liquidez. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
     "feesBody": "Taxas: a da rede Base (gas), paga em ETH — geralmente cerca de US$ 0,01; a de troca ou ponte da LI.FI — mostrada no widget antes de confirmar; a de venda de volta à reserva — 1,5%, e 3% só sobre a parte das vendas em 24 horas móveis acima de 1% da reserva.",
     "timingBody": "Uma compra na Base é confirmada em segundos. Pagamentos de outras redes costumam chegar em 1–20 minutos. Os pagamentos da venda de volta são feitos em USDC na rede Base.",
@@ -301,11 +301,11 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "Fase de lista de permissões",
-      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 numa janela móvel de 24 horas.",
+      "whitelistTitle": "Semana de lançamento",
+      "whitelistBody": "Só pessoas verificadas. De $10 a $500 por compra, até $2.000 em quaisquer 24 horas.",
       "daysLeft": "Faltam {days} dias",
-      "openTitle": "Fase pública",
-      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 numa janela móvel de 24 horas.",
+      "openTitle": "Venda aberta",
+      "openBody": "A verificação continua obrigatória. De $10 a $500 por compra, até $2.000 em quaisquer 24 horas.",
       "notOpenTitle": "A venda ainda não está aberta",
       "notOpenBody": "As compras abrem quando o contrato entra na fase de lista de permissões.",
       "expiredTitle": "Venda encerrada",
@@ -313,7 +313,7 @@
       "closedBody": "As compras estão encerradas."
     },
     "verify": {
-      "title": "Nos primeiros 7 dias, apenas pessoas verificadas",
+      "title": "Só pessoas verificadas podem comprar",
       "body": "Verifique-se via Telegram (número de telefone) ou Human Passport para participar.",
       "ctaVerify": "Verificar agora",
       "ctaSignIn": "Entre para verificar",
@@ -397,7 +397,7 @@
       "attesting": "Conferindo a queima…",
       "selling": "Pagando USDC na Base…",
       "done": "Venda concluída. O USDC é pago na Base.",
-      "payoutNote": "O PPL é queimado na PEOPLE mainnet. Você recebe USDC na Base. A compra é paga em USDC ou USDT.",
+      "payoutNote": "O PPL é queimado na PEOPLE mainnet e você recebe USDC na rede Base.",
       "error": "A venda não foi concluída. Tente de novo.",
       "rejected": "Você recusou o pedido na carteira.",
       "notConfigured": "A venda ainda não está disponível.",

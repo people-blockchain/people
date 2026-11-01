@@ -63,13 +63,14 @@ function ContractAddress({ address, explorerUrl }: { address: string; explorerUr
  */
 export function SaleRules({
   phase,
-  graduated,
+  sellBackClosed,
   sellBackTodayUsd,
   contractAddress,
   explorerUrl,
 }: {
   phase: BuyPagePhase;
-  graduated: boolean;
+  /** Reserve moved to liquidity: sell-back closed for good (graduation alone does not close it). */
+  sellBackClosed: boolean;
   sellBackTodayUsd: number | null;
   contractAddress: string | null;
   explorerUrl: string | null;
@@ -81,7 +82,7 @@ export function SaleRules({
   const today =
     phase === "upcoming"
       ? fillCopy(t.todayUpcoming, vars)
-      : graduated
+      : sellBackClosed
         ? t.todayClosed
         : sellBackTodayUsd !== null
           ? fillCopy(t.todayLive, { amount: usd(sellBackTodayUsd, lang) })

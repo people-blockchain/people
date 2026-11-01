@@ -12,6 +12,7 @@ import {
   BASE_USDT_ADDRESS,
   LIFI_BRIDGE_SOURCE_CHAIN_IDS,
   LIFI_BRIDGE_DOCS_URL,
+  LIFI_FEATURED_SOURCE_TOKENS,
   hubPaymentToken,
 } from "../src/lib/sale/bridge.ts";
 
@@ -25,6 +26,32 @@ const BUY_FORM_SRC = readFileSync(join(root, "src/components/buy/BuyForm.tsx"), 
 test("bridge destination is Base USDC", () => {
   assert.equal(BASE_CHAIN_ID, ChainId.BAS);
   assert.equal(BASE_USDC_ADDRESS, "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913");
+});
+
+// Canonical USDT/USDC contracts per source chain (issuer / Uniswap default token list).
+// A wrong or truncated address in the featured list shows a token the widget cannot route.
+const CANONICAL_FEATURED = {
+  [`${ChainId.ETH}:USDT`]: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  [`${ChainId.ETH}:USDC`]: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  [`${ChainId.BSC}:USDT`]: "0x55d398326f99059fF775485246999027B3197955",
+  [`${ChainId.BSC}:USDC`]: "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+  [`${ChainId.POL}:USDT`]: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+  [`${ChainId.POL}:USDC`]: "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+  [`${ChainId.ARB}:USDT0`]: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+  [`${ChainId.ARB}:USDC`]: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+  [`${ChainId.OPT}:USDT`]: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+  [`${ChainId.OPT}:USDC`]: "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+  [`${ChainId.AVA}:USDT`]: "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
+  [`${ChainId.AVA}:USDC`]: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+};
+
+test("featured EVM source tokens use the canonical contract addresses", () => {
+  const evm = LIFI_FEATURED_SOURCE_TOKENS.filter((t) => t.address.startsWith("0x"));
+  assert.equal(evm.length, Object.keys(CANONICAL_FEATURED).length);
+  for (const token of evm) {
+    assert.match(token.address, /^0x[0-9a-fA-F]{40}$/, `${token.chainId} ${token.symbol}`);
+    assert.equal(token.address, CANONICAL_FEATURED[`${token.chainId}:${token.symbol}`], `${token.chainId} ${token.symbol}`);
+  }
 });
 
 test("Base USDT address matches LI.FI verified token", () => {

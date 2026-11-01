@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "Buy PPL",
-    "description": "PPL is the token of the PEOPLE network. Its price follows a formula published in advance and rises as PPL sells. The first 7 days are for verified people only. Purchases are final."
+    "description": "PPL is the token of the PEOPLE network. Its price follows a formula published in advance and goes up as PPL is sold. Only verified people can buy. Purchases are final."
   },
   "hero": {
     "eyebrow": "PPL sale",
     "headline": "Blockchain for everyone. Finally.",
     "lead": "You used to have to be a techie. Now being a person is enough.",
     "subUpcoming": "The PPL sale opens on {date}.",
-    "subWhitelist": "The PPL sale is open. The first {days} days are for verified people only.",
-    "subOpen": "The PPL sale is open to everyone.",
+    "subWhitelist": "The PPL sale is open. Only verified people can buy.",
+    "subOpen": "The PPL sale is open. Any verified person can buy.",
     "subEnded": "The PPL sale is over.",
     "ctaVerify": "Get verified to be in the first {days} days",
     "ctaBuy": "Buy PPL",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "The rules",
     "title": "Same rules for everyone",
-    "lead": "They are fixed in the sale contract. Nobody can change the limits or the formula.",
+    "lead": "They are written into the sale contract. Nobody can change the formula, the amount limits, the waiting period or the fees.",
     "items": [
       {
-        "title": "First {whitelistDays} days: verified people only",
+        "title": "Verified people only",
         "body": "One person, one address. From {min} to {max} per purchase, up to {perDay} per address in a rolling 24-hour window, and a {cooldown}-second pause between purchases."
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "Up to {amount} can still be sold back today, for all sellers together.",
     "todayUpcoming": "Nothing yet: the first purchases can be sold back {holdDays} days after the sale opens.",
     "todayUnknown": "This figure is read live from the contract and is not available right now.",
-    "todayClosed": "Sell-back is closed: the curve has closed.",
+    "todayClosed": "Sell-back is closed: the reserve has moved to PPL liquidity.",
     "contractTitle": "Sale contract on Base",
     "contractPending": "The address will be published here before the sale opens. Buy only from that address.",
     "explorerLink": "Open on Basescan",
@@ -123,10 +123,10 @@
     "auditBounty": "Found a vulnerability? Report it with the bug button on any page.",
     "detailsToggle": "Details",
     "details": [
-      "Reserve: the USDC kept in the sale contract. Sell-backs are paid from it, and sell-back fees stay in it. The smaller the reserve, the smaller the daily sell-back limit. Sell-back closes for good once the curve closes.",
-      "The reserve leaves the contract only as PPL liquidity, when the curve closes, and only after a public notice of {releaseDays} days. Sell-back keeps working during the notice.",
+      "Reserve: the USDC kept in the sale contract. Sell-backs are paid from it, and sell-back fees stay in it. The smaller the reserve, the smaller the daily sell-back limit. Sell-back keeps working after the curve closes, until the reserve moves to liquidity.",
+      "The reserve leaves the contract only as PPL liquidity, when the curve closes or when the PEOPLE network launches, and only after a public notice of {releaseDays} days. New purchases stop during the notice, but sell-back keeps working.",
       "Treasury: a multisig wallet ({signersM} of {signersN} signatures) that receives the other {treasuryPct} of each purchase.",
-      "The multisig can pause buying and sell-back. It cannot move the reserve, change the limits or the formula, or extend the sale.",
+      "The multisig can pause buying and sell-back, and adjust spam protection within fixed bounds: how many purchases and sell-backs a day, and the smallest amount. It cannot move the reserve, change the formula, the per-address limits or the fees, or extend the sale.",
       "The sale runs until {graduation} has been raised or for {term} after opening, whichever comes first. Unsold PPL goes to the Community Pool. Purchases are final.",
       "Team: {teamPct} of all PPL. Nothing for the first {cliff}, then monthly over {linear}, counted from the full network launch."
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Why do I need verification?",
-        "a": "So that every buyer is a real person. One person gets one address, and the limits apply to wallet addresses, not bots. The first {whitelistDays} days are for verified people only. You can verify via Telegram or Human Passport. No personal data is written to the blockchain."
+        "a": "So that every buyer is a real person. One person gets one address, and the limits apply to that address, so bots cannot multiply them. Verification is required for the whole sale. You can verify with Telegram or Human Passport. No personal data is written to the blockchain."
       },
       {
         "q": "When can I send PPL to other people?",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "Starting price once it opens: {start}",
     "saleWindow": "Sale window",
     "saleWindowValue": "Until sold out or {term}",
-    "saleWindowV2": "7-day whitelist from {date}, then open sale up to {term}",
+    "saleWindowV2": "From {date}, for up to {term}, verified people only",
     "saleWindowHint": "Whichever comes first. No extensions.",
     "endsByHint": "Latest end date. Earlier if it sells out."
   },
@@ -278,7 +278,7 @@
     "help": "Need help? {support}",
     "supportLink": "Support",
     "noWalletHint": "No wallet? Choose Google or email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
-    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL is burned on PEOPLE mainnet. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Closes when the curve closes. Payouts in USDC on Base.",
+    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL is burned on PEOPLE mainnet. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
     "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, and 3% only on the part of sell-backs in the rolling 24 hours above 1% of the reserve.",
     "timingBody": "A purchase on Base is confirmed within seconds. Payments from other networks usually arrive within 1–20 minutes. Sell-back payouts are made in USDC on Base.",
@@ -301,11 +301,11 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "Whitelist phase",
-      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 in a rolling 24-hour window.",
+      "whitelistTitle": "Launch week",
+      "whitelistBody": "Verified people only. $10 to $500 per purchase, up to $2,000 in any rolling 24 hours.",
       "daysLeft": "{days} days left",
-      "openTitle": "Public phase",
-      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 in a rolling 24-hour window.",
+      "openTitle": "Sale open",
+      "openBody": "Verification is still required. $10 to $500 per purchase, up to $2,000 in any rolling 24 hours.",
       "notOpenTitle": "Sale not open yet",
       "notOpenBody": "Purchases open when the contract enters the whitelist phase.",
       "expiredTitle": "Sale ended",
@@ -313,7 +313,7 @@
       "closedBody": "Purchases are closed."
     },
     "verify": {
-      "title": "First 7 days: verified people only",
+      "title": "Only verified people can buy",
       "body": "Verify via Telegram (phone number) or Human Passport to take part.",
       "ctaVerify": "Verify now",
       "ctaSignIn": "Sign in to verify",
@@ -397,7 +397,7 @@
       "attesting": "Checking the burn…",
       "selling": "Paying out USDC on Base…",
       "done": "Sell complete. USDC is paid on Base.",
-      "payoutNote": "PPL is burned on PEOPLE mainnet. You receive USDC on Base. Purchases can be paid in USDC or USDT.",
+      "payoutNote": "PPL is burned on PEOPLE mainnet and you receive USDC on Base.",
       "error": "Selling PPL did not go through. Try again.",
       "rejected": "You rejected the request in your wallet.",
       "notConfigured": "Selling PPL is not available yet.",

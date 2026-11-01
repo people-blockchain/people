@@ -169,6 +169,16 @@ export function minPplOutForChargedBuy(input: {
   return minPplOutFromEstimate(estimatePplOut(charged, input.spotPriceWad), input.slippageBps);
 }
 
+/**
+ * Slippage floor from the contract's own `quoteBuy` read right before signing. The quote walks
+ * the curve exactly, so unlike a spot-price estimate it does not overstate large buys; any move
+ * of more than `slippageBps` between the read and the block makes `buy` revert with nothing spent.
+ */
+export function minPplOutFromQuote(quotedPplOut: bigint, slippageBps: number = V2_SALE.slippageBps): bigint {
+  if (quotedPplOut <= BigInt(0)) return BigInt(0);
+  return minPplOutFromEstimate(quotedPplOut, slippageBps);
+}
+
 /** Sell-back unlocks exactly 30 days after the purchase. */
 export function sellBackUnlockMs(boughtAtMs: number, holdDays: number = V2_SALE.holdDays): number {
   return boughtAtMs + holdDays * DAY_MS;

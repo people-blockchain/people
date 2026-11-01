@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "PPL kaufen",
-    "description": "PPL ist der Token des PEOPLE-Netzwerks. Der Preis folgt einer im Voraus veröffentlichten Formel und steigt, je mehr PPL verkauft werden. Die ersten 7 Tage sind nur für verifizierte Menschen. Käufe sind endgültig."
+    "description": "PPL ist der Token des PEOPLE-Netzwerks. Der Preis folgt einer vorab veröffentlichten Formel und steigt, je mehr PPL verkauft werden. Kaufen können nur verifizierte Menschen. Käufe sind endgültig."
   },
   "hero": {
     "eyebrow": "PPL-Verkauf",
     "headline": "Blockchain für alle. Endlich.",
     "lead": "Früher musste man Technikprofi sein. Heute reicht es, ein Mensch zu sein.",
     "subUpcoming": "Der PPL-Verkauf startet am {date}.",
-    "subWhitelist": "Der PPL-Verkauf läuft. Die ersten {days} Tage sind nur für verifizierte Menschen.",
-    "subOpen": "Der PPL-Verkauf ist für alle offen.",
+    "subWhitelist": "Der PPL-Verkauf ist geöffnet. Kaufen können nur verifizierte Menschen.",
+    "subOpen": "Der PPL-Verkauf ist geöffnet. Jeder verifizierte Mensch kann kaufen.",
     "subEnded": "Der PPL-Verkauf ist beendet.",
     "ctaVerify": "Verifizieren und in den ersten {days} Tagen dabei sein",
     "ctaBuy": "PPL kaufen",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "Die Regeln",
     "title": "Gleiche Regeln für alle",
-    "lead": "Sie sind im Verkaufsvertrag festgeschrieben. Niemand kann die Limits oder die Formel ändern.",
+    "lead": "Sie stehen im Verkaufsvertrag. Niemand kann die Formel, die Betragslimits, die Wartezeit oder die Gebühren ändern.",
     "items": [
       {
-        "title": "Erste {whitelistDays} Tage: nur verifizierte Menschen",
+        "title": "Nur verifizierte Menschen",
         "body": "Eine Person, eine Adresse. {min} bis {max} pro Kauf, bis zu {perDay} pro Adresse in einem gleitenden 24-Stunden-Fenster und {cooldown} Sekunden Pause zwischen zwei Käufen."
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "Heute können noch bis zu {amount} zurückverkauft werden – für alle Verkäufer zusammen.",
     "todayUpcoming": "Noch nichts: Die ersten Käufe können {holdDays} Tage nach dem Verkaufsstart zurückverkauft werden.",
     "todayUnknown": "Diese Zahl wird live aus dem Vertrag gelesen und ist gerade nicht verfügbar.",
-    "todayClosed": "Der Rückverkauf ist geschlossen: Die Kurve ist geschlossen.",
+    "todayClosed": "Der Rückverkauf ist geschlossen: Die Reserve wurde in PPL-Liquidität überführt.",
     "contractTitle": "Verkaufsvertrag auf Base",
     "contractPending": "Die Adresse wird hier vor dem Verkaufsstart veröffentlicht. Kaufen Sie nur über diese Adresse.",
     "explorerLink": "Auf Basescan öffnen",
@@ -123,10 +123,10 @@
     "auditBounty": "Eine Schwachstelle gefunden? Melden Sie sie über den Bug-Button auf jeder Seite.",
     "detailsToggle": "Details",
     "details": [
-      "Reserve: die USDC im Verkaufsvertrag. Aus ihr werden Rückverkäufe bezahlt, und Rückverkaufsgebühren bleiben in ihr. Je kleiner die Reserve, desto kleiner das tägliche Rückverkaufslimit. Wenn die Kurve schließt, endet der Rückverkauf endgültig.",
-      "Die Reserve verlässt den Vertrag nur als PPL-Liquidität, beim Schließen der Kurve, und erst nach einer öffentlichen Ankündigung {releaseDays} Tage vorher. Während dieser Frist läuft der Rückverkauf weiter.",
+      "Die Reserve sind die USDC im Verkaufsvertrag. Daraus werden Rückverkäufe bezahlt, und die Rückverkaufsgebühren bleiben darin. Je kleiner die Reserve, desto kleiner das tägliche Rückverkaufslimit. Nach dem Schließen der Kurve läuft der Rückverkauf weiter, bis die Reserve in Liquidität überführt wird.",
+      "Die Reserve verlässt den Vertrag nur als PPL-Liquidität, wenn die Kurve schließt oder das PEOPLE-Netzwerk startet, und nur nach einer öffentlichen Ankündigung von {releaseDays} Tagen. Während der Ankündigung sind neue Käufe gestoppt, der Rückverkauf läuft weiter.",
       "Treasury: ein Multisig-Wallet ({signersM} von {signersN} Signaturen), das die anderen {treasuryPct} jedes Kaufs erhält.",
-      "Die Multisig kann Käufe und Rückverkauf pausieren. Sie kann die Reserve nicht bewegen, Limits oder Formel nicht ändern und den Verkauf nicht verlängern.",
+      "Die Multisig kann Käufe und Rückverkauf pausieren und den Spamschutz in festen Grenzen einstellen: wie viele Käufe und Rückverkäufe pro Tag und den Mindestbetrag. Sie kann die Reserve nicht bewegen, Formel, Limits pro Adresse oder Gebühren nicht ändern und den Verkauf nicht verlängern.",
       "Der Verkauf läuft, bis {graduation} eingenommen sind, oder {term} ab Start – je nachdem, was zuerst eintritt. Nicht verkaufte PPL gehen in den Community Pool. Käufe sind endgültig.",
       "Team: {teamPct} aller PPL. {cliff} lang nichts, danach monatlich über {linear}, gerechnet ab dem vollständigen Netzwerkstart."
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Warum brauche ich eine Verifizierung?",
-        "a": "Damit jeder Käufer ein echter Mensch ist. Eine Person hat eine Adresse, und die Limits gelten für Wallet-Adressen, nicht für Bots. Die ersten {whitelistDays} Tage sind nur für verifizierte Menschen. Sie können sich über Telegram oder Human Passport verifizieren. Persönliche Daten werden nicht in die Blockchain geschrieben."
+        "a": "Damit jeder Käufer ein echter Mensch ist. Eine Person hat eine Adresse, und die Limits gelten für diese Adresse, Bots können sie also nicht vervielfachen. Die Verifizierung ist für den gesamten Verkauf nötig. Sie können sich über Telegram oder Human Passport verifizieren. Persönliche Daten werden nicht in die Blockchain geschrieben."
       },
       {
         "q": "Wann kann ich PPL an andere Menschen senden?",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "Startpreis bei Öffnung: {start}",
     "saleWindow": "Verkaufszeitraum",
     "saleWindowValue": "Bis ausverkauft oder {term}",
-    "saleWindowV2": "7 Tage Whitelist ab {date}, danach offener Verkauf bis zu {term}",
+    "saleWindowV2": "Ab {date}, bis zu {term}, nur verifizierte Menschen",
     "saleWindowHint": "Je nachdem, was zuerst eintritt. Keine Verlängerung.",
     "endsByHint": "Spätestes Enddatum. Früher, wenn ausverkauft."
   },
@@ -278,7 +278,7 @@
     "help": "Brauchen Sie Hilfe? {support}",
     "supportLink": "Hilfe",
     "noWalletHint": "Keine Wallet? Wählen Sie Google oder E-Mail — dann wird eine PEOPLE Wallet für Sie erstellt. Zum Bezahlen brauchen Sie USDC auf Base in dieser oder in einer verbundenen Wallet.",
-    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jeder Kauf kann 30 Tage danach zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Limits: 2 % der Reserve in jedem gleitenden 24-Stunden-Fenster für alle zusammen und 2.000 $ pro Adresse in einem gleitenden 24-Stunden-Fenster. PPL wird im PEOPLE-Mainnet verbrannt. Gebühr 1,5 %; 3 % nur auf den Teil der Rückverkäufe dieser 24 Stunden über 1 % der Reserve. Endet, wenn die Kurve schließt. Auszahlung in USDC auf Base.",
+    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jeder Kauf kann 30 Tage danach zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Limits: 2 % der Reserve in jedem gleitenden 24-Stunden-Fenster für alle zusammen und 2.000 $ pro Adresse in einem gleitenden 24-Stunden-Fenster. PPL wird im PEOPLE-Mainnet verbrannt. Gebühr 1,5 %; 3 % nur auf den Teil der Rückverkäufe dieser 24 Stunden über 1 % der Reserve. Läuft nach dem Schließen der Kurve weiter, bis die Reserve in Liquidität überführt wird. Auszahlung in USDC auf Base.",
     "feesTitle": "Gebühren und Dauer",
     "feesBody": "Gebühren: die Netzwerkgebühr von Base (Gas), bezahlt in ETH — meist etwa 0,01 $; die Swap- oder Bridge-Gebühr von LI.FI — wird im Widget vor der Bestätigung angezeigt; die Gebühr für den Rückverkauf an die Reserve — 1,5 %, und 3 % nur auf den Teil der Rückverkäufe im gleitenden 24-Stunden-Fenster über 1 % der Reserve.",
     "timingBody": "Ein Kauf auf Base wird in Sekunden bestätigt. Zahlungen aus anderen Netzwerken kommen meist innerhalb von 1–20 Minuten an. Rückverkäufe werden in USDC auf Base ausgezahlt.",
@@ -301,11 +301,11 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "Whitelist-Phase",
-      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ in einem gleitenden 24-Stunden-Fenster.",
+      "whitelistTitle": "Startwoche",
+      "whitelistBody": "Nur verifizierte Menschen. 10 $ bis 500 $ pro Kauf, bis zu 2.000 $ in beliebigen 24 Stunden.",
       "daysLeft": "Noch {days} Tage",
-      "openTitle": "Öffentliche Phase",
-      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ in einem gleitenden 24-Stunden-Fenster.",
+      "openTitle": "Verkauf geöffnet",
+      "openBody": "Die Verifizierung bleibt Pflicht. 10 $ bis 500 $ pro Kauf, bis zu 2.000 $ in beliebigen 24 Stunden.",
       "notOpenTitle": "Verkauf noch nicht geöffnet",
       "notOpenBody": "Käufe öffnen, sobald der Vertrag in die Whitelist-Phase eintritt.",
       "expiredTitle": "Verkauf beendet",
@@ -313,7 +313,7 @@
       "closedBody": "Käufe sind geschlossen."
     },
     "verify": {
-      "title": "Erste 7 Tage: nur verifizierte Personen",
+      "title": "Kaufen können nur verifizierte Menschen",
       "body": "Verifiziere dich über Telegram (Telefonnummer) oder Human Passport, um teilzunehmen.",
       "ctaVerify": "Jetzt verifizieren",
       "ctaSignIn": "Anmelden zum Verifizieren",
@@ -397,7 +397,7 @@
       "attesting": "Verbrennung wird geprüft…",
       "selling": "USDC wird auf Base ausgezahlt…",
       "done": "Verkauf abgeschlossen. USDC wird auf Base ausgezahlt.",
-      "payoutNote": "PPL wird im PEOPLE-Mainnet verbrannt. Sie erhalten USDC auf Base. Der Kauf läuft in USDC oder USDT.",
+      "payoutNote": "PPL wird im PEOPLE-Mainnet verbrannt. Sie erhalten USDC auf Base.",
       "error": "Der Verkauf ist fehlgeschlagen. Bitte erneut versuchen.",
       "rejected": "Sie haben die Anfrage in der Wallet abgelehnt.",
       "notConfigured": "Der Verkauf ist noch nicht verfügbar.",
