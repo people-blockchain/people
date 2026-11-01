@@ -407,17 +407,27 @@ test("a hung SDK logout times out and falls through instead of stranding the cli
   // (stage connect_start) with no connect ever started — the second click worked.
   let loggedOut = false;
   const mock = { ...RESTORED, provider: null };
-  const started = Date.now();
+  const timeoutMs = 20;
+  let endCalls = 0;
+  const started = performance.now();
   const reuse = await prepareRestoredSessionForConnect(mock, "email_passwordless", "user@example.com", {
-    endSession: () => new Promise(() => {}),
+    endSession: () => {
+      endCalls += 1;
+      return new Promise(() => {});
+    },
     logoutSession: async () => {
       loggedOut = true;
     },
-    timeoutMs: 20,
+    timeoutMs,
   });
+  const elapsed = performance.now() - started;
   assert.equal(reuse, undefined);
   assert.equal(loggedOut, false);
-  assert.ok(Date.now() - started >= 20, "it waited for the timeout, then gave up");
+  assert.equal(endCalls, 1, "the hung cleanup was actually started");
+  // setTimeout may fire up to ~1ms early against the wall clock on loaded CI runners
+  // (timer and clock granularity), so allow 2ms of slack. Since endSession never settles,
+  // returning at all already proves the timeout fired; this only rules out an early bail-out.
+  assert.ok(elapsed >= timeoutMs - 2, `it waited for the timeout, then gave up (${elapsed.toFixed(1)}ms)`);
 });
 
 test("a rejecting cleanup is swallowed and falls through", async () => {

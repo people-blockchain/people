@@ -1,9 +1,25 @@
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { test } from "@playwright/test";
 
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000";
-const ARTIFACT_DIR = "/opt/cursor/artifacts";
+const PREFERRED_ARTIFACT_DIR = process.env.HEADER_WORDMARK_DIR ?? "/opt/cursor/artifacts";
+let ARTIFACT_DIR = PREFERRED_ARTIFACT_DIR;
+
+async function ensureArtifactDir() {
+  try {
+    await mkdir(PREFERRED_ARTIFACT_DIR, { recursive: true });
+    return PREFERRED_ARTIFACT_DIR;
+  } catch (error) {
+    const code = error && typeof error === "object" && "code" in error ? error.code : "";
+    if (code !== "EACCES" && code !== "EPERM" && code !== "EROFS") throw error;
+    const fallback = path.join(tmpdir(), "people-header-wordmark");
+    await mkdir(fallback, { recursive: true });
+    return fallback;
+  }
+}
 
 async function setLocale(page) {
   await page.addInitScript(() => {
@@ -60,7 +76,7 @@ async function visibleLockupMetrics(page, mobile) {
 
 test.describe("header wordmark mobile matches desktop asset", () => {
   test.beforeAll(async () => {
-    await mkdir(ARTIFACT_DIR, { recursive: true });
+    ARTIFACT_DIR = await ensureArtifactDir();
   });
 
   test("desktop 1280px reference", async ({ page }) => {

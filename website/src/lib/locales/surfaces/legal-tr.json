@@ -125,7 +125,7 @@
           "Satın almak için KYC gerekmez. Geri satış, KYC olmayan bir insan olduğunu kanıtlama (Human Passport veya Telegram) gerektirir.",
           "Satış, tükenene kadar (eğri 4 milyon $ toplandığında kapanır) veya açılıştan itibaren 24 ay boyunca, hangisi önce gerçekleşirse o zamana kadar sürer. Uzatma yoktur. Satılmayan PPL, Community Pool'a gider. İade yoktur: her satın alma kesindir.",
           "Satış süresi, fiyat formülü ve limitler satış açıldıktan sonra değişmez.",
-          "Geri satış bir iade değildir: rezerve geri satış — yalnızca doğrulanmış kullanıcılar için. Her lot, 30 günlük bekletme süresinin ardından, sattığınız andaki eğri fiyatından geri satılabilir. Toplam geri satışlar, herkes için günlük rezervin %2'si ve adres başına günlük 2.000 $ ile sınırlıdır. Ücret: %1,5; o günkü geri satışlar rezervin %1'ini zaten aşmışsa %3. Graduation sonrasında kapanır. Ödemeler Base üzerinde USDC ile yapılır.",
+          "Geri satış bir iade değildir: rezerve geri satış — yalnızca doğrulanmış kullanıcılar için. Her lot, 30 günlük bekletme süresinin ardından, sattığınız andaki eğri fiyatından geri satılabilir. Toplam geri satışlar, herkes için herhangi bir kayan 24 saatte rezervin %2'si ve adres başına kayan 24 saatlik pencerede 2.000 $ ile sınırlıdır. Ücret: %1,5; %3 yalnızca o 24 saatteki geri satışların rezervin %1'ini aşan kısmına uygulanır. Graduation sonrasında kapanır. Ödemeler Base üzerinde USDC ile yapılır.",
           "Bu sitedeki hiçbir şey, satışın kısıtlandığı yerlerde PPL satışı yönünde bir teklif veya vaat değildir ve katılım bulunduğunuz yargı bölgesinde mümkün olmayabilir."
         ]
       },

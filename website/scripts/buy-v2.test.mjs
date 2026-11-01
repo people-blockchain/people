@@ -7,10 +7,12 @@ import test from "node:test";
 import { V2_PHASES } from "../src/lib/sale/v2/constants.ts";
 import { fillCopy, usdcAmount } from "../src/lib/sale/format.ts";
 import {
+  chargedBuyUsd6,
   estimatePplOut,
   heroPhase,
   isV2BuyEnabled,
   isV2PreviewEnabled,
+  minPplOutForChargedBuy,
   minPplOutFromEstimate,
   panelVisibility,
   partialTopUpAmount,
@@ -80,6 +82,21 @@ test("the per-address daily limit is $2,000 in UTC-day spending", () => {
 test("minPplOut is 99% of the estimate (1% slippage, rounded down)", () => {
   assert.equal(minPplOutFromEstimate(BigInt(1_000_000)), BigInt(990_000));
   assert.equal(minPplOutFromEstimate(BigInt(10_001)), BigInt(9_900));
+});
+
+test("final partial fill sets minPplOut from the remaining charged amount", () => {
+  const amountIn = 500n * 1_000_000n;
+  const remaining = 100n * 1_000_000n;
+  const spot = 5_000_000_000_000_000n;
+  const fromRequest = minPplOutFromEstimate(estimatePplOut(amountIn, spot));
+  const fromCharged = minPplOutForChargedBuy({ amountIn, remainingUsd6: remaining, spotPriceWad: spot });
+  assert.equal(chargedBuyUsd6(amountIn, remaining), remaining);
+  assert.equal(fromCharged, minPplOutFromEstimate(estimatePplOut(remaining, spot)));
+  assert.ok(fromCharged < fromRequest);
+  assert.equal(
+    minPplOutForChargedBuy({ amountIn, remainingUsd6: amountIn + 1n, spotPriceWad: spot }),
+    fromRequest,
+  );
 });
 
 test("PPL estimate follows the 18-decimal spot price", () => {

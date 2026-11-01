@@ -34,10 +34,11 @@
       "label": "Team & founders",
       "account": "people196jd28pjff04fv30tskzw4as5nzz2zkl0rqh73",
       "account_kind": "continuous_vesting",
-      "vesting_cliff_pct": 10,
-      "vesting_linear_months": 24,
+      "vesting_upfront_pct": 0,
+      "vesting_cliff_months": 6,
+      "vesting_linear_months": 18,
       "owner_placeholder": true,
-      "note": "M11-2 (owner-approved): 10% unlocked at mainnet genesis, remaining 90% linear over 24 months (ContinuousVestingAccount with original_vesting = 90% of the bucket, so the other 10% is spendable from height 0). Owner must still supply the real team-controller key for this address before mainnet; the schedule above does not by itself fix custody."
+      "note": "A11 (owner decision): 0% unlocked at mainnet genesis, 6-month cliff, then 18 months linear (ContinuousVestingAccount with original_vesting = 100% of the bucket, start_time = genesis + 6 months, end_time = genesis + 24 months; nothing is spendable before the cliff and the vested amount grows linearly from 0 after it). The schedule is fixed in genesis: no message can change a vesting account's schedule. Owner must still supply the real team-controller key for this address before mainnet; the schedule above does not by itself fix custody."
     },
     "treasury": {
       "id": "treasury",
@@ -45,10 +46,13 @@
       "amount_appl": "150000000000000000000000000",
       "label": "Ecosystem treasury (DAO)",
       "account": "people1e9ymgxdtdgszjg7knu0gk9uy2dff8sm4pd0zl2",
-      "account_kind": "multisig_2of3",
+      "account_kind": "multisig_2of3_continuous_vesting",
+      "vesting_upfront_pct": 0,
+      "vesting_cliff_months": 6,
+      "vesting_linear_months": 18,
       "legacy_module_name": "people_treasury",
       "owner_placeholder": true,
-      "note": "M11-2 (owner-approved): spendable only by the 2-of-3 treasury_multisig below (owner, co-founder, owner's cold address). An existing network upgrading from the old people_treasury module account sweeps its balance here via the v2-treasury-multisig gov software-upgrade (see chain/overrides/evmd/upgrades). Path to on-chain governance: the multisig can later transfer custody to x/gov (e.g. by moving funds to the community pool) via a further coordinated upgrade."
+      "note": "A11 (owner decision): same schedule as team, 0% at genesis, 6-month cliff, then 18 months linear. The 2-of-3 treasury_multisig below is a ContinuousVestingAccount whose original_vesting is this bucket only; the liquidity bucket shares the address and stays spendable from genesis. Spendable only by the 2-of-3 treasury_multisig below (owner, co-founder, owner's cold address). An existing network upgrading from the old people_treasury module account sweeps its balance here via the v2-treasury-multisig gov software-upgrade (see chain/overrides/evmd/upgrades). Path to on-chain governance: the multisig can later transfer custody to x/gov (e.g. by moving funds to the community pool) via a further coordinated upgrade."
     },
     "sale": {
       "id": "sale",
@@ -70,7 +74,7 @@
       "account_kind": "multisig_2of3",
       "legacy_module_name": "people_liquidity",
       "owner_placeholder": true,
-      "note": "M11-2 (owner-approved): same 2-of-3 treasury_multisig as the treasury bucket (shared custody is a deliberate consolidation, not an accident); see treasury note for the upgrade/governance path."
+      "note": "M11-2 (owner-approved): same 2-of-3 treasury_multisig as the treasury bucket (shared custody is a deliberate consolidation, not an accident); see treasury note for the upgrade/governance path. TODO(owner decides): liquidity unlock schedule; unchanged by A11, spendable from genesis (not part of the multisig's original_vesting)."
     }
   },
   "treasury_multisig": {

@@ -125,7 +125,7 @@
           "Không yêu cầu KYC để mua. Việc bán lại yêu cầu bằng chứng về danh tính con người (Human Passport hoặc Telegram), và đây không phải là KYC.",
           "Đợt bán diễn ra cho đến khi bán hết (đường cong đóng khi huy động đạt 4 triệu USD) hoặc trong 24 tháng kể từ khi mở bán, tùy điều kiện nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
           "Thời hạn bán, công thức giá và các giới hạn không thay đổi sau khi đợt bán mở.",
-          "Bán lại không phải là hoàn tiền: Bán lại cho quỹ dự trữ — chỉ dành cho người dùng đã xác minh. Mỗi lô có thể được bán lại sau 30 ngày nắm giữ, theo giá trên đường cong tại thời điểm bạn bán. Tổng lượng bán lại được giới hạn ở mức 2% quỹ dự trữ mỗi ngày cho tất cả mọi người và 2.000 USD mỗi địa chỉ mỗi ngày. Phí: 1,5%, hoặc 3% khi lượng bán lại trong ngày đó đã vượt quá 1% quỹ dự trữ. Đóng lại sau graduation. Thanh toán bằng USDC trên Base.",
+          "Bán lại không phải là hoàn tiền: Bán lại cho quỹ dự trữ — chỉ dành cho người dùng đã xác minh. Mỗi lô có thể được bán lại sau 30 ngày nắm giữ, theo giá trên đường cong tại thời điểm bạn bán. Tổng lượng bán lại được giới hạn ở mức 2% quỹ dự trữ trong bất kỳ 24 giờ trượt nào cho tất cả mọi người và 2.000 USD mỗi địa chỉ trong cửa sổ 24 giờ trượt. Phí: 1,5%, hoặc 3% chỉ trên phần bán lại trong 24 giờ đó vượt quá 1% quỹ dự trữ. Đóng lại sau graduation. Thanh toán bằng USDC trên Base.",
           "Không nội dung nào trên trang web này là lời chào bán hay cam kết bán PPL tại những nơi việc bán bị hạn chế, và việc tham gia có thể không khả dụng tại khu vực pháp lý của bạn."
         ]
       },
