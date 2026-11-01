@@ -271,8 +271,7 @@ contract PplCurveHubV2GasTest is HubV2Base {
     }
 
     function _limits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) internal {
-        vm.prank(owner);
-        hub.setWindowLimits(maxBuys, minBuy, maxSells, minSell);
+        hub.testSetWindowLimits(maxBuys, minBuy, maxSells, minSell);
     }
 
     function _sumLots(address who, uint256 from, uint256 n) internal view returns (uint256 sum) {

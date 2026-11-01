@@ -2,21 +2,28 @@
 pragma solidity ^0.8.24;
 
 /// @title PplReturnBurn
-/// @notice PEOPLE-network side of a `PplCurveHubV2.sellBack`: the seller burns the PPL it sells
+/// @notice PEOPLE-network side of a `PplCurveHubV2.sellBack`: the seller hands in the PPL it sells
 /// back here, and the hub's `returnVerifier` signs a `MainnetReturn` attestation only for a
-/// `ReturnBurned` event of this contract (owner decision A1: returned PPL are burned, there is no
-/// treasury sink).
+/// `ReturnBurned` event of this contract.
 ///
-/// Burn = native PPL sent here can never leave: there is no withdraw, `receive`/`fallback`,
-/// `delegatecall` or `selfdestruct`. User-facing state change is `burnForReturn`. Owner paths that
-/// could freeze sell-back (`purchaseReporter`, reporter credit cap) use the same 48-hour timelock
-/// as `PplCurveHubV2` admin ops (with grace period and cancel).
+/// Returned PPL are NOT burned (owner decision 2026-11-01, replacing the earlier burn design): each
+/// return is forwarded in the same call to the immutable `returnRecipient`, the sale distribution
+/// wallet. `sellBack` lowers the hub's `soldPpl`, so returned PPL count as unsold again: they can be
+/// delivered to a later buyer, and what is left at the end goes to the Community Pool with the rest
+/// of the unsold supply. This matches the fixed-supply, 0%-burn model (docs/ECONOMICS.md §7).
+/// The names `burnForReturn` / `ReturnBurned` are kept so the attestation signer and the site keep
+/// working; "burn" here means the PPL leave the seller for good, which is what stops a double sale.
 ///
-/// `returnId` commits to the burned amount, the destination hub, the Base seller, the PEOPLE
+/// PPL cannot stay here: there is no `receive`/`fallback`, `delegatecall` or `selfdestruct`, and
+/// the only value transfer is the forward to `returnRecipient`. Owner paths that could freeze
+/// sell-back (`purchaseReporter`, reporter credit cap) use the same 48-hour timelock as
+/// `PplCurveHubV2` admin ops (with grace period and cancel).
+///
+/// `returnId` commits to the returned amount, the destination hub, the Base seller, the PEOPLE
 /// source chain id and the destination chain id (plus this contract and a nonce, so two equal
-/// burns still differ). The hub's `MainnetReturn` attestation repeats those fields and checks them.
+/// returns still differ). The hub's `MainnetReturn` attestation repeats those fields and checks them.
 ///
-/// Only PPL credited as hub purchases (`hubPurchasedPpl`) may be burned here; reward grants and
+/// Only PPL credited as hub purchases (`hubPurchasedPpl`) may be returned here; reward grants and
 /// plain transfers do not increase that ledger (SPEC §5.2 on-chain enforcement).
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -29,9 +36,11 @@ contract PplReturnBurn is Ownable {
     bytes32 private constant OP_SET_PURCHASE_REPORTER = keccak256("setPurchaseReporter");
     bytes32 private constant OP_SET_REPORTER_CREDIT_CAP = keccak256("setReporterCreditCap");
 
-    /// @notice Total native PPL ever burned here (equals this contract's balance).
-    uint256 public totalBurned;
-    /// @notice Number of returns burned so far; feeds `returnId`.
+    /// @notice Sale distribution wallet that receives every returned PPL. Cannot change.
+    address public immutable returnRecipient;
+    /// @notice Total native PPL ever returned through this contract (all forwarded to `returnRecipient`).
+    uint256 public totalReturned;
+    /// @notice Number of returns so far; feeds `returnId`.
     uint256 public returnCount;
     /// @notice PPL (wei) bought through the hub and delivered to `account`; only this balance may
     /// be sent in `burnForReturn` (SPEC §5.2).
@@ -58,14 +67,17 @@ contract PplReturnBurn is Ownable {
     mapping(bytes32 => bytes32) private _pendingByKind;
     uint256 private _adminNonce;
 
-    constructor(address owner_) Ownable(owner_) {}
+    constructor(address owner_, address returnRecipient_) Ownable(owner_) {
+        if (returnRecipient_ == address(0) || returnRecipient_ == address(this)) revert ZeroAddress();
+        returnRecipient = returnRecipient_;
+    }
 
     /// @param returnId Unique id the verifier puts into `MainnetReturn.returnId`.
-    /// @param from The PEOPLE-network account that burned the PPL.
+    /// @param from The PEOPLE-network account that returned the PPL.
     /// @param hub The PplCurveHubV2 the PPL are sold back to.
     /// @param personId The person whose lots are sold back.
     /// @param seller The hub-chain address allowed to call `sellBack` for this return.
-    /// @param amount Burned PPL (wei) = `MainnetReturn.pplAmount`. Bound into `returnId`.
+    /// @param amount Returned PPL (wei) = `MainnetReturn.pplAmount`. Bound into `returnId`.
     /// @param destChainId Hub chain id bound into `returnId`. Signers must match it to their hub.
     event ReturnBurned(
         bytes32 indexed returnId,
@@ -90,6 +102,7 @@ contract PplReturnBurn is Ownable {
     error OpExpired();
     error KindAlreadyQueued();
     error ReporterCreditCapExceeded();
+    error ForwardFailed();
 
     /// @notice Queue the hub delivery relayer. `address(0)` disables crediting (and thus sell-back).
     /// Executable after `ADMIN_TIMELOCK`. There is no immediate setter.
@@ -140,8 +153,9 @@ contract PplReturnBurn is Ownable {
         hubPurchasedPpl[account] += amount;
     }
 
-    /// @notice Burn `msg.value` PPL as a return to `hub` for `personId`, claimable on `destChainId`
-    /// by `seller` (the Base address that will call `sellBack` and receive the stablecoin).
+    /// @notice Return `msg.value` PPL to `hub` for `personId`, claimable on `destChainId` by `seller`
+    /// (the Base address that will call `sellBack` and receive the stablecoin). The PPL go straight
+    /// to `returnRecipient`.
     /// @param destChainId Chain id of the hub deployment (Base). Bound into `returnId` with
     /// `block.chainid` (the PEOPLE source chain), `hub`, `seller` and `msg.value`.
     function burnForReturn(address hub, bytes32 personId, address seller, uint256 destChainId)
@@ -157,8 +171,12 @@ contract PplReturnBurn is Ownable {
         hubPurchasedPpl[msg.sender] -= msg.value;
         returnId =
             keccak256(abi.encode(block.chainid, destChainId, hub, seller, msg.value, address(this), returnCount++));
-        totalBurned += msg.value;
+        totalReturned += msg.value;
         emit ReturnBurned(returnId, msg.sender, hub, personId, seller, msg.value, destChainId);
+        // Effects are done; the recipient is a fixed wallet chosen at deploy, and any re-entry
+        // could only spend the caller's own remaining `hubPurchasedPpl`.
+        (bool ok,) = returnRecipient.call{value: msg.value}("");
+        if (!ok) revert ForwardFailed();
     }
 
     function _queue(bytes32 kind, address who, uint256 amount) internal returns (bytes32 id) {

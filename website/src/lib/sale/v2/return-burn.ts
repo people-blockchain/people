@@ -1,6 +1,6 @@
 import { decodeEventLog, getAddress, parseAbiItem, type Address, type Hex } from "viem";
 
-/** PEOPLE mainnet, where returned PPL are burned. */
+/** PEOPLE mainnet, where returned PPL go back to the sale wallet (`PplReturnBurn.returnRecipient`). */
 export const PEOPLE_MAINNET_CHAIN_ID = 97401;
 
 export const RETURN_BURNED_EVENT = parseAbiItem(

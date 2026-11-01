@@ -602,7 +602,9 @@ contract PplCurveHubV2SellTest is HubV2Base {
         vm.expectRevert(err);
         hub.queueSetTrustedRouter(alice, true);
         vm.expectRevert(err);
-        hub.setWindowLimits(20, MIN_BUY, 10, 1e6);
+        hub.queueSetWindowLimits(20, MIN_BUY, 10, 1e6);
+        vm.expectRevert(err);
+        hub.executeSetWindowLimits(bytes32(uint256(1)));
         vm.expectRevert(err);
         hub.transferOwnership(alice);
         vm.stopPrank();

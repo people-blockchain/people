@@ -8,6 +8,7 @@ import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { PPL_CURVE_HUB_V2_ABI } from "@/lib/sale/v2/abi";
 import {
   PEOPLE_MAINNET_CHAIN_ID,
+  addCosignature,
   createReturnAttestation,
   getReturnVerifierSigner,
   readHubChainId,
@@ -35,6 +36,9 @@ function hubChain(chainId: number) {
  * chain id and the destination hub chain id. The signer comes from
  * `getReturnVerifierSigner`: AWS KMS in production (`SALE_RETURN_VERIFIER_MODE=kms`),
  * an env key only on Base Sepolia. Anything else answers 503 and does not sign.
+ * When the hub has a `returnCosigner` (mandatory on Base mainnet), the independent cosigner
+ * server at `SALE_RETURN_COSIGNER_URL` re-checks the same receipt and adds its signature; the
+ * answer then carries both (130 bytes). Without it the route does not answer with a signature.
  */
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
@@ -102,5 +106,23 @@ export async function POST(request: Request) {
   });
 
   if (!result.ok) return errorResponse(result.error, result.status);
-  return NextResponse.json(result.body satisfies { signature: Hex });
+
+  const cosigned = await addCosignature({
+    primary: result.body,
+    txHash: typeof body.txHash === "string" ? body.txHash : "",
+    hubChainId,
+    cosignerUrl: process.env.SALE_RETURN_COSIGNER_URL,
+    cosignerToken: process.env.SALE_RETURN_COSIGNER_TOKEN,
+    cosigner: async () => {
+      if (!hubAddress || !isAddress(hubAddress)) throw new Error("not_configured");
+      const c = await hubClient.readContract({
+        address: getAddress(hubAddress),
+        abi: PPL_CURVE_HUB_V2_ABI,
+        functionName: "returnCosigner",
+      });
+      return c as Address;
+    },
+  });
+  if (!cosigned.ok) return errorResponse(cosigned.error, cosigned.status);
+  return NextResponse.json({ ...result.body, signature: cosigned.signature } satisfies { signature: Hex });
 }
