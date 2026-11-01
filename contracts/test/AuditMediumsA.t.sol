@@ -432,7 +432,7 @@ contract AuditMediumsA_GovernanceClockTest is Test {
         governor = new PeopleGovernor(gov, timelock);
     }
 
-    /// Chain 97401 blocks are ~1s, not the 12s `GovernorSettings`/`ERC20Votes` defaults assume.
+    /// Chain 97401 blocks are ~4 s, not the 12 s `GovernorSettings`/`ERC20Votes` defaults assume.
     /// The token's clock must report wall-clock time, and the governor's delay/period must be
     /// real seconds (1 day / 7 days), not a block count calibrated for a different chain.
     function test_clockModeIsTimestamp() public view {

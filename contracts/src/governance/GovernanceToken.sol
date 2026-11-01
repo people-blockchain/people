@@ -16,7 +16,7 @@ contract GovernanceToken is ERC20, ERC20Permit, ERC20Votes {
         super._update(from, to, value);
     }
 
-    /// @notice AUD-M11: chain 97401 blocks are ~1s, not the 12s `GovernorSettings`/`ERC20Votes`
+    /// @notice AUD-M11: chain 97401 blocks are ~4 s, not the 12 s `GovernorSettings`/`ERC20Votes`
     /// defaults assume. Use wall-clock time for voting checkpoints instead of block number so
     /// `PeopleGovernor`'s voting delay/period are real time, independent of block time.
     function clock() public view override returns (uint48) {
