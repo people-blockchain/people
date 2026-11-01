@@ -16,6 +16,7 @@ import {
 } from "viem";
 
 import { ensureSaleChain, type EIP1193Provider } from "@/lib/evm/client";
+import { approveErc20IfNeeded } from "@/lib/evm/erc20-allowance";
 import { SALE, SALE_CHAIN, saleContractAddress } from "@/lib/sale/config";
 import { scaleUsd6 } from "@/lib/sale/amount";
 import { pplCurveHubAbi } from "@/lib/sale/pplCurveHub.abi";
@@ -215,25 +216,34 @@ export async function executeBuy(
     if (failure) return finish({ step: "error", ...failure });
     const minPplOut = minOutWithSlippage(state.quotedPpl);
 
-    // 2. approve (only if needed)
-    const allowance = await publicClient.readContract({
-      address: params.token,
-      abi: erc20Abi,
-      functionName: "allowance",
-      args: [params.account, hub],
+    // 2. approve (only if needed), then wait and re-read the allowance
+    const approved = await approveErc20IfNeeded({
+      amount: amountIn,
+      readAllowance: () =>
+        publicClient.readContract({
+          address: params.token,
+          abi: erc20Abi,
+          functionName: "allowance",
+          args: [params.account, hub],
+        }),
+      approve: async () => {
+        onStatus({ step: "approving" });
+        return walletClient.writeContract({
+          address: params.token,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [hub, amountIn],
+          account: params.account,
+          chain: SALE_CHAIN.viemChain,
+        });
+      },
+      waitForReceipt: async (hash) => {
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        assertReceiptSuccess(receipt);
+        return receipt;
+      },
     });
-    if (allowance < amountIn) {
-      onStatus({ step: "approving" });
-      const approveHash = await walletClient.writeContract({
-        address: params.token,
-        abi: erc20Abi,
-        functionName: "approve",
-        args: [hub, amountIn],
-        account: params.account,
-        chain: SALE_CHAIN.viemChain,
-      });
-      assertReceiptSuccess(await publicClient.waitForTransactionReceipt({ hash: approveHash }));
-    }
+    if (!approved.ok) throw new Error(approved.reason === "reverted" ? "approval reverted" : "allowance unchanged");
 
     // 3. full simulation with the allowance in place
     const { request } = await publicClient.simulateContract({

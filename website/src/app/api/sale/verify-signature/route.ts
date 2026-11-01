@@ -3,14 +3,15 @@ import { getAddress, isAddress, verifyMessage, type Address, type Hex } from "vi
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { consumeFounderPassportNonce } from "@/lib/founders/passport-wallet-nonce";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
-import { SALE_CHAIN, saleContractAddress } from "@/lib/sale/config";
+import { getVerifierSignerForVersion } from "@/lib/sale/verifier/signer";
 import {
   evaluateSaleEligibilityForUser,
   recordSaleBinding,
 } from "@/lib/sale/eligibility";
 import { PPL_CURVE_HUB_ABI, saleHubPublicClient } from "@/lib/sale/hub-read";
-import { getVerifierSigner } from "@/lib/sale/verifier/signer";
 import { verificationDigest } from "@/lib/sale/verifier/typed-data";
+import { parseSaleNonceCode } from "@/lib/sale/v2/ownership";
+import { parseSaleVerifyVersion, readVerifyTargetEnv, resolveVerifyTarget, saleOwnershipMessage } from "@/lib/sale/verify-target";
 import { SITE_URL } from "@/lib/site";
 
 const ZERO_BYTES32 = `0x${"0".repeat(64)}` as Hex;
@@ -23,36 +24,6 @@ function errorResponse(error: string, status: number) {
   return NextResponse.json({ error }, { status });
 }
 
-/** SIWE-style proof that the session user owns the wallet it wants bound. */
-export function buildSaleOwnershipMessage(input: {
-  domain: string;
-  account: Address;
-  chainId: number;
-  hub: Address;
-  nonceCode?: string;
-  issuedAt?: string;
-  expiresAt?: string;
-}): string {
-  const lines = [
-    `${input.domain} wants you to verify this wallet for the PPL sale.`,
-    "",
-    "This proves wallet ownership only. It does not move funds.",
-    `Address: ${input.account}`,
-    `Chain ID: ${input.chainId}`,
-    `Hub: ${input.hub}`,
-  ];
-  if (input.nonceCode) {
-    lines.push(`Nonce: ${input.nonceCode}`);
-    if (input.issuedAt) lines.push(`Issued At: ${input.issuedAt}`);
-    if (input.expiresAt) lines.push(`Expiration Time: ${input.expiresAt}`);
-  }
-  return lines.join("\n");
-}
-
-function saleDomain(): string {
-  return (process.env.AUTH_URL?.trim() || SITE_URL).replace(/^https?:\/\//, "");
-}
-
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
   if (!guard.ok) return guard.response;
@@ -61,45 +32,40 @@ export async function POST(request: Request) {
     return errorResponse("rate_limited", 429);
   }
 
-  let body: { account?: unknown; ownershipSignature?: unknown; nonceCode?: unknown };
+  let body: { account?: unknown; ownershipSignature?: unknown; nonceCode?: unknown; version?: unknown };
   try {
     body = await request.json();
   } catch {
     return errorResponse("invalid_json", 400);
   }
 
+  const nonceCode = parseSaleNonceCode(body.nonceCode);
+  if (!nonceCode) return errorResponse("nonce_required", 400);
+
   if (
     typeof body.account !== "string" ||
     !isAddress(body.account) ||
     typeof body.ownershipSignature !== "string" ||
-    !/^0x[0-9a-fA-F]{130}$/.test(body.ownershipSignature) ||
-    (body.nonceCode !== undefined && typeof body.nonceCode !== "string")
+    !/^0x[0-9a-fA-F]{130}$/.test(body.ownershipSignature)
   ) {
     return errorResponse("invalid_input", 400);
   }
 
   const account = getAddress(body.account);
-  const hubRaw = saleContractAddress();
-  if (!hubRaw) return errorResponse("sale_not_configured", 503);
-  const hub = getAddress(hubRaw);
-  const chainId = SALE_CHAIN.id;
+  const version = parseSaleVerifyVersion(body.version);
+  const target = resolveVerifyTarget(version, readVerifyTargetEnv());
+  if (!target.hub) return errorResponse("sale_not_configured", 503);
+  const hub = getAddress(target.hub);
+  const chainId = target.chainId;
 
-  let nonceCode: string | undefined;
-  let issuedAt: string | undefined;
-  let expiresAt: string | undefined;
-  if (typeof body.nonceCode === "string" && body.nonceCode.trim()) {
-    nonceCode = body.nonceCode.trim();
-    const consumed = await consumeFounderPassportNonce(nonceCode, guard.userId);
-    if (!consumed.ok) return errorResponse("nonce_invalid", 422);
-    issuedAt = consumed.issuedAt.toISOString();
-    expiresAt = consumed.expiresAt.toISOString();
-  }
+  const consumed = await consumeFounderPassportNonce(nonceCode, guard.userId);
+  if (!consumed.ok) return errorResponse("nonce_invalid", 422);
+  const issuedAt = consumed.issuedAt.toISOString();
+  const expiresAt = consumed.expiresAt.toISOString();
 
-  const message = buildSaleOwnershipMessage({
-    domain: saleDomain(),
+  const message = saleOwnershipMessage(target, {
+    domain: version === "v2" ? SITE_URL : process.env.AUTH_URL?.trim() || SITE_URL,
     account,
-    chainId,
-    hub,
     nonceCode,
     issuedAt,
     expiresAt,
@@ -175,7 +141,7 @@ export async function POST(request: Request) {
   let signerAddress: Address;
   let signature: Hex;
   try {
-    const signer = await getVerifierSigner(chainId);
+    const signer = await getVerifierSignerForVersion(version, chainId);
     signerAddress = await signer.getAddress();
     if (getAddress(signerAddress) !== verifierOnChain) {
       return errorResponse("verifier_mismatch", 503);

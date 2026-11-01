@@ -1,9 +1,23 @@
 import { mkdir } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "@playwright/test";
 
-const ARTIFACT_ROOT = process.env.ROADMAP_SCREENSHOT_DIR ?? "/opt/cursor/artifacts/screenshots";
+const PREFERRED_ARTIFACT_ROOT = process.env.ROADMAP_SCREENSHOT_DIR ?? "/opt/cursor/artifacts/screenshots";
 const BASE = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
+
+async function artifactRoot() {
+  try {
+    await mkdir(PREFERRED_ARTIFACT_ROOT, { recursive: true });
+    return PREFERRED_ARTIFACT_ROOT;
+  } catch (error) {
+    const code = error && typeof error === "object" && "code" in error ? error.code : "";
+    if (code !== "EACCES" && code !== "EPERM" && code !== "EROFS") throw error;
+    const fallback = path.join(tmpdir(), "people-roadmap-artifacts");
+    await mkdir(fallback, { recursive: true });
+    return fallback;
+  }
+}
 
 async function setLocale(page, lang) {
   await page.addInitScript((value) => {
@@ -30,7 +44,7 @@ async function ensureLocale(page, lang) {
 
 for (const lang of ["en", "ru"]) {
   test(`roadmap and agents ${lang} screenshots`, async ({ page }) => {
-    await mkdir(ARTIFACT_ROOT, { recursive: true });
+    const ARTIFACT_ROOT = await artifactRoot();
     await setLocale(page, lang);
     await ensureLocale(page, lang);
 

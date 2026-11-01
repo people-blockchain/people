@@ -72,7 +72,7 @@
       },
       {
         "title": "PPL direto na sua carteira PEOPLE",
-        "body": "Você paga em USDC ou USDT, e o PPL é creditado na hora no seu endereço na rede PEOPLE."
+        "body": "Você paga em USDC ou USDT, e o PPL é creditado na hora no seu endereço na PEOPLE mainnet."
       }
     ],
     "verifyLink": "Como se verificar"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "Primeiros {whitelistDays} dias: só pessoas verificadas",
-        "body": "Uma pessoa, um endereço. De {min} a {max} por compra, até {perDay} por endereço por dia (UTC) e uma pausa de {cooldown} segundos entre compras."
+        "body": "Uma pessoa, um endereço. De {min} a {max} por compra, até {perDay} por endereço numa janela móvel de 24 horas e uma pausa de {cooldown} segundos entre compras."
       },
       {
         "title": "{reservePct} de cada compra fica como reserva",
@@ -101,7 +101,7 @@
       },
       {
         "title": "Revenda após {holdDays} dias",
-        "body": "Cada compra pode ser revendida {holdDays} dias depois de feita, pelo preço da curva naquele momento. Por dia: até {sellDailyPct} da reserva para todos os vendedores juntos e até {sellPerAddress} por endereço. Taxa de {feeLow}; {feeHigh} sobre a parte acima de {feeThreshold} da reserva naquele dia. Só pessoas verificadas."
+        "body": "Cada compra pode ser revendida {holdDays} dias depois de feita, pelo preço da curva naquele momento. Até {sellDailyPct} da reserva em qualquer janela móvel de 24 horas para todos os vendedores juntos, e até {sellPerAddress} por endereço numa janela móvel de 24 horas. Taxa de {feeLow}; {feeHigh} sobre a parte acima de {feeThreshold} da reserva nessas 24 horas. Só pessoas verificadas."
       },
       {
         "title": "Qualquer pessoa pode conferir",
@@ -141,7 +141,7 @@
       },
       {
         "q": "Quando posso enviar PPL para outras pessoas?",
-        "a": "O PPL é creditado na rede PEOPLE logo após a compra. No início a rede só recebe PPL: as transferências entre participantes abrem mais tarde, quando houver cerca de 1.000 participantes verificados. Até lá, você pode revender o PPL à reserva conforme as regras acima."
+        "a": "O PPL é creditado na PEOPLE mainnet logo após a compra. No início a rede só recebe PPL: as transferências entre participantes abrem mais tarde, quando houver cerca de 1.000 participantes verificados. Até lá, você pode revender o PPL à reserva conforme as regras acima."
       },
       {
         "q": "De quais redes posso pagar?",
@@ -149,7 +149,7 @@
       },
       {
         "q": "Quanto dá para revender hoje?",
-        "a": "Cada compra pode ser revendida {holdDays} dias depois de feita. Por dia, todos os vendedores juntos podem revender até {sellDailyPct} da reserva, e cada endereço até {sellPerAddress}. Reserva pequena significa limite diário pequeno. O número de hoje aparece nas regras acima."
+        "a": "Cada compra pode ser revendida {holdDays} dias depois de feita. Em qualquer janela móvel de 24 horas, todos os vendedores juntos podem revender até {sellDailyPct} da reserva, e cada endereço até {sellPerAddress} numa janela móvel de 24 horas. Reserva pequena significa limite pequeno. O número da janela atual aparece nas regras acima."
       },
       {
         "q": "Posso pedir reembolso?",
@@ -210,7 +210,7 @@
     "priceAfter": "Preço após sua compra",
     "estimate": "É uma estimativa. A quantidade exata é confirmada na rede antes de você assinar.",
     "limitPerBuy": "{min}–{max} por compra",
-    "limitPerDay": "Até {amount} por endereço por dia (UTC)",
+    "limitPerDay": "Até {amount} por endereço numa janela móvel de 24 horas",
     "cooldown": "Pausa de {seconds} s entre compras",
     "overLimit": "Máximo {amount} em uma compra.",
     "belowMin": "Informe um valor para ver a cotação.",
@@ -278,9 +278,9 @@
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
     "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
-    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites diários: 2% da reserva para todos juntos e US$ 2.000 por endereço. Taxa de 1,5%; 3% só sobre a parte das vendas do dia acima de 1% da reserva. Encerra quando a curva fecha. Você recebe em USDC na rede Base.",
+    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL é queimado na PEOPLE mainnet. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Encerra quando a curva fecha. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
-    "feesBody": "Taxas: a da rede Base (gas), paga em ETH — geralmente cerca de US$ 0,01; a de troca ou ponte da LI.FI — mostrada no widget antes de confirmar; a de venda de volta à reserva — 1,5%, e 3% só sobre a parte das vendas do dia acima de 1% da reserva.",
+    "feesBody": "Taxas: a da rede Base (gas), paga em ETH — geralmente cerca de US$ 0,01; a de troca ou ponte da LI.FI — mostrada no widget antes de confirmar; a de venda de volta à reserva — 1,5%, e 3% só sobre a parte das vendas em 24 horas móveis acima de 1% da reserva.",
     "timingBody": "Uma compra na Base é confirmada em segundos. Pagamentos de outras redes costumam chegar em 1–20 minutos. Os pagamentos da venda de volta são feitos em USDC na rede Base.",
     "getUsdc": "Ainda não tem USDC? Compre em uma corretora e saque para a rede Base, ou pague de outra rede abaixo. Você também precisa de um pouco de ETH na Base para as taxas.",
     "glossaryBase": "Base é uma rede de taxas baixas construída sobre o Ethereum. USDC e USDT são stablecoins atreladas ao dólar americano. LI.FI é o serviço que troca tokens e os move entre redes.",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Fase de lista de permissões",
-      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "whitelistBody": "Primeiros 7 dias: apenas pessoas verificadas. Mínimo $10 / máximo $500 por compra / $2.000 numa janela móvel de 24 horas.",
       "daysLeft": "Faltam {days} dias",
       "openTitle": "Fase pública",
-      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 por dia.",
+      "openBody": "Aberto a todos. Mínimo $10 / máximo $500 por compra / $2.000 numa janela móvel de 24 horas.",
       "notOpenTitle": "A venda ainda não está aberta",
       "notOpenBody": "As compras abrem quando o contrato entra na fase de lista de permissões.",
       "expiredTitle": "Venda encerrada",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "Compra concluída",
-      "credited": "{ppl} PPL creditados em {address}",
+      "credited": "{ppl} PPL creditados na PEOPLE mainnet em {address}",
       "tx": "Ver transação",
       "unlock": "A venda de volta abre em {date}",
       "again": "Comprar mais PPL"
@@ -375,6 +375,50 @@
       "body": "A troca entregou {amount} USDC na Base, mas a compra de PPL não foi concluída.",
       "topUp": "Comprar PPL com {amount} USDC",
       "hint": "Isso repete a compra na Base com os USDC recebidos."
+    },
+    "sellBack": {
+      "title": "Vender PPL",
+      "cta": "Vender PPL",
+      "available": "Disponível para vender",
+      "unlock": "O próximo lote libera em {date}",
+      "noneYet": "Nada está liberado ainda. Cada lote abre 30 dias após a compra.",
+      "personal": "Seu limite restante",
+      "personalHint": "Restam {amount} de US$ 2.000 numa janela móvel de 24 horas",
+      "global": "Reserva restante hoje",
+      "globalHint": "Restam {amount} do limite de 2% da reserva em 24 horas móveis",
+      "fee": "Taxa",
+      "feeLow": "1,5%",
+      "feeHigh": "3%",
+      "feeMixed": "1,5% até 1% da reserva, depois 3%",
+      "receive": "Você recebe",
+      "amount": "PPL a vender",
+      "max": "Máximo",
+      "burning": "Queimando PPL na PEOPLE mainnet…",
+      "attesting": "Conferindo a queima…",
+      "selling": "Pagando USDC na Base…",
+      "done": "Venda concluída. O USDC é pago na Base.",
+      "payoutNote": "O PPL é queimado na PEOPLE mainnet. Você recebe USDC na Base. A compra é paga em USDC ou USDT.",
+      "error": "A venda não foi concluída. Tente de novo.",
+      "rejected": "Você recusou o pedido na carteira.",
+      "notConfigured": "A venda ainda não está disponível.",
+      "notEnough": "Não há PPL suficiente além dos 30 dias.",
+      "globalCap": "O limite de 2% da reserva em 24 horas móveis acabou.",
+      "personalCap": "Seu limite de US$ 2.000 nesta janela de 24 horas acabou.",
+      "slippage": "O preço se moveu além do permitido. Tente de novo.",
+      "closed": "A revenda está fechada.",
+      "disabled": "A revenda está desligada.",
+      "used": "Esta venda já foi paga.",
+      "expired": "A confirmação expirou. Comece de novo.",
+      "badSignature": "A confirmação não confere.",
+      "belowMin": "O valor está abaixo do mínimo de venda.",
+      "tooMany": "Vendas demais nestas 24 horas.",
+      "reserve": "A reserva não cobre este pagamento.",
+      "reverted": "A transação foi revertida.",
+      "switchRejected": "A rede não foi trocada.",
+      "pendingTitle": "Pagamentos pendentes",
+      "pendingBody": "Uma venda espera o pagamento em USDC na Base. Conclua esse pagamento antes de vender mais PPL.",
+      "continuePayout": "Continuar o pagamento",
+      "confirmAnotherSale": "Vender mais mesmo assim"
     }
   }
 }

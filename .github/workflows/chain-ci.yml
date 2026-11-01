@@ -41,6 +41,8 @@ jobs:
         run: python3 -m unittest test_generate_founder_nft_genesis
       - name: Test fund-testnet script
         run: bash scripts/fund-testnet.test.sh
+      - name: Test emission genesis tooling (vesting schedules)
+        run: python3 scripts/test_apply_emission_genesis.py
       - name: Build peopled
         run: bash scripts/build-peopled.sh
       - name: Smoke test (local 3-validator net)

@@ -31,6 +31,7 @@ export function readV2Env(): V2Env {
     NEXT_PUBLIC_PPL_V2_HUB_ADDRESS: process.env.NEXT_PUBLIC_PPL_V2_HUB_ADDRESS,
     NEXT_PUBLIC_PPL_V2_CHAIN_ID: process.env.NEXT_PUBLIC_PPL_V2_CHAIN_ID,
     NEXT_PUBLIC_PPL_V2_OPEN_DATE: process.env.NEXT_PUBLIC_PPL_V2_OPEN_DATE,
+    NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS: process.env.NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS,
   };
 }
 
@@ -146,6 +147,26 @@ export function estimatePplOut(usdcIn: bigint, spotPriceWad: bigint): bigint {
 export function minPplOutFromEstimate(expected: bigint, slippageBps: number = V2_SALE.slippageBps): bigint {
   const bps = BigInt(Math.max(0, Math.min(10_000, Math.round(slippageBps))));
   return (expected * (BigInt(10_000) - bps)) / BigInt(10_000);
+}
+
+/**
+ * USDC the hub actually pulls. A buy that finishes the raise cap is charged
+ * only the remaining room, not the full requested amount.
+ */
+export function chargedBuyUsd6(amountIn: bigint, remainingUsd6: bigint): bigint {
+  if (amountIn <= BigInt(0) || remainingUsd6 <= BigInt(0)) return BigInt(0);
+  return amountIn < remainingUsd6 ? amountIn : remainingUsd6;
+}
+
+/** Slippage floor for `buy`, based on the charged amount rather than the request. */
+export function minPplOutForChargedBuy(input: {
+  amountIn: bigint;
+  remainingUsd6: bigint;
+  spotPriceWad: bigint;
+  slippageBps?: number;
+}): bigint {
+  const charged = chargedBuyUsd6(input.amountIn, input.remainingUsd6);
+  return minPplOutFromEstimate(estimatePplOut(charged, input.spotPriceWad), input.slippageBps);
 }
 
 /** Sell-back unlocks exactly 30 days after the purchase. */
