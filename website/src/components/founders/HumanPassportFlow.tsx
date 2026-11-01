@@ -95,6 +95,7 @@ export function HumanPassportFlow({
     checking,
   });
   const scored = passportScoredWallet(passportWallet, primaryWallet);
+  const guide = GUIDE[lang] ?? null;
 
   // `Date.now()` is read here, on mount, and never during render.
   useEffect(() => {
@@ -324,6 +325,23 @@ export function HumanPassportFlow({
               wallet: scored ? maskAddress(scored.address) : c.walletLabelNone,
             })}
           </p>
+          {guide ? (
+            <ol
+              className="list-decimal space-y-1.5 rounded-xl border border-brand/30 bg-brand/5 py-3 pl-8 pr-3 text-sm text-ink"
+              data-testid="founders-hp-guide"
+            >
+              {guide.steps.map((line, i) => (
+                <li key={i}>
+                  {fill(line, {
+                    need: outcome?.kind === "too_low" ? outcome.threshold : HUMAN_PASSPORT_DEFAULT_MIN_SCORE,
+                    wallet: scored ? maskAddress(scored.address) : c.walletLabelNone,
+                  })}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-xs text-ink-3">{c.step2Order}</p>
+          )}
           <div className="flex flex-wrap gap-2">
             <a
               href={HUMAN_PASSPORT_APP_URL}
@@ -347,7 +365,6 @@ export function HumanPassportFlow({
               {checking ? c.checkBusy : c.checkCta}
             </button>
           </div>
-          <p className="text-xs text-ink-3">{c.step2Order}</p>
 
           {/* Alternative wallet. Collapsed so it can never compete with the hop above. */}
           <details className="rounded-xl border border-line bg-surface-2 px-3 py-2" data-testid="founders-passport-wallet">
@@ -545,6 +562,32 @@ type FlowCopy = {
   errTimeout: string;
   errNetwork: string;
   retryCta: string;
+};
+
+/** Matches the server default in `human-passport-config.ts` when FOUNDERS_HUMAN_PASSPORT_MIN_SCORE is unset. */
+const HUMAN_PASSPORT_DEFAULT_MIN_SCORE = 20;
+
+/**
+ * Plain step-by-step guide shown above the buttons. Only languages with a reviewed
+ * translation get it; the rest keep the one-line `step2Order`.
+ */
+const GUIDE: Record<string, { steps: string[] }> = {
+  en: {
+    steps: [
+      "Press \u201cOpen Human Passport\u201d and connect the wallet {{wallet}}. It must be the same wallet, otherwise the score will not count. Safari has no MetaMask extension: use Chrome or Brave with MetaMask, or the browser inside the MetaMask app.",
+      "A new Passport starts at 0. You need at least {{need}} points.",
+      "On the Passport site open \u201cVerify\u201d stamps and pick the ones you can pass. The quickest without documents: Phone Verification and Biometrics. A phone confirmed in our Telegram bot does not count there: Passport has its own phone stamp, so verify it again on the Passport site. If you have them: Government ID, a verified Binance account (Binance BABT). One or two strong stamps are usually enough.",
+      "When the score on the Passport site shows {{need}} or more, come back here and press \u201cI\u2019ve finished, check my score\u201d.",
+    ],
+  },
+  ru: {
+    steps: [
+      "Нажмите \u00abОткрыть Human Passport\u00bb и подключите кошелёк {{wallet}}. Нужен именно этот кошелёк, иначе баллы не засчитаются. В Safari нет расширения MetaMask: откройте сайт в Chrome или Brave с MetaMask, или в браузере внутри приложения MetaMask.",
+      "У нового паспорта 0 баллов. Нужно набрать не меньше {{need}}.",
+      "На сайте Passport откройте раздел со штампами (Verify) и пройдите те, что можете. Быстрее всего без документов: Phone Verification (телефон) и Biometrics (селфи). Подтверждение телефона в нашем Telegram-боте там не засчитывается: у Passport свой штамп за телефон, его нужно пройти ещё раз на сайте Passport. Если есть: Government ID (паспорт) и верифицированный аккаунт Binance (Binance BABT). Обычно хватает одного-двух сильных штампов.",
+      "Когда на сайте Passport балл станет {{need}} или больше, вернитесь сюда и нажмите кнопку проверки балла.",
+    ],
+  },
 };
 
 const COPY: Record<string, FlowCopy> = {
