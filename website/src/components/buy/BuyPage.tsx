@@ -11,7 +11,6 @@ import type { SaleTrade } from "@/lib/sale/adapter";
 import { buyPagePhase, curvePosition, formatOpenDate, soldPplForSpotPrice } from "@/lib/sale/buy-page";
 import { basescanAddressUrl } from "@/lib/sale/config";
 import { parseV2OpenDate } from "@/lib/sale/v2/stats-copy";
-import { V2_PHASES } from "@/lib/sale/v2/constants";
 import {
   isV2PreviewEnabled,
   parseV2PreviewState,
@@ -73,7 +72,7 @@ export function BuyPage({
     : stats.spotPriceUsd;
   const liveSoldPpl = v2Buy ? (spotPriceUsd === null ? null : soldPplForSpotPrice(spotPriceUsd)) : stats.soldPpl;
   const position = curvePosition({ phase, liveSoldPpl });
-  const sellBackTodayUsd = useV2SellBackToday({
+  const sellBackToday = useV2SellBackToday({
     chain: v2Chain,
     enabled: v2Buy && previewState === null && phase !== "upcoming",
   });
@@ -141,8 +140,8 @@ export function BuyPage({
         <Reveal>
           <SaleRules
             phase={phase}
-            graduated={v2Buy && v2Phase.phase === V2_PHASES.Graduated}
-            sellBackTodayUsd={sellBackTodayUsd}
+            sellBackClosed={v2Buy && sellBackToday.released}
+            sellBackTodayUsd={sellBackToday.remainingUsd}
             contractAddress={contractAddress}
             explorerUrl={explorerUrl}
           />

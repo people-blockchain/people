@@ -1,17 +1,17 @@
 {
   "meta": {
     "title": "Acquista PPL",
-    "description": "PPL è il token della rete PEOPLE. Il prezzo segue una formula pubblicata in anticipo e sale man mano che i PPL vengono venduti. I primi 7 giorni sono riservati alle persone verificate. Gli acquisti sono definitivi."
+    "description": "PPL è il token della rete PEOPLE. Il prezzo segue una formula pubblicata in anticipo e sale man mano che i PPL vengono venduti. Possono comprare solo persone verificate. Gli acquisti sono definitivi."
   },
   "hero": {
     "eyebrow": "Vendita PPL",
     "headline": "La blockchain per tutti. Finalmente.",
     "lead": "Prima bisognava essere esperti di tecnologia. Ora basta essere una persona.",
     "subUpcoming": "La vendita di PPL apre il {date}.",
-    "subWhitelist": "La vendita di PPL è aperta. I primi {days} giorni sono riservati alle persone verificate.",
-    "subOpen": "La vendita di PPL è aperta a tutti.",
+    "subWhitelist": "La vendita di PPL è aperta. Possono comprare solo persone verificate.",
+    "subOpen": "La vendita di PPL è aperta. Qualsiasi persona verificata può comprare.",
     "subEnded": "La vendita di PPL è terminata.",
-    "ctaVerify": "Verificati per entrare nei primi {days} giorni",
+    "ctaVerify": "Verificati per comprare PPL",
     "ctaBuy": "Acquista PPL",
     "ctaEnded": "Leggi le regole di rivendita",
     "countdownLabel": "All’apertura della vendita",
@@ -89,10 +89,10 @@
   "rules": {
     "eyebrow": "Le regole",
     "title": "Le stesse regole per tutti",
-    "lead": "Sono fissate nel contratto di vendita. Nessuno può cambiare i limiti o la formula.",
+    "lead": "Sono scritte nel contratto di vendita. Nessuno può cambiare la formula, i limiti di importo, il periodo di attesa o le commissioni.",
     "items": [
       {
-        "title": "Primi {whitelistDays} giorni: solo persone verificate",
+        "title": "Solo persone verificate",
         "body": "Una persona, un indirizzo. Da {min} a {max} per acquisto, fino a {perDay} per indirizzo in una finestra mobile di 24 ore e una pausa di {cooldown} secondi tra un acquisto e l’altro."
       },
       {
@@ -112,7 +112,7 @@
     "todayLive": "Oggi si possono ancora rivendere fino a {amount}, per tutti i venditori insieme.",
     "todayUpcoming": "Per ora niente: i primi acquisti si potranno rivendere {holdDays} giorni dopo l’apertura della vendita.",
     "todayUnknown": "Questo dato viene letto in tempo reale dal contratto e al momento non è disponibile.",
-    "todayClosed": "La rivendita è chiusa: la curva si è chiusa.",
+    "todayClosed": "La rivendita è chiusa: la riserva è stata trasferita in liquidità PPL.",
     "contractTitle": "Contratto di vendita su Base",
     "contractPending": "L’indirizzo sarà pubblicato qui prima dell’apertura della vendita. Acquista solo tramite quell’indirizzo.",
     "explorerLink": "Apri su Basescan",
@@ -123,10 +123,10 @@
     "auditBounty": "Hai trovato una vulnerabilità? Segnalala con il pulsante bug su qualsiasi pagina.",
     "detailsToggle": "Dettagli",
     "details": [
-      "Riserva: gli USDC conservati nel contratto di vendita. Con essa si pagano le rivendite, e le commissioni di rivendita restano lì. Più la riserva è piccola, più è basso il limite giornaliero di rivendita. La rivendita si chiude per sempre quando si chiude la curva.",
-      "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso la rivendita continua a funzionare.",
+      "La riserva sono gli USDC custoditi nel contratto di vendita. Da lì si pagano le rivendite, e le loro commissioni restano lì. Più piccola è la riserva, più basso è il limite giornaliero di rivendita. Dopo la chiusura della curva la rivendita continua a funzionare, finché la riserva non passa in liquidità.",
+      "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva o al lancio della rete PEOPLE, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso i nuovi acquisti si fermano, ma la rivendita continua.",
       "Tesoreria: un wallet multisig ({signersM} firme su {signersN}) che riceve l’altro {treasuryPct} di ogni acquisto.",
-      "Il multisig può mettere in pausa acquisti e rivendita. Non può spostare la riserva, cambiare i limiti o la formula, né prolungare la vendita.",
+      "Il multisig può sospendere acquisti e rivendita e regolare, entro limiti fissi, la protezione anti-spam: quanti acquisti e rivendite al giorno e l’importo minimo. Non può spostare la riserva, cambiare la formula, i limiti per indirizzo o le commissioni, né prolungare la vendita.",
       "La vendita dura finché non si raccolgono {graduation} oppure {term} dall’apertura, a seconda di cosa avviene prima. I PPL invenduti vanno al Community Pool. Gli acquisti sono definitivi.",
       "Team: il {teamPct} di tutti i PPL. Niente per {cliff}, poi ogni mese per {linear}, a partire dal lancio completo della rete."
     ]
@@ -137,7 +137,7 @@
     "items": [
       {
         "q": "Perché serve la verifica?",
-        "a": "Perché ogni acquirente sia una persona reale. Una persona ha un indirizzo, e i limiti valgono per gli indirizzi del wallet, non per i bot. I primi {whitelistDays} giorni sono solo per persone verificate. Puoi verificarti via Telegram o Human Passport. Nessun dato personale viene scritto sulla blockchain."
+        "a": "Perché ogni acquirente sia una persona reale. Una persona, un indirizzo, e i limiti valgono per quell’indirizzo, quindi i bot non possono moltiplicarli. La verifica serve per tutta la durata della vendita. Puoi verificarti con Telegram o Human Passport. Nessun dato personale viene scritto sulla blockchain."
       },
       {
         "q": "Quando posso inviare PPL ad altre persone?",
@@ -197,7 +197,7 @@
     "startPriceOnOpen": "Prezzo di partenza all’apertura: {start}",
     "saleWindow": "Durata della vendita",
     "saleWindowValue": "Fino all’esaurimento o {term}",
-    "saleWindowV2": "Whitelist di 7 giorni dal {date}, poi vendita aperta fino a {term}",
+    "saleWindowV2": "Dal {date}, fino a {term}, solo persone verificate",
     "saleWindowHint": "A seconda di quale evento si verifichi prima. Nessuna proroga.",
     "endsByHint": "Data di fine massima. Prima, se esaurita."
   },
@@ -278,7 +278,7 @@
     "help": "Serve aiuto? {support}",
     "supportLink": "Assistenza",
     "noWalletHint": "Non hai un wallet? Scegli Google o email: verrà creato per te un PEOPLE Wallet. Per pagare servono USDC su Base in quel wallet o in un wallet che colleghi.",
-    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni acquisto può essere rivenduto 30 giorni dopo, al prezzo della curva nel momento della vendita. Limiti: 2% della riserva in qualsiasi finestra mobile di 24 ore per tutti insieme, e $2.000 per indirizzo in una finestra mobile di 24 ore. I PPL vengono bruciati su PEOPLE mainnet. Commissione 1,5%; 3% solo sulla parte delle rivendite di quelle 24 ore oltre l’1% della riserva. Si chiude quando si chiude la curva. Ricevi USDC su Base.",
+    "sellBackTerms": "Rivendita alla riserva solo per utenti verificati. Ogni acquisto può essere rivenduto 30 giorni dopo, al prezzo della curva nel momento della vendita. Limiti: 2% della riserva in qualsiasi finestra mobile di 24 ore per tutti insieme, e $2.000 per indirizzo in una finestra mobile di 24 ore. I PPL vengono bruciati su PEOPLE mainnet. Commissione 1,5%; 3% solo sulla parte delle rivendite di quelle 24 ore oltre l’1% della riserva. Resta aperta dopo la chiusura della curva, finché la riserva non passa in liquidità. Ricevi USDC su Base.",
     "feesTitle": "Commissioni e tempi",
     "feesBody": "Commissioni: quella della rete Base (gas), pagata in ETH — di solito circa $0,01; quella di scambio o bridge di LI.FI — mostrata nel widget prima della conferma; quella di rivendita alla riserva — 1,5%, e 3% solo sulla parte delle rivendite nella finestra mobile di 24 ore oltre l’1% della riserva.",
     "timingBody": "Un acquisto su Base viene confermato in pochi secondi. I pagamenti da altre reti arrivano di solito in 1–20 minuti. Le rivendite vengono pagate in USDC su Base.",
@@ -301,19 +301,19 @@
   },
   "v2": {
     "banner": {
-      "whitelistTitle": "Fase whitelist",
-      "whitelistBody": "Primi 7 giorni: solo persone verificate. Minimo $10 / massimo $500 per acquisto / $2.000 in una finestra mobile di 24 ore.",
+      "whitelistTitle": "Settimana di lancio",
+      "whitelistBody": "Solo persone verificate. Da $10 a $500 per acquisto, fino a $2.000 in qualsiasi arco di 24 ore.",
       "daysLeft": "Mancano {days} giorni",
-      "openTitle": "Fase pubblica",
-      "openBody": "Aperto a tutti. Minimo $10 / massimo $500 per acquisto / $2.000 in una finestra mobile di 24 ore.",
+      "openTitle": "Vendita aperta",
+      "openBody": "La verifica resta obbligatoria. Da $10 a $500 per acquisto, fino a $2.000 in qualsiasi arco di 24 ore.",
       "notOpenTitle": "Vendita non ancora aperta",
-      "notOpenBody": "Gli acquisti aprono quando il contratto entra nella fase whitelist.",
+      "notOpenBody": "Gli acquisti si aprono quando si apre il contratto di vendita.",
       "expiredTitle": "Vendita terminata",
       "graduatedTitle": "Vendita graduata",
       "closedBody": "Gli acquisti sono chiusi."
     },
     "verify": {
-      "title": "Primi 7 giorni: solo persone verificate",
+      "title": "Possono comprare solo persone verificate",
       "body": "Verificati via Telegram (numero di telefono) o Human Passport per partecipare.",
       "ctaVerify": "Verificati ora",
       "ctaSignIn": "Accedi per verificarti",
@@ -323,7 +323,7 @@
       "confirming": "Conferma on-chain…",
       "confirmed": "Confermato on-chain. Puoi acquistare.",
       "error": "Impossibile confermare on-chain. Riprova.",
-      "notEligible": "Questo account non è idoneo alla whitelist.",
+      "notEligible": "Questo account non soddisfa ancora i requisiti di verifica per comprare.",
       "connectWallet": "Collega un wallet per continuare.",
       "alreadyVerified": "Già confermato on-chain."
     },
@@ -397,7 +397,7 @@
       "attesting": "Controllo della bruciatura…",
       "selling": "Pagamento di USDC su Base…",
       "done": "Vendita completata. Gli USDC vengono pagati su Base.",
-      "payoutNote": "I PPL vengono bruciati su PEOPLE mainnet. Ricevi USDC su Base. L’acquisto si paga in USDC o USDT.",
+      "payoutNote": "I PPL vengono bruciati su PEOPLE mainnet e ricevi USDC su Base.",
       "error": "La vendita non è andata a buon fine. Riprova.",
       "rejected": "Hai rifiutato la richiesta nel wallet.",
       "notConfigured": "La vendita non è ancora disponibile.",

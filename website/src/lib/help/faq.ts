@@ -194,7 +194,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     source: { kind: "buy", item: 0 },
     links: ["/buy"],
     status: "needs-confirmation",
-    blocker: "Confirm whitelist days (V2_SALE.whitelistDays).",
+    blocker: "Copy checked against PplCurveHubV2 on 2026-11-01: verification is required for the whole sale, not only the first 7 days. Owner OK needed to publish.",
   },
   {
     id: "payment-networks",
@@ -212,7 +212,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     source: { kind: "buy", item: 3 },
     links: ["/buy"],
     status: "needs-confirmation",
-    blocker: "Confirm hold days, daily reserve cap, per-address cap and fees after the PplCurveHubV2 audit fixes (#72).",
+    blocker: "Numbers checked against PplCurveHubV2 on 2026-11-01 (30-day hold, 2% of the reserve and $2,000 per address per rolling 24 hours, 1.5% / 3% fee). Owner OK needed to publish.",
   },
   {
     id: "refund",

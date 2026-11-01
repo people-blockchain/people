@@ -40,7 +40,7 @@ test("rules and FAQ take every sale number from the contract placeholders", () =
   for (const lang of LANGS) {
     const b = buy[lang];
     const [limits, reserve, sellBack, contract] = b.rules.items.map((item) => `${item.title} ${item.body}`);
-    needs(limits, ["whitelistDays", "min", "max", "perDay", "cooldown"], `${lang}: rules.items[0]`);
+    needs(limits, ["min", "max", "perDay", "cooldown"], `${lang}: rules.items[0]`);
     needs(reserve, ["reservePct", "treasuryPct"], `${lang}: rules.items[1]`);
     needs(sellBack, ["holdDays", "sellDailyPct", "sellPerAddress", "feeLow", "feeHigh", "feeThreshold"], `${lang}: rules.items[2]`);
     needs(contract, ["signersM", "signersN"], `${lang}: rules.items[3]`);

@@ -6,6 +6,7 @@ import {
   createWalletClient,
   custom,
   erc20Abi,
+  parseEventLogs,
   http,
   type Address,
   type Hex,
@@ -15,7 +16,7 @@ import type { EIP1193Provider } from "@/lib/evm/client";
 import { approveErc20IfNeeded } from "@/lib/evm/erc20-allowance";
 import { SITE_URL } from "@/lib/site";
 import { PPL_CURVE_HUB_V2_ABI, ZERO_ADDRESS } from "./abi";
-import { chargedBuyUsd6, estimatePplOut, minPplOutForChargedBuy, type V2Chain } from "./logic";
+import { minPplOutFromQuote, type V2Chain } from "./logic";
 import { buildV2OwnershipMessage, saleDomain } from "./ownership";
 
 export type V2TxStatus =
@@ -162,8 +163,8 @@ export function useV2Buy() {
   }, []);
 
   const buyPpl = useCallback(
-    async (ctx: V2BuyContext & { amountIn: bigint; spotPriceWad: bigint }) => {
-      const { chain, provider, account, amountIn, spotPriceWad } = ctx;
+    async (ctx: V2BuyContext & { amountIn: bigint; spotPriceWad?: bigint }) => {
+      const { chain, provider, account, amountIn } = ctx;
       try {
         setBuyStatus({ step: "switching" });
         if (!(await ensureV2Chain(provider, chain))) {
@@ -214,14 +215,15 @@ export function useV2Buy() {
         if (!approved.ok) {
           throw new Error(approved.reason === "reverted" ? "approval reverted" : "allowance unchanged");
         }
-        const [raisedUsd6, raiseCapUsd6] = await Promise.all([
-          publicClient.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "raisedUsd6" }),
-          publicClient.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "RAISE_CAP_USD6" }),
-        ]);
-        const remainingUsd6 = raiseCapUsd6 > raisedUsd6 ? raiseCapUsd6 - raisedUsd6 : BigInt(0);
-        const charged = chargedBuyUsd6(amountIn, remainingUsd6);
-        const expected = estimatePplOut(charged, spotPriceWad);
-        const minPplOut = minPplOutForChargedBuy({ amountIn, remainingUsd6, spotPriceWad });
+        // Exact curve quote at signing time; the floor is 1% under it.
+        const [quotedPplOut] = await publicClient.readContract({
+          address: hub,
+          abi: PPL_CURVE_HUB_V2_ABI,
+          functionName: "quoteBuy",
+          args: [amountIn],
+        });
+        if (quotedPplOut <= BigInt(0)) throw new Error("ZeroOut");
+        const minPplOut = minPplOutFromQuote(quotedPplOut);
         setBuyStatus({ step: "buying" });
         const hash = await walletClient.writeContract({
           address: hub,
@@ -233,10 +235,14 @@ export function useV2Buy() {
         });
         const receipt = await publicClient.waitForTransactionReceipt({ hash });
         if (receipt.status !== "success") throw new Error("transaction reverted");
+        // Show what the contract actually credited, not the estimate.
+        const bought = parseEventLogs({ abi: PPL_CURVE_HUB_V2_ABI, eventName: "Bought", logs: receipt.logs }).find(
+          (log) => log.address.toLowerCase() === hub.toLowerCase(),
+        );
         const done = {
           step: "done" as const,
           txHash: hash,
-          pplOutWei: expected,
+          pplOutWei: bought?.args.pplOut ?? quotedPplOut,
           boughtAtMs: Date.now(),
         };
         setBuyStatus(done);

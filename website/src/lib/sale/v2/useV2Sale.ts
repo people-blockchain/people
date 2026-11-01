@@ -216,17 +216,28 @@ export function useV2Phase(input: {
  * no hub, preview, or a failed read) — the page then says so instead of
  * showing a number.
  */
+export type V2SellBackToday = {
+  /** Global sell-back room left in the rolling 24 hours (USD), or null when unknown. */
+  remainingUsd: number | null;
+  /** True once the reserve has moved to liquidity: sell-back is closed for good. */
+  released: boolean;
+};
+
+/**
+ * Sell-back room for `/buy`. Graduation does not close sell-back in the contract; only the
+ * liquidity release does, so the page reads `liquidityReleased` instead of the phase.
+ */
 export function useV2SellBackToday(input: {
   chain: V2Chain;
   enabled: boolean;
   refreshKey?: number;
-}): number | null {
+}): V2SellBackToday {
   const { chain, enabled, refreshKey = 0 } = input;
-  const [remainingUsd, setRemainingUsd] = useState<number | null>(null);
+  const [state, setState] = useState<V2SellBackToday>({ remainingUsd: null, released: false });
 
   useEffect(() => {
     if (!enabled || !chain.hubAddress) {
-      setRemainingUsd(null);
+      setState({ remainingUsd: null, released: false });
       return;
     }
     let active = true;
@@ -234,22 +245,21 @@ export function useV2SellBackToday(input: {
       chain: chain.chain,
       transport: http(undefined, { timeout: 12_000 }),
     });
-    void client
-      .readContract({
-        address: chain.hubAddress as Address,
-        abi: PPL_CURVE_HUB_V2_ABI,
-        functionName: "sellBackCapToday",
-      })
-      .then(([globalRemainingUsd6]) => {
-        if (active) setRemainingUsd(Number(globalRemainingUsd6) / 1_000_000);
+    const hub = chain.hubAddress as Address;
+    void Promise.all([
+      client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "sellBackCapToday" }),
+      client.readContract({ address: hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "liquidityReleased" }),
+    ])
+      .then(([[globalRemainingUsd6], released]) => {
+        if (active) setState({ remainingUsd: Number(globalRemainingUsd6) / 1_000_000, released });
       })
       .catch(() => {
-        if (active) setRemainingUsd(null);
+        if (active) setState({ remainingUsd: null, released: false });
       });
     return () => {
       active = false;
     };
   }, [chain.chain, chain.hubAddress, enabled, refreshKey]);
 
-  return remainingUsd;
+  return state;
 }

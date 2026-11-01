@@ -41,7 +41,7 @@ test("page phase: legacy follows the hub gate, V2 follows the contract phase", (
   assert.equal(buyPagePhase({ v2Enabled: false, v2Phase: V2_PHASES.Open, legacyOpen: true }), "open");
   assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: null, legacyOpen: true }), "upcoming");
   assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.NotOpen, legacyOpen: false }), "upcoming");
-  assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.Whitelist, legacyOpen: false }), "whitelist");
+  assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.Whitelist, legacyOpen: false }), "open");
   assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.Open, legacyOpen: false }), "open");
   assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.Expired, legacyOpen: false }), "ended");
   assert.equal(buyPagePhase({ v2Enabled: true, v2Phase: V2_PHASES.Graduated, legacyOpen: false }), "ended");
@@ -223,7 +223,7 @@ test("brief strings are exact in Russian", () => {
   assert.equal(ru.hero.headline, "Блокчейн для всех. Наконец.");
   assert.equal(ru.hero.lead, "Раньше нужно было быть технарём. Теперь достаточно быть человеком.");
   assert.equal(ru.hero.subUpcoming, "Продажа PPL открывается {date}.");
-  assert.equal(ru.hero.ctaVerify, "Пройти верификацию и попасть в первые {days} дней");
+  assert.equal(ru.hero.ctaVerify, "Пройти верификацию, чтобы купить PPL");
   assert.equal(ru.hero.ctaBuy, "Купить PPL");
   assert.equal(ru.finalCta.bounty, "или заработайте PPL заданиями");
   assert.match(ru.ppl.lines[2], /^PEOPLE не назначает и не поднимает цену/);

@@ -128,9 +128,10 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
     if (!preview) setNowMs(Date.now());
   }, [preview]);
   const view = phaseView(snapshot?.phase ?? V2_PHASES.NotOpen, snapshot?.openedAtSec ?? 0, nowMs);
-  const showVerification = view.whitelist && !snapshot?.personId;
+  // The hub reverts `NotVerified` for any unbound recipient, in every phase.
   const verifiedOnChain = Boolean(snapshot?.personId);
-  const canBuy = view.buyable && (!view.whitelist || verifiedOnChain);
+  const showVerification = view.buyable && !verifiedOnChain;
+  const canBuy = view.buyable && verifiedOnChain;
 
   const usd6 = parseUsd6Amount(amount, 2);
   const minUsd6 = BigInt(V2_SALE.minPerBuyUsd) * BigInt(1_000_000);

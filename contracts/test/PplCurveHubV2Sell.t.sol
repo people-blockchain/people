@@ -823,6 +823,10 @@ contract PplCurveHubV2SellTest is HubV2Base {
         }
         vm.createSelectFork(vm.envString("BASE_FORK_RPC_URL"));
         address baseUsdc = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
+        // On Base mainnet the hub requires the Safe, owner and liquidity escrow to be contracts.
+        vm.etch(treasury, hex"00");
+        vm.etch(owner, hex"00");
+        vm.etch(liquidityReceiver, hex"00");
         hub = new HubV2Harness(baseUsdc, treasury, liquidityReceiver, owner, verifier, address(0));
         _installReturnVerifier(hub, returnVerifier);
         _open();

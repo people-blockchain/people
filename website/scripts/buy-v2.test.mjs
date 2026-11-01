@@ -13,6 +13,7 @@ import {
   isV2BuyEnabled,
   isV2PreviewEnabled,
   minPplOutForChargedBuy,
+  minPplOutFromQuote,
   minPplOutFromEstimate,
   panelVisibility,
   partialTopUpAmount,
@@ -157,11 +158,8 @@ test("the partial state is a single top-up card with no form or main CTA", () =>
   assert.equal(success.showTopUp, false);
 });
 
-test("the hero follows the V2 whitelist phase, and legacy pages keep their old phase", () => {
-  assert.equal(
-    heroPhase({ v2Enabled: true, phase: V2_PHASES.Whitelist, legacyOpen: false }),
-    "whitelist",
-  );
+test("the launch-week phase reads as the open sale (verification is always required)", () => {
+  assert.equal(heroPhase({ v2Enabled: true, phase: V2_PHASES.Whitelist, legacyOpen: false }), "open");
   assert.equal(heroPhase({ v2Enabled: true, phase: V2_PHASES.Open, legacyOpen: false }), "open");
   assert.equal(heroPhase({ v2Enabled: true, phase: V2_PHASES.NotOpen, legacyOpen: true }), "closed");
   assert.equal(heroPhase({ v2Enabled: false, phase: V2_PHASES.Whitelist, legacyOpen: false }), "closed");
@@ -192,10 +190,10 @@ test("stats copy keys follow the V2 phase and fall back to legacy keys when the 
   assert.deepEqual(
     statsCopyKeys({ v2Enabled: true, phase: V2_PHASES.Whitelist, legacyOpen: false }),
     {
-      eyebrow: "statsTitleWhitelist",
+      eyebrow: "statsTitleOpen",
       statusLabel: "price",
       statusValue: "spotPrice",
-      statusHint: "whitelistStatus",
+      statusHint: "openStatus",
       window: "open",
     },
   );
@@ -215,13 +213,13 @@ test("stats copy keys follow the V2 phase and fall back to legacy keys when the 
   );
 });
 
-test("phase view allows buying only in whitelist/open and counts the 7-day window", () => {
+test("phase view allows buying only in whitelist/open and has no 7-day countdown", () => {
   const opened = Date.UTC(2026, 9, 18, 12, 0, 0) / 1000;
   const now = Date.UTC(2026, 9, 20, 12, 0, 0);
   const whitelist = phaseView(V2_PHASES.Whitelist, opened, now);
   assert.equal(whitelist.buyable, true);
-  assert.equal(whitelist.whitelist, true);
-  assert.equal(whitelist.whitelistDaysLeft, 5);
+  assert.equal(whitelist.whitelist, false);
+  assert.equal(whitelist.whitelistDaysLeft, null);
   assert.equal(phaseView(V2_PHASES.Open, opened, now).buyable, true);
   assert.equal(phaseView(V2_PHASES.Expired, opened, now).buyable, false);
   assert.equal(phaseView(V2_PHASES.Graduated, opened, now).buyable, false);
@@ -280,7 +278,9 @@ test("all 12 locales carry a translated hero with one sentence per sale phase", 
     }
     assert.equal(new Set(phaseKeys.map((key) => hero[key])).size, phaseKeys.length, `${lang}: one sentence per phase`);
     assert.ok(hero.subUpcoming.includes("{date}"), `${lang}: opening date placeholder`);
-    assert.ok(hero.subWhitelist.includes("{days}"), `${lang}: whitelist days placeholder`);
+    // The contract requires verification for the whole sale, so the launch-week sentence
+    // must not imply that buying opens to unverified people later.
+    assert.ok(!hero.subWhitelist.includes("{days}"), `${lang}: no launch-week countdown in the hero`);
   }
 });
 
@@ -334,11 +334,11 @@ test("the v2 sale window contains the locale-formatted opening date", () => {
   assert.match(formatted, /2027/);
   const value = v2SaleWindowValue({ copy: en, lang: "en", openDate: custom });
   assert.ok(value.includes(formatted), value);
-  assert.match(value, /whitelist/i);
+  assert.match(value, /verified people only/i);
   assert.match(value, /24 months/);
   assert.equal(
     v2SaleWindowValue({ copy: en, lang: "en", openDate: "bogus" }),
-    "7-day whitelist from 1 Dec 2026, then open sale up to 24 months",
+    "From 1 Dec 2026, for up to 24 months, verified people only",
   );
 });
 
@@ -353,4 +353,26 @@ test("all 12 locales have the v2 sale-window key with a {date} placeholder", () 
     assert.equal(typeof stats.saleWindowV2, "string", `${lang} stats.saleWindowV2`);
     assert.ok(stats.saleWindowV2.includes("{date}"), `${lang} needs {date}`);
   }
+});
+
+test("buy slippage floor is 1% under the contract's own quoteBuy", () => {
+  assert.equal(minPplOutFromQuote(BigInt(1_000_000)), BigInt(990_000));
+  assert.equal(minPplOutFromQuote(BigInt(0)), BigInt(0));
+  const hook = readFileSync(join(root, "src/lib/sale/v2/useV2Buy.ts"), "utf8");
+  assert.match(hook, /functionName: "quoteBuy"/);
+  assert.match(hook, /eventName: "Bought"/, "success shows the PPL the contract actually credited");
+});
+
+test("sell-back shows as closed only after the liquidity release, not at graduation", () => {
+  const rules = readFileSync(join(root, "src/components/buy/SaleRules.tsx"), "utf8");
+  const page = readFileSync(join(root, "src/components/buy/BuyPage.tsx"), "utf8");
+  assert.match(rules, /sellBackClosed\s*\n?\s*\? t\.todayClosed/);
+  assert.match(page, /sellBackClosed=\{v2Buy && sellBackToday\.released\}/);
+  assert.doesNotMatch(page, /graduated=\{/);
+});
+
+test("the buy panel always asks for on-chain verification first", () => {
+  const panel = readFileSync(join(root, "src/components/buy/v2/BuyV2Panel.tsx"), "utf8");
+  assert.match(panel, /const showVerification = view\.buyable && !verifiedOnChain;/);
+  assert.match(panel, /const canBuy = view\.buyable && verifiedOnChain;/);
 });

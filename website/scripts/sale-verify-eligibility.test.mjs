@@ -4,6 +4,7 @@ import { createHmac } from "node:crypto";
 import {
   decideSaleEligibility,
   hashIdentifier,
+  saleRequiresHumanPassport,
 } from "../src/lib/sale/eligibility.ts";
 
 const PERSON = "person-a";
@@ -125,4 +126,14 @@ test("wallet identifier hashing normalizes case but stays deterministic", () => 
   const mixed = hashIdentifier("hp_wallet", "0x1111111111111111111111111111111111111111");
   assert.equal(lower, mixed);
   assert.notEqual(lower, upper);
+});
+
+test("bot-wave switch: with SALE_REQUIRE_HUMAN_PASSPORT, Telegram phone alone is not enough", () => {
+  assert.deepEqual(decide({ hasTelegramPhone: true, requireHumanPassport: true }), { ok: false, reason: "not_eligible" });
+  assert.deepEqual(decide({ hasTelegramPhone: true, hpScore: 25, hpThreshold: 20, requireHumanPassport: true }), { ok: true });
+  assert.deepEqual(decide({ hasTelegramPhone: true, requireHumanPassport: false }), { ok: true });
+  assert.equal(saleRequiresHumanPassport({}), false);
+  assert.equal(saleRequiresHumanPassport({ SALE_REQUIRE_HUMAN_PASSPORT: "1" }), true);
+  assert.equal(saleRequiresHumanPassport({ SALE_REQUIRE_HUMAN_PASSPORT: "true" }), true);
+  assert.equal(saleRequiresHumanPassport({ SALE_REQUIRE_HUMAN_PASSPORT: "0" }), false);
 });

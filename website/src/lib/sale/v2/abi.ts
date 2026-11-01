@@ -31,6 +31,30 @@ export const PPL_CURVE_HUB_V2_ABI = [
   },
   {
     type: "function",
+    name: "quoteBuy",
+    stateMutability: "view",
+    inputs: [{ name: "usdcIn", type: "uint256" }],
+    outputs: [
+      { name: "pplOut", type: "uint256" },
+      { name: "chargedUsd6", type: "uint256" },
+    ],
+  },
+  {
+    type: "event",
+    name: "Bought",
+    anonymous: false,
+    inputs: [
+      { name: "buyer", type: "address", indexed: true },
+      { name: "recipient", type: "address", indexed: true },
+      { name: "referrer", type: "address", indexed: true },
+      { name: "usdcIn", type: "uint256", indexed: false },
+      { name: "toReserve", type: "uint256", indexed: false },
+      { name: "pplOut", type: "uint256", indexed: false },
+      { name: "lotId", type: "uint256", indexed: false },
+    ],
+  },
+  {
+    type: "function",
     name: "personOf",
     stateMutability: "view",
     inputs: [{ name: "account", type: "address" }],
