@@ -778,6 +778,13 @@ contract PeopleFounderNFTTest is Test {
         assertEq(nft.signer(), signer);
     }
 
+    function test_renounceOwnershipDisabled() public {
+        vm.prank(owner);
+        vm.expectRevert(PeopleFounderNFT.RenounceDisabled.selector);
+        nft.renounceOwnership();
+        assertEq(nft.owner(), owner);
+    }
+
     function test_setSigner_zeroReverts() public {
         vm.prank(owner);
         vm.expectRevert(PeopleFounderNFT.ZeroSigner.selector);

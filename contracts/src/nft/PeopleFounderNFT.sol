@@ -96,6 +96,7 @@ contract PeopleFounderNFT is ERC721, EIP712, Ownable2Step, IERC5192 {
     error RebindDelayActive();
     error RebindDelayElapsed();
     error StaleRebind();
+    error RenounceDisabled();
 
     constructor(address owner_, address signer_, uint256 mintDeadline_)
         ERC721("People Founder", "PFOUNDER")
@@ -122,6 +123,12 @@ contract PeopleFounderNFT is ERC721, EIP712, Ownable2Step, IERC5192 {
     }
 
     /// @notice Disable the signer: `mint`, `requestRebind` and `executeRebind` revert until `setSigner`.
+    /// @notice Ownership cannot be renounced: without an owner a compromised signer could never be
+    /// revoked or rotated. Transfer to a new owner (two-step) instead.
+    function renounceOwnership() public pure override {
+        revert RenounceDisabled();
+    }
+
     function revokeSigner() external onlyOwner {
         address previous = signer;
         signer = address(0);
