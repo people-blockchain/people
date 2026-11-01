@@ -458,7 +458,7 @@ export const pt: LocaleContent = {
         {
           "num": "01",
           "title": "Criar conta",
-          "desc": "Gere uma carteira leve e não-custodial diretamente no seu smartphone, tablet ou navegador.",
+          "desc": "Gere uma carteira leve diretamente no seu smartphone, tablet ou navegador — uma carteira de navegador em autocustódia ou uma carteira na nuvem que restaura ao iniciar sessão.",
           "highlight": "Zero requisitos de hardware"
         },
         {

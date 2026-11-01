@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Wallet",
-          "text": "Create a non-custodial wallet (12-word phrase) on your phone or in a browser, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave your device."
+          "text": "Create a wallet on your phone or in a browser. A 12-word browser wallet is non-custodial: keys never leave your device. A cloud wallet (Google or email sign-in) is stored encrypted on PEOPLE servers, and PEOPLE's infrastructure is able to decrypt it."
         },
         {
           "title": "Create a token",

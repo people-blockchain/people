@@ -9,7 +9,7 @@
       "items": [
         {
           "title": "Ví",
-          "text": "Ví không giữ hộ trên điện thoại hoặc trình duyệt. Khóa không rời thiết bị."
+          "text": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây (đăng nhập Google hoặc email) được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã."
         },
         {
           "title": "Tạo token",

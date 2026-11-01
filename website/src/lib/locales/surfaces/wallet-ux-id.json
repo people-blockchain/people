@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Masuk dengan Google / email",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Beli",
-  "modalExplainer": "People Wallet Anda dibuat otomatis. Kunci dienkripsi dan disimpan di server kami — pulihkan dengan Google atau email yang sama; tidak perlu frase benih. Dompet ini adalah akses ke kabinet mitra dan seluruh situs. Jangan buat dompet baru — masuk dengan Google atau email yang sama.",
+  "modalExplainer": "People Wallet Anda dibuat otomatis. Kunci Anda disimpan terenkripsi di server PEOPLE agar dapat dipulihkan dengan masuk. Infrastruktur PEOPLE mampu mendekripsinya. Untuk kendali penuh atas kunci Anda sendiri, gunakan dompet peramban atau dompet eksternal. Tidak perlu frase benih. Dompet ini adalah akses ke kabinet mitra dan seluruh situs. Jangan buat dompet baru — masuk dengan Google atau email yang sama.",
   "haveExistingWallet": "Saya sudah punya dompet",
   "continueAs": "Lanjutkan sebagai {email}",
   "modalExplainerMpc": "People Wallet dibuat otomatis. Kunci dibagi menjadi beberapa bagian — tanpa frase benih. Google atau email yang sama memulihkannya di mana saja. Ini akses ke kabinet mitra dan seluruh situs.",

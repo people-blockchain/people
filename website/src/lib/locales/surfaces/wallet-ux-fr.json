@@ -97,7 +97,7 @@
   "connectGoogleEmail": "Connexion Google / e-mail",
   "connectExternalWallets": "MetaMask / Trust Wallet / WalletConnect",
   "buyAction": "Acheter",
-  "modalExplainer": "Votre People Wallet est créé automatiquement. La clé est chiffrée et stockée sur nos serveurs — récupérez-la avec le même Google ou e-mail ; pas de phrase secrète. Ce portefeuille ouvre le cabinet partenaire et tout le site. Ne créez pas d'autres portefeuilles : reconnectez-vous avec le même Google ou e-mail.",
+  "modalExplainer": "Votre People Wallet est créé automatiquement. Votre clé est stockée chiffrée sur les serveurs de PEOPLE pour que vous puissiez la restaurer en vous connectant. L'infrastructure de PEOPLE peut la déchiffrer. Pour une auto-conservation complète, utilisez un portefeuille de navigateur ou un portefeuille externe. Pas de phrase secrète. Ce portefeuille ouvre le cabinet partenaire et tout le site. Ne créez pas d'autres portefeuilles : reconnectez-vous avec le même Google ou e-mail.",
   "haveExistingWallet": "J'ai déjà un portefeuille",
   "continueAs": "Continuer en tant que {email}",
   "modalExplainerMpc": "Votre People Wallet est créé automatiquement. La clé est répartie en plusieurs parties — pas de phrase secrète à conserver. Le même Google ou e-mail la restaure partout. C'est votre accès au cabinet partenaire et au site entier.",

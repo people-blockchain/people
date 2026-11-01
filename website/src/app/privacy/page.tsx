@@ -7,7 +7,7 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Privacy Policy | PEOPLE Blockchain",
   description:
-    "How the PEOPLE Blockchain website collects and uses information for partner sign-in, referrals, and non-custodial wallets.",
+    "How the PEOPLE Blockchain website collects and uses information for partner sign-in, referrals, and wallets (browser and cloud).",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy",

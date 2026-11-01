@@ -1,28 +1,57 @@
 import type { NextConfig } from "next";
 
 /**
- * WEB-M3: a Content-Security-Policy is sent in *report-only* mode first, so a mis-scoped source
- * cannot break sign-in — it only produces console/`report-to` violations. This is the policy that
- * would be enforced once it has run clean; `'unsafe-inline'` covers the inline boot/JSON-LD scripts
- * today (a nonce would let it be dropped) and `'unsafe-eval'` is deliberately absent.
+ * MF-14: the Content-Security-Policy is now ENFORCED (it was report-only under WEB-M3).
+ *
+ * Known gap: `script-src` still allows `'unsafe-inline'`. Next.js streams its RSC payload and the
+ * root layout's theme boot script / JSON-LD as inline scripts, and dropping the keyword needs a
+ * per-request nonce issued by the proxy on every route (the proxy matcher is currently limited to
+ * auth and referral paths) plus dynamic rendering everywhere. That is a separate change; until it
+ * lands, an HTML-injection bug can still run script. `'unsafe-eval'` stays absent, and
+ * `object-src`, `base-uri`, `form-action` and `frame-ancestors` are locked down.
  *
  * Sources are the ones the app actually loads: Web3Auth (`*.web3auth.io`), MetaMask embedded
  * wallets, Google Identity Services (`accounts.google.com`, `apis.google.com`), the People node
- * RPC + explorer, Cloudflare Turnstile, WalletConnect's relay, Vercel's toolbar and YouTube embeds.
+ * RPC + explorer, Google Fonts (the Web3Auth modal stylesheet imports Inter), Base RPC (sale), Cloudflare Turnstile, WalletConnect's relay, LI.FI, Vercel's
+ * toolbar and YouTube embeds.
  */
-const CSP_REPORT_ONLY = [
+const CSP = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
-  "frame-ancestors 'self'",
+  "frame-ancestors 'none'",
   "form-action 'self'",
   "script-src 'self' 'unsafe-inline' https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://vercel.live https://challenges.cloudflare.com",
-  "style-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  "connect-src 'self' https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://node.peopleblockchain.network https://explorer.peopleblockchain.network https://*.peopleblockchain.network https://vercel.live https://challenges.cloudflare.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org https://li.quest https://*.li.fi",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "connect-src 'self' https://auth.web3auth.io https://*.web3auth.io https://*.metamask.io https://accounts.google.com https://apis.google.com https://node.peopleblockchain.network https://explorer.peopleblockchain.network https://*.peopleblockchain.network https://mainnet.base.org https://vercel.live https://challenges.cloudflare.com wss://relay.walletconnect.com https://*.walletconnect.com https://*.walletconnect.org wss://*.walletconnect.com wss://*.walletconnect.org https://li.quest https://*.li.fi",
   "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
 ].join("; ");
+
+/**
+ * Camera is used by the wallet QR scanner (`getUserMedia`) and the clipboard by copy/paste buttons;
+ * both are limited to this origin. Everything else the app never touches is denied.
+ */
+const PERMISSIONS_POLICY = [
+  "accelerometer=()",
+  "autoplay=()",
+  "bluetooth=()",
+  "camera=(self)",
+  "clipboard-read=(self)",
+  "clipboard-write=(self)",
+  "display-capture=()",
+  "geolocation=()",
+  "gyroscope=()",
+  "hid=()",
+  "magnetometer=()",
+  "microphone=()",
+  "payment=()",
+  "serial=()",
+  "usb=()",
+].join(", ");
 
 const nextConfig: NextConfig = {
   // Baked in at build time so the bug-report button can attach an app version to its
@@ -69,10 +98,14 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
-          { key: "Content-Security-Policy-Report-Only", value: CSP_REPORT_ONLY },
-          // recon.md R3 / wallet-sessions.md #6: standalone clickjacking protection, independent
-          // of (and cheaper than) full CSP enforcement, which needs nonce infra first.
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: CSP },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: PERMISSIONS_POLICY },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // Legacy clickjacking fallback for browsers without CSP frame-ancestors; the site is not
+          // embedded anywhere on purpose.
+          { key: "X-Frame-Options", value: "DENY" },
         ],
       },
       {

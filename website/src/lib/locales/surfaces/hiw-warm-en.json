@@ -12,7 +12,7 @@
     "items": [
       {
         "title": "Get a wallet in 30 seconds",
-        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker Google sign-in with an encrypted, cloud-synced key.",
+        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word browser wallet (keys stay on your device), or a quicker Google sign-in with a cloud wallet (key stored encrypted on PEOPLE servers; PEOPLE's infrastructure is able to decrypt it).",
         "note": "No app store, no seed-phrase homework."
       },
       {

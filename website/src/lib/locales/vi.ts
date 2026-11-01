@@ -458,7 +458,7 @@ export const vi: LocaleContent = {
         {
           "num": "01",
           "title": "Tạo Tài khoản",
-          "desc": "Tạo ví phi lưu ký nhẹ trực tiếp trên điện thoại thông minh, máy tính bảng hoặc trình duyệt của bạn.",
+          "desc": "Tạo ví nhẹ trực tiếp trên điện thoại thông minh, máy tính bảng hoặc trình duyệt của bạn — ví trình duyệt tự nắm giữ khóa, hoặc ví đám mây khôi phục bằng đăng nhập.",
           "highlight": "Không yêu cầu phần cứng"
         },
         {

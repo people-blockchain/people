@@ -458,7 +458,7 @@ export const tr: LocaleContent = {
         {
           "num": "01",
           "title": "Hesap Oluşturun",
-          "desc": "Doğrudan akıllı telefonunuzda, tabletinizde veya tarayıcınızda hafif, gözetimsiz bir cüzdan oluşturun.",
+          "desc": "Doğrudan akıllı telefonunuzda, tabletinizde veya tarayıcınızda hafif bir cüzdan oluşturun — öz-saklamalı bir tarayıcı cüzdanı ya da girişle geri yüklenen bir bulut cüzdanı.",
           "highlight": "Sıfır donanım gereksinimi"
         },
         {

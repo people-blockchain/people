@@ -723,7 +723,7 @@ export const id: LocaleContent = {
         {
           "num": "01",
           "title": "Buat Akun",
-          "desc": "Buat dompet non-kustodian yang ringan langsung di ponsel pintar, tablet, atau peramban Anda.",
+          "desc": "Buat dompet ringan langsung di ponsel pintar, tablet, atau peramban Anda — dompet peramban dengan kendali kunci sendiri, atau dompet cloud yang dipulihkan dengan masuk.",
           "highlight": "Nol persyaratan perangkat keras"
         },
         {

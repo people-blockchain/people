@@ -1,6 +1,6 @@
 {
   "title": "Portefeuille",
-  "lead": "Non custodial. Les clés sont créées dans ce navigateur, chiffrées avec votre mot de passe, et ne sont jamais envoyées sur nos serveurs.",
+  "lead": "Portefeuille de navigateur : non custodial. Les clés sont créées dans ce navigateur, chiffrées avec votre mot de passe, et ne sont jamais envoyées sur nos serveurs. Se connecter avec Google ou e-mail crée à la place un portefeuille cloud : PEOPLE stocke votre clé chiffrée et son infrastructure peut la déchiffrer.",
   "create": "Créer un nouveau portefeuille",
   "import": "Importer un portefeuille",
   "unlock": "Déverrouiller",
@@ -55,6 +55,6 @@
   "signInOpening": "Opening your People Wallet…",
   "signInUnavailable": "Account wallet sign-in is not available on this deployment.",
   "signingIn": "Signing in…",
-  "cloudExportHint": "The same Google or email login restores this wallet on any device. Export the private key only if you need a backup outside People.",
+  "cloudExportHint": "Votre clé est stockée chiffrée sur les serveurs de PEOPLE pour que vous puissiez la restaurer en vous connectant. L'infrastructure de PEOPLE peut la déchiffrer. Pour une auto-conservation complète, utilisez un portefeuille de navigateur ou un portefeuille externe. N'exportez la clé privée que si vous avez besoin d'une sauvegarde hors de People.",
   "cloudDisconnect": "Disconnect"
 }
