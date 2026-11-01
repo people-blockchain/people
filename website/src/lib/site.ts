@@ -353,6 +353,7 @@ export const SITE_ROUTES = [
   { path: "/create/nft", changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/create/contract", changeFrequency: "weekly" as const, priority: 0.85 },
   { path: "/docs", changeFrequency: "monthly" as const, priority: 0.8 },
+  { path: "/help", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/tokenomics", changeFrequency: "monthly" as const, priority: 0.78 },
   { path: "/fees", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/wallet", changeFrequency: "weekly" as const, priority: 0.9 },
