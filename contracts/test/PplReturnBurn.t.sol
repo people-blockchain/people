@@ -28,14 +28,68 @@ contract PplReturnBurnTest is Test {
     function setUp() public {
         owner = makeAddr("burnOwner");
         burner = new PplReturnBurn(owner);
-        vm.prank(owner);
-        burner.setPurchaseReporter(owner);
+        _installReporter(owner, type(uint256).max, 1 days);
         vm.deal(alice, 100 ether);
+    }
+
+    function _installReporter(address reporter, uint256 creditCap, uint256 creditPeriod) internal {
+        vm.startPrank(owner);
+        bytes32 capId = burner.queueSetReporterCreditCap(creditCap, creditPeriod);
+        bytes32 repId = burner.queueSetPurchaseReporter(reporter);
+        vm.warp(block.timestamp + burner.ADMIN_TIMELOCK());
+        burner.executeSetReporterCreditCap(capId);
+        burner.executeSetPurchaseReporter(repId);
+        vm.stopPrank();
     }
 
     function _credit(address who, uint256 amount) internal {
         vm.prank(owner);
         burner.creditHubPurchase(who, amount);
+    }
+
+    function test_reporter_instantSetReverts() public {
+        (bool ok,) = address(burner).call(abi.encodeWithSignature("setPurchaseReporter(address)", owner));
+        assertFalse(ok, "no immediate setPurchaseReporter");
+    }
+
+    function test_reporter_executeBeforeDelayReverts() public {
+        vm.prank(owner);
+        bytes32 id = burner.queueSetPurchaseReporter(makeAddr("nextReporter"));
+        vm.prank(owner);
+        vm.expectRevert(PplReturnBurn.Timelocked.selector);
+        burner.executeSetPurchaseReporter(id);
+    }
+
+    function test_reporter_zeroViaTimelock() public {
+        vm.startPrank(owner);
+        bytes32 id = burner.queueSetPurchaseReporter(address(0));
+        vm.warp(block.timestamp + burner.ADMIN_TIMELOCK());
+        burner.executeSetPurchaseReporter(id);
+        vm.stopPrank();
+        assertEq(burner.purchaseReporter(), address(0));
+        vm.prank(owner);
+        vm.expectRevert(PplReturnBurn.UnauthorizedReporter.selector);
+        burner.creditHubPurchase(alice, 1 ether);
+    }
+
+    function test_reporterCreditCap_enforced() public {
+        PplReturnBurn fresh = new PplReturnBurn(owner);
+        _installReporterOn(fresh, owner, 5 ether, 1 days);
+        vm.startPrank(owner);
+        fresh.creditHubPurchase(alice, 3 ether);
+        vm.expectRevert(PplReturnBurn.ReporterCreditCapExceeded.selector);
+        fresh.creditHubPurchase(alice, 3 ether);
+        vm.stopPrank();
+    }
+
+    function _installReporterOn(PplReturnBurn b, address reporter, uint256 creditCap, uint256 creditPeriod) internal {
+        vm.startPrank(owner);
+        bytes32 capId = b.queueSetReporterCreditCap(creditCap, creditPeriod);
+        bytes32 repId = b.queueSetPurchaseReporter(reporter);
+        vm.warp(block.timestamp + b.ADMIN_TIMELOCK());
+        b.executeSetReporterCreditCap(capId);
+        b.executeSetPurchaseReporter(repId);
+        vm.stopPrank();
     }
 
     function test_burn_emitsAndCounts() public {
@@ -152,18 +206,31 @@ contract PplReturnBurnTest is Test {
         assertEq(address(burner).balance, 0);
     }
 
-    /// @notice Burned PPL never leave: the only state-changing function is `burnForReturn`.
+    /// @notice Burned PPL never leave: user state change is `burnForReturn`; reporter credit is capped.
     function test_burn_abiOnlyBurnIsStateChanging() public view {
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/out/PplReturnBurn.sol/PplReturnBurn.json"));
         string[] memory sigs = vm.parseJsonKeys(json, ".methodIdentifiers");
-        assertEq(sigs.length, 10, "unexpected function count");
+        assertEq(sigs.length, 20, "unexpected function count");
+        assertTrue(_contains(sigs, "ADMIN_TIMELOCK()"));
+        assertTrue(_contains(sigs, "GRACE_PERIOD()"));
         assertTrue(_contains(sigs, "burnForReturn(address,bytes32,address,uint256)"));
+        assertTrue(_contains(sigs, "cancel(bytes32)"));
         assertTrue(_contains(sigs, "creditHubPurchase(address,uint256)"));
+        assertTrue(_contains(sigs, "executeSetPurchaseReporter(bytes32)"));
+        assertTrue(_contains(sigs, "executeSetReporterCreditCap(bytes32)"));
         assertTrue(_contains(sigs, "hubPurchasedPpl(address)"));
+        assertTrue(_contains(sigs, "owner()"));
         assertTrue(_contains(sigs, "purchaseReporter()"));
-        assertTrue(_contains(sigs, "setPurchaseReporter(address)"));
-        assertTrue(_contains(sigs, "totalBurned()"));
+        assertTrue(_contains(sigs, "queueSetPurchaseReporter(address)"));
+        assertTrue(_contains(sigs, "queueSetReporterCreditCap(uint256,uint256)"));
+        assertTrue(_contains(sigs, "renounceOwnership()"));
+        assertTrue(_contains(sigs, "reporterCreditLimit()"));
+        assertTrue(_contains(sigs, "reporterCreditPeriod()"));
+        assertTrue(_contains(sigs, "reporterCreditUsed()"));
+        assertTrue(_contains(sigs, "reporterCreditWindowStart()"));
         assertTrue(_contains(sigs, "returnCount()"));
+        assertTrue(_contains(sigs, "totalBurned()"));
+        assertTrue(_contains(sigs, "transferOwnership(address)"));
 
         uint256 mutating;
         for (uint256 i; vm.keyExistsJson(json, string.concat(".abi[", vm.toString(i), "]")); ++i) {
@@ -176,7 +243,7 @@ contract PplReturnBurnTest is Test {
                 ++mutating;
             }
         }
-        assertGe(mutating, 3, "burnForReturn, creditHubPurchase, setPurchaseReporter");
+        assertEq(mutating, 9, "burnForReturn, creditHubPurchase, queue/execute reporter+cap, cancel, Ownable");
     }
 
     /// @notice Runtime bytecode has no DELEGATECALL, CALLCODE, SELFDESTRUCT or CALL, so nothing
