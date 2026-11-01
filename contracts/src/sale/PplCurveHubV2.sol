@@ -208,6 +208,12 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// @dev Lowest `minBuyUsd6` / `minSellUsd6` the owner may set (A4 anti-spam floor).
     /// The highest sell floor is `MAX_MIN_SELL_USD6`, not the $2,000 person cap.
     uint256 public constant MIN_AMOUNT_FLOOR_USD6 = 1e6;
+    /// @notice Base mainnet chain id. On it the constructor pins the sale token to Circle USDC and
+    /// requires `treasury`, `owner` and `liquidityReceiver` to be contracts (the Safe and the
+    /// liquidity escrow), so a misconfigured deploy cannot send proceeds to a plain key.
+    uint256 public constant BASE_MAINNET_CHAIN_ID = 8453;
+    /// @notice Circle USDC on Base mainnet: the only token a Base mainnet hub accepts.
+    address public constant BASE_MAINNET_USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
     uint256 private constant BPS = 10_000;
 
     bytes32 public constant VERIFICATION_TYPEHASH =
@@ -349,6 +355,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     error ZeroAddress();
     error BadReceiver();
     error NotSixDecimals();
+    error NotBaseUsdc();
+    error NotContract();
     error AlreadyOpen();
     error SaleNotActive();
     error NotVerified();
@@ -405,6 +413,12 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         }
         if (liquidityReceiver_ == treasury_ || liquidityReceiver_ == owner_) revert BadReceiver();
         if (IERC20Metadata(address(usdc_)).decimals() != 6) revert NotSixDecimals();
+        if (block.chainid == BASE_MAINNET_CHAIN_ID) {
+            if (address(usdc_) != BASE_MAINNET_USDC) revert NotBaseUsdc();
+            if (treasury_.code.length == 0 || owner_.code.length == 0 || liquidityReceiver_.code.length == 0) {
+                revert NotContract();
+            }
+        }
         usdc = usdc_;
         treasury = treasury_;
         liquidityReceiver = liquidityReceiver_;

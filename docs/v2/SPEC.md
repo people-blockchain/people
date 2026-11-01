@@ -48,6 +48,7 @@ v2 adds no new economic constants.
 | `LIQUIDITY_RELEASE_DELAY` | 30 days public notice before reserve → liquidity (Q1; option B = 14 days) | Q1 |
 | `usdc` | immutable; Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`; Sepolia: MockUSDC (6 dec) | D7 |
 | `treasury` | immutable, constructor arg (mainnet = Safe above) | D1 |
+| Base mainnet deploy guard | on chain id 8453 the constructor reverts unless `usdc` is Circle USDC `0x8335…2913` (`NotBaseUsdc`) and `treasury`, `owner` and `liquidityReceiver` all have code (`NotContract`), so proceeds can never be pointed at a plain key | audit 2026-11-01 |
 | `liquidityReceiver` | immutable, constructor arg, `≠ treasury`, `≠ owner`, `≠ 0` — only exit of the reserve (Q1) | Q1 |
 
 ## 3. State
