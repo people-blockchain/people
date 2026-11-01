@@ -27,6 +27,7 @@ import {
   parseAbi,
   parseEventLogs,
   formatEther,
+  encodeDeployData,
 } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 
@@ -66,14 +67,18 @@ async function step(name, fn) {
     return null;
   }
 }
+let GAS_PRICE = null;
 async function send(req) {
-  const hash = await wallet.writeContract(req);
+  // Same as the site: estimate first (preflight), then send with gas x1.2 and the node's gas price.
+  const gas = await pub.estimateContractGas({ ...req, account });
+  const hash = await wallet.writeContract({ ...req, gas: (gas * 12n) / 10n, gasPrice: GAS_PRICE, type: "legacy" });
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
   if (receipt.status !== "success") throw new Error(`tx reverted ${hash}`);
   return receipt;
 }
 async function deploy(abi, bytecode, args) {
-  const hash = await wallet.deployContract({ abi, bytecode, args });
+  const gas = await pub.estimateGas({ account, data: encodeDeployData({ abi, bytecode, args }) });
+  const hash = await wallet.deployContract({ abi, bytecode, args, gas: (gas * 12n) / 10n, gasPrice: GAS_PRICE, type: "legacy" });
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
   if (receipt.status !== "success" || !receipt.contractAddress) throw new Error(`deploy reverted ${hash}`);
   return { address: receipt.contractAddress, tx: hash };
@@ -107,6 +112,9 @@ const nftAbi = parseAbi([
 async function main() {
   const tag = String(Date.now()).slice(-6);
   console.log(`wallet ${account.address} rpc ${RPC}`);
+  GAS_PRICE = await pub.getGasPrice();
+  const block = await pub.getBlock();
+  console.log(`gasPrice ${GAS_PRICE} wei (${formatEther(GAS_PRICE * 1_000_000n)} PPL per 1M gas), block gasLimit ${block.gasLimit}`);
 
   // 1. faucet
   const funded = await step("faucet funds a new wallet", async () => {
