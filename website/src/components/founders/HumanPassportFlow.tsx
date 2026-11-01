@@ -576,7 +576,7 @@ const GUIDE: Record<string, { steps: string[] }> = {
     steps: [
       "Press \u201cOpen Human Passport\u201d and connect the wallet {{wallet}}. It must be the same wallet, otherwise the score will not count. Safari has no MetaMask extension: use Chrome or Brave with MetaMask, or the browser inside the MetaMask app.",
       "A new Passport starts at 0. You need at least {{need}} points.",
-      "On the Passport site open \u201cVerify\u201d stamps and pick the ones you can pass. The quickest without documents: Phone Verification and Biometrics. A phone confirmed in our Telegram bot does not count there: Passport has its own phone stamp, so verify it again on the Passport site. If you have them: Government ID, a verified Binance account (Binance BABT). One or two strong stamps are usually enough.",
+      "On the Passport site add stamps. Free ones (link an account): GitHub, Discord, Steam, ZK Email, LinkedIn, Google, Phone Verification. A phone confirmed in our Telegram bot does not count there. Strong but paid or harder: Government ID, Binance BABT (needs a verified Binance account), Biometrics (face scan, about $5). Weak stamps give only 0.5 to 6 points each, so you usually need several.",
       "When the score on the Passport site shows {{need}} or more, come back here and press \u201cI\u2019ve finished, check my score\u201d.",
     ],
   },
@@ -584,7 +584,7 @@ const GUIDE: Record<string, { steps: string[] }> = {
     steps: [
       "Нажмите \u00abОткрыть Human Passport\u00bb и подключите кошелёк {{wallet}}. Нужен именно этот кошелёк, иначе баллы не засчитаются. В Safari нет расширения MetaMask: откройте сайт в Chrome или Brave с MetaMask, или в браузере внутри приложения MetaMask.",
       "У нового паспорта 0 баллов. Нужно набрать не меньше {{need}}.",
-      "На сайте Passport откройте раздел со штампами (Verify) и пройдите те, что можете. Быстрее всего без документов: Phone Verification (телефон) и Biometrics (селфи). Подтверждение телефона в нашем Telegram-боте там не засчитывается: у Passport свой штамп за телефон, его нужно пройти ещё раз на сайте Passport. Если есть: Government ID (паспорт) и верифицированный аккаунт Binance (Binance BABT). Обычно хватает одного-двух сильных штампов.",
+      "На сайте Passport добавьте штампы. Бесплатные (нужно привязать аккаунт): GitHub, Discord, Steam, ZK Email (почта), LinkedIn, Google, Phone Verification (телефон). Подтверждение телефона в нашем Telegram-боте там не засчитывается. Сильные, но платные или сложнее: Government ID (паспорт), Binance BABT (нужен верифицированный аккаунт Binance), Biometrics (скан лица, около $5). Слабые штампы дают от 0,5 до 6 баллов, поэтому обычно нужно несколько.",
       "Когда на сайте Passport балл станет {{need}} или больше, вернитесь сюда и нажмите кнопку проверки балла.",
     ],
   },
