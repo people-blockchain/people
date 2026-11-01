@@ -58,7 +58,14 @@ environment file:
 - `FAUCET_RPC_URL`: local EVM RPC, normally `http://127.0.0.1:8545`;
 - `FAUCET_FIRST_BLOCK_HASH`: the verified EVM block 1 hash of this genesis;
 - `FAUCET_PORT`: defaults to 4050;
-- `FAUCET_DAILY_CAP_PPL`: global per-UTC-day payout budget, defaults to 10000 (`off` disables it).
+- `FAUCET_DAILY_CAP_PPL`: global per-UTC-day payout budget, defaults to 10000 (`off` disables it);
+- `FAUCET_MIN_AMOUNT_PPL`: minimum request, decimal PPL, defaults to 1. Smaller requests
+  (including 1 wei) are refused with `amount_too_small` before they can use the 24 h slot;
+- `FAUCET_SOURCE_DAILY_CAP_PPL`: value one client source may receive per UTC day across all
+  its addresses, defaults to 200 (`off` disables it); error `source_daily_limit`;
+- `TRUST_PROXY_HEADERS=1` (alias `TRUST_PROXY=1`): opt in to the forwarded client-IP header.
+  Unset, the socket address is the source key. The ingress must overwrite the header
+  (never append) and apply `limit_req` to `/faucet/fund`.
 
 Start `node faucet-server.mjs`. Never print the environment file or key.
 Fund this account from existing authorized test balances. The initial funding
