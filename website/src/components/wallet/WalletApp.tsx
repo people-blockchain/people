@@ -35,6 +35,7 @@ import { DEFAULT_TRANSFER_FEE, networkFetch, networkJson } from "@/lib/network-c
 import { initialNftLoadState, loadOwnerNfts, type NftLoadState, type WalletNftItem } from "@/lib/wallet-nft-loader";
 import { Loader2 } from "lucide-react";
 import { NetworkStatus } from "@/components/NetworkStatus";
+import { helpLang, helpUi } from "@/lib/help/ui";
 import type { WalletOnboardingMode } from "./useWalletOnboarding";
 import { PeopleWalletMark } from "./PeopleWalletMark";
 import { WalletPwaBootstrap } from "./WalletPwaBootstrap";
@@ -617,8 +618,16 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           </Link>
         </p>
       ) : null}
-      <div className="mb-4">
+      <div className="mb-4 flex items-center justify-between gap-3">
         <NetworkStatus />
+        <Link
+          prefetch={false}
+          href="/help"
+          data-testid="wallet-help-link"
+          className="shrink-0 rounded-xl border border-line px-3 py-2 text-sm font-semibold text-ink-2 hover:bg-surface-2"
+        >
+          {helpUi[helpLang(lang)].walletButton}
+        </Link>
       </div>
 
       {error ? <p className="mb-4 text-sm text-warm">{t.error}: {error}</p> : null}
