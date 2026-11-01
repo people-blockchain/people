@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import { readEvmRpcUrl } from "@/lib/evm/config";
 
 /**
@@ -31,6 +32,40 @@ export function resetRpcBackoffForTests(): void {
   backoffByUrl.clear();
 }
 
+/** Per-request RPC deadline. Log scans read it so a short NFT listing cannot sit on a 20s call. */
+export type RpcCallContext = {
+  deadlineAt?: number;
+  logPriority?: "recent" | "history";
+};
+
+const rpcCallContext = new AsyncLocalStorage<RpcCallContext>();
+
+export function withRpcCallContext<T>(patch: RpcCallContext, fn: () => Promise<T>): Promise<T> {
+  const parent = rpcCallContext.getStore();
+  return rpcCallContext.run({ ...parent, ...patch }, fn);
+}
+
+export function readRpcDeadlineAt(): number | undefined {
+  return rpcCallContext.getStore()?.deadlineAt;
+}
+
+export function readLogWindowPriority(): "recent" | "history" {
+  return rpcCallContext.getStore()?.logPriority ?? "history";
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && (error.name === "AbortError" || error.name === "TimeoutError");
+}
+
+function timeoutFor(fallbackMs: number): { timeoutMs: number; soft: boolean } {
+  const deadlineAt = readRpcDeadlineAt();
+  if (deadlineAt === undefined) return { timeoutMs: fallbackMs, soft: false };
+  const remaining = deadlineAt - Date.now();
+  if (remaining <= 0) return { timeoutMs: 0, soft: true };
+  const timeoutMs = Math.min(fallbackMs, remaining);
+  return { timeoutMs, soft: timeoutMs < fallbackMs };
+}
+
 function noteRpcFailure(url: string): void {
   const state = backoffByUrl.get(url) ?? { failures: 0, blockedUntil: 0 };
   state.failures += 1;
@@ -43,8 +78,10 @@ function noteRpcSuccess(url: string): void {
 }
 
 /** POSTs a JSON-RPC body, honouring and updating the per-URL backoff. */
-async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{ res: Response; payload: unknown }> {
+async function postRpc(url: string, body: unknown, fallbackTimeoutMs: number): Promise<{ res: Response; payload: unknown }> {
   if (rpcBackoffRemainingMs(url) > 0) throw new Error("rpc_backoff");
+  const { timeoutMs, soft } = timeoutFor(fallbackTimeoutMs);
+  if (timeoutMs <= 0) throw new Error("rpc_deadline");
   let res: Response;
   let payload: unknown;
   try {
@@ -56,7 +93,8 @@ async function postRpc(url: string, body: unknown, timeoutMs: number): Promise<{
       signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (error) {
-    noteRpcFailure(url);
+    // A listing deadline is our stop, not a sick node. A full 20s timeout still backs off.
+    if (!(soft && isAbortError(error))) noteRpcFailure(url);
     throw error;
   }
   if (RPC_RETRYABLE_STATUS.has(res.status)) {

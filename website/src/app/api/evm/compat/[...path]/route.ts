@@ -34,11 +34,13 @@ export async function GET(request: NextRequest, context: { params: Promise<{ pat
   const { path } = await context.params;
   const joined = (path ?? []).map((p) => encodeURIComponent(p)).join("/");
   try {
-    const { status, body } = await handleEvmCompatGet(joined, request.nextUrl.searchParams);
+    const { status, body, headers } = await handleEvmCompatGet(joined, request.nextUrl.searchParams);
     const cacheControl = status === 200 ? cacheHeaderFor(joined) : null;
+    const responseHeaders = new Headers(headers);
+    if (cacheControl) responseHeaders.set("Cache-Control", cacheControl);
     return NextResponse.json(body, {
       status,
-      ...(cacheControl ? { headers: { "Cache-Control": cacheControl } } : {}),
+      headers: responseHeaders,
     });
   } catch {
     return NextResponse.json({ error: "compat_unavailable" }, { status: 502 });
