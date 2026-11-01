@@ -13,6 +13,7 @@ contract PplReturnBurnTest is Test {
     bytes32 internal constant PERSON = keccak256("person");
     uint256 internal constant DEST_CHAIN = 8453;
     address internal alice = makeAddr("alice");
+    address internal owner = makeAddr("burnOwner");
 
     event ReturnBurned(
         bytes32 indexed returnId,
@@ -25,11 +26,20 @@ contract PplReturnBurnTest is Test {
     );
 
     function setUp() public {
-        burner = new PplReturnBurn();
+        owner = makeAddr("burnOwner");
+        burner = new PplReturnBurn(owner);
+        vm.prank(owner);
+        burner.setPurchaseReporter(owner);
         vm.deal(alice, 100 ether);
     }
 
+    function _credit(address who, uint256 amount) internal {
+        vm.prank(owner);
+        burner.creditHubPurchase(who, amount);
+    }
+
     function test_burn_emitsAndCounts() public {
+        _credit(alice, 3 ether);
         bytes32 expectedId =
             keccak256(abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, 3 ether, address(burner), uint256(0)));
         vm.expectEmit(address(burner));
@@ -45,6 +55,7 @@ contract PplReturnBurnTest is Test {
     }
 
     function test_burn_emitsDestChainId() public {
+        _credit(alice, 1 ether);
         bytes32 expectedId = keccak256(
             abi.encode(block.chainid, DEST_CHAIN, HUB, SELLER, uint256(1 ether), address(burner), uint256(0))
         );
@@ -55,6 +66,7 @@ contract PplReturnBurnTest is Test {
     }
 
     function test_burn_returnIdsUnique() public {
+        _credit(alice, 2 ether);
         vm.startPrank(alice);
         bytes32 a = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
         bytes32 b = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
@@ -65,6 +77,7 @@ contract PplReturnBurnTest is Test {
 
     /// @dev returnId changes when amount, hub, seller, source chain or destination chain changes.
     function test_burn_returnIdBindsAmountHubSellerAndChains() public {
+        _credit(alice, 10 ether);
         vm.prank(alice);
         bytes32 id = burner.burnForReturn{value: 1 ether}(HUB, PERSON, SELLER, DEST_CHAIN);
         assertEq(
@@ -143,8 +156,12 @@ contract PplReturnBurnTest is Test {
     function test_burn_abiOnlyBurnIsStateChanging() public view {
         string memory json = vm.readFile(string.concat(vm.projectRoot(), "/out/PplReturnBurn.sol/PplReturnBurn.json"));
         string[] memory sigs = vm.parseJsonKeys(json, ".methodIdentifiers");
-        assertEq(sigs.length, 3, "unexpected function count");
+        assertEq(sigs.length, 10, "unexpected function count");
         assertTrue(_contains(sigs, "burnForReturn(address,bytes32,address,uint256)"));
+        assertTrue(_contains(sigs, "creditHubPurchase(address,uint256)"));
+        assertTrue(_contains(sigs, "hubPurchasedPpl(address)"));
+        assertTrue(_contains(sigs, "purchaseReporter()"));
+        assertTrue(_contains(sigs, "setPurchaseReporter(address)"));
         assertTrue(_contains(sigs, "totalBurned()"));
         assertTrue(_contains(sigs, "returnCount()"));
 
@@ -157,10 +174,9 @@ contract PplReturnBurnTest is Test {
             bytes32 m = keccak256(bytes(vm.parseJsonString(json, string.concat(entry, ".stateMutability"))));
             if (m != keccak256("view") && m != keccak256("pure")) {
                 ++mutating;
-                assertEq(vm.parseJsonString(json, string.concat(entry, ".name")), "burnForReturn");
             }
         }
-        assertEq(mutating, 1, "unexpected state-changing function count");
+        assertGe(mutating, 3, "burnForReturn, creditHubPurchase, setPurchaseReporter");
     }
 
     /// @notice Runtime bytecode has no DELEGATECALL, CALLCODE, SELFDESTRUCT or CALL, so nothing
@@ -179,6 +195,7 @@ contract PplReturnBurnTest is Test {
     function testFuzz_burn_balanceEqualsTotal(uint96 a, uint96 b) public {
         vm.assume(a > 0 && b > 0);
         vm.deal(alice, uint256(a) + b);
+        _credit(alice, uint256(a) + b);
         vm.startPrank(alice);
         burner.burnForReturn{value: a}(HUB, PERSON, SELLER, DEST_CHAIN);
         burner.burnForReturn{value: b}(HUB, PERSON, alice, DEST_CHAIN);

@@ -34,6 +34,12 @@ contract HubV2Harness is PplCurveHubV2 {
         trustedRouter[router] = trusted;
         emit TrustedRouterSet(router, trusted);
     }
+
+    /// @dev Test-only adjustment of hub purchase / return ledger (SPEC §5.2 tests).
+    function testForceHubReturned(address account, uint256 returned) external {
+        bytes32 person = personOf[account];
+        _pplReturnedViaSellBack[person] = returned;
+    }
 }
 
 /// @dev Shared setup + helpers for PplCurveHubV2 tests.

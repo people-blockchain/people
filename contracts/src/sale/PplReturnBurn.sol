@@ -16,11 +16,23 @@ pragma solidity ^0.8.24;
 /// `returnId` commits to the burned amount, the destination hub, the Base seller, the PEOPLE
 /// source chain id and the destination chain id (plus this contract and a nonce, so two equal
 /// burns still differ). The hub's `MainnetReturn` attestation repeats those fields and checks them.
-contract PplReturnBurn {
+///
+/// Only PPL credited as hub purchases (`hubPurchasedPpl`) may be burned here; reward grants and
+/// plain transfers do not increase that ledger (SPEC §5.2 on-chain enforcement).
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+contract PplReturnBurn is Ownable {
     /// @notice Total native PPL ever burned here (equals this contract's balance).
     uint256 public totalBurned;
     /// @notice Number of returns burned so far; feeds `returnId`.
     uint256 public returnCount;
+    /// @notice PPL (wei) bought through the hub and delivered to `account`; only this balance may
+    /// be sent in `burnForReturn` (SPEC §5.2).
+    mapping(address => uint256) public hubPurchasedPpl;
+    /// @notice Relayer that credits deliveries after hub `Bought` events.
+    address public purchaseReporter;
+
+    constructor(address owner_) Ownable(owner_) {}
 
     /// @param returnId Unique id the verifier puts into `MainnetReturn.returnId`.
     /// @param from The PEOPLE-network account that burned the PPL.
@@ -41,6 +53,21 @@ contract PplReturnBurn {
 
     error ZeroAmount();
     error ZeroAddress();
+    error NotHubPurchasedPpl();
+    error UnauthorizedReporter();
+
+    /// @notice Sets the account allowed to call `creditHubPurchase` (hub delivery relayer).
+    function setPurchaseReporter(address reporter) external onlyOwner {
+        purchaseReporter = reporter;
+    }
+
+    /// @notice Credit hub-delivered PPL to `account` after an off-chain delivery (mirrors Base lots).
+    function creditHubPurchase(address account, uint256 amount) external {
+        if (msg.sender != purchaseReporter) revert UnauthorizedReporter();
+        if (account == address(0)) revert ZeroAddress();
+        if (amount == 0) revert ZeroAmount();
+        hubPurchasedPpl[account] += amount;
+    }
 
     /// @notice Burn `msg.value` PPL as a return to `hub` for `personId`, claimable on `destChainId`
     /// by `seller` (the Base address that will call `sellBack` and receive the stablecoin).
@@ -55,6 +82,8 @@ contract PplReturnBurn {
         if (hub == address(0) || seller == address(0) || personId == bytes32(0) || destChainId == 0) {
             revert ZeroAddress();
         }
+        if (hubPurchasedPpl[msg.sender] < msg.value) revert NotHubPurchasedPpl();
+        hubPurchasedPpl[msg.sender] -= msg.value;
         returnId =
             keccak256(abi.encode(block.chainid, destChainId, hub, seller, msg.value, address(this), returnCount++));
         totalBurned += msg.value;
