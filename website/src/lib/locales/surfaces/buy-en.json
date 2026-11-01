@@ -118,7 +118,7 @@
     "explorerLink": "Open on Basescan",
     "copy": "Copy",
     "copied": "Copied",
-    "auditLine": "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet.",
+    "auditLine": "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (run by the project team). This is not a security audit. No external audit has been done yet.",
     "reviewReports": "Review reports: {links}",
     "auditBounty": "Found a vulnerability? Report it with the bug button on any page.",
     "detailsToggle": "Details",

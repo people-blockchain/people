@@ -161,7 +161,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 
 ## 9. Bảo mật
 
-- Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài. Bug bounty on every page.
+- Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài. Bug bounty on every page.
 - **Multisig.** Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
 - **Địa chỉ được công bố.** Hợp đồng bán và multisig nhận tiền được công bố trước khi mở bán; hợp đồng vesting và khóa LP được công bố khi ra mắt mạng đầy đủ. Không dùng địa chỉ giả.
 - **Phòng chống bot.** Xác minh con người, giới hạn mỗi thiết bị và mỗi IP, giới hạn điểm hàng ngày và lấy lại bot.
@@ -176,7 +176,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 - **Testnet không phải mainnet.** Các token testnet và số dư không có giá trị. Điểm là một bản ghi của hoạt động, không phải một bảo đảm thanh toán.
 - **Mọi thứ đều sơ bộ.** Các số liệu, lịch trình và quy tắc có thể thay đổi trước mainnet và được tùy thuộc vào quản trị cộng đồng.
 - **Rủi ro công nghệ.** Phần mềm có thể có lỗi. Kiểm toán làm giảm rủi ro; nó không loại bỏ nó.
-- **Quy định.** Quy tắc khác nhau theo quốc gia và có thể thay đổi. Tham số bán PPL được công bố trên `/buy` (đường cong từ **$0.005**/PPL); mua hàng vẫn tắt cho đến khi hub được triển khai. Không có KYC hay kiểm tra điều kiện trên trang này.
+- **Quy định.** Quy tắc khác nhau theo quốc gia và có thể thay đổi. Tham số bán PPL được công bố trên `/buy` (đường cong từ **$0.005**/PPL); mua hàng vẫn tắt cho đến khi hub được triển khai. Để mua cần một lần xác minh con người miễn phí (Telegram hoặc Human Passport); không thu thập giấy tờ tùy thân (KYC).
 - **Tự thực hiện nghiên cứu của bạn.** Bản giới thiệu công nghệ này là thông tin, không phải tư vấn tài chính, pháp lý hoặc thuế.
 
 ---
@@ -219,8 +219,8 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 - Phần cộng đồng của một token mới là **10%** nguồn cung: **10%** được phân bổ khi ra mắt.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
-- **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Không có KYC hay kiểm tra điều kiện trên trang này.
-- Bảo mật: Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.; bug bounty on every page.
+- **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Để mua cần một lần xác minh con người miễn phí (Telegram hoặc Human Passport); không thu thập giấy tờ tùy thân (KYC).
+- Bảo mật: Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.; bug bounty on every page.
 - Multisig. Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
 - Nếu đường cong của một token không bán hết trong **180 ngày** kể từ khi ra mắt, bất kỳ ai cũng có thể kết thúc nó và các token chưa bán sẽ vào pool cộng đồng của token đó. Đường cong bán hết vẫn chuyển sang thanh khoản như trước. (Đang chạy trên testnet.)
 - Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.

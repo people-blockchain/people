@@ -95,7 +95,7 @@ const en: TransparencyCopy = {
   meta: {
     title: "Team & transparency | PEOPLE Blockchain",
     description:
-      "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1) no external audit has been done yet.",
+      "How PEOPLE Blockchain is funded: no venture capital, a small core team, a fixed 1B PPL supply, a 2-of-3 treasury multisig, AI-assisted security reviews (Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon) no external audit has been done yet.",
   },
   hero: {
     eyebrow: "TRANSPARENCY",
@@ -157,7 +157,7 @@ const en: TransparencyCopy = {
     eyebrow: "SECURITY REVIEWS",
     title: "Security reviews",
     body:
-      "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1 (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.",
+      "Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.",
     placeholderTitle: "Third-party audit report",
     placeholderBody:
       "A third-party security audit report will be published in this slot as soon as it is available. Until then, no external firm audit result is claimed anywhere on this site.",
@@ -239,7 +239,7 @@ const ru: TransparencyCopy = {
   meta: {
     title: "Команда и прозрачность | PEOPLE Blockchain",
     description:
-      "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1) внешнего аудита пока не было.",
+      "Как финансируется PEOPLE Blockchain: без венчурного капитала, небольшая команда, фиксированный выпуск 1 млрд PPL, мультисиг казны 2-из-3, AI-проверки (Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon) внешнего аудита пока не было.",
   },
   hero: {
     eyebrow: "ПРОЗРАЧНОСТЬ",
@@ -301,7 +301,7 @@ const ru: TransparencyCopy = {
     eyebrow: "ПРОВЕРКИ БЕЗОПАСНОСТИ",
     title: "Проверки безопасности",
     body:
-      "Проверено ИИ-моделями: Claude Opus 5.5, GPT Astra, Fable 5.1 (запускала команда проекта). Это не аудит безопасности. Внешнего аудита пока не было. Баг-баунти: сообщите об уязвимости кнопкой на любой странице.",
+      "Проверено ИИ-моделями: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (запускала команда проекта). Это не аудит безопасности. Внешнего аудита пока не было. Баг-баунти: сообщите об уязвимости кнопкой на любой странице.",
     placeholderTitle: "Отчёт внешнего аудита",
     placeholderBody:
       "Отчёт аудита сторонней фирмы будет опубликован на этом месте, как только появится. До этого нигде на сайте не заявлен результат внешнего аудита.",
