@@ -68,17 +68,39 @@ async function step(name, fn) {
   }
 }
 let GAS_PRICE = null;
+const FALLBACK_GAS = 3_000_000n;
+const estimateNotes = [];
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+async function retry(fn, tries = 4) {
+  for (let i = 0; ; i++) {
+    try { return await fn(); } catch (e) {
+      const msg = String(e?.shortMessage || e?.message || e);
+      if (i + 1 >= tries || !/Missing or invalid parameters|429|rate|timeout|fetch failed/i.test(msg)) throw e;
+      await pause(3000 * (i + 1));
+    }
+  }
+}
+async function gasFor(estimate, label) {
+  try { return ((await retry(estimate)) * 12n) / 10n; }
+  catch (e) {
+    estimateNotes.push({ label, error: String(e?.shortMessage || e?.message || e).slice(0, 200) });
+    return FALLBACK_GAS;
+  }
+}
 async function send(req) {
-  // Same as the site: estimate first (preflight), then send with gas x1.2 and the node's gas price.
-  const gas = await pub.estimateContractGas({ ...req, account });
-  const hash = await wallet.writeContract({ ...req, gas: (gas * 12n) / 10n, gasPrice: GAS_PRICE, type: "legacy" });
+  // Like the site: estimate first (preflight), then send with gas x1.2 and the node's gas price.
+  // If the node cannot estimate, fall back to a fixed limit and record that (it is a finding).
+  await pause(1500);
+  const gas = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName);
+  const hash = await retry(() => wallet.writeContract({ ...req, gas, gasPrice: GAS_PRICE, type: "legacy" }));
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
   if (receipt.status !== "success") throw new Error(`tx reverted ${hash}`);
   return receipt;
 }
 async function deploy(abi, bytecode, args) {
-  const gas = await pub.estimateGas({ account, data: encodeDeployData({ abi, bytecode, args }) });
-  const hash = await wallet.deployContract({ abi, bytecode, args, gas: (gas * 12n) / 10n, gasPrice: GAS_PRICE, type: "legacy" });
+  await pause(1500);
+  const gas = await gasFor(() => pub.estimateGas({ account, data: encodeDeployData({ abi, bytecode, args }) }), "deploy");
+  const hash = await retry(() => wallet.deployContract({ abi, bytecode, args, gas, gasPrice: GAS_PRICE, type: "legacy" }));
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
   if (receipt.status !== "success" || !receipt.contractAddress) throw new Error(`deploy reverted ${hash}`);
   return { address: receipt.contractAddress, tx: hash };
@@ -233,6 +255,6 @@ main()
   .catch((e) => record("unexpected", false, { error: String(e?.message || e) }))
   .finally(() => {
     const failed = results.filter((r) => !r.ok).length;
-    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
+    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, estimateNotes, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
     process.exit(failed ? 1 : 0);
   });
