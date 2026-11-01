@@ -7,11 +7,10 @@ pragma solidity ^0.8.24;
 /// `ReturnBurned` event of this contract (owner decision A1: returned PPL are burned, there is no
 /// treasury sink).
 ///
-/// Burn = native PPL sent here can never leave: there is no owner, admin, withdraw, setter,
-/// `receive`/`fallback`, `delegatecall` or `selfdestruct`. The only state-changing entry point is
-/// `burnForReturn`. A return whose attestation expired before the hub consumed it stays burned;
-/// the verifier can sign the same `returnId` again with a new deadline (the hub consumes each
-/// `returnId` at most once).
+/// Burn = native PPL sent here can never leave: there is no withdraw, `receive`/`fallback`,
+/// `delegatecall` or `selfdestruct`. User-facing state change is `burnForReturn`. Owner paths that
+/// could freeze sell-back (`purchaseReporter`, reporter credit cap) use the same 48-hour timelock
+/// as `PplCurveHubV2` admin ops (with grace period and cancel).
 ///
 /// `returnId` commits to the burned amount, the destination hub, the Base seller, the PEOPLE
 /// source chain id and the destination chain id (plus this contract and a nonce, so two equal
@@ -22,6 +21,14 @@ pragma solidity ^0.8.24;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract PplReturnBurn is Ownable {
+    /// @notice Delay before a queued owner action can execute (matches `PplCurveHubV2.ADMIN_TIMELOCK`).
+    uint256 public constant ADMIN_TIMELOCK = 48 hours;
+    /// @notice Queued owner ops expire if not executed within this window after `eta`.
+    uint256 public constant GRACE_PERIOD = 14 days;
+
+    bytes32 private constant OP_SET_PURCHASE_REPORTER = keccak256("setPurchaseReporter");
+    bytes32 private constant OP_SET_REPORTER_CREDIT_CAP = keccak256("setReporterCreditCap");
+
     /// @notice Total native PPL ever burned here (equals this contract's balance).
     uint256 public totalBurned;
     /// @notice Number of returns burned so far; feeds `returnId`.
@@ -31,6 +38,25 @@ contract PplReturnBurn is Ownable {
     mapping(address => uint256) public hubPurchasedPpl;
     /// @notice Relayer that credits deliveries after hub `Bought` events.
     address public purchaseReporter;
+    /// @notice Max PPL (wei) the reporter may credit per rolling `reporterCreditPeriod`.
+    uint256 public reporterCreditLimit;
+    /// @notice Rolling window length for `reporterCreditLimit` (seconds).
+    uint256 public reporterCreditPeriod;
+    /// @notice PPL credited by the reporter in the current window.
+    uint256 public reporterCreditUsed;
+    /// @notice Start of the current reporter credit window.
+    uint256 public reporterCreditWindowStart;
+
+    struct AdminOp {
+        uint64 eta;
+        address who;
+        uint256 amount;
+        bytes32 kind;
+    }
+
+    mapping(bytes32 => AdminOp) private _adminOps;
+    mapping(bytes32 => bytes32) private _pendingByKind;
+    uint256 private _adminNonce;
 
     constructor(address owner_) Ownable(owner_) {}
 
@@ -50,15 +76,59 @@ contract PplReturnBurn is Ownable {
         uint256 amount,
         uint256 destChainId
     );
+    event PurchaseReporterSet(address indexed previous, address indexed current);
+    event ReporterCreditCapSet(uint256 limit, uint256 period);
+    event Queued(bytes32 indexed id, bytes params, uint256 eta);
+    event Cancelled(bytes32 indexed id);
 
     error ZeroAmount();
     error ZeroAddress();
     error NotHubPurchasedPpl();
     error UnauthorizedReporter();
+    error Timelocked();
+    error NotQueued();
+    error OpExpired();
+    error KindAlreadyQueued();
+    error ReporterCreditCapExceeded();
 
-    /// @notice Sets the account allowed to call `creditHubPurchase` (hub delivery relayer).
-    function setPurchaseReporter(address reporter) external onlyOwner {
-        purchaseReporter = reporter;
+    /// @notice Queue the hub delivery relayer. `address(0)` disables crediting (and thus sell-back).
+    /// Executable after `ADMIN_TIMELOCK`. There is no immediate setter.
+    function queueSetPurchaseReporter(address reporter) external onlyOwner returns (bytes32 id) {
+        id = _queue(OP_SET_PURCHASE_REPORTER, reporter, 0);
+    }
+
+    /// @notice Execute a queued `queueSetPurchaseReporter`.
+    function executeSetPurchaseReporter(bytes32 id) external onlyOwner {
+        AdminOp memory op = _take(id, OP_SET_PURCHASE_REPORTER);
+        emit PurchaseReporterSet(purchaseReporter, op.who);
+        purchaseReporter = op.who;
+    }
+
+    /// @notice Queue a rolling cap on reporter-granted credit. `amount` is the limit (wei); `period`
+    /// is the window length in seconds (stored in `who` as uint160).
+    function queueSetReporterCreditCap(uint256 limit, uint256 period) external onlyOwner returns (bytes32 id) {
+        if (period == 0) revert ZeroAmount();
+        id = _queue(OP_SET_REPORTER_CREDIT_CAP, address(uint160(period)), limit);
+    }
+
+    /// @notice Execute a queued `queueSetReporterCreditCap`.
+    function executeSetReporterCreditCap(bytes32 id) external onlyOwner {
+        AdminOp memory op = _take(id, OP_SET_REPORTER_CREDIT_CAP);
+        uint256 period = uint256(uint160(op.who));
+        reporterCreditLimit = op.amount;
+        reporterCreditPeriod = period;
+        reporterCreditUsed = 0;
+        reporterCreditWindowStart = block.timestamp;
+        emit ReporterCreditCapSet(op.amount, period);
+    }
+
+    /// @notice Owner cancels a queued action. A cancelled id cannot be executed.
+    function cancel(bytes32 id) external onlyOwner {
+        AdminOp memory op = _adminOps[id];
+        if (op.eta == 0) revert NotQueued();
+        delete _adminOps[id];
+        if (_pendingByKind[op.kind] == id) delete _pendingByKind[op.kind];
+        emit Cancelled(id);
     }
 
     /// @notice Credit hub-delivered PPL to `account` after an off-chain delivery (mirrors Base lots).
@@ -66,6 +136,7 @@ contract PplReturnBurn is Ownable {
         if (msg.sender != purchaseReporter) revert UnauthorizedReporter();
         if (account == address(0)) revert ZeroAddress();
         if (amount == 0) revert ZeroAmount();
+        _consumeReporterCredit(amount);
         hubPurchasedPpl[account] += amount;
     }
 
@@ -88,5 +159,39 @@ contract PplReturnBurn is Ownable {
             keccak256(abi.encode(block.chainid, destChainId, hub, seller, msg.value, address(this), returnCount++));
         totalBurned += msg.value;
         emit ReturnBurned(returnId, msg.sender, hub, personId, seller, msg.value, destChainId);
+    }
+
+    function _queue(bytes32 kind, address who, uint256 amount) internal returns (bytes32 id) {
+        bytes32 pendingId = _pendingByKind[kind];
+        if (pendingId != bytes32(0) && _adminOps[pendingId].eta != 0) revert KindAlreadyQueued();
+        id = keccak256(abi.encode(kind, who, amount, _adminNonce++));
+        uint256 eta = block.timestamp + ADMIN_TIMELOCK;
+        _adminOps[id] = AdminOp({eta: uint64(eta), who: who, amount: amount, kind: kind});
+        _pendingByKind[kind] = id;
+        emit Queued(id, abi.encode(kind, who, amount), eta);
+    }
+
+    function _take(bytes32 id, bytes32 kind) internal returns (AdminOp memory op) {
+        op = _adminOps[id];
+        if (op.eta == 0 || op.kind != kind) revert NotQueued();
+        if (block.timestamp < uint256(op.eta)) revert Timelocked();
+        if (block.timestamp > uint256(op.eta) + GRACE_PERIOD) revert OpExpired();
+        delete _adminOps[id];
+        delete _pendingByKind[kind];
+    }
+
+    function _consumeReporterCredit(uint256 amount) internal {
+        uint256 limit = reporterCreditLimit;
+        uint256 period = reporterCreditPeriod;
+        if (limit == 0 || period == 0) revert ReporterCreditCapExceeded();
+        uint256 start = reporterCreditWindowStart;
+        uint256 used = reporterCreditUsed;
+        if (start == 0 || block.timestamp >= start + period) {
+            start = block.timestamp;
+            used = 0;
+        }
+        if (used + amount > limit) revert ReporterCreditCapExceeded();
+        reporterCreditWindowStart = start;
+        reporterCreditUsed = used + amount;
     }
 }

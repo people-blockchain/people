@@ -21,8 +21,13 @@ contract PplCurveHubV2OpusR3Test is HubV2Base {
     function setUp() public override {
         super.setUp();
         burner = new PplReturnBurn(owner);
-        vm.prank(owner);
-        burner.setPurchaseReporter(owner);
+        vm.startPrank(owner);
+        bytes32 capId = burner.queueSetReporterCreditCap(1000 ether, 1 days);
+        bytes32 repId = burner.queueSetPurchaseReporter(owner);
+        vm.warp(block.timestamp + burner.ADMIN_TIMELOCK());
+        burner.executeSetReporterCreditCap(capId);
+        burner.executeSetPurchaseReporter(repId);
+        vm.stopPrank();
         vesting = new RewardVesting(owner);
         vm.deal(owner, 100 ether);
     }
