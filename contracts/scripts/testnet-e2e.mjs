@@ -70,6 +70,7 @@ async function step(name, fn) {
 let GAS_PRICE = null;
 const FALLBACK_GAS = 3_000_000n;
 const estimateNotes = [];
+const gasLog = [];
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 async function retry(fn, tries = 4) {
   for (let i = 0; ; i++) {
@@ -92,9 +93,13 @@ async function send(req) {
   // If the node cannot estimate, fall back to a fixed limit and record that (it is a finding).
   await pause(1500);
   const gas = await gasFor(() => pub.estimateContractGas({ ...req, account }), req.functionName);
+  const need = gas * GAS_PRICE + (req.value ?? 0n);
+  const have = await pub.getBalance({ address: account.address });
+  if (need > have) throw new Error(`${req.functionName}: needs ${formatEther(need)} PPL upfront (gas limit ${gas} x ${GAS_PRICE} wei + value ${formatEther(req.value ?? 0n)}), wallet has ${formatEther(have)}`);
   const hash = await retry(() => wallet.writeContract({ ...req, gas, gasPrice: GAS_PRICE, type: "legacy" }));
   const receipt = await pub.waitForTransactionReceipt({ hash, timeout: 120_000 });
   if (receipt.status !== "success") throw new Error(`tx reverted ${hash}`);
+  gasLog.push({ fn: req.functionName, gasLimit: gas.toString(), gasUsed: receipt.gasUsed.toString(), costPpl: formatEther(receipt.gasUsed * GAS_PRICE) });
   return receipt;
 }
 async function deploy(abi, bytecode, args) {
@@ -255,6 +260,6 @@ main()
   .catch((e) => record("unexpected", false, { error: String(e?.message || e) }))
   .finally(() => {
     const failed = results.filter((r) => !r.ok).length;
-    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, estimateNotes, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
+    console.log("SUMMARY " + JSON.stringify({ wallet: account.address, estimateNotes, gasLog, passed: results.length - failed, failed, results }, (_, v) => (typeof v === "bigint" ? v.toString() : v)));
     process.exit(failed ? 1 : 0);
   });
