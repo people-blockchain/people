@@ -17,6 +17,8 @@ import {
   PEOPLE_MAINNET_CHAIN_ID,
   createReturnAttestation,
   decodeReturnBurned,
+  getReturnVerifierSigner,
+  mainnetReturnDigest,
   readReturnVerifierKey,
   signMainnetReturn,
 } from "../src/lib/sale/v2/return-attestation.ts";
@@ -38,6 +40,12 @@ const SELLER = "0x1111111111111111111111111111111111111111";
 const FROM = "0x2222222222222222222222222222222222222222";
 const KEY = `0x${"ab".repeat(32)}`;
 const PERSON = keccak256(toBytes("person-1"));
+
+/** Test-only signer with the `VerifierSigner` shape; chain policy is tested on `getReturnVerifierSigner`. */
+function testSigner(key) {
+  const account = privateKeyToAccount(key);
+  return { getAddress: async () => account.address, signDigest: async (hash) => account.sign({ hash }) };
+}
 const RETURN_ID = keccak256(toBytes("return-1"));
 const AMOUNT = 10n ** 18n;
 const EVENT = parseAbiItem(
@@ -222,7 +230,7 @@ test("a missing return-verifier key is refused before any signature", async () =
     assert.equal(readReturnVerifierKey(), null);
     const result = await createReturnAttestation({
       txHash: `0x${"1".repeat(64)}`,
-      key: readReturnVerifierKey(),
+      signer: getReturnVerifierSigner(8453),
       burnAddress: BURN,
       hubAddress: HUB,
       hubChainId: 8453,
@@ -241,7 +249,7 @@ test("a missing return-verifier key is refused before any signature", async () =
 test("attestation signs only a successful ReturnBurned for this hub", async () => {
   const result = await createReturnAttestation({
     txHash: `0x${"2".repeat(64)}`,
-    key: KEY,
+    signer: testSigner(KEY),
     burnAddress: BURN,
     hubAddress: HUB,
     hubChainId: 8453,
@@ -262,7 +270,7 @@ test("attestation signs only a successful ReturnBurned for this hub", async () =
 
   const wrongHub = await createReturnAttestation({
     txHash: `0x${"3".repeat(64)}`,
-    key: KEY,
+    signer: testSigner(KEY),
     burnAddress: BURN,
     hubAddress: HUB,
     hubChainId: 8453,
@@ -278,7 +286,7 @@ test("attestation waits for 12 PEOPLE confirmations or a finalized block", async
   assert.equal(MIN_RETURN_CONFIRMATIONS, 12n);
   const shallow = await createReturnAttestation({
     txHash: `0x${"4".repeat(64)}`,
-    key: KEY,
+    signer: testSigner(KEY),
     burnAddress: BURN,
     hubAddress: HUB,
     hubChainId: 8453,
@@ -292,7 +300,7 @@ test("attestation waits for 12 PEOPLE confirmations or a finalized block", async
 
   const finalized = await createReturnAttestation({
     txHash: `0x${"5".repeat(64)}`,
-    key: KEY,
+    signer: testSigner(KEY),
     burnAddress: BURN,
     hubAddress: HUB,
     hubChainId: 8453,
@@ -308,7 +316,7 @@ test("attestation waits for 12 PEOPLE confirmations or a finalized block", async
 test("createReturnAttestation does not sign when destChainId is not the hub chain", async () => {
   const wrongChain = await createReturnAttestation({
     txHash: `0x${"6".repeat(64)}`,
-    key: KEY,
+    signer: testSigner(KEY),
     burnAddress: BURN,
     hubAddress: HUB,
     hubChainId: 8453,
@@ -390,4 +398,45 @@ test("enough allowance skips the approval", async () => {
   });
   assert.deepEqual(result, { ok: true });
   assert.equal(approved, false);
+});
+
+test("return-verifier: env key is refused on Base mainnet and any chain but Base Sepolia", () => {
+  assert.equal(getReturnVerifierSigner(8453, { SALE_RETURN_VERIFIER_LOCAL_KEY: KEY }), null);
+  assert.equal(getReturnVerifierSigner(8453, { SALE_RETURN_VERIFIER_MODE: "local", SALE_RETURN_VERIFIER_LOCAL_KEY: KEY }), null);
+  assert.equal(getReturnVerifierSigner(1, { SALE_RETURN_VERIFIER_LOCAL_KEY: KEY }), null);
+  assert.notEqual(getReturnVerifierSigner(84532, { SALE_RETURN_VERIFIER_LOCAL_KEY: KEY }), null);
+});
+
+test("return-verifier: nothing configured, bad key, or kms without key id signs nothing", () => {
+  assert.equal(getReturnVerifierSigner(84532, {}), null);
+  assert.equal(getReturnVerifierSigner(84532, { SALE_RETURN_VERIFIER_LOCAL_KEY: "0x1234" }), null);
+  assert.equal(getReturnVerifierSigner(8453, { SALE_RETURN_VERIFIER_MODE: "kms" }), null);
+  assert.equal(getReturnVerifierSigner(8453, { SALE_RETURN_VERIFIER_MODE: "something" }), null);
+});
+
+test("return-verifier: kms mode with a key id yields a signer without touching the key", () => {
+  const signer = getReturnVerifierSigner(8453, {
+    SALE_RETURN_VERIFIER_MODE: "kms",
+    SALE_RETURN_VERIFIER_KMS_KEY_ID: "test-key-id",
+  });
+  assert.notEqual(signer, null);
+  assert.equal(typeof signer.signDigest, "function");
+});
+
+test("signer-path signature equals the typed-data signature and recovers to the verifier", async () => {
+  const message = {
+    personId: PERSON,
+    hub: HUB,
+    seller: SELLER,
+    pplAmount: AMOUNT,
+    sourceChainId: 97401,
+    destChainId: 84532,
+    returnId: RETURN_ID,
+    deadline: 1_700_000_900n,
+  };
+  const viaDigest = await testSigner(KEY).signDigest(mainnetReturnDigest({ chainId: 84532, hub: HUB, message }));
+  const viaTyped = await signMainnetReturn({ privateKey: KEY, chainId: 84532, hub: HUB, message });
+  assert.equal(viaDigest, viaTyped);
+  const local = getReturnVerifierSigner(84532, { SALE_RETURN_VERIFIER_LOCAL_KEY: KEY });
+  assert.equal(await local.getAddress(), privateKeyToAccount(KEY).address);
 });

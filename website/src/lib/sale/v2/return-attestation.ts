@@ -1,5 +1,9 @@
-import { getAddress, isAddress, isHex, type Address, type Hex } from "viem";
+import { getAddress, hashTypedData, isAddress, isHex, type Address, type Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
+
+import { createLocalVerifierSigner } from "../verifier/local.ts";
+import { createAwsKmsClient, createKmsVerifierSigner } from "../verifier/kms-aws.ts";
+import type { VerifierSigner } from "../verifier/signer.ts";
 
 import {
   MAINNET_RETURN_TYPES,
@@ -31,6 +35,40 @@ export function readReturnVerifierKey(
   return prefixed as Hex;
 }
 
+/**
+ * Resolves the `MainnetReturn` signer the same way as the purchase verifier.
+ *
+ * - `SALE_RETURN_VERIFIER_MODE=kms`: AWS KMS key `SALE_RETURN_VERIFIER_KMS_KEY_ID` (production; the
+ *   private key never leaves KMS).
+ * - `SALE_RETURN_VERIFIER_MODE=local` (or mode unset with `SALE_RETURN_VERIFIER_LOCAL_KEY` set):
+ *   env-held key, Base Sepolia only. Any other hub chain, including Base mainnet (8453), is refused.
+ *
+ * Returns null (sell-back signing off) when nothing is configured or the configuration is refused,
+ * so a misconfiguration never falls through to a signature.
+ */
+export function getReturnVerifierSigner(
+  hubChainId: number,
+  env: Record<string, string | undefined> = process.env,
+): VerifierSigner | null {
+  const rawMode = (env.SALE_RETURN_VERIFIER_MODE ?? "").trim().toLowerCase();
+  const localKey = env.SALE_RETURN_VERIFIER_LOCAL_KEY?.trim();
+  const mode = rawMode || (localKey ? "local" : "");
+  try {
+    if (mode === "kms") {
+      const keyId = env.SALE_RETURN_VERIFIER_KMS_KEY_ID?.trim();
+      if (!keyId) return null;
+      return createKmsVerifierSigner({ client: createAwsKmsClient(), keyId });
+    }
+    if (mode === "local") {
+      if (!localKey || !readReturnVerifierKey(localKey)) return null;
+      return createLocalVerifierSigner(hubChainId, localKey);
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 export function mainnetReturnDomain(chainId: number, hub: Address) {
   return {
     name: "PplCurveHubV2",
@@ -57,6 +95,28 @@ export async function signMainnetReturn(input: {
 }): Promise<Hex> {
   const account = privateKeyToAccount(input.privateKey);
   return account.signTypedData({
+    domain: mainnetReturnDomain(input.chainId, input.hub),
+    types: MAINNET_RETURN_TYPES,
+    primaryType: "MainnetReturn",
+    message: {
+      personId: input.message.personId,
+      hub: input.message.hub,
+      seller: input.message.seller,
+      pplAmount: input.message.pplAmount,
+      sourceChainId: BigInt(input.message.sourceChainId),
+      destChainId: BigInt(input.message.destChainId),
+      returnId: input.message.returnId,
+      deadline: input.message.deadline,
+    },
+  });
+}
+
+export function mainnetReturnDigest(input: {
+  chainId: number;
+  hub: Address;
+  message: Parameters<typeof signMainnetReturn>[0]["message"];
+}): Hex {
+  return hashTypedData({
     domain: mainnetReturnDomain(input.chainId, input.hub),
     types: MAINNET_RETURN_TYPES,
     primaryType: "MainnetReturn",
@@ -105,7 +165,8 @@ function validBytes32(raw: string | undefined): Hex | undefined {
 export async function createReturnAttestation(input: {
   txHash: string;
   returnId?: string;
-  key: string | null;
+  /** From `getReturnVerifierSigner`; null means signing is off. */
+  signer: VerifierSigner | null;
   burnAddress: string | undefined;
   hubAddress: string | undefined;
   hubChainId: number;
@@ -115,9 +176,7 @@ export async function createReturnAttestation(input: {
   finalizedBlock?: () => Promise<bigint | null>;
   returnVerifier: () => Promise<Address>;
 }): Promise<AttestationSuccess | AttestationFailure> {
-  if (!input.key) return { ok: false, status: 503, error: "signer_unavailable" };
-  const key = readReturnVerifierKey(input.key);
-  if (!key) return { ok: false, status: 503, error: "signer_unavailable" };
+  if (!input.signer) return { ok: false, status: 503, error: "signer_unavailable" };
   if (!input.burnAddress || !isAddress(input.burnAddress) || !input.hubAddress || !isAddress(input.hubAddress)) {
     return { ok: false, status: 503, error: "not_configured" };
   }
@@ -175,25 +234,36 @@ export async function createReturnAttestation(input: {
   } catch {
     return { ok: false, status: 503, error: "onchain_unavailable" };
   }
-  const signer = privateKeyToAccount(key).address;
-  if (getAddress(signer) !== verifier) return { ok: false, status: 503, error: "verifier_mismatch" };
+  let signerAddress: Address;
+  try {
+    signerAddress = getAddress(await input.signer.getAddress());
+  } catch {
+    return { ok: false, status: 503, error: "signer_unavailable" };
+  }
+  if (signerAddress !== verifier) return { ok: false, status: 503, error: "verifier_mismatch" };
 
   const deadline = BigInt(input.nowSec + ATTESTATION_TTL_SECONDS);
-  const signature = await signMainnetReturn({
-    privateKey: key,
-    chainId: input.hubChainId,
-    hub,
-    message: {
-      personId: burned.personId,
-      hub,
-      seller: burned.seller,
-      pplAmount: burned.amount,
-      sourceChainId: PEOPLE_MAINNET_CHAIN_ID,
-      destChainId: Number(burned.destChainId),
-      returnId: burned.returnId,
-      deadline,
-    },
-  });
+  let signature: Hex;
+  try {
+    signature = await input.signer.signDigest(
+      mainnetReturnDigest({
+        chainId: input.hubChainId,
+        hub,
+        message: {
+          personId: burned.personId,
+          hub,
+          seller: burned.seller,
+          pplAmount: burned.amount,
+          sourceChainId: PEOPLE_MAINNET_CHAIN_ID,
+          destChainId: Number(burned.destChainId),
+          returnId: burned.returnId,
+          deadline,
+        },
+      }),
+    );
+  } catch {
+    return { ok: false, status: 503, error: "signer_unavailable" };
+  }
   return {
     ok: true,
     status: 200,
