@@ -42,6 +42,7 @@ export type HumanPassportVerifyDeps = {
 type PassportScoreResponse = {
   address?: string;
   score?: string | number;
+  /** Scorer-side verdict and threshold; not used, see `verifyHumanPassportForUser`. */
   passing_score?: boolean;
   threshold?: string | number;
   error?: string | null;
@@ -123,10 +124,10 @@ export async function verifyHumanPassportForUser(
     return { ok: false, error: "verification_failed" };
   }
 
-  const threshold = parseScore(data.threshold) ?? config.minScore;
-  const minRequired = Math.max(config.minScore, threshold);
-  const passing =
-    data.passing_score === true || score >= minRequired;
+  // The site's own threshold decides. The scorer's `threshold`/`passing_score` reflect the
+  // scorer configured on developer.passport.xyz (usually 20) and are ignored on purpose.
+  const minRequired = config.minScore;
+  const passing = score >= minRequired;
 
   if (!passing) {
     return { ok: false, error: "score_too_low", score, threshold: minRequired, address, walletKind };
@@ -180,13 +181,6 @@ export async function fetchHumanPassportScore(input: {
   const score = parseScore(data.score);
   if (score === null) return { ok: false, error: "verification_failed" };
 
-  const threshold = parseScore(data.threshold) ?? config.minScore;
-  const minRequired = Math.max(config.minScore, threshold);
-  return {
-    ok: true,
-    score,
-    threshold: minRequired,
-    address,
-    passing: data.passing_score === true || score >= minRequired,
-  };
+  const minRequired = config.minScore;
+  return { ok: true, score, threshold: minRequired, address, passing: score >= minRequired };
 }

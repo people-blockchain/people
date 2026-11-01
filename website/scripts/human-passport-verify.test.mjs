@@ -80,3 +80,38 @@ test("unregistered user → not_registered", async () => {
   const result = await verifyHumanPassportForUser("nobody", OWN, deps);
   assert.deepEqual(result, { ok: false, error: "not_registered" });
 });
+
+/** Scorer configured at 20 (its default) answers for a score below that. */
+function scorerAt20(score) {
+  return async (url) => {
+    const address = String(url).split("/score/")[1];
+    return new Response(JSON.stringify({ address, score: String(score), passing_score: false, threshold: "20" }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+}
+
+test("site threshold decides: score 12 passes at minScore 10 even when the scorer threshold is 20", async () => {
+  const { db, deps } = harness({ u1: { walletAddress: OWN, verificationLevel: 0 } });
+  const result = await verifyHumanPassportForUser("u1", undefined, {
+    ...deps,
+    readConfig: () => ({ ...CONFIG, minScore: 10 }),
+    fetch: scorerAt20(12),
+  });
+  assert.deepEqual(result, { ok: true });
+  assert.equal(db.get("u1").verificationLevel, VERIFICATION_LEVEL_STRONG);
+});
+
+test("score below the site threshold → score_too_low reporting the site threshold", async () => {
+  const { db, deps } = harness({ u1: { walletAddress: OWN, verificationLevel: 0 } });
+  const result = await verifyHumanPassportForUser("u1", undefined, {
+    ...deps,
+    readConfig: () => ({ ...CONFIG, minScore: 10 }),
+    fetch: scorerAt20(9.5),
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.error, "score_too_low");
+  assert.equal(result.threshold, 10);
+  assert.equal(db.get("u1").verificationLevel, 0);
+});
