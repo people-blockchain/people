@@ -38,10 +38,12 @@ v2 adds no new economic constants.
 | `WHITELIST_PERIOD` | 7 days from `open()` | D4 |
 | `RESERVE_BPS` | 5_000 (50%) | D1 |
 | `HOLD` | 30 days per lot | `SELL_BACK.holdDays` |
-| `SELL_GLOBAL_CAP_BPS` | 200 (2% of day-start reserve) | `SELL_BACK.dailyCapReservePct` |
-| `SELL_CAP_DAY_USD6` | 2_000e6 per address per UTC day | `SELL_BACK.perPersonPerDayUsd` |
-| `FEE_LOW_BPS` / `FEE_HIGH_BPS` | 150 / 300 | `SELL_BACK.feePct/feeHighPct` |
-| `FEE_HIGH_THRESHOLD_BPS` | 100 (1% of day-start reserve) | `SELL_BACK.feeHighThresholdReservePct` |
+| `SELL_GLOBAL_CAP_BPS` | 200 (2% of the reserve snapshot) over an exact rolling 24 hours, not a UTC day. Snapshot is taken when the global ring is empty and stays until every entry ages out. Ring capacity `GLOBAL_SELL_CAPACITY` (128) bounds the scan | `SELL_BACK.dailyCapReservePct` |
+| `SELL_CAP_DAY_USD6` | 2_000e6 per person per exact rolling 24 hours | `SELL_BACK.perPersonPerDayUsd` |
+| `FEE_LOW_BPS` / `FEE_HIGH_BPS` | 150 / 300, on the same rolling 24-hour gross | `SELL_BACK.feePct/feeHighPct` |
+| `FEE_HIGH_THRESHOLD_BPS` | 100 (1% of the same reserve snapshot) | `SELL_BACK.feeHighThresholdReservePct` |
+| `ADMIN_TIMELOCK` | 48 hours, immutable. `queueSetVerifier` / `queueSetReturnVerifier` / `queueSetTrustedRouter` / `queueRescue` then `execute*` after `eta`; `cancel(id)` by the owner. No immediate setter or token sweep. Liquidity release stays `LIQUIDITY_RELEASE_DELAY` (30 days), which is longer, and has no shorter path | — |
+| `GRACE_PERIOD` | 14 days after `eta`: queued owner ops expire and cannot execute (prevents year-old queues). At most one pending op per `kind`; `pendingAdminOp(kind)` exposes `eta` and `dataHash` | Opus r2 M1 |
 | `MAX_LOTS_PER_SELL` | 50 (gas bound per tx, not economic; larger sales = several txs) | — |
 | `LIQUIDITY_RELEASE_DELAY` | 30 days public notice before reserve → liquidity (Q1; option B = 14 days) | Q1 |
 | `usdc` | immutable; Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`; Sepolia: MockUSDC (6 dec) | D7 |
@@ -74,20 +76,14 @@ struct Lot { uint40 boughtAt; uint96 boughtUsd6; uint120 pplRemaining; }
 mapping(address => Lot[]) internal _lots;
 mapping(address => uint256) public lotHead;         // first lot with pplRemaining > 0 (FIFO)
 mapping(address => uint64)  public lastBuyAt;       // cooldown
-mapping(address => uint256) internal _buyDayOf;     // Q5: per-recipient UTC day index
-mapping(address => uint256) internal _buyUsedUsd6;  // Q5: bought today
-
-// sell-back day accounting (UTC day = block.timestamp / 1 days)
-uint256 public sellDay;                  // current day index
-uint256 public sellDayReserveSnapshot;   // reserveUsd6 at first sell-back of sellDay
-uint256 public sellDayGrossUsd6;         // Σ gross sold back today (all users)
-mapping(address => uint256) internal _sellDayOf;     // per-address day index
-mapping(address => uint256) internal _sellUsedUsd6;  // per-address gross today
+// per-person buy and sell-back rings: exact rolling 24 hours (capacity 50)
+// global sell-back ring: same approach, capacity GLOBAL_SELL_CAPACITY (128)
+uint256 public sellWindowReserveSnapshot; // reserve when the global ring was empty
 ```
 
-Q5 (Alex, 2026-10-27): buys and sell-back both count per UTC calendar day (`block.timestamp / 1 days`).
-Trade-off noted: a buyer can spend $2k at 23:59 UTC and another $2k at 00:00 UTC; `/buy` copy "in any 24 hours"
-must become "per day (UTC)".
+Buys, the per-person $2k sell-back cap, and the global 2% sell-back cap all count over an exact rolling
+24 hours (`now < t + 24h` still counts; `t + 24h` has aged out). UTC midnight does not reset them.
+The 1.5% / 3% fee line uses that same global ring and the same reserve snapshot.
 
 ## 4. External interface
 
@@ -100,19 +96,25 @@ function verify(bytes32 personId, uint256 deadline, bytes calldata sig) external
 // ---- owner (Safe)
 function open() external;                       // once; sets openedAt
 function pause() external; function unpause() external;
-function setVerifier(address v) external;
+function queueSetVerifier(address v) external returns (bytes32 id); // executes after 48h
+function queueSetReturnVerifier(address v) external returns (bytes32 id);
+function queueRescue(address token, uint256 amount) external returns (bytes32 id); // USDC surplus or any other token
+function cancel(bytes32 id) external;
 function unbind(address account) external;      // lost wallet / abuse; bumps bindNonce
 function announceLiquidityRelease() external;   // Q1: public notice; then 30 d timelock
 function cancelLiquidityRelease() external;
 function executeLiquidityRelease() external;    // permissionless after the delay → liquidityReceiver
 function markDelivered(address[] calldata holders) external; // Q2: freeze delivered records
-function rescue(address token, uint256 amount) external; // non-USDC, or USDC surplus above reserveUsd6
+function executeRescue(bytes32 id) external; // only after ADMIN_TIMELOCK; surplus re-checked
 // renounceOwnership() always reverts; Ownable2Step for transfer.
 
 // ---- views for /buy and /api/sale/config
 function quoteBuy(uint256 usdcIn) external view returns (uint256 pplOut, uint256 chargedUsd6);
 function quoteSellBack(address holder, uint256 pplIn) external view returns (uint256 gross, uint256 fee, uint256 payout);
 function sellableNow(address holder) external view returns (uint256 ppl);       // unlocked lots
+function sellableBalance(address account) external view returns (uint256 ppl); // bought − sold − locked lots (sell-back scan)
+function liquidityReleaseExecutableAt() external view returns (uint256);      // announce + 30d + pause after announce
+function pendingAdminOp(bytes32 kind) external view returns (bool active, bytes32 id, uint64 eta, bytes32 dataHash);
 function sellBackCapToday() external view returns (uint256 globalRemainingUsd6, uint256 feeLowRemainingUsd6); // D5
 function addressSellRemainingToday(address) external view returns (uint256);
 function buyRemainingToday(address) external view returns (uint256);
@@ -136,7 +138,7 @@ from Whitelist/Open). `paused` is orthogonal.
 4. `usdcIn ≥ MIN_BUY_USD6` (except the final partial fill, see 6) and `≤ MAX_BUY_USD6`.
 5. `now ≥ lastBuyAt[recipient] + BUY_COOLDOWN`.
 6. Clamp to `RAISE_CAP_USD6 − raisedUsd6` (charged ≤ usdcIn; remainder simply not pulled — as v1 `_fill`).
-7. `boughtToday(recipient) + charged ≤ BUY_CAP_DAY_USD6` (UTC day, Q5).
+7. `boughtToday(recipient) + charged ≤ BUY_CAP_DAY_USD6` (exact rolling 24 hours).
 8. `newRaised = raisedUsd6 + charged`; `newSold = soldForRaised(newRaised)` (v1 math, rounds down);
    `pplOut = newSold − soldPpl`; require `pplOut > 0 && pplOut ≥ minPplOut`.
 9. Split: `toTreasury = charged * (10_000 − RESERVE_BPS) / 10_000` (floor), `toReserve = charged − toTreasury`
@@ -150,6 +152,17 @@ from Whitelist/Open). `paused` is orthogonal.
 Payer = `msg.sender` (wallet or LI.FI executor); limits, cooldown, whitelist and lots bind to `recipient` (D6).
 
 ### 5.2 sellBack (curve-at-exit, D9)
+
+**Reward PPL (§5.2 owner rule):** quest/founder rewards on the PEOPLE network live in `RewardVesting`
+(`contracts/src/vesting/RewardVesting.sol`). Locked or unlocked reward balance must not be sold back
+into the hub. On-chain: `PplReturnBurn` only accepts burns up to each sender's `hubPurchasedPpl`
+(credited by the delivery relayer after hub buys); reward `claim` and plain transfers do not credit
+that ledger. On Base, `sellBack` is capped by `_pplPurchasedViaHub − _pplReturnedViaSellBack` for
+the bound person (in addition to unlocked lots). The hub's immutable `rewardBuyerForbidden` address
+(if set) cannot `buy`, cannot be `recipient`, and cannot become `trustedRouter`. Curve sell-back
+rights remain buy-lots only; `sellableBalance(account)` is the minimum of that hub cap and the
+unlocked FIFO scan.
+
 1. `whenNotPaused`, `nonReentrant`; `!graduated`; `!liquidityReleased`; `openedAt != 0` (works in Open, Whitelist,
    Expired — D3/Q1: never closed by time).
 2. `personOf[msg.sender] != 0` (verified only); `!delivered[msg.sender]` (Q2).
@@ -157,27 +170,26 @@ Payer = `msg.sender` (wallet or LI.FI executor); limits, cooldown, whitelist and
    lots touched; revert `NotEnoughUnlocked` otherwise. Partial lot allowed.
 4. `newSold = soldPpl − pplIn`; `newRaised = raisedForSold(newSold)` (**rounds up**);
    `gross = raisedUsd6 − newRaised` (so gross rounds down, favours reserve).
-5. Day roll: if `today != sellDay` → `sellDay = today; sellDayReserveSnapshot = reserveUsd6; sellDayGrossUsd6 = 0`.
-6. Global cap: `sellDayGrossUsd6 + gross ≤ snapshot * 200 / 10_000`.
-7. Address cap: `addrUsedToday + gross ≤ SELL_CAP_DAY_USD6`.
-8. Fee (marginal, D10): `low = min(gross, max(0, snapshot*100/10_000 − sellDayGrossUsd6))`, `high = gross − low`;
+5. Global ring: prune entries with `timestamp + 24h <= now`. If none remain, `snapshot = reserveUsd6`;
+   otherwise keep `sellWindowReserveSnapshot`.
+6. Global cap: `windowGross + gross ≤ snapshot * 200 / 10_000`. Revert `GlobalWindowFull` if the ring
+   already holds `GLOBAL_SELL_CAPACITY` live entries (gas bound).
+7. Address cap: rolling-24h gross + this gross ≤ `SELL_CAP_DAY_USD6`.
+8. Fee (marginal, same window): `low = min(gross, max(0, snapshot*100/10_000 − windowGross))`, `high = gross − low`;
    `fee = ceil(low*150/10_000) + ceil(high*300/10_000)`; `payout = gross − fee`.
 9. `payout ≥ minUsdcOut`; `payout ≤ reserveUsd6` (else `ReserveExhausted`).
 10. Effects: `soldPpl = newSold; raisedUsd6 = newRaised; reserveUsd6 −= payout` (fee stays, D2);
-    `pplOf −= pplIn`; lots/`lotHead`; day counters.
+    `pplOf −= pplIn`; lots/`lotHead`; append the gross to the global ring and the person's ring.
 11. `usdc.safeTransfer(msg.sender, payout)`; emit `SoldBack`.
 
-Fee semantics note: site copy says "3% when that day's sell-backs already exceed 1% of the reserve". The marginal
-split charges 3% only on the part of a sell-back above the 1% line, so one large sale cannot dodge the high fee and
-a sale fully below the line pays 1.5%. Q3 answered: marginal version confirmed. **Site copy fix needed (12
-locales):** "3% applies only to the part of the day's sell-backs above 1% of the reserve" instead of "3% when
-that day's sell-backs already exceed 1% of the reserve".
+Fee semantics: the marginal split charges 3% only on the part of a sell-back above the 1% line of the same
+rolling-24-hour gross, so one large sale cannot dodge the high fee and a sale fully below the line pays 1.5%.
 
 ### 5.3 verify (D4, D6, Q4)
 Backend (website) signs EIP-712 `Verification(address account, bytes32 personId, uint256 nonce, uint256 deadline)`
 with the `verifier` key, reusing the site's existing verification flow. Q4 (Alex, 2026-10-27):
 - signer key lives in a cloud KMS, sign-only, non-exportable; rotation/revocation only by the owner (Safe) via
-  `setVerifier` (`address(0)` = revoked, all `verify` calls fail);
+  `queueSetVerifier` then `executeSetVerifier` after `ADMIN_TIMELOCK` (48 hours); `address(0)` revokes and all `verify` calls fail. `queueSetReturnVerifier` uses the same delay. There is no immediate setter;
 - admission requires Human Passport (score threshold) **or** World ID; Telegram alone is not enough;
 - backend stores hashes of all of a person's identifiers and refuses to sign if any of them is already bound to
   another address (cross-provider dedupe is off-chain);
@@ -195,9 +207,9 @@ advance public notice.
 Implemented: `liquidityReceiver` is an immutable constructor arg (`≠ treasury`, `≠ owner`, `≠ 0`).
 `announceLiquidityRelease()` (owner, after `open`) records `releaseAnnouncedAt` and emits
 `LiquidityReleaseAnnounced(to, reserve, executableAt, graduated)`; new buys stop while pending; sell-back keeps
-working during the notice (unless graduated) so holders who disagree can exit within the daily limits.
+working during the notice (unless graduated) so holders who disagree can exit within the rolling 24-hour limits.
 `cancelLiquidityRelease()` (owner) reopens buys. `executeLiquidityRelease()` is **permissionless** once
-`LIQUIDITY_RELEASE_DELAY` has passed and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
+`liquidityReleaseExecutableAt()` has passed (30-day notice plus any time paused after announce) and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
 (`liquidityReleased`), sell-back then closes. There is no other owner path that moves reserve USDC.
 
 Options for Alex (one constant / one constructor arg to change):
@@ -218,7 +230,7 @@ and LP lock from site copy remain off-chain Safe operations with public reportin
 soldPpl` (view `unsoldPpl()`) → Community Pool on the PEOPLE network.
 
 ### 5.5 Expiry without graduation (D3, Q1)
-At `openedAt + TERM` buys stop. Sell-back continues with identical limits (30-day hold, 2%/$2k per day, fees)
+At `openedAt + TERM` buys stop. Sell-back continues with identical limits (30-day hold, 2% of the reserve snapshot and $2k per person, both over an exact rolling 24 hours, fees)
 while `reserveUsd6` covers the payout and is **never closed by time**. `unsoldPpl()` → Community Pool. The only
 end is the timelocked liquidity release at the PEOPLE network launch (§5.4).
 
@@ -230,8 +242,8 @@ an immutable record (invariant 3 unchanged). Allowed only once the sale is over 
 has been announced/executed, so it cannot be used to block sell-backs during the normal sale. The first
 `markDelivered` sets `deliveryStarted`; after that `cancelLiquidityRelease` reverts (`DeliveryStarted`), so frozen
 records can never coexist with a reopened sale/sell-back (test `test_cancelReleaseRevertsAfterDelivery`).
-Note: the daily sell-back snapshot is taken at the first sell-back of a UTC day; before that `sellBackCapToday()`
-reports 2% of the current reserve.
+Note: `sellWindowReserveSnapshot` is taken when the global ring is empty (the first sell-back of an epoch) and
+stays until every entry ages out. Before any live entry, `sellBackCapToday()` reports 2% of the current reserve.
 
 ### 5.6 Pause
 Owner can pause/unpause `buy` and `sellBack` together. `verify` and views work while paused. Pause does not
@@ -247,7 +259,7 @@ Test file `contracts/test/PplCurveHubV2.t.sol` (+ `PplCurveHubV2.invariant.t.sol
 | Curve `p0·e^(k·x)` | v1 `PplCurveMath` + new `expWad`, `raisedForSold` | `test_curveMatchesV1`, `testFuzz_raisedSoldRoundTrip` |
 | $10 min per buy | `usdcIn ≥ MIN_BUY_USD6` | `test_buyRevertsBelowMin`, `test_buyAtMinSucceeds` |
 | $500 max per buy | `usdcIn ≤ MAX_BUY_USD6` | `test_buyRevertsAboveMax` |
-| $2k per address per UTC day (Q5) | per-recipient day counter | `test_buyCapPerUtcDay`, `test_buyCapResetsNextUtcDay`, `test_buyCapCountsRecipientNotPayer` |
+| $2k per person per exact rolling 24 hours | per-person ring | `test_buyCapPerUtcDay`, `test_buyCapResetsNextUtcDay`, `test_buyCapCountsRecipientNotPayer` |
 | 60 s pause | `lastBuyAt[recipient] + 60` | `test_cooldown`, `test_cooldownPerRecipient` |
 | Slippage 1% (UI sets minPplOut) | `pplOut ≥ minPplOut` | `test_buySlippage` |
 | USDC only (D7) | single immutable token | `test_onlyUsdcPulled` |
@@ -259,8 +271,8 @@ Test file `contracts/test/PplCurveHubV2.t.sol` (+ `PplCurveHubV2.invariant.t.sol
 | Sell-back verified only | `personOf[msg.sender]` | `test_sellBackRequiresVerified` |
 | 30-day hold per lot | `boughtAt + HOLD ≤ now` | `test_sellBackLockedLotReverts`, `test_sellBackUnlocksPerLot`, `test_sellBackFifoSkipsNothing` |
 | Curve-at-exit, price moves down (D9) | `raisedForSold(newSold)` | `test_sellBackMovesPriceDown`, `testFuzz_buySellRoundTripNoProfit` |
-| 2% of reserve per day (global) | day snapshot cap | `test_sellBackGlobalCap`, `test_sellBackGlobalCapResetsNextUtcDay`, `test_sellBackCapUsesDayStartSnapshot` |
-| $2k per address per day | per-address day counter | `test_sellBackAddressCap`, `test_sellBackAddressCapResetsNextDay` |
+| 2% of reserve over an exact rolling 24 hours (global) | ring + snapshot; frees at t+24h | `test_sellBackGlobalCap`, `test_sellBackGlobalCapRollsAt24hNotUtcMidnight`, `test_sellBackCapUsesDayStartSnapshot`, `test_globalSellCap_rolling24hAcrossUtcMidnight` |
+| $2k per person per exact rolling 24 hours | per-person ring | `test_sellBackAddressCap`, `test_sellBackAddressCapResetsNextDay` |
 | Fee 1.5% / 3% above 1% | marginal split | `test_feeLowBelowThreshold`, `test_feeHighAboveThreshold`, `test_feeSplitAcrossThreshold` |
 | Fee stays in reserve (D2) | `reserveUsd6 −= payout` | `test_feeStaysInReserve` |
 | Closes at graduation | `!graduated` | `test_sellBackClosedAfterGraduation` |
@@ -273,7 +285,8 @@ Test file `contracts/test/PplCurveHubV2.t.sol` (+ `PplCurveHubV2.invariant.t.sol
 | Reserve exit via timelock + notice (Q1) | `announce` → 30 d → permissionless `execute` | `test_liquidityReleaseTimelock`, `test_liquidityReleaseAnnounceStopsBuys`, `test_liquidityReleaseCancel`, `test_liquidityReleaseAfterGraduation`, `test_sellBackWorksDuringNotice`, `test_sellBackClosedAfterRelease` |
 | Sell-back never closed by time (Q1) | no term check in sellBack | `test_sellBackWorksLongAfterExpiry` |
 | Delivered records frozen (Q2) | `delivered[...]` | `test_deliveredCannotSellBack`, `test_markDeliveredOnlyAfterSaleOver`, `test_deliveredCannotReceiveBuy` |
-| Verifier rotate/revoke only by owner (Q4) | `setVerifier` onlyOwner | `test_setVerifierRevokes`, `test_onlyOwnerAdmin` |
+| Verifier and return verifier rotate/revoke only by owner, after 48 hours | `queue*` / `execute*` / `cancel`; no immediate setter | `test_setVerifierRevokes`, `test_onlyOwnerAdmin`, `test_adminTimelock48h_verifierReturnVerifierRescue` |
+| Return attestation binds amount, hub, seller, both chain ids | EIP-712 `MainnetReturn` checks; `returnId` preimage | `test_return_replayBindsAmountHubSellerChain`, `test_burn_returnIdBindsAmountHubSellerAndChains` |
 | Pause | `whenNotPaused` | `test_pauseBlocksBuyAndSell`, `test_onlyOwnerAdmin` |
 | Renounce disabled | revert | `test_renounceReverts` |
 | Mainnet USDC fork | — | `test_forkBaseUsdcEndToEnd` (fork, skipped without RPC) |
@@ -285,8 +298,8 @@ Test file `contracts/test/PplCurveHubV2.t.sol` (+ `PplCurveHubV2.invariant.t.sol
 3. `soldPpl == Σ pplOf == Σ lots.pplRemaining`.
 4. `soldPpl == soldForRaised(raisedUsd6)` within 1 wei-PPL rounding tolerance per op; `raisedUsd6 ≤ RAISE_CAP_USD6`.
 5. `Σ treasury inflow == Σ charged − Σ toReserve`.
-6. Per UTC day: `sellDayGrossUsd6 ≤ 2% · sellDayReserveSnapshot`; per address per day ≤ 2_000e6.
-7. Per recipient address per UTC day bought ≤ 2_000e6 (Q5).
+6. Over the live global ring: gross ≤ 2% of `sellWindowReserveSnapshot`; per person over the live ring ≤ 2_000e6.
+7. Per person over the live buy ring ≤ 2_000e6.
 8. No lot sold back before `boughtAt + HOLD`.
 9. After `graduated`: no change to raised/sold/pplOf/lots; reserve only decreases via `executeLiquidityRelease`
    (to `liquidityReceiver`); treasury never receives reserve USDC.
@@ -315,7 +328,7 @@ ABI differs from v1 (`buyWith(token,…)` → `buy(…)`); website must use a v2
 
 | Role | Holder | Powers | Cannot |
 |---|---|---|---|
-| owner | Safe 2-of-3 (mainnet); throwaway EOA on Sepolia | open, pause/unpause, setVerifier, unbind, announce/cancel liquidity release (executes only to immutable `liquidityReceiver` after 30 d), markDelivered (after sale over), rescue surplus, 2-step transfer | change constants/curve/limits, withdraw reserve before graduation, extend term, mint PPL, renounce |
+| owner | Safe 2-of-3 (mainnet); throwaway EOA on Sepolia | open, pause/unpause, queue/execute/cancel verifier, return verifier and surplus rescue (48 h), unbind, announce/cancel liquidity release (executes only to immutable `liquidityReceiver` after 30 d), markDelivered (after sale over), 2-step transfer | change constants/curve/limits, withdraw reserve before graduation, move USDC/USDT before the 48 h delay, extend term, mint PPL, renounce |
 | treasury | immutable, = Safe | receives 50% of every buy and released reserve | — |
 | verifier | website backend key (new) | sign bindings | buy/sell on others' behalf, move funds |
 
@@ -323,9 +336,9 @@ ABI differs from v1 (`buyWith(token,…)` → `buy(…)`); website must use a v2
 
 | Threat | Impact | Mitigation | Residual |
 |---|---|---|---|
-| Verifier key leak | attacker mints many "persons" → bypass whitelist & per-person limits, gains sell-back access | owner `setVerifier` rotation + `pause`; global 2%/day cap bounds drain; hold 30 d delays sell-back; key in server KMS/env, never in repo | Safe reaction time |
+| Verifier key leak | attacker mints many "persons" → bypass whitelist & per-person limits, gains sell-back access | owner queues a verifier rotation (48 h) + `pause`; global 2% rolling-24h cap bounds drain; hold 30 d delays sell-back; key in server KMS/env, never in repo | 48 h before the new verifier is live |
 | Sybil (real people renting identities) | per-person limits diluted | binding uniqueness by provider id; caps are per address | accepted |
-| Bank run on reserve | holders compete for 2%/day | per-day cap + per-address cap; reserve can only fall by ≤ 2% of day-start snapshot per day | early-stage daily cap is small in absolute terms (D5: shown honestly) |
+| Bank run on reserve | holders compete for the rolling 2% | rolling-24h cap + per-person cap; reserve can only fall by ≤ 2% of the window snapshot in any 24 hours | early-stage cap is small in absolute terms (D5: shown honestly) |
 | Front-running / sandwich | profit extraction | 30-day hold makes buy→sell sandwich impossible; slippage `minPplOut`/`minUsdcOut` | first-come race for daily cap |
 | Rounding / dust abuse | drain reserve via rounding | buy rounds PPL down, sell rounds gross down & fee up; min $10 buy; fuzz round-trip test | — |
 | Griefing via `recipient` | attacker buys $10 for victim → consumes victim's cooldown/daily cap | costs attacker ≥ $10 per 60 s and gives victim PPL | accepted, documented |
@@ -410,4 +423,4 @@ verifier-signing API route (§5.3).
 - **Q3** Marginal fee confirmed → §5.2 (site copy fix flagged).
 - **Q4** KMS sign-only signer, expiry + nonce, owner-only rotation, Human Passport or World ID, backend
   cross-identifier dedupe → §5.3.
-- **Q5** Buys and sell-back per UTC calendar day → §3 (copy fix: "per day (UTC)" instead of "any 24 hours").
+- **Q5** Superseded: buys, the per-person $2k sell-back, and the global 2% sell-back count over an exact rolling 24 hours, not a UTC calendar day → §3.

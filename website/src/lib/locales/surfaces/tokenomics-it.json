@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): anni 1–4 pagano 6%, 5%, 5%, 4% del supply totale all’anno (60M / 50M / 50M / 40M PPL) più 30% delle commissioni di rete.",
     "team": "15% dell'offerta: 0% al lancio, cliff di 6 mesi, poi 18 mesi di sblocco mensile lineare (24 mesi in totale).",
     "treasury": "Solo dopo voti DAO; in multisig.",
-    "sale": "Venduto sulla curva pubblica su Base (PplCurveHub). I PPL vengono accreditati subito dopo l’acquisto; i trasferimenti si aprono con il lancio completo della rete.",
+    "sale": "Venduto sulla curva pubblica su Base (PplCurveHub). I PPL vengono accreditati su PEOPLE mainnet subito dopo l’acquisto; i trasferimenti si aprono con il lancio completo della rete.",
     "liquidity": "Pool PPL/USDC alla graduation; token LP bloccati per 24 mesi."
   },
   "donutTitle": "Allocazione",
@@ -36,7 +36,7 @@
   "salePayTitle": "Come pagheresti",
   "salePayBody": "Su Base, in USDC o USDT. Da altre reti, tramite lo scambio automatico integrato (LI.FI): funzionano le reti EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e altre), Tron e Solana. TON non è supportata. Ricevi i fondi in USDC su Base.",
   "saleDeliveryTitle": "Come ricevere PPL",
-  "saleDeliveryBody": "I PPL vengono accreditati subito sul tuo indirizzo, ma potrai inviarli ad altre persone solo dopo il lancio completo della rete. Solo gli utenti verificati possono rivenderli, 30 giorni dopo ogni acquisto.",
+  "saleDeliveryBody": "I PPL vengono accreditati subito sul tuo indirizzo su PEOPLE mainnet, ma potrai inviarli ad altre persone solo dopo il lancio completo della rete. Solo gli utenti verificati possono rivenderli, 30 giorni dopo ogni acquisto.",
   "curveTitle": "Curva di bonding",
   "curveLead": "Curva esponenziale: il prezzo parte da $0,005 per PPL e sale a ogni acquisto, fino a un tetto di $0,25 mentre la curva è aperta. La graduation chiude la curva a $4M raccolti.",
   "unsoldTitle": "Token invenduti",
@@ -99,8 +99,8 @@
     "100.000.000 PPL sulla curva (10% dell'offerta); partenza $0,005, crescita esponenziale, tetto $0,25 solo sulla curva.",
     "La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.",
     "Raccolta 50% liquidità bloccata / 50% multisig progetto; token LP bloccati 24 mesi.",
-    "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva al giorno per tutti e $2.000 a persona al giorno. Commissione 1,5% (3% se le rivendite del giorno superano l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
-    "$10–$500 per acquisto; Fino a $2,000 a persona in qualsiasi arco di 24 ore; Pausa di 60 s tra un acquisto e l’altro"
+    "Rivendita alla riserva solo per utenti verificati. Ogni lotto può essere rivenduto dopo 30 giorni di detenzione, al prezzo della curva nel momento della vendita. Limite complessivo: 2% della riserva in qualsiasi finestra mobile di 24 ore per tutti e $2.000 a persona in una finestra mobile di 24 ore. Commissione 1,5% (3% solo sulla parte delle rivendite di quelle 24 ore oltre l’1% della riserva). Si chiude dopo la graduation. Ricevi USDC su Base.",
+    "$10–$500 per acquisto; Fino a $2,000 a persona in una finestra mobile di 24 ore; Pausa di 60 s tra un acquisto e l’altro"
   ],
   "curveTableSold": "% venduto",
   "curveTablePrice": "Prezzo spot (USDC)",

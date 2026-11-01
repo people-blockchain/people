@@ -125,7 +125,7 @@
           "KYC tidak diperlukan untuk membeli. Menjual kembali memerlukan bukti kemanusiaan (Human Passport atau Telegram), yang bukan KYC.",
           "Penjualan berlangsung hingga habis terjual (kurva ditutup saat dana terkumpul mencapai $4 juta) atau selama 24 bulan sejak dibuka, mana yang lebih dulu. Tanpa perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tanpa pengembalian dana: setiap pembelian bersifat final.",
           "Jangka waktu penjualan, rumus harga, dan batas tidak berubah setelah penjualan dibuka.",
-          "Jual kembali bukan pengembalian dana: Jual kembali ke cadangan (reserve) — hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tahan 30 hari, pada harga kurva saat Anda menjual. Total penjualan kembali dibatasi 2% dari cadangan per hari untuk semua orang dan $2.000 per alamat per hari. Biaya: 1,5%, atau 3% bila penjualan kembali pada hari itu sudah melebihi 1% dari cadangan. Ditutup setelah graduation. Pembayaran dalam USDC di Base.",
+          "Jual kembali bukan pengembalian dana: Jual kembali ke cadangan (reserve) — hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tahan 30 hari, pada harga kurva saat Anda menjual. Total penjualan kembali dibatasi 2% dari cadangan dalam 24 jam bergulir mana pun untuk semua orang dan $2.000 per alamat dalam jendela 24 jam bergulir. Biaya: 1,5%, atau 3% hanya pada bagian penjualan kembali dalam 24 jam itu di atas 1% dari cadangan. Ditutup setelah graduation. Pembayaran dalam USDC di Base.",
           "Tidak ada apa pun di situs ini yang merupakan penawaran atau janji untuk menjual PPL di tempat yang penjualannya dibatasi, dan partisipasi mungkin tidak tersedia di yurisdiksi Anda."
         ]
       },

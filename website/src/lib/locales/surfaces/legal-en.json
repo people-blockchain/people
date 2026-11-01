@@ -125,7 +125,7 @@
           "No KYC is required to buy. Selling back requires proof of humanity (Human Passport or Telegram), which is not KYC.",
           "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
           "The sale term, price formula and limits do not change after the sale opens.",
-          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve per day for everyone and $2,000 per address per day. Fee: 1.5%, or 3% when that day's sell-backs already exceed 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
+          "Sell-back is not a refund: Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve in any rolling 24 hours for everyone and $2,000 per address in a rolling 24-hour window. Fee: 1.5%, or 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Closes after graduation. Payouts in USDC on Base.",
           "Nothing on this site is an offer or a promise to sell PPL where sale is restricted, and participation may be unavailable in your jurisdiction."
         ]
       },

@@ -7,6 +7,7 @@ import json
 import re
 import sys
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +28,32 @@ SECONDS_PER_MONTH = SECONDS_PER_YEAR // 12
 # consensus-critical permissions live in Go (GetMaccPerms), but a genesis ModuleAccount's own
 # `permissions` field is part of state and must match what the code grants.
 NO_MINT_BURN_MODULES = {"people_sale", "people_growth"}
+
+
+def genesis_unix_time(genesis: dict) -> int:
+    raw = genesis["genesis_time"]
+    if raw.endswith("Z"):
+        raw = raw[:-1] + "+00:00"
+    return int(datetime.fromisoformat(raw).timestamp())
+
+
+def check_cliff_linear(name: str, acc: dict, bucket: dict, genesis_time: int, errors: list[str]) -> None:
+    """A11 (owner decision): `bucket` vests as a ContinuousVestingAccount with
+    original_vesting = (100 - vesting_upfront_pct)% of the bucket, start_time = genesis + cliff,
+    end_time = start_time + linear months."""
+    base_vesting = acc.get("base_vesting_account", {})
+    want_locked = int(bucket["amount_appl"]) * (100 - int(bucket["vesting_upfront_pct"])) // 100
+    got_locked = int(base_vesting.get("original_vesting", [{}])[0].get("amount", 0))
+    if got_locked != want_locked:
+        errors.append(f"{name} original_vesting want {want_locked}, got {got_locked}")
+    want_start = genesis_time + int(bucket["vesting_cliff_months"]) * SECONDS_PER_MONTH
+    got_start = int(acc.get("start_time", 0))
+    if got_start != want_start:
+        errors.append(f"{name} start_time want genesis+{bucket['vesting_cliff_months']} months ({want_start}), got {got_start}")
+    want_end = want_start + int(bucket["vesting_linear_months"]) * SECONDS_PER_MONTH
+    got_end = int(base_vesting.get("end_time", 0))
+    if got_end != want_end:
+        errors.append(f"{name} end_time want cliff+{bucket['vesting_linear_months']} months ({want_end}), got {got_end}")
 
 
 def load_genesis(path: Path) -> dict:
@@ -170,34 +197,31 @@ def validate_file(path: Path) -> list[str]:
             if got_sum != want_sum:
                 errors.append(f"validator year {year+1} daily periods sum to {got_sum}, want {want_sum}")
 
-    # M11-2: team — 10% at genesis + 90% linear over 24 months.
+    genesis_time = genesis_unix_time(g)
+
+    # A11 (owner decision): team — 0% at genesis, 6-month cliff, then 18 months linear.
     team_acc = find_account(g, TEAM_BUCKET["account"])
     if team_acc is None or not team_acc.get("@type", "").endswith("ContinuousVestingAccount"):
         errors.append("team bucket must be a ContinuousVestingAccount")
     else:
-        base_vesting = team_acc.get("base_vesting_account", {})
+        check_cliff_linear("team", team_acc, TEAM_BUCKET, genesis_time, errors)
         team_total = int(TEAM_BUCKET["amount_appl"])
-        cliff_pct = int(TEAM_BUCKET.get("vesting_cliff_pct", 0))
-        months = int(TEAM_BUCKET.get("vesting_linear_months", 0))
-        want_locked = team_total * (100 - cliff_pct) // 100
-        got_locked = int(base_vesting.get("original_vesting", [{}])[0].get("amount", 0))
-        if got_locked != want_locked:
-            errors.append(f"team original_vesting want {want_locked} ({100 - cliff_pct}% locked), got {got_locked}")
         got_balance = account_balance(g, TEAM_BUCKET["account"])
         if got_balance != team_total:
             errors.append(f"team balance want {team_total}, got {got_balance}")
-        start = int(team_acc.get("start_time", 0))
-        want_end = start + months * SECONDS_PER_MONTH
-        got_end = int(base_vesting.get("end_time", 0))
-        if got_end != want_end:
-            errors.append(f"team end_time want start+{months} months ({want_end}), got {got_end}")
 
-    # M11-2: treasury + liquidity share one 2-of-3 multisig BaseAccount, spendable from genesis.
+    # M11-2: treasury + liquidity share one 2-of-3 multisig account with a known pub_key.
+    # A11: it is a ContinuousVestingAccount locking only the treasury bucket (same schedule as
+    # team); the liquidity bucket stays spendable from genesis.
     multisig_acc = find_account(g, MULTISIG["address"])
     if multisig_acc is None:
         errors.append("treasury_multisig account missing from genesis")
+    elif not multisig_acc.get("@type", "").endswith("ContinuousVestingAccount"):
+        errors.append("treasury_multisig must be a ContinuousVestingAccount (A11 treasury schedule)")
     else:
-        pub_key = multisig_acc.get("pub_key") or {}
+        check_cliff_linear("treasury", multisig_acc, TREASURY_BUCKET, genesis_time, errors)
+        base = multisig_acc.get("base_vesting_account", {}).get("base_account", {})
+        pub_key = base.get("pub_key") or {}
         if not pub_key.get("@type", "").endswith("LegacyAminoPubKey"):
             errors.append("treasury_multisig pub_key must be a LegacyAminoPubKey")
         elif pub_key.get("threshold") != MULTISIG["threshold"]:

@@ -19,6 +19,10 @@ contract PplCurveHubV2Test is HubV2Base {
         _open();
     }
 
+    function _trust(address router) internal {
+        _setTrustedRouter(router, true);
+    }
+
     // ================================================================ curve
 
     function test_curveMatchesV1() public {
@@ -50,7 +54,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertApproxEqAbs(back, r, 3 + r / 1e9, "raised round trip");
         // sold -> raised -> sold is stable to within a relative 1e-9.
         uint256 sold2 = PplCurveMath.soldForRaised(back);
-        assertApproxEqRel(sold2, sold, 1e10,"sold round trip");
+        assertApproxEqRel(sold2, sold, 1e10, "sold round trip");
     }
 
     // ================================================================ buy limits
@@ -79,20 +83,21 @@ contract PplCurveHubV2Test is HubV2Base {
         _buy(alice, MAX_BUY);
     }
 
-    function test_buyCapPerUtcDay() public {
+    function test_buyCapPer24h() public {
         _prepare(alice);
         for (uint256 i; i < 4; ++i) {
             _buy(alice, MAX_BUY);
             vm.warp(vm.getBlockTimestamp() + 60);
         }
-        assertEq(hub.buyRemainingToday(alice), 0);
+        assertEq(hub.buyRemaining24h(alice), 0);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
     }
 
-    function test_buyCapResetsNextUtcDay() public {
+    function test_buyCapResetsAfter24h() public {
         _prepare(alice);
+        uint256 t0 = vm.getBlockTimestamp();
         for (uint256 i; i < 4; ++i) {
             _buy(alice, MAX_BUY);
             vm.warp(vm.getBlockTimestamp() + 60);
@@ -101,20 +106,21 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
 
-        // one second before midnight still capped, at midnight reset.
-        vm.warp((vm.getBlockTimestamp() / 1 days + 1) * 1 days - 1);
+        // rolling window: the first spend frees up at exactly t0 + 24h, not at UTC midnight.
+        vm.warp(t0 + 1 days - 1);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
-        _skipToNextUtcDay();
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP);
+        vm.warp(t0 + 1 days);
+        assertEq(hub.buyRemaining24h(alice), MAX_BUY);
         _buy(alice, MAX_BUY);
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP - MAX_BUY);
+        assertEq(hub.buyRemaining24h(alice), 0);
     }
 
     function test_buyCapCountsRecipientNotPayer() public {
         address payer = makeAddr("payer");
         _fund(payer, 1_000_000e6);
+        _trust(payer);
         _verify(alice);
         _verify(bob);
         for (uint256 i; i < 4; ++i) {
@@ -129,8 +135,8 @@ contract PplCurveHubV2Test is HubV2Base {
         // same payer buying for a different recipient is fine; payer has no own counter.
         vm.prank(payer);
         hub.buy(MAX_BUY, 0, bob, address(0));
-        assertEq(hub.buyRemainingToday(payer), DAY_CAP);
-        assertEq(hub.buyRemainingToday(bob), DAY_CAP - MAX_BUY);
+        assertEq(hub.buyRemaining24h(payer), DAY_CAP);
+        assertEq(hub.buyRemaining24h(bob), DAY_CAP - MAX_BUY);
         assertEq(hub.pplOf(payer), 0);
     }
 
@@ -155,17 +161,77 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(bob);
         _buy(alice, MIN_BUY);
         _buy(bob, MIN_BUY); // other recipient not affected
-        // same payer, different recipients back-to-back
+        // A trusted router buys for other people. Those buys do not use or reset the person's cooldown:
+        // they have their own count (MAX_ROUTER_BUYS_24H) and only share the $2k amount cap.
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         _verify(carol);
+        uint64 bobLast = hub.lastBuyAt(bob);
+        assertGt(bobLast, 0);
+        uint256 bobRemaining = hub.buyRemaining24h(bob);
         vm.startPrank(payer);
         hub.buy(MIN_BUY, 0, carol, address(0));
-        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
-        hub.buy(MIN_BUY, 0, carol, address(0));
-        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0)); // bob's own cooldown applies to buys made for him by others
+        hub.buy(MIN_BUY, 0, carol, address(0)); // back-to-back: no cooldown on the router path
+        hub.buy(MIN_BUY, 0, bob, address(0)); // bob's own cooldown does not apply to a router buy
         vm.stopPrank();
+
+        assertEq(hub.lastBuyAt(carol), 0, "router buy does not start cooldown");
+        assertEq(hub.lastBuyAt(bob), bobLast, "router buy does not reset cooldown");
+        (, uint256 carolOwn,,) = hub.usage24h(carol);
+        assertEq(carolOwn, 0, "router buys are not own slots");
+        (uint256 carolUsd, uint256 carolBuys) = hub.routerUsage24h(carol);
+        assertEq(carolBuys, 2);
+        assertEq(carolUsd, 2 * MIN_BUY);
+        (, uint256 bobOwn,,) = hub.usage24h(bob);
+        assertEq(bobOwn, 1, "bob's own buy still the only own slot");
+        assertEq(hub.buyRemaining24h(bob), bobRemaining - MIN_BUY, "router buy shares the $2k cap");
+        assertEq(hub.buyRemaining24h(carol), DAY_CAP - 2 * MIN_BUY);
+
+        // bob is still inside the cooldown his own buy started
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.Cooldown.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+        // carol was never put on cooldown, so she can buy for herself immediately
+        _fund(carol, 1_000e6);
+        _buy(carol, MIN_BUY);
+        assertGt(hub.lastBuyAt(carol), 0);
+    }
+
+    /// @dev Router buys cannot fill the victim's own window or start their cooldown, so they cannot
+    /// lock the victim out. The $2k/24h amount cap is shared: once it is spent, both paths revert.
+    function test_routerBuyCannotLockOutVictimSharesCap() public {
+        address router = makeAddr("router");
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        _prepare(alice);
+
+        for (uint256 i; i < hub.MAX_ROUTER_BUYS_24H(); ++i) {
+            vm.prank(router);
+            hub.buy(MIN_BUY, 0, alice, address(0));
+        }
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
+        hub.buy(MIN_BUY, 0, alice, address(0));
+        assertEq(hub.lastBuyAt(alice), 0, "cooldown untouched");
+        (, uint256 ownBuys,,) = hub.usage24h(alice);
+        assertEq(ownBuys, 0, "own window empty");
+        _buy(alice, MIN_BUY); // victim buys immediately
+
+        _prepare(bob);
+        for (uint256 i; i < 3; ++i) {
+            vm.prank(router);
+            hub.buy(MAX_BUY, 0, bob, address(0));
+        }
+        _buy(bob, MAX_BUY); // 3 * $500 router + $500 own = $2,000
+        assertEq(hub.buyRemaining24h(bob), 0);
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
+        vm.warp(vm.getBlockTimestamp() + 60);
+        vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(MIN_BUY, 0, bob, address(0));
     }
 
     // ================================================================ slippage / token / split
@@ -233,6 +299,7 @@ contract PplCurveHubV2Test is HubV2Base {
         hub.buy(MIN_BUY, 0, alice, address(0));
         // payer verified but recipient not: still rejected (recipient is what counts)
         _prepare(bob);
+        _trust(bob);
         vm.prank(bob);
         vm.expectRevert(PplCurveHubV2.NotVerified.selector);
         hub.buy(MIN_BUY, 0, alice, address(0));
@@ -244,7 +311,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertGt(_buy(alice, MIN_BUY), 0);
     }
 
-    function test_whitelistEndsAfter7Days() public {
+    function test_verificationStillRequiredAfterWhitelist() public {
         _fund(alice, 1_000e6);
         uint256 end = uint256(hub.openedAt()) + 7 days;
         vm.warp(end - 1);
@@ -254,7 +321,12 @@ contract PplCurveHubV2Test is HubV2Base {
         _skipPastWhitelist();
         assertEq(vm.getBlockTimestamp(), end);
         assertEq(uint256(hub.phase()), uint256(PplCurveHubV2.Phase.Open));
-        assertGt(_buy(alice, MIN_BUY), 0); // unverified buyer now allowed
+        // A2: no whitelist-phase special case, an unverified buyer stays rejected
+        vm.prank(alice);
+        vm.expectRevert(PplCurveHubV2.NotVerified.selector);
+        hub.buy(MIN_BUY, 0, alice, address(0));
+        _verify(alice);
+        assertGt(_buy(alice, MIN_BUY), 0);
     }
 
     // ================================================================ verification
@@ -329,29 +401,38 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.prank(alice);
         hub.verify(pid, deadline, oldSig);
 
-        vm.prank(owner);
+        vm.prank(alice);
         hub.unbind(alice);
         assertEq(hub.personOf(alice), bytes32(0));
         assertEq(hub.accountOfPerson(pid), address(0));
         assertEq(hub.bindNonce(pid), 1);
+        assertEq(hub.pinnedAccount(pid), alice);
 
-        // the old attestation (nonce 0) is dead, for the same or any other account
+        // the old attestation (nonce 0) is dead
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadSignature.selector);
         hub.verify(pid, deadline, oldSig);
 
-        // fresh attestation with the new nonce works (e.g. re-binding to a new address)
+        // a new verifier cannot hand this person to another address
         bytes memory fresh = _sign(bob, pid, deadline);
         vm.prank(bob);
+        vm.expectRevert(PplCurveHubV2.AlreadyBound.selector);
         hub.verify(pid, deadline, fresh);
-        assertEq(hub.accountOfPerson(pid), bob);
 
-        // unbinding an unbound address reverts; only owner may unbind
-        vm.prank(owner);
+        // the pinned account can verify again with the new nonce
+        bytes memory again = _sign(alice, pid, deadline);
+        vm.prank(alice);
+        hub.verify(pid, deadline, again);
+        assertEq(hub.accountOfPerson(pid), alice);
+
+        // unbinding an unbound address reverts; another account cannot unbind
+        vm.prank(alice);
+        hub.unbind(alice);
+        vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.NotBound.selector);
         hub.unbind(alice);
         vm.prank(alice);
-        vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
+        vm.expectRevert(PplCurveHubV2.UnbindDenied.selector);
         hub.unbind(bob);
     }
 
@@ -435,7 +516,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertEq(hub.reserveUsd6() - reserveBefore, remaining - remaining / 2);
         assertEq(hub.raisedUsd6(), CAP);
         assertTrue(hub.graduated());
-        assertEq(hub.buyRemainingToday(alice), DAY_CAP - remaining);
+        assertEq(hub.buyRemaining24h(alice), DAY_CAP - remaining);
     }
 
     function test_buyAfterGraduationReverts() public {
@@ -468,6 +549,7 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(alice);
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         vm.prank(alice);
         vm.expectRevert(PplCurveHubV2.BadReferrer.selector);
         hub.buy(MIN_BUY, 0, alice, alice); // referrer == msg.sender
@@ -480,6 +562,7 @@ contract PplCurveHubV2Test is HubV2Base {
         _prepare(alice);
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
+        _trust(payer);
         vm.prank(payer);
         vm.expectRevert(PplCurveHubV2.BadReferrer.selector);
         hub.buy(MIN_BUY, 0, alice, alice); // referrer == recipient
@@ -497,28 +580,31 @@ contract PplCurveHubV2Test is HubV2Base {
 
     function test_liquidityReceiverCannotBeTreasuryOrOwner() public {
         vm.expectRevert(PplCurveHubV2.BadReceiver.selector);
-        new PplCurveHubV2(usdc, treasury, treasury, owner, verifier);
+        new PplCurveHubV2(usdc, treasury, treasury, owner, verifier, address(0));
         vm.expectRevert(PplCurveHubV2.BadReceiver.selector);
-        new PplCurveHubV2(usdc, treasury, owner, owner, verifier);
+        new PplCurveHubV2(usdc, treasury, owner, owner, verifier, address(0));
         vm.expectRevert(PplCurveHubV2.ZeroAddress.selector);
-        new PplCurveHubV2(usdc, treasury, address(0), owner, verifier);
+        new PplCurveHubV2(usdc, treasury, address(0), owner, verifier, address(0));
         // sanity: a distinct receiver deploys
-        PplCurveHubV2 ok = new PplCurveHubV2(usdc, treasury, liquidityReceiver, owner, verifier);
+        PplCurveHubV2 ok = new PplCurveHubV2(usdc, treasury, liquidityReceiver, owner, verifier, address(0));
         assertEq(ok.liquidityReceiver(), liquidityReceiver);
     }
 
     function test_setVerifierRevokes() public {
         bytes32 pid = keccak256("p");
-        uint256 deadline = vm.getBlockTimestamp() + 1 days;
+        uint256 deadline = vm.getBlockTimestamp() + 30 days;
         bytes memory sigOld = _sign(bob, pid, deadline);
         _verify(alice);
 
         vm.prank(alice);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, alice));
-        hub.setVerifier(address(0));
+        hub.queueSetVerifier(address(0));
 
         vm.prank(owner);
-        hub.setVerifier(address(0));
+        bytes32 id = hub.queueSetVerifier(address(0));
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetVerifier(id);
         assertEq(hub.verifier(), address(0));
 
         // signature from the revoked verifier no longer binds anyone
@@ -531,7 +617,10 @@ contract PplCurveHubV2Test is HubV2Base {
         // rotate to a new key
         uint256 pk2 = 0xB0B;
         vm.prank(owner);
-        hub.setVerifier(vm.addr(pk2));
+        bytes32 id2 = hub.queueSetVerifier(vm.addr(pk2));
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetVerifier(id2);
         bytes memory sigNew = _signWith(pk2, bob, pid, deadline);
         vm.prank(bob);
         hub.verify(pid, deadline, sigNew);
@@ -543,45 +632,6 @@ contract PplCurveHubV2Test is HubV2Base {
         vm.expectRevert(PplCurveHubV2.RenounceDisabled.selector);
         hub.renounceOwnership();
         assertEq(hub.owner(), owner);
-    }
-
-    function test_deliveredCannotReceiveBuy() public {
-        _prepare(alice);
-        _buy(alice, MIN_BUY);
-        address[] memory hs = new address[](1);
-        hs[0] = alice;
-
-        // markDelivered is only allowed once the sale is over / release announced
-        vm.prank(owner);
-        vm.expectRevert(PplCurveHubV2.DeliveryNotAllowed.selector);
-        hub.markDelivered(hs);
-
-        // Announcing the release stops buys (_buyOpen is false) and is the precondition for
-        // markDelivered, so in every real flow the buy reverts with SaleNotActive (checked before
-        // IsDelivered). IsDelivered on buy is a defensive branch, exercised below via the harness.
-        vm.prank(owner);
-        hub.announceLiquidityRelease();
-        vm.prank(owner);
-        hub.markDelivered(hs);
-        assertTrue(hub.delivered(alice));
-
-        vm.warp(vm.getBlockTimestamp() + 60);
-        vm.prank(alice);
-        vm.expectRevert(PplCurveHubV2.SaleNotActive.selector);
-        hub.buy(MIN_BUY, 0, alice, address(0));
-
-        // defensive branch: fresh hub with the sale open and a (forced) delivered recipient
-        HubV2Harness h2 = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
-        vm.prank(owner);
-        h2.open();
-        h2.forceDelivered(bob, true);
-        _fund(bob, 1_000e6);
-        vm.prank(bob);
-        usdc.approve(address(h2), type(uint256).max);
-        vm.warp(vm.getBlockTimestamp() + 7 days);
-        vm.prank(bob);
-        vm.expectRevert(PplCurveHubV2.IsDelivered.selector);
-        h2.buy(MIN_BUY, 0, bob, address(0));
     }
 
     // ================================================================ gas
