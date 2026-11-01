@@ -184,18 +184,36 @@ async function getOrCreateSessionKey(): Promise<CryptoKey> {
   return created;
 }
 
+function removeStoredEnvelope(): void {
+  try {
+    sessionStorage.removeItem(WALLET_SESSION_STORAGE_KEY);
+  } catch {
+    /* storage disabled */
+  }
+}
+
 /** Encrypt the unlocked session into tab-scoped storage, sliding the expiry window. */
 export async function persistWalletSession(
   session: PersistedWalletSession,
-  now: number = Date.now()
+  now: number = Date.now(),
+  options?: { strict?: boolean },
 ): Promise<void> {
-  if (typeof window === "undefined" || typeof indexedDB === "undefined") return;
+  if (typeof window === "undefined" || typeof indexedDB === "undefined") {
+    // A silent return would publish a cloud session that was never written.
+    if (options?.strict) throw new Error("storage_unavailable");
+    return;
+  }
   try {
     const key = await getOrCreateSessionKey();
     const envelope = await encryptSessionPayload(session, key, now);
     sessionStorage.setItem(WALLET_SESSION_STORAGE_KEY, JSON.stringify(envelope));
-  } catch {
-    /* persistence is best-effort; the in-memory session still works */
+  } catch (err) {
+    // Local unlock stays best-effort. Cloud sign-in passes strict so the failure is visible.
+    // Drop any previous envelope: a reload must not restore the wallet this open failed to replace.
+    if (options?.strict) {
+      removeStoredEnvelope();
+      throw err;
+    }
   }
 }
 

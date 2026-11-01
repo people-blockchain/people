@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { partnerCopy } from "@/lib/partner/copy";
 import { authErrorMessage } from "@/lib/partner/auth-errors";
@@ -28,6 +28,7 @@ export function LoginForm({
   configured: boolean;
 }) {
   const { lang } = useLanguage();
+  const [importSignal, setImportSignal] = useState(0);
   const t = partnerCopy[lang];
   const w = walletUxCopy(lang);
 
@@ -62,7 +63,11 @@ export function LoginForm({
 
           {authAvailable ? (
             <div className="mt-6">
-              <UnifiedWalletAuthPanel autoConnect showAgreement />
+              <UnifiedWalletAuthPanel
+                autoConnect
+                showAgreement
+                onOpenImport={() => setImportSignal((n) => n + 1)}
+              />
             </div>
           ) : null}
           {configured && !magicEnabled && !googleEnabled && !web3AuthEnabled && (
@@ -73,7 +78,7 @@ export function LoginForm({
             <h2 className="text-sm font-semibold text-ink">{t.localWalletHeading}</h2>
             <p className="mt-2 text-xs text-ink-3">{t.localWalletLead}</p>
             <div className="mt-4">
-              <WalletConnectPanel context="sign-in-local" />
+              <WalletConnectPanel context="sign-in-local" importSignal={importSignal} />
             </div>
             {walletFeatures.externalWallets ? (
               <div className="mt-4 border-t border-line pt-4">

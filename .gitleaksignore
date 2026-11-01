@@ -80,3 +80,4 @@ b168a4f3fc2a56025d74b9ba9dbaf06a4e13e06e:website/src/data/evm-token-catalog.json
 # Findings in other pushed branches scanned by CI (full clone): public token addresses in tests/catalog, and an env var NAME (not a value)
 c2c318689ba7b75db90dba3eda4d4f638ec3458e:website/src/lib/sale/verify-target.ts:generic-api-key:36
 cd84d0b4c4546a854fdcd1f731fa2d241120f99d:website/src/lib/sale/verify-target.ts:generic-api-key:36
+# Synthetic test fixtures (public EVM addresses), not secrets

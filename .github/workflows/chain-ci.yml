@@ -36,6 +36,9 @@ jobs:
         run: node --test scripts/faucet.test.mjs
       - name: Test deployment config (RPC surface, key volumes)
         run: node --test scripts/deployment-config.test.mjs
+      - name: Test Founder NFT genesis generator
+        working-directory: chain/scripts
+        run: python3 -m unittest test_generate_founder_nft_genesis
       - name: Test fund-testnet script
         run: bash scripts/fund-testnet.test.sh
       - name: Test emission genesis tooling (vesting schedules)

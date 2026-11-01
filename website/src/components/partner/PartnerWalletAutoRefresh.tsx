@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "@/context/WalletContext";
-import { ensureCloudWalletSession, fetchAuthSessionUser } from "@/lib/wallet-cloud-client";
+import { ensureCloudWalletSession, fetchAuthSessionUser, WalletCloudError } from "@/lib/wallet-cloud-client";
+import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 
 /** After account login, create cloud vault + partner link without a manual bind step. */
 export function PartnerWalletAutoRefresh({ walletAddress }: { walletAddress: string | null }) {
@@ -20,12 +21,16 @@ export function PartnerWalletAutoRefresh({ walletAddress }: { walletAddress: str
       try {
         if (!session) {
           const cloud = await ensureCloudWalletSession(user);
-          connectCloud(cloud);
+          await connectCloud(cloud);
         }
         const res = await fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" });
         if (res.ok) router.refresh();
-      } catch {
-        /* user may complete sign-in from /login */
+        else warnCloudOpenFailed({ code: "partner_sync_failed", stage: "partner_sync", vaultPresent: true, retried: false });
+      } catch (err) {
+        const code = err instanceof WalletCloudError ? err.code : "unknown";
+        if (!(err instanceof WalletCloudError) || !err.logged) {
+          warnCloudOpenFailed({ code, stage: "partner_refresh", vaultPresent: false, retried: false });
+        }
       }
     })();
   }, [walletAddress, session, connectCloud, router]);
