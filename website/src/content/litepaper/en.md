@@ -163,7 +163,7 @@ No dates are promised. Each stage starts when its gate is met.
 
 ## 9. Security
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty: report a vulnerability from the bug button on any page.
+- **AI-assisted security reviews (not an external audit).** Bug bounty: report a vulnerability from the bug button on any page.
 - **Treasury multisig.** The treasury is controlled by People's own 2-of-3 multisig contract on the People network, created before mainnet; signer addresses will be published.
 - **Published addresses.** Sale, vesting and liquidity contract addresses will be published at mainnet launch — no placeholders.
 - **Bot defence.** Human verification, per-device and per-IP limits, daily point caps and bot clawback.
@@ -222,7 +222,7 @@ Only verifiable public facts about other networks. Sources below.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
 - Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). No KYC or sale-eligibility checks are run on this site.
-- Security: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Security: **AI-assisted security reviews (not an external audit)**; bug bounty on every page.
 - The treasury multisig is **2-of-3** and is created before mainnet.
 - If a token's bonding curve does not sell out within **180 days** of launch, anyone can finalize it and the unsold tokens go to that token's community pool. A curve that sells out moves to liquidity as before. (Live on testnet.)
 - The PPL sale, once it opens, runs until all PPL is sold or for **24 months**, whichever comes first. The term is fixed and will not be extended. After it ends, anyone can finalize it; unsold PPL goes to the community pool and there are no refunds. Until then, unsold PPL is held in the project multisig and the team does not touch it.

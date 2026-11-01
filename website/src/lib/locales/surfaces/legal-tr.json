@@ -119,7 +119,7 @@
       {
         "title": "Halka açık PPL satışı",
         "body": [
-          "Yayınlanan PPL satış parametreleri (eğri formülü, fiyat yolu, limitler ve eğri sonu hedefi) /buy sayfasında ve sipariş API'si ile uyumlu. Hub kontratı deploy edilene kadar alımlar kapalı; cüzdan bağlamak sizi hiçbir şeye bağlamaz. Bu sitede KYC veya uygunluk kontrolü yapılmaz.",
+          "Yayınlanan PPL satış parametreleri (eğri formülü, fiyat yolu, limitler ve satış süresi: tükenene kadar veya 24 ay, hangisi önce gelirse) /buy sayfasında ve sipariş API'si ile uyumlu. Hub kontratı deploy edilene kadar alımlar kapalı; cüzdan bağlamak sizi hiçbir şeye bağlamaz. Bu sitede KYC veya uygunluk kontrolü yapılmaz.",
           "Bu sitede hiçbir şey, satışın kısıtlı olduğu yerlerde PPL satışı teklifi veya vaadi değildir; katılım yargı alanınızda kullanılamayabilir. Satış koşulları yalnızca yayınlanan güncellemeler ve uygun olduğunda governance ile değişir."
         ]
       },
