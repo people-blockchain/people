@@ -154,10 +154,14 @@ Payer = `msg.sender` (wallet or LI.FI executor); limits, cooldown, whitelist and
 ### 5.2 sellBack (curve-at-exit, D9)
 
 **Reward PPL (§5.2 owner rule):** quest/founder rewards on the PEOPLE network live in `RewardVesting`
-(`contracts/src/vesting/RewardVesting.sol`). Locked or unlocked reward balance must not be sent to
-`PplReturnBurn` or a curve hub; site fees only via owner-whitelisted contracts. On Base, the hub's
-immutable `rewardBuyerForbidden` address (if set) cannot `buy` or become `trustedRouter`. Curve
-sell-back rights remain buy-lots only; `sellableBalance(account)` matches the unlocked FIFO scan.
+(`contracts/src/vesting/RewardVesting.sol`). Locked or unlocked reward balance must not be sold back
+into the hub. On-chain: `PplReturnBurn` only accepts burns up to each sender's `hubPurchasedPpl`
+(credited by the delivery relayer after hub buys); reward `claim` and plain transfers do not credit
+that ledger. On Base, `sellBack` is capped by `_pplPurchasedViaHub − _pplReturnedViaSellBack` for
+the bound person (in addition to unlocked lots). The hub's immutable `rewardBuyerForbidden` address
+(if set) cannot `buy`, cannot be `recipient`, and cannot become `trustedRouter`. Curve sell-back
+rights remain buy-lots only; `sellableBalance(account)` is the minimum of that hub cap and the
+unlocked FIFO scan.
 
 1. `whenNotPaused`, `nonReentrant`; `!graduated`; `!liquidityReleased`; `openedAt != 0` (works in Open, Whitelist,
    Expired — D3/Q1: never closed by time).

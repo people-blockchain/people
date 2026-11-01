@@ -26,6 +26,7 @@ contract RewardVesting is Ownable2Step {
     event FeeSpent(address indexed beneficiary, address indexed target, uint256 amount);
 
     error ForbiddenRecipient();
+    error ForbiddenPermanent();
     error NotWhitelisted();
     error InsufficientUnlocked();
     error ZeroAmount();
@@ -40,11 +41,14 @@ contract RewardVesting is Ownable2Step {
         emit FeeWhitelistSet(target, allowed);
     }
 
-    /// @notice Permanent denylist (e.g. `PplReturnBurn`, Base hub). Clears fee whitelist if set.
+    /// @notice Permanent denylist (e.g. `PplReturnBurn`, Base hub). Once set, cannot be cleared;
+    /// forbidden addresses can never be fee-spend-whitelisted.
     function setForbiddenRecipient(address target, bool forbidden) external onlyOwner {
-        forbiddenRecipient[target] = forbidden;
-        if (forbidden) feeSpendWhitelist[target] = false;
-        emit ForbiddenRecipientSet(target, forbidden);
+        if (forbiddenRecipient[target] && !forbidden) revert ForbiddenPermanent();
+        if (!forbidden) return;
+        forbiddenRecipient[target] = true;
+        feeSpendWhitelist[target] = false;
+        emit ForbiddenRecipientSet(target, true);
     }
 
     /// @notice Fund a linear grant for `beneficiary` (native PPL attached).

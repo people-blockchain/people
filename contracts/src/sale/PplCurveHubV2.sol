@@ -252,7 +252,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     uint64 public releaseAnnouncedAt;
     /// @dev Seconds the hub spent paused after `releaseAnnouncedAt` (extends the release deadline).
     uint64 public releasePauseAccumulated;
-    uint64 internal _releasePauseStartedAt;
+    /// @dev When the hub entered its current pause (0 if not paused).
+    uint64 internal _hubPauseStartedAt;
     bool public liquidityReleased;
 
     uint256 public raisedUsd6;
@@ -277,6 +278,9 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
 
     mapping(bytes32 => Lot[]) internal _lots;
     mapping(bytes32 => uint256) internal _lotHead;
+    /// @dev PPL credited on buys and consumed on sell-back (SPEC §5.2 hub-side cap).
+    mapping(bytes32 => uint256) internal _pplPurchasedViaHub;
+    mapping(bytes32 => uint256) internal _pplReturnedViaSellBack;
     mapping(bytes32 => uint64) internal _lastBuyAt;
     mapping(bytes32 => RollingWindow24h.Window) internal _buyWindow;
     mapping(bytes32 => RollingWindow24h.Window) internal _sellWindow;
@@ -386,6 +390,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     error OpExpired();
     error KindAlreadyQueued();
     error RewardBuyForbidden();
+    error RewardPplNotSellable();
 
     constructor(
         IERC20 usdc_,
@@ -430,6 +435,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         if (!_buyOpen()) revert SaleNotActive();
         if (recipient == address(0)) revert ZeroAddress();
         if (rewardBuyerForbidden != address(0) && msg.sender == rewardBuyerForbidden) revert RewardBuyForbidden();
+        if (rewardBuyerForbidden != address(0) && recipient == rewardBuyerForbidden) revert RewardBuyForbidden();
         if (recipient != msg.sender && !trustedRouter[msg.sender]) revert UntrustedRouter();
         bytes32 person = personOf[recipient];
         if (person == bytes32(0)) revert NotVerified();
@@ -477,6 +483,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         }
         uint256 lotId = _lots[person].length;
         _lots[person].push(Lot(uint40(block.timestamp), uint96(charged), uint120(pplOut)));
+        _pplPurchasedViaHub[person] += pplOut;
 
         if (newRaised >= RAISE_CAP_USD6) {
             graduated = true;
@@ -522,6 +529,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
 
         uint256 unlocked = _unlockedPpl(person);
         if (pplIn > unlocked) revert NotEnoughUnlocked();
+        uint256 sellCap = _pplPurchasedViaHub[person] - _pplReturnedViaSellBack[person];
+        if (pplIn > sellCap) revert RewardPplNotSellable();
 
         (uint256 windowGross, uint256 live) = RollingWindow24h.prune(_globalSellWindow, GLOBAL_SELL_CAPACITY);
         uint256 windowRef = reserveUsd6 + windowGross;
@@ -557,6 +566,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         if (payout > reserveUsd6) revert ReserveExhausted();
 
         _consumeLots(person, pplIn);
+        _pplReturnedViaSellBack[person] += pplIn;
         _commitReturn(person, pplIn, pplAmount, returnId);
         RollingWindow24h.appendAggregated(_globalSellWindow, gross, GLOBAL_SELL_CAPACITY, GLOBAL_SELL_BUCKET);
         RollingWindow24h.append(_sellWindow[person], gross, RollingWindow24h.CAPACITY);
@@ -599,6 +609,9 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     function announceLiquidityRelease() external onlyOwner {
         if (openedAt == 0 || liquidityReleased || releaseAnnouncedAt != 0) revert ReleaseNotAllowed();
         releaseAnnouncedAt = uint64(block.timestamp);
+        if (paused()) {
+            _hubPauseStartedAt = uint64(block.timestamp);
+        }
         emit LiquidityReleaseAnnounced(
             liquidityReceiver, reserveUsd6, block.timestamp + LIQUIDITY_RELEASE_DELAY, graduated
         );
@@ -607,13 +620,11 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     function cancelLiquidityRelease() external onlyOwner {
         if (releaseAnnouncedAt == 0 || liquidityReleased) revert ReleaseNotAnnounced();
         releaseAnnouncedAt = 0;
-        releasePauseAccumulated = 0;
-        _releasePauseStartedAt = 0;
         emit LiquidityReleaseCancelled();
     }
 
     /// @notice Permissionless once the notice period has passed (plus any pause time after announce).
-    function executeLiquidityRelease() external nonReentrant {
+    function executeLiquidityRelease() external nonReentrant whenNotPaused {
         if (releaseAnnouncedAt == 0 || liquidityReleased) revert ReleaseNotAnnounced();
         if (block.timestamp < liquidityReleaseExecutableAt()) revert ReleaseTimelocked();
         liquidityReleased = true;
@@ -632,16 +643,16 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     }
 
     function pause() external onlyOwner {
-        if (releaseAnnouncedAt != 0 && !liquidityReleased && !paused()) {
-            _releasePauseStartedAt = uint64(block.timestamp);
+        if (!paused()) {
+            _hubPauseStartedAt = uint64(block.timestamp);
         }
         _pause();
     }
 
     function unpause() external onlyOwner {
-        if (_releasePauseStartedAt != 0) {
-            releasePauseAccumulated += uint64(block.timestamp) - _releasePauseStartedAt;
-            _releasePauseStartedAt = 0;
+        if (_hubPauseStartedAt != 0) {
+            _accumulateReleasePause(block.timestamp);
+            _hubPauseStartedAt = 0;
         }
         _unpause();
     }
@@ -684,7 +695,12 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     function queueSetTrustedRouter(address router, bool trusted) external onlyOwner returns (bytes32 id) {
         if (router == address(0)) revert ZeroAddress();
         if (rewardBuyerForbidden != address(0) && router == rewardBuyerForbidden) revert RewardBuyForbidden();
-        id = _queue(OP_SET_TRUSTED_ROUTER, router, trusted ? 1 : 0);
+        if (!trusted) {
+            trustedRouter[router] = false;
+            emit TrustedRouterSet(router, false);
+            return bytes32(0);
+        }
+        id = _queue(OP_SET_TRUSTED_ROUTER, router, 1);
     }
 
     /// @notice Execute a queued `queueSetTrustedRouter`.
@@ -786,18 +802,23 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         return _unlockedPpl(personOf[holder]);
     }
 
-    /// @notice PPL the person bound to `account` may sell back now: purchased minus sold minus lots
-    /// still inside the 30-day hold (same FIFO head scan as `sellBack`, capped at MAX_LOTS_PER_SELL).
+    /// @notice PPL the person bound to `account` may sell back now: hub purchases minus already
+    /// returned, capped by unlocked buy-lots (FIFO head scan, `MAX_LOTS_PER_SELL`).
     function sellableBalance(address account) external view returns (uint256) {
-        return _unlockedPpl(personOf[account]);
+        bytes32 person = personOf[account];
+        if (person == bytes32(0)) return 0;
+        uint256 cap = _pplPurchasedViaHub[person] - _pplReturnedViaSellBack[person];
+        uint256 unlocked = _unlockedPpl(person);
+        return cap < unlocked ? cap : unlocked;
     }
 
     /// @notice When `executeLiquidityRelease` becomes callable (includes pause extension after announce).
     function liquidityReleaseExecutableAt() public view returns (uint256) {
         if (releaseAnnouncedAt == 0) return 0;
         uint256 pausedExtra = releasePauseAccumulated;
-        if (_releasePauseStartedAt != 0) {
-            pausedExtra += block.timestamp - _releasePauseStartedAt;
+        if (paused()) {
+            uint256 start = _releasePauseClipStart(_hubPauseStartedAt, block.timestamp);
+            if (block.timestamp > start) pausedExtra += block.timestamp - start;
         }
         return uint256(releaseAnnouncedAt) + LIQUIDITY_RELEASE_DELAY + pausedExtra;
     }
@@ -1041,5 +1062,17 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
             uint256 bal = usdc.balanceOf(address(this));
             if (bal < reserveUsd6 || amount > bal - reserveUsd6) revert ExceedsSurplus();
         }
+    }
+
+    /// @dev Adds pause seconds overlapping `[releaseAnnouncedAt, pauseEnd)` to `releasePauseAccumulated`.
+    function _accumulateReleasePause(uint256 pauseEnd) internal {
+        if (releaseAnnouncedAt == 0 || liquidityReleased || _hubPauseStartedAt == 0) return;
+        uint256 start = _releasePauseClipStart(_hubPauseStartedAt, pauseEnd);
+        if (pauseEnd > start) releasePauseAccumulated += uint64(pauseEnd - start);
+    }
+
+    function _releasePauseClipStart(uint256 pauseStarted, uint256 pauseEnd) internal view returns (uint256 start) {
+        if (releaseAnnouncedAt == 0 || pauseEnd <= releaseAnnouncedAt) return pauseEnd;
+        start = pauseStarted > releaseAnnouncedAt ? pauseStarted : releaseAnnouncedAt;
     }
 }
