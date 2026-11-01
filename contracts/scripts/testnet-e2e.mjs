@@ -137,6 +137,7 @@ const erc20Abi = parseAbi([
 const curveAbi = parseAbi([
   "function buy(address token, uint256 minTokensOut) payable",
   "function sell(address token, uint256 tokenAmount, uint256 minNativeOut)",
+  "function feeRecipient() view returns (address)",
 ]);
 const nftFactoryAbi = parseAbi([
   "function mintFee() view returns (uint256)",
@@ -208,6 +209,20 @@ async function main() {
       const half = bal / 2n;
       await send({ address: token, abi: erc20Abi, functionName: "approve", args: [C.bondingCurve, half] });
       const before = await pub.getBalance({ address: account.address });
+      // Diagnose before sending: what the sell costs at different gas limits, and who gets the fee.
+      const diag = { feeRecipient: null, feeRecipientCodeBytes: null, callAt: {} };
+      try {
+        diag.feeRecipient = await pub.readContract({ address: C.bondingCurve, abi: curveAbi, functionName: "feeRecipient" });
+        const code = await pub.getCode({ address: diag.feeRecipient });
+        diag.feeRecipientCodeBytes = code ? (code.length - 2) / 2 : 0;
+      } catch (e) { diag.feeRecipient = "read failed: " + String(e?.shortMessage || e).slice(0, 80); }
+      for (const g of [300_000n, 3_000_000n, 15_000_000n, 25_000_000n]) {
+        try {
+          await pub.simulateContract({ address: C.bondingCurve, abi: curveAbi, functionName: "sell", args: [token, half, 1n], account, gas: g });
+          diag.callAt[g.toString()] = "ok";
+        } catch (e) { diag.callAt[g.toString()] = String(e?.shortMessage || e?.message || e).slice(0, 120); }
+      }
+      console.log("SELL-DIAG " + JSON.stringify(diag));
       const r = await send({ address: C.bondingCurve, abi: curveAbi, functionName: "sell", args: [token, half, 1n] });
       const after = await pub.getBalance({ address: account.address });
       return { soldTokens: formatEther(half), pplDelta: formatEther(after - before), tx: r.transactionHash };
