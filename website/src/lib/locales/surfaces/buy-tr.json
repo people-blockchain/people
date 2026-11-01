@@ -11,7 +11,7 @@
     "subWhitelist": "PPL satışı açık. Yalnızca doğrulanmış kişiler satın alabilir.",
     "subOpen": "PPL satışı açık. Doğrulanmış herkes satın alabilir.",
     "subEnded": "PPL satışı sona erdi.",
-    "ctaVerify": "Doğrulanın, ilk {days} günde yerinizi alın",
+    "ctaVerify": "PPL almak için doğrulanın",
     "ctaBuy": "PPL satın al",
     "ctaEnded": "Geri satış kurallarını gör",
     "countdownLabel": "Satışın açılmasına",
@@ -307,7 +307,7 @@
       "openTitle": "Satış açık",
       "openBody": "Doğrulama hâlâ gerekli. Alım başına $10–$500, herhangi bir 24 saatte en fazla $2.000.",
       "notOpenTitle": "Satış henüz açılmadı",
-      "notOpenBody": "Sözleşme beyaz liste aşamasına geçtiğinde alımlar açılır.",
+      "notOpenBody": "Alımlar, satış sözleşmesi açıldığında başlar.",
       "expiredTitle": "Satış sona erdi",
       "graduatedTitle": "Satış mezun oldu",
       "closedBody": "Alımlar kapalı."
@@ -323,7 +323,7 @@
       "confirming": "Zincir üstünde onaylanıyor…",
       "confirmed": "Zincir üstünde onaylandı. Satın alabilirsin.",
       "error": "Zincir üstünde onaylanamadı. Tekrar dene.",
-      "notEligible": "Bu hesap beyaz liste için uygun değil.",
+      "notEligible": "Bu hesap henüz satın alma için doğrulama koşullarını karşılamıyor.",
       "connectWallet": "Devam etmek için bir cüzdan bağla.",
       "alreadyVerified": "Zincir üstünde zaten onaylandı."
     },

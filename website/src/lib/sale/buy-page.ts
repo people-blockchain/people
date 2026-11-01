@@ -28,8 +28,9 @@ export function buyPagePhase(input: {
 }): BuyPagePhase {
   if (!input.v2Enabled) return input.legacyOpen ? "open" : "upcoming";
   switch (input.v2Phase) {
+    // The contract requires verification for the whole sale, so its launch-week phase is
+    // shown exactly like the open sale.
     case V2_PHASES.Whitelist:
-      return "whitelist";
     case V2_PHASES.Open:
       return "open";
     case V2_PHASES.Expired:

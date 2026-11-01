@@ -11,7 +11,7 @@
     "subWhitelist": "A venda de PPL está aberta. Só pessoas verificadas podem comprar.",
     "subOpen": "A venda de PPL está aberta. Qualquer pessoa verificada pode comprar.",
     "subEnded": "A venda de PPL terminou.",
-    "ctaVerify": "Verifique-se para entrar nos primeiros {days} dias",
+    "ctaVerify": "Verifique-se para comprar PPL",
     "ctaBuy": "Comprar PPL",
     "ctaEnded": "Ver as regras de revenda",
     "countdownLabel": "Até a abertura da venda",
@@ -307,7 +307,7 @@
       "openTitle": "Venda aberta",
       "openBody": "A verificação continua obrigatória. De $10 a $500 por compra, até $2.000 em quaisquer 24 horas.",
       "notOpenTitle": "A venda ainda não está aberta",
-      "notOpenBody": "As compras abrem quando o contrato entra na fase de lista de permissões.",
+      "notOpenBody": "As compras abrem quando o contrato de venda for aberto.",
       "expiredTitle": "Venda encerrada",
       "graduatedTitle": "Venda graduada",
       "closedBody": "As compras estão encerradas."
@@ -323,7 +323,7 @@
       "confirming": "Confirmando na rede…",
       "confirmed": "Confirmado na rede. Você já pode comprar.",
       "error": "Não foi possível confirmar na rede. Tente novamente.",
-      "notEligible": "Esta conta não é elegível para a lista de permissões.",
+      "notEligible": "Esta conta ainda não cumpre os requisitos de verificação para comprar.",
       "connectWallet": "Conecte uma carteira para continuar.",
       "alreadyVerified": "Já confirmado na rede."
     },

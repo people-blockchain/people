@@ -11,7 +11,7 @@
     "subWhitelist": "PPL 销售已开启。只有已验证的用户才能购买。",
     "subOpen": "PPL 销售已开启。任何已验证的用户都可以购买。",
     "subEnded": "PPL 销售已结束。",
-    "ctaVerify": "完成验证，赶上前 {days} 天",
+    "ctaVerify": "完成验证即可购买 PPL",
     "ctaBuy": "购买 PPL",
     "ctaEnded": "查看卖回规则",
     "countdownLabel": "距离销售开启",
@@ -307,7 +307,7 @@
       "openTitle": "销售进行中",
       "openBody": "仍需验证。单笔 $10–$500，任意 24 小时内最多 $2,000。",
       "notOpenTitle": "销售尚未开放",
-      "notOpenBody": "合约进入白名单阶段后即可购买。",
+      "notOpenBody": "销售合约开启后即可购买。",
       "expiredTitle": "销售已结束",
       "graduatedTitle": "销售已毕业",
       "closedBody": "购买已关闭。"
@@ -323,7 +323,7 @@
       "confirming": "正在链上确认…",
       "confirmed": "已在链上确认。可以购买了。",
       "error": "无法在链上确认。请重试。",
-      "notEligible": "此账户不符合白名单条件。",
+      "notEligible": "该账户尚未满足购买所需的验证条件。",
       "connectWallet": "连接钱包以继续。",
       "alreadyVerified": "已在链上确认。"
     },

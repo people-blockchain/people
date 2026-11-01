@@ -11,7 +11,7 @@
     "subWhitelist": "The PPL sale is open. Only verified people can buy.",
     "subOpen": "The PPL sale is open. Any verified person can buy.",
     "subEnded": "The PPL sale is over.",
-    "ctaVerify": "Get verified to be in the first {days} days",
+    "ctaVerify": "Get verified to buy PPL",
     "ctaBuy": "Buy PPL",
     "ctaEnded": "See the sell-back rules",
     "countdownLabel": "Until the sale opens",
@@ -307,7 +307,7 @@
       "openTitle": "Sale open",
       "openBody": "Verification is still required. $10 to $500 per purchase, up to $2,000 in any rolling 24 hours.",
       "notOpenTitle": "Sale not open yet",
-      "notOpenBody": "Purchases open when the contract enters the whitelist phase.",
+      "notOpenBody": "Purchases open when the sale contract opens.",
       "expiredTitle": "Sale ended",
       "graduatedTitle": "Sale graduated",
       "closedBody": "Purchases are closed."
@@ -323,7 +323,7 @@
       "confirming": "Confirming on-chain…",
       "confirmed": "Confirmed on-chain. You can buy.",
       "error": "Could not confirm on-chain. Try again.",
-      "notEligible": "This account is not eligible for the whitelist.",
+      "notEligible": "This account cannot be verified for the sale yet.",
       "connectWallet": "Connect a wallet to continue.",
       "alreadyVerified": "Already confirmed on-chain."
     },

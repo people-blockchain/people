@@ -11,7 +11,7 @@
     "subWhitelist": "Penjualan PPL sudah dibuka. Hanya orang terverifikasi yang bisa membeli.",
     "subOpen": "Penjualan PPL sudah dibuka. Siapa pun yang terverifikasi bisa membeli.",
     "subEnded": "Penjualan PPL telah berakhir.",
-    "ctaVerify": "Verifikasi untuk ikut di {days} hari pertama",
+    "ctaVerify": "Verifikasi untuk membeli PPL",
     "ctaBuy": "Beli PPL",
     "ctaEnded": "Lihat aturan jual kembali",
     "countdownLabel": "Menuju pembukaan penjualan",
@@ -307,7 +307,7 @@
       "openTitle": "Penjualan dibuka",
       "openBody": "Verifikasi tetap wajib. $10–$500 per pembelian, maksimal $2.000 dalam 24 jam mana pun.",
       "notOpenTitle": "Penjualan belum dibuka",
-      "notOpenBody": "Pembelian dibuka saat kontrak masuk fase daftar putih.",
+      "notOpenBody": "Pembelian dibuka saat kontrak penjualan dibuka.",
       "expiredTitle": "Penjualan berakhir",
       "graduatedTitle": "Penjualan lulus",
       "closedBody": "Pembelian ditutup."
@@ -323,7 +323,7 @@
       "confirming": "Mengonfirmasi on-chain…",
       "confirmed": "Terkonfirmasi on-chain. Anda bisa membeli.",
       "error": "Tidak dapat mengonfirmasi on-chain. Coba lagi.",
-      "notEligible": "Akun ini tidak memenuhi syarat daftar putih.",
+      "notEligible": "Akun ini belum memenuhi syarat verifikasi untuk membeli.",
       "connectWallet": "Hubungkan dompet untuk melanjutkan.",
       "alreadyVerified": "Sudah terkonfirmasi on-chain."
     },

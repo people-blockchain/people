@@ -248,8 +248,8 @@ export function heroPhase(input: {
   legacyOpen: boolean;
 }): V2HeroPhase {
   if (!input.v2Enabled) return input.legacyOpen ? "open" : "closed";
-  if (input.phase === V2_PHASES.Whitelist) return "whitelist";
-  if (input.phase === V2_PHASES.Open) return "open";
+  // Verification is required for the whole sale; the launch week is not a separate offer.
+  if (input.phase === V2_PHASES.Whitelist || input.phase === V2_PHASES.Open) return "open";
   return "closed";
 }
 
@@ -323,15 +323,12 @@ export type V2PhaseView = {
 };
 
 export function phaseView(phase: V2Phase, openedAtSec: number, nowMs: number = Date.now()): V2PhaseView {
+  void openedAtSec;
+  void nowMs;
+  // The contract requires a verified buyer in every phase, so there is no separate whitelist
+  // window to count down: `whitelist` stays false and `whitelistDaysLeft` null.
   const buyable = phase === V2_PHASES.Whitelist || phase === V2_PHASES.Open;
-  const whitelist = phase === V2_PHASES.Whitelist;
-  let whitelistDaysLeft: number | null = null;
-  if (whitelist && Number.isFinite(openedAtSec) && openedAtSec > 0) {
-    const endMs = openedAtSec * 1000 + V2_SALE.whitelistDays * DAY_MS;
-    const at = Number.isFinite(nowMs) && nowMs > 0 ? nowMs : openedAtSec * 1000;
-    whitelistDaysLeft = Math.max(0, Math.min(V2_SALE.whitelistDays, Math.ceil((endMs - at) / DAY_MS)));
-  }
-  return { phase, whitelistDaysLeft, buyable, whitelist };
+  return { phase, whitelistDaysLeft: null, buyable, whitelist: false };
 }
 
 export type V2MockSnapshot = {

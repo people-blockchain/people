@@ -11,7 +11,7 @@
     "subWhitelist": "Đợt bán PPL đã mở. Chỉ người đã xác minh mới được mua.",
     "subOpen": "Đợt bán PPL đã mở. Bất kỳ ai đã xác minh đều có thể mua.",
     "subEnded": "Đợt bán PPL đã kết thúc.",
-    "ctaVerify": "Xác minh để có mặt trong {days} ngày đầu",
+    "ctaVerify": "Xác minh để mua PPL",
     "ctaBuy": "Mua PPL",
     "ctaEnded": "Xem quy tắc bán lại",
     "countdownLabel": "Còn lại đến khi mở bán",
@@ -307,7 +307,7 @@
       "openTitle": "Đang mở bán",
       "openBody": "Vẫn cần xác minh. $10–$500 mỗi lần mua, tối đa $2.000 trong 24 giờ bất kỳ.",
       "notOpenTitle": "Chưa mở bán",
-      "notOpenBody": "Việc mua sẽ mở khi hợp đồng vào giai đoạn danh sách trắng.",
+      "notOpenBody": "Có thể mua khi hợp đồng bán được mở.",
       "expiredTitle": "Đã kết thúc bán",
       "graduatedTitle": "Đã tốt nghiệp",
       "closedBody": "Việc mua đã đóng."
@@ -323,7 +323,7 @@
       "confirming": "Đang xác nhận trên chuỗi…",
       "confirmed": "Đã xác nhận trên chuỗi. Bạn có thể mua.",
       "error": "Không thể xác nhận trên chuỗi. Hãy thử lại.",
-      "notEligible": "Tài khoản này không đủ điều kiện cho danh sách trắng.",
+      "notEligible": "Tài khoản này chưa đáp ứng điều kiện xác minh để mua.",
       "connectWallet": "Kết nối ví để tiếp tục.",
       "alreadyVerified": "Đã xác nhận trên chuỗi."
     },

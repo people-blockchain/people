@@ -11,7 +11,7 @@
     "subWhitelist": "La vente de PPL est ouverte. Seules les personnes vérifiées peuvent acheter.",
     "subOpen": "La vente de PPL est ouverte. Toute personne vérifiée peut acheter.",
     "subEnded": "La vente de PPL est terminée.",
-    "ctaVerify": "Faites-vous vérifier pour être des {days} premiers jours",
+    "ctaVerify": "Faites-vous vérifier pour acheter des PPL",
     "ctaBuy": "Acheter des PPL",
     "ctaEnded": "Voir les règles de revente",
     "countdownLabel": "Avant l’ouverture de la vente",
@@ -307,7 +307,7 @@
       "openTitle": "Vente ouverte",
       "openBody": "La vérification reste obligatoire. De 10 $ à 500 $ par achat, jusqu’à 2 000 $ sur toute période de 24 heures.",
       "notOpenTitle": "La vente n’est pas encore ouverte",
-      "notOpenBody": "Les achats ouvrent lorsque le contrat entre en phase de liste blanche.",
+      "notOpenBody": "Les achats ouvrent à l’ouverture du contrat de vente.",
       "expiredTitle": "Vente terminée",
       "graduatedTitle": "Vente graduée",
       "closedBody": "Les achats sont fermés."
@@ -323,7 +323,7 @@
       "confirming": "Confirmation on-chain…",
       "confirmed": "Confirmé on-chain. Vous pouvez acheter.",
       "error": "Impossible de confirmer on-chain. Réessayez.",
-      "notEligible": "Ce compte n’est pas éligible à la liste blanche.",
+      "notEligible": "Ce compte ne remplit pas encore les conditions de vérification pour acheter.",
       "connectWallet": "Connectez un portefeuille pour continuer.",
       "alreadyVerified": "Déjà confirmé on-chain."
     },
