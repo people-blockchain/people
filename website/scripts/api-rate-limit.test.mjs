@@ -170,6 +170,12 @@ test("Vercel's own client-ip header is used without TRUST_PROXY_HEADERS", async 
     process.env.VERCEL = "1";
     assert.equal(clientIpFromRequest(new Request("http://localhost", { headers: { "x-vercel-forwarded-for": "9.9.9.9", "x-forwarded-for": "1.2.3.4" } })), "9.9.9.9");
     assert.equal(clientIpFromRequest(new Request("http://localhost", { headers: { "x-vercel-forwarded-for": "not-ip" } })), "unknown");
+    assert.equal(
+      clientIpFromRequest(new Request("http://localhost", { headers: { "x-vercel-forwarded-for": "not-ip", "x-forwarded-for": "127.0.0.2, 127.0.0.3", "x-real-ip": "127.0.0.3" } })),
+      "127.0.0.2",
+    );
+    assert.equal(clientIpFromRequest(new Request("http://localhost", { headers: { "x-forwarded-for": "127.0.0.2, 127.0.0.3", "x-real-ip": "127.0.0.3" } })), "127.0.0.2");
+    assert.equal(clientIpFromRequest(new Request("http://localhost", { headers: { "x-real-ip": "127.0.0.3" } })), "127.0.0.3");
   } finally {
     if (previousVercel === undefined) delete process.env.VERCEL; else process.env.VERCEL = previousVercel;
     if (previousTrust === undefined) delete process.env.TRUST_PROXY_HEADERS; else process.env.TRUST_PROXY_HEADERS = previousTrust;
