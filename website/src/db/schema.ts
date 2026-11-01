@@ -288,6 +288,8 @@ export const founders = pgTable(
      * When set, Human Passport scores this instead of `walletAddress`.
      */
     passportWallet: text("passportWallet"),
+    /** Genesis Quest points (separate from founder daily-task points). */
+    questPoints: integer("questPoints").notNull().default(0),
     registeredAt: timestamp("registeredAt", { mode: "date" })
       .notNull()
       .$defaultFn(() => new Date()),
@@ -511,6 +513,97 @@ export const lavkaEscrowRecords = pgTable(
   },
   (row) => [uniqueIndex("lavka_escrow_chain_idx").on(row.chainEscrowId)],
 );
+
+/** Genesis Quest ledger (1 point = 1 PPL at snapshot, cap 5,000 per person). */
+export const founderQuestLedger = pgTable(
+  "founder_quest_ledger",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    taskType: text("taskType").notNull(),
+    points: integer("points").notNull(),
+    dayKey: text("dayKey").notNull(),
+    idempotencyKey: text("idempotencyKey").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("founder_quest_idempotency_idx").on(row.idempotencyKey),
+    index("founder_quest_user_idx").on(row.userId),
+  ],
+);
+
+export const founderQuestProfiles = pgTable("founder_quest_profile", {
+  userId: text("userId")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  xHandle: text("xHandle"),
+  personalCode: text("personalCode").notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
+export const founderQuestSecrets = pgTable(
+  "founder_quest_secret",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    platform: text("platform").notNull(),
+    wordNormalized: text("wordNormalized").notNull(),
+    validFrom: timestamp("validFrom", { mode: "date" }).notNull(),
+    validTo: timestamp("validTo", { mode: "date" }).notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("founder_quest_secret_platform_idx").on(row.platform, row.validFrom)],
+);
+
+export const founderQuestSecretClaims = pgTable(
+  "founder_quest_secret_claim",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    secretId: text("secretId")
+      .notNull()
+      .references(() => founderQuestSecrets.id, { onDelete: "cascade" }),
+    dayKey: text("dayKey").notNull(),
+    idempotencyKey: text("idempotencyKey").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("founder_quest_secret_claim_idem_idx").on(row.idempotencyKey),
+    uniqueIndex("founder_quest_secret_claim_user_secret_idx").on(row.userId, row.secretId),
+  ],
+);
+
+export const founderQuestDailyAttempts = pgTable(
+  "founder_quest_daily_attempt",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    attemptKey: text("attemptKey").notNull(),
+    dayKey: text("dayKey").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    primaryKey({ columns: [row.userId, row.attemptKey, row.dayKey] }),
+  ],
+);
+
+export const founderQuestUsedXUrls = pgTable("founder_quest_used_x_url", {
+  urlHash: text("urlHash").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
 
 export const founderPointsLedger = pgTable(
   "founder_points_ledger",

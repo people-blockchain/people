@@ -17,6 +17,7 @@ import { FOUNDER_COUNTRY_OPTIONS, countryFlagEmoji } from "@/lib/founders/countr
 import { getOrCreateFounderDeviceId } from "@/lib/founders/device-id";
 import { readStoredReferrer } from "@/lib/referral-ref";
 import { FoundersPersonal, type DemoAirdropState, type ReferralStatus } from "./FoundersPersonal";
+import { GenesisQuestPanel } from "./GenesisQuestPanel";
 import {
   FoundersLandingFinalCta,
   FoundersLandingFaq,
@@ -471,6 +472,12 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
             airdropClaiming={airdropClaiming}
             countryEditor={countryEditor}
             visibilityEditor={visibilityEditor}
+            onReload={load}
+          />
+          <GenesisQuestPanel
+            founderNumber={founder.founderNumber}
+            verificationLevel={founder.verificationLevel}
+            referralWallet={referral?.referralWallet ?? null}
             onReload={load}
           />
         </div>

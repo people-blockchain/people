@@ -105,6 +105,12 @@ export async function applyTelegramPhoneVerification(
       })
       .where(eq(founders.userId, userId));
     return { ok: true as const };
+  }).then(async (result) => {
+    if (result.ok) {
+      const { tryAwardQuestVerification } = await import("./quest/service.ts");
+      await tryAwardQuestVerification(userId);
+    }
+    return result;
   });
 }
 
@@ -114,6 +120,8 @@ export async function applyStrongVerification(userId: string): Promise<void> {
     .update(founders)
     .set({ verificationLevel: VERIFICATION_LEVEL_STRONG, verifiedAt: new Date() })
     .where(eq(founders.userId, userId));
+  const { tryAwardQuestVerification } = await import("./quest/service.ts");
+  await tryAwardQuestVerification(userId);
 }
 
 export async function getFounderVerificationLevel(userId: string): Promise<FounderVerificationLevel> {

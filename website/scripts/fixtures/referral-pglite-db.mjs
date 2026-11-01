@@ -9,6 +9,7 @@ import {
   FOUNDER_REFERRAL_SCHEMA_STATEMENTS,
   FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
+  FOUNDER_QUEST_SCHEMA_STATEMENTS,
 } from "../../src/db/bootstrap-sql.mjs";
 import * as schema from "../../src/db/schema.ts";
 
@@ -27,6 +28,7 @@ export async function getDbReady() {
         FOUNDER_REFERRAL_SCHEMA_STATEMENTS,
         FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
         FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
+        FOUNDER_QUEST_SCHEMA_STATEMENTS,
       ]) {
         for (const statement of group) await client.exec(statement);
       }
