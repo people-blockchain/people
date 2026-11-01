@@ -42,7 +42,8 @@ v2 adds no new economic constants.
 | `SELL_CAP_DAY_USD6` | 2_000e6 per person per exact rolling 24 hours | `SELL_BACK.perPersonPerDayUsd` |
 | `FEE_LOW_BPS` / `FEE_HIGH_BPS` | 150 / 300, on the same rolling 24-hour gross | `SELL_BACK.feePct/feeHighPct` |
 | `FEE_HIGH_THRESHOLD_BPS` | 100 (1% of the same reserve snapshot) | `SELL_BACK.feeHighThresholdReservePct` |
-| `ADMIN_TIMELOCK` | 48 hours, immutable. `queueSetVerifier` / `queueSetReturnVerifier` / `queueRescue` then `execute*` after `eta`; `cancel(id)` by the owner. No immediate setter or token sweep. Liquidity release stays `LIQUIDITY_RELEASE_DELAY` (30 days), which is longer, and has no shorter path | — |
+| `ADMIN_TIMELOCK` | 48 hours, immutable. `queueSetVerifier` / `queueSetReturnVerifier` / `queueSetTrustedRouter` / `queueRescue` then `execute*` after `eta`; `cancel(id)` by the owner. No immediate setter or token sweep. Liquidity release stays `LIQUIDITY_RELEASE_DELAY` (30 days), which is longer, and has no shorter path | — |
+| `GRACE_PERIOD` | 14 days after `eta`: queued owner ops expire and cannot execute (prevents year-old queues). At most one pending op per `kind`; `pendingAdminOp(kind)` exposes `eta` and `dataHash` | Opus r2 M1 |
 | `MAX_LOTS_PER_SELL` | 50 (gas bound per tx, not economic; larger sales = several txs) | — |
 | `LIQUIDITY_RELEASE_DELAY` | 30 days public notice before reserve → liquidity (Q1; option B = 14 days) | Q1 |
 | `usdc` | immutable; Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`; Sepolia: MockUSDC (6 dec) | D7 |
@@ -111,6 +112,9 @@ function executeRescue(bytes32 id) external; // only after ADMIN_TIMELOCK; surpl
 function quoteBuy(uint256 usdcIn) external view returns (uint256 pplOut, uint256 chargedUsd6);
 function quoteSellBack(address holder, uint256 pplIn) external view returns (uint256 gross, uint256 fee, uint256 payout);
 function sellableNow(address holder) external view returns (uint256 ppl);       // unlocked lots
+function sellableBalance(address account) external view returns (uint256 ppl); // bought − sold − locked lots (sell-back scan)
+function liquidityReleaseExecutableAt() external view returns (uint256);      // announce + 30d + pause after announce
+function pendingAdminOp(bytes32 kind) external view returns (bool active, bytes32 id, uint64 eta, bytes32 dataHash);
 function sellBackCapToday() external view returns (uint256 globalRemainingUsd6, uint256 feeLowRemainingUsd6); // D5
 function addressSellRemainingToday(address) external view returns (uint256);
 function buyRemainingToday(address) external view returns (uint256);
@@ -148,6 +152,13 @@ from Whitelist/Open). `paused` is orthogonal.
 Payer = `msg.sender` (wallet or LI.FI executor); limits, cooldown, whitelist and lots bind to `recipient` (D6).
 
 ### 5.2 sellBack (curve-at-exit, D9)
+
+**Reward PPL (§5.2 owner rule):** quest/founder rewards on the PEOPLE network live in `RewardVesting`
+(`contracts/src/vesting/RewardVesting.sol`). Locked or unlocked reward balance must not be sent to
+`PplReturnBurn` or a curve hub; site fees only via owner-whitelisted contracts. On Base, the hub's
+immutable `rewardBuyerForbidden` address (if set) cannot `buy` or become `trustedRouter`. Curve
+sell-back rights remain buy-lots only; `sellableBalance(account)` matches the unlocked FIFO scan.
+
 1. `whenNotPaused`, `nonReentrant`; `!graduated`; `!liquidityReleased`; `openedAt != 0` (works in Open, Whitelist,
    Expired — D3/Q1: never closed by time).
 2. `personOf[msg.sender] != 0` (verified only); `!delivered[msg.sender]` (Q2).
@@ -194,7 +205,7 @@ Implemented: `liquidityReceiver` is an immutable constructor arg (`≠ treasury`
 `LiquidityReleaseAnnounced(to, reserve, executableAt, graduated)`; new buys stop while pending; sell-back keeps
 working during the notice (unless graduated) so holders who disagree can exit within the rolling 24-hour limits.
 `cancelLiquidityRelease()` (owner) reopens buys. `executeLiquidityRelease()` is **permissionless** once
-`LIQUIDITY_RELEASE_DELAY` has passed and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
+`liquidityReleaseExecutableAt()` has passed (30-day notice plus any time paused after announce) and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
 (`liquidityReleased`), sell-back then closes. There is no other owner path that moves reserve USDC.
 
 Options for Alex (one constant / one constructor arg to change):

@@ -192,6 +192,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     uint256 public constant MAX_MIN_SELL_USD6 = 50e6;
     /// @notice Delay before a queued verifier change or `rescue` can execute. Immutable.
     uint256 public constant ADMIN_TIMELOCK = 48 hours;
+    /// @notice Queued owner ops expire if not executed within this window after `eta`.
+    uint256 public constant GRACE_PERIOD = 14 days;
     /// @dev Per person per exact rolling 24 hours (A4, see `RollingWindow24h`).
     uint256 public constant SELL_CAP_DAY_USD6 = 2_000e6;
     uint256 public constant FEE_LOW_BPS = 150;
@@ -217,11 +219,14 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     );
     bytes32 private constant OP_SET_VERIFIER = keccak256("setVerifier");
     bytes32 private constant OP_SET_RETURN_VERIFIER = keccak256("setReturnVerifier");
+    bytes32 private constant OP_SET_TRUSTED_ROUTER = keccak256("setTrustedRouter");
     bytes32 private constant OP_RESCUE = keccak256("rescue");
 
     IERC20 public immutable usdc;
     address public immutable treasury;
     address public immutable liquidityReceiver;
+    /// @dev If non-zero, this address cannot `buy` and cannot be marked `trustedRouter` (SPEC §5.2).
+    address public immutable rewardBuyerForbidden;
 
     // ---------------------------------------------------------------- state (SPEC §3)
 
@@ -245,6 +250,9 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     uint64 public openedAt;
     bool public graduated;
     uint64 public releaseAnnouncedAt;
+    /// @dev Seconds the hub spent paused after `releaseAnnouncedAt` (extends the release deadline).
+    uint64 public releasePauseAccumulated;
+    uint64 internal _releasePauseStartedAt;
     bool public liquidityReleased;
 
     uint256 public raisedUsd6;
@@ -296,6 +304,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     }
 
     mapping(bytes32 => AdminOp) private _adminOps;
+    /// @dev At most one queued op per `kind` (see `GRACE_PERIOD`).
+    mapping(bytes32 => bytes32) private _pendingByKind;
     uint256 private _adminNonce;
 
     // ---------------------------------------------------------------- events (SPEC §8)
@@ -373,11 +383,18 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     error GlobalWindowFull();
     error ReturnExceeded();
     error UnbindDenied();
+    error OpExpired();
+    error KindAlreadyQueued();
+    error RewardBuyForbidden();
 
-    constructor(IERC20 usdc_, address treasury_, address liquidityReceiver_, address owner_, address verifier_)
-        Ownable(owner_)
-        EIP712("PplCurveHubV2", "1")
-    {
+    constructor(
+        IERC20 usdc_,
+        address treasury_,
+        address liquidityReceiver_,
+        address owner_,
+        address verifier_,
+        address rewardBuyerForbidden_
+    ) Ownable(owner_) EIP712("PplCurveHubV2", "1") {
         if (address(usdc_) == address(0) || treasury_ == address(0) || liquidityReceiver_ == address(0)) {
             revert ZeroAddress();
         }
@@ -386,6 +403,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         usdc = usdc_;
         treasury = treasury_;
         liquidityReceiver = liquidityReceiver_;
+        rewardBuyerForbidden = rewardBuyerForbidden_;
         verifier = verifier_;
         emit VerifierSet(address(0), verifier_);
     }
@@ -411,6 +429,7 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     {
         if (!_buyOpen()) revert SaleNotActive();
         if (recipient == address(0)) revert ZeroAddress();
+        if (rewardBuyerForbidden != address(0) && msg.sender == rewardBuyerForbidden) revert RewardBuyForbidden();
         if (recipient != msg.sender && !trustedRouter[msg.sender]) revert UntrustedRouter();
         bytes32 person = personOf[recipient];
         if (person == bytes32(0)) revert NotVerified();
@@ -588,13 +607,15 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     function cancelLiquidityRelease() external onlyOwner {
         if (releaseAnnouncedAt == 0 || liquidityReleased) revert ReleaseNotAnnounced();
         releaseAnnouncedAt = 0;
+        releasePauseAccumulated = 0;
+        _releasePauseStartedAt = 0;
         emit LiquidityReleaseCancelled();
     }
 
-    /// @notice Permissionless once the notice period has passed.
+    /// @notice Permissionless once the notice period has passed (plus any pause time after announce).
     function executeLiquidityRelease() external nonReentrant {
         if (releaseAnnouncedAt == 0 || liquidityReleased) revert ReleaseNotAnnounced();
-        if (block.timestamp < uint256(releaseAnnouncedAt) + LIQUIDITY_RELEASE_DELAY) revert ReleaseTimelocked();
+        if (block.timestamp < liquidityReleaseExecutableAt()) revert ReleaseTimelocked();
         liquidityReleased = true;
         uint256 amount = reserveUsd6;
         reserveUsd6 = 0;
@@ -611,10 +632,17 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     }
 
     function pause() external onlyOwner {
+        if (releaseAnnouncedAt != 0 && !liquidityReleased && !paused()) {
+            _releasePauseStartedAt = uint64(block.timestamp);
+        }
         _pause();
     }
 
     function unpause() external onlyOwner {
+        if (_releasePauseStartedAt != 0) {
+            releasePauseAccumulated += uint64(block.timestamp) - _releasePauseStartedAt;
+            _releasePauseStartedAt = 0;
+        }
         _unpause();
     }
 
@@ -645,16 +673,27 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
 
     /// @notice Owner cancels a queued verifier change or rescue. A cancelled id cannot be executed.
     function cancel(bytes32 id) external onlyOwner {
-        if (_adminOps[id].eta == 0) revert NotQueued();
+        AdminOp memory op = _adminOps[id];
+        if (op.eta == 0) revert NotQueued();
         delete _adminOps[id];
+        if (_pendingByKind[op.kind] == id) delete _pendingByKind[op.kind];
         emit Cancelled(id);
     }
 
-    /// @notice Allow or disallow `router` to buy for recipients other than itself (A3).
-    function setTrustedRouter(address router, bool trusted) external onlyOwner {
+    /// @notice Queue allow/disallow of `router` buying for recipients other than itself (A3).
+    function queueSetTrustedRouter(address router, bool trusted) external onlyOwner returns (bytes32 id) {
         if (router == address(0)) revert ZeroAddress();
-        trustedRouter[router] = trusted;
-        emit TrustedRouterSet(router, trusted);
+        if (rewardBuyerForbidden != address(0) && router == rewardBuyerForbidden) revert RewardBuyForbidden();
+        id = _queue(OP_SET_TRUSTED_ROUTER, router, trusted ? 1 : 0);
+    }
+
+    /// @notice Execute a queued `queueSetTrustedRouter`.
+    function executeSetTrustedRouter(bytes32 id) external onlyOwner {
+        AdminOp memory op = _take(id, OP_SET_TRUSTED_ROUTER);
+        if (rewardBuyerForbidden != address(0) && op.who == rewardBuyerForbidden) revert RewardBuyForbidden();
+        bool trusted = op.amount != 0;
+        trustedRouter[op.who] = trusted;
+        emit TrustedRouterSet(op.who, trusted);
     }
 
     /// @notice Set the A4 rolling-24h anti-spam limits (see `maxBuysPer24h`). Entry limits are
@@ -745,6 +784,37 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// most MAX_LOTS_PER_SELL from the head).
     function sellableNow(address holder) external view returns (uint256 ppl) {
         return _unlockedPpl(personOf[holder]);
+    }
+
+    /// @notice PPL the person bound to `account` may sell back now: purchased minus sold minus lots
+    /// still inside the 30-day hold (same FIFO head scan as `sellBack`, capped at MAX_LOTS_PER_SELL).
+    function sellableBalance(address account) external view returns (uint256) {
+        return _unlockedPpl(personOf[account]);
+    }
+
+    /// @notice When `executeLiquidityRelease` becomes callable (includes pause extension after announce).
+    function liquidityReleaseExecutableAt() public view returns (uint256) {
+        if (releaseAnnouncedAt == 0) return 0;
+        uint256 pausedExtra = releasePauseAccumulated;
+        if (_releasePauseStartedAt != 0) {
+            pausedExtra += block.timestamp - _releasePauseStartedAt;
+        }
+        return uint256(releaseAnnouncedAt) + LIQUIDITY_RELEASE_DELAY + pausedExtra;
+    }
+
+    /// @notice Queued owner op for `kind`, if any: `dataHash = keccak256(abi.encode(kind, who, amount))`.
+    function pendingAdminOp(bytes32 kind)
+        external
+        view
+        returns (bool active, bytes32 id, uint64 eta, bytes32 dataHash)
+    {
+        id = _pendingByKind[kind];
+        if (id == bytes32(0)) return (false, bytes32(0), 0, bytes32(0));
+        AdminOp memory op = _adminOps[id];
+        if (op.eta == 0) return (false, bytes32(0), 0, bytes32(0));
+        active = true;
+        eta = op.eta;
+        dataHash = keccak256(abi.encode(op.kind, op.who, op.amount));
     }
 
     /// @notice Gross still inside the rolling 24-hour global cap, and room left under the 1% fee line.
@@ -947,9 +1017,12 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     }
 
     function _queue(bytes32 kind, address who, uint256 amount) internal returns (bytes32 id) {
+        bytes32 pendingId = _pendingByKind[kind];
+        if (pendingId != bytes32(0) && _adminOps[pendingId].eta != 0) revert KindAlreadyQueued();
         id = keccak256(abi.encode(kind, who, amount, _adminNonce++));
         uint256 eta = block.timestamp + ADMIN_TIMELOCK;
         _adminOps[id] = AdminOp({eta: uint64(eta), who: who, amount: amount, kind: kind});
+        _pendingByKind[kind] = id;
         emit Queued(id, abi.encode(kind, who, amount), eta);
     }
 
@@ -957,7 +1030,9 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         op = _adminOps[id];
         if (op.eta == 0 || op.kind != kind) revert NotQueued();
         if (block.timestamp < uint256(op.eta)) revert Timelocked();
+        if (block.timestamp > uint256(op.eta) + GRACE_PERIOD) revert OpExpired();
         delete _adminOps[id];
+        delete _pendingByKind[kind];
     }
 
     /// @dev USDC/USDT sale token: only the surplus above the reserve may leave. Any other token may.
