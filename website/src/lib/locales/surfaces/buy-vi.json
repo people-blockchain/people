@@ -126,7 +126,7 @@
       "Quỹ dự trữ là số USDC nằm trong hợp đồng bán. Tiền bán lại được trả từ quỹ này và phí bán lại được giữ lại trong đó. Quỹ càng nhỏ thì giới hạn bán lại mỗi ngày càng nhỏ. Sau khi đường cong đóng, bán lại vẫn hoạt động cho đến khi quỹ dự trữ được chuyển thành thanh khoản.",
       "Quỹ dự trữ chỉ rời hợp đồng dưới dạng thanh khoản PPL, khi đường cong đóng hoặc khi mạng PEOPLE ra mắt, và chỉ sau thông báo công khai {releaseDays} ngày. Trong thời gian thông báo, giao dịch mua mới dừng lại nhưng bán lại vẫn hoạt động.",
       "Ngân quỹ: một ví multisig ({signersM} trên {signersN} chữ ký) nhận {treasuryPct} còn lại của mỗi giao dịch mua.",
-      "Multisig có thể tạm dừng mua và bán lại, và điều chỉnh chống spam trong giới hạn cố định: số lần mua và bán lại mỗi ngày và số tiền tối thiểu. Multisig không thể rút quỹ dự trữ, thay đổi công thức, giới hạn mỗi địa chỉ hay mức phí, cũng không thể kéo dài đợt bán.",
+      "Multisig có thể tạm dừng mua và bán lại, và điều chỉnh chống spam trong giới hạn cố định với độ trễ 48 giờ: số lần mua và bán lại mỗi ngày và số tiền tối thiểu. Multisig không thể tự rút quỹ dự trữ: quỹ dự trữ chỉ có thể chuyển vào một hợp đồng thanh khoản PPL được thông báo trước 30 ngày. Multisig không thể thay đổi công thức, giới hạn mỗi địa chỉ hay mức phí, cũng không thể kéo dài đợt bán.",
       "Đợt bán kéo dài đến khi huy động đủ {graduation} hoặc {term} sau khi mở, tùy điều nào đến trước. PPL chưa bán chuyển vào Community Pool. Mọi giao dịch mua là cuối cùng.",
       "Đội ngũ: {teamPct} tổng số PPL. Không nhận gì trong {cliff} đầu, sau đó nhận hằng tháng trong {linear}, tính từ khi ra mắt mạng đầy đủ."
     ]

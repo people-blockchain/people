@@ -126,7 +126,7 @@
       "La riserva sono gli USDC custoditi nel contratto di vendita. Da lì si pagano le rivendite, e le loro commissioni restano lì. Più piccola è la riserva, più basso è il limite giornaliero di rivendita. Dopo la chiusura della curva la rivendita continua a funzionare, finché la riserva non passa in liquidità.",
       "La riserva esce dal contratto solo come liquidità PPL, alla chiusura della curva o al lancio della rete PEOPLE, e solo dopo un preavviso pubblico di {releaseDays} giorni. Durante il preavviso i nuovi acquisti si fermano, ma la rivendita continua.",
       "Tesoreria: un wallet multisig ({signersM} firme su {signersN}) che riceve l’altro {treasuryPct} di ogni acquisto.",
-      "Il multisig può sospendere acquisti e rivendita e regolare, entro limiti fissi, la protezione anti-spam: quanti acquisti e rivendite al giorno e l’importo minimo. Non può spostare la riserva, cambiare la formula, i limiti per indirizzo o le commissioni, né prolungare la vendita.",
+      "Il multisig può sospendere acquisti e rivendita e regolare, entro limiti fissi e con 48 ore di ritardo, la protezione anti-spam: quanti acquisti e rivendite al giorno e l’importo minimo. Non può prelevare la riserva per sé: la riserva può andare solo a un contratto di liquidità PPL annunciato con 30 giorni di anticipo. Non può cambiare la formula, i limiti per indirizzo o le commissioni, né prolungare la vendita.",
       "La vendita dura finché non si raccolgono {graduation} oppure {term} dall’apertura, a seconda di cosa avviene prima. I PPL invenduti vanno al Community Pool. Gli acquisti sono definitivi.",
       "Team: il {teamPct} di tutti i PPL. Niente per {cliff}, poi ogni mese per {linear}, a partire dal lancio completo della rete."
     ]

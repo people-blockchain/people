@@ -126,7 +126,7 @@
       "Reserve: the USDC kept in the sale contract. Sell-backs are paid from it, and sell-back fees stay in it. The smaller the reserve, the smaller the daily sell-back limit. Sell-back keeps working after the curve closes, until the reserve moves to liquidity.",
       "The reserve leaves the contract only as PPL liquidity, when the curve closes or when the PEOPLE network launches, and only after a public notice of {releaseDays} days. New purchases stop during the notice, but sell-back keeps working.",
       "Treasury: a multisig wallet ({signersM} of {signersN} signatures) that receives the other {treasuryPct} of each purchase.",
-      "The multisig can pause buying and sell-back, and adjust spam protection within fixed bounds: how many purchases and sell-backs a day, and the smallest amount. It cannot move the reserve, change the formula, the per-address limits or the fees, or extend the sale.",
+      "The multisig can pause buying and sell-back, and adjust spam protection within fixed bounds with a 48-hour delay: how many purchases and sell-backs a day, and the smallest amount. It cannot withdraw the reserve itself: the reserve can only go to a PPL liquidity contract announced 30 days in advance. It cannot change the formula, the per-address limits or the fees, or extend the sale.",
       "The sale runs until {graduation} has been raised or for {term} after opening, whichever comes first. Unsold PPL goes to the Community Pool. Purchases are final.",
       "Team: {teamPct} of all PPL. Nothing for the first {cliff}, then monthly over {linear}, counted from the full network launch."
     ]

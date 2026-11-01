@@ -126,7 +126,7 @@
       "Rezerv, satış sözleşmesinde tutulan USDC'dir. Geri satışlar buradan ödenir ve geri satış ücretleri burada kalır. Rezerv ne kadar küçükse günlük geri satış sınırı da o kadar küçüktür. Eğri kapandıktan sonra da geri satış, rezerv likiditeye aktarılana kadar çalışır.",
       "Rezerv sözleşmeden yalnızca PPL likiditesi olarak, eğri kapandığında ya da PEOPLE ağı başlatıldığında ve yalnızca {releaseDays} günlük herkese açık bir duyurunun ardından çıkar. Duyuru süresince yeni alımlar durur, geri satış ise çalışmaya devam eder.",
       "Hazine: her alımın kalan {treasuryPct} kadarını alan çoklu imza cüzdanı ({signersN} imzadan {signersM}).",
-      "Multisig alımları ve geri satışı duraklatabilir ve spam korumasını sabit sınırlar içinde ayarlayabilir: günlük alım ve geri satış sayısı ile en düşük tutar. Rezervi taşıyamaz; formülü, adres başına sınırları veya ücretleri değiştiremez; satışı uzatamaz.",
+      "Multisig alımları ve geri satışı duraklatabilir ve spam korumasını sabit sınırlar içinde, 48 saat gecikmeyle ayarlayabilir: günlük alım ve geri satış sayısı ile en düşük tutar. Rezervi kendine çekemez: rezerv yalnızca 30 gün önceden duyurulan bir PPL likidite sözleşmesine gidebilir. Formülü, adres başına sınırları veya ücretleri değiştiremez; satışı uzatamaz.",
       "Satış, {graduation} toplanana ya da açılıştan itibaren {term} dolana kadar, hangisi önce gelirse, sürer. Satılmayan PPL Community Pool'a gider. Satın alımlar kesindir.",
       "Ekip: tüm PPL'nin {teamPct} kadarı. İlk {cliff} hiçbir şey yok, sonra {linear} boyunca her ay; tam ağ lansmanından itibaren sayılır."
     ]

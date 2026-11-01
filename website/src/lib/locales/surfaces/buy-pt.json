@@ -126,7 +126,7 @@
       "A reserva são os USDC guardados no contrato de venda. As recompras são pagas com ela, e as taxas de recompra ficam nela. Quanto menor a reserva, menor o limite diário de recompra. A recompra continua funcionando depois que a curva fecha, até a reserva ir para a liquidez.",
       "A reserva só sai do contrato como liquidez de PPL, quando a curva fecha ou quando a rede PEOPLE é lançada, e só depois de um aviso público de {releaseDays} dias. Durante o aviso, novas compras param, mas a recompra continua funcionando.",
       "Tesouraria: uma carteira multisig ({signersM} de {signersN} assinaturas) que recebe os outros {treasuryPct} de cada compra.",
-      "O multisig pode pausar as compras e a recompra, e ajustar dentro de limites fixos a proteção contra spam: quantas compras e vendas por dia e o valor mínimo. Não pode mover a reserva, mudar a fórmula, os limites por endereço ou as taxas, nem prorrogar a venda.",
+      "O multisig pode pausar as compras e a recompra, e ajustar dentro de limites fixos, com 48 horas de atraso, a proteção contra spam: quantas compras e vendas por dia e o valor mínimo. Não pode sacar a reserva para si: a reserva só pode ir para um contrato de liquidez de PPL anunciado com 30 dias de antecedência. Não pode mudar a fórmula, os limites por endereço ou as taxas, nem prorrogar a venda.",
       "A venda dura até arrecadar {graduation} ou {term} após a abertura, o que acontecer primeiro. O PPL não vendido vai para o Community Pool. As compras são definitivas.",
       "Equipe: {teamPct} de todo o PPL. Nada nos primeiros {cliff}; depois, mensalmente ao longo de {linear}, contando a partir do lançamento completo da rede."
     ]
