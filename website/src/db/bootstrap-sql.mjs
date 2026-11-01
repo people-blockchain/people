@@ -495,3 +495,56 @@ export const SALE_PERSON_BINDING_SCHEMA_STATEMENTS = [
 )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS "sale_binding_account_lower_idx" ON "sale_binding" (lower("account"))`,
 ];
+
+/** Genesis Quest social tasks (founder quest ledger + profile). */
+export const FOUNDER_QUEST_SCHEMA_STATEMENTS = [
+  `ALTER TABLE "founder" ADD COLUMN IF NOT EXISTS "questPoints" integer NOT NULL DEFAULT 0`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_ledger" (
+  "id" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "taskType" text NOT NULL,
+  "points" integer NOT NULL,
+  "dayKey" text NOT NULL,
+  "idempotencyKey" text NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_quest_idempotency_idx" ON "founder_quest_ledger" ("idempotencyKey")`,
+  `CREATE INDEX IF NOT EXISTS "founder_quest_user_idx" ON "founder_quest_ledger" ("userId")`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_profile" (
+  "userId" text PRIMARY KEY NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "xHandle" text,
+  "personalCode" text NOT NULL,
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_secret" (
+  "id" text PRIMARY KEY NOT NULL,
+  "platform" text NOT NULL,
+  "wordNormalized" text NOT NULL,
+  "validFrom" timestamp NOT NULL,
+  "validTo" timestamp NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_quest_secret_platform_idx" ON "founder_quest_secret" ("platform", "validFrom")`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_secret_claim" (
+  "id" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "secretId" text NOT NULL REFERENCES "founder_quest_secret"("id") ON DELETE CASCADE,
+  "dayKey" text NOT NULL,
+  "idempotencyKey" text NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_quest_secret_claim_idem_idx" ON "founder_quest_secret_claim" ("idempotencyKey")`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_quest_secret_claim_user_secret_idx" ON "founder_quest_secret_claim" ("userId", "secretId")`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_daily_attempt" (
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "attemptKey" text NOT NULL,
+  "dayKey" text NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  PRIMARY KEY ("userId", "attemptKey", "dayKey")
+)`,
+  `CREATE TABLE IF NOT EXISTS "founder_quest_used_x_url" (
+  "urlHash" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+];

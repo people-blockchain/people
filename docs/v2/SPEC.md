@@ -401,6 +401,22 @@ v2 ABI + address in sale config, v1 marked deprecated; copy in 12 locales: D1 re
 (B:247, LP:181/224), stale texts (180 days, "sell back at any time", $0.25 ceiling, Russian text in en T:102-103);
 verifier-signing API route (§5.3).
 
+## 14. Genesis Quest reward PPL (website requirements; on-chain TBD)
+
+These rules apply to **reward PPL** from Genesis Quest, founder/referral pools, airdrops, and similar
+off-chain-to-mainnet credits. **Do not implement in hub contracts in this document** — track as product
+requirements until a separate RewardVesting module ships on PEOPLE mainnet.
+
+| Rule | Requirement |
+|---|---|
+| Credit date | Locked reward PPL credited on **1 December 2026** (mainnet launch), not on Base. |
+| Standard vesting | **90-day cliff** (nothing transferable until **1 March 2027**), then **1/9 per month** linear unlock each month through **1 December 2027**. |
+| Leaderboard top 10 | **6-month cliff** (until **1 June 2027**), then **12 months** linear vesting (assumption pending final sign-off). |
+| Site spend while locked | Locked reward PPL **may** pay PEOPLE site fees (token/NFT creation and similar) without unlocking for transfer. |
+| v2 hub sell-back | Reward PPL are **never** eligible for sell-back into the v2 hub, before or after vesting. Only PPL purchased via the hub (per-lot 30-day hold) counts toward `sellableBalance`. |
+| Transfers after unlock | Vested reward PPL may be sold or transferred **P2P** only once PEOPLE mainnet enables wallet-to-wallet transfers; no promised buyback or price. |
+| Provenance | Hub and reward modules must keep provenance separate so reward PPL never increase hub `sellableBalance`, even after vesting or if sent to an address that also bought via the hub. |
+
 ## 13. Questions for Alex — answered 2026-10-27
 
 - **Q1** Sell-back never closes by time; reserve never to Safe/team; exit only to liquidity via timelock +

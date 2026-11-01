@@ -12,6 +12,7 @@ import {
   LAVKA_SCHEMA_STATEMENTS,
   BUG_REPORTS_SCHEMA_STATEMENTS,
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
+  FOUNDER_QUEST_SCHEMA_STATEMENTS,
   WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
   FACTORY_ICON_SCHEMA_STATEMENTS,
   SALE_PERSON_BINDING_SCHEMA_STATEMENTS,
@@ -72,6 +73,9 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0017_founder_passport_wallet.sql — separate wallet for Human Passport scoring.
     for (const statement of FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of FOUNDER_QUEST_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
     // drizzle/0018_wallet_vault_access_log.sql — durable rate-limit/access log for wrap-key.
