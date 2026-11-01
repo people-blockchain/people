@@ -600,7 +600,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         vm.expectRevert(err);
         hub.executeSetReturnVerifier(bytes32(uint256(1)));
         vm.expectRevert(err);
-        hub.setTrustedRouter(alice, true);
+        hub.queueSetTrustedRouter(alice, true);
         vm.expectRevert(err);
         hub.setWindowLimits(20, MIN_BUY, 10, 1e6);
         vm.expectRevert(err);
@@ -823,7 +823,7 @@ contract PplCurveHubV2SellTest is HubV2Base {
         }
         vm.createSelectFork(vm.envString("BASE_FORK_RPC_URL"));
         address baseUsdc = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
-        hub = new HubV2Harness(baseUsdc, treasury, liquidityReceiver, owner, verifier);
+        hub = new HubV2Harness(baseUsdc, treasury, liquidityReceiver, owner, verifier, address(0));
         _installReturnVerifier(hub, returnVerifier);
         _open();
         _verify(alice);

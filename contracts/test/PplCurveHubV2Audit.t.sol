@@ -44,8 +44,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
     }
 
     function _trust(address router) internal {
-        vm.prank(owner);
-        hub.setTrustedRouter(router, true);
+        _setTrustedRouter(router, true);
     }
 
     function _limits(uint256 maxBuys, uint256 minBuy, uint256 maxSells, uint256 minSell) internal {
@@ -196,7 +195,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         hub.sellBack(ppl, 0, id, deadline, ppl, new bytes(65));
 
         // default of a fresh hub is disabled
-        HubV2Harness fresh = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
+        HubV2Harness fresh = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier, address(0));
         assertEq(fresh.returnVerifier(), address(0));
 
         // re-enabling restores it (the earlier signature expired across the timelock)
@@ -210,7 +209,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
     function test_a1_otherHubDomainReverts() public {
         _holder(alice, 100_000e6, 1, MAX_BUY);
         uint256 ppl = hub.pplOf(alice) / 10;
-        HubV2Harness other = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
+        HubV2Harness other = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier, address(0));
         bytes32 id = _freshReturnId();
         uint256 deadline = _now() + 1 hours;
         bytes memory sig = _signReturnRaw(
@@ -458,8 +457,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
         vm.expectEmit(true, false, false, true, address(hub));
         emit TrustedRouterSet(router, true);
-        vm.prank(owner);
-        hub.setTrustedRouter(router, true);
+        _setTrustedRouter(router, true);
         assertTrue(hub.trustedRouter(router));
 
         uint256 routerBal = usdc.balanceOf(router);
@@ -483,8 +481,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _buy(victim, MIN_BUY);
 
         // revoked again
-        vm.prank(owner);
-        hub.setTrustedRouter(router, false);
+        _setTrustedRouter(router, false);
         _warpBy(61);
         vm.prank(router);
         vm.expectRevert(PplCurveHubV2.UntrustedRouter.selector);
@@ -492,10 +489,10 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
         vm.prank(owner);
         vm.expectRevert(PplCurveHubV2.ZeroAddress.selector);
-        hub.setTrustedRouter(address(0), true);
+        hub.queueSetTrustedRouter(address(0), true);
         vm.prank(mallory);
         vm.expectRevert(abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, mallory));
-        hub.setTrustedRouter(mallory, true);
+        hub.queueSetTrustedRouter(mallory, true);
     }
 
     function test_a3_routerBuysCappedAtFivePer24h() public {
@@ -1065,7 +1062,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
 
     function test_a6_splitMockUsdt() public {
         MockUSDT usdt = new MockUSDT();
-        hub = new HubV2Harness(address(usdt), treasury, liquidityReceiver, owner, verifier);
+        hub = new HubV2Harness(address(usdt), treasury, liquidityReceiver, owner, verifier, address(0));
         _installReturnVerifier(hub, returnVerifier);
         vm.prank(owner);
         hub.open();

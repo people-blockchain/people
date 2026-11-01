@@ -20,8 +20,7 @@ contract PplCurveHubV2Test is HubV2Base {
     }
 
     function _trust(address router) internal {
-        vm.prank(owner);
-        hub.setTrustedRouter(router, true);
+        _setTrustedRouter(router, true);
     }
 
     // ================================================================ curve
@@ -581,13 +580,13 @@ contract PplCurveHubV2Test is HubV2Base {
 
     function test_liquidityReceiverCannotBeTreasuryOrOwner() public {
         vm.expectRevert(PplCurveHubV2.BadReceiver.selector);
-        new PplCurveHubV2(usdc, treasury, treasury, owner, verifier);
+        new PplCurveHubV2(usdc, treasury, treasury, owner, verifier, address(0));
         vm.expectRevert(PplCurveHubV2.BadReceiver.selector);
-        new PplCurveHubV2(usdc, treasury, owner, owner, verifier);
+        new PplCurveHubV2(usdc, treasury, owner, owner, verifier, address(0));
         vm.expectRevert(PplCurveHubV2.ZeroAddress.selector);
-        new PplCurveHubV2(usdc, treasury, address(0), owner, verifier);
+        new PplCurveHubV2(usdc, treasury, address(0), owner, verifier, address(0));
         // sanity: a distinct receiver deploys
-        PplCurveHubV2 ok = new PplCurveHubV2(usdc, treasury, liquidityReceiver, owner, verifier);
+        PplCurveHubV2 ok = new PplCurveHubV2(usdc, treasury, liquidityReceiver, owner, verifier, address(0));
         assertEq(ok.liquidityReceiver(), liquidityReceiver);
     }
 
