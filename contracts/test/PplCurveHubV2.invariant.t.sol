@@ -248,7 +248,7 @@ contract HubV2Handler is Test {
         uint256 t0 = vm.getBlockTimestamp();
         MockUSDC u = new MockUSDC();
         HubV2Harness h =
-            new HubV2Harness(address(u), address(0x7001), address(0x7002), address(this), vm.addr(verifierPk));
+            new HubV2Harness(address(u), address(0x7001), address(0x7002), address(this), vm.addr(verifierPk), address(0));
         h.open();
         bytes32 qid = h.queueSetReturnVerifier(vm.addr(returnPk));
         vm.warp(vm.getBlockTimestamp() + h.ADMIN_TIMELOCK());
@@ -602,8 +602,7 @@ contract PplCurveHubV2InvariantTest is HubV2Base {
             actors.push(a);
             _prepare(a);
             // actors may buy for other recipients (A3 trusted routers)
-            vm.prank(owner);
-            hub.setTrustedRouter(a, true);
+            _setTrustedRouter(a, true);
         }
         // Verified but unfunded recipients: only receive buys made by the actors, never sell.
         extras.push(makeAddr("extra0"));

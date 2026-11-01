@@ -8,9 +8,14 @@ import {PplCurveMath} from "../src/sale/PplCurveHub.sol";
 
 /// @dev Minimal state-forcing harness (test only). Reuse from other v2 test files.
 contract HubV2Harness is PplCurveHubV2 {
-    constructor(address usdc_, address treasury_, address receiver_, address owner_, address verifier_)
-        PplCurveHubV2(MockUSDC(usdc_), treasury_, receiver_, owner_, verifier_)
-    {}
+    constructor(
+        address usdc_,
+        address treasury_,
+        address receiver_,
+        address owner_,
+        address verifier_,
+        address rewardBuyerForbidden_
+    ) PplCurveHubV2(MockUSDC(usdc_), treasury_, receiver_, owner_, verifier_, rewardBuyerForbidden_) {}
 
     /// @dev Sets raised and keeps soldPpl consistent with the v1 curve. Does not touch reserve/USDC.
     function forceRaised(uint256 r) external {
@@ -20,6 +25,14 @@ contract HubV2Harness is PplCurveHubV2 {
 
     function forceReserve(uint256 r) external {
         reserveUsd6 = r;
+    }
+
+    /// @dev Test-only fast path; production uses `queueSetTrustedRouter` / `executeSetTrustedRouter`.
+    function testSetTrustedRouter(address router, bool trusted) external {
+        if (router == address(0)) revert ZeroAddress();
+        if (rewardBuyerForbidden != address(0) && router == rewardBuyerForbidden) revert RewardBuyForbidden();
+        trustedRouter[router] = trusted;
+        emit TrustedRouterSet(router, trusted);
     }
 }
 
@@ -59,7 +72,7 @@ abstract contract HubV2Base is Test {
         liquidityReceiver = makeAddr("liquidityReceiver");
         verifier = vm.addr(verifierPk);
         usdc = new MockUSDC();
-        hub = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier);
+        hub = new HubV2Harness(address(usdc), treasury, liquidityReceiver, owner, verifier, address(0));
         returnVerifier = vm.addr(returnVerifierPk);
         _installReturnVerifier(hub, returnVerifier);
     }
@@ -79,6 +92,20 @@ abstract contract HubV2Base is Test {
         vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
         vm.prank(owner);
         hub.executeRescue(id);
+    }
+
+    function _setTrustedRouter(address router, bool trusted) internal {
+        vm.prank(owner);
+        hub.testSetTrustedRouter(router, trusted);
+    }
+
+    /// @dev Real 48-hour timelock path (see `PplCurveHubV2OpusR2Test`).
+    function _queueTrustedRouter(address router, bool trusted) internal returns (bytes32 id) {
+        vm.prank(owner);
+        id = hub.queueSetTrustedRouter(router, trusted);
+        vm.warp(vm.getBlockTimestamp() + hub.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        hub.executeSetTrustedRouter(id);
     }
 
     // ---- signing / verification
