@@ -9,8 +9,8 @@ import { PPL_CURVE_HUB_V2_ABI } from "@/lib/sale/v2/abi";
 import {
   PEOPLE_MAINNET_CHAIN_ID,
   createReturnAttestation,
+  getReturnVerifierSigner,
   readHubChainId,
-  readReturnVerifierKey,
 } from "@/lib/sale/v2/return-attestation";
 
 const RATE_NAMESPACE = "sale-return-attestation";
@@ -32,9 +32,9 @@ function hubChain(chainId: number) {
  * is finalized, or has `MIN_RETURN_CONFIRMATIONS` (12) confirmations. Until
  * then the route answers 202 `awaiting_confirmations` and does not sign.
  * The signed struct binds amount, this hub, the seller, the PEOPLE source
- * chain id and the destination hub chain id. The signing key is
- * `SALE_RETURN_VERIFIER_LOCAL_KEY`; if it is unset the route answers 503 and
- * does not sign.
+ * chain id and the destination hub chain id. The signer comes from
+ * `getReturnVerifierSigner`: AWS KMS in production (`SALE_RETURN_VERIFIER_MODE=kms`),
+ * an env key only on Base Sepolia. Anything else answers 503 and does not sign.
  */
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
   const result = await createReturnAttestation({
     txHash: typeof body.txHash === "string" ? body.txHash : "",
     returnId: typeof body.returnId === "string" ? body.returnId : undefined,
-    key: readReturnVerifierKey(),
+    signer: getReturnVerifierSigner(hubChainId),
     burnAddress,
     hubAddress,
     hubChainId,
