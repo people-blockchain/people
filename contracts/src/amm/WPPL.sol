@@ -4,6 +4,10 @@ pragma solidity ^0.8.24;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /// @notice Wrapped native PPL (`appl`) for AMM pairs — Uniswap WETH pattern.
+// TODO(A8): person-to-person transfers of native PPL stay closed until ~1000 verified people. That
+// gate belongs to the PEOPLE chain itself (native coin, chain/ code), not to a Solidity contract.
+// Once it exists, WPPL transfers (and pair swaps) must honour it too, otherwise deposit -> ERC-20
+// transfer -> withdraw moves PPL between people around the native gate.
 contract WPPL is ERC20 {
     event Deposit(address indexed account, uint256 amount);
     event Withdrawal(address indexed account, uint256 amount);

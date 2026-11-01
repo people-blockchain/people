@@ -72,7 +72,7 @@
       },
       {
         "title": "PPL 直接进入你的 PEOPLE 钱包",
-        "body": "你用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE 网络上的地址。"
+        "body": "你用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE 主网上的地址。"
       }
     ],
     "verifyLink": "如何完成验证"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "前 {whitelistDays} 天：仅限已验证的人",
-        "body": "一人一个地址。每笔 {min} 至 {max}，每个地址每天（UTC）最多 {perDay}，两笔购买之间间隔 {cooldown} 秒。"
+        "body": "一人一个地址。每笔 {min} 至 {max}，每个地址在滚动 24 小时内最多 {perDay}，两笔购买之间间隔 {cooldown} 秒。"
       },
       {
         "title": "每笔购买的 {reservePct} 留作储备",
@@ -101,7 +101,7 @@
       },
       {
         "title": "{holdDays} 天后可以卖回",
-        "body": "每笔购买在 {holdDays} 天后可按当时的曲线价格卖回。每天：所有卖家合计最多为储备的 {sellDailyPct}，每个地址最多 {sellPerAddress}。费用 {feeLow}；当天超过储备 {feeThreshold} 的部分收 {feeHigh}。仅限已验证的人。"
+        "body": "每笔购买在 {holdDays} 天后可按当时的曲线价格卖回。任意滚动 24 小时内：所有卖家合计最多为储备的 {sellDailyPct}，每个地址在滚动 24 小时内最多 {sellPerAddress}。费用 {feeLow}；该 24 小时内超过储备 {feeThreshold} 的部分收 {feeHigh}。仅限已验证的人。"
       },
       {
         "title": "任何人都能核查",
@@ -149,7 +149,7 @@
       },
       {
         "q": "今天能卖回多少？",
-        "a": "每笔购买在 {holdDays} 天后可以卖回。每天所有卖家合计最多可卖回储备的 {sellDailyPct}，每个地址最多 {sellPerAddress}。储备少，每日限额就小。今天的数字显示在上面的规则中。"
+        "a": "每笔购买在 {holdDays} 天后可以卖回。任意滚动 24 小时内，所有卖家合计最多可卖回储备的 {sellDailyPct}，每个地址在滚动 24 小时内最多 {sellPerAddress}。储备少，限额就小。当前窗口的数字显示在上面的规则中。"
       },
       {
         "q": "可以退款吗？",
@@ -210,7 +210,7 @@
     "priceAfter": "购买后的价格",
     "estimate": "此为估算。确切数量会在您签名前于链上确认。",
     "limitPerBuy": "每笔 {min}–{max}",
-    "limitPerDay": "每个地址每天（UTC）最多 {amount}",
+    "limitPerDay": "每个地址在滚动 24 小时内最多 {amount}",
     "cooldown": "两次购买之间间隔 {seconds} 秒",
     "overLimit": "单次购买最多 {amount}。",
     "belowMin": "输入金额以查看报价。",
@@ -278,9 +278,9 @@
     "help": "需要帮助？{support}",
     "supportLink": "支持",
     "noWalletHint": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
-    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。每日限额：全体合计为储备的 2%，每个地址 2,000 美元。费用 1.5%；仅对当天卖回中超过储备 1% 的部分收取 3%。曲线关闭时卖回随之关闭。你将在 Base 网络上收到 USDC。",
+    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 在 PEOPLE 主网销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭时卖回随之关闭。你将在 Base 网络上收到 USDC。",
     "feesTitle": "费用与时间",
-    "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%，仅对当天卖回中超过储备 1% 的部分收取 3%。",
+    "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%，仅对该滚动 24 小时卖回中超过储备 1% 的部分收取 3%。",
     "timingBody": "Base 上的购买几秒内即可确认。来自其他网络的付款通常在 1–20 分钟内到账。卖回款项以 Base 网络上的 USDC 支付。",
     "getUsdc": "还没有 USDC？可在交易所购买并提现到 Base 网络，或在下方从其他网络付款。您还需要在 Base 上持有少量 ETH 支付手续费。",
     "glossaryBase": "Base 是基于以太坊构建的低手续费网络。USDC 和 USDT 是与美元挂钩的稳定币。LI.FI 是负责兑换代币并在网络间转移的服务。",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "白名单阶段",
-      "whitelistBody": "前 7 天仅限已验证用户。单笔最低 $10 / 最高 $500 / 每天 $2,000。",
+      "whitelistBody": "前 7 天仅限已验证用户。单笔最低 $10 / 最高 $500 / 滚动 24 小时内 $2,000。",
       "daysLeft": "剩余 {days} 天",
       "openTitle": "公开阶段",
-      "openBody": "对所有人开放。单笔最低 $10 / 最高 $500 / 每天 $2,000。",
+      "openBody": "对所有人开放。单笔最低 $10 / 最高 $500 / 滚动 24 小时内 $2,000。",
       "notOpenTitle": "销售尚未开放",
       "notOpenBody": "合约进入白名单阶段后即可购买。",
       "expiredTitle": "销售已结束",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "购买完成",
-      "credited": "{ppl} PPL 已记入 {address}",
+      "credited": "{ppl} PPL 已记入 PEOPLE 主网的 {address}",
       "tx": "查看交易",
       "unlock": "回售将于 {date} 开放",
       "again": "继续购买 PPL"
@@ -375,6 +375,50 @@
       "body": "兑换已将 {amount} USDC 送到 Base，但 PPL 购买未成功。",
       "topUp": "用 {amount} USDC 购买 PPL",
       "hint": "这将用已收到的 USDC 在 Base 上重试购买。"
+    },
+    "sellBack": {
+      "title": "卖出 PPL",
+      "cta": "卖出 PPL",
+      "available": "可卖出",
+      "unlock": "下一批将于 {date} 解锁",
+      "noneYet": "还没有解锁的批次。每批在购买 30 天后解锁。",
+      "personal": "您剩余的额度",
+      "personalHint": "滚动 24 小时内的 $2,000 还剩 {amount}",
+      "global": "今日剩余储备",
+      "globalHint": "滚动 24 小时储备 2% 上限还剩 {amount}",
+      "fee": "费用",
+      "feeLow": "1.5%",
+      "feeHigh": "3%",
+      "feeMixed": "储备 1% 以内为 1.5%，超出部分为 3%",
+      "receive": "您将收到",
+      "amount": "要卖出的 PPL",
+      "max": "最大",
+      "burning": "正在 PEOPLE 主网销毁 PPL…",
+      "attesting": "正在核对销毁…",
+      "selling": "正在 Base 上支付 USDC…",
+      "done": "卖出完成。USDC 在 Base 上支付。",
+      "payoutNote": "PPL 在 PEOPLE 主网销毁。您在 Base 上收到 USDC。购买可用 USDC 或 USDT。",
+      "error": "卖出没有完成。请再试一次。",
+      "rejected": "您在钱包里拒绝了请求。",
+      "notConfigured": "卖出暂时不可用。",
+      "notEnough": "超过 30 天的 PPL 不够。",
+      "globalCap": "滚动 24 小时储备 2% 的上限已用完。",
+      "personalCap": "这个 24 小时窗口内的 $2,000 额度已用完。",
+      "slippage": "价格波动超过允许范围。请再试一次。",
+      "closed": "卖回已关闭。",
+      "disabled": "卖回已关闭。",
+      "used": "这笔卖出已经支付过。",
+      "expired": "确认已过期。请重新开始。",
+      "badSignature": "确认不匹配。",
+      "belowMin": "金额低于最低卖出额。",
+      "tooMany": "这 24 小时内的卖出次数太多。",
+      "reserve": "储备不够支付这笔金额。",
+      "reverted": "交易被网络回滚。",
+      "switchRejected": "没有切换网络。",
+      "pendingTitle": "待完成的付款",
+      "pendingBody": "有一笔出售正在等待 Base 上的 USDC 付款。请先完成这笔付款，再出售更多 PPL。",
+      "continuePayout": "继续付款",
+      "confirmAnotherSale": "仍然继续出售"
     }
   }
 }

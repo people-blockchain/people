@@ -21,7 +21,7 @@
     "validators": "200M PPL (%20): yıl 1–4 toplam arzın yıllık %6, %5, %5, %4 (60M / 50M / 50M / 40M PPL) artı ağ ücretlerinin %30’u.",
     "team": "Arzın %15'i: lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal aylık kilit açılımı (toplam 24 ay).",
     "treasury": "Yalnızca DAO oylarından sonra; multisig’de.",
-    "sale": "Base üzerindeki herkese açık eğride satılır (PplCurveHub). PPL alımdan hemen sonra hesaba yazılır; transferler ağın tam lansmanıyla açılır.",
+    "sale": "Base üzerindeki herkese açık eğride satılır (PplCurveHub). PPL, PEOPLE mainnet üzerinde alımdan hemen sonra hesaba yazılır; transferler ağın tam lansmanıyla açılır.",
     "liquidity": "Graduation'da PPL/USDC havuzu; LP token'ları 24 ay kilitli."
   },
   "donutTitle": "Dağılım",
@@ -36,7 +36,7 @@
   "salePayTitle": "Nasıl ödeyeceksiniz",
   "salePayBody": "Base'de USDC veya USDT ile. Diğer ağlardan yerleşik otomatik takas (LI.FI) ile: EVM ağları (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana çalışır. TON desteklenmez. Ödemeyi USDC olarak Base ağında alırsınız.",
   "saleDeliveryTitle": "PPL nasıl alınır",
-  "saleDeliveryBody": "PPL hemen adresinize yazılır, ancak ağın tam lansmanına kadar başkalarına gönderemezsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür.",
+  "saleDeliveryBody": "PPL hemen PEOPLE mainnet üzerindeki adresinize yazılır, ancak ağın tam lansmanına kadar başkalarına gönderemezsiniz. Geri satış yalnızca doğrulanmış kullanıcılar için, her alımdan 30 gün sonra mümkündür.",
   "curveTitle": "Bonding eğrisi",
   "curveLead": "Üstel eğri: fiyat PPL başına $0,005'ten başlar ve eğri açıkken her alımla $0,25 tavanına kadar yükselir. Mezuniyet eğriyi $4M toplanınca kapatır.",
   "unsoldTitle": "Satılmayan tokenler",
@@ -99,8 +99,8 @@
     "Eğrida 100.000.000 PPL (arzın %10'u); başlangıç $0,005, üstel artış, yalnızca eğrida $0,25 tavan.",
     "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
     "Toplanan %50 kilitli likidite / %50 proje multisig; LP tokenları 24 ay kilitli.",
-    "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için günde rezervin %2'si ve kişi başına günde $2.000. Ücret %1,5 (günlük geri satışlar rezervin %1'ini aşarsa %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
-    "Alım başına $10–$500; Herhangi bir 24 saatte kişi başına en fazla $2,000; Alımlar arasında 60 sn bekleme"
+    "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her lot, 30 günlük bekleme süresinden sonra satış anındaki eğri fiyatından satılabilir. Toplam sınır: herkes için kayan herhangi bir 24 saatte rezervin %2'si ve kişi başına kayan 24 saatte $2.000. Ücret %1,5 (o 24 saatteki geri satışlarda yalnızca rezervin %1'ini aşan kısım için %3). Graduation sonrasında kapanır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "Alım başına $10–$500; Kayan 24 saatte kişi başına en fazla $2,000; Alımlar arasında 60 sn bekleme"
   ],
   "curveTableSold": "% satıldı",
   "curveTablePrice": "Spot fiyat (USDC)",

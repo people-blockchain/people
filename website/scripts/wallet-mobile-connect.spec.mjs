@@ -22,7 +22,7 @@ async function open(browser, vp) {
   });
   const page = await context.newPage();
   await page.goto(`${BASE}/login`, { waitUntil: "domcontentloaded" });
-  await expect(page.getByTestId("wallet-external-connect")).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole("main").getByTestId("wallet-external-connect")).toBeVisible({ timeout: 15000 });
   return { context, page };
 }
 

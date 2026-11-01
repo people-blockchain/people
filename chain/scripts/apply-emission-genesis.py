@@ -110,6 +110,20 @@ def continuous_vesting_account(
     }
 
 
+def multisig_pubkey(pubkeys_hex: list[str], threshold: int, key_type: str) -> dict:
+    return {
+        "@type": "/cosmos.crypto.multisig.LegacyAminoPubKey",
+        "threshold": threshold,
+        "public_keys": [
+            {
+                "@type": key_type,
+                "key": base64.b64encode(bytes.fromhex(hexkey)).decode(),
+            }
+            for hexkey in pubkeys_hex
+        ],
+    }
+
+
 def multisig_pubkey_account(
     address: str,
     account_number: int,
@@ -122,20 +136,45 @@ def multisig_pubkey_account(
     return {
         "@type": "/cosmos.auth.v1beta1.BaseAccount",
         "address": address,
-        "pub_key": {
-            "@type": "/cosmos.crypto.multisig.LegacyAminoPubKey",
-            "threshold": threshold,
-            "public_keys": [
-                {
-                    "@type": key_type,
-                    "key": base64.b64encode(bytes.fromhex(hexkey)).decode(),
-                }
-                for hexkey in pubkeys_hex
-            ],
-        },
+        "pub_key": multisig_pubkey(pubkeys_hex, threshold, key_type),
         "account_number": str(account_number),
         "sequence": "0",
     }
+
+
+def multisig_vesting_account(
+    address: str,
+    account_number: int,
+    pubkeys_hex: list[str],
+    threshold: int,
+    key_type: str,
+    locked_appl: str,
+    start_time: int,
+    end_time: int,
+) -> dict:
+    """A11: the treasury multisig as a ContinuousVestingAccount with its 2-of-3 pub_key already
+    known. Only `locked_appl` (the treasury bucket) vests; anything else on the account (the
+    liquidity bucket, later fee income) is spendable at once."""
+    acc = continuous_vesting_account(address, account_number, locked_appl, start_time, end_time)
+    acc["base_vesting_account"]["base_account"]["pub_key"] = multisig_pubkey(pubkeys_hex, threshold, key_type)
+    return acc
+
+
+def cliff_linear_schedule(bucket: dict, genesis_time: int) -> tuple[int, int, int]:
+    """A11 (owner decision): (locked_appl, start_time, end_time) for a ContinuousVestingAccount.
+    `vesting_upfront_pct` is spendable at genesis; the rest vests linearly from
+    genesis + `vesting_cliff_months` over `vesting_linear_months`. The SDK vests nothing until
+    start_time, so start_time = end of the cliff and nothing is spendable before it."""
+    total = int(bucket["amount_appl"])
+    upfront_pct = int(bucket["vesting_upfront_pct"])
+    if not 0 <= upfront_pct <= 100:
+        raise ValueError(f"{bucket['id']}: vesting_upfront_pct out of range")
+    linear_months = int(bucket["vesting_linear_months"])
+    if linear_months <= 0:
+        raise ValueError(f"{bucket['id']}: vesting_linear_months must be positive")
+    locked = total * (100 - upfront_pct) // 100
+    start = genesis_time + int(bucket["vesting_cliff_months"]) * SECONDS_PER_MONTH
+    return locked, start, start + linear_months * SECONDS_PER_MONTH
 
 
 def account_address(acc: dict) -> str | None:
@@ -275,35 +314,39 @@ def apply_emission(path: Path, cfg: dict) -> None:
             next_num += 1
             existing_addrs.add(addr)
 
-    # M11-2 (owner-approved): treasury + liquidity share one 2-of-3 multisig BaseAccount,
-    # spendable from genesis since its pub_key (not just address) is already known.
+    # M11-2: treasury + liquidity share one 2-of-3 multisig account whose pub_key (not just
+    # address) is known at genesis. A11 (owner decision): it is a ContinuousVestingAccount locking
+    # only the treasury bucket (0% at genesis, 6-month cliff, 18 months linear); the liquidity
+    # bucket on the same address stays spendable from genesis (TODO(owner): liquidity schedule).
     multisig_cfg = cfg["treasury_multisig"]
     multisig_addr = multisig_cfg["address"]
-    multisig_total = int(buckets["treasury"]["amount_appl"]) + int(buckets["liquidity"]["amount_appl"])
+    treasury = buckets["treasury"]
+    multisig_total = int(treasury["amount_appl"]) + int(buckets["liquidity"]["amount_appl"])
+    treasury_locked, treasury_start, treasury_end = cliff_linear_schedule(treasury, start_time)
     if multisig_addr not in existing_addrs:
         new_accounts.append(
-            multisig_pubkey_account(
+            multisig_vesting_account(
                 multisig_addr,
                 next_num,
                 multisig_cfg["public_keys_secp256k1_hex"],
                 multisig_cfg["threshold"],
                 multisig_cfg.get("public_key_type", "/cosmos.crypto.secp256k1.PubKey"),
+                str(treasury_locked),
+                treasury_start,
+                treasury_end,
             )
         )
         next_num += 1
         existing_addrs.add(multisig_addr)
     add_balance(multisig_addr, str(multisig_total))
 
-    # M11-2 (owner-approved): team vesting — 10% unlocked at genesis, 90% linear over 24 months.
+    # A11 (owner decision): team vesting — 0% at genesis, 6-month cliff, then 18 months linear.
     team = buckets["team"]
     team_total = int(team["amount_appl"])
-    team_cliff_pct = int(team.get("vesting_cliff_pct", 0))
-    team_months = int(team.get("vesting_linear_months", 0))
-    team_locked = team_total * (100 - team_cliff_pct) // 100
-    team_end = start_time + team_months * SECONDS_PER_MONTH
+    team_locked, team_start, team_end = cliff_linear_schedule(team, start_time)
     if team["account"] not in existing_addrs:
         new_accounts.append(
-            continuous_vesting_account(team["account"], next_num, str(team_locked), start_time, team_end)
+            continuous_vesting_account(team["account"], next_num, str(team_locked), team_start, team_end)
         )
         next_num += 1
         existing_addrs.add(team["account"])

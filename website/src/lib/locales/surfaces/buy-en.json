@@ -72,7 +72,7 @@
       },
       {
         "title": "PPL straight to your PEOPLE wallet",
-        "body": "You pay in USDC or USDT, and PPL is credited instantly to your address on the PEOPLE network."
+        "body": "You pay in USDC or USDT, and PPL is credited instantly to your address on PEOPLE mainnet."
       }
     ],
     "verifyLink": "How to get verified"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "First {whitelistDays} days: verified people only",
-        "body": "One person, one address. From {min} to {max} per purchase, up to {perDay} per address per day (UTC), and a {cooldown}-second pause between purchases."
+        "body": "One person, one address. From {min} to {max} per purchase, up to {perDay} per address in a rolling 24-hour window, and a {cooldown}-second pause between purchases."
       },
       {
         "title": "{reservePct} of every purchase stays as a reserve",
@@ -101,7 +101,7 @@
       },
       {
         "title": "Sell back after {holdDays} days",
-        "body": "Each purchase can be sold back {holdDays} days after it was made, at the curve price at that moment. Per day: up to {sellDailyPct} of the reserve for all sellers together and up to {sellPerAddress} per address. Fee {feeLow}; {feeHigh} on the part above {feeThreshold} of the reserve that day. Verified people only."
+        "body": "Each purchase can be sold back {holdDays} days after it was made, at the curve price at that moment. Up to {sellDailyPct} of the reserve in any rolling 24 hours for all sellers together, and up to {sellPerAddress} per address in a rolling 24-hour window. Fee {feeLow}; {feeHigh} on the part above {feeThreshold} of the reserve in that rolling 24 hours. Verified people only."
       },
       {
         "title": "Open for anyone to check",
@@ -141,7 +141,7 @@
       },
       {
         "q": "When can I send PPL to other people?",
-        "a": "PPL is credited on the PEOPLE network right after your purchase. At first the network only receives PPL: transfers between participants open later, once there are about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above."
+        "a": "PPL is credited on PEOPLE mainnet right after your purchase. At first the network only receives PPL: transfers between participants open later, once there are about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above."
       },
       {
         "q": "Which networks can I pay from?",
@@ -149,7 +149,7 @@
       },
       {
         "q": "How much can be sold back today?",
-        "a": "Each purchase can be sold back {holdDays} days after it was made. Each day, up to {sellDailyPct} of the reserve can be sold back by all sellers together, and up to {sellPerAddress} per address. A small reserve means a small daily limit. Today's figure is shown in the rules above."
+        "a": "Each purchase can be sold back {holdDays} days after it was made. In any rolling 24 hours, up to {sellDailyPct} of the reserve can be sold back by all sellers together, and up to {sellPerAddress} per address in a rolling 24-hour window. A small reserve means a small limit. The figure for the current window is shown in the rules above."
       },
       {
         "q": "Can I get a refund?",
@@ -210,7 +210,7 @@
     "priceAfter": "Price after your purchase",
     "estimate": "Estimate. The exact amount is confirmed on-chain before you sign.",
     "limitPerBuy": "{min}–{max} per purchase",
-    "limitPerDay": "Up to {amount} per address per day (UTC)",
+    "limitPerDay": "Up to {amount} per address in a rolling 24-hour window",
     "cooldown": "{seconds} s pause between purchases",
     "overLimit": "Maximum {amount} in one purchase.",
     "belowMin": "Enter an amount to see your quote.",
@@ -278,9 +278,9 @@
     "help": "Need help? {support}",
     "supportLink": "Support",
     "noWalletHint": "No wallet? Choose Google or email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
-    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Daily limits: 2% of the reserve for everyone together and $2,000 per address. Fee: 1.5%; 3% only on the part of the day's sell-backs above 1% of the reserve. Closes when the curve closes. Payouts in USDC on Base.",
+    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL is burned on PEOPLE mainnet. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Closes when the curve closes. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
-    "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, and 3% only on the part of the day's sell-backs above 1% of the reserve.",
+    "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, and 3% only on the part of sell-backs in the rolling 24 hours above 1% of the reserve.",
     "timingBody": "A purchase on Base is confirmed within seconds. Payments from other networks usually arrive within 1–20 minutes. Sell-back payouts are made in USDC on Base.",
     "getUsdc": "No USDC yet? Buy it on an exchange and withdraw it to the Base network, or pay from another network below. You also need a little ETH on Base for fees.",
     "glossaryBase": "Base is a low-fee network built on Ethereum. USDC and USDT are stablecoins pegged to the US dollar. LI.FI is the service that swaps tokens and moves them between networks.",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Whitelist phase",
-      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 per day.",
+      "whitelistBody": "First 7 days: verified people only. Min $10 / max $500 per buy / $2,000 in a rolling 24-hour window.",
       "daysLeft": "{days} days left",
       "openTitle": "Public phase",
-      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 per day.",
+      "openBody": "Open to everyone. Min $10 / max $500 per buy / $2,000 in a rolling 24-hour window.",
       "notOpenTitle": "Sale not open yet",
       "notOpenBody": "Purchases open when the contract enters the whitelist phase.",
       "expiredTitle": "Sale ended",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "Purchase complete",
-      "credited": "{ppl} PPL credited to {address}",
+      "credited": "{ppl} PPL credited on PEOPLE mainnet to {address}",
       "tx": "View transaction",
       "unlock": "Sell-back unlocks on {date}",
       "again": "Buy more PPL"
@@ -375,6 +375,50 @@
       "body": "Your swap delivered {amount} USDC on Base, but the PPL purchase did not go through.",
       "topUp": "Buy PPL with {amount} USDC",
       "hint": "This retries the purchase on Base with the USDC you received."
+    },
+    "sellBack": {
+      "title": "Sell PPL",
+      "cta": "Sell PPL",
+      "available": "Available to sell",
+      "unlock": "Next lot unlocks on {date}",
+      "noneYet": "Nothing is unlocked yet. Each lot unlocks 30 days after the purchase.",
+      "personal": "Your limit left",
+      "personalHint": "{amount} left of $2,000 in a rolling 24-hour window",
+      "global": "Reserve left today",
+      "globalHint": "{amount} left of the rolling 24-hour 2% reserve cap",
+      "fee": "Fee",
+      "feeLow": "1.5%",
+      "feeHigh": "3%",
+      "feeMixed": "1.5% up to 1% of the reserve, then 3%",
+      "receive": "You receive",
+      "amount": "PPL to sell",
+      "max": "Max",
+      "burning": "Burning PPL on PEOPLE mainnet…",
+      "attesting": "Checking the burn…",
+      "selling": "Paying out USDC on Base…",
+      "done": "Sell complete. USDC is paid on Base.",
+      "payoutNote": "PPL is burned on PEOPLE mainnet. You receive USDC on Base. Purchases can be paid in USDC or USDT.",
+      "error": "Selling PPL did not go through. Try again.",
+      "rejected": "You rejected the request in your wallet.",
+      "notConfigured": "Selling PPL is not available yet.",
+      "notEnough": "Not enough PPL is past the 30-day hold.",
+      "globalCap": "The rolling 24-hour 2% reserve cap is used up.",
+      "personalCap": "Your $2,000 limit for this 24-hour window is used up.",
+      "slippage": "The price moved past your limit. Try again.",
+      "closed": "Sell-back is closed.",
+      "disabled": "Sell-back is turned off.",
+      "used": "This sale of PPL was already paid out.",
+      "expired": "The confirmation expired. Start again.",
+      "badSignature": "The confirmation did not match.",
+      "belowMin": "This amount is below the minimum you can sell.",
+      "tooMany": "Too many sales in this 24-hour window.",
+      "reserve": "The reserve cannot cover this payout.",
+      "reverted": "The transaction was reverted.",
+      "switchRejected": "The network was not switched.",
+      "pendingTitle": "Pending payouts",
+      "pendingBody": "A sale is waiting for its USDC payout on Base. Finish that payout before selling more PPL.",
+      "continuePayout": "Continue payout",
+      "confirmAnotherSale": "Sell more anyway"
     }
   }
 }

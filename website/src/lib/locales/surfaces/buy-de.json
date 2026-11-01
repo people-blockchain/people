@@ -72,7 +72,7 @@
       },
       {
         "title": "PPL direkt in Ihre PEOPLE-Wallet",
-        "body": "Sie zahlen in USDC oder USDT, und PPL werden sofort Ihrer Adresse im PEOPLE-Netzwerk gutgeschrieben."
+        "body": "Sie zahlen in USDC oder USDT, und PPL werden sofort Ihrer Adresse im PEOPLE-Mainnet gutgeschrieben."
       }
     ],
     "verifyLink": "So verifizieren Sie sich"
@@ -93,7 +93,7 @@
     "items": [
       {
         "title": "Erste {whitelistDays} Tage: nur verifizierte Menschen",
-        "body": "Eine Person, eine Adresse. {min} bis {max} pro Kauf, bis zu {perDay} pro Adresse und Tag (UTC) und {cooldown} Sekunden Pause zwischen zwei Käufen."
+        "body": "Eine Person, eine Adresse. {min} bis {max} pro Kauf, bis zu {perDay} pro Adresse in einem gleitenden 24-Stunden-Fenster und {cooldown} Sekunden Pause zwischen zwei Käufen."
       },
       {
         "title": "{reservePct} jedes Kaufs bleiben als Reserve",
@@ -101,7 +101,7 @@
       },
       {
         "title": "Rückverkauf nach {holdDays} Tagen",
-        "body": "Jeder Kauf kann {holdDays} Tage danach zurückverkauft werden, zum Kurvenpreis in diesem Moment. Pro Tag: bis zu {sellDailyPct} der Reserve für alle Verkäufer zusammen und bis zu {sellPerAddress} pro Adresse. Gebühr {feeLow}; {feeHigh} auf den Teil über {feeThreshold} der Reserve an diesem Tag. Nur für verifizierte Menschen."
+        "body": "Jeder Kauf kann {holdDays} Tage danach zurückverkauft werden, zum Kurvenpreis in diesem Moment. Bis zu {sellDailyPct} der Reserve in jedem gleitenden 24-Stunden-Fenster für alle Verkäufer zusammen und bis zu {sellPerAddress} pro Adresse in einem gleitenden 24-Stunden-Fenster. Gebühr {feeLow}; {feeHigh} auf den Teil über {feeThreshold} der Reserve in diesen 24 Stunden. Nur für verifizierte Menschen."
       },
       {
         "title": "Für alle überprüfbar",
@@ -141,7 +141,7 @@
       },
       {
         "q": "Wann kann ich PPL an andere Menschen senden?",
-        "a": "PPL werden direkt nach dem Kauf im PEOPLE-Netzwerk gutgeschrieben. Zunächst nimmt das Netzwerk nur PPL an: Überweisungen zwischen Teilnehmern öffnen später, sobald es etwa 1.000 verifizierte Teilnehmer gibt. Bis dahin können Sie PPL nach den Regeln oben an die Reserve zurückverkaufen."
+        "a": "PPL werden direkt nach dem Kauf im PEOPLE-Mainnet gutgeschrieben. Zunächst nimmt das Netzwerk nur PPL an: Überweisungen zwischen Teilnehmern öffnen später, sobald es etwa 1.000 verifizierte Teilnehmer gibt. Bis dahin können Sie PPL nach den Regeln oben an die Reserve zurückverkaufen."
       },
       {
         "q": "Aus welchen Netzwerken kann ich zahlen?",
@@ -149,7 +149,7 @@
       },
       {
         "q": "Wie viel kann man heute zurückverkaufen?",
-        "a": "Jeder Kauf kann {holdDays} Tage danach zurückverkauft werden. Pro Tag können alle Verkäufer zusammen bis zu {sellDailyPct} der Reserve zurückverkaufen, jede Adresse bis zu {sellPerAddress}. Kleine Reserve, kleines Tageslimit. Die Zahl für heute steht oben bei den Regeln."
+        "a": "Jeder Kauf kann {holdDays} Tage danach zurückverkauft werden. In jedem gleitenden 24-Stunden-Fenster können alle Verkäufer zusammen bis zu {sellDailyPct} der Reserve zurückverkaufen, jede Adresse bis zu {sellPerAddress} in einem gleitenden 24-Stunden-Fenster. Kleine Reserve, kleines Limit. Die Zahl des aktuellen Fensters steht oben bei den Regeln."
       },
       {
         "q": "Kann ich mein Geld zurückbekommen?",
@@ -210,7 +210,7 @@
     "priceAfter": "Preis nach Ihrem Kauf",
     "estimate": "Schätzung. Die genaue Menge wird vor Ihrer Signatur on-chain bestätigt.",
     "limitPerBuy": "{min}–{max} pro Kauf",
-    "limitPerDay": "Bis zu {amount} pro Adresse und Tag (UTC)",
+    "limitPerDay": "Bis zu {amount} pro Adresse in einem gleitenden 24-Stunden-Fenster",
     "cooldown": "{seconds} s Pause zwischen Käufen",
     "overLimit": "Maximal {amount} in einem Kauf.",
     "belowMin": "Betrag eingeben, um ein Angebot zu sehen.",
@@ -278,9 +278,9 @@
     "help": "Brauchen Sie Hilfe? {support}",
     "supportLink": "Hilfe",
     "noWalletHint": "Keine Wallet? Wählen Sie Google oder E-Mail — dann wird eine PEOPLE Wallet für Sie erstellt. Zum Bezahlen brauchen Sie USDC auf Base in dieser oder in einer verbundenen Wallet.",
-    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jeder Kauf kann 30 Tage danach zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Tageslimits: 2 % der Reserve für alle zusammen und 2.000 $ pro Adresse. Gebühr 1,5 %; 3 % nur auf den Teil der Rückverkäufe des Tages über 1 % der Reserve. Endet, wenn die Kurve schließt. Auszahlung in USDC auf Base.",
+    "sellBackTerms": "Rückverkauf an die Reserve nur für verifizierte Nutzer. Jeder Kauf kann 30 Tage danach zum Kurvenpreis des Verkaufszeitpunkts zurückverkauft werden. Limits: 2 % der Reserve in jedem gleitenden 24-Stunden-Fenster für alle zusammen und 2.000 $ pro Adresse in einem gleitenden 24-Stunden-Fenster. PPL wird im PEOPLE-Mainnet verbrannt. Gebühr 1,5 %; 3 % nur auf den Teil der Rückverkäufe dieser 24 Stunden über 1 % der Reserve. Endet, wenn die Kurve schließt. Auszahlung in USDC auf Base.",
     "feesTitle": "Gebühren und Dauer",
-    "feesBody": "Gebühren: die Netzwerkgebühr von Base (Gas), bezahlt in ETH — meist etwa 0,01 $; die Swap- oder Bridge-Gebühr von LI.FI — wird im Widget vor der Bestätigung angezeigt; die Gebühr für den Rückverkauf an die Reserve — 1,5 %, und 3 % nur auf den Teil der Rückverkäufe des Tages über 1 % der Reserve.",
+    "feesBody": "Gebühren: die Netzwerkgebühr von Base (Gas), bezahlt in ETH — meist etwa 0,01 $; die Swap- oder Bridge-Gebühr von LI.FI — wird im Widget vor der Bestätigung angezeigt; die Gebühr für den Rückverkauf an die Reserve — 1,5 %, und 3 % nur auf den Teil der Rückverkäufe im gleitenden 24-Stunden-Fenster über 1 % der Reserve.",
     "timingBody": "Ein Kauf auf Base wird in Sekunden bestätigt. Zahlungen aus anderen Netzwerken kommen meist innerhalb von 1–20 Minuten an. Rückverkäufe werden in USDC auf Base ausgezahlt.",
     "getUsdc": "Noch keine USDC? Kaufen Sie sie an einer Börse und heben Sie sie ins Base-Netzwerk ab, oder zahlen Sie unten aus einem anderen Netzwerk. Für Gebühren brauchen Sie außerdem etwas ETH auf Base.",
     "glossaryBase": "Base ist ein Netzwerk mit niedrigen Gebühren auf Basis von Ethereum. USDC und USDT sind an den US-Dollar gekoppelte Stablecoins. LI.FI ist der Dienst, der Token tauscht und zwischen Netzwerken überträgt.",
@@ -302,10 +302,10 @@
   "v2": {
     "banner": {
       "whitelistTitle": "Whitelist-Phase",
-      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "whitelistBody": "Erste 7 Tage: nur verifizierte Personen. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ in einem gleitenden 24-Stunden-Fenster.",
       "daysLeft": "Noch {days} Tage",
       "openTitle": "Öffentliche Phase",
-      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ pro Tag.",
+      "openBody": "Offen für alle. Mindestens 10 $ / maximal 500 $ pro Kauf / 2.000 $ in einem gleitenden 24-Stunden-Fenster.",
       "notOpenTitle": "Verkauf noch nicht geöffnet",
       "notOpenBody": "Käufe öffnen, sobald der Vertrag in die Whitelist-Phase eintritt.",
       "expiredTitle": "Verkauf beendet",
@@ -365,7 +365,7 @@
     },
     "success": {
       "title": "Kauf abgeschlossen",
-      "credited": "{ppl} PPL gutgeschrieben an {address}",
+      "credited": "{ppl} PPL im PEOPLE-Mainnet gutgeschrieben an {address}",
       "tx": "Transaktion ansehen",
       "unlock": "Rückverkauf öffnet am {date}",
       "again": "Mehr PPL kaufen"
@@ -375,6 +375,50 @@
       "body": "Der Tausch hat {amount} USDC auf Base geliefert, aber der PPL-Kauf wurde nicht abgeschlossen.",
       "topUp": "PPL mit {amount} USDC kaufen",
       "hint": "Dies wiederholt den Kauf auf Base mit den erhaltenen USDC."
+    },
+    "sellBack": {
+      "title": "PPL verkaufen",
+      "cta": "PPL verkaufen",
+      "available": "Verkaufbar",
+      "unlock": "Das nächste Los wird am {date} frei",
+      "noneYet": "Noch ist nichts frei. Jedes Los öffnet 30 Tage nach dem Kauf.",
+      "personal": "Ihr Restlimit",
+      "personalHint": "Noch {amount} von 2.000 $ in einem gleitenden 24-Stunden-Fenster",
+      "global": "Reserve heute",
+      "globalHint": "Noch {amount} vom Limit von 2 % der Reserve im gleitenden 24-Stunden-Fenster",
+      "fee": "Gebühr",
+      "feeLow": "1,5 %",
+      "feeHigh": "3 %",
+      "feeMixed": "1,5 % bis 1 % der Reserve, danach 3 %",
+      "receive": "Sie erhalten",
+      "amount": "PPL verkaufen",
+      "max": "Maximum",
+      "burning": "PPL wird im PEOPLE-Mainnet verbrannt…",
+      "attesting": "Verbrennung wird geprüft…",
+      "selling": "USDC wird auf Base ausgezahlt…",
+      "done": "Verkauf abgeschlossen. USDC wird auf Base ausgezahlt.",
+      "payoutNote": "PPL wird im PEOPLE-Mainnet verbrannt. Sie erhalten USDC auf Base. Der Kauf läuft in USDC oder USDT.",
+      "error": "Der Verkauf ist fehlgeschlagen. Bitte erneut versuchen.",
+      "rejected": "Sie haben die Anfrage in der Wallet abgelehnt.",
+      "notConfigured": "Der Verkauf ist noch nicht verfügbar.",
+      "notEnough": "Nicht genug PPL ist älter als 30 Tage.",
+      "globalCap": "Das Limit von 2 % der Reserve im gleitenden 24-Stunden-Fenster ist aufgebraucht.",
+      "personalCap": "Ihr Limit von 2.000 $ in diesem 24-Stunden-Fenster ist aufgebraucht.",
+      "slippage": "Der Preis hat sich zu stark bewegt. Bitte erneut versuchen.",
+      "closed": "Der Rückverkauf ist geschlossen.",
+      "disabled": "Der Rückverkauf ist ausgeschaltet.",
+      "used": "Dieser Verkauf wurde schon ausgezahlt.",
+      "expired": "Die Bestätigung ist abgelaufen. Bitte neu starten.",
+      "badSignature": "Die Bestätigung stimmt nicht.",
+      "belowMin": "Der Betrag liegt unter dem Verkaufsminimum.",
+      "tooMany": "Zu viele Verkäufe in diesem 24-Stunden-Fenster.",
+      "reserve": "Die Reserve deckt diese Auszahlung nicht.",
+      "reverted": "Die Transaktion wurde zurückgesetzt.",
+      "switchRejected": "Das Netzwerk wurde nicht gewechselt.",
+      "pendingTitle": "Ausstehende Auszahlungen",
+      "pendingBody": "Ein Verkauf wartet auf die USDC-Auszahlung auf Base. Schließe diese Auszahlung ab, bevor du mehr PPL verkaufst.",
+      "continuePayout": "Auszahlung fortsetzen",
+      "confirmAnotherSale": "Trotzdem mehr verkaufen"
     }
   }
 }

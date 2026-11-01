@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): años 1–4 pagan 6%, 5%, 5%, 4% del supply total al año (60M / 50M / 50M / 40M PPL) más 30% de las comisiones de red.",
     "team": "15 % del suministro: 0 % en el lanzamiento, cliff de 6 meses y luego 18 meses de desbloqueo mensual lineal (24 meses en total).",
     "treasury": "Solo tras votos DAO; en multisig.",
-    "sale": "Se vende en la curva pública en Base (PplCurveHub). Los PPL se acreditan justo después de la compra; las transferencias se abren con el lanzamiento completo de la red.",
+    "sale": "Se vende en la curva pública en Base (PplCurveHub). Los PPL se acreditan en PEOPLE mainnet justo después de la compra; las transferencias se abren con el lanzamiento completo de la red.",
     "liquidity": "Pool PPL/USDC en la graduación; tokens LP bloqueados 24 meses."
   },
   "donutTitle": "Asignación",
@@ -36,7 +36,7 @@
   "salePayTitle": "Cómo pagarías",
   "salePayBody": "En Base, con USDC o USDT. Desde otras redes, mediante el intercambio automático integrado (LI.FI): funcionan las redes EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche y otras), Tron y Solana. TON no es compatible. Recibes el dinero en USDC en la red Base.",
   "saleDeliveryTitle": "Cómo recibes PPL",
-  "saleDeliveryBody": "Los PPL se acreditan en tu dirección al instante, pero no puedes enviarlos a otras personas hasta el lanzamiento completo de la red. Solo los usuarios verificados pueden venderlos de vuelta, 30 días después de cada compra.",
+  "saleDeliveryBody": "Los PPL se acreditan en tu dirección de PEOPLE mainnet al instante, pero no puedes enviarlos a otras personas hasta el lanzamiento completo de la red. Solo los usuarios verificados pueden venderlos de vuelta, 30 días después de cada compra.",
   "curveTitle": "Curva de bonding",
   "curveLead": "Curva exponencial: el precio empieza en $0,005 por PPL y sube con cada compra, hasta un tope de $0,25 mientras la curva esté abierta. La graduación cierra la curva al reunir $4M.",
   "unsoldTitle": "Tokens no vendidos",
@@ -99,8 +99,8 @@
     "100.000.000 PPL en la curva (10% de la oferta); inicio $0,005, subida exponencial, tope $0,25 solo en la curva.",
     "La venta dura hasta agotarse (la curva se cierra al reunir $4M) o 24 meses desde su apertura, lo que ocurra primero. No hay prórrogas. Los PPL no vendidos pasan al Community Pool. No hay reembolsos: cada compra es definitiva.",
     "Recaudación 50% liquidez bloqueada / 50% multisig del proyecto; tokens LP bloqueados 24 meses.",
-    "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva al día para todos y $2.000 al día por persona. Comisión del 1,5 % (3 % si las ventas del día superan el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
-    "$10–$500 por compra; Hasta $2,000 por persona en cualquier periodo de 24 horas; Pausa de 60 s entre compras"
+    "Venta de vuelta a la reserva solo para usuarios verificados. Cada lote puede venderse tras 30 días de retención, al precio de la curva en el momento de la venta. Límite total: 2 % de la reserva en cualquier ventana móvil de 24 horas para todos y $2.000 por persona en una ventana móvil de 24 horas. Comisión del 1,5 % (3 % solo sobre la parte de las ventas de esas 24 horas que supere el 1 % de la reserva). Se cierra tras la graduación. Recibes el dinero en USDC en la red Base.",
+    "$10–$500 por compra; Hasta $2,000 por persona en una ventana móvil de 24 horas; Pausa de 60 s entre compras"
   ],
   "curveTableSold": "% vendido",
   "curveTablePrice": "Precio spot (USDC)",
