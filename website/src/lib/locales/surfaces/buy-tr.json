@@ -118,7 +118,7 @@
     "explorerLink": "Basescan'de aç",
     "copy": "Kopyala",
     "copied": "Kopyalandı",
-    "auditLine": "Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (incelemeyi proje ekibi yürüttü). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.",
+    "auditLine": "Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (incelemeyi proje ekibi yürüttü). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.",
     "reviewReports": "İnceleme raporları: {links}",
     "auditBounty": "Bir güvenlik açığı mı buldunuz? Herhangi bir sayfadaki hata düğmesiyle bildirin.",
     "detailsToggle": "Ayrıntılar",

@@ -3,7 +3,6 @@ import { createPublicClient, getAddress, http, isAddress, type Address, type Hex
 import { base, baseSepolia } from "viem/chains";
 
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
-import { readEvmRpcUrl } from "@/lib/evm/config";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { PPL_CURVE_HUB_V2_ABI } from "@/lib/sale/v2/abi";
 import {
@@ -58,7 +57,11 @@ export async function POST(request: Request) {
   const hubAddress = process.env.NEXT_PUBLIC_PPL_V2_HUB_ADDRESS?.trim();
   const burnAddress = (process.env.SALE_RETURN_BURN_ADDRESS ?? process.env.NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS)?.trim();
   const hubChainId = readHubChainId(process.env.NEXT_PUBLIC_PPL_V2_CHAIN_ID);
-  const peopleRpc = readEvmRpcUrl();
+  // Sell-back proofs must come from the PEOPLE mainnet only. The site's general RPC is the testnet,
+  // where PPL are free, and the same contract address can exist there; so this route reads a
+  // dedicated mainnet RPC and refuses to sign unless that RPC really is chain PEOPLE_MAINNET_CHAIN_ID.
+  const peopleRpc = process.env.PEOPLE_MAINNET_RPC_URL?.trim();
+  if (!peopleRpc) return errorResponse("not_configured", 503);
   const people = createPublicClient({
     chain: {
       id: PEOPLE_MAINNET_CHAIN_ID,
@@ -72,6 +75,12 @@ export async function POST(request: Request) {
     chain: hubChain(hubChainId),
     transport: http(undefined, { timeout: 12_000 }),
   });
+
+  try {
+    if ((await people.getChainId()) !== PEOPLE_MAINNET_CHAIN_ID) return errorResponse("not_configured", 503);
+  } catch {
+    return errorResponse("onchain_unavailable", 503);
+  }
 
   const result = await createReturnAttestation({
     txHash: typeof body.txHash === "string" ? body.txHash : "",

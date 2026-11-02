@@ -186,8 +186,8 @@ test("/buy UI omits dev-facing stats and form disclaimers", () => {
   assert.equal(en.form.disabledNote, undefined);
 });
 
-test("/buy AI review copy names exactly the three models and never says audit", () => {
-  const expected = ["Claude Opus 5.5", "GPT Astra", "Fable 5.1"];
+test("/buy AI review copy names exactly the four models and never says audit", () => {
+  const expected = ["Claude Opus 5.5", "GPT Astra", "Fable 5.1", "Gemini Argon"];
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).rules;
   for (const model of expected) assert.match(en.auditLine, new RegExp(model.replace(".", "\\.")));
   assert.match(en.auditLine, /not a security audit/);

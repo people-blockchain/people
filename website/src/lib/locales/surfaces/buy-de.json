@@ -118,7 +118,7 @@
     "explorerLink": "Auf Basescan öffnen",
     "copy": "Kopieren",
     "copied": "Kopiert",
-    "auditLine": "Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1 (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.",
+    "auditLine": "Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.",
     "reviewReports": "Prüfberichte: {links}",
     "auditBounty": "Eine Schwachstelle gefunden? Melden Sie sie über den Bug-Button auf jeder Seite.",
     "detailsToggle": "Details",

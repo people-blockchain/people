@@ -161,7 +161,7 @@ Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
 
 ## 9. Sicurezza
 
-- Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno. Bug bounty on every page.
+- Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno. Bug bounty on every page.
 - **Multisig.** Tesoreria delle commissioni di rete: un multisig 2 su 3 sulla rete PEOPLE. Proventi della vendita: il multisig del progetto su Base; indirizzo e soglia di firme vengono pubblicati prima dell’apertura della vendita.
 - **Indirizzi pubblicati.** Il contratto di vendita e il multisig ricevente vengono pubblicati prima dell’apertura della vendita; i contratti di vesting e di blocco LP al lancio completo della rete. Nessun segnaposto.
 - **Difesa dai bot.** Verifica umana, limiti per dispositivo e per IP, limiti di punti giornalieri e clawback dei bot.
@@ -176,7 +176,7 @@ Nessuna data è promessa. Ogni fase inizia quando il suo gate è soddisfatto.
 - **Testnet non è mainnet.** I token e i saldi testnet non hanno valore. I punti sono un record di attività, non una garanzia di pagamento.
 - **Tutto è preliminare.** I numeri, gli orari e le regole possono cambiare prima del mainnet e sono soggetti a governance comunitaria.
 - **Rischio tecnologico.** Il software può avere bug. Un audit riduce il rischio; non lo elimina.
-- **Regolazione.** Le regole variano per paese e possono cambiare. I parametri di vendita PPL sono su `/buy` (curva da **$0.005** per PPL); gli acquisti restano disattivati finché l'hub non è deployato. Nessun KYC né controlli di eleggibilità su questo sito.
+- **Regolazione.** Le regole variano per paese e possono cambiare. I parametri di vendita PPL sono su `/buy` (curva da **$0.005** per PPL); gli acquisti restano disattivati finché l'hub non è deployato. Per acquistare serve una verifica umana gratuita e una tantum (Telegram o Human Passport); non vengono raccolti documenti di identità (KYC).
 - **Fai la tua ricerca.** Questo litepaper è informazione, non consiglio finanziario, legale o fiscale.
 
 ---
@@ -219,8 +219,8 @@ Solo fatti pubblici verificabili su altre reti. Fonti di seguito.
 - La quota comunitaria di un nuovo token è il **10%** della fornitura, assegnato al lancio.
 - Il vesting del team è **0% al lancio, un cliff di 6 mesi e poi 18 mesi lineari** (24 mesi in totale).
 - Commissioni di lancio: il piano approvato è un importo fisso di **1 USD per il lancio di un token e 2 USD per il mint di un NFT**, pagabile in PPL, USDT o USDC, con uno sconto del 20% pagando in PPL a un prezzo TWAP; le factory distribuite applicano ancora una commissione fissa in PPL.
-- La **vendita comunitaria di PPL** usa la curva esponenziale pubblicata su `/buy` (partenza **$0.005** per PPL; prezzi e limiti pubblici; acquisto disattivato fino all'hub). Nessun KYC né controlli di eleggibilità su questo sito.
-- Sicurezza: Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1 (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno.; bug bounty on every page.
+- La **vendita comunitaria di PPL** usa la curva esponenziale pubblicata su `/buy` (partenza **$0.005** per PPL; prezzi e limiti pubblici; acquisto disattivato fino all'hub). Per acquistare serve una verifica umana gratuita e una tantum (Telegram o Human Passport); non vengono raccolti documenti di identità (KYC).
+- Sicurezza: Esaminato da modelli di IA: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (eseguiti dal team del progetto). Non è un audit di sicurezza. Non è ancora stato fatto alcun audit esterno.; bug bounty on every page.
 - Multisig. Tesoreria delle commissioni di rete: un multisig 2 su 3 sulla rete PEOPLE. Proventi della vendita: il multisig del progetto su Base; indirizzo e soglia di firme vengono pubblicati prima dell’apertura della vendita.
 - Se la curva di un token non si esaurisce entro **180 giorni** dal lancio, chiunque può finalizzarla e i token invenduti vanno al pool della community di quel token. Una curva esaurita passa alla liquidità come prima. (Attiva sulla testnet.)
 - La vendita dura fino all’esaurimento (la curva si chiude a $4M raccolti) o 24 mesi dall’apertura, a seconda di quale evento si verifichi prima. Nessuna proroga. I PPL invenduti vanno al Community Pool. Nessun rimborso: ogni acquisto è definitivo.
