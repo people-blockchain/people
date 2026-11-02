@@ -570,6 +570,16 @@ export function BountyTokenomics() {
             <p className="mt-2 text-base font-semibold text-ink">{t.growthValue}</p>
           </div>
         </Reveal>
+        <Reveal delay={320} className="sm:col-span-2">
+          <div
+            className="h-full rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]"
+            data-testid="bounty-genesis-quest"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-3">{t.questLabel}</p>
+            <p className="mt-2 font-mono text-3xl font-bold tabular-nums text-ink">{t.questValue}</p>
+            <p className="mt-2 text-sm text-ink-2">{t.questNote}</p>
+          </div>
+        </Reveal>
       </div>
       <Reveal delay={120}>
         <div className="mt-6">

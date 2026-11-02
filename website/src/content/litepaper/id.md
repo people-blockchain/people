@@ -137,6 +137,12 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 
 *Awal. Poin, tingkat PPL-per-poin, dan anggaran musim dapat berubah sebelum mainnet. Bukan janji penghasilan.*
 
+**PEOPLE Genesis Quest (2 November – 1 Desember 2026).** Kampanye satu bulan sebelum penjualan PPL, dibayar dari pool Million Founders 50M yang sama: Musim 1 turun dari 20M ke 15M dan pool referral untuk semua musim dari 15M ke 10M (referral Musim 1 tetap 6M). Totalnya tetap 50M dan tidak ada PPL baru yang dicetak.
+
+- **Pool:** hingga 25.000.000 PPL. 13M untuk orang terverifikasi yang melakukan satu aksi nyata di jaringan (300 PPL dengan Telegram, 1.500 PPL dengan Human Passport, maksimal 3.000 per orang). 6M untuk referral (500 PPL per undangan yang punya Human Passport dan masih aktif setelah 7 hari, maksimal 20 undangan). 6M untuk papan peringkat top 100 (peringkat 1 mendapat 500.000 PPL). Mengikuti media sosial wajib tetapi tidak dibayar.
+- **Pembukaan:** terkunci penuh sampai 1 Maret 2027, lalu 1/9 per bulan hingga 1 Desember 2027. Setiap bagian hanya terbuka jika bulan itu Anda melakukan setidaknya satu aksi di jaringan. Jadwal ini terpisah dari hadiah musim Founders.
+- **Tanpa pembelian kembali:** proyek tidak pernah membeli kembali PPL dari quest. Kontrak pembelian kembali hanya menerima PPL yang dibeli saat penjualan. PPL quest yang sudah terbuka dapat berpindah antar peserta setelah transfer dibuka.
+
 ---
 
 ## 7. Roadmap
