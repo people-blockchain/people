@@ -86,6 +86,9 @@ export const config = {
     "/login/:path*",
     "/login",
     "/",
+    // The one invite link (`?ref=<code>`) also lands on these pages; store the code here too.
+    "/founders",
+    "/bounty",
     "/(en|ru|es|pt|fr|de|it|tr|vi|id|zh|ar)/buy",
   ],
 };

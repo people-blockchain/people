@@ -135,3 +135,39 @@ test("mock network accepts register + referral sequence", async () => {
     globalThis.fetch = originalFetch;
   }
 });
+
+test("one invite link: a short code is captured, first-touch, and never mistaken for a wallet", async () => {
+  const { readStoredReferral, readStoredReferralCode } = await import("../src/lib/referral-ref.ts");
+  globalThis.localStorage.store.clear();
+  captureReferrerFromSearch("?ref=33063C3605");
+  assert.deepEqual(readStoredReferral(), { kind: "code", value: "33063c3605" });
+  assert.equal(readStoredReferralCode(), "33063c3605");
+  assert.equal(readStoredReferrer(), null);
+  // a later wallet link does not overwrite the first inviter
+  captureReferrerFromSearch(`?ref=${REF}`);
+  assert.equal(readStoredReferralCode(), "33063c3605");
+  globalThis.localStorage.store.clear();
+  captureReferrerFromSearch("?ref=bad!");
+  assert.equal(readStoredReferral(), null);
+});
+
+test("one invite link: a code resolves to the inviter wallet for the on-chain referral", async () => {
+  const { lookupReferralCodeWallet } = await import("../src/lib/referral-ref.ts");
+  globalThis.localStorage.store.clear();
+  globalThis.localStorage.setItem("ppl_referrer", "33063c3605");
+  const plan = planParticipantRegistration(SELF, REF);
+  assert.deepEqual(plan.steps, ["register", "referral"]);
+  assert.equal(plan.referrer, REF);
+  // own wallet behind the code: no self-referral
+  assert.deepEqual(planParticipantRegistration(REF, REF).steps, ["register"]);
+  // lookup failure or junk answer: registration goes ahead without the referral step
+  assert.deepEqual(planParticipantRegistration(SELF, null).steps, ["register"]);
+  const ok = await lookupReferralCodeWallet("33063c3605", async (url) => {
+    assert.equal(url, "/api/referral/resolve?code=33063c3605");
+    return new Response(JSON.stringify({ wallet: REF }));
+  });
+  assert.equal(ok, REF);
+  assert.equal(await lookupReferralCodeWallet("x", async () => new Response(JSON.stringify({ wallet: "nope" }))), null);
+  assert.equal(await lookupReferralCodeWallet("x", async () => { throw new Error("offline"); }), null);
+  globalThis.localStorage.store.clear();
+});

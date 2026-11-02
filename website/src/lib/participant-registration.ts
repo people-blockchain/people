@@ -1,6 +1,6 @@
 import { signFactoryTx } from "@/lib/people-sign";
 import { networkJson } from "@/lib/network-client";
-import { planParticipantRegistration } from "@/lib/referral-ref";
+import { lookupReferralCodeWallet, planParticipantRegistration, readStoredReferralCode } from "@/lib/referral-ref";
 
 export type { RegistrationPlan, RegistrationStep } from "@/lib/referral-ref";
 export { planParticipantRegistration } from "@/lib/referral-ref";
@@ -44,11 +44,14 @@ export async function runParticipantRegistration(
     requestFaucet?: () => Promise<void>;
     maxAttempts?: number;
     sleepMs?: (ms: number) => Promise<void>;
+    lookupCodeWallet?: (code: string) => Promise<string | null>;
   }
 ): Promise<{ ok: boolean; error?: string }> {
   const maxAttempts = options?.maxAttempts ?? 4;
   const sleep = options?.sleepMs ?? ((ms: number) => new Promise((r) => setTimeout(r, ms)));
-  const plan = planParticipantRegistration(address);
+  const code = readStoredReferralCode();
+  const codeWallet = code ? await (options?.lookupCodeWallet ?? lookupReferralCodeWallet)(code) : null;
+  const plan = planParticipantRegistration(address, codeWallet);
 
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     try {
