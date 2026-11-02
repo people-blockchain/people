@@ -1,5 +1,6 @@
 "use client";
 
+import { partnerSharePath } from "@/lib/partner/referral";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowRight, Bug, Check, Gift, Trophy, Users } from "lucide-react";
@@ -398,9 +399,14 @@ export function BountyReferral() {
             credentials: "include",
           });
           if (referralRes.ok) {
-            const referral = (await referralRes.json()) as { referralWallet?: string };
-            if (alive && referral.referralWallet) {
-              setLink(`${window.location.origin}/bounty?ref=${referral.referralWallet}`);
+            const referral = (await referralRes.json()) as { referralWallet?: string; referralCode?: string | null };
+            if (alive && (referral.referralCode || referral.referralWallet)) {
+              // One invite link for every program: the short code; the wallet link only as a fallback.
+              setLink(
+                referral.referralCode
+                  ? `${window.location.origin}${partnerSharePath(referral.referralCode)}`
+                  : `${window.location.origin}/bounty?ref=${referral.referralWallet}`,
+              );
             }
           }
         }

@@ -1,4 +1,5 @@
 import type { Language } from "./preferences";
+import { partnerSharePath } from "./partner/referral.ts";
 
 /**
  * Founder share messages, one per shipped locale. The sharer's current site locale picks the text;
@@ -42,9 +43,14 @@ export function founderShareText(lang: string, founderNumber: number | null): st
   return mine.replace("{{n}}", founderNumber.toLocaleString(lang));
 }
 
-/** Share URL is locale-free on purpose: the recipient's browser language decides their locale. */
-export function founderShareUrl(origin: string, referralWallet: string | null): string {
+/**
+ * Share URL is locale-free on purpose: the recipient's browser language decides their locale.
+ * With a short code it is the one invite link for every program (`/?ref=<code>`, the same link
+ * the partner cabinet shows); a wallet address is only a fallback while the code is loading.
+ */
+export function founderShareUrl(origin: string, referralWallet: string | null, referralCode?: string | null): string {
   if (!origin) return "";
+  if (referralCode) return `${origin}${partnerSharePath(referralCode)}`;
   return referralWallet ? `${origin}/founders?ref=${referralWallet}` : `${origin}/founders`;
 }
 
