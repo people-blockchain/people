@@ -137,6 +137,12 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 
 *Sơ bộ. Điểm, tỷ lệ PPL trên mỗi điểm và ngân sách mùa có thể thay đổi trước mainnet. Không phải là một cam kết về lợi tức.*
 
+**PEOPLE Genesis Quest (2/11 – 1/12/2026).** Chiến dịch một tháng trước đợt bán PPL, trả từ cùng quỹ Million Founders 50M: Mùa 1 giảm từ 20M xuống 15M và quỹ giới thiệu cho mọi mùa từ 15M xuống 10M (giới thiệu Mùa 1 vẫn giữ 6M). Tổng vẫn là 50M và không đúc thêm PPL nào.
+
+- **Quỹ:** tối đa 25.000.000 PPL. 13M cho người đã xác minh và thực hiện một hành động thật trên mạng (300 PPL với Telegram, 1.500 PPL với Human Passport, tối đa 3.000 mỗi người). 6M cho giới thiệu (500 PPL cho mỗi người được mời có Human Passport và vẫn hoạt động sau 7 ngày, tối đa 20 người). 6M cho bảng xếp hạng top 100 (hạng 1 nhận 500.000 PPL). Theo dõi mạng xã hội là bắt buộc nhưng không được trả thưởng.
+- **Mở khóa:** khóa hoàn toàn đến 1/3/2027, sau đó mở 1/9 mỗi tháng đến 1/12/2027. Mỗi phần chỉ mở nếu trong tháng đó bạn thực hiện ít nhất một hành động trên mạng. Lịch này tách biệt với phần thưởng mùa của Founders.
+- **Không mua lại:** dự án không bao giờ mua lại PPL từ quest. Hợp đồng mua lại chỉ nhận PPL đã mua trong đợt bán. PPL quest đã mở khóa có thể chuyển giữa những người tham gia khi tính năng chuyển được mở.
+
 ---
 
 ## 7. Lộ trình

@@ -137,6 +137,12 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 
 *Ön nitelik. Puanlar, puan başına PPL oranı ve sezon bütçesi mainnet'ten önce değişebilir. Gelir vaadi değildir.*
 
+**PEOPLE Genesis Quest (2 Kasım – 1 Aralık 2026).** PPL satışından önceki bir aylık kampanya. Aynı 50M'lik Million Founders havuzundan ödenir: 1. sezon 20M'den 15M'ye, tüm sezonların referans havuzu 15M'den 10M'ye iner (1. sezon referansları 6M'lerini korur). Toplam 50M kalır ve yeni PPL basılmaz.
+
+- **Havuz:** 25.000.000 PPL'ye kadar. Ağda gerçek bir işlem yapan doğrulanmış kişiler için 13M (Telegram ile 300 PPL, Human Passport ile 1.500 PPL, kişi başı en fazla 3.000). Referanslar için 6M (Human Passport'u olan ve 7 gün sonra hâlâ aktif olan her davetli için 500 PPL, en fazla 20 davetli). İlk 100 sıralaması için 6M (1. sıra 500.000 PPL). Sosyal medya takibi zorunludur ama ödenmez.
+- **Kilit açılışı:** 1 Mart 2027'ye kadar tamamen kilitli, sonra 1 Aralık 2027'ye kadar her ay 1/9. Her dokuzda bir pay yalnızca o ay ağda en az bir işlem yaptıysan açılır. Bu takvim Founders sezon ödüllerinden ayrıdır.
+- **Geri alım yok:** proje quest PPL'lerini asla geri satın almaz. Geri alım sözleşmesi yalnızca satışta satın alınan PPL'leri kabul eder. Kilidi açılan quest PPL'leri transferler açıldığında katılımcılar arasında aktarılabilir.
+
 ---
 
 ## 7. Yol haritası

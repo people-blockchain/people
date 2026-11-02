@@ -137,6 +137,12 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 
 *Préliminaire. Les points, le taux PPL par point et le budget de saison peuvent changer avant mainnet. Pas une promesse de revenus.*
 
+**PEOPLE Genesis Quest (2 novembre – 1er décembre 2026).** Une campagne d’un mois avant la vente de PPL, financée par le même pool Million Founders de 50M : la Saison 1 passe de 20M à 15M et le pool de parrainage de toutes les saisons de 15M à 10M (le parrainage de la Saison 1 garde ses 6M). Le total reste 50M et rien n’est créé.
+
+- **Pool :** jusqu’à 25 000 000 PPL. 13M pour les personnes vérifiées qui font une vraie action sur le réseau (300 PPL avec Telegram, 1 500 PPL avec Human Passport, 3 000 maximum par personne). 6M pour le parrainage (500 PPL par filleul doté d’un Human Passport et toujours actif après 7 jours, 20 filleuls maximum). 6M pour un classement top 100 (1re place 500 000 PPL). Suivre les réseaux sociaux est obligatoire mais n’est pas rémunéré.
+- **Déblocage :** entièrement bloqué jusqu’au 1er mars 2027, puis 1/9 par mois jusqu’au 1er décembre 2027. Chaque neuvième ne s’ouvre que si vous avez fait au moins une action sur le réseau ce mois-là. Ce calendrier est distinct de celui des récompenses de saison Founders.
+- **Pas de rachat :** le projet ne rachète jamais les PPL du quest. Le contrat de rachat n’accepte que les PPL achetés pendant la vente. Les PPL débloqués du quest peuvent circuler entre participants dès l’ouverture des transferts.
+
 ---
 
 ## 7. Feuille de route

@@ -1,8 +1,8 @@
 /**
  * Million Founders referral bounty — pure rules (no DB, no I/O).
  *
- * Funding: 15M PPL of the 50M Million Founders program pool (1.5% of 1B supply),
- * Season 1 budget 6M PPL. No new issuance: the program stops when the pool is empty.
+ * Funding: 10M PPL of the 50M Million Founders program pool (1% of 1B supply; was 15M,
+ * 5M moved to the Genesis Quest on 2026-11-01), Season 1 budget 6M PPL, later seasons 4M. No new issuance: the program stops when the pool is empty.
  *
  * Every number below is PROVISIONAL (testnet) and configurable here only; values the
  * founders did not specify are marked TBD in docs/FOUNDERS-REFERRAL.md.
@@ -14,8 +14,8 @@ import {
   MAINNET_VEST_WEEKS,
 } from "./reward-rules.ts";
 
-/** Referral share of the Million Founders program pool (1.5% of total supply). */
-export const REFERRAL_POOL_PPL = 15_000_000;
+/** Referral share of the Million Founders program pool (1% of total supply). */
+export const REFERRAL_POOL_PPL = 10_000_000;
 /** Season 1 referral budget carved out of REFERRAL_POOL_PPL. */
 export const REFERRAL_SEASON_1_POOL_PPL = 6_000_000;
 export const REFERRAL_CURRENT_SEASON = 1;
