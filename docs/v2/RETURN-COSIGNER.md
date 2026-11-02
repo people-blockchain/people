@@ -57,13 +57,13 @@ node --import ./scripts/register-ts-paths.mjs --experimental-strip-types scripts
 | `PORT` | HTTP port (default 8787). Endpoints: `POST /cosign`, `GET /health` |
 | `COSIGNER_TOKEN` | Shared secret, at least 32 characters. Must equal `SALE_RETURN_COSIGNER_TOKEN` on the site |
 | `HUB_ADDRESS`, `HUB_CHAIN_ID`, `HUB_RPC_URL` | The Base hub and the cosigner's own Base RPC |
-| `RETURN_BURN_ADDRESS`, `PEOPLE_RPC_URL` | `PplReturnBurn` and the cosigner's own PEOPLE RPC |
+| `RETURN_BURN_ADDRESS`, `PEOPLE_RPC_URL` | `PplReturnBurn` and the cosigner's own PEOPLE **mainnet** RPC (chain 97400). The cosigner refuses to start on any other chain, including the testnet 97401 |
 | `SALE_RETURN_COSIGNER_MODE=kms`, `SALE_RETURN_COSIGNER_KMS_KEY_ID` | Production key in AWS KMS (secp256k1). The key never leaves KMS |
 | `SALE_RETURN_COSIGNER_LOCAL_KEY` | Base Sepolia only. Refused on any other chain |
 | `COSIGNER_WARN_PPL_PER_HOUR`, `COSIGNER_MAX_PPL_PER_HOUR` | Brake levels in whole PPL |
 | `ALERT_TELEGRAM_BOT_TOKEN`, `ALERT_TELEGRAM_CHAT_ID` | Where alerts go (the signers' chat) |
 
-On the site (Vercel) set `SALE_RETURN_COSIGNER_URL` (for example `https://cosigner.example/cosign`)
+On the site (Vercel) set `PEOPLE_MAINNET_RPC_URL` (the PEOPLE mainnet RPC, chain 97400; the route refuses to sign if that RPC answers any other chain id) and `SALE_RETURN_COSIGNER_URL` (for example `https://cosigner.example/cosign`)
 and `SALE_RETURN_COSIGNER_TOKEN`.
 
 Before mainnet:

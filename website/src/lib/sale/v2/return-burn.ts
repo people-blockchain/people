@@ -1,7 +1,8 @@
 import { decodeEventLog, getAddress, parseAbiItem, type Address, type Hex } from "viem";
 
 /** PEOPLE mainnet, where returned PPL go back to the sale wallet (`PplReturnBurn.returnRecipient`). */
-export const PEOPLE_MAINNET_CHAIN_ID = 97401;
+/** PEOPLE mainnet (cosmos people_97400-1). The public testnet 97401 is never a sell-back source. */
+export const PEOPLE_MAINNET_CHAIN_ID = 97400;
 
 export const RETURN_BURNED_EVENT = parseAbiItem(
   "event ReturnBurned(bytes32 indexed returnId, address indexed from, address indexed hub, bytes32 personId, address seller, uint256 amount, uint256 destChainId)",
