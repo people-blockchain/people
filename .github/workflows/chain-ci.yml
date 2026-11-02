@@ -49,3 +49,9 @@ jobs:
         env:
           SKIP_CONTRACTS_SMOKE: "1"
         run: bash scripts/ci-smoke.sh
+      - name: Mainnet ceremony rehearsal (node must refuse without the real treasury multisig)
+        run: bash scripts/mainnet/rehearse.sh
+      - name: Mainnet ceremony rehearsal (throwaway multisig built in, chain runs as EVM 97400)
+        env:
+          REHEARSAL_BUILD: "1"
+        run: bash scripts/mainnet/rehearse.sh
