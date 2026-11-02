@@ -8,8 +8,13 @@ import (
 )
 
 const (
-	// PeopleEvmChainID is the EIP-155 chain ID for People's Blockchain (97401 = 0x17c79).
+	// PeopleEvmChainID is the EIP-155 chain ID of the PEOPLE testnet (97401 = 0x17c79).
 	PeopleEvmChainID uint64 = 97401
+	// PeopleMainnetEvmChainID is the EIP-155 chain ID of PEOPLE mainnet (97400 = 0x17c78).
+	PeopleMainnetEvmChainID uint64 = 97400
+	// PeopleMainnetChainID is the Cosmos chain-id of PEOPLE mainnet. It must equal
+	// peoplefees.MainnetChainID.
+	PeopleMainnetChainID = "people_97400-1"
 	// PeopleBaseDenom is the Cosmos base unit (18 decimals); human symbol PPL (documented as aPPL).
 	PeopleBaseDenom    = "appl"
 	PeopleDisplayDenom = "PPL"
@@ -37,6 +42,22 @@ var ChainsCoinInfo = map[uint64]evmtypes.EvmCoinInfo{
 		DisplayDenom:  PeopleDisplayDenom,
 		Decimals:      evmtypes.EighteenDecimals,
 	},
+	PeopleMainnetEvmChainID: {
+		Denom:         PeopleBaseDenom,
+		ExtendedDenom: PeopleBaseDenom,
+		DisplayDenom:  PeopleDisplayDenom,
+		Decimals:      evmtypes.EighteenDecimals,
+	},
+}
+
+// EVMChainIDFor maps a Cosmos chain-id to the EIP-155 chain ID the node must execute and sign
+// with. The same binary serves testnet (97401) and mainnet (97400); the EVM id is never a
+// separate setting an operator can get wrong, because it follows the genesis chain-id.
+func EVMChainIDFor(cosmosChainID string) uint64 {
+	if cosmosChainID == PeopleMainnetChainID {
+		return PeopleMainnetEvmChainID
+	}
+	return PeopleEvmChainID
 }
 
 const (

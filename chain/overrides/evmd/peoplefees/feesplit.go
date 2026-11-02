@@ -3,6 +3,7 @@ package peoplefees
 
 import (
 	"context"
+	"errors"
 
 	"cosmossdk.io/math"
 
@@ -41,6 +42,42 @@ const (
 // update this constant (and chain/emission/allocation.json `treasury_multisig`) together
 // before mainnet.
 const TreasuryMultisigAddress = "people1e9ymgxdtdgszjg7knu0gk9uy2dff8sm4pd0zl2"
+
+// MainnetChainID is the Cosmos chain-id of PEOPLE mainnet (EVM chain id 97400). Every
+// mainnet-only rule in this package is keyed on it, so testnet 97401 keeps replaying its
+// history byte-for-byte with the same binary.
+const MainnetChainID = "people_97400-1"
+
+// MainnetTreasuryMultisigAddress is the mainnet 2-of-3 treasury multisig (owner, co-founder,
+// owner's cold key). It must equal chain/emission/allocation-mainnet.json
+// `treasury_multisig.address`, which validate-emission-genesis.py cross-checks. Empty means
+// "not chosen yet": a mainnet node then refuses to produce block 1 (see
+// CheckMainnetConfig), so a placeholder can never reach a live mainnet.
+const MainnetTreasuryMultisigAddress = ""
+
+// ErrMainnetTreasuryUnset is returned on mainnet while MainnetTreasuryMultisigAddress is empty.
+var ErrMainnetTreasuryUnset = errors.New("peoplefees: mainnet treasury multisig address is not set in this binary")
+
+// TreasuryMultisigAddressFor returns the multisig that receives the treasury/liquidity/growth
+// fee shares on chainID. Mainnet uses its own multisig; every other chain (testnet 97401,
+// local nets) keeps the testnet multisig.
+func TreasuryMultisigAddressFor(chainID string) (string, error) {
+	if chainID == MainnetChainID {
+		if MainnetTreasuryMultisigAddress == "" {
+			return "", ErrMainnetTreasuryUnset
+		}
+		return MainnetTreasuryMultisigAddress, nil
+	}
+	return TreasuryMultisigAddress, nil
+}
+
+// CheckMainnetConfig fails on mainnet when this binary was built without the mainnet
+// treasury multisig. It runs from BeginBlocker at every height, including height 1, so the
+// chain halts at genesis instead of routing fees to a testnet key.
+func CheckMainnetConfig(chainID string) error {
+	_, err := TreasuryMultisigAddressFor(chainID)
+	return err
+}
 
 // ValidatorPoolAddress is the "validators" bucket account from chain/emission/allocation.json
 // (a PeriodicVestingAccount holding 60/50/50/40M PPL across years 1-4; M11-2 item 3).
@@ -152,6 +189,10 @@ func RouteModelAFees(
 	distr distrKeeper,
 	staking stakingKeeper,
 ) error {
+	multisigAddr, err := TreasuryMultisigAddressFor(ctx.ChainID())
+	if err != nil {
+		return err
+	}
 	if ctx.BlockHeight() <= 1 {
 		return nil
 	}
@@ -165,7 +206,7 @@ func RouteModelAFees(
 
 	valAmt, commAmt, treAmt, liqAmt, growthAmt, _ := SplitModelA(feeCoin)
 
-	multisig, err := sdk.AccAddressFromBech32(TreasuryMultisigAddress)
+	multisig, err := sdk.AccAddressFromBech32(multisigAddr)
 	if err != nil {
 		return err
 	}
