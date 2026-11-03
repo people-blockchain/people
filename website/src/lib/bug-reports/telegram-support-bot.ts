@@ -451,7 +451,7 @@ export async function notifyOwnerNewReport(report: BugReportRow, opts: { reporte
 }
 
 /** Tickets still needing a human. `accepted` is the site's "in progress"; `fixed` is "resolved". */
-const OPEN_STATUSES: readonly BugStatus[] = ["new", "accepted"];
+export const OPEN_STATUSES: readonly BugStatus[] = ["new", "accepted"];
 const CLOSED_STATUSES: readonly BugStatus[] = ["fixed", "rejected", "duplicate"];
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -539,17 +539,8 @@ async function handleCallback(cb: TgCallbackQuery): Promise<void> {
     });
     return;
   }
-  const existing = await getBugReport(id);
-  if (!existing) {
-    await tgApi("answerCallbackQuery", { callback_query_id: cb.id, text: "Не найдено" });
-    return;
-  }
   const status = ACTION_STATUS[action];
-  const rewardPoints =
-    (status === "accepted" || status === "fixed") && existing.rewardPoints === 0
-      ? DEFAULT_REWARD_POINTS[(existing.type as BugReportType) ?? "bug"] ?? 0
-      : undefined;
-  const result = await patchBugReportAsAdmin(id, { status, rewardPoints });
+  const result = await applySupportStatusAsAdmin(id, status);
   if (!result.ok) {
     await tgApi("answerCallbackQuery", { callback_query_id: cb.id, text: result.error });
     return;
@@ -569,7 +560,59 @@ async function handleCallback(cb: TgCallbackQuery): Promise<void> {
       reply_markup: triageKeyboard(id),
     }).catch(() => {});
   }
-  if (status !== existing.status || result.credited > 0) await notifyReporterStatus(result.report, result.credited);
+}
+
+export type SupportReplyResult =
+  | { ok: true; report: BugReportRow }
+  | { ok: false; error: "not_found" | "no_reporter" | "empty_text" };
+
+/** DM the reporter and append an adminNote — same delivery as the owner's Telegram reply flow. */
+export async function sendSupportReplyAsAdmin(id: string, text: string): Promise<SupportReplyResult> {
+  const trimmed = text.trim();
+  if (!trimmed) return { ok: false, error: "empty_text" };
+  const report = await getBugReport(id);
+  if (!report) return { ok: false, error: "not_found" };
+  const chatId = await reporterChatId(report);
+  if (!chatId) return { ok: false, error: "no_reporter" };
+  const body = trimmed.slice(0, 3500);
+  const l: Lang = supportLang((report.context as { locale?: string } | null)?.locale);
+  await tgApi("sendMessage", { chat_id: chatId, text: T[l].reply(report.id, body) });
+  const db = await getDbReady();
+  const note = `${report.adminNote ? `${report.adminNote}\n` : ""}[reply ${new Date().toISOString()}] ${body}`.slice(
+    0,
+    4000,
+  );
+  const [updated] = await db
+    .update(bugReports)
+    .set({ adminNote: note, updatedAt: new Date() })
+    .where(eq(bugReports.id, id))
+    .returning();
+  return { ok: true, report: updated ?? report };
+}
+
+export type SupportStatusResult =
+  | { ok: true; report: BugReportRow; credited: number; previousStatus: BugStatus }
+  | { ok: false; error: "not_found" | "invalid_status" | "invalid_severity" | "invalid_reward" };
+
+/** Change ticket status with default reward points on accept/fixed — shared by bot buttons and support-ops API. */
+export async function applySupportStatusAsAdmin(id: string, status: BugStatus): Promise<SupportStatusResult> {
+  const existing = await getBugReport(id);
+  if (!existing) return { ok: false, error: "not_found" };
+  const rewardPoints =
+    (status === "accepted" || status === "fixed") && existing.rewardPoints === 0
+      ? DEFAULT_REWARD_POINTS[(existing.type as BugReportType) ?? "bug"] ?? 0
+      : undefined;
+  const result = await patchBugReportAsAdmin(id, { status, rewardPoints });
+  if (!result.ok) return result;
+  if (status !== existing.status || result.credited > 0) {
+    await notifyReporterStatus(result.report, result.credited);
+  }
+  return {
+    ok: true,
+    report: result.report,
+    credited: result.credited,
+    previousStatus: existing.status as BugStatus,
+  };
 }
 
 async function handleOwnerReply(msg: TgMessage, text: string): Promise<boolean> {
@@ -580,17 +623,17 @@ async function handleOwnerReply(msg: TgMessage, text: string): Promise<boolean> 
     await tgApi("sendMessage", { chat_id: msg.chat!.id, text: "Отменено." });
     return true;
   }
-  const report = await getBugReport(id);
-  const chatId = report ? await reporterChatId(report) : null;
-  if (!report || !chatId) {
-    await tgApi("sendMessage", { chat_id: msg.chat!.id, text: "У автора нет чата в Telegram, ответ не доставлен." });
+  const result = await sendSupportReplyAsAdmin(id, text);
+  if (!result.ok) {
+    const err =
+      result.error === "not_found"
+        ? "Обращение не найдено."
+        : result.error === "empty_text"
+          ? "Пустое сообщение."
+          : "У автора нет чата в Telegram, ответ не доставлен.";
+    await tgApi("sendMessage", { chat_id: msg.chat!.id, text: err });
     return true;
   }
-  const l: Lang = supportLang((report.context as { locale?: string } | null)?.locale);
-  await tgApi("sendMessage", { chat_id: chatId, text: T[l].reply(report.id, text.slice(0, 3500)) });
-  const db = await getDbReady();
-  const note = `${report.adminNote ? `${report.adminNote}\n` : ""}[reply ${new Date().toISOString()}] ${text}`.slice(0, 4000);
-  await db.update(bugReports).set({ adminNote: note, updatedAt: new Date() }).where(eq(bugReports.id, id));
   await tgApi("sendMessage", { chat_id: msg.chat!.id, text: `Ответ отправлен на #${id.slice(0, 8)}.` });
   return true;
 }

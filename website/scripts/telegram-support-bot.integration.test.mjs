@@ -128,6 +128,96 @@ test("Reply button: owner's next message is relayed to the reporter", async () =
   assert.match(after.adminNote, /Open the Wallet tab/);
 });
 
+test("support-ops auth: fail closed without secret, rejects wrong Bearer", async () => {
+  const route = await import("../src/app/api/telegram/support-ops/route.ts");
+  delete process.env.TELEGRAM_SUPPORT_OPS_SECRET;
+  const noSecret = await route.GET(new Request("http://local/api/telegram/support-ops"));
+  assert.equal(noSecret.status, 401);
+  assert.deepEqual(await noSecret.json(), { error: "not_configured" });
+
+  process.env.TELEGRAM_SUPPORT_OPS_SECRET = "test-support-ops-secret";
+  const bad = await route.GET(
+    new Request("http://local/api/telegram/support-ops", { headers: { authorization: "Bearer wrong" } }),
+  );
+  assert.equal(bad.status, 401);
+  assert.deepEqual(await bad.json(), { error: "unauthorized" });
+});
+
+test("support-ops: list open tickets, reply and status via API", async () => {
+  process.env.TELEGRAM_SUPPORT_OPS_SECRET = "test-support-ops-secret";
+  const route = await import("../src/app/api/telegram/support-ops/route.ts");
+  const auth = { authorization: "Bearer test-support-ops-secret" };
+
+  await bot.handleSupportBotUpdate(msg(810, "/support API list test"));
+  const [row] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "810"));
+  assert.equal(row.status, "new");
+
+  const listRes = await route.GET(new Request("http://local/api/telegram/support-ops", { headers: auth }));
+  assert.equal(listRes.status, 200);
+  const list = await listRes.json();
+  assert.ok(Array.isArray(list));
+  const item = list.find((t) => t.id === row.id);
+  assert.ok(item);
+  assert.equal(item.shortId, row.id.slice(0, 8));
+  assert.equal(item.status, "new");
+  assert.ok(!("telegramChatId" in item));
+  assert.ok(!("telegramUsername" in item));
+
+  calls = [];
+  const replyRes = await route.POST(
+    new Request("http://local/api/telegram/support-ops", {
+      method: "POST",
+      headers: { ...auth, "content-type": "application/json" },
+      body: JSON.stringify({ action: "reply", id: row.id, text: "Via HTTP API" }),
+    }),
+  );
+  assert.equal(replyRes.status, 200);
+  assert.deepEqual(await replyRes.json(), { ok: true, id: row.id });
+  const relay = calls.find((c) => c.method === "sendMessage" && c.body.chat_id === "810");
+  assert.match(relay.body.text, /Via HTTP API/);
+  const [afterReply] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.id, row.id));
+  assert.match(afterReply.adminNote, /Via HTTP API/);
+
+  calls = [];
+  const statusRes = await route.POST(
+    new Request("http://local/api/telegram/support-ops", {
+      method: "POST",
+      headers: { ...auth, "content-type": "application/json" },
+      body: JSON.stringify({ action: "status", id: row.id, status: "accept" }),
+    }),
+  );
+  assert.equal(statusRes.status, 200);
+  const statusBody = await statusRes.json();
+  assert.equal(statusBody.status, "accepted");
+  assert.match(calls.find((c) => c.body.chat_id === "810")?.body.text, /accepted/);
+});
+
+test("sendSupportReplyAsAdmin and applySupportStatusAsAdmin", async () => {
+  await bot.handleSupportBotUpdate(msg(811, "/bug direct fn"));
+  const [row] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "811"));
+  calls = [];
+  const reply = await bot.sendSupportReplyAsAdmin(row.id, "Fn reply");
+  assert.equal(reply.ok, true);
+  assert.match(
+    calls.find((c) => c.method === "sendMessage" && c.body.chat_id === "811")?.body.text,
+    /Fn reply/,
+  );
+  calls = [];
+  const st = await bot.applySupportStatusAsAdmin(row.id, "fixed");
+  assert.equal(st.ok, true);
+  if (st.ok) assert.equal(st.report.status, "fixed");
+  assert.match(calls.find((c) => c.body.chat_id === "811")?.body.text, /fixed/);
+});
+
+test("resolveSupportOpsStatus maps bot aliases and raw statuses", async () => {
+  const route = await import("../src/app/api/telegram/support-ops/route.ts");
+  assert.equal(route.resolveSupportOpsStatus("accept"), "accepted");
+  assert.equal(route.resolveSupportOpsStatus("reject"), "rejected");
+  assert.equal(route.resolveSupportOpsStatus("duplicate"), "duplicate");
+  assert.equal(route.resolveSupportOpsStatus("accepted"), "accepted");
+  assert.equal(route.resolveSupportOpsStatus("nope"), null);
+});
+
 test("site bug-button reports are forwarded to the owner with buttons", async () => {
   await db.insert(schema.users).values({ id: "site1", email: "site1@x.test" });
   const svc = await import("../src/lib/bug-reports/service.ts");
