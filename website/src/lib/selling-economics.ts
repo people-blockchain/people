@@ -6,27 +6,34 @@
  * Growth Pool settlement, fee routing, or referral engines.
  */
 
-/** Mandatory Token Factory community allocation of a standard launch. */
+/** Mandatory Token Factory community allocation at launch (always credited to the token's community vault). */
 export const TOKEN_COMMUNITY_ALLOCATION_PCT = 10;
 
 /**
- * Community share of a standard launch as presented to the public: the 10%
- * launch allocation **plus** the ~16.7% of unsold bonding-curve inventory that
- * P0-4 routes into the token's own community pool (not the treasury, not a
- * burn) when the curve migrates. Rounded to 27 for display.
- *
- * The 10% launch allocation is still the protocol rule and stays
- * `TOKEN_COMMUNITY_ALLOCATION_PCT`; this constant is the headline figure the
- * site, litepaper and tokenomics copy use for the community share.
+ * Public headline cap when the creator chooses curve leftovers for the community pool at launch.
+ * Not guaranteed on every launch (default leftover mode burns unsold curve tokens).
  */
-export const TOKEN_COMMUNITY_SHARE_PCT = 10;
+export const TOKEN_COMMUNITY_SHARE_MAX_PCT = 27;
+
+/** Rounded public estimate of curve leftovers that may join the pool (~⅙ of supply in typical migration math). */
+export const TOKEN_COMMUNITY_CURVE_LEFTOVER_APPROX_PCT = 17;
 
 /**
- * Docs (`TOKEN-ECONOMY.md` §4, `ECONOMICS.md` §9) confirm a mandatory 10%
- * Community Pool allocation at launch; the P0-4 decision adds the unsold
- * curve remainder (~16.7%) to the same pool at migration, so the public figure
- * is the fixed 10% share, not an open-ended "10%+" or "10%+" range.
+ * Headline percentage for hero stats, diagrams, and OG labels ("Up to 27%").
+ * Distinct from the guaranteed launch slice (`TOKEN_COMMUNITY_ALLOCATION_PCT`).
  */
+export const TOKEN_COMMUNITY_SHARE_PCT = TOKEN_COMMUNITY_SHARE_MAX_PCT;
+
+export const TOKEN_COMMUNITY_SHARE_HEADLINE = `Up to ${TOKEN_COMMUNITY_SHARE_MAX_PCT}%` as const;
+
+/** Owner-approved EN explanation (locale JSON should mirror; asserted in copy guards). */
+export const TOKEN_COMMUNITY_SHARE_EXPLANATION_EN =
+  "10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch.";
+
+export const TOKEN_COMMUNITY_TIMELOCK_NOTE_EN =
+  "The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise.";
+
+/** Public copy uses "Up to 27%", not bare "27%" or open-ended "27%+". */
 export const TOKEN_COMMUNITY_ALLOCATION_PLUS = false;
 
 /** Approved Model A split of eligible integer network fees (percent). */

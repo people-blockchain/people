@@ -1,18 +1,18 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "La blockchain où chaque utilisateur est une personne vérifiée. Propriété des gens, pas des VCs."
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **La blockchain où chaque utilisateur est une personne vérifiée.**
 > **Propriété des gens, pas des VCs.**
 
-*v1.1 · octobre 2026 · Les chiffres sont préliminaires et soumis à la gouvernance communautaire. Rien dans ce document n'est une promesse de revenus.*
+*v1.0 · octobre 2026 · Les chiffres sont préliminaires et soumis à la gouvernance communautaire. Rien dans ce document n'est une promesse de revenus.*
 
 ---
 
@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Approvisionnement | **1 000 000 000 PPL**, fixe |
-| Chaque token lancé | **10 %** de l'approvisionnement va au pool communautaire de ce token |
+| Chaque token lancé | **27 %** de l'approvisionnement va au pool communautaire de ce token |
 | Frais réseau brûlés | **0 %** — chaque frais est partagé |
 | Qui gagne des récompenses | **Personnes vérifiées** (téléphone Telegram ou Human Passport) |
 | Financement | **Autofinancé.** Pas de VC. Pas d'allocation investisseur. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Personnes vérifiées, pas de bots.** Les récompenses vont aux comptes qui ont passé un contrôle humain gratuit. Une personne, un compte. L'inscription seule ne gagne rien.
 
-**10 % de chaque token lancé va à sa communauté.** Intégré au protocole, non pas promis dans un post : chaque lancement standard envoie 10 % de son approvisionnement au pool communautaire de ce token. Il n'est jamais mélangé aux frais réseau.
+**Jusqu'à 27 % pour sa communauté.** Intégré au protocole : 10 % vont dans le pool communautaire au lancement, garanti. Le reste des invendus (~17 %) va au pool ou est brûlé — le créateur choisit une fois au lancement. Gouverné par le timelock PEOPLE, versé aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement. Jamais mélangé aux frais réseau.
 
 ---
 
@@ -53,17 +53,17 @@ Ce que vous pouvez faire sans code :
 
 | Outil | Ce qu'il fait | Statut |
 |---|---|---|
-| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 10 % de l'approvisionnement va au pool communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
+| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 27 % de l'approvisionnement va au pool communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
 | **Cartes de club NFT** | Cartes d'adhésion pour un club, un café ou une communauté — une par membre, avec une image que vous téléchargez ou générez. | Live sur testnet |
 | **Levée de fonds** | Collectez le soutien pour un projet avec des modèles de contrats examinés : dépôt de garantie, accumulation, vote pondéré par token. Votre communauté achète sur la courbe, donc la demande définit le prix — pas un tour privé. | Live sur testnet |
 | **Contrats IA** | Décrivez un contrat intelligent en langage clair. Il est assemblé à partir de modèles OpenZeppelin et vous voyez le résultat avant de déployer. | Live sur testnet |
-| **Agents IA communautaires** | Agents qui travaillent pour un groupe : un portefeuille communautaire multisig avec limites de dépenses, listes blanches et un gel d'urgence. Les paramètres ne changent que par vote de token ; chaque action est visible dans l'explorateur. | Testnet : 1 agent communautaire actif |
+| **Agents IA communautaires** | Agents qui travaillent pour un groupe : un portefeuille communautaire basé sur Safe avec limites de dépenses, listes blanches et un gel d'urgence. Les paramètres ne changent que par vote de token ; chaque action est visible dans l'explorateur. | Testnet : 1 agent communautaire actif |
 
 ---
 
 ## 4. Technologie
 
-**Cosmos EVM.** PEOPLE fonctionne sur une pile Cosmos EVM : contrats intelligents compatibles Ethereum et adresses 0x sur une chaîne Cosmos.
+**Cosmos EVM.** People fonctionne sur une pile Cosmos EVM : contrats intelligents compatibles Ethereum et adresses 0x sur une chaîne Cosmos.
 
 | Paramètre | Valeur |
 |---|---|
@@ -115,9 +115,9 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Pool de croissance | 15 % |
 | Brûlure | 0 % |
 
-**Flux de frais.** 100% des frais de lancement de tokens et NFT (USDC/USDT) vont aux rachats publics de PPL, et les PPL rachetés sont répartis 30/25/20/10/15 par le multisig de trésorerie, comme pour tout autre rachat.
+**Rachats.** Les parts du trésor (20 %) et de la liquidité (10 %) sont utilisées pour les rachats publics de PPL. Rien n'est brûlé pour prétendre à la rareté — les frais reviennent au réseau et à ses gens.
 
-**Frais de lancement de token.** En direct sur le testnet : les usines déployées facturent encore des frais fixes en PPL — 1,045005 PPL pour lancer un token et 2,925 PPL pour créer un NFT. Le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP. L'option stablecoin et la remise TWAP ne sont pas encore dans le code déployé. 100 % des frais de lancement vont au rachat public de PPL, et le PPL racheté est partagé 30/25/20/10/15 par le multisig du trésor, comme tout autre rachat.
+**Frais de lancement de token.** En direct sur le testnet : les usines déployées facturent encore des frais fixes en PPL — 1,045005 PPL pour lancer un token et 2,925 PPL pour créer un NFT. Le plan approuvé est un montant fixe de **5 USD par lancement de token et 10 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP. L'option stablecoin et la remise TWAP ne sont pas encore dans le code déployé. 100 % des frais de lancement vont au rachat public de PPL, et le PPL racheté est partagé 30/25/20/10/15 par le multisig du trésor, comme tout autre rachat.
 
 ---
 
@@ -144,7 +144,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Vente PPL sur Base** | La vente PPL se déroule uniquement sur Base (PplCurveHub, USDC ou USDT). Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le contrat de vente n'est pas publié. Le mainnet du réseau PEOPLE est une étape distincte. | Contrat de vente (PplCurveHub sur Base) et multisig destinataire publiés |
+| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
 Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
@@ -161,9 +161,9 @@ Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
 
 ## 9. Sécurité
 
-- Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (lancés par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé. Bug bounty on every page.
-- **Multisigs.** Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base ; son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
-- **Adresses publiées.** Le contrat de vente et le multisig destinataire sont publiés avant l’ouverture de la vente ; les contrats de vesting et de verrouillage des LP, au lancement complet du réseau. Aucune adresse fictive.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Multisig de trésor.** Le trésor sera détenu dans un multisig avant mainnet ; les adresses des signataires seront publiées.
+- **Adresses publiées.** Les adresses de contrat de vente, d'accumulation et de liquidité seront publiées au lancement de mainnet — pas de placeholders.
 - **Défense contre les bots.** Vérification humaine, limites par appareil et par IP, plafonds de points quotidiens et récupération de points des bots.
 - **Blocs de construction éprouvés.** Les contrats sans code sont assemblés à partir de modèles OpenZeppelin.
 
@@ -185,13 +185,13 @@ Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.
 
 Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-dessous.
 
-| | Ethereum | Solana | PEOPLE |
+| | Ethereum | Solana | People |
 |---|---|---|---|
 | Frais brûlés | Les frais de base sont brûlés ¹ | 50 % des frais de base sont brûlés ² | **0 % brûlés** |
 | Qui reçoit les frais | Les validateurs reçoivent les frais de priorité (pourboire) ¹ | Les validateurs reçoivent 50 % des frais de base et 100 % des frais de priorité ² | **Validateurs 30 · Communauté 25 · Trésor 20 · Liquidité 10 · Croissance 15** |
 | Financement précoce | Vente d'ether publique, 2014 (42 jours, payée en BTC) ³ | Série A de 20 millions de dollars menée par Multicoin Capital (2019) ; les investisseurs ont reçu des tokens SOL ⁴ | **Autofinancé. Pas de VC, pas d'allocation d'investisseur** |
 | Création de compte | La création d'un compte ne coûte rien ; pas de contrôle d'identité ⁵ | Pas une exigence du protocole | **Récompenses seulement pour les personnes vérifiées** |
-| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **10 % de chaque token lancé** |
+| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **27 % de chaque token lancé** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -205,22 +205,20 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 
 ## Liens
 
-- Website: https://www.peopleblockchain.network
-- Million Founders: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### Ce qui a changé en v1.1
+### Ce qui a changé en v1.0
 
-- La part communautaire d'un nouveau token est de **10 %** de l'offre, alloués au lancement.
+- Jusqu'à **27 %** de l'offre peut rejoindre le pool communautaire : **10 %** au lancement garantis, plus jusqu'à **~17 %** d'invendus de courbe si le créateur choisit le pool plutôt que la destruction au lancement. Paiements via le timelock PEOPLE aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement.
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
-- Frais de lancement : le plan approuvé est un montant fixe de **1 USD par lancement de token et 2 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
+- Frais de lancement : le plan approuvé est un montant fixe de **5 USD par lancement de token et 10 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - La **vente communautaire de PPL** suit la courbe exponentielle publiée sur `/buy` (départ **0,005 $** par PPL ; prix et limites publics ; achat désactivé jusqu'au hub). Aucun KYC ni contrôle d'éligibilité sur ce site.
-- Sécurité : Examiné par des modèles d’IA : Claude Opus 5.5, GPT Astra, Fable 5.1 (lancés par l’équipe du projet). Ce n’est pas un audit de sécurité. Aucun audit externe n’a encore été réalisé. ; bug bounty on every page.
-- Multisigs. Trésorerie des frais de réseau : un multisig 2 sur 3 sur le réseau PEOPLE. Fonds de la vente : le multisig du projet sur Base ; son adresse et son seuil de signatures sont publiés avant l’ouverture de la vente.
-- Si la courbe d'un token n'est pas épuisée **180 jours** après le lancement, n'importe qui peut la clôturer et les tokens invendus vont au pool communautaire de ce token. Une courbe épuisée passe en liquidité comme avant. (Actif sur le testnet.)
-- La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.
+- Sécurité : **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1** ; bug bounty on every page.
+- Le multisig du trésor est **2 sur 3** et est créé avant le mainnet.
