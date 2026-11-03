@@ -118,7 +118,7 @@
     "explorerLink": "Buka di Basescan",
     "copy": "Salin",
     "copied": "Tersalin",
-    "auditLine": "Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1 (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.",
+    "auditLine": "Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.",
     "reviewReports": "Laporan peninjauan: {links}",
     "auditBounty": "Menemukan celah keamanan? Laporkan lewat tombol bug di halaman mana pun.",
     "detailsToggle": "Detail",

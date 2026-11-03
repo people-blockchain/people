@@ -118,7 +118,7 @@
     "explorerLink": "Mở trên Basescan",
     "copy": "Sao chép",
     "copied": "Đã sao chép",
-    "auditLine": "Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1 (do đội ngũ dự án thực hiện). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.",
+    "auditLine": "Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (do đội ngũ dự án thực hiện). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.",
     "reviewReports": "Báo cáo xem xét: {links}",
     "auditBounty": "Phát hiện lỗ hổng? Hãy báo bằng nút báo lỗi trên bất kỳ trang nào.",
     "detailsToggle": "Chi tiết",

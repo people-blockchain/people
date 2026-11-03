@@ -62,7 +62,7 @@ abstract contract HubV2Base is Test {
     bytes32 internal constant MAINNET_RETURN_TYPEHASH = keccak256(
         "MainnetReturn(bytes32 personId,address hub,address seller,uint256 pplAmount,uint256 sourceChainId,uint256 destChainId,bytes32 returnId,uint256 deadline)"
     );
-    uint256 internal constant PEOPLE_CHAIN_ID = 97401;
+    uint256 internal constant PEOPLE_CHAIN_ID = 97400;
 
     MockUSDC internal usdc;
     HubV2Harness internal hub;

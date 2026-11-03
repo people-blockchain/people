@@ -220,7 +220,7 @@ test("MainnetReturn signature recovers the return verifier on the hub domain", a
     signature,
   });
   assert.equal(recovered, privateKeyToAccount(KEY).address);
-  assert.equal(PEOPLE_MAINNET_CHAIN_ID, 97401);
+  assert.equal(PEOPLE_MAINNET_CHAIN_ID, 97400);
 });
 
 test("a missing return-verifier key is refused before any signature", async () => {
@@ -262,7 +262,7 @@ test("attestation signs only a successful ReturnBurned for this hub", async () =
   if (!result.ok) return;
   assert.equal(result.body.returnId, RETURN_ID);
   assert.equal(result.body.pplAmount, AMOUNT.toString());
-  assert.equal(result.body.sourceChainId, 97401);
+  assert.equal(result.body.sourceChainId, 97400);
   assert.equal(result.body.destChainId, 8453);
   assert.equal(result.body.hub, HUB);
   assert.equal(result.body.seller, SELLER);
@@ -429,7 +429,7 @@ test("signer-path signature equals the typed-data signature and recovers to the 
     hub: HUB,
     seller: SELLER,
     pplAmount: AMOUNT,
-    sourceChainId: 97401,
+    sourceChainId: 97400,
     destChainId: 84532,
     returnId: RETURN_ID,
     deadline: 1_700_000_900n,
