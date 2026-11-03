@@ -1,11 +1,15 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import { BUG_STATUSES, listBugReportsForAdmin, type BugStatus } from "@/lib/bug-reports/service";
+import {
+  BUG_STATUSES,
+  listBugReportsForAdmin,
+  type BugReportRow,
+  type BugStatus,
+} from "@/lib/bug-reports/service";
 import {
   OPEN_STATUSES,
   applySupportStatusAsAdmin,
   sendSupportReplyAsAdmin,
-  type BugReportRow,
 } from "@/lib/bug-reports/telegram-support-bot";
 
 /**
