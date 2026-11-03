@@ -139,6 +139,12 @@ Every protocol fee, including fractional fees, is split the same way:
 
 *Preliminary. Points, the PPL-per-point rate and the season budget may change before mainnet. Not a promise of income.*
 
+**PEOPLE Genesis Quest (2 November – 1 December 2026).** A one-month campaign before the PPL sale, paid from the same 50M Million Founders pool: Season 1 goes from 20M to 15M and the referral pool for all seasons from 15M to 10M (Season 1 referrals keep their 6M). The total stays 50M and nothing is minted.
+
+- **Pool:** up to 25,000,000 PPL. 13M for verified people who do one real network action (300 PPL with Telegram, 1,500 PPL with Human Passport, at most 3,000 per person). 6M for referrals (500 PPL per invitee who has Human Passport and is still active after 7 days, at most 20 invitees). 6M for a top-100 leaderboard (1st place 500,000 PPL). Social follows are required but not paid.
+- **Unlock:** fully locked until 1 March 2027, then 1/9 a month through 1 December 2027. Each ninth opens only if you made at least one network action that month. This schedule is separate from Founders season rewards.
+- **No buyback:** the project never buys quest PPL back. The sell-back contract accepts only PPL bought in the sale. Unlocked quest PPL can move between participants once transfers open.
+
 ---
 
 ## 7. Roadmap

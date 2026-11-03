@@ -137,6 +137,12 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 
 *Vorläufig. Punkte, der PPL-pro-Punkt-Satz und das Saison-Budget können sich vor dem Mainnet ändern. Keine Einkommensgarantie.*
 
+**PEOPLE Genesis Quest (2. November – 1. Dezember 2026).** Eine einmonatige Kampagne vor dem PPL-Verkauf, bezahlt aus demselben 50M-Pool von Million Founders: Saison 1 sinkt von 20M auf 15M, der Empfehlungspool aller Saisons von 15M auf 10M (Empfehlungen in Saison 1 behalten ihre 6M). Die Summe bleibt 50M, nichts wird neu geprägt.
+
+- **Pool:** bis zu 25.000.000 PPL. 13M für verifizierte Personen, die eine echte Aktion im Netzwerk ausführen (300 PPL mit Telegram, 1.500 PPL mit Human Passport, höchstens 3.000 pro Person). 6M für Empfehlungen (500 PPL pro Eingeladenem mit Human Passport, der nach 7 Tagen noch aktiv ist, höchstens 20 Eingeladene). 6M für eine Top-100-Rangliste (1. Platz 500.000 PPL). Social-Media-Follows sind Pflicht, werden aber nicht bezahlt.
+- **Freigabe:** vollständig gesperrt bis 1. März 2027, danach 1/9 pro Monat bis 1. Dezember 2027. Jedes Neuntel wird nur frei, wenn du in diesem Monat mindestens eine Aktion im Netzwerk ausgeführt hast. Dieser Plan ist getrennt von den Saison-Belohnungen von Founders.
+- **Kein Rückkauf:** Das Projekt kauft Quest-PPL nie zurück. Der Rückkaufvertrag nimmt nur PPL an, die im Verkauf gekauft wurden. Freigegebene Quest-PPL können zwischen Teilnehmern übertragen werden, sobald Überweisungen offen sind.
+
 ---
 
 ## 7. Roadmap

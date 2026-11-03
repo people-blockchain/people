@@ -8,8 +8,8 @@ Not to be confused with the 15% fee partner split (Beta L1=70 / L2=30 of the Gro
 
 ## Funding (no mint)
 
-- Million Founders program pool: 50M PPL of the 350M community pool (existing).
-- Referral share: **15M PPL** (1.5% of 1B supply). Season 1 budget: **6M PPL**.
+- Million Founders program pool: 50M PPL of the 350M community pool (existing). Split (owner decision 2026-11-01): Season 1 founder points 15M, referral pool 10M, Genesis Quest up to 25M (see `GENESIS-QUEST.md`).
+- Referral share: **10M PPL** (1% of 1B supply; was 15M, 5M moved to the Genesis Quest). Season 1 budget: **6M PPL**, later seasons 4M.
 - The program stops when the season pool is empty; the last credit is truncated to the remainder. Nothing is minted.
 - PPL per referral point: `1` — **TBD** (founder decision). Spent points are tracked in `founder_referral_pool`.
 

@@ -28,8 +28,8 @@ import {
 const active = { verified: true, walletCreated: true, realActionCount: 1, isBot: false };
 
 test("funding: 15M referral pool, 6M season 1, 1.5% of 1B supply", () => {
-  assert.equal(REFERRAL_POOL_PPL, 15_000_000);
-  assert.equal(REFERRAL_POOL_PPL / 1_000_000_000, 0.015);
+  assert.equal(REFERRAL_POOL_PPL, 10_000_000);
+  assert.equal(REFERRAL_POOL_PPL / 1_000_000_000, 0.01);
   assert.equal(REFERRAL_SEASON_1_POOL_PPL, 6_000_000);
   assert.ok(REFERRAL_SEASON_1_POOL_PPL < REFERRAL_POOL_PPL);
 });
