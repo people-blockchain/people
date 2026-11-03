@@ -148,6 +148,20 @@
       "when": 1759402800000,
       "tag": "0022_founder_nft_auth_nonce",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1759406400000,
+      "tag": "0024_analytics",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1759410000000,
+      "tag": "0025_analytics_ga_indexes",
+      "breakpoints": true
     }
   ]
 }

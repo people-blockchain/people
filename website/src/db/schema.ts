@@ -914,3 +914,75 @@ export const founderNftAuthNonces = pgTable(
   },
   (row) => [index("founder_nft_auth_nonce_user_idx").on(row.userId)],
 );
+
+/** First-party visitor analytics — sessions (30-min inactivity) and events. */
+export const analyticsSessions = pgTable(
+  "analytics_session",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    clientSessionId: text("clientSessionId").notNull(),
+    visitorId: text("visitorId").notNull(),
+    startedAt: timestamp("startedAt", { mode: "date" }).notNull(),
+    lastSeenAt: timestamp("lastSeenAt", { mode: "date" }).notNull(),
+    durationSec: integer("durationSec").notNull().default(0),
+    pageviewCount: integer("pageviewCount").notNull().default(0),
+    isBounce: boolean("isBounce").notNull().default(true),
+    entryPath: text("entryPath"),
+    exitPath: text("exitPath"),
+    referrer: text("referrer"),
+    utmSource: text("utmSource"),
+    utmMedium: text("utmMedium"),
+    utmCampaign: text("utmCampaign"),
+    utmTerm: text("utmTerm"),
+    utmContent: text("utmContent"),
+    refParam: text("refParam"),
+    kolParam: text("kolParam"),
+    country: text("country"),
+    region: text("region"),
+    city: text("city"),
+    browser: text("browser"),
+    os: text("os"),
+    deviceType: text("deviceType"),
+    language: text("language"),
+    timezone: text("timezone"),
+    screenW: integer("screenW"),
+    screenH: integer("screenH"),
+    isBot: boolean("isBot").notNull().default(false),
+  },
+  (row) => [
+    index("analytics_session_started_idx").on(row.startedAt),
+    index("analytics_session_last_seen_idx").on(row.lastSeenAt),
+    index("analytics_session_visitor_started_idx").on(row.visitorId, row.startedAt),
+    index("analytics_session_client_last_idx").on(row.clientSessionId, row.lastSeenAt),
+  ],
+);
+
+export const analyticsEvents = pgTable(
+  "analytics_event",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    sessionId: text("sessionId")
+      .notNull()
+      .references(() => analyticsSessions.id, { onDelete: "cascade" }),
+    visitorId: text("visitorId").notNull(),
+    eventType: text("eventType").notNull(),
+    eventName: text("eventName"),
+    path: text("path"),
+    title: text("title"),
+    props: jsonb("props").notNull().default({}),
+    durationMs: integer("durationMs"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    isBot: boolean("isBot").notNull().default(false),
+  },
+  (row) => [
+    index("analytics_event_created_idx").on(row.createdAt),
+    index("analytics_event_type_created_idx").on(row.eventType, row.createdAt),
+    index("analytics_event_path_created_idx").on(row.path, row.createdAt),
+    index("analytics_event_session_idx").on(row.sessionId),
+    index("analytics_event_name_created_idx").on(row.eventName, row.createdAt),
+  ],
+);

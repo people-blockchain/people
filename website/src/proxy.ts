@@ -2,10 +2,24 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextAuthRequest } from "next-auth";
 import { authConfig } from "@/auth.config";
+import {
+  ANALYTICS_VIEWER_HTTP_HEADERS,
+  analyticsViewerBlockedStatus,
+} from "@/lib/analytics/view-path";
 import { localeFromBuyPath } from "@/lib/locale-detect";
 import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/preferences";
 import { isLoginPath, isPartnerPath, LOGIN_PATH } from "@/lib/partner/guards";
 import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCode } from "@/lib/partner/referral";
+
+function analyticsViewerEdgeResponse(request: NextAuthRequest): NextResponse | null {
+  const { pathname } = request.nextUrl;
+  if (analyticsViewerBlockedStatus(pathname) !== 404) return null;
+  const response = new NextResponse("Not Found", { status: 404 });
+  for (const header of ANALYTICS_VIEWER_HTTP_HEADERS) {
+    response.headers.set(header.key, header.value);
+  }
+  return response;
+}
 
 /**
  * Proxy only needs to decode the JWT cookie. `authConfig` includes the Resend
@@ -21,6 +35,9 @@ const { auth } = NextAuth({
 });
 
 export const proxy = auth((request: NextAuthRequest) => {
+  const blocked = analyticsViewerEdgeResponse(request);
+  if (blocked) return blocked;
+
   const { pathname } = request.nextUrl;
   const stored = resolveStoredReferralCode(
     request.cookies.get(REFERRAL_COOKIE)?.value,
@@ -81,6 +98,10 @@ export const proxy = auth((request: NextAuthRequest) => {
 
 export const config = {
   matcher: [
+    "/stats",
+    "/stats/:path*",
+    "/__people-analytics-view",
+    "/__people-analytics-view/:path*",
     "/partner/:path*",
     "/partner",
     "/login/:path*",
