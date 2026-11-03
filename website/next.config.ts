@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import {
+  buildAnalyticsViewHeaderRules,
+  buildAnalyticsViewRewrites,
+} from "./src/lib/analytics/view-path";
 
 /**
  * MF-14: the Content-Security-Policy is ENFORCED (it was report-only under WEB-M3).
@@ -137,6 +141,10 @@ const nextConfig: NextConfig = {
       { source: "/million-founders/:path*", destination: "/bounty", permanent: false },
     ];
   },
+  async rewrites() {
+    // Secret read-only analytics viewer: `/<ANALYTICS_VIEW_PATH>` → internal route (build-time env).
+    return { beforeFiles: buildAnalyticsViewRewrites(), afterFiles: [], fallback: [] };
+  },
   async headers() {
     return [
       {
@@ -186,6 +194,7 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "no-store" },
         ],
       },
+      ...buildAnalyticsViewHeaderRules(),
     ];
   },
   images: {
