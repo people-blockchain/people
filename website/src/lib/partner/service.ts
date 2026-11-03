@@ -20,7 +20,7 @@ import {
 import {
   computeKolTierProgress,
   formatMicroPpl,
-  formatMicroUsdc,
+  formatMicroUsd,
   loadKolTierConfig,
   type KolTierProgress,
 } from "@/lib/partner/commission";
@@ -442,6 +442,9 @@ export type CabinetPayoutBatchRow = {
   createdAt: string;
 };
 
+export type CabinetCommissionItem = CabinetCommissionRow;
+export type CabinetPayoutItem = CabinetPayoutBatchRow;
+
 export type CabinetMetrics = {
   clicks: number;
   signUps: number;
@@ -573,15 +576,15 @@ export async function loadCabinet(userId: string) {
   const tierConfig = loadKolTierConfig();
   const tier: KolTierProgress = computeKolTierProgress(
     volumeUsdMicro,
-    tierConfig,
     profile.kolTierOverrideBps,
+    tierConfig,
   );
 
   const metrics: CabinetMetrics = {
     clicks: Math.max(profile.referralClicks ?? 0, l1Rows.length),
     signUps: l1Rows.length,
     buyers: distinctBuyers.size,
-    volumeUsd: formatMicroUsdc(volumeUsdMicro),
+    volumeUsd: formatMicroUsd(volumeUsdMicro),
     volumeUsdMicro: volumeUsdMicro.toString(),
     earnedUsdc: {
       pendingMicro: usdcPending.toString(),
@@ -619,7 +622,7 @@ export async function loadCabinet(userId: string) {
     pplPurchaseMicro: row.pplPurchaseMicro,
     netUsdcMicro: row.netUsdcMicro,
     netPplMicro: row.netPplMicro,
-    usdcFormatted: formatMicroUsdc(row.netUsdcMicro),
+    usdcFormatted: formatMicroUsd(row.netUsdcMicro),
     pplFormatted: formatMicroPpl(row.netPplMicro),
     usdcSettlementNetwork: row.usdcSettlementNetwork,
     pplSettlementNetwork: row.pplSettlementNetwork,
@@ -637,7 +640,7 @@ export async function loadCabinet(userId: string) {
     status: row.status,
     usdcAmountMicro: row.usdcAmountMicro,
     pplAmountMicro: row.pplAmountMicro,
-    usdcFormatted: formatMicroUsdc(row.usdcAmountMicro),
+    usdcFormatted: formatMicroUsd(row.usdcAmountMicro),
     pplFormatted: formatMicroPpl(row.pplAmountMicro),
     usdcNetwork: row.usdcNetwork,
     pplNetwork: row.pplNetwork,
