@@ -437,6 +437,77 @@ export const WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS = [
  * accounting for AI icon generation — one-shot payment consumption (unique paymentTxId),
  * per-day free/paid counters, and a generic fixed-window rate limiter.
  */
+/**
+ * Keep in sync with `website/drizzle/0024_analytics.sql` and `website/drizzle/0025_analytics_ga_indexes.sql`.
+ * Retention: prune old rows on a schedule (see docs/analytics.md); no auto-purge in app yet.
+ */
+export const ANALYTICS_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "analytics_session" (
+  "id" text PRIMARY KEY NOT NULL,
+  "clientSessionId" text NOT NULL,
+  "visitorId" text NOT NULL,
+  "startedAt" timestamp NOT NULL,
+  "lastSeenAt" timestamp NOT NULL,
+  "durationSec" integer NOT NULL DEFAULT 0,
+  "pageviewCount" integer NOT NULL DEFAULT 0,
+  "isBounce" boolean NOT NULL DEFAULT true,
+  "entryPath" text,
+  "exitPath" text,
+  "referrer" text,
+  "utmSource" text,
+  "utmMedium" text,
+  "utmCampaign" text,
+  "utmTerm" text,
+  "utmContent" text,
+  "refParam" text,
+  "kolParam" text,
+  "country" text,
+  "region" text,
+  "city" text,
+  "browser" text,
+  "os" text,
+  "deviceType" text,
+  "language" text,
+  "timezone" text,
+  "screenW" integer,
+  "screenH" integer,
+  "isBot" boolean NOT NULL DEFAULT false
+)`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_started_idx" ON "analytics_session" ("startedAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_last_seen_idx" ON "analytics_session" ("lastSeenAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_visitor_started_idx" ON "analytics_session" ("visitorId", "startedAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_client_last_idx" ON "analytics_session" ("clientSessionId", "lastSeenAt")`,
+  `CREATE TABLE IF NOT EXISTS "analytics_event" (
+  "id" text PRIMARY KEY NOT NULL,
+  "sessionId" text NOT NULL REFERENCES "analytics_session"("id") ON DELETE CASCADE,
+  "visitorId" text NOT NULL,
+  "eventType" text NOT NULL,
+  "eventName" text,
+  "path" text,
+  "title" text,
+  "props" jsonb NOT NULL DEFAULT '{}',
+  "durationMs" integer,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "isBot" boolean NOT NULL DEFAULT false
+)`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_created_idx" ON "analytics_event" ("createdAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_type_created_idx" ON "analytics_event" ("eventType", "createdAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_path_created_idx" ON "analytics_event" ("path", "createdAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_path_pattern_idx" ON "analytics_event" ("path" text_pattern_ops)`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_session_idx" ON "analytics_event" ("sessionId")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_name_created_idx" ON "analytics_event" ("eventName", "createdAt")`,
+];
+
+export const ANALYTICS_GA_INDEX_STATEMENTS = [
+  `CREATE INDEX IF NOT EXISTS "analytics_session_bot_started_idx" ON "analytics_session" ("startedAt") WHERE "isBot" = false`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_country_started_idx" ON "analytics_session" ("country", "startedAt") WHERE "isBot" = false`,
+  `CREATE INDEX IF NOT EXISTS "analytics_session_region_started_idx" ON "analytics_session" ("region", "startedAt") WHERE "isBot" = false`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_bot_created_idx" ON "analytics_event" ("createdAt") WHERE "isBot" = false`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_session_created_idx" ON "analytics_event" ("sessionId", "createdAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_visitor_created_idx" ON "analytics_event" ("visitorId", "createdAt")`,
+  `CREATE INDEX IF NOT EXISTS "analytics_event_type_name_created_idx" ON "analytics_event" ("eventType", "eventName", "createdAt")`,
+];
+
 export const FACTORY_ICON_SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "factory_icon_payment_tx" (
   "id" text PRIMARY KEY NOT NULL,
@@ -459,72 +530,4 @@ export const FACTORY_ICON_SCHEMA_STATEMENTS = [
   "expiresAt" timestamp NOT NULL
 )`,
   `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
-];
-
-/**
- * Keep in sync with `website/drizzle/0020_sale_person_binding.sql`. PplCurveHubV2 needs a
- * private person key/public personId per account plus HMAC-only identifiers; no raw
- * wallet/nullifier/Telegram/phone value is stored in these tables.
- */
-export const SALE_PERSON_BINDING_SCHEMA_STATEMENTS = [
-  `CREATE TABLE IF NOT EXISTS "sale_person" (
-  "personKey" text PRIMARY KEY NOT NULL,
-  "personId" text NOT NULL,
-  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_person_person_id_idx" ON "sale_person" ("personId")`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_person_user_id_idx" ON "sale_person" ("userId")`,
-  `CREATE TABLE IF NOT EXISTS "sale_person_identifier" (
-  "idHash" text PRIMARY KEY NOT NULL,
-  "kind" text NOT NULL,
-  "personKey" text NOT NULL REFERENCES "sale_person"("personKey") ON DELETE CASCADE,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE INDEX IF NOT EXISTS "sale_person_identifier_person_idx" ON "sale_person_identifier" ("personKey")`,
-  `CREATE TABLE IF NOT EXISTS "sale_binding" (
-  "personId" text PRIMARY KEY NOT NULL,
-  "account" text NOT NULL,
-  "chainId" integer NOT NULL,
-  "hub" text NOT NULL,
-  "nonce" text NOT NULL,
-  "deadline" timestamp NOT NULL,
-  "status" text NOT NULL,
-  "createdAt" timestamp NOT NULL DEFAULT now(),
-  "updatedAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_binding_account_lower_idx" ON "sale_binding" (lower("account"))`,
-];
-
-/**
- * Keep in sync with `website/drizzle/0021_founder_nft_person.sql`. Founder NFT personId keyed by
- * sha256 digests of Human Passport stamp nullifiers; no raw nullifier or wallet is stored.
- */
-export const FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS = [
-  `CREATE TABLE IF NOT EXISTS "founder_nft_person" (
-  "personId" text PRIMARY KEY NOT NULL,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE TABLE IF NOT EXISTS "founder_nft_stamp_hash" (
-  "stampHash" text PRIMARY KEY NOT NULL,
-  "personId" text NOT NULL REFERENCES "founder_nft_person"("personId") ON DELETE CASCADE,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE INDEX IF NOT EXISTS "founder_nft_stamp_hash_person_idx" ON "founder_nft_stamp_hash" ("personId")`,
-];
-
-/**
- * Keep in sync with `website/drizzle/0022_founder_nft_auth_nonce.sql`. Single-use wallet
- * signature nonce for Founder NFT mint and rebind. The code is random; no key is stored.
- */
-export const FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS = [
-  `CREATE TABLE IF NOT EXISTS "founder_nft_auth_nonce" (
-  "code" text PRIMARY KEY NOT NULL,
-  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
-  "chainId" integer NOT NULL,
-  "expiresAt" timestamp NOT NULL,
-  "usedAt" timestamp,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE INDEX IF NOT EXISTS "founder_nft_auth_nonce_user_idx" ON "founder_nft_auth_nonce" ("userId")`,
 ];
