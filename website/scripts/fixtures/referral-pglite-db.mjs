@@ -13,6 +13,7 @@ import {
   FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
   FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
   REFERRAL_KOL_SCHEMA_STATEMENTS,
+  WALLET_VAULT_SCHEMA_STATEMENTS,
 } from "../../src/db/bootstrap-sql.mjs";
 import * as schema from "../../src/db/schema.ts";
 
@@ -35,6 +36,7 @@ export async function getDbReady() {
         FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
         FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
         REFERRAL_KOL_SCHEMA_STATEMENTS,
+        WALLET_VAULT_SCHEMA_STATEMENTS,
       ]) {
         for (const statement of group) await client.exec(statement);
       }

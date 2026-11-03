@@ -172,6 +172,10 @@ export function PartnerCabinet({
         </div>
       )}
 
+      <p className="rounded-xl border border-line bg-surface-2 px-4 py-3 text-xs leading-relaxed text-ink-2">
+        {c.settlementBanner}
+      </p>
+
       <PartnerLinkGenerator
         referralCode={referralCode}
         initialKolCode={kolCode}
