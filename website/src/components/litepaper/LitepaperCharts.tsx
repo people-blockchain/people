@@ -62,7 +62,7 @@ function StaticAllocationDonut({ copy }: { copy: TokenomicsCopy }) {
   );
 
   return (
-    <div className="mx-auto w-full max-w-[280px]">
+    <div className="mx-auto w-full min-w-0 max-w-[280px]">
       <svg viewBox="0 0 240 240" className="w-full" role="img" aria-label={copy.donutTitle}>
         {slices.map((s) => (
           <path
@@ -78,7 +78,7 @@ function StaticAllocationDonut({ copy }: { copy: TokenomicsCopy }) {
         {slices.map((s) => (
           <li
             key={s.id}
-            className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-xs font-medium text-ink-2"
+            className="inline-flex max-w-full min-w-0 items-start gap-1.5 rounded-2xl border border-line px-3 py-1.5 text-left text-xs font-medium leading-snug text-ink-2 [overflow-wrap:anywhere]"
           >
             <span className="h-2 w-2 rounded-full" style={{ background: s.color }} aria-hidden="true" />
             {copy.bucketLabels[s.id]} · {s.pct}%
@@ -152,8 +152,8 @@ export function FeeFlowDiagram({ copy, lang }: { copy: LitepaperCopy; lang: Lang
 
   return (
     <LazyMount testId="litepaper-fee-flow" minHeight={300}>
-      <div className="rounded-2xl border border-line bg-surface p-4 sm:p-5">
-        <svg viewBox={`0 0 ${FEE_FLOW_W} ${FEE_FLOW_H}`} className="w-full" role="img" aria-label={c.feeFlowTitle}>
+      <div className="min-w-0 overflow-x-auto rounded-2xl border border-line bg-surface p-4 sm:p-5">
+        <svg viewBox={`0 0 ${FEE_FLOW_W} ${FEE_FLOW_H}`} className="min-w-[280px] w-full" role="img" aria-label={c.feeFlowTitle}>
           <rect
             x={FEE_SRC_X}
             y={FEE_SRC_Y}
@@ -230,7 +230,7 @@ export function FeeFlowDiagram({ copy, lang }: { copy: LitepaperCopy; lang: Lang
 function LoopBox({ label, color, highlight = false }: { label: string; color: string; highlight?: boolean }) {
   return (
     <div
-      className={`rounded-2xl border px-4 py-3 text-center text-sm font-semibold ${
+      className={`rounded-2xl border px-4 py-3 text-center text-sm font-semibold leading-snug [overflow-wrap:anywhere] ${
         highlight ? "border-brand/40 bg-brand text-brand-ink" : "border-line bg-canvas-2 text-ink"
       }`}
     >
