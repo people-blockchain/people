@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Luncurkan token untuk komunitas Anda."
     ],
-    "headlineAccent": "10% untuk orang Anda, bukan untuk paus.",
+    "headlineAccent": "Up to 27% untuk orang Anda, bukan untuk paus.",
     "headlineAccentLines": [
-      "10% untuk orang Anda,",
+      "Up to 27% untuk orang Anda,",
       "bukan untuk paus."
     ],
     "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik dan coba di testnet.",
@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Dompet dalam 30 detik",
-        "sub": "Dompet peramban: kunci Anda tetap di perangkat Anda. Dompet cloud: disimpan terenkripsi di server PEOPLE."
+        "sub": "Kunci Anda tetap di ponsel atau browser Anda."
       },
       {
         "id": "token",
@@ -34,65 +34,53 @@
       },
       {
         "id": "share",
-        "label": "10% untuk orang Anda",
-        "sub": "Setiap token baru mengirim 10% pasokannya ke pool komunitasnya sendiri."
+        "label": "Up to 27% untuk orang Anda",
+        "sub": "Setiap token baru mengirim Up to 27% pasokannya ke pool komunitasnya sendiri."
       }
     ],
-    "shareBadge": "10% bagian komunitas",
+    "shareBadge": "Up to 27% bagian komunitas",
     "peopleLine": "Orang Anda, bukan paus",
     "saleNote": "Jaringan PEOPLE masih berupa testnet, dan token ujinya tidak bernilai. Penjualan PPL terpisah: berlangsung di Base dengan USDC atau USDT sungguhan."
   },
   "community": {
-    "eyebrow": "10% untuk komunitas",
-    "title": "10% dari setiap token baru untuk orang Anda",
-    "lead": "Ini tertanam di protokol, bukan dijanjikan di sebuah post: setiap peluncuran standar mengirim 10% pasokannya ke pool komunitas milik token itu sendiri. Ini tidak pernah tercampur dengan biaya jaringan.",
+    "eyebrow": "Up to 27% untuk komunitas",
+    "title": "Up to 27% dari setiap token baru untuk orang Anda",
+    "lead": "10% setiap token baru masuk ke pool komunitas saat peluncuran, dijamin. Sisa di kurva (~17%) masuk ke pool komunitas atau dibakar — kreator memilih sekali saat peluncuran.",
     "statLabel": "dari pasokan setiap token baru masuk ke pool komunitasnya",
-    "statNote": "Pool ini milik orang-orang yang berpartisipasi di token itu — bukan milik jaringan dan bukan milik pencipta.",
+    "statNote": "Pool diatur timelock PEOPLE dan dibayar ke orang terverifikasi seiring waktu, bukan instan; bukan janji yield.",
     "footnote": "Biaya jaringan dibagi secara terpisah: {{community}}% ke pool komunitas, {{validators}}% ke validator.",
     "cta": "Ke mana biaya pergi",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Pembuat tanpa kode",
-    "title": "Pembuat tanpa kode",
-    "lead": "Wizard asli sudah tersedia di testnet publik. Luncurkan token atau NFT, terapkan escrow atau crowdfunding, jelaskan kontrak dengan kata-kata sederhana, atau buka Lavka — tidak perlu instalasi atau kompilasi.",
-    "cta": "Buka",
+    "eyebrow": "Tanpa kode, tanpa keahlian kripto",
+    "title": "Yang bisa Anda lakukan tanpa kode",
+    "lead": "Semua di bawah ini sudah berjalan hari ini di testnet publik. Tidak ada yang perlu diinstal, tidak ada yang perlu dikompilasi.",
+    "cta": "Coba di testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Luncurkan token",
-        "body": "Nama, ticker, gambar, dan pasokan. Bayar biaya peluncuran dan token langsung aktif di kurva ikatannya.",
+        "title": "Luncurkan token klub atau komunitas dalam satu menit",
+        "body": "Pilih nama, ticker, gambar, dan pasokan. Bayar biaya peluncuran dengan PPL dan token langsung live di bonding curve-nya sendiri.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Cetak koleksi NFT",
-        "body": "Kartu klub atau keanggotaan sebagai NFT — unggah atau buat gambar di browser.",
+        "title": "Cetak kartu NFT klub",
+        "body": "Kartu keanggotaan sebagai NFT: satu per anggota, dengan gambar yang Anda unggah atau buat di browser.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Terapkan escrow",
-        "body": "Contoh templat escrow di halaman kontrak: kunci dana hingga kondisi atau tenggat waktu terpenuhi.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Mulai crowdfunding",
-        "body": "Contoh templat crowdfund: tetapkan target dan kumpulkan dalam PPL atau stablecoin uji coba.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Kumpulkan dana untuk ide Anda",
+        "body": "Komunitas Anda membeli di curve sejak transaksi pertama, sehingga harga ditentukan oleh permintaan nyata, bukan oleh ronde privat.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Jelaskan kontrak pintar dengan kata-kata sederhana",
-        "body": "Kami memparameterkan templat OpenZeppelin yang telah ditinjau. Anda melihat Solidity sebelum menandatangani.",
+        "title": "Jelaskan smart contract dengan kata-kata biasa",
+        "body": "Tulis apa yang Anda inginkan dalam bahasa biasa dan dapatkan kontrak yang dibangun dari template OpenZeppelin yang sudah diaudit. Anda melihat hasilnya sebelum men-deploy.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Alat merchant Lavka",
-        "body": "Pass loyalitas dan escrow merchant untuk toko lokal — tanpa kode khusus.",
-        "href": "/lavka"
       }
     ]
   },
@@ -103,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10%",
+        "stat": "Up to 27%",
         "title": "dari setiap token baru masuk ke pool komunitas token itu",
         "body": "Bukan ke jaringan, bukan ke pencipta. Pool milik token itu sendiri, dibagi dengan orang-orang yang berpartisipasi."
       },

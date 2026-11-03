@@ -1,18 +1,18 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir. İnsanların sahip olduğu, VC'lerin değil."
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **Herbir kullanıcının doğrulanmış bir gerçek kişi olduğu blokzincir.**
 > **İnsanların sahip olduğu, VC'lerin değil.**
 
-*v1.1 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
+*v1.0 · Ekim 2026 · Rakamlar ön niteliktedir ve topluluk yönetişimine tabidir. Bu belgede hiçbir şey gelir vaadi değildir.*
 
 ---
 
@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Arz | **1.000.000.000 PPL**, sabit |
-| Başlatılan her token | **%10'si**, o token'ın kendi topluluk havuzuna gider |
+| Başlatılan her token | **%27'si**, o token'ın kendi topluluk havuzuna gider |
 | Yakılan ağ ücretleri | **%0** — her ücret paylaşılır |
 | Ödül kazanan | **Doğrulanmış insanlar** (Telegram telefon veya Human Passport) |
 | Finansman | **Kendi finansmanı.** VC yok. Yatırımcı tahsisi yok. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Botlar değil, doğrulanmış insanlar.** Ödüller, ücretsiz bir insan kontrolünü geçen hesaplara gider. Bir kişi, bir hesap. Kayıt tek başına hiçbir şey kazanmaz.
 
-**Başlatılan her token'ın %10'si topluluğa gider.** Bir yazıda vaat edilmez, protokole yerleştirilir: her standart başlatma, arzının %10'sini o token'ın kendi topluluk havuzuna gönderir. Hiçbir zaman ağ ücretleriyle karıştırılmaz.
+**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -53,17 +53,17 @@ Kod olmadan yapabileceğiniz şeyler:
 
 | Araç | Ne yaptığı | Durum |
 |---|---|---|
-| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %10'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
+| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %27'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
 | **NFT kulüp kartları** | Bir kulüp, kafe veya topluluk için üyelik kartları — üye başına bir tane, yüklediğiniz veya oluşturduğunuz bir görüntüyle. | Testnet'te canlı |
 | **Fon toplama** | İncelenen sözleşme şablonlarıyla bir proje için destek toplayın: emanet, hak ediş, token ağırlıklı oylama. Topluluğunuz eğride satın alır, bu nedenle talep fiyatı belirler — özel bir tur değil. | Testnet'te canlı |
 | **Yapay zeka sözleşmeleri** | Bir akıllı sözleşmeyi düz sözcüklerle açıklayın. OpenZeppelin şablonlarından birleştirilir ve dağıtmadan önce sonucu görürsünüz. | Testnet'te canlı |
-| **Topluluk yapay zeka ajanları** | Bir grup için çalışan ajanlar: harcama sınırları, beyaz listeler ve acil durum dondurması olan multisig bir topluluk cüzdanı. Parametreler yalnızca token oyu tarafından değişir; her işlem explorer'da görünür. | Testnet: 1 topluluk ajanı aktif |
+| **Topluluk yapay zeka ajanları** | Bir grup için çalışan ajanlar: harcama sınırları, beyaz listeler ve acil durum dondurması olan Safe tabanlı bir topluluk cüzdanı. Parametreler yalnızca token oyu tarafından değişir; her işlem explorer'da görünür. | Testnet: 1 topluluk ajanı aktif |
 
 ---
 
 ## 4. Teknoloji
 
-**Cosmos EVM.** PEOPLE, Cosmos EVM yığınında çalışır: Ethereum uyumlu akıllı sözleşmeler ve Cosmos zincirinde 0x adresleri.
+**Cosmos EVM.** People, Cosmos EVM yığınında çalışır: Ethereum uyumlu akıllı sözleşmeler ve Cosmos zincirinde 0x adresleri.
 
 | Parametre | Değer |
 |---|---|
@@ -115,9 +115,9 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Büyüme Havuzu | %15 |
 | Yakma | %0 |
 
-**Ücret akışı.** Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider. Ağ ücretlerinin %30'u halka açık PPL geri alımlarına gider (hazine %20 + likidite %10). Ağ ücretlerinin kalan %70'i doğrulayıcılara (%30), topluluk havuzuna (%25) ve Growth Pool'a (%15) gider. Hepsi nihayetinde katılımcılara geri döner. Sahte kıtlık yaratmak için hiçbir şey yakılmaz.
+**Geri alımlar.** Hazine (%20) ve likidite (%10) payları halka açık PPL geri alımları için kullanılır. Hiçbir şey kıtlık çakmak için yakılmaz — ücretler ağa ve insanlarına geri döner.
 
-**Token başlatma ücreti.** Test ağında canlı: kurulu fabrikalar hâlâ sabit bir PPL ücreti almaktadır — bir token başlatmak için 1,045005 PPL ve NFT basmak için 2,925 PPL. Onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır. Stabil coin seçeneği ve TWAP indirimi henüz kurulu kodda yoktur. Token ve NFT lansman ücretlerinin %100'ü (USDC/USDT) halka açık PPL geri alımlarına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak bölünür.
+**Token başlatma ücreti.** Test ağında canlı: kurulu fabrikalar hâlâ sabit bir PPL ücreti almaktadır — bir token başlatmak için 1,045005 PPL ve NFT basmak için 2,925 PPL. Onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır. Stabil coin seçeneği ve TWAP indirimi henüz kurulu kodda yoktur. Başlatma ücretlerinin %100'ü halka açık PPL geri alımına gider ve geri alınan PPL, diğer tüm geri alımlarda olduğu gibi hazine multisig'i tarafından 30/25/20/10/15 olarak paylaştırılır.
 
 ---
 
@@ -144,7 +144,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Base üzerinde PPL satışı** | PPL satışı yalnızca Base üzerinde yapılır (PplCurveHub, USDC veya USDT). Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; satış sözleşmesi yayınlanana kadar alımlar kapalı. PEOPLE ağının mainnet'i ayrı bir adımdır. | Satış sözleşmesi (Base'te PplCurveHub) ve alıcı multisig yayınlandı |
+| **Mainnet + PPL satışı** | Mainnet başlar. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; hub deploy edilene kadar alımlar kapalı. | En az 1.000 doğrulanmış kişi **ve** aktif hazine multisig |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
 Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
@@ -161,9 +161,9 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 ## 9. Güvenlik
 
-- Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı. Bug bounty on every page.
-- **Çoklu imza cüzdanları.** Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
-- **Yayımlanan adresler.** Satış sözleşmesi ve alıcı çoklu imza cüzdanı satış açılmadan önce; vesting ve LP kilidi sözleşmeleri ağın tam lansmanında yayımlanır. Yer tutucu yok.
+- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
+- **Hazine multisig.** Hazine mainnet'ten önce bir multisig'de tutulacak; imzalayan adresler yayınlanacaktır.
+- **Yayınlanan adresler.** Satış, hak ediş ve likidite sözleşme adresleri mainnet başlatmasında yayınlanacak — yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
 - **Kanıtlanmış yapı taşları.** Kod gerektirmeyen sözleşmeler OpenZeppelin şablonlarından birleştirilir.
 
@@ -185,13 +185,13 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kaynaklar aşağıda.
 
-| | Ethereum | Solana | PEOPLE |
+| | Ethereum | Solana | People |
 |---|---|---|---|
 | Yakılan ücretler | Temel ücret yakılır ¹ | Temel ücretin %50'si yakılır ² | **%0 yakılır** |
 | Ücreti alan | Doğrulayıcılar öncelik ücretini (bahşiş) alır ¹ | Doğrulayıcılar temel ücretin %50'sini ve öncelik ücretinin %100'ünü alırlar ² | **Doğrulayıcılar 30 · Topluluk 25 · Hazine 20 · Likidite 10 · Büyüme 15** |
 | Erken finansman | Halka açık eter satışı, 2014 (42 gün, BTC cinsinden ödendi) ³ | Multicoin Capital tarafından yönetilen 20 milyon dolar Series A (2019); yatırımcılar SOL jetonlarını aldılar ⁴ | **Kendi finansmanı. VC yok, yatırımcı tahsisi yok** |
 | Hesap oluşturma | Hesap oluşturmak hiçbir şeye mal olmaz; kimlik denetimi yok ⁵ | Protokol gereksi değil | **Ödüller yalnızca doğrulanmış insanlar için** |
-| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %10'si** |
+| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %27'si** |
 
 1. ethereum.org — Gaz ve ücretler: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Ücretler: https://solana.com/docs/core/fees
@@ -205,22 +205,20 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 ## Bağlantılar
 
-- Website: https://www.peopleblockchain.network
-- Million Founders: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### v1.1'da neler değişti
+### v1.0'da neler değişti
 
-- Yeni bir token'ın topluluk payı arzın **%10'sidir**: lansmanda ayrılan **%10**.
+- Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
-- Başlatma ücretleri: onaylanan plan, **token lansmanı için 1 USD ve NFT mint için 2 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
+- Başlatma ücretleri: onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.
-- Güvenlik: Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1 (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.; bug bounty on every page.
-- Çoklu imza cüzdanları. Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
-- Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
-- Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.
+- Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
+- Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.

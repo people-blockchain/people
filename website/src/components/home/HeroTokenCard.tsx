@@ -62,7 +62,7 @@ export function HeroTokenCard({ t }: { t: HeroCopy }) {
               aria-hidden="true"
             >
               <span className="grid h-12 w-12 place-items-center rounded-full bg-[#0b1220]/55 text-sm font-bold">
-                {TOKEN_COMMUNITY_SHARE_PCT}%
+                Up to {TOKEN_COMMUNITY_SHARE_PCT}%
               </span>
             </span>
             <div className="min-w-0">

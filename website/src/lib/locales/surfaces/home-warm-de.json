@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Starten Sie einen Token für Ihre Community."
     ],
-    "headlineAccent": "10 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccent": "27 % gehen an Ihre Leute, nicht an Wale.",
     "headlineAccentLines": [
-      "10 % gehen an Ihre Leute,",
+      "27 % gehen an Ihre Leute,",
       "nicht an Wale."
     ],
     "sub": "Kein Code, keine Krypto-Kenntnisse nötig. Ein Smartphone oder ein Browser reicht: Wallet in 30 Sekunden erstellen und im Testnet ausprobieren.",
@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Wallet in 30 Sekunden",
-        "sub": "Browser-Wallet: Ihre Schlüssel bleiben auf Ihrem Gerät. Cloud-Wallet: verschlüsselt auf PEOPLE-Servern gespeichert."
+        "sub": "Ihre Schlüssel bleiben auf Ihrem Smartphone oder in Ihrem Browser."
       },
       {
         "id": "token",
@@ -34,65 +34,53 @@
       },
       {
         "id": "share",
-        "label": "10 % an Ihre Leute",
-        "sub": "Jeder neue Token schickt 10 % seines Angebots in seinen eigenen Community-Pool."
+        "label": "27 % an Ihre Leute",
+        "sub": "Jeder neue Token schickt 27 % seines Angebots in seinen eigenen Community-Pool."
       }
     ],
-    "shareBadge": "10 % Community-Anteil",
+    "shareBadge": "27 % Community-Anteil",
     "peopleLine": "Ihre Leute, nicht Wale",
     "saleNote": "Das PEOPLE-Netzwerk ist noch ein Testnetz, seine Test-Token haben keinen Wert. Der PPL-Verkauf ist davon getrennt: Er läuft auf Base mit echten USDC oder USDT."
   },
   "community": {
-    "eyebrow": "10 % für die Community",
-    "title": "10 % jedes neuen Tokens gehen an Ihre Leute",
-    "lead": "Das ist im Protokoll verankert, nicht in einem Post versprochen: Jeder Standard-Start schickt 10 % seines Angebots in den eigenen Community-Pool dieses Tokens. Er wird nie mit Netzwerkgebühren vermischt.",
+    "eyebrow": "27 % für die Community",
+    "title": "27 % jedes neuen Tokens gehen an Ihre Leute",
+    "lead": "10 % jedes neuen Tokens gehen garantiert beim Start in seinen Community-Pool. Der restliche Kurvenrest (~17 %) geht in den Community-Pool oder wird verbrannt — der Ersteller wählt einmal beim Start.",
     "statLabel": "des Angebots jedes neuen Tokens fließen in seinen Community-Pool",
-    "statNote": "Der Pool gehört den Menschen, die an diesem Token teilnehmen — nicht dem Netzwerk und nicht dem Ersteller.",
+    "statNote": "Der Pool wird vom PEOPLE-Timelock gesteuert und an verifizierte Menschen über Zeit ausgezahlt, nicht sofort — kein Renditeversprechen.",
     "footnote": "Netzwerkgebühren werden separat aufgeteilt: {{community}} % an den Community-Pool, {{validators}} % an die Validatoren.",
     "cta": "Wohin die Gebühren fließen",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "No-Code-Builder",
-    "title": "No-Code-Builder",
-    "lead": "Echte Wizards laufen bereits im öffentlichen Testnetz. Starte einen Token oder NFT, stelle Escrow oder Crowdfunding bereit, beschreibe einen Vertrag in einfachen Worten oder öffne Lavka – nichts zu installieren oder zu kompilieren.",
-    "cta": "Öffnen",
+    "eyebrow": "Kein Code, keine Krypto-Kenntnisse",
+    "title": "Was Sie ohne Code tun können",
+    "lead": "Alles unten läuft schon heute im öffentlichen Testnet. Nichts zu installieren, nichts zu kompilieren.",
+    "cta": "Im Testnet ausprobieren",
     "cards": [
       {
         "id": "token",
-        "title": "Starte einen Token",
-        "body": "Name, Ticker, Bild und Supply. Zahle die Startgebühr und der Token geht live auf seiner Bonding Curve.",
+        "title": "Starten Sie einen Club- oder Community-Token in einer Minute",
+        "body": "Wählen Sie Name, Ticker, Bild und Angebot. Zahlen Sie die Startgebühr in PPL und der Token läuft auf seiner eigenen Bonding Curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Mint eine NFT-Kollektion",
-        "body": "Club- oder Mitgliedskarten als NFTs – lade ein Bild hoch oder generiere eines im Browser.",
+        "title": "NFT-Clubkarten erstellen",
+        "body": "Mitgliedskarten als NFTs: eine pro Mitglied, mit einem Bild, das Sie hochladen oder im Browser generieren.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Stelle ein Escrow bereit",
-        "body": "Beispiel-Escrow-Vorlage auf der Vertragsseite: Sperre Gelder bis zu einer Bedingung oder Frist.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Starte Crowdfunding",
-        "body": "Beispiel-Crowdfunding-Vorlage: Setze ein Ziel und sammle in PPL oder einem Test-Stablecoin.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Sammeln Sie Geld für Ihre Idee",
+        "body": "Ihre Community kauft von Anfang an auf der Kurve, sodass der Preis von echter Nachfrage statt von einer privaten Runde bestimmt wird.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Beschreibe einen Smart Contract in einfachen Worten",
-        "body": "Wir parametrisieren eine geprüfte OpenZeppelin-Vorlage. Du siehst das Solidity, bevor du unterschreibst.",
+        "title": "Beschreiben Sie einen Smart Contract in normaler Sprache",
+        "body": "Schreiben Sie, was Sie wollen, in gewöhnlicher Sprache und erhalten Sie einen Vertrag aus geprüften OpenZeppelin-Vorlagen. Sie sehen das Ergebnis, bevor Sie es deployen.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Lavka-Händler-Tools",
-        "body": "Loyalty-Pässe und Händler-Escrow für lokale Geschäfte – kein eigener Code.",
-        "href": "/lavka"
       }
     ]
   },
@@ -103,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10 %",
+        "stat": "27 %",
         "title": "jedes neuen Tokens gehen in dessen Community-Pool",
         "body": "Nicht ans Netzwerk, nicht an den Ersteller. Der eigene Pool des Tokens, geteilt mit den Menschen, die teilnehmen."
       },

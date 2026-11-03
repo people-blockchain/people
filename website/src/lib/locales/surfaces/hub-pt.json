@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "10%",
-        "title": "10% para o pool da comunidade",
+        "value": "Up to 27%",
+        "title": "Up to 27% para o pool da comunidade",
         "note": "Da oferta de cada novo token vai para o pool da comunidade."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "10% comunidade + taxa de rede",
+        "label": "Up to 27% comunidade + taxa de rede",
         "sub": "Parte do novo token e a taxa de protocolo ficam separadas"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "10% de cada novo token vai para o pool da comunidade",
-        "body": "Cada token padrão lançado através da rede envia 10% da oferta inicial para o Community Pool desse token — depois para a comunidade. Não é um pagamento pessoal, nem 10% de cada taxa.",
+        "title": "Up to 27% de cada novo token vai para o pool da comunidade",
+        "body": "10% de cada novo token vão para o pool comunitário no lançamento, garantido. O restante dos sobras da curva (~17%) vai para o pool comunitário ou é queimado — o criador escolhe uma vez no lançamento. O pool é governado pelo timelock PEOPLE e pago a pessoas verificadas ao longo do tempo, não na hora; não é promessa de rendimento. Not a personal payout, and not 10% of every fee.",
         "href": "/create/token",
         "cta": "Criar um token"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH-REFERRAL",
     "title": "Tu → L1 → L2",
-    "subtitle": "Pagamento Growth Beta ativo: L1 70% · L2 30% do orçamento de recompensa Growth. O Growth Pool é 15% das taxas elegíveis. Distinto dos destinos the fee split de taxas de rede e dos 10% de cada novo token que vão para o pool da comunidade.",
+    "subtitle": "Pagamento Growth Beta ativo: L1 70% · L2 30% do orçamento de recompensa Growth. O Growth Pool é 15% das taxas elegíveis. Distinto dos destinos the fee split de taxas de rede e dos Up to 27% de cada novo token que vão para o pool da comunidade.",
     "you": "Tu",
     "budgetNote": "As percentagens são quotas do orçamento de recompensa Growth depois de o the fee split encaminhar 15% das taxas elegíveis para o Growth Pool — não quotas de cada taxa de rede.",
     "detailsTitle": "Como funciona o Growth-referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Separado de taxas e tokens",
-        "body": "Os pesos Growth L1/L2 não são a divisão the fee split de taxas de rede nem os 10% de cada novo token para o pool da comunidade. O Growth Pool é um destino de taxa the fee split com regras próprias de liquidação."
+        "body": "Os pesos Growth L1/L2 não são a divisão the fee split de taxas de rede nem os Up to 27% de cada novo token para o pool da comunidade. O Growth Pool é um destino de taxa the fee split com regras próprias de liquidação."
       },
       {
         "title": "Este sítio",
@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JUNTA-TE",
     "title": "Como participar",
-    "subtitle": "Junta-te à PEOPLE Blockchain como participante da comunidade — a partir de um telemóvel, tablet ou navegador.",
+    "subtitle": "Junta-te à People’s Blockchain como participante da comunidade — a partir de um telemóvel, tablet ou navegador.",
     "steps": [
       {
         "num": "01",
@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Cria uma carteira",
-        "body": "Gera uma frase de 12 palavras no navegador, anota-a e cifra-a com uma palavra-passe. As chaves nunca saem deste dispositivo. Ou inicia sessão com Google para uma carteira na nuvem: a tua chave é guardada cifrada nos servidores da PEOPLE e a infraestrutura da PEOPLE consegue decifrá-la.",
+        "title": "Cria uma carteira não custodial",
+        "body": "Gera uma frase de 12 palavras no navegador, anota-a e cifra-a com uma palavra-passe. As chaves nunca saem deste dispositivo.",
         "href": "/wallet",
         "cta": "Abrir carteira"
       },
@@ -142,12 +142,12 @@
       {
         "num": "04",
         "title": "Participa na economia",
-        "body": "Paga taxas de Token Factory e de cunhagem NFT a partir da mesma carteira. A quota de 10% para o pool da comunidade em novos tokens, as taxas de rede e o Growth-referral continuam três mecanismos separados.",
+        "body": "Paga taxas de Token Factory e de cunhagem NFT a partir da mesma carteira. A quota de Up to 27% para o pool da comunidade em novos tokens, as taxas de rede e o Growth-referral continuam três mecanismos separados.",
         "href": "/create",
         "cta": "Criar"
       }
     ],
-    "ctaJoin": "Junta-te à PEOPLE Blockchain",
+    "ctaJoin": "Junta-te à People’s Blockchain",
     "ctaHow": "Como funciona"
   },
   "whatIs": {
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Uma pessoa com uma carteira num telemóvel, tablet ou navegador.",
-        "detail": "Começa com uma carteira num telemóvel, tablet ou navegador. Entras como pessoa da comunidade — não como validador."
+        "detail": "Começa com uma conta não custodial num telemóvel, tablet ou navegador. Entras como pessoa da comunidade — não como validador."
       },
       {
         "id": "transaction",
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "As taxas de rede e a quota comunitária de cada token ficam em canais separados.",
-        "detail": "As taxas de rede em PPL seguem the fee split. Tokens padrão criados por utilizadores enviam 10% da oferta desse token para o próprio pool da comunidade — isso não é uma taxa de rede."
+        "detail": "As taxas de rede em PPL seguem the fee split. Tokens padrão criados por utilizadores enviam Up to 27% da oferta desse token para o próprio pool da comunidade — isso não é uma taxa de rede."
       }
     ],
     "storyCta": "História visual completa"
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "ATIVO NATIVO",
-    "title": "PEOPLE (PPL)",
-    "summary": "PEOPLE é o ativo nativo de Blockchain para a comunidade. Ticker: PPL.",
+    "title": "People (PPL)",
+    "summary": "People é o ativo nativo de Blockchain para a comunidade. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILIDADE",
@@ -348,7 +348,7 @@
     ],
     "growthNote": "O Growth Pool recebe 15% das taxas elegíveis. Não é rendimento garantido, nem um retorno passivo, nem um produto de investimento.",
     "detailsTitle": "Como funciona o encaminhamento de taxas",
-    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The 10% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The Up to 27% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Como as recompensas são explicadas"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "O preço de lançamento usa uma curva de produto constante com matemática inteira exata.",
       "Uma taxa de protocolo na curva é encaminhada pela economia de taxas de rede.",
-      "A divisão padrão de lançamento inclui 10% obrigatórios da oferta desse token para o próprio pool da comunidade (não é uma taxa de rede em PPL).",
+      "A divisão padrão de lançamento inclui Up to 27% obrigatórios da oferta desse token para o próprio pool da comunidade (não é uma taxa de rede em PPL).",
       "O vesting do criador mantém a maior parte da sua quota a desbloquear ao longo do tempo, para a comunidade não ser despejada no primeiro dia."
     ],
     "createCta": "Abrir Token Factory",

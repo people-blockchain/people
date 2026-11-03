@@ -25,29 +25,22 @@ function extractConstObject(file, name) {
   return { rows, ids };
 }
 
-test("Token Factory public copy is confirmed 10%, not 10%+", () => {
+test("Token Factory public copy uses up to 27% headline and 10% launch guarantee", () => {
   const economics = src("src/lib/selling-economics.ts");
   assert.match(economics, /TOKEN_COMMUNITY_ALLOCATION_PCT = 10/);
-  assert.match(economics, /TOKEN_COMMUNITY_ALLOCATION_PLUS = false/);
-  // Headline community share: 10% pool at launch.
-  assert.match(economics, /TOKEN_COMMUNITY_SHARE_PCT = 10/);
+  assert.match(economics, /TOKEN_COMMUNITY_SHARE_MAX_PCT = 27/);
+  assert.match(economics, /TOKEN_COMMUNITY_SHARE_EXPLANATION_EN/);
+  assert.match(economics, /goes to its community pool at launch, guaranteed/);
+  assert.match(economics, /TOKEN_COMMUNITY_SHARE_PCT = TOKEN_COMMUNITY_SHARE_MAX_PCT/);
 
   const hub = src("src/lib/hub-content.ts");
-  assert.doesNotMatch(hub, /10%\+/);
-  assert.doesNotMatch(hub, /10% \+/);
-  assert.doesNotMatch(hub, /10%\+/);
-  assert.doesNotMatch(hub, /10% \+/);
-  assert.match(hub, /10% of every new token goes to the community pool/);
-  assert.match(hub, /10% каждого нового токена — в пул сообщества/);
-  assert.match(hub, /10% to the community pool/);
-  assert.match(hub, /Of every new token's supply goes to the community pool/);
-  assert.match(hub, /10% — в пул сообщества/);
-  assert.match(hub, /От каждого нового токена идёт в пул сообщества/);
+  assert.match(hub, /Up to 27%/);
+  assert.match(hub, /TOKEN_COMMUNITY_SHARE_EXPLANATION_EN/);
+  assert.match(hub, /10% at launch, guaranteed/);
+  assert.doesNotMatch(hub, /27%\+/);
+  assert.doesNotMatch(hub, /mandatory 27%/i);
   assert.doesNotMatch(hub, /Token community allocation/i);
   assert.doesNotMatch(hub, /Аллокация сообществу/);
-  assert.doesNotMatch(hub, /can flow to the community/i);
-  assert.doesNotMatch(hub, /могут идти сообществу/i);
-  assert.doesNotMatch(hub, /передаётся сообществу/i);
 });
 
 test("Model A fee split is 30/25/20/10/15/0 and sums to 100", () => {
@@ -192,7 +185,7 @@ test("public website copy must not mention Model A", () => {
 test("owner-approved EN hero copy on homepage", () => {
   const en = JSON.parse(src("src/lib/locales/surfaces/home-en.json"));
   assert.match(en.hero.headlineMain, /Launch a token for your community/);
-  assert.match(en.hero.headlineAccent, /10% goes to your people/);
+  assert.match(en.hero.headlineAccent, /Up to 27%/);
   assert.match(en.hero.testnetBadge, /Public testnet is live/);
 });
 
@@ -200,7 +193,7 @@ test("RU home hero is translated, not legacy lockup", () => {
   const ru = JSON.parse(src("src/lib/locales/surfaces/home-ru.json"));
   const hero = src("src/components/Hero.tsx");
   assert.match(ru.hero.headlineMain, /Запустите токен/);
-  assert.match(ru.hero.headlineAccent, /10%/);
+  assert.match(ru.hero.headlineAccent, /27%/);
   assert.match(hero, /headlineMainLines/);
   assert.match(hero, /t\.headlineAccent/);
   assert.doesNotMatch(hero, /PEOPLE&apos;S/);
@@ -272,7 +265,7 @@ test("homepage still leads with user-value props in both locales", () => {
   const ru = JSON.parse(src("src/lib/locales/surfaces/home-ru.json"));
   assert.match(en.blocks[1].body, /10% of every new token/);
   assert.match(ru.blocks[1].body, /10% каждого нового токена/);
-  assert.match(en.hero.headlineAccent, /10%/);
+  assert.match(en.hero.headlineAccent, /Up to 27%|27%/);
   assert.doesNotMatch(JSON.stringify(en), /10%\+/);
   assert.doesNotMatch(JSON.stringify(en), /10%\+/);
   assert.doesNotMatch(JSON.stringify(en), /L1 15%/);
