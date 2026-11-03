@@ -67,11 +67,20 @@ export function ticketToSupportOpsListItem(report: BugReportRow) {
   };
 }
 
+export function parseSupportOpsSinceParam(sinceRaw: string | null): Date | null {
+  const raw = sinceRaw?.trim();
+  if (!raw) return null;
+  const d = new Date(raw);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export async function GET(request: Request) {
   const denied = unauthorizedSupportOpsResponse(request);
   if (denied) return denied;
+  const since = parseSupportOpsSinceParam(new URL(request.url).searchParams.get("since"));
   const reports = await listBugReportsForAdmin();
-  const open = reports.filter((r) => OPEN_STATUSES.includes(r.status as BugStatus));
+  let open = reports.filter((r) => OPEN_STATUSES.includes(r.status as BugStatus));
+  if (since) open = open.filter((r) => r.createdAt >= since);
   return NextResponse.json(open.map(ticketToSupportOpsListItem));
 }
 

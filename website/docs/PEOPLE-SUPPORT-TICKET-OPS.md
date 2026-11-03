@@ -15,6 +15,7 @@ Base URL (production):
 | `TELEGRAM_SUPPORT_OPS_SECRET` | Vercel (website project, Sensitive) | Bearer token for this API |
 | `PEOPLE_SUPPORT_OPS_URL` | OpenMausBot / local CLI | Override API URL (optional) |
 | `TELEGRAM_SUPPORT_OPS_SECRET` | OpenMausBot / local CLI | Same secret as Vercel (never log it) |
+| `PEOPLE_SUPPORT_TICKET_WEBHOOK_URL` | Vercel (website, optional) | POST `ticket_created` on new intake (no PII) |
 
 ### One-time production setup (Alex)
 
@@ -28,9 +29,35 @@ Base URL (production):
 
 Only `new` and `accepted` tickets are returned. Response is a JSON array (no phone, chat id, or username).
 
+Optional query `?since=<ISO8601>` returns only open tickets with `createdAt >= since`. Use this for
+**3-hour polling**: store the timestamp of the last successful poll and pass it as `since` on the
+next GET so you only receive newly created open tickets (closed tickets are never listed).
+
 ```bash
 curl -sS -H "Authorization: Bearer $TELEGRAM_SUPPORT_OPS_SECRET" \
   "https://www.peopleblockchain.network/api/telegram/support-ops"
+
+# Incremental poll (example)
+curl -sS -H "Authorization: Bearer $TELEGRAM_SUPPORT_OPS_SECRET" \
+  "https://www.peopleblockchain.network/api/telegram/support-ops?since=2026-11-04T08:00:00.000Z"
+```
+
+## Ticket-created webhook (optional)
+
+When `PEOPLE_SUPPORT_TICKET_WEBHOOK_URL` is set on the website, each new ticket from Telegram intake
+fires a fire-and-forget POST with `Authorization: Bearer` using the same `TELEGRAM_SUPPORT_OPS_SECRET`.
+Body (JSON only, no chat id / username / phone):
+
+```json
+{
+  "event": "ticket_created",
+  "id": "<uuid>",
+  "shortId": "<first 8 chars>",
+  "type": "support",
+  "status": "new",
+  "locale": "en",
+  "createdAt": "2026-11-04T12:00:00.000Z"
+}
 ```
 
 ## Reply to a ticket

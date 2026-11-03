@@ -385,8 +385,33 @@ async function intake(msg: TgMessage, type: BugReportType, description: string):
       telegramPhotoFileId: photoId,
     },
   );
+  void notifySupportTicketCreated(report);
   await tgApi("sendMessage", { chat_id: chatId, text: T[l].received(report.id) });
   await notifyOwnerNewReport(report, { reporter: msg.from?.username ? `@${msg.from.username}` : msg.from?.first_name ?? `tg:${msg.from?.id}` });
+}
+
+/** Optional outbound webhook when PEOPLE_SUPPORT_TICKET_WEBHOOK_URL is set (no PII). */
+export async function notifySupportTicketCreated(report: BugReportRow): Promise<void> {
+  const url = process.env.PEOPLE_SUPPORT_TICKET_WEBHOOK_URL?.trim();
+  if (!url) return;
+  const secret = process.env.TELEGRAM_SUPPORT_OPS_SECRET?.trim();
+  const locale = (report.context as { locale?: string } | null)?.locale ?? null;
+  const body = JSON.stringify({
+    event: "ticket_created",
+    id: report.id,
+    shortId: report.id.slice(0, 8),
+    type: report.type,
+    status: report.status,
+    locale,
+    createdAt: report.createdAt.toISOString(),
+  });
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (secret) headers.authorization = `Bearer ${secret}`;
+  try {
+    await fetch(url, { method: "POST", headers, body });
+  } catch {
+    // fire-and-forget: never fail intake
+  }
 }
 
 // ---------- owner notify / triage ----------

@@ -29,7 +29,7 @@ beforeEach(() => {
   globalThis.fetch = async (url, init) => {
     const method = String(url).split("/").pop();
     const body = init?.body && typeof init.body === "string" ? JSON.parse(init.body) : init?.body;
-    calls.push({ method, body });
+    calls.push({ url: String(url), initMethod: init?.method, method, body, headers: init?.headers });
     if (method === "getWebhookInfo") {
       return new Response(JSON.stringify({ ok: true, result: { url: "https://x/api/telegram/verify-webhook", allowed_updates: ["message"] } }));
     }
@@ -78,6 +78,34 @@ test("/support <text> stores a support item and forwards it to the owner with bu
   const buttons = toOwner.body.reply_markup.inline_keyboard.flat().map((b) => b.callback_data);
   assert.deepEqual(buttons, ["accept", "duplicate", "fixed", "reject", "reply"].map((a) => `br:${a}:${rows[0].id}`));
   assert.ok(calls.some((c) => c.method === "sendMessage" && c.body.chat_id === 42 && /received/.test(c.body.text)));
+});
+
+test("/support intake POSTs ticket_created webhook when PEOPLE_SUPPORT_TICKET_WEBHOOK_URL is set", async () => {
+  process.env.PEOPLE_SUPPORT_TICKET_WEBHOOK_URL = "https://hooks.test/support-ticket";
+  process.env.TELEGRAM_SUPPORT_OPS_SECRET = "webhook-bearer-secret";
+  try {
+    calls = [];
+    await bot.handleSupportBotUpdate(msg(821, "/support webhook body check"));
+    const [row] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "821"));
+    const hook = calls.find(
+      (c) => c.url === "https://hooks.test/support-ticket" && c.initMethod === "POST",
+    );
+    assert.ok(hook, "expected webhook POST");
+    assert.equal(hook.headers?.authorization, "Bearer webhook-bearer-secret");
+    assert.deepEqual(hook.body, {
+      event: "ticket_created",
+      id: row.id,
+      shortId: row.id.slice(0, 8),
+      type: "support",
+      status: "new",
+      locale: "en",
+      createdAt: row.createdAt.toISOString(),
+    });
+    assert.ok(!("telegramChatId" in hook.body));
+  } finally {
+    delete process.env.PEOPLE_SUPPORT_TICKET_WEBHOOK_URL;
+    delete process.env.TELEGRAM_SUPPORT_OPS_SECRET;
+  }
 });
 
 test("/bug then a photo with caption creates a bug with the photo forwarded", async () => {
@@ -192,6 +220,36 @@ test("support-ops: list open tickets, reply and status via API", async () => {
   assert.match(calls.find((c) => c.body.chat_id === "810")?.body.text, /accepted/);
 });
 
+test("support-ops: since filter returns only newer open tickets", async () => {
+  process.env.TELEGRAM_SUPPORT_OPS_SECRET = "test-support-ops-secret";
+  const route = await import("../src/app/api/telegram/support-ops/route.ts");
+  const auth = { authorization: "Bearer test-support-ops-secret" };
+
+  await bot.handleSupportBotUpdate(msg(9010, "/support since old"));
+  const [oldRow] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "9010"));
+  await db
+    .update(schema.bugReports)
+    .set({ createdAt: new Date("2020-01-01T00:00:00.000Z") })
+    .where(eq(schema.bugReports.id, oldRow.id));
+
+  await bot.handleSupportBotUpdate(msg(9011, "/support since new"));
+  const [newRow] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "9011"));
+
+  await bot.handleSupportBotUpdate(msg(9012, "/support since closed"));
+  const [closedRow] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "9012"));
+  await bot.applySupportStatusAsAdmin(closedRow.id, "fixed");
+
+  const listRes = await route.GET(
+    new Request("http://local/api/telegram/support-ops?since=2026-01-01T00:00:00.000Z", { headers: auth }),
+  );
+  assert.equal(listRes.status, 200);
+  const list = await listRes.json();
+  const ids = list.map((t) => t.id);
+  assert.ok(ids.includes(newRow.id));
+  assert.ok(!ids.includes(oldRow.id));
+  assert.ok(!ids.includes(closedRow.id));
+});
+
 test("sendSupportReplyAsAdmin and applySupportStatusAsAdmin", async () => {
   await bot.handleSupportBotUpdate(msg(811, "/bug direct fn"));
   const [row] = await db.select().from(schema.bugReports).where(eq(schema.bugReports.telegramChatId, "811"));
@@ -216,6 +274,8 @@ test("resolveSupportOpsStatus maps bot aliases and raw statuses", async () => {
   assert.equal(route.resolveSupportOpsStatus("duplicate"), "duplicate");
   assert.equal(route.resolveSupportOpsStatus("accepted"), "accepted");
   assert.equal(route.resolveSupportOpsStatus("nope"), null);
+  assert.equal(route.parseSupportOpsSinceParam("2026-01-01T00:00:00.000Z")?.toISOString(), "2026-01-01T00:00:00.000Z");
+  assert.equal(route.parseSupportOpsSinceParam("not-a-date"), null);
 });
 
 test("site bug-button reports are forwarded to the owner with buttons", async () => {
