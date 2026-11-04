@@ -574,7 +574,7 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
         </section>
       ) : null}
 
-      {founder ? (
+      {founder && !embedded ? (
         <div className="mx-auto max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
           <FoundersMillionCounterBar copy={landing} lang={lang} counter={millionCounter} />
         </div>
