@@ -117,7 +117,7 @@ test("claimKolCode, depth 2 enforcement, buyer wallet binding, and loadCabinet m
     eventKind: "buy",
     buyerAddress: buyerWallet,
     beneficiaryAddress: buyerWallet,
-    tokenAddress: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    tokenAddress: "0x000000000000000000000000000000000000d13c",
     usdMicro: "30000000000", // $30,000 -> unlocks Tier 2 (9% USDC + 3% PPL)
     pplMicro: "3000000000000",
     buyerUserId: l1Id,
