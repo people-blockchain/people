@@ -9,6 +9,7 @@ import { formatFounderDisplayNumber } from "@/lib/founders/format-founder-number
 import { FounderCard } from "@/components/founders/FounderCard";
 import { CountUpNumber, WARM_PRIMARY_BTN, fill } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 const STATS_POLL_MS = 30_000;
 
@@ -21,9 +22,11 @@ export function HomeWarmFoundersTeaser() {
   const { lang } = useLanguage();
   const t = homeWarmCopy(lang).foundersTeaser;
   const cardCopy = foundersPromoCopy(lang);
+  const statsPublic = showCommunityStats();
   const [verifiedCount, setVerifiedCount] = useState<number | null>(null);
 
   const load = useCallback(async () => {
+    if (!statsPublic) return;
     try {
       const res = await fetch("/api/founders/stats", { cache: "no-store" });
       if (!res.ok) return;
@@ -34,18 +37,22 @@ export function HomeWarmFoundersTeaser() {
     } catch {
       /* keep the count hidden */
     }
-  }, []);
+  }, [statsPublic]);
 
   useEffect(() => {
+    if (!statsPublic) {
+      setVerifiedCount(null);
+      return;
+    }
     void load();
     const id = window.setInterval(() => void load(), STATS_POLL_MS);
     return () => window.clearInterval(id);
-  }, [load]);
+  }, [load, statsPublic]);
 
   const title =
-    verifiedCount === null
-      ? t.title
-      : fill(t.titleWithNumber, { n: formatFounderDisplayNumber(verifiedCount + 1, lang) });
+    statsPublic && verifiedCount !== null
+      ? fill(t.titleWithNumber, { n: formatFounderDisplayNumber(verifiedCount + 1, lang) })
+      : t.title;
 
   return (
     <section id="home-founders" data-testid="home-warm-founders" aria-labelledby="home-founders-title">
@@ -58,7 +65,7 @@ export function HomeWarmFoundersTeaser() {
             </h2>
             <p className="mt-3 max-w-xl text-sm text-ink-2 sm:text-base">{t.lead}</p>
 
-            {verifiedCount !== null ? (
+            {statsPublic && verifiedCount !== null ? (
               <p
                 className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink"
                 data-testid="home-warm-founders-live"

@@ -24,6 +24,7 @@ import {
   WarmCtaLink,
   WarmSection,
 } from "@/components/warm/warm-ui";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Counters = { verifiedPeople: number; countries: number };
 
@@ -283,8 +284,9 @@ function CommunitySection({
 }) {
   const { lang } = useLanguage();
   const t = transparencyCopy[lang].community;
+  const statsPublic = showCommunityStats();
   const tiles: { key: string; label: string; value: number }[] = [];
-  if (payload) {
+  if (payload && statsPublic) {
     tiles.push({ key: "verified", label: t.verified, value: payload.counters.verifiedPeople });
     tiles.push({ key: "countries", label: t.countries, value: payload.counters.countries });
   }
@@ -323,6 +325,7 @@ function AmbassadorsSection({ payload }: { payload: TransparencyPayload | null }
   const { lang } = useLanguage();
   const t = transparencyCopy[lang].ambassadors;
   const rows = payload?.ambassadors ?? [];
+  if (!showCommunityStats()) return null;
   // Empty source → no leaderboard. An empty list of names is not a report.
   if (!payload || rows.length === 0) return null;
 
@@ -511,6 +514,7 @@ function ReportSection({
 }) {
   const { lang } = useLanguage();
   const t = transparencyCopy[lang].report;
+  const statsPublic = showCommunityStats();
   if (failed) return null;
   return (
     <WarmSection id="report" eyebrow={t.eyebrow} title={t.title} lead={t.lead} testId="transparency-report">
@@ -529,35 +533,42 @@ function ReportSection({
         </div>
       </Reveal>
       {report ? (
-        <div className="mt-6 grid gap-4 lg:grid-cols-3" data-testid="transparency-report-body">
-          <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">
-              {t.growthLabel}
-            </p>
-            <p className="mt-2 font-mono text-3xl font-bold tabular-nums text-ink">
-              <CountUpNumber value={report.newVerifiedPeople} lang={lang} />
-            </p>
-            <p className="mt-1 text-sm text-ink-2">{t.newPeople}</p>
-          </div>
-          <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">
-              {t.countriesLabel}
-            </p>
-            {report.topCountries.length ? (
-              <ul className="mt-3 space-y-2">
-                {report.topCountries.map((row) => (
-                  <li key={row.countryCode} className="flex items-center justify-between gap-3 text-sm">
-                    <span className="min-w-0 truncate text-ink">
-                      {countryFlagEmoji(row.countryCode)} {countryName(row.countryCode)}
-                    </span>
-                    <span className="shrink-0 font-mono text-ink-2">{row.count.toLocaleString(lang)}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-3 text-sm text-ink-3">{t.nothing}</p>
-            )}
-          </div>
+        <div
+          className={`mt-6 grid gap-4 ${statsPublic ? "lg:grid-cols-3" : "lg:grid-cols-1"}`}
+          data-testid="transparency-report-body"
+        >
+          {statsPublic ? (
+            <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">
+                {t.growthLabel}
+              </p>
+              <p className="mt-2 font-mono text-3xl font-bold tabular-nums text-ink">
+                <CountUpNumber value={report.newVerifiedPeople} lang={lang} />
+              </p>
+              <p className="mt-1 text-sm text-ink-2">{t.newPeople}</p>
+            </div>
+          ) : null}
+          {statsPublic ? (
+            <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">
+                {t.countriesLabel}
+              </p>
+              {report.topCountries.length ? (
+                <ul className="mt-3 space-y-2">
+                  {report.topCountries.map((row) => (
+                    <li key={row.countryCode} className="flex items-center justify-between gap-3 text-sm">
+                      <span className="min-w-0 truncate text-ink">
+                        {countryFlagEmoji(row.countryCode)} {countryName(row.countryCode)}
+                      </span>
+                      <span className="shrink-0 font-mono text-ink-2">{row.count.toLocaleString(lang)}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 text-sm text-ink-3">{t.nothing}</p>
+              )}
+            </div>
+          ) : null}
           <div className="rounded-3xl border border-line bg-surface p-6 shadow-[var(--elev-1)]">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-3">
               {t.launchedLabel}
