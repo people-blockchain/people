@@ -23,7 +23,7 @@ export const zh: LocaleContent = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Million Founders",
+        "label": "创始人与赏金",
         "href": "/founders"
       },
       {

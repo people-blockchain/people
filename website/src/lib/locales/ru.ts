@@ -23,7 +23,7 @@ export const ru: LocaleContent = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Миллион основателей",
+        "label": "Основатели и баунти",
         "href": "/founders"
       },
       {

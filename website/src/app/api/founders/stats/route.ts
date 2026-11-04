@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "@/db";
 import { getFounderPublicStats } from "@/lib/founders/service";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (!showCommunityStats()) {
+    return NextResponse.json({ error: "hidden" }, { status: 503 });
+  }
   if (!isDatabaseConfigured()) {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }

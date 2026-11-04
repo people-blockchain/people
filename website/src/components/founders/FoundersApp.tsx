@@ -21,7 +21,6 @@ import {
   FoundersLandingFinalCta,
   FoundersLandingFaq,
   FoundersLandingHero,
-  FoundersMillionCounterBar,
   FoundersNftSection,
   FoundersSealSection,
   FoundersSpecialSection,
@@ -30,6 +29,7 @@ import {
 } from "./FoundersLandingSections";
 import { FoundersNftCard } from "./FoundersNftCard";
 import { HumanPassportFlow } from "./HumanPassportFlow";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
   signedIn: boolean;
@@ -89,14 +89,18 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
 
   const load = useCallback(async () => {
     const [counterRes, meRes] = await Promise.all([
-      fetch("/api/founders/million-counter", { cache: "no-store" }).catch(() => null),
+      showCommunityStats()
+        ? fetch("/api/founders/million-counter", { cache: "no-store" }).catch(() => null)
+        : Promise.resolve(null),
       fetch("/api/founders/me", { cache: "no-store", credentials: "include" }).catch(() => null),
     ]);
-    if (counterRes?.ok) {
+    if (showCommunityStats() && counterRes?.ok) {
       const body = (await counterRes.json()) as { current?: number; goal?: number; source?: string };
       if (typeof body.current === "number" && typeof body.goal === "number") {
         setMillionCounter({ current: body.current, goal: body.goal, source: body.source });
       }
+    } else {
+      setMillionCounter(null);
     }
     const meBody = meRes?.ok ? ((await meRes.json()) as Me) : null;
     setMe(meBody);
@@ -567,12 +571,6 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
             />
           </div>
         </section>
-      ) : null}
-
-      {founder && !embedded ? (
-        <div className="mx-auto max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
-          <FoundersMillionCounterBar copy={landing} lang={lang} counter={millionCounter} />
-        </div>
       ) : null}
 
       {embedded ? null : (

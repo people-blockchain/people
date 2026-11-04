@@ -6,6 +6,7 @@ import { CountUpNumber, PersonAvatar, SectionHead } from "./founders-ui";
 import { FounderCard } from "./FounderCard";
 import type { FoundersPromoCopy } from "@/lib/founders-promo-content";
 import { FounderMosaicPlaceholder } from "./FounderMosaicPlaceholder";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 const SECTION = "mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8";
 
@@ -42,6 +43,8 @@ export function FoundersMillionCounterBar({
   counter: MillionCounter | null;
   className?: string;
 }) {
+  if (!showCommunityStats()) return null;
+
   const pct =
     counter && counter.goal > 0 && counter.current > 0
       ? Math.max(0.5, Math.min(100, (counter.current / counter.goal) * 100))

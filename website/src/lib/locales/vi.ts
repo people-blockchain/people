@@ -23,7 +23,7 @@ export const vi: LocaleContent = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Million Founders",
+        "label": "Nhà sáng lập & phần thưởng",
         "href": "/founders"
       },
       {

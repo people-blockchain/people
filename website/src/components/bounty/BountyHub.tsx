@@ -29,6 +29,7 @@ import {
 } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { FoundersApp } from "@/components/founders/FoundersApp";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
   signedIn: boolean;
@@ -267,10 +268,12 @@ export function BountyTasks() {
 export function BountyCommunity() {
   const { lang } = useLanguage();
   const t = bountyCopy(lang);
+  const statsPublic = showCommunityStats();
   const [payload, setPayload] = useState<CommunityPayload | null>(null);
   const [goal, setGoal] = useState<number | null>(null);
 
   useEffect(() => {
+    if (!statsPublic) return;
     let alive = true;
     const load = async () => {
       const [community, counter] = await Promise.all([
@@ -292,7 +295,9 @@ export function BountyCommunity() {
       alive = false;
       window.clearInterval(id);
     };
-  }, []);
+  }, [statsPublic]);
+
+  if (!statsPublic) return null;
 
   const counters = payload?.counters ?? null;
   const rows = payload?.ambassadors ?? [];
