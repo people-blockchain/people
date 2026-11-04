@@ -21,6 +21,7 @@ import {
   FoundersLandingFinalCta,
   FoundersLandingFaq,
   FoundersLandingHero,
+  FoundersMillionCounterBar,
   FoundersNftSection,
   FoundersSealSection,
   FoundersSpecialSection,
@@ -571,6 +572,12 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
             />
           </div>
         </section>
+      ) : null}
+
+      {founder && !embedded ? (
+        <div className="mx-auto max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
+          <FoundersMillionCounterBar copy={landing} lang={lang} counter={millionCounter} />
+        </div>
       ) : null}
 
       {embedded ? null : (
