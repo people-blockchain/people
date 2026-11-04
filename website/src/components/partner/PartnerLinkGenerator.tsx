@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PARTNER_CABINET_EN } from "@/lib/partner/cabinet-copy";
+import { partnerCopy } from "@/lib/partner/copy";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Props = {
   referralCode: string;
@@ -16,6 +17,8 @@ export function PartnerLinkGenerator({
   referralLink,
   origin,
 }: Props) {
+  const { lang } = useLanguage();
+  const t = partnerCopy[lang];
   const [kolCode, setKolCode] = useState<string | null>(initialKolCode);
   const [kolInput, setKolInput] = useState<string>(initialKolCode ?? "");
   const [savingKol, setSavingKol] = useState(false);
@@ -45,7 +48,7 @@ export function PartnerLinkGenerator({
     setKolSuccess(null);
     const candidate = kolInput.trim().toLowerCase();
     if (!/^[a-z0-9]{6,16}$/.test(candidate)) {
-      setKolError("KOL code must be 6–16 lowercase letters or numbers.");
+      setKolError(t.kolErrorInvalidFormat);
       return;
     }
     setSavingKol(true);
@@ -62,19 +65,19 @@ export function PartnerLinkGenerator({
       };
       if (!res.ok || !data.ok || !data.kolCode) {
         if (data.error === "kol_code_taken") {
-          setKolError("This KOL code is already taken by another partner.");
+          setKolError(t.kolErrorTaken);
         } else if (data.error === "rate_limited") {
-          setKolError("Too many attempts. Please wait a few minutes and try again.");
+          setKolError(t.kolErrorRateLimited);
         } else {
-          setKolError("Invalid KOL code format. Use 6–16 lowercase letters or numbers.");
+          setKolError(t.kolErrorInvalidFormatRetry);
         }
         return;
       }
       setKolCode(data.kolCode);
       setKolInput(data.kolCode);
-      setKolSuccess(`Custom KOL code "${data.kolCode}" saved.`);
+      setKolSuccess(t.kolSuccessSaved.replace("{code}", data.kolCode));
     } catch {
-      setKolError("Network error while saving KOL code. Please try again.");
+      setKolError(t.kolErrorNetwork);
     } finally {
       setSavingKol(false);
     }
@@ -88,14 +91,14 @@ export function PartnerLinkGenerator({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 id="partner-links-heading" className="text-lg font-semibold text-ink">
-            {PARTNER_CABINET_EN.linksSectionTitle}
+            {t.linksSectionTitle}
           </h2>
           <p className="mt-1 text-sm text-ink-muted">
-            {PARTNER_CABINET_EN.linksSectionSubtitle}
+            {t.linksSectionSubtitle}
           </p>
         </div>
         <span className="rounded-full bg-brand-soft px-3 py-1 font-mono text-xs font-semibold text-brand">
-          Code: {kolCode ?? referralCode}
+          {t.kolCodeBadgePrefix} {kolCode ?? referralCode}
         </span>
       </div>
 
@@ -103,7 +106,7 @@ export function PartnerLinkGenerator({
         <div className="flex flex-col justify-between rounded-2xl border border-line bg-canvas p-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              {PARTNER_CABINET_EN.unifiedLinkLabel}
+              {t.unifiedLinkLabel}
             </p>
             <p className="mt-2 break-all font-mono text-xs text-ink" data-testid="partner-invite-link">
               {defaultInviteLink}
@@ -114,14 +117,14 @@ export function PartnerLinkGenerator({
             onClick={() => void copyText("invite", defaultInviteLink)}
             className="mt-4 inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-strong"
           >
-            {copiedKey === "invite" ? PARTNER_CABINET_EN.copiedButton : PARTNER_CABINET_EN.copyButton}
+            {copiedKey === "invite" ? t.copiedButton : t.copyButton}
           </button>
         </div>
 
         <div className="flex flex-col justify-between rounded-2xl border border-line bg-canvas p-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              {PARTNER_CABINET_EN.kolLinkLabel}
+              {t.kolLinkLabel}
             </p>
             {kolInviteLink ? (
               <p className="mt-2 break-all font-mono text-xs text-ink" data-testid="partner-kol-link">
@@ -129,7 +132,7 @@ export function PartnerLinkGenerator({
               </p>
             ) : (
               <p className="mt-2 text-xs text-ink-muted">
-                {PARTNER_CABINET_EN.kolSlugEmptyHint}
+                {t.kolSlugEmptyHint}
               </p>
             )}
           </div>
@@ -139,7 +142,7 @@ export function PartnerLinkGenerator({
               onClick={() => void copyText("kol", kolInviteLink)}
               className="mt-4 inline-flex items-center justify-center rounded-full bg-brand px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-strong"
             >
-              {copiedKey === "kol" ? PARTNER_CABINET_EN.copiedButton : PARTNER_CABINET_EN.copyButton}
+              {copiedKey === "kol" ? t.copiedButton : t.copyButton}
             </button>
           ) : null}
         </div>
@@ -149,15 +152,15 @@ export function PartnerLinkGenerator({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
             <label htmlFor="partner-kol-code-input" className="block text-xs font-semibold text-ink">
-              {PARTNER_CABINET_EN.kolSlugLabel}
+              {t.kolSlugLabel}
             </label>
-            <p className="mt-0.5 text-xs text-ink-muted">{PARTNER_CABINET_EN.kolSlugHint}</p>
+            <p className="mt-0.5 text-xs text-ink-muted">{t.kolSlugHint}</p>
             <input
               id="partner-kol-code-input"
               type="text"
               value={kolInput}
               onChange={(e) => setKolInput(e.target.value)}
-              placeholder={PARTNER_CABINET_EN.kolSlugPlaceholder}
+              placeholder={t.kolSlugPlaceholder}
               maxLength={16}
               className="mt-2 w-full rounded-xl border border-line bg-canvas px-3.5 py-2 font-mono text-sm text-ink focus:border-brand focus:outline-none"
             />
@@ -168,7 +171,7 @@ export function PartnerLinkGenerator({
             aria-busy={savingKol}
             className="inline-flex h-10 items-center justify-center rounded-full border border-brand bg-brand-soft px-5 text-xs font-semibold text-brand transition hover:bg-brand hover:text-white disabled:opacity-50"
           >
-            {savingKol ? PARTNER_CABINET_EN.kolSlugSaving : PARTNER_CABINET_EN.kolSlugSave}
+            {savingKol ? t.kolSlugSaving : t.kolSlugSave}
           </button>
         </div>
         {kolError ? (

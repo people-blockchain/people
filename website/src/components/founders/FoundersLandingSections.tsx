@@ -43,7 +43,24 @@ export function FoundersMillionCounterBar({
   counter: MillionCounter | null;
   className?: string;
 }) {
-  if (!showCommunityStats()) return null;
+  const statsPublic = showCommunityStats();
+  const goal = counter?.goal ?? 1_000_000;
+
+  if (!statsPublic) {
+    return (
+      <div className={className} data-testid="founders-million-counter">
+        <div className="rounded-3xl border border-line bg-surface/90 px-5 py-5 shadow-[var(--elev-1)]">
+          <p className="text-sm text-ink-3">
+            {copy.counterGoal}:{" "}
+            <span className="font-mono text-2xl font-semibold text-ink sm:text-3xl">
+              {goal.toLocaleString(lang)}
+            </span>
+          </p>
+        </div>
+        <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">{copy.counterStub}</p>
+      </div>
+    );
+  }
 
   const pct =
     counter && counter.goal > 0 && counter.current > 0
@@ -75,9 +92,7 @@ export function FoundersMillionCounterBar({
         </div>
         <p className="text-sm text-ink-3">
           {copy.counterGoal}:{" "}
-          <span className="font-mono font-semibold text-ink">
-            {(counter?.goal ?? 1_000_000).toLocaleString(lang)}
-          </span>
+          <span className="font-mono font-semibold text-ink">{goal.toLocaleString(lang)}</span>
         </p>
       </div>
       <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">

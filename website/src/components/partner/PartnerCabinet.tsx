@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { partnerCopy } from "@/lib/partner/copy";
 import { useLanguage } from "@/context/LanguageContext";
-import { PARTNER_CABINET_EN as c } from "@/lib/partner/cabinet-copy";
 import { shortWalletAddress } from "@/lib/partner/bind-errors";
 import { SignOutButton } from "@/components/partner/SignOutButton";
 import { PartnerWalletSummary } from "@/components/partner/PartnerWalletSummary";
@@ -119,7 +118,7 @@ export function PartnerCabinet({
         };
       } | null;
       if (!res.ok || !data?.ok || !data.cabinet) {
-        setRefreshError(c.refreshError);
+        setRefreshError(t.refreshError);
         return;
       }
       if (data.cabinet.kolCode !== undefined) setKolCode(data.cabinet.kolCode);
@@ -128,7 +127,7 @@ export function PartnerCabinet({
       if (data.cabinet.commissions) setCommissions(data.cabinet.commissions);
       if (data.cabinet.payouts) setPayouts(data.cabinet.payouts);
     } catch {
-      setRefreshError(c.refreshError);
+      setRefreshError(t.refreshError);
     } finally {
       setRefreshing(false);
     }
@@ -151,7 +150,7 @@ export function PartnerCabinet({
             aria-busy={refreshing}
             className="rounded-xl border border-line bg-surface-2 px-3.5 py-2 text-xs font-semibold text-ink transition hover:border-brand disabled:opacity-50"
           >
-            {refreshing ? c.refreshingButton : c.refreshButton}
+            {refreshing ? t.refreshingButton : t.refreshButton}
           </button>
           <SignOutButton />
         </div>
@@ -168,13 +167,13 @@ export function PartnerCabinet({
             onClick={handleRefreshCabinet}
             className="font-semibold underline"
           >
-            {c.tryAgain}
+            {t.tryAgain}
           </button>
         </div>
       )}
 
       <p className="rounded-xl border border-line bg-surface-2 px-4 py-3 text-xs leading-relaxed text-ink-2">
-        {c.settlementBanner}
+        {t.settlementBanner}
       </p>
 
       <PartnerLinkGenerator

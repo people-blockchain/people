@@ -1,9 +1,12 @@
 "use client";
 
-import { PARTNER_CABINET_EN as c } from "@/lib/partner/cabinet-copy";
+import { partnerCopy } from "@/lib/partner/copy";
+import { useLanguage } from "@/context/LanguageContext";
 import { formatMicroUsd, type KolTierProgress } from "@/lib/partner/commission";
 
 export function PartnerTierProgress({ tier }: { tier: KolTierProgress }) {
+  const { lang } = useLanguage();
+  const c = partnerCopy[lang];
   const usdcPct = (tier.usdcRateBps / 100).toFixed(tier.usdcRateBps % 100 === 0 ? 0 : 2);
   const tiers = [
     { num: 1, title: c.tier1Name, range: c.tier1Range },
