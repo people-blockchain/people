@@ -23,7 +23,7 @@ export const es: LocaleContent = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Million Founders",
+        "label": "Fundadores y recompensas",
         "href": "/founders"
       },
       {
