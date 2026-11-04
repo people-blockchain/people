@@ -131,9 +131,14 @@ export default async function PartnerPage() {
         <PartnerCabinet
           email={cabinet.email}
           referralCode={cabinet.referralCode}
+          kolCode={cabinet.kolCode}
           referralLink={referralLink}
           referredBy={cabinet.referredBy}
           walletAddress={cabinet.walletAddress}
+          metrics={cabinet.metrics}
+          tier={cabinet.tier}
+          commissions={cabinet.commissions}
+          payouts={cabinet.payouts}
           l1={cabinet.l1}
           l2={cabinet.l2}
           protocolStatus={protocolStatus}

@@ -16,7 +16,13 @@ import {
   FACTORY_ICON_SCHEMA_STATEMENTS,
   ANALYTICS_SCHEMA_STATEMENTS,
   ANALYTICS_GA_INDEX_STATEMENTS,
+  SALE_PERSON_BINDING_SCHEMA_STATEMENTS,
+  FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
+  FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
+  REFERRAL_KOL_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
+import { UPLOAD_NONCE_SCHEMA_STATEMENTS } from "./upload-nonce-sql.mjs";
+import { UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS } from "./upload-sign-rate-sql.mjs";
 
 let bootstrapPromise: Promise<void> | null = null;
 
@@ -86,6 +92,28 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
       await client.unsafe(statement);
     }
     for (const statement of ANALYTICS_GA_INDEX_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0020_sale_person_binding.sql — PplCurveHubV2 person + hashed identifiers.
+    for (const statement of SALE_PERSON_BINDING_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0021_founder_nft_person.sql — Founder NFT personId + HP stamp-nullifier digests.
+    for (const statement of FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0022_founder_nft_auth_nonce.sql — single-use wallet signature nonce.
+    for (const statement of FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0023_referral_kol_attribution.sql — KOL/referral attribution, sale purchases & commission ledger.
+    for (const statement of REFERRAL_KOL_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    for (const statement of UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
   } finally {

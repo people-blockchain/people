@@ -9,7 +9,7 @@ import {
 import { localeFromBuyPath } from "@/lib/locale-detect";
 import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/preferences";
 import { isLoginPath, isPartnerPath, LOGIN_PATH } from "@/lib/partner/guards";
-import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCode } from "@/lib/partner/referral";
+import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCookie } from "@/lib/partner/referral";
 
 function analyticsViewerEdgeResponse(request: NextAuthRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
@@ -39,7 +39,7 @@ export const proxy = auth((request: NextAuthRequest) => {
   if (blocked) return blocked;
 
   const { pathname } = request.nextUrl;
-  const stored = resolveStoredReferralCode(
+  const stored = resolveStoredReferralCookie(
     request.cookies.get(REFERRAL_COOKIE)?.value,
     request.nextUrl.searchParams.get("ref"),
   );
@@ -110,6 +110,7 @@ export const config = {
     // The one invite link (`?ref=<code>`) also lands on these pages; store the code here too.
     "/founders",
     "/bounty",
+    "/buy",
     "/(en|ru|es|pt|fr|de|it|tr|vi|id|zh|ar)/buy",
   ],
 };

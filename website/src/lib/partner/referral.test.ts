@@ -2,11 +2,20 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   MAX_PARTNER_REFERRAL_DEPTH,
+  REFERRAL_COOKIE,
+  REFERRAL_COOKIE_WINDOW_MS,
+  derivedDepth,
   evaluateReferralAttach,
   listL1L2,
+  normalizeKolCode,
   normalizeReferralCode,
+  parseReferralCookie,
   referralCodeFromUserId,
   resolveStoredReferralCode,
+  resolveStoredReferralCookie,
+  serializeReferralCookie,
+  withinReferralCookieWindow,
+  withinReferralRegistrationWindow,
   type PartnerNode,
 } from "./referral.ts";
 import { isLoginPath, isPartnerPath, loginRedirectUrl, partnerHomeAfterLogin } from "./guards.ts";
@@ -16,10 +25,49 @@ function node(userId: string, parent: string | null = null): PartnerNode {
 }
 
 test("referral cookie is first-wins and codes are normalized", () => {
+  assert.equal(REFERRAL_COOKIE, "people_partner_ref");
   assert.equal(normalizeReferralCode("AbCdef12"), "abcdef12");
   assert.equal(normalizeReferralCode("bad code"), null);
+  assert.equal(normalizeReferralCode("not-an-address"), null);
   assert.equal(resolveStoredReferralCode("already1", "newer000"), "already1");
   assert.equal(resolveStoredReferralCode(undefined, "newer000"), "newer000");
+});
+
+test("people_partner_ref cookie serializes setAt timestamp, preserves first-touch for 30d, and measures window from cookie setAt", () => {
+  const t0 = 1_762_200_000_000;
+  const serialized = serializeReferralCookie("33063C3605", t0);
+  assert.equal(serialized, "33063c3605.1762200000");
+  // normalizeReferralCode transparently accepts both plain and timestamped cookie values
+  assert.equal(normalizeReferralCode(serialized), "33063c3605");
+
+  const parsed = parseReferralCookie(serialized);
+  assert.ok(parsed);
+  assert.equal(parsed.code, "33063c3605");
+  assert.equal(parsed.setAt?.getTime(), t0);
+
+  // First-touch wins within the 30-day window
+  const t5d = t0 + 5 * 24 * 60 * 60 * 1000;
+  assert.equal(resolveStoredReferralCookie(serialized ?? undefined, "othercode1", t5d), serialized);
+
+  // Window is measured from cookie setAt, even if account was created > 24h earlier
+  const accountCreatedAt = new Date(t0);
+  const attachAtDay10 = t0 + 10 * 24 * 60 * 60 * 1000;
+  assert.equal(withinReferralCookieWindow(parsed.setAt, attachAtDay10), true);
+  assert.equal(withinReferralRegistrationWindow(accountCreatedAt, attachAtDay10, parsed.setAt), true);
+
+  // After 30 days, cookie window expires and a new ?ref= can start a fresh window
+  const after31d = t0 + REFERRAL_COOKIE_WINDOW_MS + 60_000;
+  assert.equal(withinReferralCookieWindow(parsed.setAt, after31d), false);
+  assert.equal(
+    resolveStoredReferralCookie(serialized ?? undefined, "newercode1", after31d),
+    serializeReferralCookie("newercode1", after31d),
+  );
+});
+
+test("KOL code validation accepts 6-16 lowercase alphanumeric codes matching the unified ?ref= format", () => {
+  assert.equal(normalizeKolCode("AliceKol1"), "alicekol1");
+  assert.equal(normalizeKolCode("ab"), null);
+  assert.equal(normalizeKolCode("bad-hyphen"), null);
 });
 
 test("attach binds L1 and L2 and rejects depth 3 and self", () => {
@@ -69,6 +117,34 @@ test("attach binds L1 and L2 and rejects depth 3 and self", () => {
     nodes,
   });
   assert.equal(already.ok, false);
+});
+
+test("referral depth boundary: L2 (depth 2) is max; L2 cannot refer L3", () => {
+  const root = node("11111111-1111-4111-8111-111111111111");
+  const l1 = node("22222222-2222-4222-8222-222222222222", root.userId);
+  const l2 = node("33333333-3333-4333-8333-333333333333", l1.userId);
+  const nodes = new Map([root, l1, l2].map((n) => [n.userId, n]));
+
+  assert.equal(derivedDepth(nodes, root.userId), 0);
+  assert.equal(derivedDepth(nodes, l1.userId), 1);
+  assert.equal(derivedDepth(nodes, l2.userId), MAX_PARTNER_REFERRAL_DEPTH);
+
+  const attachAtMaxDepth = evaluateReferralAttach({
+    inviteeUserId: "44444444-4444-4444-8444-444444444444",
+    inviteeAlreadyHasParent: false,
+    referrer: l1,
+    nodes,
+  });
+  assert.equal(attachAtMaxDepth.ok, true);
+
+  const attachBeyondMax = evaluateReferralAttach({
+    inviteeUserId: "55555555-5555-4555-8555-555555555555",
+    inviteeAlreadyHasParent: false,
+    referrer: l2,
+    nodes,
+  });
+  assert.equal(attachBeyondMax.ok, false);
+  if (!attachBeyondMax.ok) assert.equal(attachBeyondMax.reason, "depth_exceeded");
 });
 
 test("attach rejects an attachment that would close a referral cycle", () => {
