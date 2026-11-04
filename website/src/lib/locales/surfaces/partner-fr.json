@@ -1,5 +1,5 @@
 {
-  "loginTitle": "Sign in",
+  "loginTitle": "Se connecter",
   "emailLabel": "E-mail",
   "emailPlaceholder": "you@example.com",
   "magicCta": "Recevoir un lien de connexion",
@@ -58,7 +58,7 @@
   "disconnected": "Pas de données",
   "becomePartner": "Devenir partenaire",
   "logIn": "Connexion",
-  "cabinet": "Espace",
+  "cabinet": "Espace partenaire",
   "growthNote": "Les paiements Growth restent L1 70% / L2 30% du budget de récompense Growth. Cet espace ne modifie pas l'économie du protocole.",
   "footerNote": "Données protocole en lecture seule. Actif natif : PEOPLE (PPL).",
   "magicLinkSubject": "Connexion au portail partenaire PEOPLE",
@@ -80,8 +80,14 @@
   "signInAgreementAfter": ".",
   "authErrorSessionExpired": "Votre session a expiré. Reconnectez-vous.",
   "authErrorUnavailable": "L’espace partenaire est momentanément indisponible. Réessayez dans une minute.",
-  "localWalletHeading": "PEOPLE Wallet on this device",
-  "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
+  "localWalletHeading": "PEOPLE Wallet sur cet appareil",
+  "localWalletLead": "Déverrouillez ou importez un portefeuille protégé par mot de passe stocké uniquement dans ce navigateur. Les gains partenaires nécessitent Google ou un e-mail ci-dessus.",
+  "walletAutoLead": "Votre PEOPLE Wallet est liée à ce compte. La même adresse est utilisée sur le site et dans l'espace partenaire — aucune étape de liaison distincte.",
+  "walletProvisioning": "Configuration de votre PEOPLE Wallet… actualisez dans un instant ou ouvrez la page du portefeuille.",
+  "nodeNotConfigured": "L'URL du nœud n'est pas configurée.",
+  "nodeUnreachable": "Le nœud configuré n'a pas pu être joint.",
+  "snapshotEmpty": "L'instantané était vide.",
+  "growthClaimsNotExposed": "Cet instantané HTTP du nœud n'expose pas les réclamations Growth. Les gains restent sur la chaîne ; l'espace partenaire ne peut pas les afficher tant qu'une API publique de lecture n'existe pas.",
+  "growthClaimsReadError": "Impossible de lire les réclamations Growth depuis le nœud.",
+  "partnerBadge": "Partenaire"
 }

@@ -11,6 +11,7 @@
     "precompile-contracts": "node --experimental-strip-types scripts/precompile-templates.mjs",
     "precompile-samples": "node scripts/generate-sample-contract-artifacts.mjs",
     "start": "next start",
+    "vitest": "node scripts/vitest-shim.mjs",
     "lint": "eslint --max-warnings 0",
     "test:hero-layout": "playwright test",
     "test:live": "playwright test --config e2e/playwright.live.config.mjs",
@@ -90,5 +91,11 @@
       "react": "$react",
       "react-dom": "$react-dom"
     }
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@reown/appkit",
+      "esbuild"
+    ]
   }
 }

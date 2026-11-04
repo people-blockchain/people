@@ -83,5 +83,11 @@
   "localWalletHeading": "PEOPLE Wallet на этом устройстве",
   "localWalletLead": "Разблокируйте или импортируйте кошелёк с паролем только в этом браузере. Для партнёрского кабинета нужен вход через Google или email выше.",
   "walletAutoLead": "PEOPLE Wallet привязан к этому аккаунту. Тот же адрес на сайте и в кабинете партнёра — отдельная привязка не нужна.",
-  "walletProvisioning": "Настраиваем PEOPLE Wallet… обновите страницу или откройте кошелёк."
+  "walletProvisioning": "Настраиваем PEOPLE Wallet… обновите страницу или откройте кошелёк.",
+  "nodeNotConfigured": "URL ноды не настроен.",
+  "nodeUnreachable": "Не удалось связаться с настроенной нодой.",
+  "snapshotEmpty": "Снимок состояния пуст.",
+  "growthClaimsNotExposed": "HTTP-снимок этой ноды не содержит начислений Growth. Они остаются в сети; кабинет сможет показать их, когда появится публичный API для чтения.",
+  "growthClaimsReadError": "Не удалось прочитать начисления Growth с ноды.",
+  "partnerBadge": "Партнёр"
 }

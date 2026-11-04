@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PartnerCabinet } from "@/components/partner/PartnerCabinet";
 import { bountyCopy } from "@/lib/bounty-content";
+import { partnerCopy } from "@/lib/partner/copy";
 import { languageFromAcceptLanguage } from "@/lib/locale-detect";
 import { isAuthConfigured } from "@/lib/partner/guards";
 import {
@@ -80,8 +81,12 @@ export default async function PartnerPage() {
   const origin = process.env.AUTH_URL?.trim() || SITE_URL;
   const referralLink = `${origin.replace(/\/$/, "")}${partnerSharePath(cabinet.referralCode)}`;
 
+  const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
+  const t = partnerCopy[lang];
+  const bountyLabel = bountyCopy(lang).navLabel;
+
   let protocolStatus: "connected" | "disconnected" = "disconnected";
-  let protocolNote: string | null = "Node URL is not configured.";
+  let protocolNote: string | null = t.nodeNotConfigured;
   let pplBalance: number | null = null;
   let claims: { key: string; amount: number; status: string; level?: number; epoch?: number }[] = [];
   let claimsNote: string | null = null;
@@ -92,14 +97,14 @@ export default async function PartnerPage() {
       protocolStatus = "connected";
       protocolNote = null;
       pplBalance = account?.pplBalance ?? null;
-      const growth = await fetchGrowthClaims(cabinet.walletAddress);
+      const growth = await fetchGrowthClaims(cabinet.walletAddress, t);
       claims = growth.claims;
       claimsNote = growth.available ? null : (growth.note ?? null);
     } else {
       protocolNote =
         connection.reason === "not_configured"
-          ? "Node URL is not configured."
-          : "The configured node could not be reached.";
+          ? t.nodeNotConfigured
+          : t.nodeUnreachable;
     }
   } else {
     const { connection } = await fetchAccountView("0x0000000000000000000000000000000000000000");
@@ -107,14 +112,11 @@ export default async function PartnerPage() {
       protocolStatus = "connected";
       protocolNote = null;
     } else if (connection.reason === "not_configured") {
-      protocolNote = "Node URL is not configured.";
+      protocolNote = t.nodeNotConfigured;
     } else {
-      protocolNote = "The configured node could not be reached.";
+      protocolNote = t.nodeUnreachable;
     }
   }
-
-  const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
-  const bountyLabel = bountyCopy(lang).navLabel;
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">

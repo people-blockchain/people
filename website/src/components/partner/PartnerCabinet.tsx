@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { partnerCopy } from "@/lib/partner/copy";
+import { useLanguage } from "@/context/LanguageContext";
 import { PARTNER_CABINET_EN as c } from "@/lib/partner/cabinet-copy";
 import { shortWalletAddress } from "@/lib/partner/bind-errors";
 import { SignOutButton } from "@/components/partner/SignOutButton";
@@ -86,8 +87,8 @@ export function PartnerCabinet({
   claims: { key: string; amount: number; status: string; level?: number; epoch?: number }[];
   claimsNote: string | null;
 }) {
-  // Strictly English-only copy for the partner & KOL cabinet
-  const t = partnerCopy.en;
+  const { lang } = useLanguage();
+  const t = partnerCopy[lang];
 
   const baseOrigin = referralLink.split("/?ref=")[0] || "https://www.peopleblockchain.network";
   const [kolCode, setKolCode] = useState<string | null>(initialKolCode);
@@ -138,9 +139,9 @@ export function PartnerCabinet({
       <PartnerWalletAutoRefresh walletAddress={walletAddress} />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mono-label text-warm">{c.eyebrow}</p>
-          <h1 className="mt-2 text-h2 font-bold text-ink">{c.title}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-ink-2">{c.subtitle}</p>
+          <p className="mono-label text-warm">{t.partnerBadge}</p>
+          <h1 className="mt-2 text-h2 font-bold text-ink">{t.cabinetTitle}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-ink-2">{t.growthNote}</p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -258,7 +259,13 @@ export function PartnerCabinet({
             {claims.map((claim) => (
               <li key={claim.key} className="rounded-xl border border-line px-3 py-2 text-sm">
                 <span className="font-mono text-ink">{claim.amount} PPL</span>
-                <span className="ml-2 text-ink-3">{claim.status}</span>
+                <span className="ml-2 text-ink-3">
+                  {claim.status === "claimable"
+                    ? t.growthClaimable
+                    : claim.status === "claimed" || claim.status === "settled"
+                      ? t.growthClaimed
+                      : claim.status}
+                </span>
               </li>
             ))}
           </ul>

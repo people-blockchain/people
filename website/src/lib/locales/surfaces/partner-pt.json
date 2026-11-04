@@ -1,5 +1,5 @@
 {
-  "loginTitle": "Sign in",
+  "loginTitle": "Entrar",
   "emailLabel": "E-mail",
   "emailPlaceholder": "you@example.com",
   "magicCta": "Enviar link de acesso",
@@ -58,7 +58,7 @@
   "disconnected": "Sem dados",
   "becomePartner": "Tornar-se parceiro",
   "logIn": "Entrar",
-  "cabinet": "Gabinete",
+  "cabinet": "Painel do parceiro",
   "growthNote": "Pagamentos Growth permanecem L1 70% / L2 30% do orçamento de recompensa Growth. Este gabinete não altera a economia do protocolo.",
   "footerNote": "Dados de protocolo somente leitura. Ativo nativo: PEOPLE (PPL).",
   "magicLinkSubject": "Entrar no portal de parceiros PEOPLE",
@@ -80,8 +80,14 @@
   "signInAgreementAfter": ".",
   "authErrorSessionExpired": "Sua sessão terminou. Entre novamente.",
   "authErrorUnavailable": "O painel de parceiros está indisponível no momento. Tente de novo em um minuto.",
-  "localWalletHeading": "PEOPLE Wallet on this device",
-  "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
+  "localWalletHeading": "PEOPLE Wallet neste dispositivo",
+  "localWalletLead": "Desbloqueie ou importe uma carteira protegida por senha armazenada apenas neste navegador. Os acréscimos de parceiro exigem Google ou e-mail acima.",
+  "walletAutoLead": "Sua PEOPLE Wallet está vinculada a esta conta. O mesmo endereço é usado no site e no painel de parceiro — sem etapa de vinculação separada.",
+  "walletProvisioning": "Configurando sua PEOPLE Wallet… atualize em instantes ou abra a página da carteira.",
+  "nodeNotConfigured": "A URL do nó não está configurada.",
+  "nodeUnreachable": "O nó configurado não pôde ser alcançado.",
+  "snapshotEmpty": "O instantâneo estava vazio.",
+  "growthClaimsNotExposed": "O instantâneo HTTP deste nó não expõe reivindicações Growth. Os acréscimos permanecem na rede; o painel não pode listá-los até que exista uma API pública de leitura.",
+  "growthClaimsReadError": "Não foi possível ler as reivindicações Growth do nó.",
+  "partnerBadge": "Parceiro"
 }

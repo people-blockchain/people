@@ -1,5 +1,5 @@
 {
-  "loginTitle": "Sign in",
+  "loginTitle": "登录",
   "emailLabel": "邮箱",
   "emailPlaceholder": "you@example.com",
   "magicCta": "发送登录链接",
@@ -58,7 +58,7 @@
   "disconnected": "无数据",
   "becomePartner": "成为合作伙伴",
   "logIn": "登录",
-  "cabinet": "中心",
+  "cabinet": "合伙人中心",
   "growthNote": "Growth 支付仍为 Growth 奖励预算的 L1 70% / L2 30%。本中心不更改协议经济。",
   "footerNote": "协议数据只读。原生资产：PEOPLE (PPL)。",
   "magicLinkSubject": "登录 PEOPLE 合作伙伴门户",
@@ -80,8 +80,14 @@
   "signInAgreementAfter": "。",
   "authErrorSessionExpired": "你的登录已过期，请重新登录。",
   "authErrorUnavailable": "合作伙伴后台暂时无法使用，请一分钟后再试。",
-  "localWalletHeading": "PEOPLE Wallet on this device",
-  "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
+  "localWalletHeading": "此设备上的 PEOPLE Wallet",
+  "localWalletLead": "解锁或导入仅存储在此浏览器中且受密码保护的钱包。合伙人收益需要通过上方的 Google 或邮箱登录。",
+  "walletAutoLead": "您的 PEOPLE Wallet 已与此账户绑定。网站和合伙人中心使用同一地址 — 无需单独绑定步骤。",
+  "walletProvisioning": "正在设置您的 PEOPLE Wallet… 请稍后刷新或打开钱包页面。",
+  "nodeNotConfigured": "节点 URL 未配置。",
+  "nodeUnreachable": "无法连接到已配置的节点。",
+  "snapshotEmpty": "快照为空。",
+  "growthClaimsNotExposed": "该节点的 HTTP 快照未提供 Growth 申领数据。收益保留在链上；在开放公开读取 API 之前，合伙人中心无法列出它们。",
+  "growthClaimsReadError": "无法从节点读取 Growth 申领数据。",
+  "partnerBadge": "合伙人"
 }

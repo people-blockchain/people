@@ -1,5 +1,5 @@
 {
-  "loginTitle": "Sign in",
+  "loginTitle": "Anmelden",
   "emailLabel": "E-Mail",
   "emailPlaceholder": "you@example.com",
   "magicCta": "Anmeldelink senden",
@@ -58,7 +58,7 @@
   "disconnected": "Keine Daten",
   "becomePartner": "Partner werden",
   "logIn": "Anmelden",
-  "cabinet": "Bereich",
+  "cabinet": "Partnerbereich",
   "growthNote": "Growth-Auszahlungen bleiben L1 70% / L2 30% des Growth-Reward-Budgets. Dieser Bereich ändert die Protokollökonomie nicht.",
   "footerNote": "Protokolldaten nur lesen. Native Asset: PEOPLE (PPL).",
   "magicLinkSubject": "Anmeldung beim PEOPLE-Partnerportal",
@@ -80,8 +80,14 @@
   "signInAgreementAfter": " zu.",
   "authErrorSessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
   "authErrorUnavailable": "Der Partnerbereich ist gerade nicht erreichbar. Bitte versuchen Sie es in einer Minute erneut.",
-  "localWalletHeading": "PEOPLE Wallet on this device",
-  "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
+  "localWalletHeading": "PEOPLE Wallet auf diesem Gerät",
+  "localWalletLead": "Entsperren oder importieren Sie eine passwortgeschützte Wallet, die nur in diesem Browser gespeichert ist. Partner-Vergütungen erfordern Google oder E-Mail oben.",
+  "walletAutoLead": "Ihre PEOPLE Wallet ist mit diesem Konto verknüpft. Dieselbe Adresse wird auf der Website und im Partnerbereich verwendet — kein separater Verknüpfungsschritt.",
+  "walletProvisioning": "PEOPLE Wallet wird eingerichtet… bitte gleich aktualisieren oder die Wallet-Seite öffnen.",
+  "nodeNotConfigured": "Node-URL ist nicht konfiguriert.",
+  "nodeUnreachable": "Der konfigurierte Node konnte nicht erreicht werden.",
+  "snapshotEmpty": "Snapshot war leer.",
+  "growthClaimsNotExposed": "Dieser Node-HTTP-Snapshot enthält keine Growth-Claims. Guthaben bleiben auf der Chain; der Partnerbereich kann sie erst anzeigen, wenn eine öffentliche Lese-API existiert.",
+  "growthClaimsReadError": "Growth-Claims konnten nicht vom Node gelesen werden.",
+  "partnerBadge": "Partner"
 }

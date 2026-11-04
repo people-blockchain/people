@@ -1,6 +1,7 @@
 /** Read-only protocol client for the partner cabinet. Never writes chain state. */
 
 import { resolveNodeRpcUrl } from "@/lib/node-rpc";
+import type { PartnerStrings } from "@/lib/partner/copy";
 import {
   NATIVE_ASSET_ID,
   parseGrowthClaimsFromSnapshot,
@@ -101,19 +102,27 @@ export async function fetchAccountView(address: string): Promise<{
   }
 }
 
-export async function fetchGrowthClaims(address: string): Promise<{
+export type GrowthClaimsCopy = Pick<
+  PartnerStrings,
+  "nodeNotConfigured" | "snapshotEmpty" | "growthClaimsNotExposed" | "growthClaimsReadError"
+>;
+
+export async function fetchGrowthClaims(
+  address: string,
+  t?: GrowthClaimsCopy,
+): Promise<{
   available: boolean;
   claims: GrowthClaimView[];
   note?: string;
 }> {
   const base = nodeBaseUrl();
   if (!base) {
-    return { available: false, claims: [], note: "Node URL is not configured." };
+    return { available: false, claims: [], note: t?.nodeNotConfigured ?? "Node URL is not configured." };
   }
   try {
     const snap = asRecord(await getJson(`${base}/snapshot`));
     if (!snap) {
-      return { available: false, claims: [], note: "Snapshot was empty." };
+      return { available: false, claims: [], note: t?.snapshotEmpty ?? "Snapshot was empty." };
     }
     const claims = parseGrowthClaimsFromSnapshot(snap, address);
     const claimsRaw = snap.growthClaims ?? asRecord(snap.chainState)?.growthClaims;
@@ -121,7 +130,9 @@ export async function fetchGrowthClaims(address: string): Promise<{
       return {
         available: false,
         claims,
-        note: "This node HTTP snapshot does not expose Growth claims. Accruals stay on-chain; the cabinet cannot list them until a public read API exists.",
+        note:
+          t?.growthClaimsNotExposed ??
+          "This node HTTP snapshot does not expose Growth claims. Accruals stay on-chain; the cabinet cannot list them until a public read API exists.",
       };
     }
     return { available: true, claims };
@@ -129,7 +140,7 @@ export async function fetchGrowthClaims(address: string): Promise<{
     return {
       available: false,
       claims: [],
-      note: "Could not read Growth claims from the node.",
+      note: t?.growthClaimsReadError ?? "Could not read Growth claims from the node.",
     };
   }
 }
