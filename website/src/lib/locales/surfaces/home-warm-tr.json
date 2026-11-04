@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Topluluğunuz için bir token başlatın."
     ],
-    "headlineAccent": "%27 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "%27'ye kadar sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%27 sizin insanlarınıza gider,",
+      "%27'ye kadar sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "%27 insanlarınıza",
-        "sub": "Her yeni token, arzının %27'sini kendi topluluk havuzuna gönderir."
+        "label": "%27'ye kadar insanlarınıza",
+        "sub": "Her yeni token, arzının %27'ye kadarını kendi topluluk havuzuna gönderir."
       }
     ],
-    "shareBadge": "%27 topluluk payı",
+    "shareBadge": "%27'ye kadar topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil",
     "saleNote": "PEOPLE ağı hâlâ bir test ağıdır ve test token'larının değeri yoktur. PPL satışı ayrıdır: gerçek USDC veya USDT ile Base üzerinde yapılır."
   },
   "community": {
-    "eyebrow": "%27 topluluğa",
-    "title": "Her yeni tokenin %27'si sizin insanlarınıza gider",
+    "eyebrow": "%27'ye kadar topluluğa",
+    "title": "Her yeni tokenin arzının %27'ye kadarı sizin insanlarınıza gider",
     "lead": "Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer.",
     "statLabel": "her yeni tokenin arzının topluluk havuzuna gider",
     "statNote": "Havuz PEOPLE timelock ile yönetilir; doğrulanmış kişilere zamanla ödenir, anında değil — getiri vaadi değildir.",
@@ -91,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "%27",
+        "stat": "%27'ye kadar",
         "title": "her yeni token o tokenin topluluk havuzuna gider",
         "body": "Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
       },

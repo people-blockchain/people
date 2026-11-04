@@ -7,9 +7,9 @@
       "bir token",
       "başlatın."
     ],
-    "headlineAccent": "%27 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "%27'ye kadar sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%27 sizin insanlarınıza gider,",
+      "%27'ye kadar sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "PEOPLE Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "%27 topluluk havuzuna",
+        "label": "%27'ye kadar topluluk havuzuna",
         "sub": "Her yeni tokene gömülü"
       },
       {
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Bu bir ağa katılım, yatırım değil.",
   "visuals": {
     "supply": "Token arzı",
-    "share": "%27",
+    "share": "%27'ye kadar",
     "toPool": "topluluk havuzuna gider",
     "pool": "Topluluk havuzu",
     "poolNote": "katılanlar arasında paylaşılır",
-    "aria": "Her yeni tokenin arzının %27'si kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
+    "aria": "Her yeni tokenin arzının %27'ye kadarı kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
     "prompt": "Sahiplerinin hazinenin nasıl harcanacağına oy verdiği bir token",
     "step1": "Siz yazarsınız",
     "step2": "Biz kurarız",
