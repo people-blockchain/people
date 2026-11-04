@@ -1,5 +1,5 @@
 {
-  "loginTitle": "Sign in",
+  "loginTitle": "Giriş yap",
   "emailLabel": "E-posta",
   "emailPlaceholder": "you@example.com",
   "magicCta": "Giriş bağlantısı gönder",
@@ -58,7 +58,7 @@
   "disconnected": "Veri yok",
   "becomePartner": "Partner ol",
   "logIn": "Giriş",
-  "cabinet": "Alan",
+  "cabinet": "Ortak paneli",
   "growthNote": "Growth ödemeleri Growth ödül bütçesinde L1 %70 / L2 %30 olarak kalır. Bu alan protokol ekonomisini değiştirmez.",
   "footerNote": "Salt okunur protokol verisi. Yerel varlık: PEOPLE (PPL).",
   "magicLinkSubject": "PEOPLE ortak portalına giriş",
@@ -80,8 +80,14 @@
   "signInAgreementAfter": "'nı kabul edersiniz.",
   "authErrorSessionExpired": "Oturumunuz sona erdi. Lütfen yeniden giriş yapın.",
   "authErrorUnavailable": "Ortak paneli şu anda kullanılamıyor. Bir dakika sonra tekrar deneyin.",
-  "localWalletHeading": "PEOPLE Wallet on this device",
-  "localWalletLead": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "walletAutoLead": "Your PEOPLE Wallet is tied to this account. The same address is used on the site and in the partner cabinet — no separate linking step.",
-  "walletProvisioning": "Setting up your PEOPLE Wallet… refresh in a moment or open the wallet page."
+  "localWalletHeading": "Bu cihazdaki PEOPLE Wallet",
+  "localWalletLead": "Yalnızca bu tarayıcıda saklanan şifre korumalı bir cüzdanın kilidini açın veya içe aktarın. Ortaklık hakedişleri için yukarıdaki Google veya e-posta gereklidir.",
+  "walletAutoLead": "PEOPLE Wallet cüzdanınız bu hesaba bağlıdır. Sitede ve ortak panelinde aynı adres kullanılır — ayrı bir bağlama adımı gerekmez.",
+  "walletProvisioning": "PEOPLE Wallet cüzdanınız ayarlanıyor… birazdan sayfayı yenileyin veya cüzdan sayfasını açın.",
+  "nodeNotConfigured": "Düğüm URL'si yapılandırılmamış.",
+  "nodeUnreachable": "Yapılandırılan düğüme ulaşılamadı.",
+  "snapshotEmpty": "Anlık görüntü boştu.",
+  "growthClaimsNotExposed": "Bu düğüm HTTP anlık görüntüsü Growth taleplerini göstermiyor. Hakedişler zincirde kalır; genel bir okuma API'si oluşturulana kadar panel bunları listeleyemez.",
+  "growthClaimsReadError": "Düğümden Growth talepleri okunamadı.",
+  "partnerBadge": "Ortak"
 }

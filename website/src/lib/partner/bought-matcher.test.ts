@@ -17,7 +17,7 @@ import { MICRO_PER_UNIT } from "./commission.ts";
 const ZERO = BigInt(0);
 const BUYER_WALLET = "0x1111111111111111111111111111111111111111";
 const KOL_WALLET = "0x2222222222222222222222222222222222222222";
-const USDC_TOKEN = "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913";
+const USDC_TOKEN = "0x000000000000000000000000000000000000d13c"; // fake stable for unit tests (not Base mainnet USDC)
 
 function makeBoughtLog(params: {
   buyer?: `0x${string}`;
