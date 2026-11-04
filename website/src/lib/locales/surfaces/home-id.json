@@ -7,9 +7,9 @@
       "untuk komunitas",
       "Anda."
     ],
-    "headlineAccent": "Up to 27% untuk orang Anda, bukan untuk paus.",
+    "headlineAccent": "Hingga 27% untuk orang Anda, bukan untuk paus.",
     "headlineAccentLines": [
-      "Up to 27% untuk orang Anda,",
+      "Hingga 27% untuk orang Anda,",
       "bukan untuk paus."
     ],
     "sub": "PEOPLE Blockchain tempat kreator meluncurkan token dengan harga adil sejak blok pertama, dan komunitas mendapat bagian dari semua yang mereka bantu tumbuh.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% ke pool komunitas",
+        "label": "Hingga 27% ke pool komunitas",
         "sub": "Tertanam di setiap token baru"
       },
       {
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Ini partisipasi di jaringan, bukan investasi.",
   "visuals": {
     "supply": "Pasokan token",
-    "share": "Up to 27%",
+    "share": "Hingga 27%",
     "toPool": "masuk ke dana komunitas",
     "pool": "Dana komunitas",
     "poolNote": "dibagi di antara yang ikut serta",
-    "aria": "Up to 27% pasokan setiap token baru masuk ke dana komunitasnya, dibagi di antara yang ikut serta.",
+    "aria": "Hingga 27% pasokan setiap token baru masuk ke dana komunitasnya, dibagi di antara yang ikut serta.",
     "prompt": "Token yang pemegangnya memilih cara memakai kas",
     "step1": "Anda menulis",
     "step2": "Kami menyusun",

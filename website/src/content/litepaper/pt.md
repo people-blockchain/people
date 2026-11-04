@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Fornecimento | **1,000,000,000 PPL**, fixo |
-| Cada token lançado | **Up to 27%** do fornecimento vai para o pool da comunidade daquele token |
+| Cada token lançado | **Até 27%** do fornecimento vai para o pool da comunidade daquele token |
 | Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
 | Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
 | Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Humanos verificados, não bots.** Recompensas vão para contas que passaram uma verificação gratuita de humanidade. Uma pessoa, uma conta. Apenas se inscrever não ganha nada.
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**Até 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -53,7 +53,7 @@ O que você pode fazer sem código:
 
 | Ferramenta | O que faz | Status |
 |---|---|---|
-| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. Up to 27% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
+| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. Até 27% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
 | **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
 | **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
 | **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
@@ -191,7 +191,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
 | Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
 | Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
-| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **Up to 27% de cada token lançado** |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **Até 27% de cada token lançado** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

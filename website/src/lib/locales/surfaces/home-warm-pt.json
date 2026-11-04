@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Lance um token para a sua comunidade."
     ],
-    "headlineAccent": "Up to 27% vão para a sua gente, não para baleias.",
+    "headlineAccent": "Até 27% vão para a sua gente, não para baleias.",
     "headlineAccentLines": [
-      "Up to 27% vão para a sua gente,",
+      "Até 27% vão para a sua gente,",
       "não para baleias."
     ],
     "sub": "Sem código, sem saber de cripto. Basta um celular ou um navegador: crie uma carteira em 30 segundos e experimente no testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "Up to 27% para a sua gente",
-        "sub": "Cada token novo manda Up to 27% da sua oferta para o próprio pool da comunidade."
+        "label": "Até 27% para a sua gente",
+        "sub": "Cada token novo manda Até 27% da sua oferta para o próprio pool da comunidade."
       }
     ],
-    "shareBadge": "Up to 27% para a comunidade",
+    "shareBadge": "Até 27% para a comunidade",
     "peopleLine": "A sua gente, não as baleias",
     "saleNote": "A rede PEOPLE ainda é uma testnet, e seus tokens de teste não têm valor. A venda de PPL é separada: acontece na Base com USDC ou USDT reais."
   },
   "community": {
-    "eyebrow": "Up to 27% para a comunidade",
-    "title": "Up to 27% de cada token novo vai para a sua gente",
+    "eyebrow": "Até 27% para a comunidade",
+    "title": "Até 27% de cada token novo vai para a sua gente",
     "lead": "10% de cada novo token vão para o pool comunitário no lançamento, garantido. O restante dos sobras da curva (~17%) vai para o pool comunitário ou é queimado — o criador escolhe uma vez no lançamento.",
     "statLabel": "da oferta de cada token novo vai para o pool da sua comunidade",
     "statNote": "O pool é governado pelo timelock PEOPLE e pago a pessoas verificadas ao longo do tempo, não na hora; não é promessa de rendimento.",
@@ -91,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "Up to 27%",
+        "stat": "Até 27%",
         "title": "de cada token novo vai para o pool da comunidade daquele token",
         "body": "Não para a rede, não para o criador. O pool do próprio token, compartilhado com quem participa."
       },

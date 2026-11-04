@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Angebot | **1.000.000.000 PPL**, fest |
-| Jeder gestartete Token | **Up to 27%** des Angebots gehen an den Community-Pool dieses Tokens |
+| Jeder gestartete Token | **Bis zu 27%** des Angebots gehen an den Community-Pool dieses Tokens |
 | Netzwerk­gebühren verbrannt | **0%** — jede Gebühr wird geteilt |
 | Wer Belohnungen erhält | **Verifizierte Menschen** (Telegram-Telefon oder Human Passport) |
 | Finanzierung | **Self-finanziert.** Keine VCs. Keine Investor-Zuteilungen. |
@@ -53,7 +53,7 @@ Was du ohne Code tun kannst:
 
 | Tool | Was es tut | Status |
 |---|---|---|
-| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. Up to 27% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
+| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. Bis zu 27% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
 | **NFT-Club-Karten** | Mitglieds­karten für einen Club, ein Café oder eine Community — eine pro Mitglied, mit einem Bild, das du hochlädst oder generierst. | Live auf Testnet |
 | **Fundraising** | Sammeln von Unterstützung für ein Projekt mit überprüften Vertrags­vorlagen: Escrow, Vesting, Token-gestütztes Abstimmen. Deine Community kauft auf der Curve ein, also setzt Nachfrage den Preis — nicht eine private Runde. | Live auf Testnet |
 | **KI-Verträge** | Beschreibe einen Smart Contract in einfachen Worten. Er wird aus OpenZeppelin-Vorlagen zusammengesetzt und du siehst das Ergebnis, bevor du es einsetzt. | Live auf Testnet |
@@ -191,7 +191,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 | Wer erhält Gebühren | Validatoren erhalten die Prioritäts­gebühr (Trinkgeld) ¹ | Validatoren erhalten 50% der Basis­gebühr und 100% der Prioritäts­gebühr ² | **Validatoren 30 · Community 25 · Treasury 20 · Liquidität 10 · Growth 15** |
 | Frühe Finanzierung | Öffentliche Ether-Sale, 2014 (42 Tage, zahlbar in BTC) ³ | $20M Series A unter Führung von Multicoin Capital (2019); Investoren erhielten SOL-Token ⁴ | **Self-finanziert. Keine VCs, keine Investor-Zuteilung** |
 | Konto­erstellung | Einen Account zu erstellen kostet nichts; keine Identitäts­überprüfung ⁵ | Keine Protokoll-Anforderung | **Belohnungen nur für verifizierte Menschen** |
-| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **Up to 27% jedes gestarteten Tokens** |
+| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **Bis zu 27% jedes gestarteten Tokens** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

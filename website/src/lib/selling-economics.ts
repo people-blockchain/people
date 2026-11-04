@@ -6,6 +6,8 @@
  * Growth Pool settlement, fee routing, or referral engines.
  */
 
+import type { Language } from "./preferences";
+
 /** Mandatory Token Factory community allocation at launch (always credited to the token's community vault). */
 export const TOKEN_COMMUNITY_ALLOCATION_PCT = 10;
 
@@ -25,6 +27,46 @@ export const TOKEN_COMMUNITY_CURVE_LEFTOVER_APPROX_PCT = 17;
 export const TOKEN_COMMUNITY_SHARE_PCT = TOKEN_COMMUNITY_SHARE_MAX_PCT;
 
 export const TOKEN_COMMUNITY_SHARE_HEADLINE = `Up to ${TOKEN_COMMUNITY_SHARE_MAX_PCT}%` as const;
+
+/** Localized headline next to the 27% figure (EN constant above stays for OG/assertions). */
+export const TOKEN_COMMUNITY_SHARE_HEADLINE_BY_LANG: Record<Language, string> = {
+  en: TOKEN_COMMUNITY_SHARE_HEADLINE,
+  ru: "До 27%",
+  de: "Bis zu 27%",
+  es: "Hasta un 27%",
+  fr: "Jusqu'à 27%",
+  it: "Fino al 27%",
+  pt: "Até 27%",
+  tr: "%27'ye kadar",
+  id: "Hingga 27%",
+  vi: "Lên đến 27%",
+  zh: "最高27%",
+  ar: "حتى 27%",
+};
+
+export function communityShareHeadline(lang: Language): string {
+  return TOKEN_COMMUNITY_SHARE_HEADLINE_BY_LANG[lang] ?? TOKEN_COMMUNITY_SHARE_HEADLINE;
+}
+
+/** Short public explanation beside the headline (mirrors approved economics; locale JSON may expand). */
+export const TOKEN_COMMUNITY_SHARE_EXPLANATION_BY_LANG: Record<Language, string> = {
+  en: "10% always go to the community pool. Up to 17% more is chosen by the creator at launch: either also to the participants' pool, or burned.",
+  ru: "10% всегда уходят в пул сообщества. Ещё до 17% создатель выбирает при запуске: либо тоже в пул участников, либо сжигание.",
+  de: "10 % gehen immer in den Community-Pool. Bis zu 17 % mehr wählt der Ersteller beim Start: entweder ebenfalls in den Teilnehmer-Pool oder Verbrennung.",
+  es: "El 10% siempre va al pool de la comunidad. Hasta un 17% más lo elige el creador al lanzar: también al pool de participantes o quema.",
+  fr: "10 % vont toujours au pool communautaire. Jusqu'à 17 % de plus sont choisis par le créateur au lancement : pool des participants ou brûlage.",
+  it: "Il 10% va sempre al pool della comunità. Fino al 17% in più lo sceglie il creatore al lancio: pool dei partecipanti o burn.",
+  pt: "10% vão sempre para o pool da comunidade. Até 17% a mais são escolhidos pelo criador no lançamento: pool dos participantes ou queima.",
+  tr: "10% her zaman topluluk havuzuna gider. En fazla 17% daha kurucu tarafından lansmanda seçilir: katılımcı havuzuna veya yakma.",
+  id: "10% selalu masuk ke kolam komunitas. Hingga 17% lagi dipilih kreator saat peluncuran: ke kolam peserta atau dibakar.",
+  vi: "10% luôn vào quỹ cộng đồng. Thêm tối đa 17% do người tạo chọn khi ra mắt: vào quỹ người tham gia hoặc đốt.",
+  zh: "10% 始终进入社区池。另最多 17% 由创建者在发布时选择：进入参与者池或销毁。",
+  ar: "10% تذهب دائمًا إلى مجمع المجتمع. حتى 17% إضافية يختارها المنشئ عند الإطلاق: إما إلى مجمع المشاركين أو الحرق.",
+};
+
+export function communityShareExplanation(lang: Language): string {
+  return TOKEN_COMMUNITY_SHARE_EXPLANATION_BY_LANG[lang] ?? TOKEN_COMMUNITY_SHARE_EXPLANATION_BY_LANG.en;
+}
 
 /** Owner-approved EN explanation (locale JSON should mirror; asserted in copy guards). */
 export const TOKEN_COMMUNITY_SHARE_EXPLANATION_EN =

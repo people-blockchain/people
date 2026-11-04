@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | 总供应量 | **1,000,000,000 PPL**，固定 |
-| 每个已发行代币 | **Up to 27%** 的供应量进入该代币自己的社区池 |
+| 每个已发行代币 | **最高27%** 的供应量进入该代币自己的社区池 |
 | 网络费用销毁 | **0%** — 每笔费用都被分享 |
 | 谁获得奖励 | **已验证的真人**（Telegram 手机号或 Human Passport） |
 | 融资 | **自筹资金。**无风投。无投资者分配。 |
@@ -43,7 +43,7 @@ status: public-draft
 
 **验证的真人，而非机器人。** 奖励进入通过免费人类检查的账户。一个人，一个账户。仅注册不能获得任何东西。
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**最高27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -53,7 +53,7 @@ status: public-draft
 
 | 工具 | 做什么 | 状态 |
 |---|---|---|
-| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。Up to 27%的供应量进入代币的社区池；创建者的份额在180天内线性释放。 | 在测试网上上线 |
+| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。最高27%的供应量进入代币的社区池；创建者的份额在180天内线性释放。 | 在测试网上上线 |
 | **NFT俱乐部卡** | 俱乐部、咖啡馆或社区的会员卡 — 每个成员一张，配你上传或生成的图像。 | 在测试网上上线 |
 | **筹资** | 用评审过的合同模板为项目收集支持：托管、释放、代币加权投票。你的社区在曲线上买入，因此需求设定价格 — 而非私募轮。 | 在测试网上上线 |
 | **AI合同** | 用纯文字描述智能合约。它从OpenZeppelin模板组装而成，在部署前你会看到结果。 | 在测试网上上线 |
@@ -191,7 +191,7 @@ status: public-draft
 | 谁收取费用 | 验证器获得优先费用（小费） ¹ | 验证器获得50%的基础费用和100%的优先费用 ² | **验证器30 · 社区25 · 财库20 · 流动性10 · 增长15** |
 | 早期融资 | 公开以太销售，2014年（42天，以BTC支付） ³ | $20M A轮由Multicoin Capital领导（2019年）；投资者获得SOL代币 ⁴ | **自筹资金。无风投，无投资者分配** |
 | 账户创建 | 创建账户无需费用；无身份检查 ⁵ | 不是协议要求 | **仅对经验证的真人的奖励** |
-| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **每个已发行代币的Up to 27%** |
+| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **每个已发行代币的最高27%** |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

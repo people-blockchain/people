@@ -4,7 +4,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { content } from "@/lib/content";
 import { useInView } from "../motion/useInView";
 import { Chip } from "../ui/primitives";
-import { TOKEN_COMMUNITY_SHARE_HEADLINE } from "@/lib/selling-economics";
+import { communityShareHeadline } from "@/lib/selling-economics";
 
 /**
  * Chapter 04 (second mechanism) — the TOKEN economy pipeline. Deliberately
@@ -45,7 +45,9 @@ export function TokenValueFlow() {
                 aria-hidden="true"
               >
                 {emphasised ? (
-                  <span className="text-center text-[11px] leading-tight lg:text-[12px]">{TOKEN_COMMUNITY_SHARE_HEADLINE}</span>
+                  <span className="text-center text-[11px] leading-tight lg:text-[12px]">
+                    {communityShareHeadline(lang)}
+                  </span>
                 ) : (
                   <span className="text-[11px]">{stage.step}</span>
                 )}

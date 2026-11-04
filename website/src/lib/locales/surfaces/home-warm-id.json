@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Luncurkan token untuk komunitas Anda."
     ],
-    "headlineAccent": "Up to 27% untuk orang Anda, bukan untuk paus.",
+    "headlineAccent": "Hingga 27% untuk orang Anda, bukan untuk paus.",
     "headlineAccentLines": [
-      "Up to 27% untuk orang Anda,",
+      "Hingga 27% untuk orang Anda,",
       "bukan untuk paus."
     ],
     "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik dan coba di testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "Up to 27% untuk orang Anda",
-        "sub": "Setiap token baru mengirim Up to 27% pasokannya ke pool komunitasnya sendiri."
+        "label": "Hingga 27% untuk orang Anda",
+        "sub": "Setiap token baru mengirim Hingga 27% pasokannya ke pool komunitasnya sendiri."
       }
     ],
-    "shareBadge": "Up to 27% bagian komunitas",
+    "shareBadge": "Hingga 27% bagian komunitas",
     "peopleLine": "Orang Anda, bukan paus",
     "saleNote": "Jaringan PEOPLE masih berupa testnet, dan token ujinya tidak bernilai. Penjualan PPL terpisah: berlangsung di Base dengan USDC atau USDT sungguhan."
   },
   "community": {
-    "eyebrow": "Up to 27% untuk komunitas",
-    "title": "Up to 27% dari setiap token baru untuk orang Anda",
+    "eyebrow": "Hingga 27% untuk komunitas",
+    "title": "Hingga 27% dari setiap token baru untuk orang Anda",
     "lead": "10% setiap token baru masuk ke pool komunitas saat peluncuran, dijamin. Sisa di kurva (~17%) masuk ke pool komunitas atau dibakar — kreator memilih sekali saat peluncuran.",
     "statLabel": "dari pasokan setiap token baru masuk ke pool komunitasnya",
     "statNote": "Pool diatur timelock PEOPLE dan dibayar ke orang terverifikasi seiring waktu, bukan instan; bukan janji yield.",
@@ -91,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "Up to 27%",
+        "stat": "Hingga 27%",
         "title": "dari setiap token baru masuk ke pool komunitas token itu",
         "body": "Bukan ke jaringan, bukan ke pencipta. Pool milik token itu sendiri, dibagi dengan orang-orang yang berpartisipasi."
       },

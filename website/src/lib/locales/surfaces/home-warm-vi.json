@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Ra mắt token cho cộng đồng của bạn."
     ],
-    "headlineAccent": "Up to 27% về người của bạn, không về cá voi.",
+    "headlineAccent": "Lên đến 27% về người của bạn, không về cá voi.",
     "headlineAccentLines": [
-      "Up to 27% về người của bạn,",
+      "Lên đến 27% về người của bạn,",
       "không về cá voi."
     ],
     "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây và thử trên testnet.",
@@ -34,17 +34,17 @@
       },
       {
         "id": "share",
-        "label": "Up to 27% về người của bạn",
-        "sub": "Mỗi token mới gửi Up to 27% lượng cung của nó vào pool cộng đồng riêng."
+        "label": "Lên đến 27% về người của bạn",
+        "sub": "Mỗi token mới gửi Lên đến 27% lượng cung của nó vào pool cộng đồng riêng."
       }
     ],
-    "shareBadge": "Up to 27% chia cho cộng đồng",
+    "shareBadge": "Lên đến 27% chia cho cộng đồng",
     "peopleLine": "Người của bạn, không phải cá voi",
     "saleNote": "Mạng PEOPLE vẫn là mạng thử nghiệm và token thử nghiệm không có giá trị. Đợt bán PPL là riêng biệt: diễn ra trên Base bằng USDC hoặc USDT thật."
   },
   "community": {
-    "eyebrow": "Up to 27% cho cộng đồng",
-    "title": "Up to 27% mỗi token mới thuộc về người của bạn",
+    "eyebrow": "Lên đến 27% cho cộng đồng",
+    "title": "Lên đến 27% mỗi token mới thuộc về người của bạn",
     "lead": "10% mỗi token mới vào pool cộng đồng khi ra mắt — được đảm bảo. Phần còn lại trên đường cong (~17%) vào pool cộng đồng hoặc bị đốt — người tạo chọn một lần khi ra mắt.",
     "statLabel": "lượng cung của mỗi token mới vào pool cộng đồng của nó",
     "statNote": "Pool do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không ngay lập tức; không phải lời hứa lợi nhuận.",
@@ -91,7 +91,7 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "Up to 27%",
+        "stat": "Lên đến 27%",
         "title": "mỗi token mới vào pool cộng đồng của token đó",
         "body": "Không về mạng, không về người tạo. Pool riêng của token, chia cho những người tham gia."
       },

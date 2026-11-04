@@ -17,7 +17,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { WarmCard, WARM_PRIMARY_BTN, WARM_SECONDARY_BTN } from "@/components/warm/warm-ui";
 import { DOCS_RELEASE, docsVersionLine } from "@/lib/docs-release";
 import { TOTAL_SUPPLY_PPL, NETWORK_FEE_SPLIT } from "@/lib/tokenomics";
-import { TOKEN_COMMUNITY_SHARE_HEADLINE } from "@/lib/selling-economics";
+import { communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import {
   LitepaperAllocationDonut,
   FeeFlowDiagram,
@@ -89,10 +89,13 @@ export function LitepaperApp({
 
         <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <HeroStat value={`${TOTAL_SUPPLY_PPL / 1_000_000_000}B`} label={t.heroStat.supplyLabel} />
-          <HeroStat value={TOKEN_COMMUNITY_SHARE_HEADLINE} label={t.heroStat.communityLabel} />
+          <HeroStat value={communityShareHeadline(lang)} label={t.heroStat.communityLabel} />
           <HeroStat value={`${burnPct}%`} label={t.heroStat.burnLabel} />
           <HeroStat value={t.heroStat.vcValue} label={t.heroStat.vcLabel} />
         </dl>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-ink-2">
+          {communityShareExplanation(lang)}
+        </p>
       </Reveal>
 
       <div className="mt-10 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[260px_minmax(0,1fr)]">

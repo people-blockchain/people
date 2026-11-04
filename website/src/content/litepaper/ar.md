@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | العرض | **1,000,000,000 PPL**، محدد |
-| كل رمز مطروح | **Up to 27%** من العرض يذهب لمجموعة المجتمع الخاصة به |
+| كل رمز مطروح | **حتى 27%** من العرض يذهب لمجموعة المجتمع الخاصة به |
 | رسوم الشبكة المحروقة | **0%** — كل رسم يتم مشاركته |
 | من يحصل على المكافآت | **البشر الموثقون** (هاتف Telegram أو Human Passport) |
 | التمويل | **ممول ذاتياً.** بدون رؤوس أموال. بدون تخصيص للمستثمرين. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **البشر الموثقون وليس البرامج الآلية.** تذهب المكافآت للحسابات التي اجتازت فحص إنسان مجاني. شخص واحد حساب واحد. التسجيل وحده لا يكسب شيئاً.
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**حتى 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -53,7 +53,7 @@ status: public-draft
 
 | الأداة | ما تفعله | الحالة |
 |---|---|---|
-| **الرموز بدون كود** | الاسم والرمز والصورة والعرض. يذهب الرمز مباشرة على منحنى الربط الخاص به؛ التجارة الأولى تحدد السعر. Up to 27% من العرض يذهب لمجموعة المجتمع الخاصة به؛ حصة المُنشئ تخضع للاستحقاق على مدى 180 يوم. | نشط على الشبكة الاختبارية |
+| **الرموز بدون كود** | الاسم والرمز والصورة والعرض. يذهب الرمز مباشرة على منحنى الربط الخاص به؛ التجارة الأولى تحدد السعر. حتى 27% من العرض يذهب لمجموعة المجتمع الخاصة به؛ حصة المُنشئ تخضع للاستحقاق على مدى 180 يوم. | نشط على الشبكة الاختبارية |
 | **بطاقات نادي NFT** | بطاقات العضوية للنادي أو المقهى أو المجتمع — واحدة لكل عضو، بصورة تحملها أو تنشئها. | نشط على الشبكة الاختبارية |
 | **جمع التمويل** | اجمع الدعم لمشروع بقوالب عقد مراجعة: ضمان، استحقاق، تصويت مرجح برمز. يشتري المجتمع على المنحنى، لذا يحدد الطلب السعر — ليس جولة خاصة. | نشط على الشبكة الاختبارية |
 | **العقود الذكية بالذكاء الاصطناعي** | صِف عقداً ذكياً بكلمات عادية. يتم تجميعها من قوالب OpenZeppelin وترى النتيجة قبل النشر. | نشط على الشبكة الاختبارية |
@@ -191,7 +191,7 @@ status: public-draft
 | من يستقبل الرسوم | يحصل المدققون على الرسم الأولويتي (البقشيش) ¹ | يحصل المدققون على 50% من الرسم الأساسي و 100% من الرسم الأولويتي ² | **المدققون 30 · المجتمع 25 · الخزانة 20 · السيولة 10 · النمو 15** |
 | التمويل المبكر | بيع أثير عام 2014 (42 يوم، مدفوع بـ BTC) ³ | جولة Series A بقيمة 20 مليون دولار بقيادة Multicoin Capital (2019)؛ تلقى المستثمرون رموز SOL ⁴ | **ممول ذاتياً. بدون رؤوس أموال وبدون تخصيص مستثمرين** |
 | إنشاء الحساب | إنشاء حساب مجاني؛ بدون فحص الهوية ⁵ | ليس متطلب بروتوكول | **المكافآت فقط للبشر الموثقين** |
-| حصة المجتمع من الرمز الجديد | ليس قاعدة بروتوكول | ليس قاعدة بروتوكول | **Up to 27% من كل رمز مطروح** |
+| حصة المجتمع من الرمز الجديد | ليس قاعدة بروتوكول | ليس قاعدة بروتوكول | **حتى 27% من كل رمز مطروح** |
 
 1. ethereum.org — الغاز والرسوم: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — الرسوم: https://solana.com/docs/core/fees

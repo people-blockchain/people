@@ -14,8 +14,8 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Up to 27%",
-        "title": "Up to 27% ke kolam komunitas",
+        "value": "Hingga 27%",
+        "title": "Hingga 27% ke kolam komunitas",
         "note": "Dari pasokan setiap token baru masuk ke kolam komunitas."
       },
       {
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% komunitas + biaya jaringan",
+        "label": "Hingga 27% komunitas + biaya jaringan",
         "sub": "Bagian token baru dan biaya protokol tetap terpisah"
       },
       {
@@ -66,7 +66,7 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Up to 27% setiap token baru masuk ke kolam komunitas",
+        "title": "Hingga 27% setiap token baru masuk ke kolam komunitas",
         "body": "10% setiap token baru masuk ke pool komunitas saat peluncuran, dijamin. Sisa di kurva (~17%) masuk ke pool komunitas atau dibakar — kreator memilih sekali saat peluncuran. Pool diatur timelock PEOPLE dan dibayar ke orang terverifikasi seiring waktu, bukan instan; bukan janji yield. Not a personal payout, and not 10% of every fee.",
         "href": "/create/token",
         "cta": "Buat token"
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Pembayaran Growth Beta aktif: L1 70% · L2 30% dari anggaran imbalan Growth. Growth Pool adalah 15% biaya yang memenuhi syarat. Terpisah dari tujuan the fee split biaya jaringan dan dari Up to 27% setiap token baru yang masuk ke kumpulan komunitas.",
+    "subtitle": "Pembayaran Growth Beta aktif: L1 70% · L2 30% dari anggaran imbalan Growth. Growth Pool adalah 15% biaya yang memenuhi syarat. Terpisah dari tujuan the fee split biaya jaringan dan dari Hingga 27% setiap token baru yang masuk ke kumpulan komunitas.",
     "you": "Anda",
     "budgetNote": "Persentase adalah bagian anggaran imbalan Growth setelah the fee split mengarahkan 15% biaya yang memenuhi syarat ke Growth Pool — bukan bagian dari setiap biaya jaringan.",
     "detailsTitle": "Cara kerja Growth-referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Terpisah dari biaya dan token",
-        "body": "Bobot Growth L1/L2 bukan pembagian biaya jaringan the fee split dan bukan Up to 27% setiap token baru untuk kumpulan komunitas. Growth Pool adalah tujuan biaya the fee split dengan aturan penyelesaian sendiri."
+        "body": "Bobot Growth L1/L2 bukan pembagian biaya jaringan the fee split dan bukan Hingga 27% setiap token baru untuk kumpulan komunitas. Growth Pool adalah tujuan biaya the fee split dengan aturan penyelesaian sendiri."
       },
       {
         "title": "Situs ini",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Ikut serta dalam ekonomi",
-        "body": "Bayar biaya Token Factory dan mint NFT dari dompet yang sama. Bagian Up to 27% kumpulan komunitas pada token baru, biaya jaringan, dan Growth-referral tetap tiga mekanisme terpisah.",
+        "body": "Bayar biaya Token Factory dan mint NFT dari dompet yang sama. Bagian Hingga 27% kumpulan komunitas pada token baru, biaya jaringan, dan Growth-referral tetap tiga mekanisme terpisah.",
         "href": "/create",
         "cta": "Buat"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Biaya jaringan dan bagian komunitas setiap token tetap di saluran terpisah.",
-        "detail": "Biaya jaringan dalam PPL mengikuti the fee split. Token standar buatan pengguna mengirim Up to 27% pasokan token itu ke kumpulan komunitas miliknya — itu bukan biaya jaringan."
+        "detail": "Biaya jaringan dalam PPL mengikuti the fee split. Token standar buatan pengguna mengirim Hingga 27% pasokan token itu ke kumpulan komunitas miliknya — itu bukan biaya jaringan."
       }
     ],
     "storyCta": "Cerita visual lengkap"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool menerima 15% biaya yang memenuhi syarat. Bukan pendapatan terjamin, imbal hasil pasif, atau produk investasi.",
     "detailsTitle": "Cara kerja perutean biaya",
-    "detailsBody": "Setiap biaya protokol dibagi: 30% validator, 25% komunitas, 20% treasury, 10% likuiditas, 15% Growth, 0% dibakar — termasuk pecahan. After whole-number division, any remainder stays with validators. The Up to 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Setiap biaya protokol dibagi: 30% validator, 25% komunitas, 20% treasury, 10% likuiditas, 15% Growth, 0% dibakar — termasuk pecahan. After whole-number division, any remainder stays with validators. The Hingga 27% of each new token that goes to the community pool is a different path — not a network fee.",
     "storyLink": "Bagaimana imbalan dijelaskan"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Harga peluncuran memakai kurva constant-product dengan matematika bilangan bulat tepat.",
       "Biaya perdagangan protokol pada kurva diarahkan melalui ekonomi biaya jaringan.",
-      "Pembagian peluncuran standar mencakup wajib Up to 27% pasokan token itu ke kumpulan komunitas miliknya (bukan biaya jaringan PPL).",
+      "Pembagian peluncuran standar mencakup wajib Hingga 27% pasokan token itu ke kumpulan komunitas miliknya (bukan biaya jaringan PPL).",
       "Vesting pencipta menahan sebagian besar bagian pencipta terbuka seiring waktu, agar komunitas tidak di-dump pada hari pertama."
     ],
     "createCta": "Buka Token Factory",

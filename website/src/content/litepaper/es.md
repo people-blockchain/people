@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Suministro | **1.000.000.000 PPL**, fijo |
-| Cada token lanzado | **Up to 27%** del suministro va al fondo comunitario de ese token |
+| Cada token lanzado | **Hasta un 27%** del suministro va al fondo comunitario de ese token |
 | Comisiones de red quemadas | **0%** — cada comisión se comparte |
 | Quién gana recompensas | **Humanos verificados** (teléfono de Telegram o Human Passport) |
 | Financiación | **Auto-financiado.** Sin capitales de riesgo. Sin asignación de inversores. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Humanos verificados, no bots.** Las recompensas van a cuentas que pasaron una verificación de humanidad gratuita. Una persona, una cuenta. El registro solo no genera nada.
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**Hasta un 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -53,7 +53,7 @@ Lo que puedes hacer sin código:
 
 | Herramienta | Qué hace | Estado |
 |---|---|---|
-| **Tokens sin código** | Nombre, símbolo, imagen, suministro. El token se activa en su propia curva de enlace; la primera transacción establece el precio. El Up to 27% del suministro va al fondo comunitario del token; la participación del creador se devenga durante 180 días. | Activo en testnet |
+| **Tokens sin código** | Nombre, símbolo, imagen, suministro. El token se activa en su propia curva de enlace; la primera transacción establece el precio. El Hasta un 27% del suministro va al fondo comunitario del token; la participación del creador se devenga durante 180 días. | Activo en testnet |
 | **Tarjetas de club NFT** | Tarjetas de membresía para un club, una cafetería o una comunidad — una por miembro, con una imagen que cargas o generas. | Activo en testnet |
 | **Recaudación de fondos** | Recopila apoyo para un proyecto con plantillas de contrato revisadas: depósito en garantía, devengo, voto ponderado por token. Tu comunidad compra en la curva, por lo que la demanda establece el precio — no una ronda privada. | Activo en testnet |
 | **Contratos AI** | Describe un contrato inteligente en palabras simples. Se ensambla a partir de plantillas de OpenZeppelin y ves el resultado antes de implementar. | Activo en testnet |
@@ -191,7 +191,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 | Quién recibe las comisiones | Los validadores obtienen la comisión prioritaria (propina) ¹ | Los validadores obtienen el 50% de la comisión base y el 100% de la comisión prioritaria ² | **Validadores 30 · Comunidad 25 · Tesorería 20 · Liquidez 10 · Crecimiento 15** |
 | Financiación inicial | Venta pública de ether, 2014 (42 días, pagada en BTC) ³ | Serie A de 20 millones de dólares liderada por Multicoin Capital (2019); los inversores recibieron tokens SOL ⁴ | **Auto-financiado. Sin capitales de riesgo, sin asignación de inversores** |
 | Creación de cuenta | Crear una cuenta no cuesta nada; sin verificación de identidad ⁵ | No es un requisito de protocolo | **Recompensas solo para humanos verificados** |
-| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **Up to 27% de cada token lanzado** |
+| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **Hasta un 27% de cada token lanzado** |
 
 1. ethereum.org — Gas y comisiones: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Comisiones: https://solana.com/docs/core/fees
