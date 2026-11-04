@@ -1,4 +1,9 @@
-import { normalizeReferralCode } from "@/lib/partner/referral";
+import {
+  REFERRAL_COOKIE,
+  REFERRAL_COOKIE_MAX_AGE,
+  normalizeReferralCode,
+  resolveStoredReferralCookie,
+} from "@/lib/partner/referral";
 
 const STORAGE_KEY = "ppl_referrer";
 
@@ -38,6 +43,31 @@ function storage(): Storage | null {
   }
 }
 
+export function readBrowserReferralCookie(): string | undefined {
+  if (typeof document === "undefined" || typeof document.cookie !== "string") return undefined;
+  const parts = document.cookie.split(";");
+  for (const part of parts) {
+    const [k, ...rest] = part.trim().split("=");
+    if (k === REFERRAL_COOKIE) {
+      return decodeURIComponent(rest.join("="));
+    }
+  }
+  return undefined;
+}
+
+function writeBrowserReferralCookie(code: string): void {
+  if (typeof document === "undefined") return;
+  try {
+    const existing = readBrowserReferralCookie();
+    const resolved = resolveStoredReferralCookie(existing, code);
+    if (!resolved || resolved === existing) return;
+    const secure = typeof window !== "undefined" && window.location?.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${REFERRAL_COOKIE}=${encodeURIComponent(resolved)}; Path=/; Max-Age=${REFERRAL_COOKIE_MAX_AGE}; SameSite=Lax${secure}`;
+  } catch {
+    /* ignore cookie restrictions */
+  }
+}
+
 /**
  * Persist `?ref=` from the landing URL (any page). First-touch: once a referrer is stored, a
  * later `?ref=` on some other page must not overwrite it, or whichever link the user clicks
@@ -45,9 +75,12 @@ function storage(): Storage | null {
  */
 export function captureReferrerFromSearch(search: string): void {
   const store = storage();
+  const ref = parseReferral(new URLSearchParams(search).get("ref"));
+  if (ref?.kind === "code") {
+    writeBrowserReferralCookie(ref.value);
+  }
   if (!store) return;
   if (readStoredReferral()) return;
-  const ref = parseReferral(new URLSearchParams(search).get("ref"));
   if (!ref) return;
   try {
     store.setItem(STORAGE_KEY, ref.value);

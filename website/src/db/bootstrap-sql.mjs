@@ -437,6 +437,214 @@ export const WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS = [
  * accounting for AI icon generation — one-shot payment consumption (unique paymentTxId),
  * per-day free/paid counters, and a generic fixed-window rate limiter.
  */
+export const FACTORY_ICON_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "factory_icon_payment_tx" (
+  "id" text PRIMARY KEY NOT NULL,
+  "paymentTxId" text NOT NULL,
+  "walletAddress" text NOT NULL,
+  "dayKey" text NOT NULL,
+  "claimedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "factory_icon_payment_tx_id_idx" ON "factory_icon_payment_tx" ("paymentTxId")`,
+  `CREATE TABLE IF NOT EXISTS "factory_icon_daily_usage" (
+  "dayKey" text NOT NULL,
+  "walletAddress" text NOT NULL,
+  "usedCount" integer NOT NULL DEFAULT 0,
+  "updatedAt" timestamp NOT NULL DEFAULT now(),
+  PRIMARY KEY ("dayKey", "walletAddress")
+)`,
+  `CREATE TABLE IF NOT EXISTS "api_rate_limit" (
+  "bucketKey" text PRIMARY KEY NOT NULL,
+  "count" integer NOT NULL DEFAULT 0,
+  "expiresAt" timestamp NOT NULL
+)`,
+  `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
+];
+
+/**
+ * Keep in sync with `website/drizzle/0020_sale_person_binding.sql`. PplCurveHubV2 needs a
+ * private person key/public personId per account plus HMAC-only identifiers; no raw
+ * wallet/nullifier/Telegram/phone value is stored in these tables.
+ */
+export const SALE_PERSON_BINDING_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "sale_person" (
+  "personKey" text PRIMARY KEY NOT NULL,
+  "personId" text NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_person_person_id_idx" ON "sale_person" ("personId")`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_person_user_id_idx" ON "sale_person" ("userId")`,
+  `CREATE TABLE IF NOT EXISTS "sale_person_identifier" (
+  "idHash" text PRIMARY KEY NOT NULL,
+  "kind" text NOT NULL,
+  "personKey" text NOT NULL REFERENCES "sale_person"("personKey") ON DELETE CASCADE,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "sale_person_identifier_person_idx" ON "sale_person_identifier" ("personKey")`,
+  `CREATE TABLE IF NOT EXISTS "sale_binding" (
+  "personId" text PRIMARY KEY NOT NULL,
+  "account" text NOT NULL,
+  "chainId" integer NOT NULL,
+  "hub" text NOT NULL,
+  "nonce" text NOT NULL,
+  "deadline" timestamp NOT NULL,
+  "status" text NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_binding_account_lower_idx" ON "sale_binding" (lower("account"))`,
+];
+
+/**
+ * Keep in sync with `website/drizzle/0021_founder_nft_person.sql`. Founder NFT personId keyed by
+ * sha256 digests of Human Passport stamp nullifiers; no raw nullifier or wallet is stored.
+ */
+export const FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_nft_person" (
+  "personId" text PRIMARY KEY NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE TABLE IF NOT EXISTS "founder_nft_stamp_hash" (
+  "stampHash" text PRIMARY KEY NOT NULL,
+  "personId" text NOT NULL REFERENCES "founder_nft_person"("personId") ON DELETE CASCADE,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_nft_stamp_hash_person_idx" ON "founder_nft_stamp_hash" ("personId")`,
+];
+
+/**
+ * Keep in sync with `website/drizzle/0022_founder_nft_auth_nonce.sql`. Single-use wallet
+ * signature nonce for Founder NFT mint and rebind. The code is random; no key is stored.
+ */
+export const FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_nft_auth_nonce" (
+  "code" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "chainId" integer NOT NULL,
+  "expiresAt" timestamp NOT NULL,
+  "usedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_nft_auth_nonce_user_idx" ON "founder_nft_auth_nonce" ("userId")`,
+];
+
+/** Keep in sync with `website/drizzle/0023_referral_kol_attribution.sql`. */
+export const REFERRAL_KOL_SCHEMA_STATEMENTS = [
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "kolCode" text`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "referredByKolCode" text`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "referralAttachedAt" timestamp`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "referralCookieSetAt" timestamp`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "kolTierOverrideBps" integer`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "kolStatus" text NOT NULL DEFAULT 'active'`,
+  `ALTER TABLE "partner" ADD COLUMN IF NOT EXISTS "referralClicks" integer NOT NULL DEFAULT 0`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "partner_kol_code_lower_idx" ON "partner" (lower("kolCode"))`,
+  `CREATE INDEX IF NOT EXISTS "partner_referred_by_user_idx" ON "partner" ("referredByUserId")`,
+  `CREATE INDEX IF NOT EXISTS "partner_referred_by_kol_idx" ON "partner" (lower("referredByKolCode"))`,
+  `CREATE TABLE IF NOT EXISTS "sale_buyer_binding" (
+  "buyerWallet" text PRIMARY KEY NOT NULL,
+  "peopleAddress" text,
+  "userId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "referrerUserId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "kolCode" text,
+  "source" text NOT NULL DEFAULT 'cookie',
+  "cookieSetAt" timestamp,
+  "boundAt" timestamp NOT NULL DEFAULT now(),
+  "ipHash" text,
+  "deviceHash" text
+)`,
+  `CREATE INDEX IF NOT EXISTS "sale_buyer_binding_user_idx" ON "sale_buyer_binding" ("userId")`,
+  `CREATE INDEX IF NOT EXISTS "sale_buyer_binding_referrer_idx" ON "sale_buyer_binding" ("referrerUserId")`,
+  `CREATE INDEX IF NOT EXISTS "sale_buyer_binding_kol_idx" ON "sale_buyer_binding" (lower("kolCode"))`,
+  `CREATE TABLE IF NOT EXISTS "sale_chain_cursor" (
+  "chainId" integer NOT NULL,
+  "contractAddress" text NOT NULL,
+  "lastScannedBlock" integer NOT NULL DEFAULT 0,
+  "lastBlockHash" text,
+  "updatedAt" timestamp NOT NULL DEFAULT now(),
+  PRIMARY KEY ("chainId", "contractAddress")
+)`,
+  `CREATE TABLE IF NOT EXISTS "sale_purchase" (
+  "id" text PRIMARY KEY NOT NULL,
+  "chainId" integer NOT NULL DEFAULT 8453,
+  "contractAddress" text NOT NULL,
+  "txHash" text NOT NULL,
+  "logIndex" integer NOT NULL DEFAULT 0,
+  "blockNumber" integer NOT NULL,
+  "blockHash" text NOT NULL,
+  "blockTimestamp" timestamp NOT NULL,
+  "eventKind" text NOT NULL DEFAULT 'buy',
+  "buyerAddress" text NOT NULL,
+  "beneficiaryAddress" text NOT NULL,
+  "tokenAddress" text NOT NULL,
+  "usdMicro" numeric(38, 0) NOT NULL,
+  "pplMicro" numeric(38, 0) NOT NULL,
+  "soldAfterMicro" numeric(38, 0),
+  "buyerUserId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "referrerUserId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "kolCode" text,
+  "attributionMethod" text NOT NULL DEFAULT 'unattributed',
+  "status" text NOT NULL DEFAULT 'confirmed',
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "sale_purchase_chain_tx_log_idx" ON "sale_purchase" ("chainId", lower("txHash"), "logIndex")`,
+  `CREATE INDEX IF NOT EXISTS "sale_purchase_buyer_idx" ON "sale_purchase" ("buyerAddress", "blockTimestamp")`,
+  `CREATE INDEX IF NOT EXISTS "sale_purchase_referrer_idx" ON "sale_purchase" ("referrerUserId", "status")`,
+  `CREATE INDEX IF NOT EXISTS "sale_purchase_kol_idx" ON "sale_purchase" (lower("kolCode"), "status")`,
+  `CREATE TABLE IF NOT EXISTS "referral_payout_batch" (
+  "id" text PRIMARY KEY NOT NULL,
+  "beneficiaryUserId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "periodKey" text NOT NULL,
+  "status" text NOT NULL DEFAULT 'pending',
+  "usdcAmountMicro" numeric(38, 0) NOT NULL DEFAULT '0',
+  "pplAmountMicro" numeric(38, 0) NOT NULL DEFAULT '0',
+  "usdcNetwork" text NOT NULL DEFAULT 'base',
+  "pplNetwork" text NOT NULL DEFAULT 'people_mainnet',
+  "usdcTxHash" text,
+  "pplTxHash" text,
+  "paidAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "referral_payout_batch_user_idx" ON "referral_payout_batch" ("beneficiaryUserId", "createdAt")`,
+  `CREATE TABLE IF NOT EXISTS "referral_commission_ledger" (
+  "id" text PRIMARY KEY NOT NULL,
+  "purchaseId" text NOT NULL REFERENCES "sale_purchase"("id") ON DELETE CASCADE,
+  "beneficiaryUserId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "buyerUserId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "buyerAddress" text NOT NULL,
+  "program" text NOT NULL DEFAULT 'kol',
+  "level" integer NOT NULL DEFAULT 1,
+  "usdcRateBps" integer NOT NULL DEFAULT 700,
+  "pplRateBps" integer NOT NULL DEFAULT 300,
+  "usdPurchaseMicro" numeric(38, 0) NOT NULL,
+  "pplPurchaseMicro" numeric(38, 0) NOT NULL,
+  "grossUsdcMicro" numeric(38, 0) NOT NULL,
+  "grossPplMicro" numeric(38, 0) NOT NULL,
+  "clawedBackUsdcMicro" numeric(38, 0) NOT NULL DEFAULT '0',
+  "clawedBackPplMicro" numeric(38, 0) NOT NULL DEFAULT '0',
+  "netUsdcMicro" numeric(38, 0) NOT NULL,
+  "netPplMicro" numeric(38, 0) NOT NULL,
+  "usdcSettlementNetwork" text NOT NULL DEFAULT 'base',
+  "pplSettlementNetwork" text NOT NULL DEFAULT 'people_mainnet',
+  "isPplLocked" boolean NOT NULL DEFAULT false,
+  "status" text NOT NULL DEFAULT 'pending',
+  "voidReason" text,
+  "holdUntil" timestamp NOT NULL,
+  "payoutBatchId" text REFERENCES "referral_payout_batch"("id") ON DELETE SET NULL,
+  "paidTxHashBase" text,
+  "paidTxHashPeople" text,
+  "paidAt" timestamp,
+  "idempotencyKey" text NOT NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "referral_commission_idem_idx" ON "referral_commission_ledger" ("idempotencyKey")`,
+  `CREATE INDEX IF NOT EXISTS "referral_commission_benef_status_idx" ON "referral_commission_ledger" ("beneficiaryUserId", "status", "holdUntil")`,
+  `CREATE INDEX IF NOT EXISTS "referral_commission_buyer_idx" ON "referral_commission_ledger" ("buyerAddress", "status")`,
+];
+
 /**
  * Keep in sync with `website/drizzle/0024_analytics.sql` and `website/drizzle/0025_analytics_ga_indexes.sql`.
  * Retention: prune old rows on a schedule (see docs/analytics.md); no auto-purge in app yet.
@@ -506,28 +714,4 @@ export const ANALYTICS_GA_INDEX_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "analytics_event_session_created_idx" ON "analytics_event" ("sessionId", "createdAt")`,
   `CREATE INDEX IF NOT EXISTS "analytics_event_visitor_created_idx" ON "analytics_event" ("visitorId", "createdAt")`,
   `CREATE INDEX IF NOT EXISTS "analytics_event_type_name_created_idx" ON "analytics_event" ("eventType", "eventName", "createdAt")`,
-];
-
-export const FACTORY_ICON_SCHEMA_STATEMENTS = [
-  `CREATE TABLE IF NOT EXISTS "factory_icon_payment_tx" (
-  "id" text PRIMARY KEY NOT NULL,
-  "paymentTxId" text NOT NULL,
-  "walletAddress" text NOT NULL,
-  "dayKey" text NOT NULL,
-  "claimedAt" timestamp NOT NULL DEFAULT now()
-)`,
-  `CREATE UNIQUE INDEX IF NOT EXISTS "factory_icon_payment_tx_id_idx" ON "factory_icon_payment_tx" ("paymentTxId")`,
-  `CREATE TABLE IF NOT EXISTS "factory_icon_daily_usage" (
-  "dayKey" text NOT NULL,
-  "walletAddress" text NOT NULL,
-  "usedCount" integer NOT NULL DEFAULT 0,
-  "updatedAt" timestamp NOT NULL DEFAULT now(),
-  PRIMARY KEY ("dayKey", "walletAddress")
-)`,
-  `CREATE TABLE IF NOT EXISTS "api_rate_limit" (
-  "bucketKey" text PRIMARY KEY NOT NULL,
-  "count" integer NOT NULL DEFAULT 0,
-  "expiresAt" timestamp NOT NULL
-)`,
-  `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
 ];
