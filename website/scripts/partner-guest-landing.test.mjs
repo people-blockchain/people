@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const dir = join(root, "src/lib/locales/surfaces");
 const pagePath = join(root, "src/app/partner/page.tsx");
+const proxyPath = join(root, "src/proxy.ts");
 
 const guestKeys = [
   "guestLandingTitle",
@@ -29,6 +30,15 @@ test("guest landing copy keys exist in all partner locales", () => {
       assert.ok(data[key].trim().length > 0, `${lang}.${key} empty`);
     }
   }
+});
+
+test("proxy must not redirect unauthenticated /partner to login", () => {
+  const src = readFileSync(proxyPath, "utf8");
+  assert.doesNotMatch(
+    src,
+    /isPartnerPath\s*\(\s*pathname\s*\)\s*&&\s*!session/,
+    "proxy must not gate /partner on session (guest landing is in partner/page.tsx)",
+  );
 });
 
 test("partner page shows guest landing instead of login redirect when unauthenticated", () => {

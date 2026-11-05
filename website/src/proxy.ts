@@ -8,7 +8,7 @@ import {
 } from "@/lib/analytics/view-path";
 import { localeFromBuyPath } from "@/lib/locale-detect";
 import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/preferences";
-import { isLoginPath, isPartnerPath, LOGIN_PATH } from "@/lib/partner/guards";
+import { isLoginPath, isPartnerPath } from "@/lib/partner/guards";
 import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCookie } from "@/lib/partner/referral";
 
 function analyticsViewerEdgeResponse(request: NextAuthRequest): NextResponse | null {
@@ -24,8 +24,8 @@ function analyticsViewerEdgeResponse(request: NextAuthRequest): NextResponse | n
 /**
  * Proxy only needs to decode the JWT cookie. `authConfig` includes the Resend
  * email provider, and Auth.js throws `MissingAdapter` when an email provider is
- * present without an adapter — `getSession()` then returns null and `/partner`
- * always redirects to `/login` even though `/api/auth/session` has a user.
+ * present without an adapter — `getSession()` then returns null even though
+ * `/api/auth/session` has a user. Guest `/partner` is rendered in the page, not here.
  */
 const { auth } = NextAuth({
   ...authConfig,
@@ -44,7 +44,6 @@ export const proxy = auth((request: NextAuthRequest) => {
     request.nextUrl.searchParams.get("ref"),
   );
 
-  const session = request.auth;
   let response: NextResponse;
 
   const buyLocale = localeFromBuyPath(pathname);
@@ -61,18 +60,13 @@ export const proxy = auth((request: NextAuthRequest) => {
       httpOnly: false,
       secure: request.nextUrl.protocol === "https:",
     });
-  } else if (isPartnerPath(pathname) && !session?.user) {
-    const login = request.nextUrl.clone();
-    login.pathname = LOGIN_PATH;
-    login.search = "";
-    login.searchParams.set("callbackUrl", pathname);
-    response = NextResponse.redirect(login);
   } else {
     // Signed-in visitors on /login are sent to /partner by the login page
     // itself, after it checks that the session still belongs to a real user.
     // Redirecting here on the JWT alone trapped stale sessions in a
     // /login -> /partner -> error loop and the header "Partner login" link
     // never reached the sign-in form.
+    // Unauthenticated `/partner` is handled by partner/page.tsx (guest landing).
     response = NextResponse.next();
   }
 
