@@ -297,7 +297,32 @@ export function BountyCommunity() {
     };
   }, [statsPublic]);
 
-  if (!statsPublic) return null;
+  const staticGoal = 1_000_000;
+
+  if (!statsPublic) {
+    return (
+      <WarmSection
+        id="bounty-community"
+        tone="canvas-2"
+        eyebrow={t.stats.eyebrow}
+        title={t.stats.title}
+        lead={t.stats.lead}
+        testId="bounty-community"
+      >
+        <Reveal>
+          <div className="mt-8 max-w-sm">
+            <div className="rounded-3xl border border-line bg-surface p-5 shadow-[var(--elev-1)]">
+              <Gift className="h-5 w-5 text-value" aria-hidden="true" />
+              <p className="mt-3 font-mono text-3xl font-bold tabular-nums text-ink">
+                {staticGoal.toLocaleString(lang)}
+              </p>
+              <p className="mt-1 text-sm text-ink-2">{t.stats.goal}</p>
+            </div>
+          </div>
+        </Reveal>
+      </WarmSection>
+    );
+  }
 
   const counters = payload?.counters ?? null;
   const rows = payload?.ambassadors ?? [];

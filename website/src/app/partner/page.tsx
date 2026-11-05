@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PartnerCabinet } from "@/components/partner/PartnerCabinet";
+import { PartnerGuestLanding } from "@/components/partner/PartnerGuestLanding";
 import { bountyCopy } from "@/lib/bounty-content";
 import { partnerCopy } from "@/lib/partner/copy";
 import { languageFromAcceptLanguage } from "@/lib/locale-detect";
@@ -33,7 +34,15 @@ export default async function PartnerPage() {
   }
   const session = await auth();
   if (!session?.user?.id) {
-    redirect("/login?callbackUrl=/partner");
+    return (
+      <div className="flex min-h-screen flex-col bg-canvas text-ink">
+        <Navbar />
+        <main id="main" className="warm-page flex-1">
+          <PartnerGuestLanding />
+        </main>
+        <Footer />
+      </div>
+    );
   }
   // A session cookie can outlive its user row (database reset, removed
   // account). Send it back to the sign-in form instead of failing.
@@ -78,8 +87,8 @@ export default async function PartnerPage() {
   if (!cabinet) {
     redirect("/login?error=Unavailable");
   }
-  const origin = process.env.AUTH_URL?.trim() || SITE_URL;
-  const referralLink = `${origin.replace(/\/$/, "")}${partnerSharePath(cabinet.referralCode)}`;
+  const origin = SITE_URL.replace(/\/$/, "");
+  const referralLink = `${origin}${partnerSharePath(cabinet.referralCode)}`;
 
   const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
   const t = partnerCopy[lang];

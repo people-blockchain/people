@@ -1,22 +1,30 @@
 "use client";
 
-import { PARTNER_CABINET_EN as c } from "@/lib/partner/cabinet-copy";
+import { partnerCopy } from "@/lib/partner/copy";
+import { useLanguage } from "@/context/LanguageContext";
 import { shortWalletAddress } from "@/lib/partner/bind-errors";
 import { formatMicroPpl, formatMicroUsd } from "@/lib/partner/commission";
 import type { CabinetCommissionItem, CabinetPayoutItem } from "@/lib/partner/service";
 
-function statusBadge(status: string, voidReason?: string | null) {
+function statusBadge(
+  status: string,
+  labels: Pick<
+    typeof partnerCopy.en,
+    "statusPaid" | "statusApproved" | "statusVoid" | "statusPending"
+  >,
+  voidReason?: string | null,
+) {
   if (status === "paid") {
     return (
       <span className="inline-block rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">
-        {c.statusPaid}
+        {labels.statusPaid}
       </span>
     );
   }
   if (status === "approved") {
     return (
       <span className="inline-block rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800">
-        {c.statusApproved}
+        {labels.statusApproved}
       </span>
     );
   }
@@ -26,13 +34,13 @@ function statusBadge(status: string, voidReason?: string | null) {
         title={voidReason ?? undefined}
         className="inline-block rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800"
       >
-        {c.statusVoid}
+        {labels.statusVoid}
       </span>
     );
   }
   return (
     <span className="inline-block rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
-      {c.statusPending}
+      {labels.statusPending}
     </span>
   );
 }
@@ -51,6 +59,8 @@ export function PartnerPayoutHistory({
   commissions: CabinetCommissionItem[];
   payouts: CabinetPayoutItem[];
 }) {
+  const { lang } = useLanguage();
+  const c = partnerCopy[lang];
   return (
     <div className="grid gap-6">
       <section className="surface-elevated rounded-2xl p-5">
@@ -94,7 +104,7 @@ export function PartnerPayoutHistory({
                     <td className="px-3 py-2.5 font-mono text-ink-2">
                       {formatShortDate(item.holdUntil)}
                     </td>
-                    <td className="py-2.5 pl-3">{statusBadge(item.status, item.voidReason)}</td>
+                    <td className="py-2.5 pl-3">{statusBadge(item.status, c, item.voidReason)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -133,7 +143,7 @@ export function PartnerPayoutHistory({
                     <td className="px-3 py-2.5 font-mono">
                       {formatMicroPpl(batch.pplAmountMicro)}
                     </td>
-                    <td className="px-3 py-2.5">{statusBadge(batch.status)}</td>
+                    <td className="px-3 py-2.5">{statusBadge(batch.status, c)}</td>
                     <td className="py-2.5 pl-3 font-mono text-ink-2">
                       {batch.usdcTxHash ? shortWalletAddress(batch.usdcTxHash) : "—"}
                       {batch.pplTxHash ? ` / ${shortWalletAddress(batch.pplTxHash)}` : ""}

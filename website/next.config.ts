@@ -115,6 +115,13 @@ const PERMISSIONS_POLICY = [
 ].join(", ");
 
 const nextConfig: NextConfig = {
+  /**
+   * `next dev` allowlists `localhost` (and the bind hostname) for `/_next/*`, but browsers treat
+   * `127.0.0.1` as a different origin. Opening the app or screenshot tooling at
+   * http://127.0.0.1:3456 while the dev server was started on localhost then blocks cross-origin
+   * dev assets unless we list the numeric loopback host here.
+   */
+  allowedDevOrigins: ["127.0.0.1"],
   // Baked in at build time so the bug-report button can attach an app version to its
   // auto-context. VERCEL_GIT_COMMIT_SHA is already set by Vercel; no dashboard env needed.
   env: {

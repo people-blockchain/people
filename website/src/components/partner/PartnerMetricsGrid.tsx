@@ -1,10 +1,13 @@
 "use client";
 
-import { PARTNER_CABINET_EN as c } from "@/lib/partner/cabinet-copy";
+import { partnerCopy } from "@/lib/partner/copy";
+import { useLanguage } from "@/context/LanguageContext";
 import { formatMicroPpl, formatMicroUsd } from "@/lib/partner/commission";
 import type { CabinetMetrics } from "@/lib/partner/service";
 
 export function PartnerMetricsGrid({ metrics }: { metrics: CabinetMetrics }) {
+  const { lang } = useLanguage();
+  const c = partnerCopy[lang];
   return (
     <section className="surface-elevated rounded-2xl p-5">
       <h2 className="text-base font-bold text-ink">{c.metricsSectionTitle}</h2>
