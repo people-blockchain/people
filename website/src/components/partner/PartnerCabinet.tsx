@@ -156,6 +156,13 @@ export function PartnerCabinet({
         </div>
       </header>
 
+      <p
+        role="status"
+        className="rounded-xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-950"
+      >
+        {t.preSaleBanner}
+      </p>
+
       {refreshError && (
         <div
           role="alert"
