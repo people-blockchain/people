@@ -87,8 +87,8 @@ export default async function PartnerPage() {
   if (!cabinet) {
     redirect("/login?error=Unavailable");
   }
-  const origin = process.env.AUTH_URL?.trim() || SITE_URL;
-  const referralLink = `${origin.replace(/\/$/, "")}${partnerSharePath(cabinet.referralCode)}`;
+  const origin = SITE_URL.replace(/\/$/, "");
+  const referralLink = `${origin}${partnerSharePath(cabinet.referralCode)}`;
 
   const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
   const t = partnerCopy[lang];
