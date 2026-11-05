@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Pasokan | **1.000.000.000 PPL**, tetap |
-| Setiap token yang diluncurkan | **10% guaranteed** (up to **27%** total) dari pasokan masuk ke pool komunitas token itu sendiri |
+| Setiap token yang diluncurkan | **10% dijamin** saat peluncuran (hingga **27%** total dengan sisa kurva) dari pasokan masuk ke dana komunitas token itu sendiri |
 | Biaya jaringan terbakar | **0%** — setiap biaya dibagikan |
 | Siapa yang mendapat hadiah | **Manusia terverifikasi** (Telegram dengan nomor ponsel atau Human Passport) |
 | Pendanaan | **Pendanaan mandiri.** Tanpa VC. Tanpa alokasi investor. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Manusia terverifikasi, bukan bot.** Hadiah pergi ke akun yang lulus pemeriksaan manusia gratis. Satu orang, satu akun. Pendaftaran saja tidak menghasilkan apa pun.
 
-**Hingga 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**10% setiap token baru masuk ke dana komunitasnya — dijamin.** Saat peluncuran, kreator juga dapat mengirim sisa kurva yang belum terjual (hingga ~17%) ke dana alih-alih dibakar — hingga 27% total. Terintegrasi dalam protokol, bukan dijanjikan dalam postingan. Dana dikelola timelock PEOPLE dan dibayarkan ke orang terverifikasi seiring waktu, bukan instan; ini bukan janji imbal hasil. Tidak pernah dicampur dengan biaya jaringan.
 
 ---
 
@@ -53,7 +53,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 | Alat | Apa yang dilakukannya | Status |
 |---|---|---|
-| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. Hingga 27% dari pasokan masuk ke pool komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
+| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. Hingga 27% dari pasokan masuk ke dana komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
 | **Kartu klub NFT** | Kartu keanggotaan untuk klub, kafe, atau komunitas — satu per anggota, dengan gambar yang Anda unggah atau hasilkan. | Aktif di testnet |
 | **Penggalangan dana** | Kumpulkan dukungan untuk proyek dengan template kontrak yang ditinjau: escrow, vesting, token-weighted vote. Komunitas Anda membeli di kurva, jadi permintaan menetapkan harga — bukan putaran pribadi. | Aktif di testnet |
 | **Kontrak AI** | Jelaskan kontrak pintar dalam kata-kata polos. Ini dirakit dari template OpenZeppelin dan Anda melihat hasilnya sebelum Anda deploy. | Aktif di testnet |
@@ -73,7 +73,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 | Prefiks alamat | `people1…` (dan akun yang sama seperti `0x…` di EVM) |
 | Status jaringan | Testnet publik — bukan mainnet |
 
-**Validator.** Validator menjalankan jaringan dan dibayar dari pool validator pra-alokasi ditambah 30% dari setiap biaya jaringan. Validator testnet berjalan untuk pengujian saja; pembukaan validasi dan staking ke publik adalah tahap roadmap yang lebih lambat.
+**Validator.** Validator menjalankan jaringan dan dibayar dari dana validator pra-alokasi ditambah 30% dari setiap biaya jaringan. Validator testnet berjalan untuk pengujian saja; pembukaan validasi dan staking ke publik adalah tahap roadmap yang lebih lambat.
 
 **Verifikasi — satu pemeriksaan bahwa Anda adalah orang.** Gratis, dilakukan sekali:
 
@@ -100,7 +100,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 - **Vesting tim & founder (15% dari pasokan):** 0% saat peluncuran, 6 bulan cliff, kemudian 18 bulan linear (24 bulan total).
 - **Tidak ada ember investor.** Tidak ada alokasi VC atau putaran pribadi.
-- **Hadiah berasal dari pool yang ada.** Founder, bounty, ambassador, dan airdrop dibayar hanya dari bucket Komunitas & hadiah. Tidak ada koin baru yang dicetak untuk mereka.
+- **Hadiah berasal dari dana yang ada.** Founder, bounty, ambassador, dan airdrop dibayar hanya dari bucket Komunitas & hadiah. Tidak ada koin baru yang dicetak untuk mereka.
 
 ### Pembagian biaya jaringan
 
@@ -109,10 +109,10 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Penerima | Bagian |
 |---|---:|
 | Validator | 30% |
-| Pool komunitas | 25% |
+| Dana komunitas | 25% |
 | Treasury | 20% |
 | Likuiditas | 10% |
-| Pool pertumbuhan | 15% |
+| Dana pertumbuhan | 15% |
 | Terbakar | 0% |
 
 **Pembelian kembali.** Bagian treasury (20%) dan likuiditas (10%) digunakan untuk pembelian kembali PPL publik. Tidak ada yang terbakar untuk membuat kelangkaan palsu — biaya kembali ke jaringan dan orangnya.
@@ -125,13 +125,13 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 
 **Jadilah salah satu dari satu juta orang pertama yang terverifikasi.** Dapatkan nomor founder, ajak teman dan dapatkan poin ketika *mereka* melakukan hal nyata di jaringan.
 
-**Poin berasal dari tindakan nyata, bukan pendaftaran.** Anda mendapatkan poin undangan hanya setelah pihak yang diundang Anda telah terverifikasi, membuat dompet, dan melakukan setidaknya satu tindakan testnet nyata (swap, liquidity pool, NFT mint, peluncuran token, atau suara tata kelola). Pendaftaran saja = 0.
+**Poin berasal dari tindakan nyata, bukan pendaftaran.** Anda mendapatkan poin undangan hanya setelah pihak yang diundang Anda telah terverifikasi, membuat dompet, dan melakukan setidaknya satu tindakan testnet nyata (swap, dana likuiditas, mint NFT, peluncuran token, atau suara tata kelola). Pendaftaran saja = 0.
 
 **Bagaimana poin menjadi PPL:**
 
-> **PPL per poin = pool musiman ÷ semua poin yang diperoleh dalam musim**
+> **PPL per poin = dana musiman ÷ semua poin yang diperoleh dalam musim**
 
-- **Pool musim 1:** 6.000.000 PPL, dibayar dari pool Satu Juta Founder yang ada. Tidak ada koin baru. Ketika pool kosong, program berhenti.
+- **Dana musim 1:** 6.000.000 PPL, dibayar dari dana Satu Juta Founder yang ada. Tidak ada koin baru. Ketika dana kosong, program berhenti.
 - **Pembayaran:** 10% sekaligus, 90% sisanya dalam irisan mingguan yang sama selama 52 minggu.
 - **Anti-farming:** dua tingkat referral saja, batas per musim pada undangan aktif, dan clawback poin dari akun yang ditandai sebagai bot.
 
@@ -191,9 +191,9 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 | Siapa yang menerima biaya | Validator mendapat biaya prioritas (tip) ¹ | Validator mendapat 50% dari biaya dasar dan 100% dari biaya prioritas ² | **Validator 30 · Komunitas 25 · Treasury 20 · Likuiditas 10 · Pertumbuhan 15** |
 | Pendanaan awal | Penjualan ether publik, 2014 (42 hari, dibayar dalam BTC) ³ | Putaran Seri A $20M yang dipimpin oleh Multicoin Capital (2019); investor menerima token SOL ⁴ | **Pendanaan mandiri. Tanpa VC, tanpa alokasi investor** |
 | Pembuatan akun | Membuat akun tidak memerlukan biaya; tidak ada pemeriksaan identitas ⁵ | Bukan persyaratan protokol | **Hadiah hanya untuk manusia terverifikasi** |
-| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **10% guaranteed** (up to **27%** total) |
+| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **10% dijamin** (hingga **27%** total) (10% saat peluncuran + sisa kurva opsional) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas dan biaya: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana
@@ -216,7 +216,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 
 ### Apa yang berubah di v1.0
 
-- Hingga **27%** pasokan dapat masuk ke pool komunitas: **10%** saat peluncuran dijamin, plus hingga **~17%** sisa kurva jika kreator memilih pool alih-alih burn saat peluncuran. Dibayar via timelock PEOPLE ke orang terverifikasi seiring waktu — bukan instan, bukan janji yield.
+- Hingga **27%** pasokan dapat masuk ke dana komunitas: **10%** saat peluncuran dijamin, plus hingga **~17%** sisa kurva jika kreator memilih dana alih-alih pembakaran saat peluncuran. Dibayar via timelock PEOPLE ke orang terverifikasi seiring waktu — bukan instan, bukan janji imbal hasil.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
 - **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Tidak ada KYC atau pemeriksaan kelayakan di situs ini.

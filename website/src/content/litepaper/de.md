@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Angebot | **1.000.000.000 PPL**, fest |
-| Jeder gestartete Token | **10% guaranteed** (up to **27%** total) des Angebots gehen an den Community-Pool dieses Tokens |
+| Jeder gestartete Token | **10 % garantiert** beim Start (bis **27 %** gesamt mit Kurvenrest) des Angebots gehen an den Community-Fonds dieses Tokens |
 | Netzwerk­gebühren verbrannt | **0%** — jede Gebühr wird geteilt |
 | Wer Belohnungen erhält | **Verifizierte Menschen** (Telegram-Telefon oder Human Passport) |
 | Finanzierung | **Self-finanziert.** Keine VCs. Keine Investor-Zuteilungen. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Verifizierte Menschen, keine Bots.** Belohnungen gehen an Konten, die eine kostenlose Personen­prüfung bestanden haben. Eine Person, ein Konto. Eine Anmeldung allein bringt nichts.
 
-**Bis zu 27 % für die Community.** Im Protokoll verankert: 10 % gehen garantiert beim Start in den Community-Pool. Der Kurvenrest (~17 %) geht in den Pool oder wird verbrannt — der Ersteller wählt einmal beim Start. PEOPLE-Timelock, Auszahlung an verifizierte Menschen über Zeit — kein Renditeversprechen. Nie mit Netzwerkgebühren vermischt.
+**10 % jedes neuen Tokens gehen in seinen Community-Fonds — garantiert.** Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) in den Fonds statt zur Verbrennung senden — bis zu 27 % gesamt. Im Protokoll verankert, nicht in einem Post versprochen. Der Fonds wird vom PEOPLE-Timelock gesteuert und an verifizierte Menschen über Zeit ausgezahlt — nicht sofort; das ist kein Renditeversprechen. Er wird nie mit Netzwerkgebühren vermischt.
 
 ---
 
@@ -53,7 +53,7 @@ Was du ohne Code tun kannst:
 
 | Tool | Was es tut | Status |
 |---|---|---|
-| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. Bis zu 27% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
+| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. Bis zu 27% des Angebots gehen an den Community-Fonds des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
 | **NFT-Club-Karten** | Mitglieds­karten für einen Club, ein Café oder eine Community — eine pro Mitglied, mit einem Bild, das du hochlädst oder generierst. | Live auf Testnet |
 | **Fundraising** | Sammeln von Unterstützung für ein Projekt mit überprüften Vertrags­vorlagen: Escrow, Vesting, Token-gestütztes Abstimmen. Deine Community kauft auf der Curve ein, also setzt Nachfrage den Preis — nicht eine private Runde. | Live auf Testnet |
 | **KI-Verträge** | Beschreibe einen Smart Contract in einfachen Worten. Er wird aus OpenZeppelin-Vorlagen zusammengesetzt und du siehst das Ergebnis, bevor du es einsetzt. | Live auf Testnet |
@@ -73,7 +73,7 @@ Was du ohne Code tun kannst:
 | Adressprefix | `people1…` (und dieselbe Adresse als `0x…` in EVM) |
 | Netzwerk­status | Öffentliches Testnet — kein Mainnet |
 
-**Validatoren.** Validatoren betreiben das Netzwerk und werden vom vorab zugeordneten Validator-Pool plus 30% jeder Netzwerk­gebühr bezahlt. Testnet-Validatoren laufen nur zum Testen; die Öffnung von Validierung und Staking für die Öffentlichkeit ist eine spätere Roadmap-Etappe.
+**Validatoren.** Validatoren betreiben das Netzwerk und werden vom vorab zugeordneten Validator-Fonds plus 30% jeder Netzwerk­gebühr bezahlt. Testnet-Validatoren laufen nur zum Testen; die Öffnung von Validierung und Staking für die Öffentlichkeit ist eine spätere Roadmap-Etappe.
 
 **Verifizierung — eine Überprüfung, dass du eine Person bist.** Kostenlos, einmalig:
 
@@ -100,7 +100,7 @@ Was du ohne Code tun kannst:
 
 - **Team & Gründer Vesting (15% des Angebots):** 0% beim Start, 6-Monats-Cliff, dann 18 Monate linear (24 Monate insgesamt).
 - **Kein Investor-Eintrag.** Es gibt keine VC- oder Private-Round-Zuteilung.
-- **Belohnungen kommen aus bestehenden Pools.** Gründer, Bounties, Botschafter und Airdrops werden nur aus dem Community & Belohnungen-Pool bezahlt. Für sie werden keine neuen Coins geprägt.
+- **Belohnungen kommen aus bestehenden Fonds.** Gründer, Bounties, Botschafter und Airdrops werden nur aus dem Community- & Belohnungen-Fonds bezahlt. Für sie werden keine neuen Coins geprägt.
 
 ### Netzwerk­gebühren-Aufteilung
 
@@ -109,10 +109,10 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Empfänger | Anteil |
 |---|---:|
 | Validatoren | 30% |
-| Community-Pool | 25% |
+| Community-Fonds | 25% |
 | Treasury | 20% |
 | Liquidität | 10% |
-| Growth Pool | 15% |
+| Growth-Fonds | 15% |
 | Verbrannt | 0% |
 
 **Rückkäufe.** Die Treasury- (20%) und Liquiditäts- (10%) Anteile werden für öffentliche PPL-Rückkäufe verwendet. Nichts wird verbrannt, um Knappheit vorzutäuschen — Gebühren gehen zurück an das Netzwerk und seine Menschen.
@@ -125,13 +125,13 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 
 **Sei einer der ersten Million verifizierter Menschen.** Erhalte eine Gründernummer, lade Freunde ein und verdiene Punkte, wenn *sie* echte Dinge im Netzwerk tun.
 
-**Punkte kommen von echten Handlungen, nicht von Anmeldungen.** Du erhältst Einladungspunkte erst, nachdem dein Einladener verifiziert wurde, eine Wallet erstellt hat und mindestens eine echte Testnet-Aktion durchgeführt hat (Swap, Liquiditäts-Pool, NFT-Prägung, Token-Start oder Governance-Abstimmung). Eine Anmeldung allein = 0.
+**Punkte kommen von echten Handlungen, nicht von Anmeldungen.** Du erhältst Einladungspunkte erst, nachdem dein Einladener verifiziert wurde, eine Wallet erstellt hat und mindestens eine echte Testnet-Aktion durchgeführt hat (Swap, Liquiditätsfonds, NFT-Prägung, Token-Start oder Governance-Abstimmung). Eine Anmeldung allein = 0.
 
 **Wie Punkte zu PPL werden:**
 
-> **PPL pro Punkt = Saison-Pool ÷ alle in der Saison verdienen Punkte**
+> **PPL pro Punkt = Saisonfonds ÷ alle in der Saison verdienen Punkte**
 
-- **Season 1 Pool:** 6.000.000 PPL, bezahlt aus dem bestehenden Million Founders-Pool. Keine neuen Coins. Wenn der Pool leer ist, endet das Programm.
+- **Saison-1-Fonds:** 6.000.000 PPL, bezahlt aus dem bestehenden Million Founders-Fonds. Keine neuen Coins. Wenn der Fonds leer ist, endet das Programm.
 - **Auszahlung:** 10% sofort, die restlichen 90% in gleichen wöchentlichen Raten über 52 Wochen.
 - **Anti-Farming:** nur zwei Verweis-Ebenen, ein Pro-Saison-Cap für aktive Einladene und Rückforderung von Punkten von Konten, die als Bots gekennzeichnet sind.
 
@@ -191,9 +191,9 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 | Wer erhält Gebühren | Validatoren erhalten die Prioritäts­gebühr (Trinkgeld) ¹ | Validatoren erhalten 50% der Basis­gebühr und 100% der Prioritäts­gebühr ² | **Validatoren 30 · Community 25 · Treasury 20 · Liquidität 10 · Growth 15** |
 | Frühe Finanzierung | Öffentliche Ether-Sale, 2014 (42 Tage, zahlbar in BTC) ³ | $20M Series A unter Führung von Multicoin Capital (2019); Investoren erhielten SOL-Token ⁴ | **Self-finanziert. Keine VCs, keine Investor-Zuteilung** |
 | Konto­erstellung | Einen Account zu erstellen kostet nichts; keine Identitäts­überprüfung ⁵ | Keine Protokoll-Anforderung | **Belohnungen nur für verifizierte Menschen** |
-| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **10% guaranteed** (up to **27%** total) |
+| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **10 % garantiert** (bis **27 %** gesamt) (10 % beim Start + optionaler Kurvenrest) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas und Gebühren: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana
@@ -216,7 +216,7 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
 ### Was sich in v1.0 geändert hat
 
-- Bis zu **27 %** des Angebots können den Community-Pool erreichen: **10 %** beim Start garantiert, plus bis zu **~17 %** Kurvenrest, wenn der Ersteller beim Start Community-Pool statt Burn wählt. Auszahlungen über den PEOPLE-Timelock an verifizierte Menschen — nicht sofort, kein Renditeversprechen.
+- Bis zu **27 %** des Angebots können den Community-Fonds erreichen: **10 %** beim Start garantiert, plus bis zu **~17 %** Kurvenrest, wenn der Ersteller beim Start Community-Fonds statt Verbrennung wählt. Auszahlungen über den PEOPLE-Timelock an verifizierte Menschen — nicht sofort, kein Renditeversprechen.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
 - Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Kein KYC und keine Teilnahmeprüfungen auf dieser Website.

@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool erhält 15 % der zulässigen Gebühren. Das ist kein garantiertes Einkommen, keine passive Rendite und kein Anlageprodukt.",
     "detailsTitle": "So funktioniert die Gebührenweiterleitung",
-    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. After whole-number division, any remainder stays with validators. The 27 % of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. Nach der ganzzahligen Aufteilung verbleibt ein Rest bei den Validatoren. Bis zu 27 % jedes neuen Tokens, die in den Community-Fonds gehen, sind ein anderer Weg — keine Netzwerkgebühr.",
     "storyLink": "Wie Belohnungen erklärt werden"
   },
   "tokenMarket": {

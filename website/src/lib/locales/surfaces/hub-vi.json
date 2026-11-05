@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool nhận 15% phí đủ điều kiện. Không phải thu nhập bảo đảm, lợi nhuận thụ động hay sản phẩm đầu tư.",
     "detailsTitle": "Định tuyến phí hoạt động thế nào",
-    "detailsBody": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số. After whole-number division, any remainder stays with validators. The Lên đến 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số. Sau khi chia số nguyên, phần dư còn lại ở validator. Lên đến 27% mỗi token mới vào quỹ cộng đồng là lộ trình khác — không phải phí mạng.",
     "storyLink": "Phần thưởng được giải thích thế nào"
   },
   "tokenMarket": {

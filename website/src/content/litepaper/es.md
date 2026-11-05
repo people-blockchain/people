@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Suministro | **1.000.000.000 PPL**, fijo |
-| Cada token lanzado | **10% guaranteed** (up to **27%** total) del suministro va al fondo comunitario de ese token |
+| Cada token lanzado | **10% garantizado** en el lanzamiento (hasta **27%** total con resto de curva) del suministro va al fondo comunitario de ese token |
 | Comisiones de red quemadas | **0%** — cada comisión se comparte |
 | Quién gana recompensas | **Humanos verificados** (teléfono de Telegram o Human Passport) |
 | Financiación | **Auto-financiado.** Sin capitales de riesgo. Sin asignación de inversores. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Humanos verificados, no bots.** Las recompensas van a cuentas que pasaron una verificación de humanidad gratuita. Una persona, una cuenta. El registro solo no genera nada.
 
-**Hasta un 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**El 10% de cada nuevo token va al fondo comunitario — garantizado.** En el lanzamiento, el creador también puede enviar el resto no vendido de la curva (hasta ~17%) al fondo en lugar de quemarlo — hasta un 27% en total. Integrado en el protocolo, no prometido en una publicación. El fondo está gobernado por el timelock de PEOPLE y se paga a personas verificadas con el tiempo, no al instante; esto no es una promesa de rendimiento. Nunca se mezcla con las comisiones de red.
 
 ---
 
@@ -191,7 +191,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 | Quién recibe las comisiones | Los validadores obtienen la comisión prioritaria (propina) ¹ | Los validadores obtienen el 50% de la comisión base y el 100% de la comisión prioritaria ² | **Validadores 30 · Comunidad 25 · Tesorería 20 · Liquidez 10 · Crecimiento 15** |
 | Financiación inicial | Venta pública de ether, 2014 (42 días, pagada en BTC) ³ | Serie A de 20 millones de dólares liderada por Multicoin Capital (2019); los inversores recibieron tokens SOL ⁴ | **Auto-financiado. Sin capitales de riesgo, sin asignación de inversores** |
 | Creación de cuenta | Crear una cuenta no cuesta nada; sin verificación de identidad ⁵ | No es un requisito de protocolo | **Recompensas solo para humanos verificados** |
-| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **10% guaranteed** (up to **27%** total) |
+| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **10% garantizado** (hasta **27%** total) (10% en el lanzamiento + resto opcional de la curva) |
 
 1. ethereum.org — Gas y comisiones: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Comisiones: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 
 ### Qué cambió en la v1.0
 
-- Hasta **27%** del suministro puede llegar al pool comunitario: **10%** en el lanzamiento garantizado, más hasta **~17%** de sobrantes de la curva si el creador elige pool comunitario en lugar de quema al lanzar. Pagos vía timelock PEOPLE a personas verificadas en el tiempo — no al instante, sin promesa de rendimiento.
+- Hasta **27%** del suministro puede llegar al fondo comunitario: **10%** en el lanzamiento garantizado, más hasta **~17%** de sobrantes de la curva si el creador elige fondo comunitario en lugar de quema al lanzar. Pagos vía timelock PEOPLE a personas verificadas en el tiempo — no al instante, sin promesa de rendimiento.
 - El vesting del equipo es **0% al lanzamiento, un cliff de 6 meses y luego 18 meses lineales** (24 meses en total).
 - Comisiones de lanzamiento: el plan aprobado es un importe fijo de **5 USD por lanzamiento de token y 10 USD por mint de NFT**, pagadero en PPL, USDT o USDC, con un 20% de descuento al pagar en PPL a un precio TWAP; las fábricas desplegadas aún cobran una comisión fija en PPL.
 - La **venta comunitaria de PPL** usa la curva exponencial publicada en `/buy` (inicio **$0.005** por PPL; precios y límites públicos; la compra sigue desactivada hasta el hub). No hay KYC ni comprobaciones de elegibilidad en este sitio.

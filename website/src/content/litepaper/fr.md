@@ -43,7 +43,7 @@ status: public-draft
 
 **Personnes vérifiées, pas de bots.** Les récompenses vont aux comptes qui ont passé un contrôle humain gratuit. Une personne, un compte. L'inscription seule ne gagne rien.
 
-**10 % de chaque nouveau token vont dans son pool communautaire — garanti.** Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. Intégré au protocole, pas dans un post. Gouverné par le timelock PEOPLE, versé aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement. Jamais mélangé aux frais réseau.
+**10 % de chaque nouveau token vont dans son fonds communautaire — garanti.** Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au fonds au lieu de le brûler — jusqu'à 27 % au total. Intégré au protocole, pas dans un post. Gouverné par le timelock PEOPLE, versé aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement. Jamais mélangé aux frais réseau.
 
 ---
 
@@ -53,7 +53,7 @@ Ce que vous pouvez faire sans code :
 
 | Outil | Ce qu'il fait | Statut |
 |---|---|---|
-| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 27 % de l'approvisionnement va au pool communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
+| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 27 % de l'approvisionnement va au fonds communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
 | **Cartes de club NFT** | Cartes d'adhésion pour un club, un café ou une communauté — une par membre, avec une image que vous téléchargez ou générez. | Live sur testnet |
 | **Levée de fonds** | Collectez le soutien pour un projet avec des modèles de contrats examinés : dépôt de garantie, accumulation, vote pondéré par token. Votre communauté achète sur la courbe, donc la demande définit le prix — pas un tour privé. | Live sur testnet |
 | **Contrats IA** | Décrivez un contrat intelligent en langage clair. Il est assemblé à partir de modèles OpenZeppelin et vous voyez le résultat avant de déployer. | Live sur testnet |
@@ -73,7 +73,7 @@ Ce que vous pouvez faire sans code :
 | Préfixe d'adresse | `people1…` (et le même compte que `0x…` en EVM) |
 | Statut du réseau | Testnet public — pas mainnet |
 
-**Validateurs.** Les validateurs gèrent le réseau et sont payés à partir du pool de validateurs pré-alloué plus 30 % de chaque frais réseau. Les validateurs testnet fonctionnent à titre de test uniquement ; l'ouverture de la validation et de l'enjeu au public est une étape ultérieure de la feuille de route.
+**Validateurs.** Les validateurs gèrent le réseau et sont payés à partir du fonds de validateurs pré-alloué plus 30 % de chaque frais réseau. Les validateurs testnet fonctionnent à titre de test uniquement ; l'ouverture de la validation et de l'enjeu au public est une étape ultérieure de la feuille de route.
 
 **Vérification — un contrôle que vous êtes une personne.** Gratuit, fait une seule fois :
 
@@ -100,7 +100,7 @@ Ce que vous pouvez faire sans code :
 
 - **Accumulation équipe et fondateurs (15 % de l'approvisionnement) :** 0 % au lancement, falaise de 6 mois, puis 18 mois linéaires (24 mois au total).
 - **Pas de seau investisseur.** Il n'y a pas d'allocation VC ou tour privé.
-- **Les récompenses proviennent des pools existants.** Les fondateurs, les primes, les ambassadeurs et les largages ne sont payés que depuis le pool Communauté et récompenses. Aucune nouvelle pièce n'est frappée pour eux.
+- **Les récompenses proviennent des fonds existants.** Les fondateurs, les primes, les ambassadeurs et les largages ne sont payés que depuis le fonds Communauté et récompenses. Aucune nouvelle pièce n'est frappée pour eux.
 
 ### Répartition des frais réseau
 
@@ -109,10 +109,10 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Destinataire | Part |
 |---|---:|
 | Validateurs | 30 % |
-| Pool communautaire | 25 % |
+| Fonds communautaire | 25 % |
 | Trésor | 20 % |
 | Liquidité | 10 % |
-| Pool de croissance | 15 % |
+| Fonds de croissance | 15 % |
 | Brûlure | 0 % |
 
 **Rachats.** Les parts du trésor (20 %) et de la liquidité (10 %) sont utilisées pour les rachats publics de PPL. Rien n'est brûlé pour prétendre à la rareté — les frais reviennent au réseau et à ses gens.
@@ -125,13 +125,13 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 
 **Soyez l'une des premières millions de personnes vérifiées.** Obtenez un numéro de fondateur, invitez des amis et gagnez des points quand *ils* font de vraies choses sur le réseau.
 
-**Les points proviennent d'actions réelles, pas d'inscriptions.** Vous ne gagnez des points d'invitation que après que votre invité se soit vérifié, ait créé un portefeuille et ait effectué au moins une vraie action testnet (échange, pool de liquidité, mint NFT, lancement de token ou vote de gouvernance). L'inscription seule = 0.
+**Les points proviennent d'actions réelles, pas d'inscriptions.** Vous ne gagnez des points d'invitation que après que votre invité se soit vérifié, ait créé un portefeuille et ait effectué au moins une vraie action testnet (échange, fonds de liquidité, mint NFT, lancement de token ou vote de gouvernance). L'inscription seule = 0.
 
 **Comment les points deviennent PPL :**
 
-> **PPL par point = pool de saison ÷ tous les points gagnés en saison**
+> **PPL par point = fonds de saison ÷ tous les points gagnés en saison**
 
-- **Pool de saison 1 :** 6 000 000 PPL, payés depuis le pool Million Founders existant. Pas de nouvelles pièces. Quand le pool est vide, le programme s'arrête.
+- **Fonds de saison 1 :** 6 000 000 PPL, payés depuis le fonds Million Founders existant. Pas de nouvelles pièces. Quand le fonds est vide, le programme s'arrête.
 - **Paiement :** 10 % à la fois, les 90 % restants en tranches hebdomadaires égales sur 52 semaines.
 - **Anti-culture :** deux niveaux de parrainage seulement, un plafond par saison sur les parrainés actifs, et récupération des points des comptes signalés comme bots.
 
@@ -191,9 +191,9 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 | Qui reçoit les frais | Les validateurs reçoivent les frais de priorité (pourboire) ¹ | Les validateurs reçoivent 50 % des frais de base et 100 % des frais de priorité ² | **Validateurs 30 · Communauté 25 · Trésor 20 · Liquidité 10 · Croissance 15** |
 | Financement précoce | Vente d'ether publique, 2014 (42 jours, payée en BTC) ³ | Série A de 20 millions de dollars menée par Multicoin Capital (2019) ; les investisseurs ont reçu des tokens SOL ⁴ | **Autofinancé. Pas de VC, pas d'allocation d'investisseur** |
 | Création de compte | La création d'un compte ne coûte rien ; pas de contrôle d'identité ⁵ | Pas une exigence du protocole | **Récompenses seulement pour les personnes vérifiées** |
-| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **27 % de chaque token lancé** |
+| Part communautaire du nouveau token | Pas une règle du protocole | Pas une règle du protocole | **10 % garantis** (jusqu'à **27 %** total) (10 % au lancement + reliquat optionnel de courbe) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas et frais : https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana-blockchain
@@ -216,7 +216,7 @@ Seulement des faits publics vérifiables sur d'autres réseaux. Sources ci-desso
 
 ### Ce qui a changé en v1.0
 
-- Jusqu'à **27 %** de l'offre peut rejoindre le pool communautaire : **10 %** au lancement garantis, plus jusqu'à **~17 %** d'invendus de courbe si le créateur choisit le pool plutôt que la destruction au lancement. Paiements via le timelock PEOPLE aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement.
+- Jusqu'à **27 %** de l'offre peut rejoindre le fonds communautaire : **10 %** au lancement garantis, plus jusqu'à **~17 %** d'invendus de courbe si le créateur choisit le fonds plutôt que la destruction au lancement. Paiements via le timelock PEOPLE aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement.
 - Le vesting de l'équipe est de **0 % au lancement, un cliff de 6 mois, puis 18 mois linéaires** (24 mois au total).
 - Frais de lancement : le plan approuvé est un montant fixe de **5 USD par lancement de token et 10 USD par mint de NFT**, payable en PPL, USDT ou USDC, avec une remise de 20 % en payant en PPL à un prix TWAP ; les usines déployées facturent encore des frais fixes en PPL.
 - La **vente communautaire de PPL** suit la courbe exponentielle publiée sur `/buy` (départ **0,005 $** par PPL ; prix et limites publics ; achat désactivé jusqu'au hub). Aucun KYC ni contrôle d'éligibilité sur ce site.

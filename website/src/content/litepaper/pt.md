@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Fornecimento | **1,000,000,000 PPL**, fixo |
-| Cada token lançado | **10% guaranteed** (up to **27%** total) do fornecimento vai para o pool da comunidade daquele token |
+| Cada token lançado | **10% garantido** no lançamento (até **27%** no total com resto da curva) do fornecimento vai para o fundo comunitário daquele token |
 | Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
 | Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
 | Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Humanos verificados, não bots.** Recompensas vão para contas que passaram uma verificação gratuita de humanidade. Uma pessoa, uma conta. Apenas se inscrever não ganha nada.
 
-**Até 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**10% de cada novo token vão para o fundo comunitário — garantido.** No lançamento, o criador também pode enviar o restante não vendido da curva (até ~17%) para o fundo em vez de queimar — até 27% no total. Integrado no protocolo, não prometido numa publicação. O fundo é governado pelo timelock PEOPLE e pago a pessoas verificadas ao longo do tempo, não instantaneamente; isto não é uma promessa de rendimento. Nunca se mistura com taxas de rede.
 
 ---
 
@@ -53,7 +53,7 @@ O que você pode fazer sem código:
 
 | Ferramenta | O que faz | Status |
 |---|---|---|
-| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. Até 27% do fornecimento vai para o pool de comunidade do token; a participação do criador veste em 180 dias. | Ativo em testnet |
+| **Tokens sem código** | Nome, ticker, imagem, fornecimento. O token fica ativo em sua própria curva de ligação; o primeiro trade define o preço. Até 27% do fornecimento vai para o fundo comunitário do token; a participação do criador veste em 180 dias. | Ativo em testnet |
 | **Cartões de clube NFT** | Cartões de associação para um clube, uma café ou uma comunidade — um por membro, com uma imagem que você carrega ou gera. | Ativo em testnet |
 | **Arrecadação de fundos** | Colete suporte para um projeto com modelos de contrato revisados: escrow, vesting, voto ponderado por token. Sua comunidade compra na curva, então a demanda define o preço — não uma rodada privada. | Ativo em testnet |
 | **Contratos de IA** | Descreva um contrato inteligente em linguagem simples. É montado a partir de templates OpenZeppelin e você vê o resultado antes de implantar. | Ativo em testnet |
@@ -73,7 +73,7 @@ O que você pode fazer sem código:
 | Prefixo de endereço | `people1…` (e a mesma conta como `0x…` em EVM) |
 | Status da rede | Testnet público — não é mainnet |
 
-**Validadores.** Os validadores executam a rede e são pagos do pool pré-alocado de validadores mais 30% de cada taxa de rede. Os validadores de testnet são executados apenas para testes; abrir validação e staking ao público é um estágio posterior do roadmap.
+**Validadores.** Os validadores executam a rede e são pagos do fundo pré-alocado de validadores mais 30% de cada taxa de rede. Os validadores de testnet são executados apenas para testes; abrir validação e staking ao público é um estágio posterior do roadmap.
 
 **Verificação — uma verificação de que você é uma pessoa.** Gratuita, feita uma vez:
 
@@ -100,7 +100,7 @@ O que você pode fazer sem código:
 
 - **Vesting de equipe e fundadores (15% do fornecimento):** 0% no lançamento, cliff de 6 meses, depois 18 meses linear (24 meses no total).
 - **Sem bucket de investidor.** Não há alocação de VC ou rodada privada.
-- **Recompensas vêm de pools existentes.** Fundadores, bounties, embaixadores e airdrops são pagos apenas do bucket de Comunidade e recompensas. Nenhuma moeda nova é cunhada para eles.
+- **Recompensas vêm de fundos existentes.** Fundadores, bounties, embaixadores e airdrops são pagos apenas do bucket de Comunidade e recompensas. Nenhuma moeda nova é cunhada para eles.
 
 ### Divisão de taxa de rede
 
@@ -109,11 +109,11 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Destinatário | Participação |
 |---|---:|
 | Validadores | 30% |
-| Pool comunitário | 25% |
+| Fundo comunitário | 25% |
 | Tesouro | 20% |
 | Liquidez | 10% |
-| Growth Pool | 15% |
-| Burn | 0% |
+| Fundo Growth | 15% |
+| Queimado | 0% |
 
 **Buybacks.** As ações do tesouro (20%) e liquidez (10%) são usadas para buybacks públicos de PPL. Nada é queimado para falsificar escassez — as taxas voltam para a rede e suas pessoas.
 
@@ -125,13 +125,13 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 
 **Seja uma das primeiras milhões de pessoas verificadas.** Obtenha um número de fundador, convide amigos e ganhe pontos quando *eles* fizerem coisas reais na rede.
 
-**Os pontos vêm de ações reais, não de inscrições.** Você ganha pontos de convite apenas após seu convidado ter verificado, criado uma carteira e feito pelo menos uma ação real de testnet (swap, pool de liquidez, cunhagem de NFT, lançamento de token ou voto de governança). Apenas inscrição = 0.
+**Os pontos vêm de ações reais, não de inscrições.** Você ganha pontos de convite apenas após seu convidado ter verificado, criado uma carteira e feito pelo menos uma ação real de testnet (swap, fundo de liquidez, cunhagem de NFT, lançamento de token ou voto de governança). Apenas inscrição = 0.
 
 **Como os pontos se tornam PPL:**
 
-> **PPL por ponto = pool da temporada ÷ todos os pontos ganhos na temporada**
+> **PPL por ponto = fundo da temporada ÷ todos os pontos ganhos na temporada**
 
-- **Pool da Temporada 1:** 6,000,000 PPL, pagos do pool existente do Million Founders. Sem moedas novas. Quando o pool estiver vazio, o programa para.
+- **Fundo da Temporada 1:** 6,000,000 PPL, pagos do fundo existente do Million Founders. Sem moedas novas. Quando o fundo estiver vazio, o programa para.
 - **Pagamento:** 10% imediatamente, os 90% restantes em fatias iguais semanais ao longo de 52 semanas.
 - **Anti-farming:** apenas dois níveis de referência, um limite por temporada em convidados ativos e recuperação de pontos de contas sinalizadas como bots.
 
@@ -191,9 +191,9 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
 | Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
 | Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
-| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% guaranteed** (up to **27%** total) |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% garantido** (até **27%** total) (10% no lançamento + resto opcional da curva) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gás e taxas: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana-blockchain
@@ -216,7 +216,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 
 ### O que mudou na v1.0
 
-- Até **27%** da oferta pode ir ao pool comunitário: **10%** no lançamento garantidos, mais até **~17%** de sobras da curva se o criador escolher pool em vez de queima no lançamento. Pagamentos via timelock PEOPLE a pessoas verificadas ao longo do tempo — não instantâneos, sem promessa de rendimento.
+- Até **27%** da oferta pode ir ao fundo comunitário: **10%** no lançamento garantidos, mais até **~17%** de sobras da curva se o criador escolher fundo em vez de queima no lançamento. Pagamentos via timelock PEOPLE a pessoas verificadas ao longo do tempo — não instantâneos, sem promessa de rendimento.
 - O vesting da equipe é **0% no lançamento, um cliff de 6 meses e depois 18 meses lineares** (24 meses no total).
 - Taxas de lançamento: o plano aprovado é um valor fixo de **5 USD por lançamento de token e 10 USD por mint de NFT**, pagável em PPL, USDT ou USDC, com 20% de desconto ao pagar em PPL por um preço TWAP; as fábricas implantadas ainda cobram uma taxa fixa em PPL.
 - A **venda comunitária de PPL** usa a curva exponencial publicada em `/buy` (início **$0.005** por PPL; preços e limites públicos; compra desativada até o hub). Não há KYC nem verificações de elegibilidade neste site.

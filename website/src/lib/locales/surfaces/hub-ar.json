@@ -348,7 +348,7 @@
     ],
     "growthNote": "يتلقى Growth Pool 15% من الرسوم المؤهلة. ليس دخلًا مضمونًا ولا عائدًا سلبيًا ولا منتج استثمار.",
     "detailsTitle": "كيف يعمل توجيه الرسوم",
-    "detailsBody": "كل رسوم البروتوكول: 30% للمدققين، 25% للمجتمع، 20% للخزينة، 10% للسيولة، 15% Growth، 0% حرق — بما في ذلك الكسرية. After whole-number division, any remainder stays with validators. The حتى 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "كل رسوم البروتوكول: 30% للمدققين، 25% للمجتمع، 20% للخزينة، 10% للسيولة، 15% Growth، 0% حرق — بما في ذلك الكسرية. بعد القسمة على أعداد صحيحة، يبقى أي باقٍ لدى المدققين. حتى 27% من كل رمز جديد يذهب إلى صندوق المجتمع مسار مختلف — وليس رسوم شبكة.",
     "storyLink": "كيف تُشرح المكافآت"
   },
   "tokenMarket": {

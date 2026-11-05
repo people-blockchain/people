@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool recibe el 15% de las comisiones elegibles. No es ingreso garantizado, ni un retorno pasivo, ni un producto de inversión.",
     "detailsTitle": "Cómo funciona el enrutado de comisiones",
-    "detailsBody": "Cada comisión del protocolo se reparte: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quemado — también las fraccionarias. After whole-number division, any remainder stays with validators. The Hasta un 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Cada comisión del protocolo se reparte: 30% validadores, 25% comunidad, 20% tesorería, 10% liquidez, 15% Growth, 0% quemado — también las fraccionarias. Tras la división en números enteros, cualquier resto permanece con los validadores. Hasta un 27% de cada token nuevo que va al fondo comunitario es un camino distinto — no es una comisión de red.",
     "storyLink": "Cómo se explican las recompensas"
   },
   "tokenMarket": {

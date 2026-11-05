@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool 获得符合条件手续费的 15%。不是保证收入、被动回报或投资产品。",
     "detailsTitle": "手续费路由如何运作",
-    "detailsBody": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。 After whole-number division, any remainder stays with validators. The 最高27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "每笔协议手续费：30% 验证者、25% 社区、20% 国库、10% 流动性、15% Growth、0% 销毁 — 包括小数手续费。整数除法后的余数归验证者。每个新代币进入社区资金池的最高27%是另一条路径——不是网络手续费。",
     "storyLink": "如何解释奖励"
   },
   "tokenMarket": {

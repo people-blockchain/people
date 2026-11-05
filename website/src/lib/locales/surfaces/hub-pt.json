@@ -348,7 +348,7 @@
     ],
     "growthNote": "O Growth Pool recebe 15% das taxas elegíveis. Não é rendimento garantido, nem um retorno passivo, nem um produto de investimento.",
     "detailsTitle": "Como funciona o encaminhamento de taxas",
-    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. After whole-number division, any remainder stays with validators. The Até 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Cada taxa do protocolo reparte-se: 30% validadores, 25% comunidade, 20% tesouraria, 10% liquidez, 15% Growth, 0% queimado — incluindo fracionárias. Após a divisão em números inteiros, qualquer resto fica com os validadores. Até 27% de cada novo token que vai para o fundo comunitário é um caminho diferente — não é uma taxa de rede.",
     "storyLink": "Como as recompensas são explicadas"
   },
   "tokenMarket": {

@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool reçoit 15 % des frais éligibles. Ce n’est pas un revenu garanti, ni un rendement passif, ni un produit d’investissement.",
     "detailsTitle": "Comment l’acheminement des frais fonctionne",
-    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. After whole-number division, any remainder stays with validators. The 27 % of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. Après division en nombres entiers, tout reste éventuel reste chez les validateurs. Jusqu'à 27 % de chaque nouveau token qui va au fonds communautaire est un chemin distinct — pas des frais réseau.",
     "storyLink": "Comment les récompenses sont expliquées"
   },
   "tokenMarket": {
