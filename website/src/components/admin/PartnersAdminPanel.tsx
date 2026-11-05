@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PartnersAdminOverview, PartnersAdminRow } from "@/lib/partner/admin-overview";
+import { KOL_TIER_OVERRIDE_PRESET_USDC_BPS } from "@/lib/partner/admin-tier-override";
 
 type CabinetSnapshot = Awaited<ReturnType<typeof import("@/lib/partner/service")["loadCabinet"]>>;
 
@@ -15,13 +16,22 @@ function bpsToPct(bps: number): string {
   return `${(bps / 100).toFixed(0)}%`;
 }
 
-export function PartnersAdminPanel({ demoOverview }: { demoOverview?: PartnersAdminOverview }) {
+export function PartnersAdminPanel({
+  demoOverview,
+  demoCabinetsByUserId,
+}: {
+  demoOverview?: PartnersAdminOverview;
+  demoCabinetsByUserId?: Record<string, CabinetSnapshot>;
+}) {
   const [overview, setOverview] = useState<PartnersAdminOverview | null>(demoOverview ?? null);
   const [loading, setLoading] = useState(!demoOverview);
   const [error, setError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState<CabinetSnapshot | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [tierOverrideInput, setTierOverrideInput] = useState("");
+  const [tierSaveState, setTierSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [tierSaveError, setTierSaveError] = useState<string | null>(null);
 
   const loadOverview = useCallback(async () => {
     if (demoOverview) return;
@@ -52,7 +62,17 @@ export function PartnersAdminPanel({ demoOverview }: { demoOverview?: PartnersAd
   const loadDetail = useCallback(async (userId: string) => {
     setSelectedId(userId);
     setDetailLoading(true);
+    setTierSaveState("idle");
+    setTierSaveError(null);
     try {
+      const demoCabinet = demoCabinetsByUserId?.[userId];
+      if (demoCabinet) {
+        setDetail(demoCabinet);
+        setTierOverrideInput(
+          demoCabinet.kolTierOverrideBps != null ? String(demoCabinet.kolTierOverrideBps) : "",
+        );
+        return;
+      }
       const res = await fetch("/api/admin/referral/partners", {
         method: "POST",
         credentials: "include",
@@ -61,11 +81,48 @@ export function PartnersAdminPanel({ demoOverview }: { demoOverview?: PartnersAd
       });
       if (!res.ok) return;
       const data = (await res.json()) as { detail?: CabinetSnapshot };
-      setDetail(data.detail ?? null);
+      const next = data.detail ?? null;
+      setDetail(next);
+      setTierOverrideInput(next?.kolTierOverrideBps != null ? String(next.kolTierOverrideBps) : "");
     } finally {
       setDetailLoading(false);
     }
-  }, []);
+  }, [demoCabinetsByUserId]);
+
+  const saveTierOverride = useCallback(async () => {
+    if (!selectedId || !detail) return;
+    if (demoOverview) {
+      setTierSaveState("saved");
+      return;
+    }
+    setTierSaveState("saving");
+    setTierSaveError(null);
+    const trimmed = tierOverrideInput.trim();
+    const kolTierOverrideBps = trimmed === "" ? null : Number(trimmed);
+    if (trimmed !== "" && !Number.isInteger(kolTierOverrideBps)) {
+      setTierSaveState("error");
+      setTierSaveError("Enter a whole-number bps value or leave empty to clear.");
+      return;
+    }
+    const res = await fetch("/api/admin/referral/partners", {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: selectedId, kolTierOverrideBps }),
+    });
+    if (!res.ok) {
+      const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+      setTierSaveState("error");
+      setTierSaveError(payload?.error ?? `HTTP ${res.status}`);
+      return;
+    }
+    const payload = (await res.json()) as { kolTierOverrideBps?: number | null };
+    setDetail({
+      ...detail,
+      kolTierOverrideBps: payload.kolTierOverrideBps ?? null,
+    });
+    setTierSaveState("saved");
+  }, [demoOverview, detail, selectedId, tierOverrideInput]);
 
   const summary = overview?.summary;
   const partners = useMemo(() => overview?.partners ?? [], [overview?.partners]);
@@ -74,6 +131,8 @@ export function PartnersAdminPanel({ demoOverview }: { demoOverview?: PartnersAd
     () => partners.find((p) => p.userId === selectedId),
     [partners, selectedId],
   );
+
+  const volumeTierFloorBps = detail?.volumeTierUsdcBps ?? selectedRow?.tierUsdcBps ?? 700;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-neutral-100">
@@ -160,6 +219,51 @@ export function PartnersAdminPanel({ demoOverview }: { demoOverview?: PartnersAd
                 <div className="font-medium">{selectedRow.email}</div>
                 <div className="text-xs text-neutral-500">{selectedRow.tierLabel}</div>
               </div>
+              <section data-testid="partner-admin-tier-override" className="rounded border border-neutral-800 p-3">
+                <h3 className="mb-2 text-xs font-semibold uppercase text-neutral-400">KOL tier override (USDC bps)</h3>
+                <p className="mb-2 text-xs text-neutral-500">
+                  Presets 700 / 900 / 1200 (7% / 9% / 12%). Must be at or above volume tier ({volumeTierFloorBps} bps).
+                </p>
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {KOL_TIER_OVERRIDE_PRESET_USDC_BPS.map((bps) => (
+                    <button
+                      key={bps}
+                      type="button"
+                      className="rounded border border-neutral-700 px-2 py-1 text-xs hover:bg-neutral-800"
+                      onClick={() => setTierOverrideInput(String(bps))}
+                    >
+                      {bpsToPct(bps)}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className="rounded border border-neutral-700 px-2 py-1 text-xs hover:bg-neutral-800"
+                    onClick={() => setTierOverrideInput("")}
+                  >
+                    Clear
+                  </button>
+                </div>
+                <label className="mb-2 block text-xs text-neutral-400">
+                  Override bps
+                  <input
+                    className="mt-1 w-full rounded border border-neutral-700 bg-neutral-950 px-2 py-1 font-mono text-sm"
+                    inputMode="numeric"
+                    value={tierOverrideInput}
+                    onChange={(e) => setTierOverrideInput(e.target.value.replace(/\D/g, ""))}
+                    placeholder={`≥ ${volumeTierFloorBps}`}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="rounded bg-emerald-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+                  disabled={tierSaveState === "saving"}
+                  onClick={() => void saveTierOverride()}
+                >
+                  {tierSaveState === "saving" ? "Saving…" : "Save tier override"}
+                </button>
+                {tierSaveState === "saved" ? <p className="mt-2 text-xs text-emerald-400">Saved.</p> : null}
+                {tierSaveError ? <p className="mt-2 text-xs text-red-400">{tierSaveError}</p> : null}
+              </section>
               <section>
                 <h3 className="mb-1 text-xs font-semibold uppercase text-neutral-400">L1 referrals</h3>
                 <ul className="space-y-1 text-xs">
