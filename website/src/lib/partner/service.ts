@@ -22,6 +22,7 @@ import {
   formatMicroPpl,
   formatMicroUsd,
   loadKolTierConfig,
+  resolveKolTier,
   type KolTierProgress,
 } from "@/lib/partner/commission";
 import { buildWalletBindMessage, verifyWalletProof, type WalletProof } from "@/lib/partner/wallet";
@@ -654,6 +655,8 @@ export async function loadCabinet(userId: string) {
     email: user?.email ?? null,
     referralCode: profile.referralCode,
     kolCode: profile.kolCode ?? null,
+    kolTierOverrideBps: profile.kolTierOverrideBps ?? null,
+    volumeTierUsdcBps: resolveKolTier(volumeUsdMicro, null, tierConfig).usdcRateBps,
     referredBy: parent ? { referralCode: parent.referralCode, email: maskEmail(parent.email) } : null,
     walletAddress: profile.walletAddress,
     walletBoundAt: profile.walletBoundAt?.toISOString() ?? null,
@@ -676,4 +679,15 @@ export async function partnerUserExists(userId: string): Promise<boolean> {
   const db = await getDbReady();
   const rows = await db.select({ id: users.id }).from(users).where(eq(users.id, userId)).limit(1);
   return rows.length > 0;
+}
+
+export async function setPartnerKolTierOverrideBps(
+  userId: string,
+  kolTierOverrideBps: number | null,
+): Promise<void> {
+  const db = await getDbReady();
+  await db
+    .update(partners)
+    .set({ kolTierOverrideBps })
+    .where(eq(partners.userId, userId));
 }
