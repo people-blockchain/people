@@ -7,10 +7,10 @@
       "für Ihre",
       "Community."
     ],
-    "headlineAccent": "Bis zu 27 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccent": "10 % gehen an Ihre Leute — garantiert, nicht an Wale.",
     "headlineAccentLines": [
-      "Bis zu 27 % gehen an Ihre Leute,",
-      "nicht an Wale."
+      "10 % gehen an Ihre Leute —",
+      "garantiert, nicht an Wale."
     ],
     "sub": "PEOPLE Blockchain ist der Ort, an dem Creator Tokens mit fairer Preisfindung ab Block eins starten – und die Community einen festen Anteil an allem erhält, was sie mitwachsen lässt.",
     "testnetBadge": "Öffentliches Testnet ist live. Noch kein Mainnet.",
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Für die Community",
-      "body": "10 % jedes neuen Tokens gehen garantiert beim Start in seinen Community-Pool. Der restliche Kurvenrest (~17 %) geht in den Community-Pool oder wird verbrannt — der Ersteller wählt einmal beim Start. Der Pool wird vom PEOPLE-Timelock gesteuert und an verifizierte Menschen über Zeit ausgezahlt, nicht sofort — kein Renditeversprechen. A share of every network fee is routed separately."
+      "body": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %. "
     },
     {
       "id": "everyone",

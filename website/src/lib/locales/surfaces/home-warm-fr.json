@@ -35,17 +35,17 @@
       {
         "id": "share",
         "label": "27 % pour vos gens",
-        "sub": "Chaque nouveau token envoie 27 % de son offre à son propre pool communautaire."
+        "sub": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total."
       }
     ],
-    "shareBadge": "27 % pour la communauté",
+    "shareBadge": "10% pour la communauté",
     "peopleLine": "Vos gens, pas les baleines",
     "saleNote": "Le réseau PEOPLE est encore un réseau de test, et ses jetons de test n’ont aucune valeur. La vente de PPL est distincte : elle se déroule sur Base avec de vrais USDC ou USDT."
   },
   "community": {
-    "eyebrow": "27 % pour la communauté",
-    "title": "27 % de chaque nouveau token vont à vos gens",
-    "lead": "10 % de chaque nouveau token vont dans son pool communautaire au lancement, garanti. Le reste des invendus de la courbe (~17 %) va au pool communautaire ou est brûlé — le créateur choisit une fois au lancement.",
+    "eyebrow": "10 % garanti pour la communauté",
+    "title": "10 % de chaque nouveau token vont à vos gens — garanti",
+    "lead": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total.",
     "statLabel": "de l'offre de chaque nouveau token va à son pool communautaire",
     "statNote": "Le pool est gouverné par le timelock PEOPLE et versé aux personnes vérifiées dans le temps, pas instantanément — ce n'est pas une promesse de rendement.",
     "footnote": "Les frais du réseau sont répartis séparément : {{community}} % au pool communautaire, {{validators}} % aux validateurs.",
@@ -91,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "27 %",
+        "stat": "10%",
         "title": "de chaque nouveau token vont au pool communautaire de ce token",
-        "body": "Pas au réseau, pas au créateur. Le pool propre au token, partagé avec les personnes qui y participent."
+        "body": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. Pas au réseau, pas au créateur. Le pool propre au token, partagé avec les personnes qui y participent."
       },
       {
         "id": "vesting",

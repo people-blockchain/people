@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Pasokan | **1.000.000.000 PPL**, tetap |
-| Setiap token yang diluncurkan | **Hingga 27%** dari pasokan masuk ke pool komunitas token itu sendiri |
+| Setiap token yang diluncurkan | **10% guaranteed** (up to **27%** total) dari pasokan masuk ke pool komunitas token itu sendiri |
 | Biaya jaringan terbakar | **0%** — setiap biaya dibagikan |
 | Siapa yang mendapat hadiah | **Manusia terverifikasi** (Telegram dengan nomor ponsel atau Human Passport) |
 | Pendanaan | **Pendanaan mandiri.** Tanpa VC. Tanpa alokasi investor. |
@@ -191,7 +191,7 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 | Siapa yang menerima biaya | Validator mendapat biaya prioritas (tip) ¹ | Validator mendapat 50% dari biaya dasar dan 100% dari biaya prioritas ² | **Validator 30 · Komunitas 25 · Treasury 20 · Likuiditas 10 · Pertumbuhan 15** |
 | Pendanaan awal | Penjualan ether publik, 2014 (42 hari, dibayar dalam BTC) ³ | Putaran Seri A $20M yang dipimpin oleh Multicoin Capital (2019); investor menerima token SOL ⁴ | **Pendanaan mandiri. Tanpa VC, tanpa alokasi investor** |
 | Pembuatan akun | Membuat akun tidak memerlukan biaya; tidak ada pemeriksaan identitas ⁵ | Bukan persyaratan protokol | **Hadiah hanya untuk manusia terverifikasi** |
-| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **Hingga 27% dari setiap token yang diluncurkan** |
+| Bagian komunitas token baru | Bukan aturan protokol | Bukan aturan protokol | **10% guaranteed** (up to **27%** total) |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

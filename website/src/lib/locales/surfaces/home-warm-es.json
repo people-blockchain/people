@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Lanza un token para tu comunidad."
     ],
-    "headlineAccent": "El Hasta un 27% va a tu gente, no a las ballenas.",
+    "headlineAccent": "El 10% va a tu gente, no a las ballenas.",
     "headlineAccentLines": [
-      "El Hasta un 27% va a tu gente,",
+      "El 10% va a tu gente,",
       "no a las ballenas."
     ],
     "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos y pruébalo en el testnet.",
@@ -34,18 +34,18 @@
       },
       {
         "id": "share",
-        "label": "Hasta un 27% para tu gente",
-        "sub": "Cada token nuevo envía el Hasta un 27% de su suministro a su propio pool de la comunidad."
+        "label": "10% para tu gente",
+        "sub": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total."
       }
     ],
-    "shareBadge": "Hasta un 27% para la comunidad",
+    "shareBadge": "Hasta un 10% para la comunidad",
     "peopleLine": "Tu gente, no las ballenas",
     "saleNote": "La red PEOPLE sigue siendo una red de pruebas y sus tokens de prueba no tienen valor. La venta de PPL es aparte: se realiza en Base con USDC o USDT reales."
   },
   "community": {
-    "eyebrow": "Hasta un 27% para la comunidad",
-    "title": "El Hasta un 27% de cada token nuevo va a tu gente",
-    "lead": "El 10 % de cada token nuevo va a su pool comunitario en el lanzamiento, garantizado. El resto de sobrantes de la curva (~17 %) va al pool comunitario o se quema — el creador elige una vez al lanzar.",
+    "eyebrow": "10 % garantizado para la comunidad",
+    "title": "El 10 % de cada token nuevo va a tu gente — garantizado",
+    "lead": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total.",
     "statLabel": "del suministro de cada token nuevo va a su pool de la comunidad",
     "statNote": "El pool lo gobierna el timelock de PEOPLE y se paga a personas verificadas con el tiempo, no al instante; no es una promesa de rendimiento.",
     "footnote": "Las comisiones de la red se reparten por separado: {{community}}% al pool de la comunidad, {{validators}}% a los validadores.",
@@ -91,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "Hasta un 27%",
+        "stat": "10%",
         "title": "de cada token nuevo va al pool de la comunidad de ese token",
-        "body": "No a la red, no al creador. El pool propio del token, compartido con las personas que participan."
+        "body": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total. No a la red, no al creador. El pool propio del token, compartido con las personas que participan."
       },
       {
         "id": "vesting",

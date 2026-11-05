@@ -38,8 +38,8 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "Up to 27%",
-          title: "Up to 27% to the community pool",
+          value: "10%",
+          title: "10% to the community pool — guaranteed",
           note: "10% at launch, guaranteed; up to ~17% more if the creator routes curve leftovers to the pool.",
         },
         {
@@ -62,7 +62,7 @@ const rawHub = {
         { id: "created", label: "Token created", sub: "A project launches on the network" },
         {
           id: "community",
-          label: "Up to 27% community + network fee",
+          label: "10% community pool + network fee",
           sub: "Part of the new token and the protocol fee stay separate",
         },
         {
@@ -83,7 +83,7 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "Up to 27% of every new token can go to the community pool",
+          title: "10% of every new token goes to the community pool — guaranteed",
           body: `${TOKEN_COMMUNITY_SHARE_EXPLANATION_EN} ${TOKEN_COMMUNITY_TIMELOCK_NOTE_EN} Not a personal payout, and not 10% of every fee.`,
           href: "/create/token",
           cta: "Create a token",
@@ -490,8 +490,8 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "До 27%",
-          title: "До 27% — в пул сообщества",
+          value: "10%",
+          title: "10% — в пул сообщества, гарантированно",
           note: "10% при запуске гарантированно; ещё до ~17% — если создатель направит остаток кривой в пул.",
         },
         {
@@ -514,7 +514,7 @@ const rawHub = {
         { id: "created", label: "Токен создан", sub: "Проект запускается в сети" },
         {
           id: "community",
-          label: "До 27% сообществу + сетевая комиссия",
+          label: "10% сообществу + сетевая комиссия",
           sub: "Доля нового токена и комиссия протокола разделены",
         },
         {
@@ -535,8 +535,8 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "До 27% каждого нового токена — в пул сообщества",
-          body: "10% каждого нового токена гарантированно уходит в его пул сообщества при запуске. Остаток на кривой (~17%) отправляется в пул сообщества или сжигается — создатель выбирает один раз при запуске. Пулом управляет timelock PEOPLE; выплаты verified-участникам идут со временем, не мгновенно. Это не обещание доходности. Не личная выплата и не 10% с каждой комиссии.",
+          title: "10% каждого нового токена — в пул сообщества, гарантированно",
+          body: "При запуске создатель может также направить остаток непроданной кривой (до ~17%) в пул вместо сжигания — до 27% суммарно. Пулом управляет timelock PEOPLE; выплаты verified-участникам идут со временем, не мгновенно. Это не обещание доходности. Не личная выплата и не 10% с каждой комиссии.",
           href: "/create/token",
           cta: "Создать токен",
         },

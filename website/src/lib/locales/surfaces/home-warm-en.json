@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Launch a token for your community."
     ],
-    "headlineAccent": "Up to 27% goes to your people, not to whales.",
+    "headlineAccent": "10% goes to your people, guaranteed — not to whales.",
     "headlineAccentLines": [
-      "Up to 27% goes to your people,",
+      "10% goes to your people, guaranteed —",
       "not to whales."
     ],
     "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds and try it on the testnet.",
@@ -34,18 +34,18 @@
       },
       {
         "id": "share",
-        "label": "Up to 27% to your people",
-        "sub": "Every new token sends Up to 27% of its supply to its own community pool."
+        "label": "10% to your people",
+        "sub": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total."
       }
     ],
-    "shareBadge": "Up to 27% community share",
+    "shareBadge": "10% community share, guaranteed",
     "peopleLine": "Your people, not whales",
     "saleNote": "The PEOPLE network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
   },
   "community": {
-    "eyebrow": "Up to 27% to the community",
-    "title": "Up to 27% of every new token goes to your people",
-    "lead": "10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch.",
+    "eyebrow": "10% guaranteed for the community",
+    "title": "10% of every new token goes to your people — guaranteed",
+    "lead": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total.",
     "statLabel": "of every new token's supply goes to its community pool",
     "statNote": "The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise.",
     "footnote": "Network fees are split separately: {{community}}% to the community pool, {{validators}}% to validators.",
@@ -91,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "Up to 27%",
-        "title": "of every new token goes to that token's community pool",
-        "body": "Not to the network, not to the creator. The token's own pool, shared with the people who take part."
+        "stat": "10%",
+        "title": "of every new token goes to that token's community pool (10% guaranteed)",
+        "body": "Not to the network, not to the creator. Up to 27% in total if the creator sends curve leftovers to the pool at launch."
       },
       {
         "id": "vesting",

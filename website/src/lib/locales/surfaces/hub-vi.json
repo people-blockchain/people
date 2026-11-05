@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Lên đến 27%",
-        "title": "Lên đến 27% vào quỹ cộng đồng",
-        "note": "Của nguồn cung mỗi token mới đi vào quỹ cộng đồng."
+        "value": "10%",
+        "title": "10% mỗi token mới dành cho người của bạn — được đảm bảo",
+        "note": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Lên đến 27% cộng đồng + phí mạng",
+        "label": "Lên đến 10% cộng đồng + phí mạng",
         "sub": "Một phần token mới và phí giao thức được giữ tách"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Lên đến 27% mỗi token mới đi vào quỹ cộng đồng",
-        "body": "10% mỗi token mới vào pool cộng đồng khi ra mắt — được đảm bảo. Phần còn lại trên đường cong (~17%) vào pool cộng đồng hoặc bị đốt — người tạo chọn một lần khi ra mắt. Pool do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không ngay lập tức; không phải lời hứa lợi nhuận. Not a personal payout, and not 10% of every fee.",
+        "title": "10% mỗi token mới đi vào quỹ cộng đồng",
+        "body": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. 10% mỗi token mới vào pool cộng đồng khi ra mắt — được đảm bảo. Phần còn lại trên đường cong (~17%) vào pool cộng đồng hoặc bị đốt — người tạo chọn một lần khi ra mắt.",
         "href": "/create/token",
         "cta": "Tạo token"
       },

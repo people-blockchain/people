@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Fornecimento | **1,000,000,000 PPL**, fixo |
-| Cada token lançado | **Até 27%** do fornecimento vai para o pool da comunidade daquele token |
+| Cada token lançado | **10% guaranteed** (up to **27%** total) do fornecimento vai para o pool da comunidade daquele token |
 | Taxas de rede queimadas | **0%** — cada taxa é compartilhada |
 | Quem ganha recompensas | **Humanos verificados** (telefone do Telegram ou Human Passport) |
 | Financiamento | **Auto-financiado.** Sem VC. Sem alocação de investidores. |
@@ -191,7 +191,7 @@ Apenas fatos públicos verificáveis sobre outras redes. Fontes abaixo.
 | Quem recebe taxas | Validadores recebem a taxa de prioridade (dica) ¹ | Validadores recebem 50% da taxa base e 100% da taxa de prioridade ² | **Validadores 30 · Comunidade 25 · Tesouro 20 · Liquidez 10 · Growth 15** |
 | Financiamento inicial | Venda pública de ether, 2014 (42 dias, pago em BTC) ³ | Série A de $20M liderada pela Multicoin Capital (2019); investidores receberam tokens SOL ⁴ | **Auto-financiado. Sem VC, sem alocação de investidor** |
 | Criação de conta | Criar uma conta não custa nada; sem verificação de identidade ⁵ | Não é um requisito de protocolo | **Recompensas apenas para humanos verificados** |
-| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **Até 27% de cada token lançado** |
+| Participação da comunidade em novo token | Não é uma regra de protocolo | Não é uma regra de protocolo | **10% guaranteed** (up to **27%** total) |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

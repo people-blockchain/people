@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Approvisionnement | **1 000 000 000 PPL**, fixe |
-| Chaque token lancé | **27 %** de l'approvisionnement va au pool communautaire de ce token |
+| Chaque token lancé | **10 % garantis** au lancement (jusqu'à **27 %** au total) |
 | Frais réseau brûlés | **0 %** — chaque frais est partagé |
 | Qui gagne des récompenses | **Personnes vérifiées** (téléphone Telegram ou Human Passport) |
 | Financement | **Autofinancé.** Pas de VC. Pas d'allocation investisseur. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Personnes vérifiées, pas de bots.** Les récompenses vont aux comptes qui ont passé un contrôle humain gratuit. Une personne, un compte. L'inscription seule ne gagne rien.
 
-**Jusqu'à 27 % pour sa communauté.** Intégré au protocole : 10 % vont dans le pool communautaire au lancement, garanti. Le reste des invendus (~17 %) va au pool ou est brûlé — le créateur choisit une fois au lancement. Gouverné par le timelock PEOPLE, versé aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement. Jamais mélangé aux frais réseau.
+**10 % de chaque nouveau token vont dans son pool communautaire — garanti.** Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. Intégré au protocole, pas dans un post. Gouverné par le timelock PEOPLE, versé aux personnes vérifiées dans le temps — pas instantané, pas de promesse de rendement. Jamais mélangé aux frais réseau.
 
 ---
 

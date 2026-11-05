@@ -5,10 +5,10 @@
     "headlineMainLines": [
       "Starten Sie einen Token für Ihre Community."
     ],
-    "headlineAccent": "Bis zu 27 % gehen an Ihre Leute, nicht an Wale.",
+    "headlineAccent": "10 % gehen an Ihre Leute — garantiert, nicht an Wale.",
     "headlineAccentLines": [
-      "Bis zu 27 % gehen an Ihre Leute,",
-      "nicht an Wale."
+      "10 % gehen an Ihre Leute —",
+      "garantiert, nicht an Wale."
     ],
     "sub": "Kein Code, keine Krypto-Kenntnisse nötig. Ein Smartphone oder ein Browser reicht: Wallet in 30 Sekunden erstellen und im Testnet ausprobieren.",
     "pitchLine": "Eine Blockchain für ganz normale Menschen: ein eigener Token, NFT-Clubkarten und Geld für eine Idee sammeln — ohne Code.",
@@ -35,17 +35,17 @@
       {
         "id": "share",
         "label": "27 % an Ihre Leute",
-        "sub": "Jeder neue Token schickt 27 % seines Angebots in seinen eigenen Community-Pool."
+        "sub": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %."
       }
     ],
-    "shareBadge": "27 % Community-Anteil",
+    "shareBadge": "10% Community-Anteil",
     "peopleLine": "Ihre Leute, nicht Wale",
     "saleNote": "Das PEOPLE-Netzwerk ist noch ein Testnetz, seine Test-Token haben keinen Wert. Der PPL-Verkauf ist davon getrennt: Er läuft auf Base mit echten USDC oder USDT."
   },
   "community": {
-    "eyebrow": "27 % für die Community",
-    "title": "27 % jedes neuen Tokens gehen an Ihre Leute",
-    "lead": "10 % jedes neuen Tokens gehen garantiert beim Start in seinen Community-Pool. Der restliche Kurvenrest (~17 %) geht in den Community-Pool oder wird verbrannt — der Ersteller wählt einmal beim Start.",
+    "eyebrow": "10 % garantiert für die Community",
+    "title": "10 % jedes neuen Tokens gehen an deine Leute — garantiert",
+    "lead": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %.",
     "statLabel": "des Angebots jedes neuen Tokens fließen in seinen Community-Pool",
     "statNote": "Der Pool wird vom PEOPLE-Timelock gesteuert und an verifizierte Menschen über Zeit ausgezahlt, nicht sofort — kein Renditeversprechen.",
     "footnote": "Netzwerkgebühren werden separat aufgeteilt: {{community}} % an den Community-Pool, {{validators}} % an die Validatoren.",
@@ -91,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "27 %",
+        "stat": "10%",
         "title": "jedes neuen Tokens gehen in dessen Community-Pool",
-        "body": "Nicht ans Netzwerk, nicht an den Ersteller. Der eigene Pool des Tokens, geteilt mit den Menschen, die teilnehmen."
+        "body": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %. Nicht ans Netzwerk, nicht an den Ersteller. Der eigene Pool des Tokens, geteilt mit den Menschen, die teilnehmen."
       },
       {
         "id": "vesting",

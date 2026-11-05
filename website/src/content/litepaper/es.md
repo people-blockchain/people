@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Suministro | **1.000.000.000 PPL**, fijo |
-| Cada token lanzado | **Hasta un 27%** del suministro va al fondo comunitario de ese token |
+| Cada token lanzado | **10% guaranteed** (up to **27%** total) del suministro va al fondo comunitario de ese token |
 | Comisiones de red quemadas | **0%** — cada comisión se comparte |
 | Quién gana recompensas | **Humanos verificados** (teléfono de Telegram o Human Passport) |
 | Financiación | **Auto-financiado.** Sin capitales de riesgo. Sin asignación de inversores. |
@@ -191,7 +191,7 @@ Solo hechos verificables públicos sobre otras redes. Fuentes a continuación.
 | Quién recibe las comisiones | Los validadores obtienen la comisión prioritaria (propina) ¹ | Los validadores obtienen el 50% de la comisión base y el 100% de la comisión prioritaria ² | **Validadores 30 · Comunidad 25 · Tesorería 20 · Liquidez 10 · Crecimiento 15** |
 | Financiación inicial | Venta pública de ether, 2014 (42 días, pagada en BTC) ³ | Serie A de 20 millones de dólares liderada por Multicoin Capital (2019); los inversores recibieron tokens SOL ⁴ | **Auto-financiado. Sin capitales de riesgo, sin asignación de inversores** |
 | Creación de cuenta | Crear una cuenta no cuesta nada; sin verificación de identidad ⁵ | No es un requisito de protocolo | **Recompensas solo para humanos verificados** |
-| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **Hasta un 27% de cada token lanzado** |
+| Participación comunitaria de nuevo token | No es una regla de protocolo | No es una regla de protocolo | **10% guaranteed** (up to **27%** total) |
 
 1. ethereum.org — Gas y comisiones: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Comisiones: https://solana.com/docs/core/fees

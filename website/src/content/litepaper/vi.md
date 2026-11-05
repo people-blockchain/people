@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Cung cấp | **1.000.000.000 PPL**, cố định |
-| Mỗi token được phát hành | **Lên đến 27%** cung cấp đi vào nhóm cộng đồng của token đó |
+| Mỗi token được phát hành | **10% guaranteed** (up to **27%** total) cung cấp đi vào nhóm cộng đồng của token đó |
 | Phí mạng bị đốt cháy | **0%** — mỗi phí được chia sẻ |
 | Ai kiếm được phần thưởng | **Những con người được xác minh** (số điện thoại Telegram hoặc Human Passport) |
 | Tài trợ | **Tự trợ cấp.** Không VC. Không phân bổ nhà đầu tư. |
@@ -191,7 +191,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 | Ai nhận phí | Trình xác thực nhận phí ưu tiên (mẹo) ¹ | Trình xác thực nhận 50% phí cơ sở và 100% phí ưu tiên ² | **Trình xác thực 30 · Cộng đồng 25 · Kho tài sản 20 · Tính thanh khoản 10 · Tăng trưởng 15** |
 | Tài trợ sớm | Bán ether công cộng, 2014 (42 ngày, trả bằng BTC) ³ | $20M Series A do Multicoin Capital dẫn đầu (2019); nhà đầu tư nhận được token SOL ⁴ | **Tự trợ cấp. Không VC, không phân bổ nhà đầu tư** |
 | Tạo tài khoản | Tạo một tài khoản không tốn chi phí; không kiểm tra danh tính ⁵ | Không phải yêu cầu giao thức | **Phần thưởng chỉ cho những con người được xác minh** |
-| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **Lên đến 27% của mỗi token được phát hành** |
+| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **10% guaranteed** (up to **27%** total) |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

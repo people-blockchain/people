@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Fino al 27%",
-        "title": "Fino al 27% al pool della comunità",
-        "note": "Dell’offerta di ogni nuovo token va al pool della comunità."
+        "value": "10%",
+        "title": "Il 10% di ogni nuovo token va alla tua gente — garantito",
+        "note": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Fino al 27% comunità + commissione di rete",
+        "label": "Fino al 10% comunità + commissione di rete",
         "sub": "Parte del nuovo token e la commissione di protocollo restano separate"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Il Fino al 27% di ogni nuovo token va al pool della comunità",
-        "body": "Il 10% di ogni nuovo token va al pool comunitario al lancio, garantito. Il resto degli invenduti sulla curva (~17%) va al pool comunitario o viene bruciato — il creatore sceglie una sola volta al lancio. Il pool è governato dal timelock PEOPLE e pagato a persone verificate nel tempo, non subito; non è una promessa di rendimento. Not a personal payout, and not 10% of every fee.",
+        "title": "Il 10% di ogni nuovo token va al pool della comunità",
+        "body": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo — fino al 27 % in totale. Il 10% di ogni nuovo token va al pool comunitario al lancio, garantito. Il resto degli invenduti sulla curva (~17%) va al pool comunitario o viene bruciato — il creatore sceglie una sola volta al lancio.",
         "href": "/create/token",
         "cta": "Crea un token"
       },

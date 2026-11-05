@@ -7,9 +7,9 @@
       "for your",
       "community."
     ],
-    "headlineAccent": "Up to 27% goes to your people, not to whales.",
+    "headlineAccent": "10% goes to your people, guaranteed — not to whales.",
     "headlineAccentLines": [
-      "Up to 27% goes to your people,",
+      "10% goes to your people, guaranteed —",
       "not to whales."
     ],
     "sub": "PEOPLE Blockchain is where creators launch tokens with fair pricing from block one, and the community gets a built-in share of everything it helps grow.",
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "For your community",
-      "body": "10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. A share of every network fee is routed separately."
+      "body": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total. A share of every network fee is routed separately."
     },
     {
       "id": "everyone",

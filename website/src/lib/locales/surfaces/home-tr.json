@@ -7,9 +7,9 @@
       "bir token",
       "başlatın."
     ],
-    "headlineAccent": "%27'ye kadar sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "10% sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%27'ye kadar sizin insanlarınıza gider,",
+      "10% sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "PEOPLE Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
@@ -32,8 +32,8 @@
       },
       {
         "id": "community",
-        "label": "%27'ye kadar topluluk havuzuna",
-        "sub": "Her yeni tokene gömülü"
+        "label": "%10 garanti — topluluk havuzuna",
+        "sub": "Lansmanda kurucu eğri artığını (~17%'ye kadar) havuza gönderebilir — toplamda %27'ye kadar."
       },
       {
         "id": "trade",
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Topluluğunuz için",
-      "body": "Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer. Havuz PEOPLE timelock ile yönetilir; doğrulanmış kişilere zamanla ödenir, anında değil — getiri vaadi değildir. A share of every network fee is routed separately."
+      "body": "Her yeni tokenin %10'u lansmanda topluluk havuzuna gider — garanti. Kurucu satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar."
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Bu bir ağa katılım, yatırım değil.",
   "visuals": {
     "supply": "Token arzı",
-    "share": "%27'ye kadar",
-    "toPool": "topluluk havuzuna gider",
+    "share": "%10",
+    "toPool": "topluluk havuzuna gider (garanti)",
     "pool": "Topluluk havuzu",
     "poolNote": "katılanlar arasında paylaşılır",
-    "aria": "Her yeni tokenin arzının %27'ye kadarı kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
+    "aria": "Her yeni tokenin %10'u lansmanda topluluk havuzuna gider — garanti. İsteğe bağlı eğri artığı ile toplamda %27'ye kadar kendi topluluk havuzuna gider ve katılanlar arasında paylaşılır.",
     "prompt": "Sahiplerinin hazinenin nasıl harcanacağına oy verdiği bir token",
     "step1": "Siz yazarsınız",
     "step2": "Biz kurarız",

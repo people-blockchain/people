@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "%27'ye kadar",
-        "title": "Topluluk havuzuna %27'ye kadar",
-        "note": "Her yeni token arzının topluluk havuzuna gider."
+        "value": "%10",
+        "title": "Her yeni tokenin %10'u insanlarınıza gider — garanti",
+        "note": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "%27'ye kadar topluluk + ağ ücreti",
+        "label": "10% topluluk + ağ ücreti",
         "sub": "Yeni tokenin bir kısmı ile protokol ücreti ayrı kalır"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Her yeni tokenin arzının %27'ye kadarı topluluk havuzuna gider",
-        "body": "Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer. Havuz PEOPLE timelock ile yönetilir; doğrulanmış kişilere zamanla ödenir, anında değil — getiri vaadi değildir. Not a personal payout, and not 10% of every fee.",
+        "title": "Her yeni tokenin arzının 10%ı topluluk havuzuna gider",
+        "body": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer.",
         "href": "/create/token",
         "cta": "Token oluştur"
       },

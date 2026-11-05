@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Arz | **1.000.000.000 PPL**, sabit |
-| Başlatılan her token | **%27'si**, o token'ın kendi topluluk havuzuna gider |
+| Başlatılan her token | **%10 garanti** (toplamda **%27'ye kadar**) |
 | Yakılan ağ ücretleri | **%0** — her ücret paylaşılır |
 | Ödül kazanan | **Doğrulanmış insanlar** (Telegram telefon veya Human Passport) |
 | Finansman | **Kendi finansmanı.** VC yok. Yatırımcı tahsisi yok. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Botlar değil, doğrulanmış insanlar.** Ödüller, ücretsiz bir insan kontrolünü geçen hesaplara gider. Bir kişi, bir hesap. Kayıt tek başına hiçbir şey kazanmaz.
 
-**%27'ye kadar can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**Her yeni tokenin %10'u topluluk havuzuna gider — garanti.** Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Protokole gömülü; bir gönderide vaat değil. PEOPLE timelock yönetir; doğrulanmış kişilere zamanla ödenir — anında değil, getiri vaadi değil. Ağ ücretleriyle karışmaz.
 
 ---
 

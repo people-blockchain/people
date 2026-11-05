@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Hingga 27%",
-        "title": "Hingga 27% ke kolam komunitas",
-        "note": "Dari pasokan setiap token baru masuk ke kolam komunitas."
+        "value": "10%",
+        "title": "10% setiap token baru untuk orang Anda — dijamin",
+        "note": "Saat peluncuran, kreator juga dapat mengirim sisa kurva yang belum terjual (hingga ~17%) ke pool alih-alih membakar."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Hingga 27% komunitas + biaya jaringan",
+        "label": "Hingga 10% komunitas + biaya jaringan",
         "sub": "Bagian token baru dan biaya protokol tetap terpisah"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Hingga 27% setiap token baru masuk ke kolam komunitas",
-        "body": "10% setiap token baru masuk ke pool komunitas saat peluncuran, dijamin. Sisa di kurva (~17%) masuk ke pool komunitas atau dibakar — kreator memilih sekali saat peluncuran. Pool diatur timelock PEOPLE dan dibayar ke orang terverifikasi seiring waktu, bukan instan; bukan janji yield. Not a personal payout, and not 10% of every fee.",
+        "title": "10% setiap token baru masuk ke kolam komunitas",
+        "body": "Saat peluncuran, kreator juga dapat mengirim sisa kurva yang belum terjual (hingga ~17%) ke pool alih-alih membakar — hingga 27% total. 10% setiap token baru masuk ke pool komunitas saat peluncuran, dijamin. Sisa di kurva (~17%) masuk ke pool komunitas atau dibakar — kreator memilih sekali saat peluncuran.",
         "href": "/create/token",
         "cta": "Buat token"
       },
