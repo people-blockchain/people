@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | 总供应量 | **1,000,000,000 PPL**，固定 |
-| 每个已发行代币 | **Up to 27%** 的供应量进入该代币自己的社区池 |
+| 每个已发行代币 | 发行时**10%保证**（含曲线剩余合计最高**27%**）的供应量进入该代币自己的社区资金池 |
 | 网络费用销毁 | **0%** — 每笔费用都被分享 |
 | 谁获得奖励 | **已验证的真人**（Telegram 手机号或 Human Passport） |
 | 融资 | **自筹资金。**无风投。无投资者分配。 |
@@ -43,7 +43,7 @@ status: public-draft
 
 **验证的真人，而非机器人。** 奖励进入通过免费人类检查的账户。一个人，一个账户。仅注册不能获得任何东西。
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**每个新代币有10%保证进入其社区资金池。** 发行时，创建者也可将曲线上未售出部分（最多约17%）送入社区资金池而非销毁 — 合计最高27%。写入协议，而非帖子承诺。由 PEOPLE timelock 治理，向已验证参与者随时间支付，非即时；这不是收益承诺。不与网络费用混用。
 
 ---
 
@@ -53,7 +53,7 @@ status: public-draft
 
 | 工具 | 做什么 | 状态 |
 |---|---|---|
-| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。Up to 27%的供应量进入代币的社区池；创建者的份额在180天内线性释放。 | 在测试网上上线 |
+| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。发行时10%的供应量进入代币的社区资金池（若创建者在发行时选择，曲线上未售出剩余最多还可增加约17%）；创建者的份额在180天内线性释放。 | 在测试网上上线 |
 | **NFT俱乐部卡** | 俱乐部、咖啡馆或社区的会员卡 — 每个成员一张，配你上传或生成的图像。 | 在测试网上上线 |
 | **筹资** | 用评审过的合同模板为项目收集支持：托管、释放、代币加权投票。你的社区在曲线上买入，因此需求设定价格 — 而非私募轮。 | 在测试网上上线 |
 | **AI合同** | 用纯文字描述智能合约。它从OpenZeppelin模板组装而成，在部署前你会看到结果。 | 在测试网上上线 |
@@ -109,7 +109,7 @@ status: public-draft
 | 接收者 | 份额 |
 |---|---:|
 | 验证器 | 30% |
-| 社区池 | 25% |
+| 社区资金池 | 25% |
 | 财库 | 20% |
 | 流动性 | 10% |
 | 增长池 | 15% |
@@ -191,9 +191,9 @@ status: public-draft
 | 谁收取费用 | 验证器获得优先费用（小费） ¹ | 验证器获得50%的基础费用和100%的优先费用 ² | **验证器30 · 社区25 · 财库20 · 流动性10 · 增长15** |
 | 早期融资 | 公开以太销售，2014年（42天，以BTC支付） ³ | $20M A轮由Multicoin Capital领导（2019年）；投资者获得SOL代币 ⁴ | **自筹资金。无风投，无投资者分配** |
 | 账户创建 | 创建账户无需费用；无身份检查 ⁵ | 不是协议要求 | **仅对经验证的真人的奖励** |
-| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **每个已发行代币的Up to 27%** |
+| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **10%保证**（最高**27%**合计）（发行时10% + 可选曲线剩余） |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — 燃气与手续费： https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana-blockchain
@@ -216,7 +216,7 @@ status: public-draft
 
 ### v1.0 变更内容
 
-- 新代币供应量最多 **27%** 可进入社区池：发行时保证 **10%**，若创建者在发行时选择社区池而非销毁，曲线剩余最多约 **17%** 也可进入。由 PEOPLE timelock 向已验证参与者随时间支付 — 非即时，非收益承诺。
+- 新代币供应量最多 **27%** 可进入社区资金池：发行时保证 **10%**，若创建者在发行时选择社区资金池而非销毁，曲线剩余最多约 **17%** 也可进入。由 PEOPLE timelock 向已验证参与者随时间支付 — 非即时，非收益承诺。
 - 团队归属为**发行时 0%、6 个月悬崖期，随后 18 个月线性释放**（共 24 个月）。
 - 发币费用：已批准方案为**每次代币发行 5 美元、每次 NFT 铸造 10 美元**的固定费用，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣；已部署的工厂仍收取固定的 PPL 费用。
 - **PPL 社区销售**使用 `/buy` 上公布的指数曲线（起始每 PPL **$0.005**；价格与限额公开；hub 部署前购买关闭）。本网站不进行 KYC 或资格检查。

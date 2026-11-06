@@ -7,9 +7,9 @@
       "per la tua",
       "community."
     ],
-    "headlineAccent": "Il Up to 27% va alla tua gente, non alle balene.",
+    "headlineAccent": "Il 10% va alla tua gente, non alle balene.",
     "headlineAccentLines": [
-      "Il Up to 27% va alla tua gente,",
+      "Il 10% va alla tua gente,",
       "non alle balene."
     ],
     "sub": "PEOPLE Blockchain è dove i creator lanciano token con prezzo equo dal primo blocco, e la community ottiene una quota di tutto ciò che aiuta a crescere.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% al pool della community",
+        "label": "Fino al 27% al pool della community",
         "sub": "Integrato in ogni nuovo token"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Per la community",
-      "body": "Il 10% di ogni nuovo token va al pool comunitario al lancio, garantito. Il resto degli invenduti sulla curva (~17%) va al pool comunitario o viene bruciato — il creatore sceglie una sola volta al lancio. Il pool è governato dal timelock PEOPLE e pagato a persone verificate nel tempo, non subito; non è una promessa di rendimento. A share of every network fee is routed separately."
+      "body": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo — fino al 27 % in totale. "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "È partecipazione a una rete, non un investimento.",
   "visuals": {
     "supply": "Offerta del token",
-    "share": "Up to 27%",
+    "share": "Fino al 27%",
     "toPool": "va al fondo della comunità",
     "pool": "Fondo della comunità",
     "poolNote": "diviso tra chi partecipa",
-    "aria": "Il Up to 27% dell'offerta di ogni nuovo token va al suo fondo della comunità, diviso tra chi partecipa.",
+    "aria": "Il Fino al 27% dell'offerta di ogni nuovo token va al suo fondo della comunità, diviso tra chi partecipa.",
     "prompt": "Un token i cui possessori votano come spendere la tesoreria",
     "step1": "Tu scrivi",
     "step2": "Noi costruiamo",

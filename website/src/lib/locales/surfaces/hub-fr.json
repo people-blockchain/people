@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Up to 27%",
-        "title": "27 % vers le pool communautaire",
-        "note": "De l’offre de chaque nouveau jeton va au pool communautaire."
+        "value": "10%",
+        "title": "10 % de chaque nouveau token vont à vos gens — garanti",
+        "note": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "27 % communauté + frais de réseau",
+        "label": "10% communauté + frais de réseau",
         "sub": "Une part du nouveau jeton et le frais de protocole restent séparés"
       },
       {
@@ -67,7 +67,7 @@
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
         "title": "27 % de chaque nouveau jeton va au pool communautaire",
-        "body": "10 % de chaque nouveau token vont dans son pool communautaire au lancement, garanti. Le reste des invendus de la courbe (~17 %) va au pool communautaire ou est brûlé — le créateur choisit une fois au lancement. Le pool est gouverné par le timelock PEOPLE et versé aux personnes vérifiées dans le temps, pas instantanément — ce n'est pas une promesse de rendement. Not a personal payout, and not 10% of every fee.",
+        "body": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. 10 % de chaque nouveau token vont dans son pool communautaire au lancement, garanti. Le reste des invendus de la courbe (~17 %) va au pool communautaire ou est brûlé — le créateur choisit une fois au lancement.",
         "href": "/create/token",
         "cta": "Créer un jeton"
       },
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool reçoit 15 % des frais éligibles. Ce n’est pas un revenu garanti, ni un rendement passif, ni un produit d’investissement.",
     "detailsTitle": "Comment l’acheminement des frais fonctionne",
-    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. After whole-number division, any remainder stays with validators. The 27 % of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Chaque frais de protocole se répartit : 30 % validateurs, 25 % communauté, 20 % trésorerie, 10 % liquidité, 15 % Growth, 0 % brûlé — y compris les fractionnaires. Après division en nombres entiers, tout reste éventuel reste chez les validateurs. Jusqu'à 27 % de chaque nouveau token qui va au fonds communautaire est un chemin distinct — pas des frais réseau.",
     "storyLink": "Comment les récompenses sont expliquées"
   },
   "tokenMarket": {

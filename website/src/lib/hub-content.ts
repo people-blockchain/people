@@ -38,8 +38,8 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "Up to 27%",
-          title: "Up to 27% to the community pool",
+          value: "10%",
+          title: "10% to the community pool — guaranteed",
           note: "10% at launch, guaranteed; up to ~17% more if the creator routes curve leftovers to the pool.",
         },
         {
@@ -62,7 +62,7 @@ const rawHub = {
         { id: "created", label: "Token created", sub: "A project launches on the network" },
         {
           id: "community",
-          label: "Up to 27% community + network fee",
+          label: "10% community pool + network fee",
           sub: "Part of the new token and the protocol fee stay separate",
         },
         {
@@ -83,7 +83,7 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "Up to 27% of every new token can go to the community pool",
+          title: "10% of every new token goes to the community pool — guaranteed",
           body: `${TOKEN_COMMUNITY_SHARE_EXPLANATION_EN} ${TOKEN_COMMUNITY_TIMELOCK_NOTE_EN} Not a personal payout, and not 10% of every fee.`,
           href: "/create/token",
           cta: "Create a token",
@@ -490,9 +490,9 @@ const rawHub = {
       pillars: [
         {
           id: "allocation",
-          value: "Up to 27%",
-          title: "Up to 27% — в пул сообщества",
-          note: "От каждого нового токена идёт в пул сообщества.",
+          value: "10%",
+          title: "10% — в пул сообщества, гарантированно",
+          note: "10% при запуске гарантированно; ещё до ~17% — если создатель направит остаток кривой в пул.",
         },
         {
           id: "fees",
@@ -514,7 +514,7 @@ const rawHub = {
         { id: "created", label: "Токен создан", sub: "Проект запускается в сети" },
         {
           id: "community",
-          label: "Up to 27% сообществу + сетевая комиссия",
+          label: "10% сообществу + сетевая комиссия",
           sub: "Доля нового токена и комиссия протокола разделены",
         },
         {
@@ -535,8 +535,8 @@ const rawHub = {
         {
           id: "allocation",
           kicker: "TOKEN FACTORY",
-          title: "Up to 27% каждого нового токена — в пул сообщества",
-          body: "10% каждого нового токена гарантированно уходит в его пул сообщества при запуске. Остаток на кривой (~17%) отправляется в пул сообщества или сжигается — создатель выбирает один раз при запуске. Пулом управляет timelock PEOPLE; выплаты verified-участникам идут со временем, не мгновенно. Это не обещание доходности. Не личная выплата и не 10% с каждой комиссии.",
+          title: "10% каждого нового токена — в пул сообщества, гарантированно",
+          body: "При запуске создатель может также направить остаток непроданной кривой (до ~17%) в пул вместо сжигания — до 27% суммарно. Пулом управляет timelock PEOPLE; выплаты verified-участникам идут со временем, не мгновенно. Это не обещание доходности. Не личная выплата и не 10% с каждой комиссии.",
           href: "/create/token",
           cta: "Создать токен",
         },
@@ -563,7 +563,7 @@ const rawHub = {
       tag: "GROWTH-РЕФЕРАЛ",
       title: "Вы → L1 → L2",
       subtitle:
-        "Активная Beta-выплата Growth: L1 70% · L2 30% бюджета награды Growth. Growth Pool — 15% допустимых комиссий. Это отдельно от направлений сетевых комиссий и от Up to 27% каждого нового токена в пул сообщества.",
+        "Активная Beta-выплата Growth: L1 70% · L2 30% бюджета награды Growth. Growth Pool — 15% допустимых комиссий. Это отдельно от направлений сетевых комиссий и от До 27% каждого нового токена в пул сообщества.",
       you: "Вы",
       budgetNote:
         "Проценты — доли бюджета награды Growth после того, как 15% каждой комиссии протокола идёт в Growth Pool, а не доли каждой сетевой комиссии.",
@@ -575,7 +575,7 @@ const rawHub = {
         },
         {
           title: "Отдельно от комиссий и токенов",
-          body: "Веса L1/L2 Growth — не сплит сетевых комиссий и не Up to 27% каждого нового токена в пул сообщества. Growth Pool — 15% от комиссии протокола со своими правилами settlement.",
+          body: "Веса L1/L2 Growth — не сплит сетевых комиссий и не До 27% каждого нового токена в пул сообщества. Growth Pool — 15% от комиссии протокола со своими правилами settlement.",
         },
         {
           title: "Этот сайт",
@@ -614,7 +614,7 @@ const rawHub = {
         {
           num: "04",
           title: "Участвуйте в экономике",
-          body: "Комиссии Token Factory и минта NFT оплачиваются из того же кошелька. Up to 27% новых токенов в пул сообщества, сетевые комиссии и Growth-реферал — три отдельных механизма.",
+          body: "Комиссии Token Factory и минта NFT оплачиваются из того же кошелька. До 27% новых токенов в пул сообщества, сетевые комиссии и Growth-реферал — три отдельных механизма.",
           href: "/create",
           cta: "Создать",
         },

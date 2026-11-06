@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Up to 27%",
-        "title": "Up to 27% to the community pool",
-        "note": "Of every new token's supply goes to the community pool."
+        "value": "10%",
+        "title": "10% to the community pool — guaranteed",
+        "note": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it; up to 27% in total if the creator chooses the pool."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% community + network fee",
+        "label": "10% community + network fee",
         "sub": "Part of the new token and the protocol fee stay separate"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Up to 27% of every new token goes to the community pool",
-        "body": "10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. Not a personal payout, and not 10% of every fee.",
+        "title": "10% of every new token goes to the community pool — guaranteed",
+        "body": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total. 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch.",
         "href": "/create/token",
         "cta": "Create a token"
       },

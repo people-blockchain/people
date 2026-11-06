@@ -7,9 +7,9 @@
       "发行",
       "代币。"
     ],
-    "headlineAccent": "Up to 27% 给你的用户，而不是巨鲸。",
+    "headlineAccent": "10% 给你的用户，而不是巨鲸。",
     "headlineAccentLines": [
-      "Up to 27% 给你的用户，",
+      "10% 给你的用户，",
       "而不是巨鲸。"
     ],
     "sub": "PEOPLE Blockchain 让创作者从第一个区块起以公平定价发行代币，社区在共同增长的一切中获得内置份额。",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% 进入社区池",
+        "label": "最高27% 进入社区池",
         "sub": "内置在每个新代币中"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "面向社区",
-      "body": "每个新代币发行时有 10% 保证进入其社区池。曲线剩余（约 17%）进入社区池或被销毁——创建者在发行时选择一次。 池由 PEOPLE timelock 治理，向已验证参与者随时间支付，非即时到账；这不是收益承诺。 A share of every network fee is routed separately."
+      "body": "发布时，创建者也可将曲线上未售出部分（最多约 17%）送入社区池而非销毁 — 合计最高 27%。 "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "这是参与网络，不是投资。",
   "visuals": {
     "supply": "代币供应",
-    "share": "Up to 27%",
+    "share": "最高27%",
     "toPool": "进入社区池",
     "pool": "社区池",
     "poolNote": "由参与者共享",
-    "aria": "每个新代币供应的 Up to 27% 进入它的社区池，由参与者共享。",
+    "aria": "每个新代币供应的 最高27% 进入它的社区池，由参与者共享。",
     "prompt": "一个由持有者投票决定金库如何使用的代币",
     "step1": "你来描述",
     "step2": "我们构建",

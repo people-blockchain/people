@@ -101,12 +101,26 @@ test("buy limits are per address, never per person, in every locale", () => {
   }
 });
 
-test("Turkish surfaces state the 10% community share, never 27%", () => {
+const TR_UP_TO_27 = "%27'ye kadar";
+
+test("Turkish surfaces use up to 27% wording and state the 10% launch guarantee", () => {
   for (const name of ["home", "hiw", "hub", "home-warm"]) {
-    const file = read(`src/lib/locales/surfaces/${name}-tr.json`);
-    assert.doesNotMatch(file, /%27/, `${name}-tr.json`);
+    const rel = `src/lib/locales/surfaces/${name}-tr.json`;
+    const file = read(rel);
+    const withoutUpTo = file.split(TR_UP_TO_27).join("");
+    assert.doesNotMatch(
+      withoutUpTo,
+      /%27/,
+      `${name}-tr.json must not use bare %27 outside ${TR_UP_TO_27}`,
+    );
+    if (file.includes("%27")) {
+      assert.match(
+        file,
+        /%10/,
+        `${name}-tr.json must state the 10% launch guarantee wherever %27 appears`,
+      );
+    }
   }
-  assert.match(read("src/lib/locales/surfaces/home-warm-tr.json"), /%10/);
 });
 
 test("localeFromBuyPath maps /xx/buy to a shipped locale only", () => {

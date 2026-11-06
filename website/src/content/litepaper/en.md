@@ -23,7 +23,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 | | |
 |---|---|
 | Supply | **1,000,000,000 PPL**, fixed |
-| Every launched token | **Up to 27%** of supply goes to that token's own community pool |
+| Every launched token | **10% guaranteed** at launch (up to **27%** total with curve remainder) |
 | Network fees burned | **0%** — every fee is shared |
 | Who earns rewards | **Verified humans** (Telegram phone or Human Passport) |
 | Funding | **Self-funded.** No VC. No investor allocation. |
@@ -45,7 +45,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 
 **Verified humans, not bots.** Rewards go to accounts that passed a free human check. One person, one account. Sign-up alone earns nothing.
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**10% of every new token goes to its community pool — guaranteed.** At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total. Built into the protocol, not promised in a post. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -193,7 +193,7 @@ Only verifiable public facts about other networks. Sources below.
 | Who receives fees | Validators get the priority fee (tip) ¹ | Validators get 50% of the base fee and 100% of the priority fee ² | **Validators 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Early funding | Public ether sale, 2014 (42 days, paid in BTC) ³ | $20M Series A led by Multicoin Capital (2019); investors received SOL tokens ⁴ | **Self-funded. No VC, no investor allocation** |
 | Account creation | Creating an account costs nothing; no identity check ⁵ | Not a protocol requirement | **Rewards only for verified humans** |
-| New-token community share | Not a protocol rule | Not a protocol rule | **Up to 27%** (10% at launch + optional curve leftovers) |
+| New-token community share | Not a protocol rule | Not a protocol rule | **10% guaranteed** (up to **27%** total) (10% at launch + optional curve leftovers) |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees

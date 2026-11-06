@@ -7,7 +7,7 @@ import { homeWarmCopy } from "@/lib/home-warm-content";
 import { homePublic } from "@/lib/home-public-content";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
 import { fetchHealth, type NetworkHealth } from "@/lib/network-client";
-import { MODEL_A_FEE_SPLIT, TOKEN_COMMUNITY_SHARE_HEADLINE } from "@/lib/selling-economics";
+import { MODEL_A_FEE_SPLIT, communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import { CommunityShareFlow } from "@/components/visuals/CommunityShareFlow";
 import {
   CountUpNumber,
@@ -70,8 +70,9 @@ export function HomeWarmCommunity() {
       <div className="mt-8 grid gap-4 lg:grid-cols-[0.62fr_1.38fr] lg:items-stretch">
         <div className="flex flex-col justify-center rounded-[28px] border border-value/30 bg-surface p-6 text-center shadow-[var(--elev-1)]">
           <p className="font-mono text-4xl font-bold leading-tight tabular-nums text-value sm:text-5xl">
-            {TOKEN_COMMUNITY_SHARE_HEADLINE}
+            {communityShareHeadline(lang)}
           </p>
+          <p className="mt-3 text-xs leading-relaxed text-ink-2">{communityShareExplanation(lang)}</p>
           <p className="mt-4 text-sm font-semibold text-ink">{t.statLabel}</p>
           <p className="mt-2 text-xs text-ink-3">{t.statNote}</p>
         </div>

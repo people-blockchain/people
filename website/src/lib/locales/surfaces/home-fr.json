@@ -7,9 +7,9 @@
       "pour votre",
       "communauté."
     ],
-    "headlineAccent": "27 % vont à vos gens, pas aux baleines.",
+    "headlineAccent": "Jusqu'à 27 % vont à vos gens, pas aux baleines.",
     "headlineAccentLines": [
-      "27 % vont à vos gens,",
+      "Jusqu'à 27 % vont à vos gens,",
       "pas aux baleines."
     ],
     "sub": "PEOPLE Blockchain, c'est là où les créateurs lancent des tokens à prix équitable dès le premier bloc, et la communauté reçoit une part de tout ce qu'elle aide à faire grandir.",
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Pour la communauté",
-      "body": "10 % de chaque nouveau token vont dans son pool communautaire au lancement, garanti. Le reste des invendus de la courbe (~17 %) va au pool communautaire ou est brûlé — le créateur choisit une fois au lancement. Le pool est gouverné par le timelock PEOPLE et versé aux personnes vérifiées dans le temps, pas instantanément — ce n'est pas une promesse de rendement. A share of every network fee is routed separately."
+      "body": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. "
     },
     {
       "id": "everyone",

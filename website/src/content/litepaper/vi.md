@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Cung cấp | **1.000.000.000 PPL**, cố định |
-| Mỗi token được phát hành | **Up to 27%** cung cấp đi vào nhóm cộng đồng của token đó |
+| Mỗi token được phát hành | **10% được đảm bảo** khi ra mắt (tối đa **27%** tổng cộng với phần còn lại trên đường cong) cung cấp đi vào quỹ cộng đồng của token đó |
 | Phí mạng bị đốt cháy | **0%** — mỗi phí được chia sẻ |
 | Ai kiếm được phần thưởng | **Những con người được xác minh** (số điện thoại Telegram hoặc Human Passport) |
 | Tài trợ | **Tự trợ cấp.** Không VC. Không phân bổ nhà đầu tư. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Những con người được xác minh, không phải bot.** Phần thưởng đi đến những tài khoản đã vượt qua một bài kiểm tra con người miễn phí. Một người, một tài khoản. Chỉ đăng ký không kiếm được gì.
 
-**Up to 27% can go to its community.** Built into the protocol, not promised in a post: 10% of every new token goes to its community pool at launch, guaranteed. The rest of the curve leftovers (~17%) goes to the community pool or is burned — the creator chooses once at launch. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
+**10% mỗi token mới vào quỹ cộng đồng — được đảm bảo.** Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. Ghi trong giao thức, không hứa trong bài đăng. Quỹ do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không tức thì; đây không phải lời hứa lợi nhuận. Không bao giờ trộn với phí mạng.
 
 ---
 
@@ -53,7 +53,7 @@ Những gì bạn có thể làm mà không cần mã:
 
 | Công cụ | Nó làm gì | Trạng thái |
 |---|---|---|
-| **Token không cần mã** | Tên, ticker, hình ảnh, cung cấp. Token có được trực tiếp trên đường cong liên kết của nó; giao dịch đầu tiên đặt giá. Up to 27% cung cấp đi vào nhóm cộng đồng của token; cổ phần của người tạo được phân bổ trong 180 ngày. | Hoạt động trên testnet |
+| **Token không cần mã** | Tên, ticker, hình ảnh, nguồn cung. Token ra mắt trên đường cong bonding riêng; giao dịch đầu tiên đặt giá. 10% nguồn cung vào quỹ cộng đồng của token khi ra mắt (thêm tới ~17% từ phần còn lại chưa bán trên đường cong nếu người tạo chọn); cổ phần người tạo vest trong 180 ngày. | Hoạt động trên testnet |
 | **Thẻ câu lạc bộ NFT** | Thẻ thành viên cho một câu lạc bộ, một quán cà phê hoặc một cộng đồng — một cho mỗi thành viên, với hình ảnh bạn tải lên hoặc tạo. | Hoạt động trên testnet |
 | **Gây quỹ** | Thu thập sự hỗ trợ cho một dự án với các mẫu hợp đồng được xem xét: ký quỹ, phân bổ, quyết định có trọng số token. Cộng đồng của bạn mua vào trên đường cong, do đó nhu cầu đặt giá — không phải một vòng riêng tư. | Hoạt động trên testnet |
 | **Hợp đồng AI** | Mô tả một hợp đồng thông minh bằng từ thường. Nó được lắp ráp từ các mẫu OpenZeppelin và bạn thấy kết quả trước khi triển khai. | Hoạt động trên testnet |
@@ -191,9 +191,9 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 | Ai nhận phí | Trình xác thực nhận phí ưu tiên (mẹo) ¹ | Trình xác thực nhận 50% phí cơ sở và 100% phí ưu tiên ² | **Trình xác thực 30 · Cộng đồng 25 · Kho tài sản 20 · Tính thanh khoản 10 · Tăng trưởng 15** |
 | Tài trợ sớm | Bán ether công cộng, 2014 (42 ngày, trả bằng BTC) ³ | $20M Series A do Multicoin Capital dẫn đầu (2019); nhà đầu tư nhận được token SOL ⁴ | **Tự trợ cấp. Không VC, không phân bổ nhà đầu tư** |
 | Tạo tài khoản | Tạo một tài khoản không tốn chi phí; không kiểm tra danh tính ⁵ | Không phải yêu cầu giao thức | **Phần thưởng chỉ cho những con người được xác minh** |
-| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **Up to 27% của mỗi token được phát hành** |
+| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **10% được đảm bảo** (tối đa **27%** tổng cộng) (10% khi ra mắt + phần dư tùy chọn trên đường cong) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas và phí: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana
@@ -216,7 +216,7 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 ### Những gì đã thay đổi trong v1.0
 
-- Tới **27%** nguồn cung có thể vào pool cộng đồng: **10%** khi ra mắt được đảm bảo, cộng tới **~17%** từ phần còn lại trên đường cong nếu người tạo chọn pool thay vì đốt khi ra mắt. Chi trả qua timelock PEOPLE cho người đã xác minh theo thời gian — không tức thì, không hứa lợi nhuận.
+- Tới **27%** nguồn cung có thể vào quỹ cộng đồng: **10%** khi ra mắt được đảm bảo, cộng tới **~17%** từ phần còn lại trên đường cong nếu người tạo chọn quỹ thay vì đốt khi ra mắt. Chi trả qua timelock PEOPLE cho người đã xác minh theo thời gian — không tức thì, không hứa lợi nhuận.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
 - Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **5 USD cho mỗi lần ra mắt token và 10 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Không có KYC hay kiểm tra điều kiện trên trang này.

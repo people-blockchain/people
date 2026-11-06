@@ -25,6 +25,7 @@ import {
   type PromoBps,
 } from "@/lib/token-promo";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
+import { communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import { ISSUER_REFERRAL_DEFAULT_ALLOCATION_BPS } from "@/lib/founders/referral";
 import {
   GATEWAY_KIND,
@@ -618,6 +619,16 @@ export function EvmTokenLaunch() {
             </div>
           ) : null}
 
+
+          <div
+            className="rounded-xl border border-violet/30 bg-violet/[0.04] p-3"
+            data-testid="community-share-explainer"
+          >
+            <p className="font-mono text-2xl font-black tabular-nums text-violet">
+              {communityShareHeadline(lang)}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-2">{communityShareExplanation(lang)}</p>
+          </div>
 
           <p className="text-sm text-ink-2" data-testid="launch-summary">
             {form.launchSummary}

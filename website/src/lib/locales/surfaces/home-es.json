@@ -7,9 +7,9 @@
       "para tu",
       "comunidad."
     ],
-    "headlineAccent": "El Up to 27% va a tu gente, no a las ballenas.",
+    "headlineAccent": "El 10% va a tu gente, no a las ballenas.",
     "headlineAccentLines": [
-      "El Up to 27% va a tu gente,",
+      "El 10% va a tu gente,",
       "no a las ballenas."
     ],
     "sub": "PEOPLE Blockchain es donde los creadores lanzan tokens con precio justo desde el primer bloque, y la comunidad recibe una parte de todo lo que ayuda a crecer.",
@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% al pool de la comunidad",
+        "label": "Hasta un 27% al pool de la comunidad",
         "sub": "Integrado en cada token nuevo"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Para tu comunidad",
-      "body": "El 10 % de cada token nuevo va a su pool comunitario en el lanzamiento, garantizado. El resto de sobrantes de la curva (~17 %) va al pool comunitario o se quema — el creador elige una vez al lanzar. El pool lo gobierna el timelock de PEOPLE y se paga a personas verificadas con el tiempo, no al instante; no es una promesa de rendimiento. A share of every network fee is routed separately."
+      "body": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total. "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Es participación en una red, no una inversión.",
   "visuals": {
     "supply": "Suministro del token",
-    "share": "Up to 27%",
+    "share": "Hasta un 27%",
     "toPool": "va al fondo de la comunidad",
     "pool": "Fondo de la comunidad",
     "poolNote": "repartido entre quienes participan",
-    "aria": "El Up to 27% del suministro de cada token nuevo va a su fondo de la comunidad, repartido entre quienes participan.",
+    "aria": "El Hasta un 27% del suministro de cada token nuevo va a su fondo de la comunidad, repartido entre quienes participan.",
     "prompt": "Un token cuyos titulares votan en qué se gasta la tesorería",
     "step1": "Tú escribes",
     "step2": "Nosotros lo construimos",

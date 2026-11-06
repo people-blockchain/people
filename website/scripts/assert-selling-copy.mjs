@@ -25,18 +25,19 @@ function extractConstObject(file, name) {
   return { rows, ids };
 }
 
-test("Token Factory public copy uses up to 27% headline and 10% launch guarantee", () => {
+test("Token Factory public copy uses 10% guaranteed headline and up to 27% in explanations", () => {
   const economics = src("src/lib/selling-economics.ts");
   assert.match(economics, /TOKEN_COMMUNITY_ALLOCATION_PCT = 10/);
   assert.match(economics, /TOKEN_COMMUNITY_SHARE_MAX_PCT = 27/);
   assert.match(economics, /TOKEN_COMMUNITY_SHARE_EXPLANATION_EN/);
-  assert.match(economics, /goes to its community pool at launch, guaranteed/);
-  assert.match(economics, /TOKEN_COMMUNITY_SHARE_PCT = TOKEN_COMMUNITY_SHARE_MAX_PCT/);
+  assert.match(economics, /goes to its community pool — guaranteed/);
+  assert.match(economics, /TOKEN_COMMUNITY_SHARE_HEADLINE = `\$\{TOKEN_COMMUNITY_ALLOCATION_PCT\}%`/);
 
   const hub = src("src/lib/hub-content.ts");
-  assert.match(hub, /Up to 27%/);
+  assert.match(hub, /10% of every new token goes to the community pool — guaranteed/);
   assert.match(hub, /TOKEN_COMMUNITY_SHARE_EXPLANATION_EN/);
-  assert.match(hub, /10% at launch, guaranteed/);
+  assert.match(hub, /up to 27%|Up to 27%/);
+  assert.doesNotMatch(hub, /title: "Up to 27%/);
   assert.doesNotMatch(hub, /27%\+/);
   assert.doesNotMatch(hub, /mandatory 27%/i);
   assert.doesNotMatch(hub, /Token community allocation/i);
@@ -185,7 +186,8 @@ test("public website copy must not mention Model A", () => {
 test("owner-approved EN hero copy on homepage", () => {
   const en = JSON.parse(src("src/lib/locales/surfaces/home-en.json"));
   assert.match(en.hero.headlineMain, /Launch a token for your community/);
-  assert.match(en.hero.headlineAccent, /Up to 27%/);
+  assert.match(en.hero.headlineAccent, /10%.*guaranteed/i);
+  assert.doesNotMatch(en.hero.headlineAccent, /Up to 27/i);
   assert.match(en.hero.testnetBadge, /Public testnet is live/);
 });
 
@@ -193,7 +195,8 @@ test("RU home hero is translated, not legacy lockup", () => {
   const ru = JSON.parse(src("src/lib/locales/surfaces/home-ru.json"));
   const hero = src("src/components/Hero.tsx");
   assert.match(ru.hero.headlineMain, /Запустите токен/);
-  assert.match(ru.hero.headlineAccent, /27%/);
+  assert.match(ru.hero.headlineAccent, /10%/);
+  assert.doesNotMatch(ru.hero.headlineAccent, /До 27/i);
   assert.match(hero, /headlineMainLines/);
   assert.match(hero, /t\.headlineAccent/);
   assert.doesNotMatch(hero, /PEOPLE&apos;S/);
@@ -263,9 +266,10 @@ test("public website copy has no legacy brand or internal diary language", () =>
 test("homepage still leads with user-value props in both locales", () => {
   const en = JSON.parse(src("src/lib/locales/surfaces/home-en.json"));
   const ru = JSON.parse(src("src/lib/locales/surfaces/home-ru.json"));
-  assert.match(en.blocks[1].body, /10% of every new token/);
-  assert.match(ru.blocks[1].body, /10% каждого нового токена/);
-  assert.match(en.hero.headlineAccent, /Up to 27%|27%/);
+  assert.match(en.blocks[1].body, /10% of every new token|At launch the creator/);
+  assert.match(ru.blocks[1].body, /10% каждого нового токена|При запуске создатель/);
+  assert.match(en.hero.headlineAccent, /10%.*guaranteed/i);
+  assert.doesNotMatch(en.hero.headlineAccent, /Up to 27/i);
   assert.doesNotMatch(JSON.stringify(en), /10%\+/);
   assert.doesNotMatch(JSON.stringify(en), /10%\+/);
   assert.doesNotMatch(JSON.stringify(en), /L1 15%/);
@@ -479,4 +483,21 @@ test("Wallet and explorer pages exist and state custody honestly in copy", () =>
   assert.match(hub, /href: "\/explorer"/);
   assert.match(hero, /HomeWalletCta/);
   assert.match(hero, /href="\/create\/token"/);
+});
+
+const HOME_WARM_LANGS = ["en", "ru", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
+const UP_TO_27_HEADLINE =
+  /Up to 27|up to 27|До 27|до 27|Bis zu 27|Hasta un 27|Até 27|Jusqu'à 27|Fino al 27|Hingga 27|Lên đến 27|最高27|حتى 27|%27'ye kadar/i;
+
+test("every locale home-warm community block: 10% headline, 27% only in explanation", () => {
+  for (const lang of HOME_WARM_LANGS) {
+    const warm = JSON.parse(src(`src/lib/locales/surfaces/home-warm-${lang}.json`));
+    const { community } = warm;
+    assert.ok(community?.title && community?.lead, `${lang} community copy`);
+    assert.match(community.title, /10\s*%|%10|10%/);
+    assert.doesNotMatch(community.title, UP_TO_27_HEADLINE, `${lang} community.title`);
+    assert.doesNotMatch(community.eyebrow ?? "", UP_TO_27_HEADLINE, `${lang} community.eyebrow`);
+    assert.match(community.lead, /17|~17|17 %/);
+    assert.match(community.lead, /27|27 %|%27/);
+  }
 });

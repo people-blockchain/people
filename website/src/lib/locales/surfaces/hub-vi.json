@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "Up to 27%",
-        "title": "Up to 27% vào quỹ cộng đồng",
-        "note": "Của nguồn cung mỗi token mới đi vào quỹ cộng đồng."
+        "value": "10%",
+        "title": "10% mỗi token mới dành cho người của bạn — được đảm bảo",
+        "note": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "Up to 27% cộng đồng + phí mạng",
+        "label": "Lên đến 10% cộng đồng + phí mạng",
         "sub": "Một phần token mới và phí giao thức được giữ tách"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Up to 27% mỗi token mới đi vào quỹ cộng đồng",
-        "body": "10% mỗi token mới vào pool cộng đồng khi ra mắt — được đảm bảo. Phần còn lại trên đường cong (~17%) vào pool cộng đồng hoặc bị đốt — người tạo chọn một lần khi ra mắt. Pool do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không ngay lập tức; không phải lời hứa lợi nhuận. Not a personal payout, and not 10% of every fee.",
+        "title": "10% mỗi token mới đi vào quỹ cộng đồng",
+        "body": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. 10% mỗi token mới vào pool cộng đồng khi ra mắt — được đảm bảo. Phần còn lại trên đường cong (~17%) vào pool cộng đồng hoặc bị đốt — người tạo chọn một lần khi ra mắt.",
         "href": "/create/token",
         "cta": "Tạo token"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Chi trả Growth Beta đang hoạt động: L1 70% · L2 30% ngân sách thưởng Growth. Growth Pool là 15% phí đủ điều kiện. Tách biệt với đích the fee split của phí mạng và với Up to 27% mỗi token mới đi vào pool cộng đồng.",
+    "subtitle": "Chi trả Growth Beta đang hoạt động: L1 70% · L2 30% ngân sách thưởng Growth. Growth Pool là 15% phí đủ điều kiện. Tách biệt với đích the fee split của phí mạng và với Lên đến 27% mỗi token mới đi vào pool cộng đồng.",
     "you": "Bạn",
     "budgetNote": "Phần trăm là phần ngân sách thưởng Growth sau khi the fee split đưa 15% phí đủ điều kiện vào Growth Pool — không phải phần của mọi phí mạng.",
     "detailsTitle": "Growth-referral hoạt động thế nào",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Tách khỏi phí và token",
-        "body": "Trọng số Growth L1/L2 không phải phần chia phí mạng the fee split và không phải Up to 27% mỗi token mới cho pool cộng đồng. Growth Pool là đích phí the fee split với quy tắc quyết toán riêng."
+        "body": "Trọng số Growth L1/L2 không phải phần chia phí mạng the fee split và không phải Lên đến 27% mỗi token mới cho pool cộng đồng. Growth Pool là đích phí the fee split với quy tắc quyết toán riêng."
       },
       {
         "title": "Site này",
@@ -142,7 +142,7 @@
       {
         "num": "04",
         "title": "Tham gia kinh tế",
-        "body": "Trả phí Token Factory và mint NFT từ cùng ví. Phần Up to 27% pool cộng đồng trên token mới, phí mạng và Growth-referral vẫn là ba cơ chế riêng.",
+        "body": "Trả phí Token Factory và mint NFT từ cùng ví. Phần Lên đến 27% pool cộng đồng trên token mới, phí mạng và Growth-referral vẫn là ba cơ chế riêng.",
         "href": "/create",
         "cta": "Tạo"
       }
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Phí mạng và phần cộng đồng của mỗi token ở các kênh riêng.",
-        "detail": "Phí mạng bằng PPL theo the fee split. Token chuẩn do người dùng tạo gửi Up to 27% nguồn cung token đó vào pool cộng đồng riêng — đó không phải phí mạng."
+        "detail": "Phí mạng bằng PPL theo the fee split. Token chuẩn do người dùng tạo gửi Lên đến 27% nguồn cung token đó vào pool cộng đồng riêng — đó không phải phí mạng."
       }
     ],
     "storyCta": "Câu chuyện hình đầy đủ"
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool nhận 15% phí đủ điều kiện. Không phải thu nhập bảo đảm, lợi nhuận thụ động hay sản phẩm đầu tư.",
     "detailsTitle": "Định tuyến phí hoạt động thế nào",
-    "detailsBody": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số. After whole-number division, any remainder stays with validators. The Up to 27% of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Mỗi phí giao thức chia: 30% validator, 25% cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth, 0% đốt — kể cả phí phân số. Sau khi chia số nguyên, phần dư còn lại ở validator. Lên đến 27% mỗi token mới vào quỹ cộng đồng là lộ trình khác — không phải phí mạng.",
     "storyLink": "Phần thưởng được giải thích thế nào"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Giá phát hành dùng đường cong constant-product với toán số nguyên chính xác.",
       "Phí giao dịch giao thức trên đường cong được định tuyến qua kinh tế phí mạng.",
-      "Phần chia phát hành chuẩn gồm bắt buộc Up to 27% nguồn cung token đó vào pool cộng đồng riêng (không phải phí mạng PPL).",
+      "Phần chia phát hành chuẩn gồm bắt buộc Lên đến 27% nguồn cung token đó vào pool cộng đồng riêng (không phải phí mạng PPL).",
       "Vesting của người tạo giữ phần lớn phần của họ mở dần theo thời gian, để cộng đồng không bị dump ngày đầu."
     ],
     "createCta": "Mở Token Factory",

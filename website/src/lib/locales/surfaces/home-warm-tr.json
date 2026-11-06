@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Topluluğunuz için bir token başlatın."
     ],
-    "headlineAccent": "%27 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "10% sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%27 sizin insanlarınıza gider,",
+      "10% sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
@@ -34,18 +34,18 @@
       },
       {
         "id": "share",
-        "label": "%27 insanlarınıza",
-        "sub": "Her yeni token, arzının %27'sini kendi topluluk havuzuna gönderir."
+        "label": "10% insanlarınıza",
+        "sub": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar."
       }
     ],
-    "shareBadge": "%27 topluluk payı",
+    "shareBadge": "10% topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil",
     "saleNote": "PEOPLE ağı hâlâ bir test ağıdır ve test token'larının değeri yoktur. PPL satışı ayrıdır: gerçek USDC veya USDT ile Base üzerinde yapılır."
   },
   "community": {
-    "eyebrow": "%27 topluluğa",
-    "title": "Her yeni tokenin %27'si sizin insanlarınıza gider",
-    "lead": "Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer.",
+    "eyebrow": "Topluluk için garanti %10",
+    "title": "Her yeni tokenin %10'u insanlarınıza gider — garanti",
+    "lead": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar.",
     "statLabel": "her yeni tokenin arzının topluluk havuzuna gider",
     "statNote": "Havuz PEOPLE timelock ile yönetilir; doğrulanmış kişilere zamanla ödenir, anında değil — getiri vaadi değildir.",
     "footnote": "Ağ ücretleri ayrı paylaştırılır: %{{community}} topluluk havuzuna, %{{validators}} doğrulayıcılara.",
@@ -91,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "%27",
+        "stat": "10%",
         "title": "her yeni token o tokenin topluluk havuzuna gider",
-        "body": "Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
+        "body": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
       },
       {
         "id": "vesting",
