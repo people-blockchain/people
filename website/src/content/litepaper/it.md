@@ -53,7 +53,7 @@ Quello che puoi fare senza codice:
 
 | Strumento | Cosa fa | Stato |
 |---|---|---|
-| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il Fino al 27% della fornitura va al fondo comunitario del token; la quota del creatore scade in 180 giorni. | Live on testnet |
+| **Token senza codice** | Nome, ticker, immagine, fornitura. Il token entra in live sulla sua curva di bonding; il primo scambio fissa il prezzo. Il 10% della fornitura va al fondo comunitario del token al lancio (fino a ~17% in più dal resto invenduto sulla curva se il creatore lo sceglie); la quota del creatore si accumula in 180 giorni. | Live on testnet |
 | **Carte club NFT** | Carte di iscrizione per un club, un caffè o una comunità — una per membro, con un'immagine che carichi o generi. | Live on testnet |
 | **Raccolta fondi** | Raccogli supporto per un progetto con modelli di contratti revisionati: escrow, vesting, voto ponderato per token. La tua comunità acquista sulla curva, quindi la domanda fissa il prezzo — non un round privato. | Live on testnet |
 | **Contratti AI** | Descrivi un contratto intelligente a parole. Viene assemblato da modelli OpenZeppelin e vedi il risultato prima di distribuirlo. | Live on testnet |

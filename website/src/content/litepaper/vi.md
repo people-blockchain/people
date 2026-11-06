@@ -53,7 +53,7 @@ Những gì bạn có thể làm mà không cần mã:
 
 | Công cụ | Nó làm gì | Trạng thái |
 |---|---|---|
-| **Token không cần mã** | Tên, ticker, hình ảnh, cung cấp. Token có được trực tiếp trên đường cong liên kết của nó; giao dịch đầu tiên đặt giá. Lên đến 27% cung cấp đi vào quỹ cộng đồng của token; cổ phần của người tạo được phân bổ trong 180 ngày. | Hoạt động trên testnet |
+| **Token không cần mã** | Tên, ticker, hình ảnh, nguồn cung. Token ra mắt trên đường cong bonding riêng; giao dịch đầu tiên đặt giá. 10% nguồn cung vào quỹ cộng đồng của token khi ra mắt (thêm tới ~17% từ phần còn lại chưa bán trên đường cong nếu người tạo chọn); cổ phần người tạo vest trong 180 ngày. | Hoạt động trên testnet |
 | **Thẻ câu lạc bộ NFT** | Thẻ thành viên cho một câu lạc bộ, một quán cà phê hoặc một cộng đồng — một cho mỗi thành viên, với hình ảnh bạn tải lên hoặc tạo. | Hoạt động trên testnet |
 | **Gây quỹ** | Thu thập sự hỗ trợ cho một dự án với các mẫu hợp đồng được xem xét: ký quỹ, phân bổ, quyết định có trọng số token. Cộng đồng của bạn mua vào trên đường cong, do đó nhu cầu đặt giá — không phải một vòng riêng tư. | Hoạt động trên testnet |
 | **Hợp đồng AI** | Mô tả một hợp đồng thông minh bằng từ thường. Nó được lắp ráp từ các mẫu OpenZeppelin và bạn thấy kết quả trước khi triển khai. | Hoạt động trên testnet |

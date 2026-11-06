@@ -53,7 +53,7 @@ Kod olmadan yapabileceğiniz şeyler:
 
 | Araç | Ne yaptığı | Durum |
 |---|---|---|
-| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bağlanma eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzının %27'si token'ın topluluk havuzuna gider; yaratıcının payı 180 gün içinde hak ediş yapılır. | Testnet'te canlı |
+| **Kod gerektirmeyen tokenler** | Ad, işaret, görüntü, arz. Token kendi bonding eğrisinde canlı yayına gider; ilk ticaret fiyatı belirler. Arzın %10'u lansmanda token'ın topluluk havuzuna gider (yaratıcı seçerse eğriden satılmayan artıklardan ~%17'ye kadar daha); yaratıcının payı 180 gün içinde hak edilir. | Testnet'te canlı |
 | **NFT kulüp kartları** | Bir kulüp, kafe veya topluluk için üyelik kartları — üye başına bir tane, yüklediğiniz veya oluşturduğunuz bir görüntüyle. | Testnet'te canlı |
 | **Fon toplama** | İncelenen sözleşme şablonlarıyla bir proje için destek toplayın: emanet, hak ediş, token ağırlıklı oylama. Topluluğunuz eğride satın alır, bu nedenle talep fiyatı belirler — özel bir tur değil. | Testnet'te canlı |
 | **Yapay zeka sözleşmeleri** | Bir akıllı sözleşmeyi düz sözcüklerle açıklayın. OpenZeppelin şablonlarından birleştirilir ve dağıtmadan önce sonucu görürsünüz. | Testnet'te canlı |
@@ -191,7 +191,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 | Ücreti alan | Doğrulayıcılar öncelik ücretini (bahşiş) alır ¹ | Doğrulayıcılar temel ücretin %50'sini ve öncelik ücretinin %100'ünü alırlar ² | **Doğrulayıcılar 30 · Topluluk 25 · Hazine 20 · Likidite 10 · Büyüme 15** |
 | Erken finansman | Halka açık eter satışı, 2014 (42 gün, BTC cinsinden ödendi) ³ | Multicoin Capital tarafından yönetilen 20 milyon dolar Series A (2019); yatırımcılar SOL jetonlarını aldılar ⁴ | **Kendi finansmanı. VC yok, yatırımcı tahsisi yok** |
 | Hesap oluşturma | Hesap oluşturmak hiçbir şeye mal olmaz; kimlik denetimi yok ⁵ | Protokol gereksi değil | **Ödüller yalnızca doğrulanmış insanlar için** |
-| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **Başlatılan her token'ın %27'si** |
+| Yeni token topluluk payı | Protokol kuralı değil | Protokol kuralı değil | **%10 garanti** (toplamda **%27'ye kadar**) (%10 lansmanda + isteğe bağlı eğri artığı) |
 
 1. ethereum.org — Gaz ve ücretler: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Ücretler: https://solana.com/docs/core/fees
@@ -216,7 +216,7 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 ### v1.0'da neler değişti
 
-- Yeni bir token'ın topluluk payı arzın **%27'sidir**: lansmanda ayrılan **%10** artı göç sırasında eğriden çekilen **~%16,7**.
+- Yeni bir token arzının **%27'sine kadar** topluluk havuzuna gidebilir: lansmanda **%10** garanti, artı yaratıcı lansmanda yakma yerine havuzu seçerse eğri artığından **~%17'ye kadar**. Ödemeler PEOPLE timelock ile doğrulanmış kişilere zamanla — anında değil, getiri vaadi değil.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
 - **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.

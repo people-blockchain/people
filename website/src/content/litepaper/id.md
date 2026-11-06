@@ -53,7 +53,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 
 | Alat | Apa yang dilakukannya | Status |
 |---|---|---|
-| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. Hingga 27% dari pasokan masuk ke dana komunitas token; bagian kreator vests selama 180 hari. | Aktif di testnet |
+| **Token tanpa kode** | Nama, ticker, gambar, pasokan. Token aktif di kurva bonding-nya sendiri; perdagangan pertama menetapkan harga. 10% pasokan masuk ke dana komunitas token saat peluncuran (hingga ~17% lagi dari sisa kurva yang belum terjual jika kreator memilih); bagian kreator vest selama 180 hari. | Aktif di testnet |
 | **Kartu klub NFT** | Kartu keanggotaan untuk klub, kafe, atau komunitas — satu per anggota, dengan gambar yang Anda unggah atau hasilkan. | Aktif di testnet |
 | **Penggalangan dana** | Kumpulkan dukungan untuk proyek dengan template kontrak yang ditinjau: escrow, vesting, token-weighted vote. Komunitas Anda membeli di kurva, jadi permintaan menetapkan harga — bukan putaran pribadi. | Aktif di testnet |
 | **Kontrak AI** | Jelaskan kontrak pintar dalam kata-kata polos. Ini dirakit dari template OpenZeppelin dan Anda melihat hasilnya sebelum Anda deploy. | Aktif di testnet |

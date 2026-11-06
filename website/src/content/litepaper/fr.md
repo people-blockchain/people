@@ -53,7 +53,7 @@ Ce que vous pouvez faire sans code :
 
 | Outil | Ce qu'il fait | Statut |
 |---|---|---|
-| **Tokens sans code** | Nom, ticker, image, approvisionnement. Le token se met en direct sur sa propre courbe de liaison ; le premier échange définit le prix. 27 % de l'approvisionnement va au fonds communautaire du token ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
+| **Tokens sans code** | Nom, ticker, image, offre. Le token se met en direct sur sa propre courbe de bonding ; le premier échange définit le prix. 10 % de l'offre vont au fonds communautaire du token au lancement (jusqu'à ~17 % de plus provenant du reliquat invendu de la courbe si le créateur le choisit) ; la part du créateur s'accumule sur 180 jours. | Live sur testnet |
 | **Cartes de club NFT** | Cartes d'adhésion pour un club, un café ou une communauté — une par membre, avec une image que vous téléchargez ou générez. | Live sur testnet |
 | **Levée de fonds** | Collectez le soutien pour un projet avec des modèles de contrats examinés : dépôt de garantie, accumulation, vote pondéré par token. Votre communauté achète sur la courbe, donc la demande définit le prix — pas un tour privé. | Live sur testnet |
 | **Contrats IA** | Décrivez un contrat intelligent en langage clair. Il est assemblé à partir de modèles OpenZeppelin et vous voyez le résultat avant de déployer. | Live sur testnet |

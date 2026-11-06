@@ -53,7 +53,7 @@ Lo que puedes hacer sin código:
 
 | Herramienta | Qué hace | Estado |
 |---|---|---|
-| **Tokens sin código** | Nombre, símbolo, imagen, suministro. El token se activa en su propia curva de enlace; la primera transacción establece el precio. El Hasta un 27% del suministro va al fondo comunitario del token; la participación del creador se devenga durante 180 días. | Activo en testnet |
+| **Tokens sin código** | Nombre, símbolo, imagen, suministro. El token se activa en su propia curva de bonding; la primera transacción establece el precio. El 10% del suministro va al fondo comunitario del token en el lanzamiento (hasta ~17% más de sobrantes no vendidos en la curva si el creador lo elige); la participación del creador se devenga durante 180 días. | Activo en testnet |
 | **Tarjetas de club NFT** | Tarjetas de membresía para un club, una cafetería o una comunidad — una por miembro, con una imagen que cargas o generas. | Activo en testnet |
 | **Recaudación de fondos** | Recopila apoyo para un proyecto con plantillas de contrato revisadas: depósito en garantía, devengo, voto ponderado por token. Tu comunidad compra en la curva, por lo que la demanda establece el precio — no una ronda privada. | Activo en testnet |
 | **Contratos AI** | Describe un contrato inteligente en palabras simples. Se ensambla a partir de plantillas de OpenZeppelin y ves el resultado antes de implementar. | Activo en testnet |
