@@ -103,7 +103,7 @@ export function renderLitepaperBlocks(blocks: MdBlock[]): ReactNode {
                       {block.header.map((cell, j) => (
                         <th
                           key={j}
-                          className={`border-b border-line px-4 py-3 font-semibold text-ink ${alignClass[block.align[j] ?? "left"]}`}
+                          className={`border-b border-line px-4 py-3 font-semibold text-ink [overflow-wrap:anywhere] ${alignClass[block.align[j] ?? "left"]}`}
                         >
                           {renderInline(cell)}
                         </th>
@@ -116,7 +116,7 @@ export function renderLitepaperBlocks(blocks: MdBlock[]): ReactNode {
                         {row.map((cell, c) => (
                           <td
                             key={c}
-                            className={`border-b border-line px-4 py-3 text-ink-2 last:border-b-0 ${alignClass[block.align[c] ?? "left"]}`}
+                            className={`border-b border-line px-4 py-3 text-ink-2 [overflow-wrap:anywhere] last:border-b-0 ${alignClass[block.align[c] ?? "left"]}`}
                           >
                             {renderInline(cell)}
                           </td>

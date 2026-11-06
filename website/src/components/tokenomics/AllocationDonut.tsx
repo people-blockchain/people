@@ -61,8 +61,8 @@ export function AllocationDonut({ copy }: { copy: TokenomicsCopy }) {
   }, []);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
-      <div className="relative mx-auto w-full max-w-[280px]">
+    <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start">
+      <div className="relative mx-auto w-full min-w-0 max-w-[280px]">
         <svg viewBox="0 0 240 240" className="w-full touch-manipulation" role="img" aria-label={copy.donutTitle}>
           {slices.map((s) => {
             const isOn = s.id === focused;
@@ -98,11 +98,11 @@ export function AllocationDonut({ copy }: { copy: TokenomicsCopy }) {
         <p className="mt-2 text-center text-xs text-ink-3">{copy.legendHint}</p>
         <ul className="mt-4 flex flex-wrap justify-center gap-2">
           {slices.map((s) => (
-            <li key={s.id}>
+            <li key={s.id} className="max-w-full min-w-0">
               <button
                 type="button"
                 onClick={() => onSelect(s.id)}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                className={`inline-flex max-w-full min-w-0 items-start gap-1.5 rounded-2xl border px-3 py-1.5 text-left text-xs font-medium leading-snug [overflow-wrap:anywhere] transition-colors ${
                   focused === s.id ? "border-brand bg-brand/10 text-brand" : "border-line text-ink-2 hover:border-brand/50"
                 }`}
               >
@@ -114,9 +114,9 @@ export function AllocationDonut({ copy }: { copy: TokenomicsCopy }) {
         </ul>
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface p-5">
-        <h3 className="text-lg font-semibold text-ink">{copy.bucketLabels[focusSlice.id]}</h3>
-        <p className="mt-2 text-sm text-ink-2">{copy.bucketNotes[focusSlice.id]}</p>
+      <div className="min-w-0 rounded-2xl border border-line bg-surface p-5">
+        <h3 className="text-lg font-semibold text-ink [overflow-wrap:anywhere]">{copy.bucketLabels[focusSlice.id]}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-ink-2 [overflow-wrap:anywhere]">{copy.bucketNotes[focusSlice.id]}</p>
         <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
           <div>
             <dt className="text-ink-3">{copy.shareLabel}</dt>
