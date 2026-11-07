@@ -218,5 +218,73 @@ class CliffLinearVestingTests(unittest.TestCase):
             apply_emission_genesis.cliff_linear_schedule(bad, 0)
 
 
+class MainnetAllocationTests(unittest.TestCase):
+    """The committed mainnet allocation must be refused until every placeholder is real, a
+    completed one must pass, and testnet/mainnet allocations can never cross chains."""
+
+    MAINNET = ROOT / "emission" / "allocation-mainnet.json"
+    TESTNET = ROOT / "emission" / "allocation.json"
+
+    def load(self, path: Path) -> dict:
+        return json.loads(path.read_text())
+
+    def completed(self) -> dict:
+        d = self.load(self.MAINNET)
+        ms = "people1j5ued7s75g85wefxqhem9n5uuwvup0r5klxkjt"
+        d["treasury_multisig"].update({
+            "address": ms,
+            "placeholder": False,
+            "public_keys_secp256k1_hex": ["02" + "11" * 32, "03" + "22" * 32, "02" + "33" * 32],
+        })
+        for name, b in d["buckets"].items():
+            b["owner_placeholder"] = False
+            if b.get("account_kind", "").startswith("multisig") or name == "treasury":
+                b["account"] = ms
+        d["buckets"]["team"]["account"] = "people1rnw7un6lm0xg2gwjrtkf6q3a4pqyqy9zxhf907"
+        return d
+
+    def test_committed_mainnet_allocation_is_refused(self) -> None:
+        errors = apply_emission_genesis.mainnet_blockers(self.load(self.MAINNET))
+        self.assertTrue(any("treasury_multisig" in e for e in errors), errors)
+        self.assertTrue(any("bucket team" in e for e in errors), errors)
+        self.assertTrue(any("bucket community" in e for e in errors), errors)
+
+    def test_testnet_allocation_has_no_mainnet_blockers(self) -> None:
+        self.assertEqual(apply_emission_genesis.mainnet_blockers(self.load(self.TESTNET)), [])
+
+    def test_completed_allocation_passes(self) -> None:
+        self.assertEqual(apply_emission_genesis.mainnet_blockers(self.completed()), [])
+
+    def test_supply_and_buckets_match_testnet(self) -> None:
+        m, t = self.load(self.MAINNET), self.load(self.TESTNET)
+        self.assertEqual(m["total_supply_appl"], t["total_supply_appl"])
+        self.assertEqual(sum(int(b["amount_appl"]) for b in m["buckets"].values()), int(m["total_supply_appl"]))
+        for name in t["buckets"]:
+            self.assertEqual(m["buckets"][name]["amount_appl"], t["buckets"][name]["amount_appl"], name)
+        self.assertEqual(m["fee_split_bps"], t["fee_split_bps"])
+        self.assertEqual(m["validator_vesting_annual_ppl"], t["validator_vesting_annual_ppl"])
+
+    def test_testnet_keys_faucet_and_shared_team_are_refused(self) -> None:
+        d = self.completed()
+        d["treasury_multisig"]["public_keys_secp256k1_hex"][0] = sorted(apply_emission_genesis.TESTNET_MULTISIG_PUBKEYS)[0]
+        self.assertTrue(any("testnet signer" in e for e in apply_emission_genesis.mainnet_blockers(d)))
+        d = self.completed()
+        d["genesis_extra_accounts"]["accounts"] = [{"address": "people1x", "amount_appl": "1"}]
+        self.assertTrue(any("genesis_extra_accounts" in e for e in apply_emission_genesis.mainnet_blockers(d)))
+        d = self.completed()
+        d["buckets"]["team"]["account"] = d["treasury_multisig"]["address"]
+        self.assertTrue(any("team bucket" in e for e in apply_emission_genesis.mainnet_blockers(d)))
+        d = self.completed()
+        d["treasury_multisig"]["threshold"] = 1
+        self.assertTrue(any("threshold" in e for e in apply_emission_genesis.mainnet_blockers(d)))
+
+    def test_chain_ids_never_cross(self) -> None:
+        check = apply_emission_genesis.check_chain_matches
+        self.assertTrue(check({"chain_id": "people_97400-1"}, self.load(self.TESTNET)))
+        self.assertTrue(check({"chain_id": "people_97401-1"}, self.load(self.MAINNET)))
+        self.assertEqual(check({"chain_id": "people_97400-1"}, self.load(self.MAINNET)), [])
+        self.assertEqual(check({"chain_id": "people_97401-1"}, self.load(self.TESTNET)), [])
+
+
 if __name__ == "__main__":
     unittest.main()

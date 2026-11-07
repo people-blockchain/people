@@ -80,6 +80,13 @@ assert_patched 'RouteModelAFees' "$CACHE/evmd/app.go"
 assert_patched 'StreamValidatorPool' "$CACHE/evmd/app.go"
 assert_patched 'evmd/upgrades' "$CACHE/evmd/upgrades.go"
 assert_patched 'RegisterUpgradeHandler' "$CACHE/evmd/upgrades.go"
+assert_patched 'EVMChainIDFor(chainID)' "$CACHE/evmd/cmd/evmd/cmd/root.go"
+assert_patched 'EVMChainIDFor(initClientCtx.ChainID)' "$CACHE/evmd/cmd/evmd/cmd/root.go"
+assert_patched 'EVMChainIDFor(chainID)' "$CACHE/evmd/cmd/evmd/cmd/creator.go"
+# Only the throwaway CLI tempApp (autocli wiring, never runs a chain) may keep the fixed id.
+if [[ "$(grep -c 'evmdconfig\.EVMChainID[,)]' "$CACHE/evmd/cmd/evmd/cmd/root.go")" != 1 ]]; then
+  echo "root.go still passes the fixed testnet EVMChainID to a node app"; exit 1
+fi
 
 export LEDGER_ENABLED=false
 make build

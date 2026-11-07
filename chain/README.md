@@ -79,3 +79,5 @@ See `docker-compose.yml` for node1/node2 host port offsets.
 Migration overview: `docs/COSMOS-EVM-MIGRATION.md`.
 
 Testnet hard reset (approved emission genesis): `RESET_TESTNET.md`.
+
+Mainnet (`people_97400-1`, EVM 97400): genesis ceremony scripts in `scripts/mainnet/`, runbook `docs/MAINNET-LAUNCH.md`. The same `peopled` binary serves both networks; the EVM chain id follows the genesis chain-id.

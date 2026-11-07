@@ -4,13 +4,31 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import sys
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ALLOCATION_PATH = ROOT / "emission" / "allocation.json"
+
+
+def allocation_path() -> Path:
+    """PEOPLE_ALLOCATION selects the allocation file (default: testnet emission/allocation.json;
+    mainnet uses emission/allocation-mainnet.json). Relative paths resolve against chain/."""
+    raw = os.environ.get("PEOPLE_ALLOCATION", "emission/allocation.json")
+    path = Path(raw)
+    return path if path.is_absolute() else ROOT / path
+
+
+ALLOCATION_PATH = allocation_path()
+MAINNET_CHAIN_ID = "people_97400-1"
+# Testnet signer keys (they sit in the testnet VPS keyring). A mainnet genesis must never use them.
+TESTNET_MULTISIG_PUBKEYS = {
+    "0211f37d541a43e7c6afbfd00e163130563719d817522db5218cc95318e608304b",
+    "034388487f8f6e1f66eca64cb0ec1f9ef5755d2816d9ed8d22cd5da756e00e6e6f",
+    "02895b4bc696fc47b4133e1cf389cc625dc963ecd0258366799223f2307f38cbe9",
+}
 DENOM = "appl"
 DISPLAY = "PPL"
 SECONDS_PER_YEAR = 31_536_000
@@ -19,6 +37,53 @@ SECONDS_PER_MONTH = SECONDS_PER_YEAR // 12
 
 def load_allocation() -> dict:
     return json.loads(ALLOCATION_PATH.read_text())
+
+
+def mainnet_blockers(cfg: dict) -> list[str]:
+    """Everything that must be real before a mainnet genesis exists. Empty list = ready.
+    Applies only to an allocation whose chain_id is mainnet; testnet allocations return []."""
+    if cfg.get("chain_id") != MAINNET_CHAIN_ID:
+        return []
+    errors: list[str] = []
+    ms = cfg["treasury_multisig"]
+    keys = [k.lower() for k in ms.get("public_keys_secp256k1_hex", [])]
+    if ms.get("placeholder"):
+        errors.append("treasury_multisig.placeholder is true")
+    if not ms.get("address", "").startswith("people1"):
+        errors.append("treasury_multisig.address is not set")
+    if len(keys) != 3 or len(set(keys)) != 3:
+        errors.append("treasury_multisig needs exactly 3 distinct public keys")
+    if ms.get("threshold") != 2:
+        errors.append("treasury_multisig.threshold must be 2")
+    for k in keys:
+        if len(k) != 66 or k[:2] not in ("02", "03") or any(c not in "0123456789abcdef" for c in k):
+            errors.append(f"treasury_multisig key {k[:12]}... is not a 33-byte compressed secp256k1 key")
+    if TESTNET_MULTISIG_PUBKEYS & set(keys):
+        errors.append("treasury_multisig reuses a testnet signer key")
+    if ms.get("public_key_type") != "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey":
+        errors.append("treasury_multisig.public_key_type must be ethsecp256k1")
+    for name, bucket in cfg["buckets"].items():
+        if bucket.get("owner_placeholder"):
+            errors.append(f"bucket {name}: owner_placeholder is still true")
+        if not str(bucket.get("account", "")).startswith("people1"):
+            errors.append(f"bucket {name}: account is not set")
+        if bucket.get("account_kind", "").startswith("multisig") and bucket.get("account") != ms.get("address"):
+            errors.append(f"bucket {name}: multisig bucket must use treasury_multisig.address")
+    if ms.get("address") and cfg["buckets"]["team"].get("account") == ms.get("address"):
+        errors.append("team bucket must not share the treasury multisig")
+    if (cfg.get("genesis_extra_accounts") or {}).get("accounts"):
+        errors.append("mainnet must not carry genesis_extra_accounts (faucet/deployers)")
+    return errors
+
+
+def check_chain_matches(genesis: dict, cfg: dict) -> list[str]:
+    """A testnet allocation (faucet, test keys) must never build a mainnet genesis, and the
+    mainnet allocation must never build a genesis for another chain."""
+    gid = genesis.get("chain_id")
+    want = cfg.get("chain_id")
+    if (gid == MAINNET_CHAIN_ID or want == MAINNET_CHAIN_ID) and gid != want:
+        return [f"genesis chain_id {gid!r} does not match allocation chain_id {want!r}"]
+    return []
 
 
 def merge_coins(coins: list[dict]) -> list[dict]:
@@ -210,6 +275,13 @@ def apply_emission(path: Path, cfg: dict) -> None:
         print(f"{path}: genesis already patched, refusing to patch again", file=sys.stderr)
         sys.exit(1)
 
+    refusals = check_chain_matches(data, cfg) + mainnet_blockers(cfg)
+    if refusals:
+        print(f"{path}: refusing to build this genesis:", file=sys.stderr)
+        for r in refusals:
+            print(f"  - {r}", file=sys.stderr)
+        sys.exit(1)
+
     start_time = parse_genesis_time(data)
 
     validator_funding = validator_funding_addresses(data)
@@ -303,10 +375,12 @@ def apply_emission(path: Path, cfg: dict) -> None:
     GROWTH_MODULE = cfg["fee_sink_modules"]["growth"]
     GROWTH_ADDR = "people1wnw7865hmkjyghnymknyqy3xz962cnt5qtcmds"
 
-    module_rows: list[tuple[str, str]] = [
-        (buckets["sale"]["module_name"], buckets["sale"]["account"]),
-        (GROWTH_MODULE, GROWTH_ADDR),
-    ]
+    # Testnet: the sale bucket is the keyless people_sale module account. Mainnet: it sits on
+    # the 2-of-3 treasury multisig, spendable, so the multisig can fund PplSaleDistributor.
+    sale_on_multisig = buckets["sale"].get("account_kind") == "multisig_2of3"
+    module_rows: list[tuple[str, str]] = [(GROWTH_MODULE, GROWTH_ADDR)]
+    if not sale_on_multisig:
+        module_rows.insert(0, (buckets["sale"]["module_name"], buckets["sale"]["account"]))
 
     for name, addr in module_rows:
         if addr not in existing_addrs:
@@ -322,6 +396,8 @@ def apply_emission(path: Path, cfg: dict) -> None:
     multisig_addr = multisig_cfg["address"]
     treasury = buckets["treasury"]
     multisig_total = int(treasury["amount_appl"]) + int(buckets["liquidity"]["amount_appl"])
+    if sale_on_multisig:
+        multisig_total += int(buckets["sale"]["amount_appl"])
     treasury_locked, treasury_start, treasury_end = cliff_linear_schedule(treasury, start_time)
     if multisig_addr not in existing_addrs:
         new_accounts.append(
@@ -406,7 +482,8 @@ def apply_emission(path: Path, cfg: dict) -> None:
     add_balance(val["account"], val["amount_appl"])
 
     # sale module balance (growth fee sink starts at 0; treasury/liquidity/team handled above)
-    add_balance(buckets["sale"]["account"], buckets["sale"]["amount_appl"])
+    if not sale_on_multisig:
+        add_balance(buckets["sale"]["account"], buckets["sale"]["amount_appl"])
 
     # gentx signers / validator operators (liquid stake + fees)
     for addr in sorted(validator_funding):

@@ -19,7 +19,7 @@ Legacy `people-node` is archive-only for the public network. Production site and
 | **3** | On-chain fee split: validators 30% / community 25% / treasury 20% / liquidity 10% / growth 15% / burn 0% | **TBD** (economics founder-gated) |
 | **4** | Genesis snapshot: PPL balances, tokens, pools, NFTs at same `0x` addresses | **TBD** |
 | **5** | Website → standard EVM JSON-RPC (replace custom REST paths) | **IMPLEMENTED** (site uses `/api/evm/rpc` → node JSON-RPC) |
-| **6** | Public testnet, external audit, mainnet after owner OK | **Public testnet LIVE**; external audit + mainnet still TBD |
+| **6** | Public testnet, external audit, mainnet after owner OK | **Public testnet LIVE**; mainnet `people_97400-1` / EVM **97400** tooling ready and rehearsed, launch pending owner inputs (see `docs/MAINNET-LAUNCH.md`) |
 
 ---
 
