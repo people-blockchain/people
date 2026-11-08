@@ -14,7 +14,7 @@ import {
 
 /**
  * GET/POST /api/telegram/support-ops — Bearer-protected ticket triage for PEOPLE Support
- * (OpenMausBot) without the Mac Helper UI or owner Telegram session. Fail closed when
+ * (Support Bot) without the Mac Helper UI or owner Telegram session. Fail closed when
  * TELEGRAM_SUPPORT_OPS_SECRET is unset.
  */
 export const dynamic = "force-dynamic";

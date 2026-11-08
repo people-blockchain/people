@@ -5,7 +5,7 @@ import { test, expect } from "@playwright/test";
 const BASE = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000";
 const OUT =
   process.env.PARTNER_ADMIN_SCREENSHOT_DIR ??
-  "/Users/aego/mausbot-brain/docs/screenshots/partner-admin";
+  path.resolve(process.cwd(), "docs/screenshots/partner-admin");
 
 test.beforeAll(async () => {
   await mkdir(OUT, { recursive: true });

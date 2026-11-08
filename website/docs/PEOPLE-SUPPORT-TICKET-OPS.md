@@ -1,6 +1,6 @@
 # PEOPLE Support ticket ops (HTTP API)
 
-OpenMausBot / PEOPLE Support can list open tickets, reply to reporters, and change status on
+Support Agent / PEOPLE Support can list open tickets, reply to reporters, and change status on
 @PeopleVerifyBot **without** the Mac Telegram Helper UI or an owner DM session. Access is
 Bearer-protected via `TELEGRAM_SUPPORT_OPS_SECRET`.
 
@@ -13,17 +13,17 @@ Base URL (production):
 | Variable | Where | Purpose |
 |----------|--------|---------|
 | `TELEGRAM_SUPPORT_OPS_SECRET` | Vercel (website project, Sensitive) | Bearer token for this API |
-| `PEOPLE_SUPPORT_OPS_URL` | OpenMausBot / local CLI | Override API URL (optional) |
-| `TELEGRAM_SUPPORT_OPS_SECRET` | OpenMausBot / local CLI | Same secret as Vercel (never log it) |
+| `PEOPLE_SUPPORT_OPS_URL` | Support Agent / local CLI | Override API URL (optional) |
+| `TELEGRAM_SUPPORT_OPS_SECRET` | Support Agent / local CLI | Same secret as Vercel (never log it) |
 | `PEOPLE_SUPPORT_TICKET_WEBHOOK_URL` | Vercel (website, optional) | POST `ticket_created` on new intake (no PII) |
 
-### One-time production setup (Alex)
+### One-time production setup
 
 1. Generate a long random secret (e.g. `openssl rand -hex 32`).
 2. In the **website** Vercel project → Settings → Environment Variables, add
    `TELEGRAM_SUPPORT_OPS_SECRET` (Sensitive) for Production (and Preview if needed).
 3. Redeploy the website.
-4. Configure the same value in OpenMausBot’s env (not in git).
+4. Configure the same value in the support agent’s env (not in git).
 
 ## List open tickets
 
