@@ -258,7 +258,7 @@ The project is being developed in stages:
 ## Project Structure
 
 ```text
-Peoples-Blockchain/
+people/
 │
 ├── core/              # Blockchain core
 ├── protocol/          # Protocol rules
