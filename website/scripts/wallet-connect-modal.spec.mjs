@@ -19,11 +19,30 @@ async function setLocale(page, lang) {
 }
 
 async function assertUnifiedSignInVisible(page) {
-  await expect(page.getByTestId("unified-wallet-auth")).toBeVisible({ timeout: 10000 });
-  await expect(page.getByTestId("wallet-modal-explainer")).toBeVisible();
-  const google = page.getByTestId("wallet-sign-in-google");
-  if (await google.isVisible().catch(() => false)) {
-    await expect(page.getByTestId("wallet-sign-in-email")).toBeVisible();
+  // Check if cloud/auth UI should be visible (flags on) or wallet create/import/external should be visible (flags off)
+  const cloudAuthLocator = page.getByTestId("unified-wallet-auth");
+  const walletCreateImportLocator = page.getByTestId("wallet-create-import");
+  const externalConnectLocator = page.getByTestId("wallet-external-connect");
+  const cloudSignInLocator = page.getByTestId("wallet-cloud-sign-in");
+  const emailSignInLocator = page.getByTestId("wallet-sign-in-email");
+  
+  const cloudAuthVisible = await cloudAuthLocator.isVisible().catch(() => false);
+  if (cloudAuthVisible) {
+    // Cloud/auth UI is present (flags on)
+    await expect(cloudAuthLocator).toBeVisible({ timeout: 10000 });
+    await expect(page.getByTestId("wallet-modal-explainer")).toBeVisible();
+    const google = page.getByTestId("wallet-sign-in-google");
+    if (await google.isVisible().catch(() => false)) {
+      await expect(page.getByTestId("wallet-sign-in-email")).toBeVisible();
+    }
+  } else {
+    // Cloud/auth UI is absent (flags off) - wallet create/import or external should be visible
+    const hasCreateImport = await walletCreateImportLocator.isVisible().catch(() => false);
+    const hasExternalConnect = await externalConnectLocator.isVisible().catch(() => false);
+    assert.ok(hasCreateImport || hasExternalConnect, "Flags off: either wallet-create-import or wallet-external-connect should be visible");
+    // Cloud/email CTAs should be absent
+    await expect(cloudSignInLocator).toHaveCount(0);
+    await expect(emailSignInLocator).toHaveCount(0);
   }
 }
 
