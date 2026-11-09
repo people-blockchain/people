@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { homePublic } from "@/lib/home-public-content";
 import { foundersPublic } from "@/lib/founders-public-content";
 import { formatFounderDisplayNumber } from "@/lib/founders/format-founder-number";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 function fill(template: string, vars: Record<string, string | number>) {
   return template.replace(/\{\{(\w+)\}\}/g, (_, key: string) => String(vars[key] ?? ""));
@@ -16,9 +17,11 @@ export function HomeFoundersTeaser() {
   const { lang } = useLanguage();
   const teaser = homePublic[lang].foundersTeaser;
   const founderCopy = foundersPublic[lang];
+  const statsPublic = showCommunityStats();
   const [verifiedCount, setVerifiedCount] = useState<number | null>(null);
 
   const loadStats = useCallback(async () => {
+    if (!statsPublic) return;
     try {
       const res = await fetch("/api/founders/stats", { cache: "no-store" });
       if (!res.ok) return;
@@ -27,21 +30,25 @@ export function HomeFoundersTeaser() {
     } catch {
       /* keep fallback title */
     }
-  }, []);
+  }, [statsPublic]);
 
   useEffect(() => {
+    if (!statsPublic) {
+      setVerifiedCount(null);
+      return;
+    }
     void loadStats();
-  }, [loadStats]);
+  }, [loadStats, statsPublic]);
 
   const title = useMemo(() => {
     if (!teaser) return "";
-    if (verifiedCount !== null && teaser.titleWithNumber) {
+    if (statsPublic && verifiedCount !== null && teaser.titleWithNumber) {
       return fill(teaser.titleWithNumber, {
         n: formatFounderDisplayNumber(verifiedCount + 1, lang),
       });
     }
     return teaser.titleFallback ?? founderCopy.heroTitleFallback;
-  }, [teaser, verifiedCount, lang, founderCopy.heroTitleFallback]);
+  }, [teaser, statsPublic, verifiedCount, lang, founderCopy.heroTitleFallback]);
 
   if (!teaser) return null;
 

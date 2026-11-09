@@ -23,7 +23,7 @@ export const id: LocaleContent = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Million Founders",
+        "label": "Pendiri & hadiah",
         "href": "/founders"
       },
       {

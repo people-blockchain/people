@@ -21,7 +21,7 @@ export const en = {
         "href": "/docs#product-phases"
       },
       {
-        "label": "Million Founders",
+        "label": "Founders & Bounty",
         "href": "/founders"
       },
       {

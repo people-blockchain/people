@@ -8,6 +8,16 @@ import { shortWalletAddress } from "@/lib/partner/bind-errors";
 import { SignOutButton } from "@/components/partner/SignOutButton";
 import { PartnerWalletSummary } from "@/components/partner/PartnerWalletSummary";
 import { PartnerWalletAutoRefresh } from "@/components/partner/PartnerWalletAutoRefresh";
+import { PartnerLinkGenerator } from "@/components/partner/PartnerLinkGenerator";
+import { PartnerMetricsGrid } from "@/components/partner/PartnerMetricsGrid";
+import { PartnerTierProgress } from "@/components/partner/PartnerTierProgress";
+import { PartnerPayoutHistory } from "@/components/partner/PartnerPayoutHistory";
+import { computeKolTierProgress, type KolTierProgress } from "@/lib/partner/commission";
+import type {
+  CabinetCommissionItem,
+  CabinetMetrics,
+  CabinetPayoutItem,
+} from "@/lib/partner/service";
 import { formatPplAmount } from "@/lib/partner/wallet-summary";
 
 type Line = {
@@ -17,12 +27,39 @@ type Line = {
   walletAddress: string | null;
 };
 
+const DEFAULT_METRICS: CabinetMetrics = {
+  clicks: 0,
+  signUps: 0,
+  buyers: 0,
+  volumeUsd: "$0.00",
+  volumeUsdMicro: "0",
+  earnedUsdc: {
+    pendingMicro: "0",
+    approvedMicro: "0",
+    paidMicro: "0",
+    voidMicro: "0",
+    totalEarnedMicro: "0",
+  },
+  earnedPpl: {
+    pendingMicro: "0",
+    approvedMicro: "0",
+    paidMicro: "0",
+    voidMicro: "0",
+    totalEarnedMicro: "0",
+  },
+};
+
 export function PartnerCabinet({
   email,
   referralCode,
+  kolCode: initialKolCode = null,
   referralLink,
   referredBy,
   walletAddress,
+  metrics: initialMetrics,
+  tier: initialTier,
+  commissions: initialCommissions = [],
+  payouts: initialPayouts = [],
   l1,
   l2,
   protocolStatus,
@@ -33,9 +70,14 @@ export function PartnerCabinet({
 }: {
   email: string | null;
   referralCode: string;
+  kolCode?: string | null;
   referralLink: string;
   referredBy: { referralCode: string; email: string | null } | null;
   walletAddress: string | null;
+  metrics?: CabinetMetrics;
+  tier?: KolTierProgress;
+  commissions?: CabinetCommissionItem[];
+  payouts?: CabinetPayoutItem[];
   l1: Line[];
   l2: Line[];
   protocolStatus: "connected" | "disconnected";
@@ -46,23 +88,117 @@ export function PartnerCabinet({
 }) {
   const { lang } = useLanguage();
   const t = partnerCopy[lang];
-  const [copied, setCopied] = useState(false);
+
+  const baseOrigin = referralLink.split("/?ref=")[0] || "https://www.peopleblockchain.network";
+  const [kolCode, setKolCode] = useState<string | null>(initialKolCode);
+  const [metrics, setMetrics] = useState<CabinetMetrics>(
+    initialMetrics ?? { ...DEFAULT_METRICS, signUps: l1.length },
+  );
+  const [tier, setTier] = useState<KolTierProgress>(
+    initialTier ?? computeKolTierProgress(BigInt(0)),
+  );
+  const [commissions, setCommissions] = useState<CabinetCommissionItem[]>(initialCommissions);
+  const [payouts, setPayouts] = useState<CabinetPayoutItem[]>(initialPayouts);
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+
+  const handleRefreshCabinet = async () => {
+    setRefreshing(true);
+    setRefreshError(null);
+    try {
+      const res = await fetch("/api/partner/cabinet", { cache: "no-store" });
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        cabinet?: {
+          kolCode?: string | null;
+          metrics?: CabinetMetrics;
+          tier?: KolTierProgress;
+          commissions?: CabinetCommissionItem[];
+          payouts?: CabinetPayoutItem[];
+        };
+      } | null;
+      if (!res.ok || !data?.ok || !data.cabinet) {
+        setRefreshError(t.refreshError);
+        return;
+      }
+      if (data.cabinet.kolCode !== undefined) setKolCode(data.cabinet.kolCode);
+      if (data.cabinet.metrics) setMetrics(data.cabinet.metrics);
+      if (data.cabinet.tier) setTier(data.cabinet.tier);
+      if (data.cabinet.commissions) setCommissions(data.cabinet.commissions);
+      if (data.cabinet.payouts) setPayouts(data.cabinet.payouts);
+    } catch {
+      setRefreshError(t.refreshError);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-10 sm:px-6">
       <PartnerWalletAutoRefresh walletAddress={walletAddress} />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mono-label text-warm">Partner</p>
+          <p className="mono-label text-warm">{t.partnerBadge}</p>
           <h1 className="mt-2 text-h2 font-bold text-ink">{t.cabinetTitle}</h1>
           <p className="mt-2 max-w-2xl text-sm text-ink-2">{t.growthNote}</p>
         </div>
-        <SignOutButton />
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleRefreshCabinet}
+            disabled={refreshing}
+            aria-busy={refreshing}
+            className="rounded-xl border border-line bg-surface-2 px-3.5 py-2 text-xs font-semibold text-ink transition hover:border-brand disabled:opacity-50"
+          >
+            {refreshing ? t.refreshingButton : t.refreshButton}
+          </button>
+          <SignOutButton />
+        </div>
       </header>
+
+      <p
+        role="status"
+        className="rounded-xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-950"
+      >
+        {t.preSaleBanner}
+      </p>
+
+      {refreshError && (
+        <div
+          role="alert"
+          className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-xs text-red-800"
+        >
+          <span>{refreshError}</span>
+          <button
+            type="button"
+            onClick={handleRefreshCabinet}
+            className="font-semibold underline"
+          >
+            {t.tryAgain}
+          </button>
+        </div>
+      )}
+
+      <p className="rounded-xl border border-line bg-surface-2 px-4 py-3 text-xs leading-relaxed text-ink-2">
+        {t.settlementBanner}
+      </p>
+
+      <PartnerLinkGenerator
+        referralCode={referralCode}
+        initialKolCode={kolCode}
+        referralLink={referralLink}
+        origin={baseOrigin}
+      />
+
+      <PartnerMetricsGrid metrics={metrics} />
+
+      <PartnerTierProgress tier={tier} />
+
+      <PartnerPayoutHistory commissions={commissions} payouts={payouts} />
 
       <section className="surface-elevated rounded-2xl p-5">
         <h2 className="text-base font-bold text-ink">{t.profile}</h2>
-        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+        <dl className="mt-4 grid gap-3 sm:grid-cols-3">
           <div>
             <dt className="text-xs uppercase tracking-wide text-ink-3">{t.email}</dt>
             <dd className="mt-1 font-mono text-sm text-ink">{email ?? t.none}</dd>
@@ -70,22 +206,6 @@ export function PartnerCabinet({
           <div>
             <dt className="text-xs uppercase tracking-wide text-ink-3">{t.yourCode}</dt>
             <dd className="mt-1 font-mono text-sm text-ink">{referralCode}</dd>
-          </div>
-          <div className="sm:col-span-2">
-            <dt className="text-xs uppercase tracking-wide text-ink-3">{t.yourLink}</dt>
-            <dd className="mt-1 flex flex-wrap items-center gap-2">
-              <code className="break-all text-sm text-ink-2">{referralLink}</code>
-              <button
-                type="button"
-                className="rounded-lg border border-line px-3 py-1 text-xs font-semibold text-brand"
-                onClick={async () => {
-                  await navigator.clipboard.writeText(referralLink);
-                  setCopied(true);
-                }}
-              >
-                {copied ? t.copied : t.copy}
-              </button>
-            </dd>
           </div>
           <div>
             <dt className="text-xs uppercase tracking-wide text-ink-3">{t.referredBy}</dt>
@@ -145,7 +265,13 @@ export function PartnerCabinet({
             {claims.map((claim) => (
               <li key={claim.key} className="rounded-xl border border-line px-3 py-2 text-sm">
                 <span className="font-mono text-ink">{claim.amount} PPL</span>
-                <span className="ml-2 text-ink-3">{claim.status}</span>
+                <span className="ml-2 text-ink-3">
+                  {claim.status === "claimable"
+                    ? t.growthClaimable
+                    : claim.status === "claimed" || claim.status === "settled"
+                      ? t.growthClaimed
+                      : claim.status}
+                </span>
               </li>
             ))}
           </ul>

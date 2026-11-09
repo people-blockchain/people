@@ -16,6 +16,8 @@ import { HumanPassportFlow } from "./HumanPassportFlow";
 
 export type ReferralStatus = {
   referralWallet: string;
+  /** Short code for the one invite link (`/?ref=<code>`). */
+  referralCode?: string | null;
   maxActiveInvitees: number;
   ambassador: boolean;
   invitees: {
@@ -109,7 +111,7 @@ export function FoundersPersonal({
 
   const link =
     referral && typeof window !== "undefined"
-      ? founderShareUrl(window.location.origin, referral.referralWallet)
+      ? founderShareUrl(window.location.origin, referral.referralWallet, referral.referralCode)
       : "";
   const shareText = founderShareText(lang, card.founderNumber);
   const fmt = (n: number) => n.toLocaleString(lang, { maximumFractionDigits: 2 });

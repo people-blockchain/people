@@ -5,7 +5,7 @@ Supersedes the sale part of `docs/PPL-CURVE-HUB.md` once v2 ships. v1 hub `0x843
 (Base mainnet) is **deprecated and must never be opened** (decision 8).
 
 Source of truth for numbers: `website/src/lib/sale/config.ts` (`CURVE`, `SALE`, `SELL_BACK`) and v1
-`contracts/src/sale/PplCurveHub.sol`. Every number below is copied from there or from Alex's approved decisions;
+`contracts/src/sale/PplCurveHub.sol`. Every number below is copied from there or from approved governance decisions;
 v2 adds no new economic constants.
 
 ## 1. Approved decisions (input)
@@ -198,7 +198,7 @@ rolling-24-hour gross, so one large sale cannot dodge the high fee and a sale fu
 
 ### 5.3 verify (D4, D6, Q4)
 Backend (website) signs EIP-712 `Verification(address account, bytes32 personId, uint256 nonce, uint256 deadline)`
-with the `verifier` key, reusing the site's existing verification flow. Q4 (Alex, 2026-10-27):
+with the `verifier` key, reusing the site's existing verification flow. Q4 (Governance decision, 2026-10-27):
 - signer key lives in a cloud KMS, sign-only, non-exportable; rotation/revocation only by the owner (Safe) via
   `queueSetVerifier` then `executeSetVerifier` after `ADMIN_TIMELOCK` (48 hours); `address(0)` revokes and all `verify` calls fail. `queueSetReturnVerifier` uses the same delay. There is no immediate setter;
 - admission requires Human Passport (score threshold) **or** World ID; Telegram alone is not enough;
@@ -211,7 +211,7 @@ person ↔ one address, permanent until owner `unbind` (bumps `bindNonce`, emits
 move lots or `pplOf`.
 
 ### 5.4 Reserve exit: graduation or PEOPLE launch, timelocked (Q1)
-Q1 (Alex, 2026-10-27): the reserve can **never** be withdrawn to the Safe/treasury or the team. Its only exit
+Q1 (Governance decision, 2026-10-27): the reserve can **never** be withdrawn to the Safe/treasury or the team. Its only exit
 (besides sell-backs) is PPL liquidity at graduation or at the PEOPLE network launch, through a timelock with an
 advance public notice.
 
@@ -223,7 +223,7 @@ working during the notice (unless graduated) so holders who disagree can exit wi
 `liquidityReleaseExecutableAt()` has passed (30-day notice plus any time paused after announce) and moves the full `reserveUsd6` to `liquidityReceiver`; terminal
 (`liquidityReleased`), sell-back then closes. There is no other owner path that moves reserve USDC.
 
-Options for Alex (one constant / one constructor arg to change):
+Configurable options (one constant / one constructor arg to change):
 - **Timelock length:** (A, implemented) **30 days** — equals the sell-back hold, so any lot bought before the
   notice becomes sellable before execution; (B) 14 days — faster launch, but lots bought in the last 2 weeks
   before the notice cannot exit.
@@ -256,7 +256,7 @@ while `reserveUsd6` covers the payout and is **never closed by time**. `unsoldPp
 end is the timelocked liquidity release at the PEOPLE network launch (§5.4).
 
 ### 5.5a Delivery freeze (Q2)
-Q2 (Alex): when PPL are delivered on the PEOPLE network, the buyer's Base record is frozen so it cannot be sold
+Q2 (Governance decision): when PPL are delivered on the PEOPLE network, the buyer's Base record is frozen so it cannot be sold
 back (no double spend). `markDelivered(address[] holders)` (owner) sets `delivered[h] = true` and emits
 `Delivered(h, pplOf[h])`; frozen addresses cannot `sellBack` and cannot receive new buys. `pplOf`/lots stay as
 an immutable record (invariant 3 unchanged). Allowed only once the sale is over (`graduated`) or the launch release
@@ -390,7 +390,7 @@ ABI differs from v1 (`buyWith(token,…)` → `buy(…)`); website must use a v2
 - CI: existing `contracts-ci.yml` picks up new tests; OZ submodule must be initialized locally (`contracts/lib` empty now).
 - Website (separate branch/PR): see §12.
 
-## 12. Site (/buy v2) — payment path and UX (addenda, agreed by Alex + ElonBot)
+## 12. Site (/buy v2) — payment path and UX (addenda)
 
 ### 12.1 USDT → USDC (off-contract, D7)
 - Hub accepts **USDC only** and never swaps. `/buy` swaps USDT→USDC on Base via LI.FI, then calls `buy`.
@@ -435,7 +435,7 @@ v2 ABI + address in sale config, v1 marked deprecated; copy in 12 locales: D1 re
 (B:247, LP:181/224), stale texts (180 days, "sell back at any time", $0.25 ceiling, Russian text in en T:102-103);
 verifier-signing API route (§5.3).
 
-## 13. Questions for Alex — answered 2026-10-27
+## 13. Core Protocol Decisions — answered 2026-10-27
 
 - **Q1** Sell-back never closes by time; reserve never to Safe/team; exit only to liquidity via timelock +
   public notice → §5.4 (options for timelock length and destination listed there; 30 days + immutable escrow

@@ -1,5 +1,6 @@
 "use client";
 
+import { partnerSharePath } from "@/lib/partner/referral";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowRight, Bug, Check, Gift, Trophy, Users } from "lucide-react";
@@ -28,6 +29,7 @@ import {
 } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { FoundersApp } from "@/components/founders/FoundersApp";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
   signedIn: boolean;
@@ -266,10 +268,12 @@ export function BountyTasks() {
 export function BountyCommunity() {
   const { lang } = useLanguage();
   const t = bountyCopy(lang);
+  const statsPublic = showCommunityStats();
   const [payload, setPayload] = useState<CommunityPayload | null>(null);
   const [goal, setGoal] = useState<number | null>(null);
 
   useEffect(() => {
+    if (!statsPublic) return;
     let alive = true;
     const load = async () => {
       const [community, counter] = await Promise.all([
@@ -291,7 +295,34 @@ export function BountyCommunity() {
       alive = false;
       window.clearInterval(id);
     };
-  }, []);
+  }, [statsPublic]);
+
+  const staticGoal = 1_000_000;
+
+  if (!statsPublic) {
+    return (
+      <WarmSection
+        id="bounty-community"
+        tone="canvas-2"
+        eyebrow={t.stats.eyebrow}
+        title={t.stats.title}
+        lead={t.stats.lead}
+        testId="bounty-community"
+      >
+        <Reveal>
+          <div className="mt-8 max-w-sm">
+            <div className="rounded-3xl border border-line bg-surface p-5 shadow-[var(--elev-1)]">
+              <Gift className="h-5 w-5 text-value" aria-hidden="true" />
+              <p className="mt-3 font-mono text-3xl font-bold tabular-nums text-ink">
+                {staticGoal.toLocaleString(lang)}
+              </p>
+              <p className="mt-1 text-sm text-ink-2">{t.stats.goal}</p>
+            </div>
+          </div>
+        </Reveal>
+      </WarmSection>
+    );
+  }
 
   const counters = payload?.counters ?? null;
   const rows = payload?.ambassadors ?? [];
@@ -398,9 +429,14 @@ export function BountyReferral() {
             credentials: "include",
           });
           if (referralRes.ok) {
-            const referral = (await referralRes.json()) as { referralWallet?: string };
-            if (alive && referral.referralWallet) {
-              setLink(`${window.location.origin}/bounty?ref=${referral.referralWallet}`);
+            const referral = (await referralRes.json()) as { referralWallet?: string; referralCode?: string | null };
+            if (alive && (referral.referralCode || referral.referralWallet)) {
+              // One invite link for every program: the short code; the wallet link only as a fallback.
+              setLink(
+                referral.referralCode
+                  ? `${window.location.origin}${partnerSharePath(referral.referralCode)}`
+                  : `${window.location.origin}/bounty?ref=${referral.referralWallet}`,
+              );
             }
           }
         }

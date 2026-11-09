@@ -17,6 +17,7 @@ import { HomeWalletCta } from "@/components/wallet/HomeWalletCta";
 import { PersonAvatar, WARM_HERO_BTN } from "@/components/warm/warm-ui";
 import Link from "next/link";
 import { HeroTokenCard } from "./HeroTokenCard";
+import { communityShareHeadline } from "@/lib/selling-economics";
 
 /** main lines + accent lines; keep in sync with the copy module. */
 const MAX_HEADLINE_LINES = 3;
@@ -31,6 +32,7 @@ const MAX_HEADLINE_LINES = 3;
 export function HomeWarmHero() {
   const { lang } = useLanguage();
   const t = homeWarmCopy(lang).hero;
+  const shareHeadline = communityShareHeadline(lang);
   const bounty = bountyCopy(lang);
 
   const mainLines = t.headlineMainLines;
@@ -173,7 +175,7 @@ export function HomeWarmHero() {
 
           {/* Token card. In the flow on mobile (stacked under the copy), beside it on desktop. */}
           <Reveal delay={80} className="flex min-w-0 flex-col items-center gap-5 lg:items-end">
-            <HeroTokenCard t={t} />
+            <HeroTokenCard t={t} shareHeadline={shareHeadline} />
 
             <ol className="w-full max-w-[340px] space-y-2" data-testid="home-hero-beats">
               {t.stages.map((beat, index) => (

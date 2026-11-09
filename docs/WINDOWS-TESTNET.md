@@ -4,7 +4,7 @@
 
 Ноутбук — **оператор локальных нод**, а не «вся сеть» и не mainnet. Faucet работает **только на node-1**.
 
-Нужно: доступ в GitHub-репозиторий `rednaxelavoroge/Peoples-Blockchain` (без доступа `git clone` не сработает) и несколько гигабайт RAM (Docker Desktop + две ноды + web; 4–8 ГБ для Docker спокойнее, чем дефолтные 2 ГБ).
+Нужно: доступ в GitHub-репозиторий `people-blockchain/people` (без доступа `git clone` не сработает) и несколько гигабайт RAM (Docker Desktop + две ноды + web; 4–8 ГБ для Docker спокойнее, чем дефолтные 2 ГБ).
 
 ---
 
@@ -16,13 +16,13 @@
 
 Поставьте также [Git for Windows](https://git-scm.com/download/win), если ещё нет `git`.
 
-## 2. Клон приватного репозитория
+## 2. Клон репозитория
 
-В PowerShell (войдите в GitHub: браузерный логин, GitHub Desktop или Personal Access Token; репозиторий **private**):
+В PowerShell (войдите в GitHub: браузерный логин, GitHub Desktop или Personal Access Token):
 
 ```powershell
-git clone https://github.com/rednaxelavoroge/Peoples-Blockchain.git
-cd Peoples-Blockchain\people-node
+git clone https://github.com/people-blockchain/people.git
+cd people\people-node
 ```
 
 Дальше все команды — из каталога `people-node`. Compose-файл: `docker-compose.yml` (не `docker-compose.prod.yml`).

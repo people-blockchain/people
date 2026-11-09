@@ -54,22 +54,22 @@ export const SITE_TITLE = homeTitle(NETWORK_NAME_EN);
 
 /** Meta description used by the root layout. */
 export const SITE_DESCRIPTION =
-  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of its supply goes to your people, not to whales. Public testnet, fees in PPL.";
+  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of every new token goes to its community pool at launch, guaranteed (up to 27% in total). Public testnet, fees in PPL.";
 
 /** Open Graph / Twitter title shared by routes that do not override it. */
 export const SITE_OG_TITLE = SITE_TITLE;
 
 /** Open Graph / Twitter description shared by routes that do not override it. */
 export const SITE_OG_DESCRIPTION =
-  "Launch a token for your community on PEOPLE. 10% of every new token goes to the community pool, not to whales.";
+  "Launch a token for your community on PEOPLE. 10% of every new token goes to the community pool at launch, guaranteed — up to 27% in total.";
 
 /** Russian locale metadata equivalents — localized title leads. */
 export const SITE_TITLE_RU = homeTitle(NETWORK_NAME_BY_LANG.ru);
 export const SITE_DESCRIPTION_RU =
-  "PEOPLE — блокчейн для сообществ. Запустите токен для своего сообщества: 10% выпуска получают ваши люди, а не киты. Публичная тестовая сеть, комиссии в PPL.";
+  "PEOPLE — блокчейн для сообществ. Запустите токен для своего сообщества: 10% каждого нового токена гарантированно в пул сообщества (до 27% суммарно). Публичная тестовая сеть, комиссии в PPL.";
 export const SITE_OG_TITLE_RU = SITE_TITLE_RU;
 export const SITE_OG_DESCRIPTION_RU =
-  "Запустите токен для своего сообщества в PEOPLE. 10% каждого нового токена идёт в пул сообщества, а не китам.";
+  "Запустите токен для своего сообщества в PEOPLE. 10% каждого нового токена гарантированно в пул сообщества — до 27% суммарно.";
 
 export type DocumentTitlesLocale = {
   home: string;
@@ -356,13 +356,13 @@ export const SITE_ROUTES = [
   { path: "/help", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/tokenomics", changeFrequency: "monthly" as const, priority: 0.78 },
   { path: "/fees", changeFrequency: "monthly" as const, priority: 0.75 },
+  { path: "/help", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/wallet", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/explorer", changeFrequency: "weekly" as const, priority: 0.9 },
   { path: "/swap", changeFrequency: "weekly" as const, priority: 0.85 },
-  { path: "/bounty", changeFrequency: "weekly" as const, priority: 0.9 },
+  { path: "/founders", changeFrequency: "weekly" as const, priority: 0.88 },
   { path: "/litepaper", changeFrequency: "monthly" as const, priority: 0.8 },
   { path: "/transparency", changeFrequency: "monthly" as const, priority: 0.7 },
-  { path: "/ecosystem", changeFrequency: "monthly" as const, priority: 0.75 },
   { path: "/privacy", changeFrequency: "yearly" as const, priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly" as const, priority: 0.3 },
 ];

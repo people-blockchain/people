@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Có ví trong 30 giây",
-        "sub": "Ví trình duyệt: khóa của bạn ở lại trên thiết bị. Ví đám mây: lưu mã hóa trên máy chủ PEOPLE."
+        "sub": "Khóa của bạn luôn ở trên điện thoại hoặc trình duyệt của bạn."
       },
       {
         "id": "token",
@@ -35,64 +35,52 @@
       {
         "id": "share",
         "label": "10% về người của bạn",
-        "sub": "Mỗi token mới gửi 10% lượng cung của nó vào pool cộng đồng riêng."
+        "sub": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng."
       }
     ],
-    "shareBadge": "10% chia cho cộng đồng",
+    "shareBadge": "Lên đến 10% chia cho cộng đồng",
     "peopleLine": "Người của bạn, không phải cá voi",
     "saleNote": "Mạng PEOPLE vẫn là mạng thử nghiệm và token thử nghiệm không có giá trị. Đợt bán PPL là riêng biệt: diễn ra trên Base bằng USDC hoặc USDT thật."
   },
   "community": {
-    "eyebrow": "10% cho cộng đồng",
-    "title": "10% mỗi token mới thuộc về người của bạn",
-    "lead": "Điều này được gắn sẵn trong protocol, không phải lời hứa trong một bài đăng: mỗi lần ra mắt chuẩn đều gửi 10% lượng cung vào pool cộng đồng riêng của token đó. Nó không bao giờ bị trộn với phí mạng.",
+    "eyebrow": "10% đảm bảo cho cộng đồng",
+    "title": "10% mỗi token mới dành cho người của bạn — được đảm bảo",
+    "lead": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng.",
     "statLabel": "lượng cung của mỗi token mới vào pool cộng đồng của nó",
-    "statNote": "Pool thuộc về những người tham gia vào token đó — không thuộc về mạng, không thuộc về người tạo.",
+    "statNote": "Pool do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không ngay lập tức; không phải lời hứa lợi nhuận.",
     "footnote": "Phí mạng được chia riêng: {{community}}% vào pool cộng đồng, {{validators}}% cho validator.",
     "cta": "Phí đi về đâu",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Trình tạo không mã",
-    "title": "Trình tạo không mã",
-    "lead": "Các wizard thực thụ đã có mặt trên public testnet. Khởi chạy token hoặc NFT, triển khai escrow hoặc crowdfunding, mô tả hợp đồng bằng ngôn ngữ đơn giản, hoặc mở Lavka — không cần cài đặt hay biên dịch.",
-    "cta": "Mở",
+    "eyebrow": "Không cần code, không cần biết crypto",
+    "title": "Những gì bạn có thể làm mà không cần code",
+    "lead": "Mọi thứ dưới đây đã chạy ngay hôm nay trên testnet công khai. Không cần cài gì, không cần build gì.",
+    "cta": "Thử trên testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Khởi chạy token",
-        "body": "Tên, mã, hình ảnh và nguồn cung. Trả phí khởi chạy và token sẽ hoạt động trên đường cong liên kết của nó.",
+        "title": "Ra mắt token câu lạc bộ hoặc cộng đồng trong một phút",
+        "body": "Chọn tên, ticker, hình ảnh và lượng cung. Trả phí ra mắt bằng PPL và token sẽ chạy trên bonding curve riêng của nó.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Đúc bộ sưu tập NFT",
-        "body": "Thẻ câu lạc bộ hoặc thẻ thành viên dưới dạng NFT — tải lên hoặc tạo hình ảnh trong trình duyệt.",
+        "title": "Phát hành thẻ NFT câu lạc bộ",
+        "body": "Thẻ thành viên dưới dạng NFT: một thẻ mỗi người, với hình ảnh bạn tải lên hoặc tạo ngay trên trình duyệt.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Triển khai escrow",
-        "body": "Mẫu escrow trên trang hợp đồng: khóa tiền cho đến khi có điều kiện hoặc thời hạn.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Bắt đầu crowdfunding",
-        "body": "Mẫu crowdfund: đặt mục tiêu và gây quỹ bằng PPL hoặc stablecoin thử nghiệm.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Gọi vốn cho ý tưởng của bạn",
+        "body": "Cộng đồng của bạn mua vào trên đường cong ngay từ giao dịch đầu tiên, nên giá được quyết định bởi nhu cầu thật, không phải một vòng gọi vốn riêng.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Mô tả hợp đồng thông minh bằng ngôn ngữ đơn giản",
-        "body": "Chúng tôi tham số hóa một mẫu OpenZeppelin đã được kiểm duyệt. Bạn xem Solidity trước khi ký.",
+        "title": "Mô tả một smart contract bằng lời thường",
+        "body": "Viết điều bạn muốn bằng ngôn ngữ thông thường và nhận một hợp đồng được xây từ các mẫu OpenZeppelin đã kiểm toán. Bạn thấy kết quả trước khi triển khai.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Công cụ thương nhân Lavka",
-        "body": "Thẻ khách hàng thân thiết và escrow thương nhân cho cửa hàng địa phương — không cần mã tùy chỉnh.",
-        "href": "/lavka"
       }
     ]
   },
@@ -105,7 +93,7 @@
         "id": "community-share",
         "stat": "10%",
         "title": "mỗi token mới vào pool cộng đồng của token đó",
-        "body": "Không về mạng, không về người tạo. Pool riêng của token, chia cho những người tham gia."
+        "body": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. Không về mạng, không về người tạo. Pool riêng của token, chia cho những người tham gia."
       },
       {
         "id": "vesting",

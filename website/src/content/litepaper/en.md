@@ -1,20 +1,20 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "The blockchain where every user is a verified human. Owned by people, not VCs."
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **The blockchain where every user is a verified human.**
 > **Owned by people, not VCs.**
 
 Our mission: put a blockchain in the hands of ordinary people — no code, no crypto skills, no bots, no insiders.
 
-*v1.1 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
+*v1.0 · October 2026 · Numbers are preliminary and subject to community governance. Nothing in this document is a promise of income.*
 
 ---
 
@@ -23,7 +23,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 | | |
 |---|---|
 | Supply | **1,000,000,000 PPL**, fixed |
-| Every launched token | **10%** of supply goes to that token's own community pool |
+| Every launched token | **10% guaranteed** at launch (up to **27%** total with curve remainder) |
 | Network fees burned | **0%** — every fee is shared |
 | Who earns rewards | **Verified humans** (Telegram phone or Human Passport) |
 | Funding | **Self-funded.** No VC. No investor allocation. |
@@ -45,7 +45,7 @@ Our mission: put a blockchain in the hands of ordinary people — no code, no cr
 
 **Verified humans, not bots.** Rewards go to accounts that passed a free human check. One person, one account. Sign-up alone earns nothing.
 
-**10% of every launched token goes to its community.** Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.
+**10% of every new token goes to its community pool — guaranteed.** At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total. Built into the protocol, not promised in a post. The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise. It is never mixed with network fees.
 
 ---
 
@@ -55,17 +55,17 @@ What you can do without code:
 
 | Tool | What it does | Status |
 |---|---|---|
-| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 10% of supply goes to the token's community pool; the creator's share vests over 180 days. | Live on testnet |
+| **No-code tokens** | Name, ticker, image, supply. The token goes live on its own bonding curve; the first trade sets the price. 10% of supply goes to the token's community pool at launch (up to ~17% more from curve leftovers if the creator chooses); the creator's share vests over 180 days. | Live on testnet |
 | **NFT club cards** | Membership cards for a club, a café or a community — one per member, with an image you upload or generate. | Live on testnet |
 | **Fundraising** | Collect support for a project with reviewed contract templates: escrow, vesting, token-weighted vote. Your community buys in on the curve, so demand sets the price — not a private round. | Live on testnet |
 | **AI contracts** | Describe a smart contract in plain words. It is assembled from OpenZeppelin templates and you see the result before you deploy. | Live on testnet |
-| **Community AI agents** | Agents that work for a group: a multisig community wallet with spending limits, whitelists and an emergency freeze. Parameters change only by token vote; every action is visible in the explorer. | Testnet: 1 community agent live |
+| **Community AI agents** | Agents that work for a group: a Safe-based community wallet with spending limits, whitelists and an emergency freeze. Parameters change only by token vote; every action is visible in the explorer. | Testnet: 1 community agent live |
 
 ---
 
 ## 4. Technology
 
-**Cosmos EVM.** PEOPLE runs on a Cosmos EVM stack: Ethereum-compatible smart contracts and 0x addresses on a Cosmos chain.
+**Cosmos EVM.** People runs on a Cosmos EVM stack: Ethereum-compatible smart contracts and 0x addresses on a Cosmos chain.
 
 | Parameter | Value |
 |---|---|
@@ -117,9 +117,9 @@ Every protocol fee, including fractional fees, is split the same way:
 | Growth Pool | 15% |
 | Burn | 0% |
 
-**Fee flow.** 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants. Nothing is burned to fake scarcity.
+**Buybacks.** The treasury (20%) and liquidity (10%) shares are used for public PPL buybacks. Nothing is burned to fake scarcity — fees go back to the network and its people.
 
-**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
+**Token-launch fee.** Live on testnet: the deployed factories currently charge a fixed fee in PPL — 1.045005 PPL to launch a token and 2.925 PPL to mint an NFT. The approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price. The stablecoin option and the TWAP discount are not in the deployed code yet. 100% of launch fees goes to the public PPL buyback, and the bought-back PPL is split 30/25/20/10/15 by the treasury multisig, same as every other buyback.
 
 ---
 
@@ -146,7 +146,7 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **PPL sale on Base** | The PPL sale runs on Base only (PplCurveHub, USDC or USDT). Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale contract is published. Mainnet of the PEOPLE network is a separate step. | Sale contract (PplCurveHub on Base) and receiving multisig published |
+| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
 No dates are promised. Each stage starts when its gate is met.
@@ -162,6 +162,7 @@ No dates are promised. Each stage starts when its gate is met.
 ---
 
 ## 9. Security
+
 
 - Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty: report a vulnerability from the bug button on any page.
 - **Multisigs.** Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.
@@ -187,13 +188,13 @@ No dates are promised. Each stage starts when its gate is met.
 
 Only verifiable public facts about other networks. Sources below.
 
-| | Ethereum | Solana | PEOPLE |
+| | Ethereum | Solana | People |
 |---|---|---|---|
 | Fees burned | Base fee is burned ¹ | 50% of the base fee is burned ² | **0% burned** |
 | Who receives fees | Validators get the priority fee (tip) ¹ | Validators get 50% of the base fee and 100% of the priority fee ² | **Validators 30 · Community 25 · Treasury 20 · Liquidity 10 · Growth 15** |
 | Early funding | Public ether sale, 2014 (42 days, paid in BTC) ³ | $20M Series A led by Multicoin Capital (2019); investors received SOL tokens ⁴ | **Self-funded. No VC, no investor allocation** |
 | Account creation | Creating an account costs nothing; no identity check ⁵ | Not a protocol requirement | **Rewards only for verified humans** |
-| New-token community share | Not a protocol rule | Not a protocol rule | **10% of every launched token** |
+| New-token community share | Not a protocol rule | Not a protocol rule | **10% guaranteed** (up to **27%** total) (10% at launch + optional curve leftovers) |
 
 1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
@@ -207,20 +208,21 @@ Only verifiable public facts about other networks. Sources below.
 
 ## Links
 
-- Website: https://www.peopleblockchain.network
-- Million Founders: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### What changed in v1.1
+### What changed in v1.0
 
-- A new token's community share is **10%** of supply: **10%** allocated at launch.
+- Up to **27%** of a new token's supply can reach its community pool: **10%** at launch, guaranteed, plus up to **~17%** from curve leftovers if the creator chooses community pool over burn at launch. Payouts are governed by the PEOPLE timelock to verified people over time — not instant, not a yield promise.
 - Team vesting is **0% at launch, a 6-month cliff, then 18 months linear** (24 months in total).
-- Launch fees: the approved plan is a flat **1 USD per token launch and 2 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
+
+- Launch fees: the approved plan is a flat **5 USD per token launch and 10 USD per NFT mint**, payable in PPL, USDT or USDC, with a 20% discount for paying in PPL at a TWAP price; the deployed factories still charge a fixed PPL fee.
 - The **PPL community sale** uses the published exponential curve on `/buy` (starts at **$0.005** per PPL; prices and limits are public; the buy action stays off until the hub contract is deployed). Buying requires a free one-time human check (Telegram or Human Passport); no ID documents (KYC) are collected.
 - Security: Reviewed by AI models: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (run by the project team). This is not a security audit. No external audit has been done yet. Bug bounty on every page.
 - Multisigs. Network-fee treasury: a 2-of-3 multisig on the PEOPLE network. Sale proceeds: the project multisig on Base; its address and signer threshold are published before the sale opens.

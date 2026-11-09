@@ -11,7 +11,7 @@ type HeroCopy = HomeWarmCopy["hero"];
  * phone mock. Static markup only — the one animated loop is the existing
  * `founders-card-sheen` sweep, which already no-ops under reduced motion.
  */
-export function HeroTokenCard({ t }: { t: HeroCopy }) {
+export function HeroTokenCard({ t, shareHeadline }: { t: HeroCopy; shareHeadline: string }) {
   const initial = t.card.tokenName.trim().charAt(0).toUpperCase() || "P";
 
   return (
@@ -61,8 +61,8 @@ export function HeroTokenCard({ t }: { t: HeroCopy }) {
               style={{ background: `conic-gradient(#fde68a 0% ${TOKEN_COMMUNITY_SHARE_PCT}%, rgba(255,255,255,0.22) ${TOKEN_COMMUNITY_SHARE_PCT}% 100%)` }}
               aria-hidden="true"
             >
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-[#0b1220]/55 text-sm font-bold">
-                {TOKEN_COMMUNITY_SHARE_PCT}%
+              <span className="grid h-12 w-12 place-items-center rounded-full bg-[#0b1220]/55 text-[11px] font-bold leading-tight text-center px-1">
+                {shareHeadline}
               </span>
             </span>
             <div className="min-w-0">

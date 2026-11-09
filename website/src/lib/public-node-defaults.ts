@@ -7,11 +7,11 @@ export const DEFAULT_PUBLIC_NODE_NETWORK_URL =
  * Update only after a verified anonymous `docker pull` of the new digest.
  */
 export const DEFAULT_PUBLIC_NODE_IMAGE =
-  "ghcr.io/rednaxelavoroge/people-node@sha256:d48cc23312667655e673a3f32c0636b1f84d2adde9464256fee90c8af648ef02";
+  "ghcr.io/people-blockchain/people-node@sha256:e1bf81ba2ca10f70e02edee08d85921480ccdd4c7811dfc50837c5b0bc2ffe36";
 
-export const PUBLIC_NODE_REPO = "rednaxelavoroge/Peoples-Blockchain";
-export const PUBLIC_NODE_CLONE_DIR = "Peoples-Blockchain";
-export const PUBLIC_NODE_ZIP_DIR = "Peoples-Blockchain-main";
+export const PUBLIC_NODE_REPO = "people-blockchain/people";
+export const PUBLIC_NODE_CLONE_DIR = "people";
+export const PUBLIC_NODE_ZIP_DIR = "people-main";
 export const PUBLIC_NODE_MONOREPO_DIR = "people-node";
 
 export const manualNodeBuildCommand = `git clone https://github.com/${PUBLIC_NODE_REPO}.git

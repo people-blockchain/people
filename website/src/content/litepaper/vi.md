@@ -1,18 +1,18 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "Blockchain nơi mỗi người dùng là một con người đã được xác minh. Sở hữu bởi con người, không phải các quỹ VC."
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **Blockchain nơi mỗi người dùng là một con người đã được xác minh.**
 > **Sở hữu bởi con người, không phải các quỹ VC.**
 
-*v1.1 · Tháng 10 năm 2026 · Các số liệu là sơ bộ và có thể thay đổi theo quản trị cộng đồng. Không có gì trong tài liệu này là một cam kết về lợi tức.*
+*v1.0 · Tháng 10 năm 2026 · Các số liệu là sơ bộ và có thể thay đổi theo quản trị cộng đồng. Không có gì trong tài liệu này là một cam kết về lợi tức.*
 
 ---
 
@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Cung cấp | **1.000.000.000 PPL**, cố định |
-| Mỗi token được phát hành | **10%** cung cấp đi vào nhóm cộng đồng của token đó |
+| Mỗi token được phát hành | **10% được đảm bảo** khi ra mắt (tối đa **27%** tổng cộng với phần còn lại trên đường cong) cung cấp đi vào quỹ cộng đồng của token đó |
 | Phí mạng bị đốt cháy | **0%** — mỗi phí được chia sẻ |
 | Ai kiếm được phần thưởng | **Những con người được xác minh** (số điện thoại Telegram hoặc Human Passport) |
 | Tài trợ | **Tự trợ cấp.** Không VC. Không phân bổ nhà đầu tư. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Những con người được xác minh, không phải bot.** Phần thưởng đi đến những tài khoản đã vượt qua một bài kiểm tra con người miễn phí. Một người, một tài khoản. Chỉ đăng ký không kiếm được gì.
 
-**10% của mỗi token được phát hành đi vào cộng đồng của nó.** Được tích hợp vào giao thức, không hứa hẹn trong một bài đăng: mỗi bản phát hành tiêu chuẩn gửi 10% cung cấp của nó đến nhóm cộng đồng của token đó. Nó không bao giờ được trộn với phí mạng.
+**10% mỗi token mới vào quỹ cộng đồng — được đảm bảo.** Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. Ghi trong giao thức, không hứa trong bài đăng. Quỹ do timelock PEOPLE quản lý và trả cho người đã xác minh theo thời gian, không tức thì; đây không phải lời hứa lợi nhuận. Không bao giờ trộn với phí mạng.
 
 ---
 
@@ -53,17 +53,17 @@ Những gì bạn có thể làm mà không cần mã:
 
 | Công cụ | Nó làm gì | Trạng thái |
 |---|---|---|
-| **Token không cần mã** | Tên, ticker, hình ảnh, cung cấp. Token có được trực tiếp trên đường cong liên kết của nó; giao dịch đầu tiên đặt giá. 10% cung cấp đi vào nhóm cộng đồng của token; cổ phần của người tạo được phân bổ trong 180 ngày. | Hoạt động trên testnet |
+| **Token không cần mã** | Tên, ticker, hình ảnh, nguồn cung. Token ra mắt trên đường cong bonding riêng; giao dịch đầu tiên đặt giá. 10% nguồn cung vào quỹ cộng đồng của token khi ra mắt (thêm tới ~17% từ phần còn lại chưa bán trên đường cong nếu người tạo chọn); cổ phần người tạo vest trong 180 ngày. | Hoạt động trên testnet |
 | **Thẻ câu lạc bộ NFT** | Thẻ thành viên cho một câu lạc bộ, một quán cà phê hoặc một cộng đồng — một cho mỗi thành viên, với hình ảnh bạn tải lên hoặc tạo. | Hoạt động trên testnet |
 | **Gây quỹ** | Thu thập sự hỗ trợ cho một dự án với các mẫu hợp đồng được xem xét: ký quỹ, phân bổ, quyết định có trọng số token. Cộng đồng của bạn mua vào trên đường cong, do đó nhu cầu đặt giá — không phải một vòng riêng tư. | Hoạt động trên testnet |
 | **Hợp đồng AI** | Mô tả một hợp đồng thông minh bằng từ thường. Nó được lắp ráp từ các mẫu OpenZeppelin và bạn thấy kết quả trước khi triển khai. | Hoạt động trên testnet |
-| **Agent AI Cộng đồng** | Agent làm việc cho một nhóm: ví cộng đồng multisig với giới hạn chi tiêu, danh sách trắng và đóng băng khẩn cấp. Các tham số chỉ thay đổi theo quyết định token; mỗi hành động đều hiển thị trong trình khám phá. | Testnet: 1 agent cộng đồng đang hoạt động |
+| **Agent AI Cộng đồng** | Agent làm việc cho một nhóm: ví tiền cộng đồng dựa trên Safe với giới hạn chi tiêu, danh sách trắng và đóng băng khẩn cấp. Các tham số chỉ thay đổi theo quyết định token; mỗi hành động đều hiển thị trong trình khám phá. | Testnet: 1 agent cộng đồng đang hoạt động |
 
 ---
 
 ## 4. Công nghệ
 
-**Cosmos EVM.** PEOPLE chạy trên ngăn xếp Cosmos EVM: hợp đồng thông minh tương thích Ethereum và địa chỉ 0x trên chuỗi Cosmos.
+**Cosmos EVM.** People chạy trên ngăn xếp Cosmos EVM: hợp đồng thông minh tương thích Ethereum và địa chỉ 0x trên chuỗi Cosmos.
 
 | Tham số | Giá trị |
 |---|---|
@@ -115,9 +115,9 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Nhóm tăng trưởng | 15% |
 | Đốt cháy | 0% |
 
-**Dòng phí.** 100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai. 30% phí mạng được dùng cho các đợt mua lại PPL công khai (kho bạc 20% + thanh khoản 10%). 70% phí mạng còn lại được chia cho các validator (30%), quỹ cộng đồng (25%) và Growth Pool (15%). Cuối cùng tất cả đều quay trở lại với người tham gia. Không có gì bị đốt để tạo khan hiếm giả tạo.
+**Mua lại.** Cổ phần của kho tài sản (20%) và tính thanh khoản (10%) được sử dụng cho các mua lại PPL công cộng. Không có gì bị đốt cháy để giả lập hiếm — phí quay trở lại mạng và con người của nó.
 
-**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy token và NFT (USDC/USDT) được dùng cho các đợt mua lại PPL công khai, và PPL đã mua lại được chia theo tỷ lệ 30/25/20/10/15 bởi multisig kho bạc, giống như mọi đợt mua lại khác.
+**Phí khởi chạy token.** Hoạt động trên testnet: các nhà máy đã triển khai vẫn thu phí cố định bằng PPL — 1,045005 PPL để ra mắt token và 2,925 PPL để đúc NFT. Kế hoạch đã được phê duyệt là mức phí cố định **5 USD cho mỗi lần ra mắt token và 10 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP. Tùy chọn stablecoin và ưu đãi TWAP chưa có trong mã đã triển khai. 100% phí khởi chạy được chuyển vào quỹ mua lại PPL công khai, và PPL mua lại được chia 30/25/20/10/15 bởi multisig của ngân khố, giống như mọi lần mua lại khác.
 
 ---
 
@@ -144,7 +144,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Bán PPL trên Base** | Đợt bán PPL chỉ chạy trên Base (PplCurveHub, USDC hoặc USDT). Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hợp đồng bán được công bố. Mainnet của mạng PEOPLE là bước riêng. | Đã công bố hợp đồng bán (PplCurveHub trên Base) và multisig nhận tiền |
+| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
 Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.
@@ -160,6 +160,7 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 ---
 
 ## 9. Bảo mật
+
 
 - Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài. Bug bounty on every page.
 - **Multisig.** Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.
@@ -185,15 +186,15 @@ Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổn
 
 Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. Nguồn dưới đây.
 
-| | Ethereum | Solana | PEOPLE |
+| | Ethereum | Solana | People |
 |---|---|---|---|
 | Phí bị đốt cháy | Phí cơ sở bị đốt cháy ¹ | 50% phí cơ sở bị đốt cháy ² | **0% bị đốt cháy** |
 | Ai nhận phí | Trình xác thực nhận phí ưu tiên (mẹo) ¹ | Trình xác thực nhận 50% phí cơ sở và 100% phí ưu tiên ² | **Trình xác thực 30 · Cộng đồng 25 · Kho tài sản 20 · Tính thanh khoản 10 · Tăng trưởng 15** |
 | Tài trợ sớm | Bán ether công cộng, 2014 (42 ngày, trả bằng BTC) ³ | $20M Series A do Multicoin Capital dẫn đầu (2019); nhà đầu tư nhận được token SOL ⁴ | **Tự trợ cấp. Không VC, không phân bổ nhà đầu tư** |
 | Tạo tài khoản | Tạo một tài khoản không tốn chi phí; không kiểm tra danh tính ⁵ | Không phải yêu cầu giao thức | **Phần thưởng chỉ cho những con người được xác minh** |
-| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **10% của mỗi token được phát hành** |
+| Chia sẻ cộng đồng token mới | Không phải quy tắc giao thức | Không phải quy tắc giao thức | **10% được đảm bảo** (tối đa **27%** tổng cộng) (10% khi ra mắt + phần dư tùy chọn trên đường cong) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas và phí: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana
@@ -205,20 +206,21 @@ Chỉ các sự kiện công cộng có thể xác minh về các mạng khác. 
 
 ## Liên kết
 
-- Website: https://www.peopleblockchain.network
-- Million Founders: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### Những gì đã thay đổi trong v1.1
+### Những gì đã thay đổi trong v1.0
 
-- Phần cộng đồng của một token mới là **10%** nguồn cung: **10%** được phân bổ khi ra mắt.
+- Tới **27%** nguồn cung có thể vào quỹ cộng đồng: **10%** khi ra mắt được đảm bảo, cộng tới **~17%** từ phần còn lại trên đường cong nếu người tạo chọn quỹ thay vì đốt khi ra mắt. Chi trả qua timelock PEOPLE cho người đã xác minh theo thời gian — không tức thì, không hứa lợi nhuận.
 - Vesting của đội ngũ là **0% khi ra mắt, cliff 6 tháng, sau đó 18 tháng tuyến tính** (tổng cộng 24 tháng).
-- Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **1 USD cho mỗi lần ra mắt token và 2 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
+
+- Phí khởi chạy: kế hoạch đã được phê duyệt là mức phí cố định **5 USD cho mỗi lần ra mắt token và 10 USD cho mỗi lần đúc NFT**, trả bằng PPL, USDT hoặc USDC, với ưu đãi 20% khi trả bằng PPL theo giá TWAP; các nhà máy đã triển khai vẫn thu phí PPL cố định.
 - **Bán PPL cộng đồng** dùng đường cong mũ công bố trên `/buy` (bắt đầu **$0.005**/PPL; giá và giới hạn công khai; mua tắt đến khi có hub). Để mua cần một lần xác minh con người miễn phí (Telegram hoặc Human Passport); không thu thập giấy tờ tùy thân (KYC).
 - Bảo mật: Được các mô hình AI xem xét: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (do đội ngũ dự án chạy). Đây không phải là kiểm toán bảo mật. Chưa có kiểm toán độc lập bên ngoài.; bug bounty on every page.
 - Multisig. Kho bạc phí mạng: một multisig 2/3 trên mạng PEOPLE. Tiền bán: multisig của dự án trên Base; địa chỉ và ngưỡng chữ ký được công bố trước khi mở bán.

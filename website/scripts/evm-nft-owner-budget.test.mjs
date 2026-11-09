@@ -8,7 +8,7 @@ import { readEvmDeployments } from "../src/lib/evm/config.ts";
 import { fetchLogsWindowed, LOG_WINDOW_BLOCKS, logWindowConcurrencyPeakForTests, logWindows, resetChainCatalogCacheForTests } from "../src/lib/evm/chain-catalog.ts";
 import { NFT_MINTED_TOPIC, nftMintedEvent } from "../src/lib/evm/nft-factory.ts";
 import { handleEvmCompatGet } from "../src/lib/evm/people-compat.ts";
-import { resetRpcBackoffForTests } from "../src/lib/evm/rpc-server.ts";
+import { resetRpcBackoffForTests, evmJsonRpc } from "../src/lib/evm/rpc-server.ts";
 import {
   NFT_OWNER_LIST_BUDGET_MS,
   listMintedNfts,
@@ -58,7 +58,7 @@ async function useNode(t, server) {
   });
 }
 
-test("a slow log window returns inside the budget with partial and a cursor", async (t) => {
+test("a slow log window returns inside the budget with partial and a cursor", { concurrency: false }, async (t) => {
   const budgetMs = 350;
   assert.equal(NFT_OWNER_LIST_BUDGET_MS, 6_000);
   setNftOwnerListBudgetForTests(budgetMs);
@@ -89,6 +89,12 @@ test("a slow log window returns inside the budget with partial and a cursor", as
     });
   });
   await useNode(t, server);
+
+  const blockHex = await evmJsonRpc("eth_blockNumber", []);
+  assert.ok(
+    blockHex && Number.isFinite(Number.parseInt(blockHex, 16)),
+    `mock RPC must answer eth_blockNumber (got ${blockHex ?? "empty"})`,
+  );
 
   const started = Date.now();
   const page = await listMintedNfts(OWNER);

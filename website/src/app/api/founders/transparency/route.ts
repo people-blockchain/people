@@ -3,6 +3,7 @@ import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { isDatabaseConfigured } from "@/db";
 import { MAX_AMBASSADORS, getCommunityCounters, getTopAmbassadors } from "@/lib/founders/transparency";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,9 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   try {
+    if (!showCommunityStats()) {
+      return NextResponse.json({ maxAmbassadors: MAX_AMBASSADORS }, { headers: CACHE_HEADERS });
+    }
     const [counters, ambassadors] = await Promise.all([
       getCommunityCounters(),
       getTopAmbassadors(),

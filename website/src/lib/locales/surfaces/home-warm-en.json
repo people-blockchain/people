@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Launch a token for your community."
     ],
-    "headlineAccent": "10% goes to your people, not to whales.",
+    "headlineAccent": "10% goes to your people, guaranteed — not to whales.",
     "headlineAccentLines": [
-      "10% goes to your people,",
+      "10% goes to your people, guaranteed —",
       "not to whales."
     ],
     "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds and try it on the testnet.",
@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "A wallet in 30 seconds",
-        "sub": "Browser wallet: your keys stay on your device. Cloud wallet: stored encrypted on PEOPLE servers."
+        "sub": "Your keys stay on your phone or in your browser."
       },
       {
         "id": "token",
@@ -35,64 +35,52 @@
       {
         "id": "share",
         "label": "10% to your people",
-        "sub": "Every new token sends 10% of its supply to its own community pool."
+        "sub": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total."
       }
     ],
-    "shareBadge": "10% community share",
+    "shareBadge": "10% community share, guaranteed",
     "peopleLine": "Your people, not whales",
     "saleNote": "The PEOPLE network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
   },
   "community": {
-    "eyebrow": "10% to the community",
-    "title": "10% of every new token goes to your people",
-    "lead": "Built into the protocol, not promised in a post: every standard launch sends 10% of its supply to that token's own community pool. It is never mixed with network fees.",
+    "eyebrow": "10% guaranteed for the community",
+    "title": "10% of every new token goes to your people — guaranteed",
+    "lead": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total.",
     "statLabel": "of every new token's supply goes to its community pool",
-    "statNote": "The pool belongs to the people who take part in that token — not to the network and not to the creator.",
+    "statNote": "The pool is governed by the PEOPLE timelock and paid out to verified people over time, not instantly; this is not a yield promise.",
     "footnote": "Network fees are split separately: {{community}}% to the community pool, {{validators}}% to validators.",
     "cta": "Where the fees go",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "No-code builder",
-    "title": "No-code builder",
-    "lead": "Real wizards already live on the public testnet. Launch a token or NFT, deploy escrow or crowdfunding, describe a contract in plain words, or open Lavka — nothing to install or compile.",
-    "cta": "Open",
+    "eyebrow": "No code, no crypto skills",
+    "title": "What you can do without code",
+    "lead": "Everything below runs on the public testnet today. Nothing to install, nothing to compile.",
+    "cta": "Try on testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Launch a token",
-        "body": "Name, ticker, image and supply. Pay the launch fee and the token goes live on its bonding curve.",
+        "title": "Launch a club or community token in a minute",
+        "body": "Pick a name, a ticker, an image and a supply. Pay the launch fee in PPL and the token is live on its own bonding curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Mint an NFT collection",
-        "body": "Club or membership cards as NFTs — upload or generate an image in the browser.",
+        "title": "Mint NFT club cards",
+        "body": "Membership cards as NFTs: one per member, with an image you upload or generate in the browser.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Deploy an escrow",
-        "body": "Sample escrow template on the contracts page: lock funds until a condition or deadline.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Start crowdfunding",
-        "body": "Sample crowdfund template: set a goal and raise in PPL or a test stablecoin.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Raise funding for your idea",
+        "body": "Your community buys in on the curve from the first trade, so the price is set by real demand instead of a private round.",
+        "href": "/create"
       },
       {
         "id": "contract",
         "title": "Describe a smart contract in plain words",
-        "body": "We parameterize a reviewed OpenZeppelin template. You see the Solidity before you sign.",
+        "body": "Write what you want in ordinary language and get a contract built from audited OpenZeppelin templates. You see the result before you deploy.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Lavka merchant tools",
-        "body": "Loyalty passes and merchant escrow for local shops — no custom code.",
-        "href": "/lavka"
       }
     ]
   },
@@ -104,8 +92,8 @@
       {
         "id": "community-share",
         "stat": "10%",
-        "title": "of every new token goes to that token's community pool",
-        "body": "Not to the network, not to the creator. The token's own pool, shared with the people who take part."
+        "title": "of every new token goes to that token's community pool (10% guaranteed)",
+        "body": "Not to the network, not to the creator. Up to 27% in total if the creator sends curve leftovers to the pool at launch."
       },
       {
         "id": "vesting",

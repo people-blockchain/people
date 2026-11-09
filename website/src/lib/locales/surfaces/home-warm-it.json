@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Un wallet in 30 secondi",
-        "sub": "Wallet del browser: le tue chiavi restano sul tuo dispositivo. Wallet cloud: conservato cifrato sui server di PEOPLE."
+        "sub": "Le tue chiavi restano sul tuo telefono o nel tuo browser."
       },
       {
         "id": "token",
@@ -35,64 +35,52 @@
       {
         "id": "share",
         "label": "10% alla tua gente",
-        "sub": "Ogni nuovo token invia il 10% della sua offerta al proprio pool della community."
+        "sub": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo — fino al 27 % in totale."
       }
     ],
-    "shareBadge": "10% alla community",
+    "shareBadge": "Fino al 10% alla community",
     "peopleLine": "La tua gente, non le balene",
     "saleNote": "La rete PEOPLE è ancora una rete di test e i suoi token di prova non hanno valore. La vendita di PPL è separata: avviene su Base con USDC o USDT reali."
   },
   "community": {
-    "eyebrow": "10% alla community",
-    "title": "Il 10% di ogni nuovo token va alla tua gente",
-    "lead": "È integrato nel protocollo, non promesso in un post: ogni lancio standard invia il 10% della sua offerta al pool della community di quel token. Non viene mai mescolato con le commissioni di rete.",
+    "eyebrow": "10% garantito per la community",
+    "title": "Il 10% di ogni nuovo token va alla tua gente — garantito",
+    "lead": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo — fino al 27 % in totale.",
     "statLabel": "dell'offerta di ogni nuovo token va al suo pool della community",
-    "statNote": "Il pool appartiene alle persone che partecipano a quel token — non alla rete e non al creator.",
+    "statNote": "Il pool è governato dal timelock PEOPLE e pagato a persone verificate nel tempo, non subito; non è una promessa di rendimento.",
     "footnote": "Le commissioni di rete sono divise separatamente: {{community}}% al pool della community, {{validators}}% ai validatori.",
     "cta": "Dove vanno le commissioni",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Builder no-code",
-    "title": "Builder no-code",
-    "lead": "I wizard reali sono già attivi sulla testnet pubblica. Lancia un token o un NFT, distribuisci escrow o crowdfunding, descrivi un contratto in parole semplici o apri Lavka — niente da installare o compilare.",
-    "cta": "Apri",
+    "eyebrow": "Senza codice, senza competenze crypto",
+    "title": "Cosa puoi fare senza codice",
+    "lead": "Tutto quello che segue funziona già oggi sul testnet pubblico. Niente da installare, niente da compilare.",
+    "cta": "Prova sul testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Lancia un token",
-        "body": "Nome, ticker, immagine e supply. Paga la commissione di lancio e il token va live sulla sua bonding curve.",
+        "title": "Lancia il token del tuo club o community in un minuto",
+        "body": "Scegli un nome, un ticker, un'immagine e un'offerta. Paga il lancio in PPL e il token è live sulla sua bonding curve.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Conia una collezione NFT",
-        "body": "Tessere club o membership come NFT — carica o genera un'immagine nel browser.",
+        "title": "Crea tessere NFT del club",
+        "body": "Tessere associative come NFT: una per membro, con un'immagine che carichi o generi nel browser.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Distribuisci un escrow",
-        "body": "Template escrow di esempio nella pagina dei contratti: blocca i fondi fino a una condizione o scadenza.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Avvia il crowdfunding",
-        "body": "Template crowdfund di esempio: imposta un obiettivo e raccogli in PPL o una stablecoin di test.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Raccogli fondi per la tua idea",
+        "body": "La tua community compra sulla curva dalla prima operazione, quindi il prezzo è deciso dalla domanda reale e non da un round privato.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Descrivi uno smart contract in parole semplici",
-        "body": "Parametrizziamo un template OpenZeppelin revisionato. Vedi il Solidity prima di firmare.",
+        "title": "Descrivi uno smart contract con parole semplici",
+        "body": "Scrivi cosa vuoi in linguaggio comune e ottieni un contratto costruito da template OpenZeppelin verificati. Vedi il risultato prima di fare il deploy.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Strumenti per commercianti Lavka",
-        "body": "Pass fedeltà ed escrow per commercianti per negozi locali — senza codice personalizzato.",
-        "href": "/lavka"
       }
     ]
   },
@@ -105,7 +93,7 @@
         "id": "community-share",
         "stat": "10%",
         "title": "di ogni nuovo token va al pool della community di quel token",
-        "body": "Non alla rete, non al creator. Il pool proprio del token, condiviso con chi partecipa."
+        "body": "Al lancio il creatore può anche inviare l'invenduto sulla curva (fino a ~17 %) al pool invece di bruciarlo — fino al 27 % in totale. Non alla rete, non al creator. Il pool proprio del token, condiviso con chi partecipa."
       },
       {
         "id": "vesting",

@@ -1,18 +1,18 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "区块链，每个用户都是经过验证的真人。由人民拥有，而非风投。"
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **区块链，每个用户都是经过验证的真人。**
 > **由人民拥有，而非风投。**
 
-*v1.1 · 2026年10月 · 数字为初步数据，受社区治理影响。本文档中的任何内容都不是收入承诺。*
+*v1.0 · 2026年10月 · 数字为初步数据，受社区治理影响。本文档中的任何内容都不是收入承诺。*
 
 ---
 
@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | 总供应量 | **1,000,000,000 PPL**，固定 |
-| 每个已发行代币 | **10%** 的供应量进入该代币自己的社区池 |
+| 每个已发行代币 | 发行时**10%保证**（含曲线剩余合计最高**27%**）的供应量进入该代币自己的社区资金池 |
 | 网络费用销毁 | **0%** — 每笔费用都被分享 |
 | 谁获得奖励 | **已验证的真人**（Telegram 手机号或 Human Passport） |
 | 融资 | **自筹资金。**无风投。无投资者分配。 |
@@ -43,7 +43,7 @@ status: public-draft
 
 **验证的真人，而非机器人。** 奖励进入通过免费人类检查的账户。一个人，一个账户。仅注册不能获得任何东西。
 
-**每个已发行代币的10%进入其社区。** 内置在协议中，而非口头承诺：每次标准发币都会将其10%的供应量发送到该代币自己的社区池。它永远不会与网络费用混淆。
+**每个新代币有10%保证进入其社区资金池。** 发行时，创建者也可将曲线上未售出部分（最多约17%）送入社区资金池而非销毁 — 合计最高27%。写入协议，而非帖子承诺。由 PEOPLE timelock 治理，向已验证参与者随时间支付，非即时；这不是收益承诺。不与网络费用混用。
 
 ---
 
@@ -53,17 +53,17 @@ status: public-draft
 
 | 工具 | 做什么 | 状态 |
 |---|---|---|
-| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。10%的供应量进入代币的社区池；创建者的份额在180天内线性释放。 | 在测试网上上线 |
+| **无代码代币** | 名称、代码、图像、供应量。代币在自己的绑定曲线上上线；第一笔交易设定价格。发行时10%的供应量进入代币的社区资金池（若创建者在发行时选择，曲线上未售出剩余最多还可增加约17%）；创建者的份额在180天内线性释放。 | 在测试网上上线 |
 | **NFT俱乐部卡** | 俱乐部、咖啡馆或社区的会员卡 — 每个成员一张，配你上传或生成的图像。 | 在测试网上上线 |
 | **筹资** | 用评审过的合同模板为项目收集支持：托管、释放、代币加权投票。你的社区在曲线上买入，因此需求设定价格 — 而非私募轮。 | 在测试网上上线 |
 | **AI合同** | 用纯文字描述智能合约。它从OpenZeppelin模板组装而成，在部署前你会看到结果。 | 在测试网上上线 |
-| **社区AI代理** | 为一个群体工作的代理：一个多签社区钱包，有支出限额、白名单和紧急冻结。参数仅通过代币投票更改；每个操作都在浏览器中可见。 | 测试网：1 个社区代理已上线 |
+| **社区AI代理** | 为一个群体工作的代理：一个基于Safe的社区钱包，有支出限额、白名单和紧急冻结。参数仅通过代币投票更改；每个操作都在浏览器中可见。 | 测试网：1 个社区代理已上线 |
 
 ---
 
 ## 4. 技术
 
-**Cosmos EVM。** PEOPLE 运行在 Cosmos EVM 堆栈上：Ethereum兼容的智能合约和 0x 地址在 Cosmos 链上。
+**Cosmos EVM。** People 运行在 Cosmos EVM 堆栈上：Ethereum兼容的智能合约和 0x 地址在 Cosmos 链上。
 
 | 参数 | 值 |
 |---|---|
@@ -109,15 +109,15 @@ status: public-draft
 | 接收者 | 份额 |
 |---|---:|
 | 验证器 | 30% |
-| 社区池 | 25% |
+| 社区资金池 | 25% |
 | 财库 | 20% |
 | 流动性 | 10% |
 | 增长池 | 15% |
 | 销毁 | 0% |
 
-**费用流向。** 100% 的代币和 NFT 发行费用（USDC/USDT）用于公开的 PPL 回购。30% 的网络费用用于公开的 PPL 回购（金库 20% + 流动性 10%）。剩余 70% 的网络费用分配给验证者（30%）、社区池（25%）和 Growth Pool（15%）。最终全部回馈给参与者。没有任何销毁来制造虚假稀缺。
+**回购。** 财库（20%）和流动性（10%）份额用于公开PPL回购。没有什么被销毁来假装稀缺 — 费用回馈网络及其人民。
 
-**代币发币费用。** 已在测试网上线：已部署的工厂仍收取固定的 PPL 费用——发行一个代币为 1.045005 PPL，铸造一个 NFT 为 2.925 PPL。已批准的方案是固定费用：**每次代币发行 1 美元、每次 NFT 铸造 2 美元**，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣。稳定币选项和 TWAP 折扣尚未在已部署代码中实现。100% 的代币和 NFT 发行费用（USDC/USDT）用于公开的 PPL 回购，回购的 PPL 随后由金库多签按 30/25/20/10/15 分配，与其他所有回购相同。
+**代币发币费用。** 已在测试网上线：已部署的工厂仍收取固定的 PPL 费用——发行一个代币为 1.045005 PPL，铸造一个 NFT 为 2.925 PPL。已批准的方案是固定费用：**每次代币发行 5 美元、每次 NFT 铸造 10 美元**，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣。稳定币选项和 TWAP 折扣尚未在已部署代码中实现。100% 的发币费用用于公开的 PPL 回购，回购的 PPL 随后由财务多签按 30/25/20/10/15 的比例分配，与其他任何回购相同。
 
 ---
 
@@ -144,7 +144,7 @@ status: public-draft
 | 阶段 | 发生什么 | 门 |
 |---|---|---|
 | **第0赛季 — 公开测试网** | 钱包、验证、代币发币、NFT卡、交换、百万创始人积分。 | 现在 |
-| **Base 上的 PPL 销售** | PPL 销售仅在 Base 上进行（PplCurveHub，USDC 或 USDT）。已公布参数（指数曲线从每 PPL **$0.005** 起，曲线上最多 **1 亿 PPL**，**400 万美元**毕业）见 `/buy`；销售合约公布前购买关闭。PEOPLE 网络主网是单独的一步。 | 销售合约（Base 上的 PplCurveHub）和收款多签已公布 |
+| **主网 + PPL 销售** | 主网上线。已公布参数（指数曲线从每 PPL **$0.005** 起，曲线上最多 **1 亿 PPL**，**400 万美元**毕业）见 `/buy`；hub 合约部署前购买关闭。 | 至少 **1,000** 名已验证参与者 **且** 国库多签上线 |
 | **质押与验证器** | 质押和验证器参与超越项目开放。 | 主网后 |
 
 没有承诺日期。每个阶段在其门开启时开始。
@@ -160,6 +160,7 @@ status: public-draft
 ---
 
 ## 9. 安全
+
 
 - 由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1、Gemini Argon（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。 Bug bounty on every page.
 - **多签。** 网络手续费金库：PEOPLE 网络上的 2/3 多签。销售资金：Base 上的项目多签；其地址和签名门槛会在销售开放前公布。
@@ -185,15 +186,15 @@ status: public-draft
 
 仅关于其他网络的可验证公开事实。来源如下。
 
-| | 以太坊 | Solana | PEOPLE |
+| | 以太坊 | Solana | People |
 |---|---|---|---|
 | 销毁的费用 | 基础费用被销毁 ¹ | 50%的基础费用被销毁 ² | **0%销毁** |
 | 谁收取费用 | 验证器获得优先费用（小费） ¹ | 验证器获得50%的基础费用和100%的优先费用 ² | **验证器30 · 社区25 · 财库20 · 流动性10 · 增长15** |
 | 早期融资 | 公开以太销售，2014年（42天，以BTC支付） ³ | $20M A轮由Multicoin Capital领导（2019年）；投资者获得SOL代币 ⁴ | **自筹资金。无风投，无投资者分配** |
 | 账户创建 | 创建账户无需费用；无身份检查 ⁵ | 不是协议要求 | **仅对经验证的真人的奖励** |
-| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **每个已发行代币的10%** |
+| 新代币社区份额 | 不是协议规则 | 不是协议规则 | **10%保证**（最高**27%**合计）（发行时10% + 可选曲线剩余） |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — 燃气与手续费： https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana-blockchain
@@ -205,20 +206,21 @@ status: public-draft
 
 ## 链接
 
-- 网站: https://www.peopleblockchain.network
-- 百万创始人: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- 网站: https://peopleblockchain.network
+- 百万创始人: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### v1.1 变更内容
+### v1.0 变更内容
 
-- 新代币的社区份额为供应量的 **10%**：发行时分配 **10%。
+- 新代币供应量最多 **27%** 可进入社区资金池：发行时保证 **10%**，若创建者在发行时选择社区资金池而非销毁，曲线剩余最多约 **17%** 也可进入。由 PEOPLE timelock 向已验证参与者随时间支付 — 非即时，非收益承诺。
 - 团队归属为**发行时 0%、6 个月悬崖期，随后 18 个月线性释放**（共 24 个月）。
-- 发币费用：已批准方案为**每次代币发行 1 美元、每次 NFT 铸造 2 美元**的固定费用，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣；已部署的工厂仍收取固定的 PPL 费用。
+
+- 发币费用：已批准方案为**每次代币发行 5 美元、每次 NFT 铸造 10 美元**的固定费用，可用 PPL、USDT 或 USDC 支付，使用 PPL 按 TWAP 价格支付可享 20% 折扣；已部署的工厂仍收取固定的 PPL 费用。
 - **PPL 社区销售**使用 `/buy` 上公布的指数曲线（起始每 PPL **$0.005**；价格与限额公开；hub 部署前购买关闭）。购买前需完成一次免费的真人验证（Telegram 或 Human Passport）；不收集身份证件（KYC）。
 - 安全：由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1、Gemini Argon（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。；全站 bug bounty。
 - 多签。 网络手续费金库：PEOPLE 网络上的 2/3 多签。销售资金：Base 上的项目多签；其地址和签名门槛会在销售开放前公布。

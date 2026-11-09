@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Uma carteira em 30 segundos",
-        "sub": "Carteira do navegador: as suas chaves ficam no seu dispositivo. Carteira na nuvem: guardada cifrada nos servidores da PEOPLE."
+        "sub": "Suas chaves ficam no seu celular ou no seu navegador."
       },
       {
         "id": "token",
@@ -35,64 +35,52 @@
       {
         "id": "share",
         "label": "10% para a sua gente",
-        "sub": "Cada token novo manda 10% da sua oferta para o próprio pool da comunidade."
+        "sub": "No lançamento, o criador também pode enviar o restante não vendido da curva (até ~17 %) para o pool em vez de queimar — até 27 % no total."
       }
     ],
-    "shareBadge": "10% para a comunidade",
+    "shareBadge": "Até 10% para a comunidade",
     "peopleLine": "A sua gente, não as baleias",
     "saleNote": "A rede PEOPLE ainda é uma testnet, e seus tokens de teste não têm valor. A venda de PPL é separada: acontece na Base com USDC ou USDT reais."
   },
   "community": {
-    "eyebrow": "10% para a comunidade",
-    "title": "10% de cada token novo vai para a sua gente",
-    "lead": "Isso está integrado no protocolo, não prometido em um post: todo lançamento padrão manda 10% da sua oferta para o pool da comunidade daquele token. Nunca é misturado com as taxas da rede.",
+    "eyebrow": "10% garantido para a comunidade",
+    "title": "10% de cada novo token vão para a sua gente — garantido",
+    "lead": "No lançamento, o criador também pode enviar o restante não vendido da curva (até ~17 %) para o pool em vez de queimar — até 27 % no total.",
     "statLabel": "da oferta de cada token novo vai para o pool da sua comunidade",
-    "statNote": "O pool pertence às pessoas que participam daquele token — não à rede e não ao criador.",
+    "statNote": "O pool é governado pelo timelock PEOPLE e pago a pessoas verificadas ao longo do tempo, não na hora; não é promessa de rendimento.",
     "footnote": "As taxas da rede são divididas separadamente: {{community}}% para o pool da comunidade, {{validators}}% para os validadores.",
     "cta": "Para onde vão as taxas",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Construtor sem código",
-    "title": "Construtor sem código",
-    "lead": "Assistentes reais já estão na testnet pública. Lance um token ou NFT, implante escrow ou crowdfunding, descreva um contrato em palavras simples ou abra Lavka — nada para instalar ou compilar.",
-    "cta": "Abrir",
+    "eyebrow": "Sem código, sem conhecimento de cripto",
+    "title": "O que você pode fazer sem código",
+    "lead": "Tudo abaixo já funciona hoje no testnet público. Não há nada para instalar, nada para compilar.",
+    "cta": "Experimentar no testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Lance um token",
-        "body": "Nome, ticker, imagem e suprimento. Pague a taxa de lançamento e o token entra em operação na sua curva de vínculo.",
+        "title": "Lance o token do seu clube ou comunidade em um minuto",
+        "body": "Escolha um nome, um ticker, uma imagem e uma oferta. Pague a taxa de lançamento em PPL e o token entra no ar na sua própria curva de vinculação.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Cunhe uma coleção NFT",
-        "body": "Cartões de clube ou associação como NFTs — carregue ou gere uma imagem no navegador.",
+        "title": "Crie cartões de clube em NFT",
+        "body": "Cartões de membro como NFTs: um por integrante, com uma imagem que você envia ou gera no navegador.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Implante um escrow",
-        "body": "Modelo de escrow de exemplo na página de contratos: bloqueie fundos até uma condição ou prazo.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Inicie crowdfunding",
-        "body": "Modelo de crowdfund de exemplo: defina uma meta e arrecade em PPL ou uma stablecoin de teste.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Capte recursos para a sua ideia",
+        "body": "A sua comunidade compra na curva desde a primeira negociação, então o preço é definido pela demanda real, e não por uma rodada privada.",
+        "href": "/create"
       },
       {
         "id": "contract",
         "title": "Descreva um contrato inteligente em palavras simples",
-        "body": "Parametrizamos um modelo OpenZeppelin revisado. Você vê o Solidity antes de assinar.",
+        "body": "Escreva o que você quer em linguagem comum e receba um contrato construído a partir de modelos auditados da OpenZeppelin. Você vê o resultado antes de implantar.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Ferramentas para comerciantes Lavka",
-        "body": "Passes de fidelidade e escrow para comerciantes de lojas locais — sem código personalizado.",
-        "href": "/lavka"
       }
     ]
   },
@@ -105,7 +93,7 @@
         "id": "community-share",
         "stat": "10%",
         "title": "de cada token novo vai para o pool da comunidade daquele token",
-        "body": "Não para a rede, não para o criador. O pool do próprio token, compartilhado com quem participa."
+        "body": "No lançamento, o criador também pode enviar o restante não vendido da curva (até ~17 %) para o pool em vez de queimar — até 27 % no total. Não para a rede, não para o criador. O pool do próprio token, compartilhado com quem participa."
       },
       {
         "id": "vesting",

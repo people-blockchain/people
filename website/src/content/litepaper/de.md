@@ -1,18 +1,18 @@
 ---
-title: "PEOPLE Blockchain — Litepaper"
+title: "People Blockchain — Litepaper"
 description: "Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist. Von Menschen kontrolliert, nicht von VCs."
 slug: /litepaper
-version: "1.1"
+version: "1.0"
 date: 2026-10
 status: public-draft
 ---
 
-# PEOPLE Blockchain — Litepaper
+# People Blockchain — Litepaper
 
 > **Die Blockchain, auf der jeder Benutzer ein verifi­zierter Mensch ist.**
 > **Von Menschen kontrolliert, nicht von VCs.**
 
-*v1.1 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
+*v1.0 · Oktober 2026 · Die Zahlen sind vorläufig und unterliegen Abstimmungen in der Community. Nichts in diesem Dokument ist eine Einkommensgarantie.*
 
 ---
 
@@ -21,7 +21,7 @@ status: public-draft
 | | |
 |---|---|
 | Angebot | **1.000.000.000 PPL**, fest |
-| Jeder gestartete Token | **10%** des Angebots gehen an den Community-Pool dieses Tokens |
+| Jeder gestartete Token | **10 % garantiert** beim Start (bis **27 %** gesamt mit Kurvenrest) des Angebots gehen an den Community-Fonds dieses Tokens |
 | Netzwerk­gebühren verbrannt | **0%** — jede Gebühr wird geteilt |
 | Wer Belohnungen erhält | **Verifizierte Menschen** (Telegram-Telefon oder Human Passport) |
 | Finanzierung | **Self-finanziert.** Keine VCs. Keine Investor-Zuteilungen. |
@@ -43,7 +43,7 @@ status: public-draft
 
 **Verifizierte Menschen, keine Bots.** Belohnungen gehen an Konten, die eine kostenlose Personen­prüfung bestanden haben. Eine Person, ein Konto. Eine Anmeldung allein bringt nichts.
 
-**10% jedes gestarteten Tokens gehen an seine Community.** Ins Protokoll eingebaut, nicht nur versprochen: Jeder Standard-Launch sendet 10% seines Angebots an den Community-Pool dieses Tokens. Es wird nie mit Netzwerk­gebühren vermischt.
+**10 % jedes neuen Tokens gehen in seinen Community-Fonds — garantiert.** Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) in den Fonds statt zur Verbrennung senden — bis zu 27 % gesamt. Im Protokoll verankert, nicht in einem Post versprochen. Der Fonds wird vom PEOPLE-Timelock gesteuert und an verifizierte Menschen über Zeit ausgezahlt — nicht sofort; das ist kein Renditeversprechen. Er wird nie mit Netzwerkgebühren vermischt.
 
 ---
 
@@ -53,17 +53,17 @@ Was du ohne Code tun kannst:
 
 | Tool | Was es tut | Status |
 |---|---|---|
-| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. 10% des Angebots gehen an den Community-Pool des Tokens; der Anteil des Erstellers wird über 180 Tage abgebaut. | Live auf Testnet |
+| **No-Code-Token** | Name, Ticker, Bild, Angebot. Der Token läuft auf seiner eigenen Bonding Curve live; der erste Trade setzt den Preis. 10 % des Angebots gehen beim Start an den Community-Fonds des Tokens (bis zu ~17 % mehr aus dem unverkauften Kurvenrest, wenn der Ersteller dies wählt); der Anteil des Erstellers wird über 180 Tage freigegeben. | Live auf Testnet |
 | **NFT-Club-Karten** | Mitglieds­karten für einen Club, ein Café oder eine Community — eine pro Mitglied, mit einem Bild, das du hochlädst oder generierst. | Live auf Testnet |
 | **Fundraising** | Sammeln von Unterstützung für ein Projekt mit überprüften Vertrags­vorlagen: Escrow, Vesting, Token-gestütztes Abstimmen. Deine Community kauft auf der Curve ein, also setzt Nachfrage den Preis — nicht eine private Runde. | Live auf Testnet |
 | **KI-Verträge** | Beschreibe einen Smart Contract in einfachen Worten. Er wird aus OpenZeppelin-Vorlagen zusammengesetzt und du siehst das Ergebnis, bevor du es einsetzt. | Live auf Testnet |
-| **Community-KI-Agenten** | Agenten, die für eine Gruppe arbeiten: eine Multisig-Community-Wallet mit Ausgabelimits, Whitelists und einem Notfall-Freeze. Parameter ändern sich nur durch Token-Abstimmung; jede Aktion ist im Explorer sichtbar. | Testnet: 1 Community-Agent aktiv |
+| **Community-KI-Agenten** | Agenten, die für eine Gruppe arbeiten: eine auf Safe basierende Community-Wallet mit Ausgabelimits, Whitelists und einem Notfall-Freeze. Parameter ändern sich nur durch Token-Abstimmung; jede Aktion ist im Explorer sichtbar. | Testnet: 1 Community-Agent aktiv |
 
 ---
 
 ## 4. Technologie
 
-**Cosmos EVM.** PEOPLE läuft auf einem Cosmos EVM Stack: Ethereum-kompatible Smart Contracts und 0x-Adressen auf einer Cosmos-Chain.
+**Cosmos EVM.** People läuft auf einem Cosmos EVM Stack: Ethereum-kompatible Smart Contracts und 0x-Adressen auf einer Cosmos-Chain.
 
 | Parameter | Wert |
 |---|---|
@@ -73,7 +73,7 @@ Was du ohne Code tun kannst:
 | Adressprefix | `people1…` (und dieselbe Adresse als `0x…` in EVM) |
 | Netzwerk­status | Öffentliches Testnet — kein Mainnet |
 
-**Validatoren.** Validatoren betreiben das Netzwerk und werden vom vorab zugeordneten Validator-Pool plus 30% jeder Netzwerk­gebühr bezahlt. Testnet-Validatoren laufen nur zum Testen; die Öffnung von Validierung und Staking für die Öffentlichkeit ist eine spätere Roadmap-Etappe.
+**Validatoren.** Validatoren betreiben das Netzwerk und werden vom vorab zugeordneten Validator-Fonds plus 30% jeder Netzwerk­gebühr bezahlt. Testnet-Validatoren laufen nur zum Testen; die Öffnung von Validierung und Staking für die Öffentlichkeit ist eine spätere Roadmap-Etappe.
 
 **Verifizierung — eine Überprüfung, dass du eine Person bist.** Kostenlos, einmalig:
 
@@ -100,7 +100,7 @@ Was du ohne Code tun kannst:
 
 - **Team & Gründer Vesting (15% des Angebots):** 0% beim Start, 6-Monats-Cliff, dann 18 Monate linear (24 Monate insgesamt).
 - **Kein Investor-Eintrag.** Es gibt keine VC- oder Private-Round-Zuteilung.
-- **Belohnungen kommen aus bestehenden Pools.** Gründer, Bounties, Botschafter und Airdrops werden nur aus dem Community & Belohnungen-Pool bezahlt. Für sie werden keine neuen Coins geprägt.
+- **Belohnungen kommen aus bestehenden Fonds.** Gründer, Bounties, Botschafter und Airdrops werden nur aus dem Community- & Belohnungen-Fonds bezahlt. Für sie werden keine neuen Coins geprägt.
 
 ### Netzwerk­gebühren-Aufteilung
 
@@ -109,15 +109,15 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Empfänger | Anteil |
 |---|---:|
 | Validatoren | 30% |
-| Community-Pool | 25% |
+| Community-Fonds | 25% |
 | Treasury | 20% |
 | Liquidität | 10% |
-| Growth Pool | 15% |
+| Growth-Fonds | 15% |
 | Verbrannt | 0% |
 
-**Gebührenfluss.** 100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe. 30% der Netzwerkgebühren fließen in öffentliche PPL-Rückkäufe (Treasury 20% + Liquidität 10%). Die verbleibenden 70% der Netzwerkgebühren gehen an Validatoren (30%), den Community Pool (25%) und den Growth Pool (15%). Alles fließt letztendlich an die Teilnehmer zurück. Nichts wird verbrannt, um Knappheit vorzutäuschen.
+**Rückkäufe.** Die Treasury- (20%) und Liquiditäts- (10%) Anteile werden für öffentliche PPL-Rückkäufe verwendet. Nichts wird verbrannt, um Knappheit vorzutäuschen — Gebühren gehen zurück an das Netzwerk und seine Menschen.
 
-**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100% der Token- und NFT-Launch-Gebühren (USDC/USDT) fließen in öffentliche PPL-Rückkäufe, und die zurückgekauften PPL werden vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, genau wie bei jedem anderen Rückkauf.
+**Token-Launch-Gebühr.** Live im Testnet: Die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr — 1,045005 PPL für einen Token-Launch und 2,925 PPL für ein NFT-Minting. Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis. Die Stablecoin-Option und der TWAP-Rabatt sind noch nicht im bereitgestellten Code. 100 % der Launch-Gebühren fließen in den öffentlichen PPL-Rückkauf, und der zurückgekaufte PPL wird vom Treasury-Multisig im Verhältnis 30/25/20/10/15 aufgeteilt, wie bei jedem anderen Rückkauf.
 
 ---
 
@@ -125,13 +125,13 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 
 **Sei einer der ersten Million verifizierter Menschen.** Erhalte eine Gründernummer, lade Freunde ein und verdiene Punkte, wenn *sie* echte Dinge im Netzwerk tun.
 
-**Punkte kommen von echten Handlungen, nicht von Anmeldungen.** Du erhältst Einladungspunkte erst, nachdem dein Einladener verifiziert wurde, eine Wallet erstellt hat und mindestens eine echte Testnet-Aktion durchgeführt hat (Swap, Liquiditäts-Pool, NFT-Prägung, Token-Start oder Governance-Abstimmung). Eine Anmeldung allein = 0.
+**Punkte kommen von echten Handlungen, nicht von Anmeldungen.** Du erhältst Einladungspunkte erst, nachdem dein Einladener verifiziert wurde, eine Wallet erstellt hat und mindestens eine echte Testnet-Aktion durchgeführt hat (Swap, Liquiditätsfonds, NFT-Prägung, Token-Start oder Governance-Abstimmung). Eine Anmeldung allein = 0.
 
 **Wie Punkte zu PPL werden:**
 
-> **PPL pro Punkt = Saison-Pool ÷ alle in der Saison verdienen Punkte**
+> **PPL pro Punkt = Saisonfonds ÷ alle in der Saison verdienen Punkte**
 
-- **Season 1 Pool:** 6.000.000 PPL, bezahlt aus dem bestehenden Million Founders-Pool. Keine neuen Coins. Wenn der Pool leer ist, endet das Programm.
+- **Saison-1-Fonds:** 6.000.000 PPL, bezahlt aus dem bestehenden Million Founders-Fonds. Keine neuen Coins. Wenn der Fonds leer ist, endet das Programm.
 - **Auszahlung:** 10% sofort, die restlichen 90% in gleichen wöchentlichen Raten über 52 Wochen.
 - **Anti-Farming:** nur zwei Verweis-Ebenen, ein Pro-Saison-Cap für aktive Einladene und Rückforderung von Punkten von Konten, die als Bots gekennzeichnet sind.
 
@@ -144,7 +144,7 @@ Jede Protokollgebühr, einschließlich Bruchgebühren, wird auf die gleiche Weis
 | Etappe | Was passiert | Gate |
 |---|---|---|
 | **Season 0 — Öffentliches Testnet** | Wallets, Verifizierung, Token-Starts, NFT-Karten, Swaps, Million Founders Punkte. | Jetzt |
-| **PPL-Verkauf auf Base** | Der PPL-Verkauf läuft nur auf Base (PplCurveHub, USDC oder USDT). Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Verkaufsvertrag veröffentlicht ist. Das Mainnet des PEOPLE-Netzwerks ist ein separater Schritt. | Verkaufsvertrag (PplCurveHub auf Base) und empfangende Multisig veröffentlicht |
+| **Mainnet + PPL-Verkauf** | Mainnet startet. Veröffentlichte Parameter (Exponentialkurve ab **0,005 $** pro PPL, bis **100M PPL** auf der Kurve, Graduation bei **4 M$**) auf `/buy`; Käufe bleiben deaktiviert, bis der Sale-Hub deployed ist. | Mindestens 1.000 verifizierte Personen **und** ein aktives Treasury-Multisig |
 | **Staking & Validatoren** | Staking und Validator-Beteiligung öffnen sich über das Projekt hinaus. | Nach Mainnet |
 
 Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt ist.
@@ -160,6 +160,7 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 ---
 
 ## 9. Sicherheit
+
 
 - Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht. Bug bounty on every page.
 - **Multisigs.** Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.
@@ -185,15 +186,15 @@ Es werden keine Daten versprochen. Jede Etappe beginnt, wenn ihr Gate erfüllt i
 
 Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
-| | Ethereum | Solana | PEOPLE |
+| | Ethereum | Solana | People |
 |---|---|---|---|
 | Gebühren verbrannt | Basis­gebühr wird verbrannt ¹ | 50% der Basis­gebühr wird verbrannt ² | **0% verbrannt** |
 | Wer erhält Gebühren | Validatoren erhalten die Prioritäts­gebühr (Trinkgeld) ¹ | Validatoren erhalten 50% der Basis­gebühr und 100% der Prioritäts­gebühr ² | **Validatoren 30 · Community 25 · Treasury 20 · Liquidität 10 · Growth 15** |
 | Frühe Finanzierung | Öffentliche Ether-Sale, 2014 (42 Tage, zahlbar in BTC) ³ | $20M Series A unter Führung von Multicoin Capital (2019); Investoren erhielten SOL-Token ⁴ | **Self-finanziert. Keine VCs, keine Investor-Zuteilung** |
 | Konto­erstellung | Einen Account zu erstellen kostet nichts; keine Identitäts­überprüfung ⁵ | Keine Protokoll-Anforderung | **Belohnungen nur für verifizierte Menschen** |
-| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **10% jedes gestarteten Tokens** |
+| Community-Anteil bei neuem Token | Keine Protokoll-Regel | Keine Protokoll-Regel | **10 % garantiert** (bis **27 %** gesamt) (10 % beim Start + optionaler Kurvenrest) |
 
-1. ethereum.org — Gas and fees: https://ethereum.org/en/developers/docs/gas/
+1. ethereum.org — Gas und Gebühren: https://ethereum.org/en/developers/docs/gas/
 2. solana.com — Fees: https://solana.com/docs/core/fees
 3. ethereum.org — History (2014 Ether sale): https://ethereum.org/en/history/
 4. Solana Labs, "Solana Completes $20 Million Raise Led by Multicoin Capital" (30 Jul 2019): https://medium.com/solana-labs/solana-completes-20-million-raise-led-by-multicoin-capital-3d7f939475b6 · CoinDesk (30 Jul 2019): https://www.coindesk.com/markets/2019/07/30/multicoin-leads-20-million-round-for-speed-focused-solana
@@ -205,20 +206,21 @@ Nur überprüfbare öffentliche Fakten über andere Netzwerke. Quellen unten.
 
 ## Links
 
-- Website: https://www.peopleblockchain.network
-- Million Founders: https://www.peopleblockchain.network/founders
-- Litepaper: https://www.peopleblockchain.network/litepaper
+- Website: https://peopleblockchain.network
+- Million Founders: https://peopleblockchain.network/founders
+- Litepaper: https://peopleblockchain.network/litepaper
 - Telegram: https://t.me/people_blockchain
 - X: https://x.com/Peoplebchain
 - YouTube: https://www.youtube.com/@PeoplesBlockchain
 
 ---
 
-### Was sich in v1.1 geändert hat
+### Was sich in v1.0 geändert hat
 
-- Der Community-Anteil eines neuen Tokens beträgt **10 %** des Angebots, bei der Einführung zugeteilt.
+- Bis zu **27 %** des Angebots können den Community-Fonds erreichen: **10 %** beim Start garantiert, plus bis zu **~17 %** Kurvenrest, wenn der Ersteller beim Start Community-Fonds statt Verbrennung wählt. Auszahlungen über den PEOPLE-Timelock an verifizierte Menschen — nicht sofort, kein Renditeversprechen.
 - Das Team-Vesting ist **0 % beim Start, ein 6-monatiger Cliff, danach 18 Monate linear** (insgesamt 24 Monate).
-- Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **1 USD pro Token-Launch und 2 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
+
+- Launch-Gebühren: Der genehmigte Plan ist eine feste Gebühr von **5 USD pro Token-Launch und 10 USD pro NFT-Mint**, zahlbar in PPL, USDT oder USDC, mit 20 % Rabatt bei Zahlung in PPL zu einem TWAP-Preis; die bereitgestellten Fabriken verlangen weiterhin eine feste PPL-Gebühr.
 - Der **PPL-Community-Verkauf** nutzt die veröffentlichte Exponentialkurve auf `/buy` (Start **0,005 $** pro PPL; Preise und Limits öffentlich; Kauf bleibt bis zum Hub aus). Zum Kauf ist eine kostenlose einmalige Prüfung nötig, dass Sie ein Mensch sind (Telegram oder Human Passport); Ausweisdokumente (KYC) werden nicht erhoben.
 - Sicherheit: Von KI-Modellen geprüft: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (durchgeführt vom Projektteam). Das ist kein Sicherheitsaudit. Ein externes Audit gibt es noch nicht.; Bug bounty on every page.
 - Multisigs. Treasury der Netzwerkgebühren: eine 2-von-3-Multisig im PEOPLE-Netzwerk. Verkaufserlöse: die Multisig des Projekts auf Base; Adresse und Signaturschwelle werden vor dem Verkaufsstart veröffentlicht.

@@ -109,6 +109,26 @@ test("every bootstrap statement is idempotent DDL", async () => {
   }
 });
 
+test("referral & KOL bootstrap mirrors drizzle 0023 SQL file", async () => {
+  const { REFERRAL_KOL_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
+  const raw = readFileSync(join(root, "drizzle/0023_referral_kol_attribution.sql"), "utf8");
+  const fromFile = raw
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n")
+    .split(";")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+  assert.equal(REFERRAL_KOL_SCHEMA_STATEMENTS.length, fromFile.length);
+  for (let i = 0; i < fromFile.length; i += 1) {
+    assert.equal(
+      REFERRAL_KOL_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "),
+      fromFile[i].replace(/\s+/g, " "),
+    );
+    assert.match(REFERRAL_KOL_SCHEMA_STATEMENTS[i], /IF NOT EXISTS/i);
+  }
+});
+
 test("bootstrap clears cached promise after failure so later calls can retry", async () => {
   const src = readFileSync(join(root, "src/db/bootstrap.ts"), "utf8");
   assert.match(src, /\.catch\(\(error\) => \{/);

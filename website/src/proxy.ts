@@ -2,16 +2,30 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextAuthRequest } from "next-auth";
 import { authConfig } from "@/auth.config";
+import {
+  ANALYTICS_VIEWER_HTTP_HEADERS,
+  analyticsViewerBlockedStatus,
+} from "@/lib/analytics/view-path";
 import { localeFromBuyPath } from "@/lib/locale-detect";
 import { LANG_COOKIE, LANG_COOKIE_MAX_AGE } from "@/lib/preferences";
-import { isLoginPath, isPartnerPath, LOGIN_PATH } from "@/lib/partner/guards";
-import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCode } from "@/lib/partner/referral";
+import { isLoginPath, isPartnerPath } from "@/lib/partner/guards";
+import { REFERRAL_COOKIE, REFERRAL_COOKIE_MAX_AGE, resolveStoredReferralCookie } from "@/lib/partner/referral";
+
+function analyticsViewerEdgeResponse(request: NextAuthRequest): NextResponse | null {
+  const { pathname } = request.nextUrl;
+  if (analyticsViewerBlockedStatus(pathname) !== 404) return null;
+  const response = new NextResponse("Not Found", { status: 404 });
+  for (const header of ANALYTICS_VIEWER_HTTP_HEADERS) {
+    response.headers.set(header.key, header.value);
+  }
+  return response;
+}
 
 /**
  * Proxy only needs to decode the JWT cookie. `authConfig` includes the Resend
  * email provider, and Auth.js throws `MissingAdapter` when an email provider is
- * present without an adapter — `getSession()` then returns null and `/partner`
- * always redirects to `/login` even though `/api/auth/session` has a user.
+ * present without an adapter — `getSession()` then returns null even though
+ * `/api/auth/session` has a user. Guest `/partner` is rendered in the page, not here.
  */
 const { auth } = NextAuth({
   ...authConfig,
@@ -21,13 +35,15 @@ const { auth } = NextAuth({
 });
 
 export const proxy = auth((request: NextAuthRequest) => {
+  const blocked = analyticsViewerEdgeResponse(request);
+  if (blocked) return blocked;
+
   const { pathname } = request.nextUrl;
-  const stored = resolveStoredReferralCode(
+  const stored = resolveStoredReferralCookie(
     request.cookies.get(REFERRAL_COOKIE)?.value,
     request.nextUrl.searchParams.get("ref"),
   );
 
-  const session = request.auth;
   let response: NextResponse;
 
   const buyLocale = localeFromBuyPath(pathname);
@@ -44,18 +60,13 @@ export const proxy = auth((request: NextAuthRequest) => {
       httpOnly: false,
       secure: request.nextUrl.protocol === "https:",
     });
-  } else if (isPartnerPath(pathname) && !session?.user) {
-    const login = request.nextUrl.clone();
-    login.pathname = LOGIN_PATH;
-    login.search = "";
-    login.searchParams.set("callbackUrl", pathname);
-    response = NextResponse.redirect(login);
   } else {
     // Signed-in visitors on /login are sent to /partner by the login page
     // itself, after it checks that the session still belongs to a real user.
     // Redirecting here on the JWT alone trapped stale sessions in a
     // /login -> /partner -> error loop and the header "Partner login" link
     // never reached the sign-in form.
+    // Unauthenticated `/partner` is handled by partner/page.tsx (guest landing).
     response = NextResponse.next();
   }
 
@@ -81,11 +92,19 @@ export const proxy = auth((request: NextAuthRequest) => {
 
 export const config = {
   matcher: [
+    "/stats",
+    "/stats/:path*",
+    "/__people-analytics-view",
+    "/__people-analytics-view/:path*",
     "/partner/:path*",
     "/partner",
     "/login/:path*",
     "/login",
     "/",
+    // The one invite link (`?ref=<code>`) also lands on these pages; store the code here too.
+    "/founders",
+    "/bounty",
+    "/buy",
     "/(en|ru|es|pt|fr|de|it|tr|vi|id|zh|ar)/buy",
   ],
 };

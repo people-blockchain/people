@@ -1,7 +1,7 @@
 {
   "hero": {
     "eyebrow": "PEOPLE Blockchain",
-    "title": "How PEOPLE works, in 1 minute.",
+    "title": "How People works, in 1 minute.",
     "lead": "A wallet, one check that you are a person, and then you can launch, mint, swap or vote. No code and no crypto background.",
     "testnetBadge": "Public testnet. Not mainnet yet.",
     "saleNote": "The PEOPLE network is still a testnet, and its test tokens have no value. The PPL sale is separate: it runs on Base with real USDC or USDT."
@@ -13,7 +13,7 @@
     "items": [
       {
         "title": "Get a wallet in 30 seconds",
-        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word browser wallet (keys stay on your device), or a quicker Google sign-in with a cloud wallet (key stored encrypted on PEOPLE servers; PEOPLE's infrastructure is able to decrypt it).",
+        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker Google sign-in with an encrypted, cloud-synced key.",
         "note": "No app store, no seed-phrase homework."
       },
       {
@@ -63,7 +63,7 @@
   "fees": {
     "eyebrow": "Fees",
     "title": "Where every fee goes",
-    "lead": "100% of token and NFT launch fees (USDC/USDT) go to public PPL buybacks. 30% of network fees go to public PPL buybacks (treasury 20% + liquidity 10%). The remaining 70% of network fees go to validators (30%), the community pool (25%) and the Growth Pool (15%). It all ultimately goes back to participants.",
+    "lead": "Every network fee is paid in PPL and split the same way, every time.",
     "totalLabel": "One fee",
     "totalValue": "100%",
     "note": "Nothing is burned: the burn line is 0%. Fractional fees follow the same split."
@@ -78,8 +78,8 @@
         "body": "There is no private round and no preset price. The token starts on a bonding curve, so the very first buy sets the price everyone else sees."
       },
       {
-        "title": "10% goes to that token's community pool",
-        "body": "Every standard launch sends 10% of its supply to the token's own community pool. It is never mixed with network fees."
+        "title": "10% goes to that token's community pool — guaranteed",
+        "body": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total. It is never mixed with network fees."
       },
       {
         "title": "The creator's share vests over 180 days",
@@ -117,7 +117,7 @@
     "items": [
       {
         "q": "Is this mainnet?",
-        "a": "No. The PEOPLE network is a public testnet. The tokens and balances here are for testing and carry no value. The PPL sale is separate: it runs on Base, in USDC or USDT, and opens once the sale contract is published."
+        "a": "No. This is a public testnet. The tokens and balances here are for testing and carry no value."
       },
       {
         "q": "Do I need to know how to code?",

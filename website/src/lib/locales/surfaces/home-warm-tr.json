@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Topluluğunuz için bir token başlatın."
     ],
-    "headlineAccent": "%10 sizin insanlarınıza gider, balinalara değil.",
+    "headlineAccent": "10% sizin insanlarınıza gider, balinalara değil.",
     "headlineAccentLines": [
-      "%10 sizin insanlarınıza gider,",
+      "10% sizin insanlarınıza gider,",
       "balinalara değil."
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "30 saniyede cüzdan",
-        "sub": "Tarayıcı cüzdanı: anahtarlarınız cihazınızda kalır. Bulut cüzdanı: PEOPLE sunucularında şifreli saklanır."
+        "sub": "Anahtarlarınız telefonunuzda veya tarayıcınızda kalır."
       },
       {
         "id": "token",
@@ -34,65 +34,53 @@
       },
       {
         "id": "share",
-        "label": "%10 insanlarınıza",
-        "sub": "Her yeni token, arzının %10'sini kendi topluluk havuzuna gönderir."
+        "label": "10% insanlarınıza",
+        "sub": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar."
       }
     ],
-    "shareBadge": "%10 topluluk payı",
+    "shareBadge": "10% topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil",
     "saleNote": "PEOPLE ağı hâlâ bir test ağıdır ve test token'larının değeri yoktur. PPL satışı ayrıdır: gerçek USDC veya USDT ile Base üzerinde yapılır."
   },
   "community": {
-    "eyebrow": "%10 topluluğa",
-    "title": "Her yeni tokenin %10'si sizin insanlarınıza gider",
-    "lead": "Bu protokole gömülüdür, bir gönderide vadedilmiş değildir: her standart lansman, arzının %10'sini o tokenin kendi topluluk havuzuna gönderir. Bu asla ağ ücretleriyle karıştırılmaz.",
+    "eyebrow": "Topluluk için garanti %10",
+    "title": "Her yeni tokenin %10'u insanlarınıza gider — garanti",
+    "lead": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar.",
     "statLabel": "her yeni tokenin arzının topluluk havuzuna gider",
-    "statNote": "Havuz, o tokene katılan insanlara aittir — ağa veya oluşturana değil.",
+    "statNote": "Havuz PEOPLE timelock ile yönetilir; doğrulanmış kişilere zamanla ödenir, anında değil — getiri vaadi değildir.",
     "footnote": "Ağ ücretleri ayrı paylaştırılır: %{{community}} topluluk havuzuna, %{{validators}} doğrulayıcılara.",
     "cta": "Ücretler nereye gidiyor",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Kod yazmadan oluşturucu",
-    "title": "Kod yazmadan oluşturucu",
-    "lead": "Gerçek sihirbazlar zaten halka açık testnet'te çalışıyor. Bir token veya NFT başlatın, emanet veya kitle fonlaması dağıtın, bir sözleşmeyi sade kelimelerle tanımlayın veya Lavka'yı açın — yükleme veya derleme yok.",
-    "cta": "Aç",
+    "eyebrow": "Kod yok, kripto bilgisi gerekmez",
+    "title": "Kod yazmadan yapabilecekleriniz",
+    "lead": "Aşağıdakilerin hepsi bugün halka açık testnette çalışıyor. Kurulacak veya derlenecek hiçbir şey yok.",
+    "cta": "Testnette deneyin",
     "cards": [
       {
         "id": "token",
-        "title": "Bir token başlat",
-        "body": "İsim, sembol, görsel ve arz. Başlatma ücretini ödeyin ve token bağlanma eğrisinde yayına geçsin.",
+        "title": "Bir dakikada kulüp veya topluluk tokeni başlatın",
+        "body": "Bir ad, ticker, görsel ve arz seçin. Lansman ücretini PPL ile ödeyin, token kendi bonding curve'ünde yayında olsun.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Bir NFT koleksiyonu bas",
-        "body": "NFT olarak kulüp veya üyelik kartları — tarayıcıda bir görsel yükleyin veya oluşturun.",
+        "title": "NFT kulüp kartları basın",
+        "body": "Üyelik kartları NFT olarak: kişi başına bir tane, yüklediğiniz veya tarayıcıda oluşturduğunuz bir görselle.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Bir emanet dağıt",
-        "body": "Sözleşmeler sayfasındaki örnek emanet şablonu: bir koşul veya son tarihe kadar fonları kilitleyin.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Kitle fonlaması başlat",
-        "body": "Örnek kitle fonlaması şablonu: bir hedef belirleyin ve PPL veya bir test stablecoin ile toplayın.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Fikriniz için fon toplayın",
+        "body": "Topluluğunuz ilk işlemden itibaren eğriden alım yapar, böylece fiyatı özel bir tur değil gerçek talep belirler.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Bir akıllı sözleşmeyi sade kelimelerle tanımla",
-        "body": "İncelenmiş bir OpenZeppelin şablonunu parametreleştiriyoruz. İmzalamadan önce Solidity'yi görürsünüz.",
+        "title": "Bir akıllı sözleşmeyi düz sözlerle tanımlayın",
+        "body": "İstediğinizi sade bir dille yazın, denetlenmiş OpenZeppelin şablonlarından oluşturulmuş bir sözleşme alın. Dağıtmadan önce sonucu görürsünüz.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Lavka satıcı araçları",
-        "body": "Yerel dükkanlar için sadakat kartları ve satıcı emaneti — özel kod yok.",
-        "href": "/lavka"
       }
     ]
   },
@@ -103,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "%10",
+        "stat": "10%",
         "title": "her yeni token o tokenin topluluk havuzuna gider",
-        "body": "Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
+        "body": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Ağa değil, oluşturana değil. Tokenin kendi havuzu, katılan insanlarla paylaşılır."
       },
       {
         "id": "vesting",

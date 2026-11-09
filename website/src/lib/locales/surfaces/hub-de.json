@@ -15,8 +15,8 @@
       {
         "id": "allocation",
         "value": "10%",
-        "title": "10 % in den Gemeinschaftspool",
-        "note": "Vom Angebot jedes neuen Tokens geht in den Gemeinschaftspool."
+        "title": "10 % jedes neuen Tokens gehen an deine Leute — garantiert",
+        "note": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "10 % Gemeinschaft + Netzgebühr",
+        "label": "10% Gemeinschaft + Netzgebühr",
         "sub": "Teil des neuen Tokens und die Protokollgebühr bleiben getrennt"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "10 % jedes neuen Tokens gehen in den Gemeinschaftspool",
-        "body": "Jeder Standard-Token, der über das Netz gestartet wird, sendet 10 % seines Anfangsangebots in den Community Pool dieses Tokens — dann an die Gemeinschaft. Keine persönliche Auszahlung und nicht 10 % jeder Gebühr.",
+        "title": "27 % jedes neuen Tokens gehen in den Gemeinschaftspool",
+        "body": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %. 10 % jedes neuen Tokens gehen garantiert beim Start in seinen Community-Pool. Der restliche Kurvenrest (~17 %) geht in den Community-Pool oder wird verbrannt — der Ersteller wählt einmal beim Start.",
         "href": "/create/token",
         "cta": "Token erstellen"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Aktive Beta-Growth-Auszahlung: L1 70 % · L2 30 % des Growth-Belohnungsbudgets. Growth Pool sind 15 % der zulässigen Gebühren. Getrennt von den Model-A-Zielen der Netzgebühren und von den 10 % jedes neuen Tokens, die in den Community-Pool gehen.",
+    "subtitle": "Aktive Beta-Growth-Auszahlung: L1 70 % · L2 30 % des Growth-Belohnungsbudgets. Growth Pool sind 15 % der zulässigen Gebühren. Getrennt von den Model-A-Zielen der Netzgebühren und von den 27 % jedes neuen Tokens, die in den Community-Pool gehen.",
     "you": "Du",
     "budgetNote": "Prozentsätze sind Anteile am Growth-Belohnungsbudget, nachdem the fee split 15 % der zulässigen Gebühren in den Growth Pool leitet — nicht Anteile an jeder Netzgebühr.",
     "detailsTitle": "So funktioniert Growth-Referral",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Getrennt von Gebühren und Token",
-        "body": "Die Growth-Gewichte L1/L2 sind nicht der Model-A-Split der Netzgebühren und nicht die 10 % jedes neuen Tokens für den Community-Pool. Growth Pool ist ein Model-A-Gebührenziel mit eigenen Abrechnungsregeln."
+        "body": "Die Growth-Gewichte L1/L2 sind nicht der Model-A-Split der Netzgebühren und nicht die 27 % jedes neuen Tokens für den Community-Pool. Growth Pool ist ein Model-A-Gebührenziel mit eigenen Abrechnungsregeln."
       },
       {
         "title": "Diese Site",
@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "Wie man teilnimmt",
-    "subtitle": "Treten Sie PEOPLE Blockchain als Gemeinschaftsteilnehmer bei — vom Telefon, Tablet oder Browser.",
+    "subtitle": "Treten Sie People’s Blockchain als Gemeinschaftsteilnehmer bei — vom Telefon, Tablet oder Browser.",
     "steps": [
       {
         "num": "01",
@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Wallet erstellen",
-        "body": "Erzeugen Sie eine 12-Wörter-Phrase im Browser, schreiben Sie sie auf und verschlüsseln Sie sie mit einem Passwort. Schlüssel verlassen dieses Gerät nie. Oder melden Sie sich mit Google an und erhalten eine Cloud-Wallet: Ihr Schlüssel wird verschlüsselt auf PEOPLE-Servern gespeichert, und die Infrastruktur von PEOPLE kann ihn entschlüsseln.",
+        "title": "Nicht-kustodiales Wallet erstellen",
+        "body": "Erzeugen Sie eine 12-Wörter-Phrase im Browser, schreiben Sie sie auf und verschlüsseln Sie sie mit einem Passwort. Schlüssel verlassen dieses Gerät nie.",
         "href": "/wallet",
         "cta": "Wallet öffnen"
       },
@@ -147,7 +147,7 @@
         "cta": "Erstellen"
       }
     ],
-    "ctaJoin": "PEOPLE Blockchain beitreten",
+    "ctaJoin": "People’s Blockchain beitreten",
     "ctaHow": "So funktioniert es"
   },
   "whatIs": {
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Eine Person mit Wallet auf Telefon, Tablet oder Browser.",
-        "detail": "Beginnen Sie mit einer Wallet auf Telefon, Tablet oder Browser. Sie treten als Person in der Gemeinschaft bei — nicht als Validator."
+        "detail": "Beginnen Sie mit einem nicht-kustodialen Konto auf Telefon, Tablet oder Browser. Sie treten als Person in der Gemeinschaft bei — nicht als Validator."
       },
       {
         "id": "transaction",
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Netzgebühren und der Gemeinschaftsanteil jedes Tokens bleiben in getrennten Kanälen.",
-        "detail": "Netzgebühren in PPL folgen the fee split. Standardmäßig von Nutzern erstellte Token senden 10 % des Angebots dieses Tokens in den eigenen Community-Pool — das ist keine Netzgebühr."
+        "detail": "Netzgebühren in PPL folgen the fee split. Standardmäßig von Nutzern erstellte Token senden 27 % des Angebots dieses Tokens in den eigenen Community-Pool — das ist keine Netzgebühr."
       }
     ],
     "storyCta": "Vollständige visuelle Geschichte"
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "PEOPLE (PPL)",
-    "summary": "PEOPLE ist das native Asset von Blockchain für die Gemeinschaft. Ticker: PPL.",
+    "title": "People (PPL)",
+    "summary": "People ist das native Asset von Blockchain für die Gemeinschaft. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool erhält 15 % der zulässigen Gebühren. Das ist kein garantiertes Einkommen, keine passive Rendite und kein Anlageprodukt.",
     "detailsTitle": "So funktioniert die Gebührenweiterleitung",
-    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. After whole-number division, any remainder stays with validators. The 10 % of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Jede Protokollgebühr teilt sich: 30 % Validatoren, 25 % Community, 20 % Treasury, 10 % Liquidität, 15 % Growth, 0 % verbrannt — einschließlich gebrochener Gebühren. Nach der ganzzahligen Aufteilung verbleibt ein Rest bei den Validatoren. Bis zu 27 % jedes neuen Tokens, die in den Community-Fonds gehen, sind ein anderer Weg — keine Netzwerkgebühr.",
     "storyLink": "Wie Belohnungen erklärt werden"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Die Startpreisbildung nutzt eine Constant-Product-Kurve mit exakter Ganzzahlmathematik.",
       "Eine Protokoll-Handelsgebühr auf der Kurve wird über die Netzgebührenwirtschaft weitergeleitet.",
-      "Der Standard-Start-Split enthält verpflichtend 10 % des Angebots dieses Tokens in den eigenen Community-Pool (keine PPL-Netzgebühr).",
+      "Der Standard-Start-Split enthält verpflichtend 27 % des Angebots dieses Tokens in den eigenen Community-Pool (keine PPL-Netzgebühr).",
       "Creator-Vesting hält den Großteil des Creator-Anteils über die Zeit frei, damit die Gemeinschaft nicht am ersten Tag gedumpt wird."
     ],
     "createCta": "Token Factory öffnen",

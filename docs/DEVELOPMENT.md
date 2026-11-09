@@ -19,7 +19,7 @@ This guide explains how to set up, build, test, and run the **PEOPLE Blockchain*
 ## Repository Structure
 
 ```text
-peoples-blockchain/
+people/
 ├── docs/                        # Specifications & Architecture Documentation
 │   ├── VISION.md                # High-level vision & product principles
 │   ├── ECONOMICS.md             # Native asset, fees, and validator emission
