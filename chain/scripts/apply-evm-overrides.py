@@ -40,9 +40,90 @@ def patch_app_go(app_go: Path) -> None:
     app_go.write_text(text)
 
 
+# Mainnet (people_97400-1, EVM 97400) and testnet (people_97401-1, EVM 97401) run the same
+# binary. Upstream passes one compile-time EVMChainID everywhere; these patches make every app
+# construction derive the EVM chain id from the Cosmos chain-id instead (config.EVMChainIDFor).
+# A mainnet node whose app.toml still says another evm-chain-id refuses to start, because the
+# JSON-RPC server reports app.toml's value to wallets.
+ROOT_REPLACEMENTS = [
+    (
+        "customAppTemplate, customAppConfig := evmdconfig.InitAppConfig(evmdconfig.BaseDenom, evmdconfig.EVMChainID)",
+        "customAppTemplate, customAppConfig := evmdconfig.InitAppConfig(evmdconfig.BaseDenom, evmdconfig.EVMChainIDFor(initClientCtx.ChainID))",
+        1,
+    ),
+    (
+        "if err := evmdconfig.EvmAppOptions(evmdconfig.EVMChainID); err != nil {",
+        "if err := evmdconfig.EvmAppOptions(evmdconfig.EVMChainIDFor(initClientCtx.ChainID)); err != nil {",
+        1,
+    ),
+    (
+        """	return evmd.NewExampleApp(
+		logger, db, traceStore, true,
+		appOpts,
+		evmdconfig.EVMChainID,
+		evmdconfig.EvmAppOptions,
+		baseappOptions...,
+	)""",
+        """	evmChainID := evmdconfig.EVMChainIDFor(chainID)
+	if chainID == evmdconfig.PeopleMainnetChainID {
+		if got := cast.ToUint64(appOpts.Get("evm.evm-chain-id")); got != evmChainID {
+			panic(fmt.Sprintf("app.toml [evm] evm-chain-id is %d; %s requires %d", got, chainID, evmChainID))
+		}
+	}
+
+	return evmd.NewExampleApp(
+		logger, db, traceStore, true,
+		appOpts,
+		evmChainID,
+		evmdconfig.EvmAppOptions,
+		baseappOptions...,
+	)""",
+        1,
+    ),
+    (
+        "evmdconfig.EVMChainID, evmdconfig.EvmAppOptions, baseapp.SetChainID(chainID))",
+        "evmdconfig.EVMChainIDFor(chainID), evmdconfig.EvmAppOptions, baseapp.SetChainID(chainID))",
+        2,
+    ),
+]
+
+CREATOR_OLD = """		simtestutil.EmptyAppOptions{},
+		evmdconfig.EVMChainID,
+		evmdconfig.EvmAppOptions,
+		baseappOptions...,"""
+CREATOR_NEW = """		simtestutil.EmptyAppOptions{},
+		evmdconfig.EVMChainIDFor(chainID),
+		evmdconfig.EvmAppOptions,
+		baseappOptions...,"""
+
+
+def patch_root_go(root_go: Path) -> None:
+    text = root_go.read_text()
+    for old, new, count in ROOT_REPLACEMENTS:
+        if text.count(new) == count:
+            continue
+        if text.count(old) != count:
+            raise SystemExit(f"{root_go}: expected {count} x {old[:60]!r}; upstream root.go changed")
+        text = text.replace(old, new)
+    if '\t"fmt"\n' not in text:
+        text = text.replace('\t"errors"\n', '\t"errors"\n\t"fmt"\n', 1)
+    root_go.write_text(text)
+
+
+def patch_creator_go(creator_go: Path) -> None:
+    text = creator_go.read_text()
+    if CREATOR_NEW in text:
+        return
+    if text.count(CREATOR_OLD) != 1:
+        raise SystemExit(f"{creator_go}: newApp anchor not found; upstream creator.go changed")
+    creator_go.write_text(text.replace(CREATOR_OLD, CREATOR_NEW, 1))
+
+
 def main() -> None:
     cache = Path(sys.argv[1])
     patch_app_go(cache / "evmd" / "app.go")
+    patch_root_go(cache / "evmd" / "cmd" / "evmd" / "cmd" / "root.go")
+    patch_creator_go(cache / "evmd" / "cmd" / "evmd" / "cmd" / "creator.go")
 
 
 if __name__ == "__main__":

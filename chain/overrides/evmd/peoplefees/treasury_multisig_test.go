@@ -79,3 +79,43 @@ func TestTreasuryMultisigAddressRejectsWrongKeyType(t *testing.T) {
 		t.Fatalf("plain secp256k1 pubkeys must NOT derive TreasuryMultisigAddress, but they did: %s", got)
 	}
 }
+
+// mainnetTreasuryMultisigPubkeysHex must stay byte-for-byte equal to
+// chain/emission/allocation-mainnet.json `treasury_multisig.public_keys_secp256k1_hex`
+// (cross-checked by validate-emission-genesis.py with PEOPLE_ALLOCATION=emission/allocation-mainnet.json).
+// Empty until the owner supplies the three mainnet signer public keys.
+var mainnetTreasuryMultisigPubkeysHex = []string{}
+
+// TestMainnetTreasuryMultisigAddressDerivesFromDeclaredPubkeys proves the mainnet multisig
+// address compiled into the binary is the 2-of-3 of the declared mainnet keys, and that it
+// shares no key with the testnet multisig.
+func TestMainnetTreasuryMultisigAddressDerivesFromDeclaredPubkeys(t *testing.T) {
+	if MainnetTreasuryMultisigAddress == "" {
+		if len(mainnetTreasuryMultisigPubkeysHex) != 0 {
+			t.Fatal("mainnet pubkeys declared but MainnetTreasuryMultisigAddress is empty")
+		}
+		t.Skip("mainnet treasury multisig not chosen yet")
+	}
+	if len(mainnetTreasuryMultisigPubkeysHex) != 3 {
+		t.Fatalf("mainnet multisig needs 3 pubkeys, got %d", len(mainnetTreasuryMultisigPubkeysHex))
+	}
+	testnet := map[string]bool{}
+	for _, h := range treasuryMultisigPubkeysHex {
+		testnet[h] = true
+	}
+	pubkeys := make([]cryptotypes.PubKey, len(mainnetTreasuryMultisigPubkeysHex))
+	for i, h := range mainnetTreasuryMultisigPubkeysHex {
+		if testnet[h] {
+			t.Fatalf("mainnet pubkey %d reuses a testnet signer key", i)
+		}
+		key, err := hex.DecodeString(h)
+		if err != nil {
+			t.Fatalf("decode mainnet pubkey %d: %v", i, err)
+		}
+		pubkeys[i] = &ethsecp256k1.PubKey{Key: key}
+	}
+	got := mustAddress(t, kmultisig.NewLegacyAminoPubKey(treasuryMultisigThreshold, pubkeys))
+	if got != MainnetTreasuryMultisigAddress {
+		t.Fatalf("derived mainnet multisig %s does not match MainnetTreasuryMultisigAddress %s", got, MainnetTreasuryMultisigAddress)
+	}
+}

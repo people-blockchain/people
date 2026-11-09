@@ -1,0 +1,137 @@
+{
+  "chain_id": "people_97400-1",
+  "denom": "appl",
+  "display": "PPL",
+  "decimals": 18,
+  "total_supply_appl": "1000000000000000000000000000",
+  "comment": "PEOPLE MAINNET allocation. Same 1B PPL supply and buckets as testnet (website/src/lib/tokenomics.ts). Fields marked owner_placeholder / placeholder must be replaced with real, independently held keys before the genesis ceremony; apply-emission-genesis.py and validate-emission-genesis.py refuse a mainnet genesis while any remain. Only public keys and addresses belong here, never private keys or mnemonics.",
+  "buckets": {
+    "community": {
+      "id": "community",
+      "pct": 35,
+      "amount_appl": "350000000000000000000000000",
+      "label": "Community & rewards",
+      "account": "people1vmdpt6nljzrcx924ddle96q8kgjaf2mlvdfpel",
+      "account_kind": "continuous_vesting",
+      "vesting_years": 6,
+      "owner_placeholder": true,
+      "note": "350M PPL, continuous vesting over 6 years from genesis. Funds the Million Founders program (incl. Genesis Quest up to 25M, decided 2026-11-01) and community rewards. BLOCKER: on testnet this address has no signer and no code path, so vested PPL can never move. Mainnet needs a spend path before genesis (recommended: peoplefees streams the vested amount into the x/distribution community pool each block, spent by governance proposals; alternative: the treasury multisig). Owner decides."
+    },
+    "validators": {
+      "id": "validators",
+      "pct": 20,
+      "amount_appl": "200000000000000000000000000",
+      "label": "Validators & staking pool",
+      "account": "people1yaf2hms6r9z6ws3hk2nmfvn33ruatz6lezml02",
+      "account_kind": "periodic_vesting",
+      "owner_placeholder": false,
+      "note": "Validator reward pool (200M PPL). M11-2 (owner-approved): each year's 60M/50M/50M/40M PPL tranche is laid out as ~365 daily PeriodicVestingAccount periods, not one yearly cliff; every block, StreamValidatorPool (chain/overrides/evmd/peoplefees) drains whatever the SDK's native vesting lock has already unlocked and pays it to whichever validators signed the previous block, in addition to the 30% live fee share."
+    },
+    "team": {
+      "id": "team",
+      "pct": 15,
+      "amount_appl": "150000000000000000000000000",
+      "label": "Team & founders",
+      "account": "",
+      "account_kind": "continuous_vesting",
+      "vesting_upfront_pct": 0,
+      "vesting_cliff_months": 6,
+      "vesting_linear_months": 18,
+      "owner_placeholder": true,
+      "note": "A11: 0% at genesis, 6-month cliff, then 18 months linear. Owner supplies the team-controller address (a key or multisig held by the team, not on any server) before the ceremony."
+    },
+    "treasury": {
+      "id": "treasury",
+      "pct": 15,
+      "amount_appl": "150000000000000000000000000",
+      "label": "Ecosystem treasury (DAO)",
+      "account": "",
+      "account_kind": "multisig_2of3_continuous_vesting",
+      "vesting_upfront_pct": 0,
+      "vesting_cliff_months": 6,
+      "vesting_linear_months": 18,
+      "legacy_module_name": "people_treasury",
+      "owner_placeholder": true,
+      "note": "A11: 0% at genesis, 6-month cliff, then 18 months linear, on the mainnet 2-of-3 treasury multisig below."
+    },
+    "sale": {
+      "id": "sale",
+      "pct": 10,
+      "amount_appl": "100000000000000000000000000",
+      "label": "Community sale",
+      "account": "",
+      "account_kind": "multisig_2of3",
+      "owner_placeholder": true,
+      "note": "Mainnet: spendable on the 2-of-3 treasury multisig from genesis, so the multisig can fund PplSaleDistributor (PR #88) in tranches after it is deployed on 97400. On testnet this was the keyless people_sale module account, which nothing can spend."
+    },
+    "liquidity": {
+      "id": "liquidity",
+      "pct": 5,
+      "amount_appl": "50000000000000000000000000",
+      "label": "Liquidity",
+      "account": "",
+      "account_kind": "multisig_2of3",
+      "legacy_module_name": "people_liquidity",
+      "owner_placeholder": true,
+      "note": "Same 2-of-3 mainnet treasury multisig, spendable from genesis (one PPL/pUSDC pool on PEOPLE at sale graduation, user decision 2026-11-01)."
+    }
+  },
+  "treasury_multisig": {
+    "threshold": 2,
+    "signer_roles": [
+      "owner",
+      "co_founder",
+      "owner_cold"
+    ],
+    "address": "",
+    "public_keys_secp256k1_hex": [],
+    "placeholder": true,
+    "note": "MAINNET 2-of-3 (owner, co-founder, owner's cold key). Must NOT reuse the testnet signer keys. Proposed: the three owners of the Base sale Safe (their eth_secp256k1 public keys, recoverable from any Base transaction they signed). The address goes into peoplefees.MainnetTreasuryMultisigAddress too; validate-emission-genesis.py cross-checks both.",
+    "public_key_type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey"
+  },
+  "mainnet_prep": {
+    "drop_well_known_mnemonic_accounts": true,
+    "default_validator_commission_rate": "0.10",
+    "default_validator_commission_max_rate": "0.20",
+    "default_validator_commission_max_change_rate": "0.01",
+    "bootstrap_address_in_genesis": true,
+    "note": "Validators run on separate servers and sign their own gentx (scripts/mainnet/). Keys use the file keyring, never test. validator_reserve_appl is each genesis validator operator's liquid balance (carved out of community); validator_self_delegation_appl is the gentx bond."
+  },
+  "validator_vesting_annual_ppl": [
+    60000000,
+    50000000,
+    50000000,
+    40000000
+  ],
+  "validator_reserve_appl": "100000000000000000000",
+  "fee_split_bps": {
+    "validators": 3000,
+    "community": 2500,
+    "treasury": 2000,
+    "liquidity": 1000,
+    "growth": 1500,
+    "burn": 0
+  },
+  "mint": {
+    "inflation": "0.000000000000000000",
+    "inflation_min": "0.000000000000000000",
+    "inflation_max": "0.000000000000000000",
+    "inflation_rate_change": "0.000000000000000000"
+  },
+  "distribution": {
+    "community_tax": "0.000000000000000000",
+    "comment": "Must stay 0 while Model A is enforced in peoplefees (25% community). Non-zero community_tax would re-split any fee-collector dust and double-count the community share."
+  },
+  "fee_sink_modules": {
+    "comment": "Fees go straight to treasury_multisig.address (peoplefees, mainnet multisig selected by chain-id). Module names kept only for the testnet upgrade sweep.",
+    "treasury": "people_treasury",
+    "liquidity": "people_liquidity",
+    "growth": "people_growth"
+  },
+  "genesis_extra_accounts": {
+    "comment": "Mainnet: no faucet, no deployer, no test accounts.",
+    "accounts": []
+  },
+  "evm_chain_id": 97400,
+  "validator_self_delegation_appl": "50000000000000000000"
+}
