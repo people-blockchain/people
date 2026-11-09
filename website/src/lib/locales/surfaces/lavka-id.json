@@ -5,7 +5,7 @@
   "contractsOff": "Kontrak loyalitas belum di-deploy di testnet ini. Jalankan workflow Lavka setelah merge.",
   "signInCta": "Masuk",
   "walletCta": "Tautkan dompet",
-  "pohRequired": "Masuk dengan Google atau email dan tautkan dompet untuk mengelola toko atau menukar kunjungan.",
+  "pohRequired": "Masuk dengan email dan tautkan dompet untuk mengelola toko atau menukar kunjungan.",
   "merchantTitle": "Toko Anda",
   "merchantLead": "Atur nama dan negara, lalu terbitkan pass untuk dibeli dan dipakai.",
   "displayNameLabel": "Nama toko",
@@ -58,5 +58,6 @@
   "successPay": "Pembayaran terkirim.",
   "successEscrow": "Prabayar terkunci.",
   "connectWallet": "Hubungkan dompet",
-  "preliminaryBanner": "Sementara — parameter pilot dapat berubah sebelum mainnet."
+  "preliminaryBanner": "Sementara — parameter pilot dapat berubah sebelum mainnet.",
+  "pohRequiredSocial": "Masuk dengan Google atau email dan tautkan dompet untuk mengelola toko atau menukar kunjungan."
 }

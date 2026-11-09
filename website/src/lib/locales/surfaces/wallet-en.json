@@ -1,6 +1,6 @@
 {
   "title": "Wallet",
-  "lead": "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
+  "lead": "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
   "create": "Create a new wallet",
   "import": "Import wallet",
   "unlock": "Unlock",
@@ -46,8 +46,8 @@
   "registrationPending": "Connecting to the network — we will retry automatically.",
   "networkChecking": "Connecting…",
   "networkUnavailable": "Network temporarily unavailable",
-  "signInHeading": "Sign in with Google or email",
-  "signInGoogle": "Continue with Google",
+  "signInHeading": "Sign in with email",
+  "signInGoogle": "Continue with email",
   "signInMagicCta": "Continue with email",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "Your key is stored encrypted on PEOPLE servers so you can restore it by signing in. PEOPLE's infrastructure is able to decrypt it. For full self-custody, use a browser wallet or an external wallet. Export the private key only if you need a backup outside PEOPLE.",
   "cloudDisconnect": "Disconnect",
   "importAddress": "Address this key controls",
-  "importInvalidKey": "Enter a 12-word phrase or a 64-character hex private key."
+  "importInvalidKey": "Enter a 12-word phrase or a 64-character hex private key.",
+  "leadSocial": "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
+  "signInHeadingSocial": "Sign in with Google or email",
+  "signInGoogleSocial": "Continue with Google"
 }

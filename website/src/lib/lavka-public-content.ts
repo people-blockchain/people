@@ -1,4 +1,5 @@
 import type { Language } from "./preferences";
+import { withSocialLoginCopy } from "./social-login";
 import lavkaAr from "./locales/surfaces/lavka-ar.json" with { type: "json" };
 import lavkaDe from "./locales/surfaces/lavka-de.json" with { type: "json" };
 import lavkaEn from "./locales/surfaces/lavka-en.json" with { type: "json" };
@@ -14,7 +15,7 @@ import lavkaZh from "./locales/surfaces/lavka-zh.json" with { type: "json" };
 
 export type LavkaPublicCopy = typeof lavkaEn;
 
-export const lavkaPublic: Record<Language, LavkaPublicCopy> = {
+const lavkaPublicRaw: Record<Language, LavkaPublicCopy> = {
   en: lavkaEn,
   ru: lavkaRu,
   es: lavkaEs,
@@ -28,3 +29,7 @@ export const lavkaPublic: Record<Language, LavkaPublicCopy> = {
   zh: lavkaZh,
   ar: lavkaAr,
 };
+
+export const lavkaPublic: Record<Language, LavkaPublicCopy> = Object.fromEntries(
+  Object.entries(lavkaPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+) as Record<Language, LavkaPublicCopy>;

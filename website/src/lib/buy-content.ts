@@ -6,6 +6,7 @@
  */
 
 import type { Language } from "./preferences";
+import { withSocialLoginCopy } from "./social-login";
 import buyEn from "./locales/surfaces/buy-en.json" with { type: "json" };
 import buyRu from "./locales/surfaces/buy-ru.json" with { type: "json" };
 import buyEs from "./locales/surfaces/buy-es.json" with { type: "json" };
@@ -68,5 +69,8 @@ export const BUY_UNTRANSLATED_LOCALES = Object.entries(rawByLanguage)
   .map(([lang]) => lang as Language);
 
 export const buyCopy: Record<Language, BuyCopy> = Object.fromEntries(
-  Object.entries(rawByLanguage).map(([lang, copy]) => [lang, withEnFallback(copy)]),
+  Object.entries(rawByLanguage).map(([lang, copy]) => [
+    lang,
+    withSocialLoginCopy(withEnFallback(copy)),
+  ]),
 ) as Record<Language, BuyCopy>;

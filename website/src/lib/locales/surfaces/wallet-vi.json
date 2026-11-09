@@ -1,6 +1,6 @@
 {
   "title": "Ví",
-  "lead": "Ví trình duyệt: không lưu ký. Khóa được tạo trong trình duyệt này, mã hóa bằng mật khẩu của bạn và không bao giờ gửi tới máy chủ của chúng tôi. Đăng nhập bằng Google hoặc email sẽ tạo ví đám mây thay thế: PEOPLE lưu khóa của bạn đã mã hóa và hạ tầng của PEOPLE có thể giải mã.",
+  "lead": "Ví trình duyệt: không lưu ký. Khóa được tạo trong trình duyệt này, mã hóa bằng mật khẩu của bạn và không bao giờ gửi tới máy chủ của chúng tôi. Đăng nhập bằng email sẽ tạo ví đám mây thay thế: PEOPLE lưu khóa của bạn đã mã hóa và hạ tầng của PEOPLE có thể giải mã.",
   "create": "Tạo ví mới",
   "import": "Nhập ví",
   "unlock": "Mở khóa",
@@ -46,8 +46,8 @@
   "registrationPending": "Đang kết nối mạng — sẽ thử lại tự động.",
   "networkChecking": "Đang kết nối…",
   "networkUnavailable": "Mạng tạm thời không khả dụng",
-  "signInHeading": "Đăng nhập bằng Google hoặc email",
-  "signInGoogle": "Tiếp tục với Google",
+  "signInHeading": "Đăng nhập bằng email",
+  "signInGoogle": "Tiếp tục với email",
   "signInMagicCta": "Send login link",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "Khóa của bạn được lưu mã hóa trên máy chủ PEOPLE để bạn khôi phục bằng cách đăng nhập. Hạ tầng của PEOPLE có khả năng giải mã khóa đó. Để tự nắm giữ khóa hoàn toàn, hãy dùng ví trình duyệt hoặc ví ngoài. Chỉ xuất khóa riêng nếu bạn cần bản sao lưu bên ngoài PEOPLE.",
   "cloudDisconnect": "Ngắt kết nối",
   "importAddress": "Địa chỉ do khóa này kiểm soát",
-  "importInvalidKey": "Nhập cụm 12 từ hoặc khóa riêng thập lục phân 64 ký tự."
+  "importInvalidKey": "Nhập cụm 12 từ hoặc khóa riêng thập lục phân 64 ký tự.",
+  "leadSocial": "Ví trình duyệt: không lưu ký. Khóa được tạo trong trình duyệt này, mã hóa bằng mật khẩu của bạn và không bao giờ gửi tới máy chủ của chúng tôi. Đăng nhập bằng Google hoặc email sẽ tạo ví đám mây thay thế: PEOPLE lưu khóa của bạn đã mã hóa và hạ tầng của PEOPLE có thể giải mã.",
+  "signInHeadingSocial": "Đăng nhập bằng Google hoặc email",
+  "signInGoogleSocial": "Tiếp tục với Google"
 }

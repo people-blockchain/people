@@ -1,5 +1,7 @@
 /** Web3Auth (Sapphire) — public Client ID; override via NEXT_PUBLIC_WEB3AUTH_CLIENT_ID in Vercel. */
 
+import { isSocialLoginEnabled } from "@/lib/social-login";
+
 export type Web3AuthNetworkName = "sapphire_devnet" | "sapphire_mainnet";
 
 /** Owner Sapphire Mainnet project (public). Env overrides for previews / rotation. */
@@ -48,5 +50,8 @@ export const WEB3AUTH_ID_TOKEN_TRUST_ANCHORS: readonly Web3AuthIdTokenTrustAncho
 ];
 
 export function isWeb3AuthActive(): boolean {
-  return Boolean(readWeb3AuthClientId());
+  // Social login (Google / Apple / Web3Auth Login Service) is behind
+  // NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED (default false). When off, the UI falls
+  // back to email magic-link / seed / injected wallets — see social-login.ts.
+  return Boolean(readWeb3AuthClientId()) && isSocialLoginEnabled();
 }

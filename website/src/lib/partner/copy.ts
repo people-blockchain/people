@@ -1,4 +1,5 @@
 import type { Language } from "@/lib/preferences";
+import { withSocialLoginCopy } from "@/lib/social-login";
 import partnerAr from "@/lib/locales/surfaces/partner-ar.json" with { type: "json" };
 import partnerDe from "@/lib/locales/surfaces/partner-de.json" with { type: "json" };
 import partnerEn from "@/lib/locales/surfaces/partner-en.json" with { type: "json" };
@@ -14,7 +15,7 @@ import partnerZh from "@/lib/locales/surfaces/partner-zh.json" with { type: "jso
 
 export type PartnerStrings = typeof partnerEn;
 
-export const partnerCopy: Record<Language, PartnerStrings> = {
+const partnerCopyRaw: Record<Language, PartnerStrings> = {
   en: partnerEn,
   es: partnerEs,
   pt: partnerPt,
@@ -28,6 +29,10 @@ export const partnerCopy: Record<Language, PartnerStrings> = {
   ar: partnerAr,
   ru: partnerRu,
 };
+
+export const partnerCopy: Record<Language, PartnerStrings> = Object.fromEntries(
+  Object.entries(partnerCopyRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+) as Record<Language, PartnerStrings>;
 
 export function partnerText(lang: Language): PartnerStrings {
   return partnerCopy[lang];

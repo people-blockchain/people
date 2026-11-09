@@ -41,7 +41,8 @@
         "sub": "İlk takastan adil fiyat"
       }
     ],
-    "ctaWalletAuth": "Cüzdan oluştur / Google ile giriş"
+    "ctaWalletAuth": "Cüzdan oluştur",
+    "ctaWalletAuthSocial": "Cüzdan oluştur / Google ile giriş"
   },
   "blocks": [
     {

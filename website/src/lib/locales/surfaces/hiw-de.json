@@ -9,7 +9,8 @@
       "items": [
         {
           "title": "Wallet",
-          "text": "Erstellen Sie eine Wallet am Handy oder im Browser. Eine Browser-Wallet mit 12 Wörtern ist non-custodial: Schlüssel verlassen Ihr Gerät nicht. Eine Cloud-Wallet (Anmeldung mit Google oder E-Mail) wird verschlüsselt auf PEOPLE-Servern gespeichert, und die Infrastruktur von PEOPLE kann sie entschlüsseln."
+          "text": "Erstellen Sie eine Wallet am Handy oder im Browser. Eine Browser-Wallet mit 12 Wörtern ist non-custodial: Schlüssel verlassen Ihr Gerät nicht. Eine Cloud-Wallet (Anmeldung mit E-Mail) wird verschlüsselt auf PEOPLE-Servern gespeichert, und die Infrastruktur von PEOPLE kann sie entschlüsseln.",
+          "textSocial": "Erstellen Sie eine Wallet am Handy oder im Browser. Eine Browser-Wallet mit 12 Wörtern ist non-custodial: Schlüssel verlassen Ihr Gerät nicht. Eine Cloud-Wallet (Anmeldung mit Google oder E-Mail) wird verschlüsselt auf PEOPLE-Servern gespeichert, und die Infrastruktur von PEOPLE kann sie entschlüsseln."
         },
         {
           "title": "Token erstellen",

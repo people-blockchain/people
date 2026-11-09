@@ -41,7 +41,8 @@
         "sub": "Precio justo desde el primer swap"
       }
     ],
-    "ctaWalletAuth": "Crear cartera / Entrar con Google"
+    "ctaWalletAuth": "Crear cartera",
+    "ctaWalletAuthSocial": "Crear cartera / Entrar con Google"
   },
   "blocks": [
     {

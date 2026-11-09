@@ -5,7 +5,7 @@
   "contractsOff": "Contrats fidélité non déployés sur ce testnet. Lancez le workflow Lavka après fusion.",
   "signInCta": "Se connecter",
   "walletCta": "Lier le portefeuille",
-  "pohRequired": "Connectez-vous avec Google ou e-mail et liez votre portefeuille pour gérer le commerce ou utiliser des visites.",
+  "pohRequired": "Connectez-vous avec e-mail et liez votre portefeuille pour gérer le commerce ou utiliser des visites.",
   "merchantTitle": "Votre commerce",
   "merchantLead": "Indiquez le nom et le pays, puis publiez un pass à acheter ou utiliser.",
   "displayNameLabel": "Nom du commerce",
@@ -58,5 +58,6 @@
   "successPay": "Paiement envoyé.",
   "successEscrow": "Prépaiement bloqué.",
   "connectWallet": "Connecter le portefeuille",
-  "preliminaryBanner": "Préliminaire — paramètres pilotes susceptibles d'évoluer avant le mainnet."
+  "preliminaryBanner": "Préliminaire — paramètres pilotes susceptibles d'évoluer avant le mainnet.",
+  "pohRequiredSocial": "Connectez-vous avec Google ou e-mail et liez votre portefeuille pour gérer le commerce ou utiliser des visites."
 }

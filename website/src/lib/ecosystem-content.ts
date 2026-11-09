@@ -1,4 +1,5 @@
 import type { Language } from "./preferences";
+import { withSocialLoginCopy } from "./social-login";
 import ecosystemAr from "./locales/surfaces/ecosystem-ar.json" with { type: "json" };
 import ecosystemDe from "./locales/surfaces/ecosystem-de.json" with { type: "json" };
 import ecosystemEn from "./locales/surfaces/ecosystem-en.json" with { type: "json" };
@@ -108,7 +109,7 @@ export const ECOSYSTEM_PRODUCTS: EcosystemProduct[] = [
   },
 ];
 
-export const ecosystemPublic: Record<Language, EcosystemPublicCopy> = {
+const ecosystemPublicRaw: Record<Language, EcosystemPublicCopy> = {
   en: ecosystemEn,
   ru: ecosystemRu,
   es: ecosystemEs,
@@ -122,3 +123,7 @@ export const ecosystemPublic: Record<Language, EcosystemPublicCopy> = {
   zh: ecosystemZh,
   ar: ecosystemAr,
 };
+
+export const ecosystemPublic: Record<Language, EcosystemPublicCopy> = Object.fromEntries(
+  Object.entries(ecosystemPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+) as Record<Language, EcosystemPublicCopy>;

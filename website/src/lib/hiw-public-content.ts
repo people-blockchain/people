@@ -1,4 +1,5 @@
 import type { Language } from "./preferences";
+import { withSocialLoginCopy } from "./social-login";
 import hiwAr from "./locales/surfaces/hiw-ar.json" with { type: "json" };
 import hiwDe from "./locales/surfaces/hiw-de.json" with { type: "json" };
 import hiwEn from "./locales/surfaces/hiw-en.json" with { type: "json" };
@@ -14,7 +15,7 @@ import hiwZh from "./locales/surfaces/hiw-zh.json" with { type: "json" };
 
 export type HiwPublicCopy = typeof hiwEn;
 
-export const hiwPublic: Record<Language, HiwPublicCopy> = {
+const hiwPublicRaw: Record<Language, HiwPublicCopy> = {
   en: hiwEn,
   ru: hiwRu,
   es: hiwEs,
@@ -28,3 +29,7 @@ export const hiwPublic: Record<Language, HiwPublicCopy> = {
   zh: hiwZh,
   ar: hiwAr,
 };
+
+export const hiwPublic: Record<Language, HiwPublicCopy> = Object.fromEntries(
+  Object.entries(hiwPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+) as Record<Language, HiwPublicCopy>;

@@ -1,4 +1,5 @@
 import type { Language } from "./preferences";
+import { withSocialLoginCopy } from "./social-login";
 import foundersAr from "./locales/surfaces/founders-ar.json" with { type: "json" };
 import foundersDe from "./locales/surfaces/founders-de.json" with { type: "json" };
 import foundersEn from "./locales/surfaces/founders-en.json" with { type: "json" };
@@ -14,7 +15,7 @@ import foundersZh from "./locales/surfaces/founders-zh.json" with { type: "json"
 
 export type FoundersPublicCopy = typeof foundersEn;
 
-export const foundersPublic: Record<Language, FoundersPublicCopy> = {
+const foundersPublicRaw: Record<Language, FoundersPublicCopy> = {
   en: foundersEn,
   ru: foundersRu,
   es: foundersEs,
@@ -28,3 +29,7 @@ export const foundersPublic: Record<Language, FoundersPublicCopy> = {
   zh: foundersZh,
   ar: foundersAr,
 };
+
+export const foundersPublic: Record<Language, FoundersPublicCopy> = Object.fromEntries(
+  Object.entries(foundersPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+) as Record<Language, FoundersPublicCopy>;

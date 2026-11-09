@@ -30,7 +30,8 @@
     "rows": [
       {
         "before": "Seed phrases, gas and a dozen steps before your first action.",
-        "after": "Sign in with Google or email, like any normal app."
+        "after": "Sign in with email, like any normal app.",
+        "afterSocial": "Sign in with Google or email, like any normal app."
       },
       {
         "before": "Bots and fake accounts next to real people.",
@@ -216,7 +217,7 @@
     "belowMin": "Enter an amount to see your quote.",
     "cta": "Connect a wallet to buy",
     "ctaConnected": "Buy PPL",
-    "wallets": "PEOPLE Wallet (sign in with Google or email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (sign in with email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "How you pay",
     "payOnBase": "Pay on Base",
     "payFromOther": "Pay from another network",
@@ -277,7 +278,7 @@
     "termsLink": "Terms",
     "help": "Need help? {support}",
     "supportLink": "Support",
-    "noWalletHint": "No wallet? Choose Google or email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
+    "noWalletHint": "No wallet? Choose email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
     "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL goes back to the sale wallet on PEOPLE mainnet; nothing is burned. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
     "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, and 3% only on the part of sell-backs in the rolling 24 hours above 1% of the reserve.",
@@ -288,7 +289,7 @@
     "stableUsdtDirectOption": "USDT on Base (bridged)",
     "payFromNetworks": "Works from EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana. TON is not supported.",
     "bridgeSteps": "Step 1. Swap your tokens to USDC on Base in the widget (usually 1–20 minutes). Step 2. Buy PPL with the button below.",
-    "solanaHint": "Paying from Solana or Tron? You also need an address on Base to receive USDC: connect MetaMask, Trust Wallet or WalletConnect, or sign in with Google.",
+    "solanaHint": "Paying from Solana or Tron? You also need an address on Base to receive USDC: connect MetaMask, Trust Wallet or WalletConnect, or sign in with email.",
     "bridgeClosed": "Paying from other networks opens together with the sale.",
     "bridgeStatus": "Swap in progress. Track it on {link}.",
     "bridgeFailed": "The swap did not complete. Check its status on scan.li.fi or try again.",
@@ -297,7 +298,10 @@
     "wrongNetwork": "The purchase runs on the Base network. Your wallet is on another network.",
     "switchToBase": "Switch to Base",
     "switchRejected": "The network was not switched. The purchase needs Base — try again.",
-    "embeddedNoBase": "PEOPLE Wallet cannot pay on Base yet. To buy, connect MetaMask, Trust Wallet or WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet cannot pay on Base yet. To buy, connect MetaMask, Trust Wallet or WalletConnect.",
+    "walletsSocial": "PEOPLE Wallet (sign in with Google or email) · MetaMask · Trust Wallet · WalletConnect",
+    "noWalletHintSocial": "No wallet? Choose Google or email — a PEOPLE Wallet is created for you. To pay, you need USDC on Base in that wallet or in a wallet you connect.",
+    "solanaHintSocial": "Paying from Solana or Tron? You also need an address on Base to receive USDC: connect MetaMask, Trust Wallet or WalletConnect, or sign in with Google."
   },
   "v2": {
     "banner": {

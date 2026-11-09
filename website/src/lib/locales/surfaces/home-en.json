@@ -41,7 +41,8 @@
         "sub": "Fair pricing from the first swap"
       }
     ],
-    "ctaWalletAuth": "Create wallet / Sign in with Google"
+    "ctaWalletAuth": "Create wallet",
+    "ctaWalletAuthSocial": "Create wallet / Sign in with Google"
   },
   "blocks": [
     {

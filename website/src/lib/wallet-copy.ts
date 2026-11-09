@@ -1,4 +1,5 @@
 import type { Language } from "@/lib/preferences";
+import { withSocialLoginCopy } from "@/lib/social-login";
 import walletAr from "./locales/surfaces/wallet-ar.json" with { type: "json" };
 import walletDe from "./locales/surfaces/wallet-de.json" with { type: "json" };
 import walletEs from "./locales/surfaces/wallet-es.json" with { type: "json" };
@@ -76,7 +77,8 @@ export type WalletCopyContent = {
 const baseWalletCopy: Record<string, WalletCopyContent> = {
   en: {
     title: "PEOPLE Wallet",
-    lead: "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
+    // Social (preserved): "...Signing in with Google or email creates a cloud wallet..."
+    lead: "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
     create: "Create a new wallet",
     import: "Import wallet",
     unlock: "Unlock",
@@ -124,8 +126,9 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     faucetOk: "Testnet PPL sent to this address.",
     createdConnected: "Wallet created and connected to the network.",
     registrationPending: "Connecting to the network — we will retry automatically.",
-    signInHeading: "Sign in with Google or email",
-    signInGoogle: "Continue with Google",
+    // Social (preserved): "Sign in with Google or email" / "Continue with Google"
+    signInHeading: "Sign in with email",
+    signInGoogle: "Continue with email",
     signInMagicCta: "Continue with email",
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
@@ -139,7 +142,8 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
   },
   ru: {
     title: "PEOPLE Wallet",
-    lead: "Браузерный кошелёк: некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы. Вход через Google или email создаёт вместо него облачный кошелёк: PEOPLE хранит ваш ключ в зашифрованном виде, и её инфраструктура способна его расшифровать.",
+    // Social (preserved): "...Вход через Google или email создаёт..."
+    lead: "Браузерный кошелёк: некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы. Вход через email создаёт вместо него облачный кошелёк: PEOPLE хранит ваш ключ в зашифрованном виде, и её инфраструктура способна его расшифровать.",
     create: "Создать кошелёк",
     import: "Импортировать",
     unlock: "Разблокировать",
@@ -187,8 +191,9 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     faucetOk: "Testnet PPL отправлены на этот адрес.",
     createdConnected: "Кошелёк создан и подключён к сети.",
     registrationPending: "Подключаем к сети — повторим автоматически.",
-    signInHeading: "Войти через Google или email",
-    signInGoogle: "Продолжить через Google",
+    // Social (preserved): "Войти через Google или email" / "Продолжить через Google"
+    signInHeading: "Войти через email",
+    signInGoogle: "Продолжить через email",
     signInMagicCta: "Продолжить через email",
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
@@ -215,6 +220,7 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
 export const walletCopy: Record<Language, WalletCopyContent> = new Proxy(
   baseWalletCopy as unknown as Record<Language, WalletCopyContent>,
   {
-    get: (target, prop: string) => target[prop as keyof typeof target] ?? target.en,
+    get: (target, prop: string) =>
+      withSocialLoginCopy(target[prop as keyof typeof target] ?? target.en),
   }
 );

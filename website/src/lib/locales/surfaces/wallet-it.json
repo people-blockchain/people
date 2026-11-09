@@ -1,6 +1,6 @@
 {
   "title": "Portafoglio",
-  "lead": "Wallet del browser: non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server. Accedere con Google o email crea invece un wallet cloud: PEOPLE conserva la tua chiave cifrata e la sua infrastruttura può decifrarla.",
+  "lead": "Wallet del browser: non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server. Accedere con email crea invece un wallet cloud: PEOPLE conserva la tua chiave cifrata e la sua infrastruttura può decifrarla.",
   "create": "Crea un nuovo portafoglio",
   "import": "Importa portafoglio",
   "unlock": "Sblocca",
@@ -46,8 +46,8 @@
   "registrationPending": "Connessione alla rete — riproveremo automaticamente.",
   "networkChecking": "Connessione…",
   "networkUnavailable": "La rete non è temporaneamente disponibile",
-  "signInHeading": "Accedi con Google o email",
-  "signInGoogle": "Continua con Google",
+  "signInHeading": "Accedi con email",
+  "signInGoogle": "Continua con email",
   "signInMagicCta": "Send login link",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "La tua chiave è conservata cifrata sui server di PEOPLE così puoi ripristinarla accedendo. L'infrastruttura di PEOPLE è in grado di decifrarla. Per l'autocustodia completa, usa un wallet del browser o un wallet esterno. Esporta la chiave privata solo se ti serve un backup fuori da PEOPLE.",
   "cloudDisconnect": "Disconnetti",
   "importAddress": "Indirizzo controllato da questa chiave",
-  "importInvalidKey": "Inserisci una frase di 12 parole o una chiave privata esadecimale di 64 caratteri."
+  "importInvalidKey": "Inserisci una frase di 12 parole o una chiave privata esadecimale di 64 caratteri.",
+  "leadSocial": "Wallet del browser: non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server. Accedere con Google o email crea invece un wallet cloud: PEOPLE conserva la tua chiave cifrata e la sua infrastruttura può decifrarla.",
+  "signInHeadingSocial": "Accedi con Google o email",
+  "signInGoogleSocial": "Continua con Google"
 }

@@ -41,7 +41,8 @@
         "sub": "Prezzo equo dal primo swap"
       }
     ],
-    "ctaWalletAuth": "Crea wallet / Accedi con Google"
+    "ctaWalletAuth": "Crea wallet / Accedi con email",
+    "ctaWalletAuthSocial": "Crea wallet / Accedi con Google"
   },
   "blocks": [
     {

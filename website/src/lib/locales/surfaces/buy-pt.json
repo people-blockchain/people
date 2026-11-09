@@ -30,7 +30,8 @@
     "rows": [
       {
         "before": "Frases-semente, gas e uma dúzia de passos antes da primeira ação.",
-        "after": "Entre com Google ou e-mail, como em qualquer app comum."
+        "after": "Entre com e-mail, como em qualquer app comum.",
+        "afterSocial": "Entre com Google ou e-mail, como em qualquer app comum."
       },
       {
         "before": "Bots e contas falsas ao lado de pessoas reais.",
@@ -216,7 +217,7 @@
     "belowMin": "Informe um valor para ver a cotação.",
     "cta": "Conecte uma carteira para comprar",
     "ctaConnected": "Comprar PPL",
-    "wallets": "PEOPLE Wallet (entrar com Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (entrar com e-mail) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Como você paga",
     "payOnBase": "Pagar na Base",
     "payFromOther": "Pagar de outra rede",
@@ -277,7 +278,7 @@
     "termsLink": "Termos",
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
-    "noWalletHint": "Não tem carteira? Escolha Google ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
+    "noWalletHint": "Não tem carteira? Escolha email ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
     "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL volta para a carteira de venda na PEOPLE mainnet e não é queimado. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Continua aberta depois que a curva fecha, até a reserva ir para a liquidez. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
     "feesBody": "Taxas: a da rede Base (gas), paga em ETH — geralmente cerca de US$ 0,01; a de troca ou ponte da LI.FI — mostrada no widget antes de confirmar; a de venda de volta à reserva — 1,5%, e 3% só sobre a parte das vendas em 24 horas móveis acima de 1% da reserva.",
@@ -288,7 +289,7 @@
     "stableUsdtDirectOption": "USDT na Base (bridged)",
     "payFromNetworks": "Funciona a partir de redes EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e outras), Tron e Solana. TON não é suportada.",
     "bridgeSteps": "Passo 1. Troque seus tokens por USDC na Base no widget (normalmente 1–20 minutos). Passo 2. Compre PPL com o botão abaixo.",
-    "solanaHint": "Vai pagar a partir da Solana ou da Tron? Você também precisa de um endereço na Base para receber os USDC: conecte MetaMask, Trust Wallet ou WalletConnect, ou entre com o Google.",
+    "solanaHint": "Vai pagar a partir da Solana ou da Tron? Você também precisa de um endereço na Base para receber os USDC: conecte MetaMask, Trust Wallet ou WalletConnect, ou entre com e-mail.",
     "bridgeClosed": "O pagamento a partir de outras redes abre junto com a venda.",
     "bridgeStatus": "Troca em andamento. Acompanhe em {link}.",
     "bridgeFailed": "A troca não foi concluída. Confira o status em scan.li.fi ou tente de novo.",
@@ -297,7 +298,10 @@
     "wrongNetwork": "A compra acontece na rede Base. Sua carteira está em outra rede.",
     "switchToBase": "Mudar para Base",
     "switchRejected": "A rede não foi trocada. A compra exige Base — tente novamente.",
-    "embeddedNoBase": "A PEOPLE Wallet ainda não consegue pagar na rede Base. Para comprar, conecte MetaMask, Trust Wallet ou WalletConnect."
+    "embeddedNoBase": "A PEOPLE Wallet ainda não consegue pagar na rede Base. Para comprar, conecte MetaMask, Trust Wallet ou WalletConnect.",
+    "walletsSocial": "PEOPLE Wallet (entrar com Google ou e-mail) · MetaMask · Trust Wallet · WalletConnect",
+    "noWalletHintSocial": "Não tem carteira? Escolha Google ou e-mail — uma PEOPLE Wallet é criada para você. Para pagar, você precisa de USDC na Base nessa carteira ou em uma carteira que conectar.",
+    "solanaHintSocial": "Vai pagar a partir da Solana ou da Tron? Você também precisa de um endereço na Base para receber os USDC: conecte MetaMask, Trust Wallet ou WalletConnect, ou entre com o Google."
   },
   "v2": {
     "banner": {
