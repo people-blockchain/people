@@ -46,3 +46,77 @@ test("founders promo copy still powers card and referral UI strings", () => {
   assert.ok(en.cardFounder);
   assert.equal(en.countriesEmpty, "Be the first founder from your country");
 });
+
+const CARD_KEYS = [
+  "eyebrow",
+  "cardFounder",
+  "cardNumberPlaceholder",
+  "cardNetwork",
+  "cardFlipHint",
+  "cardBackTitle",
+  "cardCountry",
+  "cardRank",
+  "cardPoints",
+];
+const CARD_LANGS = ["ar", "de", "es", "fr", "id", "it", "pt", "tr", "vi", "zh"];
+/** Values that legitimately equal the English copy, keyed as `lang.key`. */
+const SAME_AS_EN_ALLOWED = new Set(["fr.cardPoints"]);
+
+const isText = (value) => typeof value === "string" && value.trim().length > 0;
+const cardFile = (lang) => `founders-card-${lang}.json`;
+
+function assertCardCopy(lang, copy, en) {
+  for (const key of CARD_KEYS) {
+    assert.ok(isText(copy[key]), `${lang}.${key} must be a non-empty string`);
+    if (lang !== "en" && !SAME_AS_EN_ALLOWED.has(`${lang}.${key}`)) {
+      assert.notEqual(copy[key], en[key], `${lang}.${key} must differ from English`);
+    }
+  }
+  assert.ok(Array.isArray(copy.cardBackLines) && copy.cardBackLines.length === 3, `${lang}.cardBackLines must have 3 lines`);
+  copy.cardBackLines.forEach((line, i) => {
+    assert.ok(isText(line), `${lang}.cardBackLines[${i}] must be a non-empty string`);
+    if (lang !== "en") assert.notEqual(line, en.cardBackLines[i], `${lang}.cardBackLines[${i}] must differ from English`);
+  });
+}
+
+test("founder card copy is complete for all 12 languages", () => {
+  const en = load("founders-promo-en.json");
+  assertCardCopy("en", en, en);
+  assertCardCopy("ru", load("founders-promo-ru.json"), en);
+  for (const lang of CARD_LANGS) assertCardCopy(lang, load(cardFile(lang)), en);
+});
+
+test("founder card locale files hold exactly the card keys", () => {
+  const expected = [...CARD_KEYS, "cardBackLines"].sort();
+  for (const lang of CARD_LANGS) {
+    assert.deepEqual(Object.keys(load(cardFile(lang))).sort(), expected, cardFile(lang));
+  }
+});
+
+test("founder card locale files keep scripts and brand names clean", () => {
+  for (const lang of CARD_LANGS) {
+    const copy = load(cardFile(lang));
+    const values = [...CARD_KEYS.map((key) => copy[key]), ...copy.cardBackLines];
+    for (const value of values) {
+      assert.doesNotMatch(value, /[Ѐ-ӿ]/, `${lang}: Cyrillic in "${value}"`);
+      for (const brand of value.match(/\b(?:people|ppl)\b/gi) ?? []) {
+        assert.equal(brand, brand.toUpperCase(), `${lang}: brand must be uppercase in "${value}"`);
+      }
+    }
+  }
+});
+
+test("foundersPromoCopy serves the card translation for every new language", async () => {
+  const { foundersPromoCopy } = await import("../src/lib/founders-promo-content.ts");
+  const en = load("founders-promo-en.json");
+  const ru = load("founders-promo-ru.json");
+  assert.deepEqual(foundersPromoCopy("en"), en);
+  assert.deepEqual(foundersPromoCopy("ru"), ru);
+  for (const lang of CARD_LANGS) {
+    const card = load(cardFile(lang));
+    const copy = foundersPromoCopy(lang);
+    for (const key of [...CARD_KEYS, "cardBackLines"]) assert.deepEqual(copy[key], card[key], `${lang}.${key}`);
+    assert.equal(copy.ctaClaim, en.ctaClaim, `${lang} keeps English for non-card copy`);
+    assert.equal(foundersPromoCopy(lang), copy, `${lang} copy is precomputed`);
+  }
+});

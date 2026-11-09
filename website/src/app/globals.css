@@ -1034,22 +1034,44 @@ html:has([data-testid="buy-page"]) {
 .founders-card-scene {
   perspective: 1200px;
 }
+/* Both faces share one grid cell so the card is as tall as its tallest face
+   (never clipped); the ::before spacer keeps the 1.586 credit-card ratio as a
+   minimum height. */
 .founders-card-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   position: relative;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform 0.7s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.founders-card-inner::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 100%;
+  aspect-ratio: 1.586;
+  pointer-events: none;
 }
 .founders-card-inner.is-flipped {
   transform: rotateY(180deg);
 }
+/* `visibility` flips at mid-turn as a fallback for engines that ignore
+   backface-visibility (headless WebKit shows the mirrored back otherwise). */
 .founders-card-face {
+  grid-area: 1 / 1;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transition: visibility 0s linear 0.35s;
+}
+.founders-card-inner.is-flipped > .founders-card-face:not(.founders-card-back) {
+  visibility: hidden;
 }
 .founders-card-back {
-  position: absolute;
-  inset: 0;
   transform: rotateY(180deg);
+  visibility: hidden;
+}
+.founders-card-inner.is-flipped > .founders-card-back {
+  visibility: visible;
 }
 .founders-card-sheen {
   background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.28) 45%, transparent 60%);
@@ -1237,7 +1259,8 @@ html:has([data-testid="buy-page"]) {
   .founders-flow-dot {
     display: none;
   }
-  .founders-card-inner {
+  .founders-card-inner,
+  .founders-card-face {
     transition: none;
   }
   .warm-phone-stage,

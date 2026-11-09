@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Million Gründer · Saison 1",
+  "cardFounder": "Gründer",
+  "cardNumberPlaceholder": "Deine Nummer hier",
+  "cardNetwork": "PEOPLE-Testnet",
+  "cardFlipHint": "Zum Wenden tippen",
+  "cardBackTitle": "Deine Gründerkarte",
+  "cardCountry": "Land",
+  "cardRank": "Rang beim Früheinstieg",
+  "cardPoints": "Punkte",
+  "cardBackLines": [
+    "Ein verifizierter Mensch, eine Nummer.",
+    "Deine Stufe richtet sich nach dem Zeitpunkt deiner Verifizierung; deine Nummer wird innerhalb der Stufe gezogen.",
+    "Teilbar – deine Freunde bekommen ihre eigene."
+  ]
+}
