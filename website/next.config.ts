@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import {
+  buildAnalyticsViewHeaderRules,
+  buildAnalyticsViewRewrites,
+} from "./src/lib/analytics/view-path";
 
 /**
  * MF-14: the Content-Security-Policy is ENFORCED (it was report-only under WEB-M3).
@@ -111,6 +115,13 @@ const PERMISSIONS_POLICY = [
 ].join(", ");
 
 const nextConfig: NextConfig = {
+  /**
+   * `next dev` allowlists `localhost` (and the bind hostname) for `/_next/*`, but browsers treat
+   * `127.0.0.1` as a different origin. Opening the app or screenshot tooling at
+   * http://127.0.0.1:3456 while the dev server was started on localhost then blocks cross-origin
+   * dev assets unless we list the numeric loopback host here.
+   */
+  allowedDevOrigins: ["127.0.0.1"],
   // Baked in at build time so the bug-report button can attach an app version to its
   // auto-context. VERCEL_GIT_COMMIT_SHA is already set by Vercel; no dashboard env needed.
   env: {
@@ -136,6 +147,10 @@ const nextConfig: NextConfig = {
       { source: "/million-founders", destination: "/bounty", permanent: false },
       { source: "/million-founders/:path*", destination: "/bounty", permanent: false },
     ];
+  },
+  async rewrites() {
+    // Secret read-only analytics viewer: `/<ANALYTICS_VIEW_PATH>` → internal route (build-time env).
+    return { beforeFiles: buildAnalyticsViewRewrites(), afterFiles: [], fallback: [] };
   },
   async headers() {
     return [
@@ -165,6 +180,28 @@ const nextConfig: NextConfig = {
         source: "/api/:path*",
         headers: [{ key: "X-Content-Type-Options", value: "nosniff" }],
       },
+      {
+        source: "/stats/:path*",
+        headers: [
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/admin/:path*",
+        headers: [
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/api/admin/analytics/:path*",
+        headers: [
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Cache-Control", value: "no-store" },
+        ],
+      },
+      ...buildAnalyticsViewHeaderRules(),
     ];
   },
   images: {

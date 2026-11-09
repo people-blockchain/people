@@ -15,7 +15,7 @@ import { detectBrowserCountryCode } from "@/lib/founders/country-detect";
 import { persistCountryChoice, readPersistedCountryChoice } from "@/lib/founders/country-choice";
 import { FOUNDER_COUNTRY_OPTIONS, countryFlagEmoji } from "@/lib/founders/countries";
 import { getOrCreateFounderDeviceId } from "@/lib/founders/device-id";
-import { readStoredReferrer } from "@/lib/referral-ref";
+import { readStoredReferralCode, readStoredReferrer } from "@/lib/referral-ref";
 import { FoundersPersonal, type DemoAirdropState, type ReferralStatus } from "./FoundersPersonal";
 import {
   FoundersLandingFinalCta,
@@ -30,6 +30,7 @@ import {
 } from "./FoundersLandingSections";
 import { FoundersNftCard } from "./FoundersNftCard";
 import { HumanPassportFlow } from "./HumanPassportFlow";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
   signedIn: boolean;
@@ -89,14 +90,18 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
 
   const load = useCallback(async () => {
     const [counterRes, meRes] = await Promise.all([
-      fetch("/api/founders/million-counter", { cache: "no-store" }).catch(() => null),
+      showCommunityStats()
+        ? fetch("/api/founders/million-counter", { cache: "no-store" }).catch(() => null)
+        : Promise.resolve(null),
       fetch("/api/founders/me", { cache: "no-store", credentials: "include" }).catch(() => null),
     ]);
-    if (counterRes?.ok) {
+    if (showCommunityStats() && counterRes?.ok) {
       const body = (await counterRes.json()) as { current?: number; goal?: number; source?: string };
       if (typeof body.current === "number" && typeof body.goal === "number") {
         setMillionCounter({ current: body.current, goal: body.goal, source: body.source });
       }
+    } else {
+      setMillionCounter(null);
     }
     const meBody = meRes?.ok ? ((await meRes.json()) as Me) : null;
     setMe(meBody);
@@ -196,6 +201,7 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
           countryCode: code,
           deviceId: getOrCreateFounderDeviceId(),
           invitedByWallet: readStoredReferrer(),
+          invitedByCode: readStoredReferralCode(),
         }),
       }),
     [],

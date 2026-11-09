@@ -53,6 +53,11 @@ test("share link carries no locale and keeps ?ref= intact", () => {
   assert.doesNotMatch(url, /lang|locale|\/(ru|de|es)\b/);
   assert.equal(share.founderShareUrl("https://x.test", null), "https://x.test/founders");
   assert.equal(share.founderShareUrl("", wallet), "");
+  // one invite link for every program: the short code wins over the wallet
+  assert.equal(
+    share.founderShareUrl("https://www.peopleblockchain.network", wallet, "33063c3605"),
+    "https://www.peopleblockchain.network/?ref=33063c3605",
+  );
 });
 
 test("the site has no locale redirects that drop ?ref= (config has none; the /xx/buy proxy redirect keeps the query)", () => {

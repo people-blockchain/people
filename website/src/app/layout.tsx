@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -20,6 +19,8 @@ import { WalletConnectQueryHandler } from "@/components/wallet/WalletConnectQuer
 import { CloudWalletSessionBridge } from "@/components/wallet/CloudWalletSessionBridge";
 import { ChainProviders } from "@/components/ChainProviders";
 import { Suspense } from "react";
+import { VercelWebAnalytics } from "@/components/analytics/VercelWebAnalytics";
+import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import { ReferralRefCapture } from "@/components/ReferralRefCapture";
 import { DocumentTitle } from "@/components/DocumentTitle";
 import { BugReportButton } from "@/components/BugReportButton";
@@ -180,6 +181,9 @@ export default async function RootLayout({
               </Suspense>
               <CloudWalletSessionBridge />
               <BugReportButton />
+              <Suspense fallback={null}>
+                <AnalyticsTracker />
+              </Suspense>
               {children}
             </WalletModalProvider>
             </ChainProviders>
@@ -188,7 +192,7 @@ export default async function RootLayout({
         </ThemeProvider>
         {process.env.NEXT_PUBLIC_VERCEL_ANALYTICS === "1" ? (
           <>
-            <Analytics />
+            <VercelWebAnalytics />
             <SpeedInsights />
           </>
         ) : null}

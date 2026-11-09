@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10% ke pool komunitas",
+        "label": "Hingga 27% ke pool komunitas",
         "sub": "Tertanam di setiap token baru"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Untuk komunitas",
-      "body": "10% setiap token baru masuk ke pool komunitas token itu. Sebagian setiap biaya jaringan juga ke sana. Yang ikut mendapat bagian dari apa yang mereka bangun."
+      "body": "Saat peluncuran, kreator juga dapat mengirim sisa kurva yang belum terjual (hingga ~17%) ke pool alih-alih membakar — hingga 27% total. "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Ini partisipasi di jaringan, bukan investasi.",
   "visuals": {
     "supply": "Pasokan token",
-    "share": "10%",
+    "share": "Hingga 27%",
     "toPool": "masuk ke dana komunitas",
     "pool": "Dana komunitas",
     "poolNote": "dibagi di antara yang ikut serta",
-    "aria": "10% pasokan setiap token baru masuk ke dana komunitasnya, dibagi di antara yang ikut serta.",
+    "aria": "Hingga 27% pasokan setiap token baru masuk ke dana komunitasnya, dibagi di antara yang ikut serta.",
     "prompt": "Token yang pemegangnya memilih cara memakai kas",
     "step1": "Anda menulis",
     "step2": "Kami menyusun",

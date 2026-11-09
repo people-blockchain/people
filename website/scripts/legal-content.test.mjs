@@ -199,7 +199,7 @@ test("localized metadata and English-prevails notice are never untranslated Engl
 
 // Header, navigation and footer strings rendered on /terms and /privacy. Labels below are
 // product names or loanwords that are legitimately the same as English in some locales.
-const NAV_FOOTER_SAME_AS_EN_OK = new Set(["Million Founders", "Staking", "Litepaper", "Explorer", "Governance", "Menu", "Architecture"]);
+const NAV_FOOTER_SAME_AS_EN_OK = new Set(["Staking", "Litepaper", "Explorer", "Governance", "Menu", "Architecture"]);
 
 test("header, nav and footer strings on legal pages are localized in every locale", () => {
   const pick = (c) => ({

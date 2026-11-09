@@ -5,9 +5,9 @@
     "headlineMainLines": [
       "Lancez un token pour votre communauté."
     ],
-    "headlineAccent": "10 % vont à vos gens, pas aux baleines.",
+    "headlineAccent": "Jusqu'à 27 % vont à vos gens, pas aux baleines.",
     "headlineAccentLines": [
-      "10 % vont à vos gens,",
+      "Jusqu'à 27 % vont à vos gens,",
       "pas aux baleines."
     ],
     "sub": "Sans code, sans compétences crypto. Un téléphone ou un navigateur suffit : créez un portefeuille en 30 secondes et essayez-le sur le testnet.",
@@ -25,7 +25,7 @@
       {
         "id": "wallet",
         "label": "Un portefeuille en 30 secondes",
-        "sub": "Portefeuille de navigateur : vos clés restent sur votre appareil. Portefeuille cloud : stocké chiffré sur les serveurs de PEOPLE."
+        "sub": "Vos clés restent sur votre téléphone ou dans votre navigateur."
       },
       {
         "id": "token",
@@ -34,65 +34,53 @@
       },
       {
         "id": "share",
-        "label": "10 % pour vos gens",
-        "sub": "Chaque nouveau token envoie 10 % de son offre à son propre pool communautaire."
+        "label": "27 % pour vos gens",
+        "sub": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total."
       }
     ],
-    "shareBadge": "10 % pour la communauté",
+    "shareBadge": "10% pour la communauté",
     "peopleLine": "Vos gens, pas les baleines",
     "saleNote": "Le réseau PEOPLE est encore un réseau de test, et ses jetons de test n’ont aucune valeur. La vente de PPL est distincte : elle se déroule sur Base avec de vrais USDC ou USDT."
   },
   "community": {
-    "eyebrow": "10 % pour la communauté",
-    "title": "10 % de chaque nouveau token vont à vos gens",
-    "lead": "C'est intégré au protocole, pas promis dans un post : chaque lancement standard envoie 10 % de son offre vers le pool communautaire propre à ce token. Il n'est jamais mélangé aux frais du réseau.",
+    "eyebrow": "10 % garanti pour la communauté",
+    "title": "10 % de chaque nouveau token vont à vos gens — garanti",
+    "lead": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total.",
     "statLabel": "de l'offre de chaque nouveau token va à son pool communautaire",
-    "statNote": "Le pool appartient aux personnes qui participent à ce token — pas au réseau, pas au créateur.",
+    "statNote": "Le pool est gouverné par le timelock PEOPLE et versé aux personnes vérifiées dans le temps, pas instantanément — ce n'est pas une promesse de rendement.",
     "footnote": "Les frais du réseau sont répartis séparément : {{community}} % au pool communautaire, {{validators}} % aux validateurs.",
     "cta": "Où vont les frais",
     "href": "/how-it-works#hiw-fees"
   },
   "build": {
-    "eyebrow": "Générateur sans code",
-    "title": "Générateur sans code",
-    "lead": "De vrais assistants sont déjà disponibles sur le testnet public. Lancez un token ou un NFT, déployez un séquestre ou un financement participatif, décrivez un contrat en mots simples, ou ouvrez Lavka — rien à installer ni à compiler.",
-    "cta": "Ouvrir",
+    "eyebrow": "Sans code, sans compétences crypto",
+    "title": "Ce que vous pouvez faire sans code",
+    "lead": "Tout ce qui suit fonctionne déjà aujourd'hui sur le testnet public. Rien à installer, rien à compiler.",
+    "cta": "Essayer sur le testnet",
     "cards": [
       {
         "id": "token",
-        "title": "Lancer un token",
-        "body": "Nom, ticker, image et offre. Payez les frais de lancement et le token est mis en ligne sur sa courbe de liaison.",
+        "title": "Lancez le token de votre club ou communauté en une minute",
+        "body": "Choisissez un nom, un ticker, une image et une offre. Payez les frais de lancement en PPL et le token est en ligne sur sa propre courbe de liaison.",
         "href": "/create/token"
       },
       {
         "id": "nft",
-        "title": "Créer une collection NFT",
-        "body": "Cartes de club ou d'adhésion sous forme de NFT — téléchargez ou générez une image dans le navigateur.",
+        "title": "Créez des cartes de club en NFT",
+        "body": "Des cartes de membre en NFT : une par membre, avec une image que vous importez ou générez dans le navigateur.",
         "href": "/create/nft"
       },
       {
-        "id": "escrow",
-        "title": "Déployer un séquestre",
-        "body": "Modèle de séquestre exemple sur la page des contrats : bloquez les fonds jusqu'à une condition ou une échéance.",
-        "href": "/explorer/contracts"
-      },
-      {
-        "id": "crowdfund",
-        "title": "Lancer un financement participatif",
-        "body": "Modèle de financement participatif exemple : fixez un objectif et collectez en PPL ou en stablecoin de test.",
-        "href": "/explorer/contracts"
+        "id": "funding",
+        "title": "Levez des fonds pour votre idée",
+        "body": "Votre communauté achète sur la courbe dès le premier échange, donc le prix est fixé par la demande réelle plutôt que par un tour privé.",
+        "href": "/create"
       },
       {
         "id": "contract",
-        "title": "Décrire un contrat intelligent en mots simples",
-        "body": "Nous paramétrons un modèle OpenZeppelin audité. Vous voyez le Solidity avant de signer.",
+        "title": "Décrivez un smart contract en langage courant",
+        "body": "Écrivez ce que vous voulez en langage ordinaire et obtenez un contrat construit à partir de modèles OpenZeppelin audités. Vous voyez le résultat avant de le déployer.",
         "href": "/create/contract"
-      },
-      {
-        "id": "lavka",
-        "title": "Outils marchands Lavka",
-        "body": "Cartes de fidélité et séquestre marchand pour les commerces locaux — aucun code personnalisé.",
-        "href": "/lavka"
       }
     ]
   },
@@ -103,9 +91,9 @@
     "tiles": [
       {
         "id": "community-share",
-        "stat": "10 %",
+        "stat": "10%",
         "title": "de chaque nouveau token vont au pool communautaire de ce token",
-        "body": "Pas au réseau, pas au créateur. Le pool propre au token, partagé avec les personnes qui y participent."
+        "body": "Au lancement, le créateur peut aussi envoyer le reliquat invendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. Pas au réseau, pas au créateur. Le pool propre au token, partagé avec les personnes qui y participent."
       },
       {
         "id": "vesting",

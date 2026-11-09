@@ -6,6 +6,7 @@ import { CountUpNumber, PersonAvatar, SectionHead } from "./founders-ui";
 import { FounderCard } from "./FounderCard";
 import type { FoundersPromoCopy } from "@/lib/founders-promo-content";
 import { FounderMosaicPlaceholder } from "./FounderMosaicPlaceholder";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 const SECTION = "mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8";
 
@@ -42,6 +43,25 @@ export function FoundersMillionCounterBar({
   counter: MillionCounter | null;
   className?: string;
 }) {
+  const statsPublic = showCommunityStats();
+  const goal = counter?.goal ?? 1_000_000;
+
+  if (!statsPublic) {
+    return (
+      <div className={className} data-testid="founders-million-counter">
+        <div className="rounded-3xl border border-line bg-surface/90 px-5 py-5 shadow-[var(--elev-1)]">
+          <p className="text-sm text-ink-3">
+            {copy.counterGoal}:{" "}
+            <span className="font-mono text-2xl font-semibold text-ink sm:text-3xl">
+              {goal.toLocaleString(lang)}
+            </span>
+          </p>
+        </div>
+        <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">{copy.counterStub}</p>
+      </div>
+    );
+  }
+
   const pct =
     counter && counter.goal > 0 && counter.current > 0
       ? Math.max(0.5, Math.min(100, (counter.current / counter.goal) * 100))
@@ -72,9 +92,7 @@ export function FoundersMillionCounterBar({
         </div>
         <p className="text-sm text-ink-3">
           {copy.counterGoal}:{" "}
-          <span className="font-mono font-semibold text-ink">
-            {(counter?.goal ?? 1_000_000).toLocaleString(lang)}
-          </span>
+          <span className="font-mono font-semibold text-ink">{goal.toLocaleString(lang)}</span>
         </p>
       </div>
       <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">

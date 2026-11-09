@@ -14,9 +14,9 @@
     "pillars": [
       {
         "id": "allocation",
-        "value": "10%",
-        "title": "Topluluk havuzuna %10",
-        "note": "Her yeni token arzının topluluk havuzuna gider."
+        "value": "%10",
+        "title": "Her yeni tokenin %10'u insanlarınıza gider — garanti",
+        "note": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir."
       },
       {
         "id": "fees",
@@ -42,7 +42,7 @@
       },
       {
         "id": "community",
-        "label": "%10 topluluk + ağ ücreti",
+        "label": "10% topluluk + ağ ücreti",
         "sub": "Yeni tokenin bir kısmı ile protokol ücreti ayrı kalır"
       },
       {
@@ -66,8 +66,8 @@
       {
         "id": "allocation",
         "kicker": "TOKEN FACTORY",
-        "title": "Her yeni tokenin %10’u topluluk havuzuna gider",
-        "body": "Ağ üzerinden başlatılan her standart token, ilk arzının %10’unu o tokenin Community Pool’una — sonra topluluğa gönderir. Kişisel ödeme değildir ve her ücretin %10’u değildir.",
+        "title": "Her yeni tokenin arzının 10%ı topluluk havuzuna gider",
+        "body": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Her yeni token'ın %10'u lansmanda topluluk havuzuna gider — garanti. Eğri artığı (~%17) topluluk havuzuna gider veya yakılır — kurucu lansmanda bir kez seçer.",
         "href": "/create/token",
         "cta": "Token oluştur"
       },
@@ -93,7 +93,7 @@
     "id": "partner",
     "tag": "GROWTH REFERRAL",
     "title": "You → L1 → L2",
-    "subtitle": "Aktif Beta Growth ödemesi: Growth ödül bütçesinin L1 %70 · L2 %30’u. Growth Pool, uygun ücretlerin %15’idir. Ağ ücreti the fee split hedeflerinden ve her yeni tokenin topluluk havuzuna giden %10’undan ayrıdır.",
+    "subtitle": "Aktif Beta Growth ödemesi: Growth ödül bütçesinin L1 %70 · L2 %30’u. Growth Pool, uygun ücretlerin %15’idir. Ağ ücreti the fee split hedeflerinden ve her yeni tokenin topluluk havuzuna giden %27'ye kadarından ayrıdır.",
     "you": "Sen",
     "budgetNote": "Yüzdeler, the fee split uygun ücretlerin %15’ini Growth Pool’a yönlendirdikten sonra Growth ödül bütçesinin paylarıdır — her ağ ücretinin payı değildir.",
     "detailsTitle": "Growth-referral nasıl çalışır",
@@ -104,7 +104,7 @@
       },
       {
         "title": "Ücretlerden ve tokenlardan ayrı",
-        "body": "L1/L2 Growth ağırlıkları the fee split ağ ücreti bölüşümü değildir ve her yeni tokenin topluluk havuzu için %10’u da değildir. Growth Pool, kendi mutabakat kuralları olan bir the fee split ücret hedefidir."
+        "body": "L1/L2 Growth ağırlıkları the fee split ağ ücreti bölüşümü değildir ve her yeni tokenin topluluk havuzu için %27'ye kadarı da değildir. Growth Pool, kendi mutabakat kuralları olan bir the fee split ücret hedefidir."
       },
       {
         "title": "Bu site",
@@ -116,7 +116,7 @@
     "id": "join",
     "tag": "JOIN",
     "title": "Nasıl katılırım",
-    "subtitle": "PEOPLE Blockchain’e topluluk katılımcısı olarak katılın — telefondan, tabletle veya tarayıcıdan.",
+    "subtitle": "People’s Blockchain’e topluluk katılımcısı olarak katılın — telefondan, tabletle veya tarayıcıdan.",
     "steps": [
       {
         "num": "01",
@@ -127,8 +127,8 @@
       },
       {
         "num": "02",
-        "title": "Cüzdan oluştur",
-        "body": "Tarayıcıda 12 kelimelik bir ifade üretin, yazın ve bir parolayla şifreleyin. Anahtarlar bu cihazı asla terk etmez. Ya da Google ile giriş yaparak bulut cüzdanı alın: anahtarınız PEOPLE sunucularında şifreli saklanır ve PEOPLE altyapısı onu çözebilir.",
+        "title": "Emanetsiz cüzdan oluştur",
+        "body": "Tarayıcıda 12 kelimelik bir ifade üretin, yazın ve bir parolayla şifreleyin. Anahtarlar bu cihazı asla terk etmez.",
         "href": "/wallet",
         "cta": "Cüzdanı aç"
       },
@@ -142,12 +142,12 @@
       {
         "num": "04",
         "title": "Ekonomiye katıl",
-        "body": "Token Factory ve NFT mint ücretlerini aynı cüzdandan ödeyin. Yeni tokenlerdeki %10 topluluk havuzu payı, ağ ücretleri ve Growth-referral üç ayrı mekanizma olarak kalır.",
+        "body": "Token Factory ve NFT mint ücretlerini aynı cüzdandan ödeyin. Yeni tokenlerdeki %27'ye kadar topluluk havuzu payı, ağ ücretleri ve Growth-referral üç ayrı mekanizma olarak kalır.",
         "href": "/create",
         "cta": "Oluştur"
       }
     ],
-    "ctaJoin": "PEOPLE Blockchain’e katıl",
+    "ctaJoin": "People’s Blockchain’e katıl",
     "ctaHow": "Nasıl çalışır"
   },
   "whatIs": {
@@ -228,7 +228,7 @@
         "id": "user",
         "title": "USER",
         "summary": "Telefon, tablet veya tarayıcıda cüzdanı olan bir kişi.",
-        "detail": "Telefonda, tablette veya tarayıcıda bir cüzdanla başlayın. Toplulukta bir kişi olarak katılırsınız — doğrulayıcı olarak değil."
+        "detail": "Telefonda, tablette veya tarayıcıda saklamasız bir hesapla başlayın. Toplulukta bir kişi olarak katılırsınız — doğrulayıcı olarak değil."
       },
       {
         "id": "transaction",
@@ -258,7 +258,7 @@
         "id": "community",
         "title": "COMMUNITY",
         "summary": "Ağ ücretleri ve her tokenin topluluk payı ayrı kanallarda kalır.",
-        "detail": "PPL cinsinden ağ ücretleri the fee split’yı izler. Standart kullanıcı tokenleri o tokenin arzının %10’unu kendi topluluk havuzuna gönderir — bu bir ağ ücreti değildir."
+        "detail": "PPL cinsinden ağ ücretleri the fee split’yı izler. Standart kullanıcı tokenleri o tokenin arzının %27'ye kadarını kendi topluluk havuzuna gönderir — bu bir ağ ücreti değildir."
       }
     ],
     "storyCta": "Tam görsel hikâye"
@@ -266,8 +266,8 @@
   "ppl": {
     "id": "ppl",
     "tag": "NATIVE ASSET",
-    "title": "PEOPLE (PPL)",
-    "summary": "PEOPLE, Topluluk için blokzincir’in yerel varlığıdır. Ticker: PPL.",
+    "title": "People (PPL)",
+    "summary": "People, Topluluk için blokzincir’in yerel varlığıdır. Ticker: PPL.",
     "cards": [
       {
         "title": "UTILITY",
@@ -348,7 +348,7 @@
     ],
     "growthNote": "Growth Pool uygun ücretlerin %15’ini alır. Garantili gelir, pasif getiri veya yatırım ürünü değildir.",
     "detailsTitle": "Ücret yönlendirme nasıl çalışır",
-    "detailsBody": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil. After whole-number division, any remainder stays with validators. The %10 of each new token that goes to the community pool is a different path — not a network fee.",
+    "detailsBody": "Her protokol ücreti bölünür: %30 doğrulayıcılar, %25 topluluk, %20 hazine, %10 likidite, %15 Growth, %0 yakma — kesirli ücretler dahil. Tam sayı bölünmesinden kalan miktar doğrulayıcılarda kalır. Her yeni tokenin topluluk havuzuna giden %27'ye kadarı farklı bir yoldur — ağ ücreti değildir.",
     "storyLink": "Ödüller nasıl açıklanır"
   },
   "tokenMarket": {
@@ -378,7 +378,7 @@
     "expandItems": [
       "Lansman fiyatı tam tam sayı matematiğiyle constant-product eğrisi kullanır.",
       "Eğrideki protokol işlem ücreti ağ ücreti ekonomisi üzerinden yönlendirilir.",
-      "Standart lansman bölüşümü, o tokenin arzının zorunlu %10’unu kendi topluluk havuzuna içerir (PPL ağ ücreti değildir).",
+      "Standart lansman bölüşümü, o tokenin arzının %27'ye kadarını kendi topluluk havuzuna içerir (PPL ağ ücreti değildir).",
       "Oluşturucu vesting’i, oluşturucu payının çoğunu zamanla açar ki topluluk birinci günde dump edilmesin."
     ],
     "createCta": "Token Factory’yi aç",

@@ -1,0 +1,95 @@
+{
+  "id": {
+    "guestLandingTitle": "Program mitra dan kreator",
+    "guestLandingLead": "Masuk dengan Google atau email untuk membuka kabinet dan menyalin tautan /?ref= pribadi Anda. Dapatkan 7%–12% USDC di Base plus 3% PPL di mainnet PEOPLE dari pembelian PPL yang diatribusikan.",
+    "guestSignInCta": "Masuk untuk mendapat tautan Anda",
+    "guestWalletHint": "Komisi mitra memerlukan masuk dengan Google atau email. Dompet browser saja tidak mengakumulasi hadiah mitra.",
+    "guestPreSaleNote": "Penjualan PPL publik dimulai 1 Desember 2026. Dasbor Anda mungkin menampilkan nol penjualan sampai saat itu — itu normal.",
+    "preSaleBanner": "Penjualan PPL dimulai 1 Desember 2026. Komisi pembelian yang diatribusikan muncul di sini setelah pembeli memakai tautan Anda dan menyelesaikan pembelian di Base.",
+    "colStatus": "Status komisi",
+    "tier1Name": "Tingkat 1 — Mitra Starter (7% USDC + 3% PPL)",
+    "tier2Name": "Tingkat 2 — Mitra Growth (9% USDC + 3% PPL)",
+    "tier3Name": "Tingkat 3 — Mitra Elite (12% USDC + 3% PPL)"
+  },
+  "es": {
+    "guestLandingTitle": "Programa para socios y creadores",
+    "guestLandingLead": "Inicia sesión con Google o email para abrir tu cabinet y copiar tu enlace personal /?ref=. Gana del 7 % al 12 % en USDC en Base más un 3 % en PPL en mainnet PEOPLE por compras de PPL atribuidas.",
+    "guestSignInCta": "Inicia sesión para obtener tu enlace",
+    "guestWalletHint": "Las comisiones de socio requieren iniciar sesión con Google o email. Solo una cartera del navegador no acumula recompensas de socio.",
+    "guestPreSaleNote": "La venta pública de PPL comienza el 1 de diciembre de 2026. Tu panel puede mostrar cero ventas hasta entonces; es normal.",
+    "preSaleBanner": "La venta de PPL comienza el 1 de diciembre de 2026. Las comisiones de compras atribuidas aparecerán aquí cuando los compradores usen tu enlace y completen compras en Base."
+  },
+  "zh": {
+    "guestLandingTitle": "合作伙伴与创作者计划",
+    "guestLandingLead": "使用 Google 或电子邮件登录以打开工作台并复制您的个人 /?ref= 链接。从归因的 PPL 购买中获得 Base 上 7%–12% 的 USDC 以及 PEOPLE 主网上 3% 的 PPL。",
+    "guestSignInCta": "登录以获取您的链接",
+    "guestWalletHint": "合作伙伴佣金需要通过 Google 或电子邮件登录。仅浏览器钱包无法累积合作伙伴奖励。",
+    "guestPreSaleNote": "PPL 公开发售于 2026 年 12 月 1 日开始。在此之前仪表板可能显示零销售——属正常现象。",
+    "preSaleBanner": "PPL 销售于 2026 年 12 月 1 日开始。买家通过您的链接并在 Base 上完成购买后，归因购买佣金将显示在此处。"
+  },
+  "ar": {
+    "guestLandingTitle": "برنامج الشركاء وصنّاع المحتوى",
+    "guestLandingLead": "سجّل الدخول عبر Google أو البريد الإلكتروني لفتح لوحة التحكم ونسخ رابط /?ref= الشخصي. اربح من 7% إلى 12% USDC على Base بالإضافة إلى 3% PPL على شبكة PEOPLE mainnet من مشتريات PPL المنسوبة.",
+    "guestSignInCta": "سجّل الدخول للحصول على رابطك",
+    "guestWalletHint": "عمولات الشريك تتطلب تسجيل الدخول عبر Google أو البريد. محفظة المتصفح وحدها لا تتراكم لها مكافآت الشريك.",
+    "guestPreSaleNote": "يبدأ بيع PPL العام في 1 ديسمبر 2026. قد تعرض لوحتك صفر مبيعات حتى ذلك الحين — وهذا متوقع.",
+    "preSaleBanner": "يبدأ بيع PPL في 1 ديسمبر 2026. تظهر عمولات المشتريات المنسوبة هنا بعد أن يستخدم المشترون رابطك ويكملون الشراء على Base."
+  },
+  "tr": {
+    "guestLandingTitle": "Partner ve içerik üreticisi programı",
+    "guestLandingLead": "Kabininizi açmak ve kişisel /?ref= bağlantınızı kopyalamak için Google veya e-posta ile giriş yapın. Atfedilen PPL alımlarından Base'de %7–12 USDC artı PEOPLE mainnet'te %3 PPL kazanın.",
+    "guestSignInCta": "Bağlantınızı almak için giriş yapın",
+    "guestWalletHint": "Partner komisyonları Google veya e-posta girişi gerektirir. Yalnızca tarayıcı cüzdanı partner ödülü biriktirmez.",
+    "guestPreSaleNote": "PPL halka açık satışı 1 Aralık 2026'da başlar. Panonuz o zamana kadar sıfır satış gösterebilir — bu normaldir.",
+    "preSaleBanner": "PPL satışı 1 Aralık 2026'da başlar. Alıcılar bağlantınızı kullanıp Base'de satın almayı tamamladıktan sonra atfedilen satın alma komisyonları burada görünür."
+  },
+  "de": {
+    "guestLandingTitle": "Partner- und Creator-Programm",
+    "guestLandingLead": "Melden Sie sich mit Google oder E-Mail an, um Ihr Cabinet zu öffnen und Ihren persönlichen /?ref=-Link zu kopieren. Verdienen Sie 7 % bis 12 % in USDC auf Base plus 3 % in PPL im PEOPLE-Mainnet aus zugeordneten PPL-Käufen.",
+    "guestSignInCta": "Anmelden, um Ihren Link zu erhalten",
+    "guestWalletHint": "Partnerprovisionen erfordern Google- oder E-Mail-Anmeldung. Allein eine Browser-Wallet sammelt keine Partnerbelohnungen.",
+    "guestPreSaleNote": "Der öffentliche PPL-Verkauf startet am 1. Dezember 2026. Ihr Dashboard kann bis dahin null Verkäufe anzeigen — das ist erwartbar.",
+    "preSaleBanner": "Der PPL-Verkauf startet am 1. Dezember 2026. Zugeordnete Kaufprovisionen erscheinen hier, nachdem Käufer Ihren Link nutzen und Käufe auf Base abschließen.",
+    "colStatus": "Bearbeitungsstatus",
+    "kolCodeBadgePrefix": "Kürzel:",
+    "partnerBadge": "Partner-Konto",
+    "wallet": "Geldbörse",
+    "tier1Name": "Stufe 1 — Starter Partner (7 % USDC + 3 % PPL)",
+    "tier2Name": "Stufe 2 — Growth Partner (9 % USDC + 3 % PPL)",
+    "tier3Name": "Stufe 3 — Elite Partner (12 % USDC + 3 % PPL)"
+  },
+  "fr": {
+    "guestLandingTitle": "Programme partenaires et créateurs",
+    "guestLandingLead": "Connectez-vous avec Google ou e-mail pour ouvrir votre cabinet et copier votre lien personnel /?ref=. Gagnez de 7 % à 12 % en USDC sur Base plus 3 % en PPL sur mainnet PEOPLE sur les achats PPL attribués.",
+    "guestSignInCta": "Se connecter pour obtenir votre lien",
+    "guestWalletHint": "Les commissions partenaire exigent une connexion Google ou e-mail. Un portefeuille navigateur seul n'accumule pas de récompenses partenaire.",
+    "guestPreSaleNote": "La vente publique PPL commence le 1er décembre 2026. Votre tableau de bord peut afficher zéro vente d'ici là — c'est normal.",
+    "preSaleBanner": "La vente PPL commence le 1er décembre 2026. Les commissions d'achats attribués apparaissent ici après que les acheteurs utilisent votre lien et finalisent leurs achats sur Base.",
+    "colDate": "Date de transaction"
+  },
+  "it": {
+    "guestLandingTitle": "Programma partner e creator",
+    "guestLandingLead": "Accedi con Google o email per aprire il cabinet e copiare il tuo link personale /?ref=. Guadagna dal 7% al 12% in USDC su Base più il 3% in PPL su mainnet PEOPLE dagli acquisti PPL attribuiti.",
+    "guestSignInCta": "Accedi per ottenere il tuo link",
+    "guestWalletHint": "Le commissioni partner richiedono l'accesso con Google o email. Solo un wallet del browser non accumula ricompense partner.",
+    "guestPreSaleNote": "La vendita pubblica PPL inizia il 1° dicembre 2026. La dashboard può mostrare zero vendite fino ad allora — è previsto.",
+    "preSaleBanner": "La vendita PPL inizia il 1° dicembre 2026. Le commissioni sugli acquisti attribuiti compaiono qui dopo che gli acquirenti usano il tuo link e completano gli acquisti su Base.",
+    "partnerBadge": "Badge partner"
+  },
+  "pt": {
+    "guestLandingTitle": "Programa de parceiros e criadores",
+    "guestLandingLead": "Inicie sessão com Google ou email para abrir o cabinet e copiar o seu link pessoal /?ref=. Ganhe 7% a 12% em USDC na Base mais 3% em PPL na mainnet PEOPLE de compras PPL atribuídas.",
+    "guestSignInCta": "Iniciar sessão para obter o seu link",
+    "guestWalletHint": "As comissões de parceiro exigem início de sessão com Google ou email. Só uma carteira do navegador não acumula recompensas de parceiro.",
+    "guestPreSaleNote": "A venda pública de PPL começa a 1 de dezembro de 2026. O seu painel pode mostrar zero vendas até lá — isso é esperado.",
+    "preSaleBanner": "A venda PPL começa a 1 de dezembro de 2026. As comissões de compras atribuídas aparecem aqui depois de os compradores usarem o seu link e concluírem compras na Base."
+  },
+  "vi": {
+    "guestLandingTitle": "Chương trình đối tác và nhà sáng tạo",
+    "guestLandingLead": "Đăng nhập bằng Google hoặc email để mở cabinet và sao chép liên kết /?ref= cá nhân. Kiếm 7%–12% USDC trên Base cộng 3% PPL trên mainnet PEOPLE từ các giao dịch mua PPL được gán.",
+    "guestSignInCta": "Đăng nhập để nhận liên kết của bạn",
+    "guestWalletHint": "Hoa hồng đối tác yêu cầu đăng nhập Google hoặc email. Chỉ ví trình duyệt không tích lũy phần thưởng đối tác.",
+    "guestPreSaleNote": "Đợt bán PPL công khai bắt đầu 1 tháng 12 năm 2026. Bảng điều khiển có thể hiển thị không doanh số cho đến lúc đó — điều này là bình thường.",
+    "preSaleBanner": "Đợt bán PPL bắt đầu 1 tháng 12 năm 2026. Hoa hồng mua hàng được gán hiển thị ở đây sau khi người mua dùng liên kết của bạn và hoàn tất mua trên Base."
+  }
+}

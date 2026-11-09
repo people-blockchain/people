@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "@/db";
 import { FOUNDER_GOAL } from "@/lib/founders/config";
 import { getCommunityCounters } from "@/lib/founders/transparency";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,12 @@ export const dynamic = "force-dynamic";
  */
 export async function GET() {
   const goal = FOUNDER_GOAL;
+  if (!showCommunityStats()) {
+    return NextResponse.json(
+      { goal, source: "hidden" },
+      { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=300" } },
+    );
+  }
   if (!isDatabaseConfigured()) {
     return NextResponse.json({
       current: 0,

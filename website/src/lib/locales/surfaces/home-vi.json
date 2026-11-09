@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10% vào pool cộng đồng",
+        "label": "Lên đến 27% vào pool cộng đồng",
         "sub": "Gắn sẵn trong mỗi token mới"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Cho cộng đồng",
-      "body": "10% mỗi token mới vào pool cộng đồng của token đó. Một phần mỗi phí mạng cũng vào đó. Người tham gia có phần trong những gì họ xây dựng."
+      "body": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng. "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Đây là tham gia mạng, không phải đầu tư.",
   "visuals": {
     "supply": "Nguồn cung token",
-    "share": "10%",
+    "share": "Lên đến 27%",
     "toPool": "vào quỹ cộng đồng",
     "pool": "Quỹ cộng đồng",
     "poolNote": "chia cho những người tham gia",
-    "aria": "10% nguồn cung của mỗi token mới vào quỹ cộng đồng của nó, chia cho những người tham gia.",
+    "aria": "Lên đến 27% nguồn cung của mỗi token mới vào quỹ cộng đồng của nó, chia cho những người tham gia.",
     "prompt": "Một token mà người nắm giữ bỏ phiếu cách chi tiêu ngân quỹ",
     "step1": "Bạn viết",
     "step2": "Chúng tôi dựng",

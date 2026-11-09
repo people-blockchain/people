@@ -6,7 +6,9 @@ import { auth } from "@/auth";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PartnerCabinet } from "@/components/partner/PartnerCabinet";
+import { PartnerGuestLanding } from "@/components/partner/PartnerGuestLanding";
 import { bountyCopy } from "@/lib/bounty-content";
+import { partnerCopy } from "@/lib/partner/copy";
 import { languageFromAcceptLanguage } from "@/lib/locale-detect";
 import { isAuthConfigured } from "@/lib/partner/guards";
 import {
@@ -32,7 +34,15 @@ export default async function PartnerPage() {
   }
   const session = await auth();
   if (!session?.user?.id) {
-    redirect("/login?callbackUrl=/partner");
+    return (
+      <div className="flex min-h-screen flex-col bg-canvas text-ink">
+        <Navbar />
+        <main id="main" className="warm-page flex-1">
+          <PartnerGuestLanding />
+        </main>
+        <Footer />
+      </div>
+    );
   }
   // A session cookie can outlive its user row (database reset, removed
   // account). Send it back to the sign-in form instead of failing.
@@ -77,11 +87,15 @@ export default async function PartnerPage() {
   if (!cabinet) {
     redirect("/login?error=Unavailable");
   }
-  const origin = process.env.AUTH_URL?.trim() || SITE_URL;
-  const referralLink = `${origin.replace(/\/$/, "")}${partnerSharePath(cabinet.referralCode)}`;
+  const origin = SITE_URL.replace(/\/$/, "");
+  const referralLink = `${origin}${partnerSharePath(cabinet.referralCode)}`;
+
+  const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
+  const t = partnerCopy[lang];
+  const bountyLabel = bountyCopy(lang).navLabel;
 
   let protocolStatus: "connected" | "disconnected" = "disconnected";
-  let protocolNote: string | null = "Node URL is not configured.";
+  let protocolNote: string | null = t.nodeNotConfigured;
   let pplBalance: number | null = null;
   let claims: { key: string; amount: number; status: string; level?: number; epoch?: number }[] = [];
   let claimsNote: string | null = null;
@@ -92,14 +106,14 @@ export default async function PartnerPage() {
       protocolStatus = "connected";
       protocolNote = null;
       pplBalance = account?.pplBalance ?? null;
-      const growth = await fetchGrowthClaims(cabinet.walletAddress);
+      const growth = await fetchGrowthClaims(cabinet.walletAddress, t);
       claims = growth.claims;
       claimsNote = growth.available ? null : (growth.note ?? null);
     } else {
       protocolNote =
         connection.reason === "not_configured"
-          ? "Node URL is not configured."
-          : "The configured node could not be reached.";
+          ? t.nodeNotConfigured
+          : t.nodeUnreachable;
     }
   } else {
     const { connection } = await fetchAccountView("0x0000000000000000000000000000000000000000");
@@ -107,14 +121,11 @@ export default async function PartnerPage() {
       protocolStatus = "connected";
       protocolNote = null;
     } else if (connection.reason === "not_configured") {
-      protocolNote = "Node URL is not configured.";
+      protocolNote = t.nodeNotConfigured;
     } else {
-      protocolNote = "The configured node could not be reached.";
+      protocolNote = t.nodeUnreachable;
     }
   }
-
-  const lang = languageFromAcceptLanguage((await headers()).get("accept-language"));
-  const bountyLabel = bountyCopy(lang).navLabel;
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">
@@ -131,9 +142,14 @@ export default async function PartnerPage() {
         <PartnerCabinet
           email={cabinet.email}
           referralCode={cabinet.referralCode}
+          kolCode={cabinet.kolCode}
           referralLink={referralLink}
           referredBy={cabinet.referredBy}
           walletAddress={cabinet.walletAddress}
+          metrics={cabinet.metrics}
+          tier={cabinet.tier}
+          commissions={cabinet.commissions}
+          payouts={cabinet.payouts}
           l1={cabinet.l1}
           l2={cabinet.l2}
           protocolStatus={protocolStatus}

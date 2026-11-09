@@ -32,7 +32,7 @@
       },
       {
         "id": "community",
-        "label": "10% al pool de la comunidad",
+        "label": "Hasta un 27% al pool de la comunidad",
         "sub": "Integrado en cada token nuevo"
       },
       {
@@ -52,7 +52,7 @@
     {
       "id": "community",
       "title": "Para tu comunidad",
-      "body": "El 10% de cada token nuevo va al pool comunitario de ese token. Una parte de cada comisión de red también va allí. Quienes participan obtienen una parte de lo que construyen."
+      "body": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total. "
     },
     {
       "id": "everyone",
@@ -75,11 +75,11 @@
   "notInvestmentDisclaimer": "Es participación en una red, no una inversión.",
   "visuals": {
     "supply": "Suministro del token",
-    "share": "10%",
+    "share": "Hasta un 27%",
     "toPool": "va al fondo de la comunidad",
     "pool": "Fondo de la comunidad",
     "poolNote": "repartido entre quienes participan",
-    "aria": "El 10% del suministro de cada token nuevo va a su fondo de la comunidad, repartido entre quienes participan.",
+    "aria": "El Hasta un 27% del suministro de cada token nuevo va a su fondo de la comunidad, repartido entre quienes participan.",
     "prompt": "Un token cuyos titulares votan en qué se gasta la tesorería",
     "step1": "Tú escribes",
     "step2": "Nosotros lo construimos",

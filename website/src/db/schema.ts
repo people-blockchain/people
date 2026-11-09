@@ -123,6 +123,13 @@ export const partners = pgTable(
       .references(() => users.id, { onDelete: "cascade" }),
     referralCode: text("referralCode").notNull(),
     referredByUserId: text("referredByUserId").references(() => users.id, { onDelete: "set null" }),
+    kolCode: text("kolCode"),
+    referredByKolCode: text("referredByKolCode"),
+    referralAttachedAt: timestamp("referralAttachedAt", { mode: "date" }),
+    referralCookieSetAt: timestamp("referralCookieSetAt", { mode: "date" }),
+    kolTierOverrideBps: integer("kolTierOverrideBps"),
+    kolStatus: text("kolStatus").notNull().default("active"),
+    referralClicks: integer("referralClicks").notNull().default(0),
     walletAddress: text("walletAddress"),
     walletPublicKey: text("walletPublicKey"),
     walletBoundAt: timestamp("walletBoundAt", { mode: "date" }),
@@ -133,6 +140,9 @@ export const partners = pgTable(
   (partner) => [
     uniqueIndex("partner_referral_code_idx").on(partner.referralCode),
     uniqueIndex("partner_wallet_address_idx").on(partner.walletAddress),
+    uniqueIndex("partner_kol_code_lower_idx").on(sql`lower(${partner.kolCode})`),
+    index("partner_referred_by_user_idx").on(partner.referredByUserId),
+    index("partner_referred_by_kol_idx").on(sql`lower(${partner.referredByKolCode})`),
   ],
 );
 
@@ -913,4 +923,220 @@ export const founderNftAuthNonces = pgTable(
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
   },
   (row) => [index("founder_nft_auth_nonce_user_idx").on(row.userId)],
+);
+
+/**
+ * Migration 0023: Off-chain buyer wallet binding, Base PplCurveHub event cursor & purchases,
+ * and volume-tiered KOL / Partner commission ledger (USDC on Base, PPL on PEOPLE mainnet).
+ */
+export const saleBuyerBindings = pgTable(
+  "sale_buyer_binding",
+  {
+    buyerWallet: text("buyerWallet").primaryKey(),
+    peopleAddress: text("peopleAddress"),
+    userId: text("userId").references(() => users.id, { onDelete: "set null" }),
+    referrerUserId: text("referrerUserId").references(() => users.id, { onDelete: "set null" }),
+    kolCode: text("kolCode"),
+    source: text("source").notNull().default("cookie"),
+    cookieSetAt: timestamp("cookieSetAt", { mode: "date" }),
+    boundAt: timestamp("boundAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    ipHash: text("ipHash"),
+    deviceHash: text("deviceHash"),
+  },
+  (row) => [
+    index("sale_buyer_binding_user_idx").on(row.userId),
+    index("sale_buyer_binding_referrer_idx").on(row.referrerUserId),
+    index("sale_buyer_binding_kol_idx").on(sql`lower(${row.kolCode})`),
+  ],
+);
+
+export const saleChainCursors = pgTable(
+  "sale_chain_cursor",
+  {
+    chainId: integer("chainId").notNull(),
+    contractAddress: text("contractAddress").notNull(),
+    lastScannedBlock: integer("lastScannedBlock").notNull().default(0),
+    lastBlockHash: text("lastBlockHash"),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [primaryKey({ columns: [row.chainId, row.contractAddress] })],
+);
+
+export const salePurchases = pgTable(
+  "sale_purchase",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    chainId: integer("chainId").notNull().default(8453),
+    contractAddress: text("contractAddress").notNull(),
+    txHash: text("txHash").notNull(),
+    logIndex: integer("logIndex").notNull().default(0),
+    blockNumber: integer("blockNumber").notNull(),
+    blockHash: text("blockHash").notNull(),
+    blockTimestamp: timestamp("blockTimestamp", { mode: "date" }).notNull(),
+    eventKind: text("eventKind").notNull().default("buy"),
+    buyerAddress: text("buyerAddress").notNull(),
+    beneficiaryAddress: text("beneficiaryAddress").notNull(),
+    tokenAddress: text("tokenAddress").notNull(),
+    usdMicro: numeric("usdMicro", { precision: 38, scale: 0 }).notNull(),
+    pplMicro: numeric("pplMicro", { precision: 38, scale: 0 }).notNull(),
+    soldAfterMicro: numeric("soldAfterMicro", { precision: 38, scale: 0 }),
+    buyerUserId: text("buyerUserId").references(() => users.id, { onDelete: "set null" }),
+    referrerUserId: text("referrerUserId").references(() => users.id, { onDelete: "set null" }),
+    kolCode: text("kolCode"),
+    attributionMethod: text("attributionMethod").notNull().default("unattributed"),
+    status: text("status").notNull().default("confirmed"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("sale_purchase_chain_tx_log_idx").on(row.chainId, sql`lower(${row.txHash})`, row.logIndex),
+    index("sale_purchase_buyer_idx").on(row.buyerAddress, row.blockTimestamp),
+    index("sale_purchase_referrer_idx").on(row.referrerUserId, row.status),
+    index("sale_purchase_kol_idx").on(sql`lower(${row.kolCode})`, row.status),
+  ],
+);
+
+export const referralPayoutBatches = pgTable(
+  "referral_payout_batch",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    beneficiaryUserId: text("beneficiaryUserId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    periodKey: text("periodKey").notNull(),
+    status: text("status").notNull().default("pending"),
+    usdcAmountMicro: numeric("usdcAmountMicro", { precision: 38, scale: 0 }).notNull().default("0"),
+    pplAmountMicro: numeric("pplAmountMicro", { precision: 38, scale: 0 }).notNull().default("0"),
+    usdcNetwork: text("usdcNetwork").notNull().default("base"),
+    pplNetwork: text("pplNetwork").notNull().default("people_mainnet"),
+    usdcTxHash: text("usdcTxHash"),
+    pplTxHash: text("pplTxHash"),
+    paidAt: timestamp("paidAt", { mode: "date" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("referral_payout_batch_user_idx").on(row.beneficiaryUserId, row.createdAt)],
+);
+
+export const referralCommissionLedgers = pgTable(
+  "referral_commission_ledger",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    purchaseId: text("purchaseId")
+      .notNull()
+      .references(() => salePurchases.id, { onDelete: "cascade" }),
+    beneficiaryUserId: text("beneficiaryUserId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    buyerUserId: text("buyerUserId").references(() => users.id, { onDelete: "set null" }),
+    buyerAddress: text("buyerAddress").notNull(),
+    program: text("program").notNull().default("kol"),
+    level: integer("level").notNull().default(1),
+    usdcRateBps: integer("usdcRateBps").notNull().default(700),
+    pplRateBps: integer("pplRateBps").notNull().default(300),
+    usdPurchaseMicro: numeric("usdPurchaseMicro", { precision: 38, scale: 0 }).notNull(),
+    pplPurchaseMicro: numeric("pplPurchaseMicro", { precision: 38, scale: 0 }).notNull(),
+    grossUsdcMicro: numeric("grossUsdcMicro", { precision: 38, scale: 0 }).notNull(),
+    grossPplMicro: numeric("grossPplMicro", { precision: 38, scale: 0 }).notNull(),
+    clawedBackUsdcMicro: numeric("clawedBackUsdcMicro", { precision: 38, scale: 0 }).notNull().default("0"),
+    clawedBackPplMicro: numeric("clawedBackPplMicro", { precision: 38, scale: 0 }).notNull().default("0"),
+    netUsdcMicro: numeric("netUsdcMicro", { precision: 38, scale: 0 }).notNull(),
+    netPplMicro: numeric("netPplMicro", { precision: 38, scale: 0 }).notNull(),
+    usdcSettlementNetwork: text("usdcSettlementNetwork").notNull().default("base"),
+    pplSettlementNetwork: text("pplSettlementNetwork").notNull().default("people_mainnet"),
+    isPplLocked: boolean("isPplLocked").notNull().default(false),
+    status: text("status").notNull().default("pending"),
+    voidReason: text("voidReason"),
+    holdUntil: timestamp("holdUntil", { mode: "date" }).notNull(),
+    payoutBatchId: text("payoutBatchId").references(() => referralPayoutBatches.id, { onDelete: "set null" }),
+    paidTxHashBase: text("paidTxHashBase"),
+    paidTxHashPeople: text("paidTxHashPeople"),
+    paidAt: timestamp("paidAt", { mode: "date" }),
+    idempotencyKey: text("idempotencyKey").notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("referral_commission_idem_idx").on(row.idempotencyKey),
+    index("referral_commission_benef_status_idx").on(row.beneficiaryUserId, row.status, row.holdUntil),
+    index("referral_commission_buyer_idx").on(row.buyerAddress, row.status),
+  ],
+);
+
+/** First-party visitor analytics — sessions (30-min inactivity) and events. */
+export const analyticsSessions = pgTable(
+  "analytics_session",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    clientSessionId: text("clientSessionId").notNull(),
+    visitorId: text("visitorId").notNull(),
+    startedAt: timestamp("startedAt", { mode: "date" }).notNull(),
+    lastSeenAt: timestamp("lastSeenAt", { mode: "date" }).notNull(),
+    durationSec: integer("durationSec").notNull().default(0),
+    pageviewCount: integer("pageviewCount").notNull().default(0),
+    isBounce: boolean("isBounce").notNull().default(true),
+    entryPath: text("entryPath"),
+    exitPath: text("exitPath"),
+    referrer: text("referrer"),
+    utmSource: text("utmSource"),
+    utmMedium: text("utmMedium"),
+    utmCampaign: text("utmCampaign"),
+    utmTerm: text("utmTerm"),
+    utmContent: text("utmContent"),
+    refParam: text("refParam"),
+    kolParam: text("kolParam"),
+    country: text("country"),
+    region: text("region"),
+    city: text("city"),
+    browser: text("browser"),
+    os: text("os"),
+    deviceType: text("deviceType"),
+    language: text("language"),
+    timezone: text("timezone"),
+    screenW: integer("screenW"),
+    screenH: integer("screenH"),
+    isBot: boolean("isBot").notNull().default(false),
+  },
+  (row) => [
+    index("analytics_session_started_idx").on(row.startedAt),
+    index("analytics_session_last_seen_idx").on(row.lastSeenAt),
+    index("analytics_session_visitor_started_idx").on(row.visitorId, row.startedAt),
+    index("analytics_session_client_last_idx").on(row.clientSessionId, row.lastSeenAt),
+  ],
+);
+
+export const analyticsEvents = pgTable(
+  "analytics_event",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    sessionId: text("sessionId")
+      .notNull()
+      .references(() => analyticsSessions.id, { onDelete: "cascade" }),
+    visitorId: text("visitorId").notNull(),
+    eventType: text("eventType").notNull(),
+    eventName: text("eventName"),
+    path: text("path"),
+    title: text("title"),
+    props: jsonb("props").notNull().default({}),
+    durationMs: integer("durationMs"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    isBot: boolean("isBot").notNull().default(false),
+  },
+  (row) => [
+    index("analytics_event_created_idx").on(row.createdAt),
+    index("analytics_event_type_created_idx").on(row.eventType, row.createdAt),
+    index("analytics_event_path_created_idx").on(row.path, row.createdAt),
+    index("analytics_event_session_idx").on(row.sessionId),
+    index("analytics_event_name_created_idx").on(row.eventName, row.createdAt),
+  ],
 );
