@@ -9,8 +9,9 @@
       "items": [
         {
           "title": "Carteira",
-          "text": "Crie uma carteira no telemóvel ou no navegador. Uma carteira de navegador com 12 palavras é não custodial: as chaves não saem do seu dispositivo. Uma carteira na nuvem (início de sessão com email ou email) é guardada cifrada nos servidores da PEOPLE, e a infraestrutura da PEOPLE consegue decifrá-la.",
-          "textSocial": "Crie uma carteira no telemóvel ou no navegador. Uma carteira de navegador com 12 palavras é não custodial: as chaves não saem do seu dispositivo. Uma carteira na nuvem (início de sessão com Google ou email) é guardada cifrada nos servidores da PEOPLE, e a infraestrutura da PEOPLE consegue decifrá-la."
+          "text": "Crie uma carteira no telemóvel ou no navegador. Uma carteira de navegador com 12 palavras é não custodial: as chaves não saem do seu dispositivo. Uma carteira na nuvem é guardada cifrada nos servidores da PEOPLE, e a infraestrutura da PEOPLE consegue decifrá-la.",
+          "textSocial": "Crie uma carteira no telemóvel ou no navegador. Uma carteira de navegador com 12 palavras é não custodial: as chaves não saem do seu dispositivo. Uma carteira na nuvem (início de sessão com Google ou email) é guardada cifrada nos servidores da PEOPLE, e a infraestrutura da PEOPLE consegue decifrá-la.",
+          "textCloud": "Crie uma carteira no telemóvel ou no navegador. Uma carteira de navegador com 12 palavras é não custodial: as chaves não saem do seu dispositivo. Uma carteira na nuvem (início de sessão com email ou email) é guardada cifrada nos servidores da PEOPLE, e a infraestrutura da PEOPLE consegue decifrá-la."
         },
         {
           "title": "Criar token",

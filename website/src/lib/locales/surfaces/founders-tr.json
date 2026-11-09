@@ -30,7 +30,7 @@
   "poolEstimateValue": "Now 1 point ≈ {{ppl}} PPL",
   "poolEstimatePending": "Estimate appears once founders earn points.",
   "verificationTitle": "Verification levels (free)",
-  "verificationLead": "Level 1: sign in with email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLead": "Level 1: create or connect a wallet, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
   "verificationLevelLabel": "Your level",
   "verificationLevel0": "Level 0 — complete level 1 to earn points",
   "verificationLevel1": "Level 1 — 50% of base points",
@@ -165,5 +165,6 @@
   "demoAirdropClaiming": "Sending demo tokens…",
   "demoAirdropUnavailable": "Demo airdrop is not configured on this server yet.",
   "demoAirdropCapReached": "The first 10,000 founder demo packs have already been claimed.",
-  "verificationLeadSocial": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free."
+  "verificationLeadSocial": "Level 1: sign in with Google or email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free.",
+  "verificationLeadCloud": "Level 1: sign in with email, then share your phone once in our Telegram bot (50% of base points; one number per founder). Level 2: Human Passport (100% of base points). Verification is free."
 }

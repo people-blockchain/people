@@ -9,8 +9,9 @@
       "items": [
         {
           "title": "Dompet",
-          "text": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud (masuk dengan email) disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya.",
-          "textSocial": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud (masuk dengan Google atau email) disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya."
+          "text": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya.",
+          "textSocial": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud (masuk dengan Google atau email) disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya.",
+          "textCloud": "Buat dompet di ponsel atau browser. Dompet peramban 12 kata bersifat non-kustodial: kunci tidak meninggalkan perangkat. Dompet cloud (masuk dengan email) disimpan terenkripsi di server PEOPLE, dan infrastruktur PEOPLE mampu mendekripsinya."
         },
         {
           "title": "Buat token",

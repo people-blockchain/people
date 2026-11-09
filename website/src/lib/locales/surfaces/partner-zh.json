@@ -49,7 +49,7 @@
   "emptyLine": "该层暂无合作伙伴。",
   "eyebrow": "合作伙伴与创作者门户",
   "footerNote": "协议数据只读。原生资产：PEOPLE (PPL)。",
-  "googleCta": "使用 邮箱 继续",
+  "googleCta": "继续",
   "googleOff": "邮箱 登录尚未配置。",
   "growthAccrued": "累计",
   "growthClaimable": "可领取",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "无法从节点读取 Growth 申领数据。",
   "growthNote": "Growth 支付仍为 Growth 奖励预算的 L1 70% / L2 30%。本中心不更改协议经济。",
   "growthRewardsTitle": "Growth 奖励",
-  "guestLandingLead": "使用 邮箱 或电子邮件登录以打开工作台并复制您的个人 /?ref= 链接。从归因的 PPL 购买中获得 Base 上 7%–12% 的 USDC 以及 PEOPLE 主网上 3% 的 PPL。",
+  "guestLandingLead": "创建或连接钱包以打开您的 cabinet 并复制个人 /?ref= 链接。通过归因的 PPL 购买，在 Base 上获得 7% 至 12% 的 USDC，并在 PEOPLE 主网上获得 3% 的 PPL。",
   "guestLandingTitle": "合作伙伴与创作者计划",
   "guestPreSaleNote": "PPL 公开发售于 2026 年 12 月 1 日开始。在此之前仪表板可能显示零销售——属正常现象。",
   "guestSignInCta": "登录以获取您的链接",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "尚无 payout 批次。已批准佣金（最低 $50.00 USDC）每周打包，在 Base 上以 USDC、在 PEOPLE 主网上以 PPL 结算。",
   "payoutHistoryTitle": "支付历史",
   "payoutRuleNote": "佣金进入 30 天持有期 (pending)，以防 curve 回售，之后批准进入每周 payout 批次（最低 $50.00 USDC）。",
-  "pplBalance": "PPL 余额",
   "preSaleBanner": "PPL 销售于 2026 年 12 月 1 日开始。买家通过您的链接并在 Base 上完成购买后，归因购买佣金将显示在此处。",
+  "pplBalance": "PPL 余额",
   "profile": "资料",
   "protocolDown": "无法连接网络。不显示协议数据。",
   "protocolOff": "实时 PPL 数据暂时不可用。",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "使用 Google 或电子邮件登录以打开工作台并复制您的个人 /?ref= 链接。从归因的 PPL 购买中获得 Base 上 7%–12% 的 USDC 以及 PEOPLE 主网上 3% 的 PPL。",
   "guestWalletHintSocial": "合作伙伴佣金需要通过 Google 或电子邮件登录。仅浏览器钱包无法累积合作伙伴奖励。",
   "localWalletLeadSocial": "解锁或导入仅存储在此浏览器中且受密码保护的钱包。合伙人收益需要通过上方的 Google 或邮箱登录。",
-  "notConfiguredSocial": "此部署未配置合作伙伴登录。运营方需设置 AUTH_SECRET、DATABASE_URL，以及 AUTH_RESEND_KEY 或 Google OAuth 至少一项。"
+  "notConfiguredSocial": "此部署未配置合作伙伴登录。运营方需设置 AUTH_SECRET、DATABASE_URL，以及 AUTH_RESEND_KEY 或 Google OAuth 至少一项。",
+  "googleCtaCloud": "使用 邮箱 继续",
+  "guestLandingLeadCloud": "使用 邮箱 或电子邮件登录以打开工作台并复制您的个人 /?ref= 链接。从归因的 PPL 购买中获得 Base 上 7%–12% 的 USDC 以及 PEOPLE 主网上 3% 的 PPL。"
 }

@@ -49,7 +49,7 @@
   "emptyLine": "Pas encore de partenaires sur cette ligne.",
   "eyebrow": "Portail partenaires et créateurs",
   "footerNote": "Données protocole en lecture seule. Actif natif : PEOPLE (PPL).",
-  "googleCta": "Continuer avec e-mail",
+  "googleCta": "Continuer",
   "googleOff": "Connexion email pas encore configurée.",
   "growthAccrued": "Accumulé",
   "growthClaimable": "À réclamer",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Impossible de lire les réclamations Growth depuis le nœud.",
   "growthNote": "Les paiements Growth restent L1 70% / L2 30% du budget de récompense Growth. Cet espace ne modifie pas l'économie du protocole.",
   "growthRewardsTitle": "Récompenses Growth",
-  "guestLandingLead": "Connectez-vous avec e-mail pour ouvrir votre cabinet et copier votre lien personnel /?ref=. Gagnez de 7 % à 12 % en USDC sur Base plus 3 % en PPL sur mainnet PEOPLE sur les achats PPL attribués.",
+  "guestLandingLead": "Créez ou connectez un portefeuille pour ouvrir votre cabinet et copier votre lien personnel /?ref=. Gagnez de 7 % à 12 % en USDC sur Base plus 3 % en PPL sur le mainnet PEOPLE grâce aux achats PPL attribués.",
   "guestLandingTitle": "Programme partenaires et créateurs",
   "guestPreSaleNote": "La vente publique PPL commence le 1er décembre 2026. Votre tableau de bord peut afficher zéro vente d'ici là — c'est normal.",
   "guestSignInCta": "Se connecter pour obtenir votre lien",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "Pas encore de lots de paiement. Les commissions approuvées (minimum $50.00 USDC) sont regroupées chaque semaine pour règlement en USDC sur Base et PPL sur mainnet PEOPLE.",
   "payoutHistoryTitle": "Historique des paiements",
   "payoutRuleNote": "Les commissions entrent dans une période de retenue de 30 jours (pending) pour se prémunir des rachats curve avant approbation pour des lots hebdomadaires (minimum $50.00 USDC).",
-  "pplBalance": "Solde PPL",
   "preSaleBanner": "La vente PPL commence le 1er décembre 2026. Les commissions d'achats attribués apparaissent ici après que les acheteurs utilisent votre lien et finalisent leurs achats sur Base.",
+  "pplBalance": "Solde PPL",
   "profile": "Profil",
   "protocolDown": "Le réseau est injoignable. Aucune donnée protocole.",
   "protocolOff": "Les données PPL en direct sont temporairement indisponibles.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Connectez-vous avec Google ou e-mail pour ouvrir votre cabinet et copier votre lien personnel /?ref=. Gagnez de 7 % à 12 % en USDC sur Base plus 3 % en PPL sur mainnet PEOPLE sur les achats PPL attribués.",
   "guestWalletHintSocial": "Les commissions partenaire exigent une connexion Google ou e-mail. Un portefeuille navigateur seul n'accumule pas de récompenses partenaire.",
   "localWalletLeadSocial": "Déverrouillez ou importez un portefeuille protégé par mot de passe stocké uniquement dans ce navigateur. Les gains partenaires nécessitent Google ou un e-mail ci-dessus.",
-  "notConfiguredSocial": "La connexion partenaire n'est pas configurée sur ce déploiement. L'opérateur doit définir AUTH_SECRET, DATABASE_URL et au moins AUTH_RESEND_KEY ou OAuth Google."
+  "notConfiguredSocial": "La connexion partenaire n'est pas configurée sur ce déploiement. L'opérateur doit définir AUTH_SECRET, DATABASE_URL et au moins AUTH_RESEND_KEY ou OAuth Google.",
+  "googleCtaCloud": "Continuer avec e-mail",
+  "guestLandingLeadCloud": "Connectez-vous avec e-mail pour ouvrir votre cabinet et copier votre lien personnel /?ref=. Gagnez de 7 % à 12 % en USDC sur Base plus 3 % en PPL sur mainnet PEOPLE sur les achats PPL attribués."
 }

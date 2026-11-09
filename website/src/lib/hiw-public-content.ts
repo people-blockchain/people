@@ -1,5 +1,6 @@
 import type { Language } from "./preferences";
 import { withSocialLoginCopy } from "./social-login";
+import { withCloudWalletCopy } from "./cloud-wallet";
 import hiwAr from "./locales/surfaces/hiw-ar.json" with { type: "json" };
 import hiwDe from "./locales/surfaces/hiw-de.json" with { type: "json" };
 import hiwEn from "./locales/surfaces/hiw-en.json" with { type: "json" };
@@ -31,5 +32,5 @@ const hiwPublicRaw: Record<Language, HiwPublicCopy> = {
 };
 
 export const hiwPublic: Record<Language, HiwPublicCopy> = Object.fromEntries(
-  Object.entries(hiwPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+  Object.entries(hiwPublicRaw).map(([lang, copy]) => [lang, withCloudWalletCopy(withSocialLoginCopy(copy))]),
 ) as Record<Language, HiwPublicCopy>;

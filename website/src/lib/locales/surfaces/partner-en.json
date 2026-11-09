@@ -49,7 +49,7 @@
   "emptyLine": "No partners on this line yet.",
   "eyebrow": "Partner & Creator Portal",
   "footerNote": "Read-only protocol data. Native asset: PEOPLE (PPL).",
-  "googleCta": "Continue with email",
+  "googleCta": "Continue",
   "googleOff": "email sign-in is not configured yet.",
   "growthAccrued": "Accrued",
   "growthClaimable": "Claimable",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Could not read Growth claims from the node.",
   "growthNote": "Growth payouts stay L1 70% / L2 30% of the Growth reward budget. This cabinet does not change protocol economics.",
   "growthRewardsTitle": "Growth rewards",
-  "guestLandingLead": "Sign in with email to open your cabinet and copy your personal /?ref= link. Earn 7% to 12% in USDC on Base plus 3% in PPL on PEOPLE mainnet from attributed PPL purchases.",
+  "guestLandingLead": "Create or connect a wallet to open your cabinet and copy your personal /?ref= link. Earn 7% to 12% in USDC on Base plus 3% in PPL on PEOPLE mainnet from attributed PPL purchases.",
   "guestLandingTitle": "Partner & creator program",
   "guestPreSaleNote": "PPL public sale starts 1 December 2026. Your dashboard may show zero sales until then — that is expected.",
   "guestSignInCta": "Sign in to get your link",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Sign in with Google or email to open your cabinet and copy your personal /?ref= link. Earn 7% to 12% in USDC on Base plus 3% in PPL on PEOPLE mainnet from attributed PPL purchases.",
   "guestWalletHintSocial": "Partner commissions require Google or email sign-in. A browser wallet alone does not accrue partner rewards.",
   "localWalletLeadSocial": "Unlock or import a password-protected wallet stored only in this browser. Partner accruals require Google or email above.",
-  "notConfiguredSocial": "Partner sign-in is not configured on this deployment. The operator must set AUTH_SECRET, DATABASE_URL, and at least one of AUTH_RESEND_KEY or Google OAuth."
+  "notConfiguredSocial": "Partner sign-in is not configured on this deployment. The operator must set AUTH_SECRET, DATABASE_URL, and at least one of AUTH_RESEND_KEY or Google OAuth.",
+  "googleCtaCloud": "Continue with email",
+  "guestLandingLeadCloud": "Sign in with email to open your cabinet and copy your personal /?ref= link. Earn 7% to 12% in USDC on Base plus 3% in PPL on PEOPLE mainnet from attributed PPL purchases."
 }

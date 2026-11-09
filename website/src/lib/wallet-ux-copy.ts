@@ -1,5 +1,6 @@
 import type { Language } from "./preferences";
 import { withSocialLoginCopy } from "./social-login";
+import { withCloudWalletCopy } from "./cloud-wallet";
 import en from "./locales/surfaces/wallet-ux-en.json";
 import ru from "./locales/surfaces/wallet-ux-ru.json";
 import es from "./locales/surfaces/wallet-ux-es.json";
@@ -14,4 +15,4 @@ import zh from "./locales/surfaces/wallet-ux-zh.json";
 import ar from "./locales/surfaces/wallet-ux-ar.json";
 
 export const walletUxTranslations: Record<Language, typeof en> = { en, ru, es, pt, fr, de, it, tr, vi, id, zh, ar };
-export function walletUxCopy(language: Language) { return withSocialLoginCopy(walletUxTranslations[language]); }
+export function walletUxCopy(language: Language) { return withCloudWalletCopy(withSocialLoginCopy(walletUxTranslations[language])); }

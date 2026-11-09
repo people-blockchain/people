@@ -46,9 +46,9 @@
   "registrationPending": "Menghubungkan ke jaringan — akan coba lagi otomatis.",
   "networkChecking": "Menghubungkan…",
   "networkUnavailable": "Jaringan sementara tidak tersedia",
-  "signInHeading": "Masuk dengan email",
-  "signInGoogle": "Lanjutkan dengan email",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Buat atau hubungkan dompet",
+  "signInGoogle": "Lanjutkan",
+  "signInMagicCta": "Lanjutkan",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Atau gunakan kata sandi di perangkat ini",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Masukkan frasa 12 kata atau kunci privat heksadesimal 64 karakter.",
   "leadSocial": "Dompet peramban: non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami. Masuk dengan Google atau email justru membuat dompet cloud: PEOPLE menyimpan kunci Anda terenkripsi dan infrastrukturnya dapat mendekripsinya.",
   "signInHeadingSocial": "Masuk dengan Google atau email",
-  "signInGoogleSocial": "Lanjutkan dengan Google"
+  "signInGoogleSocial": "Lanjutkan dengan Google",
+  "signInHeadingCloud": "Masuk dengan email",
+  "signInGoogleCloud": "Lanjutkan dengan email",
+  "signInMagicCtaCloud": "Send login link"
 }

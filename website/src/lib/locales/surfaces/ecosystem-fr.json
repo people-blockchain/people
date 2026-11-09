@@ -34,8 +34,9 @@
       "summary": "Une trésorerie partagée contrôlée par plusieurs propriétaires."
     },
     "people-wallet": {
-      "summary": "Un portefeuille PPL non dépositaire dans le navigateur, avec connexion email facultative.",
-      "summarySocial": "Un portefeuille PPL non dépositaire dans le navigateur, avec connexion Google facultative."
+      "summary": "Un portefeuille PPL non dépositaire dans le navigateur.",
+      "summarySocial": "Un portefeuille PPL non dépositaire dans le navigateur, avec connexion Google facultative.",
+      "summaryCloud": "Un portefeuille PPL non dépositaire dans le navigateur, avec connexion email facultative."
     },
     "people-explorer": {
       "summary": "Blocs, transactions, adresses, jetons et NFT sur le réseau de test public."

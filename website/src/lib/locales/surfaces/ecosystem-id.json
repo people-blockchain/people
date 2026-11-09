@@ -34,8 +34,9 @@
       "summary": "Kas bersama yang dikendalikan beberapa pemilik."
     },
     "people-wallet": {
-      "summary": "Dompet PPL non-kustodial di browser, dengan login email opsional.",
-      "summarySocial": "Dompet PPL non-kustodial di browser, dengan login Google opsional."
+      "summary": "Dompet PPL non-kustodial di browser.",
+      "summarySocial": "Dompet PPL non-kustodial di browser, dengan login Google opsional.",
+      "summaryCloud": "Dompet PPL non-kustodial di browser, dengan login email opsional."
     },
     "people-explorer": {
       "summary": "Blok, transaksi, alamat, token, dan NFT di jaringan uji publik."

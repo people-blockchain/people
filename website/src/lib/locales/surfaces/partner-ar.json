@@ -49,7 +49,7 @@
   "emptyLine": "لا شركاء في هذا الخط بعد.",
   "eyebrow": "بوابة الشركاء وصنّاع المحتوى",
   "footerNote": "بيانات البروتوكول للقراءة فقط. الأصل الأصلي: PEOPLE (PPL).",
-  "googleCta": "المتابعة مع email",
+  "googleCta": "متابعة",
   "googleOff": "دخول email غير مُعدّ بعد.",
   "growthAccrued": "المستحق",
   "growthClaimable": "قابل للمطالبة",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "تعذر قراءة مطالبات Growth من العقدة.",
   "growthNote": "مدفوعات Growth تبقى L1 70% / L2 30% من ميزانية مكافآت Growth. هذه اللوحة لا تغيّر اقتصاد البروتوكول.",
   "growthRewardsTitle": "مكافآت Growth",
-  "guestLandingLead": "سجّل الدخول عبر email أو البريد الإلكتروني لفتح لوحة التحكم ونسخ رابط /?ref= الشخصي. اربح من 7% إلى 12% USDC على Base بالإضافة إلى 3% PPL على شبكة PEOPLE mainnet من مشتريات PPL المنسوبة.",
+  "guestLandingLead": "أنشئ محفظة أو اربطها لفتح cabinet ونسخ رابط /?ref= الشخصي. اربح من 7٪ إلى 12٪ بـ USDC على Base بالإضافة إلى 3٪ بـ PPL على شبكة PEOPLE الرئيسية من مشتريات PPL المنسوبة.",
   "guestLandingTitle": "برنامج الشركاء وصنّاع المحتوى",
   "guestPreSaleNote": "يبدأ بيع PPL العام في 1 ديسمبر 2026. قد تعرض لوحتك صفر مبيعات حتى ذلك الحين — وهذا متوقع.",
   "guestSignInCta": "سجّل الدخول للحصول على رابطك",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "لا دفعات بعد. العمولات المعتمدة (حد أدنى $50.00 USDC) تُجمَّع أسبوعياً للتسوية بـ USDC على Base وPPL على mainnet PEOPLE.",
   "payoutHistoryTitle": "سجل المدفوعات",
   "payoutRuleNote": "تدخل العمولات فترة hold لمدة 30 يوماً (pending) للحماية من إعادة البيع على curve قبل الموافقة لدفعات أسبوعية (حد أدنى $50.00 USDC).",
-  "pplBalance": "رصيد PPL",
   "preSaleBanner": "يبدأ بيع PPL في 1 ديسمبر 2026. تظهر عمولات المشتريات المنسوبة هنا بعد أن يستخدم المشترون رابطك ويكملون الشراء على Base.",
+  "pplBalance": "رصيد PPL",
   "profile": "الملف",
   "protocolDown": "تعذّر الوصول إلى الشبكة. لا بيانات بروتوكول.",
   "protocolOff": "بيانات PPL المباشرة غير متاحة مؤقتًا.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "سجّل الدخول عبر Google أو البريد الإلكتروني لفتح لوحة التحكم ونسخ رابط /?ref= الشخصي. اربح من 7% إلى 12% USDC على Base بالإضافة إلى 3% PPL على شبكة PEOPLE mainnet من مشتريات PPL المنسوبة.",
   "guestWalletHintSocial": "عمولات الشريك تتطلب تسجيل الدخول عبر Google أو البريد. محفظة المتصفح وحدها لا تتراكم لها مكافآت الشريك.",
   "localWalletLeadSocial": "افتح أو استورد محفظة محمية بكلمة مرور ومخزنة في هذا المتصفح فقط. تتطلب مستحقات الشركاء تسجيل الدخول عبر Google أو البريد أعلاه.",
-  "notConfiguredSocial": "دخول الشريك غير مُعدّ على هذا النشر. يجب على المشغّل تعيين AUTH_SECRET و DATABASE_URL و AUTH_RESEND_KEY أو Google OAuth على الأقل."
+  "notConfiguredSocial": "دخول الشريك غير مُعدّ على هذا النشر. يجب على المشغّل تعيين AUTH_SECRET و DATABASE_URL و AUTH_RESEND_KEY أو Google OAuth على الأقل.",
+  "googleCtaCloud": "المتابعة مع email",
+  "guestLandingLeadCloud": "سجّل الدخول عبر email أو البريد الإلكتروني لفتح لوحة التحكم ونسخ رابط /?ref= الشخصي. اربح من 7% إلى 12% USDC على Base بالإضافة إلى 3% PPL على شبكة PEOPLE mainnet من مشتريات PPL المنسوبة."
 }

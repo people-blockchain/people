@@ -49,7 +49,7 @@
   "emptyLine": "Noch keine Partner in dieser Linie.",
   "eyebrow": "Partner- & Creator-Portal",
   "footerNote": "Protokolldaten nur lesen. Native Asset: PEOPLE (PPL).",
-  "googleCta": "Mit E-Mail fortfahren",
+  "googleCta": "Weiter",
   "googleOff": "email-Anmeldung noch nicht konfiguriert.",
   "growthAccrued": "Angesammelt",
   "growthClaimable": "Abholbar",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Growth-Claims konnten nicht vom Node gelesen werden.",
   "growthNote": "Growth-Auszahlungen bleiben L1 70% / L2 30% des Growth-Reward-Budgets. Dieser Bereich ändert die Protokollökonomie nicht.",
   "growthRewardsTitle": "Growth-Belohnungen",
-  "guestLandingLead": "Melden Sie sich mit E-Mail an, um Ihr Cabinet zu öffnen und Ihren persönlichen /?ref=-Link zu kopieren. Verdienen Sie 7 % bis 12 % in USDC auf Base plus 3 % in PPL im PEOPLE-Mainnet aus zugeordneten PPL-Käufen.",
+  "guestLandingLead": "Erstellen oder verbinden Sie eine Wallet, um Ihr Cabinet zu öffnen und Ihren persönlichen /?ref=-Link zu kopieren. Verdienen Sie 7 % bis 12 % in USDC auf Base plus 3 % in PPL auf PEOPLE-Mainnet aus zugeschriebenen PPL-Käufen.",
   "guestLandingTitle": "Partner- und Creator-Programm",
   "guestPreSaleNote": "Der öffentliche PPL-Verkauf startet am 1. Dezember 2026. Ihr Dashboard kann bis dahin null Verkäufe anzeigen — das ist erwartbar.",
   "guestSignInCta": "Anmelden, um Ihren Link zu erhalten",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "Noch keine Auszahlungsbatches. Genehmigte Provisionen (Mindestbetrag $50.00 USDC) werden wöchentlich für Abrechnung in USDC auf Base und PPL im PEOPLE-Mainnet gebündelt.",
   "payoutHistoryTitle": "Auszahlungsverlauf",
   "payoutRuleNote": "Provisionen unterliegen einer 30-tägigen Haltefrist (pending), um Curve-Rückverkäufe abzusichern, bevor sie für wöchentliche Auszahlungsbatches freigegeben werden (Mindestbetrag $50.00 USDC).",
-  "pplBalance": "PPL-Saldo",
   "preSaleBanner": "Der PPL-Verkauf startet am 1. Dezember 2026. Zugeordnete Kaufprovisionen erscheinen hier, nachdem Käufer Ihren Link nutzen und Käufe auf Base abschließen.",
+  "pplBalance": "PPL-Saldo",
   "profile": "Profil",
   "protocolDown": "Das Netz ist nicht erreichbar. Keine Protokolldaten.",
   "protocolOff": "Live-PPL-Daten sind vorübergehend nicht verfügbar.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Melden Sie sich mit Google oder E-Mail an, um Ihr Cabinet zu öffnen und Ihren persönlichen /?ref=-Link zu kopieren. Verdienen Sie 7 % bis 12 % in USDC auf Base plus 3 % in PPL im PEOPLE-Mainnet aus zugeordneten PPL-Käufen.",
   "guestWalletHintSocial": "Partnerprovisionen erfordern Google- oder E-Mail-Anmeldung. Allein eine Browser-Wallet sammelt keine Partnerbelohnungen.",
   "localWalletLeadSocial": "Entsperren oder importieren Sie eine passwortgeschützte Wallet, die nur in diesem Browser gespeichert ist. Partner-Vergütungen erfordern Google oder E-Mail oben.",
-  "notConfiguredSocial": "Partner-Anmeldung ist in diesem Deployment nicht konfiguriert. Der Betreiber muss AUTH_SECRET, DATABASE_URL und mindestens AUTH_RESEND_KEY oder Google OAuth setzen."
+  "notConfiguredSocial": "Partner-Anmeldung ist in diesem Deployment nicht konfiguriert. Der Betreiber muss AUTH_SECRET, DATABASE_URL und mindestens AUTH_RESEND_KEY oder Google OAuth setzen.",
+  "googleCtaCloud": "Mit E-Mail fortfahren",
+  "guestLandingLeadCloud": "Melden Sie sich mit E-Mail an, um Ihr Cabinet zu öffnen und Ihren persönlichen /?ref=-Link zu kopieren. Verdienen Sie 7 % bis 12 % in USDC auf Base plus 3 % in PPL im PEOPLE-Mainnet aus zugeordneten PPL-Käufen."
 }

@@ -14,6 +14,7 @@ import { WalletExternalConnectSection } from "@/components/wallet/WalletExternal
 import { walletFeatures } from "@/lib/wallet-features";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { isWeb3AuthActive } from "@/lib/web3auth-config";
+import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 
 export function LoginForm({
   errorCode,
@@ -39,7 +40,9 @@ export function LoginForm({
 
   // Web3Auth is its own sign-in path, and /login is where its mobile redirect returns to.
   const web3AuthEnabled = isWeb3AuthActive();
-  const authAvailable = configured && (magicEnabled || googleEnabled || web3AuthEnabled);
+  const cloudEnabled = isCloudWalletEnabled();
+  const authAvailable =
+    configured && (web3AuthEnabled || (cloudEnabled && (magicEnabled || googleEnabled)));
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">

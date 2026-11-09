@@ -1,5 +1,6 @@
 import type { Language } from "./preferences";
 import { withSocialLoginCopy } from "./social-login";
+import { withCloudWalletCopy } from "./cloud-wallet";
 import ecosystemAr from "./locales/surfaces/ecosystem-ar.json" with { type: "json" };
 import ecosystemDe from "./locales/surfaces/ecosystem-de.json" with { type: "json" };
 import ecosystemEn from "./locales/surfaces/ecosystem-en.json" with { type: "json" };
@@ -125,5 +126,5 @@ const ecosystemPublicRaw: Record<Language, EcosystemPublicCopy> = {
 };
 
 export const ecosystemPublic: Record<Language, EcosystemPublicCopy> = Object.fromEntries(
-  Object.entries(ecosystemPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+  Object.entries(ecosystemPublicRaw).map(([lang, copy]) => [lang, withCloudWalletCopy(withSocialLoginCopy(copy))]),
 ) as Record<Language, EcosystemPublicCopy>;

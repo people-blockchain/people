@@ -1,5 +1,6 @@
 import type { Language } from "./preferences";
 import { withSocialLoginCopy } from "./social-login";
+import { withCloudWalletCopy } from "./cloud-wallet";
 import homeAr from "./locales/surfaces/home-ar.json" with { type: "json" };
 import homeDe from "./locales/surfaces/home-de.json" with { type: "json" };
 import homeEn from "./locales/surfaces/home-en.json" with { type: "json" };
@@ -31,5 +32,5 @@ const homePublicRaw: Record<Language, HomePublicCopy> = {
 };
 
 export const homePublic: Record<Language, HomePublicCopy> = Object.fromEntries(
-  Object.entries(homePublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+  Object.entries(homePublicRaw).map(([lang, copy]) => [lang, withCloudWalletCopy(withSocialLoginCopy(copy))]),
 ) as Record<Language, HomePublicCopy>;

@@ -1,5 +1,6 @@
 import type { Language } from "@/lib/preferences";
 import { withSocialLoginCopy } from "@/lib/social-login";
+import { withCloudWalletCopy } from "@/lib/cloud-wallet";
 import walletAr from "./locales/surfaces/wallet-ar.json" with { type: "json" };
 import walletDe from "./locales/surfaces/wallet-de.json" with { type: "json" };
 import walletEs from "./locales/surfaces/wallet-es.json" with { type: "json" };
@@ -64,6 +65,7 @@ export type WalletCopyContent = {
   signInHeading: string;
   signInGoogle: string;
   signInMagicCta: string;
+  signInMagicCtaCloud?: string;
   signInEmailLabel: string;
   signInEmailPlaceholder: string;
   signInDivider: string;
@@ -78,7 +80,7 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
   en: {
     title: "PEOPLE Wallet",
     // Social (preserved): "...Signing in with Google or email creates a cloud wallet..."
-    lead: "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
+    lead: "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Keys for a seed-phrase wallet stay on this device. Cloud email wallets are disabled for new sign-ins.",
     create: "Create a new wallet",
     import: "Import wallet",
     unlock: "Unlock",
@@ -127,9 +129,11 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     createdConnected: "Wallet created and connected to the network.",
     registrationPending: "Connecting to the network — we will retry automatically.",
     // Social (preserved): "Sign in with Google or email" / "Continue with Google"
-    signInHeading: "Sign in with email",
-    signInGoogle: "Continue with email",
-    signInMagicCta: "Continue with email",
+    // Cloud (preserved): signInMagicCtaCloud = "Continue with email"
+    signInHeading: "Open your wallet",
+    signInGoogle: "Continue",
+    signInMagicCta: "Continue",
+    signInMagicCtaCloud: "Continue with email",
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
     signInDivider: "Or use a password on this device",
@@ -143,7 +147,7 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
   ru: {
     title: "PEOPLE Wallet",
     // Social (preserved): "...Вход через Google или email создаёт..."
-    lead: "Браузерный кошелёк: некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы. Вход через email создаёт вместо него облачный кошелёк: PEOPLE хранит ваш ключ в зашифрованном виде, и её инфраструктура способна его расшифровать.",
+    lead: "Браузерный кошелёк: некастодиальный. Ключи создаются в браузере, шифруются паролем и не уходят на наши серверы. Ключи кошелька с фразой остаются на устройстве. Облачный вход по email для новых пользователей отключён.",
     create: "Создать кошелёк",
     import: "Импортировать",
     unlock: "Разблокировать",
@@ -192,9 +196,11 @@ const baseWalletCopy: Record<string, WalletCopyContent> = {
     createdConnected: "Кошелёк создан и подключён к сети.",
     registrationPending: "Подключаем к сети — повторим автоматически.",
     // Social (preserved): "Войти через Google или email" / "Продолжить через Google"
-    signInHeading: "Войти через email",
-    signInGoogle: "Продолжить через email",
-    signInMagicCta: "Продолжить через email",
+    // Cloud (preserved): signInMagicCtaCloud = "Продолжить через email"
+    signInHeading: "Открыть кошелёк",
+    signInGoogle: "Продолжить",
+    signInMagicCta: "Продолжить",
+    signInMagicCtaCloud: "Продолжить через email",
     signInEmailLabel: "Email",
     signInEmailPlaceholder: "you@example.com",
     signInDivider: "Или пароль только на этом устройстве",
@@ -221,6 +227,6 @@ export const walletCopy: Record<Language, WalletCopyContent> = new Proxy(
   baseWalletCopy as unknown as Record<Language, WalletCopyContent>,
   {
     get: (target, prop: string) =>
-      withSocialLoginCopy(target[prop as keyof typeof target] ?? target.en),
+      withCloudWalletCopy(withSocialLoginCopy(target[prop as keyof typeof target] ?? target.en)),
   }
 );

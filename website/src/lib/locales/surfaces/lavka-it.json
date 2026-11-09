@@ -5,7 +5,7 @@
   "contractsOff": "Contratti fedeltà non ancora deployati su questo testnet. Esegui il workflow Lavka dopo il merge.",
   "signInCta": "Accedi",
   "walletCta": "Collega wallet",
-  "pohRequired": "Accedi con email e collega il wallet per gestire il negozio o scalare visite.",
+  "pohRequired": "Collega il tuo wallet per gestire il negozio o riscattare le visite.",
   "merchantTitle": "Il tuo negozio",
   "merchantLead": "Imposta nome e paese, poi pubblica un pass acquistabile e scalabile.",
   "displayNameLabel": "Nome negozio",
@@ -59,5 +59,6 @@
   "successEscrow": "Prepagamento bloccato.",
   "connectWallet": "Collega wallet",
   "preliminaryBanner": "Preliminare — parametri pilota possono cambiare prima del mainnet.",
-  "pohRequiredSocial": "Accedi con Google o email e collega il wallet per gestire il negozio o scalare visite."
+  "pohRequiredSocial": "Accedi con Google o email e collega il wallet per gestire il negozio o scalare visite.",
+  "pohRequiredCloud": "Accedi con email e collega il wallet per gestire il negozio o scalare visite."
 }

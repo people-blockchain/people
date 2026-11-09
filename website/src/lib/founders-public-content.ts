@@ -1,5 +1,6 @@
 import type { Language } from "./preferences";
 import { withSocialLoginCopy } from "./social-login";
+import { withCloudWalletCopy } from "./cloud-wallet";
 import foundersAr from "./locales/surfaces/founders-ar.json" with { type: "json" };
 import foundersDe from "./locales/surfaces/founders-de.json" with { type: "json" };
 import foundersEn from "./locales/surfaces/founders-en.json" with { type: "json" };
@@ -31,5 +32,5 @@ const foundersPublicRaw: Record<Language, FoundersPublicCopy> = {
 };
 
 export const foundersPublic: Record<Language, FoundersPublicCopy> = Object.fromEntries(
-  Object.entries(foundersPublicRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+  Object.entries(foundersPublicRaw).map(([lang, copy]) => [lang, withCloudWalletCopy(withSocialLoginCopy(copy))]),
 ) as Record<Language, FoundersPublicCopy>;
