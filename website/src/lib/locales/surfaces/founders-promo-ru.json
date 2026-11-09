@@ -47,8 +47,9 @@
     },
     {
       "title": "Создай кошелёк",
-      "body": "Войди через email и подключи кошелёк PEOPLE в пару касаний.",
-      "bodySocial": "Войди через Google или email и подключи кошелёк PEOPLE в пару касаний."
+      "body": "Создайте или подключите кошелёк PEOPLE в пару касаний.",
+      "bodySocial": "Войди через Google или email и подключи кошелёк PEOPLE в пару касаний.",
+      "bodyCloud": "Войди через email и подключи кошелёк PEOPLE в пару касаний."
     },
     {
       "title": "Одно действие в тестнете",
@@ -190,7 +191,7 @@
   "shareX": "X",
   "claimEyebrow": "Регистрация",
   "claimTitle": "Получи номер основателя",
-  "claimSignInLead": "Войди через email, подключи кошелёк, выбери страну — и следующий номер твой.",
+  "claimSignInLead": "Подключите кошелёк, выберите страну — и следующий номер ваш.",
   "personalEyebrow": "Твоё пространство основателя",
   "personalTitle": "Привет, ты основатель №{{n}}",
   "downloadCard": "Скачать карточку (PNG)",
@@ -214,5 +215,6 @@
   "verifyHumanPassportLow": "Твой балл Human Passport ниже требуемого порога.",
   "verifyHumanPassportError": "Не удалось пройти Human Passport. Попробуй позже.",
   "verifyHumanPassportOff": "Human Passport на этом окружении ещё не настроен.",
-  "claimSignInLeadSocial": "Войди через Google или email, подключи кошелёк, выбери страну — и следующий номер твой."
+  "claimSignInLeadSocial": "Войди через Google или email, подключи кошелёк, выбери страну — и следующий номер твой.",
+  "claimSignInLeadCloud": "Войди через email, подключи кошелёк, выбери страну — и следующий номер твой."
 }

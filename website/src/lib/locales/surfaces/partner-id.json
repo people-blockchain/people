@@ -49,7 +49,7 @@
   "emptyLine": "Belum ada mitra di baris ini.",
   "eyebrow": "Portal mitra dan kreator",
   "footerNote": "Data protokol hanya baca. Aset native: PEOPLE (PPL).",
-  "googleCta": "Lanjutkan dengan email",
+  "googleCta": "Lanjutkan",
   "googleOff": "Masuk email belum dikonfigurasi.",
   "growthAccrued": "Terakumulasi",
   "growthClaimable": "Dapat diklaim",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Tidak dapat membaca klaim Growth dari node.",
   "growthNote": "Pembayaran Growth tetap L1 70% / L2 30% anggaran reward Growth. Area ini tidak mengubah ekonomi protokol.",
   "growthRewardsTitle": "Reward Growth",
-  "guestLandingLead": "Masuk dengan email untuk membuka kabinet dan menyalin tautan /?ref= pribadi Anda. Dapatkan 7%–12% USDC di Base plus 3% PPL di mainnet PEOPLE dari pembelian PPL yang diatribusikan.",
+  "guestLandingLead": "Buat atau hubungkan dompet untuk membuka cabinet dan menyalin tautan /?ref= pribadi Anda. Dapatkan 7% hingga 12% dalam USDC di Base plus 3% dalam PPL di mainnet PEOPLE dari pembelian PPL yang diatribusikan.",
   "guestLandingTitle": "Program mitra dan kreator",
   "guestPreSaleNote": "Penjualan PPL publik dimulai 1 Desember 2026. Dasbor Anda mungkin menampilkan nol penjualan sampai saat itu — itu normal.",
   "guestSignInCta": "Masuk untuk mendapat tautan Anda",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "Belum ada batch payout. Komisi disetujui (minimum $50.00 USDC) dikelompokkan mingguan untuk penyelesaian USDC di Base dan PPL di mainnet PEOPLE.",
   "payoutHistoryTitle": "Riwayat payout",
   "payoutRuleNote": "Komisi masuk periode hold 30 hari (pending) untuk melindungi dari sell-back curve sebelum disetujui untuk batch payout mingguan (minimum $50.00 USDC).",
-  "pplBalance": "Saldo PPL",
   "preSaleBanner": "Penjualan PPL dimulai 1 Desember 2026. Komisi pembelian yang diatribusikan muncul di sini setelah pembeli memakai tautan Anda dan menyelesaikan pembelian di Base.",
+  "pplBalance": "Saldo PPL",
   "profile": "Profil",
   "protocolDown": "Jaringan tidak dapat dijangkau. Tidak ada data protokol.",
   "protocolOff": "Data PPL langsung sementara tidak tersedia.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Masuk dengan Google atau email untuk membuka kabinet dan menyalin tautan /?ref= pribadi Anda. Dapatkan 7%–12% USDC di Base plus 3% PPL di mainnet PEOPLE dari pembelian PPL yang diatribusikan.",
   "guestWalletHintSocial": "Komisi mitra memerlukan masuk dengan Google atau email. Dompet browser saja tidak mengakumulasi hadiah mitra.",
   "localWalletLeadSocial": "Buka kunci atau impor dompet dengan kata sandi yang disimpan hanya di browser ini. Akumulasi mitra memerlukan Google atau email di atas.",
-  "notConfiguredSocial": "Masuk mitra belum dikonfigurasi di deployment ini. Operator harus menetapkan AUTH_SECRET, DATABASE_URL, dan minimal AUTH_RESEND_KEY atau Google OAuth."
+  "notConfiguredSocial": "Masuk mitra belum dikonfigurasi di deployment ini. Operator harus menetapkan AUTH_SECRET, DATABASE_URL, dan minimal AUTH_RESEND_KEY atau Google OAuth.",
+  "googleCtaCloud": "Lanjutkan dengan email",
+  "guestLandingLeadCloud": "Masuk dengan email untuk membuka kabinet dan menyalin tautan /?ref= pribadi Anda. Dapatkan 7%–12% USDC di Base plus 3% PPL di mainnet PEOPLE dari pembelian PPL yang diatribusikan."
 }

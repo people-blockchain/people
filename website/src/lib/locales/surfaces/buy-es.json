@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "Frases semilla, gas y una docena de pasos antes de la primera acción.",
-        "after": "Entras con tu correo, como en cualquier app normal.",
-        "afterSocial": "Entras con Google o con tu correo, como en cualquier app normal."
+        "after": "Crea o conecta una billetera.",
+        "afterSocial": "Entras con Google o con tu correo, como en cualquier app normal.",
+        "afterCloud": "Entras con tu correo, como en cualquier app normal."
       },
       {
         "before": "Bots y cuentas falsas junto a personas reales.",
@@ -217,7 +218,7 @@
     "belowMin": "Introduce un importe para ver tu cotización.",
     "cta": "Conecta una cartera para comprar",
     "ctaConnected": "Comprar PPL",
-    "wallets": "PEOPLE Wallet (acceso con email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (crear o conectar una billetera) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Cómo pagas",
     "payOnBase": "Pagar en Base",
     "payFromOther": "Pagar desde otra red",
@@ -278,7 +279,7 @@
     "termsLink": "Términos",
     "help": "¿Necesitas ayuda? {support}",
     "supportLink": "Soporte",
-    "noWalletHint": "¿No tienes cartera? Elige email o email y se creará una PEOPLE Wallet para ti. Para pagar necesitas USDC en Base en esa cartera o en una que conectes.",
+    "noWalletHint": "¿Sin billetera? Crea o importa un PEOPLE Wallet, o conecta MetaMask / WalletConnect. Para pagar necesitas USDC en Base en esa billetera.",
     "sellBackTerms": "Venta de vuelta a la reserva solo para usuarios verificados. Cada compra puede venderse 30 días después de hacerla, al precio de la curva en el momento de la venta. Límites: 2 % de la reserva en cualquier ventana móvil de 24 horas entre todos, y $2.000 por dirección en una ventana móvil de 24 horas. Los PPL vuelven a la billetera de venta en PEOPLE mainnet; no se queman. Comisión del 1,5 %; 3 % solo sobre la parte de las ventas de esas 24 horas que supere el 1 % de la reserva. Sigue abierta después del cierre de la curva, hasta que la reserva pase a liquidez. Recibes el dinero en USDC en la red Base.",
     "feesTitle": "Comisiones y plazos",
     "feesBody": "Comisiones: la de la red Base (gas), que se paga en ETH, normalmente unos US$ 0,01; la de intercambio o puente de LI.FI, que el widget muestra antes de confirmar; y la de venta de vuelta a la reserva: 1,5 %, y 3 % solo sobre la parte de las ventas en 24 horas móviles que supere el 1 % de la reserva.",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "USDT en Base (puenteado)",
     "payFromNetworks": "Funciona desde redes EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche y otras), Tron y Solana. TON no es compatible.",
     "bridgeSteps": "Paso 1. Cambia tus tokens a USDC en Base en el widget (normalmente 1–20 minutos). Paso 2. Compra PPL con el botón de abajo.",
-    "solanaHint": "¿Pagas desde Solana o Tron? También necesitas una dirección en Base para recibir los USDC: conecta MetaMask, Trust Wallet o WalletConnect, o entra con email.",
+    "solanaHint": "¿Pagas desde Solana o Tron? También necesitas una dirección en Base para recibir USDC: conecta MetaMask, Trust Wallet o WalletConnect, o crea o conecta una billetera.",
     "bridgeClosed": "El pago desde otras redes se abrirá junto con la venta.",
     "bridgeStatus": "Intercambio en curso. Síguelo en {link}.",
     "bridgeFailed": "El intercambio no se completó. Revisa su estado en scan.li.fi o vuelve a intentarlo.",
@@ -301,7 +302,10 @@
     "embeddedNoBase": "PEOPLE Wallet todavía no puede pagar en la red Base. Para comprar, conecta MetaMask, Trust Wallet o WalletConnect.",
     "walletsSocial": "PEOPLE Wallet (acceso con Google o email) · MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "¿No tienes cartera? Elige Google o email y se creará una PEOPLE Wallet para ti. Para pagar necesitas USDC en Base en esa cartera o en una que conectes.",
-    "solanaHintSocial": "¿Pagas desde Solana o Tron? También necesitas una dirección en Base para recibir los USDC: conecta MetaMask, Trust Wallet o WalletConnect, o entra con Google."
+    "solanaHintSocial": "¿Pagas desde Solana o Tron? También necesitas una dirección en Base para recibir los USDC: conecta MetaMask, Trust Wallet o WalletConnect, o entra con Google.",
+    "walletsCloud": "PEOPLE Wallet (acceso con email) · MetaMask · Trust Wallet · WalletConnect",
+    "solanaHintCloud": "¿Pagas desde Solana o Tron? También necesitas una dirección en Base para recibir los USDC: conecta MetaMask, Trust Wallet o WalletConnect, o entra con email.",
+    "noWalletHintCloud": "¿No tienes cartera? Elige email o email y se creará una PEOPLE Wallet para ti. Para pagar necesitas USDC en Base en esa cartera o en una que conectes."
   },
   "v2": {
     "banner": {

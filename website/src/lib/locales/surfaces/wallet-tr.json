@@ -46,9 +46,9 @@
   "registrationPending": "Ağa bağlanılıyor — otomatik yeniden denenecek.",
   "networkChecking": "Bağlanıyor…",
   "networkUnavailable": "Ağ geçici olarak kullanılamıyor",
-  "signInHeading": "e-posta ile giriş yapın",
-  "signInGoogle": "E-posta ile devam et",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Cüzdan oluştur veya bağla",
+  "signInGoogle": "Devam",
+  "signInMagicCta": "Devam",
   "signInEmailLabel": "E-posta",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Veya bu cihazda bir şifre kullanın",
@@ -61,5 +61,8 @@
   "importInvalidKey": "12 kelimelik bir ifade veya 64 karakterlik onaltılık özel anahtar girin.",
   "leadSocial": "Tarayıcı cüzdanı: emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez. Google veya e-posta ile giriş ise bunun yerine bir bulut cüzdanı oluşturur: PEOPLE anahtarınızı şifreli saklar ve altyapısı onu çözebilir.",
   "signInHeadingSocial": "Google veya e-posta ile giriş yapın",
-  "signInGoogleSocial": "Google ile devam et"
+  "signInGoogleSocial": "Google ile devam et",
+  "signInHeadingCloud": "e-posta ile giriş yapın",
+  "signInGoogleCloud": "E-posta ile devam et",
+  "signInMagicCtaCloud": "Send login link"
 }

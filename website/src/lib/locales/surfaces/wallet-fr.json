@@ -46,9 +46,9 @@
   "registrationPending": "Connexion au réseau — nouvel essai automatique.",
   "networkChecking": "Connexion…",
   "networkUnavailable": "Le réseau est temporairement indisponible",
-  "signInHeading": "Se connecter avec par e-mail",
-  "signInGoogle": "Continuer avec e-mail",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Créer ou connecter un portefeuille",
+  "signInGoogle": "Continuer",
+  "signInMagicCta": "Continuer",
   "signInEmailLabel": "E-mail",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Ou utilisez un mot de passe sur cet appareil",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Saisissez une phrase de 12 mots ou une clé privée hexadécimale de 64 caractères.",
   "leadSocial": "Portefeuille de navigateur : non custodial. Les clés sont créées dans ce navigateur, chiffrées avec votre mot de passe, et ne sont jamais envoyées sur nos serveurs. Se connecter avec Google ou e-mail crée à la place un portefeuille cloud : PEOPLE stocke votre clé chiffrée et son infrastructure peut la déchiffrer.",
   "signInHeadingSocial": "Se connecter avec Google ou par e-mail",
-  "signInGoogleSocial": "Continuer avec Google"
+  "signInGoogleSocial": "Continuer avec Google",
+  "signInHeadingCloud": "Se connecter avec par e-mail",
+  "signInGoogleCloud": "Continuer avec e-mail",
+  "signInMagicCtaCloud": "Send login link"
 }

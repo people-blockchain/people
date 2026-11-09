@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "Cụm từ khôi phục, phí gas và cả chục bước trước thao tác đầu tiên.",
-        "after": "Đăng nhập bằng email, như mọi ứng dụng bình thường.",
-        "afterSocial": "Đăng nhập bằng Google hoặc email, như mọi ứng dụng bình thường."
+        "after": "Tạo hoặc kết nối ví.",
+        "afterSocial": "Đăng nhập bằng Google hoặc email, như mọi ứng dụng bình thường.",
+        "afterCloud": "Đăng nhập bằng email, như mọi ứng dụng bình thường."
       },
       {
         "before": "Bot và tài khoản giả lẫn với người thật.",
@@ -217,7 +218,7 @@
     "belowMin": "Nhập số tiền để xem báo giá.",
     "cta": "Kết nối ví để mua",
     "ctaConnected": "Mua PPL",
-    "wallets": "PEOPLE Wallet (đăng nhập bằng email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (tạo hoặc kết nối ví) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Cách thanh toán",
     "payOnBase": "Thanh toán trên Base",
     "payFromOther": "Thanh toán từ mạng khác",
@@ -278,7 +279,7 @@
     "termsLink": "Điều khoản",
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
-    "noWalletHint": "Chưa có ví? Chọn email hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
+    "noWalletHint": "Chưa có ví? Tạo hoặc nhập PEOPLE Wallet, hoặc kết nối MetaMask / WalletConnect. Để thanh toán, bạn cần USDC trên Base trong ví đó.",
     "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người cộng lại, và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. PPL được trả về ví bán trên PEOPLE mainnet và không bị đốt. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ. Vẫn mở sau khi đường cong đóng, cho đến khi quỹ dự trữ được chuyển thành thanh khoản. Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
     "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí hoán đổi hoặc cầu nối của LI.FI — hiển thị trong widget trước khi xác nhận; phí bán lại vào quỹ dự trữ — 1,5%, và 3% chỉ cho phần bán lại trong cửa sổ trượt 24 giờ vượt 1% quỹ dự trữ.",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "USDT trên Base (bridged)",
     "payFromNetworks": "Hoạt động từ các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana. TON không được hỗ trợ.",
     "bridgeSteps": "Bước 1. Đổi token của bạn sang USDC trên Base trong widget (thường 1–20 phút). Bước 2. Mua PPL bằng nút bên dưới.",
-    "solanaHint": "Thanh toán từ Solana hoặc Tron? Bạn cũng cần một địa chỉ trên Base để nhận USDC: kết nối MetaMask, Trust Wallet hoặc WalletConnect, hoặc đăng nhập bằng email.",
+    "solanaHint": "Thanh toán từ Solana hoặc Tron? Bạn cũng cần địa chỉ trên Base để nhận USDC: kết nối MetaMask, Trust Wallet hoặc WalletConnect, hoặc tạo/kết nối ví.",
     "bridgeClosed": "Thanh toán từ các mạng khác sẽ mở cùng lúc với đợt bán.",
     "bridgeStatus": "Đang hoán đổi. Theo dõi trên {link}.",
     "bridgeFailed": "Hoán đổi chưa hoàn tất. Kiểm tra trạng thái trên scan.li.fi hoặc thử lại.",
@@ -301,7 +302,10 @@
     "embeddedNoBase": "PEOPLE Wallet chưa thể thanh toán trên mạng Base. Để mua, hãy kết nối MetaMask, Trust Wallet hoặc WalletConnect.",
     "walletsSocial": "PEOPLE Wallet (đăng nhập bằng Google hoặc email) · MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "Chưa có ví? Chọn Google hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối.",
-    "solanaHintSocial": "Thanh toán từ Solana hoặc Tron? Bạn cũng cần một địa chỉ trên Base để nhận USDC: kết nối MetaMask, Trust Wallet hoặc WalletConnect, hoặc đăng nhập bằng Google."
+    "solanaHintSocial": "Thanh toán từ Solana hoặc Tron? Bạn cũng cần một địa chỉ trên Base để nhận USDC: kết nối MetaMask, Trust Wallet hoặc WalletConnect, hoặc đăng nhập bằng Google.",
+    "walletsCloud": "PEOPLE Wallet (đăng nhập bằng email) · MetaMask · Trust Wallet · WalletConnect",
+    "solanaHintCloud": "Thanh toán từ Solana hoặc Tron? Bạn cũng cần một địa chỉ trên Base để nhận USDC: kết nối MetaMask, Trust Wallet hoặc WalletConnect, hoặc đăng nhập bằng email.",
+    "noWalletHintCloud": "Chưa có ví? Chọn email hoặc email — PEOPLE Wallet sẽ được tạo cho bạn. Để thanh toán, bạn cần USDC trên Base trong ví đó hoặc trong ví bạn kết nối."
   },
   "v2": {
     "banner": {

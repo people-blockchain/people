@@ -34,8 +34,9 @@
       "summary": "Birden çok sahibin yönettiği ortak bir hazine."
     },
     "people-wallet": {
-      "summary": "Tarayıcıda isteğe bağlı email girişi olan, saklamasız bir PPL cüzdanı.",
-      "summarySocial": "Tarayıcıda isteğe bağlı Google girişi olan, saklamasız bir PPL cüzdanı."
+      "summary": "Tarayıcıda saklamasız bir PPL cüzdanı.",
+      "summarySocial": "Tarayıcıda isteğe bağlı Google girişi olan, saklamasız bir PPL cüzdanı.",
+      "summaryCloud": "Tarayıcıda isteğe bağlı email girişi olan, saklamasız bir PPL cüzdanı."
     },
     "people-explorer": {
       "summary": "Herkese açık test ağında bloklar, işlemler, adresler, tokenlar ve NFT'ler."

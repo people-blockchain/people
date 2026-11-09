@@ -46,9 +46,9 @@
   "registrationPending": "Connessione alla rete — riproveremo automaticamente.",
   "networkChecking": "Connessione…",
   "networkUnavailable": "La rete non è temporaneamente disponibile",
-  "signInHeading": "Accedi con email",
-  "signInGoogle": "Continua con email",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Crea o collega un wallet",
+  "signInGoogle": "Continua",
+  "signInMagicCta": "Continua",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Oppure usa una password su questo dispositivo",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Inserisci una frase di 12 parole o una chiave privata esadecimale di 64 caratteri.",
   "leadSocial": "Wallet del browser: non-custodial. Le chiavi vengono create in questo browser, cifrate con la password e non vengono mai inviate ai nostri server. Accedere con Google o email crea invece un wallet cloud: PEOPLE conserva la tua chiave cifrata e la sua infrastruttura può decifrarla.",
   "signInHeadingSocial": "Accedi con Google o email",
-  "signInGoogleSocial": "Continua con Google"
+  "signInGoogleSocial": "Continua con Google",
+  "signInHeadingCloud": "Accedi con email",
+  "signInGoogleCloud": "Continua con email",
+  "signInMagicCtaCloud": "Send login link"
 }

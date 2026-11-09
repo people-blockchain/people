@@ -46,9 +46,9 @@
   "registrationPending": "Connecting to the network — we will retry automatically.",
   "networkChecking": "Connecting…",
   "networkUnavailable": "Network temporarily unavailable",
-  "signInHeading": "Sign in with email",
-  "signInGoogle": "Continue with email",
-  "signInMagicCta": "Continue with email",
+  "signInHeading": "Create or connect a wallet",
+  "signInGoogle": "Continue",
+  "signInMagicCta": "Continue",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Or use a password on this device",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Enter a 12-word phrase or a 64-character hex private key.",
   "leadSocial": "Browser wallet: non-custodial. Keys are created in this browser, encrypted with your password, and never sent to our servers. Signing in with Google or email creates a cloud wallet instead: PEOPLE stores your key encrypted and its infrastructure can decrypt it.",
   "signInHeadingSocial": "Sign in with Google or email",
-  "signInGoogleSocial": "Continue with Google"
+  "signInGoogleSocial": "Continue with Google",
+  "signInHeadingCloud": "Sign in with email",
+  "signInGoogleCloud": "Continue with email",
+  "signInMagicCtaCloud": "Continue with email"
 }

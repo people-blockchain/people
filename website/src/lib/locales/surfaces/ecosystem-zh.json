@@ -34,8 +34,9 @@
       "summary": "由多位所有者共同管理的共享资金库。"
     },
     "people-wallet": {
-      "summary": "浏览器中的非托管 PPL 钱包，可选择使用邮箱登录。",
-      "summarySocial": "浏览器中的非托管 PPL 钱包，可选择使用 Google 登录。"
+      "summary": "浏览器中的非托管 PPL 钱包。",
+      "summarySocial": "浏览器中的非托管 PPL 钱包，可选择使用 Google 登录。",
+      "summaryCloud": "浏览器中的非托管 PPL 钱包，可选择使用邮箱登录。"
     },
     "people-explorer": {
       "summary": "公共测试网上的区块、交易、地址、代币和 NFT。"

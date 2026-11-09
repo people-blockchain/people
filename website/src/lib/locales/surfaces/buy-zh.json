@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "助记词、gas 费，第一次操作前还要走十几步。",
-        "after": "像普通应用一样，用 邮箱登录。",
-        "afterSocial": "像普通应用一样，用 Google 或邮箱登录。"
+        "after": "创建或连接钱包。",
+        "afterSocial": "像普通应用一样，用 Google 或邮箱登录。",
+        "afterCloud": "像普通应用一样，用 邮箱登录。"
       },
       {
         "before": "机器人和假账号混在真人中间。",
@@ -217,7 +218,7 @@
     "belowMin": "输入金额以查看报价。",
     "cta": "连接钱包以购买",
     "ctaConnected": "购买 PPL",
-    "wallets": "PEOPLE Wallet（通过邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet（创建或连接钱包）· MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "支付方式",
     "payOnBase": "在 Base 支付",
     "payFromOther": "从其他网络支付",
@@ -278,7 +279,7 @@
     "termsLink": "《条款》",
     "help": "需要帮助？{support}",
     "supportLink": "支持",
-    "noWalletHint": "没有钱包？选择 邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
+    "noWalletHint": "没有钱包？创建或导入 PEOPLE Wallet，或连接 MetaMask / WalletConnect。付款需要该钱包在 Base 上有 USDC。",
     "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 退回 PEOPLE 主网上的销售钱包，不会销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭后卖回继续开放，直到储备转为流动性。你将在 Base 网络上收到 USDC。",
     "feesTitle": "费用与时间",
     "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%，仅对该滚动 24 小时卖回中超过储备 1% 的部分收取 3%。",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "Base 上的 USDT（跨链桥版本）",
     "payFromNetworks": "支持 EVM 网络（Ethereum、BNB Chain、Polygon、Arbitrum、Optimism、Avalanche 等）、Tron 和 Solana。不支持 TON。",
     "bridgeSteps": "第 1 步：在组件中将代币兑换为 Base 上的 USDC（通常 1–20 分钟）。第 2 步：用下方按钮购买 PPL。",
-    "solanaHint": "从 Solana 或 Tron 付款？您还需要一个 Base 地址来接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或使用邮箱登录。",
+    "solanaHint": "从 Solana 或 Tron 付款？您还需要 Base 上的地址以接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或创建/连接钱包。",
     "bridgeClosed": "从其他网络付款将与销售同时开放。",
     "bridgeStatus": "兑换进行中。可在 {link} 查看进度。",
     "bridgeFailed": "兑换未完成。请在 scan.li.fi 查看状态或重试。",
@@ -301,7 +302,10 @@
     "embeddedNoBase": "PEOPLE Wallet 暂不支持在 Base 网络付款。如需购买，请连接 MetaMask、Trust Wallet 或 WalletConnect。",
     "walletsSocial": "PEOPLE Wallet（通过 Google 或邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "没有钱包？选择 Google 或邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
-    "solanaHintSocial": "从 Solana 或 Tron 付款？您还需要一个 Base 地址来接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或使用 Google 登录。"
+    "solanaHintSocial": "从 Solana 或 Tron 付款？您还需要一个 Base 地址来接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或使用 Google 登录。",
+    "walletsCloud": "PEOPLE Wallet（通过邮箱登录）· MetaMask · Trust Wallet · WalletConnect",
+    "noWalletHintCloud": "没有钱包？选择 邮箱登录，系统会为您创建 PEOPLE Wallet。付款需要该钱包或您连接的钱包中有 Base 上的 USDC。",
+    "solanaHintCloud": "从 Solana 或 Tron 付款？您还需要一个 Base 地址来接收 USDC：连接 MetaMask、Trust Wallet 或 WalletConnect，或使用邮箱登录。"
   },
   "v2": {
     "banner": {

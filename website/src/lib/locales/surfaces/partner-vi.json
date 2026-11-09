@@ -49,7 +49,7 @@
   "emptyLine": "Chưa có đối tác ở tuyến này.",
   "eyebrow": "Cổng đối tác và nhà sáng tạo",
   "footerNote": "Dữ liệu giao thức chỉ đọc. Tài sản gốc: PEOPLE (PPL).",
-  "googleCta": "Tiếp tục với email",
+  "googleCta": "Tiếp tục",
   "googleOff": "Đăng nhập email chưa được cấu hình.",
   "growthAccrued": "Đã tích lũy",
   "growthClaimable": "Có thể nhận",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Không thể đọc yêu cầu Growth từ nút.",
   "growthNote": "Thanh toán Growth vẫn L1 70% / L2 30% ngân sách thưởng Growth. Khu vực này không thay đổi kinh tế giao thức.",
   "growthRewardsTitle": "Phần thưởng Growth",
-  "guestLandingLead": "Đăng nhập bằng email để mở cabinet và sao chép liên kết /?ref= cá nhân. Kiếm 7%–12% USDC trên Base cộng 3% PPL trên mainnet PEOPLE từ các giao dịch mua PPL được gán.",
+  "guestLandingLead": "Tạo hoặc kết nối ví để mở cabinet và sao chép liên kết /?ref= cá nhân. Nhận 7% đến 12% USDC trên Base cộng 3% PPL trên PEOPLE mainnet từ các giao dịch PPL được ghi nhận.",
   "guestLandingTitle": "Chương trình đối tác và nhà sáng tạo",
   "guestPreSaleNote": "Đợt bán PPL công khai bắt đầu 1 tháng 12 năm 2026. Bảng điều khiển có thể hiển thị không doanh số cho đến lúc đó — điều này là bình thường.",
   "guestSignInCta": "Đăng nhập để nhận liên kết của bạn",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "Chưa có batch chi trả. Hoa hồng đã duyệt (tối thiểu $50.00 USDC) được gom hàng tuần để thanh toán USDC trên Base và PPL trên mainnet PEOPLE.",
   "payoutHistoryTitle": "Lịch sử chi trả",
   "payoutRuleNote": "Hoa hồng vào thời gian giữ 30 ngày (pending) để chống bán lại curve trước khi duyệt cho các batch trả hàng tuần (tối thiểu $50.00 USDC).",
-  "pplBalance": "Số dư PPL",
   "preSaleBanner": "Đợt bán PPL bắt đầu 1 tháng 12 năm 2026. Hoa hồng mua hàng được gán hiển thị ở đây sau khi người mua dùng liên kết của bạn và hoàn tất mua trên Base.",
+  "pplBalance": "Số dư PPL",
   "profile": "Hồ sơ",
   "protocolDown": "Không thể kết nối mạng. Không hiển thị dữ liệu giao thức.",
   "protocolOff": "Dữ liệu PPL trực tiếp tạm thời không khả dụng.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Đăng nhập bằng Google hoặc email để mở cabinet và sao chép liên kết /?ref= cá nhân. Kiếm 7%–12% USDC trên Base cộng 3% PPL trên mainnet PEOPLE từ các giao dịch mua PPL được gán.",
   "guestWalletHintSocial": "Hoa hồng đối tác yêu cầu đăng nhập Google hoặc email. Chỉ ví trình duyệt không tích lũy phần thưởng đối tác.",
   "localWalletLeadSocial": "Mở khóa hoặc nhập ví được bảo vệ bằng mật khẩu chỉ lưu trong trình duyệt này. Tích lũy đối tác yêu cầu Google hoặc email ở trên.",
-  "notConfiguredSocial": "Đăng nhập đối tác chưa được cấu hình trên bản triển khai này. Vận hành cần đặt AUTH_SECRET, DATABASE_URL và ít nhất AUTH_RESEND_KEY hoặc Google OAuth."
+  "notConfiguredSocial": "Đăng nhập đối tác chưa được cấu hình trên bản triển khai này. Vận hành cần đặt AUTH_SECRET, DATABASE_URL và ít nhất AUTH_RESEND_KEY hoặc Google OAuth.",
+  "googleCtaCloud": "Tiếp tục với email",
+  "guestLandingLeadCloud": "Đăng nhập bằng email để mở cabinet và sao chép liên kết /?ref= cá nhân. Kiếm 7%–12% USDC trên Base cộng 3% PPL trên mainnet PEOPLE từ các giao dịch mua PPL được gán."
 }

@@ -46,8 +46,9 @@
     },
     {
       "title": "Create a wallet",
-      "body": "Sign in with email and link your PEOPLE wallet in a few taps.",
-      "bodySocial": "Sign in with Google or email and link your PEOPLE wallet in a few taps."
+      "body": "Create or connect a wallet and link your PEOPLE wallet in a few taps.",
+      "bodySocial": "Sign in with Google or email and link your PEOPLE wallet in a few taps.",
+      "bodyCloud": "Sign in with email and link your PEOPLE wallet in a few taps."
     },
     {
       "title": "Do one testnet action",
@@ -189,7 +190,7 @@
   "shareX": "X",
   "claimEyebrow": "Claim",
   "claimTitle": "Get your founder number",
-  "claimSignInLead": "Sign in with email, link a wallet, pick your country — and the next number is yours.",
+  "claimSignInLead": "Create or connect a wallet, link a wallet, pick your country — and the next number is yours.",
   "personalEyebrow": "Your founder space",
   "personalTitle": "Welcome, Founder #{{n}}",
   "downloadCard": "Download card (PNG)",
@@ -213,5 +214,6 @@
   "verifyHumanPassportLow": "Your Human Passport score is below the required threshold.",
   "verifyHumanPassportError": "Human Passport verification failed. Try again later.",
   "verifyHumanPassportOff": "Human Passport is not configured on this environment yet.",
-  "claimSignInLeadSocial": "Sign in with Google or email, link a wallet, pick your country — and the next number is yours."
+  "claimSignInLeadSocial": "Sign in with Google or email, link a wallet, pick your country — and the next number is yours.",
+  "claimSignInLeadCloud": "Sign in with email, link a wallet, pick your country — and the next number is yours."
 }

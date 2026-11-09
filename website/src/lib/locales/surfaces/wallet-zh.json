@@ -46,9 +46,9 @@
   "registrationPending": "正在连接网络 — 将自动重试。",
   "networkChecking": "连接中…",
   "networkUnavailable": "网络暂时不可用",
-  "signInHeading": "通过邮箱登录",
-  "signInGoogle": "通过邮箱继续",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "创建或连接钱包",
+  "signInGoogle": "继续",
+  "signInMagicCta": "继续",
   "signInEmailLabel": "邮箱",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "或在此设备上使用密码",
@@ -61,5 +61,8 @@
   "importInvalidKey": "请输入 12 个单词的助记词，或 64 位十六进制私钥。",
   "leadSocial": "浏览器钱包：非托管。密钥在本浏览器中生成，用你的密码加密，绝不会发送到我们的服务器。使用 Google 或邮箱登录则会创建云钱包：PEOPLE 以加密形式存储你的密钥，其基础设施能够解密。",
   "signInHeadingSocial": "通过 Google 或邮箱登录",
-  "signInGoogleSocial": "通过 Google 继续"
+  "signInGoogleSocial": "通过 Google 继续",
+  "signInHeadingCloud": "通过邮箱登录",
+  "signInGoogleCloud": "通过邮箱继续",
+  "signInMagicCtaCloud": "Send login link"
 }

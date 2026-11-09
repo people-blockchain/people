@@ -34,8 +34,9 @@
       "summary": "Uma tesouraria compartilhada controlada por vários proprietários."
     },
     "people-wallet": {
-      "summary": "Uma carteira PPL não custodial no navegador, com login opcional pelo email.",
-      "summarySocial": "Uma carteira PPL não custodial no navegador, com login opcional pelo Google."
+      "summary": "Uma carteira PPL não custodial no navegador.",
+      "summarySocial": "Uma carteira PPL não custodial no navegador, com login opcional pelo Google.",
+      "summaryCloud": "Uma carteira PPL não custodial no navegador, com login opcional pelo email."
     },
     "people-explorer": {
       "summary": "Blocos, transações, endereços, tokens e NFTs na rede de teste pública."

@@ -49,6 +49,7 @@ import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
 import { WALLET_APP_REDIRECT, isMobileBrowser } from "@/lib/mobile-env";
 import { isSocialLoginEnabled } from "@/lib/social-login";
+import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 
 export function WalletExternalConnectSection({
   onConnected,
@@ -90,7 +91,24 @@ export function WalletExternalConnectSection({
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [installFor, setInstallFor] = useState<string | null>(null);
-  const extTable = isSocialLoginEnabled() ? EXT_COPY_SOCIAL : EXT_COPY;
+  const extTable = isSocialLoginEnabled()
+    ? EXT_COPY_SOCIAL
+    : isCloudWalletEnabled()
+      ? EXT_COPY
+      : {
+          en: {
+            noApp: "{wallet} did not open. On a phone without the {wallet} app, install it first, or create/import a PEOPLE Wallet above.",
+            install: "Install {wallet}",
+            timeout: "{wallet} did not answer. Close this window and try again, or create/import a wallet above.",
+            useGoogle: "Create or import a wallet",
+          },
+          ru: {
+            noApp: "{wallet} не открылся. Если на телефоне нет приложения {wallet}, сначала установите его — или создайте/импортируйте PEOPLE Wallet выше.",
+            install: "Установить {wallet}",
+            timeout: "{wallet} не ответил. Закройте окно и попробуйте снова или создайте/импортируйте кошелёк выше.",
+            useGoogle: "Создать или импортировать кошелёк",
+          },
+        };
   const x = extTable[lang] ?? extTable.en;
   const showWalletConnect = walletConnectProjectIdConfigured();
 

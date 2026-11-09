@@ -5,7 +5,7 @@
   "contractsOff": "本测试网尚未部署会员合约。合并后请运行 Lavka 部署工作流。",
   "signInCta": "登录",
   "walletCta": "绑定钱包",
-  "pohRequired": "使用邮箱登录并绑定钱包，以经营小店或核销次数。",
+  "pohRequired": "连接钱包以经营商店或兑换到访。",
   "merchantTitle": "您的小店",
   "merchantLead": "设置名称与国家，然后发布可购买与核销的次卡。",
   "displayNameLabel": "店名",
@@ -59,5 +59,6 @@
   "successEscrow": "预付已锁定。",
   "connectWallet": "连接钱包",
   "preliminaryBanner": "初步方案——试点参数可能在主网前调整。",
-  "pohRequiredSocial": "使用 Google 或邮箱登录并绑定钱包，以经营小店或核销次数。"
+  "pohRequiredSocial": "使用 Google 或邮箱登录并绑定钱包，以经营小店或核销次数。",
+  "pohRequiredCloud": "使用邮箱登录并绑定钱包，以经营小店或核销次数。"
 }

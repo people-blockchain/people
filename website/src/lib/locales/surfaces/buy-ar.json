@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "عبارات استرداد ورسوم غاز وعشرات الخطوات قبل أول إجراء.",
-        "after": "سجّل الدخول عبر email أو البريد الإلكتروني، كأي تطبيق عادي.",
-        "afterSocial": "سجّل الدخول عبر Google أو البريد الإلكتروني، كأي تطبيق عادي."
+        "after": "أنشئ محفظة أو اربطها.",
+        "afterSocial": "سجّل الدخول عبر Google أو البريد الإلكتروني، كأي تطبيق عادي.",
+        "afterCloud": "سجّل الدخول عبر email أو البريد الإلكتروني، كأي تطبيق عادي."
       },
       {
         "before": "روبوتات وحسابات مزيفة إلى جانب أشخاص حقيقيين.",
@@ -217,7 +218,7 @@
     "belowMin": "أدخل مبلغًا لرؤية العرض.",
     "cta": "اربط محفظة للشراء",
     "ctaConnected": "اشترِ PPL",
-    "wallets": "PEOPLE Wallet (تسجيل الدخول عبر email أو البريد الإلكتروني) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (إنشاء أو ربط محفظة) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "طريقة الدفع",
     "payOnBase": "الدفع على Base",
     "payFromOther": "الدفع من شبكة أخرى",
@@ -278,7 +279,7 @@
     "termsLink": "الشروط",
     "help": "تحتاج إلى مساعدة؟ {support}",
     "supportLink": "الدعم",
-    "noWalletHint": "ليست لديك محفظة؟ اختر email أو البريد الإلكتروني وستُنشأ لك محفظة PEOPLE Wallet. للدفع تحتاج إلى USDC على Base في هذه المحفظة أو في محفظة تربطها.",
+    "noWalletHint": "لا محفظة؟ أنشئ أو استورد PEOPLE Wallet، أو اربط MetaMask / WalletConnect. للدفع تحتاج USDC على Base في تلك المحفظة.",
     "sellBackTerms": "البيع للاحتياطي متاح للمستخدمين الموثَّقين فقط. يمكن بيع كل عملية شراء بعد 30 يومًا منها بسعر المنحنى لحظة البيع. الحدود: 2% من الاحتياطي في أي نافذة 24 ساعة متحركة لجميع المستخدمين معًا و2,000 دولار لكل عنوان في نافذة 24 ساعة متحركة. تعود PPL إلى محفظة البيع على PEOPLE mainnet ولا تُحرق. الرسوم 1.5%؛ و3% فقط على الجزء من المبيعات في تلك الساعات الـ24 الذي يتجاوز 1% من الاحتياطي. يبقى مفتوحًا بعد إغلاق المنحنى إلى أن يُنقل الاحتياطي إلى السيولة. تستلم المبلغ بعملة USDC على شبكة Base.",
     "feesTitle": "الرسوم والمدة",
     "feesBody": "الرسوم: رسوم شبكة Base (الغاز) وتُدفع بعملة ETH — عادةً نحو $0.01؛ رسوم التبديل أو الجسر من LI.FI — تظهر في الأداة قبل التأكيد؛ رسوم البيع للاحتياطي — 1.5%، و3% فقط على الجزء من المبيعات في نافذة 24 ساعة متحركة الذي يتجاوز 1% من الاحتياطي.",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "USDT على Base (عبر جسر)",
     "payFromNetworks": "يعمل من شبكات EVM (Ethereum و BNB Chain و Polygon و Arbitrum و Optimism و Avalanche وغيرها)، ومن Tron و Solana. شبكة TON غير مدعومة.",
     "bridgeSteps": "الخطوة 1: بدّل رموزك إلى USDC على Base في الأداة (عادةً 1–20 دقيقة). الخطوة 2: اشترِ PPL بالزر أدناه.",
-    "solanaHint": "تدفع من Solana أو Tron؟ تحتاج أيضًا إلى عنوان على Base لاستلام USDC: اربط MetaMask أو Trust Wallet أو WalletConnect، أو سجّل الدخول عبر email.",
+    "solanaHint": "هل تدفع من Solana أو Tron؟ تحتاج أيضاً عنواناً على Base لاستلام USDC: اربط MetaMask أو Trust Wallet أو WalletConnect، أو أنشئ/اربط محفظة.",
     "bridgeClosed": "يُفتح الدفع من الشبكات الأخرى مع افتتاح البيع.",
     "bridgeStatus": "التبديل جارٍ. تابعه على {link}.",
     "bridgeFailed": "لم يكتمل التبديل. تحقّق من حالته على scan.li.fi أو حاول مرة أخرى.",
@@ -301,7 +302,10 @@
     "embeddedNoBase": "لا تدعم محفظة PEOPLE Wallet الدفع على شبكة Base بعد. للشراء، اربط MetaMask أو Trust Wallet أو WalletConnect.",
     "walletsSocial": "PEOPLE Wallet (تسجيل الدخول عبر Google أو البريد الإلكتروني) · MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "ليست لديك محفظة؟ اختر Google أو البريد الإلكتروني وستُنشأ لك محفظة PEOPLE Wallet. للدفع تحتاج إلى USDC على Base في هذه المحفظة أو في محفظة تربطها.",
-    "solanaHintSocial": "تدفع من Solana أو Tron؟ تحتاج أيضًا إلى عنوان على Base لاستلام USDC: اربط MetaMask أو Trust Wallet أو WalletConnect، أو سجّل الدخول عبر Google."
+    "solanaHintSocial": "تدفع من Solana أو Tron؟ تحتاج أيضًا إلى عنوان على Base لاستلام USDC: اربط MetaMask أو Trust Wallet أو WalletConnect، أو سجّل الدخول عبر Google.",
+    "walletsCloud": "PEOPLE Wallet (تسجيل الدخول عبر email أو البريد الإلكتروني) · MetaMask · Trust Wallet · WalletConnect",
+    "solanaHintCloud": "تدفع من Solana أو Tron؟ تحتاج أيضًا إلى عنوان على Base لاستلام USDC: اربط MetaMask أو Trust Wallet أو WalletConnect، أو سجّل الدخول عبر email.",
+    "noWalletHintCloud": "ليست لديك محفظة؟ اختر email أو البريد الإلكتروني وستُنشأ لك محفظة PEOPLE Wallet. للدفع تحتاج إلى USDC على Base في هذه المحفظة أو في محفظة تربطها."
   },
   "v2": {
     "banner": {

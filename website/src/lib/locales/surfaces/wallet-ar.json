@@ -46,9 +46,9 @@
   "registrationPending": "جارٍ الاتصال بالشبكة — سنعيد المحاولة تلقائيًا.",
   "networkChecking": "جارٍ الاتصال…",
   "networkUnavailable": "الشبكة غير متاحة مؤقتًا",
-  "signInHeading": "تسجيل الدخول باستخدام email أو البريد الإلكتروني",
-  "signInGoogle": "المتابعة باستخدام email",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "إنشاء أو ربط محفظة",
+  "signInGoogle": "متابعة",
+  "signInMagicCta": "متابعة",
   "signInEmailLabel": "البريد الإلكتروني",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "أو استخدم كلمة مرور على هذا الجهاز",
@@ -61,5 +61,8 @@
   "importInvalidKey": "أدخل عبارة من 12 كلمة أو مفتاحًا خاصًا سداسيًا من 64 محرفًا.",
   "leadSocial": "محفظة المتصفح: غير حضانية. تُنشأ المفاتيح في هذا المتصفح وتُشفَّر بكلمتك السرية ولا تُرسل أبدًا إلى خوادمنا. تسجيل الدخول عبر Google أو البريد ينشئ بدلًا من ذلك محفظة سحابية: تخزّن PEOPLE مفتاحك مشفَّرًا وبنيتها التحتية قادرة على فك تشفيره.",
   "signInHeadingSocial": "تسجيل الدخول باستخدام Google أو البريد الإلكتروني",
-  "signInGoogleSocial": "المتابعة باستخدام Google"
+  "signInGoogleSocial": "المتابعة باستخدام Google",
+  "signInHeadingCloud": "تسجيل الدخول باستخدام email أو البريد الإلكتروني",
+  "signInGoogleCloud": "المتابعة باستخدام email",
+  "signInMagicCtaCloud": "Send login link"
 }

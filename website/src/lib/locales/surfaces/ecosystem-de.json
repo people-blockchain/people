@@ -34,8 +34,9 @@
       "summary": "Eine gemeinsame Schatzkammer, die von mehreren Eigentümern verwaltet wird."
     },
     "people-wallet": {
-      "summary": "Eine nicht-verwahrende PPL-Wallet im Browser mit optionaler Anmeldung über email.",
-      "summarySocial": "Eine nicht-verwahrende PPL-Wallet im Browser mit optionaler Anmeldung über Google."
+      "summary": "Eine nicht-verwahrende PPL-Wallet im Browser.",
+      "summarySocial": "Eine nicht-verwahrende PPL-Wallet im Browser mit optionaler Anmeldung über Google.",
+      "summaryCloud": "Eine nicht-verwahrende PPL-Wallet im Browser mit optionaler Anmeldung über email."
     },
     "people-explorer": {
       "summary": "Blöcke, Transaktionen, Adressen, Token und NFTs im öffentlichen Testnetz."

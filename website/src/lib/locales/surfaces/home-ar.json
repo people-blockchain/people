@@ -41,7 +41,7 @@
         "sub": "تسعير عادل من أول مقايضة"
       }
     ],
-    "ctaWalletAuth": "إنشاء محفظة / الدخول عبر email",
+    "ctaWalletAuth": "إنشاء محفظة",
     "ctaWalletAuthSocial": "إنشاء محفظة / الدخول عبر Google"
   },
   "blocks": [

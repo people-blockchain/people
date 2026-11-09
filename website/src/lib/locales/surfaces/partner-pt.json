@@ -49,7 +49,7 @@
   "emptyLine": "Ainda não há parceiros nesta linha.",
   "eyebrow": "Portal de parceiros e criadores",
   "footerNote": "Dados de protocolo somente leitura. Ativo nativo: PEOPLE (PPL).",
-  "googleCta": "Continuar com email",
+  "googleCta": "Continuar",
   "googleOff": "Login com email ainda não configurado.",
   "growthAccrued": "Acumulado",
   "growthClaimable": "Disponível para resgate",
@@ -58,7 +58,7 @@
   "growthClaimsReadError": "Não foi possível ler as reivindicações Growth do nó.",
   "growthNote": "Pagamentos Growth permanecem L1 70% / L2 30% do orçamento de recompensa Growth. Este gabinete não altera a economia do protocolo.",
   "growthRewardsTitle": "Recompensas Growth",
-  "guestLandingLead": "Inicie sessão com email ou email para abrir o cabinet e copiar o seu link pessoal /?ref=. Ganhe 7% a 12% em USDC na Base mais 3% em PPL na mainnet PEOPLE de compras PPL atribuídas.",
+  "guestLandingLead": "Crie ou conecte uma carteira para abrir o seu cabinet e copiar o seu link pessoal /?ref=. Ganhe de 7% a 12% em USDC na Base mais 3% em PPL na mainnet PEOPLE em compras de PPL atribuídas.",
   "guestLandingTitle": "Programa de parceiros e criadores",
   "guestPreSaleNote": "A venda pública de PPL começa a 1 de dezembro de 2026. O seu painel pode mostrar zero vendas até lá — isso é esperado.",
   "guestSignInCta": "Iniciar sessão para obter o seu link",
@@ -121,8 +121,8 @@
   "payoutHistoryEmpty": "Ainda não há lotes de pagamento. Comissões aprovadas (mínimo $50.00 USDC) são agrupadas semanalmente para liquidação em USDC na Base e PPL na mainnet PEOPLE.",
   "payoutHistoryTitle": "Histórico de pagamentos",
   "payoutRuleNote": "As comissões entram num período de retenção de 30 dias (pending) para proteger contra recompras na curve antes de serem aprovadas para lotes semanais (mínimo $50.00 USDC).",
-  "pplBalance": "Saldo PPL",
   "preSaleBanner": "A venda PPL começa a 1 de dezembro de 2026. As comissões de compras atribuídas aparecem aqui depois de os compradores usarem o seu link e concluírem compras na Base.",
+  "pplBalance": "Saldo PPL",
   "profile": "Perfil",
   "protocolDown": "A rede não respondeu. Sem dados de protocolo.",
   "protocolOff": "Os dados PPL em tempo real estão temporariamente indisponíveis.",
@@ -178,5 +178,7 @@
   "guestLandingLeadSocial": "Inicie sessão com Google ou email para abrir o cabinet e copiar o seu link pessoal /?ref=. Ganhe 7% a 12% em USDC na Base mais 3% em PPL na mainnet PEOPLE de compras PPL atribuídas.",
   "guestWalletHintSocial": "As comissões de parceiro exigem início de sessão com Google ou email. Só uma carteira do navegador não acumula recompensas de parceiro.",
   "localWalletLeadSocial": "Desbloqueie ou importe uma carteira protegida por senha armazenada apenas neste navegador. Os acréscimos de parceiro exigem Google ou e-mail acima.",
-  "notConfiguredSocial": "O login de parceiro não está configurado neste deploy. O operador deve definir AUTH_SECRET, DATABASE_URL e pelo menos AUTH_RESEND_KEY ou OAuth do Google."
+  "notConfiguredSocial": "O login de parceiro não está configurado neste deploy. O operador deve definir AUTH_SECRET, DATABASE_URL e pelo menos AUTH_RESEND_KEY ou OAuth do Google.",
+  "googleCtaCloud": "Continuar com email",
+  "guestLandingLeadCloud": "Inicie sessão com email ou email para abrir o cabinet e copiar o seu link pessoal /?ref=. Ganhe 7% a 12% em USDC na Base mais 3% em PPL na mainnet PEOPLE de compras PPL atribuídas."
 }

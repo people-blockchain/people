@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "Kurtarma ifadeleri, gas ücretleri ve ilk işlemden önce bir düzine adım.",
-        "after": "Sıradan bir uygulama gibi email ya da e-posta ile giriş.",
-        "afterSocial": "Sıradan bir uygulama gibi Google ya da e-posta ile giriş."
+        "after": "Cüzdan oluşturun veya bağlayın.",
+        "afterSocial": "Sıradan bir uygulama gibi Google ya da e-posta ile giriş.",
+        "afterCloud": "Sıradan bir uygulama gibi email ya da e-posta ile giriş."
       },
       {
         "before": "Gerçek insanların yanında botlar ve sahte hesaplar.",
@@ -217,7 +218,7 @@
     "belowMin": "Fiyat teklifini görmek için tutar girin.",
     "cta": "Satın almak için cüzdan bağlayın",
     "ctaConnected": "PPL satın al",
-    "wallets": "PEOPLE Wallet (e-posta ile giriş) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (cüzdan oluştur veya bağla) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Ödeme yöntemi",
     "payOnBase": "Base'de öde",
     "payFromOther": "Başka bir ağdan öde",
@@ -278,7 +279,7 @@
     "termsLink": "Koşulları",
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
-    "noWalletHint": "Cüzdanınız yok mu? email veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
+    "noWalletHint": "Cüzdan yok mu? Bir PEOPLE Wallet oluşturun veya içe aktarın, ya da MetaMask / WalletConnect bağlayın. Ödeme için o cüzdanda Base üzerinde USDC gerekir.",
     "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Sınırlar: herkes için kayan herhangi bir 24 saatte rezervin %2'si ve adres başına kayan 24 saatte $2.000. PPL, PEOPLE mainnet üzerindeki satış cüzdanına geri döner ve yakılmaz. Ücret %1,5; o 24 saatteki geri satışlarda yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandıktan sonra da rezerv likiditeye aktarılana kadar açık kalır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
     "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık $0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5, ve yalnızca kayan 24 saatteki geri satışlarda rezervin %1'ini aşan kısım için %3.",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "Base üzerinde USDT (köprülenmiş)",
     "payFromNetworks": "EVM ağlarından (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche ve diğerleri), Tron ve Solana'dan çalışır. TON desteklenmez.",
     "bridgeSteps": "Adım 1. Widget'ta token'larınızı Base üzerinde USDC'ye takas edin (genellikle 1–20 dakika). Adım 2. Aşağıdaki düğmeyle PPL satın alın.",
-    "solanaHint": "Solana veya Tron'dan mı ödüyorsunuz? USDC'yi almak için Base'de bir adresiniz de olmalı: MetaMask, Trust Wallet veya WalletConnect bağlayın ya da E-posta ile giriş yapın.",
+    "solanaHint": "Solana veya Tron’dan mı ödüyorsunuz? USDC almak için Base’te de bir adres gerekir: MetaMask, Trust Wallet veya WalletConnect bağlayın ya da bir cüzdan oluşturun/bağlayın.",
     "bridgeClosed": "Diğer ağlardan ödeme, satışla birlikte açılacak.",
     "bridgeStatus": "Takas sürüyor. Durumu {link} üzerinden izleyin.",
     "bridgeFailed": "Takas tamamlanmadı. Durumu scan.li.fi üzerinden kontrol edin veya tekrar deneyin.",
@@ -301,7 +302,10 @@
     "embeddedNoBase": "PEOPLE Wallet henüz Base ağında ödeme yapamıyor. Satın almak için MetaMask, Trust Wallet veya WalletConnect bağlayın.",
     "walletsSocial": "PEOPLE Wallet (Google veya e-posta ile giriş) · MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "Cüzdanınız yok mu? Google veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir.",
-    "solanaHintSocial": "Solana veya Tron'dan mı ödüyorsunuz? USDC'yi almak için Base'de bir adresiniz de olmalı: MetaMask, Trust Wallet veya WalletConnect bağlayın ya da Google ile giriş yapın."
+    "solanaHintSocial": "Solana veya Tron'dan mı ödüyorsunuz? USDC'yi almak için Base'de bir adresiniz de olmalı: MetaMask, Trust Wallet veya WalletConnect bağlayın ya da Google ile giriş yapın.",
+    "walletsCloud": "PEOPLE Wallet (e-posta ile giriş) · MetaMask · Trust Wallet · WalletConnect",
+    "solanaHintCloud": "Solana veya Tron'dan mı ödüyorsunuz? USDC'yi almak için Base'de bir adresiniz de olmalı: MetaMask, Trust Wallet veya WalletConnect bağlayın ya da E-posta ile giriş yapın.",
+    "noWalletHintCloud": "Cüzdanınız yok mu? email veya e-postayı seçin — sizin için bir PEOPLE Wallet oluşturulur. Ödeme için bu cüzdanda veya bağladığınız bir cüzdanda Base üzerinde USDC gerekir."
   },
   "v2": {
     "banner": {

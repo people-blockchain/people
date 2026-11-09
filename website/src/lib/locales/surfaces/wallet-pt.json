@@ -46,9 +46,9 @@
   "registrationPending": "A ligar à rede — tentaremos de novo automaticamente.",
   "networkChecking": "A conectar…",
   "networkUnavailable": "A rede está temporariamente indisponível",
-  "signInHeading": "Entrar com e-mail",
-  "signInGoogle": "Continuar com e-mail",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Criar ou conectar uma carteira",
+  "signInGoogle": "Continuar",
+  "signInMagicCta": "Continuar",
   "signInEmailLabel": "E-mail",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Ou use uma senha neste dispositivo",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Introduza uma frase de 12 palavras ou uma chave privada hexadecimal de 64 caracteres.",
   "leadSocial": "Carteira do navegador: não custodial. As chaves são criadas neste navegador, cifradas com a sua palavra-passe e nunca enviadas para os nossos servidores. Iniciar sessão com Google ou email cria, em vez disso, uma carteira na nuvem: a PEOPLE guarda a sua chave cifrada e a sua infraestrutura consegue decifrá-la.",
   "signInHeadingSocial": "Entrar com Google ou e-mail",
-  "signInGoogleSocial": "Continuar com o Google"
+  "signInGoogleSocial": "Continuar com o Google",
+  "signInHeadingCloud": "Entrar com e-mail",
+  "signInGoogleCloud": "Continuar com e-mail",
+  "signInMagicCtaCloud": "Send login link"
 }

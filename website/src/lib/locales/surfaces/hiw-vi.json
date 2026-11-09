@@ -9,8 +9,9 @@
       "items": [
         {
           "title": "Ví",
-          "text": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây (đăng nhập email hoặc email) được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã.",
-          "textSocial": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây (đăng nhập Google hoặc email) được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã."
+          "text": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã.",
+          "textSocial": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây (đăng nhập Google hoặc email) được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã.",
+          "textCloud": "Tạo ví trên điện thoại hoặc trình duyệt. Ví trình duyệt 12 từ là không lưu ký: khóa không rời thiết bị. Ví đám mây (đăng nhập email hoặc email) được lưu mã hóa trên máy chủ PEOPLE, và hạ tầng PEOPLE có khả năng giải mã."
         },
         {
           "title": "Tạo token",

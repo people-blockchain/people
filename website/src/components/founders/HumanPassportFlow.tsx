@@ -40,6 +40,7 @@ import {
   type HumanPassportFailureCode,
 } from "@/lib/founders/human-passport-flow";
 import { HUMAN_PASSPORT_DEFAULT_MIN_SCORE } from "@/lib/founders/human-passport-config";
+import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 
 type FlowOutcome = { text: string; tone: "error" | "success"; retry: boolean };
 
@@ -96,7 +97,11 @@ export function HumanPassportFlow({
     checking,
   });
   const scored = passportScoredWallet(passportWallet, primaryWallet);
-  const guide = GUIDE[lang] ?? null;
+  const guide = GUIDE[lang] ?? GUIDE.en;
+  const firstPrimary =
+    isCloudWalletEnabled() && guide.firstPrimaryCloud
+      ? guide.firstPrimaryCloud
+      : guide.firstPrimary;
 
   // `Date.now()` is read here, on mount, and never during render.
   useEffect(() => {
@@ -320,21 +325,35 @@ export function HumanPassportFlow({
           <p className="text-sm text-ink-2" data-testid={returning ? "founders-hp-welcome-back" : undefined}>
             {returning ? c.welcomeBack : c.step2Body}
           </p>
+          {scored ? (
+            <p className="text-xs font-medium text-ink-2" data-testid="founders-hp-passport-wallet-caption">
+              {fill(c.passportWalletCaption, { wallet: maskAddress(scored.address) })}
+            </p>
+          ) : null}
           <p className="text-xs text-ink-3">
             {fill(c.scoredWallet, {
               walletLabel: scored?.kind === "passport" ? c.walletLabelPassport : c.walletLabelPrimary,
               wallet: scored ? maskAddress(scored.address) : c.walletLabelNone,
             })}
           </p>
-          {guide ? (
+          {scored?.kind !== "passport" && guide.steps.length === 0 ? (
+            <p
+              className="rounded-xl border border-brand/30 bg-brand/5 px-3 py-3 text-sm text-ink"
+              data-testid="founders-hp-link-wallet-hint"
+            >
+              {fill(firstPrimary, {
+                wallet: scored ? maskAddress(scored.address) : c.walletLabelNone,
+              })}
+            </p>
+          ) : null}
+          {guide.steps.length > 0 ? (
             <ol
               className="list-decimal space-y-1.5 rounded-xl border border-brand/30 bg-brand/5 py-3 pl-8 pr-3 text-sm text-ink"
               data-testid="founders-hp-guide"
             >
               {guide.steps.map((step, i) => {
-                // Without a linked Passport wallet the scored wallet is the site-made one,
-                // which the Passport app cannot connect to: lead with linking MetaMask.
-                const line = i === 0 && scored?.kind !== "passport" ? guide.firstPrimary : step;
+                // When no Passport wallet is linked yet, step 1 is the MetaMask/WC linking hint.
+                const line = i === 0 && scored?.kind !== "passport" ? firstPrimary : step;
                 return (
                 <li key={i}>
                   {fill(line, {
@@ -544,6 +563,8 @@ type FlowCopy = {
   checkBusy: string;
   welcomeBack: string;
   scoredWallet: string;
+  /** Short label when the Passport-scoring address may differ from the header. */
+  passportWalletCaption: string;
   walletLabelPrimary: string;
   walletLabelPassport: string;
   walletLabelNone: string;
@@ -578,10 +599,10 @@ type FlowCopy = {
  * Plain step-by-step guide shown above the buttons. Only languages with a reviewed
  * translation get it; the rest keep the one-line `step2Order`.
  */
-const GUIDE: Record<string, { steps: string[]; firstPrimary: string }> = {
+const GUIDE: Record<string, { steps: string[]; firstPrimary: string; firstPrimaryCloud: string }> = {
   en: {
-    firstPrimary:
-      "Your PEOPLE wallet {{wallet}} was created by the site (email sign-in) and cannot be opened on the Passport site. So first link MetaMask: open \u201cUse a different wallet instead\u201d below, connect MetaMask and sign. Then press \u201cOpen Human Passport\u201d and connect the same MetaMask there. Safari has no MetaMask: use Chrome or Brave, or the browser inside the MetaMask app.",
+    firstPrimary: "To verify with Human Passport, link MetaMask or another supported wallet (WalletConnect etc.): open “Use a different wallet instead” below, connect and sign. Then press “Open Human Passport” and connect the same wallet there. Safari has no MetaMask extension, so use Chrome or Brave, or the in-app browser of MetaMask or your wallet app.",
+    firstPrimaryCloud: "Your PEOPLE wallet {{wallet}} was created by the site (email sign-in) and cannot be opened on the Passport site. So first link MetaMask: open “Use a different wallet instead” below, connect MetaMask and sign. Then press “Open Human Passport” and connect the same MetaMask there. Safari has no MetaMask: use Chrome or Brave, or the browser inside the MetaMask app.",
     steps: [
       "Press \u201cOpen Human Passport\u201d and connect the wallet {{wallet}}. It must be the same wallet, otherwise the score will not count. Safari has no MetaMask extension: use Chrome or Brave with MetaMask, or the browser inside the MetaMask app.",
       "A new Passport starts at 0. You need at least {{need}} points.",
@@ -590,8 +611,8 @@ const GUIDE: Record<string, { steps: string[]; firstPrimary: string }> = {
     ],
   },
   ru: {
-    firstPrimary:
-      "Ваш кошелёк PEOPLE {{wallet}} создан сайтом при входе через email, и на сайте Passport его открыть нельзя. Поэтому сначала привяжите MetaMask: откройте ниже пункт \u00abИспользовать другой кошелёк\u00bb, подключите MetaMask и подпишите. Потом нажмите \u00abОткрыть Human Passport\u00bb и подключите там тот же MetaMask. В Safari нет MetaMask: используйте Chrome или Brave, или браузер внутри приложения MetaMask.",
+    firstPrimary: "Чтобы пройти Human Passport, привяжите MetaMask или другой поддерживаемый кошелёк (WalletConnect и т.п.): откройте ниже пункт «Использовать другой кошелёк», подключите и подпишите. Потом нажмите «Открыть Human Passport» и подключите там тот же кошелёк. В Safari нет расширения MetaMask — используйте Chrome или Brave, или браузер внутри приложения MetaMask или вашего кошелька.",
+    firstPrimaryCloud: "Ваш кошелёк PEOPLE {{wallet}} создан сайтом при входе через email, и на сайте Passport его открыть нельзя. Поэтому сначала привяжите MetaMask: откройте ниже пункт «Использовать другой кошелёк», подключите MetaMask и подпишите. Потом нажмите «Открыть Human Passport» и подключите там тот же MetaMask. В Safari нет MetaMask: используйте Chrome или Brave, или браузер внутри приложения MetaMask.",
     steps: [
       "Нажмите \u00abОткрыть Human Passport\u00bb и подключите кошелёк {{wallet}}. Нужен именно этот кошелёк, иначе баллы не засчитаются. В Safari нет расширения MetaMask: откройте сайт в Chrome или Brave с MetaMask, или в браузере внутри приложения MetaMask.",
       "У нового паспорта 0 баллов. Нужно набрать не меньше {{need}}.",
@@ -599,7 +620,57 @@ const GUIDE: Record<string, { steps: string[]; firstPrimary: string }> = {
       "Когда на сайте Passport балл станет {{need}} или больше, вернитесь сюда и нажмите кнопку проверки балла.",
     ],
   },
-};
+  de: {
+    firstPrimary: "Um Human Passport zu verifizieren, verknüpfe MetaMask oder eine andere unterstützte Wallet (WalletConnect usw.): öffne unten „Stattdessen eine andere Wallet verwenden“, verbinde und signiere. Dann „Human Passport öffnen“ drücken und dieselbe Wallet dort verbinden. Safari hat keine MetaMask-Erweiterung: nutze Chrome oder Brave, oder den In-App-Browser von MetaMask bzw. deiner Wallet-App.",
+    firstPrimaryCloud: "Deine PEOPLE-Wallet {{wallet}} wurde von der Website (E-Mail-Anmeldung) erstellt und lässt sich auf der Passport-Website nicht öffnen. Verknüpfe deshalb zuerst MetaMask: öffne unten „Stattdessen eine andere Wallet verwenden“, verbinde MetaMask und signiere. Dann „Human Passport öffnen“ drücken und dieselbe MetaMask dort verbinden. Safari hat keine MetaMask: nutze Chrome oder Brave, oder den Browser in der MetaMask-App.",
+    steps: [],
+  },
+  es: {
+    firstPrimary: "Para verificar con Human Passport, vincula MetaMask u otra billetera compatible (WalletConnect, etc.): abre abajo «Usar otra billetera», conecta y firma. Luego pulsa «Abrir Human Passport» y conecta la misma billetera allí. Safari no tiene extensión MetaMask: usa Chrome o Brave, o el navegador dentro de la app MetaMask o de tu billetera.",
+    firstPrimaryCloud: "Tu billetera PEOPLE {{wallet}} la creó el sitio (inicio con email) y no se puede abrir en el sitio de Passport. Por eso primero vincula MetaMask: abre abajo «Usar otra billetera», conecta MetaMask y firma. Luego pulsa «Abrir Human Passport» y conecta el mismo MetaMask allí. Safari no tiene MetaMask: usa Chrome o Brave, o el navegador de la app MetaMask.",
+    steps: [],
+  },
+  fr: {
+    firstPrimary: "Pour vérifier avec Human Passport, liez MetaMask ou un autre portefeuille pris en charge (WalletConnect, etc.) : ouvrez ci-dessous « Utiliser un autre portefeuille », connectez et signez. Puis appuyez sur « Ouvrir Human Passport » et connectez le même portefeuille là-bas. Safari n’a pas d’extension MetaMask : utilisez Chrome ou Brave, ou le navigateur intégré à l’app MetaMask ou à votre portefeuille.",
+    firstPrimaryCloud: "Votre portefeuille PEOPLE {{wallet}} a été créé par le site (connexion e-mail) et ne peut pas s’ouvrir sur le site Passport. Liez d’abord MetaMask : ouvrez ci-dessous « Utiliser un autre portefeuille », connectez MetaMask et signez. Puis appuyez sur « Ouvrir Human Passport » et connectez le même MetaMask là-bas. Safari n’a pas MetaMask : utilisez Chrome ou Brave, ou le navigateur de l’app MetaMask.",
+    steps: [],
+  },
+  it: {
+    firstPrimary: "Per verificare con Human Passport, collega MetaMask o un altro wallet supportato (WalletConnect ecc.): apri sotto «Usa un altro wallet», connetti e firma. Poi premi «Apri Human Passport» e collega lo stesso wallet lì. Safari non ha l’estensione MetaMask: usa Chrome o Brave, oppure il browser nell’app MetaMask o del tuo wallet.",
+    firstPrimaryCloud: "Il tuo wallet PEOPLE {{wallet}} è stato creato dal sito (accesso email) e non si può aprire sul sito Passport. Quindi collega prima MetaMask: apri sotto «Usa un altro wallet», connetti MetaMask e firma. Poi premi «Apri Human Passport» e collega lo stesso MetaMask lì. Safari non ha MetaMask: usa Chrome o Brave, o il browser nell’app MetaMask.",
+    steps: [],
+  },
+  pt: {
+    firstPrimary: "Para verificar com Human Passport, associe MetaMask ou outra carteira suportada (WalletConnect etc.): abra abaixo «Usar outra carteira», ligue e assine. Depois prima «Abrir Human Passport» e ligue a mesma carteira lá. O Safari não tem extensão MetaMask: use Chrome ou Brave, ou o browser na app MetaMask ou da sua carteira.",
+    firstPrimaryCloud: "A sua carteira PEOPLE {{wallet}} foi criada pelo site (entrar com email) e não pode ser aberta no site Passport. Por isso associe primeiro MetaMask: abra abaixo «Usar outra carteira», ligue MetaMask e assine. Depois prima «Abrir Human Passport» e ligue o mesmo MetaMask lá. O Safari não tem MetaMask: use Chrome ou Brave, ou o browser da app MetaMask.",
+    steps: [],
+  },
+  tr: {
+    firstPrimary: "Human Passport doğrulaması için MetaMask veya desteklenen başka bir cüzdanı (WalletConnect vb.) bağlayın: aşağıda «Başka bir cüzdan kullan» açın, bağlayıp imzalayın. Sonra «Human Passport’u aç» düğmesine basın ve orada aynı cüzdanı bağlayın. Safari’de MetaMask eklentisi yoktur: Chrome veya Brave kullanın ya da MetaMask / cüzdan uygulamasının iç tarayıcısını açın.",
+    firstPrimaryCloud: "PEOPLE cüzdanınız {{wallet}} sitede e-posta girişi ile oluşturuldu ve Passport sitesinde açılamaz. Bu yüzden önce MetaMask bağlayın: aşağıda «Başka bir cüzdan kullan» açın, MetaMask bağlayıp imzalayın. Sonra «Human Passport’u aç» düğmesine basın ve orada aynı MetaMask’i bağlayın. Safari’de MetaMask yok: Chrome veya Brave kullanın ya da MetaMask uygulamasının tarayıcısını açın.",
+    steps: [],
+  },
+  id: {
+    firstPrimary: "Untuk verifikasi dengan Human Passport, tautkan MetaMask atau dompet lain yang didukung (WalletConnect, dll.): buka «Gunakan dompet lain» di bawah, hubungkan dan tanda tangani. Lalu tekan «Buka Human Passport» dan hubungkan dompet yang sama di sana. Safari tidak punya ekstensi MetaMask: gunakan Chrome atau Brave, atau browser dalam aplikasi MetaMask / dompet Anda.",
+    firstPrimaryCloud: "Dompet PEOPLE Anda {{wallet}} dibuat situs saat masuk dengan email dan tidak bisa dibuka di situs Passport. Karena itu tautkan MetaMask dulu: buka «Gunakan dompet lain» di bawah, hubungkan MetaMask dan tanda tangani. Lalu tekan «Buka Human Passport» dan hubungkan MetaMask yang sama di sana. Safari tidak punya MetaMask: gunakan Chrome atau Brave, atau browser di aplikasi MetaMask.",
+    steps: [],
+  },
+  zh: {
+    firstPrimary: "要用 Human Passport 验证，请关联 MetaMask 或其他支持的钱包（WalletConnect 等）：打开下方“使用其他钱包”，连接并签名。然后点击“打开 Human Passport”，在那里连接同一个钱包。Safari 没有 MetaMask 扩展：请使用 Chrome 或 Brave，或 MetaMask / 钱包 App 内的浏览器。",
+    firstPrimaryCloud: "您的 PEOPLE 钱包 {{wallet}} 由网站在邮箱登录时创建，无法在 Passport 网站打开。请先关联 MetaMask：打开下方“使用其他钱包”，连接 MetaMask 并签名。然后点击“打开 Human Passport”，在那里连接同一个 MetaMask。Safari 没有 MetaMask：请使用 Chrome 或 Brave，或 MetaMask App 内的浏览器。",
+    steps: [],
+  },
+  vi: {
+    firstPrimary: "Để xác minh bằng Human Passport, hãy liên kết MetaMask hoặc ví được hỗ trợ khác (WalletConnect…): mở «Dùng ví khác» bên dưới, kết nối và ký. Sau đó nhấn «Mở Human Passport» và kết nối cùng ví đó. Safari không có tiện ích MetaMask: dùng Chrome hoặc Brave, hoặc trình duyệt trong app MetaMask / ví của bạn.",
+    firstPrimaryCloud: "Ví PEOPLE {{wallet}} của bạn do trang tạo khi đăng nhập email và không mở được trên trang Passport. Vì vậy hãy liên kết MetaMask trước: mở «Dùng ví khác» bên dưới, kết nối MetaMask và ký. Sau đó nhấn «Mở Human Passport» và kết nối cùng MetaMask đó. Safari không có MetaMask: dùng Chrome hoặc Brave, hoặc trình duyệt trong app MetaMask.",
+    steps: [],
+  },
+  ar: {
+    firstPrimary: "للتحقق عبر Human Passport، اربط MetaMask أو محفظة مدعومة أخرى (WalletConnect وغيرها): افتح أدناه «استخدام محفظة أخرى»، وصّل ووقّع. ثم اضغط «فتح Human Passport» ووصل نفس المحفظة هناك. Safari بلا إضافة MetaMask: استخدم Chrome أو Brave، أو المتصفح داخل تطبيق MetaMask أو محفظتك.",
+    firstPrimaryCloud: "محفظة PEOPLE {{wallet}} أُنشئت بواسطة الموقع عند تسجيل الدخول بالبريد ولا يمكن فتحها على موقع Passport. لذلك اربط MetaMask أولاً: افتح أدناه «استخدام محفظة أخرى»، وصّل MetaMask ووقّع. ثم اضغط «فتح Human Passport» ووصل نفس MetaMask هناك. Safari بلا MetaMask: استخدم Chrome أو Brave، أو متصفح تطبيق MetaMask.",
+    steps: [],
+  },
+}
 
 const COPY: Record<string, FlowCopy> = {
   en: {
@@ -617,6 +688,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Checking your score…",
     welcomeBack: "Welcome back. Check your score to finish.",
     scoredWallet: "The score check uses {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Wallet for Passport: {{wallet}}",
     walletLabelPrimary: "wallet",
     walletLabelPassport: "Human Passport wallet",
     walletLabelNone: "no wallet yet",
@@ -661,6 +733,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Проверяем балл…",
     welcomeBack: "С возвращением. Проверьте балл, чтобы завершить.",
     scoredWallet: "Проверяем {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Кошелёк для Passport: {{wallet}}",
     walletLabelPrimary: "кошелёк",
     walletLabelPassport: "кошелёк Human Passport",
     walletLabelNone: "кошелёк пока не привязан",
@@ -705,6 +778,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Score wird geprüft…",
     welcomeBack: "Willkommen zurück. Prüfe deinen Score, um abzuschließen.",
     scoredWallet: "Geprüft wird {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Wallet für Passport: {{wallet}}",
     walletLabelPrimary: "Wallet",
     walletLabelPassport: "Human-Passport-Wallet",
     walletLabelNone: "noch keine Wallet",
@@ -749,6 +823,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Comprobando tu puntuación…",
     welcomeBack: "Bienvenido de nuevo. Comprueba tu puntuación para terminar.",
     scoredWallet: "La comprobación usa {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Billetera para Passport: {{wallet}}",
     walletLabelPrimary: "billetera",
     walletLabelPassport: "billetera de Human Passport",
     walletLabelNone: "ninguna billetera todavía",
@@ -793,6 +868,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Vérification de votre score…",
     welcomeBack: "Bon retour. Vérifiez votre score pour terminer.",
     scoredWallet: "La vérification porte sur {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Portefeuille pour Passport : {{wallet}}",
     walletLabelPrimary: "portefeuille",
     walletLabelPassport: "portefeuille Human Passport",
     walletLabelNone: "aucun portefeuille pour l'instant",
@@ -837,6 +913,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Controllo del punteggio…",
     welcomeBack: "Bentornato. Controlla il punteggio per completare.",
     scoredWallet: "Il controllo usa {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Wallet per Passport: {{wallet}}",
     walletLabelPrimary: "wallet",
     walletLabelPassport: "wallet Human Passport",
     walletLabelNone: "ancora nessun wallet",
@@ -881,6 +958,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Verificando sua pontuação…",
     welcomeBack: "Bem-vindo de volta. Verifique sua pontuação para concluir.",
     scoredWallet: "A verificação usa {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Carteira para Passport: {{wallet}}",
     walletLabelPrimary: "carteira",
     walletLabelPassport: "carteira do Human Passport",
     walletLabelNone: "nenhuma carteira ainda",
@@ -925,6 +1003,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Puanınız kontrol ediliyor…",
     welcomeBack: "Tekrar hoş geldiniz. Bitirmek için puanınızı kontrol edin.",
     scoredWallet: "Kontrol {{walletLabel}} {{wallet}} üzerinde yapılır.",
+    passportWalletCaption: "Passport cüzdanı: {{wallet}}",
     walletLabelPrimary: "cüzdan",
     walletLabelPassport: "Human Passport cüzdanı",
     walletLabelNone: "henüz cüzdan yok",
@@ -969,6 +1048,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Memeriksa skor Anda…",
     welcomeBack: "Selamat datang kembali. Periksa skor Anda untuk menyelesaikan.",
     scoredWallet: "Pemeriksaan memakai {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Dompet untuk Passport: {{wallet}}",
     walletLabelPrimary: "dompet",
     walletLabelPassport: "dompet Human Passport",
     walletLabelNone: "belum ada dompet",
@@ -1013,6 +1093,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "正在检查您的分数…",
     welcomeBack: "欢迎回来。检查分数即可完成。",
     scoredWallet: "检查将使用{{walletLabel}} {{wallet}}。",
+    passportWalletCaption: "Passport 钱包：{{wallet}}",
     walletLabelPrimary: "钱包",
     walletLabelPassport: "Human Passport 钱包",
     walletLabelNone: "尚未绑定钱包",
@@ -1057,6 +1138,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "Đang kiểm tra điểm của bạn…",
     welcomeBack: "Chào mừng trở lại. Hãy kiểm tra điểm để hoàn tất.",
     scoredWallet: "Kiểm tra sẽ dùng {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "Ví cho Passport: {{wallet}}",
     walletLabelPrimary: "ví",
     walletLabelPassport: "ví Human Passport",
     walletLabelNone: "chưa có ví",
@@ -1101,6 +1183,7 @@ const COPY: Record<string, FlowCopy> = {
     checkBusy: "جارٍ التحقق من نتيجتك…",
     welcomeBack: "أهلًا بعودتك. تحقق من نتيجتك للإنهاء.",
     scoredWallet: "سيتم التحقق من {{walletLabel}} {{wallet}}.",
+    passportWalletCaption: "محفظة Passport: {{wallet}}",
     walletLabelPrimary: "المحفظة",
     walletLabelPassport: "محفظة Human Passport",
     walletLabelNone: "لا توجد محفظة بعد",

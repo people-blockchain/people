@@ -30,8 +30,9 @@
     "rows": [
       {
         "before": "Seed-фразы, газ и десяток шагов до первого действия.",
-        "after": "Вход через email, как в обычном приложении.",
-        "afterSocial": "Вход через Google или почту, как в обычном приложении."
+        "after": "Создайте или подключите кошелёк.",
+        "afterSocial": "Вход через Google или почту, как в обычном приложении.",
+        "afterCloud": "Вход через email, как в обычном приложении."
       },
       {
         "before": "Боты и фейковые аккаунты рядом с живыми людьми.",
@@ -217,7 +218,7 @@
     "belowMin": "Введите сумму, чтобы увидеть расчёт.",
     "cta": "Подключите кошелёк, чтобы купить",
     "ctaConnected": "Купить PPL",
-    "wallets": "PEOPLE Wallet (вход через email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (создать или подключить кошелёк) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Способ оплаты",
     "payOnBase": "Оплатить в сети Base",
     "payFromOther": "Оплатить из другой сети",
@@ -278,7 +279,7 @@
     "termsLink": "Условиями",
     "help": "Нужна помощь? {support}",
     "supportLink": "Поддержка",
-    "noWalletHint": "Нет кошелька? Выберите email — PEOPLE Wallet создастся автоматически. Для оплаты нужны USDC в сети Base в этом или в подключённом кошельке.",
+    "noWalletHint": "Нет кошелька? Создайте или импортируйте PEOPLE Wallet либо подключите MetaMask / WalletConnect. Для оплаты нужен USDC на Base в этом кошельке.",
     "sellBackTerms": "Продажа обратно в резерв — только для верифицированных пользователей. Каждую покупку можно продать через 30 дней после неё по цене кривой на момент продажи. Лимиты: 2% резерва за любые скользящие 24 часа на всех вместе и $2 000 на адрес за скользящие 24 часа. PPL возвращаются на кошелёк продажи в PEOPLE mainnet и не сжигаются. Комиссия 1,5%; 3% — только на часть выкупа за эти 24 часа сверх 1% резерва. После закрытия кривой продолжает работать, пока резерв не переведут в ликвидность. Выплата — в USDC в сети Base.",
     "feesTitle": "Комиссии и сроки",
     "feesBody": "Комиссии: сетевая (gas) в Base, платится в ETH — обычно около $0,01; обмен или мост LI.FI — показывается в виджете до подтверждения; при продаже обратно в резерв — 1,5%, а 3% — только на часть выкупа за скользящие 24 часа сверх 1% резерва.",
@@ -289,7 +290,7 @@
     "stableUsdtDirectOption": "USDT в сети Base (мостовой)",
     "payFromNetworks": "Работает из EVM-сетей (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche и другие), Tron и Solana. TON не поддерживается.",
     "bridgeSteps": "Шаг 1. Обменяйте токены на USDC в сети Base в виджете (обычно 1–20 минут). Шаг 2. Купите PPL кнопкой ниже.",
-    "solanaHint": "Платите из Solana или Tron? Нужен ещё адрес в сети Base, куда придут USDC: подключите MetaMask, Trust Wallet или WalletConnect либо войдите через email.",
+    "solanaHint": "Платите из Solana или Tron? Нужен также адрес в Base для получения USDC: подключите MetaMask, Trust Wallet или WalletConnect либо создайте или подключите кошелёк.",
     "bridgeClosed": "Оплата из других сетей откроется вместе с продажей.",
     "bridgeStatus": "Обмен идёт. Статус — на {link}.",
     "bridgeFailed": "Обмен не завершился. Проверьте статус на scan.li.fi или попробуйте снова.",
@@ -301,7 +302,10 @@
     "switchRejected": "Сеть не переключена. Для покупки нужна сеть Base — попробуйте ещё раз.",
     "walletsSocial": "PEOPLE Wallet (вход через Google или email) · MetaMask · Trust Wallet · WalletConnect",
     "noWalletHintSocial": "Нет кошелька? Выберите Google или email — PEOPLE Wallet создастся автоматически. Для оплаты нужны USDC в сети Base в этом или в подключённом кошельке.",
-    "solanaHintSocial": "Платите из Solana или Tron? Нужен ещё адрес в сети Base, куда придут USDC: подключите MetaMask, Trust Wallet или WalletConnect либо войдите через Google."
+    "solanaHintSocial": "Платите из Solana или Tron? Нужен ещё адрес в сети Base, куда придут USDC: подключите MetaMask, Trust Wallet или WalletConnect либо войдите через Google.",
+    "walletsCloud": "PEOPLE Wallet (вход через email) · MetaMask · Trust Wallet · WalletConnect",
+    "solanaHintCloud": "Платите из Solana или Tron? Нужен ещё адрес в сети Base, куда придут USDC: подключите MetaMask, Trust Wallet или WalletConnect либо войдите через email.",
+    "noWalletHintCloud": "Нет кошелька? Выберите email — PEOPLE Wallet создастся автоматически. Для оплаты нужны USDC в сети Base в этом или в подключённом кошельке."
   },
   "v2": {
     "banner": {

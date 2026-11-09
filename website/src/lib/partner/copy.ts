@@ -1,5 +1,6 @@
 import type { Language } from "@/lib/preferences";
 import { withSocialLoginCopy } from "@/lib/social-login";
+import { withCloudWalletCopy } from "@/lib/cloud-wallet";
 import partnerAr from "@/lib/locales/surfaces/partner-ar.json" with { type: "json" };
 import partnerDe from "@/lib/locales/surfaces/partner-de.json" with { type: "json" };
 import partnerEn from "@/lib/locales/surfaces/partner-en.json" with { type: "json" };
@@ -31,7 +32,7 @@ const partnerCopyRaw: Record<Language, PartnerStrings> = {
 };
 
 export const partnerCopy: Record<Language, PartnerStrings> = Object.fromEntries(
-  Object.entries(partnerCopyRaw).map(([lang, copy]) => [lang, withSocialLoginCopy(copy)]),
+  Object.entries(partnerCopyRaw).map(([lang, copy]) => [lang, withCloudWalletCopy(withSocialLoginCopy(copy))]),
 ) as Record<Language, PartnerStrings>;
 
 export function partnerText(lang: Language): PartnerStrings {

@@ -46,9 +46,9 @@
   "registrationPending": "Verbindung zum Netz — automatischer Wiederholversuch.",
   "networkChecking": "Verbindung…",
   "networkUnavailable": "Das Netz ist vorübergehend nicht erreichbar",
-  "signInHeading": "Mit E-Mail anmelden",
-  "signInGoogle": "Mit E-Mail fortfahren",
-  "signInMagicCta": "Send login link",
+  "signInHeading": "Wallet erstellen oder verbinden",
+  "signInGoogle": "Weiter",
+  "signInMagicCta": "Weiter",
   "signInEmailLabel": "E-Mail",
   "signInEmailPlaceholder": "you@example.com",
   "signInDivider": "Oder Passwort auf diesem Gerät nutzen",
@@ -61,5 +61,8 @@
   "importInvalidKey": "Geben Sie eine 12-Wort-Phrase oder einen privaten Hex-Schlüssel mit 64 Zeichen ein.",
   "leadSocial": "Browser-Wallet: nicht-kustodial. Schlüssel entstehen in diesem Browser, werden mit Ihrem Passwort verschlüsselt und nie an unsere Server gesendet. Die Anmeldung mit Google oder E-Mail erstellt stattdessen eine Cloud-Wallet: PEOPLE speichert Ihren Schlüssel verschlüsselt, und die Infrastruktur von PEOPLE kann ihn entschlüsseln.",
   "signInHeadingSocial": "Mit Google oder E-Mail anmelden",
-  "signInGoogleSocial": "Mit Google fortfahren"
+  "signInGoogleSocial": "Mit Google fortfahren",
+  "signInHeadingCloud": "Mit E-Mail anmelden",
+  "signInGoogleCloud": "Mit E-Mail fortfahren",
+  "signInMagicCtaCloud": "Send login link"
 }
