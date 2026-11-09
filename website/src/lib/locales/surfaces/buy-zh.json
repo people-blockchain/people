@@ -118,7 +118,7 @@
     "explorerLink": "在 Basescan 上查看",
     "copy": "复制",
     "copied": "已复制",
-    "auditLine": "由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。",
+    "auditLine": "由 AI 模型审查：Claude Opus 5.5、GPT Astra、Fable 5.1、Gemini Argon（由项目团队运行）。这不是安全审计。目前尚未进行外部审计。",
     "reviewReports": "审查报告：{links}",
     "auditBounty": "发现漏洞？请在任意页面通过错误报告按钮提交。",
     "detailsToggle": "详情",

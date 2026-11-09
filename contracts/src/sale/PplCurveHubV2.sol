@@ -140,7 +140,7 @@ library RollingWindow24h {
 /// stays in the reserve.
 ///
 /// PPL is not a Base token. Each `Bought` event is the delivery trigger: an off-chain relayer
-/// credits `pplOut` to `recipient` on the PEOPLE network (chain id 97401) right away. Base keeps
+/// credits `pplOut` to `recipient` on the PEOPLE mainnet (chain id 97400) right away. Base keeps
 /// the per-person purchase record (`lots`) that drives the hold, the limits and sell-back. Because
 /// the PPL are already spendable on the PEOPLE network, `sellBack` only pays against an attestation
 /// that the same amount was returned there (A1).
@@ -204,7 +204,9 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// Options in SPEC §5.4: 30 days (implemented) or 14 days.
     uint256 public constant LIQUIDITY_RELEASE_DELAY = 30 days;
     /// @notice Chain id of the PEOPLE network, where PPL live and where sell-back returns happen.
-    uint256 public constant PEOPLE_CHAIN_ID = 97401;
+    /// @dev PEOPLE mainnet (EVM chain id 97400, cosmos people_97400-1). The public testnet is 97401
+    /// and is never accepted as a sell-back source.
+    uint256 public constant PEOPLE_CHAIN_ID = 97400;
     /// @dev Lowest `minBuyUsd6` / `minSellUsd6` the owner may set (A4 anti-spam floor).
     /// The highest sell floor is `MAX_MIN_SELL_USD6`, not the $2,000 person cap.
     uint256 public constant MIN_AMOUNT_FLOOR_USD6 = 1e6;

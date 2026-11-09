@@ -1,0 +1,37 @@
+name: Testnet E2E (creator tools)
+
+# Live check on the PEOPLE testnet (97401): faucet, token launch, curve buy/sell, NFT mint,
+# deploy of every no-code contract template, public site endpoints. Uses a throwaway wallet
+# funded by the public faucet; no secrets are used.
+
+on:
+  workflow_dispatch:
+    inputs:
+      rpc_url:
+        description: JSON-RPC URL
+        required: false
+        default: https://node.peopleblockchain.network/rpc
+  push:
+    branches: ["claude/project-thread-h2o05q"]
+    paths: ["contracts/scripts/testnet-e2e.mjs", ".github/workflows/testnet-e2e.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install script deps
+        working-directory: contracts
+        run: npm ci
+      - name: Run testnet E2E
+        working-directory: contracts
+        env:
+          RPC_URL: ${{ inputs.rpc_url || 'https://node.peopleblockchain.network/rpc' }}
+        run: node scripts/testnet-e2e.mjs

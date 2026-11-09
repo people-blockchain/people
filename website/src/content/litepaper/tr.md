@@ -161,9 +161,10 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 
 ## 9. Güvenlik
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Hazine multisig.** Hazine mainnet'ten önce bir multisig'de tutulacak; imzalayan adresler yayınlanacaktır.
-- **Yayınlanan adresler.** Satış, hak ediş ve likidite sözleşme adresleri mainnet başlatmasında yayınlanacak — yer tutucu yok.
+
+- Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı. Bug bounty on every page.
+- **Çoklu imza cüzdanları.** Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
+- **Yayımlanan adresler.** Satış sözleşmesi ve alıcı çoklu imza cüzdanı satış açılmadan önce; vesting ve LP kilidi sözleşmeleri ağın tam lansmanında yayımlanır. Yer tutucu yok.
 - **Bot savunması.** İnsan doğrulaması, cihaz başına ve IP başına sınırlamalar, günlük puan kapakları ve bot geri alma.
 - **Kanıtlanmış yapı taşları.** Kod gerektirmeyen sözleşmeler OpenZeppelin şablonlarından birleştirilir.
 
@@ -176,7 +177,7 @@ Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.
 - **Testnet mainnet değil.** Testnet jetonları ve bakiyeleri hiçbir değere sahip değildir. Puanlar, ödeme garantisi değil, aktivitenin bir kaydıdır.
 - **Her şey ön niteliklidir.** Rakamlar, zaman çizelgeleri ve kurallar mainnet'ten önce değişebilir ve topluluk yönetişimine tabidir.
 - **Teknoloji riski.** Yazılımda hata olabilir. Bir denetim riski azaltır; bunu kaldırmaz.
-- **Düzenleme.** Kurallar ülkeye göre değişir. PPL satış parametreleri `/buy` sayfasında (eğri **$0.005**/PPL'den); hub kontratı deploy edilene kadar alımlar kapalı. Bu sitede KYC veya uygunluk kontrolü yapılmaz.
+- **Düzenleme.** Kurallar ülkeye göre değişir. PPL satış parametreleri `/buy` sayfasında (eğri **$0.005**/PPL'den); hub kontratı deploy edilene kadar alımlar kapalı. Satın almak için ücretsiz, tek seferlik bir insan doğrulaması gerekir (Telegram veya Human Passport); kimlik belgesi (KYC) istenmez.
 - **Kendi araştırmanızı yapın.** Bu litepaper bilgidir, finansal, yasal veya vergi danışması değildir.
 
 ---
@@ -218,7 +219,10 @@ Yalnızca diğer ağlar hakkında doğrulanabilir halka açık gerçekler. Kayna
 
 - Yeni bir token arzının **%27'sine kadar** topluluk havuzuna gidebilir: lansmanda **%10** garanti, artı yaratıcı lansmanda yakma yerine havuzu seçerse eğri artığından **~%17'ye kadar**. Ödemeler PEOPLE timelock ile doğrulanmış kişilere zamanla — anında değil, getiri vaadi değil.
 - Ekip hak edişi **lansmanda %0, 6 aylık cliff, ardından 18 ay doğrusal** (toplam 24 ay).
+
 - Başlatma ücretleri: onaylanan plan, **token lansmanı için 5 USD ve NFT mint için 10 USD** sabit ücret olup PPL, USDT veya USDC ile ödenebilir ve PPL ile TWAP fiyatından ödemede %20 indirim uygulanır; kurulu fabrikalar hâlâ sabit PPL ücreti almaktadır.
-- **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Bu sitede KYC veya uygunluk kontrolü yapılmaz.
-- Güvenlik: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- Hazine multisig'i **3'te 2**'dir ve mainnet'ten önce oluşturulur.
+- **PPL topluluk satışı** `/buy` üzerindeki yayınlanmış üstel eğriyi kullanır (**$0.005**/PPL başlangıç; fiyatlar ve limitler açık; hub'a kadar alım kapalı). Satın almak için ücretsiz, tek seferlik bir insan doğrulaması gerekir (Telegram veya Human Passport); kimlik belgesi (KYC) istenmez.
+- Güvenlik: Yapay zekâ modelleri tarafından incelendi: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (proje ekibi çalıştırdı). Bu bir güvenlik denetimi değildir. Henüz harici bir denetim yapılmadı.; bug bounty on every page.
+- Çoklu imza cüzdanları. Ağ ücreti hazinesi: PEOPLE ağında 2/3 çoklu imza cüzdanı. Satış gelirleri: Base üzerindeki proje çoklu imza cüzdanı; adresi ve imza eşiği satış açılmadan önce yayımlanır.
+- Bir tokenın eğrisi lansmandan sonraki **180 gün** içinde tükenmezse herkes onu sonlandırabilir ve satılmayan tokenlar o tokenın topluluk havuzuna gider. Tükenen eğri eskisi gibi likiditeye geçer. (Test ağında canlı.)
+- Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.

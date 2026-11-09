@@ -35,6 +35,11 @@ const people = createPublicClient({
   },
   transport: http(peopleRpc, { timeout: 12_000 }),
 });
+// Refuse to start unless PEOPLE_RPC_URL is the PEOPLE mainnet (never the free-PPL testnet 97401).
+const peopleRpcChainId = await people.getChainId();
+if (peopleRpcChainId !== PEOPLE_MAINNET_CHAIN_ID) {
+  throw new Error(`PEOPLE_RPC_URL is chain ${peopleRpcChainId}, expected the PEOPLE mainnet ${PEOPLE_MAINNET_CHAIN_ID}`);
+}
 const hubRpc = need("HUB_RPC_URL");
 const hub = createPublicClient({
   chain: {

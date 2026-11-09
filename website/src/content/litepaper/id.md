@@ -161,9 +161,10 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 
 ## 9. Keamanan
 
-- **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1.** Bug bounty on every page.
-- **Multisig treasury.** Treasury akan dipegang dalam multisig sebelum mainnet; alamat penanda akan dipublikasikan.
-- **Alamat yang dipublikasikan.** Alamat penjualan, vesting, dan kontrak likuiditas akan dipublikasikan saat peluncuran mainnet — tidak ada placeholder.
+
+- Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal. Bug bounty on every page.
+- **Multisig.** Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base; alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
+- **Alamat yang dipublikasikan.** Kontrak penjualan dan multisig penerima dipublikasikan sebelum penjualan dibuka; kontrak vesting dan kunci LP saat peluncuran jaringan penuh. Tanpa placeholder.
 - **Pertahanan bot.** Verifikasi manusia, batas per-perangkat dan per-IP, batas poin harian, dan clawback bot.
 - **Blok bangunan yang terbukti.** Kontrak tanpa kode dirakit dari template OpenZeppelin.
 
@@ -176,7 +177,7 @@ Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpen
 - **Testnet bukan mainnet.** Token testnet dan saldo tidak memiliki nilai. Poin adalah catatan aktivitas, bukan jaminan pembayaran.
 - **Semuanya awal.** Angka, jadwal, dan aturan dapat berubah sebelum mainnet dan tunduk pada tata kelola komunitas.
 - **Risiko teknologi.** Perangkat lunak dapat memiliki bug. Audit mengurangi risiko; itu tidak menghilangkannya.
-- **Regulasi.** Aturan berbeda per negara dan dapat berubah. Parameter penjualan PPL ada di `/buy` (kurva dari **$0.005**/PPL); pembelian tetap nonaktif hingga hub di-deploy. Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
+- **Regulasi.** Aturan berbeda per negara dan dapat berubah. Parameter penjualan PPL ada di `/buy` (kurva dari **$0.005**/PPL); pembelian tetap nonaktif hingga hub di-deploy. Untuk membeli diperlukan satu kali verifikasi manusia gratis (Telegram atau Human Passport); tidak ada dokumen identitas (KYC) yang dikumpulkan.
 - **Lakukan riset sendiri.** Litepaper ini adalah informasi, bukan saran keuangan, hukum, atau pajak.
 
 ---
@@ -218,7 +219,10 @@ Hanya fakta publik yang dapat diverifikasi tentang jaringan lain. Sumber di bawa
 
 - Hingga **27%** pasokan dapat masuk ke dana komunitas: **10%** saat peluncuran dijamin, plus hingga **~17%** sisa kurva jika kreator memilih dana alih-alih pembakaran saat peluncuran. Dibayar via timelock PEOPLE ke orang terverifikasi seiring waktu — bukan instan, bukan janji imbal hasil.
 - Vesting tim adalah **0% saat peluncuran, cliff 6 bulan, lalu 18 bulan linear** (total 24 bulan).
+
 - Biaya peluncuran: rencana yang disetujui adalah biaya tetap **5 USD per peluncuran token dan 10 USD per mint NFT**, dapat dibayar dalam PPL, USDT, atau USDC, dengan diskon 20% saat membayar dalam PPL pada harga TWAP; pabrik yang telah diterapkan masih mengenakan biaya PPL tetap.
-- **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Tidak ada KYC atau pemeriksaan kelayakan di situs ini.
-- Keamanan: **Audited by: Claude Opus 5.5, GPT Astra, Fable 5.1**; bug bounty on every page.
-- Multisig treasury adalah **2 dari 3** dan dibuat sebelum mainnet.
+- **Penjualan komunitas PPL** memakai kurva eksponensial yang dipublikasikan di `/buy` (mulai **$0.005**/PPL; harga dan batas publik; beli nonaktif hingga hub). Untuk membeli diperlukan satu kali verifikasi manusia gratis (Telegram atau Human Passport); tidak ada dokumen identitas (KYC) yang dikumpulkan.
+- Keamanan: Ditinjau oleh model AI: Claude Opus 5.5, GPT Astra, Fable 5.1, Gemini Argon (dijalankan oleh tim proyek). Ini bukan audit keamanan. Belum ada audit eksternal.; bug bounty on every page.
+- Multisig. Kas biaya jaringan: multisig 2-dari-3 di jaringan PEOPLE. Dana penjualan: multisig proyek di Base; alamat dan ambang tanda tangannya dipublikasikan sebelum penjualan dibuka.
+- Jika kurva token tidak habis terjual dalam **180 hari** sejak peluncuran, siapa pun dapat memfinalisasinya dan token yang tidak terjual masuk ke pool komunitas token tersebut. Kurva yang habis terjual tetap pindah ke likuiditas seperti sebelumnya. (Aktif di testnet.)
+- Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.
