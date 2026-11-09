@@ -40,7 +40,30 @@ async function assertHeaderSignInClick(page, lang, width) {
   const navStart = Date.now();
   await login.click({ timeout: 5000 });
   await expect(page.locator("dialog[open]")).toBeVisible({ timeout: 8000 });
-  await expect(page.getByTestId("unified-wallet-auth")).toBeVisible();
+  
+  // Check if cloud/auth UI should be visible (flags on) or wallet create/import/external should be visible (flags off)
+  const cloudAuthLocator = page.getByTestId("unified-wallet-auth");
+  const walletCreateImportLocator = page.getByTestId("wallet-create-import");
+  const externalConnectLocator = page.getByTestId("wallet-external-connect");
+  const cloudSignInLocator = page.getByTestId("wallet-cloud-sign-in");
+  const emailSignInLocator = page.getByTestId("wallet-sign-in-email");
+  
+  const cloudAuthVisible = await cloudAuthLocator.isVisible().catch(() => false);
+  if (cloudAuthVisible) {
+    // Cloud/auth UI is present (flags on)
+    await expect(cloudAuthLocator).toBeVisible();
+    // Cloud/email CTAs should also be visible
+    await expect(cloudSignInLocator.or(emailSignInLocator)).toBeVisible();
+  } else {
+    // Cloud/auth UI is absent (flags off) - wallet create/import or external should be visible
+    const hasCreateImport = await walletCreateImportLocator.isVisible().catch(() => false);
+    const hasExternalConnect = await externalConnectLocator.isVisible().catch(() => false);
+    assert.ok(hasCreateImport || hasExternalConnect, "Flags off: either wallet-create-import or wallet-external-connect should be visible");
+    // Cloud/email CTAs should be absent
+    await expect(cloudSignInLocator).toHaveCount(0);
+    await expect(emailSignInLocator).toHaveCount(0);
+  }
+  
   assert.ok(!page.url().includes("/login"), `${lang}@${width}px: must not navigate to /login`);
   assert.ok(Date.now() - navStart < 5000, `${lang}@${width}px: modal open too slow`);
 }
