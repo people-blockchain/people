@@ -9,7 +9,8 @@
       "items": [
         {
           "title": "Cartera",
-          "text": "Crea una cartera en el móvil o en el navegador. Una cartera de navegador con 12 palabras es no custodial: las claves no salen de tu dispositivo. Una cartera en la nube (inicio de sesión con Google o email) se guarda cifrada en los servidores de PEOPLE, y la infraestructura de PEOPLE puede descifrarla."
+          "text": "Crea una cartera en el móvil o en el navegador. Una cartera de navegador con 12 palabras es no custodial: las claves no salen de tu dispositivo. Una cartera en la nube (inicio de sesión con email) se guarda cifrada en los servidores de PEOPLE, y la infraestructura de PEOPLE puede descifrarla.",
+          "textSocial": "Crea una cartera en el móvil o en el navegador. Una cartera de navegador con 12 palabras es no custodial: las claves no salen de tu dispositivo. Una cartera en la nube (inicio de sesión con Google o email) se guarda cifrada en los servidores de PEOPLE, y la infraestructura de PEOPLE puede descifrarla."
         },
         {
           "title": "Crear un token",

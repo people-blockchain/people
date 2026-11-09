@@ -41,7 +41,8 @@
         "sub": "Harga adil sejak swap pertama"
       }
     ],
-    "ctaWalletAuth": "Buat dompet / Masuk dengan Google"
+    "ctaWalletAuth": "Buat dompet",
+    "ctaWalletAuthSocial": "Buat dompet / Masuk dengan Google"
   },
   "blocks": [
     {

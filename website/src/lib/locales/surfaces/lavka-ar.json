@@ -5,7 +5,7 @@
   "contractsOff": "عقود الولاء غير منشورة على هذا الاختبار بعد. شغّل workflow Lavka بعد الدمج.",
   "signInCta": "تسجيل الدخول",
   "walletCta": "ربط المحفظة",
-  "pohRequired": "سجّل عبر Google أو البريد واربط محفظتك لإدارة المتجر أو استخدام الزيارات.",
+  "pohRequired": "سجّل عبر email أو البريد واربط محفظتك لإدارة المتجر أو استخدام الزيارات.",
   "merchantTitle": "متجرك",
   "merchantLead": "حدد الاسم والبلد ثم انشر بطاقة للشراء والاستخدام.",
   "displayNameLabel": "اسم المتجر",
@@ -58,5 +58,6 @@
   "successPay": "تم إرسال الدفع.",
   "successEscrow": "تم قفل الدفع المسبق.",
   "connectWallet": "ربط المحفظة",
-  "preliminaryBanner": "مبدئي — قد تتغير معاملات التجربة قبل mainnet."
+  "preliminaryBanner": "مبدئي — قد تتغير معاملات التجربة قبل mainnet.",
+  "pohRequiredSocial": "سجّل عبر Google أو البريد واربط محفظتك لإدارة المتجر أو استخدام الزيارات."
 }

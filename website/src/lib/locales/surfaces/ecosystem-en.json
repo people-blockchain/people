@@ -34,7 +34,8 @@
       "summary": "A shared treasury controlled by several owners."
     },
     "people-wallet": {
-      "summary": "A non-custodial PPL wallet in the browser, with optional Google sign-in."
+      "summary": "A non-custodial PPL wallet in the browser, with optional email sign-in.",
+      "summarySocial": "A non-custodial PPL wallet in the browser, with optional Google sign-in."
     },
     "people-explorer": {
       "summary": "Blocks, transactions, addresses, tokens, and NFTs on the public testnet."

@@ -5,7 +5,7 @@
   "contractsOff": "Contratos de fidelidade ainda não implantados neste testnet. Execute o workflow Lavka após o merge.",
   "signInCta": "Entrar",
   "walletCta": "Vincular carteira",
-  "pohRequired": "Entre com Google ou e-mail e vincule a carteira para gerir a loja ou resgatar visitas.",
+  "pohRequired": "Entre com e-mail e vincule a carteira para gerir a loja ou resgatar visitas.",
   "merchantTitle": "Sua loja",
   "merchantLead": "Defina nome e país, depois publique um passe para compra e resgate.",
   "displayNameLabel": "Nome da loja",
@@ -58,5 +58,6 @@
   "successPay": "Pagamento enviado.",
   "successEscrow": "Pré-pagamento bloqueado.",
   "connectWallet": "Conectar carteira",
-  "preliminaryBanner": "Preliminar — parâmetros do piloto podem mudar antes do mainnet."
+  "preliminaryBanner": "Preliminar — parâmetros do piloto podem mudar antes do mainnet.",
+  "pohRequiredSocial": "Entre com Google ou e-mail e vincule a carteira para gerir a loja ou resgatar visitas."
 }

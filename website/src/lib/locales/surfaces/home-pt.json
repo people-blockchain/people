@@ -41,7 +41,8 @@
         "sub": "Preço justo desde a primeira troca"
       }
     ],
-    "ctaWalletAuth": "Criar carteira / Entrar com Google"
+    "ctaWalletAuth": "Criar carteira",
+    "ctaWalletAuthSocial": "Criar carteira / Entrar com Google"
   },
   "blocks": [
     {

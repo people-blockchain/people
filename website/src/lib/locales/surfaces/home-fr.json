@@ -41,7 +41,8 @@
         "sub": "Prix équitable dès le premier swap"
       }
     ],
-    "ctaWalletAuth": "Créer un portefeuille / Se connecter avec Google"
+    "ctaWalletAuth": "Créer un portefeuille",
+    "ctaWalletAuthSocial": "Créer un portefeuille / Se connecter avec Google"
   },
   "blocks": [
     {

@@ -41,7 +41,8 @@
         "sub": "Fairer Preis ab dem ersten Swap"
       }
     ],
-    "ctaWalletAuth": "Wallet erstellen / Mit Google anmelden"
+    "ctaWalletAuth": "Wallet erstellen",
+    "ctaWalletAuthSocial": "Wallet erstellen / Mit Google anmelden"
   },
   "blocks": [
     {

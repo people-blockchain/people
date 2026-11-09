@@ -30,7 +30,8 @@
     "rows": [
       {
         "before": "Frasa pemulihan, gas, dan selusin langkah sebelum tindakan pertama.",
-        "after": "Masuk dengan Google atau email, seperti aplikasi biasa."
+        "after": "Masuk dengan email, seperti aplikasi biasa.",
+        "afterSocial": "Masuk dengan Google atau email, seperti aplikasi biasa."
       },
       {
         "before": "Bot dan akun palsu di samping orang sungguhan.",
@@ -216,7 +217,7 @@
     "belowMin": "Masukkan jumlah untuk melihat penawaran.",
     "cta": "Hubungkan dompet untuk membeli",
     "ctaConnected": "Beli PPL",
-    "wallets": "PEOPLE Wallet (masuk dengan Google atau email) · MetaMask · Trust Wallet · WalletConnect",
+    "wallets": "PEOPLE Wallet (masuk dengan email) · MetaMask · Trust Wallet · WalletConnect",
     "payModeLabel": "Cara bayar",
     "payOnBase": "Bayar di Base",
     "payFromOther": "Bayar dari jaringan lain",
@@ -277,7 +278,7 @@
     "termsLink": "Ketentuan",
     "help": "Butuh bantuan? {support}",
     "supportLink": "Dukungan",
-    "noWalletHint": "Belum punya dompet? Pilih Google atau email — PEOPLE Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
+    "noWalletHint": "Belum punya dompet? Pilih email atau email — PEOPLE Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
     "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap pembelian dapat dijual kembali 30 hari setelahnya, dengan harga kurva pada saat penjualan. Batas: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang bersama, dan $2.000 per alamat dalam jendela geser 24 jam. PPL kembali ke dompet penjualan di PEOPLE mainnet dan tidak dibakar. Biaya 1,5%; 3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan. Tetap buka setelah kurva ditutup, sampai cadangan dipindahkan ke likuiditas. Dana diterima dalam USDC di jaringan Base.",
     "feesTitle": "Biaya dan waktu",
     "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar $0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum konfirmasi; biaya penjualan kembali ke cadangan — 1,5%, dan 3% hanya untuk bagian penjualan kembali dalam jendela geser 24 jam yang melebihi 1% cadangan.",
@@ -288,7 +289,7 @@
     "stableUsdtDirectOption": "USDT di Base (bridged)",
     "payFromNetworks": "Berfungsi dari jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana. TON tidak didukung.",
     "bridgeSteps": "Langkah 1. Tukar token Anda menjadi USDC di Base di widget (biasanya 1–20 menit). Langkah 2. Beli PPL dengan tombol di bawah.",
-    "solanaHint": "Membayar dari Solana atau Tron? Anda juga memerlukan alamat di Base untuk menerima USDC: hubungkan MetaMask, Trust Wallet, atau WalletConnect, atau masuk dengan Google.",
+    "solanaHint": "Membayar dari Solana atau Tron? Anda juga memerlukan alamat di Base untuk menerima USDC: hubungkan MetaMask, Trust Wallet, atau WalletConnect, atau masuk dengan email.",
     "bridgeClosed": "Pembayaran dari jaringan lain dibuka bersamaan dengan penjualan.",
     "bridgeStatus": "Penukaran sedang berlangsung. Pantau di {link}.",
     "bridgeFailed": "Penukaran tidak selesai. Periksa statusnya di scan.li.fi atau coba lagi.",
@@ -297,7 +298,10 @@
     "wrongNetwork": "Pembelian berlangsung di jaringan Base. Dompet Anda ada di jaringan lain.",
     "switchToBase": "Beralih ke Base",
     "switchRejected": "Jaringan tidak dialihkan. Pembelian memerlukan Base — coba lagi.",
-    "embeddedNoBase": "PEOPLE Wallet belum bisa membayar di jaringan Base. Untuk membeli, hubungkan MetaMask, Trust Wallet, atau WalletConnect."
+    "embeddedNoBase": "PEOPLE Wallet belum bisa membayar di jaringan Base. Untuk membeli, hubungkan MetaMask, Trust Wallet, atau WalletConnect.",
+    "walletsSocial": "PEOPLE Wallet (masuk dengan Google atau email) · MetaMask · Trust Wallet · WalletConnect",
+    "noWalletHintSocial": "Belum punya dompet? Pilih Google atau email — PEOPLE Wallet akan dibuat untuk Anda. Untuk membayar, Anda memerlukan USDC di Base di dompet itu atau di dompet yang Anda hubungkan.",
+    "solanaHintSocial": "Membayar dari Solana atau Tron? Anda juga memerlukan alamat di Base untuk menerima USDC: hubungkan MetaMask, Trust Wallet, atau WalletConnect, atau masuk dengan Google."
   },
   "v2": {
     "banner": {

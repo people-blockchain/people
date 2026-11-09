@@ -1,6 +1,6 @@
 {
   "title": "Cartera",
-  "lead": "Cartera del navegador: no custodial. Las claves se crean en este navegador, se cifran con tu contraseña y nunca se envían a nuestros servidores. Iniciar sesión con Google o email crea en cambio una cartera en la nube: PEOPLE guarda tu clave cifrada y su infraestructura puede descifrarla.",
+  "lead": "Cartera del navegador: no custodial. Las claves se crean en este navegador, se cifran con tu contraseña y nunca se envían a nuestros servidores. Iniciar sesión con email crea en cambio una cartera en la nube: PEOPLE guarda tu clave cifrada y su infraestructura puede descifrarla.",
   "create": "Crear una cartera nueva",
   "import": "Importar cartera",
   "unlock": "Desbloquear",
@@ -46,8 +46,8 @@
   "registrationPending": "Conectando a la red — reintentaremos automáticamente.",
   "networkChecking": "Conectando…",
   "networkUnavailable": "La red no está disponible temporalmente",
-  "signInHeading": "Iniciar sesión con Google o correo",
-  "signInGoogle": "Continuar con Google",
+  "signInHeading": "Iniciar sesión con email o correo",
+  "signInGoogle": "Continuar con email",
   "signInMagicCta": "Send login link",
   "signInEmailLabel": "Correo electrónico",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "Tu clave se guarda cifrada en los servidores de PEOPLE para que puedas restaurarla al iniciar sesión. La infraestructura de PEOPLE puede descifrarla. Para una autocustodia total, usa una cartera de navegador o una cartera externa. Exporta la clave privada solo si necesitas una copia de seguridad fuera de PEOPLE.",
   "cloudDisconnect": "Desconectar",
   "importAddress": "Dirección que controla esta clave",
-  "importInvalidKey": "Introduce una frase de 12 palabras o una clave privada hexadecimal de 64 caracteres."
+  "importInvalidKey": "Introduce una frase de 12 palabras o una clave privada hexadecimal de 64 caracteres.",
+  "leadSocial": "Cartera del navegador: no custodial. Las claves se crean en este navegador, se cifran con tu contraseña y nunca se envían a nuestros servidores. Iniciar sesión con Google o email crea en cambio una cartera en la nube: PEOPLE guarda tu clave cifrada y su infraestructura puede descifrarla.",
+  "signInHeadingSocial": "Iniciar sesión con Google o correo",
+  "signInGoogleSocial": "Continuar con Google"
 }

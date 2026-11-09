@@ -2,7 +2,27 @@
 
 import { useEffect, useRef, useState } from "react";
 
+/* Social variants preserved for NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED=true:
+ * en.noAppSocial: "...or use the PEOPLE Wallet above (Continue with Google) — it needs no app."
+ * en.timeoutSocial: "...or use Continue with Google above."
+ * en.useGoogleSocial: "Use Continue with Google"
+ * ru equivalents likewise.
+ */
 const EXT_COPY: Record<string, { noApp: string; install: string; timeout: string; useGoogle: string }> = {
+  en: {
+    noApp: "{wallet} did not open. On a phone without the {wallet} app, install it first, or use the PEOPLE Wallet above (email sign-in) — it needs no app.",
+    install: "Install {wallet}",
+    timeout: "{wallet} did not answer. Close this window and try again, or use email sign-in above.",
+    useGoogle: "Use email sign-in",
+  },
+  ru: {
+    noApp: "{wallet} не открылся. Если на телефоне нет приложения {wallet}, сначала установите его — или используйте PEOPLE Wallet выше (вход через email), приложение не нужно.",
+    install: "Установить {wallet}",
+    timeout: "{wallet} не ответил. Закройте окно и попробуйте снова или войдите через email выше.",
+    useGoogle: "Войти через email",
+  },
+};
+const EXT_COPY_SOCIAL: typeof EXT_COPY = {
   en: {
     noApp: "{wallet} did not open. On a phone without the {wallet} app, install it first, or use the PEOPLE Wallet above (Continue with Google) — it needs no app.",
     install: "Install {wallet}",
@@ -28,6 +48,7 @@ import { useExternalWallet } from "@/context/ExternalWalletContext";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { walletConnectProjectIdConfigured } from "@/lib/wallet-external-connect";
 import { WALLET_APP_REDIRECT, isMobileBrowser } from "@/lib/mobile-env";
+import { isSocialLoginEnabled } from "@/lib/social-login";
 
 export function WalletExternalConnectSection({
   onConnected,
@@ -69,7 +90,8 @@ export function WalletExternalConnectSection({
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [installFor, setInstallFor] = useState<string | null>(null);
-  const x = EXT_COPY[lang] ?? EXT_COPY.en;
+  const extTable = isSocialLoginEnabled() ? EXT_COPY_SOCIAL : EXT_COPY;
+  const x = extTable[lang] ?? extTable.en;
   const showWalletConnect = walletConnectProjectIdConfigured();
 
   const run = async (fn: () => Promise<void>, walletName: string) => {
@@ -197,7 +219,7 @@ export function WalletExternalConnectSection({
                   document.getElementById("wallet-embedded-block")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
-                {w.signInGoogle}
+                {isSocialLoginEnabled() ? w.signInGoogle : x.useGoogle}
               </button>
             ) : null}
             <button type="button" className="min-h-11 rounded-xl px-4 text-sm text-ink-3" onClick={() => setStep(null)}>

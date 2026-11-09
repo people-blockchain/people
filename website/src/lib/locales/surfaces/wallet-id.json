@@ -1,6 +1,6 @@
 {
   "title": "Dompet",
-  "lead": "Dompet peramban: non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami. Masuk dengan Google atau email justru membuat dompet cloud: PEOPLE menyimpan kunci Anda terenkripsi dan infrastrukturnya dapat mendekripsinya.",
+  "lead": "Dompet peramban: non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami. Masuk dengan email justru membuat dompet cloud: PEOPLE menyimpan kunci Anda terenkripsi dan infrastrukturnya dapat mendekripsinya.",
   "create": "Buat dompet baru",
   "import": "Impor dompet",
   "unlock": "Buka kunci",
@@ -46,8 +46,8 @@
   "registrationPending": "Menghubungkan ke jaringan — akan coba lagi otomatis.",
   "networkChecking": "Menghubungkan…",
   "networkUnavailable": "Jaringan sementara tidak tersedia",
-  "signInHeading": "Masuk dengan Google atau email",
-  "signInGoogle": "Lanjutkan dengan Google",
+  "signInHeading": "Masuk dengan email",
+  "signInGoogle": "Lanjutkan dengan email",
   "signInMagicCta": "Send login link",
   "signInEmailLabel": "Email",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "Kunci Anda disimpan terenkripsi di server PEOPLE agar dapat dipulihkan dengan masuk. Infrastruktur PEOPLE mampu mendekripsinya. Untuk kendali penuh atas kunci Anda sendiri, gunakan dompet peramban atau dompet eksternal. Ekspor kunci privat hanya jika Anda memerlukan cadangan di luar PEOPLE.",
   "cloudDisconnect": "Putuskan",
   "importAddress": "Alamat yang dikendalikan kunci ini",
-  "importInvalidKey": "Masukkan frasa 12 kata atau kunci privat heksadesimal 64 karakter."
+  "importInvalidKey": "Masukkan frasa 12 kata atau kunci privat heksadesimal 64 karakter.",
+  "leadSocial": "Dompet peramban: non-kustodial. Kunci dibuat di peramban ini, dienkripsi dengan kata sandi Anda, dan tidak pernah dikirim ke server kami. Masuk dengan Google atau email justru membuat dompet cloud: PEOPLE menyimpan kunci Anda terenkripsi dan infrastrukturnya dapat mendekripsinya.",
+  "signInHeadingSocial": "Masuk dengan Google atau email",
+  "signInGoogleSocial": "Lanjutkan dengan Google"
 }

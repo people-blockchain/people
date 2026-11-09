@@ -41,7 +41,8 @@
         "sub": "从第一次交换起公平定价"
       }
     ],
-    "ctaWalletAuth": "创建钱包 / 使用 Google 登录"
+    "ctaWalletAuth": "创建钱包",
+    "ctaWalletAuthSocial": "创建钱包 / 使用 Google 登录"
   },
   "blocks": [
     {

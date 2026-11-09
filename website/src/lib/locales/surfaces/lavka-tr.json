@@ -5,7 +5,7 @@
   "contractsOff": "Sadakat sözleşmeleri bu testnette henüz yok. Merge sonrası Lavka workflow çalıştırın.",
   "signInCta": "Giriş yap",
   "walletCta": "Cüzdan bağla",
-  "pohRequired": "Google veya e-posta ile giriş yapın ve dükkanı yönetmek veya ziyaret kullanmak için cüzdan bağlayın.",
+  "pohRequired": "e-posta ile giriş yapın ve dükkanı yönetmek veya ziyaret kullanmak için cüzdan bağlayın.",
   "merchantTitle": "Dükkanınız",
   "merchantLead": "Ad ve ülke belirleyin, sonra satın alınabilir bir pass yayınlayın.",
   "displayNameLabel": "Dükkan adı",
@@ -58,5 +58,6 @@
   "successPay": "Ödeme gönderildi.",
   "successEscrow": "Ön ödeme kilitlendi.",
   "connectWallet": "Cüzdan bağla",
-  "preliminaryBanner": "Ön çalışma — pilot parametreleri mainnet öncesi değişebilir."
+  "preliminaryBanner": "Ön çalışma — pilot parametreleri mainnet öncesi değişebilir.",
+  "pohRequiredSocial": "Google veya e-posta ile giriş yapın ve dükkanı yönetmek veya ziyaret kullanmak için cüzdan bağlayın."
 }

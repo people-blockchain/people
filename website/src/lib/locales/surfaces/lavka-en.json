@@ -5,7 +5,7 @@
   "contractsOff": "Loyalty contracts are not deployed on this testnet yet. Ask the operator to run the Lavka deploy workflow after merging.",
   "signInCta": "Sign in",
   "walletCta": "Link wallet",
-  "pohRequired": "Sign in with Google or email and link your wallet to run the shop or redeem visits.",
+  "pohRequired": "Sign in with email and link your wallet to run the shop or redeem visits.",
   "merchantTitle": "Your shop",
   "merchantLead": "Set your venue name and country, then publish a pass customers can buy or redeem.",
   "displayNameLabel": "Venue name",
@@ -58,5 +58,6 @@
   "successPay": "Payment sent.",
   "successEscrow": "Prepayment locked.",
   "connectWallet": "Connect wallet",
-  "preliminaryBanner": "Preliminary — pilot parameters may change before mainnet."
+  "preliminaryBanner": "Preliminary — pilot parameters may change before mainnet.",
+  "pohRequiredSocial": "Sign in with Google or email and link your wallet to run the shop or redeem visits."
 }

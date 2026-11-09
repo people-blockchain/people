@@ -581,7 +581,7 @@ type FlowCopy = {
 const GUIDE: Record<string, { steps: string[]; firstPrimary: string }> = {
   en: {
     firstPrimary:
-      "Your PEOPLE wallet {{wallet}} was created by the site (Google or email sign-in) and cannot be opened on the Passport site. So first link MetaMask: open \u201cUse a different wallet instead\u201d below, connect MetaMask and sign. Then press \u201cOpen Human Passport\u201d and connect the same MetaMask there. Safari has no MetaMask: use Chrome or Brave, or the browser inside the MetaMask app.",
+      "Your PEOPLE wallet {{wallet}} was created by the site (email sign-in) and cannot be opened on the Passport site. So first link MetaMask: open \u201cUse a different wallet instead\u201d below, connect MetaMask and sign. Then press \u201cOpen Human Passport\u201d and connect the same MetaMask there. Safari has no MetaMask: use Chrome or Brave, or the browser inside the MetaMask app.",
     steps: [
       "Press \u201cOpen Human Passport\u201d and connect the wallet {{wallet}}. It must be the same wallet, otherwise the score will not count. Safari has no MetaMask extension: use Chrome or Brave with MetaMask, or the browser inside the MetaMask app.",
       "A new Passport starts at 0. You need at least {{need}} points.",
@@ -591,7 +591,7 @@ const GUIDE: Record<string, { steps: string[]; firstPrimary: string }> = {
   },
   ru: {
     firstPrimary:
-      "Ваш кошелёк PEOPLE {{wallet}} создан сайтом при входе через Google или почту, и на сайте Passport его открыть нельзя. Поэтому сначала привяжите MetaMask: откройте ниже пункт \u00abИспользовать другой кошелёк\u00bb, подключите MetaMask и подпишите. Потом нажмите \u00abОткрыть Human Passport\u00bb и подключите там тот же MetaMask. В Safari нет MetaMask: используйте Chrome или Brave, или браузер внутри приложения MetaMask.",
+      "Ваш кошелёк PEOPLE {{wallet}} создан сайтом при входе через email, и на сайте Passport его открыть нельзя. Поэтому сначала привяжите MetaMask: откройте ниже пункт \u00abИспользовать другой кошелёк\u00bb, подключите MetaMask и подпишите. Потом нажмите \u00abОткрыть Human Passport\u00bb и подключите там тот же MetaMask. В Safari нет MetaMask: используйте Chrome или Brave, или браузер внутри приложения MetaMask.",
     steps: [
       "Нажмите \u00abОткрыть Human Passport\u00bb и подключите кошелёк {{wallet}}. Нужен именно этот кошелёк, иначе баллы не засчитаются. В Safari нет расширения MetaMask: откройте сайт в Chrome или Brave с MetaMask, или в браузере внутри приложения MetaMask.",
       "У нового паспорта 0 баллов. Нужно набрать не меньше {{need}}.",

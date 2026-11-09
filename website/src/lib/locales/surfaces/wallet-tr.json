@@ -1,6 +1,6 @@
 {
   "title": "Cüzdan",
-  "lead": "Tarayıcı cüzdanı: emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez. Google veya e-posta ile giriş ise bunun yerine bir bulut cüzdanı oluşturur: PEOPLE anahtarınızı şifreli saklar ve altyapısı onu çözebilir.",
+  "lead": "Tarayıcı cüzdanı: emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez. e-posta ile giriş ise bunun yerine bir bulut cüzdanı oluşturur: PEOPLE anahtarınızı şifreli saklar ve altyapısı onu çözebilir.",
   "create": "Yeni cüzdan oluştur",
   "import": "Cüzdan içe aktar",
   "unlock": "Kilidi aç",
@@ -46,8 +46,8 @@
   "registrationPending": "Ağa bağlanılıyor — otomatik yeniden denenecek.",
   "networkChecking": "Bağlanıyor…",
   "networkUnavailable": "Ağ geçici olarak kullanılamıyor",
-  "signInHeading": "Google veya e-posta ile giriş yapın",
-  "signInGoogle": "Google ile devam et",
+  "signInHeading": "e-posta ile giriş yapın",
+  "signInGoogle": "E-posta ile devam et",
   "signInMagicCta": "Send login link",
   "signInEmailLabel": "E-posta",
   "signInEmailPlaceholder": "you@example.com",
@@ -58,5 +58,8 @@
   "cloudExportHint": "Anahtarınız, giriş yaparak geri yükleyebilmeniz için PEOPLE sunucularında şifrelenmiş olarak saklanır. PEOPLE altyapısı onu çözebilir. Tam öz-saklama için tarayıcı cüzdanı veya harici bir cüzdan kullanın. Özel anahtarı yalnızca PEOPLE dışında bir yedeğe ihtiyacınız varsa dışa aktarın.",
   "cloudDisconnect": "Bağlantıyı kes",
   "importAddress": "Bu anahtarın kontrol ettiği adres",
-  "importInvalidKey": "12 kelimelik bir ifade veya 64 karakterlik onaltılık özel anahtar girin."
+  "importInvalidKey": "12 kelimelik bir ifade veya 64 karakterlik onaltılık özel anahtar girin.",
+  "leadSocial": "Tarayıcı cüzdanı: emanetsiz. Anahtarlar bu tarayıcıda oluşturulur, parolanızla şifrelenir ve sunucularımıza hiç gönderilmez. Google veya e-posta ile giriş ise bunun yerine bir bulut cüzdanı oluşturur: PEOPLE anahtarınızı şifreli saklar ve altyapısı onu çözebilir.",
+  "signInHeadingSocial": "Google veya e-posta ile giriş yapın",
+  "signInGoogleSocial": "Google ile devam et"
 }

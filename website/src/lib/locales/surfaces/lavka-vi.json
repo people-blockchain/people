@@ -5,7 +5,7 @@
   "contractsOff": "Hợp đồng loyalty chưa triển khai trên testnet này. Chạy workflow Lavka sau merge.",
   "signInCta": "Đăng nhập",
   "walletCta": "Liên kết ví",
-  "pohRequired": "Đăng nhập Google hoặc email và liên kết ví để vận hành cửa hàng hoặc dùng lượt ghé.",
+  "pohRequired": "Đăng nhập email hoặc email và liên kết ví để vận hành cửa hàng hoặc dùng lượt ghé.",
   "merchantTitle": "Cửa hàng của bạn",
   "merchantLead": "Đặt tên và quốc gia, sau đó phát hành pass mua và dùng lượt.",
   "displayNameLabel": "Tên cửa hàng",
@@ -58,5 +58,6 @@
   "successPay": "Đã gửi thanh toán.",
   "successEscrow": "Đã khóa trả trước.",
   "connectWallet": "Kết nối ví",
-  "preliminaryBanner": "Sơ bộ — tham số pilot có thể đổi trước mainnet."
+  "preliminaryBanner": "Sơ bộ — tham số pilot có thể đổi trước mainnet.",
+  "pohRequiredSocial": "Đăng nhập Google hoặc email và liên kết ví để vận hành cửa hàng hoặc dùng lượt ghé."
 }

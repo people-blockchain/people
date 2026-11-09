@@ -20,7 +20,18 @@
   "cardCountry": "Страна",
   "cardRank": "Ранг раннего входа",
   "cardPoints": "Очки",
-  "hello": ["Hello", "Привет", "Hola", "Olá", "Merhaba", "Xin chào", "你好", "مرحبا", "Bonjour", "Halo"],
+  "hello": [
+    "Hello",
+    "Привет",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
   "poolEyebrow": "Реферальный пул сезона 1",
   "poolNoNewCoins": "Выплаты из пула «Миллиона основателей». Новых монет нет.",
   "poolSpent": "Потрачено",
@@ -36,7 +47,8 @@
     },
     {
       "title": "Создай кошелёк",
-      "body": "Войди через Google или email и подключи кошелёк PEOPLE в пару касаний."
+      "body": "Войди через email и подключи кошелёк PEOPLE в пару касаний.",
+      "bodySocial": "Войди через Google или email и подключи кошелёк PEOPLE в пару касаний."
     },
     {
       "title": "Одно действие в тестнете",
@@ -75,7 +87,11 @@
   "gpplNote": "Тестнет: у gPPL нет цены, это не доход. Сумма на одного основателя объявляется для каждой партии.",
   "activeEyebrow": "Кто считается активным",
   "activeTitle": "Все три пункта — иначе не считается",
-  "activeChecklist": ["Верификация (телефон в Telegram или Human Passport)", "Создан кошелёк", "Хотя бы 1 реальное действие в тестнете"],
+  "activeChecklist": [
+    "Верификация (телефон в Telegram или Human Passport)",
+    "Создан кошелёк",
+    "Хотя бы 1 реальное действие в тестнете"
+  ],
   "activeActionsHint": "Реальные действия: своп, стейкинг, пул ликвидности, выпуск NFT, запуск токена, голосование. Лайки и подписки не считаются.",
   "signupZero": "Одна регистрация = 0",
   "bonusTitle": "Бонусные очки за активных друзей",
@@ -174,7 +190,7 @@
   "shareX": "X",
   "claimEyebrow": "Регистрация",
   "claimTitle": "Получи номер основателя",
-  "claimSignInLead": "Войди через Google или email, подключи кошелёк, выбери страну — и следующий номер твой.",
+  "claimSignInLead": "Войди через email, подключи кошелёк, выбери страну — и следующий номер твой.",
   "personalEyebrow": "Твоё пространство основателя",
   "personalTitle": "Привет, ты основатель №{{n}}",
   "downloadCard": "Скачать карточку (PNG)",
@@ -197,5 +213,6 @@
   "verifyHumanPassportOk": "Human Passport подтверждён.",
   "verifyHumanPassportLow": "Твой балл Human Passport ниже требуемого порога.",
   "verifyHumanPassportError": "Не удалось пройти Human Passport. Попробуй позже.",
-  "verifyHumanPassportOff": "Human Passport на этом окружении ещё не настроен."
+  "verifyHumanPassportOff": "Human Passport на этом окружении ещё не настроен.",
+  "claimSignInLeadSocial": "Войди через Google или email, подключи кошелёк, выбери страну — и следующий номер твой."
 }

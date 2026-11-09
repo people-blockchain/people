@@ -41,7 +41,8 @@
         "sub": "Честная цена с первой сделки"
       }
     ],
-    "ctaWalletAuth": "Создать кошелёк / Войти через Google"
+    "ctaWalletAuth": "Создать кошелёк",
+    "ctaWalletAuthSocial": "Создать кошелёк / Войти через Google"
   },
   "blocks": [
     {

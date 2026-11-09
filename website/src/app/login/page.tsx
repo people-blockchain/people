@@ -7,7 +7,8 @@ import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Sign in | PEOPLE",
-  description: "Sign in with Google or email for your PEOPLE Wallet and partner cabinet.",
+  // Social (preserved): "Sign in with Google or email for your PEOPLE Wallet and partner cabinet."
+  description: "Sign in with email for your PEOPLE Wallet and partner cabinet.",
   robots: { index: false, follow: false },
   openGraph: {
     title: "Sign in | PEOPLE",

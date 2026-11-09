@@ -148,7 +148,8 @@ const rawHub = {
         {
           num: "02",
           title: "Create a non-custodial wallet",
-          body: "Generate a 12-word phrase in the browser and encrypt it with a password, or sign in with Google for a synced wallet. With the 12-word wallet, keys never leave this device.",
+          // Social (preserved): "...or sign in with Google for a synced wallet..."
+          body: "Generate a 12-word phrase in the browser and encrypt it with a password, or sign in with email for a synced wallet. With the 12-word wallet, keys never leave this device.",
           href: "/wallet",
           cta: "Open wallet",
         },
@@ -600,7 +601,8 @@ const rawHub = {
         {
           num: "02",
           title: "Создайте некастодиальный кошелёк",
-          body: "Сгенерируйте фразу из 12 слов в браузере и зашифруйте её паролем, либо войдите через Google для синхронизированного кошелька. У кошелька с фразой ключи не покидают устройство.",
+          // Social (preserved): "...либо войдите через Google..."
+          body: "Сгенерируйте фразу из 12 слов в браузере и зашифруйте её паролем, либо войдите через email для синхронизированного кошелька. У кошелька с фразой ключи не покидают устройство.",
           href: "/wallet",
           cta: "Открыть кошелёк",
         },

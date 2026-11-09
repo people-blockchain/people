@@ -41,7 +41,8 @@
         "sub": "Giá công bằng từ lần swap đầu"
       }
     ],
-    "ctaWalletAuth": "Tạo ví / Đăng nhập bằng Google"
+    "ctaWalletAuth": "Tạo ví",
+    "ctaWalletAuthSocial": "Tạo ví / Đăng nhập bằng Google"
   },
   "blocks": [
     {

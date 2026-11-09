@@ -5,7 +5,7 @@
   "contractsOff": "Treueverträge auf diesem Testnet noch nicht deployed. Lavka-Workflow nach Merge ausführen.",
   "signInCta": "Anmelden",
   "walletCta": "Wallet verknüpfen",
-  "pohRequired": "Melden Sie sich mit Google oder E-Mail an und verknüpfen Sie Ihr Wallet für Shop oder Besuchsabbuchung.",
+  "pohRequired": "Melden Sie sich mit E-Mail an und verknüpfen Sie Ihr Wallet für Shop oder Besuchsabbuchung.",
   "merchantTitle": "Ihr Geschäft",
   "merchantLead": "Name und Land festlegen, dann einen Pass zum Kaufen und Einlösen veröffentlichen.",
   "displayNameLabel": "Name des Geschäfts",
@@ -58,5 +58,6 @@
   "successPay": "Zahlung gesendet.",
   "successEscrow": "Vorauszahlung gesperrt.",
   "connectWallet": "Wallet verbinden",
-  "preliminaryBanner": "Vorläufig — Pilotparameter können vor Mainnet ändern."
+  "preliminaryBanner": "Vorläufig — Pilotparameter können vor Mainnet ändern.",
+  "pohRequiredSocial": "Melden Sie sich mit Google oder E-Mail an und verknüpfen Sie Ihr Wallet für Shop oder Besuchsabbuchung."
 }

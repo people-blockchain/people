@@ -13,8 +13,9 @@
     "items": [
       {
         "title": "Get a wallet in 30 seconds",
-        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker Google sign-in with an encrypted, cloud-synced key.",
-        "note": "No app store, no seed-phrase homework."
+        "body": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker email sign-in with an encrypted, cloud-synced key.",
+        "note": "No app store, no seed-phrase homework.",
+        "bodySocial": "Open the site on your phone or in a browser and create a wallet — a non-custodial 12-word phrase (keys stay on your device), or a quicker Google sign-in with an encrypted, cloud-synced key."
       },
       {
         "title": "Prove you are a human",
