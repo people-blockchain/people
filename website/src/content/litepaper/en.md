@@ -146,10 +146,10 @@ Every protocol fee, including fractional fees, is split the same way:
 | Stage | What happens | Gate |
 |---|---|---|
 | **Season 0 — Public testnet** | Wallets, verification, token launches, NFT cards, swaps, Million Founders points. | Now |
-| **Mainnet + PPL sale** | Mainnet launches. Published sale parameters (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation) are on `/buy`; purchases stay disabled until the sale hub contract is deployed. | At least 1,000 verified people **and** a live treasury multisig |
+| **Mainnet + PPL sale** | PEOPLE mainnet genesis: **30 November 2026, 12:00 UTC**. The PPL sale on Base opens **1 December 2026, 00:00 UTC** (exponential curve from **$0.005** per PPL, up to **100M PPL** on the curve, **$4M** graduation; parameters on `/buy`). PPL are credited on PEOPLE mainnet right after each purchase. | Fixed dates. About 1,000 verified participants open transfers between people — not genesis or the sale |
 | **Staking & validators** | Staking and validator participation open beyond the project. | After mainnet |
 
-No dates are promised. Each stage starts when its gate is met.
+Mainnet and the sale have fixed dates. Later stages start when their gate is met.
 
 ---
 

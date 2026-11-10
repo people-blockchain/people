@@ -1,8 +1,16 @@
 import type { Language } from "./preferences";
 
-const SUPPORTED: ReadonlySet<string> = new Set([
-  "en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar", "ru",
-]);
+/**
+ * Locales a visitor can be served on the public site. `ru` is deliberately absent: public PEOPLE
+ * materials are not offered in Russian (owner rule 2026-11-01), so a Russian browser, an
+ * `Accept-Language: ru` header or an old `people_lang=ru` cookie all fall back to English.
+ */
+export const PUBLIC_LANGUAGE_CODES = ["en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"] as const;
+
+const SUPPORTED: ReadonlySet<string> = new Set(PUBLIC_LANGUAGE_CODES);
+
+/** Retired public locales: old `/ru/buy` links land on the English page instead of a 404. */
+const RETIRED_BUY_LOCALES: Record<string, Language> = { ru: "en" };
 
 /** Legacy / alternate primary subtags that map onto a shipped locale. */
 const ALIASES: Record<string, Language> = { in: "id" };
@@ -57,8 +65,9 @@ export function languageFromRequest(
   return languageFromCookie(cookieValue) ?? languageFromAcceptLanguage(acceptLanguageHeader);
 }
 
-/** `/tr/buy` (or `/tr/buy/`) → "tr"; any other path, or an unknown locale prefix → null. */
+/** `/tr/buy` (or `/tr/buy/`) → "tr"; retired `/ru/buy` → "en"; any other path, or an unknown locale prefix → null. */
 export function localeFromBuyPath(pathname: string): Language | null {
   const match = /^\/([a-z]{2})\/buy\/?$/.exec(pathname);
-  return match ? languageFromCookie(match[1]) : null;
+  if (!match) return null;
+  return languageFromCookie(match[1]) ?? RETIRED_BUY_LOCALES[match[1]] ?? null;
 }

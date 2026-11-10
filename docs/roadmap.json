@@ -32,7 +32,7 @@
     {
       "id": "tokenomics-1b-ppl",
       "status": "proposed_pending_vote",
-      "evidence": "Fixed 1B PPL public copy on `/tokenomics` and `/how-it-works`: years 1–4 at 0% inflation; 200M validator pool on 6/5/5/4% of supply per year plus 30% of fees; launch rewards from 35% community pool; year 5+ max 2%/year by vote; founders airdrop before sale at 1,000 verified people + multisig; Model A fee split 30/25/20/10/15/0 (preliminary, governance-gated)."
+      "evidence": "Fixed 1B PPL public copy on `/tokenomics` and `/how-it-works`: years 1–4 at 0% inflation; 200M validator pool on 6/5/5/4% of supply per year plus 30% of fees; launch rewards from 35% community pool; year 5+ max 2%/year by vote; mainnet genesis 30 Nov 2026 12:00 UTC and PPL sale from 1 Dec 2026 00:00 UTC; ~1,000 verified participants open transfers between people; Model A fee split 30/25/20/10/15/0 (preliminary, governance-gated)."
     },
     {
       "id": "discover-feed",

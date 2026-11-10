@@ -15,6 +15,10 @@
  *
  * The UI scales to dozens of locales without layout changes: the desktop
  * switcher is a dropdown, the mobile sheet renders a scrollable list.
+ *
+ * Public PEOPLE materials are not offered in Russian (owner rule 2026-11-01): `ru` stays out of
+ * this catalogue, out of browser/Accept-Language detection and out of the accepted cookie values
+ * (see `PUBLIC_LANGUAGE_CODES` in `lib/locale-detect.ts`).
  */
 
 export interface LanguageOption {
@@ -38,7 +42,6 @@ export const CATALOGUE: readonly LanguageOption[] = [
   { code: "tr", short: "TR", endonym: "Türkçe", english: "Turkish" },
   { code: "vi", short: "VI", endonym: "Tiếng Việt", english: "Vietnamese" },
   { code: "id", short: "ID", endonym: "Bahasa Indonesia", english: "Indonesian" },
-  { code: "ru", short: "RU", endonym: "Русский", english: "Russian" },
   { code: "zh", short: "ZH", endonym: "简体中文", english: "Chinese" },
   { code: "ar", short: "AR", endonym: "العربية", english: "Arabic" },
 ] as const;

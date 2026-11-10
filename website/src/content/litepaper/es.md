@@ -144,10 +144,10 @@ Cada comisión de protocolo, incluidas las comisiones fraccionarias, se divide d
 | Etapa | Qué sucede | Condición |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteras, verificación, lanzamientos de tokens, tarjetas NFT, intercambios, puntos de Un Millón de Fundadores. | Ahora |
-| **Mainnet + venta de PPL** | Se lanza mainnet. Los parámetros publicados (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva, graduación en **$4M**) están en `/buy`; las compras siguen desactivadas hasta desplegar el hub de venta. | Al menos 1.000 personas verificadas **y** una multifirma de tesorería activa |
+| **Mainnet + venta de PPL** | Génesis de PEOPLE mainnet: **30 de noviembre de 2026, 12:00 UTC**. La venta de PPL en Base abre el **1 de diciembre de 2026, 00:00 UTC** (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva, graduación en **$4M**; parámetros en `/buy`). Los PPL se acreditan en PEOPLE mainnet justo después de cada compra. | Fechas fijas. Unas 1.000 personas verificadas abren las transferencias entre personas — no la génesis ni la venta |
 | **Apuestas y validadores** | Las apuestas y la participación de validadores se abren más allá del proyecto. | Después de mainnet |
 
-No se prometen fechas. Cada etapa comienza cuando se cumple su condición.
+Mainnet y la venta tienen fechas fijas. Las etapas posteriores comienzan cuando se cumple su condición.
 
 ---
 

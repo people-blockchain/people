@@ -144,10 +144,10 @@ Cada taxa de protocolo, incluindo taxas fracionárias, é dividida da mesma form
 | Estágio | O que acontece | Gate |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteiras, verificação, lançamentos de tokens, cartões NFT, swaps, pontos do Million Founders. | Agora |
-| **Mainnet + venda de PPL** | O mainnet é lançado. Os parâmetros publicados (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**) estão em `/buy`; compras permanecem desativadas até o hub de venda ser implantado. | Pelo menos 1.000 pessoas verificadas **e** multisig do tesouro ativo |
+| **Mainnet + venda de PPL** | Gênese da PEOPLE mainnet: **30 de novembro de 2026, 12:00 UTC**. A venda de PPL na Base abre em **1º de dezembro de 2026, 00:00 UTC** (curva exponencial a partir de **$0.005** por PPL, até **100M PPL** na curva, graduação em **$4M**; parâmetros em `/buy`). Os PPL são creditados na PEOPLE mainnet logo após cada compra. | Datas fixas. Cerca de 1.000 participantes verificados abrem transferências entre pessoas — não a gênese nem a venda |
 | **Staking e validadores** | Staking e participação de validador abrem além do projeto. | Após mainnet |
 
-Nenhuma data é prometida. Cada estágio começa quando seu gate é atendido.
+O mainnet e a venda têm datas fixas. Os estágios seguintes começam quando seu gate é atendido.
 
 ---
 

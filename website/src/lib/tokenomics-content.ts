@@ -133,7 +133,7 @@ const en: TokenomicsCopy = {
     "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
     "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
     "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
-    "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve in any rolling 24 hours for everyone and $2,000 per person in a rolling 24-hour window. Fee: 1.5%, or 3% on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Closes after graduation. Payouts in USDC on Base. PPL sold back is burned on PEOPLE mainnet.",
+    "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve in any rolling 24 hours for everyone and $2,000 per person in a rolling 24-hour window. Fee: 1.5%, or 3% on the part of sell-backs in that rolling 24 hours above 1% of the reserve. PPL sold back goes back to the sale wallet on PEOPLE mainnet; nothing is burned. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base.",
     "$10–$500 per purchase; Up to $2,000 per person in a rolling 24-hour window; 60 s pause between purchases",
   ],
   curveTableSold: "% sold",
