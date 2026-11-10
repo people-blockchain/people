@@ -117,9 +117,34 @@ throwaway binary that knows the rehearsal multisig and asserts the chain runs wi
 
 ## After genesis (sale)
 
-1. Deploy `DeployPplSaleDelivery` (PR #88) on 97400; owner = the 2-of-3.
-2. The treasury multisig sets the reporter and cap and funds `PplSaleDistributor` from the sale
-   bucket, in tranches.
-3. Site: wallet network config for 97400 and `PEOPLE_MAINNET_RPC_URL`, so sell-back (from Dec 31)
+Everything below happens between genesis (**2026-11-30 12:00 UTC**) and the sale opening
+(**2026-12-01 00:00 UTC**), so buyers get PPL on 97400 from the first purchase. `PplCurveHubV2` must
+already be deployed on Base (closed) so its address can be passed as `BASE_HUB`.
+
+1. **EVM owner on 97400.** The native 2-of-3 treasury multisig is a Cosmos multisig and cannot sign
+   EVM transactions, and `DeployPplSaleDelivery` requires `OWNER` to be a contract. Deploy
+   `contracts/src/governance/PeopleMultisig.sol` on 97400 with the same three owner EOAs:
+   `[0x510B2e28e936d36eF1EDDA7C9ea592e359aB5D48, 0x685Ef7cE99a7C8bBC7BdE0B12594376163DDd4B2,
+   0xCFFF2577D01b2494E0699Ac5E0D1EFA6485fF8D0]` (owner, co-founder, owner's cold key; the threshold
+   starts at 2). Any owner submits, a second confirms, then an owner executes. Verify `owners()`,
+   `threshold() == 2` and the bytecode before using it.
+2. **Gas for the owners.** Mainnet genesis has no extra accounts, so send each owner EOA a small amount
+   of PPL for gas: a `bank send` from the native treasury multisig, signed by 2 of 3
+   (`peopled tx bank send … --generate-only`, `peopled tx sign --multisig …` by two signers,
+   `peopled tx multisign`, `peopled tx broadcast`). The same flow funds the deployer and relayer keys.
+3. **Delivery contracts.** Run `contracts/script/DeployPplSaleDelivery.s.sol` on 97400 with
+   `OWNER` = the PeopleMultisig from step 1, `RELAYER` = the relayer key's address,
+   `BASE_HUB` = the Base `PplCurveHubV2`, `BASE_CHAIN_ID=8453`, `COMMUNITY_POOL`, and
+   `REPORTER_CREDIT_LIMIT` (PPL wei per window, required, > 0) / `REPORTER_CREDIT_PERIOD`
+   (seconds, default 86400). The predicted distributor is set as `PplReturnBurn`'s initial
+   `purchaseReporter` with that cap **in the constructor**, so `deliver` works right away; there is
+   no 48 h wait. Set the limit at or above the most PPL the hub can sell in one period, otherwise
+   delivery stalls (`ReporterCreditCapExceeded`) until the window rolls over. Later changes to the
+   reporter or the cap still go through the 48 h `queue…` / `execute…` timelock.
+4. **Fund the distributor.** Send the sale PPL from the native treasury multisig (sale bucket) to the
+   distributor address, in tranches (2-of-3 `multisign` as in step 2).
+5. **Relayer.** Start `contracts/scripts/sale-delivery-relayer.mjs` with `RELAYER`'s key, Telegram
+   alerts on, and confirm `preflight ok`.
+6. Site: wallet network config for 97400 and `PEOPLE_MAINNET_RPC_URL`, so sell-back (from Dec 31)
    can switch wallets to mainnet.
-4. Deploy the second return cosigner (`docs/v2/RETURN-COSIGNER.md`) pointed at the mainnet RPC.
+7. Deploy the second return cosigner (`docs/v2/RETURN-COSIGNER.md`) pointed at the mainnet RPC.

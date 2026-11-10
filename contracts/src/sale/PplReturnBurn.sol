@@ -15,9 +15,11 @@ pragma solidity ^0.8.24;
 /// working; "burn" here means the PPL leave the seller for good, which is what stops a double sale.
 ///
 /// PPL cannot stay here: there is no `receive`/`fallback`, `delegatecall` or `selfdestruct`, and
-/// the only value transfer is the forward to `returnRecipient`. Owner paths that could freeze
-/// sell-back (`purchaseReporter`, reporter credit cap) use the same 48-hour timelock as
-/// `PplCurveHubV2` admin ops (with grace period and cancel).
+/// the only value transfer is the forward to `returnRecipient`. The initial `purchaseReporter` and
+/// reporter credit cap are set in the constructor (so delivery works the moment the sale opens);
+/// every LATER change to `purchaseReporter` or the reporter credit cap uses the same 48-hour
+/// timelock as `PplCurveHubV2` admin ops (with grace period and cancel), and there is no immediate
+/// setter.
 ///
 /// `returnId` commits to the returned amount, the destination hub, the Base seller, the PEOPLE
 /// source chain id and the destination chain id (plus this contract and a nonce, so two equal
@@ -67,9 +69,29 @@ contract PplReturnBurn is Ownable {
     mapping(bytes32 => bytes32) private _pendingByKind;
     uint256 private _adminNonce;
 
-    constructor(address owner_, address returnRecipient_) Ownable(owner_) {
+    /// @param owner_ Initial owner (the PEOPLE-mainnet Safe).
+    /// @param returnRecipient_ Sale distribution wallet that receives every returned PPL. Cannot change.
+    /// @param purchaseReporter_ Initial delivery relayer; must be non-zero so deliveries work at deploy.
+    /// @param reporterCreditLimit_ Initial per-window cap (wei) on reporter-granted credit; non-zero.
+    /// @param reporterCreditPeriod_ Initial window length (seconds); non-zero.
+    constructor(
+        address owner_,
+        address returnRecipient_,
+        address purchaseReporter_,
+        uint256 reporterCreditLimit_,
+        uint256 reporterCreditPeriod_
+    ) Ownable(owner_) {
         if (returnRecipient_ == address(0) || returnRecipient_ == address(this)) revert ZeroAddress();
+        if (purchaseReporter_ == address(0)) revert ZeroAddress();
+        if (reporterCreditLimit_ == 0 || reporterCreditPeriod_ == 0) revert ZeroAmount();
         returnRecipient = returnRecipient_;
+        purchaseReporter = purchaseReporter_;
+        reporterCreditLimit = reporterCreditLimit_;
+        reporterCreditPeriod = reporterCreditPeriod_;
+        reporterCreditUsed = 0;
+        reporterCreditWindowStart = block.timestamp;
+        emit PurchaseReporterSet(address(0), purchaseReporter_);
+        emit ReporterCreditCapSet(reporterCreditLimit_, reporterCreditPeriod_);
     }
 
     /// @param returnId Unique id the verifier puts into `MainnetReturn.returnId`.
