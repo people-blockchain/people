@@ -24,12 +24,14 @@
 //   LOW_BALANCE_PPL=100000 alert when the distributor has less PPL available than this
 //   TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID, or ALERT_WEBHOOK_URL (JSON {text}) for alerts
 //   ONCE=1                 run one pass and exit (for tests)
-//   ALLOW_TEST_CHAIN=1     allow chain 97401 (local rehearsal on anvil only)
+//   ALLOW_TEST_CHAIN=1     allow chain 97401 (rehearsal only). With PEOPLE RPC = 97401 and a Base
+//                          chain other than 8453 it also skips the hub PEOPLE_CHAIN_ID check (the hub
+//                          constant is 97400), with a loud warning, so a Base Sepolia hub can be paired
+//                          with a testnet distributor. Never set for the real sale.
 
 import { createPublicClient, createWalletClient, defineChain, http, parseAbi, parseAbiItem, encodeAbiParameters, keccak256, formatEther, parseEther, getAddress } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-
-const PEOPLE_TESTNET_CHAIN_ID = 97401;
+import { PEOPLE_TESTNET_CHAIN_ID, checkHubPeopleChain } from "./sale-delivery-relayer-checks.mjs";
 
 function env(name, fallback) {
   const v = process.env[name];
@@ -116,7 +118,12 @@ async function preflight() {
   if (peopleChain !== cfg.peopleChainId) throw new Error(`PEOPLE RPC is chain ${peopleChain}, expected PEOPLE_MAINNET_CHAIN_ID ${cfg.peopleChainId}`);
   if (peopleChain === PEOPLE_TESTNET_CHAIN_ID && !cfg.allowTestChain) throw new Error("refusing to deliver on the PEOPLE testnet (97401)");
   const hubPeople = await base.readContract({ address: cfg.hub, abi: hubAbi, functionName: "PEOPLE_CHAIN_ID" });
-  if (Number(hubPeople) !== peopleChain) throw new Error(`hub PEOPLE_CHAIN_ID is ${hubPeople}, PEOPLE RPC is ${peopleChain}`);
+  const hubCheck = checkHubPeopleChain({ hubPeopleChainId: hubPeople, peopleChain, baseChain, allowTestChain: cfg.allowTestChain });
+  if (hubCheck.skipped) {
+    // Loud on purpose: printed on every start and sent as an alert.
+    console.warn("\n" + "!".repeat(100) + "\n" + hubCheck.warning + "\n" + "!".repeat(100) + "\n");
+    await alert(hubCheck.warning);
+  }
   const [relayer, baseHub, baseChainId] = await Promise.all([
     people.readContract({ address: cfg.distributor, abi: distAbi, functionName: "relayer" }),
     people.readContract({ address: cfg.distributor, abi: distAbi, functionName: "baseHub" }),
