@@ -44,17 +44,9 @@ contract PplSaleDistributorTest is Test {
         // PplReturnBurn needs its returnRecipient at deploy; the distributor needs PplReturnBurn.
         // Predict the distributor address so returns flow back into it.
         address predicted = vm.computeCreateAddress(address(this), vm.getNonce(address(this)) + 1);
-        burn = new PplReturnBurn(owner, predicted);
+        burn = new PplReturnBurn(owner, predicted, predicted, 1_000_000 ether, 1 days);
         dist = new PplSaleDistributor(owner, relayer, IPplReturnBurnCredit(address(burn)), BASE, HUB, pool);
         assertEq(address(dist), predicted);
-
-        vm.startPrank(owner);
-        bytes32 a = burn.queueSetPurchaseReporter(address(dist));
-        bytes32 b = burn.queueSetReporterCreditCap(1_000_000 ether, 1 days);
-        vm.warp(block.timestamp + 48 hours);
-        burn.executeSetPurchaseReporter(a);
-        burn.executeSetReporterCreditCap(b);
-        vm.stopPrank();
 
         vm.deal(address(this), 10_000_000 ether);
         (bool ok,) = address(dist).call{value: 5_000_000 ether}("");

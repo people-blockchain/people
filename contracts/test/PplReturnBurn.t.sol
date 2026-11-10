@@ -28,19 +28,8 @@ contract PplReturnBurnTest is Test {
 
     function setUp() public {
         owner = makeAddr("burnOwner");
-        burner = new PplReturnBurn(owner, saleWallet);
-        _installReporter(owner, type(uint256).max, 1 days);
+        burner = new PplReturnBurn(owner, saleWallet, owner, type(uint256).max, 1 days);
         vm.deal(alice, 100 ether);
-    }
-
-    function _installReporter(address reporter, uint256 creditCap, uint256 creditPeriod) internal {
-        vm.startPrank(owner);
-        bytes32 capId = burner.queueSetReporterCreditCap(creditCap, creditPeriod);
-        bytes32 repId = burner.queueSetPurchaseReporter(reporter);
-        vm.warp(block.timestamp + burner.ADMIN_TIMELOCK());
-        burner.executeSetReporterCreditCap(capId);
-        burner.executeSetPurchaseReporter(repId);
-        vm.stopPrank();
     }
 
     function _credit(address who, uint256 amount) internal {
@@ -74,8 +63,7 @@ contract PplReturnBurnTest is Test {
     }
 
     function test_reporterCreditCap_enforced() public {
-        PplReturnBurn fresh = new PplReturnBurn(owner, saleWallet);
-        _installReporterOn(fresh, owner, 5 ether, 1 days);
+        PplReturnBurn fresh = new PplReturnBurn(owner, saleWallet, owner, 5 ether, 1 days);
         vm.startPrank(owner);
         fresh.creditHubPurchase(alice, 3 ether);
         vm.expectRevert(PplReturnBurn.ReporterCreditCapExceeded.selector);
@@ -83,14 +71,14 @@ contract PplReturnBurnTest is Test {
         vm.stopPrank();
     }
 
-    function _installReporterOn(PplReturnBurn b, address reporter, uint256 creditCap, uint256 creditPeriod) internal {
+    function test_reporterCreditCap_resetsAfterPeriod() public {
+        PplReturnBurn fresh = new PplReturnBurn(owner, saleWallet, owner, 5 ether, 1 days);
         vm.startPrank(owner);
-        bytes32 capId = b.queueSetReporterCreditCap(creditCap, creditPeriod);
-        bytes32 repId = b.queueSetPurchaseReporter(reporter);
-        vm.warp(block.timestamp + b.ADMIN_TIMELOCK());
-        b.executeSetReporterCreditCap(capId);
-        b.executeSetPurchaseReporter(repId);
+        fresh.creditHubPurchase(alice, 3 ether);
+        vm.warp(block.timestamp + 1 days);
+        fresh.creditHubPurchase(alice, 3 ether);
         vm.stopPrank();
+        assertEq(fresh.reporterCreditUsed(), 3 ether, "window reset");
     }
 
     function test_burn_emitsAndCounts() public {
@@ -277,14 +265,13 @@ contract PplReturnBurnTest is Test {
 
     function test_constructorRejectsBadRecipient() public {
         vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
-        new PplReturnBurn(owner, address(0));
+        new PplReturnBurn(owner, address(0), owner, type(uint256).max, 1 days);
     }
 
     /// @notice A recipient that rejects PPL makes the whole return revert, so a return never
     /// counts unless the PPL actually reached the sale wallet.
     function test_returnRevertsIfRecipientRejects() public {
-        PplReturnBurn strict = new PplReturnBurn(owner, address(new ReturnRejecter()));
-        _installReporterOn(strict, owner, type(uint256).max, 1 days);
+        PplReturnBurn strict = new PplReturnBurn(owner, address(new ReturnRejecter()), owner, type(uint256).max, 1 days);
         vm.prank(owner);
         strict.creditHubPurchase(alice, 1 ether);
         vm.prank(alice);
@@ -297,9 +284,8 @@ contract PplReturnBurnTest is Test {
     /// @notice A recipient that re-enters can only spend the caller's own remaining credit.
     function test_reentrantRecipientCannotExceedCredit() public {
         ReturnReenterer r = new ReturnReenterer();
-        PplReturnBurn b2 = new PplReturnBurn(owner, address(r));
+        PplReturnBurn b2 = new PplReturnBurn(owner, address(r), owner, type(uint256).max, 1 days);
         r.setTarget(b2);
-        _installReporterOn(b2, owner, type(uint256).max, 1 days);
         vm.prank(owner);
         b2.creditHubPurchase(alice, 1 ether);
         vm.prank(alice);
