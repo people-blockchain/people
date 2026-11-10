@@ -145,4 +145,43 @@ contract PplReturnBurnReporterAtDeployTest is Test {
         vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
         new PplReturnBurn(owner, address(0), relayer, CAP, PERIOD);
     }
+    function test_constructorRejectsSelfAsReporter() public {
+        address predictedBurn = vm.computeCreateAddress(address(this), vm.getNonce(address(this)));
+        vm.expectRevert(PplReturnBurn.ZeroAddress.selector);
+        new PplReturnBurn(owner, makeAddr("wallet"), predictedBurn, CAP, PERIOD);
+    }
+
+    /// @notice Only the distributor credits purchases: the relayer key itself cannot.
+    function test_relayerCannotCreditDirectly() public {
+        vm.prank(relayer);
+        vm.expectRevert(PplReturnBurn.UnauthorizedReporter.selector);
+        burn.creditHubPurchase(buyer, 1 ether);
+        vm.prank(owner);
+        vm.expectRevert(PplReturnBurn.UnauthorizedReporter.selector);
+        burn.creditHubPurchase(buyer, 1 ether);
+    }
+
+    /// @notice A later (timelocked) cap change resets the window and the used credit.
+    function test_laterCapChangeResetsWindow() public {
+        vm.prank(relayer);
+        dist.deliver(_id(1), buyer, CAP / 2);
+        vm.prank(owner);
+        bytes32 id = burn.queueSetReporterCreditCap(CAP, PERIOD);
+        vm.warp(block.timestamp + burn.ADMIN_TIMELOCK());
+        vm.prank(owner);
+        burn.executeSetReporterCreditCap(id);
+        assertEq(burn.reporterCreditUsed(), 0);
+        assertEq(burn.reporterCreditWindowStart(), block.timestamp);
+    }
+
+    /// @notice Documents the tumbling window: up to 2x the limit can be credited across a boundary.
+    function test_windowBoundaryAllowsTwoLimits() public {
+        vm.warp(block.timestamp + PERIOD - 1);
+        vm.prank(relayer);
+        dist.deliver(_id(1), buyer, CAP);
+        vm.warp(block.timestamp + 1);
+        vm.prank(relayer);
+        dist.deliver(_id(2), buyer, CAP);
+        assertEq(burn.hubPurchasedPpl(buyer), 2 * CAP);
+    }
 }

@@ -1,7 +1,8 @@
 # PEOPLE mainnet launch runbook
 
-**Status (2026-11-02):** tooling ready and rehearsed; mainnet is **not live**. Target: genesis on
-**2026-12-01**, in sale mode (buyers receive PPL on mainnet). Testnet `people_97401-1` keeps running.
+**Status (2026-11-10):** tooling ready and rehearsed; mainnet is **not live**. Genesis:
+**2026-11-30 12:00 UTC** (owner decision 2026-11-09), 12 hours before the PPL sale opens on
+2026-12-01 00:00 UTC, in sale mode (buyers receive PPL on mainnet). Testnet `people_97401-1` keeps running.
 Launching, and every action with real keys or funds, needs the owner's explicit go-ahead.
 
 ## Network identity
@@ -76,7 +77,7 @@ block max gas 40M, 2 s commit timeout.
 4. **Are PPL transfers open from day 1?** Recommended yes: locks (team, treasury, quest rewards) are
    enforced by vesting accounts, and sell-back only accepts sale-purchased PPL.
 5. **Servers**: 3 to 4 validators on separate hosts (ideally 2+ providers), plus 1 to 2 RPC nodes.
-6. **Genesis time** (proposal: 2026-12-01 12:00 UTC).
+6. **Genesis time**: DONE, **2026-11-30T12:00:00Z** (owner decision 2026-11-09).
 
 ## Ceremony (scripts in `chain/scripts/mainnet/`)
 
@@ -133,18 +134,37 @@ already be deployed on Base (closed) so its address can be passed as `BASE_HUB`.
    (`peopled tx bank send … --generate-only`, `peopled tx sign --multisig …` by two signers,
    `peopled tx multisign`, `peopled tx broadcast`). The same flow funds the deployer and relayer keys.
 3. **Delivery contracts.** Run `contracts/script/DeployPplSaleDelivery.s.sol` on 97400 with
-   `OWNER` = the PeopleMultisig from step 1, `RELAYER` = the relayer key's address,
-   `BASE_HUB` = the Base `PplCurveHubV2`, `BASE_CHAIN_ID=8453`, `COMMUNITY_POOL`, and
-   `REPORTER_CREDIT_LIMIT` (PPL wei per window, required, > 0) / `REPORTER_CREDIT_PERIOD`
-   (seconds, default 86400). The predicted distributor is set as `PplReturnBurn`'s initial
-   `purchaseReporter` with that cap **in the constructor**, so `deliver` works right away; there is
-   no 48 h wait. Set the limit at or above the most PPL the hub can sell in one period, otherwise
-   delivery stalls (`ReporterCreditCapExceeded`) until the window rolls over. Later changes to the
-   reporter or the cap still go through the 48 h `queue…` / `execute…` timelock.
+   `--slow`, from a fresh deployer key with no pending transactions (the reporter is the predicted
+   address at deployer nonce + 1), and `OWNER` = the PeopleMultisig from step 1,
+   `RELAYER` = the relayer key's address, `BASE_HUB` = the Base `PplCurveHubV2`, `BASE_CHAIN_ID=8453`,
+   `COMMUNITY_POOL`, and `REPORTER_CREDIT_LIMIT` (PPL **wei** per window, 1,000..100,000,000 PPL) /
+   `REPORTER_CREDIT_PERIOD` (seconds, default 86400, 1 hour..7 days). The predicted distributor is
+   set as `PplReturnBurn`'s initial `purchaseReporter` with that cap **in the constructor**, so
+   `deliver` works right away; there is no 48 h wait. Later changes to the reporter or the cap still
+   go through the 48 h `queue…` / `execute…` timelock.
+   - **Cap sizing:** about 1.5–3× the expected peak daily sale volume in PPL, not the whole bucket.
+     The cap bounds what a stolen relayer key can credit; the distributor balance (funded in
+     tranches) bounds what it can pay out. The window is tumbling, so up to 2× the limit can pass
+     around a window boundary. Hitting the cap stalls delivery on purpose: the relayer stops in
+     order and alerts. If volume may exceed it, queue a higher cap right after deploy and execute it
+     only if needed (`cancel` otherwise).
+   - **Verify on chain before anything else** (the script's checks run in simulation only). With
+     `cast` against the live RPC: the runtime code at the distributor matches the build artifact;
+     `dist.returnBurn() == burn`; `burn.purchaseReporter() == burn.returnRecipient() == dist`;
+     `burn.reporterCreditLimit()` / `reporterCreditPeriod()`; `burn.owner() == dist.owner() ==`
+     the PeopleMultisig; `dist.relayer()`, `dist.baseHub()`, `dist.baseChainId() == 8453`,
+     `dist.communityPool()`. If any check fails, abandon both contracts and redeploy; never re-point
+     the reporter of an orphaned `PplReturnBurn`. Give only this verified `PplReturnBurn` address to
+     the return verifier and the cosigner.
 4. **Fund the distributor.** Send the sale PPL from the native treasury multisig (sale bucket) to the
-   distributor address, in tranches (2-of-3 `multisign` as in step 2).
+   distributor, in tranches (2-of-3 `multisign` as in step 2). Convert the distributor's 0x address
+   to bech32 and have two people check it; send a small test tranche first and confirm
+   `dist.available()` grew. **Never send PPL to `PplReturnBurn`**: a bank send does not run EVM code
+   and that contract has no way to send PPL out, so it would be stuck for good.
 5. **Relayer.** Start `contracts/scripts/sale-delivery-relayer.mjs` with `RELAYER`'s key, Telegram
    alerts on, and confirm `preflight ok`.
 6. Site: wallet network config for 97400 and `PEOPLE_MAINNET_RPC_URL`, so sell-back (from Dec 31)
    can switch wallets to mainnet.
 7. Deploy the second return cosigner (`docs/v2/RETURN-COSIGNER.md`) pointed at the mainnet RPC.
+8. **Last:** the hub owner calls `open()` on Base only after the relayer shows `preflight ok`,
+   `dist.available() > 0` and every on-chain check in step 3 has passed.

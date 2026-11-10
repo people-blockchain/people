@@ -14,8 +14,10 @@ pragma solidity ^0.8.24;
 /// The names `burnForReturn` / `ReturnBurned` are kept so the attestation signer and the site keep
 /// working; "burn" here means the PPL leave the seller for good, which is what stops a double sale.
 ///
-/// PPL cannot stay here: there is no `receive`/`fallback`, `delegatecall` or `selfdestruct`, and
-/// the only value transfer is the forward to `returnRecipient`. The initial `purchaseReporter` and
+/// PPL cannot stay here through EVM calls: there is no `receive`/`fallback`, `delegatecall` or
+/// `selfdestruct`, and the only value transfer is the forward to `returnRecipient`. (A native bank send
+/// on the PEOPLE chain does not run EVM code, so PPL sent that way would be stuck: never fund this
+/// contract.) The initial `purchaseReporter` and
 /// reporter credit cap are set in the constructor (so delivery works the moment the sale opens);
 /// every LATER change to `purchaseReporter` or the reporter credit cap uses the same 48-hour
 /// timelock as `PplCurveHubV2` admin ops (with grace period and cancel), and there is no immediate
@@ -82,7 +84,7 @@ contract PplReturnBurn is Ownable {
         uint256 reporterCreditPeriod_
     ) Ownable(owner_) {
         if (returnRecipient_ == address(0) || returnRecipient_ == address(this)) revert ZeroAddress();
-        if (purchaseReporter_ == address(0)) revert ZeroAddress();
+        if (purchaseReporter_ == address(0) || purchaseReporter_ == address(this)) revert ZeroAddress();
         if (reporterCreditLimit_ == 0 || reporterCreditPeriod_ == 0) revert ZeroAmount();
         returnRecipient = returnRecipient_;
         purchaseReporter = purchaseReporter_;
