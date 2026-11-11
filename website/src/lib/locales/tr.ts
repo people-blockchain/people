@@ -1287,7 +1287,7 @@ export const tr: LocaleContent = {
   "networkMode": {
     "label": "Ağ modu",
     "mainnet": "Ana ağ",
-    "mainnetTitle": "Ana ağ: PPL satışının yapıldığı Base ağı",
+    "mainnetTitle": "Ana ağ: PPL satışı Base üzerinde yapılır; PPL, PEOPLE mainnet üzerinde bulunur",
     "testnet": "Test ağı",
     "testnetTitle": "Test ağı: token ve NFT oluşturmak için PEOPLE test ağı"
   },

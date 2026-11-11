@@ -165,15 +165,11 @@ const en: TransparencyCopy = {
   launch: {
     eyebrow: "LAUNCH PLAN",
     title: "Million Founders, testnet, mainnet",
-    lead: "The order is fixed, and each step opens only after the previous one is done.",
+    lead: "The order is fixed. Mainnet and the sale have fixed dates; transfers between people open once about 1,000 participants are verified.",
     steps: [
       {
         title: "Public testnet with points",
         body: "The network is open to everyone today. Founders get their number, invite people and earn points for real actions on the testnet.",
-      },
-      {
-        title: "1,000 verified people",
-        body: "Mainnet work starts once 1,000 people have been verified on the network.",
       },
       {
         title: "Treasury multisig",
@@ -181,7 +177,11 @@ const en: TransparencyCopy = {
       },
       {
         title: "Mainnet and the PPL sale",
-        body: "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
+        body: "PEOPLE mainnet genesis is 30 November 2026, 12:00 UTC. The PPL sale on Base opens 1 December 2026, 00:00 UTC. PPL are credited on PEOPLE mainnet right after each purchase.",
+      },
+      {
+        title: "Transfers at about 1,000 verified people",
+        body: "Transfers between people and pool trading open once about 1,000 participants are verified. This gate does not delay genesis or the sale.",
       },
     ],
   },

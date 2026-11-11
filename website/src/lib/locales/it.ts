@@ -1287,7 +1287,7 @@ export const it: LocaleContent = {
   "networkMode": {
     "label": "Modalità di rete",
     "mainnet": "Rete principale",
-    "mainnetTitle": "Rete principale: la rete Base, dove si svolge la vendita di PPL",
+    "mainnetTitle": "Rete principale: la vendita di PPL si svolge su Base; i PPL vivono su PEOPLE mainnet",
     "testnet": "Rete di test",
     "testnetTitle": "Rete di test: la rete di test PEOPLE per creare token e NFT"
   },

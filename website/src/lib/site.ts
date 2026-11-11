@@ -52,16 +52,19 @@ const homeTitle = (network: string) => `PEOPLE — ${network}`;
 /** Document title used by the root layout (default / crawler locale is EN). */
 export const SITE_TITLE = homeTitle(NETWORK_NAME_EN);
 
-/** Meta description used by the root layout. */
+/**
+ * Meta description used by the root layout. Headline/snippet copy states only the guaranteed 10%
+ * (decision B, 2026-11-05); "up to 27%" belongs in the explanatory body, never in titles/meta/og.
+ */
 export const SITE_DESCRIPTION =
-  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of every new token goes to its community pool at launch, guaranteed (up to 27% in total). Public testnet, fees in PPL.";
+  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of every new token goes to its community pool at launch, guaranteed. Public testnet, fees in PPL.";
 
 /** Open Graph / Twitter title shared by routes that do not override it. */
 export const SITE_OG_TITLE = SITE_TITLE;
 
 /** Open Graph / Twitter description shared by routes that do not override it. */
 export const SITE_OG_DESCRIPTION =
-  "Launch a token for your community on PEOPLE. 10% of every new token goes to the community pool at launch, guaranteed — up to 27% in total.";
+  "Launch a token for your community on PEOPLE. 10% of every new token goes to the community pool at launch, guaranteed.";
 
 /** Russian locale metadata equivalents — localized title leads. */
 export const SITE_TITLE_RU = homeTitle(NETWORK_NAME_BY_LANG.ru);

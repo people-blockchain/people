@@ -10,7 +10,7 @@
  * the stored preference is applied immediately afterwards.
  */
 
-import { detectLanguage, languageFromCookie } from "./locale-detect";
+import { PUBLIC_LANGUAGE_CODES, detectLanguage, languageFromCookie } from "./locale-detect";
 import { migrateWebsiteStorage } from "./storage-migration";
 
 export type Language =
@@ -123,20 +123,8 @@ export function themeCookieFromStore(
   return cookieStore.get(THEME_COOKIE)?.value ?? cookieStore.get(LEGACY_THEME_COOKIE)?.value;
 }
 
-const VALID_LANGS = new Set<Language>([
-  "en",
-  "es",
-  "pt",
-  "fr",
-  "de",
-  "it",
-  "tr",
-  "vi",
-  "id",
-  "zh",
-  "ar",
-  "ru",
-]);
+/** Stored choices honoured on the public site; a stored `ru` falls back like an unset value. */
+const VALID_LANGS = new Set<Language>(PUBLIC_LANGUAGE_CODES);
 
 const listeners = new Set<() => void>();
 

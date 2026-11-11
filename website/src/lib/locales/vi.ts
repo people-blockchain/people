@@ -1287,7 +1287,7 @@ export const vi: LocaleContent = {
   "networkMode": {
     "label": "Chế độ mạng",
     "mainnet": "Mạng chính",
-    "mainnetTitle": "Mạng chính: mạng Base, nơi diễn ra đợt bán PPL",
+    "mainnetTitle": "Mạng chính: đợt bán PPL diễn ra trên Base; PPL nằm trên PEOPLE mainnet",
     "testnet": "Mạng thử nghiệm",
     "testnetTitle": "Mạng thử nghiệm: mạng thử nghiệm PEOPLE để tạo token và NFT"
   },

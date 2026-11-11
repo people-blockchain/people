@@ -1287,7 +1287,7 @@ export const ar: LocaleContent = {
   "networkMode": {
     "label": "وضع الشبكة",
     "mainnet": "الشبكة الرئيسية",
-    "mainnetTitle": "الشبكة الرئيسية: شبكة Base حيث يجري بيع PPL",
+    "mainnetTitle": "الشبكة الرئيسية: يجري بيع PPL على Base، وتوجد PPL على PEOPLE mainnet",
     "testnet": "شبكة الاختبار",
     "testnetTitle": "شبكة الاختبار: شبكة PEOPLE التجريبية لإنشاء الرموز و NFT"
   },

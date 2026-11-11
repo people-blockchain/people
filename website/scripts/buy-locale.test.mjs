@@ -126,7 +126,9 @@ test("Turkish surfaces use up to 27% wording and state the 10% launch guarantee"
 test("localeFromBuyPath maps /xx/buy to a shipped locale only", () => {
   assert.equal(localeFromBuyPath("/tr/buy"), "tr");
   assert.equal(localeFromBuyPath("/tr/buy/"), "tr");
-  for (const lang of LANGS) assert.equal(localeFromBuyPath(`/${lang}/buy`), lang);
+  for (const lang of LANGS.filter((l) => l !== "ru")) assert.equal(localeFromBuyPath(`/${lang}/buy`), lang);
+  // `ru` is no longer a public locale: old `/ru/buy` links land on the English page.
+  assert.equal(localeFromBuyPath("/ru/buy"), "en");
   assert.equal(localeFromBuyPath("/xx/buy"), null);
   assert.equal(localeFromBuyPath("/tr/buy/x"), null);
   assert.equal(localeFromBuyPath("/buy"), null);
@@ -138,6 +140,9 @@ test("server language: the cookie wins over Accept-Language, which wins over Eng
   assert.equal(languageFromRequest(undefined, "tr-TR,tr;q=0.9,en;q=0.8"), "tr");
   assert.equal(languageFromRequest("xx", "pt-BR,pt;q=0.9"), "pt");
   assert.equal(languageFromRequest(null, null), "en");
+  // No public Russian: neither an old cookie nor Accept-Language selects `ru`.
+  assert.equal(languageFromRequest("ru", "ru-RU,ru;q=0.9"), "en");
+  assert.equal(languageFromRequest("ru", "ru-RU,ru;q=0.9,de;q=0.5"), "de");
 });
 
 test("proxy redirects /xx/buy to /buy keeping the query and setting the language cookie", () => {
