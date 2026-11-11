@@ -171,9 +171,9 @@ export function LitepaperApp({
 
 function HeroStat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface px-4 py-3">
+    <div className="min-w-0 rounded-2xl border border-line bg-surface px-4 py-3">
       <dd className="font-mono text-2xl font-bold tabular-nums text-brand sm:text-3xl">{value}</dd>
-      <dt className="mt-1 text-xs leading-snug text-ink-2">{label}</dt>
+      <dt className="mt-1 text-xs leading-snug text-ink-2 [overflow-wrap:anywhere]">{label}</dt>
     </div>
   );
 }
@@ -208,11 +208,11 @@ function SectionBody({
       return (
         <>
           {lead ? renderLitepaperBlocks([lead]) : null}
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <WarmCard testId="litepaper-allocation-donut-card">
+          <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-2">
+            <WarmCard testId="litepaper-allocation-donut-card" className="h-auto min-w-0 overflow-visible">
               <LitepaperAllocationDonut lang={lang} />
             </WarmCard>
-            <div className="flex flex-col gap-6">
+            <div className="flex min-w-0 flex-col gap-6">
               <TeamVestingChart copy={copy} />
               <BuybackLoop copy={copy} />
             </div>
