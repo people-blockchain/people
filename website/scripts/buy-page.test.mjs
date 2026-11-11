@@ -220,8 +220,11 @@ test("every placeholder the new blocks use is resolved", () => {
 
 test("brief strings are exact in Russian", () => {
   const ru = buy.ru;
-  assert.equal(ru.hero.headline, "Блокчейн для всех. Наконец.");
-  assert.equal(ru.hero.lead, "Раньше нужно было быть технарём. Теперь достаточно быть человеком.");
+  assert.equal(ru.hero.headline, "Чем раньше покупаешь, тем ниже цена.");
+  assert.equal(
+    ru.hero.lead,
+    "Каждая покупка сдвигает цену вверх по кривой, поэтому следующие покупатели платят больше. Поэтому важно открытие продажи. Продать обратно можно через 30 дней.",
+  );
   assert.equal(ru.hero.subUpcoming, "Продажа PPL открывается {date}.");
   assert.equal(ru.hero.ctaVerify, "Пройти верификацию, чтобы купить PPL");
   assert.equal(ru.hero.ctaBuy, "Купить PPL");

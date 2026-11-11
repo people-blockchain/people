@@ -131,8 +131,11 @@ export function BuyHero({
         >
           {t.headline}
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">
-          {t.lead} {heroSub(t, phase, formatOpenDate(openDate, lang))}
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg" data-testid="buy-hero-sub">
+          {t.lead}
+        </p>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-ink-3" data-testid="buy-hero-phase">
+          {heroSub(t, phase, formatOpenDate(openDate, lang))}
         </p>
 
         {phase === "upcoming" ? <OpeningCountdown openDate={openDate} /> : null}

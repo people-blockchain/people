@@ -1,6 +1,12 @@
 {
   "hero": {
     "brandLine": "PEOPLE — بلوكتشين للمجتمعات",
+    "sloganPrimary": "بلوكتشين للجميع. أخيرًا.",
+    "sloganPrimaryLines": [
+      "بلوكتشين",
+      "للجميع.",
+      "أخيرًا."
+    ],
     "headlineMain": "أطلق رمزًا لمجتمعك.",
     "headlineMainLines": [
       "أطلق رمزًا لمجتمعك."

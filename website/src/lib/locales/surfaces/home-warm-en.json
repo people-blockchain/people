@@ -1,6 +1,12 @@
 {
   "hero": {
     "brandLine": "PEOPLE — a blockchain for communities",
+    "sloganPrimary": "Blockchain for everyone. Finally.",
+    "sloganPrimaryLines": [
+      "Blockchain",
+      "for everyone.",
+      "Finally."
+    ],
     "headlineMain": "Launch a token for your community.",
     "headlineMainLines": [
       "Launch a token for your community."

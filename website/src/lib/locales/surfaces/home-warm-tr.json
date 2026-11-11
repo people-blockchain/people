@@ -1,6 +1,12 @@
 {
   "hero": {
     "brandLine": "PEOPLE — topluluklar için bir blockchain",
+    "sloganPrimary": "Herkes için blokzincir. Sonunda.",
+    "sloganPrimaryLines": [
+      "Herkes için",
+      "blokzincir.",
+      "Sonunda."
+    ],
     "headlineMain": "Topluluğunuz için bir token başlatın.",
     "headlineMainLines": [
       "Topluluğunuz için bir token başlatın."

@@ -162,8 +162,11 @@ export function BuyPage({
           <h2 id="buy-final-title" className="mx-auto mt-2 max-w-2xl text-2xl font-bold leading-tight text-ink sm:text-4xl">
             {t.hero.headline}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-ink-2 sm:text-base">
-            {t.hero.lead} {heroSub(t.hero, phase, openDateText)}
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-2 sm:text-base">
+            {t.hero.lead}
+          </p>
+          <p className="mx-auto mt-2 max-w-xl text-xs text-ink-3 sm:text-sm">
+            {heroSub(t.hero, phase, openDateText)}
           </p>
           <div className="mt-7 flex justify-center">
             <BuyCta phase={phase} testId="buy-final-cta-button" />
