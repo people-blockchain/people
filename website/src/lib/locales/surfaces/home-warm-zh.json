@@ -1,6 +1,12 @@
 {
   "hero": {
     "brandLine": "PEOPLE — 面向社区的区块链",
+    "sloganPrimary": "人人可用的区块链。终于来了。",
+    "sloganPrimaryLines": [
+      "人人可用的",
+      "区块链。",
+      "终于来了。"
+    ],
     "headlineMain": "为你的社区发行代币。",
     "headlineMainLines": [
       "为你的社区发行代币。"

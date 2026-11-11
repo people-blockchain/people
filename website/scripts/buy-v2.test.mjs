@@ -268,7 +268,7 @@ test("all 12 locales carry every v2 key", () => {
 
 test("all 12 locales carry a translated hero with one sentence per sale phase", () => {
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).hero;
-  assert.equal(en.headline, "Blockchain for everyone. Finally.");
+  assert.equal(en.headline, "The earlier you buy, the lower the price.");
   const phaseKeys = ["subUpcoming", "subWhitelist", "subOpen", "subEnded"];
   for (const lang of LANGS) {
     const hero = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).hero;

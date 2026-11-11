@@ -1,6 +1,13 @@
 {
   "hero": {
     "brandLine": "PEOPLE — blockchain cho cộng đồng",
+    "sloganPrimary": "Blockchain cho mọi người. Cuối cùng cũng đến.",
+    "sloganPrimaryLines": [
+      "Blockchain",
+      "cho mọi người.",
+      "Cuối cùng",
+      "cũng đến."
+    ],
     "headlineMain": "Ra mắt token cho cộng đồng của bạn.",
     "headlineMainLines": [
       "Ra mắt token cho cộng đồng của bạn."

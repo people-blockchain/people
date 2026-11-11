@@ -1,6 +1,12 @@
 {
   "hero": {
     "brandLine": "PEOPLE — блокчейн для сообществ",
+    "sloganPrimary": "Блокчейн для всех. Наконец.",
+    "sloganPrimaryLines": [
+      "Блокчейн",
+      "для всех.",
+      "Наконец."
+    ],
     "headlineMain": "Запусти токен для своего сообщества.",
     "headlineMainLines": [
       "Запусти токен",

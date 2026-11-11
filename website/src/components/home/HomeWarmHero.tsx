@@ -19,8 +19,8 @@ import Link from "next/link";
 import { HeroTokenCard } from "./HeroTokenCard";
 import { communityShareHeadline } from "@/lib/selling-economics";
 
-/** main lines + accent lines; keep in sync with the copy module. */
-const MAX_HEADLINE_LINES = 3;
+/** slogan lines; keep in sync with the copy module. */
+const MAX_HEADLINE_LINES = 6;
 
 /**
  * Homepage hero in the /founders visual language.
@@ -35,18 +35,18 @@ export function HomeWarmHero() {
   const shareHeadline = communityShareHeadline(lang);
   const bounty = bountyCopy(lang);
 
-  const mainLines = t.headlineMainLines;
-  const accentLines = t.headlineAccentLines;
-  const headlineLines = useMemo(() => [...mainLines, ...accentLines], [mainLines, accentLines]);
-  const headlineCopyKey = useMemo(() => headlineLines.join("\0"), [headlineLines]);
+  // «Blockchain for everyone. Finally.» is the main landing phrase; the
+  // product line sits directly under it, smaller, and the 10% line stays.
+  const sloganLines = t.sloganPrimaryLines;
+  const headlineCopyKey = useMemo(() => sloganLines.join("\0"), [sloganLines]);
 
-  const heroMaxWordChars = heroHeadlineMaxWordCharsFromLines(headlineLines);
+  const heroMaxWordChars = heroHeadlineMaxWordCharsFromLines(sloganLines);
   const heroCqiMult = heroHeadlineCqiMultiplier(
     heroMaxWordChars,
-    mainLines.join(" "),
-    accentLines.join(" "),
+    t.sloganPrimary,
+    "",
   );
-  const wideGlyphs = heroHeadlineUsesWideGlyphs(mainLines.join(" "), accentLines.join(" "));
+  const wideGlyphs = heroHeadlineUsesWideGlyphs(t.sloganPrimary, "");
 
   const columnRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
@@ -59,7 +59,7 @@ export function HomeWarmHero() {
     headlineRef,
     lineRefs,
     headlineCopyKey,
-    headlineLines.length,
+    sloganLines.length,
     HERO_HEADLINE_HOME_MAX_REM,
   );
 
@@ -82,7 +82,7 @@ export function HomeWarmHero() {
             <Reveal delay={30}>
               <h1
                 ref={headlineRef}
-                className="hero-headline mt-4 max-w-full text-3xl font-bold leading-[1.06] tracking-tight text-ink sm:text-5xl"
+                className="hero-headline mt-4 max-w-full text-4xl font-bold leading-[1.04] tracking-tight text-ink sm:text-6xl"
                 data-testid="hero-headline"
                 data-hero-fit="pending"
                 style={
@@ -93,9 +93,9 @@ export function HomeWarmHero() {
                   } as React.CSSProperties
                 }
               >
-                {mainLines.map((line, index) => (
+                {sloganLines.map((line, index) => (
                   <span
-                    key={`main-${line}`}
+                    key={`slogan-${line}`}
                     ref={(el) => {
                       lineRefs.current[index] = el;
                     }}
@@ -105,28 +105,34 @@ export function HomeWarmHero() {
                     {line}
                   </span>
                 ))}
-                {accentLines.map((line, index) => {
-                  const refIndex = mainLines.length + index;
-                  return (
-                    <span
-                      key={`accent-${line}`}
-                      ref={(el) => {
-                        lineRefs.current[refIndex] = el;
-                      }}
-                      className="hero-headline-line hero-headline-line--accent text-gradient-brand"
-                      data-testid="hero-headline-line"
-                    >
-                      {line}
-                    </span>
-                  );
-                })}
               </h1>
+            </Reveal>
+
+            {/* The product line stays, directly under the slogan and a step
+                smaller, so the slogan leads without replacing it. */}
+            <Reveal delay={45}>
+              <p
+                className="mt-3 max-w-xl text-balance text-xl font-semibold leading-snug text-ink sm:text-3xl"
+                data-testid="home-hero-product-line"
+              >
+                {t.headlineMain}
+              </p>
+            </Reveal>
+
+            {/* The 10% community-share line stays exactly as translated. */}
+            <Reveal delay={55}>
+              <p
+                className="mt-2 max-w-xl text-balance text-lg font-semibold leading-snug text-gradient-brand sm:text-2xl"
+                data-testid="home-hero-share-line"
+              >
+                {t.headlineAccent}
+              </p>
             </Reveal>
 
             {/* What this actually is, in one line, before any supporting detail. */}
             <Reveal delay={60}>
               <p
-                className="mt-4 max-w-xl text-lg font-semibold leading-snug text-ink sm:text-xl"
+                className="mt-4 max-w-xl text-base leading-snug text-ink-2 sm:text-lg"
                 data-testid="home-hero-pitch"
               >
                 {t.pitchLine}
