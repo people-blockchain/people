@@ -34,7 +34,11 @@ test("login page surfaces Auth.js error query and does not point error at /", ()
   const config = readFileSync(join(root, "src/auth.config.ts"), "utf8");
   assert.match(page, /errorCode=\{params\.error\}/);
   assert.match(form, /authErrorMessage/);
+  // Web3Auth still renders through UnifiedWalletAuthPanel; the default path is the
+  // session-only panel and must not be gated on the custodial cloud-wallet flag.
   assert.match(form, /UnifiedWalletAuthPanel/);
+  assert.match(form, /SessionSignInPanel/);
+  assert.doesNotMatch(form, /isCloudWalletEnabled/);
   assert.match(readFileSync(join(root, "src/components/wallet/WalletCloudSignIn.tsx"), "utf8"), /next-auth\/react/);
   assert.match(config, /error:\s*"\/login"/);
   assert.doesNotMatch(config, /error:\s*"\/"/);

@@ -7,8 +7,10 @@ export async function GET() {
   const cloud = isCloudWalletEnabled();
   return NextResponse.json({
     auth: isAuthConfigured(),
-    google: isGoogleConfigured() && cloud,
-    magic: isResendConfigured() && cloud,
+    // Session-only Google / Magic Link do not require the custodial cloud-wallet
+    // kill-switch. `cloudWallet` below still reports (and enforces) that flag.
+    google: isGoogleConfigured(),
+    magic: isResendConfigured(),
     walletVault: isWalletVaultConfigured(),
     cloudWallet: cloud,
   });

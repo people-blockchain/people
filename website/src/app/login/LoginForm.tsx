@@ -8,15 +8,17 @@ import { useLanguage } from "@/context/LanguageContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { WalletConnectPanel } from "@/components/wallet/WalletConnectPanel";
+import { SessionSignInPanel } from "@/components/wallet/SessionSignInPanel";
 import { UnifiedWalletAuthPanel } from "@/components/wallet/UnifiedWalletAuthPanel";
 import { WalletSoonOption } from "@/components/wallet/WalletSoonOption";
 import { WalletExternalConnectSection } from "@/components/wallet/WalletExternalConnectSection";
 import { walletFeatures } from "@/lib/wallet-features";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { isWeb3AuthActive } from "@/lib/web3auth-config";
-import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
+import { partnerHomeAfterLogin } from "@/lib/partner/guards";
 
 export function LoginForm({
+  callbackUrl,
   errorCode,
   googleEnabled,
   magicEnabled,
@@ -39,10 +41,10 @@ export function LoginForm({
   }, [configured, errorCode, t]);
 
   // Web3Auth is its own sign-in path, and /login is where its mobile redirect returns to.
+  // Google / Magic Link below it are session-only and do not depend on the cloud-wallet flag.
   const web3AuthEnabled = isWeb3AuthActive();
-  const cloudEnabled = isCloudWalletEnabled();
-  const authAvailable =
-    configured && (web3AuthEnabled || (cloudEnabled && (magicEnabled || googleEnabled)));
+  const sessionSignInEnabled = googleEnabled || magicEnabled;
+  const authAvailable = configured && (web3AuthEnabled || sessionSignInEnabled);
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">
@@ -64,12 +66,22 @@ export function LoginForm({
             </div>
           )}
 
-          {authAvailable ? (
+          {authAvailable && web3AuthEnabled ? (
             <div className="mt-6">
               <UnifiedWalletAuthPanel
                 autoConnect
                 showAgreement
                 onOpenImport={() => setImportSignal((n) => n + 1)}
+              />
+            </div>
+          ) : null}
+          {authAvailable && !web3AuthEnabled ? (
+            <div className="mt-6">
+              <SessionSignInPanel
+                redirectTo={partnerHomeAfterLogin(callbackUrl)}
+                googleEnabled={googleEnabled}
+                magicEnabled={magicEnabled}
+                showAgreement
               />
             </div>
           ) : null}
