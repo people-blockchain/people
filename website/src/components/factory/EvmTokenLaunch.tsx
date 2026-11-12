@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- logo preview is a local object URL */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +26,9 @@ import {
   type PromoBps,
 } from "@/lib/token-promo";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
+import { fileForDirectUpload, MediaUploadError, mediaUploadText, uploadDirect } from "@/lib/media-upload-client";
+import { DIRECT_UPLOAD_MAX_BYTES, mimeAllowedForKind, normalizeUploadMime } from "@/lib/media-upload-rules";
+import { saveTokenMetadata } from "@/lib/nft-media-client";
 import { communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import { ISSUER_REFERRAL_DEFAULT_ALLOCATION_BPS } from "@/lib/founders/referral";
 import {
@@ -148,6 +152,10 @@ export function EvmTokenLaunch() {
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
   const [supply, setSupply] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoUri, setLogoUri] = useState<string | null>(null);
+  const [logoError, setLogoError] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [created, setCreated] = useState<CreatedToken | null>(null);
@@ -167,6 +175,16 @@ export function EvmTokenLaunch() {
   // launch on the unchanged five-argument `createToken` path.
   const [promoBps, setPromoBps] = useState<PromoBps>(0);
   const r = foundersReferralCopy(lang);
+
+  useEffect(() => {
+    if (!logoFile) {
+      setLogoPreview(null);
+      return;
+    }
+    const url = URL.createObjectURL(logoFile);
+    setLogoPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [logoFile]);
 
   useEffect(() => {
     if (!gateway || payWith === "PPL") {
@@ -347,7 +365,32 @@ export function EvmTokenLaunch() {
         // proves the fee is already covered by credit.
         feeValue = payWith !== "PPL" && stableFeePaid ? BigInt(0) : fee;
       }
-      const metadataURI = `ipfs://people/${symbol.trim()}`;
+      let metadataURI: string;
+      try {
+        let image = logoUri;
+        if (logoFile && !image) {
+          const uploaded = await uploadDirect(
+            fileForDirectUpload(logoFile, normalizeUploadMime(logoFile.type)),
+            "token-icon",
+          );
+          image = uploaded.uri;
+          setLogoUri(image);
+        }
+        const metadata = await saveTokenMetadata({
+          name: name.trim(),
+          symbol: symbol.trim().toUpperCase(),
+          ...(image ? { image } : {}),
+        });
+        metadataURI = metadata.tokenUri;
+      } catch (err) {
+        console.error("[create] token metadata failed", err);
+        setError(
+          err instanceof MediaUploadError
+            ? mediaUploadText("en", err.code)
+            : "Could not save the token metadata. Please try again.",
+        );
+        return;
+      }
       // One entry point carries both creator choices: the promo share (0/5/10%) and what happens
       // to curve leftovers / the unsold remainder (0 = burn, 1 = the token's community pool).
       const request = {
@@ -482,6 +525,9 @@ export function EvmTokenLaunch() {
     setName("");
     setSymbol("");
     setSupply("");
+    setLogoFile(null);
+    setLogoUri(null);
+    setLogoError("");
     setPromoBps(0);
     setLeftoverMode(0);
     setIssuerReferral(false);
@@ -582,6 +628,47 @@ export function EvmTokenLaunch() {
         <div className="mt-8 space-y-4">
           <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.name} value={name} onChange={(e) => setName(e.target.value)} />
           <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.ticker} value={symbol} onChange={(e) => setSymbol(e.target.value)} />
+          <div className="rounded-xl border border-line p-3" data-testid="token-logo-upload">
+            <label htmlFor="token-logo" className="block text-sm font-semibold text-ink">
+              Logo (optional)
+            </label>
+            <p className="mt-1 text-xs text-ink-3">PNG, JPEG or WebP. The logo is stored permanently before launch.</p>
+            <input
+              id="token-logo"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              className="mt-2 block w-full text-sm text-ink-2"
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null;
+                setLogoError("");
+                setLogoUri(null);
+                if (!file) {
+                  setLogoFile(null);
+                  return;
+                }
+                const type = normalizeUploadMime(file.type);
+                if (!mimeAllowedForKind("token-icon", type)) {
+                  setLogoFile(null);
+                  setLogoError("Choose a PNG, JPEG or WebP logo.");
+                  return;
+                }
+                if (file.size <= 0 || file.size > DIRECT_UPLOAD_MAX_BYTES) {
+                  setLogoFile(null);
+                  setLogoError("The logo must be smaller than 25 MB.");
+                  return;
+                }
+                setLogoFile(file);
+              }}
+            />
+            {logoPreview ? (
+              <img
+                src={logoPreview}
+                alt="Token logo preview"
+                className="mt-3 h-16 w-16 rounded-xl border border-line object-cover"
+              />
+            ) : null}
+            {logoError ? <p role="alert" className="mt-2 text-sm text-warm">{logoError}</p> : null}
+          </div>
           <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={u.supplyPlaceholder} value={supply} onChange={(e) => setSupply(e.target.value)} />
           <p className="text-xs text-ink-3">{u.supplyHint}</p>
 

@@ -31,7 +31,13 @@ import { nftError, nftGlobalRateAllowed, nftRateAllowed, pinataErrorResponse } f
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const GATEWAY_TIMEOUT_MS = 20_000;
+const GATEWAY_TIMEOUT_MS = 15_000;
+const GATEWAY_TOTAL_BUDGET_MS = 45_000;
+const GATEWAY_RETRY_DELAYS_MS = [1_000, 2_000] as const;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 async function readBounded(response: Response, cap: number): Promise<{ bytes: Uint8Array; overflow: boolean } | null> {
   if (!response.ok || !response.body) return null;
@@ -73,9 +79,54 @@ function sameHash(left: string, right: string): boolean {
 }
 
 /**
- * Confirms a private direct upload: size, MIME, magic bytes and the signed sha256.
- * A mismatch deletes the private file, which was never public. A match is copied to
- * the public network and the private record is removed.
+ * Reads freshly pinned bytes from the public gateway. A new pin can take a few seconds to
+ * appear, so this retries briefly inside a total time budget that stays below maxDuration.
+ * Returns null and logs a step code when every attempt fails.
+ */
+async function readPublicGatewayBytes(cid: string): Promise<{ bytes: Uint8Array; overflow: boolean } | null> {
+  const source = ipfsGatewayUrl(cid);
+  const deadline = Date.now() + GATEWAY_TOTAL_BUDGET_MS;
+  let lastCode = "fetch_failed";
+  for (let attempt = 0; attempt <= GATEWAY_RETRY_DELAYS_MS.length; attempt += 1) {
+    const remaining = deadline - Date.now();
+    if (remaining <= 0) {
+      lastCode = "budget_exhausted";
+      break;
+    }
+    try {
+      const res = await fetch(source, { signal: AbortSignal.timeout(Math.min(GATEWAY_TIMEOUT_MS, remaining)) });
+      if (!res.ok) {
+        lastCode = `http_${res.status}`;
+      } else {
+        const downloaded = await readBounded(res, DIRECT_UPLOAD_MAX_BYTES + 1);
+        if (downloaded) return downloaded;
+        lastCode = "empty_body";
+      }
+    } catch (error) {
+      lastCode =
+        error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")
+          ? "timeout"
+          : "fetch_failed";
+    }
+    const delay = GATEWAY_RETRY_DELAYS_MS[attempt];
+    if (delay !== undefined) {
+      const wait = Math.min(delay, deadline - Date.now());
+      if (wait <= 0) break;
+      await sleep(wait);
+    }
+  }
+  console.warn("[upload-verify] gateway read failed", {
+    code: lastCode,
+    attempts: GATEWAY_RETRY_DELAYS_MS.length + 1,
+  });
+  return null;
+}
+
+/**
+ * Confirms a direct upload: size, MIME, magic bytes and the signed sha256.
+ * Public uploads are read through the public gateway and stay public. A mismatch deletes
+ * every public file id for the CID. Legacy private records are still read through a
+ * private download link, then copied to public and removed once verified.
  */
 export async function POST(request: Request) {
   if (!isPinataConfigured()) return nftError("storage_unavailable", 503);
@@ -103,13 +154,15 @@ export async function POST(request: Request) {
   let network: PinataFileNetwork = PINATA_UPLOAD_NETWORK;
   try {
     try {
-      record = await getPinataFile(id, fetch, "private");
+      record = await getPinataFile(id, fetch, "public");
     } catch (error) {
       if (!(error instanceof PinataError) || error.code !== "pin_failed") throw error;
-      record = await getPinataFile(id, fetch, "public");
-      network = "public";
+      record = await getPinataFile(id, fetch, "private");
+      network = "private";
     }
   } catch (error) {
+    const code = error instanceof PinataError ? error.code : "lookup_failed";
+    console.warn("[upload-verify] file lookup failed", { code });
     if (error instanceof PinataError && error.code === "pin_failed") return nftError("content_mismatch", 422);
     return pinataErrorResponse(error, "storage_unavailable");
   }
@@ -144,14 +197,17 @@ export async function POST(request: Request) {
 
   let downloaded: { bytes: Uint8Array; overflow: boolean } | null = null;
   let privateReadFailed = false;
-  try {
-    const source =
-      network === "private" ? await pinataPrivateDownloadUrl(record.cid, fetch) : ipfsGatewayUrl(record.cid);
-    const res = await fetch(source, { signal: AbortSignal.timeout(GATEWAY_TIMEOUT_MS) });
-    downloaded = await readBounded(res, DIRECT_UPLOAD_MAX_BYTES + 1);
-  } catch {
-    downloaded = null;
-    privateReadFailed = network === "private";
+  if (network === "public") {
+    downloaded = await readPublicGatewayBytes(record.cid);
+  } else {
+    try {
+      const source = await pinataPrivateDownloadUrl(record.cid, fetch);
+      const res = await fetch(source, { signal: AbortSignal.timeout(GATEWAY_TIMEOUT_MS) });
+      downloaded = await readBounded(res, DIRECT_UPLOAD_MAX_BYTES + 1);
+    } catch {
+      downloaded = null;
+      privateReadFailed = true;
+    }
   }
   if (!downloaded) {
     if (network === "private" || privateReadFailed) {

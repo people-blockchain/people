@@ -2,40 +2,57 @@ import { NextResponse } from "next/server";
 import { isPinataConfigured } from "@/lib/factory-icon-config";
 import { ipfsGatewayUrlForUri, pinBytesToIpfs } from "@/lib/ipfs";
 import { NftMetadataError, buildNftMetadata } from "@/lib/nft-media-rules";
+import { buildTokenMetadata, TokenMetadataError } from "@/lib/token-metadata";
 import { NFT_RATE, nftError, nftRateAllowed, pinataErrorResponse } from "@/lib/nft-upload-server";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
 /**
- * Pins the ERC-721 metadata JSON and returns the `tokenUri` the mint transaction will carry.
- * The JSON is rebuilt on the server from validated fields; `image`/`animation_url` must be
- * permanent `ipfs://` or `https://` addresses, never `blob:` or `data:`.
+ * Pins metadata JSON and returns the `tokenUri` a create transaction will carry.
+ *
+ * An NFT request (`name` + required `image`) is rebuilt as ERC-721 metadata. A token request
+ * adds `symbol`, allows an optional logo `image`, and is rebuilt as ERC-20 metadata. Every
+ * address must be permanent `ipfs://` or `https://`, never `blob:` or `data:`.
  */
 export async function POST(request: Request) {
   if (!isPinataConfigured()) return nftError("storage_unavailable", 503);
   const body = (await request.json().catch(() => null)) as {
     name?: unknown;
+    symbol?: unknown;
     description?: unknown;
     image?: unknown;
     animationUrl?: unknown;
   } | null;
-  if (!body || typeof body.name !== "string" || typeof body.image !== "string") return nftError("invalid_metadata", 400);
+  if (!body || typeof body.name !== "string") return nftError("invalid_metadata", 400);
   if (body.description !== undefined && typeof body.description !== "string") return nftError("invalid_description", 400);
   if (body.animationUrl !== undefined && body.animationUrl !== null && typeof body.animationUrl !== "string") {
     return nftError("invalid_animation_uri", 400);
+  }
+  const isToken = typeof body.symbol === "string";
+  if (!isToken && typeof body.image !== "string") return nftError("invalid_metadata", 400);
+  if (body.image !== undefined && body.image !== null && typeof body.image !== "string") {
+    return nftError("invalid_image_uri", 400);
   }
   if (!(await nftRateAllowed(request, NFT_RATE.metadata))) return nftError("rate_limited", 429);
 
   let json;
   try {
-    json = buildNftMetadata({
-      name: body.name,
-      description: body.description as string | undefined,
-      image: body.image,
-      animationUrl: body.animationUrl as string | null | undefined,
-    });
+    json = isToken
+      ? buildTokenMetadata({
+          name: body.name,
+          symbol: body.symbol,
+          description: body.description as string | undefined,
+          image: body.image as string | undefined,
+        })
+      : buildNftMetadata({
+          name: body.name,
+          description: body.description as string | undefined,
+          image: body.image as string,
+          animationUrl: body.animationUrl as string | null | undefined,
+        });
   } catch (err) {
+    if (err instanceof TokenMetadataError) return nftError(err.code, 400);
     return nftError(err instanceof NftMetadataError ? err.code : "invalid_metadata", 400);
   }
 

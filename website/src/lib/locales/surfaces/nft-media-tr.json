@@ -41,6 +41,8 @@
   "createAnother": "Bir tane daha oluştur",
   "storedAt": "Saklandığı yer",
   "metadataLabel": "Üst veri",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "PeopleScan'de görüntüle",
   "viewHere": "Bu NFT'yi görüntüle",
   "technicalDetails": "Teknik ayrıntılar",

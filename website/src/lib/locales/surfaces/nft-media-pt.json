@@ -41,6 +41,8 @@
   "createAnother": "Criar outro",
   "storedAt": "Guardado em",
   "metadataLabel": "Metadados",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "Ver no PeopleScan",
   "viewHere": "Ver este NFT",
   "technicalDetails": "Detalhes técnicos",

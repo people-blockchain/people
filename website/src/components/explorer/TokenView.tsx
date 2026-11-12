@@ -16,10 +16,15 @@ import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import { resolveMarketTokenAddress } from "@/lib/evm/market-token";
+import { withTimeoutSignal } from "@/lib/request-timeout";
 
 type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
 type Data = { asset: Token; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
+const ASSET_TIMEOUT_MS = 10_000;
+const ACCOUNTS_TIMEOUT_MS = 8_000;
+const BLOCK_TIMEOUT_MS = 8_000;
+const ARCHIVE_TIMEOUT_MS = 8_000;
 
 export function TokenView({ assetId }: { assetId: string }) {
   const { lang } = useLanguage();
@@ -29,33 +34,62 @@ export function TokenView({ assetId }: { assetId: string }) {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [holdersLoading, setHoldersLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const [visible, setVisible] = useState(25);
 
   useEffect(() => {
     const controller = new AbortController();
     async function load() {
+      setHoldersLoading(true);
       try {
         if (isHiddenAsset(assetId)) throw new Error("hidden_asset");
-        const [asset, accountResult] = await Promise.all([
-          networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, { signal: controller.signal }),
-          networkJson<ExplorerAccount[]>(
-            `accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`,
-            { signal: controller.signal },
-          )
-            .then(accounts => Array.isArray(accounts) ? accounts : null).catch(() => null),
-        ]);
-        let timestamp: number | null = null;
+        // The asset is the page. Render it first; a slow holder scan must not hold it back.
+        const asset = await networkJson<Token>(`assets/${encodeURIComponent(assetId)}`, {
+          signal: withTimeoutSignal(controller.signal, ASSET_TIMEOUT_MS),
+        });
+        if (controller.signal.aborted) return;
+        setData({ asset, accounts: null, partial: false, timestamp: null, fetchedAt: Date.now() });
+        setLoading(false);
+
+        void networkJson<ExplorerAccount[]>(
+          `accounts?limit=${ACCOUNT_SCAN_LIMIT + 1}&assetId=${encodeURIComponent(assetId)}`,
+          { signal: withTimeoutSignal(controller.signal, ACCOUNTS_TIMEOUT_MS) },
+        )
+          .then((accounts) => {
+            if (controller.signal.aborted) return;
+            const rows = Array.isArray(accounts) ? accounts : null;
+            setData((prev) => prev ? {
+              ...prev,
+              accounts: rows?.slice(0, ACCOUNT_SCAN_LIMIT) ?? null,
+              partial: (rows?.length ?? 0) > ACCOUNT_SCAN_LIMIT,
+            } : prev);
+          })
+          .catch(() => {
+            if (controller.signal.aborted) return;
+            setData((prev) => prev ? { ...prev, accounts: null, partial: false } : prev);
+          })
+          .finally(() => {
+            if (!controller.signal.aborted) setHoldersLoading(false);
+          });
+
         if (asset.createdAt !== undefined) {
-          const block = await networkJson<{ header?: { height?: number; timestamp?: number } }>(`blocks/${asset.createdAt}`, { signal: controller.signal }).catch(() => null);
-          timestamp = creationTimestamp(block, asset.createdAt);
+          const block = await networkJson<{ header?: { height?: number; timestamp?: number } }>(
+            `blocks/${asset.createdAt}`,
+            { signal: withTimeoutSignal(controller.signal, BLOCK_TIMEOUT_MS) },
+          ).catch(() => null);
+          let timestamp = creationTimestamp(block, asset.createdAt);
           if (timestamp === null && !controller.signal.aborted) {
-            const archived = await fetch(`/api/explorer/token/${encodeURIComponent(assetId)}/created`, { signal: controller.signal }).then(r => r.ok ? r.json() : null).catch(() => null);
+            const archived = await fetch(`/api/explorer/token/${encodeURIComponent(assetId)}/created`, {
+              signal: withTimeoutSignal(controller.signal, ARCHIVE_TIMEOUT_MS),
+              cache: "no-store",
+            }).then(r => r.ok ? r.json() : null).catch(() => null);
             if (typeof archived?.timestamp === "number" && Number.isFinite(archived.timestamp) && archived.timestamp > 0) timestamp = archived.timestamp;
           }
+          if (!controller.signal.aborted && timestamp !== null) {
+            setData((prev) => prev ? { ...prev, timestamp } : prev);
+          }
         }
-        if (controller.signal.aborted) return;
-        setData({ asset, accounts: accountResult?.slice(0, ACCOUNT_SCAN_LIMIT) ?? null, partial: (accountResult?.length ?? 0) > ACCOUNT_SCAN_LIMIT, timestamp, fetchedAt: Date.now() });
       } catch { if (!controller.signal.aborted) setError(true); }
       finally { if (!controller.signal.aborted) setLoading(false); }
     }
@@ -63,7 +97,7 @@ export function TokenView({ assetId }: { assetId: string }) {
     return () => controller.abort();
   }, [assetId, refresh]);
 
-  function reload() { setLoading(true); setError(false); setRefresh(v => v + 1); }
+  function reload() { setLoading(true); setError(false); setHoldersLoading(true); setRefresh(v => v + 1); }
   const asset = data?.asset;
   const symbol = displaySymbol(assetId, asset?.symbol, u);
   const distribution = tokenHolders(data?.accounts ?? [], assetId);
@@ -97,7 +131,7 @@ export function TokenView({ assetId }: { assetId: string }) {
         <h2 id="holder-title" className="text-xl font-bold">{c.distribution}</h2>
         <p className="mt-2 max-w-3xl text-sm text-ink-3">{c.note}</p>
         {data?.partial ? <p role="status" className="mt-3 text-sm text-warm">{c.partial}</p> : null}
-        {data?.accounts === null ? <p role="alert" className="mt-5 text-warm">{c.failed}</p> : !distribution.holders.length ? <p className="mt-5 text-ink-3">{c.noHolders}</p> : <>
+        {holdersLoading ? <p role="status" className="mt-5 text-ink-3">{c.loading}</p> : data?.accounts === null ? <div className="mt-5 space-y-2"><p role="alert" className="text-warm">{c.holdersUnavailable}</p><button type="button" onClick={reload} className="text-sm font-semibold text-brand">{c.retry}</button></div> : !distribution.holders.length ? <p className="mt-5 text-ink-3">{c.noHolders}</p> : <>
           <div className="mt-6 grid items-center gap-8 rounded-2xl border border-line p-6 sm:grid-cols-[240px_1fr]">
             <div role="img" aria-label={`${c.distribution}: ${chart.map(row => `${row.label === "other" ? c.other : row.label} ${formatShare(row.share)}`).join(", ")}`} className="relative mx-auto grid h-52 w-52 place-items-center rounded-full" style={{ background: `conic-gradient(${gradient})` }}>
               <div className="grid h-36 w-36 place-content-center rounded-full bg-surface text-center"><strong className="text-3xl">{distribution.holders.length}</strong><span className="mt-1 text-xs text-ink-3">{c.holders}</span></div>

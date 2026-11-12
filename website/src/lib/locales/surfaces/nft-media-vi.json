@@ -41,6 +41,8 @@
   "createAnother": "Tạo thêm",
   "storedAt": "Lưu tại",
   "metadataLabel": "Siêu dữ liệu",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "Xem trên PeopleScan",
   "viewHere": "Xem NFT này",
   "technicalDetails": "Chi tiết kỹ thuật",

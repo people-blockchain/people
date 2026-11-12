@@ -41,6 +41,8 @@
   "createAnother": "Buat lagi",
   "storedAt": "Disimpan di",
   "metadataLabel": "Metadata",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "Lihat di PeopleScan",
   "viewHere": "Lihat NFT ini",
   "technicalDetails": "Detail teknis",

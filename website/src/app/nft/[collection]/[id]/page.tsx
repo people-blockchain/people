@@ -3,6 +3,7 @@ import { isAddress } from "viem";
 import { SiteChrome } from "@/components/SiteChrome";
 import { NftTokenView } from "@/components/nft/NftTokenView";
 import { readNftTokenOnChain } from "@/lib/evm/nft-chain";
+import { fetchNftTokenMetadata } from "@/lib/nft-token-metadata";
 
 export default async function NftTokenPage({
   params,
@@ -13,6 +14,7 @@ export default async function NftTokenPage({
   if (!isAddress(collection) || !/^\d+$/.test(id)) notFound();
   const token = await readNftTokenOnChain(collection, BigInt(id));
   if (!token) notFound();
+  const metadata = token.tokenUri ? await fetchNftTokenMetadata(token.tokenUri) : null;
   return (
     <SiteChrome>
       <NftTokenView
@@ -21,6 +23,7 @@ export default async function NftTokenPage({
         tokenId={token.onChainTokenId}
         owner={token.owner}
         tokenUri={token.tokenUri ?? ""}
+        metadata={metadata}
       />
     </SiteChrome>
   );

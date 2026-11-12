@@ -53,8 +53,10 @@ let downloadLinkStatus;
 let publicCid;
 let publicUploads;
 let downloadLinks;
-let legacyPublic;
+let legacyPrivate;
 let listedPublicIds;
+let gatewayFailures;
+let gatewayFetches;
 
 const PRIVATE_BYTES = "https://cdn.example.test/private-bytes";
 
@@ -90,8 +92,10 @@ beforeEach(() => {
   publicCid = CID;
   publicUploads = [];
   downloadLinks = [];
-  legacyPublic = false;
+  legacyPrivate = false;
   listedPublicIds = ["file-1234", "file-5678"];
+  gatewayFailures = 0;
+  gatewayFetches = 0;
   resetPinataGatewayCacheForTests();
   globalThis.fetch = async (url, init = {}) => {
     const target = String(url);
@@ -120,13 +124,18 @@ beforeEach(() => {
         return json({}, deleteStatus);
       }
       const isPrivate = target.includes("/files/private/");
-      if (isPrivate && legacyPublic) return json({}, 404);
-      if (!isPrivate && !legacyPublic) return json({}, 404);
+      if (isPrivate && !legacyPrivate) return json({}, 404);
+      if (!isPrivate && legacyPrivate) return json({}, 404);
       return json({ data: fileRecord });
     }
     const publicGateway = `https://gateway.pinata.cloud/ipfs/${CID}`;
-    if ((target === PRIVATE_BYTES || (legacyPublic && target === publicGateway)) && gatewayBytes) {
+    if ((target === PRIVATE_BYTES || target === publicGateway) && gatewayBytes) {
+      gatewayFetches += 1;
       gatewayRange = new Headers(init.headers).get("range");
+      if (gatewayFailures > 0) {
+        gatewayFailures -= 1;
+        return new Response("", { status: 503 });
+      }
       if (!gatewayStream) return new Response(gatewayBytes);
       const source = gatewayBytes;
       const chunkSize = 64 * 1024;
@@ -226,8 +235,8 @@ test("GIF is accepted and the signed URL is bound to that type and the declared 
   assert.equal(signBodies.length, 1);
   assert.deepEqual(signBodies[0].allow_mime_types, ["image/gif"]);
   assert.equal(signBodies[0].max_file_size, pinataSignedUploadMaxBytes(2_000_000));
-  assert.equal(PINATA_UPLOAD_NETWORK, "private");
-  assert.equal(signBodies[0].network, "private");
+  assert.equal(PINATA_UPLOAD_NETWORK, "public");
+  assert.equal(signBodies[0].network, "public");
   assert.equal(signBodies[0].expires, 120);
   const icon = await signRoute(
     jsonRequest("/api/factory/upload/sign", { kind: "token-icon", type: "image/gif", size: 10, sha256: "ab".repeat(32) }),
@@ -236,7 +245,7 @@ test("GIF is accepted and the signed URL is bound to that type and the declared 
   assert.equal((await icon.json()).error, "unsupported_format");
 });
 
-test("verify accepts GIF bytes and returns size, mime and sha256", async () => {
+test("public upload is read through the gateway and verified without copying or deleting", async () => {
   const bytes = Buffer.from("GIF89a-original");
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/gif" };
   gatewayBytes = bytes;
@@ -251,14 +260,25 @@ test("verify accepts GIF bytes and returns size, mime and sha256", async () => {
   assert.equal(body.mime, "image/gif");
   assert.equal(body.sha256, sha256);
   assert.equal(gatewayRange, null);
-  assert.equal(downloadLinks.length, 1);
-  assert.equal(downloadLinks[0].expires, 60);
-  assert.equal(downloadLinks[0].method, "GET");
-  assert.equal(downloadLinks[0].url, `https://dedicated.mypinata.cloud/files/${CID}`);
-  assert.equal(publicUploads.length, 1);
-  assert.equal(publicUploads[0].get("network"), "public");
-  assert.deepEqual(deleted, ["file-1234"]);
-  assert.equal(deleteCalls[0].url, "https://api.pinata.cloud/v3/files/private/file-1234");
+  assert.equal(gatewayFetches, 1);
+  assert.equal(downloadLinks.length, 0);
+  assert.equal(publicUploads.length, 0);
+  assert.deepEqual(deleted, []);
+  assert.equal(deleteCalls.length, 0);
+});
+
+test("a fresh public pin is retried briefly on the gateway before verification succeeds", async () => {
+  const bytes = Buffer.from("GIF89a-fresh-pin");
+  fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/gif" };
+  gatewayBytes = bytes;
+  gatewayFailures = 2;
+  const sha256 = hash(bytes);
+  const res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256, size: bytes.length }),
+  );
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).sha256, sha256);
+  assert.equal(gatewayFetches, 3);
 });
 
 test("a multi-block file passes when Pinata's DAG size is larger than the declared file length", async () => {
@@ -274,8 +294,8 @@ test("a multi-block file passes when Pinata's DAG size is larger than the declar
   assert.equal(body.size, bytes.length);
   assert.equal(body.sha256, sha256);
   assert.equal(gatewayRange, null);
-  assert.equal(publicUploads.length, 1);
-  assert.deepEqual(deleted, ["file-1234"]);
+  assert.equal(publicUploads.length, 0);
+  assert.deepEqual(deleted, []);
   assert.equal(downloadedBytesMatchDeclaration(bytes.length, bytes.length + 80_000, bytes.length, false), true);
   assert.equal(declaredUploadSizeError(DIRECT_UPLOAD_MAX_BYTES + 1), "file_too_large");
 });
@@ -294,7 +314,7 @@ function paintWebp(bytes) {
   bytes.write("WEBP", 8, "ascii");
 }
 
-test("verify accepts streamed PNG, MP4 and WebP payloads when the private DAG is larger", async () => {
+test("verify accepts streamed PNG, MP4 and WebP payloads when the public DAG is larger", async () => {
   gatewayStream = true;
   const cases = [
     { kind: "nft-image", mime: "image/png", size: 5_000_000, paint: paintPng },
@@ -321,11 +341,9 @@ test("verify accepts streamed PNG, MP4 and WebP payloads when the private DAG is
     assert.equal(body.size, bytes.length);
     assert.equal(body.mime, item.mime);
     assert.equal(body.sha256, sha256);
-    assert.equal(publicUploads.length, 1, item.mime);
-    assert.equal(publicUploads[0].get("network"), "public");
-    assert.equal(publicUploads[0].get("file").size, bytes.length);
-    assert.deepEqual(deleted, ["file-1234"]);
-    assert.equal(deleteCalls[0].url, "https://api.pinata.cloud/v3/files/private/file-1234");
+    assert.equal(publicUploads.length, 0, item.mime);
+    assert.deepEqual(deleted, []);
+    assert.equal(deleteCalls.length, 0);
     assert.ok(gatewayChunks > 1, `${item.mime} bounded read`);
   }
 
@@ -355,7 +373,7 @@ test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected",
   );
   assert.equal(res.status, 422);
   assert.equal((await res.json()).error, "size_mismatch");
-  assert.deepEqual(deleted, ["file-1234"]);
+  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
 
   deleted.length = 0;
   const header = Buffer.from("GIF89a");
@@ -383,7 +401,8 @@ test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected",
   );
   assert.equal(res.status, 422);
   assert.equal((await res.json()).error, "sha256_mismatch");
-  assert.equal(deleted.at(-1), "file-1234");
+  assert.ok(deleted.includes("file-1234"));
+  assert.ok(deleted.includes("file-5678"));
 });
 
 test("a spoofed Content-Type is rejected and the file is deleted", async () => {
@@ -398,14 +417,16 @@ test("a spoofed Content-Type is rejected and the file is deleted", async () => {
   assert.equal(body.error, "content_mismatch");
   assert.equal(body.cleanup, "deleted");
   assert.equal(publicUploads.length, 0);
-  assert.deepEqual(deleted, ["file-1234"]);
+  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
   assert.deepEqual(deleteCalls, [
     { url: `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-1234`, method: "DELETE" },
+    { url: `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-5678`, method: "DELETE" },
   ]);
   assert.equal(deleteCalls[0].url.includes(CID), false);
 });
 
-test("gateway discovery failure deletes the private file and does not publish", async () => {
+test("legacy private gateway discovery failure deletes the private file and does not publish", async () => {
+  legacyPrivate = true;
   gatewayStatus = 403;
   const warnings = [];
   const originalWarn = console.warn;
@@ -434,8 +455,7 @@ test("gateway discovery failure deletes the private file and does not publish", 
   }
 });
 
-test("a public legacy mismatch deletes every file record for that cid", async () => {
-  legacyPublic = true;
+test("a public mismatch deletes every file record for that cid", async () => {
   const bytes = Buffer.from("GIF89a-not-a-png");
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
@@ -449,7 +469,8 @@ test("a public legacy mismatch deletes every file record for that cid", async ()
   assert.ok(deleteCalls.every((call) => call.url.startsWith("https://api.pinata.cloud/v3/files/public/")));
 });
 
-test("a public cid that is not the verified bytes is discarded", async () => {
+test("a legacy private upload is published only when the public cid matches the verified bytes", async () => {
+  legacyPrivate = true;
   publicCid = `b${"a".repeat(58)}`;
   const bytes = Buffer.from("GIF89a-other-cid");
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/gif" };
@@ -517,7 +538,7 @@ test("sha256 mismatch deletes the file", async () => {
   const body = await res.json();
   assert.equal(body.error, "sha256_mismatch");
   assert.equal(body.cleanup, "deleted");
-  assert.deepEqual(deleted, ["file-1234"]);
+  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
 });
 
 test("an over-25 MB declaration is rejected before a signed URL is issued", async () => {

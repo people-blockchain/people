@@ -17,6 +17,14 @@ import { withRpcCallContext } from "@/lib/evm/rpc-server";
 import { enrichAssetRow, listSeedNfts, seedAssetMeta } from "@/lib/evm/seed-assets";
 import { evmJsonRpc } from "@/lib/evm/rpc-server";
 
+/** The holder scan is a full Transfer-log walk; give the token page a bounded budget. */
+export const DEFAULT_ACCOUNTS_SCAN_BUDGET_MS = 8_000;
+
+export function accountsScanBudgetMs(): number {
+  const raw = Number(process.env.EVM_ACCOUNTS_SCAN_BUDGET_MS);
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : DEFAULT_ACCOUNTS_SCAN_BUDGET_MS;
+}
+
 type AssetRow = {
   assetId: string;
   name: string;
@@ -349,7 +357,17 @@ export async function handleEvmCompatGet(
       if (assetId) return { status: 404, body: { error: "unknown_token" } };
       return { status: 200, body: [] };
     }
-    const holders = await aggregateHoldersFromTransfers(token).catch(() => []);
+    let holders;
+    try {
+      // The RPC layer reads this deadline and aborts a slow log window instead of letting the
+      // request sit for minutes. The token page shows a holder fallback and can retry.
+      holders = await withRpcCallContext(
+        { deadlineAt: Date.now() + accountsScanBudgetMs() },
+        () => aggregateHoldersFromTransfers(token),
+      );
+    } catch {
+      return { status: 503, body: { error: "accounts_unavailable" }, headers: { "Cache-Control": "no-store" } };
+    }
     const asset = await loadAsset(assetId ?? token);
     const decimals = asset?.decimals ?? 18;
     return {
