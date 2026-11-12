@@ -20,12 +20,15 @@ function hostFromDomain(domain: string): string | null {
 }
 
 /** This account's dedicated gateway, cached in-process. `rows[0].domain` plus `.mypinata.cloud`. */
-export async function pinataDedicatedGatewayHost(fetchImpl: FetchLike = fetch): Promise<string> {
+export async function pinataDedicatedGatewayHost(
+  fetchImpl: FetchLike = fetch,
+  timeoutMs: number = LOOKUP_TIMEOUT_MS,
+): Promise<string> {
   if (gatewayHostCache && Date.now() - gatewayHostCache.at < GATEWAY_CACHE_MS) return gatewayHostCache.host;
   const jwt = pinataJwt();
   const res = await fetchImpl("https://api.pinata.cloud/v3/gateways", {
     headers: { Authorization: `Bearer ${jwt}` },
-    signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw pinataFailure(res.status);
   const body = (await res.json().catch(() => ({}))) as { data?: { rows?: Array<{ domain?: unknown }> }; rows?: Array<{ domain?: unknown }> };
@@ -38,9 +41,19 @@ export async function pinataDedicatedGatewayHost(fetchImpl: FetchLike = fetch): 
 }
 
 /** Short-lived URL that reads one private file. The bytes never sit on a public gateway. */
-export async function pinataPrivateDownloadUrl(cid: string, fetchImpl: FetchLike = fetch): Promise<string> {
+export async function pinataPrivateDownloadUrl(
+  cid: string,
+  fetchImpl: FetchLike = fetch,
+  timeoutMs?: number,
+): Promise<string> {
   if (!isValidIpfsCid(cid)) throw new PinataError("pin_failed");
-  const host = await pinataDedicatedGatewayHost(fetchImpl);
+  const deadline = timeoutMs === undefined ? null : Date.now() + timeoutMs;
+  const remaining = (fallback: number) => {
+    if (deadline === null) return fallback;
+    const left = deadline - Date.now();
+    return left > 0 ? Math.min(fallback, left) : 1;
+  };
+  const host = await pinataDedicatedGatewayHost(fetchImpl, remaining(LOOKUP_TIMEOUT_MS));
   const jwt = pinataJwt();
   const res = await fetchImpl("https://api.pinata.cloud/v3/files/private/download_link", {
     method: "POST",
@@ -51,7 +64,7 @@ export async function pinataPrivateDownloadUrl(cid: string, fetchImpl: FetchLike
       expires: 60,
       method: "GET",
     }),
-    signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS),
+    signal: AbortSignal.timeout(remaining(LOOKUP_TIMEOUT_MS)),
   });
   if (!res.ok) throw pinataFailure(res.status);
   const body = (await res.json().catch(() => ({}))) as { data?: unknown };
@@ -80,12 +93,13 @@ export async function listPinataFileIdsByCid(
   network: PinataFileNetwork,
   cid: string,
   fetchImpl: FetchLike = fetch,
+  timeoutMs: number = LOOKUP_TIMEOUT_MS,
 ): Promise<string[]> {
   if (!isValidIpfsCid(cid)) throw new PinataError("pin_failed");
   const jwt = pinataJwt();
   const res = await fetchImpl(`https://api.pinata.cloud/v3/files/${network}?cid=${encodeURIComponent(cid)}`, {
     headers: { Authorization: `Bearer ${jwt}` },
-    signal: AbortSignal.timeout(LOOKUP_TIMEOUT_MS),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw pinataFailure(res.status);
   const ids: string[] = [];
@@ -101,6 +115,7 @@ export async function pinPublicFileBytes(
   filename: string,
   mime: string,
   fetchImpl: FetchLike = fetch,
+  timeoutMs: number = 18_000,
 ): Promise<{ id: string; cid: string }> {
   const jwt = pinataJwt();
   const form = new FormData();
@@ -110,7 +125,7 @@ export async function pinPublicFileBytes(
     method: "POST",
     headers: { Authorization: `Bearer ${jwt}` },
     body: form,
-    signal: AbortSignal.timeout(18_000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw pinataFailure(res.status);
   const body = (await res.json().catch(() => ({}))) as { data?: { id?: unknown; cid?: unknown }; id?: unknown; cid?: unknown };

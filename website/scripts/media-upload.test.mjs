@@ -126,7 +126,7 @@ beforeEach(() => {
       const isPrivate = target.includes("/files/private/");
       if (isPrivate && !legacyPrivate) return json({}, 404);
       if (!isPrivate && legacyPrivate) return json({}, 404);
-      return json({ data: fileRecord });
+      return json({ data: { created_at: new Date().toISOString(), ...fileRecord } });
     }
     const publicGateway = `https://gateway.pinata.cloud/ipfs/${CID}`;
     if ((target === PRIVATE_BYTES || target === publicGateway) && gatewayBytes) {
@@ -373,7 +373,7 @@ test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected",
   );
   assert.equal(res.status, 422);
   assert.equal((await res.json()).error, "size_mismatch");
-  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
+  assert.deepEqual(deleted, ["file-1234"]);
 
   deleted.length = 0;
   const header = Buffer.from("GIF89a");
@@ -401,11 +401,10 @@ test("truncated bytes, a read past the cap, and a sha256 mismatch are rejected",
   );
   assert.equal(res.status, 422);
   assert.equal((await res.json()).error, "sha256_mismatch");
-  assert.ok(deleted.includes("file-1234"));
-  assert.ok(deleted.includes("file-5678"));
+  assert.deepEqual(deleted, ["file-1234"]);
 });
 
-test("a spoofed Content-Type is rejected and the file is deleted", async () => {
+test("a spoofed Content-Type is rejected and only the verified file is deleted", async () => {
   const bytes = Buffer.from("GIF89a-not-a-png");
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
@@ -417,10 +416,9 @@ test("a spoofed Content-Type is rejected and the file is deleted", async () => {
   assert.equal(body.error, "content_mismatch");
   assert.equal(body.cleanup, "deleted");
   assert.equal(publicUploads.length, 0);
-  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
+  assert.deepEqual(deleted, ["file-1234"]);
   assert.deepEqual(deleteCalls, [
     { url: `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-1234`, method: "DELETE" },
-    { url: `https://api.pinata.cloud/v3/files/${PINATA_UPLOAD_NETWORK}/file-5678`, method: "DELETE" },
   ]);
   assert.equal(deleteCalls[0].url.includes(CID), false);
 });
@@ -455,7 +453,7 @@ test("legacy private gateway discovery failure deletes the private file and does
   }
 });
 
-test("a public mismatch deletes every file record for that cid", async () => {
+test("a public mismatch deletes only the verified file, not other records for the cid", async () => {
   const bytes = Buffer.from("GIF89a-not-a-png");
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
@@ -465,8 +463,56 @@ test("a public mismatch deletes every file record for that cid", async () => {
   assert.equal(res.status, 422);
   assert.equal((await res.json()).error, "content_mismatch");
   assert.equal(publicUploads.length, 0);
-  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
+  assert.deepEqual(deleted, ["file-1234"]);
   assert.ok(deleteCalls.every((call) => call.url.startsWith("https://api.pinata.cloud/v3/files/public/")));
+});
+
+test("an old upload record is rejected without deleting anything", async () => {
+  const bytes = Buffer.from("GIF89a-old-record");
+  fileRecord = {
+    id: "file-1234",
+    cid: CID,
+    size: bytes.length,
+    mime_type: "image/gif",
+    created_at: new Date(Date.now() - 30 * 60_000).toISOString(),
+  };
+  gatewayBytes = bytes;
+  const res = await verifyRoute(
+    jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes), size: bytes.length }),
+  );
+  assert.equal(res.status, 422);
+  assert.equal((await res.json()).error, "content_mismatch");
+  assert.deepEqual(deleted, []);
+  assert.equal(deleteCalls.length, 0);
+  assert.equal(gatewayFetches, 0);
+});
+
+test("the handler deadline returns verify_unavailable instead of running past maxDuration", async () => {
+  const previousDeadline = process.env.UPLOAD_VERIFY_DEADLINE_MS;
+  process.env.UPLOAD_VERIFY_DEADLINE_MS = "40";
+  try {
+    const bytes = Buffer.from("GIF89a-slow-lookup");
+    fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/gif" };
+    gatewayBytes = bytes;
+    const slowFetch = globalThis.fetch;
+    globalThis.fetch = async (url, init = {}) => {
+      const target = String(url);
+      if (target.startsWith("https://api.pinata.cloud/v3/files/public/")) {
+        await new Promise((resolve) => setTimeout(resolve, 80));
+        return json({ data: { created_at: new Date().toISOString(), ...fileRecord } });
+      }
+      return slowFetch(url, init);
+    };
+    const res = await verifyRoute(
+      jsonRequest("/api/factory/upload/verify", { id: "file-1234", kind: "nft-image", sha256: hash(bytes), size: bytes.length }),
+    );
+    assert.equal(res.status, 503);
+    assert.equal((await res.json()).error, "verify_unavailable");
+    assert.deepEqual(deleted, []);
+  } finally {
+    if (previousDeadline === undefined) delete process.env.UPLOAD_VERIFY_DEADLINE_MS;
+    else process.env.UPLOAD_VERIFY_DEADLINE_MS = previousDeadline;
+  }
 });
 
 test("a legacy private upload is published only when the public cid matches the verified bytes", async () => {
@@ -527,7 +573,7 @@ test("verify refuses a content id in place of the Pinata file id", async () => {
   assert.equal(deleteCalls.length, 0);
 });
 
-test("sha256 mismatch deletes the file", async () => {
+test("sha256 mismatch deletes only the verified file", async () => {
   const bytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4]);
   fileRecord = { id: "file-1234", cid: CID, size: bytes.length, mime_type: "image/png" };
   gatewayBytes = bytes;
@@ -538,7 +584,7 @@ test("sha256 mismatch deletes the file", async () => {
   const body = await res.json();
   assert.equal(body.error, "sha256_mismatch");
   assert.equal(body.cleanup, "deleted");
-  assert.deepEqual(deleted, ["file-1234", "file-5678"]);
+  assert.deepEqual(deleted, ["file-1234"]);
 });
 
 test("an over-25 MB declaration is rejected before a signed URL is issued", async () => {

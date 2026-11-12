@@ -10,11 +10,12 @@ import {
   type PinataFileNetwork,
   type PinataFileRecord,
 } from "@/lib/ipfs";
-import { listPinataFileIdsByCid, pinataPrivateDownloadUrl, pinPublicFileBytes } from "@/lib/pinata-private-access";
+import { pinataPrivateDownloadUrl, pinPublicFileBytes } from "@/lib/pinata-private-access";
 import { PINATA_UPLOAD_NETWORK } from "@/lib/pinata-signed-upload";
 import { mediaBytesMatch } from "@/lib/media-upload-magic";
 import { DIRECT_UPLOAD_RATE } from "@/lib/media-upload-rate";
 import {
+  DIRECT_UPLOAD_URL_TTL_SEC,
   declaredUploadSizeError,
   DIRECT_UPLOAD_MAX_BYTES,
   downloadedBytesMatchDeclaration,
@@ -34,6 +35,20 @@ export const maxDuration = 60;
 const GATEWAY_TIMEOUT_MS = 15_000;
 const GATEWAY_TOTAL_BUDGET_MS = 45_000;
 const GATEWAY_RETRY_DELAYS_MS = [1_000, 2_000] as const;
+const VERIFY_DEADLINE_MS = 50_000;
+const UPLOAD_RECORD_SKEW_MS = 5 * 60_000;
+
+function readVerifyDeadlineMs(): number {
+  const raw = Number(process.env.UPLOAD_VERIFY_DEADLINE_MS);
+  return Number.isFinite(raw) && raw > 0 ? raw : VERIFY_DEADLINE_MS;
+}
+
+/** A direct-upload record is only accepted while its signed link could still be alive. */
+function isFreshUploadRecord(record: PinataFileRecord, now: number): boolean {
+  if (typeof record.createdAt !== "number" || !Number.isFinite(record.createdAt)) return false;
+  const age = now - record.createdAt;
+  return age <= DIRECT_UPLOAD_URL_TTL_SEC * 1_000 + UPLOAD_RECORD_SKEW_MS && age >= -UPLOAD_RECORD_SKEW_MS;
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -80,12 +95,15 @@ function sameHash(left: string, right: string): boolean {
 
 /**
  * Reads freshly pinned bytes from the public gateway. A new pin can take a few seconds to
- * appear, so this retries briefly inside a total time budget that stays below maxDuration.
- * Returns null and logs a step code when every attempt fails.
+ * appear, so this retries briefly inside the handler deadline. Returns null when every
+ * attempt fails or the deadline is reached.
  */
-async function readPublicGatewayBytes(cid: string): Promise<{ bytes: Uint8Array; overflow: boolean } | null> {
+async function readPublicGatewayBytes(
+  cid: string,
+  handlerDeadline: number,
+): Promise<{ bytes: Uint8Array; overflow: boolean } | null> {
   const source = ipfsGatewayUrl(cid);
-  const deadline = Date.now() + GATEWAY_TOTAL_BUDGET_MS;
+  const deadline = Math.min(Date.now() + GATEWAY_TOTAL_BUDGET_MS, handlerDeadline);
   let lastCode = "fetch_failed";
   for (let attempt = 0; attempt <= GATEWAY_RETRY_DELAYS_MS.length; attempt += 1) {
     const remaining = deadline - Date.now();
@@ -94,7 +112,9 @@ async function readPublicGatewayBytes(cid: string): Promise<{ bytes: Uint8Array;
       break;
     }
     try {
-      const res = await fetch(source, { signal: AbortSignal.timeout(Math.min(GATEWAY_TIMEOUT_MS, remaining)) });
+      const res = await fetch(source, {
+        signal: AbortSignal.timeout(Math.max(1, Math.min(GATEWAY_TIMEOUT_MS, remaining))),
+      });
       if (!res.ok) {
         lastCode = `http_${res.status}`;
       } else {
@@ -123,12 +143,19 @@ async function readPublicGatewayBytes(cid: string): Promise<{ bytes: Uint8Array;
 }
 
 /**
- * Confirms a direct upload: size, MIME, magic bytes and the signed sha256.
- * Public uploads are read through the public gateway and stay public. A mismatch deletes
- * every public file id for the CID. Legacy private records are still read through a
- * private download link, then copied to public and removed once verified.
+ * Confirms a direct upload: freshness, size, MIME, magic bytes and the signed sha256.
+ * Public uploads are read through the public gateway and stay public. A mismatch deletes only
+ * the verified file record. Legacy private records are still read through a private download
+ * link, then copied to public and removed once verified. Every network step stays inside one
+ * absolute handler deadline below maxDuration.
  */
 export async function POST(request: Request) {
+  const deadline = Date.now() + readVerifyDeadlineMs();
+  const remaining = () => Math.max(0, deadline - Date.now());
+  const deadlineExceeded = () => remaining() <= 0;
+  const stepTimeout = () => Math.max(1, remaining());
+  const unavailable = () => nftError("verify_unavailable", 503);
+
   if (!isPinataConfigured()) return nftError("storage_unavailable", 503);
   const body = (await request.json().catch(() => null)) as {
     id?: unknown;
@@ -149,38 +176,40 @@ export async function POST(request: Request) {
 
   if (!(await nftRateAllowed(request, DIRECT_UPLOAD_RATE.verifyIp))) return nftError("rate_limited", 429);
   if (!(await nftGlobalRateAllowed(DIRECT_UPLOAD_RATE.verifyGlobal))) return nftError("rate_limited", 429);
+  if (deadlineExceeded()) return unavailable();
 
   let record: PinataFileRecord;
   let network: PinataFileNetwork = PINATA_UPLOAD_NETWORK;
   try {
     try {
-      record = await getPinataFile(id, fetch, "public");
+      record = await getPinataFile(id, fetch, "public", stepTimeout());
     } catch (error) {
       if (!(error instanceof PinataError) || error.code !== "pin_failed") throw error;
-      record = await getPinataFile(id, fetch, "private");
+      if (deadlineExceeded()) return unavailable();
+      record = await getPinataFile(id, fetch, "private", stepTimeout());
       network = "private";
     }
   } catch (error) {
+    if (deadlineExceeded()) return unavailable();
     const code = error instanceof PinataError ? error.code : "lookup_failed";
     console.warn("[upload-verify] file lookup failed", { code });
     if (error instanceof PinataError && error.code === "pin_failed") return nftError("content_mismatch", 422);
     return pinataErrorResponse(error, "storage_unavailable");
   }
 
+  if (deadlineExceeded()) return unavailable();
+  if (!isFreshUploadRecord(record, Date.now())) return nftError("content_mismatch", 422);
+
   const reject = async (error: string, status: number) => {
+    if (deadlineExceeded()) return unavailable();
     try {
-      if (network === "public") {
-        const ids = new Set(await listPinataFileIdsByCid("public", record.cid, fetch));
-        ids.add(record.id);
-        for (const fileId of ids) await deletePinataFile(fileId, fetch, "public");
-      } else {
-        await deletePinataFile(record.id, fetch, "private");
-      }
+      await deletePinataFile(record.id, fetch, network, stepTimeout());
       return NextResponse.json(
         { error, cleanup: "deleted" },
         { status, headers: { "Cache-Control": "no-store" } },
       );
     } catch (deleteError) {
+      if (deadlineExceeded()) return unavailable();
       const code = deleteError instanceof PinataError ? deleteError.code : "delete_failed";
       console.warn("[upload-verify] delete failed", { fileId: record.id, network, code });
       return NextResponse.json(
@@ -198,11 +227,14 @@ export async function POST(request: Request) {
   let downloaded: { bytes: Uint8Array; overflow: boolean } | null = null;
   let privateReadFailed = false;
   if (network === "public") {
-    downloaded = await readPublicGatewayBytes(record.cid);
+    downloaded = await readPublicGatewayBytes(record.cid, deadline);
   } else {
     try {
-      const source = await pinataPrivateDownloadUrl(record.cid, fetch);
-      const res = await fetch(source, { signal: AbortSignal.timeout(GATEWAY_TIMEOUT_MS) });
+      const source = await pinataPrivateDownloadUrl(record.cid, fetch, stepTimeout());
+      if (deadlineExceeded()) return unavailable();
+      const res = await fetch(source, {
+        signal: AbortSignal.timeout(Math.max(1, Math.min(GATEWAY_TIMEOUT_MS, remaining()))),
+      });
       downloaded = await readBounded(res, DIRECT_UPLOAD_MAX_BYTES + 1);
     } catch {
       downloaded = null;
@@ -210,6 +242,7 @@ export async function POST(request: Request) {
     }
   }
   if (!downloaded) {
+    if (deadlineExceeded()) return unavailable();
     if (network === "private" || privateReadFailed) {
       console.warn("[upload-verify] private read unavailable");
       return reject("verify_unavailable", 503);
@@ -226,18 +259,20 @@ export async function POST(request: Request) {
 
   let cid = record.cid;
   if (network === "private") {
+    if (deadlineExceeded()) return unavailable();
     let published: { id: string; cid: string };
     try {
       const ext = extensionForMime(mime) ?? "bin";
-      published = await pinPublicFileBytes(downloaded.bytes, `people-direct.${ext}`, mime, fetch);
+      published = await pinPublicFileBytes(downloaded.bytes, `people-direct.${ext}`, mime, fetch, stepTimeout());
     } catch (error) {
+      if (deadlineExceeded()) return unavailable();
       const code = error instanceof PinataError ? error.code : "pin_failed";
       console.warn("[upload-verify] public publish failed", { code });
       return reject("verify_unavailable", 503);
     }
     if (!isValidIpfsCid(published.cid) || published.cid !== record.cid) {
       try {
-        await deletePinataFile(published.id, fetch, "public");
+        await deletePinataFile(published.id, fetch, "public", stepTimeout());
       } catch (error) {
         const code = error instanceof PinataError ? error.code : "delete_failed";
         console.warn("[upload-verify] delete failed", { fileId: published.id, network: "public", code });
@@ -246,7 +281,7 @@ export async function POST(request: Request) {
     }
     cid = published.cid;
     try {
-      await deletePinataFile(record.id, fetch, "private");
+      await deletePinataFile(record.id, fetch, "private", stepTimeout());
     } catch (error) {
       const code = error instanceof PinataError ? error.code : "delete_failed";
       console.warn("[upload-verify] delete failed", { fileId: record.id, network: "private", code });

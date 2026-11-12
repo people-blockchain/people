@@ -21,7 +21,7 @@ import { withTimeoutSignal } from "@/lib/request-timeout";
 type Token = AssetInfo & { totalSupply: number; creator: string; createdAt?: number; status: string; type: string };
 type Data = { asset: Token; accounts: ExplorerAccount[] | null; partial: boolean; timestamp: number | null; fetchedAt: number };
 const colors = ["#6366f1", "#14b8a6", "#f59e0b", "#ec4899", "#8b5cf6", "#94a3b8"];
-const ASSET_TIMEOUT_MS = 10_000;
+const ASSET_TIMEOUT_MS = 15_000;
 const ACCOUNTS_TIMEOUT_MS = 8_000;
 const BLOCK_TIMEOUT_MS = 8_000;
 const ARCHIVE_TIMEOUT_MS = 8_000;
