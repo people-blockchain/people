@@ -4,10 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import { networkJson } from "@/lib/network-client";
 import type { PartnerStrings } from "@/lib/partner/copy";
 import {
-  aggregateGrowthRewards,
   formatPplAmount,
-  parseGrowthClaimsFromSnapshot,
-  resolvePplBalanceFromAccount,
+  loadPartnerWalletSummary,
   type GrowthRewardTotals,
 } from "@/lib/partner/wallet-summary";
 
@@ -21,13 +19,9 @@ export function PartnerWalletSummary({ address, t }: { address: string; t: Partn
   const load = useCallback(async () => {
     setLoadState("loading");
     try {
-      const [accountBody, snapshotBody] = await Promise.all([
-        networkJson<unknown>(`address/${encodeURIComponent(address)}`),
-        networkJson<unknown>("snapshot"),
-      ]);
-      setBalance(resolvePplBalanceFromAccount(accountBody));
-      const claims = parseGrowthClaimsFromSnapshot(snapshotBody, address);
-      setGrowth(aggregateGrowthRewards(claims));
+      const { balance: ppl, growth: totals } = await loadPartnerWalletSummary(address, networkJson);
+      setBalance(ppl);
+      setGrowth(totals);
       setLoadState("ready");
     } catch {
       setLoadState("error");
