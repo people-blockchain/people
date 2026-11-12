@@ -22,14 +22,51 @@ function asRecord(value: unknown): Record<string, unknown> | null {
     : null;
 }
 
+const PPL_DECIMALS = 18;
+
+/** EVM compat reports the native balance as a decimal wei string; PPL has 18 decimals. */
+function parsePplWei(raw: unknown): number | null {
+  if (typeof raw !== "string" && typeof raw !== "number") return null;
+  const text = String(raw);
+  if (!/^\d+$/.test(text)) return null;
+  const padded = text.padStart(PPL_DECIMALS + 1, "0");
+  const whole = padded.slice(0, -PPL_DECIMALS);
+  const fraction = padded.slice(-PPL_DECIMALS);
+  const value = Number(`${whole}.${fraction}`);
+  return Number.isFinite(value) ? value : null;
+}
+
 export function resolvePplBalanceFromAccount(body: unknown): number {
   const rec = asRecord(body);
   if (!rec) return 0;
   const balances = asRecord(rec.balances);
   const fromMap = balances && typeof balances[NATIVE_ASSET_ID] === "number" ? balances[NATIVE_ASSET_ID] : null;
   const raw = fromMap ?? rec.balance;
-  const n = typeof raw === "number" ? raw : Number(raw);
-  return Number.isFinite(n) ? n : 0;
+  if (raw !== undefined && raw !== null) {
+    const n = typeof raw === "number" ? raw : Number(raw);
+    if (Number.isFinite(n)) return n;
+  }
+  // `/api/evm/compat/address/:addr` shape: `{ balanceWei: "<decimal string>", ... }`.
+  return parsePplWei(rec.balanceWei) ?? 0;
+}
+
+/**
+ * Loads the partner wallet widget without letting a missing snapshot fail the balance.
+ * EVM compat deliberately has no `/snapshot`; growth claims then render as empty.
+ */
+export async function loadPartnerWalletSummary(
+  address: string,
+  fetchJson: <T>(path: string) => Promise<T>,
+): Promise<{ balance: number; growth: GrowthRewardTotals }> {
+  const [accountBody, snapshotBody] = await Promise.all([
+    fetchJson<unknown>(`address/${encodeURIComponent(address)}`),
+    fetchJson<unknown>("snapshot").catch(() => null),
+  ]);
+  const claims = parseGrowthClaimsFromSnapshot(snapshotBody, address);
+  return {
+    balance: resolvePplBalanceFromAccount(accountBody),
+    growth: aggregateGrowthRewards(claims),
+  };
 }
 
 export function formatPplAmount(amount: number): string {
