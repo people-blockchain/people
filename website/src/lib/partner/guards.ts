@@ -1,5 +1,4 @@
 import { hasControlOrBackslash, sanitizeInAppPath } from "@/lib/safe-return-path";
-import { isSocialLoginEnabled } from "@/lib/social-login";
 
 export const PARTNER_PATH_PREFIX = "/partner";
 export const LOGIN_PATH = "/login";
@@ -100,12 +99,10 @@ export function isAuthConfigured(): boolean {
 }
 
 export function isGoogleConfigured(): boolean {
-  // Auth.js Google OAuth is part of the same temporary social-login kill-switch
-  // (NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED, default false). Credentials stay in env.
-  return (
-    isSocialLoginEnabled() &&
-    Boolean(process.env.AUTH_GOOGLE_ID?.trim() && process.env.AUTH_GOOGLE_SECRET?.trim())
-  );
+  // Session-only Auth.js Google provider: available whenever credentials are set.
+  // It must not depend on NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED (Web3Auth kill-switch);
+  // this path creates no custodial wallet and never loads Web3Auth.
+  return Boolean(process.env.AUTH_GOOGLE_ID?.trim() && process.env.AUTH_GOOGLE_SECRET?.trim());
 }
 
 export function isResendConfigured(): boolean {
