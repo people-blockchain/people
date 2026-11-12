@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useLanguage } from "@/context/LanguageContext";
 import { partnerCopy } from "@/lib/partner/copy";
 import { readLastAuthEmail, rememberAuthEmail } from "@/lib/wallet-auth-storage";
@@ -32,7 +32,12 @@ export function SessionSignInPanel({
 
   const continueWithGoogle = () => {
     setPending("google");
-    void signIn("google", { redirectTo });
+    // UX extra only: start the provider flow from a clean session. The server still drops a
+    // stale JWT on the OAuth callback when the new identity has a different email, so this is
+    // never the enforcement point (see auth-session-identity.ts).
+    void signOut({ redirect: false })
+      .catch(() => undefined)
+      .then(() => signIn("google", { redirectTo }));
   };
 
   return (
@@ -67,6 +72,7 @@ export function SessionSignInPanel({
             if (!email) return;
             rememberAuthEmail(email);
             setPending("email");
+            await signOut({ redirect: false }).catch(() => undefined);
             await signIn("resend", { email, redirectTo });
           }}
         >
