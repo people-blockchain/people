@@ -119,6 +119,30 @@ contract AuditMediumsSimpleTest is Test {
         assertFalse(d.agentWallet.hasRole(d.agentWallet.EXECUTOR_ROLE(), deployer), "not the deploy key");
     }
 
+    /// Pre-mainnet audit: `Deploy.s.sol` used to make the multisig `DEFAULT_ADMIN_ROLE` of the
+    /// timelock; an admin can `grantRole` instantly and so bypass the delay. The real `run()` must
+    /// leave the timelock as its own sole admin, with the multisig only proposer + canceller.
+    function test_deployTimelockIsSelfAdminAndMultisigIsNotAdmin() public {
+        Deploy.Deployment memory d = _runProtocolDeploy();
+        address deployer = vm.addr(DEPLOYER_PK);
+        PeopleTimelock tl = d.timelock;
+        bytes32 admin = tl.DEFAULT_ADMIN_ROLE();
+        assertTrue(tl.hasRole(admin, address(tl)), "timelock is its own admin");
+        assertFalse(tl.hasRole(admin, address(d.treasuryMultisig)), "multisig is not admin");
+        assertFalse(tl.hasRole(admin, deployer), "deployer is not admin");
+        assertFalse(tl.hasRole(admin, address(d.governor)), "governor is not admin");
+        assertTrue(tl.hasRole(tl.PROPOSER_ROLE(), address(d.treasuryMultisig)), "multisig proposer");
+        assertTrue(tl.hasRole(tl.CANCELLER_ROLE(), address(d.treasuryMultisig)), "multisig canceller");
+        assertTrue(tl.hasRole(tl.PROPOSER_ROLE(), address(d.governor)), "governor proposer");
+        assertTrue(tl.hasRole(tl.EXECUTOR_ROLE(), address(0)), "open executor");
+
+        // The multisig can no longer mint itself roles without the delay.
+        bytes32 proposer = tl.PROPOSER_ROLE();
+        vm.prank(address(d.treasuryMultisig));
+        vm.expectRevert();
+        tl.grantRole(proposer, address(0xBAD));
+    }
+
     // ------------------------------------------------------------------ AUD-M6
 
     /// The multisig is required, never defaulted to the deployer EOA. This exercises the same
@@ -135,8 +159,9 @@ contract AuditMediumsSimpleTest is Test {
     /// threads and `vm.setEnv` is process-wide, so two tests needing different values for
     /// `PEOPLE_MULTISIG` / `LAVKA_TIMELOCK` would race; one test is the only writer of those keys.
     ///
-    /// Fresh path: a new `PeopleTimelock` must not keep DEFAULT_ADMIN_ROLE on the deployer and
-    /// `LavkaPass` must be owned by the multisig — mirroring the protocol's AUD-H1 bootstrap.
+    /// Fresh path: a new `PeopleTimelock` must not keep DEFAULT_ADMIN_ROLE on the deployer or give
+    /// it to the multisig (the timelock is its own admin; the multisig is only proposer/canceller)
+    /// and `LavkaPass` must be owned by the multisig — mirroring the protocol's AUD-H1 bootstrap.
     /// Existing path: an explicitly supplied `LAVKA_TIMELOCK` is already wired; its roles must be
     /// left alone (in particular not granted to a multisig that does not control it).
     function test_deployLavkaWiresGovernanceToTheMultisig() public {
@@ -150,7 +175,9 @@ contract AuditMediumsSimpleTest is Test {
 
         assertEq(pass.owner(), multisig, "LavkaPass owner is the multisig");
         assertEq(payments.owner(), address(timelock), "timelock owns LavkaPayments");
-        assertTrue(timelock.hasRole(timelock.DEFAULT_ADMIN_ROLE(), multisig), "multisig admin");
+        // The timelock is its own sole admin; the multisig must not be able to grantRole instantly.
+        assertTrue(timelock.hasRole(timelock.DEFAULT_ADMIN_ROLE(), address(timelock)), "timelock self-admin");
+        assertFalse(timelock.hasRole(timelock.DEFAULT_ADMIN_ROLE(), multisig), "multisig is not admin");
         assertTrue(timelock.hasRole(timelock.PROPOSER_ROLE(), multisig), "multisig proposer");
         assertTrue(timelock.hasRole(timelock.CANCELLER_ROLE(), multisig), "multisig canceller");
         assertTrue(timelock.hasRole(timelock.EXECUTOR_ROLE(), address(0)), "executor role open");

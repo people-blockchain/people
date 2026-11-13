@@ -108,16 +108,22 @@ contract Deploy is Script {
         // proposal, the supply was locked forever, and the timelock-gated kill switches on
         // `CommunityAgentWallet` (freeze, limits, recipient allowlist) were unreachable. The
         // already-approved 2-of-3 `PeopleMultisig` (M07-4, the owner of the vaults) is therefore
-        // the timelock's bootstrap admin and proposer: it can schedule the initial gPPL
+        // the timelock's bootstrap PROPOSER and CANCELLER: it can schedule the initial gPPL
         // distribution/delegation and act in an emergency, still behind the 2-day delay, with no
         // EOA keeping standing control. Once gPPL is distributed and the governor can carry a
-        // vote on its own, revoking these three roles from the multisig is one timelock
+        // vote on its own, revoking these two roles from the multisig is one timelock
         // proposal (see docs/audit-final/contracts.md AUD-H1 for the open owner decision on the
         // distribution itself).
-        d.timelock.grantRole(d.timelock.DEFAULT_ADMIN_ROLE(), address(d.treasuryMultisig));
+        // The multisig is deliberately NOT given DEFAULT_ADMIN_ROLE: an admin can `grantRole`
+        // instantly, so a multisig admin could mint itself (or anyone) any role, including
+        // EXECUTOR/PROPOSER, and bypass the delay entirely. OZ's `TimelockController` constructor
+        // always grants DEFAULT_ADMIN_ROLE to the timelock itself, so after the deployer
+        // renounces below, the timelock is its own sole admin and any role change must itself
+        // pass through schedule -> delay -> execute.
         d.timelock.grantRole(d.timelock.PROPOSER_ROLE(), address(d.treasuryMultisig));
         d.timelock.grantRole(d.timelock.CANCELLER_ROLE(), address(d.treasuryMultisig));
-        // M07-5: the deployer keeps no admin role.
+        // M07-5: the deployer keeps no admin role (`PeopleTimelock` passes `msg.sender` as the
+        // constructor's temporary admin).
         d.timelock.renounceRole(d.timelock.DEFAULT_ADMIN_ROLE(), deployer);
         // AUD-M1: the last argument is where a migrated curve's leftover tokens go. It is the
         // same governed address as `FEE_RECIPIENT` (the treasury multisig on the live chain),

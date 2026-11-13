@@ -65,11 +65,13 @@ contract DeployLavka is Script {
             // AUD-M6: a fresh `PeopleTimelock` would otherwise keep DEFAULT_ADMIN_ROLE on the
             // deployer EOA, making M08-6's "never the deployer EOA" mean "the deployer with a
             // 2-day delay". Mirror the main protocol's AUD-H1 bootstrap in `Deploy.s.sol`: the
-            // multisig is the timelock's admin/proposer/canceller (it can schedule the initial
+            // multisig is the timelock's proposer/canceller (it can schedule the initial
             // configuration and act in an emergency, still behind the 2-day delay), the
-            // executor role is open to anyone, and the deployer renounces its admin role.
+            // executor role is open to anyone, and the deployer renounces its admin role. The
+            // multisig is deliberately NOT given DEFAULT_ADMIN_ROLE: an admin can `grantRole`
+            // instantly and so bypass the delay. OZ's constructor always makes the timelock its
+            // own admin, so after the deployer renounces, role changes need schedule -> delay.
             PeopleTimelock fresh = new PeopleTimelock(2 days);
-            fresh.grantRole(fresh.DEFAULT_ADMIN_ROLE(), peopleMultisig);
             fresh.grantRole(fresh.PROPOSER_ROLE(), peopleMultisig);
             fresh.grantRole(fresh.CANCELLER_ROLE(), peopleMultisig);
             fresh.grantRole(fresh.EXECUTOR_ROLE(), address(0));
