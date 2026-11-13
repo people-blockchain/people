@@ -6,7 +6,7 @@ export const tokenExplorerCopy = {
     note: "The chart shows positive wallet balances. Liquidity pools, vesting and protocol reserves are separate and are not counted as wallets.",
     partial: "Partial data: the account scan reached its limit. Holder count and distribution cover only the returned accounts.",
     updated: "Fetched", refresh: "Refresh", status: "Status", decimals: "Decimals", description: "About this token",
-    noHolders: "No positive wallet balances found.", failed: "Could not load wallet distribution.", more: "Show more wallets",
+    noHolders: "No positive wallet balances found.", failed: "Could not load wallet distribution.", holdersUnavailable: "Holder list is not available right now.", more: "Show more wallets",
   },
   ru: {
     loading: "Загружаем данные сети…", retry: "Попробовать снова", holders: "Кошельков-владельцев", distribution: "Распределение по кошелькам",
@@ -15,7 +15,7 @@ export const tokenExplorerCopy = {
     note: "График показывает положительные балансы кошельков. Ликвидность, вестинг и протокольные резервы учитываются отдельно и не считаются кошельками.",
     partial: "Данные неполные: достигнут лимит просмотра аккаунтов. Число владельцев и распределение рассчитаны только по полученным аккаунтам.",
     updated: "Получено", refresh: "Обновить", status: "Статус", decimals: "Знаков после запятой", description: "О токене",
-    noHolders: "Кошельки с положительным балансом не найдены.", failed: "Не удалось загрузить распределение по кошелькам.", more: "Показать ещё кошельки",
+    noHolders: "Кошельки с положительным балансом не найдены.", failed: "Не удалось загрузить распределение по кошелькам.", holdersUnavailable: "Holder list is not available right now.", more: "Показать ещё кошельки",
   },
   es: {
     loading: "Cargando datos de la red…", retry: "Intentar de nuevo", holders: "Titulares de monederos", distribution: "Distribución entre monederos",
@@ -24,7 +24,7 @@ export const tokenExplorerCopy = {
     note: "El gráfico muestra saldos positivos de monederos. Los pools de liquidez, el vesting y las reservas del protocolo son independientes y no se cuentan como monederos.",
     partial: "Datos parciales: el escaneo de cuentas alcanzó su límite. El número de titulares y la distribución solo cubren las cuentas devueltas.",
     updated: "Obtenido", refresh: "Actualizar", status: "Estado", decimals: "Decimales", description: "Sobre este token",
-    noHolders: "No se encontraron saldos positivos de monederos.", failed: "No se pudo cargar la distribución de monederos.", more: "Mostrar más monederos",
+    noHolders: "No se encontraron saldos positivos de monederos.", failed: "No se pudo cargar la distribución de monederos.", holdersUnavailable: "Holder list is not available right now.", more: "Mostrar más monederos",
   },
   pt: {
     loading: "Carregando dados da rede…", retry: "Tentar novamente", holders: "Titulares de carteiras", distribution: "Distribuição entre carteiras",
@@ -33,7 +33,7 @@ export const tokenExplorerCopy = {
     note: "O gráfico mostra saldos positivos de carteiras. Pools de liquidez, vesting e reservas do protocolo são separados e não são contados como carteiras.",
     partial: "Dados parciais: a varredura de contas atingiu seu limite. O número de titulares e a distribuição cobrem apenas as contas retornadas.",
     updated: "Obtido", refresh: "Atualizar", status: "Status", decimals: "Decimais", description: "Sobre este token",
-    noHolders: "Nenhum saldo positivo de carteira encontrado.", failed: "Não foi possível carregar a distribuição de carteiras.", more: "Mostrar mais carteiras",
+    noHolders: "Nenhum saldo positivo de carteira encontrado.", failed: "Não foi possível carregar a distribuição de carteiras.", holdersUnavailable: "Holder list is not available right now.", more: "Mostrar mais carteiras",
   },
   fr: {
     loading: "Chargement des données du réseau…", retry: "Réessayer", holders: "Détenteurs de portefeuilles", distribution: "Répartition entre portefeuilles",
@@ -42,7 +42,7 @@ export const tokenExplorerCopy = {
     note: "Le graphique montre les soldes positifs des portefeuilles. Les pools de liquidité, le vesting et les réserves du protocole sont distincts et ne sont pas comptés comme des portefeuilles.",
     partial: "Données partielles : le balayage des comptes a atteint sa limite. Le nombre de détenteurs et la répartition ne couvrent que les comptes renvoyés.",
     updated: "Récupéré", refresh: "Actualiser", status: "Statut", decimals: "Décimales", description: "À propos de ce token",
-    noHolders: "Aucun solde positif de portefeuille trouvé.", failed: "Impossible de charger la répartition des portefeuilles.", more: "Afficher plus de portefeuilles",
+    noHolders: "Aucun solde positif de portefeuille trouvé.", failed: "Impossible de charger la répartition des portefeuilles.", holdersUnavailable: "Holder list is not available right now.", more: "Afficher plus de portefeuilles",
   },
   de: {
     loading: "Netzwerkdaten werden geladen…", retry: "Erneut versuchen", holders: "Wallet-Inhaber", distribution: "Verteilung über Wallets",
@@ -51,7 +51,7 @@ export const tokenExplorerCopy = {
     note: "Das Diagramm zeigt positive Wallet-Guthaben. Liquiditätspools, Vesting und Protokollreserven sind getrennt und werden nicht als Wallets gezählt.",
     partial: "Unvollständige Daten: Der Kontoscan hat sein Limit erreicht. Die Anzahl der Inhaber und die Verteilung umfassen nur die zurückgegebenen Konten.",
     updated: "Abgerufen", refresh: "Aktualisieren", status: "Status", decimals: "Dezimalstellen", description: "Über diesen Token",
-    noHolders: "Keine positiven Wallet-Guthaben gefunden.", failed: "Wallet-Verteilung konnte nicht geladen werden.", more: "Weitere Wallets anzeigen",
+    noHolders: "Keine positiven Wallet-Guthaben gefunden.", failed: "Wallet-Verteilung konnte nicht geladen werden.", holdersUnavailable: "Holder list is not available right now.", more: "Weitere Wallets anzeigen",
   },
   it: {
     loading: "Caricamento dei dati di rete…", retry: "Riprova", holders: "Titolari di wallet", distribution: "Distribuzione tra i wallet",
@@ -60,7 +60,7 @@ export const tokenExplorerCopy = {
     note: "Il grafico mostra i saldi positivi dei wallet. Pool di liquidità, vesting e riserve del protocollo sono separati e non sono conteggiati come wallet.",
     partial: "Dati parziali: la scansione degli account ha raggiunto il limite. Il numero di titolari e la distribuzione coprono solo gli account restituiti.",
     updated: "Recuperato", refresh: "Aggiorna", status: "Stato", decimals: "Decimali", description: "Informazioni su questo token",
-    noHolders: "Nessun saldo positivo di wallet trovato.", failed: "Impossibile caricare la distribuzione dei wallet.", more: "Mostra altri wallet",
+    noHolders: "Nessun saldo positivo di wallet trovato.", failed: "Impossibile caricare la distribuzione dei wallet.", holdersUnavailable: "Holder list is not available right now.", more: "Mostra altri wallet",
   },
   tr: {
     loading: "Ağ verileri yükleniyor…", retry: "Yeniden dene", holders: "Cüzdan sahipleri", distribution: "Cüzdanlar arası dağılım",
@@ -69,7 +69,7 @@ export const tokenExplorerCopy = {
     note: "Grafik, pozitif cüzdan bakiyelerini gösterir. Likidite havuzları, vesting ve protokol rezervleri ayrıdır ve cüzdan olarak sayılmaz.",
     partial: "Eksik veri: hesap taraması sınırına ulaştı. Sahip sayısı ve dağılım yalnızca döndürülen hesapları kapsar.",
     updated: "Alındı", refresh: "Yenile", status: "Durum", decimals: "Ondalık basamak", description: "Bu token hakkında",
-    noHolders: "Pozitif bakiyeli cüzdan bulunamadı.", failed: "Cüzdan dağılımı yüklenemedi.", more: "Daha fazla cüzdan göster",
+    noHolders: "Pozitif bakiyeli cüzdan bulunamadı.", failed: "Cüzdan dağılımı yüklenemedi.", holdersUnavailable: "Holder list is not available right now.", more: "Daha fazla cüzdan göster",
   },
   vi: {
     loading: "Đang tải dữ liệu mạng…", retry: "Thử lại", holders: "Người giữ ví", distribution: "Phân bổ giữa các ví",
@@ -78,7 +78,7 @@ export const tokenExplorerCopy = {
     note: "Biểu đồ hiển thị số dư dương của các ví. Hồ bơi thanh khoản, vesting và dự trữ giao thức là riêng biệt và không được tính là ví.",
     partial: "Dữ liệu không đầy đủ: quá trình quét tài khoản đã đạt giới hạn. Số lượng người giữ và phân bổ chỉ bao gồm các tài khoản được trả về.",
     updated: "Đã lấy", refresh: "Làm mới", status: "Trạng thái", decimals: "Số chữ số thập phân", description: "Về token này",
-    noHolders: "Không tìm thấy số dư ví dương nào.", failed: "Không thể tải phân bổ ví.", more: "Hiện thêm ví",
+    noHolders: "Không tìm thấy số dư ví dương nào.", failed: "Không thể tải phân bổ ví.", holdersUnavailable: "Holder list is not available right now.", more: "Hiện thêm ví",
   },
   id: {
     loading: "Memuat data jaringan…", retry: "Coba lagi", holders: "Pemegang dompet", distribution: "Distribusi antar dompet",
@@ -87,7 +87,7 @@ export const tokenExplorerCopy = {
     note: "Grafik menunjukkan saldo dompet positif. Pool likuiditas, vesting, dan cadangan protokol bersifat terpisah dan tidak dihitung sebagai dompet.",
     partial: "Data sebagian: pemindaian akun mencapai batasnya. Jumlah pemegang dan distribusi hanya mencakup akun yang dikembalikan.",
     updated: "Diambil", refresh: "Segarkan", status: "Status", decimals: "Desimal", description: "Tentang token ini",
-    noHolders: "Tidak ditemukan saldo dompet positif.", failed: "Gagal memuat distribusi dompet.", more: "Tampilkan lebih banyak dompet",
+    noHolders: "Tidak ditemukan saldo dompet positif.", failed: "Gagal memuat distribusi dompet.", holdersUnavailable: "Holder list is not available right now.", more: "Tampilkan lebih banyak dompet",
   },
   zh: {
     loading: "正在加载网络数据…", retry: "重试", holders: "钱包持有人", distribution: "各钱包分布",
@@ -96,7 +96,7 @@ export const tokenExplorerCopy = {
     note: "图表显示的是正余额钱包。流动性池、锁仓计划和协议储备金是独立统计的，不计入钱包。",
     partial: "数据不完整：账户扫描已达到上限。持有人数量和分布仅覆盖已返回的账户。",
     updated: "获取时间", refresh: "刷新", status: "状态", decimals: "小数位数", description: "关于此代币",
-    noHolders: "未找到正余额钱包。", failed: "无法加载钱包分布数据。", more: "显示更多钱包",
+    noHolders: "未找到正余额钱包。", failed: "无法加载钱包分布数据。", holdersUnavailable: "Holder list is not available right now.", more: "显示更多钱包",
   },
   ar: {
     loading: "جارٍ تحميل بيانات الشبكة…", retry: "إعادة المحاولة", holders: "حاملو المحافظ", distribution: "التوزيع بين المحافظ",
@@ -105,6 +105,6 @@ export const tokenExplorerCopy = {
     note: "يُظهر الرسم البياني أرصدة المحافظ الإيجابية. تُحسب مجمعات السيولة وجداول الاستحقاق واحتياطيات البروتوكول بشكل منفصل ولا تُعد محافظ.",
     partial: "بيانات جزئية: بلغ فحص الحسابات حده الأقصى. يغطي عدد الحاملين والتوزيع الحسابات التي تم إرجاعها فقط.",
     updated: "تم الجلب", refresh: "تحديث", status: "الحالة", decimals: "الأرقام العشرية", description: "حول هذا الرمز",
-    noHolders: "لم يتم العثور على أرصدة محافظ إيجابية.", failed: "تعذر تحميل توزيع المحافظ.", more: "عرض المزيد من المحافظ",
+    noHolders: "لم يتم العثور على أرصدة محافظ إيجابية.", failed: "تعذر تحميل توزيع المحافظ.", holdersUnavailable: "Holder list is not available right now.", more: "عرض المزيد من المحافظ",
   },
 };

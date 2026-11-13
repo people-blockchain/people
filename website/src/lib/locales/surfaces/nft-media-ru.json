@@ -41,6 +41,8 @@
   "createAnother": "Создать ещё",
   "storedAt": "Хранится по адресу",
   "metadataLabel": "Метаданные",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "Открыть в PeopleScan",
   "viewHere": "Открыть этот NFT",
   "technicalDetails": "Технические подробности",

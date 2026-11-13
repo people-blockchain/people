@@ -41,6 +41,8 @@
   "createAnother": "再创建一个",
   "storedAt": "存储位置",
   "metadataLabel": "元数据",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "在 PeopleScan 查看",
   "viewHere": "查看此 NFT",
   "technicalDetails": "技术详情",

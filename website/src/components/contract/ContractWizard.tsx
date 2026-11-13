@@ -29,6 +29,8 @@ import {
 import { Chip, Eyebrow } from "@/components/ui/primitives";
 import { contractCopy, type ContractCopy } from "@/lib/contract-copy";
 import { formatPplExact } from "@/lib/asset-amounts";
+import { fetchAuthSessionUser } from "@/lib/wallet-cloud-client";
+import { sanitizeInAppPath } from "@/lib/safe-return-path";
 import {
   constructorFields,
   defaultFieldValue,
@@ -93,6 +95,21 @@ export function ContractWizard() {
   const [gasEstimate, setGasEstimate] = useState<number | null>(null);
   const [gasLimit, setGasLimit] = useState<number | null>(null);
   const [ctorEdits, setCtorEdits] = useState<Record<string, string>>({});
+  const [authSignedIn, setAuthSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void fetchAuthSessionUser()
+      .then((user) => {
+        if (active) setAuthSignedIn(Boolean(user));
+      })
+      .catch(() => {
+        if (active) setAuthSignedIn(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const ctorFields = useMemo<ConstructorField[]>(() => {
     try {
@@ -115,6 +132,8 @@ export function ContractWizard() {
     params?.quoteTypicalDeployFeePpl,
     TYPICAL_CONTRACT_DEPLOY_FEE_WEI
   );
+  const contractReturnPath = sanitizeInAppPath("/create/contract") ?? "/create/contract";
+  const signInHref = `/login?callbackUrl=${encodeURIComponent(contractReturnPath)}`;
 
   useEffect(() => {
     // E2E-M1: on the EVM chain the legacy compat layer only implements `contracts/<address>`,
@@ -168,9 +187,9 @@ export function ContractWizard() {
       });
       const body = (await res.json()) as CompileResult & { error?: string; details?: string[] };
       if (res.status === 401 || body.error === "sign_in_required") {
-        throw new Error(
-          lang === "ru" ? "Войдите в аккаунт, чтобы проверить код контракта." : "Sign in to check the contract code."
-        );
+        setAuthSignedIn(false);
+        setError("");
+        return;
       }
       if (!res.ok) {
         throw new Error(body.details?.[0] ?? body.error ?? t.error);
@@ -230,6 +249,14 @@ export function ContractWizard() {
       <Eyebrow>{t.tag}</Eyebrow>
       <h1 className="mt-3 text-h2 font-bold tracking-tight">{t.title}</h1>
       <p className="mt-3 text-lead text-ink-2">{t.lead}</p>
+      {authSignedIn === false ? (
+        <div className="mt-5 flex flex-col gap-3 rounded-xl border border-brand/40 bg-brand/5 p-4 sm:flex-row sm:items-center sm:justify-between" data-testid="contract-sign-in">
+          <p className="text-sm font-semibold text-ink">{t.signInRequired}</p>
+          <Link href={signInHref} className="inline-flex justify-center rounded-xl bg-brand px-4 py-2 text-sm font-semibold text-brand-ink">
+            {t.signIn}
+          </Link>
+        </div>
+      ) : null}
       <label htmlFor="contract-prompt" className="mt-6 block text-sm font-semibold text-ink">
         {t.label}
       </label>

@@ -235,3 +235,10 @@ export async function saveNftMetadata(
 ): Promise<StoredMetadata> {
   return postJson<StoredMetadata>("/api/factory/nft/metadata", input, fetchImpl);
 }
+
+export async function saveTokenMetadata(
+  input: { name: string; symbol: string; description?: string; image?: string },
+  fetchImpl: typeof fetch = fetch,
+): Promise<StoredMetadata> {
+  return postJson<StoredMetadata>("/api/factory/nft/metadata", input, fetchImpl);
+}

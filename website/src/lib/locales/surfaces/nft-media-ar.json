@@ -41,6 +41,8 @@
   "createAnother": "إنشاء آخر",
   "storedAt": "محفوظ في",
   "metadataLabel": "البيانات الوصفية",
+  "metadataUnavailable": "Metadata is not available right now.",
+  "aboutNft": "About this NFT",
   "viewOnPeoplescan": "عرض على PeopleScan",
   "viewHere": "عرض هذا NFT",
   "technicalDetails": "تفاصيل تقنية",

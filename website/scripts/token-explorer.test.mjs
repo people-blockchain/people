@@ -20,3 +20,17 @@ test('block height is never treated as a creation timestamp',()=>{
 test('tiny positive ownership is not rounded to zero', () => {
  assert.equal(formatShare(0.00001), '<0.01%'); assert.equal(formatShare(0), '0.00%'); assert.equal(formatShare(80), '80.00%');
 });
+
+import { withTimeoutSignal } from '../src/lib/request-timeout.ts';
+test('a section request times out on its own budget without the page controller', async () => {
+  const page = new AbortController();
+  const signal = withTimeoutSignal(page.signal, 20);
+  await new Promise((resolve) => signal.addEventListener('abort', resolve, { once: true }));
+  assert.equal(signal.aborted, true);
+  assert.equal(page.signal.aborted, false);
+
+  const external = new AbortController();
+  const linked = withTimeoutSignal(external.signal, 10_000);
+  external.abort();
+  assert.equal(linked.aborted, true);
+});

@@ -3,6 +3,8 @@ import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { handleEvmCompatGet } from "@/lib/evm/people-compat";
 import { clientIpFromRequest } from "@/lib/request-client-ip";
 
+export const maxDuration = 30;
+
 const RATE_LIMIT = 120;
 const RATE_WINDOW_MS = 60_000;
 

@@ -258,3 +258,37 @@ test("metadata: blob:, data:, a video uri with a path and an oversized descripti
   }
   assert.equal(pinned.length, 0);
 });
+
+test("metadata: token JSON has symbol and an optional permanent logo", async () => {
+  let res = await metadataRoute(
+    jsonRequest("/api/factory/nft/metadata", {
+      name: "People Test Token",
+      symbol: "ptt",
+      image: `ipfs://${VIDEO_CID}`,
+    }),
+  );
+  assert.equal(res.status, 200);
+  let body = await res.json();
+  assert.deepEqual(body.json, {
+    name: "People Test Token",
+    symbol: "PTT",
+    image: `ipfs://${VIDEO_CID}`,
+  });
+  assert.equal(body.tokenUri, `ipfs://${DIR_CID}/metadata.json`);
+  assert.equal(pinned.at(-1).name, "metadata.json");
+
+  res = await metadataRoute(jsonRequest("/api/factory/nft/metadata", { name: "No Logo", symbol: "NL" }));
+  assert.equal(res.status, 200);
+  body = await res.json();
+  assert.deepEqual(body.json, { name: "No Logo", symbol: "NL" });
+
+  res = await metadataRoute(
+    jsonRequest("/api/factory/nft/metadata", {
+      name: "Bad Image",
+      symbol: "BAD",
+      image: "data:image/png;base64,AA",
+    }),
+  );
+  assert.equal(res.status, 400);
+  assert.equal((await res.json()).error, "invalid_image_uri");
+});

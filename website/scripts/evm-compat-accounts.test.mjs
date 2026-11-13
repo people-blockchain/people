@@ -28,16 +28,17 @@ async function startRpcNode(t, answer) {
   const node = createServer((req, res) => {
     const chunks = [];
     req.on("data", (chunk) => chunks.push(chunk));
-    req.on("end", () => {
+    req.on("end", async () => {
       const body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
       res.writeHead(200, { "content-type": "application/json" });
       if (Array.isArray(body)) {
         calls.push(...body.map((call) => ({ method: call.method, params: call.params ?? [] })));
-        res.end(JSON.stringify(body.map((call) => ({ jsonrpc: "2.0", id: call.id, result: answer(call) ?? null }))));
+        const results = await Promise.all(body.map(async (call) => ({ jsonrpc: "2.0", id: call.id, result: (await answer(call)) ?? null })));
+        res.end(JSON.stringify(results));
         return;
       }
       calls.push({ method: body.method, params: body.params ?? [] });
-      res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result: answer(body) ?? null }));
+      res.end(JSON.stringify({ jsonrpc: "2.0", id: body.id, result: (await answer(body)) ?? null }));
     });
   });
   await new Promise((resolve) => node.listen(0, "127.0.0.1", resolve));
@@ -153,4 +154,27 @@ test("the holders cache is a bounded LRU", async (t) => {
     await aggregateHoldersFromTransfers(`0x${i.toString(16).padStart(40, "0")}`);
   }
   assert.equal(holdersCacheSizeForTests(), HOLDERS_CACHE_MAX_ENTRIES);
+});
+
+test("accounts returns a fast 503 when the Transfer-log scan exceeds its time budget", async (t) => {
+  const previousBudget = process.env.EVM_ACCOUNTS_SCAN_BUDGET_MS;
+  process.env.EVM_ACCOUNTS_SCAN_BUDGET_MS = "40";
+  t.after(() => {
+    if (previousBudget === undefined) delete process.env.EVM_ACCOUNTS_SCAN_BUDGET_MS;
+    else process.env.EVM_ACCOUNTS_SCAN_BUDGET_MS = previousBudget;
+  });
+  withScanCap(t, 5);
+  const token = Object.values(readEvmDeployments().assetMap)[0];
+  await startRpcNode(t, async (call) => {
+    if (call.method === "eth_getLogs") {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      return [];
+    }
+    return emptyNode(call);
+  });
+  const started = Date.now();
+  const res = await handleEvmCompatGet("/accounts", new URLSearchParams({ assetId: token }));
+  assert.equal(res.status, 503);
+  assert.deepEqual(res.body, { error: "accounts_unavailable" });
+  assert.ok(Date.now() - started < 1_000, "the route must not wait for the full scan");
 });

@@ -5,10 +5,11 @@ const PINATA_TIMEOUT_MS = 25_000;
 type FetchLike = typeof fetch;
 
 /**
- * Signed uploads land on the private network. Verify reads them through a
- * private link and only then copies the checked bytes to public.
+ * Signed uploads land on the public network. Verify reads the bytes back through the
+ * public IPFS gateway. Private storage (and its dedicated-gateway download link) is kept
+ * only for records created before this default changed.
  */
-export const PINATA_UPLOAD_NETWORK = "private" as const;
+export const PINATA_UPLOAD_NETWORK = "public" as const;
 
 /** Pinata counts the whole multipart body, not the file alone. At least 64 KiB, or 2%. */
 export const PINATA_MULTIPART_HEADROOM_MIN_BYTES = 64 * 1024;
