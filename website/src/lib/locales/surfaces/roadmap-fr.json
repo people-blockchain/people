@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "1B PPL fixe : années 1–4 à 0 % d’inflation ; pool 200M selon 6/5/5/4 % + 30 % frais ; lancement depuis le fonds 35 % ; à partir de l’an 5 max 2 %/an par vote ; airdrop fondateurs avant vente à 1 000 vérifiés + multisig. Frais 30/25/20/10/15/0 sur /tokenomics et /how-it-works."
+      "summary": "1B PPL fixe : années 1–4 à 0 % d’inflation ; pool 200M selon 6/5/5/4 % + 30 % frais ; lancement depuis le fonds 35 % ; à partir de l’an 5 max 2 %/an par vote ; la vente PPL est live sur Base via PplCurveHub pour USDC/USDT ; paiement depuis d’autres chaînes via le widget cross-chain (TON non pris en charge) ; dure jusqu’à épuisement ou 24 mois, selon le premier terme, sans prolongation ; les PPL invendus vont au Community Pool ; revente réservée aux personnes vérifiées, avec un délai de 30 jours et des limites. Frais 30/25/20/10/15/0 sur /tokenomics et /how-it-works."
     },
     "discover-feed": {
       "title": "Fil de projets",

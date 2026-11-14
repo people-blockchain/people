@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "1B PPL tetap: tahun 1–4 inflasi 0%; kolam validator 200M jadwal 6/5/5/4% + 30% biaya; hadiah peluncuran dari kolam 35%; dari tahun 5 maks. 2%/tahun voting; airdrop pendiri sebelum jual dengan 1.000 terverifikasi + multisig. Biaya 30/25/20/10/15/0 di /tokenomics dan /how-it-works."
+      "summary": "1B PPL tetap: tahun 1–4 inflasi 0%; kolam validator 200M jadwal 6/5/5/4% + 30% biaya; hadiah peluncuran dari kolam 35%; dari tahun 5 maks. 2%/tahun voting; penjualan PPL aktif di Base lewat PplCurveHub untuk USDC/USDT; bayar dari chain lain lewat widget cross-chain (TON tidak didukung); berlangsung sampai habis atau 24 bulan, mana yang lebih dulu, tanpa perpanjangan; PPL yang tidak terjual masuk ke Community Pool; jual balik hanya untuk orang terverifikasi, dengan hold 30 hari dan batas. Biaya 30/25/20/10/15/0 di /tokenomics dan /how-it-works."
     },
     "discover-feed": {
       "title": "Feed proyek",

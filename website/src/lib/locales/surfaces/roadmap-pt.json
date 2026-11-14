@@ -37,7 +37,7 @@
     },
     "tokenomics-1b-ppl": {
       "title": "1 mil millones de PPL",
-      "summary": "1B PPL fixo: anos 1–4 com 0% inflação; pool 200M com 6/5/5/4% + 30% taxas; recompensas do 35% comunitário; do ano 5 máx. 2%/ano por voto; airdrop fundadores antes da venda com 1.000 verificados e multisig. Taxas 30/25/20/10/15/0 em /tokenomics e /how-it-works."
+      "summary": "1B PPL fixo: anos 1–4 com 0% inflação; pool 200M com 6/5/5/4% + 30% taxas; recompensas do 35% comunitário; do ano 5 máx. 2%/ano por voto; a venda de PPL está ativa na Base via PplCurveHub para USDC/USDT; pague de outras chains pelo widget cross-chain (TON não suportado); dura até esgotar ou 24 meses, o que vier primeiro, sem prorrogações; PPL não vendido vai para o Community Pool; revenda apenas para pessoas verificadas, com retenção de 30 dias e limites. Taxas 30/25/20/10/15/0 em /tokenomics e /how-it-works."
     },
     "discover-feed": {
       "title": "Feed de projetos",
