@@ -71,7 +71,7 @@ Apa yang dapat Anda lakukan tanpa kode:
 | EVM chain id | `97401` |
 | Koin asli | PPL (base denom `appl`, 18 decimals) |
 | Prefiks alamat | `people1…` (dan akun yang sama seperti `0x…` di EVM) |
-| Status jaringan | Testnet publik — bukan mainnet |
+| Status jaringan | Testnet publik aktif; PEOPLE Mainnet Beta dibuka 1 Desember 2026 |
 
 **Validator.** Validator menjalankan jaringan dan dibayar dari dana validator pra-alokasi ditambah 30% dari setiap biaya jaringan. Validator testnet berjalan untuk pengujian saja; pembukaan validasi dan staking ke publik adalah tahap roadmap yang lebih lambat.
 
@@ -144,7 +144,7 @@ Setiap biaya protokol, termasuk biaya fraksional, dibagi dengan cara yang sama:
 | Tahap | Apa yang terjadi | Gerbang |
 |---|---|---|
 | **Musim 0 — Testnet publik** | Dompet, verifikasi, peluncuran token, kartu NFT, swap, poin Satu Juta Founder. | Sekarang |
-| **Mainnet + penjualan PPL** | Mainnet diluncurkan. Parameter dipublikasikan (kurva eksponensial dari **$0.005**/PPL, hingga **100M PPL** di kurva, graduation **$4M**) di `/buy`; pembelian nonaktif hingga hub di-deploy. | Minimal 1.000 orang terverifikasi **dan** multisig treasury aktif |
+| **PEOPLE Mainnet Beta + penjualan PPL** | PEOPLE Mainnet Beta dibuka pada 1 Desember 2026: Anda membayar dengan USDC atau USDT di Base (PplCurveHub), dan PPL langsung dikreditkan di PEOPLE Mainnet Beta. Parameter dipublikasikan (kurva eksponensial dari **$0.005**/PPL, hingga **100M PPL** di kurva, graduation **$4M**) di `/buy`. Transfer antar orang dibuka setelah sekitar 1.000 peserta terverifikasi. | 1 Desember 2026 · PplCurveHub di Base dan multisig penerima dipublikasikan |
 | **Staking & validator** | Staking dan partisipasi validator terbuka di luar proyek. | Setelah mainnet |
 
 Tidak ada tanggal yang dijanjikan. Setiap tahap dimulai ketika gerbangnya terpenuhi.

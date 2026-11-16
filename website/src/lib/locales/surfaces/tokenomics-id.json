@@ -1,11 +1,11 @@
 {
   "tag": "TOKENOMIK",
   "title": "Pasokan PPL dan rencana peluncuran",
-  "lead": "Bagaimana satu miliar PPL tetap dialokasikan, dibuka, dan dijual sebelum dan sesudah mainnet. Angka sementara, tunduk pada tata kelola komunitas.",
+  "lead": "Bagaimana satu miliar PPL tetap dialokasikan, dibuka, dan dijual sebelum dan sesudah PEOPLE Mainnet Beta. Angka sementara, tunduk pada tata kelola komunitas.",
   "banner": "Sementara — menunggu voting tata kelola komunitas.",
   "supplyTitle": "Pasokan tetap",
   "supplyBody": "Pasokan tetap 1.000.000.000 PPL (satu miliar). Tahun 1–4: inflasi 0% — tidak ada koin baru di luar jadwal buka. Dari tahun 5, emisi tambahan maks. 2% per tahun hanya lewat voting komunitas.",
-  "testnetNote": "Testnet internal memakai premine 1M PPL untuk eksperimen. Tidak dibawa — mainnet mulai dari nol.",
+  "testnetNote": "Testnet internal memakai premine 1M PPL untuk eksperimen. Tidak dibawa — pencatatan Mainnet Beta mulai dari nol.",
   "allocationTitle": "Alokasi genesis",
   "allocationLead": "Enam bucket saat peluncuran. Ketuk atau arahkan kursor untuk melihat bagian, jumlah, dan jadwal buka.",
   "bucketLabels": {
@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): tahun 1–4 membayar 6%, 5%, 5%, 4% dari total pasokan per tahun (60M / 50M / 50M / 40M PPL) plus 30% biaya jaringan.",
     "team": "15% dari suplai: 0% saat peluncuran, cliff 6 bulan, lalu 18 bulan pembukaan bulanan linear (total 24 bulan).",
     "treasury": "Hanya setelah vote DAO; di multisig.",
-    "sale": "Dijual di kurva publik di Base (PplCurveHub). PPL dikreditkan di PEOPLE mainnet segera setelah pembelian; transfer dibuka saat peluncuran jaringan penuh.",
+    "sale": "Dijual di kurva publik di Base (PplCurveHub). PPL dikreditkan di PEOPLE Mainnet Beta segera setelah pembelian; transfer antar orang dibuka setelah sekitar 1.000 peserta terverifikasi.",
     "liquidity": "Pool PPL/USDC saat graduation; token LP dikunci selama 24 bulan."
   },
   "donutTitle": "Alokasi",
@@ -36,7 +36,7 @@
   "salePayTitle": "Cara Anda akan membayar",
   "salePayBody": "Di Base — dengan USDC atau USDT. Dari jaringan lain — melalui penukaran otomatis bawaan (LI.FI): jaringan EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, dan lainnya), Tron, dan Solana berfungsi. TON tidak didukung. Dana diterima dalam USDC di jaringan Base.",
   "saleDeliveryTitle": "Cara menerima PPL",
-  "saleDeliveryBody": "PPL langsung dikreditkan ke alamat Anda di PEOPLE mainnet, tetapi Anda baru bisa mengirimkannya ke orang lain setelah peluncuran jaringan penuh. Hanya pengguna terverifikasi yang bisa menjual kembali, 30 hari setelah setiap pembelian.",
+  "saleDeliveryBody": "PPL langsung dikreditkan ke alamat Anda di PEOPLE Mainnet Beta, tetapi Anda baru bisa mengirimkannya ke orang lain setelah sekitar 1.000 peserta terverifikasi. Hanya pengguna terverifikasi yang bisa menjual kembali, 30 hari setelah setiap pembelian.",
   "curveTitle": "Kurva bonding",
   "curveLead": "Kurva eksponensial: harga mulai $0,005 per PPL dan naik setiap pembelian, hingga batas $0,25 selama kurva terbuka. Graduation menutup kurva saat terkumpul $4M.",
   "unsoldTitle": "Token tidak terjual",
@@ -88,7 +88,7 @@
     "Dari tahun 5, emisi baru maks. 2% per tahun dan hanya lewat voting komunitas."
   ],
   "launchOrderTitle": "Urutan peluncuran",
-  "launchOrderBody": "Penjualan PPL dibuka setelah kontrak penjualan (PplCurveHub di Base) dan multisig penerima dipublikasikan. Transfer dan perdagangan di pool dibuka saat peluncuran jaringan penuh, dengan 1.000 orang terverifikasi.",
+  "launchOrderBody": "Penjualan PPL dibuka pada 1 Desember 2026 sebagai PEOPLE Mainnet Beta. Transfer antar orang diaktifkan setelah sekitar 1.000 peserta terverifikasi.",
   "pplFeeTariffsLink": "Tarif biaya PPL",
   "explorerLink": "Penjelajah",
   "backToDocsLink": "Kembali ke dokumentasi",
@@ -99,7 +99,7 @@
     "100.000.000 PPL di kurva (10% pasokan); awal $0,005, kenaikan eksponensial, batas $0,25 hanya di kurva.",
     "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
     "Dana 50% likuiditas terkunci / 50% multisig proyek; token LP terkunci 24 bulan.",
-    "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang dan $2.000 per orang dalam jendela geser 24 jam. Biaya 1,5% (3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan). Ditutup setelah graduation. Dana diterima dalam USDC di jaringan Base.",
+    "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap lot dapat dijual kembali setelah masa tunggu 30 hari, dengan harga kurva pada saat penjualan. Batas total: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang dan $2.000 per alamat dalam jendela geser 24 jam. Biaya 1,5% (3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan). Tetap buka setelah kurva ditutup, sampai cadangan dipindahkan ke likuiditas. Dana diterima dalam USDC di jaringan Base. PPL kembali ke dompet penjualan di PEOPLE Mainnet Beta; tidak ada yang dibakar.",
     "$10–$500 per pembelian; Hingga $2,000 per orang dalam jendela geser 24 jam; Jeda 60 detik antarpembelian"
   ],
   "curveTableSold": "% terjual",

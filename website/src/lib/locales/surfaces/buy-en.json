@@ -7,7 +7,7 @@
     "eyebrow": "PPL sale",
     "headline": "The earlier you buy, the lower the price.",
     "lead": "Every purchase moves the curve up, so later buyers pay more. That’s why the open matters. You can sell back after 30 days.",
-    "subUpcoming": "The PPL sale opens on {date}.",
+    "subUpcoming": "The PPL sale opens on {date} as PEOPLE Mainnet Beta.",
     "subWhitelist": "The PPL sale is open. Only verified people can buy.",
     "subOpen": "The PPL sale is open. Any verified person can buy.",
     "subEnded": "The PPL sale is over.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL straight to your PEOPLE wallet",
-        "body": "You pay in USDC or USDT, and PPL is credited instantly to your address on PEOPLE mainnet."
+        "body": "You pay in USDC or USDT, and PPL is credited instantly to your address on PEOPLE Mainnet Beta."
       }
     ],
     "verifyLink": "How to get verified"
@@ -143,7 +143,7 @@
       },
       {
         "q": "When can I send PPL to other people?",
-        "a": "PPL is credited on PEOPLE mainnet right after your purchase. At first the network only receives PPL: transfers between participants open later, once there are about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above."
+        "a": "PPL is credited on PEOPLE Mainnet Beta right after your purchase. This is the real PEOPLE mainnet, at an early stage we call beta, so some limits still apply. At first the network only receives PPL: transfers between people open after about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above."
       },
       {
         "q": "Which networks can I pay from?",
@@ -273,14 +273,14 @@
     "riskTitle": "Risk warning",
     "riskBody": "Crypto is risky: the price can fall, you may not be able to sell right away, and purchases cannot be refunded. Only use money you can afford to lose.",
     "riskMoreToggle": "All risks",
-    "riskMore": "Also: PPL transfers between participants open later, once the PEOPLE network has about 1,000 verified participants. Selling back to the reserve is for verified users only, 30 days after each purchase and within daily limits. The sale contract has been reviewed only by AI models; no external audit has been done yet. The project multisig can pause buying and selling back.",
+    "riskMore": "Also: PPL is credited on PEOPLE Mainnet Beta right after purchase, and transfers between people open after about 1,000 verified participants. Selling back to the reserve is for verified users only, 30 days after each purchase and within daily limits. The sale contract has been reviewed only by AI models; no external audit has been done yet. The project multisig can pause buying and selling back.",
     "saleTermsNote": "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
     "termsAgree": "By buying you agree to the {terms}.",
     "termsLink": "Terms",
     "help": "Need help? {support}",
     "supportLink": "Support",
     "noWalletHint": "No wallet? Create or import a PEOPLE Wallet, or connect MetaMask / WalletConnect. To pay, you need USDC on Base in that wallet.",
-    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL goes back to the sale wallet on PEOPLE mainnet; nothing is burned. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base.",
+    "sellBackTerms": "Sell-back to the reserve — verified users only. Each purchase can be sold back 30 days after it was made, at the curve price at the moment you sell. Limits: 2% of the reserve in any rolling 24 hours for everyone together, and $2,000 per address in a rolling 24-hour window. PPL goes back to the sale wallet on PEOPLE Mainnet Beta; nothing is burned. Fee: 1.5%; 3% only on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base.",
     "feesTitle": "Fees and timing",
     "feesBody": "Fees: the Base network fee (gas), paid in ETH — usually about $0.01; the LI.FI swap or bridge fee — shown in the widget before you confirm; the sell-back fee — 1.5%, and 3% only on the part of sell-backs in the rolling 24 hours above 1% of the reserve.",
     "timingBody": "A purchase on Base is confirmed within seconds. Payments from other networks usually arrive within 1–20 minutes. Sell-back payouts are made in USDC on Base.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Purchase complete",
-      "credited": "{ppl} PPL credited on PEOPLE mainnet to {address}",
+      "credited": "{ppl} PPL credited on PEOPLE Mainnet Beta to {address}",
       "tx": "View transaction",
       "unlock": "Sell-back unlocks on {date}",
       "again": "Buy more PPL"
@@ -401,11 +401,11 @@
       "receive": "You receive",
       "amount": "PPL to sell",
       "max": "Max",
-      "burning": "Returning PPL to the sale wallet on PEOPLE mainnet…",
+      "burning": "Returning PPL to the sale wallet on PEOPLE Mainnet Beta…",
       "attesting": "Checking the return…",
       "selling": "Paying out USDC on Base…",
       "done": "Sell complete. USDC is paid on Base.",
-      "payoutNote": "PPL goes back to the sale wallet on PEOPLE mainnet and you receive USDC on Base.",
+      "payoutNote": "PPL goes back to the sale wallet on PEOPLE Mainnet Beta and you receive USDC on Base.",
       "error": "Selling PPL did not go through. Try again.",
       "rejected": "You rejected the request in your wallet.",
       "notConfigured": "Selling PPL is not available yet.",

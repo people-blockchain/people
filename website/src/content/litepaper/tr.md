@@ -71,7 +71,7 @@ Kod olmadan yapabileceğiniz şeyler:
 | EVM zincir kimliği | `97401` |
 | Yerel madeni para | PPL (temel denom `appl`, 18 ondalık) |
 | Adres öneki | `people1…` (ve EVM'de aynı hesap olarak `0x…`) |
-| Ağ durumu | Halka açık testnet — mainnet değil |
+| Ağ durumu | Halka açık testnet yayında; PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor |
 
 **Doğrulayıcılar.** Doğrulayıcılar ağı çalıştırır ve önceden tahsis edilen doğrulayıcı havuzundan artı her ağ ücretinin %30'undan ödeme alırlar. Testnet doğrulayıcıları yalnızca test için çalışır; doğrulama ve hisse senedi halka açmak daha sonraki bir yol haritası aşamasıdır.
 
@@ -144,7 +144,7 @@ Her protokol ücreti, kesirli ücretler dahil, aynı şekilde bölünür:
 | Aşama | Ne olur | Kapı |
 |---|---|---|
 | **Sezon 0 — Halka açık testnet** | Cüzdanlar, doğrulama, token başlatmaları, NFT kartları, takaslalar, Milyon Kurucusu puanları. | Şimdi |
-| **Mainnet + PPL satışı** | Mainnet başlar. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında; hub deploy edilene kadar alımlar kapalı. | En az 1.000 doğrulanmış kişi **ve** aktif hazine multisig |
+| **PEOPLE Mainnet Beta + PPL satışı** | PEOPLE Mainnet Beta 1 Aralık 2026'da açılır: Base üzerinde USDC veya USDT ile ödeme yaparsınız (PplCurveHub) ve PPL anında PEOPLE Mainnet Beta üzerinde tanımlanır. Yayınlanan parametreler (üstel eğri **$0.005**/PPL'den, eğride **100M PPL**, **$4M** graduation) `/buy` sayfasında. Kişiler arasındaki transferler yaklaşık 1.000 doğrulanmış katılımcıdan sonra açılır. | 1 Aralık 2026 · Base üzerinde PplCurveHub ve alıcı multisig yayınlandı |
 | **Hisse senedi ve doğrulayıcılar** | Hisse senedi ve doğrulayıcı katılımı proje ötesinde açılır. | Mainnet'ten sonra |
 
 Hiçbir tarih vaat edilmez. Her aşama, kapısı karşılandığında başlar.

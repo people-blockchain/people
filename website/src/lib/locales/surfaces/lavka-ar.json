@@ -58,7 +58,7 @@
   "successPay": "تم إرسال الدفع.",
   "successEscrow": "تم قفل الدفع المسبق.",
   "connectWallet": "ربط المحفظة",
-  "preliminaryBanner": "مبدئي — قد تتغير معاملات التجربة قبل mainnet.",
+  "preliminaryBanner": "مبدئي — قد تتغير معاملات التجربة قبل PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "سجّل عبر Google أو البريد واربط محفظتك لإدارة المتجر أو استخدام الزيارات.",
   "pohRequiredCloud": "سجّل عبر email أو البريد واربط محفظتك لإدارة المتجر أو استخدام الزيارات."
 }

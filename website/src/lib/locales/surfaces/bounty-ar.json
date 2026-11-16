@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "بيع PPL · 1 ديسمبر 2026",
     "title": "العد التنازلي لبيع PPL",
-    "lead": "تفتح عملية بيع PPL العامة في 1 ديسمبر 2026. تدفع بالـ USDC أو USDT على Base، ويُضاف PPL فورًا إلى عنوانك في شبكة PEOPLE.",
+    "lead": "تفتح عملية بيع PPL العامة في 1 ديسمبر 2026 باسم PEOPLE Mainnet Beta. تدفع بالـ USDC أو USDT على Base، ويُضاف PPL فورًا إلى عنوانك على PEOPLE Mainnet Beta.",
     "days": "أيام",
     "hours": "ساعات",
     "minutes": "دقائق",
@@ -56,14 +56,46 @@
     "verification": "التحقق من الإنسان مطلوب."
   },
   "taskItems": [
-    { "id": "swap", "label": "مبادلة PPL", "href": "/swap" },
-    { "id": "stake", "label": "ستاك PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "إطلاق رمز", "href": "/create/token" },
-    { "id": "nft_mint", "label": "سك NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "التصويت في الحوكمة", "href": "/governance" },
-    { "id": "discover_reaction", "label": "التفاعل مع مشروع", "href": "/discover" },
-    { "id": "discover_follow", "label": "متابعة مشروع", "href": "/discover" },
-    { "id": "invite", "label": "دعوة شخص موثّق", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "مبادلة PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "ستاك PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "إطلاق رمز",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "سك NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "التصويت في الحوكمة",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "التفاعل مع مشروع",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "متابعة مشروع",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "دعوة شخص موثّق",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "الإحالة",

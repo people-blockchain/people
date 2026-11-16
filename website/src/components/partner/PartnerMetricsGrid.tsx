@@ -93,7 +93,7 @@ export function PartnerMetricsGrid({ metrics }: { metrics: CabinetMetrics }) {
               </p>
             </div>
             <span className="rounded-full border border-line bg-canvas px-2.5 py-0.5 font-mono text-xs text-ink-2">
-              PEOPLE Mainnet
+              PEOPLE Mainnet Beta
             </span>
           </div>
           <p className="mt-1 text-xs text-ink-3">{c.metricEarnedPplHint}</p>

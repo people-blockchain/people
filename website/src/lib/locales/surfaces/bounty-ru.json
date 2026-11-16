@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "ПРОДАЖА PPL · 1 ДЕКАБРЯ 2026",
     "title": "До старта продажи PPL",
-    "lead": "Публичная продажа PPL открывается 1 декабря 2026 года. Оплата в USDC или USDT в сети Base, а PPL сразу зачисляются на ваш адрес в сети PEOPLE.",
+    "lead": "Публичная продажа PPL открывается 1 декабря 2026 года как PEOPLE Mainnet Beta. Оплата в USDC или USDT в сети Base, а PPL сразу зачисляются на ваш адрес в PEOPLE Mainnet Beta.",
     "days": "дней",
     "hours": "часов",
     "minutes": "минут",
@@ -56,14 +56,46 @@
     "verification": "Требуется верификация человека."
   },
   "taskItems": [
-    { "id": "swap", "label": "Обменять PPL", "href": "/swap" },
-    { "id": "stake", "label": "Застейкать PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "Запустить токен", "href": "/create/token" },
-    { "id": "nft_mint", "label": "Создать NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Проголосовать в управлении", "href": "/governance" },
-    { "id": "discover_reaction", "label": "Отреагировать на проект", "href": "/discover" },
-    { "id": "discover_follow", "label": "Подписаться на проект", "href": "/discover" },
-    { "id": "invite", "label": "Пригласить верифицированного человека", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "Обменять PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "Застейкать PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Запустить токен",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Создать NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Проголосовать в управлении",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "Отреагировать на проект",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Подписаться на проект",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Пригласить верифицированного человека",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "РЕФЕРАЛЫ",

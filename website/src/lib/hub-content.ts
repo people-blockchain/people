@@ -335,7 +335,7 @@ const rawHub = {
         },
         {
           label: "Public network",
-          value: "Public testnet v2 is running. This is not Mainnet.",
+          value: "Public testnet v2 is running. PEOPLE Mainnet Beta opens 1 December 2026.",
         },
       ],
       caveat: "",
@@ -440,7 +440,7 @@ const rawHub = {
           title: "TESTNET",
           items: [
             "A public testnet is running.",
-            "This is not Mainnet and not a promise of live public trading of value.",
+            "PEOPLE Mainnet Beta opens 1 December 2026; test tokens carry no value.",
           ],
         },
         {
@@ -788,7 +788,7 @@ const rawHub = {
         },
         {
           label: "Публичная сеть",
-          value: "Публичный testnet v2 работает. Это не Mainnet.",
+          value: "Публичный testnet v2 работает. PEOPLE Mainnet Beta открывается 1 декабря 2026 года.",
         },
       ],
       caveat: "",
@@ -893,7 +893,7 @@ const rawHub = {
           title: "TESTNET",
           items: [
             "Публичный testnet работает.",
-            "Это не Mainnet и не обещание живой публичной торговли ценностью.",
+            "PEOPLE Mainnet Beta открывается 1 декабря 2026 года; тестовые токены не имеют ценности.",
           ],
         },
         {

@@ -19,7 +19,7 @@
     ],
     "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây và thử trên testnet.",
     "pitchLine": "Blockchain cho người bình thường: token riêng, thẻ NFT câu lạc bộ và gọi vốn cho một ý tưởng — không cần code.",
-    "testnetBadge": "Testnet công khai đang chạy. Chưa phải mainnet.",
+    "testnetBadge": "Testnet công khai đang chạy. PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026.",
     "ctaTestnet": "Thử testnet",
     "ctaFounder": "Nhận số nhà sáng lập của bạn",
     "card": {
@@ -47,7 +47,7 @@
     ],
     "shareBadge": "Lên đến 10% chia cho cộng đồng",
     "peopleLine": "Người của bạn, không phải cá voi",
-    "saleNote": "Mạng PEOPLE vẫn là mạng thử nghiệm và token thử nghiệm không có giá trị. Đợt bán PPL là riêng biệt: diễn ra trên Base bằng USDC hoặc USDT thật."
+    "saleNote": "Môi trường dùng thử hiện nay là testnet công khai (token thử nghiệm không có giá trị). PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026: bạn thanh toán bằng USDC hoặc USDT trên Base và PPL được ghi có trên PEOPLE Mainnet Beta."
   },
   "community": {
     "eyebrow": "10% đảm bảo cho cộng đồng",

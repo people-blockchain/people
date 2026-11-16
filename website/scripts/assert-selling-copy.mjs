@@ -188,7 +188,16 @@ test("owner-approved EN hero copy on homepage", () => {
   assert.match(en.hero.headlineMain, /Launch a token for your community/);
   assert.match(en.hero.headlineAccent, /10%.*guaranteed/i);
   assert.doesNotMatch(en.hero.headlineAccent, /Up to 27/i);
-  assert.match(en.hero.testnetBadge, /Public testnet is live/);
+  assert.equal(
+    en.hero.testnetBadge,
+    "Public testnet is live. PEOPLE Mainnet Beta opens 1 December 2026.",
+  );
+  const enLocale = src("src/lib/locales/en.ts");
+  assert.match(
+    enLocale,
+    /"mainnetTitle": "PEOPLE Mainnet Beta: pay USDC or USDT on Base; PPL are credited on the PEOPLE network\."/,
+  );
+  assert.doesNotMatch(enLocale, /Mainnet: the Base network/);
 });
 
 test("RU home hero is translated, not legacy lockup", () => {

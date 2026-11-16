@@ -58,7 +58,7 @@
   "successPay": "Zahlung gesendet.",
   "successEscrow": "Vorauszahlung gesperrt.",
   "connectWallet": "Wallet verbinden",
-  "preliminaryBanner": "Vorläufig — Pilotparameter können vor Mainnet ändern.",
+  "preliminaryBanner": "Vorläufig — Pilotparameter können sich vor der PEOPLE Mainnet Beta ändern.",
   "pohRequiredSocial": "Melden Sie sich mit Google oder E-Mail an und verknüpfen Sie Ihr Wallet für Shop oder Besuchsabbuchung.",
   "pohRequiredCloud": "Melden Sie sich mit E-Mail an und verknüpfen Sie Ihr Wallet für Shop oder Besuchsabbuchung."
 }

@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "VENDA DE PPL · 1 DE DEZEMBRO DE 2026",
     "title": "Contagem para a venda de PPL",
-    "lead": "A venda pública de PPL abre em 1 de dezembro de 2026. Você paga em USDC ou USDT na Base, e os PPL são creditados imediatamente no seu endereço na rede PEOPLE.",
+    "lead": "A venda pública de PPL abre em 1 de dezembro de 2026 como PEOPLE Mainnet Beta. Você paga em USDC ou USDT na Base, e os PPL são creditados imediatamente no seu endereço na PEOPLE Mainnet Beta.",
     "days": "dias",
     "hours": "horas",
     "minutes": "minutos",
@@ -56,14 +56,46 @@
     "verification": "Verificação humana necessária."
   },
   "taskItems": [
-    { "id": "swap", "label": "Trocar PPL", "href": "/swap" },
-    { "id": "stake", "label": "Fazer staking de PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "Lançar um token", "href": "/create/token" },
-    { "id": "nft_mint", "label": "Cunhar um NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Votar na governança", "href": "/governance" },
-    { "id": "discover_reaction", "label": "Reagir a um projeto", "href": "/discover" },
-    { "id": "discover_follow", "label": "Seguir um projeto", "href": "/discover" },
-    { "id": "invite", "label": "Convidar uma pessoa verificada", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "Trocar PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "Fazer staking de PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Lançar um token",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Cunhar um NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Votar na governança",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "Reagir a um projeto",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Seguir um projeto",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Convidar uma pessoa verificada",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "INDICAÇÕES",

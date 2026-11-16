@@ -115,7 +115,7 @@
         "title": "Test network and beta status",
         "body": [
           "PEOPLE Blockchain is provided as a test / beta network. Features may change, break, or be withdrawn without notice. The site and network are provided \"as is\" and \"as available\".",
-          "The PEOPLE network is still a test network. The PPL sale is separate: it runs on Base mainnet with real USDC or USDT."
+          "On 1 December 2026 the PEOPLE network opens as PEOPLE Mainnet Beta: it is the real mainnet, at an early stage. You pay in USDC or USDT on Base, and PPL are credited immediately on PEOPLE Mainnet Beta. \"Beta\" marks that early stage and the limits that come with it, such as transfers between people opening after about 1,000 verified participants. A separate public testnet may still be offered for trying the product; test tokens there have no monetary value."
         ]
       },
       {

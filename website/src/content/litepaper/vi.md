@@ -71,7 +71,7 @@ Những gì bạn có thể làm mà không cần mã:
 | EVM chain id | `97401` |
 | Đồng tiền asli | PPL (denom cơ sở `appl`, 18 chữ số thập phân) |
 | Tiền tố địa chỉ | `people1…` (và cùng một tài khoản như `0x…` trong EVM) |
-| Trạng thái mạng | Testnet công cộng — không phải mainnet |
+| Trạng thái mạng | Testnet công khai đang chạy; PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026 |
 
 **Trình xác thực.** Các trình xác thực chạy mạng và được trả tiền từ nhóm xác thực được phân bổ trước cộng với 30% của mỗi phí mạng. Các trình xác thực testnet chạy cho mục đích thử nghiệm; mở xác thực và cược cho công chúng là một giai đoạn lộ trình sau này.
 
@@ -144,7 +144,7 @@ Mỗi phí giao thức, bao gồm phí phân số, được chia theo cách tư�
 | Giai đoạn | Điều gì xảy ra | Cổng |
 |---|---|---|
 | **Mùa 0 — Testnet công cộng** | Ví, xác minh, khởi chạy token, thẻ NFT, hoán đổi, điểm Million Founders. | Bây giờ |
-| **Mainnet + bán PPL** | Mainnet ra mắt. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`; mua vẫn tắt cho đến khi hub triển khai. | Ít nhất 1.000 người đã xác minh **và** multisig kho bạc hoạt động |
+| **PEOPLE Mainnet Beta + bán PPL** | PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026: bạn thanh toán bằng USDC hoặc USDT trên Base (PplCurveHub) và PPL được ghi có ngay trên PEOPLE Mainnet Beta. Tham số công bố (đường cong mũ từ **$0.005**/PPL, tối đa **100M PPL** trên đường cong, graduation **$4M**) trên `/buy`. Chuyển khoản giữa mọi người mở sau khoảng 1.000 người tham gia đã xác minh. | 1 tháng 12 năm 2026 · PplCurveHub trên Base và multisig nhận tiền được công bố |
 | **Cược & trình xác thực** | Cược và tham gia trình xác thực mở ra ngoài dự án. | Sau mainnet |
 
 Không có ngày được hứa hẹn. Mỗi giai đoạn bắt đầu khi cổng của nó đạt được.

@@ -58,7 +58,7 @@
   "successPay": "Pago enviado.",
   "successEscrow": "Prepago bloqueado.",
   "connectWallet": "Conectar monedero",
-  "preliminaryBanner": "Preliminar: parámetros del piloto pueden cambiar antes del mainnet.",
+  "preliminaryBanner": "Preliminar: parámetros del piloto pueden cambiar antes de PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "Inicia sesión con Google o correo y vincula tu monedero para gestionar la tienda o canjear visitas.",
   "pohRequiredCloud": "Inicia sesión con email o correo y vincula tu monedero para gestionar la tienda o canjear visitas."
 }

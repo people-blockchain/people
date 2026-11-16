@@ -77,11 +77,19 @@ test("the live position is recovered from the contract spot price", () => {
 test("the opening date reads naturally inside the hero sentence in every language", () => {
   const date = new Date(Date.UTC(2026, 11, 1));
   assert.equal(formatOpenDate(date, "en"), "December 1, 2026");
-  assert.equal(fillCopy(buy.ru.hero.subUpcoming, { date: formatOpenDate(date, "ru") }), "Продажа PPL открывается 1 декабря 2026 г.");
+  assert.equal(
+    fillCopy(buy.en.hero.subUpcoming, { date: formatOpenDate(date, "en") }),
+    "The PPL sale opens on December 1, 2026 as PEOPLE Mainnet Beta.",
+  );
+  assert.equal(
+    fillCopy(buy.ru.hero.subUpcoming, { date: formatOpenDate(date, "ru") }),
+    "Продажа PPL как PEOPLE Mainnet Beta открывается 1 декабря 2026 г.",
+  );
   for (const lang of LANGS) {
     const sentence = fillCopy(buy[lang].hero.subUpcoming, { date: formatOpenDate(date, lang) });
     assert.doesNotMatch(sentence, /\.\./, `${lang}: ${sentence}`);
     assert.match(sentence, /2026/, lang);
+    assert.match(sentence, /PEOPLE Mainnet Beta/, lang);
   }
 });
 
@@ -225,11 +233,19 @@ test("brief strings are exact in Russian", () => {
     ru.hero.lead,
     "Каждая покупка сдвигает цену вверх по кривой, поэтому следующие покупатели платят больше. Поэтому важно открытие продажи. Продать обратно можно через 30 дней.",
   );
-  assert.equal(ru.hero.subUpcoming, "Продажа PPL открывается {date}.");
+  assert.equal(ru.hero.subUpcoming, "Продажа PPL как PEOPLE Mainnet Beta открывается {date}.");
   assert.equal(ru.hero.ctaVerify, "Пройти верификацию, чтобы купить PPL");
   assert.equal(ru.hero.ctaBuy, "Купить PPL");
   assert.equal(ru.finalCta.bounty, "или заработайте PPL заданиями");
   assert.match(ru.ppl.lines[2], /^PEOPLE не назначает и не поднимает цену/);
+  assert.equal(
+    buy.en.how.steps[2].body,
+    "You pay in USDC or USDT, and PPL is credited instantly to your address on PEOPLE Mainnet Beta.",
+  );
+  assert.equal(
+    buy.en.faq.items[1].a,
+    "PPL is credited on PEOPLE Mainnet Beta right after your purchase. This is the real PEOPLE mainnet, at an early stage we call beta, so some limits still apply. At first the network only receives PPL: transfers between people open after about 1,000 verified participants. Until then you can sell PPL back to the reserve under the rules above.",
+  );
 });
 
 test("PEOPLE is the community: no 'the PEOPLE team' wording in any language", () => {

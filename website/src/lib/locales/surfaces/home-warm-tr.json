@@ -18,7 +18,7 @@
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
     "pitchLine": "Sıradan insanlar için bir blockchain: kendi tokeniniz, kulüp NFT kartları ve bir fikir için para toplamak — kod yazmadan.",
-    "testnetBadge": "Halka açık testnet yayında. Henüz mainnet değil.",
+    "testnetBadge": "Halka açık testnet yayında. PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor.",
     "ctaTestnet": "Testneti deneyin",
     "ctaFounder": "Kurucu numaranızı alın",
     "card": {
@@ -46,7 +46,7 @@
     ],
     "shareBadge": "10% topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil",
-    "saleNote": "PEOPLE ağı hâlâ bir test ağıdır ve test token'larının değeri yoktur. PPL satışı ayrıdır: gerçek USDC veya USDT ile Base üzerinde yapılır."
+    "saleNote": "Bugünkü deneme alanı halka açık testnettir (test token'larının değeri yoktur). PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor: Base üzerinde USDC veya USDT ile ödersiniz, PPL ise PEOPLE Mainnet Beta üzerinde tanımlanır."
   },
   "community": {
     "eyebrow": "Topluluk için garanti %10",

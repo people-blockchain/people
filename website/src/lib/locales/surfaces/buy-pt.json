@@ -7,7 +7,7 @@
     "eyebrow": "Venda de PPL",
     "headline": "Quanto antes você comprar, menor será o preço.",
     "lead": "Cada compra sobe a curva, então quem chega depois paga mais. É por isso que a abertura importa. Você pode vender de volta após 30 dias.",
-    "subUpcoming": "A venda de PPL abre em {date}.",
+    "subUpcoming": "A venda de PPL abre em {date} como PEOPLE Mainnet Beta.",
     "subWhitelist": "A venda de PPL está aberta. Só pessoas verificadas podem comprar.",
     "subOpen": "A venda de PPL está aberta. Qualquer pessoa verificada pode comprar.",
     "subEnded": "A venda de PPL terminou.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL direto na sua carteira PEOPLE",
-        "body": "Você paga em USDC ou USDT, e o PPL é creditado na hora no seu endereço na PEOPLE mainnet."
+        "body": "Você paga em USDC ou USDT, e o PPL é creditado na hora no seu endereço na PEOPLE Mainnet Beta."
       }
     ],
     "verifyLink": "Como se verificar"
@@ -143,7 +143,7 @@
       },
       {
         "q": "Quando posso enviar PPL para outras pessoas?",
-        "a": "O PPL é creditado na PEOPLE mainnet logo após a compra. No início a rede só recebe PPL: as transferências entre participantes abrem mais tarde, quando houver cerca de 1.000 participantes verificados. Até lá, você pode revender o PPL à reserva conforme as regras acima."
+        "a": "O PPL é creditado na PEOPLE Mainnet Beta logo após a compra. Esta é a rede principal real da PEOPLE, em um estágio inicial que chamamos de beta, por isso alguns limites ainda se aplicam. No início a rede só recebe PPL: as transferências entre pessoas abrem após cerca de 1.000 participantes verificados. Até lá, você pode revender o PPL à reserva conforme as regras acima."
       },
       {
         "q": "De quais redes posso pagar?",
@@ -273,14 +273,14 @@
     "riskTitle": "Aviso de risco",
     "riskBody": "Criptoativos envolvem risco: o preço pode cair, talvez você não consiga vender de imediato e as compras não são reembolsáveis. Use apenas dinheiro que você possa perder.",
     "riskMoreToggle": "Todos os riscos",
-    "riskMore": "Além disso: as transferências de PPL entre participantes abrem mais tarde, quando a rede PEOPLE tiver cerca de 1.000 participantes verificados. A venda de volta à reserva é só para usuários verificados, 30 dias após cada compra e dentro dos limites diários. O contrato de venda foi revisado apenas por modelos de IA; ainda não houve auditoria externa. O multisig do projeto pode pausar as compras e a venda de volta.",
+    "riskMore": "Além disso: o PPL é creditado na PEOPLE Mainnet Beta logo após a compra, e as transferências entre pessoas abrem após cerca de 1.000 participantes verificados. A venda de volta à reserva é só para usuários verificados, 30 dias após cada compra e dentro dos limites diários. O contrato de venda foi revisado apenas por modelos de IA; ainda não houve auditoria externa. O multisig do projeto pode pausar as compras e a venda de volta.",
     "saleTermsNote": "A venda dura até esgotar (a curva fecha ao arrecadar US$ 4M) ou 24 meses após a abertura, o que ocorrer primeiro. Não há prorrogação. Os PPL não vendidos vão para o Community Pool. Não há reembolsos: toda compra é definitiva.",
     "termsAgree": "Ao comprar, você aceita os {terms}.",
     "termsLink": "Termos",
     "help": "Precisa de ajuda? {support}",
     "supportLink": "Suporte",
     "noWalletHint": "Sem carteira? Crie ou importe um PEOPLE Wallet, ou conecte MetaMask / WalletConnect. Para pagar, precisa de USDC na Base nessa carteira.",
-    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL volta para a carteira de venda na PEOPLE mainnet e não é queimado. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Continua aberta depois que a curva fecha, até a reserva ir para a liquidez. Você recebe em USDC na rede Base.",
+    "sellBackTerms": "Venda de volta à reserva apenas para usuários verificados. Cada compra pode ser vendida 30 dias depois de feita, pelo preço da curva no momento da venda. Limites: 2% da reserva em qualquer janela móvel de 24 horas para todos juntos, e US$ 2.000 por endereço numa janela móvel de 24 horas. O PPL volta para a carteira de venda na PEOPLE Mainnet Beta e não é queimado. Taxa de 1,5%; 3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva. Continua aberta depois que a curva fecha, até a reserva ir para a liquidez. Você recebe em USDC na rede Base.",
     "feesTitle": "Taxas e prazos",
     "feesBody": "Taxas: a da rede Base (gas), paga em ETH — geralmente cerca de US$ 0,01; a de troca ou ponte da LI.FI — mostrada no widget antes de confirmar; a de venda de volta à reserva — 1,5%, e 3% só sobre a parte das vendas em 24 horas móveis acima de 1% da reserva.",
     "timingBody": "Uma compra na Base é confirmada em segundos. Pagamentos de outras redes costumam chegar em 1–20 minutos. Os pagamentos da venda de volta são feitos em USDC na rede Base.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Compra concluída",
-      "credited": "{ppl} PPL creditados na PEOPLE mainnet em {address}",
+      "credited": "{ppl} PPL creditados na PEOPLE Mainnet Beta em {address}",
       "tx": "Ver transação",
       "unlock": "A venda de volta abre em {date}",
       "again": "Comprar mais PPL"
@@ -401,11 +401,11 @@
       "receive": "Você recebe",
       "amount": "PPL a vender",
       "max": "Máximo",
-      "burning": "Devolvendo PPL para a carteira de venda na PEOPLE mainnet…",
+      "burning": "Devolvendo PPL para a carteira de venda na PEOPLE Mainnet Beta…",
       "attesting": "Conferindo a devolução…",
       "selling": "Pagando USDC na Base…",
       "done": "Venda concluída. O USDC é pago na Base.",
-      "payoutNote": "O PPL volta para a carteira de venda na PEOPLE mainnet e você recebe USDC na rede Base.",
+      "payoutNote": "O PPL volta para a carteira de venda na PEOPLE Mainnet Beta e você recebe USDC na rede Base.",
       "error": "A venda não foi concluída. Tente de novo.",
       "rejected": "Você recusou o pedido na carteira.",
       "notConfigured": "A venda ainda não está disponível.",

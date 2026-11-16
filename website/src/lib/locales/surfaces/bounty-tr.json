@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "PPL SATIŞI · 1 ARALIK 2026",
     "title": "PPL satışına geri sayım",
-    "lead": "Halka açık PPL satışı 1 Aralık 2026'da açılır. Base üzerinde USDC veya USDT ile ödeme yaparsınız ve PPL, PEOPLE ağındaki adresinize anında yatırılır.",
+    "lead": "Halka açık PPL satışı 1 Aralık 2026'da PEOPLE Mainnet Beta olarak açılır. Base üzerinde USDC veya USDT ile ödeme yaparsınız ve PPL, PEOPLE Mainnet Beta üzerindeki adresinize anında yatırılır.",
     "days": "gün",
     "hours": "saat",
     "minutes": "dakika",
@@ -56,14 +56,46 @@
     "verification": "İnsan doğrulaması gerekli."
   },
   "taskItems": [
-    { "id": "swap", "label": "PPL takas et", "href": "/swap" },
-    { "id": "stake", "label": "PPL stake et", "href": "/staking" },
-    { "id": "token_launch", "label": "Token başlat", "href": "/create/token" },
-    { "id": "nft_mint", "label": "NFT bas", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Yönetişimde oy ver", "href": "/governance" },
-    { "id": "discover_reaction", "label": "Bir projeye tepki ver", "href": "/discover" },
-    { "id": "discover_follow", "label": "Bir projeyi takip et", "href": "/discover" },
-    { "id": "invite", "label": "Doğrulanmış bir kişiyi davet et", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "PPL takas et",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "PPL stake et",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Token başlat",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "NFT bas",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Yönetişimde oy ver",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "Bir projeye tepki ver",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Bir projeyi takip et",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Doğrulanmış bir kişiyi davet et",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "DAVETLER",

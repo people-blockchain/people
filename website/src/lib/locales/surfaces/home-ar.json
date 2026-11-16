@@ -13,7 +13,7 @@
       "لا للحيتان."
     ],
     "sub": "PEOPLE Blockchain حيث يطلق المبدعون رموزًا بسعر عادل من الكتلة الأولى، ويحصل المجتمع على حصة مدمجة في كل ما يساعدون على نموه.",
-    "testnetBadge": "شبكة الاختبار العامة تعمل. ليست mainnet بعد.",
+    "testnetBadge": "شبكة الاختبار العامة تعمل. تفتح PEOPLE Mainnet Beta في 1 ديسمبر 2026.",
     "ctaCreate": "إنشاء رمز",
     "ctaWallet": "فتح المحفظة",
     "flowAria": "أربع خطوات: من المحفظة إلى تداول الرمز",
@@ -124,7 +124,7 @@
     "lead": "يحصل المشاركون الموثَّقون على رقمهم ومكافأة الدخول المبكر ونقاط النشاط على testnet PEOPLE Blockchain.",
     "cta": "انضم إلى المؤسسين",
     "href": "/founders",
-    "titleWithNumber": "كن مؤسسًا رقم {{n}} قبل mainnet",
-    "titleFallback": "كن من أوائل المؤسسين قبل إطلاق الشبكة الرئيسية"
+    "titleWithNumber": "كن مؤسسًا رقم {{n}} قبل PEOPLE Mainnet Beta",
+    "titleFallback": "كن من أوائل المؤسسين قبل إطلاق PEOPLE Mainnet Beta"
   }
 }

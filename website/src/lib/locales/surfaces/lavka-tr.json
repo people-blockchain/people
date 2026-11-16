@@ -58,7 +58,7 @@
   "successPay": "Ödeme gönderildi.",
   "successEscrow": "Ön ödeme kilitlendi.",
   "connectWallet": "Cüzdan bağla",
-  "preliminaryBanner": "Ön çalışma — pilot parametreleri mainnet öncesi değişebilir.",
+  "preliminaryBanner": "Ön çalışma — pilot parametreleri PEOPLE Mainnet Beta öncesi değişebilir.",
   "pohRequiredSocial": "Google veya e-posta ile giriş yapın ve dükkanı yönetmek veya ziyaret kullanmak için cüzdan bağlayın.",
   "pohRequiredCloud": "e-posta ile giriş yapın ve dükkanı yönetmek veya ziyaret kullanmak için cüzdan bağlayın."
 }

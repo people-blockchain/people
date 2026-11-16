@@ -304,7 +304,7 @@
       },
       {
         "label": "Jaringan publik",
-        "value": "Testnet publik v2 sedang berjalan. Ini bukan Mainnet."
+        "value": "Testnet publik v2 sedang berjalan. PEOPLE Mainnet Beta dibuka 1 Desember 2026."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "Sebuah testnet publik sedang berjalan.",
-          "Ini bukan Mainnet dan bukan janji perdagangan publik nilai yang sedang berjalan."
+          "PEOPLE Mainnet Beta dibuka 1 Desember 2026; token uji tidak memiliki nilai."
         ]
       },
       {

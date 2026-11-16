@@ -304,7 +304,7 @@
       },
       {
         "label": "Réseau public",
-        "value": "Le testnet public v2 tourne. Ce n’est pas le Mainnet."
+        "value": "Le testnet public v2 tourne. PEOPLE Mainnet Beta ouvre le 1er décembre 2026."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "Un testnet public tourne.",
-          "Ce n’est pas le Mainnet et ce n’est pas une promesse de trading public en direct de valeur."
+          "PEOPLE Mainnet Beta ouvre le 1er décembre 2026 ; les jetons de test n’ont aucune valeur."
         ]
       },
       {

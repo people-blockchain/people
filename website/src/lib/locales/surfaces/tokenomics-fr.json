@@ -1,11 +1,11 @@
 {
   "tag": "TOKENOMIQUE",
   "title": "Offre PPL et plan de lancement",
-  "lead": "Comment le milliard fixe de PPL est alloué, débloqué et vendu avant et après le mainnet. Chiffres préliminaires, soumis à la gouvernance.",
+  "lead": "Comment le milliard fixe de PPL est alloué, débloqué et vendu avant et après PEOPLE Mainnet Beta. Chiffres préliminaires, soumis à la gouvernance.",
   "banner": "Préliminaire — soumis au vote de gouvernance communautaire.",
   "supplyTitle": "Offre fixe",
   "supplyBody": "Offre fixe de 1 000 000 000 PPL (un milliard). Années 1–4 : 0 % d’inflation — pas de nouvelles pièces hors déblocages prévus. À partir de l’année 5, émission supplémentaire plafonnée à 2 % par an et uniquement par vote.",
-  "testnetNote": "Le testnet interne a utilisé un premine de 1M PPL pour les tests. Il n’est pas reporté — le mainnet démarre à zéro.",
+  "testnetNote": "Le testnet interne a utilisé un premine de 1M PPL pour les tests. Il n’est pas reporté — la comptabilité de Mainnet Beta démarre à zéro.",
   "allocationTitle": "Allocation genesis",
   "allocationLead": "Six réserves au lancement. Touchez ou survolez une part pour voir la quote, le volume et le déblocage.",
   "bucketLabels": {
@@ -21,7 +21,7 @@
     "validators": "200M PPL (20 %) : années 1–4 versent 6 %, 5 %, 5 %, 4 % du supply total par an (60M / 50M / 50M / 40M PPL) plus 30 % des frais réseau.",
     "team": "15 % de l'offre : 0 % au lancement, cliff de 6 mois, puis 18 mois de déblocage mensuel linéaire (24 mois au total).",
     "treasury": "Dépensé seulement après votes DAO ; en multisig.",
-    "sale": "Vendu sur la courbe publique sur Base (PplCurveHub). Les PPL sont crédités sur PEOPLE mainnet juste après l’achat ; les transferts ouvrent au lancement complet du réseau.",
+    "sale": "Vendu sur la courbe publique sur Base (PplCurveHub). Les PPL sont crédités sur PEOPLE Mainnet Beta juste après l’achat ; les transferts entre personnes ouvrent après environ 1 000 participants vérifiés.",
     "liquidity": "Pool PPL/USDC à la graduation ; jetons LP bloqués pendant 24 mois."
   },
   "donutTitle": "Allocation",
@@ -36,7 +36,7 @@
   "salePayTitle": "Comment vous paieriez",
   "salePayBody": "Sur Base, en USDC ou en USDT. Depuis d’autres réseaux, via l’échange automatique intégré (LI.FI) : les réseaux EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche et d’autres), Tron et Solana fonctionnent. TON n’est pas pris en charge. Vous recevez les fonds en USDC sur Base.",
   "saleDeliveryTitle": "Comment recevoir des PPL",
-  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse PEOPLE mainnet tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après le lancement complet du réseau. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
+  "saleDeliveryBody": "Les PPL sont crédités sur votre adresse PEOPLE Mainnet Beta tout de suite, mais vous ne pouvez les envoyer à d’autres personnes qu’après environ 1 000 participants vérifiés. Seuls les utilisateurs vérifiés peuvent les revendre, 30 jours après chaque achat.",
   "curveTitle": "Courbe de bonding",
   "curveLead": "Courbe exponentielle : le prix démarre à 0,005 $ par PPL et monte à chaque achat, jusqu'à un plafond de 0,25 $ tant que la courbe est ouverte. La graduation ferme la courbe à 4 M$ levés.",
   "unsoldTitle": "Jetons invendus",
@@ -88,7 +88,7 @@
     "À partir de l’année 5, émission nouvelle max. 2 % par an et seulement par vote communautaire."
   ],
   "launchOrderTitle": "Ordre de lancement",
-  "launchOrderBody": "La vente de PPL ouvre dès que le contrat de vente (PplCurveHub sur Base) et le multisig destinataire sont publiés. Les transferts et les échanges dans le pool ouvrent au lancement complet du réseau, avec 1 000 personnes vérifiées.",
+  "launchOrderBody": "La vente de PPL ouvre le 1er décembre 2026 en tant que PEOPLE Mainnet Beta. Les transferts entre personnes sont activés après environ 1 000 participants vérifiés.",
   "pplFeeTariffsLink": "Tarifs des frais PPL",
   "explorerLink": "Explorateur",
   "backToDocsLink": "Retour à la documentation",
@@ -99,7 +99,7 @@
     "100 000 000 PPL sur la courbe (10 % de l'offre) ; départ 0,005 $, hausse exponentielle, plafond 0,25 $ sur la courbe seulement.",
     "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "Levée 50 % liquidité verrouillée / 50 % multisig projet ; jetons LP verrouillés 24 mois.",
-    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par personne dans une fenêtre glissante de 24 heures. Frais de 1,5 % (3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve). Fermée après la graduation. Vous recevez des USDC sur Base.",
+    "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque lot peut être revendu après 30 jours de détention, au prix de la courbe au moment de la vente. Plafond global : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par adresse dans une fenêtre glissante de 24 heures. Frais de 1,5 % (3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve). Reste ouverte après la fermeture de la courbe, jusqu’au transfert de la réserve en liquidité. Vous recevez des USDC sur Base. Les PPL retournent au portefeuille de vente sur PEOPLE Mainnet Beta ; rien n’est détruit.",
     "$10–$500 par achat; Jusqu’à $2,000 par personne dans une fenêtre glissante de 24 heures; Pause de 60 s entre deux achats"
   ],
   "curveTableSold": "% vendu",

@@ -304,7 +304,7 @@
       },
       {
         "label": "Öffentliches Netz",
-        "value": "Das öffentliche Testnet v2 läuft. Das ist nicht Mainnet."
+        "value": "Das öffentliche Testnet v2 läuft. Die PEOPLE Mainnet Beta startet am 1. Dezember 2026."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "Ein öffentliches Testnet läuft.",
-          "Das ist nicht Mainnet und kein Versprechen lebenden öffentlichen Wert-Handels."
+          "Die PEOPLE Mainnet Beta startet am 1. Dezember 2026; Test-Token haben keinen Wert."
         ]
       },
       {

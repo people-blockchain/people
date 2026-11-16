@@ -13,7 +13,7 @@
       "而不是巨鲸。"
     ],
     "sub": "PEOPLE Blockchain 让创作者从第一个区块起以公平定价发行代币，社区在共同增长的一切中获得内置份额。",
-    "testnetBadge": "公开测试网已上线。尚未是主网。",
+    "testnetBadge": "公开测试网已上线。PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启。",
     "ctaCreate": "创建代币",
     "ctaWallet": "打开钱包",
     "flowAria": "四步：从钱包到代币交易",
@@ -124,7 +124,7 @@
     "lead": "已验证参与者获得编号、早期入场奖励，以及在 PEOPLE Blockchain 测试网上的活动积分。",
     "cta": "加入创始人计划",
     "href": "/founders",
-    "titleWithNumber": "在 mainnet 前成为第 {{n}} 号创始人",
-    "titleFallback": "在主网启动前成为最早的一批创始人"
+    "titleWithNumber": "在 PEOPLE Mainnet Beta 前成为第 {{n}} 号创始人",
+    "titleFallback": "在 PEOPLE Mainnet Beta 启动前成为最早的一批创始人"
   }
 }

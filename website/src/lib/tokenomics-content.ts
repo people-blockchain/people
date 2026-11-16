@@ -74,13 +74,13 @@ const en: TokenomicsCopy = {
   tag: "TOKENOMICS",
   title: "PPL supply and launch plan",
   lead:
-    "How the fixed one-billion PPL supply is allocated, unlocked and sold before and after mainnet. Numbers are preliminary and subject to community governance.",
+    "How the fixed one-billion PPL supply is allocated, unlocked and sold before and after PEOPLE Mainnet Beta. Numbers are preliminary and subject to community governance.",
   banner: "Preliminary — subject to community governance vote.",
   supplyTitle: "Fixed supply",
   supplyBody:
     "Total supply is fixed at 1,000,000,000 PPL (one billion). In years 1–4 there is 0% inflation — no new coins beyond the unlock schedules below. From year 5, any additional emission is capped at 2% per year and only by community vote.",
   testnetNote:
-    "The internal testnet used a 1M PPL premine for experiments. That balance does not carry over — mainnet accounting starts from zero.",
+    "The internal testnet used a 1M PPL premine for experiments. That balance does not carry over — Mainnet Beta accounting starts from zero.",
   allocationTitle: "Genesis allocation",
   allocationLead:
     "Six buckets at launch. Tap or hover a slice to see its share, size and unlock path.",
@@ -89,7 +89,7 @@ const en: TokenomicsCopy = {
     validators: "Validators & staking",
     team: "Team & founders",
     treasury: "Ecosystem treasury (DAO)",
-    sale: "Sold on the public curve on Base (PplCurveHub). PPL is credited on PEOPLE mainnet right after purchase; transfers open at the full network launch.",
+    sale: "Sold on the public curve on Base (PplCurveHub). PPL is credited on PEOPLE Mainnet Beta right after purchase; transfers between people open after about 1,000 verified participants.",
     liquidity: "PPL/USDC pool at graduation; LP tokens locked for 24 months.",
   },
   bucketNotes: {
@@ -99,7 +99,7 @@ const en: TokenomicsCopy = {
       "200M PPL (20%): years 1–4 pay 6%, 5%, 5%, 4% of total supply per year (60M / 50M / 50M / 40M), plus 30% of network fees.",
     team: "15% of supply: 0% at launch, 6-month cliff, then 18 months of linear monthly unlocks (24 months total).",
     treasury: "Spent only after DAO votes; held in multisig.",
-    sale: "Sold on the public curve on Base (PplCurveHub). PPL is credited on PEOPLE mainnet right after purchase; transfers open at the full network launch.",
+    sale: "Sold on the public curve on Base (PplCurveHub). PPL is credited on PEOPLE Mainnet Beta right after purchase; transfers between people open after about 1,000 verified participants.",
     liquidity: "PPL/USDC pool at graduation; LP tokens locked for 24 months.",
   },
   donutTitle: "Allocation",
@@ -118,7 +118,7 @@ const en: TokenomicsCopy = {
     "On Base — in USDC or USDT. From other networks — through the built-in automatic swap (LI.FI): EVM networks (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche and others), Tron and Solana work. TON is not supported. Payouts in USDC on Base.",
   saleDeliveryTitle: "How you receive PPL",
   saleDeliveryBody:
-    "PPL is credited to your address on PEOPLE mainnet right away, but you cannot send it to others until the full network launch. Sell-back is possible only for verified users, 30 days after each purchase.",
+    "PPL is credited to your address on PEOPLE Mainnet Beta right away, but you cannot send it to other people until about 1,000 verified participants. Sell-back is possible only for verified users, 30 days after each purchase.",
   curveTitle: "Bonding curve",
   curveLead:
     "Exponential curve: price starts at $0.005 per PPL and rises with every purchase, up to a $0.25 ceiling while the curve is open. Graduation closes the curve at $4M raised.",
@@ -133,7 +133,7 @@ const en: TokenomicsCopy = {
     "100,000,000 PPL on the curve (10% of supply); start $0.005, exponential rise, $0.25 cap on the curve only.",
     "The sale runs until it sells out (the curve closes at $4M raised) or for 24 months from opening, whichever comes first. No extensions. Unsold PPL goes to the Community Pool. No refunds: every purchase is final.",
     "Raise split 50% locked liquidity / 50% project multisig; LP tokens locked 24 months.",
-    "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve in any rolling 24 hours for everyone and $2,000 per person in a rolling 24-hour window. Fee: 1.5%, or 3% on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Closes after graduation. Payouts in USDC on Base. PPL sold back is burned on PEOPLE mainnet.",
+    "Sell-back to the reserve — verified users only. Each lot can be sold back after a 30-day hold, at the curve price at the moment you sell. Total sell-backs are capped at 2% of the reserve in any rolling 24 hours for everyone and $2,000 per address in a rolling 24-hour window. Fee: 1.5%, or 3% on the part of sell-backs in that rolling 24 hours above 1% of the reserve. Stays open after the curve closes, until the reserve moves to liquidity. Payouts in USDC on Base. PPL goes back to the sale wallet on PEOPLE Mainnet Beta; nothing is burned.",
     "$10–$500 per purchase; Up to $2,000 per person in a rolling 24-hour window; 60 s pause between purchases",
   ],
   curveTableSold: "% sold",
@@ -150,7 +150,7 @@ const en: TokenomicsCopy = {
   ],
   launchOrderTitle: "Launch sequence",
   launchOrderBody:
-    "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
+    "The PPL sale opens on 1 December 2026 as PEOPLE Mainnet Beta. Transfers between people are enabled after about 1,000 verified participants.",
   feeTitle: "Network fee split",
   feeLead: "Every protocol fee on PEOPLE follows the approved Model A routing:",
   feeNote: FEE_SPLIT_PLAIN.en,
@@ -186,13 +186,13 @@ const ru: TokenomicsCopy = {
   tag: "ТОКЕНОМИКА",
   title: "Выпуск PPL и план запуска",
   lead:
-    "Как распределяется фиксированный миллиард PPL, как разблокируется и продаётся до и после mainnet. Цифры предварительные и подлежат голосованию сообщества.",
+    "Как распределяется фиксированный миллиард PPL, как разблокируется и продаётся до и после PEOPLE Mainnet Beta. Цифры предварительные и подлежат голосованию сообщества.",
   banner: "Предварительно, утверждается голосованием сообщества.",
   supplyTitle: "Фиксированный выпуск",
   supplyBody:
     "Общий выпуск фиксирован: 1 000 000 000 PPL (один миллиард). В годы 1–4 инфляция 0% — новых монет сверх графиков разблокировки нет. С 5-го года дополнительная эмиссия — не более 2% в год и только по голосованию сообщества.",
   testnetNote:
-    "Во внутренней тестовой сети использовался премайн 1M PPL для экспериментов. Он не переносится — учёт mainnet начинается с нуля.",
+    "Во внутренней тестовой сети использовался премайн 1M PPL для экспериментов. Он не переносится — учёт в Mainnet Beta начинается с нуля.",
   allocationTitle: "Распределение genesis",
   allocationLead:
     "Шесть корзин при запуске. Наведите или нажмите на сектор, чтобы увидеть долю, объём и график разблокировки.",
@@ -211,7 +211,7 @@ const ru: TokenomicsCopy = {
       "200M PPL (20%): в годы 1–4 выплаты 6%, 5%, 5%, 4% от total supply в год (60M / 50M / 50M / 40M PPL) плюс 30% сетевых комиссий.",
     team: "15% эмиссии: 0% при запуске, клифф 6 месяцев, затем линейная ежемесячная разблокировка 18 месяцев (всего 24 месяца).",
     treasury: "Тратится только после голосования DAO; хранится в мультисиге.",
-    sale: "Продаётся на публичной кривой в сети Base (PplCurveHub). PPL зачисляются в PEOPLE mainnet сразу после покупки; переводы — с полного запуска сети.",
+    sale: "Продаётся на публичной кривой в сети Base (PplCurveHub). PPL зачисляются в PEOPLE Mainnet Beta сразу после покупки; переводы между людьми открываются после примерно 1 000 подтверждённых участников.",
     liquidity: "Пул PPL/USDC при закрытии продажи; LP заблокирован на 24 месяца.",
   },
   donutTitle: "Распределение",
@@ -230,7 +230,7 @@ const ru: TokenomicsCopy = {
     "В сети Base — USDC или USDT. Из других сетей — через встроенный автоматический обмен (LI.FI): работают EVM-сети (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche и другие), Tron и Solana. TON не поддерживается. Выплата — в USDC в сети Base.",
   saleDeliveryTitle: "Как получить PPL",
   saleDeliveryBody:
-    "PPL зачисляются на ваш адрес в PEOPLE mainnet сразу, но отправить их другим людям можно только после полного запуска сети. Продать обратно могут только верифицированные пользователи, через 30 дней после каждой покупки.",
+    "PPL зачисляются на ваш адрес в PEOPLE Mainnet Beta сразу, но отправить их другим людям можно после примерно 1 000 подтверждённых участников. Продать обратно могут только верифицированные пользователи, через 30 дней после каждой покупки.",
   curveTitle: "Bonding curve",
   curveLead:
     "Экспоненциальная кривая: цена стартует с $0.005 за PPL и растёт с каждой покупкой, до потолка $0.25, пока кривая открыта. Выпуск закрывается при сборе $4M.",
@@ -245,7 +245,7 @@ const ru: TokenomicsCopy = {
     "100 000 000 PPL на кривой (10% эмиссии); старт $0.005, экспоненциальный рост, потолок $0.25 только на кривой.",
     "Продажа идёт до распродажи (кривая закрывается при сборе $4M) или 24 месяца с момента открытия — что наступит раньше. Продлений нет. Непроданные PPL уходят в Community Pool. Возвратов нет: каждая покупка окончательна.",
     "Сбор 50% в заблокированную ликвидность / 50% в мультисиг проекта; LP заблокированы на 24 месяца.",
-    "Продажа обратно в резерв — только для верифицированных пользователей. Каждую партию можно продать после 30 дней удержания по цене кривой на момент продажи. Общий лимит — 2% резерва за любые скользящие 24 часа на всех и $2 000 на человека за скользящие 24 часа. Комиссия 1,5%; 3% — только на часть выкупа за эти 24 часа сверх 1% резерва. Закрывается после выпуска в пул (graduation). Выплата — в USDC в сети Base. Проданные обратно PPL сжигаются в PEOPLE mainnet.",
+    "Продажа обратно в резерв — только для верифицированных пользователей. Каждую партию можно продать после 30 дней удержания по цене кривой на момент продажи. Общий лимит — 2% резерва за любые скользящие 24 часа на всех и $2 000 на адрес за скользящие 24 часа. Комиссия 1,5%; 3% — только на часть выкупа за эти 24 часа сверх 1% резерва. После закрытия кривой продолжает работать, пока резерв не переведут в ликвидность. Выплата — в USDC в сети Base. PPL возвращаются на кошелёк продажи в PEOPLE Mainnet Beta и не сжигаются.",
     "$10–$500 за покупку; До $2 000 на человека за скользящие 24 часа; Пауза 60 с между покупками",
   ],
   curveTableSold: "% продано",
@@ -262,7 +262,7 @@ const ru: TokenomicsCopy = {
   ],
   launchOrderTitle: "Порядок запуска",
   launchOrderBody:
-    "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
+    "Продажа PPL открывается 1 декабря 2026 года как PEOPLE Mainnet Beta. Переводы между людьми открываются после примерно 1 000 подтверждённых участников.",
   feeTitle: "Деление сетевой комиссии",
   feeLead: "Каждая протокольная комиссия в PEOPLE следует утверждённой Model A:",
   feeNote: FEE_SPLIT_PLAIN.ru,

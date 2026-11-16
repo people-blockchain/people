@@ -13,7 +13,7 @@
       "não para baleias."
     ],
     "sub": "PEOPLE Blockchain é onde criadores lançam tokens com preço justo desde o primeiro bloco, e a comunidade recebe uma fatia de tudo o que ajuda a crescer.",
-    "testnetBadge": "O testnet público está no ar. Ainda não é mainnet.",
+    "testnetBadge": "O testnet público está no ar. A PEOPLE Mainnet Beta abre em 1 de dezembro de 2026.",
     "ctaCreate": "Criar um token",
     "ctaWallet": "Abrir carteira",
     "flowAria": "Quatro passos: da carteira ao trading do token",
@@ -124,7 +124,7 @@
     "lead": "Participantes verificados recebem número, bónus de entrada antecipada e pontos de atividade no testnet PEOPLE Blockchain.",
     "cta": "Juntar-me aos fundadores",
     "href": "/founders",
-    "titleWithNumber": "Seja o fundador n.º {{n}} antes do mainnet",
-    "titleFallback": "Esteja entre os primeiros fundadores antes do lançamento da rede principal"
+    "titleWithNumber": "Seja o fundador n.º {{n}} antes da PEOPLE Mainnet Beta",
+    "titleFallback": "Esteja entre os primeiros fundadores antes da PEOPLE Mainnet Beta"
   }
 }

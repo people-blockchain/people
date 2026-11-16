@@ -58,7 +58,7 @@
   "successPay": "Pagamento enviado.",
   "successEscrow": "Pré-pagamento bloqueado.",
   "connectWallet": "Conectar carteira",
-  "preliminaryBanner": "Preliminar — parâmetros do piloto podem mudar antes do mainnet.",
+  "preliminaryBanner": "Preliminar — parâmetros do piloto podem mudar antes da PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "Entre com Google ou e-mail e vincule a carteira para gerir a loja ou resgatar visitas.",
   "pohRequiredCloud": "Entre com e-mail e vincule a carteira para gerir a loja ou resgatar visitas."
 }

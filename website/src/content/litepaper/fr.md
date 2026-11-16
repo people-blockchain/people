@@ -71,7 +71,7 @@ Ce que vous pouvez faire sans code :
 | ID de chaîne EVM | `97401` |
 | Pièce native | PPL (dénomination de base `appl`, 18 décimales) |
 | Préfixe d'adresse | `people1…` (et le même compte que `0x…` en EVM) |
-| Statut du réseau | Testnet public — pas mainnet |
+| Statut du réseau | Testnet public en ligne ; PEOPLE Mainnet Beta ouvre le 1er décembre 2026 |
 
 **Validateurs.** Les validateurs gèrent le réseau et sont payés à partir du fonds de validateurs pré-alloué plus 30 % de chaque frais réseau. Les validateurs testnet fonctionnent à titre de test uniquement ; l'ouverture de la validation et de l'enjeu au public est une étape ultérieure de la feuille de route.
 
@@ -144,7 +144,7 @@ Chaque frais de protocole, y compris les frais fractionnaires, est réparti de l
 | Étape | Que se passe-t-il | Porte |
 |---|---|---|
 | **Saison 0 — Testnet public** | Portefeuilles, vérification, lancements de tokens, cartes NFT, swaps, points Million Founders. | Maintenant |
-| **Mainnet + vente PPL** | Mainnet est lancé. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy` ; les achats restent désactivés tant que le hub de vente n'est pas déployé. | Au moins 1 000 personnes vérifiées **et** un multisig de trésor actif |
+| **PEOPLE Mainnet Beta + vente PPL** | PEOPLE Mainnet Beta ouvre le 1er décembre 2026 : vous payez en USDC ou USDT sur Base (PplCurveHub), et les PPL sont crédités immédiatement sur PEOPLE Mainnet Beta. Les paramètres publiés (courbe exponentielle dès **0,005 $** par PPL, jusqu'à **100M PPL** sur la courbe, graduation à **4 M$**) sont sur `/buy`. Les transferts entre personnes ouvrent après environ 1 000 participants vérifiés. | 1er décembre 2026 · PplCurveHub sur Base et multisig destinataire publiés |
 | **Enjeu et validateurs** | L'enjeu et la participation des validateurs s'ouvrent au-delà du projet. | Après mainnet |
 
 Aucune date n'est promise. Chaque étape commence quand sa porte est franchie.

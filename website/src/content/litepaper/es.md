@@ -71,7 +71,7 @@ Lo que puedes hacer sin código:
 | EVM chain id | `97401` |
 | Moneda nativa | PPL (denominación base `appl`, 18 decimales) |
 | Prefijo de dirección | `people1…` (y la misma cuenta que `0x…` en EVM) |
-| Estado de la red | Testnet público — no mainnet |
+| Estado de la red | Testnet público activo; PEOPLE Mainnet Beta abre el 1 de diciembre de 2026 |
 
 **Validadores.** Los validadores ejecutan la red y se pagan desde el fondo de validadores preasignado más el 30% de cada comisión de red. Los validadores de testnet se ejecutan solo para pruebas; abrir validación y apuestas al público es una etapa posterior en el mapa de ruta.
 
@@ -144,7 +144,7 @@ Cada comisión de protocolo, incluidas las comisiones fraccionarias, se divide d
 | Etapa | Qué sucede | Condición |
 |---|---|---|
 | **Temporada 0 — Testnet público** | Carteras, verificación, lanzamientos de tokens, tarjetas NFT, intercambios, puntos de Un Millón de Fundadores. | Ahora |
-| **Mainnet + venta de PPL** | Se lanza mainnet. Los parámetros publicados (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva, graduación en **$4M**) están en `/buy`; las compras siguen desactivadas hasta desplegar el hub de venta. | Al menos 1.000 personas verificadas **y** una multifirma de tesorería activa |
+| **PEOPLE Mainnet Beta + venta de PPL** | PEOPLE Mainnet Beta abre el 1 de diciembre de 2026: pagas con USDC o USDT en Base (PplCurveHub) y los PPL se acreditan de inmediato en PEOPLE Mainnet Beta. Los parámetros publicados (curva exponencial desde **$0.005** por PPL, hasta **100M PPL** en la curva, graduación en **$4M**) están en `/buy`. Las transferencias entre personas se abren después de unos 1.000 participantes verificados. | 1 de diciembre de 2026 · PplCurveHub en Base y multifirma receptora publicados |
 | **Apuestas y validadores** | Las apuestas y la participación de validadores se abren más allá del proyecto. | Después de mainnet |
 
 No se prometen fechas. Cada etapa comienza cuando se cumple su condición.

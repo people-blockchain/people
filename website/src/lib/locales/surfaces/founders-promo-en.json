@@ -4,7 +4,7 @@
   "heroSub": "No code, no crypto skills. Get your founder number, invite friends, and earn points when they launch tokens, NFTs and club cards on the PEOPLE testnet.",
   "ctaClaim": "Claim my founder number",
   "ctaHow": "How it works",
-  "disclaimer": "Preliminary. Points, rates and season budget may change before mainnet. Not a promise of income.",
+  "disclaimer": "Preliminary. Points, rates and season budget may change before PEOPLE Mainnet Beta. Not a promise of income.",
   "stripVerified": "verified founders",
   "stripGoal": "goal",
   "cardFounder": "Founder",
@@ -154,7 +154,7 @@
   "faq": [
     {
       "q": "Is this a promise of income?",
-      "a": "No. Everything here is preliminary: points, the PPL-per-point rate and the season budget may change before mainnet. Points are a record of real activity on the testnet, not a payout guarantee."
+      "a": "No. Everything here is preliminary: points, the PPL-per-point rate and the season budget may change before PEOPLE Mainnet Beta. Points are a record of real activity on the testnet, not a payout guarantee."
     },
     {
       "q": "Why only 2 levels?",

@@ -58,7 +58,7 @@
   "successPay": "Đã gửi thanh toán.",
   "successEscrow": "Đã khóa trả trước.",
   "connectWallet": "Kết nối ví",
-  "preliminaryBanner": "Sơ bộ — tham số pilot có thể đổi trước mainnet.",
+  "preliminaryBanner": "Sơ bộ — tham số pilot có thể đổi trước PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "Đăng nhập Google hoặc email và liên kết ví để vận hành cửa hàng hoặc dùng lượt ghé.",
   "pohRequiredCloud": "Đăng nhập email hoặc email và liên kết ví để vận hành cửa hàng hoặc dùng lượt ghé."
 }
