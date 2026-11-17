@@ -1,11 +1,11 @@
 {
   "tag": "TOKENOMIA",
   "title": "Oferta de PPL e plano de lançamento",
-  "lead": "Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois do mainnet. Números preliminares, sujeitos à governança da comunidade.",
+  "lead": "Como o bilhão fixo de PPL é alocado, desbloqueado e vendido antes e depois da PEOPLE Mainnet Beta. Números preliminares, sujeitos à governança da comunidade.",
   "banner": "Preliminar — sujeito a voto da governança comunitária.",
   "supplyTitle": "Oferta fixa",
   "supplyBody": "Oferta fixa de 1.000.000.000 PPL (um bilhão). Anos 1–4: 0% de inflação — sem moedas novas além dos desbloqueios. A partir do ano 5, emissão extra de no máximo 2% ao ano só por voto da comunidade.",
-  "testnetNote": "A testnet interna usou premine de 1M PPL para testes. Não é transferido — o mainnet começa do zero.",
+  "testnetNote": "A testnet interna usou premine de 1M PPL para testes. Não é transferido — a contabilidade da Mainnet Beta começa do zero.",
   "allocationTitle": "Alocação genesis",
   "allocationLead": "Seis buckets no lançamento. Toque ou passe o mouse para ver participação, volume e desbloqueio.",
   "bucketLabels": {
@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): anos 1–4 pagam 6%, 5%, 5%, 4% do supply total por ano (60M / 50M / 50M / 40M PPL) mais 30% das taxas de rede.",
     "team": "15% da oferta: 0% no lançamento, cliff de 6 meses e depois 18 meses de desbloqueio mensal linear (24 meses no total).",
     "treasury": "Só após votos DAO; em multisig.",
-    "sale": "Vendido na curva pública na Base (PplCurveHub). Os PPL são creditados na PEOPLE mainnet logo após a compra; as transferências abrem no lançamento completo da rede.",
+    "sale": "Vendido na curva pública na Base (PplCurveHub). Os PPL são creditados na PEOPLE Mainnet Beta logo após a compra; as transferências entre pessoas abrem após cerca de 1.000 participantes verificados.",
     "liquidity": "Pool PPL/USDC na graduação; tokens LP bloqueados por 24 meses."
   },
   "donutTitle": "Alocação",
@@ -36,7 +36,7 @@
   "salePayTitle": "Como você pagaria",
   "salePayBody": "Na Base, com USDC ou USDT. De outras redes, pela troca automática integrada (LI.FI): funcionam redes EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche e outras), Tron e Solana. TON não é suportada. Você recebe o valor em USDC na rede Base.",
   "saleDeliveryTitle": "Como receber PPL",
-  "saleDeliveryBody": "Os PPL são creditados no seu endereço na PEOPLE mainnet na hora, mas você só pode enviá-los a outras pessoas após o lançamento completo da rede. Só usuários verificados podem vendê-los de volta, 30 dias após cada compra.",
+  "saleDeliveryBody": "Os PPL são creditados no seu endereço na PEOPLE Mainnet Beta na hora, mas você só pode enviá-los a outras pessoas após cerca de 1.000 participantes verificados. Só usuários verificados podem vendê-los de volta, 30 dias após cada compra.",
   "curveTitle": "Curva de bonding",
   "curveLead": "Curva exponencial: o preço começa em $0,005 por PPL e sobe a cada compra, até um teto de $0,25 enquanto a curva estiver aberta. A graduação fecha a curva ao arrecadar $4M.",
   "unsoldTitle": "Tokens não vendidos",
@@ -88,7 +88,7 @@
     "A partir do ano 5, emissão nova de no máximo 2% ao ano e só por voto comunitário."
   ],
   "launchOrderTitle": "Sequência de lançamento",
-  "launchOrderBody": "A venda de PPL abre quando o contrato de venda (PplCurveHub na Base) e o multisig recebedor forem publicados. Transferências e negociação no pool abrem no lançamento completo da rede, com 1.000 pessoas verificadas.",
+  "launchOrderBody": "A venda de PPL abre em 1 de dezembro de 2026 como PEOPLE Mainnet Beta. As transferências entre pessoas são habilitadas após cerca de 1.000 participantes verificados.",
   "pplFeeTariffsLink": "Tarifas de taxas PPL",
   "explorerLink": "Explorador",
   "backToDocsLink": "Voltar à documentação",
@@ -99,7 +99,7 @@
     "100.000.000 PPL na curva (10% da oferta); início $0,005, alta exponencial, teto $0,25 só na curva.",
     "A venda dura até esgotar (a curva fecha ao arrecadar US$ 4M) ou 24 meses após a abertura, o que ocorrer primeiro. Não há prorrogação. Os PPL não vendidos vão para o Community Pool. Não há reembolsos: toda compra é definitiva.",
     "Arrecadação 50% liquidez bloqueada / 50% multisig do projeto; tokens LP bloqueados por 24 meses.",
-    "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva em qualquer janela móvel de 24 horas para todos e US$ 2.000 por pessoa numa janela móvel de 24 horas. Taxa de 1,5% (3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva). Encerra após a graduação. Você recebe em USDC na rede Base.",
+    "Venda de volta à reserva apenas para usuários verificados. Cada lote pode ser vendido após 30 dias de retenção, pelo preço da curva no momento da venda. Limite total: 2% da reserva em qualquer janela móvel de 24 horas para todos e US$ 2.000 por endereço numa janela móvel de 24 horas. Taxa de 1,5% (3% só sobre a parte das vendas dessas 24 horas acima de 1% da reserva). Continua aberta depois que a curva fecha, até a reserva ir para a liquidez. Você recebe em USDC na rede Base. O PPL volta para a carteira de venda na PEOPLE Mainnet Beta; nada é queimado.",
     "$10–$500 por compra; Até $2,000 por pessoa numa janela móvel de 24 horas; Pausa de 60 s entre compras"
   ],
   "curveTableSold": "% vendido",

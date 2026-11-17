@@ -304,7 +304,7 @@
       },
       {
         "label": "Genel ağ",
-        "value": "Genel testnet v2 çalışıyor. Bu Mainnet değil."
+        "value": "Genel testnet v2 çalışıyor. PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "Bir genel testnet çalışıyor.",
-          "Bu Mainnet değildir ve canlı kamuya açık değer ticaretinin sözü değildir."
+          "PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor; test token'larının değeri yoktur."
         ]
       },
       {

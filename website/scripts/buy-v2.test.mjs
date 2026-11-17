@@ -269,15 +269,19 @@ test("all 12 locales carry every v2 key", () => {
 test("all 12 locales carry a translated hero with one sentence per sale phase", () => {
   const en = JSON.parse(readFileSync(join(surfaces, "buy-en.json"), "utf8")).hero;
   assert.equal(en.headline, "The earlier you buy, the lower the price.");
+  assert.equal(en.subUpcoming, "The PPL sale opens on {date} as PEOPLE Mainnet Beta.");
   const phaseKeys = ["subUpcoming", "subWhitelist", "subOpen", "subEnded"];
   for (const lang of LANGS) {
-    const hero = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8")).hero;
+    const doc = JSON.parse(readFileSync(join(surfaces, `buy-${lang}.json`), "utf8"));
+    const hero = doc.hero;
+    assert.match(doc.v2.success.credited, /PEOPLE Mainnet Beta/, `${lang}: v2.success.credited`);
     for (const key of ["headline", "lead", "ctaVerify", "ctaBuy", ...phaseKeys]) {
       assert.ok(hero[key], `${lang} is missing hero.${key}`);
       if (lang !== "en") assert.notEqual(hero[key], en[key], `${lang} needs a translation for hero.${key}`);
     }
     assert.equal(new Set(phaseKeys.map((key) => hero[key])).size, phaseKeys.length, `${lang}: one sentence per phase`);
     assert.ok(hero.subUpcoming.includes("{date}"), `${lang}: opening date placeholder`);
+    assert.match(hero.subUpcoming, /PEOPLE Mainnet Beta/, `${lang}: PEOPLE Mainnet Beta in subUpcoming`);
     // The contract requires verification for the whole sale, so the launch-week sentence
     // must not imply that buying opens to unverified people later.
     assert.ok(!hero.subWhitelist.includes("{days}"), `${lang}: no launch-week countdown in the hero`);

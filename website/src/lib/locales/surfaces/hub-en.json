@@ -304,7 +304,7 @@
       },
       {
         "label": "Public network",
-        "value": "Public testnet v2 is running. This is not Mainnet."
+        "value": "Public testnet v2 is running. PEOPLE Mainnet Beta opens 1 December 2026."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "A public testnet is running.",
-          "This is not Mainnet and not a promise of live public trading of value."
+          "PEOPLE Mainnet Beta opens 1 December 2026; test tokens carry no value."
         ]
       },
       {

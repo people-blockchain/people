@@ -7,7 +7,7 @@
     "eyebrow": "Penjualan PPL",
     "headline": "Semakin awal Anda membeli, semakin rendah harganya.",
     "lead": "Setiap pembelian menaikkan kurva, jadi pembeli berikutnya membayar lebih mahal. Itulah mengapa pembukaan penting. Anda dapat jual kembali setelah 30 hari.",
-    "subUpcoming": "Penjualan PPL dibuka pada {date}.",
+    "subUpcoming": "Penjualan PPL dibuka pada {date} sebagai PEOPLE Mainnet Beta.",
     "subWhitelist": "Penjualan PPL sudah dibuka. Hanya orang terverifikasi yang bisa membeli.",
     "subOpen": "Penjualan PPL sudah dibuka. Siapa pun yang terverifikasi bisa membeli.",
     "subEnded": "Penjualan PPL telah berakhir.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL langsung ke dompet PEOPLE Anda",
-        "body": "Anda membayar dengan USDC atau USDT, dan PPL langsung dikreditkan ke alamat Anda di PEOPLE mainnet."
+        "body": "Anda membayar dengan USDC atau USDT, dan PPL langsung dikreditkan ke alamat Anda di PEOPLE Mainnet Beta."
       }
     ],
     "verifyLink": "Cara verifikasi"
@@ -143,7 +143,7 @@
       },
       {
         "q": "Kapan saya bisa mengirim PPL ke orang lain?",
-        "a": "PPL dikreditkan di PEOPLE mainnet tepat setelah pembelian Anda. Pada awalnya jaringan hanya menerima PPL: transfer antar peserta dibuka nanti, setelah ada sekitar 1.000 peserta terverifikasi. Sampai saat itu Anda dapat menjual PPL kembali ke cadangan sesuai aturan di atas."
+        "a": "PPL dikreditkan di PEOPLE Mainnet Beta tepat setelah pembelian Anda. Ini adalah mainnet PEOPLE yang sesungguhnya pada tahap awal yang kami sebut beta, sehingga beberapa batas masih berlaku. Pada awalnya jaringan hanya menerima PPL: transfer antar orang dibuka setelah sekitar 1.000 peserta terverifikasi. Sampai saat itu Anda dapat menjual PPL kembali ke cadangan sesuai aturan di atas."
       },
       {
         "q": "Dari jaringan mana saya bisa membayar?",
@@ -273,14 +273,14 @@
     "riskTitle": "Peringatan risiko",
     "riskBody": "Kripto berisiko: harga bisa turun, Anda mungkin tidak bisa langsung menjual, dan pembelian tidak dapat dikembalikan. Gunakan hanya uang yang sanggup Anda rugikan.",
     "riskMoreToggle": "Semua risiko",
-    "riskMore": "Selain itu: transfer PPL antar peserta dibuka nanti, setelah jaringan PEOPLE memiliki sekitar 1.000 peserta terverifikasi. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, 30 hari setelah setiap pembelian dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat menjeda pembelian dan penjualan kembali.",
+    "riskMore": "Selain itu: PPL dikreditkan di PEOPLE Mainnet Beta tepat setelah pembelian, dan transfer antar orang dibuka setelah sekitar 1.000 peserta terverifikasi. Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi, 30 hari setelah setiap pembelian dan dalam batas harian. Kontrak penjualan baru ditinjau oleh model AI; belum ada audit eksternal. Multisig proyek dapat menjeda pembelian dan penjualan kembali.",
     "saleTermsNote": "Penjualan berlangsung hingga habis terjual (kurva tutup saat $4M terkumpul) atau 24 bulan sejak dibuka, mana yang lebih dulu. Tidak ada perpanjangan. PPL yang tidak terjual masuk ke Community Pool. Tidak ada pengembalian dana: setiap pembelian bersifat final.",
     "termsAgree": "Dengan membeli, Anda menyetujui {terms}.",
     "termsLink": "Ketentuan",
     "help": "Butuh bantuan? {support}",
     "supportLink": "Dukungan",
     "noWalletHint": "Belum punya dompet? Buat atau impor PEOPLE Wallet, atau hubungkan MetaMask / WalletConnect. Untuk membayar, Anda perlu USDC di Base di dompet itu.",
-    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap pembelian dapat dijual kembali 30 hari setelahnya, dengan harga kurva pada saat penjualan. Batas: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang bersama, dan $2.000 per alamat dalam jendela geser 24 jam. PPL kembali ke dompet penjualan di PEOPLE mainnet dan tidak dibakar. Biaya 1,5%; 3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan. Tetap buka setelah kurva ditutup, sampai cadangan dipindahkan ke likuiditas. Dana diterima dalam USDC di jaringan Base.",
+    "sellBackTerms": "Penjualan kembali ke cadangan hanya untuk pengguna terverifikasi. Setiap pembelian dapat dijual kembali 30 hari setelahnya, dengan harga kurva pada saat penjualan. Batas: 2% dari cadangan dalam setiap jendela geser 24 jam untuk semua orang bersama, dan $2.000 per alamat dalam jendela geser 24 jam. PPL kembali ke dompet penjualan di PEOPLE Mainnet Beta dan tidak dibakar. Biaya 1,5%; 3% hanya untuk bagian penjualan kembali dalam 24 jam itu yang melebihi 1% cadangan. Tetap buka setelah kurva ditutup, sampai cadangan dipindahkan ke likuiditas. Dana diterima dalam USDC di jaringan Base.",
     "feesTitle": "Biaya dan waktu",
     "feesBody": "Biaya: biaya jaringan Base (gas), dibayar dengan ETH — biasanya sekitar $0,01; biaya swap atau bridge LI.FI — ditampilkan di widget sebelum konfirmasi; biaya penjualan kembali ke cadangan — 1,5%, dan 3% hanya untuk bagian penjualan kembali dalam jendela geser 24 jam yang melebihi 1% cadangan.",
     "timingBody": "Pembelian di Base dikonfirmasi dalam hitungan detik. Pembayaran dari jaringan lain biasanya tiba dalam 1–20 menit. Pembayaran penjualan kembali dikirim dalam USDC di jaringan Base.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Pembelian selesai",
-      "credited": "{ppl} PPL dikreditkan di PEOPLE mainnet ke {address}",
+      "credited": "{ppl} PPL dikreditkan di PEOPLE Mainnet Beta ke {address}",
       "tx": "Lihat transaksi",
       "unlock": "Jual kembali terbuka pada {date}",
       "again": "Beli PPL lagi"
@@ -401,11 +401,11 @@
       "receive": "Anda menerima",
       "amount": "PPL yang dijual",
       "max": "Maksimum",
-      "burning": "Mengembalikan PPL ke dompet penjualan di PEOPLE mainnet…",
+      "burning": "Mengembalikan PPL ke dompet penjualan di PEOPLE Mainnet Beta…",
       "attesting": "Memeriksa pengembalian…",
       "selling": "Membayar USDC di Base…",
       "done": "Penjualan selesai. USDC dibayar di Base.",
-      "payoutNote": "PPL kembali ke dompet penjualan di PEOPLE mainnet dan Anda menerima USDC di jaringan Base.",
+      "payoutNote": "PPL kembali ke dompet penjualan di PEOPLE Mainnet Beta dan Anda menerima USDC di jaringan Base.",
       "error": "Penjualan tidak selesai. Coba lagi.",
       "rejected": "Anda menolak permintaan di dompet.",
       "notConfigured": "Penjualan belum tersedia.",

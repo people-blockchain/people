@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "PPL SALE · 1 DECEMBER 2026",
     "title": "Countdown to the PPL sale",
-    "lead": "The public PPL sale opens on 1 December 2026. You pay in USDC or USDT on Base, and PPL are credited immediately to your address in the PEOPLE network.",
+    "lead": "The public PPL sale opens on 1 December 2026 as PEOPLE Mainnet Beta. You pay in USDC or USDT on Base, and PPL are credited immediately to your address on PEOPLE Mainnet Beta.",
     "days": "days",
     "hours": "hours",
     "minutes": "minutes",
@@ -56,14 +56,46 @@
     "verification": "Human verification required."
   },
   "taskItems": [
-    { "id": "swap", "label": "Swap PPL", "href": "/swap" },
-    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "Launch a token", "href": "/create/token" },
-    { "id": "nft_mint", "label": "Mint an NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Vote in governance", "href": "/governance" },
-    { "id": "discover_reaction", "label": "React to a project", "href": "/discover" },
-    { "id": "discover_follow", "label": "Follow a project", "href": "/discover" },
-    { "id": "invite", "label": "Invite a verified person", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "Swap PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Launch a token",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Mint an NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Vote in governance",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "React to a project",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Follow a project",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Invite a verified person",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "REFERRAL",

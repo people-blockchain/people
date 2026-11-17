@@ -18,7 +18,7 @@
     ],
     "sub": "Sans code, sans compétences crypto. Un téléphone ou un navigateur suffit : créez un portefeuille en 30 secondes et essayez-le sur le testnet.",
     "pitchLine": "Une blockchain pour les gens ordinaires : votre propre token, des cartes NFT de club et lever des fonds pour une idée — sans code.",
-    "testnetBadge": "Le testnet public est en ligne. Ce n'est pas encore le mainnet.",
+    "testnetBadge": "Le testnet public est en ligne. PEOPLE Mainnet Beta ouvre le 1er décembre 2026.",
     "ctaTestnet": "Essayer le testnet",
     "ctaFounder": "Réclamez votre numéro de fondateur",
     "card": {
@@ -46,7 +46,7 @@
     ],
     "shareBadge": "10% pour la communauté",
     "peopleLine": "Vos gens, pas les baleines",
-    "saleNote": "Le réseau PEOPLE est encore un réseau de test, et ses jetons de test n’ont aucune valeur. La vente de PPL est distincte : elle se déroule sur Base avec de vrais USDC ou USDT."
+    "saleNote": "L’espace d’essai actuel est le testnet public (les jetons de test n’ont aucune valeur). PEOPLE Mainnet Beta ouvre le 1er décembre 2026 : vous payez en USDC ou USDT sur Base, et les PPL sont crédités sur PEOPLE Mainnet Beta."
   },
   "community": {
     "eyebrow": "10 % garanti pour la communauté",

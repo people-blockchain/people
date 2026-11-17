@@ -164,7 +164,7 @@ const en: TransparencyCopy = {
   },
   launch: {
     eyebrow: "LAUNCH PLAN",
-    title: "Million Founders, testnet, mainnet",
+    title: "Million Founders, testnet, PEOPLE Mainnet Beta",
     lead: "The order is fixed, and each step opens only after the previous one is done.",
     steps: [
       {
@@ -173,15 +173,15 @@ const en: TransparencyCopy = {
       },
       {
         title: "1,000 verified people",
-        body: "Mainnet work starts once 1,000 people have been verified on the network.",
+        body: "Transfers between people on PEOPLE Mainnet Beta open after about 1,000 verified participants.",
       },
       {
         title: "Treasury multisig",
         body: "The network-fee treasury is a 2-of-3 multisig, so spending is visible in the explorer.",
       },
       {
-        title: "Mainnet and the PPL sale",
-        body: "The PPL sale opens once the sale contract (PplCurveHub on Base) and the receiving multisig are published. Transfers and pool trading open at the full network launch, with 1,000 verified people.",
+        title: "PEOPLE Mainnet Beta and the PPL sale",
+        body: "The PPL sale opens on 1 December 2026 as PEOPLE Mainnet Beta: you pay in USDC or USDT on Base (PplCurveHub), and PPL are credited immediately on PEOPLE Mainnet Beta. Transfers between people open after about 1,000 verified participants.",
       },
     ],
   },
@@ -308,7 +308,7 @@ const ru: TransparencyCopy = {
   },
   launch: {
     eyebrow: "ПЛАН ЗАПУСКА",
-    title: "Миллион основателей, testnet, mainnet",
+    title: "Миллион основателей, testnet, PEOPLE Mainnet Beta",
     lead: "Порядок фиксирован, и каждый шаг открывается только после предыдущего.",
     steps: [
       {
@@ -317,15 +317,15 @@ const ru: TransparencyCopy = {
       },
       {
         title: "1 000 verified people",
-        body: "Работа над mainnet начинается, когда в сети верифицированы 1 000 человек.",
+        body: "Переводы между людьми в PEOPLE Mainnet Beta открываются после примерно 1 000 подтверждённых участников.",
       },
       {
         title: "Мультисиг казны",
-        body: "До mainnet казна — мультисиг 2-из-3, чтобы расходы были видны в explorer.",
+        body: "Казна комиссий сети — мультисиг 2-из-3, чтобы расходы были видны в explorer.",
       },
       {
-        title: "Mainnet и продажа PPL",
-        body: "Продажа PPL открывается после публикации контракта продажи (PplCurveHub в сети Base) и мультисига-получателя. Переводы и торговля в пуле — с полного запуска сети, при 1 000 верифицированных людей.",
+        title: "PEOPLE Mainnet Beta и продажа PPL",
+        body: "Продажа PPL открывается 1 декабря 2026 года как PEOPLE Mainnet Beta: вы платите USDC или USDT в сети Base (PplCurveHub), а PPL сразу зачисляются в PEOPLE Mainnet Beta. Переводы между людьми открываются после примерно 1 000 подтверждённых участников.",
       },
     ],
   },

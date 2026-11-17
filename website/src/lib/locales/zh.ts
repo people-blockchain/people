@@ -1287,7 +1287,7 @@ export const zh: LocaleContent = {
   "networkMode": {
     "label": "网络模式",
     "mainnet": "主网",
-    "mainnetTitle": "主网：Base 网络，PPL 销售在此进行",
+    "mainnetTitle": "PEOPLE Mainnet Beta：在 Base 上用 USDC 或 USDT 支付；PPL 记入 PEOPLE 网络。",
     "testnet": "测试网",
     "testnetTitle": "测试网：用于创建代币和 NFT 的 PEOPLE 测试网"
   },

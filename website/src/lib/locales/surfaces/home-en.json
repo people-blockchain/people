@@ -13,7 +13,7 @@
       "not to whales."
     ],
     "sub": "PEOPLE Blockchain is where creators launch tokens with fair pricing from block one, and the community gets a built-in share of everything it helps grow.",
-    "testnetBadge": "Public testnet is live. Not mainnet yet.",
+    "testnetBadge": "Public testnet is live. PEOPLE Mainnet Beta opens 1 December 2026.",
     "ctaCreate": "Create a token",
     "ctaWallet": "Open wallet",
     "flowAria": "Four steps from wallet to trading your token",
@@ -99,8 +99,8 @@
     "lead": "Verified participants get their number, an early-entry bonus, and activity points on the PEOPLE Blockchain testnet.",
     "cta": "Join founders",
     "href": "/founders",
-    "titleWithNumber": "Become founder № {{n}} before mainnet",
-    "titleFallback": "Be among the first founders before mainnet launches"
+    "titleWithNumber": "Become founder № {{n}} before PEOPLE Mainnet Beta",
+    "titleFallback": "Be among the first founders before PEOPLE Mainnet Beta"
   },
   "agentsTeaser": {
     "eyebrow": "Community AI",

@@ -7,7 +7,7 @@
     "eyebrow": "Vente de PPL",
     "headline": "Plus vous achetez tôt, plus le prix est bas.",
     "lead": "Chaque achat fait monter la courbe, donc les acheteurs suivants paient plus. C’est pour ça que l’ouverture compte. Vous pouvez revendre après 30 jours.",
-    "subUpcoming": "La vente de PPL ouvre le {date}.",
+    "subUpcoming": "La vente de PPL ouvre le {date} en tant que PEOPLE Mainnet Beta.",
     "subWhitelist": "La vente de PPL est ouverte. Seules les personnes vérifiées peuvent acheter.",
     "subOpen": "La vente de PPL est ouverte. Toute personne vérifiée peut acheter.",
     "subEnded": "La vente de PPL est terminée.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "Les PPL directement dans votre portefeuille PEOPLE",
-        "body": "Vous payez en USDC ou en USDT, et les PPL sont crédités instantanément à votre adresse sur PEOPLE mainnet."
+        "body": "Vous payez en USDC ou en USDT, et les PPL sont crédités instantanément à votre adresse sur PEOPLE Mainnet Beta."
       }
     ],
     "verifyLink": "Comment se faire vérifier"
@@ -143,7 +143,7 @@
       },
       {
         "q": "Quand puis-je envoyer des PPL à d’autres personnes ?",
-        "a": "Les PPL sont crédités sur PEOPLE mainnet juste après votre achat. Au début, le réseau ne reçoit que des PPL : les transferts entre participants ouvriront plus tard, lorsqu’il y aura environ 1 000 participants vérifiés. D’ici là, vous pouvez revendre les PPL à la réserve selon les règles ci-dessus."
+        "a": "Les PPL sont crédités sur PEOPLE Mainnet Beta juste après votre achat. C’est le vrai réseau principal PEOPLE, à un stade initial que nous appelons bêta, de sorte que certaines limites s’appliquent encore. Au début, le réseau ne reçoit que des PPL : les transferts entre personnes ouvrent après environ 1 000 participants vérifiés. D’ici là, vous pouvez revendre les PPL à la réserve selon les règles ci-dessus."
       },
       {
         "q": "Depuis quels réseaux puis-je payer ?",
@@ -273,14 +273,14 @@
     "riskTitle": "Avertissement sur les risques",
     "riskBody": "Les cryptoactifs sont risqués : le prix peut baisser, vous ne pourrez peut-être pas revendre tout de suite et les achats ne sont pas remboursables. N’utilisez que de l’argent que vous pouvez perdre.",
     "riskMoreToggle": "Tous les risques",
-    "riskMore": "Par ailleurs : les transferts de PPL entre participants ouvriront plus tard, lorsque le réseau PEOPLE comptera environ 1 000 participants vérifiés. La revente à la réserve est réservée aux utilisateurs vérifiés, 30 jours après chaque achat et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut mettre en pause les achats et la revente.",
+    "riskMore": "Par ailleurs : les PPL sont crédités sur PEOPLE Mainnet Beta juste après l’achat, et les transferts entre personnes ouvrent après environ 1 000 participants vérifiés. La revente à la réserve est réservée aux utilisateurs vérifiés, 30 jours après chaque achat et dans les limites journalières. Le contrat de vente n’a été examiné que par des modèles d’IA ; aucun audit externe n’a encore été réalisé. Le multisig du projet peut mettre en pause les achats et la revente.",
     "saleTermsNote": "La vente dure jusqu’à épuisement (la courbe se ferme à 4 M$ levés) ou 24 mois après l’ouverture, selon la première échéance. Aucune prolongation. Les PPL invendus vont au Community Pool. Aucun remboursement : tout achat est définitif.",
     "termsAgree": "En achetant, vous acceptez les {terms}.",
     "termsLink": "Conditions",
     "help": "Besoin d’aide ? {support}",
     "supportLink": "Assistance",
     "noWalletHint": "Pas de portefeuille ? Créez ou importez un PEOPLE Wallet, ou connectez MetaMask / WalletConnect. Pour payer, il vous faut des USDC sur Base dans ce portefeuille.",
-    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque achat peut être revendu 30 jours après avoir été fait, au prix de la courbe au moment de la vente. Limites : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par adresse dans une fenêtre glissante de 24 heures. Les PPL retournent au portefeuille de vente sur PEOPLE mainnet ; rien n’est détruit. Frais de 1,5 % ; 3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve. Reste ouverte après la fermeture de la courbe, jusqu’au transfert de la réserve en liquidité. Vous recevez des USDC sur Base.",
+    "sellBackTerms": "Revente à la réserve réservée aux utilisateurs vérifiés. Chaque achat peut être revendu 30 jours après avoir été fait, au prix de la courbe au moment de la vente. Limites : 2 % de la réserve sur toute fenêtre glissante de 24 heures pour tous, et 2 000 $ par adresse dans une fenêtre glissante de 24 heures. Les PPL retournent au portefeuille de vente sur PEOPLE Mainnet Beta ; rien n’est détruit. Frais de 1,5 % ; 3 % seulement sur la part des reventes de ces 24 heures qui dépasse 1 % de la réserve. Reste ouverte après la fermeture de la courbe, jusqu’au transfert de la réserve en liquidité. Vous recevez des USDC sur Base.",
     "feesTitle": "Frais et délais",
     "feesBody": "Frais : ceux du réseau Base (gas), payés en ETH — en général environ 0,01 $ ; ceux d’échange ou de pont de LI.FI — affichés dans le widget avant confirmation ; ceux de revente à la réserve — 1,5 %, et 3 % seulement sur la part des reventes sur 24 heures glissantes qui dépasse 1 % de la réserve.",
     "timingBody": "Un achat sur Base est confirmé en quelques secondes. Les paiements depuis d’autres réseaux arrivent en général en 1 à 20 minutes. Les reventes sont réglées en USDC sur Base.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Achat terminé",
-      "credited": "{ppl} PPL crédités sur PEOPLE mainnet à {address}",
+      "credited": "{ppl} PPL crédités sur PEOPLE Mainnet Beta à {address}",
       "tx": "Voir la transaction",
       "unlock": "La revente ouvre le {date}",
       "again": "Acheter plus de PPL"
@@ -401,11 +401,11 @@
       "receive": "Vous recevez",
       "amount": "PPL à vendre",
       "max": "Maximum",
-      "burning": "Retour des PPL vers le portefeuille de vente sur PEOPLE mainnet…",
+      "burning": "Retour des PPL vers le portefeuille de vente sur PEOPLE Mainnet Beta…",
       "attesting": "Vérification du retour…",
       "selling": "Paiement des USDC sur Base…",
       "done": "Vente terminée. Les USDC sont payés sur Base.",
-      "payoutNote": "Les PPL retournent au portefeuille de vente sur PEOPLE mainnet et vous recevez des USDC sur Base.",
+      "payoutNote": "Les PPL retournent au portefeuille de vente sur PEOPLE Mainnet Beta et vous recevez des USDC sur Base.",
       "error": "La vente n’a pas abouti. Réessayez.",
       "rejected": "Vous avez refusé la demande dans le portefeuille.",
       "notConfigured": "La vente n’est pas encore disponible.",

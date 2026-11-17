@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "BÁN PPL · 1 THÁNG 12 NĂM 2026",
     "title": "Đếm ngược đến đợt bán PPL",
-    "lead": "Đợt bán PPL công khai mở vào ngày 1 tháng 12 năm 2026. Bạn thanh toán bằng USDC hoặc USDT trên Base, và PPL được ghi có ngay vào địa chỉ của bạn trong mạng PEOPLE.",
+    "lead": "Đợt bán PPL công khai mở vào ngày 1 tháng 12 năm 2026 dưới tên PEOPLE Mainnet Beta. Bạn thanh toán bằng USDC hoặc USDT trên Base, và PPL được ghi có ngay vào địa chỉ của bạn trên PEOPLE Mainnet Beta.",
     "days": "ngày",
     "hours": "giờ",
     "minutes": "phút",
@@ -56,14 +56,46 @@
     "verification": "Cần xác minh con người."
   },
   "taskItems": [
-    { "id": "swap", "label": "Đổi PPL", "href": "/swap" },
-    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "Phát hành token", "href": "/create/token" },
-    { "id": "nft_mint", "label": "Đúc NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Bỏ phiếu quản trị", "href": "/governance" },
-    { "id": "discover_reaction", "label": "Phản ứng với dự án", "href": "/discover" },
-    { "id": "discover_follow", "label": "Theo dõi dự án", "href": "/discover" },
-    { "id": "invite", "label": "Mời một người đã xác minh", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "Đổi PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Phát hành token",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Đúc NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Bỏ phiếu quản trị",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "Phản ứng với dự án",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Theo dõi dự án",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Mời một người đã xác minh",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "GIỚI THIỆU",

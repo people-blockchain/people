@@ -1287,7 +1287,7 @@ export const id: LocaleContent = {
   "networkMode": {
     "label": "Mode jaringan",
     "mainnet": "Jaringan utama",
-    "mainnetTitle": "Jaringan utama: jaringan Base, tempat penjualan PPL berlangsung",
+    "mainnetTitle": "PEOPLE Mainnet Beta: bayar dengan USDC atau USDT di Base; PPL dikreditkan di jaringan PEOPLE.",
     "testnet": "Jaringan uji",
     "testnetTitle": "Jaringan uji: jaringan uji PEOPLE untuk membuat token dan NFT"
   },

@@ -7,7 +7,7 @@
     "eyebrow": "PPL satışı",
     "headline": "Ne kadar erken alırsanız, fiyat o kadar düşük olur.",
     "lead": "Her alım eğriyi yükseltir, sonra gelenler daha fazla öder. Bu yüzden açılış önemlidir. 30 gün sonra geri satış yapabilirsiniz.",
-    "subUpcoming": "PPL satışı {date} tarihinde açılıyor.",
+    "subUpcoming": "PPL satışı {date} tarihinde PEOPLE Mainnet Beta olarak açılıyor.",
     "subWhitelist": "PPL satışı açık. Yalnızca doğrulanmış kişiler satın alabilir.",
     "subOpen": "PPL satışı açık. Doğrulanmış herkes satın alabilir.",
     "subEnded": "PPL satışı sona erdi.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL doğrudan PEOPLE cüzdanınıza",
-        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE mainnet üzerindeki adresinize yazılır."
+        "body": "USDC ya da USDT ile ödersiniz ve PPL anında PEOPLE Mainnet Beta üzerindeki adresinize yazılır."
       }
     ],
     "verifyLink": "Nasıl doğrulanırım"
@@ -143,7 +143,7 @@
       },
       {
         "q": "PPL'yi başkalarına ne zaman gönderebilirim?",
-        "a": "PPL, satın alımınızdan hemen sonra PEOPLE ağında kaydedilir. Başlangıçta ağ yalnızca PPL alır: katılımcılar arasındaki transferler daha sonra, ağda yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. O zamana kadar PPL'yi yukarıdaki kurallarla rezerve geri satabilirsiniz."
+        "a": "PPL, satın alımınızdan hemen sonra PEOPLE Mainnet Beta üzerinde kaydedilir. Bu, beta adını verdiğimiz erken bir aşamadaki gerçek PEOPLE ana ağıdır; bu nedenle bazı sınırlar geçerlidir. Başlangıçta ağ yalnızca PPL alır: kişiler arasındaki transferler yaklaşık 1000 doğrulanmış katılımcıdan sonra açılır. O zamana kadar PPL'yi yukarıdaki kurallarla rezerve geri satabilirsiniz."
       },
       {
         "q": "Hangi ağlardan ödeme yapabilirim?",
@@ -273,14 +273,14 @@
     "riskTitle": "Risk uyarısı",
     "riskBody": "Kripto risklidir: fiyat düşebilir, hemen satamayabilirsiniz ve alımlar iade edilmez. Yalnızca kaybetmeyi göze alabileceğiniz parayı kullanın.",
     "riskMoreToggle": "Tüm riskler",
-    "riskMore": "Ayrıca: PPL'nin katılımcılar arasındaki transferleri daha sonra, PEOPLE ağında yaklaşık 1000 doğrulanmış katılımcı olduğunda açılır. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; her alımdan 30 gün sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları ve geri satışı duraklatabilir.",
+    "riskMore": "Ayrıca: PPL satın alımdan hemen sonra PEOPLE Mainnet Beta üzerinde tanımlanır ve kişiler arasındaki transferler yaklaşık 1000 doğrulanmış katılımcıdan sonra açılır. Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir; her alımdan 30 gün sonra ve günlük sınırlar içinde yapılabilir. Satış sözleşmesi yalnızca yapay zekâ modelleri tarafından incelendi; henüz harici bir denetim yapılmadı. Projenin çoklu imza cüzdanı alımları ve geri satışı duraklatabilir.",
     "saleTermsNote": "Satış, tükenene kadar (eğri $4M toplanınca kapanır) veya açılıştan itibaren 24 ay boyunca sürer; hangisi önce gerçekleşirse. Uzatma yoktur. Satılmayan PPL Community Pool'a gider. İade yoktur: her alım kesindir.",
     "termsAgree": "Satın alarak {terms} kabul etmiş olursunuz.",
     "termsLink": "Koşulları",
     "help": "Yardım mı gerekiyor? {support}",
     "supportLink": "Destek",
     "noWalletHint": "Cüzdan yok mu? Bir PEOPLE Wallet oluşturun veya içe aktarın, ya da MetaMask / WalletConnect bağlayın. Ödeme için o cüzdanda Base üzerinde USDC gerekir.",
-    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Sınırlar: herkes için kayan herhangi bir 24 saatte rezervin %2'si ve adres başına kayan 24 saatte $2.000. PPL, PEOPLE mainnet üzerindeki satış cüzdanına geri döner ve yakılmaz. Ücret %1,5; o 24 saatteki geri satışlarda yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandıktan sonra da rezerv likiditeye aktarılana kadar açık kalır. Ödemeyi USDC olarak Base ağında alırsınız.",
+    "sellBackTerms": "Rezerve geri satış yalnızca doğrulanmış kullanıcılar içindir. Her alım, yapıldıktan 30 gün sonra satış anındaki eğri fiyatından geri satılabilir. Sınırlar: herkes için kayan herhangi bir 24 saatte rezervin %2'si ve adres başına kayan 24 saatte $2.000. PPL, PEOPLE Mainnet Beta üzerindeki satış cüzdanına geri döner ve yakılmaz. Ücret %1,5; o 24 saatteki geri satışlarda yalnızca rezervin %1'ini aşan kısım için %3. Eğri kapandıktan sonra da rezerv likiditeye aktarılana kadar açık kalır. Ödemeyi USDC olarak Base ağında alırsınız.",
     "feesTitle": "Ücretler ve süreler",
     "feesBody": "Ücretler: Base ağ ücreti (gas), ETH ile ödenir — genellikle yaklaşık $0,01; LI.FI takas veya köprü ücreti — onaylamadan önce widget'ta gösterilir; rezerve geri satış ücreti — %1,5, ve yalnızca kayan 24 saatteki geri satışlarda rezervin %1'ini aşan kısım için %3.",
     "timingBody": "Base'de bir alım saniyeler içinde onaylanır. Diğer ağlardan ödemeler genellikle 1–20 dakikada ulaşır. Geri satış ödemeleri Base ağında USDC olarak yapılır.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Alım tamamlandı",
-      "credited": "{ppl} PPL, PEOPLE mainnet üzerinde {address} adresine geçti",
+      "credited": "{ppl} PPL, PEOPLE Mainnet Beta üzerinde {address} adresine geçti",
       "tx": "İşlemi görüntüle",
       "unlock": "Geri satış {date} tarihinde açılır",
       "again": "Daha fazla PPL al"
@@ -401,11 +401,11 @@
       "receive": "Alacağınız",
       "amount": "Satılacak PPL",
       "max": "En fazla",
-      "burning": "PPL, PEOPLE mainnet üzerindeki satış cüzdanına iade ediliyor…",
+      "burning": "PPL, PEOPLE Mainnet Beta üzerindeki satış cüzdanına iade ediliyor…",
       "attesting": "İade kontrol ediliyor…",
       "selling": "USDC, Base üzerinde ödeniyor…",
       "done": "Satış tamam. USDC, Base üzerinde ödenir.",
-      "payoutNote": "PPL, PEOPLE mainnet üzerindeki satış cüzdanına geri döner; USDC'yi Base ağında alırsınız.",
+      "payoutNote": "PPL, PEOPLE Mainnet Beta üzerindeki satış cüzdanına geri döner; USDC'yi Base ağında alırsınız.",
       "error": "Satış tamamlanmadı. Yeniden deneyin.",
       "rejected": "İsteği cüzdanınızda reddettiniz.",
       "notConfigured": "Satış henüz kullanılamıyor.",

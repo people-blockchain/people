@@ -1,5 +1,5 @@
 {
-  "heroEyebrow": "PEOPLE · before mainnet",
+  "heroEyebrow": "PEOPLE · before PEOPLE Mainnet Beta",
   "heroTitle": "Million Founders",
   "heroSub": "Join up to one million verified people who help write the first chapter of PEOPLE. One person, one founder number, one free Founder NFT — recorded in the genesis block forever.",
   "heroCta": "Verify and join",
@@ -8,12 +8,12 @@
   "counterGoal": "goal",
   "counterLive": "Live count from Human Passport verification on PEOPLE.",
   "counterStub": "Counter shows verified people once the database is connected.",
-  "disclaimer": "Preliminary program details may change before mainnet. Not financial advice. No promise of income or token price growth.",
+  "disclaimer": "Preliminary program details may change before PEOPLE Mainnet Beta. Not financial advice. No promise of income or token price growth.",
   "nftEyebrow": "Founder NFT",
   "nftTitle": "Your free numbered Founder NFT",
-  "nftBody": "Every verified person who joins before mainnet receives a Founder NFT with their public number. Getting it is free. The record is written into the genesis block and stays there — there will never be a second genesis.",
+  "nftBody": "Every verified person who joins before PEOPLE Mainnet Beta receives a Founder NFT with their public number. Getting it is free. The record is written into the genesis block and stays there — there will never be a second genesis.",
   "nftBullets": [
-    "Free for verified founders before mainnet",
+    "Free for verified founders before PEOPLE Mainnet Beta",
     "Your number is part of chain history from day one",
     "Same base rights for every founder — special numbers add small one-time perks only"
   ],
@@ -75,7 +75,7 @@
   "faq": [
     {
       "q": "Is it free?",
-      "a": "Yes. Verification with Human Passport on PEOPLE is free, and your Founder NFT is free before mainnet."
+      "a": "Yes. Verification with Human Passport on PEOPLE is free, and your Founder NFT is free before PEOPLE Mainnet Beta."
     },
     {
       "q": "Can I pick my founder number?",
@@ -91,7 +91,7 @@
     },
     {
       "q": "What is PEOPLE?",
-      "a": "PEOPLE is a community blockchain — created by people, for the community. Founders are verified humans who join before mainnet."
+      "a": "PEOPLE is a community blockchain — created by people, for the community. Founders are verified humans who join before PEOPLE Mainnet Beta."
     }
   ],
   "finalTitle": "Become a founder",

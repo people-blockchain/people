@@ -1287,7 +1287,7 @@ export const ru: LocaleContent = {
   "networkMode": {
     "label": "Режим сети",
     "mainnet": "Основная сеть",
-    "mainnetTitle": "Основная сеть: сеть Base, где идёт продажа PPL",
+    "mainnetTitle": "PEOPLE Mainnet Beta: оплата в USDC или USDT в сети Base; PPL зачисляются в сети PEOPLE.",
     "testnet": "Тестовая сеть",
     "testnetTitle": "Тестовая сеть: тестовая сеть PEOPLE для создания токенов и NFT"
   },

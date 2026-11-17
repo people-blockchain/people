@@ -58,7 +58,7 @@
   "successPay": "Paiement envoyé.",
   "successEscrow": "Prépaiement bloqué.",
   "connectWallet": "Connecter le portefeuille",
-  "preliminaryBanner": "Préliminaire — paramètres pilotes susceptibles d'évoluer avant le mainnet.",
+  "preliminaryBanner": "Préliminaire — paramètres pilotes susceptibles d'évoluer avant PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "Connectez-vous avec Google ou e-mail et liez votre portefeuille pour gérer le commerce ou utiliser des visites.",
   "pohRequiredCloud": "Connectez-vous avec e-mail et liez votre portefeuille pour gérer le commerce ou utiliser des visites."
 }

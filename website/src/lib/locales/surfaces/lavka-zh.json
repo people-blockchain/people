@@ -58,7 +58,7 @@
   "successPay": "付款已发送。",
   "successEscrow": "预付已锁定。",
   "connectWallet": "连接钱包",
-  "preliminaryBanner": "初步方案——试点参数可能在主网前调整。",
+  "preliminaryBanner": "初步方案——试点参数可能在 PEOPLE Mainnet Beta 前调整。",
   "pohRequiredSocial": "使用 Google 或邮箱登录并绑定钱包，以经营小店或核销次数。",
   "pohRequiredCloud": "使用邮箱登录并绑定钱包，以经营小店或核销次数。"
 }

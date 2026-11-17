@@ -1,11 +1,11 @@
 {
   "tag": "TOKENOMICS",
   "title": "Cung PPL và kế hoạch ra mắt",
-  "lead": "Cách phân bổ, mở khóa và bán 1 tỷ PPL cố định trước và sau mainnet. Số liệu sơ bộ, phụ thuộc quản trị cộng đồng.",
+  "lead": "Cách phân bổ, mở khóa và bán 1 tỷ PPL cố định trước và sau PEOPLE Mainnet Beta. Số liệu sơ bộ, phụ thuộc quản trị cộng đồng.",
   "banner": "Sơ bộ — chờ bỏ phiếu quản trị cộng đồng.",
   "supplyTitle": "Cung cố định",
   "supplyBody": "Tổng cung cố định 1.000.000.000 PPL (một tỷ). Năm 1–4: 0% lạm phát — không đúc thêm ngoài lịch mở khóa. Từ năm 5, phát hành thêm tối đa 2%/năm và chỉ khi cộng đồng bỏ phiếu.",
-  "testnetNote": "Testnet nội bộ dùng premine 1M PPL thử nghiệm. Không chuyển sang mainnet — mainnet bắt đầu từ số không.",
+  "testnetNote": "Testnet nội bộ dùng premine 1M PPL thử nghiệm. Không chuyển sang — kế toán Mainnet Beta bắt đầu từ số không.",
   "allocationTitle": "Phân bổ genesis",
   "allocationLead": "Sáu bucket khi ra mắt. Chạm hoặc di chuột để xem tỷ lệ, khối lượng và lộ trình mở khóa.",
   "bucketLabels": {
@@ -21,7 +21,7 @@
     "validators": "200M PPL (20%): năm 1–4 trả 6%, 5%, 5%, 4% tổng cung mỗi năm (60M / 50M / 50M / 40M PPL) cộng 30% phí mạng.",
     "team": "15% nguồn cung: 0% khi ra mắt, cliff 6 tháng, sau đó mở khóa tuyến tính hàng tháng trong 18 tháng (tổng 24 tháng).",
     "treasury": "Chỉ chi sau vote DAO; giữ multisig.",
-    "sale": "Bán trên đường cong công khai trên Base (PplCurveHub). PPL được ghi trên PEOPLE mainnet ngay sau khi mua; chuyển khoản mở khi ra mắt mạng đầy đủ.",
+    "sale": "Bán trên đường cong công khai trên Base (PplCurveHub). PPL được ghi trên PEOPLE Mainnet Beta ngay sau khi mua; chuyển khoản giữa mọi người mở sau khoảng 1.000 người tham gia đã xác minh.",
     "liquidity": "Pool PPL/USDC khi graduation; token LP bị khóa 24 tháng."
   },
   "donutTitle": "Phân bổ",
@@ -36,7 +36,7 @@
   "salePayTitle": "Bạn sẽ thanh toán thế nào",
   "salePayBody": "Trên Base — bằng USDC hoặc USDT. Từ các mạng khác — qua công cụ hoán đổi tự động tích hợp (LI.FI): các mạng EVM (Ethereum, BNB Chain, Polygon, Arbitrum, Optimism, Avalanche và các mạng khác), Tron và Solana đều dùng được. TON không được hỗ trợ. Bạn nhận tiền bằng USDC trên mạng Base.",
   "saleDeliveryTitle": "Cách nhận PPL",
-  "saleDeliveryBody": "PPL được ghi vào địa chỉ của bạn trên PEOPLE mainnet ngay, nhưng bạn chỉ có thể gửi cho người khác sau khi ra mắt mạng đầy đủ. Chỉ người dùng đã xác minh mới bán lại được, 30 ngày sau mỗi lần mua.",
+  "saleDeliveryBody": "PPL được ghi vào địa chỉ của bạn trên PEOPLE Mainnet Beta ngay, nhưng bạn chỉ có thể gửi cho người khác sau khoảng 1.000 người tham gia đã xác minh. Chỉ người dùng đã xác minh mới bán lại được, 30 ngày sau mỗi lần mua.",
   "curveTitle": "Đường cong bonding",
   "curveLead": "Đường cong mũ: giá bắt đầu $0,005 mỗi PPL và tăng theo mỗi lần mua, tới trần $0,25 khi đường cong mở. Tốt nghiệp đóng đường cong ở mức gom $4M.",
   "unsoldTitle": "Token chưa bán",
@@ -88,7 +88,7 @@
     "Từ năm 5, phát hành mới tối đa 2%/năm và chỉ khi cộng đồng bỏ phiếu."
   ],
   "launchOrderTitle": "Thứ tự ra mắt",
-  "launchOrderBody": "Đợt bán PPL mở khi hợp đồng bán (PplCurveHub trên Base) và multisig nhận tiền được công bố. Chuyển PPL và giao dịch trong pool mở khi ra mắt mạng đầy đủ, với 1.000 người đã xác minh.",
+  "launchOrderBody": "Đợt bán PPL mở vào ngày 1 tháng 12 năm 2026 dưới tên PEOPLE Mainnet Beta. Chuyển khoản giữa mọi người được bật sau khoảng 1.000 người tham gia đã xác minh.",
   "pplFeeTariffsLink": "Biểu giá phí PPL",
   "explorerLink": "Trình khám phá",
   "backToDocsLink": "Quay lại tài liệu",
@@ -99,7 +99,7 @@
     "100.000.000 PPL trên đường cong (10% cung); bắt đầu $0,005, tăng mũ, trần $0,25 chỉ trên đường cong.",
     "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
     "Gom 50% thanh khoản khóa / 50% multisig dự án; token LP khóa 24 tháng.",
-    "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người và $2.000 mỗi người trong cửa sổ trượt 24 giờ. Phí 1,5% (3% chỉ cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ). Đóng sau khi đường cong hoàn tất (graduation). Bạn nhận USDC trên mạng Base.",
+    "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi lô có thể bán lại sau 30 ngày nắm giữ, theo giá đường cong tại thời điểm bán. Giới hạn chung: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. Phí 1,5% (3% chỉ cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ). Vẫn mở sau khi đường cong đóng, cho đến khi quỹ dự trữ chuyển thành thanh khoản. Bạn nhận USDC trên mạng Base. PPL được trả về ví bán trên PEOPLE Mainnet Beta; không có gì bị đốt.",
     "$10–$500 mỗi lần mua; Tối đa $2,000 mỗi người trong cửa sổ trượt 24 giờ; Nghỉ 60 giây giữa các lần mua"
   ],
   "curveTableSold": "% đã bán",

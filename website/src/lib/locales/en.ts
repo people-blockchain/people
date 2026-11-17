@@ -1285,7 +1285,7 @@ export const en = {
   "networkMode": {
     "label": "Network mode",
     "mainnet": "Mainnet",
-    "mainnetTitle": "Mainnet: the Base network, where the PPL sale runs",
+    "mainnetTitle": "PEOPLE Mainnet Beta: pay USDC or USDT on Base; PPL are credited on the PEOPLE network.",
     "testnet": "Testnet",
     "testnetTitle": "Testnet: the PEOPLE test network for creating tokens and NFTs"
   },

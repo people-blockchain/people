@@ -7,7 +7,7 @@
     "eyebrow": "Mở bán PPL",
     "headline": "Mua càng sớm, giá càng thấp.",
     "lead": "Mỗi lần mua đẩy đường cong lên, nên người đến sau phải trả cao hơn. Vì vậy thời điểm mở bán rất quan trọng. Bạn có thể bán lại sau 30 ngày.",
-    "subUpcoming": "Đợt bán PPL mở vào ngày {date}.",
+    "subUpcoming": "Đợt bán PPL mở vào ngày {date} dưới tên PEOPLE Mainnet Beta.",
     "subWhitelist": "Đợt bán PPL đã mở. Chỉ người đã xác minh mới được mua.",
     "subOpen": "Đợt bán PPL đã mở. Bất kỳ ai đã xác minh đều có thể mua.",
     "subEnded": "Đợt bán PPL đã kết thúc.",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL vào thẳng ví PEOPLE của bạn",
-        "body": "Bạn thanh toán bằng USDC hoặc USDT, và PPL được ghi có ngay vào địa chỉ của bạn trên PEOPLE mainnet."
+        "body": "Bạn thanh toán bằng USDC hoặc USDT, và PPL được ghi có ngay vào địa chỉ của bạn trên PEOPLE Mainnet Beta."
       }
     ],
     "verifyLink": "Cách xác minh"
@@ -143,7 +143,7 @@
       },
       {
         "q": "Khi nào tôi có thể gửi PPL cho người khác?",
-        "a": "PPL được ghi có trên PEOPLE mainnet ngay sau khi bạn mua. Ban đầu mạng chỉ tiếp nhận PPL: các giao dịch chuyển giữa người tham gia sẽ mở sau, khi có khoảng 1.000 người tham gia đã xác minh. Trước đó, bạn có thể bán PPL lại vào quỹ dự trữ theo các quy tắc ở trên."
+        "a": "PPL được ghi có trên PEOPLE Mainnet Beta ngay sau khi bạn mua. Đây là mạng chính PEOPLE thực sự ở giai đoạn đầu mà chúng tôi gọi là beta, nên một số giới hạn vẫn áp dụng. Ban đầu mạng chỉ tiếp nhận PPL: chuyển khoản giữa mọi người sẽ mở sau khi có khoảng 1.000 người tham gia đã xác minh. Trước đó, bạn có thể bán PPL lại vào quỹ dự trữ theo các quy tắc ở trên."
       },
       {
         "q": "Tôi có thể thanh toán từ những mạng nào?",
@@ -273,14 +273,14 @@
     "riskTitle": "Cảnh báo rủi ro",
     "riskBody": "Tiền mã hóa có rủi ro: giá có thể giảm, bạn có thể không bán được ngay và các giao dịch mua không được hoàn tiền. Chỉ dùng số tiền bạn chấp nhận mất.",
     "riskMoreToggle": "Tất cả rủi ro",
-    "riskMore": "Ngoài ra: việc chuyển PPL giữa những người tham gia sẽ mở sau, khi mạng PEOPLE có khoảng 1.000 người tham gia đã xác minh. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, 30 ngày sau mỗi giao dịch mua và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể tạm dừng việc mua và bán lại.",
+    "riskMore": "Ngoài ra: PPL được ghi có trên PEOPLE Mainnet Beta ngay sau khi mua, và việc chuyển giữa mọi người sẽ mở sau khi có khoảng 1.000 người tham gia đã xác minh. Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh, 30 ngày sau mỗi giao dịch mua và trong giới hạn hằng ngày. Hợp đồng bán mới chỉ được các mô hình AI xem xét; chưa có kiểm toán độc lập bên ngoài. Multisig của dự án có thể tạm dừng việc mua và bán lại.",
     "saleTermsNote": "Đợt bán kéo dài đến khi bán hết (đường cong đóng khi gom đủ $4M) hoặc 24 tháng kể từ ngày mở, tùy mốc nào đến trước. Không gia hạn. PPL chưa bán sẽ chuyển vào Community Pool. Không hoàn tiền: mọi giao dịch mua đều là cuối cùng.",
     "termsAgree": "Khi mua, bạn đồng ý với {terms}.",
     "termsLink": "Điều khoản",
     "help": "Cần hỗ trợ? {support}",
     "supportLink": "Hỗ trợ",
     "noWalletHint": "Chưa có ví? Tạo hoặc nhập PEOPLE Wallet, hoặc kết nối MetaMask / WalletConnect. Để thanh toán, bạn cần USDC trên Base trong ví đó.",
-    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người cộng lại, và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. PPL được trả về ví bán trên PEOPLE mainnet và không bị đốt. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ. Vẫn mở sau khi đường cong đóng, cho đến khi quỹ dự trữ được chuyển thành thanh khoản. Bạn nhận USDC trên mạng Base.",
+    "sellBackTerms": "Bán lại vào quỹ dự trữ chỉ dành cho người dùng đã xác minh. Mỗi giao dịch mua có thể bán lại 30 ngày sau đó, theo giá đường cong tại thời điểm bán. Giới hạn: 2% quỹ dự trữ trong bất kỳ cửa sổ trượt 24 giờ nào cho tất cả mọi người cộng lại, và $2.000 mỗi địa chỉ trong cửa sổ trượt 24 giờ. PPL được trả về ví bán trên PEOPLE Mainnet Beta và không bị đốt. Phí 1,5%; 3% chỉ áp dụng cho phần bán lại trong 24 giờ đó vượt 1% quỹ dự trữ. Vẫn mở sau khi đường cong đóng, cho đến khi quỹ dự trữ được chuyển thành thanh khoản. Bạn nhận USDC trên mạng Base.",
     "feesTitle": "Phí và thời gian",
     "feesBody": "Phí: phí mạng Base (gas), trả bằng ETH — thường khoảng $0,01; phí hoán đổi hoặc cầu nối của LI.FI — hiển thị trong widget trước khi xác nhận; phí bán lại vào quỹ dự trữ — 1,5%, và 3% chỉ cho phần bán lại trong cửa sổ trượt 24 giờ vượt 1% quỹ dự trữ.",
     "timingBody": "Giao dịch mua trên Base được xác nhận trong vài giây. Thanh toán từ mạng khác thường đến trong 1–20 phút. Tiền bán lại được trả bằng USDC trên mạng Base.",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "Mua hoàn tất",
-      "credited": "{ppl} PPL đã ghi có trên PEOPLE mainnet vào {address}",
+      "credited": "{ppl} PPL đã ghi có trên PEOPLE Mainnet Beta vào {address}",
       "tx": "Xem giao dịch",
       "unlock": "Bán lại mở vào {date}",
       "again": "Mua thêm PPL"
@@ -401,11 +401,11 @@
       "receive": "Bạn nhận",
       "amount": "PPL cần bán",
       "max": "Tối đa",
-      "burning": "Đang trả PPL về ví bán trên PEOPLE mainnet…",
+      "burning": "Đang trả PPL về ví bán trên PEOPLE Mainnet Beta…",
       "attesting": "Đang kiểm tra lần trả…",
       "selling": "Đang trả USDC trên Base…",
       "done": "Đã bán xong. USDC được trả trên Base.",
-      "payoutNote": "PPL được trả về ví bán trên PEOPLE mainnet và bạn nhận USDC trên mạng Base.",
+      "payoutNote": "PPL được trả về ví bán trên PEOPLE Mainnet Beta và bạn nhận USDC trên mạng Base.",
       "error": "Việc bán không hoàn tất. Hãy thử lại.",
       "rejected": "Bạn đã từ chối yêu cầu trong ví.",
       "notConfigured": "Chưa thể bán PPL.",

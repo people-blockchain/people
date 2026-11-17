@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "PENJUALAN PPL · 1 DESEMBER 2026",
     "title": "Hitung mundur penjualan PPL",
-    "lead": "Penjualan PPL publik dibuka pada 1 Desember 2026. Anda membayar dengan USDC atau USDT di Base, dan PPL langsung dikreditkan ke alamat Anda di jaringan PEOPLE.",
+    "lead": "Penjualan PPL publik dibuka pada 1 Desember 2026 sebagai PEOPLE Mainnet Beta. Anda membayar dengan USDC atau USDT di Base, dan PPL langsung dikreditkan ke alamat Anda di PEOPLE Mainnet Beta.",
     "days": "hari",
     "hours": "jam",
     "minutes": "menit",
@@ -56,14 +56,46 @@
     "verification": "Verifikasi manusia diperlukan."
   },
   "taskItems": [
-    { "id": "swap", "label": "Tukar PPL", "href": "/swap" },
-    { "id": "stake", "label": "Stake PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "Luncurkan token", "href": "/create/token" },
-    { "id": "nft_mint", "label": "Cetak NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "Voting di tata kelola", "href": "/governance" },
-    { "id": "discover_reaction", "label": "Bereaksi pada proyek", "href": "/discover" },
-    { "id": "discover_follow", "label": "Ikuti proyek", "href": "/discover" },
-    { "id": "invite", "label": "Undang orang terverifikasi", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "Tukar PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "Stake PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "Luncurkan token",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "Cetak NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "Voting di tata kelola",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "Bereaksi pada proyek",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "Ikuti proyek",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "Undang orang terverifikasi",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "RUJUKAN",

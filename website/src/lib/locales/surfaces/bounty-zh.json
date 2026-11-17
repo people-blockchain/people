@@ -12,7 +12,7 @@
   "countdown": {
     "eyebrow": "PPL 销售 · 2026 年 12 月 1 日",
     "title": "PPL 销售倒计时",
-    "lead": "公开 PPL 销售将于 2026 年 12 月 1 日开启。你可在 Base 上用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE 网络中的地址。",
+    "lead": "公开 PPL 销售将于 2026 年 12 月 1 日作为 PEOPLE Mainnet Beta 开启。你可在 Base 上用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE Mainnet Beta 上的地址。",
     "days": "天",
     "hours": "小时",
     "minutes": "分钟",
@@ -56,14 +56,46 @@
     "verification": "需要真人验证。"
   },
   "taskItems": [
-    { "id": "swap", "label": "兑换 PPL", "href": "/swap" },
-    { "id": "stake", "label": "质押 PPL", "href": "/staking" },
-    { "id": "token_launch", "label": "发行代币", "href": "/create/token" },
-    { "id": "nft_mint", "label": "铸造 NFT", "href": "/create/nft" },
-    { "id": "governance_vote", "label": "参与治理投票", "href": "/governance" },
-    { "id": "discover_reaction", "label": "对项目做出反应", "href": "/discover" },
-    { "id": "discover_follow", "label": "关注项目", "href": "/discover" },
-    { "id": "invite", "label": "邀请已验证的人", "href": "#referral" }
+    {
+      "id": "swap",
+      "label": "兑换 PPL",
+      "href": "/swap"
+    },
+    {
+      "id": "stake",
+      "label": "质押 PPL",
+      "href": "/staking"
+    },
+    {
+      "id": "token_launch",
+      "label": "发行代币",
+      "href": "/create/token"
+    },
+    {
+      "id": "nft_mint",
+      "label": "铸造 NFT",
+      "href": "/create/nft"
+    },
+    {
+      "id": "governance_vote",
+      "label": "参与治理投票",
+      "href": "/governance"
+    },
+    {
+      "id": "discover_reaction",
+      "label": "对项目做出反应",
+      "href": "/discover"
+    },
+    {
+      "id": "discover_follow",
+      "label": "关注项目",
+      "href": "/discover"
+    },
+    {
+      "id": "invite",
+      "label": "邀请已验证的人",
+      "href": "#referral"
+    }
   ],
   "referral": {
     "eyebrow": "推荐",

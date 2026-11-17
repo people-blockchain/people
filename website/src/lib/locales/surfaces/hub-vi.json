@@ -304,7 +304,7 @@
       },
       {
         "label": "Mạng công khai",
-        "value": "Testnet công khai v2 đang chạy. Đây không phải Mainnet."
+        "value": "Testnet công khai v2 đang chạy. PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026."
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "Một testnet công khai đang chạy.",
-          "Đây không phải Mainnet và không phải lời hứa giao dịch công khai giá trị đang chạy."
+          "PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026; token thử nghiệm không có giá trị."
         ]
       },
       {

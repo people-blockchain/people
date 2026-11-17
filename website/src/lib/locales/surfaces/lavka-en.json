@@ -58,7 +58,7 @@
   "successPay": "Payment sent.",
   "successEscrow": "Prepayment locked.",
   "connectWallet": "Connect wallet",
-  "preliminaryBanner": "Preliminary — pilot parameters may change before mainnet.",
+  "preliminaryBanner": "Preliminary — pilot parameters may change before PEOPLE Mainnet Beta.",
   "pohRequiredSocial": "Sign in with Google or email and link your wallet to run the shop or redeem visits.",
   "pohRequiredCloud": "Sign in with email and link your wallet to run the shop or redeem visits."
 }

@@ -7,7 +7,7 @@
     "eyebrow": "PPL 销售",
     "headline": "越早买，价格越低。",
     "lead": "每笔购买都会推高曲线，所以后来的买家要付更高的价格。这就是为什么开售很重要。30 天后可以回售。",
-    "subUpcoming": "PPL 销售将于 {date}开启。",
+    "subUpcoming": "PPL 销售将于 {date}作为 PEOPLE Mainnet Beta 开启。",
     "subWhitelist": "PPL 销售已开启。只有已验证的用户才能购买。",
     "subOpen": "PPL 销售已开启。任何已验证的用户都可以购买。",
     "subEnded": "PPL 销售已结束。",
@@ -74,7 +74,7 @@
       },
       {
         "title": "PPL 直接进入你的 PEOPLE 钱包",
-        "body": "你用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE 主网上的地址。"
+        "body": "你用 USDC 或 USDT 支付，PPL 会立即记入你在 PEOPLE Mainnet Beta 上的地址。"
       }
     ],
     "verifyLink": "如何完成验证"
@@ -143,7 +143,7 @@
       },
       {
         "q": "我什么时候可以把 PPL 发送给别人？",
-        "a": "PPL 在购买后立即记入 PEOPLE 网络。起初网络只接收 PPL：参与者之间的转账将在稍后开放，届时网络约有 1000 名已验证参与者。在此之前，你可以按上面的规则将 PPL 卖回给储备。"
+        "a": "PPL 在购买后立即记入 PEOPLE Mainnet Beta。这是真正的 PEOPLE 主网，处于我们称为 beta 的早期阶段，因此仍有一些限制。起初网络只接收 PPL：人与人之间的转账将在约 1000 名已验证参与者后开放。在此之前，你可以按上面的规则将 PPL 卖回给储备。"
       },
       {
         "q": "可以从哪些网络付款？",
@@ -273,14 +273,14 @@
     "riskTitle": "风险提示",
     "riskBody": "加密资产存在风险：价格可能下跌，您可能无法立即卖出，且购买不可退款。请仅使用您可以承受损失的资金。",
     "riskMoreToggle": "全部风险",
-    "riskMore": "此外：PPL 在参与者之间的转账将在稍后开放，届时 PEOPLE 网络约有 1000 名已验证参与者。卖回储备仅限已验证用户，须在每笔购买 30 天后并在每日限额内进行。销售合约仅经过 AI 模型审查，尚未进行外部审计。项目多签可以暂停购买和卖回。",
+    "riskMore": "此外：PPL 在购买后立即记入 PEOPLE Mainnet Beta，人与人之间的转账将在约 1000 名已验证参与者后开放。卖回储备仅限已验证用户，须在每笔购买 30 天后并在每日限额内进行。销售合约仅经过 AI 模型审查，尚未进行外部审计。项目多签可以暂停购买和卖回。",
     "saleTermsNote": "销售持续到售罄（曲线在募集 400 万美元时关闭）或自开放起 24 个月，以先到者为准。不会延期。未售出的 PPL 进入 Community Pool。不支持退款：每笔购买均为最终交易。",
     "termsAgree": "购买即表示您同意{terms}。",
     "termsLink": "《条款》",
     "help": "需要帮助？{support}",
     "supportLink": "支持",
     "noWalletHint": "没有钱包？创建或导入 PEOPLE Wallet，或连接 MetaMask / WalletConnect。付款需要该钱包在 Base 上有 USDC。",
-    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 退回 PEOPLE 主网上的销售钱包，不会销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭后卖回继续开放，直到储备转为流动性。你将在 Base 网络上收到 USDC。",
+    "sellBackTerms": "仅已验证用户可将 PPL 卖回储备。每笔购买在 30 天后可按卖出时的曲线价格卖回。限额：任意滚动 24 小时内全体合计为储备的 2%，每个地址在滚动 24 小时内 2,000 美元。PPL 退回 PEOPLE Mainnet Beta上的销售钱包，不会销毁。费用 1.5%；仅对该 24 小时卖回中超过储备 1% 的部分收取 3%。曲线关闭后卖回继续开放，直到储备转为流动性。你将在 Base 网络上收到 USDC。",
     "feesTitle": "费用与时间",
     "feesBody": "费用：Base 网络手续费（gas），以 ETH 支付，通常约 0.01 美元；LI.FI 兑换或跨链桥费用，确认前在组件中显示；卖回储备的手续费为 1.5%，仅对该滚动 24 小时卖回中超过储备 1% 的部分收取 3%。",
     "timingBody": "Base 上的购买几秒内即可确认。来自其他网络的付款通常在 1–20 分钟内到账。卖回款项以 Base 网络上的 USDC 支付。",
@@ -373,7 +373,7 @@
     },
     "success": {
       "title": "购买完成",
-      "credited": "{ppl} PPL 已记入 PEOPLE 主网的 {address}",
+      "credited": "{ppl} PPL 已记入 PEOPLE Mainnet Beta 的 {address}",
       "tx": "查看交易",
       "unlock": "回售将于 {date} 开放",
       "again": "继续购买 PPL"
@@ -401,11 +401,11 @@
       "receive": "您将收到",
       "amount": "要卖出的 PPL",
       "max": "最大",
-      "burning": "正在将 PPL 退回 PEOPLE 主网上的销售钱包…",
+      "burning": "正在将 PPL 退回 PEOPLE Mainnet Beta上的销售钱包…",
       "attesting": "正在核对退回…",
       "selling": "正在 Base 上支付 USDC…",
       "done": "卖出完成。USDC 在 Base 上支付。",
-      "payoutNote": "PPL 退回 PEOPLE 主网上的销售钱包，你将在 Base 网络上收到 USDC。",
+      "payoutNote": "PPL 退回 PEOPLE Mainnet Beta上的销售钱包，你将在 Base 网络上收到 USDC。",
       "error": "卖出没有完成。请再试一次。",
       "rejected": "您在钱包里拒绝了请求。",
       "notConfigured": "卖出暂时不可用。",

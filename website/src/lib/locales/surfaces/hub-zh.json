@@ -304,7 +304,7 @@
       },
       {
         "label": "公开网络",
-        "value": "公开测试网 v2 正在运行。这不是 Mainnet。"
+        "value": "公开测试网 v2 正在运行。PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启。"
       }
     ],
     "caveat": ""
@@ -439,7 +439,7 @@
         "title": "TESTNET",
         "items": [
           "公开测试网正在运行。",
-          "这不是 Mainnet，也不是对公开实盘价值交易的承诺。"
+          "PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启；测试代币没有价值。"
         ]
       },
       {
