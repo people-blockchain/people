@@ -12,15 +12,12 @@ import {
 import { ENGAGEMENT_EVENTS, SCROLL_DEPTH_EVENTS } from "@/lib/analytics/events-catalog";
 import { shouldSkipAnalyticsForPath } from "@/lib/analytics/paths";
 
-const HEARTBEAT_MS = 15_000;
-
 export function AnalyticsTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams?.toString() ? `?${searchParams.toString()}` : "";
   const lastPath = useRef<string | null>(null);
   const visibleSince = useRef<number>(0);
-  const heartbeatTimer = useRef<number | null>(null);
   const hideBeaconSent = useRef(false);
 
   useEffect(() => {
@@ -157,28 +154,12 @@ export function AnalyticsTracker() {
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pagehide", onPageHide);
 
-    heartbeatTimer.current = window.setInterval(() => {
-      if (document.visibilityState !== "visible") return;
-      const now = Date.now();
-      const dur = now - visibleSince.current;
-      visibleSince.current = now;
-      void flushAnalyticsEvents([
-        {
-          type: "heartbeat",
-          durationMs: dur,
-          ts: now,
-          ...ctx(),
-        },
-      ]);
-    }, HEARTBEAT_MS);
-
     return () => {
       document.removeEventListener("click", onOutboundClick, true);
       document.removeEventListener("click", onDownloadClick, true);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("pagehide", onPageHide);
-      if (heartbeatTimer.current) window.clearInterval(heartbeatTimer.current);
 
       const now = Date.now();
       const dur = now - visibleSince.current;
