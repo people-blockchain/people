@@ -45,7 +45,7 @@ Older rows are deleted from `analytics_event` then `analytics_session`.
 - Custom events: `import { trackEvent } from "@/lib/analytics/client-track"` (alias `track`) or `window.peopleTrack`
 - Automatic: scroll depth (`scroll_depth_25/50/75/90`), outbound clicks, file downloads, `?q=` / `?search=` site search
 
-Respects **Do Not Track**. Uses `sendBeacon` on hide/unload when appropriate.
+Respects **Do Not Track**. Heartbeats are not periodic; duration is sent on hide/unload/navigation only (using `sendBeacon` when appropriate).
 
 ### Funnel events
 
@@ -65,7 +65,7 @@ Same UI on **`/admin/analytics`** (discover admin) and the **secret viewer URL**
 
 | Tab | Contents |
 | --- | --- |
-| Realtime | Active users (5 / 30 min), live pages & countries, 30s auto-refresh |
+| Realtime | Active users (5 / 30 min), live pages & countries, manual refresh only (Refresh button) |
 | Overview | KPIs with compare period, new vs returning, daily + hourly trends |
 | Acquisition | Channel grouping, source/medium, UTM dimensions, referrer domains, landing pages |
 | Geography | World choropleth (Vercel `x-vercel-ip-country`), country / region / city tables |

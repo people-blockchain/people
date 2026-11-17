@@ -1,6 +1,8 @@
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { register } from "node:module";
+import { fileURLToPath } from "node:url";
 
 register("./fixtures/referral-db-loader.mjs", import.meta.url);
 
@@ -88,4 +90,24 @@ test("analyticsViewTokenMatches is constant-time safe length gate", () => {
     if (prev === undefined) delete process.env.ANALYTICS_VIEW_TOKEN;
     else process.env.ANALYTICS_VIEW_TOKEN = prev;
   }
+});
+
+test("AnalyticsTracker has no periodic heartbeat timer", () => {
+  const trackerPath = fileURLToPath(
+    new URL("../src/components/analytics/AnalyticsTracker.tsx", import.meta.url),
+  );
+  const src = readFileSync(trackerPath, "utf8");
+  assert.doesNotMatch(src, /setInterval|clearInterval|HEARTBEAT_MS|15_000|15000/);
+  assert.match(src, /"pageview"/);
+  assert.match(src, /"visibilitychange"/);
+  assert.match(src, /"pagehide"/);
+});
+
+test("AnalyticsGaDashboard has no 30s auto-refresh timer", () => {
+  const dashboardPath = fileURLToPath(
+    new URL("../src/components/admin/AnalyticsGaDashboard.tsx", import.meta.url),
+  );
+  const src = readFileSync(dashboardPath, "utf8");
+  assert.doesNotMatch(src, /setInterval|clearInterval|30_000|30000/);
+  assert.match(src, /Refresh/);
 });

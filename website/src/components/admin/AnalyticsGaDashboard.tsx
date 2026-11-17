@@ -157,12 +157,6 @@ export default function AnalyticsGaDashboard({ readOnly }: { readOnly?: boolean 
     void load();
   }, [load]);
 
-  useEffect(() => {
-    if (tab !== "Realtime") return;
-    const id = window.setInterval(() => void load(), 30_000);
-    return () => window.clearInterval(id);
-  }, [tab, load]);
-
   async function exportCsv(section: string) {
     const res = await fetch(`/api/admin/analytics/export?${query}&section=${encodeURIComponent(section)}`, {
       credentials: "include",
