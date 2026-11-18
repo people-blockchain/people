@@ -1,0 +1,156 @@
+# One-signature cross-chain PPL purchase (LI.FI destination call)
+
+Status: **draft, not enabled anywhere.** It ships behind `NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED`
+(default off). It also needs a Safe change on the hub (below) before it can work. Without that
+change the panel reads `hub.trustedRouter(executor) == false` and keeps the two-step swap.
+
+## 1. Flow
+
+1. The buyer types the USDC amount to buy with (`usdcIn`, $10–$500) and picks a source network and
+   token.
+2. The site reads `hub.quoteBuy(usdcIn)` on Base and sets `minPplOut = quoteBuy(usdcIn) × 0.99`.
+3. The site asks LI.FI `POST /v1/quote/contractCalls` with `toAmount = usdcIn`, so LI.FI quotes
+   the source amount needed to deliver **at least** `usdcIn` USDC on Base. The single contract call
+   is `PplCurveHubV2.buy(usdcIn, minPplOut, recipient = buyer, referrer)` with
+   `toApprovalAddress = hub`, `toFallbackAddress = buyer` and a gas limit of 500k.
+   (`hub.buy` was measured at up to about 321k gas.)
+4. Before showing the button, the site refuses the quote unless all of these hold
+   (`validateOneTxQuote`):
+   - the last step is the contract call;
+   - it runs from the LI.FI Executor on Base;
+   - it targets the configured hub;
+   - its calldata is byte-for-byte the `buy` we built;
+   - the step feeding it delivers USDC on Base with `toAmountMin ≥ usdcIn`;
+   - the source chain, token and sender match the buyer.
+5. The buyer approves the exact source amount (never `MaxUint256`) and signs one transaction on the
+   source network.
+6. On Base, the bridge receiver (`ReceiverAcrossV4` / `ReceiverStargateV2`) hands the USDC to the
+   Executor. The Executor approves the hub and calls `buy`. The hub pulls `usdcIn` (less only on
+   the final partial fill), and the Executor returns the unused USDC to the buyer.
+7. The site polls `GET /v1/status`. Once the route is DONE or FAILED, it reads the Base receiving
+   transaction:
+   - **`Bought(recipient = buyer)` found:** success screen with the real `pplOut`.
+   - **No `Bought`:** the destination call reverted, and the receiver's `catch` sent all the
+     bridged USDC to the buyer on Base. The site measures the **on-chain USDC balance delta** and
+     shows the existing "USDC arrived, PPL not bought" top-up button for that exact amount.
+
+Same-chain Base USDT → USDC works the same way. LI.FI sends the buyer's transaction straight to
+the Executor, so a revert there undoes everything and the buyer keeps the USDT.
+
+### Two-step fallback (kept)
+
+The LI.FI widget swap to the buyer's wallet stays available. It sits under "Prefer two steps?"
+when one-signature is usable, and is the only option otherwise. Fix in this PR: the second step
+now buys with the **USDC that actually arrived**, not the typed amount. That is the Base balance
+delta between route start and completion, capped by the amount LI.FI reports it delivered and by
+the $500 per-purchase cap (SPEC §12.1). The top-up button is also capped by the wallet's current
+USDC balance.
+
+## 2. Which Base address calls the hub
+
+**LI.FI `Executor` — `0x4DaC9d1769b9b304cb04741DCDEb2FC14aBdF110` (Base, 8453).**
+
+Evidence:
+
+- LI.FI deployment registry for Base, `Executor`:
+  https://github.com/lifinance/contracts/blob/main/deployments/base.json
+  - The same file lists `LiFiDiamond` `0x1231DEB6…4EaE` (the source-chain entry point, not the
+    hub caller), `ReceiverAcrossV4` `0x33b255b5…9871` and `ReceiverStargateV2` `0x1493e7B8…219A`.
+- Official address page (Diamond and pointer to the registry):
+  https://docs.li.fi/introduction/lifi-architecture/smart-contract-addresses
+- Contract-calls API (`toContractAddress`, `toContractCallData`, `toApprovalAddress`,
+  `toFallbackAddress` = where bridged tokens go if the call fails):
+  https://docs.li.fi/api-reference/perform-multiple-contract-calls-across-blockchains-beta
+- Executor source: it runs the call list itself, so `msg.sender` at the hub is the Executor, and
+  it sends leftovers to the receiver:
+  https://github.com/lifinance/contracts/blob/main/src/Periphery/Executor.sol
+- Receiver source: `try executor.swapAndCompleteBridgeTokens(...) catch { transfer to receiver }`:
+  https://github.com/lifinance/contracts/blob/main/src/Periphery/ReceiverAcrossV4.sol
+- Live check, 18 Nov 2026: read-only `POST https://li.quest/v1/quote/contractCalls` from every EVM
+  source in §4. Every quote's final `custom` step had
+  `action.fromAddress = 0x4DaC9d1769b9b304cb04741DCDEb2FC14aBdF110`. `eth_getCode` on Base
+  returned 9,446 bytes at that address.
+
+`trustedRouter` risk note (the hub already accounts for it, A3): anyone can call the Executor with
+their own calldata. Whitelisting it therefore lets anyone buy **for** any verified recipient with
+their own USDC. Router buys use a separate counter (`MAX_ROUTER_BUYS_24H`) and share the $2k/24h
+cap, so this cannot lock a victim out. It can use up the victim's daily cap, but only at the
+caller's own expense, and all the PPL go to the victim. The Executor's own leftover approvals do
+not matter: the hub only ever pulls from `msg.sender`.
+
+If LI.FI redeploys the Executor, the address changes. A quote from a new Executor fails our
+`unexpectedCaller` check and the site falls back to two-step. Re-whitelisting needs a new Safe
+queue + execute.
+
+Safe payload (not sent): [`safe-payloads/set-trusted-router-lifi-executor.md`](safe-payloads/set-trusted-router-lifi-executor.md).
+
+## 3. Verification for new cross-chain buyers
+
+`verify(personId, deadline, sig)` binds `msg.sender`. A buyer whose wallet has never verified on
+Base must therefore send one Base transaction (and hold Base ETH) before any purchase, including
+a one-signature one. The panel already requires the on-chain binding before it shows the form.
+
+The verifier's EIP-712 struct is `Verification(address account, bytes32 personId, uint256 nonce,
+uint256 deadline)`. It already names the account, so the attestation cannot be used for anyone
+else. That makes a relayed bind safe.
+
+| Option | One signature for a brand-new buyer? | Contract change | Notes |
+| - | - | - | - |
+| A. `verifyFor(account, personId, deadline, sig)`: permissionless, binds `account` (the signed field) instead of `msg.sender`. Same pin/nonce rules as `verify`. | Yes. The LI.FI call list becomes `[hub.verifyFor(buyer, …), hub.buy(…, buyer, …)]`, run by the Executor. | Yes: a new function. The hub is not upgradeable, so this means a new deployment plus a re-audit of the binding rules. | **Recommended** if the mainnet hub is not deployed yet. The server issues the attestation for the buyer's address exactly as today. |
+| B. Same `verifyFor`, but submitted by a PEOPLE relayer on Base (we pay about $0.01 of gas). | Yes, from the buyer's view (no ETH, no network switch). | Same as A. | Needs a funded hot key, rate limits, and monitoring. |
+| C. `buy(…)` overload carrying the verification signature for `recipient`. | Yes. | Yes, and larger: it touches `buy`, the most audited function. | A gives the same result with less risk. |
+| D. No contract change: give the buyer gas on Base (LI.FI/Gas.zip refuel or a small ETH drip), then the buyer signs `verify` on Base. | No: two signatures plus a network switch. | No. | Works with the hub as it is. Budget and sybil limits are needed for a drip. |
+
+Nothing above is implemented or deployed in this PR.
+
+## 4. Destination-call support by source network (checked 18 Nov 2026)
+
+Method: read-only `POST /v1/quote/contractCalls` for 20 USDC on Base with a `buy` call. No
+transactions were sent.
+
+| Source network on /buy | Token tested | Destination call | Route seen | Site behaviour |
+| - | - | - | - | - |
+| Ethereum (1) | USDT | Yes | Across → ReceiverAcrossV4 → Executor | one signature |
+| BNB Chain (56) | USDT, USDC | Yes | swap → Across (Stargate V2 if Across is excluded) | one signature |
+| Polygon (137) | USDT | Yes | swap → Across | one signature |
+| Arbitrum (42161) | USDT0 | Yes | Across | one signature |
+| Optimism (10) | USDT | Yes | swap → Across | one signature |
+| Avalanche (43114) | USDT | Yes | swap → Stargate V2 → ReceiverStargateV2 → Executor | one signature |
+| Base (8453) | USDT → USDC | Yes (same chain, transaction goes to the Executor) | swap → Executor | one signature |
+| Solana | USDT, USDC | **No**: `422 "Contract calls are not supported for non-EVM chains yet"` | — | two-step widget |
+| Tron | USDT | **No**: same 422 | — | two-step widget |
+
+Notes:
+
+- The 18 Nov smoke test (2 USDT BNB → 1.968638 USDC Base) went through Relay as a plain swap.
+  Relay did not appear in any destination-call quote: LI.FI picks a bridge that supports the call
+  (Across or Stargate V2 here).
+- Routes change over time. That is why the site re-checks every quote rather than trusting a
+  table.
+- LI.FI reports a known case where a Stargate V2 receiver delivered tokens without running the
+  call (lifinance/sdk#359, Gnosis → Base). In that case the buyer gets the USDC on Base and sees
+  the top-up button. No funds are lost.
+
+## 5. "Fees on us" (crediting PPL for the amount sent): options only, owner decision
+
+Today, with this PR, the typed amount is the USDC the hub receives. LI.FI quotes a slightly
+larger source amount. On the 18 Nov test quotes for 20 USDC the extra was about 0.9–2%; part of
+it is fixed, so it is a smaller share on larger buys. The buyer gets PPL for exactly what they
+typed and sees the fees before signing.
+
+| Option | What it means | Contract | Cost / risk |
+| - | - | - | - |
+| 1. Keep as is | Buyer pays swap/bridge fees on top. | None | None |
+| 2. Off-chain rebate | After a confirmed `Bought`, PEOPLE credits the fee value in PPL from a marketing/rewards pool. | None | Needs a budget, per-person caps, and accounting. PPL comes from a pool, not the curve. |
+| 3. Sponsor contract tops up USDC | A PEOPLE-funded sponsor adds the fee in USDC on Base inside the destination call, so the hub receives the full sent amount. | New sponsor contract + funding + abuse limits (the hub is unchanged) | Treasury pays real USDC; needs daily caps. |
+| 4. Hub credits PPL for a declared sent amount | The hub mints curve PPL for more USDC than it received. | Yes, plus a trusted attestation of the sent amount | **Not recommended**: breaks the 50% reserve backing for sell-back and adds an oracle to trust. |
+| 5. Negotiate the LI.FI fee | Our integrator fee is already 0. The 0.25% LI.FI fixed fee may be reducible through the partner portal. | None | Business step. |
+
+## 6. Needs the owner's explicit approval (not done here)
+
+- Merging this PR.
+- Safe `queueSetTrustedRouter(Executor, true)`, then `executeSetTrustedRouter(id)` at least 48 h
+  later (any on-chain action).
+- Setting `NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED=1` (and `NEXT_PUBLIC_PPL_V2_BUY_ENABLED`) in
+  Production.
+- Any contract change or deploy for §3 (e.g. `verifyFor`) and the choice in §5.

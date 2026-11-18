@@ -369,7 +369,19 @@
       "needWallet": "Kết nối ví để xem báo giá.",
       "preview": "Xem trước: sẽ không gửi giao dịch nào.",
       "bridgeHint": "Trước tiên hoán đổi sang USDC trên Base bằng LI.FI, sau đó hoàn tất việc mua.",
-      "error": "Việc mua không thành công. Hãy thử lại."
+      "error": "Việc mua không thành công. Hãy thử lại.",
+      "sourceNetwork": "Thanh toán từ",
+      "oneTxCta": "Mua PPL với một chữ ký",
+      "oneTxPay": "Bạn trả khoảng {amount} {token} trên {chain}",
+      "oneTxFees": "Phí hoán đổi và cầu nối: {fees}",
+      "oneTxHint": "LI.FI hoán đổi, chuyển cầu và mua PPL trên Base trong một giao dịch. Nếu giao dịch mua trên Base thất bại, USDC sẽ được gửi về ví của bạn trên Base.",
+      "oneTxQuoting": "Đang tìm lộ trình…",
+      "oneTxBridging": "Đang chuyển cầu và mua… thường mất {eta}",
+      "oneTxNoRoute": "Hiện chưa có lộ trình một chữ ký. Hãy dùng hoán đổi hai bước bên dưới.",
+      "oneTxUnavailable": "Chưa hỗ trợ mua một chữ ký từ mạng này. Hãy dùng hoán đổi hai bước bên dưới.",
+      "oneTxTwoStep": "Muốn làm hai bước? Hoán đổi bằng LI.FI trước",
+      "oneTxRequote": "Báo giá đã hết hạn. Kiểm tra số tiền mới và xác nhận lại.",
+      "oneTxError": "Giao dịch không thành công. Hãy thử lại hoặc dùng hoán đổi hai bước bên dưới."
     },
     "success": {
       "title": "Mua hoàn tất",

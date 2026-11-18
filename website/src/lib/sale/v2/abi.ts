@@ -156,6 +156,13 @@ export const PPL_CURVE_HUB_V2_ABI = [
   },
   {
     type: "function",
+    name: "trustedRouter",
+    stateMutability: "view",
+    inputs: [{ name: "router", type: "address" }],
+    outputs: [{ name: "", type: "bool" }],
+  },
+  {
+    type: "function",
     name: "paused",
     stateMutability: "view",
     inputs: [],

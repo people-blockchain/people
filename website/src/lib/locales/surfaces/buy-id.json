@@ -369,7 +369,19 @@
       "needWallet": "Hubungkan dompet untuk melihat penawaran.",
       "preview": "Pratinjau: tidak ada transaksi yang akan dikirim.",
       "bridgeHint": "Tukar dulu ke USDC di Base dengan LI.FI, lalu selesaikan pembelian.",
-      "error": "Pembelian tidak berhasil. Coba lagi."
+      "error": "Pembelian tidak berhasil. Coba lagi.",
+      "sourceNetwork": "Bayar dari",
+      "oneTxCta": "Beli PPL dengan satu tanda tangan",
+      "oneTxPay": "Anda membayar sekitar {amount} {token} di {chain}",
+      "oneTxFees": "Biaya tukar dan bridge: {fees}",
+      "oneTxHint": "LI.FI menukar, mem-bridge, dan membeli PPL di Base dalam satu transaksi. Jika pembelian di Base gagal, USDC dikirim ke dompet Anda di Base.",
+      "oneTxQuoting": "Mencari rute…",
+      "oneTxBridging": "Mem-bridge dan membeli… biasanya {eta}",
+      "oneTxNoRoute": "Belum ada rute satu tanda tangan saat ini. Gunakan penukaran dua langkah di bawah.",
+      "oneTxUnavailable": "Pembelian satu tanda tangan belum tersedia dari jaringan ini. Gunakan penukaran dua langkah di bawah.",
+      "oneTxTwoStep": "Lebih suka dua langkah? Tukar dulu dengan LI.FI",
+      "oneTxRequote": "Penawaran kedaluwarsa. Periksa jumlah baru dan konfirmasi lagi.",
+      "oneTxError": "Transaksi tidak berhasil. Coba lagi atau gunakan penukaran dua langkah di bawah."
     },
     "success": {
       "title": "Pembelian selesai",

@@ -369,7 +369,19 @@
       "needWallet": "Подключите кошелёк, чтобы увидеть расчёт.",
       "preview": "Предпросмотр: транзакция не отправится.",
       "bridgeHint": "Сначала обменяйте на USDC в сети Base через LI.FI, затем завершите покупку.",
-      "error": "Покупка не прошла. Попробуйте ещё раз."
+      "error": "Покупка не прошла. Попробуйте ещё раз.",
+      "sourceNetwork": "Pay from",
+      "oneTxCta": "Buy PPL in one signature",
+      "oneTxPay": "You pay about {amount} {token} on {chain}",
+      "oneTxFees": "Swap and bridge fees: {fees}",
+      "oneTxHint": "LI.FI swaps, bridges and buys PPL on Base in one transaction. If the purchase fails on Base, the USDC is sent to your wallet on Base.",
+      "oneTxQuoting": "Finding a route…",
+      "oneTxBridging": "Bridging and buying… usually {eta}",
+      "oneTxNoRoute": "No one-signature route right now. Use the two-step swap below.",
+      "oneTxUnavailable": "One-signature purchase is not available from this network yet. Use the two-step swap below.",
+      "oneTxTwoStep": "Prefer two steps? Swap with LI.FI first",
+      "oneTxRequote": "The quote expired. Check the new amount and confirm again.",
+      "oneTxError": "The transaction did not go through. Try again or use the two-step swap below."
     },
     "success": {
       "title": "Покупка завершена",

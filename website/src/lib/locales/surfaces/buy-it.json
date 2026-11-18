@@ -369,7 +369,19 @@
       "needWallet": "Collega un wallet per vedere il preventivo.",
       "preview": "Anteprima: nessuna transazione verrà inviata.",
       "bridgeHint": "Prima scambia in USDC su Base con LI.FI, poi completa l’acquisto.",
-      "error": "L’acquisto non è andato a buon fine. Riprova."
+      "error": "L’acquisto non è andato a buon fine. Riprova.",
+      "sourceNetwork": "Paga da",
+      "oneTxCta": "Compra PPL con una firma",
+      "oneTxPay": "Paghi circa {amount} {token} su {chain}",
+      "oneTxFees": "Commissioni di scambio e bridge: {fees}",
+      "oneTxHint": "LI.FI scambia, trasferisce e compra PPL su Base in un’unica transazione. Se l’acquisto fallisce su Base, gli USDC vanno al tuo wallet su Base.",
+      "oneTxQuoting": "Ricerca di un percorso…",
+      "oneTxBridging": "Trasferimento e acquisto in corso… di solito {eta}",
+      "oneTxNoRoute": "Nessun percorso con una firma al momento. Usa lo scambio in due passaggi qui sotto.",
+      "oneTxUnavailable": "L’acquisto con una firma non è ancora disponibile da questa rete. Usa lo scambio in due passaggi qui sotto.",
+      "oneTxTwoStep": "Preferisci due passaggi? Scambia prima con LI.FI",
+      "oneTxRequote": "La quotazione è scaduta. Controlla il nuovo importo e conferma di nuovo.",
+      "oneTxError": "La transazione non è andata a buon fine. Riprova o usa lo scambio in due passaggi qui sotto."
     },
     "success": {
       "title": "Acquisto completato",

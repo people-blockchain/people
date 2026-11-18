@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Address } from "viem";
 
 import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
@@ -18,6 +18,7 @@ import { PplAmount } from "@/components/ui/PplAmount";
 import { V2_PHASES, V2_SALE } from "@/lib/sale/v2/constants";
 import {
   estimatePplOut,
+  isV2OneTxEnabled,
   isV2PreviewEnabled,
   minPplOutFromEstimate,
   panelVisibility,
@@ -27,11 +28,16 @@ import {
   readV2Env,
   resolveV2Chain,
   sellBackUnlockMs,
+  twoStepBuyAmountUsd6,
+  usdcBalanceDelta,
   validV2Address,
 } from "@/lib/sale/v2/logic";
+import { executedToAmountUsd6, LIFI_BASE_CHAIN_ID, LIFI_BASE_EXECUTOR, SOURCE_CHAINS, supportsDestinationCall } from "@/lib/sale/v2/lifi-route";
+import { readTrustedRouter, readUsdcBalance, waitForUsdcIncrease } from "@/lib/sale/v2/usdc-balance";
 import { useV2Sale, useV2Refresh } from "@/lib/sale/v2/useV2Sale";
 import { useV2Buy, type V2TxStatus } from "@/lib/sale/v2/useV2Buy";
 
+import { LifiOneTx } from "./LifiOneTx";
 import { V2PhaseBanner } from "./PhaseBanner";
 import { SellBackPanel } from "./SellBackPanel";
 import { V2VerificationGate } from "./VerificationGate";
@@ -122,6 +128,10 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const [swapReady, setSwapReady] = useState<bigint | null>(null);
   const [localPurchase, setLocalPurchase] = useState<Purchase | null>(null);
   const [partial, setPartial] = useState<{ receivedUsdc: number } | null>(null);
+  const [sourceChainId, setSourceChainId] = useState<number>(56);
+  const [routerTrusted, setRouterTrusted] = useState<boolean | null>(null);
+  /** Base USDC balance right before the two-step swap; the buy uses the delta, not the typed amount. */
+  const balanceBefore = useRef<bigint | null>(null);
 
   const [nowMs, setNowMs] = useState(preview?.nowMs ?? 0);
   useEffect(() => {
@@ -156,6 +166,13 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const estimateUsd6 = pplWeiToUsd6(estimate, spotPriceWad);
 
   const needsSwap = network === "other" || token === "USDT";
+  const fromChainId = network === "other" ? sourceChainId : LIFI_BASE_CHAIN_ID;
+  const oneTxFlag = isV2OneTxEnabled(env);
+  // One signature needs Base mainnet, an EVM source network and the hub trusting the LI.FI Executor.
+  const oneTxUsable =
+    oneTxFlag &&
+    supportsDestinationCall(fromChainId) &&
+    (preview ? true : chain.id === LIFI_BASE_CHAIN_ID && routerTrusted === true && Boolean(provider));
   const purchase = preview?.purchase ?? localPurchase;
   const partialState = preview?.partial ?? partial;
   const topUp = partialTopUpAmount({
@@ -172,6 +189,43 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   const wrongNetwork =
     canBuy && account && provider && walletChainId !== null && walletChainId !== chain.id;
   const canSign = Boolean(provider);
+
+  useEffect(() => {
+    if (!oneTxFlag || preview || chain.id !== LIFI_BASE_CHAIN_ID || !chain.hubAddress) return;
+    let cancelled = false;
+    void readTrustedRouter(chain, LIFI_BASE_EXECUTOR).then((trusted) => {
+      if (!cancelled) setRouterTrusted(trusted);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [oneTxFlag, preview, chain]);
+
+  const snapshotBalance = useCallback(async () => {
+    if (!account || preview) return;
+    balanceBefore.current = await readUsdcBalance(chain, account);
+  }, [account, chain, preview]);
+
+  useEffect(() => {
+    if (needsSwap && canBuy) void snapshotBalance();
+  }, [needsSwap, canBuy, snapshotBalance]);
+
+  const onBridgeComplete = useCallback(
+    async (route?: unknown) => {
+      setPartial(null);
+      if (!account) return;
+      // SPEC §12.1: buy with the USDC that actually arrived (on-chain balance delta).
+      const before = balanceBefore.current;
+      const after = await waitForUsdcIncrease(chain, account, before);
+      const amount = twoStepBuyAmountUsd6({
+        deltaUsd6: usdcBalanceDelta(before, after),
+        deliveredUsd6: executedToAmountUsd6(route),
+      });
+      setSwapReady(amount);
+      balanceBefore.current = after;
+    },
+    [account, chain],
+  );
 
   const amountError =
     validation.ok || amount.trim() === ""
@@ -237,11 +291,27 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
   };
 
   const onTopUp = async () => {
-    if (!topUp || preview) return;
+    if (!topUp || preview || !account) return;
     const topUpUsd6 = parseUsd6Amount(topUp.toFixed(2), 2);
     if (topUpUsd6 === null || topUpUsd6 <= BigInt(0)) return;
-    await runPurchase(topUpUsd6);
+    // Never ask the hub for more than the wallet holds now.
+    const balance = await readUsdcBalance(chain, account);
+    const amount = balance !== null && balance < topUpUsd6 ? balance : topUpUsd6;
+    if (amount <= BigInt(0)) return;
+    await runPurchase(amount);
   };
+
+  const twoStepWidget = account ? (
+    <BuyLifiBridge
+      variant={network === "other" ? "cross-chain" : "base-usdt"}
+      lang={lang}
+      recipient={account}
+      toAddressName={t.form.networkBase}
+      onBridgeStart={() => void snapshotBalance()}
+      onBridgeComplete={(route) => void onBridgeComplete(route)}
+      testId="v2-lifi-widget"
+    />
+  ) : null;
 
   const ctaDisabled =
     !canBuy ||
@@ -401,6 +471,31 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
               </div>
             </div>
 
+            {network === "other" && oneTxFlag ? (
+              <div>
+                <label className={LABEL} htmlFor={`${testId}-source`}>
+                  {t.form.sourceNetwork}
+                </label>
+                <select
+                  id={`${testId}-source`}
+                  data-testid="v2-source-network"
+                  value={sourceChainId}
+                  onChange={(event) => {
+                    setSourceChainId(Number(event.target.value));
+                    setSwapReady(null);
+                  }}
+                  className={FIELD}
+                  disabled={!canBuy}
+                >
+                  {SOURCE_CHAINS.filter((c) => c.id !== LIFI_BASE_CHAIN_ID).map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
+
             <div className="rounded-2xl border border-line bg-surface-2 p-4" data-testid="v2-quote">
               <dl className="space-y-1.5 text-sm">
                 <div className="flex items-baseline justify-between gap-3">
@@ -453,22 +548,48 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
               </p>
             ) : null}
 
+            {needsSwap && canBuy && oneTxUsable ? (
+              <LifiOneTx
+                chain={chain}
+                account={account}
+                provider={provider}
+                fromChain={fromChainId}
+                symbol={token}
+                usdcIn={validation.ok ? validation.usd6 : null}
+                lang={lang}
+                copy={{ ...t.form }}
+                preview={Boolean(preview)}
+                disabled={busy}
+                onSuccess={(done) => {
+                  setLocalPurchase(done);
+                  setPartial(null);
+                  refresh();
+                }}
+                onRefunded={(refundedUsd6) => setPartial({ receivedUsdc: Number(refundedUsd6) / 1_000_000 })}
+              />
+            ) : null}
+
             {needsSwap && canBuy ? (
               <div className="space-y-2" data-testid="v2-lifi">
-                <p className="text-xs text-ink-3">{t.form.bridgeHint}</p>
-                {account ? (
-                  <BuyLifiBridge
-                    variant={network === "other" ? "cross-chain" : "base-usdt"}
-                    lang={lang}
-                    recipient={account}
-                    toAddressName={t.form.networkBase}
-                    onBridgeComplete={() => {
-                      setSwapReady(validation.ok ? validation.usd6 : null);
-                      setPartial(null);
-                    }}
-                    testId="v2-lifi-widget"
-                  />
+                {oneTxUsable ? null : network === "other" && !supportsDestinationCall(fromChainId) && oneTxFlag ? (
+                  <p className="text-xs text-ink-3" data-testid="v2-onetx-unsupported">
+                    {t.form.oneTxUnavailable}
+                  </p>
                 ) : null}
+                {oneTxUsable ? (
+                  <details data-testid="v2-twostep">
+                    <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-ink-2">
+                      {t.form.oneTxTwoStep}
+                    </summary>
+                    <p className="pb-2 text-xs text-ink-3">{t.form.bridgeHint}</p>
+                    {twoStepWidget}
+                  </details>
+                ) : (
+                  <>
+                    <p className="text-xs text-ink-3">{t.form.bridgeHint}</p>
+                    {twoStepWidget}
+                  </>
+                )}
               </div>
             ) : null}
 

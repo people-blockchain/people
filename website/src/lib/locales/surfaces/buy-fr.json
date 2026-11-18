@@ -369,7 +369,19 @@
       "needWallet": "Connectez un portefeuille pour voir votre devis.",
       "preview": "Aperçu : aucune transaction ne sera envoyée.",
       "bridgeHint": "Échangez d’abord en USDC sur Base avec LI.FI, puis finalisez l’achat.",
-      "error": "L’achat n’a pas abouti. Réessayez."
+      "error": "L’achat n’a pas abouti. Réessayez.",
+      "sourceNetwork": "Payer depuis",
+      "oneTxCta": "Acheter des PPL en une signature",
+      "oneTxPay": "Vous payez environ {amount} {token} sur {chain}",
+      "oneTxFees": "Frais d’échange et de pont : {fees}",
+      "oneTxHint": "LI.FI échange, transfère et achète des PPL sur Base en une seule transaction. Si l’achat échoue sur Base, les USDC sont envoyés sur votre portefeuille Base.",
+      "oneTxQuoting": "Recherche d’un itinéraire…",
+      "oneTxBridging": "Transfert et achat en cours… généralement {eta}",
+      "oneTxNoRoute": "Aucun itinéraire en une signature pour le moment. Utilisez l’échange en deux étapes ci-dessous.",
+      "oneTxUnavailable": "L’achat en une signature n’est pas encore disponible depuis ce réseau. Utilisez l’échange en deux étapes ci-dessous.",
+      "oneTxTwoStep": "Vous préférez deux étapes ? Échangez d’abord avec LI.FI",
+      "oneTxRequote": "Le devis a expiré. Vérifiez le nouveau montant et confirmez à nouveau.",
+      "oneTxError": "La transaction n’a pas abouti. Réessayez ou utilisez l’échange en deux étapes ci-dessous."
     },
     "success": {
       "title": "Achat terminé",

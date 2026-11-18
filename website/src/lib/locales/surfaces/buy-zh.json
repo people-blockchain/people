@@ -369,7 +369,19 @@
       "needWallet": "连接钱包以查看报价。",
       "preview": "预览：不会发送任何交易。",
       "bridgeHint": "先用 LI.FI 在 Base 上兑换为 USDC，然后完成购买。",
-      "error": "购买未成功。请重试。"
+      "error": "购买未成功。请重试。",
+      "sourceNetwork": "付款网络",
+      "oneTxCta": "一次签名购买 PPL",
+      "oneTxPay": "您将在 {chain} 上支付约 {amount} {token}",
+      "oneTxFees": "兑换和跨链费用：{fees}",
+      "oneTxHint": "LI.FI 在一笔交易中完成兑换、跨链并在 Base 上购买 PPL。如果在 Base 上购买失败，USDC 会发送到您在 Base 上的钱包。",
+      "oneTxQuoting": "正在寻找路线…",
+      "oneTxBridging": "正在跨链并购买…通常需要 {eta}",
+      "oneTxNoRoute": "暂时没有一次签名的路线。请使用下方的两步兑换。",
+      "oneTxUnavailable": "该网络暂不支持一次签名购买。请使用下方的两步兑换。",
+      "oneTxTwoStep": "想分两步？先用 LI.FI 兑换",
+      "oneTxRequote": "报价已过期。请检查新的金额并再次确认。",
+      "oneTxError": "交易未完成。请重试或使用下方的两步兑换。"
     },
     "success": {
       "title": "购买完成",

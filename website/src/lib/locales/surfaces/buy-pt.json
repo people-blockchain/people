@@ -369,7 +369,19 @@
       "needWallet": "Conecte uma carteira para ver sua cotação.",
       "preview": "Prévia: nenhuma transação será enviada.",
       "bridgeHint": "Primeiro troque para USDC na Base com a LI.FI e depois conclua a compra.",
-      "error": "A compra não foi concluída. Tente novamente."
+      "error": "A compra não foi concluída. Tente novamente.",
+      "sourceNetwork": "Pagar a partir de",
+      "oneTxCta": "Comprar PPL com uma assinatura",
+      "oneTxPay": "Você paga cerca de {amount} {token} em {chain}",
+      "oneTxFees": "Taxas de troca e ponte: {fees}",
+      "oneTxHint": "A LI.FI troca, faz a ponte e compra PPL na Base em uma única transação. Se a compra falhar na Base, os USDC vão para a sua carteira na Base.",
+      "oneTxQuoting": "Procurando uma rota…",
+      "oneTxBridging": "Fazendo a ponte e comprando… geralmente {eta}",
+      "oneTxNoRoute": "Sem rota de uma assinatura no momento. Use a troca em duas etapas abaixo.",
+      "oneTxUnavailable": "A compra com uma assinatura ainda não está disponível nesta rede. Use a troca em duas etapas abaixo.",
+      "oneTxTwoStep": "Prefere duas etapas? Troque primeiro com a LI.FI",
+      "oneTxRequote": "A cotação expirou. Confira o novo valor e confirme novamente.",
+      "oneTxError": "A transação não foi concluída. Tente novamente ou use a troca em duas etapas abaixo."
     },
     "success": {
       "title": "Compra concluída",

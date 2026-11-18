@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 const PORT = process.env.PORT ?? "3456";
 const BASE = process.env.SHOT_BASE_URL ?? `http://127.0.0.1:${PORT}`;
 const OUT = "/workspace/people-v2-buy-shots";
-const STATES = ["unverified", "verified", "success", "partial"];
+const STATES = ["unverified", "verified", "buyable", "success", "partial"];
 const WIDTHS = [360, 390, 1440];
 
 test.beforeAll(async () => {
