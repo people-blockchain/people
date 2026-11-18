@@ -381,7 +381,10 @@
       "oneTxUnavailable": "Pembelian satu tanda tangan belum tersedia dari jaringan ini. Gunakan penukaran dua langkah di bawah.",
       "oneTxTwoStep": "Lebih suka dua langkah? Tukar dulu dengan LI.FI",
       "oneTxRequote": "Penawaran kedaluwarsa. Periksa jumlah baru dan konfirmasi lagi.",
-      "oneTxError": "Transaksi tidak berhasil. Coba lagi atau gunakan penukaran dua langkah di bawah."
+      "oneTxError": "Transaksi tidak berhasil. Coba lagi atau gunakan penukaran dua langkah di bawah.",
+      "oneTxVerifyCta": "Konfirmasi dompet untuk melihat penawaran",
+      "oneTxVerifyHint": "Satu tanda tangan gratis, tanpa gas. Dompet Anda dikonfirmasi di Base dalam pembelian yang sama, jadi tidak perlu ETH di Base.",
+      "oneTxNewBuyerHint": "Pembeli baru? Bayar dari jaringan lain atau dengan USDT: dompet Anda dikonfirmasi dalam pembelian yang sama, tanpa langkah terpisah atau ETH di Base."
     },
     "success": {
       "title": "Pembelian selesai",

@@ -156,6 +156,33 @@ export const PPL_CURVE_HUB_V2_ABI = [
   },
   {
     type: "function",
+    name: "verifyFor",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "account", type: "address" },
+      { name: "personId", type: "bytes32" },
+      { name: "deadline", type: "uint256" },
+      { name: "sig", type: "bytes" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "verifyAndBuy",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "usdcIn", type: "uint256" },
+      { name: "minPplOut", type: "uint256" },
+      { name: "recipient", type: "address" },
+      { name: "referrer", type: "address" },
+      { name: "personId", type: "bytes32" },
+      { name: "deadline", type: "uint256" },
+      { name: "sig", type: "bytes" },
+    ],
+    outputs: [{ name: "pplOut", type: "uint256" }],
+  },
+  {
+    type: "function",
     name: "trustedRouter",
     stateMutability: "view",
     inputs: [{ name: "router", type: "address" }],

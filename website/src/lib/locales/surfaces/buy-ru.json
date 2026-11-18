@@ -381,7 +381,10 @@
       "oneTxUnavailable": "One-signature purchase is not available from this network yet. Use the two-step swap below.",
       "oneTxTwoStep": "Prefer two steps? Swap with LI.FI first",
       "oneTxRequote": "The quote expired. Check the new amount and confirm again.",
-      "oneTxError": "The transaction did not go through. Try again or use the two-step swap below."
+      "oneTxError": "The transaction did not go through. Try again or use the two-step swap below.",
+      "oneTxVerifyCta": "Confirm your wallet to get a quote",
+      "oneTxVerifyHint": "One free signature, no gas. Your wallet is confirmed on Base inside the same purchase, so you need no Base ETH.",
+      "oneTxNewBuyerHint": "New buyer? Pay from another network or with USDT: your wallet is confirmed inside the same purchase, no separate step or Base ETH needed."
     },
     "success": {
       "title": "Покупка завершена",

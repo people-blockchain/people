@@ -381,7 +381,10 @@
       "oneTxUnavailable": "该网络暂不支持一次签名购买。请使用下方的两步兑换。",
       "oneTxTwoStep": "想分两步？先用 LI.FI 兑换",
       "oneTxRequote": "报价已过期。请检查新的金额并再次确认。",
-      "oneTxError": "交易未完成。请重试或使用下方的两步兑换。"
+      "oneTxError": "交易未完成。请重试或使用下方的两步兑换。",
+      "oneTxVerifyCta": "确认钱包以获取报价",
+      "oneTxVerifyHint": "一次免费签名，无需 gas。您的钱包会在同一笔购买中于 Base 上完成确认，无需 Base ETH。",
+      "oneTxNewBuyerHint": "首次购买？从其他网络或用 USDT 付款：钱包会在同一笔购买中完成确认，无需单独步骤或 Base ETH。"
     },
     "success": {
       "title": "购买完成",

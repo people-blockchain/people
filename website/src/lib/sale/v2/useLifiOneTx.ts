@@ -21,10 +21,12 @@ import {
   fetchOneTxQuote,
   LIFI_BASE_CHAIN_ID,
   ONE_TX_QUOTE_TTL_MS,
+  proofLeavesTime,
   sourceToken,
   statusPhase,
   supportsDestinationCall,
   validateOneTxQuote,
+  type HubVerification,
   type OneTxParams,
   type OneTxQuoteSummary,
 } from "./lifi-route";
@@ -50,6 +52,8 @@ export type OneTxQuoteInput = {
   symbol: "USDC" | "USDT";
   usdcIn: bigint;
   referrer?: Address | null;
+  /** Buyer not yet bound on Base: run `verifyAndBuy` with this attestation. */
+  verification?: HubVerification | null;
 };
 
 const POLL_MS = 8_000;
@@ -126,12 +130,17 @@ export function useLifiOneTx() {
           usdcIn: input.usdcIn,
           minPplOut: minPplOutFromQuote(quotedPplOut),
           referrer: input.referrer ?? null,
+          verification: input.verification ?? null,
         };
         const quote = await fetchOneTxQuote(buildContractCallsRequest(params));
         if (id !== seq.current) return;
         const check = validateOneTxQuote(quote, params);
         if (!check.ok) {
           set({ step: "unavailable", reason: check.reason });
+          return;
+        }
+        if (params.verification && !proofLeavesTime(params.verification.deadline, Date.now(), check.summary.executionDurationSec)) {
+          set({ step: "unavailable", reason: "proofExpiring" });
           return;
         }
         set({ step: "ready", summary: check.summary, params, quotedAt: Date.now(), requoted });
@@ -153,6 +162,10 @@ export function useLifiOneTx() {
       }
       const { chain, provider } = ctx;
       const account = params.account;
+      if (params.verification && !proofLeavesTime(params.verification.deadline, Date.now(), summary.executionDurationSec)) {
+        set({ step: "unavailable", reason: "proofExpiring" });
+        return null;
+      }
       try {
         if (!(await switchWallet(provider, params.fromChain))) {
           set({ step: "error", reason: "switchRejected" });

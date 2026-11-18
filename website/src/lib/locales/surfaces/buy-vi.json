@@ -381,7 +381,10 @@
       "oneTxUnavailable": "Chưa hỗ trợ mua một chữ ký từ mạng này. Hãy dùng hoán đổi hai bước bên dưới.",
       "oneTxTwoStep": "Muốn làm hai bước? Hoán đổi bằng LI.FI trước",
       "oneTxRequote": "Báo giá đã hết hạn. Kiểm tra số tiền mới và xác nhận lại.",
-      "oneTxError": "Giao dịch không thành công. Hãy thử lại hoặc dùng hoán đổi hai bước bên dưới."
+      "oneTxError": "Giao dịch không thành công. Hãy thử lại hoặc dùng hoán đổi hai bước bên dưới.",
+      "oneTxVerifyCta": "Xác nhận ví để nhận báo giá",
+      "oneTxVerifyHint": "Một chữ ký miễn phí, không tốn gas. Ví của bạn được xác nhận trên Base ngay trong giao dịch mua, không cần ETH trên Base.",
+      "oneTxNewBuyerHint": "Mua lần đầu? Thanh toán từ mạng khác hoặc bằng USDT: ví được xác nhận ngay trong giao dịch mua, không cần bước riêng hay ETH trên Base."
     },
     "success": {
       "title": "Mua hoàn tất",

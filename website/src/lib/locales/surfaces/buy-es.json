@@ -381,7 +381,10 @@
       "oneTxUnavailable": "La compra con una firma aún no está disponible desde esta red. Usa el intercambio en dos pasos de abajo.",
       "oneTxTwoStep": "¿Prefieres dos pasos? Intercambia primero con LI.FI",
       "oneTxRequote": "La cotización caducó. Revisa el nuevo importe y confirma de nuevo.",
-      "oneTxError": "La transacción no se completó. Inténtalo de nuevo o usa el intercambio en dos pasos de abajo."
+      "oneTxError": "La transacción no se completó. Inténtalo de nuevo o usa el intercambio en dos pasos de abajo.",
+      "oneTxVerifyCta": "Confirma tu billetera para ver la cotización",
+      "oneTxVerifyHint": "Una firma gratuita, sin gas. Tu billetera se confirma en Base dentro de la misma compra, así que no necesitas ETH en Base.",
+      "oneTxNewBuyerHint": "¿Primera compra? Paga desde otra red o con USDT: tu billetera se confirma dentro de la misma compra, sin paso aparte ni ETH en Base."
     },
     "success": {
       "title": "Compra completada",

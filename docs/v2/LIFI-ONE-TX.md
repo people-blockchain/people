@@ -27,6 +27,11 @@ change the panel reads `hub.trustedRouter(executor) == false` and keeps the two-
 6. On Base, the bridge receiver (`ReceiverAcrossV4` / `ReceiverStargateV2`) hands the USDC to the
    Executor. The Executor approves the hub and calls `buy`. The hub pulls `usdcIn` (less only on
    the final partial fill), and the Executor returns the unused USDC to the buyer.
+   For a site-verified buyer who is **not yet bound on Base**, the buyer first gives one free
+   ownership signature (no gas, any network). The server returns the verifier's attestation for
+   that account, and the single destination call becomes
+   `verifyAndBuy(usdcIn, minPplOut, buyer, referrer, personId, deadline, sig)` (§3). The first
+   purchase therefore needs no separate verify transaction and no Base ETH.
 7. The site polls `GET /v1/status`. Once the route is DONE or FAILED, it reads the Base receiving
    transaction:
    - **`Bought(recipient = buyer)` found:** success screen with the real `pplOut`.
@@ -84,24 +89,75 @@ queue + execute.
 
 Safe payload (not sent): [`safe-payloads/set-trusted-router-lifi-executor.md`](safe-payloads/set-trusted-router-lifi-executor.md).
 
-## 3. Verification for new cross-chain buyers
+## 3. Verification for new cross-chain buyers: `verifyFor` + `verifyAndBuy` (implemented, not deployed)
 
-`verify(personId, deadline, sig)` binds `msg.sender`. A buyer whose wallet has never verified on
-Base must therefore send one Base transaction (and hold Base ETH) before any purchase, including
-a one-signature one. The panel already requires the on-chain binding before it shows the form.
+Before this change `verify(personId, deadline, sig)` bound `msg.sender` only. A new buyer therefore
+had to send a Base transaction (and hold Base ETH) before any purchase. On 18 Nov 2026 the owner
+approved adding `verifyFor` to the hub.
 
-The verifier's EIP-712 struct is `Verification(address account, bytes32 personId, uint256 nonce,
-uint256 deadline)`. It already names the account, so the attestation cannot be used for anyone
-else. That makes a relayed bind safe.
+### Changed / new hub functions (`contracts/src/sale/PplCurveHubV2.sol`)
 
-| Option | One signature for a brand-new buyer? | Contract change | Notes |
-| - | - | - | - |
-| A. `verifyFor(account, personId, deadline, sig)`: permissionless, binds `account` (the signed field) instead of `msg.sender`. Same pin/nonce rules as `verify`. | Yes. The LI.FI call list becomes `[hub.verifyFor(buyer, …), hub.buy(…, buyer, …)]`, run by the Executor. | Yes: a new function. The hub is not upgradeable, so this means a new deployment plus a re-audit of the binding rules. | **Recommended** if the mainnet hub is not deployed yet. The server issues the attestation for the buyer's address exactly as today. |
-| B. Same `verifyFor`, but submitted by a PEOPLE relayer on Base (we pay about $0.01 of gas). | Yes, from the buyer's view (no ETH, no network switch). | Same as A. | Needs a funded hot key, rate limits, and monitoring. |
-| C. `buy(…)` overload carrying the verification signature for `recipient`. | Yes. | Yes, and larger: it touches `buy`, the most audited function. | A gives the same result with less risk. |
-| D. No contract change: give the buyer gas on Base (LI.FI/Gas.zip refuel or a small ETH drip), then the buyer signs `verify` on Base. | No: two signatures plus a network switch. | No. | Works with the hub as it is. Budget and sybil limits are needed for a drip. |
+| Function | Status | Who may call |
+| - | - | - |
+| `verify(bytes32 personId, uint256 deadline, bytes sig)` | unchanged behaviour (now a wrapper over `_bind(msg.sender, …, idempotent = false)`) | the account itself |
+| `verifyFor(address account, bytes32 personId, uint256 deadline, bytes sig)` | **new** | anyone |
+| `verifyAndBuy(uint256 usdcIn, uint256 minPplOut, address recipient, address referrer, bytes32 personId, uint256 deadline, bytes sig) returns (uint256 pplOut)` | **new**, `nonReentrant whenNotPaused` | `recipient` itself, or a `trustedRouter` buying for `recipient` (same rule as `buy`) |
+| `buy(uint256 usdcIn, uint256 minPplOut, address recipient, address referrer)` | unchanged; its body moved verbatim into internal `_buy` | as before |
 
-Nothing above is implemented or deployed in this PR.
+`verifyAndBuy` runs `_bind(recipient, …, idempotent = true)` and then exactly the `buy` checks, in
+one call. LI.FI runs one contract call per destination step; a separate zero-amount `verifyFor`
+call is not a reliable LI.FI call. So the site sends `verifyAndBuy` as the single destination call
+for a buyer who is not yet bound, and plain `buy` for a bound buyer.
+
+### Signature scheme and replay protection (no new scheme)
+
+The verifier signs the **existing** EIP-712 struct, unchanged:
+
+```
+Verification(address account, bytes32 personId, uint256 nonce, uint256 deadline)
+domain = EIP712("PplCurveHubV2", "1", chainId = block.chainid, verifyingContract = hub)
+```
+
+- **Who signs:** the existing hub `verifier` key (production: the AWS KMS key behind
+  `/api/sale/verify-signature`), the same key and flow as `verify`. The server signs only after
+  the signed-in, human-verified user proves wallet ownership with a personal signature, and it
+  refuses accounts already bound on chain.
+- **Account:** `account` is inside the signed struct. A signature for Alice cannot bind Bob, and a
+  submitter (relayer, the LI.FI Executor) cannot bind itself.
+- **Chain and hub:** the EIP-712 domain contains `block.chainid` and the hub address. OpenZeppelin
+  rebuilds the domain if the chain id changes (fork), so a signature is dead on any other chain or
+  hub.
+- **Nonce:** `bindNonce[personId]` is in the struct. `unbind` increments it, so every older
+  attestation for that person dies.
+- **Expiry:** `deadline` is checked (`Expired`). Direct `verify` attestations last 15 minutes as
+  before. Attestations requested for the routed path (`routed: true`) last 60 minutes so they
+  outlive a slow bridge. The site refuses a quote unless at least
+  max(10 min, 3 × LI.FI ETA) of validity is left.
+- **One person ↔ one account, pinning:** unchanged (`AlreadyBound`). A person stays pinned to its
+  first account forever, even after `unbind`.
+- **Signature malleability:** OpenZeppelin `ECDSA.recover` rejects high-s and bad-length
+  signatures.
+- **Idempotent:** if `account` is already bound to `personId`, `verifyFor` / `verifyAndBuy`
+  return without changes or events and do not look at the signature. So someone who front-runs
+  the same attestation cannot make the buyer's destination call revert. Any other bound state
+  still reverts `AlreadyBound`.
+- **Atomic:** if the buy part of `verifyAndBuy` reverts (untrusted caller, slippage, caps,
+  pause), the binding is rolled back too. The LI.FI receiver then sends all the USDC to the buyer.
+
+Contract tests: `contracts/test/PplCurveHubV2VerifyFor.t.sol` cover the happy path (third-party
+submit), idempotency, wrong account, wrong person, wrong chain (other domain chain id and
+`vm.chainId` fork), wrong hub, wrong signer, expiry, replay after `unbind`, the already-bound and
+pinned guards, zero inputs, and unchanged `verify`. The `verifyAndBuy` tests use a mock LI.FI
+Executor (approve → call → refund leftovers, revert → full refund): new buyer in one call,
+untrusted executor (atomic revert + refund), bad signature, slippage, already-verified buyer,
+self-call without a router, a third party without a router, and paused.
+
+### Deployment consequence
+
+`PplCurveHubV2` is not upgradeable. Using `verifyFor` / `verifyAndBuy` on mainnet needs a **new
+hub deployment** of this code, then the usual post-deploy setup and the `trustedRouter` Safe step
+in the payload doc against the **new** hub address. No mainnet v2 hub address is in the repo yet.
+Nothing was deployed (no testnet either).
 
 ## 4. Destination-call support by source network (checked 18 Nov 2026)
 
@@ -153,4 +209,6 @@ typed and sees the fees before signing.
   later (any on-chain action).
 - Setting `NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED=1` (and `NEXT_PUBLIC_PPL_V2_BUY_ENABLED`) in
   Production.
-- Any contract change or deploy for §3 (e.g. `verifyFor`) and the choice in §5.
+- Deploying the new hub with `verifyFor` / `verifyAndBuy` (§3), on any network, plus an external
+  audit of the change.
+- The choice in §5.

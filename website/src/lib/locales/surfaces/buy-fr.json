@@ -381,7 +381,10 @@
       "oneTxUnavailable": "L’achat en une signature n’est pas encore disponible depuis ce réseau. Utilisez l’échange en deux étapes ci-dessous.",
       "oneTxTwoStep": "Vous préférez deux étapes ? Échangez d’abord avec LI.FI",
       "oneTxRequote": "Le devis a expiré. Vérifiez le nouveau montant et confirmez à nouveau.",
-      "oneTxError": "La transaction n’a pas abouti. Réessayez ou utilisez l’échange en deux étapes ci-dessous."
+      "oneTxError": "La transaction n’a pas abouti. Réessayez ou utilisez l’échange en deux étapes ci-dessous.",
+      "oneTxVerifyCta": "Confirmez votre portefeuille pour obtenir un devis",
+      "oneTxVerifyHint": "Une signature gratuite, sans gas. Votre portefeuille est confirmé sur Base dans le même achat : pas besoin d’ETH sur Base.",
+      "oneTxNewBuyerHint": "Premier achat ? Payez depuis un autre réseau ou en USDT : votre portefeuille est confirmé dans le même achat, sans étape séparée ni ETH sur Base."
     },
     "success": {
       "title": "Achat terminé",

@@ -76,6 +76,52 @@ export type V2BuyContext = {
   account: Address;
 };
 
+export type V2VerificationProof = { personId: Hex; deadline: number; signature: Hex; hub: Address };
+
+/**
+ * Off-chain step of verification: the buyer signs the ownership message (no gas, any network) and
+ * the server returns the verifier's `Verification` attestation for that account. `routed: true`
+ * asks for the longer deadline used by `verifyAndBuy` inside a cross-chain destination call.
+ */
+export async function requestV2VerificationProof(input: {
+  chain: V2Chain;
+  provider: EIP1193Provider;
+  account: Address;
+  routed?: boolean;
+}): Promise<{ ok: true; proof: V2VerificationProof } | { ok: false; reason: string }> {
+  const { chain, provider, account } = input;
+  if (!chain.hubAddress) return { ok: false, reason: "notConfigured" };
+  const walletClient = createWalletClient({ chain: chain.chain, transport: custom(provider), account });
+  const nonceRes = await fetch("/api/founders/passport-wallet/nonce", { credentials: "include" });
+  if (!nonceRes.ok) return { ok: false, reason: "verifyFailed" };
+  const challenge = (await nonceRes.json()) as { nonce?: string; issuedAt?: string; expiresAt?: string };
+  if (!challenge.nonce || !challenge.issuedAt || !challenge.expiresAt) return { ok: false, reason: "verifyFailed" };
+  const message = buildV2OwnershipMessage({
+    domain: saleDomain(SITE_URL),
+    account,
+    chainId: chain.id,
+    hub: chain.hubAddress,
+    nonceCode: challenge.nonce,
+    issuedAt: challenge.issuedAt,
+    expiresAt: challenge.expiresAt,
+  });
+  const ownershipSignature = await walletClient.signMessage({ account, message });
+  const res = await fetch("/api/sale/verify-signature", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      account,
+      ownershipSignature,
+      nonceCode: challenge.nonce,
+      version: "v2",
+      ...(input.routed ? { routed: true } : {}),
+    }),
+  });
+  if (!res.ok) return { ok: false, reason: (await res.json().catch(() => null))?.error ?? "verifyFailed" };
+  return { ok: true, proof: (await res.json()) as V2VerificationProof };
+}
+
 export function useV2Buy() {
   const [verifyStatus, setVerifyStatus] = useState<V2TxStatus>({ step: "idle" });
   const [buyStatus, setBuyStatus] = useState<V2TxStatus>({ step: "idle" });
@@ -103,42 +149,12 @@ export function useV2Buy() {
         transport: custom(provider),
         account,
       });
-      const nonceRes = await fetch("/api/founders/passport-wallet/nonce", { credentials: "include" });
-      if (!nonceRes.ok) {
-        setVerifyStatus({ step: "error", reason: "verifyFailed" });
+      const got = await requestV2VerificationProof({ chain, provider, account });
+      if (!got.ok) {
+        setVerifyStatus({ step: "error", reason: got.reason });
         return false;
       }
-      const challenge = (await nonceRes.json()) as { nonce?: string; issuedAt?: string; expiresAt?: string };
-      if (!challenge.nonce || !challenge.issuedAt || !challenge.expiresAt) {
-        setVerifyStatus({ step: "error", reason: "verifyFailed" });
-        return false;
-      }
-      const message = buildV2OwnershipMessage({
-        domain: saleDomain(SITE_URL),
-        account,
-        chainId: chain.id,
-        hub: chain.hubAddress,
-        nonceCode: challenge.nonce,
-        issuedAt: challenge.issuedAt,
-        expiresAt: challenge.expiresAt,
-      });
-      const ownershipSignature = await walletClient.signMessage({ account, message });
-      const res = await fetch("/api/sale/verify-signature", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ account, ownershipSignature, nonceCode: challenge.nonce, version: "v2" }),
-      });
-      if (!res.ok) {
-        setVerifyStatus({ step: "error", reason: (await res.json().catch(() => null))?.error ?? "verifyFailed" });
-        return false;
-      }
-      const proof = (await res.json()) as {
-        personId: Hex;
-        deadline: number;
-        signature: Hex;
-        hub: Address;
-      };
+      const proof = got.proof;
       setVerifyStatus({ step: "confirming" });
       const publicClient = createPublicClient({
         chain: chain.chain,

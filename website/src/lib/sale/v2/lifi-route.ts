@@ -31,6 +31,29 @@ export const LIFI_BASE_EXECUTOR: Address = "0x4DaC9d1769b9b304cb04741DCDEb2FC14a
 
 /** `hub.buy` measured at up to ~321k gas (PplCurveHubV2Gas.t.sol) plus the approval, with headroom. */
 export const HUB_BUY_GAS_LIMIT = 500_000;
+/** `verifyAndBuy` adds an ecrecover and up to four fresh storage slots to `buy`. */
+export const HUB_VERIFY_AND_BUY_GAS_LIMIT = 650_000;
+
+/** Verification attestation deadline for a direct `verify` transaction (server side). */
+export const DIRECT_VERIFICATION_DEADLINE_SECONDS = 15 * 60;
+/** Longer deadline when the attestation rides inside a cross-chain call (Stargate can take ~20 min). */
+export const ROUTED_VERIFICATION_DEADLINE_SECONDS = 60 * 60;
+
+export function verificationDeadlineSeconds(routed: boolean): number {
+  return routed ? ROUTED_VERIFICATION_DEADLINE_SECONDS : DIRECT_VERIFICATION_DEADLINE_SECONDS;
+}
+
+/**
+ * The attestation must still be valid when the destination call runs on Base: at least 10 minutes
+ * and three times LI.FI's estimated duration must remain. Otherwise ask for a fresh one.
+ */
+export function proofLeavesTime(deadlineSec: number, nowMs: number, executionDurationSec = 0): boolean {
+  const needMs = Math.max(10 * 60_000, executionDurationSec * 3_000);
+  return deadlineSec * 1000 - nowMs >= needMs;
+}
+
+/** Verifier attestation for a buyer not yet bound on Base (`verifyAndBuy`). */
+export type HubVerification = { personId: Hex; deadline: number; signature: Hex };
 
 /** Swap/bridge slippage passed to LI.FI. The PPL floor is separate (`minPplOut`, 1%). */
 export const LIFI_SLIPPAGE = 0.005;
@@ -99,13 +122,34 @@ function sameAddress(a: string | null | undefined, b: string | null | undefined)
   return Boolean(a && b && a.toLowerCase() === b.toLowerCase());
 }
 
-/** Calldata for `hub.buy(usdcIn, minPplOut, recipient, referrer)` run by the LI.FI Executor. */
+/**
+ * Calldata run by the LI.FI Executor: `hub.buy(usdcIn, minPplOut, recipient, referrer)`, or for a
+ * buyer not yet bound on Base `hub.verifyAndBuy(..., personId, deadline, sig)` so the first
+ * purchase needs no separate verify transaction.
+ */
 export function encodeHubBuy(input: {
   usdcIn: bigint;
   minPplOut: bigint;
   recipient: Address;
   referrer?: Address | null;
+  verification?: HubVerification | null;
 }): Hex {
+  const v = input.verification;
+  if (v) {
+    return encodeFunctionData({
+      abi: PPL_CURVE_HUB_V2_ABI,
+      functionName: "verifyAndBuy",
+      args: [
+        input.usdcIn,
+        input.minPplOut,
+        input.recipient,
+        (input.referrer ?? ZERO_ADDRESS) as Address,
+        v.personId,
+        BigInt(v.deadline),
+        v.signature,
+      ],
+    });
+  }
   return encodeFunctionData({
     abi: PPL_CURVE_HUB_V2_ABI,
     functionName: "buy",
@@ -145,6 +189,8 @@ export type OneTxParams = {
   minPplOut: bigint;
   referrer?: Address | null;
   slippage?: number;
+  /** Present for a buyer not yet bound on Base: the call becomes `verifyAndBuy`. */
+  verification?: HubVerification | null;
 };
 
 /**
@@ -159,6 +205,9 @@ export function buildContractCallsRequest(p: OneTxParams): ContractCallsRequest 
   }
   if (p.usdcIn <= BigInt(0)) throw new Error("badAmount");
   if (p.minPplOut <= BigInt(0)) throw new Error("badMinPplOut");
+  if (p.verification && (!/^0x[0-9a-fA-F]{64}$/.test(p.verification.personId) || !(p.verification.deadline > 0))) {
+    throw new Error("badVerification");
+  }
   const amount = p.usdcIn.toString();
   return {
     fromChain: p.fromChain,
@@ -177,8 +226,9 @@ export function buildContractCallsRequest(p: OneTxParams): ContractCallsRequest 
           minPplOut: p.minPplOut,
           recipient: p.account,
           referrer: p.referrer,
+          verification: p.verification,
         }),
-        toContractGasLimit: String(HUB_BUY_GAS_LIMIT),
+        toContractGasLimit: String(p.verification ? HUB_VERIFY_AND_BUY_GAS_LIMIT : HUB_BUY_GAS_LIMIT),
         toApprovalAddress: p.hub,
       },
     ],
@@ -282,13 +332,14 @@ export function validateOneTxQuote(
     minPplOut: p.minPplOut,
     recipient: p.account,
     referrer: p.referrer,
+    verification: p.verification,
   }).toLowerCase()) {
     return { ok: false, reason: "wrongCalldata" };
   }
   // Defence in depth: decode too, so a future encoding change cannot slip through.
   try {
     const decoded = decodeFunctionData({ abi: PPL_CURVE_HUB_V2_ABI, data: call.action?.toContractCallData as Hex });
-    if (decoded.functionName !== "buy") return { ok: false, reason: "wrongCalldata" };
+    if (decoded.functionName !== (p.verification ? "verifyAndBuy" : "buy")) return { ok: false, reason: "wrongCalldata" };
   } catch {
     return { ok: false, reason: "wrongCalldata" };
   }

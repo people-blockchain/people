@@ -381,7 +381,10 @@
       "oneTxUnavailable": "Bu ağdan tek imzayla alım henüz mümkün değil. Aşağıdaki iki adımlı takası kullanın.",
       "oneTxTwoStep": "İki adım mı tercih edersiniz? Önce LI.FI ile takas edin",
       "oneTxRequote": "Teklifin süresi doldu. Yeni tutarı kontrol edip tekrar onaylayın.",
-      "oneTxError": "İşlem gerçekleşmedi. Tekrar deneyin veya aşağıdaki iki adımlı takası kullanın."
+      "oneTxError": "İşlem gerçekleşmedi. Tekrar deneyin veya aşağıdaki iki adımlı takası kullanın.",
+      "oneTxVerifyCta": "Teklif almak için cüzdanınızı onaylayın",
+      "oneTxVerifyHint": "Ücretsiz tek imza, gas yok. Cüzdanınız aynı alım içinde Base’de onaylanır; Base ETH gerekmez.",
+      "oneTxNewBuyerHint": "İlk alım mı? Başka bir ağdan veya USDT ile ödeyin: cüzdanınız aynı alım içinde onaylanır, ayrı adım veya Base ETH gerekmez."
     },
     "success": {
       "title": "Alım tamamlandı",

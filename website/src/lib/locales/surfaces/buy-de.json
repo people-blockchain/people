@@ -381,7 +381,10 @@
       "oneTxUnavailable": "Der Kauf mit einer Signatur ist von diesem Netzwerk noch nicht möglich. Nutze unten den Tausch in zwei Schritten.",
       "oneTxTwoStep": "Lieber zwei Schritte? Erst mit LI.FI tauschen",
       "oneTxRequote": "Das Angebot ist abgelaufen. Prüfe den neuen Betrag und bestätige erneut.",
-      "oneTxError": "Die Transaktion ist nicht durchgegangen. Versuche es erneut oder nutze unten den Tausch in zwei Schritten."
+      "oneTxError": "Die Transaktion ist nicht durchgegangen. Versuche es erneut oder nutze unten den Tausch in zwei Schritten.",
+      "oneTxVerifyCta": "Wallet bestätigen und Angebot erhalten",
+      "oneTxVerifyHint": "Eine kostenlose Signatur ohne Gas. Deine Wallet wird im selben Kauf auf Base bestätigt, du brauchst kein ETH auf Base.",
+      "oneTxNewBuyerHint": "Erster Kauf? Zahle von einem anderen Netzwerk oder mit USDT: Deine Wallet wird im selben Kauf bestätigt, ohne extra Schritt und ohne ETH auf Base."
     },
     "success": {
       "title": "Kauf abgeschlossen",

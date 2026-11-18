@@ -7,6 +7,9 @@ approval.
 - `to`: **`<PPL_V2_HUB_BASE>`**. The mainnet PplCurveHubV2 address is not in the repo yet. Use
   the value of `NEXT_PUBLIC_PPL_V2_HUB_ADDRESS` once the hub is deployed.
 - From: the hub `owner` (the v2 owner Safe). `value = 0`, `operation = 0` (CALL).
+- **Hub redeploy:** the `verifyFor` / `verifyAndBuy` change (`../LIFI-ONE-TX.md` §3) needs a
+  new hub deployment because the hub is not upgradeable. Run this payload against that new hub
+  only. The calldata below does not depend on the hub address and is unchanged.
 - Router: LI.FI `Executor` `0x4DaC9d1769b9b304cb04741DCDEb2FC14aBdF110` (see `../LIFI-ONE-TX.md` §2).
 
 ## Step 1: queue (starts the 48 h `ADMIN_TIMELOCK`)

@@ -381,7 +381,10 @@
       "oneTxUnavailable": "A compra com uma assinatura ainda não está disponível nesta rede. Use a troca em duas etapas abaixo.",
       "oneTxTwoStep": "Prefere duas etapas? Troque primeiro com a LI.FI",
       "oneTxRequote": "A cotação expirou. Confira o novo valor e confirme novamente.",
-      "oneTxError": "A transação não foi concluída. Tente novamente ou use a troca em duas etapas abaixo."
+      "oneTxError": "A transação não foi concluída. Tente novamente ou use a troca em duas etapas abaixo.",
+      "oneTxVerifyCta": "Confirme sua carteira para ver a cotação",
+      "oneTxVerifyHint": "Uma assinatura gratuita, sem gás. Sua carteira é confirmada na Base dentro da mesma compra, então você não precisa de ETH na Base.",
+      "oneTxNewBuyerHint": "Primeira compra? Pague a partir de outra rede ou com USDT: sua carteira é confirmada na mesma compra, sem etapa separada nem ETH na Base."
     },
     "success": {
       "title": "Compra concluída",

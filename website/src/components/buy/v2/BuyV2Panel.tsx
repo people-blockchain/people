@@ -35,7 +35,7 @@ import {
 import { executedToAmountUsd6, LIFI_BASE_CHAIN_ID, LIFI_BASE_EXECUTOR, SOURCE_CHAINS, supportsDestinationCall } from "@/lib/sale/v2/lifi-route";
 import { readTrustedRouter, readUsdcBalance, waitForUsdcIncrease } from "@/lib/sale/v2/usdc-balance";
 import { useV2Sale, useV2Refresh } from "@/lib/sale/v2/useV2Sale";
-import { useV2Buy, type V2TxStatus } from "@/lib/sale/v2/useV2Buy";
+import { requestV2VerificationProof, useV2Buy, type V2TxStatus } from "@/lib/sale/v2/useV2Buy";
 
 import { LifiOneTx } from "./LifiOneTx";
 import { V2PhaseBanner } from "./PhaseBanner";
@@ -173,6 +173,15 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
     oneTxFlag &&
     supportsDestinationCall(fromChainId) &&
     (preview ? true : chain.id === LIFI_BASE_CHAIN_ID && routerTrusted === true && Boolean(provider));
+  // Site-verified buyer not yet bound on Base: the one-signature route binds them inside the same
+  // destination call (`verifyAndBuy`), so no separate verify transaction and no Base ETH.
+  const routedNewBuyer =
+    view.buyable &&
+    !verifiedOnChain &&
+    verification.verifiedHuman &&
+    oneTxFlag &&
+    (preview ? true : chain.id === LIFI_BASE_CHAIN_ID && routerTrusted === true && Boolean(provider));
+  const formEnabled = canBuy || routedNewBuyer;
   const purchase = preview?.purchase ?? localPurchase;
   const partialState = preview?.partial ?? partial;
   const topUp = partialTopUpAmount({
@@ -425,7 +434,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                     setSwapReady(null);
                   }}
                   className={FIELD}
-                  disabled={!canBuy}
+                  disabled={!formEnabled}
                 >
                   <option value="base">{t.form.networkBase}</option>
                   <option value="other">{t.form.networkOther}</option>
@@ -444,7 +453,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                     setSwapReady(null);
                   }}
                   className={FIELD}
-                  disabled={!canBuy}
+                  disabled={!formEnabled}
                 >
                   <option value="USDC">{t.form.tokenUsdc}</option>
                   <option value="USDT">{t.form.tokenUsdt}</option>
@@ -466,7 +475,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                     setSwapReady(null);
                   }}
                   className={`${FIELD} font-mono`}
-                  disabled={!canBuy}
+                  disabled={!formEnabled}
                 />
               </div>
             </div>
@@ -485,7 +494,7 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                     setSwapReady(null);
                   }}
                   className={FIELD}
-                  disabled={!canBuy}
+                  disabled={!formEnabled}
                 >
                   {SOURCE_CHAINS.filter((c) => c.id !== LIFI_BASE_CHAIN_ID).map((c) => (
                     <option key={c.id} value={c.id}>
@@ -548,7 +557,13 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
               </p>
             ) : null}
 
-            {needsSwap && canBuy && oneTxUsable ? (
+            {routedNewBuyer && !needsSwap ? (
+              <p className="text-xs text-ink-3" data-testid="v2-onetx-newbuyer">
+                {t.form.oneTxNewBuyerHint}
+              </p>
+            ) : null}
+
+            {needsSwap && formEnabled && oneTxUsable ? (
               <LifiOneTx
                 chain={chain}
                 account={account}
@@ -560,6 +575,14 @@ export function BuyV2Panel({ testId = "buy-v2-panel" }: { testId?: string }) {
                 copy={{ ...t.form }}
                 preview={Boolean(preview)}
                 disabled={busy}
+                needsVerification={!verifiedOnChain}
+                getProof={async () => {
+                  if (!provider || !account) return null;
+                  const got = await requestV2VerificationProof({ chain, provider, account, routed: true });
+                  return got.ok
+                    ? { personId: got.proof.personId, deadline: got.proof.deadline, signature: got.proof.signature }
+                    : null;
+                }}
                 onSuccess={(done) => {
                   setLocalPurchase(done);
                   setPartial(null);

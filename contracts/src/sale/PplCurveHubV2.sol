@@ -457,6 +457,30 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         whenNotPaused
         returns (uint256 pplOut)
     {
+        pplOut = _buy(usdcIn, minPplOut, recipient, referrer);
+    }
+
+    /// @notice First purchase without a separate verify transaction: binds `recipient` with the
+    /// verifier's `Verification` attestation for `recipient` (as `verifyFor`), then runs exactly the
+    /// `buy` checks. Built for a single cross-chain destination call (the LI.FI Executor as a
+    /// `trustedRouter`); a recipient that is already bound to `personId` just buys.
+    function verifyAndBuy(
+        uint256 usdcIn,
+        uint256 minPplOut,
+        address recipient,
+        address referrer,
+        bytes32 personId,
+        uint256 deadline,
+        bytes calldata sig
+    ) external nonReentrant whenNotPaused returns (uint256 pplOut) {
+        _bind(recipient, personId, deadline, sig, true);
+        pplOut = _buy(usdcIn, minPplOut, recipient, referrer);
+    }
+
+    function _buy(uint256 usdcIn, uint256 minPplOut, address recipient, address referrer)
+        internal
+        returns (uint256 pplOut)
+    {
         if (!_buyOpen()) revert SaleNotActive();
         if (recipient == address(0)) revert ZeroAddress();
         if (rewardBuyerForbidden != address(0) && msg.sender == rewardBuyerForbidden) revert RewardBuyForbidden();
@@ -609,20 +633,39 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// @dev The first successful verify pins `personId` to `msg.sender`. A later verify of that
     /// person, including after `unbind`, must be the same account. Lots stay with that account.
     function verify(bytes32 personId, uint256 deadline, bytes calldata sig) external {
+        _bind(msg.sender, personId, deadline, sig, false);
+    }
+
+    /// @notice Bind `account` (not the caller) to `personId`. Anyone may submit it: the verifier's
+    /// `Verification` attestation names `account`, the person's current `bindNonce` and a deadline,
+    /// and its EIP-712 domain names this chain id and this hub, so it binds that exact account only
+    /// and cannot be replayed on another chain, another hub or after an `unbind`.
+    /// @dev Idempotent: if `account` is already bound to `personId` it returns without changes, so a
+    /// front-run submission of the same attestation cannot make a later destination call revert.
+    /// All other rules are those of `verify` (pinning, one account per person, expiry).
+    function verifyFor(address account, bytes32 personId, uint256 deadline, bytes calldata sig) external {
+        _bind(account, personId, deadline, sig, true);
+    }
+
+    function _bind(address account, bytes32 personId, uint256 deadline, bytes calldata sig, bool idempotent)
+        internal
+    {
+        if (idempotent && personId != bytes32(0) && personOf[account] == personId) return;
+        if (account == address(0)) revert ZeroAddress();
         if (block.timestamp > deadline) revert Expired();
         if (personId == bytes32(0)) revert BadSignature();
-        if (personOf[msg.sender] != bytes32(0) || accountOfPerson[personId] != address(0)) revert AlreadyBound();
+        if (personOf[account] != bytes32(0) || accountOfPerson[personId] != address(0)) revert AlreadyBound();
         address pinned = pinnedAccount[personId];
-        if (pinned != address(0) && pinned != msg.sender) revert AlreadyBound();
+        if (pinned != address(0) && pinned != account) revert AlreadyBound();
         bytes32 digest = _hashTypedDataV4(
-            keccak256(abi.encode(VERIFICATION_TYPEHASH, msg.sender, personId, bindNonce[personId], deadline))
+            keccak256(abi.encode(VERIFICATION_TYPEHASH, account, personId, bindNonce[personId], deadline))
         );
         address signer = ECDSA.recover(digest, sig);
         if (signer != verifier || signer == address(0)) revert BadSignature();
-        if (pinned == address(0)) pinnedAccount[personId] = msg.sender;
-        personOf[msg.sender] = personId;
-        accountOfPerson[personId] = msg.sender;
-        emit Verified(msg.sender, personId);
+        if (pinned == address(0)) pinnedAccount[personId] = account;
+        personOf[account] = personId;
+        accountOfPerson[personId] = account;
+        emit Verified(account, personId);
     }
 
     // ================================================================ liquidity release (Q1)

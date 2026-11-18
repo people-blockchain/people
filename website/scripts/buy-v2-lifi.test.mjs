@@ -6,6 +6,11 @@ import { decodeFunctionData } from "viem";
 import { PPL_CURVE_HUB_V2_ABI } from "../src/lib/sale/v2/abi.ts";
 import {
   HUB_BUY_GAS_LIMIT,
+  HUB_VERIFY_AND_BUY_GAS_LIMIT,
+  DIRECT_VERIFICATION_DEADLINE_SECONDS,
+  ROUTED_VERIFICATION_DEADLINE_SECONDS,
+  proofLeavesTime,
+  verificationDeadlineSeconds,
   LIFI_BASE_EXECUTOR,
   SOURCE_CHAINS,
   buildContractCallsRequest,
@@ -242,4 +247,65 @@ test("buyable preview state is bound on-chain with no purchase or partial", asyn
   assert.ok(snap.personId);
   assert.equal(snap.purchase, null);
   assert.equal(snap.partial, null);
+});
+
+const PROOF = {
+  personId: "0x" + "ab".repeat(32),
+  deadline: 1_800_000_000,
+  signature: "0x" + "11".repeat(65),
+};
+
+test("new buyer: the destination call is verifyAndBuy with the attestation for the buyer", () => {
+  const req = buildContractCallsRequest({ ...params, verification: PROOF });
+  const [call] = req.contractCalls;
+  assert.equal(call.toContractGasLimit, String(HUB_VERIFY_AND_BUY_GAS_LIMIT));
+  const decoded = decodeFunctionData({ abi: PPL_CURVE_HUB_V2_ABI, data: call.toContractCallData });
+  assert.equal(decoded.functionName, "verifyAndBuy");
+  assert.deepEqual(decoded.args, [
+    usd6(100),
+    params.minPplOut,
+    BUYER,
+    "0x0000000000000000000000000000000000000000",
+    PROOF.personId,
+    BigInt(PROOF.deadline),
+    PROOF.signature,
+  ]);
+  assert.throws(() => buildContractCallsRequest({ ...params, verification: { ...PROOF, personId: "0x12" } }), /badVerification/);
+});
+
+test("new buyer: quote validation requires verifyAndBuy calldata, plain buy is refused", () => {
+  const withVerify = { ...params, verification: PROOF };
+  const q = mockQuote();
+  q.includedSteps[2].action.toContractCallData = encodeHubBuy({
+    usdcIn: params.usdcIn,
+    minPplOut: params.minPplOut,
+    recipient: BUYER,
+    verification: PROOF,
+  });
+  assert.equal(validateOneTxQuote(q, withVerify).ok, true);
+  // A plain buy for an unbound buyer would revert NotVerified on Base: refuse it up front.
+  const plain = validateOneTxQuote(mockQuote(), withVerify);
+  assert.equal(plain.ok, false);
+  assert.equal(plain.reason, "wrongCalldata");
+  // And an attestation for someone else is refused too.
+  const other = structuredClone(q);
+  other.includedSteps[2].action.toContractCallData = encodeHubBuy({
+    usdcIn: params.usdcIn,
+    minPplOut: params.minPplOut,
+    recipient: BUYER,
+    verification: { ...PROOF, personId: "0x" + "cd".repeat(32) },
+  });
+  assert.equal(validateOneTxQuote(other, withVerify).reason, "wrongCalldata");
+});
+
+test("attestation deadline: routed proofs live longer and must outlast the bridge", () => {
+  assert.equal(verificationDeadlineSeconds(false), DIRECT_VERIFICATION_DEADLINE_SECONDS);
+  assert.equal(verificationDeadlineSeconds(true), ROUTED_VERIFICATION_DEADLINE_SECONDS);
+  assert.equal(DIRECT_VERIFICATION_DEADLINE_SECONDS, 15 * 60, "direct verify unchanged");
+  const now = 1_000_000_000_000;
+  const sec = now / 1000;
+  assert.equal(proofLeavesTime(sec + 60 * 60, now, 30), true);
+  assert.equal(proofLeavesTime(sec + 9 * 60, now, 30), false, "needs at least 10 minutes");
+  assert.equal(proofLeavesTime(sec + 30 * 60, now, 20 * 60), false, "needs 3x the ETA");
+  assert.equal(proofLeavesTime(sec - 1, now, 0), false);
 });
