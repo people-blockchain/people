@@ -57,6 +57,12 @@ contract PplCurveHubV2LifiForkTest is Test {
         hub.open();
     }
 
+    /// Without BASE_RPC_URL the fork tests are reported as SKIPPED (not silently passed), with a reason in the log.
+    function _requireFork() internal {
+        if (forked) return;
+        vm.skip(true, "BASE_RPC_URL not set: real LI.FI contracts on Base were NOT exercised");
+    }
+
     function _trustExecutor() internal {
         vm.startPrank(owner);
         bytes32 id = hub.queueSetTrustedRouter(LIFI_EXECUTOR, true);
@@ -78,8 +84,8 @@ contract PplCurveHubV2LifiForkTest is Test {
         return abi.encode(txId, swaps, receiver);
     }
 
-    function test_fork_capturedMessageShape() public view {
-        if (!forked) return;
+    /// Pure decoding of the captured message: runs with or without BASE_RPC_URL.
+    function test_capturedMessageShape() public pure {
         (, LibSwapData[] memory swaps, address receiver) = abi.decode(MESSAGE, (bytes32, LibSwapData[], address));
         assertEq(swaps.length, 1);
         assertEq(swaps[0].callTo, HUB);
@@ -91,7 +97,7 @@ contract PplCurveHubV2LifiForkTest is Test {
     }
 
     function test_fork_newBuyerVerifyAndBuyThroughRealLifiContracts() public {
-        if (!forked) return;
+        _requireFork();
         _trustExecutor();
         (uint256 expectedPpl,) = hub.quoteBuy(USDC_IN);
         uint256 buyerBefore = IERC20(USDC).balanceOf(BUYER);
@@ -122,7 +128,7 @@ contract PplCurveHubV2LifiForkTest is Test {
     }
 
     function test_fork_untrustedExecutorRefundsAllUsdcToBuyer() public {
-        if (!forked) return;
+        _requireFork();
         uint256 buyerBefore = IERC20(USDC).balanceOf(BUYER);
         _deliver(MESSAGE);
         assertEq(hub.personOf(BUYER), bytes32(0), "bind rolled back");
@@ -131,7 +137,7 @@ contract PplCurveHubV2LifiForkTest is Test {
     }
 
     function test_fork_slippageRevertRefundsAllUsdcToBuyer() public {
-        if (!forked) return;
+        _requireFork();
         _trustExecutor();
         (, LibSwapData[] memory swaps,) = abi.decode(MESSAGE, (bytes32, LibSwapData[], address));
         (,,,, bytes32 pid, uint256 dl, bytes memory sig) =

@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { readFileSync } from "node:fs";
 
-import { decodeFunctionData, encodeAbiParameters, encodeEventTopics, erc20Abi, padHex } from "viem";
+import { decodeFunctionData, encodeAbiParameters, encodeEventTopics, encodeFunctionData, erc20Abi, padHex } from "viem";
 
 import { PPL_CURVE_HUB_V2_ABI } from "../src/lib/sale/v2/abi.ts";
 import {
@@ -30,6 +30,9 @@ import {
   receivingOutcome,
   sourceAmountWithinMargin,
   ROUTER_MIN_BUY_USD6,
+  LIFI_ONE_TX_ABI,
+  LIFI_BASE_RECEIVER_ACROSS_V4,
+  LIFI_BASE_ERC20_PROXY,
 } from "../src/lib/sale/v2/lifi-route.ts";
 import { isV2OneTxEnabled, twoStepBuyAmountUsd6, usdcBalanceDelta } from "../src/lib/sale/v2/logic.ts";
 
@@ -50,21 +53,6 @@ const params = {
   minPplOut: BigInt("990000000000000000000"),
 };
 
-const BRIDGE_DATA = {
-  type: "tuple",
-  components: [
-    { name: "transactionId", type: "bytes32" },
-    { name: "bridge", type: "string" },
-    { name: "integrator", type: "string" },
-    { name: "referrer", type: "address" },
-    { name: "sendingAssetId", type: "address" },
-    { name: "receiver", type: "address" },
-    { name: "minAmount", type: "uint256" },
-    { name: "destinationChainId", type: "uint256" },
-    { name: "hasSourceSwaps", type: "bool" },
-    { name: "hasDestinationCall", type: "bool" },
-  ],
-};
 const SWAP_DATA = {
   type: "tuple[]",
   components: [
@@ -78,21 +66,50 @@ const SWAP_DATA = {
   ],
 };
 
-/** Source tx calldata in LI.FI's layout: selector + (BridgeData, ..., destination message). */
-function mockSourceData({ callData, receiver = BUYER, refund = BUYER, destinationChainId = 8453, hasDestinationCall = true }) {
+const word = (a) => padHex(a.toLowerCase(), { size: 32 });
+const hubStep = (callData, over = {}) => ({ callTo: HUB, approveTo: HUB, sendingAssetId: USDC, receivingAssetId: USDC, fromAmount: BigInt(100500000), callData, requiresDeposit: true, ...over });
+
+/**
+ * Source tx calldata exactly as LI.FI builds it for Across: Diamond
+ * `swapAndStartBridgeTokensViaAcrossV4(BridgeData, SwapData[], AcrossV4Data)` (or `startBridgeTokensViaAcrossV4`
+ * without source swaps), with the ReceiverAcrossV4 message `(bytes32, SwapData[], address receiver)`.
+ */
+function mockSourceData({
+  callData,
+  receiver = BUYER,
+  refund = BUYER,
+  acrossRefund = BUYER,
+  acrossReceiver = LIFI_BASE_RECEIVER_ACROSS_V4,
+  receivingAssetId = USDC,
+  destinationChainId = 8453,
+  hasDestinationCall = true,
+  steps,
+  sourceSwaps,
+  noSwap = false,
+  outputAmount = BigInt(100500000),
+}) {
   const txId = padHex("0x01", { size: 32 });
   const message = encodeAbiParameters(
     [{ type: "bytes32" }, SWAP_DATA, { type: "address" }],
-    [txId, [{ callTo: HUB, approveTo: HUB, sendingAssetId: USDC, receivingAssetId: USDC, fromAmount: BigInt(100500000), callData, requiresDeposit: true }], refund],
+    [txId, steps ?? [hubStep(callData)], refund],
   );
-  const args = encodeAbiParameters(
-    [BRIDGE_DATA, { type: "bytes" }],
-    [
-      { transactionId: txId, bridge: "across", integrator: "PEOPLE", referrer: "0x0000000000000000000000000000000000000000", sendingAssetId: BSC_USDT, receiver, minAmount: BigInt(100500000), destinationChainId: BigInt(destinationChainId), hasSourceSwaps: true, hasDestinationCall },
-      message,
-    ],
-  );
-  return `0x1794958f${args.slice(2)}`;
+  const bridgeData = { transactionId: txId, bridge: "across", integrator: "PEOPLE", referrer: "0x0000000000000000000000000000000000000000", sendingAssetId: BSC_USDT, receiver, minAmount: BigInt(100500000), destinationChainId: BigInt(destinationChainId), hasSourceSwaps: !noSwap, hasDestinationCall };
+  const acrossData = {
+    receiverAddress: word(acrossReceiver),
+    refundAddress: word(acrossRefund),
+    sendingAssetId: word(BSC_USDT),
+    receivingAssetId: word(receivingAssetId),
+    outputAmount,
+    outputAmountMultiplier: BigInt("1000000000000"),
+    exclusiveRelayer: padHex("0x0", { size: 32 }),
+    quoteTimestamp: 1795012055,
+    fillDeadline: 1795021278,
+    exclusivityParameter: 0,
+    message,
+  };
+  if (noSwap) return encodeFunctionData({ abi: LIFI_ONE_TX_ABI, functionName: "startBridgeTokensViaAcrossV4", args: [bridgeData, acrossData] });
+  const fee = { callTo: "0xDe2b920506EE931a6A2ABDF566526220214FBbAE", approveTo: "0xDe2b920506EE931a6A2ABDF566526220214FBbAE", sendingAssetId: BSC_USDT, receivingAssetId: BSC_USDT, fromAmount: BigInt("101250000000000000000"), callData: "0x332d746b", requiresDeposit: true };
+  return encodeFunctionData({ abi: LIFI_ONE_TX_ABI, functionName: "swapAndStartBridgeTokensViaAcrossV4", args: [bridgeData, sourceSwaps ?? [fee], acrossData] });
 }
 
 /** Shape of a real `/quote/contractCalls` answer (BSC USDT -> Across -> Base Executor -> hub.buy). */
@@ -393,10 +410,89 @@ test("M2: receiver and refund receiver inside the source calldata must be the bu
   assert.equal(checkSourceCalldata(mockSourceData({ callData, hasDestinationCall: false }), params, callData), "noContractCall");
   const otherCall = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: BigInt(1), recipient: BUYER });
   assert.equal(checkSourceCalldata(mockSourceData({ callData: otherCall }), params, callData), "calldataMismatch");
-  assert.equal(checkSourceCalldata("0xdeadbeef", params, callData), "calldataMismatch");
+  assert.equal(checkSourceCalldata("0xdeadbeef", params, callData), "unsupportedFacet");
   // via the validator: a quote whose tx pays leftovers/refunds elsewhere is refused
   const bad = mockQuote({}, { sourceData: mockSourceData({ callData, refund: other }) });
   assert.equal(validateOneTxQuote(bad, params).reason, "wrongRefundReceiver");
+});
+
+test("M2/LOW: the Across calldata is fully decoded, not searched (facet, positions, every receiver)", () => {
+  const callData = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: params.minPplOut, recipient: BUYER });
+  const other = "0x2222222222222222222222222222222222222222";
+  const check = (opts) => checkSourceCalldata(mockSourceData({ callData, ...opts }), params, callData);
+  // no source swap: startBridgeTokensViaAcrossV4 is decoded too; it must spend the buyer's token and deliver >= usdcIn
+  assert.equal(checkSourceCalldata(mockSourceData({ callData, noSwap: true }), params, callData), null);
+  assert.equal(check({ noSwap: true, outputAmount: params.usdcIn - BigInt(1) }), "minBelowBuy");
+  // Across must deliver to LI.FI ReceiverAcrossV4 on Base, in Base USDC; source refunds go to the buyer
+  assert.equal(check({ acrossReceiver: other }), "unexpectedBridgeReceiver");
+  assert.equal(check({ acrossRefund: other }), "wrongRefundReceiver");
+  assert.equal(check({ receivingAssetId: other }), "wrongDestinationToken");
+  // the destination message: exactly one step, our hub, our USDC, enough USDC
+  assert.equal(check({ steps: [hubStep(callData), hubStep(callData)] }), "wrongTarget");
+  assert.equal(check({ steps: [hubStep(callData, { callTo: other })] }), "wrongTarget");
+  assert.equal(check({ steps: [hubStep(callData, { approveTo: other })] }), "wrongTarget");
+  assert.equal(check({ steps: [hubStep(callData, { sendingAssetId: other })] }), "wrongDestinationToken");
+  assert.equal(check({ steps: [hubStep(callData, { fromAmount: params.usdcIn - BigInt(1) })] }), "minBelowBuy");
+  // our hub calldata hidden elsewhere (a source swap) no longer satisfies the check: only the message counts
+  const otherCall = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: BigInt(1), recipient: BUYER });
+  const smuggle = { callTo: other, approveTo: other, sendingAssetId: BSC_USDT, receivingAssetId: BSC_USDT, fromAmount: BigInt(1), callData, requiresDeposit: true };
+  assert.equal(check({ steps: [hubStep(otherCall)], sourceSwaps: [smuggle] }), "calldataMismatch");
+  // the buyer's address appearing elsewhere (e.g. as a source swap target) does not stand in for the refund receiver
+  const buyerSwap = { ...smuggle, callTo: BUYER, approveTo: BUYER, callData: "0x" };
+  assert.equal(check({ refund: other, sourceSwaps: [buyerSwap] }), "wrongRefundReceiver");
+  // source swaps must start from the buyer's token
+  assert.equal(check({ sourceSwaps: [{ ...smuggle, sendingAssetId: other, callData: "0x" }] }), "wrongSourceToken");
+  // unknown facets are refused, not guessed at: Stargate (seen on Avalanche), Base Executor used cross-chain, junk
+  const good = mockSourceData({ callData });
+  assert.equal(checkSourceCalldata(`0xa6010a66${good.slice(10)}`, params, callData), "unsupportedFacet");
+  const exec = encodeFunctionData({ abi: LIFI_ONE_TX_ABI, functionName: "swapAndExecute", args: [padHex("0x01", { size: 32 }), [hubStep(callData)], BSC_USDT, BUYER, BigInt(1)] });
+  assert.equal(checkSourceCalldata(exec, params, callData), "unsupportedFacet");
+  // non-canonical encodings are refused: trailing bytes, dirty high bits in an address word
+  assert.equal(checkSourceCalldata(`${good}${"00".repeat(32)}`, params, callData), "nonCanonicalCalldata");
+  const receiverWord = BUYER.toLowerCase().slice(2).padStart(64, "0");
+  const dirty = good.replace(receiverWord, `ff${receiverWord.slice(2)}`);
+  assert.notEqual(dirty, good);
+  assert.notEqual(checkSourceCalldata(dirty, params, callData), null);
+  // a pointer moved off its canonical position (bridge string offset + 32) is refused
+  const shifted = `${good.slice(0, 10)}${good.slice(10, 74)}${(BigInt(`0x${good.slice(74, 138)}`) + BigInt(32)).toString(16).padStart(64, "0")}${good.slice(138)}${"00".repeat(32)}`;
+  assert.notEqual(checkSourceCalldata(shifted, params, callData), null);
+});
+
+test("M2/LOW: Base -> Base (Executor.swapAndExecute via ERC20Proxy) is decoded and pinned too", () => {
+  const fx = JSON.parse(readFileSync(new URL("./fixtures/lifi-quote-base-usdt-swapandexecute.json", import.meta.url), "utf8"));
+  const p = { ...fx.params, usdcIn: BigInt(fx.params.usdcIn), minPplOut: BigInt(fx.params.minPplOut) };
+  const callData = fx.quote.includedSteps.at(-1).action.toContractCallData;
+  const r = validateOneTxQuote(fx.quote, p);
+  assert.equal(r.ok, true, r.reason);
+  assert.equal(r.summary.tx.to, LIFI_BASE_EXECUTOR);
+  assert.equal(r.summary.approvalAddress, LIFI_BASE_ERC20_PROXY, "approve the Executor's ERC20Proxy, never the Executor");
+  assert.equal(r.summary.crossChain, false);
+  const reason = (quote) => {
+    const v = validateOneTxQuote(quote, p);
+    return v.ok ? "ok" : v.reason;
+  };
+  const q = fx.quote;
+  assert.equal(reason({ ...q, transactionRequest: { ...q.transactionRequest, to: DIAMOND } }), "unexpectedTarget");
+  assert.equal(reason({ ...q, estimate: { ...q.estimate, approvalAddress: DIAMOND } }), "unexpectedApproval");
+  assert.equal(reason({ ...q, estimate: { ...q.estimate, approvalAddress: LIFI_BASE_EXECUTOR } }), "unexpectedApproval");
+  const d = decodeFunctionData({ abi: LIFI_ONE_TX_ABI, data: q.transactionRequest.data });
+  assert.equal(d.functionName, "swapAndExecute");
+  const [txId, swaps, asset, receiver, amount] = d.args;
+  const enc = (args) => encodeFunctionData({ abi: LIFI_ONE_TX_ABI, functionName: "swapAndExecute", args });
+  const fromAmount = BigInt(q.estimate.fromAmount);
+  const other = "0x2222222222222222222222222222222222222222";
+  assert.equal(checkSourceCalldata(enc([txId, swaps, asset, receiver, amount]), p, callData, fromAmount), null);
+  assert.equal(checkSourceCalldata(enc([txId, swaps, asset, other, amount]), p, callData, fromAmount), "wrongReceiver");
+  assert.equal(checkSourceCalldata(enc([txId, swaps, other, receiver, amount]), p, callData, fromAmount), "wrongSourceToken");
+  assert.equal(checkSourceCalldata(enc([txId, swaps, asset, receiver, amount + BigInt(1)]), p, callData, fromAmount), "noFromAmount");
+  // the hub call must be the final step, and the only one touching the hub
+  assert.equal(checkSourceCalldata(enc([txId, swaps.slice(0, -1), asset, receiver, amount]), p, callData, fromAmount), "wrongTarget");
+  assert.equal(checkSourceCalldata(enc([txId, [swaps.at(-1), ...swaps], asset, receiver, amount]), p, callData, fromAmount), "wrongTarget");
+  const last = swaps.at(-1);
+  assert.equal(checkSourceCalldata(enc([txId, [...swaps.slice(0, -1), { ...last, fromAmount: p.usdcIn - BigInt(1) }], asset, receiver, amount]), p, callData, fromAmount), "minBelowBuy");
+  assert.equal(checkSourceCalldata(enc([txId, [...swaps.slice(0, -1), { ...last, callData: encodeHubBuy({ usdcIn: p.usdcIn, minPplOut: BigInt(2), recipient: p.account }) }], asset, receiver, amount]), p, callData, fromAmount), "calldataMismatch");
+  // an Across facet on a Base -> Base purchase is refused
+  assert.equal(checkSourceCalldata(mockSourceData({ callData }), p, callData, fromAmount), "unsupportedFacet");
 });
 
 test("M2: a real captured LI.FI quote (Polygon USDT -> Across -> verifyAndBuy) passes every check", () => {

@@ -16,7 +16,9 @@
 import {
   decodeAbiParameters,
   decodeFunctionData,
+  encodeAbiParameters,
   encodeFunctionData,
+  parseAbi,
   erc20Abi,
   parseEventLogs,
   type Address,
@@ -341,9 +343,14 @@ export function validateOneTxQuote(
   const tx = quote.transactionRequest;
   if (!tx?.to || !ADDRESS_RE.test(tx.to) || !tx.data) return { ok: false, reason: "noTransaction" };
   // The buyer signs this transaction, so pin where it goes and what it carries (audit M2).
-  if (!sameAddress(tx.to, LIFI_DIAMOND)) return { ok: false, reason: "unexpectedTarget" };
+  // Cross-chain: the Diamond is both target and spender. Base -> Base: LI.FI calls the Executor
+  // directly and the Executor pulls the token through its ERC20Proxy.
+  const sameChain = p.fromChain === LIFI_BASE_CHAIN_ID;
+  const target = sameChain ? executor : LIFI_DIAMOND;
+  const spender = sameChain ? LIFI_BASE_ERC20_PROXY : LIFI_DIAMOND;
+  if (!sameAddress(tx.to, target)) return { ok: false, reason: "unexpectedTarget" };
   if ((toBigInt(tx.value ?? "0") ?? BigInt(-1)) !== BigInt(0)) return { ok: false, reason: "unexpectedValue" };
-  if (!sameAddress(quote.estimate?.approvalAddress, LIFI_DIAMOND)) return { ok: false, reason: "unexpectedApproval" };
+  if (!sameAddress(quote.estimate?.approvalAddress, spender)) return { ok: false, reason: "unexpectedApproval" };
   const token = ONE_TX_SOURCE_TOKENS.find((t) => t.chainId === p.fromChain && sameAddress(t.address, p.fromToken));
   if (!token) return { ok: false, reason: "wrongSourceToken" };
   if (tx.chainId !== undefined && tx.chainId !== p.fromChain) return { ok: false, reason: "wrongSourceChain" };
@@ -389,7 +396,12 @@ export function validateOneTxQuote(
     return { ok: false, reason: "noFromAmount" };
   }
   if (!sourceAmountWithinMargin(fromAmount, token.decimals, p.usdcIn)) return { ok: false, reason: "overpay" };
-  const receiverCheck = checkSourceCalldata(tx.data as Hex, p, steps[callIndex].action?.toContractCallData as Hex);
+  const receiverCheck = checkSourceCalldata(
+    tx.data as Hex,
+    p,
+    steps[callIndex].action?.toContractCallData as Hex,
+    fromAmount,
+  );
   if (receiverCheck) return { ok: false, reason: receiverCheck };
 
   return {
@@ -400,7 +412,7 @@ export function validateOneTxQuote(
       fromAmount,
       fromDecimals: token.decimals,
       fromSymbol: quote.action?.fromToken?.symbol ?? "",
-      approvalAddress: LIFI_DIAMOND,
+      approvalAddress: spender,
       minReceivedUsd6: minReceived,
       executionDurationSec: Math.max(0, Math.round(quote.estimate?.executionDuration ?? 0)),
       feesUsd: sumUsd(quote.estimate?.feeCosts) + sumUsd(quote.estimate?.gasCosts),
@@ -415,56 +427,162 @@ export function sourceAmountWithinMargin(fromAmount: bigint, decimals: number, u
   return fromAmount * BigInt(1_000_000) * BigInt(10_000) <= usdcIn * scale * BigInt(10_000 + MAX_SOURCE_OVERPAY_BPS);
 }
 
-const BRIDGE_DATA = [
+/**
+ * LI.FI periphery on Base (lifinance/contracts `deployments/base.json`, checked 18 Nov 2026).
+ * `ReceiverAcrossV4` receives the Across fill and runs the destination message through the
+ * Executor; `ERC20Proxy` is the spender for a same-chain Base purchase (`Executor.swapAndExecute`
+ * pulls the source token through it), so on Base the buyer approves the proxy, not the Diamond.
+ */
+export const LIFI_BASE_RECEIVER_ACROSS_V4: Address = "0x33b255b5db44A78c34381f89f1a454bc0Ef49871";
+export const LIFI_BASE_ERC20_PROXY: Address = "0x74a55CaDb12501A3707E9F3C5dfd8b563C6A5940";
+
+/**
+ * The only LI.FI entry points a one-signature transaction may use. Everything else (Stargate,
+ * Relay, Mayan, packed facets, ...) is refused with `unsupportedFacet`: its calldata is not
+ * decoded here, so the receiver and destination call could not be checked.
+ */
+export const LIFI_ONE_TX_ABI = parseAbi([
+  "struct BridgeData { bytes32 transactionId; string bridge; string integrator; address referrer; address sendingAssetId; address receiver; uint256 minAmount; uint256 destinationChainId; bool hasSourceSwaps; bool hasDestinationCall; }",
+  "struct SwapData { address callTo; address approveTo; address sendingAssetId; address receivingAssetId; uint256 fromAmount; bytes callData; bool requiresDeposit; }",
+  "struct AcrossV4Data { bytes32 receiverAddress; bytes32 refundAddress; bytes32 sendingAssetId; bytes32 receivingAssetId; uint256 outputAmount; uint128 outputAmountMultiplier; bytes32 exclusiveRelayer; uint32 quoteTimestamp; uint32 fillDeadline; uint32 exclusivityParameter; bytes message; }",
+  // Diamond, AcrossFacetV4 (cross-chain)
+  "function startBridgeTokensViaAcrossV4(BridgeData _bridgeData, AcrossV4Data _acrossData)",
+  "function swapAndStartBridgeTokensViaAcrossV4(BridgeData _bridgeData, SwapData[] _swapData, AcrossV4Data _acrossData)",
+  // Executor on Base (same-chain Base -> Base)
+  "function swapAndExecute(bytes32 _transactionId, SwapData[] _swapData, address _transferredAssetId, address _receiver, uint256 _amount)",
+]);
+
+/** `ReceiverAcrossV4.handleV3AcrossMessage` payload: `abi.decode(message, (bytes32, SwapData[], address))`. */
+const ACROSS_MESSAGE_PARAMS = [
+  { name: "transactionId", type: "bytes32" },
   {
-    type: "tuple",
+    name: "swapData",
+    type: "tuple[]",
     components: [
-      { name: "transactionId", type: "bytes32" },
-      { name: "bridge", type: "string" },
-      { name: "integrator", type: "string" },
-      { name: "referrer", type: "address" },
+      { name: "callTo", type: "address" },
+      { name: "approveTo", type: "address" },
       { name: "sendingAssetId", type: "address" },
-      { name: "receiver", type: "address" },
-      { name: "minAmount", type: "uint256" },
-      { name: "destinationChainId", type: "uint256" },
-      { name: "hasSourceSwaps", type: "bool" },
-      { name: "hasDestinationCall", type: "bool" },
+      { name: "receivingAssetId", type: "address" },
+      { name: "fromAmount", type: "uint256" },
+      { name: "callData", type: "bytes" },
+      { name: "requiresDeposit", type: "bool" },
     ],
   },
+  { name: "receiver", type: "address" },
 ] as const;
 
-function countWord(hex: string, word: string): number {
-  let count = 0;
-  for (let i = hex.indexOf(word); i !== -1; i = hex.indexOf(word, i + word.length)) count += 1;
-  return count;
+type SwapStep = {
+  callTo: Address;
+  approveTo: Address;
+  sendingAssetId: Address;
+  receivingAssetId: Address;
+  fromAmount: bigint;
+  callData: Hex;
+  requiresDeposit: boolean;
+};
+
+function addressWord(a: string): Hex {
+  return `0x${a.toLowerCase().replace(/^0x/, "").padStart(64, "0")}` as Hex;
+}
+
+function sameWord(word: Hex, a: string): boolean {
+  return word.toLowerCase() === addressWord(a);
+}
+
+/** The hub call LI.FI runs on Base: exactly one step, our hub, our USDC, our calldata, enough USDC. */
+function checkHubStep(step: SwapStep | undefined, p: OneTxParams, hubCallData: string): string | null {
+  if (!step) return "noContractCall";
+  if (!sameAddress(step.callTo, p.hub) || !sameAddress(step.approveTo, p.hub)) return "wrongTarget";
+  if (!sameAddress(step.sendingAssetId, p.usdc)) return "wrongDestinationToken";
+  if (step.callData.toLowerCase() !== hubCallData) return "calldataMismatch";
+  if (step.fromAmount < p.usdcIn) return "minBelowBuy";
+  return null;
 }
 
 /**
- * Checks the source transaction itself, not only the quote summary (audit M2):
- * - it carries our exact hub calldata (the destination call LI.FI will run);
- * - cross-chain: its `ILiFi.BridgeData` (first argument of every LI.FI bridge facet) names the
- *   buyer as receiver, Base as destination and a destination call;
- * - the buyer appears as a receiver outside the hub calldata as well: BridgeData.receiver plus the
- *   destination message's refund receiver (leftover and failed-call USDC) for cross-chain, at
- *   least once for same-chain.
+ * Checks the source transaction itself, not only the quote summary (audit M2), by fully ABI-decoding
+ * it (no substring search). The calldata must also be in canonical ABI encoding (re-encoding the
+ * decoded values gives the same bytes), so every field sits at its 32-byte-aligned position and no
+ * other parser (the LI.FI contracts' `abi.decode`) can read it differently.
+ * - Cross-chain: `AcrossFacetV4.{start,swapAndStart}BridgeTokensViaAcrossV4` only. BridgeData names the
+ *   buyer as receiver, Base as destination and a destination call; Across sends to LI.FI
+ *   `ReceiverAcrossV4` on Base, in Base USDC, with the buyer as the source-chain refund address; the
+ *   destination message is exactly one step (our hub calldata) with the buyer as the receiver of
+ *   leftovers and of the full amount if the hub call reverts.
+ * - Base -> Base: `Executor.swapAndExecute` only. It pulls exactly the quoted amount of the source
+ *   token, the buyer receives every leftover, and the last step is our hub call.
  * Returns a reason string, or null when the calldata is acceptable.
  */
-export function checkSourceCalldata(data: Hex, p: OneTxParams, hubCallData: Hex | undefined): string | null {
-  const lower = data.toLowerCase();
-  const call = (hubCallData ?? "").toLowerCase().replace(/^0x/, "");
-  if (!call || !lower.includes(call)) return "calldataMismatch";
-  const buyerWord = p.account.toLowerCase().replace(/^0x/, "").padStart(64, "0");
-  const outside = countWord(lower.split(call).join(""), buyerWord);
-  if (p.fromChain === LIFI_BASE_CHAIN_ID) return outside >= 1 ? null : "wrongReceiver";
+export function checkSourceCalldata(
+  data: Hex,
+  p: OneTxParams,
+  hubCallData: Hex | undefined,
+  fromAmount?: bigint | null,
+): string | null {
+  const call = (hubCallData ?? "").toLowerCase();
+  if (!/^0x[0-9a-f]{8,}$/.test(call)) return "calldataMismatch";
+  let decoded;
   try {
-    const [bridge] = decodeAbiParameters(BRIDGE_DATA, `0x${lower.slice(10)}` as Hex);
-    if (!sameAddress(bridge.receiver, p.account)) return "wrongReceiver";
-    if (bridge.destinationChainId !== BigInt(LIFI_BASE_CHAIN_ID)) return "wrongDestination";
-    if (!bridge.hasDestinationCall) return "noContractCall";
+    decoded = decodeFunctionData({ abi: LIFI_ONE_TX_ABI, data });
   } catch {
-    return "wrongReceiver";
+    return "unsupportedFacet";
   }
-  return outside >= 2 ? null : "wrongRefundReceiver";
+  try {
+    const canonical = encodeFunctionData({ abi: LIFI_ONE_TX_ABI, functionName: decoded.functionName, args: decoded.args } as Parameters<typeof encodeFunctionData>[0]);
+    if (canonical.toLowerCase() !== data.toLowerCase()) return "nonCanonicalCalldata";
+  } catch {
+    return "nonCanonicalCalldata";
+  }
+
+  if (p.fromChain === LIFI_BASE_CHAIN_ID) {
+    if (decoded.functionName !== "swapAndExecute") return "unsupportedFacet";
+    const [, swaps, transferredAssetId, receiver, amount] = decoded.args;
+    if (!sameAddress(receiver, p.account)) return "wrongReceiver";
+    if (!sameAddress(transferredAssetId, p.fromToken)) return "wrongSourceToken";
+    if (fromAmount !== undefined && fromAmount !== null && amount !== fromAmount) return "noFromAmount";
+    if (swaps.length < 1) return "noContractCall";
+    const last = swaps[swaps.length - 1];
+    // the hub may be called only once, as the final step
+    if (swaps.slice(0, -1).some((s) => sameAddress(s.callTo, p.hub) || sameAddress(s.approveTo, p.hub))) {
+      return "wrongTarget";
+    }
+    return checkHubStep(last as SwapStep, p, call);
+  }
+
+  if (decoded.functionName === "swapAndExecute") return "unsupportedFacet";
+  const bridge = decoded.args[0];
+  const across = decoded.functionName === "swapAndStartBridgeTokensViaAcrossV4" ? decoded.args[2] : decoded.args[1];
+  if (!sameAddress(bridge.receiver, p.account)) return "wrongReceiver";
+  if (bridge.destinationChainId !== BigInt(LIFI_BASE_CHAIN_ID)) return "wrongDestination";
+  if (!bridge.hasDestinationCall) return "noContractCall";
+  if (decoded.functionName === "swapAndStartBridgeTokensViaAcrossV4") {
+    const swaps = decoded.args[1];
+    if (!bridge.hasSourceSwaps || swaps.length < 1) return "wrongSourceToken";
+    if (!sameAddress(swaps[0].sendingAssetId, p.fromToken)) return "wrongSourceToken";
+    if (!sameAddress(swaps[swaps.length - 1].receivingAssetId, bridge.sendingAssetId)) return "wrongSourceToken";
+  } else {
+    if (bridge.hasSourceSwaps || !sameAddress(bridge.sendingAssetId, p.fromToken)) return "wrongSourceToken";
+    // no source swap: the facet uses outputAmount as given
+    if (across.outputAmount < p.usdcIn) return "minBelowBuy";
+  }
+  if (!sameWord(across.receiverAddress, LIFI_BASE_RECEIVER_ACROSS_V4)) return "unexpectedBridgeReceiver";
+  if (!sameWord(across.refundAddress, p.account)) return "wrongRefundReceiver";
+  if (!sameWord(across.sendingAssetId, bridge.sendingAssetId)) return "wrongSourceToken";
+  if (!sameWord(across.receivingAssetId, p.usdc)) return "wrongDestinationToken";
+
+  let message;
+  try {
+    message = decodeAbiParameters(ACROSS_MESSAGE_PARAMS, across.message);
+    if (encodeAbiParameters(ACROSS_MESSAGE_PARAMS, message).toLowerCase() !== across.message.toLowerCase()) {
+      return "nonCanonicalCalldata";
+    }
+  } catch {
+    return "calldataMismatch";
+  }
+  const [, steps, refundReceiver] = message;
+  if (!sameAddress(refundReceiver, p.account)) return "wrongRefundReceiver";
+  if (steps.length !== 1) return "wrongTarget";
+  return checkHubStep(steps[0] as SwapStep, p, call);
 }
 
 export type ReceivingOutcome = {

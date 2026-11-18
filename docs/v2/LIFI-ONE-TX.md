@@ -40,7 +40,8 @@ change the panel reads `hub.trustedRouter(executor) == false` and keeps the two-
      shows the existing "USDC arrived, PPL not bought" top-up button for that exact amount.
 
 Same-chain Base USDT → USDC works the same way. LI.FI sends the buyer's transaction straight to
-the Executor, so a revert there undoes everything and the buyer keeps the USDT.
+the Executor (`swapAndExecute`; the buyer approves LI.FI's `ERC20Proxy`, which the Executor pulls
+through), so a revert there undoes everything and the buyer keeps the USDT.
 
 ### Two-step fallback (kept)
 
@@ -80,6 +81,11 @@ Evidence:
 their own calldata, so whitelisting it lets anyone buy **for** any verified recipient with their
 own USDC (and anyone can copy a pending buyer's 60-minute attestation from public calldata, which
 only binds that buyer's own account to that buyer's person: the intended effect).
+After a failed cross-chain attempt (the destination call reverted, so the binding was rolled back
+and the USDC refunded), that attestation stays public and valid until its deadline (up to 60
+minutes), so anyone can submit it with `verifyFor` and permanently pin that person to that wallet
+(`pinnedAccount`, which survives `unbind`); this is intended, since it is the wallet the user proved
+they own, but it means a failed attempt still fixes the person's Base account.
 - **Before:** router buys had a count limit (`MAX_ROUTER_BUYS_24H = 5`). That was **not** safe: five
   minimum buys ($50, all PPL to the victim) locked the victim's one-signature buys for 24 hours.
 - **Now:** router buys have **no count limit**. They have a router minimum, `ROUTER_MIN_BUY_USD6 = 40e6`
@@ -88,8 +94,9 @@ only binds that buyer's own account to that buyer's person: the intended effect)
   cannot overflow. A routed buy with 49 attacker entries in the window costs < 400k gas
   (`test_m1_routedBuyGasWithFullWindow`), under the 500k/650k destination gas limits.
 - **Remaining grief:** the attacker must spend the victim's whole $2k daily cap, and the victim
-  receives all of those PPL. Router buys still never touch the person's own `maxBuysPer24h` slots
-  or cooldown, so the victim can always buy directly on Base.
+  receives all of those PPL. Router buys never touch the person's own `maxBuysPer24h` slots or
+  cooldown, but the $2k/24h amount cap is shared: once router buys exhaust it, a direct buy on Base
+  also reverts `BuyDayCap` until the 24-hour window frees up.
 - **Product effect:** the one-signature path starts at $40. The site does not offer it below that
   (`belowRouterMin`); smaller amounts use the two-step path (direct buy, $10 minimum).
 - **Size:** this fix fits the EIP-170 margin. A bucketed router window without a minimum (fold
@@ -100,18 +107,45 @@ only binds that buyer's own account to that buyer's person: the intended effect)
 
 Site-side quote checks (audit M2, L1, L2):
 - **The source transaction the buyer signs is pinned**, not just the quote summary:
-  - `transactionRequest.to` and `estimate.approvalAddress` must be the LI.FI Diamond
+  - Cross-chain: `transactionRequest.to` and `estimate.approvalAddress` must be the LI.FI Diamond
     `0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE`. It is the same address on every source chain we
     list, per `lifinance/contracts/deployments/{mainnet,bsc,polygon,arbitrum,optimism,avalanche,base}.json`,
     checked 18 Nov 2026.
+  - Base → Base: LI.FI sends the transaction to the Executor (`0x4DaC9d17…F110`), which pulls the
+    token through its `ERC20Proxy` (`0x74a55CaDb12501A3707E9F3C5dfd8b563C6A5940`, `deployments/base.json`).
+    So `to` must be the Executor and `approvalAddress` (the spender the buyer approves) the
+    ERC20Proxy; anything else is refused.
   - `value` must be 0, since every source token is an ERC-20.
   - `fromAmount` must equal `action.fromAmount` and be ≤ `usdcIn` × 1.03 in token units
     (`MAX_SOURCE_OVERPAY_BPS = 300`; live quotes were 0.3–0.9% above).
-  - `transactionRequest.data` must contain our exact hub calldata.
-  - Cross-chain, its `ILiFi.BridgeData` must name the buyer as receiver, Base as destination and
-    a destination call, and the buyer must also appear outside the hub calldata as the refund
-    receiver of the destination message.
-  - A real captured LI.FI quote passes all of these (unit test with fixture).
+  - `transactionRequest.data` is fully ABI-decoded (`checkSourceCalldata`, no substring search) and
+    must be canonically encoded: re-encoding the decoded values must give the same bytes, so every
+    field is read at its 32-byte-aligned position, exactly as the LI.FI contracts' `abi.decode` reads it.
+  - Only these entry points are accepted; any other selector is refused (`unsupportedFacet`), and the
+    site falls back to two-step:
+    - cross-chain: `AcrossFacetV4.swapAndStartBridgeTokensViaAcrossV4` (`0x1794958f`) and
+      `startBridgeTokensViaAcrossV4`;
+    - Base → Base: `Executor.swapAndExecute` (`0xa83cbaa3`).
+  - Across: `BridgeData` names the buyer as receiver, Base as destination and a destination call;
+    source swaps start from the buyer's token and end in the bridged token. `AcrossV4Data` sends
+    to LI.FI `ReceiverAcrossV4` on Base (`0x33b255b5…9871`), in Base USDC, with the buyer as the
+    source-chain refund address (unfilled deposits). The destination message
+    `(bytes32, SwapData[], address receiver)` must be exactly one step — `callTo = approveTo = hub`,
+    `sendingAssetId = USDC`, `fromAmount ≥ usdcIn`, calldata byte-for-byte ours — and
+    `receiver = buyer` (leftovers, and everything if the hub call reverts). Without source swaps,
+    `outputAmount ≥ usdcIn`; with swaps the facet recomputes `outputAmount` on-chain from the swap
+    result (`outputAmountMultiplier`), so the guaranteed amount is checked through the quote's
+    `toAmountMin ≥ usdcIn` instead. A wrong multiplier can only make the fill fail or come short,
+    which refunds the buyer.
+  - Base → Base: `swapAndExecute` must pull exactly `fromAmount` of the buyer's source token, send
+    every leftover to the buyer (`_receiver`), and end with our hub call (same step checks as
+    above); no earlier step may call or approve the hub. Earlier steps (fee, DEX swap) are LI.FI's;
+    if they misroute funds the hub call lacks USDC and the whole transaction reverts.
+  - Stargate V2 (seen for Avalanche) is not decoded: its quotes also carry a native messaging fee
+    (`value > 0`). Avalanche therefore stays on the two-step path until it is added.
+  - Real captured LI.FI quotes pass all of these: Polygon USDT → Across → `verifyAndBuy` and
+    Base USDT → `swapAndExecute` → `buy` (unit tests with fixtures), plus live read-only quotes
+    from Ethereum, BNB (USDC), Polygon, Arbitrum and Optimism on 18 Nov 2026.
 - **Outcome on Base comes from the receiving transaction's logs, not a balance delta.**
   `Bought(recipient = buyer)` means success. USDC `Transfer`s to the buyer in that tx are the
   leftover (after success) or the refund (no `Bought`). Executor transfers to anything other
@@ -201,6 +235,22 @@ hub deployment** of this code, then the usual post-deploy setup and the `trusted
 in the payload doc against the **new** hub address. No mainnet v2 hub address is in the repo yet.
 Nothing was deployed (no testnet either).
 
+**Runtime size (EIP-170, limit 24,576 B).** With `via_ir = true` the hub's bytecode depends on
+which other sources are in the same solc input, not only on the hub's own sources and settings
+(identical sources and compiler settings in the artifact metadata, different bytecode). Measured
+on this branch (solc 0.8.24, optimizer 200 runs, `paris`):
+
+| Build | Sources in the solc input | `PplCurveHubV2` runtime | Margin |
+| - | - | - | - |
+| Deploy command `forge script script/DeployPplSaleV2.s.sol` | 124 | **24,281 B** | **295 B** |
+| Hub alone (`forge build src/sale/PplCurveHubV2.sol`; the shape a block-explorer verification uses) | 21 | 24,121 B | 455 B |
+| Full `forge build` at `4308311` (the Reviewer's number) | 199 | 24,420 B | 156 B |
+| Full `forge build` after the flaky-test fix (hub sources unchanged) | 199 | 24,121 B | 455 B |
+
+Every build fits; the worst seen is 156 B. Before the deploy: build the hub from one pinned
+input (hub alone, or the exact deploy command), deploy that artifact, and verify on the explorer
+with the same input, otherwise the explorer's recompiled bytecode may not match the deployed one.
+
 ## 4. Destination-call support by source network (checked 18 Nov 2026)
 
 Method: read-only `POST /v1/quote/contractCalls` for 20 USDC on Base with a `buy` call. No
@@ -213,8 +263,8 @@ transactions were sent.
 | Polygon (137) | USDT | Yes | swap → Across | one signature |
 | Arbitrum (42161) | USDT0 | Yes | Across | one signature |
 | Optimism (10) | USDT | Yes | swap → Across | one signature |
-| Avalanche (43114) | USDT | Yes | swap → Stargate V2 → ReceiverStargateV2 → Executor | one signature |
-| Base (8453) | USDT → USDC | Yes (same chain, transaction goes to the Executor) | swap → Executor | one signature |
+| Avalanche (43114) | USDT, USDC | Yes | swap → Stargate V2 → ReceiverStargateV2 → Executor | **two-step** (Stargate not decoded, needs `value > 0`; see §2) |
+| Base (8453) | USDT → USDC | Yes (same chain, transaction goes to the Executor, spender = ERC20Proxy) | swap → Executor | one signature |
 | Solana | USDT, USDC | **No**: `422 "Contract calls are not supported for non-EVM chains yet"` | — | two-step widget |
 | Tron | USDT | **No**: same 422 | — | two-step widget |
 
