@@ -378,6 +378,7 @@
       "oneTxQuoting": "Mencari rute…",
       "oneTxBridging": "Mem-bridge dan membeli… biasanya {eta}",
       "oneTxNoRoute": "Belum ada rute satu tanda tangan saat ini. Gunakan penukaran dua langkah di bawah.",
+      "oneTxMin": "Pembelian satu tanda tangan mulai dari $40. Untuk jumlah lebih kecil, gunakan penukaran dua langkah di bawah.",
       "oneTxUnavailable": "Pembelian satu tanda tangan belum tersedia dari jaringan ini. Gunakan penukaran dua langkah di bawah.",
       "oneTxTwoStep": "Lebih suka dua langkah? Tukar dulu dengan LI.FI",
       "oneTxRequote": "Penawaran kedaluwarsa. Periksa jumlah baru dan konfirmasi lagi.",

@@ -7,7 +7,6 @@ import {
   custom,
   erc20Abi,
   http,
-  parseEventLogs,
   type Address,
   type Hex,
 } from "viem";
@@ -22,6 +21,8 @@ import {
   LIFI_BASE_CHAIN_ID,
   ONE_TX_QUOTE_TTL_MS,
   proofLeavesTime,
+  receivingOutcome,
+  ROUTER_MIN_BUY_USD6,
   sourceToken,
   statusPhase,
   supportsDestinationCall,
@@ -41,7 +42,16 @@ export type OneTxState =
   | { step: "approving" }
   | { step: "sending" }
   | { step: "bridging"; txHash: Hex }
-  | { step: "done"; txHash: Hex; pplOutWei: bigint; boughtAtMs: number }
+  | {
+      step: "done";
+      txHash: Hex;
+      pplOutWei: bigint;
+      boughtAtMs: number;
+      /** USDC the Executor returned to the buyer after the buy (quote minimum above `usdcIn`). */
+      leftoverUsd6: bigint;
+      /** USDC the Executor sent somewhere other than hub, treasury or buyer; must be 0 (audit L1). */
+      misroutedUsd6: bigint;
+    }
   | { step: "refunded"; refundedUsd6: bigint }
   | { step: "error"; reason: string };
 
@@ -110,6 +120,10 @@ export function useLifiOneTx() {
       const token = sourceToken(input.fromChain, input.symbol);
       if (!token) {
         set({ step: "unavailable", reason: "unsupportedToken" });
+        return;
+      }
+      if (input.usdcIn < ROUTER_MIN_BUY_USD6) {
+        set({ step: "unavailable", reason: "belowRouterMin" });
         return;
       }
       set({ step: "quoting" });
@@ -233,24 +247,40 @@ export function useLifiOneTx() {
         const base = createPublicClient({ chain: chain.chain, transport: http(undefined, { timeout: 12_000 }) });
         if (receivingHash) {
           const receipt = await base.waitForTransactionReceipt({ hash: receivingHash });
-          const bought = parseEventLogs({ abi: PPL_CURVE_HUB_V2_ABI, eventName: "Bought", logs: receipt.logs }).find(
-            (log) =>
-              log.address.toLowerCase() === params.hub.toLowerCase() &&
-              log.args.recipient.toLowerCase() === account.toLowerCase(),
-          );
-          if (bought) {
+          const treasury = await base
+            .readContract({ address: params.hub, abi: PPL_CURVE_HUB_V2_ABI, functionName: "treasury" })
+            .catch(() => null);
+          // Outcome from the receiving transaction's own logs, not from a balance delta (audit L2).
+          const outcome = receivingOutcome(receipt.logs, {
+            usdc: params.usdc,
+            hub: params.hub,
+            buyer: account,
+            treasury,
+          });
+          if (outcome.pplOutWei !== null) {
             const done = {
               step: "done" as const,
               txHash: receivingHash,
-              pplOutWei: bought.args.pplOut,
+              pplOutWei: outcome.pplOutWei,
               boughtAtMs: Date.now(),
+              leftoverUsd6: outcome.toBuyerUsd6,
+              misroutedUsd6: outcome.misroutedUsd6,
             };
+            if (outcome.misroutedUsd6 > BigInt(0)) console.warn("LI.FI leftover not returned to buyer", receivingHash);
             set(done);
             return done;
           }
+          // No Bought event: the destination call reverted and the bridge receiver sent the USDC to
+          // the buyer on Base in this same transaction.
+          if (outcome.toBuyerUsd6 > BigInt(0)) {
+            const refunded = { step: "refunded" as const, refundedUsd6: outcome.toBuyerUsd6 };
+            set(refunded);
+            return refunded;
+          }
+          set({ step: "error", reason: "unknownOutcome" });
+          return null;
         }
-        // No Bought event: the destination call reverted and the bridge receiver sent the USDC to
-        // the buyer on Base. Measure it on-chain so the top-up button spends only what arrived.
+        // No receiving hash from LI.FI status: fall back to the on-chain balance increase.
         const after = await waitForUsdcIncrease(chain, account, before);
         const refundedUsd6 = usdcBalanceDelta(before, after);
         const refunded = { step: "refunded" as const, refundedUsd6 };

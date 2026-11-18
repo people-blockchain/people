@@ -16,6 +16,7 @@ interface IMintable {
 /// @dev Audit-fix tests: A1 attested sell-back, A2 verification for the whole sale, A3 trusted routers,
 /// A4 exact rolling 24h windows, A5 person-keyed state, A6 50/50 split (see PplCurveHubV2.sol).
 contract PplCurveHubV2AuditTest is HubV2Base {
+    uint256 internal constant RMIN = 40e6; // PplCurveHubV2.ROUTER_MIN_BUY_USD6
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
     address internal carol = makeAddr("carol");
@@ -476,7 +477,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(hub.buyRemaining24h(router), DAY_CAP, "router has no counter");
         // no cooldown on the router path, and the victim may buy on its own right away
         vm.prank(router);
-        hub.buy(MIN_BUY, 0, victim, address(0));
+        hub.buy(RMIN, 0, victim, address(0));
         _buy(victim, MIN_BUY);
 
         // revoked again
@@ -484,7 +485,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _warpBy(61);
         vm.prank(router);
         vm.expectRevert(PplCurveHubV2.UntrustedRouter.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
+        hub.buy(RMIN, 0, victim, address(0));
 
         vm.prank(owner);
         vm.expectRevert(PplCurveHubV2.ZeroAddress.selector);
@@ -494,35 +495,89 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         hub.queueSetTrustedRouter(mallory, true);
     }
 
-    function test_a3_routerBuysCappedAtFivePer24h() public {
+    /// @dev M1 (audit of e500d1c): router buys have no count limit, so minimum buys through a
+    /// permissionless router cannot lock a person's routed (one-signature) buys. They have a higher
+    /// minimum (`ROUTER_MIN_BUY_USD6`), so only the shared $2k/24h amount cap bounds them, and the
+    /// caller pays for every PPL the victim receives.
+    function test_m1_routerBuysHaveNoCountLimit() public {
         address router = makeAddr("router");
         _prepare(victim);
         _fund(router, 1_000_000e6);
         _trust(router);
-        assertEq(hub.MAX_ROUTER_BUYS_24H(), 5);
-        uint256 t0 = _now();
-        for (uint256 i; i < 5; ++i) {
+        assertEq(hub.ROUTER_MIN_BUY_USD6(), RMIN);
+        // an attacker makes 20 minimum router buys for the victim in one block
+        for (uint256 i; i < 20; ++i) {
             vm.prank(router);
-            hub.buy(MIN_BUY, 0, victim, address(0));
+            hub.buy(RMIN, 0, victim, address(0));
         }
-        vm.prank(router);
-        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
-        // a second trusted router shares the same per-person counter
+        // the victim's own routed buy (e.g. via LI.FI, another router) still goes through right away
         address router2 = makeAddr("router2");
         _fund(router2, 1_000_000e6);
         _trust(router2);
         vm.prank(router2);
-        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
-        // exactly 24 h after the first router buy one slot frees up
-        vm.warp(t0 + 24 hours - 1);
+        hub.buy(MAX_BUY, 0, victim, address(0));
+        (uint256 used, uint256 n) = hub.routerUsage24h(victim);
+        assertEq(used, 20 * RMIN + MAX_BUY);
+        assertEq(n, 21);
+    }
+
+    function test_m1_routerBuyBelowRouterMinimumReverts() public {
+        address router = makeAddr("router");
+        _prepare(victim);
+        _fund(router, 1_000_000e6);
+        _trust(router);
         vm.prank(router);
-        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
-        vm.warp(t0 + 24 hours);
+        vm.expectRevert(PplCurveHubV2.BelowMin.selector);
+        hub.buy(RMIN - 1, 0, victim, address(0));
+        // the person's own direct buy keeps the normal minimum
+        _buy(victim, MIN_BUY);
+        // an owner-set minimum above the router minimum applies to router buys too
+        _limits(20, 100e6, 10, 1e6);
         vm.prank(router);
-        hub.buy(MIN_BUY, 0, victim, address(0));
+        vm.expectRevert(PplCurveHubV2.BelowMin.selector);
+        hub.buy(99e6, 0, victim, address(0));
+        vm.prank(router);
+        hub.buy(100e6, 0, victim, address(0));
+    }
+
+    /// @dev The window can never overflow: at the router minimum the $2k cap stops the router path
+    /// at exactly `CAPACITY` (50) live entries. Worst-case gas of a routed buy after that is bounded.
+    function test_m1_routerWindowFullAtCapNeverOverflows() public {
+        address router = makeAddr("router");
+        _prepare(victim);
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        for (uint256 i; i < 50; ++i) {
+            vm.prank(router);
+            hub.buy(RMIN, 0, victim, address(0));
+        }
+        (uint256 used, uint256 n) = hub.routerUsage24h(victim);
+        assertEq(used, 50 * RMIN);
+        assertEq(n, 50);
+        assertEq(hub.buyRemaining24h(victim), 0);
+        vm.prank(router);
+        vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
+        hub.buy(RMIN, 0, victim, address(0));
+    }
+
+    /// @dev Worst case for a victim's one-signature buy: 49 attacker router entries in the window
+    /// (just under the cap), then the victim's routed buy. Its gas must stay well under the site's
+    /// LI.FI destination gas limit (HUB_BUY_GAS_LIMIT = 500k; verifyAndBuy uses 650k).
+    function test_m1_routedBuyGasWithFullWindow() public {
+        address router = makeAddr("router");
+        _prepare(victim);
+        _fund(router, 1_000_000e6);
+        _trust(router);
+        for (uint256 i; i < 49; ++i) {
+            vm.prank(router);
+            hub.buy(RMIN, 0, victim, address(0));
+        }
+        vm.prank(router);
+        uint256 g = gasleft();
+        hub.buy(RMIN, 0, victim, address(0));
+        g -= gasleft();
+        emit log_named_uint("routed buy gas with 49 live router entries", g);
+        assertLt(g, 400_000);
     }
 
     /// @dev Griefing: an attacker using a public trusted router (it runs any user's calldata) with
@@ -534,14 +589,11 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         _prepare(victim);
         _limits(20, MIN_BUY, 10, 1e6);
 
-        // the attacker maxes out the router path for the victim at the minimum buy
-        for (uint256 i; i < 5; ++i) {
+        // the attacker makes many router buys for the victim at the minimum buy
+        for (uint256 i; i < 10; ++i) {
             vm.prank(router);
-            hub.buy(MIN_BUY, 0, victim, address(0));
+            hub.buy(RMIN, 0, victim, address(0));
         }
-        vm.prank(router);
-        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
         (, uint256 ownBuys,,) = hub.usage24h(victim);
         assertEq(ownBuys, 0, "victim window empty");
         assertEq(hub.lastBuyAt(victim), 0, "victim cooldown untouched");
@@ -572,7 +624,7 @@ contract PplCurveHubV2AuditTest is HubV2Base {
         assertEq(hub.buyRemaining24h(victim), 0);
         vm.prank(router);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, victim, address(0));
+        hub.buy(RMIN, 0, victim, address(0));
         _warpBy(60);
         vm.prank(victim);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);

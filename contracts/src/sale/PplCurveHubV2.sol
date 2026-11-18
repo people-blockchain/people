@@ -170,9 +170,14 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// @dev Per person per exact rolling 24 hours (A4, see `RollingWindow24h`).
     uint256 public constant BUY_CAP_DAY_USD6 = 2_000e6;
     uint256 public constant BUY_COOLDOWN = 60;
-    /// @dev Buys a trusted router makes for a person (`recipient != msg.sender`) per exact rolling
-    /// 24 hours. Counted apart from the person's own `maxBuysPer24h` slots (owner decision).
-    uint256 public constant MAX_ROUTER_BUYS_24H = 5;
+    /// @dev Minimum buy when a trusted router buys for a person (`recipient != msg.sender`), or
+    /// `minBuyUsd6` if that is higher. Router buys have no count limit (a count limit let anyone lock
+    /// a person's routed buys for 24 h with a few minimum buys through a permissionless router); they
+    /// stay apart from the person's own `maxBuysPer24h` slots and share the $2k/24h amount cap. With
+    /// this minimum the cap ends the router window at `BUY_CAP_DAY_USD6 / ROUTER_MIN_BUY_USD6` = 50
+    /// live entries = `RollingWindow24h.CAPACITY`, so the window can never overflow (the one possible
+    /// smaller entry is the final partial fill, which graduates the sale).
+    uint256 public constant ROUTER_MIN_BUY_USD6 = 40e6;
     uint256 public constant TERM = 730 days;
     /// @dev Launch-week label for `phase()` only: verification is required for the whole sale (A2).
     uint256 public constant WHITELIST_PERIOD = 7 days;
@@ -376,7 +381,6 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     error Cooldown();
     error BuyDayCap();
     error TooManyBuys();
-    error TooManyRouterBuys();
     error ZeroOut();
     error Slippage();
     error SellBackClosed();
@@ -446,8 +450,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// owner-approved cross-chain swap executor that pays on the user's behalf). Arbitrary callers
     /// can therefore no longer reset a victim's cooldown or spend the victim's daily limit. A trusted
     /// router runs calldata chosen by its own users, so `recipient = victim` stays reachable through
-    /// it. Router buys therefore use their own counter (`MAX_ROUTER_BUYS_24H` per person per rolling
-    /// 24 h) and neither occupy the person's own `maxBuysPer24h` slots nor reset the person's
+    /// it. Router buys therefore use their own window (no count limit, `ROUTER_MIN_BUY_USD6` minimum)
+    /// and neither occupy the person's own `maxBuysPer24h` slots nor reset the person's
     /// cooldown, so a router caller cannot lock a victim out of buying. The $2k/24h amount cap stays
     /// shared by both paths (else a router would lift it); using it up is never free: the caller pays
     /// real USDC and the victim receives all of the PPL.
@@ -492,9 +496,11 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
         if (usdcIn > MAX_BUY_USD6) revert AboveMax();
 
         uint256 remaining = RAISE_CAP_USD6 - raisedUsd6;
-        // Below-min is only allowed when it completes the raise (final partial fill).
-        if (usdcIn < minBuyUsd6 && usdcIn < remaining) revert BelowMin();
         bool viaRouter = recipient != msg.sender;
+        uint256 minIn = minBuyUsd6;
+        if (viaRouter && minIn < ROUTER_MIN_BUY_USD6) minIn = ROUTER_MIN_BUY_USD6;
+        // Below-min is only allowed when it completes the raise (final partial fill).
+        if (usdcIn < minIn && usdcIn < remaining) revert BelowMin();
         if (!viaRouter) {
             uint64 last = _lastBuyAt[person];
             if (last != 0 && block.timestamp < uint256(last) + BUY_COOLDOWN) revert Cooldown();
@@ -502,13 +508,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
 
         uint256 charged = usdcIn < remaining ? usdcIn : remaining;
         (uint256 bought24h, uint256 buys24h) = RollingWindow24h.prune(_buyWindow[person], RollingWindow24h.CAPACITY);
-        (uint256 routerBought24h, uint256 routerBuys24h) =
-            RollingWindow24h.prune(_routerBuyWindow[person], RollingWindow24h.CAPACITY);
-        if (viaRouter) {
-            if (routerBuys24h >= MAX_ROUTER_BUYS_24H) revert TooManyRouterBuys();
-        } else if (buys24h >= maxBuysPer24h) {
-            revert TooManyBuys();
-        }
+        (uint256 routerBought24h,) = RollingWindow24h.prune(_routerBuyWindow[person], RollingWindow24h.CAPACITY);
+        if (!viaRouter && buys24h >= maxBuysPer24h) revert TooManyBuys();
         if (bought24h + routerBought24h + charged > BUY_CAP_DAY_USD6) revert BuyDayCap();
 
         uint256 newRaised = raisedUsd6 + charged;
@@ -642,6 +643,8 @@ contract PplCurveHubV2 is ReentrancyGuard, Ownable2Step, Pausable, EIP712 {
     /// and cannot be replayed on another chain, another hub or after an `unbind`.
     /// @dev Idempotent: if `account` is already bound to `personId` it returns without changes, so a
     /// front-run submission of the same attestation cannot make a later destination call revert.
+    /// In that case the signature and deadline are not checked (any bytes pass): nothing changes,
+    /// so there is nothing to authorise. Every state change needs a valid, unexpired attestation.
     /// All other rules are those of `verify` (pinning, one account per person, expiry).
     function verifyFor(address account, bytes32 personId, uint256 deadline, bytes calldata sig) external {
         _bind(account, personId, deadline, sig, true);

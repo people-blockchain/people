@@ -378,6 +378,7 @@
       "oneTxQuoting": "Recherche d’un itinéraire…",
       "oneTxBridging": "Transfert et achat en cours… généralement {eta}",
       "oneTxNoRoute": "Aucun itinéraire en une signature pour le moment. Utilisez l’échange en deux étapes ci-dessous.",
+      "oneTxMin": "L’achat en une signature commence à 40 $. Pour un montant plus petit, utilisez l’échange en deux étapes ci-dessous.",
       "oneTxUnavailable": "L’achat en une signature n’est pas encore disponible depuis ce réseau. Utilisez l’échange en deux étapes ci-dessous.",
       "oneTxTwoStep": "Vous préférez deux étapes ? Échangez d’abord avec LI.FI",
       "oneTxRequote": "Le devis a expiré. Vérifiez le nouveau montant et confirmez à nouveau.",

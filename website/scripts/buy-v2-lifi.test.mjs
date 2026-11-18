@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { decodeFunctionData } from "viem";
+import { readFileSync } from "node:fs";
+
+import { decodeFunctionData, encodeAbiParameters, encodeEventTopics, erc20Abi, padHex } from "viem";
 
 import { PPL_CURVE_HUB_V2_ABI } from "../src/lib/sale/v2/abi.ts";
 import {
@@ -22,6 +24,12 @@ import {
   statusPhase,
   supportsDestinationCall,
   validateOneTxQuote,
+  LIFI_DIAMOND,
+  MAX_SOURCE_OVERPAY_BPS,
+  checkSourceCalldata,
+  receivingOutcome,
+  sourceAmountWithinMargin,
+  ROUTER_MIN_BUY_USD6,
 } from "../src/lib/sale/v2/lifi-route.ts";
 import { isV2OneTxEnabled, twoStepBuyAmountUsd6, usdcBalanceDelta } from "../src/lib/sale/v2/logic.ts";
 
@@ -42,12 +50,57 @@ const params = {
   minPplOut: BigInt("990000000000000000000"),
 };
 
+const BRIDGE_DATA = {
+  type: "tuple",
+  components: [
+    { name: "transactionId", type: "bytes32" },
+    { name: "bridge", type: "string" },
+    { name: "integrator", type: "string" },
+    { name: "referrer", type: "address" },
+    { name: "sendingAssetId", type: "address" },
+    { name: "receiver", type: "address" },
+    { name: "minAmount", type: "uint256" },
+    { name: "destinationChainId", type: "uint256" },
+    { name: "hasSourceSwaps", type: "bool" },
+    { name: "hasDestinationCall", type: "bool" },
+  ],
+};
+const SWAP_DATA = {
+  type: "tuple[]",
+  components: [
+    { name: "callTo", type: "address" },
+    { name: "approveTo", type: "address" },
+    { name: "sendingAssetId", type: "address" },
+    { name: "receivingAssetId", type: "address" },
+    { name: "fromAmount", type: "uint256" },
+    { name: "callData", type: "bytes" },
+    { name: "requiresDeposit", type: "bool" },
+  ],
+};
+
+/** Source tx calldata in LI.FI's layout: selector + (BridgeData, ..., destination message). */
+function mockSourceData({ callData, receiver = BUYER, refund = BUYER, destinationChainId = 8453, hasDestinationCall = true }) {
+  const txId = padHex("0x01", { size: 32 });
+  const message = encodeAbiParameters(
+    [{ type: "bytes32" }, SWAP_DATA, { type: "address" }],
+    [txId, [{ callTo: HUB, approveTo: HUB, sendingAssetId: USDC, receivingAssetId: USDC, fromAmount: BigInt(100500000), callData, requiresDeposit: true }], refund],
+  );
+  const args = encodeAbiParameters(
+    [BRIDGE_DATA, { type: "bytes" }],
+    [
+      { transactionId: txId, bridge: "across", integrator: "PEOPLE", referrer: "0x0000000000000000000000000000000000000000", sendingAssetId: BSC_USDT, receiver, minAmount: BigInt(100500000), destinationChainId: BigInt(destinationChainId), hasSourceSwaps: true, hasDestinationCall },
+      message,
+    ],
+  );
+  return `0x1794958f${args.slice(2)}`;
+}
+
 /** Shape of a real `/quote/contractCalls` answer (BSC USDT -> Across -> Base Executor -> hub.buy). */
-function mockQuote(overrides = {}) {
-  const callData = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: params.minPplOut, recipient: BUYER });
+function mockQuote(overrides = {}, { verification, sourceData } = {}) {
+  const callData = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: params.minPplOut, recipient: BUYER, verification });
   return {
     tool: "across",
-    action: { fromChainId: 56, toChainId: 8453, fromAddress: BUYER, fromToken: { address: BSC_USDT, symbol: "USDT", decimals: 18 } },
+    action: { fromChainId: 56, toChainId: 8453, fromAddress: BUYER, fromAmount: "101250000000000000000", fromToken: { address: BSC_USDT, symbol: "USDT", decimals: 18 } },
     estimate: {
       fromAmount: "101250000000000000000",
       approvalAddress: DIAMOND,
@@ -77,7 +130,7 @@ function mockQuote(overrides = {}) {
         estimate: { toAmount: "0", toAmountMin: "0" },
       },
     ],
-    transactionRequest: { to: DIAMOND, data: "0xdeadbeef", value: "0x0", chainId: 56 },
+    transactionRequest: { to: DIAMOND, data: sourceData ?? mockSourceData({ callData }), value: "0x0", chainId: 56 },
     ...overrides,
   };
 }
@@ -275,13 +328,7 @@ test("new buyer: the destination call is verifyAndBuy with the attestation for t
 
 test("new buyer: quote validation requires verifyAndBuy calldata, plain buy is refused", () => {
   const withVerify = { ...params, verification: PROOF };
-  const q = mockQuote();
-  q.includedSteps[2].action.toContractCallData = encodeHubBuy({
-    usdcIn: params.usdcIn,
-    minPplOut: params.minPplOut,
-    recipient: BUYER,
-    verification: PROOF,
-  });
+  const q = mockQuote({}, { verification: PROOF });
   assert.equal(validateOneTxQuote(q, withVerify).ok, true);
   // A plain buy for an unbound buyer would revert NotVerified on Base: refuse it up front.
   const plain = validateOneTxQuote(mockQuote(), withVerify);
@@ -308,4 +355,129 @@ test("attestation deadline: routed proofs live longer and must outlast the bridg
   assert.equal(proofLeavesTime(sec + 9 * 60, now, 30), false, "needs at least 10 minutes");
   assert.equal(proofLeavesTime(sec + 30 * 60, now, 20 * 60), false, "needs 3x the ETA");
   assert.equal(proofLeavesTime(sec - 1, now, 0), false);
+});
+
+test("M2: the source transaction itself is pinned: Diamond, no value, approval, amount margin", () => {
+  assert.equal(LIFI_DIAMOND, DIAMOND);
+  const q = mockQuote();
+  const reason = (quote, p = params) => {
+    const r = validateOneTxQuote(quote, p);
+    return r.ok ? "ok" : r.reason;
+  };
+  assert.equal(reason(q), "ok");
+  assert.equal(reason({ ...q, transactionRequest: { ...q.transactionRequest, to: HUB } }), "unexpectedTarget");
+  assert.equal(reason({ ...q, transactionRequest: { ...q.transactionRequest, value: "1" } }), "unexpectedValue");
+  assert.equal(reason({ ...q, transactionRequest: { ...q.transactionRequest, value: undefined } }), "ok");
+  assert.equal(reason({ ...q, estimate: { ...q.estimate, approvalAddress: HUB } }), "unexpectedApproval");
+  assert.equal(reason({ ...q, estimate: { ...q.estimate, approvalAddress: undefined } }), "unexpectedApproval");
+  // fromAmount: 100 USDC asked, 18-decimals USDT source; margin 3%
+  assert.equal(MAX_SOURCE_OVERPAY_BPS, 300);
+  const amount = (raw) => ({ ...q, action: { ...q.action, fromAmount: raw }, estimate: { ...q.estimate, fromAmount: raw } });
+  assert.equal(reason(amount("103000000000000000000")), "ok");
+  assert.equal(reason(amount("103000000000000000001")), "overpay");
+  // the amount the Diamond pulls must equal the amount shown and approved
+  assert.equal(reason({ ...q, action: { ...q.action, fromAmount: "200000000000000000000" } }), "noFromAmount");
+  assert.equal(sourceAmountWithinMargin(BigInt(10_300_000), 6, usd6(10)), true);
+  assert.equal(sourceAmountWithinMargin(BigInt(10_300_001), 6, usd6(10)), false);
+  // a source token we do not list is refused
+  assert.equal(reason({ ...q, action: { ...q.action, fromToken: { address: HUB } } }, { ...params, fromToken: HUB }), "wrongSourceToken");
+});
+
+test("M2: receiver and refund receiver inside the source calldata must be the buyer", () => {
+  const callData = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: params.minPplOut, recipient: BUYER });
+  const other = "0x2222222222222222222222222222222222222222";
+  assert.equal(checkSourceCalldata(mockSourceData({ callData }), params, callData), null);
+  assert.equal(checkSourceCalldata(mockSourceData({ callData, receiver: other }), params, callData), "wrongReceiver");
+  assert.equal(checkSourceCalldata(mockSourceData({ callData, refund: other }), params, callData), "wrongRefundReceiver");
+  assert.equal(checkSourceCalldata(mockSourceData({ callData, destinationChainId: 10 }), params, callData), "wrongDestination");
+  assert.equal(checkSourceCalldata(mockSourceData({ callData, hasDestinationCall: false }), params, callData), "noContractCall");
+  const otherCall = encodeHubBuy({ usdcIn: params.usdcIn, minPplOut: BigInt(1), recipient: BUYER });
+  assert.equal(checkSourceCalldata(mockSourceData({ callData: otherCall }), params, callData), "calldataMismatch");
+  assert.equal(checkSourceCalldata("0xdeadbeef", params, callData), "calldataMismatch");
+  // via the validator: a quote whose tx pays leftovers/refunds elsewhere is refused
+  const bad = mockQuote({}, { sourceData: mockSourceData({ callData, refund: other }) });
+  assert.equal(validateOneTxQuote(bad, params).reason, "wrongRefundReceiver");
+});
+
+test("M2: a real captured LI.FI quote (Polygon USDT -> Across -> verifyAndBuy) passes every check", () => {
+  const fx = JSON.parse(readFileSync(new URL("./fixtures/lifi-quote-polygon-verifyandbuy.json", import.meta.url), "utf8"));
+  const call = decodeFunctionData({ abi: PPL_CURVE_HUB_V2_ABI, data: fx.request.contractCalls[0].toContractCallData });
+  assert.equal(call.functionName, "verifyAndBuy");
+  const [usdcIn, minPplOut, recipient, referrer, personId, deadline, signature] = call.args;
+  const p = {
+    fromChain: 137,
+    fromToken: fx.request.fromToken,
+    account: recipient,
+    hub: fx.request.contractCalls[0].toContractAddress,
+    usdc: USDC,
+    usdcIn,
+    minPplOut,
+    referrer,
+    verification: { personId, deadline: Number(deadline), signature },
+  };
+  const check = validateOneTxQuote(fx.quote, p);
+  assert.equal(check.ok, true, check.reason);
+  assert.equal(check.summary.tool, "across");
+  assert.equal(check.summary.tx.to, DIAMOND);
+  assert.ok(check.summary.minReceivedUsd6 >= usdcIn);
+  // tampering with the refund receiver inside the real calldata is caught
+  const buyerWord = recipient.toLowerCase().slice(2).padStart(64, "0");
+  const data = fx.quote.transactionRequest.data.toLowerCase();
+  const last = data.lastIndexOf(buyerWord);
+  const tampered = data.slice(0, last) + "0".repeat(24) + "2".repeat(40) + data.slice(last + 64);
+  const q2 = structuredClone(fx.quote);
+  q2.transactionRequest.data = tampered;
+  assert.equal(validateOneTxQuote(q2, p).ok, false);
+});
+
+function transferLog(from, to, value, token = USDC) {
+  return {
+    address: token,
+    topics: encodeEventTopics({ abi: erc20Abi, eventName: "Transfer", args: { from, to } }),
+    data: padHex(`0x${value.toString(16)}`, { size: 32 }),
+  };
+}
+function boughtLog(recipient, pplOut) {
+  return {
+    address: HUB,
+    topics: encodeEventTopics({ abi: PPL_CURVE_HUB_V2_ABI, eventName: "Bought", args: { buyer: LIFI_BASE_EXECUTOR, recipient, referrer: "0x0000000000000000000000000000000000000000" } }),
+    data: encodeAbiParameters(
+      [{ type: "uint256" }, { type: "uint256" }, { type: "uint256" }, { type: "uint256" }],
+      [usd6(100), usd6(50), pplOut, BigInt(0)],
+    ),
+  };
+}
+
+test("L1/L2: outcome comes from the receiving tx logs (leftover to buyer, refund), not a balance delta", () => {
+  const RECEIVER = "0x33b255b5db44A78c34381f89f1a454bc0Ef49871";
+  const TREASURY = "0x3333333333333333333333333333333333333333";
+  const ctx = { usdc: USDC, hub: HUB, buyer: BUYER, treasury: TREASURY };
+  const ppl = BigInt("2000000000000000000000");
+  // success: Receiver -> Executor, Executor -> hub / treasury, Bought, leftover Executor -> buyer
+  const ok = receivingOutcome(
+    [
+      transferLog(RECEIVER, LIFI_BASE_EXECUTOR, usd6(100.5)),
+      transferLog(LIFI_BASE_EXECUTOR, HUB, usd6(50)),
+      transferLog(LIFI_BASE_EXECUTOR, TREASURY, usd6(50)),
+      boughtLog(BUYER, ppl),
+      transferLog(LIFI_BASE_EXECUTOR, BUYER, usd6(0.5)),
+    ],
+    ctx,
+  );
+  assert.deepEqual(ok, { pplOutWei: ppl, toBuyerUsd6: usd6(0.5), misroutedUsd6: BigInt(0) });
+  // leftover sent elsewhere is flagged (L1)
+  const mis = receivingOutcome([boughtLog(BUYER, ppl), transferLog(LIFI_BASE_EXECUTOR, HUB.replace(/1/g, "4"), usd6(0.5))], ctx);
+  assert.equal(mis.misroutedUsd6, usd6(0.5));
+  // refund: no Bought, Receiver -> buyer for the whole amount (L2)
+  const refund = receivingOutcome([transferLog(RECEIVER, BUYER, usd6(100.5))], ctx);
+  assert.deepEqual(refund, { pplOutWei: null, toBuyerUsd6: usd6(100.5), misroutedUsd6: BigInt(0) });
+  // other tokens and a Bought for someone else do not count
+  const noise = receivingOutcome([transferLog(RECEIVER, BUYER, usd6(7), BSC_USDT), boughtLog(HUB, ppl)], ctx);
+  assert.deepEqual(noise, { pplOutWei: null, toBuyerUsd6: BigInt(0), misroutedUsd6: BigInt(0) });
+});
+
+test("M1: one-signature path refuses amounts below the hub's router minimum ($40)", () => {
+  assert.equal(ROUTER_MIN_BUY_USD6, usd6(40));
+  assert.throws(() => buildContractCallsRequest({ ...params, usdcIn: usd6(39.99) }), /belowRouterMin/);
+  assert.equal(buildContractCallsRequest({ ...params, usdcIn: usd6(40) }).toAmount, "40000000");
 });

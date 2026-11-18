@@ -378,6 +378,7 @@
       "oneTxQuoting": "Buscando una ruta…",
       "oneTxBridging": "Transfiriendo y comprando… suele tardar {eta}",
       "oneTxNoRoute": "Ahora no hay ruta con una sola firma. Usa el intercambio en dos pasos de abajo.",
+      "oneTxMin": "La compra con una sola firma empieza en 40 $. Para importes menores usa el intercambio en dos pasos de abajo.",
       "oneTxUnavailable": "La compra con una firma aún no está disponible desde esta red. Usa el intercambio en dos pasos de abajo.",
       "oneTxTwoStep": "¿Prefieres dos pasos? Intercambia primero con LI.FI",
       "oneTxRequote": "La cotización caducó. Revisa el nuevo importe y confirma de nuevo.",

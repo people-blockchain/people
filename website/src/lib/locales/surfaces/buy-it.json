@@ -378,6 +378,7 @@
       "oneTxQuoting": "Ricerca di un percorso…",
       "oneTxBridging": "Trasferimento e acquisto in corso… di solito {eta}",
       "oneTxNoRoute": "Nessun percorso con una firma al momento. Usa lo scambio in due passaggi qui sotto.",
+      "oneTxMin": "L’acquisto con una firma parte da 40 $. Per importi minori usa lo scambio in due passaggi qui sotto.",
       "oneTxUnavailable": "L’acquisto con una firma non è ancora disponibile da questa rete. Usa lo scambio in due passaggi qui sotto.",
       "oneTxTwoStep": "Preferisci due passaggi? Scambia prima con LI.FI",
       "oneTxRequote": "La quotazione è scaduta. Controlla il nuovo importo e conferma di nuovo.",

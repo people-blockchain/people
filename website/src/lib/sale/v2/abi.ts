@@ -190,6 +190,13 @@ export const PPL_CURVE_HUB_V2_ABI = [
   },
   {
     type: "function",
+    name: "treasury",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "address" }],
+  },
+  {
+    type: "function",
     name: "paused",
     stateMutability: "view",
     inputs: [],

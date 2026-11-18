@@ -76,12 +76,54 @@ Evidence:
   `action.fromAddress = 0x4DaC9d1769b9b304cb04741DCDEb2FC14aBdF110`. `eth_getCode` on Base
   returned 9,446 bytes at that address.
 
-`trustedRouter` risk note (the hub already accounts for it, A3): anyone can call the Executor with
-their own calldata. Whitelisting it therefore lets anyone buy **for** any verified recipient with
-their own USDC. Router buys use a separate counter (`MAX_ROUTER_BUYS_24H`) and share the $2k/24h
-cap, so this cannot lock a victim out. It can use up the victim's daily cap, but only at the
-caller's own expense, and all the PPL go to the victim. The Executor's own leftover approvals do
-not matter: the hub only ever pulls from `msg.sender`.
+`trustedRouter` risk note (audit M1 on `e500d1c`, fixed): anyone can call the Executor with
+their own calldata, so whitelisting it lets anyone buy **for** any verified recipient with their
+own USDC (and anyone can copy a pending buyer's 60-minute attestation from public calldata, which
+only binds that buyer's own account to that buyer's person: the intended effect).
+- **Before:** router buys had a count limit (`MAX_ROUTER_BUYS_24H = 5`). That was **not** safe: five
+  minimum buys ($50, all PPL to the victim) locked the victim's one-signature buys for 24 hours.
+- **Now:** router buys have **no count limit**. They have a router minimum, `ROUTER_MIN_BUY_USD6 = 40e6`
+  (or `minBuyUsd6` if higher), and they share the person's $2k/24h amount cap. At the minimum, the
+  cap ends the router window at exactly 50 entries = `RollingWindow24h.CAPACITY`, so the window
+  cannot overflow. A routed buy with 49 attacker entries in the window costs < 400k gas
+  (`test_m1_routedBuyGasWithFullWindow`), under the 500k/650k destination gas limits.
+- **Remaining grief:** the attacker must spend the victim's whole $2k daily cap, and the victim
+  receives all of those PPL. Router buys still never touch the person's own `maxBuysPer24h` slots
+  or cooldown, so the victim can always buy directly on Base.
+- **Product effect:** the one-signature path starts at $40. The site does not offer it below that
+  (`belowRouterMin`); smaller amounts use the two-step path (direct buy, $10 minimum).
+- **Size:** this fix fits the EIP-170 margin. A bucketed router window without a minimum (fold
+  router buys into 30-minute buckets, no count limit, keep the $10 minimum) was also built and
+  tested; it costs ~200 B and does not fit (24,625 B > 24,576 B). It is an option for a later,
+  slimmer hub if Alex wants $10 one-signature buys.
+- The Executor's own leftover approvals do not matter: the hub only ever pulls from `msg.sender`.
+
+Site-side quote checks (audit M2, L1, L2):
+- **The source transaction the buyer signs is pinned**, not just the quote summary:
+  - `transactionRequest.to` and `estimate.approvalAddress` must be the LI.FI Diamond
+    `0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE`. It is the same address on every source chain we
+    list, per `lifinance/contracts/deployments/{mainnet,bsc,polygon,arbitrum,optimism,avalanche,base}.json`,
+    checked 18 Nov 2026.
+  - `value` must be 0, since every source token is an ERC-20.
+  - `fromAmount` must equal `action.fromAmount` and be ≤ `usdcIn` × 1.03 in token units
+    (`MAX_SOURCE_OVERPAY_BPS = 300`; live quotes were 0.3–0.9% above).
+  - `transactionRequest.data` must contain our exact hub calldata.
+  - Cross-chain, its `ILiFi.BridgeData` must name the buyer as receiver, Base as destination and
+    a destination call, and the buyer must also appear outside the hub calldata as the refund
+    receiver of the destination message.
+  - A real captured LI.FI quote passes all of these (unit test with fixture).
+- **Outcome on Base comes from the receiving transaction's logs, not a balance delta.**
+  `Bought(recipient = buyer)` means success. USDC `Transfer`s to the buyer in that tx are the
+  leftover (after success) or the refund (no `Bought`). Executor transfers to anything other
+  than the hub, the hub treasury or the buyer are flagged as misrouted. The balance delta is
+  only a fallback when LI.FI's status gives no receiving tx hash.
+
+`verifyFor` idempotency note (audit L3, documentation only): when `account` is already bound to
+`personId`, `verifyFor` and `verifyAndBuy` return before checking the signature or deadline, so
+any bytes are accepted. This is intended. Nothing changes in that case, so there is nothing to
+authorise, and it keeps a front-run or stale attestation from reverting a buyer's destination
+call. Every state change still requires a valid, unexpired verifier signature for that exact
+account, person, nonce, chain and hub.
 
 If LI.FI redeploys the Executor, the address changes. A quote from a new Executor fails our
 `unexpectedCaller` check and the site falls back to two-step. Re-whitelisting needs a new Safe

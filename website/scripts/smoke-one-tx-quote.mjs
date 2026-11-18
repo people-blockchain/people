@@ -11,7 +11,7 @@
 //                           LI.FI simulates the source step)
 //   FROM_CHAIN=56           56 BNB | 137 Polygon | 8453 Base | 1 Ethereum | 42161 Arbitrum | ...
 //   FROM_TOKEN              default: USDT on the source chain (BNB / Polygon)
-//   USDC_IN=12000000        USDC (6 dp) the hub pulls; the hub minimum buy is 10 USDC
+//   USDC_IN=41000000        USDC (6 dp) the hub pulls; one-signature (router) minimum is 40 USDC
 //   MIN_PPL_OUT             default 1 (shape check). For the live smoke use quoteBuy(USDC_IN) * 0.99;
 //                           for the refund case use more than quoteBuy(USDC_IN)
 //   REFERRER                default zero address
@@ -29,7 +29,7 @@ const params = {
   account: env("BUYER"),
   hub: env("HUB"),
   usdc: USDC,
-  usdcIn: BigInt(env("USDC_IN", "12000000")),
+  usdcIn: BigInt(env("USDC_IN", "41000000")),
   minPplOut: BigInt(env("MIN_PPL_OUT", "1")),
   referrer: env("REFERRER", "0x0000000000000000000000000000000000000000"),
   verification: process.env.VERIFICATION ? JSON.parse(process.env.VERIFICATION) : undefined,

@@ -17,6 +17,7 @@ export type OneTxCopy = {
   oneTxQuoting: string;
   oneTxBridging: string;
   oneTxNoRoute: string;
+  oneTxMin: string;
   oneTxRequote: string;
   oneTxError: string;
   oneTxVerifyCta: string;
@@ -150,7 +151,7 @@ export function LifiOneTx({
       {state.step === "quoting" ? <p className="text-sm text-ink-2">{copy.oneTxQuoting}</p> : null}
       {state.step === "unavailable" ? (
         <p className="text-sm text-warm" role="status" data-testid="v2-onetx-noroute">
-          {copy.oneTxNoRoute}
+          {state.reason === "belowRouterMin" ? copy.oneTxMin : copy.oneTxNoRoute}
         </p>
       ) : null}
       {ready && state.requoted ? <p className="text-sm text-warm">{copy.oneTxRequote}</p> : null}

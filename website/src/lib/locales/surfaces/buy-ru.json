@@ -378,6 +378,7 @@
       "oneTxQuoting": "Finding a route…",
       "oneTxBridging": "Bridging and buying… usually {eta}",
       "oneTxNoRoute": "No one-signature route right now. Use the two-step swap below.",
+      "oneTxMin": "One-signature purchase starts at $40. For a smaller amount use the two-step swap below.",
       "oneTxUnavailable": "One-signature purchase is not available from this network yet. Use the two-step swap below.",
       "oneTxTwoStep": "Prefer two steps? Swap with LI.FI first",
       "oneTxRequote": "The quote expired. Check the new amount and confirm again.",

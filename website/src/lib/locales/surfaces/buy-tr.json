@@ -378,6 +378,7 @@
       "oneTxQuoting": "Rota aranıyor…",
       "oneTxBridging": "Köprüleniyor ve satın alınıyor… genellikle {eta}",
       "oneTxNoRoute": "Şu anda tek imzalı rota yok. Aşağıdaki iki adımlı takası kullanın.",
+      "oneTxMin": "Tek imzalı alım 40 $’dan başlar. Daha küçük tutarlar için aşağıdaki iki adımlı takası kullanın.",
       "oneTxUnavailable": "Bu ağdan tek imzayla alım henüz mümkün değil. Aşağıdaki iki adımlı takası kullanın.",
       "oneTxTwoStep": "İki adım mı tercih edersiniz? Önce LI.FI ile takas edin",
       "oneTxRequote": "Teklifin süresi doldu. Yeni tutarı kontrol edip tekrar onaylayın.",

@@ -13,7 +13,16 @@
  * @see https://docs.li.fi/introduction/lifi-architecture/smart-contract-addresses
  */
 
-import { decodeFunctionData, encodeFunctionData, type Address, type Hex } from "viem";
+import {
+  decodeAbiParameters,
+  decodeFunctionData,
+  encodeFunctionData,
+  erc20Abi,
+  parseEventLogs,
+  type Address,
+  type Hex,
+  type Log,
+} from "viem";
 
 import { PPL_CURVE_HUB_V2_ABI, ZERO_ADDRESS } from "./abi";
 
@@ -28,6 +37,20 @@ export const LIFI_BASE_CHAIN_ID = 8453;
  * a `trustedRouter` (Safe, 48 h timelock) before the one-signature path can work.
  */
 export const LIFI_BASE_EXECUTOR: Address = "0x4DaC9d1769b9b304cb04741DCDEb2FC14aBdF110";
+/**
+ * LI.FI Diamond: the only contract the buyer's source transaction may call and the only spender
+ * the buyer may approve. Same address on every source chain in `ONE_TX_SOURCE_TOKENS`
+ * (lifinance/contracts `deployments/{mainnet,bsc,polygon,arbitrum,optimism,avalanche,base}.json`,
+ * checked 18 Nov 2026).
+ */
+export const LIFI_DIAMOND: Address = "0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE";
+/**
+ * Most the source amount may exceed `usdcIn` (in token units, normalised to 6 decimals) to cover
+ * LI.FI, bridge and swap fees. Live stablecoin quotes on 18 Nov 2026 were 0.3–0.9% above.
+ */
+export const MAX_SOURCE_OVERPAY_BPS = 300;
+/** `PplCurveHubV2.ROUTER_MIN_BUY_USD6`: smallest buy a trusted router (the LI.FI Executor) may make. */
+export const ROUTER_MIN_BUY_USD6 = BigInt(40_000_000);
 
 /** `hub.buy` measured at up to ~321k gas (PplCurveHubV2Gas.t.sol) plus the approval, with headroom. */
 export const HUB_BUY_GAS_LIMIT = 500_000;
@@ -204,6 +227,8 @@ export function buildContractCallsRequest(p: OneTxParams): ContractCallsRequest 
     if (!ADDRESS_RE.test(value)) throw new Error("badAddress");
   }
   if (p.usdcIn <= BigInt(0)) throw new Error("badAmount");
+  // Below the hub's router minimum the destination call would revert (BelowMin) and only refund.
+  if (p.usdcIn < ROUTER_MIN_BUY_USD6) throw new Error("belowRouterMin");
   if (p.minPplOut <= BigInt(0)) throw new Error("badMinPplOut");
   if (p.verification && (!/^0x[0-9a-fA-F]{64}$/.test(p.verification.personId) || !(p.verification.deadline > 0))) {
     throw new Error("badVerification");
@@ -259,7 +284,7 @@ export type LifiStep = {
 
 export type LifiQuote = {
   tool?: string;
-  action?: { fromChainId?: number; toChainId?: number; fromAddress?: string; fromToken?: LifiToken };
+  action?: { fromChainId?: number; toChainId?: number; fromAddress?: string; fromAmount?: string; fromToken?: LifiToken };
   estimate?: {
     fromAmount?: string;
     approvalAddress?: string;
@@ -315,6 +340,12 @@ export function validateOneTxQuote(
 ): OneTxQuoteCheck {
   const tx = quote.transactionRequest;
   if (!tx?.to || !ADDRESS_RE.test(tx.to) || !tx.data) return { ok: false, reason: "noTransaction" };
+  // The buyer signs this transaction, so pin where it goes and what it carries (audit M2).
+  if (!sameAddress(tx.to, LIFI_DIAMOND)) return { ok: false, reason: "unexpectedTarget" };
+  if ((toBigInt(tx.value ?? "0") ?? BigInt(-1)) !== BigInt(0)) return { ok: false, reason: "unexpectedValue" };
+  if (!sameAddress(quote.estimate?.approvalAddress, LIFI_DIAMOND)) return { ok: false, reason: "unexpectedApproval" };
+  const token = ONE_TX_SOURCE_TOKENS.find((t) => t.chainId === p.fromChain && sameAddress(t.address, p.fromToken));
+  if (!token) return { ok: false, reason: "wrongSourceToken" };
   if (tx.chainId !== undefined && tx.chainId !== p.fromChain) return { ok: false, reason: "wrongSourceChain" };
   if (quote.action?.fromChainId !== p.fromChain) return { ok: false, reason: "wrongSourceChain" };
   if (!sameAddress(quote.action?.fromToken?.address, p.fromToken)) return { ok: false, reason: "wrongSourceToken" };
@@ -353,7 +384,13 @@ export function validateOneTxQuote(
 
   const fromAmount = toBigInt(quote.estimate?.fromAmount);
   if (fromAmount === null || fromAmount <= BigInt(0)) return { ok: false, reason: "noFromAmount" };
-  const approval = quote.estimate?.approvalAddress;
+  // The amount the Diamond pulls is `action.fromAmount`; it must be the amount we show and approve.
+  if (quote.action?.fromAmount !== undefined && toBigInt(quote.action.fromAmount) !== fromAmount) {
+    return { ok: false, reason: "noFromAmount" };
+  }
+  if (!sourceAmountWithinMargin(fromAmount, token.decimals, p.usdcIn)) return { ok: false, reason: "overpay" };
+  const receiverCheck = checkSourceCalldata(tx.data as Hex, p, steps[callIndex].action?.toContractCallData as Hex);
+  if (receiverCheck) return { ok: false, reason: receiverCheck };
 
   return {
     ok: true,
@@ -361,15 +398,111 @@ export function validateOneTxQuote(
       tool: quote.tool ?? "lifi",
       crossChain: p.fromChain !== LIFI_BASE_CHAIN_ID,
       fromAmount,
-      fromDecimals: quote.action?.fromToken?.decimals ?? 6,
+      fromDecimals: token.decimals,
       fromSymbol: quote.action?.fromToken?.symbol ?? "",
-      approvalAddress: approval && ADDRESS_RE.test(approval) ? (approval as Address) : null,
+      approvalAddress: LIFI_DIAMOND,
       minReceivedUsd6: minReceived,
       executionDurationSec: Math.max(0, Math.round(quote.estimate?.executionDuration ?? 0)),
       feesUsd: sumUsd(quote.estimate?.feeCosts) + sumUsd(quote.estimate?.gasCosts),
       tx: { to: tx.to as Address, data: tx.data as Hex, value: toBigInt(tx.value) ?? BigInt(0) },
     },
   };
+}
+
+/** `fromAmount` (source token units) <= `usdcIn` (6 dp) x (1 + MAX_SOURCE_OVERPAY_BPS). Stablecoins only. */
+export function sourceAmountWithinMargin(fromAmount: bigint, decimals: number, usdcIn: bigint): boolean {
+  const scale = BigInt(10) ** BigInt(decimals);
+  return fromAmount * BigInt(1_000_000) * BigInt(10_000) <= usdcIn * scale * BigInt(10_000 + MAX_SOURCE_OVERPAY_BPS);
+}
+
+const BRIDGE_DATA = [
+  {
+    type: "tuple",
+    components: [
+      { name: "transactionId", type: "bytes32" },
+      { name: "bridge", type: "string" },
+      { name: "integrator", type: "string" },
+      { name: "referrer", type: "address" },
+      { name: "sendingAssetId", type: "address" },
+      { name: "receiver", type: "address" },
+      { name: "minAmount", type: "uint256" },
+      { name: "destinationChainId", type: "uint256" },
+      { name: "hasSourceSwaps", type: "bool" },
+      { name: "hasDestinationCall", type: "bool" },
+    ],
+  },
+] as const;
+
+function countWord(hex: string, word: string): number {
+  let count = 0;
+  for (let i = hex.indexOf(word); i !== -1; i = hex.indexOf(word, i + word.length)) count += 1;
+  return count;
+}
+
+/**
+ * Checks the source transaction itself, not only the quote summary (audit M2):
+ * - it carries our exact hub calldata (the destination call LI.FI will run);
+ * - cross-chain: its `ILiFi.BridgeData` (first argument of every LI.FI bridge facet) names the
+ *   buyer as receiver, Base as destination and a destination call;
+ * - the buyer appears as a receiver outside the hub calldata as well: BridgeData.receiver plus the
+ *   destination message's refund receiver (leftover and failed-call USDC) for cross-chain, at
+ *   least once for same-chain.
+ * Returns a reason string, or null when the calldata is acceptable.
+ */
+export function checkSourceCalldata(data: Hex, p: OneTxParams, hubCallData: Hex | undefined): string | null {
+  const lower = data.toLowerCase();
+  const call = (hubCallData ?? "").toLowerCase().replace(/^0x/, "");
+  if (!call || !lower.includes(call)) return "calldataMismatch";
+  const buyerWord = p.account.toLowerCase().replace(/^0x/, "").padStart(64, "0");
+  const outside = countWord(lower.split(call).join(""), buyerWord);
+  if (p.fromChain === LIFI_BASE_CHAIN_ID) return outside >= 1 ? null : "wrongReceiver";
+  try {
+    const [bridge] = decodeAbiParameters(BRIDGE_DATA, `0x${lower.slice(10)}` as Hex);
+    if (!sameAddress(bridge.receiver, p.account)) return "wrongReceiver";
+    if (bridge.destinationChainId !== BigInt(LIFI_BASE_CHAIN_ID)) return "wrongDestination";
+    if (!bridge.hasDestinationCall) return "noContractCall";
+  } catch {
+    return "wrongReceiver";
+  }
+  return outside >= 2 ? null : "wrongRefundReceiver";
+}
+
+export type ReceivingOutcome = {
+  /** `Bought` for the buyer from the hub in the receiving transaction, if any. */
+  pplOutWei: bigint | null;
+  /** USDC sent to the buyer in the receiving transaction: leftover after a buy, or the refund. */
+  toBuyerUsd6: bigint;
+  /** USDC the Executor sent anywhere other than the hub, the hub treasury or the buyer. */
+  misroutedUsd6: bigint;
+};
+
+/**
+ * Reads the outcome from the Base receiving transaction's logs instead of a balance delta, so an
+ * unrelated transfer to the buyer cannot be mistaken for a refund (audit L2), and checks that the
+ * Executor's leftover went to the buyer (audit L1).
+ */
+export function receivingOutcome(
+  logs: Log[],
+  p: { usdc: Address; hub: Address; buyer: Address; treasury?: Address | null; executor?: Address },
+): ReceivingOutcome {
+  const executor = p.executor ?? LIFI_BASE_EXECUTOR;
+  const bought = parseEventLogs({ abi: PPL_CURVE_HUB_V2_ABI, eventName: "Bought", logs }).find(
+    (log) => sameAddress(log.address, p.hub) && sameAddress(log.args.recipient, p.buyer),
+  );
+  let toBuyerUsd6 = BigInt(0);
+  let misroutedUsd6 = BigInt(0);
+  for (const log of parseEventLogs({ abi: erc20Abi, eventName: "Transfer", logs })) {
+    if (!sameAddress(log.address, p.usdc)) continue;
+    if (sameAddress(log.args.to, p.buyer)) toBuyerUsd6 += log.args.value;
+    else if (
+      sameAddress(log.args.from, executor) &&
+      !sameAddress(log.args.to, p.hub) &&
+      !(p.treasury && sameAddress(log.args.to, p.treasury))
+    ) {
+      misroutedUsd6 += log.args.value;
+    }
+  }
+  return { pplOutWei: bought ? bought.args.pplOut : null, toBuyerUsd6, misroutedUsd6 };
 }
 
 export type FetchLike = (url: string, init?: { method?: string; headers?: Record<string, string>; body?: string }) =>

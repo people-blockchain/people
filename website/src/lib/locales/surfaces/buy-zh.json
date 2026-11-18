@@ -378,6 +378,7 @@
       "oneTxQuoting": "正在寻找路线…",
       "oneTxBridging": "正在跨链并购买…通常需要 {eta}",
       "oneTxNoRoute": "暂时没有一次签名的路线。请使用下方的两步兑换。",
+      "oneTxMin": "一次签名购买最低 40 美元。金额更小时请使用下方的两步兑换。",
       "oneTxUnavailable": "该网络暂不支持一次签名购买。请使用下方的两步兑换。",
       "oneTxTwoStep": "想分两步？先用 LI.FI 兑换",
       "oneTxRequote": "报价已过期。请检查新的金额并再次确认。",

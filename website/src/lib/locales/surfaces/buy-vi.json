@@ -378,6 +378,7 @@
       "oneTxQuoting": "Đang tìm lộ trình…",
       "oneTxBridging": "Đang chuyển cầu và mua… thường mất {eta}",
       "oneTxNoRoute": "Hiện chưa có lộ trình một chữ ký. Hãy dùng hoán đổi hai bước bên dưới.",
+      "oneTxMin": "Mua bằng một chữ ký từ 40 $. Với số tiền nhỏ hơn, hãy dùng hoán đổi hai bước bên dưới.",
       "oneTxUnavailable": "Chưa hỗ trợ mua một chữ ký từ mạng này. Hãy dùng hoán đổi hai bước bên dưới.",
       "oneTxTwoStep": "Muốn làm hai bước? Hoán đổi bằng LI.FI trước",
       "oneTxRequote": "Báo giá đã hết hạn. Kiểm tra số tiền mới và xác nhận lại.",

@@ -288,10 +288,10 @@ contract PplCurveHubV2VerifyForTest is HubV2Base {
     function test_verifyAndBuy_alreadyVerifiedJustBuys() public {
         _setTrustedRouter(address(executor), true);
         bytes32 pid = _verify(alice);
-        usdc.mint(address(executor), 20e6);
+        usdc.mint(address(executor), 50e6);
         // Stale/garbage attestation is ignored for an account already bound to that person.
         bool ok = executor.execute(
-            IERC20(address(usdc)), address(hub), 20e6, _verifyAndBuyData(alice, 20e6, 0, hex"00", 0), alice
+            IERC20(address(usdc)), address(hub), 50e6, _verifyAndBuyData(alice, 50e6, 0, hex"00", 0), alice
         );
         assertTrue(ok);
         assertGt(hub.pplOfPerson(pid), 0);
