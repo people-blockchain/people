@@ -31,6 +31,7 @@ export function readV2Env(): V2Env {
     NEXT_PUBLIC_PPL_V2_HUB_ADDRESS: process.env.NEXT_PUBLIC_PPL_V2_HUB_ADDRESS,
     NEXT_PUBLIC_PPL_V2_CHAIN_ID: process.env.NEXT_PUBLIC_PPL_V2_CHAIN_ID,
     NEXT_PUBLIC_PPL_V2_OPEN_DATE: process.env.NEXT_PUBLIC_PPL_V2_OPEN_DATE,
+    NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED: process.env.NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED,
     NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS: process.env.NEXT_PUBLIC_PPL_RETURN_BURN_ADDRESS,
   };
 }
@@ -361,7 +362,7 @@ export function previewSnapshot(state: V2PreviewState): V2MockSnapshot {
     phase: V2_PHASES.Whitelist,
     openedAtSec: PREVIEW_OPENED_AT,
     spotPriceWad: PREVIEW_SPOT,
-    personId: state === "success" || state === "partial" ? PREVIEW_PERSON : null,
+    personId: state === "success" || state === "partial" || state === "buyable" ? PREVIEW_PERSON : null,
     siteVerified: verified,
     purchase:
       state === "success"
@@ -370,4 +371,37 @@ export function previewSnapshot(state: V2PreviewState): V2MockSnapshot {
     partial: state === "partial" ? { receivedUsdc: 123.45 } : null,
     nowMs: PREVIEW_NOW,
   };
+}
+
+/**
+ * USDC that actually arrived on Base: the on-chain balance after the swap minus the balance
+ * before it (SPEC §12.1). Never negative; unknown balances count as nothing received.
+ */
+export function usdcBalanceDelta(before: bigint | null, after: bigint | null): bigint {
+  if (before === null || after === null) return BigInt(0);
+  return after > before ? after - before : BigInt(0);
+}
+
+/**
+ * Amount the second step of the two-step path buys with: the real balance delta, never more than
+ * the amount LI.FI reports it delivered (so unrelated incoming USDC is not spent) and never more
+ * than the per-purchase cap. Null when nothing usable arrived.
+ */
+export function twoStepBuyAmountUsd6(input: {
+  deltaUsd6: bigint;
+  deliveredUsd6?: bigint | null;
+  maxUsd6?: bigint;
+}): bigint | null {
+  let amount = input.deltaUsd6;
+  if (input.deliveredUsd6 !== undefined && input.deliveredUsd6 !== null && input.deliveredUsd6 > BigInt(0)) {
+    amount = amount < input.deliveredUsd6 ? amount : input.deliveredUsd6;
+  }
+  const max = input.maxUsd6 ?? BigInt(V2_SALE.maxPerBuyUsd) * BigInt(1_000_000);
+  if (amount > max) amount = max;
+  return amount > BigInt(0) ? amount : null;
+}
+
+/** One-signature LI.FI path: off unless explicitly enabled (it also needs the hub to trust the Executor). */
+export function isV2OneTxEnabled(env: V2Env): boolean {
+  return truthy(env.NEXT_PUBLIC_PPL_V2_ONE_TX_ENABLED);
 }

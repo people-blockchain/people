@@ -39,18 +39,45 @@ contract DeployPplCurveHub is Script {
         require(treasury != broadcaster, "treasury: must not be the broadcaster (buyer == treasury reverts TransferMismatch)");
     }
 
+    /// @dev Everything `run()` reads from the environment. Split out so tests can drive the gating logic with an
+    /// explicit config instead of the process-wide env (forge runs test contracts in parallel threads, and
+    /// `vm.setEnv` from another suite could otherwise race this one).
+    struct Config {
+        address owner;
+        address treasury;
+        address usdc;
+        address usdt;
+        bool deployMocks;
+        bool testDeployMainnet;
+        bool openSale;
+    }
+
+    function readConfig() public view returns (Config memory c) {
+        c.owner = vm.envAddress("OWNER");
+        c.treasury = vm.envAddress("TREASURY");
+        c.usdc = vm.envOr("USDC_ADDRESS", address(0));
+        c.usdt = vm.envOr("USDT_ADDRESS", address(0));
+        c.deployMocks = vm.envOr("DEPLOY_MOCKS", false);
+        c.testDeployMainnet = vm.envOr("TEST_DEPLOY_MAINNET", false);
+        c.openSale = vm.envOr("OPEN_SALE", false);
+    }
+
     function run() external returns (PplCurveHub hub) {
-        address owner = vm.envAddress("OWNER");
-        address treasury = vm.envAddress("TREASURY");
-        address usdc = vm.envOr("USDC_ADDRESS", address(0));
-        address usdt = vm.envOr("USDT_ADDRESS", address(0));
-        bool deployMocks = vm.envOr("DEPLOY_MOCKS", false);
-        bool openSale = vm.envOr("OPEN_SALE", false);
+        return deploy(readConfig());
+    }
+
+    function deploy(Config memory c) public returns (PplCurveHub hub) {
+        address owner = c.owner;
+        address treasury = c.treasury;
+        address usdc = c.usdc;
+        address usdt = c.usdt;
+        bool deployMocks = c.deployMocks;
+        bool openSale = c.openSale;
 
         if (deployMocks) {
             require(usdc == address(0) && usdt == address(0), "mocks: USDC_ADDRESS/USDT_ADDRESS must be unset");
             if (block.chainid == 8453) {
-                require(vm.envOr("TEST_DEPLOY_MAINNET", false), "mocks: mainnet needs TEST_DEPLOY_MAINNET=true");
+                require(c.testDeployMainnet, "mocks: mainnet needs TEST_DEPLOY_MAINNET=true");
             } else {
                 require(block.chainid == 84532 || block.chainid == 31337, "mocks: testnet only");
             }

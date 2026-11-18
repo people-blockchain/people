@@ -13,9 +13,9 @@ import { verificationDigest } from "@/lib/sale/verifier/typed-data";
 import { parseSaleNonceCode } from "@/lib/sale/v2/ownership";
 import { parseSaleVerifyVersion, readVerifyTargetEnv, resolveVerifyTarget, saleOwnershipMessage } from "@/lib/sale/verify-target";
 import { SITE_URL } from "@/lib/site";
+import { verificationDeadlineSeconds } from "@/lib/sale/v2/lifi-route";
 
 const ZERO_BYTES32 = `0x${"0".repeat(64)}` as Hex;
-const DEADLINE_SECONDS = 15 * 60;
 const RATE_NAMESPACE = "sale-verify-signature";
 const RATE_MAX = 10;
 const RATE_WINDOW_MS = 60_000;
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     return errorResponse("rate_limited", 429);
   }
 
-  let body: { account?: unknown; ownershipSignature?: unknown; nonceCode?: unknown; version?: unknown };
+  let body: { account?: unknown; ownershipSignature?: unknown; nonceCode?: unknown; version?: unknown; routed?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -146,7 +146,11 @@ export async function POST(request: Request) {
     if (getAddress(signerAddress) !== verifierOnChain) {
       return errorResponse("verifier_mismatch", 503);
     }
-    const deadline = BigInt(Math.floor(Date.now() / 1000) + DEADLINE_SECONDS);
+    // `routed`: the attestation rides inside a cross-chain destination call (`verifyAndBuy`) and
+    // must outlive the bridge; it still names this account, chain, hub and the current nonce.
+    const deadline = BigInt(
+      Math.floor(Date.now() / 1000) + verificationDeadlineSeconds(version === "v2" && body.routed === true),
+    );
     const digest = verificationDigest({
       chainId,
       hub,

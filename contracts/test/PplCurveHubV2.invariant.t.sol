@@ -380,7 +380,7 @@ contract HubV2Handler is Test {
             }
             buyUsed[recipient][day] += charged;
             // Router buys (recipient != buyer) do not consume own-buy slots or the cooldown. They have
-            // their own count (MAX_ROUTER_BUYS_24H). The $2k amount cap stays shared.
+            // no count limit (ROUTER_MIN_BUY_USD6 minimum). The $2k amount cap stays shared.
             _logSpend(
                 _buyLog[recipient],
                 nowTs,
@@ -434,8 +434,8 @@ contract HubV2Handler is Test {
     }
 
     /// @dev Records a spend and checks the rolling window ending now. Amount sum over (now-24h, now]
-    /// <= cap. Own buys and sells also stay within the owner-set entry limit; router buys stay within
-    /// MAX_ROUTER_BUYS_24H and are not counted against the person's own buy slots.
+    /// <= cap. Own buys and sells also stay within the owner-set entry limit; router buys have no count
+    /// limit and are not counted against the person's own buy slots.
     function _logSpend(
         Spend[] storage log,
         uint256 nowTs,
@@ -456,7 +456,8 @@ contract HubV2Handler is Test {
             else ++ownLive;
         }
         if (isBuy) {
-            if (sum > cap || ownLive > maxEntries || routerLive > hub.MAX_ROUTER_BUYS_24H()) ++rollingBuyViolations;
+            // No router count limit (M1): the router minimum and the shared amount cap bound the window.
+            if (sum > cap || ownLive > maxEntries || routerLive > 50) ++rollingBuyViolations;
         } else if (sum > cap || ownLive > maxEntries) {
             ++rollingSellViolations;
         }

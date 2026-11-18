@@ -28,6 +28,8 @@ type BuyLifiBridgeProps = {
   toAddressName?: string;
   /** Called with the completed LI.FI route (payload of `RouteExecutionCompleted`). */
   onBridgeComplete?: (route?: unknown) => void;
+  /** Called when the buyer starts a route, so the caller can snapshot balances first. */
+  onBridgeStart?: () => void;
   onBridgeFailed?: (reason: "rejected" | "failed") => void;
   onBridgeProgress?: (info: { txLink?: string }) => void;
   testId?: string;
@@ -124,6 +126,7 @@ function BridgeWidgetInner({
   lang = "en",
   toAddressName = "Your wallet on Base",
   onBridgeComplete,
+  onBridgeStart,
   onBridgeFailed,
   onBridgeProgress,
   testId,
@@ -161,6 +164,15 @@ function BridgeWidgetInner({
       widgetEvents.off(WidgetEvent.RouteExecutionUpdated, updated as never);
     };
   }, [onBridgeProgress]);
+
+  useEffect(() => {
+    if (!onBridgeStart) return;
+    const started = () => onBridgeStart();
+    widgetEvents.on(WidgetEvent.RouteExecutionStarted, started as never);
+    return () => {
+      widgetEvents.off(WidgetEvent.RouteExecutionStarted, started as never);
+    };
+  }, [onBridgeStart]);
 
   useEffect(() => {
     if (!onBridgeComplete) return;

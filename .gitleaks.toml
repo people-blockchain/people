@@ -16,10 +16,15 @@ paths = [
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
   '''website/src/lib/web3auth-config\.ts''',
   '''website/src/lib/partner/.*\.test\.ts''',
+  # trimmed public LI.FI quote responses (public token/contract addresses only, nothing signed)
+  '''website/scripts/fixtures/lifi-quote-[a-z0-9-]+\.json''',
 ]
 regexTarget = "line"
 regexes = [
   # keccak event topics (TOKEN_CREATED etc.)
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
+  # docs/v2/SMOKE-ONE-TX.md: placeholder shell vars and a public token address (BNB USDC)
+  '''BUYER=<buyer wallet holding the source token> FROM_CHAIN=''',
+  '''FROM_TOKEN=0x[0-9a-fA-F]{40}\b''',
 ]

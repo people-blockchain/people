@@ -40,6 +40,7 @@ contract DeployPplCurveHubMocksTest is Test {
     address constant BASE_USDT = 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2;
 
     DeployPplCurveHub script;
+    DeployPplCurveHub.Config cfg;
     address owner = makeAddr("owner");
     address treasury = makeAddr("treasury");
 
@@ -47,20 +48,51 @@ contract DeployPplCurveHubMocksTest is Test {
         script = new DeployPplCurveHub();
     }
 
-    /// @dev Process env is global and forge runs tests in parallel, so all script cases run in ONE test.
+    /// @dev The gating cases drive `script.deploy(cfg)` with an explicit config, NOT the process env:
+    /// `vm.setEnv` is process-wide and other suites (e.g. AuditMediumsSimple sets TREASURY) run in
+    /// parallel threads, which made this test flaky in a full `forge test`. Env parsing is covered
+    /// separately in `test_deployScriptReadsEnv` on keys no other suite writes.
     function test_deployScriptMockGating() public {
-        _resetEnv();
+        _reset();
         _test_mocksOnMainnetRequireExplicitFlag();
-        _resetEnv();
+        _reset();
         _test_mocksOnMainnetWithFlagAllowlistOnlyMocks();
-        _resetEnv();
+        _reset();
         _test_mocksForbidRealTokenAddresses();
-        _resetEnv();
+        _reset();
         _test_mocksRejectedOnOtherChains();
-        _resetEnv();
+        _reset();
         _test_nonMockMainnetStillRequiresCanonicalTokens();
-        _resetEnv();
+        _reset();
         _test_mainnetRolesGuard();
+    }
+
+    /// `run()` == `deploy(readConfig())`; check the env -> Config mapping. TREASURY is written by other
+    /// suites in parallel, so only its presence (a parseable address) is relied on, not its value.
+    function test_deployScriptReadsEnv() public {
+        vm.setEnv("TREASURY", vm.toString(treasury));
+        vm.setEnv("OWNER", vm.toString(owner));
+        vm.setEnv("USDC_ADDRESS", vm.toString(BASE_USDC));
+        vm.setEnv("USDT_ADDRESS", "");
+        vm.setEnv("DEPLOY_MOCKS", "true");
+        vm.setEnv("TEST_DEPLOY_MAINNET", "true");
+        vm.setEnv("OPEN_SALE", "false");
+        DeployPplCurveHub.Config memory c = script.readConfig();
+        assertEq(c.owner, owner);
+        assertEq(c.usdc, BASE_USDC);
+        assertEq(c.usdt, address(0));
+        assertTrue(c.deployMocks);
+        assertTrue(c.testDeployMainnet);
+        assertFalse(c.openSale);
+        vm.setEnv("DEPLOY_MOCKS", "false");
+        vm.setEnv("TEST_DEPLOY_MAINNET", "false");
+        vm.setEnv("OPEN_SALE", "true");
+        vm.setEnv("USDC_ADDRESS", "");
+        c = script.readConfig();
+        assertEq(c.usdc, address(0));
+        assertFalse(c.deployMocks);
+        assertFalse(c.testDeployMainnet);
+        assertTrue(c.openSale);
     }
 
     /// @dev Marks `who` as a contract (a Safe stand-in) for the 8453 role checks.
@@ -73,70 +105,66 @@ contract DeployPplCurveHubMocksTest is Test {
         vm.chainId(8453);
         address safeOwner = makeAddr("safeOwner");
         address safeTreasury = makeAddr("safeTreasury");
-        vm.setEnv("OWNER", vm.toString(safeOwner));
-        vm.setEnv("TREASURY", vm.toString(safeTreasury));
+        cfg.owner = safeOwner;
+        cfg.treasury = safeTreasury;
 
         // EOA owner
         _asContract(safeTreasury);
         vm.expectRevert(bytes("owner: must be a contract (Safe) on Base mainnet"));
-        script.run();
+        script.deploy(cfg);
 
         // EOA treasury
         _asContract(safeOwner);
         vm.etch(safeTreasury, "");
         vm.expectRevert(bytes("treasury: must be a contract (Safe) on Base mainnet"));
-        script.run();
+        script.deploy(cfg);
 
         // treasury == broadcaster (contract-ish, so only the broadcaster rule can fire)
         _asContract(DEFAULT_SENDER);
-        vm.setEnv("TREASURY", vm.toString(DEFAULT_SENDER));
+        cfg.treasury = DEFAULT_SENDER;
         vm.expectRevert(bytes("treasury: must not be the broadcaster (buyer == treasury reverts TransferMismatch)"));
-        script.run();
+        script.deploy(cfg);
         vm.stopBroadcast();
 
         // both Safes, broadcaster is a third party: deploys; the hub is owned by the Safe, nothing is opened
         _asContract(safeTreasury);
-        vm.setEnv("TREASURY", vm.toString(safeTreasury));
-        PplCurveHub hub = script.run();
+        cfg.treasury = safeTreasury;
+        PplCurveHub hub = script.deploy(cfg);
         assertEq(hub.owner(), safeOwner);
         assertEq(hub.treasury(), safeTreasury);
         assertEq(hub.openedAt(), 0);
 
         // the guard is mainnet-only: an EOA owner/treasury is still fine on Base Sepolia
         vm.chainId(84532);
-        vm.setEnv("OWNER", vm.toString(makeAddr("eoaOwner")));
-        vm.setEnv("TREASURY", vm.toString(makeAddr("eoaTreasury")));
-        assertEq(script.run().openedAt(), 0);
+        cfg.owner = makeAddr("eoaOwner");
+        cfg.treasury = makeAddr("eoaTreasury");
+        assertEq(script.deploy(cfg).openedAt(), 0);
     }
 
-    function _resetEnv() internal {
-        vm.setEnv("OWNER", vm.toString(owner));
-        vm.setEnv("TREASURY", vm.toString(treasury));
-        vm.setEnv("USDC_ADDRESS", "");
-        vm.setEnv("USDT_ADDRESS", "");
-        vm.setEnv("DEPLOY_MOCKS", "false");
-        vm.setEnv("TEST_DEPLOY_MAINNET", "false");
-        vm.setEnv("OPEN_SALE", "false");
+    function _reset() internal {
+        delete cfg;
+        cfg.owner = owner;
+        cfg.treasury = treasury;
     }
 
     function _test_mocksOnMainnetRequireExplicitFlag() internal {
         vm.chainId(8453);
-        vm.setEnv("DEPLOY_MOCKS", "true");
+        cfg.deployMocks = true;
         vm.expectRevert(bytes("mocks: mainnet needs TEST_DEPLOY_MAINNET=true"));
-        script.run();
+        script.deploy(cfg);
     }
 
     function _test_mocksOnMainnetWithFlagAllowlistOnlyMocks() internal {
         vm.chainId(8453);
-        vm.setEnv("DEPLOY_MOCKS", "true");
-        vm.setEnv("TEST_DEPLOY_MAINNET", "true");
-        vm.setEnv("OWNER", vm.toString(DEFAULT_SENDER));
-        vm.setEnv("OPEN_SALE", "true");
+        cfg.deployMocks = true;
+        cfg.testDeployMainnet = true;
+        cfg.owner = DEFAULT_SENDER;
+        cfg.openSale = true;
         // Base mainnet requires contract owner/treasury (L-4)
         _asContract(DEFAULT_SENDER);
         _asContract(treasury);
         vm.recordLogs();
-        PplCurveHub hub = script.run();
+        PplCurveHub hub = script.deploy(cfg);
         assertGt(hub.openedAt(), 0);
         // the allowlist is frozen once the sale is open (setToken before open stays in the script)
         vm.prank(DEFAULT_SENDER);
@@ -167,29 +195,29 @@ contract DeployPplCurveHubMocksTest is Test {
 
     function _test_mocksForbidRealTokenAddresses() internal {
         vm.chainId(84532);
-        vm.setEnv("DEPLOY_MOCKS", "true");
-        vm.setEnv("USDC_ADDRESS", vm.toString(BASE_USDC));
+        cfg.deployMocks = true;
+        cfg.usdc = BASE_USDC;
         vm.expectRevert(bytes("mocks: USDC_ADDRESS/USDT_ADDRESS must be unset"));
-        script.run();
+        script.deploy(cfg);
 
-        vm.setEnv("USDC_ADDRESS", "");
-        vm.setEnv("USDT_ADDRESS", vm.toString(BASE_USDT));
+        cfg.usdc = address(0);
+        cfg.usdt = BASE_USDT;
         vm.expectRevert(bytes("mocks: USDC_ADDRESS/USDT_ADDRESS must be unset"));
-        script.run();
+        script.deploy(cfg);
     }
 
     function _test_mocksRejectedOnOtherChains() internal {
         vm.chainId(1);
-        vm.setEnv("DEPLOY_MOCKS", "true");
-        vm.setEnv("TEST_DEPLOY_MAINNET", "true");
+        cfg.deployMocks = true;
+        cfg.testDeployMainnet = true;
         vm.expectRevert(bytes("mocks: testnet only"));
-        script.run();
+        script.deploy(cfg);
     }
 
     function _test_nonMockMainnetStillRequiresCanonicalTokens() internal {
         vm.chainId(8453);
-        vm.setEnv("USDC_ADDRESS", vm.toString(makeAddr("fake")));
+        cfg.usdc = makeAddr("fake");
         vm.expectRevert(bytes("usdc: not canonical Base USDC"));
-        script.run();
+        script.deploy(cfg);
     }
 }

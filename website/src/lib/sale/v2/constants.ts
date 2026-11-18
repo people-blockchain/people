@@ -43,7 +43,8 @@ export const V2_PHASE_NAMES: Record<V2Phase, "not-open" | "whitelist" | "open" |
   4: "graduated",
 };
 
-export const V2_PREVIEW_STATES = ["unverified", "verified", "success", "partial"] as const;
+/** `buyable`: bound on-chain with the form enabled (used for the one-signature screenshots). */
+export const V2_PREVIEW_STATES = ["unverified", "verified", "buyable", "success", "partial"] as const;
 export type V2PreviewState = (typeof V2_PREVIEW_STATES)[number];
 
 export function isV2PreviewState(value: unknown): value is V2PreviewState {

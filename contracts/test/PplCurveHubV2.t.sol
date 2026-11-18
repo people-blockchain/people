@@ -10,6 +10,7 @@ import {HubV2Base, HubV2Harness} from "./PplCurveHubV2Base.sol";
 
 /// @dev Buy-side, whitelist/verification, term, graduation, referrer and admin tests (SPEC §6).
 contract PplCurveHubV2Test is HubV2Base {
+    uint256 internal constant RMIN = 40e6; // PplCurveHubV2.ROUTER_MIN_BUY_USD6
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
     address internal carol = makeAddr("carol");
@@ -131,7 +132,7 @@ contract PplCurveHubV2Test is HubV2Base {
         // alice (recipient) is capped even though payer never bought for itself.
         vm.prank(payer);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, alice, address(0));
+        hub.buy(RMIN, 0, alice, address(0));
         // same payer buying for a different recipient is fine; payer has no own counter.
         vm.prank(payer);
         hub.buy(MAX_BUY, 0, bob, address(0));
@@ -162,7 +163,7 @@ contract PplCurveHubV2Test is HubV2Base {
         _buy(alice, MIN_BUY);
         _buy(bob, MIN_BUY); // other recipient not affected
         // A trusted router buys for other people. Those buys do not use or reset the person's cooldown:
-        // they have their own count (MAX_ROUTER_BUYS_24H) and only share the $2k amount cap.
+        // they have no count limit and only share the $2k amount cap.
         address payer = makeAddr("payer");
         _fund(payer, 1_000e6);
         _trust(payer);
@@ -171,9 +172,9 @@ contract PplCurveHubV2Test is HubV2Base {
         assertGt(bobLast, 0);
         uint256 bobRemaining = hub.buyRemaining24h(bob);
         vm.startPrank(payer);
-        hub.buy(MIN_BUY, 0, carol, address(0));
-        hub.buy(MIN_BUY, 0, carol, address(0)); // back-to-back: no cooldown on the router path
-        hub.buy(MIN_BUY, 0, bob, address(0)); // bob's own cooldown does not apply to a router buy
+        hub.buy(RMIN, 0, carol, address(0));
+        hub.buy(RMIN, 0, carol, address(0)); // back-to-back: no cooldown on the router path
+        hub.buy(RMIN, 0, bob, address(0)); // bob's own cooldown does not apply to a router buy
         vm.stopPrank();
 
         assertEq(hub.lastBuyAt(carol), 0, "router buy does not start cooldown");
@@ -182,11 +183,11 @@ contract PplCurveHubV2Test is HubV2Base {
         assertEq(carolOwn, 0, "router buys are not own slots");
         (uint256 carolUsd, uint256 carolBuys) = hub.routerUsage24h(carol);
         assertEq(carolBuys, 2);
-        assertEq(carolUsd, 2 * MIN_BUY);
+        assertEq(carolUsd, 2 * RMIN);
         (, uint256 bobOwn,,) = hub.usage24h(bob);
         assertEq(bobOwn, 1, "bob's own buy still the only own slot");
-        assertEq(hub.buyRemaining24h(bob), bobRemaining - MIN_BUY, "router buy shares the $2k cap");
-        assertEq(hub.buyRemaining24h(carol), DAY_CAP - 2 * MIN_BUY);
+        assertEq(hub.buyRemaining24h(bob), bobRemaining - RMIN, "router buy shares the $2k cap");
+        assertEq(hub.buyRemaining24h(carol), DAY_CAP - 2 * RMIN);
 
         // bob is still inside the cooldown his own buy started
         vm.prank(bob);
@@ -206,13 +207,10 @@ contract PplCurveHubV2Test is HubV2Base {
         _trust(router);
         _prepare(alice);
 
-        for (uint256 i; i < hub.MAX_ROUTER_BUYS_24H(); ++i) {
+        for (uint256 i; i < 10; ++i) {
             vm.prank(router);
-            hub.buy(MIN_BUY, 0, alice, address(0));
+            hub.buy(RMIN, 0, alice, address(0));
         }
-        vm.prank(router);
-        vm.expectRevert(PplCurveHubV2.TooManyRouterBuys.selector);
-        hub.buy(MIN_BUY, 0, alice, address(0));
         assertEq(hub.lastBuyAt(alice), 0, "cooldown untouched");
         (, uint256 ownBuys,,) = hub.usage24h(alice);
         assertEq(ownBuys, 0, "own window empty");
@@ -227,7 +225,7 @@ contract PplCurveHubV2Test is HubV2Base {
         assertEq(hub.buyRemaining24h(bob), 0);
         vm.prank(router);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
-        hub.buy(MIN_BUY, 0, bob, address(0));
+        hub.buy(RMIN, 0, bob, address(0));
         vm.warp(vm.getBlockTimestamp() + 60);
         vm.prank(bob);
         vm.expectRevert(PplCurveHubV2.BuyDayCap.selector);
