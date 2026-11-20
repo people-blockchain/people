@@ -13,6 +13,11 @@ paths = [
   '''website/scripts/evm-embedded-key\.test\.mjs''',
   '''website/scripts/wallet-keep-current\.spec\.mjs''',
   '''website/scripts/evm-log-start-blocks\.test\.mjs''',
+  # Unit-test vault wrap fixtures (repeated dummy strings / env names, not live secrets)
+  '''website/scripts/wallet-cloud-server\.test\.mjs''',
+  # Public ERC-20 addresses in recorded LiFi quotes and smoke docs (generic-api-key false positives)
+  '''website/scripts/fixtures/lifi-quote-.*\.json''',
+  '''docs/v2/SMOKE-ONE-TX\.md''',
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
   '''website/src/lib/web3auth-config\.ts''',
   '''website/src/lib/partner/.*\.test\.ts''',

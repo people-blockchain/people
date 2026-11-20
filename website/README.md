@@ -44,6 +44,8 @@ matters for security. All secret comparisons fail closed and use constant-time e
 | --- | --- | --- |
 | `AUTH_SECRET` | app refuses to start in runtime | Never falls back to a public placeholder. |
 | `PEOPLE_WALLET_VAULT_SECRET` | `GET/POST /api/wallet/vault*` return `503 not_configured` | ≥32 bytes. No `AUTH_SECRET` fallback at runtime; `AUTH_SECRET` is kept only to migrate legacy `vaultVersion === 1` vaults. **Mandatory in production.** |
+| `PEOPLE_WALLET_VAULT_SECRET_PREVIOUS` | ignored; current version stays 2 | Optional dual-key rotation. When set, `PEOPLE_WALLET_VAULT_SECRET` wraps vaultVersion 3; v2 rows unwrap with this value. |
+| `PEOPLE_WALLET_VAULT_SECRET_NEXT` | ignored; current version stays 2 | Optional. New wrapping secret while `PEOPLE_WALLET_VAULT_SECRET` is still the old (e.g. Vercel Sensitive) value. Do not set together with PREVIOUS. See `docs/WALLET-VAULT-SECRET-ROTATION.md`. |
 | `WEB3AUTH_ALLOWED_VERIFIERS` | built-in allowlist (`google`, `email_passwordless`) | Web3Auth logins from any other verifier are rejected; never binds to an account by email alone. |
 | `DISCOVER_ADMIN_USER_IDS` | no user is admin by `userId` | Preferred over `DISCOVER_ADMIN_EMAILS`; the email list is only a migration fallback and only for Google logins with a verified email. |
 | `CRON_SECRET` | cron routes return `401 not_configured` | Bearer secret for `/api/telegram/daily-summary` and other Vercel crons. |
