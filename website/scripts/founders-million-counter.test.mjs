@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { resolveMillionCounterPayload } from "../src/lib/founders/million-counter.ts";
+import { isFoundingRosterSealed, resolveMillionCounterPayload } from "../src/lib/founders/million-counter.ts";
 
 test("verified count under 1000 keeps current hidden / { goal: 1000, source: \"hidden\" }", () => {
   for (const count of [0, 1, 999]) {
@@ -36,4 +36,17 @@ test("missing or invalid verified count stays hidden", () => {
     assert.deepEqual(payload, { goal: 1000, source: "hidden" });
     assert.equal("current" in payload, false);
   }
+});
+
+test("stats, transparency and lookup stay sealed when stats are off or verified count is under 1000", () => {
+  for (const count of [0, 1, 999, null]) {
+    assert.equal(
+      isFoundingRosterSealed({ statsPublic: true, verifiedCount: count }),
+      true,
+      `should stay sealed for count=${count}`,
+    );
+  }
+  assert.equal(isFoundingRosterSealed({ statsPublic: false, verifiedCount: 1500 }), true);
+  assert.equal(isFoundingRosterSealed({ statsPublic: true, verifiedCount: 1000 }), false);
+  assert.equal(isFoundingRosterSealed({ statsPublic: true, verifiedCount: 1_250_000 }), false);
 });

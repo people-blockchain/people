@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
-import { foundersPublic } from "@/lib/founders-public-content";
+import { foundersPublicCopy } from "@/lib/founders-public-content";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
 import { foundersPromoCopy } from "@/lib/founders-promo-content";
 import { foundersLandingCopy } from "@/lib/founders-landing-content";
@@ -60,7 +60,8 @@ const WALLET_LINK_RETRY_MS = 700;
 export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bounty" } = {}) {
   const embedded = variant === "bounty";
   const { lang } = useLanguage();
-  const base = foundersPublic[lang];
+  // Public /founders copy is English even when the UI language is `ru`.
+  const base = foundersPublicCopy(lang);
   const t = foundersPromoCopy(lang);
   const landing = foundersLandingCopy(lang);
   const r = foundersReferralCopy(lang);

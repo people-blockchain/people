@@ -117,9 +117,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Founder numbers are still being handed out",
+    "title": "Founding 1,000 seats are open",
     "titleWithNumber": "Founder #{{n}} is next",
-    "lead": "Claim a number, get a card you can share, and earn a share of the community pool by being early and active.",
+    "lead": "Claim a Founding Seat now. Roster and order stay sealed until 1,000 verified wallets lock in.",
     "cta": "Become a founder",
     "href": "/founders",
     "cardHint": "Two levels, active people only, 10% up front and the rest over 52 weeks.",

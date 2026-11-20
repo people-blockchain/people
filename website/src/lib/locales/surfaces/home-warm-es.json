@@ -117,9 +117,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Todavía se están repartiendo números de fundador",
+    "title": "Las plazas Founding 1,000 están abiertas",
     "titleWithNumber": "El fundador #{{n}} es el siguiente",
-    "lead": "Reclama un número, consigue una tarjeta que puedes compartir y gana una parte del pool de la comunidad por ser de los primeros y estar activo.",
+    "lead": "Reclama un asiento fundador ahora. La lista y el orden permanecen sellados hasta que se confirmen 1,000 monederos verificados.",
     "cta": "Conviértete en fundador",
     "href": "/founders",
     "cardHint": "Dos niveles, solo gente activa, 10% por adelantado y el resto en 52 semanas.",

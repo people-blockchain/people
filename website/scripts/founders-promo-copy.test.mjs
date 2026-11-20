@@ -4,6 +4,10 @@ import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { foundersPromoCopy } from "../src/lib/founders-promo-content.ts";
+import { foundersReferralCopy } from "../src/lib/founders-referral-content.ts";
+import { foundersPublicCopy } from "../src/lib/founders-public-content.ts";
+
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
 const load = (name) => JSON.parse(readFileSync(join(surfaces, name), "utf8"));
@@ -45,4 +49,16 @@ test("founders promo copy still powers card and referral UI strings", () => {
   assert.ok(en.ctaClaim);
   assert.ok(en.cardFounder);
   assert.equal(en.countriesEmpty, "Be the first founder from your country");
+});
+
+const CYRILLIC = /[Ѐ-ӿ]/;
+
+test("founders promo, referral, and public copy: ru falls back to English with no Cyrillic", () => {
+  assert.deepEqual(foundersPromoCopy("ru"), foundersPromoCopy("en"));
+  assert.doesNotMatch(JSON.stringify(foundersPromoCopy("ru")), CYRILLIC);
+  assert.equal(foundersPromoCopy("en").cardNumberPlaceholder, "Revealed at 1,000 wallets");
+  assert.deepEqual(foundersReferralCopy("ru"), foundersReferralCopy("en"));
+  assert.doesNotMatch(JSON.stringify(foundersReferralCopy("ru")), CYRILLIC);
+  assert.deepEqual(foundersPublicCopy("ru"), foundersPublicCopy("en"));
+  assert.doesNotMatch(JSON.stringify(foundersPublicCopy("ru")), CYRILLIC);
 });

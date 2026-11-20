@@ -15,7 +15,7 @@ export const OG_IMAGE_BY_LANG: Partial<Record<Language, string>> = {
 };
 
 const FOUNDERS_DESCRIPTION: Partial<Record<Language, string>> = {
-  en: "Be one of the first million people building a blockchain for everyone. Get your founder number, invite friends and earn points on the PEOPLE testnet.",
+  en: "Join the Founding 1,000 Vault. Seats are open now; roster and order stay sealed until 1,000 verified wallets lock in.",
   ru: "Станьте одним из первых миллиона людей, строящих блокчейн для всех. Получите номер основателя, приглашайте друзей и зарабатывайте баллы в тестовой сети PEOPLE.",
 };
 
@@ -42,7 +42,9 @@ type PageKey = "home" | "founders" | "bounty" | "transparency" | "litepaper";
  * renders the identical preview.
  */
 export function buildPageMetadata(page: PageKey, lang: Language): Metadata {
-  const titles = DOCUMENT_TITLES[lang];
+  // Public /founders metadata is English even when Accept-Language is Russian.
+  const metaLang: Language = page === "founders" && lang === "ru" ? "en" : lang;
+  const titles = DOCUMENT_TITLES[metaLang];
   const bounty = page === "bounty" ? bountyCopy(lang) : null;
   const title =
     bounty
@@ -60,14 +62,14 @@ export function buildPageMetadata(page: PageKey, lang: Language): Metadata {
       : page === "home"
         ? lang === "ru" ? SITE_OG_DESCRIPTION_RU : SITE_OG_DESCRIPTION
         : page === "founders"
-          ? FOUNDERS_DESCRIPTION[lang] ?? FOUNDERS_DESCRIPTION.en!
+          ? FOUNDERS_DESCRIPTION[metaLang] ?? FOUNDERS_DESCRIPTION.en!
           : page === "litepaper"
             ? LITEPAPER_DESCRIPTION[lang] ?? LITEPAPER_DESCRIPTION.en!
             : TRANSPARENCY_DESCRIPTION[lang] ?? TRANSPARENCY_DESCRIPTION.en!;
   const path =
     page === "home" ? "/" : page === "founders" ? "/founders" : page === "bounty" ? "/bounty" : page === "litepaper" ? "/litepaper" : "/transparency";
-  const image = absoluteUrl(OG_IMAGE_BY_LANG[lang] ?? OG_IMAGE_BY_LANG.en!);
-  const alt = `${SITE_NAME} — ${NETWORK_NAME_BY_LANG[lang]}`;
+  const image = absoluteUrl(OG_IMAGE_BY_LANG[metaLang] ?? OG_IMAGE_BY_LANG.en!);
+  const alt = `${SITE_NAME} — ${NETWORK_NAME_BY_LANG[metaLang]}`;
   return {
     title,
     description,
@@ -78,7 +80,7 @@ export function buildPageMetadata(page: PageKey, lang: Language): Metadata {
       type: "website",
       siteName: SITE_NAME,
       url: absoluteUrl(path),
-      locale: OG_LOCALE[lang],
+      locale: OG_LOCALE[metaLang],
       images: [{ url: image, width: 1200, height: 630, alt, type: "image/jpeg" }],
     },
     twitter: {

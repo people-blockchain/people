@@ -117,9 +117,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "创始人编号仍在发放中",
+    "title": "Founding 1,000 席位现已开放",
     "titleWithNumber": "下一个是创始人 #{{n}}",
-    "lead": "领取一个编号，获得一张可以分享的卡片，凭借早期参与和活跃表现赢得社区池的一份。",
+    "lead": "立即领取创始席位。名册与序号将保密，直至 1,000 个已验证钱包锁定。",
     "cta": "成为创始人",
     "href": "/founders",
     "cardHint": "两个等级，仅限活跃用户，10% 预先发放，其余在 52 周内发放。",

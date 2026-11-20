@@ -82,8 +82,12 @@ test("OG metadata: absolute https 1200x630 image, canonical url without ref, twi
       assert.ok(m.openGraph.title && m.openGraph.description);
     }
   }
-  assert.match(og.buildPageMetadata("founders", "ru").openGraph.description, /основател/i);
-  assert.ok(og.buildPageMetadata("founders", "ru").openGraph.images[0].url.endsWith("/og-image-ru.jpg"));
+  const foundersRu = og.buildPageMetadata("founders", "ru");
+  const foundersEn = og.buildPageMetadata("founders", "en");
+  assert.equal(foundersRu.openGraph.description, foundersEn.openGraph.description);
+  assert.equal(foundersRu.openGraph.title, foundersEn.openGraph.title);
+  assert.doesNotMatch(JSON.stringify(foundersRu), /[Ѐ-ӿ]/);
+  assert.ok(foundersRu.openGraph.images[0].url.endsWith("/og-image.jpg"));
 });
 
 test("OG images are under 300 KB", () => {
