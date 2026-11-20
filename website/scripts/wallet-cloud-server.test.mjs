@@ -32,6 +32,7 @@ const { decryptPrivateKeyFromVault, deriveUserWrapKeyHex, encryptPrivateKeyForVa
   "../src/lib/wallet-cloud-crypto.ts"
 );
 const { keyFromPrivate } = await import("../src/lib/people-sign.ts");
+const { evmAddressFromPublicKey, legacyAddressFromPublicKey } = await import("../src/lib/wallet-address-scheme.ts");
 const { getDbReady } = await import("./fixtures/wallet-vault-pglite-db.mjs");
 const schema = await import("../src/db/schema.ts");
 
@@ -303,12 +304,12 @@ test("legacy migration compare-and-swap does not overwrite a version 2 row", asy
   });
 });
 
-async function insertVault({ userId, secret, vaultVersion, privateKey = "ab".repeat(32) }) {
+async function insertVault({ userId, secret, vaultVersion, privateKey = "ab".repeat(32), storedAddress }) {
   const db = await getDbReady();
   await db.insert(schema.users).values({ id: userId });
   const wrapKeyHex = await deriveUserWrapKeyHex(secret, userId);
   const encryptedPrivateKey = await encryptPrivateKeyForVault(privateKey, wrapKeyHex);
-  const address = keyFromPrivate(privateKey).address;
+  const address = storedAddress ?? keyFromPrivate(privateKey).address;
   await db.insert(schema.userWalletVaults).values({
     userId,
     address,
@@ -822,6 +823,104 @@ test("bulk migrate live reports hashed rowId + error code; dry-run probes each s
         .from(schema.userWalletVaults)
         .where(eq(schema.userWalletVaults.userId, v2FailId));
       assert.equal(v2FailRow[0].vaultVersion, 2);
+    },
+  );
+});
+
+test("migrate re-wraps a vault stored under the legacy sha256 address while the site uses keccak", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      NEXT_PUBLIC_CHAIN: "cosmos-evm",
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-legacy-scheme-v2-user";
+      const privateKey = "e1".repeat(32);
+      const key = keyFromPrivate(privateKey);
+      const legacy = legacyAddressFromPublicKey(key.publicKey);
+      const evm = evmAddressFromPublicKey(key.publicKey);
+      assert.notEqual(legacy.toLowerCase(), evm.toLowerCase());
+      await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 2,
+        privateKey,
+        storedAddress: legacy,
+      });
+
+      const dry = await migrateAllWalletVaults({ dryRun: true });
+      const probe = dry.decryptProbes.find((p) => p.rowId === hashVaultRowId(userId));
+      assert.equal(probe.probes.dedicated, "ok");
+      assert.equal(probe.schemeMatch, "legacy");
+      assert.equal(probe.storedAddress, legacy.toLowerCase());
+      assert.equal(probe.derivedEvm.toLowerCase(), evm.toLowerCase());
+      assert.equal(probe.derivedLegacy.toLowerCase(), legacy.toLowerCase());
+      assert.equal(
+        dry.failures.some((f) => f.rowId === hashVaultRowId(userId)),
+        false,
+      );
+
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
+      assert.equal(loaded.address.toLowerCase(), legacy.toLowerCase());
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(await decryptPrivateKeyFromVault(loaded.encryptedPrivateKey, nextWrap), privateKey);
+    },
+  );
+});
+
+test("v1 row stored under the legacy sha256 address migrates and wrap-key follows the row", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      NEXT_PUBLIC_CHAIN: "cosmos-evm",
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-legacy-scheme-v1-user";
+      const privateKey = "e2".repeat(32);
+      const key = keyFromPrivate(privateKey);
+      await insertVault({
+        userId,
+        secret: process.env.AUTH_SECRET,
+        vaultVersion: 1,
+        privateKey,
+        storedAddress: legacyAddressFromPublicKey(key.publicKey),
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
+      const wrap = await getUserWrapKeyHex(userId);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(wrap, nextWrap);
+    },
+  );
+});
+
+test("checksum-only case difference is not address_mismatch", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-checksum-case-user";
+      const privateKey = "e3".repeat(32);
+      const evm = evmAddressFromPublicKey(keyFromPrivate(privateKey).publicKey);
+      await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 2,
+        privateKey,
+        storedAddress: evm.toLowerCase(),
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
     },
   );
 });

@@ -12,6 +12,11 @@ import {
 } from "@/lib/wallet-cloud-crypto";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
+import {
+  addressMatchesPublicKey,
+  evmAddressFromPublicKey,
+  legacyAddressFromPublicKey,
+} from "@/lib/wallet-address-scheme";
 
 const MIN_VAULT_SECRET_BYTES = 32;
 /** Dedicated PEOPLE_WALLET_VAULT_SECRET wrapping. v1 is AUTH_SECRET-only (legacy). */
@@ -274,13 +279,16 @@ async function migrateVaultIfNeeded(userId: string): Promise<MigrateVaultAttempt
   }
   const plain = decrypted.plain;
 
-  let derivedAddress: string;
+  let publicKeyHex: string;
   try {
-    derivedAddress = keyFromPrivate(plain).address;
+    publicKeyHex = keyFromPrivate(plain).publicKey;
   } catch {
     return failMigrate(vault, stage, fromVersion === 1 ? "legacy_key_invalid" : "rotate_key_invalid");
   }
-  if (derivedAddress.toLowerCase() !== vault.address.trim().toLowerCase()) {
+  // Client open already accepts sha256 (pre-EVM) or keccak. Migrate used to compare
+  // only the current scheme, so leftover vaults stored under the other scheme looked
+  // like address_mismatch even though AES-GCM and the key were fine.
+  if (!addressMatchesPublicKey(vault.address, publicKeyHex)) {
     return failMigrate(vault, stage, fromVersion === 1 ? "legacy_address_mismatch" : "rotate_address_mismatch");
   }
 
@@ -358,12 +366,26 @@ export type VaultBulkMigrateFailure = {
   code: string;
 };
 
+export type VaultAddressSchemeMatch = "evm" | "legacy" | "none";
+
 export type VaultDecryptProbe = {
   rowId: string;
   vaultVersion: number;
   expectedSlot: VaultSecretSlot;
   probes: Record<VaultSecretSlot, VaultDecryptProbeResult>;
+  /** Stored receive address (public). Lets ops compare on-chain balances without the key. */
+  storedAddress: string;
+  derivedEvm?: string;
+  derivedLegacy?: string;
+  schemeMatch?: VaultAddressSchemeMatch;
 };
+
+function schemeMatchForStoredAddress(storedAddress: string, publicKeyHex: string): VaultAddressSchemeMatch {
+  const a = storedAddress.trim().toLowerCase();
+  if (evmAddressFromPublicKey(publicKeyHex).toLowerCase() === a) return "evm";
+  if (legacyAddressFromPublicKey(publicKeyHex).toLowerCase() === a) return "legacy";
+  return "none";
+}
 
 export type VaultBulkMigrateResult = {
   dryRun: boolean;
@@ -391,12 +413,34 @@ async function probeDecryptSlot(vault: VaultRow, secret: string | null): Promise
   const decrypted = await decryptVaultWithSecret(vault, secret, "fail");
   if ("error" in decrypted) return "fail";
   try {
-    const derived = keyFromPrivate(decrypted.plain).address;
-    if (derived.toLowerCase() !== vault.address.trim().toLowerCase()) return "address_mismatch";
+    const key = keyFromPrivate(decrypted.plain);
+    if (!addressMatchesPublicKey(vault.address, key.publicKey)) return "address_mismatch";
   } catch {
     return "invalid_key";
   }
   return "ok";
+}
+
+async function derivedAddressesIfDecryptable(
+  vault: VaultRow,
+): Promise<{ derivedEvm: string; derivedLegacy: string; schemeMatch: VaultAddressSchemeMatch } | null> {
+  for (const slot of VAULT_SECRET_SLOTS) {
+    const secret = secretForSlot(slot);
+    if (!secret) continue;
+    const decrypted = await decryptVaultWithSecret(vault, secret, "fail");
+    if ("error" in decrypted) continue;
+    try {
+      const key = keyFromPrivate(decrypted.plain);
+      return {
+        derivedEvm: evmAddressFromPublicKey(key.publicKey),
+        derivedLegacy: legacyAddressFromPublicKey(key.publicKey),
+        schemeMatch: schemeMatchForStoredAddress(vault.address, key.publicKey),
+      };
+    } catch {
+      continue;
+    }
+  }
+  return null;
 }
 
 async function decryptProbesForRows(rows: VaultRow[]): Promise<VaultDecryptProbe[]> {
@@ -406,11 +450,14 @@ async function decryptProbesForRows(rows: VaultRow[]): Promise<VaultDecryptProbe
     for (const slot of VAULT_SECRET_SLOTS) {
       probes[slot] = await probeDecryptSlot(vault, secretForSlot(slot));
     }
+    const derived = await derivedAddressesIfDecryptable(vault);
     out.push({
       rowId: hashVaultRowId(vault.userId),
       vaultVersion: vault.vaultVersion,
       expectedSlot: expectedSecretSlotForVaultVersion(vault.vaultVersion),
       probes,
+      storedAddress: vault.address.trim().toLowerCase(),
+      ...(derived ?? {}),
     });
   }
   return out;
