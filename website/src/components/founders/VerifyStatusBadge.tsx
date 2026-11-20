@@ -1,5 +1,6 @@
 "use client";
 
+import { foundersCopyLang } from "@/lib/founders-public-content";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, ShieldAlert } from "lucide-react";
@@ -46,7 +47,7 @@ function loadStatus(): Promise<Status> {
 /** Verification status for signed-in users: a "Verify" CTA until verified, then a level badge. */
 export function VerifyStatusBadge({ variant = "chip", onNavigate }: { variant?: "chip" | "menu"; onNavigate?: () => void }) {
   const { lang } = useLanguage();
-  const c = COPY[lang] ?? COPY.en;
+  const c = COPY[foundersCopyLang(lang)] ?? COPY.en;
   const [status, setStatus] = useState<Status>("unknown");
 
   useEffect(() => {

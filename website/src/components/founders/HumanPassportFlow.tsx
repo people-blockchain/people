@@ -1,5 +1,7 @@
 "use client";
 
+import { foundersCopyLang } from "@/lib/founders-public-content";
+
 /**
  * The one Human Passport surface. Every entry point renders this component, and
  * it renders exactly one step at a time (see `lib/founders/human-passport-flow.ts`
@@ -76,7 +78,7 @@ export function HumanPassportFlow({
   onSignIn: () => void;
   onReload: () => Promise<void>;
 }) {
-  const c = COPY[lang] ?? COPY.en;
+  const c = COPY[foundersCopyLang(lang)] ?? COPY.en;
   const external = useExternalWalletOptional();
   const signer = external?.signer ?? null;
 
@@ -99,7 +101,7 @@ export function HumanPassportFlow({
     checking,
   });
   const scored = passportScoredWallet(passportWallet, primaryWallet);
-  const guide = GUIDE[lang] ?? GUIDE.en;
+  const guide = GUIDE[foundersCopyLang(lang)] ?? GUIDE.en;
   const firstPrimary =
     isCloudWalletEnabled() && guide.firstPrimaryCloud
       ? guide.firstPrimaryCloud

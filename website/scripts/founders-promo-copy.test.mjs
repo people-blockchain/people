@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import { foundersPromoCopy } from "../src/lib/founders-promo-content.ts";
 import { foundersReferralCopy } from "../src/lib/founders-referral-content.ts";
-import { foundersPublicCopy } from "../src/lib/founders-public-content.ts";
+import { foundersCopyLang, foundersPublicCopy } from "../src/lib/founders-public-content.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
@@ -62,3 +62,30 @@ test("founders promo, referral, and public copy: ru falls back to English with n
   assert.deepEqual(foundersPublicCopy("ru"), foundersPublicCopy("en"));
   assert.doesNotMatch(JSON.stringify(foundersPublicCopy("ru")), CYRILLIC);
 });
+
+test("foundersCopyLang maps ru to en and leaves other locales alone", () => {
+  assert.equal(foundersCopyLang("ru"), "en");
+  assert.equal(foundersCopyLang("en"), "en");
+  assert.equal(foundersCopyLang("de"), "de");
+});
+
+const FOUNDERS_UI_FILES = [
+  "src/components/founders/HumanPassportFlow.tsx",
+  "src/components/founders/FoundersPersonal.tsx",
+  "src/components/founders/FoundersApp.tsx",
+  "src/components/founders/VerifyStatusBadge.tsx",
+  "src/components/founders/FoundersNftCard.tsx",
+];
+
+test("founders UI copy lookups use foundersCopyLang so ru never renders Russian", () => {
+  for (const file of FOUNDERS_UI_FILES) {
+    const src = readFileSync(join(root, file), "utf8");
+    assert.match(src, /foundersCopyLang/, `${file} must call foundersCopyLang`);
+    assert.doesNotMatch(
+      src,
+      /COPY\[lang\]|GUIDE\[lang\]|VERIFY_EXTRA\[lang\]|founderNftCopy\[lang\]/,
+      `${file} still indexes a copy table with raw lang`,
+    );
+  }
+});
+

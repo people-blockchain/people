@@ -36,10 +36,18 @@ export const foundersPublic: Record<Language, FoundersPublicCopy> = Object.fromE
 ) as Record<Language, FoundersPublicCopy>;
 
 /**
+ * Public /founders UI stays English when the site language is Russian.
+ * Locale tables and JSON fixtures, including ru copies, stay on disk.
+ */
+export function foundersCopyLang(lang: Language | string): Language {
+  return lang === "ru" ? "en" : (lang as Language);
+}
+
+/**
  * /founders public register/country/visibility copy.
  * `ru` falls back to English so the public /founders route never renders Russian.
  * Locale JSON files, including founders-ru.json, stay on disk for fixtures.
  */
 export function foundersPublicCopy(lang: Language): FoundersPublicCopy {
-  return foundersPublic[lang === "ru" ? "en" : lang];
+  return foundersPublic[foundersCopyLang(lang)];
 }

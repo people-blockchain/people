@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
-import { foundersPublicCopy } from "@/lib/founders-public-content";
+import { foundersCopyLang, foundersPublicCopy } from "@/lib/founders-public-content";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
 import { foundersPromoCopy } from "@/lib/founders-promo-content";
 import { foundersLandingCopy } from "@/lib/founders-landing-content";
@@ -188,7 +188,7 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   const countryName = useCallback(
     (code: string) => {
       try {
-        const dn = new Intl.DisplayNames([lang], { type: "region" });
+        const dn = new Intl.DisplayNames([foundersCopyLang(lang)], { type: "region" });
         return dn.of(code) ?? code;
       } catch {
         return FOUNDER_COUNTRY_OPTIONS.find((c) => c.code === code)?.name ?? code;
