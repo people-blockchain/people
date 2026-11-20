@@ -24,7 +24,7 @@ Rotation reuses that path:
 - Compare-and-swap `UPDATE … WHERE userId = ? AND vaultVersion = <old>`. A lost race does not overwrite a newer row.
 - Decrypt / address mismatch: **no write**. The ciphertext stays.
 
-The wrap-key route migrates the row **before** returning the current wrap key, so the client never needs both old and new keys.
+The wrap-key route migrates the row first. If the row cannot move, it returns the wrap key for the **stored** `vaultVersion` (v1=`AUTH_SECRET`, v2=`PEOPLE_WALLET_VAULT_SECRET` or `_PREVIOUS`, v3=`NEXT`/current). Unmigrated rows are never handed `NEXT`. The client still never needs both keys.
 
 Deploying this code with rotation env **unset** changes nothing: current version stays 2, only v1→v2 runs.
 
@@ -32,9 +32,9 @@ Deploying this code with rotation env **unset** changes nothing: current version
 
 Protected like other admin/cron routes: `Authorization: Bearer $CRON_SECRET`, or a discover-admin session.
 
-- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version (`1`, `2`, `3`, `other`, `total`).
+- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version, `failures` (hashed `rowId` + error code, never userId/secrets), and `decryptProbes` (each row vs `auth_secret` / `dedicated` / `previous` / `next`: `unset` | `ok` | `fail` | `address_mismatch` | `invalid_key`). No writes.
 - `POST /api/cron/wallet-vault-rotate` with `{"dryRun": true}` — same, no writes.
-- `POST /api/cron/wallet-vault-rotate` — live migrate every behind-version row (same CAS as lazy login).
+- `POST /api/cron/wallet-vault-rotate` — live migrate every behind-version row (same CAS as lazy login). Failed rows are listed in `failures` with `rowId` + `code`; each also logs `[wallet-vault] rotate row failed`.
 
 Not on the Vercel cron schedule. One-shot, owner-triggered. Do not point this at a production database from a laptop script.
 

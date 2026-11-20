@@ -14,13 +14,16 @@ register("./fixtures/wallet-vault-db-loader.mjs", import.meta.url);
 
 const {
   currentVaultVersion,
+  expectedSecretSlotForVaultVersion,
   getUserWrapKeyHex,
+  hashVaultRowId,
   isAuthTimeFresh,
   isVaultRotationActive,
   isWalletVaultConfigured,
   legacyVaultCasWhere,
   loadUserWalletVault,
   migrateAllWalletVaults,
+  unwrapMasterSecretForVaultVersion,
   vaultCasWhere,
   walletVaultMasterSecret,
   WALLET_VAULT_REAUTH_WINDOW_MS,
@@ -561,6 +564,7 @@ test("bulk migrate dry-run reports counts and writes nothing; live migrate moves
       assert.equal(live.dryRun, false);
       assert.equal(live.migrated, 1);
       assert.equal(live.failed, 0);
+      assert.deepEqual(live.failures, []);
       assert.equal(live.skipped, 0);
       assert.equal(live.counts.total, 1);
       assert.equal(live.counts[3], 1);
@@ -569,6 +573,255 @@ test("bulk migrate dry-run reports counts and writes nothing; live migrate moves
       assert.equal(row[0].vaultVersion, 3);
       const currentWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
       assert.equal(await decryptPrivateKeyFromVault(row[0].encryptedPrivateKey, currentWrap), privateKey);
+    },
+  );
+});
+
+test("unwrapMasterSecretForVaultVersion matches the stored version, never NEXT for v1/v2", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+    },
+    () => {
+      assert.equal(unwrapMasterSecretForVaultVersion(1), process.env.AUTH_SECRET);
+      assert.equal(unwrapMasterSecretForVaultVersion(2), process.env.PEOPLE_WALLET_VAULT_SECRET);
+      assert.equal(unwrapMasterSecretForVaultVersion(3), process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT);
+      assert.equal(expectedSecretSlotForVaultVersion(1), "auth_secret");
+      assert.equal(expectedSecretSlotForVaultVersion(2), "dedicated");
+      assert.equal(expectedSecretSlotForVaultVersion(3), "next");
+    },
+  );
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: undefined,
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+    },
+    () => {
+      assert.equal(unwrapMasterSecretForVaultVersion(3), process.env.PEOPLE_WALLET_VAULT_SECRET);
+      assert.equal(expectedSecretSlotForVaultVersion(3), "dedicated");
+    },
+  );
+});
+
+test("unmigrated v2 row with NEXT set returns the old dedicated wrap key, not NEXT", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-wrapkey-stuck-v2-user";
+      const privateKey = "88".repeat(32);
+      const storedAddress = keyFromPrivate("99".repeat(32)).address;
+      assert.notEqual(storedAddress.toLowerCase(), keyFromPrivate(privateKey).address.toLowerCase());
+      const db = await getDbReady();
+      await db.insert(schema.users).values({ id: userId });
+      const wrapKeyHex = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      const encryptedPrivateKey = await encryptPrivateKeyForVault(privateKey, wrapKeyHex);
+      await db.insert(schema.userWalletVaults).values({
+        userId,
+        address: storedAddress,
+        publicKey: `0x${"22".repeat(33)}`,
+        encryptedPrivateKey,
+        vaultVersion: 2,
+      });
+
+      const returned = await getUserWrapKeyHex(userId);
+      const oldWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(returned, oldWrap);
+      assert.notEqual(returned, nextWrap);
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 2);
+      assert.equal(loaded.encryptedPrivateKey, encryptedPrivateKey);
+    },
+  );
+});
+
+test("v3 row with NEXT set returns the NEXT wrap key", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-wrapkey-v3-next-user";
+      const privateKey = "aa".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT,
+        vaultVersion: 3,
+        privateKey,
+      });
+      const returned = await getUserWrapKeyHex(userId);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      const oldWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(returned, nextWrap);
+      assert.notEqual(returned, oldWrap);
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
+    },
+  );
+});
+
+test("unmigrated v1 row with NEXT set returns the AUTH_SECRET wrap key", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-wrapkey-stuck-v1-user";
+      const privateKey = "bb".repeat(32);
+      const storedAddress = keyFromPrivate("cc".repeat(32)).address;
+      const db = await getDbReady();
+      await db.insert(schema.users).values({ id: userId });
+      const legacyWrap = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, userId);
+      const encryptedPrivateKey = await encryptPrivateKeyForVault(privateKey, legacyWrap);
+      await db.insert(schema.userWalletVaults).values({
+        userId,
+        address: storedAddress,
+        publicKey: `0x${"22".repeat(33)}`,
+        encryptedPrivateKey,
+        vaultVersion: 1,
+      });
+
+      const returned = await getUserWrapKeyHex(userId);
+      const authWrap = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, userId);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(returned, authWrap);
+      assert.notEqual(returned, nextWrap);
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 1);
+    },
+  );
+});
+
+test("bulk migrate live reports hashed rowId + error code; dry-run probes each secret slot", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const db = await getDbReady();
+      const { eq } = await import("drizzle-orm");
+      await db.delete(schema.userWalletVaults);
+
+      const v2OkId = "wallet-probe-v2-ok";
+      const v2FailId = "wallet-probe-v2-fail";
+      const v3Id = "wallet-probe-v3";
+      const v1MismatchId = "wallet-probe-v1-mismatch";
+
+      await insertVault({
+        userId: v2OkId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 2,
+        privateKey: "d1".repeat(32),
+      });
+      const v2FailPk = "d2".repeat(32);
+      const v2FailAddr = keyFromPrivate("d3".repeat(32)).address;
+      await db.insert(schema.users).values({ id: v2FailId });
+      const v2FailWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, v2FailId);
+      await db.insert(schema.userWalletVaults).values({
+        userId: v2FailId,
+        address: v2FailAddr,
+        publicKey: `0x${"22".repeat(33)}`,
+        encryptedPrivateKey: await encryptPrivateKeyForVault(v2FailPk, v2FailWrap),
+        vaultVersion: 2,
+      });
+      await insertVault({
+        userId: v3Id,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT,
+        vaultVersion: 3,
+        privateKey: "d4".repeat(32),
+      });
+      const v1Pk = "d5".repeat(32);
+      const v1Addr = keyFromPrivate("d6".repeat(32)).address;
+      await db.insert(schema.users).values({ id: v1MismatchId });
+      const v1Wrap = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, v1MismatchId);
+      await db.insert(schema.userWalletVaults).values({
+        userId: v1MismatchId,
+        address: v1Addr,
+        publicKey: `0x${"22".repeat(33)}`,
+        encryptedPrivateKey: await encryptPrivateKeyForVault(v1Pk, v1Wrap),
+        vaultVersion: 1,
+      });
+
+      const warnings = [];
+      const original = console.warn;
+      console.warn = (...args) => {
+        warnings.push(args);
+      };
+      let dry;
+      let live;
+      try {
+        dry = await migrateAllWalletVaults({ dryRun: true });
+        live = await migrateAllWalletVaults({ dryRun: false });
+      } finally {
+        console.warn = original;
+      }
+
+      assert.equal(dry.dryRun, true);
+      assert.ok(Array.isArray(dry.decryptProbes));
+      const byRow = Object.fromEntries(dry.decryptProbes.map((p) => [p.rowId, p]));
+      const v2OkProbe = byRow[hashVaultRowId(v2OkId)];
+      const v2FailProbe = byRow[hashVaultRowId(v2FailId)];
+      const v3Probe = byRow[hashVaultRowId(v3Id)];
+      const v1Probe = byRow[hashVaultRowId(v1MismatchId)];
+      assert.equal(v2OkProbe.probes.dedicated, "ok");
+      assert.equal(v2OkProbe.probes.next, "fail");
+      assert.equal(v2OkProbe.expectedSlot, "dedicated");
+      assert.equal(v2FailProbe.probes.dedicated, "address_mismatch");
+      assert.equal(v3Probe.probes.next, "ok");
+      assert.equal(v3Probe.probes.dedicated, "fail");
+      assert.equal(v1Probe.probes.auth_secret, "address_mismatch");
+      assert.equal(
+        dry.decryptProbes.some((p) => JSON.stringify(p).includes(v2FailId)),
+        false,
+      );
+      assert.ok(dry.failures.some((f) => f.rowId === hashVaultRowId(v2FailId)));
+      assert.ok(dry.failures.some((f) => f.rowId === hashVaultRowId(v1MismatchId)));
+      assert.equal(
+        dry.failures.some((f) => f.rowId === hashVaultRowId(v2OkId)),
+        false,
+      );
+
+      assert.equal(live.migrated, 1);
+      assert.equal(live.failed, 2);
+      const liveCodes = Object.fromEntries(live.failures.map((f) => [f.rowId, f.code]));
+      assert.equal(liveCodes[hashVaultRowId(v2FailId)], "rotate_address_mismatch");
+      assert.equal(liveCodes[hashVaultRowId(v1MismatchId)], "legacy_address_mismatch");
+      assert.equal(live.failures.some((f) => JSON.stringify(f).includes(v2FailId)), false);
+      const logText = JSON.stringify(warnings);
+      assert.match(logText, /\[wallet-vault\] rotate row failed/);
+      assert.match(logText, /rotate_address_mismatch/);
+      assert.match(logText, /legacy_address_mismatch/);
+      assert.equal(logText.includes(v2FailId), false);
+      assert.equal(logText.includes(v1MismatchId), false);
+      assert.equal(logText.includes(v2FailPk), false);
+
+      const v2OkRow = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, v2OkId));
+      assert.equal(v2OkRow[0].vaultVersion, 3);
+      const v2FailRow = await db
+        .select()
+        .from(schema.userWalletVaults)
+        .where(eq(schema.userWalletVaults.userId, v2FailId));
+      assert.equal(v2FailRow[0].vaultVersion, 2);
     },
   );
 });
