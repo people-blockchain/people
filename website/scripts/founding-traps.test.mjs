@@ -359,4 +359,9 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
   );
   assert.match(sqlRaw, /CREATE TABLE IF NOT EXISTS "founder_telegram_pending_claim"/);
   assert.match(sqlRaw, /CREATE TABLE IF NOT EXISTS "founder_email_waitlist"/);
+
+  const layoutSrc = readFileSync(join(root, "src/app/layout.tsx"), "utf8");
+  const keywordsBlock = layoutSrc.match(/keywords:\s*\[([\s\S]*?)\]/);
+  assert.ok(keywordsBlock, "layout metadata keywords block missing");
+  assert.doesNotMatch(keywordsBlock[1], /[Ѐ-ӿ]/, "public metadata keywords must not contain Cyrillic");
 });

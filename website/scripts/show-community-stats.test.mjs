@@ -27,7 +27,7 @@ test("showCommunityStats accepts true and 1", () => {
   else process.env.NEXT_PUBLIC_SHOW_COMMUNITY_STATS = prev;
 });
 
-test("BountyCommunity and FoundersMillionCounterBar keep goal copy when flag is off", () => {
+test("BountyCommunity and FoundersMillionCounterBar hide live signup counters when flag is off", () => {
   const bounty = readFileSync(
     join(root, "src/components/bounty/BountyHub.tsx"),
     "utf8",
@@ -36,8 +36,10 @@ test("BountyCommunity and FoundersMillionCounterBar keep goal copy when flag is 
     join(root, "src/components/founders/FoundersLandingSections.tsx"),
     "utf8",
   );
-  assert.doesNotMatch(bounty, /if \(!statsPublic\) return null;/);
   assert.match(bounty, /if \(!statsPublic\)/);
+  assert.doesNotMatch(bounty, /staticGoal = 1_000_000/);
+  assert.doesNotMatch(bounty, /if \(!statsPublic\) return null;/);
   assert.match(founders, /if \(!statsPublic\)/);
+  assert.match(founders, /vaultCalloutTitle/);
   assert.doesNotMatch(founders, /if \(!showCommunityStats\(\)\) return null;/);
 });

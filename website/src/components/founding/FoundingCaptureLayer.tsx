@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,6 +24,7 @@ import {
   FOUNDING_PENDING_CLAIM_STORAGE_KEY,
   FOUNDING_TG_CLAIM_PARAM,
   FOUNDING_TG_CLAIM_TOKEN_RE,
+  isFullProgressRoute,
   openFoundingModal,
   telegramColdStartLink,
   type FoundingOpenSource,
@@ -86,10 +88,6 @@ function isOtherDialogOpen(): boolean {
   return Boolean(document.querySelector('[role="dialog"][aria-modal="true"]'));
 }
 
-export function isFullProgressRoute(pathname: string): boolean {
-  return pathname === "/" || pathname === "/founders" || pathname === "/bounty";
-}
-
 export function FoundingCaptureLayer() {
   const pathname = usePathname() || "/";
   const { lang } = useLanguage();
@@ -105,6 +103,9 @@ export function FoundingCaptureLayer() {
   const [modalSource, setModalSource] = useState<FoundingOpenSource>("cta");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [badgeExpanded, setBadgeExpanded] = useState(false);
+  const [progressExpanded, setProgressExpanded] = useState(false);
+  const [progressSlot, setProgressSlot] = useState<HTMLElement | null>(null);
+  const [foundersSlot, setFoundersSlot] = useState<HTMLElement | null>(null);
 
   const [me, setMe] = useState<FounderMeSnapshot | null>(null);
   const [pendingClaim, setPendingClaim] = useState<StoredPendingClaim | null>(null);
@@ -443,6 +444,16 @@ export function FoundingCaptureLayer() {
     };
   }, [emailSubmittedBotUrl, tgColdLink]);
 
+  useEffect(() => {
+    if (!mounted || skipCapture || typeof document === "undefined") {
+      setProgressSlot(null);
+      setFoundersSlot(null);
+      return;
+    }
+    setProgressSlot(document.getElementById("founding-progress-slot"));
+    setFoundersSlot(document.getElementById("founding-progress-founders-slot"));
+  }, [mounted, skipCapture, pathname]);
+
   if (skipCapture) return null;
 
   const verificationLevel = me?.founder?.verificationLevel ?? 0;
@@ -524,38 +535,184 @@ export function FoundingCaptureLayer() {
   const showFullProgressInline = isFullProgressRoute(pathname);
   const drawerRouteCopy = copy.drawer.byRoute[routeKey];
 
+  const nextStepShort = !step1Done
+    ? (copy.progress.step1Short ?? "Step 1: Verify in Telegram (20s)")
+    : !step2Done
+      ? (copy.progress.step2Short ?? "Step 2: Create or Connect Wallet")
+      : !step3Done
+        ? (copy.progress.step3Short ?? "Step 3: Human Passport")
+        : copy.progress.title;
+  const nextStepShortMobile = !step1Done
+    ? (copy.progress.step1ShortMobile ?? "Step 1 (20s)")
+    : !step2Done
+      ? "Step 2"
+      : !step3Done
+        ? "Step 3"
+        : copy.progress.title;
+
+  const nextStepAction = !step1Done ? (
+    <a
+      href={tgColdLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={() => handleTgDeepLinkClick("progress_strip")}
+      data-testid="founding-progress-strip-cta"
+      className="inline-flex h-7 shrink-0 items-center justify-center rounded-full bg-brand px-2.5 text-[11px] font-bold text-brand-ink transition hover:brightness-110 sm:h-8 sm:px-3 sm:text-xs"
+    >
+      {copy.progress.verifyShort ?? "Verify"}
+    </a>
+  ) : !step2Done ? (
+    <button
+      type="button"
+      onClick={() => openWalletModal()}
+      data-testid="founding-progress-strip-cta"
+      className="inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-brand bg-brand/10 px-2.5 text-[11px] font-bold text-brand transition hover:bg-brand/20 sm:h-8 sm:px-3 sm:text-xs"
+    >
+      {copy.progress.verifyShort ?? "Verify"}
+    </button>
+  ) : !step3Done ? (
+    <Link
+      href="/founders#verify"
+      data-testid="founding-progress-strip-cta"
+      className="inline-flex h-7 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface px-2.5 text-[11px] font-bold text-ink transition hover:border-brand hover:text-brand sm:h-8 sm:px-3 sm:text-xs"
+    >
+      {copy.progress.verifyShort ?? "Verify"}
+    </Link>
+  ) : null;
+
+  const progressSteps = (
+    <ol className="grid gap-2 sm:grid-cols-3">
+      <li
+        data-testid="founding-step-1"
+        className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
+          step1Done
+            ? "border-value/45 bg-surface"
+            : "border-warm/45 bg-surface shadow-[var(--elev-1)]"
+        }`}
+      >
+        <div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold text-ink">{copy.progress.step1Title}</span>
+            {step1Done ? (
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
+                <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 font-semibold text-brand">{copy.progress.step1Status}</p>
+          <p className="mt-0.5 text-ink-2">{copy.progress.step1Detail}</p>
+        </div>
+        {!step1Done ? (
+          <a
+            href={tgColdLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => handleTgDeepLinkClick("progress_step1")}
+            className="mt-2.5 inline-flex h-8 items-center justify-center gap-1.5 rounded-xl bg-brand px-3 font-semibold text-brand-ink transition hover:brightness-110"
+          >
+            {copy.progress.step1Cta}
+            <ExternalLink className="h-3 w-3" aria-hidden="true" />
+          </a>
+        ) : null}
+      </li>
+      <li
+        data-testid="founding-step-2"
+        className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
+          step2Done ? "border-value/45 bg-surface" : "border-line bg-surface"
+        }`}
+      >
+        <div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold text-ink">{copy.progress.step2Title}</span>
+            {step2Done ? (
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
+                <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 font-semibold text-brand">{copy.progress.step2Status}</p>
+          <p className="mt-0.5 text-ink-2">{copy.progress.step2Detail}</p>
+        </div>
+        {!step2Done ? (
+          <button
+            type="button"
+            onClick={() => openWalletModal()}
+            className="mt-2.5 inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-brand bg-brand/10 px-3 font-semibold text-brand transition hover:bg-brand/20"
+          >
+            <Wallet className="h-3.5 w-3.5" aria-hidden="true" />
+            {copy.progress.step2Cta}
+          </button>
+        ) : null}
+      </li>
+      <li
+        data-testid="founding-step-3"
+        className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
+          step3Done ? "border-value/45 bg-surface" : "border-line bg-surface"
+        }`}
+      >
+        <div>
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold text-ink">{copy.progress.step3Title}</span>
+            {step3Done ? (
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
+                <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 font-semibold text-brand">{copy.progress.step3Status}</p>
+          <p className="mt-0.5 text-ink-2">{copy.progress.step3Detail}</p>
+        </div>
+        {!step3Done ? (
+          <Link
+            href="/founders#verify"
+            className="mt-2.5 inline-flex h-8 items-center justify-center rounded-xl border border-line-strong bg-canvas-2 px-3 font-semibold text-ink transition hover:border-brand hover:text-brand"
+          >
+            {copy.progress.step3Cta}
+          </Link>
+        ) : null}
+      </li>
+    </ol>
+  );
+
   return (
     <>
-      {/* 1. Sticky Top Bar: Founding 1,000 Vault */}
+      {/* 1. Sticky Top Bar: Founding 1,000 Vault — always sticky at the very top.
+          The style tag publishes the bar height so <header> can stick just below it
+          on the first paint (no useEffect delay / overlap). */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: ":root { --founding-topbar-h: 2.5rem; }",
+        }}
+      />
       <div
         role="region"
         aria-label={copy.stickyBar.badge}
         data-testid="founding-sticky-bar"
-        className="w-full max-w-full overflow-x-hidden border-b border-warm/35 bg-[linear-gradient(90deg,rgba(245,158,11,0.14),rgba(3,105,161,0.12),rgba(245,158,11,0.14))] px-2.5 py-1.5 text-ink sm:px-4 sm:py-2"
+        className="sticky top-0 z-[60] h-10 w-full max-w-full overflow-hidden border-b border-warm/35 bg-[linear-gradient(90deg,rgba(245,158,11,0.14),rgba(3,105,161,0.12),rgba(245,158,11,0.14))] px-2 text-ink sm:px-4"
       >
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
-          <div className="flex min-w-0 flex-1 items-center gap-2">
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-warm/50 bg-warm/20 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-ink">
-              <Lock className="h-3 w-3 text-warm" aria-hidden="true" />
-              <span className="hidden xs:inline">{copy.stickyBar.badge}</span>
-              <span className="xs:hidden">1,000</span>
-            </span>
-            <p className="min-w-0 truncate text-xs font-medium text-ink sm:text-xs md:whitespace-normal">
-              <span className="hidden md:inline">{copy.stickyBar.messageFull}</span>
-              <span className="md:hidden">{copy.stickyBar.messageCompact}</span>
+        <div className="mx-auto flex h-full max-w-7xl flex-nowrap items-center justify-between gap-1.5 sm:gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
+            <Lock className="h-3.5 w-3.5 shrink-0 text-warm" aria-hidden="true" />
+            <p className="min-w-0 whitespace-nowrap text-[11px] font-semibold leading-none text-ink sm:text-xs">
+              <span className="lg:hidden">{copy.stickyBar.messageMobile ?? "Founding 1,000 Vault · Dec 1"}</span>
+              <span className="hidden lg:inline">{copy.stickyBar.messageFull}</span>
             </p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             {countdown && !countdown.open ? (
               <span
-                className="inline-flex items-center rounded-full border border-line bg-surface/90 px-2 py-0.5 font-mono text-[11px] font-semibold tabular-nums text-ink-2"
+                className="inline-flex items-center rounded-full border border-line bg-surface/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold tabular-nums text-ink-2 sm:px-2"
                 data-testid="founding-sticky-countdown"
               >
                 {countdown.days}
                 {copy.stickyBar.daysShort} {String(countdown.hours).padStart(2, "0")}
-                {copy.stickyBar.hoursShort} {String(countdown.minutes).padStart(2, "0")}
-                {copy.stickyBar.minutesShort}
+                {copy.stickyBar.hoursShort}
+                <span className="hidden sm:inline">
+                  {" "}
+                  {String(countdown.minutes).padStart(2, "0")}
+                  {copy.stickyBar.minutesShort}
+                </span>
               </span>
             ) : null}
 
@@ -563,152 +720,97 @@ export function FoundingCaptureLayer() {
               type="button"
               onClick={handleStickyBarClick}
               data-testid="founding-sticky-cta"
-              className="inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-brand px-3 text-xs font-bold text-brand-ink shadow-sm transition hover:brightness-110 sm:h-8 sm:px-3.5"
+              className="inline-flex h-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-brand px-2.5 text-[11px] font-bold text-brand-ink shadow-sm transition hover:brightness-110 sm:h-8 sm:px-3.5 sm:text-xs"
             >
-              {copy.stickyBar.cta}
+              <span className="sm:hidden">{copy.stickyBar.ctaShort ?? "Claim Seat"}</span>
+              <span className="hidden sm:inline">{copy.stickyBar.cta}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 2. Progress Widget: Full card on /, /founders, /bounty; compact floating badge elsewhere */}
-      {showFullProgressInline ? (
-        <section
-          aria-label={copy.progress.title}
-          data-testid="founding-progress-widget-full"
-          className="w-full max-w-full overflow-x-hidden border-b border-line bg-canvas-2/80 px-3 py-3 sm:px-6"
-        >
-          <div className="mx-auto max-w-6xl">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
+      {/* 2. Collapsible Founder 0/3 strip — portaled directly under <header> */}
+      {showFullProgressInline && progressSlot
+        ? createPortal(
+            <section
+              aria-label={copy.progress.title}
+              data-testid="founding-progress-widget-full"
+              className="w-full max-w-full border-b border-line bg-canvas-2/90"
+            >
+              <div className="mx-auto flex h-10 max-w-7xl flex-nowrap items-center gap-1.5 px-2.5 sm:gap-2 sm:px-6">
                 <span
-                  className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 px-3 py-1 font-mono text-xs font-bold text-brand"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full border border-brand/40 bg-brand/10 px-2 py-0.5 font-mono text-[11px] font-bold text-brand sm:px-3 sm:text-xs"
                   data-testid="founding-progress-counter"
                 >
                   <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                   {copy.progress.badgePrefix} {completedSteps}/3
                 </span>
-                <p className="text-xs font-semibold text-ink sm:text-sm">{copy.progress.title}</p>
-                <span className="hidden text-xs text-ink-3 lg:inline">· {copy.progress.sealedNote}</span>
-              </div>
-              {referralLinkToDisplay ? (
-                <div className="flex max-w-full items-center gap-1.5 rounded-full border border-value/40 bg-surface px-2.5 py-1 text-xs">
-                  <span className=" hidden text-ink-2 sm:inline">{copy.progress.referralReadyLabel}</span>
-                  <span className="max-w-[160px] truncate font-mono text-ink sm:max-w-[220px]">
-                    {referralLinkToDisplay}
+                <p className="min-w-0 flex-1 truncate text-[11px] font-medium text-ink sm:text-xs">
+                  <span className="sm:hidden">
+                    {nextStepShortMobile}
                   </span>
-                  <button
-                    type="button"
-                    onClick={handleCopyReferral}
-                    className="inline-flex items-center gap-1 rounded-full bg-brand/15 px-2 py-0.5 font-semibold text-brand hover:bg-brand/25"
-                  >
-                    <Copy className="h-3 w-3" aria-hidden="true" />
-                    {copiedRef ? copy.progress.copiedReferral : copy.progress.copyReferral}
-                  </button>
+                  <span className="hidden sm:inline">{nextStepShort}</span>
+                </p>
+                {nextStepAction}
+                <button
+                  type="button"
+                  aria-expanded={progressExpanded}
+                  aria-label={progressExpanded ? copy.progress.collapseAria : copy.progress.expandAria}
+                  onClick={() => setProgressExpanded((open) => !open)}
+                  className="inline-flex h-7 shrink-0 cursor-pointer items-center gap-0.5 rounded-full border border-line bg-surface px-2 text-[11px] font-semibold text-ink transition hover:border-brand sm:h-8 sm:px-2.5 sm:text-xs"
+                >
+                  {copy.progress.detailsToggle ?? "Details"}
+                  {progressExpanded ? (
+                    <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
+                  ) : (
+                    <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
+              {progressExpanded ? (
+                <div className="border-t border-line px-3 py-3 sm:px-6">
+                  <div className="mx-auto max-w-6xl">
+                    {referralLinkToDisplay ? (
+                      <div className="mb-2.5 flex max-w-full items-center gap-1.5 rounded-full border border-value/40 bg-surface px-2.5 py-1 text-xs">
+                        <span className="hidden text-ink-2 sm:inline">{copy.progress.referralReadyLabel}</span>
+                        <span className="max-w-[160px] truncate font-mono text-ink sm:max-w-[220px]">
+                          {referralLinkToDisplay}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleCopyReferral}
+                          className="inline-flex items-center gap-1 rounded-full bg-brand/15 px-2 py-0.5 font-semibold text-brand hover:bg-brand/25"
+                        >
+                          <Copy className="h-3 w-3" aria-hidden="true" />
+                          {copiedRef ? copy.progress.copiedReferral : copy.progress.copyReferral}
+                        </button>
+                      </div>
+                    ) : null}
+                    {progressSteps}
+                  </div>
                 </div>
               ) : null}
-            </div>
+            </section>,
+            progressSlot,
+          )
+        : null}
 
-            <ol className="mt-2.5 grid gap-2 sm:grid-cols-3">
-              {/* Step 1: Telegram Verify */}
-              <li
-                data-testid="founding-step-1"
-                className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
-                  step1Done
-                    ? "border-value/45 bg-surface"
-                    : "border-warm/45 bg-surface shadow-[var(--elev-1)]"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-ink">{copy.progress.step1Title}</span>
-                    {step1Done ? (
-                      <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
-                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                      </span>
-                    ) : null}
-                  </div>
-                  <p className="mt-1 font-semibold text-brand">{copy.progress.step1Status}</p>
-                  <p className="mt-0.5 text-ink-2">{copy.progress.step1Detail}</p>
-                </div>
-                {!step1Done ? (
-                  <a
-                    href={tgColdLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => handleTgDeepLinkClick("progress_step1")}
-                    className="mt-2.5 inline-flex h-8 items-center justify-center gap-1.5 rounded-xl bg-brand px-3 font-semibold text-brand-ink transition hover:brightness-110"
-                  >
-                    {copy.progress.step1Cta}
-                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                  </a>
-                ) : null}
-              </li>
+      {/* 2b. Full 3-step cards on /founders, below the page hero (not above the header) */}
+      {pathname === "/founders" && foundersSlot
+        ? createPortal(
+            <section
+              aria-label={copy.progress.title}
+              data-testid="founding-progress-founders-steps"
+              className="mb-2"
+            >
+              {progressSteps}
+            </section>,
+            foundersSlot,
+          )
+        : null}
 
-              {/* Step 2: Create or Connect Wallet */}
-              <li
-                data-testid="founding-step-2"
-                className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
-                  step2Done ? "border-value/45 bg-surface" : "border-line bg-surface"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-ink">{copy.progress.step2Title}</span>
-                    {step2Done ? (
-                      <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
-                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                      </span>
-                    ) : null}
-                  </div>
-                  <p className="mt-1 font-semibold text-brand">{copy.progress.step2Status}</p>
-                  <p className="mt-0.5 text-ink-2">{copy.progress.step2Detail}</p>
-                </div>
-                {!step2Done ? (
-                  <button
-                    type="button"
-                    onClick={() => openWalletModal()}
-                    className="mt-2.5 inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-brand bg-brand/10 px-3 font-semibold text-brand transition hover:bg-brand/20"
-                  >
-                    <Wallet className="h-3.5 w-3.5" aria-hidden="true" />
-                    {copy.progress.step2Cta}
-                  </button>
-                ) : null}
-              </li>
-
-              {/* Step 3: Human Passport */}
-              <li
-                data-testid="founding-step-3"
-                className={`flex flex-col justify-between rounded-2xl border p-3 text-xs transition ${
-                  step3Done ? "border-value/45 bg-surface" : "border-line bg-surface"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-ink">{copy.progress.step3Title}</span>
-                    {step3Done ? (
-                      <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-value/20 text-value">
-                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                      </span>
-                    ) : null}
-                  </div>
-                  <p className="mt-1 font-semibold text-brand">{copy.progress.step3Status}</p>
-                  <p className="mt-0.5 text-ink-2">{copy.progress.step3Detail}</p>
-                </div>
-                {!step3Done ? (
-                  <Link
-                    href="/founders#verify"
-                    className="mt-2.5 inline-flex h-8 items-center justify-center rounded-xl border border-line-strong bg-canvas-2 px-3 font-semibold text-ink transition hover:border-brand hover:text-brand"
-                  >
-                    {copy.progress.step3Cta}
-                  </Link>
-                ) : null}
-              </li>
-            </ol>
-          </div>
-        </section>
-      ) : (
-        /* Compact floating badge on non-primary routes */
+      {/* 2c. Compact floating badge on non-primary routes */}
+      {!showFullProgressInline ? (
         <div
           data-testid="founding-progress-widget-compact"
           className="fixed bottom-4 left-3 z-30 max-w-[calc(100vw-5.5rem)] sm:left-4"
@@ -776,7 +878,7 @@ export function FoundingCaptureLayer() {
             </button>
           )}
         </div>
-      )}
+      ) : null}
 
       {/* 3. Context Scroll / Read Drawer (bottom-right, never stacks with modal) */}
       {drawerOpen && !modalOpen ? (

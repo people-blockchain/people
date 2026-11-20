@@ -21,7 +21,9 @@ test("founders landing RU matches EN structure", () => {
 test("founders landing carries agreed hero titles and FAQ", () => {
   const en = load("founders-landing-en.json");
   const ru = load("founders-landing-ru.json");
-  assert.equal(en.heroTitle, "Million Founders");
+  assert.equal(en.heroTitle, "Founding 1,000 Vault");
+  assert.match(en.heroSub, /first 1,000 verified wallets/i);
+  assert.match(en.vaultCalloutTitle, /Founding 1,000 Bounty Draw/);
   assert.equal(ru.heroTitle, "Миллион основателей");
   assert.equal(en.faq.length, 5);
   assert.equal(ru.faq.length, 5);

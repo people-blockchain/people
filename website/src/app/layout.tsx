@@ -51,7 +51,6 @@ export const metadata: Metadata = {
   keywords: [
     "PEOPLE",
     "PEOPLE Blockchain",
-    "Блокчейн для сообщества",
     "Blockchain für die Gemeinschaft",
     "社区区块链",
     "PPL",

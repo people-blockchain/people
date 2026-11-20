@@ -15,7 +15,9 @@ export type FoundingCopy = {
     badge: string;
     messageFull: string;
     messageCompact: string;
+    messageMobile?: string;
     cta: string;
+    ctaShort?: string;
     daysShort: string;
     hoursShort: string;
     minutesShort: string;
@@ -66,6 +68,13 @@ export type FoundingCopy = {
     copiedReferral: string;
     expandAria: string;
     collapseAria: string;
+    step1Short?: string;
+    step1ShortMobile?: string;
+    step2Short?: string;
+    step3Short?: string;
+    detailsToggle?: string;
+    verifyShort?: string;
+    vaultUnlockLead?: string;
   };
   simulator: {
     eyebrow: string;
@@ -93,7 +102,9 @@ const EN_COPY: FoundingCopy = {
     messageFull:
       "PEOPLE Mainnet Beta · Opens Dec 1 · Founding 1,000 Vault open — Roster & order stay sealed until 1,000 verified wallets lock in (unlocks transfers & Founding 1,000 PPL Bounty Draw)",
     messageCompact: "PEOPLE Mainnet Beta · Dec 1 · Founding 1,000 Vault sealed until 1,000 wallets lock in",
+    messageMobile: "Founding 1,000 Vault · Dec 1",
     cta: "Claim Seat (60s)",
+    ctaShort: "Claim Seat",
     daysShort: "d",
     hoursShort: "h",
     minutesShort: "m",
@@ -179,6 +190,13 @@ const EN_COPY: FoundingCopy = {
     copiedReferral: "Copied",
     expandAria: "Open Founder 0/3 progress",
     collapseAria: "Collapse Founder progress",
+    step1Short: "Step 1: Verify in Telegram (20s)",
+    step1ShortMobile: "Step 1 (20s)",
+    step2Short: "Step 2: Create or Connect Wallet",
+    step3Short: "Step 3: Human Passport",
+    detailsToggle: "Details",
+    verifyShort: "Verify",
+    vaultUnlockLead: "The first 1,000 verified wallets unlock transfers and the Founding 1,000 Bounty Draw.",
   },
   simulator: {
     eyebrow: "Bonding-Curve & Season 1 Pool-Share Simulator",
@@ -1347,8 +1365,29 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
 };
 
+const STICKY_BAR_SHORT_DEFAULTS = {
+  messageMobile: "Founding 1,000 Vault · Dec 1",
+  ctaShort: "Claim Seat",
+};
+
+const PROGRESS_SHORT_DEFAULTS = {
+  step1Short: "Step 1: Verify in Telegram (20s)",
+  step1ShortMobile: "Step 1 (20s)",
+  step2Short: "Step 2: Create or Connect Wallet",
+  step3Short: "Step 3: Human Passport",
+  detailsToggle: "Details",
+  verifyShort: "Verify",
+  vaultUnlockLead:
+    "The first 1,000 verified wallets unlock transfers and the Founding 1,000 Bounty Draw.",
+};
+
 export function foundingCopy(lang: Language): FoundingCopy {
-  return FOUNDING_COPY[lang] ?? EN_COPY;
+  const copy = FOUNDING_COPY[lang] ?? EN_COPY;
+  return {
+    ...copy,
+    stickyBar: { ...STICKY_BAR_SHORT_DEFAULTS, ...copy.stickyBar },
+    progress: { ...PROGRESS_SHORT_DEFAULTS, ...copy.progress },
+  };
 }
 
 export function resolveDrawerRouteKey(pathname: string): FoundingDrawerRouteKey {

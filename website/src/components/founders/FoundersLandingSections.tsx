@@ -44,23 +44,20 @@ export function FoundersMillionCounterBar({
   className?: string;
 }) {
   const statsPublic = showCommunityStats();
-  const goal = counter?.goal ?? 1_000_000;
 
   if (!statsPublic) {
     return (
       <div className={className} data-testid="founders-million-counter">
-        <div className="rounded-3xl border border-line bg-surface/90 px-5 py-5 shadow-[var(--elev-1)]">
-          <p className="text-sm text-ink-3">
-            {copy.counterGoal}:{" "}
-            <span className="font-mono text-2xl font-semibold text-ink sm:text-3xl">
-              {goal.toLocaleString(lang)}
-            </span>
-          </p>
+        <div className="rounded-3xl border border-warm/40 bg-surface/90 px-5 py-5 shadow-[var(--elev-1)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-warm">{copy.heroEyebrow}</p>
+          <p className="mt-2 text-base font-semibold text-ink">{copy.vaultCalloutTitle}</p>
+          <p className="mt-2 text-sm text-ink-2">{copy.vaultCalloutBody}</p>
         </div>
-        <p className="mt-2 text-center text-xs text-ink-3 sm:text-left">{copy.counterStub}</p>
       </div>
     );
   }
+
+  const goal = counter?.goal ?? 1_000_000;
 
   const pct =
     counter && counter.goal > 0 && counter.current > 0
@@ -156,6 +153,9 @@ export function FoundersLandingHero({
         </div>
       </div>
 
+      <div className="relative mx-auto max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
+        <div id="founding-progress-founders-slot" />
+      </div>
       <div className="relative mx-auto max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
         <FoundersMillionCounterBar copy={copy} lang={lang} counter={counter} />
       </div>

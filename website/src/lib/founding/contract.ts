@@ -89,3 +89,8 @@ export function parseColdStartPayload(
   if (ref !== undefined && !REF_RE.test(ref)) return null;
   return { locale, ref: ref ?? null };
 }
+
+export function isFullProgressRoute(pathname: string): boolean {
+  return pathname === "/" || pathname === "/founders" || pathname === "/bounty";
+}
+

@@ -13,6 +13,7 @@ import { GithubNavLink } from "./OpenSource";
 import { NetworkModeSwitch } from "./NetworkModeSwitch";
 import { Menu, X, ArrowRight, Sun, Moon, ChevronDown } from "lucide-react";
 import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
+import { isFullProgressRoute } from "@/lib/founding/contract";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { content } from "@/lib/content";
@@ -265,8 +266,11 @@ export function Navbar() {
     };
   }, [lang, t.slogan]);
 
+  const showFoundingProgressSlot = isFullProgressRoute(pathname || "/");
+
   return (
-    <header className="glass-bar sticky top-0 z-50 border-b border-line">
+    <>
+    <header className="glass-bar sticky top-[var(--founding-topbar-h,0px)] z-50 border-b border-line">
       <div
         dir="ltr"
         className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-[4.5rem] lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
@@ -489,5 +493,10 @@ export function Navbar() {
           )
         : null}
     </header>
+    <div
+      id="founding-progress-slot"
+      className={showFoundingProgressSlot ? "min-h-10" : undefined}
+    />
+    </>
   );
 }
