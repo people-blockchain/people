@@ -13,7 +13,7 @@
       "bukan untuk paus."
     ],
     "sub": "PEOPLE Blockchain tempat kreator meluncurkan token dengan harga adil sejak blok pertama, dan komunitas mendapat bagian dari semua yang mereka bantu tumbuh.",
-    "testnetBadge": "Testnet publik sudah live. PEOPLE Mainnet Beta dibuka 1 Desember 2026.",
+    "testnetBadge": "PEOPLE Mainnet Beta · Dibuka 1 Desember",
     "ctaCreate": "Buat token",
     "ctaWallet": "Buka dompet",
     "flowAria": "Empat langkah: dari dompet ke perdagangan token",
@@ -69,7 +69,7 @@
     }
   ],
   "footerCta": {
-    "title": "Testnet terbuka.",
+    "title": "PEOPLE Mainnet Beta · Dibuka 1 Desember",
     "body": "Datang lebih awal, rusakkan hal-hal, beri tahu apa yang jelek.",
     "cta": "Mulai di testnet"
   },

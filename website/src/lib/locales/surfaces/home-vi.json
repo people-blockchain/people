@@ -13,7 +13,7 @@
       "không về cá voi."
     ],
     "sub": "PEOPLE Blockchain là nơi creator ra token với giá công bằng ngay từ block đầu, và cộng đồng có phần trong mọi thứ họ giúp phát triển.",
-    "testnetBadge": "Testnet công khai đang chạy. PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026.",
+    "testnetBadge": "PEOPLE Mainnet Beta · Mở ngày 1 tháng 12",
     "ctaCreate": "Tạo token",
     "ctaWallet": "Mở ví",
     "flowAria": "Bốn bước: từ ví đến giao dịch token",
@@ -69,7 +69,7 @@
     }
   ],
   "footerCta": {
-    "title": "Testnet đang mở.",
+    "title": "PEOPLE Mainnet Beta · Mở ngày 1 tháng 12",
     "body": "Đến sớm, phá thử, nói chúng tôi chỗ nào tệ.",
     "cta": "Bắt đầu trên testnet"
   },

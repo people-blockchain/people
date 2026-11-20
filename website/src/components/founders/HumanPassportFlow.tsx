@@ -1,5 +1,7 @@
 "use client";
 
+import { foundersCopyLang } from "@/lib/founders-public-content";
+
 /**
  * The one Human Passport surface. Every entry point renders this component, and
  * it renders exactly one step at a time (see `lib/founders/human-passport-flow.ts`
@@ -19,6 +21,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { track } from "@/lib/analytics/client-track";
+import { FOUNDING_CONVERSION_EVENTS } from "@/lib/analytics/events-catalog";
 import type { FoundersPublicCopy } from "@/lib/founders-public-content";
 import { CheckIcon, fill } from "./founders-ui";
 import { useExternalWalletOptional, signViaActiveSigner } from "@/context/ExternalWalletContext";
@@ -74,7 +78,7 @@ export function HumanPassportFlow({
   onSignIn: () => void;
   onReload: () => Promise<void>;
 }) {
-  const c = COPY[lang] ?? COPY.en;
+  const c = COPY[foundersCopyLang(lang)] ?? COPY.en;
   const external = useExternalWalletOptional();
   const signer = external?.signer ?? null;
 
@@ -97,7 +101,7 @@ export function HumanPassportFlow({
     checking,
   });
   const scored = passportScoredWallet(passportWallet, primaryWallet);
-  const guide = GUIDE[lang] ?? GUIDE.en;
+  const guide = GUIDE[foundersCopyLang(lang)] ?? GUIDE.en;
   const firstPrimary =
     isCloudWalletEnabled() && guide.firstPrimaryCloud
       ? guide.firstPrimaryCloud
@@ -153,6 +157,7 @@ export function HumanPassportFlow({
     if (result.kind === "verified") {
       clearPersistedHumanPassportProgress();
       setReturning(false);
+      track(FOUNDING_CONVERSION_EVENTS.passportCompleted, { source: "human_passport_flow" });
       await onReload();
     }
   }, [onReload, scored]);

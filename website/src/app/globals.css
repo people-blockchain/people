@@ -671,7 +671,18 @@ html.dark img.header-lockup-theme-dark {
   }
 }
 
-@media (min-width: 1024px) {
+/* xl (1280+) keeps the slogan; at lg (1024–1279) it must stay hidden.
+   `.header-brand-slogan { display: block }` above beats Tailwind `lg:hidden`
+   at equal specificity, which let the long DE slogan size the brand slot
+   and push «Anmelden» past the 1024px viewport (elementFromPoint at the
+   Sign in center returned null). */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  .header-brand-slogan {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
   .header-brand-slogan {
     width: max-content;
     max-width: none;

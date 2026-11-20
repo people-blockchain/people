@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { HomeWarmHero } from "@/components/home/HomeWarmHero";
+import { FoundingSimulator } from "@/components/founding/FoundingSimulator";
 import { ExplainerVideoSection } from "@/components/ExplainerVideoSection";
 import {
   HomeWarmBuild,
@@ -38,6 +39,7 @@ export default function Home() {
       <Navbar />
       <main id="main" className="warm-page flex-1">
         <HomeWarmHero />
+        <FoundingSimulator surface="home" />
         <ExplainerVideoSection />
         {/* The 10% community share leads the page; agents sit after the live
             network strip, near the end. */}

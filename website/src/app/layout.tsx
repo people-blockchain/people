@@ -24,6 +24,7 @@ import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import { ReferralRefCapture } from "@/components/ReferralRefCapture";
 import { DocumentTitle } from "@/components/DocumentTitle";
 import { BugReportButton } from "@/components/BugReportButton";
+import { FoundingCaptureLayer } from "@/components/founding/FoundingCaptureLayer";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -50,7 +51,6 @@ export const metadata: Metadata = {
   keywords: [
     "PEOPLE",
     "PEOPLE Blockchain",
-    "Блокчейн для сообщества",
     "Blockchain für die Gemeinschaft",
     "社区区块链",
     "PPL",
@@ -183,6 +183,9 @@ export default async function RootLayout({
               <BugReportButton />
               <Suspense fallback={null}>
                 <AnalyticsTracker />
+              </Suspense>
+              <Suspense fallback={null}>
+                <FoundingCaptureLayer />
               </Suspense>
               {children}
             </WalletModalProvider>

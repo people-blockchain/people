@@ -7,11 +7,11 @@ import {
 } from "../src/lib/partner/admin-tier-override.ts";
 import { MICRO_PER_UNIT } from "../src/lib/partner/commission.ts";
 
-test("KOL tier override presets match 7/9/12% USDC bps", () => {
-  assert.deepEqual([...KOL_TIER_OVERRIDE_PRESET_USDC_BPS], [700, 900, 1200]);
+test("KOL tier override presets match 7% USDC bps", () => {
+  assert.deepEqual([...KOL_TIER_OVERRIDE_PRESET_USDC_BPS], [700]);
 });
 
-test("validateKolTierOverrideBps rejects below volume tier", () => {
+test("validateKolTierOverrideBps rejects below 700 bps base rate", () => {
   const lowVolume = 1n * MICRO_PER_UNIT;
   const floor = volumeTierUsdcBps(lowVolume);
   assert.equal(floor, 700);
@@ -19,12 +19,13 @@ test("validateKolTierOverrideBps rejects below volume tier", () => {
   assert.deepEqual(validateKolTierOverrideBps(lowVolume, 699), { ok: false, error: "below_volume_tier" });
 });
 
-test("validateKolTierOverrideBps allows clear and high custom bps", () => {
+test("validateKolTierOverrideBps allows clear and custom bps >= 700 at any volume", () => {
   const vol = 50_000n * MICRO_PER_UNIT;
-  assert.equal(volumeTierUsdcBps(vol), 900);
+  assert.equal(volumeTierUsdcBps(vol), 700);
   assert.deepEqual(validateKolTierOverrideBps(vol, null), { ok: true, normalized: null });
   assert.deepEqual(validateKolTierOverrideBps(vol, 1500), { ok: true, normalized: 1500 });
-  assert.deepEqual(validateKolTierOverrideBps(vol, 800), { ok: false, error: "below_volume_tier" });
+  assert.deepEqual(validateKolTierOverrideBps(vol, 800), { ok: true, normalized: 800 });
+  assert.deepEqual(validateKolTierOverrideBps(vol, 600), { ok: false, error: "below_volume_tier" });
 });
 
 test("PATCH handler validates kolTierOverrideBps before persisting", async () => {

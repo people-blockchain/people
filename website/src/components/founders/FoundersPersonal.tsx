@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import type { FoundersPromoCopy } from "@/lib/founders-promo-content";
 import type { FoundersReferralCopy } from "@/lib/founders-referral-content";
-import type { FoundersPublicCopy } from "@/lib/founders-public-content";
+import { foundersCopyLang, type FoundersPublicCopy } from "@/lib/founders-public-content";
 import { vestingScheduleBps } from "@/lib/founders/referral";
 import { formatFounderDisplayNumber } from "@/lib/founders/format-founder-number";
 import { FounderCard, renderFounderCardPng, type FounderCardData } from "./FounderCard";
@@ -107,7 +107,7 @@ export function FoundersPersonal({
   // Human Passport verification lives in its own component: one step on screen at
   // a time, one entry point. This card only frames it.
   // (see components/founders/HumanPassportFlow.tsx)
-  const vx = VERIFY_EXTRA[lang] ?? VERIFY_EXTRA.en;
+  const vx = VERIFY_EXTRA[foundersCopyLang(lang)] ?? VERIFY_EXTRA.en;
 
   const link =
     referral && typeof window !== "undefined"

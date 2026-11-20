@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { isDatabaseConfigured } from "@/db";
+import { isFoundingRosterSealed } from "@/lib/founders/million-counter";
 import { MAX_AMBASSADORS, getCommunityCounters, getTopAmbassadors } from "@/lib/founders/transparency";
 import { showCommunityStats } from "@/lib/show-community-stats";
 
@@ -23,13 +24,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   try {
-    if (!showCommunityStats()) {
+    const counters = await getCommunityCounters();
+    if (isFoundingRosterSealed({
+      statsPublic: showCommunityStats(),
+      verifiedCount: counters.verifiedPeople,
+    })) {
       return NextResponse.json({ maxAmbassadors: MAX_AMBASSADORS }, { headers: CACHE_HEADERS });
     }
-    const [counters, ambassadors] = await Promise.all([
-      getCommunityCounters(),
-      getTopAmbassadors(),
-    ]);
+    const ambassadors = await getTopAmbassadors();
     return NextResponse.json(
       { counters, ambassadors, maxAmbassadors: MAX_AMBASSADORS },
       { headers: CACHE_HEADERS },

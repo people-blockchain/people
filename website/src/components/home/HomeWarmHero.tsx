@@ -145,11 +145,11 @@ export function HomeWarmHero() {
             <Reveal delay={100}>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Link
-                  href="/bounty"
+                  href="/founders"
                   className={WARM_HERO_BTN}
                   data-testid="home-hero-founder-cta"
                 >
-                  {bounty.homeCta}
+                  {t.ctaFounder || bounty.homeCta}
                 </Link>
                 <HomeWalletCta label={content[lang].nav.ctaJoin} className={WARM_HERO_BTN} />
               </div>
