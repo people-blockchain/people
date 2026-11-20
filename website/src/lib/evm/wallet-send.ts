@@ -105,17 +105,12 @@ export async function readNativeGasPriceWei(): Promise<bigint> {
   return FALLBACK_GAS_PRICE_WEI;
 }
 
-export async function sendNativeTransfer(input: {
-  privateKey: Hex;
-  to: `0x${string}`;
-  amountPpl?: number;
-  amountWei?: bigint;
-  memo?: string;
-}): Promise<`0x${string}`> {
+async function sendNativeTransferWithClient(
+  client: { account: { address: `0x${string}` }; sendTransaction: (tx: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint }) => Promise<`0x${string}`> },
+  input: { to: `0x${string}`; amountPpl?: number; amountWei?: bigint; memo?: string },
+): Promise<`0x${string}`> {
   const request = nativeTransferRequest(input);
-  const client = createEmbeddedWalletClient(input.privateKey);
-  let transaction: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint } =
-    request;
+  let transaction: { to: `0x${string}`; value: bigint; data?: Hex; gas?: bigint } = request;
   if (request.data) {
     const { createBrowserPublicClient } = await import("@/lib/evm/client");
     const publicClient = createBrowserPublicClient();
@@ -130,8 +125,33 @@ export async function sendNativeTransfer(input: {
     const floor = calldataFloorGas(request.data);
     transaction = { ...request, gas: estimate > floor ? estimate : floor };
   }
-  const hash = await client.sendTransaction(transaction);
-  return hash;
+  return client.sendTransaction(transaction);
+}
+
+export async function sendNativeTransfer(input: {
+  privateKey: Hex;
+  to: `0x${string}`;
+  amountPpl?: number;
+  amountWei?: bigint;
+  memo?: string;
+}): Promise<`0x${string}`> {
+  return sendNativeTransferWithClient(createEmbeddedWalletClient(input.privateKey), input);
+}
+
+export async function sendNativeTransferFromSession(
+  session: { kind?: string; privateKey?: string; address: string; publicKey?: string; subOrganizationId?: string; walletId?: string },
+  input: { to: `0x${string}`; amountPpl?: number; amountWei?: bigint; memo?: string },
+): Promise<`0x${string}`> {
+  const { createSessionEmbeddedWalletClient } = await import("@/lib/wallet-session-sign");
+  const client = await createSessionEmbeddedWalletClient({
+    kind: session.kind as "local" | "cloud" | "turnkey" | undefined,
+    privateKey: session.privateKey,
+    address: session.address,
+    publicKey: session.publicKey ?? "",
+    subOrganizationId: session.subOrganizationId,
+    walletId: session.walletId,
+  });
+  return sendNativeTransferWithClient(client as never, input);
 }
 
 export async function waitForReceipt(hash: `0x${string}`, timeoutMs = 60_000): Promise<boolean> {

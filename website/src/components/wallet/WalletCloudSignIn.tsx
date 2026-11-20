@@ -48,11 +48,14 @@ export function WalletCloudSignIn({
   onConnected,
   autoConnect = false,
   onOpenImport,
+  skipVault = false,
 }: {
   onConnected?: () => void;
   autoConnect?: boolean;
   /** Opens the existing WalletConnectPanel import mode (encrypted backup or key). */
   onOpenImport?: () => void;
+  /** Auth.js identity only. Used when `WALLET_PROVIDER=turnkey` owns the embedded wallet. */
+  skipVault?: boolean;
 }) {
   const { lang } = useLanguage();
   const t = walletCopy[lang];
@@ -90,6 +93,10 @@ export function WalletCloudSignIn({
       try {
         rememberAuthEmail(email);
         if (email) setKnownEmail(email);
+        if (skipVault) {
+          onConnected?.();
+          return true;
+        }
         const cloud = await ensureCloudWalletSession({ id: userId });
         await connectCloud(cloud);
         try {
@@ -141,7 +148,7 @@ export function WalletCloudSignIn({
         setPending(null);
       }
     },
-    [connectCloud, onConnected, c, setError, setBusy, setPending],
+    [connectCloud, onConnected, c, setError, setBusy, setPending, skipVault],
   );
 
   useEffect(() => {

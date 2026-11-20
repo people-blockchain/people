@@ -17,6 +17,7 @@ import { WalletModalProvider } from "@/context/WalletModalContext";
 import { WalletModalHost } from "@/components/wallet/WalletModal";
 import { WalletConnectQueryHandler } from "@/components/wallet/WalletConnectQueryHandler";
 import { CloudWalletSessionBridge } from "@/components/wallet/CloudWalletSessionBridge";
+import { TurnkeyLayoutGate } from "@/components/turnkey/TurnkeyLayoutGate";
 import { ChainProviders } from "@/components/ChainProviders";
 import { Suspense } from "react";
 import { VercelWebAnalytics } from "@/components/analytics/VercelWebAnalytics";
@@ -168,6 +169,7 @@ export default async function RootLayout({
         <ThemeProvider initialTheme={theme}>
         <LanguageProvider initialLang={lang}>
           <WalletProvider>
+            <TurnkeyLayoutGate>
             <ChainProviders>
             <WalletModalProvider>
               <DocumentTitle />
@@ -189,6 +191,7 @@ export default async function RootLayout({
               {children}
             </WalletModalProvider>
             </ChainProviders>
+            </TurnkeyLayoutGate>
           </WalletProvider>
         </LanguageProvider>
         </ThemeProvider>

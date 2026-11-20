@@ -24,6 +24,7 @@ import {
   type GovVotingParams,
 } from "@/lib/gov/rest";
 import { tallyToPpl, quorumPercent, yesThresholdPercent, decToPercent, type TallyTotals } from "@/lib/gov/math";
+import { bech32FromEvmAddress } from "@/lib/gov/address";
 import { buildSignedVoteTx, voterAddressFromSigner, VoteOption } from "@/lib/gov/tx";
 import { gasLimitWithMargin, feeForGasLimit } from "@/lib/gov/fee";
 
@@ -164,7 +165,13 @@ export function GovernanceApp() {
   const voterAddress = useMemo(() => {
     if (!session) return null;
     try {
-      return voterAddressFromSigner({ privateKey: session.privateKey, publicKey: session.publicKey });
+      if (session.publicKey) {
+        return voterAddressFromSigner({
+          privateKey: session.privateKey || `0x${"00".repeat(32)}`,
+          publicKey: session.publicKey,
+        });
+      }
+      return bech32FromEvmAddress(session.address);
     } catch {
       return null;
     }
@@ -197,6 +204,9 @@ export function GovernanceApp() {
     setBusy(true);
     setError("");
     try {
+      if (session.kind === "turnkey" || !session.privateKey) {
+        throw new Error("turnkey_gov_unsupported");
+      }
       const signer = { privateKey: session.privateKey, publicKey: session.publicKey };
       const voter = voterAddressFromSigner(signer);
       const account = await fetchAccount(voter);

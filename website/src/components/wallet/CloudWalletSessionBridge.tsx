@@ -6,6 +6,7 @@ import { fetchAuthSessionUser, ensureCloudWalletSession, isCloudSessionId, Walle
 import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { rememberAuthEmail } from "@/lib/wallet-auth-storage";
 import { isUserDisconnected } from "@/lib/wallet-disconnect";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 
 /**
  * After partner / magic-link / Web3Auth login, restore the cloud People Wallet in memory
@@ -26,6 +27,10 @@ export function CloudWalletSessionBridge() {
   }, [session]);
 
   const tryRestore = useCallback(() => {
+    if (isTurnkeyWalletProvider()) {
+      markSessionHydrated();
+      return;
+    }
     if (isUserDisconnected()) return;
     if (latestSession.current) return;
     if (inFlight.current) return;

@@ -4,8 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { connectExplorer } from "@/lib/explorer-live";
 import { connectEvmExplorer } from "@/lib/evm/explorer-live";
 import { isCosmosEvmChain } from "@/lib/chain-mode";
-import { nativeSendGasLimit, quoteMaxNativeSend, readNativeGasPriceWei, sendNativeTransfer, FALLBACK_GAS_PRICE_WEI } from "@/lib/evm/wallet-send";
-import type { Hex } from "viem";
+import { nativeSendGasLimit, quoteMaxNativeSend, readNativeGasPriceWei, sendNativeTransferFromSession, FALLBACK_GAS_PRICE_WEI } from "@/lib/evm/wallet-send";
 import { AssetImage } from "@/components/ui/AssetImage";
 import { RecipientField } from "./RecipientField";
 import { WalletDialog } from "./WalletDialog";
@@ -30,7 +29,7 @@ import { useWallet } from "@/context/WalletContext";
 import { useExternalWalletOptional } from "@/context/ExternalWalletContext";
 import { resolveWalletPortfolio } from "@/lib/wallet-portfolio";
 import { walletCopy } from "@/lib/wallet-copy";
-import { signFactoryTx } from "@/lib/people-sign";
+import { signSessionFactoryTx } from "@/lib/wallet-session-sign";
 import { DEFAULT_TRANSFER_FEE, networkFetch, networkJson } from "@/lib/network-client";
 import { initialNftLoadState, loadOwnerNfts, type NftLoadState, type WalletNftItem } from "@/lib/wallet-nft-loader";
 import { Loader2 } from "lucide-react";
@@ -433,15 +432,14 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       }
       if (isCosmosEvmChain()) {
         if (txDraft.assetId !== "ppl" || txDraft.type !== "transfer") throw new Error(c.assetError);
-        const hash = await sendNativeTransfer({
-          privateKey: session.privateKey as Hex,
+        const hash = await sendNativeTransferFromSession(session, {
           to: txDraft.to as `0x${string}`,
           amountWei: draft.amountWei,
           memo: typeof txDraft.payload?.memo === "string" ? txDraft.payload.memo : undefined,
         });
         trackPending(chainId, session.address, { ...txDraft, id: hash, amountWei: draft.amountWei.toString(), feeWei: draft.protocolFeeWei.toString() });
       } else {
-        const tx=signFactoryTx(session.privateKey,txDraft);
+        const tx=await signSessionFactoryTx(session,txDraft);
         const result = await networkJson<{ accepted?: boolean; error?: string }>("tx", {
           method: "POST",
           headers: { "content-type": "application/json" },

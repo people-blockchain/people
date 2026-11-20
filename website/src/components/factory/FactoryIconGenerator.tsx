@@ -4,8 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Sparkles } from "lucide-react";
 import type { FactoryCopyContent } from "@/lib/factory-content";
 import type { IconPresetId } from "@/lib/factory-icon-config";
-import { signFactoryTx } from "@/lib/people-sign";
-import { signWalletMessage } from "@/lib/partner/wallet";
+import { signSessionFactoryTx, signSessionWalletMessage } from "@/lib/wallet-session-sign";
 import { buildIconQuotaProofMessage } from "@/lib/factory-icon-proof";
 import { networkJson } from "@/lib/network-client";
 import { useWallet } from "@/context/WalletContext";
@@ -130,7 +129,7 @@ export function FactoryIconGenerator({
     if (!recipient) {
       throw new Error("fee_recipient_unconfigured");
     }
-    const tx = signFactoryTx(session.privateKey, {
+    const tx = await signSessionFactoryTx(session, {
       chainId: health.chainId,
       id: `${session.address}-iconGenPay-${Date.now()}`,
       from: session.address,
@@ -167,8 +166,8 @@ export function FactoryIconGenerator({
       // address. One proof covers both attempts; it stays fresh well past the payment poll.
       const nonce = crypto.randomUUID().replace(/-/g, "");
       const issuedAt = Date.now();
-      const signed = signWalletMessage(
-        session.privateKey,
+      const signed = await signSessionWalletMessage(
+        session,
         buildIconQuotaProofMessage({ wallet: session.address, nonce, issuedAt })
       );
       const proofPayload = {

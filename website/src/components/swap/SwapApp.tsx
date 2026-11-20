@@ -12,7 +12,7 @@ import type { PoolRow } from "@/components/swap/EvmSwapApp";
 import type { AssetInfo } from "@/lib/asset-amounts";
 import { swapCopy } from "@/lib/swap-content";
 import { uxCopy, fill, displaySymbol } from "@/lib/ux-copy";
-import { signFactoryTx } from "@/lib/people-sign";
+import { signSessionFactoryTx } from "@/lib/wallet-session-sign";
 import { DEFAULT_TRANSFER_FEE, networkJson } from "@/lib/network-client";
 import { minAmountOutWithSlippage, quoteExactIn } from "@/lib/amm-math";
 import { assetDecimals, formatPpl, formatUnits, parseUnits } from "@/lib/asset-amounts";
@@ -187,7 +187,7 @@ function PeopleSwapApp() {
     try {
       const live = await networkJson<{ nonce?: number }>(`address/${session.address}`);
       const health = await networkJson<{ chainId: string }>("health");
-      const signed = signFactoryTx(session.privateKey, {
+      const signed = await signSessionFactoryTx(session, {
         chainId: health.chainId,
         id: `${session.address}-${type}-${Date.now()}`,
         from: session.address,

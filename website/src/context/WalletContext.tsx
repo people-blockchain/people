@@ -41,8 +41,11 @@ export interface WalletSession {
   address: string;
   privateKey: string;
   publicKey: string;
-  kind?: "local" | "cloud";
+  kind?: "local" | "cloud" | "turnkey";
   userId?: string;
+  subOrganizationId?: string;
+  turnkeyUserId?: string;
+  walletId?: string;
 }
 
 interface WalletContextValue {
@@ -68,6 +71,7 @@ interface WalletContextValue {
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   /** Resolves once the cloud session is actually persisted (see `connectCloud` below). */
   connectCloud: (session: WalletSession) => Promise<void>;
+  connectTurnkey: (session: WalletSession) => Promise<void>;
   exportCloudPrivateKey: () => Promise<string>;
 }
 
@@ -232,6 +236,19 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     void clearWalletSession();
   }, []);
 
+  const connectTurnkey = useCallback(async (next: WalletSession) => {
+    const userId = next.userId ?? (next.id.startsWith("turnkey:") ? next.id.slice(8) : undefined);
+    const turnkey: WalletSession = {
+      ...next,
+      kind: "turnkey",
+      userId,
+      privateKey: "",
+    };
+    await persistWalletSession(turnkey, Date.now(), { strict: true });
+    setSession(turnkey);
+    setSessionHydrated(true);
+  }, []);
+
   const connectCloud = useCallback(async (next: WalletSession) => {
     const userId = next.userId ?? (next.id.startsWith("cloud:") ? next.id.slice(6) : undefined);
     // Persist cloud wallets too so the header can rehydrate instantly after an Android
@@ -256,6 +273,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const exportPrivateKey = useCallback(
     async (password: string) => {
       if (!session) throw new Error("locked");
+      if (session.kind === "turnkey") throw new Error("turnkey_non_exportable");
       if (session.kind === "cloud" || isCloudSessionId(session.id)) {
         throw new Error("use_export_cloud");
       }
@@ -268,6 +286,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   );
 
   const exportCloudPrivateKey = useCallback(async () => {
+    if (!session || session.kind === "turnkey") throw new Error("turnkey_non_exportable");
     if (!session || session.kind !== "cloud" || !session.userId) throw new Error("locked");
     const key = await exportCloudKey({
       id: session.id,
@@ -343,6 +362,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       forget,
       changePassword,
       connectCloud,
+      connectTurnkey,
       exportCloudPrivateKey,
     }),
     [
@@ -359,6 +379,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       forget,
       changePassword,
       connectCloud,
+      connectTurnkey,
       exportCloudPrivateKey,
     ]
   );
