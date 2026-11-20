@@ -4,9 +4,13 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { foundersLandingCopy } from "../src/lib/founders-landing-content.ts";
+
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const surfaces = join(root, "src/lib/locales/surfaces");
 const load = (name) => JSON.parse(readFileSync(join(surfaces, name), "utf8"));
+
+const CYRILLIC = /[Ѐ-ӿ]/;
 
 function shape(obj) {
   if (Array.isArray(obj)) return obj.map(shape);
@@ -20,15 +24,21 @@ test("founders landing RU matches EN structure", () => {
 
 test("founders landing carries agreed hero titles and FAQ", () => {
   const en = load("founders-landing-en.json");
-  const ru = load("founders-landing-ru.json");
   assert.equal(en.heroTitle, "Founding 1,000 Vault");
   assert.match(en.heroSub, /first 1,000 verified wallets/i);
   assert.match(en.vaultCalloutTitle, /Founding 1,000 Bounty Draw/);
-  assert.equal(ru.heroTitle, "Миллион основателей");
   assert.equal(en.faq.length, 5);
-  assert.equal(ru.faq.length, 5);
   assert.ok(en.faq.some((item) => /payout/i.test(item.q)));
   assert.ok(en.faq.some((item) => /free/i.test(item.q)));
+});
+
+test("founders landing public copy: ru falls back to English with no Cyrillic", () => {
+  const en = foundersLandingCopy("en");
+  const ru = foundersLandingCopy("ru");
+  assert.deepEqual(ru, en);
+  assert.equal(ru.heroTitle, "Founding 1,000 Vault");
+  assert.doesNotMatch(JSON.stringify(ru), CYRILLIC);
+  assert.doesNotMatch(ru.heroTitle, /Миллион основателей/);
 });
 
 test("founders landing copy avoids jargon", () => {

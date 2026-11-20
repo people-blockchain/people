@@ -2,7 +2,7 @@
  * Pure KOL & Partner commission calculation, volume tier progression, 30-day hold
  * lifecycle (`pending / approved / paid / void`), LIFO curve sell-back clawback,
  * and settlement network invariants:
- * - Blogger/KOL USDC commission: 7% / 9% / 12% by cumulative net volume, settled in USDC on Base.
+ * - Blogger/KOL USDC commission: flat 7% USDC from the very first purchase (no minimum volume), settled in USDC on Base.
  * - Blogger/KOL PPL bonus: 3% in PPL, credited on PEOPLE mainnet (never on Base).
  * - Genesis Quest reward PPL is locked on PEOPLE mainnet and cannot be sold back to PplCurveHub.
  */
