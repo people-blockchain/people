@@ -16,7 +16,19 @@ import {
 
 export const FOUNDER_DEMO_AIRDROP_CAP = 10_000;
 export const FOUNDER_DEMO_TOKENS_PER_KIND = 100;
-export const FOUNDER_DEMO_ASSET_IDS = ["trosc2", "tpitp2", "tmark2", "tkrda", "tmem", "tgood"] as const;
+
+/**
+ * Demo airdrop kinds come from the seeded `assetMap` in the deployments file so the ids
+ * stay in sync with the live token set instead of a hardcoded list.
+ */
+export function founderDemoAssetIds(
+  assetMap: Record<string, string | undefined> = readEvmDeployments().assetMap ?? {},
+): string[] {
+  return Object.keys(assetMap).filter((id) => {
+    const addr = assetMap[id];
+    return Boolean(addr && isAddress(addr));
+  });
+}
 
 const erc20Abi = [
   {
@@ -52,7 +64,7 @@ export async function getFounderDemoAirdropStatus(userId: string): Promise<Found
     return {
       state: "received",
       tokensPerKind: FOUNDER_DEMO_TOKENS_PER_KIND,
-      kinds: FOUNDER_DEMO_ASSET_IDS.length,
+      kinds: founderDemoAssetIds().length,
     };
   }
   const founder = await db.select().from(founders).where(eq(founders.userId, userId)).limit(1);
@@ -66,9 +78,8 @@ export async function getFounderDemoAirdropStatus(userId: string): Promise<Found
   if (Number(total[0]?.c ?? 0) >= FOUNDER_DEMO_AIRDROP_CAP) {
     return { state: "cap_reached" };
   }
-  const assetMap = readEvmDeployments().assetMap ?? {};
-  const ready = FOUNDER_DEMO_ASSET_IDS.every((id) => assetMap[id] && isAddress(assetMap[id]));
-  if (!ready) return { state: "pending" };
+  const assetIds = founderDemoAssetIds();
+  if (assetIds.length === 0) return { state: "pending" };
   return { state: "pending" };
 }
 
@@ -112,10 +123,11 @@ export async function claimFounderDemoAirdrop(userId: string): Promise<FounderDe
   const wallet = founder[0].walletAddress?.trim();
   if (!wallet || !isAddress(wallet)) return { state: "ineligible" };
 
+  const assetIds = founderDemoAssetIds();
   const received: FounderDemoAirdropStatus = {
     state: "received",
     tokensPerKind: FOUNDER_DEMO_TOKENS_PER_KIND,
-    kinds: FOUNDER_DEMO_ASSET_IDS.length,
+    kinds: assetIds.length,
   };
 
   // Reserve the (unique) claim row before any transfer. A parallel request loses this
@@ -169,7 +181,7 @@ export async function claimFounderDemoAirdrop(userId: string): Promise<FounderDe
 
   try {
     const assetMap = readEvmDeployments().assetMap ?? {};
-    if (!FOUNDER_DEMO_ASSET_IDS.every((id) => assetMap[id] && isAddress(assetMap[id]))) {
+    if (assetIds.length === 0 || !assetIds.every((id) => assetMap[id] && isAddress(assetMap[id]))) {
       // Tokens not deployed yet: release so the claim can retry later.
       await releaseLease();
       return { state: "pending" };
@@ -197,7 +209,7 @@ export async function claimFounderDemoAirdrop(userId: string): Promise<FounderDe
     }
 
     // 2) Sign + record + broadcast whatever is still missing.
-    const missing = FOUNDER_DEMO_ASSET_IDS.filter((id) => !progress.sent[id]);
+    const missing = assetIds.filter((id) => !progress.sent[id]);
     if (missing.length > 0) {
       const fees = await legacyGasOverrides(publicClient);
       let nonce = await publicClient.getTransactionCount({ address: account.address, blockTag: "pending" });
@@ -251,8 +263,8 @@ export async function claimFounderDemoAirdrop(userId: string): Promise<FounderDe
       if (r.status === "fulfilled") delete progress.sent[entries[i][0]];
     });
 
-    if (done && FOUNDER_DEMO_ASSET_IDS.every((id) => progress.sent[id])) {
-      const hashes = FOUNDER_DEMO_ASSET_IDS.map((id) => progress.sent[id].hash);
+    if (done && assetIds.every((id) => progress.sent[id])) {
+      const hashes = assetIds.map((id) => progress.sent[id].hash);
       await db
         .update(founderDemoTokenAirdrops)
         .set({ txSummary: JSON.stringify(hashes) })
