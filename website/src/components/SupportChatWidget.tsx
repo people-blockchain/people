@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Loader2, Send, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import type { Language } from "@/lib/preferences";
 import { fetchAuthSessionUser } from "@/lib/wallet-cloud-client";
 
 const POLL_INTERVAL_MS = 6000;
@@ -24,7 +25,25 @@ type ChatPayload = { thread: { id: string; status: string } | null; messages: Ch
 
 type Phase = "checking" | "guest" | "loading" | "ready" | "error";
 
-const COPY = {
+type CopyShape = {
+  title: string;
+  subtitle: string;
+  open: string;
+  close: string;
+  greeting: string;
+  placeholder: string;
+  send: string;
+  guestTitle: string;
+  guestBody: string;
+  guestCta: string;
+  loadError: string;
+  sendError: string;
+  rateLimited: string;
+  escalated: string;
+  you: string;
+};
+
+const COPY: Record<Language, CopyShape> = {
   en: {
     title: "PEOPLE Support",
     subtitle: "We usually reply within a few hours",
@@ -41,6 +60,176 @@ const COPY = {
     rateLimited: "Too many messages. Please wait a moment.",
     escalated: "A team member has been notified and will reply here.",
     you: "You",
+  },
+  es: {
+    title: "PEOPLE Support",
+    subtitle: "Solemos responder en unas pocas horas",
+    open: "Abrir chat de soporte",
+    close: "Cerrar chat de soporte",
+    greeting: "¡Hola! 👋 Pregúntanos lo que quieras sobre PEOPLE y te responderemos aquí.",
+    placeholder: "Escribe un mensaje…",
+    send: "Enviar",
+    guestTitle: "Inicia sesión para chatear con nosotros",
+    guestBody: "El soporte en vivo es gratuito para usuarios registrados. Inicia sesión y estaremos aquí.",
+    guestCta: "Iniciar sesión",
+    loadError: "No se pudo cargar el chat. Por favor, inténtalo de nuevo.",
+    sendError: "Mensaje no enviado. Por favor, inténtalo de nuevo.",
+    rateLimited: "Demasiados mensajes. Por favor, espera un momento.",
+    escalated: "Un miembro del equipo ha sido notificado y responderá aquí.",
+    you: "Tú",
+  },
+  pt: {
+    title: "PEOPLE Support",
+    subtitle: "Geralmente respondemos em algumas horas",
+    open: "Abrir chat de suporte",
+    close: "Fechar chat de suporte",
+    greeting: "Olá! 👋 Pergunte qualquer coisa sobre o PEOPLE e responderemos aqui.",
+    placeholder: "Escreva uma mensagem…",
+    send: "Enviar",
+    guestTitle: "Inicie sessão para conversar conosco",
+    guestBody: "O suporte ao vivo é gratuito para usuários registrados. Inicie sessão e estaremos aqui.",
+    guestCta: "Iniciar sessão",
+    loadError: "Não foi possível carregar o chat. Tente novamente.",
+    sendError: "Mensagem não enviada. Tente novamente.",
+    rateLimited: "Muitas mensagens. Por favor, aguarde um momento.",
+    escalated: "Um membro da equipe foi notificado e responderá aqui.",
+    you: "Você",
+  },
+  fr: {
+    title: "PEOPLE Support",
+    subtitle: "Nous répondons généralement en quelques heures",
+    open: "Ouvrir le chat d'assistance",
+    close: "Fermer le chat d'assistance",
+    greeting: "Bonjour ! 👋 Posez-nous vos questions sur PEOPLE et nous vous répondrons ici.",
+    placeholder: "Écrivez un message…",
+    send: "Envoyer",
+    guestTitle: "Connectez-vous pour discuter avec nous",
+    guestBody: "L'assistance en direct est gratuite pour les utilisateurs inscrits. Connectez-vous et nous serons là.",
+    guestCta: "Se connecter",
+    loadError: "Impossible de charger le chat. Veuillez réessayer.",
+    sendError: "Message non envoyé. Veuillez réessayer.",
+    rateLimited: "Trop de messages. Veuillez patienter un moment.",
+    escalated: "Un membre de l'équipe a été averti et vous répondra ici.",
+    you: "Vous",
+  },
+  de: {
+    title: "PEOPLE Support",
+    subtitle: "Wir antworten normalerweise innerhalb weniger Stunden",
+    open: "Support-Chat öffnen",
+    close: "Support-Chat schließen",
+    greeting: "Hallo! 👋 Frag uns alles über PEOPLE und wir antworten dir hier.",
+    placeholder: "Nachricht schreiben…",
+    send: "Senden",
+    guestTitle: "Anmelden, um mit uns zu chatten",
+    guestBody: "Der Live-Support ist für registrierte Benutzer kostenlos. Melden Sie sich an und wir sind da.",
+    guestCta: "Anmelden",
+    loadError: "Chat konnte nicht geladen werden. Bitte versuche es erneut.",
+    sendError: "Nachricht nicht gesendet. Bitte versuche es erneut.",
+    rateLimited: "Zu viele Nachrichten. Bitte warte einen Moment.",
+    escalated: "Ein Teammitglied wurde benachrichtigt und wird hier antworten.",
+    you: "Du",
+  },
+  it: {
+    title: "PEOPLE Support",
+    subtitle: "Di solito rispondiamo entro poche ore",
+    open: "Apri chat di supporto",
+    close: "Chiudi chat di supporto",
+    greeting: "Ciao! 👋 Chiedici qualsiasi cosa su PEOPLE e ti risponderemo qui.",
+    placeholder: "Scrivi un messaggio…",
+    send: "Invia",
+    guestTitle: "Accedi per chattare con noi",
+    guestBody: "Il supporto live è gratuito per gli utenti registrati. Accedi e saremo subito qui.",
+    guestCta: "Accedi",
+    loadError: "Impossibile caricare la chat. Riprova.",
+    sendError: "Messaggio non inviato. Riprova.",
+    rateLimited: "Troppi messaggi. Attendi un momento.",
+    escalated: "Un membro del team è stato avvisato e risponderà qui.",
+    you: "Tu",
+  },
+  tr: {
+    title: "PEOPLE Support",
+    subtitle: "Genellikle birkaç saat içinde yanıt veriyoruz",
+    open: "Destek sohbetini aç",
+    close: "Destek sohbetini kapat",
+    greeting: "Merhaba! 👋 PEOPLE hakkında dilediğinizi sorun, buradan yanıtlayalım.",
+    placeholder: "Bir mesaj yazın…",
+    send: "Gönder",
+    guestTitle: "Bizimle sohbet etmek için giriş yapın",
+    guestBody: "Canlı destek kayıtlı kullanıcılar için ücretsizdir. Giriş yapın, hemen yardımcı olalım.",
+    guestCta: "Giriş yap",
+    loadError: "Sohbet yüklenemedi. Lütfen tekrar deneyin.",
+    sendError: "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    rateLimited: "Çok fazla mesaj gönderildi. Lütfen biraz bekleyin.",
+    escalated: "Ekip üyemiz bilgilendirildi ve buradan yanıt verecektir.",
+    you: "Sen",
+  },
+  vi: {
+    title: "PEOPLE Support",
+    subtitle: "Chúng tôi thường phản hồi trong vòng vài giờ",
+    open: "Mở trò chuyện hỗ trợ",
+    close: "Đóng trò chuyện hỗ trợ",
+    greeting: "Xin chào! 👋 Hãy hỏi bất cứ điều gì về PEOPLE và chúng tôi sẽ trả lời tại đây.",
+    placeholder: "Viết tin nhắn…",
+    send: "Gửi",
+    guestTitle: "Đăng nhập để trò chuyện với chúng tôi",
+    guestBody: "Hỗ trợ trực tuyến miễn phí cho người dùng đã đăng ký. Hãy đăng nhập và chúng tôi sẵn sàng hỗ trợ.",
+    guestCta: "Đăng nhập",
+    loadError: "Không thể tải cuộc trò chuyện. Vui lòng thử lại.",
+    sendError: "Tin nhắn chưa được gửi. Vui lòng thử lại.",
+    rateLimited: "Quá nhiều tin nhắn. Vui lòng chờ trong giây lát.",
+    escalated: "Một thành viên trong nhóm đã được thông báo và sẽ phản hồi tại đây.",
+    you: "Bạn",
+  },
+  id: {
+    title: "PEOPLE Support",
+    subtitle: "Kami biasanya membalas dalam beberapa jam",
+    open: "Buka obrolan dukungan",
+    close: "Tutup obrolan dukungan",
+    greeting: "Halo! 👋 Tanyakan apa saja tentang PEOPLE dan kami akan menjawab di sini.",
+    placeholder: "Tulis pesan…",
+    send: "Kirim",
+    guestTitle: "Masuk untuk mengobrol dengan kami",
+    guestBody: "Dukungan langsung gratis untuk pengguna terdaftar. Masuk dan kami akan siap membantu.",
+    guestCta: "Masuk",
+    loadError: "Gagal memuat obrolan. Silakan coba lagi.",
+    sendError: "Pesan tidak terkirim. Silakan coba lagi.",
+    rateLimited: "Terlalu banyak pesan. Mohon tunggu sebentar.",
+    escalated: "Anggota tim kami telah diberitahu dan akan membalas di sini.",
+    you: "Anda",
+  },
+  zh: {
+    title: "PEOPLE Support",
+    subtitle: "我们通常在几小时内回复",
+    open: "打开客服聊天",
+    close: "关闭客服聊天",
+    greeting: "你好！👋 有任何关于 PEOPLE 的问题都可以问我们，我们会在这里回复。",
+    placeholder: "输入消息…",
+    send: "发送",
+    guestTitle: "登录以与我们聊天",
+    guestBody: "注册用户可享受免费实时客服支持。登录后我们随时为您服务。",
+    guestCta: "登录",
+    loadError: "无法加载聊天。请重试。",
+    sendError: "消息未能发送。请重试。",
+    rateLimited: "发送频率过高，请稍候。",
+    escalated: "已通知团队成员，将在此回复您。",
+    you: "你",
+  },
+  ar: {
+    title: "PEOPLE Support",
+    subtitle: "عادةً ما نرد خلال بضع ساعات",
+    open: "فتح محادثة الدعم",
+    close: "إغلاق محادثة الدعم",
+    greeting: "مرحباً! 👋 اسألنا عن أي شيء يخص PEOPLE وسنرد عليك هنا.",
+    placeholder: "اكتب رسالة…",
+    send: "إرسال",
+    guestTitle: "سجّل الدخول لتتحدث معنا",
+    guestBody: "الدعم المباشر مجاني للمستخدمين المسجلين. سجّل الدخول وسنكون هنا فوراً.",
+    guestCta: "تسجيل الدخول",
+    loadError: "تعذر تحميل المحادثة. يُرجى المحاولة مرة أخرى.",
+    sendError: "لم يتم إرسال الرسالة. يُرجى المحاولة مرة أخرى.",
+    rateLimited: "رسائل كثيرة جداً. يُرجى الانتظار قليلاً.",
+    escalated: "تم إخطار أحد أعضاء الفريق وسيرد عليك هنا.",
+    you: "أنت",
   },
   ru: {
     title: "PEOPLE Support",
@@ -59,12 +248,10 @@ const COPY = {
     escalated: "Сотрудник уведомлён и ответит здесь.",
     you: "Вы",
   },
-} as const;
+};
 
-type CopyKey = keyof (typeof COPY)["en"];
-
-function copyFor(lang: string): Record<CopyKey, string> {
-  return lang === "ru" ? COPY.ru : COPY.en;
+function copyFor(lang: string): CopyShape {
+  return COPY[lang as Language] ?? COPY.en;
 }
 
 /** Cheerful PEOPLE-style mascot: a round smiling face with two little raised hands. */
