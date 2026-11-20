@@ -13,15 +13,21 @@ import { register } from "node:module";
 register("./fixtures/wallet-vault-db-loader.mjs", import.meta.url);
 
 const {
+  currentVaultVersion,
   getUserWrapKeyHex,
   isAuthTimeFresh,
+  isVaultRotationActive,
   isWalletVaultConfigured,
   legacyVaultCasWhere,
   loadUserWalletVault,
+  migrateAllWalletVaults,
+  vaultCasWhere,
   walletVaultMasterSecret,
   WALLET_VAULT_REAUTH_WINDOW_MS,
 } = await import("../src/lib/wallet-cloud-server.ts");
-const { deriveUserWrapKeyHex, encryptPrivateKeyForVault } = await import("../src/lib/wallet-cloud-crypto.ts");
+const { decryptPrivateKeyFromVault, deriveUserWrapKeyHex, encryptPrivateKeyForVault } = await import(
+  "../src/lib/wallet-cloud-crypto.ts"
+);
 const { keyFromPrivate } = await import("../src/lib/people-sign.ts");
 const { getDbReady } = await import("./fixtures/wallet-vault-pglite-db.mjs");
 const schema = await import("../src/db/schema.ts");
@@ -141,7 +147,6 @@ test("loadUserWalletVault migrates a legacy vaultVersion:1 row to the dedicated 
       assert.equal(migrated.vaultVersion, 2);
       assert.notEqual(migrated.encryptedPrivateKey, legacyEncrypted);
 
-      const { decryptPrivateKeyFromVault } = await import("../src/lib/wallet-cloud-crypto.ts");
       const newWrapKeyHex = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
       const plain = await decryptPrivateKeyFromVault(migrated.encryptedPrivateKey, newWrapKeyHex);
       assert.equal(plain, privateKey);
@@ -293,4 +298,277 @@ test("legacy migration compare-and-swap does not overwrite a version 2 row", asy
     assert.equal(current[0].encryptedPrivateKey, ciphertext);
     assert.equal(current[0].vaultVersion, 2);
   });
+});
+
+async function insertVault({ userId, secret, vaultVersion, privateKey = "ab".repeat(32) }) {
+  const db = await getDbReady();
+  await db.insert(schema.users).values({ id: userId });
+  const wrapKeyHex = await deriveUserWrapKeyHex(secret, userId);
+  const encryptedPrivateKey = await encryptPrivateKeyForVault(privateKey, wrapKeyHex);
+  const address = keyFromPrivate(privateKey).address;
+  await db.insert(schema.userWalletVaults).values({
+    userId,
+    address,
+    publicKey: `0x${"22".repeat(33)}`,
+    encryptedPrivateKey,
+    vaultVersion,
+  });
+  return { encryptedPrivateKey, privateKey, address };
+}
+
+test("rotation env unset: current version stays 2 and a v2 row is not rewritten", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "c".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: undefined,
+    },
+    async () => {
+      assert.equal(isVaultRotationActive(), false);
+      assert.equal(currentVaultVersion(), 2);
+      const userId = "wallet-v2-noop-user";
+      const inserted = await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 2,
+        privateKey: "a1".repeat(32),
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 2);
+      assert.equal(loaded.encryptedPrivateKey, inserted.encryptedPrivateKey);
+    },
+  );
+});
+
+test("v1 migrates straight to v3 when PREVIOUS is set", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "P".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: undefined,
+    },
+    async () => {
+      assert.equal(currentVaultVersion(), 3);
+      const userId = "wallet-v1-to-v3-user";
+      const privateKey = "a2".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.AUTH_SECRET,
+        vaultVersion: 1,
+        privateKey,
+      });
+      const migrated = await loadUserWalletVault(userId);
+      assert.equal(migrated.vaultVersion, 3);
+      const currentWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(await decryptPrivateKeyFromVault(migrated.encryptedPrivateKey, currentWrap), privateKey);
+      const previousWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_PREVIOUS, userId);
+      await assert.rejects(() => decryptPrivateKeyFromVault(migrated.encryptedPrivateKey, previousWrap));
+    },
+  );
+});
+
+test("v2 migrates to v3 with the previous secret", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: undefined,
+    },
+    async () => {
+      const userId = "wallet-v2-to-v3-user";
+      const privateKey = "22".repeat(32);
+      const inserted = await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET_PREVIOUS,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const migrated = await loadUserWalletVault(userId);
+      assert.equal(migrated.vaultVersion, 3);
+      assert.notEqual(migrated.encryptedPrivateKey, inserted.encryptedPrivateKey);
+      const currentWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(await decryptPrivateKeyFromVault(migrated.encryptedPrivateKey, currentWrap), privateKey);
+    },
+  );
+});
+
+test("already-v3 rows are left untouched during rotation", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "O".repeat(32),
+    },
+    async () => {
+      const userId = "wallet-already-v3-user";
+      const inserted = await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 3,
+        privateKey: "33".repeat(32),
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
+      assert.equal(loaded.encryptedPrivateKey, inserted.encryptedPrivateKey);
+    },
+  );
+});
+
+test("wrong previous secret does not write and does not destroy ciphertext", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "wrong-previous-secret-32bytes-x",
+    },
+    async () => {
+      const userId = "wallet-wrong-previous-user";
+      const realPrevious = "real-previous-secret-32bytes-ok";
+      const privateKey = "44".repeat(32);
+      const inserted = await insertVault({
+        userId,
+        secret: realPrevious,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 2);
+      assert.equal(loaded.encryptedPrivateKey, inserted.encryptedPrivateKey);
+      const realWrap = await deriveUserWrapKeyHex(realPrevious, userId);
+      assert.equal(await decryptPrivateKeyFromVault(loaded.encryptedPrivateKey, realWrap), privateKey);
+    },
+  );
+});
+
+test("concurrent v2→v3 compare-and-swap leaves a single intact v3 row", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "O".repeat(32),
+    },
+    async () => {
+      const userId = "wallet-concurrent-cas-user";
+      const privateKey = "55".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET_PREVIOUS,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const [a, b] = await Promise.all([loadUserWalletVault(userId), loadUserWalletVault(userId)]);
+      assert.equal(a.vaultVersion, 3);
+      assert.equal(b.vaultVersion, 3);
+      const db = await getDbReady();
+      const { eq } = await import("drizzle-orm");
+      const current = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, userId));
+      assert.equal(current.length, 1);
+      assert.equal(current[0].vaultVersion, 3);
+      const currentWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(await decryptPrivateKeyFromVault(current[0].encryptedPrivateKey, currentWrap), privateKey);
+    },
+  );
+});
+
+test("NEXT mode unwraps v2 with PEOPLE_WALLET_VAULT_SECRET and re-wraps to v3", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+    },
+    async () => {
+      assert.equal(walletVaultMasterSecret(), "N".repeat(32));
+      assert.equal(currentVaultVersion(), 3);
+      const userId = "wallet-next-mode-user";
+      const privateKey = "66".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const migrated = await loadUserWalletVault(userId);
+      assert.equal(migrated.vaultVersion, 3);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(await decryptPrivateKeyFromVault(migrated.encryptedPrivateKey, nextWrap), privateKey);
+    },
+  );
+});
+
+test("v2→v3 compare-and-swap does not overwrite a version 3 row", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "O".repeat(32),
+    },
+    async () => {
+      const db = await getDbReady();
+      const userId = "wallet-v3-cas-user";
+      await db.insert(schema.users).values({ id: userId });
+      const ciphertext = "v3-ciphertext-must-stay";
+      await db.insert(schema.userWalletVaults).values({
+        userId,
+        address: `0x${"aa".repeat(20)}`,
+        publicKey: `0x${"bb".repeat(33)}`,
+        encryptedPrivateKey: ciphertext,
+        vaultVersion: 3,
+      });
+      const updated = await db
+        .update(schema.userWalletVaults)
+        .set({ encryptedPrivateKey: "overwritten", vaultVersion: 3 })
+        .where(vaultCasWhere(userId, 2))
+        .returning();
+      assert.equal(updated.length, 0);
+      const { eq } = await import("drizzle-orm");
+      const current = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, userId));
+      assert.equal(current[0].encryptedPrivateKey, ciphertext);
+      assert.equal(current[0].vaultVersion, 3);
+    },
+  );
+});
+
+test("bulk migrate dry-run reports counts and writes nothing; live migrate moves v2 to v3", async () => {
+  await withEnv(
+    {
+      PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "O".repeat(32),
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const db = await getDbReady();
+      const { eq } = await import("drizzle-orm");
+      await db.delete(schema.userWalletVaults);
+      const userId = "wallet-bulk-migrate-user";
+      const privateKey = "77".repeat(32);
+      const inserted = await insertVault({
+        userId,
+        secret: process.env.PEOPLE_WALLET_VAULT_SECRET_PREVIOUS,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const dry = await migrateAllWalletVaults({ dryRun: true });
+      assert.equal(dry.dryRun, true);
+      assert.equal(dry.currentVersion, 3);
+      assert.equal(dry.rotationActive, true);
+      assert.equal(dry.migrated, 0);
+      assert.equal(dry.counts.total, 1);
+      assert.equal(dry.counts[2], 1);
+      assert.equal(dry.counts[3], 0);
+      const raw = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, userId));
+      assert.equal(raw[0].vaultVersion, 2);
+      assert.equal(raw[0].encryptedPrivateKey, inserted.encryptedPrivateKey);
+
+      const live = await migrateAllWalletVaults({ dryRun: false });
+      assert.equal(live.dryRun, false);
+      assert.equal(live.migrated, 1);
+      assert.equal(live.failed, 0);
+      assert.equal(live.skipped, 0);
+      assert.equal(live.counts.total, 1);
+      assert.equal(live.counts[3], 1);
+      assert.equal(live.counts[2], 0);
+      const row = await db.select().from(schema.userWalletVaults).where(eq(schema.userWalletVaults.userId, userId));
+      assert.equal(row[0].vaultVersion, 3);
+      const currentWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(await decryptPrivateKeyFromVault(row[0].encryptedPrivateKey, currentWrap), privateKey);
+    },
+  );
 });

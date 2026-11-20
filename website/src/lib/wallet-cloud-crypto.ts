@@ -50,15 +50,26 @@ export function warnCloudOpenFailed(entry: {
 }
 
 /**
- * Legacy migration decrypt. A throw becomes null plus a code log so the caller can leave the
+ * Migration decrypt. A throw becomes null plus a code log so the caller can leave the
  * stored vault untouched. Nothing here writes or deletes.
  */
-export async function readLegacyVaultPlaintext(decrypt: () => Promise<string>): Promise<string | null> {
+export async function readLegacyVaultPlaintext(
+  decrypt: () => Promise<string>,
+  options?: { stage?: string; decryptFailedCode?: string },
+): Promise<string | null> {
   try {
     return await decrypt();
   } catch (err) {
-    const code = err instanceof VaultSchemaError ? "vault_schema_unsupported" : "legacy_decrypt_failed";
-    warnCloudOpenFailed({ code, stage: "legacy_migrate", vaultPresent: true, retried: false });
+    const code =
+      err instanceof VaultSchemaError
+        ? "vault_schema_unsupported"
+        : (options?.decryptFailedCode ?? "legacy_decrypt_failed");
+    warnCloudOpenFailed({
+      code,
+      stage: options?.stage ?? "legacy_migrate",
+      vaultPresent: true,
+      retried: false,
+    });
     return null;
   }
 }
