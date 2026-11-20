@@ -325,6 +325,10 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
   for (const lang of langs) {
     const c = foundingCopyMod.foundingCopy(lang);
     assert.ok(c.stickyBar.messageFull.includes("PEOPLE Mainnet Beta"), `${lang} stickyBar Mainnet Beta`);
+    assert.ok(
+      c.stickyBar.messageFull.length <= 110,
+      `${lang} stickyBar.messageFull is too long for the desktop top bar (${c.stickyBar.messageFull.length} chars)`,
+    );
     assert.ok(c.modal.rewardNote.length > 5, `${lang} rewardNote`);
     assert.ok(c.simulator.poolFormulaLabel.includes("6,000,000") || c.simulator.poolFormulaLabel.includes("6.000.000") || c.simulator.poolFormulaLabel.includes("6 000 000"), `${lang} pool formula`);
     assert.doesNotMatch(JSON.stringify(c), /[Ѐ-ӿ]/, `${lang} founding copy must not contain Cyrillic`);

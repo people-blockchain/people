@@ -13,7 +13,7 @@ import { GithubNavLink } from "./OpenSource";
 import { NetworkModeSwitch } from "./NetworkModeSwitch";
 import { Menu, X, ArrowRight, Sun, Moon, ChevronDown } from "lucide-react";
 import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
-import { isFullProgressRoute } from "@/lib/founding/contract";
+import { isProgressStripRoute } from "@/lib/founding/contract";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { content } from "@/lib/content";
@@ -266,7 +266,7 @@ export function Navbar() {
     };
   }, [lang, t.slogan]);
 
-  const showFoundingProgressSlot = isFullProgressRoute(pathname || "/");
+  const showFoundingProgressSlot = isProgressStripRoute(pathname || "/");
 
   return (
     <>

@@ -100,7 +100,7 @@ const EN_COPY: FoundingCopy = {
   stickyBar: {
     badge: "Founding 1,000 Vault",
     messageFull:
-      "PEOPLE Mainnet Beta · Opens Dec 1 · Founding 1,000 Vault open — Roster & order stay sealed until 1,000 verified wallets lock in (unlocks transfers & Founding 1,000 PPL Bounty Draw)",
+      "PEOPLE Mainnet Beta · Opens Dec 1 · Founding 1,000 Vault sealed until 1,000 wallets lock in",
     messageCompact: "PEOPLE Mainnet Beta · Dec 1 · Founding 1,000 Vault sealed until 1,000 wallets lock in",
     messageMobile: "Founding 1,000 Vault · Dec 1",
     cta: "Claim Seat (60s)",
@@ -227,7 +227,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Abre el 1 dic · Founding 1,000 Vault abierto — La lista y el orden permanecen sellados hasta que 1,000 billeteras verificadas se bloqueen (desbloquea transferencias y el sorteo Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Abre el 1 dic · Founding 1,000 Vault sellado hasta 1,000 billeteras",
       messageCompact: "PEOPLE Mainnet Beta · 1 dic · Founding 1,000 Vault sellado hasta 1,000 billeteras",
       cta: "Reclamar asiento (60s)",
       daysShort: "d",
@@ -341,7 +341,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Abre em 1 dez · Founding 1,000 Vault aberto — A lista e a ordem permanecem seladas até que 1.000 carteiras verificadas confirmem (desbloqueia transferências e o sorteio Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Abre em 1 dez · Founding 1,000 Vault selado até 1.000 carteiras",
       messageCompact: "PEOPLE Mainnet Beta · 1 dez · Founding 1,000 Vault selado até 1.000 carteiras",
       cta: "Garantir lugar (60s)",
       daysShort: "d",
@@ -455,7 +455,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Ouvre le 1er déc · Founding 1,000 Vault ouvert — La liste et l'ordre restent scellés jusqu'à 1 000 portefeuilles vérifiés (débloque les transferts et le tirage Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Ouvre le 1er déc · Founding 1,000 Vault scellé jusqu'à 1 000 portefeuilles",
       messageCompact: "PEOPLE Mainnet Beta · 1er déc · Founding 1,000 Vault scellé jusqu'à 1 000 portefeuilles",
       cta: "Réserver ma place (60s)",
       daysShort: "j",
@@ -569,7 +569,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Startet am 1. Dez. · Founding 1,000 Vault offen — Liste & Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets gesichert sind (schaltet Transfers & Founding 1,000 PPL Bounty Draw frei)",
+        "PEOPLE Mainnet Beta · Start am 1. Dez. · Founding 1,000 Vault versiegelt bis 1.000 Wallets",
       messageCompact: "PEOPLE Mainnet Beta · 1. Dez. · Founding 1,000 Vault versiegelt bis 1.000 Wallets",
       cta: "Platz sichern (60s)",
       daysShort: "T",
@@ -683,7 +683,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Apre il 1° dic · Founding 1,000 Vault aperto — Elenco e ordine restano sigillati finché 1.000 portafogli verificati non sono bloccati (sblocca i trasferimenti e l'estrazione Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Apre il 1° dic · Founding 1,000 Vault sigillato fino a 1.000 portafogli",
       messageCompact: "PEOPLE Mainnet Beta · 1° dic · Founding 1,000 Vault sigillato fino a 1.000 portafogli",
       cta: "Prenota posto (60s)",
       daysShort: "g",
@@ -797,7 +797,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · 1 Aralık'ta açılıyor · Founding 1,000 Vault açık — 1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır (transferleri ve Founding 1,000 PPL Ödül Çekilişini açar)",
+        "PEOPLE Mainnet Beta · 1 Aralık'ta açılır · Founding 1,000 Vault 1.000 cüzdana kadar mühürlü",
       messageCompact: "PEOPLE Mainnet Beta · 1 Ara · Founding 1,000 Vault 1.000 cüzdana kadar mühürlü",
       cta: "Koltuk Ayır (60sn)",
       daysShort: "g",
@@ -911,7 +911,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Mở ngày 1/12 · Founding 1,000 Vault đang mở — Danh sách & thứ tự được niêm phong cho đến khi đủ 1.000 ví xác minh (mở khóa chuyển khoản & Quay thưởng Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Mở 1/12 · Founding 1,000 Vault niêm phong đến khi đủ 1.000 ví",
       messageCompact: "PEOPLE Mainnet Beta · 1/12 · Founding 1,000 Vault niêm phong đến khi đủ 1.000 ví",
       cta: "Giữ vị trí (60 giây)",
       daysShort: "ng",
@@ -1025,7 +1025,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · Dibuka 1 Des · Founding 1,000 Vault terbuka — Daftar & urutan tetap tersegel hingga 1.000 dompet terverifikasi terkunci (membuka transfer & Undian Bounty Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · Dibuka 1 Des · Founding 1,000 Vault tersegel hingga 1.000 dompet",
       messageCompact: "PEOPLE Mainnet Beta · 1 Des · Founding 1,000 Vault tersegel hingga 1.000 dompet",
       cta: "Klaim Kursi (60d)",
       daysShort: "h",
@@ -1139,7 +1139,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · 12月1日开启 · Founding 1,000 Vault 已开放 — 名单与顺序在 1,000 个验证钱包锁定前保持密封（解锁转账与 Founding 1,000 PPL 奖金池抽奖）",
+        "PEOPLE Mainnet Beta · 12月1日开启 · Founding 1,000 Vault 满 1,000 钱包前保持密封",
       messageCompact: "PEOPLE Mainnet Beta · 12月1日 · Founding 1,000 Vault 满 1,000 钱包前保持密封",
       cta: "锁定席位 (60秒)",
       daysShort: "天",
@@ -1253,7 +1253,7 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
     stickyBar: {
       badge: "Founding 1,000 Vault",
       messageFull:
-        "PEOPLE Mainnet Beta · يفتح في 1 ديسمبر · Founding 1,000 Vault مفتوح — تظل القائمة والترتيب مختومين حتى يتم قفل 1,000 محفظة موثقة (يفتح التحويلات وسحب مكافآت Founding 1,000 PPL)",
+        "PEOPLE Mainnet Beta · يفتح 1 ديسمبر · Founding 1,000 Vault مختوم حتى 1,000 محفظة",
       messageCompact: "PEOPLE Mainnet Beta · 1 ديسمبر · Founding 1,000 Vault مختوم حتى 1,000 محفظة",
       cta: "احجز مقعدك (60 ثانية)",
       daysShort: "ي",

@@ -7,6 +7,8 @@
  * expose a live counter or a seat/order number anywhere in the UI.
  */
 
+import { isAnalyticsExcludedPathname } from "@/lib/analytics/paths";
+
 /** Same bot as the session-code flow (`TELEGRAM_VERIFY_BOT_USERNAME` in telegram-bot.ts). */
 export const FOUNDING_TELEGRAM_BOT_USERNAME = "PeopleVerifyBot";
 
@@ -92,5 +94,10 @@ export function parseColdStartPayload(
 
 export function isFullProgressRoute(pathname: string): boolean {
   return pathname === "/" || pathname === "/founders" || pathname === "/bounty";
+}
+
+/** Collapsed Founder 0/3 strip under the header — all public pages, not admin/analytics. */
+export function isProgressStripRoute(pathname: string): boolean {
+  return !isAnalyticsExcludedPathname(pathname);
 }
 

@@ -24,7 +24,6 @@ import {
   FOUNDING_PENDING_CLAIM_STORAGE_KEY,
   FOUNDING_TG_CLAIM_PARAM,
   FOUNDING_TG_CLAIM_TOKEN_RE,
-  isFullProgressRoute,
   openFoundingModal,
   telegramColdStartLink,
   type FoundingOpenSource,
@@ -102,7 +101,6 @@ export function FoundingCaptureLayer() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSource, setModalSource] = useState<FoundingOpenSource>("cta");
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [badgeExpanded, setBadgeExpanded] = useState(false);
   const [progressExpanded, setProgressExpanded] = useState(false);
   const [progressSlot, setProgressSlot] = useState<HTMLElement | null>(null);
   const [foundersSlot, setFoundersSlot] = useState<HTMLElement | null>(null);
@@ -532,7 +530,6 @@ export function FoundingCaptureLayer() {
     }
   };
 
-  const showFullProgressInline = isFullProgressRoute(pathname);
   const drawerRouteCopy = copy.drawer.byRoute[routeKey];
 
   const nextStepShort = !step1Done
@@ -694,8 +691,8 @@ export function FoundingCaptureLayer() {
           <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2">
             <Lock className="h-3.5 w-3.5 shrink-0 text-warm" aria-hidden="true" />
             <p className="min-w-0 whitespace-nowrap text-[11px] font-semibold leading-none text-ink sm:text-xs">
-              <span className="lg:hidden">{copy.stickyBar.messageMobile ?? "Founding 1,000 Vault · Dec 1"}</span>
-              <span className="hidden lg:inline">{copy.stickyBar.messageFull}</span>
+              <span className="xl:hidden">{copy.stickyBar.messageMobile ?? "Founding 1,000 Vault · Dec 1"}</span>
+              <span className="hidden xl:inline">{copy.stickyBar.messageFull}</span>
             </p>
           </div>
 
@@ -730,7 +727,7 @@ export function FoundingCaptureLayer() {
       </div>
 
       {/* 2. Collapsible Founder 0/3 strip — portaled directly under <header> */}
-      {showFullProgressInline && progressSlot
+      {progressSlot
         ? createPortal(
             <section
               aria-label={copy.progress.title}
@@ -808,77 +805,6 @@ export function FoundingCaptureLayer() {
             foundersSlot,
           )
         : null}
-
-      {/* 2c. Compact floating badge on non-primary routes */}
-      {!showFullProgressInline ? (
-        <div
-          data-testid="founding-progress-widget-compact"
-          className="fixed bottom-4 left-3 z-30 max-w-[calc(100vw-5.5rem)] sm:left-4"
-        >
-          {badgeExpanded ? (
-            <div className="w-72 max-w-full rounded-2xl border border-line-strong bg-surface p-3.5 text-xs shadow-[var(--elev-2)] sm:w-80">
-              <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1.5 font-mono font-bold text-brand">
-                  <ShieldCheck className="h-4 w-4" aria-hidden="true" />
-                  {copy.progress.badgePrefix} {completedSteps}/3
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setBadgeExpanded(false)}
-                  aria-label={copy.progress.collapseAria}
-                  className="rounded-lg p-1 text-ink-3 hover:bg-surface-2 hover:text-ink"
-                >
-                  <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </div>
-              <p className="mt-1 text-[11px] text-ink-3">{copy.progress.sealedNote}</p>
-              <ul className="mt-2.5 space-y-1.5">
-                <li className="flex items-center justify-between gap-2 rounded-xl border border-line bg-canvas-2 px-2.5 py-1.5">
-                  <span className="truncate font-medium text-ink">{copy.progress.step1Title}</span>
-                  <span className="shrink-0 font-mono text-[11px] font-bold text-brand">
-                    {step1Done ? "✓" : "1"}
-                  </span>
-                </li>
-                <li className="flex items-center justify-between gap-2 rounded-xl border border-line bg-canvas-2 px-2.5 py-1.5">
-                  <span className="truncate font-medium text-ink">{copy.progress.step2Title}</span>
-                  <span className="shrink-0 font-mono text-[11px] font-bold text-brand">
-                    {step2Done ? "✓" : "2"}
-                  </span>
-                </li>
-                <li className="flex items-center justify-between gap-2 rounded-xl border border-line bg-canvas-2 px-2.5 py-1.5">
-                  <span className="truncate font-medium text-ink">{copy.progress.step3Title}</span>
-                  <span className="shrink-0 font-mono text-[11px] font-bold text-brand">
-                    {step3Done ? "✓" : "3"}
-                  </span>
-                </li>
-              </ul>
-              <button
-                type="button"
-                onClick={() => {
-                  setBadgeExpanded(false);
-                  openFoundingModal("progress");
-                }}
-                className="mt-3 inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-xl bg-brand px-3 font-semibold text-brand-ink transition hover:brightness-110"
-              >
-                {copy.stickyBar.cta}
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setBadgeExpanded(true)}
-              aria-label={copy.progress.expandAria}
-              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-brand/45 bg-surface px-3.5 text-xs font-bold text-ink shadow-[var(--elev-2)] transition hover:border-brand"
-            >
-              <ShieldCheck className="h-4 w-4 text-brand" aria-hidden="true" />
-              <span className="font-mono">
-                {copy.progress.badgePrefix} {completedSteps}/3
-              </span>
-              <ChevronUp className="h-3.5 w-3.5 text-ink-3" aria-hidden="true" />
-            </button>
-          )}
-        </div>
-      ) : null}
 
       {/* 3. Context Scroll / Read Drawer (bottom-right, never stacks with modal) */}
       {drawerOpen && !modalOpen ? (
