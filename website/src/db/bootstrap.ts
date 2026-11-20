@@ -11,6 +11,7 @@ import {
   FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
   LAVKA_SCHEMA_STATEMENTS,
   BUG_REPORTS_SCHEMA_STATEMENTS,
+  SUPPORT_CHAT_SCHEMA_STATEMENTS,
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
   WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
   FACTORY_ICON_SCHEMA_STATEMENTS,
@@ -73,6 +74,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     }
     // drizzle/0015_bug_reports.sql — bug bounty "beetle" button submissions.
     for (const statement of BUG_REPORTS_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0026_support_chat.sql — live support chat widget.
+    for (const statement of SUPPORT_CHAT_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
     // drizzle/0017_founder_passport_wallet.sql — separate wallet for Human Passport scoring.

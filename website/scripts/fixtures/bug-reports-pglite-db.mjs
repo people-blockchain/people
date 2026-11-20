@@ -9,6 +9,7 @@ import {
   FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
   BUG_REPORTS_SCHEMA_STATEMENTS,
+  SUPPORT_CHAT_SCHEMA_STATEMENTS,
 } from "../../src/db/bootstrap-sql.mjs";
 import * as schema from "../../src/db/schema.ts";
 
@@ -26,6 +27,7 @@ export async function getDbReady() {
         FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
         FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
         BUG_REPORTS_SCHEMA_STATEMENTS,
+        SUPPORT_CHAT_SCHEMA_STATEMENTS,
       ]) {
         for (const statement of group) await client.exec(statement);
       }
