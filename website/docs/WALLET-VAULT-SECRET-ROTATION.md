@@ -32,7 +32,7 @@ Deploying this code with rotation env **unset** changes nothing: current version
 
 Protected like other admin/cron routes: `Authorization: Bearer $CRON_SECRET`, or a discover-admin session.
 
-- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version, `failures` (hashed `rowId` + error code, never userId/secrets), and `decryptProbes` (each row vs `auth_secret` / `dedicated` / `previous` / `next`: `unset` | `ok` | `fail` | `address_mismatch` | `invalid_key`). No writes.
+- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version, `failures` (hashed `rowId` + error code, never userId/secrets), and `decryptProbes` (each row vs `auth_secret` / `dedicated` / `previous` / `next`: `unset` | `ok` | `fail` | `address_mismatch` | `invalid_key`). When a slot decrypts, the probe also includes `storedAddress`, `derivedEvm`, `derivedLegacy`, and `schemeMatch` (`evm` | `legacy` | `none`) so leftover rows can be balance-checked on-chain. No writes. No keys.
 - `POST /api/cron/wallet-vault-rotate` with `{"dryRun": true}` — same, no writes.
 - `POST /api/cron/wallet-vault-rotate` — live migrate every behind-version row (same CAS as lazy login). Failed rows are listed in `failures` with `rowId` + `code`; each also logs `[wallet-vault] rotate row failed`.
 
