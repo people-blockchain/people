@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { and, count, eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { userWalletVaults } from "@/db/schema";
@@ -6,7 +7,7 @@ import {
   decryptPrivateKeyFromVault,
   deriveUserWrapKeyHex,
   encryptPrivateKeyForVault,
-  readLegacyVaultPlaintext,
+  VaultSchemaError,
   warnCloudOpenFailed,
 } from "@/lib/wallet-cloud-crypto";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
@@ -141,10 +142,44 @@ export function isWalletVaultConfigured(): boolean {
   return Boolean(process.env.DATABASE_URL?.trim() && currentVaultSecretOrNull());
 }
 
+/** Opaque row id for migrate diagnostics. Never the raw userId. */
+export function hashVaultRowId(userId: string): string {
+  return createHash("sha256").update(userId, "utf8").digest("hex").slice(0, 16);
+}
+
+export type VaultSecretSlot = "auth_secret" | "dedicated" | "previous" | "next";
+export type VaultDecryptProbeResult = "unset" | "ok" | "fail" | "address_mismatch" | "invalid_key";
+
+/**
+ * Master secret that unwraps ciphertext *already stored* at `vaultVersion`.
+ * During NEXT rotation, v2 stays on `PEOPLE_WALLET_VAULT_SECRET` (the old env); v3 uses NEXT.
+ * Unmigrated rows must never be handed the current wrapping secret.
+ */
+export function unwrapMasterSecretForVaultVersion(vaultVersion: number): string | null {
+  if (vaultVersion === 1) return legacyWalletVaultMasterSecret();
+  if (vaultVersion === WALLET_VAULT_VERSION_DEDICATED) {
+    const previous = previousVaultSecret();
+    if (previous) return previous;
+    return trimmedEnv("PEOPLE_WALLET_VAULT_SECRET");
+  }
+  return currentVaultSecretOrNull();
+}
+
+export function expectedSecretSlotForVaultVersion(vaultVersion: number): VaultSecretSlot {
+  if (vaultVersion === 1) return "auth_secret";
+  if (vaultVersion === WALLET_VAULT_VERSION_DEDICATED) {
+    return previousVaultSecret() ? "previous" : "dedicated";
+  }
+  return nextVaultSecret() && !previousVaultSecret() ? "next" : "dedicated";
+}
+
 export async function getUserWrapKeyHex(userId: string): Promise<string> {
   if (!isWalletVaultConfigured()) throw new Error("wallet_vault_not_configured");
-  const secret = walletVaultMasterSecret();
-  await migrateVaultIfNeeded(userId);
+  const { vault } = await migrateVaultIfNeeded(userId);
+  const secret = vault
+    ? unwrapMasterSecretForVaultVersion(vault.vaultVersion)
+    : currentVaultSecretOrNull();
+  if (!secret) throw new Error("wallet_vault_not_configured");
   return deriveUserWrapKeyHex(secret, userId);
 }
 
@@ -168,57 +203,85 @@ function sourceSecretForVersion(fromVersion: number): { secret: string | null; s
   return { secret: null, stage: "vault_rotate", decryptFailedCode: "rotate_decrypt_failed" };
 }
 
+function logRotateRowFailed(userId: string, vaultVersion: number, code: string): void {
+  console.warn("[wallet-vault] rotate row failed", {
+    rowId: hashVaultRowId(userId),
+    vaultVersion,
+    code,
+  });
+}
+
+async function decryptVaultWithSecret(
+  vault: VaultRow,
+  secret: string,
+  decryptFailedCode: string,
+): Promise<{ plain: string } | { error: string }> {
+  try {
+    const wrapKeyHex = await deriveUserWrapKeyHex(secret, vault.userId);
+    const plain = await decryptPrivateKeyFromVault(vault.encryptedPrivateKey, wrapKeyHex);
+    return { plain };
+  } catch (err) {
+    const error = err instanceof VaultSchemaError ? "vault_schema_unsupported" : decryptFailedCode;
+    return { error };
+  }
+}
+
+type MigrateVaultAttempt = {
+  vault: VaultRow | null;
+  error: string | null;
+};
+
+function failMigrate(vault: VaultRow, stage: string, code: string): MigrateVaultAttempt {
+  warnCloudOpenFailed({ code, stage, vaultPresent: true, retried: false });
+  logRotateRowFailed(vault.userId, vault.vaultVersion, code);
+  return { vault, error: code };
+}
+
 /**
  * Re-wrap a vault onto the current master secret when its version is behind `currentVaultVersion()`.
  *
  * Server-side re-wrap is safe: the wrap key is HKDF(master, userId) and AES-GCM runs on the
- * server in the existing v1 path. The client still encrypts new vaults with the *current* wrap
- * key from GET /api/wallet/vault/wrap-key; that route migrates first, so the ciphertext the
- * browser decrypts always matches the wrap key it receives. No client dual-key handshake.
+ * server in the existing v1 path. GET /api/wallet/vault/wrap-key still migrates first, but
+ * if the row cannot move it returns the wrap key for the *stored* vaultVersion — never NEXT
+ * for an unmigrated v1/v2 row. No client dual-key handshake.
  *
  * No-op when rotation env is unset and the row is already v2 (or already at the target).
  * Decrypt / address failure leaves the row untouched.
  */
-async function migrateVaultIfNeeded(userId: string): Promise<VaultRow | null> {
+async function migrateVaultIfNeeded(userId: string): Promise<MigrateVaultAttempt> {
   const db = await getDbReady();
   const rows = await db.select().from(userWalletVaults).where(eq(userWalletVaults.userId, userId)).limit(1);
   const vault = rows[0];
-  if (!vault) return null;
+  if (!vault) return { vault: null, error: null };
   const targetVersion = currentVaultVersion();
-  if (vault.vaultVersion === targetVersion || vault.vaultVersion > targetVersion) return vault;
+  if (vault.vaultVersion === targetVersion || vault.vaultVersion > targetVersion) {
+    return { vault, error: null };
+  }
 
   const fromVersion = vault.vaultVersion;
   const { secret: sourceSecret, stage, decryptFailedCode } = sourceSecretForVersion(fromVersion);
   const newSecret = currentVaultSecretOrNull();
-  if (!sourceSecret || !newSecret) return vault;
+  if (!sourceSecret) {
+    return failMigrate(vault, stage, fromVersion === 1 ? "legacy_secret_missing" : "rotate_secret_missing");
+  }
+  if (!newSecret) {
+    return failMigrate(vault, stage, "wrap_secret_missing");
+  }
 
-  const sourceWrapKeyHex = await deriveUserWrapKeyHex(sourceSecret, userId);
-  const plain = await readLegacyVaultPlaintext(
-    () => decryptPrivateKeyFromVault(vault.encryptedPrivateKey, sourceWrapKeyHex),
-    { stage, decryptFailedCode },
-  );
-  if (!plain) return vault;
+  const decrypted = await decryptVaultWithSecret(vault, sourceSecret, decryptFailedCode);
+  if ("error" in decrypted) {
+    return failMigrate(vault, stage, decrypted.error);
+  }
+  const plain = decrypted.plain;
 
   let derivedAddress: string;
   try {
     derivedAddress = keyFromPrivate(plain).address;
   } catch {
-    warnCloudOpenFailed({
-      code: fromVersion === 1 ? "legacy_key_invalid" : "rotate_key_invalid",
-      stage,
-      vaultPresent: true,
-      retried: false,
-    });
-    return vault;
+    return failMigrate(vault, stage, fromVersion === 1 ? "legacy_key_invalid" : "rotate_key_invalid");
   }
   if (derivedAddress.toLowerCase() !== vault.address.trim().toLowerCase()) {
-    warnCloudOpenFailed({
-      code: fromVersion === 1 ? "legacy_address_mismatch" : "rotate_address_mismatch",
-      stage,
-      vaultPresent: true,
-      retried: false,
-    });
-    return vault;
+    return failMigrate(vault, stage, fromVersion === 1 ? "legacy_address_mismatch" : "rotate_address_mismatch");
   }
 
   const newWrapKeyHex = await deriveUserWrapKeyHex(newSecret, userId);
@@ -237,9 +300,12 @@ async function migrateVaultIfNeeded(userId: string): Promise<VaultRow | null> {
       retried: false,
     });
     const current = await db.select().from(userWalletVaults).where(eq(userWalletVaults.userId, userId)).limit(1);
-    return current[0] ?? vault;
+    const latest = current[0] ?? vault;
+    if (latest.vaultVersion === targetVersion) return { vault: latest, error: null };
+    logRotateRowFailed(userId, latest.vaultVersion, fromVersion === 1 ? "legacy_migrate_cas" : "rotate_migrate_cas");
+    return { vault: latest, error: fromVersion === 1 ? "legacy_migrate_cas" : "rotate_migrate_cas" };
   }
-  return updated[0];
+  return { vault: updated[0], error: null };
 }
 
 /** Compare-and-swap: only a row still at `fromVersion` may move. */
@@ -253,7 +319,8 @@ export function legacyVaultCasWhere(userId: string) {
 }
 
 export async function loadUserWalletVault(userId: string) {
-  return migrateVaultIfNeeded(userId);
+  const { vault } = await migrateVaultIfNeeded(userId);
+  return vault;
 }
 
 export type VaultVersionCounts = {
@@ -285,6 +352,19 @@ export async function countWalletVaultsByVersion(): Promise<VaultVersionCounts> 
   return out;
 }
 
+export type VaultBulkMigrateFailure = {
+  rowId: string;
+  vaultVersion: number;
+  code: string;
+};
+
+export type VaultDecryptProbe = {
+  rowId: string;
+  vaultVersion: number;
+  expectedSlot: VaultSecretSlot;
+  probes: Record<VaultSecretSlot, VaultDecryptProbeResult>;
+};
+
 export type VaultBulkMigrateResult = {
   dryRun: boolean;
   currentVersion: 2 | 3;
@@ -293,48 +373,107 @@ export type VaultBulkMigrateResult = {
   migrated: number;
   skipped: number;
   failed: number;
+  failures: VaultBulkMigrateFailure[];
+  decryptProbes?: VaultDecryptProbe[];
 };
 
+const VAULT_SECRET_SLOTS: VaultSecretSlot[] = ["auth_secret", "dedicated", "previous", "next"];
+
+function secretForSlot(slot: VaultSecretSlot): string | null {
+  if (slot === "auth_secret") return legacyWalletVaultMasterSecret();
+  if (slot === "dedicated") return trimmedEnv("PEOPLE_WALLET_VAULT_SECRET");
+  if (slot === "previous") return previousVaultSecret();
+  return nextVaultSecret();
+}
+
+async function probeDecryptSlot(vault: VaultRow, secret: string | null): Promise<VaultDecryptProbeResult> {
+  if (!secret) return "unset";
+  const decrypted = await decryptVaultWithSecret(vault, secret, "fail");
+  if ("error" in decrypted) return "fail";
+  try {
+    const derived = keyFromPrivate(decrypted.plain).address;
+    if (derived.toLowerCase() !== vault.address.trim().toLowerCase()) return "address_mismatch";
+  } catch {
+    return "invalid_key";
+  }
+  return "ok";
+}
+
+async function decryptProbesForRows(rows: VaultRow[]): Promise<VaultDecryptProbe[]> {
+  const out: VaultDecryptProbe[] = [];
+  for (const vault of rows) {
+    const probes = {} as Record<VaultSecretSlot, VaultDecryptProbeResult>;
+    for (const slot of VAULT_SECRET_SLOTS) {
+      probes[slot] = await probeDecryptSlot(vault, secretForSlot(slot));
+    }
+    out.push({
+      rowId: hashVaultRowId(vault.userId),
+      vaultVersion: vault.vaultVersion,
+      expectedSlot: expectedSecretSlotForVaultVersion(vault.vaultVersion),
+      probes,
+    });
+  }
+  return out;
+}
+
 /**
- * Bulk re-wrap every row behind `currentVaultVersion()`. Dry-run returns counts only and
- * writes nothing. Live mode is the same per-row CAS as lazy migration on wrap-key / vault GET.
+ * Bulk re-wrap every row behind `currentVaultVersion()`. Dry-run writes nothing and reports
+ * per-row decrypt probes against every available secret slot. Live mode is the same per-row
+ * CAS as lazy migration on wrap-key / vault GET, plus per-row failure codes (hashed row id).
  */
 export async function migrateAllWalletVaults(options?: { dryRun?: boolean }): Promise<VaultBulkMigrateResult> {
   const dryRun = options?.dryRun === true;
   const currentVersion = currentVaultVersion();
   const rotationActive = isVaultRotationActive();
   const db = await getDbReady();
-  const rows = await db
-    .select({
-      userId: userWalletVaults.userId,
-      vaultVersion: userWalletVaults.vaultVersion,
-    })
-    .from(userWalletVaults);
+  const rows = await db.select().from(userWalletVaults);
 
   if (dryRun) {
+    const decryptProbes = await decryptProbesForRows(rows);
+    const failures: VaultBulkMigrateFailure[] = [];
+    let skipped = 0;
+    for (const probe of decryptProbes) {
+      if (probe.vaultVersion === currentVersion || probe.vaultVersion > currentVersion) {
+        skipped += 1;
+        continue;
+      }
+      if (probe.probes[probe.expectedSlot] !== "ok") {
+        failures.push({
+          rowId: probe.rowId,
+          vaultVersion: probe.vaultVersion,
+          code: `decrypt_${probe.probes[probe.expectedSlot]}`,
+        });
+      }
+    }
     return {
       dryRun: true,
       currentVersion,
       rotationActive,
       counts: await countWalletVaultsByVersion(),
       migrated: 0,
-      skipped: 0,
-      failed: 0,
+      skipped,
+      failed: failures.length,
+      failures,
+      decryptProbes,
     };
   }
 
   let migrated = 0;
   let skipped = 0;
-  let failed = 0;
+  const failures: VaultBulkMigrateFailure[] = [];
   for (const row of rows) {
     if (row.vaultVersion === currentVersion || row.vaultVersion > currentVersion) {
       skipped += 1;
       continue;
     }
     const beforeVersion = row.vaultVersion;
-    const after = await migrateVaultIfNeeded(row.userId);
+    const { vault: after, error } = await migrateVaultIfNeeded(row.userId);
     if (!after || after.vaultVersion === beforeVersion) {
-      failed += 1;
+      failures.push({
+        rowId: hashVaultRowId(row.userId),
+        vaultVersion: beforeVersion,
+        code: error ?? "rotate_unchanged",
+      });
       continue;
     }
     migrated += 1;
@@ -346,7 +485,8 @@ export async function migrateAllWalletVaults(options?: { dryRun?: boolean }): Pr
     counts: await countWalletVaultsByVersion(),
     migrated,
     skipped,
-    failed,
+    failed: failures.length,
+    failures,
   };
 }
 

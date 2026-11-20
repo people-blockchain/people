@@ -61,7 +61,7 @@ async function handle(req: Request) {
   return NextResponse.json({ ok: true, ...result }, { headers: NO_STORE });
 }
 
-/** Dry-run counts per vaultVersion. Bearer CRON_SECRET or discover admin. */
+/** Dry-run counts, per-row decrypt probes, and predicted failures. Bearer CRON_SECRET or discover admin. */
 export async function GET(req: Request) {
   return handle(req);
 }
