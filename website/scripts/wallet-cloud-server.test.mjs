@@ -924,3 +924,100 @@ test("checksum-only case difference is not address_mismatch", async () => {
     },
   );
 });
+
+test("v2 row encrypted with AUTH_SECRET migrates to v3 when dedicated decrypt fails", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-v2-auth-secret-stamp-user";
+      const privateKey = "e4".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.AUTH_SECRET,
+        vaultVersion: 2,
+        privateKey,
+      });
+
+      const dry = await migrateAllWalletVaults({ dryRun: true });
+      const probe = dry.decryptProbes.find((p) => p.rowId === hashVaultRowId(userId));
+      assert.equal(probe.probes.dedicated, "fail");
+      assert.equal(probe.probes.auth_secret, "ok");
+      assert.equal(probe.expectedSlot, "dedicated");
+      assert.equal(probe.unwrapSlot, "auth_secret");
+      assert.equal(
+        dry.failures.some((f) => f.rowId === hashVaultRowId(userId)),
+        false,
+      );
+
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 3);
+      const nextWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET_NEXT, userId);
+      assert.equal(await decryptPrivateKeyFromVault(loaded.encryptedPrivateKey, nextWrap), privateKey);
+      const wrap = await getUserWrapKeyHex(userId);
+      assert.equal(wrap, nextWrap);
+    },
+  );
+});
+
+test("wrap-key for a v2 AUTH_SECRET-stamped row returns AUTH_SECRET before rotation", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: undefined,
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: undefined,
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-v2-auth-secret-wrap-user";
+      const privateKey = "e5".repeat(32);
+      await insertVault({
+        userId,
+        secret: process.env.AUTH_SECRET,
+        vaultVersion: 2,
+        privateKey,
+      });
+      const wrap = await getUserWrapKeyHex(userId);
+      const authWrap = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, userId);
+      const dedicatedWrap = await deriveUserWrapKeyHex(process.env.PEOPLE_WALLET_VAULT_SECRET, userId);
+      assert.equal(wrap, authWrap);
+      assert.notEqual(wrap, dedicatedWrap);
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 2);
+    },
+  );
+});
+
+test("v2 AUTH_SECRET fallback still refuses a genuine address mismatch", async () => {
+  await withEnv(
+    {
+      AUTH_SECRET: "legacy-auth-secret-used-for-sessions-too",
+      PEOPLE_WALLET_VAULT_SECRET: "O".repeat(32),
+      PEOPLE_WALLET_VAULT_SECRET_NEXT: "N".repeat(32),
+      DATABASE_URL: "postgres://x/y",
+    },
+    async () => {
+      const userId = "wallet-v2-auth-secret-mismatch-user";
+      const privateKey = "e6".repeat(32);
+      const otherAddress = keyFromPrivate("e7".repeat(32)).address;
+      await insertVault({
+        userId,
+        secret: process.env.AUTH_SECRET,
+        vaultVersion: 2,
+        privateKey,
+        storedAddress: otherAddress,
+      });
+      const loaded = await loadUserWalletVault(userId);
+      assert.equal(loaded.vaultVersion, 2);
+      const wrap = await getUserWrapKeyHex(userId);
+      const authWrap = await deriveUserWrapKeyHex(process.env.AUTH_SECRET, userId);
+      assert.equal(wrap, authWrap);
+    },
+  );
+});

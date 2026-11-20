@@ -135,9 +135,9 @@ function v2UnwrapSecret(): string | null {
 }
 
 /**
- * vaultVersion 1 rows were encrypted with the old AUTH_SECRET-derived key. `AUTH_SECRET` is
- * kept available *only* to decrypt-and-migrate those legacy rows onto the dedicated secret
- * (`migrateVaultIfNeeded`) — it is never used as the current secret for new reads/writes.
+ * vaultVersion 1 rows were encrypted with AUTH_SECRET. A mis-stamped v2 row may still be
+ * AUTH_SECRET ciphertext (version bumped without re-wrap). AUTH_SECRET is never the current
+ * wrapping secret for new writes.
  */
 function legacyWalletVaultMasterSecret(): string | null {
   return trimmedEnv("AUTH_SECRET");
@@ -182,7 +182,7 @@ export async function getUserWrapKeyHex(userId: string): Promise<string> {
   if (!isWalletVaultConfigured()) throw new Error("wallet_vault_not_configured");
   const { vault } = await migrateVaultIfNeeded(userId);
   const secret = vault
-    ? unwrapMasterSecretForVaultVersion(vault.vaultVersion)
+    ? await resolveUnwrapSecretForVault(vault)
     : currentVaultSecretOrNull();
   if (!secret) throw new Error("wallet_vault_not_configured");
   return deriveUserWrapKeyHex(secret, userId);
@@ -231,6 +231,60 @@ async function decryptVaultWithSecret(
   }
 }
 
+function secretsToTryForStoredVersion(fromVersion: number): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const add = (secret: string | null) => {
+    if (!secret || seen.has(secret)) return;
+    seen.add(secret);
+    out.push(secret);
+  };
+  if (fromVersion === 1) {
+    add(legacyWalletVaultMasterSecret());
+    return out;
+  }
+  if (fromVersion === WALLET_VAULT_VERSION_DEDICATED) {
+    add(v2UnwrapSecret() ?? unwrapMasterSecretForVaultVersion(WALLET_VAULT_VERSION_DEDICATED));
+    add(legacyWalletVaultMasterSecret());
+  }
+  return out;
+}
+
+/** Dedicated (or PREVIOUS) first; AUTH_SECRET only when that decrypt fails on a v2 row. */
+async function decryptStoredVault(
+  vault: VaultRow,
+  decryptFailedCode: string,
+): Promise<{ plain: string } | { error: string }> {
+  const secrets = secretsToTryForStoredVersion(vault.vaultVersion);
+  if (secrets.length === 0) return { error: decryptFailedCode };
+  let lastError = decryptFailedCode;
+  for (let i = 0; i < secrets.length; i += 1) {
+    const decrypted = await decryptVaultWithSecret(vault, secrets[i], decryptFailedCode);
+    if (!("error" in decrypted)) {
+      if (i > 0) {
+        console.warn("[wallet-vault] v2 unwrap used auth_secret fallback", {
+          rowId: hashVaultRowId(vault.userId),
+          vaultVersion: vault.vaultVersion,
+        });
+      }
+      return decrypted;
+    }
+    if (decrypted.error === "vault_schema_unsupported") return decrypted;
+    lastError = decrypted.error;
+  }
+  return { error: lastError };
+}
+
+async function resolveUnwrapSecretForVault(vault: VaultRow): Promise<string | null> {
+  const secrets = secretsToTryForStoredVersion(vault.vaultVersion);
+  if (secrets.length === 0) return unwrapMasterSecretForVaultVersion(vault.vaultVersion);
+  for (const secret of secrets) {
+    const decrypted = await decryptVaultWithSecret(vault, secret, "fail");
+    if (!("error" in decrypted)) return secret;
+  }
+  return unwrapMasterSecretForVaultVersion(vault.vaultVersion);
+}
+
 type MigrateVaultAttempt = {
   vault: VaultRow | null;
   error: string | null;
@@ -247,8 +301,9 @@ function failMigrate(vault: VaultRow, stage: string, code: string): MigrateVault
  *
  * Server-side re-wrap is safe: the wrap key is HKDF(master, userId) and AES-GCM runs on the
  * server in the existing v1 path. GET /api/wallet/vault/wrap-key still migrates first, but
- * if the row cannot move it returns the wrap key for the *stored* vaultVersion — never NEXT
- * for an unmigrated v1/v2 row. No client dual-key handshake.
+ * if the row cannot move it returns the wrap key that actually decrypts the stored ciphertext
+ * (v2 dedicated/PREVIOUS, then AUTH_SECRET for a mis-stamped v2 row) — never NEXT for an
+ * unmigrated v1/v2 row. No client dual-key handshake.
  *
  * No-op when rotation env is unset and the row is already v2 (or already at the target).
  * Decrypt / address failure leaves the row untouched.
@@ -264,16 +319,16 @@ async function migrateVaultIfNeeded(userId: string): Promise<MigrateVaultAttempt
   }
 
   const fromVersion = vault.vaultVersion;
-  const { secret: sourceSecret, stage, decryptFailedCode } = sourceSecretForVersion(fromVersion);
+  const { stage, decryptFailedCode } = sourceSecretForVersion(fromVersion);
   const newSecret = currentVaultSecretOrNull();
-  if (!sourceSecret) {
+  if (secretsToTryForStoredVersion(fromVersion).length === 0) {
     return failMigrate(vault, stage, fromVersion === 1 ? "legacy_secret_missing" : "rotate_secret_missing");
   }
   if (!newSecret) {
     return failMigrate(vault, stage, "wrap_secret_missing");
   }
 
-  const decrypted = await decryptVaultWithSecret(vault, sourceSecret, decryptFailedCode);
+  const decrypted = await decryptStoredVault(vault, decryptFailedCode);
   if ("error" in decrypted) {
     return failMigrate(vault, stage, decrypted.error);
   }
@@ -372,6 +427,8 @@ export type VaultDecryptProbe = {
   rowId: string;
   vaultVersion: number;
   expectedSlot: VaultSecretSlot;
+  /** Slot that would actually unwrap: expected, or auth_secret for a mis-stamped v2 row. */
+  unwrapSlot: VaultSecretSlot;
   probes: Record<VaultSecretSlot, VaultDecryptProbeResult>;
   /** Stored receive address (public). Lets ops compare on-chain balances without the key. */
   storedAddress: string;
@@ -443,6 +500,25 @@ async function derivedAddressesIfDecryptable(
   return null;
 }
 
+function unwrapSlotForProbe(
+  vaultVersion: number,
+  expectedSlot: VaultSecretSlot,
+  probes: Record<VaultSecretSlot, VaultDecryptProbeResult>,
+): VaultSecretSlot {
+  if (probes[expectedSlot] === "ok") return expectedSlot;
+  if (vaultVersion === WALLET_VAULT_VERSION_DEDICATED && probes.auth_secret === "ok") return "auth_secret";
+  return expectedSlot;
+}
+
+function probeWouldDecrypt(probe: {
+  vaultVersion: number;
+  expectedSlot: VaultSecretSlot;
+  unwrapSlot: VaultSecretSlot;
+  probes: Record<VaultSecretSlot, VaultDecryptProbeResult>;
+}): boolean {
+  return probe.probes[probe.unwrapSlot] === "ok";
+}
+
 async function decryptProbesForRows(rows: VaultRow[]): Promise<VaultDecryptProbe[]> {
   const out: VaultDecryptProbe[] = [];
   for (const vault of rows) {
@@ -450,11 +526,13 @@ async function decryptProbesForRows(rows: VaultRow[]): Promise<VaultDecryptProbe
     for (const slot of VAULT_SECRET_SLOTS) {
       probes[slot] = await probeDecryptSlot(vault, secretForSlot(slot));
     }
+    const expectedSlot = expectedSecretSlotForVaultVersion(vault.vaultVersion);
     const derived = await derivedAddressesIfDecryptable(vault);
     out.push({
       rowId: hashVaultRowId(vault.userId),
       vaultVersion: vault.vaultVersion,
-      expectedSlot: expectedSecretSlotForVaultVersion(vault.vaultVersion),
+      expectedSlot,
+      unwrapSlot: unwrapSlotForProbe(vault.vaultVersion, expectedSlot, probes),
       probes,
       storedAddress: vault.address.trim().toLowerCase(),
       ...(derived ?? {}),
@@ -484,11 +562,11 @@ export async function migrateAllWalletVaults(options?: { dryRun?: boolean }): Pr
         skipped += 1;
         continue;
       }
-      if (probe.probes[probe.expectedSlot] !== "ok") {
+      if (!probeWouldDecrypt(probe)) {
         failures.push({
           rowId: probe.rowId,
           vaultVersion: probe.vaultVersion,
-          code: `decrypt_${probe.probes[probe.expectedSlot]}`,
+          code: `decrypt_${probe.probes[probe.unwrapSlot]}`,
         });
       }
     }

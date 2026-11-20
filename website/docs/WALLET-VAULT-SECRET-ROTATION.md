@@ -20,11 +20,11 @@ The server already derives the same key and already re-wraps v1 rows (`migrateLe
 Rotation reuses that path:
 
 - v1 → current version: decrypt with `AUTH_SECRET`, AES-256-GCM re-encrypt with the current secret.
-- v2 → 3: decrypt with the previous secret, re-encrypt with the current secret.
+- v2 → 3: decrypt with the previous/dedicated secret; if that fails, try `AUTH_SECRET` (mis-stamped v2 ciphertext). Then re-encrypt with the current secret. Address check accepts sha256 or keccak.
 - Compare-and-swap `UPDATE … WHERE userId = ? AND vaultVersion = <old>`. A lost race does not overwrite a newer row.
 - Decrypt / address mismatch: **no write**. The ciphertext stays.
 
-The wrap-key route migrates the row first. If the row cannot move, it returns the wrap key for the **stored** `vaultVersion` (v1=`AUTH_SECRET`, v2=`PEOPLE_WALLET_VAULT_SECRET` or `_PREVIOUS`, v3=`NEXT`/current). Unmigrated rows are never handed `NEXT`. The client still never needs both keys.
+The wrap-key route migrates the row first. If the row cannot move, it returns the wrap key that decrypts the stored ciphertext: v1=`AUTH_SECRET`, v2=`PEOPLE_WALLET_VAULT_SECRET` or `_PREVIOUS` then `AUTH_SECRET` if dedicated fails, v3=`NEXT`/current. Unmigrated rows are never handed `NEXT`. The client still never needs both keys.
 
 Deploying this code with rotation env **unset** changes nothing: current version stays 2, only v1→v2 runs.
 
@@ -32,7 +32,7 @@ Deploying this code with rotation env **unset** changes nothing: current version
 
 Protected like other admin/cron routes: `Authorization: Bearer $CRON_SECRET`, or a discover-admin session.
 
-- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version, `failures` (hashed `rowId` + error code, never userId/secrets), and `decryptProbes` (each row vs `auth_secret` / `dedicated` / `previous` / `next`: `unset` | `ok` | `fail` | `address_mismatch` | `invalid_key`). When a slot decrypts, the probe also includes `storedAddress`, `derivedEvm`, `derivedLegacy`, and `schemeMatch` (`evm` | `legacy` | `none`) so leftover rows can be balance-checked on-chain. No writes. No keys.
+- `GET /api/cron/wallet-vault-rotate` — always dry-run. JSON `counts` per version, `failures` (hashed `rowId` + error code, never userId/secrets), and `decryptProbes` (each row vs `auth_secret` / `dedicated` / `previous` / `next`: `unset` | `ok` | `fail` | `address_mismatch` | `invalid_key`). `unwrapSlot` is the slot that would actually unwrap (including `auth_secret` for a v2 row whose dedicated decrypt fails). When a slot decrypts, the probe also includes `storedAddress`, `derivedEvm`, `derivedLegacy`, and `schemeMatch` (`evm` | `legacy` | `none`). No writes. No keys.
 - `POST /api/cron/wallet-vault-rotate` with `{"dryRun": true}` — same, no writes.
 - `POST /api/cron/wallet-vault-rotate` — live migrate every behind-version row (same CAS as lazy login). Failed rows are listed in `failures` with `rowId` + `code`; each also logs `[wallet-vault] rotate row failed`.
 
