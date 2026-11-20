@@ -317,7 +317,7 @@ export function Navbar() {
               data-testid="header-brand-slogan"
               data-lang={lang}
               data-expected={t.slogan}
-              className="header-brand-slogan"
+              className="header-brand-slogan lg:hidden xl:block"
               style={{ "--slogan-chars": String(t.slogan.length) } as CSSProperties}
             >
               {t.slogan}
@@ -332,7 +332,8 @@ export function Navbar() {
             by ~27px when these two were inline there. 2xl (1536px) has real
             room to spare. Earn PPL only goes inline from xl: at 1024px it
             pushed the long-locale header into the sign-in button, so below xl
-            it lives in More (like the sheet, which always lists it). */}
+            it lives in More (like the sheet, which always lists it). The
+            Founders / Verify pill likewise uses a short “Founders” label below xl. */}
         <nav
           aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
@@ -342,7 +343,8 @@ export function Navbar() {
             data-testid="nav-founders-verify"
             className="header-label mr-1 inline-flex h-10 items-center rounded-full border border-warm/45 bg-warm/15 px-3 text-sm font-semibold text-ink shadow-[var(--elev-1)] transition-colors hover:border-warm hover:bg-warm/25 xl:px-3.5"
           >
-            {foundersVerifyLink.label}
+            <span className="xl:hidden">Founders</span>
+            <span className="hidden xl:inline">{foundersVerifyLink.label}</span>
           </Link>
           {t.links.map((link) => (
             <a
