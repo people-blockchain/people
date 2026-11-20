@@ -75,6 +75,10 @@ function ThemeToggleButton({
 const HOW_IT_WORKS_HREF = "/how-it-works";
 const DISCOVER_HREF = "/discover";
 const DESKTOP_NAV_MIN_WIDTH = 1024;
+/** Tailwind `xl`: the brand slogan is reserved for this width and up so a
+ *  long locale line cannot size the brand slot and push Sign in off-screen
+ *  at 1024px (DE «Anmelden» center was 0.5px past the viewport edge). */
+const SLOGAN_VISIBLE_MIN_WIDTH = 1280;
 
 type NavLink = {
   label: string;
@@ -251,7 +255,16 @@ export function Navbar() {
         brand.style.width = "";
         return;
       }
-      const width = bundle.scrollWidth;
+      // Below xl the slogan is hidden. Size the slot to the lockup, not
+      // bundle.scrollWidth (which includes the slogan while it is still in
+      // the grid), so long DE/FR copy cannot push Sign in off-screen.
+      const lockup = bundle.querySelector("[data-testid='header-brand-lockup']");
+      const width =
+        window.innerWidth < SLOGAN_VISIBLE_MIN_WIDTH
+          ? (lockup instanceof HTMLElement && lockup.scrollWidth > 0
+              ? lockup.scrollWidth
+              : bundle.scrollWidth)
+          : bundle.scrollWidth;
       if (width > 0) brand.style.width = `${width}px`;
     };
 
@@ -333,7 +346,9 @@ export function Navbar() {
             room to spare. Earn PPL only goes inline from xl: at 1024px it
             pushed the long-locale header into the sign-in button, so below xl
             it lives in More (like the sheet, which always lists it). The
-            Founders / Verify pill likewise uses a short “Founders” label below xl. */}
+            Founders / Verify pill likewise uses a short “Founders” label below
+            xl, and the brand slogan stays hidden until xl so a long DE line
+            cannot push Sign in past the viewport edge. */}
         <nav
           aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
