@@ -4,7 +4,10 @@ import { normalizePhoneE164 } from "./verification.ts";
 export function phoneHashSalt(): string {
   const salt = process.env.FOUNDERS_PHONE_HASH_SALT?.trim();
   if (!salt) {
-    throw new Error("FOUNDERS_PHONE_HASH_SALT is not set");
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("FOUNDERS_PHONE_HASH_SALT is not set");
+    }
+    return "founders-dev-phone-salt";
   }
   return salt;
 }

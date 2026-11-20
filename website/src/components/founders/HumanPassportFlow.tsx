@@ -19,6 +19,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { track } from "@/lib/analytics/client-track";
+import { FOUNDING_CONVERSION_EVENTS } from "@/lib/analytics/events-catalog";
 import type { FoundersPublicCopy } from "@/lib/founders-public-content";
 import { CheckIcon, fill } from "./founders-ui";
 import { useExternalWalletOptional, signViaActiveSigner } from "@/context/ExternalWalletContext";
@@ -153,6 +155,7 @@ export function HumanPassportFlow({
     if (result.kind === "verified") {
       clearPersistedHumanPassportProgress();
       setReturning(false);
+      track(FOUNDING_CONVERSION_EVENTS.passportCompleted, { source: "human_passport_flow" });
       await onReload();
     }
   }, [onReload, scored]);

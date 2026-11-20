@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const pt: LocaleContent = {
   "nav": {
-    "statusBadge": "Rede de testes PEOPLE v0.1",
+    "statusBadge": "PEOPLE Mainnet Beta · Abre em 1 dez",
     "links": [
       {
         "label": "Como funciona",

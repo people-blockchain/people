@@ -19,6 +19,22 @@ import { content } from "@/lib/content";
 import { bountyCopy } from "@/lib/bounty-content";
 import { BRAND_TAGLINE } from "@/lib/site";
 import { bugReportCopy } from "@/lib/bug-reports/copy";
+import type { Language } from "@/lib/preferences";
+
+const FOUNDERS_VERIFY_NAV_LABEL: Record<Language, string> = {
+  en: "Founders / Verify",
+  ru: "Founders / Verify",
+  es: "Founders / Verificar",
+  pt: "Founders / Verificar",
+  fr: "Founders / Vérifier",
+  de: "Founders / Verifizieren",
+  it: "Founders / Verifica",
+  tr: "Founders / Doğrula",
+  vi: "Founders / Xác minh",
+  id: "Founders / Verifikasi",
+  zh: "Founders / 验证",
+  ar: "Founders / التحقق",
+};
 
 /** Hidden when unset — no Vercel dashboard change required to ship without it. */
 const SUPPORT_TG_URL = process.env.NEXT_PUBLIC_SUPPORT_TG_URL;
@@ -160,6 +176,8 @@ export function Navbar() {
   const pathname = usePathname();
   const t = content[lang].nav;
   const bounty = bountyCopy(lang);
+  const foundersVerifyLabel = FOUNDERS_VERIFY_NAV_LABEL[lang] ?? FOUNDERS_VERIFY_NAV_LABEL.en;
+  const foundersVerifyLink: NavLink = { label: foundersVerifyLabel, href: "/founders" };
   const bountyLink: NavLink = { label: bounty.navLabel, href: "/bounty" };
   const supportLabel = bugReportCopy[lang].supportLink;
   const supportLink: NavLink[] = SUPPORT_TG_URL
@@ -315,6 +333,13 @@ export function Navbar() {
           aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
         >
+          <Link
+            href={foundersVerifyLink.href}
+            data-testid="nav-founders-verify"
+            className="header-label mr-1 inline-flex h-10 items-center rounded-full border border-warm/45 bg-warm/15 px-3 text-sm font-semibold text-ink shadow-[var(--elev-1)] transition-colors hover:border-warm hover:bg-warm/25 xl:px-3.5"
+          >
+            {foundersVerifyLink.label}
+          </Link>
           {t.links.map((link) => (
             <a
               key={link.href}
@@ -399,6 +424,17 @@ export function Navbar() {
               >
                 <nav aria-label={content[lang].a11y.navMobile} className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
                   <ul className="flex flex-col">
+                    <li>
+                      <Link
+                        href={foundersVerifyLink.href}
+                        onClick={() => setOpen(false)}
+                        data-testid="nav-founders-verify-mobile"
+                        className="mb-2 flex items-center justify-between gap-4 rounded-2xl border border-warm/45 bg-warm/15 px-4 py-3.5 text-lg font-bold text-ink"
+                      >
+                        {foundersVerifyLink.label}
+                        <ArrowRight className="h-4 w-4 shrink-0 text-warm" />
+                      </Link>
+                    </li>
                     {sheetLinks.map((link) => (
                       <li key={link.href}>
                         <a

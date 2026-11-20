@@ -18,7 +18,7 @@
     ],
     "sub": "无需代码，无需加密知识。只要一台手机或一个浏览器：30 秒创建钱包，直接在测试网上体验。",
     "pitchLine": "面向普通人的区块链：自己的代币、俱乐部 NFT 卡，以及为一个想法筹资——全部无需代码。",
-    "testnetBadge": "公开测试网已上线。PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启。",
+    "testnetBadge": "PEOPLE Mainnet Beta · 12 月 1 日开启",
     "ctaTestnet": "体验测试网",
     "ctaFounder": "领取你的创始人编号",
     "card": {
@@ -143,7 +143,7 @@
     "note": "这是测试网。上面的数字是真实的，代币不是。"
   },
   "final": {
-    "title": "测试网已开放。早点来，大胆试错，告诉我们哪里做得不好。",
+    "title": "PEOPLE Mainnet Beta 于 12 月 1 日开启。提早锁定您的 Founding 1,000 席位。",
     "body": "每一份错误报告和每一个令人困惑的问题，都会直接影响我们接下来要做的事。",
     "ctaWallet": "创建钱包",
     "ctaExplore": "查看浏览器",

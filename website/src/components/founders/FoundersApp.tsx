@@ -30,6 +30,7 @@ import {
 } from "./FoundersLandingSections";
 import { FoundersNftCard } from "./FoundersNftCard";
 import { HumanPassportFlow } from "./HumanPassportFlow";
+import { FoundingSimulator } from "@/components/founding/FoundingSimulator";
 import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
@@ -125,7 +126,12 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   useEffect(() => {
     void load();
     const id = window.setInterval(() => void load(), 30_000);
-    return () => window.clearInterval(id);
+    const onClaimed = () => void load();
+    window.addEventListener("people:founder-claimed", onClaimed);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("people:founder-claimed", onClaimed);
+    };
   }, [load]);
 
   useEffect(() => {
@@ -482,14 +488,17 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
           />
         </div>
       ) : embedded ? null : (
-        <FoundersLandingHero
-          copy={landing}
-          promo={t}
-          lang={lang}
-          counter={millionCounter}
-          onCta={handleJoinCta}
-          countryBlock={heroCountryBlock}
-        />
+        <>
+          <FoundersLandingHero
+            copy={landing}
+            promo={t}
+            lang={lang}
+            counter={millionCounter}
+            onCta={handleJoinCta}
+            countryBlock={heroCountryBlock}
+          />
+          <FoundingSimulator surface="founders" />
+        </>
       )}
 
       {/* Claim: signed-in visitors who do not have a founder number yet. The number is issued

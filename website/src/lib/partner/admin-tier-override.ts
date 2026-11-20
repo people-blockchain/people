@@ -1,7 +1,7 @@
 import { loadKolTierConfig, resolveKolTier, type KolTierConfig } from "@/lib/partner/commission";
 
-/** Preset USDC commission rates (bps): 7% / 9% / 12%. Custom admin overrides must stay at or above the volume tier. */
-export const KOL_TIER_OVERRIDE_PRESET_USDC_BPS = [700, 900, 1200] as const;
+/** Default USDC commission rate (bps): 7% from the very first purchase, no minimum volume. Custom admin overrides must stay at or above 700 bps. */
+export const KOL_TIER_OVERRIDE_PRESET_USDC_BPS = [700] as const;
 
 export type KolTierOverrideValidation =
   | { ok: true; normalized: number | null }

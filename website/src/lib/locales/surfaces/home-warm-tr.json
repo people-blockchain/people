@@ -18,7 +18,7 @@
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
     "pitchLine": "Sıradan insanlar için bir blockchain: kendi tokeniniz, kulüp NFT kartları ve bir fikir için para toplamak — kod yazmadan.",
-    "testnetBadge": "Halka açık testnet yayında. PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor.",
+    "testnetBadge": "PEOPLE Mainnet Beta · 1 Aralık'ta açılıyor",
     "ctaTestnet": "Testneti deneyin",
     "ctaFounder": "Kurucu numaranızı alın",
     "card": {
@@ -143,7 +143,7 @@
     "note": "Bu bir testnet. Yukarıdaki sayılar gerçek, tokenler değil."
   },
   "final": {
-    "title": "Testnet açık. Erken olun, bir şeyleri kırın, neyin kötü olduğunu bize söyleyin.",
+    "title": "PEOPLE Mainnet Beta 1 Aralık'ta açılıyor. Founding 1,000 koltuğunuzu erkenden kilitleyin.",
     "body": "Her hata bildirimi ve her kafa karıştıran soru doğrudan sıradaki yapacağımız şeye gidiyor.",
     "ctaWallet": "Cüzdan oluşturun",
     "ctaExplore": "Explorer'a bakın",

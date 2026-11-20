@@ -162,6 +162,20 @@
       "when": 1759406400000,
       "tag": "0024_analytics",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1759410000000,
+      "tag": "0025_analytics_ga_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1763596800000,
+      "tag": "0026_founding_traps_tg_claim_waitlist",
+      "breakpoints": true
     }
   ]
 }

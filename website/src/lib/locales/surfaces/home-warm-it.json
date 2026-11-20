@@ -18,7 +18,7 @@
     ],
     "sub": "Senza codice, senza competenze crypto. Basta un telefono o un browser: crea un wallet in 30 secondi e provalo sul testnet.",
     "pitchLine": "Una blockchain per le persone comuni: il tuo token, tessere NFT del club e raccogliere fondi per un'idea — senza codice.",
-    "testnetBadge": "Il testnet pubblico è attivo. PEOPLE Mainnet Beta apre il 1° dicembre 2026.",
+    "testnetBadge": "PEOPLE Mainnet Beta · Apre il 1° dicembre",
     "ctaTestnet": "Prova il testnet",
     "ctaFounder": "Richiedi il tuo numero da founder",
     "card": {
@@ -143,7 +143,7 @@
     "note": "Questo è un testnet. I numeri sopra sono reali, i token no."
   },
   "final": {
-    "title": "Il testnet è aperto. Sii tra i primi, rompi le cose, dicci cosa fa schifo.",
+    "title": "PEOPLE Mainnet Beta apre il 1° dicembre. Blocca in anticipo il tuo posto in Founding 1,000.",
     "body": "Ogni segnalazione di bug e ogni domanda confusa va dritta in quello che costruiamo dopo.",
     "ctaWallet": "Crea un wallet",
     "ctaExplore": "Guarda l'explorer",

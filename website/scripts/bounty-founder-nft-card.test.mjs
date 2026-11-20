@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (rel) => readFileSync(join(root, rel), "utf8");
 
-test("the bounty page mounts the Founder NFT card and /founders still redirects to /bounty", () => {
+test("the bounty page mounts the Founder NFT card and /founders is open (million-founders redirects to /founders)", () => {
   const page = read("src/app/bounty/page.tsx");
   const cardAt = page.indexOf("<FoundersNftCard");
   const countdownAt = page.indexOf("<BountyCountdown");
@@ -22,9 +22,10 @@ test("the bounty page mounts the Founder NFT card and /founders still redirects 
   const end = cfg.indexOf("async headers()");
   assert.ok(start >= 0 && end > start, "redirects() and headers() blocks are present");
   const redirects = cfg.slice(start, end);
-  assert.match(redirects, /source:\s*"\/founders",\s*destination:\s*"\/bounty",\s*permanent:\s*false/);
+  assert.doesNotMatch(redirects, /source:\s*"\/founders"/);
+  assert.match(redirects, /source:\s*"\/million-founders",\s*destination:\s*"\/founders",\s*permanent:\s*false/);
   assert.match(
     redirects,
-    /source:\s*"\/founders\/:path\*",\s*destination:\s*"\/bounty",\s*permanent:\s*false/,
+    /source:\s*"\/million-founders\/:path\*",\s*destination:\s*"\/founders",\s*permanent:\s*false/,
   );
 });

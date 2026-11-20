@@ -29,6 +29,7 @@ import {
 } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { FoundersApp } from "@/components/founders/FoundersApp";
+import { FoundingSimulator } from "@/components/founding/FoundingSimulator";
 import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
@@ -84,6 +85,7 @@ export function BountyHero() {
         </div>
         <p className="mt-4 max-w-2xl text-xs text-ink-3">{t.hero.disclaimer}</p>
       </div>
+      <FoundingSimulator surface="bounty" />
     </section>
   );
 }

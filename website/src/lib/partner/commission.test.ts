@@ -18,7 +18,7 @@ import {
 
 const ZERO = BigInt(0);
 
-test("KOL volume tiers resolve 7% / 9% / 12% USDC + 3% PPL and respect configurable thresholds", () => {
+test("Partner rate resolves a flat 7% USDC + 3% PPL from the very first purchase with no minimum volume", () => {
   const t1 = resolveKolTier(ZERO);
   assert.deepEqual(t1, { tier: 1, usdcRateBps: 700, pplRateBps: 300 });
 
@@ -26,36 +26,32 @@ test("KOL volume tiers resolve 7% / 9% / 12% USDC + 3% PPL and respect configura
   assert.deepEqual(t1Edge, { tier: 1, usdcRateBps: 700, pplRateBps: 300 });
 
   const t2 = resolveKolTier(BigInt(25_000) * MICRO_PER_UNIT);
-  assert.deepEqual(t2, { tier: 2, usdcRateBps: 900, pplRateBps: 300 });
+  assert.deepEqual(t2, { tier: 1, usdcRateBps: 700, pplRateBps: 300 });
 
   const t3 = resolveKolTier(BigInt(100_000) * MICRO_PER_UNIT);
-  assert.deepEqual(t3, { tier: 3, usdcRateBps: 1200, pplRateBps: 300 });
+  assert.deepEqual(t3, { tier: 1, usdcRateBps: 700, pplRateBps: 300 });
 
-  // Override bps elevates a negotiated KOL deal
+  // Override bps still elevates a negotiated custom deal
   const overridden = resolveKolTier(BigInt(1_000) * MICRO_PER_UNIT, 1200);
-  assert.deepEqual(overridden, { tier: 3, usdcRateBps: 1200, pplRateBps: 300 });
+  assert.deepEqual(overridden, { tier: 1, usdcRateBps: 1200, pplRateBps: 300 });
 
-  // Custom env config overrides thresholds
-  const customCfg = loadKolTierConfig({
-    KOL_TIER2_MIN_USD: "10000",
-    KOL_TIER3_MIN_USD: "50000",
-  });
-  assert.equal(resolveKolTier(BigInt(12_000) * MICRO_PER_UNIT, null, customCfg).usdcRateBps, 900);
-  assert.equal(resolveKolTier(BigInt(50_000) * MICRO_PER_UNIT, null, customCfg).usdcRateBps, 1200);
+  const cfg = loadKolTierConfig({});
+  assert.equal(cfg.tier1UsdcBps, 700);
+  assert.equal(cfg.pplBps, 300);
 });
 
-test("computeKolTierProgress calculates remaining volume and percentage accurately", () => {
-  const p1 = computeKolTierProgress(BigInt(12_500) * MICRO_PER_UNIT);
+test("computeKolTierProgress reports flat 7% USDC + 3% PPL active immediately with 100% progress", () => {
+  const p1 = computeKolTierProgress(ZERO);
   assert.equal(p1.currentTier, 1);
   assert.equal(p1.usdcRateBps, 700);
   assert.equal(p1.pplRateBps, 300);
-  assert.equal(p1.nextTier, 2);
-  assert.equal(p1.remainingToNextTierUsdMicro, (BigInt(12_500) * MICRO_PER_UNIT).toString());
-  assert.equal(p1.progressPct, 50);
+  assert.equal(p1.nextTier, null);
+  assert.equal(p1.remainingToNextTierUsdMicro, "0");
+  assert.equal(p1.progressPct, 100);
 
   const p3 = computeKolTierProgress(BigInt(120_000) * MICRO_PER_UNIT);
-  assert.equal(p3.currentTier, 3);
-  assert.equal(p3.usdcRateBps, 1200);
+  assert.equal(p3.currentTier, 1);
+  assert.equal(p3.usdcRateBps, 700);
   assert.equal(p3.nextTier, null);
   assert.equal(p3.progressPct, 100);
 });
