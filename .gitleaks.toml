@@ -20,6 +20,8 @@ paths = [
   '''docs/v2/SMOKE-ONE-TX\.md''',
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
   '''website/src/lib/web3auth-config\.ts''',
+  # Turnkey parent organization id is public (not an API key); real keys stay in env
+  '''website/src/lib/turnkey-config\.ts''',
   '''website/src/lib/partner/.*\.test\.ts''',
   # Turnkey parent org id is public (documented in .env.example; not an API secret)
   '''website/\.env\.example''',
@@ -30,6 +32,8 @@ regexes = [
   # keccak event topics (TOKEN_CREATED etc.)
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
+  # Turnkey parent organization id is public (dashboard org UUID, not an API key)
+  '''6ffc9541-4400-4c4b-8839-19fbc332a91b''',
 ]
 
 # Historic commit only: public Turnkey parent org id (not an API secret).
