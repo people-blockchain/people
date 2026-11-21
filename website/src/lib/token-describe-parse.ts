@@ -1,6 +1,8 @@
+import { allowlistDescribeLang } from "@/lib/describe-helper-lang";
 import { MIN_TOKEN_SUPPLY_WHOLE } from "@/lib/token-supply-limits";
 import { launchSpotFromSupplyWhole, supplyWholeForMaxSpotPpl, type LaunchSpotPrice } from "@/lib/token-curve-start-price";
 import { parseTokenDescriptionWithAi, type TokenDescribeModelJson } from "@/lib/token-describe-ai";
+import { isPromoBps, type PromoBps } from "@/lib/token-promo";
 
 export type TokenDescribeResult = {
   name: string;
@@ -104,7 +106,12 @@ function titleCase(value: string): string {
     .slice(0, 32);
 }
 
-function normalizeModelFields(raw: TokenDescribeModelJson): {
+export function normalizeTokenPromoBps(raw: unknown): PromoBps {
+  const n = typeof raw === "number" ? raw : Number(raw);
+  return isPromoBps(n) ? n : 0;
+}
+
+export function normalizeModelFields(raw: TokenDescribeModelJson): {
   name: string;
   symbol: string;
   supply: bigint;
@@ -152,9 +159,13 @@ function dollarTargetPpl(text: string): number | null {
 }
 
 
-export function parseTokenDescriptionHeuristic(description: string): TokenDescribeResult | null {
+export function parseTokenDescriptionHeuristic(
+  description: string,
+  promoBps: PromoBps = 0,
+): TokenDescribeResult | null {
   const text = description.trim();
   if (text.length < 8) return null;
+  const promo = normalizeTokenPromoBps(promoBps);
 
   const warnings: TokenDescribeWarningCode[] = [];
   if (containsFundraisingPromise(text)) {
@@ -167,7 +178,7 @@ export function parseTokenDescriptionHeuristic(description: string): TokenDescri
   if (mentionsUsd) {
     warnings.push("dollar_not_configurable");
     if (targetPpl) {
-      const tuned = supplyWholeForMaxSpotPpl(targetPpl);
+      const tuned = supplyWholeForMaxSpotPpl(targetPpl, promo);
       if (tuned) supply = tuned;
     } else if (supply < BigInt(10_000_000)) {
       // No PPL/USD oracle here: pick a larger supply so formula spot moves down.
@@ -179,7 +190,7 @@ export function parseTokenDescriptionHeuristic(description: string): TokenDescri
 
   const name = guessName(text);
   const symbol = guessSymbol(name, text);
-  const price = launchSpotFromSupplyWhole(supply);
+  const price = launchSpotFromSupplyWhole(supply, promo);
   if (!price) return null;
 
   return {
@@ -196,19 +207,21 @@ export function parseTokenDescriptionHeuristic(description: string): TokenDescri
 export async function parseTokenDescription(
   description: string,
   lang: string,
+  promoBps: PromoBps = 0,
 ): Promise<TokenDescribeResult | null> {
+  const promo = normalizeTokenPromoBps(promoBps);
   const warnings: TokenDescribeWarningCode[] = [];
   if (containsFundraisingPromise(description)) {
     warnings.push("fundraising_not_guaranteed");
   }
 
-  const aiLang = lang === "ru" ? "en" : lang;
+  const aiLang = allowlistDescribeLang(lang);
   const ai = await parseTokenDescriptionWithAi(description, aiLang);
   if (ai) {
     const fields = normalizeModelFields(ai);
     if (fields) {
-      const price = launchSpotFromSupplyWhole(fields.supply);
-      if (!price) return parseTokenDescriptionHeuristic(description);
+      const price = launchSpotFromSupplyWhole(fields.supply, promo);
+      if (!price) return parseTokenDescriptionHeuristic(description, promo);
       let rationale = fields.rationale;
       if (containsFundraisingPromise(rationale)) {
         rationale = "";
@@ -227,7 +240,7 @@ export async function parseTokenDescription(
       };
     }
   }
-  const heuristic = parseTokenDescriptionHeuristic(description);
+  const heuristic = parseTokenDescriptionHeuristic(description, promo);
   if (!heuristic) return null;
   return { ...heuristic, warnings: [...new Set([...warnings, ...heuristic.warnings])] };
 }

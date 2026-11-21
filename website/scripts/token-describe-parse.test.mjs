@@ -23,3 +23,12 @@ test("fundraising promises are flagged", () => {
 test("formatSpotPpl renders small values", () => {
   assert.match(formatSpotPpl(0.0001), /0\.0001/);
 });
+
+test("heuristic spot follows promo bps", () => {
+  const text =
+    "I want a token for my Telegram coffee channel, 1 million tokens so subscribers can support the channel.";
+  const none = parseTokenDescriptionHeuristic(text, 0);
+  const promo = parseTokenDescriptionHeuristic(text, 1000);
+  assert.ok(none && promo);
+  assert.ok(promo.price.spotPplPerWholeToken > none.price.spotPplPerWholeToken);
+});

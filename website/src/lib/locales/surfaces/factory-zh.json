@@ -109,7 +109,16 @@
     "errorGeneric": "无法读取描述。请重试或手动填写。",
     "errorRateLimited": "尝试次数过多。请等待一分钟。",
     "errorTooShort": "请补充一些细节（至少一句话）。",
-    "sourceNote": "建议来源：{{source}}"
+    "sourceNote": "建议来源：{{source}}",
+    "nftLead": "可选助手：我们建议名称、描述和收藏模式。您仍需自行检查并铸造。",
+    "nftPlaceholder": "我想为咖啡俱乐部铸造会员 NFT，独一无二，名为 Coffee Club Pass。",
+    "contractLead": "可选助手：我们建议已审核模板和构造参数。您仍需自行编译、检查并部署。",
+    "contractPlaceholder": "我需要把代币在一年内线性归属给合作伙伴。",
+    "contractTemplate": "建议模板：{{template}}",
+    "discoverLead": "可选助手：我们建议标题、想法、受众和发币原因。您仍需自行检查并提交。",
+    "discoverPlaceholder": "用社区代币做的邻里店铺奖励项目。",
+    "lavkaLead": "可选助手：我们建议忠诚计划名称、次数、价格和有效期。您仍需自行检查并签名。",
+    "lavkaPlaceholder": "咖啡集点卡，10 次，5 PPL，有效 90 天，不可转让。"
   },
   "iconGen": {
     "button": "生成图标",

@@ -109,7 +109,16 @@
     "errorGeneric": "Tidak bisa membaca deskripsi. Coba lagi atau isi bidang secara manual.",
     "errorRateLimited": "Terlalu banyak percobaan. Tunggu satu menit.",
     "errorTooShort": "Tambahkan sedikit detail (setidaknya satu kalimat).",
-    "sourceNote": "Saran dari: {{source}}"
+    "sourceNote": "Saran dari: {{source}}",
+    "nftLead": "Bantuan opsional: kami sarankan nama, deskripsi, dan mode koleksi. Anda tetap meninjau dan mint sendiri.",
+    "nftPlaceholder": "Saya ingin NFT keanggotaan klub kopi, satu item unik bernama Coffee Club Pass.",
+    "contractLead": "Bantuan opsional: kami sarankan templat yang ditinjau dan nilai konstruktor. Anda tetap kompilasi, tinjau, dan deploy.",
+    "contractPlaceholder": "Saya butuh vesting linear token saya ke mitra selama satu tahun.",
+    "contractTemplate": "Templat yang disarankan: {{template}}",
+    "discoverLead": "Bantuan opsional: kami sarankan judul, ide, audiens, dan alasan token. Anda tetap meninjau dan mengirim.",
+    "discoverPlaceholder": "Proyek hadiah lingkungan untuk toko lokal dengan token komunitas.",
+    "lavkaLead": "Bantuan opsional: kami sarankan judul, kunjungan, harga, dan masa berlaku. Anda tetap meninjau dan menandatangani.",
+    "lavkaPlaceholder": "Kartu kopi, 10 kunjungan, 5 PPL, berlaku 90 hari, tidak dapat dipindahtangankan."
   },
   "iconGen": {
     "button": "Buat ikon",

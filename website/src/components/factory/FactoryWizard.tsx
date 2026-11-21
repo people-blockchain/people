@@ -18,6 +18,7 @@ import { FactoryIconGenerator } from "@/components/factory/FactoryIconGenerator"
 import { isCosmosEvmChain } from "@/lib/chain-mode";
 import { EvmTokenLaunch } from "@/components/factory/EvmTokenLaunch";
 import { EvmNftMint } from "@/components/factory/EvmNftMint";
+import { DescribeHelper } from "@/components/factory/DescribeHelper";
 import {
   isTokenSupplyWholeAmountValid,
   wholeTokensToBaseUnits,
@@ -282,6 +283,21 @@ function PeopleFactoryWizard({ kind }: Props) {
 
       {step === 1 && (
         <section className="mt-8 grid gap-4">
+          <DescribeHelper
+            kind={kind === "token" ? "token" : "nft"}
+            onApply={(payload) => {
+              if (kind === "token") {
+                if (payload.name) setName(String(payload.name));
+                if (payload.symbol) setTicker(String(payload.symbol));
+                if (payload.supply) setSupply(String(payload.supply));
+                return;
+              }
+              if (payload.name) setName(String(payload.name));
+              setDescription(String(payload.description ?? ""));
+              setNftMode(payload.mode === "collection" ? "collection" : "single");
+              if (payload.collection) setCollectionId(String(payload.collection));
+            }}
+          />
           <label className="text-sm font-medium text-ink">
             {copy.form.name}
             <input

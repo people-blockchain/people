@@ -20,6 +20,14 @@ test("launch spot matches 60 PPL / curve allocation (1M supply)", () => {
   assert.ok(Math.abs(spot.spotPplPerWholeToken - VIRTUAL_NATIVE_RESERVE_PPL / 600_000) < 1e-12);
 });
 
+test("promo bps shrinks the curve and raises start spot", () => {
+  const none = launchSpotFromSupplyWhole(1_000_000n, 0);
+  const promo = launchSpotFromSupplyWhole(1_000_000n, 1000);
+  assert.ok(none && promo);
+  assert.ok(promo.bondingCurveWholeTokens < none.bondingCurveWholeTokens);
+  assert.ok(promo.spotPplPerWholeToken > none.spotPplPerWholeToken);
+});
+
 test("higher supply lowers spot price", () => {
   const a = launchSpotFromSupplyWhole(1_000_000n);
   const b = launchSpotFromSupplyWhole(10_000_000n);

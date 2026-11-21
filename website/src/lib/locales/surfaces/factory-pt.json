@@ -109,7 +109,16 @@
     "errorGeneric": "Não foi possível ler a descrição. Tente de novo ou preencha manualmente.",
     "errorRateLimited": "Muitas tentativas. Espere um minuto.",
     "errorTooShort": "Acrescente mais detalhe (pelo menos uma frase).",
-    "sourceNote": "Sugestões de: {{source}}"
+    "sourceNote": "Sugestões de: {{source}}",
+    "nftLead": "Ajuda opcional: sugerimos nome, descrição e modo de coleção. Você revisa e faz o mint.",
+    "nftPlaceholder": "Quero um NFT de membro do meu clube de café, um item único chamado Coffee Club Pass.",
+    "contractLead": "Ajuda opcional: sugerimos um modelo revisado e valores do construtor. Você compila, revisa e implanta.",
+    "contractPlaceholder": "Preciso de vesting linear do meu token para um parceiro ao longo de um ano.",
+    "contractTemplate": "Modelo sugerido: {{template}}",
+    "discoverLead": "Ajuda opcional: sugerimos título, ideia, público e por que o token. Você revisa e envia.",
+    "discoverPlaceholder": "Um projeto de recompensas de bairro para lojas locais com um token comunitário.",
+    "lavkaLead": "Ajuda opcional: sugerimos título, visitas, preço e validade. Você revisa e assina.",
+    "lavkaPlaceholder": "Cartão de café, 10 visitas, 5 PPL, válido 90 dias, não transferível."
   },
   "iconGen": {
     "button": "Gerar ícone",

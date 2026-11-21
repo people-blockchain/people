@@ -109,7 +109,16 @@
     "errorGeneric": "Açıklama okunamadı. Tekrar deneyin veya alanları elle doldurun.",
     "errorRateLimited": "Çok fazla deneme. Bir dakika bekleyin.",
     "errorTooShort": "Biraz daha ayrıntı ekleyin (en az bir cümle).",
-    "sourceNote": "Öneriler: {{source}}"
+    "sourceNote": "Öneriler: {{source}}",
+    "nftLead": "İsteğe bağlı yardım: ad, açıklama ve koleksiyon kipini öneririz. İncelemeyi ve mint’i siz yaparsınız.",
+    "nftPlaceholder": "Kahve kulübüm için üyelik NFT’si istiyorum, Coffee Club Pass adlı tek parça.",
+    "contractLead": "İsteğe bağlı yardım: gözden geçirilmiş şablon ve kurucu değerleri öneririz. Derlemeyi, incelemeyi ve dağıtımı siz yaparsınız.",
+    "contractPlaceholder": "Tokenimin bir ortağa bir yıl boyunca doğrusal vesting’e ihtiyacı var.",
+    "contractTemplate": "Önerilen şablon: {{template}}",
+    "discoverLead": "İsteğe bağlı yardım: başlık, fikir, kitle ve token gerekçesini öneririz. İnceleme ve gönderim size ait.",
+    "discoverPlaceholder": "Yerel dükkanlar için topluluk tokeni kullanan mahalle ödül projesi.",
+    "lavkaLead": "İsteğe bağlı yardım: sadakat programı başlığı, ziyaret, fiyat ve geçerlilik öneririz. İnceleme ve imza size ait.",
+    "lavkaPlaceholder": "Kahve kartı, 10 ziyaret, 5 PPL, 90 gün geçerli, devredilemez."
   },
   "iconGen": {
     "button": "Simge oluştur",

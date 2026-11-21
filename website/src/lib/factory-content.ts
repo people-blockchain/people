@@ -124,6 +124,15 @@ export type FactoryCopyContent = {
     errorRateLimited: string;
     errorTooShort: string;
     sourceNote: string;
+    nftLead: string;
+    nftPlaceholder: string;
+    contractLead: string;
+    contractPlaceholder: string;
+    contractTemplate: string;
+    discoverLead: string;
+    discoverPlaceholder: string;
+    lavkaLead: string;
+    lavkaPlaceholder: string;
   };
   iconGen: {
     button: string;
@@ -265,6 +274,20 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       errorRateLimited: "Too many tries. Wait a minute and try again.",
       errorTooShort: "Add a bit more detail (at least a sentence).",
       sourceNote: "Suggestions from: {{source}}",
+      nftLead:
+        "Optional helper: we suggest name, description, and collection mode. You still review and mint yourself.",
+      nftPlaceholder:
+        "I want a membership pass NFT for my coffee club, one unique item, named Coffee Club Pass.",
+      contractLead:
+        "Optional helper: we suggest a reviewed template and constructor values. You still compile, review, and deploy yourself.",
+      contractPlaceholder: "I need linear vesting of my token to a partner over one year.",
+      contractTemplate: "Suggested template: {{template}}",
+      discoverLead:
+        "Optional helper: we suggest title, idea, audience, and why-token copy. You still review and submit yourself.",
+      discoverPlaceholder: "A neighborhood rewards project for local shops using a community token.",
+      lavkaLead:
+        "Optional helper: we suggest loyalty program title, visits, price, and validity. You still review and sign yourself.",
+      lavkaPlaceholder: "Coffee punch card, 10 visits, 5 PPL, valid 90 days, not transferable.",
     },
     iconGen: {
       button: "Generate icon",

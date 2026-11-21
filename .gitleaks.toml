@@ -31,3 +31,8 @@ regexes = [
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
 ]
+
+# Historic commit only: public Turnkey parent org id (not an API secret).
+[[allowlists]]
+description = "Public Turnkey org id in commit 404a576"
+commits = [ "404a576a32d5c529d040236511b035f2c4497413" ]

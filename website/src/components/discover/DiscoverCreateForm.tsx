@@ -10,6 +10,7 @@ import {
   DISCOVER_VIDEO_MIN_SECONDS,
   readVideoDurationSeconds,
 } from "@/lib/discover/video";
+import { DescribeHelper } from "@/components/factory/DescribeHelper";
 
 type TokenOption = { assetId: string; name: string; symbol: string; imageUri?: string | null };
 
@@ -134,6 +135,16 @@ export function DiscoverCreateForm() {
     <form onSubmit={(e) => void onSubmit(e)} className="mx-auto max-w-xl space-y-5 px-4 py-10 sm:px-6">
       <h1 className="text-h2 font-bold text-ink">{t.form.title}</h1>
       <p className="text-sm text-ink-2">{t.form.lead}</p>
+      <DescribeHelper
+        kind="discover"
+        onApply={(payload) => {
+          if (payload.title) setTitle(String(payload.title));
+          if (payload.idea) setIdea(String(payload.idea));
+          if (payload.audience) setAudience(String(payload.audience));
+          if (payload.whyToken) setWhyToken(String(payload.whyToken));
+          if (typeof payload.productUrl === "string") setProductUrl(payload.productUrl);
+        }}
+      />
       {error ? <p className="text-sm text-warm">{error}</p> : null}
       <label className="block text-sm font-medium text-ink">
         {t.form.name}
