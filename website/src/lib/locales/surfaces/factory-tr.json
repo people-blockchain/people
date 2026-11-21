@@ -94,6 +94,23 @@
     "leftoverPoolHint": "Kalan ve satılmayan tokenları bu tokenın kendi topluluk havuzuna gönder.",
     "launchSummary": "Başlattığınızda: arzın %10'u tokenınızın topluluk havuzuna gider. AMM geçişinden sonra eğri kalanlarının ve 180 günlük finalizasyonda satılmayan tokenların yakılacağını (varsayılan, önerilen) veya o topluluk havuzuna gönderileceğini siz seçersiniz — asla size veya hazineye değil. İsteğe bağlı referans payı: varsayılan arzın %5'i (maks %10), davet ödülü %5."
   },
+  "tokenDescribe": {
+    "title": "Kendi ifadelerinizle anlatın",
+    "lead": "İsteğe bağlı yardım: açıklamanızdan ad, ticker ve arz öneririz. Lansmanı siz inceler ve imzalarsınız.",
+    "placeholder": "Telegram kahve kanalım için bir token istiyorum, aboneler kanalı desteklesin diye 1 milyon token.",
+    "submit": "Formu doldur",
+    "busy": "Okunuyor…",
+    "reviewNote": "Bu token oluşturmaz veya imza atmaz.",
+    "priceTitle": "Tahmini eğri başlangıç fiyatı",
+    "priceSpot": "≈ {{spot}} PPL / tam token",
+    "priceExplain": "Protokol başlangıç fiyatını sanal rezervlerle belirler: {{virtual}} PPL ÷ {{curve}} eğri tokenı. Doğrudan dolar fiyatı seçemezsiniz.",
+    "warnFundraising": "Hiçbir fon toplama tutarı garanti değildir — sadece eğri ve piyasa talebi.",
+    "warnDollar": "Dolar fiyatı yapılandırılamaz; arzı zincir formülüne uyarladık.",
+    "errorGeneric": "Açıklama okunamadı. Tekrar deneyin veya alanları elle doldurun.",
+    "errorRateLimited": "Çok fazla deneme. Bir dakika bekleyin.",
+    "errorTooShort": "Biraz daha ayrıntı ekleyin (en az bir cümle).",
+    "sourceNote": "Öneriler: {{source}}"
+  },
   "iconGen": {
     "button": "Simge oluştur",
     "lead": "Bir stil seçin, fikrinizi birkaç kelimeyle yazın ve dört görselden birini seçin.",

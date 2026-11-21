@@ -21,6 +21,9 @@ paths = [
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
   '''website/src/lib/web3auth-config\.ts''',
   '''website/src/lib/partner/.*\.test\.ts''',
+  # Turnkey parent org id is public (documented in .env.example; not an API secret)
+  '''website/\.env\.example''',
+  '''website/src/lib/turnkey-config\.ts''',
 ]
 regexTarget = "line"
 regexes = [
