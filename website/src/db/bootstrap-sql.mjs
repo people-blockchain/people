@@ -730,7 +730,7 @@ export const ANALYTICS_SCHEMA_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "analytics_event_name_created_idx" ON "analytics_event" ("eventName", "createdAt")`,
 ];
 
-/** Keep in sync with `website/drizzle/0026_user_turnkey_wallet.sql`. */
+/** Keep in sync with `website/drizzle/0027_user_turnkey_wallet.sql`. */
 export const USER_TURNKEY_WALLET_SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "user_turnkey_wallet" (
   "userId" text PRIMARY KEY NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,

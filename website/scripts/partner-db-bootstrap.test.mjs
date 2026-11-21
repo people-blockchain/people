@@ -129,9 +129,9 @@ test("referral & KOL bootstrap mirrors drizzle 0023 SQL file", async () => {
   }
 });
 
-test("turnkey wallet bootstrap mirrors drizzle 0026 SQL file", async () => {
+test("turnkey wallet bootstrap mirrors drizzle 0027 SQL file", async () => {
   const { USER_TURNKEY_WALLET_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
-  const raw = readFileSync(join(root, "drizzle/0026_user_turnkey_wallet.sql"), "utf8");
+  const raw = readFileSync(join(root, "drizzle/0027_user_turnkey_wallet.sql"), "utf8");
   const fromFile = raw
     .split("\n")
     .filter((line) => !line.trim().startsWith("--"))

@@ -83,7 +83,9 @@ export function WalletCloudSignIn({
       .catch(() => setFeatures({ google: false, magic: false, walletVault: false }));
   }, []);
 
-  const configured = features?.walletVault && (features.google || features.magic);
+  const configured = skipVault
+    ? Boolean(features && (features.google || features.magic))
+    : Boolean(features?.walletVault && (features.google || features.magic));
 
   const finishConnect = useCallback(
     async (userId: string, email?: string | null) => {

@@ -43,6 +43,8 @@ import { WalletSoonAction } from "./WalletSoonOption";
 import { walletFeatures, walletShowsSoonPlaceholders } from "@/lib/wallet-features";
 import { disconnectPeopleWallet } from "@/lib/wallet-disconnect";
 import { faucetErrorMessage } from "@/lib/faucet-error";
+import { isTurnkeySession } from "@/lib/turnkey-client";
+import { TurnkeyExportPrivateKey } from "./TurnkeyExportPrivateKey";
 
 interface AccountView {
   balanceWei: bigint;
@@ -109,6 +111,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
   });
   const address = portfolio.address;
   const isCloud = session?.kind === "cloud";
+  const isTurnkey = isTurnkeySession(session);
   const [tab, setTab] = useState<"tokens" | "nft" | "history">("tokens");
   const [sheet, setSheet] = useState<null | "send" | "receive" | "settings">(null);
   const [pwCurrent, setPwCurrent] = useState("");
@@ -467,6 +470,10 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
 
   async function showExport(kind: "key" | "seed") {
     try {
+      if (isTurnkey) {
+        setNotice(c.exportPrivateKeyNoSeed);
+        return;
+      }
       if (isCloud) {
         if (kind === "seed") {
           setNotice(c.noSeed);
@@ -552,7 +559,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
 
   const settingsBody = session ? (
     <div className="space-y-4">
-      {!isCloud ? (
+      {!isCloud && !isTurnkey ? (
         <section className="space-y-3 rounded-2xl border border-line bg-surface-2 p-4">
           <h3 className="font-bold">{c.changePassword}</h3>
           <label className="block text-sm">{c.currentPassword}<input type="password" value={pwCurrent} onChange={(e) => setPwCurrent(e.target.value)} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /></label>
@@ -564,7 +571,10 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       <section className="space-y-3 rounded-2xl border border-line bg-surface-2 p-4">
         <h3 className="font-bold">{c.settings}</h3>
         {isCloud ? <p className="text-xs text-ink-3">{t.cloudExportHint}</p> : null}
-        {!isCloud ? (
+        {isTurnkey && session.subOrganizationId ? (
+          <TurnkeyExportPrivateKey address={session.address} subOrganizationId={session.subOrganizationId} />
+        ) : null}
+        {!isCloud && !isTurnkey ? (
           <>
             <label className="block text-sm">{c.rename}<input value={walletName} placeholder={wallets.find(w=>w.id===session.id)?.label} maxLength={64} onChange={e=>setWalletName(e.target.value)} className="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2" /></label>
             <button type="button" disabled={!walletName.trim()} className="text-sm text-brand disabled:opacity-40" onClick={()=>{const w=wallets.find(w=>w.id===session.id);if(w){try{upsertWallet({...w,label:walletName.trim()});refresh();setWalletName("");}catch{setError(t.error);}}}}>{c.save}</button>
@@ -585,21 +595,25 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
         <button type="button" disabled={busy} onClick={() => void doFaucet(faucetAmount)} className="mt-3 rounded-xl border border-warm px-4 py-2 text-sm font-semibold disabled:opacity-40">{t.faucet}</button>
       </details>
       <div className="flex flex-wrap gap-3">
-        <button type="button" className="text-sm text-ink-2" onClick={() => void showExport("key")}>{t.exportKey}</button>
-        <button type="button" className="text-sm text-ink-2" onClick={() => void showExport("seed")}>{t.exportSeed}</button>
+        {!isTurnkey ? (
+          <>
+            <button type="button" className="text-sm text-ink-2" onClick={() => void showExport("key")}>{t.exportKey}</button>
+            <button type="button" className="text-sm text-ink-2" onClick={() => void showExport("seed")}>{t.exportSeed}</button>
+          </>
+        ) : null}
         <button type="button" className="text-sm text-brand" onClick={lock}>{t.lock}</button>
         <button
           type="button"
           className="text-sm text-warm"
           onClick={() => {
-            if (isCloud) {
+            if (isCloud || isTurnkey) {
               void disconnectPeopleWallet({ lock });
               return;
             }
             if (window.confirm(t.forget)) forget(session.id);
           }}
         >
-          {isCloud ? t.cloudDisconnect : t.forget}
+          {isCloud || isTurnkey ? t.cloudDisconnect : t.forget}
         </button>
       </div>
       <p className="text-xs text-ink-3">{t.nonce}: {account?.nonce ?? "—"}</p>

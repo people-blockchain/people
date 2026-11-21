@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { fetchAuthSessionUser, WalletCloudError } from "@/lib/wallet-cloud-client";
-import { turnkeyWalletCopy } from "@/lib/turnkey-wallet-copy";
 import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
+import { fetchTurnkeyStatus } from "@/lib/turnkey-client";
+import { decideTurnkeyOpen } from "@/lib/turnkey-upgrade";
 import {
   completeTurnkeyOtpAndOpen,
   openTurnkeyWalletSession,
@@ -17,6 +19,8 @@ import { networkJson } from "@/lib/network-client";
 import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { rememberAuthEmail } from "@/lib/wallet-auth-storage";
 import { clearUserDisconnected } from "@/lib/wallet-disconnect";
+import { walletUxCopy } from "@/lib/wallet-ux-copy";
+import { TurnkeyUpgradeCard } from "./TurnkeyUpgradeCard";
 
 export function WalletTurnkeySignIn({
   onConnected,
@@ -25,22 +29,24 @@ export function WalletTurnkeySignIn({
   onConnected?: () => void;
   autoConnect?: boolean;
 }) {
+  const { lang } = useLanguage();
+  const c = walletUxCopy(lang);
   const { connectTurnkey } = useWallet();
-  const copy = turnkeyWalletCopy;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [otpId, setOtpId] = useState("");
   const [otpPublicKey, setOtpPublicKey] = useState("");
+  const [otpBundle, setOtpBundle] = useState("");
   const [otpCode, setOtpCode] = useState("");
-  const [importing, setImporting] = useState(false);
+  const [legacyAddress, setLegacyAddress] = useState("");
+  const [needsUpgrade, setNeedsUpgrade] = useState(false);
 
   const finish = useCallback(
-    async (userId: string) => {
+    async (importLegacy: boolean) => {
       const user = await fetchAuthSessionUser();
       if (!user?.id) throw new WalletCloudError("unauthorized");
       rememberAuthEmail(user.email);
-      setImporting(true);
-      const session = await openTurnkeyWalletSession(user);
+      const session = await openTurnkeyWalletSession(user, { importLegacy });
       await connectTurnkey(session);
       void fetch("/api/partner/wallet/sync-vault", { method: "POST", credentials: "include" }).catch(
         () => undefined,
@@ -54,7 +60,6 @@ export function WalletTurnkeySignIn({
           });
         },
       }).catch(() => undefined);
-      void userId;
       onConnected?.();
     },
     [connectTurnkey, onConnected],
@@ -67,21 +72,51 @@ export function WalletTurnkeySignIn({
       clearUserDisconnected();
       const user = await fetchAuthSessionUser();
       if (!user?.id) {
-        setError(copy.createFailed);
+        setError(c.turnkeyCreateFailed);
+        return;
+      }
+      const status = await fetchTurnkeyStatus();
+      const decision = decideTurnkeyOpen({
+        hasLegacyVault: status.hasLegacyVault === true,
+        legacyAddress: status.legacyAddress ?? null,
+        address: status.address ?? null,
+        legacyImportError: status.legacyImportError ?? null,
+      });
+      if (decision.action === "prompt_upgrade") {
+        setLegacyAddress(decision.legacyAddress);
+        setNeedsUpgrade(true);
+        return;
+      }
+      if (decision.action === "keep_legacy") {
+        setLegacyAddress(decision.legacyAddress);
+        setNeedsUpgrade(true);
+        setError(c.upgradeWalletFailed);
+        warnCloudOpenFailed({
+          code: decision.reason,
+          stage: "turnkey_import",
+          vaultPresent: true,
+          retried: false,
+        });
         return;
       }
       try {
-        await finish(user.id);
+        await finish(false);
       } catch (err) {
         const code = turnkeyOpenErrorCode(err);
         if (code === "otp_required" || code === "turnkey_client_unready") {
           const otp = await requestTurnkeyOtp();
           setOtpId(otp.otpId);
           setOtpPublicKey(otp.publicKey);
+          setOtpBundle(otp.otpEncryptionTargetBundle);
+          return;
+        }
+        if (code === "upgrade_required") {
+          setLegacyAddress(status.legacyAddress ?? "");
+          setNeedsUpgrade(true);
           return;
         }
         if (code === LEGACY_ADDRESS_MISMATCH) {
-          setError(copy.importMismatch);
+          setError(c.upgradeWalletFailed);
           warnCloudOpenFailed({
             code: LEGACY_ADDRESS_MISMATCH,
             stage: "turnkey_import",
@@ -90,13 +125,12 @@ export function WalletTurnkeySignIn({
           });
           return;
         }
-        setError(code === "create_failed" ? copy.createFailed : copy.importFailed);
+        setError(code === "create_failed" ? c.turnkeyCreateFailed : c.upgradeWalletFailed);
       }
     } finally {
       setBusy(false);
-      setImporting(false);
     }
-  }, [copy.createFailed, copy.importFailed, copy.importMismatch, finish]);
+  }, [c.turnkeyCreateFailed, c.upgradeWalletFailed, finish]);
 
   useEffect(() => {
     if (autoConnect) void start();
@@ -112,29 +146,57 @@ export function WalletTurnkeySignIn({
         otpId,
         otpCode,
         publicKey: otpPublicKey,
+        otpEncryptionTargetBundle: otpBundle,
       });
       await connectTurnkey(session);
       onConnected?.();
     } catch {
-      setError(copy.sessionFailed);
+      setError(c.turnkeySessionFailed);
     } finally {
       setBusy(false);
     }
-  }, [connectTurnkey, copy.sessionFailed, onConnected, otpCode, otpId, otpPublicKey]);
+  }, [connectTurnkey, c.turnkeySessionFailed, onConnected, otpBundle, otpCode, otpId, otpPublicKey]);
+
+  if (needsUpgrade) {
+    return (
+      <TurnkeyUpgradeCard
+        legacyAddress={legacyAddress}
+        busy={busy}
+        error={error}
+        onUpgrade={() => {
+          setBusy(true);
+          setError("");
+          void finish(true)
+            .catch((err) => {
+              const code = turnkeyOpenErrorCode(err);
+              setError(c.upgradeWalletFailed);
+              warnCloudOpenFailed({
+                code,
+                stage: "turnkey_import",
+                vaultPresent: true,
+                retried: false,
+              });
+            })
+            .finally(() => setBusy(false));
+        }}
+        onLater={() => setNeedsUpgrade(false)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-4" data-testid="turnkey-wallet-sign-in">
       <div>
-        <h2 className="text-lg font-semibold text-ink">{copy.heading}</h2>
-        <p className="mt-1 text-sm leading-relaxed text-ink-2">{copy.lead}</p>
+        <h2 className="text-lg font-semibold text-ink">{c.brandName}</h2>
+        <p className="mt-1 text-sm leading-relaxed text-ink-2">{c.turnkeyLead}</p>
       </div>
       {otpId ? (
         <div className="space-y-3">
-          <p className="text-sm text-ink-2">{copy.otpLead}</p>
+          <p className="text-sm text-ink-2">{c.turnkeyOtpLead}</p>
           <input
             value={otpCode}
             onChange={(event) => setOtpCode(event.target.value)}
-            placeholder={copy.otpPlaceholder}
+            placeholder={c.turnkeyOtpPlaceholder}
             autoComplete="one-time-code"
             className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-sm"
           />
@@ -145,7 +207,7 @@ export function WalletTurnkeySignIn({
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-brand-ink disabled:opacity-60"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {copy.otpVerify}
+            {c.turnkeyOtpVerify}
           </button>
         </div>
       ) : (
@@ -156,7 +218,7 @@ export function WalletTurnkeySignIn({
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-brand-ink disabled:opacity-60"
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          {busy ? (importing ? copy.importHeading : copy.opening) : copy.heading}
+          {busy ? c.turnkeyOpening : c.brandName}
         </button>
       )}
       {error ? (

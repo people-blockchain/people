@@ -29,6 +29,7 @@ export type TurnkeyWalletStatusResponse = {
   hasLegacyVault?: boolean;
   legacyAddress?: string | null;
   needsImport?: boolean;
+  addressConflict?: boolean;
   legacyImportError?: string | null;
 };
 
@@ -45,6 +46,9 @@ export type TurnkeyBrowserBridge = {
   storeSession: (session: string) => Promise<void> | void;
   signRawPayload: TurnkeySignRawPayload;
   organizationId: string;
+  signWithApiKey?: (input: { message: string; publicKey?: string }) => Promise<string>;
+  getApiKeyPublicKey?: () => string | null;
+  exportWalletAccount?: (input: { address: string; organizationId: string }) => Promise<void>;
   httpClient?: { signRawPayload: (input: Record<string, unknown>) => Promise<unknown> };
 };
 
@@ -254,7 +258,11 @@ export async function registerTurnkeyAddress(input: {
   return (await res.json()) as { address: string; subOrganizationId: string };
 }
 
-export async function initTurnkeyOtp(userIdentifier?: string): Promise<{ otpId: string; subOrganizationId: string }> {
+export async function initTurnkeyOtp(userIdentifier?: string): Promise<{
+  otpId: string;
+  otpEncryptionTargetBundle: string;
+  subOrganizationId: string;
+}> {
   const res = await fetch("/api/wallet/turnkey/otp/init", {
     method: "POST",
     credentials: "include",
@@ -262,14 +270,17 @@ export async function initTurnkeyOtp(userIdentifier?: string): Promise<{ otpId: 
     body: JSON.stringify({ userIdentifier }),
   });
   if (!res.ok) await jsonOrError(res, "otp_failed");
-  return (await res.json()) as { otpId: string; subOrganizationId: string };
+  return (await res.json()) as {
+    otpId: string;
+    otpEncryptionTargetBundle: string;
+    subOrganizationId: string;
+  };
 }
 
 export async function verifyTurnkeyOtp(input: {
   otpId: string;
-  otpCode: string;
-  publicKey: string;
-}): Promise<{ session: string; subOrganizationId: string }> {
+  encryptedOtpBundle: string;
+}): Promise<{ verificationToken: string; subOrganizationId: string }> {
   const res = await fetch("/api/wallet/turnkey/otp/verify", {
     method: "POST",
     credentials: "include",
@@ -277,7 +288,47 @@ export async function verifyTurnkeyOtp(input: {
     body: JSON.stringify(input),
   });
   if (!res.ok) await jsonOrError(res, "otp_verify_failed");
+  return (await res.json()) as { verificationToken: string; subOrganizationId: string };
+}
+
+export async function loginTurnkeyOtp(input: {
+  verificationToken: string;
+  publicKey: string;
+  clientSignature: {
+    publicKey: string;
+    scheme: "CLIENT_SIGNATURE_SCHEME_API_P256";
+    message: string;
+    signature: string;
+  };
+}): Promise<{ session: string; subOrganizationId: string }> {
+  const res = await fetch("/api/wallet/turnkey/otp/login", {
+    method: "POST",
+    credentials: "include",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (!res.ok) await jsonOrError(res, "otp_verify_failed");
   return (await res.json()) as { session: string; subOrganizationId: string };
+}
+
+export async function encryptTurnkeyOtpCode(input: {
+  otpCode: string;
+  otpEncryptionTargetBundle: string;
+  publicKey: string;
+}): Promise<string> {
+  const { encryptOtpCodeToBundle } = await import("@turnkey/crypto");
+  return encryptOtpCodeToBundle(input.otpCode, input.otpEncryptionTargetBundle, input.publicKey);
+}
+
+export async function confirmTurnkeyExportReady(): Promise<{ address: string; subOrganizationId: string }> {
+  const res = await fetch("/api/wallet/turnkey/export/ready", {
+    method: "POST",
+    credentials: "include",
+    headers: { "content-type": "application/json" },
+    body: "{}",
+  });
+  if (!res.ok) await jsonOrError(res, "reauth_required");
+  return (await res.json()) as { address: string; subOrganizationId: string };
 }
 
 export function matchLegacyVaultKey(

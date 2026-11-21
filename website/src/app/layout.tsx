@@ -17,6 +17,7 @@ import { WalletModalProvider } from "@/context/WalletModalContext";
 import { WalletModalHost } from "@/components/wallet/WalletModal";
 import { WalletConnectQueryHandler } from "@/components/wallet/WalletConnectQueryHandler";
 import { CloudWalletSessionBridge } from "@/components/wallet/CloudWalletSessionBridge";
+import { TurnkeyUpgradePrompt } from "@/components/wallet/TurnkeyUpgradePrompt";
 import { TurnkeyLayoutGate } from "@/components/turnkey/TurnkeyLayoutGate";
 import { ChainProviders } from "@/components/ChainProviders";
 import { Suspense } from "react";
@@ -183,6 +184,7 @@ export default async function RootLayout({
                 <WalletModalHost />
               </Suspense>
               <CloudWalletSessionBridge />
+              <TurnkeyUpgradePrompt />
               <BugReportButton />
               <SupportChatWidget />
               <Suspense fallback={null}>

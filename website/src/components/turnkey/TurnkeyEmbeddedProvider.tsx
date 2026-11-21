@@ -6,6 +6,8 @@ import "@turnkey/react-wallet-kit/styles.css";
 import { readPublicTurnkeyOrganizationId } from "@/lib/turnkey-config";
 import { parseSignRawPayload, setTurnkeyBrowserBridge } from "@/lib/turnkey-client";
 
+let lastApiKeyPublicKey = "";
+
 function TurnkeySessionBridge({ children }: { children: ReactNode }) {
   const turnkey = useTurnkey();
 
@@ -18,8 +20,21 @@ function TurnkeySessionBridge({ children }: { children: ReactNode }) {
         : undefined,
       createApiKeyPair: async () => {
         const created = await turnkey.createApiKeyPair();
-        if (typeof created === "string" && created.trim()) return created.trim();
+        if (typeof created === "string" && created.trim()) {
+          lastApiKeyPublicKey = created.trim();
+          return lastApiKeyPublicKey;
+        }
         throw new Error("invalid_client_key");
+      },
+      getApiKeyPublicKey: () => lastApiKeyPublicKey || null,
+      signWithApiKey: async ({ message, publicKey }) => {
+        return turnkey.signWithApiKey({ message, publicKey: publicKey || lastApiKeyPublicKey });
+      },
+      exportWalletAccount: async ({ address, organizationId: subOrganizationId }) => {
+        await turnkey.handleExportWalletAccount({
+          address,
+          organizationId: subOrganizationId,
+        });
       },
       storeSession: (session) => turnkey.storeSession({ sessionToken: session }),
       signRawPayload: async (input) => {

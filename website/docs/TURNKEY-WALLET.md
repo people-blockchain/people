@@ -2,8 +2,8 @@
 
 Draft replacement for the current PEOPLE website wallet stack (Web3Auth + server
 AES-GCM vault `user_wallet_vault`). Private keys never land on this server when
-`WALLET_PROVIDER=turnkey`. This document is operator-facing; public UI copy is
-English-only.
+`WALLET_PROVIDER=turnkey`. This document is operator-facing. Public wallet copy
+(upgrade prompt, OTP, export) is in all 12 site languages.
 
 **This PR does not run the migration, does not write production data, and must
 not be merged until the rollout checklist below is complete.**
@@ -16,9 +16,19 @@ not be merged until the rollout checklist below is complete.**
   root user (non-custodial: the parent org is not added as a root).
 - New users get an Ethereum-path secp256k1 account (`m/44'/60'/0'/0/0`) used on
   PEOPLE and Base.
-- Returning vault users (the ~17 `user_wallet_vault` rows) are prompted to
-  **import** the decrypted key into the Turnkey enclave. The address stays the
-  same. Import is user-initiated on first wallet open.
+- Returning vault users (the ~17 `user_wallet_vault` rows) see a one-time
+  **Upgrade your wallet** prompt on the next login with `WALLET_PROVIDER=turnkey`.
+  Import is user-initiated. The address stays the same (PPL and history untouched).
+  The server **never** silently creates a new address for a user who still has a
+  vault row (`createWallet` defaults to false; `legacy_vault_present` if a client
+  asks to mint anyway). If import fails, they stay on the legacy vault session and
+  see a support path (`/help`); the failure is logged as a machine code only.
+- Users can **Export private key** from wallet settings via Turnkey
+  `EXPORT_WALLET_ACCOUNT` to `https://export.turnkey.com` (iframe/TEK). The
+  plaintext key is decrypted only in the user’s browser. PEOPLE servers never
+  see it. A fresh PEOPLE login is required first. After export, the key can be
+  imported into MetaMask. The derived address is checked against the address
+  shown in the UI.
 - The database stores only `subOrganizationId`, Turnkey user/wallet ids, the
   EVM address, and import flags. No ciphertext, no private keys.
 
@@ -71,7 +81,8 @@ the site is rebuilt.
 
 ## Database
 
-Migration file: `website/drizzle/0026_user_turnkey_wallet.sql`.
+Migration file: `website/drizzle/0027_user_turnkey_wallet.sql`
+(`0026` on main is `0026_support_chat.sql`; open PR #122 also used a 0026 name).
 
 - **Do not run it from this PR.** Apply it in a dedicated ops step before
   flipping the flag.
@@ -92,16 +103,21 @@ Columns: `userId` (PK), `subOrganizationId` (unique), `turnkeyUserId`,
 3. Server `createSubOrganization` with that API key as root and an Ethereum
    account. Stores sub-org id + address.
 4. First device can stamp requests with that API key. A new browser gets an
-   email OTP (`/otp/init` + `/otp/verify`) bound to the PEOPLE account email,
-   then `storeSession`.
+   email OTP V2: `/otp/init` returns `otpEncryptionTargetBundle`; the browser
+   encrypts the code with `encryptOtpCodeToBundle` (plaintext OTP never hits
+   this server); `/otp/verify` takes `encryptedOtpBundle`; `/otp/login` requires
+   `clientSignature` (`CLIENT_SIGNATURE_SCHEME_API_P256`) then `storeSession`.
 
 ## Legacy import (the 17 vault wallets)
 
 Triggered when a signed-in user opens the wallet, the flag is `turnkey`, and
-`user_wallet_vault` exists but `user_turnkey_wallet.address` does not.
+`user_wallet_vault` exists but `user_turnkey_wallet.address` does not. The UI
+title is **Upgrade your wallet** (all site languages). Auto-open never imports
+and never calls `createWallet: true`.
 
 1. Bootstrap a sub-org **without** creating a new wallet (`createWallet: false`)
-   so Turnkey does not mint a different address.
+   so Turnkey does not mint a different address. Until the user confirms, the
+   session bridge restores the **legacy vault** wallet so balances stay usable.
 2. Client fetches wrap-key + vault (same routes as today). Decrypt uses the
    **stored `vaultVersion`** (PR #125): v1 = `AUTH_SECRET`, v2 = dedicated or
    `PEOPLE_WALLET_VAULT_SECRET_PREVIOUS`, v3 = `PEOPLE_WALLET_VAULT_SECRET_NEXT`.
@@ -140,14 +156,13 @@ Not yet on Turnkey (open):
 
 - Cosmos `SIGN_MODE_DIRECT` governance votes still need a local key. The UI
   refuses those while `session.kind === "turnkey"`.
-- New-device email OTP uses `initOtp` / `verifyOtp` / `otpLogin`. Turnkey SDK
-  8.10 types a V2 encrypted OTP bundle + `clientSignature`. The live path may
-  need that client encryption before new-browser OTP works; first-device
-  signing uses the browser P-256 API key as sub-org root and does not need OTP.
+- Apple sign-in still needs Web3Auth configured; Auth.js Google + email work
+  with `WALLET_PROVIDER=turnkey` even when `NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED`
+  and `NEXT_PUBLIC_CLOUD_WALLET_ENABLED` are off.
 
 ## Rollout
 
-1. Apply `0026_user_turnkey_wallet.sql` to the target database (preview first).
+1. Apply `0027_user_turnkey_wallet.sql` to the target database (preview first).
 2. Set Turnkey API keys on the preview project. Keep `WALLET_PROVIDER=legacy`.
 3. Smoke-test `/api/wallet/turnkey/status` → `503`/`legacy` while the flag is
    off; no sub-orgs should be created.
@@ -179,11 +194,13 @@ Not yet on Turnkey (open):
 | --- | --- | --- |
 | GET | `/api/wallet/turnkey/status` | Sub-org, address, `needsImport` |
 | POST | `/api/wallet/turnkey/bootstrap` | Create sub-org (fresh PEOPLE auth) |
-| POST | `/api/wallet/turnkey/otp/init` | Email OTP for a new device |
-| POST | `/api/wallet/turnkey/otp/verify` | OTP → session token |
+| POST | `/api/wallet/turnkey/otp/init` | Email OTP V2 (`otpEncryptionTargetBundle`) |
+| POST | `/api/wallet/turnkey/otp/verify` | `encryptedOtpBundle` → verification token (plaintext OTP rejected) |
+| POST | `/api/wallet/turnkey/otp/login` | `clientSignature` → session JWT |
 | POST | `/api/wallet/turnkey/register` | Persist address / public key |
 | POST | `/api/wallet/turnkey/import/init` | TEK import bundle |
-| POST | `/api/wallet/turnkey/import/complete` | Enclave import, or `{ mismatch: true }` |
+| POST | `/api/wallet/turnkey/import/complete` | Enclave import, `{ mismatch: true }`, or `{ error }` |
+| POST | `/api/wallet/turnkey/export/ready` | Fresh-auth gate only. **No key material.** Export is `EXPORT_WALLET_ACCOUNT` from the browser to `export.turnkey.com`. |
 
-All routes no-store, rate-limited, require Auth.js. Bootstrap and import
-require a fresh `authTime` (same 15-minute window as wrap-key).
+All routes no-store, rate-limited, require Auth.js. Bootstrap, import, and
+export-ready require a fresh `authTime` (same window as wrap-key).

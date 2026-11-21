@@ -52,7 +52,8 @@ export function mapTurnkeyError(err: unknown): NextResponse {
   if (
     code === "address_conflict" ||
     code === "address_taken" ||
-    code === "legacy_address_mismatch"
+    code === "legacy_address_mismatch" ||
+    code === "legacy_vault_present"
   ) {
     return jsonError(code, 409);
   }

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { parseCreateSubOrganizationResult, parseImportedKey } from "./turnkey-server.ts";
+import { parseCreateSubOrganizationResult, parseImportedKey, parseInitOtp } from "./turnkey-server.ts";
 
 describe("Turnkey response parsers", () => {
   it("reads a nested createSubOrganizationResultV7 wallet", () => {
@@ -38,5 +38,24 @@ describe("Turnkey response parsers", () => {
     });
     assert.equal(parsed.privateKeyId, "pk-1");
     assert.deepEqual(parsed.addresses, ["0x1111111111111111111111111111111111111111"]);
+  });
+
+  it("reads initOtpResultV2 encryption bundle and rejects plaintext-only results", () => {
+    const parsed = parseInitOtp({
+      activity: {
+        result: {
+          initOtpResultV2: {
+            otpId: "otp-1",
+            otpEncryptionTargetBundle: "bundle-1",
+          },
+        },
+      },
+    });
+    assert.equal(parsed.otpId, "otp-1");
+    assert.equal(parsed.otpEncryptionTargetBundle, "bundle-1");
+    assert.throws(
+      () => parseInitOtp({ activity: { result: { initOtpResult: { otpId: "otp-old" } } } }),
+      /turnkey_otp_bundle_missing/,
+    );
   });
 });

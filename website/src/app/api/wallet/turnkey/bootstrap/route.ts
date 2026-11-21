@@ -13,7 +13,9 @@ export async function POST(request: Request) {
     return mapTurnkeyError(new Error("invalid_client_key"));
   }
   const clientPublicKey = typeof body.clientPublicKey === "string" ? body.clientPublicKey : "";
-  const createWallet = body.createWallet !== false;
+  // Default false: never mint a new address unless the client explicitly opts in.
+  // Vault users must send createWallet: false and import the existing key.
+  const createWallet = body.createWallet === true;
   try {
     await ensurePartnerSchema();
     const row = await bootstrapTurnkeySubOrg({

@@ -39,7 +39,7 @@ export type InitOtpInput = {
 
 export type VerifyOtpInput = {
   otpId: string;
-  otpCode: string;
+  encryptedOtpBundle: string;
 };
 
 export type OtpLoginInput = {
@@ -47,6 +47,12 @@ export type OtpLoginInput = {
   verificationToken: string;
   publicKey: string;
   expirationSeconds?: string;
+  clientSignature: {
+    publicKey: string;
+    scheme: "CLIENT_SIGNATURE_SCHEME_API_P256";
+    message: string;
+    signature: string;
+  };
 };
 
 export type InitImportPrivateKeyInput = {
@@ -63,7 +69,7 @@ export type ImportPrivateKeyInput = {
 
 export type TurnkeyApi = {
   createSubOrganization(input: CreateSubOrganizationInput): Promise<CreateSubOrganizationResult>;
-  initOtp(input: InitOtpInput): Promise<{ otpId: string }>;
+  initOtp(input: InitOtpInput): Promise<{ otpId: string; otpEncryptionTargetBundle: string }>;
   verifyOtp(input: VerifyOtpInput): Promise<{ verificationToken: string }>;
   otpLogin(input: OtpLoginInput): Promise<{ session: string }>;
   initImportPrivateKey(input: InitImportPrivateKeyInput): Promise<{ importBundle: string }>;
@@ -117,17 +123,20 @@ export function parseCreateSubOrganizationResult(response: unknown): CreateSubOr
   };
 }
 
-function parseOtpId(response: unknown): string {
+export function parseInitOtp(response: unknown): { otpId: string; otpEncryptionTargetBundle: string } {
   const root = asRecord(response);
   const activity = asRecord(root?.activity);
   const result = asRecord(activity?.result);
-  const nested = asRecord(result?.initOtpResult) ?? asRecord(result?.initOtpResultV2) ?? result;
+  const nested = asRecord(result?.initOtpResultV2) ?? asRecord(result?.initOtpResult) ?? result;
   const otpId = asString(nested?.otpId) ?? asString(root?.otpId);
+  const otpEncryptionTargetBundle =
+    asString(nested?.otpEncryptionTargetBundle) ?? asString(root?.otpEncryptionTargetBundle);
   if (!otpId) throw new Error("turnkey_otp_missing");
-  return otpId;
+  if (!otpEncryptionTargetBundle) throw new Error("turnkey_otp_bundle_missing");
+  return { otpId, otpEncryptionTargetBundle };
 }
 
-function parseVerificationToken(response: unknown): string {
+export function parseVerificationToken(response: unknown): string {
   const root = asRecord(response);
   const activity = asRecord(root?.activity);
   const result = asRecord(activity?.result);
@@ -219,15 +228,13 @@ async function createLiveTurnkeyApi(config: TurnkeyServerConfig): Promise<Turnke
         appName: "PEOPLE",
         ...(input.userIdentifier ? { userIdentifier: input.userIdentifier } : {}),
       });
-      return { otpId: parseOtpId(response) };
+      return parseInitOtp(response);
     },
     async verifyOtp(input) {
-      // SDK 8.10 types the V2 encrypted-bundle body; tests inject TurnkeyApi with otpCode.
-      // Live OTP V2 (encryptedOtpBundle + clientSignature) is an open follow-up.
       const response = await client.verifyOtp({
         otpId: input.otpId,
-        otpCode: input.otpCode,
-      } as never);
+        encryptedOtpBundle: input.encryptedOtpBundle,
+      });
       return { verificationToken: parseVerificationToken(response) };
     },
     async otpLogin(input) {
@@ -235,8 +242,9 @@ async function createLiveTurnkeyApi(config: TurnkeyServerConfig): Promise<Turnke
         organizationId: input.organizationId,
         verificationToken: input.verificationToken,
         publicKey: input.publicKey,
+        clientSignature: input.clientSignature,
         ...(input.expirationSeconds ? { expirationSeconds: input.expirationSeconds } : {}),
-      } as never);
+      });
       return { session: parseSession(response) };
     },
     async initImportPrivateKey(input) {

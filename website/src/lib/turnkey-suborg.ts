@@ -4,6 +4,7 @@ import { userTurnkeyWallets, userWalletVaults } from "@/db/schema";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
 import { getTurnkeyApi } from "@/lib/turnkey-server";
+import { assertCanCreateTurnkeyWallet } from "@/lib/turnkey-upgrade";
 
 export type TurnkeyWalletRow = {
   userId: string;
@@ -23,6 +24,7 @@ export type TurnkeyWalletStatus = {
   hasLegacyVault: boolean;
   legacyAddress: string | null;
   needsImport: boolean;
+  addressConflict: boolean;
   legacyImportError: string | null;
 };
 
@@ -47,6 +49,9 @@ export function computeTurnkeyWalletStatus(
   vault: { address: string } | null,
 ): TurnkeyWalletStatus {
   const hasAddress = Boolean(row?.address);
+  const vaultAddr = vault?.address?.trim().toLowerCase() ?? "";
+  const turnkeyAddr = row?.address?.trim().toLowerCase() ?? "";
+  const addressConflict = Boolean(vaultAddr && turnkeyAddr && vaultAddr !== turnkeyAddr);
   return {
     subOrganizationId: row?.subOrganizationId ?? null,
     address: row?.address ?? null,
@@ -54,6 +59,7 @@ export function computeTurnkeyWalletStatus(
     hasLegacyVault: Boolean(vault),
     legacyAddress: vault?.address ?? null,
     needsImport: Boolean(vault) && !hasAddress,
+    addressConflict,
     legacyImportError: row?.legacyImportError ?? null,
   };
 }
@@ -72,6 +78,9 @@ export async function bootstrapTurnkeySubOrg(input: {
 }): Promise<TurnkeyWalletRow> {
   const existing = await loadTurnkeyWallet(input.userId);
   if (existing) return existing;
+
+  const vault = await loadLegacyVaultSummary(input.userId);
+  assertCanCreateTurnkeyWallet(Boolean(vault), input.createWallet);
 
   const publicKey = input.clientPublicKey.trim();
   if (!/^[0-9a-fA-F]{64,132}$/.test(publicKey)) {

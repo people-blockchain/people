@@ -60,3 +60,8 @@ export async function completeTurnkeyPrivateKeyImport(input: {
 export async function markLegacyImportMismatch(userId: string): Promise<void> {
   await recordLegacyImportError(userId, LEGACY_ADDRESS_MISMATCH);
 }
+
+export async function markLegacyImportFailure(userId: string, code: string): Promise<void> {
+  const safe = /^[a-z0-9_]{1,80}$/.test(code) ? code : "import_failed";
+  await recordLegacyImportError(userId, safe);
+}

@@ -39,7 +39,7 @@ export function UnifiedWalletAuthPanel({
 
   return (
     <div className="space-y-4" data-testid="unified-wallet-auth">
-      {showExplainer && (mpcActive || cloudActive) && !turnkeyActive ? (
+      {showExplainer && (mpcActive || cloudActive || turnkeyActive) ? (
         <p className="text-sm leading-relaxed text-ink-2" data-testid="wallet-modal-explainer">
           {explainer}
         </p>
@@ -48,9 +48,9 @@ export function UnifiedWalletAuthPanel({
         <>
           {mpcActive ? (
             <WalletWeb3AuthSignIn skipVault onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
-          ) : cloudActive ? (
+          ) : (
             <WalletCloudSignIn skipVault onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
-          ) : null}
+          )}
           <WalletTurnkeySignIn onConnected={onConnected} autoConnect={autoConnect} />
         </>
       ) : mpcActive ? (

@@ -116,7 +116,7 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     for (const statement of REFERRAL_KOL_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
-    // drizzle/0026_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
+    // drizzle/0027_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
     for (const statement of USER_TURNKEY_WALLET_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
