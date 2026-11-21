@@ -22,14 +22,15 @@ paths = [
   '''website/src/lib/web3auth-config\.ts''',
   # Turnkey parent organization id is public (not an API key); real keys stay in env
   '''website/src/lib/turnkey-config\.ts''',
-  '''website/.env\.example''',
   '''website/src/lib/partner/.*\.test\.ts''',
+]
+commits = [
+  # Turnkey wallet spike (404a576): public parent org id in .env.example, not live secrets
+  "404a576a32d5c529d040236511b035f2c4497413",
 ]
 regexTarget = "line"
 regexes = [
   # keccak event topics (TOKEN_CREATED etc.)
   '''TOKEN_CREATED(_TOPIC)?\s*=''',
   '''TOKEN_CREATED(_TOPIC)?=''',
-  # Turnkey parent organization id is public (dashboard org UUID, not an API key)
-  '''6ffc9541-4400-4c4b-8839-19fbc332a91b''',
 ]
