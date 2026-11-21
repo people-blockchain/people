@@ -17,11 +17,10 @@
       "10% về người của bạn,",
       "không về cá voi."
     ],
-    "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây và thử trên testnet.",
+    "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây.",
     "pitchLine": "Blockchain cho người bình thường: token riêng, thẻ NFT câu lạc bộ và gọi vốn cho một ý tưởng — không cần code.",
-    "testnetBadge": "Testnet công khai đang chạy. PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026.",
-    "ctaTestnet": "Thử testnet",
-    "ctaFounder": "Nhận số nhà sáng lập của bạn",
+    "ctaTestnet": "Bắt đầu tạo",
+    "ctaFounder": "Nhận số nhà sáng lập — miễn phí",
     "card": {
       "badge": "Ví dụ",
       "tokenName": "Token của cộng đồng bạn",
@@ -31,23 +30,35 @@
     "stages": [
       {
         "id": "wallet",
-        "label": "Có ví trong 30 giây",
-        "sub": "Khóa của bạn luôn ở trên điện thoại hoặc trình duyệt của bạn."
+        "label": "Ví trong 30 giây",
+        "sub": "Khóa trên điện thoại hoặc trình duyệt."
       },
       {
         "id": "token",
-        "label": "Token của bạn, có giá ngay từ giao dịch đầu tiên",
-        "sub": "Chọn tên và ticker. Bonding curve sẽ tự định giá."
+        "label": "Token của bạn live",
+        "sub": "Tên và ticker — đường cong định giá."
       },
       {
         "id": "share",
-        "label": "10% về người của bạn",
-        "sub": "Khi ra mắt, người tạo cũng có thể gửi phần còn lại trên đường cong chưa bán (tới ~17%) vào quỹ thay vì đốt — tối đa 27% tổng cộng."
+        "label": "10% cho người của bạn",
+        "sub": "Đảm bảo mỗi lần ra mắt."
       }
     ],
     "shareBadge": "Lên đến 10% chia cho cộng đồng",
     "peopleLine": "Người của bạn, không phải cá voi",
-    "saleNote": "Môi trường dùng thử hiện nay là testnet công khai (token thử nghiệm không có giá trị). PEOPLE Mainnet Beta mở vào ngày 1 tháng 12 năm 2026: bạn thanh toán bằng USDC hoặc USDT trên Base và PPL được ghi có trên PEOPLE Mainnet Beta."
+    "saleNote": "PEOPLE Mainnet Beta mở ngày 1 tháng 12 năm 2026: thanh toán USDC hoặc USDT trên Base; PPL được ghi có trên PEOPLE Mainnet Beta.",
+    "subheadline": "Ra mắt token cho cộng đồng trong một phút — không cần code. 10% mỗi token dành cho người của bạn, được đảm bảo.",
+    "betaBadge": "PEOPLE Mainnet Beta · mở 1 thg 12",
+    "trustLine": "Chỉ người đã xác minh · một người, một địa chỉ · Xây trên Base",
+    "ctaWallet": "Tạo ví miễn phí",
+    "countdown": {
+      "days": "ngày",
+      "hours": "giờ",
+      "minutes": "phút",
+      "seconds": "giây",
+      "dateLabel": "Mở cửa",
+      "open": "Mainnet Beta đã hoạt động."
+    }
   },
   "community": {
     "eyebrow": "10% đảm bảo cho cộng đồng",
@@ -62,8 +73,8 @@
   "build": {
     "eyebrow": "Không cần code, không cần biết crypto",
     "title": "Những gì bạn có thể làm mà không cần code",
-    "lead": "Mọi thứ dưới đây đã chạy ngay hôm nay trên testnet công khai. Không cần cài gì, không cần build gì.",
-    "cta": "Thử trên testnet",
+    "lead": "Mọi thứ bên dưới chạy trong trình duyệt. Không cần cài hay biên dịch.",
+    "cta": "Bắt đầu tạo",
     "cards": [
       {
         "id": "token",
@@ -135,19 +146,20 @@
   },
   "network": {
     "eyebrow": "Mạng trực tiếp",
-    "title": "Testnet công khai, ngay bây giờ",
+    "title": "Mạng PEOPLE, trực tiếp",
     "blockHeight": "Chiều cao khối",
-    "chainLabel": "Chain testnet",
+    "chainLabel": "Chuỗi",
     "explorer": "Mở explorer",
     "unavailable": "Chiều cao khối hiện không khả dụng.",
     "collecting": "Đang đọc mạng…",
-    "note": "Đây là testnet. Các số trên là thật, token thì không."
+    "note": "Khối trực tiếp từ mạng PEOPLE."
   },
   "final": {
-    "title": "Testnet đã mở. Hãy đến sớm, phá thử mọi thứ, nói cho chúng tôi biết điều gì tệ.",
-    "body": "Mỗi báo cáo lỗi và mỗi câu hỏi khó hiểu đều đi thẳng vào thứ chúng tôi xây tiếp theo.",
-    "ctaWallet": "Tạo ví",
+    "title": "Mainnet Beta mở 1 thg 12 — giữ chỗ của bạn",
+    "body": "Nhận số nhà sáng lập trước khi ra mắt.",
+    "ctaWallet": "Tạo ví miễn phí",
     "ctaExplore": "Xem explorer",
-    "socialLabel": "Theo dõi chúng tôi"
+    "socialLabel": "Theo dõi chúng tôi",
+    "ctaFounder": "Nhận số nhà sáng lập — miễn phí"
   }
 }

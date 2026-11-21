@@ -20,10 +20,16 @@ paths = [
   '''docs/v2/SMOKE-ONE-TX\.md''',
   # Web3Auth client id is public by design (domain-restricted in the Web3Auth dashboard)
   '''website/src/lib/web3auth-config\.ts''',
+  # Turnkey parent organization id is public (not an API key); real keys stay in env
+  '''website/src/lib/turnkey-config\.ts''',
   '''website/src/lib/partner/.*\.test\.ts''',
   # Turnkey parent org id is public (documented in .env.example; not an API secret)
   '''website/\.env\.example''',
   '''website/src/lib/turnkey-config\.ts''',
+]
+commits = [
+  # Turnkey wallet spike (404a576): public parent org id in .env.example, not live secrets
+  "404a576a32d5c529d040236511b035f2c4497413",
 ]
 regexTarget = "line"
 regexes = [

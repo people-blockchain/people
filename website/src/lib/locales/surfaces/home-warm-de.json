@@ -18,9 +18,8 @@
     ],
     "sub": "Kein Code, keine Krypto-Kenntnisse nötig. Ein Smartphone oder ein Browser reicht: Wallet in 30 Sekunden erstellen und im Testnet ausprobieren.",
     "pitchLine": "Eine Blockchain für ganz normale Menschen: ein eigener Token, NFT-Clubkarten und Geld für eine Idee sammeln — ohne Code.",
-    "testnetBadge": "Öffentliches Testnet ist live. PEOPLE Mainnet Beta startet am 1. Dezember 2026.",
     "ctaTestnet": "Testnet ausprobieren",
-    "ctaFounder": "Gründernummer sichern",
+    "ctaFounder": "Meine Gründernummer holen — kostenlos",
     "card": {
       "badge": "Beispiel",
       "tokenName": "Der Token Ihrer Community",
@@ -31,22 +30,34 @@
       {
         "id": "wallet",
         "label": "Wallet in 30 Sekunden",
-        "sub": "Ihre Schlüssel bleiben auf Ihrem Smartphone oder in Ihrem Browser."
+        "sub": "Schlüssel auf Handy oder Browser."
       },
       {
         "id": "token",
-        "label": "Ihr Token, bepreist ab dem ersten Trade",
-        "sub": "Wählen Sie einen Namen und einen Ticker. Die Bonding Curve übernimmt die Preisbildung."
+        "label": "Ihr Token geht live",
+        "sub": "Name und Ticker — die Kurve setzt den Preis."
       },
       {
         "id": "share",
-        "label": "27 % an Ihre Leute",
-        "sub": "Beim Start kann der Ersteller den unverkauften Kurvenrest (bis ~17 %) statt Verbrennung in den Pool senden — insgesamt bis 27 %."
+        "label": "10 % an Ihre Leute",
+        "sub": "Bei jedem Launch garantiert."
       }
     ],
     "shareBadge": "10% Community-Anteil",
     "peopleLine": "Ihre Leute, nicht Wale",
-    "saleNote": "Zum Ausprobieren läuft heute das öffentliche Testnet (Test-Token haben keinen Wert). Am 1. Dezember 2026 startet die PEOPLE Mainnet Beta: Sie zahlen in USDC oder USDT auf Base, und PPL werden in der PEOPLE Mainnet Beta gutgeschrieben."
+    "saleNote": "PEOPLE Mainnet Beta startet am 1. Dezember 2026: Zahlen Sie mit USDC oder USDT auf Base; PPL werden auf PEOPLE Mainnet Beta gutgeschrieben.",
+    "subheadline": "Starten Sie in einer Minute einen Token für Ihre Community — ohne Code. 10 % jedes Tokens gehen garantiert an Ihre Leute.",
+    "betaBadge": "PEOPLE Mainnet Beta · Start 1. Dez",
+    "trustLine": "Nur verifizierte Menschen · eine Person, eine Adresse · Gebaut auf Base",
+    "ctaWallet": "Kostenlose Wallet erstellen",
+    "countdown": {
+      "days": "Tage",
+      "hours": "Std",
+      "minutes": "Min",
+      "seconds": "Sek",
+      "dateLabel": "Start",
+      "open": "Mainnet Beta ist live."
+    }
   },
   "community": {
     "eyebrow": "10 % garantiert für die Community",
@@ -61,8 +72,8 @@
   "build": {
     "eyebrow": "Kein Code, keine Krypto-Kenntnisse",
     "title": "Was Sie ohne Code tun können",
-    "lead": "Alles unten läuft schon heute im öffentlichen Testnet. Nichts zu installieren, nichts zu kompilieren.",
-    "cta": "Im Testnet ausprobieren",
+    "lead": "Alles unten läuft im Browser. Nichts installieren, nichts kompilieren.",
+    "cta": "Jetzt erstellen",
     "cards": [
       {
         "id": "token",
@@ -134,19 +145,20 @@
   },
   "network": {
     "eyebrow": "Live-Netzwerk",
-    "title": "Öffentliches Testnet, gerade jetzt",
+    "title": "PEOPLE-Netzwerk, live",
     "blockHeight": "Blockhöhe",
-    "chainLabel": "Testnet-Chain",
+    "chainLabel": "Chain",
     "explorer": "Explorer öffnen",
     "unavailable": "Die Blockhöhe ist gerade nicht verfügbar.",
     "collecting": "Netzwerk wird gelesen…",
-    "note": "Dies ist ein Testnet. Die Zahlen oben sind real, die Tokens sind es nicht."
+    "note": "Live-Blöcke vom PEOPLE-Netzwerk."
   },
   "final": {
-    "title": "Das Testnet ist offen. Seien Sie früh dabei, machen Sie Dinge kaputt, sagen Sie uns, was nervt.",
-    "body": "Jeder Fehlerbericht und jede verwirrte Frage fließt direkt in das, was wir als Nächstes bauen.",
-    "ctaWallet": "Wallet erstellen",
+    "title": "Mainnet Beta am 1. Dez — Platz sichern",
+    "body": "Holen Sie sich Ihre Gründernummer vor dem Start.",
+    "ctaWallet": "Kostenlose Wallet erstellen",
     "ctaExplore": "Explorer ansehen",
-    "socialLabel": "Folgen Sie uns"
+    "socialLabel": "Folgen Sie uns",
+    "ctaFounder": "Meine Gründernummer holen — kostenlos"
   }
 }

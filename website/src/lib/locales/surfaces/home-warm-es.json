@@ -16,11 +16,10 @@
       "El 10% va a tu gente,",
       "no a las ballenas."
     ],
-    "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos y pruébalo en el testnet.",
+    "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos.",
     "pitchLine": "Un blockchain para gente normal: tu propio token, tarjetas NFT de club y recaudar dinero para una idea — sin código.",
-    "testnetBadge": "El testnet público está activo. PEOPLE Mainnet Beta abre el 1 de diciembre de 2026.",
-    "ctaTestnet": "Probar el testnet",
-    "ctaFounder": "Reclama tu número de fundador",
+    "ctaTestnet": "Empezar a crear",
+    "ctaFounder": "Obtener mi número de fundador — gratis",
     "card": {
       "badge": "Ejemplo",
       "tokenName": "El token de tu comunidad",
@@ -30,23 +29,35 @@
     "stages": [
       {
         "id": "wallet",
-        "label": "Una cartera en 30 segundos",
-        "sub": "Tus claves se quedan en tu teléfono o en tu navegador."
+        "label": "Wallet en 30 segundos",
+        "sub": "Las claves en tu móvil o navegador."
       },
       {
         "id": "token",
-        "label": "Tu token, con precio desde la primera operación",
-        "sub": "Elige un nombre y un ticker. La curva de vinculación pone el precio."
+        "label": "Tu token en vivo",
+        "sub": "Nombre y ticker — la curva fija el precio."
       },
       {
         "id": "share",
         "label": "10% para tu gente",
-        "sub": "Al lanzar, el creador puede enviar el resto no vendido de la curva (hasta ~17 %) al pool en lugar de quemarlo — hasta 27 % en total."
+        "sub": "Garantizado en cada lanzamiento."
       }
     ],
     "shareBadge": "Hasta un 10% para la comunidad",
     "peopleLine": "Tu gente, no las ballenas",
-    "saleNote": "El entorno de prueba actual es el testnet público (los tokens de prueba no tienen valor). PEOPLE Mainnet Beta abre el 1 de diciembre de 2026: pagas con USDC o USDT en Base y los PPL se acreditan en PEOPLE Mainnet Beta."
+    "saleNote": "PEOPLE Mainnet Beta abre el 1 de diciembre de 2026: paga en USDC o USDT en Base; los PPL se acreditan en PEOPLE Mainnet Beta.",
+    "subheadline": "Lanza un token para tu comunidad en un minuto, sin código. El 10% de cada token va a tu gente, garantizado.",
+    "betaBadge": "PEOPLE Mainnet Beta · lanzamiento 1 dic",
+    "trustLine": "Solo personas verificadas · una persona, una dirección · Construido en Base",
+    "ctaWallet": "Crear una wallet gratis",
+    "countdown": {
+      "days": "días",
+      "hours": "h",
+      "minutes": "min",
+      "seconds": "seg",
+      "dateLabel": "Abre",
+      "open": "Mainnet Beta está activa."
+    }
   },
   "community": {
     "eyebrow": "10 % garantizado para la comunidad",
@@ -61,8 +72,8 @@
   "build": {
     "eyebrow": "Sin código, sin saber de cripto",
     "title": "Lo que puedes hacer sin código",
-    "lead": "Todo esto ya funciona hoy en el testnet público. No hay nada que instalar ni que compilar.",
-    "cta": "Probar en el testnet",
+    "lead": "Todo lo de abajo funciona en tu navegador. Nada que instalar ni compilar.",
+    "cta": "Empezar a crear",
     "cards": [
       {
         "id": "token",
@@ -134,19 +145,20 @@
   },
   "network": {
     "eyebrow": "Red en vivo",
-    "title": "Testnet público, ahora mismo",
+    "title": "Red PEOPLE, en vivo",
     "blockHeight": "Altura de bloque",
-    "chainLabel": "Cadena de testnet",
+    "chainLabel": "Cadena",
     "explorer": "Abrir el explorador",
     "unavailable": "La altura de bloque no está disponible ahora mismo.",
     "collecting": "Leyendo la red…",
-    "note": "Esto es un testnet. Los números de arriba son reales, los tokens no."
+    "note": "Bloques en vivo de la red PEOPLE."
   },
   "final": {
-    "title": "El testnet está abierto. Sé de los primeros, rompe cosas, dinos qué odias.",
-    "body": "Cada reporte de error y cada pregunta confundida va directo a lo que construimos después.",
-    "ctaWallet": "Crea una cartera",
+    "title": "Mainnet Beta abre el 1 dic — reserva tu lugar",
+    "body": "Consigue tu número de fundador antes del lanzamiento.",
+    "ctaWallet": "Crear una wallet gratis",
     "ctaExplore": "Mira el explorador",
-    "socialLabel": "Síguenos"
+    "socialLabel": "Síguenos",
+    "ctaFounder": "Obtener mi número de fundador — gratis"
   }
 }
