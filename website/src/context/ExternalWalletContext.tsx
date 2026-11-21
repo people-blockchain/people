@@ -42,8 +42,9 @@ export type WalletConnectorKind = "embedded" | "injected" | "walletconnect" | "p
 export type ActiveEvmSigner = {
   kind: WalletConnectorKind;
   address: Address;
-  /** Embedded People wallet only. */
+  /** Embedded People wallet only (absent for Turnkey; signing goes through the enclave). */
   privateKey?: Hex;
+  subOrganizationId?: string;
   provider?: EIP1193Provider;
 };
 
@@ -89,10 +90,12 @@ export function ExternalWalletProvider({ children }: { children: ReactNode }) {
   const connectEmbedded = useCallback(() => {
     if (!session) return;
     // Must match WalletContext session.address (balance + explorer use this id).
+    const turnkey = session.kind === "turnkey";
     setSigner({
       kind: "embedded",
       address: session.address as Address,
-      privateKey: session.privateKey as Hex,
+      privateKey: turnkey ? undefined : (session.privateKey as Hex),
+      subOrganizationId: session.subOrganizationId,
     });
   }, [session]);
 
@@ -313,9 +316,26 @@ export function useExternalWalletOptional() {
   return useContext(ExternalWalletContext);
 }
 
+async function embeddedWalletClient(signer: ActiveEvmSigner) {
+  if (signer.privateKey) return createEmbeddedWalletClient(signer.privateKey);
+  if (signer.subOrganizationId) {
+    const { createTurnkeyEmbeddedWalletClient } = await import("@/lib/turnkey-client");
+    return createTurnkeyEmbeddedWalletClient({
+      id: `turnkey:${signer.address}`,
+      address: signer.address,
+      publicKey: "",
+      privateKey: "",
+      kind: "turnkey",
+      userId: "",
+      subOrganizationId: signer.subOrganizationId,
+    });
+  }
+  throw new Error("missing_private_key");
+}
+
 export async function writeViaActiveSigner(signer: ActiveEvmSigner, request: Record<string, unknown>) {
-  if (signer.kind === "embedded" && signer.privateKey) {
-    const client = createEmbeddedWalletClient(signer.privateKey);
+  if (signer.kind === "embedded") {
+    const client = await embeddedWalletClient(signer);
     // viem WriteContractParameters varies by ABI inference; runtime args are validated on-chain.
     return client.writeContract(request as never);
   }
@@ -327,8 +347,8 @@ export async function writeViaActiveSigner(signer: ActiveEvmSigner, request: Rec
 
 /** Sign a plain text message (EIP-191 `personal_sign`) through the active signer. */
 export async function signViaActiveSigner(signer: ActiveEvmSigner, message: string): Promise<Hex> {
-  if (signer.kind === "embedded" && signer.privateKey) {
-    const client = createEmbeddedWalletClient(signer.privateKey);
+  if (signer.kind === "embedded") {
+    const client = await embeddedWalletClient(signer);
     return client.signMessage({ message });
   }
   if (!signer.provider) throw new Error("missing_provider");
@@ -346,8 +366,8 @@ export async function sendViaActiveSigner(
   signer: ActiveEvmSigner,
   tx: { data: Hex; value?: bigint; gas?: bigint },
 ): Promise<`0x${string}`> {
-  if (signer.kind === "embedded" && signer.privateKey) {
-    const client = createEmbeddedWalletClient(signer.privateKey);
+  if (signer.kind === "embedded") {
+    const client = await embeddedWalletClient(signer);
     return client.sendTransaction({ data: tx.data, value: tx.value ?? BigInt(0), gas: tx.gas });
   }
   if (!signer.provider) throw new Error("missing_provider");

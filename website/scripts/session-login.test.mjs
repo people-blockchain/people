@@ -65,6 +65,9 @@ test("/api/auth/features exposes google/magic without the cloud-wallet flag", as
       assert.equal(body.google, true);
       assert.equal(body.magic, true);
       assert.equal(body.cloudWallet, false, "cloudWallet must stay false while the flag is off");
+      assert.equal(body.walletProvider, "legacy", "WALLET_PROVIDER defaults to legacy");
+      assert.equal(body.turnkey.ready, false);
+      assert.equal(body.turnkey.organizationId, null);
     },
   );
 });

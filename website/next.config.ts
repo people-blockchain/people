@@ -66,6 +66,8 @@ const CONNECT_SRC_BASE = [
   "wss://*.walletconnect.org",
   "https://li.quest",
   "https://*.li.fi",
+  "https://api.turnkey.com",
+  "https://*.turnkey.com",
   ...configuredRpcOrigins,
 ];
 
@@ -82,7 +84,7 @@ function buildCsp(connectSrc: string[]): string {
     "font-src 'self' data: https://fonts.gstatic.com",
     "media-src 'self' blob: https:",
     `connect-src ${Array.from(new Set(connectSrc)).join(" ")}`,
-    "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi https://verify.walletconnect.org https://verify.walletconnect.com",
+    "frame-src 'self' https://auth.web3auth.io https://*.web3auth.io https://accounts.google.com https://vercel.live https://challenges.cloudflare.com https://www.youtube.com https://li.fi https://verify.walletconnect.org https://verify.walletconnect.com https://import.turnkey.com https://export.turnkey.com",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
   ].join("; ");

@@ -59,19 +59,37 @@ function canonicalTxPayload(tx: UnsignedTx & { signature?: string; publicKey?: s
   return JSON.stringify(rest);
 }
 
-export function signFactoryTx(privateKeyHex: string, tx: UnsignedTx) {
+export function prepareFactoryTx(address: string, publicKey: string, tx: UnsignedTx) {
   if (!tx.chainId) throw new Error("Transaction chainId is required");
-  const key = keyFromPrivate(privateKeyHex);
-  tx = { ...tx, from: key.address };
-  tx = { ...tx, id: bytesToHex(sha256(new TextEncoder().encode(transactionIdPayload(tx)))) };
-  const message = new TextEncoder().encode(canonicalTxPayload({ ...tx, from: key.address }));
-  const signature = bytesToHex(secp.sign(message, hexToBytes(key.privateKey)));
+  let prepared: UnsignedTx = { ...tx, from: address };
+  prepared = { ...prepared, id: bytesToHex(sha256(new TextEncoder().encode(transactionIdPayload(prepared)))) };
+  const message = new TextEncoder().encode(canonicalTxPayload({ ...prepared, from: address }));
   return {
-    ...tx,
-    from: key.address,
-    publicKey: key.publicKey,
-    signature,
+    prepared,
+    message,
+    messageHex: bytesToHex(message),
+    publicKey,
   };
+}
+
+export function attachFactoryTxSignature(
+  prepared: UnsignedTx,
+  publicKey: string,
+  signatureHex: string,
+) {
+  return {
+    ...prepared,
+    from: prepared.from,
+    publicKey,
+    signature: signatureHex.replace(/^0x/i, "").toLowerCase(),
+  };
+}
+
+export function signFactoryTx(privateKeyHex: string, tx: UnsignedTx) {
+  const key = keyFromPrivate(privateKeyHex);
+  const { prepared, message } = prepareFactoryTx(key.address, key.publicKey, tx);
+  const signature = bytesToHex(secp.sign(message, hexToBytes(key.privateKey)));
+  return attachFactoryTxSignature(prepared, key.publicKey, signature);
 }
 
 export async function fetchAccount(rpcUrl: string, address: string): Promise<{ nonce: number; balance: number }> {

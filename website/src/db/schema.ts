@@ -94,6 +94,32 @@ export const userWalletVaults = pgTable(
 );
 
 /**
+ * Turnkey embedded wallet: one sub-organization per Auth.js user.
+ * Private keys stay in the Turnkey enclave. This table stores only ids + the EVM address.
+ */
+export const userTurnkeyWallets = pgTable(
+  "user_turnkey_wallet",
+  {
+    userId: text("userId")
+      .primaryKey()
+      .references(() => users.id, { onDelete: "cascade" }),
+    subOrganizationId: text("subOrganizationId").notNull(),
+    turnkeyUserId: text("turnkeyUserId"),
+    walletId: text("walletId"),
+    address: text("address"),
+    publicKey: text("publicKey"),
+    importedFromVault: boolean("importedFromVault").notNull().default(false),
+    legacyImportError: text("legacyImportError"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("user_turnkey_wallet_suborg_idx").on(row.subOrganizationId),
+    uniqueIndex("user_turnkey_wallet_address_idx").on(row.address),
+  ],
+);
+
+/**
  * recon.md R1: durable access log + rate-limit source for the wrap-key route specifically
  * (the in-memory `checkSlidingWindowRateLimit` resets on every deploy/restart and gives no
  * forensic trail). No key material is ever stored here, only who/when/outcome.

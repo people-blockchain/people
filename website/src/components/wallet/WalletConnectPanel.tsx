@@ -12,6 +12,7 @@ import { readLastAuthEmail } from "@/lib/wallet-auth-storage";
 import { PeopleMobileConnect } from "./PeopleMobileConnect";
 import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 import { isWeb3AuthActive } from "@/lib/web3auth-config";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 
 export function WalletConnectPanel({
   onConnected,
@@ -81,7 +82,8 @@ export function WalletConnectPanel({
     return null;
   }
 
-  const showCloudAuth = context === "modal" && (isCloudWalletEnabled() || isWeb3AuthActive());
+  const showCloudAuth =
+    context === "modal" && (isCloudWalletEnabled() || isWeb3AuthActive() || isTurnkeyWalletProvider());
   const showLocalHome = context === "modal" || context === "sign-in-local";
   // An account that already has a wallet (a remembered sign-in, or a keystore on this device)
   // gets one clear path: its sign-in above / its own keystore below. Offering "Create" and

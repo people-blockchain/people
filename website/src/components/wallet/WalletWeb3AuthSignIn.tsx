@@ -147,11 +147,14 @@ export function WalletWeb3AuthSignIn({
   onConnected,
   autoConnect = false,
   onOpenImport,
+  skipVault = false,
 }: {
   onConnected?: () => void;
   autoConnect?: boolean;
   /** Opens the existing WalletConnectPanel import mode (encrypted backup or key). */
   onOpenImport?: () => void;
+  /** Auth.js identity only. Used when `WALLET_PROVIDER=turnkey` owns the embedded wallet. */
+  skipVault?: boolean;
 }) {
   const { lang } = useLanguage();
   const t = walletCopy[lang];
@@ -364,6 +367,10 @@ export function WalletWeb3AuthSignIn({
       }
 
       rememberAuthEmail(user.email);
+      if (skipVault) {
+        onConnected?.();
+        return "connected";
+      }
       const vault = await fetchVaultRecordClient();
 
       // A returning account opens the wallet already saved for it. The Web3Auth key is only
@@ -392,7 +399,7 @@ export function WalletWeb3AuthSignIn({
       }
       return (await finishConnect(user.id, user.email)) ? "connected" : "failed";
     },
-    [finishConnect],
+    [finishConnect, onConnected, skipVault],
   );
 
   /**
