@@ -3,6 +3,13 @@ import { cookies, headers } from "next/headers";
 
 import { SiteChrome } from "@/components/SiteChrome";
 import { BuyPage } from "@/components/buy/BuyPage";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  breadcrumbJsonLd,
+  buyFaqPairs,
+  faqPageJsonLd,
+  jsonLdGraph,
+} from "@/lib/seo/json-ld";
 import { buyCopy } from "@/lib/buy-content";
 import { languageFromRequest } from "@/lib/locale-detect";
 import { languageCookieFromStore } from "@/lib/preferences";
@@ -42,8 +49,24 @@ export default async function Page({
   // Example trades exist only in this server response, and only on a
   // non-production deployment opened with `?demo=1`. Production never builds them.
   const exampleTrades = tradeDemoAllowed(process.env, params.demo) ? demoTrades() : null;
+  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
+  const lang = languageFromRequest(
+    languageCookieFromStore(cookieStore),
+    headerStore.get("accept-language"),
+  );
+  const faq = faqPageJsonLd(buyFaqPairs(lang));
+
   return (
     <SiteChrome>
+      <JsonLd
+        data={jsonLdGraph(
+          faq,
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Buy PPL", path: "/buy" },
+          ]),
+        )}
+      />
       <BuyPage initialSaleOpen={initialOpen} exampleTrades={exampleTrades} />
     </SiteChrome>
   );

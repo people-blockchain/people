@@ -265,19 +265,24 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
   },
 ];
 
+function contentLang(lang: Language | string): Language {
+  return lang in docsContent ? (lang as Language) : "en";
+}
+
 /** The answer text for one source, or null when the source has none. */
-export function answerFor(source: HelpSource, lang: HelpLang): string | null {
+export function answerFor(source: HelpSource, lang: Language | string): string | null {
+  const l = contentLang(lang);
   switch (source.kind) {
     case "docs": {
-      const section = docsContent[lang].sections.find((s) => s.id === source.section);
+      const section = docsContent[l].sections.find((s) => s.id === source.section);
       return section?.items[source.item]?.text ?? null;
     }
     case "buy": {
-      const item = buyCopy[lang].faq.items[source.item];
-      return item ? fillCopy(item.a, buyCopyVars(lang)) : null;
+      const item = buyCopy[l].faq.items[source.item];
+      return item ? fillCopy(item.a, buyCopyVars(l)) : null;
     }
     case "staking": {
-      const copy = stakingCopy[lang] as Record<string, unknown>;
+      const copy = stakingCopy[l] as Record<string, unknown>;
       const parts = source.keys.map((key) => copy[key]);
       return parts.every((part) => typeof part === "string" && part) ? parts.join(" ") : null;
     }
@@ -309,7 +314,7 @@ export function resolveHelpFaq(lang: Language | string, options: { includePendin
     id: topic,
     title: helpUi[l].topics[topic],
     entries: HELP_ENTRIES.filter((e) => e.topic === topic && (options.includePending || e.status === "published")).flatMap((e) => {
-      const a = answerFor(e.source, l);
+      const a = answerFor(e.source, lang);
       return a ? [{ id: e.id, topic, q: e.q[l], a, links: e.links, status: e.status, verifiedAt: HELP_VERIFIED_AT }] : [];
     }),
   })).filter((t) => t.entries.length > 0);
