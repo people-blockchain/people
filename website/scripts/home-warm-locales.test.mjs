@@ -20,6 +20,16 @@ const RU_EN_FALLBACK_KEYS = new Set([
   "hero.countdown",
   "hero.trustLine",
   "hero.ctaWallet",
+  "hero.sub",
+  "hero.ctaTestnet",
+  "hero.saleNote",
+  "build.lead",
+  "build.cta",
+  "network.title",
+  "network.chainLabel",
+  "network.note",
+  "final.title",
+  "final.body",
   "final.ctaFounder",
 ]);
 

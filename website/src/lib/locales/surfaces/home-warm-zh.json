@@ -18,7 +18,6 @@
     ],
     "sub": "无需代码，无需加密知识。只要一台手机或一个浏览器：30 秒创建钱包，直接在测试网上体验。",
     "pitchLine": "面向普通人的区块链：自己的代币、俱乐部 NFT 卡，以及为一个想法筹资——全部无需代码。",
-    "testnetBadge": "PEOPLE 主网 Beta 将于 2026 年 12 月 1 日开启。",
     "ctaTestnet": "体验测试网",
     "ctaFounder": "领取我的创始人编号 — 免费",
     "card": {
@@ -46,10 +45,10 @@
     ],
     "shareBadge": "最高10% 社区份额",
     "peopleLine": "你的用户，而不是巨鲸",
-      "saleNote": "PEOPLE 主网 Beta 于 2026 年 12 月 1 日开启：在 Base 上用 USDC 或 USDT 支付；PPL 记入 PEOPLE 主网 Beta。",
+    "saleNote": "PEOPLE 主网 Beta 于 2026 年 12 月 1 日开启：在 Base 上用 USDC 或 USDT 支付；PPL 记入 PEOPLE 主网 Beta。",
     "subheadline": "一分钟为社区发行代币，无需代码。每个代币的 10% 归你的人，有保障。",
     "betaBadge": "PEOPLE 主网 Beta · 12 月 1 日开启",
-      "trustLine": "仅经核验真人 · 一人一号 · 基于 Base",
+    "trustLine": "仅经核验真人 · 一人一号 · 基于 Base",
     "ctaWallet": "创建免费钱包",
     "countdown": {
       "days": "天",

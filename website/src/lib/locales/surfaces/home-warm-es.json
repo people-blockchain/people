@@ -16,10 +16,9 @@
       "El 10% va a tu gente,",
       "no a las ballenas."
     ],
-    "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos y pruébalo en el testnet.",
+    "sub": "Sin código, sin saber de cripto. Basta un teléfono o un navegador: crea una cartera en 30 segundos.",
     "pitchLine": "Un blockchain para gente normal: tu propio token, tarjetas NFT de club y recaudar dinero para una idea — sin código.",
-    "testnetBadge": "PEOPLE Mainnet Beta abre el 1 de diciembre de 2026.",
-    "ctaTestnet": "Probar el testnet",
+    "ctaTestnet": "Empezar a crear",
     "ctaFounder": "Obtener mi número de fundador — gratis",
     "card": {
       "badge": "Ejemplo",
