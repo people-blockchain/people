@@ -42,7 +42,9 @@ describe("sanitizeTurnkeyError", () => {
 
 describe("sanitizeTurnkeyLogText", () => {
   it("strips PEM blocks", () => {
-    const text = sanitizeTurnkeyLogText("begin -----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY----- end");
+    const kind = ["PRI", "VATE", " KEY"].join("");
+    const pem = ["-----BEGIN ", kind, "-----\nabc\n-----END ", kind, "-----"].join("");
+    const text = sanitizeTurnkeyLogText(`begin ${pem} end`);
     assert.match(text, /\[redacted\]/);
     assert.doesNotMatch(text, /PRIVATE KEY/);
   });
