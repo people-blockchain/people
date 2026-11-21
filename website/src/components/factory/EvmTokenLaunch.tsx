@@ -628,6 +628,7 @@ export function EvmTokenLaunch() {
       ) : (
         <div className="mt-8 space-y-4">
           <TokenDescribeHelper
+            promoBps={promoBps}
             onApply={(payload) => {
               setName(payload.name);
               setSymbol(payload.symbol);

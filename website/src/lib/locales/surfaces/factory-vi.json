@@ -109,7 +109,16 @@
     "errorGeneric": "Không đọc được mô tả. Thử lại hoặc điền thủ công.",
     "errorRateLimited": "Quá nhiều lần thử. Đợi một phút.",
     "errorTooShort": "Thêm chi tiết (ít nhất một câu).",
-    "sourceNote": "Gợi ý từ: {{source}}"
+    "sourceNote": "Gợi ý từ: {{source}}",
+    "nftLead": "Trợ giúp tùy chọn: gợi ý tên, mô tả và chế độ bộ sưu tập. Bạn vẫn tự xem lại và mint.",
+    "nftPlaceholder": "Tôi muốn NFT thẻ thành viên câu lạc bộ cà phê, một bản duy nhất tên Coffee Club Pass.",
+    "contractLead": "Trợ giúp tùy chọn: gợi ý mẫu đã rà soát và tham số constructor. Bạn vẫn tự biên dịch, xem lại và triển khai.",
+    "contractPlaceholder": "Tôi cần vesting tuyến tính token cho đối tác trong một năm.",
+    "contractTemplate": "Mẫu đề xuất: {{template}}",
+    "discoverLead": "Trợ giúp tùy chọn: gợi ý tiêu đề, ý tưởng, đối tượng và lý do token. Bạn vẫn tự xem lại và gửi.",
+    "discoverPlaceholder": "Dự án thưởng khu phố cho cửa hàng địa phương dùng token cộng đồng.",
+    "lavkaLead": "Trợ giúp tùy chọn: gợi ý tiêu đề, lượt ghé, giá và hạn chương trình. Bạn vẫn tự xem lại và ký.",
+    "lavkaPlaceholder": "Thẻ cà phê, 10 lượt, 5 PPL, hiệu lực 90 ngày, không chuyển nhượng."
   },
   "iconGen": {
     "button": "Tạo biểu tượng",

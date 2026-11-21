@@ -11,6 +11,7 @@ import { useExternalWallet, writeViaActiveSigner, readPublicClient } from "@/con
 import { LAVKA_MAX_VISITS_PER_PURCHASE, lavkaPassAbi, lavkaPassAddress } from "@/lib/lavka/contracts";
 import { MAX_MERCHANT_DISPLAY_NAME, MAX_PROGRAM_TITLE } from "@/lib/lavka/limits";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
+import { DescribeHelper } from "@/components/factory/DescribeHelper";
 
 type Me = {
   signedIn: boolean;
@@ -246,6 +247,16 @@ export function LavkaMerchantApp() {
                   </div>
                 ) : (
                   <div className="mt-4 grid gap-3">
+                    <DescribeHelper
+                      kind="lavka"
+                      onApply={(payload) => {
+                        if (payload.title) setProgramTitle(String(payload.title));
+                        if (payload.visits) setVisits(String(payload.visits));
+                        if (payload.pricePpl) setPricePpl(String(payload.pricePpl));
+                        if (payload.validDays) setValidDays(String(payload.validDays));
+                        if (typeof payload.transferable === "boolean") setTransferable(payload.transferable);
+                      }}
+                    />
                     <input
                       className="w-full rounded-xl border border-line px-3 py-2"
                       placeholder={t.programTitleLabel}

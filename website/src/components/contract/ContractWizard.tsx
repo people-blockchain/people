@@ -38,6 +38,7 @@ import {
   encodeConstructorArgs,
   type ConstructorField,
 } from "@/lib/contract-constructor";
+import { DescribeHelper } from "@/components/factory/DescribeHelper";
 
 interface ComposeResult {
   templateId: string;
@@ -95,6 +96,7 @@ export function ContractWizard() {
   const [gasEstimate, setGasEstimate] = useState<number | null>(null);
   const [gasLimit, setGasLimit] = useState<number | null>(null);
   const [ctorEdits, setCtorEdits] = useState<Record<string, string>>({});
+  const [pendingCtorParams, setPendingCtorParams] = useState<Record<string, string>>({});
   const [authSignedIn, setAuthSignedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -195,7 +197,7 @@ export function ContractWizard() {
         throw new Error(body.details?.[0] ?? body.error ?? t.error);
       }
       setCompiled(body);
-      setCtorEdits({});
+      setCtorEdits(pendingCtorParams);
       let argRoom = 0;
       try {
         argRoom = constructorFields(body.abi).length + 8;
@@ -257,6 +259,21 @@ export function ContractWizard() {
           </Link>
         </div>
       ) : null}
+      <div className="mt-6">
+        <DescribeHelper
+          kind="contract"
+          onApply={(payload) => {
+            const nextPrompt = String(payload.prompt ?? "").trim();
+            if (nextPrompt) setPrompt(nextPrompt);
+            const params =
+              payload.params && typeof payload.params === "object" && !Array.isArray(payload.params)
+                ? (payload.params as Record<string, string>)
+                : {};
+            setPendingCtorParams(params);
+            setCtorEdits((prev) => ({ ...prev, ...params }));
+          }}
+        />
+      </div>
       <label htmlFor="contract-prompt" className="mt-6 block text-sm font-semibold text-ink">
         {t.label}
       </label>

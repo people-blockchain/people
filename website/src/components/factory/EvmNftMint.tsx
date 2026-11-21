@@ -48,6 +48,7 @@ import {
   type NftMintDraft,
   type NftMintMode,
 } from "@/lib/nft-mint-draft";
+import { DescribeHelper } from "@/components/factory/DescribeHelper";
 import { NftMediaPicker } from "./nft/NftMediaPicker";
 import { NftPreview } from "./nft/NftPreview";
 import { NftStages } from "./nft/NftStages";
@@ -689,7 +690,7 @@ export function EvmNftMint() {
       <h1 className="mt-3 text-h2 font-bold tracking-tight text-ink">{copy.nft.title}</h1>
       <p className="mt-3 text-sm leading-relaxed text-ink-2">{copy.nft.lead}</p>
       <Chip tone="value" className="mt-4">
-        PEOPLE Blockchain testnet · chain 97401
+        PEOPLE Mainnet Beta · chain 97401
       </Chip>
 
       {!signer ? (
@@ -698,6 +699,19 @@ export function EvmNftMint() {
         </div>
       ) : result ? null : (
         <div className="mt-8 space-y-4">
+          <DescribeHelper
+            kind="nft"
+            onApply={(payload) => {
+              const nextName = String(payload.name ?? "").trim();
+              const nextDesc = String(payload.description ?? "");
+              const nextMode = payload.mode === "collection" ? "collection" : "single";
+              const nextCollection = String(payload.collection ?? "").trim();
+              if (nextName) setName(nextName);
+              setDescription(nextDesc);
+              setMode(nextMode);
+              if (nextCollection) setCollectionInput(nextCollection);
+            }}
+          />
           <div className="flex gap-2">
             <button
               type="button"
