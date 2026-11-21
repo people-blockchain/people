@@ -51,6 +51,15 @@ export function mayCreateTurnkeyWallet(decision: TurnkeyOpenDecision): boolean {
   return decision.action === "create_new";
 }
 
+/** Settings entry: vault users on a local/device session still need Upgrade your wallet. */
+export function shouldMountTurnkeySettingsUpgrade(input: {
+  providerIsTurnkey: boolean;
+  sessionKind?: string | null;
+}): boolean {
+  if (!input.providerIsTurnkey) return false;
+  return input.sessionKind !== "turnkey";
+}
+
 export function assertCanCreateTurnkeyWallet(hasLegacyVault: boolean, createWallet: boolean): void {
   if (hasLegacyVault && createWallet) {
     throw new Error("legacy_vault_present");

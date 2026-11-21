@@ -130,6 +130,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_VERSION: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.NEXT_PUBLIC_APP_VERSION ?? "dev",
   },
   transpilePackages: [
+    "@turnkey/core",
     "@web3auth/modal",
     "@web3auth/base",
     "@web3auth/ethereum-provider",

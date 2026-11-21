@@ -6,6 +6,7 @@ import {
   isOrphanTurnkeySubOrg,
   mayCreateTurnkeyWallet,
   planTurnkeyBootstrap,
+  shouldMountTurnkeySettingsUpgrade,
 } from "./turnkey-upgrade.ts";
 
 const vault = "0x1111111111111111111111111111111111111111";
@@ -133,5 +134,14 @@ describe("orphan sub-org recovery", () => {
       decision: decideTurnkeyOpen({ hasLegacyVault: false, legacyAddress: null, address: null }),
     });
     assert.deepEqual(plan, { action: "bootstrap", createWallet: true, replaceOrphan: false });
+  });
+});
+
+describe("shouldMountTurnkeySettingsUpgrade", () => {
+  it("shows Upgrade in settings for local and cloud sessions, not after a Turnkey session", () => {
+    assert.equal(shouldMountTurnkeySettingsUpgrade({ providerIsTurnkey: true, sessionKind: "local" }), true);
+    assert.equal(shouldMountTurnkeySettingsUpgrade({ providerIsTurnkey: true, sessionKind: "cloud" }), true);
+    assert.equal(shouldMountTurnkeySettingsUpgrade({ providerIsTurnkey: true, sessionKind: "turnkey" }), false);
+    assert.equal(shouldMountTurnkeySettingsUpgrade({ providerIsTurnkey: false, sessionKind: "local" }), false);
   });
 });

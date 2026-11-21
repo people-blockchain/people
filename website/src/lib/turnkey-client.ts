@@ -5,7 +5,10 @@ import { LEGACY_ADDRESS_MISMATCH, TURNKEY_API_PUBKEY_STORAGE_KEY } from "@/lib/t
 import {
   buildInitImportActivity,
   buildImportPrivateKeyActivity,
+  coerceTurnkeyP256SignatureToDerHex,
+  describeStampSignatureShape,
   encodeTurnkeyApiStamp,
+  parseTurnkeyApiStamp,
 } from "@/lib/turnkey-stamp";
 import { decryptPrivateKeyFromVault, VaultSchemaError, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { fetchVaultRecord, fetchWrapKey, WalletCloudError } from "@/lib/wallet-cloud-client";
@@ -56,6 +59,8 @@ export type TurnkeyBrowserBridge = {
   signRawPayload: TurnkeySignRawPayload;
   organizationId: string;
   signWithApiKey?: (input: { message: string; publicKey?: string }) => Promise<string>;
+  /** Official kit IndexedDB stamper: returns X-Stamp header value for the sub-org root. */
+  stampActivity?: (payload: string) => Promise<string>;
   getApiKeyPublicKey?: () => string | null;
   exportWalletAccount?: (input: { address: string; organizationId: string }) => Promise<void>;
   httpClient?: { signRawPayload: (input: Record<string, unknown>) => Promise<unknown> };
@@ -481,32 +486,50 @@ function stampFailureCode(err: unknown): string {
   return "stamp_failed";
 }
 
+function stampError(code: string, signature: unknown): WalletCloudError {
+  let shape = describeStampSignatureShape(signature);
+  if (typeof signature === "string" && signature.length >= 16) {
+    try {
+      shape = describeStampSignatureShape(parseTurnkeyApiStamp(signature).signature);
+    } catch {
+      /* keep the outer encoding shape */
+    }
+  }
+  return new WalletCloudError(code, { stage: "stamp", stampShape: shape });
+}
+
 export async function stampTurnkeyActivityBody(body: object): Promise<{ stampedBody: string; stamp: string }> {
   const bridge = requireTurnkeyBrowserBridge();
-  if (!bridge.signWithApiKey) {
-    throw new WalletCloudError("stamp_unready", { stage: "stamp" });
-  }
   const publicKey =
     bridge.getApiKeyPublicKey?.()?.trim().replace(/^0x/i, "") || readTurnkeyApiPublicKey();
-  if (!publicKey) throw new WalletCloudError("stamp_no_key", { stage: "stamp" });
+  if (!publicKey) throw stampError("stamp_no_key", "");
   rememberTurnkeyApiPublicKey(publicKey);
   const stampedBody = JSON.stringify(body);
-  let signature: string;
+
+  if (bridge.stampActivity) {
+    let header = "";
+    try {
+      header = await bridge.stampActivity(stampedBody);
+      parseTurnkeyApiStamp(header);
+      return { stampedBody, stamp: header };
+    } catch (err) {
+      throw stampError(stampFailureCode(err), header);
+    }
+  }
+
+  if (!bridge.signWithApiKey) throw stampError("stamp_unready", "");
+  let signature: unknown;
   try {
     signature = await bridge.signWithApiKey({ message: stampedBody, publicKey });
   } catch (err) {
-    throw new WalletCloudError(stampFailureCode(err), { stage: "stamp" });
-  }
-  if (typeof signature !== "string" || !signature.trim()) {
-    throw new WalletCloudError("invalid_stamp", { stage: "stamp" });
+    throw stampError(stampFailureCode(err), "");
   }
   try {
-    return { stampedBody, stamp: encodeTurnkeyApiStamp({ publicKey, signature }) };
+    const der = coerceTurnkeyP256SignatureToDerHex(signature);
+    return { stampedBody, stamp: encodeTurnkeyApiStamp({ publicKey, signature: der }) };
   } catch (err) {
     const message = err instanceof Error ? err.message : "invalid_stamp";
-    throw new WalletCloudError(message === "invalid_client_key" ? "stamp_bad_key" : "invalid_stamp", {
-      stage: "stamp",
-    });
+    throw stampError(message === "invalid_client_key" ? "stamp_bad_key" : "invalid_stamp", signature);
   }
 }
 

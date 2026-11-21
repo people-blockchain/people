@@ -22,6 +22,9 @@ export async function POST(request: Request) {
     mismatch?: unknown;
     error?: unknown;
     stage?: unknown;
+    stampLength?: unknown;
+    stampPrefix?: unknown;
+    stampFormat?: unknown;
     encryptedBundle?: unknown;
   } = {};
   try {
@@ -37,13 +40,27 @@ export async function POST(request: Request) {
       if (conflict.mismatch) {
         await markLegacyImportMismatch(gate.userId);
         return NextResponse.json(
-          { error: "legacy_address_mismatch", stage: conflict.stage, code: conflict.reason },
+          {
+            error: "legacy_address_mismatch",
+            stage: conflict.stage,
+            code: conflict.reason,
+            ...(conflict.stampLength !== undefined ? { stampLength: conflict.stampLength } : {}),
+            ...(conflict.stampPrefix ? { stampPrefix: conflict.stampPrefix } : {}),
+            ...(conflict.stampFormat ? { stampFormat: conflict.stampFormat } : {}),
+          },
           { status: 409, headers: NO_STORE },
         );
       }
       await markLegacyImportFailure(gate.userId, conflict.reason);
       return NextResponse.json(
-        { error: "import_failed", stage: conflict.stage, code: conflict.reason },
+        {
+          error: "import_failed",
+          stage: conflict.stage,
+          code: conflict.reason,
+          ...(conflict.stampLength !== undefined ? { stampLength: conflict.stampLength } : {}),
+          ...(conflict.stampPrefix ? { stampPrefix: conflict.stampPrefix } : {}),
+          ...(conflict.stampFormat ? { stampFormat: conflict.stampFormat } : {}),
+        },
         { status: 409, headers: NO_STORE },
       );
     }

@@ -17,6 +17,22 @@ describe("import complete conflict reporting", () => {
       stage: "match",
       mismatch: true,
     });
+    assert.deepEqual(
+      describeImportCompleteConflict({
+        error: "invalid_stamp",
+        stage: "stamp",
+        stampLength: 0,
+        stampPrefix: "",
+        stampFormat: "empty",
+      }),
+      {
+        reason: "invalid_stamp",
+        stage: "stamp",
+        mismatch: false,
+        stampLength: 0,
+        stampFormat: "empty",
+      },
+    );
     assert.deepEqual(describeImportCompleteConflict({ error: "stamp_no_key", stage: "stamp" }), {
       reason: "stamp_no_key",
       stage: "stamp",

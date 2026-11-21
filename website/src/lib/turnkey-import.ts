@@ -39,18 +39,51 @@ export type ImportCompleteConflict = {
   reason: string;
   stage: TurnkeyImportStage | "complete" | "unknown";
   mismatch: boolean;
+  stampLength?: number;
+  stampPrefix?: string;
+  stampFormat?: string;
 };
+
+function sanitizeStampPrefix(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const prefix = value.slice(0, 4);
+  return /^[A-Za-z0-9+/=_-]{0,4}$/.test(prefix) ? prefix : undefined;
+}
+
+function sanitizeStampFormat(value: unknown): string | undefined {
+  return typeof value === "string" && /^[a-z0-9_]{1,32}$/.test(value) ? value : undefined;
+}
+
+function stampFieldsFromBody(body: { stampLength?: unknown; stampPrefix?: unknown; stampFormat?: unknown }): {
+  stampLength?: number;
+  stampPrefix?: string;
+  stampFormat?: string;
+} {
+  const length = typeof body.stampLength === "number" && Number.isFinite(body.stampLength) ? Math.max(0, Math.trunc(body.stampLength)) : undefined;
+  const prefix = sanitizeStampPrefix(body.stampPrefix);
+  const format = sanitizeStampFormat(body.stampFormat);
+  return {
+    ...(length !== undefined ? { stampLength: length } : {}),
+    ...(prefix ? { stampPrefix: prefix } : {}),
+    ...(format ? { stampFormat: format } : {}),
+  };
+}
 
 export function describeImportCompleteConflict(body: {
   mismatch?: unknown;
   error?: unknown;
   stage?: unknown;
+  stampLength?: unknown;
+  stampPrefix?: unknown;
+  stampFormat?: unknown;
 }): ImportCompleteConflict | null {
+  const stamp = stampFieldsFromBody(body);
   if (body.mismatch === true) {
     return {
       reason: LEGACY_ADDRESS_MISMATCH,
       stage: sanitizeImportStage(body.stage) === "unknown" ? "match" : sanitizeImportStage(body.stage),
       mismatch: true,
+      ...stamp,
     };
   }
   if (typeof body.error === "string" && body.error.trim()) {
@@ -58,6 +91,7 @@ export function describeImportCompleteConflict(body: {
       reason: sanitizeImportFailureCode(body.error),
       stage: sanitizeImportStage(body.stage),
       mismatch: false,
+      ...stamp,
     };
   }
   return null;
@@ -70,6 +104,9 @@ export function logTurnkeyImportCompleteRejected(conflict: ImportCompleteConflic
   console.warn("[turnkey] import complete rejected", {
     reason,
     stage: sanitizeConsoleSignInLabel(conflict.stage),
+    ...(conflict.stampLength !== undefined ? { stampLength: conflict.stampLength } : {}),
+    ...(conflict.stampPrefix ? { stampPrefix: conflict.stampPrefix } : {}),
+    ...(conflict.stampFormat ? { stampFormat: conflict.stampFormat } : {}),
   });
 }
 

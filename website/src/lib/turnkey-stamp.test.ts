@@ -4,6 +4,8 @@ import {
   assertStampedImportActivity,
   buildInitImportActivity,
   buildImportPrivateKeyActivity,
+  coerceTurnkeyP256SignatureToDerHex,
+  describeStampSignatureShape,
   encodeTurnkeyApiStamp,
   ieeeP1363SignatureToDer,
   IMPORT_PRIVATE_KEY_TYPE,
@@ -53,6 +55,13 @@ describe("client-stamped Turnkey import activities", () => {
     const parsed = parseTurnkeyApiStamp(stamp);
     assert.equal(parsed.signature, der);
     assert.equal(normalizeTurnkeyP256Signature(der), der);
+    const b64 = Buffer.from(Buffer.from(ieeeSignature, "hex")).toString("base64");
+    assert.equal(coerceTurnkeyP256SignatureToDerHex(b64), der);
+    assert.equal(coerceTurnkeyP256SignatureToDerHex(Buffer.from(ieeeSignature, "hex")), der);
+    assert.deepEqual(describeStampSignatureShape(""), { length: 0, prefix: "", format: "empty" });
+    assert.equal(describeStampSignatureShape(ieeeSignature).format, "hex_p1363");
+    assert.equal(describeStampSignatureShape(ieeeSignature).prefix.length <= 4, true);
+    assert.equal(describeStampSignatureShape(der).format, "hex_der");
   });
 
   it("rejects an unstamped import payload so the parent key cannot be used", () => {

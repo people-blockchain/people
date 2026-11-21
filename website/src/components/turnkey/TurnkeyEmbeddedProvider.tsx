@@ -10,6 +10,7 @@ import {
   rememberTurnkeyApiPublicKey,
   setTurnkeyBrowserBridge,
 } from "@/lib/turnkey-client";
+import { stampPayloadWithIndexedDbRoot } from "@/lib/turnkey-indexed-db-stamper";
 
 function TurnkeySessionBridge({ children }: { children: ReactNode }) {
   const turnkey = useTurnkey();
@@ -38,6 +39,11 @@ function TurnkeySessionBridge({ children }: { children: ReactNode }) {
         throw new Error("invalid_client_key");
       },
       getApiKeyPublicKey: () => readTurnkeyApiPublicKey() || null,
+      stampActivity: async (payload) => {
+        const key = readTurnkeyApiPublicKey();
+        if (!key) throw new Error("stamp_no_key");
+        return stampPayloadWithIndexedDbRoot(payload, key);
+      },
       signWithApiKey: async ({ message, publicKey }) => {
         const key = publicKey || readTurnkeyApiPublicKey();
         return turnkeyRef.current.signWithApiKey({ message, publicKey: key });

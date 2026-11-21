@@ -144,16 +144,73 @@ export function ieeeP1363SignatureToDer(ieeeHex: string): string {
   return bytesToHex(der);
 }
 
-/** Accept kit Raw (64-byte IEEE) or an already-DER hex signature. */
-export function normalizeTurnkeyP256Signature(signature: string): string {
-  const hex = signature.trim().replace(/^0x/i, "");
-  if (!/^[0-9a-fA-F]+$/.test(hex) || hex.length < 64 || hex.length > 800 || hex.length % 2 !== 0) {
-    throw new Error("invalid_stamp");
+export type StampSignatureShape = {
+  length: number;
+  prefix: string;
+  format: string;
+};
+
+function safeStampPrefix(value: string): string {
+  return value.slice(0, 4);
+}
+
+/** Length / 4-char prefix / encoding only. Never the signature bytes. */
+export function describeStampSignatureShape(value: unknown): StampSignatureShape {
+  if (value == null) return { length: 0, prefix: "", format: "empty" };
+  if (value instanceof Uint8Array) {
+    const format =
+      value.length === 0 ? "empty" : value.length === 64 ? "bytes_p1363" : value[0] === 0x30 ? "bytes_der" : "bytes";
+    return { length: value.length, prefix: bytesToHex(value.subarray(0, 2)).slice(0, 4), format };
   }
-  const bytes = hexToBytes(hex);
-  if (bytes.length === 64) return ieeeP1363SignatureToDer(hex);
-  if (bytes[0] === 0x30) return hex.toLowerCase();
+  if (typeof value !== "string") return { length: 0, prefix: "", format: typeof value };
+  const trimmed = value.trim();
+  if (!trimmed) return { length: 0, prefix: "", format: "empty" };
+  const prefix = safeStampPrefix(trimmed);
+  const hex = trimmed.replace(/^0x/i, "");
+  if (/^[0-9a-fA-F]+$/.test(hex) && hex.length % 2 === 0) {
+    if (hex.length === 128) return { length: trimmed.length, prefix, format: "hex_p1363" };
+    if (hex.toLowerCase().startsWith("30")) return { length: trimmed.length, prefix, format: "hex_der" };
+    return { length: trimmed.length, prefix, format: "hex" };
+  }
+  if (/^[A-Za-z0-9_-]+$/.test(trimmed) || /^[A-Za-z0-9+/]+=*$/.test(trimmed)) {
+    return { length: trimmed.length, prefix, format: "base64" };
+  }
+  return { length: trimmed.length, prefix, format: "other" };
+}
+
+function bytesFromBase64ish(value: string): Uint8Array | null {
+  try {
+    const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (value.length % 4)) % 4);
+    const buf = typeof Buffer !== "undefined" ? Buffer.from(padded, "base64") : Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+    if (!buf.length) return null;
+    return buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  } catch {
+    return null;
+  }
+}
+
+/** Kit `signWithApiKey` may return hex/base64/bytes in IEEE P1363 or DER. */
+export function coerceTurnkeyP256SignatureToDerHex(value: unknown): string {
+  let bytes: Uint8Array | null = null;
+  if (value instanceof Uint8Array) bytes = value;
+  else if (typeof value === "string") {
+    const trimmed = value.trim();
+    const hex = trimmed.replace(/^0x/i, "");
+    if (/^[0-9a-fA-F]+$/.test(hex) && hex.length >= 64 && hex.length % 2 === 0) {
+      bytes = hexToBytes(hex);
+    } else {
+      bytes = bytesFromBase64ish(trimmed);
+    }
+  }
+  if (!bytes || bytes.length === 0) throw new Error("invalid_stamp");
+  if (bytes.length === 64) return ieeeP1363SignatureToDer(bytesToHex(bytes));
+  if (bytes[0] === 0x30) return bytesToHex(bytes);
   throw new Error("invalid_stamp");
+}
+
+/** Accept kit Raw (64-byte IEEE), DER, or base64 of either. */
+export function normalizeTurnkeyP256Signature(signature: string): string {
+  return coerceTurnkeyP256SignatureToDerHex(signature);
 }
 
 function utf8ToBase64Url(value: string): string {
@@ -173,7 +230,7 @@ function base64UrlToUtf8(value: string): string {
 export function encodeTurnkeyApiStamp(input: { publicKey: string; signature: string }): string {
   const publicKey = input.publicKey.trim().replace(/^0x/i, "");
   if (!/^[0-9a-fA-F]{64,264}$/.test(publicKey)) throw new Error("invalid_client_key");
-  const signature = normalizeTurnkeyP256Signature(input.signature);
+  const signature = coerceTurnkeyP256SignatureToDerHex(input.signature);
   return utf8ToBase64Url(
     JSON.stringify({
       publicKey,
