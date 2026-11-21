@@ -94,6 +94,23 @@
     "leftoverPoolHint": "Enviar tokens restantes e não vendidos para o pool comunitário deste token.",
     "launchSummary": "Ao lançar: 10% do suprimento vai para o pool comunitário do seu token. Você escolhe se as sobras da curva após a migração para o AMM e os tokens não vendidos na finalização de 180 dias são queimados (padrão, recomendado) ou enviados para esse pool comunitário — nunca para você ou para o tesouro. Participação por indicação opcional: padrão 5% do suprimento (máx. 10%), recompensa por convite 5%."
   },
+  "tokenDescribe": {
+    "title": "Descreva com suas palavras",
+    "lead": "Ajuda opcional: sugerimos nome, ticker e oferta. Você revisa e assina o lançamento.",
+    "placeholder": "Quero um token para meu canal de café no Telegram, 1 milhão de tokens para os inscritos apoiarem o canal.",
+    "submit": "Preencher o formulário",
+    "busy": "Lendo…",
+    "reviewNote": "Isso não cria token nem assina nada.",
+    "priceTitle": "Preço inicial estimado da curva",
+    "priceSpot": "≈ {{spot}} PPL por token inteiro",
+    "priceExplain": "O protocolo define o preço inicial pelas reservas virtuais: {{virtual}} PPL ÷ {{curve}} tokens na curva no lançamento. Não dá para escolher preço em dólar diretamente.",
+    "warnFundraising": "Nenhum valor de captação é garantido — só a curva e a demanda do mercado.",
+    "warnDollar": "Preço em dólar não é configurável; ajustamos a oferta à fórmula on-chain.",
+    "errorGeneric": "Não foi possível ler a descrição. Tente de novo ou preencha manualmente.",
+    "errorRateLimited": "Muitas tentativas. Espere um minuto.",
+    "errorTooShort": "Acrescente mais detalhe (pelo menos uma frase).",
+    "sourceNote": "Sugestões de: {{source}}"
+  },
   "iconGen": {
     "button": "Gerar ícone",
     "lead": "Escolha um estilo, descreva a ideia em poucas palavras e escolha uma das quatro imagens.",

@@ -94,6 +94,23 @@
     "leftoverPoolHint": "Invia i token rimanenti e invenduti al pool della community di questo token.",
     "launchSummary": "Al lancio: il 10% dell'offerta va al pool della community del tuo token. Scegli se le rimanenze della curva dopo la migrazione all'AMM e i token invenduti alla finalizzazione dei 180 giorni vengono bruciati (predefinito, consigliato) o inviati a quel pool della community — mai a te o alla tesoreria. Quota referral opzionale: predefinito 5% dell'offerta (max 10%), bounty invito 5%."
   },
+  "tokenDescribe": {
+    "title": "Descrivi con parole tue",
+    "lead": "Aiuto opzionale: proponiamo nome, ticker e offerta. Tu controlli e firmi il lancio.",
+    "placeholder": "Voglio un token per il mio canale caffè su Telegram, 1 milione di token perché gli iscritti supportino il canale.",
+    "submit": "Compila il modulo",
+    "busy": "Lettura…",
+    "reviewNote": "Non crea un token e non firma nulla.",
+    "priceTitle": "Prezzo iniziale stimato della curva",
+    "priceSpot": "≈ {{spot}} PPL per token intero",
+    "priceExplain": "Il protocollo imposta il prezzo iniziale con riserve virtuali: {{virtual}} PPL ÷ {{curve}} token sulla curva al lancio. Non puoi scegliere un prezzo in dollari direttamente.",
+    "warnFundraising": "Nessun importo di raccolta è garantito — solo curva e domanda di mercato.",
+    "warnDollar": "Il prezzo in dollari non è configurabile; abbiamo adattato l'offerta alla formula on-chain.",
+    "errorGeneric": "Impossibile leggere la descrizione. Riprova o compila i campi manualmente.",
+    "errorRateLimited": "Troppi tentativi. Attendi un minuto.",
+    "errorTooShort": "Aggiungi qualche dettaglio in più (almeno una frase).",
+    "sourceNote": "Suggerimenti da: {{source}}"
+  },
   "iconGen": {
     "button": "Genera icona",
     "lead": "Scegli un stile, descrivi l'idea in poche parole e scegli una delle quattro immagini.",

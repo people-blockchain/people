@@ -94,6 +94,23 @@
     "leftoverPoolHint": "Envoyer les tokens restants et invendus au pool communautaire de ce token.",
     "launchSummary": "Lors du lancement : 10% de l'offre va au pool communautaire de votre token. Vous choisissez si les restes de courbe après migration vers l'AMM et les tokens invendus à la finalisation des 180 jours sont brûlés (par défaut, recommandé) ou envoyés à ce pool communautaire — jamais à vous ni à la trésorerie. Part de parrainage optionnelle : par défaut 5% de l'offre (max 10%), prime d'invitation 5%."
   },
+  "tokenDescribe": {
+    "title": "Décrivez avec vos mots",
+    "lead": "Aide optionnelle : nous proposons nom, ticker et offre. Vous vérifiez et signez vous-même.",
+    "placeholder": "Je veux un token pour mon canal café Telegram, 1 million de tokens pour que les abonnés soutiennent le canal.",
+    "submit": "Remplir le formulaire",
+    "busy": "Lecture…",
+    "reviewNote": "Cela ne crée pas de token ni ne signe rien.",
+    "priceTitle": "Prix de départ estimé de la courbe",
+    "priceSpot": "≈ {{spot}} PPL par jeton entier",
+    "priceExplain": "Le protocole fixe le prix de départ via les réserves virtuelles : {{virtual}} PPL ÷ {{curve}} jetons sur la courbe au lancement. Vous ne choisissez pas un prix en dollars directement.",
+    "warnFundraising": "Aucun montant levé n'est garanti — seule la courbe et la demande comptent.",
+    "warnDollar": "Le prix en dollars n'est pas configurable ; l'offre est ajustée à la formule on-chain.",
+    "errorGeneric": "Impossible de lire la description. Réessayez ou remplissez les champs manuellement.",
+    "errorRateLimited": "Trop de tentatives. Attendez une minute.",
+    "errorTooShort": "Ajoutez un peu plus de détail (au moins une phrase).",
+    "sourceNote": "Suggestions : {{source}}"
+  },
   "iconGen": {
     "button": "Générer une icône",
     "lead": "Choisissez un style, décrivez votre idée en quelques mots et choisissez l'une des quatre images.",

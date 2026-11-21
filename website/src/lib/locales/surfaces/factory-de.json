@@ -94,6 +94,23 @@
     "leftoverPoolHint": "Übrig gebliebene und unverkaufte Tokens an den Community-Pool dieses Tokens senden.",
     "launchSummary": "Beim Start: 10% des Angebots gehen an den Community-Pool deines Tokens. Du wählst, ob Kurvenreste nach der AMM-Migration und unverkaufte Tokens bei der 180-Tage-Finalisierung verbrannt (Standard, empfohlen) oder an diesen Community-Pool gesendet werden — niemals an dich oder die Schatzkammer. Optionale Empfehlungsbeteiligung: Standard 5% des Angebots (max. 10%), Einladungsprämie 5%."
   },
+  "tokenDescribe": {
+    "title": "In eigenen Worten beschreiben",
+    "lead": "Optional: Wir schlagen Name, Ticker und Angebot aus Ihrer Beschreibung vor. Sie prüfen und signieren den Start selbst.",
+    "placeholder": "Ich möchte einen Token für meinen Telegram-Kaffeekanal, 1 Million Token, damit Abonnenten den Kanal unterstützen können.",
+    "submit": "Formular ausfüllen",
+    "busy": "Lesen…",
+    "reviewNote": "Dies erstellt keinen Token und signiert nichts.",
+    "priceTitle": "Geschätzter Startpreis der Kurve",
+    "priceSpot": "≈ {{spot}} PPL pro ganzer Token",
+    "priceExplain": "Das Protokoll setzt den Startpreis aus virtuellen Reserven: {{virtual}} PPL ÷ {{curve}} Bonding-Curve-Token beim Start. Einen Dollarpreis können Sie nicht direkt wählen.",
+    "warnFundraising": "Kein Fundraising-Betrag ist garantiert — nur Kurve und Nachfrage bestimmen das Ergebnis.",
+    "warnDollar": "Dollarpreis ist nicht einstellbar; wir haben das Angebot der On-Chain-Formel angepasst.",
+    "errorGeneric": "Beschreibung konnte nicht gelesen werden. Erneut versuchen oder Felder manuell ausfüllen.",
+    "errorRateLimited": "Zu viele Versuche. Eine Minute warten.",
+    "errorTooShort": "Bitte etwas mehr Detail (mindestens ein Satz).",
+    "sourceNote": "Vorschläge von: {{source}}"
+  },
   "iconGen": {
     "button": "Icon erstellen",
     "lead": "Wählen Sie einen Stil, beschreiben Sie die Idee kurz und wählen Sie eines von vier Bildern.",
