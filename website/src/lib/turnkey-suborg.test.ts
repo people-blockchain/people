@@ -20,6 +20,8 @@ describe("computeTurnkeyWalletStatus", () => {
     assert.equal(status.addressConflict, false);
     assert.equal(status.hasLegacyVault, true);
     assert.equal(status.subOrganizationId, "sub-1");
+    assert.equal(status.orphanSubOrg, true);
+    assert.equal(status.turnkeyUserId, "tk-user");
   });
 
   it("does not import again once an address is stored", () => {
@@ -30,6 +32,7 @@ describe("computeTurnkeyWalletStatus", () => {
     assert.equal(status.needsImport, false);
     assert.equal(status.addressConflict, false);
     assert.equal(status.importedFromVault, true);
+    assert.equal(status.orphanSubOrg, false);
   });
 
   it("flags a Turnkey address that does not match the vault", () => {

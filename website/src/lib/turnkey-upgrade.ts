@@ -16,6 +16,11 @@ export type TurnkeyOpenDecision =
   | { action: "use_turnkey"; address: string }
   | { action: "keep_legacy"; reason: string; legacyAddress: string };
 
+export type TurnkeyBootstrapPlan =
+  | { action: "none" }
+  | { action: "otp" }
+  | { action: "bootstrap"; createWallet: boolean; replaceOrphan: boolean };
+
 function normAddr(value: string | null | undefined): string | null {
   const trimmed = value?.trim().toLowerCase();
   return trimmed ? trimmed : null;
@@ -50,4 +55,47 @@ export function assertCanCreateTurnkeyWallet(hasLegacyVault: boolean, createWall
   if (hasLegacyVault && createWallet) {
     throw new Error("legacy_vault_present");
   }
+}
+
+/**
+ * A sub-org row whose browser root key can be replaced: no completed import,
+ * no stored address, and no Turnkey wallet. Vault users must still import the
+ * same address — this never mints a new one.
+ */
+export function isOrphanTurnkeySubOrg(row: {
+  address?: string | null;
+  importedFromVault?: boolean | null;
+  walletId?: string | null;
+} | null | undefined): boolean {
+  if (!row) return false;
+  if (row.importedFromVault === true) return false;
+  if (row.address?.trim()) return false;
+  if (row.walletId?.trim()) return false;
+  return true;
+}
+
+export function planTurnkeyBootstrap(input: {
+  subOrganizationId: string | null;
+  address: string | null;
+  importedFromVault: boolean;
+  walletId: string | null;
+  clientKeyIsNew: boolean;
+  decision: TurnkeyOpenDecision;
+}): TurnkeyBootstrapPlan {
+  const createWallet = mayCreateTurnkeyWallet(input.decision);
+  if (!input.subOrganizationId) {
+    return { action: "bootstrap", createWallet, replaceOrphan: false };
+  }
+  const orphan = isOrphanTurnkeySubOrg({
+    address: input.address,
+    importedFromVault: input.importedFromVault,
+    walletId: input.walletId,
+  });
+  if (orphan && input.clientKeyIsNew) {
+    return { action: "bootstrap", createWallet, replaceOrphan: true };
+  }
+  if (input.decision.action === "use_turnkey" && input.clientKeyIsNew) {
+    return { action: "otp" };
+  }
+  return { action: "none" };
 }

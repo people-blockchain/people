@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Tingkatkan dompet",
   "upgradeWalletLater": "Tetap gunakan dompet ini untuk saat ini",
   "upgradeWalletFailed": "Tidak dapat meningkatkan dompet ini. Alamat dan saldo tidak berubah. Anda dapat terus memakai dompet sebelumnya atau menghubungi dukungan.",
+  "upgradeWalletStatusFailed": "Tidak dapat memeriksa apakah dompet ini perlu ditingkatkan. Alamat dan saldo tidak berubah. Coba lagi.",
+  "upgradeWalletRetry": "Coba lagi",
   "upgradeWalletSupport": "Hubungi dukungan",
   "upgradeWalletAddress": "Alamat Anda",
   "turnkeyLead": "People Wallet Anda dilindungi kunci dengan dukungan perangkat keras. Masuk dengan akun PEOPLE yang sama.",

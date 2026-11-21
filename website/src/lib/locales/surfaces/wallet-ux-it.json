@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Aggiorna il portafoglio",
   "upgradeWalletLater": "Continua a usare questo portafoglio per ora",
   "upgradeWalletFailed": "Impossibile aggiornare questo portafoglio. Indirizzo e saldi sono invariati. Puoi continuare a usare il portafoglio precedente o contattare l’assistenza.",
+  "upgradeWalletStatusFailed": "Impossibile verificare se questo portafoglio va aggiornato. Indirizzo e saldi sono invariati. Riprova.",
+  "upgradeWalletRetry": "Riprova",
   "upgradeWalletSupport": "Contatta l’assistenza",
   "upgradeWalletAddress": "Il tuo indirizzo",
   "turnkeyLead": "Il tuo People Wallet è protetto da una chiave con supporto hardware. Accedi con lo stesso account PEOPLE.",

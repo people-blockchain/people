@@ -16,7 +16,7 @@ import {
 } from "@/lib/turnkey-client";
 import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
 import { otpLoginSignaturePayload, turnkeyClientSignature } from "@/lib/turnkey-otp-message";
-import { decideTurnkeyOpen, mayCreateTurnkeyWallet } from "@/lib/turnkey-upgrade";
+import { decideTurnkeyOpen, planTurnkeyBootstrap } from "@/lib/turnkey-upgrade";
 import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 
 export class TurnkeyOtpRequiredError extends Error {
@@ -87,22 +87,31 @@ export async function openTurnkeyWalletSession(
   const { publicKey: clientPublicKey, created } = await resolveClientPublicKey();
   let subOrganizationId = status.subOrganizationId ?? "";
   let address = status.address ?? "";
-  let turnkeyUserId: string | undefined;
-  let walletId: string | undefined;
+  let turnkeyUserId = status.turnkeyUserId ?? undefined;
+  let walletId = status.walletId ?? undefined;
   let publicKey = "";
 
-  if (!subOrganizationId) {
+  const bootstrapPlan = planTurnkeyBootstrap({
+    subOrganizationId: status.subOrganizationId ?? null,
+    address: status.address ?? null,
+    importedFromVault: status.importedFromVault === true,
+    walletId: status.walletId ?? null,
+    clientKeyIsNew: created,
+    decision,
+  });
+  if (bootstrapPlan.action === "otp") {
+    throw new TurnkeyOtpRequiredError();
+  }
+  if (bootstrapPlan.action === "bootstrap") {
     const createdWallet = await bootstrapTurnkeyWallet({
       clientPublicKey,
-      createWallet: mayCreateTurnkeyWallet(decision),
+      createWallet: bootstrapPlan.createWallet,
+      replaceOrphan: bootstrapPlan.replaceOrphan,
     });
     subOrganizationId = createdWallet.subOrganizationId;
     turnkeyUserId = createdWallet.turnkeyUserId ?? undefined;
     walletId = createdWallet.walletId ?? undefined;
     address = createdWallet.address ?? "";
-  } else if (decision.action === "use_turnkey" && created) {
-    // A newly generated P-256 key is not a root of the existing sub-org.
-    throw new TurnkeyOtpRequiredError();
   }
 
   if (options?.importLegacy && decision.action === "prompt_upgrade" && !address) {
@@ -121,6 +130,8 @@ export async function openTurnkeyWalletSession(
       const imported = await importLegacyKeyIntoTurnkey({
         privateKey: decrypted.privateKey,
         expectedAddress: decrypted.address,
+        organizationId: subOrganizationId,
+        turnkeyUserId,
       });
       address = imported.address;
       publicKey = decrypted.publicKey;

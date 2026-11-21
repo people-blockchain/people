@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Atualizar carteira",
   "upgradeWalletLater": "Continuar usando esta carteira por agora",
   "upgradeWalletFailed": "Não foi possível atualizar esta carteira. O endereço e os saldos não mudaram. Você pode continuar usando a carteira anterior ou falar com o suporte.",
+  "upgradeWalletStatusFailed": "Não foi possível verificar se esta carteira precisa de atualização. O endereço e os saldos não mudaram. Tente de novo.",
+  "upgradeWalletRetry": "Tentar de novo",
   "upgradeWalletSupport": "Falar com o suporte",
   "upgradeWalletAddress": "Seu endereço",
   "turnkeyLead": "Sua People Wallet é protegida por uma chave com suporte de hardware. Entre com a mesma conta PEOPLE.",

@@ -10,7 +10,6 @@ import { openTurnkeyWalletSession, turnkeyOpenErrorCode } from "@/lib/turnkey-op
 import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { TurnkeyUpgradeCard } from "./TurnkeyUpgradeCard";
-import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
 
 const DISMISS_KEY = "people-turnkey-upgrade-dismissed";
 
@@ -53,15 +52,16 @@ export function TurnkeyUpgradePrompt() {
       }
       if (decision.action === "keep_legacy") {
         setLegacyAddress(decision.legacyAddress);
-        setError(decision.reason === LEGACY_ADDRESS_MISMATCH ? c.upgradeWalletFailed : c.upgradeWalletFailed);
+        setError(c.upgradeWalletFailed);
         setVisible(true);
         return;
       }
       setVisible(false);
     } catch {
-      setVisible(false);
+      setError(c.upgradeWalletStatusFailed);
+      setVisible(true);
     }
-  }, [c.upgradeWalletFailed, session]);
+  }, [c.upgradeWalletFailed, c.upgradeWalletStatusFailed, session]);
 
   useEffect(() => {
     void refresh();
@@ -101,6 +101,7 @@ export function TurnkeyUpgradePrompt() {
         error={error}
         onUpgrade={() => void onUpgrade()}
         onLater={() => void onLater()}
+        onRetry={error ? () => void refresh() : undefined}
       />
     </div>
   );

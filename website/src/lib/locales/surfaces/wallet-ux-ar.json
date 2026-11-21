@@ -179,6 +179,8 @@
   "upgradeWalletCta": "تحديث المحفظة",
   "upgradeWalletLater": "الاستمرار باستخدام هذه المحفظة الآن",
   "upgradeWalletFailed": "تعذر تحديث هذه المحفظة. العنوان والأرصدة لم تتغير. يمكنك متابعة استخدام المحفظة السابقة أو التواصل مع الدعم.",
+  "upgradeWalletStatusFailed": "تعذر التحقق مما إذا كانت هذه المحفظة بحاجة إلى تحديث. العنوان والأرصدة لم تتغير. حاول مرة أخرى.",
+  "upgradeWalletRetry": "حاول مرة أخرى",
   "upgradeWalletSupport": "التواصل مع الدعم",
   "upgradeWalletAddress": "عنوانك",
   "turnkeyLead": "محفظة People Wallet محمية بمفتاح مدعوم عتاديًا. سجّل الدخول بنفس حساب PEOPLE.",

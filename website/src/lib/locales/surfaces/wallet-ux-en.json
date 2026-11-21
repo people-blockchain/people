@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Upgrade your wallet",
   "upgradeWalletLater": "Keep using this wallet for now",
   "upgradeWalletFailed": "Could not upgrade this wallet. Your address and balances are unchanged. You can keep using the previous wallet, or contact support.",
+  "upgradeWalletStatusFailed": "Could not check whether this wallet needs an upgrade. Your address and balances are unchanged. Try again.",
+  "upgradeWalletRetry": "Try again",
   "upgradeWalletSupport": "Contact support",
   "upgradeWalletAddress": "Your address",
   "turnkeyLead": "Your People Wallet is secured by a hardware-backed key. Sign in with the same PEOPLE account you already use.",

@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { isTurnkeyWalletReady } from "@/lib/turnkey-config";
+import { sanitizeTurnkeyError } from "@/lib/turnkey-error";
 import { isAuthTimeFresh } from "@/lib/wallet-reauth-window";
 import { NextResponse } from "next/server";
 
@@ -42,7 +43,11 @@ export function mapTurnkeyError(err: unknown): NextResponse {
     code === "invalid_client_key" ||
     code === "invalid_email" ||
     code === "invalid_otp" ||
-    code === "invalid_address"
+    code === "invalid_address" ||
+    code === "invalid_stamp" ||
+    code === "client_stamp_required" ||
+    code === "turnkey_org_mismatch" ||
+    code === "turnkey_user_mismatch"
   ) {
     return jsonError(code, 400);
   }
@@ -60,6 +65,7 @@ export function mapTurnkeyError(err: unknown): NextResponse {
   if (code === "turnkey_not_configured") {
     return jsonError("not_configured", 503);
   }
-  console.warn("[turnkey] request failed", { code: /^[a-z0-9_]+$/.test(code) ? code : "unknown" });
+  const sanitized = sanitizeTurnkeyError(err);
+  console.warn("[turnkey] request failed", { code: sanitized.code, message: sanitized.message });
   return jsonError("turnkey_failed", 502);
 }

@@ -55,25 +55,11 @@ export type OtpLoginInput = {
   };
 };
 
-export type InitImportPrivateKeyInput = {
-  organizationId: string;
-  userId: string;
-};
-
-export type ImportPrivateKeyInput = {
-  organizationId: string;
-  userId: string;
-  encryptedBundle: string;
-  privateKeyName: string;
-};
-
 export type TurnkeyApi = {
   createSubOrganization(input: CreateSubOrganizationInput): Promise<CreateSubOrganizationResult>;
   initOtp(input: InitOtpInput): Promise<{ otpId: string; otpEncryptionTargetBundle: string }>;
   verifyOtp(input: VerifyOtpInput): Promise<{ verificationToken: string }>;
   otpLogin(input: OtpLoginInput): Promise<{ session: string }>;
-  initImportPrivateKey(input: InitImportPrivateKeyInput): Promise<{ importBundle: string }>;
-  importPrivateKey(input: ImportPrivateKeyInput): Promise<{ privateKeyId: string; addresses: string[] }>;
 };
 
 let injected: TurnkeyApi | null = null;
@@ -97,7 +83,17 @@ function asString(value: unknown): string | undefined {
 
 function asStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === "string" && item.length > 0);
+  const out: string[] = [];
+  for (const item of value) {
+    if (typeof item === "string" && item.trim()) {
+      out.push(item.trim());
+      continue;
+    }
+    const rec = asRecord(item);
+    const address = asString(rec?.address);
+    if (address) out.push(address);
+  }
+  return out;
 }
 
 export function parseCreateSubOrganizationResult(response: unknown): CreateSubOrganizationResult {
@@ -156,7 +152,7 @@ function parseSession(response: unknown): string {
   return session;
 }
 
-function parseImportBundle(response: unknown): string {
+export function parseImportBundle(response: unknown): string {
   const root = asRecord(response);
   const activity = asRecord(root?.activity);
   const result = asRecord(activity?.result);
@@ -246,24 +242,6 @@ async function createLiveTurnkeyApi(config: TurnkeyServerConfig): Promise<Turnke
         ...(input.expirationSeconds ? { expirationSeconds: input.expirationSeconds } : {}),
       });
       return { session: parseSession(response) };
-    },
-    async initImportPrivateKey(input) {
-      const response = await client.initImportPrivateKey({
-        organizationId: input.organizationId,
-        userId: input.userId,
-      });
-      return { importBundle: parseImportBundle(response) };
-    },
-    async importPrivateKey(input) {
-      const response = await client.importPrivateKey({
-        organizationId: input.organizationId,
-        userId: input.userId,
-        encryptedBundle: input.encryptedBundle,
-        privateKeyName: input.privateKeyName,
-        curve: "CURVE_SECP256K1",
-        addressFormats: ["ADDRESS_FORMAT_ETHEREUM"],
-      });
-      return parseImportedKey(response);
     },
   };
 }

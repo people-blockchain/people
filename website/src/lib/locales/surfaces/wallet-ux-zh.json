@@ -179,6 +179,8 @@
   "upgradeWalletCta": "升级钱包",
   "upgradeWalletLater": "暂时继续使用此钱包",
   "upgradeWalletFailed": "无法升级此钱包。地址和余额未更改。您可以继续使用原来的钱包，或联系支持。",
+  "upgradeWalletStatusFailed": "无法检查此钱包是否需要升级。地址和余额未更改。请重试。",
+  "upgradeWalletRetry": "重试",
   "upgradeWalletSupport": "联系支持",
   "upgradeWalletAddress": "您的地址",
   "turnkeyLead": "您的 People Wallet 由硬件保护的密钥保障。请使用同一个 PEOPLE 账户登录。",

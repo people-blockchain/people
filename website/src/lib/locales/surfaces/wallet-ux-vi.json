@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Nâng cấp ví",
   "upgradeWalletLater": "Tiếp tục dùng ví này lúc này",
   "upgradeWalletFailed": "Không nâng cấp được ví. Địa chỉ và số dư không đổi. Bạn có thể tiếp tục dùng ví trước đó hoặc liên hệ hỗ trợ.",
+  "upgradeWalletStatusFailed": "Không kiểm tra được ví này có cần nâng cấp hay không. Địa chỉ và số dư không đổi. Thử lại.",
+  "upgradeWalletRetry": "Thử lại",
   "upgradeWalletSupport": "Liên hệ hỗ trợ",
   "upgradeWalletAddress": "Địa chỉ của bạn",
   "turnkeyLead": "People Wallet được bảo vệ bằng khóa hỗ trợ phần cứng. Đăng nhập bằng cùng tài khoản PEOPLE.",

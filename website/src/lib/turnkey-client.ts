@@ -2,6 +2,11 @@ import * as secp from "@noble/secp256k1";
 import { sha256 } from "@noble/hashes/sha2.js";
 import { attachFactoryTxSignature, prepareFactoryTx, type UnsignedTx } from "@/lib/people-sign";
 import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
+import {
+  buildInitImportActivity,
+  buildImportPrivateKeyActivity,
+  encodeTurnkeyApiStamp,
+} from "@/lib/turnkey-stamp";
 import { decryptPrivateKeyFromVault, VaultSchemaError, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { fetchVaultRecord, fetchWrapKey, WalletCloudError } from "@/lib/wallet-cloud-client";
 import { keyFromPrivate } from "@/lib/people-sign";
@@ -24,6 +29,8 @@ export type TurnkeyWalletSession = {
 export type TurnkeyWalletStatusResponse = {
   provider: "legacy" | "turnkey";
   subOrganizationId?: string | null;
+  turnkeyUserId?: string | null;
+  walletId?: string | null;
   address?: string | null;
   importedFromVault?: boolean;
   hasLegacyVault?: boolean;
@@ -31,6 +38,7 @@ export type TurnkeyWalletStatusResponse = {
   needsImport?: boolean;
   addressConflict?: boolean;
   legacyImportError?: string | null;
+  orphanSubOrg?: boolean;
 };
 
 export type TurnkeySignRawPayload = (input: {
@@ -221,6 +229,7 @@ export async function fetchTurnkeyStatus(): Promise<TurnkeyWalletStatusResponse>
 export async function bootstrapTurnkeyWallet(input: {
   clientPublicKey: string;
   createWallet: boolean;
+  replaceOrphan?: boolean;
 }): Promise<{
   subOrganizationId: string;
   turnkeyUserId?: string | null;
@@ -408,32 +417,73 @@ export async function encryptPrivateKeyForTurnkeyImport(input: {
   });
 }
 
+async function stampTurnkeyActivityBody(body: object): Promise<{ stampedBody: string; stamp: string }> {
+  const bridge = requireTurnkeyBrowserBridge();
+  if (!bridge.signWithApiKey) throw new WalletCloudError("turnkey_client_unready");
+  const publicKey = bridge.getApiKeyPublicKey?.()?.trim() ?? "";
+  if (!publicKey) throw new WalletCloudError("turnkey_client_unready");
+  const stampedBody = JSON.stringify(body);
+  const signature = await bridge.signWithApiKey({ message: stampedBody, publicKey });
+  return { stampedBody, stamp: encodeTurnkeyApiStamp({ publicKey, signature }) };
+}
+
 export async function importLegacyKeyIntoTurnkey(input: {
   privateKey: string;
   expectedAddress: string;
+  organizationId?: string;
+  turnkeyUserId?: string;
 }): Promise<{ address: string }> {
+  let organizationId = input.organizationId?.trim() ?? "";
+  let turnkeyUserId = input.turnkeyUserId?.trim() ?? "";
+  if (!organizationId || !turnkeyUserId) {
+    const metaRes = await fetch("/api/wallet/turnkey/import/init", {
+      method: "POST",
+      credentials: "include",
+      headers: { "content-type": "application/json" },
+      body: "{}",
+    });
+    if (!metaRes.ok) await jsonOrError(metaRes, "import_init_failed");
+    const meta = (await metaRes.json()) as { organizationId?: string; turnkeyUserId?: string };
+    organizationId = meta.organizationId?.trim() ?? "";
+    turnkeyUserId = meta.turnkeyUserId?.trim() ?? "";
+  }
+  if (!organizationId || !turnkeyUserId) throw new WalletCloudError("turnkey_user_missing");
+
+  const initStamp = await stampTurnkeyActivityBody(
+    buildInitImportActivity({ organizationId, userId: turnkeyUserId }),
+  );
   const initRes = await fetch("/api/wallet/turnkey/import/init", {
     method: "POST",
     credentials: "include",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(initStamp),
   });
   if (!initRes.ok) await jsonOrError(initRes, "import_init_failed");
   const init = (await initRes.json()) as {
-    importBundle: string;
+    importBundle?: string;
     organizationId: string;
     turnkeyUserId: string;
   };
+  if (!init.importBundle) throw new WalletCloudError("import_init_failed");
   const encryptedBundle = await encryptPrivateKeyForTurnkeyImport({
     privateKey: input.privateKey,
     importBundle: init.importBundle,
     userId: init.turnkeyUserId,
     organizationId: init.organizationId,
   });
+  const importStamp = await stampTurnkeyActivityBody(
+    buildImportPrivateKeyActivity({
+      organizationId: init.organizationId,
+      userId: init.turnkeyUserId,
+      encryptedBundle,
+    }),
+  );
   const completeRes = await fetch("/api/wallet/turnkey/import/complete", {
     method: "POST",
     credentials: "include",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      encryptedBundle,
+      ...importStamp,
       expectedAddress: input.expectedAddress,
     }),
   });

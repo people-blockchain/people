@@ -44,7 +44,9 @@ import { walletFeatures, walletShowsSoonPlaceholders } from "@/lib/wallet-featur
 import { disconnectPeopleWallet } from "@/lib/wallet-disconnect";
 import { faucetErrorMessage } from "@/lib/faucet-error";
 import { isTurnkeySession } from "@/lib/turnkey-client";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 import { TurnkeyExportPrivateKey } from "./TurnkeyExportPrivateKey";
+import { TurnkeySettingsUpgrade } from "./TurnkeySettingsUpgrade";
 
 interface AccountView {
   balanceWei: bigint;
@@ -571,6 +573,7 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
       <section className="space-y-3 rounded-2xl border border-line bg-surface-2 p-4">
         <h3 className="font-bold">{c.settings}</h3>
         {isCloud ? <p className="text-xs text-ink-3">{t.cloudExportHint}</p> : null}
+        {isCloud && isTurnkeyWalletProvider() ? <TurnkeySettingsUpgrade /> : null}
         {isTurnkey && session.subOrganizationId ? (
           <TurnkeyExportPrivateKey address={session.address} subOrganizationId={session.subOrganizationId} />
         ) : null}

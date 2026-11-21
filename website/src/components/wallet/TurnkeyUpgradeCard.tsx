@@ -11,12 +11,14 @@ export function TurnkeyUpgradeCard({
   error,
   onUpgrade,
   onLater,
+  onRetry,
 }: {
   legacyAddress: string;
   busy: boolean;
   error?: string;
   onUpgrade: () => void;
-  onLater: () => void;
+  onLater?: () => void;
+  onRetry?: () => void;
 }) {
   const { lang } = useLanguage();
   const c = walletUxCopy(lang);
@@ -35,7 +37,18 @@ export function TurnkeyUpgradeCard({
       {error ? (
         <div className="space-y-2" role="alert">
           <p className="text-sm text-warm">{error}</p>
-          <a href="/help" className="text-sm font-semibold text-brand hover:underline">
+          {onRetry ? (
+            <button
+              type="button"
+              disabled={busy}
+              data-testid="turnkey-upgrade-retry"
+              className="text-sm font-semibold text-brand hover:underline disabled:opacity-40"
+              onClick={onRetry}
+            >
+              {c.upgradeWalletRetry}
+            </button>
+          ) : null}
+          <a href="/help" className="block text-sm font-semibold text-brand hover:underline">
             {c.upgradeWalletSupport}
           </a>
         </div>
@@ -50,15 +63,17 @@ export function TurnkeyUpgradeCard({
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
         {c.upgradeWalletCta}
       </button>
-      <button
-        type="button"
-        disabled={busy}
-        data-testid="turnkey-upgrade-later"
-        className="w-full rounded-xl border border-line px-4 py-2 text-sm"
-        onClick={onLater}
-      >
-        {c.upgradeWalletLater}
-      </button>
+      {onLater ? (
+        <button
+          type="button"
+          disabled={busy}
+          data-testid="turnkey-upgrade-later"
+          className="w-full rounded-xl border border-line px-4 py-2 text-sm"
+          onClick={onLater}
+        >
+          {c.upgradeWalletLater}
+        </button>
+      ) : null}
     </div>
   );
 }

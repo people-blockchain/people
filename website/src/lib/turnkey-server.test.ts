@@ -40,6 +40,21 @@ describe("Turnkey response parsers", () => {
     assert.deepEqual(parsed.addresses, ["0x1111111111111111111111111111111111111111"]);
   });
 
+  it("reads object-shaped import addresses from the enclave", () => {
+    const parsed = parseImportedKey({
+      activity: {
+        result: {
+          importPrivateKeyResult: {
+            privateKeyId: "pk-2",
+            addresses: [{ format: "ADDRESS_FORMAT_ETHEREUM", address: "0x3333333333333333333333333333333333333333" }],
+          },
+        },
+      },
+    });
+    assert.equal(parsed.privateKeyId, "pk-2");
+    assert.deepEqual(parsed.addresses, ["0x3333333333333333333333333333333333333333"]);
+  });
+
   it("reads initOtpResultV2 encryption bundle and rejects plaintext-only results", () => {
     const parsed = parseInitOtp({
       activity: {

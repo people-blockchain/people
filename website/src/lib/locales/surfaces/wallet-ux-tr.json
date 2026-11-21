@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Cüzdanı yükselt",
   "upgradeWalletLater": "Şimdilik bu cüzdanı kullanmaya devam et",
   "upgradeWalletFailed": "Bu cüzdan yükseltilemedi. Adres ve bakiyeler değişmedi. Önceki cüzdanı kullanmaya devam edebilir veya destekle iletişime geçebilirsiniz.",
+  "upgradeWalletStatusFailed": "Bu cüzdanın yükseltilmesi gerekip gerekmediği kontrol edilemedi. Adres ve bakiyeler değişmedi. Yeniden deneyin.",
+  "upgradeWalletRetry": "Yeniden dene",
   "upgradeWalletSupport": "Destekle iletişime geç",
   "upgradeWalletAddress": "Adresiniz",
   "turnkeyLead": "People Wallet’ınız donanım destekli bir anahtarla korunur. Aynı PEOPLE hesabıyla oturum açın.",

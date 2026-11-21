@@ -6,9 +6,9 @@ import { mapTurnkeyError, NO_STORE, requireTurnkeySession } from "../_shared";
 export async function POST(request: Request) {
   const gate = await requireTurnkeySession(request, { freshAuth: true });
   if (!gate.ok) return gate.response;
-  let body: { clientPublicKey?: unknown; createWallet?: unknown } = {};
+  let body: { clientPublicKey?: unknown; createWallet?: unknown; replaceOrphan?: unknown } = {};
   try {
-    body = (await request.json()) as { clientPublicKey?: unknown; createWallet?: unknown };
+    body = (await request.json()) as { clientPublicKey?: unknown; createWallet?: unknown; replaceOrphan?: unknown };
   } catch {
     return mapTurnkeyError(new Error("invalid_client_key"));
   }
@@ -16,6 +16,7 @@ export async function POST(request: Request) {
   // Default false: never mint a new address unless the client explicitly opts in.
   // Vault users must send createWallet: false and import the existing key.
   const createWallet = body.createWallet === true;
+  const replaceOrphan = body.replaceOrphan === true;
   try {
     await ensurePartnerSchema();
     const row = await bootstrapTurnkeySubOrg({
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
       email: gate.email,
       clientPublicKey,
       createWallet,
+      replaceOrphan,
     });
     return NextResponse.json(
       {

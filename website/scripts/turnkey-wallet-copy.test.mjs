@@ -32,6 +32,10 @@ test("Upgrade your wallet and Export private key exist in all site languages", (
     );
     assert.equal(typeof copy.upgradeWalletTitle, "string");
     assert.ok(copy.upgradeWalletTitle.trim());
+    assert.equal(typeof copy.upgradeWalletStatusFailed, "string");
+    assert.ok(copy.upgradeWalletStatusFailed.trim());
+    assert.equal(typeof copy.upgradeWalletRetry, "string");
+    assert.ok(copy.upgradeWalletRetry.trim());
     assert.equal(typeof copy.exportPrivateKeyCta, "string");
     assert.ok(copy.exportPrivateKeyCta.trim());
     assert.doesNotMatch(copy.upgradeWalletLead, /testnet/i);

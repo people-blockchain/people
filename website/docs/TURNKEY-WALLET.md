@@ -112,8 +112,10 @@ Columns: `userId` (PK), `subOrganizationId` (unique), `turnkeyUserId`,
 
 Triggered when a signed-in user opens the wallet, the flag is `turnkey`, and
 `user_wallet_vault` exists but `user_turnkey_wallet.address` does not. The UI
-title is **Upgrade your wallet** (all site languages). Auto-open never imports
-and never calls `createWallet: true`.
+title is **Upgrade your wallet** (all site languages), both as a dismissible
+bottom card and inside Wallet settings. If status cannot be loaded, the card
+stays visible with a retryable error instead of disappearing. Auto-open never
+imports and never calls `createWallet: true`.
 
 1. Bootstrap a sub-org **without** creating a new wallet (`createWallet: false`)
    so Turnkey does not mint a different address. Until the user confirms, the
@@ -126,10 +128,21 @@ and never calls `createWallet: true`.
    user is told they can restore from a backup they previously exported. The
    vault row is left untouched so a later `WALLET_PROVIDER=legacy` rollback
    still decrypts (when wrap-key still works).
-4. On match: `initImportPrivateKey` (TEK from the enclave) →
-   `encryptPrivateKeyToBundle` in the browser → `importPrivateKey`. The
-   imported Ethereum address must equal the vault address or the server
-   records `legacy_address_mismatch` and returns 409.
+4. On match: the **browser** stamps `initImportPrivateKey` (TEK from the
+   enclave) with the sub-org root P-256 key, encrypts with
+   `encryptPrivateKeyToBundle`, then stamps `importPrivateKey`. The server
+   only relays the stamped body (`X-Stamp`); it does **not** stamp with
+   `people-website-server` (that parent key is read-only in the sub-org, and
+   Turnkey requires import to target the stamping user). Do not add the
+   parent org as a sub-org root. The imported Ethereum address must equal
+   the vault address or the server records `legacy_address_mismatch` and
+   returns 409.
+
+   If bootstrap already created a sub-org but this browser no longer has the
+   root key (for example a closed incognito session) and **no** import,
+   Turnkey wallet, or address exists yet, bootstrap may replace that orphan
+   row with a new sub-org for the current browser key. The vault address is
+   never changed and a new address is never minted for a vault user.
 5. Success stores the address with `importedFromVault=true` and clears
    `legacyImportError`.
 
@@ -198,8 +211,8 @@ Not yet on Turnkey (open):
 | POST | `/api/wallet/turnkey/otp/verify` | `encryptedOtpBundle` → verification token (plaintext OTP rejected) |
 | POST | `/api/wallet/turnkey/otp/login` | `clientSignature` → session JWT |
 | POST | `/api/wallet/turnkey/register` | Persist address / public key |
-| POST | `/api/wallet/turnkey/import/init` | TEK import bundle |
-| POST | `/api/wallet/turnkey/import/complete` | Enclave import, `{ mismatch: true }`, or `{ error }` |
+| POST | `/api/wallet/turnkey/import/init` | Metadata, or relay of a client-stamped `INIT_IMPORT_PRIVATE_KEY` |
+| POST | `/api/wallet/turnkey/import/complete` | Relay of a client-stamped `IMPORT_PRIVATE_KEY`, `{ mismatch: true }`, or `{ error }` |
 | POST | `/api/wallet/turnkey/export/ready` | Fresh-auth gate only. **No key material.** Export is `EXPORT_WALLET_ACCOUNT` from the browser to `export.turnkey.com`. |
 
 All routes no-store, rate-limited, require Auth.js. Bootstrap, import, and

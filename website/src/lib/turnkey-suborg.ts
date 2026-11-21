@@ -4,7 +4,7 @@ import { userTurnkeyWallets, userWalletVaults } from "@/db/schema";
 import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
 import { getTurnkeyApi } from "@/lib/turnkey-server";
-import { assertCanCreateTurnkeyWallet } from "@/lib/turnkey-upgrade";
+import { assertCanCreateTurnkeyWallet, isOrphanTurnkeySubOrg } from "@/lib/turnkey-upgrade";
 
 export type TurnkeyWalletRow = {
   userId: string;
@@ -19,6 +19,8 @@ export type TurnkeyWalletRow = {
 
 export type TurnkeyWalletStatus = {
   subOrganizationId: string | null;
+  turnkeyUserId: string | null;
+  walletId: string | null;
   address: string | null;
   importedFromVault: boolean;
   hasLegacyVault: boolean;
@@ -26,6 +28,7 @@ export type TurnkeyWalletStatus = {
   needsImport: boolean;
   addressConflict: boolean;
   legacyImportError: string | null;
+  orphanSubOrg: boolean;
 };
 
 export async function loadTurnkeyWallet(userId: string): Promise<TurnkeyWalletRow | null> {
@@ -54,6 +57,8 @@ export function computeTurnkeyWalletStatus(
   const addressConflict = Boolean(vaultAddr && turnkeyAddr && vaultAddr !== turnkeyAddr);
   return {
     subOrganizationId: row?.subOrganizationId ?? null,
+    turnkeyUserId: row?.turnkeyUserId ?? null,
+    walletId: row?.walletId ?? null,
     address: row?.address ?? null,
     importedFromVault: row?.importedFromVault === true,
     hasLegacyVault: Boolean(vault),
@@ -61,6 +66,7 @@ export function computeTurnkeyWalletStatus(
     needsImport: Boolean(vault) && !hasAddress,
     addressConflict,
     legacyImportError: row?.legacyImportError ?? null,
+    orphanSubOrg: isOrphanTurnkeySubOrg(row),
   };
 }
 
@@ -75,9 +81,11 @@ export async function bootstrapTurnkeySubOrg(input: {
   email?: string | null;
   clientPublicKey: string;
   createWallet: boolean;
+  replaceOrphan?: boolean;
 }): Promise<TurnkeyWalletRow> {
   const existing = await loadTurnkeyWallet(input.userId);
-  if (existing) return existing;
+  const replaceOrphan = Boolean(existing && input.replaceOrphan && isOrphanTurnkeySubOrg(existing));
+  if (existing && !replaceOrphan) return existing;
 
   const vault = await loadLegacyVaultSummary(input.userId);
   assertCanCreateTurnkeyWallet(Boolean(vault), input.createWallet);
@@ -109,6 +117,29 @@ export async function bootstrapTurnkeySubOrg(input: {
 
   const db = await getDbReady();
   const now = new Date();
+  if (replaceOrphan && existing) {
+    const updated = await db
+      .update(userTurnkeyWallets)
+      .set({
+        subOrganizationId: created.subOrganizationId,
+        turnkeyUserId: created.turnkeyUserId ?? null,
+        walletId: created.walletId ?? null,
+        address,
+        publicKey: null,
+        importedFromVault: false,
+        legacyImportError: null,
+        updatedAt: now,
+      })
+      .where(eq(userTurnkeyWallets.userId, input.userId))
+      .returning();
+    const row = updated[0] ?? (await loadTurnkeyWallet(input.userId));
+    if (!row) throw new Error("turnkey_row_missing");
+    if (row.address) {
+      await bindPartnerWalletFromVault(input.userId, row.address, row.publicKey ?? "");
+    }
+    return row;
+  }
+
   const inserted = await db
     .insert(userTurnkeyWallets)
     .values({

@@ -179,6 +179,8 @@
   "upgradeWalletCta": "Wallet aktualisieren",
   "upgradeWalletLater": "Dieses Wallet vorerst weiterverwenden",
   "upgradeWalletFailed": "Das Wallet konnte nicht aktualisiert werden. Adresse und Guthaben sind unverändert. Sie können das bisherige Wallet weiter nutzen oder den Support kontaktieren.",
+  "upgradeWalletStatusFailed": "Es konnte nicht geprüft werden, ob dieses Wallet aktualisiert werden muss. Adresse und Guthaben sind unverändert. Bitte erneut versuchen.",
+  "upgradeWalletRetry": "Erneut versuchen",
   "upgradeWalletSupport": "Support kontaktieren",
   "upgradeWalletAddress": "Ihre Adresse",
   "turnkeyLead": "Ihr People Wallet ist durch einen hardwaregestützten Schlüssel geschützt. Melden Sie sich mit demselben PEOPLE-Konto an.",

@@ -13,7 +13,7 @@ for(const lang of languages) {
    for(const key of ['total','feeError'])assert.ok(copy[key].includes('PPL'));
    if(lang!=='en')for(const key of ['overview','sendTab','historyTab','settingsTab','review','confirm','cameraError','addressError','feeError'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);
    if(lang!=='en'&&lang!=='ru')for(const key of ['migrationTitle','migrationBody','migrationExisting','migrationNew','migrationKeepExisting'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);
-   if(lang!=='en')for(const key of ['upgradeWalletTitle','upgradeWalletLead','upgradeWalletCta','exportPrivateKeyCta','exportPrivateKeyWarning'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);
+   if(lang!=='en')for(const key of ['upgradeWalletTitle','upgradeWalletLead','upgradeWalletCta','upgradeWalletStatusFailed','upgradeWalletRetry','exportPrivateKeyCta','exportPrivateKeyWarning'])assert.notEqual(copy[key],en[key],`${lang}.${key} must not fall back to English`);
    if(lang==='en'){
      assert.equal(copy.upgradeWalletTitle,'Upgrade your wallet');
      assert.equal(copy.exportPrivateKeyCta,'Export private key');
