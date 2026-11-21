@@ -14,7 +14,7 @@ import {
   verifyTurnkeyOtp,
   type TurnkeyWalletSession,
 } from "@/lib/turnkey-client";
-import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
+import { LEGACY_ADDRESS_MISMATCH, type TurnkeyImportStage } from "@/lib/turnkey-constants";
 import { otpLoginSignaturePayload, turnkeyClientSignature } from "@/lib/turnkey-otp-message";
 import { decideTurnkeyOpen, planTurnkeyBootstrap } from "@/lib/turnkey-upgrade";
 import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
@@ -47,12 +47,24 @@ async function resolveClientPublicKey(): Promise<{ publicKey: string; created: b
   return { publicKey, created: true };
 }
 
-async function recordImportFailure(code: string): Promise<void> {
+function importFailureStage(err: unknown, fallback: TurnkeyImportStage): TurnkeyImportStage {
+  if (err instanceof WalletCloudError && err.stage) {
+    if (err.stage === "decrypt" || err.stage === "match" || err.stage === "stamp" || err.stage === "init") {
+      return err.stage;
+    }
+  }
+  return fallback;
+}
+
+async function recordImportFailure(code: string, stage: TurnkeyImportStage): Promise<void> {
+  const mismatch = code === LEGACY_ADDRESS_MISMATCH;
   await fetch("/api/wallet/turnkey/import/complete", {
     method: "POST",
     credentials: "include",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ error: code }),
+    body: JSON.stringify(
+      mismatch ? { mismatch: true, stage, error: code } : { error: code, stage },
+    ),
   }).catch(() => undefined);
 }
 
@@ -117,19 +129,21 @@ export async function openTurnkeyWalletSession(
   if (options?.importLegacy && decision.action === "prompt_upgrade" && !address) {
     const decrypted = await decryptLegacyVaultForImport(user.id);
     if (!decrypted.ok) {
+      const stage = decrypted.stage;
       warnCloudOpenFailed({
         code: decrypted.error,
-        stage: "turnkey_import",
+        stage,
         vaultPresent: true,
         retried: false,
       });
-      await recordImportFailure(decrypted.error);
-      throw new WalletCloudError(decrypted.error);
+      await recordImportFailure(decrypted.error, stage);
+      throw new WalletCloudError(decrypted.error, { stage });
     }
     try {
       const imported = await importLegacyKeyIntoTurnkey({
         privateKey: decrypted.privateKey,
         expectedAddress: decrypted.address,
+        publicKey: decrypted.publicKey,
         organizationId: subOrganizationId,
         turnkeyUserId,
       });
@@ -137,14 +151,15 @@ export async function openTurnkeyWalletSession(
       publicKey = decrypted.publicKey;
     } catch (err) {
       const code = err instanceof WalletCloudError ? err.code : "import_failed";
+      const stage = importFailureStage(err, "stamp");
       warnCloudOpenFailed({
         code,
-        stage: "turnkey_import",
+        stage,
         vaultPresent: true,
         retried: false,
       });
-      await recordImportFailure(code);
-      throw err instanceof WalletCloudError ? err : new WalletCloudError("import_failed");
+      await recordImportFailure(code, stage);
+      throw err instanceof WalletCloudError ? err : new WalletCloudError("import_failed", { stage });
     }
   }
 

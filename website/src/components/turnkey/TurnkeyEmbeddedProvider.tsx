@@ -1,44 +1,56 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { TurnkeyProvider, useTurnkey } from "@turnkey/react-wallet-kit";
 import "@turnkey/react-wallet-kit/styles.css";
 import { readPublicTurnkeyOrganizationId } from "@/lib/turnkey-config";
-import { parseSignRawPayload, setTurnkeyBrowserBridge } from "@/lib/turnkey-client";
-
-let lastApiKeyPublicKey = "";
+import {
+  parseSignRawPayload,
+  readTurnkeyApiPublicKey,
+  rememberTurnkeyApiPublicKey,
+  setTurnkeyBrowserBridge,
+} from "@/lib/turnkey-client";
 
 function TurnkeySessionBridge({ children }: { children: ReactNode }) {
   const turnkey = useTurnkey();
+  const turnkeyRef = useRef(turnkey);
+
+  useEffect(() => {
+    turnkeyRef.current = turnkey;
+  }, [turnkey]);
 
   useEffect(() => {
     const organizationId = readPublicTurnkeyOrganizationId();
     setTurnkeyBrowserBridge({
       organizationId,
-      httpClient: turnkey.httpClient
-        ? { signRawPayload: (input) => turnkey.httpClient!.signRawPayload(input as never) }
-        : undefined,
+      httpClient: {
+        signRawPayload: (input) => {
+          const client = turnkeyRef.current.httpClient;
+          if (!client) throw new Error("turnkey_client_unready");
+          return client.signRawPayload(input as never);
+        },
+      },
       createApiKeyPair: async () => {
-        const created = await turnkey.createApiKeyPair();
+        const created = await turnkeyRef.current.createApiKeyPair();
         if (typeof created === "string" && created.trim()) {
-          lastApiKeyPublicKey = created.trim();
-          return lastApiKeyPublicKey;
+          return rememberTurnkeyApiPublicKey(created);
         }
         throw new Error("invalid_client_key");
       },
-      getApiKeyPublicKey: () => lastApiKeyPublicKey || null,
+      getApiKeyPublicKey: () => readTurnkeyApiPublicKey() || null,
       signWithApiKey: async ({ message, publicKey }) => {
-        return turnkey.signWithApiKey({ message, publicKey: publicKey || lastApiKeyPublicKey });
+        const key = publicKey || readTurnkeyApiPublicKey();
+        return turnkeyRef.current.signWithApiKey({ message, publicKey: key });
       },
       exportWalletAccount: async ({ address, organizationId: subOrganizationId }) => {
-        await turnkey.handleExportWalletAccount({
+        await turnkeyRef.current.handleExportWalletAccount({
           address,
           organizationId: subOrganizationId,
         });
       },
-      storeSession: (session) => turnkey.storeSession({ sessionToken: session }),
+      storeSession: (session) => turnkeyRef.current.storeSession({ sessionToken: session }),
       signRawPayload: async (input) => {
-        const client = turnkey.httpClient;
+        const client = turnkeyRef.current.httpClient;
         if (!client) throw new Error("turnkey_client_unready");
         const result = await client.signRawPayload({
           organizationId: input.organizationId,
@@ -51,7 +63,7 @@ function TurnkeySessionBridge({ children }: { children: ReactNode }) {
       },
     });
     return () => setTurnkeyBrowserBridge(null);
-  }, [turnkey]);
+  }, []);
 
   return children;
 }

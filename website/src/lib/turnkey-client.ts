@@ -1,7 +1,7 @@
 import * as secp from "@noble/secp256k1";
 import { sha256 } from "@noble/hashes/sha2.js";
 import { attachFactoryTxSignature, prepareFactoryTx, type UnsignedTx } from "@/lib/people-sign";
-import { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
+import { LEGACY_ADDRESS_MISMATCH, TURNKEY_API_PUBKEY_STORAGE_KEY } from "@/lib/turnkey-constants";
 import {
   buildInitImportActivity,
   buildImportPrivateKeyActivity,
@@ -11,6 +11,7 @@ import { decryptPrivateKeyFromVault, VaultSchemaError, warnCloudOpenFailed } fro
 import { fetchVaultRecord, fetchWrapKey, WalletCloudError } from "@/lib/wallet-cloud-client";
 import { keyFromPrivate } from "@/lib/people-sign";
 import { addressMatchesPublicKey } from "@/lib/wallet-address-scheme";
+import type { TurnkeyImportStage } from "@/lib/turnkey-constants";
 
 const { bytesToHex, hexToBytes } = secp.etc;
 
@@ -71,8 +72,38 @@ export function getTurnkeyBrowserBridge(): TurnkeyBrowserBridge | null {
 }
 
 export function requireTurnkeyBrowserBridge(): TurnkeyBrowserBridge {
-  if (!bridge) throw new Error("turnkey_client_unready");
+  if (!bridge) throw new WalletCloudError("turnkey_client_unready");
   return bridge;
+}
+
+let rememberedApiPublicKey = "";
+
+export function rememberTurnkeyApiPublicKey(publicKey: string): string {
+  const next = publicKey.trim().replace(/^0x/i, "");
+  if (!next) throw new WalletCloudError("stamp_no_key", { stage: "stamp" });
+  rememberedApiPublicKey = next;
+  try {
+    sessionStorage.setItem(TURNKEY_API_PUBKEY_STORAGE_KEY, next);
+  } catch {
+    /* sessionStorage may be unavailable; IndexedDB still holds the non-extractable key. */
+  }
+  return next;
+}
+
+/** Clears only the in-memory copy so a subsequent read must go to sessionStorage (reload). */
+export function forgetTurnkeyApiPublicKeyMemory(): void {
+  rememberedApiPublicKey = "";
+}
+
+export function readTurnkeyApiPublicKey(): string {
+  if (rememberedApiPublicKey) return rememberedApiPublicKey;
+  try {
+    const stored = sessionStorage.getItem(TURNKEY_API_PUBKEY_STORAGE_KEY)?.trim() ?? "";
+    if (stored) rememberedApiPublicKey = stored.replace(/^0x/i, "");
+  } catch {
+    /* ignore */
+  }
+  return rememberedApiPublicKey;
 }
 
 export function isTurnkeySession(session: { kind?: string } | null | undefined): session is TurnkeyWalletSession {
@@ -215,9 +246,11 @@ export async function createTurnkeyEmbeddedWalletClient(session: TurnkeyWalletSe
   });
 }
 
-async function jsonOrError(res: Response, fallback: string): Promise<never> {
+async function jsonOrError(res: Response, fallback: string, stage?: string): Promise<never> {
   const body = (await res.json().catch(() => ({}))) as { error?: string };
-  throw new WalletCloudError(typeof body.error === "string" && body.error ? body.error : fallback);
+  throw new WalletCloudError(typeof body.error === "string" && body.error ? body.error : fallback, {
+    stage,
+  });
 }
 
 export async function fetchTurnkeyStatus(): Promise<TurnkeyWalletStatusResponse> {
@@ -355,47 +388,70 @@ export function matchLegacyVaultKey(
   if (!addressMatchesPublicKey(vault.address, key.publicKey)) {
     return { ok: false, error: LEGACY_ADDRESS_MISMATCH };
   }
-  return { ok: true, privateKey: key.privateKey, address: key.address, publicKey: key.publicKey };
+  // Keep the vault address (legacy sha256 or keccak). key.address follows the live scheme and
+  // must not replace a funded vault row.
+  return {
+    ok: true,
+    privateKey: key.privateKey,
+    address: vault.address.trim().toLowerCase(),
+    publicKey: key.publicKey,
+  };
+}
+
+function wrapKeyFailureCode(err: unknown): "decrypt_failed" | "reauth_required" | "wrap_key_failed" {
+  if (err instanceof WalletCloudError) {
+    if (err.code === "reauth_required") return "reauth_required";
+    if (err.code === "wrap_key_failed" || err.code === "unauthorized") return "wrap_key_failed";
+  }
+  return "decrypt_failed";
 }
 
 export async function decryptLegacyVaultForImport(userId: string): Promise<
   | { ok: true; privateKey: string; address: string; publicKey: string }
-  | { ok: false; error: typeof LEGACY_ADDRESS_MISMATCH | "decrypt_failed" | "vault_not_found" | "invalid_private_key" }
+  | {
+      ok: false;
+      error:
+        | typeof LEGACY_ADDRESS_MISMATCH
+        | "decrypt_failed"
+        | "vault_not_found"
+        | "invalid_private_key"
+        | "reauth_required"
+        | "wrap_key_failed";
+      stage: TurnkeyImportStage;
+    }
 > {
-  const vault = await fetchVaultRecord({ vaultPresent: true });
-  if (!vault) return { ok: false, error: "vault_not_found" };
+  // Wrap-key first: GET wrap-key may migrate the vault row. Fetching ciphertext before that
+  // (the previous order) decrypts the old blob with the post-migration key.
   let wrapKeyHex: string;
   try {
     wrapKeyHex = await fetchWrapKey({ vaultPresent: true });
-  } catch {
-    return { ok: false, error: "decrypt_failed" };
+  } catch (err) {
+    return { ok: false, error: wrapKeyFailureCode(err), stage: "decrypt" };
   }
+  let vault;
+  try {
+    vault = await fetchVaultRecord({ vaultPresent: true });
+  } catch {
+    return { ok: false, error: "decrypt_failed", stage: "decrypt" };
+  }
+  if (!vault) return { ok: false, error: "vault_not_found", stage: "decrypt" };
   let privateKey: string;
   try {
     privateKey = await decryptPrivateKeyFromVault(vault.encryptedPrivateKey, wrapKeyHex);
   } catch (err) {
     if (err instanceof VaultSchemaError) {
-      warnCloudOpenFailed({ code: "vault_schema_unsupported", stage: "turnkey_import", vaultPresent: true, retried: false });
-    }
-    return { ok: false, error: "decrypt_failed" };
-  }
-  const matched = matchLegacyVaultKey(vault, privateKey);
-  if (!matched.ok) {
-    if (matched.error === LEGACY_ADDRESS_MISMATCH) {
       warnCloudOpenFailed({
-        code: LEGACY_ADDRESS_MISMATCH,
-        stage: "turnkey_import",
+        code: "vault_schema_unsupported",
+        stage: "decrypt",
         vaultPresent: true,
         retried: false,
       });
-      await fetch("/api/wallet/turnkey/import/complete", {
-        method: "POST",
-        credentials: "include",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ mismatch: true }),
-      }).catch(() => undefined);
     }
-    return matched;
+    return { ok: false, error: "decrypt_failed", stage: "decrypt" };
+  }
+  const matched = matchLegacyVaultKey(vault, privateKey);
+  if (!matched.ok) {
+    return { ...matched, stage: matched.error === LEGACY_ADDRESS_MISMATCH ? "match" : "decrypt" };
   }
   void userId;
   return matched;
@@ -417,19 +473,47 @@ export async function encryptPrivateKeyForTurnkeyImport(input: {
   });
 }
 
-async function stampTurnkeyActivityBody(body: object): Promise<{ stampedBody: string; stamp: string }> {
+function stampFailureCode(err: unknown): string {
+  if (err instanceof WalletCloudError) return err.code;
+  const message = err instanceof Error ? err.message : "";
+  if (message === "invalid_stamp" || message === "invalid_client_key") return message;
+  if (/key not found|no active session|not initialized/i.test(message)) return "stamp_no_key";
+  return "stamp_failed";
+}
+
+export async function stampTurnkeyActivityBody(body: object): Promise<{ stampedBody: string; stamp: string }> {
   const bridge = requireTurnkeyBrowserBridge();
-  if (!bridge.signWithApiKey) throw new WalletCloudError("turnkey_client_unready");
-  const publicKey = bridge.getApiKeyPublicKey?.()?.trim() ?? "";
-  if (!publicKey) throw new WalletCloudError("turnkey_client_unready");
+  if (!bridge.signWithApiKey) {
+    throw new WalletCloudError("stamp_unready", { stage: "stamp" });
+  }
+  const publicKey =
+    bridge.getApiKeyPublicKey?.()?.trim().replace(/^0x/i, "") || readTurnkeyApiPublicKey();
+  if (!publicKey) throw new WalletCloudError("stamp_no_key", { stage: "stamp" });
+  rememberTurnkeyApiPublicKey(publicKey);
   const stampedBody = JSON.stringify(body);
-  const signature = await bridge.signWithApiKey({ message: stampedBody, publicKey });
-  return { stampedBody, stamp: encodeTurnkeyApiStamp({ publicKey, signature }) };
+  let signature: string;
+  try {
+    signature = await bridge.signWithApiKey({ message: stampedBody, publicKey });
+  } catch (err) {
+    throw new WalletCloudError(stampFailureCode(err), { stage: "stamp" });
+  }
+  if (typeof signature !== "string" || !signature.trim()) {
+    throw new WalletCloudError("invalid_stamp", { stage: "stamp" });
+  }
+  try {
+    return { stampedBody, stamp: encodeTurnkeyApiStamp({ publicKey, signature }) };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "invalid_stamp";
+    throw new WalletCloudError(message === "invalid_client_key" ? "stamp_bad_key" : "invalid_stamp", {
+      stage: "stamp",
+    });
+  }
 }
 
 export async function importLegacyKeyIntoTurnkey(input: {
   privateKey: string;
   expectedAddress: string;
+  publicKey?: string;
   organizationId?: string;
   turnkeyUserId?: string;
 }): Promise<{ address: string }> {
@@ -442,12 +526,14 @@ export async function importLegacyKeyIntoTurnkey(input: {
       headers: { "content-type": "application/json" },
       body: "{}",
     });
-    if (!metaRes.ok) await jsonOrError(metaRes, "import_init_failed");
+    if (!metaRes.ok) await jsonOrError(metaRes, "import_init_failed", "init");
     const meta = (await metaRes.json()) as { organizationId?: string; turnkeyUserId?: string };
     organizationId = meta.organizationId?.trim() ?? "";
     turnkeyUserId = meta.turnkeyUserId?.trim() ?? "";
   }
-  if (!organizationId || !turnkeyUserId) throw new WalletCloudError("turnkey_user_missing");
+  if (!organizationId || !turnkeyUserId) {
+    throw new WalletCloudError("turnkey_user_missing", { stage: "init" });
+  }
 
   const initStamp = await stampTurnkeyActivityBody(
     buildInitImportActivity({ organizationId, userId: turnkeyUserId }),
@@ -458,13 +544,13 @@ export async function importLegacyKeyIntoTurnkey(input: {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(initStamp),
   });
-  if (!initRes.ok) await jsonOrError(initRes, "import_init_failed");
+  if (!initRes.ok) await jsonOrError(initRes, "import_init_failed", "init");
   const init = (await initRes.json()) as {
     importBundle?: string;
     organizationId: string;
     turnkeyUserId: string;
   };
-  if (!init.importBundle) throw new WalletCloudError("import_init_failed");
+  if (!init.importBundle) throw new WalletCloudError("import_init_failed", { stage: "init" });
   const encryptedBundle = await encryptPrivateKeyForTurnkeyImport({
     privateKey: input.privateKey,
     importBundle: init.importBundle,
@@ -485,9 +571,11 @@ export async function importLegacyKeyIntoTurnkey(input: {
     body: JSON.stringify({
       ...importStamp,
       expectedAddress: input.expectedAddress,
+      publicKey: input.publicKey,
+      stage: "init",
     }),
   });
-  if (!completeRes.ok) await jsonOrError(completeRes, "import_failed");
+  if (!completeRes.ok) await jsonOrError(completeRes, "import_failed", "init");
   return (await completeRes.json()) as { address: string };
 }
 

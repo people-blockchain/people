@@ -5,8 +5,10 @@ import {
   buildInitImportActivity,
   buildImportPrivateKeyActivity,
   encodeTurnkeyApiStamp,
+  ieeeP1363SignatureToDer,
   IMPORT_PRIVATE_KEY_TYPE,
   INIT_IMPORT_PRIVATE_KEY_TYPE,
+  normalizeTurnkeyP256Signature,
   parseClientStampedActivity,
   parseTurnkeyApiStamp,
 } from "./turnkey-stamp.ts";
@@ -15,7 +17,8 @@ import { forwardStampedTurnkeyActivity } from "./turnkey-relay.ts";
 const org = "11111111-1111-1111-1111-111111111111";
 const user = "22222222-2222-2222-2222-222222222222";
 const publicKey = "a".repeat(64);
-const signature = "b".repeat(128);
+const ieeeSignature = "b".repeat(128);
+const signature = ieeeP1363SignatureToDer(ieeeSignature);
 
 describe("client-stamped Turnkey import activities", () => {
   it("builds init/import bodies targeting the sub-org user", () => {
@@ -40,6 +43,16 @@ describe("client-stamped Turnkey import activities", () => {
     assert.equal(parsed.publicKey, publicKey);
     assert.equal(parsed.signature, signature);
     assert.equal(parsed.scheme, "SIGNATURE_SCHEME_TK_API_P256");
+  });
+
+  it("converts kit Raw IEEE P1363 signatures to DER before encoding X-Stamp", () => {
+    const der = normalizeTurnkeyP256Signature(ieeeSignature);
+    assert.match(der, /^30/);
+    assert.notEqual(der, ieeeSignature);
+    const stamp = encodeTurnkeyApiStamp({ publicKey, signature: ieeeSignature });
+    const parsed = parseTurnkeyApiStamp(stamp);
+    assert.equal(parsed.signature, der);
+    assert.equal(normalizeTurnkeyP256Signature(der), der);
   });
 
   it("rejects an unstamped import payload so the parent key cannot be used", () => {

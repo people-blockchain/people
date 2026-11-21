@@ -82,6 +82,80 @@ export function buildImportPrivateKeyActivity(input: {
   };
 }
 
+function hexToBytes(hex: string): Uint8Array {
+  const normalized = hex.replace(/^0x/i, "");
+  if (normalized.length % 2 !== 0) throw new Error("invalid_stamp");
+  const out = new Uint8Array(normalized.length / 2);
+  for (let i = 0; i < out.length; i++) {
+    out[i] = Number.parseInt(normalized.slice(i * 2, i * 2 + 2), 16);
+  }
+  return out;
+}
+
+function bytesToHex(bytes: Uint8Array): string {
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Minimal unsigned integer encoding for DER: drop leading zeros, then add one back if the high bit
+ * is set so the value is not read as negative.
+ */
+function toUnsignedDerInteger(bytes: Uint8Array): Uint8Array {
+  let start = 0;
+  while (start < bytes.length && bytes[start] === 0) start += 1;
+  if (start === bytes.length) start = bytes.length - 1;
+  const extraZero = (bytes[start]! & 0x80) === 0x80 ? 1 : 0;
+  const out = new Uint8Array(bytes.length - start + extraZero);
+  out.set(bytes.subarray(start), extraZero);
+  return out;
+}
+
+/**
+ * Turnkey X-Stamp signatures are DER-encoded ECDSA. `@turnkey/core` `signWithApiKey` returns
+ * IEEE P1363 (`r||s`, 64 bytes for P-256). Encode that as DER so the relayed activity verifies.
+ */
+export function ieeeP1363SignatureToDer(ieeeHex: string): string {
+  const ieee = hexToBytes(ieeeHex);
+  if (ieee.length % 2 !== 0 || ieee.length === 0 || ieee.length > 132) {
+    throw new Error("invalid_stamp");
+  }
+  const r = toUnsignedDerInteger(ieee.subarray(0, ieee.length / 2));
+  const s = toUnsignedDerInteger(ieee.subarray(ieee.length / 2));
+  const contentLength = 1 + 1 + r.length + 1 + 1 + s.length;
+  let der: Uint8Array;
+  let offset = 0;
+  if (contentLength >= 128) {
+    der = new Uint8Array(contentLength + 3);
+    der[offset++] = 0x30;
+    der[offset++] = 0x81;
+    der[offset++] = contentLength;
+  } else {
+    der = new Uint8Array(contentLength + 2);
+    der[offset++] = 0x30;
+    der[offset++] = contentLength;
+  }
+  der[offset++] = 0x02;
+  der[offset++] = r.length;
+  der.set(r, offset);
+  offset += r.length;
+  der[offset++] = 0x02;
+  der[offset++] = s.length;
+  der.set(s, offset);
+  return bytesToHex(der);
+}
+
+/** Accept kit Raw (64-byte IEEE) or an already-DER hex signature. */
+export function normalizeTurnkeyP256Signature(signature: string): string {
+  const hex = signature.trim().replace(/^0x/i, "");
+  if (!/^[0-9a-fA-F]+$/.test(hex) || hex.length < 64 || hex.length > 800 || hex.length % 2 !== 0) {
+    throw new Error("invalid_stamp");
+  }
+  const bytes = hexToBytes(hex);
+  if (bytes.length === 64) return ieeeP1363SignatureToDer(hex);
+  if (bytes[0] === 0x30) return hex.toLowerCase();
+  throw new Error("invalid_stamp");
+}
+
 function utf8ToBase64Url(value: string): string {
   if (typeof Buffer !== "undefined") return Buffer.from(value, "utf8").toString("base64url");
   const bytes = new TextEncoder().encode(value);
@@ -98,9 +172,8 @@ function base64UrlToUtf8(value: string): string {
 
 export function encodeTurnkeyApiStamp(input: { publicKey: string; signature: string }): string {
   const publicKey = input.publicKey.trim().replace(/^0x/i, "");
-  const signature = input.signature.trim().replace(/^0x/i, "");
   if (!/^[0-9a-fA-F]{64,264}$/.test(publicKey)) throw new Error("invalid_client_key");
-  if (!/^[0-9a-fA-F]{64,800}$/.test(signature)) throw new Error("invalid_stamp");
+  const signature = normalizeTurnkeyP256Signature(input.signature);
   return utf8ToBase64Url(
     JSON.stringify({
       publicKey,

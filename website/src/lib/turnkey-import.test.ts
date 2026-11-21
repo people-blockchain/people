@@ -1,0 +1,69 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { generateFactoryKey } from "./people-sign.ts";
+import { LEGACY_ADDRESS_MISMATCH } from "./turnkey-constants.ts";
+import {
+  describeImportCompleteConflict,
+  resolveImportedVaultAddress,
+  sanitizeImportFailureCode,
+  sanitizeImportStage,
+} from "./turnkey-import.ts";
+import { evmAddressFromPublicKey, legacyAddressFromPublicKey } from "./wallet-address-scheme.ts";
+
+describe("import complete conflict reporting", () => {
+  it("logs mismatch vs error code with a sanitized stage", () => {
+    assert.deepEqual(describeImportCompleteConflict({ mismatch: true }), {
+      reason: LEGACY_ADDRESS_MISMATCH,
+      stage: "match",
+      mismatch: true,
+    });
+    assert.deepEqual(describeImportCompleteConflict({ error: "stamp_no_key", stage: "stamp" }), {
+      reason: "stamp_no_key",
+      stage: "stamp",
+      mismatch: false,
+    });
+    assert.deepEqual(describeImportCompleteConflict({ error: "decrypt_failed", stage: "decrypt" }), {
+      reason: "decrypt_failed",
+      stage: "decrypt",
+      mismatch: false,
+    });
+    assert.equal(describeImportCompleteConflict({}), null);
+    assert.equal(sanitizeImportStage("stamp"), "stamp");
+    assert.equal(sanitizeImportStage("nope"), "unknown");
+    assert.equal(sanitizeImportFailureCode("stamp_no_key"), "stamp_no_key");
+    assert.equal(sanitizeImportFailureCode("not a code!!"), "import_failed");
+  });
+});
+
+describe("imported Turnkey address vs vault address schemes", () => {
+  it("keeps the vault sha256 address when Turnkey returns keccak for the same key", () => {
+    const key = generateFactoryKey();
+    const legacy = legacyAddressFromPublicKey(key.publicKey).toLowerCase();
+    const evm = evmAddressFromPublicKey(key.publicKey).toLowerCase();
+    assert.notEqual(legacy, evm);
+    assert.equal(
+      resolveImportedVaultAddress({
+        expectedAddress: legacy,
+        importedAddress: evm,
+        publicKey: key.publicKey,
+      }),
+      legacy,
+    );
+    assert.equal(
+      resolveImportedVaultAddress({
+        expectedAddress: evm,
+        importedAddress: evm,
+        publicKey: key.publicKey,
+      }),
+      evm,
+    );
+    assert.throws(
+      () =>
+        resolveImportedVaultAddress({
+          expectedAddress: legacy,
+          importedAddress: evm,
+        }),
+      /legacy_address_mismatch/,
+    );
+  });
+});
