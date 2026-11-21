@@ -10,8 +10,9 @@ import { FounderCard } from "@/components/founders/FounderCard";
 import { CountUpNumber, WARM_PRIMARY_BTN, fill } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { showCommunityStats } from "@/lib/show-community-stats";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 
-const STATS_POLL_MS = 30_000;
+const STATS_POLL_MS = 60_000;
 
 /**
  * Compact teaser of the /founders hero: the same flip card, the next founder
@@ -45,9 +46,11 @@ export function HomeWarmFoundersTeaser() {
       return;
     }
     void load();
-    const id = window.setInterval(() => void load(), STATS_POLL_MS);
-    return () => window.clearInterval(id);
   }, [load, statsPublic]);
+
+  useVisibleInterval(() => {
+    void load();
+  }, STATS_POLL_MS, statsPublic);
 
   const title =
     statsPublic && verifiedCount !== null

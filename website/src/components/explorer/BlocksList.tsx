@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { explorerCopy } from "@/lib/explorer-copy";
@@ -9,6 +9,9 @@ import { NetworkStatus } from "@/components/NetworkStatus";
 import { Eyebrow } from "@/components/ui/primitives";
 import { SkeletonRows } from "./ExplorerSkeleton";
 import { ExplorerSubnav } from "./ExplorerSubnav";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
+
+const BLOCKS_POLL_MS = 30_000;
 
 export type BlockRow = {
   hash?: string;
@@ -40,29 +43,24 @@ export function BlocksList({ initialBlocks }: { initialBlocks?: BlockRow[] } = {
   const [loading, setLoading] = useState(!prefetched);
   const [failed, setFailed] = useState(false);
 
-  useEffect(() => {
-    let alive = true;
-    const load = () =>
-      void networkJson<BlockRow[]>("blocks?limit=50")
-        .then((body) => {
-          if (!alive) return;
-          setBlocks(Array.isArray(body) ? body : []);
-          setFailed(false);
-        })
-        // A failed background refresh must not replace the prefetched rows with an error notice.
-        .catch(() => {
-          if (alive && !prefetched) setFailed(true);
-        })
-        .finally(() => {
-          if (alive) setLoading(false);
-        });
-    load();
-    const id = setInterval(load, 12_000);
-    return () => {
-      alive = false;
-      clearInterval(id);
-    };
+  const load = useCallback(() => {
+    void networkJson<BlockRow[]>("blocks?limit=50")
+      .then((body) => {
+        setBlocks(Array.isArray(body) ? body : []);
+        setFailed(false);
+      })
+      // A failed background refresh must not replace the prefetched rows with an error notice.
+      .catch(() => {
+        if (!prefetched) setFailed(true);
+      })
+      .finally(() => setLoading(false));
   }, [prefetched]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useVisibleInterval(load, BLOCKS_POLL_MS);
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
