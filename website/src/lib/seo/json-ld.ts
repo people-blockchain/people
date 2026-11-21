@@ -41,7 +41,8 @@ export function mainnetBetaEventJsonLd() {
     "@type": "Event",
     name: "PEOPLE Mainnet Beta",
     description:
-      "Opening of PEOPLE Mainnet Beta and the public PPL sale on Base (USDC/USDT). PPL are credited on the PEOPLE network after purchase.",
+      "PEOPLE Mainnet Beta opens 1 December 2026: you pay in USDC or USDT on Base, and PPL are credited immediately on PEOPLE Mainnet Beta.",
+    inLanguage: "en",
     startDate: openDay,
     eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
@@ -61,6 +62,7 @@ export function faqPageJsonLd(entries: readonly FaqPair[]) {
   if (entries.length === 0) return null;
   return {
     "@type": "FAQPage",
+    inLanguage: "en",
     mainEntity: entries.map(({ question, answer }) => ({
       "@type": "Question",
       name: question,
@@ -91,10 +93,17 @@ export function jsonLdGraph(...nodes: Array<Record<string, unknown> | null>) {
   return { "@context": "https://schema.org", "@graph": graph };
 }
 
+/** English-only FAQ for JSON-LD (crawlers; not tied to visitor locale). */
+export const JSON_LD_FAQ_LANG = "en" as const satisfies Language;
+
 export function helpFaqPairs(lang: Language): FaqPair[] {
   return resolveHelpFaq(lang).flatMap((topic) =>
     topic.entries.map((entry) => ({ question: entry.q, answer: entry.a })),
   );
+}
+
+export function helpFaqPairsForJsonLd(): FaqPair[] {
+  return helpFaqPairs(JSON_LD_FAQ_LANG);
 }
 
 export function buyFaqPairs(lang: Language): FaqPair[] {
@@ -104,6 +113,10 @@ export function buyFaqPairs(lang: Language): FaqPair[] {
     question: fillCopy(item.q, vars),
     answer: fillCopy(item.a, vars),
   }));
+}
+
+export function buyFaqPairsForJsonLd(): FaqPair[] {
+  return buyFaqPairs(JSON_LD_FAQ_LANG);
 }
 
 export function mainnetOpenDateLabel(lang: Language): string {

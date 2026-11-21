@@ -54,7 +54,7 @@ export const SITE_TITLE = homeTitle(NETWORK_NAME_EN);
 
 /** Meta description used by the root layout. */
 export const SITE_DESCRIPTION =
-  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of every new token goes to its community pool at launch, guaranteed (up to 27% in total). Public testnet, fees in PPL.";
+  "PEOPLE — the blockchain for communities. Launch a token for your community: 10% of every new token goes to its community pool at launch, guaranteed (up to 27% in total). PEOPLE Mainnet Beta opens 1 December 2026; fees in PPL.";
 
 /** Open Graph / Twitter title shared by routes that do not override it. */
 export const SITE_OG_TITLE = SITE_TITLE;

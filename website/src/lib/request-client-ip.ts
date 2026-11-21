@@ -10,25 +10,50 @@ function firstIp(header: string | null): string {
   return isIP(first) ? first : "";
 }
 
-/**
- * Best-effort client IP for rate-limit keys and audit logs. On Vercel the platform sets
- * `x-vercel-forwarded-for` to the real client IP and does not let the client override it, so
- * it is trusted there (signalled by the platform's own `VERCEL` env var). If that header is
- * missing, the first `x-forwarded-for` item is used, then `x-real-ip`. Off Vercel those
- * headers are client controlled unless TRUST_PROXY_HEADERS=1; otherwise callers get a shared
- * "unknown" bucket that cannot be rotated by the client.
- */
-export function clientIpFromRequest(request: Request): string {
+/** Cloudflare sets `cf-ray` on every proxied request; use it before trusting CF IP headers. */
+export function requestCameViaCloudflare(headers: Headers): boolean {
+  return Boolean(headers.get("cf-ray")?.trim());
+}
+
+function cloudflareClientIp(headers: Headers): string {
+  if (!requestCameViaCloudflare(headers)) return "";
+  return (
+    firstIp(headers.get("cf-connecting-ip")) ||
+    firstIp(headers.get("true-client-ip")) ||
+    ""
+  );
+}
+
+function vercelOrTrustedProxyIp(headers: Headers): string {
   if (process.env.VERCEL) {
     return (
-      firstIp(request.headers.get("x-vercel-forwarded-for")) ||
-      firstIp(request.headers.get("x-forwarded-for")) ||
-      firstIp(request.headers.get("x-real-ip")) ||
-      "unknown"
+      firstIp(headers.get("x-vercel-forwarded-for")) ||
+      firstIp(headers.get("x-forwarded-for")) ||
+      firstIp(headers.get("x-real-ip")) ||
+      ""
     );
   }
-  if (!trustProxyHeaders()) return "unknown";
-  const real = firstIp(request.headers.get("x-real-ip"));
+  if (!trustProxyHeaders()) return "";
+  const real = firstIp(headers.get("x-real-ip"));
   if (real) return real;
-  return firstIp(request.headers.get("x-forwarded-for")) || "unknown";
+  return firstIp(headers.get("x-forwarded-for"));
+}
+
+/**
+ * Best-effort client IP for rate-limit keys and audit logs.
+ *
+ * Order: Cloudflare (`cf-connecting-ip`, `true-client-ip`) when `cf-ray` is present;
+ * then Vercel (`x-vercel-forwarded-for`, first `x-forwarded-for`, `x-real-ip`) on Vercel;
+ * else trusted-proxy `x-real-ip` / `x-forwarded-for` when `TRUST_PROXY_HEADERS=1`.
+ */
+export function clientIpFromHeaders(headers: Headers): string {
+  const viaCf = cloudflareClientIp(headers);
+  if (viaCf) return viaCf;
+  const viaPlatform = vercelOrTrustedProxyIp(headers);
+  if (viaPlatform) return viaPlatform;
+  return "unknown";
+}
+
+export function clientIpFromRequest(request: Request): string {
+  return clientIpFromHeaders(request.headers);
 }
