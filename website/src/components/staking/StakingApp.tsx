@@ -21,6 +21,7 @@ import {
 } from "@/lib/evm/staking-abi";
 import { commissionPercent, coinToPpl, decCoinToPpl, estimateAprPercent, networkSharePercent, secondsToDaysLabel } from "@/lib/staking-math";
 import { toValoperAddress } from "@/lib/evm/staking-address";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 
 /** SDK default; our testnet genesis doesn't currently override staking.params.unbonding_time. */
 const UNBONDING_TIME_SECONDS = 1_814_400;
@@ -99,9 +100,10 @@ export function StakingApp() {
 
   useEffect(() => {
     void loadValidators();
-    const id = setInterval(() => void loadValidators(), 15_000);
-    return () => clearInterval(id);
   }, [loadValidators]);
+  useVisibleInterval(() => {
+    void loadValidators();
+  }, 30_000);
 
   const loadMyPosition = useCallback(async () => {
     if (!signer || !precompileActive || validators.length === 0) {
@@ -157,9 +159,10 @@ export function StakingApp() {
 
   useEffect(() => {
     void loadMyPosition();
-    const id = setInterval(() => void loadMyPosition(), 15_000);
-    return () => clearInterval(id);
   }, [loadMyPosition]);
+  useVisibleInterval(() => {
+    void loadMyPosition();
+  }, 30_000);
 
   const rows: ValidatorRow[] = useMemo(
     () =>

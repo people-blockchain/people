@@ -4,6 +4,7 @@ import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { normalizeReferralCode } from "@/lib/partner/referral";
 import { resolveWalletByReferralCode } from "@/lib/referral-link-server";
+import { PUBLIC_CACHE_30S } from "@/lib/public-cache";
 
 export const dynamic = "force-dynamic";
 
@@ -22,5 +23,5 @@ export async function GET(request: Request) {
   const code = normalizeReferralCode(new URL(request.url).searchParams.get("code"));
   if (!code) return NextResponse.json({ error: "invalid_code" }, { status: 400 });
   const wallet = await resolveWalletByReferralCode(code);
-  return NextResponse.json({ wallet }, { headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json({ wallet }, { headers: PUBLIC_CACHE_30S });
 }

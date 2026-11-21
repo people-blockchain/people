@@ -312,7 +312,7 @@ test("chat route calls auth() before any database-touching import is used", () =
 
 test("widget only polls while open, signed in and visible, and does no fetch when closed", () => {
   const src = readFileSync(join(root, "src/components/SupportChatWidget.tsx"), "utf8");
-  assert.match(src, /POLL_INTERVAL_MS = 6000/);
+  assert.match(src, /POLL_INTERVAL_MS = 30_000/);
   assert.match(src, /if \(!open\) return;/);
   assert.match(src, /document\.visibilityState === "visible"/);
   assert.match(src, /href="\/login"/);

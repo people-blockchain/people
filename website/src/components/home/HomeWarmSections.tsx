@@ -7,6 +7,7 @@ import { homeWarmCopy } from "@/lib/home-warm-content";
 import { homePublic } from "@/lib/home-public-content";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
 import { fetchHealth, type NetworkHealth } from "@/lib/network-client";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { MODEL_A_FEE_SPLIT, communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import { CommunityShareFlow } from "@/components/visuals/CommunityShareFlow";
 import {
@@ -212,7 +213,7 @@ export function HomeWarmAgents() {
 
 /* ── 6. Live network strip ───────────────────────────────────────────────── */
 
-const NETWORK_POLL_MS = 30_000;
+const NETWORK_POLL_MS = 60_000;
 
 export function HomeWarmNetwork() {
   const { lang } = useLanguage();
@@ -228,9 +229,10 @@ export function HomeWarmNetwork() {
 
   useEffect(() => {
     void load();
-    const id = window.setInterval(() => void load(), NETWORK_POLL_MS);
-    return () => window.clearInterval(id);
   }, [load]);
+  useVisibleInterval(() => {
+    void load();
+  }, NETWORK_POLL_MS);
 
   // Only real values are ever rendered; a failed read shows the explorer link alone.
   const height = health?.height && Number.isFinite(health.height) && health.height > 0 ? health.height : null;

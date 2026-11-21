@@ -25,7 +25,7 @@ export async function GET(request: Request, context: { params: Promise<{ token: 
   try {
     const snapshot = await fetchTokenMarketSnapshotCached(token);
     return NextResponse.json(snapshot, {
-      headers: { "Cache-Control": "public, s-maxage=15, stale-while-revalidate=60" },
+      headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=90" },
     });
   } catch (error) {
     console.error("[evm/market]", error instanceof Error ? error.message : error);
