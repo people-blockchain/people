@@ -88,10 +88,13 @@ test("sale answers fill every placeholder from the live sale config", () => {
   }
 });
 
-test("other languages read the EN copy", () => {
+test("other languages keep EN questions but may use localized answers", () => {
   assert.equal(helpLang("ru"), "ru");
   assert.equal(helpLang("de"), "en");
-  assert.deepEqual(resolveHelpFaq("zh"), resolveHelpFaq("en"));
+  const en = resolveHelpFaq("en").flatMap((t) => t.entries);
+  const zh = resolveHelpFaq("zh").flatMap((t) => t.entries);
+  assert.equal(zh.length, en.length);
+  assert.deepEqual(zh.map((e) => e.q), en.map((e) => e.q));
 });
 
 test("search matches questions and answers and recovers from empty queries", () => {

@@ -44,16 +44,13 @@ export function HelpCenter() {
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{topic.title}</h2>
             <div className="mt-5 space-y-3">
               {topic.entries.map((entry) => (
-                <details
+                <article
                   key={entry.id}
                   id={entry.id}
-                  className="group rounded-2xl border border-line bg-surface p-4 open:shadow-[var(--elev-1)]"
+                  className="rounded-2xl border border-line bg-surface p-4"
                   data-testid={`help-entry-${entry.id}`}
                 >
-                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-ink marker:hidden">
-                    <span>{entry.q}</span>
-                    <span aria-hidden="true" className="shrink-0 text-ink-3 transition-transform group-open:rotate-45">+</span>
-                  </summary>
+                  <h3 className="text-sm font-semibold text-ink">{entry.q}</h3>
                   <p className="mt-2.5 break-words text-sm leading-relaxed text-ink-2">{entry.a}</p>
                   <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-3">
                     {entry.links.length > 0 ? (
@@ -69,7 +66,7 @@ export function HelpCenter() {
                     ) : null}
                     <span>{t.verified}: <time dateTime={entry.verifiedAt}>{entry.verifiedAt}</time></span>
                   </p>
-                </details>
+                </article>
               ))}
             </div>
           </section>
