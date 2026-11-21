@@ -12,7 +12,7 @@ import {
   jsonLdGraph,
   mainnetBetaEventJsonLd,
 } from "../src/lib/seo/json-ld.ts";
-import { SITE_ROUTES, SITE_URL } from "../src/lib/site.ts";
+import { SITE_DESCRIPTION, SITE_ROUTES, SITE_URL } from "../src/lib/site.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -29,6 +29,15 @@ test("llms.txt names Mainnet Beta and links the sale", () => {
   assert.match(text, /PEOPLE Mainnet Beta/);
   assert.match(text, new RegExp(`${SITE_URL.replace(/\./g, "\\.")}/buy`));
   assert.doesNotMatch(text, /testnet launch/i);
+  assert.doesNotMatch(text, /public testnet/i);
+});
+
+test("public schema copy avoids calling the launch a testnet", () => {
+  assert.doesNotMatch(SITE_DESCRIPTION, /public testnet/i);
+  const event = mainnetBetaEventJsonLd();
+  assert.match(event.description, /credited immediately/i);
+  assert.doesNotMatch(event.description, /public testnet/i);
+  assert.equal(event.inLanguage, "en");
 });
 
 test("sitemap includes /buy once and no duplicate /help", () => {
@@ -40,6 +49,7 @@ test("sitemap includes /buy once and no duplicate /help", () => {
 
 test("JSON-LD FAQ and Event use site copy", () => {
   const faq = faqPageJsonLd(buyFaqPairs("en"));
+  assert.equal(faq?.inLanguage, "en");
   assert.ok(faq && faq.mainEntity.length >= 4);
   const graph = jsonLdGraph(mainnetBetaEventJsonLd(), faq);
   const event = graph["@graph"].find((n) => n["@type"] === "Event");

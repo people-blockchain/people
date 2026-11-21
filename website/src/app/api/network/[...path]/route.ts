@@ -2,7 +2,7 @@ import { isIP } from "node:net";
 import { NextRequest, NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { getNodeRpcUrl } from "@/lib/factory-config";
-import { clientIpFromRequest } from "@/lib/request-client-ip";
+import { clientIpFromRequest, trustProxyHeaders } from "@/lib/request-client-ip";
 import { evmJsonRpcMethodsAllowed } from "@/lib/evm/json-rpc-allowlist";
 import { readCappedText } from "@/lib/read-capped-text";
 
@@ -98,9 +98,8 @@ async function proxy(request: NextRequest, segments: string[]) {
     init.headers = { accept: "application/json", "content-type": "application/json" };
     init.body = raw;
   }
-  // Enable only behind an ingress which OVERWRITES x-real-ip; never trust a client XFF chain.
-  const clientIp = request.headers.get("x-real-ip") ?? "";
-  if (process.env.TRUST_PROXY_HEADERS === "1" && isIP(clientIp)) {
+  const clientIp = clientIpFromRequest(request);
+  if (trustProxyHeaders() && clientIp !== "unknown" && isIP(clientIp)) {
     init.headers = { ...init.headers, "x-forwarded-for": clientIp };
   }
   let upstream: Response;

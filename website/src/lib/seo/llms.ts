@@ -30,9 +30,9 @@ export function buildLlmsTxt(): string {
 - ${SITE_URL}/tokenomics — ${tokenomics.lead}
 - ${SITE_URL}/help — Short answer-first FAQ linked to docs, fees, wallet and the sale.
 - ${SITE_URL}/litepaper — Product overview, roadmap and risks (localized).
-- ${SITE_URL}/founders — Participation program and referrals (testnet points; not investment).
+- ${SITE_URL}/founders — Participation program and referrals (not investment).
 - ${SITE_URL}/bounty — Partner / growth program overview and tasks.
-- ${SITE_URL}/docs — Participant documentation for the public testnet and planned Mainnet Beta.
+- ${SITE_URL}/docs — Participant documentation for PEOPLE Blockchain and the PEOPLE Mainnet Beta sale (1 December 2026).
 
 ## PPL sale FAQ (from /buy)
 ${buyFaq}

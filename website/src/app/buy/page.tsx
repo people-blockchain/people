@@ -6,7 +6,7 @@ import { BuyPage } from "@/components/buy/BuyPage";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   breadcrumbJsonLd,
-  buyFaqPairs,
+  buyFaqPairsForJsonLd,
   faqPageJsonLd,
   jsonLdGraph,
 } from "@/lib/seo/json-ld";
@@ -49,12 +49,7 @@ export default async function Page({
   // Example trades exist only in this server response, and only on a
   // non-production deployment opened with `?demo=1`. Production never builds them.
   const exampleTrades = tradeDemoAllowed(process.env, params.demo) ? demoTrades() : null;
-  const [cookieStore, headerStore] = await Promise.all([cookies(), headers()]);
-  const lang = languageFromRequest(
-    languageCookieFromStore(cookieStore),
-    headerStore.get("accept-language"),
-  );
-  const faq = faqPageJsonLd(buyFaqPairs(lang));
+  const faq = faqPageJsonLd(buyFaqPairsForJsonLd());
 
   return (
     <SiteChrome>
