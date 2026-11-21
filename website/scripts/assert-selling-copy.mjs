@@ -190,7 +190,7 @@ test("owner-approved EN hero copy on homepage", () => {
   assert.doesNotMatch(en.hero.headlineAccent, /Up to 27/i);
   assert.equal(
     en.hero.testnetBadge,
-    "Public testnet is live. PEOPLE Mainnet Beta opens 1 December 2026.",
+    "PEOPLE Mainnet Beta opens 1 December 2026.",
   );
   const enLocale = src("src/lib/locales/en.ts");
   assert.match(

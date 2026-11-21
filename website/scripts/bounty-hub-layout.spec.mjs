@@ -35,7 +35,10 @@ test.describe("bounty hub layout", () => {
       await page.goto(`${BASE}/`, { waitUntil: "networkidle" });
       const homeBounty = page.getByTestId("home-hero-founder-cta");
       await expect(homeBounty).toBeVisible();
-      await expect(homeBounty).toHaveAttribute("href", "/bounty");
+      await expect(homeBounty).toHaveAttribute(
+        "href",
+        "/founders?utm_source=home&utm_medium=hero&utm_campaign=founder_number",
+      );
 
       if (width >= 1024) {
         await expect(page.locator('header nav a[href="/bounty"]:visible').first()).toBeVisible();

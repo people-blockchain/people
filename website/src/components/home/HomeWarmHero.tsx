@@ -1,10 +1,8 @@
 "use client";
 
 import { useMemo, useRef } from "react";
+import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
-import { content } from "@/lib/content";
-import { homeWarmCopy } from "@/lib/home-warm-content";
-import { bountyCopy } from "@/lib/bounty-content";
 import {
   heroHeadlineCqiMultiplier,
   heroHeadlineMaxWordCharsFromLines,
@@ -12,40 +10,26 @@ import {
   HERO_HEADLINE_HOME_MAX_REM,
 } from "@/lib/hero-headline-scale";
 import { useHeroHeadlineFit } from "@/hooks/useHeroHeadlineFit";
+import { homeWarmCopy } from "@/lib/home-warm-content";
+import { HOME_FOUNDER_CTA_HREF } from "@/lib/home-founder-cta";
 import { Reveal } from "@/components/motion/Reveal";
 import { HomeWalletCta } from "@/components/wallet/HomeWalletCta";
-import { PersonAvatar, WARM_HERO_BTN } from "@/components/warm/warm-ui";
-import Link from "next/link";
+import { WARM_HERO_BTN } from "@/components/warm/warm-ui";
 import { HeroTokenCard } from "./HeroTokenCard";
+import { HomeHeroCountdown } from "./HomeHeroCountdown";
+import { HomeHeroSteps } from "./HomeHeroSteps";
 import { communityShareHeadline } from "@/lib/selling-economics";
 
-/** slogan lines; keep in sync with the copy module. */
 const MAX_HEADLINE_LINES = 6;
 
-/**
- * Homepage hero in the /founders visual language.
- *
- * The headline keeps the site's per-line fit machinery (`useHeroHeadlineFit`)
- * so long RU/DE lines shrink instead of overflowing, and the token card sits
- * to the right on desktop / below the copy on mobile.
- */
 export function HomeWarmHero() {
   const { lang } = useLanguage();
   const t = homeWarmCopy(lang).hero;
   const shareHeadline = communityShareHeadline(lang);
-  const bounty = bountyCopy(lang);
-
-  // «Blockchain for everyone. Finally.» is the main landing phrase; the
-  // product line sits directly under it, smaller, and the 10% line stays.
   const sloganLines = t.sloganPrimaryLines;
   const headlineCopyKey = useMemo(() => sloganLines.join("\0"), [sloganLines]);
-
   const heroMaxWordChars = heroHeadlineMaxWordCharsFromLines(sloganLines);
-  const heroCqiMult = heroHeadlineCqiMultiplier(
-    heroMaxWordChars,
-    t.sloganPrimary,
-    "",
-  );
+  const heroCqiMult = heroHeadlineCqiMultiplier(heroMaxWordChars, t.sloganPrimary, "");
   const wideGlyphs = heroHeadlineUsesWideGlyphs(t.sloganPrimary, "");
 
   const columnRef = useRef<HTMLDivElement>(null);
@@ -63,6 +47,8 @@ export function HomeWarmHero() {
     HERO_HEADLINE_HOME_MAX_REM,
   );
 
+  const brandUpper = lang !== "tr";
+
   return (
     <section className="relative overflow-hidden" data-testid="home-hero">
       <div
@@ -70,11 +56,14 @@ export function HomeWarmHero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-6xl px-4 pb-8 pt-8 sm:px-6 sm:pt-14 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:gap-10">
+      <div className="relative mx-auto max-w-6xl px-4 pb-4 pt-6 sm:px-6 sm:pb-6 sm:pt-12 lg:px-8 lg:pb-8">
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center lg:gap-10">
           <div ref={columnRef} className="hero-copy min-w-0 max-w-full" data-testid="hero-copy-column">
             <Reveal>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-warm" data-testid="home-hero-brand-line">
+              <p
+                className={`text-xs font-semibold tracking-[0.16em] text-warm ${brandUpper ? "uppercase" : ""}`}
+                data-testid="home-hero-brand-line"
+              >
                 {t.brandLine}
               </p>
             </Reveal>
@@ -82,7 +71,7 @@ export function HomeWarmHero() {
             <Reveal delay={30}>
               <h1
                 ref={headlineRef}
-                className="hero-headline mt-4 max-w-full text-4xl font-bold leading-[1.04] tracking-tight text-ink sm:text-6xl"
+                className="hero-headline mt-3 max-w-full text-4xl font-bold leading-[1.04] tracking-tight text-ink sm:mt-4 sm:text-6xl"
                 data-testid="hero-headline"
                 data-hero-fit="pending"
                 style={
@@ -108,111 +97,48 @@ export function HomeWarmHero() {
               </h1>
             </Reveal>
 
-            {/* The product line stays, directly under the slogan and a step
-                smaller, so the slogan leads without replacing it. */}
-            <Reveal delay={45}>
+            <Reveal delay={50}>
               <p
-                className="mt-3 max-w-xl text-balance text-xl font-semibold leading-snug text-ink sm:text-3xl"
-                data-testid="home-hero-product-line"
+                className="mt-3 max-w-xl text-balance text-lg font-semibold leading-snug text-ink-2 sm:text-xl"
+                data-testid="home-hero-subheadline"
               >
-                {t.headlineMain}
+                {t.subheadline}
               </p>
             </Reveal>
 
-            {/* The 10% community-share line stays exactly as translated. */}
-            <Reveal delay={55}>
-              <p
-                className="mt-2 max-w-xl text-balance text-lg font-semibold leading-snug text-gradient-brand sm:text-2xl"
-                data-testid="home-hero-share-line"
-              >
-                {t.headlineAccent}
-              </p>
-            </Reveal>
-
-            {/* What this actually is, in one line, before any supporting detail. */}
-            <Reveal delay={60}>
-              <p
-                className="mt-4 max-w-xl text-base leading-snug text-ink-2 sm:text-lg"
-                data-testid="home-hero-pitch"
-              >
-                {t.pitchLine}
-              </p>
-            </Reveal>
-
-            {/* Join is the page's one big ask — it is the only Join on the site
-                now that the header carries a single «Sign in». The founder
-                number leads the row and is its peer. */}
-            <Reveal delay={100}>
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <Reveal delay={80}>
+              <div className="mt-4 flex flex-col gap-2.5 sm:mt-5 sm:flex-row sm:flex-wrap sm:items-center">
                 <Link
-                  href="/bounty"
+                  href={HOME_FOUNDER_CTA_HREF}
                   className={WARM_HERO_BTN}
                   data-testid="home-hero-founder-cta"
                 >
-                  {bounty.homeCta}
+                  {t.ctaFounder}
                 </Link>
-                <HomeWalletCta label={content[lang].nav.ctaJoin} className={WARM_HERO_BTN} />
+                <HomeWalletCta label={t.ctaWallet} className={WARM_HERO_BTN} />
               </div>
             </Reveal>
 
-            <Reveal delay={140}>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-2 sm:text-lg">{t.sub}</p>
+            <Reveal delay={100}>
+              <p className="mt-3 max-w-xl text-sm leading-snug text-ink-3" data-testid="home-hero-trust-line">
+                {t.trustLine}
+              </p>
             </Reveal>
 
-            <Reveal delay={180}>
-              <p
-                className="mt-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-xs font-semibold text-ink-2 shadow-[var(--elev-1)]"
-                data-testid="home-hero-testnet-badge"
-              >
-                <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-value opacity-60 motion-reduce:hidden" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-value" />
-                </span>
-                {t.testnetBadge}
-              </p>
-              <p className="mt-3 max-w-xl text-sm text-ink-2" data-testid="home-hero-sale-note">
-                {t.saleNote}{" "}
-                <Link href="/buy" className="font-semibold text-brand underline">
-                  {content[lang].nav.buy}
-                </Link>
-              </p>
+            <Reveal delay={120}>
+              <HomeHeroCountdown badge={t.betaBadge} countdown={t.countdown} />
+            </Reveal>
+
+            <Reveal delay={140} className="lg:hidden">
+              <HomeHeroSteps stages={t.stages} compact className="mt-4 w-full max-w-md space-y-1.5" />
             </Reveal>
           </div>
 
-          {/* Token card. In the flow on mobile (stacked under the copy), beside it on desktop. */}
-          <Reveal delay={80} className="flex min-w-0 flex-col items-center gap-5 lg:items-end">
+          <Reveal delay={80} className="hidden min-w-0 flex-col items-center gap-4 lg:flex lg:items-end">
             <HeroTokenCard t={t} shareHeadline={shareHeadline} />
-
-            <ol className="w-full max-w-[340px] space-y-2" data-testid="home-hero-beats">
-              {t.stages.map((beat, index) => (
-                <li
-                  key={beat.id}
-                  className="flex items-start gap-3 rounded-2xl border border-line bg-surface/60 px-4 py-3"
-                >
-                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand/10 text-[11px] font-bold text-brand" aria-hidden="true">
-                    {index + 1}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-ink">{beat.label}</p>
-                    <p className="mt-0.5 text-xs text-ink-2">{beat.sub}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <HomeHeroSteps stages={t.stages} className="w-full max-w-[340px] space-y-2" />
           </Reveal>
         </div>
-
-        {/* Logged-out reassurance: real people, different countries. */}
-        <Reveal delay={200}>
-          <div className="mt-8 flex items-center gap-3">
-            <span className="flex -space-x-2" aria-hidden="true">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <PersonAvatar key={i} index={i} className="warm-avatar-ring h-9 w-9 rounded-full" />
-              ))}
-            </span>
-            <span className="text-sm font-semibold text-ink-2">{t.peopleLine}</span>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

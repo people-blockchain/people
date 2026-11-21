@@ -18,9 +18,9 @@
     ],
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun ve testnette deneyin.",
     "pitchLine": "Sıradan insanlar için bir blockchain: kendi tokeniniz, kulüp NFT kartları ve bir fikir için para toplamak — kod yazmadan.",
-    "testnetBadge": "Halka açık testnet yayında. PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor.",
+    "testnetBadge": "PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor.",
     "ctaTestnet": "Testneti deneyin",
-    "ctaFounder": "Kurucu numaranızı alın",
+    "ctaFounder": "Kurucu numaramı al — ücretsiz",
     "card": {
       "badge": "Örnek",
       "tokenName": "Topluluğunuzun tokeni",
@@ -31,22 +31,34 @@
       {
         "id": "wallet",
         "label": "30 saniyede cüzdan",
-        "sub": "Anahtarlarınız telefonunuzda veya tarayıcınızda kalır."
+        "sub": "Anahtarlar telefonda veya tarayıcıda."
       },
       {
         "id": "token",
-        "label": "Tokeniniz, ilk işlemden itibaren fiyatlanır",
-        "sub": "Bir ad ve ticker seçin. Fiyatlandırmayı bonding curve yapar."
+        "label": "Tokeniniz yayında",
+        "sub": "Ad ve ticker — eğri fiyatı belirler."
       },
       {
         "id": "share",
-        "label": "10% insanlarınıza",
-        "sub": "Lansmanda kurucu, satılmayan eğri artığını (~17%'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar."
+        "label": "%10 insanlarınıza",
+        "sub": "Her lansmanda garanti."
       }
     ],
     "shareBadge": "10% topluluk payı",
     "peopleLine": "Sizin insanlarınız, balinalar değil",
-    "saleNote": "Bugünkü deneme alanı halka açık testnettir (test token'larının değeri yoktur). PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor: Base üzerinde USDC veya USDT ile ödersiniz, PPL ise PEOPLE Mainnet Beta üzerinde tanımlanır."
+    "saleNote": "PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor: Base üzerinde USDC veya USDT ile ödeyin; PPL PEOPLE Mainnet Beta'ya tanımlanır.",
+    "subheadline": "Topluluğunuz için bir dakikada token başlatın — kod yok. Her tokenin %10'u insanlarınıza gider, garanti.",
+    "betaBadge": "PEOPLE Mainnet Beta · 1 Ara'da başlıyor",
+    "trustLine": "Yalnızca doğrulanmış kişiler · bir kişi, bir adres · Base üzerinde",
+    "ctaWallet": "Ücretsiz cüzdan oluştur",
+    "countdown": {
+      "days": "gün",
+      "hours": "sa",
+      "minutes": "dk",
+      "seconds": "sn",
+      "dateLabel": "Açılış",
+      "open": "Mainnet Beta yayında."
+    }
   },
   "community": {
     "eyebrow": "Topluluk için garanti %10",
@@ -61,8 +73,8 @@
   "build": {
     "eyebrow": "Kod yok, kripto bilgisi gerekmez",
     "title": "Kod yazmadan yapabilecekleriniz",
-    "lead": "Aşağıdakilerin hepsi bugün halka açık testnette çalışıyor. Kurulacak veya derlenecek hiçbir şey yok.",
-    "cta": "Testnette deneyin",
+    "lead": "Aşağıdakilerin hepsi tarayıcıda çalışır. Kurulum veya derleme yok.",
+    "cta": "Oluşturmaya başla",
     "cards": [
       {
         "id": "token",
@@ -134,19 +146,20 @@
   },
   "network": {
     "eyebrow": "Canlı ağ",
-    "title": "Halka açık testnet, şu an",
+    "title": "PEOPLE ağı, canlı",
     "blockHeight": "Blok yüksekliği",
-    "chainLabel": "Testnet zinciri",
+    "chainLabel": "Zincir",
     "explorer": "Explorer'ı aç",
     "unavailable": "Blok yüksekliği şu anda kullanılamıyor.",
     "collecting": "Ağ okunuyor…",
-    "note": "Bu bir testnet. Yukarıdaki sayılar gerçek, tokenler değil."
+    "note": "PEOPLE ağından canlı bloklar."
   },
   "final": {
-    "title": "Testnet açık. Erken olun, bir şeyleri kırın, neyin kötü olduğunu bize söyleyin.",
-    "body": "Her hata bildirimi ve her kafa karıştıran soru doğrudan sıradaki yapacağımız şeye gidiyor.",
-    "ctaWallet": "Cüzdan oluşturun",
+    "title": "Mainnet Beta 1 Ara'da — yerinizi alın",
+    "body": "Lansmandan önce kurucu numaranızı alın.",
+    "ctaWallet": "Ücretsiz cüzdan oluştur",
     "ctaExplore": "Explorer'a bakın",
-    "socialLabel": "Bizi takip edin"
+    "socialLabel": "Bizi takip edin",
+    "ctaFounder": "Kurucu numaramı al — ücretsiz"
   }
 }
