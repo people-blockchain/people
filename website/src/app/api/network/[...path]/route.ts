@@ -1,7 +1,8 @@
+import { isIP } from "node:net";
 import { NextRequest, NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { getNodeRpcUrl } from "@/lib/factory-config";
-import { clientIpFromRequest } from "@/lib/request-client-ip";
+import { clientIpFromRequest, trustProxyHeaders } from "@/lib/request-client-ip";
 import { evmJsonRpcMethodsAllowed } from "@/lib/evm/json-rpc-allowlist";
 import { readCappedText } from "@/lib/read-capped-text";
 
@@ -98,7 +99,7 @@ async function proxy(request: NextRequest, segments: string[]) {
     init.body = raw;
   }
   const clientIp = clientIpFromRequest(request);
-  if (clientIp !== "unknown") {
+  if (trustProxyHeaders() && clientIp !== "unknown" && isIP(clientIp)) {
     init.headers = { ...init.headers, "x-forwarded-for": clientIp };
   }
   let upstream: Response;

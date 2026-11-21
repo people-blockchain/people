@@ -1,6 +1,6 @@
 import {
   clientIpFromHeaders as resolveClientIp,
-  requestCameViaCloudflare,
+  cloudflareHeadersTrusted,
 } from "@/lib/request-client-ip";
 
 export type GeoFromHeaders = {
@@ -16,7 +16,7 @@ function normalizeCountry(code: string | null | undefined): string | null {
 }
 
 export function geoFromRequestHeaders(headers: Headers): GeoFromHeaders {
-  const cfCountry = requestCameViaCloudflare(headers)
+  const cfCountry = cloudflareHeadersTrusted(headers)
     ? normalizeCountry(headers.get("cf-ipcountry"))
     : null;
   const country =

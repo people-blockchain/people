@@ -1,8 +1,17 @@
 import { isIP } from "node:net";
+import { isCloudflareIp } from "@/lib/cloudflare-ip-ranges";
 
 /** Enable only behind an ingress which overwrites the forwarding headers. */
 export function trustProxyHeaders(): boolean {
   return process.env.TRUST_PROXY_HEADERS === "1";
+}
+
+/**
+ * After orange-cloud, set on Vercel so `cf-connecting-ip` / `cf-ipcountry` are honored
+ * only when the immediate hop is a Cloudflare published range.
+ */
+export function trustCloudflareHeaders(): boolean {
+  return process.env.TRUST_CLOUDFLARE_HEADERS === "1";
 }
 
 function firstIp(header: string | null): string {
@@ -10,13 +19,29 @@ function firstIp(header: string | null): string {
   return isIP(first) ? first : "";
 }
 
-/** Cloudflare sets `cf-ray` on every proxied request; use it before trusting CF IP headers. */
+/** TCP peer Vercel saw (CF edge when proxied through orange-cloud). */
+export function vercelImmediateHop(headers: Headers): string {
+  return firstIp(headers.get("x-real-ip")) || firstIp(headers.get("x-vercel-forwarded-for")) || "";
+}
+
+/**
+ * `cf-*` headers are only trusted on Vercel when `TRUST_CLOUDFLARE_HEADERS=1` and the
+ * immediate hop is in Cloudflare's published IP ranges — never from `cf-ray` alone.
+ */
+export function cloudflareHeadersTrusted(headers: Headers): boolean {
+  if (!process.env.VERCEL || !trustCloudflareHeaders()) return false;
+  const hop = vercelImmediateHop(headers);
+  if (!hop) return false;
+  return isCloudflareIp(hop);
+}
+
+/** @deprecated Use `cloudflareHeadersTrusted`. */
 export function requestCameViaCloudflare(headers: Headers): boolean {
-  return Boolean(headers.get("cf-ray")?.trim());
+  return cloudflareHeadersTrusted(headers);
 }
 
 function cloudflareClientIp(headers: Headers): string {
-  if (!requestCameViaCloudflare(headers)) return "";
+  if (!cloudflareHeadersTrusted(headers)) return "";
   return (
     firstIp(headers.get("cf-connecting-ip")) ||
     firstIp(headers.get("true-client-ip")) ||
@@ -42,9 +67,8 @@ function vercelOrTrustedProxyIp(headers: Headers): string {
 /**
  * Best-effort client IP for rate-limit keys and audit logs.
  *
- * Order: Cloudflare (`cf-connecting-ip`, `true-client-ip`) when `cf-ray` is present;
- * then Vercel (`x-vercel-forwarded-for`, first `x-forwarded-for`, `x-real-ip`) on Vercel;
- * else trusted-proxy `x-real-ip` / `x-forwarded-for` when `TRUST_PROXY_HEADERS=1`.
+ * On Vercel: when `TRUST_CLOUDFLARE_HEADERS=1` and the immediate hop is a Cloudflare
+ * range, use `cf-connecting-ip` / `true-client-ip`; otherwise platform headers as before.
  */
 export function clientIpFromHeaders(headers: Headers): string {
   const viaCf = cloudflareClientIp(headers);
