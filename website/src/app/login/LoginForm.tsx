@@ -15,6 +15,7 @@ import { WalletExternalConnectSection } from "@/components/wallet/WalletExternal
 import { walletFeatures } from "@/lib/wallet-features";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { isWeb3AuthActive } from "@/lib/web3auth-config";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 import { partnerHomeAfterLogin } from "@/lib/partner/guards";
 
 export function LoginForm({
@@ -43,8 +44,9 @@ export function LoginForm({
   // Web3Auth is its own sign-in path, and /login is where its mobile redirect returns to.
   // Google / Magic Link below it are session-only and do not depend on the cloud-wallet flag.
   const web3AuthEnabled = isWeb3AuthActive();
+  const turnkeyEnabled = isTurnkeyWalletProvider();
   const sessionSignInEnabled = googleEnabled || magicEnabled;
-  const authAvailable = configured && (web3AuthEnabled || sessionSignInEnabled);
+  const authAvailable = configured && (web3AuthEnabled || sessionSignInEnabled || turnkeyEnabled);
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas text-ink">
@@ -66,7 +68,7 @@ export function LoginForm({
             </div>
           )}
 
-          {authAvailable && web3AuthEnabled ? (
+          {authAvailable && (web3AuthEnabled || turnkeyEnabled) ? (
             <div className="mt-6">
               <UnifiedWalletAuthPanel
                 autoConnect
@@ -75,7 +77,7 @@ export function LoginForm({
               />
             </div>
           ) : null}
-          {authAvailable && !web3AuthEnabled ? (
+          {authAvailable && !web3AuthEnabled && !turnkeyEnabled ? (
             <div className="mt-6">
               <SessionSignInPanel
                 redirectTo={partnerHomeAfterLogin(callbackUrl)}
@@ -85,7 +87,7 @@ export function LoginForm({
               />
             </div>
           ) : null}
-          {configured && !magicEnabled && !googleEnabled && !web3AuthEnabled && (
+          {configured && !magicEnabled && !googleEnabled && !web3AuthEnabled && !turnkeyEnabled && (
             <p className="mt-4 text-sm text-ink-3">{t.magicOff}</p>
           )}
 

@@ -1,3 +1,5 @@
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
+
 /**
  * Temporary kill-switch for Google/Apple (and Web3Auth social) login after the
  * Web3Auth Login Service outage / Keplr key-leak incident (2026-11-06).
@@ -6,11 +8,18 @@
  * Vercel (Production + Preview) and redeploying — no code revert required.
  * Original marketing strings are preserved under `*Social` locale keys; when
  * the flag is on, {@link withSocialLoginCopy} prefers those over the base keys.
+ *
+ * When `WALLET_PROVIDER=turnkey`, the same Social overlay is used so Google /
+ * email copy is shown without turning Web3Auth back on.
  */
 export function isSocialLoginEnabled(): boolean {
   const raw = process.env.NEXT_PUBLIC_SOCIAL_LOGIN_ENABLED?.trim().toLowerCase();
   if (!raw) return false;
   return raw === "1" || raw === "true" || raw === "yes" || raw === "on";
+}
+
+export function isSocialLoginCopyEnabled(): boolean {
+  return isSocialLoginEnabled() || isTurnkeyWalletProvider();
 }
 
 /**
@@ -22,7 +31,7 @@ export function pickSocialCopy<T extends Record<string, unknown>>(
   copy: T,
   baseKey: keyof T & string,
 ): string {
-  if (isSocialLoginEnabled()) {
+  if (isSocialLoginCopyEnabled()) {
     const socialKey = `${baseKey}Social` as keyof T;
     const social = copy[socialKey];
     if (typeof social === "string" && social.trim()) return social;
@@ -56,6 +65,6 @@ function preferSocialKeys(value: unknown): unknown {
  * Google/Apple pitches).
  */
 export function withSocialLoginCopy<T>(copy: T): T {
-  if (!isSocialLoginEnabled()) return copy;
+  if (!isSocialLoginCopyEnabled()) return copy;
   return preferSocialKeys(copy) as T;
 }

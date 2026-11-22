@@ -22,8 +22,11 @@ export interface PersistedWalletSession {
   address: string;
   privateKey: string;
   publicKey: string;
-  kind?: "local" | "cloud";
+  kind?: "local" | "cloud" | "turnkey";
   userId?: string;
+  subOrganizationId?: string;
+  turnkeyUserId?: string;
+  walletId?: string;
 }
 
 export interface SessionEnvelope {
@@ -90,14 +93,19 @@ export async function decryptSessionPayload(
   ) {
     throw new Error("invalid_session");
   }
+  const kind =
+    parsed.kind === "turnkey" ? "turnkey" : parsed.kind === "cloud" ? "cloud" : "local";
   const session: PersistedWalletSession = {
     id: parsed.id,
     address: parsed.address,
     privateKey: parsed.privateKey,
     publicKey: parsed.publicKey,
-    kind: parsed.kind === "cloud" ? "cloud" : "local",
+    kind,
   };
   if (typeof parsed.userId === "string") session.userId = parsed.userId;
+  if (typeof parsed.subOrganizationId === "string") session.subOrganizationId = parsed.subOrganizationId;
+  if (typeof parsed.turnkeyUserId === "string") session.turnkeyUserId = parsed.turnkeyUserId;
+  if (typeof parsed.walletId === "string") session.walletId = parsed.walletId;
   return session;
 }
 

@@ -47,11 +47,20 @@ export class WalletCloudError extends Error {
   readonly code: string;
   /** True once `failCloudOpen` has written the safe console warning. */
   readonly logged: boolean;
-  constructor(code: string, options?: { logged?: boolean }) {
+  /** Import/open stage when known (`decrypt` / `match` / `stamp` / `init`). */
+  readonly stage?: string;
+  /** Signature length/prefix/format only — never the bytes. */
+  readonly stampShape?: { length: number; prefix: string; format: string };
+  constructor(
+    code: string,
+    options?: { logged?: boolean; stage?: string; stampShape?: { length: number; prefix: string; format: string } },
+  ) {
     super(code);
     this.name = "WalletCloudError";
     this.code = code;
     this.logged = options?.logged === true;
+    this.stage = options?.stage;
+    this.stampShape = options?.stampShape;
   }
 }
 

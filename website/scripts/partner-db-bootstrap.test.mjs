@@ -129,7 +129,7 @@ test("referral & KOL bootstrap mirrors drizzle 0023 SQL file", async () => {
   }
 });
 
-test("founding traps 0026 SQL mirrors bootstrap-sql statements", async () => {
+test("founding traps 0027 SQL mirrors bootstrap-sql statements", async () => {
   const { FOUNDING_TRAPS_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
   const raw = readFileSync(join(root, "drizzle/0027_founding_traps_tg_claim_waitlist.sql"), "utf8");
   const fromFile = raw
@@ -149,13 +149,32 @@ test("founding traps 0026 SQL mirrors bootstrap-sql statements", async () => {
   }
 });
 
+test("turnkey wallet bootstrap mirrors drizzle 0028 SQL file", async () => {
+  const { USER_TURNKEY_WALLET_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
+  const raw = readFileSync(join(root, "drizzle/0028_user_turnkey_wallet.sql"), "utf8");
+  const fromFile = raw
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("--"))
+    .join("\n")
+    .split(";")
+    .map((chunk) => chunk.trim())
+    .filter(Boolean);
+  assert.equal(USER_TURNKEY_WALLET_SCHEMA_STATEMENTS.length, fromFile.length);
+  for (let i = 0; i < fromFile.length; i += 1) {
+    assert.equal(
+      USER_TURNKEY_WALLET_SCHEMA_STATEMENTS[i].replace(/\s+/g, " "),
+      fromFile[i].replace(/\s+/g, " "),
+    );
+    assert.match(USER_TURNKEY_WALLET_SCHEMA_STATEMENTS[i], /IF NOT EXISTS/i);
+  }
+});
+
 test("runtime schema bootstrap does not auto-apply founding traps 0027 DDL", () => {
   const src = readFileSync(join(root, "src/db/bootstrap.ts"), "utf8");
   assert.doesNotMatch(src, /for \(const statement of FOUNDING_TRAPS_SCHEMA_STATEMENTS\)/);
   assert.doesNotMatch(src, /FOUNDING_TRAPS_SCHEMA_STATEMENTS,/);
   assert.match(src, /0027_founding_traps_tg_claim_waitlist\.sql/);
 });
-
 test("bootstrap clears cached promise after failure so later calls can retry", async () => {
   const src = readFileSync(join(root, "src/db/bootstrap.ts"), "utf8");
   assert.match(src, /\.catch\(\(error\) => \{/);

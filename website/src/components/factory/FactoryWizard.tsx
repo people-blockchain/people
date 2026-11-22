@@ -8,7 +8,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { factoryCopy } from "@/lib/factory-content";
 import type { FactoryPublicConfig } from "@/lib/factory-config";
 import { DEFAULT_PUBLIC_CHAIN_ID } from "@/lib/node-rpc";
-import { signFactoryTx } from "@/lib/people-sign";
+import { signSessionFactoryTx } from "@/lib/wallet-session-sign";
 import { networkJson } from "@/lib/network-client";
 import { useWallet } from "@/context/WalletContext";
 import { Chip, Eyebrow } from "@/components/ui/primitives";
@@ -150,10 +150,12 @@ function PeopleFactoryWizard({ kind }: Props) {
       const live = await networkJson<{ nonce?: number; balance?: number }>(`address/${session.address}`);
       setAccount({ address: session.address, nonce: Number(live.nonce ?? 0), balance: Number(live.balance ?? 0) });
       const image = imageUri || imageUrlInput.trim();
-      const tx =
+      const chainId = (await networkJson<{ chainId: string }>("health")).chainId;
+      const tx = await signSessionFactoryTx(
+        session,
         kind === "token"
-          ? signFactoryTx(session.privateKey, {
-              chainId: (await networkJson<{ chainId: string }>("health")).chainId,
+          ? {
+              chainId,
               id: `${session.address}-tokenCreate-${Date.now()}`,
               from: session.address,
               to: "network",
@@ -172,9 +174,9 @@ function PeopleFactoryWizard({ kind }: Props) {
                   image: image,
                 },
               },
-            })
-          : signFactoryTx(session.privateKey, {
-              chainId: (await networkJson<{ chainId: string }>("health")).chainId,
+            }
+          : {
+              chainId,
               id: `${session.address}-nftMint-${Date.now()}`,
               from: session.address,
               to: "nft",
@@ -191,7 +193,8 @@ function PeopleFactoryWizard({ kind }: Props) {
                   ? { collectionId: collectionId.trim() }
                   : {}),
               },
-            });
+            },
+      );
       const sent = await networkJson<{ accepted?: boolean; error?: string }>("tx", {
         method: "POST",
         headers: { "content-type": "application/json" },

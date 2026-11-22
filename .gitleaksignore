@@ -1,3 +1,6 @@
+# Dummy PEM header in a sanitizer unit test (not a real key); rewritten in a later commit
+922cca9006029b0b69878aaae521c665e7704ece:website/src/lib/turnkey-error.test.ts:private-key:45
+
 # Synthetic test fixtures (public EVM addresses), not secrets
 9015d581f66debf43295a210efa455ca66feb42d:website/scripts/wallet-send.test.mjs:generic-api-key:30
 c4eb1ebcb0d44e49269dba53182ebaeb043cf7d7:website/scripts/wallet-holdings.test.mjs:generic-api-key:25

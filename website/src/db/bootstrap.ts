@@ -21,6 +21,7 @@ import {
   FOUNDER_NFT_PERSON_SCHEMA_STATEMENTS,
   FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
   REFERRAL_KOL_SCHEMA_STATEMENTS,
+  USER_TURNKEY_WALLET_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 import { UPLOAD_NONCE_SCHEMA_STATEMENTS } from "./upload-nonce-sql.mjs";
 import { UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS } from "./upload-sign-rate-sql.mjs";
@@ -120,6 +121,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     // first preview hit would mutate prod without an explicit go-ahead. Apply 0027 via
     // migration after approval. Routes degrade on undefined_table / SQLSTATE 42P01 until then.
     // SQL also lives in bootstrap-sql.mjs for offline fixtures and tests only.
+    // drizzle/0028_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
+    for (const statement of USER_TURNKEY_WALLET_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
     for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }

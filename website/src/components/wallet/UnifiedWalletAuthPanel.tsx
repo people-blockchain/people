@@ -7,7 +7,9 @@ import { partnerCopy } from "@/lib/partner/copy";
 import { walletUxCopy } from "@/lib/wallet-ux-copy";
 import { isWeb3AuthActive } from "@/lib/web3auth-config";
 import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 import { WalletCloudSignIn } from "./WalletCloudSignIn";
+import { WalletTurnkeySignIn } from "./WalletTurnkeySignIn";
 
 const WalletWeb3AuthSignIn = dynamic(
   () => import("./WalletWeb3AuthSignIn").then((m) => m.WalletWeb3AuthSignIn),
@@ -32,16 +34,26 @@ export function UnifiedWalletAuthPanel({
   const t = partnerCopy[lang];
   const mpcActive = isWeb3AuthActive();
   const cloudActive = isCloudWalletEnabled();
+  const turnkeyActive = isTurnkeyWalletProvider();
   const explainer = mpcActive ? c.modalExplainerMpc : c.modalExplainer;
 
   return (
     <div className="space-y-4" data-testid="unified-wallet-auth">
-      {showExplainer && (mpcActive || cloudActive) ? (
+      {showExplainer && (mpcActive || cloudActive || turnkeyActive) ? (
         <p className="text-sm leading-relaxed text-ink-2" data-testid="wallet-modal-explainer">
           {explainer}
         </p>
       ) : null}
-      {mpcActive ? (
+      {turnkeyActive ? (
+        <>
+          {mpcActive ? (
+            <WalletWeb3AuthSignIn skipVault onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
+          ) : (
+            <WalletCloudSignIn skipVault onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
+          )}
+          <WalletTurnkeySignIn onConnected={onConnected} autoConnect={autoConnect} />
+        </>
+      ) : mpcActive ? (
         <WalletWeb3AuthSignIn onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
       ) : cloudActive ? (
         <WalletCloudSignIn onConnected={onConnected} autoConnect={autoConnect} onOpenImport={onOpenImport} />
