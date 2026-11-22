@@ -14,12 +14,29 @@ import { NetworkModeSwitch } from "./NetworkModeSwitch";
 import { isAppToolRoute } from "@/lib/marketing-routes";
 import { Menu, X, ArrowRight, Sun, Moon, ChevronDown } from "lucide-react";
 import { HeaderWalletMenu } from "@/components/wallet/HeaderWalletMenu";
+import { isProgressStripRoute } from "@/lib/founding/contract";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { content } from "@/lib/content";
 import { bountyCopy } from "@/lib/bounty-content";
 import { BRAND_TAGLINE } from "@/lib/site";
 import { bugReportCopy } from "@/lib/bug-reports/copy";
+import type { Language } from "@/lib/preferences";
+
+const FOUNDERS_VERIFY_NAV_LABEL: Record<Language, string> = {
+  en: "Founders / Verify",
+  ru: "Founders / Verify",
+  es: "Founders / Verificar",
+  pt: "Founders / Verificar",
+  fr: "Founders / Vérifier",
+  de: "Founders / Verifizieren",
+  it: "Founders / Verifica",
+  tr: "Founders / Doğrula",
+  vi: "Founders / Xác minh",
+  id: "Founders / Verifikasi",
+  zh: "Founders / 验证",
+  ar: "Founders / التحقق",
+};
 
 /** Hidden when unset — no Vercel dashboard change required to ship without it. */
 const SUPPORT_TG_URL = process.env.NEXT_PUBLIC_SUPPORT_TG_URL;
@@ -59,6 +76,10 @@ function ThemeToggleButton({
 const HOW_IT_WORKS_HREF = "/how-it-works";
 const DISCOVER_HREF = "/discover";
 const DESKTOP_NAV_MIN_WIDTH = 1024;
+/** Tailwind `xl`: the brand slogan is reserved for this width and up so a
+ *  long locale line cannot size the brand slot and push Sign in off-screen
+ *  at 1024px (DE «Anmelden» center was 0.5px past the viewport edge). */
+const SLOGAN_VISIBLE_MIN_WIDTH = 1280;
 
 type NavLink = {
   label: string;
@@ -161,6 +182,8 @@ export function Navbar() {
   const pathname = usePathname();
   const t = content[lang].nav;
   const bounty = bountyCopy(lang);
+  const foundersVerifyLabel = FOUNDERS_VERIFY_NAV_LABEL[lang] ?? FOUNDERS_VERIFY_NAV_LABEL.en;
+  const foundersVerifyLink: NavLink = { label: foundersVerifyLabel, href: "/founders" };
   const bountyLink: NavLink = { label: bounty.navLabel, href: "/bounty" };
   const supportLabel = bugReportCopy[lang].supportLink;
   const supportLink: NavLink[] = SUPPORT_TG_URL
@@ -233,7 +256,16 @@ export function Navbar() {
         brand.style.width = "";
         return;
       }
-      const width = bundle.scrollWidth;
+      // Below xl the slogan is hidden. Size the slot to the lockup, not
+      // bundle.scrollWidth (which includes the slogan while it is still in
+      // the grid), so long DE/FR copy cannot push Sign in off-screen.
+      const lockup = bundle.querySelector("[data-testid='header-brand-lockup']");
+      const width =
+        window.innerWidth < SLOGAN_VISIBLE_MIN_WIDTH
+          ? (lockup instanceof HTMLElement && lockup.scrollWidth > 0
+              ? lockup.scrollWidth
+              : bundle.scrollWidth)
+          : bundle.scrollWidth;
       if (width > 0) brand.style.width = `${width}px`;
     };
 
@@ -248,10 +280,12 @@ export function Navbar() {
     };
   }, [lang, t.slogan]);
 
+  const showFoundingProgressSlot = isProgressStripRoute(pathname || "/");
   const showNetworkMode = isAppToolRoute(pathname);
 
   return (
-    <header className="glass-bar sticky top-0 z-50 border-b border-line">
+    <>
+    <header className="glass-bar sticky top-[var(--founding-topbar-h,0px)] z-50 border-b border-line">
       <div
         dir="ltr"
         className="header-bar-row mx-auto flex h-14 max-w-7xl flex-nowrap items-center gap-1.5 px-3 py-0 max-[639px]:gap-1.5 sm:gap-2 sm:px-6 lg:h-[4.5rem] lg:gap-3 lg:px-6 xl:gap-3 xl:px-8"
@@ -298,7 +332,7 @@ export function Navbar() {
               data-testid="header-brand-slogan"
               data-lang={lang}
               data-expected={t.slogan}
-              className="header-brand-slogan"
+              className="header-brand-slogan lg:hidden xl:block"
               style={{ "--slogan-chars": String(t.slogan.length) } as CSSProperties}
             >
               {t.slogan}
@@ -313,11 +347,22 @@ export function Navbar() {
             by ~27px when these two were inline there. 2xl (1536px) has real
             room to spare. Earn PPL only goes inline from xl: at 1024px it
             pushed the long-locale header into the sign-in button, so below xl
-            it lives in More (like the sheet, which always lists it). */}
+            it lives in More (like the sheet, which always lists it). The
+            Founders / Verify pill likewise uses a short “Founders” label below
+            xl, and the brand slogan stays hidden until xl so a long DE line
+            cannot push Sign in past the viewport edge. */}
         <nav
           aria-label={content[lang].a11y.navPrimary}
           className="header-primary-nav hidden shrink items-center gap-0.5 lg:flex lg:pl-4 xl:gap-1 xl:pl-5 2xl:pl-6"
         >
+          <Link
+            href={foundersVerifyLink.href}
+            data-testid="nav-founders-verify"
+            className="header-label mr-1 inline-flex h-10 items-center rounded-full border border-warm/45 bg-warm/15 px-3 text-sm font-semibold text-ink shadow-[var(--elev-1)] transition-colors hover:border-warm hover:bg-warm/25 xl:px-3.5"
+          >
+            <span className="xl:hidden">Founders</span>
+            <span className="hidden xl:inline">{foundersVerifyLink.label}</span>
+          </Link>
           {t.links.map((link) => (
             <a
               key={link.href}
@@ -402,6 +447,17 @@ export function Navbar() {
               >
                 <nav aria-label={content[lang].a11y.navMobile} className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
                   <ul className="flex flex-col">
+                    <li>
+                      <Link
+                        href={foundersVerifyLink.href}
+                        onClick={() => setOpen(false)}
+                        data-testid="nav-founders-verify-mobile"
+                        className="mb-2 flex items-center justify-between gap-4 rounded-2xl border border-warm/45 bg-warm/15 px-4 py-3.5 text-lg font-bold text-ink"
+                      >
+                        {foundersVerifyLink.label}
+                        <ArrowRight className="h-4 w-4 shrink-0 text-warm" />
+                      </Link>
+                    </li>
                     {sheetLinks.map((link) => (
                       <li key={link.href}>
                         <a
@@ -458,5 +514,10 @@ export function Navbar() {
           )
         : null}
     </header>
+    <div
+      id="founding-progress-slot"
+      className={showFoundingProgressSlot ? "min-h-10" : undefined}
+    />
+    </>
   );
 }

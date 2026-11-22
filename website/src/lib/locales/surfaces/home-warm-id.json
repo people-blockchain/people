@@ -19,7 +19,7 @@
     "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik.",
     "pitchLine": "Blockchain untuk orang biasa: token sendiri, kartu NFT klub, dan mengumpulkan dana untuk sebuah ide — tanpa kode.",
     "ctaTestnet": "Mulai membuat",
-    "ctaFounder": "Dapatkan nomor pendiri saya — gratis",
+    "ctaFounder": "Klaim kursi",
     "card": {
       "badge": "Contoh",
       "tokenName": "Token komunitas Anda",
@@ -128,9 +128,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Nomor pendiri masih dibagikan",
+    "title": "Kursi Founding 1,000 sudah dibuka",
     "titleWithNumber": "Pendiri #{{n}} berikutnya",
-    "lead": "Klaim nomor, dapatkan kartu yang bisa dibagikan, dan dapatkan bagian pool komunitas karena hadir lebih awal dan aktif.",
+    "lead": "Klaim kursi pendiri sekarang. Daftar dan urutan tetap tertutup hingga 1.000 dompet terverifikasi terkunci.",
     "cta": "Jadi pendiri",
     "href": "/founders",
     "cardHint": "Dua level, hanya untuk orang aktif, 10% di awal dan sisanya selama 52 minggu.",
@@ -154,8 +154,8 @@
     "note": "Blok live dari jaringan PEOPLE."
   },
   "final": {
-    "title": "Mainnet Beta buka 1 Des — amankan tempat Anda",
-    "body": "Dapatkan nomor pendiri sebelum peluncuran.",
+    "title": "PEOPLE Mainnet Beta dibuka 1 Desember. Kunci kursi Founding 1,000 Anda lebih awal.",
+    "body": "Setiap laporan bug dan setiap pertanyaan yang membingungkan langsung masuk ke apa yang kami bangun selanjutnya.",
     "ctaWallet": "Buat dompet gratis",
     "ctaExplore": "Lihat explorer",
     "socialLabel": "Ikuti kami",

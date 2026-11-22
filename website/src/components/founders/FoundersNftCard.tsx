@@ -1,5 +1,6 @@
 "use client";
 
+import { foundersCopyLang } from "@/lib/founders-public-content";
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { readPublicClient, signViaActiveSigner, useExternalWalletOptional, writeViaActiveSigner } from "@/context/ExternalWalletContext";
@@ -64,7 +65,7 @@ export function FoundersNftCard({ signedIn }: { signedIn: boolean }) {
   const config = readFounderNftPublicConfig();
   const contract = config?.address ?? null;
   const { lang } = useLanguage();
-  const copy = founderNftCopy[lang];
+  const copy = founderNftCopy[foundersCopyLang(lang)];
   const wallet = useExternalWalletOptional();
   const signer = wallet?.signer ?? null;
   const connectInjected = wallet?.connectInjected;

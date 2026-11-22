@@ -29,7 +29,7 @@
     },
     "trustLine": "Verified people only · one person, one address · Built on Base",
     "ctaTestnet": "Start creating",
-    "ctaFounder": "Get my founder number — free",
+    "ctaFounder": "Claim Seat",
     "ctaWallet": "Create a free wallet",
     "card": {
       "badge": "Example",
@@ -127,9 +127,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Founder numbers are still being handed out",
+    "title": "Founding 1,000 seats are open",
     "titleWithNumber": "Founder #{{n}} is next",
-    "lead": "Claim a number, get a card you can share, and earn a share of the community pool by being early and active.",
+    "lead": "Claim a Founding Seat now. Roster and order stay sealed until 1,000 verified wallets lock in.",
     "cta": "Become a founder",
     "href": "/founders",
     "cardHint": "Two levels, active people only, 10% up front and the rest over 52 weeks.",
@@ -153,8 +153,8 @@
     "note": "Live blocks from the PEOPLE network."
   },
   "final": {
-    "title": "Mainnet Beta opens 1 Dec — claim your spot",
-    "body": "Get your founder number before launch and be ready when transfers open.",
+    "title": "PEOPLE Mainnet Beta opens Dec 1. Lock in your Founding 1,000 seat early.",
+    "body": "Every bug report and every confused question goes straight into what we build next.",
     "ctaFounder": "Get my founder number — free",
     "ctaWallet": "Create a free wallet",
     "ctaExplore": "Look at the explorer",

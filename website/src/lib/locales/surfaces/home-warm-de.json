@@ -19,7 +19,7 @@
     "sub": "Kein Code, keine Krypto-Kenntnisse nötig. Ein Smartphone oder ein Browser reicht: Wallet in 30 Sekunden erstellen und im Testnet ausprobieren.",
     "pitchLine": "Eine Blockchain für ganz normale Menschen: ein eigener Token, NFT-Clubkarten und Geld für eine Idee sammeln — ohne Code.",
     "ctaTestnet": "Testnet ausprobieren",
-    "ctaFounder": "Meine Gründernummer holen — kostenlos",
+    "ctaFounder": "Sitzplatz sichern",
     "card": {
       "badge": "Beispiel",
       "tokenName": "Der Token Ihrer Community",
@@ -128,9 +128,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Gründernummern werden noch vergeben",
+    "title": "Founding-1.000-Plätze sind offen",
     "titleWithNumber": "Gründer #{{n}} ist als Nächstes dran",
-    "lead": "Sichern Sie sich eine Nummer, erhalten Sie eine teilbare Karte und verdienen Sie einen Anteil am Community-Pool, weil Sie früh dabei und aktiv sind.",
+    "lead": "Sichern Sie sich jetzt einen Gründersitz. Liste und Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets feststehen.",
     "cta": "Gründer werden",
     "href": "/founders",
     "cardHint": "Zwei Stufen, nur für aktive Menschen, 10 % im Voraus und der Rest über 52 Wochen.",
@@ -154,8 +154,8 @@
     "note": "Live-Blöcke vom PEOPLE-Netzwerk."
   },
   "final": {
-    "title": "Mainnet Beta am 1. Dez — Platz sichern",
-    "body": "Holen Sie sich Ihre Gründernummer vor dem Start.",
+    "title": "PEOPLE Mainnet Beta startet am 1. Dezember. Sichern Sie sich früh Ihren Founding-1,000-Platz.",
+    "body": "Jeder Fehlerbericht und jede verwirrte Frage fließt direkt in das, was wir als Nächstes bauen.",
     "ctaWallet": "Kostenlose Wallet erstellen",
     "ctaExplore": "Explorer ansehen",
     "socialLabel": "Folgen Sie uns",

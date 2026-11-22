@@ -162,6 +162,40 @@ const MESSAGES: Record<string, Record<TelegramBotLocale, string>> = {
     "ka": "✅ ამ ანგარიშისთვის Telegram-ის ვერიფიკაცია უკვე დასრულებულია.",
     "hy": "✅ Այս հաշվի համար Telegram-ի ստուգումն արդեն ավարտված է։",
     "uk": "✅ Верифікацію Telegram для цього акаунта вже виконано."
+  },
+  "coldStartPending": {
+    "en": "✅ Status: Pending in Founding 1,000 Vault.\n\nYour phone is verified (1 phone = 1 human). Roster & order stay sealed until 1,000 verified wallets lock in.\n\n🔗 Your 7% USDC referral link:\n{{refUrl}}\n\n🔒 Tap below to connect or create a wallet and seal your Founding 1,000 seat:\n{{claimUrl}}",
+    "es": "✅ Estado: Pendiente en Founding 1,000 Vault.\n\nTu teléfono está verificado (1 teléfono = 1 humano). La lista y el orden permanecen sellados hasta que 1,000 billeteras verificadas se bloqueen.\n\n🔗 Tu enlace de referido (7% USDC):\n{{refUrl}}\n\n🔒 Pulsa abajo para crear o conectar una billetera y sellar tu asiento en Founding 1,000:\n{{claimUrl}}",
+    "pt": "✅ Status: Pendente no Founding 1,000 Vault.\n\nSeu telefone foi verificado (1 telefone = 1 humano). A lista e a ordem permanecem seladas até que 1.000 carteiras verificadas confirmem.\n\n🔗 Seu link de indicação (7% USDC):\n{{refUrl}}\n\n🔒 Toque abaixo para criar ou conectar uma carteira e selar seu lugar no Founding 1,000:\n{{claimUrl}}",
+    "fr": "✅ Statut : En attente dans Founding 1,000 Vault.\n\nVotre téléphone est vérifié (1 téléphone = 1 humain). La liste et l'ordre restent scellés jusqu'à 1 000 portefeuilles vérifiés.\n\n🔗 Votre lien de parrainage (7 % USDC) :\n{{refUrl}}\n\n🔒 Appuyez ci-dessous pour créer ou connecter un portefeuille et sceller votre place :\n{{claimUrl}}",
+    "de": "✅ Status: Ausstehend im Founding 1,000 Vault.\n\nDeine Nummer ist verifiziert (1 Telefon = 1 Mensch). Liste und Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets gesichert sind.\n\n🔗 Dein 7 % USDC Empfehlungslink:\n{{refUrl}}\n\n🔒 Tippe unten, um eine Wallet zu erstellen oder zu verbinden und deinen Platz zu versiegeln:\n{{claimUrl}}",
+    "it": "✅ Stato: In attesa nel Founding 1,000 Vault.\n\nIl tuo telefono è verificato (1 telefono = 1 umano). Elenco e ordine restano sigillati finché 1.000 portafogli verificati non sono confermati.\n\n🔗 Il tuo link referral (7% USDC):\n{{refUrl}}\n\n🔒 Tocca qui sotto per creare o collegare un portafoglio e sigillare il tuo posto:\n{{claimUrl}}",
+    "tr": "✅ Durum: Founding 1,000 Vault içinde Beklemede.\n\nTelefonunuz doğrulandı (1 telefon = 1 insan). 1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır.\n\n🔗 %7 USDC referans bağlantınız:\n{{refUrl}}\n\n🔒 Bir cüzdan oluşturmak veya bağlamak ve Founding 1,000 koltuğunuzu mühürlemek için aşağıya dokunun:\n{{claimUrl}}",
+    "vi": "✅ Trạng thái: Đang chờ trong Founding 1,000 Vault.\n\nSố điện thoại của bạn đã được xác minh (1 số = 1 người thật). Danh sách và thứ tự được niêm phong cho đến khi đủ 1.000 ví xác minh.\n\n🔗 Liên kết giới thiệu 7% USDC của bạn:\n{{refUrl}}\n\n🔒 Nhấn bên dưới để tạo hoặc kết nối ví và niêm phong vị trí Founding 1,000:\n{{claimUrl}}",
+    "id": "✅ Status: Tertunda di Founding 1,000 Vault.\n\nTelepon Anda terverifikasi (1 telepon = 1 manusia). Daftar & urutan tetap tersegel hingga 1.000 dompet terverifikasi terkunci.\n\n🔗 Tautan referral 7% USDC Anda:\n{{refUrl}}\n\n🔒 Ketuk di bawah untuk membuat atau menghubungkan dompet dan menyegel kursi Founding 1,000 Anda:\n{{claimUrl}}",
+    "zh": "✅ 状态：Founding 1,000 Vault 待绑定（Pending）。\n\n您的手机号已验证（1 个号码 = 1 位真人）。名单与顺序在 1,000 个验证钱包锁定前保持密封。\n\n🔗 您的 7% USDC 邀请链接：\n{{refUrl}}\n\n🔒 点击下方创建或连接钱包以锁定您的 Founding 1,000 席位：\n{{claimUrl}}",
+    "ar": "✅ الحالة: قيد الانتظار في Founding 1,000 Vault.\n\nتم التحقق من هاتفك (هاتف واحد = إنسان واحد). تظل القائمة والترتيب مختومين حتى يتم قفل 1,000 محفظة موثقة.\n\n🔗 رابط الإحالة الخاص بك (7% USDC):\n{{refUrl}}\n\n🔒 اضغط أدناه لإنشاء أو ربط محفظة وختم مقعدك في Founding 1,000:\n{{claimUrl}}",
+    "ru": "✅ Status: Pending in Founding 1,000 Vault.\n\nYour phone is verified (1 phone = 1 human). Roster & order stay sealed until 1,000 verified wallets lock in.\n\n🔗 Your 7% USDC referral link:\n{{refUrl}}\n\n🔒 Tap below to connect or create a wallet and seal your Founding 1,000 seat:\n{{claimUrl}}",
+    "ka": "✅ Status: Pending in Founding 1,000 Vault.\n\nYour phone is verified (1 phone = 1 human). Roster & order stay sealed until 1,000 verified wallets lock in.\n\n🔗 Your 7% USDC referral link:\n{{refUrl}}\n\n🔒 Tap below to connect or create a wallet and seal your Founding 1,000 seat:\n{{claimUrl}}",
+    "hy": "✅ Status: Pending in Founding 1,000 Vault.\n\nYour phone is verified (1 phone = 1 human). Roster & order stay sealed until 1,000 verified wallets lock in.\n\n🔗 Your 7% USDC referral link:\n{{refUrl}}\n\n🔒 Tap below to connect or create a wallet and seal your Founding 1,000 seat:\n{{claimUrl}}",
+    "uk": "✅ Status: Pending in Founding 1,000 Vault.\n\nYour phone is verified (1 phone = 1 human). Roster & order stay sealed until 1,000 verified wallets lock in.\n\n🔗 Your 7% USDC referral link:\n{{refUrl}}\n\n🔒 Tap below to connect or create a wallet and seal your Founding 1,000 seat:\n{{claimUrl}}"
+  },
+  "coldStartClaimButton": {
+    "en": "🔒 Connect Wallet & Seal Seat",
+    "es": "🔒 Conectar billetera y sellar asiento",
+    "pt": "🔒 Conectar carteira e selar lugar",
+    "fr": "🔒 Connecter le portefeuille et sceller la place",
+    "de": "🔒 Wallet verbinden & Platz versiegeln",
+    "it": "🔒 Collega portafoglio e sigilla il posto",
+    "tr": "🔒 Cüzdanı Bağla ve Koltuğu Mühürle",
+    "vi": "🔒 Kết nối ví & Niêm phong vị trí",
+    "id": "🔒 Hubungkan Dompet & Segel Kursi",
+    "zh": "🔒 连接钱包并锁定席位",
+    "ar": "🔒 ربط المحفظة وختم المقعد",
+    "ru": "🔒 Connect Wallet & Seal Seat",
+    "ka": "🔒 Connect Wallet & Seal Seat",
+    "hy": "🔒 Connect Wallet & Seal Seat",
+    "uk": "🔒 Connect Wallet & Seal Seat"
   }
 };
 
@@ -174,7 +208,9 @@ export type TelegramBotMessageKey =
   | "telegramTaken"
   | "wrongContact"
   | "sessionExpired"
-  | "alreadyVerified";
+  | "alreadyVerified"
+  | "coldStartPending"
+  | "coldStartClaimButton";
 
 export function tgMsg(key: TelegramBotMessageKey, locale: TelegramBotLocale): string {
   return MESSAGES[key][locale] ?? MESSAGES[key].en;

@@ -2,7 +2,7 @@
  * Pure KOL & Partner commission calculation, volume tier progression, 30-day hold
  * lifecycle (`pending / approved / paid / void`), LIFO curve sell-back clawback,
  * and settlement network invariants:
- * - Blogger/KOL USDC commission: 7% / 9% / 12% by cumulative net volume, settled in USDC on Base.
+ * - Blogger/KOL USDC commission: flat 7% USDC from the very first purchase (no minimum volume), settled in USDC on Base.
  * - Blogger/KOL PPL bonus: 3% in PPL, credited on PEOPLE mainnet (never on Base).
  * - Genesis Quest reward PPL is locked on PEOPLE mainnet and cannot be sold back to PplCurveHub.
  */
@@ -13,13 +13,14 @@ const HUNDRED = BigInt(100);
 export const MICRO_PER_UNIT = BigInt(1_000_000);
 export const BPS_DENOMINATOR = BigInt(10_000);
 
-export const DEFAULT_KOL_TIER1_USDC_BPS = 700; // 7%
-export const DEFAULT_KOL_TIER2_USDC_BPS = 900; // 9%
-export const DEFAULT_KOL_TIER3_USDC_BPS = 1200; // 12%
+export const DEFAULT_KOL_USDC_BPS = 700; // 7% from the very first purchase, no minimum volume
+export const DEFAULT_KOL_TIER1_USDC_BPS = DEFAULT_KOL_USDC_BPS;
+export const DEFAULT_KOL_TIER2_USDC_BPS = DEFAULT_KOL_USDC_BPS;
+export const DEFAULT_KOL_TIER3_USDC_BPS = DEFAULT_KOL_USDC_BPS;
 export const DEFAULT_KOL_PPL_BPS = 300; // 3%
 
-export const DEFAULT_KOL_TIER2_MIN_USD_MICRO = BigInt(25_000) * MICRO_PER_UNIT; // $25,000
-export const DEFAULT_KOL_TIER3_MIN_USD_MICRO = BigInt(100_000) * MICRO_PER_UNIT; // $100,000
+export const DEFAULT_KOL_TIER2_MIN_USD_MICRO = BigInt(0);
+export const DEFAULT_KOL_TIER3_MIN_USD_MICRO = BigInt(0);
 
 /** 30-day hold period before `pending` commissions mature to `approved`. */
 export const COMMISSION_HOLD_PERIOD_DAYS = 30;
@@ -96,32 +97,21 @@ export function resolveKolTier(
   overrideBps?: number | null,
   config: KolTierConfig = loadKolTierConfig(),
 ): { tier: KolTierNumber; usdcRateBps: number; pplRateBps: number } {
-  const vol = cumulativeVolumeUsdMicro < ZERO ? ZERO : cumulativeVolumeUsdMicro;
-  let naturalTier: KolTierNumber = 1;
-  let naturalBps = config.tier1UsdcBps;
-
-  if (vol >= config.tier3MinUsdMicro) {
-    naturalTier = 3;
-    naturalBps = config.tier3UsdcBps;
-  } else if (vol >= config.tier2MinUsdMicro) {
-    naturalTier = 2;
-    naturalBps = config.tier2UsdcBps;
-  }
+  const _vol = cumulativeVolumeUsdMicro < ZERO ? ZERO : cumulativeVolumeUsdMicro;
+  void _vol;
+  const naturalBps = config.tier1UsdcBps;
 
   if (overrideBps && overrideBps > naturalBps) {
-    const overrideTier: KolTierNumber =
-      overrideBps >= config.tier3UsdcBps ? 3 : overrideBps >= config.tier2UsdcBps ? 2 : 1;
-    return { tier: overrideTier, usdcRateBps: overrideBps, pplRateBps: config.pplBps };
+    return { tier: 1, usdcRateBps: overrideBps, pplRateBps: config.pplBps };
   }
 
-  return { tier: naturalTier, usdcRateBps: naturalBps, pplRateBps: config.pplBps };
+  return { tier: 1, usdcRateBps: naturalBps, pplRateBps: config.pplBps };
 }
 
-function tierLabel(tier: KolTierNumber, usdcBps: number, pplBps: number): string {
+function tierLabel(_tier: KolTierNumber, usdcBps: number, pplBps: number): string {
   const usdcPct = (usdcBps / 100).toFixed(usdcBps % 100 === 0 ? 0 : 2);
   const pplPct = (pplBps / 100).toFixed(pplBps % 100 === 0 ? 0 : 2);
-  const name = tier === 3 ? "Elite" : tier === 2 ? "Growth" : "Starter";
-  return `Tier ${tier} — ${name} (${usdcPct}% USDC + ${pplPct}% PPL)`;
+  return `${usdcPct}% USDC + ${pplPct}% PPL`;
 }
 
 export function computeKolTierProgress(
@@ -132,55 +122,17 @@ export function computeKolTierProgress(
   const vol = cumulativeVolumeUsdMicro < ZERO ? ZERO : cumulativeVolumeUsdMicro;
   const resolved = resolveKolTier(vol, overrideBps, config);
 
-  if (resolved.tier === 3) {
-    return {
-      currentTier: 3,
-      currentTierLabel: tierLabel(3, resolved.usdcRateBps, resolved.pplRateBps),
-      usdcRateBps: resolved.usdcRateBps,
-      pplRateBps: resolved.pplRateBps,
-      currentVolumeUsdMicro: vol.toString(),
-      nextTier: null,
-      nextTierLabel: null,
-      nextTierMinUsdMicro: null,
-      remainingToNextTierUsdMicro: "0",
-      progressPct: 100,
-    };
-  }
-
-  if (resolved.tier === 2) {
-    const target = config.tier3MinUsdMicro;
-    const rem = target > vol ? target - vol : ZERO;
-    const span = target - config.tier2MinUsdMicro;
-    const gained = vol > config.tier2MinUsdMicro ? vol - config.tier2MinUsdMicro : ZERO;
-    const pct = span > ZERO ? Number((gained * HUNDRED) / span) : 100;
-    return {
-      currentTier: 2,
-      currentTierLabel: tierLabel(2, resolved.usdcRateBps, resolved.pplRateBps),
-      usdcRateBps: resolved.usdcRateBps,
-      pplRateBps: resolved.pplRateBps,
-      currentVolumeUsdMicro: vol.toString(),
-      nextTier: 3,
-      nextTierLabel: tierLabel(3, config.tier3UsdcBps, config.pplBps),
-      nextTierMinUsdMicro: target.toString(),
-      remainingToNextTierUsdMicro: rem.toString(),
-      progressPct: Math.max(0, Math.min(100, pct)),
-    };
-  }
-
-  const target = config.tier2MinUsdMicro;
-  const rem = target > vol ? target - vol : ZERO;
-  const pct = target > ZERO ? Number((vol * HUNDRED) / target) : 100;
   return {
     currentTier: 1,
     currentTierLabel: tierLabel(1, resolved.usdcRateBps, resolved.pplRateBps),
     usdcRateBps: resolved.usdcRateBps,
     pplRateBps: resolved.pplRateBps,
     currentVolumeUsdMicro: vol.toString(),
-    nextTier: 2,
-    nextTierLabel: tierLabel(2, config.tier2UsdcBps, config.pplBps),
-    nextTierMinUsdMicro: target.toString(),
-    remainingToNextTierUsdMicro: rem.toString(),
-    progressPct: Math.max(0, Math.min(100, pct)),
+    nextTier: null,
+    nextTierLabel: null,
+    nextTierMinUsdMicro: null,
+    remainingToNextTierUsdMicro: "0",
+    progressPct: 100,
   };
 }
 

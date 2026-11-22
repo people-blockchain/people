@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const de: LocaleContent = {
   "nav": {
-    "statusBadge": "Testnetz PEOPLE v0.1",
+    "statusBadge": "PEOPLE Mainnet Beta · Start am 1. Dez.",
     "links": [
       {
         "label": "So funktioniert es",

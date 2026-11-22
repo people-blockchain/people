@@ -19,7 +19,7 @@
     "sub": "Sem código, sem saber de cripto. Basta um celular ou um navegador: crie uma carteira em 30 segundos.",
     "pitchLine": "Um blockchain para pessoas comuns: seu próprio token, cartões de clube em NFT e arrecadar dinheiro para uma ideia — sem código.",
     "ctaTestnet": "Começar a criar",
-    "ctaFounder": "Pegar meu número de fundador — grátis",
+    "ctaFounder": "Garantir seu assento",
     "card": {
       "badge": "Exemplo",
       "tokenName": "O token da sua comunidade",
@@ -128,9 +128,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Ainda estão sendo distribuídos números de fundador",
+    "title": "As vagas Founding 1,000 estão abertas",
     "titleWithNumber": "O fundador #{{n}} é o próximo",
-    "lead": "Resgate um número, ganhe um cartão para compartilhar e receba uma parte do pool da comunidade por ser dos primeiros e ativo.",
+    "lead": "Garanta um assento fundador agora. A lista e a ordem permanecem lacradas até 1.000 carteiras verificadas entrarem.",
     "cta": "Torne-se um fundador",
     "href": "/founders",
     "cardHint": "Dois níveis, só gente ativa, 10% adiantado e o resto em 52 semanas.",
@@ -154,8 +154,8 @@
     "note": "Blocos ao vivo da rede PEOPLE."
   },
   "final": {
-    "title": "Mainnet Beta abre 1 de dez — garanta seu lugar",
-    "body": "Pegue seu número de fundador antes do lançamento.",
+    "title": "A PEOPLE Mainnet Beta abre em 1 de dezembro. Garanta seu lugar no Founding 1,000.",
+    "body": "Cada relato de bug e cada pergunta confusa vai direto para o que construímos a seguir.",
     "ctaWallet": "Criar uma carteira grátis",
     "ctaExplore": "Veja o explorador",
     "socialLabel": "Siga a gente",

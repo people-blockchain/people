@@ -20,7 +20,7 @@
     "sub": "Không cần code, không cần biết crypto. Chỉ cần điện thoại hoặc trình duyệt: tạo ví trong 30 giây.",
     "pitchLine": "Blockchain cho người bình thường: token riêng, thẻ NFT câu lạc bộ và gọi vốn cho một ý tưởng — không cần code.",
     "ctaTestnet": "Bắt đầu tạo",
-    "ctaFounder": "Nhận số nhà sáng lập — miễn phí",
+    "ctaFounder": "Giành chỗ ngồi",
     "card": {
       "badge": "Ví dụ",
       "tokenName": "Token của cộng đồng bạn",
@@ -129,9 +129,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Số nhà sáng lập vẫn đang được phát",
+    "title": "Các ghế Founding 1,000 đang mở",
     "titleWithNumber": "Nhà sáng lập #{{n}} là người tiếp theo",
-    "lead": "Nhận một số, có một thẻ để chia sẻ, và nhận một phần pool cộng đồng vì đến sớm và hoạt động tích cực.",
+    "lead": "Giành một ghế sáng lập ngay. Danh sách và thứ tự được niêm phong cho đến khi 1.000 ví đã xác minh được khóa.",
     "cta": "Trở thành nhà sáng lập",
     "href": "/founders",
     "cardHint": "Hai cấp độ, chỉ cho người hoạt động tích cực, 10% trả trước và phần còn lại trong 52 tuần.",
@@ -155,8 +155,8 @@
     "note": "Khối trực tiếp từ mạng PEOPLE."
   },
   "final": {
-    "title": "Mainnet Beta mở 1 thg 12 — giữ chỗ của bạn",
-    "body": "Nhận số nhà sáng lập trước khi ra mắt.",
+    "title": "PEOPLE Mainnet Beta mở ngày 1/12. Hãy giữ sớm vị trí Founding 1,000 của bạn.",
+    "body": "Mỗi báo cáo lỗi và mỗi câu hỏi khó hiểu đều đi thẳng vào thứ chúng tôi xây tiếp theo.",
     "ctaWallet": "Tạo ví miễn phí",
     "ctaExplore": "Xem explorer",
     "socialLabel": "Theo dõi chúng tôi",

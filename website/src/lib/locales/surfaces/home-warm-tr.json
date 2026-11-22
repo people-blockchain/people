@@ -19,7 +19,7 @@
     "sub": "Kod yok, kripto bilgisi gerekmez. Bir telefon veya tarayıcı yeterli: 30 saniyede cüzdan oluşturun.",
     "pitchLine": "Sıradan insanlar için bir blockchain: kendi tokeniniz, kulüp NFT kartları ve bir fikir için para toplamak — kod yazmadan.",
     "ctaTestnet": "Testneti deneyin",
-    "ctaFounder": "Kurucu numaramı al — ücretsiz",
+    "ctaFounder": "Yerini ayırt",
     "card": {
       "badge": "Örnek",
       "tokenName": "Topluluğunuzun tokeni",
@@ -128,9 +128,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "Kurucu numaraları hâlâ dağıtılıyor",
+    "title": "Founding 1,000 koltukları açık",
     "titleWithNumber": "Sıradaki kurucu #{{n}}",
-    "lead": "Bir numara alın, paylaşabileceğiniz bir kart kazanın ve erken ve aktif olarak topluluk havuzundan pay kazanın.",
+    "lead": "Şimdi bir kurucu koltuğu ayırtın. Liste ve sıra, 1.000 doğrulanmış cüzdan kilitlenene kadar gizli kalır.",
     "cta": "Kurucu olun",
     "href": "/founders",
     "cardHint": "İki seviye, sadece aktif kişiler, öne %10 ve kalanı 52 haftada.",
@@ -154,8 +154,8 @@
     "note": "PEOPLE ağından canlı bloklar."
   },
   "final": {
-    "title": "Mainnet Beta 1 Ara'da — yerinizi alın",
-    "body": "Lansmandan önce kurucu numaranızı alın.",
+    "title": "PEOPLE Mainnet Beta 1 Aralık'ta açılıyor. Founding 1,000 koltuğunuzu erkenden kilitleyin.",
+    "body": "Her hata bildirimi ve her kafa karıştıran soru doğrudan sıradaki yapacağımız şeye gidiyor.",
     "ctaWallet": "Ücretsiz cüzdan oluştur",
     "ctaExplore": "Explorer'a bakın",
     "socialLabel": "Bizi takip edin",

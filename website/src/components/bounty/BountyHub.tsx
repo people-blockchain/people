@@ -29,7 +29,9 @@ import {
 } from "@/components/warm/warm-ui";
 import { Reveal } from "@/components/motion/Reveal";
 import { FoundersApp } from "@/components/founders/FoundersApp";
+import { FoundingSimulator } from "@/components/founding/FoundingSimulator";
 import { showCommunityStats } from "@/lib/show-community-stats";
+import { foundingCopy } from "@/lib/founding/copy";
 
 type Me = {
   signedIn: boolean;
@@ -84,6 +86,7 @@ export function BountyHero() {
         </div>
         <p className="mt-4 max-w-2xl text-xs text-ink-3">{t.hero.disclaimer}</p>
       </div>
+      <FoundingSimulator surface="bounty" />
     </section>
   );
 }
@@ -297,9 +300,8 @@ export function BountyCommunity() {
     };
   }, [statsPublic]);
 
-  const staticGoal = 1_000_000;
-
   if (!statsPublic) {
+    const vault = foundingCopy(lang);
     return (
       <WarmSection
         id="bounty-community"
@@ -310,13 +312,11 @@ export function BountyCommunity() {
         testId="bounty-community"
       >
         <Reveal>
-          <div className="mt-8 max-w-sm">
-            <div className="rounded-3xl border border-line bg-surface p-5 shadow-[var(--elev-1)]">
+          <div className="mt-8 max-w-2xl">
+            <div className="rounded-3xl border border-warm/40 bg-surface p-5 shadow-[var(--elev-1)]">
               <Gift className="h-5 w-5 text-value" aria-hidden="true" />
-              <p className="mt-3 font-mono text-3xl font-bold tabular-nums text-ink">
-                {staticGoal.toLocaleString(lang)}
-              </p>
-              <p className="mt-1 text-sm text-ink-2">{t.stats.goal}</p>
+              <p className="mt-3 text-lg font-semibold text-ink">{vault.progress.vaultUnlockLead}</p>
+              <p className="mt-2 text-sm text-ink-2">{vault.progress.sealedNote}</p>
             </div>
           </div>
         </Reveal>

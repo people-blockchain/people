@@ -1180,3 +1180,55 @@ export const analyticsEvents = pgTable(
     index("analytics_event_name_created_idx").on(row.eventName, row.createdAt),
   ],
 );
+
+/**
+ * Migration 0026: Founding 1,000 Telegram-first cold-start pending claims (verified phone before
+ * wallet creation, single-use hashed claim token) and email waitlist.
+ */
+export const founderTelegramPendingClaims = pgTable(
+  "founder_telegram_pending_claim",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    /** SHA-256 hex digest of the one-time tg_claim token; raw token is never stored at rest. */
+    tokenHash: text("tokenHash").notNull(),
+    phoneHash: text("phoneHash").notNull(),
+    telegramUserId: text("telegramUserId").notNull(),
+    chatId: text("chatId").notNull(),
+    locale: text("locale"),
+    referredByCode: text("referredByCode"),
+    provisionalRefCode: text("provisionalRefCode").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+    claimedAt: timestamp("claimedAt", { mode: "date" }),
+    claimedByUserId: text("claimedByUserId").references(() => users.id, { onDelete: "set null" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("founder_tg_pending_claim_token_hash_idx").on(row.tokenHash),
+    uniqueIndex("founder_tg_pending_claim_phone_hash_idx").on(row.phoneHash),
+    uniqueIndex("founder_tg_pending_claim_tg_user_idx").on(row.telegramUserId),
+    index("founder_tg_pending_claim_expires_idx").on(row.expiresAt),
+  ],
+);
+
+export const founderEmailWaitlist = pgTable(
+  "founder_email_waitlist",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    emailHash: text("emailHash").notNull(),
+    emailNormalized: text("emailNormalized").notNull(),
+    locale: text("locale"),
+    sourcePath: text("sourcePath"),
+    refCode: text("refCode"),
+    ipHash: text("ipHash"),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    uniqueIndex("founder_email_waitlist_hash_idx").on(row.emailHash),
+    index("founder_email_waitlist_created_idx").on(row.createdAt),
+  ],
+);

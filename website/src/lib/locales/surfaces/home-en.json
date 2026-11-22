@@ -13,7 +13,7 @@
       "not to whales."
     ],
     "sub": "PEOPLE Blockchain is where creators launch tokens with fair pricing from block one, and the community gets a built-in share of everything it helps grow.",
-    "testnetBadge": "PEOPLE Mainnet Beta opens 1 December 2026.",
+    "testnetBadge": "PEOPLE Mainnet Beta · Opens Dec 1",
     "ctaCreate": "Create a token",
     "ctaWallet": "Open wallet",
     "flowAria": "Four steps from wallet to trading your token",
@@ -69,7 +69,7 @@
     }
   ],
   "footerCta": {
-    "title": "Testnet is open.",
+    "title": "PEOPLE Mainnet Beta · Opens Dec 1",
     "body": "Be early, break things, tell us what sucks.",
     "cta": "Start on testnet"
   },

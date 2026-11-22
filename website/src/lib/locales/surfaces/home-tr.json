@@ -13,7 +13,7 @@
       "balinalara değil."
     ],
     "sub": "PEOPLE Blockchain, yaratıcıların token'ları ilk bloktan adil fiyatla çıkardığı ve topluluğun büyütmeye yardım ettiği her şeyden pay aldığı yerdir.",
-    "testnetBadge": "Halka açık testnet yayında. PEOPLE Mainnet Beta 1 Aralık 2026'da açılıyor.",
+    "testnetBadge": "PEOPLE Mainnet Beta · 1 Aralık'ta açılıyor",
     "ctaCreate": "Token oluştur",
     "ctaWallet": "Cüzdanı aç",
     "flowAria": "Dört adım: cüzdandan token alım satımına",
@@ -69,7 +69,7 @@
     }
   ],
   "footerCta": {
-    "title": "Testnet açık.",
+    "title": "PEOPLE Mainnet Beta · 1 Aralık'ta açılıyor",
     "body": "Erken gelin, bir şeyleri kırın, neyin kötü olduğunu söyleyin.",
     "cta": "Testnette başla"
   },

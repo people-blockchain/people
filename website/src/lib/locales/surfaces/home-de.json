@@ -13,7 +13,7 @@
       "garantiert, nicht an Wale."
     ],
     "sub": "PEOPLE Blockchain ist der Ort, an dem Creator Tokens mit fairer Preisfindung ab Block eins starten – und die Community einen festen Anteil an allem erhält, was sie mitwachsen lässt.",
-    "testnetBadge": "Öffentliches Testnet ist live. PEOPLE Mainnet Beta startet am 1. Dezember 2026.",
+    "testnetBadge": "PEOPLE Mainnet Beta · Startet am 1. Dezember",
     "ctaCreate": "Token erstellen",
     "ctaWallet": "Wallet öffnen",
     "flowAria": "Vier Schritte: vom Wallet zum Token-Handel",
@@ -69,7 +69,7 @@
     }
   ],
   "footerCta": {
-    "title": "Testnet ist offen.",
+    "title": "PEOPLE Mainnet Beta · Startet am 1. Dezember",
     "body": "Seien Sie früh dabei, brechen Sie Dinge, sagen Sie uns, was nervt.",
     "cta": "Im Testnet starten"
   },
