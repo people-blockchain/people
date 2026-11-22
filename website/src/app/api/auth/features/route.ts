@@ -2,6 +2,7 @@ import { isGoogleConfigured, isResendConfigured, isAuthConfigured } from "@/lib/
 import { isWalletVaultConfigured } from "@/lib/wallet-cloud-server";
 import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 import { NextResponse } from "next/server";
+import { PUBLIC_CACHE_60S } from "@/lib/public-cache";
 
 export async function GET() {
   const cloud = isCloudWalletEnabled();
@@ -13,5 +14,5 @@ export async function GET() {
     magic: isResendConfigured(),
     walletVault: isWalletVaultConfigured(),
     cloudWallet: cloud,
-  });
+  }, { headers: PUBLIC_CACHE_60S });
 }

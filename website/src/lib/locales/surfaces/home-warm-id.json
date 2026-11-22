@@ -16,10 +16,9 @@
       "10% untuk orang Anda,",
       "bukan untuk paus."
     ],
-    "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik dan coba di testnet.",
+    "sub": "Tanpa kode, tanpa keahlian kripto. Cukup ponsel atau browser: buat dompet dalam 30 detik.",
     "pitchLine": "Blockchain untuk orang biasa: token sendiri, kartu NFT klub, dan mengumpulkan dana untuk sebuah ide — tanpa kode.",
-    "testnetBadge": "PEOPLE Mainnet Beta · Dibuka 1 Desember",
-    "ctaTestnet": "Coba testnet",
+    "ctaTestnet": "Mulai membuat",
     "ctaFounder": "Klaim kursi",
     "card": {
       "badge": "Contoh",
@@ -31,22 +30,34 @@
       {
         "id": "wallet",
         "label": "Dompet dalam 30 detik",
-        "sub": "Kunci Anda tetap di ponsel atau browser Anda."
+        "sub": "Kunci di ponsel atau browser."
       },
       {
         "id": "token",
-        "label": "Token Anda, dihargai sejak transaksi pertama",
-        "sub": "Pilih nama dan ticker. Bonding curve yang menentukan harganya."
+        "label": "Token Anda live",
+        "sub": "Nama dan ticker — kurva menetapkan harga."
       },
       {
         "id": "share",
         "label": "10% untuk orang Anda",
-        "sub": "Saat peluncuran, kreator juga dapat mengirim sisa kurva yang belum terjual (hingga ~17%) ke pool alih-alih membakar — hingga 27% total."
+        "sub": "Dijamin di setiap peluncuran."
       }
     ],
     "shareBadge": "Hingga 10% bagian komunitas",
     "peopleLine": "Orang Anda, bukan paus",
-    "saleNote": "Area uji coba saat ini adalah testnet publik (token uji tidak bernilai). PEOPLE Mainnet Beta dibuka 1 Desember 2026: Anda membayar dengan USDC atau USDT di Base, dan PPL dikreditkan di PEOPLE Mainnet Beta."
+    "saleNote": "PEOPLE Mainnet Beta dibuka 1 Desember 2026: bayar dengan USDC atau USDT di Base; PPL dikreditkan di PEOPLE Mainnet Beta.",
+    "subheadline": "Luncurkan token untuk komunitas Anda dalam satu menit — tanpa kode. 10% setiap token untuk orang-orang Anda, dijamin.",
+    "betaBadge": "PEOPLE Mainnet Beta · buka 1 Des",
+    "trustLine": "Hanya orang terverifikasi · satu orang, satu alamat · Dibangun di Base",
+    "ctaWallet": "Buat dompet gratis",
+    "countdown": {
+      "days": "hari",
+      "hours": "jam",
+      "minutes": "mnt",
+      "seconds": "dtk",
+      "dateLabel": "Buka",
+      "open": "Mainnet Beta sudah aktif."
+    }
   },
   "community": {
     "eyebrow": "10% dijamin untuk komunitas",
@@ -61,8 +72,8 @@
   "build": {
     "eyebrow": "Tanpa kode, tanpa keahlian kripto",
     "title": "Yang bisa Anda lakukan tanpa kode",
-    "lead": "Semua di bawah ini sudah berjalan hari ini di testnet publik. Tidak ada yang perlu diinstal, tidak ada yang perlu dikompilasi.",
-    "cta": "Coba di testnet",
+    "lead": "Semua di bawah berjalan di browser. Tidak perlu instal atau kompilasi.",
+    "cta": "Mulai membuat",
     "cards": [
       {
         "id": "token",
@@ -134,19 +145,20 @@
   },
   "network": {
     "eyebrow": "Jaringan live",
-    "title": "Testnet publik, saat ini",
+    "title": "Jaringan PEOPLE, live",
     "blockHeight": "Tinggi blok",
-    "chainLabel": "Chain testnet",
+    "chainLabel": "Chain",
     "explorer": "Buka explorer",
     "unavailable": "Tinggi blok sedang tidak tersedia.",
     "collecting": "Membaca jaringan…",
-    "note": "Ini adalah testnet. Angka di atas nyata, tokennya tidak."
+    "note": "Blok live dari jaringan PEOPLE."
   },
   "final": {
     "title": "PEOPLE Mainnet Beta dibuka 1 Desember. Kunci kursi Founding 1,000 Anda lebih awal.",
     "body": "Setiap laporan bug dan setiap pertanyaan yang membingungkan langsung masuk ke apa yang kami bangun selanjutnya.",
-    "ctaWallet": "Buat dompet",
+    "ctaWallet": "Buat dompet gratis",
     "ctaExplore": "Lihat explorer",
-    "socialLabel": "Ikuti kami"
+    "socialLabel": "Ikuti kami",
+    "ctaFounder": "Dapatkan nomor pendiri saya — gratis"
   }
 }

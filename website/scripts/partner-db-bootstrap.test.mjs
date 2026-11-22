@@ -131,7 +131,7 @@ test("referral & KOL bootstrap mirrors drizzle 0023 SQL file", async () => {
 
 test("founding traps 0026 SQL mirrors bootstrap-sql statements", async () => {
   const { FOUNDING_TRAPS_SCHEMA_STATEMENTS } = await import("../src/db/bootstrap-sql.mjs");
-  const raw = readFileSync(join(root, "drizzle/0026_founding_traps_tg_claim_waitlist.sql"), "utf8");
+  const raw = readFileSync(join(root, "drizzle/0027_founding_traps_tg_claim_waitlist.sql"), "utf8");
   const fromFile = raw
     .split("\n")
     .filter((line) => !line.trim().startsWith("--"))
@@ -149,11 +149,11 @@ test("founding traps 0026 SQL mirrors bootstrap-sql statements", async () => {
   }
 });
 
-test("runtime schema bootstrap does not auto-apply founding traps 0026 DDL", () => {
+test("runtime schema bootstrap does not auto-apply founding traps 0027 DDL", () => {
   const src = readFileSync(join(root, "src/db/bootstrap.ts"), "utf8");
   assert.doesNotMatch(src, /for \(const statement of FOUNDING_TRAPS_SCHEMA_STATEMENTS\)/);
   assert.doesNotMatch(src, /FOUNDING_TRAPS_SCHEMA_STATEMENTS,/);
-  assert.match(src, /0026_founding_traps_tg_claim_waitlist\.sql/);
+  assert.match(src, /0027_founding_traps_tg_claim_waitlist\.sql/);
 });
 
 test("bootstrap clears cached promise after failure so later calls can retry", async () => {

@@ -192,6 +192,8 @@ test("owner-approved EN hero copy on homepage", () => {
     en.hero.testnetBadge,
     "PEOPLE Mainnet Beta · Opens Dec 1",
   );
+  const warmEn = JSON.parse(src("src/lib/locales/surfaces/home-warm-en.json"));
+  assert.equal(warmEn.hero.betaBadge, "PEOPLE Mainnet Beta · launches 1 Dec");
   const enLocale = src("src/lib/locales/en.ts");
   assert.match(
     enLocale,

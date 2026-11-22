@@ -19,20 +19,21 @@
 3. Добавь `AUTH_URL` = `https://www.peopleblockchain.network` (production).
 4. Redeploy (Deployments → ⋯ → Redeploy на последнем production-деплое).
 
-## 2. Задать `PEOPLE_WALLET_VAULT_SECRET`
+## 2. `PEOPLE_WALLET_VAULT_SECRET` — не подменять вслепую
 
-Сейчас эта переменная не задана, и код автоматически использует `AUTH_SECRET`
-как запасной вариант (это намеренно сделано в #192, вход не ломается). Но это
-закрывает аудиторскую находку M02-2 (утечка `AUTH_SECRET` не должна означать
-утечку ключей шифрования кошельков) — рекомендуется закрыть:
+Запасного варианта на `AUTH_SECRET` **больше нет**. Если dedicated-секрет
+не задан, маршруты `/api/wallet/vault*` отвечают `503 {error:"not_configured"}`
+и облачный кошелёк не открывается. `AUTH_SECRET` читается только чтобы
+расшифровать старые строки `vaultVersion === 1` и перенести их на dedicated-секрет.
 
-1. Сгенерируй секрет: `openssl rand -base64 32`.
-2. Vercel → Environment Variables → добавь `PEOPLE_WALLET_VAULT_SECRET` (production) с этим значением.
-3. Redeploy.
+В production `PEOPLE_WALLET_VAULT_SECRET` уже должен быть задан как Sensitive
+переменная Vercel. **Нельзя** просто сгенерировать новое значение и записать
+его поверх текущего: строки `vaultVersion === 2` тогда не расшифруются.
 
-Существующие кошельки (зашифрованные старым ключом на основе `AUTH_SECRET`)
-автоматически мигрируют на новый секрет при следующем успешном входе —
-ничего руками переносить не нужно, это уже в коде и покрыто тестами.
+Если секрет нужно сменить (нет локальной копии Sensitive-значения) — только
+по runbook dual-key rotation: `docs/WALLET-VAULT-SECRET-ROTATION.md` (режим B:
+`PEOPLE_WALLET_VAULT_SECRET_NEXT`, старое значение не трогать, пока все
+строки не станут `vaultVersion === 3`).
 
 ## 3. Если вход через Gmail или email снова откажет — как диагностировать
 

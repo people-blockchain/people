@@ -25,6 +25,7 @@ import { ReferralRefCapture } from "@/components/ReferralRefCapture";
 import { DocumentTitle } from "@/components/DocumentTitle";
 import { BugReportButton } from "@/components/BugReportButton";
 import { FoundingCaptureLayer } from "@/components/founding/FoundingCaptureLayer";
+import { SupportChatWidget } from "@/components/SupportChatWidget";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -181,6 +182,7 @@ export default async function RootLayout({
               </Suspense>
               <CloudWalletSessionBridge />
               <BugReportButton />
+              <SupportChatWidget />
               <Suspense fallback={null}>
                 <AnalyticsTracker />
               </Suspense>

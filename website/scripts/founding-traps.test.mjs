@@ -356,9 +356,9 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
     assert.equal(parsed.ok, true, `parseTrackPayload failed for ${name}`);
   }
 
-  // Bootstrap DDL mirrors drizzle/0026_founding_traps_tg_claim_waitlist.sql
+  // Bootstrap DDL mirrors drizzle/0027_founding_traps_tg_claim_waitlist.sql
   const sqlRaw = readFileSync(
-    join(root, "drizzle/0026_founding_traps_tg_claim_waitlist.sql"),
+    join(root, "drizzle/0027_founding_traps_tg_claim_waitlist.sql"),
     "utf8",
   );
   assert.match(sqlRaw, /CREATE TABLE IF NOT EXISTS "founder_telegram_pending_claim"/);

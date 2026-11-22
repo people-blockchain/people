@@ -7,20 +7,30 @@
       "for everyone.",
       "Finally."
     ],
-    "headlineMain": "Launch a token for your community.",
+    "subheadline": "Launch a token for your community in a minute — no code. 10% of every token goes to your people, guaranteed.",
+    "headlineMain": "Launch a token for your community in a minute — no code.",
     "headlineMainLines": [
-      "Launch a token for your community."
+      "Launch a token for your community in a minute — no code."
     ],
-    "headlineAccent": "10% goes to your people, guaranteed — not to whales.",
+    "headlineAccent": "10% of every token goes to your people, guaranteed.",
     "headlineAccentLines": [
-      "10% goes to your people, guaranteed —",
-      "not to whales."
+      "10% of every token goes to your people, guaranteed."
     ],
-    "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds and try it on the testnet.",
+    "sub": "No code, no crypto skills. A phone or a browser is enough: create a wallet in 30 seconds.",
     "pitchLine": "A blockchain for ordinary people: your own token, club NFT cards and raising money for an idea — no code.",
-    "testnetBadge": "PEOPLE Mainnet Beta · Opens Dec 1",
-    "ctaTestnet": "Try the testnet",
+    "betaBadge": "PEOPLE Mainnet Beta · launches 1 Dec",
+    "countdown": {
+      "days": "days",
+      "hours": "hrs",
+      "minutes": "min",
+      "seconds": "sec",
+      "dateLabel": "Opens",
+      "open": "Mainnet Beta is live."
+    },
+    "trustLine": "Verified people only · one person, one address · Built on Base",
+    "ctaTestnet": "Start creating",
     "ctaFounder": "Claim Seat",
+    "ctaWallet": "Create a free wallet",
     "card": {
       "badge": "Example",
       "tokenName": "Your community token",
@@ -30,23 +40,23 @@
     "stages": [
       {
         "id": "wallet",
-        "label": "A wallet in 30 seconds",
-        "sub": "Your keys stay on your phone or in your browser."
+        "label": "Wallet in 30 seconds",
+        "sub": "Keys stay on your phone or browser."
       },
       {
         "id": "token",
-        "label": "Your token, priced from the first trade",
-        "sub": "Pick a name and a ticker. The bonding curve does the pricing."
+        "label": "Your token goes live",
+        "sub": "Name and ticker — the curve sets the price."
       },
       {
         "id": "share",
         "label": "10% to your people",
-        "sub": "At launch the creator can also send the unsold curve remainder (up to ~17%) to the pool instead of burning it — up to 27% in total."
+        "sub": "Guaranteed at every token launch."
       }
     ],
     "shareBadge": "10% community share, guaranteed",
     "peopleLine": "Your people, not whales",
-    "saleNote": "Today's playground is the public testnet (test tokens have no value). PEOPLE Mainnet Beta opens 1 December 2026: you pay in USDC or USDT on Base, and PPL are credited on PEOPLE Mainnet Beta."
+    "saleNote": "PEOPLE Mainnet Beta opens 1 December 2026: pay in USDC or USDT on Base; PPL are credited on PEOPLE Mainnet Beta."
   },
   "community": {
     "eyebrow": "10% guaranteed for the community",
@@ -61,13 +71,13 @@
   "build": {
     "eyebrow": "No code, no crypto skills",
     "title": "What you can do without code",
-    "lead": "Everything below runs on the public testnet today. Nothing to install, nothing to compile.",
-    "cta": "Try on testnet",
+    "lead": "Everything below runs in your browser. Nothing to install, nothing to compile.",
+    "cta": "Start creating",
     "cards": [
       {
         "id": "token",
         "title": "Launch a club or community token in a minute",
-        "body": "Pick a name, a ticker, an image and a supply. Pay the launch fee in PPL and the token is live on its own bonding curve.",
+        "body": "Pick a name, a ticker, an image and a supply. Pay the launch fee in PEOPLE and the token is live on its own bonding curve.",
         "href": "/create/token"
       },
       {
@@ -134,18 +144,19 @@
   },
   "network": {
     "eyebrow": "Live network",
-    "title": "Public testnet, right now",
+    "title": "PEOPLE network, live",
     "blockHeight": "Block height",
-    "chainLabel": "Testnet chain",
+    "chainLabel": "Chain",
     "explorer": "Open the explorer",
     "unavailable": "Block height is unavailable right now.",
     "collecting": "Reading the network…",
-    "note": "This is a testnet. The numbers above are real, the tokens are not."
+    "note": "Live blocks from the PEOPLE network."
   },
   "final": {
     "title": "PEOPLE Mainnet Beta opens Dec 1. Lock in your Founding 1,000 seat early.",
     "body": "Every bug report and every confused question goes straight into what we build next.",
-    "ctaWallet": "Create a wallet",
+    "ctaFounder": "Get my founder number — free",
+    "ctaWallet": "Create a free wallet",
     "ctaExplore": "Look at the explorer",
     "socialLabel": "Follow along"
   }

@@ -5,6 +5,7 @@ import { getBaseSaleNetwork } from "@/lib/sale/sale-hub";
 import { totalDeliveredSoldPpl } from "@/lib/sale/service";
 import { BONDING_CURVE, bondingCurvePriceUsdt } from "@/lib/tokenomics";
 import { SALE_MAX_USDT } from "@/lib/sale/economics";
+import { PUBLIC_CACHE_45S } from "@/lib/public-cache";
 
 export async function GET() {
   const sold = await totalDeliveredSoldPpl();
@@ -27,5 +28,5 @@ export async function GET() {
       stables: base.stables,
       saleContract: base.evm.saleContract,
     },
-  });
+  }, { headers: PUBLIC_CACHE_45S });
 }

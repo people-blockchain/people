@@ -15,6 +15,7 @@ import { detectBrowserCountryCode } from "@/lib/founders/country-detect";
 import { persistCountryChoice, readPersistedCountryChoice } from "@/lib/founders/country-choice";
 import { FOUNDER_COUNTRY_OPTIONS, countryFlagEmoji } from "@/lib/founders/countries";
 import { getOrCreateFounderDeviceId } from "@/lib/founders/device-id";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { readStoredReferralCode, readStoredReferrer } from "@/lib/referral-ref";
 import { FoundersPersonal, type DemoAirdropState, type ReferralStatus } from "./FoundersPersonal";
 import {
@@ -134,6 +135,9 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
       window.removeEventListener("people:founder-claimed", onClaimed);
     };
   }, [load]);
+  useVisibleInterval(() => {
+    void load();
+  }, 60_000);
 
   useEffect(() => {
     if (!me?.founder || me.founder.verificationLevel < 1) return;

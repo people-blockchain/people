@@ -730,6 +730,46 @@ export const bugReports = pgTable(
   ],
 );
 
+/** Live support chat: one thread per signed-in user (status open | escalated | closed). */
+export const supportThreads = pgTable(
+  "support_thread",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    userEmail: text("user_email"),
+    status: text("status").notNull().default("open"),
+    lastMessageAt: timestamp("last_message_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+    updatedAt: timestamp("updated_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [
+    index("support_thread_user_idx").on(row.userId),
+    index("support_thread_status_idx").on(row.status, row.lastMessageAt),
+  ],
+);
+
+/** Messages of a support thread; sender_role is user | bot | agent. */
+export const supportMessages = pgTable(
+  "support_message",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    threadId: text("thread_id")
+      .notNull()
+      .references(() => supportThreads.id, { onDelete: "cascade" }),
+    senderRole: text("sender_role").notNull(),
+    senderName: text("sender_name"),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("support_message_thread_idx").on(row.threadId, row.createdAt)],
+);
+
 /** Small key/value store for the Telegram bot (owner chat id, per-chat conversation state). */
 export const telegramBotState = pgTable("telegram_bot_state", {
   key: text("key").primaryKey(),

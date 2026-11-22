@@ -30,6 +30,7 @@ import { fileForDirectUpload, MediaUploadError, mediaUploadText, uploadDirect } 
 import { DIRECT_UPLOAD_MAX_BYTES, mimeAllowedForKind, normalizeUploadMime } from "@/lib/media-upload-rules";
 import { saveTokenMetadata } from "@/lib/nft-media-client";
 import { communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
+import { TokenDescribeHelper } from "@/components/factory/TokenDescribeHelper";
 import { ISSUER_REFERRAL_DEFAULT_ALLOCATION_BPS } from "@/lib/founders/referral";
 import {
   GATEWAY_KIND,
@@ -563,7 +564,7 @@ export function EvmTokenLaunch() {
       <Eyebrow>{page.title}</Eyebrow>
       <h1 className="mt-3 text-h2 font-bold">{page.title}</h1>
       <Chip tone="value" className="mt-4">
-        PEOPLE Blockchain testnet · chain 97401
+        PEOPLE Mainnet Beta · chain 97401
       </Chip>
       {!signer ? (
         <div className="mt-8">
@@ -626,6 +627,14 @@ export function EvmTokenLaunch() {
         </section>
       ) : (
         <div className="mt-8 space-y-4">
+          <TokenDescribeHelper
+            promoBps={promoBps}
+            onApply={(payload) => {
+              setName(payload.name);
+              setSymbol(payload.symbol);
+              setSupply(payload.supply);
+            }}
+          />
           <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.name} value={name} onChange={(e) => setName(e.target.value)} />
           <input className="w-full rounded-xl border border-line px-3 py-3" placeholder={form.ticker} value={symbol} onChange={(e) => setSymbol(e.target.value)} />
           <div className="rounded-xl border border-line p-3" data-testid="token-logo-upload">

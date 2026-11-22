@@ -23,7 +23,7 @@ type MarketApiResponse =
       fetchedAt: number;
     };
 
-const POLL_MS = 15_000;
+const POLL_MS = 30_000;
 const DAY_MS = 24 * 60 * 60_000;
 
 function formatPriceNative(value: number): string {
@@ -60,14 +60,28 @@ export function TokenMarketPanel({ tokenAddress, symbol, className = "" }: { tok
       } finally {
         if (!controller.signal.aborted) {
           setLoading(false);
-          timer = setTimeout(load, POLL_MS);
+          if (document.visibilityState === "visible") {
+            timer = setTimeout(load, POLL_MS);
+          }
         }
       }
     }
+    const onVisibility = () => {
+      if (controller.signal.aborted) return;
+      if (document.visibilityState === "visible") {
+        if (timer) clearTimeout(timer);
+        void load();
+      } else if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
     void load();
     return () => {
       controller.abort();
       if (timer) clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [tokenAddress, refresh]);
 

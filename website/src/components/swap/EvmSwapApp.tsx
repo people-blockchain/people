@@ -23,6 +23,7 @@ import { fractionOfBalance, priceImpactPercent, quotePoolSwap, spotTokenPerPpl }
 import { isHiddenAssetRow, visiblePools } from "@/lib/hidden-assets";
 import { TEST_STABLES, normalizePoolTokenId } from "@/lib/evm/test-stables";
 import { SwapTokenPicker } from "@/components/swap/SwapTokenPicker";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { TokenMarketPanel } from "@/components/market/TokenMarketPanel";
 import type { AssetInfo } from "@/lib/asset-amounts";
 
@@ -290,9 +291,10 @@ export function EvmSwapApp({ initialPools, initialAssets }: { initialPools?: Raw
 
   useEffect(() => {
     void refreshChain();
-    const id = setInterval(() => void refreshChain(), 12_000);
-    return () => clearInterval(id);
   }, [refreshChain]);
+  useVisibleInterval(() => {
+    void refreshChain();
+  }, 30_000);
 
   useEffect(() => {
     if (!dep.contracts.router) return;

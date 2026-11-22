@@ -108,6 +108,32 @@ export type FactoryCopyContent = {
     allocationEcosystem: string;
     allocationPromo: string;
   };
+  tokenDescribe?: {
+    title: string;
+    lead: string;
+    placeholder: string;
+    submit: string;
+    busy: string;
+    reviewNote: string;
+    priceTitle: string;
+    priceSpot: string;
+    priceExplain: string;
+    warnFundraising: string;
+    warnDollar: string;
+    errorGeneric: string;
+    errorRateLimited: string;
+    errorTooShort: string;
+    sourceNote: string;
+    nftLead: string;
+    nftPlaceholder: string;
+    contractLead: string;
+    contractPlaceholder: string;
+    contractTemplate: string;
+    discoverLead: string;
+    discoverPlaceholder: string;
+    lavkaLead: string;
+    lavkaPlaceholder: string;
+  };
   iconGen: {
     button: string;
     lead: string;
@@ -227,6 +253,41 @@ const baseFactoryCopy: Record<string, FactoryCopyContent> = {
       leftoverPoolLabel: "To community pool",
       leftoverPoolHint: "Send leftover and unsold tokens to this token's own community pool.",
       launchSummary: "When you launch: 10% of supply goes to your token's community pool. You choose whether curve leftovers after AMM migration and unsold tokens at 180-day finalize are burned (default, recommended) or sent to that community pool — never to you or the treasury. Optional referral share: default 5% of supply (max 10%), invite bounty 5%.",
+    },
+    tokenDescribe: {
+      title: "Describe in your own words",
+      lead: "Optional helper: we suggest name, ticker, and supply from your description. You still review and sign the launch yourself.",
+      placeholder:
+        "I want a token for my Telegram coffee channel, 1 million tokens so subscribers can support the channel.",
+      submit: "Fill the form",
+      busy: "Reading…",
+      reviewNote: "This does not create a token or sign anything.",
+      priceTitle: "Estimated curve start price",
+      priceSpot: "≈ {{spot}} PPL per whole token",
+      priceExplain:
+        "The protocol sets start price from virtual reserves: {{virtual}} PPL ÷ {{curve}} bonding-curve tokens at launch. You cannot pick a dollar price directly.",
+      warnFundraising:
+        "No fundraising amount is guaranteed — only the bonding curve and market demand determine outcomes.",
+      warnDollar:
+        "Dollar price is not configurable; we adjusted supply to fit the on-chain formula as closely as we can.",
+      errorGeneric: "Could not read that description. Try again or fill the fields manually.",
+      errorRateLimited: "Too many tries. Wait a minute and try again.",
+      errorTooShort: "Add a bit more detail (at least a sentence).",
+      sourceNote: "Suggestions from: {{source}}",
+      nftLead:
+        "Optional helper: we suggest name, description, and collection mode. You still review and mint yourself.",
+      nftPlaceholder:
+        "I want a membership pass NFT for my coffee club, one unique item, named Coffee Club Pass.",
+      contractLead:
+        "Optional helper: we suggest a reviewed template and constructor values. You still compile, review, and deploy yourself.",
+      contractPlaceholder: "I need linear vesting of my token to a partner over one year.",
+      contractTemplate: "Suggested template: {{template}}",
+      discoverLead:
+        "Optional helper: we suggest title, idea, audience, and why-token copy. You still review and submit yourself.",
+      discoverPlaceholder: "A neighborhood rewards project for local shops using a community token.",
+      lavkaLead:
+        "Optional helper: we suggest loyalty program title, visits, price, and validity. You still review and sign yourself.",
+      lavkaPlaceholder: "Coffee punch card, 10 visits, 5 PPL, valid 90 days, not transferable.",
     },
     iconGen: {
       button: "Generate icon",

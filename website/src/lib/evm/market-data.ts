@@ -384,7 +384,7 @@ export async function fetchTokenMarketSnapshot(tokenAddress: string): Promise<To
   };
 }
 
-const MARKET_TTL_MS = 15_000;
+const MARKET_TTL_MS = 30_000;
 const cache = new Map<string, { at: number; value: TokenMarketSnapshot }>();
 
 export async function fetchTokenMarketSnapshotCached(tokenAddress: string): Promise<TokenMarketSnapshot> {

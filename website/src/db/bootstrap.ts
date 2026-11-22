@@ -11,6 +11,7 @@ import {
   FOUNDER_PUBLIC_PROFILE_SCHEMA_STATEMENTS,
   LAVKA_SCHEMA_STATEMENTS,
   BUG_REPORTS_SCHEMA_STATEMENTS,
+  SUPPORT_CHAT_SCHEMA_STATEMENTS,
   FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS,
   WALLET_VAULT_ACCESS_LOG_SCHEMA_STATEMENTS,
   FACTORY_ICON_SCHEMA_STATEMENTS,
@@ -75,6 +76,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     for (const statement of BUG_REPORTS_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
+    // drizzle/0026_support_chat.sql — live support chat widget.
+    for (const statement of SUPPORT_CHAT_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
     // drizzle/0017_founder_passport_wallet.sql — separate wallet for Human Passport scoring.
     for (const statement of FOUNDER_PASSPORT_WALLET_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
@@ -110,9 +115,9 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     for (const statement of REFERRAL_KOL_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
-    // drizzle/0026_founding_traps_tg_claim_waitlist.sql is intentionally NOT auto-applied
+    // drizzle/0027_founding_traps_tg_claim_waitlist.sql is intentionally NOT auto-applied
     // here. Vercel Preview may share the production database; applying CREATE TABLE on
-    // first preview hit would mutate prod without an explicit go-ahead. Apply 0026 via
+    // first preview hit would mutate prod without an explicit go-ahead. Apply 0027 via
     // migration after approval. Routes degrade on undefined_table / SQLSTATE 42P01 until then.
     // SQL also lives in bootstrap-sql.mjs for offline fixtures and tests only.
     for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {
