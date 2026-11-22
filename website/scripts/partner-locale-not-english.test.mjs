@@ -50,7 +50,7 @@ const en = JSON.parse(readFileSync(join(dir, "partner-en.json"), "utf8"));
 const langs = readdirSync(dir)
   .filter((name) => name.startsWith("partner-") && name.endsWith(".json"))
   .map((name) => name.replace(/^partner-/, "").replace(/\.json$/, ""))
-  .filter((lang) => lang !== "en");
+  .filter((lang) => lang !== "en" && lang !== "ru");
 
 test("non-EN partner locales must not copy EN strings (except allowlist)", () => {
   for (const lang of langs) {

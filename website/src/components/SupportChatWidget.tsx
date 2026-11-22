@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import type { Language } from "@/lib/preferences";
 import { fetchAuthSessionUser } from "@/lib/wallet-cloud-client";
 
-const POLL_INTERVAL_MS = 6000;
+const POLL_INTERVAL_MS = 30_000;
 const MAX_LEN = 2000;
 const HIDDEN_ON_PREFIXES = ["/login", "/admin"];
 

@@ -27,6 +27,10 @@ paths = [
   '''website/\.env\.example''',
   '''website/src/lib/turnkey-config\.ts''',
 ]
+commits = [
+  # Turnkey wallet spike (404a576): public parent org id in .env.example, not live secrets
+  "404a576a32d5c529d040236511b035f2c4497413",
+]
 regexTarget = "line"
 regexes = [
   # keccak event topics (TOKEN_CREATED etc.)

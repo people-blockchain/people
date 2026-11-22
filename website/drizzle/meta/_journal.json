@@ -166,22 +166,29 @@
     {
       "idx": 25,
       "version": "7",
-      "when": 1760000000000,
+      "when": 1759410000000,
       "tag": "0025_analytics_ga_indexes",
       "breakpoints": true
     },
     {
       "idx": 26,
       "version": "7",
-      "when": 1763000000000,
+      "when": 1763596800000,
       "tag": "0026_support_chat",
       "breakpoints": true
     },
     {
       "idx": 27,
       "version": "7",
+      "when": 1763683200000,
+      "tag": "0027_founding_traps_tg_claim_waitlist",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
       "when": 1763700000000,
-      "tag": "0027_user_turnkey_wallet",
+      "tag": "0028_user_turnkey_wallet",
       "breakpoints": true
     }
   ]

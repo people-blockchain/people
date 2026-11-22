@@ -18,7 +18,7 @@ test("Turnkey public copy never calls 97400 a testnet", () => {
   assert.match(doc, /WALLET_PROVIDER/);
   assert.match(doc, /legacy_address_mismatch/);
   assert.match(doc, /PEOPLE Mainnet Beta/);
-  assert.match(doc, /0027_user_turnkey_wallet/);
+  assert.match(doc, /0028_user_turnkey_wallet/);
   assert.match(doc, /Upgrade your wallet/);
   assert.match(doc, /EXPORT_WALLET_ACCOUNT/);
   assert.match(doc, /encryptedOtpBundle/);

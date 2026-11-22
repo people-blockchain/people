@@ -18,9 +18,8 @@
     ],
     "sub": "无需代码，无需加密知识。只要一台手机或一个浏览器：30 秒创建钱包，直接在测试网上体验。",
     "pitchLine": "面向普通人的区块链：自己的代币、俱乐部 NFT 卡，以及为一个想法筹资——全部无需代码。",
-    "testnetBadge": "公开测试网已上线。PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启。",
     "ctaTestnet": "体验测试网",
-    "ctaFounder": "领取你的创始人编号",
+    "ctaFounder": "领取席位",
     "card": {
       "badge": "示例",
       "tokenName": "你的社区代币",
@@ -31,22 +30,34 @@
       {
         "id": "wallet",
         "label": "30 秒创建钱包",
-        "sub": "密钥始终留在你的手机或浏览器中。"
+        "sub": "密钥留在手机或浏览器。"
       },
       {
         "id": "token",
-        "label": "代币从第一笔交易起就有价格",
-        "sub": "选一个名称和代号，联合曲线自动定价。"
+        "label": "代币上线",
+        "sub": "名称和 ticker — 曲线定价。"
       },
       {
         "id": "share",
-        "label": "10% 给你的用户",
-        "sub": "发布时，创建者也可将曲线上未售出部分（最多约 17%）送入社区池而非销毁 — 合计最高 27%。"
+        "label": "10% 归你的人",
+        "sub": "每次发行有保障。"
       }
     ],
     "shareBadge": "最高10% 社区份额",
     "peopleLine": "你的用户，而不是巨鲸",
-    "saleNote": "目前的体验环境是公开测试网（测试代币没有价值）。PEOPLE Mainnet Beta 将于 2026 年 12 月 1 日开启：您在 Base 上用 USDC 或 USDT 支付，PPL 会记入 PEOPLE Mainnet Beta。"
+    "saleNote": "PEOPLE 主网 Beta 于 2026 年 12 月 1 日开启：在 Base 上用 USDC 或 USDT 支付；PPL 记入 PEOPLE 主网 Beta。",
+    "subheadline": "一分钟为社区发行代币，无需代码。每个代币的 10% 归你的人，有保障。",
+    "betaBadge": "PEOPLE 主网 Beta · 12 月 1 日开启",
+    "trustLine": "仅经核验真人 · 一人一号 · 基于 Base",
+    "ctaWallet": "创建免费钱包",
+    "countdown": {
+      "days": "天",
+      "hours": "时",
+      "minutes": "分",
+      "seconds": "秒",
+      "dateLabel": "开启",
+      "open": "主网 Beta 已上线。"
+    }
   },
   "community": {
     "eyebrow": "10% 保证给社区",
@@ -61,8 +72,8 @@
   "build": {
     "eyebrow": "无需代码，无需加密知识",
     "title": "不用写代码也能做的事",
-    "lead": "以下这些今天已经在公开测试网上运行。无需安装，无需编译。",
-    "cta": "在测试网上体验",
+    "lead": "以下功能均在浏览器中运行，无需安装或编译。",
+    "cta": "开始创建",
     "cards": [
       {
         "id": "token",
@@ -117,9 +128,9 @@
   },
   "foundersTeaser": {
     "eyebrow": "Million Founders",
-    "title": "创始人编号仍在发放中",
+    "title": "Founding 1,000 席位现已开放",
     "titleWithNumber": "下一个是创始人 #{{n}}",
-    "lead": "领取一个编号，获得一张可以分享的卡片，凭借早期参与和活跃表现赢得社区池的一份。",
+    "lead": "立即领取创始席位。名册与序号将保密，直至 1,000 个已验证钱包锁定。",
     "cta": "成为创始人",
     "href": "/founders",
     "cardHint": "两个等级，仅限活跃用户，10% 预先发放，其余在 52 周内发放。",
@@ -134,19 +145,20 @@
   },
   "network": {
     "eyebrow": "实时网络",
-    "title": "公开测试网，实时数据",
+    "title": "PEOPLE 网络，实时",
     "blockHeight": "区块高度",
-    "chainLabel": "测试网链",
+    "chainLabel": "链",
     "explorer": "打开浏览器",
     "unavailable": "区块高度当前不可用。",
     "collecting": "正在读取网络…",
-    "note": "这是测试网。上面的数字是真实的，代币不是。"
+    "note": "来自 PEOPLE 网络的实时区块。"
   },
   "final": {
-    "title": "测试网已开放。早点来，大胆试错，告诉我们哪里做得不好。",
+    "title": "PEOPLE Mainnet Beta 于 12 月 1 日开启。提早锁定您的 Founding 1,000 席位。",
     "body": "每一份错误报告和每一个令人困惑的问题，都会直接影响我们接下来要做的事。",
-    "ctaWallet": "创建钱包",
+    "ctaWallet": "创建免费钱包",
     "ctaExplore": "查看浏览器",
-    "socialLabel": "关注我们"
+    "socialLabel": "关注我们",
+    "ctaFounder": "领取我的创始人编号 — 免费"
   }
 }

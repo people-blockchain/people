@@ -1,13 +1,13 @@
 {
-  "navLabel": "赚取 PPL",
-  "homeCta": "赚取 PPL",
+  "navLabel": "赚取 PEOPLE",
+  "homeCta": "赚取 PEOPLE",
   "hero": {
     "eyebrow": "赚取 PPL",
     "title": "与 PEOPLE 一起赚取 PPL",
     "lead": "一个页面集中展示你的创始人编号、积分、个人推荐链接、赏金和社区奖励池。",
     "ctaEarn": "开始赚取",
     "ctaSale": "前往 PPL 销售",
-    "disclaimer": "测试网阶段。积分和奖励均为初步安排，需要完成真人验证，且不构成收益承诺。"
+    "disclaimer": "PEOPLE Mainnet Beta。积分和奖励均为初步安排，需要完成真人验证，且不构成收益承诺。"
   },
   "countdown": {
     "eyebrow": "PPL 销售 · 2026 年 12 月 1 日",

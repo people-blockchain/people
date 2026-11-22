@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const tr: LocaleContent = {
   "nav": {
-    "statusBadge": "Test ağı PEOPLE v0.1",
+    "statusBadge": "PEOPLE Mainnet Beta · 1 Aralık'ta açılıyor",
     "links": [
       {
         "label": "Nasıl Çalışır",

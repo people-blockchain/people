@@ -81,8 +81,8 @@ the site is rebuilt.
 
 ## Database
 
-Migration file: `website/drizzle/0027_user_turnkey_wallet.sql`
-(`0026` on main is `0026_support_chat.sql`; open PR #122 also used a 0026 name).
+Migration file: `website/drizzle/0028_user_turnkey_wallet.sql`
+(`0026` on main is `0026_support_chat.sql`; `0027` is `0027_founding_traps_tg_claim_waitlist.sql`).
 
 - **Do not run it from this PR.** Apply it in a dedicated ops step before
   flipping the flag.
@@ -175,7 +175,7 @@ Not yet on Turnkey (open):
 
 ## Rollout
 
-1. Apply `0027_user_turnkey_wallet.sql` to the target database (preview first).
+1. Apply `0028_user_turnkey_wallet.sql` to the target database (preview first).
 2. Set Turnkey API keys on the preview project. Keep `WALLET_PROVIDER=legacy`.
 3. Smoke-test `/api/wallet/turnkey/status` → `503`/`legacy` while the flag is
    off; no sub-orgs should be created.

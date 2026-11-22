@@ -190,8 +190,10 @@ test("owner-approved EN hero copy on homepage", () => {
   assert.doesNotMatch(en.hero.headlineAccent, /Up to 27/i);
   assert.equal(
     en.hero.testnetBadge,
-    "Public testnet is live. PEOPLE Mainnet Beta opens 1 December 2026.",
+    "PEOPLE Mainnet Beta · Opens Dec 1",
   );
+  const warmEn = JSON.parse(src("src/lib/locales/surfaces/home-warm-en.json"));
+  assert.equal(warmEn.hero.betaBadge, "PEOPLE Mainnet Beta · launches 1 Dec");
   const enLocale = src("src/lib/locales/en.ts");
   assert.match(
     enLocale,
@@ -305,14 +307,14 @@ test("homepage has four content blocks including contract builder CTA", () => {
   assert.equal(contract?.ctaLabel, "Create a contract");
 });
 
-test("nav uses the single localized Sign in label and Testnet v0.1 footer badge", () => {
+test("nav uses the single localized Sign in label and PEOPLE Mainnet Beta footer badge", () => {
   const nav = src("src/components/Navbar.tsx");
   const headerAuth = src("src/components/wallet/HeaderWalletMenu.tsx");
   const footer = src("src/components/Footer.tsx");
   const en = src("src/lib/locales/en.ts");
   assert.match(en, /"login": "Sign in"/);
   assert.match(en, /"signIn": "Sign in"/);
-  assert.match(en, /"statusBadge": "Testnet PEOPLE v0\.1"/);
+  assert.match(en, /"statusBadge": "PEOPLE Mainnet Beta · Opens Dec 1"/);
   assert.doesNotMatch(footer, /baselineNote/);
   // The footer keeps nav.login; the header renders nav.signIn exactly once and
   // no longer duplicates the action as a nav link.

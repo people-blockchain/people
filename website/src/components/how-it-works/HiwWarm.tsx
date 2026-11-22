@@ -64,7 +64,7 @@ export function HiwWarm() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-value opacity-60 motion-reduce:hidden" />
                 <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-value" />
               </span>
-              {c.hero.testnetBadge}
+              {c.hero.betaBadge}
             </p>
             <p className="mt-3 max-w-xl text-sm text-ink-2" data-testid="hiw-sale-note">
               {c.hero.saleNote}

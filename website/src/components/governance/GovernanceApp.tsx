@@ -23,6 +23,7 @@ import {
   type GovTallyResult,
   type GovVotingParams,
 } from "@/lib/gov/rest";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { tallyToPpl, quorumPercent, yesThresholdPercent, decToPercent, type TallyTotals } from "@/lib/gov/math";
 import { bech32FromEvmAddress } from "@/lib/gov/address";
 import { buildSignedVoteTx, voterAddressFromSigner, VoteOption } from "@/lib/gov/tx";
@@ -156,9 +157,10 @@ export function GovernanceApp() {
 
   useEffect(() => {
     void loadList();
-    const id = setInterval(() => void loadList(), 20_000);
-    return () => clearInterval(id);
   }, [loadList]);
+  useVisibleInterval(() => {
+    void loadList();
+  }, 45_000);
 
   const selected = useMemo(() => proposals.find((p) => p.id === selectedId) ?? null, [proposals, selectedId]);
 

@@ -116,7 +116,12 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     for (const statement of REFERRAL_KOL_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
-    // drizzle/0027_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
+    // drizzle/0027_founding_traps_tg_claim_waitlist.sql is intentionally NOT auto-applied
+    // here. Vercel Preview may share the production database; applying CREATE TABLE on
+    // first preview hit would mutate prod without an explicit go-ahead. Apply 0027 via
+    // migration after approval. Routes degrade on undefined_table / SQLSTATE 42P01 until then.
+    // SQL also lives in bootstrap-sql.mjs for offline fixtures and tests only.
+    // drizzle/0028_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
     for (const statement of USER_TURNKEY_WALLET_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }

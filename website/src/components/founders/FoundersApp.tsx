@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useWallet } from "@/context/WalletContext";
 import { useWalletModal } from "@/context/WalletModalContext";
-import { foundersPublic } from "@/lib/founders-public-content";
+import { foundersCopyLang, foundersPublicCopy } from "@/lib/founders-public-content";
 import { foundersReferralCopy } from "@/lib/founders-referral-content";
 import { foundersPromoCopy } from "@/lib/founders-promo-content";
 import { foundersLandingCopy } from "@/lib/founders-landing-content";
@@ -15,6 +15,7 @@ import { detectBrowserCountryCode } from "@/lib/founders/country-detect";
 import { persistCountryChoice, readPersistedCountryChoice } from "@/lib/founders/country-choice";
 import { FOUNDER_COUNTRY_OPTIONS, countryFlagEmoji } from "@/lib/founders/countries";
 import { getOrCreateFounderDeviceId } from "@/lib/founders/device-id";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { readStoredReferralCode, readStoredReferrer } from "@/lib/referral-ref";
 import { FoundersPersonal, type DemoAirdropState, type ReferralStatus } from "./FoundersPersonal";
 import {
@@ -30,6 +31,7 @@ import {
 } from "./FoundersLandingSections";
 import { FoundersNftCard } from "./FoundersNftCard";
 import { HumanPassportFlow } from "./HumanPassportFlow";
+import { FoundingSimulator } from "@/components/founding/FoundingSimulator";
 import { showCommunityStats } from "@/lib/show-community-stats";
 
 type Me = {
@@ -59,7 +61,8 @@ const WALLET_LINK_RETRY_MS = 700;
 export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bounty" } = {}) {
   const embedded = variant === "bounty";
   const { lang } = useLanguage();
-  const base = foundersPublic[lang];
+  // Public /founders copy is English even when the UI language is `ru`.
+  const base = foundersPublicCopy(lang);
   const t = foundersPromoCopy(lang);
   const landing = foundersLandingCopy(lang);
   const r = foundersReferralCopy(lang);
@@ -125,8 +128,16 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   useEffect(() => {
     void load();
     const id = window.setInterval(() => void load(), 30_000);
-    return () => window.clearInterval(id);
+    const onClaimed = () => void load();
+    window.addEventListener("people:founder-claimed", onClaimed);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("people:founder-claimed", onClaimed);
+    };
   }, [load]);
+  useVisibleInterval(() => {
+    void load();
+  }, 60_000);
 
   useEffect(() => {
     if (!me?.founder || me.founder.verificationLevel < 1) return;
@@ -181,7 +192,7 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
   const countryName = useCallback(
     (code: string) => {
       try {
-        const dn = new Intl.DisplayNames([lang], { type: "region" });
+        const dn = new Intl.DisplayNames([foundersCopyLang(lang)], { type: "region" });
         return dn.of(code) ?? code;
       } catch {
         return FOUNDER_COUNTRY_OPTIONS.find((c) => c.code === code)?.name ?? code;
@@ -482,14 +493,17 @@ export function FoundersApp({ variant = "landing" }: { variant?: "landing" | "bo
           />
         </div>
       ) : embedded ? null : (
-        <FoundersLandingHero
-          copy={landing}
-          promo={t}
-          lang={lang}
-          counter={millionCounter}
-          onCta={handleJoinCta}
-          countryBlock={heroCountryBlock}
-        />
+        <>
+          <FoundersLandingHero
+            copy={landing}
+            promo={t}
+            lang={lang}
+            counter={millionCounter}
+            onCta={handleJoinCta}
+            countryBlock={heroCountryBlock}
+          />
+          <FoundingSimulator surface="founders" />
+        </>
       )}
 
       {/* Claim: signed-in visitors who do not have a founder number yet. The number is issued

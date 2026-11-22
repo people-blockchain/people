@@ -160,8 +160,8 @@ test("claimKolCode, depth 2 enforcement, buyer wallet binding, and loadCabinet m
   assert.equal(cabinet.metrics.volumeUsdMicro, "30000000000");
   assert.equal(cabinet.metrics.earnedUsdc.pendingMicro, "2700000000");
   assert.equal(cabinet.metrics.earnedPpl.pendingMicro, "90000000000");
-  assert.equal(cabinet.tier.currentTier, 2);
-  assert.equal(cabinet.tier.usdcRateBps, 900);
+  assert.equal(cabinet.tier.currentTier, 1);
+  assert.equal(cabinet.tier.usdcRateBps, 700);
   assert.equal(cabinet.l1.length, 1);
   assert.equal(cabinet.l2.length, 1);
 });

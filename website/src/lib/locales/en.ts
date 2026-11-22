@@ -1,6 +1,6 @@
 export const en = {
   "nav": {
-    "statusBadge": "Testnet PEOPLE v0.1",
+    "statusBadge": "PEOPLE Mainnet Beta · Opens Dec 1",
     "links": [
       {
         "label": "How It Works",

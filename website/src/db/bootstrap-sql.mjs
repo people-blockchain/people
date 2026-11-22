@@ -730,7 +730,7 @@ export const ANALYTICS_SCHEMA_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "analytics_event_name_created_idx" ON "analytics_event" ("eventName", "createdAt")`,
 ];
 
-/** Keep in sync with `website/drizzle/0027_user_turnkey_wallet.sql`. */
+/** Keep in sync with `website/drizzle/0028_user_turnkey_wallet.sql`. */
 export const USER_TURNKEY_WALLET_SCHEMA_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS "user_turnkey_wallet" (
   "userId" text PRIMARY KEY NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
@@ -756,4 +756,39 @@ export const ANALYTICS_GA_INDEX_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS "analytics_event_session_created_idx" ON "analytics_event" ("sessionId", "createdAt")`,
   `CREATE INDEX IF NOT EXISTS "analytics_event_visitor_created_idx" ON "analytics_event" ("visitorId", "createdAt")`,
   `CREATE INDEX IF NOT EXISTS "analytics_event_type_name_created_idx" ON "analytics_event" ("eventType", "eventName", "createdAt")`,
+];
+
+/** Keep in sync with `website/drizzle/0027_founding_traps_tg_claim_waitlist.sql`. */
+export const FOUNDING_TRAPS_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_telegram_pending_claim" (
+  "id" text PRIMARY KEY NOT NULL,
+  "tokenHash" text NOT NULL,
+  "phoneHash" text NOT NULL,
+  "telegramUserId" text NOT NULL,
+  "chatId" text NOT NULL,
+  "locale" text,
+  "referredByCode" text,
+  "provisionalRefCode" text NOT NULL,
+  "expiresAt" timestamp NOT NULL,
+  "claimedAt" timestamp,
+  "claimedByUserId" text REFERENCES "user"("id") ON DELETE SET NULL,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_tg_pending_claim_token_hash_idx" ON "founder_telegram_pending_claim" ("tokenHash")`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_tg_pending_claim_phone_hash_idx" ON "founder_telegram_pending_claim" ("phoneHash")`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_tg_pending_claim_tg_user_idx" ON "founder_telegram_pending_claim" ("telegramUserId")`,
+  `CREATE INDEX IF NOT EXISTS "founder_tg_pending_claim_expires_idx" ON "founder_telegram_pending_claim" ("expiresAt")`,
+  `CREATE TABLE IF NOT EXISTS "founder_email_waitlist" (
+  "id" text PRIMARY KEY NOT NULL,
+  "emailHash" text NOT NULL,
+  "emailNormalized" text NOT NULL,
+  "locale" text,
+  "sourcePath" text,
+  "refCode" text,
+  "ipHash" text,
+  "createdAt" timestamp NOT NULL DEFAULT now(),
+  "updatedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "founder_email_waitlist_hash_idx" ON "founder_email_waitlist" ("emailHash")`,
+  `CREATE INDEX IF NOT EXISTS "founder_email_waitlist_created_idx" ON "founder_email_waitlist" ("createdAt")`,
 ];

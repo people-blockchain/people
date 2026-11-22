@@ -4,6 +4,7 @@ import { isCloudWalletEnabled } from "@/lib/cloud-wallet";
 import { isTurnkeyConfigured, isTurnkeyWalletReady, readPublicTurnkeyOrganizationId } from "@/lib/turnkey-config";
 import { readWalletProvider } from "@/lib/wallet-provider-flag";
 import { NextResponse } from "next/server";
+import { PUBLIC_CACHE_60S } from "@/lib/public-cache";
 
 export async function GET() {
   const cloud = isCloudWalletEnabled();
@@ -22,5 +23,5 @@ export async function GET() {
       ready: isTurnkeyWalletReady(),
       organizationId: walletProvider === "turnkey" ? readPublicTurnkeyOrganizationId() || null : null,
     },
-  });
+  }, { headers: PUBLIC_CACHE_60S });
 }

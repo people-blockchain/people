@@ -7,6 +7,7 @@ import { homeWarmCopy } from "@/lib/home-warm-content";
 import { homePublic } from "@/lib/home-public-content";
 import { SOCIAL_PROFILES } from "@/lib/social-profiles";
 import { fetchHealth, type NetworkHealth } from "@/lib/network-client";
+import { useVisibleInterval } from "@/lib/use-visible-interval";
 import { MODEL_A_FEE_SPLIT, communityShareExplanation, communityShareHeadline } from "@/lib/selling-economics";
 import { CommunityShareFlow } from "@/components/visuals/CommunityShareFlow";
 import {
@@ -18,6 +19,7 @@ import {
   fill,
 } from "@/components/warm/warm-ui";
 import { HomeWalletCta } from "@/components/wallet/HomeWalletCta";
+import { HOME_FOUNDER_CTA_HREF } from "@/lib/home-founder-cta";
 
 const SECTION_CTA =
   "mt-4 inline-flex text-sm font-semibold text-brand hover:underline";
@@ -211,7 +213,7 @@ export function HomeWarmAgents() {
 
 /* ── 6. Live network strip ───────────────────────────────────────────────── */
 
-const NETWORK_POLL_MS = 30_000;
+const NETWORK_POLL_MS = 60_000;
 
 export function HomeWarmNetwork() {
   const { lang } = useLanguage();
@@ -227,9 +229,10 @@ export function HomeWarmNetwork() {
 
   useEffect(() => {
     void load();
-    const id = window.setInterval(() => void load(), NETWORK_POLL_MS);
-    return () => window.clearInterval(id);
   }, [load]);
+  useVisibleInterval(() => {
+    void load();
+  }, NETWORK_POLL_MS);
 
   // Only real values are ever rendered; a failed read shows the explorer link alone.
   const height = health?.height && Number.isFinite(health.height) && health.height > 0 ? health.height : null;
@@ -302,17 +305,18 @@ export function HomeWarmFinal() {
             <h2 className="text-3xl font-bold leading-tight sm:text-4xl">{t.title}</h2>
             <p className="mt-3 text-base text-white/90">{t.body}</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link
+                href={HOME_FOUNDER_CTA_HREF}
+                data-testid="home-final-founder-cta"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-6 text-base font-semibold text-[#0369a1] transition hover:bg-amber-50"
+              >
+                {t.ctaFounder}
+              </Link>
               <HomeWalletCta
                 label={t.ctaWallet}
                 data-testid="home-footer-wallet-auth-cta"
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-6 text-base font-semibold text-[#0369a1] transition hover:bg-amber-50"
-              />
-              <Link
-                href="/explorer"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/40 px-6 text-base font-semibold text-white transition hover:bg-white/10"
-              >
-                {t.ctaExplore}
-              </Link>
+              />
             </div>
           </div>
 

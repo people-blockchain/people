@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
 import { founderTelegramChats } from "@/db/schema";
+import { parseColdStartPayload } from "@/lib/founding/contract";
 import { applyTelegramPhoneVerification } from "./verification-service.ts";
 import {
   markFounderTelegramStartCodeUsed,
@@ -12,6 +13,14 @@ import {
   type TelegramBotLocale,
 } from "./telegram-bot-messages.ts";
 import { readTelegramVerifyBotToken } from "./telegram-bot.ts";
+import {
+  COLD_START_CHAT_TTL_MS,
+  clearColdStartChatSession,
+  createPendingTelegramClaim,
+  getColdStartChatSession,
+  isMissingTableOrDbError,
+  setColdStartChatSession,
+} from "./telegram-cold-start.ts";
 import { getChatSiteLocale, setChatSiteLocale } from "../telegram-lang.ts";
 
 export type TelegramUpdate = {
@@ -34,14 +43,45 @@ export async function handleTelegramVerifyUpdate(update: TelegramUpdate): Promis
 
   const text = msg.text?.trim() ?? "";
   if (text.startsWith("/start")) {
-    const raw = text.replace(/^\/start\s*/, "").trim();
-    // Site deep link: `<24-char code>_<site locale>` (old links: bare code).
+    const raw = text.replace(/^\/start(?:@\w+)?\s*/, "").trim();
+
+    // 1. Cold-start flow: bare `/start` or `/start f1000[_<locale>[_<ref>]]` (no wallet required)
+    const coldStart = raw === "" ? { locale: null, ref: null } : parseColdStartPayload(raw);
+    if (coldStart !== null) {
+      if (coldStart.locale) {
+        await setChatSiteLocale(chatId, coldStart.locale);
+        locale = telegramBotLocale(msg.from?.language_code, coldStart.locale);
+      }
+      await setColdStartChatSession(chatId, {
+        locale: coldStart.locale ?? locale,
+        ref: coldStart.ref,
+        expiresAtMs: Date.now() + COLD_START_CHAT_TTL_MS,
+      });
+      try {
+        const db = await getDbReady();
+        await db.delete(founderTelegramChats).where(eq(founderTelegramChats.chatId, chatId));
+      } catch (err) {
+        if (!isMissingTableOrDbError(err)) throw err;
+      }
+      await sendTelegramContactRequest(botToken, msg.chat.id, locale);
+      return;
+    }
+
+    // 2. Existing session-code flow for already-authenticated wallet users: `<24-char code>[_<locale>]`
     let payload = raw;
-    let userId = raw ? await resolveFounderTelegramStartCode(raw) : null;
+    let userId = raw
+      ? await resolveFounderTelegramStartCode(raw).catch((err) => {
+          if (isMissingTableOrDbError(err)) return null;
+          throw err;
+        })
+      : null;
     const m = /^(.{24})_([a-z]{2,3})$/.exec(raw);
     if (!userId && m) {
       payload = m[1];
-      userId = await resolveFounderTelegramStartCode(payload);
+      userId = await resolveFounderTelegramStartCode(payload).catch((err) => {
+        if (isMissingTableOrDbError(err)) return null;
+        throw err;
+      });
       await setChatSiteLocale(chatId, m[2]);
       locale = telegramBotLocale(msg.from?.language_code, m[2]);
     }
@@ -49,6 +89,7 @@ export async function handleTelegramVerifyUpdate(update: TelegramUpdate): Promis
       await sendTelegramMessage(botToken, msg.chat.id, tgMsg("invalidLink", locale));
       return;
     }
+    await clearColdStartChatSession(chatId);
     const expires = new Date(Date.now() + 30 * 60 * 1000);
     const db = await getDbReady();
     await db
@@ -69,6 +110,43 @@ export async function handleTelegramVerifyUpdate(update: TelegramUpdate): Promis
   const contactUserId = msg.contact?.user_id;
   if (fromId == null || contactUserId == null || contactUserId !== fromId) {
     await sendTelegramMessage(botToken, msg.chat.id, tgMsg("wrongContact", locale));
+    return;
+  }
+
+  // Check if this chat initiated a cold-start verification (no wallet yet)
+  const coldSession = await getColdStartChatSession(chatId);
+  if (coldSession) {
+    if (coldSession.expiresAtMs <= Date.now()) {
+      await clearColdStartChatSession(chatId);
+      await sendTelegramMessage(botToken, msg.chat.id, tgMsg("sessionExpired", locale));
+      return;
+    }
+    if (coldSession.locale) {
+      locale = telegramBotLocale(msg.from?.language_code, coldSession.locale);
+    }
+    const pending = await createPendingTelegramClaim({
+      phoneE164: phone,
+      telegramUserId: String(fromId),
+      chatId,
+      locale,
+      referredByCode: coldSession.ref,
+    });
+    if (!pending.ok) {
+      const failKey = failureMessageKey(pending.error);
+      await sendTelegramMessage(botToken, msg.chat.id, tgMsg(failKey, locale));
+      return;
+    }
+    await clearColdStartChatSession(chatId);
+    const replyText = tgMsg("coldStartPending", locale)
+      .replace("{{refUrl}}", pending.referralUrl)
+      .replace("{{claimUrl}}", pending.claimUrl);
+    await sendTelegramMessage(botToken, msg.chat.id, replyText, {
+      removeKeyboard: true,
+      inlineButton: {
+        text: tgMsg("coldStartClaimButton", locale),
+        url: pending.claimUrl,
+      },
+    });
     return;
   }
 
@@ -116,10 +194,14 @@ async function sendTelegramMessage(
   token: string,
   chatId: number,
   text: string,
-  opts?: { removeKeyboard?: boolean },
+  opts?: { removeKeyboard?: boolean; inlineButton?: { text: string; url: string } },
 ) {
   const body: Record<string, unknown> = { chat_id: chatId, text };
-  if (opts?.removeKeyboard) {
+  if (opts?.inlineButton) {
+    body.reply_markup = {
+      inline_keyboard: [[{ text: opts.inlineButton.text, url: opts.inlineButton.url }]],
+    };
+  } else if (opts?.removeKeyboard) {
     body.reply_markup = { remove_keyboard: true };
   }
   await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

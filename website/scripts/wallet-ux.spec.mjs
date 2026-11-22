@@ -45,7 +45,8 @@ test('wallet reviews before signing, guards stale balances, exports encrypted ba
    else if(path==='tx'){sent.push(route.request().postDataJSON());body={accepted:true};}
    await route.fulfill({json:body});
  });
- await page.goto('/wallet');
+ await page.addInitScript(() => { try { sessionStorage.setItem('people_founding_drawer_shown','1'); sessionStorage.setItem('people_founding_exit_shown','1'); } catch {} });
+await page.goto('/wallet');
  await page.evaluate(seedWallet,{key});
  await page.reload();
  await page.getByRole('button',{name:'Unlock',exact:true}).click();

@@ -2,7 +2,7 @@ import type { LocaleContent } from "./types";
 
 export const zh: LocaleContent = {
   "nav": {
-    "statusBadge": "测试网 PEOPLE v0.1",
+    "statusBadge": "PEOPLE Mainnet Beta · 12月1日开启",
     "links": [
       {
         "label": "运作方式",

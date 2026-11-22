@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
 import { clientIp } from "@/lib/discover/api-guard";
 import { isDatabaseConfigured } from "@/db";
-import { lookupFounder } from "@/lib/founders/transparency";
+import { isFoundingRosterSealed } from "@/lib/founders/million-counter";
+import { getCommunityCounters, lookupFounder } from "@/lib/founders/transparency";
+import { showCommunityStats } from "@/lib/show-community-stats";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +30,13 @@ export async function GET(request: Request) {
   }
   const q = new URL(request.url).searchParams.get("q") ?? "";
   try {
+    const { verifiedPeople } = await getCommunityCounters();
+    if (isFoundingRosterSealed({
+      statsPublic: showCommunityStats(),
+      verifiedCount: verifiedPeople,
+    })) {
+      return NextResponse.json({ error: "hidden" }, { status: 503, headers: NOT_FOUND_CACHE_HEADERS });
+    }
     const founder = await lookupFounder(q);
     if (!founder) {
       return NextResponse.json({ error: "not_found" }, { status: 404, headers: NOT_FOUND_CACHE_HEADERS });

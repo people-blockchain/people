@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "@/db";
+import { isFoundingRosterSealed } from "@/lib/founders/million-counter";
 import { getFounderPublicStats } from "@/lib/founders/service";
+import { getCommunityCounters } from "@/lib/founders/transparency";
 import { showCommunityStats } from "@/lib/show-community-stats";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +15,10 @@ export async function GET() {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   }
   try {
+    const { verifiedPeople } = await getCommunityCounters();
+    if (isFoundingRosterSealed({ statsPublic: true, verifiedCount: verifiedPeople })) {
+      return NextResponse.json({ error: "hidden" }, { status: 503 });
+    }
     const stats = await getFounderPublicStats();
     return NextResponse.json(stats, {
       headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=300" },
