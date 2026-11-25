@@ -320,8 +320,9 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
     assert.equal(tier.pplRateBps, 300);
   }
 
-  // All 11 non-Russian locales localized + ru uses English text (no Cyrillic in founding copy)
+  // Russian founding copy is Cyrillic; other non-English locales stay in their own script.
   const langs = ["en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar", "ru"];
+  const noCyrillic = new Set(["en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"]);
   for (const lang of langs) {
     const c = foundingCopyMod.foundingCopy(lang);
     assert.ok(c.stickyBar.messageFull.includes("PEOPLE Mainnet Beta"), `${lang} stickyBar Mainnet Beta`);
@@ -331,7 +332,16 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
     );
     assert.ok(c.modal.rewardNote.length > 5, `${lang} rewardNote`);
     assert.ok(c.simulator.poolFormulaLabel.includes("6,000,000") || c.simulator.poolFormulaLabel.includes("6.000.000") || c.simulator.poolFormulaLabel.includes("6 000 000"), `${lang} pool formula`);
-    assert.doesNotMatch(JSON.stringify(c), /[Ѐ-ӿ]/, `${lang} founding copy must not contain Cyrillic`);
+    if (lang === "ru") {
+      assert.match(JSON.stringify(c), /[Ѐ-ӿ]/, "ru founding copy must contain Cyrillic");
+    } else if (noCyrillic.has(lang)) {
+      assert.doesNotMatch(JSON.stringify(c), /[Ѐ-ӿ]/, `${lang} founding copy must not contain Cyrillic`);
+    }
+    if (lang !== "en") {
+      assert.notEqual(c.progress.verifyShort, "Verify", `${lang} verifyShort`);
+      assert.notEqual(c.progress.detailsToggle, "Details", `${lang} detailsToggle`);
+      assert.notEqual(c.stickyBar.ctaShort, "Claim Seat", `${lang} ctaShort`);
+    }
   }
 
   // All 10 Founding 1,000 conversion analytics events are cataloged and accepted by parseTrackPayload

@@ -13,26 +13,6 @@ function load(lang) {
   return JSON.parse(readFileSync(join(dir, `home-warm-${lang}.json`), "utf8"));
 }
 
-/** RU omits these Hero A+B keys on purpose — runtime merges English from home-warm-en.json. */
-const RU_EN_FALLBACK_KEYS = new Set([
-  "hero.subheadline",
-  "hero.betaBadge",
-  "hero.countdown",
-  "hero.trustLine",
-  "hero.ctaWallet",
-  "hero.sub",
-  "hero.ctaTestnet",
-  "hero.saleNote",
-  "build.lead",
-  "build.cta",
-  "network.title",
-  "network.chainLabel",
-  "network.note",
-  "final.title",
-  "final.body",
-  "final.ctaFounder",
-]);
-
 function assertNonEmpty(en, got, path, lang) {
   if (Array.isArray(en)) {
     assert.ok(Array.isArray(got), `${path} should be an array`);
@@ -55,12 +35,7 @@ function assertNonEmpty(en, got, path, lang) {
   if (en && typeof en === "object") {
     assert.ok(got && typeof got === "object" && !Array.isArray(got), `${path} should be an object`);
     for (const key of Object.keys(en)) {
-      const childPath = `${path}.${key}`;
-      const ruSuffix = childPath.replace(/^home-warm-ru\./, "");
-      if (lang === "ru" && RU_EN_FALLBACK_KEYS.has(ruSuffix) && !(key in got)) {
-        continue;
-      }
-      assert.ok(key in got, `${path}.${key} is missing`);
+      assert.ok(key in got, `${lang}: ${path}.${key} is missing`);
       assertNonEmpty(en[key], got[key], `${path}.${key}`, lang);
     }
     return;
@@ -75,6 +50,28 @@ test("every home-warm-en.json key is present and non-empty in all locales", () =
   const en = load("en");
   for (const lang of NON_EN_LANGS) {
     assertNonEmpty(en, load(lang), `home-warm-${lang}`, lang);
+  }
+});
+
+test("home-warm-ru hero and founders strings are not English fallbacks", () => {
+  const en = load("en");
+  const ru = load("ru");
+  const paths = [
+    ["hero", "ctaFounder"],
+    ["hero", "subheadline"],
+    ["hero", "trustLine"],
+    ["hero", "ctaWallet"],
+    ["final", "title"],
+    ["foundersTeaser", "eyebrow"],
+  ];
+  for (const keys of paths) {
+    let enVal = en;
+    let ruVal = ru;
+    for (const key of keys) {
+      enVal = enVal[key];
+      ruVal = ruVal[key];
+    }
+    assert.notEqual(ruVal, enVal, keys.join("."));
   }
 });
 
