@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "创始 1,000 金库 · PEOPLE Mainnet Beta（12 月 1 日）",
+  "heroTitle": "创始 1,000 金库",
+  "heroSub": "前 1,000 个已验证钱包解锁转账与创始 1,000 Bounty Draw。名单与顺序在钱包锁定前保持密封。在 Telegram 上 20 秒完成验证即可获得待定席位——需连接钱包才能锁定创始 1,000 席位与 Bounty Draw  ticket。首个 1,000 之后，更广泛的 Million Founders 计划继续进行。",
+  "heroCta": "验证并加入",
+  "heroCtaHow": "编号如何运作",
+  "counterLabel": "已验证用户",
+  "counterGoal": "目标",
+  "counterLive": "PEOPLE 上 Human Passport 验证的实时计数。",
+  "counterStub": "在 1,000 个已验证钱包锁定前，名单与顺序保持密封。",
+  "vaultCalloutTitle": "前 1,000 个已验证钱包解锁转账与创始 1,000 Bounty Draw",
+  "vaultCalloutBody": "在 1,000 个已验证钱包锁定前，名单与顺序保持密封。名单密封期间不显示实时报名人数。",
+  "disclaimer": "初步计划细节可能在 PEOPLE Mainnet Beta 之前变更。非财务建议。不承诺收益或代币价格上涨。",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "免费的编号 Founder NFT",
+  "nftBody": "在 PEOPLE Mainnet Beta 之前加入的每位已验证用户都会获得带有公开编号的 Founder NFT。免费领取。记录写入创世区块并永久留存——不会有第二次创世。",
+  "nftBullets": [
+    "PEOPLE Mainnet Beta 前已验证创始者免费",
+    "你的编号从第一天起就是链历史的一部分",
+    "每位创始者享有相同基础权利——特殊编号仅增加少量一次性福利"
+  ],
+  "tiersEyebrow": "创始者编号",
+  "tiersTitle": "按加入时间分档",
+  "tiersSub": "档位取决于你的验证顺序。每个档位关闭时，通过公平的公开随机抽签分配确切编号——无人自选编号。",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "前一百位已验证创始者"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "塑造网络的早期建设者"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "大规模普及前的核心浪潮"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "大规模壮大社区"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "前十万之后的所有人"
+    }
+  ],
+  "specialEyebrow": "特殊编号",
+  "specialTitle": "特殊编号与档位末位",
+  "specialBody": "部分编号与众不同：整数或视觉显眼的数字，以及每个档位的最后一个编号。档位末位不会给最后加入的人——在该档位所有人中公平抽取。",
+  "specialListTitle": "哪些是特殊编号",
+  "specialList": [
+    "#1 至 #9",
+    "重复数字，如 77、888 或 8888",
+    "整数：1,000、10,000、100,000 和 500,000",
+    "序列 12345",
+    "每个档位的最后一个编号"
+  ],
+  "specialFixedNote": "此列表在开放注册前发布并固定，之后不会更改，以便每个人核验抽签公平。",
+  "specialPerksTitle": "特殊编号获得什么——一次性",
+  "specialPerksBody": "每个特殊编号获得相同的一次性奖励。这是感谢，不是金钱：无支付、无价格承诺、无永久折扣。创始者基础权利对所有人相同。",
+  "sealEyebrow": "创世仪式",
+  "sealTitle": "封存创世区块",
+  "sealBody": "创始窗口关闭时，PEOPLE 将举办公开创世区块封存仪式。选择公开马赛克显示的创始者姓名将一同出现，作为启动网络者的永久快照。",
+  "mosaicTitle": "创始者马赛克",
+  "mosaicSub": "创始者姓名视觉马赛克将在封存时上线。届时可搜索 handle。",
+  "mosaicSearchLabel": "按 handle 搜索",
+  "mosaicSearchPlaceholder": "创世封存时开放",
+  "mosaicSoon": "封存时",
+  "mosaicSearchHint": "创世区块封存后开放 handle 搜索。",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "快速解答",
+  "faq": [
+    {
+      "q": "免费吗？",
+      "a": "是的。在 PEOPLE 上用 Human Passport 验证免费，PEOPLE Mainnet Beta 前 Founder NFT 也免费。"
+    },
+    {
+      "q": "能自己选创始编号吗？",
+      "a": "不能。编号与档位绑定，在档位内通过公平公开随机抽签分配。无人能预留心仪编号。"
+    },
+    {
+      "q": "有支付或保证奖励吗？",
+      "a": "没有。本页关于创世区块中的身份与历史，而非支付或投资回报。"
+    },
+    {
+      "q": "如何加入？",
+      "a": "登录 PEOPLE，完成 Human Passport 验证，按本页步骤操作。准备好后使用下方验证部分。"
+    },
+    {
+      "q": "什么是 PEOPLE？",
+      "a": "PEOPLE 是社区区块链——由人民创建、服务社区。创始者是在 PEOPLE Mainnet Beta 之前加入的已验证真人。"
+    }
+  ],
+  "finalTitle": "成为创始者",
+  "finalSub": "用 Human Passport 验证，在 Million Founders 中占据一席之地，让你的编号永远留在创世区块中。",
+  "finalCta": "开始验证",
+  "specialPerks": [
+    "Founder NFT 上的动画边框与徽章",
+    "你的名字在创世马赛克制高亮",
+    "提前 7 天体验新 PEOPLE 功能与 drop",
+    "优先支持"
+  ],
+  "specialNamedBadge": "#1 与各档位末位编号还会获得专属命名徽章。"
+}

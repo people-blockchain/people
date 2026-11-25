@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Kho 1.000 sáng lập · PEOPLE Mainnet Beta (1 thg 12)",
+  "heroTitle": "Kho 1.000 sáng lập",
+  "heroSub": "1.000 ví xác minh đầu tiên mở khóa chuyển khoản và Bounty Draw 1.000 sáng lập. Danh sách và thứ tự giữ bí mật đến khi các ví đó khóa chỗ. Xác minh trên Telegram trong 20 giây để bắt đầu ghế chờ — cần ví đã kết nối để khóa chỗ 1.000 sáng lập và vé Bounty Draw. Chương trình Million Founders tiếp tục sau 1.000 người đầu.",
+  "heroCta": "Xác minh và tham gia",
+  "heroCtaHow": "Số hoạt động thế nào",
+  "counterLabel": "người đã xác minh",
+  "counterGoal": "mục tiêu",
+  "counterLive": "Số đếm trực tiếp từ xác minh Human Passport trên PEOPLE.",
+  "counterStub": "Danh sách và thứ tự giữ bí mật đến khi 1.000 ví xác minh khóa chỗ.",
+  "vaultCalloutTitle": "1.000 ví xác minh đầu tiên mở khóa chuyển khoản và Bounty Draw 1.000 sáng lập",
+  "vaultCalloutBody": "Danh sách và thứ tự giữ bí mật đến khi 1.000 ví xác minh khóa chỗ. Không hiển thị số đăng ký trực tiếp khi danh sách còn bí mật.",
+  "disclaimer": "Chi tiết chương trình sơ bộ có thể thay đổi trước PEOPLE Mainnet Beta. Không phải lời khuyên tài chính. Không hứa thu nhập hay tăng giá token.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Founder NFT có số miễn phí của bạn",
+  "nftBody": "Mọi người đã xác minh tham gia trước PEOPLE Mainnet Beta nhận Founder NFT với số công khai. Miễn phí. Bản ghi được ghi vào khối genesis và ở lại đó — sẽ không có genesis thứ hai.",
+  "nftBullets": [
+    "Miễn phí cho nhà sáng lập đã xác minh trước PEOPLE Mainnet Beta",
+    "Số của bạn là một phần lịch sử chuỗi từ ngày đầu",
+    "Quyền cơ bản giống nhau cho mọi nhà sáng lập — số đặc biệt chỉ thêm vài ưu đãi một lần nhỏ"
+  ],
+  "tiersEyebrow": "Số nhà sáng lập",
+  "tiersTitle": "Bậc theo thời điểm tham gia",
+  "tiersSub": "Bậc của bạn theo thứ tự xác minh. Trong mỗi bậc, số chính xác được gán bằng bốc thăm công khai công bằng khi bậc đóng — không ai tự chọn số.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "Một trăm nhà sáng lập xác minh đầu tiên"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Những người xây dựng sớm định hình mạng"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "Làn sóng cốt lõi trước khi được dùng rộng"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Phát triển cộng đồng ở quy mô lớn"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Mọi người sau một trăm nghìn đầu"
+    }
+  ],
+  "specialEyebrow": "Số đặc biệt",
+  "specialTitle": "Số đặc biệt và số đóng bậc",
+  "specialBody": "Một số nổi bật: số tròn hoặc dễ nhận, và số cuối mỗi bậc. Số cuối của bậc không trao cho người vào cuối — bốc công bằng trong bậc đó.",
+  "specialListTitle": "Số nào là đặc biệt",
+  "specialList": [
+    "#1 đến #9",
+    "Chữ số lặp, như 77, 888 hoặc 8888",
+    "Số tròn: 1,000, 10,000, 100,000 và 500,000",
+    "Dãy 12345",
+    "Số cuối của mỗi bậc"
+  ],
+  "specialFixedNote": "Danh sách này công bố và cố định trước khi mở đăng ký. Sau đó không đổi để mọi người kiểm tra bốc thăm công bằng.",
+  "specialPerksTitle": "Số đặc biệt nhận gì — một lần",
+  "specialPerksBody": "Mỗi số đặc biệt nhận cùng một phần thưởng một lần. Là lời cảm ơn, không phải tiền: không chi trả, không hứa giá, không giảm giá vĩnh viễn. Quyền sáng lập cơ bản giống nhau cho mọi người.",
+  "sealEyebrow": "Lễ genesis",
+  "sealTitle": "Niêm phong khối genesis",
+  "sealBody": "Khi cửa sổ sáng lập đóng, PEOPLE tổ chức lễ niêm phong công khai khối genesis. Tên nhà sáng lập chọn khảm công khai sẽ hiện cùng nhau như ảnh chụp vĩnh viễn những ai khởi đầu mạng.",
+  "mosaicTitle": "Khảm nhà sáng lập",
+  "mosaicSub": "Khảm trực quan tên nhà sáng lập sẽ lên khi niêm phong. Tìm theo handle sẽ có lúc đó.",
+  "mosaicSearchLabel": "Tìm theo handle",
+  "mosaicSearchPlaceholder": "Có khi niêm phong genesis",
+  "mosaicSoon": "Khi niêm phong",
+  "mosaicSearchHint": "Tìm handle mở khi khối genesis được niêm phong.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Trả lời nhanh",
+  "faq": [
+    {
+      "q": "Có miễn phí không?",
+      "a": "Có. Xác minh với Human Passport trên PEOPLE miễn phí, và Founder NFT của bạn miễn phí trước PEOPLE Mainnet Beta."
+    },
+    {
+      "q": "Tôi có chọn số sáng lập không?",
+      "a": "Không. Số gắn với bậc và được gán bằng bốc thăm công khai công bằng trong bậc. Không ai đặt trước số yêu thích."
+    },
+    {
+      "q": "Có khoản chi trả hay phần thưởng đảm bảo?",
+      "a": "Không. Trang này về danh tính và lịch sử trong khối genesis, không phải chi trả hay lợi nhuận đầu tư."
+    },
+    {
+      "q": "Tham gia thế nào?",
+      "a": "Đăng nhập PEOPLE, hoàn tất xác minh Human Passport và làm theo các bước trên trang. Dùng mục Xác minh bên dưới khi sẵn sàng."
+    },
+    {
+      "q": "PEOPLE là gì?",
+      "a": "PEOPLE là blockchain cộng đồng — do con người tạo, cho cộng đồng. Nhà sáng lập là người đã xác minh tham gia trước PEOPLE Mainnet Beta."
+    }
+  ],
+  "finalTitle": "Trở thành nhà sáng lập",
+  "finalSub": "Xác minh với Human Passport, giành chỗ trong Million Founders và giữ số của bạn trong khối genesis mãi mãi.",
+  "finalCta": "Bắt đầu xác minh",
+  "specialPerks": [
+    "Khung hoạt hình và huy hiệu trên Founder NFT",
+    "Tên bạn nổi bật trong khảm genesis",
+    "7 ngày truy cập sớm tính năng và drop PEOPLE mới",
+    "Hỗ trợ ưu tiên"
+  ],
+  "specialNamedBadge": "#1 và số cuối mỗi bậc cũng có huy hiệu riêng mang tên."
+}

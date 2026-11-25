@@ -148,7 +148,7 @@
     "title": "Jaringan PEOPLE, live",
     "blockHeight": "Tinggi blok",
     "chainLabel": "Chain",
-    "explorer": "Buka explorer",
+    "explorer": "Buka penjelajah",
     "unavailable": "Tinggi blok sedang tidak tersedia.",
     "collecting": "Membaca jaringan…",
     "note": "Blok live dari jaringan PEOPLE."
@@ -157,7 +157,7 @@
     "title": "PEOPLE Mainnet Beta dibuka 1 Desember. Kunci kursi Founding 1,000 Anda lebih awal.",
     "body": "Setiap laporan bug dan setiap pertanyaan yang membingungkan langsung masuk ke apa yang kami bangun selanjutnya.",
     "ctaWallet": "Buat dompet gratis",
-    "ctaExplore": "Lihat explorer",
+    "ctaExplore": "Lihat penjelajah",
     "socialLabel": "Ikuti kami",
     "ctaFounder": "Dapatkan nomor pendiri saya — gratis"
   }

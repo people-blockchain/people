@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · Stagione 1",
+  "heroTitle": "Sii tra i primi milione di persone che costruiscono una blockchain per tutti.",
+  "heroSub": "Niente codice, niente competenze crypto. Ottieni il tuo numero founder, invita amici e guadagna punti quando lanciano token, NFT e tessere club sulla testnet PEOPLE.",
+  "ctaClaim": "Richiedi il mio numero founder",
+  "ctaHow": "Come funziona",
+  "disclaimer": "Preliminare. Punti, tassi e budget stagione possono cambiare prima di PEOPLE Mainnet Beta. Non è una promessa di reddito.",
+  "stripVerified": "founder verificati",
+  "stripGoal": "obiettivo",
+  "cardFounder": "Founder",
+  "cardNumberPlaceholder": "Svelato a 1.000 wallet",
+  "cardNetwork": "testnet PEOPLE",
+  "cardFlipHint": "Tocca per girare",
+  "cardBackTitle": "La tua tessera founder",
+  "cardBackLines": [
+    "Una persona verificata, un numero.",
+    "Il tuo livello segue quando verifichi; il tuo numero è estratto nel livello.",
+    "Condivisibile — i tuoi amici ottengono il proprio."
+  ],
+  "cardCountry": "Paese",
+  "cardRank": "Classifica ingresso anticipato",
+  "cardPoints": "Punti",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "Pool referral stagione 1",
+  "poolNoNewCoins": "Pagato dal pool Million Founders. Nessuna moneta nuova.",
+  "poolSpent": "Speso",
+  "poolRemaining": "Rimanente",
+  "poolLiveHint": "Il saldo speso/rimanente live è mostrato ai founder registrati.",
+  "poolEmpty": "Il pool referral della Stagione 1 è vuoto. Nuovi punti referral non vengono accreditati.",
+  "howEyebrow": "Come funziona",
+  "howTitle": "Tre passi per diventare un founder attivo",
+  "steps": [
+    {
+      "title": "Verifica",
+      "body": "Condividi il telefono una volta nel nostro bot Telegram, o verifica con Human Passport. Gratis."
+    },
+    {
+      "title": "Crea un wallet",
+      "body": "Crea o collega un wallet e collega il wallet PEOPLE in pochi tap.",
+      "bodySocial": "Accedi con Google o email e collega il wallet PEOPLE in pochi tap.",
+      "bodyCloud": "Accedi con email e collega il wallet PEOPLE in pochi tap."
+    },
+    {
+      "title": "Fai un'azione testnet",
+      "body": "Uno swap, un mint NFT o un lancio token sulla testnet PEOPLE."
+    }
+  ],
+  "inviteLine": "Invita amici: guadagni quando LORO fanno il passo 3.",
+  "levelsEyebrow": "Due livelli",
+  "levelsTitle": "Come fluiscono i punti invito",
+  "levelYou": "Tu",
+  "levelFriend": "Il tuo amico",
+  "levelFriendsFriends": "Gli amici del tuo amico",
+  "levelL1": "{{pts}} punti per ogni amico attivo",
+  "levelL2": "+{{pct}}% del L1 del tuo amico — non gli viene tolto",
+  "levelsTagline": "Solo 2 livelli. Solo persone reali e attive.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — voti di governance",
+  "gppl": [
+    {
+      "title": "Token di governance PEOPLE",
+      "body": "gPPL è il token di governance PEOPLE. I detentori votano le proposte del DAO."
+    },
+    {
+      "title": "1.000.000 gPPL, detenuti dal DAO",
+      "body": "L'intera supply è nel timelock del DAO — un contratto on-chain, non una persona."
+    },
+    {
+      "title": "Quota uguale per founder verificato",
+      "body": "Ogni founder verificato riceve una quota uguale di gPPL. La distribuzione avviene a batch dalla treasury con multisig 2-su-3."
+    },
+    {
+      "title": "Multisig ora, voto DAO dopo",
+      "body": "Finché non ci sono abbastanza founder verificati, la multisig 2-su-3 decide batch e tempistiche. Poi le decisioni passano al voto DAO dei detentori di gPPL."
+    }
+  ],
+  "gpplNote": "Testnet: gPPL non ha prezzo e non è reddito. L'importo per founder è annunciato per batch.",
+  "activeEyebrow": "Chi conta come attivo",
+  "activeTitle": "Tutti e tre, altrimenti non conta",
+  "activeChecklist": [
+    "Verificato (telefono Telegram o Human Passport)",
+    "Wallet creato",
+    "Almeno 1 azione testnet reale"
+  ],
+  "activeActionsHint": "Azioni reali: swap, stake, pool di liquidità, mint NFT, lancio token, voto governance. Like e follow non contano.",
+  "signupZero": "Sola iscrizione = 0",
+  "bonusTitle": "Punti bonus dai tuoi amici attivi",
+  "bonusStay": "+{{pts}} · ancora attivo dopo {{days}} giorni",
+  "buildEyebrow": "Senza codice",
+  "buildTitle": "Cosa possono creare i tuoi amici",
+  "build": [
+    {
+      "title": "Lancia un token",
+      "body": "Nome, ticker, supply — un modulo breve, niente codice. Va live sulla testnet.",
+      "href": "/create/token",
+      "cta": "Lancia un token"
+    },
+    {
+      "title": "Mint tessere club e NFT",
+      "body": "Tessere per club, bar o community — come NFT o pass fedeltà.",
+      "href": "/create/nft",
+      "cta": "Mint di un NFT"
+    },
+    {
+      "title": "Raccogli fondi",
+      "body": "Raccogli supporto per un progetto con modelli di contratto revisionati — escrow, vesting, voto ponderato per token.",
+      "href": "/create/contract",
+      "cta": "Apri modelli"
+    }
+  ],
+  "buildTestnet": "Apri la testnet PEOPLE",
+  "ranksEyebrow": "Ingresso anticipato",
+  "ranksTitle": "I founder più precoci ottengono un moltiplicatore maggiore",
+  "ranksHint": "Si applica ai punti attività del titolare del numero founder. Preliminare.",
+  "ranksRange": "Founder {{from}}–{{to}}",
+  "fairEyebrow": "Equo per design",
+  "fairTitle": "Costruito perché nessuno possa farmarlo",
+  "fair": [
+    {
+      "title": "{{instant}}% ora + {{rest}}% settimanale",
+      "body": "Il resto si sblocca in quote settimanali uguali per {{weeks}} settimane."
+    },
+    {
+      "title": "Max {{max}} invitati attivi",
+      "body": "Per persona per stagione. Di più solo con approvazione ambassador."
+    },
+    {
+      "title": "0% burn, commissioni condivise",
+      "body": "Le commissioni di rete sono condivise secondo lo split pubblicato. Il burn è 0%."
+    },
+    {
+      "title": "Nessuna moneta nuova",
+      "body": "Pagato da un pool esistente. Quando il pool stagione è vuoto, il programma si ferma."
+    }
+  ],
+  "countriesEyebrow": "Nel mondo",
+  "countriesTitle": "Founder per paese",
+  "countriesHint": "Paese autodichiarato alla registrazione.",
+  "countriesEmpty": "Sii il primo founder del tuo paese",
+  "countriesEmptyHint": "Richiedi il tuo numero e metti il tuo paese sulla mappa.",
+  "countriesCount": "{{count}} founder",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Domande che le persone fanno",
+  "faq": [
+    {
+      "q": "È una promessa di reddito?",
+      "a": "No. Tutto qui è preliminare: punti, tasso PPL per punto e budget stagione possono cambiare prima di PEOPLE Mainnet Beta. I punti sono registrazione di attività reale sulla testnet, non garanzia di pagamento."
+    },
+    {
+      "q": "Perché solo 2 livelli?",
+      "a": "Perché la ricompensa vada a chi porta amici reali e attivi — non a catene profonde. Ottieni punti per i tuoi amici e +30% di ciò che i tuoi amici guadagnano per i loro. Non viene tolto al tuo amico."
+    },
+    {
+      "q": "Chi conta come attivo?",
+      "a": "Chi ha verificato (telefono Telegram o Human Passport), ha un wallet e ha fatto almeno un'azione testnet reale: swap, stake, pool, NFT, lancio token o voto governance. Solo iscrizione non dà nulla."
+    },
+    {
+      "q": "Quando posso vendere?",
+      "a": "Non sulla testnet. Dopo che la distribuzione mainnet è attiva, il 10% del PPL accreditato è liquido subito e il 90% si sblocca settimanalmente in 52 settimane. Nei primi 30 giorni mainnet si applica una commissione vendita anticipata, da 10% a 0%."
+    },
+    {
+      "q": "E se il pool si esaurisce?",
+      "a": "Il programma si ferma. L'ultimo accredito è ridotto a quanto resta e non si minta nulla di nuovo per continuare."
+    },
+    {
+      "q": "Servono competenze crypto?",
+      "a": "No. Accedi, colleghi un wallet e verifichi una volta. Lanciare un token o mintare un NFT è un modulo, non codice."
+    }
+  ],
+  "rulesDetails": "Regole complete del programma (preliminare)",
+  "finalTitle": "Il tuo numero ti aspetta.",
+  "finalSub": "Richiedilo e condividilo con le persone con cui vorresti costruire.",
+  "shareTitle": "Condividi il programma",
+  "shareText": "Mi unisco a Million Founders su PEOPLE Blockchain — una blockchain per tutti, senza codice.",
+  "shareMine": "Sono Founder #{{n}} su PEOPLE Blockchain. Ottieni il tuo numero founder:",
+  "shareCopy": "Copia",
+  "shareCopied": "Copiato",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "Richiedi",
+  "claimTitle": "Ottieni il tuo numero founder",
+  "claimSignInLead": "Crea o collega un wallet, collegalo, scegli il paese — e il prossimo numero è tuo.",
+  "personalEyebrow": "Il tuo spazio founder",
+  "personalTitle": "Benvenuto, Founder #{{n}}",
+  "downloadCard": "Scarica tessera (PNG)",
+  "shareCard": "Condividi tessera",
+  "activeOfMax": "{{active}}/{{max}} attivi",
+  "activeOfMaxHint": "Invitati attivi questa stagione",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "Totale",
+  "tickVerified": "Verificato",
+  "tickWallet": "Wallet",
+  "tickAction": "Azione",
+  "vestingTimeline": "Cronologia sblocco",
+  "vestingWeek": "settimana {{w}}",
+  "vestingNow": "ora",
+  "verifyTitle": "La tua verifica",
+  "verifyHumanPassport": "Verifica con Human Passport",
+  "verifyHumanPassportBusy": "Verifica Human Passport…",
+  "verifyHumanPassportOk": "Human Passport verificato.",
+  "verifyHumanPassportLow": "Il tuo punteggio Human Passport è sotto la soglia richiesta.",
+  "verifyHumanPassportError": "Verifica Human Passport fallita. Riprova più tardi.",
+  "verifyHumanPassportOff": "Human Passport non è ancora configurato in questo ambiente.",
+  "claimSignInLeadSocial": "Accedi con Google o email, collega un wallet, scegli il paese — e il prossimo numero è tuo.",
+  "claimSignInLeadCloud": "Accedi con email, collega un wallet, scegli il paese — e il prossimo numero è tuo."
+}

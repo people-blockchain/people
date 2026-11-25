@@ -53,18 +53,24 @@ test("founders promo copy still powers card and referral UI strings", () => {
 
 const CYRILLIC = /[Ѐ-ӿ]/;
 
-test("founders promo, referral, and public copy: ru falls back to English with no Cyrillic", () => {
-  assert.deepEqual(foundersPromoCopy("ru"), foundersPromoCopy("en"));
-  assert.doesNotMatch(JSON.stringify(foundersPromoCopy("ru")), CYRILLIC);
-  assert.equal(foundersPromoCopy("en").cardNumberPlaceholder, "Revealed at 1,000 wallets");
-  assert.deepEqual(foundersReferralCopy("ru"), foundersReferralCopy("en"));
-  assert.doesNotMatch(JSON.stringify(foundersReferralCopy("ru")), CYRILLIC);
-  assert.deepEqual(foundersPublicCopy("ru"), foundersPublicCopy("en"));
-  assert.doesNotMatch(JSON.stringify(foundersPublicCopy("ru")), CYRILLIC);
+test("founders promo, referral, and public copy: ru is localized with Cyrillic", () => {
+  const promoRu = foundersPromoCopy("ru");
+  const promoEn = foundersPromoCopy("en");
+  assert.notDeepEqual(promoRu, promoEn);
+  assert.match(JSON.stringify(promoRu), CYRILLIC);
+  assert.equal(promoEn.cardNumberPlaceholder, "Revealed at 1,000 wallets");
+
+  const referralRu = foundersReferralCopy("ru");
+  assert.notDeepEqual(referralRu, foundersReferralCopy("en"));
+  assert.match(JSON.stringify(referralRu), CYRILLIC);
+
+  const publicRu = foundersPublicCopy("ru");
+  assert.notDeepEqual(publicRu, foundersPublicCopy("en"));
+  assert.match(JSON.stringify(publicRu), CYRILLIC);
 });
 
-test("foundersCopyLang maps ru to en and leaves other locales alone", () => {
-  assert.equal(foundersCopyLang("ru"), "en");
+test("foundersCopyLang passes ru through and leaves other locales alone", () => {
+  assert.equal(foundersCopyLang("ru"), "ru");
   assert.equal(foundersCopyLang("en"), "en");
   assert.equal(foundersCopyLang("de"), "de");
 });
@@ -77,7 +83,7 @@ const FOUNDERS_UI_FILES = [
   "src/components/founders/FoundersNftCard.tsx",
 ];
 
-test("founders UI copy lookups use foundersCopyLang so ru never renders Russian", () => {
+test("founders UI copy lookups use foundersCopyLang", () => {
   for (const file of FOUNDERS_UI_FILES) {
     const src = readFileSync(join(root, file), "utf8");
     assert.match(src, /foundersCopyLang/, `${file} must call foundersCopyLang`);

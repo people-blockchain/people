@@ -148,7 +148,7 @@
     "title": "PEOPLE-Netzwerk, live",
     "blockHeight": "Blockhöhe",
     "chainLabel": "Chain",
-    "explorer": "Explorer öffnen",
+    "explorer": "Block-Explorer öffnen",
     "unavailable": "Die Blockhöhe ist gerade nicht verfügbar.",
     "collecting": "Netzwerk wird gelesen…",
     "note": "Live-Blöcke vom PEOPLE-Netzwerk."
@@ -157,7 +157,7 @@
     "title": "PEOPLE Mainnet Beta startet am 1. Dezember. Sichern Sie sich früh Ihren Founding-1,000-Platz.",
     "body": "Jeder Fehlerbericht und jede verwirrte Frage fließt direkt in das, was wir als Nächstes bauen.",
     "ctaWallet": "Kostenlose Wallet erstellen",
-    "ctaExplore": "Explorer ansehen",
+    "ctaExplore": "Block-Explorer ansehen",
     "socialLabel": "Folgen Sie uns",
     "ctaFounder": "Meine Gründernummer holen — kostenlos"
   }

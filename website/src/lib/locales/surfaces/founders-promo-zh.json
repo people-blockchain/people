@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · 第 1 季",
+  "heroTitle": "成为首批一百万名共建「人人区块链」的人之一。",
+  "heroSub": "无需代码，无需加密经验。领取你的创始人编号，邀请朋友，当他们在 PEOPLE 测试网上发布代币、NFT 和俱乐部卡时赚取积分。",
+  "ctaClaim": "领取我的创始人编号",
+  "ctaHow": "如何运作",
+  "disclaimer": "初步说明。积分、费率和赛季预算可能在 PEOPLE Mainnet Beta 之前调整。不构成收入承诺。",
+  "stripVerified": "已验证创始人",
+  "stripGoal": "目标",
+  "cardFounder": "创始人",
+  "cardNumberPlaceholder": "满 1,000 个钱包后揭晓",
+  "cardNetwork": "PEOPLE 测试网",
+  "cardFlipHint": "点击翻转",
+  "cardBackTitle": "你的创始人卡",
+  "cardBackLines": [
+    "一名已验证的人，一个编号。",
+    "你的档位在你验证后确定；编号在档位内抽取。",
+    "可分享——朋友各自领取自己的编号。"
+  ],
+  "cardCountry": "国家/地区",
+  "cardRank": "早鸟排名",
+  "cardPoints": "积分",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "第 1 季推荐池",
+  "poolNoNewCoins": "从 Million Founders 池支付。不增发新币。",
+  "poolSpent": "已用",
+  "poolRemaining": "剩余",
+  "poolLiveHint": "已注册创始人可查看实时已用/剩余余额。",
+  "poolEmpty": "第 1 季推荐池已空。不再记入新的推荐积分。",
+  "howEyebrow": "如何运作",
+  "howTitle": "成为活跃创始人的三步",
+  "steps": [
+    {
+      "title": "验证",
+      "body": "在我们的 Telegram 机器人中一次性分享手机号，或使用 Human Passport 验证。免费。"
+    },
+    {
+      "title": "创建钱包",
+      "body": "创建或连接钱包，几步即可关联你的 PEOPLE 钱包。",
+      "bodySocial": "使用 Google 或邮箱登录，几步即可关联你的 PEOPLE 钱包。",
+      "bodyCloud": "使用邮箱登录，几步即可关联你的 PEOPLE 钱包。"
+    },
+    {
+      "title": "完成一次测试网操作",
+      "body": "在 PEOPLE 测试网上进行一次 swap、NFT 铸造或代币发布。"
+    }
+  ],
+  "inviteLine": "邀请朋友：当他们完成第 3 步时你获得积分。",
+  "levelsEyebrow": "两层",
+  "levelsTitle": "邀请积分如何流动",
+  "levelYou": "你",
+  "levelFriend": "你的朋友",
+  "levelFriendsFriends": "你朋友的朋友",
+  "levelL1": "每位活跃朋友 {{pts}} 积分",
+  "levelL2": "朋友 L1 的 +{{pct}}%——不从他们身上扣除",
+  "levelsTagline": "仅 2 层。仅真实、活跃的人。",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — 治理投票",
+  "gppl": [
+    {
+      "title": "PEOPLE 治理代币",
+      "body": "gPPL 是 PEOPLE 治理代币。持有者就 DAO 提案投票。"
+    },
+    {
+      "title": "1,000,000 gPPL，由 DAO 持有",
+      "body": "全部供应量在 DAO timelock 中——链上合约，而非个人。"
+    },
+    {
+      "title": "每位已验证创始人等额份额",
+      "body": "每位已验证创始人获得等额 gPPL。由财库 2/3 多签分批发放。"
+    },
+    {
+      "title": "现阶段多签，之后 DAO 投票",
+      "body": "在已验证创始人足够之前，2/3 多签决定批次与时间安排。之后由 gPPL 持有者进行 DAO 投票。"
+    }
+  ],
+  "gpplNote": "测试网：gPPL 无价格，不构成收入。每位创始人金额按批公布。",
+  "activeEyebrow": "谁算活跃",
+  "activeTitle": "三项齐全，否则不计",
+  "activeChecklist": [
+    "已验证（Telegram 手机或 Human Passport）",
+    "已创建钱包",
+    "至少 1 次真实测试网操作"
+  ],
+  "activeActionsHint": "真实操作：swap、质押、流动性池、NFT 铸造、代币发布、治理投票。点赞与关注不计。",
+  "signupZero": "仅注册 = 0",
+  "bonusTitle": "活跃朋友带来的奖励积分",
+  "bonusStay": "+{{pts}} · {{days}} 天后仍活跃",
+  "buildEyebrow": "无需代码",
+  "buildTitle": "你的朋友可以创建什么",
+  "build": [
+    {
+      "title": "发布代币",
+      "body": "名称、代号、总量——简短表单，无需代码。在测试网上线。",
+      "href": "/create/token",
+      "cta": "发布代币"
+    },
+    {
+      "title": "铸造俱乐部卡与 NFT",
+      "body": "俱乐部、咖啡馆或社区的会员卡——NFT 或忠诚度通行证。",
+      "href": "/create/nft",
+      "cta": "铸造 NFT"
+    },
+    {
+      "title": "筹集资金",
+      "body": "使用经审核的合约模板为项目筹集支持——托管、归属、代币加权投票。",
+      "href": "/create/contract",
+      "cta": "打开模板"
+    }
+  ],
+  "buildTestnet": "打开 PEOPLE 测试网",
+  "ranksEyebrow": "早鸟",
+  "ranksTitle": "越早加入的创始人倍数越高",
+  "ranksHint": "适用于编号持有人的活动积分。初步说明。",
+  "ranksRange": "创始人 {{from}}–{{to}}",
+  "fairEyebrow": "公平设计",
+  "fairTitle": "防止任何人刷量",
+  "fair": [
+    {
+      "title": "立即 {{instant}}% + 每周 {{rest}}%",
+      "body": "其余在 {{weeks}} 周内按等额周份额解锁。"
+    },
+    {
+      "title": "每季最多 {{max}} 名活跃受邀人",
+      "body": "每人每季。更多需大使批准。"
+    },
+    {
+      "title": "0% 销毁，费用共享",
+      "body": "网络费用按已公布的分成规则分配。销毁为 0%。"
+    },
+    {
+      "title": "无新币",
+      "body": "从现有池支付。赛季池用尽则计划停止。"
+    }
+  ],
+  "countriesEyebrow": "全球",
+  "countriesTitle": "按国家/地区的创始人",
+  "countriesHint": "注册时自报国家/地区。",
+  "countriesEmpty": "成为您国家/地区的第一位创始人",
+  "countriesEmptyHint": "领取编号，让您的国家/地区登上地图。",
+  "countriesCount": "{{count}} 位创始人",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "常见问题",
+  "faq": [
+    {
+      "q": "这是收入承诺吗？",
+      "a": "不是。此处均为初步说明：积分、每点 PPL 费率和赛季预算可能在 PEOPLE Mainnet Beta 之前调整。积分是测试网真实活动的记录，不是支付保证。"
+    },
+    {
+      "q": "为什么只有 2 层？",
+      "a": "让奖励给带来真实活跃朋友的人——而非深层链路。你为朋友获得积分，并获朋友为其邀请人所赚 +30%。不从朋友处扣除。"
+    },
+    {
+      "q": "谁算活跃？",
+      "a": "已验证（Telegram 手机或 Human Passport）、有钱包且至少完成一次真实测试网操作：swap、质押、池、NFT、代币发布或治理投票。仅注册无任何收益。"
+    },
+    {
+      "q": "何时可以卖出？",
+      "a": "测试网上不可。主网分配上线后，入账 PPL 的 10% 立即流动，90% 在 52 周内每周解锁。主网前 30 天适用提前卖出费，从 10% 降至 0%。"
+    },
+    {
+      "q": "池子用完了怎么办？",
+      "a": "计划停止。最后一笔记账按剩余额度削减，不会增发以延续。"
+    },
+    {
+      "q": "需要加密经验吗？",
+      "a": "不需要。登录、关联钱包并验证一次即可。发布代币或铸造 NFT 是表单，不是代码。"
+    }
+  ],
+  "rulesDetails": "完整计划规则（初步）",
+  "finalTitle": "你的编号在等你。",
+  "finalSub": "领取它，并与你想一起共建的人分享。",
+  "shareTitle": "分享计划",
+  "shareText": "我加入 PEOPLE Blockchain 的 Million Founders——人人区块链，无需代码。",
+  "shareMine": "我是 PEOPLE Blockchain 上的创始人 #{{n}}。领取你的创始人编号：",
+  "shareCopy": "复制",
+  "shareCopied": "已复制",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "领取",
+  "claimTitle": "获取你的创始人编号",
+  "claimSignInLead": "创建或连接钱包、关联、选择国家/地区——下一个编号就是你的。",
+  "personalEyebrow": "你的创始人空间",
+  "personalTitle": "欢迎，创始人 #{{n}}",
+  "downloadCard": "下载卡片 (PNG)",
+  "shareCard": "分享卡片",
+  "activeOfMax": "{{active}}/{{max}} 活跃",
+  "activeOfMaxHint": "本季活跃受邀人",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "合计",
+  "tickVerified": "已验证",
+  "tickWallet": "钱包",
+  "tickAction": "操作",
+  "vestingTimeline": "解锁时间线",
+  "vestingWeek": "第 {{w}} 周",
+  "vestingNow": "现在",
+  "verifyTitle": "你的验证",
+  "verifyHumanPassport": "使用 Human Passport 验证",
+  "verifyHumanPassportBusy": "正在检查 Human Passport…",
+  "verifyHumanPassportOk": "Human Passport 已验证。",
+  "verifyHumanPassportLow": "你的 Human Passport 分数低于所需阈值。",
+  "verifyHumanPassportError": "Human Passport 验证失败。请稍后重试。",
+  "verifyHumanPassportOff": "此环境尚未配置 Human Passport。",
+  "claimSignInLeadSocial": "使用 Google 或邮箱登录，关联钱包，选择国家/地区——下一个编号就是你的。",
+  "claimSignInLeadCloud": "使用邮箱登录，关联钱包，选择国家/地区——下一个编号就是你的。"
+}

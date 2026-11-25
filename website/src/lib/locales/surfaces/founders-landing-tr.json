@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Kurucu 1.000 Kasası · PEOPLE Mainnet Beta (1 Ara)",
+  "heroTitle": "Kurucu 1.000 Kasası",
+  "heroSub": "İlk 1.000 doğrulanmış cüzdan transferleri ve Kurucu 1.000 Bounty Çekilişini açar. Liste ve sıra, bu cüzdanlar kilitlenene kadar mühürlü kalır. Bekleyen bir koltuk için Telegram'da 20 saniyede doğrula — Kurucu 1.000 koltuğunu ve Bounty Draw biletini kilitlemek için bağlı bir cüzdan gerekir. Million Founders programı ilk 1.000'den sonra devam eder.",
+  "heroCta": "Doğrula ve katıl",
+  "heroCtaHow": "Numaralar nasıl işler",
+  "counterLabel": "doğrulanmış kişi",
+  "counterGoal": "hedef",
+  "counterLive": "PEOPLE üzerinde Human Passport doğrulamasından canlı sayım.",
+  "counterStub": "1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır.",
+  "vaultCalloutTitle": "İlk 1.000 doğrulanmış cüzdan transferleri ve Kurucu 1.000 Bounty Çekilişini açar",
+  "vaultCalloutBody": "1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır. Liste mühürlüyken canlı kayıt sayısı gösterilmez.",
+  "disclaimer": "Ön program ayrıntıları PEOPLE Mainnet Beta öncesi değişebilir. Finansal tavsiye değildir. Gelir veya token fiyat artışı vaadi yoktur.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Ücretsiz numaralı Founder NFT'iniz",
+  "nftBody": "PEOPLE Mainnet Beta öncesi katılan her doğrulanmış kişi, kamu numarasıyla bir Founder NFT alır. Ücretsizdir. Kayıt genesis bloğuna yazılır ve orada kalır — ikinci bir genesis olmayacak.",
+  "nftBullets": [
+    "PEOPLE Mainnet Beta öncesi doğrulanmış kurucular için ücretsiz",
+    "Numaranız ilk günden zincir tarihinin parçası",
+    "Her kurucu için aynı temel haklar — özel numaralar yalnızca küçük tek seferlik avantajlar ekler"
+  ],
+  "tiersEyebrow": "Kurucu numaraları",
+  "tiersTitle": "Katılım zamanına göre kademeler",
+  "tiersSub": "Kademeniz doğrulama sıranızı izler. Her kademede tam numaranız, kademe kapandığında adil bir kamu rastgele çekilişiyle verilir — kimse numarasını seçemez.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "İlk yüz doğrulanmış kurucu"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Ağı şekillendiren erken builder'lar"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "Geniş benimsenmeden önceki ana dalga"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Topluluğu ölçekte büyütmek"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "İlk yüz binden sonraki herkes"
+    }
+  ],
+  "specialEyebrow": "Özel numaralar",
+  "specialTitle": "Özel numaralar ve kademe kapanışları",
+  "specialBody": "Bazı numaralar öne çıkar: yuvarlak veya göze çarpan rakamlar ve her kademenin son numarası. Bir kademenin son numarası son katılana verilmez — o kademedeki herkes arasında adil çekilir.",
+  "specialListTitle": "Hangi numaralar özel",
+  "specialList": [
+    "#1'den #9'a",
+    "77, 888 veya 8888 gibi tekrarlayan rakamlar",
+    "Yuvarlak sayılar: 1,000, 10,000, 100,000 ve 500,000",
+    "12345 dizisi",
+    "Her kademenin son numarası"
+  ],
+  "specialFixedNote": "Bu liste kayıt açılmadan önce yayımlanır ve sabitlenir. Sonrasında değişmez; böylece herkes çekilişin adil olduğunu doğrulayabilir.",
+  "specialPerksTitle": "Özel bir numara ne alır — bir kez",
+  "specialPerksBody": "Her özel numara aynı tek seferlik bonusu alır. Bu bir teşekkür, para değil: ödeme yok, fiyat vaadi yok, kalıcı indirim yok. Temel kurucu hakları herkes için aynı kalır.",
+  "sealEyebrow": "Genesis töreni",
+  "sealTitle": "Genesis bloğunun mühürlenmesi",
+  "sealBody": "Kurucu penceresi kapandığında PEOPLE, genesis bloğu için kamu bir mühürleme töreni düzenleyecek. Kamu mozaiğine katılan kurucu adları, ağı başlatanların kalıcı bir anlık görüntüsü olarak birlikte görünecek.",
+  "mosaicTitle": "Kurucu mozaiği",
+  "mosaicSub": "Kurucu adlarından oluşan görsel mozaik mühürlemede yayına girecek. Kullanıcı adına göre arama o zaman gelecek.",
+  "mosaicSearchLabel": "Kullanıcı adına göre ara",
+  "mosaicSearchPlaceholder": "Genesis mühürlemesinde gelecek",
+  "mosaicSoon": "Mühürlemede",
+  "mosaicSearchHint": "Genesis bloğu mühürlendiğinde kullanıcı adı araması açılır.",
+  "faqEyebrow": "SSS",
+  "faqTitle": "Hızlı yanıtlar",
+  "faq": [
+    {
+      "q": "Ücretsiz mi?",
+      "a": "Evet. PEOPLE üzerinde Human Passport ile doğrulama ücretsizdir ve Founder NFT'iniz PEOPLE Mainnet Beta öncesi ücretsizdir."
+    },
+    {
+      "q": "Kurucu numaramı seçebilir miyim?",
+      "a": "Hayır. Numaralar kademenize bağlıdır ve kademe içinde adil bir kamu rastgele çekilişiyle verilir. Kimse favori bir numarayı ayırtamaz."
+    },
+    {
+      "q": "Ödeme veya garantili ödül var mı?",
+      "a": "Hayır. Bu sayfa genesis bloğundaki kimlik ve tarih içindir; ödeme veya yatırım getirisi değil."
+    },
+    {
+      "q": "Nasıl katılırım?",
+      "a": "PEOPLE'da oturum açın, Human Passport doğrulamasını tamamlayın ve bu sayfadaki adımları izleyin. Hazır olduğunuzda aşağıdaki Doğrula bölümünü kullanın."
+    },
+    {
+      "q": "PEOPLE nedir?",
+      "a": "PEOPLE topluluk blockhain'idir — insanlar tarafından, topluluk için. Kurucular PEOPLE Mainnet Beta öncesi katılan doğrulanmış insanlardır."
+    }
+  ],
+  "finalTitle": "Kurucu ol",
+  "finalSub": "Human Passport ile doğrula, Million Founders arasında yerini al ve numaranı genesis bloğunda sonsuza kadar sakla.",
+  "finalCta": "Doğrulamayı başlat",
+  "specialPerks": [
+    "Founder NFT'inizde animasyonlu çerçeve ve rozet",
+    "Genesis mozaiğinde vurgulanan adınız",
+    "Yeni PEOPLE özellikleri ve droplarına 7 gün erken erişim",
+    "Öncelikli destek"
+  ],
+  "specialNamedBadge": "#1 ve her kademenin son numarası ayrıca kendi adlı rozetlerini alır."
+}

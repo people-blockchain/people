@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "People hoạt động thế nào, trong 1 phút.",
+    "lead": "Một ví, một bước xác nhận bạn là người thật, rồi bạn có thể khởi chạy, mint, hoán đổi hoặc bỏ phiếu. Không cần code, không cần nền tảng crypto.",
+    "betaBadge": "PEOPLE Mainnet Beta khởi chạy ngày 1 tháng 12 năm 2026.",
+    "saleNote": "PEOPLE Mainnet Beta khởi chạy ngày 1 tháng 12 năm 2026 — mainnet thật ở giai đoạn sớm, có giới hạn cho đến khi nhiều người được xác minh hơn. Thanh toán bằng USDC hoặc USDT trên Base; PPL được ghi có trên PEOPLE Mainnet Beta."
+  },
+  "steps": {
+    "eyebrow": "Ba bước",
+    "title": "Người bình thường thực sự làm gì",
+    "lead": "Đó là toàn bộ onboarding. Phần còn lại của trang là chi tiết cho người tò mò.",
+    "items": [
+      {
+        "title": "Có ví trong 30 giây",
+        "body": "Mở trang trên điện thoại hoặc trình duyệt và tạo ví — cụm 12 từ không lưu ký (khóa ở trên thiết bị của bạn).",
+        "note": "Không cần app store, không bài tập seed phrase.",
+        "bodySocial": "Mở trang trên điện thoại hoặc trình duyệt và tạo ví — cụm 12 từ không lưu ký (khóa ở trên thiết bị của bạn), hoặc đăng nhập Google nhanh hơn với khóa mã hóa đồng bộ đám mây.",
+        "bodyCloud": "Mở trang trên điện thoại hoặc trình duyệt và tạo ví — cụm 12 từ không lưu ký (khóa ở trên thiết bị của bạn), hoặc đăng nhập email nhanh hơn với khóa mã hóa đồng bộ đám mây."
+      },
+      {
+        "title": "Chứng minh bạn là con người",
+        "body": "Xác minh một lần bằng số điện thoại Telegram hoặc Human Passport. Một người, một tài khoản — điều đó ngăn bot farm pool cộng đồng.",
+        "note": "Không bắt buộc sinh trắc học."
+      },
+      {
+        "title": "Khởi chạy, mint, hoán đổi hoặc bỏ phiếu",
+        "body": "Khởi chạy token cho cộng đồng của bạn, mint thẻ club, giao dịch trong pool token/PPL, hoặc bỏ phiếu nơi pool cộng đồng được dùng.",
+        "note": "Mỗi thao tác là một nút bình thường, không phải dòng lệnh."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Nguồn cung",
+    "title": "Một tỷ PPL, không bất ngờ",
+    "lead": "Nguồn cung cố định từ genesis. Không có gì được mint theo lịch phía sau lưng bạn.",
+    "totalLabel": "Tổng cung, cố định",
+    "unit": "PPL",
+    "noNewCoins": "Năm 1–4: 0% coin mới. Tham số lạm phát được ghim về 0 trong genesis của chuỗi.",
+    "year5": "Từ năm 5: tối đa 2% mỗi năm, và chỉ khi cộng đồng bỏ phiếu đồng ý.",
+    "donutLabel": "Phân bổ genesis",
+    "bucketLabels": {
+      "community": "Cộng đồng và phần thưởng",
+      "validators": "Validator",
+      "team": "Đội ngũ",
+      "treasury": "Kho bạc",
+      "sale": "Bán cộng đồng",
+      "liquidity": "Thanh khoản"
+    },
+    "donutNote": "Tổng cộng 100% một tỷ PPL. Bucket cộng đồng mở khóa tuyến tính trong sáu năm; kho bạc và thanh khoản bị khóa không lưu hành."
+  },
+  "validators": {
+    "eyebrow": "Validator",
+    "title": "Ai vận hành mạng, ai trả chi phí",
+    "lead": "Validator giữ chuỗi chạy. Họ được trả từ pool riêng, cộng thêm phần mỗi phí.",
+    "poolLabel": "Pool validator",
+    "unit": "PPL",
+    "shareLabel": "cộng 30% mỗi phí mạng",
+    "yearsLabel": "PPL phát hành mỗi năm",
+    "yearLabel": "Năm {{n}}",
+    "pctLabel": "{{pct}}% tổng cung",
+    "scheduleNote": "Năm 1–4 phát hành 60M, 50M, 50M và 40M PPL từ pool 200M. Không mint để trả việc này.",
+    "feeNote": "Ngoài lịch, validator nhận 30% mỗi phí mạng, chia mỗi block."
+  },
+  "fees": {
+    "eyebrow": "Phí",
+    "title": "Mỗi phí đi đâu",
+    "lead": "Mọi phí mạng trả bằng PPL và chia theo cùng một cách, mỗi lần.",
+    "totalLabel": "Một phí",
+    "totalValue": "100%",
+    "note": "Không đốt: dòng burn là 0%. Phí lẻ vẫn chia như vậy."
+  },
+  "launch": {
+    "eyebrow": "Khởi chạy token",
+    "title": "Điều gì xảy ra khi bạn khởi chạy",
+    "lead": "Ba quy tắc do hợp đồng thực thi, không phải vì chúng tôi tốt bụng.",
+    "points": [
+      {
+        "title": "Đường cong định giá từ giao dịch đầu tiên",
+        "body": "Không vòng riêng, không giá đặt sẵn. Token bắt đầu trên bonding curve — lần mua đầu đặt giá mọi người thấy."
+      },
+      {
+        "title": "10% vào pool cộng đồng của token đó — đảm bảo",
+        "body": "Khi khởi chạy, người tạo cũng có thể gửi phần curve chưa bán (tới ~17%) vào pool thay vì đốt — tối đa 27% tổng. Không bao giờ trộn với phí mạng."
+      },
+      {
+        "title": "Phần người tạo vest trong 180 ngày",
+        "body": "10% phân bổ người tạo thanh khoản ngay khi tạo, 90% còn lại mở khóa tuyến tính trong 180 ngày. Không dump ngày đầu."
+      },
+      {
+        "title": "Phần thừa curve",
+        "body": "Sau khi curve chuyển sang AMM — hoặc được finalize sau 180 ngày mà chưa bán hết — token thừa và chưa bán theo lựa chọn khởi chạy của người tạo: mặc định đốt (khuyến nghị), hoặc vào pool cộng đồng của token đó. Không bao giờ cho người tạo hay kho bạc giao thức. Mỗi token chuẩn cũng gửi 10% nguồn cung vào pool cộng đồng khi khởi chạy."
+      },
+      {
+        "title": "Chia sẻ giới thiệu tùy chọn",
+        "body": "Khi khởi chạy, người tạo có thể tham gia chương trình giới thiệu issuer: mặc định 5% nguồn cung (tối đa 10%) dành cho thưởng mời, bounty mời mặc định 5% giao dịch mua của người được mời. Tắt cho đến khi người tạo bật."
+      }
+    ],
+    "curveCaption": "Giá dọc theo bonding curve",
+    "curveStartLabel": "Giao dịch đầu",
+    "curveEndLabel": "Bán hết",
+    "curveNote": "Hình minh họa của curve — đây là cách cơ chế hoạt động, không phải dự báo giá."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Đến sớm, mang theo cộng đồng của bạn",
+    "lead": "Số founder vẫn còn. Hai cấp giới thiệu, chỉ người hoạt động mới được tính.",
+    "bullets": [
+      "Hai cấp: bạn kiếm từ người bạn mời, và phần nhỏ hơn từ người họ mời.",
+      "Tài khoản không hoạt động không kiếm gì — trăm tài khoản giả kiếm trăm lần không.",
+      "Phần thưởng vest: 10% thanh khoản ngay, phần còn lại theo lát hàng tuần trong 52 tuần."
+    ],
+    "cta": "Trở thành founder",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Trả lời thẳng",
+    "items": [
+      {
+        "q": "Đây có phải mainnet?",
+        "a": "PEOPLE Mainnet Beta khởi chạy ngày 1 tháng 12 năm 2026. Đó là mainnet PEOPLE thật ở giai đoạn sớm, có giới hạn cho đến khi nhiều người được xác minh hơn. Bạn thanh toán bằng USDC hoặc USDT trên Base, và PPL được ghi có trên PEOPLE Mainnet Beta."
+      },
+      {
+        "q": "Tôi có cần biết code không?",
+        "a": "Không. Tạo ví, khởi chạy token, mint thẻ club và bỏ phiếu là các nút trong giao diện. Hợp đồng từ mẫu OpenZeppelin đã kiểm toán."
+      },
+      {
+        "q": "Phí đi đâu?",
+        "a": "30% cho validator, 25% pool cộng đồng, 20% kho bạc, 10% thanh khoản, 15% Growth Pool và 0% đốt."
+      },
+      {
+        "q": "Có in thêm coin mới không?",
+        "a": "Không trong năm 1–4 — genesis chuỗi ghim lạm phát về 0. Từ năm 5, tối đa 2% mỗi năm và chỉ khi cộng đồng bỏ phiếu."
+      },
+      {
+        "q": "Đây có phải lời hứa thu nhập?",
+        "a": "Không. Phần thưởng không cố định: không hoạt động, không thưởng. Giá token có thể tăng, giảm hoặc về 0. Đây là tham gia mạng, không phải đầu tư."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Đó là toàn bộ ý tưởng",
+    "body": "Tạo ví miễn phí và thử, hoặc đọc chi tiết trong tài liệu trước.",
+    "ctaWallet": "Tạo ví miễn phí",
+    "ctaCreate": "Khởi chạy token",
+    "ctaDocs": "Đọc tài liệu"
+  }
+}
