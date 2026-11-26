@@ -22,6 +22,7 @@ const swapEventAbi = [
 
 const token0Abi = [
   { type: "function", name: "token0", stateMutability: "view", inputs: [], outputs: [{ type: "address" }] },
+  { type: "function", name: "token1", stateMutability: "view", inputs: [], outputs: [{ type: "address" }] },
 ] as const;
 
 const creatorAbi = [
@@ -56,7 +57,8 @@ export type ChainVerifyError =
   | "wallet_mismatch"
   | "wrong_contract"
   | "event_missing"
-  | "not_verifiable";
+  | "not_verifiable"
+  | "chain_verification_failed";
 
 export type ChainVerifyResult =
   | { ok: true; swapAmountPpl?: number; stakeAmountPpl?: number }
@@ -119,6 +121,7 @@ export async function verifyFounderActionOnChain(
   }
   const pairAddresses = new Set(deployments.pools.map((p) => p.poolId.toLowerCase()));
   const wppl = deployments.contracts.wppl?.toLowerCase();
+  if (!wppl) return { ok: false, error: "chain_verification_failed" };
   for (const log of receipt.logs) {
     if (!pairAddresses.has(log.address.toLowerCase())) continue;
     let decoded;
@@ -137,10 +140,17 @@ export async function verifyFounderActionOnChain(
     const token0 = await client
       .readContract({ address: log.address, abi: token0Abi, functionName: "token0" })
       .catch(() => null);
-    const wpplIsToken0 = typeof token0 === "string" && token0.toLowerCase() === wppl;
-    const moved = wpplIsToken0
-      ? (args.amount0In > args.amount0Out ? args.amount0In : args.amount0Out)
-      : (args.amount1In > args.amount1Out ? args.amount1In : args.amount1Out);
+    if (typeof token0 !== "string") continue;
+    let moved: bigint;
+    if (token0.toLowerCase() === wppl) {
+      moved = args.amount0In > args.amount0Out ? args.amount0In : args.amount0Out;
+    } else {
+      const token1 = await client
+        .readContract({ address: log.address, abi: token0Abi, functionName: "token1" })
+        .catch(() => null);
+      if (typeof token1 !== "string" || token1.toLowerCase() !== wppl) continue;
+      moved = args.amount1In > args.amount1Out ? args.amount1In : args.amount1Out;
+    }
     return { ok: true, swapAmountPpl: Number(moved) / 1e18 };
   }
   return { ok: false, error: "event_missing" };

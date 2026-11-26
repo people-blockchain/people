@@ -11,7 +11,10 @@ import {
   WEB3AUTH_ID_TOKEN_ISSUER,
   WEB3AUTH_ID_TOKEN_TRUST_ANCHORS,
 } from "@/lib/web3auth-config";
-import { GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN } from "@/lib/web3auth-verifier-allowlist";
+import {
+  GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN,
+  isGenericAggregateContainer,
+} from "@/lib/web3auth-verifier-allowlist";
 
 export type Web3AuthProfile = {
   email: string;
@@ -130,7 +133,8 @@ export async function verifyWeb3AuthIdToken(
   const claimAbsent = payload.email_verified === undefined;
   const verifierProvesEmailOwnership =
     GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN.test(verifier ?? "") ||
-    GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN.test(aggregateVerifier ?? "");
+    ((!verifier || isGenericAggregateContainer(verifier)) &&
+      GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN.test(aggregateVerifier ?? ""));
   const emailVerified = payload.email_verified === true || (claimAbsent && verifierProvesEmailOwnership);
 
   return {

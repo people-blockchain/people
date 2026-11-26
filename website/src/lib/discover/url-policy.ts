@@ -30,3 +30,18 @@ export function isSafeVideoUri(value: string): boolean {
     return false;
   }
 }
+
+/** Image/icon source for screenshots and token icons: https://, ipfs://, or local `/tokens/...`. */
+export function isSafeImageAssetUri(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.includes("\\")) return false;
+  if (trimmed.startsWith("/")) {
+    return !trimmed.startsWith("//") && /^\/tokens\/[A-Za-z0-9._/-]+$/.test(trimmed);
+  }
+  try {
+    const url = new URL(trimmed);
+    return url.protocol === "https:" || url.protocol === "ipfs:";
+  } catch {
+    return false;
+  }
+}

@@ -103,6 +103,16 @@ test("site threshold decides: score 12 passes at minScore 10 even when the score
   assert.equal(db.get("u1").verificationLevel, VERIFICATION_LEVEL_STRONG);
 });
 
+test("AUTH-01: claimPassportWallet failure is returned as passport_wallet_taken", async () => {
+  const { db, deps } = harness({ u1: { walletAddress: OWN, verificationLevel: 0 } });
+  const result = await verifyHumanPassportForUser("u1", undefined, {
+    ...deps,
+    claimPassportWallet: async () => ({ ok: false, error: "passport_wallet_taken" }),
+  });
+  assert.deepEqual(result, { ok: false, error: "passport_wallet_taken" });
+  assert.equal(db.get("u1").verificationLevel, 0);
+});
+
 test("score below the site threshold → score_too_low reporting the site threshold", async () => {
   const { db, deps } = harness({ u1: { walletAddress: OWN, verificationLevel: 0 } });
   const result = await verifyHumanPassportForUser("u1", undefined, {

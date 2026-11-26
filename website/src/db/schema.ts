@@ -382,6 +382,34 @@ export const founderWorldIdNullifiers = pgTable(
   ],
 );
 
+/** AUTH-03: single-use World ID RP nonce bound to the signed-in user before the proof is submitted. */
+export const founderWorldIdNonces = pgTable(
+  "founder_world_id_nonce",
+  {
+    nonce: text("nonce").primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    action: text("action").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+    usedAt: timestamp("usedAt", { mode: "date" }),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+  },
+  (row) => [index("founder_world_id_nonce_user_idx").on(row.userId)],
+);
+
+/**
+ * AUTH-01: wallets that have already been used to pass Human Passport Level 2. Survives
+ * unlink of `founder.passportWallet`, so the same address cannot upgrade a second account.
+ */
+export const founderPassportWalletRegistry = pgTable("founder_passport_wallet_registry", {
+  walletAddress: text("walletAddress").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  verifiedAt: timestamp("verifiedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
+});
+
 export const founderTelegramChats = pgTable("founder_telegram_chat", {
   chatId: text("chatId").primaryKey(),
   userId: text("userId")
@@ -837,6 +865,20 @@ export const factoryIconDailyUsage = pgTable(
     updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().$defaultFn(() => new Date()),
   },
   (row) => [primaryKey({ columns: [row.dayKey, row.walletAddress] })],
+);
+
+/** WEB-02: one-shot wallet-ownership proof nonces for free AI-icon generations. */
+export const factoryIconProofNonces = pgTable(
+  "factory_icon_proof_nonce",
+  {
+    walletAddress: text("walletAddress").notNull(),
+    nonce: text("nonce").notNull(),
+    expiresAt: timestamp("expiresAt", { mode: "date" }).notNull(),
+  },
+  (row) => [
+    primaryKey({ columns: [row.walletAddress, row.nonce] }),
+    index("factory_icon_proof_nonce_expires_idx").on(row.expiresAt),
+  ],
 );
 
 /**

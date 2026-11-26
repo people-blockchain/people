@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getDbReady, isDatabaseConfigured } from "@/db";
 import { accounts, userWalletVaults, users } from "@/db/schema";
 
@@ -21,14 +21,16 @@ export async function blocksDangerousAccountLink(params: {
 }): Promise<boolean> {
   if (!isDatabaseConfigured()) return false;
   const db = await getDbReady();
-  const email = params.email.toLowerCase();
+  const email = params.email.trim().toLowerCase();
 
   const existingLink = await db.query.accounts.findFirst({
     where: and(eq(accounts.provider, params.provider), eq(accounts.providerAccountId, params.providerAccountId)),
   });
   if (existingLink) return false; // normal re-login, not a new link
 
-  const existingUser = await db.query.users.findFirst({ where: eq(users.email, email) });
+  const existingUser = await db.query.users.findFirst({
+    where: sql`lower(${users.email}) = ${email}`,
+  });
   if (!existingUser) return false; // brand-new account, nothing to protect yet
 
   const vault = await db.query.userWalletVaults.findFirst({

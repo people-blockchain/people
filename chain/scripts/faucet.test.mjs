@@ -111,3 +111,42 @@ test('default rate limit is one request per address per day: blocked just under 
   await faucet.fund({address,amount:'1'});
   assert.equal(sends.length,2);
 });
+test('rejects dust requests below minAmountWei to prevent claims flooding (CHAIN-04)', async () => {
+  const { faucet, sends } = setup();
+  await assert.rejects(faucet.fund({ address, amount: '0.0001' }), /amount_too_small/);
+  assert.equal(sends.length, 0);
+});
+test('enforces perSourceDailyCapPpl and dailyGasCapWei (CHAIN-04)', async () => {
+  const sends = [];
+  const provider = {
+    getNetwork: async () => ({ chainId: 97401n }),
+    getBlock: async () => ({ hash }),
+    estimateGas: async () => 100_000n,
+    getFeeData: async () => ({ gasPrice: 10n ** 13n }),
+    getBalance: async () => 10_000n * 10n ** 18n,
+  };
+  const wallet = { address: sender, sendTransaction: async (tx) => { sends.push(tx); return { hash }; } };
+  const faucet = createFaucet({
+    provider,
+    wallet,
+    firstBlockHash: hash,
+    perSourceDailyCapPpl: 5n,
+    dailyGasCapWei: 2n * 10n ** 18n,
+  });
+  await faucet.fund({ address: addr(1), amount: '3' }, '198.51.100.10');
+  await assert.rejects(faucet.fund({ address: addr(2), amount: '3' }, '198.51.100.10'), /rate_limited/);
+  await assert.rejects(faucet.fund({ address: addr(3), amount: '3' }, '198.51.100.11'), /daily_budget_exhausted/);
+  assert.equal(sends.length, 1);
+});
+test('clientSource requires proxySecret when configured (CHAIN-03)', () => {
+  const opts = { trustProxyHeaders: true, trustedPeers: DEFAULT_TRUSTED_PROXY_PEERS, proxySecret: 'top-secret' };
+  assert.equal(clientSource('127.0.0.1', { 'x-people-client-ip': '9.9.9.9' }, opts), '127.0.0.1');
+  assert.equal(
+    clientSource('127.0.0.1', { 'x-people-client-ip': '9.9.9.9', 'x-faucet-proxy-secret': 'top-secret' }, opts),
+    '9.9.9.9',
+  );
+  assert.equal(clientSource('127.0.0.1', { 'x-people-client-ip': 'dead::beef::bad' }, trusted), '127.0.0.1');
+});
+test('clientSource without proxySecret keeps trusted-peer behaviour', () => {
+  assert.equal(clientSource('127.0.0.1', fwd('9.9.9.9'), trusted), '9.9.9.9');
+});

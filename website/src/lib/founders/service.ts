@@ -4,6 +4,7 @@ import { clawBackReferralForBot, tryEvaluateReferral } from "./referral-service.
 import { isReferralActiveAction } from "./referral.ts";
 import { getDb, getDbReady } from "@/db";
 import {
+  founderPassportWalletRegistry,
   founderPointsLedger,
   founders,
 } from "@/db/schema";
@@ -23,10 +24,9 @@ import { shouldBlockDiscoverPoints } from "./discover-antibot.ts";
 import { computePointsAward } from "./points.ts";
 import { canAccrueFounderRewards } from "./reward-rules.ts";
 import {
-  checkRegistrationSlots,
   hashDeviceSlot,
   hashIpSlot,
-  incrementRegistrationSlots,
+  reserveRegistrationSlotsTx,
 } from "./registration-limits.ts";
 import {
   FOUNDER_SEASON_1_POOL_PPL,
@@ -181,13 +181,20 @@ export async function getFounderByUserId(userId: string): Promise<FounderProfile
 
 /** Any founder (self included) currently holding `address` as their walletAddress or passportWallet. */
 export async function findFounderByWalletOrPassportWallet(address: string): Promise<{ userId: string } | null> {
+  const normalized = address.trim().toLowerCase();
   const db = await getDbReady();
   const rows = await db
     .select({ userId: founders.userId })
     .from(founders)
-    .where(or(eq(founders.walletAddress, address), eq(founders.passportWallet, address)))
+    .where(or(eq(founders.walletAddress, normalized), eq(founders.passportWallet, normalized)))
     .limit(1);
-  return rows[0] ?? null;
+  if (rows[0]) return rows[0];
+  const historical = await db
+    .select({ userId: founderPassportWalletRegistry.userId })
+    .from(founderPassportWalletRegistry)
+    .where(eq(founderPassportWalletRegistry.walletAddress, normalized))
+    .limit(1);
+  return historical[0] ?? null;
 }
 
 export async function setFounderPassportWallet(userId: string, address: string): Promise<void> {
@@ -227,11 +234,6 @@ export async function registerFounder(
     return { ok: false, error: "invalid_country" };
   }
 
-  const slots = await checkRegistrationSlots(opts?.deviceId, opts?.ip ?? "");
-  if (!slots.ok) {
-    return { ok: false, error: slots.error };
-  }
-
   const db = await getDbReady();
   const existing = await getFounderByUserId(userId);
   if (existing) {
@@ -255,6 +257,10 @@ export async function registerFounder(
     await tx.execute(sql`SELECT pg_advisory_xact_lock(742615)`);
     const dup = await tx.select({ userId: founders.userId }).from(founders).where(eq(founders.userId, userId)).limit(1);
     if (dup[0]) return { ok: false as const, error: "already_registered" as const };
+    const slots = await reserveRegistrationSlotsTx(tx, opts?.deviceId, opts?.ip ?? "");
+    if (!slots.ok) {
+      return { ok: false as const, error: slots.error };
+    }
     // Read MAX+1 through the query builder, not a raw `tx.execute`: the raw form returns a
     // postgres-js `Result` (an Array subclass) in production but a `{ rows }` object under the
     // PGlite test driver, so `[0].next` silently allocated NaN and made every registration
@@ -287,8 +293,6 @@ export async function registerFounder(
   if (!allocated.ok) {
     return { ok: false, error: allocated.error };
   }
-
-  await incrementRegistrationSlots(opts?.deviceId, opts?.ip ?? "");
 
   const profile = await getFounderByUserId(userId);
   if (!profile) throw new Error("founder insert missing");

@@ -27,6 +27,7 @@ export type ProjectFieldInput = {
   tokenLink: string;
   productUrl?: string | null;
   videoUri?: string | null;
+  tokenIconUri?: string | null;
   /** Raw (pre-serialization) screenshot URLs, when available. */
   screenshotUris?: readonly string[];
 };
@@ -45,6 +46,7 @@ export function firstProjectTextFieldError(input: Omit<ProjectFieldInput, "scree
   if (input.tokenLink.length > limits.url) return "invalid_token_link";
   if ((input.productUrl?.length ?? 0) > limits.url) return "invalid_product_url";
   if ((input.videoUri?.length ?? 0) > limits.url) return "invalid_video_uri";
+  if ((input.tokenIconUri?.length ?? 0) > limits.url) return "invalid_token_icon_uri";
   return null;
 }
 

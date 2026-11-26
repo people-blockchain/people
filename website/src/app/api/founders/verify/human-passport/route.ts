@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
+import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { verifyHumanPassportForUser } from "@/lib/founders/human-passport-verify";
-import { applyStrongVerification } from "@/lib/founders/verification-service";
+import {
+  applyStrongVerification,
+  claimPassportWalletAndApplyStrongVerification,
+} from "@/lib/founders/verification-service";
 import { getFounderByUserId } from "@/lib/founders/service";
 
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
   if (!guard.ok) return guard.response;
+
+  const rateKey = `${guard.userId}:${clientIp(request)}`;
+  if (!(await checkSharedRateLimit("founders-human-passport", rateKey, 20, 60 * 60 * 1000))) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+  }
 
   const founder = await getFounderByUserId(guard.userId);
   if (!founder) {
@@ -23,6 +33,7 @@ export async function POST(request: Request) {
   const verified = await verifyHumanPassportForUser(guard.userId, body.credential, {
     loadFounder: async () => founder,
     applyStrongVerification,
+    claimPassportWallet: claimPassportWalletAndApplyStrongVerification,
     fetch,
   });
   if (!verified.ok) {
@@ -35,6 +46,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "invalid_credential" }, { status: 400 });
       case "wallet_not_linked":
         return NextResponse.json({ error: "wallet_not_linked" }, { status: 409 });
+      case "passport_wallet_taken":
+        return NextResponse.json({ error: "passport_wallet_taken" }, { status: 409 });
       case "wallet_mismatch":
         return NextResponse.json({ error: "wallet_mismatch" }, { status: 403 });
       case "score_too_low":

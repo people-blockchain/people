@@ -58,7 +58,7 @@ if (googleId && googleSecret) {
         return {
           id: profile.sub,
           name: profile.name ?? profile.email.split("@")[0],
-          email: profile.email,
+          email: profile.email.trim().toLowerCase(),
           image: profile.picture,
         };
       },

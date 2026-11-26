@@ -21,6 +21,11 @@
 export const GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN = /google|email[-_]?passwordless/i;
 
 const DEFAULT_ALLOWED_PATTERN = GOOGLE_OR_EMAIL_PASSWORDLESS_PATTERN;
+const GENERIC_AGGREGATE_CONTAINER_PATTERN = /^(web3auth|torus|tkey)$/i;
+
+export function isGenericAggregateContainer(verifier: string | null | undefined): boolean {
+  return typeof verifier === "string" && GENERIC_AGGREGATE_CONTAINER_PATTERN.test(verifier.trim());
+}
 
 let fallbackWarningLogged = false;
 
@@ -61,7 +66,16 @@ export function isVerifierAllowed(
         "this down to an exact match.",
     );
   }
-  const allowed = candidates.some((candidate) => DEFAULT_ALLOWED_PATTERN.test(candidate));
+  const normalizedVerifier = typeof verifier === "string" && verifier.trim() ? verifier.trim().toLowerCase() : null;
+  const normalizedAggregate =
+    typeof aggregateVerifier === "string" && aggregateVerifier.trim()
+      ? aggregateVerifier.trim().toLowerCase()
+      : null;
+
+  let allowed = normalizedVerifier !== null && DEFAULT_ALLOWED_PATTERN.test(normalizedVerifier);
+  if (!allowed && normalizedAggregate && (!normalizedVerifier || isGenericAggregateContainer(normalizedVerifier))) {
+    allowed = DEFAULT_ALLOWED_PATTERN.test(normalizedAggregate);
+  }
   if (!allowed) {
     console.warn("[auth] web3auth verifier rejected by allowlist heuristic", { verifier, aggregateVerifier });
   }

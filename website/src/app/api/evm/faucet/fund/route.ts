@@ -27,7 +27,14 @@ export async function POST(request: NextRequest) {
       method: "POST",
       // The faucet caps how much of its queue one caller may hold, so it needs the origin of
       // the request; it binds to loopback and only reads this header from a loopback peer.
-      headers: { "content-type": "application/json", accept: "application/json", "x-people-client-ip": ip },
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+        "x-people-client-ip": ip,
+        ...(process.env.FAUCET_PROXY_SECRET?.trim()
+          ? { "x-faucet-proxy-secret": process.env.FAUCET_PROXY_SECRET.trim() }
+          : {}),
+      },
       body,
       cache: "no-store",
       signal: AbortSignal.timeout(30_000),

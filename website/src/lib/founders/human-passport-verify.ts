@@ -15,6 +15,7 @@ export type HumanPassportVerifyResult =
         | "invalid_credential"
         | "wallet_not_linked"
         | "wallet_mismatch"
+        | "passport_wallet_taken"
         | "score_too_low"
         | "verification_failed";
       score?: number;
@@ -35,6 +36,10 @@ export type HumanPassportFounderRecord = {
 export type HumanPassportVerifyDeps = {
   loadFounder: (userId: string) => Promise<HumanPassportFounderRecord | null>;
   applyStrongVerification: (userId: string) => Promise<void>;
+  claimPassportWallet?: (
+    userId: string,
+    walletAddress: string,
+  ) => Promise<{ ok: true } | { ok: false; error: "passport_wallet_taken" }>;
   fetch: typeof fetch;
   readConfig?: () => FoundersHumanPassportConfig | null;
 };
@@ -133,7 +138,14 @@ export async function verifyHumanPassportForUser(
     return { ok: false, error: "score_too_low", score, threshold: minRequired, address, walletKind };
   }
 
-  await deps.applyStrongVerification(userId);
+  if (deps.claimPassportWallet) {
+    const claimed = await deps.claimPassportWallet(userId, address);
+    if (!claimed.ok) {
+      return { ok: false, error: claimed.error };
+    }
+  } else {
+    await deps.applyStrongVerification(userId);
+  }
   return { ok: true };
 }
 

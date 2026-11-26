@@ -15,6 +15,7 @@ import {
   REFERRAL_KOL_SCHEMA_STATEMENTS,
   WALLET_VAULT_SCHEMA_STATEMENTS,
   FOUNDING_TRAPS_SCHEMA_STATEMENTS,
+  FOUNDER_SECURITY_AUDIT_SCHEMA_STATEMENTS,
 } from "../../src/db/bootstrap-sql.mjs";
 import * as schema from "../../src/db/schema.ts";
 
@@ -39,6 +40,7 @@ export async function getDbReady() {
         REFERRAL_KOL_SCHEMA_STATEMENTS,
         WALLET_VAULT_SCHEMA_STATEMENTS,
         FOUNDING_TRAPS_SCHEMA_STATEMENTS,
+        FOUNDER_SECURITY_AUDIT_SCHEMA_STATEMENTS,
       ]) {
         for (const statement of group) await client.exec(statement);
       }

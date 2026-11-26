@@ -347,3 +347,13 @@ test("RA-WEB-N1: only the token's on-chain creator may register as issuer", asyn
   });
   assert.equal(legit.ok, true);
 });
+
+test("AUTH-05: bot-flagged founder cannot claim vested referral rewards", async () => {
+  const inviter = await mkUser({ bot: false, verified: true });
+  const invitee = await mkUser({ invitedBy: inviter, bot: false, verified: true });
+  await act(invitee);
+  await svc.evaluateReferralActivation(invitee);
+  await db.update(schema.founders).set({ isBot: true }).where(eq(schema.founders.userId, inviter));
+  const res = await svc.claimReferralVested(inviter);
+  assert.deepEqual(res, { ok: false, error: "ineligible" });
+});

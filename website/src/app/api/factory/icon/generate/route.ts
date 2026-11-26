@@ -31,6 +31,7 @@ import {
   verifyIconGenPaymentTx,
 } from "@/lib/factory-icon-payment";
 import { verifyIconQuotaProof } from "@/lib/factory-icon-proof";
+import { claimIconQuotaProofNonce } from "@/lib/factory-icon-proof-server";
 
 const IP_LIMIT = 12;
 const IP_WINDOW_MS = 60_000;
@@ -131,15 +132,20 @@ export async function POST(request: Request) {
     // L1: a free batch is a perk of a specific wallet, and the address in the body could be
     // anyone's. Require a signature proving the caller holds the key before spending it.
     if (charge === "free") {
+      const issuedAt = Number(body.proofIssuedAt);
+      const proofNonce = body.proofNonce ?? "";
       const proof = verifyIconQuotaProof({
         wallet,
-        nonce: body.proofNonce ?? "",
-        issuedAt: Number(body.proofIssuedAt),
+        nonce: proofNonce,
+        issuedAt,
         publicKey: body.proofPublicKey ?? "",
         signature: body.proofSignature ?? "",
       });
       if (!proof.ok) {
         return NextResponse.json({ error: proof.code }, { status: 403 });
+      }
+      if (!(await claimIconQuotaProofNonce(wallet, proofNonce, issuedAt))) {
+        return NextResponse.json({ error: "ownership_proof_replayed" }, { status: 403 });
       }
     }
   }

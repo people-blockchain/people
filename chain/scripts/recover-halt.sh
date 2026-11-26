@@ -20,21 +20,33 @@ COMET_RPC="${COMET_RPC:-http://127.0.0.1:26657}"
 EVM_RPC="${EVM_RPC:-http://127.0.0.1:8545}"
 WAIT_SECS="${WAIT_SECS:-120}"
 DEPLOYER="${DEPLOYER:-0x74A50ac5Ea07f86fC10f0AD0E543e9321B57EB8c}"
+[[ "$DEPLOYER" =~ ^0x[0-9a-fA-F]{40}$ ]] || { echo "invalid DEPLOYER address" >&2; exit 1; }
 
 need() { command -v "$1" >/dev/null || { echo "missing $1" >&2; exit 1; }; }
 need curl; need jq; need systemctl
 
-comet_height() { curl -sf -m 5 "$COMET_RPC/status" | jq -r '.result.sync_info.latest_block_height' || echo 0; }
-evm_call() {
-  curl -sf -m 5 -X POST "$EVM_RPC" -H 'content-type: application/json' \
-    -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"$1\",\"params\":$2}" | jq -r '.result // empty'
+comet_height() {
+  local h
+  h="$(curl -sf -m 5 "$COMET_RPC/status" | jq -r '.result.sync_info.latest_block_height // "0"' 2>/dev/null || echo 0)"
+  if [[ "$h" =~ ^[0-9]+$ ]]; then echo "$h"; else echo 0; fi
 }
-evm_height() { local h; h="$(evm_call eth_blockNumber '[]')"; [ -n "$h" ] && echo $((h)) || echo 0; }
+evm_call() {
+  local payload
+  payload="$(jq -nc --arg m "$1" --argjson p "$2" '{jsonrpc:"2.0",id:1,method:$m,params:$p}')"
+  curl -sf -m 5 -X POST "$EVM_RPC" -H 'content-type: application/json' -d "$payload" | jq -r '.result // empty'
+}
+parse_hex_or_zero() {
+  local v="${1:-}"
+  if [[ "$v" =~ ^0x[0-9a-fA-F]+$ ]]; then printf '%d\n' "$v"; else echo 0; fi
+}
+evm_height() { local h; h="$(evm_call eth_blockNumber '[]' || true)"; parse_hex_or_zero "$h"; }
 nonces() {
-  local l p
-  l="$(evm_call eth_getTransactionCount "[\"$DEPLOYER\",\"latest\"]")"
-  p="$(evm_call eth_getTransactionCount "[\"$DEPLOYER\",\"pending\"]")"
-  echo "deployer $DEPLOYER nonce latest=$((${l:-0})) pending=$((${p:-0}))"
+  local l p params_latest params_pending
+  params_latest="$(jq -nc --arg d "$DEPLOYER" '[$d,"latest"]')"
+  params_pending="$(jq -nc --arg d "$DEPLOYER" '[$d,"pending"]')"
+  l="$(evm_call eth_getTransactionCount "$params_latest" || true)"
+  p="$(evm_call eth_getTransactionCount "$params_pending" || true)"
+  echo "deployer $DEPLOYER nonce latest=$(parse_hex_or_zero "$l") pending=$(parse_hex_or_zero "$p")"
 }
 
 UNIT="${UNIT:-$(systemctl list-unit-files --type=service --no-legend | awk '{print $1}' | grep -E '^peopled' | head -1)}"

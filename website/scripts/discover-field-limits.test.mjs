@@ -66,6 +66,10 @@ test("url fields are capped without rejecting ordinary links", () => {
     limits.firstProjectFieldError({ ...base, videoUri: "https://x.co/" + "a".repeat(L.url) }),
     "invalid_video_uri",
   );
+  assert.equal(
+    limits.firstProjectFieldError({ ...base, tokenIconUri: "https://x.co/" + "a".repeat(L.url) }),
+    "invalid_token_icon_uri",
+  );
 });
 
 test("screenshot count and per-url length are capped", () => {
@@ -126,5 +130,22 @@ test("the two creation namespaces are enforced independently (user and IP)", () 
   assert.equal(
     rateLimit.checkSlidingWindowRateLimit("discover-project-create-ip", "1.2.3.4", projectsPerIpPerHour, 60_000),
     false,
+  );
+});
+
+test("WEB-05: screenshotUris and tokenIconUri reject unsafe schemes and /api/ paths", async () => {
+  const { resolveScreenshotUrl } = await import("../src/lib/discover/screenshots.ts");
+  assert.equal(resolveScreenshotUrl("https://cdn.example.com/a.png"), "https://cdn.example.com/a.png");
+  assert.equal(resolveScreenshotUrl("/tokens/ppl.png"), "/tokens/ppl.png");
+  assert.equal(resolveScreenshotUrl("/api/founders/stats"), null);
+  assert.equal(resolveScreenshotUrl("http://insecure.example.com/a.png"), null);
+  assert.equal(resolveScreenshotUrl("javascript:alert(1)"), null);
+  await assert.rejects(
+    () =>
+      service.createProject("author-1", {
+        ...base,
+        screenshotUris: JSON.stringify(["/api/founders/stats"]),
+      }),
+    /invalid_screenshots/,
   );
 });

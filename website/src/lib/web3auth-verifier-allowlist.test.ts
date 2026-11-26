@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isVerifierAllowed } from "./web3auth-verifier-allowlist";
+import { isGenericAggregateContainer, isVerifierAllowed } from "./web3auth-verifier-allowlist";
 
 function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
   const prev: Record<string, string | undefined> = {};
@@ -59,6 +59,12 @@ test("isVerifierAllowed: explicit allowlist is comma-separated and case-insensit
     assert.equal(isVerifierAllowed("VERIFIER-B", null), true);
     assert.equal(isVerifierAllowed("verifier-c", null), false);
   });
+});
+
+test("isGenericAggregateContainer matches only web3auth/torus/tkey containers", () => {
+  assert.equal(isGenericAggregateContainer("web3auth"), true);
+  assert.equal(isGenericAggregateContainer("tkey"), true);
+  assert.equal(isGenericAggregateContainer("google-oauth2"), false);
 });
 
 test("isVerifierAllowed: explicit allowlist also matches via aggregateVerifier", () => {

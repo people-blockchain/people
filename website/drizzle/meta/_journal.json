@@ -190,6 +190,13 @@
       "when": 1763700000000,
       "tag": "0028_user_turnkey_wallet",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1764160000000,
+      "tag": "0029_security_audit_hardening",
+      "breakpoints": true
     }
   ]
 }

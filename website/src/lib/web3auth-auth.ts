@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { getDbReady, isDatabaseConfigured } from "@/db";
 import { accounts, users } from "@/db/schema";
 import {
@@ -8,7 +8,7 @@ import {
 } from "@/lib/web3auth-id-token";
 import { ensurePartner } from "@/lib/partner/service";
 import { isVerifierAllowed } from "@/lib/web3auth-verifier-allowlist";
-import { isDiscoverAdminEmail } from "@/lib/discover/admin-config";
+import { discoverAdminUserIds, isDiscoverAdminEmail } from "@/lib/discover/admin-config";
 import { blocksDangerousAccountLink } from "@/lib/wallet-link-guard";
 
 /**
@@ -26,7 +26,7 @@ import { blocksDangerousAccountLink } from "@/lib/wallet-link-guard";
  */
 export async function bindWeb3AuthProfile(profile: Web3AuthProfile) {
   const db = await getDbReady();
-  const email = profile.email.toLowerCase();
+  const email = profile.email.trim().toLowerCase();
   const fallbackName = () => profile.name ?? email.split("@")[0];
 
   const verifier = profile.verifier;
@@ -80,8 +80,17 @@ export async function bindWeb3AuthProfile(profile: Web3AuthProfile) {
     console.warn("[auth] web3auth sign-in refused: email is on the admin allowlist", { verifier, email });
     return null;
   }
-  const existingByEmail = await db.query.users.findFirst({ where: eq(users.email, email) });
+  const existingByEmail = await db.query.users.findFirst({
+    where: sql`lower(${users.email}) = ${email}`,
+  });
   if (existingByEmail) {
+    if (discoverAdminUserIds().has(existingByEmail.id)) {
+      console.warn("[auth] web3auth sign-in refused: user id is on admin allowlist", {
+        verifier,
+        email,
+      });
+      return null;
+    }
     const conflictingAccount = await db.query.accounts.findFirst({
       where: and(eq(accounts.userId, existingByEmail.id), eq(accounts.provider, verifier)),
     });

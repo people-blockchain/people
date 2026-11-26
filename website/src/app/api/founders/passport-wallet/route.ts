@@ -8,6 +8,7 @@ import {
 } from "@/lib/founders/service";
 import { consumeFounderPassportNonce } from "@/lib/founders/passport-wallet-nonce";
 import { linkPassportWalletForUser } from "@/lib/founders/passport-wallet";
+import { VERIFICATION_LEVEL_STRONG } from "@/lib/founders/verification";
 import { SITE_URL } from "@/lib/site";
 
 export async function POST(request: Request) {
@@ -17,6 +18,9 @@ export async function POST(request: Request) {
   const founder = await getFounderByUserId(guard.userId);
   if (!founder) {
     return NextResponse.json({ error: "not_registered" }, { status: 403 });
+  }
+  if (founder.verificationLevel >= VERIFICATION_LEVEL_STRONG) {
+    return NextResponse.json({ error: "already_verified" }, { status: 409 });
   }
 
   let body: { nonce?: unknown; address?: unknown; signature?: unknown };
@@ -55,6 +59,10 @@ export async function POST(request: Request) {
 export async function DELETE() {
   const guard = await foundersApiGuard();
   if (!guard.ok) return guard.response;
+  const founder = await getFounderByUserId(guard.userId);
+  if (founder && founder.verificationLevel >= VERIFICATION_LEVEL_STRONG) {
+    return NextResponse.json({ error: "already_verified" }, { status: 409 });
+  }
   await clearFounderPassportWallet(guard.userId);
   return NextResponse.json({ ok: true });
 }

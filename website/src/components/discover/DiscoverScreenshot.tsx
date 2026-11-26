@@ -19,6 +19,7 @@ function isOptimizableScreenshotUrl(url: string): boolean {
 
 export function DiscoverScreenshot({ uri }: { uri: string }) {
   const src = resolveScreenshotUrl(uri);
+  if (!src) return null;
   const optimizable = isOptimizableScreenshotUrl(src);
 
   return (
@@ -43,6 +44,7 @@ export function DiscoverScreenshot({ uri }: { uri: string }) {
           className="aspect-video w-full object-cover"
           loading="lazy"
           decoding="async"
+          referrerPolicy="no-referrer"
         />
       )}
     </li>

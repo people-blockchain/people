@@ -38,4 +38,4 @@ if (!body.ok) {
   process.exit(1);
 }
 console.log("Webhook set:", WEBHOOK_URL);
-console.log("secret_token (X-Telegram-Bot-Api-Secret-Token):", secretToken);
+console.log("secret_token configured (redacted)");

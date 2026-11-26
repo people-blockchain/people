@@ -312,6 +312,7 @@ export type RecordEscrowResult =
         | "merchant_mismatch"
         | "customer_mismatch"
         | "terms_mismatch"
+        | "terms_too_long"
         | "escrow_already_recorded";
     };
 

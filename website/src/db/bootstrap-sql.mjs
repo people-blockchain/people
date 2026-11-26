@@ -483,6 +483,35 @@ export const FACTORY_ICON_SCHEMA_STATEMENTS = [
   "expiresAt" timestamp NOT NULL
 )`,
   `CREATE INDEX IF NOT EXISTS "api_rate_limit_expires_idx" ON "api_rate_limit" ("expiresAt")`,
+  `CREATE TABLE IF NOT EXISTS "factory_icon_proof_nonce" (
+  "walletAddress" text NOT NULL,
+  "nonce" text NOT NULL,
+  "expiresAt" timestamp NOT NULL,
+  PRIMARY KEY ("walletAddress", "nonce")
+)`,
+  `CREATE INDEX IF NOT EXISTS "factory_icon_proof_nonce_expires_idx" ON "factory_icon_proof_nonce" ("expiresAt")`,
+];
+
+/**
+ * Keep in sync with `website/drizzle/0029_security_audit_hardening.sql`.
+ * Permanent Human Passport wallet registry + World ID RP nonces. The factory-icon proof
+ * nonce table is also listed in FACTORY_ICON_SCHEMA_STATEMENTS so icon fixtures apply it.
+ */
+export const FOUNDER_SECURITY_AUDIT_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS "founder_passport_wallet_registry" (
+  "walletAddress" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "verifiedAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE TABLE IF NOT EXISTS "founder_world_id_nonce" (
+  "nonce" text PRIMARY KEY NOT NULL,
+  "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "action" text NOT NULL,
+  "expiresAt" timestamp NOT NULL,
+  "usedAt" timestamp,
+  "createdAt" timestamp NOT NULL DEFAULT now()
+)`,
+  `CREATE INDEX IF NOT EXISTS "founder_world_id_nonce_user_idx" ON "founder_world_id_nonce" ("userId")`,
 ];
 
 /**

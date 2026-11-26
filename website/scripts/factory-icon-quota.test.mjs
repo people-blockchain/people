@@ -7,7 +7,9 @@ import { register } from "node:module";
 register("./fixtures/factory-icon-db-loader.mjs", import.meta.url);
 
 const { getDbReady } = await import("./fixtures/factory-icon-pglite-db.mjs");
-const { factoryIconDailyUsage } = await import("../src/db/schema.ts");
+const { factoryIconDailyUsage, factoryIconProofNonces } = await import("../src/db/schema.ts");
+const { claimIconQuotaProofNonce } = await import("../src/lib/factory-icon-proof-server.ts");
+const { ICON_QUOTA_PROOF_MAX_AGE_MS } = await import("../src/lib/factory-icon-proof.ts");
 const {
   freeIconGensRemaining,
   consumeIconGenSlot,
@@ -146,4 +148,14 @@ test("releaseIconGenSlot gives a failed batch's slot back", async () => {
 test("utcDayKey uses ISO date", () => {
   const d = new Date("2026-10-01T23:59:00.000Z");
   assert.equal(utcDayKey(d), "2026-10-01");
+});
+
+test("WEB-02: icon quota proof nonce can be claimed only once", async () => {
+  await db.delete(factoryIconProofNonces);
+  const wallet = "0x1111111111111111111111111111111111111111";
+  const nonce = "nonce-once";
+  const issuedAt = Date.now() - 1_000;
+  assert.equal(await claimIconQuotaProofNonce(wallet, nonce, issuedAt), true);
+  assert.equal(await claimIconQuotaProofNonce(wallet, nonce, issuedAt), false);
+  assert.ok(ICON_QUOTA_PROOF_MAX_AGE_MS > 0);
 });
