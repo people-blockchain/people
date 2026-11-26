@@ -23,7 +23,7 @@ jobs:
       - run: npm ci && npm run build && npm run typecheck && npm test && npm run test:public-node
         working-directory: people-node
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
-      - uses: docker/login-action@9780b0c442f937e744e2edca0e46c67c38c1d325 # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
