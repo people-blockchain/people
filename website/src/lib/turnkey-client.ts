@@ -18,7 +18,7 @@ import {
 import { decryptPrivateKeyFromVault, VaultSchemaError, warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
 import { fetchVaultRecord, fetchWrapKey, WalletCloudError } from "@/lib/wallet-cloud-client";
 import { keyFromPrivate } from "@/lib/people-sign";
-import { addressMatchesPublicKey } from "@/lib/wallet-address-scheme";
+import { addressMatchesPublicKey, liveSchemeVaultAddress } from "@/lib/wallet-address-scheme";
 import type { TurnkeyImportStage } from "@/lib/turnkey-constants";
 
 const { bytesToHex, hexToBytes } = secp.etc;
@@ -459,12 +459,12 @@ export function matchLegacyVaultKey(
   if (!addressMatchesPublicKey(vault.address, key.publicKey)) {
     return { ok: false, error: LEGACY_ADDRESS_MISMATCH };
   }
-  // Keep the vault address (legacy sha256 or keccak). key.address follows the live scheme and
-  // must not replace a funded vault row.
+  // Same secp256k1 key either way. In evm mode persist the live keccak address so the Turnkey
+  // row matches the header; in a non-evm scheme keep the stored vault address.
   return {
     ok: true,
     privateKey: key.privateKey,
-    address: vault.address.trim().toLowerCase(),
+    address: liveSchemeVaultAddress({ storedAddress: vault.address, publicKey: key.publicKey }).toLowerCase(),
     publicKey: key.publicKey,
   };
 }

@@ -26,6 +26,26 @@ import { deriveUserWrapKeyHex, encryptPrivateKeyForVault } from "./wallet-cloud-
 import { evmAddressFromPublicKey, legacyAddressFromPublicKey } from "./wallet-address-scheme.ts";
 import { isAuthTimeFresh } from "./wallet-reauth-window.ts";
 
+async function withAddressScheme<T>(scheme: "evm" | "legacy", fn: () => T | Promise<T>): Promise<T> {
+  const prevChain = process.env.NEXT_PUBLIC_CHAIN;
+  const prevFlag = process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+  try {
+    if (scheme === "legacy") {
+      process.env.NEXT_PUBLIC_CHAIN = "people-node";
+      delete process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+    } else {
+      process.env.NEXT_PUBLIC_CHAIN = "cosmos-evm";
+      process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES = "evm";
+    }
+    return await fn();
+  } finally {
+    if (prevChain === undefined) delete process.env.NEXT_PUBLIC_CHAIN;
+    else process.env.NEXT_PUBLIC_CHAIN = prevChain;
+    if (prevFlag === undefined) delete process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+    else process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES = prevFlag;
+  }
+}
+
 secp.hashes.sha256 = sha256;
 secp.hashes.hmacSha256 = (key, msg) => hmac(sha256, key, msg);
 
@@ -83,17 +103,33 @@ describe("Turnkey client helpers", () => {
     assert.equal(ok.ok, true);
   });
 
-  it("matches a vault address under both sha256 and keccak schemes and keeps the vault address", () => {
-    const key = generateFactoryKey();
-    const legacy = legacyAddressFromPublicKey(key.publicKey);
-    const evm = evmAddressFromPublicKey(key.publicKey);
-    assert.notEqual(legacy.toLowerCase(), evm.toLowerCase());
-    const fromLegacy = matchLegacyVaultKey({ address: legacy }, key.privateKey);
-    assert.equal(fromLegacy.ok, true);
-    if (fromLegacy.ok) assert.equal(fromLegacy.address, legacy.toLowerCase());
-    const fromEvm = matchLegacyVaultKey({ address: evm }, key.privateKey);
-    assert.equal(fromEvm.ok, true);
-    if (fromEvm.ok) assert.equal(fromEvm.address, evm.toLowerCase());
+  it("returns the live EVM address when matching a sha256 vault in evm scheme", async () => {
+    await withAddressScheme("evm", () => {
+      const key = generateFactoryKey();
+      const legacy = legacyAddressFromPublicKey(key.publicKey);
+      const evm = evmAddressFromPublicKey(key.publicKey);
+      assert.notEqual(legacy.toLowerCase(), evm.toLowerCase());
+      const fromLegacy = matchLegacyVaultKey({ address: legacy }, key.privateKey);
+      assert.equal(fromLegacy.ok, true);
+      if (fromLegacy.ok) assert.equal(fromLegacy.address, evm.toLowerCase());
+      const fromEvm = matchLegacyVaultKey({ address: evm }, key.privateKey);
+      assert.equal(fromEvm.ok, true);
+      if (fromEvm.ok) assert.equal(fromEvm.address, evm.toLowerCase());
+    });
+  });
+
+  it("keeps the stored vault address when matching in a legacy scheme", async () => {
+    await withAddressScheme("legacy", () => {
+      const key = generateFactoryKey();
+      const legacy = legacyAddressFromPublicKey(key.publicKey);
+      const evm = evmAddressFromPublicKey(key.publicKey);
+      const fromLegacy = matchLegacyVaultKey({ address: legacy }, key.privateKey);
+      assert.equal(fromLegacy.ok, true);
+      if (fromLegacy.ok) assert.equal(fromLegacy.address, legacy.toLowerCase());
+      const fromEvm = matchLegacyVaultKey({ address: evm }, key.privateKey);
+      assert.equal(fromEvm.ok, true);
+      if (fromEvm.ok) assert.equal(fromEvm.address, evm.toLowerCase());
+    });
   });
 
   it("signs a PEOPLE tx through a mocked Turnkey bridge with the same digest as signFactoryTx", async () => {
@@ -155,53 +191,56 @@ describe("legacy vault import before Turnkey init", () => {
     globalThis.fetch = originalFetch;
   });
 
-  it("decrypts a production-scheme vault after bootstrap wrap-key and keeps the legacy address", async () => {
-    const userId = "user-import-1";
-    const secret = "test-master-secret-for-hkdf-only";
-    const wrap = await deriveUserWrapKeyHex(secret, userId);
-    const key = generateFactoryKey();
-    const legacy = legacyAddressFromPublicKey(key.publicKey);
-    const encryptedPrivateKey = await encryptPrivateKeyForVault(key.privateKey, wrap);
-    const order: string[] = [];
-    globalThis.fetch = (async (url: string | URL) => {
-      const path = String(url);
-      if (path.includes("/api/wallet/turnkey/bootstrap")) {
-        order.push("bootstrap");
-        return new Response(JSON.stringify({ subOrganizationId: "sub", turnkeyUserId: "tk-user" }), {
-          status: 200,
-          headers: { "content-type": "application/json" },
-        });
-      }
-      if (path.includes("/api/wallet/vault/wrap-key")) {
-        order.push("wrap-key");
-        return new Response(JSON.stringify({ wrapKeyHex: wrap, version: 1 }), {
-          status: 200,
-          headers: { "content-type": "application/json" },
-        });
-      }
-      if (path.includes("/api/wallet/vault")) {
-        order.push("vault");
-        return new Response(
-          JSON.stringify({
-            address: legacy,
-            publicKey: key.publicKey,
-            encryptedPrivateKey,
-            vaultVersion: 1,
-          }),
-          { status: 200, headers: { "content-type": "application/json" } },
-        );
-      }
-      throw new Error(`unexpected fetch ${path}`);
-    }) as typeof fetch;
+  it("decrypts a production-scheme vault after bootstrap wrap-key and returns the live EVM address", async () => {
+    await withAddressScheme("evm", async () => {
+      const userId = "user-import-1";
+      const secret = "test-master-secret-for-hkdf-only";
+      const wrap = await deriveUserWrapKeyHex(secret, userId);
+      const key = generateFactoryKey();
+      const legacy = legacyAddressFromPublicKey(key.publicKey);
+      const evm = evmAddressFromPublicKey(key.publicKey);
+      const encryptedPrivateKey = await encryptPrivateKeyForVault(key.privateKey, wrap);
+      const order: string[] = [];
+      globalThis.fetch = (async (url: string | URL) => {
+        const path = String(url);
+        if (path.includes("/api/wallet/turnkey/bootstrap")) {
+          order.push("bootstrap");
+          return new Response(JSON.stringify({ subOrganizationId: "sub", turnkeyUserId: "tk-user" }), {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        if (path.includes("/api/wallet/vault/wrap-key")) {
+          order.push("wrap-key");
+          return new Response(JSON.stringify({ wrapKeyHex: wrap, version: 1 }), {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          });
+        }
+        if (path.includes("/api/wallet/vault")) {
+          order.push("vault");
+          return new Response(
+            JSON.stringify({
+              address: legacy,
+              publicKey: key.publicKey,
+              encryptedPrivateKey,
+              vaultVersion: 1,
+            }),
+            { status: 200, headers: { "content-type": "application/json" } },
+          );
+        }
+        throw new Error(`unexpected fetch ${path}`);
+      }) as typeof fetch;
 
-    await fetch("/api/wallet/turnkey/bootstrap", { method: "POST" });
-    const decrypted = await decryptLegacyVaultForImport(userId);
-    assert.deepEqual(order, ["bootstrap", "wrap-key", "vault"]);
-    assert.equal(decrypted.ok, true);
-    if (!decrypted.ok) return;
-    assert.equal(decrypted.address, legacy.toLowerCase());
-    assert.equal(decrypted.privateKey, key.privateKey);
-    assert.equal(decrypted.publicKey, key.publicKey);
+      await fetch("/api/wallet/turnkey/bootstrap", { method: "POST" });
+      const decrypted = await decryptLegacyVaultForImport(userId);
+      assert.deepEqual(order, ["bootstrap", "wrap-key", "vault"]);
+      assert.equal(decrypted.ok, true);
+      if (!decrypted.ok) return;
+      assert.equal(decrypted.address, evm.toLowerCase());
+      assert.equal(decrypted.privateKey, key.privateKey);
+      assert.equal(decrypted.publicKey, key.publicKey);
+    });
   });
 
   it("does not change the wrap key when auth_time is 20s old vs fresh — reauth only gates access", async () => {

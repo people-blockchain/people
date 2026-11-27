@@ -5,6 +5,7 @@ import { bindPartnerWalletFromVault } from "@/lib/partner/service";
 import { isWalletAddress, normalizeHex } from "@/lib/partner/wallet";
 import { getTurnkeyApi } from "@/lib/turnkey-server";
 import { assertCanCreateTurnkeyWallet, isOrphanTurnkeySubOrg } from "@/lib/turnkey-upgrade";
+import { liveSchemeVaultAddress } from "@/lib/wallet-address-scheme";
 
 export type TurnkeyWalletRow = {
   userId: string;
@@ -37,10 +38,15 @@ export async function loadTurnkeyWallet(userId: string): Promise<TurnkeyWalletRo
   return rows[0] ?? null;
 }
 
-export async function loadLegacyVaultSummary(userId: string): Promise<{ address: string } | null> {
+export type LegacyVaultSummary = {
+  address: string;
+  publicKey?: string | null;
+};
+
+export async function loadLegacyVaultSummary(userId: string): Promise<LegacyVaultSummary | null> {
   const db = await getDbReady();
   const rows = await db
-    .select({ address: userWalletVaults.address })
+    .select({ address: userWalletVaults.address, publicKey: userWalletVaults.publicKey })
     .from(userWalletVaults)
     .where(eq(userWalletVaults.userId, userId))
     .limit(1);
@@ -49,10 +55,13 @@ export async function loadLegacyVaultSummary(userId: string): Promise<{ address:
 
 export function computeTurnkeyWalletStatus(
   row: TurnkeyWalletRow | null,
-  vault: { address: string } | null,
+  vault: LegacyVaultSummary | null,
 ): TurnkeyWalletStatus {
   const hasAddress = Boolean(row?.address);
-  const vaultAddr = vault?.address?.trim().toLowerCase() ?? "";
+  const displayVault = vault
+    ? liveSchemeVaultAddress({ storedAddress: vault.address, publicKey: vault.publicKey })
+    : null;
+  const vaultAddr = displayVault?.trim().toLowerCase() ?? "";
   const turnkeyAddr = row?.address?.trim().toLowerCase() ?? "";
   const addressConflict = Boolean(vaultAddr && turnkeyAddr && vaultAddr !== turnkeyAddr);
   return {
@@ -62,7 +71,7 @@ export function computeTurnkeyWalletStatus(
     address: row?.address ?? null,
     importedFromVault: row?.importedFromVault === true,
     hasLegacyVault: Boolean(vault),
-    legacyAddress: vault?.address ?? null,
+    legacyAddress: displayVault,
     needsImport: Boolean(vault) && !hasAddress,
     addressConflict,
     legacyImportError: row?.legacyImportError ?? null,

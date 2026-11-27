@@ -103,3 +103,19 @@ export function addressMatchesPublicKey(address: string, publicKeyHex: string): 
     evmAddressFromPublicKey(publicKeyHex).toLowerCase() === a
   );
 }
+
+/**
+ * October vault rows may still store a sha256 address after prod switched to keccak.
+ * In evm mode, show/persist the live-scheme address of the same key (header already does
+ * this via keyFromPrivate). Non-evm schemes keep the stored vault address.
+ */
+export function liveSchemeVaultAddress(input: {
+  storedAddress: string;
+  publicKey?: string | null;
+}): string {
+  const stored = input.storedAddress.trim();
+  const publicKey = input.publicKey?.trim() ?? "";
+  if (getWalletAddressScheme() !== "evm" || !publicKey) return stored;
+  if (!addressMatchesPublicKey(stored, publicKey)) return stored;
+  return walletAddressFromPublicKey(publicKey);
+}
