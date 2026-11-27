@@ -51,3 +51,19 @@ test("OTP verify rejects plaintext otpCode and export never hits our server for 
   assert.match(ui, /exportWalletAccount/);
   assert.match(ui, /confirmTurnkeyExportReady/);
 });
+
+test("turnkey mode never creates a second (vault) wallet", () => {
+  const route = readFileSync(join(root, "src/app/api/wallet/vault/route.ts"), "utf8");
+  const put = route.slice(route.indexOf("export async function PUT"));
+  assert.ok(put.indexOf("isTurnkeyWalletProvider()") > 0, "PUT checks turnkey mode");
+  assert.ok(put.indexOf("isTurnkeyWalletProvider()") < put.indexOf("createUserWalletVault("), "before creating a vault");
+  assert.match(put, /turnkey_mode/);
+
+  const partner = readFileSync(join(root, "src/components/partner/PartnerWalletAutoRefresh.tsx"), "utf8");
+  assert.match(partner, /!session && !isTurnkeyWalletProvider\(\)/);
+});
+
+test("turnkey register never clears importedFromVault", () => {
+  const route = readFileSync(join(root, "src/app/api/wallet/turnkey/register/route.ts"), "utf8");
+  assert.match(route, /importedFromVault: body\.importedFromVault === true \? true : undefined/);
+});
