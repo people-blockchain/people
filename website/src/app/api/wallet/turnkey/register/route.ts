@@ -24,7 +24,9 @@ export async function POST(request: Request) {
       address: typeof body.address === "string" ? body.address : "",
       publicKey: typeof body.publicKey === "string" ? body.publicKey : null,
       walletId: typeof body.walletId === "string" ? body.walletId : null,
-      importedFromVault: body.importedFromVault === true,
+      // Only ever set the flag. Later registers (e.g. after the first signature) omit it
+      // and must not reset an upgraded wallet to "not imported".
+      importedFromVault: body.importedFromVault === true ? true : undefined,
     });
     return NextResponse.json(
       { address: row.address, subOrganizationId: row.subOrganizationId },

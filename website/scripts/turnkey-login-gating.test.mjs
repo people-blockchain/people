@@ -62,3 +62,8 @@ test("turnkey mode never creates a second (vault) wallet", () => {
   const partner = readFileSync(join(root, "src/components/partner/PartnerWalletAutoRefresh.tsx"), "utf8");
   assert.match(partner, /!session && !isTurnkeyWalletProvider\(\)/);
 });
+
+test("turnkey register never clears importedFromVault", () => {
+  const route = readFileSync(join(root, "src/app/api/wallet/turnkey/register/route.ts"), "utf8");
+  assert.match(route, /importedFromVault: body\.importedFromVault === true \? true : undefined/);
+});
