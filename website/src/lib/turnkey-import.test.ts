@@ -10,6 +10,26 @@ import {
 } from "./turnkey-import.ts";
 import { evmAddressFromPublicKey, legacyAddressFromPublicKey } from "./wallet-address-scheme.ts";
 
+async function withAddressScheme<T>(scheme: "evm" | "legacy", fn: () => T | Promise<T>): Promise<T> {
+  const prevChain = process.env.NEXT_PUBLIC_CHAIN;
+  const prevFlag = process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+  try {
+    if (scheme === "legacy") {
+      process.env.NEXT_PUBLIC_CHAIN = "people-node";
+      delete process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+    } else {
+      process.env.NEXT_PUBLIC_CHAIN = "cosmos-evm";
+      process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES = "evm";
+    }
+    return await fn();
+  } finally {
+    if (prevChain === undefined) delete process.env.NEXT_PUBLIC_CHAIN;
+    else process.env.NEXT_PUBLIC_CHAIN = prevChain;
+    if (prevFlag === undefined) delete process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES;
+    else process.env.NEXT_PUBLIC_EVM_CANONICAL_ADDRESSES = prevFlag;
+  }
+}
+
 describe("import complete conflict reporting", () => {
   it("logs mismatch vs error code with a sanitized stage", () => {
     assert.deepEqual(describeImportCompleteConflict({ mismatch: true }), {
@@ -52,34 +72,69 @@ describe("import complete conflict reporting", () => {
 });
 
 describe("imported Turnkey address vs vault address schemes", () => {
-  it("keeps the vault sha256 address when Turnkey returns keccak for the same key", () => {
-    const key = generateFactoryKey();
-    const legacy = legacyAddressFromPublicKey(key.publicKey).toLowerCase();
-    const evm = evmAddressFromPublicKey(key.publicKey).toLowerCase();
-    assert.notEqual(legacy, evm);
-    assert.equal(
-      resolveImportedVaultAddress({
-        expectedAddress: legacy,
-        importedAddress: evm,
-        publicKey: key.publicKey,
-      }),
-      legacy,
-    );
-    assert.equal(
-      resolveImportedVaultAddress({
-        expectedAddress: evm,
-        importedAddress: evm,
-        publicKey: key.publicKey,
-      }),
-      evm,
-    );
-    assert.throws(
-      () =>
+  it("persists the live EVM address when scheme is evm", async () => {
+    await withAddressScheme("evm", () => {
+      const key = generateFactoryKey();
+      const legacy = legacyAddressFromPublicKey(key.publicKey).toLowerCase();
+      const evm = evmAddressFromPublicKey(key.publicKey).toLowerCase();
+      assert.notEqual(legacy, evm);
+      assert.equal(
         resolveImportedVaultAddress({
           expectedAddress: legacy,
           importedAddress: evm,
+          publicKey: key.publicKey,
         }),
-      /legacy_address_mismatch/,
-    );
+        evm,
+      );
+      assert.equal(
+        resolveImportedVaultAddress({
+          expectedAddress: evm,
+          importedAddress: evm,
+          publicKey: key.publicKey,
+        }),
+        evm,
+      );
+      assert.equal(
+        resolveImportedVaultAddress({
+          expectedAddress: legacy,
+          importedAddress: legacy,
+          publicKey: key.publicKey,
+        }),
+        evm,
+      );
+      assert.throws(
+        () =>
+          resolveImportedVaultAddress({
+            expectedAddress: legacy,
+            importedAddress: evm,
+          }),
+        /legacy_address_mismatch/,
+      );
+    });
+  });
+
+  it("keeps the vault sha256 address when scheme is legacy", async () => {
+    await withAddressScheme("legacy", () => {
+      const key = generateFactoryKey();
+      const legacy = legacyAddressFromPublicKey(key.publicKey).toLowerCase();
+      const evm = evmAddressFromPublicKey(key.publicKey).toLowerCase();
+      assert.notEqual(legacy, evm);
+      assert.equal(
+        resolveImportedVaultAddress({
+          expectedAddress: legacy,
+          importedAddress: evm,
+          publicKey: key.publicKey,
+        }),
+        legacy,
+      );
+      assert.equal(
+        resolveImportedVaultAddress({
+          expectedAddress: evm,
+          importedAddress: evm,
+          publicKey: key.publicKey,
+        }),
+        evm,
+      );
+    });
   });
 });

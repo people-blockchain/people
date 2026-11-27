@@ -15,7 +15,7 @@ import {
   INIT_IMPORT_PRIVATE_KEY_TYPE,
   parseClientStampedActivity,
 } from "@/lib/turnkey-stamp";
-import { addressMatchesPublicKey } from "@/lib/wallet-address-scheme";
+import { addressMatchesPublicKey, liveSchemeVaultAddress } from "@/lib/wallet-address-scheme";
 import { safeCloudLogCode, sanitizeConsoleSignInLabel } from "@/lib/wallet-cloud-crypto";
 
 export { LEGACY_ADDRESS_MISMATCH } from "@/lib/turnkey-constants";
@@ -112,7 +112,8 @@ export function logTurnkeyImportCompleteRejected(conflict: ImportCompleteConflic
 
 /**
  * Turnkey `ADDRESS_FORMAT_ETHEREUM` is keccak; a vault row may still be the legacy sha256
- * address. Both belong to the same secp256k1 key — keep the vault address so funded PPL stays put.
+ * address of the same secp256k1 key. In evm mode persist the live keccak address (the header
+ * already shows that). In a non-evm scheme keep the stored vault address.
  */
 export function resolveImportedVaultAddress(input: {
   expectedAddress: string;
@@ -122,14 +123,13 @@ export function resolveImportedVaultAddress(input: {
   const expected = input.expectedAddress.trim().toLowerCase();
   const imported = input.importedAddress.trim().toLowerCase();
   if (!isWalletAddress(expected) || !isWalletAddress(imported)) throw new Error("invalid_address");
-  if (imported === expected) return expected;
   const publicKey = input.publicKey?.trim() ?? "";
-  if (
-    publicKey &&
+  const sameKey =
+    Boolean(publicKey) &&
     addressMatchesPublicKey(expected, publicKey) &&
-    addressMatchesPublicKey(imported, publicKey)
-  ) {
-    return expected;
+    addressMatchesPublicKey(imported, publicKey);
+  if (imported === expected || sameKey) {
+    return liveSchemeVaultAddress({ storedAddress: expected, publicKey }).toLowerCase();
   }
   throw new Error(LEGACY_ADDRESS_MISMATCH);
 }
