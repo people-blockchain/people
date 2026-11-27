@@ -8,7 +8,9 @@ import {
   importLegacyKeyIntoTurnkey,
   initTurnkeyOtp,
   loginTurnkeyOtp,
+  readTurnkeyRootKey,
   registerTurnkeyAddress,
+  rememberTurnkeyApiPublicKey,
   requireTurnkeyBrowserBridge,
   toTurnkeyWalletSession,
   verifyTurnkeyOtp,
@@ -39,13 +41,34 @@ export class TurnkeyUpgradeRequiredError extends Error {
   }
 }
 
-async function resolveClientPublicKey(): Promise<{ publicKey: string; created: boolean }> {
+async function resolveClientPublicKey(
+  subOrganizationId?: string | null,
+): Promise<{ publicKey: string; created: boolean }> {
   const bridge = requireTurnkeyBrowserBridge();
   const existing = bridge.getApiKeyPublicKey?.()?.trim() ?? "";
   if (existing) return { publicKey: existing, created: false };
+  // New tab: sessionStorage is empty, but this browser may still hold the sub-org root
+  // key in IndexedDB (remembered in localStorage when it was verified).
+  const root = subOrganizationId ? readTurnkeyRootKey(subOrganizationId) : "";
+  if (root) return { publicKey: rememberTurnkeyApiPublicKey(root), created: false };
   const publicKey = await bridge.createApiKeyPair();
   return { publicKey, created: true };
 }
+
+/**
+ * Opening a wallet is not enough to sign: Turnkey needs a live session in the kit.
+ * Without one every signRawPayload / export fails with "No active session".
+ * If this browser cannot create one (no root key for the sub-org), ask for email OTP.
+ */
+async function requireTurnkeySigningSession(subOrganizationId: string): Promise<void> {
+  const bridge = requireTurnkeyBrowserBridge();
+  if (!bridge.ensureSession) return;
+  if (!(await bridge.ensureSession({ subOrganizationId }))) {
+    throw new TurnkeyOtpRequiredError(undefined, subOrganizationId);
+  }
+}
+
+const inflightOpens = new Map<string, Promise<TurnkeyWalletSession>>();
 
 function importFailureStage(err: unknown, fallback: TurnkeyImportStage): TurnkeyImportStage {
   if (err instanceof WalletCloudError && err.stage) {
@@ -77,7 +100,25 @@ async function recordImportFailure(
   }).catch(() => undefined);
 }
 
-export async function openTurnkeyWalletSession(
+/**
+ * Concurrent callers (session bridge + sign-in panel) share one open. Two parallel opens
+ * used to create two browser keys, register one, and keep the other as "current".
+ */
+export function openTurnkeyWalletSession(
+  user: AuthSessionUser,
+  options?: { importLegacy?: boolean },
+): Promise<TurnkeyWalletSession> {
+  const key = `${user.id ?? ""}:${options?.importLegacy ? "import" : "open"}`;
+  const pending = inflightOpens.get(key);
+  if (pending) return pending;
+  const run = openTurnkeyWalletSessionOnce(user, options).finally(() => {
+    inflightOpens.delete(key);
+  });
+  inflightOpens.set(key, run);
+  return run;
+}
+
+async function openTurnkeyWalletSessionOnce(
   user: AuthSessionUser,
   options?: { importLegacy?: boolean },
 ): Promise<TurnkeyWalletSession> {
@@ -105,7 +146,7 @@ export async function openTurnkeyWalletSession(
     throw new TurnkeyUpgradeRequiredError(decision.legacyAddress);
   }
 
-  const { publicKey: clientPublicKey, created } = await resolveClientPublicKey();
+  const { publicKey: clientPublicKey, created } = await resolveClientPublicKey(status.subOrganizationId);
   let subOrganizationId = status.subOrganizationId ?? "";
   let address = status.address ?? "";
   let turnkeyUserId = status.turnkeyUserId ?? undefined;
@@ -121,7 +162,9 @@ export async function openTurnkeyWalletSession(
     decision,
   });
   if (bootstrapPlan.action === "otp") {
-    throw new TurnkeyOtpRequiredError();
+    // This browser key is not the sub-org root. A still-valid kit session (e.g. from an
+    // earlier OTP login in another tab) is enough; otherwise ask for the email code.
+    await requireTurnkeySigningSession(subOrganizationId);
   }
   if (bootstrapPlan.action === "bootstrap") {
     const createdWallet = await bootstrapTurnkeyWallet({
@@ -177,6 +220,8 @@ export async function openTurnkeyWalletSession(
     throw new WalletCloudError("create_failed");
   }
 
+  await requireTurnkeySigningSession(subOrganizationId);
+
   if (publicKey) {
     await registerTurnkeyAddress({
       address,
@@ -202,7 +247,9 @@ export async function requestTurnkeyOtp(): Promise<{
   subOrganizationId: string;
   publicKey: string;
 }> {
-  const { publicKey } = await resolveClientPublicKey();
+  // Always a fresh key for OTP login: it becomes a session credential, and Turnkey
+  // rejects a public key that is already registered (e.g. the sub-org root key).
+  const publicKey = await requireTurnkeyBrowserBridge().createApiKeyPair();
   const result = await initTurnkeyOtp();
   return { ...result, publicKey };
 }

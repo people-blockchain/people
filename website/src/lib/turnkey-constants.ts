@@ -6,3 +6,4 @@ export const TURNKEY_IMPORT_STAGES = ["decrypt", "match", "stamp", "init"] as co
 export type TurnkeyImportStage = (typeof TURNKEY_IMPORT_STAGES)[number];
 
 export const TURNKEY_API_PUBKEY_STORAGE_KEY = "ppl-turnkey-api-pubkey";
+export const TURNKEY_ROOT_PUBKEY_STORAGE_PREFIX = "ppl-turnkey-root-pubkey:";

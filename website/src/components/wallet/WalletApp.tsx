@@ -579,7 +579,11 @@ function WalletView({ wsUrl, chainId, nftTransfersEnabled }: { wsUrl: string; ch
           sessionKind: session.kind,
         }) ? <TurnkeySettingsUpgrade /> : null}
         {isTurnkey && session.subOrganizationId ? (
-          <TurnkeyExportPrivateKey address={session.address} subOrganizationId={session.subOrganizationId} />
+          <TurnkeyExportPrivateKey
+            address={session.address}
+            subOrganizationId={session.subOrganizationId}
+            onBeforeTurnkeyModal={() => setSheet(null)}
+          />
         ) : null}
         {!isCloud && !isTurnkey ? (
           <>

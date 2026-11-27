@@ -1,7 +1,12 @@
 import * as secp from "@noble/secp256k1";
+import { getAddress } from "viem";
 import { sha256 } from "@noble/hashes/sha2.js";
 import { attachFactoryTxSignature, prepareFactoryTx, type UnsignedTx } from "@/lib/people-sign";
-import { LEGACY_ADDRESS_MISMATCH, TURNKEY_API_PUBKEY_STORAGE_KEY } from "@/lib/turnkey-constants";
+import {
+  LEGACY_ADDRESS_MISMATCH,
+  TURNKEY_API_PUBKEY_STORAGE_KEY,
+  TURNKEY_ROOT_PUBKEY_STORAGE_PREFIX,
+} from "@/lib/turnkey-constants";
 import {
   buildInitImportActivity,
   buildImportPrivateKeyActivity,
@@ -63,6 +68,15 @@ export type TurnkeyBrowserBridge = {
   stampActivity?: (payload: string) => Promise<string>;
   getApiKeyPublicKey?: () => string | null;
   exportWalletAccount?: (input: { address: string; organizationId: string }) => Promise<void>;
+  /** Opens the Turnkey export modal for an imported (vault-upgraded) private key. */
+  exportPrivateKey?: (input: { address: string; organizationId: string }) => Promise<boolean>;
+  /**
+   * Makes sure the Turnkey kit holds a live session for `subOrganizationId`, so
+   * `signRawPayload` / export can be stamped. Creates one with STAMP_LOGIN from the
+   * sub-org root API key stored in this browser. Returns false when this browser
+   * holds no root key for the sub-org (the caller must fall back to email OTP).
+   */
+  ensureSession?: (input: { subOrganizationId: string }) => Promise<boolean>;
   httpClient?: { signRawPayload: (input: Record<string, unknown>) => Promise<unknown> };
 };
 
@@ -109,6 +123,58 @@ export function readTurnkeyApiPublicKey(): string {
     /* ignore */
   }
   return rememberedApiPublicKey;
+}
+
+/**
+ * Turnkey matches `signWith` / export addresses case-sensitively against the EIP-55
+ * checksum form. PEOPLE stores addresses lowercased, so always convert before calling
+ * Turnkey ("Could not find any resource to sign with. Addresses are case sensitive.").
+ */
+export function turnkeyAddress(address: string): string {
+  const trimmed = address.trim();
+  try {
+    return getAddress(trimmed);
+  } catch {
+    return trimmed;
+  }
+}
+
+function rootKeyStorageKey(subOrganizationId: string): string {
+  return `${TURNKEY_ROOT_PUBKEY_STORAGE_PREFIX}${subOrganizationId.trim()}`;
+}
+
+/**
+ * The sub-org root P-256 key lives (non-extractable) in IndexedDB, which persists across
+ * tabs. Remember which public key is the root for a sub-org in localStorage, so a new tab
+ * can open a Turnkey session without a new email code. Public key only, not a secret.
+ */
+export function rememberTurnkeyRootKey(subOrganizationId: string, publicKey: string): void {
+  const sub = subOrganizationId.trim();
+  const key = publicKey.trim().replace(/^0x/i, "");
+  if (!sub || !key) return;
+  try {
+    localStorage.setItem(rootKeyStorageKey(sub), key);
+  } catch {
+    /* localStorage may be unavailable */
+  }
+}
+
+export function readTurnkeyRootKey(subOrganizationId: string): string {
+  const sub = subOrganizationId.trim();
+  if (!sub) return "";
+  try {
+    return localStorage.getItem(rootKeyStorageKey(sub))?.trim() ?? "";
+  } catch {
+    return "";
+  }
+}
+
+export function forgetTurnkeyRootKey(subOrganizationId: string): void {
+  try {
+    localStorage.removeItem(rootKeyStorageKey(subOrganizationId));
+  } catch {
+    /* ignore */
+  }
 }
 
 export function isTurnkeySession(session: { kind?: string } | null | undefined): session is TurnkeyWalletSession {
@@ -183,7 +249,7 @@ export async function signTurnkeyPeopleTx(session: TurnkeyWalletSession, tx: Uns
     payload: messageHex,
     encoding: "PAYLOAD_ENCODING_HEXADECIMAL",
     hashFunction: "HASH_FUNCTION_SHA256",
-    signWith: session.address,
+    signWith: turnkeyAddress(session.address),
     organizationId: session.subOrganizationId,
   });
   let publicKey = session.publicKey;
@@ -211,7 +277,7 @@ export async function signTurnkeyWalletMessage(session: TurnkeyWalletSession, me
     payload: message,
     encoding: "PAYLOAD_ENCODING_TEXT_UTF8",
     hashFunction: "HASH_FUNCTION_SHA256",
-    signWith: session.address,
+    signWith: turnkeyAddress(session.address),
     organizationId: session.subOrganizationId,
   });
   let publicKey = session.publicKey;
@@ -240,8 +306,8 @@ export async function createTurnkeyEmbeddedWalletClient(session: TurnkeyWalletSe
   const account = createAccountWithAddress({
     client: bridge.httpClient as never,
     organizationId: session.subOrganizationId,
-    signWith: session.address,
-    ethereumAddress: session.address,
+    signWith: turnkeyAddress(session.address),
+    ethereumAddress: turnkeyAddress(session.address),
   });
   const chain = peopleViemChain(browserEvmRpcUrl());
   return createWalletClient({
