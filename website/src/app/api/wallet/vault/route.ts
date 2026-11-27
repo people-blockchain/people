@@ -1,3 +1,4 @@
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 import { auth } from "@/auth";
 import { ensurePartnerSchema } from "@/db";
 import { checkSharedRateLimit } from "@/lib/api-rate-limit";
@@ -61,6 +62,11 @@ export async function PUT(request: Request) {
   }
   if (!body.address || !body.publicKey || !body.encryptedPrivateKey) {
     return NextResponse.json({ error: "invalid_input" }, { status: 400, headers: NO_STORE });
+  }
+  if (isTurnkeyWalletProvider()) {
+    // Turnkey mode: new wallets live in Turnkey. A new vault here gave the user a second
+    // address (the /partner page created one next to the Turnkey wallet).
+    return NextResponse.json({ error: "turnkey_mode" }, { status: 409, headers: NO_STORE });
   }
   const result = await createUserWalletVault(session.user.id, {
     address: body.address,

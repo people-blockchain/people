@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useWallet } from "@/context/WalletContext";
 import { ensureCloudWalletSession, fetchAuthSessionUser, WalletCloudError } from "@/lib/wallet-cloud-client";
 import { warnCloudOpenFailed } from "@/lib/wallet-cloud-crypto";
+import { isTurnkeyWalletProvider } from "@/lib/wallet-provider-flag";
 
 /** After account login, create cloud vault + partner link without a manual bind step. */
 export function PartnerWalletAutoRefresh({ walletAddress }: { walletAddress: string | null }) {
@@ -19,7 +20,9 @@ export function PartnerWalletAutoRefresh({ walletAddress }: { walletAddress: str
       const user = await fetchAuthSessionUser();
       if (!user) return;
       try {
-        if (!session) {
+        // Turnkey mode: the Turnkey session bridge opens the wallet. Creating a cloud vault
+        // here gave new users a second address next to their Turnkey wallet.
+        if (!session && !isTurnkeyWalletProvider()) {
           const cloud = await ensureCloudWalletSession(user);
           await connectCloud(cloud);
         }
