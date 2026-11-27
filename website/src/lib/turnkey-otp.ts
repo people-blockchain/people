@@ -1,3 +1,4 @@
+import { readTurnkeyOrganizationId } from "@/lib/turnkey-config";
 import { getTurnkeyApi } from "@/lib/turnkey-server";
 import { loadTurnkeyWallet } from "@/lib/turnkey-suborg";
 import type { TurnkeyClientSignature } from "@/lib/turnkey-otp-message";
@@ -12,8 +13,11 @@ export async function initTurnkeyEmailOtp(input: {
   const email = input.email.trim().toLowerCase();
   if (!email || !email.includes("@")) throw new Error("invalid_email");
   const api = await getTurnkeyApi();
+  // INIT_OTP_V3 / VERIFY_OTP_V2 are parent-org activities. Targeting the sub-org fails with
+  // REQUEST_NOT_AUTHORIZED: the parent API key is not a credential inside the sub-org.
+  // OTP_LOGIN_V2 below still targets the user's sub-org.
   const { otpId, otpEncryptionTargetBundle } = await api.initOtp({
-    organizationId: row.subOrganizationId,
+    organizationId: readTurnkeyOrganizationId(),
     otpType: "OTP_TYPE_EMAIL",
     contact: email,
     userIdentifier: input.userIdentifier,

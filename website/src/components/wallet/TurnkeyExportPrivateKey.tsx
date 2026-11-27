@@ -10,9 +10,16 @@ import { WalletCloudError } from "@/lib/wallet-cloud-client";
 export function TurnkeyExportPrivateKey({
   address,
   subOrganizationId,
+  onBeforeTurnkeyModal,
 }: {
   address: string;
   subOrganizationId: string;
+  /**
+   * Called right before the Turnkey export modal opens. The wallet settings use a native
+   * <dialog> (top layer, everything else inert), so it must close first or the Turnkey
+   * modal renders underneath it and cannot be clicked.
+   */
+  onBeforeTurnkeyModal?: () => void;
 }) {
   const { lang } = useLanguage();
   const c = walletUxCopy(lang);
@@ -30,18 +37,26 @@ export function TurnkeyExportPrivateKey({
       }
       const bridge = getTurnkeyBrowserBridge();
       if (!bridge?.exportWalletAccount) throw new WalletCloudError("turnkey_client_unready");
-      await bridge.exportWalletAccount({
-        address: ready.address,
-        organizationId: ready.subOrganizationId || subOrganizationId,
-      });
+      const organizationId = ready.subOrganizationId || subOrganizationId;
+      if (bridge.ensureSession && !(await bridge.ensureSession({ subOrganizationId: organizationId }))) {
+        throw new WalletCloudError("reauth_required");
+      }
       setOpen(false);
+      onBeforeTurnkeyModal?.();
+      // Upgraded vault wallets were imported as a Turnkey private key, not a wallet account.
+      const exportedImported = bridge.exportPrivateKey
+        ? await bridge.exportPrivateKey({ address: ready.address, organizationId })
+        : false;
+      if (!exportedImported) {
+        await bridge.exportWalletAccount({ address: ready.address, organizationId });
+      }
     } catch (err) {
       const code = err instanceof WalletCloudError ? err.code : "export_failed";
       setError(code === "reauth_required" ? c.exportPrivateKeyReauth : c.exportPrivateKeyFailed);
     } finally {
       setBusy(false);
     }
-  }, [address, c.exportPrivateKeyFailed, c.exportPrivateKeyReauth, subOrganizationId]);
+  }, [address, c.exportPrivateKeyFailed, c.exportPrivateKeyReauth, onBeforeTurnkeyModal, subOrganizationId]);
 
   return (
     <div className="space-y-3" data-testid="turnkey-export-private-key">
