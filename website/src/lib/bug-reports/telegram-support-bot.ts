@@ -220,7 +220,8 @@ async function clearState(key: string): Promise<void> {
 }
 
 export async function getOwnerChatId(): Promise<string | null> {
-  const env = process.env.BUG_REPORTS_TELEGRAM_CHAT_ID?.trim();
+  const env =
+    process.env.TELEGRAM_OWNER_CHAT_ID?.trim() || process.env.BUG_REPORTS_TELEGRAM_CHAT_ID?.trim();
   if (env) return env;
   return getState(OWNER_KEY);
 }
@@ -293,7 +294,11 @@ async function tryClaimOwner(msg: TgMessage, payload: string): Promise<boolean> 
     return true;
   }
 
-  const byCode = payload === `owner_${ownerClaimCode(token)}`;
+  const expectedCode = `owner_${ownerClaimCode(token)}`;
+  const byCode = timingSafeEqual(
+    createHash("sha256").update(payload).digest(),
+    createHash("sha256").update(expectedCode).digest(),
+  );
   const ownerUser = process.env.OWNER_TELEGRAM_USERNAME?.trim().replace(/^@/, "").toLowerCase();
   const byUsername =
     !!ownerUser && !!msg.from?.username && msg.from.username.toLowerCase() === ownerUser && (payload === "" || payload === "support");
@@ -311,15 +316,44 @@ async function tryClaimOwner(msg: TgMessage, payload: string): Promise<boolean> 
 
 // ---------- intake ----------
 
+const MAX_TELEGRAM_PHOTO_BYTES = 500_000;
+
 async function photoAsDataUrl(fileId: string): Promise<string | null> {
   const token = readTelegramVerifyBotToken();
   if (!token) return null;
-  const info = (await tgApi("getFile", { file_id: fileId })) as { result?: { file_path?: string } } | null;
+  const info = (await tgApi("getFile", { file_id: fileId })) as {
+    result?: { file_path?: string; file_size?: number };
+  } | null;
+  if (typeof info?.result?.file_size === "number" && info.result.file_size > MAX_TELEGRAM_PHOTO_BYTES) {
+    return null;
+  }
   const path = info?.result?.file_path;
   if (!path) return null;
   const res = await fetch(`https://api.telegram.org/file/bot${token}/${path}`);
   if (!res.ok) return null;
-  const buf = Buffer.from(await res.arrayBuffer());
+  const declared = Number(res.headers.get("content-length") ?? "0");
+  if (Number.isFinite(declared) && declared > MAX_TELEGRAM_PHOTO_BYTES) return null;
+  const reader = res.body?.getReader();
+  let buf: Buffer;
+  if (reader) {
+    const chunks: Uint8Array[] = [];
+    let total = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      total += value.byteLength;
+      if (total > MAX_TELEGRAM_PHOTO_BYTES) {
+        await reader.cancel().catch(() => {});
+        return null;
+      }
+      chunks.push(value);
+    }
+    buf = Buffer.concat(chunks, total);
+  } else {
+    buf = Buffer.from(await res.arrayBuffer());
+    if (buf.byteLength > MAX_TELEGRAM_PHOTO_BYTES) return null;
+  }
   const mime = path.endsWith(".png") ? "image/png" : path.endsWith(".webp") ? "image/webp" : "image/jpeg";
   const url = `data:${mime};base64,${buf.toString("base64")}`;
   return url.length <= MAX_SCREENSHOT_DATA_URL_LEN ? url : null;
@@ -327,10 +361,15 @@ async function photoAsDataUrl(fileId: string): Promise<string | null> {
 
 function pickPhoto(msg: TgMessage): string | null {
   if (msg.photo?.length) {
-    const fitting = msg.photo.filter((p) => (p.file_size ?? 0) <= 500_000);
-    return (fitting.at(-1) ?? msg.photo[0]).file_id;
+    const fitting = msg.photo.filter((p) => (p.file_size ?? 0) <= MAX_TELEGRAM_PHOTO_BYTES);
+    return fitting.length ? fitting.at(-1)!.file_id : null;
   }
-  if (msg.document?.mime_type?.startsWith("image/")) return msg.document.file_id;
+  if (
+    msg.document?.mime_type?.startsWith("image/") &&
+    (msg.document.file_size ?? Infinity) <= MAX_TELEGRAM_PHOTO_BYTES
+  ) {
+    return msg.document.file_id;
+  }
   return null;
 }
 

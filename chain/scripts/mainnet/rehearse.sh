@@ -15,7 +15,13 @@ EXPECT_BLOCKS="${EXPECT_BLOCKS:-0}"
 N="${VALIDATORS:-3}"
 REH="${REHEARSAL_DIR:-$(mktemp -d)}"
 PIDS=()
-cleanup() { for p in "${PIDS[@]}"; do kill "$p" 2>/dev/null || true; done; [[ -n "${KEEP:-}" ]] || rm -rf "$REH"; }
+cleanup() {
+  for p in "${PIDS[@]}"; do kill "$p" 2>/dev/null || true; done
+  for p in "${PIDS[@]}"; do wait "$p" 2>/dev/null || true; done
+  # Halted validators can still hold/write config during SIGTERM; leftover /tmp
+  # must not flip a PASS into a CI failure (rm: Directory not empty).
+  [[ -n "${KEEP:-}" ]] || rm -rf "$REH" || true
+}
 trap cleanup EXIT
 K=(--keyring-backend test --home "$REH/keys")
 

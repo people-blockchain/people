@@ -224,7 +224,7 @@ export type EscrowCreatedVerifyResult =
     }
   | {
       ok: false;
-      error: ChainTxError | "merchant_mismatch" | "customer_mismatch" | "terms_mismatch";
+      error: ChainTxError | "merchant_mismatch" | "customer_mismatch" | "terms_mismatch" | "terms_too_long";
     };
 
 /**
@@ -281,7 +281,10 @@ export async function verifyEscrowCreatedTx(
     if (!escrow) return { ok: false, error: "tx_not_found" };
     const termsHash = escrow[5] as Hex;
     if (termsNote) {
-      const expected = keccak256(encodePacked(["string"], [termsNote.slice(0, 500)]));
+      if (termsNote.length > 500) {
+        return { ok: false, error: "terms_too_long" };
+      }
+      const expected = keccak256(encodePacked(["string"], [termsNote]));
       if (expected.toLowerCase() !== termsHash.toLowerCase()) {
         return { ok: false, error: "terms_mismatch" };
       }

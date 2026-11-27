@@ -24,6 +24,7 @@ git fetch --depth 1 origin tag "$VERSION" 2>/dev/null || true
 git checkout --detach "$VERSION" 2>/dev/null || git checkout --detach "tags/$VERSION"
 # Discard the overrides a previous run copied in, so what is verified below is upstream's tree.
 git reset --hard "$VERSION" >/dev/null
+git clean -fdx >/dev/null
 
 ACTUAL="$(git rev-parse HEAD)"
 if [[ "$ACTUAL" != "$COMMIT" ]]; then
@@ -31,8 +32,8 @@ if [[ "$ACTUAL" != "$COMMIT" ]]; then
   echo "(either the upstream tag moved, or .cache/cosmos-evm is stale; remove it and retry)"
   exit 1
 fi
-if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
-  echo "cosmos/evm checkout at $ACTUAL has modified tracked files; refusing to build"
+if [[ -n "$(git status --porcelain)" ]]; then
+  echo "cosmos/evm checkout at $ACTUAL has modified or untracked files; refusing to build"
   exit 1
 fi
 

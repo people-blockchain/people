@@ -34,7 +34,7 @@ export async function POST(request: Request, { params }: Params) {
   await tryAwardFounderPoints(
     guard.userId,
     "discover_reaction",
-    `discover:react:${id}:${guard.userId}:${vote}`,
+    `discover:react:${id}:${guard.userId}`,
     { projectAuthorUserId: project?.authorUserId ?? undefined },
   );
   return NextResponse.json({ ok: true });

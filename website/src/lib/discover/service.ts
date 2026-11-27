@@ -16,7 +16,8 @@ import {
   type DiscoverVote,
 } from "@/lib/discover/scoring-config";
 import { assertProjectFieldLimits } from "@/lib/discover/field-limits";
-import { isSafeLinkTarget, isSafeVideoUri } from "@/lib/discover/url-policy";
+import { parseScreenshotUris } from "@/lib/discover/screenshots";
+import { isSafeImageAssetUri, isSafeLinkTarget, isSafeVideoUri } from "@/lib/discover/url-policy";
 
 export type DiscoverProjectRow = typeof discoverProjects.$inferSelect;
 
@@ -59,7 +60,10 @@ async function computeWeightedScore(projectId: string, revision: number): Promis
   }
   score += follows.length * w.follow;
   score += questions.length * w.question;
-  score += clicks.length * w.productClick;
+  const uniqueClickerIds = new Set(
+    clicks.map((c) => c.userId).filter((uid): uid is string => typeof uid === "string" && uid.length > 0),
+  );
+  score += uniqueClickerIds.size * w.productClick;
   for (const v of visits) {
     if (v.visitCount > 1) score += w.repeatVisit * (v.visitCount - 1);
   }
@@ -336,6 +340,8 @@ export async function trackProductClick(projectId: string, userId: string | null
   await refreshProjectScore(projectId);
 }
 
+const CARD_REPEAT_VISIT_COOLDOWN_MS = 15 * 60 * 1000;
+
 export async function trackCardVisit(projectId: string, userId: string) {
   const db = await getDbReady();
   const existing = await db
@@ -343,12 +349,16 @@ export async function trackCardVisit(projectId: string, userId: string) {
     .from(discoverCardVisits)
     .where(and(eq(discoverCardVisits.projectId, projectId), eq(discoverCardVisits.userId, userId)))
     .limit(1);
+  const now = new Date();
   if (existing[0]) {
+    if (now.getTime() - existing[0].lastAt.getTime() < CARD_REPEAT_VISIT_COOLDOWN_MS) {
+      return;
+    }
     await db
       .update(discoverCardVisits)
       .set({
         visitCount: existing[0].visitCount + 1,
-        lastAt: new Date(),
+        lastAt: now,
       })
       .where(
         and(eq(discoverCardVisits.projectId, projectId), eq(discoverCardVisits.userId, userId)),
@@ -385,11 +395,24 @@ export async function getAuthorFeedback(projectId: string, authorUserId: string)
   return { project, tallies, questions: questions.map((q) => ({ id: q.id, body: q.body, createdAt: q.createdAt })) };
 }
 
-/** Reject link values that would render as a cross-origin or unsafe href. */
-function assertSafeProjectLinks(links: { tokenLink: string; productUrl?: string | null; videoUri?: string | null }) {
+/** Reject link values that would render as a cross-origin or unsafe href or image source. */
+function assertSafeProjectLinks(links: {
+  tokenLink: string;
+  productUrl?: string | null;
+  videoUri?: string | null;
+  tokenIconUri?: string | null;
+  screenshotUris?: string;
+}) {
   if (!isSafeLinkTarget(links.tokenLink)) throw new Error("invalid_token_link");
   if (links.productUrl && !isSafeLinkTarget(links.productUrl)) throw new Error("invalid_product_url");
   if (links.videoUri && !isSafeVideoUri(links.videoUri)) throw new Error("invalid_video_uri");
+  if (links.tokenIconUri && !isSafeImageAssetUri(links.tokenIconUri)) throw new Error("invalid_token_icon_uri");
+  if (links.screenshotUris) {
+    const parsed = parseScreenshotUris(links.screenshotUris);
+    if (parsed.some((uri) => !isSafeImageAssetUri(uri))) {
+      throw new Error("invalid_screenshots");
+    }
+  }
 }
 
 export async function resubmitProject(

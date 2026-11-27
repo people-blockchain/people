@@ -38,6 +38,7 @@ export async function shouldBlockDiscoverPoints(
   projectAuthorUserId: string | null | undefined,
 ): Promise<boolean> {
   if (!projectAuthorUserId) return false;
+  if (projectAuthorUserId === userId) return true;
   await recordDiscoverPeer(userId, projectAuthorUserId);
   const graph = await loadInteractionGraph(userId);
   return isClosedInteractionClique(graph, userId, projectAuthorUserId);

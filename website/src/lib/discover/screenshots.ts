@@ -1,4 +1,5 @@
 import { ipfsGatewayUrl, parseIpfsUri } from "@/lib/ipfs";
+import { isSafeImageAssetUri } from "@/lib/discover/url-policy";
 
 export function parseScreenshotUris(raw: string | null | undefined): string[] {
   if (!raw?.trim()) return [];
@@ -15,8 +16,9 @@ export function serializeScreenshotUris(uris: string[]): string {
   return JSON.stringify(uris.filter((u) => u.trim()).slice(0, 8));
 }
 
-export function resolveScreenshotUrl(uri: string): string {
+export function resolveScreenshotUrl(uri: string): string | null {
   const trimmed = uri.trim();
+  if (!isSafeImageAssetUri(trimmed)) return null;
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) return trimmed;
   const cid = parseIpfsUri(trimmed);
   if (cid) {

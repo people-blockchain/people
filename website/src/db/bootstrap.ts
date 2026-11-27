@@ -22,6 +22,7 @@ import {
   FOUNDER_NFT_AUTH_NONCE_SCHEMA_STATEMENTS,
   REFERRAL_KOL_SCHEMA_STATEMENTS,
   USER_TURNKEY_WALLET_SCHEMA_STATEMENTS,
+  FOUNDER_SECURITY_AUDIT_SCHEMA_STATEMENTS,
 } from "./bootstrap-sql.mjs";
 import { UPLOAD_NONCE_SCHEMA_STATEMENTS } from "./upload-nonce-sql.mjs";
 import { UPLOAD_SIGN_RATE_SCHEMA_STATEMENTS } from "./upload-sign-rate-sql.mjs";
@@ -123,6 +124,10 @@ async function runPartnerSchemaBootstrap(): Promise<void> {
     // SQL also lives in bootstrap-sql.mjs for offline fixtures and tests only.
     // drizzle/0028_user_turnkey_wallet.sql — Turnkey sub-org + address (no private keys).
     for (const statement of USER_TURNKEY_WALLET_SCHEMA_STATEMENTS) {
+      await client.unsafe(statement);
+    }
+    // drizzle/0029_security_audit_hardening.sql — passport wallet registry + World ID nonces.
+    for (const statement of FOUNDER_SECURITY_AUDIT_SCHEMA_STATEMENTS) {
       await client.unsafe(statement);
     }
     for (const statement of UPLOAD_NONCE_SCHEMA_STATEMENTS) {

@@ -10,6 +10,11 @@ export async function POST() {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
   const result = await claimReferralVested(guard.userId);
-  if (!result.ok) return NextResponse.json({ error: result.error }, { status: 409 });
+  if (!result.ok) {
+    return NextResponse.json(
+      { error: result.error },
+      { status: result.error === "ineligible" ? 403 : 409 },
+    );
+  }
   return NextResponse.json({ ok: true, claims: result.claims });
 }

@@ -10,6 +10,8 @@ export function readTelegramVerifyBotToken(): string | null {
 
 /** First 32 hex chars of sha256(bot token); Telegram `secret_token` for setWebhook. */
 export function telegramVerifyWebhookSecret(token: string): string {
+  const override = process.env.TELEGRAM_SUPPORT_WEBHOOK_SECRET?.trim();
+  if (override) return override;
   return createHash("sha256").update(token).digest("hex").slice(0, 32);
 }
 

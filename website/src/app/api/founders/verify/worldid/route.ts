@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import type { IDKitResult } from "@worldcoin/idkit";
+import { checkSharedRateLimit } from "@/lib/api-rate-limit";
+import { clientIp } from "@/lib/discover/api-guard";
 import { foundersApiGuard } from "@/lib/founders/api-guard";
 import { getFounderByUserId } from "@/lib/founders/service";
 import { verifyWorldIdProofForUser } from "@/lib/founders/world-id-verify";
@@ -7,6 +9,11 @@ import { verifyWorldIdProofForUser } from "@/lib/founders/world-id-verify";
 export async function POST(request: Request) {
   const guard = await foundersApiGuard();
   if (!guard.ok) return guard.response;
+
+  const rateKey = `${guard.userId}:${clientIp(request)}`;
+  if (!(await checkSharedRateLimit("founders-worldid-verify", rateKey, 20, 60 * 60 * 1000))) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+  }
 
   const founder = await getFounderByUserId(guard.userId);
   if (!founder) {

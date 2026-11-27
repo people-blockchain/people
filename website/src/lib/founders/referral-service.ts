@@ -386,6 +386,28 @@ export async function clawBackReferralForBot(inviteeUserId: string): Promise<voi
     await tx
       .delete(founderReferralCredits)
       .where(eq(founderReferralCredits.sourceInviteeUserId, inviteeUserId));
+    const botBeneficiary = await tx
+      .select()
+      .from(founderReferralCredits)
+      .where(eq(founderReferralCredits.beneficiaryUserId, inviteeUserId));
+    const claimedRow = await tx
+      .select({ value: sum(founderReferralClaims.amount) })
+      .from(founderReferralClaims)
+      .where(and(eq(founderReferralClaims.userId, inviteeUserId), eq(founderReferralClaims.asset, "ppl")));
+    const alreadyClaimed = Number(claimedRow[0]?.value ?? 0);
+    if (alreadyClaimed <= 0 && botBeneficiary.length > 0) {
+      const bySeasonBen = new Map<number, number>();
+      for (const c of botBeneficiary) bySeasonBen.set(c.season, (bySeasonBen.get(c.season) ?? 0) + c.points);
+      for (const [season, points] of bySeasonBen) {
+        await tx
+          .update(founderReferralPool)
+          .set({ spentPoints: sql`GREATEST(0, ${founderReferralPool.spentPoints} - ${points})` })
+          .where(eq(founderReferralPool.season, season));
+      }
+      await tx
+        .delete(founderReferralCredits)
+        .where(eq(founderReferralCredits.beneficiaryUserId, inviteeUserId));
+    }
     await tx
       .delete(founderReferralActivations)
       .where(eq(founderReferralActivations.inviteeUserId, inviteeUserId));
@@ -614,7 +636,7 @@ export async function settleStayBonusesForInviter(inviterUserId: string): Promis
 
 export type ClaimResult =
   | { ok: true; claims: { asset: string; amount: string }[] }
-  | { ok: false; error: "nothing_to_claim" };
+  | { ok: false; error: "nothing_to_claim" | "ineligible" };
 
 /** Queues a claim for everything vested and not yet claimed (PPL + issuer tokens). */
 export async function claimReferralVested(userId: string, now = new Date()): Promise<ClaimResult> {
@@ -622,6 +644,14 @@ export async function claimReferralVested(userId: string, now = new Date()): Pro
   const nowMs = now.getTime();
   return db.transaction(async (tx) => {
     await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${"referral-claim:" + userId}))`);
+    const founder = await tx
+      .select({ isBot: founders.isBot, verifiedAt: founders.verifiedAt })
+      .from(founders)
+      .where(eq(founders.userId, userId))
+      .limit(1);
+    if (!founder[0] || founder[0].isBot || !founder[0].verifiedAt) {
+      return { ok: false as const, error: "ineligible" as const };
+    }
     const out: { asset: string; amount: string }[] = [];
 
     const ppl = (

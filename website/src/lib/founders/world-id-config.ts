@@ -13,8 +13,8 @@ export function foundersWorldIdAction(): string {
 export function readFoundersWorldIdConfig():
   | { appId: string; rpId: string; signingKeyHex: string; action: string }
   | null {
-  const appId = process.env.FOUNDERS_WORLD_ID_APP_ID?.trim();
-  const rpId = process.env.FOUNDERS_WORLD_ID_RP_ID?.trim();
+  const appId = process.env.FOUNDERS_WORLD_ID_APP_ID?.trim() || process.env.WORLD_ID_APP_ID?.trim();
+  const rpId = process.env.FOUNDERS_WORLD_ID_RP_ID?.trim() || process.env.WORLD_ID_RP_CONTEXT?.trim();
   const signingKeyHex = process.env.FOUNDERS_WORLD_ID_SIGNING_KEY?.trim();
   if (!appId || !rpId || !signingKeyHex) return null;
   return { appId, rpId, signingKeyHex, action: foundersWorldIdAction() };

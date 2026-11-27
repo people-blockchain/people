@@ -1,8 +1,10 @@
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { JsonRpcProvider, Wallet, NonceManager } from 'ethers';
+import { FetchRequest, JsonRpcProvider, Wallet, NonceManager } from 'ethers';
 import { createFaucet, clientSource, DEFAULT_TRUSTED_PROXY_PEERS } from './faucet-core.mjs';
-const provider = new JsonRpcProvider(process.env.FAUCET_RPC_URL ?? 'http://127.0.0.1:8545', undefined, { cacheTimeout: -1 });
+const rpcReq = new FetchRequest(process.env.FAUCET_RPC_URL ?? 'http://127.0.0.1:8545');
+rpcReq.timeout = 8_000;
+const provider = new JsonRpcProvider(rpcReq, undefined, { cacheTimeout: -1 });
 const signer = new Wallet(process.env.FAUCET_PRIVATE_KEY, provider);
 const manager = new NonceManager(signer);
 const wallet = { address: signer.address, sendTransaction: async (tx) => {
@@ -12,9 +14,11 @@ const wallet = { address: signer.address, sendTransaction: async (tx) => {
 // "off"/"none" disables it (the per-address cooldown and per-request cap still apply).
 const dailyCapEnv = process.env.FAUCET_DAILY_CAP_PPL;
 const dailyCapPpl = dailyCapEnv === undefined || dailyCapEnv.trim() === '' ? 10_000n : /^(off|none)$/i.test(dailyCapEnv.trim()) ? null : BigInt(dailyCapEnv.trim());
-const faucet = createFaucet({ provider, wallet, firstBlockHash: process.env.FAUCET_FIRST_BLOCK_HASH, dailyCapPpl });
+const perSourceCapEnv = process.env.FAUCET_SOURCE_DAILY_CAP_PPL;
+const perSourceDailyCapPpl = perSourceCapEnv === undefined || perSourceCapEnv.trim() === '' ? 200n : /^(off|none)$/i.test(perSourceCapEnv.trim()) ? null : BigInt(perSourceCapEnv.trim());
+const faucet = createFaucet({ provider, wallet, firstBlockHash: process.env.FAUCET_FIRST_BLOCK_HASH, dailyCapPpl, perSourceDailyCapPpl });
 await faucet.verifyNetwork();
-const publicErrors = new Set(['invalid_address','invalid_amount','amount_too_large','rate_limited','faucet_busy','wrong_network','fee_unavailable','faucet_insufficient_funds','recipient_gas_too_high','daily_budget_exhausted']);
+const publicErrors = new Set(['invalid_address','invalid_amount','amount_too_small','amount_too_large','rate_limited','faucet_busy','wrong_network','fee_unavailable','faucet_insufficient_funds','recipient_gas_too_high','daily_budget_exhausted']);
 // Errors whose public meaning needs a human sentence for the website/faucet UI.
 const publicMessages = { daily_budget_exhausted: 'Faucet is empty for today, try again tomorrow' };
 const html = await readFile(new URL('./faucet.html', import.meta.url));
@@ -27,17 +31,23 @@ const html = await readFile(new URL('./faucet.html', import.meta.url));
 const TRUST_PROXY_HEADERS = process.env.TRUST_PROXY_HEADERS === '1';
 const TRUSTED_PROXY_PEERS = (process.env.FAUCET_TRUSTED_PROXY ?? DEFAULT_TRUSTED_PROXY_PEERS.join(','))
   .split(',').map((entry) => entry.trim()).filter(Boolean);
-const sourceOf = (req) => clientSource(req.socket.remoteAddress, req.headers, { trustProxyHeaders: TRUST_PROXY_HEADERS, trustedPeers: TRUSTED_PROXY_PEERS });
+const FAUCET_PROXY_SECRET = process.env.FAUCET_PROXY_SECRET ?? '';
+const sourceOf = (req) => clientSource(req.socket.remoteAddress, req.headers, { trustProxyHeaders: TRUST_PROXY_HEADERS, trustedPeers: TRUSTED_PROXY_PEERS, proxySecret: FAUCET_PROXY_SECRET });
 
-// `/faucet/status` is a read-only probe; memoize it so it cannot be used to hammer the RPC.
+// `/faucet/status` is a read-only probe; memoize it and deduplicate in-flight refreshes.
 const STATUS_CACHE_MS = 5_000;
 let statusCache = null;
+let statusInFlight = null;
 async function readStatus() {
   if (statusCache && Date.now() - statusCache.at < STATUS_CACHE_MS) return statusCache.value;
-  await faucet.verifyNetwork();
-  const value = { ok: true, chainId: 97401, address: wallet.address, balanceAppl: String(await provider.getBalance(wallet.address)) };
-  statusCache = { at: Date.now(), value };
-  return value;
+  if (statusInFlight) return statusInFlight;
+  statusInFlight = (async () => {
+    await faucet.verifyNetwork();
+    const value = { ok: true, chainId: 97401, address: wallet.address, balanceAppl: String(await provider.getBalance(wallet.address)) };
+    statusCache = { at: Date.now(), value };
+    return value;
+  })().finally(() => { statusInFlight = null; });
+  return statusInFlight;
 }
 /** One journal line per fund attempt: caller source key (real client IP behind the proxy), recipient, outcome. */
 function logFund(source, to, outcome) {
@@ -45,6 +55,7 @@ function logFund(source, to, outcome) {
 }
 const server = http.createServer(async (req, res) => {
   const reply = (status, body) => {
+    if (res.writableEnded || res.destroyed || res.headersSent) return;
     res.writeHead(status, { 'content-type': 'application/json', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
     res.end(JSON.stringify(body));
   };
@@ -62,7 +73,7 @@ const server = http.createServer(async (req, res) => {
   try {
     for await (const chunk of req) {
       size += chunk.length;
-      if (size > 2048) { reply(413, { error: 'request_too_large' }); return; }
+      if (size > 2048) { req.destroy(); reply(413, { error: 'request_too_large' }); return; }
       chunks.push(chunk);
     }
     let body;
@@ -75,7 +86,7 @@ const server = http.createServer(async (req, res) => {
   } catch (error) {
     const code = publicErrors.has(error?.message) ? error.message : 'faucet_unavailable';
     if (source) logFund(source, to, code);
-    const status = ['invalid_address','invalid_amount','amount_too_large'].includes(code) ? 400 : code === 'rate_limited' ? 429 : 503;
+    const status = ['invalid_address','invalid_amount','amount_too_small','amount_too_large'].includes(code) ? 400 : code === 'rate_limited' ? 429 : 503;
     return reply(status, { error: code, ...(publicMessages[code] ? { message: publicMessages[code] } : {}) });
   }
 });

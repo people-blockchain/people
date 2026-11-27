@@ -139,3 +139,12 @@ test("LAV-M6: routes and service enforce the caps", async () => {
   assert.ok(service.includes("displayNameError(input.displayName)"), "upsertMerchant must re-check");
   assert.ok(service.includes("programTitleError(input.title)"), "registerProgram must re-check");
 });
+
+test("WEB-06: escrow route and chain-verify reject termsNote > 500 bytes instead of truncating", async () => {
+  const read = (rel) => readFile(new URL(rel, import.meta.url), "utf8");
+  const route = await read("../src/app/api/lavka/escrow/route.ts");
+  const verify = await read("../src/lib/lavka/chain-verify.ts");
+  assert.ok(route.includes("terms_too_long"), "route must reject oversized termsNote");
+  assert.ok(verify.includes("terms_too_long"), "verifier must reject oversized termsNote");
+  assert.ok(!verify.includes(".slice(0, 500)"), "verifier must not truncate termsNote");
+});

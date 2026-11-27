@@ -26,6 +26,9 @@ export async function POST(request: Request) {
   // Not trimmed: the note is hashed as-is against the on-chain termsHash, so changing a single
   // byte here would fail verification.
   const termsNote = typeof body.termsNote === "string" && body.termsNote.trim() ? body.termsNote : null;
+  if (termsNote && termsNote.length > 500) {
+    return NextResponse.json({ error: "terms_too_long" }, { status: 400 });
+  }
   const recorded = await recordEscrowFromChain({
     customerUserId: guard.userId,
     merchantSlug: slug,

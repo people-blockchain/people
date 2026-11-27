@@ -1,7 +1,7 @@
 import type { IDKitResult } from "@worldcoin/idkit";
-import { eq } from "drizzle-orm";
+import { and, eq, gt, isNull } from "drizzle-orm";
 import { getDbReady } from "@/db";
-import { founderWorldIdNullifiers, founders } from "@/db/schema";
+import { founderWorldIdNonces, founderWorldIdNullifiers, founders } from "@/db/schema";
 import { FOUNDERS_WORLD_ID_EXPECTED_ENV, readFoundersWorldIdConfig } from "./world-id-config.ts";
 import { nullifierHexToDecimal } from "./world-id-nullifier.ts";
 import { VERIFICATION_LEVEL_STRONG } from "./verification.ts";
@@ -34,6 +34,42 @@ export async function verifyWorldIdProofForUser(
     return { ok: false, error: "verification_failed" };
   }
 
+  const nonce =
+    "nonce" in idkitResponse && typeof idkitResponse.nonce === "string" && idkitResponse.nonce.trim()
+      ? idkitResponse.nonce.trim()
+      : null;
+  if (!nonce) {
+    return { ok: false, error: "invalid_proof" };
+  }
+
+  const responseRow = idkitResponse.responses?.[0];
+  const identifier =
+    responseRow && "identifier" in responseRow && typeof responseRow.identifier === "string"
+      ? responseRow.identifier
+      : null;
+  if (identifier !== "orb") {
+    return { ok: false, error: "invalid_proof" };
+  }
+
+  const db = await getDbReady();
+  const now = new Date();
+  const nonceRows = await db
+    .update(founderWorldIdNonces)
+    .set({ usedAt: now })
+    .where(
+      and(
+        eq(founderWorldIdNonces.nonce, nonce),
+        eq(founderWorldIdNonces.userId, userId),
+        eq(founderWorldIdNonces.action, config.action),
+        isNull(founderWorldIdNonces.usedAt),
+        gt(founderWorldIdNonces.expiresAt, now),
+      ),
+    )
+    .returning({ nonce: founderWorldIdNonces.nonce });
+  if (nonceRows.length === 0) {
+    return { ok: false, error: "verification_failed" };
+  }
+
   const verifyRes = await fetch(`https://developer.world.org/api/v4/verify/${config.rpId}`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -50,7 +86,6 @@ export async function verifyWorldIdProofForUser(
     return { ok: false, error: "verification_failed" };
   }
 
-  const responseRow = idkitResponse.responses?.[0];
   const nullifierHex =
     responseRow && "nullifier" in responseRow && typeof responseRow.nullifier === "string"
       ? responseRow.nullifier
@@ -66,7 +101,6 @@ export async function verifyWorldIdProofForUser(
     return { ok: false, error: "invalid_proof" };
   }
 
-  const db = await getDbReady();
   try {
     // The unique nullifier row is claimed and the level upgrade only happens if this
     // transaction won the insert. A parallel submission of the same nullifier from another
@@ -86,7 +120,12 @@ export async function verifyWorldIdProofForUser(
         const owner = await tx
           .select({ userId: founderWorldIdNullifiers.userId })
           .from(founderWorldIdNullifiers)
-          .where(eq(founderWorldIdNullifiers.nullifier, nullifierDecimal))
+          .where(
+            and(
+              eq(founderWorldIdNullifiers.nullifier, nullifierDecimal),
+              eq(founderWorldIdNullifiers.action, config.action),
+            ),
+          )
           .limit(1);
         if (owner[0] && owner[0].userId !== userId) {
           return { ok: false as const, error: "nullifier_used" as const };
@@ -95,7 +134,7 @@ export async function verifyWorldIdProofForUser(
       }
       await tx
         .update(founders)
-        .set({ verificationLevel: VERIFICATION_LEVEL_STRONG })
+        .set({ verificationLevel: VERIFICATION_LEVEL_STRONG, verifiedAt: new Date() })
         .where(eq(founders.userId, userId));
       return { ok: true as const };
     });

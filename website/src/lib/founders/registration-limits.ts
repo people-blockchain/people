@@ -44,6 +44,51 @@ export async function checkRegistrationSlots(
   return { ok: true };
 }
 
+type DbExecutor = Pick<Awaited<ReturnType<typeof getDbReady>>, "select" | "insert">;
+
+/**
+ * AUTH-04: verify caps and increment counters inside the caller's transaction so a parallel
+ * registration cannot both pass `checkRegistrationSlots` and then both increment.
+ */
+export async function reserveRegistrationSlotsTx(
+  tx: DbExecutor,
+  deviceId: string | undefined,
+  ip: string,
+): Promise<{ ok: true } | { ok: false; error: "device_cap" | "ip_cap" }> {
+  const bump = async (slotHash: string, kind: "ip" | "device", cap: number) => {
+    const row = await tx
+      .select()
+      .from(founderSlotCounts)
+      .where(eq(founderSlotCounts.slotHash, slotHash))
+      .limit(1);
+    if (!withinRegistrationCap(Number(row[0]?.founderCount ?? 0), cap)) {
+      return false;
+    }
+    await tx
+      .insert(founderSlotCounts)
+      .values({ slotHash, kind, founderCount: 1 })
+      .onConflictDoUpdate({
+        target: founderSlotCounts.slotHash,
+        set: {
+          founderCount: sql`${founderSlotCounts.founderCount} + 1`,
+          updatedAt: new Date(),
+        },
+      });
+    return true;
+  };
+  if (ip) {
+    if (!(await bump(hashIpSlot(ip), "ip", FOUNDERS_MAX_PER_IP))) {
+      return { ok: false, error: "ip_cap" };
+    }
+  }
+  if (deviceId?.trim()) {
+    if (!(await bump(hashDeviceSlot(deviceId), "device", FOUNDERS_MAX_PER_DEVICE))) {
+      return { ok: false, error: "device_cap" };
+    }
+  }
+  return { ok: true };
+}
+
 export async function incrementRegistrationSlots(deviceId: string | undefined, ip: string) {
   const db = await getDbReady();
   if (ip) {

@@ -1,6 +1,11 @@
 import { eq } from "drizzle-orm";
 import { getDbReady } from "@/db";
-import { founderPhoneRegistry, founderTelegramUsers, founders } from "@/db/schema";
+import {
+  founderPassportWalletRegistry,
+  founderPhoneRegistry,
+  founderTelegramUsers,
+  founders,
+} from "@/db/schema";
 import { hashPhoneNumber } from "./phone-hash.ts";
 import {
   VERIFICATION_LEVEL_STRONG,
@@ -114,6 +119,41 @@ export async function applyStrongVerification(userId: string): Promise<void> {
     .update(founders)
     .set({ verificationLevel: VERIFICATION_LEVEL_STRONG, verifiedAt: new Date() })
     .where(eq(founders.userId, userId));
+}
+
+/**
+ * AUTH-01: claim `walletAddress` as this user's Human Passport wallet permanently, then
+ * upgrade to Level 2. A wallet that already upgraded a different account is rejected even
+ * after that account unlinked `founder.passportWallet`.
+ */
+export async function claimPassportWalletAndApplyStrongVerification(
+  userId: string,
+  walletAddress: string,
+): Promise<{ ok: true } | { ok: false; error: "passport_wallet_taken" }> {
+  const normalized = walletAddress.trim().toLowerCase();
+  const db = await getDbReady();
+  return db.transaction(async (tx) => {
+    const claimed = await tx
+      .insert(founderPassportWalletRegistry)
+      .values({ walletAddress: normalized, userId })
+      .onConflictDoNothing()
+      .returning({ userId: founderPassportWalletRegistry.userId });
+    if (claimed.length === 0) {
+      const owner = await tx
+        .select({ userId: founderPassportWalletRegistry.userId })
+        .from(founderPassportWalletRegistry)
+        .where(eq(founderPassportWalletRegistry.walletAddress, normalized))
+        .limit(1);
+      if (owner[0] && owner[0].userId !== userId) {
+        return { ok: false as const, error: "passport_wallet_taken" as const };
+      }
+    }
+    await tx
+      .update(founders)
+      .set({ verificationLevel: VERIFICATION_LEVEL_STRONG, verifiedAt: new Date() })
+      .where(eq(founders.userId, userId));
+    return { ok: true as const };
+  });
 }
 
 export async function getFounderVerificationLevel(userId: string): Promise<FounderVerificationLevel> {
