@@ -45,7 +45,7 @@
   "voteButtonAbstain": "弃权",
   "voteButtonVeto": "否决",
   "voteConfirmTitle": "确认投票",
-  "voteConfirmBody": "你即将对提案 #{id} 投「{option}」。这将从已连接钱包提交一笔签名交易。",
+  "voteConfirmBody": "你将对提案 #{id} 投「{option}」。这将从已连接钱包提交一笔签名交易。",
   "voteConfirm": "确认投票",
   "voteSending": "提交中…",
   "voteSuccess": "投票已提交。",
