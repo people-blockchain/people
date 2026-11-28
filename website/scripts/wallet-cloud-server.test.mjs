@@ -422,11 +422,11 @@ test("wrong previous secret does not write and does not destroy ciphertext", asy
   await withEnv(
     {
       PEOPLE_WALLET_VAULT_SECRET: "N".repeat(32),
-      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "wrong-previous-secret-32bytes-x",
+      PEOPLE_WALLET_VAULT_SECRET_PREVIOUS: "w".repeat(32),
     },
     async () => {
       const userId = "wallet-wrong-previous-user";
-      const realPrevious = "real-previous-secret-32bytes-ok";
+      const realPrevious = "r".repeat(32);
       const privateKey = "44".repeat(32);
       const inserted = await insertVault({
         userId,
