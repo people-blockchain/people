@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { cookies, headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
+import "@turnkey/react-wallet-kit/styles.css";
 import "./globals.css";
 import {
   languageCookieFromStore,
