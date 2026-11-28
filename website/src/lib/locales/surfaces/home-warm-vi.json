@@ -149,7 +149,7 @@
     "title": "Mạng PEOPLE, trực tiếp",
     "blockHeight": "Chiều cao khối",
     "chainLabel": "Chuỗi",
-    "explorer": "Mở explorer",
+    "explorer": "Mở trình khám phá",
     "unavailable": "Chiều cao khối hiện không khả dụng.",
     "collecting": "Đang đọc mạng…",
     "note": "Khối trực tiếp từ mạng PEOPLE."
@@ -158,7 +158,7 @@
     "title": "PEOPLE Mainnet Beta mở ngày 1/12. Hãy giữ sớm vị trí Founding 1,000 của bạn.",
     "body": "Mỗi báo cáo lỗi và mỗi câu hỏi khó hiểu đều đi thẳng vào thứ chúng tôi xây tiếp theo.",
     "ctaWallet": "Tạo ví miễn phí",
-    "ctaExplore": "Xem explorer",
+    "ctaExplore": "Xem trình khám phá",
     "socialLabel": "Theo dõi chúng tôi",
     "ctaFounder": "Nhận số nhà sáng lập — miễn phí"
   }

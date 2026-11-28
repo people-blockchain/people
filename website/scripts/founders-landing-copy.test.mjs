@@ -32,13 +32,12 @@ test("founders landing carries agreed hero titles and FAQ", () => {
   assert.ok(en.faq.some((item) => /free/i.test(item.q)));
 });
 
-test("founders landing public copy: ru falls back to English with no Cyrillic", () => {
+test("founders landing public copy: ru is localized Cyrillic, not English hero title", () => {
   const en = foundersLandingCopy("en");
   const ru = foundersLandingCopy("ru");
-  assert.deepEqual(ru, en);
-  assert.equal(ru.heroTitle, "Founding 1,000 Vault");
-  assert.doesNotMatch(JSON.stringify(ru), CYRILLIC);
-  assert.doesNotMatch(ru.heroTitle, /Миллион основателей/);
+  assert.notDeepEqual(ru, en);
+  assert.match(JSON.stringify(load("founders-landing-ru.json")), CYRILLIC);
+  assert.notEqual(ru.heroTitle, "Founding 1,000 Vault");
 });
 
 test("founders landing copy avoids jargon", () => {

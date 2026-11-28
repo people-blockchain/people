@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Vault dei 1.000 fondatori · PEOPLE Mainnet Beta (1 dic)",
+  "heroTitle": "Vault dei 1.000 fondatori",
+  "heroSub": "I primi 1.000 wallet verificati sbloccano i trasferimenti e l'estrazione Bounty Draw dei 1.000 fondatori. Elenco e ordine restano sigillati finché quei wallet non si bloccano. Verifica su Telegram in 20 secondi per ottenere un posto in sospeso — serve un wallet connesso per bloccare il tuo posto tra i 1.000 fondatori e il biglietto del Bounty Draw. Il programma Million Founders continua dopo i primi 1.000.",
+  "heroCta": "Verifica e partecipa",
+  "heroCtaHow": "Come funzionano i numeri",
+  "counterLabel": "persone verificate",
+  "counterGoal": "obiettivo",
+  "counterLive": "Conteggio live dalla verifica Human Passport su PEOPLE.",
+  "counterStub": "Elenco e ordine restano sigillati finché 1.000 wallet verificati non si bloccano.",
+  "vaultCalloutTitle": "I primi 1.000 wallet verificati sbloccano i trasferimenti e il Bounty Draw dei 1.000 fondatori",
+  "vaultCalloutBody": "Elenco e ordine restano sigillati finché 1.000 wallet verificati non si bloccano. Nessun conteggio iscrizioni live mentre l'elenco è sigillato.",
+  "disclaimer": "I dettagli preliminari del programma possono cambiare prima di PEOPLE Mainnet Beta. Non è consulenza finanziaria. Nessuna promessa di reddito o crescita del prezzo del token.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Il tuo Founder NFT numerato gratuito",
+  "nftBody": "Ogni persona verificata che entra prima di PEOPLE Mainnet Beta riceve un Founder NFT con il proprio numero pubblico. È gratis. Il record è scritto nel blocco genesi e resta lì — non ci sarà mai una seconda genesi.",
+  "nftBullets": [
+    "Gratis per i fondatori verificati prima di PEOPLE Mainnet Beta",
+    "Il tuo numero fa parte della storia della chain dal primo giorno",
+    "Stessi diritti base per ogni fondatore — i numeri speciali aggiungono solo piccoli vantaggi una tantum"
+  ],
+  "tiersEyebrow": "Numeri fondatore",
+  "tiersTitle": "Livelli in base a quando entri",
+  "tiersSub": "Il tuo livello segue l'ordine della verifica. In ogni livello, il numero esatto viene assegnato con un'estrazione pubblica equa alla chiusura del livello — nessuno sceglie il proprio numero.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "I primi cento fondatori verificati"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "I builder iniziali che modellano la rete"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "L'onda centrale prima dell'adozione ampia"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Far crescere la community su larga scala"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Tutti dopo i primi centomila"
+    }
+  ],
+  "specialEyebrow": "Numeri speciali",
+  "specialTitle": "Numeri speciali e chiusure di livello",
+  "specialBody": "Alcuni numeri spiccano: cifre tonde o distintive e l'ultimo numero di ogni livello. L'ultimo numero di un livello non va a chi è entrato per ultimo — viene estratto equamente tra tutti in quel livello.",
+  "specialListTitle": "Quali numeri sono speciali",
+  "specialList": [
+    "Da #1 a #9",
+    "Cifre ripetute, come 77, 888 o 8888",
+    "Numeri tondi: 1,000, 10,000, 100,000 e 500,000",
+    "La sequenza 12345",
+    "L'ultimo numero di ogni livello"
+  ],
+  "specialFixedNote": "Questo elenco è pubblicato e fisso prima dell'apertura delle iscrizioni. Non cambierà in seguito, così tutti possono verificare che l'estrazione sia stata equa.",
+  "specialPerksTitle": "Cosa ottiene un numero speciale — una volta",
+  "specialPerksBody": "Ogni numero speciale riceve lo stesso bonus una tantum. È un ringraziamento, non denaro: nessun pagamento, nessuna promessa di prezzo, nessuno sconto permanente. I diritti base del fondatore restano uguali per tutti.",
+  "sealEyebrow": "Cerimonia della genesi",
+  "sealTitle": "Sigillatura del blocco genesi",
+  "sealBody": "Alla chiusura della finestra fondatori, PEOPLE terrà una cerimonia pubblica di sigillatura del blocco genesi. I nomi dei fondatori che hanno scelto il mosaico pubblico compariranno insieme come istantanea permanente di chi ha avviato la rete.",
+  "mosaicTitle": "Mosaico dei fondatori",
+  "mosaicSub": "Un mosaico visivo dei nomi fondatore andrà live alla sigillatura. La ricerca per handle arriverà allora.",
+  "mosaicSearchLabel": "Cerca per handle",
+  "mosaicSearchPlaceholder": "Disponibile alla sigillatura della genesi",
+  "mosaicSoon": "Alla sigillatura",
+  "mosaicSearchHint": "La ricerca per handle si apre quando il blocco genesi è sigillato.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Risposte rapide",
+  "faq": [
+    {
+      "q": "È gratis?",
+      "a": "Sì. La verifica con Human Passport su PEOPLE è gratuita e il tuo Founder NFT è gratis prima di PEOPLE Mainnet Beta."
+    },
+    {
+      "q": "Posso scegliere il mio numero fondatore?",
+      "a": "No. I numeri sono legati al livello e assegnati con un'estrazione pubblica equa nel livello. Nessuno può prenotare un numero preferito."
+    },
+    {
+      "q": "Ci sono pagamenti o ricompense garantite?",
+      "a": "No. Questa pagina parla di identità e storia nel blocco genesi, non di pagamenti o rendimenti d'investimento."
+    },
+    {
+      "q": "Come partecipo?",
+      "a": "Accedi su PEOPLE, completa la verifica Human Passport e segui i passaggi in questa pagina. Usa la sezione Verifica qui sotto quando sei pronto."
+    },
+    {
+      "q": "Cos'è PEOPLE?",
+      "a": "PEOPLE è una blockchain della community — creata dalle persone, per la community. I fondatori sono esseri umani verificati che entrano prima di PEOPLE Mainnet Beta."
+    }
+  ],
+  "finalTitle": "Diventa fondatore",
+  "finalSub": "Verifica con Human Passport, reclama il tuo posto tra i Million Founders e conserva il tuo numero nel blocco genesi per sempre.",
+  "finalCta": "Inizia la verifica",
+  "specialPerks": [
+    "Cornice animata e badge sul tuo Founder NFT",
+    "Il tuo nome evidenziato nel mosaico della genesi",
+    "7 giorni di accesso anticipato a nuove funzioni e drop PEOPLE",
+    "Supporto prioritario"
+  ],
+  "specialNamedBadge": "#1 e l'ultimo numero di ogni livello ricevono anche un badge nominativo dedicato."
+}

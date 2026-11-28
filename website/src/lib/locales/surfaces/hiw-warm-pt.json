@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "Como o People funciona, em 1 minuto.",
+    "lead": "Uma carteira, uma verificação de que você é uma pessoa, e depois pode lançar, fazer mint, trocar ou votar. Sem código e sem experiência em crypto.",
+    "betaBadge": "PEOPLE Mainnet Beta lança a 1 de dezembro de 2026.",
+    "saleNote": "PEOPLE Mainnet Beta lança a 1 de dezembro de 2026 — uma mainnet real em fase inicial, com limites até mais pessoas serem verificadas. Pague em USDC ou USDT na Base; o PPL é creditado na PEOPLE Mainnet Beta."
+  },
+  "steps": {
+    "eyebrow": "Três passos",
+    "title": "O que uma pessoa comum faz de facto",
+    "lead": "Isto é todo o onboarding. O resto desta página é detalhe para os curiosos.",
+    "items": [
+      {
+        "title": "Obtenha uma carteira em 30 segundos",
+        "body": "Abra o site no telemóvel ou no browser e crie uma carteira — frase de 12 palavras sem custódia (as chaves ficam no seu dispositivo).",
+        "note": "Sem app store, sem lição de frase-semente.",
+        "bodySocial": "Abra o site no telemóvel ou no browser e crie uma carteira — frase de 12 palavras sem custódia (as chaves ficam no seu dispositivo), ou início de sessão mais rápido com Google com chave encriptada sincronizada na nuvem.",
+        "bodyCloud": "Abra o site no telemóvel ou no browser e crie uma carteira — frase de 12 palavras sem custódia (as chaves ficam no seu dispositivo), ou início de sessão mais rápido com email com chave encriptada sincronizada na nuvem."
+      },
+      {
+        "title": "Prove que é humano",
+        "body": "Verifique uma vez com número de telefone no Telegram ou Human Passport. Uma pessoa, uma conta — isso impede bots de farmar o pool comunitário.",
+        "note": "Sem biometria obrigatória."
+      },
+      {
+        "title": "Lance, mint, troque ou vote",
+        "body": "Comece um token para a sua comunidade, faça mint de cartões de clube, negocie no pool token/PPL ou vote para onde vai o pool comunitário.",
+        "note": "Cada ação é um botão normal, não uma linha de comandos."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Oferta",
+    "title": "Mil milhões de PPL, sem surpresas",
+    "lead": "A oferta está fixa no génesis. Nada é mintado em calendário às suas costas.",
+    "totalLabel": "Oferta total, fixa",
+    "unit": "PPL",
+    "noNewCoins": "Anos 1–4: 0% moedas novas. Parâmetros de inflação estão a zero no génesis da cadeia.",
+    "year5": "A partir do ano 5: no máximo 2% por ano, e só se a comunidade votar a favor.",
+    "donutLabel": "Alocação no génesis",
+    "bucketLabels": {
+      "community": "Comunidade e recompensas",
+      "validators": "Validadores",
+      "team": "Equipa",
+      "treasury": "Tesouraria",
+      "sale": "Venda comunitária",
+      "liquidity": "Liquidez"
+    },
+    "donutNote": "Soma 100% do mil milhões de PPL. O bucket comunitário desbloqueia linearmente em seis anos; tesouraria e liquidez bloqueada não circulam."
+  },
+  "validators": {
+    "eyebrow": "Validadores",
+    "title": "Quem gere a rede e quem a paga",
+    "lead": "Os validadores mantêm a cadeia. São pagos do seu pool e de uma parte de cada taxa.",
+    "poolLabel": "Pool de validadores",
+    "unit": "PPL",
+    "shareLabel": "mais 30% de cada taxa de rede",
+    "yearsLabel": "PPL libertados por ano",
+    "yearLabel": "Ano {{n}}",
+    "pctLabel": "{{pct}}% da oferta total",
+    "scheduleNote": "Os anos 1–4 libertam 60M, 50M, 50M e 40M PPL do pool de 200M. Nada é mintado para pagar.",
+    "feeNote": "Para além do calendário, os validadores recebem 30% de cada taxa de rede, repartido a cada bloco."
+  },
+  "fees": {
+    "eyebrow": "Taxas",
+    "title": "Para onde vai cada taxa",
+    "lead": "Cada taxa de rede é paga em PPL e repartida da mesma forma, sempre.",
+    "totalLabel": "Uma taxa",
+    "totalValue": "100%",
+    "note": "Nada é queimado: a linha de burn é 0%. Taxas fracionárias seguem o mesmo split."
+  },
+  "launch": {
+    "eyebrow": "Lançar um token",
+    "title": "O que acontece quando lança",
+    "lead": "Três regras são aplicadas pelos contratos, não pela nossa boa vontade.",
+    "points": [
+      {
+        "title": "A curva define o preço desde o primeiro trade",
+        "body": "Não há ronda privada nem preço pré-definido. O token começa numa bonding curve, por isso a primeira compra define o preço que todos veem."
+      },
+      {
+        "title": "10% vai para o pool comunitário desse token — garantido",
+        "body": "No lançamento o criador também pode enviar o restante não vendido da curva (até ~17%) para o pool em vez de queimar — até 27% no total. Nunca se mistura com taxas de rede."
+      },
+      {
+        "title": "A parte do criador desbloqueia ao longo de 180 dias",
+        "body": "10% da alocação do criador é líquido na criação, os 90% restantes desbloqueiam linearmente em 180 dias. Sem dump no primeiro dia."
+      },
+      {
+        "title": "Restos da curva",
+        "body": "Depois da curva migrar para o AMM — ou se for finalizada após 180 dias sem esgotar — tokens sobrantes e não vendidos seguem a escolha do criador no lançamento: queimados por defeito (recomendado) ou enviados para o pool comunitário desse token. Nunca para o criador ou tesouraria do protocolo. Cada token padrão também envia 10% da oferta ao seu pool comunitário no lançamento."
+      },
+      {
+        "title": "Quota de referência opcional",
+        "body": "No lançamento, o criador pode optar por um programa de referência do emissor: por defeito 5% da oferta (máximo 10%) pode ser reservado para recompensas de convite, com bounty de convite por defeito de 5% da compra do convidado. Desligado até o criador optar."
+      }
+    ],
+    "curveCaption": "Preço ao longo da bonding curve",
+    "curveStartLabel": "Primeiro trade",
+    "curveEndLabel": "Esgotado",
+    "curveNote": "Forma ilustrativa da curva — é assim que o mecanismo funciona, não uma previsão de preço."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Chegue cedo e traga a sua gente",
+    "lead": "Números de fundador ainda abertos. Dois níveis de referência, e só contam pessoas ativas.",
+    "bullets": [
+      "Dois níveis: ganha com os seus convidados e uma parte menor dos deles.",
+      "Contas inativas não ganham nada — cem contas falsas ganham cem vezes zero.",
+      "Recompensas com vesting: 10% líquido de imediato, o resto em fatias semanais em 52 semanas."
+    ],
+    "cta": "Tornar-se fundador",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Respostas diretas",
+    "items": [
+      {
+        "q": "Isto é mainnet?",
+        "a": "PEOPLE Mainnet Beta lança a 1 de dezembro de 2026. É a mainnet real PEOPLE em fase inicial, com limites até mais pessoas serem verificadas. Paga em USDC ou USDT na Base e o PPL é creditado na PEOPLE Mainnet Beta."
+      },
+      {
+        "q": "Preciso de saber programar?",
+        "a": "Não. Criar carteira, lançar token, mint de cartões de clube e votar são botões na interface. Os contratos vêm de modelos OpenZeppelin auditados."
+      },
+      {
+        "q": "Para onde vão as taxas?",
+        "a": "30% para validadores, 25% para o pool comunitário, 20% para tesouraria, 10% para liquidez, 15% para o Growth Pool e 0% queimado."
+      },
+      {
+        "q": "Vão imprimir moedas novas?",
+        "a": "Não nos anos 1–4 — o génesis da cadeia fixa a inflação a zero. A partir do ano 5, no máximo 2% por ano e só por voto da comunidade."
+      },
+      {
+        "q": "É promessa de rendimento?",
+        "a": "Não. Recompensas não são fixas: sem atividade, sem recompensas. Preços de tokens podem subir, descer ou ir a zero. É participação numa rede, não um investimento."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Essa é a ideia toda",
+    "body": "Crie uma carteira grátis e experimente, ou leia os detalhes na documentação primeiro.",
+    "ctaWallet": "Criar carteira grátis",
+    "ctaCreate": "Lançar um token",
+    "ctaDocs": "Ler a documentação"
+  }
+}

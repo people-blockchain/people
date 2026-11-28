@@ -323,6 +323,8 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
   // Russian founding copy is Cyrillic; other non-English locales stay in their own script.
   const langs = ["en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar", "ru"];
   const noCyrillic = new Set(["en", "es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"]);
+  const vaultEnglish = "Founding 1,000 Vault";
+  const localizedVaultLangs = ["es", "pt", "fr", "de", "it", "tr", "vi", "id", "zh", "ar"];
   for (const lang of langs) {
     const c = foundingCopyMod.foundingCopy(lang);
     assert.ok(c.stickyBar.messageFull.includes("PEOPLE Mainnet Beta"), `${lang} stickyBar Mainnet Beta`);
@@ -341,6 +343,13 @@ test("/partner single 7% USDC rule and Founding 1,000 localization / analytics c
       assert.notEqual(c.progress.verifyShort, "Verify", `${lang} verifyShort`);
       assert.notEqual(c.progress.detailsToggle, "Details", `${lang} detailsToggle`);
       assert.notEqual(c.stickyBar.ctaShort, "Claim Seat", `${lang} ctaShort`);
+    }
+    if (localizedVaultLangs.includes(lang)) {
+      assert.ok(!c.stickyBar.badge.includes(vaultEnglish), `${lang} stickyBar.badge must not be English vault title`);
+      assert.ok(
+        !(c.stickyBar.messageMobile ?? "").includes(vaultEnglish),
+        `${lang} stickyBar.messageMobile must not contain English vault title`,
+      );
     }
   }
 

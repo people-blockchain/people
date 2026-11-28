@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "People nasıl çalışır, 1 dakikada.",
+    "lead": "Bir cüzdan, insan olduğunuzu gösteren tek bir kontrol — ardından başlatın, mintleyin, takas edin veya oy verin. Kod veya kripto geçmişi gerekmez.",
+    "betaBadge": "PEOPLE Mainnet Beta 1 Aralık 2026'da başlıyor.",
+    "saleNote": "PEOPLE Mainnet Beta 1 Aralık 2026'da başlıyor — erken aşamadaki gerçek bir mainnet; daha fazla kişi doğrulanana kadar sınırlar var. Base üzerinde USDC veya USDT ile ödeyin; PPL PEOPLE Mainnet Beta'ya tanımlanır."
+  },
+  "steps": {
+    "eyebrow": "Üç adım",
+    "title": "Sıradan bir kişinin gerçekte yaptığı",
+    "lead": "Tüm onboarding budur. Bu sayfadaki geri kalanı meraklılar için ayrıntı.",
+    "items": [
+      {
+        "title": "30 saniyede cüzdan edinin",
+        "body": "Siteyi telefonda veya tarayıcıda açın ve bir cüzdan oluşturun — gözetimsiz 12 kelimelik ifade (anahtarlar cihazınızda kalır).",
+        "note": "Uygulama mağazası yok, seed phrase ödevi yok.",
+        "bodySocial": "Siteyi telefonda veya tarayıcıda açın ve bir cüzdan oluşturun — gözetimsiz 12 kelimelik ifade (anahtarlar cihazınızda kalır) veya şifreli, bulutla senkronize anahtarla daha hızlı Google girişi.",
+        "bodyCloud": "Siteyi telefonda veya tarayıcıda açın ve bir cüzdan oluşturun — gözetimsiz 12 kelimelik ifade (anahtarlar cihazınızda kalır) veya şifreli, bulutla senkronize anahtarla daha hızlı e-posta girişi."
+      },
+      {
+        "title": "İnsan olduğunuzu kanıtlayın",
+        "body": "Telegram telefon numarası veya Human Passport ile bir kez doğrulayın. Bir kişi, bir hesap — botların topluluk havuzunu farm etmesini bu engeller.",
+        "note": "Biyometri gerekmez."
+      },
+      {
+        "title": "Başlatın, mintleyin, takas edin veya oy verin",
+        "body": "Topluluğunuz için token başlatın, kulüp kartları mintleyin, token/PPL havuzunda işlem yapın veya topluluk havuzunun nereye gideceğine oy verin.",
+        "note": "Her işlem normal bir düğme, komut satırı değil."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Arz",
+    "title": "Bir milyar PPL, sürpriz yok",
+    "lead": "Arz genesis'te sabitlendi. Arkanızdan takvimle yeni mint yok.",
+    "totalLabel": "Toplam arz, sabit",
+    "unit": "PPL",
+    "noNewCoins": "Yıl 1–4: %0 yeni coin. Enflasyon parametreleri zincir genesis'inde sıfıra sabitlendi.",
+    "year5": "5. yıldan itibaren: yılda en fazla %2, ve yalnızca topluluk oy verirse.",
+    "donutLabel": "Genesis tahsisi",
+    "bucketLabels": {
+      "community": "Topluluk ve ödüller",
+      "validators": "Validatorler",
+      "team": "Ekip",
+      "treasury": "Hazine",
+      "sale": "Topluluk satışı",
+      "liquidity": "Likidite"
+    },
+    "donutNote": "Bir milyar PPL'nin %100'üne eşit. Topluluk kovası altı yılda doğrusal açılır; hazine ve kilitli likidite dolaşımda değildir."
+  },
+  "validators": {
+    "eyebrow": "Validatorler",
+    "title": "Ağı kim çalıştırır, kim öder",
+    "lead": "Validatorler zinciri ayakta tutar. Kendi havuzlarından ve her ücretten bir payla ödenirler.",
+    "poolLabel": "Validator havuzu",
+    "unit": "PPL",
+    "shareLabel": "artı her ağ ücretinin %30'u",
+    "yearsLabel": "Yıllık serbest bırakılan PPL",
+    "yearLabel": "Yıl {{n}}",
+    "pctLabel": "toplam arzın {{pct}}%",
+    "scheduleNote": "Yıl 1–4, 200M havuzdan sırasıyla 60M, 50M, 50M ve 40M PPL serbest bırakır. Bunun için yeni mint yok.",
+    "feeNote": "Takvimin üstüne validatorler her ağ ücretinin %30'unu alır, her blokta paylaşılır."
+  },
+  "fees": {
+    "eyebrow": "Ücretler",
+    "title": "Her ücret nereye gider",
+    "lead": "Her ağ ücreti PPL ile ödenir ve her seferinde aynı şekilde bölünür.",
+    "totalLabel": "Tek ücret",
+    "totalValue": "100%",
+    "note": "Yakım yok: burn satırı %0. Kesirli ücretler aynı bölünmeyi izler."
+  },
+  "launch": {
+    "eyebrow": "Token başlatma",
+    "title": "Başlattığınızda ne olur",
+    "lead": "Üç kural sözleşmeler tarafından uygulanır, bizim nezaketimizle değil.",
+    "points": [
+      {
+        "title": "Eğri fiyatı ilk işlemden itibaren belirler",
+        "body": "Özel tur veya önceden belirlenmiş fiyat yok. Token bir bonding curve'de başlar; ilk alım herkesin gördüğü fiyatı belirler."
+      },
+      {
+        "title": "%10 o tokenin topluluk havuzuna — garanti",
+        "body": "Başlangıçta yaratıcı, eğriden satılmayan kalanı (~%17'ye kadar) yakmak yerine havuza gönderebilir — toplamda %27'ye kadar. Ağ ücretleriyle asla karışmaz."
+      },
+      {
+        "title": "Yaratıcı payı 180 günde vest olur",
+        "body": "Yaratıcı tahsisinin %10'u oluşturulduğunda likit, kalan %90'ı 180 günde doğrusal açılır. İlk gün dump yok."
+      },
+      {
+        "title": "Eğri artıkları",
+        "body": "Eğri AMM'ye taşındıktan sonra — veya 180 günde tükenmeden finalize edilirse — kalan ve satılmayan tokenler yaratıcının başlangıç tercihini izler: varsayılan yakım (önerilen) veya o tokenin topluluk havuzuna. Asla yaratıcıya veya protokol hazinesine değil. Her standart token başlangıçta arzın %10'unu da kendi topluluk havuzuna gönderir."
+      },
+      {
+        "title": "İsteğe bağlı referans payı",
+        "body": "Başlangıçta yaratıcı bir ihraççı referans programına katılabilir: varsayılan olarak arzın %5'i (en fazla %10) davet ödülleri için ayrılabilir; varsayılan davet ödülü davetlinin alımının %5'i. Yaratıcı katılana kadar kapalı."
+      }
+    ],
+    "curveCaption": "Bonding curve boyunca fiyat",
+    "curveStartLabel": "İlk işlem",
+    "curveEndLabel": "Tükendi",
+    "curveNote": "Eğrinin örnek şekli — mekanizmanın işleyişi budur, fiyat tahmini değil."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Erken gelin, insanlarınızı getirin",
+    "lead": "Kurucu numaraları hâlâ açık. İki referans seviyesi; yalnızca aktif kişiler sayılır.",
+    "bullets": [
+      "İki seviye: davetlilerinizden ve onlarınkilerden daha küçük bir payla kazanırsınız.",
+      "Pasif hesaplar kazanmaz — yüz sahte hesap yüz kez sıfır kazanır.",
+      "Ödüller vest olur: %10 anında likit, kalanı 52 haftada haftalık dilimlerle."
+    ],
+    "cta": "Kurucu olun",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Net yanıtlar",
+    "items": [
+      {
+        "q": "Bu mainnet mi?",
+        "a": "PEOPLE Mainnet Beta 1 Aralık 2026'da başlıyor. Daha fazla kişi doğrulanana kadar sınırları olan erken aşamadaki gerçek PEOPLE mainnet'idir. Base üzerinde USDC veya USDT ile ödersiniz; PPL PEOPLE Mainnet Beta'ya tanımlanır."
+      },
+      {
+        "q": "Kod bilmem gerekir mi?",
+        "a": "Hayır. Cüzdan oluşturma, token başlatma, kulüp kartı mintleme ve oy verme arayüzde düğmelerdir. Sözleşmeler denetlenmiş OpenZeppelin şablonlarından gelir."
+      },
+      {
+        "q": "Ücretler nereye gider?",
+        "a": "%30 validatorlere, %25 topluluk havuzuna, %20 hazinede, %10 likiditeye, %15 Growth Pool'a ve %0 yakım."
+      },
+      {
+        "q": "Yeni coin basılacak mı?",
+        "a": "Yıl 1–4'te hayır — zincir genesis'i enflasyonu sıfıra sabitler. 5. yıldan itibaren yılda en fazla %2 ve yalnızca topluluk oyuyla."
+      },
+      {
+        "q": "Bu gelir vaadi mi?",
+        "a": "Hayır. Ödüller sabit değil: aktivite yoksa ödül yok. Token fiyatları yükselir, düşer veya sıfıra gider. Bu bir ağa katılım, yatırım değil."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Tüm fikir bu",
+    "body": "Ücretsiz cüzdan oluşturup deneyin veya önce dokümantasyondaki ayrıntıları okuyun.",
+    "ctaWallet": "Ücretsiz cüzdan oluştur",
+    "ctaCreate": "Token başlat",
+    "ctaDocs": "Dokümantasyonu oku"
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · الموسم 1",
+  "heroTitle": "كن من بين أول مليون شخص يبنون بلوكشين للجميع.",
+  "heroSub": "بدون كود وبدون خبرة في العملات المشفرة. احصل على رقم المؤسس، ادعُ الأصدقاء واكسب نقاطًا عندما يطلقون tokens وNFT وبطاقات النادي على testnet PEOPLE.",
+  "ctaClaim": "المطالبة برقم المؤسس",
+  "ctaHow": "كيف يعمل",
+  "disclaimer": "أولي. قد تتغير النقاط والأسعار وميزانية الموسم قبل PEOPLE Mainnet Beta. ليس وعدًا بدخل.",
+  "stripVerified": "مؤسسون موثّقون",
+  "stripGoal": "الهدف",
+  "cardFounder": "مؤسس",
+  "cardNumberPlaceholder": "يُكشف عند 1,000 محفظة",
+  "cardNetwork": "testnet PEOPLE",
+  "cardFlipHint": "انقر للقلب",
+  "cardBackTitle": "بطاقة المؤسس",
+  "cardBackLines": [
+    "شخص موثّق واحد، رقم واحد.",
+    "مستواك يتبع وقت التوثيق؛ يُسحب رقمك ضمن المستوى.",
+    "قابلة للمشاركة — يحصل أصدقاؤك على رقمهم."
+  ],
+  "cardCountry": "البلد",
+  "cardRank": "رتبة الدخول المبكر",
+  "cardPoints": "النقاط",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "مجمع إحالة الموسم 1",
+  "poolNoNewCoins": "يُدفع من مجمع Million Founders. لا عملات جديدة.",
+  "poolSpent": "المُنفَق",
+  "poolRemaining": "المتبقي",
+  "poolLiveHint": "يُعرض الرصيد المُنفَق/المتبقي مباشرة للمؤسسين المسجّلين.",
+  "poolEmpty": "مجمع إحالة الموسم 1 فارغ. لا تُسجَّل نقاط إحالة جديدة.",
+  "howEyebrow": "كيف يعمل",
+  "howTitle": "ثلاث خطوات لتصبح مؤسسًا نشطًا",
+  "steps": [
+    {
+      "title": "التوثيق",
+      "body": "شارك رقم هاتفك مرة واحدة في بوت Telegram لدينا، أو وثّق عبر Human Passport. مجانًا."
+    },
+    {
+      "title": "إنشاء محفظة",
+      "body": "أنشئ محفظة أو اربطها واربط محفظة PEOPLE ببضع نقرات.",
+      "bodySocial": "سجّل الدخول بـ Google أو البريد واربط محفظة PEOPLE ببضع نقرات.",
+      "bodyCloud": "سجّل الدخول بالبريد واربط محفظة PEOPLE ببضع نقرات."
+    },
+    {
+      "title": "إجراء واحد على testnet",
+      "body": "swap أو mint لـ NFT أو إطلاق token على testnet PEOPLE."
+    }
+  ],
+  "inviteLine": "ادعُ الأصدقاء: تكسب عندما ينفّذون الخطوة 3.",
+  "levelsEyebrow": "مستويان",
+  "levelsTitle": "كيف تتدفق نقاط الدعوة",
+  "levelYou": "أنت",
+  "levelFriend": "صديقك",
+  "levelFriendsFriends": "أصدقاء صديقك",
+  "levelL1": "{{pts}} نقطة لكل صديق نشط",
+  "levelL2": "+{{pct}}% من L1 لصديقك — لا يُؤخذ منه",
+  "levelsTagline": "مستويان فقط. أشخاص حقيقيون ونشطون فقط.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — أصوات الحوكمة",
+  "gppl": [
+    {
+      "title": "رمز حوكمة PEOPLE",
+      "body": "gPPL هو رمز حوكمة PEOPLE. يصوّت الحاملون على مقترحات DAO."
+    },
+    {
+      "title": "1,000,000 gPPL بحوزة DAO",
+      "body": "كل العرض في timelock الـ DAO — عقد on-chain وليس شخصًا."
+    },
+    {
+      "title": "حصة متساوية لكل مؤسس موثّق",
+      "body": "كل مؤسس موثّق يحصل على حصة gPPL متساوية. التوزيع على دفعات من الخزينة عبر multisig 2 من 3."
+    },
+    {
+      "title": "Multisig الآن، تصويت DAO لاحقًا",
+      "body": "حتى يتوفر عدد كافٍ من المؤسسين الموثّقين، يقرر multisig 2 من 3 الدفعات والمواعيد. بعدها تنتقل القرارات إلى تصويت DAO لحاملي gPPL."
+    }
+  ],
+  "gpplNote": "Testnet: ليس لـ gPPL سعر وليس دخلًا. يُعلن المبلغ لكل مؤسس لكل دفعة.",
+  "activeEyebrow": "من يُحسب نشطًا",
+  "activeTitle": "الثلاثة معًا وإلا لا يُحسب",
+  "activeChecklist": [
+    "موثّق (هاتف Telegram أو Human Passport)",
+    "محفظة منشأة",
+    "إجراء testnet حقيقي واحد على الأقل"
+  ],
+  "activeActionsHint": "إجراءات حقيقية: swap وstake ومجمع سيولة وmint NFT وإطلاق token وتصويت حوكمة. الإعجابات والمتابعات لا تُحسب.",
+  "signupZero": "التسجيل وحده = 0",
+  "bonusTitle": "نقاط إضافية من أصدقائك النشطين",
+  "bonusStay": "+{{pts}} · ما زال نشطًا بعد {{days}} يومًا",
+  "buildEyebrow": "لا حاجة للكود",
+  "buildTitle": "ما يمكن لأصدقائك بناؤه",
+  "build": [
+    {
+      "title": "إطلاق token",
+      "body": "الاسم والرمز والعرض — نموذج قصير بلا كود. يعمل على testnet.",
+      "href": "/create/token",
+      "cta": "إطلاق token"
+    },
+    {
+      "title": "Mint بطاقات النادي وNFT",
+      "body": "بطاقات عضوية لنادي أو مقهى أو مجتمع — كـ NFT أو تصاريح ولاء.",
+      "href": "/create/nft",
+      "cta": "Mint NFT"
+    },
+    {
+      "title": "جمع التمويل",
+      "body": "اجمع الدعم لمشروع بقوالب عقود مراجعة — escrow وvesting وتصويت مرجّح بالرمز.",
+      "href": "/create/contract",
+      "cta": "فتح القوالب"
+    }
+  ],
+  "buildTestnet": "فتح testnet PEOPLE",
+  "ranksEyebrow": "الدخول المبكر",
+  "ranksTitle": "المؤسسون الأسبق يحصلون على مضاعف أكبر",
+  "ranksHint": "ينطبق على نقاط نشاط حامل رقم المؤسس. أولي.",
+  "ranksRange": "مؤسسون {{from}}–{{to}}",
+  "fairEyebrow": "عادل بالتصميم",
+  "fairTitle": "مبني لمنع الاستغلال",
+  "fair": [
+    {
+      "title": "{{instant}}% الآن + {{rest}}% أسبوعيًا",
+      "body": "الباقي يُفتح على شرائح أسبوعية متساوية خلال {{weeks}} أسبوعًا."
+    },
+    {
+      "title": "حد أقصى {{max}} مدعو نشط",
+      "body": "لكل شخص في الموسم. المزيد بموافقة السفير فقط."
+    },
+    {
+      "title": "0% حرق، الرسوم مُشاركة",
+      "body": "تُقسَّم رسوم الشبكة وفق تقسيم الرسوم المنشور. الحرق 0%."
+    },
+    {
+      "title": "لا عملات جديدة",
+      "body": "يُدفع من مجمع قائم. عند نفاد مجمع الموسم يتوقف البرنامج."
+    }
+  ],
+  "countriesEyebrow": "حول العالم",
+  "countriesTitle": "المؤسسون حسب البلد",
+  "countriesHint": "البلد المُصرّح به عند التسجيل.",
+  "countriesEmpty": "كن أول مؤسس من بلدك",
+  "countriesEmptyHint": "اطلب رقمك وضع بلدك على الخريطة.",
+  "countriesCount": "{{count}} مؤسس",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "أسئلة شائعة",
+  "faq": [
+    {
+      "q": "هل هذا وعد بدخل؟",
+      "a": "لا. كل ما هنا أولي: قد تتغير النقاط ومعدل PPL لكل نقطة وميزانية الموسم قبل PEOPLE Mainnet Beta. النقاط سجل نشاط حقيقي على testnet وليست ضمان دفع."
+    },
+    {
+      "q": "لماذا مستويان فقط؟",
+      "a": "لتذهب المكافأة لمن يجلب أصدقاء حقيقيين ونشطين — وليس لسلاسل عميقة. تحصل على نقاط لأصدقائك و+30% مما يكسبه أصدقاؤك لمدعويهم. لا يُؤخذ من صديقك."
+    },
+    {
+      "q": "من يُحسب نشطًا؟",
+      "a": "من وثّق (هاتف Telegram أو Human Passport) ولديه محفظة ونفّذ إجراء testnet حقيقيًا واحدًا على الأقل: swap أو stake أو pool أو NFT أو إطلاق token أو تصويت حوكمة. التسجيل وحده لا يكسب شيئًا."
+    },
+    {
+      "q": "متى أستطيع البيع؟",
+      "a": "ليس على testnet. بعد تشغيل توزيع mainnet، 10% من PPL المقيد سائل فورًا و90% يُفتح أسبوعيًا على 52 أسبوعًا. خلال أول 30 يومًا على mainnet تُطبَّق رسوم بيع مبكر تنخفض من 10% إلى 0%."
+    },
+    {
+      "q": "ماذا إذا نفد المجمع؟",
+      "a": "يتوقف البرنامج. يُقصَّر آخر إيداع على المتبقي ولا يُسكّ عمل جديد للاستمرار."
+    },
+    {
+      "q": "هل أحتاج خبرة في العملات المشفرة؟",
+      "a": "لا. تسجّل الدخول وتربط محفظة وتُوثّق مرة. إطلاق token أو mint NFT نموذج وليس كودًا."
+    }
+  ],
+  "rulesDetails": "قواعد البرنامج الكاملة (أولية)",
+  "finalTitle": "رقمك في انتظارك.",
+  "finalSub": "اطلبه وشاركه مع من تريد البناء معهم.",
+  "shareTitle": "مشاركة البرنامج",
+  "shareText": "أنضم إلى Million Founders على PEOPLE Blockchain — بلوكشين للجميع بلا كود.",
+  "shareMine": "أنا مؤسس #{{n}} على PEOPLE Blockchain. احصل على رقم المؤسس:",
+  "shareCopy": "نسخ",
+  "shareCopied": "تم النسخ",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "المطالبة",
+  "claimTitle": "احصل على رقم المؤسس",
+  "claimSignInLead": "أنشئ محفظة أو اربطها واربطها واختر بلدك — الرقم التالي لك.",
+  "personalEyebrow": "مساحة المؤسس",
+  "personalTitle": "مرحبًا، مؤسس #{{n}}",
+  "downloadCard": "تنزيل البطاقة (PNG)",
+  "shareCard": "مشاركة البطاقة",
+  "activeOfMax": "{{active}}/{{max}} نشط",
+  "activeOfMaxHint": "المدعوون النشطون هذا الموسم",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "الإجمالي",
+  "tickVerified": "موثّق",
+  "tickWallet": "محفظة",
+  "tickAction": "إجراء",
+  "vestingTimeline": "جدول الفتح",
+  "vestingWeek": "أسبوع {{w}}",
+  "vestingNow": "الآن",
+  "verifyTitle": "التوثيق",
+  "verifyHumanPassport": "التوثيق عبر Human Passport",
+  "verifyHumanPassportBusy": "جارٍ التحقق من Human Passport…",
+  "verifyHumanPassportOk": "تم توثيق Human Passport.",
+  "verifyHumanPassportLow": "درجة Human Passport دون العتبة المطلوبة.",
+  "verifyHumanPassportError": "فشل توثيق Human Passport. حاول لاحقًا.",
+  "verifyHumanPassportOff": "Human Passport غير مُعدّ في هذه البيئة بعد.",
+  "claimSignInLeadSocial": "سجّل الدخول بـ Google أو البريد واربط محفظة واختر بلدك — الرقم التالي لك.",
+  "claimSignInLeadCloud": "سجّل الدخول بالبريد واربط محفظة واختر بلدك — الرقم التالي لك."
+}

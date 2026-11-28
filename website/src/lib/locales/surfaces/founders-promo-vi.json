@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · Mùa 1",
+  "heroTitle": "Hãy là một trong một triệu người đầu tiên xây blockchain cho mọi người.",
+  "heroSub": "Không cần code, không cần kiến thức crypto. Nhận số founder, mời bạn bè và kiếm điểm khi họ phát hành token, NFT và thẻ câu lạc bộ trên testnet PEOPLE.",
+  "ctaClaim": "Nhận số founder của tôi",
+  "ctaHow": "Cách hoạt động",
+  "disclaimer": "Sơ bộ. Điểm, tỷ lệ và ngân sách mùa có thể thay đổi trước PEOPLE Mainnet Beta. Không phải lời hứa thu nhập.",
+  "stripVerified": "founder đã xác minh",
+  "stripGoal": "mục tiêu",
+  "cardFounder": "Founder",
+  "cardNumberPlaceholder": "Công bố khi đủ 1.000 ví",
+  "cardNetwork": "testnet PEOPLE",
+  "cardFlipHint": "Chạm để lật",
+  "cardBackTitle": "Thẻ founder của bạn",
+  "cardBackLines": [
+    "Một người đã xác minh, một số.",
+    "Hạng của bạn theo lúc bạn xác minh; số của bạn được bốc trong hạng.",
+    "Có thể chia sẻ — bạn bè có số riêng."
+  ],
+  "cardCountry": "Quốc gia",
+  "cardRank": "Xếp hạng vào sớm",
+  "cardPoints": "Điểm",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "Pool giới thiệu mùa 1",
+  "poolNoNewCoins": "Trả từ pool Million Founders. Không có coin mới.",
+  "poolSpent": "Đã chi",
+  "poolRemaining": "Còn lại",
+  "poolLiveHint": "Số dư chi/còn trực tiếp được hiển thị cho founder đã đăng ký.",
+  "poolEmpty": "Pool giới thiệu Mùa 1 đã hết. Điểm giới thiệu mới không được ghi nhận.",
+  "howEyebrow": "Cách hoạt động",
+  "howTitle": "Ba bước để trở thành founder hoạt động",
+  "steps": [
+    {
+      "title": "Xác minh",
+      "body": "Chia sẻ số điện thoại một lần trong bot Telegram của chúng tôi, hoặc xác minh bằng Human Passport. Miễn phí."
+    },
+    {
+      "title": "Tạo ví",
+      "body": "Tạo hoặc kết nối ví và liên kết ví PEOPLE trong vài chạm.",
+      "bodySocial": "Đăng nhập bằng Google hoặc email và liên kết ví PEOPLE trong vài chạm.",
+      "bodyCloud": "Đăng nhập bằng email và liên kết ví PEOPLE trong vài chạm."
+    },
+    {
+      "title": "Làm một hành động testnet",
+      "body": "Một swap, mint NFT hoặc phát hành token trên testnet PEOPLE."
+    }
+  ],
+  "inviteLine": "Mời bạn: bạn kiếm được khi HỌ làm bước 3.",
+  "levelsEyebrow": "Hai cấp",
+  "levelsTitle": "Điểm mời chảy thế nào",
+  "levelYou": "Bạn",
+  "levelFriend": "Bạn của bạn",
+  "levelFriendsFriends": "Bạn của bạn bè bạn",
+  "levelL1": "{{pts}} điểm mỗi bạn hoạt động",
+  "levelL2": "+{{pct}}% L1 của bạn bạn — không lấy từ họ",
+  "levelsTagline": "Chỉ 2 cấp. Chỉ người thật, hoạt động thật.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — phiếu quản trị",
+  "gppl": [
+    {
+      "title": "Token quản trị PEOPLE",
+      "body": "gPPL là token quản trị PEOPLE. Người nắm giữ bỏ phiếu đề xuất DAO."
+    },
+    {
+      "title": "1.000.000 gPPL, do DAO nắm giữ",
+      "body": "Toàn bộ nguồn cung nằm trong timelock DAO — hợp đồng on-chain, không phải một người."
+    },
+    {
+      "title": "Phần bằng nhau mỗi founder đã xác minh",
+      "body": "Mỗi founder đã xác minh nhận phần gPPL bằng nhau. Phân phối theo lô từ kho bạc multisig 2/3."
+    },
+    {
+      "title": "Multisig trước, bỏ phiếu DAO sau",
+      "body": "Cho đến khi đủ founder xác minh, multisig 2/3 quyết định lô và thời gian. Sau đó quyết định chuyển sang bỏ phiếu DAO của người nắm gPPL."
+    }
+  ],
+  "gpplNote": "Testnet: gPPL không có giá và không phải thu nhập. Số tiền mỗi founder được công bố theo lô.",
+  "activeEyebrow": "Ai được tính là hoạt động",
+  "activeTitle": "Đủ cả ba, không thì không tính",
+  "activeChecklist": [
+    "Đã xác minh (điện thoại Telegram hoặc Human Passport)",
+    "Đã tạo ví",
+    "Ít nhất 1 hành động testnet thật"
+  ],
+  "activeActionsHint": "Hành động thật: swap, stake, pool thanh khoản, mint NFT, phát hành token, bỏ phiếu quản trị. Like và follow không tính.",
+  "signupZero": "Chỉ đăng ký = 0",
+  "bonusTitle": "Điểm thưởng từ bạn bè hoạt động",
+  "bonusStay": "+{{pts}} · vẫn hoạt động sau {{days}} ngày",
+  "buildEyebrow": "Không cần code",
+  "buildTitle": "Bạn bè có thể xây gì",
+  "build": [
+    {
+      "title": "Phát hành token",
+      "body": "Tên, ticker, nguồn cung — form ngắn, không code. Lên testnet ngay.",
+      "href": "/create/token",
+      "cta": "Phát hành token"
+    },
+    {
+      "title": "Mint thẻ câu lạc bộ và NFT",
+      "body": "Thẻ thành viên cho câu lạc bộ, quán cà phê hoặc cộng đồng — dạng NFT hoặc thẻ trung thành.",
+      "href": "/create/nft",
+      "cta": "Mint NFT"
+    },
+    {
+      "title": "Gọi vốn",
+      "body": "Thu hỗ trợ cho dự án với mẫu hợp đồng đã rà soát — escrow, vesting, bỏ phiếu theo trọng số token.",
+      "href": "/create/contract",
+      "cta": "Mở mẫu"
+    }
+  ],
+  "buildTestnet": "Mở testnet PEOPLE",
+  "ranksEyebrow": "Vào sớm",
+  "ranksTitle": "Founder vào sớm hơn có hệ số lớn hơn",
+  "ranksHint": "Áp dụng cho điểm hoạt động của chủ số founder. Sơ bộ.",
+  "ranksRange": "Founder {{from}}–{{to}}",
+  "fairEyebrow": "Công bằng theo thiết kế",
+  "fairTitle": "Xây để không ai farm được",
+  "fair": [
+    {
+      "title": "{{instant}}% ngay + {{rest}}% hàng tuần",
+      "body": "Phần còn lại mở khóa theo lát hàng tuần bằng nhau trong {{weeks}} tuần."
+    },
+    {
+      "title": "Tối đa {{max}} người được mời hoạt động",
+      "body": "Mỗi người mỗi mùa. Thêm chỉ khi đại sứ duyệt."
+    },
+    {
+      "title": "0% đốt, phí chia sẻ",
+      "body": "Phí mạng được chia theo tỷ lệ phí đã công bố. Đốt là 0%."
+    },
+    {
+      "title": "Không coin mới",
+      "body": "Trả từ pool hiện có. Khi pool mùa hết, chương trình dừng."
+    }
+  ],
+  "countriesEyebrow": "Khắp thế giới",
+  "countriesTitle": "Founder theo quốc gia",
+  "countriesHint": "Quốc gia tự khai khi đăng ký.",
+  "countriesEmpty": "Hãy là founder đầu tiên của quốc gia bạn",
+  "countriesEmptyHint": "Nhận số và đưa quốc gia lên bản đồ.",
+  "countriesCount": "{{count}} founder",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Câu hỏi mọi người hay hỏi",
+  "faq": [
+    {
+      "q": "Đây có phải lời hứa thu nhập?",
+      "a": "Không. Mọi thứ ở đây là sơ bộ: điểm, tỷ lệ PPL mỗi điểm và ngân sách mùa có thể thay đổi trước PEOPLE Mainnet Beta. Điểm là ghi nhận hoạt động thật trên testnet, không phải cam kết chi trả."
+    },
+    {
+      "q": "Tại sao chỉ 2 cấp?",
+      "a": "Để phần thưởng đến người mang bạn thật, hoạt động thật — không phải chuỗi sâu. Bạn nhận điểm từ bạn bè và +30% những gì bạn bè kiếm từ người của họ. Không lấy từ bạn của bạn."
+    },
+    {
+      "q": "Ai được tính hoạt động?",
+      "a": "Người đã xác minh (điện thoại Telegram hoặc Human Passport), có ví và đã làm ít nhất một hành động testnet thật: swap, stake, pool, NFT, phát hành token hoặc bỏ phiếu quản trị. Chỉ đăng ký không kiếm gì."
+    },
+    {
+      "q": "Khi nào tôi bán được?",
+      "a": "Không trên testnet. Sau khi phân phối mainnet hoạt động, 10% PPL được ghi có thanh khoản ngay và 90% mở khóa hàng tuần trong 52 tuần. Trong 30 ngày mainnet đầu có phí bán sớm, giảm từ 10% xuống 0%."
+    },
+    {
+      "q": "Nếu pool hết thì sao?",
+      "a": "Chương trình dừng. Khoản ghi có cuối cùng cắt theo phần còn lại và không mint thêm để tiếp tục."
+    },
+    {
+      "q": "Tôi có cần kiến thức crypto?",
+      "a": "Không. Bạn đăng nhập, liên kết ví và xác minh một lần. Phát hành token hoặc mint NFT là form, không phải code."
+    }
+  ],
+  "rulesDetails": "Quy tắc chương trình đầy đủ (sơ bộ)",
+  "finalTitle": "Số của bạn đang chờ.",
+  "finalSub": "Nhận nó và chia sẻ với những người bạn muốn cùng xây.",
+  "shareTitle": "Chia sẻ chương trình",
+  "shareText": "Tôi tham gia Million Founders trên PEOPLE Blockchain — blockchain cho mọi người, không cần code.",
+  "shareMine": "Tôi là Founder #{{n}} trên PEOPLE Blockchain. Nhận số founder của bạn:",
+  "shareCopy": "Sao chép",
+  "shareCopied": "Đã sao chép",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "Nhận",
+  "claimTitle": "Nhận số founder",
+  "claimSignInLead": "Tạo hoặc kết nối ví, liên kết, chọn quốc gia — số tiếp theo là của bạn.",
+  "personalEyebrow": "Không gian founder của bạn",
+  "personalTitle": "Chào mừng, Founder #{{n}}",
+  "downloadCard": "Tải thẻ (PNG)",
+  "shareCard": "Chia sẻ thẻ",
+  "activeOfMax": "{{active}}/{{max}} hoạt động",
+  "activeOfMaxHint": "Người được mời hoạt động mùa này",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "Tổng",
+  "tickVerified": "Đã xác minh",
+  "tickWallet": "Ví",
+  "tickAction": "Hành động",
+  "vestingTimeline": "Lịch mở khóa",
+  "vestingWeek": "tuần {{w}}",
+  "vestingNow": "bây giờ",
+  "verifyTitle": "Xác minh của bạn",
+  "verifyHumanPassport": "Xác minh bằng Human Passport",
+  "verifyHumanPassportBusy": "Đang kiểm tra Human Passport…",
+  "verifyHumanPassportOk": "Human Passport đã xác minh.",
+  "verifyHumanPassportLow": "Điểm Human Passport của bạn dưới ngưỡng yêu cầu.",
+  "verifyHumanPassportError": "Xác minh Human Passport thất bại. Thử lại sau.",
+  "verifyHumanPassportOff": "Human Passport chưa được cấu hình trong môi trường này.",
+  "claimSignInLeadSocial": "Đăng nhập bằng Google hoặc email, liên kết ví, chọn quốc gia — số tiếp theo là của bạn.",
+  "claimSignInLeadCloud": "Đăng nhập bằng email, liên kết ví, chọn quốc gia — số tiếp theo là của bạn."
+}

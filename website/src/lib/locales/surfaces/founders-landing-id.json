@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Vault 1.000 Pendiri · PEOPLE Mainnet Beta (1 Des)",
+  "heroTitle": "Vault 1.000 Pendiri",
+  "heroSub": "1.000 dompet terverifikasi pertama membuka transfer dan Bounty Draw 1.000 Pendiri. Daftar dan urutan tetap tertutup sampai dompet itu terkunci. Verifikasi di Telegram dalam 20 detik untuk memulai kursi tertunda — dompet terhubung diperlukan untuk mengunci kursi 1.000 Pendiri dan tiket Bounty Draw. Program Million Founders berlanjut setelah 1.000 pertama.",
+  "heroCta": "Verifikasi dan gabung",
+  "heroCtaHow": "Cara kerja nomor",
+  "counterLabel": "orang terverifikasi",
+  "counterGoal": "target",
+  "counterLive": "Hitungan langsung dari verifikasi Human Passport di PEOPLE.",
+  "counterStub": "Daftar dan urutan tetap tertutup sampai 1.000 dompet terverifikasi terkunci.",
+  "vaultCalloutTitle": "1.000 dompet terverifikasi pertama membuka transfer dan Bounty Draw 1.000 Pendiri",
+  "vaultCalloutBody": "Daftar dan urutan tetap tertutup sampai 1.000 dompet terverifikasi terkunci. Tidak ada hitungan pendaftaran langsung saat daftar tertutup.",
+  "disclaimer": "Detail program awal dapat berubah sebelum PEOPLE Mainnet Beta. Bukan saran keuangan. Tanpa janji pendapatan atau kenaikan harga token.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Founder NFT bernomor gratis Anda",
+  "nftBody": "Setiap orang terverifikasi yang bergabung sebelum PEOPLE Mainnet Beta menerima Founder NFT dengan nomor publik mereka. Gratis. Rekamannya ditulis ke blok genesis dan tetap di sana — tidak akan ada genesis kedua.",
+  "nftBullets": [
+    "Gratis untuk pendiri terverifikasi sebelum PEOPLE Mainnet Beta",
+    "Nomor Anda bagian dari sejarah chain sejak hari pertama",
+    "Hak dasar sama untuk setiap pendiri — nomor spesial hanya menambah keuntungan sekali pakai kecil"
+  ],
+  "tiersEyebrow": "Nomor pendiri",
+  "tiersTitle": "Tingkat menurut waktu bergabung",
+  "tiersSub": "Tingkat Anda mengikuti urutan verifikasi. Di setiap tingkat, nomor pasti Anda ditetapkan dengan undian acak publik yang adil saat tingkat ditutup — tidak ada yang memilih nomornya.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "Seratus pendiri terverifikasi pertama"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Builder awal yang membentuk jaringan"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "Gelombang inti sebelum adopsi luas"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Membesarkan komunitas dalam skala besar"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Semua setelah seratus ribu pertama"
+    }
+  ],
+  "specialEyebrow": "Nomor spesial",
+  "specialTitle": "Nomor spesial dan penutup tingkat",
+  "specialBody": "Beberapa nomor menonjol: angka bulat atau khas, dan nomor terakhir setiap tingkat. Nomor terakhir tingkat tidak diberikan ke yang bergabung terakhir — diundi adil di antara semua di tingkat itu.",
+  "specialListTitle": "Nomor mana yang spesial",
+  "specialList": [
+    "#1 hingga #9",
+    "Digit berulang, seperti 77, 888 atau 8888",
+    "Angka bulat: 1,000, 10,000, 100,000 dan 500,000",
+    "Urutan 12345",
+    "Nomor terakhir setiap tingkat"
+  ],
+  "specialFixedNote": "Daftar ini diterbitkan dan tetap sebelum pendaftaran dibuka. Tidak akan berubah setelahnya, agar semua bisa memeriksa undian adil.",
+  "specialPerksTitle": "Apa yang didapat nomor spesial — sekali",
+  "specialPerksBody": "Setiap nomor spesial mendapat bonus sekali pakai yang sama. Ini ucapan terima kasih, bukan uang: tanpa pembayaran, tanpa janji harga, tanpa diskon permanen. Hak dasar pendiri sama untuk semua.",
+  "sealEyebrow": "Upacara genesis",
+  "sealTitle": "Menyegel blok genesis",
+  "sealBody": "Saat jendela pendiri ditutup, PEOPLE akan mengadakan upacara penyegelan publik blok genesis. Nama pendiri yang memilih mosaik publik akan tampil bersama sebagai cuplikan permanen siapa yang memulai jaringan.",
+  "mosaicTitle": "Mosaik pendiri",
+  "mosaicSub": "Mosaik visual nama pendiri akan aktif saat penyegelan. Pencarian handle datang kemudian.",
+  "mosaicSearchLabel": "Cari berdasarkan handle",
+  "mosaicSearchPlaceholder": "Tersedia saat penyegelan genesis",
+  "mosaicSoon": "Saat penyegelan",
+  "mosaicSearchHint": "Pencarian handle dibuka saat blok genesis disegel.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Jawaban singkat",
+  "faq": [
+    {
+      "q": "Apakah gratis?",
+      "a": "Ya. Verifikasi dengan Human Passport di PEOPLE gratis, dan Founder NFT Anda gratis sebelum PEOPLE Mainnet Beta."
+    },
+    {
+      "q": "Bisakah saya memilih nomor pendiri?",
+      "a": "Tidak. Nomor terikat tingkat Anda dan ditetapkan dengan undian acak publik adil dalam tingkat itu. Tidak ada yang bisa memesan nomor favorit."
+    },
+    {
+      "q": "Ada pembayaran atau hadiah terjamin?",
+      "a": "Tidak. Halaman ini tentang identitas dan sejarah di blok genesis, bukan pembayaran atau imbal hasil investasi."
+    },
+    {
+      "q": "Bagaimana bergabung?",
+      "a": "Masuk di PEOPLE, selesaikan verifikasi Human Passport, dan ikuti langkah di halaman ini. Gunakan bagian Verifikasi di bawah saat siap."
+    },
+    {
+      "q": "Apa itu PEOPLE?",
+      "a": "PEOPLE adalah blockchain komunitas — dibuat oleh orang-orang, untuk komunitas. Pendiri adalah manusia terverifikasi yang bergabung sebelum PEOPLE Mainnet Beta."
+    }
+  ],
+  "finalTitle": "Jadilah pendiri",
+  "finalSub": "Verifikasi dengan Human Passport, klaim tempat Anda di Million Founders, dan simpan nomor Anda di blok genesis selamanya.",
+  "finalCta": "Mulai verifikasi",
+  "specialPerks": [
+    "Bingkai animasi dan lencana di Founder NFT Anda",
+    "Nama Anda disorot di mosaik genesis",
+    "7 hari akses awal ke fitur dan drop PEOPLE baru",
+    "Dukungan prioritas"
+  ],
+  "specialNamedBadge": "#1 dan nomor terakhir setiap tingkat juga mendapat lencana bernama mereka sendiri."
+}

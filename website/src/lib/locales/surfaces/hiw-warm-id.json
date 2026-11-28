@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "Cara kerja People, dalam 1 menit.",
+    "lead": "Dompet, satu pemeriksaan bahwa Anda manusia, lalu Anda bisa meluncurkan, mint, swap, atau memilih. Tanpa kode dan tanpa latar belakang kripto.",
+    "betaBadge": "PEOPLE Mainnet Beta diluncurkan 1 Desember 2026.",
+    "saleNote": "PEOPLE Mainnet Beta diluncurkan 1 Desember 2026 — mainnet nyata di tahap awal, dengan batas sampai lebih banyak orang terverifikasi. Bayar dengan USDC atau USDT di Base; PPL dikreditkan di PEOPLE Mainnet Beta."
+  },
+  "steps": {
+    "eyebrow": "Tiga langkah",
+    "title": "Yang benar-benar dilakukan orang biasa",
+    "lead": "Ini seluruh onboarding. Sisanya di halaman ini adalah detail untuk yang penasaran.",
+    "items": [
+      {
+        "title": "Dapatkan dompet dalam 30 detik",
+        "body": "Buka situs di ponsel atau browser dan buat dompet — frasa 12 kata non-kustodial (kunci tetap di perangkat Anda).",
+        "note": "Tanpa app store, tanpa tugas menghafal seed phrase.",
+        "bodySocial": "Buka situs di ponsel atau browser dan buat dompet — frasa 12 kata non-kustodial (kunci tetap di perangkat Anda), atau masuk Google lebih cepat dengan kunci terenkripsi yang disinkronkan ke cloud.",
+        "bodyCloud": "Buka situs di ponsel atau browser dan buat dompet — frasa 12 kata non-kustodial (kunci tetap di perangkat Anda), atau masuk email lebih cepat dengan kunci terenkripsi yang disinkronkan ke cloud."
+      },
+      {
+        "title": "Buktikan Anda manusia",
+        "body": "Verifikasi sekali dengan nomor telepon Telegram atau Human Passport. Satu orang, satu akun — itulah yang mencegah bot mem-farm pool komunitas.",
+        "note": "Tidak perlu biometrik."
+      },
+      {
+        "title": "Luncurkan, mint, swap, atau pilih",
+        "body": "Mulai token untuk komunitas Anda, mint kartu klub, perdagangan di pool token/PPL, atau pilih ke mana pool komunitas pergi.",
+        "note": "Setiap aksi adalah tombol biasa, bukan baris perintah."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Pasokan",
+    "title": "Satu miliar PPL, tanpa kejutan",
+    "lead": "Pasokan tetap sejak genesis. Tidak ada yang di-mint terjadwal di belakang Anda.",
+    "totalLabel": "Total pasokan, tetap",
+    "unit": "PPL",
+    "noNewCoins": "Tahun 1–4: 0% koin baru. Parameter inflasi dipatok nol di genesis chain.",
+    "year5": "Dari tahun 5: paling banyak 2% per tahun, dan hanya jika komunitas memilih setuju.",
+    "donutLabel": "Alokasi genesis",
+    "bucketLabels": {
+      "community": "Komunitas & hadiah",
+      "validators": "Validator",
+      "team": "Tim",
+      "treasury": "Perbendaharaan",
+      "sale": "Penjualan komunitas",
+      "liquidity": "Likuiditas"
+    },
+    "donutNote": "Berjumlah 100% dari satu miliar PPL. Bucket komunitas terbuka secara linear selama enam tahun; perbendaharaan dan likuiditas terkunci tidak beredar."
+  },
+  "validators": {
+    "eyebrow": "Validator",
+    "title": "Siapa menjalankan jaringan, siapa membayarnya",
+    "lead": "Validator menjaga chain tetap berjalan. Mereka dibayar dari pool sendiri, plus bagian dari setiap biaya.",
+    "poolLabel": "Pool validator",
+    "unit": "PPL",
+    "shareLabel": "plus 30% dari setiap biaya jaringan",
+    "yearsLabel": "PPL dirilis per tahun",
+    "yearLabel": "Tahun {{n}}",
+    "pctLabel": "{{pct}}% dari total pasokan",
+    "scheduleNote": "Tahun 1–4 melepaskan 60M, 50M, 50M, dan 40M PPL dari pool 200M. Tidak ada mint untuk membayarnya.",
+    "feeNote": "Di atas jadwal, validator menerima 30% dari setiap biaya jaringan, dibagi setiap blok."
+  },
+  "fees": {
+    "eyebrow": "Biaya",
+    "title": "Ke mana setiap biaya pergi",
+    "lead": "Setiap biaya jaringan dibayar dalam PPL dan dibagi dengan cara yang sama, setiap kali.",
+    "totalLabel": "Satu biaya",
+    "totalValue": "100%",
+    "note": "Tidak ada yang dibakar: baris burn 0%. Biaya pecahan mengikuti pembagian yang sama."
+  },
+  "launch": {
+    "eyebrow": "Meluncurkan token",
+    "title": "Apa yang terjadi saat Anda meluncurkan",
+    "lead": "Tiga aturan ditegakkan kontrak, bukan karena kami baik hati.",
+    "points": [
+      {
+        "title": "Kurva menetapkan harga dari perdagangan pertama",
+        "body": "Tidak ada putaran privat atau harga preset. Token mulai di bonding curve, jadi pembelian pertama menetapkan harga yang dilihat semua orang."
+      },
+      {
+        "title": "10% ke pool komunitas token itu — dijamin",
+        "body": "Saat peluncuran kreator juga bisa mengirim sisa curve yang tidak terjual (hingga ~17%) ke pool alih-alih membakar — total hingga 27%. Tidak pernah dicampur dengan biaya jaringan."
+      },
+      {
+        "title": "Bagian kreator vest selama 180 hari",
+        "body": "10% alokasi kreator likuid saat dibuat, 90% sisanya terbuka linear selama 180 hari. Tanpa dump di hari pertama."
+      },
+      {
+        "title": "Sisa kurva",
+        "body": "Setelah kurva bermigrasi ke AMM — atau difinalisasi setelah 180 hari tanpa habis terjual — token sisa dan tidak terjual mengikuti pilihan peluncuran kreator: default dibakar (disarankan), atau ke pool komunitas token itu. Tidak pernah ke kreator atau perbendaharaan protokol. Setiap token standar juga mengirim 10% pasokan ke pool komunitasnya saat peluncuran."
+      },
+      {
+        "title": "Bagian referal opsional",
+        "body": "Saat peluncuran, kreator dapat ikut program referal penerbit: default 5% pasokan (maksimum 10%) dapat dicadangkan untuk hadiah undangan, dengan bounty undangan default 5% dari pembelian undangan. Mati sampai kreator ikut."
+      }
+    ],
+    "curveCaption": "Harga sepanjang bonding curve",
+    "curveStartLabel": "Perdagangan pertama",
+    "curveEndLabel": "Habis terjual",
+    "curveNote": "Bentuk ilustratif kurva — ini cara mekanisme bekerja, bukan ramalan harga."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Datang awal, bawa orang-orang Anda",
+    "lead": "Nomor founder masih terbuka. Dua tingkat referal, hanya orang aktif yang dihitung.",
+    "bullets": [
+      "Dua tingkat: Anda dapat dari undangan Anda, dan bagian lebih kecil dari undangan mereka.",
+      "Akun tidak aktif tidak dapat apa pun — seratus akun palsu dapat seratus kali nol.",
+      "Hadiah vest: 10% likuid sekaligus, sisanya dalam irisan mingguan selama 52 minggu."
+    ],
+    "cta": "Jadi founder",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Jawaban langsung",
+    "items": [
+      {
+        "q": "Apakah ini mainnet?",
+        "a": "PEOPLE Mainnet Beta diluncurkan 1 Desember 2026. Ini mainnet PEOPLE nyata di tahap awal, dengan batas sampai lebih banyak orang terverifikasi. Anda membayar dengan USDC atau USDT di Base, dan PPL dikreditkan di PEOPLE Mainnet Beta."
+      },
+      {
+        "q": "Apakah saya perlu bisa coding?",
+        "a": "Tidak. Membuat dompet, meluncurkan token, mint kartu klub, dan memilih adalah tombol di antarmuka. Kontrak dari templat OpenZeppelin yang diaudit."
+      },
+      {
+        "q": "Ke mana biaya pergi?",
+        "a": "30% ke validator, 25% ke pool komunitas, 20% ke perbendaharaan, 10% ke likuiditas, 15% ke Growth Pool, dan 0% dibakar."
+      },
+      {
+        "q": "Apakah koin baru akan dicetak?",
+        "a": "Tidak di tahun 1–4 — genesis chain mematok inflasi ke nol. Dari tahun 5, paling banyak 2% per tahun dan hanya lewat pemilihan komunitas."
+      },
+      {
+        "q": "Apakah ini janji penghasilan?",
+        "a": "Tidak. Hadiah tidak tetap: tanpa aktivitas, tanpa hadiah. Harga token bisa naik, turun, atau nol. Ini partisipasi di jaringan, bukan investasi."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Itu seluruh idenya",
+    "body": "Buat dompet gratis dan coba, atau baca detail di dokumentasi dulu.",
+    "ctaWallet": "Buat dompet gratis",
+    "ctaCreate": "Luncurkan token",
+    "ctaDocs": "Baca dokumentasi"
+  }
+}

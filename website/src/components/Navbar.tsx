@@ -23,19 +23,34 @@ import { BRAND_TAGLINE } from "@/lib/site";
 import { bugReportCopy } from "@/lib/bug-reports/copy";
 import type { Language } from "@/lib/preferences";
 
+const FOUNDERS_VERIFY_NAV_SHORT: Record<Language, string> = {
+  en: "Founders",
+  ru: "Основатели",
+  es: "Fundadores",
+  pt: "Fundadores",
+  fr: "Fondateurs",
+  de: "Gründer",
+  it: "Fondatori",
+  tr: "Kurucular",
+  vi: "Nhà sáng lập",
+  id: "Pendiri",
+  zh: "创始人",
+  ar: "المؤسسون",
+};
+
 const FOUNDERS_VERIFY_NAV_LABEL: Record<Language, string> = {
   en: "Founders / Verify",
-  ru: "Founders / Verify",
-  es: "Founders / Verificar",
-  pt: "Founders / Verificar",
-  fr: "Founders / Vérifier",
-  de: "Founders / Verifizieren",
-  it: "Founders / Verifica",
-  tr: "Founders / Doğrula",
-  vi: "Founders / Xác minh",
-  id: "Founders / Verifikasi",
-  zh: "Founders / 验证",
-  ar: "Founders / التحقق",
+  ru: "Основатели / Проверить",
+  es: "Fundadores / Verificar",
+  pt: "Fundadores / Verificar",
+  fr: "Fondateurs / Vérifier",
+  de: "Gründer / Verifizieren",
+  it: "Fondatori / Verifica",
+  tr: "Kurucular / Doğrula",
+  vi: "Nhà sáng lập / Xác minh",
+  id: "Pendiri / Verifikasi",
+  zh: "创始人 / 验证",
+  ar: "المؤسسون / التحقق",
 };
 
 /** Hidden when unset — no Vercel dashboard change required to ship without it. */
@@ -360,7 +375,7 @@ export function Navbar() {
             data-testid="nav-founders-verify"
             className="header-label mr-1 inline-flex h-10 items-center rounded-full border border-warm/45 bg-warm/15 px-3 text-sm font-semibold text-ink shadow-[var(--elev-1)] transition-colors hover:border-warm hover:bg-warm/25 xl:px-3.5"
           >
-            <span className="xl:hidden">Founders</span>
+            <span className="xl:hidden">{FOUNDERS_VERIFY_NAV_SHORT[lang] ?? FOUNDERS_VERIFY_NAV_SHORT.en}</span>
             <span className="hidden xl:inline">{foundersVerifyLink.label}</span>
           </Link>
           {t.links.map((link) => (

@@ -347,19 +347,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   es: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Bóveda de los 1.000",
       messageFull:
-        "PEOPLE Mainnet Beta · Abre el 1 dic · Founding 1,000 Vault sellado hasta 1,000 billeteras",
-      messageCompact: "PEOPLE Mainnet Beta · 1 dic · Founding 1,000 Vault sellado hasta 1,000 billeteras",
+        "PEOPLE Mainnet Beta · Abre el 1 dic · Bóveda de los 1.000 sellado hasta 1,000 billeteras",
+      messageCompact: "PEOPLE Mainnet Beta · 1 dic · Bóveda de los 1.000 sellado hasta 1,000 billeteras",
       cta: "Reclamar asiento (60s)",
       daysShort: "d",
       hoursShort: "h",
       minutesShort: "m",
-      messageMobile: "Founding 1,000 Vault · 1 dic",
+      messageMobile: "Bóveda de los 1.000 · 1 dic",
       ctaShort: "Reclamar asiento",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Bóveda de los 1.000",
       cta: "Reclamar asiento (60s)",
       dismissAria: "Cerrar aviso de Founding 1,000",
       byRoute: {
@@ -376,11 +376,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Los creadores verificados antes de las 1,000 billeteras entran al sorteo Founding 1,000 PPL y ganan 7% USDC desde la primera compra referida.",
         },
         explorer: {
-          title: "¿Explorando la red? Reserva tu lugar en Founding 1,000 Vault.",
+          title: "¿Explorando la red? Reserva tu lugar en Bóveda de los 1.000.",
           body: "La lista y el orden permanecen sellados hasta que 1,000 billeteras verificadas se bloqueen.",
         },
         wallet: {
-          title: "Vincula tu billetera al Founding 1,000 Vault.",
+          title: "Vincula tu billetera al Bóveda de los 1.000.",
           body: "El Paso 1 toma 20 segundos en Telegram; el Paso 2 sella tu billetera en la lista Founding 1,000.",
         },
         bounty: {
@@ -388,18 +388,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Verifica en Telegram en 20 segundos sin billetera y luego conecta tu billetera para sellar tu asiento.",
         },
         home: {
-          title: "Founding 1,000 Vault abierto antes de PEOPLE Mainnet Beta (1 dic).",
+          title: "Bóveda de los 1.000 abierto antes de PEOPLE Mainnet Beta (1 dic).",
           body: "La lista y el orden permanecen sellados hasta que 1,000 billeteras verificadas se bloqueen. Verifica en Telegram en 20 segundos.",
         },
         default: {
-          title: "Reclama un asiento gratis en Founding 1,000 Vault antes del 1 dic.",
+          title: "Reclama un asiento gratis en Bóveda de los 1.000 antes del 1 dic.",
           body: "La lista y el orden permanecen sellados hasta llegar a 1,000 billeteras verificadas. Empieza en Telegram en 20 segundos.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1 dic)",
-      title: "Reclama un asiento gratis en Founding 1,000 Vault antes del 1 dic",
+      eyebrow: "Bóveda de los 1.000 · PEOPLE Mainnet Beta (1 dic)",
+      title: "Reclama un asiento gratis en Bóveda de los 1.000 antes del 1 dic",
       lead: "Participa en el sorteo Founding 1,000 Bounty Draw por PPL adicionales del fondo de la Temporada 1 y activa tu enlace de referido del 7% en USDC.",
       rewardNote: "Recompensa del fondo de bounty, no rendimiento financiero.",
       sealedFraming:
@@ -470,19 +470,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   pt: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Cofre dos 1.000",
       messageFull:
-        "PEOPLE Mainnet Beta · Abre em 1 dez · Founding 1,000 Vault selado até 1.000 carteiras",
-      messageCompact: "PEOPLE Mainnet Beta · 1 dez · Founding 1,000 Vault selado até 1.000 carteiras",
+        "PEOPLE Mainnet Beta · Abre em 1 dez · Cofre dos 1.000 selado até 1.000 carteiras",
+      messageCompact: "PEOPLE Mainnet Beta · 1 dez · Cofre dos 1.000 selado até 1.000 carteiras",
       cta: "Garantir lugar (60s)",
       daysShort: "d",
       hoursShort: "h",
       minutesShort: "m",
-      messageMobile: "Founding 1,000 Vault · 1 dez",
+      messageMobile: "Cofre dos 1.000 · 1 dez",
       ctaShort: "Garantir lugar",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Cofre dos 1.000",
       cta: "Garantir lugar (60s)",
       dismissAria: "Fechar aviso do Founding 1,000",
       byRoute: {
@@ -499,11 +499,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Criadores verificados antes de 1.000 carteiras entram no sorteio Founding 1,000 PPL e ativam 7% em USDC desde a primeira compra indicada.",
         },
         explorer: {
-          title: "Explorando a rede? Reserve seu lugar no Founding 1,000 Vault.",
+          title: "Explorando a rede? Reserve seu lugar no Cofre dos 1.000.",
           body: "A lista e a ordem permanecem seladas até que 1.000 carteiras verificadas confirmem.",
         },
         wallet: {
-          title: "Vincule sua carteira ao Founding 1,000 Vault.",
+          title: "Vincule sua carteira ao Cofre dos 1.000.",
           body: "O Passo 1 leva 20 segundos no Telegram; o Passo 2 sela sua carteira na lista Founding 1,000.",
         },
         bounty: {
@@ -511,18 +511,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Verifique no Telegram em 20 segundos sem carteira e depois conecte sua carteira para selar seu lugar.",
         },
         home: {
-          title: "Founding 1,000 Vault aberto antes da PEOPLE Mainnet Beta (1 dez).",
+          title: "Cofre dos 1.000 aberto antes da PEOPLE Mainnet Beta (1 dez).",
           body: "A lista e a ordem permanecem seladas até 1.000 carteiras verificadas. Verifique no Telegram em 20 segundos.",
         },
         default: {
-          title: "Garanta um lugar grátis no Founding 1,000 Vault antes de 1 dez.",
+          title: "Garanta um lugar grátis no Cofre dos 1.000 antes de 1 dez.",
           body: "A lista e a ordem permanecem seladas até 1.000 carteiras verificadas. Comece no Telegram em 20 segundos.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1 dez)",
-      title: "Garanta um lugar grátis no Founding 1,000 Vault antes de 1 dez",
+      eyebrow: "Cofre dos 1.000 · PEOPLE Mainnet Beta (1 dez)",
+      title: "Garanta um lugar grátis no Cofre dos 1.000 antes de 1 dez",
       lead: "Participe do sorteio Founding 1,000 Bounty Draw por PPL extras do pool da Temporada 1 e ative seu link de indicação de 7% em USDC.",
       rewardNote: "Recompensa do pool de bounty, não rendimento financeiro.",
       sealedFraming:
@@ -593,19 +593,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   fr: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Coffre des 1 000",
       messageFull:
-        "PEOPLE Mainnet Beta · Ouvre le 1er déc · Founding 1,000 Vault scellé jusqu'à 1 000 portefeuilles",
-      messageCompact: "PEOPLE Mainnet Beta · 1er déc · Founding 1,000 Vault scellé jusqu'à 1 000 portefeuilles",
+        "PEOPLE Mainnet Beta · Ouvre le 1er déc · Coffre des 1 000 scellé jusqu'à 1 000 portefeuilles",
+      messageCompact: "PEOPLE Mainnet Beta · 1er déc · Coffre des 1 000 scellé jusqu'à 1 000 portefeuilles",
       cta: "Réserver ma place (60s)",
       daysShort: "j",
       hoursShort: "h",
       minutesShort: "m",
-      messageMobile: "Founding 1,000 Vault · 1er déc",
+      messageMobile: "Coffre des 1 000 · 1er déc",
       ctaShort: "Réserver ma place",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Coffre des 1 000",
       cta: "Réserver ma place (60s)",
       dismissAria: "Fermer le tiroir Founding 1,000",
       byRoute: {
@@ -622,11 +622,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Les créateurs vérifiés avant 1 000 portefeuilles participent au tirage Founding 1,000 PPL et activent 7 % en USDC dès le premier achat parrainé.",
         },
         explorer: {
-          title: "Vous explorez la chaîne ? Réservez une place dans Founding 1,000 Vault.",
+          title: "Vous explorez la chaîne ? Réservez une place dans Coffre des 1 000.",
           body: "La liste et l'ordre restent scellés jusqu'à ce que 1 000 portefeuilles vérifiés soient verrouillés.",
         },
         wallet: {
-          title: "Liez votre portefeuille au Founding 1,000 Vault.",
+          title: "Liez votre portefeuille au Coffre des 1 000.",
           body: "L'étape 1 prend 20 secondes sur Telegram ; l'étape 2 scelle votre portefeuille dans la liste Founding 1,000.",
         },
         bounty: {
@@ -634,18 +634,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Vérifiez-vous sur Telegram en 20 secondes sans portefeuille, puis connectez votre portefeuille pour sceller votre place.",
         },
         home: {
-          title: "Founding 1,000 Vault ouvert avant PEOPLE Mainnet Beta (1er déc).",
+          title: "Coffre des 1 000 ouvert avant PEOPLE Mainnet Beta (1er déc).",
           body: "La liste et l'ordre restent scellés jusqu'à 1 000 portefeuilles vérifiés. Vérifiez-vous sur Telegram en 20 secondes.",
         },
         default: {
-          title: "Réservez une place gratuite dans Founding 1,000 Vault avant le 1er déc.",
+          title: "Réservez une place gratuite dans Coffre des 1 000 avant le 1er déc.",
           body: "La liste et l'ordre restent scellés jusqu'à 1 000 portefeuilles vérifiés. Commencez sur Telegram en 20 secondes.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1er déc)",
-      title: "Réservez une place gratuite dans Founding 1,000 Vault avant le 1er déc",
+      eyebrow: "Coffre des 1 000 · PEOPLE Mainnet Beta (1er déc)",
+      title: "Réservez une place gratuite dans Coffre des 1 000 avant le 1er déc",
       lead: "Participez au tirage Founding 1,000 Bounty Draw pour des PPL bonus de la Saison 1 et activez votre lien de parrainage à 7 % USDC.",
       rewardNote: "Récompense du pool de bounty, pas un rendement financier.",
       sealedFraming:
@@ -716,19 +716,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   de: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Tresor der 1.000",
       messageFull:
-        "PEOPLE Mainnet Beta · Start am 1. Dez. · Founding 1,000 Vault versiegelt bis 1.000 Wallets",
-      messageCompact: "PEOPLE Mainnet Beta · 1. Dez. · Founding 1,000 Vault versiegelt bis 1.000 Wallets",
+        "PEOPLE Mainnet Beta · Start am 1. Dez. · Tresor der 1.000 versiegelt bis 1.000 Wallets",
+      messageCompact: "PEOPLE Mainnet Beta · 1. Dez. · Tresor der 1.000 versiegelt bis 1.000 Wallets",
       cta: "Platz sichern (60s)",
       daysShort: "T",
       hoursShort: "Std",
       minutesShort: "Min",
-      messageMobile: "Founding 1,000 Vault · 1. Dez.",
+      messageMobile: "Tresor der 1.000 · 1. Dez.",
       ctaShort: "Platz sichern",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Tresor der 1.000",
       cta: "Platz sichern (60s)",
       dismissAria: "Founding 1,000 Hinweis schließen",
       byRoute: {
@@ -745,11 +745,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Verifizierte Ersteller vor 1.000 Wallets nehmen am Founding 1,000 PPL Bounty Draw teil und erhalten 7 % USDC ab dem ersten vermittelten Kauf.",
         },
         explorer: {
-          title: "Sie erkunden die Chain? Reservieren Sie einen Platz im Founding 1,000 Vault.",
+          title: "Sie erkunden die Chain? Reservieren Sie einen Platz im Tresor der 1.000.",
           body: "Liste & Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets gesichert sind.",
         },
         wallet: {
-          title: "Verknüpfen Sie Ihre Wallet mit dem Founding 1,000 Vault.",
+          title: "Verknüpfen Sie Ihre Wallet mit dem Tresor der 1.000.",
           body: "Schritt 1 dauert 20 Sekunden in Telegram; Schritt 2 versiegelt Ihre Wallet in der Founding-1,000-Liste.",
         },
         bounty: {
@@ -757,18 +757,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "In 20 Sekunden in Telegram ohne Wallet verifizieren, dann Wallet verbinden und Platz versiegeln.",
         },
         home: {
-          title: "Founding 1,000 Vault ist vor der PEOPLE Mainnet Beta (1. Dez.) geöffnet.",
+          title: "Tresor der 1.000 ist vor der PEOPLE Mainnet Beta (1. Dez.) geöffnet.",
           body: "Liste & Reihenfolge bleiben bis 1.000 verifizierte Wallets versiegelt. Jetzt in 20 Sekunden per Telegram starten.",
         },
         default: {
-          title: "Kostenlosen Platz im Founding 1,000 Vault vor dem 1. Dez. sichern.",
+          title: "Kostenlosen Platz im Tresor der 1.000 vor dem 1. Dez. sichern.",
           body: "Liste & Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets erreicht sind. Start in Telegram in 20 Sekunden.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1. Dez.)",
-      title: "Kostenlosen Platz im Founding 1,000 Vault vor dem 1. Dez. sichern",
+      eyebrow: "Tresor der 1.000 · PEOPLE Mainnet Beta (1. Dez.)",
+      title: "Kostenlosen Platz im Tresor der 1.000 vor dem 1. Dez. sichern",
       lead: "Nehmen Sie am Founding 1,000 Bounty Draw für Bonus-PPL aus dem Season-1-Pool teil und aktivieren Sie Ihren 7 % USDC Empfehlungslink.",
       rewardNote: "Bounty-Pool-Belohnung, keine finanzielle Rendite.",
       sealedFraming:
@@ -839,19 +839,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   it: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Caveau dei 1.000",
       messageFull:
-        "PEOPLE Mainnet Beta · Apre il 1° dic · Founding 1,000 Vault sigillato fino a 1.000 portafogli",
-      messageCompact: "PEOPLE Mainnet Beta · 1° dic · Founding 1,000 Vault sigillato fino a 1.000 portafogli",
+        "PEOPLE Mainnet Beta · Apre il 1° dic · Caveau dei 1.000 sigillato fino a 1.000 portafogli",
+      messageCompact: "PEOPLE Mainnet Beta · 1° dic · Caveau dei 1.000 sigillato fino a 1.000 portafogli",
       cta: "Prenota posto (60s)",
       daysShort: "g",
       hoursShort: "h",
       minutesShort: "m",
-      messageMobile: "Founding 1,000 Vault · 1° dic",
+      messageMobile: "Caveau dei 1.000 · 1° dic",
       ctaShort: "Prenota posto",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Caveau dei 1.000",
       cta: "Prenota posto (60s)",
       dismissAria: "Chiudi avviso Founding 1,000",
       byRoute: {
@@ -868,11 +868,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "I creatori verificati prima dei 1.000 portafogli partecipano all'estrazione Founding 1,000 PPL e attivano il 7% in USDC dal primo acquisto invitato.",
         },
         explorer: {
-          title: "Esplori la rete? Riservati un posto nel Founding 1,000 Vault.",
+          title: "Esplori la rete? Riservati un posto nel Caveau dei 1.000.",
           body: "Elenco e ordine restano sigillati finché 1.000 portafogli verificati non sono confermati.",
         },
         wallet: {
-          title: "Collega il tuo portafoglio al Founding 1,000 Vault.",
+          title: "Collega il tuo portafoglio al Caveau dei 1.000.",
           body: "Il Passo 1 richiede 20 secondi su Telegram; il Passo 2 sigilla il tuo portafoglio nell'elenco Founding 1,000.",
         },
         bounty: {
@@ -880,18 +880,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Verifica su Telegram in 20 secondi senza portafoglio, poi collega il portafoglio per sigillare il tuo posto.",
         },
         home: {
-          title: "Founding 1,000 Vault aperto prima di PEOPLE Mainnet Beta (1° dic).",
+          title: "Caveau dei 1.000 aperto prima di PEOPLE Mainnet Beta (1° dic).",
           body: "Elenco e ordine restano sigillati fino a 1.000 portafogli verificati. Verifica su Telegram in 20 secondi.",
         },
         default: {
-          title: "Prenota un posto gratuito nel Founding 1,000 Vault prima del 1° dic.",
+          title: "Prenota un posto gratuito nel Caveau dei 1.000 prima del 1° dic.",
           body: "Elenco e ordine restano sigillati fino a 1.000 portafogli verificati. Inizia su Telegram in 20 secondi.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1° dic)",
-      title: "Prenota un posto gratuito nel Founding 1,000 Vault prima del 1° dic",
+      eyebrow: "Caveau dei 1.000 · PEOPLE Mainnet Beta (1° dic)",
+      title: "Prenota un posto gratuito nel Caveau dei 1.000 prima del 1° dic",
       lead: "Partecipa all'estrazione Founding 1,000 Bounty Draw per PPL bonus dal pool della Stagione 1 e attiva il tuo link referral al 7% in USDC.",
       rewardNote: "Ricompensa del pool bounty, non rendimento finanziario.",
       sealedFraming:
@@ -962,19 +962,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   tr: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "İlk 1.000 Kasası",
       messageFull:
-        "PEOPLE Mainnet Beta · 1 Aralık'ta açılır · Founding 1,000 Vault 1.000 cüzdana kadar mühürlü",
-      messageCompact: "PEOPLE Mainnet Beta · 1 Ara · Founding 1,000 Vault 1.000 cüzdana kadar mühürlü",
+        "PEOPLE Mainnet Beta · 1 Aralık'ta açılır · İlk 1.000 Kasası 1.000 cüzdana kadar mühürlü",
+      messageCompact: "PEOPLE Mainnet Beta · 1 Ara · İlk 1.000 Kasası 1.000 cüzdana kadar mühürlü",
       cta: "Koltuk Ayır (60sn)",
       daysShort: "g",
       hoursShort: "s",
       minutesShort: "dk",
-      messageMobile: "Founding 1,000 Vault · 1 Ara",
+      messageMobile: "İlk 1.000 Kasası · 1 Ara",
       ctaShort: "Koltuk Ayır",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "İlk 1.000 Kasası",
       cta: "Koltuk Ayır (60sn)",
       dismissAria: "Founding 1,000 penceresini kapat",
       byRoute: {
@@ -991,11 +991,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "1.000 cüzdan dolmadan doğrulanan üreticiler Founding 1,000 PPL çekilişine katılır ve ilk satıştan itibaren %7 USDC kazanır.",
         },
         explorer: {
-          title: "Ağı mı inceliyorsunuz? Founding 1,000 Vault içinde yerinizi ayırın.",
+          title: "Ağı mı inceliyorsunuz? İlk 1.000 Kasası içinde yerinizi ayırın.",
           body: "1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır.",
         },
         wallet: {
-          title: "Cüzdanınızı Founding 1,000 Vault'a bağlayın.",
+          title: "Cüzdanınızı İlk 1.000 Kasası'a bağlayın.",
           body: "1. Adım Telegram'da 20 saniye sürer; 2. Adım cüzdanınızı Founding 1,000 listesine mühürler.",
         },
         bounty: {
@@ -1003,18 +1003,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Cüzdan olmadan 20 saniyede Telegram'da doğrulayın, ardından cüzdanınızı bağlayarak koltuğunuzu mühürleyin.",
         },
         home: {
-          title: "PEOPLE Mainnet Beta (1 Aralık) öncesinde Founding 1,000 Vault açık.",
+          title: "PEOPLE Mainnet Beta (1 Aralık) öncesinde İlk 1.000 Kasası açık.",
           body: "1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır. Telegram'da 20 saniyede doğrulayın.",
         },
         default: {
-          title: "1 Aralık'tan önce Founding 1,000 Vault'ta ücretsiz koltuk ayırın.",
+          title: "1 Aralık'tan önce İlk 1.000 Kasası'ta ücretsiz koltuk ayırın.",
           body: "1.000 doğrulanmış cüzdan kilitlenene kadar liste ve sıra mühürlü kalır. Telegram'da 20 saniyede başlayın.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1 Aralık)",
-      title: "1 Aralık'tan önce Founding 1,000 Vault'ta ücretsiz koltuk ayırın",
+      eyebrow: "İlk 1.000 Kasası · PEOPLE Mainnet Beta (1 Aralık)",
+      title: "1 Aralık'tan önce İlk 1.000 Kasası'ta ücretsiz koltuk ayırın",
       lead: "Sezon 1 havuzundan bonus PPL için Founding 1,000 Ödül Çekilişine katılın ve ilk satın alımdan itibaren geçerli %7 USDC referans bağlantınızı açın.",
       rewardNote: "Ödül havuzu teşvikidir, finansal getiri vaadi değildir.",
       sealedFraming:
@@ -1085,19 +1085,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   vi: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Kho 1.000 đầu",
       messageFull:
-        "PEOPLE Mainnet Beta · Mở 1/12 · Founding 1,000 Vault niêm phong đến khi đủ 1.000 ví",
-      messageCompact: "PEOPLE Mainnet Beta · 1/12 · Founding 1,000 Vault niêm phong đến khi đủ 1.000 ví",
+        "PEOPLE Mainnet Beta · Mở 1/12 · Kho 1.000 đầu niêm phong đến khi đủ 1.000 ví",
+      messageCompact: "PEOPLE Mainnet Beta · 1/12 · Kho 1.000 đầu niêm phong đến khi đủ 1.000 ví",
       cta: "Giữ vị trí (60 giây)",
       daysShort: "ng",
       hoursShort: "g",
       minutesShort: "p",
-      messageMobile: "Founding 1,000 Vault · 1/12",
+      messageMobile: "Kho 1.000 đầu · 1/12",
       ctaShort: "Giữ vị trí",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Kho 1.000 đầu",
       cta: "Giữ vị trí (60 giây)",
       dismissAria: "Đóng hộp thoại Founding 1,000",
       byRoute: {
@@ -1114,11 +1114,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Nhà sáng tạo xác minh trước mốc 1.000 ví được tham gia quay thưởng Founding 1,000 PPL và nhận 7% USDC ngay từ giao dịch đầu tiên.",
         },
         explorer: {
-          title: "Đang khám phá mạng lưới? Đặt chỗ trong Founding 1,000 Vault.",
+          title: "Đang khám phá mạng lưới? Đặt chỗ trong Kho 1.000 đầu.",
           body: "Danh sách & thứ tự được niêm phong cho đến khi 1.000 ví xác minh hoàn tất.",
         },
         wallet: {
-          title: "Liên kết ví của bạn với Founding 1,000 Vault.",
+          title: "Liên kết ví của bạn với Kho 1.000 đầu.",
           body: "Bước 1 chỉ mất 20 giây trên Telegram; Bước 2 niêm phong ví của bạn vào danh sách Founding 1,000.",
         },
         bounty: {
@@ -1126,18 +1126,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Xác minh Telegram trong 20 giây không cần ví, sau đó kết nối ví để niêm phong vị trí của bạn.",
         },
         home: {
-          title: "Founding 1,000 Vault đang mở trước thềm PEOPLE Mainnet Beta (1/12).",
+          title: "Kho 1.000 đầu đang mở trước thềm PEOPLE Mainnet Beta (1/12).",
           body: "Danh sách & thứ tự được niêm phong cho đến khi đủ 1.000 ví xác minh. Xác minh Telegram trong 20 giây.",
         },
         default: {
-          title: "Giữ vị trí miễn phí trong Founding 1,000 Vault trước ngày 1/12.",
+          title: "Giữ vị trí miễn phí trong Kho 1.000 đầu trước ngày 1/12.",
           body: "Danh sách & thứ tự giữ niêm phong đến khi đủ 1.000 ví xác minh. Bắt đầu trên Telegram trong 20 giây.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1/12)",
-      title: "Giữ vị trí miễn phí trong Founding 1,000 Vault trước ngày 1/12",
+      eyebrow: "Kho 1.000 đầu · PEOPLE Mainnet Beta (1/12)",
+      title: "Giữ vị trí miễn phí trong Kho 1.000 đầu trước ngày 1/12",
       lead: "Tham gia Quay thưởng Founding 1,000 Bounty Draw để nhận PPL thưởng từ quỹ Mùa 1 và kích hoạt liên kết giới thiệu 7% USDC ngay từ giao dịch đầu tiên.",
       rewardNote: "Phần thưởng từ quỹ bounty, không phải lợi tức tài chính.",
       sealedFraming:
@@ -1208,19 +1208,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   id: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "Brankas 1.000",
       messageFull:
-        "PEOPLE Mainnet Beta · Dibuka 1 Des · Founding 1,000 Vault tersegel hingga 1.000 dompet",
-      messageCompact: "PEOPLE Mainnet Beta · 1 Des · Founding 1,000 Vault tersegel hingga 1.000 dompet",
+        "PEOPLE Mainnet Beta · Dibuka 1 Des · Brankas 1.000 tersegel hingga 1.000 dompet",
+      messageCompact: "PEOPLE Mainnet Beta · 1 Des · Brankas 1.000 tersegel hingga 1.000 dompet",
       cta: "Klaim Kursi (60d)",
       daysShort: "h",
       hoursShort: "j",
       minutesShort: "m",
-      messageMobile: "Founding 1,000 Vault · 1 Des",
+      messageMobile: "Brankas 1.000 · 1 Des",
       ctaShort: "Klaim Kursi",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "Brankas 1.000",
       cta: "Klaim Kursi (60d)",
       dismissAria: "Tutup panel Founding 1,000",
       byRoute: {
@@ -1237,11 +1237,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Kreator yang terverifikasi sebelum 1.000 dompet terkunci masuk ke Undian Bounty Founding 1,000 PPL dan mengaktifkan komisi 7% USDC sejak pembelian pertama.",
         },
         explorer: {
-          title: "Menjelajahi jaringan? Amankan kursi di Founding 1,000 Vault.",
+          title: "Menjelajahi jaringan? Amankan kursi di Brankas 1.000.",
           body: "Daftar & urutan tetap tersegel hingga 1.000 dompet terverifikasi terkunci.",
         },
         wallet: {
-          title: "Hubungkan dompet Anda ke Founding 1,000 Vault.",
+          title: "Hubungkan dompet Anda ke Brankas 1.000.",
           body: "Langkah 1 hanya 20 detik di Telegram; Langkah 2 menyegel dompet Anda ke dalam daftar Founding 1,000.",
         },
         bounty: {
@@ -1249,18 +1249,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "Verifikasi di Telegram dalam 20 detik tanpa dompet, lalu hubungkan dompet Anda untuk menyegel kursi.",
         },
         home: {
-          title: "Founding 1,000 Vault terbuka menjelang PEOPLE Mainnet Beta (1 Des).",
+          title: "Brankas 1.000 terbuka menjelang PEOPLE Mainnet Beta (1 Des).",
           body: "Daftar & urutan tetap tersegel hingga 1.000 dompet terverifikasi terkunci. Verifikasi di Telegram dalam 20 detik.",
         },
         default: {
-          title: "Klaim kursi gratis di Founding 1,000 Vault sebelum 1 Des.",
+          title: "Klaim kursi gratis di Brankas 1.000 sebelum 1 Des.",
           body: "Daftar & urutan tetap tersegel hingga 1.000 dompet terverifikasi terkunci. Mulai di Telegram dalam 20 detik.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1 Des)",
-      title: "Klaim kursi gratis di Founding 1,000 Vault sebelum 1 Des",
+      eyebrow: "Brankas 1.000 · PEOPLE Mainnet Beta (1 Des)",
+      title: "Klaim kursi gratis di Brankas 1.000 sebelum 1 Des",
       lead: "Ikuti Undian Bounty Founding 1,000 untuk bonus PPL dari pool Musim 1 dan aktifkan tautan referral 7% USDC Anda sejak pembelian pertama.",
       rewardNote: "Hadiah pool bounty, bukan imbal hasil finansial.",
       sealedFraming:
@@ -1331,19 +1331,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   zh: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "首千金库",
       messageFull:
-        "PEOPLE Mainnet Beta · 12月1日开启 · Founding 1,000 Vault 满 1,000 钱包前保持密封",
-      messageCompact: "PEOPLE Mainnet Beta · 12月1日 · Founding 1,000 Vault 满 1,000 钱包前保持密封",
+        "PEOPLE Mainnet Beta · 12月1日开启 · 首千金库 满 1,000 钱包前保持密封",
+      messageCompact: "PEOPLE Mainnet Beta · 12月1日 · 首千金库 满 1,000 钱包前保持密封",
       cta: "锁定席位 (60秒)",
       daysShort: "天",
       hoursShort: "时",
       minutesShort: "分",
-      messageMobile: "Founding 1,000 Vault · 12月1日",
+      messageMobile: "首千金库 · 12月1日",
       ctaShort: "锁定席位",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "首千金库",
       cta: "锁定席位 (60秒)",
       dismissAria: "关闭 Founding 1,000 提示",
       byRoute: {
@@ -1360,11 +1360,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "在 1,000 个钱包满额前完成验证的创作者可参与 Founding 1,000 PPL 奖金池抽奖，并享首单起 7% USDC 邀请佣金。",
         },
         explorer: {
-          title: "正在浏览区块浏览器？预留 Founding 1,000 Vault 席位。",
+          title: "正在浏览区块浏览器？预留 首千金库 席位。",
           body: "名单与顺序在 1,000 个验证钱包锁定前保持密封。",
         },
         wallet: {
-          title: "将您的钱包绑定至 Founding 1,000 Vault。",
+          title: "将您的钱包绑定至 首千金库。",
           body: "第 1 步在 Telegram 仅需 20 秒；第 2 步连接钱包即可在 Founding 1,000 名单中密封席位。",
         },
         bounty: {
@@ -1372,18 +1372,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "无需钱包 20 秒在 Telegram 完成验证，再连接钱包锁定席位并激活第 1 季积分。",
         },
         home: {
-          title: "PEOPLE Mainnet Beta（12月1日）开启前，Founding 1,000 Vault 已开放。",
+          title: "PEOPLE Mainnet Beta（12月1日）开启前，首千金库 已开放。",
           body: "名单与顺序在 1,000 个验证钱包锁定前保持密封。20 秒在 Telegram 完成验证。",
         },
         default: {
-          title: "在 12 月 1 日前免费领取 Founding 1,000 Vault 席位。",
+          title: "在 12 月 1 日前免费领取 首千金库 席位。",
           body: "名单与顺序在 1,000 个验证钱包锁定前保持密封。20 秒在 Telegram 开始验证。",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (12月1日)",
-      title: "在 12 月 1 日前免费领取 Founding 1,000 Vault 席位",
+      eyebrow: "首千金库 · PEOPLE Mainnet Beta (12月1日)",
+      title: "在 12 月 1 日前免费领取 首千金库 席位",
       lead: "参与 Founding 1,000 奖金池抽奖以获取第 1 季奖池的额外 PPL，并激活首单起即享的 7% USDC 邀请链接。",
       rewardNote: "赏金池奖励，非金融理财收益。",
       sealedFraming:
@@ -1454,19 +1454,19 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
   },
   ar: {
     stickyBar: {
-      badge: "Founding 1,000 Vault",
+      badge: "خزنة الألف",
       messageFull:
-        "PEOPLE Mainnet Beta · يفتح 1 ديسمبر · Founding 1,000 Vault مختوم حتى 1,000 محفظة",
-      messageCompact: "PEOPLE Mainnet Beta · 1 ديسمبر · Founding 1,000 Vault مختوم حتى 1,000 محفظة",
+        "PEOPLE Mainnet Beta · يفتح 1 ديسمبر · خزنة الألف مختوم حتى 1,000 محفظة",
+      messageCompact: "PEOPLE Mainnet Beta · 1 ديسمبر · خزنة الألف مختوم حتى 1,000 محفظة",
       cta: "احجز مقعدك (60 ثانية)",
       daysShort: "ي",
       hoursShort: "س",
       minutesShort: "د",
-      messageMobile: "Founding 1,000 Vault · 1 ديسمبر",
+      messageMobile: "خزنة الألف · 1 ديسمبر",
       ctaShort: "احجز مقعدك",
     },
     drawer: {
-      eyebrow: "Founding 1,000 Vault",
+      eyebrow: "خزنة الألف",
       cta: "احجز مقعدك (60 ثانية)",
       dismissAria: "إغلاق إشعار Founding 1,000",
       byRoute: {
@@ -1483,11 +1483,11 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "المبدعون الموثقون قبل اكتمال 1,000 محفظة يدخلون سحب Founding 1,000 PPL ويحصلون على 7% USDC من أول عملية شراء.",
         },
         explorer: {
-          title: "تتصفح المستكشف؟ احجز مقعداً في Founding 1,000 Vault.",
+          title: "تتصفح المستكشف؟ احجز مقعداً في خزنة الألف.",
           body: "تظل القائمة والترتيب مختومين حتى يتم قفل 1,000 محفظة موثقة.",
         },
         wallet: {
-          title: "اربط محفظتك بـ Founding 1,000 Vault.",
+          title: "اربط محفظتك بـ خزنة الألف.",
           body: "الخطوة 1 تستغرق 20 ثانية في Telegram؛ الخطوة 2 تختم محفظتك في قائمة Founding 1,000.",
         },
         bounty: {
@@ -1495,18 +1495,18 @@ export const FOUNDING_COPY: Record<Language, FoundingCopy> = {
           body: "تحقق في Telegram خلال 20 ثانية دون محفظة، ثم اربط محفظتك لختم مقعدك.",
         },
         home: {
-          title: "Founding 1,000 Vault مفتوح قبل انطلاق PEOPLE Mainnet Beta (1 ديسمبر).",
+          title: "خزنة الألف مفتوح قبل انطلاق PEOPLE Mainnet Beta (1 ديسمبر).",
           body: "تظل القائمة والترتيب مختومين حتى يتم قفل 1,000 محفظة موثقة. تحقق عبر Telegram في 20 ثانية.",
         },
         default: {
-          title: "احجز مقعداً مجانياً في Founding 1,000 Vault قبل 1 ديسمبر.",
+          title: "احجز مقعداً مجانياً في خزنة الألف قبل 1 ديسمبر.",
           body: "تظل القائمة والترتيب مختومين حتى اكتمال 1,000 محفظة موثقة. ابدأ عبر Telegram في 20 ثانية.",
         },
       },
     },
     modal: {
-      eyebrow: "Founding 1,000 Vault · PEOPLE Mainnet Beta (1 ديسمبر)",
-      title: "احجز مقعداً مجانياً في Founding 1,000 Vault قبل 1 ديسمبر",
+      eyebrow: "خزنة الألف · PEOPLE Mainnet Beta (1 ديسمبر)",
+      title: "احجز مقعداً مجانياً في خزنة الألف قبل 1 ديسمبر",
       lead: "ادخل سحب Founding 1,000 Bounty Draw للحصول على PPL إضافية من مجمع الموسم 1 وفعّل رابط الإحالة الخاص بك بنسبة 7% USDC من أول عملية شراء.",
       rewardNote: "مكافأة من مجمع الجوائز وليست عائداً مالياً.",
       sealedFraming:

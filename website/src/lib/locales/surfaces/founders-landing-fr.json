@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Coffre des 1 000 fondateurs · PEOPLE Mainnet Beta (1 déc.)",
+  "heroTitle": "Coffre des 1 000 fondateurs",
+  "heroSub": "Les 1 000 premiers portefeuilles vérifiés débloquent les transferts et le tirage au sort Bounty Draw des 1 000 fondateurs. La liste et l'ordre restent scellés jusqu'à ce que ces portefeuilles soient verrouillés. Vérifiez-vous sur Telegram en 20 secondes pour obtenir une place en attente — un portefeuille connecté est nécessaire pour verrouiller votre place parmi les 1 000 fondateurs et votre billet au Bounty Draw. Le programme Million Founders se poursuit après les 1 000 premiers.",
+  "heroCta": "Vérifier et rejoindre",
+  "heroCtaHow": "Comment fonctionnent les numéros",
+  "counterLabel": "personnes vérifiées",
+  "counterGoal": "objectif",
+  "counterLive": "Compteur en direct issu de la vérification Human Passport sur PEOPLE.",
+  "counterStub": "La liste et l'ordre restent scellés jusqu'à ce que 1 000 portefeuilles vérifiés soient verrouillés.",
+  "vaultCalloutTitle": "Les 1 000 premiers portefeuilles vérifiés débloquent les transferts et le Bounty Draw des 1 000 fondateurs",
+  "vaultCalloutBody": "La liste et l'ordre restent scellés jusqu'à ce que 1 000 portefeuilles vérifiés soient verrouillés. Aucun compteur d'inscriptions en direct n'est affiché tant que la liste est scellée.",
+  "disclaimer": "Les détails préliminaires du programme peuvent changer avant PEOPLE Mainnet Beta. Ce n'est pas un conseil financier. Aucune promesse de revenu ni de hausse du prix du token.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Votre Founder NFT numéroté gratuit",
+  "nftBody": "Chaque personne vérifiée qui rejoint avant PEOPLE Mainnet Beta reçoit un Founder NFT avec son numéro public. C'est gratuit. L'enregistrement est écrit dans le bloc genèse et y reste — il n'y aura jamais une seconde genèse.",
+  "nftBullets": [
+    "Gratuit pour les fondateurs vérifiés avant PEOPLE Mainnet Beta",
+    "Votre numéro fait partie de l'historique de la chaîne dès le premier jour",
+    "Les mêmes droits de base pour chaque fondateur — les numéros spéciaux ajoutent seulement de petits avantages ponctuels"
+  ],
+  "tiersEyebrow": "Numéros de fondateur",
+  "tiersTitle": "Paliers selon votre date d'adhésion",
+  "tiersSub": "Votre palier suit l'ordre de votre vérification. Dans chaque palier, votre numéro exact est attribué par un tirage aléatoire public équitable à la fermeture du palier — personne ne choisit son numéro.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "Les cent premiers fondateurs vérifiés"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Les bâtisseurs précoces qui façonnent le réseau"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "La vague centrale avant l'adoption large"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Faire grandir la communauté à grande échelle"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Tous ceux qui viennent après les cent mille premiers"
+    }
+  ],
+  "specialEyebrow": "Numéros spéciaux",
+  "specialTitle": "Numéros spéciaux et derniers numéros de palier",
+  "specialBody": "Certains numéros se démarquent : numéros ronds ou visuellement distinctifs, et le dernier numéro de chaque palier. Le dernier numéro d'un palier n'est pas attribué à celui qui a rejoint en dernier — il est tiré équitablement parmi tous les membres de ce palier.",
+  "specialListTitle": "Quels numéros sont spéciaux",
+  "specialList": [
+    "#1 à #9",
+    "Chiffres répétés, comme 77, 888 ou 8888",
+    "Numéros ronds : 1,000, 10,000, 100,000 et 500,000",
+    "La séquence 12345",
+    "Le dernier numéro de chaque palier"
+  ],
+  "specialFixedNote": "Cette liste est publiée et figée avant l'ouverture des inscriptions. Elle ne changera pas ensuite, pour que chacun puisse vérifier que le tirage était équitable.",
+  "specialPerksTitle": "Ce qu'un numéro spécial obtient — une fois",
+  "specialPerksBody": "Chaque numéro spécial reçoit le même bonus unique. C'est un remerciement, pas de l'argent : pas de paiements, pas de promesses de prix, pas de remises permanentes. Les droits fondateur de base restent les mêmes pour tous.",
+  "sealEyebrow": "Cérémonie de genèse",
+  "sealTitle": "Scellement du bloc genèse",
+  "sealBody": "À la fermeture de la fenêtre fondateur, PEOPLE organisera une cérémonie publique de scellement du bloc genèse. Les noms de fondateurs ayant opté pour la mosaïque publique apparaîtront ensemble comme instantané permanent de ceux qui ont lancé le réseau.",
+  "mosaicTitle": "Mosaïque des fondateurs",
+  "mosaicSub": "Une mosaïque visuelle des noms de fondateurs sera en ligne au scellement. La recherche par identifiant arrive alors.",
+  "mosaicSearchLabel": "Rechercher par identifiant",
+  "mosaicSearchPlaceholder": "Disponible au scellement de la genèse",
+  "mosaicSoon": "Au scellement",
+  "mosaicSearchHint": "La recherche par identifiant s'ouvre lorsque le bloc genèse est scellé.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Réponses rapides",
+  "faq": [
+    {
+      "q": "Est-ce gratuit ?",
+      "a": "Oui. La vérification avec Human Passport sur PEOPLE est gratuite, et votre Founder NFT est gratuit avant PEOPLE Mainnet Beta."
+    },
+    {
+      "q": "Puis-je choisir mon numéro de fondateur ?",
+      "a": "Non. Les numéros sont liés à votre palier et attribués par un tirage aléatoire public équitable dans ce palier. Personne ne peut réserver un numéro favori."
+    },
+    {
+      "q": "Y a-t-il des paiements ou des récompenses garanties ?",
+      "a": "Non. Cette page parle d'identité et d'histoire dans le bloc genèse, pas de paiements ni de rendements d'investissement."
+    },
+    {
+      "q": "Comment m'inscrire ?",
+      "a": "Connectez-vous sur PEOPLE, terminez la vérification Human Passport et suivez les étapes de cette page. Utilisez la section Vérifier ci-dessous quand vous êtes prêt."
+    },
+    {
+      "q": "Qu'est-ce que PEOPLE ?",
+      "a": "PEOPLE est une blockchain communautaire — créée par des personnes, pour la communauté. Les fondateurs sont des humains vérifiés qui rejoignent avant PEOPLE Mainnet Beta."
+    }
+  ],
+  "finalTitle": "Devenez fondateur",
+  "finalSub": "Vérifiez-vous avec Human Passport, réclamez votre place parmi les Million Founders et gardez votre numéro dans le bloc genèse pour toujours.",
+  "finalCta": "Commencer la vérification",
+  "specialPerks": [
+    "Un cadre animé et un badge sur votre Founder NFT",
+    "Votre nom mis en avant dans la mosaïque de genèse",
+    "7 jours d'accès anticipé aux nouvelles fonctionnalités et drops PEOPLE",
+    "Support prioritaire"
+  ],
+  "specialNamedBadge": "#1 et le dernier numéro de chaque palier obtiennent aussi leur propre badge nommé."
+}

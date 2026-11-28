@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "Cómo funciona People, en 1 minuto.",
+    "lead": "Una wallet, una comprobación de que eres una persona, y luego puedes lanzar, mintear, intercambiar o votar. Sin código ni trasfondo en cripto.",
+    "betaBadge": "PEOPLE Mainnet Beta se lanza el 1 de diciembre de 2026.",
+    "saleNote": "PEOPLE Mainnet Beta se lanza el 1 de diciembre de 2026 — una mainnet real en etapa temprana, con límites hasta que más personas estén verificadas. Paga en USDC o USDT en Base; el PPL se acredita en PEOPLE Mainnet Beta."
+  },
+  "steps": {
+    "eyebrow": "Tres pasos",
+    "title": "Lo que hace una persona normal",
+    "lead": "Esto es todo el onboarding. El resto de esta página es detalle para los curiosos.",
+    "items": [
+      {
+        "title": "Obtén una wallet en 30 segundos",
+        "body": "Abre el sitio en el móvil o en el navegador y crea una wallet — frase de 12 palabras sin custodia (las claves se quedan en tu dispositivo).",
+        "note": "Sin app store, sin deberes de frase semilla.",
+        "bodySocial": "Abre el sitio en el móvil o en el navegador y crea una wallet — frase de 12 palabras sin custodia (las claves se quedan en tu dispositivo), o un inicio de sesión más rápido con Google con clave cifrada sincronizada en la nube.",
+        "bodyCloud": "Abre el sitio en el móvil o en el navegador y crea una wallet — frase de 12 palabras sin custodia (las claves se quedan en tu dispositivo), o un inicio de sesión más rápido con email con clave cifrada sincronizada en la nube."
+      },
+      {
+        "title": "Demuestra que eres humano",
+        "body": "Verifica una vez con un número de Telegram o Human Passport. Una persona, una cuenta — eso evita que bots farmeen el pool comunitario.",
+        "note": "No se requieren biométricos."
+      },
+      {
+        "title": "Lanza, mintea, intercambia o vota",
+        "body": "Inicia un token para tu comunidad, mintea tarjetas de club, opera en el pool token/PPL o vota a dónde va el pool comunitario.",
+        "note": "Cada acción es un botón normal, no una línea de comandos."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Oferta",
+    "title": "Mil millones de PPL, sin sorpresas",
+    "lead": "La oferta está fijada en el génesis. Nada se mintea en calendario a tus espaldas.",
+    "totalLabel": "Oferta total, fija",
+    "unit": "PPL",
+    "noNewCoins": "Años 1–4: 0% monedas nuevas. Los parámetros de inflación están en cero en el génesis de la cadena.",
+    "year5": "Desde el año 5: como máximo 2% al año, y solo si la comunidad vota a favor.",
+    "donutLabel": "Asignación génesis",
+    "bucketLabels": {
+      "community": "Comunidad y recompensas",
+      "validators": "Validadores",
+      "team": "Equipo",
+      "treasury": "Tesorería",
+      "sale": "Venta comunitaria",
+      "liquidity": "Liquidez"
+    },
+    "donutNote": "Suma el 100% del mil millones de PPL. El bucket comunitario se desbloquea linealmente en seis años; la tesorería y la liquidez bloqueada no circulan."
+  },
+  "validators": {
+    "eyebrow": "Validadores",
+    "title": "Quién ejecuta la red y quién la paga",
+    "lead": "Los validadores mantienen la cadena. Se pagan desde su propio pool, más una parte de cada comisión.",
+    "poolLabel": "Pool de validadores",
+    "unit": "PPL",
+    "shareLabel": "más 30% de cada comisión de red",
+    "yearsLabel": "PPL liberados por año",
+    "yearLabel": "Año {{n}}",
+    "pctLabel": "{{pct}}% de la oferta total",
+    "scheduleNote": "Los años 1–4 liberan 60M, 50M, 50M y 40M PPL del pool de 200M. Nada se mintea para pagarlo.",
+    "feeNote": "Además del calendario, los validadores reciben el 30% de cada comisión de red, repartido cada bloque."
+  },
+  "fees": {
+    "eyebrow": "Comisiones",
+    "title": "A dónde va cada comisión",
+    "lead": "Cada comisión de red se paga en PPL y se reparte igual cada vez.",
+    "totalLabel": "Una comisión",
+    "totalValue": "100%",
+    "note": "Nada se quema: la línea de burn es 0%. Las comisiones fraccionarias siguen el mismo reparto."
+  },
+  "launch": {
+    "eyebrow": "Lanzar un token",
+    "title": "Qué pasa cuando lanzas",
+    "lead": "Tres reglas las aplican los contratos, no nuestra buena voluntad.",
+    "points": [
+      {
+        "title": "La curva fija el precio desde el primer trade",
+        "body": "No hay ronda privada ni precio prefijado. El token empieza en una bonding curve, así que la primera compra fija el precio que ve todo el mundo."
+      },
+      {
+        "title": "10% va al pool comunitario de ese token — garantizado",
+        "body": "En el lanzamiento el creador también puede enviar el resto no vendido de la curva (hasta ~17%) al pool en lugar de quemarlo — hasta 27% en total. Nunca se mezcla con comisiones de red."
+      },
+      {
+        "title": "La parte del creador se desbloquea en 180 días",
+        "body": "El 10% de la asignación del creador es líquido al crear, el 90% restante se desbloquea linealmente en 180 días. Sin dump el día uno."
+      },
+      {
+        "title": "Restos de la curva",
+        "body": "Tras migrar la curva al AMM — o si se finaliza tras 180 días sin agotarse — los tokens sobrantes y no vendidos siguen la elección del creador: quemados por defecto (recomendado), o al pool comunitario de ese token. Nunca al creador ni a la tesorería del protocolo. Cada token estándar también envía el 10% de la oferta a su pool comunitario al lanzar."
+      },
+      {
+        "title": "Participación de referidos opcional",
+        "body": "Al lanzar, el creador puede optar por un programa de referidos del emisor: por defecto hasta el 5% de la oferta (máximo 10%) para recompensas por invitación, con bounty por defecto del 5% de la compra del invitado. Desactivado hasta que el creador opte."
+      }
+    ],
+    "curveCaption": "Precio a lo largo de la bonding curve",
+    "curveStartLabel": "Primer trade",
+    "curveEndLabel": "Agotado",
+    "curveNote": "Forma ilustrativa de la curva — así funciona el mecanismo, no una previsión de precio."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Llega pronto y trae a tu gente",
+    "lead": "Los números de fundador siguen abiertos. Dos niveles de referidos, y solo cuentan personas activas.",
+    "bullets": [
+      "Dos niveles: ganas de tus invitados y una parte menor de los suyos.",
+      "Cuentas inactivas no ganan nada — cien cuentas falsas ganan cien veces cero.",
+      "Las recompensas se desbloquean: 10% líquido de inmediato, el resto en cortes semanales en 52 semanas."
+    ],
+    "cta": "Ser fundador",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Respuestas directas",
+    "items": [
+      {
+        "q": "¿Esto es mainnet?",
+        "a": "PEOPLE Mainnet Beta se lanza el 1 de diciembre de 2026. Es la mainnet real de PEOPLE en etapa temprana, con límites hasta que más personas estén verificadas. Pagas en USDC o USDT en Base y el PPL se acredita en PEOPLE Mainnet Beta."
+      },
+      {
+        "q": "¿Necesito saber programar?",
+        "a": "No. Crear wallet, lanzar token, mintear tarjetas de club y votar son botones en la interfaz. Los contratos vienen de plantillas OpenZeppelin auditadas."
+      },
+      {
+        "q": "¿A dónde van las comisiones?",
+        "a": "30% a validadores, 25% al pool comunitario, 20% a tesorería, 10% a liquidez, 15% al Growth Pool y 0% quemado."
+      },
+      {
+        "q": "¿Se imprimirán monedas nuevas?",
+        "a": "No en los años 1–4 — el génesis de la cadena fija la inflación en cero. Desde el año 5, como máximo 2% al año y solo por voto comunitario."
+      },
+      {
+        "q": "¿Es promesa de ingresos?",
+        "a": "No. Las recompensas no son fijas: sin actividad, sin recompensas. Los precios de tokens pueden subir, bajar o ir a cero. Es participación en una red, no una inversión."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Esa es toda la idea",
+    "body": "Crea una wallet gratis y pruébalo, o lee los detalles en la documentación primero.",
+    "ctaWallet": "Crear wallet gratis",
+    "ctaCreate": "Lanzar un token",
+    "ctaDocs": "Leer la documentación"
+  }
+}

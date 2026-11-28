@@ -148,7 +148,7 @@
     "title": "PEOPLE 网络，实时",
     "blockHeight": "区块高度",
     "chainLabel": "链",
-    "explorer": "打开浏览器",
+    "explorer": "打开区块浏览器",
     "unavailable": "区块高度当前不可用。",
     "collecting": "正在读取网络…",
     "note": "来自 PEOPLE 网络的实时区块。"
@@ -157,7 +157,7 @@
     "title": "PEOPLE Mainnet Beta 于 12 月 1 日开启。提早锁定您的 Founding 1,000 席位。",
     "body": "每一份错误报告和每一个令人困惑的问题，都会直接影响我们接下来要做的事。",
     "ctaWallet": "创建免费钱包",
-    "ctaExplore": "查看浏览器",
+    "ctaExplore": "查看区块浏览器",
     "socialLabel": "关注我们",
     "ctaFounder": "领取我的创始人编号 — 免费"
   }

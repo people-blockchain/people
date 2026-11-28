@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · Musim 1",
+  "heroTitle": "Jadilah salah satu dari sejuta orang pertama yang membangun blockchain untuk semua orang.",
+  "heroSub": "Tanpa kode, tanpa keahlian kripto. Dapatkan nomor founder Anda, undang teman, dan dapatkan poin saat mereka meluncurkan token, NFT, dan kartu klub di testnet PEOPLE.",
+  "ctaClaim": "Klaim nomor founder saya",
+  "ctaHow": "Cara kerjanya",
+  "disclaimer": "Sementara. Poin, tarif, dan anggaran musim dapat berubah sebelum PEOPLE Mainnet Beta. Bukan janji pendapatan.",
+  "stripVerified": "founder terverifikasi",
+  "stripGoal": "target",
+  "cardFounder": "Founder",
+  "cardNumberPlaceholder": "Terungkap pada 1.000 dompet",
+  "cardNetwork": "testnet PEOPLE",
+  "cardFlipHint": "Ketuk untuk membalik",
+  "cardBackTitle": "Kartu founder Anda",
+  "cardBackLines": [
+    "Satu orang terverifikasi, satu nomor.",
+    "Tier Anda mengikuti saat Anda memverifikasi; nomor Anda diundi dalam tier.",
+    "Dapat dibagikan — teman Anda mendapat milik mereka sendiri."
+  ],
+  "cardCountry": "Negara",
+  "cardRank": "Peringkat masuk awal",
+  "cardPoints": "Poin",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "Pool referral musim 1",
+  "poolNoNewCoins": "Dibayar dari pool Million Founders. Tanpa koin baru.",
+  "poolSpent": "Terpakai",
+  "poolRemaining": "Tersisa",
+  "poolLiveHint": "Saldo terpakai/tersisa langsung ditampilkan kepada founder terdaftar.",
+  "poolEmpty": "Pool referral Musim 1 kosong. Poin referral baru tidak dikreditkan.",
+  "howEyebrow": "Cara kerjanya",
+  "howTitle": "Tiga langkah menjadi founder aktif",
+  "steps": [
+    {
+      "title": "Verifikasi",
+      "body": "Bagikan nomor telepon Anda sekali di bot Telegram kami, atau verifikasi dengan Human Passport. Gratis."
+    },
+    {
+      "title": "Buat dompet",
+      "body": "Buat atau hubungkan dompet dan tautkan dompet PEOPLE Anda dalam beberapa ketukan.",
+      "bodySocial": "Masuk dengan Google atau email dan tautkan dompet PEOPLE Anda dalam beberapa ketukan.",
+      "bodyCloud": "Masuk dengan email dan tautkan dompet PEOPLE Anda dalam beberapa ketukan."
+    },
+    {
+      "title": "Lakukan satu aksi testnet",
+      "body": "Swap, mint NFT, atau peluncuran token di testnet PEOPLE."
+    }
+  ],
+  "inviteLine": "Undang teman: Anda dapat poin saat MEREKA melakukan langkah 3.",
+  "levelsEyebrow": "Dua level",
+  "levelsTitle": "Alur poin undangan",
+  "levelYou": "Anda",
+  "levelFriend": "Teman Anda",
+  "levelFriendsFriends": "Teman dari teman Anda",
+  "levelL1": "{{pts}} poin per teman aktif",
+  "levelL2": "+{{pct}}% dari L1 teman Anda — tidak diambil dari mereka",
+  "levelsTagline": "Hanya 2 level. Hanya orang nyata dan aktif.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — suara governance",
+  "gppl": [
+    {
+      "title": "Token governance PEOPLE",
+      "body": "gPPL adalah token governance PEOPLE. Pemegang memilih proposal DAO."
+    },
+    {
+      "title": "1.000.000 gPPL, dipegang DAO",
+      "body": "Seluruh pasokan ada di timelock DAO — kontrak on-chain, bukan orang."
+    },
+    {
+      "title": "Bagian sama per founder terverifikasi",
+      "body": "Setiap founder terverifikasi mendapat bagian gPPL yang sama. Distribusi berjalan batch dari treasury multisig 2-dari-3."
+    },
+    {
+      "title": "Multisig sekarang, pemungutan suara DAO nanti",
+      "body": "Sampai cukup founder terverifikasi, multisig 2-dari-3 memutuskan batch dan waktu. Setelah itu, keputusan beralih ke pemungutan suara DAO oleh pemegang gPPL."
+    }
+  ],
+  "gpplNote": "Testnet: gPPL tidak punya harga dan bukan pendapatan. Jumlah per founder diumumkan per batch.",
+  "activeEyebrow": "Siapa yang dihitung aktif",
+  "activeTitle": "Ketiganya, atau tidak dihitung",
+  "activeChecklist": [
+    "Terverifikasi (telepon Telegram atau Human Passport)",
+    "Dompet dibuat",
+    "Minimal 1 aksi testnet nyata"
+  ],
+  "activeActionsHint": "Aksi nyata: swap, stake, pool likuiditas, mint NFT, peluncuran token, suara governance. Suka dan follow tidak dihitung.",
+  "signupZero": "Hanya daftar = 0",
+  "bonusTitle": "Poin bonus dari teman aktif Anda",
+  "bonusStay": "+{{pts}} · masih aktif setelah {{days}} hari",
+  "buildEyebrow": "Tanpa kode",
+  "buildTitle": "Apa yang bisa dibangun teman Anda",
+  "build": [
+    {
+      "title": "Luncurkan token",
+      "body": "Nama, ticker, pasokan — formulir singkat, tanpa kode. Langsung live di testnet.",
+      "href": "/create/token",
+      "cta": "Luncurkan token"
+    },
+    {
+      "title": "Mint kartu klub dan NFT",
+      "body": "Kartu keanggotaan untuk klub, kafe, atau komunitas — sebagai NFT atau pass loyalitas.",
+      "href": "/create/nft",
+      "cta": "Mint NFT"
+    },
+    {
+      "title": "Galang dana",
+      "body": "Kumpulkan dukungan untuk proyek dengan templat kontrak yang ditinjau — escrow, vesting, pemungutan suara berbobot token.",
+      "href": "/create/contract",
+      "cta": "Buka templat"
+    }
+  ],
+  "buildTestnet": "Buka testnet PEOPLE",
+  "ranksEyebrow": "Masuk awal",
+  "ranksTitle": "Founder lebih awal mendapat pengali lebih besar",
+  "ranksHint": "Berlaku untuk poin aktivitas pemegang nomor founder. Sementara.",
+  "ranksRange": "Founder {{from}}–{{to}}",
+  "fairEyebrow": "Adil by design",
+  "fairTitle": "Dibangun agar tidak bisa di-farm",
+  "fair": [
+    {
+      "title": "{{instant}}% sekarang + {{rest}}% mingguan",
+      "body": "Sisanya terbuka dalam irisan mingguan sama selama {{weeks}} minggu."
+    },
+    {
+      "title": "Maks {{max}} undangan aktif",
+      "body": "Per orang per musim. Lebih hanya dengan persetujuan duta."
+    },
+    {
+      "title": "0% burn, biaya dibagi",
+      "body": "Biaya jaringan dibagi sesuai pembagian biaya yang dipublikasikan. Burn 0%."
+    },
+    {
+      "title": "Tanpa koin baru",
+      "body": "Dibayar dari pool yang ada. Saat pool musim habis, program berhenti."
+    }
+  ],
+  "countriesEyebrow": "Di seluruh dunia",
+  "countriesTitle": "Founder per negara",
+  "countriesHint": "Negara yang dideklarasikan sendiri saat pendaftaran.",
+  "countriesEmpty": "Jadilah founder pertama dari negaramu",
+  "countriesEmptyHint": "Klaim nomormu dan taruh negaramu di peta.",
+  "countriesCount": "{{count}} founder",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Pertanyaan yang sering diajukan",
+  "faq": [
+    {
+      "q": "Apakah ini janji pendapatan?",
+      "a": "Tidak. Semua di sini sementara: poin, tarif PPL per poin, dan anggaran musim dapat berubah sebelum PEOPLE Mainnet Beta. Poin adalah catatan aktivitas nyata di testnet, bukan jaminan pembayaran."
+    },
+    {
+      "q": "Mengapa hanya 2 level?",
+      "a": "Agar hadiah ke orang yang membawa teman nyata dan aktif — bukan rantai dalam. Anda dapat poin untuk teman Anda dan +30% dari yang teman Anda dapatkan untuk mereka. Tidak diambil dari teman Anda."
+    },
+    {
+      "q": "Siapa yang dihitung aktif?",
+      "a": "Seseorang yang terverifikasi (telepon Telegram atau Human Passport), punya dompet, dan melakukan minimal satu aksi testnet nyata: swap, stake, pool, NFT, peluncuran token, atau suara governance. Hanya daftar tidak dapat apa-apa."
+    },
+    {
+      "q": "Kapan saya bisa menjual?",
+      "a": "Tidak di testnet. Setelah distribusi mainnet live, 10% PPL yang dikreditkan likuid segera dan 90% terbuka mingguan selama 52 minggu. Selama 30 hari mainnet pertama berlaku biaya jual awal, turun dari 10% ke 0%."
+    },
+    {
+      "q": "Bagaimana jika pool habis?",
+      "a": "Program berhenti. Kredit terakhir dipotong sesuai sisa, dan tidak ada yang baru di-mint untuk melanjutkan."
+    },
+    {
+      "q": "Apakah saya perlu keahlian kripto?",
+      "a": "Tidak. Anda masuk, tautkan dompet, dan verifikasi sekali. Meluncurkan token atau mint NFT itu formulir, bukan kode."
+    }
+  ],
+  "rulesDetails": "Aturan program lengkap (sementara)",
+  "finalTitle": "Nomor Anda menunggu.",
+  "finalSub": "Klaim, lalu bagikan dengan orang yang ingin Anda bangun bersama.",
+  "shareTitle": "Bagikan program",
+  "shareText": "Saya bergabung Million Founders di PEOPLE Blockchain — blockchain untuk semua orang, tanpa kode.",
+  "shareMine": "Saya Founder #{{n}} di PEOPLE Blockchain. Dapatkan nomor founder Anda:",
+  "shareCopy": "Salin",
+  "shareCopied": "Disalin",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "Klaim",
+  "claimTitle": "Dapatkan nomor founder Anda",
+  "claimSignInLead": "Buat atau hubungkan dompet, tautkan, pilih negara — nomor berikutnya milik Anda.",
+  "personalEyebrow": "Ruang founder Anda",
+  "personalTitle": "Selamat datang, Founder #{{n}}",
+  "downloadCard": "Unduh kartu (PNG)",
+  "shareCard": "Bagikan kartu",
+  "activeOfMax": "{{active}}/{{max}} aktif",
+  "activeOfMaxHint": "Undangan aktif musim ini",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "Total",
+  "tickVerified": "Terverifikasi",
+  "tickWallet": "Dompet",
+  "tickAction": "Aksi",
+  "vestingTimeline": "Linimasa pembukaan",
+  "vestingWeek": "minggu {{w}}",
+  "vestingNow": "sekarang",
+  "verifyTitle": "Verifikasi Anda",
+  "verifyHumanPassport": "Verifikasi dengan Human Passport",
+  "verifyHumanPassportBusy": "Memeriksa Human Passport…",
+  "verifyHumanPassportOk": "Human Passport terverifikasi.",
+  "verifyHumanPassportLow": "Skor Human Passport Anda di bawah ambang yang diperlukan.",
+  "verifyHumanPassportError": "Verifikasi Human Passport gagal. Coba lagi nanti.",
+  "verifyHumanPassportOff": "Human Passport belum dikonfigurasi di lingkungan ini.",
+  "claimSignInLeadSocial": "Masuk dengan Google atau email, tautkan dompet, pilih negara — nomor berikutnya milik Anda.",
+  "claimSignInLeadCloud": "Masuk dengan email, tautkan dompet, pilih negara — nomor berikutnya milik Anda."
+}

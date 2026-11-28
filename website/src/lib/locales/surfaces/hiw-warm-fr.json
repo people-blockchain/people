@@ -1,0 +1,149 @@
+{
+  "hero": {
+    "eyebrow": "PEOPLE Blockchain",
+    "title": "Comment People fonctionne, en 1 minute.",
+    "lead": "Un portefeuille, une vérification que vous êtes une personne, puis vous pouvez lancer, mint, échanger ou voter. Sans code ni bagage crypto.",
+    "betaBadge": "PEOPLE Mainnet Beta est lancé le 1er décembre 2026.",
+    "saleNote": "PEOPLE Mainnet Beta est lancé le 1er décembre 2026 — une vraie mainnet en phase initiale, avec des limites tant que moins de personnes sont vérifiées. Payez en USDC ou USDT sur Base ; le PPL est crédité sur PEOPLE Mainnet Beta."
+  },
+  "steps": {
+    "eyebrow": "Trois étapes",
+    "title": "Ce qu'une personne lambda fait vraiment",
+    "lead": "C'est tout l'onboarding. Le reste de cette page est du détail pour les curieux.",
+    "items": [
+      {
+        "title": "Obtenez un portefeuille en 30 secondes",
+        "body": "Ouvrez le site sur votre téléphone ou dans un navigateur et créez un portefeuille — phrase de 12 mots non custodiale (les clés restent sur votre appareil).",
+        "note": "Pas d'app store, pas de devoirs de phrase secrète.",
+        "bodySocial": "Ouvrez le site sur votre téléphone ou dans un navigateur et créez un portefeuille — phrase de 12 mots non custodiale (les clés restent sur votre appareil), ou une connexion Google plus rapide avec clé chiffrée synchronisée dans le cloud.",
+        "bodyCloud": "Ouvrez le site sur votre téléphone ou dans un navigateur et créez un portefeuille — phrase de 12 mots non custodiale (les clés restent sur votre appareil), ou une connexion e-mail plus rapide avec clé chiffrée synchronisée dans le cloud."
+      },
+      {
+        "title": "Prouvez que vous êtes humain",
+        "body": "Vérifiez une fois avec un numéro Telegram ou Human Passport. Une personne, un compte — c'est ce qui empêche les bots de farmer le pool communautaire.",
+        "note": "Aucune biométrie requise."
+      },
+      {
+        "title": "Lancez, mintez, échangez ou votez",
+        "body": "Démarrez un token pour votre communauté, mintez des cartes de club, tradez dans le pool token/PPL ou votez sur l'affectation du pool communautaire.",
+        "note": "Chaque action est un bouton normal, pas une ligne de commande."
+      }
+    ]
+  },
+  "supply": {
+    "eyebrow": "Offre",
+    "title": "Un milliard de PPL, sans surprises",
+    "lead": "L'offre est fixée au genesis. Rien n'est minté selon un calendrier en coulisse.",
+    "totalLabel": "Offre totale, fixe",
+    "unit": "PPL",
+    "noNewCoins": "Années 1–4 : 0 % de nouvelles pièces. Les paramètres d'inflation sont fixés à zéro dans le genesis de la chaîne.",
+    "year5": "À partir de l'année 5 : au plus 2 % par an, et seulement si la communauté vote pour.",
+    "donutLabel": "Allocation genesis",
+    "bucketLabels": {
+      "community": "Communauté et récompenses",
+      "validators": "Validateurs",
+      "team": "Équipe",
+      "treasury": "Trésorerie",
+      "sale": "Vente communautaire",
+      "liquidity": "Liquidité"
+    },
+    "donutNote": "Totalise 100 % du milliard de PPL. Le bucket communautaire se débloque linéairement sur six ans ; trésorerie et liquidité verrouillée ne circulent pas."
+  },
+  "validators": {
+    "eyebrow": "Validateurs",
+    "title": "Qui fait tourner le réseau, et qui le paie",
+    "lead": "Les validateurs font tourner la chaîne. Ils sont payés depuis leur propre pool, plus une part de chaque frais.",
+    "poolLabel": "Pool validateurs",
+    "unit": "PPL",
+    "shareLabel": "plus 30 % de chaque frais réseau",
+    "yearsLabel": "PPL libérés par an",
+    "yearLabel": "Année {{n}}",
+    "pctLabel": "{{pct}} % de l'offre totale",
+    "scheduleNote": "Les années 1–4 libèrent 60M, 50M, 50M et 40M PPL du pool de 200M. Rien n'est minté pour les payer.",
+    "feeNote": "En plus du calendrier, les validateurs reçoivent 30 % de chaque frais réseau, répartis à chaque bloc."
+  },
+  "fees": {
+    "eyebrow": "Frais",
+    "title": "Où va chaque frais",
+    "lead": "Chaque frais réseau est payé en PPL et réparti de la même façon, à chaque fois.",
+    "totalLabel": "Un frais",
+    "totalValue": "100%",
+    "note": "Rien n'est brûlé : la ligne burn est à 0 %. Les frais fractionnaires suivent le même partage."
+  },
+  "launch": {
+    "eyebrow": "Lancer un token",
+    "title": "Ce qui se passe quand vous lancez",
+    "lead": "Trois règles sont appliquées par les contrats, pas par notre bonne volonté.",
+    "points": [
+      {
+        "title": "La courbe fixe le prix dès le premier trade",
+        "body": "Pas de tour privé ni de prix prédéfini. Le token démarre sur une bonding curve, donc le tout premier achat fixe le prix que tout le monde voit."
+      },
+      {
+        "title": "10 % vont au pool communautaire de ce token — garanti",
+        "body": "Au lancement le créateur peut aussi envoyer le reste non vendu de la courbe (jusqu'à ~17 %) au pool au lieu de le brûler — jusqu'à 27 % au total. Jamais mélangé aux frais réseau."
+      },
+      {
+        "title": "La part du créateur se débloque sur 180 jours",
+        "body": "10 % de l'allocation créateur sont liquides à la création, les 90 % restants se débloquent linéairement sur 180 jours. Pas de dump le jour un."
+      },
+      {
+        "title": "Reliquats de courbe",
+        "body": "Après migration de la courbe vers l'AMM — ou si elle est finalisée après 180 jours sans être épuisée — tokens restants et invendus suivent le choix du créateur au lancement : brûlés par défaut (recommandé), ou envoyés au pool communautaire de ce token. Jamais au créateur ni à la trésorerie du protocole. Chaque token standard envoie aussi 10 % de l'offre à son pool communautaire au lancement."
+      },
+      {
+        "title": "Part de parrainage optionnelle",
+        "body": "Au lancement, un créateur peut rejoindre un programme de parrainage émetteur : par défaut 5 % de l'offre (maximum 10 %) peuvent être réservés pour les récompenses d'invitation, avec une prime d'invitation par défaut de 5 % de l'achat de l'invité. Désactivé tant que le créateur n'a pas opté."
+      }
+    ],
+    "curveCaption": "Prix le long de la bonding curve",
+    "curveStartLabel": "Premier trade",
+    "curveEndLabel": "Épuisé",
+    "curveNote": "Forme illustrative de la courbe — c'est ainsi que le mécanisme fonctionne, pas une prévision de prix."
+  },
+  "founders": {
+    "eyebrow": "Million Founders",
+    "title": "Soyez en avance, et amenez votre monde",
+    "lead": "Les numéros de fondateur sont encore ouverts. Deux niveaux de parrainage, et seules les personnes actives comptent.",
+    "bullets": [
+      "Deux niveaux : vous gagnez sur vos invités, et une part plus petite sur les leurs.",
+      "Les comptes inactifs ne gagnent rien — cent faux comptes valent cent fois zéro.",
+      "Récompenses avec vesting : 10 % liquides tout de suite, le reste en parts hebdomadaires sur 52 semaines."
+    ],
+    "cta": "Devenir fondateur",
+    "href": "/founders"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Réponses nettes",
+    "items": [
+      {
+        "q": "Est-ce la mainnet ?",
+        "a": "PEOPLE Mainnet Beta est lancé le 1er décembre 2026. C'est la vraie mainnet PEOPLE en phase initiale, avec des limites tant que moins de personnes sont vérifiées. Vous payez en USDC ou USDT sur Base, et le PPL est crédité sur PEOPLE Mainnet Beta."
+      },
+      {
+        "q": "Faut-il savoir coder ?",
+        "a": "Non. Créer un portefeuille, lancer un token, mint des cartes de club et voter sont des boutons dans l'interface. Les contrats viennent de modèles OpenZeppelin audités."
+      },
+      {
+        "q": "Où vont les frais ?",
+        "a": "30 % aux validateurs, 25 % au pool communautaire, 20 % à la trésorerie, 10 % à la liquidité, 15 % au Growth Pool et 0 % brûlé."
+      },
+      {
+        "q": "De nouvelles pièces seront-elles imprimées ?",
+        "a": "Pas les années 1–4 — le genesis de la chaîne fixe l'inflation à zéro. À partir de l'année 5, au plus 2 % par an et seulement par vote communautaire."
+      },
+      {
+        "q": "Est-ce une promesse de revenu ?",
+        "a": "Non. Les récompenses ne sont pas fixes : pas d'activité, pas de récompenses. Les prix des tokens peuvent monter, baisser ou aller à zéro. C'est de la participation à un réseau, pas un investissement."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Voilà toute l'idée",
+    "body": "Créez un portefeuille gratuit et essayez, ou lisez d'abord les détails dans la doc.",
+    "ctaWallet": "Créer un portefeuille gratuit",
+    "ctaCreate": "Lancer un token",
+    "ctaDocs": "Lire la doc"
+  }
+}

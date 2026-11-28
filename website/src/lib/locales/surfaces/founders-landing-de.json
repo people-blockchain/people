@@ -1,0 +1,109 @@
+{
+  "heroEyebrow": "Gründungs-Tresor 1.000 · PEOPLE Mainnet Beta (1. Dez.)",
+  "heroTitle": "Gründungs-Tresor 1.000",
+  "heroSub": "Die ersten 1.000 verifizierten Wallets schalten Transfers und die Founding-1.000-Bounty-Verlosung frei. Liste und Reihenfolge bleiben versiegelt, bis diese Wallets verankert sind. Verifiziere in Telegram in 20 Sekunden für einen ausstehenden Platz — eine verbundene Wallet ist nötig, um deinen Founding-1.000-Platz und dein Bounty-Draw-Ticket zu sichern. Das Million-Founders-Programm läuft nach den ersten 1.000 weiter.",
+  "heroCta": "Verifizieren und mitmachen",
+  "heroCtaHow": "So funktionieren die Nummern",
+  "counterLabel": "verifizierte Personen",
+  "counterGoal": "Ziel",
+  "counterLive": "Live-Zähler aus der Human-Passport-Verifizierung auf PEOPLE.",
+  "counterStub": "Liste und Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets verankert sind.",
+  "vaultCalloutTitle": "Die ersten 1.000 verifizierten Wallets schalten Transfers und die Founding-1.000-Bounty-Verlosung frei",
+  "vaultCalloutBody": "Liste und Reihenfolge bleiben versiegelt, bis 1.000 verifizierte Wallets verankert sind. Während die Liste versiegelt ist, wird keine Live-Anmeldezahl angezeigt.",
+  "disclaimer": "Vorläufige Programmdetails können sich vor PEOPLE Mainnet Beta ändern. Keine Finanzberatung. Kein Versprechen von Einkommen oder Tokenpreiswachstum.",
+  "nftEyebrow": "Founder NFT",
+  "nftTitle": "Dein kostenloses nummeriertes Founder NFT",
+  "nftBody": "Jede verifizierte Person, die vor PEOPLE Mainnet Beta mitmacht, erhält ein Founder NFT mit ihrer öffentlichen Nummer. Es ist kostenlos. Der Eintrag wird in den Genesis-Block geschrieben und bleibt dort — es wird nie eine zweite Genesis geben.",
+  "nftBullets": [
+    "Kostenlos für verifizierte Gründer vor PEOPLE Mainnet Beta",
+    "Deine Nummer ist von Tag eins an Teil der Chain-Geschichte",
+    "Gleiche Grundrechte für jeden Gründer — Sondernummern bringen nur kleine einmalige Extras"
+  ],
+  "tiersEyebrow": "Gründernummern",
+  "tiersTitle": "Stufen nach Beitrittszeitpunkt",
+  "tiersSub": "Deine Stufe folgt der Reihenfolge deiner Verifizierung. Innerhalb jeder Stufe wird deine genaue Nummer bei Stufenabschluss per fairem öffentlichem Zufallsziehen vergeben — niemand wählt seine Nummer.",
+  "tiers": [
+    {
+      "name": "Genesis",
+      "range": "1–100",
+      "note": "Die ersten hundert verifizierten Gründer"
+    },
+    {
+      "name": "Vanguard",
+      "range": "101–1,000",
+      "note": "Frühe Builder, die das Netzwerk formen"
+    },
+    {
+      "name": "Builders",
+      "range": "1,001–10,000",
+      "note": "Die Kernwelle vor breiter Adoption"
+    },
+    {
+      "name": "Settlers",
+      "range": "10,001–100,000",
+      "note": "Die Community im großen Maßstab wachsen lassen"
+    },
+    {
+      "name": "Citizens",
+      "range": "100,001+",
+      "note": "Alle nach den ersten hunderttausend"
+    }
+  ],
+  "specialEyebrow": "Sondernummern",
+  "specialTitle": "Sondernummern und Stufenabschlüsse",
+  "specialBody": "Manche Nummern fallen auf: runde oder auffällige Ziffernfolgen und die letzte Nummer jeder Stufe. Die letzte Nummer einer Stufe erhält nicht der letzte Beitretende — sie wird fair unter allen in dieser Stufe gezogen.",
+  "specialListTitle": "Welche Nummern sind speziell",
+  "specialList": [
+    "#1 bis #9",
+    "Wiederholende Ziffern, wie 77, 888 oder 8888",
+    "Runde Zahlen: 1,000, 10,000, 100,000 und 500,000",
+    "Die Folge 12345",
+    "Die letzte Nummer jeder Stufe"
+  ],
+  "specialFixedNote": "Diese Liste wird vor Registrierungsstart veröffentlicht und ist fix. Sie ändert sich danach nicht, damit jeder prüfen kann, dass die Ziehung fair war.",
+  "specialPerksTitle": "Was eine Sondernummer einmal bekommt",
+  "specialPerksBody": "Jede Sondernummer erhält denselben einmaligen Bonus. Es ist ein Dankeschön, kein Geld: keine Auszahlungen, keine Preisversprechen, keine dauerhaften Rabatte. Grundrechte der Gründer bleiben für alle gleich.",
+  "sealEyebrow": "Genesis-Zeremonie",
+  "sealTitle": "Versiegelung des Genesis-Blocks",
+  "sealBody": "Wenn das Gründerfenster schließt, hält PEOPLE eine öffentliche Versiegelungszeremonie für den Genesis-Block ab. Gründernamen, die der öffentlichen Mosaik zugestimmt haben, erscheinen gemeinsam als dauerhafte Momentaufnahme der Netzwerkstarter.",
+  "mosaicTitle": "Gründer-Mosaik",
+  "mosaicSub": "Ein visuelles Mosaik aus Gründernamen geht bei der Versiegelung live. Die Handle-Suche folgt dann.",
+  "mosaicSearchLabel": "Nach Handle suchen",
+  "mosaicSearchPlaceholder": "Verfügbar bei Genesis-Versiegelung",
+  "mosaicSoon": "Bei Versiegelung",
+  "mosaicSearchHint": "Die Handle-Suche öffnet, wenn der Genesis-Block versiegelt ist.",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "Kurze Antworten",
+  "faq": [
+    {
+      "q": "Ist es kostenlos?",
+      "a": "Ja. Die Verifizierung mit Human Passport auf PEOPLE ist kostenlos, und dein Founder NFT ist vor PEOPLE Mainnet Beta kostenlos."
+    },
+    {
+      "q": "Kann ich meine Gründernummer wählen?",
+      "a": "Nein. Nummern hängen an deiner Stufe und werden innerhalb der Stufe per fairem öffentlichem Zufallsziehen vergeben. Niemand kann eine Lieblingsnummer reservieren."
+    },
+    {
+      "q": "Gibt es Auszahlungen oder garantierte Belohnungen?",
+      "a": "Nein. Diese Seite geht um Identität und Geschichte im Genesis-Block, nicht um Auszahlungen oder Anlagerenditen."
+    },
+    {
+      "q": "Wie trete ich bei?",
+      "a": "Melde dich auf PEOPLE an, schließe die Human-Passport-Verifizierung ab und folge den Schritten auf dieser Seite. Nutze den Bereich Verifizieren unten, wenn du bereit bist."
+    },
+    {
+      "q": "Was ist PEOPLE?",
+      "a": "PEOPLE ist eine Community-Blockchain — von Menschen, für die Community. Gründer sind verifizierte Menschen, die vor PEOPLE Mainnet Beta beitreten."
+    }
+  ],
+  "finalTitle": "Gründer werden",
+  "finalSub": "Verifiziere dich mit Human Passport, sichere dir deinen Platz unter den Million Founders und behalte deine Nummer für immer im Genesis-Block.",
+  "finalCta": "Verifizierung starten",
+  "specialPerks": [
+    "Ein animierter Rahmen und Badge auf deinem Founder NFT",
+    "Dein Name hervorgehoben im Genesis-Mosaik",
+    "7 Tage früher Zugang zu neuen PEOPLE-Features und Drops",
+    "Prioritäts-Support"
+  ],
+  "specialNamedBadge": "#1 und die letzte Nummer jeder Stufe erhalten außerdem ein eigenes benanntes Badge."
+}

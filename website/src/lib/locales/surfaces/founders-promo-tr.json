@@ -1,0 +1,219 @@
+{
+  "eyebrow": "Million Founders · Sezon 1",
+  "heroTitle": "Herkes için bir blockchain inşa eden ilk bir milyon kişiden biri olun.",
+  "heroSub": "Kod yok, kripto bilgisi gerekmez. Kurucu numaranızı alın, arkadaşlarınızı davet edin; PEOPLE testnet'te token, NFT ve kulüp kartı başlattıklarında puan kazanın.",
+  "ctaClaim": "Kurucu numaramı al",
+  "ctaHow": "Nasıl çalışır",
+  "disclaimer": "Ön bilgi. Puanlar, oranlar ve sezon bütçesi PEOPLE Mainnet Beta öncesinde değişebilir. Gelir vaadi değildir.",
+  "stripVerified": "doğrulanmış kurucular",
+  "stripGoal": "hedef",
+  "cardFounder": "Kurucu",
+  "cardNumberPlaceholder": "1.000 cüzdanda açıklanır",
+  "cardNetwork": "PEOPLE testnet",
+  "cardFlipHint": "Çevirmek için dokunun",
+  "cardBackTitle": "Kurucu kartınız",
+  "cardBackLines": [
+    "Bir doğrulanmış kişi, bir numara.",
+    "Kademeniz doğruladığınızda belirlenir; numaranız kademe içinde çekilir.",
+    "Paylaşılabilir — arkadaşlarınız kendi numarasını alır."
+  ],
+  "cardCountry": "Ülke",
+  "cardRank": "Erken giriş sırası",
+  "cardPoints": "Puan",
+  "hello": [
+    "Hello",
+    "Hola",
+    "Olá",
+    "Merhaba",
+    "Xin chào",
+    "你好",
+    "مرحبا",
+    "Bonjour",
+    "Halo"
+  ],
+  "poolEyebrow": "Sezon 1 yönlendirme havuzu",
+  "poolNoNewCoins": "Million Founders havuzundan ödenir. Yeni coin yok.",
+  "poolSpent": "Harcanan",
+  "poolRemaining": "Kalan",
+  "poolLiveHint": "Canlı harcanan/kalan bakiye kayıtlı kuruculara gösterilir.",
+  "poolEmpty": "Sezon 1 yönlendirme havuzu boş. Yeni yönlendirme puanı yazılmaz.",
+  "howEyebrow": "Nasıl çalışır",
+  "howTitle": "Aktif kurucu olmak için üç adım",
+  "steps": [
+    {
+      "title": "Doğrula",
+      "body": "Telegram botumuzda telefonunuzu bir kez paylaşın veya Human Passport ile doğrulayın. Ücretsiz."
+    },
+    {
+      "title": "Cüzdan oluştur",
+      "body": "Bir cüzdan oluşturun veya bağlayın ve PEOPLE cüzdanınızı birkaç dokunuşla bağlayın.",
+      "bodySocial": "Google veya e-posta ile giriş yapın ve PEOPLE cüzdanınızı birkaç dokunuşla bağlayın.",
+      "bodyCloud": "E-posta ile giriş yapın ve PEOPLE cüzdanınızı birkaç dokunuşla bağlayın."
+    },
+    {
+      "title": "Bir testnet işlemi yap",
+      "body": "PEOPLE testnet'te bir swap, NFT mint veya token lansmanı."
+    }
+  ],
+  "inviteLine": "Arkadaşlarını davet et: ONLAR 3. adımı yaptığında kazanırsın.",
+  "levelsEyebrow": "İki seviye",
+  "levelsTitle": "Davet puanları nasıl akar",
+  "levelYou": "Sen",
+  "levelFriend": "Arkadaşın",
+  "levelFriendsFriends": "Arkadaşının arkadaşları",
+  "levelL1": "Aktif arkadaş başına {{pts}} puan",
+  "levelL2": "Arkadaşının L1'inin +{{pct}}%'si — ondan düşülmez",
+  "levelsTagline": "Yalnızca 2 seviye. Yalnızca gerçek, aktif insanlar.",
+  "gpplEyebrow": "Governance",
+  "gpplTitle": "gPPL — yönetişim oyları",
+  "gppl": [
+    {
+      "title": "PEOPLE yönetişim tokeni",
+      "body": "gPPL, PEOPLE yönetişim tokenidir. Sahipleri DAO önerilerinde oy kullanır."
+    },
+    {
+      "title": "1.000.000 gPPL, DAO'da",
+      "body": "Tüm arz DAO timelock'unda — zincir üstü bir sözleşme, bir kişi değil."
+    },
+    {
+      "title": "Doğrulanmış kurucu başına eşit pay",
+      "body": "Her doğrulanmış kurucu eşit gPPL payı alır. Dağıtım hazineden 2/3 multisig ile parti parti yapılır."
+    },
+    {
+      "title": "Şimdi multisig, sonra DAO oylaması",
+      "body": "Yeterli doğrulanmış kurucu olana kadar 2/3 multisig parti ve zamanlamaya karar verir. Sonrasında kararlar gPPL sahiplerinin DAO oylamasına geçer."
+    }
+  ],
+  "gpplNote": "Testnet: gPPL'nin fiyatı yoktur ve gelir değildir. Kurucu başına tutar parti parti duyurulur.",
+  "activeEyebrow": "Kim aktif sayılır",
+  "activeTitle": "Üçü birden, yoksa sayılmaz",
+  "activeChecklist": [
+    "Doğrulanmış (Telegram telefon veya Human Passport)",
+    "Cüzdan oluşturulmuş",
+    "En az 1 gerçek testnet işlemi"
+  ],
+  "activeActionsHint": "Gerçek işlemler: swap, stake, likidite havuzu, NFT mint, token lansmanı, yönetişim oyu. Beğeni ve takip sayılmaz.",
+  "signupZero": "Yalnızca kayıt = 0",
+  "bonusTitle": "Aktif arkadaşlarınızdan bonus puan",
+  "bonusStay": "+{{pts}} · {{days}} gün sonra hâlâ aktif",
+  "buildEyebrow": "Kod gerekmez",
+  "buildTitle": "Arkadaşlarınız neler oluşturabilir",
+  "build": [
+    {
+      "title": "Token başlat",
+      "body": "Ad, ticker, arz — kısa bir form, kod yok. Testnette yayına girer.",
+      "href": "/create/token",
+      "cta": "Token başlat"
+    },
+    {
+      "title": "Kulüp kartı ve NFT mint",
+      "body": "Kulüp, kafe veya topluluk için üyelik kartları — NFT veya sadakat geçişi olarak.",
+      "href": "/create/nft",
+      "cta": "NFT mint"
+    },
+    {
+      "title": "Fon topla",
+      "body": "İncelenmiş sözleşme şablonlarıyla projeye destek toplayın — escrow, vesting, token ağırlıklı oy.",
+      "href": "/create/contract",
+      "cta": "Şablonları aç"
+    }
+  ],
+  "buildTestnet": "PEOPLE testnet'i aç",
+  "ranksEyebrow": "Erken giriş",
+  "ranksTitle": "Daha erken kurucular daha büyük çarpan alır",
+  "ranksHint": "Kurucu numarası sahibinin aktivite puanlarına uygulanır. Ön bilgi.",
+  "ranksRange": "Kurucular {{from}}–{{to}}",
+  "fairEyebrow": "Tasarım gereği adil",
+  "fairTitle": "Kimse farm yapamasın diye yapıldı",
+  "fair": [
+    {
+      "title": "Şimdi %{{instant}} + haftalık %{{rest}}",
+      "body": "Kalanı {{weeks}} hafta boyunca eşit haftalık dilimlerle açılır."
+    },
+    {
+      "title": "Sezon başına en fazla {{max}} aktif davetli",
+      "body": "Kişi başına sezon başına. Daha fazlası yalnızca elçi onayıyla."
+    },
+    {
+      "title": "%0 yakım, ücretler paylaşılır",
+      "body": "Ağ ücretleri yayımlanan ücret bölümüne göre paylaşılır. Yakım %0."
+    },
+    {
+      "title": "Yeni coin yok",
+      "body": "Mevcut bir havuzdan ödenir. Sezon havuzu boşalınca program durur."
+    }
+  ],
+  "countriesEyebrow": "Dünya çapında",
+  "countriesTitle": "Ülkeye göre kurucular",
+  "countriesHint": "Kayıtta kendi bildirdiği ülke.",
+  "countriesEmpty": "Ülkenizin ilk kurucusu olun",
+  "countriesEmptyHint": "Numaranızı alın ve ülkenizi haritaya koyun.",
+  "countriesCount": "{{count}} kurucu",
+  "faqEyebrow": "FAQ",
+  "faqTitle": "İnsanların sorduğu sorular",
+  "faq": [
+    {
+      "q": "Bu bir gelir vaadi mi?",
+      "a": "Hayır. Buradaki her şey ön bilgidir: puanlar, puan başına PPL oranı ve sezon bütçesi PEOPLE Mainnet Beta öncesinde değişebilir. Puanlar testnette gerçek aktivitenin kaydıdır, ödeme garantisi değildir."
+    },
+    {
+      "q": "Neden yalnızca 2 seviye?",
+      "a": "Ödül, gerçek aktif arkadaş getiren kişilere gitsin diye — derin zincirlere değil. Arkadaşlarınız için puan alırsınız ve arkadaşlarınızın kendi davetlilerinden kazandığının +%30'unu. Arkadaşınızdan alınmaz."
+    },
+    {
+      "q": "Kim aktif sayılır?",
+      "a": "Doğrulayan (Telegram telefon veya Human Passport), cüzdanı olan ve en az bir gerçek testnet işlemi yapan: swap, stake, pool, NFT, token lansmanı veya yönetişim oyu. Yalnızca kayıt hiçbir şey kazandırmaz."
+    },
+    {
+      "q": "Ne zaman satabilirim?",
+      "a": "Testnette değil. Mainnet dağıtımı canlı olduktan sonra, yazılan PPL'nin %10'u anında likit, %90'ı 52 haftada haftalık açılır. İlk 30 mainnet gününde erken satış ücreti uygulanır, %10'dan %0'a düşer."
+    },
+    {
+      "q": "Havuz biterse ne olur?",
+      "a": "Program durur. Son kredi kalanla sınırlanır ve devam ettirmek için yeni mint yapılmaz."
+    },
+    {
+      "q": "Kripto bilgisi gerekir mi?",
+      "a": "Hayır. Giriş yapar, cüzdan bağlar ve bir kez doğrularsınız. Token başlatmak veya NFT mint etmek formdur, kod değil."
+    }
+  ],
+  "rulesDetails": "Tam program kuralları (ön bilgi)",
+  "finalTitle": "Numaranız bekliyor.",
+  "finalSub": "Alın ve birlikte inşa etmek istediğiniz insanlarla paylaşın.",
+  "shareTitle": "Programı paylaş",
+  "shareText": "PEOPLE Blockchain'de Million Founders'a katılıyorum — herkes için bir blockchain, kod gerekmez.",
+  "shareMine": "PEOPLE Blockchain'de Kurucu #{{n}}'yim. Kurucu numaranı al:",
+  "shareCopy": "Kopyala",
+  "shareCopied": "Kopyalandı",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "shareX": "X",
+  "claimEyebrow": "Al",
+  "claimTitle": "Kurucu numaranı al",
+  "claimSignInLead": "Cüzdan oluştur veya bağla, bağla, ülkeni seç — sıradaki numara senin.",
+  "personalEyebrow": "Kurucu alanın",
+  "personalTitle": "Hoş geldin, Kurucu #{{n}}",
+  "downloadCard": "Kartı indir (PNG)",
+  "shareCard": "Kartı paylaş",
+  "activeOfMax": "{{active}}/{{max}} aktif",
+  "activeOfMaxHint": "Bu sezon aktif davetliler",
+  "pointsL1": "L1",
+  "pointsL2": "L2",
+  "pointsBonus": "Bonus",
+  "pointsTotal": "Toplam",
+  "tickVerified": "Doğrulandı",
+  "tickWallet": "Cüzdan",
+  "tickAction": "İşlem",
+  "vestingTimeline": "Açılış zaman çizelgesi",
+  "vestingWeek": "hafta {{w}}",
+  "vestingNow": "şimdi",
+  "verifyTitle": "Doğrulaman",
+  "verifyHumanPassport": "Human Passport ile doğrula",
+  "verifyHumanPassportBusy": "Human Passport kontrol ediliyor…",
+  "verifyHumanPassportOk": "Human Passport doğrulandı.",
+  "verifyHumanPassportLow": "Human Passport puanınız gerekli eşiğin altında.",
+  "verifyHumanPassportError": "Human Passport doğrulaması başarısız. Daha sonra tekrar deneyin.",
+  "verifyHumanPassportOff": "Human Passport bu ortamda henüz yapılandırılmadı.",
+  "claimSignInLeadSocial": "Google veya e-posta ile giriş yap, cüzdan bağla, ülkeni seç — sıradaki numara senin.",
+  "claimSignInLeadCloud": "E-posta ile giriş yap, cüzdan bağla, ülkeni seç — sıradaki numara senin."
+}
