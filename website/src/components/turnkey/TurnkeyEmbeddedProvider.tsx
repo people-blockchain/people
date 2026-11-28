@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { TurnkeyProvider, useTurnkey } from "@turnkey/react-wallet-kit";
-import "@turnkey/react-wallet-kit/styles.css";
 import { readPublicTurnkeyOrganizationId } from "@/lib/turnkey-config";
 import {
   parseSignRawPayload,
